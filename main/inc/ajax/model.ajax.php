@@ -621,6 +621,7 @@ switch ($action) {
             $sessionId  = intval($_GET['session_id']);
             $courseId   = intval($_GET['course_id']);
             $exerciseId = intval($_GET['exercise_id']);
+            $answer = intval($_GET['answer']);
         }
 
         $columns = array(
@@ -637,7 +638,7 @@ switch ($action) {
             'correct'
         );
 
-        $result = SessionManager::get_exercise_progress($sessionId, $courseId, $exerciseId,
+        $result = SessionManager::get_exercise_progress($sessionId, $courseId, $exerciseId, $answer,
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",

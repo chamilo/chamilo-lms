@@ -506,7 +506,7 @@ class SessionManager
      *  @param int session id
      *  @return array
      */
-    public static function get_exercise_progress($sessionId = 0, $courseId = 0, $exerciseId = 0, $options = array())
+    public static function get_exercise_progress($sessionId = 0, $courseId = 0, $exerciseId = 0, $answer = 2, $options = array())
     {
         $session                = Database::get_main_table(TABLE_MAIN_SESSION);
         $user                   = Database::get_main_table(TABLE_MAIN_USER);
@@ -521,6 +521,11 @@ class SessionManager
         $where = " WHERE a.session_id = %d
         AND a.course_code = '%s'
         AND q.id = %d";
+        
+        if ($answer != 2) 
+        {
+            $where .= sprintf(' AND qa.correct = %d', $answer); 
+        }
 
         $limit = null;
         if (!empty($options['limit'])) {
@@ -556,8 +561,6 @@ class SessionManager
         INNER JOIN $quiz q ON q.id = e.exe_exo_id
         INNER JOIN $user u ON u.user_id = a.user_id
         $where $order $limit";
-
-
         $sql_query = sprintf($sql, $sessionId, $course['code'], $exerciseId);
 
         $rs = Database::query($sql_query);
@@ -751,7 +754,7 @@ class SessionManager
          *  Exercises
          */
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-        $exercises = get_all_exercises($course_info, $sessionId);
+        $exercises = get_all_exercises($course, $sessionId);
         $exercises_total = count($exercises);
 
         /**

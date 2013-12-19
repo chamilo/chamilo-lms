@@ -685,6 +685,63 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     });
                 </script>';
         }
+        if (in_array($display, array('exerciseprogress')))
+        {
+                //exercise
+                $exerciseFilter = new FormValidator('student_filter', 'get', '', '', array('class'=> 'form-search'), false);
+                $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_exercise_by_course&session_id=' . $_GET['session_id'] . '&course_id=' . $_GET['course_id'];
+                $exerciseList = array();
+                $exerciseId = isset($_GET['exercise_id']) ? $_GET['exercise_id'] : null;
+                if (!empty($exerciseId)) {
+                    $exerciseList = array();
+                    $exerciseInfo = current(get_exercise_by_id($exerciseId));
+                    $exerciseList[] = array('id' => $exerciseInfo['id'], 'text' => $exerciseInfo['title']);
+                }
+                $exerciseFilter->addElement('select_ajax', 'exercise_name', get_lang('SearchExercise'), null, array('url' => $url, 'defaults' => $exerciseList));
+                $courseListUrl = api_get_self();
+
+                echo '<div class="">'; 
+                echo $exerciseFilter->return_form();
+                echo '</div>';
+
+                echo '<script>
+                $(function() {
+                    $("#exercise_name").on("change", function() {
+                        var sessionId = $("#session_name").val();
+                        var courseId = $("#course_name").val();
+                        var exerciseId  = $("#exercise_name").val();
+                        window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&exercise_id="+exerciseId;
+                        });
+                    });
+                </script>';
+
+                //answer Type    
+                $answerFilter = new FormValidator('answer_filter', 'get', '', '', array('class'=> 'form-search'), false);
+                $options = array(
+                    2 => get_lang('all'),
+                    0 => get_lang('incorrect'),
+                    1 => get_lang('correct'),
+                    );
+                $answerFilter->addElement('select', 'answer', get_lang('Answer'),$options, array('id' => 'answer'));
+                $courseListUrl = api_get_self();
+
+                echo '<div class="">'; 
+                echo $answerFilter->return_form();
+                echo '</div>';
+
+                echo '<script>
+                $(function() {
+                    $("#answer").on("change", function() {
+                        var sessionId = $("#session_name").val();
+                        var courseId = $("#course_name").val();
+                        var exerciseId  = $("#exercise_name").val();
+                        var answerType  = $("#answer").val();
+                        window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&exercise_id="+exerciseId+"&answer="+answerType;
+                        });
+                    });
+                </script>';
+
+        }
     }
 
 	if ($display === 'useroverview') {
@@ -742,7 +799,8 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             {
                 if (!empty($_GET['exercise_id'])) 
                 {
-                    echo MySpace::display_tracking_exercise_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']));
+                    $answer = (isset($_GET['answer'])) ? intval($_GET['answer']) : 2;
+                    echo MySpace::display_tracking_exercise_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']), $answer);
                 } else 
                 {
                     Display::display_warning_message(get_lang('ChooseExercise'));

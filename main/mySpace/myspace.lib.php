@@ -335,7 +335,7 @@ class MySpace {
      * Display a sortable table that contains an overview off all the progress of the user in a session
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
-    function display_tracking_exercise_progress_overview($sessionId = 0, $courseId = 0, $exerciseId = 0) {
+    function display_tracking_exercise_progress_overview($sessionId = 0, $courseId = 0, $exerciseId = 0, $answer = 2) {
 
         /**
          * Column name
@@ -375,7 +375,7 @@ class MySpace {
 
         $action_links = '';
         // jqgrid will use this URL to do the selects
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_progress&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId)  . '&exercise_id=' . intval($exerciseId);
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_progress&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId)  . '&exercise_id=' . intval($exerciseId) . '&answer=' . intval($answer);
 
         $tableId = 'exerciseProgressOverview';
         $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);

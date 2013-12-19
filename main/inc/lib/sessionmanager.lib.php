@@ -521,7 +521,7 @@ class SessionManager
         $where = " WHERE a.session_id = %d
         AND a.course_code = '%s' 
         AND q.id = %d";
-        
+
         if ($answer != 2) 
         {
             $where .= sprintf(' AND qa.correct = %d', $answer); 
@@ -672,6 +672,88 @@ class SessionManager
         }
         return $table;
     }
+    /**
+     * Gets the progress of learning paths in the given session
+     * @param int   session id
+     * @param array options order and limit keys
+     * @return array table with user name, lp name, progress
+     */
+    public static function get_survey_overview($sessionId = 0, $courseId = 0, $surveyId = 0, $options)
+    {
+        //tables
+        $session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $user                   = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_course_lp_view     = Database::get_course_table(TABLE_LP_VIEW);
+
+        $course = api_get_course_info_by_id($courseId); 
+
+        $where = " WHERE course_code = '%s'
+        AND s.status <> 2 and id_session = %s";
+
+        $limit = null;
+        if (!empty($options['limit'])) {
+            $limit = " LIMIT ".$options['limit'];
+        }
+
+        if (!empty($options['where'])) {
+           $where .= ' AND '.$options['where'];
+        }
+
+        $order = null;
+        if (!empty($options['order'])) {
+            $order = " ORDER BY ".$options['order'];
+        }
+
+        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code
+        FROM $session_course_user s
+        INNER JOIN $user u ON u.user_id = s.id_user
+        $where $order $limit";
+
+        $sql_query = sprintf($sql, $course['code'], $sessionId);
+        
+        $rs = Database::query($sql_query);
+        while ($user = Database::fetch_array($rs))
+        {
+            $users[$user['user_id']] = $user;
+        }
+
+        //Get survey questions
+        $questions = survey_manager::get_questions($surveyId, $courseId);
+        $table = array();
+        foreach ($users as $user)
+        {
+            $data = array(
+                'lastname'  => $user[1],
+                'firstname' => $user[2],
+                'username'  => $user[3],
+            );
+
+            //Get questions by user
+            $sql = "SELECT sa.question_id, sa.option_id
+            FROM c_survey_answer sa
+            INNER JOIN c_survey_question sq ON sq.question_id = sa.question_id
+            WHERE sa.survey_id = %d AND sa.c_id = %d AND sa.user = %d";
+
+            $sql_query = sprintf($sql, $surveyId, $courseId, $user['user_id']);
+
+            $result = Database::query($sql_query);
+
+            $user_questions = array();
+            while ($row = Database::fetch_array($result))
+            {
+                $user_questions[$row['question_id']] = $row;
+            }
+
+            //Match course lessons with user progress
+            foreach ($questions as $question_id => $question)
+            {
+                $data[$question_id] = $user_questions[$question_id]['option_id'];
+            }
+
+            $table[] = $data;
+        }
+        return $table;
+    }    
     /**
      * Gets the progress of the given session
      * @param int   session id

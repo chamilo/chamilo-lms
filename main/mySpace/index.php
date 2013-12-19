@@ -160,7 +160,7 @@ echo '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
     Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</span>';
 
-if (!empty($session_id) && !in_array($display, array('accessoverview','lpprogressoverview','progressoverview','exerciseprogress'))) {
+if (!empty($session_id) && !in_array($display, array('accessoverview','lpprogressoverview','progressoverview','exerciseprogress', 'surveyoverview'))) {
     echo '<a href="index.php">'.Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
     if (!api_is_platform_admin()) {
         if (api_get_setting('add_users_by_coach') == 'true') {
@@ -183,7 +183,7 @@ if (!empty($session_id) && !in_array($display, array('accessoverview','lpprogres
 
 // Actions menu
 $nb_menu_items = count($menu_items);
-if (empty($session_id) || in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress'))) {
+if (empty($session_id) || in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'))) {
     if ($nb_menu_items > 1) {
         foreach ($menu_items as $key => $item) {
             echo $item;
@@ -594,6 +594,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 	}
 	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=sessionoverview">'.get_lang('DisplaySessionOverview').'</a>';
 	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=accessoverview">'.get_lang('DisplayAccessOverview').'</a>';
+    echo ' | <a href="'.api_get_self().'?view=admin&amp;display=surveyoverview">'.get_lang('Displaysurveyoverview').'</a>';
     echo ' | <a href="'.api_get_self().'?view=admin&amp;display=lpprogressoverview">'.get_lang('DisplayLpProgressOverview').'</a>';
     echo ' | <a href="'.api_get_self().'?view=admin&amp;display=progressoverview">'.get_lang('DisplayProgressOverview').'</a>';
     echo ' | <a href="'.api_get_self().'?view=admin&amp;display=exerciseprogress">'.get_lang('DisplayExerciseProgress').'</a>';
@@ -602,7 +603,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
     echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin">'.get_lang('LPExerciseResultsBySession').'</a>';
 	echo '<br /><br />';
 
-    if ($is_platform_admin && $view == 'admin' && in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress'))) {
+    if ($is_platform_admin && $view == 'admin' && in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'))) {
         //Session Filter
         $sessionFilter = new FormValidator('session_filter', 'get', '', '', array('class'=> 'form-search'), false);
         $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
@@ -628,7 +629,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         });
         </script>';
         //Course filter
-        if (in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress')))
+        if (in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview')))
         {
                 $courseFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-search'), false);
                 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course_by_session&session_id=' . $_GET['session_id'];
@@ -667,7 +668,10 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     $studentInfo = UserManager::get_user_info_by_id($studentId);
                     $studentList[] = array('id' => $studentInfo['id'], 'text' => $studentInfo['username']);
                 }
+
                 $studentFilter->addElement('select_ajax', 'student_name', get_lang('SearchStudent'), null, array('url' => $url, 'defaults' => $studentList));
+                //$studentFilter->addElement('datepicker', 'startdate', get_lang('StartDate'), array('form_name'=>'lp_add'), 5);
+                //$studentFilter->addElement('datepicker', 'enddate', get_lang('EndDate'), array('form_name'=>'lp_add', 'class' => 'block'), 3);
                 $courseListUrl = api_get_self();
 
                 echo '<div class="">'; 
@@ -684,6 +688,33 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                         });
                     });
                 </script>';
+
+                /*//profile filter  
+                $profileFilter = new FormValidator('answer_filter', 'get', '', '', array('class'=> 'form-search'), false);
+                $options = array(
+                    STUDENT         => get_lang('Student'),
+                    COURSEMANAGER   => get_lang('CourseManager'),
+                    DRH             => get_lang('Drh'),
+                    ANONYMOUS       => get_lang('Anonymous'),
+                    );
+                $profileFilter->addElement('select', 'profile', get_lang('Profile'),$options, array('id' => 'profile'));
+                $courseListUrl = api_get_self();
+
+                echo '<div class="">'; 
+                echo $profileFilter->return_form();
+                echo '</div>';
+
+                echo '<script>
+                $(function() {
+                    $("#profile").on("change", function() {
+                        var sessionId = $("#session_name").val();
+                        var courseId = $("#course_name").val();
+                        var studentId  = $("#student_name").val();
+                        var profileId  = $("#profile").val();
+                        window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&student_id="+studentId+"&profile_id="+profileId;
+                        });
+                    });
+                </script>';*/
         }
         if (in_array($display, array('exerciseprogress')))
         {
@@ -801,6 +832,25 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 {
                     $answer = (isset($_GET['answer'])) ? intval($_GET['answer']) : 2;
                     echo MySpace::display_tracking_exercise_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']), $answer);
+                } else 
+                {
+                    Display::display_warning_message(get_lang('ChooseExercise'));
+                }
+            } else
+            {
+                Display::display_warning_message(get_lang('ChooseCourse'));
+            }
+        } else {
+            Display::display_warning_message(get_lang('ChooseSession'));
+        }
+    } else if($display == 'surveyoverview') {
+        if (!empty($_GET['session_id'])) 
+        {
+            if (!empty($_GET['course_id'])) 
+            {
+                if (!empty($_GET['survey_id'])) 
+                {
+                    echo MySpace::display_survey_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['survey_id']));
                 } else 
                 {
                     Display::display_warning_message(get_lang('ChooseExercise'));

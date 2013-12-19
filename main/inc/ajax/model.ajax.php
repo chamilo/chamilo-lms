@@ -279,6 +279,9 @@ switch ($action) {
         $records = SessionManager::get_user_data_access_tracking_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['student_id']), 0, $options);
         $count = count($records);
         break;
+    case 'get_survey_overview':
+        $count = 10; //temp
+        break;
     /*case 'get_extra_fields':
         $type = $_REQUEST['type'];
         $obj = new ExtraField($type);
@@ -679,6 +682,39 @@ switch ($action) {
             )
         );
         break;
+    case 'get_survey_overview':
+        $sessionId = 0;
+        if (!empty($_GET['session_id']) && !empty($_GET['course_id']) && !empty($_GET['survey_id']))
+        {
+            $sessionId = intval($_GET['session_id']);
+            $courseId  = intval($_GET['course_id']);
+            $surveyId  = intval($_GET['survey_id']);
+            //$course    = api_get_course_info_by_id($courseId);
+        }
+        /**
+         * Add lessons of course
+         */
+        $columns = array(
+            'username',
+            'firstname',
+            'lastname',
+        );
+
+        $questions = survey_manager::get_questions($surveyId, $courseId);
+
+        foreach ($questions as $question_id => $question)
+        {
+            $columns[] = $question_id;
+        }
+        
+        $result = SessionManager::get_survey_overview($sessionId, $courseId, $surveyId,
+            array(
+                'where' => $where_condition,
+                'order' => "$sidx $sord",
+                'limit'=> "$start , $limit"
+            )
+        );
+        break;
     case 'get_session_progress':
         $columns = array(
             'lastname',
@@ -969,6 +1005,7 @@ $allowed_actions = array(
     'get_session_access_overview',
     'get_sessions_tracking',
     'get_session_lp_progress',
+    'get_survey_overview',
     'get_session_progress',
     'get_exercise_progress',
     'get_exercise_results',

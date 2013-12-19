@@ -397,6 +397,63 @@ class MySpace {
      * Display a sortable table that contains an overview off all the progress of the user in a session
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
+    function display_survey_overview($sessionId = 0, $courseId = 0, $surveyId = 0, $answer = 2) {
+
+        $course = api_get_course_info_by_id($courseId); 
+        /**
+         * Column name
+         * The order is important you need to check the $column variable in the model.ajax.php file
+         */
+        $columns = array(
+            get_lang('Username'), 
+            get_lang('FirstName'), 
+            get_lang('LastName'), 
+        );
+        //add lessons of course
+        $questions = survey_manager::get_questions($surveyId, $courseId);
+
+        foreach ($questions as $question_id => $question)
+        {
+            $columns[] = $question['question'];
+        }
+
+        /**
+         * Column config
+         */
+        $column_model   = array(
+            array('name'=>'username',   'index'=>'username',  'width'=>'160',  'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
+            array('name'=>'firstname',  'index'=>'firstname',   'width'=>'100',   'align'=>'left', 'search' => 'true'),
+            array('name'=>'lastname',   'index'=>'lastname',    'width'=>'100',   'align'=>'left', 'search' => 'true'),
+        );
+        //get dinamic column names
+        foreach ($questions as $question_id => $question)
+        {
+            $column_model[] = array('name'=> $question_id,   'index'=>$question_id,    'width'=>'70',   'align'=>'left', 'search' => 'true');
+        }
+
+        $action_links = '';
+        // jqgrid will use this URL to do the selects
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_survey_overview&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId) . '&survey_id=' . intval($surveyId);
+        $tableId = 'lpProgress';
+        $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+
+        $return = '<script>$(function() {'. $table . 
+            'jQuery("#'.$tableId.'").jqGrid("navGrid","#'.$tableId.'_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
+                jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{
+                       caption:"",
+                       title:"' . get_lang('ExportExcel') . '",
+                       onClickButton : function () {
+                           jQuery("#'.$tableId.'").jqGrid("excelExport",{"url":"'.$url.'&export_format=xls"});
+                       }
+                });
+            });</script>';
+        $return .= Display::grid_html($tableId);
+        return $return;
+    }
+    /**
+     * Display a sortable table that contains an overview off all the progress of the user in a session
+     * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
+     */
     function display_tracking_progress_overview($sessionId = 0, $courseId = 0) {
 
        //The order is important you need to check the the $column variable in the model.ajax.php file

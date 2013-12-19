@@ -190,33 +190,6 @@ if (empty($session_id) || in_array($display, array('accessoverview','lpprogresso
         }
     }
 }
-// Create a filter by session
-$sessionFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-search'), false);
-$url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
-$sessionList = array();
-$sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
-if (!empty($sessionId)) {
-    $sessionList = array();
-    $sessionInfo = SessionManager::fetch($sessionId);
-    $sessionList[] = array('id' => $sessionInfo['id'], 'text' => $sessionInfo['name']);
-}
-$sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchCourseBySession'), null, array('url' => $url, 'defaults' => $sessionList));
-$courseListUrl = api_get_self();
-
-#show filter by session
-if ($is_platform_admin && $view == 'admin' && in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress'))) {
-    echo '<div class="pull-right">';
-    echo $sessionFilter->return_form();
-    echo '</div>';
-    echo '<script>
-    $(function() {
-        $("#session_name").on("change", function() {
-           var sessionId = $(this).val();
-           window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId;
-        });
-    });
-    </script>';
-}
 
 echo '</div>';
 
@@ -629,31 +602,155 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
     echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin">'.get_lang('LPExerciseResultsBySession').'</a>';
 	echo '<br /><br />';
 
+    if ($is_platform_admin && $view == 'admin' && in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress'))) {
+        //Session Filter
+        $sessionFilter = new FormValidator('session_filter', 'get', '', '', array('class'=> 'form-search'), false);
+        $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
+        $sessionList = array();
+        $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
+        if (!empty($sessionId)) {
+            $sessionList = array();
+            $sessionInfo = SessionManager::fetch($sessionId);
+            $sessionList[] = array('id' => $sessionInfo['id'], 'text' => $sessionInfo['name']);
+        }
+        $sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchSession'), null, array('url' => $url, 'defaults' => $sessionList));
+        $courseListUrl = api_get_self();
+
+        echo '<div class="">';
+        echo $sessionFilter->return_form();
+        echo '</div>';
+        echo '<script>
+        $(function() {
+            $("#session_name").on("change", function() {
+               var sessionId = $(this).val();
+               window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId;
+            });
+        });
+        </script>';
+        //Course filter
+        if (in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress')))
+        {
+                $courseFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-search'), false);
+                $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course_by_session&session_id=' . $_GET['session_id'];
+                $courseList = array();
+                $courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;
+                if (!empty($courseId)) {
+                    $courseList = array();
+                    $courseInfo = api_get_course_info_by_id($courseId);
+                    $courseList[] = array('id' => $courseInfo['real_id'], 'text' => $courseInfo['name']);
+                }
+                $courseFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList));
+                $courseListUrl = api_get_self();
+
+                echo '<div class="">'; 
+                echo $courseFilter->return_form();
+                echo '</div>';
+                echo '<script>
+                $(function() {
+                    $("#course_name").on("change", function() {
+                        var sessionId = $("#session_name").val();
+                        var courseId  = $("#course_name").val();
+                        window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId;
+                        });
+                    });
+                </script>';
+        }
+        //Student Filter
+        if (in_array($display, array('accessoverview')))
+        {
+                $studentFilter = new FormValidator('student_filter', 'get', '', '', array('class'=> 'form-search'), false);
+                $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_user_by_course&session_id=' . $_GET['session_id'] . '&course_id=' . $_GET['course_id'];
+                $studentList = array();
+                $studentId = isset($_GET['student_id']) ? $_GET['student_id'] : null;
+                if (!empty($studentId)) {
+                    $studentList = array();
+                    $studentInfo = UserManager::get_user_info_by_id($studentId);
+                    $studentList[] = array('id' => $studentInfo['id'], 'text' => $studentInfo['username']);
+                }
+                $studentFilter->addElement('select_ajax', 'student_name', get_lang('SearchStudent'), null, array('url' => $url, 'defaults' => $studentList));
+                $courseListUrl = api_get_self();
+
+                echo '<div class="">'; 
+                echo $studentFilter->return_form();
+                echo '</div>';
+
+                echo '<script>
+                $(function() {
+                    $("#student_name").on("change", function() {
+                        var sessionId = $("#session_name").val();
+                        var courseId = $("#course_name").val();
+                        var studentId  = $("#student_name").val();
+                        window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&student_id="+studentId;
+                        });
+                    });
+                </script>';
+        }
+    }
+
 	if ($display === 'useroverview') {
 		MySpace::display_tracking_user_overview();
 	} else if($display == 'sessionoverview') {
 		MySpace::display_tracking_session_overview();
 	} else if($display == 'accessoverview') {
-        if (!empty($_GET['session_id'])) {
-            MySpace::display_tracking_access_overview();
-        } else {
+        if (!empty($_GET['session_id'])) 
+        {
+            if (!empty($_GET['course_id'])) 
+            {
+                if (!empty($_GET['student_id'])) 
+                {
+                    echo MySpace::display_tracking_access_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['student_id']));;
+                } else
+                {
+                    Display::display_warning_message(get_lang('ChooseStudent'));
+                }
+            } else
+            {
+                Display::display_warning_message(get_lang('ChooseCourse'));
+            }
+        } else
+        {
             Display::display_warning_message(get_lang('ChooseSession'));
         }
     } else if($display == 'lpprogressoverview') {
         if (!empty($_GET['session_id'])) {
-            echo MySpace::display_tracking_lp_progress_overview(intval($_GET['session_id']));
+            if (!empty($_GET['course_id'])) 
+            {
+                echo MySpace::display_tracking_lp_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']));
+            } else
+            {
+                Display::display_warning_message(get_lang('ChooseCourse'));
+            }
         } else {
             Display::display_warning_message(get_lang('ChooseSession'));
         }
     } else if($display == 'progressoverview') {
         if (!empty($_GET['session_id'])) {
-            echo MySpace::display_tracking_progress_overview(intval($_GET['session_id']));
+            if (!empty($_GET['course_id'])) 
+            {
+                echo MySpace::display_tracking_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']));
+            } else
+            {
+                Display::display_warning_message(get_lang('ChooseCourse'));
+            }
         } else {
             Display::display_warning_message(get_lang('ChooseSession'));
         }
     } else if($display == 'exerciseprogress') {
-        if (!empty($_GET['session_id'])) {
-            echo MySpace::display_tracking_exercise_progress_overview(intval($_GET['session_id']));
+        if (!empty($_GET['session_id'])) 
+        {
+            if (!empty($_GET['course_id'])) 
+            {
+                if (!empty($_GET['exercise_id'])) 
+                {
+                    echo MySpace::display_tracking_exercise_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']));
+                } else 
+                {
+                    Display::display_warning_message(get_lang('ChooseExercise'));
+                }
+            } else
+            {
+                Display::display_warning_message(get_lang('ChooseCourse'));
+            }
         } else {
             Display::display_warning_message(get_lang('ChooseSession'));
         }

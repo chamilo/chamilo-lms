@@ -262,7 +262,7 @@ class Security
                 return false;
         }
         if (!empty($option['save'])) {
-            $this->clean[$name] = $result;
+            self::$clean[$name] = $result;
         }
         return $result;
     }

@@ -7208,7 +7208,7 @@ class learnpath
         $return .= '<select id="previous" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
         $return .= '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
         for ($i = 0; $i < count($arrLP); $i++) {
-            if ($arrLP[$i]['parent_item_id'] == $parent_item_id && $arrLP[$i]['id'] != $id) {
+            if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
                 if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
                     $selected = 'selected="selected" ';
                 elseif ($action == 'add')

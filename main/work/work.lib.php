@@ -423,7 +423,6 @@ function getUniqueStudentAttempts($workId, $groupId, $course_id, $sessionId, $us
  * @param $work_parents
  * @param $origin
  * @param array $userList
- * @deprecated
  */
 function display_student_publications_list($id, $my_folder_data, $work_parents, $origin, $userList = array())
 {
@@ -747,6 +746,7 @@ function showTeacherWorkGrid()
     $columnModel = array(
         array('name'=>'type', 'index'=>'type', 'width'=>'50', 'align'=>'left', 'sortable' => 'false'),
         array('name'=>'title', 'index'=>'title',  'width'=>'300',   'align'=>'left'),
+        array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'150',  'align'=>'left'),
         array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'150',  'align'=>'left'),
         array('name'=>'end_on', 'index'=>'end_on', 'width'=>'150',  'align'=>'left'),
         array('name'=>'actions', 'index'=>'actions', 'width'=>'150', 'align'=>'left', 'sortable'=>'false')
@@ -759,6 +759,7 @@ function showTeacherWorkGrid()
     $columns = array(
         get_lang('Type'),
         get_lang('Title'),
+        get_lang('SentDate'),
         get_lang('HandOutDateLimit'),
         get_lang('HandedOut'),
         get_lang('Actions')
@@ -1648,10 +1649,14 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
             $work['type'] = Display::return_icon('work.png');
             $work['expires_on'] = $work['expires_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['expires_on']);
             $work['ends_on'] = $work['ends_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['ends_on']);
+
             if (empty($work['title'])) {
                 $work['title'] = basename($work['url']);
             }
             $work['title'] = Display::url($work['title'], $url.'&id='.$workId);
+
+            $work['title'] .= ' '.Display::label(get_count_work($work['id']), 'success');
+            $work['sent_date'] = date_to_str_ago($work['sent_date']).' <br />'.api_get_local_time($work['sent_date']);
 
             $editLink = Display::url(
                 Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),

@@ -61,13 +61,14 @@ function handle_forum_and_forumcategories($lp_id = null)
     $post_submit_cat = isset($_POST['SubmitForumCategory']) ? true : false;
     $post_submit_forum = isset($_POST['SubmitForum']) ? true : false;
     $get_id = isset($_GET['id']) ? $_GET['id'] : '';
+    $forum_categories_list = get_forum_categories();
 
     // Adding a forum category
-    if (($action_forum_cat == 'add' && $_GET['content'] == 'forumcategory') || $post_submit_cat) {
+    if (($action_forum_cat == 'add' && ($_GET['content'] == 'forumcategory' || empty($forum_categories_list))) || $post_submit_cat) {
         show_add_forumcategory_form(array(), $lp_id); //$lp_id when is called from learning path
     }
     // Adding a forum
-    if ((($action_forum_cat == 'add' || $action_forum_cat == 'edit') && $_GET['content'] == 'forum') || $post_submit_forum) {
+    if ((($action_forum_cat == 'add' || $action_forum_cat == 'edit') && ($_GET['content'] == 'forum' && !empty($forum_categories_list))) || $post_submit_forum) {
         if ($action_forum_cat == 'edit' && $get_id || $post_submit_forum) {
             $inputvalues = get_forums(intval($get_id)); // Note: This has to be cleaned first.
         } else {

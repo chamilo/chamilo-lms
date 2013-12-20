@@ -89,17 +89,17 @@ if ($_POST['form_sent']) {
             foreach ($courses as $course_code) {
                 foreach ($users as $user_id) {
                     $user = api_get_user_info($user_id);
-                    if ($user['status'] <> 4) {
+                    if ($user['status'] <> DRH) {
                         CourseManager::subscribe_user($user_id,$course_code);
                     } else {
                         $errorDrh = 1;
                     }
                 }
             }
-            if($errorDrh == 0) {
+            if ($errorDrh == 0) {
                 Display :: display_confirmation_message(get_lang('UsersAreSubscibedToCourse'));
             } else {
-                Display :: display_error_message(get_lang('HumanResourcesManagerNotRegieteredToCourses'));
+                Display :: display_error_message(get_lang('HumanResourcesManagerShouldNotBeRegisteredToCourses'));
             }
         }
     }

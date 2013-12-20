@@ -120,7 +120,7 @@ $form = new FormValidator('lp_add', 'post', 'lp_controller.php');
 $form->addElement('header', null, get_lang('AddLpToStart'));
 
 // Title
-$form->addElement('text', 'lp_name', api_ucfirst(get_lang('LPName')), array('class' => 'span6'));
+$form->addElement('text', 'lp_name', api_ucfirst(get_lang('LPName')), array('class' => 'span6', 'autofocus' => 'autofocus'));
 $form->applyFilter('lp_name', 'html_filter');
 $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 

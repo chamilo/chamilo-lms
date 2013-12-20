@@ -150,7 +150,7 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
         get_lang('Actions')
     );
     $column_model   = array (
-        array('name'=>'type',           'index'=>'file',            'width'=>'10',   'align'=>'left', 'search' => 'false'),
+        array('name'=>'type',           'index'=>'file',            'width'=>'10',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
@@ -172,7 +172,7 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
     );
 
     $column_model   = array (
-        array('name'=>'type',           'index'=>'file',            'width'=>'10',   'align'=>'left', 'search' => 'false'),
+        array('name'=>'type',           'index'=>'file',            'width'=>'10',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),

@@ -699,7 +699,7 @@ function showStudentWorkGrid()
 {
     $courseInfo = api_get_course_info();
     $columnModel = array(
-        array('name'=>'type', 'index'=>'type', 'width'=>'30',   'align'=>'left', 'sortable'=>'false'),
+        array('name'=>'type', 'index'=>'type', 'width'=>'30',   'align'=>'left', 'sortable' => 'false'),
         array('name'=>'title', 'index'=>'title', 'width'=>'80',   'align'=>'left'),
         array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'500',  'align'=>'left', 'sortable'=>'false')
     );
@@ -745,7 +745,7 @@ function showStudentWorkGrid()
 function showTeacherWorkGrid()
 {
     $columnModel = array(
-        array('name'=>'type', 'index'=>'type', 'width'=>'50', 'align'=>'left'),
+        array('name'=>'type', 'index'=>'type', 'width'=>'50', 'align'=>'left', 'sortable' => 'false'),
         array('name'=>'title', 'index'=>'title',  'width'=>'300',   'align'=>'left'),
         array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'150',  'align'=>'left'),
         array('name'=>'end_on', 'index'=>'end_on', 'width'=>'150',  'align'=>'left'),

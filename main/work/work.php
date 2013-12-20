@@ -224,7 +224,7 @@ switch ($action) {
                 $move_to_path = $move_to_path .'/';
             }
 
-            //security fix: make sure they can't move files that are not in the document table
+            // Security fix: make sure they can't move files that are not in the document table
             if ($path = get_work_path($item_id)) {
 
                 if (move($course_dir.'/'.$path, $base_work_dir . $move_to_path)) {
@@ -247,7 +247,6 @@ switch ($action) {
                 echo generateMoveForm($item_id, $curdirpath, $course_info, $group_id, $session_id);
             }
         }
-
 
         /*	Delete dir */
 

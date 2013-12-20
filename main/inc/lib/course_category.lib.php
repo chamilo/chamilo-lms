@@ -497,6 +497,11 @@ function countCoursesInCategory($category_code)
     return Database::num_rows(Database::query($sql));
 }
 
+/**
+ * @param string $category_code
+ * @param string $random_value
+ * @return array
+ */
 function browseCoursesInCategory($category_code, $random_value = null)
 {
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -672,7 +677,7 @@ function getCourseCategoryNotInList($list)
 }
 
 /**
- * @param $keyword
+ * @param string $keyword
  * @return array|null
  */
 function searchCategoryByKeyword($keyword)
@@ -693,11 +698,15 @@ function searchCategoryByKeyword($keyword)
     $keyword = Database::escape_string($keyword);
 
     $sql = "SELECT c.*, c.name as text FROM $tableCategory c $conditions
-            WHERE (BINARY c.code LIKE '%$keyword%' or BINARY name LIKE '%$keyword%') AND auth_course_child = 'TRUE' $whereCondition ";
+            WHERE (c.code LIKE '%$keyword%' or name LIKE '%$keyword%') AND auth_course_child = 'TRUE' $whereCondition ";
     $result = Database::query($sql);
     return Database::store_result($result, 'ASSOC');
 }
 
+/**
+ * @param array $list
+ * @return array
+ */
 function searchCategoryById($list)
 {
     if (empty($list)) {

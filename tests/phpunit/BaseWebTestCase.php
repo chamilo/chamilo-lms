@@ -14,7 +14,7 @@ class BaseWebTestCase extends WebTestCase
     public function createApplication()
     {
         // do not use require_once
-        $app = require '../../main/inc/global.inc.php';
+        $app = require __DIR__.'/../../main/inc/global.inc.php';
         $app['debug'] = true;
         $app['session.test'] = true;
         $app['exception_handler']->disable();

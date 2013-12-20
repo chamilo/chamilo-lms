@@ -82,3 +82,8 @@ License
 ----------
 
 Chamilo is licensed under the GPLv3 license.
+
+Misc
+----
+
+[![Build Status](https://api.travis-ci.org/chamilo/chamilo-lms.png)](https://travis-ci.org/chamilo/chamilo-lms)

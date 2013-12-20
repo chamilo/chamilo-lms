@@ -1056,11 +1056,13 @@ if (in_array($action, $allowed_actions)) {
         }
         switch ($export_format) {
             case 'xls':
-                Export::export_table_xls($array, 'company_report');
+                $file_name = (!empty($action)) ? $action : 'company_report'; 
+                Export::export_table_xls($array, $file_name);
                 break;
             case 'csv':
             default:
-                Export::export_table_csv($array, 'company_report');
+                $file_name = (!empty($action)) ? $action : 'company_report'; 
+                Export::export_table_csv($array, $file_name);
                 break;
         }
         exit;

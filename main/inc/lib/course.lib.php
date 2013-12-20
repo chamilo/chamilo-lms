@@ -1022,7 +1022,12 @@ class CourseManager
      * @param    bool    True for checking inside sessions too, by default is not checked
      * @return     bool     true if the user is registered in the course, false otherwise
      */
-    public static function is_user_subscribed_in_course($user_id, $course_code = null, $in_a_session = false, $session_id = null) {
+    public static function is_user_subscribed_in_course(
+        $user_id,
+        $course_code = null,
+        $in_a_session = false,
+        $session_id = null
+    ) {
 
         $user_id = intval($user_id);
 
@@ -1044,25 +1049,31 @@ class CourseManager
         $result = Database::fetch_array(Database::query($sql));
 
         if (!empty($result)) {
-            return true; // The user has been registered in this course.
+            // The user has been registered in this course.
+            return true;
         }
 
         if (!$in_a_session) {
-            return false; // The user has not been registered in this course.
+            // The user has not been registered in this course.
+            return false;
         }
 
-        if (Database::num_rows(Database::query('SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
-                ' WHERE id_user = '.$user_id.' '.$condition_course.' ')) > 0) {
+        $sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
+               ' WHERE id_user = '.$user_id.' '.$condition_course;
+        if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
         }
 
-        if (Database::num_rows(Database::query('SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
-                ' WHERE id_user = '.$user_id.' AND status=2 '.$condition_course.' ')) > 0) {
+        $sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
+               ' WHERE id_user = '.$user_id.' AND status=2 '.$condition_course;
+        if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
         }
 
-        if (Database::num_rows(Database::query('SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION).
-                ' WHERE id='.$session_id.' AND id_coach='.$user_id)) > 0) {
+        $sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION).
+        ' WHERE id='.$session_id.' AND id_coach='.$user_id;
+
+        if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
         }
 

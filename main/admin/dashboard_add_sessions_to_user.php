@@ -155,11 +155,11 @@ $UserList = array();
 
 $msg = '';
 if (intval($_POST['formSent']) == 1) {
-	$sessions_list = $_POST['SessionsList'];
-	$affected_rows = SessionManager::suscribe_sessions_to_hr_manager($user_id, $sessions_list);
-	if ($affected_rows)	{
-		$msg = get_lang('AssignedSessionsHaveBeenUpdatedSuccessfully');
-	}
+    $sessions_list = $_POST['SessionsList'];
+    $affected_rows = SessionManager::suscribe_sessions_to_hr_manager($user_id, $sessions_list);
+    if ($affected_rows) {
+        $msg = get_lang('AssignedSessionsHaveBeenUpdatedSuccessfully');
+    }
 }
 
 // display header
@@ -168,19 +168,21 @@ Display::display_header($tool_name);
 // actions
 echo '<div class="actions">';
 if ($user_info['status'] != SESSIONADMIN) {
-	echo 	'<span style="float: right;margin:0px;padding:0px;">
-				<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignUsers').'</a>
-				<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignCourses').'</a>
-			</span>';
+	echo '<span style="float: right;margin:0px;padding:0px;">
+		    <a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('add_user_big.gif', get_lang('AssignUsers'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignUsers').'</a>
+			<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignCourses').'</a>
+         </span>';
 }
 echo '</div>';
 echo Display::page_header(sprintf(get_lang('AssignSessionsToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])));
 
 $assigned_sessions_to_hrm = SessionManager::get_sessions_followed_by_drh($user_id);
+
 $assigned_sessions_id = array_keys($assigned_sessions_to_hrm);
+
 $without_assigned_sessions = '';
 if (count($assigned_sessions_id) > 0) {
-	$without_assigned_sessions = " AND s.id NOT IN(".implode(',',$assigned_sessions_id).")";
+    $without_assigned_sessions = " AND s.id NOT IN (".implode(',',$assigned_sessions_id).") ";
 }
 
 $needle = '%';
@@ -189,12 +191,12 @@ if (isset($_POST['firstLetterSession'])) {
 	$needle = "$needle%";
 }
 
-if ($_configuration['multiple_access_urls']) {
+if (api_is_multiple_url_enabled()) {
 	$sql 	= " SELECT s.id, s.name FROM $tbl_session s LEFT JOIN $tbl_session_rel_access_url a ON (s.id = a.session_id)
 				WHERE  s.name LIKE '$needle%' $without_assigned_sessions AND access_url_id = ".api_get_current_access_url_id()."
                 ORDER BY s.name";
 } else {
-	$sql 	= " SELECT s.id, s.name FROM $tbl_session s
+    $sql 	= " SELECT s.id, s.name FROM $tbl_session s
 				WHERE  s.name LIKE '$needle%' $without_assigned_sessions
                 ORDER BY s.name
                 ";

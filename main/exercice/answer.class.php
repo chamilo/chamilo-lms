@@ -148,7 +148,7 @@ class Answer
 		    $id = array();
 		    // while a record is found
         if (Database::num_rows($result) > 0) {
-                while ($object = Database::fetch_array($result)) {
+              while ($object = Database::fetch_array($result)) {
     			      $id[] = $object['id'];
     		    }
         }

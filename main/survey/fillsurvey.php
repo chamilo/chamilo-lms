@@ -71,8 +71,10 @@ if ($surveyCode != "") {
         api_not_allowed();
     } 
 // If is anonymous and it is allowed to take the survey as anonymous, mark survey as anonymous:
-else if (api_is_anonymous($_user['user_id'], true))	$isAnonymous = true;
-	
+} else {
+    if (api_is_anonymous($_user['user_id'], true)) {
+        $isAnonymous = true;
+    }
 } 
 
 // Header

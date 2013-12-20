@@ -7869,7 +7869,8 @@ class learnpath
      */
     public function get_documents() {
     	$course_info = api_get_course_info();
-    	$document_tree = DocumentManager::get_document_preview($course_info, $this->lp_id, null, 0, true);
+        $sessionId = api_get_session_id();
+    	$document_tree = DocumentManager::get_document_preview($course_info, $this->lp_id, null, $sessionId, true);
     	return $document_tree;
     }
 

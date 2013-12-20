@@ -484,7 +484,7 @@ switch ($action) {
         }
         break;
     case 'get_work_teacher':
-        $columns = array('type', 'title', 'expires_on', 'ends_on', 'actions');
+        $columns = array('type', 'title', 'sent_date', 'expires_on', 'ends_on', 'actions');
         $result = getWorkListTeacher($start, $limit, $sidx, $sord, $where_condition);
         break;
     case 'get_work_student':

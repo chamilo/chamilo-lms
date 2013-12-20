@@ -157,19 +157,20 @@ class Tracking
 
     /**
      * Get las connection date for a student
-     * @param    int                  Student id
-     * @param    bool            Show a warning message (optional)
-     * @param    bool            True for returning results in timestamp (optional)
-     * @return    string|int|bool Date format long without day, false if there are no connections or timestamp if parameter $return_timestamp is true
+     * @param int Student id
+     * @param bool Show a warning message (optional)
+     * @param bool True for returning results in timestamp (optional)
+     * @return string|int|bool Date format long without day, false if there are no connections or
+     * timestamp if parameter $return_timestamp is true
      */
     public static function get_last_connection_date($student_id, $warning_message = false, $return_timestamp = false) {
     	$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
     	$sql = 'SELECT login_date FROM ' . $tbl_track_login . '
-                        WHERE login_user_id = ' . intval($student_id) . '
-                        ORDER BY login_date DESC LIMIT 0,1';
+                WHERE login_user_id = ' . intval($student_id) . '
+                ORDER BY login_date DESC LIMIT 0,1';
 
     	$rs = Database::query($sql);
-    	if(Database::num_rows($rs)>0) {
+    	if (Database::num_rows($rs) > 0) {
     		if ($last_login_date = Database::result($rs, 0, 0)) {
     			$last_login_date = api_get_local_time($last_login_date);
     			if ($return_timestamp) {

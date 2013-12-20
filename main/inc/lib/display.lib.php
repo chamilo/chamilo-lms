@@ -875,9 +875,10 @@ class Display {
         $width_fix = false
     ) {
         $obj = new stdClass();
+        $obj->first = 'first';
 
         if (!empty($url)) {
-            $obj->url       = $url;
+            $obj->url = $url;
         }
 
         //This line should only be used/modified in case of having characters
@@ -887,12 +888,12 @@ class Display {
         $obj->colNames      = $column_names;
         $obj->colModel      = $column_model;
         $obj->pager         = '#'.$div_id.'_pager';
-
         $obj->datatype  = 'json';
+        $obj->viewrecords = 'true';
 
         $all_value = 10000000;
 
-        //Default row quantity
+        // Default row quantity
         if (!isset($extra_params['rowList'])) {
             $extra_params['rowList'] = array(20, 50, 100, 500, 1000, $all_value);
         }
@@ -902,16 +903,16 @@ class Display {
             $obj->datatype  = $extra_params['datatype'];
         }
 
-        //Row even odd style
+        // Row even odd style.
         $obj->altRows = true;
         if (!empty($extra_params['altRows'])) {
-            $obj->altRows      = $extra_params['altRows'];
+            $obj->altRows = $extra_params['altRows'];
         }
 
         if (!empty($extra_params['sortname'])) {
             $obj->sortname      = $extra_params['sortname'];
         }
-        //$obj->sortorder     = 'desc';
+
         if (!empty($extra_params['sortorder'])) {
             $obj->sortorder     = $extra_params['sortorder'];
         }
@@ -925,18 +926,24 @@ class Display {
             $obj->rowNum     = $extra_params['rowNum'];
         }
 
-        $obj->viewrecords = 'true';
-
-        if (!empty($extra_params['viewrecords']))
+        if (!empty($extra_params['viewrecords'])) {
             $obj->viewrecords   = $extra_params['viewrecords'];
+        }
 
+        $beforeSelectRow = null;
+        if (isset($extra_params['beforeSelectRow'])) {
+            $beforeSelectRow = "beforeSelectRow: ".$extra_params['beforeSelectRow'].", ";
+            unset($extra_params['beforeSelectRow']);
+        }
+
+        // Adding extra params
         if (!empty($extra_params)) {
-            foreach ($extra_params as $key=>$element){
+            foreach ($extra_params as $key => $element) {
                 $obj->$key = $element;
             }
         }
 
-        //Adding static data
+        // Adding static data.
         if (!empty($data)) {
             $data_var = $div_id.'_data';
             $json.=' var '.$data_var.' = '.json_encode($data).';';
@@ -945,80 +952,49 @@ class Display {
             $json.="\n";
         }
 
+        $obj->end = 'end';
+
         $json_encode = json_encode($obj);
 
         if (!empty($data)) {
             //Converts the "data":"js_variable" to "data":js_variable othersiwe it will not work
-            $json_encode = str_replace('"data":"'.$data_var.'"','"data":'.$data_var.'',$json_encode);
+            $json_encode = str_replace('"data":"'.$data_var.'"', '"data":'.$data_var.'', $json_encode);
         }
 
-        //Fixing true/false js values that doesn't need the ""
+        // Fixing true/false js values that doesn't need the ""
         $json_encode = str_replace(':"true"',':true',$json_encode);
-        //wrap_cell is not a valid jqgrid attributes is a hack to wrap a text
-        $json_encode = str_replace('"wrap_cell":true','cellattr : function(rowId, value, rowObject, colModel, arrData) { return \'class = "jqgrid_whitespace"\'; }', $json_encode);
+        // wrap_cell is not a valid jqgrid attributes is a hack to wrap a text
+        $json_encode = str_replace('"wrap_cell":true', 'cellattr : function(rowId, value, rowObject, colModel, arrData) { return \'class = "jqgrid_whitespace"\'; }', $json_encode);
         $json_encode = str_replace(':"false"',':false',$json_encode);
-        $json_encode = str_replace('"formatter":"action_formatter"','formatter:action_formatter',$json_encode);
+        $json_encode = str_replace('"formatter":"action_formatter"', 'formatter:action_formatter', $json_encode);
+        $json_encode = str_replace(array('{"first":"first",','"end":"end"}'), '', $json_encode);
 
-        if ($width_fix) {
-            if (is_numeric($width_fix)) {
-                $width_fix = intval($width_fix);
-            } else {
-                $width_fix = '150';
-            }
-            //see BT#2020
-            /*$json .= "$(window).bind('resize', function() {
-                $('#".$div_id."').setGridWidth($(window).width() - ".$width_fix.");
-            }).trigger('resize');";*/
-        }
-
-        //Creating the jqgrid element
-        $json .= '$("#'.$div_id.'").jqGrid(';
+        // Creating the jqgrid element.
+        $json .= '$("#'.$div_id.'").jqGrid({';
+        //$json .= $beforeSelectRow;
         $json .= $json_encode;
-        $json .= ');';
+        $json .= '});';
 
         $all_text = addslashes(get_lang('All'));
         $json .= '$("'.$obj->pager.' option[value='.$all_value.']").text("'.$all_text.'");';
-
-        $json.="\n";
-
-        //Adding edit/delete icons
-        $json.=$formatter;
+        $json.= "\n";
+        // Adding edit/delete icons.
+        $json.= $formatter;
 
         return $json;
-
-        /*
-        Real Example
-        $("#list_week").jqGrid({
-            url:'<?php echo api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_week&session_id='.$session_id; ?>',
-            datatype: 'json',
-            colNames:['Week','Date','Course', 'LP'],
-            colModel :[
-              {name:'week',     index:'week',   width:120, align:'right'},
-              {name:'date',     index:'date',   width:120, align:'right'},
-              {name:'course',   index:'course', width:150},
-              {name:'lp',       index:'lp',     width:250}
-            ],
-            pager: '#pager3',
-            rowNum:100,
-             rowList:[10,20,30],
-            sortname: 'date',
-            sortorder: 'desc',
-            viewrecords: true,
-            grouping:true,
-            groupingView : {
-                groupField : ['week'],
-                groupColumnShow : [false],
-                groupText : ['<b>Week {0} - {1} Item(s)</b>']
-            }
-        });  */
     }
 
+    /**
+     * @param array $headers
+     * @param array $rows
+     * @param array $attributes
+     * @return string
+     */
     public static function table($headers, $rows, $attributes = array()) {
 
     	if (empty($attributes)) {
     		$attributes['class'] = 'data_table';
-    	}
-        //require_once api_get_path(LIBRARY_PATH).'pear/HTML/Table.php';
+        }
         $table = new HTML_Table($attributes);
         $row = 0;
         $column = 0;

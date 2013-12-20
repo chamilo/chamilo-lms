@@ -6795,3 +6795,29 @@ function api_is_allowed_in_course()
 {
     return Session::read('is_allowed_in_course');
 }
+
+/**
+ * Show a string in
+ * @param string $sql
+ */
+function api_error_log($string)
+{
+    // Clean query
+    $bt = debug_backtrace();
+    $caller = array_shift($bt);;
+    $string = str_replace(array("\r", "\n", "\t", "\10"), '', $string);
+
+    error_log("-------------------------------------");
+    error_log($string);
+    error_log("File: ".$caller['file']." +".$caller['line']);
+    error_log("-------------------------------------");
+}
+
+/**
+ * Show a string in
+ * @param string $sql
+ */
+function api_elog($string)
+{
+    return api_error_log($string);
+}

@@ -118,7 +118,7 @@ function settingsForm($defaults)
     $form->addGroup($group, '', get_lang('StudentAllowedToDeleteOwnPublication'));
     $form->addElement('button', 'submit', get_lang('Save'));
     $form->setDefaults($defaults);
-    $form->display();
+    return $form->return_form();
 }
 
 /**
@@ -749,21 +749,11 @@ function showTeacherWorkGrid()
         array('name'=>'title', 'index'=>'title',  'width'=>'300',   'align'=>'left'),
         array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'150',  'align'=>'left'),
         array('name'=>'end_on', 'index'=>'end_on', 'width'=>'150',  'align'=>'left'),
-        array('name'=>'actions', 'index'=>'actions', 'width'=>'150', 'align'=>'left', 'formatter'=>'action_formatter', 'sortable'=>'false')
+        array('name'=>'actions', 'index'=>'actions', 'width'=>'150', 'align'=>'left', 'sortable'=>'false')
     );
-
     $token = null;
-    $baseUrl = api_get_path(WEB_CODE_PATH).'work/';
-    $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-    return \'<a href="'.$baseUrl.'edit_work.php?'.api_get_cidreq().'&id=\'+options.rowId+\'">'.
-        Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>'.
-        '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;" href="'.$baseUrl.'work.php?'.api_get_cidreq().'&action=delete_dir&id=\'+options.rowId+\'">'.
-        Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>'.
-        '\';
-    }';
 
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_teacher&'.api_get_cidreq();
-
     $deleteUrl = api_get_path(WEB_AJAX_PATH).'work.ajax.php?a=delete_work&'.api_get_cidreq();
 
     $columns = array(
@@ -777,13 +767,13 @@ function showTeacherWorkGrid()
     $params = array(
         'multiselect' => true,
         'autowidth' => 'true',
-        'height' => 'auto'
+        'height' => 'auto',
+        //'beforeSelectRow' => 'function(rowid, e) { e.stopPropagation(); }'
     );
 
     $html = '<script>
     $(function() {
-        '.Display::grid_js('workList', $url, $columns, $columnModel, $params, array(), $action_links, true).'
-
+        '.Display::grid_js('workList', $url, $columns, $columnModel, $params, array(), null, true).'
         $("#workList").jqGrid(
             "navGrid",
             "#workList_pager",
@@ -1654,13 +1644,29 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
         $works = array();
         $url = api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq();
         while ($work = Database::fetch_array($result, 'ASSOC')) {
+            $workId = $work['id'];
             $work['type'] = Display::return_icon('work.png');
             $work['expires_on'] = $work['expires_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['expires_on']);
             $work['ends_on'] = $work['ends_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['ends_on']);
             if (empty($work['title'])) {
                 $work['title'] = basename($work['url']);
             }
-            $work['title'] = Display::url($work['title'], $url.'&id='.$work['id']);
+            $work['title'] = Display::url($work['title'], $url.'&id='.$workId);
+
+            $editLink = Display::url(
+                Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
+                api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq()
+            );
+
+            $downloadLink = Display::url(
+                Display::return_icon('save_pack.png', get_lang('Save'), array(), ICON_SIZE_SMALL),
+                api_get_path(WEB_CODE_PATH).'work/downloadfolder.inc.php?id='.$workId.'&'.api_get_cidreq()
+            );
+            $deleteUrl = api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action=delete_dir&'.api_get_cidreq();
+            $deleteLink = '<a href="#" onclick="showConfirmationPopup(this, \''.$deleteUrl.'\' ) " >'.
+                Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+
+            $work['actions'] = $downloadLink.$editLink.$deleteLink;
             $works[] = $work;
         }
     }

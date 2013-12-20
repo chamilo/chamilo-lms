@@ -6,6 +6,8 @@
 
 /* INIT SECTION */
 
+use ChamiloSession as Session;
+
 $language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
 
 require_once '../inc/global.inc.php';
@@ -119,7 +121,6 @@ if (!empty($group_id)) {
     if ($action == 'create_dir') {
         $interbreadcrumb[] = array ('url' => 'work.php','name' => get_lang('CreateAssignment'));
     }
-    Display::display_header(null);
 } else {
     if (isset($origin) && $origin != 'learnpath') {
 
@@ -140,10 +141,6 @@ if (!empty($group_id)) {
         if ($action == 'create_dir') {
             $interbreadcrumb[] = array ('url' => '#','name' => get_lang('CreateAssignment'));
         }
-        Display :: display_header(null);
-    } else {
-        //we are in the learnpath tool
-        Display::display_reduced_header();
     }
 }
 
@@ -153,69 +150,83 @@ event_access_tool(TOOL_STUDENTPUBLICATION);
 $is_allowed_to_edit = api_is_allowed_to_edit();
 $student_can_edit_in_session = api_is_allowed_to_session_edit(false, true);
 
-Display::display_introduction_section(TOOL_STUDENTPUBLICATION);
-
-if ($origin == 'learnpath') {
-    echo '<div style="height:15px">&nbsp;</div>';
-}
-
 /*	Display links to upload form and tool options */
 if (!in_array($action, array('add', 'create_dir'))) {
     $token = Security::get_token();
 }
 $courseInfo = api_get_course_info();
-display_action_links($work_id, $curdirpath, $action);
+
+$currentUrl = api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq();
+$content = null;
+
 // For teachers
 switch ($action) {
     case 'settings':
         //if posts
         if ($is_allowed_to_edit && !empty($_POST['changeProperties'])) {
             updateSettings($course, $_POST['show_score'], $_POST['student_delete_own_publication']);
-            Display::display_confirmation_message(get_lang('Saved'));
+            Session::write('message', Display::return_message(get_lang('Saved'), 'success'));
+            header('Location: '.$currentUrl);
+            exit;
         }
         $studentDeleteOwnPublication = api_get_course_setting('student_delete_own_publication') == 1 ? 1 : 0;
         /*	Display of tool options */
-        settingsForm(
+        $content = settingsForm(
             array(
                 'show_score' => $course_info['show_score'],
                 'student_delete_own_publication' =>  $studentDeleteOwnPublication
             )
         );
         break;
-    case 'mark_work':
-        if (!api_is_allowed_to_edit()) {
-            echo Display::return_message(get_lang('ActionNotAllowed'), 'error');
-            Display::display_footer();
+    case 'add':
+    case 'create_dir':
+        if (!$is_allowed_to_edit) {
+            api_not_allowed();
+        }
+        $form = new FormValidator('form1', 'post', api_get_path(WEB_CODE_PATH).'work/work.php?action=create_dir&'. api_get_cidreq());
+        $form->addElement('header', get_lang('CreateAssignment'));
+        $form->addElement('hidden', 'action', 'add');
+        $form = getFormWork($form, array());
+        $form->addElement('style_submit_button', 'submit', get_lang('CreateDirectory'));
+
+        if ($form->validate()) {
+            $result = addDir($_POST, $user_id, $_course, $group_id, $id_session);
+            if ($result) {
+                $message = Display::return_message(get_lang('DirectoryCreated'), 'success');
+            } else {
+                $message = Display::return_message(get_lang('CannotCreateDir'), 'error');
+            }
+
+            Session::write('message', $message);
+            header('Location: '.$currentUrl);
+            exit;
+        } else {
+            $content = $form->return_form();
         }
         break;
-    case 'create_dir':
-    case 'add':
-        // Show them the form for the directory name
-        if ($is_allowed_to_edit && in_array($action, array('create_dir', 'add'))) {
-
-            $form = new FormValidator('form1', 'post', api_get_path(WEB_CODE_PATH).'work/work.php?action=create_dir&'. api_get_cidreq());
-            $form->addElement('header', get_lang('CreateAssignment'));
-            $form->addElement('hidden', 'action', 'add');
-            $form = getFormWork($form, array());
-            $form->addElement('style_submit_button', 'submit', get_lang('CreateDirectory'));
-
-            if ($form->validate()) {
-                $result = addDir($_POST, $user_id, $_course, $group_id, $id_session);
-                if ($result) {
-                    Display::display_confirmation_message(get_lang('DirectoryCreated'), false);
-                } else {
-                    Display::display_error_message(get_lang('CannotCreateDir'));
-                }
-            } else {
-                $form->display();
+    case 'delete_dir':
+        if ($is_allowed_to_edit) {
+            $work_to_delete = get_work_data_by_id($_REQUEST['id']);
+            $result = deleteDirWork($_REQUEST['id']);
+            if ($result) {
+                $message = Display::return_message(get_lang('DirDeleted') . ': '.$work_to_delete['title'], 'success');
+                Session::write('message', $message);
+                header('Location: '.$currentUrl);
+                exit;
             }
         }
-    case 'delete_dir':
+        break;
     case 'move':
+        /*	Move file form request */
+        if ($is_allowed_to_edit) {
+            if (!empty($item_id)) {
+                $content = generateMoveForm($item_id, $curdirpath, $course_info, $group_id, $session_id);
+            }
+        }
+        break;
     case 'move_to':
-    case 'list':
         /* Move file command */
-        if ($is_allowed_to_edit && $action == 'move_to') {
+        if ($is_allowed_to_edit) {
             $move_to_path = get_work_path($_REQUEST['move_to_id']);
 
             if ($move_to_path==-1) {
@@ -226,42 +237,28 @@ switch ($action) {
 
             // Security fix: make sure they can't move files that are not in the document table
             if ($path = get_work_path($item_id)) {
-
                 if (move($course_dir.'/'.$path, $base_work_dir . $move_to_path)) {
                     // Update db
                     updateWorkUrl($item_id, 'work' . $move_to_path, $_REQUEST['move_to_id']);
                     api_item_property_update($_course, 'work', $_REQUEST['move_to_id'], 'FolderUpdated', $user_id);
 
-                    Display::display_confirmation_message(get_lang('DirMv'));
+                    $message = Display::return_message(get_lang('DirMv'), 'success');
                 } else {
-                    Display::display_error_message(get_lang('Impossible'));
+                    $message = Display::return_message(get_lang('Impossible'), 'error');
                 }
             } else {
-                Display :: display_error_message(get_lang('Impossible'));
+                $message = Display::return_message(get_lang('Impossible'), 'error');
             }
+            Session::write('message', $message);
+            header('Location: '.$currentUrl);
+            exit;
         }
-
-        /*	Move file form request */
-        if ($is_allowed_to_edit && $action == 'move') {
-            if (!empty($item_id)) {
-                echo generateMoveForm($item_id, $curdirpath, $course_info, $group_id, $session_id);
-            }
-        }
-
-        /*	Delete dir */
-
-        if ($is_allowed_to_edit && $action == 'delete_dir') {
-            $work_to_delete = get_work_data_by_id($_REQUEST['id']);
-            $result = deleteDirWork($_REQUEST['id']);
-
-            if ($result) {
-                Display::display_confirmation_message(get_lang('DirDeleted') . ': '.$work_to_delete['title']);
-            }
-        }
+        break;
+    case 'list':
 
         /*	Display list of student publications */
         if (!empty($my_folder_data['description'])) {
-            echo '<p><div><strong>'.
+            $content = '<p><div><strong>'.
                 get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description'], STUDENT).
                 '</p></div></p>';
         }
@@ -277,19 +274,40 @@ switch ($action) {
             $userList = getWorkUserList($course_code, $session_id);
 
             // Work list
-            echo '<div class="row">';
-            echo '<div class="span9">';
-            $grid = showTeacherWorkGrid();
-            echo $grid ;
-            echo '</div>';
-            echo '<div class="span3">';
-            echo showStudentList($userList, $work_parents, $group_id, $course_id, $session_id);
-            echo '</div>';
+            $content .= '<div class="row">';
+            $content .= '<div class="span9">';
+            $content .= showTeacherWorkGrid();
+            $content .= '</div>';
+            $content .= '<div class="span3">';
+            $content .= showStudentList($userList, $work_parents, $group_id, $course_id, $session_id);
+            $content .= '</div>';
         } else {
-            echo showStudentWorkGrid();
+            $content .= showStudentWorkGrid();
         }
     break;
 }
+
+if (isset($origin) && $origin != 'learnpath') {
+    Display :: display_header(null);
+} else {
+    // We are in the learnpath tool
+    Display::display_reduced_header();
+}
+
+Display::display_introduction_section(TOOL_STUDENTPUBLICATION);
+
+if ($origin == 'learnpath') {
+    echo '<div style="height:15px">&nbsp;</div>';
+}
+
+display_action_links($work_id, $curdirpath, $action);
+
+$message = Session::read('message');
+echo $message;
+Session::erase('message');
+
+echo $content;
+
 if ($origin != 'learnpath') {
     //we are not in the learning path tool
     Display :: display_footer();

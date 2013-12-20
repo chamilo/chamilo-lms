@@ -31,7 +31,10 @@ $this_section = SECTION_COURSES;
 // "Course validation" feature. This value affects the way of a new course creation:
 // true  - the new course is requested only and it is created after approval;
 // false - the new course is created immediately, after filling this form.
-$course_validation_feature = api_get_setting('course_validation') == 'true';
+$course_validation_feature = false;
+if (api_get_setting('course_validation') == 'true' && !api_is_platform_admin()) {
+    $course_validation_feature = true;
+}
 
 // Require additional libraries.
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';

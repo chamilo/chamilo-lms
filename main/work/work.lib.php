@@ -1758,6 +1758,12 @@ function get_work_user_list_from_documents(
     $direction = in_array(strtolower($direction), array('desc', 'asc')) ? $direction : 'desc';
     $column = Database::escape_string($column);
 
+    if ($getCount) {
+        $result = Database::query($sql);
+        $result = Database::fetch_array($result);
+        return $result['count'];
+    }
+
     $sql .= " ORDER BY $column $direction";
     $sql .= " LIMIT $start, $limit";
 
@@ -1771,99 +1777,95 @@ function get_work_user_list_from_documents(
         $qualificationExists = true;
     }
 
-    if ($getCount) {
-        $result = Database::fetch_array($result);
-        return $result['count'];
-    } else {
-        $workList = array();
+    $workList = array();
 
-        $urlAdd = api_get_path(WEB_CODE_PATH).'work/upload_from_template.php?'.api_get_cidreq();
-        $urlEdit = api_get_path(WEB_CODE_PATH).'work/edit.php?'.api_get_cidreq();
-        $urlDelete = api_get_path(WEB_CODE_PATH).'work/work_list.php?action=delete&'.api_get_cidreq();
-        $urlView = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq();
+    $urlAdd = api_get_path(WEB_CODE_PATH).'work/upload_from_template.php?'.api_get_cidreq();
+    $urlEdit = api_get_path(WEB_CODE_PATH).'work/edit.php?'.api_get_cidreq();
+    $urlDelete = api_get_path(WEB_CODE_PATH).'work/work_list.php?action=delete&'.api_get_cidreq();
+    $urlView = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq();
 
-        $editIcon = Display::return_icon('edit.png', get_lang('Edit'));
-        $addIcon = Display::return_icon('add.png', get_lang('Add'));
-        $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'));
-        $viewIcon = Display::return_icon('default.png', get_lang('View'));
+    $editIcon = Display::return_icon('edit.png', get_lang('Edit'));
+    $addIcon = Display::return_icon('add.png', get_lang('Add'));
+    $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'));
+    $viewIcon = Display::return_icon('default.png', get_lang('View'));
 
-        $allowEdition = api_get_course_setting('student_delete_own_publication');
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $userId = $row['user_id'];
-            $documentId = $row['document_id'];
-            $itemId = $row['id'];
+    $allowEdition = api_get_course_setting('student_delete_own_publication');
+    while ($row = Database::fetch_array($result, 'ASSOC')) {
+        $userId = $row['user_id'];
+        $documentId = $row['document_id'];
+        $itemId = $row['id'];
 
-            $addLinkShowed = false;
+        $addLinkShowed = false;
 
-            if (empty($documentId)) {
-                $url = $urlEdit.'&item_id='.$row['id'].'&id='.$workId;
+        if (empty($documentId)) {
+            $url = $urlEdit.'&item_id='.$row['id'].'&id='.$workId;
+            $editLink = Display::url($editIcon, $url);
+            if ($allowEdition == false) {
+                $editLink = null;
+            }
+        } else {
+            $documentToWork = getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $userId);
+            if (empty($documentToWork)) {
+                $url = $urlAdd.'&document_id='.$documentId.'&id='.$workId;
+                $editLink = Display::url($addIcon, $url);
+                $addLinkShowed = true;
+            } else {
+
+                $row['title'] = $documentToWork['title'];
+                $row['sent_date'] = $documentToWork['sent_date'];
+                $newWorkId = $documentToWork['id'];
+                $url = $urlEdit.'&item_id='.$newWorkId.'&id='.$workId;
                 $editLink = Display::url($editIcon, $url);
+
                 if ($allowEdition == false) {
                     $editLink = null;
                 }
-            } else {
-                $documentToWork = getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $userId);
-                if (empty($documentToWork)) {
-                    $url = $urlAdd.'&document_id='.$documentId.'&id='.$workId;
-                    $editLink = Display::url($addIcon, $url);
-                    $addLinkShowed = true;
-                } else {
-
-                    $row['title'] = $documentToWork['title'];
-                    $row['sent_date'] = $documentToWork['sent_date'];
-                    $newWorkId = $documentToWork['id'];
-                    $url = $urlEdit.'&item_id='.$newWorkId.'&id='.$workId;
-                    $editLink = Display::url($editIcon, $url);
-
-                    if ($allowEdition == false) {
-                        $editLink = null;
-                    }
-                }
             }
-
-            if ($allowEdition && !empty($itemId)) {
-                $deleteLink  = Display::url($deleteIcon, $urlDelete.'&item_id='.$itemId.'&id='.$workId);
-            } else {
-                $deleteLink = null;
-            }
-
-            $viewLink = null;
-
-            if (!empty($itemId)) {
-                $viewLink = Display::url($viewIcon, $urlView.'&id='.$itemId);
-            }
-
-            $row['type'] = build_document_icon_tag('file', $row['file']);
-
-            if ($qualificationExists) {
-                if (empty($row['qualificator_id'])) {
-                    $status = Display::label(get_lang('NotRevised'), 'warning');
-                } else {
-                    $status = Display::label(get_lang('Revised'), 'success');
-                }
-                $row['qualificator_id'] = $status;
-            }
-
-            if (!empty($row['qualification'])) {
-                $row['qualification'] = Display::label($row['qualification'], 'info');
-            }
-
-            if (!empty($row['sent_date'])) {
-                $row['sent_date'] = api_get_local_time($row['sent_date']);
-            }
-
-            if ($userId == $currentUserId) {
-                $row['actions'] = $viewLink.$editLink.$deleteLink;
-            }
-
-            if ($addLinkShowed) {
-                $row['qualification'] = '';
-                $row['qualificator_id'] = '';
-            }
-
-            $workList[] = $row;
         }
+
+        if ($allowEdition && !empty($itemId)) {
+            $deleteLink  = Display::url($deleteIcon, $urlDelete.'&item_id='.$itemId.'&id='.$workId);
+        } else {
+            $deleteLink = null;
+        }
+
+        $viewLink = null;
+
+        if (!empty($itemId)) {
+            $viewLink = Display::url($viewIcon, $urlView.'&id='.$itemId);
+        }
+
+        $row['type'] = build_document_icon_tag('file', $row['file']);
+
+        if ($qualificationExists) {
+            if (empty($row['qualificator_id'])) {
+                $status = Display::label(get_lang('NotRevised'), 'warning');
+            } else {
+                $status = Display::label(get_lang('Revised'), 'success');
+            }
+            $row['qualificator_id'] = $status;
+        }
+
+        if (!empty($row['qualification'])) {
+            $row['qualification'] = Display::label($row['qualification'], 'info');
+        }
+
+        if (!empty($row['sent_date'])) {
+            $row['sent_date'] = api_get_local_time($row['sent_date']);
+        }
+
+        if ($userId == $currentUserId) {
+            $row['actions'] = $viewLink.$editLink.$deleteLink;
+        }
+
+        if ($addLinkShowed) {
+            $row['qualification'] = '';
+            $row['qualificator_id'] = '';
+        }
+
+        $workList[] = $row;
     }
+
     return $workList;
 }
 

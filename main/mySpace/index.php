@@ -659,6 +659,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         //Student Filter
         if (in_array($display, array('accessoverview')))
         {
+                $courseListUrl = api_get_self();
                 $studentFilter = new FormValidator('student_filter', 'get', '', '', array('class'=> 'form-search'), false);
                 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_user_by_course&session_id=' . $_GET['session_id'] . '&course_id=' . $_GET['course_id'];
                 $studentList = array();
@@ -669,24 +670,69 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     $studentList[] = array('id' => $studentInfo['id'], 'text' => $studentInfo['username']);
                 }
 
-                $studentFilter->addElement('select_ajax', 'student_name', get_lang('SearchStudent'), null, array('url' => $url, 'defaults' => $studentList));
-                //$studentFilter->addElement('datepicker', 'startdate', get_lang('StartDate'), array('form_name'=>'lp_add'), 5);
-                //$studentFilter->addElement('datepicker', 'enddate', get_lang('EndDate'), array('form_name'=>'lp_add', 'class' => 'block'), 3);
-                $courseListUrl = api_get_self();
+                $studentFilter->addElement('text', 'from', get_lang('From'), array('id' => 'date_from'), array('defaults' => $_GET['date_from']));
+                $studentFilter->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to'), $_GET['date_to']);
+
+                $studentFilter->addElement('select_ajax', 'student_name', get_lang('SearchStudent'), null, array('url' => $url, 'defaults' => $studentList), array('class' => 'pull-left'));
+                $options = array(
+                    ''              => get_lang('Select'),
+                    STUDENT         => get_lang('Student'),
+                    COURSEMANAGER   => get_lang('CourseManager'),
+                    DRH             => get_lang('Drh'),
+                    );
+                $studentFilter->addElement('select', 'profile', get_lang('Profile'),$options, array('id' => 'profile'));
 
                 echo '<div class="">'; 
                 echo $studentFilter->return_form();
                 echo '</div>';
 
+                //TODO fix this hack
+                $date_to = (!empty($_GET['date_to'])) ?  ' $(\'#date_to\').val(\'' . $_GET['date_to'] . '\'); ' : '';
+                $date_from =  (!empty($_GET['date_from'])) ?  ' $(\'#date_from\').val(\'' . $_GET['date_from'] . '\'); ' : '';
                 echo '<script>
                 $(function() {
+                    ' . $date_to . '
+                    ' . $date_from . '
                     $("#student_name").on("change", function() {
-                        var sessionId = $("#session_name").val();
-                        var courseId = $("#course_name").val();
-                        var studentId  = $("#student_name").val();
-                        window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&student_id="+studentId;
+                        var date_to     = $(\'#date_to\').val();
+                        var date_from   = $(\'#date_from\').val();
+                        var sessionId   = $("#session_name").val();
+                        var courseId    = $("#course_name").val();
+                        var studentId   = $("#student_name").val();
+                        window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&student_id="+studentId+"&date_to="+date_to+"&date_from="+date_from;
                         });
                     });
+                    $("#profile").on("change", function() {
+                        var date_to     = $(\'#date_to\').val();
+                        var date_from   = $(\'#date_from\').val();
+                        var sessionId   = $("#session_name").val();
+                        var courseId    = $("#course_name").val();
+                        var profile     = $("#profile").val();
+                        window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&profile="+profile+"&date_to="+date_to+"&date_from="+date_from;
+                    $( "#date_from, #date_to").datepicker({
+                        dateFormat:  \'yy-mm-dd\',
+                        onSelect: function( selectedDate ) {
+                            var filled = areBothFilled();
+                            if (filled) {
+                                var date_to     = $(\'#date_to\').val();
+                                date_to = date_to.replace(/-/g,""); 
+                                var date_from   = $(\'#date_from\').val();
+                                date_from = date_from.replace(/-/g,""); 
+                                var sessionId   = $("#session_name").val();
+                                var courseId    = $("#course_name").val();
+                                var studentId   = $("#student_name").val();
+                                window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&student_id="+studentId+"&date_to="+date_to+"&date_from="+date_from;
+                            }
+                        }
+                    });
+                });
+                    function areBothFilled() {
+                        var returnValue = false;
+                        if ((document.getElementById("date_from").value != "") && (document.getElementById("date_to").value != "")){
+                            returnValue = true;
+                        }
+                        return returnValue;
+                    }
                 </script>';
 
                 /*//profile filter  
@@ -728,7 +774,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $exerciseInfo = survey_manager::get_survey($surveyId, 0, $course['code']);
                 $surveyList[] = array('id' => $exerciseInfo['id'], 'text' => $exerciseInfo['title']);
             }
-            $surveyOverview->addElement('select_ajax', 'survey_name', get_lang('SearchExercise'), null, array('url' => $url, 'defaults' => $surveyList));
+            $surveyOverview->addElement('select_ajax', 'survey_name', get_lang('SearchSurvey'), null, array('url' => $url, 'defaults' => $surveyList));
             $courseListUrl = api_get_self();
 
             echo '<div class="">'; 
@@ -814,12 +860,21 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         {
             if (!empty($_GET['course_id'])) 
             {
-                if (!empty($_GET['student_id'])) 
+                if(!empty($_GET['date_to']) && (!empty($_GET['date_from'])))
                 {
-                    echo MySpace::display_tracking_access_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['student_id']));;
-                } else
+                    if (!empty($_GET['student_id'])) 
+                    {
+                        echo MySpace::display_tracking_access_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['student_id']), '', $_GET['date_to'], $_GET['date_from']);
+                    } else if (!empty($_GET['profile']))
+                    {
+                        echo MySpace::display_tracking_access_overview(intval($_GET['session_id']), intval($_GET['course_id']), '', $_GET['profile'], $_GET['date_to'], $_GET['date_from']);
+                    } else 
+                    {
+                        Display::display_warning_message(get_lang('ChooseStudentOrProfile'));
+                    }
+                } else 
                 {
-                    Display::display_warning_message(get_lang('ChooseStudent'));
+                    Display::display_warning_message(get_lang('ChooseStartDateAndEndDate'));
                 }
             } else
             {
@@ -883,7 +938,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     echo MySpace::display_survey_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['survey_id']));
                 } else 
                 {
-                    Display::display_warning_message(get_lang('ChooseExercise'));
+                    Display::display_warning_message(get_lang('ChooseSurvey'));
                 }
             } else
             {

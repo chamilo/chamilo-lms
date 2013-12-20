@@ -578,7 +578,7 @@ class MySpace {
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      * @version Chamilo 1.9.6
      */
-    function display_tracking_access_overview($sessionId = 0, $courseId = 0, $studentId = 0) {
+    function display_tracking_access_overview($sessionId = 0, $courseId = 0, $studentId = '', $profile = '', $date_to, $date_from) {
         //The order is important you need to check the the $column variable in the model.ajax.php file
         $columns = array(
             get_lang('LoginDate'),
@@ -602,7 +602,7 @@ class MySpace {
 
         $action_links = '';
         // jqgrid will use this URL to do the selects
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_access_overview&session_id=' . $sessionId . '&course_id=' . $courseId . '&student_id=' . $studentId;
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_access_overview&session_id=' . $sessionId . '&course_id=' . $courseId . '&student_id=' . $studentId . '&profile=' . $profile . '&date_to=' . $date_to . '&date_from=' . $date_from;
         $tableId = 'accessOverview';
         $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 

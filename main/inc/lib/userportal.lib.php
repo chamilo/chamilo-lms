@@ -890,7 +890,14 @@ class IndexManager {
 		$my_account_content = '<ul class="nav nav-list">';
 
 		if ($show_create_link) {
-			$my_account_content .= '<li><a href="main/create_course/add_course.php" class="add course">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
+			$my_account_content .= '<li><a href="main/create_course/add_course.php" class="add course">';
+            if (api_get_setting('course_validation') == 'true' && !api_is_platform_admin()) {
+                $my_account_content .= get_lang('CreateCourseRequest');
+            }
+            else {
+                $my_account_content .= get_lang('CourseCreate');
+            }
+            $my_account_content .= '</a></li>';
 		}
 
         //Sort courses

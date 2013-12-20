@@ -111,7 +111,7 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
     );
 
     $column_model   = array (
-        array('name'=>'type', 'index'=>'file', 'width'=>'5',   'align'=>'left', 'search' => 'false'),
+        array('name'=>'type', 'index'=>'file', 'width'=>'5',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
         array('name'=>'title', 'index'=>'title', 'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
         array('name'=>'qualification',	'index'=>'qualification', 'width'=>'10',   'align'=>'left', 'search' => 'true'),
         array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'30',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
@@ -129,7 +129,7 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
     );
 
     $column_model   = array (
-        array('name'=>'type',           'index'=>'file',            'width'=>'5',   'align'=>'left', 'search' => 'false'),
+        array('name'=>'type',           'index'=>'file',            'width'=>'5',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
         array('name'=>'title',          'index'=>'title',           'width'=>'60',   'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
         array('name'=>'sent_date',       'index'=>'sent_date',      'width'=>'30',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true', 'sortable'=>'false'),
         array('name'=>'actions',        'index'=>'actions',         'width'=>'20',   'align'=>'left', 'search' => 'false', 'sortable'=>'false')

@@ -484,7 +484,7 @@ switch ($action) {
         }
         break;
     case 'get_work_teacher':
-        $columns = array('type', 'title', 'expires_on', 'ends_on', 'actions');
+        $columns = array('type', 'title', 'sent_date', 'expires_on', 'ends_on', 'actions');
         $result = getWorkListTeacher($start, $limit, $sidx, $sord, $where_condition);
         break;
     case 'get_work_student':
@@ -1056,12 +1056,12 @@ if (in_array($action, $allowed_actions)) {
         }
         switch ($export_format) {
             case 'xls':
-                $file_name = (!empty($action)) ? $action : 'company_report'; 
+                $file_name = (!empty($action)) ? $action : 'company_report';
                 Export::export_table_xls($array, $file_name);
                 break;
             case 'csv':
             default:
-                $file_name = (!empty($action)) ? $action : 'company_report'; 
+                $file_name = (!empty($action)) ? $action : 'company_report';
                 Export::export_table_csv($array, $file_name);
                 break;
         }

@@ -194,6 +194,68 @@ $(document).scroll(function() {
     }
 });
 
+function showConfirmationPopup(obj, urlParam)
+{
+    if (urlParam) {
+        url = urlParam
+    } else {
+        url = obj.href;
+    }
+
+    var dialog  = $("#dialog");
+    if ($("#dialog").length == 0) {
+        dialog  = $('<div id="dialog" style="display:none">{{ "ConfirmYourChoice" | get_lang }} </div>').appendTo('body');
+    }
+
+    var width_value = 350;
+    var height_value = 150;
+    var resizable_value = true;
+
+    var new_param = get_url_params(url, 'width');
+    if (new_param) {
+        width_value = new_param;
+    }
+
+    var new_param = get_url_params(url, 'height')
+    if (new_param) {
+        height_value = new_param;
+    }
+
+    var new_param = get_url_params(url, 'resizable');
+    if (new_param) {
+        resizable_value = new_param;
+    }
+
+    // Show dialog
+    dialog.dialog({
+        modal       : true,
+        width       : width_value,
+        height      : height_value,
+        resizable   : resizable_value,
+        buttons: [
+            {
+                text: '{{ 'Yes' | get_lang }}',
+                click: function() {
+                    window.location = url;
+                },
+                icons:{
+                    primary:'ui-icon-locked'
+                }
+            },
+            {
+                text: '{{ 'No' | get_lang }}',
+                click: function() { $(this).dialog("close"); },
+                icons:{
+                    primary:'ui-icon-locked'
+                }
+            }
+        ]
+    });
+    console.log('dd');
+    // prevent the browser to follow the link
+    return false;
+}
+
 $(function() {
 
     check_brand();
@@ -237,21 +299,21 @@ $(function() {
             dialog  = $('<div id="dialog" style="display:none"></div>').appendTo('body');
         }
 
-        width_value = 580;
-        height_value = 450;
-        resizable_value = true;
+        var width_value = 580;
+        var height_value = 450;
+        var resizable_value = true;
 
-        new_param = get_url_params(url, 'width');
+        var new_param = get_url_params(url, 'width');
         if (new_param) {
             width_value = new_param;
         }
 
-        new_param = get_url_params(url, 'height')
+        var new_param = get_url_params(url, 'height')
         if (new_param) {
             height_value = new_param;
         }
 
-        new_param = get_url_params(url, 'resizable');
+        var new_param = get_url_params(url, 'resizable');
         if (new_param) {
             resizable_value = new_param;
         }
@@ -269,11 +331,17 @@ $(function() {
                 });
             }
         );
-        //prevent the browser to follow the link
+        // prevent the browser to follow the link
         return false;
     });
 
-    //old jquery.menu.js
+    // Global confirmation
+    $('.popup-confirmation').on('click', function() {
+        showConfirmationPopup(this);
+        return false;
+    });
+
+    // old jquery.menu.js
     $('#navigation a').stop().animate({
         'marginLeft':'50px'
     },1000);

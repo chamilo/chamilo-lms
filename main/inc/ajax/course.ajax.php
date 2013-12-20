@@ -60,7 +60,9 @@ switch ($action) {
                 1, //$orderby = 1,
                 'ASC',
                 -1,
-                $_REQUEST['q']
+                $_REQUEST['q'],
+                null,
+                true
             );
             $results = array();
 

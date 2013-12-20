@@ -594,7 +594,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 	}
 	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=sessionoverview">'.get_lang('DisplaySessionOverview').'</a>';
 	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=accessoverview">'.get_lang('DisplayAccessOverview').'</a>';
-    echo ' | <a href="'.api_get_self().'?view=admin&amp;display=surveyoverview">'.get_lang('Displaysurveyoverview').'</a>';
+    echo ' | <a href="'.api_get_self().'?view=admin&amp;display=surveyoverview">'.get_lang('DisplaySurveyOverview').'</a>';
     echo ' | <a href="'.api_get_self().'?view=admin&amp;display=lpprogressoverview">'.get_lang('DisplayLpProgressOverview').'</a>';
     echo ' | <a href="'.api_get_self().'?view=admin&amp;display=progressoverview">'.get_lang('DisplayProgressOverview').'</a>';
     echo ' | <a href="'.api_get_self().'?view=admin&amp;display=exerciseprogress">'.get_lang('DisplayExerciseProgress').'</a>';
@@ -695,7 +695,6 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     STUDENT         => get_lang('Student'),
                     COURSEMANAGER   => get_lang('CourseManager'),
                     DRH             => get_lang('Drh'),
-                    ANONYMOUS       => get_lang('Anonymous'),
                     );
                 $profileFilter->addElement('select', 'profile', get_lang('Profile'),$options, array('id' => 'profile'));
                 $courseListUrl = api_get_self();

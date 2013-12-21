@@ -290,6 +290,8 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) 
                     $exercise_info['question'][$question_index]['title'] = trim(substr($info,0,40)).'...';
                     $exercise_info['question'][$question_index]['description'] = $info;
                 }
+            } else {
+                $exercise_info['question'][$question_index]['description'] = $info;
             }
         }
     }

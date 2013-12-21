@@ -713,13 +713,13 @@ class Exercise {
         if ($id) {
             // we prepare date in the database using the api_get_utc_datetime() function
             if (!empty($this->start_time) && $this->start_time != '0000-00-00 00:00:00') {
-                $start_time = Database::escape_string(api_get_utc_datetime($this->start_time));
+                $start_time = Database::escape_string($this->start_time);
             } else {
                 $start_time = '0000-00-00 00:00:00';
             }
 
             if (!empty($this->end_time) && $this->end_time != '0000-00-00 00:00:00') {
-                $end_time 	= Database::escape_string(api_get_utc_datetime($this->end_time));
+                $end_time 	= Database::escape_string($this->end_time);
             } else {
                 $end_time = '0000-00-00 00:00:00';
             }
@@ -1251,7 +1251,7 @@ class Exercise {
             $start_time['i'] = sprintf('%02d', $start_time['i']);
             $start_time['d'] = sprintf('%02d', $start_time['d']);
 
-            $this->start_time = $start_time['Y'].'-'.$start_time['F'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00';
+            $this->start_time = api_get_utc_datetime($start_time['Y'].'-'.$start_time['F'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00');
 
         } else {
             $this->start_time = '0000-00-00 00:00:00';
@@ -1263,7 +1263,7 @@ class Exercise {
             $end_time['i'] = sprintf('%02d', $end_time['i']);
             $end_time['d'] = sprintf('%02d', $end_time['d']);
 
-            $this->end_time = $end_time['Y'].'-'.$end_time['F'].'-'.$end_time['d'].' '.$end_time['H'].':'.$end_time['i'].':00';
+            $this->end_time = api_get_utc_datetime($end_time['Y'].'-'.$end_time['F'].'-'.$end_time['d'].' '.$end_time['H'].':'.$end_time['i'].':00');
         } else {
             $this->end_time   = '0000-00-00 00:00:00';
         }

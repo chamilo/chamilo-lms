@@ -246,7 +246,7 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) 
             $exercise_info['question'][$question_index]['correct_answers'][] = $correct_answer_index + 1;
             //weight for correct answer
             $exercise_info['question'][$question_index]['weighting'][$correct_answer_index] = 1;
-        } elseif (preg_match('/^SCORE:\s?(.*)\s?/', $info, $matches)) {
+        } elseif (preg_match('/^SCORE:\s?(\d{3})\s?/', $info, $matches)) {
             $total_weight = $matches[1];
         } elseif (preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $info, $matches)) {
             //Comment of correct answer

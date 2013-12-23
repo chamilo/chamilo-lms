@@ -703,7 +703,6 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                         var courseId    = $("#course_name").val();
                         var studentId   = $("#student_name").val();
                         window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&student_id="+studentId+"&date_to="+date_to+"&date_from="+date_from;
-                        });
                     });
                     $("#profile").on("change", function() {
                         var date_to     = $(\'#date_to\').val();
@@ -712,6 +711,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                         var courseId    = $("#course_name").val();
                         var profile     = $("#profile").val();
                         window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&profile="+profile+"&date_to="+date_to+"&date_from="+date_from;
+                    });
                     $( "#date_from, #date_to").datepicker({
                         dateFormat:  \'yy-mm-dd\',
                         onSelect: function( selectedDate ) {

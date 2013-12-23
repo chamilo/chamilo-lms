@@ -8,10 +8,10 @@
  * Initialization
  */
 // name of the language file that needs to be included
-$language_file=array('userInfo');
+$language_file = array('userInfo');
 
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 
 // including some necessary dokeos files
 require_once '../inc/global.inc.php';
@@ -20,8 +20,10 @@ require_once '../inc/lib/xajax/xajax.inc.php';
 api_block_anonymous_users();
 
 $xajax = new xajax();
-//$xajax->debugOn();
-$xajax -> registerFunction ('search_users');
+
+$xajax->registerFunction ('search_users');
+
+$add = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -63,7 +65,7 @@ if (empty($group_id)) {
     }
 }
 
-function search_users($needle,$type) {
+function search_users($needle, $type) {
     global $tbl_user,$tbl_group_rel_user,$group_id;
     $xajax_response = new XajaxResponse();
     $return = '';
@@ -89,7 +91,7 @@ function search_users($needle,$type) {
                     $user_ids[] = (int)$row[0];
                 }
             }
-            if (count($user_ids) > 0){
+            if (count($user_ids) > 0) {
                 $cond_user_id = ' AND user_id NOT IN('.implode(",",$user_ids).')';
             }
 		}
@@ -129,7 +131,6 @@ function search_users($needle,$type) {
                 }
             }
         }
-
         $rs = Database::query($sql);
         $i = 0;
         if ($type=='single') {
@@ -143,9 +144,7 @@ function search_users($needle,$type) {
                 }
             }
             $xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));
-
         } else {
-            global $nosessionUsersList;
             $return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
             while ($user = Database :: fetch_array($rs)) {
                 $person_name = api_get_person_name($user['firstname'], $user['lastname']);
@@ -211,7 +210,11 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
     if ($form_sent == 1) {
         //invite this users
-        $result 	= GroupPortalManager::add_users_to_groups($user_list, array($group_id), GROUP_USER_PERMISSION_PENDING_INVITATION);
+        $result 	= GroupPortalManager::add_users_to_groups(
+            $user_list,
+            array($group_id),
+            GROUP_USER_PERMISSION_PENDING_INVITATION
+        );
         $title 		= get_lang('YouAreInvitedToGroup').' '.$group_info['name'];
         $content  	= get_lang('YouAreInvitedToGroupContent').' '.$group_info['name'].' <br />';
         $content   .= get_lang('ToSubscribeClickInTheLinkBelow').' <br />';
@@ -219,7 +222,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
         if (is_array($user_list) && count($user_list) > 0) {
             //send invitation message
-            foreach ($user_list as $user_id ) {
+            foreach ($user_list as $user_id) {
                 $result = MessageManager::send_message($user_id, $title, $content);
             }
         }
@@ -234,8 +237,8 @@ if ($ajax_search) {
 	$sql=  "SELECT  u.user_id, lastname, firstname, username, group_id
             FROM $tbl_user u
             LEFT JOIN $tbl_group_rel_user gu
-            ON (gu.user_id = u.user_id) WHERE gu.group_id = $group_id ".
-    $order_clause;
+            ON (gu.user_id = u.user_id)
+            WHERE gu.group_id = $group_id $order_clause";
 
 	if (api_is_multiple_url_enabled()) {
         $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -257,72 +260,82 @@ if ($ajax_search) {
         $sessionUsersList[$user['user_id']] = $user ;
     }
 } else {
-        $friends = SocialManager::get_friends(api_get_user_id());
-        $suggest_friends = false;
+    $friends = SocialManager::get_friends(api_get_user_id());
+    $suggest_friends = false;
 
-        if (!$friends) {
-            $suggest_friends = true;
-        } else {
-            foreach($friends as $friend) {
-                $group_friend_list = GroupPortalManager::get_groups_by_user($friend['friend_user_id'], 0);
-                //var_dump($group_friend_list);
-                $friend_group_id = '';
-                if (isset($group_friend_list[$group_id]) && $group_friend_list[$group_id]['id'] == $group_id) {
-                    $friend_group_id = $group_id;
-                }
-                //var_dump ($group_friend_list[$group_id]['relation_type']);
-                if ($group_friend_list[$group_id]['relation_type'] == '' ) {
-                    $Users[$friend['friend_user_id']]=array('user_id' => $friend['friend_user_id'],  'firstname' =>$friend['firstName'], 'lastname' => $friend['lastName'], 'username' =>$friend['username'],'group_id'=>$friend_group_id );
-                }
+    if (!$friends) {
+        $suggest_friends = true;
+    } else {
+        foreach ($friends as $friend) {
+            $group_friend_list = GroupPortalManager::get_groups_by_user($friend['friend_user_id'], 0);
+            $friend_group_id = '';
+            if (isset($group_friend_list[$group_id]) && $group_friend_list[$group_id]['id'] == $group_id) {
+                $friend_group_id = $group_id;
+            }
+            if (!isset($group_friend_list[$group_id]) || isset($group_friend_list[$group_id]) && empty($group_friend_list[$group_id]['relation_type'])) {
+                $Users[$friend['friend_user_id']] = array(
+                    'user_id' => $friend['friend_user_id'],
+                    'firstname' => $friend['firstName'],
+                    'lastname' => $friend['lastName'],
+                    'username' =>$friend['username'],
+                    'group_id'=> $friend_group_id
+                );
             }
         }
+    }
 
-        if (is_array($Users) && count($Users) > 0) {
-            foreach ($Users as $user) {
-                if ($user['group_id'] != $group_id) {
-                    $nosessionUsersList[$user['user_id']] = $user;
-                }
+    if (is_array($Users) && count($Users) > 0) {
+        foreach ($Users as $user) {
+            if ($user['group_id'] != $group_id) {
+                $nosessionUsersList[$user['user_id']] = $user;
             }
         }
+    }
 
-        //deleting anonymous users
-        $user_anonymous = api_get_anonymous_id();
-        foreach ($nosessionUsersList as $key_user_list =>$value_user_list) {
-            if ($nosessionUsersList[$key_user_list]['user_id'] == $user_anonymous) {
-                unset($nosessionUsersList[$key_user_list]);
-            }
+    // Deleting anonymous users
+    $user_anonymous = api_get_anonymous_id();
+    foreach ($nosessionUsersList as $key_user_list =>$value_user_list) {
+        if ($nosessionUsersList[$key_user_list]['user_id'] == $user_anonymous) {
+            unset($nosessionUsersList[$key_user_list]);
         }
+    }
 }
 
 if ($add_type == 'multiple') {
-	$link_add_type_unique = '<a href="'.api_get_self().'?id='.$group_id.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
-	$link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
+    $link_add_type_unique = '<a href="'.api_get_self().'?id='.$group_id.'&add='.$add.'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
+    $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
 } else {
 	$link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
-	$link_add_type_multiple = '<a href="'.api_get_self().'?id='.$group_id.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+	$link_add_type_multiple = '<a href="'.api_get_self().'?id='.$group_id.'&add='.$add.'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 
 $social_left_content = SocialManager::show_social_menu('invite_friends',$group_id);
-$social_right_content .=  '<h2>'.Security::remove_XSS($group_info['name'], STUDENT, true).'</h2>';
+$social_right_content =  '<h2>'.Security::remove_XSS($group_info['name'], STUDENT, true).'</h2>';
 
 if (count($nosessionUsersList) == 0) {
-        $friends = SocialManager::get_friends(api_get_user_id());
-        if ($friends == 0) {
-            $social_right_content .=  get_lang('YouNeedToHaveFriendsInYourSocialNetwork');
-        } else {
-            $social_right_content .=   get_lang('YouAlreadyInviteAllYourContacts');
-        }
-        $social_right_content .=   '<div>';
-        $social_right_content .=   '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';
-        $social_right_content .=   '</div>';
+    $friends = SocialManager::get_friends(api_get_user_id());
+    if ($friends == 0) {
+        $social_right_content .=  get_lang('YouNeedToHaveFriendsInYourSocialNetwork');
+    } else {
+        $social_right_content .=   get_lang('YouAlreadyInviteAllYourContacts');
+    }
+    $social_right_content .=   '<div>';
+    $social_right_content .=   '<a href="search.php">'.get_lang('TryAndFindSomeFriends').'</a>';
+    $social_right_content .=   '</div>';
 }
 
-if (!empty($_GET['add'])) $add_true = '&add=true';
-if ($ajax_search) $ajax = 'onsubmit="valide();"';
+$add_true = null;
+if (!empty($_GET['add'])) {
+    $add_true = '&add=true';
+}
+$ajax = null;
+if ($ajax_search) {
+    $ajax = 'onsubmit="valide();"';
+}
 
 $form = '<form name="formulaire" method="post" action="'.api_get_self().'?id='.$group_id.$add_true.'" style="margin:0px;" '.$ajax.'>';
-
-if ($add_type=='multiple') {
+/*$extra_field_list = UserManager::get_extra_fields();
+if ($add_type == 'multiple') {
 	if (is_array($extra_field_list)) {
 		if (is_array($new_field_list) && count($new_field_list)>0 ) {
 			$form .= '<h3>'.get_lang('FilterUsers').'</h3>';
@@ -347,7 +360,7 @@ if ($add_type=='multiple') {
 			$form .= '<br /><br />';
 		}
 	}
-}
+}*/
 
 $form .=  '<input type="hidden" name="form_sent" value="1" />';
 $form .=  '<input type="hidden" name="id" value="'.$group_id.'">';
@@ -388,7 +401,7 @@ if (!($add_type=='multiple')) {
     $form .= '<div id="ajax_list_users_multiple">
     <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:290px;">';
 
-    foreach($nosessionUsersList as $enreg) {
+    foreach ($nosessionUsersList as $enreg) {
         $selected = '';
         if(in_array($enreg['user_id'],$UserList)) $selected  = 'selected="selected"';
         $form .= '<option value="'.$enreg['user_id'].'" '.$selected.'>'.api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].') </option>';
@@ -397,7 +410,6 @@ if (!($add_type=='multiple')) {
     $form .= '</div>';
 }
 
-unset($nosessionUsersList);
 $form .= '</div>';
 $form .= '</td><td width="10%" valign="middle" align="center">';
 
@@ -415,10 +427,9 @@ if ($ajax_search) {
   <td align="center">
   <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:290px;">';
 
-foreach($sessionUsersList as $enreg) {
+foreach ($sessionUsersList as $enreg) {
 	$form .= ' <option value="'.$enreg['user_id'].'">'.api_get_person_name($enreg['firstname'], $enreg['lastname']).' ('.$enreg['username'].')</option>';
 }
-unset($sessionUsersList);
 $form .= '</select></td>
 </tr>
 <tr>
@@ -432,7 +443,7 @@ $form .= '</select></td>
 
 $social_right_content .= $form;
 
-//current group members
+// Current group members
 $members = GroupPortalManager::get_users_by_group($group_id, false, array(GROUP_USER_PERMISSION_PENDING_INVITATION));
 if (is_array($members) && count($members)>0) {
 	foreach ($members as &$member) {
@@ -441,12 +452,18 @@ if (is_array($members) && count($members)>0) {
 		$member['image'] = '<img src="'.$picture['file'].'"  width="50px" height="50px"  />';
 	}
 	$social_right_content .= '<h3>'.get_lang('UsersAlreadyInvited').'</h3>';
-	$social_right_content .= Display::return_sortable_grid('invitation_profile', array(), $members, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true));
+	$social_right_content .= Display::return_sortable_grid(
+        'invitation_profile',
+        array(),
+        $members,
+        array('hide_navigation'=>true, 'per_page' => 100),
+        $query_vars,
+        false,
+        array(true, false, true, true)
+    );
 }
 
-$htmlHeadXtra[] = '
-<script type="text/javascript">
-<!--
+$htmlHeadXtra[] = '<script>
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
@@ -489,9 +506,7 @@ function valide(){
 	document.forms.formulaire.submit();
 }
 
-
-function loadUsersInSelect(select){
-
+function loadUsersInSelect(select) {
 	var xhr_object = null;
 
 	if(window.XMLHttpRequest) // Firefox
@@ -513,7 +528,6 @@ function loadUsersInSelect(select){
 	xhr_object.onreadystatechange = function() {
 		if(xhr_object.readyState == 4) {
 			document.getElementById("content_source").innerHTML = result = xhr_object.responseText;
-			//alert(xhr_object.responseText);
 		}
 	}
 }
@@ -525,7 +539,6 @@ function makepost(select) {
 		ret = ret + options[i].value +\'::\'+options[i].text+";;";
 	return ret;
 }
--->
 </script>';
 
 $social_right_content = Display::div($social_right_content, array('class' => 'span9'));
@@ -533,10 +546,9 @@ $social_right_content = Display::div($social_right_content, array('class' => 'sp
 $tpl = new Template($tool_name);
 $tpl->set_help('Groups');
 $tpl->assign('social_left_content', $social_left_content);
-$tpl->assign('social_left_menu', $social_left_menu);
+//$tpl->assign('social_left_menu', $social_left_menu);
 $tpl->assign('social_right_content', $social_right_content);
-
-$tpl->assign('actions', $actions);
-$tpl->assign('content', $content);
+//$tpl->assign('actions', $actions);
+//$tpl->assign('content', $content);
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);

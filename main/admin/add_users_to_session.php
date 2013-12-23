@@ -48,7 +48,8 @@ $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
 
 //checking for extra field with filter on
 
-$extra_field_list= UserManager::get_extra_fields();
+$extra_field_list = UserManager::get_extra_fields();
+
 $new_field_list = array();
 if (is_array($extra_field_list)) {
     foreach ($extra_field_list as $extra_field) {
@@ -332,7 +333,7 @@ if ($ajax_search) {
             }
         } else {
             if (is_array($final_result) && count($final_result)>0) {
-                $where_filter = " WHERE u.user_id IN  ('".implode("','",$final_result)."') ";
+                $where_filter = " WHERE u.user_id IN  ('".implode("','", $final_result)."') ";
             } else {
                 //no results
                 $where_filter = " WHERE u.user_id  = -1";

@@ -289,6 +289,8 @@ class MySpace {
         //add lessons of course
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
         $lessons = LearnpathList::get_course_lessons($course['code'], $sessionId);
+
+        //create columns array
         foreach ($lessons as $lesson_id => $lesson) 
         {
             $columns[] = $lesson['name'];
@@ -300,22 +302,31 @@ class MySpace {
          * Column config
          */
         $column_model   = array(
-            array('name'=>'username',   'index'=>'username',  'width'=>'160',  'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
-            array('name'=>'firstname',  'index'=>'firstname',   'width'=>'100',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'lastname',   'index'=>'lastname',    'width'=>'100',   'align'=>'left', 'search' => 'true'),
+            array('name'=>'username',   'index'=>'username',  'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
+            array('name'=>'firstname',  'index'=>'firstname',    'align'=>'left', 'search' => 'true'),
+            array('name'=>'lastname',   'index'=>'lastname',     'align'=>'left', 'search' => 'true'),
         );
         //get dinamic column names
         foreach ($lessons as $lesson_id => $lesson) 
         {
-            $column_model[] = array('name'=> $lesson['id'],   'index'=>$lesson['id'],    'width'=>'70',   'align'=>'left', 'search' => 'true');
+            $column_model[] = array('name'=> $lesson['id'],   'index'=>$lesson['id'],    'align'=>'left', 'search' => 'true');
         }
 
-        $column_model[] = array('name'=>'total',   'index'=>'total',    'width'=>'70',   'align'=>'left', 'search' => 'true');
+        $column_model[] = array('name'=>'total',   'index'=>'total',    'align'=>'left', 'search' => 'true');
 
         $action_links = '';
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_lp_progress&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId);
+
+        //Table Id
         $tableId = 'lpProgress';
+
+        //Autowidth
+        $extra_params['autowidth'] = 'true';
+
+        //height auto
+        $extra_params['height'] = 'auto';
+
         $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
         $return = '<script>$(function() {'. $table . 
@@ -359,23 +370,29 @@ class MySpace {
          * Column config
          */
         $column_model   = array(
-            array('name'=>'session',        'index'=>'session',     'width'=>'160',   'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
-            array('name'=>'exercise_id',    'index'=>'exercise_id', 'width'=>'100',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'quiz_title',     'index'=>'quiz_title',  'width'=>'100',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'username',       'index'=>'username',    'width'=>'100',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'lastname',       'index'=>'lastname',    'width'=>'100',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'firstname',      'index'=>'firstname',   'width'=>'100',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'time',           'index'=>'time',        'width'=>'100',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'question_id',    'index'=>'question_id', 'width'=>'100',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'question',       'index'=>'question',    'width'=>'100',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'answer',         'index'=>'answer',      'width'=>'100',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'correct',        'index'=>'correct',     'width'=>'100',   'align'=>'left', 'search' => 'true'),
+            array('name'=>'session',        'index'=>'session',       'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
+            array('name'=>'exercise_id',    'index'=>'exercise_id',   'align'=>'left', 'search' => 'true'),
+            array('name'=>'quiz_title',     'index'=>'quiz_title',    'align'=>'left', 'search' => 'true'),
+            array('name'=>'username',       'index'=>'username',      'align'=>'left', 'search' => 'true'),
+            array('name'=>'lastname',       'index'=>'lastname',      'align'=>'left', 'search' => 'true'),
+            array('name'=>'firstname',      'index'=>'firstname',     'align'=>'left', 'search' => 'true'),
+            array('name'=>'time',           'index'=>'time',          'align'=>'left', 'search' => 'true'),
+            array('name'=>'question_id',    'index'=>'question_id',   'align'=>'left', 'search' => 'true'),
+            array('name'=>'question',       'index'=>'question',      'align'=>'left', 'search' => 'true'),
+            array('name'=>'answer',         'index'=>'answer',        'align'=>'left', 'search' => 'true'),
+            array('name'=>'correct',        'index'=>'correct',       'align'=>'left', 'search' => 'true'),
         );
         //get dinamic column names
 
         $action_links = '';
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_progress&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId)  . '&exercise_id=' . intval($exerciseId) . '&answer=' . intval($answer);
+
+        //Autowidth
+        $extra_params['autowidth'] = 'true';
+
+        //height auto
+        $extra_params['height'] = 'auto';
 
         $tableId = 'exerciseProgressOverview';
         $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
@@ -421,9 +438,9 @@ class MySpace {
          * Column config
          */
         $column_model   = array(
-            array('name'=>'username',   'index'=>'username',  'width'=>'160',  'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
-            array('name'=>'firstname',  'index'=>'firstname',   'width'=>'100',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'lastname',   'index'=>'lastname',    'width'=>'100',   'align'=>'left', 'search' => 'true'),
+            array('name'=>'username',   'index'=>'username',    'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
+            array('name'=>'firstname',  'index'=>'firstname',   'align'=>'left', 'search' => 'true'),
+            array('name'=>'lastname',   'index'=>'lastname',    'align'=>'left', 'search' => 'true'),
         );
         //get dinamic column names
         foreach ($questions as $question_id => $question)
@@ -432,9 +449,19 @@ class MySpace {
         }
 
         $action_links = '';
+
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_survey_overview&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId) . '&survey_id=' . intval($surveyId);
+
+        //Table Id
         $tableId = 'lpProgress';
+        
+        //Autowidth
+        $extra_params['autowidth'] = 'true';
+
+        //height auto
+        $extra_params['height'] = 'auto';
+
         $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
         $return = '<script>$(function() {'. $table . 
@@ -507,57 +534,66 @@ class MySpace {
 
         //Column config
         $column_model   = array(
-            array('name'=>'lastname',   'index'=>'lastname',    'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'firstname',  'index'=>'firstname',   'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'username',   'index'=>'username',    'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            #array('name'=>'profile',   'index'=>'username',    'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'total',      'index'=>'total',       'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'courses',    'index'=>'courses',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'lessons',    'index'=>'lessons',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'exercises',  'index'=>'exercises',   'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'forums',     'index'=>'forums',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'homeworks',  'index'=>'homeworks',   'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'wikis',      'index'=>'wikis',       'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'surveys',    'index'=>'surveys',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'lastname',   'index'=>'lastname',     'align'=>'left', 'search' => 'true'),
+            array('name'=>'firstname',  'index'=>'firstname',    'align'=>'left', 'search' => 'true'),
+            array('name'=>'username',   'index'=>'username',     'align'=>'left', 'search' => 'true'),
+            #array('name'=>'profile',   'index'=>'username',     'align'=>'left', 'search' => 'true'),
+            array('name'=>'total',      'index'=>'total',        'align'=>'left', 'search' => 'true'),
+            array('name'=>'courses',    'index'=>'courses',      'align'=>'left', 'search' => 'true'),
+            array('name'=>'lessons',    'index'=>'lessons',      'align'=>'left', 'search' => 'true'),
+            array('name'=>'exercises',  'index'=>'exercises',    'align'=>'left', 'search' => 'true'),
+            array('name'=>'forums',     'index'=>'forums',       'align'=>'left', 'search' => 'true'),
+            array('name'=>'homeworks',  'index'=>'homeworks',    'align'=>'left', 'search' => 'true'),
+            array('name'=>'wikis',      'index'=>'wikis',        'align'=>'left', 'search' => 'true'),
+            array('name'=>'surveys',    'index'=>'surveys',      'align'=>'left', 'search' => 'true'),
             //Course description
-            array('name'=>'course_description_progress',    'index'=>'course_description_progress',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'course_description_progress',    'index'=>'course_description_progress',      'align'=>'left', 'search' => 'true'),
             //Lessons
-            array('name'=>'lessons_total',    'index'=>'lessons_total',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'lessons_done',     'index'=>'lessons_done',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'lessons_left',     'index'=>'lessons_left',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'lessons_progress', 'index'=>'lessons_progress',  'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'lessons_total',    'index'=>'lessons_total',      'align'=>'left', 'search' => 'true'),
+            array('name'=>'lessons_done',     'index'=>'lessons_done',       'align'=>'left', 'search' => 'true'),
+            array('name'=>'lessons_left',     'index'=>'lessons_left',       'align'=>'left', 'search' => 'true'),
+            array('name'=>'lessons_progress', 'index'=>'lessons_progress',   'align'=>'left', 'search' => 'true'),
             //Exercises
-            array('name'=>'exercises_total',    'index'=>'exercises_total',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'exercises_done',     'index'=>'exercises_done',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'exercises_left',     'index'=>'exercises_left',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'exercises_progress', 'index'=>'exercises_progress',  'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'exercises_total',    'index'=>'exercises_total',      'align'=>'left', 'search' => 'true'),
+            array('name'=>'exercises_done',     'index'=>'exercises_done',       'align'=>'left', 'search' => 'true'),
+            array('name'=>'exercises_left',     'index'=>'exercises_left',       'align'=>'left', 'search' => 'true'),
+            array('name'=>'exercises_progress', 'index'=>'exercises_progress',   'align'=>'left', 'search' => 'true'),
             //Assignments
-            array('name'=>'forums_total',    'index'=>'forums_total',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'forums_done',     'index'=>'forums_done',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'forums_left',     'index'=>'forums_left',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'forums_progress', 'index'=>'forums_progress',  'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'forums_total',    'index'=>'forums_total',        'align'=>'left', 'search' => 'true'),
+            array('name'=>'forums_done',     'index'=>'forums_done',         'align'=>'left', 'search' => 'true'),
+            array('name'=>'forums_left',     'index'=>'forums_left',         'align'=>'left', 'search' => 'true'),
+            array('name'=>'forums_progress', 'index'=>'forums_progress',     'align'=>'left', 'search' => 'true'),
             //Assignments
-            array('name'=>'assigments_total',    'index'=>'assigments_total',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'assigments_done',     'index'=>'assigments_done',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'assigments_left',     'index'=>'assigments_left',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'assigments_progress', 'index'=>'assigments_progress',  'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'assigments_total',    'index'=>'assigments_total',        'align'=>'left', 'search' => 'true'),
+            array('name'=>'assigments_done',     'index'=>'assigments_done',         'align'=>'left', 'search' => 'true'),
+            array('name'=>'assigments_left',     'index'=>'assigments_left',         'align'=>'left', 'search' => 'true'),
+            array('name'=>'assigments_progress', 'index'=>'assigments_progress',     'align'=>'left', 'search' => 'true'),
             //Assignments
-            array('name'=>'wiki_total',         'index'=>'wiki_total',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'wiki_revisions',     'index'=>'wiki_revisions',  'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'wiki_read',          'index'=>'wiki_read',       'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'wiki_unread',        'index'=>'wiki_unread',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'wiki_progress',      'index'=>'wiki_progress',   'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'wiki_total',         'index'=>'wiki_total',       'align'=>'left', 'search' => 'true'),
+            array('name'=>'wiki_revisions',     'index'=>'wiki_revisions',   'align'=>'left', 'search' => 'true'),
+            array('name'=>'wiki_read',          'index'=>'wiki_read',        'align'=>'left', 'search' => 'true'),
+            array('name'=>'wiki_unread',        'index'=>'wiki_unread',      'align'=>'left', 'search' => 'true'),
+            array('name'=>'wiki_progress',      'index'=>'wiki_progress',    'align'=>'left', 'search' => 'true'),
             //Surveys
-            array('name'=>'surveys_total',    'index'=>'surveys_total',     'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'surveys_done',     'index'=>'surveys_done',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'surveys_left',     'index'=>'surveys_left',      'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'surveys_progress', 'index'=>'surveys_progress',  'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'surveys_total',    'index'=>'surveys_total',      'align'=>'left', 'search' => 'true'),
+            array('name'=>'surveys_done',     'index'=>'surveys_done',       'align'=>'left', 'search' => 'true'),
+            array('name'=>'surveys_left',     'index'=>'surveys_left',       'align'=>'left', 'search' => 'true'),
+            array('name'=>'surveys_progress', 'index'=>'surveys_progress',   'align'=>'left', 'search' => 'true'),
         );
 
         $action_links = '';
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_progress&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId);
+
+        //Table Id
         $tableId = 'progressOverview';
+
+        //Autowidth
+        $extra_params['autowidth'] = 'true';
+
+        //height auto
+        $extra_params['height'] = 'auto';
+
         $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
         $return = '<script>$(function() {'. $table . 
@@ -591,19 +627,28 @@ class MySpace {
         );
 
         $column_model   = array(
-            array('name'=>'logindate',      'index'=>'loginDate',       'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'username',       'index'=>'username',        'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'firstname',      'index'=>'firstname',       'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'lastname',       'index'=>'lastname',        'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'clicks',         'index'=>'clicks',          'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'ip',            'index'=>'ip',             'width'=>'100',  'align'=>'left', 'search' => 'true'),
-            array('name'=>'timeloggedin',   'index'=>'timeLoggedIn',    'width'=>'100',  'align'=>'left', 'search' => 'true'),
+            array('name'=>'logindate',      'index'=>'loginDate',      'align'=>'left', 'search' => 'true'),
+            array('name'=>'username',       'index'=>'username',       'align'=>'left', 'search' => 'true'),
+            array('name'=>'firstname',      'index'=>'firstname',      'align'=>'left', 'search' => 'true'),
+            array('name'=>'lastname',       'index'=>'lastname',       'align'=>'left', 'search' => 'true'),
+            array('name'=>'clicks',         'index'=>'clicks',         'align'=>'left', 'search' => 'true'),
+            array('name'=>'ip',             'index'=>'ip',             'align'=>'left', 'search' => 'true'),
+            array('name'=>'timeloggedin',   'index'=>'timeLoggedIn',   'align'=>'left', 'search' => 'true'),
         );
 
         $action_links = '';
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_access_overview&session_id=' . $sessionId . '&course_id=' . $courseId . '&student_id=' . $studentId . '&profile=' . $profile . '&date_to=' . $date_to . '&date_from=' . $date_from;
+
+        //Table Id
         $tableId = 'accessOverview';
+
+        //Autowidth
+        $extra_params['autowidth'] = 'true';
+
+        //height auto
+        $extra_params['height'] = 'auto';
+
         $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
         $return = '<script>$(function() {'. $table . 

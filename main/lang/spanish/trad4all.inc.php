@@ -2,7 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AllowMemberLeaveGroup = "Permitir a los miembros de dejar el grupo";
 $CreatedByXYOnZ = "Creado/a por <a href=\"%s\">%s</a> el %s";
+$LoginWithExternalAccount = "Ingresar con una cuenta externa";
 $NumberOfGroupsToCreate = "Cantidad de grupos a crear";
 $CoachesSubscribedAsATeacherInCourseX = "Tutores inscritos como profesores en curso %s";
 $EnrollStudentsFromExistingSessions = "Suscribir estudiantes de sesiones existentes";

@@ -24,14 +24,17 @@ $anchor = '';
 if (isset($_GET['anchor_topic'])) {
 	$anchor = Security::remove_XSS($_GET['anchor_topic']);
 } else {
-	$match = 0;
-	$param_names = array_keys($_GET);
-	foreach ($param_names as $param) {
-		if (preg_match('/^items_(\d)_page_nr$/', $param, $match)) {
-			break;
-		}
-	}
-	$anchor = 'topic_'.$match[1];
+    $match = 0;
+    $param_names = array_keys($_GET);
+    foreach ($param_names as $param) {
+        if (preg_match('/^items_(\d)_page_nr$/', $param, $match)) {
+            break;
+        }
+    }
+    if (isset($match[1])) {
+        $anchor = 'topic_'.$match[1];
+    }
+
 }
 $htmlHeadXtra[] = '<script>
 

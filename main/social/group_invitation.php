@@ -42,7 +42,7 @@ $tool_name = get_lang('SubscribeUsersToGroup');
 $group_id = intval($_REQUEST['id']);
 
 $add_type = 'multiple';
-if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!='') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -193,37 +193,37 @@ function validate_filter() {
 </script>';
 
 $form_sent=0;
-$errorMsg=$firstLetterUser=$firstLetterSession='';
-$UserList=$SessionList=array();
-$users=$sessions=array();
+$errorMsg = $firstLetterUser = $firstLetterSession='';
+$UserList = array();
+$SessionList = array();
+$sessions = array();
+$Users = array();
 
-//Display :: display_header($tool_name, 'Groups');
+if (isset($_POST['form_sent']) && $_POST['form_sent']) {
+    $form_sent			= $_POST['form_sent'];
+    $firstLetterUser	= $_POST['firstLetterUser'];
+    $firstLetterSession	= $_POST['firstLetterSession'];
+    $user_list			= $_POST['sessionUsersList'];
+    $group_id			= intval($_POST['id']);
 
-if ($_POST['form_sent']) {
-	$form_sent			= $_POST['form_sent'];
-	$firstLetterUser	= $_POST['firstLetterUser'];
-	$firstLetterSession	= $_POST['firstLetterSession'];
-	$user_list			= $_POST['sessionUsersList'];
-	$group_id			= intval($_POST['id']);
+    if (!is_array($user_list)) {
+        $user_list=array();
+    }
+    if ($form_sent == 1) {
+        //invite this users
+        $result 	= GroupPortalManager::add_users_to_groups($user_list, array($group_id), GROUP_USER_PERMISSION_PENDING_INVITATION);
+        $title 		= get_lang('YouAreInvitedToGroup').' '.$group_info['name'];
+        $content  	= get_lang('YouAreInvitedToGroupContent').' '.$group_info['name'].' <br />';
+        $content   .= get_lang('ToSubscribeClickInTheLinkBelow').' <br />';
+        $content   .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php?accept='.$group_id.'">'.get_lang('Subscribe').'</a>';
 
-	if(!is_array($user_list)) {
-		$user_list=array();
-	}
-	if ($form_sent == 1) {
-		//invite this users
-		$result 	= GroupPortalManager::add_users_to_groups($user_list, array($group_id), GROUP_USER_PERMISSION_PENDING_INVITATION);
-		$title 		= get_lang('YouAreInvitedToGroup').' '.$group_info['name'];
-		$content  	= get_lang('YouAreInvitedToGroupContent').' '.$group_info['name'].' <br />';
-		$content   .= get_lang('ToSubscribeClickInTheLinkBelow').' <br />';
-		$content   .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php?accept='.$group_id.'">'.get_lang('Subscribe').'</a>';
-
-		if (is_array($user_list) && count($user_list) > 0) {
-			//send invitation message
-			foreach($user_list as $user_id ){
-				$result = MessageManager::send_message($user_id, $title, $content);
-			}
-		}
-	}
+        if (is_array($user_list) && count($user_list) > 0) {
+            //send invitation message
+            foreach ($user_list as $user_id ) {
+                $result = MessageManager::send_message($user_id, $title, $content);
+            }
+        }
+    }
 }
 
 $nosessionUsersList = $sessionUsersList = array();
@@ -231,67 +231,69 @@ $ajax_search = $add_type == 'unique' ? true : false;
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 
 if ($ajax_search) {
-	$sql="SELECT  u.user_id, lastname, firstname, username, group_id
-				FROM $tbl_user u
-				LEFT JOIN $tbl_group_rel_user gu
-				ON (gu.user_id = u.user_id) WHERE gu.group_id = $group_id ".
-			$order_clause;
+	$sql=  "SELECT  u.user_id, lastname, firstname, username, group_id
+            FROM $tbl_user u
+            LEFT JOIN $tbl_group_rel_user gu
+            ON (gu.user_id = u.user_id) WHERE gu.group_id = $group_id ".
+    $order_clause;
 
 	if (api_is_multiple_url_enabled()) {
-		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-		$access_url_id = api_get_current_access_url_id();
-		if ($access_url_id != -1){
-			$sql="SELECT u.user_id, lastname, firstname, username, id_session
-			FROM $tbl_user u
-			INNER JOIN $tbl_session_rel_user
-				ON $tbl_session_rel_user.id_user = u.user_id
-				AND $tbl_session_rel_user.id_session = ".intval($id_session)."
-				INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
-				WHERE access_url_id = $access_url_id
-				$order_clause";
-		}
+        $tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $access_url_id = api_get_current_access_url_id();
+        if ($access_url_id != -1) {
+            $sql = "SELECT u.user_id, lastname, firstname, username, id_session
+            FROM $tbl_user u
+            INNER JOIN $tbl_session_rel_user
+                ON $tbl_session_rel_user.id_user = u.user_id
+                AND $tbl_session_rel_user.id_session = ".intval($id_session)."
+                INNER JOIN $tbl_user_rel_access_url url_user ON (url_user.user_id=u.user_id)
+                WHERE access_url_id = $access_url_id
+                $order_clause";
+        }
 	}
-	$result=Database::query($sql);
-	$Users=Database::store_result($result);
-	foreach ($Users as $user) {
-		$sessionUsersList[$user['user_id']] = $user ;
-	}
+    $result = Database::query($sql);
+    $Users = Database::store_result($result);
+    foreach ($Users as $user) {
+        $sessionUsersList[$user['user_id']] = $user ;
+    }
 } else {
-		$friends = SocialManager::get_friends(api_get_user_id());
-		$suggest_friends = false;
+        $friends = SocialManager::get_friends(api_get_user_id());
+        $suggest_friends = false;
 
-		if (!$friends) {
-			$suggest_friends = true;
-		} else {
-			foreach($friends as $friend) {
-				$group_friend_list = GroupPortalManager::get_groups_by_user($friend['friend_user_id'], 0);
-				//var_dump($group_friend_list);
-				$friend_group_id = '';
-				if (isset($group_friend_list[$group_id]) && $group_friend_list[$group_id]['id'] == $group_id) {
-					$friend_group_id = $group_id;
-				}
-				//var_dump ($group_friend_list[$group_id]['relation_type']);
-				if ($group_friend_list[$group_id]['relation_type'] == '' ) {
-					$Users[$friend['friend_user_id']]=array('user_id' => $friend['friend_user_id'],  'firstname' =>$friend['firstName'], 'lastname' => $friend['lastName'], 'username' =>$friend['username'],'group_id'=>$friend_group_id );
-				}
-			}
-		}
-		if (is_array($Users) && count($Users) > 0 ) {
-			foreach ($Users as $user) {
-				if ($user['group_id'] != $group_id) {
-					$nosessionUsersList[$user['user_id']] = $user;
+        if (!$friends) {
+            $suggest_friends = true;
+        } else {
+            foreach($friends as $friend) {
+                $group_friend_list = GroupPortalManager::get_groups_by_user($friend['friend_user_id'], 0);
+                //var_dump($group_friend_list);
+                $friend_group_id = '';
+                if (isset($group_friend_list[$group_id]) && $group_friend_list[$group_id]['id'] == $group_id) {
+                    $friend_group_id = $group_id;
                 }
-			}
-		}
+                //var_dump ($group_friend_list[$group_id]['relation_type']);
+                if ($group_friend_list[$group_id]['relation_type'] == '' ) {
+                    $Users[$friend['friend_user_id']]=array('user_id' => $friend['friend_user_id'],  'firstname' =>$friend['firstName'], 'lastname' => $friend['lastName'], 'username' =>$friend['username'],'group_id'=>$friend_group_id );
+                }
+            }
+        }
 
-		//deleting anonymous users
-		$user_anonymous = api_get_anonymous_id();
-		foreach($nosessionUsersList as $key_user_list =>$value_user_list) {
-			if ($nosessionUsersList[$key_user_list]['user_id']==$user_anonymous) {
-				unset($nosessionUsersList[$key_user_list]);
-			}
-		}
+        if (is_array($Users) && count($Users) > 0) {
+            foreach ($Users as $user) {
+                if ($user['group_id'] != $group_id) {
+                    $nosessionUsersList[$user['user_id']] = $user;
+                }
+            }
+        }
+
+        //deleting anonymous users
+        $user_anonymous = api_get_anonymous_id();
+        foreach ($nosessionUsersList as $key_user_list =>$value_user_list) {
+            if ($nosessionUsersList[$key_user_list]['user_id'] == $user_anonymous) {
+                unset($nosessionUsersList[$key_user_list]);
+            }
+        }
 }
+
 if ($add_type == 'multiple') {
 	$link_add_type_unique = '<a href="'.api_get_self().'?id='.$group_id.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
 	$link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
@@ -535,7 +537,6 @@ $tpl->assign('social_left_menu', $social_left_menu);
 $tpl->assign('social_right_content', $social_right_content);
 
 $tpl->assign('actions', $actions);
-$tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);

@@ -120,17 +120,22 @@ foreach($users as $user) {
     $new_member_list[] = $user;
 }
 if (count($new_member_list) > 0) {
-    $social_right_content .= Display::return_sortable_grid('list_members', array(), $new_member_list, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, false, true,true,false,true,true));
+    $social_right_content .= Display::return_sortable_grid(
+        'list_members',
+        array(),
+        $new_member_list,
+        array('hide_navigation'=>true, 'per_page' => 100),
+        array(),
+        false,
+        array(true, false, true, true, false, true, true)
+    );
 }
 $social_right_content .= '</div>';
 
 $tpl = new Template($tool_name);
 $tpl->set_help('Groups');
 $tpl->assign('social_left_content', $social_left_content);
-$tpl->assign('social_left_menu', $social_left_menu);
 $tpl->assign('social_right_content', $social_right_content);
-$tpl->assign('actions', $actions);
-$tpl->assign('message', $show_message);
-$tpl->assign('content', $content);
+
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);

@@ -200,8 +200,6 @@ $Users = array();
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent			= $_POST['form_sent'];
-    $firstLetterUser	= $_POST['firstLetterUser'];
-    $firstLetterSession	= $_POST['firstLetterSession'];
     $user_list			= $_POST['sessionUsersList'];
     $group_id			= intval($_POST['id']);
 
@@ -366,7 +364,7 @@ $form .=  '<input type="hidden" name="form_sent" value="1" />';
 $form .=  '<input type="hidden" name="id" value="'.$group_id.'">';
 $form .=  '<input type="hidden" name="add_type"  />';
 
-if(!empty($errorMsg)) {
+if (!empty($errorMsg)) {
 	$form .= Display::return_message($errorMsg,'error'); //main API
 }
 
@@ -456,8 +454,8 @@ if (is_array($members) && count($members)>0) {
         'invitation_profile',
         array(),
         $members,
-        array('hide_navigation'=>true, 'per_page' => 100),
-        $query_vars,
+        array('hide_navigation' => true, 'per_page' => 100),
+        array(),
         false,
         array(true, false, true, true)
     );

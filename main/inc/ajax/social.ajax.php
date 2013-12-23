@@ -15,9 +15,6 @@ switch ($action) {
             echo '';
             break;
         }
-
-        $my_current_friend		 = Security::remove_XSS($_POST['friend_id']);
-
         if (isset($_POST['is_my_friend'])) {
             $relation_type = USER_RELATION_TYPE_FRIEND; //My friend
         } else {
@@ -25,6 +22,7 @@ switch ($action) {
         }
 
         if (isset($_POST['friend_id'])) {
+            $my_current_friend  = $_POST['friend_id'];
             UserManager::relate_users($current_user_id, $my_current_friend, $relation_type);
             UserManager::relate_users($my_current_friend, $current_user_id, $relation_type);
             SocialManager::invitation_accepted($my_current_friend, $current_user_id);
@@ -36,19 +34,15 @@ switch ($action) {
             echo '';
             break;
         }
-        $my_current_friend		 = Security::remove_XSS($_POST['friend_id']);
-        $my_denied_current_friend= Security::remove_XSS($_POST['denied_friend_id']);
-        $my_delete_friend        = Security::remove_XSS($_POST['delete_friend_id']);
-        $friend_id_qualify       = Security::remove_XSS($_POST['user_id_friend_q']);
-        $type_friend_qualify     = Security::remove_XSS($_POST['type_friend_q']); //filtered?
-        $is_my_friend            = Security::remove_XSS($_POST['is_my_friend']); //filtered?
+
+
         if (isset($_POST['is_my_friend'])) {
-            $relation_type=USER_RELATION_TYPE_FRIEND;//my friend
+            $relation_type = USER_RELATION_TYPE_FRIEND;//my friend
         } else {
-            $relation_type=USER_RELATION_TYPE_UNKNOW;//Contact unknown
+            $relation_type = USER_RELATION_TYPE_UNKNOW;//Contact unknown
         }
         if (isset($_POST['denied_friend_id'])) {
-            SocialManager::invitation_denied($my_denied_current_friend, $current_user_id);
+            SocialManager::invitation_denied($_POST['denied_friend_id'], $current_user_id);
             Display::display_confirmation_message(api_xml_http_response_encode(get_lang('InvitationDenied')));
         }
         break;
@@ -57,7 +51,7 @@ switch ($action) {
             echo '';
             break;
         }
-        $my_delete_friend        = intval($_POST['delete_friend_id']);
+        $my_delete_friend = intval($_POST['delete_friend_id']);
         if (isset($_POST['delete_friend_id'])) {
             SocialManager::remove_user_rel_user($my_delete_friend);
         }

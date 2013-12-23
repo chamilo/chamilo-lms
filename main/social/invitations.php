@@ -19,8 +19,8 @@ if (api_get_setting('allow_social_tool') !='true') {
 
 $this_section = SECTION_SOCIAL;
 
-$interbreadcrumb[]= array ('url' =>'profile.php','name' => get_lang('SocialNetwork'));
-$interbreadcrumb[]= array ('url' =>'#','name' => get_lang('Invitations'));
+$interbreadcrumb[] = array ('url' =>'profile.php','name' => get_lang('SocialNetwork'));
+$interbreadcrumb[] = array ('url' =>'#','name' => get_lang('Invitations'));
 
 $htmlHeadXtra[] = '
 <script>
@@ -70,26 +70,26 @@ $content = null;
 
 // easy links
 if (is_array($_GET) && count($_GET)>0) {
-	foreach ($_GET as $key => $value) {
-		switch ($key) {
-			case 'accept':
-				$user_role = GroupPortalManager::get_user_group_role(api_get_user_id(), $value);
-				if (in_array($user_role , array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER,GROUP_USER_PERMISSION_PENDING_INVITATION))) {
-					GroupPortalManager::update_user_role(api_get_user_id(), $value, GROUP_USER_PERMISSION_READER);
-					$show_message = Display::return_message(get_lang('UserIsSubscribedToThisGroup'), 'success');
-				} elseif (in_array($user_role , array(GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
-					$show_message = Display::return_message(get_lang('UserIsAlreadySubscribedToThisGroup'), 'warning');
-				} else {
-					$show_message = Display::return_message(get_lang('UserIsNotSubscribedToThisGroup'), 'warning');
-				}
+    foreach ($_GET as $key => $value) {
+        switch ($key) {
+            case 'accept':
+                $user_role = GroupPortalManager::get_user_group_role(api_get_user_id(), $value);
+                if (in_array($user_role, array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER, GROUP_USER_PERMISSION_PENDING_INVITATION))) {
+                    GroupPortalManager::update_user_role(api_get_user_id(), $value, GROUP_USER_PERMISSION_READER);
+                    $show_message = Display::return_message(get_lang('UserIsSubscribedToThisGroup'), 'success');
+                } elseif (in_array($user_role, array(GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
+                    $show_message = Display::return_message(get_lang('UserIsAlreadySubscribedToThisGroup'), 'warning');
+                } else {
+                    $show_message = Display::return_message(get_lang('UserIsNotSubscribedToThisGroup'), 'warning');
+                }
                 break 2;
-			case 'deny':
-				// delete invitation
-				GroupPortalManager::delete_user_rel_group(api_get_user_id(), $value);
-				$show_message = Display::return_message(get_lang('GroupInvitationWasDeny'));
-			break 2;
-		}
-	}
+            case 'deny':
+                // delete invitation
+                GroupPortalManager::delete_user_rel_group(api_get_user_id(), $value);
+                $show_message = Display::return_message(get_lang('GroupInvitationWasDeny'));
+                break 2;
+        }
+    }
 }
 $social_left_content = SocialManager::show_social_menu('invitations');
 $social_right_content =  '<div id="id_response" align="center"></div>';
@@ -113,7 +113,7 @@ if ($number_loop != 0) {
         $sender_user_id = $invitation['user_sender_id'];
         $social_right_content .= '<div id="id_'.$sender_user_id.'" class="invitation_confirm span8">';
 
-        $picture = UserManager::get_user_picture_path_by_id($sender_user_id,'web',false,true);
+        $picture = UserManager::get_user_picture_path_by_id($sender_user_id, 'web', false, true);
         $friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
         $user_info	= api_get_user_info($sender_user_id);
         $title 		= Security::remove_XSS($invitation['title'], STUDENT, true);
@@ -141,14 +141,14 @@ if ($number_loop != 0) {
     }
 }
 
-if (count($list_get_invitation_sent) > 0 ) {
+if (count($list_get_invitation_sent) > 0) {
     $social_right_content .= '<div class="span8">'.Display::page_subheader(get_lang('InvitationSent')).'</div>';
     foreach ($list_get_invitation_sent as $invitation) {
         $sender_user_id = $invitation['user_receiver_id'];
 
         $social_right_content .= '<div id="id_'.$sender_user_id.'" class="invitation_confirm span8">';
 
-        $picture = UserManager::get_user_picture_path_by_id($sender_user_id,'web',false,true);
+        $picture = UserManager::get_user_picture_path_by_id($sender_user_id, 'web', false, true);
         $friends_profile = SocialManager::get_picture_user($sender_user_id, $picture['file'], 92);
         $user_info	= api_get_user_info($sender_user_id);
 
@@ -179,15 +179,24 @@ if (count($pending_invitations) > 0) {
     foreach ($pending_invitations as $invitation) {
         $picture = GroupPortalManager::get_picture_group($invitation['id'], $invitation['picture_uri'],80);
         $img = '<img class="social-groups-image" src="'.$picture['file'].'" hspace="4" height="50" border="2" align="left" width="50" />';
-
         $invitation['picture_uri'] = '<a href="groups.php?id='.$invitation['id'].'">'.$img.'</a>';
         $invitation['name'] = '<a href="groups.php?id='.$invitation['id'].'">'.cut($invitation['name'],120,true).'</a>';
-        $invitation['join'] = '<a href="invitations.php?accept='.$invitation['id'].'">'.Display::return_icon('accept_invitation.png', get_lang('AcceptInvitation')).'&nbsp;&nbsp;'.get_lang('AcceptInvitation').'</a>';
-        $invitation['deny'] = '<a href="invitations.php?deny='.$invitation['id'].'">'.Display::return_icon('denied_invitation.png', get_lang('DenyInvitation')).'&nbsp;&nbsp;'.get_lang('DenyInvitation').'</a>';
+        $invitation['join'] = '<a href="invitations.php?accept='.$invitation['id'].'">'.
+            Display::return_icon('accept_invitation.png', get_lang('AcceptInvitation')).'&nbsp;&nbsp;'.get_lang('AcceptInvitation').'</a>';
+        $invitation['deny'] = '<a href="invitations.php?deny='.$invitation['id'].'">'.
+            Display::return_icon('denied_invitation.png', get_lang('DenyInvitation')).'&nbsp;&nbsp;'.get_lang('DenyInvitation').'</a>';
         $invitation['description'] = cut($invitation['description'],220,true);
         $new_invitation[]=$invitation;
     }
-    $social_right_content .= Display::return_sortable_grid('waiting_user', array(), $new_invitation, array('hide_navigation'=>true, 'per_page' => 100), $query_vars, false, array(true, true, true,false,false,true,true,true,true));
+    $social_right_content .= Display::return_sortable_grid(
+        'waiting_user',
+        array(),
+        $new_invitation,
+        array('hide_navigation'=>true, 'per_page' => 100),
+        array(),
+        false,
+        array(true, true, true, false, false, true, true, true, true)
+    );
 }
 
 $tpl = new Template(null);

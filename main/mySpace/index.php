@@ -194,7 +194,6 @@ if (empty($session_id) || in_array($display, array('accessoverview','lpprogresso
 echo '</div>';
 
 if (empty($session_id)) {
-
 	// Getting courses followed by a coach (No session courses)
     $courses  = CourseManager::get_course_list_as_coach($user_id, false);
 
@@ -252,8 +251,10 @@ if (empty($session_id)) {
 
     if (!empty($students)) {
         foreach ($students as $student_id) {
+
             // inactive students
-            $last_connection_date = Tracking :: get_last_connection_date($student_id, true, true);
+            $last_connection_date = Tracking::get_last_connection_date($student_id, true, true);
+
             if ($last_connection_date !== false) {
                 if (time() - (3600 * 24 * 7) > $last_connection_date) {
                     $nb_inactive_students++;
@@ -262,11 +263,12 @@ if (empty($session_id)) {
                 $nb_inactive_students++;
             }
 
-            $total_time_spent += Tracking :: get_time_spent_on_the_platform($student_id);
-            $total_courses += Tracking :: count_course_per_student($student_id);
+            $total_time_spent += Tracking::get_time_spent_on_the_platform($student_id);
+            $total_courses += Tracking::count_course_per_student($student_id);
             $avg_student_progress   = 0;
             $avg_student_score      = 0;
             $nb_courses_student     = 0;
+
             foreach ($courses as $course_code) {
                 if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
                     $nb_courses_student++;
@@ -275,9 +277,9 @@ if (empty($session_id)) {
                     $avg_student_progress  += Tracking :: get_avg_student_progress($student_id, $course_code);
                     $myavg_temp 			= Tracking :: get_avg_student_score($student_id, $course_code);
 
-                     if (is_numeric($myavg_temp)) {
+                    if (is_numeric($myavg_temp)) {
                         $avg_student_score += $myavg_temp;
-                     }
+                    }
 
                     if ($nb_posts !== null && $nb_assignments !== null && $avg_student_progress !== null && $avg_student_score !== null) {
                         //if one of these scores is null, it means that we had a problem connecting to the right database, so don't count it in
@@ -285,6 +287,7 @@ if (empty($session_id)) {
                     }
                 }
             }
+
             // average progress of the student
             $avg_student_progress = $nb_courses_student ?$avg_student_progress / $nb_courses_student:0;
             $avg_total_progress += $avg_student_progress;
@@ -346,9 +349,7 @@ if (empty($session_id)) {
 
             $countActiveUsers = SessionManager::getCountUserTracking(null, 1);
             $countInactiveUsers = SessionManager::getCountUserTracking(null, 0);
-
             $lastConnectionDate = api_get_utc_datetime(strtotime('15 days ago'));
-
             $countSleepingTeachers = SessionManager::getTeacherTracking(api_get_user_id(), 1, $lastConnectionDate, true);
             $countSleepingStudents =SessionManager::getCountUserTracking(null, 1, $lastConnectionDate);
 
@@ -643,7 +644,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $courseFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList));
                 $courseListUrl = api_get_self();
 
-                echo '<div class="">'; 
+                echo '<div class="">';
                 echo $courseFilter->return_form();
                 echo '</div>';
                 echo '<script>
@@ -674,7 +675,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 //$studentFilter->addElement('datepicker', 'enddate', get_lang('EndDate'), array('form_name'=>'lp_add', 'class' => 'block'), 3);
                 $courseListUrl = api_get_self();
 
-                echo '<div class="">'; 
+                echo '<div class="">';
                 echo $studentFilter->return_form();
                 echo '</div>';
 
@@ -689,7 +690,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     });
                 </script>';
 
-                /*//profile filter  
+                /*//profile filter
                 $profileFilter = new FormValidator('answer_filter', 'get', '', '', array('class'=> 'form-search'), false);
                 $options = array(
                     STUDENT         => get_lang('Student'),
@@ -699,7 +700,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $profileFilter->addElement('select', 'profile', get_lang('Profile'),$options, array('id' => 'profile'));
                 $courseListUrl = api_get_self();
 
-                echo '<div class="">'; 
+                echo '<div class="">';
                 echo $profileFilter->return_form();
                 echo '</div>';
 
@@ -731,7 +732,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             $surveyOverview->addElement('select_ajax', 'survey_name', get_lang('SearchExercise'), null, array('url' => $url, 'defaults' => $surveyList));
             $courseListUrl = api_get_self();
 
-            echo '<div class="">'; 
+            echo '<div class="">';
             echo $surveyOverview ->return_form();
             echo '</div>';
 
@@ -761,7 +762,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $exerciseFilter->addElement('select_ajax', 'exercise_name', get_lang('SearchExercise'), null, array('url' => $url, 'defaults' => $exerciseList));
                 $courseListUrl = api_get_self();
 
-                echo '<div class="">'; 
+                echo '<div class="">';
                 echo $exerciseFilter->return_form();
                 echo '</div>';
 
@@ -776,7 +777,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     });
                 </script>';
 
-                //answer Type    
+                //answer Type
                 $answerFilter = new FormValidator('answer_filter', 'get', '', '', array('class'=> 'form-search'), false);
                 $options = array(
                     2 => get_lang('all'),
@@ -786,7 +787,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $answerFilter->addElement('select', 'answer', get_lang('Answer'),$options, array('id' => 'answer'));
                 $courseListUrl = api_get_self();
 
-                echo '<div class="">'; 
+                echo '<div class="">';
                 echo $answerFilter->return_form();
                 echo '</div>';
 
@@ -810,11 +811,11 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 	} else if($display == 'sessionoverview') {
 		MySpace::display_tracking_session_overview();
 	} else if($display == 'accessoverview') {
-        if (!empty($_GET['session_id'])) 
+        if (!empty($_GET['session_id']))
         {
-            if (!empty($_GET['course_id'])) 
+            if (!empty($_GET['course_id']))
             {
-                if (!empty($_GET['student_id'])) 
+                if (!empty($_GET['student_id']))
                 {
                     echo MySpace::display_tracking_access_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['student_id']));;
                 } else
@@ -831,7 +832,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }
     } else if($display == 'lpprogressoverview') {
         if (!empty($_GET['session_id'])) {
-            if (!empty($_GET['course_id'])) 
+            if (!empty($_GET['course_id']))
             {
                 echo MySpace::display_tracking_lp_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']));
             } else
@@ -843,7 +844,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }
     } else if($display == 'progressoverview') {
         if (!empty($_GET['session_id'])) {
-            if (!empty($_GET['course_id'])) 
+            if (!empty($_GET['course_id']))
             {
                 echo MySpace::display_tracking_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']));
             } else
@@ -854,15 +855,15 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             Display::display_warning_message(get_lang('ChooseSession'));
         }
     } else if($display == 'exerciseprogress') {
-        if (!empty($_GET['session_id'])) 
+        if (!empty($_GET['session_id']))
         {
-            if (!empty($_GET['course_id'])) 
+            if (!empty($_GET['course_id']))
             {
-                if (!empty($_GET['exercise_id'])) 
+                if (!empty($_GET['exercise_id']))
                 {
                     $answer = (isset($_GET['answer'])) ? intval($_GET['answer']) : 2;
                     echo MySpace::display_tracking_exercise_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']), $answer);
-                } else 
+                } else
                 {
                     Display::display_warning_message(get_lang('ChooseExercise'));
                 }
@@ -874,14 +875,14 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             Display::display_warning_message(get_lang('ChooseSession'));
         }
     } else if($display == 'surveyoverview') {
-        if (!empty($_GET['session_id'])) 
+        if (!empty($_GET['session_id']))
         {
-            if (!empty($_GET['course_id'])) 
+            if (!empty($_GET['course_id']))
             {
-                if (!empty($_GET['survey_id'])) 
+                if (!empty($_GET['survey_id']))
                 {
                     echo MySpace::display_survey_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['survey_id']));
-                } else 
+                } else
                 {
                     Display::display_warning_message(get_lang('ChooseExercise'));
                 }

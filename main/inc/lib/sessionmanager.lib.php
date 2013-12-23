@@ -687,7 +687,7 @@ class SessionManager
         $user                   = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_course_lp_view     = Database::get_course_table(TABLE_LP_VIEW);
 
-        $course = api_get_course_info_by_id($courseId); 
+        $course = api_get_course_info_by_id($courseId);
 
         $where = " WHERE course_code = '%s'
         AND s.status <> 2 and id_session = %s";
@@ -712,7 +712,7 @@ class SessionManager
         $where $order $limit";
 
         $sql_query = sprintf($sql, $course['code'], $sessionId);
-        
+
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs))
         {
@@ -755,7 +755,7 @@ class SessionManager
             $table[] = $data;
         }
         return $table;
-    }    
+    }
     /**
      * Gets the progress of the given session
      * @param int   session id
@@ -2283,9 +2283,9 @@ class SessionManager
 		if (is_array($sessions_list)) {
 			foreach ($sessions_list as $session_id) {
 				$session_id = intval($session_id);
-				$insert_sql = "INSERT IGNORE INTO $tbl_session_rel_user(id_session, id_user, relation_type) VALUES
-				               ($session_id, $hr_manager_id, '".SESSION_RELATION_TYPE_RRHH."')";
-				Database::query($insert_sql);
+				$sql = "INSERT IGNORE INTO $tbl_session_rel_user (id_session, id_user, relation_type) VALUES
+                       ($session_id, $hr_manager_id, '".SESSION_RELATION_TYPE_RRHH."')";
+				Database::query($sql);
 				$affected_rows = Database::affected_rows();
 			}
 		}
@@ -2338,11 +2338,22 @@ class SessionManager
 
 	/**
 	 * Get sessions followed by human resources manager
-	 * @param int		Human resources manager or Session admin id
-	 * @return array 	sessions
+	 * @param int $userId
+     * @param int $start
+     * @param int $limit
+     * @param bool $getCount
+     * @param bool $getOnlySessionId
+     * @param bool $getSql
+	 * @return array sessions
 	 */
-	public static function get_sessions_followed_by_drh($userId, $start = null, $limit = null, $getCount = false)
-    {
+	public static function get_sessions_followed_by_drh(
+        $userId,
+        $start = null,
+        $limit = null,
+        $getCount = false,
+        $getOnlySessionId = false,
+        $getSql = false
+    ) {
 		// Database Table Definitions
 		$tbl_session 			= 	Database::get_main_table(TABLE_MAIN_SESSION);
 		$tbl_session_rel_user 	= 	Database::get_main_table(TABLE_MAIN_SESSION_USER);
@@ -2352,11 +2363,16 @@ class SessionManager
 		$assigned_sessions_to_hrm = array();
 
         $select = " SELECT * ";
+
         if ($getCount) {
             $select = " SELECT count(s.id) as count ";
         }
 
-         $limitCondition = null;
+        if ($getOnlySessionId) {
+            $select = " SELECT s.id ";
+        }
+
+        $limitCondition = null;
         if (!empty($start) && !empty($limit)) {
             $limitCondition = " LIMIT ".intval($start). ", ".intval($limit);
         }
@@ -2379,7 +2395,13 @@ class SessionManager
                         sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."'
                         $limitCondition";
         }
+
+        if ($getSql) {
+            return $sql;
+        }
+
 		$result = Database::query($sql);
+
         if ($getCount) {
             $row = Database::fetch_array($result);
             return $row['count'];
@@ -3186,8 +3208,8 @@ class SessionManager
 
                         $course_counter++;
 
-                        $course_coaches = isset($courseArray[1]) ? $courseArray[1] : array();
-                        $course_users   = isset($courseArray[2]) ? $courseArray[2] : array();
+                        $course_coaches = isset($courseArray[1]) ? $courseArray[1] : null;
+                        $course_users   = isset($courseArray[2]) ? $courseArray[2] : null;
 
                         $course_users   = explode(',', $course_users);
                         $course_coaches = explode(',', $course_coaches);
@@ -3421,15 +3443,8 @@ class SessionManager
                 break;
                 // Show all by DRH
             case 'drh_all':
-                $sessions = SessionManager::get_sessions_followed_by_drh($userId);
-                $sessionIdList = array();
-                foreach ($sessions as $session) {
-                    $sessionIdList[] = $session['id'];
-                }
-                if (empty($sessionIdList)) {
-                    return array();
-                }
-                $statusConditions = " AND s.id IN ('".implode("','", $sessionIdList)."') ";
+                $sessionsListSql = SessionManager::get_sessions_followed_by_drh($userId, null, null, false, true, true);
+                $statusConditions = " AND s.id IN (".$sessionsListSql.") ";
                 break;
             case 'session_admin';
                 $statusConditions = " AND s.id_coach = $userId";
@@ -3485,6 +3500,7 @@ class SessionManager
                         u.email LIKE '%$keyword%'
                     )";
         }
+
         if ($getCount) {
             $result = Database::query($sql);
             $count = 0;
@@ -3730,7 +3746,7 @@ class SessionManager
      * @param bool $getCount
      * @return array|int
      */
-    public function getTeacherTracking($userId, $active = 1, $lastConnectionDate = null, $getCount = false)
+    public static function getTeacherTracking($userId, $active = 1, $lastConnectionDate = null, $getCount = false)
     {
         $teacherResult = array();
 

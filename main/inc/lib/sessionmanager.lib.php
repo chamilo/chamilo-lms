@@ -566,6 +566,7 @@ class SessionManager
         $rs = Database::query($sql_query);
         while ($row = Database::fetch_array($rs))
         {
+            $row['correct'] = ($row['correct'] == 1) ? get_lang('Yes') : get_lang('No');
             $data[] = $row;
         }
         return $data;

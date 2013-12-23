@@ -1,6 +1,6 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * 	This library provides functions for the group management.
  * 	Include/require it in your code to use its functionality.
@@ -48,7 +48,8 @@ class GroupPortalManager
      * @param  int     the user_id of the owner
      * @return boolean if success
      */
-    public static function add($name, $description, $url, $visibility, $picture = '') {
+    public static function add($name, $description, $url, $visibility, $picture = '')
+    {
         $now = api_get_utc_datetime();
         $table = Database :: get_main_table(TABLE_MAIN_GROUP);
         $sql = "INSERT INTO $table
@@ -74,7 +75,8 @@ class GroupPortalManager
      * @param	int     the user_id of the owner
      * @return 	boolean if success
      */
-    public static function update($group_id, $name, $description, $url, $visibility, $picture_uri) {
+    public static function update($group_id, $name, $description, $url, $visibility, $picture_uri)
+    {
         $group_id = intval($group_id);
         $table = Database::get_main_table(TABLE_MAIN_GROUP);
         $now = api_get_utc_datetime();
@@ -96,14 +98,15 @@ class GroupPortalManager
      * @param int id
      * @return boolean true if success
      * */
-    public static function delete($id) {
+    public static function delete($id)
+    {
         $id = intval($id);
         $table = Database :: get_main_table(TABLE_MAIN_GROUP);
         $sql = "DELETE FROM $table WHERE id = ".Database::escape_string($id);
         $result = Database::query($sql);
-        //deleting all relationship with users and groups
+        // Deleting all relationship with users and groups
         self::delete_users($id);
-        // delete group image
+        // Delete group image
         self::delete_group_picture($id);
         return $result;
     }
@@ -116,7 +119,8 @@ class GroupPortalManager
      * @param int	number of items
      * @return array
      * */
-    public static function get_all_group_data($visibility = GROUP_PERMISSION_OPEN, $from = 0, $number_of_items = 10) {
+    public static function get_all_group_data($visibility = GROUP_PERMISSION_OPEN, $from = 0, $number_of_items = 10)
+    {
         $table = Database :: get_main_table(TABLE_MAIN_GROUP);
         $visibility = intval($visibility);
         $sql = "SELECT name, description, picture_uri FROM $table WHERE visibility = $visibility ";
@@ -133,7 +137,8 @@ class GroupPortalManager
      * @param id of a group not to include (i.e. to exclude)
      * @return array : id => name
      * */
-    public static function get_groups_list($without_this_one = NULL) {
+    public static function get_groups_list($without_this_one = NULL)
+    {
         $where = '';
         if (isset($without_this_one) && (intval($without_this_one) == $without_this_one)) {
             $where = "WHERE id <> $without_this_one";
@@ -150,10 +155,11 @@ class GroupPortalManager
 
     /**
      * Gets the group data
-     *
-     *
+     * @param int $group_id
+     * @return array
      */
-    public static function get_group_data($group_id) {
+    public static function get_group_data($group_id)
+    {
         $table = Database :: get_main_table(TABLE_MAIN_GROUP);
         $group_id = intval($group_id);
         $sql = "SELECT id, name, description, picture_uri, url, visibility  FROM $table WHERE id = $group_id ";
@@ -167,12 +173,13 @@ class GroupPortalManager
 
     /**
      * Set a parent group
-     * @param group_id
-     * @param parent_group, if 0, we delete the parent_group association
-     * @param relation_type
-     * @return true or false
+     * @param int $group_id
+     * @param int $parent_group_id, if 0, we delete the parent_group association
+     * @param int $relation_type
+     * @return bool
      * */
-    public static function set_parent_group($group_id, $parent_group_id, $relation_type = 1) {
+    public static function set_parent_group($group_id, $parent_group_id, $relation_type = 1)
+    {
         $table = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
         $group_id = intval($group_id);
         $parent_group_id = intval($parent_group_id);
@@ -184,7 +191,8 @@ class GroupPortalManager
             if (Database::num_rows($res) == 0) {
                 $sql = "INSERT INTO $table  SET group_id = $parent_group_id, subgroup_id = $group_id, relation_type = $relation_type";
             } else {
-                $sql = "UPDATE $table SET group_id = $parent_group_id, relation_type = $relation_type  WHERE subgroup_id = $group_id";
+                $sql = "UPDATE $table SET group_id = $parent_group_id, relation_type = $relation_type
+                        WHERE subgroup_id = $group_id";
             }
         }
         $res = Database::query($sql);
@@ -193,14 +201,14 @@ class GroupPortalManager
 
     /**
      * Get the parent group
-     * @param group_id
-     * @param relation_type
+     * @param int group_id
+     * @param int relation_type
      * @return int parent_group_id or false
      * */
-    public static function get_parent_group($group_id, $relation_type = 1) {
+    public static function get_parent_group($group_id, $relation_type = 1)
+    {
         $table = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
         $group_id = intval($group_id);
-        $parent_group_id = intval($parent_group_id);
         $sql = "SELECT group_id FROM $table WHERE subgroup_id = $group_id";
         $res = Database::query($sql);
         if (Database::num_rows($res) == 0) {
@@ -211,7 +219,13 @@ class GroupPortalManager
         }
     }
 
-    public static function get_subgroups($root, $level) {
+    /**
+     * @param int $root
+     * @param int $level
+     * @return array
+     */
+    public static function get_subgroups($root, $level)
+    {
         $t_group = Database::get_main_table(TABLE_MAIN_GROUP);
         $t_rel_group = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
         $select_part = "SELECT ";
@@ -253,7 +267,12 @@ class GroupPortalManager
         return $toreturn;
     }
 
-    public static function get_parent_groups($group_id) {
+    /**
+     * @param int $group_id
+     * @return array
+     */
+    public static function get_parent_groups($group_id)
+    {
         $t_rel_group = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
         $max_level = 10;
         $select_part = "SELECT ";
@@ -288,11 +307,12 @@ class GroupPortalManager
 
     /**
      * Gets the tags from a given group
-     * @param int	group id
+     * @param int group id
      * @param bool show group links or not
      *
      */
-    public static function get_group_tags($group_id, $show_tag_links = true) {
+    public static function get_group_tags($group_id, $show_tag_links = true)
+    {
         $tag = Database :: get_main_table(TABLE_MAIN_TAG);
         $table_group_rel_tag = Database :: get_main_table(TABLE_MAIN_GROUP_REL_TAG);
         $group_id = intval($group_id);
@@ -321,11 +341,16 @@ class GroupPortalManager
         return $tags;
     }
 
-    /** Gets the inner join from users and group table
-     * @return array   Database::store_result of the result
+    /**
+     * Gets the inner join from users and group table
+     * @param string $user_id
+     * @param string $relation_type
+     * @param bool $with_image
+     * @return array Database::store_result of the result
      * @author Julio Montoya
-     * */
-    public static function get_groups_by_user($user_id = '', $relation_type = GROUP_USER_PERMISSION_READER, $with_image = false) {
+     **/
+    public static function get_groups_by_user($user_id = '', $relation_type = GROUP_USER_PERMISSION_READER, $with_image = false)
+    {
         $table_group_rel_user = Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
         $tbl_group = Database::get_main_table(TABLE_MAIN_GROUP);
         $user_id = intval($user_id);
@@ -363,7 +388,8 @@ class GroupPortalManager
      * @return array  with group content
      * @author Julio Montoya
      * */
-    public static function get_groups_by_popularity($num = 6, $with_image = true) {
+    public static function get_groups_by_popularity($num = 6, $with_image = true)
+    {
         $table_group_rel_user = Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
         $tbl_group = Database::get_main_table(TABLE_MAIN_GROUP);
         if (empty($num)) {
@@ -397,13 +423,15 @@ class GroupPortalManager
         return $array;
     }
 
-    /** Gets the last groups created
+    /**
+     * Gets the last groups created
      * @param int  quantity of records
      * @param bool show groups with image or not
      * @return array  with group content
      * @author Julio Montoya
      * */
-    public static function get_groups_by_age($num = 6, $with_image = true) {
+    public static function get_groups_by_age($num = 6, $with_image = true)
+    {
         $table_group_rel_user = Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
         $tbl_group = Database::get_main_table(TABLE_MAIN_GROUP);
 
@@ -446,7 +474,14 @@ class GroupPortalManager
      * @param array image configuration, i.e array('height'=>'20px', 'size'=> '20px')
      * @return array list of users in a group
      */
-    public static function get_users_by_group($group_id, $with_image = false, $relation_type = array(), $from = null, $limit = null, $image_conf = array('size' => USER_IMAGE_SIZE_MEDIUM, 'height' => 80)) {
+    public static function get_users_by_group(
+        $group_id,
+        $with_image = false,
+        $relation_type = array(),
+        $from = null,
+        $limit = null,
+        $image_conf = array('size' => USER_IMAGE_SIZE_MEDIUM, 'height' => 80)
+    ) {
         $where = '';
         $table_group_rel_user = Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -500,7 +535,8 @@ class GroupPortalManager
      * @param int group id
      * @return array
      */
-    public static function get_all_users_by_group($group_id) {
+    public static function get_all_users_by_group($group_id)
+    {
         $table_group_rel_user = Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $group_id = intval($group_id);
@@ -527,7 +563,8 @@ class GroupPortalManager
      * @param int group_id
      * @return int 0 if there are not relationship otherwise returns the user group
      * */
-    public static function get_user_group_role($user_id, $group_id) {
+    public static function get_user_group_role($user_id, $group_id)
+    {
         $table_group_rel_user = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
         $return_value = 0;
         if (!empty($user_id) && !empty($group_id)) {
@@ -544,11 +581,12 @@ class GroupPortalManager
     /**
      * Add a user into a group
      * @author Julio Montoya
-     * @param  user_id
-     * @param  url_id
+     * @param  int user_id
+     * @param  int url_id
      * @return boolean true if success
-     * */
-    public static function add_user_to_group($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER) {
+     **/
+    public static function add_user_to_group($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER)
+    {
         $table_url_rel_group = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
         if (!empty($user_id) && !empty($group_id)) {
             $role = self::get_user_group_role($user_id, $group_id);
@@ -569,8 +607,9 @@ class GroupPortalManager
      * @author Julio Montoya
      * @param  array of user_ids
      * @param  array of url_ids
-     * */
-    public static function add_users_to_groups($user_list, $group_list, $relation_type = GROUP_USER_PERMISSION_READER) {
+     **/
+    public static function add_users_to_groups($user_list, $group_list, $relation_type = GROUP_USER_PERMISSION_READER)
+    {
         $table_url_rel_group = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
         $result_array = array();
         $relation_type = intval($relation_type);
@@ -581,7 +620,9 @@ class GroupPortalManager
                     $role = self::get_user_group_role($user_id, $group_id);
                     if ($role == 0) {
                         $sql = "INSERT INTO $table_url_rel_group
-		               			SET user_id = ".intval($user_id).", group_id = ".intval($group_id).", relation_type = ".intval($relation_type);
+		               			SET user_id = ".intval($user_id).",
+                                    group_id = ".intval($group_id).",
+                                    relation_type = ".intval($relation_type);
 
                         $result = Database::query($sql);
                         if ($result)
@@ -602,7 +643,8 @@ class GroupPortalManager
      * @param int relation type (optional)
      * @return boolean true if success
      * */
-    public static function delete_users($group_id, $relation_type = '') {
+    public static function delete_users($group_id, $relation_type = '')
+    {
         $table_ = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
         $condition_relation = "";
         if (!empty($relation_type)) {
@@ -617,13 +659,14 @@ class GroupPortalManager
     /**
      * Deletes an url and session relationship
      * @author Julio Montoya
-     * @param  char  course code
-     * @param  int url id
+     * @param  int $user_id
+     * @param  int $group_id
      * @return boolean true if success
      * */
-    public static function delete_user_rel_group($user_id, $group_id) {
+    public static function delete_user_rel_group($user_id, $group_id)
+    {
         $table = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
-        $sql = "DELETE FROM $table WHERE user_id = ".intval($user_id)." AND group_id=".intval($group_id)."  ";
+        $sql = "DELETE FROM $table WHERE user_id = ".intval($user_id)." AND group_id=".intval($group_id);
         $result = Database::query($sql);
         return $result;
     }
@@ -635,7 +678,8 @@ class GroupPortalManager
      * @param int group id
      * @param int relation type
      * */
-    public static function update_user_role($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER) {
+    public static function update_user_role($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER)
+    {
         $table_group_rel_user = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
         $group_id = intval($group_id);
         $user_id = intval($user_id);
@@ -645,18 +689,23 @@ class GroupPortalManager
         Database::query($sql);
     }
 
-    public static function get_group_admin_list($user_id, $group_id) {
+    /**
+     * @param int $user_id
+     * @param int $group_id
+     */
+    public static function get_group_admin_list($user_id, $group_id)
+    {
         $table_group_rel_user = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
         $group_id = intval($group_id);
         $user_id = intval($user_id);
 
         $sql = "SELECT user_id FROM  $table_group_rel_user WHERE
    				relation_type = ".GROUP_USER_PERMISSION_ADMIN." AND user_id = $user_id AND group_id = $group_id";
-        $result = Database::query($sql);
+        Database::query($sql);
     }
 
     /**
-     * @param $tag
+     * @param string $tag
      * @param int $from
      * @param int $number_of_items
      * @param bool $getCount
@@ -664,8 +713,7 @@ class GroupPortalManager
      */
     public static function get_all_group_tags($tag, $from = 0, $number_of_items = 10, $getCount = false)
     {
-        // database table definition
-
+        // Database table definition
         $group_table = Database::get_main_table(TABLE_MAIN_GROUP);
         $table_tag = Database::get_main_table(TABLE_MAIN_TAG);
         $table_group_tag_values = Database::get_main_table(TABLE_MAIN_GROUP_REL_TAG);
@@ -710,17 +758,20 @@ class GroupPortalManager
     }
 
     /**
-     * Creates new group pictures in various sizes of a user, or deletes user pfotos.
-     * Note: This method relies on configuration setting from dokeos/main/inc/conf/profile.conf.php
-     * @param	int	The group id
-     * @param	string $file			The common file name for the newly created pfotos. It will be checked and modified for compatibility with the file system.
+     * Creates new group pictures in various sizes of a user, or deletes user photos.
+     * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php
+     * @param int	The group id
+     * @param string $file The common file name for the newly created photos.
+     * It will be checked and modified for compatibility with the file system.
      * If full name is provided, path component is ignored.
-     * If an empty name is provided, then old user photos are deleted only, @see UserManager::delete_user_picture() as the prefered way for deletion.
-     * @param	string		$source_file	The full system name of the image from which user photos will be created.
-     * @return	string/bool	Returns the resulting common file name of created images which usually should be stored in database.
+     * If an empty name is provided, then old user photos are deleted only, @see UserManager::delete_user_picture()
+     * as the prefered way for deletion.
+     * @param	string		$source_file The full system name of the image from which user photos will be created.
+     * @return	string/bool	Returns the resulting file name of created images which usually should be stored in DB.
      * When deletion is recuested returns empty string. In case of internal error or negative validation returns FALSE.
      */
-    public static function update_group_picture($group_id, $file = null, $source_file = null) {
+    public static function update_group_picture($group_id, $file = null, $source_file = null)
+    {
 
         // Validation 1.
         if (empty($group_id)) {
@@ -813,11 +864,14 @@ class GroupPortalManager
      * the same directory.
      * @param	integer	User ID
      * @param	string	Type of path to return (can be 'none', 'system', 'rel', 'web')
-     * @param	bool	Whether we want to have the directory name returned 'as if' there was a file or not (in the case we want to know which directory to create - otherwise no file means no split subdir)
+     * @param	bool	Whether we want to have the directory name returned 'as if' there was a file or not
+     * (in the case we want to know which directory to create - otherwise no file means no split subdir)
      * @param	bool	If we want that the function returns the /main/img/unknown.jpg image set it at true
-     * @return	array 	Array of 2 elements: 'dir' and 'file' which contain the dir and file as the name implies if image does not exist it will return the unknow image if anonymous parameter is true if not it returns an empty er's
+     * @return	array 	Array of 2 elements: 'dir' and 'file' which contain the dir and file as the name implies
+     * if image does not exist it will return the unknow image if anonymous parameter is true if not it returns an empty
      */
-    public static function get_group_picture_path_by_id($id, $type = 'none', $preview = false, $anonymous = false) {
+    public static function get_group_picture_path_by_id($id, $type = 'none', $preview = false, $anonymous = false)
+    {
 
         switch ($type) {
             case 'system': // Base: absolute system path.
@@ -875,7 +929,8 @@ class GroupPortalManager
      * @param  int size in pixels
      * @return obj image object
      */
-    public static function resize_picture($file, $max_size_for_picture) {
+    public static function resize_picture($file, $max_size_for_picture)
+    {
         $temp = new Image($file);
         $picture_infos = api_getimagesize($file);
         if ($picture_infos['width'] > $max_size_for_picture) {
@@ -900,7 +955,8 @@ class GroupPortalManager
      * @param string style css
      * @return array with the file and the style of an image i.e $array['file'] $array['style']
      */
-    public static function get_picture_group($id, $picture_file, $height, $size_picture = GROUP_IMAGE_SIZE_MEDIUM, $style = '') {
+    public static function get_picture_group($id, $picture_file, $height, $size_picture = GROUP_IMAGE_SIZE_MEDIUM, $style = '')
+    {
         $patch_profile = 'upload/users/groups/';
         $picture = array();
         $picture['style'] = $style;
@@ -950,11 +1006,22 @@ class GroupPortalManager
         return $picture;
     }
 
-    public static function delete_group_picture($group_id) {
+    /**
+     * @param int $group_id
+     * @return string
+     */
+    public static function delete_group_picture($group_id)
+    {
         return self::update_group_picture($group_id);
     }
 
-    public static function is_group_admin($group_id, $user_id = 0) {
+    /**
+     * @param int $group_id
+     * @param int $user_id
+     * @return bool
+     */
+    public static function is_group_admin($group_id, $user_id = 0)
+    {
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
@@ -966,7 +1033,13 @@ class GroupPortalManager
         }
     }
 
-    public static function is_group_moderator($group_id, $user_id = 0) {
+    /**
+     * @param int $group_id
+     * @param int $user_id
+     * @return bool
+     */
+    public static function is_group_moderator($group_id, $user_id = 0)
+    {
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
@@ -978,12 +1051,25 @@ class GroupPortalManager
         }
     }
 
-    public static function is_group_member($group_id, $user_id = 0) {
+    /**
+     * @param int $group_id
+     * @param int $user_id
+     * @return bool
+     */
+    public static function is_group_member($group_id, $user_id = 0)
+    {
         if (empty($user_id)) {
             $user_id = api_get_user_id();
         }
         $user_role = GroupPortalManager::get_user_group_role($user_id, $group_id);
-        if (in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_HRM))) {
+        $permissions = array(
+            GROUP_USER_PERMISSION_ADMIN,
+            GROUP_USER_PERMISSION_MODERATOR,
+            GROUP_USER_PERMISSION_READER,
+            GROUP_USER_PERMISSION_HRM
+        );
+
+        if (in_array($user_role, $permissions)) {
             return true;
         } else {
             return false;
@@ -996,16 +1082,13 @@ class GroupPortalManager
      * @param int user id
      *
      */
-    public static function show_group_column_information($group_id, $user_id, $show = '') {
+    public static function show_group_column_information($group_id, $user_id, $show = '')
+    {
         global $relation_group_title, $my_group_role;
         $html = '';
 
         $group_info = GroupPortalManager::get_group_data($group_id);
-        //$picture		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],160,GROUP_IMAGE_SIZE_MEDIUM);
-        //$big_image		= GroupPortalManager::get_picture_group($group_id, $group_info['picture_uri'],'',GROUP_IMAGE_SIZE_BIG);
-        //$tags			= GroupPortalManager::get_group_tags($group_id, true);
-        //$groups_by_user	= GroupPortalManager::get_groups_by_user($user_id, 0);
-        //my relation with the group is set here
+        // My relation with the group is set here.
         $my_group_role = self::get_user_group_role($user_id, $group_id);
 
         //@todo this must be move to default.css for dev use only
@@ -1075,7 +1158,12 @@ class GroupPortalManager
         return $html;
     }
 
-    function delete_topic($group_id, $topic_id) {
+    /**
+     * @param int $group_id
+     * @param int $topic_id
+     */
+    function delete_topic($group_id, $topic_id)
+    {
         $table_message = Database::get_main_table(TABLE_MESSAGE);
         $topic_id = intval($topic_id);
         $group_id = intval($group_id);
@@ -1083,10 +1171,17 @@ class GroupPortalManager
         Database::query($sql);
     }
 
-    public static function get_groups_by_user_count($user_id = '', $relation_type = GROUP_USER_PERMISSION_READER, $with_image = false) {
+    /**
+     * @param int $user_id
+     * @param int $relation_type
+     * @param bool $with_image
+     * @return int
+     */
+    public static function get_groups_by_user_count($user_id = null, $relation_type = GROUP_USER_PERMISSION_READER, $with_image = false)
+    {
         $table_group_rel_user	= Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
 		$tbl_group				= Database::get_main_table(TABLE_MAIN_GROUP);
-		$user_id 				= intval($user_id);
+		$user_id = intval($user_id);
 
 		if ($relation_type == 0) {
 			$where_relation_condition = '';

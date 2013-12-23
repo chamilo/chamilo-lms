@@ -4,9 +4,6 @@
  * @package chamilo.social
  * @author Julio Montoya <gugli100@gmail.com>
  */
-/**
- * Initialization
- */
 // Language files that should be included
 $language_file = array('userInfo');
 $cidReset = true;
@@ -49,13 +46,13 @@ $table_group = Database::get_main_table(TABLE_MAIN_GROUP);
 $sql = "SELECT * FROM $table_group WHERE id = '".$group_id."'";
 $res = Database::query($sql);
 if (Database::num_rows($res) != 1) {
-	header('Location: groups.php?id='.$group_id);
-	exit;
+    header('Location: groups.php?id='.$group_id);
+    exit;
 }
 
 //only group admins can edit the group
 if (!GroupPortalManager::is_group_admin($group_id)) {
-	api_not_allowed();
+    api_not_allowed();
 }
 
 $group_data = Database::fetch_array($res, 'ASSOC');
@@ -86,7 +83,7 @@ $form->addElement('file', 'picture', get_lang('AddPicture'));
 $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
 $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 if (strlen($group_data['picture_uri']) > 0) {
-	$form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
+    $form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
 }
 
 // Status
@@ -95,7 +92,6 @@ $status[GROUP_PERMISSION_OPEN] 		= get_lang('Open');
 $status[GROUP_PERMISSION_CLOSED]	= get_lang('Closed');
 $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $status, array());
 
-
 // Submit button
 $form->addElement('style_submit_button', 'submit', get_lang('ModifyInformation'), 'class="save"');
 
@@ -103,32 +99,31 @@ $form->addElement('style_submit_button', 'submit', get_lang('ModifyInformation')
 $form->setDefaults($group_data);
 
 // Validate form
-if ( $form->validate()) {
-	$group = $form->exportValues();
-	$picture_element = $form->getElement('picture');
-	$picture = $picture_element->getValue();
-	$picture_uri = $group_data['picture_uri'];
+if ($form->validate()) {
+    $group = $form->exportValues();
+    $picture_element = $form->getElement('picture');
+    $picture = $picture_element->getValue();
+    $picture_uri = $group_data['picture_uri'];
 
-	if ($group['delete_picture']) {
-		$picture_uri = GroupPortalManager::delete_group_picture($group_id);
-		}
-	elseif (!empty($picture['name'])) {
-		$picture_uri = GroupPortalManager::update_group_picture($group_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
-	}
+    if ($group['delete_picture']) {
+        $picture_uri = GroupPortalManager::delete_group_picture($group_id);
+    } elseif (!empty($picture['name'])) {
+        $picture_uri = GroupPortalManager::update_group_picture($group_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);
+    }
 
-	$name 			= $group['name'];
-	$description	= $group['description'];
-	$url 			= $group['url'];
-	$status 		= intval($group['visibility']);
+    $name 			= $group['name'];
+    $description	= $group['description'];
+    $url 			= $group['url'];
+    $status 		= intval($group['visibility']);
 
-	GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);
-	$tok = Security::get_token();
-	header('Location: groups.php?id='.$group_id.'&action=show_message&message='.urlencode(get_lang('GroupUpdated')).'&sec_token='.$tok);
-	exit();
+    GroupPortalManager::update($group_id, $name, $description, $url, $status, $picture_uri);
+    $tok = Security::get_token();
+    header('Location: groups.php?id='.$group_id.'&action=show_message&message='.urlencode(get_lang('GroupUpdated')).'&sec_token='.$tok);
+    exit();
 }
 
 // Group picture
-$image_path = GroupPortalManager::get_group_picture_path_by_id($group_id,'web');
+$image_path = GroupPortalManager::get_group_picture_path_by_id($group_id, 'web');
 $image_dir = $image_path['dir'];
 $image = $image_path['file'];
 $image_file = ($image != '' ? $image_dir.$image : api_get_path(WEB_CODE_PATH).'img/unknown_group.jpg');
@@ -141,9 +136,8 @@ $big_image_width = $big_image_size['width'];
 $big_image_height = $big_image_size['height'];
 $url_big_image = $big_image.'?rnd='.time();
 
-$social_left_content = SocialManager::show_social_menu('group_edit',$group_id);
+$social_left_content = SocialManager::show_social_menu('group_edit', $group_id);
 $social_right_content = $form->return_form();
-
 
 $tpl = new Template($tool_name);
 $tpl->set_help('Groups');
@@ -155,4 +149,3 @@ $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
 $social_layout = $tpl->get_template('layout/social_layout.tpl');
 $tpl->display($social_layout);
-

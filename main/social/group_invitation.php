@@ -42,8 +42,8 @@ $tool_name = get_lang('SubscribeUsersToGroup');
 $group_id = intval($_REQUEST['id']);
 
 $add_type = 'multiple';
-if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
-	$add_type = Security::remove_XSS($_REQUEST['add_type']);
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
+    $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
 //checking for extra field with filter on
@@ -51,120 +51,117 @@ require_once api_get_path(LIBRARY_PATH).'group_portal_manager.lib.php';
 
 //todo @this validation could be in a function in group_portal_manager
 if (empty($group_id)) {
-	api_not_allowed();
+    api_not_allowed();
 } else {
-	$group_info = GroupPortalManager::get_group_data($group_id);
-	if (empty($group_info)) {
-		api_not_allowed();
-	}
-	//only admin or moderator can do that
-	if (!GroupPortalManager::is_group_member($group_id)) {
-		api_not_allowed();
-	}
+    $group_info = GroupPortalManager::get_group_data($group_id);
+    if (empty($group_info)) {
+        api_not_allowed();
+    }
+    //only admin or moderator can do that
+    if (!GroupPortalManager::is_group_member($group_id)) {
+        api_not_allowed();
+    }
 }
 
 function search_users($needle,$type) {
-	global $tbl_user,$tbl_group_rel_user,$group_id;
-	$xajax_response = new XajaxResponse();
-	$return = '';
+    global $tbl_user,$tbl_group_rel_user,$group_id;
+    $xajax_response = new XajaxResponse();
+    $return = '';
 
-	if (!empty($needle) && !empty($type)) {
+    if (!empty($needle) && !empty($type)) {
 
-		// xajax send utf8 datas... datas in db can be non-utf8 datas
-		$charset = api_get_system_encoding();
-		$needle = Database::escape_string($needle);
-		$needle = api_convert_encoding($needle, $charset, 'utf-8');
-		$user_anonymous=api_get_anonymous_id();
+        // xajax send utf8 datas... datas in db can be non-utf8 datas
+        $charset = api_get_system_encoding();
+        $needle = Database::escape_string($needle);
+        $needle = api_convert_encoding($needle, $charset, 'utf-8');
+        $user_anonymous=api_get_anonymous_id();
 
-		$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
-		$cond_user_id = '';
-		if (!empty($id_session)) {
-		$group_id = Database::escape_string($group_id);
-			// check id_user from session_rel_user table
-			$sql = 'SELECT id_user FROM '.$tbl_group_rel_user.' WHERE group_id ="'.(int)$group_id.'"';
-			$res = Database::query($sql);
-			$user_ids = array();
-			if (Database::num_rows($res) > 0) {
-				while ($row = Database::fetch_row($res)) {
-					$user_ids[] = (int)$row[0];
-				}
-			}
-			if (count($user_ids) > 0){
-				$cond_user_id = ' AND user_id NOT IN('.implode(",",$user_ids).')';
-			}
+        $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
+        $cond_user_id = '';
+        if (!empty($id_session)) {
+            $group_id = Database::escape_string($group_id);
+            // check id_user from session_rel_user table
+            $sql = 'SELECT id_user FROM '.$tbl_group_rel_user.' WHERE group_id ="'.(int)$group_id.'"';
+            $res = Database::query($sql);
+            $user_ids = array();
+            if (Database::num_rows($res) > 0) {
+                while ($row = Database::fetch_row($res)) {
+                    $user_ids[] = (int)$row[0];
+                }
+            }
+            if (count($user_ids) > 0){
+                $cond_user_id = ' AND user_id NOT IN('.implode(",",$user_ids).')';
+            }
 		}
 
-		if ($type == 'single') {
-			// search users where username or firstname or lastname begins likes $needle
-			$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
-					WHERE (username LIKE "'.$needle.'%"
-					OR firstname LIKE "'.$needle.'%"
-				OR lastname LIKE "'.$needle.'%") AND user_id<>"'.$user_anonymous.'"'.
-				$order_clause.
-				' LIMIT 11';
-		} else {
-			$sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
-					WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user_id<>"'.$user_anonymous.'"'.$cond_user_id.
-					$order_clause;
-		}
+        if ($type == 'single') {
+            // search users where username or firstname or lastname begins likes $needle
+            $sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
+                    WHERE (username LIKE "'.$needle.'%"
+                    OR firstname LIKE "'.$needle.'%"
+                OR lastname LIKE "'.$needle.'%") AND user_id<>"'.$user_anonymous.'"'.
+                $order_clause.
+                ' LIMIT 11';
+        } else {
+            $sql = 'SELECT user_id, username, lastname, firstname FROM '.$tbl_user.' user
+                    WHERE '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user_id<>"'.$user_anonymous.'"'.$cond_user_id.
+                    $order_clause;
+        }
 
-		global $_configuration;
-		if ($_configuration['multiple_access_urls']) {
-			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-			$access_url_id = api_get_current_access_url_id();
-			if ($access_url_id != -1){
-				if ($type == 'single') {
-					$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
-					INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-					WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
-					OR firstname LIKE "'.$needle.'%"
-					OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'"'.
-					$order_clause.
-					' LIMIT 11';
-				} else {
-					$sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
-					INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-					WHERE access_url_id = '.$access_url_id.'
-					AND '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
-					$order_clause;
-				}
+		if (api_is_multiple_url_enabled()) {
+            $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $access_url_id = api_get_current_access_url_id();
+            if ($access_url_id != -1) {
+                if ($type == 'single') {
+                    $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
+                    INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
+                    WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
+                    OR firstname LIKE "'.$needle.'%"
+                    OR lastname LIKE "'.$needle.'%") AND user.user_id<>"'.$user_anonymous.'"'.
+                    $order_clause.
+                    ' LIMIT 11';
+                } else {
+                    $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
+                    INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
+                    WHERE access_url_id = '.$access_url_id.'
+                    AND '.(api_sort_by_first_name() ? 'firstname' : 'lastname').' LIKE "'.$needle.'%" AND user.user_id<>"'.$user_anonymous.'"'.$cond_user_id.
+                    $order_clause;
+                }
+            }
+        }
 
-			}
-		}
+        $rs = Database::query($sql);
+        $i = 0;
+        if ($type=='single') {
+            while ($user = Database :: fetch_array($rs)) {
+                $i++;
+                if ($i<=10) {
+                    $person_name = api_get_person_name($user['firstname'], $user['lastname']);
+                    $return .= '<a href="javascript: void(0);" onclick="javascript: add_user(\''.$user['user_id'].'\',\''.$person_name.' ('.$user['username'].')'.'\')">'.$person_name.' ('.$user['username'].')</a><br />';
+                } else {
+                    $return .= '...<br />';
+                }
+            }
+            $xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));
 
-		$rs = Database::query($sql);
-        $i=0;
-		if ($type=='single') {
-			while ($user = Database :: fetch_array($rs)) {
-	            $i++;
-	            if ($i<=10) {
-            		$person_name = api_get_person_name($user['firstname'], $user['lastname']);
-					$return .= '<a href="javascript: void(0);" onclick="javascript: add_user(\''.$user['user_id'].'\',\''.$person_name.' ('.$user['username'].')'.'\')">'.$person_name.' ('.$user['username'].')</a><br />';
-	            } else {
-	            	$return .= '...<br />';
-	            }
-			}
-			$xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));
-
-		} else {
-			global $nosessionUsersList;
-			$return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
-			while ($user = Database :: fetch_array($rs)) {
-				$person_name = api_get_person_name($user['firstname'], $user['lastname']);
-	            $return .= '<option value="'.$user['user_id'].'">'.$person_name.' ('.$user['username'].')</option>';
-			}
-			$return .= '</select>';
-			$xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
-		}
+        } else {
+            global $nosessionUsersList;
+            $return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
+            while ($user = Database :: fetch_array($rs)) {
+                $person_name = api_get_person_name($user['firstname'], $user['lastname']);
+                $return .= '<option value="'.$user['user_id'].'">'.$person_name.' ('.$user['username'].')</option>';
+            }
+            $return .= '</select>';
+            $xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
+        }
 	}
 	return $xajax_response;
 }
 
-$xajax -> processRequests();
+$xajax->processRequests();
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
-$htmlHeadXtra[] = '
-<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function add_user (code, content) {
 	// document.getElementById("user_to_add").value = "";
 	//document.getElementById("ajax_list_users_single").innerHTML = "";
@@ -227,12 +224,10 @@ if ($_POST['form_sent']) {
 			}
 		}
 	}
-
 }
 
 $nosessionUsersList = $sessionUsersList = array();
 $ajax_search = $add_type == 'unique' ? true : false;
-global $_configuration;
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 
 if ($ajax_search) {
@@ -242,7 +237,7 @@ if ($ajax_search) {
 				ON (gu.user_id = u.user_id) WHERE gu.group_id = $group_id ".
 			$order_clause;
 
-	if ($_configuration['multiple_access_urls']) {
+	if (api_is_multiple_url_enabled()) {
 		$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$access_url_id = api_get_current_access_url_id();
 		if ($access_url_id != -1){
@@ -263,7 +258,6 @@ if ($ajax_search) {
 	}
 } else {
 		$friends = SocialManager::get_friends(api_get_user_id());
-
 		$suggest_friends = false;
 
 		if (!$friends) {
@@ -284,8 +278,9 @@ if ($ajax_search) {
 		}
 		if (is_array($Users) && count($Users) > 0 ) {
 			foreach ($Users as $user) {
-				if($user['group_id'] != $group_id)
-					$nosessionUsersList[$user['user_id']] = $user ;
+				if ($user['group_id'] != $group_id) {
+					$nosessionUsersList[$user['user_id']] = $user;
+                }
 			}
 		}
 

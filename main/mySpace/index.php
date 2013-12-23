@@ -608,7 +608,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 
     if ($is_platform_admin && $view == 'admin' && in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'))) {
         //Session Filter
-        $sessionFilter = new FormValidator('session_filter', 'get', '', '', array('class'=> 'form-search'), false);
+        $sessionFilter = new FormValidator('session_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
         $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
         $sessionList = array();
         $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
@@ -634,7 +634,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         //Course filter
         if (in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview')))
         {
-                $courseFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-search'), false);
+                $courseFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
                 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course_by_session&session_id=' . $_GET['session_id'];
                 $courseList = array();
                 $courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;
@@ -663,7 +663,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         if (in_array($display, array('accessoverview')))
         {
                 $courseListUrl = api_get_self();
-                $studentFilter = new FormValidator('student_filter', 'get', '', '', array('class'=> 'form-search'), false);
+                $studentFilter = new FormValidator('student_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
                 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_user_by_course&session_id=' . $_GET['session_id'] . '&course_id=' . $_GET['course_id'];
                 $studentList = array();
                 $studentId = isset($_GET['student_id']) ? $_GET['student_id'] : null;
@@ -703,7 +703,6 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                         var courseId    = $("#course_name").val();
                         var studentId   = $("#student_name").val();
                         window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&student_id="+studentId+"&date_to="+date_to+"&date_from="+date_from;
-                        });
                     });
                     $("#profile").on("change", function() {
                         var date_to     = $(\'#date_to\').val();
@@ -712,6 +711,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                         var courseId    = $("#course_name").val();
                         var profile     = $("#profile").val();
                         window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&profile="+profile+"&date_to="+date_to+"&date_from="+date_from;
+                    });
                     $( "#date_from, #date_to").datepicker({
                         dateFormat:  \'yy-mm-dd\',
                         onSelect: function( selectedDate ) {
@@ -739,7 +739,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 </script>';
 
                 /*//profile filter
-                $profileFilter = new FormValidator('answer_filter', 'get', '', '', array('class'=> 'form-search'), false);
+                $profileFilter = new FormValidator('answer_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
                 $options = array(
                     STUDENT         => get_lang('Student'),
                     COURSEMANAGER   => get_lang('CourseManager'),
@@ -766,7 +766,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }
         if (in_array($display, array('surveyoverview')))
         {
-            $surveyOverview = new FormValidator('survey_filter', 'get', '', '', array('class'=> 'form-search'), false);
+            $surveyOverview = new FormValidator('survey_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
             $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_survey_by_course&session_id=' . $_GET['session_id'] . '&course_id=' . $_GET['course_id'] . '&survey_id=' . $_GET['survey_id'];
             $surveyList = array();
             $surveyId = isset($_GET['survey_id']) ? intval($_GET['survey_id']) : null;
@@ -798,7 +798,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         if (in_array($display, array('exerciseprogress')))
         {
                 //exercise
-                $exerciseFilter = new FormValidator('student_filter', 'get', '', '', array('class'=> 'form-search'), false);
+                $exerciseFilter = new FormValidator('student_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
                 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_exercise_by_course&session_id=' . $_GET['session_id'] . '&course_id=' . $_GET['course_id'];
                 $exerciseList = array();
                 $exerciseId = isset($_GET['exercise_id']) ? $_GET['exercise_id'] : null;
@@ -826,7 +826,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 </script>';
 
                 //answer Type
-                $answerFilter = new FormValidator('answer_filter', 'get', '', '', array('class'=> 'form-search'), false);
+                $answerFilter = new FormValidator('answer_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
                 $options = array(
                     2 => get_lang('all'),
                     0 => get_lang('incorrect'),

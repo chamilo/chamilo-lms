@@ -3760,11 +3760,18 @@ class CourseManager
         return false;
     }
 
+    /**
+     * @param int $course_id
+     * @param int $session_id
+     * @param int $url_id
+     * @return array
+     */
     public static function get_course_ranking($course_id, $session_id = null, $url_id = null) {
         $table_course_ranking       = Database::get_main_table(TABLE_STATISTIC_TRACK_COURSE_RANKING);
 
         $session_id = !isset($session_id)   ? api_get_session_id() : intval($session_id);
         $url_id     = empty($url_id)        ? api_get_current_access_url_id() : intval($url_id);
+        $now = api_get_utc_datetime();
 
         $params = array(
             'c_id'          => $course_id,
@@ -3773,7 +3780,12 @@ class CourseManager
             'creation_date' => $now,
         );
 
-        $result = Database::select('c_id, accesses, total_score, users', $table_course_ranking, array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)), 'first');
+        $result = Database::select(
+            'c_id, accesses, total_score, users',
+            $table_course_ranking,
+            array('where' => array('c_id = ? AND session_id = ? AND url_id = ?' => $params)),
+            'first'
+        );
 
         $point_average_in_percentage = 0;
         $point_average_in_star = 0;

@@ -43,6 +43,7 @@ function aiken_display_form($msg = '') {
     $form .= $msg;
     $form_validator  = new FormValidator('aiken_upload', 'post',api_get_self()."?".api_get_cidreq(), null, array('enctype' => 'multipart/form-data') );
     $form_validator->addElement('header', $name_tools);
+    $form_validator->addElement('text', 'total_weight', get_lang('totalWeight'));
     $form_validator->addElement('file', 'userFile', get_lang('DownloadFile'));
     $form_validator->addElement('style_submit_button', 'submit', get_lang('Send'), 'class="upload"');
     $form .= $form_validator->return_form();
@@ -298,6 +299,7 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) 
         }
     }
     $total_questions = count($exercise_info['question']);
+    $total_weight = (!empty($_POST['total_weight'])) ? intval($_POST['total_weight']) : 20;
     foreach  ($exercise_info['question'] as $key => $question) {
         $exercise_info['question'][$key]['weighting'][current(array_keys($exercise_info['question'][$key]['weighting']))] = $total_weight / $total_questions;
     }

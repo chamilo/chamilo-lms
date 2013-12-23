@@ -516,10 +516,12 @@ class SessionManager
         $table_stats_exercises  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $table_stats_attempt    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $course = api_get_course_info_by_id($courseId);
+        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 
-        $where = " WHERE a.session_id = %d
-        AND a.course_code = '%s'
+        $course = api_get_course_info_by_id($courseId);
+        $exercise = current(get_exercise_by_id($exerciseId));
+
+        $where = " WHERE  a.course_code = '%s'
         AND q.id = %d";
 
         if ($answer != 2)
@@ -561,7 +563,7 @@ class SessionManager
         INNER JOIN $quiz q ON q.id = e.exe_exo_id
         INNER JOIN $user u ON u.user_id = a.user_id
         $where $order $limit";
-        $sql_query = sprintf($sql, $sessionId, $course['code'], $exerciseId);
+        $sql_query = sprintf($sql, $course['code'], $exercise['title']);
 
         $rs = Database::query($sql_query);
         while ($row = Database::fetch_array($rs))

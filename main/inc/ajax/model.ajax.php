@@ -621,7 +621,7 @@ switch ($action) {
         break;
     case 'get_exercise_progress':
         $sessionId = 0;
-        if (!empty($_GET['course_id']) && !empty($_GET['session_id']) && !empty($_GET['exercise_id']))
+        if (!empty($_GET['course_id']) && !empty($_GET['exercise_id']))
         {
             $sessionId  = intval($_GET['session_id']);
             $courseId   = intval($_GET['course_id']);

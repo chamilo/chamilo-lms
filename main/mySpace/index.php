@@ -635,7 +635,13 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         if (in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview')))
         {
                 $courseFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
-                $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course_by_session&session_id=' . $_GET['session_id'];
+                 $a = 'search_course_by_session';
+                if ( $display = 'exerciseprogress') 
+                {
+                   $a =  'search_course';
+                }
+                $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a='. $a .'&session_id=' . $_GET['session_id'];
+
                 $courseList = array();
                 $courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;
                 if (!empty($courseId)) {
@@ -912,8 +918,6 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             Display::display_warning_message(get_lang('ChooseSession'));
         }
     } else if($display == 'exerciseprogress') {
-        if (!empty($_GET['session_id']))
-        {
             if (!empty($_GET['course_id']))
             {
                 if (!empty($_GET['exercise_id']))
@@ -928,9 +932,6 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             {
                 Display::display_warning_message(get_lang('ChooseCourse'));
             }
-        } else {
-            Display::display_warning_message(get_lang('ChooseSession'));
-        }
     } else if($display == 'surveyoverview') {
         if (!empty($_GET['session_id']))
         {

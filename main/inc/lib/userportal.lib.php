@@ -208,7 +208,9 @@ class IndexManager {
 	}
 
 	/* Includes a created page */
-	function return_home_page() {
+	function return_home_page()
+    {
+        $userId = api_get_user_id();
         global $_configuration;
 		// Including the page for the news
 		$html = '';
@@ -217,11 +219,11 @@ class IndexManager {
 			$open = @(string)file_get_contents(api_get_path(SYS_PATH).$this->home.$_GET['include']);
 			$html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 		} else {
-            //hiding home top when user not connected
-            global $_user;
-            if ($_configuration['hide_home_top_when_connected'] && isset($_user['user_id'])) {
+            // Hiding home top when user not connected.
+            if (isset($_configuration['hide_home_top_when_connected']) && $_configuration['hide_home_top_when_connected'] && !empty($userId)) {
                 return $html;
             }
+
 			if (!empty($_SESSION['user_language_choice'])) {
 				$user_selected_language = $_SESSION['user_language_choice'];
 			} elseif (!empty($_SESSION['_user']['language'])) {
@@ -229,6 +231,7 @@ class IndexManager {
 			} else {
 				$user_selected_language = api_get_setting('platformLanguage');
 			}
+
 			if (!file_exists($this->home.'home_news_'.$user_selected_language.'.html')) {
 				if (file_exists($this->home.'home_top.html')) {
 					$home_top_temp = file($this->home.'home_top.html');

@@ -522,7 +522,7 @@ class SessionManager
         $exercise = current(get_exercise_by_id($exerciseId));
 
         $where = " WHERE  a.course_code = '%s'
-        AND q.id = %d";
+        AND q.title = '%s'";
 
         if ($answer != 2)
         {
@@ -564,7 +564,7 @@ class SessionManager
         INNER JOIN $user u ON u.user_id = a.user_id
         $where $order $limit";
         $sql_query = sprintf($sql, $course['code'], $exercise['title']);
-
+error_log($sql_query);
         $rs = Database::query($sql_query);
         while ($row = Database::fetch_array($rs))
         {

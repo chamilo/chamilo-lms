@@ -61,31 +61,42 @@ class GroupPortalManager
                    created_on = '".$now."',
                    updated_on = '".$now."'";
         Database::query($sql);
-        $return = Database::insert_id();
-        return $return;
+        $id = Database::insert_id();
+        if ($id) {
+            event_system(LOG_GROUP_PORTAL_CREATED, LOG_GROUP_PORTAL_ID, $id);
+            return $id;
+        }
+        return false;
     }
 
     /**
      * Updates a group
      * @author Julio Montoya <gugli100@gmail.com>,
      *
-     * @param	int 	The id
-     * @param	string  The description of the site
-     * @param	int		is active or not
-     * @param	int     the user_id of the owner
-     * @return 	boolean if success
+     * @param int The id
+     * @param string The description of the site
+     * @param int is active or not
+     * @param int the user_id of the owner
+     * @param bool $allowMemberGroupToLeave
+     * @return bool if success
      */
-    public static function update($group_id, $name, $description, $url, $visibility, $picture_uri)
+    public static function update($group_id, $name, $description, $url, $visibility, $picture_uri, $allowMemberGroupToLeave = null)
     {
         $group_id = intval($group_id);
         $table = Database::get_main_table(TABLE_MAIN_GROUP);
         $now = api_get_utc_datetime();
+        $groupLeaveCondition = null;
+        if (isset($allowMemberGroupToLeave)) {
+            $allowMemberGroupToLeave = $allowMemberGroupToLeave == true ? 1 : 0;
+            $groupLeaveCondition = " allow_members_leave_group = $allowMemberGroupToLeave , ";
+        }
         $sql = "UPDATE $table
                	SET name 	= '".Database::escape_string($name)."',
                 description = '".Database::escape_string($description)."',
                 picture_uri = '".Database::escape_string($picture_uri)."',
                 url 		= '".Database::escape_string($url)."',
                 visibility 	= '".Database::escape_string($visibility)."',
+                $groupLeaveCondition
                 updated_on 	= '".$now."'
                 WHERE id = '$group_id'";
         $result = Database::query($sql);
@@ -108,6 +119,7 @@ class GroupPortalManager
         self::delete_users($id);
         // Delete group image
         self::delete_group_picture($id);
+        event_system(LOG_GROUP_PORTAL_DELETED, LOG_GROUP_PORTAL_ID, $id);
         return $result;
     }
 
@@ -123,7 +135,7 @@ class GroupPortalManager
     {
         $table = Database :: get_main_table(TABLE_MAIN_GROUP);
         $visibility = intval($visibility);
-        $sql = "SELECT name, description, picture_uri FROM $table WHERE visibility = $visibility ";
+        $sql = "SELECT * FROM $table WHERE visibility = $visibility ";
         $res = Database::query($sql);
         $data = array();
         while ($item = Database::fetch_array($res)) {
@@ -162,7 +174,7 @@ class GroupPortalManager
     {
         $table = Database :: get_main_table(TABLE_MAIN_GROUP);
         $group_id = intval($group_id);
-        $sql = "SELECT id, name, description, picture_uri, url, visibility  FROM $table WHERE id = $group_id ";
+        $sql = "SELECT * FROM $table WHERE id = $group_id ";
         $res = Database::query($sql);
         $item = array();
         if (Database::num_rows($res) > 0) {
@@ -174,10 +186,10 @@ class GroupPortalManager
     /**
      * Set a parent group
      * @param int $group_id
-     * @param int $parent_group_id, if 0, we delete the parent_group association
+     * @param int $parent_group_id if 0, we delete the parent_group association
      * @param int $relation_type
-     * @return bool
-     * */
+     * @return resource
+     **/
     public static function set_parent_group($group_id, $parent_group_id, $relation_type = 1)
     {
         $table = Database :: get_main_table(TABLE_MAIN_GROUP_REL_GROUP);
@@ -189,14 +201,14 @@ class GroupPortalManager
             $sql = "SELECT group_id FROM $table WHERE subgroup_id = $group_id";
             $res = Database::query($sql);
             if (Database::num_rows($res) == 0) {
-                $sql = "INSERT INTO $table  SET group_id = $parent_group_id, subgroup_id = $group_id, relation_type = $relation_type";
+                $sql = "INSERT INTO $table SET group_id = $parent_group_id, subgroup_id = $group_id, relation_type = $relation_type";
             } else {
                 $sql = "UPDATE $table SET group_id = $parent_group_id, relation_type = $relation_type
                         WHERE subgroup_id = $group_id";
             }
         }
         $res = Database::query($sql);
-        return($res);
+        return $res;
     }
 
     /**
@@ -587,6 +599,7 @@ class GroupPortalManager
      **/
     public static function add_user_to_group($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER)
     {
+        $result = false;
         $table_url_rel_group = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
         if (!empty($user_id) && !empty($group_id)) {
             $role = self::get_user_group_role($user_id, $group_id);
@@ -594,8 +607,14 @@ class GroupPortalManager
                 $sql = "INSERT INTO $table_url_rel_group
            				SET user_id = ".intval($user_id).", group_id = ".intval($group_id).", relation_type = ".intval($relation_type);
                 $result = Database::query($sql);
+                event_system(
+                    LOG_GROUP_PORTAL_USER_SUBSCRIBED,
+                    LOG_GROUP_PORTAL_REL_USER_ARRAY,
+                    array('user_id' => $user_id, 'group_id' => $group_id, 'relation_type' => $relation_type)
+                );
+
             } elseif ($role == GROUP_USER_PERMISSION_PENDING_INVITATION) {
-                //if somebody already invited me I can be added
+                // If somebody already invited me I can be added
                 self::update_user_role($user_id, $group_id, GROUP_USER_PERMISSION_READER);
             }
         }
@@ -610,25 +629,17 @@ class GroupPortalManager
      **/
     public static function add_users_to_groups($user_list, $group_list, $relation_type = GROUP_USER_PERMISSION_READER)
     {
-        $table_url_rel_group = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
         $result_array = array();
         $relation_type = intval($relation_type);
 
         if (is_array($user_list) && is_array($group_list)) {
             foreach ($group_list as $group_id) {
                 foreach ($user_list as $user_id) {
-                    $role = self::get_user_group_role($user_id, $group_id);
-                    if ($role == 0) {
-                        $sql = "INSERT INTO $table_url_rel_group
-		               			SET user_id = ".intval($user_id).",
-                                    group_id = ".intval($group_id).",
-                                    relation_type = ".intval($relation_type);
-
-                        $result = Database::query($sql);
-                        if ($result)
-                            $result_array[$group_id][$user_id] = 1;
-                        else
-                            $result_array[$group_id][$user_id] = 0;
+                    $result = self::add_user_to_group($user_id, $group_id, $relation_type);
+                    if ($result) {
+                        $result_array[$group_id][$user_id] = 1;
+                    } else {
+                        $result_array[$group_id][$user_id] = 0;
                     }
                 }
             }
@@ -637,13 +648,13 @@ class GroupPortalManager
     }
 
     /**
-     * Deletes a group  and user relationship
+     * Deletes a group and user relationship
      * @author Julio Montoya
      * @param int user id
      * @param int relation type (optional)
      * @return boolean true if success
      * */
-    public static function delete_users($group_id, $relation_type = '')
+    public static function delete_users($group_id, $relation_type = null)
     {
         $table_ = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
         $condition_relation = "";
@@ -653,6 +664,13 @@ class GroupPortalManager
         }
         $sql = "DELETE FROM $table_ WHERE group_id = ".intval($group_id).$condition_relation;
         $result = Database::query($sql);
+
+        event_system(
+            LOG_GROUP_PORTAL_USER_DELETE_ALL,
+            LOG_GROUP_PORTAL_REL_USER_ARRAY,
+            array('group_id' => $group_id, 'relation_type' => $relation_type)
+        );
+
         return $result;
     }
 
@@ -668,25 +686,48 @@ class GroupPortalManager
         $table = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
         $sql = "DELETE FROM $table WHERE user_id = ".intval($user_id)." AND group_id=".intval($group_id);
         $result = Database::query($sql);
+
+        event_system(
+            LOG_GROUP_PORTAL_USER_UNSUBSCRIBED,
+            LOG_GROUP_PORTAL_REL_USER_ARRAY,
+            array('user_id' => $user_id, 'group_id' => $group_id)
+        );
+
         return $result;
     }
 
     /**
      * Updates the group_rel_user table  with a given user and group ids
      * @author Julio Montoya
-     * @param int  user id
-     * @param int group id
-     * @param int relation type
-     * */
+     * @param int  $user_id
+     * @param int $group_id
+     * @param int $relation_type
+     * @return bool
+     **/
     public static function update_user_role($user_id, $group_id, $relation_type = GROUP_USER_PERMISSION_READER)
     {
-        $table_group_rel_user = Database :: get_main_table(TABLE_MAIN_USER_REL_GROUP);
+        $table_group_rel_user = Database::get_main_table(TABLE_MAIN_USER_REL_GROUP);
+        if (empty($user_id) || empty($group_id) || empty($relation_type)) {
+            return false;
+        }
         $group_id = intval($group_id);
         $user_id = intval($user_id);
 
         $sql = "UPDATE $table_group_rel_user
-   				SET relation_type = ".intval($relation_type)." WHERE user_id = $user_id AND group_id = $group_id";
+   				SET relation_type = ".intval($relation_type)."
+   				WHERE
+                    user_id = $user_id AND
+                    group_id = $group_id
+            ";
         Database::query($sql);
+
+        event_system(
+            LOG_GROUP_PORTAL_USER_UPDATE_ROLE,
+            LOG_GROUP_PORTAL_REL_USER_ARRAY,
+            array('user_id' => $user_id, 'group_id' => $group_id, 'relation_type' => $relation_type)
+        );
+        return true;
+
     }
 
     /**
@@ -772,8 +813,7 @@ class GroupPortalManager
      */
     public static function update_group_picture($group_id, $file = null, $source_file = null)
     {
-
-        // Validation 1.
+        // Validation.
         if (empty($group_id)) {
             return false;
         }
@@ -872,7 +912,6 @@ class GroupPortalManager
      */
     public static function get_group_picture_path_by_id($id, $type = 'none', $preview = false, $anonymous = false)
     {
-
         switch ($type) {
             case 'system': // Base: absolute system path.
                 $base = api_get_path(SYS_CODE_PATH);
@@ -966,16 +1005,16 @@ class GroupPortalManager
         }
 
         switch ($size_picture) {
-            case GROUP_IMAGE_SIZE_ORIGINAL :
+            case GROUP_IMAGE_SIZE_ORIGINAL:
                 $size_picture = '';
                 break;
-            case GROUP_IMAGE_SIZE_BIG :
+            case GROUP_IMAGE_SIZE_BIG:
                 $size_picture = 'big_';
                 break;
-            case GROUP_IMAGE_SIZE_MEDIUM :
+            case GROUP_IMAGE_SIZE_MEDIUM:
                 $size_picture = 'medium_';
                 break;
-            case GROUP_IMAGE_SIZE_SMALL :
+            case GROUP_IMAGE_SIZE_SMALL:
                 $size_picture = 'small_';
                 break;
             default:
@@ -995,7 +1034,6 @@ class GroupPortalManager
                 $picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension['width'].'px; height:'.$dimension['height'].';" ';
             }
         } else {
-            //$file = api_get_path(SYS_CODE_PATH).$patch_profile.$user_id.'/'.$picture_file;
             $file = $image_array_sys['dir'].$picture_file;
             if (file_exists($file) && !is_dir($file)) {
                 $picture['file'] = $image_array['dir'].$picture_file;
@@ -1108,14 +1146,18 @@ class GroupPortalManager
                 // I'm just a reader
                 $relation_group_title = get_lang('IAmAReader');
                 $links .= '<li><a href="group_invitation.php?id='.$group_id.'">'.Display::return_icon('invitation_friend.png', get_lang('InviteFriends'), array('hspace' => '6')).'<span class="'.($show == 'invite_friends' ? 'social-menu-text-active' : 'social-menu-text4').'" >'.get_lang('InviteFriends').'</span></a></li>';
-                $links .= '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.Display::return_icon('group_leave.png', get_lang('LeaveGroup'), array('hspace' => '6')).'<span class="social-menu-text4" >'.get_lang('LeaveGroup').'</span></a></li>';
+                if (GroupPortalManager::canLeave($group_info)) {
+                    $links .= '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.Display::return_icon('group_leave.png', get_lang('LeaveGroup'), array('hspace' => '6')).'<span class="social-menu-text4" >'.get_lang('LeaveGroup').'</span></a></li>';
+                }
                 break;
             case GROUP_USER_PERMISSION_ADMIN:
                 $relation_group_title = get_lang('IAmAnAdmin');
                 $links .= '<li><a href="group_edit.php?id='.$group_id.'">'.Display::return_icon('group_edit.png', get_lang('EditGroup'), array('hspace' => '6')).'<span class="'.($show == 'group_edit' ? 'social-menu-text-active' : 'social-menu-text4').'" >'.get_lang('EditGroup').'</span></a></li>';
                 $links .= '<li><a href="group_waiting_list.php?id='.$group_id.'">'.Display::return_icon('waiting_list.png', get_lang('WaitingList'), array('hspace' => '6')).'<span class="'.($show == 'waiting_list' ? 'social-menu-text-active' : 'social-menu-text4').'" >'.get_lang('WaitingList').'</span></a></li>';
                 $links .= '<li><a href="group_invitation.php?id='.$group_id.'">'.Display::return_icon('invitation_friend.png', get_lang('InviteFriends'), array('hspace' => '6')).'<span class="'.($show == 'invite_friends' ? 'social-menu-text-active' : 'social-menu-text4').'" >'.get_lang('InviteFriends').'</span></a></li>';
-                $links .= '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.Display::return_icon('group_leave.png', get_lang('LeaveGroup'), array('hspace' => '6')).'<span class="social-menu-text4" >'.get_lang('LeaveGroup').'</span></a></li>';
+                if (GroupPortalManager::canLeave($group_info)) {
+                    $links .= '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.Display::return_icon('group_leave.png', get_lang('LeaveGroup'), array('hspace' => '6')).'<span class="social-menu-text4" >'.get_lang('LeaveGroup').'</span></a></li>';
+                }
                 break;
             case GROUP_USER_PERMISSION_PENDING_INVITATION:
 //				$links .=  '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('addd.gif', get_lang('YouHaveBeenInvitedJoinNow'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('YouHaveBeenInvitedJoinNow').'</span></a></li>';
@@ -1132,7 +1174,9 @@ class GroupPortalManager
                     $links .= '<li><a href="group_waiting_list.php?id='.$group_id.'">'.Display::return_icon('waiting_list.png', get_lang('WaitingList'), array('hspace' => '6')).'<span class="'.($show == 'waiting_list' ? 'social-menu-text-active' : 'social-menu-text4').'" >'.get_lang('WaitingList').'</span></a></li>';
                 }
                 $links .= '<li><a href="group_invitation.php?id='.$group_id.'">'.Display::return_icon('invitation_friend.png', get_lang('InviteFriends'), array('hspace' => '6')).'<span class="'.($show == 'invite_friends' ? 'social-menu-text-active' : 'social-menu-text4').'" >'.get_lang('InviteFriends').'</span></a></li>';
-                $links .= '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.Display::return_icon('group_leave.png', get_lang('LeaveGroup'), array('hspace' => '6')).'<span class="social-menu-text4" >'.get_lang('LeaveGroup').'</span></a></li>';
+                if (GroupPortalManager::canLeave($group_info)) {
+                    $links .= '<li><a href="groups.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.Display::return_icon('group_leave.png', get_lang('LeaveGroup'), array('hspace' => '6')).'<span class="social-menu-text4" >'.get_lang('LeaveGroup').'</span></a></li>';
+                }
                 break;
             case GROUP_USER_PERMISSION_HRM:
                 $relation_group_title = get_lang('IAmAHRM');
@@ -1201,5 +1245,80 @@ class GroupPortalManager
             return $row['count'];
 		}
 		return 0;
+    }
+
+    /**
+     * @param FormValidator $form
+     * @param array
+     */
+    public static function setGroupForm($form, $groupData = array())
+    {
+        // Name
+        $form->addElement('text', 'name', get_lang('Name'), array('class'=>'span5', 'maxlength'=>120));
+        $form->applyFilter('name', 'html_filter');
+        $form->applyFilter('name', 'trim');
+        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+
+        // Description
+        $form->addElement('textarea', 'description', get_lang('Description'), array('class'=>'span5', 'cols'=>58, 'onKeyDown' => "textarea_maxlength()", 'onKeyUp' => "textarea_maxlength()"));
+        $form->applyFilter('description', 'html_filter');
+        $form->applyFilter('description', 'trim');
+        $form->addRule('name', '', 'maxlength',255);
+
+        // Url
+        $form->addElement('text', 'url', get_lang('URL'), array('class'=>'span5'));
+        $form->applyFilter('url', 'html_filter');
+        $form->applyFilter('url', 'trim');
+
+        // Picture
+        $form->addElement('file', 'picture', get_lang('AddPicture'));
+        $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+        $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
+
+        if (!empty($groupData)) {
+            if (isset($groupData['picture_uri']) && strlen($groupData['picture_uri']) > 0) {
+                $form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
+            }
+        }
+
+        // Status
+        $status = array();
+        $status[GROUP_PERMISSION_OPEN] 		= get_lang('Open');
+        $status[GROUP_PERMISSION_CLOSED]	= get_lang('Closed');
+        $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $status, array());
+
+        if (!empty($groupData)) {
+            if (self::canLeaveFeatureEnabled($groupData)) {
+                $form->addElement('checkbox', 'allow_members_leave_group', '', get_lang('AllowMemberLeaveGroup'));
+            }
+            // Set default values
+            $form->setDefaults($groupData);
+        }
+        return $form;
+    }
+
+    /**
+     * Check if the can leave feature exists.
+     * @param array $groupData
+     * @return bool
+     */
+    public static function canLeaveFeatureEnabled($groupData)
+    {
+        if (isset($groupData['allow_members_leave_group'])) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param array $groupData
+     * @return bool
+     */
+    public static function canLeave($groupData)
+    {
+        if (self::canLeaveFeatureEnabled($groupData)) {
+            return $groupData['allow_members_leave_group'] == 1 ? true : false;
+        }
+        return true;
     }
 }

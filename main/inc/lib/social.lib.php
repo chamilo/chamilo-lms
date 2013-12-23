@@ -40,7 +40,6 @@ class SocialManager extends UserManager
     public static function show_list_type_friends()
     {
         $friend_relation_list = array();
-        $count_list = 0;
         $tbl_my_friend_relation_type = Database :: get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
         $sql = 'SELECT id,title FROM '.$tbl_my_friend_relation_type.' WHERE id<>6 ORDER BY id ASC';
         $result = Database::query($sql);
@@ -82,8 +81,15 @@ class SocialManager extends UserManager
     {
         $tbl_my_friend_relation_type = Database :: get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
         $tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
-        $sql = 'SELECT rt.id as id FROM '.$tbl_my_friend_relation_type.' rt '.
-            'WHERE rt.id=(SELECT uf.relation_type FROM '.$tbl_my_friend.' uf WHERE  user_id='.((int) $user_id).' AND friend_user_id='.((int) $user_friend).' AND uf.relation_type <> '.USER_RELATION_TYPE_RRHH.' )';
+        $sql = 'SELECT rt.id as id FROM '.$tbl_my_friend_relation_type.' rt
+                WHERE rt.id = (
+                    SELECT uf.relation_type FROM '.$tbl_my_friend.' uf
+                    WHERE
+                        user_id='.((int) $user_id).' AND
+                        friend_user_id='.((int) $user_friend).' AND
+                        uf.relation_type <> '.USER_RELATION_TYPE_RRHH.'
+                    LIMIT 1
+                )';
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res, 'ASSOC');
@@ -249,7 +255,9 @@ class SocialManager extends UserManager
     {
         $list_friend_invitation = array();
         $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
-        $sql = 'SELECT user_sender_id,send_date,title,content FROM '.$tbl_message.' WHERE user_receiver_id='.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
+        $sql = 'SELECT user_sender_id,send_date,title,content
+                FROM '.$tbl_message.'
+                WHERE user_receiver_id='.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list_friend_invitation[] = $row;
@@ -267,7 +275,9 @@ class SocialManager extends UserManager
     {
         $list_friend_invitation = array();
         $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
-        $sql = 'SELECT user_receiver_id, send_date,title,content FROM '.$tbl_message.' WHERE user_sender_id = '.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
+        $sql = 'SELECT user_receiver_id, send_date,title,content
+                FROM '.$tbl_message.'
+                WHERE user_sender_id = '.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list_friend_invitation[$row['user_receiver_id']] = $row;
@@ -277,15 +287,20 @@ class SocialManager extends UserManager
 
     /**
      * Accepts invitation
-     * @param int user sender id
-     * @param int user receiver id
+     * @param int $user_send_id
+     * @param int $user_receiver_id
      * @author isaac flores paz
      * @author Julio Montoya <gugli100@gmail.com> Cleaning code
      */
     public static function invitation_accepted($user_send_id, $user_receiver_id)
     {
         $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
-        $sql = 'UPDATE '.$tbl_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_ACCEPTED.' WHERE user_sender_id='.((int) $user_send_id).' AND user_receiver_id='.((int) $user_receiver_id).';';
+        $sql = "UPDATE $tbl_message
+                SET msg_status = ".MESSAGE_STATUS_INVITATION_ACCEPTED."
+                WHERE
+                    user_sender_id = ".((int) $user_send_id)." AND
+                    user_receiver_id=".((int) $user_receiver_id)." AND
+                    msg_status = ".MESSAGE_STATUS_INVITATION_PENDING;
         Database::query($sql);
     }
 
@@ -299,9 +314,11 @@ class SocialManager extends UserManager
     public static function invitation_denied($user_send_id, $user_receiver_id)
     {
         $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
-        //$msg_status=7;
-        //$sql='UPDATE '.$tbl_message.' SET msg_status='.$msg_status.' WHERE user_sender_id='.((int)$user_send_id).' AND user_receiver_id='.((int)$user_receiver_id).';';
-        $sql = 'DELETE FROM '.$tbl_message.' WHERE user_sender_id='.((int) $user_send_id).' AND user_receiver_id='.((int) $user_receiver_id).';';
+        $sql = 'DELETE FROM '.$tbl_message.'
+                WHERE
+                    user_sender_id =  '.((int) $user_send_id).' AND
+                    user_receiver_id='.((int) $user_receiver_id).' AND
+                    msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         Database::query($sql);
     }
 
@@ -316,7 +333,8 @@ class SocialManager extends UserManager
     {
         $tbl_user_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $user_id = api_get_user_id();
-        $sql = 'UPDATE '.$tbl_user_friend.' SET relation_type='.((int) $type_qualify).' WHERE user_id='.((int) $user_id).' AND friend_user_id='.((int) $id_friend_qualify).';';
+        $sql = 'UPDATE '.$tbl_user_friend.' SET relation_type='.((int) $type_qualify).'
+                WHERE user_id = '.((int) $user_id).' AND friend_user_id='.(int) $id_friend_qualify;
         Database::query($sql);
     }
 

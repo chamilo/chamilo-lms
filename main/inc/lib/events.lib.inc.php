@@ -71,26 +71,35 @@ function event_open()
 function event_login()
 {
     global $TABLETRACK_LOGIN;
+    global $_user;
+    // @todo use api_get_user_info();
+    //$userInfo = api_get_user_info();
+    $userInfo = $_user;
+    if (empty($userInfo)) {
+        return false;
+    }
+
+    $userId = api_get_user_id();
 
     $reallyNow = api_get_utc_datetime();
     $sql = "INSERT INTO ".$TABLETRACK_LOGIN." (login_user_id, login_ip, login_date, logout_date) VALUES
-                ('".api_get_user_id()."',
-        		'".Database::escape_string(api_get_real_ip())."',
-        		'".$reallyNow."',
-        		'".$reallyNow."'
-        		)";
+            ('".$userId."',
+            '".Database::escape_string(api_get_real_ip())."',
+            '".$reallyNow."',
+            '".$reallyNow."'
+            )";
     Database::query($sql);
-    // auto subscribe
-    $user_status = $_user['status'];
-    $user_status = $_user['status']  == SESSIONADMIN ? 'sessionadmin' :
-    $_user['status'] == COURSEMANAGER ? 'teacher' :
-    $_user['status'] == DRH ? 'DRH' : 'student';
+
+    // Auto subscribe
+    $user_status = $userInfo['status']  == SESSIONADMIN ? 'sessionadmin' :
+        $userInfo['status'] == COURSEMANAGER ? 'teacher' :
+        $userInfo['status'] == DRH ? 'DRH' : 'student';
     $autoSubscribe = api_get_setting($user_status.'_autosubscribe');
     if ($autoSubscribe) {
         $autoSubscribe = explode('|', $autoSubscribe);
         foreach ($autoSubscribe as $code) {
             if (CourseManager::course_exists($code)) {
-                CourseManager::subscribe_user($_user['user_id'], $code);
+                CourseManager::subscribe_user($userId, $code);
             }
         }
     }
@@ -544,7 +553,7 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
     $event_type         = Database::escape_string($event_type);
     $event_value_type   = Database::escape_string($event_value_type);
 
-    //Clean the user_info
+    // Clean the user_info.
     if ($event_value_type == LOG_USER_OBJECT) {
         if (is_array($event_value)) {
             unset($event_value['complete_name']);
@@ -555,8 +564,11 @@ function event_system($event_type, $event_value_type, $event_value, $datetime = 
             unset($event_value['password']);
             unset($event_value['lastLogin']);
             unset($event_value['picture_uri']);
-            $event_value = serialize($event_value);
         }
+    }
+
+    if (is_array($event_value)) {
+        $event_value = serialize($event_value);
     }
 
     $event_value        = Database::escape_string($event_value);

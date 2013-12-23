@@ -36,34 +36,7 @@ function text_longitud(){
 $table_message = Database::get_main_table(TABLE_MESSAGE);
 
 $form = new FormValidator('add_group');
-
-// name
-$form->addElement('text', 'name', get_lang('Name'), array('class'=>'span5', 'maxlength'=>120));
-$form->applyFilter('name', 'html_filter');
-$form->applyFilter('name', 'trim');
-$form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
-
-// Description
-$form->addElement('textarea', 'description', get_lang('Description'), array('class'=>'span5', 'cols'=>58, 'onKeyDown' => "text_longitud()", 'onKeyUp' => "text_longitud()"));
-$form->applyFilter('description', 'html_filter');
-$form->applyFilter('description', 'trim');
-
-// url
-$form->addElement('text', 'url', get_lang('URL'), array('class'=>'span5'));
-$form->applyFilter('url', 'html_filter');
-$form->applyFilter('url', 'trim');
-
-// Picture
-$form->addElement('file', 'picture', get_lang('AddPicture'));
-$allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
-$form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
-
-// Status
-$status = array();
-$status[GROUP_PERMISSION_OPEN] 		= get_lang('Open');
-$status[GROUP_PERMISSION_CLOSED]	= get_lang('Closed');
-
-$form->addElement('select', 'visibility', get_lang('GroupPermissions'), $status);
+$form = GroupPortalManager::setGroupForm($form);
 $form->addElement('style_submit_button', 'add_group', get_lang('AddGroup'), 'class="save"');
 
 $form->setRequiredNote(api_xml_http_response_encode('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>'));
@@ -81,7 +54,7 @@ if ($form->validate()) {
     $picture 		= $_FILES['picture'];
 
     $group_id = GroupPortalManager::add($name, $description, $url, $status);
-    GroupPortalManager::add_user_to_group(api_get_user_id(), $group_id,GROUP_USER_PERMISSION_ADMIN);
+    GroupPortalManager::add_user_to_group(api_get_user_id(), $group_id, GROUP_USER_PERMISSION_ADMIN);
 
     if (!empty($picture['name'])) {
         $picture_uri = GroupPortalManager::update_group_picture($group_id, $_FILES['picture']['name'], $_FILES['picture']['tmp_name']);

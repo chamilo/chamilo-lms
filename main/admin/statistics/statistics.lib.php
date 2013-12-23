@@ -164,6 +164,11 @@ class Statistics
 
     /**
      * Get activities data to display
+     * @param int $from
+     * @param int $number_of_items
+     * @param int $column
+     * @param string $direction
+     * @return array
      */
     static function get_activities_data($from, $number_of_items, $column, $direction)
     {
@@ -189,8 +194,10 @@ class Statistics
                 "user.username         as col3, ".
                 "user.user_id         as col4, ".
                 "default_date         as col5 ".
-                "FROM $track_e_default as track_default, $table_user as user, $access_url_rel_user_table as url ".
-                "WHERE track_default.default_user_id = user.user_id AND url.user_id=user.user_id AND access_url_id='".$current_url_id."'";
+                "FROM $track_e_default as track_default, $table_user as user, $access_url_rel_user_table as url
+                WHERE   track_default.default_user_id = user.user_id AND
+                        url.user_id = user.user_id AND
+                        access_url_id='".$current_url_id."'";
         } else {
             $sql = "SELECT ".
                    "default_event_type  as col0, ".
@@ -205,7 +212,10 @@ class Statistics
 
         if (isset($_GET['keyword'])) {
             $keyword = Database::escape_string(trim($_GET['keyword']));
-            $sql .= " AND (user.username LIKE '%".$keyword."%' OR default_event_type LIKE '%".$keyword."%' OR default_value_type LIKE '%".$keyword."%' OR default_value LIKE '%".$keyword."%') ";
+            $sql .= " AND (user.username LIKE '%".$keyword."%' OR
+                        default_event_type LIKE '%".$keyword."%' OR
+                        default_value_type LIKE '%".$keyword."%' OR
+                        default_value LIKE '%".$keyword."%') ";
         }
 
         if (!empty($column) && !empty($direction)) {
@@ -213,12 +223,13 @@ class Statistics
         } else {
             $sql .= " ORDER BY col5 DESC ";
         }
-        $sql .=    " LIMIT $from,$number_of_items ";
+        $sql .= " LIMIT $from,$number_of_items ";
 
         $res = Database::query($sql);
         $activities = array ();
         while ($row = Database::fetch_row($res)) {
-            if (strpos($row[1], '_object') === false) {
+
+            if (strpos($row[1], '_object') === false && strpos($row[1], '_array') === false) {
                 $row[2] = $row[2];
             } else {
                 if (!empty($row[2])) {
@@ -228,15 +239,20 @@ class Statistics
                     }
                 }
             }
-        	if (!empty($row['default_date']) && $row['default_date'] != '0000-00-00 00:00:00') {
-            	$row['default_date'] = api_get_local_time($row['default_date']);
-        	} else {
-        		$row['default_date'] = '-';
-        	}
-            if (!empty($row[4])) { //user ID
-                $row[3] = Display::url($row[3],api_get_path(WEB_CODE_PATH).'admin/user_information?user_id='.$row[4], array('title' => get_lang('UserInfo')));
+            if (!empty($row['default_date']) && $row['default_date'] != '0000-00-00 00:00:00') {
+                $row['default_date'] = api_get_local_time($row['default_date']);
+            } else {
+                $row['default_date'] = '-';
+            }
 
-                $row[4] = TrackingUserLog::get_ip_from_user_event($row[4],$row[5],true);
+            if (!empty($row[4])) {
+                // User id.
+                $row[3] = Display::url(
+                    $row[3],
+                    api_get_path(WEB_CODE_PATH).'admin/user_information?user_id='.$row[4], array('title' => get_lang('UserInfo'))
+                );
+
+                $row[4] = TrackingUserLog::get_ip_from_user_event($row[4], $row[5], true);
                 if (empty($row[4])) {
                     $row[4] = get_lang('Unknown');
                 }

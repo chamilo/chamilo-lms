@@ -64,7 +64,7 @@ Display :: display_header($nameTools);
 $a_courses = array();
 if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
     $coursesFromSession = array();
-    if (api_is_drh()) {
+    if (empty($id_session) && api_is_drh()) {
         if (api_drh_can_access_all_session_content()) {
             $coursesFromSession = SessionManager::getAllCoursesFromAllSessionFromDrh(api_get_user_id());
         }
@@ -146,7 +146,7 @@ if (!api_is_drh() && !api_is_session_admin() && !api_is_platform_admin()) {
     $a_courses = array_keys($courses);
 }
 
-if (api_is_drh() && !api_is_platform_admin()) {
+if (empty($id_session) && api_is_drh() && !api_is_platform_admin()) {
     if (api_drh_can_access_all_session_content()) {
         if (!isset($_GET['user_id'])) {
             $a_courses = $coursesFromSession;

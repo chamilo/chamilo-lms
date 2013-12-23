@@ -276,7 +276,7 @@ switch ($action) {
         break;
     case 'get_session_access_overview':
         //@TODO replace this for a more efficient function (not retrieving the whole data)
-        $records = SessionManager::get_user_data_access_tracking_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['student_id']), 0, $options);
+        $records = SessionManager::get_user_data_access_tracking_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['student_id']), $_GET['profile'], $_GET['date_from'], $_GET['date_to'], $options);
         $count = count($records);
         break;
     case 'get_survey_overview':
@@ -792,12 +792,15 @@ switch ($action) {
         $sessionId = 0;
         if (!empty($_GET['course_id']) && !empty($_GET['session_id']))
         {
-            $sessionId = intval($_GET['session_id']);
-            $courseId  = intval($_GET['course_id']);
+            $sessionId  = intval($_GET['session_id']);
+            $courseId   = intval($_GET['course_id']);
             $studentId  = intval($_GET['student_id']);
+            $profile    = intval($_GET['profile']);
+            $date_from  = intval($_GET['date_from']);
+            $date_to    = intval($_GET['date_to']);
         }
 
-        $result = SessionManager::get_user_data_access_tracking_overview(intval($sessionId), intval($courseId), intval($studentId), 0,
+        $result = SessionManager::get_user_data_access_tracking_overview(intval($sessionId), intval($courseId), intval($studentId), intval($profile), $date_to, $date_from,
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",
@@ -1056,12 +1059,14 @@ if (in_array($action, $allowed_actions)) {
         }
         switch ($export_format) {
             case 'xls':
-                $file_name = (!empty($action)) ? $action : 'company_report';
+                //TODO add date if exists
+                $file_name = (!empty($action)) ? $action : 'company_report'; 
                 Export::export_table_xls($array, $file_name);
                 break;
             case 'csv':
             default:
-                $file_name = (!empty($action)) ? $action : 'company_report';
+                //TODO add date if exists
+                $file_name = (!empty($action)) ? $action : 'company_report'; 
                 Export::export_table_csv($array, $file_name);
                 break;
         }

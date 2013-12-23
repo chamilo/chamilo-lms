@@ -1035,7 +1035,7 @@ class SessionManager
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      * @version Chamilo 1.9.6
      */
-    function get_user_data_access_tracking_overview($sessionId, $courseId, $studentId = 0, $profile = 0, $options) {
+    function get_user_data_access_tracking_overview($sessionId, $courseId, $studentId = 0, $profile = '', $date_from = '', $date_to = '', $options) {
         global $_configuration;
         // database table definition
         $user                   = Database :: get_main_table(TABLE_MAIN_USER);
@@ -1062,6 +1062,14 @@ class SessionManager
         if (isset($studentId) && !empty($studentId))
         {
             $where .= sprintf(" AND u.user_id = %d", $studentId);
+        }
+        if (!empty($date_to) && !empty($date_from)) 
+        {
+            //FIX THIS
+            $to     = substr($date_to, 0, 4) .'-' . substr($date_to, 4, 2) . '-' . substr($date_to, 6, 2);
+            $from   = substr($date_from, 0, 4) . '-' . substr($date_from, 4, 2) . '-' . substr($date_from, 6, 2);
+            $where .=  sprintf(" AND a.login_course_date >= '%s 00:00:00' 
+                        AND a.login_course_date <= '%s 23:59:59'", $to, $from);
         }
         $limit = null;
         if (!empty($options['limit'])) {
@@ -1097,7 +1105,6 @@ class SessionManager
             INNER JOIN $user u ON a.user_id = u.user_id
             INNER JOIN $course c ON a.course_code = c.code
             $where $order $limit";
-
         $result = Database::query(sprintf($sql, $sessionId, $courseId));
 
         $clicks = Tracking::get_total_clicks_by_session();

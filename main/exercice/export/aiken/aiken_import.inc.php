@@ -246,6 +246,8 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) 
             $exercise_info['question'][$question_index]['correct_answers'][] = $correct_answer_index + 1;
             //weight for correct answer
             $exercise_info['question'][$question_index]['weighting'][$correct_answer_index] = 1;
+        } elseif (preg_match('/^SCORE:\s?(\d{3})\s?/', $info, $matches)) {
+            $total_weight = $matches[1];
         } elseif (preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $info, $matches)) {
             //Comment of correct answer
             $correct_answer_index = array_search($matches[1], $answers_array);
@@ -254,6 +256,10 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) 
             //Comment of correct answer (Spanish e-ducativa format)
             $correct_answer_index = array_search($matches[1], $answers_array);
             $exercise_info['question'][$question_index]['feedback'] = $matches[1];
+        } elseif (preg_match('/^T:\s?(.*)/', $info, $matches)) {
+            //Question Title
+            $correct_answer_index = array_search($matches[1], $answers_array);
+            $exercise_info['question'][$question_index]['title'] = $matches[1];
         } elseif (preg_match('/^TAGS:\s?([A-Z])\s?/', $info, $matches)) {
              //TAGS for chamilo >= 1.10
             $exercise_info['question'][$question_index]['answer_tags'] = explode(',', $matches[1]);
@@ -275,14 +281,25 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) 
             $answers_array = array();
             $new_question = true;
         } else {
-            //Question itself (use a 40-chars long title and a larger description)
-            $exercise_info['question'][$question_index]['title'] = trim(substr($info,0,40)).'...';
-            $exercise_info['question'][$question_index]['description'] = $info;
+            if (empty($exercise_info['question'][$question_index]['title']))
+            {
+                if (strlen($info) < 40)
+                {
+                    $exercise_info['question'][$question_index]['title'] = $info; 
+                } else
+                {
+                    //Question itself (use a 40-chars long title and a larger description)
+                    $exercise_info['question'][$question_index]['title'] = trim(substr($info,0,40)).'...';
+                    $exercise_info['question'][$question_index]['description'] = $info;
+                }
+            } else {
+                $exercise_info['question'][$question_index]['description'] = $info;
+            }
         }
     }
     $total_questions = count($exercise_info['question']);
     foreach  ($exercise_info['question'] as $key => $question) {
-        $exercise_info['question'][$key]['weighting'][current(array_keys($exercise_info['question'][$key]['weighting']))] = 20 / $total_questions;
+        $exercise_info['question'][$key]['weighting'][current(array_keys($exercise_info['question'][$key]['weighting']))] = $total_weight / $total_questions;
     }
     return true;
 }

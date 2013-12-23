@@ -604,8 +604,8 @@ class AnnouncementManager {
     /**
      * this function shows the form for sending a message to a specific group or user.
      */
-    public static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected) {
-
+    public static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected)
+    {
         echo '<select name="not_selected_form[]" size="7" class="span4" multiple>';
         // adding the groups to the select form
         if ($group_list) {

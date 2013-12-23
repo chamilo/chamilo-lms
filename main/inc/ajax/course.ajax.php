@@ -60,7 +60,9 @@ switch ($action) {
                 1, //$orderby = 1,
                 'ASC',
                 -1,
-                $_REQUEST['q']
+                $_REQUEST['q'],
+                null,
+                true
             );
             $results = array();
 
@@ -86,6 +88,110 @@ switch ($action) {
                 }*/
                 echo json_encode($results);
             } else {
+                echo json_encode(array());
+            }
+        }
+        break;
+    case 'search_course_by_session':
+        if (api_is_platform_admin())
+        {
+            $results = SessionManager::get_course_list_by_session_id($_GET['session_id'], $_GET['q']);
+
+            //$results = SessionManager::get_sessions_list(array('s.name LIKE' => "%".$_REQUEST['q']."%"));
+            $results2 = array();
+            if (!empty($results)) {
+                foreach ($results as $item) {
+                    $item2 = array();
+                    foreach ($item as $id => $internal) {
+                        if ($id == 'id') {
+                            $item2[$id] = $internal;
+                        }
+                        if ($id == 'title') {
+                            $item2['text'] = $internal;
+                        }
+                    }
+                    $results2[] = $item2;
+                }
+                echo json_encode($results2);
+            } else {
+                echo json_encode(array());
+            }
+        }
+        break;
+    case 'search_user_by_course':
+        if (api_is_platform_admin())
+        {
+            $user                   = Database :: get_main_table(TABLE_MAIN_USER);
+            $session_course_user    = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+
+            $course = api_get_course_info_by_id($_GET['course_id']);
+
+            $sql = "SELECT u.user_id as id, u.username, u.lastname, u.firstname 
+                    FROM $user u
+                    INNER JOIN $session_course_user r ON u.user_id = r.id_user
+                    WHERE id_session = %d AND course_code =  '%s'
+                    AND (u.firstname LIKE '%s' OR u.username LIKE '%s' OR u.lastname LIKE '%s')";
+            $needle = '%' . $_GET['q'] . '%';
+            $sql_query = sprintf($sql, $_GET['session_id'], $course['code'], $needle, $needle, $needle);
+
+            $result = Database::query($sql_query);
+            while ($user = Database::fetch_assoc($result)) 
+            {
+                $data[] = array('id' => $user['id'], 'text' => $user['username'] );
+
+            }
+            if (!empty($data)) 
+            {
+                echo json_encode($data);
+            } else
+            {
+                echo json_encode(array());
+            }
+        }
+        break;
+    case 'search_exercise_by_course':
+        if (api_is_platform_admin())
+        {
+
+            $course = api_get_course_info_by_id($_GET['course_id']);
+            require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+            $exercises = get_all_exercises($course, intval($_GET['session_id']), false, $_GET['q']);
+
+            foreach ($exercises as $exercise)    
+            {
+                $data[] = array('id' => $exercise['id'], 'text' => $exercise['title'] );
+            }
+            if (!empty($data)) 
+            {
+                echo json_encode($data);
+            } else
+            {
+                echo json_encode(array());
+            }
+        }
+        break;
+    case 'search_survey_by_course':
+        if (api_is_platform_admin())
+        {
+            $survey     = Database :: get_course_table(TABLE_SURVEY);
+            
+            $sql = "SELECT survey_id as id, title
+            FROM $survey 
+            WHERE c_id = %d 
+            AND session_id = %d 
+            AND title LIKE '%s'";
+
+            $sql_query = sprintf($sql, intval($_GET['course_id']), intval($_GET['session_id']), '%' . $_GET['q'] .'%');
+            $result = Database::query($sql_query);
+            while ($survey = Database::fetch_assoc($result)) 
+            {
+                $data[] = array('id' => $survey['id'], 'text' => $survey['title'] );
+            }
+            if (!empty($data)) 
+            {
+                echo json_encode($data);
+            } else
+            {
                 echo json_encode(array());
             }
         }

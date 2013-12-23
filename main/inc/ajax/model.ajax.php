@@ -200,6 +200,25 @@ switch ($action) {
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $work_id = $_REQUEST['work_id'];
         $courseInfo = api_get_course_info();
+
+        $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
+
+        if (empty($documents)) {
+            $where_condition .= " AND u.user_id = ".api_get_user_id();
+            $count = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition, null, true);
+        } else {
+            $count = get_work_user_list_from_documents(
+                $start,
+                $limit,
+                $sidx,
+                $sord,
+                $work_id,
+                api_get_user_id(),
+                $where_condition,
+                true
+            );
+        }
+/*
         // All
         if ($courseInfo['show_score'] == '0') {
             $count = get_count_work($work_id, null, api_get_user_id());
@@ -207,6 +226,7 @@ switch ($action) {
             // Only my stuff
             $count = get_count_work($work_id, api_get_user_id());
         }
+*/
         break;
     case 'get_exercise_results':
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
@@ -244,14 +264,24 @@ switch ($action) {
         break;
     case 'get_session_lp_progress':
     case 'get_session_progress':
-        $courses = SessionManager::get_course_list_by_session_id(intval($_GET['session_id']));
-        //TODO let select course
-        $course = current($courses);
+        //@TODO replace this for a more efficient function (not retrieving the whole data)
+        $course = api_get_course_info_by_id($courseId);
         $users = CourseManager::get_student_list_from_course_code($course['code'], true, intval($_GET['session_id']));
         $count = count($users);
         break;
     case 'get_exercise_progress':
-        $records = SessionManager::get_exercise_progress(intval($_GET['session_id']));
+        //@TODO replace this for a more efficient function (not retrieving the whole data)
+        $records = SessionManager::get_exercise_progress(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']));
+        $count = count($records);
+        break;
+    case 'get_session_access_overview':
+        //@TODO replace this for a more efficient function (not retrieving the whole data)
+        $records = SessionManager::get_user_data_access_tracking_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['student_id']), $_GET['profile'], $_GET['date_from'], $_GET['date_to'], $options);
+        $count = count($records);
+        break;
+    case 'get_survey_overview':
+        //@TODO replace this for a more efficient function (not retrieving the whole data)
+        $records = SessionManager::get_survey_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['survey_id']), $options);
         $count = count($records);
         break;
     /*case 'get_extra_fields':
@@ -454,7 +484,7 @@ switch ($action) {
         }
         break;
     case 'get_work_teacher':
-        $columns = array('type', 'title', 'expires_on', 'ends_on', 'actions');
+        $columns = array('type', 'title', 'sent_date', 'expires_on', 'ends_on', 'actions');
         $result = getWorkListTeacher($start, $limit, $sidx, $sord, $where_condition);
         break;
     case 'get_work_student':
@@ -485,13 +515,12 @@ switch ($action) {
     case 'get_work_user_list':
         if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
             $columns = array(
-                'type', 'firstname', 'lastname', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions'
+                'type', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions'
             );
         } else {
-            $columns = array('type', 'firstname', 'lastname', 'title', 'sent_date', 'actions');
+            $columns = array('type', 'title', 'sent_date', 'actions');
         }
 
-        $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
         $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
 
         if (empty($documents)) {
@@ -592,12 +621,12 @@ switch ($action) {
         break;
     case 'get_exercise_progress':
         $sessionId = 0;
-        if (isset($_GET['session_id']) && !empty($_GET['session_id']))
+        if (!empty($_GET['course_id']) && !empty($_GET['session_id']) && !empty($_GET['exercise_id']))
         {
-            $sessionId = intval($_GET['session_id']);
-            $courses = SessionManager::get_course_list_by_session_id($sessionId);
-            //TODO let select course
-            $course = current($courses);
+            $sessionId  = intval($_GET['session_id']);
+            $courseId   = intval($_GET['course_id']);
+            $exerciseId = intval($_GET['exercise_id']);
+            $answer = intval($_GET['answer']);
         }
 
         $columns = array(
@@ -614,7 +643,7 @@ switch ($action) {
             'correct'
         );
 
-        $result = SessionManager::get_exercise_progress($sessionId,
+        $result = SessionManager::get_exercise_progress($sessionId, $courseId, $exerciseId, $answer,
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",
@@ -624,14 +653,12 @@ switch ($action) {
         break;
     case 'get_session_lp_progress':
         $sessionId = 0;
-        if (isset($_GET['session_id']) && !empty($_GET['session_id']))
+        if (!empty($_GET['session_id']) && !empty($_GET['course_id']))
         {
             $sessionId = intval($_GET['session_id']);
-            $courses = SessionManager::get_course_list_by_session_id($sessionId);
-            //TODO let select course
-            $course = current($courses);
+            $courseId = intval($_GET['course_id']);
+            $course = api_get_course_info_by_id($courseId);
         }
-
         /**
          * Add lessons of course
          *
@@ -649,7 +676,40 @@ switch ($action) {
         }
         $columns[] = 'total';
 
-        $result = SessionManager::get_session_lp_progress($sessionId,
+        $result = SessionManager::get_session_lp_progress($sessionId, $courseId,
+            array(
+                'where' => $where_condition,
+                'order' => "$sidx $sord",
+                'limit'=> "$start , $limit"
+            )
+        );
+        break;
+    case 'get_survey_overview':
+        $sessionId = 0;
+        if (!empty($_GET['session_id']) && !empty($_GET['course_id']) && !empty($_GET['survey_id']))
+        {
+            $sessionId = intval($_GET['session_id']);
+            $courseId  = intval($_GET['course_id']);
+            $surveyId  = intval($_GET['survey_id']);
+            //$course    = api_get_course_info_by_id($courseId);
+        }
+        /**
+         * Add lessons of course
+         */
+        $columns = array(
+            'username',
+            'firstname',
+            'lastname',
+        );
+
+        $questions = survey_manager::get_questions($surveyId, $courseId);
+
+        foreach ($questions as $question_id => $question)
+        {
+            $columns[] = $question_id;
+        }
+
+        $result = SessionManager::get_survey_overview($sessionId, $courseId, $surveyId,
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",
@@ -706,11 +766,41 @@ switch ($action) {
             'surveys_progress' ,
             );
         $sessionId = 0;
-        if (isset($_GET['session_id']) && !empty($_GET['session_id']))
+        if (!empty($_GET['course_id']) && !empty($_GET['session_id']))
         {
             $sessionId = intval($_GET['session_id']);
+            $courseId = intval($_GET['course_id']);
         }
-        $result = SessionManager::get_session_progress($sessionId,
+        $result = SessionManager::get_session_progress($sessionId, $courseId,
+            array(
+                'where' => $where_condition,
+                'order' => "$sidx $sord",
+                'limit'=> "$start , $limit"
+            )
+        );
+        break;
+    case 'get_session_access_overview':
+        $columns = array(
+            'logindate',
+            'username',
+            'lastname',
+            'firstname',
+            'clicks',
+            'ip',
+            'timeLoggedIn',
+        );
+        $sessionId = 0;
+        if (!empty($_GET['course_id']) && !empty($_GET['session_id']))
+        {
+            $sessionId  = intval($_GET['session_id']);
+            $courseId   = intval($_GET['course_id']);
+            $studentId  = intval($_GET['student_id']);
+            $profile    = intval($_GET['profile']);
+            $date_from  = intval($_GET['date_from']);
+            $date_to    = intval($_GET['date_to']);
+        }
+
+        $result = SessionManager::get_user_data_access_tracking_overview(intval($sessionId), intval($courseId), intval($studentId), intval($profile), $date_to, $date_from,
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",
@@ -917,8 +1007,10 @@ $allowed_actions = array(
     'get_usergroups_teacher',
     'get_gradebooks',
     'get_sessions',
+    'get_session_access_overview',
     'get_sessions_tracking',
     'get_session_lp_progress',
+    'get_survey_overview',
     'get_session_progress',
     'get_exercise_progress',
     'get_exercise_results',
@@ -967,11 +1059,15 @@ if (in_array($action, $allowed_actions)) {
         }
         switch ($export_format) {
             case 'xls':
-                Export::export_table_xls($array, 'company_report');
+                //TODO add date if exists
+                $file_name = (!empty($action)) ? $action : 'company_report'; 
+                Export::export_table_xls($array, $file_name);
                 break;
             case 'csv':
             default:
-                Export::export_table_csv($array, 'company_report');
+                //TODO add date if exists
+                $file_name = (!empty($action)) ? $action : 'company_report'; 
+                Export::export_table_csv($array, $file_name);
                 break;
         }
         exit;

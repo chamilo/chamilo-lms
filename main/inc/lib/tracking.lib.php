@@ -20,7 +20,8 @@ require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
  * Class
  * @package chamilo.library
  */
-class Tracking {
+class Tracking
+{
 
     /**
      * Calculates the time spent on the platform by a user
@@ -156,19 +157,20 @@ class Tracking {
 
     /**
      * Get las connection date for a student
-     * @param    int                  Student id
-     * @param    bool            Show a warning message (optional)
-     * @param    bool            True for returning results in timestamp (optional)
-     * @return    string|int|bool Date format long without day, false if there are no connections or timestamp if parameter $return_timestamp is true
+     * @param int Student id
+     * @param bool Show a warning message (optional)
+     * @param bool True for returning results in timestamp (optional)
+     * @return string|int|bool Date format long without day, false if there are no connections or
+     * timestamp if parameter $return_timestamp is true
      */
     public static function get_last_connection_date($student_id, $warning_message = false, $return_timestamp = false) {
     	$tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
     	$sql = 'SELECT login_date FROM ' . $tbl_track_login . '
-                        WHERE login_user_id = ' . intval($student_id) . '
-                        ORDER BY login_date DESC LIMIT 0,1';
+                WHERE login_user_id = ' . intval($student_id) . '
+                ORDER BY login_date DESC LIMIT 0,1';
 
     	$rs = Database::query($sql);
-    	if(Database::num_rows($rs)>0) {
+    	if (Database::num_rows($rs) > 0) {
     		if ($last_login_date = Database::result($rs, 0, 0)) {
     			$last_login_date = api_get_local_time($last_login_date);
     			if ($return_timestamp) {
@@ -3644,11 +3646,11 @@ class TrackingCourseLog
     		$url_condition = " AND user.user_id = url_users.user_id AND access_url_id='$access_url_id'";
     	}
 
-    	$sql = "SELECT user.user_id as user_id,
-                user.official_code  as col0,
-                user.lastname       as col1,
-                user.firstname      as col2,
-                user.username       as col3
+    	$sql = "SELECT  user.user_id as user_id,
+                        user.official_code  as col0,
+                        user.lastname       as col1,
+                        user.firstname      as col2,
+                        user.username       as col3
                 FROM $tbl_user as user $url_table
     	        $condition_user $url_condition";
 
@@ -3658,15 +3660,6 @@ class TrackingCourseLog
 
     	$column = intval($column);
 
-    	if ($is_western_name_order) {
-    		$original_column = $column;
-    		if ($original_column == 1) {
-    			$column = 2;
-    		}
-    		if ($original_column == 2) {
-    			$column = 1;
-    		}
-    	}
     	$from            = intval($from);
     	$number_of_items = intval($number_of_items);
 
@@ -3749,6 +3742,7 @@ class TrackingCourseLog
             $user_row = array();
 
             $user_row[]= $user['official_code']; //0
+
             if ($is_western_name_order) {
                 $user_row[]= $user['firstname'];
                 $user_row[]= $user['lastname'];

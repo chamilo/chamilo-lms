@@ -142,12 +142,14 @@ class CourseManager
 
     /**
      * Returns a list of courses. Should work with quickform syntax
-     * @param    integer    Offset (from the 7th = '6'). Optional.
-     * @param    integer    Number of results we want. Optional.
-     * @param    string    The column we want to order it by. Optional, defaults to first column.
-     * @param    string    The direction of the order (ASC or DESC). Optional, defaults to ASC.
-     * @param    string    The visibility of the course, or all by default.
-     * @param    string    If defined, only return results for which the course *title* begins with this string
+     * @param    integer   $from Offset (from the 7th = '6'). Optional.
+     * @param    integer   $howmany Number of results we want. Optional.
+     * @param    string    $orderby The column we want to order it by. Optional, defaults to first column.
+     * @param    string    $orderdirection The direction of the order (ASC or DESC). Optional, defaults to ASC.
+     * @param    string    $visibility The visibility of the course, or all by default.
+     * @param    string    $startwith If defined, only return results for which the course *title* begins with this string
+     * @param    string    $urlId The Access URL ID, if using multiple URLs
+     * @param    string    $alsoSearchCode An extension option to indicate that we also want to search for course codes (not *only* titles)
      * @return array
      */
     public static function get_courses_list(
@@ -157,7 +159,8 @@ class CourseManager
         $orderdirection = 'ASC',
         $visibility = -1,
         $startwith = '',
-        $urlId = null
+        $urlId = null,
+        $alsoSearchCode = false
     ) {
 
         $sql = "SELECT course.* FROM ".Database::get_main_table(TABLE_MAIN_COURSE)." course ";
@@ -168,7 +171,11 @@ class CourseManager
         }
 
         if (!empty($startwith)) {
-            $sql .= "WHERE title LIKE '".Database::escape_string($startwith)."%' ";
+            $sql .= "WHERE (title LIKE '".Database::escape_string($startwith)."%' ";
+            if ($alsoSearchCode) {
+                $sql .= "OR code LIKE '".Database::escape_string($startwith)."%' ";
+            }
+            $sql .= ') ';
             if ($visibility !== -1 && $visibility == strval(intval($visibility))) {
                 $sql .= " AND visibility = $visibility ";
             }
@@ -1022,7 +1029,12 @@ class CourseManager
      * @param    bool    True for checking inside sessions too, by default is not checked
      * @return     bool     true if the user is registered in the course, false otherwise
      */
-    public static function is_user_subscribed_in_course($user_id, $course_code = null, $in_a_session = false, $session_id = null) {
+    public static function is_user_subscribed_in_course(
+        $user_id,
+        $course_code = null,
+        $in_a_session = false,
+        $session_id = null
+    ) {
 
         $user_id = intval($user_id);
 
@@ -1044,25 +1056,31 @@ class CourseManager
         $result = Database::fetch_array(Database::query($sql));
 
         if (!empty($result)) {
-            return true; // The user has been registered in this course.
+            // The user has been registered in this course.
+            return true;
         }
 
         if (!$in_a_session) {
-            return false; // The user has not been registered in this course.
+            // The user has not been registered in this course.
+            return false;
         }
 
-        if (Database::num_rows(Database::query('SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
-                ' WHERE id_user = '.$user_id.' '.$condition_course.' ')) > 0) {
+        $sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
+               ' WHERE id_user = '.$user_id.' '.$condition_course;
+        if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
         }
 
-        if (Database::num_rows(Database::query('SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
-                ' WHERE id_user = '.$user_id.' AND status=2 '.$condition_course.' ')) > 0) {
+        $sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
+               ' WHERE id_user = '.$user_id.' AND status=2 '.$condition_course;
+        if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
         }
 
-        if (Database::num_rows(Database::query('SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION).
-                ' WHERE id='.$session_id.' AND id_coach='.$user_id)) > 0) {
+        $sql = 'SELECT 1 FROM '.Database::get_main_table(TABLE_MAIN_SESSION).
+        ' WHERE id='.$session_id.' AND id_coach='.$user_id;
+
+        if (Database::num_rows(Database::query($sql)) > 0) {
             return true;
         }
 

@@ -1416,9 +1416,11 @@ function convert_score($score, $weight) {
  * Getting all active exercises from a course from a session (if a session_id is provided we will show all the exercises in the course + all exercises in the session)
  * @param   array   course data
  * @param   int     session id
+ * @param   boolean Check publications dates
+ * @param   string  Search exercise name
  * @return  array   array with exercise data
  */
-function get_all_exercises($course_info = null, $session_id = 0, $check_publication_dates = false) {
+function get_all_exercises($course_info = null, $session_id = 0, $check_publication_dates = false, $search_exercise = '') {
     $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
     $course_id = api_get_course_int_id();
 
@@ -1440,16 +1442,27 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
         $time_conditions .= " (start_time = '0000-00-00 00:00:00'   AND end_time =  '0000-00-00 00:00:00'))  "; // nothing is set
     }
 
+    $needle_where   = (!empty($search_exercise)) ? " AND title LIKE '?' "       : '';
+    $needle         = (!empty($search_exercise)) ? "%" . $search_exercise . "%" : ''; 
+
     if ($session_id == 0) {
-    	$conditions = array('where'=>array('active = ? AND session_id = ? AND c_id = ? '.$time_conditions => array('1', $session_id, $course_id)), 'order'=>'title');
+    	$conditions = array('where'=>array('active = ? AND session_id = ? AND c_id = ? '. $needle_where . $time_conditions => array('1', $session_id, $course_id, $needle)), 'order'=>'title');
     } else {
         //All exercises
-    	$conditions = array('where'=>array('active = ? AND  (session_id = 0 OR session_id = ? ) AND c_id = ? '.$time_conditions => array('1', $session_id, $course_id)), 'order'=>'title');
+    	$conditions = array('where'=>array('active = ? AND  (session_id = 0 OR session_id = ? ) AND c_id = ? ' . $needle_where . $time_conditions => array('1', $session_id, $course_id, $needle)), 'order'=>'title');
     }
     return Database::select('*',$TBL_EXERCICES, $conditions);
 }
-
-
+/**
+ * Get exercise information by id
+ * @param int Exercise Id
+ * @return array Exercise info 
+ */
+function get_exercise_by_id($exerciseId = 0) {
+    $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
+    $conditions  = array('where' => array('id = ?' => array($exerciseId)));
+    return Database::select('*', $TBL_EXERCICES, $conditions);
+}
 /**
  * Getting all active exercises from a course from a session (if a session_id is provided we will show all the exercises in the course + all exercises in the session)
  * @param   array   course data

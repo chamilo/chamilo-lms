@@ -17,7 +17,8 @@ $current_course_tool  = TOOL_STUDENTPUBLICATION;
 $workId = isset($_GET['id']) ? intval($_GET['id']) : null;
 $docId = isset($_GET['document_id']) ? intval($_GET['document_id']) : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-$message = isset($_GET['message']) ? Security::remove_XSS($_GET['message']) : null;
+$message = Session::read('show_message');
+Session::erase('show_message');
 
 if (empty($workId)) {
     api_not_allowed(true);
@@ -69,7 +70,6 @@ if (empty($docId)) {
                 $link = Display::url(get_lang('Delete'), $url);
                 echo $docData['title'].' '.$link.'<br />';
             }
-
         }
         echo '</div>';
     }
@@ -110,7 +110,9 @@ if (empty($docId)) {
             $message = Display::return_message(get_lang('DocumentAlreadyAdded'), 'warning');
         }
 
-        $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&'.api_get_cidreq().'&message='.$message;
+        Session::write('show_message', $message);
+
+        $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&'.api_get_cidreq();
         header('Location: '.$url);
         exit;
     }

@@ -171,7 +171,7 @@ if (count($sessions) > 0) {
             array($session_item['date_start'], $session_item['date_end'])
         );
         echo Display::page_subheader(
-            $session_item['session_name'],
+            '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$id_session.'">'.$session_item['session_name'].'</a>',
             ' '.implode(' - ', $dates)
         );
 

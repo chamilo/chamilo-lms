@@ -6196,6 +6196,7 @@ function api_is_global_chat_enabled(){
 
 /**
  * @todo Fix tool_visible_by_default_at_creation labels
+ * @todo Add sessionId parameter to avoid using context
  */
 function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
     $original_tool_id = $tool_id;
@@ -6793,4 +6794,30 @@ function api_can_login_as($loginAsUserId, $userId = null)
 function api_is_allowed_in_course()
 {
     return Session::read('is_allowed_in_course');
+}
+
+/**
+ * Show a string in
+ * @param string $sql
+ */
+function api_error_log($string)
+{
+    // Clean query
+    $bt = debug_backtrace();
+    $caller = array_shift($bt);;
+    $string = str_replace(array("\r", "\n", "\t", "\10"), '', $string);
+
+    error_log("-------------------------------------");
+    error_log($string);
+    error_log("File: ".$caller['file']." +".$caller['line']);
+    error_log("-------------------------------------");
+}
+
+/**
+ * Show a string in
+ * @param string $sql
+ */
+function api_elog($string)
+{
+    return api_error_log($string);
 }

@@ -78,7 +78,7 @@ function get_document_title($name) {
 	// If they upload .htaccess...
 	$name = disable_dangerous_file($name);
 	$ext = substr(strrchr($name, '.'), 0);
-	return addslashes(substr($name, 0, strlen($name) - strlen(strstr($name, $ext))));
+	return substr($name, 0, strlen($name) - strlen(strstr($name, $ext)));
 }
 
 /**
@@ -256,6 +256,7 @@ function handle_uploaded_document(
 			$files_perm = api_get_permissions_for_new_files();
 
 			// What to do if the target file exists
+            error_log($what_if_file_exists);
 			switch ($what_if_file_exists) {
 				// Overwrite the file if it exists
 				case 'overwrite':
@@ -276,7 +277,18 @@ function handle_uploaded_document(
 
                                 // Redo visibility
                                 api_set_default_visibility(TOOL_DOCUMENT, $document_id);
-							}
+							} else {
+                                // There might be cases where the file exists on disk but there is no registration of that in the database
+                                // In this case, and if we are in overwrite mode, overwrite and create the db record
+                                $document_id = add_document($_course, $file_path, 'file', $file_size, $document_name, null, 0, true, null, $current_session_id);
+                                if ($document_id) {
+                                    // Put the document in item_property update
+                                    api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
+
+                                    // Redo visibility
+                                    api_set_default_visibility(TOOL_DOCUMENT, $document_id);
+                                }
+                            }
 							// If the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course, $upload_path, $user_id);
 							// Display success message with extra info to user
@@ -286,7 +298,7 @@ function handle_uploaded_document(
 							return $file_path;
 						} else {
 							// Put the document data in the database
-							$document_id = add_document($_course, $file_path, 'file', $file_size, $document_name, null, 0, true);
+							$document_id = add_document($_course, $file_path, 'file', $file_size, $document_name, null, 0, true, null, $current_session_id);
 							if ($document_id) {
 								// Put the document in item_property update
 								api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
@@ -859,10 +871,13 @@ function filter_extension(&$filename) {
  * @param string $filetype
  * @param int $filesize
  * @param string $title
+ * @param int $session_id Session ID, if any
  * @return id if inserted document
  */
-function add_document($_course, $path, $filetype, $filesize, $title, $comment = null, $readonly = 0, $save_visibility = true, $group_id = null) {
-	$session_id    = api_get_session_id();
+function add_document($_course, $path, $filetype, $filesize, $title, $comment = null, $readonly = 0, $save_visibility = true, $group_id = null, $session_id = 0) {
+    if (empty($session_id)) {
+        $session_id    = api_get_session_id();
+    }
 	$readonly      = intval($readonly);
 	$comment       = Database::escape_string($comment);
 	$path          = Database::escape_string($path);

@@ -464,19 +464,19 @@ class MySpace {
             #get_lang('Profile'),
             get_lang('Total'),
             get_lang('CourseDescription'),
-            get_lang('Lessons'),
+            get_lang('LearningPaths'),
             get_lang('Exercises'),
             get_lang('Forums'),
-            get_lang('Homeworks'),
-            get_lang('Wikis'),
-            get_lang('Surveys'),
+            get_lang('Assignments'),
+            get_lang('ToolWiki'),
+            get_lang('ToolSurvey'),
             //course description
             get_lang('CourseDescriptionProgress'),
-            //Exercises
-            get_lang('LessonsTotal'),
-            get_lang('LessonsDone'),
-            get_lang('LessonsLeft'),
-            get_lang('LessonsProgress'),
+            //Learning paths
+            get_lang('LearnpathsTotal'),
+            get_lang('LearnpathsDone'),
+            get_lang('LearnpathsLeft'),
+            get_lang('LearnpathsProgress'),
             //Exercises
             get_lang('ExercisesTotal'),
             get_lang('ExercisesDone'),

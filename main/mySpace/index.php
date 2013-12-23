@@ -832,7 +832,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     0 => get_lang('incorrect'),
                     1 => get_lang('correct'),
                     );
-                $answerFilter->addElement('select', 'answer', get_lang('Answer'),$options, array('id' => 'answer'));
+                $answerFilter->addElement('select', 'answer', get_lang('AnswerIndicator'),$options, array('id' => 'answer'));
                 $courseListUrl = api_get_self();
 
                 echo '<div class="">';

@@ -1453,7 +1453,7 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
         if ($session_id == 0) {
             $conditions = array('where'=>array('active = ? AND session_id = ? AND c_id = ? '. $needle_where . $time_conditions => array('1', $session_id, $course_id, $needle)), 'order'=>'title');
         } else {
-            $conditions = array('where'=>array('active = ? AND  (session_id = 0 OR session_id = ? ) AND c_id = ? ' . $needle_where . $time_conditions => array('1', $session_id, $course_id, $needle)), 'order'=>
+            $conditions = array('where'=>array('active = ? AND  (session_id = 0 OR session_id = ? ) AND c_id = ? ' . $needle_where . $time_conditions => array('1', $session_id, $course_id, $needle)), 'order'=>'title');
         }
     }
     return Database::select('*',$TBL_EXERCICES, $conditions);

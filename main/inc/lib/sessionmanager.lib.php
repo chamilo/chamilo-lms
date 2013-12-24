@@ -516,12 +516,21 @@ class SessionManager
         $table_stats_exercises  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $table_stats_attempt    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
+        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+
         $course = api_get_course_info_by_id($courseId);
+        $exercise = current(get_exercise_by_id($exerciseId));
 
-        $where = " WHERE a.session_id = %d
-        AND a.course_code = '%s'
-        AND q.id = %d";
+        $where = " WHERE a.course_code = '%s'";
+        if (!empty($sessionId)) {
+            $where .= " AND a.session_id = %d 
+                        AND q.id = %d";
+        } else
+        {
+            $where .= " AND q.title = '%s'";
+        }
 
+        //2 = show all questions (wrong and correct answered)
         if ($answer != 2)
         {
             $where .= sprintf(' AND qa.correct = %d', $answer);
@@ -561,11 +570,19 @@ class SessionManager
         INNER JOIN $quiz q ON q.id = e.exe_exo_id
         INNER JOIN $user u ON u.user_id = a.user_id
         $where $order $limit";
-        $sql_query = sprintf($sql, $sessionId, $course['code'], $exerciseId);
+
+        if (!empty($sessionId)) 
+        {
+            $sql_query = sprintf($sql, $course['code'], $sessionId,  $exerciseId);
+        } else 
+        {
+            $sql_query = sprintf($sql, $course['code'], $exercise['title']);
+        }
 
         $rs = Database::query($sql_query);
         while ($row = Database::fetch_array($rs))
         {
+            $row['correct'] = ($row['correct'] == 1) ? get_lang('Yes') : get_lang('No');
             $data[] = $row;
         }
         return $data;
@@ -711,7 +728,7 @@ class SessionManager
         INNER JOIN $user u ON u.user_id = s.id_user
         $where $order $limit";
 
-        $sql_query = sprintf($sql, $course['code'], $sessionId);
+        $sql_query = sprintf($sql, $course['code'], intval($sessionId));
 
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs))
@@ -1053,15 +1070,19 @@ class SessionManager
 
         if (isset($sessionId) && !empty($sessionId))
         {
-            $where = sprintf(" WHERE a.session_id = %d", $sessionId);
+            $where = sprintf(" WHERE a.session_id = %d", intval($sessionId));
         }
         if (isset($courseId) && !empty($courseId))
         {
-            $where .= sprintf(" AND c.id = %d", $courseId) ;
+            $where .= sprintf(" AND c.id = %d", intval($courseId)) ;
         }
         if (isset($studentId) && !empty($studentId))
         {
-            $where .= sprintf(" AND u.user_id = %d", $studentId);
+            $where .= sprintf(" AND u.user_id = %d", intval($studentId));
+        }
+        if (isset($profile) && !empty($profile))
+        {
+            $where .= sprintf(" AND u.status = %d", intval($profile));
         }
         if (!empty($date_to) && !empty($date_from))
         {

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AllowMemberLeaveGroup = "Allow members to leave group";
 $CreatedByXYOnZ = "Create by <a href=\"%s\">%s</a> on %s";
 $LoginWithExternalAccount = "Login without an institutional account";
 $NumberOfGroupsToCreate = "Number of groups to create";

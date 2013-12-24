@@ -65,15 +65,14 @@ function handle_forum_and_forumcategories($lp_id = null)
     $forum_categories_list = get_forum_categories();
 
     // Verify if exist content and action
-
     if ((($action_forum_cat == '' || $get_content == '') && !$post_submit_cat) && !$post_submit_forum) {
         return null;
     }
 
+    //Verify if forum category exists
     if (empty($forum_categories_list)) {
         $get_content = 'forumcategory';
     }
-
 
     // Adding a forum category
     if (($action_forum_cat == 'add' && $get_content == 'forumcategory') || $post_submit_cat) {

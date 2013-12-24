@@ -13,11 +13,11 @@ api_protect_course_script(true);
 
 $action = $_REQUEST['a'];
 
-switch ($action) {    
+switch ($action) {
     case 'get_gradebook_weight':
         if (api_is_allowed_to_edit(null, true)) {
             $cat_id = $_GET['cat_id'];
-            $cat = Category :: load($cat_id);            
+            $cat = Category :: load($cat_id);
             if ($cat && isset($cat[0])) {
                 echo $cat[0]->get_weight();
             } else {
@@ -27,5 +27,5 @@ switch ($action) {
         break;
     default:
         echo '';
-}
+    }
 exit;

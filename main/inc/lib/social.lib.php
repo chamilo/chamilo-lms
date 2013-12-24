@@ -798,7 +798,7 @@ class SocialManager extends UserManager
      */
     public static function display_user_list($user_list)
     {
-        if ($_GET['id'] == '') {
+        if (!isset($_GET['id'])) {
             $column_size = '9';
             $add_row = false;
             if (api_is_anonymous()) {
@@ -808,11 +808,12 @@ class SocialManager extends UserManager
 
             $extra_params = array();
             $course_url = '';
-            if (strlen($_GET['cidReq']) > 0) {
+            if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
                 $extra_params['cidReq'] = Security::remove_XSS($_GET['cidReq']);
                 $course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
             }
 
+            $html = null;
             if ($add_row) {
                 $html .='<div class="row">';
             }

@@ -1418,9 +1418,13 @@ function convert_score($score, $weight) {
  * @param   int     session id
  * @param   boolean Check publications dates
  * @param   string  Search exercise name
+ * @param   boolean Search exercises in all sessions
+ * @param   int     0 = only inactive exercises 
+ *                  1 = only active exercises, 
+ *                  2 = all exercises
  * @return  array   array with exercise data
  */
-function get_all_exercises($course_info = null, $session_id = 0, $check_publication_dates = false, $search_exercise = '', $search_all_sessions = false) {
+function get_all_exercises($course_info = null, $session_id = 0, $check_publication_dates = false, $search_exercise = '', $search_all_sessions = false, $active = 2) {
     $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
     $course_id = api_get_course_int_id();
 
@@ -1445,15 +1449,22 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
     $needle_where   = (!empty($search_exercise)) ? " AND title LIKE '?' "       : '';
     $needle         = (!empty($search_exercise)) ? "%" . $search_exercise . "%" : ''; 
 
+    //Show courses by active status
+    $active_sql = '';
+    if ($active != 2) {
+        $active_sql = sprintf(' active = %d AND', $active);
+    }
+
+
     if ($search_all_sessions == true) 
     {
-        $conditions = array('where'=>array('active = ?  AND c_id = ? '. $needle_where . $time_conditions => array('1', $course_id, $needle)), 'order'=>'title');
+        $conditions = array('where'=>array($active_sql . ' c_id = ? '. $needle_where . $time_conditions => array($course_id, $needle)), 'order'=>'title');
     } else 
     {
         if ($session_id == 0) {
-            $conditions = array('where'=>array('active = ? AND session_id = ? AND c_id = ? '. $needle_where . $time_conditions => array('1', $session_id, $course_id, $needle)), 'order'=>'title');
+            $conditions = array('where'=>array($active_sql . ' session_id = ? AND c_id = ? '. $needle_where . $time_conditions => array($session_id, $course_id, $needle)), 'order'=>'title');
         } else {
-            $conditions = array('where'=>array('active = ? AND  (session_id = 0 OR session_id = ? ) AND c_id = ? ' . $needle_where . $time_conditions => array('1', $session_id, $course_id, $needle)), 'order'=>'title');
+            $conditions = array('where'=>array($active_sql . ' (session_id = 0 OR session_id = ? ) AND c_id = ? ' . $needle_where . $time_conditions => array($session_id, $course_id, $needle)), 'order'=>'title');
         }
     }
     return Database::select('*',$TBL_EXERCICES, $conditions);

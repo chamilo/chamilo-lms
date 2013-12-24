@@ -7,7 +7,7 @@
 /**
  * code
  */
-$language_file = array('registration', 'index', 'tracking', 'admin');
+$language_file = array('registration', 'index', 'tracking', 'admin', 'exercice');
 
 // resetting the course id
 $cidReset = true;

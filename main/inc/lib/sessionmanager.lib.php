@@ -728,7 +728,7 @@ class SessionManager
         INNER JOIN $user u ON u.user_id = s.id_user
         $where $order $limit";
 
-        $sql_query = sprintf($sql, $course['code'], $sessionId);
+        $sql_query = sprintf($sql, $course['code'], intval($sessionId));
 
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs))
@@ -1070,15 +1070,19 @@ class SessionManager
 
         if (isset($sessionId) && !empty($sessionId))
         {
-            $where = sprintf(" WHERE a.session_id = %d", $sessionId);
+            $where = sprintf(" WHERE a.session_id = %d", intval($sessionId));
         }
         if (isset($courseId) && !empty($courseId))
         {
-            $where .= sprintf(" AND c.id = %d", $courseId) ;
+            $where .= sprintf(" AND c.id = %d", intval($courseId)) ;
         }
         if (isset($studentId) && !empty($studentId))
         {
-            $where .= sprintf(" AND u.user_id = %d", $studentId);
+            $where .= sprintf(" AND u.user_id = %d", intval($studentId));
+        }
+        if (isset($profile) && !empty($profile))
+        {
+            $where .= sprintf(" AND u.status = %d", intval($profile));
         }
         if (!empty($date_to) && !empty($date_from)) 
         {
@@ -1122,7 +1126,6 @@ class SessionManager
             INNER JOIN $user u ON a.user_id = u.user_id
             INNER JOIN $course c ON a.course_code = c.code
             $where $order $limit";
-        error_log(sprintf($sql, $sessionId, $courseId));
         $result = Database::query(sprintf($sql, $sessionId, $courseId));
 
         $clicks = Tracking::get_total_clicks_by_session();

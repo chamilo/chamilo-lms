@@ -355,13 +355,13 @@ class MySpace {
         $columns = array(
             get_lang('Session'), 
             get_lang('ExerciseId'), 
-            get_lang('QuizTitle'), 
+            get_lang('ExerciseName'), 
             get_lang('Username'), 
-            get_lang('Lastname'), 
-            get_lang('Firstname'), 
+            get_lang('LastName'), 
+            get_lang('FirstName'), 
             get_lang('Time'), 
-            get_lang('Question_id'), 
-            get_lang('Question'), 
+            get_lang('QuestionId'), 
+            get_lang('QuestionTitle'), 
             get_lang('Answer'), 
             get_lang('Correct'),
         );
@@ -376,10 +376,10 @@ class MySpace {
             array('name'=>'username',       'index'=>'username',      'align'=>'left', 'search' => 'true'),
             array('name'=>'lastname',       'index'=>'lastname',      'align'=>'left', 'search' => 'true'),
             array('name'=>'firstname',      'index'=>'firstname',     'align'=>'left', 'search' => 'true'),
-            array('name'=>'time',           'index'=>'time',          'align'=>'left', 'search' => 'true'),
+            array('name'=>'time',           'index'=>'time',          'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
             array('name'=>'question_id',    'index'=>'question_id',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'question',       'index'=>'question',      'align'=>'left', 'search' => 'true'),
-            array('name'=>'answer',         'index'=>'answer',        'align'=>'left', 'search' => 'true'),
+            array('name'=>'question',       'index'=>'question',      'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
+            array('name'=>'answer',         'index'=>'answer',        'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
             array('name'=>'correct',        'index'=>'correct',       'align'=>'left', 'search' => 'true'),
         );
         //get dinamic column names

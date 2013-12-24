@@ -276,7 +276,7 @@ switch ($action) {
         break;
     case 'get_session_access_overview':
         //@TODO replace this for a more efficient function (not retrieving the whole data)
-        $records = SessionManager::get_user_data_access_tracking_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['student_id']), $_GET['profile'], $_GET['date_from'], $_GET['date_to'], $options);
+        $records = SessionManager::get_user_data_access_tracking_overview($_GET['session_id'], $_GET['course_id'], $_GET['student_id'], $_GET['profile'], $_GET['date_to'], $_GET['date_from'], $options);
         $count = count($records);
         break;
     case 'get_survey_overview':

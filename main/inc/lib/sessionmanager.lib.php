@@ -521,9 +521,16 @@ class SessionManager
         $course = api_get_course_info_by_id($courseId);
         $exercise = current(get_exercise_by_id($exerciseId));
 
-        $where = " WHERE  a.course_code = '%s'
-        AND q.title = '%s'";
+        $where = " WHERE a.course_code = '%s'";
+        if (!empty($sessionId)) {
+            $where .= " AND a.session_id = %d 
+                        AND q.id = %d";
+        } else
+        {
+            $where .= " AND q.title = '%s'";
+        }
 
+        //2 = show all questions (wrong and correct answered)
         if ($answer != 2)
         {
             $where .= sprintf(' AND qa.correct = %d', $answer);
@@ -563,8 +570,15 @@ class SessionManager
         INNER JOIN $quiz q ON q.id = e.exe_exo_id
         INNER JOIN $user u ON u.user_id = a.user_id
         $where $order $limit";
-        $sql_query = sprintf($sql, $course['code'], $exercise['title']);
-error_log($sql_query);
+
+        if (!empty($sessionId)) 
+        {
+            $sql_query = sprintf($sql, $course['code'], $sessionId,  $exerciseId);
+        } else 
+        {
+            $sql_query = sprintf($sql, $course['code'], $exercise['title']);
+        }
+
         $rs = Database::query($sql_query);
         while ($row = Database::fetch_array($rs))
         {
@@ -1108,6 +1122,7 @@ error_log($sql_query);
             INNER JOIN $user u ON a.user_id = u.user_id
             INNER JOIN $course c ON a.course_code = c.code
             $where $order $limit";
+        error_log(sprintf($sql, $sessionId, $courseId));
         $result = Database::query(sprintf($sql, $sessionId, $courseId));
 
         $clicks = Tracking::get_total_clicks_by_session();

@@ -636,7 +636,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         {
                 $courseFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
                  $a = 'search_course_by_session';
-                if ( $display = 'exerciseprogress') 
+                if ( $display == 'exerciseprogress') 
                 {
                    $a =  'search_course';
                 }

@@ -626,7 +626,7 @@ switch ($action) {
             $sessionId  = intval($_GET['session_id']);
             $courseId   = intval($_GET['course_id']);
             $exerciseId = intval($_GET['exercise_id']);
-            $answer = intval($_GET['answer']);
+            $answer     = intval($_GET['answer']);
         }
 
         $columns = array(

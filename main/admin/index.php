@@ -107,9 +107,9 @@ if (api_is_platform_admin()) {
 	$items = array();
 	$items[] = array('url'=>'course_list.php', 	'label' => get_lang('CourseList'));
   $items[] = array('url'=>'course_add.php', 	'label' => get_lang('AddCourse'));
-	
+
   if (api_get_setting('course_validation') == 'true') {
-        
+
 		$items[] = array('url'=>'course_request_review.php', 	'label' => get_lang('ReviewCourseRequests'));
 		$items[] = array('url'=>'course_request_accepted.php', 	'label' => get_lang('AcceptedCourseRequests'));
 		$items[] = array('url'=>'course_request_rejected.php', 	'label' => get_lang('RejectedCourseRequests'));
@@ -191,6 +191,7 @@ $items[] = array('url'=>'session_list.php', 	'label' => get_lang('ListSession'))
 $items[] = array('url'=>'session_add.php', 	'label' => get_lang('AddSession'));
 $items[] = array('url'=>'session_category_list.php', 	'label' => get_lang('ListSessionCategory'));
 $items[] = array('url'=>'session_import.php', 	'label' => get_lang('ImportSessionListXMLCSV'));
+$items[] = array('url'=>'session_import_drh.php', 	'label' => get_lang('ImportSessionDrhList'));
 if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
     $items[] = array('url'=>'ldap_import_students_to_session.php', 	'label' => get_lang('ImportLDAPUsersIntoSession'));
 }

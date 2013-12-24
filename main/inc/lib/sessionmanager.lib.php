@@ -1063,12 +1063,12 @@ class SessionManager
         {
             $where .= sprintf(" AND u.user_id = %d", $studentId);
         }
-        if (!empty($date_to) && !empty($date_from)) 
+        if (!empty($date_to) && !empty($date_from))
         {
             //FIX THIS
             $to     = substr($date_to, 0, 4) .'-' . substr($date_to, 4, 2) . '-' . substr($date_to, 6, 2);
             $from   = substr($date_from, 0, 4) . '-' . substr($date_from, 4, 2) . '-' . substr($date_from, 6, 2);
-            $where .=  sprintf(" AND a.login_course_date >= '%s 00:00:00' 
+            $where .=  sprintf(" AND a.login_course_date >= '%s 00:00:00'
                         AND a.login_course_date <= '%s 23:59:59'", $to, $from);
         }
         $limit = null;
@@ -1890,12 +1890,20 @@ class SessionManager
 	* @param string session name
 	* @return mixed false if the session does not exist, array if the session exist
 	* */
-	public static function get_session_by_name ($session_name) {
+	public static function get_session_by_name ($session_name)
+    {
 		$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-		$sql = 'SELECT id, id_coach, date_start, date_end FROM '.$tbl_session.' WHERE name="'.Database::escape_string($session_name).'"';
+        $session_name = trim($session_name);
+        if (empty($session_name)) {
+            return false;
+        }
+
+		$sql = 'SELECT *
+		        FROM '.$tbl_session.'
+		        WHERE name = "'.Database::escape_string($session_name).'"';
 		$result = Database::query($sql);
 		$num = Database::num_rows($result);
-		if ($num>0){
+		if ($num>0) {
 			return Database::fetch_array($result);
 		} else {
 			return false;
@@ -2251,49 +2259,60 @@ class SessionManager
     * @param	array 		Sessions id
     * @return int
     **/
-	public static function suscribe_sessions_to_hr_manager($hr_manager_id, $sessions_list)
+	public static function suscribe_sessions_to_hr_manager($userInfo, $sessions_list, $sendEmail = false, $removeOldConnections = true)
     {
         // Database Table Definitions
-        $tbl_session_rel_user           =   Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_session_rel_access_url     =   Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
-        $hr_manager_id = intval($hr_manager_id);
+        if (empty($userInfo)) {
+            return 0;
+        }
+
+        $userId = $userInfo['user_id'];
+        // Only subscribe DRH users.
+        if ($userInfo['status'] != DRH) {
+            return 0;
+        }
+
         $affected_rows = 0;
 
-        // Deleting assigned sessions to hrm_id
-        if (api_is_multiple_url_enabled()) {
-            $sql = "SELECT id_session
-                    FROM $tbl_session_rel_user s
-                    INNER JOIN $tbl_session_rel_access_url a ON (a.session_id = s.id_session)
-                    WHERE
-                        id_user = $hr_manager_id AND
-                        relation_type=".SESSION_RELATION_TYPE_RRHH." AND
-                        access_url_id = ".api_get_current_access_url_id()."";
-        } else {
-            $sql = "SELECT id_session FROM $tbl_session_rel_user s
-                    WHERE id_user = $hr_manager_id AND relation_type=".SESSION_RELATION_TYPE_RRHH."";
-        }
-        $result = Database::query($sql);
-
-        if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result))   {
-                 $sql = "DELETE FROM $tbl_session_rel_user
+        // Deleting assigned sessions to hrm_id.
+        if ($removeOldConnections) {
+            if (api_is_multiple_url_enabled()) {
+                $sql = "SELECT id_session
+                        FROM $tbl_session_rel_user s
+                        INNER JOIN $tbl_session_rel_access_url a ON (a.session_id = s.id_session)
                         WHERE
-                            id_session = {$row['id_session']} AND
-                            id_user = $hr_manager_id AND
-                            relation_type=".SESSION_RELATION_TYPE_RRHH." ";
-                 Database::query($sql);
+                            id_user = $userId AND
+                            relation_type=".SESSION_RELATION_TYPE_RRHH." AND
+                            access_url_id = ".api_get_current_access_url_id()."";
+            } else {
+                $sql = "SELECT id_session FROM $tbl_session_rel_user s
+                        WHERE id_user = $userId AND relation_type=".SESSION_RELATION_TYPE_RRHH."";
+            }
+            $result = Database::query($sql);
+
+            if (Database::num_rows($result) > 0) {
+                while ($row = Database::fetch_array($result))   {
+                     $sql = "DELETE FROM $tbl_session_rel_user
+                            WHERE
+                                id_session = {$row['id_session']} AND
+                                id_user = $userId AND
+                                relation_type=".SESSION_RELATION_TYPE_RRHH." ";
+                     Database::query($sql);
+                }
             }
         }
 
-		// Inserting new sessions list
-		if (is_array($sessions_list)) {
+		// Inserting new sessions list.
+		if (!empty($sessions_list) && is_array($sessions_list)) {
 			foreach ($sessions_list as $session_id) {
 				$session_id = intval($session_id);
-				$sql = "INSERT IGNORE INTO $tbl_session_rel_user (id_session, id_user, relation_type) VALUES
-                       ($session_id, $hr_manager_id, '".SESSION_RELATION_TYPE_RRHH."')";
+				$sql = "INSERT IGNORE INTO $tbl_session_rel_user (id_session, id_user, relation_type)
+				        VALUES ($session_id, $userId, '".SESSION_RELATION_TYPE_RRHH."')";
 				Database::query($sql);
-				$affected_rows = Database::affected_rows();
+                $affected_rows++;
 			}
 		}
 		return $affected_rows;
@@ -3904,6 +3923,10 @@ class SessionManager
         }
     }
 
+    /**
+     * @param int $sessionId
+     * @param int $courseId
+     */
     public static function removeCourseIntroduction($sessionId, $courseId)
     {
         $sessionId = intval($sessionId);
@@ -3913,7 +3936,10 @@ class SessionManager
         Database::query($sql);
     }
 
-
+    /**
+     * @param int $sessionId
+     * @param int $courseId
+     */
     public static function addCourseDescription($sessionId, $courseId)
     {
         /*$description = new CourseDescription();
@@ -3922,8 +3948,105 @@ class SessionManager
         }*/
     }
 
+    /**
+     * @param int $sessionId
+     * @param int $courseId
+     */
     public static function removeCourseDescription($sessionId, $courseId)
     {
 
+    }
+
+    /**
+     * @param array $list  format see self::importSessionDrhCSV()
+     * @param bool $sendEmail
+     * @param bool $removeOldRelationShips
+     * @return string
+     */
+    public static function subscribeDrhToSessionList($userSessionList, $sendEmail, $removeOldRelationShips)
+    {
+        if (!empty($userSessionList)) {
+            foreach ($userSessionList as $userId => $data) {
+                $sessionList = array();
+                foreach ($data['session_list'] as $sessionInfo) {
+                    $sessionList[] = $sessionInfo['session_id'];
+                }
+                $userInfo = $data['user_info'];
+                self::suscribe_sessions_to_hr_manager($userInfo, $sessionList, $sendEmail, $removeOldRelationShips);
+            }
+        }
+    }
+
+    /**
+     * @param array $userSessionList format see self::importSessionDrhCSV()
+     */
+    public static function checkSubscribeDrhToSessionList($userSessionList)
+    {
+        $message = null;
+        if (!empty($userSessionList)) {
+            if (!empty($userSessionList)) {
+                foreach ($userSessionList as $userId => $data) {
+                    $userInfo = $data['user_info'];
+
+                    $sessionListSubscribed = self::get_sessions_followed_by_drh($userId);
+                    if (!empty($sessionListSubscribed)) {
+                        $sessionListSubscribed = array_keys($sessionListSubscribed);
+                    }
+
+                    $sessionList = array();
+                    if (!empty($data['session_list'])) {
+                        foreach ($data['session_list'] as $sessionInfo) {
+                            if (in_array($sessionInfo['session_id'], $sessionListSubscribed)) {
+                                $sessionList[] = $sessionInfo['session_info']['name'];
+                            }
+                        }
+                    }
+
+                    $message .= '<strong>'.get_lang('User').'</strong> '.$userInfo['complete_name'].' <br />';
+
+                    if (!in_array($userInfo['status'], array(DRH)) && !api_is_platform_admin_by_id($userInfo['user_id'])) {
+                        $message .= get_lang('UserMustHaveTheDrhRole').'<br />';
+                        continue;
+                    }
+
+                    if (!empty($sessionList)) {
+                        $message .= '<strong>'.get_lang('Sessions').':</strong> <br />';
+                        $message .= implode(', ', $sessionList).'<br /><br />';
+                    } else {
+                        $message .= get_lang('NoSessions').' <br /><br />';
+                    }
+                }
+            }
+        }
+        return $message;
+    }
+
+    /**
+     * @param string $file
+     * @param bool $sendEmail
+     * @param bool $removeOldRelationShips
+     */
+    public static function importSessionDrhCSV($file, $sendEmail, $removeOldRelationShips)
+    {
+        $list = Import::csv_reader($file);
+
+        if (!empty($list)) {
+            $userSessionList = array();
+            foreach ($list as $data) {
+                $userInfo = api_get_user_info_from_username($data['Username']);
+                $sessionInfo = self::get_session_by_name($data['SessionName']);
+
+                if (!empty($userInfo) && !empty($sessionInfo)) {
+                    $userSessionList[$userInfo['user_id']]['session_list'][] = array(
+                        'session_id' => $sessionInfo['id'],
+                        'session_info' => $sessionInfo
+                    );
+                    $userSessionList[$userInfo['user_id']]['user_info'] = $userInfo;
+                }
+            }
+
+            self::subscribeDrhToSessionList($userSessionList, $sendEmail, $removeOldRelationShips);
+            return self::checkSubscribeDrhToSessionList($userSessionList);
+        }
     }
 }

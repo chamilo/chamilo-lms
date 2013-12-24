@@ -217,10 +217,6 @@ if ($form->validate()) {
 
 	// to hide the exercise description
 	echo '<style> .media { display:none;}</style>';
-
-    if ($objExercise->id != 0 && $objExercise->edit_exercise_in_lp == false) {
-        $form->freeze();
-    }
 	$form->display();
 }
 Display::display_footer();

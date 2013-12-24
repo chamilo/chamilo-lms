@@ -677,7 +677,8 @@ class Exercise {
      *
      * @author - Olivier Brouckaert
      */
-    function save($type_e = '') {
+    function save($type_e = '')
+    {
         global $_course;
         $TBL_EXERCICES      = Database::get_course_table(TABLE_QUIZ_TEST);
 
@@ -724,7 +725,7 @@ class Exercise {
                 $end_time = '0000-00-00 00:00:00';
             }
 
-            $sql="UPDATE $TBL_EXERCICES SET
+            $sql = "UPDATE $TBL_EXERCICES SET
 				    title='".Database::escape_string($exercise)."',
 					description='".Database::escape_string($description)."'";
 
@@ -917,9 +918,8 @@ class Exercise {
 
         $form->addElement('header', $form_title);
 
-        // title
+        // Title.
         $form->addElement('text', 'exerciseTitle', get_lang('ExerciseName'), array('class' => 'span6','id'=>'exercise_title'));
-        //$form->applyFilter('exerciseTitle','html_filter');
 
         $form->addElement('advanced_settings','
 			<a href="javascript://" onclick=" return show_media()">
@@ -946,11 +946,6 @@ class Exercise {
         $form->addElement('html','<div id="options" style="">');
 
         if ($type=='full') {
-
-            /*$feedback_option[0]=get_lang('ExerciseAtTheEndOfTheTest');
-             $feedback_option[1]=get_lang('DirectFeedback');
-            $feedback_option[2]=get_lang('NoFeedback');
-            */
             //Can't modify a DirectFeedback question
             if ($this->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_DIRECT ) {
                 // feedback type
@@ -1050,7 +1045,7 @@ class Exercise {
             $radiocat[] = $form->createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesShuffled'),'1');
             $radiocat[] = $form->createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesSorted'),'2');
             $radiocat[] = $form->createElement('radio', 'randomByCat', null, get_lang('No'),'0');
-            $form->addGroup($radiocat, null, get_lang('RandomQuestionByCategory'), '');
+            $radioCatGroup = $form->addGroup($radiocat, null, get_lang('RandomQuestionByCategory'), '');
             $form->addElement('html','<div class="clear">&nbsp;</div>');
 
             // add the radio display the category name for student
@@ -1221,14 +1216,37 @@ class Exercise {
             $defaults['index_document'] = 'checked="checked"';
         }
         $form->setDefaults($defaults);
+
+        // Freeze some elements.
+        if ($this->id != 0 && $this->edit_exercise_in_lp == false) {
+            $elementsToFreeze = array(
+                'randomQuestions',
+                //'randomByCat',
+                'exerciseAttempts',
+                'propagate_neg',
+                'enabletimercontrol',
+                'review_answers'
+            );
+
+            foreach ($elementsToFreeze as $elementName) {
+                /** @var HTML_QuickForm_element $element */
+                $element = $form->getElement($elementName);
+                $element->freeze();
+            }
+
+            $radioCatGroup->freeze();
+
+            //$form->freeze();
+        }
     }
 
     /**
      * function which process the creation of exercises
-     * @param FormValidator $form the formvalidator instance
+     * @param FormValidator $form
+     * @param string
      */
-    function processCreation($form, $type='') {
-
+    function processCreation($form, $type = '')
+    {
         $this->updateTitle(htmlentities($form->getSubmitValue('exerciseTitle')));
         $this->updateDescription($form->getSubmitValue('exerciseDescription'));
         $this->updateAttempts($form->getSubmitValue('exerciseAttempts'));
@@ -1283,7 +1301,6 @@ class Exercise {
             $this->random_answers=0;
         }
         $this->save($type);
-
     }
 
     function search_engine_save() {

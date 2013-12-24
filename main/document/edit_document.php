@@ -220,7 +220,7 @@ if ($is_allowed_to_edit) {
         $filename = stripslashes($_POST['filename']);
         $extension = $_POST['extension'];
 
-        $content = trim(str_replace(array("\r", "\n"), '', stripslashes($_POST['content'])));
+        $content = trim(str_replace(array("\r", "\n"), '', $_POST['content']));
         $content = Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
 
         if (!strstr($content, '/css/frames.css')) {

@@ -3,6 +3,8 @@
 
 namespace ChamiloLMS\Component\Editor;
 
+use Symfony\Component\Routing\Router;
+
 /**
  * Class Toolbar
  * @package ChamiloLMS\Component\Editor
@@ -10,18 +12,24 @@ namespace ChamiloLMS\Component\Editor;
 class Toolbar
 {
     public $config;
+    public $urlGenerator;
 
     /**
+     * @param Router $urlGenerator
      * @param string $toolbar
      * @param array $config
      * @param string $prefix
      */
-    public function __construct($toolbar = null, $config = array(), $prefix = null)
-    {
+    public function __construct(
+        Router $urlGenerator,
+        $toolbar = null,
+        $config = array(),
+        $prefix = null
+    ) {
         if (!empty($toolbar)) {
             $class = __NAMESPACE__."\\".$prefix."\\Toolbar\\".$toolbar;
             if (class_exists($class)) {
-                $toolbarObj = new $class;
+                $toolbarObj = new $class($urlGenerator);
                 $this->setConfig($toolbarObj->getConfig());
             }
         }
@@ -29,6 +37,7 @@ class Toolbar
         if (!empty($config)) {
             $this->updateConfig($config);
         }
+        $this->urlGenerator = $urlGenerator;
     }
 
     /**
@@ -57,6 +66,18 @@ class Toolbar
     public function getConfig()
     {
         return $this->config;
+    }
+
+    /**
+     * @param string
+     * @return array
+     */
+    public function getConfigAttribute($variable)
+    {
+        if (isset($this->config[$variable])) {
+            return $this->config[$variable];
+        }
+        return null;
     }
 
     /**

@@ -8,7 +8,6 @@ namespace ChamiloLMS\Component\Editor\CkEditor\Toolbar;
  */
 class Documents extends Basic
 {
-
     public function getConfig()
     {
         $config['toolbarGroups'] = array(
@@ -29,9 +28,12 @@ class Documents extends Basic
             array('name' => 'mode')
         );
 
+        $config['extraPlugins'] = $this->getConfigAttribute('extraPlugins').',mathjax';
+        $config['mathJaxLib'] = $this->urlGenerator->generate(
+            'legacy.controller:getJavascript',
+            array('file' => 'math_jax/MathJax.js', 'config'=> 'default')
+        );
         $config['fullPage'] = true;
-        //$config['height'] = '200';
-
         return $config;
     }
 }

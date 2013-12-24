@@ -17,7 +17,6 @@ use \ChamiloSession as Session;
 class LegacyController extends CommonController
 {
     public $section;
-    public $language_files = array('courses', 'index', 'admin');
 
     /**
     * Handles default Chamilo scripts handled by Display::display_header() and display_footer()
@@ -41,8 +40,9 @@ class LegacyController extends CommonController
 
         //$_REQUEST = $request->request->all();
         $mainPath = $app['paths']['sys_root'].'main/';
+        $fileToLoad = $mainPath.$file;
 
-        if (is_file($mainPath.$file)) {
+        if (is_file($fileToLoad) && \Security::check_abs_path($fileToLoad, $mainPath)) {
 
             // Default values
             $_course = api_get_course_info();
@@ -89,5 +89,19 @@ class LegacyController extends CommonController
             return $app->abort(404, 'File not found');
         }
         return new Response($response, 200, $responseHeaders);
+    }
+
+    /**
+     * @param Application $app
+     * @param string $file
+     * @return BinaryFileResponse
+     */
+    public function getJavascript(Application $app, $file)
+    {
+        $mainPath = $app['paths']['sys_root'].'main/inc/lib/javascript/';
+        $fileToLoad = $mainPath.$file;
+        if (is_file($fileToLoad) && \Security::check_abs_path($fileToLoad, $mainPath)) {
+            return $app->sendFile($fileToLoad);
+        }
     }
 }

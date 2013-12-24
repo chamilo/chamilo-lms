@@ -62,10 +62,7 @@ if (isset($app['configuration']['services']['media-alchemyst'])) {
         ),
         //'media-alchemyst.logger' => $logger,  // A PSR Logger
     ));
-
-
 }
-
 
 use Knp\Provider\ConsoleServiceProvider;
 
@@ -77,7 +74,6 @@ $app->register(new ConsoleServiceProvider(), array(
 
 // Monolog.
 if (is_writable($app['sys_temp_path'])) {
-
     /**
      *  Adding Monolog service provider.
      *  Examples:
@@ -596,7 +592,13 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 
         // Template class
         $app['template'] = $app->share(function () use ($app) {
-            $template = new Template($app, $app['database'], $app['security'], $app['translator']);
+            $template = new Template(
+                $app,
+                $app['database'],
+                $app['security'],
+                $app['translator'],
+                $app['url_generator']
+            );
             return $template;
         });
 
@@ -630,7 +632,6 @@ class ChamiloServiceProvider implements ServiceProviderInterface
             $mailGenerator = new ChamiloLMS\Component\Mail\MailGenerator($app['twig'], $app['mailer']);
             return $mailGenerator;
         });
-
 
         // Setting up name conventions
         $conventions = require_once $app['sys_root'].'main/inc/lib/internationalization_database/name_order_conventions.php';
@@ -852,3 +853,11 @@ $app['editor_connector'] = $app->share(function ($app) {
     );
 });
 
+
+/*
+$app->register(
+    new ChamiloLMS\Provider\BootstrapSilexProvider(),
+    array(
+
+    )
+);*/

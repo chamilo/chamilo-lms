@@ -73,8 +73,7 @@ if (is_dir($file_url_sys)) {
     api_not_allowed(true);
 }
 
-//Check user visibility
-//$is_visible = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
+// Check user visibility.
 $is_visible = DocumentManager::check_visibility_tree($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id());
 
 if (!api_is_allowed_to_edit() && !$is_visible) {
@@ -107,18 +106,18 @@ if (isset($group_id) && $group_id != '') {
 $interbreadcrumb[] = array('url' => './document.php?curdirpath='.dirname($header_file).$req_gid, 'name' => get_lang('Documents'));
 
 if (empty($document_data['parents'])) {
-	if (isset($_GET['createdir'])) {
-		$interbreadcrumb[] = array('url' => $document_data['document_url'], 'name' => $document_data['title']);
-	} else {
-		$interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
-	}
+    if (isset($_GET['createdir'])) {
+        $interbreadcrumb[] = array('url' => $document_data['document_url'], 'name' => $document_data['title']);
+    } else {
+        $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
+    }
 } else {
-	foreach($document_data['parents'] as $document_sub_data) {
-		if (!isset($_GET['createdir']) && $document_sub_data['id'] ==  $document_data['id']) {
-			$document_sub_data['document_url'] = '#';
-		}
-		$interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
-	}
+    foreach($document_data['parents'] as $document_sub_data) {
+        if (!isset($_GET['createdir']) && $document_sub_data['id'] ==  $document_data['id']) {
+            $document_sub_data['document_url'] = '#';
+        }
+        $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
+    }
 }
 
 $this_section = SECTION_COURSES;
@@ -139,40 +138,55 @@ $frameheight = 135;
 if (api_is_course_admin()) {
     $frameheight = 165;
 }
+$mathJaxUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/math_jax/MathJax.js?config=default';
 
 $js_glossary_in_documents = '';
 if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
-    $js_glossary_in_documents = '	//	    $(document).ready(function() {
-                                    $.frameReady(function() {
-                                       //  $("<div>I am a div courses</div>").prependTo("body");
-                                      }, "top.mainFrame",
-                                      { load: [
-                                                {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
-                                                {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-                                                {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
-                                           ]
-                                      }
-                                      );
-                                    //});';
+    $js_glossary_in_documents = '
+        $.frameReady(function() {
+            //  $("<div>I am a div courses</div>").prependTo("body");
+        }, "top.mainFrame",
+        { load: [
+                {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
+                {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"},
+                {type:"script", id:"_fr4", src:"'.$mathJaxUrl.'"}
+           ]
+        }
+    );';
 } elseif (api_get_setting('show_glossary_in_documents') == 'isautomatic') {
-    $js_glossary_in_documents =	'//    $(document).ready(function() {
-                                      $.frameReady(function(){
-                                       //  $("<div>I am a div courses</div>").prependTo("body");
-
-                                      }, "top.mainFrame",
-                                      { load: [
-                                                {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
-                                                {type:"script", id:"_fr4", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
-                                                {type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
-                                                {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-                                                {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
-                                           ]
-                                      }
-                                      );
-                                //   });';
+    $js_glossary_in_documents =	'
+        $.frameReady(function(){
+            //  $("<div>I am a div courses</div>").prependTo("body");
+        }, "top.mainFrame",
+        { load: [
+                {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
+                {type:"script", id:"_fr4", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
+                {type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
+                {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"},
+                {type:"script", id:"_fr6", src:"'.$mathJaxUrl.'"}
+           ]
+        }
+        );';
+}
+if (empty($js_glossary_in_documents)) {
+$js_glossary_in_documents = '
+    $.frameReady(function() {
+    }, "top.mainFrame",
+    {
+        load: [
+            {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
+            {type:"script", id:"_fr2", src:"'.$mathJaxUrl.'"}
+        ]
+    }
+    );';
 }
 
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
+
+$htmlHeadXtra[] = api_get_js('math_jax/MathJax.js?config=TeX-AMS-MML_HTMLorMML');
+
 if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
     $show_web_odf  = true;
     $htmlHeadXtra[] = api_get_js('webodf/webodf.js');
@@ -180,9 +194,9 @@ if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
     $htmlHeadXtra[] = '
     <script charset="utf-8">
         function init() {
-                var odfelement = document.getElementById("odf"),
-                odfcanvas = new odf.OdfCanvas(odfelement);
-                odfcanvas.load("'.$file_url_web.'");
+            var odfelement = document.getElementById("odf"),
+            odfcanvas = new odf.OdfCanvas(odfelement);
+            odfcanvas.load("'.$file_url_web.'");
         }
         $(document).ready(function() {
             window.setTimeout(init, 0);

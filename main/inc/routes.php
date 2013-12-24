@@ -185,7 +185,7 @@ $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
 };
 
 /** Only course admin has access. */
-$userCourseAdmin = function(Request $request) use ($app) {
+$userCourseAdmin = function (Request $request) use ($app) {
     if (api_is_allowed_to_edit()) {
         return null;
     } else {
@@ -501,18 +501,23 @@ $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexActi
     ->value('page', '1')
     ->bind('userportal');
 
+/** get javascript file */
+$app->match('/main/inc/lib/javascript/{file}', 'legacy.controller:getJavascript', 'GET')
+    ->assert('file', '.+')
+    ->bind('legacy.controller:getJavascript');
+
 /** Legacy wrapper */
 $app->match('/main/{file}', 'legacy.controller:classicAction', 'GET|POST')
     ->before($removeCidResetDependingOfSection)
     ->before($settingCourseConditions)
     ->before($checkLogin)
-    ->before(
-        function() use ($app) {
-            // Do not load breadcrumbs
-            $app['template']->loadBreadcrumb = false;
-        })
+    ->before(function () use ($app) {
+        // Do not load breadcrumbs
+        $app['template']->loadBreadcrumb = false;
+    })
     ->assert('file', '.+')
-    ->assert('type', '.+');
+    ->assert('type', '.+')
+    ->bind('legacy.controller:classicAction');
 
 /** Login form */
 $app->match('/login', 'index.controller:loginAction', 'GET|POST')
@@ -728,7 +733,6 @@ if ($alreadyInstalled) {
 
     $app->mount('/app/session_path', new ChamiloLMS\Provider\ReflectionControllerProvider('session_path.controller'));
     $app->mount('/app/session_path/tree', new ChamiloLMS\Provider\ReflectionControllerProvider('session_tree.controller'));
-
 
     $app->mount('/courses/{course}/curriculum/category', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_category.controller'));
     $app->mount('/courses/{course}/curriculum/item', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_item.controller'));

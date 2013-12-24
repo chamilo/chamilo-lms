@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 namespace ChamiloLMS\Component\Editor;
 
-use \Symfony\Component\Translation\Translator;
+use Symfony\Component\Translation\Translator;
 use Symfony\Component\Routing\Router;
 use \Entity\Course;
 
@@ -52,8 +52,8 @@ class Editor
      */
     public function __construct(Translator $translator, Router $urlGenerator, $course)
     {
-        $this->toolbarSet   = 'Basic';
-        $this->value        = '';
+        $this->toolbarSet = 'Basic';
+        $this->value = '';
         $this->config = array();
         $this->setConfigAttribute('width', '100%');
         $this->setConfigAttribute('height', '200');
@@ -96,7 +96,7 @@ class Editor
      */
     public function editorReplace()
     {
-        $toolbar  = new Toolbar($this->toolbarSet, $this->config);
+        $toolbar = new Toolbar($this->urlGenerator, $this->toolbarSet, $this->config);
         $toolbar->setLanguage($this->translator->getLocale());
         $config = $toolbar->getConfig();
         $javascript = $this->toJavascript($config);

@@ -8,6 +8,9 @@
  * */
 use \ChamiloSession as Session;
 use Silex\Application;
+use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Translation\Translator;
+use Symfony\Component\Routing\Router;
 
 class Template
 {
@@ -28,22 +31,32 @@ class Template
     public $force_plugin_load = true;
     public $navigation_array;
     public $loadBreadcrumb = true;
-    /** @var  Symfony\Component\Security\Core\SecurityContext */
+
+    /** @var SecurityContext */
     private $security;
-    /** @var  Symfony\Component\Translation\Translator */
+    /** @var Translator */
     private $translator;
+    /** @var Router */
+    private $urlGenerator;
 
     /**
      * @param Application $app
-     * @param $database
-     * @param $security
-     * @param $translator
+     * @param Database $database
+     * @param SecurityContext $security
+     * @param Translator $translator
+     * @param Router $urlGenerator
      */
-    public function __construct(Application $app, $database, $security, $translator)
-    {
+    public function __construct(
+        Application $app,
+        Database $database,
+        SecurityContext $security,
+        Translator $translator,
+        Router $urlGenerator
+    ) {
         $this->app = &$app;
         $this->security = $security;
         $this->translator = $translator;
+        $this->urlGenerator = $urlGenerator;
 
         $this->app['classic_layout'] = true;
         $this->navigation_array = $this->returnNavigationArray();
@@ -100,21 +113,20 @@ class Template
     }
 
     /**
-     * @param array $interbreadcrumb
+     * @param array $breadCrumb
      */
-    public function setBreadcrumb($interbreadcrumb)
+    public function setBreadcrumb($breadCrumb)
     {
-
         if (isset($this->app['breadcrumb']) && !empty($this->app['breadcrumb'])) {
-            if (empty($interbreadcrumb)) {
-                $interbreadcrumb = $this->app['breadcrumb'];
+            if (empty($breadCrumb)) {
+                $breadCrumb = $this->app['breadcrumb'];
             } else {
-                $interbreadcrumb = array_merge($interbreadcrumb, $this->app['breadcrumb']);
+                $breadCrumb = array_merge($breadCrumb, $this->app['breadcrumb']);
             }
         }
 
-        if (!empty($interbreadcrumb)) {
-            $this->app['breadcrumb'] = $interbreadcrumb;
+        if (!empty($breadCrumb)) {
+            $this->app['breadcrumb'] = $breadCrumb;
         }
     }
 
@@ -127,7 +139,7 @@ class Template
      */
     public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
     {
-        return Display:: return_icon($image, '', array(), $size, false, true);
+        return Display::return_icon($image, '', array(), $size, false, true);
     }
 
     /**
@@ -272,12 +284,22 @@ class Template
      * @param string $name
      * @return string
      */
-    public function get_template($name)
+    public function getTemplate($name)
     {
         return $this->app['template_style'].'/'.$name;
     }
 
-    /** Set course parameters */
+    /**
+     * @deprecated use getTemplate
+     */
+    public function get_template($name)
+    {
+        return $this->getTemplate($name);
+    }
+
+    /**
+     * Set course parameters
+     */
     private function setCourseParameters()
     {
         //Setting course id
@@ -306,13 +328,6 @@ class Template
 
             $new_messages = MessageManager::get_new_messages();
             $user_info['messages_count'] = $new_messages != 0 ? Display::label($new_messages, 'warning') : null;
-
-            /*$usergroup = new UserGroup();
-            $messages_invitations_count = $usergroup->get_groups_by_user_count($user_info['user_id'], GROUP_USER_PERMISSION_PENDING_INVITATION, false);
-            $user_info['messages_invitations_count'] = $messages_invitations_count != 0 ? Display::label(
-                $messages_invitations_count,
-                'warning'
-            ) : null;*/
             $this->user_is_logged_in = true;
         }
 
@@ -325,9 +340,9 @@ class Template
      */
     private function setSystemParameters()
     {
-        global $_configuration;
+        $version = $this->app['configuration']['system_version'];
 
-        //Setting app paths/URLs
+        // Setting app paths/URLs.
         $_p = array(
             'web' => api_get_path(WEB_PATH),
             'web_course' => api_get_path(WEB_COURSE_PATH),
@@ -352,7 +367,7 @@ class Template
         //Here we can add system parameters that can be use in any template
         $_s = array(
             'software_name' => api_get_software_name(),
-            'system_version' => $_configuration['system_version'],
+            'system_version' => $version,
             'site_name' => api_get_setting('siteName'),
             'institution' => api_get_setting('Institution')
         );
@@ -797,6 +812,10 @@ class Template
         return $template->render(array());
     }
 
+    /**
+     * @param string $key
+     * @param mixed $value
+     */
     public function assign($key, $value = null)
     {
         if ($this->app['allowed'] == true) {
@@ -804,6 +823,9 @@ class Template
         }
     }
 
+    /**
+     * @param string $template
+     */
     public function display($template = null)
     {
         if (!empty($template)) {
@@ -895,7 +917,6 @@ class Template
     }
 
     /**
-     *
      * @return string
      */
     public function getNavigationLinks()
@@ -919,7 +940,6 @@ class Template
         $this->addJsFiles();
         return $this->app['twig']->render($this->app['template_style'].'/layout/'.$layout);
     }
-
 
     /**
      * @param string $layout
@@ -1106,10 +1126,9 @@ class Template
 
         $html = '';
 
-        if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting(
-            'showonline',
-            'users'
-        ) == 'true' AND $user_id) OR (api_get_setting('showonline', 'course') == 'true' AND $user_id AND $course_id)
+        if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR
+            (api_get_setting('showonline', 'users') == 'true' AND $user_id) OR
+            (api_get_setting('showonline', 'course') == 'true' AND $user_id AND $course_id)
         ) {
             $number = Online::who_is_online_count(api_get_setting('time_limit_whosonline'));
 
@@ -1124,10 +1143,8 @@ class Template
 
             // Display the who's online of the platform
             if ($number) {
-                if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting(
-                    'showonline',
-                    'users'
-                ) == 'true' AND $user_id)
+                if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR
+                    (api_get_setting('showonline', 'users' ) == 'true' AND $user_id)
                 ) {
                     $html .= '<li><a href="'.SocialManager::getUserOnlineLink().'" target="_top" title="'.get_lang(
                         'UsersOnline'
@@ -1143,10 +1160,9 @@ class Template
 
             // Display the who's online for the course
             if ($number_online_in_course) {
-                if (is_array($_course) AND api_get_setting(
-                    'showonline',
-                    'course'
-                ) == 'true' AND isset($_course['sysCode'])
+                if (is_array($_course) AND
+                    api_get_setting('showonline', 'course' ) == 'true' AND
+                    isset($_course['sysCode'])
                 ) {
                     $html .= '<li><a href="'.SocialManager::getUserOnlineLink($_course['sysCode']).'" target="_top">'.
                         Display::return_icon(
@@ -1380,7 +1396,7 @@ class Template
             $navigation[] = $navigation_item;
         }
 
-        // Part 2: Interbreadcrumbs.
+        // Part 2: breadcrumbs.
         // If there is an array $interbreadcrumb defined then these have to appear before the last breadcrumb
         // (which is the tool itself)
         if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {

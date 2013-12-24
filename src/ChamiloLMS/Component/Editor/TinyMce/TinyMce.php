@@ -46,7 +46,7 @@ class TinyMce extends Editor
      */
     public function editorReplace()
     {
-        $toolbar  = new Toolbar\Basic($this->toolbarSet, $this->config, 'TinyMce');
+        $toolbar  = new Toolbar\Basic($this->urlGenerator, $this->toolbarSet, $this->config, 'TinyMce');
         $toolbar->setLanguage($this->translator->getLocale());
         $config = $toolbar->getConfig();
         $config['selector'] = "#".$this->name;

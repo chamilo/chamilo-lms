@@ -1299,7 +1299,7 @@ $default_column = $is_allowed_to_edit ? 2 : 1;
 $tablename = $is_allowed_to_edit ? 'teacher_table' : 'student_table';
 
 $table = new SortableTableFromArrayConfig($sortable_data, $default_column, 20, $tablename, $column_show, $column_order, 'ASC');
-
+$query_vars = array();
 if (isset($_GET['keyword'])) {
     $query_vars['keyword'] = Security::remove_XSS($_GET['keyword']);
 } else {

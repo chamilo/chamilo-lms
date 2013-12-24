@@ -197,18 +197,17 @@ $UserList = array();
 $SessionList = array();
 $sessions = array();
 $Users = array();
-
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent			= $_POST['form_sent'];
     $user_list			= $_POST['sessionUsersList'];
     $group_id			= intval($_POST['id']);
 
     if (!is_array($user_list)) {
-        $user_list=array();
+        $user_list = array();
     }
     if ($form_sent == 1) {
         //invite this users
-        $result 	= GroupPortalManager::add_users_to_groups(
+        $result = GroupPortalManager::add_users_to_groups(
             $user_list,
             array($group_id),
             GROUP_USER_PERMISSION_PENDING_INVITATION

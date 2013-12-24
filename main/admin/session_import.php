@@ -8,7 +8,7 @@
 $language_file = array('admin', 'registration');
 $cidReset = true;
 
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
@@ -22,7 +22,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
     $error_message = Security::remove_XSS($_GET['message']);
 }
 
-
 $tbl_user                   = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_course                 = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_course_user            = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -34,6 +33,7 @@ $tbl_session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE
 $tool_name = get_lang('ImportSessionListXMLCSV');
 
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
 set_time_limit(0);
 
@@ -44,7 +44,7 @@ $inserted_in_course = array();
 
 global $_configuration;
 
-if ($_POST['formSent']) {
+if (isset($_POST['formSent']) && $_POST['formSent']) {
     if (isset($_FILES['import_file']['tmp_name']) && !empty($_FILES['import_file']['tmp_name'])) {
         $form_sent = $_POST['formSent'];
         $file_type = $_POST['file_type'];
@@ -543,7 +543,6 @@ $form->setDefaults($defaults);
 
 Display::display_normal_message(get_lang('TheXMLImportLetYouAddMoreInfoAndCreateResources'));
 $form->display();
-
 
 ?>
 <font color="gray">

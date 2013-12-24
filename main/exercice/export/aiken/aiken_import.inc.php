@@ -43,7 +43,7 @@ function aiken_display_form($msg = '') {
     $form .= $msg;
     $form_validator  = new FormValidator('aiken_upload', 'post',api_get_self()."?".api_get_cidreq(), null, array('enctype' => 'multipart/form-data') );
     $form_validator->addElement('header', $name_tools);
-    $form_validator->addElement('text', 'total_weight', get_lang('totalWeight'));
+    $form_validator->addElement('text', 'total_weight', get_lang('TotalWeight'));
     $form_validator->addElement('file', 'userFile', get_lang('DownloadFile'));
     $form_validator->addElement('style_submit_button', 'submit', get_lang('Send'), 'class="upload"');
     $form .= $form_validator->return_form();
@@ -247,8 +247,6 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile) 
             $exercise_info['question'][$question_index]['correct_answers'][] = $correct_answer_index + 1;
             //weight for correct answer
             $exercise_info['question'][$question_index]['weighting'][$correct_answer_index] = 1;
-        } elseif (preg_match('/^SCORE:\s?(\d{3})\s?/', $info, $matches)) {
-            $total_weight = $matches[1];
         } elseif (preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $info, $matches)) {
             //Comment of correct answer
             $correct_answer_index = array_search($matches[1], $answers_array);

@@ -58,17 +58,29 @@ $(document).ready(function () {
 function handle_forum_and_forumcategories($lp_id = null)
 {
     $action_forum_cat = isset($_GET['action']) ? $_GET['action'] : '';
+    $get_content = isset($_GET['content']) ? $_GET['content'] : '';
     $post_submit_cat = isset($_POST['SubmitForumCategory']) ? true : false;
     $post_submit_forum = isset($_POST['SubmitForum']) ? true : false;
     $get_id = isset($_GET['id']) ? $_GET['id'] : '';
     $forum_categories_list = get_forum_categories();
 
+    // Verify if exist content and action
+
+    if ((($action_forum_cat == '' || $get_content == '') && !$post_submit_cat) && !$post_submit_forum) {
+        return null;
+    }
+
+    if (empty($forum_categories_list)) {
+        $get_content = 'forumcategory';
+    }
+
+
     // Adding a forum category
-    if (($action_forum_cat == 'add' && ($_GET['content'] == 'forumcategory' || empty($forum_categories_list))) || $post_submit_cat) {
+    if (($action_forum_cat == 'add' && $get_content == 'forumcategory') || $post_submit_cat) {
         show_add_forumcategory_form(array(), $lp_id); //$lp_id when is called from learning path
     }
     // Adding a forum
-    if ((($action_forum_cat == 'add' || $action_forum_cat == 'edit') && ($_GET['content'] == 'forum' && !empty($forum_categories_list))) || $post_submit_forum) {
+    if ((($action_forum_cat == 'add' || $action_forum_cat == 'edit') && $get_content == 'forum') || $post_submit_forum) {
         if ($action_forum_cat == 'edit' && $get_id || $post_submit_forum) {
             $inputvalues = get_forums(intval($get_id)); // Note: This has to be cleaned first.
         } else {
@@ -76,13 +88,18 @@ function handle_forum_and_forumcategories($lp_id = null)
         }
         show_add_forum_form($inputvalues, $lp_id);
     }
+
+    //Verify if id is set
+    if ($get_id == '') {
+        return null;
+    }
     // Edit a forum category
-    if (($action_forum_cat == 'edit' && $_GET['content'] == 'forumcategory' && isset($_GET['id'])) || (isset($_POST['SubmitEditForumCategory'])) ? true : false) {
-        $forum_category = get_forum_categories(strval(intval($_GET['id']))); // Note: This has to be cleaned first.
+    if (($action_forum_cat == 'edit' && $get_content == 'forumcategory') || (isset($_POST['SubmitEditForumCategory'])) ? true : false) {
+        $forum_category = get_forum_categories(strval(intval($get_id))); // Note: This has to be cleaned first.
         show_edit_forumcategory_form($forum_category);
     }
     // Delete a forum category
-    if ((isset($_GET['action']) && $_GET['action'] == 'delete') && isset($_GET['content']) && $get_id) {
+    if ($action_forum_cat == 'delete') {
         $id_forum = intval($get_id);
         $list_threads = get_threads($id_forum);
 
@@ -94,22 +111,22 @@ function handle_forum_and_forumcategories($lp_id = null)
                 remove_resource_from_course_gradebook($link_info['id']);
             }
         }
-        $return_message = delete_forum_forumcategory_thread($_GET['content'], $_GET['id']);
+        $return_message = delete_forum_forumcategory_thread($get_content, $get_id);
         Display::display_confirmation_message($return_message, false);
     }
     // Change visibility of a forum or a forum category.
-    if (($action_forum_cat == 'invisible' || $action_forum_cat == 'visible') && isset($_GET['content']) && isset($_GET['id'])) {
-        $return_message = change_visibility($_GET['content'], $_GET['id'], $_GET['action']); // Note: This has to be cleaned first.
+    if ($action_forum_cat == 'invisible' || $action_forum_cat == 'visible') {
+        $return_message = change_visibility($get_content, $get_id, $action_forum_cat); // Note: This has to be cleaned first.
         Display::display_confirmation_message($return_message, false);
     }
     // Change lock status of a forum or a forum category.
-    if (($action_forum_cat == 'lock' || $action_forum_cat == 'unlock') && isset($_GET['content']) && isset($_GET['id'])) {
-        $return_message = change_lock_status($_GET['content'], $_GET['id'], $_GET['action']); // Note: This has to be cleaned first.
+    if ($action_forum_cat == 'lock' || $action_forum_cat == 'unlock') {
+        $return_message = change_lock_status($get_content, $get_id, $action_forum_cat); // Note: This has to be cleaned first.
         Display::display_confirmation_message($return_message, false);
     }
     // Move a forum or a forum category.
-    if ($action_forum_cat == 'move' && isset($_GET['content']) && isset($_GET['id']) && isset($_GET['direction'])) {
-        $return_message = move_up_down($_GET['content'], $_GET['direction'], $_GET['id']); // Note: This has to be cleaned first.
+    if ($action_forum_cat == 'move' && isset($_GET['direction'])) {
+        $return_message = move_up_down($get_content, $_GET['direction'], $get_id); // Note: This has to be cleaned first.
         Display::display_confirmation_message($return_message, false);
     }
 }

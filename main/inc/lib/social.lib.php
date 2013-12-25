@@ -795,10 +795,11 @@ class SocialManager extends UserManager
     /**
      * Displays a sortable table with the list of online users.
      * @param array $user_list The list of users to be shown
+     * @param bool $wrap Whether we want the function to wrap the spans list in a div or not
      * @return string HTML block or null if and ID was defined
      * @assert (null) === false
      */
-    public static function display_user_list($user_list)
+    public static function display_user_list($user_list, $wrap = true)
     {
         $html = null;
         if (isset($_GET['id']) or count($user_list) < 1) {
@@ -818,13 +819,15 @@ class SocialManager extends UserManager
             $course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
         }
 
-        if ($add_row) {
-            $html .='<div class="row">';
+        if ($wrap) {
+            if ($add_row) {
+                $html .='<div class="row">';
+            }
+
+            $html .= '<div class="span'.$column_size.'">';
+
+            $html .= '<ul id="online_grid_container" class="thumbnails">';
         }
-
-        $html .= '<div class="span'.$column_size.'">';
-
-        $html .= '<ul id="online_grid_container" class="thumbnails">';
 
         foreach ($user_list as $uid) {
             $user_info = api_get_user_info($uid);
@@ -857,11 +860,13 @@ class SocialManager extends UserManager
         }
         $counter = $_SESSION['who_is_online_counter'];
 
-        $html .= '</ul></div>';
+        if ($wrap) {
+            $html .= '</ul></div>';
+        }
         if (count($user_list) >= 9) {
             $html .= '<div class="span'.$column_size.'"><a class="btn btn-large" id="link_load_more_items" data_link="'.$counter.'" >'.get_lang('More').'</a></div>';
         }
-        if ($add_row) {
+        if ($wrap && $add_row) {
             $html .= '</div>';
         }
         return $html;

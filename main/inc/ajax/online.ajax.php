@@ -24,7 +24,7 @@ switch($action) {
                 $user_list = who_is_online($page_rows, $images_to_show);
             }
             if (!empty($user_list)) {
-                echo SocialManager::display_user_list($user_list);
+                echo SocialManager::display_user_list($user_list, false);
                 exit;
             }
         }

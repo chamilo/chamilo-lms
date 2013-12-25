@@ -794,72 +794,75 @@ class SocialManager extends UserManager
 
     /**
      * Displays a sortable table with the list of online users.
-     * @param array $user_list
+     * @param array $user_list The list of users to be shown
+     * @return string HTML block or null if and ID was defined
+     * @assert (null) === false
      */
     public static function display_user_list($user_list)
     {
-        if (!isset($_GET['id'])) {
-            $column_size = '9';
-            $add_row = false;
-            if (api_is_anonymous()) {
-                $column_size = '12';
-                $add_row = true;
-            }
+        $html = null;
+        if (isset($_GET['id']) or count($user_list) < 1) {
+            return false;
+        }
+        $column_size = '9';
+        $add_row = false;
+        if (api_is_anonymous()) {
+            $column_size = '12';
+            $add_row = true;
+        }
 
-            $extra_params = array();
-            $course_url = '';
-            if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
-                $extra_params['cidReq'] = Security::remove_XSS($_GET['cidReq']);
-                $course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
-            }
+        $extra_params = array();
+        $course_url = '';
+        if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
+            $extra_params['cidReq'] = Security::remove_XSS($_GET['cidReq']);
+            $course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
+        }
 
-            $html = null;
-            if ($add_row) {
-                $html .='<div class="row">';
-            }
+        if ($add_row) {
+            $html .='<div class="row">';
+        }
 
-            $html .= '<div class="span'.$column_size.'">';
+        $html .= '<div class="span'.$column_size.'">';
 
-            $html .= '<ul id="online_grid_container" class="thumbnails">';
+        $html .= '<ul id="online_grid_container" class="thumbnails">';
 
-            foreach ($user_list as $uid) {
-                $user_info = api_get_user_info($uid);
-                //Anonymous users can't have access to the profile
-                if (!api_is_anonymous()) {
-                    if (api_get_setting('allow_social_tool') == 'true') {
-                        $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$uid.$course_url;
-                    } else {
-                        $url = '?id='.$uid.$course_url;
-                    }
+        foreach ($user_list as $uid) {
+            $user_info = api_get_user_info($uid);
+            //Anonymous users can't have access to the profile
+            if (!api_is_anonymous()) {
+                if (api_get_setting('allow_social_tool') == 'true') {
+                    $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$uid.$course_url;
                 } else {
-                    $url = '#';
+                    $url = '?id='.$uid.$course_url;
                 }
-                $image_array = UserManager::get_user_picture_path_by_id($uid, 'system', false, true);
-
-                // reduce image
-                $name = $user_info['complete_name'];
-                $status_icon = Display::span('', array('class' => 'online_user_in_text'));
-                $user_status = $user_info['status'] == 1 ? Display::span('', array('class' => 'teacher_online')) : Display::span('', array('class' => 'student_online'));
-
-                if ($image_array['file'] == 'unknown.jpg' || !file_exists($image_array['dir'].$image_array['file'])) {
-                    $friends_profile['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';
-                    $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
-                } else {
-                    $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);
-                    $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
-                }
-                $name = '<a href="'.$url.'">'.$status_icon.$user_status.$name.'</a><br>';
-                $html .= '<li class="span'.($column_size / 3).'"><div class="thumbnail">'.$img.'<div class="caption">'.$name.'</div</div></li>';
+            } else {
+                $url = '#';
             }
-            $counter = $_SESSION['who_is_online_counter'];
+            $image_array = UserManager::get_user_picture_path_by_id($uid, 'system', false, true);
 
-            $html .= '</ul></div>';
-            if (count($user_list) >= 9) {
-                $html .= '<div class="span'.$column_size.'"><a class="btn btn-large" id="link_load_more_items" data_link="'.$counter.'" >'.get_lang('More').'</a></div>';
+            // reduce image
+            $name = $user_info['complete_name'];
+            $status_icon = Display::span('', array('class' => 'online_user_in_text'));
+            $user_status = $user_info['status'] == 1 ? Display::span('', array('class' => 'teacher_online')) : Display::span('', array('class' => 'student_online'));
+
+            if ($image_array['file'] == 'unknown.jpg' || !file_exists($image_array['dir'].$image_array['file'])) {
+                $friends_profile['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';
+                $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
+            } else {
+                $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);
+                $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
             }
-            if ($add_row) {
-                $html .= '</div>';
-            }
+            $name = '<a href="'.$url.'">'.$status_icon.$user_status.$name.'</a><br>';
+            $html .= '<li class="span'.($column_size / 3).'"><div class="thumbnail">'.$img.'<div class="caption">'.$name.'</div</div></li>';
+        }
+        $counter = $_SESSION['who_is_online_counter'];
+
+        $html .= '</ul></div>';
+        if (count($user_list) >= 9) {
+            $html .= '<div class="span'.$column_size.'"><a class="btn btn-large" id="link_load_more_items" data_link="'.$counter.'" >'.get_lang('More').'</a></div>';
+        }
+        if ($add_row) {
+            $html .= '</div>';
         }
         return $html;
     }

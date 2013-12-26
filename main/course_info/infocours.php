@@ -64,7 +64,9 @@ $tbl_course_user       = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_course            = Database :: get_main_table(TABLE_MAIN_COURSE);
 
 // Get all course categories
-$sql = "SELECT code,name FROM ".$table_course_category." WHERE auth_course_child ='TRUE'  OR code = '".Database::escape_string($_course['categoryCode'])."'  ORDER BY tree_pos";
+$sql = "SELECT code,name FROM ".$table_course_category."
+        WHERE auth_course_child ='TRUE'  OR code = '".Database::escape_string($_course['categoryCode'])."'
+        ORDER BY tree_pos";
 $res = Database::query($sql);
 
 $s_select_course_tutor_name = "SELECT tutor_name FROM $tbl_course WHERE code='$course_code'";
@@ -80,7 +82,8 @@ $s_sql_course_titular = "
 $q_result_titulars = Database::query($s_sql_course_titular);
 
 if (Database::num_rows($q_result_titulars) == 0) {
-	$sql = "SELECT username, lastname, firstname FROM $tbl_user as user, $tbl_admin as admin WHERE admin.user_id=user.user_id ORDER BY ".$target_name." ASC";
+	$sql = "SELECT username, lastname, firstname FROM $tbl_user as user, $tbl_admin as admin
+	        WHERE admin.user_id=user.user_id ORDER BY ".$target_name." ASC";
 	$q_result_titulars = Database::query($sql);
 }
 
@@ -133,7 +136,6 @@ if (file_exists($course_path.'/course-pic85x85.png')) {
     $image_html =  '<div class="row"><div class="formw"><img src="'.$course_medium_image.'" /></div></div>';
 }
 $form->addElement('html', $image_html);
-
 
 $form->add_textfield('title', get_lang('Title'), true, array('class' => 'span6'));
 $form->applyFilter('title', 'html_filter');
@@ -427,9 +429,7 @@ $values['allow_fast_exercise_edition']              = api_get_course_setting('al
 $values['enable_exercise_auto_launch']              = api_get_course_setting('enable_exercise_auto_launch') == -1 ? 0 : api_get_course_setting('enable_exercise_auto_launch') ;
 
 $app_plugin->set_course_settings_defaults($values);
-
 $form->setDefaults($values);
-
 
 // Validate form
 if ($form->validate() && is_settings_editable()) {
@@ -488,7 +488,11 @@ if ($form->validate() && is_settings_editable()) {
                 );
                 Database::insert($table_course_setting, $params);
             } else {
-                Database::update($table_course_setting, array('value' => $update_values[$key]), array('variable = ? AND c_id = ?' => array($key, api_get_course_int_id())));
+                Database::update(
+                    $table_course_setting,
+                    array('value' => $update_values[$key]),
+                    array('variable = ? AND c_id = ?' => array($key, api_get_course_int_id()))
+                );
             }
         }
     }
@@ -505,7 +509,7 @@ Display :: display_header($nameTools, MODULE_HELP_NAME);
 if ($show_delete_watermark_text_message) {
     Display :: display_normal_message(get_lang('FileDeleted'));
 }
-//api_display_tool_title($nameTools);
+
 if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
     Display :: display_normal_message(get_lang('ModifDone'));
 }

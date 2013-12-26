@@ -2151,7 +2151,7 @@ class CourseRestorer
                         if ($r === false) {
                             error_log('Failed creating directory '.$new_path.' in course restore for work tool');
                         }
-                        $obj->params['url'] = $new_path;
+                        $obj->params['url'] .= '_'.$i;
                         $obj->params['title'] .= '_'.$i;
                         $last_id = Database::insert($table_work, $obj->params);
                         if (is_numeric($last_id)) {

@@ -1,40 +1,51 @@
 <?php
 /* For licensing terms, see /license.txt */
-namespace ChamiloLMS\Controller;
+
+namespace ChamiloLMS\Controller\Tool\Introduction;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
+use ChamiloLMS\Controller\CommonController;
+use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
  * Class IntroductionToolController
  * @package ChamiloLMS\Controller
- * @todo use dbal
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class IntroductionToolController
+class IntroductionController extends CommonController
 {
     /**
-     * @param Application $app
+     * @Route("/edit/{tool}")
+     * @Method({"GET"})
+     *
      * @param string $tool
      * @return Response
      */
-    public function editAction(Application $app, $tool)
+    public function editAction($tool)
     {
         $message = null;
-        $request = $app['request'];
-        $courseId = $request->get('courseId');
-        $sessionId = $request->get('sessionId');
+        // @todo use proper functions not api functions.
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
         $tool = \Database::escape_string($tool);
 
         $TBL_INTRODUCTION = \Database::get_course_table(TABLE_TOOL_INTRO);
 
-        $url = $app['url_generator']->generate('introduction_edit', array('tool' => $tool)).'?'.api_get_cidreq();
+        $url = $this->generateUrl(
+            'introduction.controller:editAction',
+            array('tool' => $tool, 'course' => api_get_course_id())
+        );
+
         $form = $this->getForm($url);
+
         if ($form->validate()) {
             $values  = $form->exportValues();
 			$content = $values['content'];
 
-            $sql = "REPLACE $TBL_INTRODUCTION SET c_id = $courseId, id='$tool', intro_text='".\Database::escape_string($content)."', session_id='".intval($sessionId)."'";
+            $sql = "REPLACE $TBL_INTRODUCTION
+                    SET c_id = $courseId, id='$tool', intro_text='".\Database::escape_string($content)."', session_id='".intval($sessionId)."'";
             \Database::query($sql);
             $message = \Display::return_message(get_lang('IntroductionTextUpdated'), 'confirmation', false);
         } else {
@@ -50,35 +61,41 @@ class IntroductionToolController
             $form->setDefaults(array('content' => $content));
         }
 
-        $app['template']->assign('content', $form->return_form());
-        $app['template']->assign('message', $message);
-        $response = $app['template']->renderLayout('layout_1_col.tpl');
+        $this->getTemplate()->assign('content', $form->return_form());
+        $this->getTemplate()->assign('message', $message);
+        $response = $this->getTemplate()->renderLayout('layout_1_col.tpl');
         return new Response($response, 200, array());
     }
 
     /**
-     * @param Application $app
+     * @Route("/delete/{tool}")
+     * @Method({"GET"})
+     *
      * @param string $tool
      * @return Response
      */
-    public function deleteAction(Application $app, $tool)
+    public function deleteAction($tool)
     {
-        /** @var \Request $request */
-        $request = $app['request'];
+        $request = $this->getRequest();
         $courseId = $request->get('courseId');
         $sessionId = $request->get('sessionId');
         $tool = \Database::escape_string($tool);
 
         $TBL_INTRODUCTION = \Database::get_course_table(TABLE_TOOL_INTRO);
-	    \Database::query("DELETE FROM $TBL_INTRODUCTION WHERE c_id = $courseId AND id='".$tool."' AND session_id='".intval($sessionId)."'");
+	    \Database::query("DELETE FROM $TBL_INTRODUCTION
+	                      WHERE c_id = $courseId AND id='".$tool."' AND session_id='".intval($sessionId)."'");
 		$message = \Display::return_message(get_lang('IntroductionTextDeleted'), 'confirmation');
 
-        $url = $app['url_generator']->generate('introduction_edit', array('tool' => $tool)).'?'.api_get_cidreq();
+        $url = $this->generateUrl(
+            'introduction.controller:editAction',
+            array('tool' => $tool, 'course' => api_get_course_id())
+        );
+
         $form = $this->getForm($url);
 
-        $app['template']->assign('content', $form->return_form());
-        $app['template']->assign('message', $message);
-        $response = $app['template']->renderLayout('layout_1_col.tpl');
+        $this->getTemplate()->assign('content', $form->return_form());
+        $this->getTemplate()->assign('message', $message);
+        $response = $this->getTemplate()->renderLayout('layout_1_col.tpl');
         return new Response($response, 200, array());
     }
 

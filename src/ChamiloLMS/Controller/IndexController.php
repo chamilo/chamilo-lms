@@ -325,6 +325,24 @@ class IndexController extends CommonController
     }
 
     /**
+     * Gets a document from the data/courses/MATHS/document/file.jpg to the user
+     * @todo check permissions
+     * @param Application $app
+     * @param string $courseCode
+     * @param string $file
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
+     */
+    public function getCourseUploadFileAction(Application $app, $courseCode, $file)
+    {
+        try {
+            $file = $app['chamilo.filesystem']->getCourseUploadFile($courseCode, $file);
+            return $app->sendFile($file->getPathname());
+        } catch (\InvalidArgumentException $e) {
+            return $app->abort(404, 'File not found');
+        }
+    }
+
+    /**
      * Gets a document from the data/courses/MATHS/scorm/file.jpg to the user
      * @todo check permissions
      * @param Application $app

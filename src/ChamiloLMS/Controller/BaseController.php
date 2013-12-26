@@ -151,6 +151,11 @@ abstract class BaseController extends FlintController
         return $this->get('orm.em');
     }
 
+    public function sendFile($file, $status = 200, $headers = array(), $contentDisposition = null)
+    {
+        return $this->pimple->sendFile($file, $status, $headers, $contentDisposition);
+    }
+
     /**
      * Converts an array of URL to absolute URLs using the url_generator service
      * @param string $label

@@ -9,6 +9,7 @@ use Symfony\Component\Console;
 
 /**
  * @todo use Gaufrette to manage course files (some day)
+ * @todo add security restrictions.
  * Class DataFilesystem
  * @package ChamiloLMS\Component\DataFilesystem
  */
@@ -72,6 +73,18 @@ class DataFilesystem
     public function getCourseScormDocument($courseCode, $file)
     {
         $file = 'courses/'.$courseCode.'/scorm/'.$file;
+        return $this->get($file);
+    }
+
+    /**
+     * Gets a file from the data/courses/MATHS/document directory
+     * @param $courseCode
+     * @param $file
+     * @return SplFileInfo
+     */
+    public function getCourseUploadFile($courseCode, $file)
+    {
+        $file = 'courses/'.$courseCode.'/upload/'.$file;
         return $this->get($file);
     }
 

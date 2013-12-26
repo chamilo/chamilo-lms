@@ -144,6 +144,15 @@ $("form").on("click", ' .advanced_parameters', function() {
 
 /** Makes row highlighting possible */
 $(document).ready( function() {
+    $(function() {
+        $('a').tooltip({
+            placement: 'right',
+            show: 500,
+            hide: 500
+        });
+    });
+
+
     $('.advanced_parameters').addClass('btn-default');
     //$('.btn').addClass('btn-default');
 

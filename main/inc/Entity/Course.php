@@ -818,4 +818,12 @@ class Course
     {
         return $this->courseTypeId;
     }
+
+    /**
+     * @return string
+     */
+    public function getAbsoluteSysCoursePath()
+    {
+        return realpath(__DIR__.'/../../../data/courses/'.$this->getDirectory()).'/';
+    }
 }

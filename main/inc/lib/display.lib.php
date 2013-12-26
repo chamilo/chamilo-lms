@@ -106,14 +106,20 @@ class Display
      */
     public static function display_introduction_section($tool, $editor_config = null)
     {
-        echo self::return_introduction_section($tool, $editor_config);
+        global $app;
+        $urlGenerator = $app['url_generator'];
+        echo self::return_introduction_section($urlGenerator, $tool, $editor_config);
     }
 
-    public static function return_introduction_section($tool, $editor_config = null)
+    /**
+     * @param Symfony\Component\Routing\RouterInterface $urlGenerator
+     * @param string $tool
+     * @param array $editor_config
+     * @return null|string
+     */
+    public static function return_introduction_section($urlGenerator, $tool, $editor_config = null)
     {
-        global $charset;
         $is_allowed_to_edit = api_is_allowed_to_edit();
-        $moduleId = $tool;
         $courseInfo = api_get_course_info();
         $introduction_section = null;
 
@@ -216,7 +222,11 @@ class Display
                     // Displays "Add intro" commands
                     $introduction_section .=  '<div id="introduction_block_action" class="col-md-2 col-md-offset-10">';
 
-                    $url = api_get_path(WEB_PUBLIC_PATH).'introduction/edit/'.$tool;
+                    $url = $urlGenerator->generate(
+                        'introduction.controller:editAction',
+                        array('tool' => $tool, 'course' => api_get_course_id())
+                    );
+
                     $introduction_section .=  "<a href=\"".$url."?".api_get_cidreq()."\">";
                     $introduction_section .=  Display::return_icon('introduction_add.gif', get_lang('AddIntro')).' ';
                     $introduction_section .=  "</a>";
@@ -226,15 +236,19 @@ class Display
                 } else {
                     // Displays "edit intro && delete intro" commands
                     $introduction_section .=  '<div id="introduction_block_action" class="col-md-2 col-md-offset-10">';
-                    //$url = $app['url_generator']->generate('introduction_edit', array('tool' => $moduleId));
-                    $url = api_get_path(WEB_PUBLIC_PATH).'introduction/edit/'.$tool;
+                    $url = $urlGenerator->generate(
+                        'introduction.controller:editAction',
+                        array('tool' => $tool, 'course' => api_get_course_id())
+                    );
 
                     $introduction_section .=  "<a href=\"".$url."?".api_get_cidreq()."\">";
                     $introduction_section .=  Display::return_icon('edit.png', get_lang('Modify')).' ';
                     $introduction_section .=  "</a>";
 
-                    //$url = $app['url_generator']->generate('introduction_delete', array('tool' => $moduleId));
-                    $url = api_get_path(WEB_PUBLIC_PATH).'introduction/delete/'.$tool;
+                    $url = $urlGenerator->generate(
+                        'introduction.controller:deleteAction',
+                        array('tool' => $tool, 'course' => api_get_course_id())
+                    );
 
                     $introduction_section .=  "<a onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\" href=\"".$url."?".api_get_cidreq()."\">";
                     $introduction_section .=  Display::return_icon('delete.png', get_lang('AddIntro')).' ';
@@ -814,9 +828,10 @@ class Display
     /**
      * Returns the htmlcode for an image
      *
-     * @param string $image the filename of the file (in the main/img/ folder
+     * @param string $image_path the filename of the file (in the main/img/ folder
      * @param string $alt_text the alt text (probably a language variable)
      * @param array additional attributes (for instance height, width, onclick, ...)
+     * @param bool $applyFilter
      * @author Julio Montoya 2010
      */
     public static function img($image_path, $alt_text = '', $additional_attributes = array(), $applyFilter = true)

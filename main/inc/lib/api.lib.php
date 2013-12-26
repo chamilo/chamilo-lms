@@ -427,10 +427,24 @@ define('SOCIAL_CENTER_PLUGIN',      2);
 define('SOCIAL_RIGHT_PLUGIN',       3);
 define('CUT_GROUP_NAME', 50);
 
-//Skills
+// Skills
 define ('SKILL_TYPE_REQUIREMENT',   'required');
 define ('SKILL_TYPE_ACQUIRED',      'acquired');
 define ('SKILL_TYPE_BOTH',          'both');
+
+// Tool
+
+define('TOOL_PUBLIC',                   'Public');
+define('TOOL_PUBLIC_BUT_HIDDEN',        'PublicButHide');
+define('TOOL_COURSE_ADMIN',             'courseAdmin');
+define('TOOL_PLATFORM_ADMIN',           'platformAdmin');
+define('TOOL_AUTHORING',                'toolauthoring');
+define('TOOL_INTERACTION',              'toolinteraction');
+define('TOOL_COURSE_PLUGIN',            'toolcourseplugin'); //all plugins that can be enabled in courses
+define('TOOL_ADMIN',                    'tooladmin');
+define('TOOL_ADMIN_PLATFORM',           'tooladminplatform');
+define('TOOL_STUDENT_VIEW',              'toolstudentview');
+define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
 
 /* PATHS & FILES - ROUTINES */
 

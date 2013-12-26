@@ -287,7 +287,7 @@ $app['form.extensions'] = $app->share($app->extend('form.extensions', function (
     return $extensions;
 }));
 
-// Needed to use the "UniqueEntity" validator
+// Needed to use the "UniqueEntity" validator.
 $app['validator.validator_factory'] = $app->share(function ($app) {
     $uniqueValidator = new Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator($app['manager_registry']);
     $factory = new ChamiloLMS\Component\Validator\ConstraintValidatorFactory();
@@ -699,24 +699,6 @@ $app['learnpath.controller'] = $app->share(
     }
 );
 
-$app['course_home.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\CourseHomeController();
-    }
-);
-
-$app['course_home.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\CourseHomeController();
-    }
-);
-
-$app['introduction_tool.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\IntroductionToolController();
-    }
-);
-
 $app['certificate.controller'] = $app->share(
     function () use ($app) {
         return new ChamiloLMS\Controller\CertificateController();
@@ -830,6 +812,18 @@ $app['session_tree.controller'] = $app->share(
 $app['upgrade.controller'] = $app->share(
     function () use ($app) {
         return new ChamiloLMS\Controller\Admin\Administrator\UpgradeController($app);
+    }
+);
+
+$app['course_home.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\CourseHome\CourseHomeController($app);
+    }
+);
+
+$app['introduction.controller'] = $app->share(
+    function () use ($app) {
+        return new ChamiloLMS\Controller\Tool\Introduction\IntroductionController($app);
     }
 );
 

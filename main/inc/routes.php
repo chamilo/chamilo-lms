@@ -544,19 +544,6 @@ $app->match('/courses/{cidReq}/', 'course_home.controller:indexAction', 'GET|POS
     ->before($settingCourseConditions)
     ->before($userPermissionsInsideACourse);
 
-// Introduction
-$app->match('/introduction/edit/{tool}', 'introduction_tool.controller:editAction', 'GET|POST')
-    ->assert('type', '.+')
-    ->before($settingCourseConditions)
-    ->before($userPermissionsInsideACourse)
-     ->bind('introduction_edit');
-
-$app->match('/introduction/delete/{tool}', 'introduction_tool.controller:deleteAction', 'GET|POST')
-    ->assert('type', '.+')
-    ->before($settingCourseConditions)
-    ->before($userPermissionsInsideACourse)
-    ->bind('introduction_delete');
-
 /** Course documents */
 $app->get('/data/courses/{courseCode}/document/{file}', 'index.controller:getDocumentAction')
     ->assert('file', '.+')
@@ -568,6 +555,12 @@ $app->get('/data/courses/{courseCode}/scorm/{file}', 'index.controller:getScormD
     ->assert('file', '.+')
     ->assert('type', '.+')
     ->bind('get_scorm_document');
+
+/** Course documents */
+$app->get('/data/courses/{courseCode}/upload/{file}', 'index.controller:getCourseUploadFileAction')
+    ->assert('file', '.+')
+    ->assert('type', '.+')
+    ->bind('getCourseUploadFileAction');
 
 /** Certificates */
 $app->match('/certificates/{id}', 'certificate.controller:indexAction', 'GET');
@@ -722,21 +715,27 @@ $app->match('/ajax', 'model_ajax.controller:indexAction', 'GET')
     ->bind('model_ajax');
 
 if ($alreadyInstalled) {
-    $app->mount('/admin/', new ChamiloLMS\Provider\ReflectionControllerProvider('admin.controller'));
-    $app->mount('/admin/administrator/upgrade', new ChamiloLMS\Provider\ReflectionControllerProvider('upgrade.controller'));
-    $app->mount('/admin/administrator/roles', new ChamiloLMS\Provider\ReflectionControllerProvider('role.controller'));
-    $app->mount('/admin/administrator/question_scores', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score.controller'));
-    $app->mount('/admin/administrator/question_score_names', new ChamiloLMS\Provider\ReflectionControllerProvider('question_score_name.controller'));
+    // Mount controllers.
+    $controllers = array(
+        '/admin/' => 'admin.controller',
+        '/admin/administrator/upgrade' => 'upgrade.controller',
+        '/admin/administrator/roles' => 'role.controller',
+        '/admin/administrator/question_scores' => 'question_score.controller',
+        '/admin/administrator/question_score_names' => 'question_score_name.controller',
+        '/editor/' => 'editor.controller',
+        '/user/' => 'profile.controller',
+        '/app/session_path' => 'session_path.controller',
+        '/app/session_path/tree' => 'session_tree.controller',
+        '/courses/{course}/curriculum/category' => 'curriculum_category.controller',
+        '/courses/{course}/curriculum/item' => 'curriculum_item.controller',
+        '/courses/{course}/curriculum/user' => 'curriculum_user.controller',
+        '/courses/{course}/curriculum' => 'curriculum.controller',
+        '/courses/{course}/course_home' => 'course_home.controller',
+        '/courses/{course}/introduction' => 'introduction.controller',
+    );
 
-    $app->mount('/editor/', new ChamiloLMS\Provider\ReflectionControllerProvider('editor.controller'));
-    $app->mount('/user/', new ChamiloLMS\Provider\ReflectionControllerProvider('profile.controller'));
-
-    $app->mount('/app/session_path', new ChamiloLMS\Provider\ReflectionControllerProvider('session_path.controller'));
-    $app->mount('/app/session_path/tree', new ChamiloLMS\Provider\ReflectionControllerProvider('session_tree.controller'));
-
-    $app->mount('/courses/{course}/curriculum/category', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_category.controller'));
-    $app->mount('/courses/{course}/curriculum/item', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_item.controller'));
-    $app->mount('/courses/{course}/curriculum/user', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum_user.controller'));
-    $app->mount('/courses/{course}/curriculum', new ChamiloLMS\Provider\ReflectionControllerProvider('curriculum.controller'));
+    foreach ($controllers as $route => $controller) {
+        $app->mount($route, new ChamiloLMS\Provider\ReflectionControllerProvider($controller));
+    }
 }
 

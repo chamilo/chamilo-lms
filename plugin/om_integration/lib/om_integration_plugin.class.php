@@ -6,7 +6,7 @@ class om_integrationPlugin extends Plugin
 
     //When creating a new course this settings are added to the course
     public $course_settings = array(
-                    array('name' => 'om_button_record_and_store', 'type' => 'checkbox')
+                    array('name' => 'openmeetings_record_and_store', 'type' => 'checkbox')
     );
 
     static function create()
@@ -22,7 +22,7 @@ class om_integrationPlugin extends Plugin
 
     function install()
     {
-        $table = Database::get_main_table('plugin_om_meeting');
+        $table = Database::get_main_table('plugin_openmeeting');
         $sql = "CREATE TABLE IF NOT EXISTS $table (
                 id INT unsigned NOT NULL auto_increment PRIMARY KEY,
                 c_id INT unsigned NOT NULL DEFAULT 0,
@@ -69,10 +69,10 @@ class om_integrationPlugin extends Plugin
 //        Database::query($sql);
 
         //hack to get rid of Database::query warning (please add c_id...)
-        $sql = "DELETE FROM $t_tool WHERE name = 'videoconference' AND c_id = c_id";
+        $sql = "DELETE FROM $t_tool WHERE name = 'openmeetings' AND c_id = c_id";
         Database::query($sql);
 
-        $sql = "DROP TABLE IF EXISTS plugin_om_meeting";
+        $sql = "DROP TABLE IF EXISTS plugin_openmeeting";
         Database::query($sql);
 
         //Deleting course settings

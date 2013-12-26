@@ -9,16 +9,19 @@ class om_integrationPlugin extends Plugin
                     array('name' => 'om_button_record_and_store', 'type' => 'checkbox')
     );
 
-    static function create() {
+    static function create()
+    {
         static $result = null;
         return $result ? $result : $result = new self();
     }
 
-    protected function __construct() {
+    protected function __construct()
+    {
         parent::__construct('2.0', 'Francis Gonzales', array('tool_enable' => 'boolean', 'host' =>'text', 'user' => 'text', 'pass' => 'text'));
     }
 
-    function install() {
+    function install()
+    {
         $table = Database::get_main_table('plugin_om_meeting');
         $sql = "CREATE TABLE IF NOT EXISTS $table (
                 id INT unsigned NOT NULL auto_increment PRIMARY KEY,
@@ -38,7 +41,8 @@ class om_integrationPlugin extends Plugin
         $this->install_course_fields_in_all_courses();
     }
 
-    function uninstall() {
+    function uninstall()
+    {
         $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
         $t_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
         $t_tool = Database::get_course_table(TABLE_TOOL_LIST);

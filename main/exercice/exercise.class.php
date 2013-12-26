@@ -991,7 +991,7 @@ class Exercise {
                         $radios_feedback[] = $form->createElement('radio', 'exerciseFeedbackType', null, get_lang('DirectFeedback'), '1', array('id' =>'exerciseType_1' , 'onclick' => 'check_direct_feedback()'));
                     }
                     $radios_feedback[] = $form->createElement('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'),'2',array('id' =>'exerciseType_2'));
-                    $form->addGroup($radios_feedback, null, get_lang('FeedbackType'));
+                    $form->addGroup($radios_feedback, null, array(get_lang('FeedbackType'),get_lang('FeedbackDisplayOptions')));
 
                     //$form->addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
                     $radios_results_disabled = array();

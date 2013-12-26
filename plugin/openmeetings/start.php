@@ -7,7 +7,7 @@
  * Initialization
  */
 
-$course_plugin = 'om_integration'; //needed in order to load the plugin lang variables
+$course_plugin = 'openmeetings'; //needed in order to load the plugin lang variables
 require_once dirname(__FILE__).'/config.php';
 $tool_name = get_lang('Videoconference');
 $tpl = new Template($tool_name);

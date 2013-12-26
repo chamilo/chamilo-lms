@@ -7,7 +7,7 @@
  * Initialization
  */
 
-$course_plugin = 'om_integration'; //needed in order to load the plugin lang variables
+$course_plugin = 'openmeetings'; //needed in order to load the plugin lang variables
 require_once dirname(__FILE__).'/config.php';
 $plugin = om_integrationPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
@@ -83,7 +83,7 @@ if ($meeting_exists || $teacher) {
 
 $tpl->assign('allow_to_edit', $teacher);
 $tpl->assign('meetings', $meetings);
-$conference_url = api_get_path(WEB_PLUGIN_PATH).'om_integration/start.php?launch=1&'.api_get_cidreq();
+$conference_url = api_get_path(WEB_PLUGIN_PATH).'openmeetings/start.php?launch=1&'.api_get_cidreq();
 $tpl->assign('conference_url', $conference_url);
 $tpl->assign('users_online', $users_online);
 $tpl->assign('bbb_status', $status);
@@ -91,6 +91,6 @@ $tpl->assign('show_join_button', $show_join_button);
 
 //$tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
-$listing_tpl = 'om_integration/listing.tpl';
+$listing_tpl = 'openmeetings/listing.tpl';
 $content = $tpl->fetch($listing_tpl);
 $tpl->assign('content', $content);$tpl->display_one_col_template();

@@ -11,7 +11,7 @@ $course_plugin = 'openmeetings'; //needed in order to load the plugin lang varia
 require_once dirname(__FILE__).'/config.php';
 $tool_name = get_lang('Videoconference');
 $tpl = new Template($tool_name);
-$om = new om_integration();
+$om = new openmeetings();
 
 if ($om->plugin_enabled) {
 

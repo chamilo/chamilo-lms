@@ -1,6 +1,6 @@
 <?php
 
-class openmeetingsPlugin extends Plugin
+class OpenMeetingsPlugin extends Plugin
 {
     public $is_course_plugin = true;
 
@@ -22,7 +22,7 @@ class openmeetingsPlugin extends Plugin
 
     function install()
     {
-        $table = Database::get_main_table('plugin_openmeeting');
+        $table = Database::get_main_table('plugin_openmeetings');
         $sql = "CREATE TABLE IF NOT EXISTS $table (
                 id INT unsigned NOT NULL auto_increment PRIMARY KEY,
                 c_id INT unsigned NOT NULL DEFAULT 0,
@@ -49,30 +49,30 @@ class openmeetingsPlugin extends Plugin
 
         //New settings
 
-        $sql = "DELETE FROM $t_settings WHERE variable = 'om_integration_tool_enable'";
+        $sql = "DELETE FROM $t_settings WHERE variable = 'openmeetings_tool_enable'";
         Database::query($sql);
-        $sql = "DELETE FROM $t_settings WHERE variable = 'om_integration_pass'";
+        $sql = "DELETE FROM $t_settings WHERE variable = 'openmeetings_pass'";
         Database::query($sql);
-        $sql = "DELETE FROM $t_settings WHERE variable = 'om_integration_user'";
+        $sql = "DELETE FROM $t_settings WHERE variable = 'openmeetings_user'";
         Database::query($sql);
-        $sql = "DELETE FROM $t_settings WHERE variable = 'om_integration_host'";
+        $sql = "DELETE FROM $t_settings WHERE variable = 'openmeetings_host'";
         Database::query($sql);
 
         //Old settings deleting just in case
-        $sql = "DELETE FROM $t_settings WHERE variable = 'om_plugin'";
+        $sql = "DELETE FROM $t_settings WHERE variable = 'openmeetings_plugin'";
         Database::query($sql);
-        $sql = "DELETE FROM $t_options WHERE variable  = 'om_plugin'";
+        $sql = "DELETE FROM $t_options WHERE variable  = 'openmeetings_plugin'";
         Database::query($sql);
-//        $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_plugin_host'";
+//        $sql = "DELETE FROM $t_settings WHERE variable = 'openmeetings_plugin_host'";
 //        Database::query($sql);
-//        $sql = "DELETE FROM $t_settings WHERE variable = 'bbb_plugin_salt'";
+//        $sql = "DELETE FROM $t_settings WHERE variable = 'openmeetings_plugin_salt'";
 //        Database::query($sql);
 
         //hack to get rid of Database::query warning (please add c_id...)
         $sql = "DELETE FROM $t_tool WHERE name = 'openmeetings' AND c_id = c_id";
         Database::query($sql);
 
-        $sql = "DROP TABLE IF EXISTS plugin_openmeeting";
+        $sql = "DROP TABLE IF EXISTS plugin_openmeetings";
         Database::query($sql);
 
         //Deleting course settings

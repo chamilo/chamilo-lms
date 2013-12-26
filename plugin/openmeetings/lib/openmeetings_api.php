@@ -3,11 +3,11 @@
 class OpenMeetingsAPI
 {
     private $_securitySalt;
-    private $_omServerBaseUrl;
+    private $_serverBaseUrl;
     function __construct()
     {
             $this->_securitySalt  = CONFIG_SECURITY_SALT;
-            $this->_omServerBaseUrl  = CONFIG_SERVER_BASE_URL;
+            $this->_serverBaseUrl  = CONFIG_OPENMEETINGS_SERVER_BASE_URL;
     }
     function getMeetingInfoArray($infoParams)
     {

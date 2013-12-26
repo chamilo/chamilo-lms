@@ -13,7 +13,7 @@ $plugin = openmeetingsPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 $tpl = new Template($tool_name);
 
-$om = new om_integration();
+$om = new openmeetings();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $teacher = $om->is_teacher();
@@ -71,7 +71,9 @@ if ($teacher) {
 }
 
 $meetings = $om->get_course_meetings();
-if (!empty($meetings))  $meetings = array_reverse($meetings);
+if (!empty($meetings)) {
+    $meetings = array_reverse($meetings);
+}
 
 $users_online = $meetings->participantCount;
 $status = !$meetings->isClosed;

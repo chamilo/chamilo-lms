@@ -1,6 +1,6 @@
 <div class ="row">
 
-{% if bbb_status == true %}
+{% if openmeetings_status == true %}
   {% if show_join_button == true %}
     <div class ="span12" style="text-align:center">
         <a href="{{ conference_url }}" target="_blank" class="btn btn-primary btn-large">

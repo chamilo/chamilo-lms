@@ -17,7 +17,7 @@ include_once 'services/getRoomById/getRoomById.class.php';
 /**
  * Open Meetings-Chamilo connector class
  */
-class openmeetings
+class OpenMeetings
 {
 
     var $url;
@@ -37,14 +37,14 @@ class openmeetings
     function __construct()
     {
         // initialize video server settings from global settings
-        $plugin = openmeetingsPlugin::create();
+        $plugin = OpenMeetingsPlugin::create();
 
         $om_plugin = $plugin->get('tool_enable');
         $om_host   = $plugin->get('host');
         $om_user   = $plugin->get('user');
         $om_pass   = $plugin->get('pass');
 
-        $this->table = Database::get_main_table('plugin_om_meeting');
+        $this->table = Database::get_main_table('plugin_openmeetings');
 
         if ($om_plugin) {
             $user_info = api_get_user_info();
@@ -54,11 +54,11 @@ class openmeetings
             $this->url = $om_host;
 
             // Setting OM api
-            define('CONFIG_OMUSER_SALT', $this->user);
-            define('CONFIG_OMPASS_SALT', $this->pass);
-            define('CONFIG_OMSERVER_BASE_URL', $this->url);
+            define('CONFIG_OPENMEETINGS_USER_SALT', $this->user);
+            define('CONFIG_OPENMEETINGS_PASS_SALT', $this->pass);
+            define('CONFIG_OPENMEETINGS_SERVER_BASE_URL', $this->url);
 
-            $this->api = new OpenMeetings();
+            $this->api = new OpenMeetingsAPI();
             $this->plugin_enabled = $om_plugin;
         }
     }
@@ -79,7 +79,7 @@ class openmeetings
         try {
             $objGetSession = new getSession();
             $objloginUser = new loginUser();
-            $urlWsdl = CONFIG_OMSERVER_BASE_URL . "/services/UserService?wsdl";
+            $urlWsdl = CONFIG_OPENMEETINGS_SERVER_BASE_URL . "/services/UserService?wsdl";
             $omServices = new SoapClient( $urlWsdl );
             //Verifying if there is already an active session
             if (empty($_SESSION['sessOpenMeeting'])) {
@@ -118,12 +118,12 @@ class openmeetings
         $roomtypes_id = $isModerated = ( $this->is_teacher() ) ? 1 : 2 ;
         $params['c_id'] = api_get_course_int_id();
         $course_name = 'COURSE_ID_' . $params['c_id'] .'_NAME_' . $params['meeting_name'];
-        $urlWsdl = CONFIG_OMSERVER_BASE_URL . "/services/RoomService?wsdl";
+        $urlWsdl = CONFIG_OPENMEETINGS_SERVER_BASE_URL . "/services/RoomService?wsdl";
 
         $objAddRoom->SID = $this->sessionId;
         $objAddRoom->name = $course_name;
         $objAddRoom->roomtypes_id = $roomtypes_id;
-        $objAddRoom->comment = 'Curso: ' . $params['meeting_name'] . ' Plugin for Chamilo';
+        $objAddRoom->comment = get_lang('Course').': ' . $params['meeting_name'] . ' Plugin for Chamilo';
         $objAddRoom->numberOfPartizipants = 40;
         $objAddRoom->ispublic = true;
         $objAddRoom->appointment = false;
@@ -178,10 +178,10 @@ class openmeetings
         $params = array( 'room_id' => $meetingid );
 
         $returnVal = $this->setUserObjectAndGenerateRoomHashByURLAndRecFlag( $params );
-        //$urlWithoutProtocol = str_replace("http://",  CONFIG_OMSERVER_BASE_URL);
+        //$urlWithoutProtocol = str_replace("http://",  CONFIG_OPENMEETINGS_SERVER_BASE_URL);
         //$imgWithoutProtocol = str_replace("http://", $_SESSION['_user']['avatar'] );
 
-        $iframe = CONFIG_OMSERVER_BASE_URL . "/?" .
+        $iframe = CONFIG_OPENMEETINGS_SERVER_BASE_URL . "/?" .
                 "secureHash=" . $returnVal /*.
                 '&username=FRAGOTE' .
                 '&firstname=DD' .
@@ -238,7 +238,7 @@ class openmeetings
         try {
             $result = $this->api->getMeetingInfoArray($params);
             if ($result == null) {
-                if ($this->debug) error_log("Failed to get any response. Maybe we can't contact the BBB server.");
+                if ($this->debug) error_log("Failed to get any response. Maybe we can't contact the OpenMeetings server.");
             } else {
                 return $result;
             }
@@ -256,7 +256,7 @@ class openmeetings
         $systemType = 'chamilo';
         $room_id = $params['room_id'];
 
-        $urlWsdl = CONFIG_OMSERVER_BASE_URL . "/services/UserService?wsdl";
+        $urlWsdl = CONFIG_OPENMEETINGS_SERVER_BASE_URL . "/services/UserService?wsdl";
         $omServices = new SoapClient( $urlWsdl );
         $objRec = new setUserObjectAndGenerateRecordingHashByURL();
 
@@ -286,7 +286,7 @@ class openmeetings
         $becomeModerator = ( $this->is_teacher() ? 1 : 0 );
         $allowRecording = 1; //Provisional
 
-        $urlWsdl = CONFIG_OMSERVER_BASE_URL . "/services/UserService?wsdl";
+        $urlWsdl = CONFIG_OPENMEETINGS_SERVER_BASE_URL . "/services/UserService?wsdl";
         $omServices = new SoapClient( $urlWsdl );
         $objRec = new setUserObjectAndGenerateRoomHashByURLAndRecFlag();
 
@@ -309,7 +309,7 @@ class openmeetings
     }
 
     /**
-     * Gets all the course meetings saved in the plugin_bbb_meeting table
+     * Gets all the course meetings saved in the plugin_openmeetings table
      * @return array Array of current open meeting rooms
      */
     function get_course_meetings()
@@ -320,22 +320,21 @@ class openmeetings
         $this->loginUser();
         $meeting_list = Database::select('*', $this->table, array('where' => array('c_id = ? ' => api_get_course_int_id())));
 
-        $urlWsdl = CONFIG_OMSERVER_BASE_URL . "/services/RoomService?wsdl";
-
+        $urlWsdl = CONFIG_OPENMEETINGS_SERVER_BASE_URL . "/services/RoomService?wsdl";
         $omServices = new SoapClient($urlWsdl);
         $objRoom = new getRoomById();
         $objCurrentUsers = new getRoomWithCurrentUsersById();
         $objRoom->SID = $objCurrentUsers->SID = $this->sessionId;
+
         foreach ($meeting_list as $meeting_db) {
             $objRoom->rooms_id = $objCurrentUsers->rooms_id = $meeting_db['id'];
             try {
-            $objRoomId = $omServices->getRoomById($objRoom);
-
-            if (empty($objRoomId->return)) {
-                Database::delete($this->table, "id = {$meeting_db['id']}");
-                continue;
-            }
-            $objCurUs = $omServices->getRoomWithCurrentUsersById($objCurrentUsers);
+                $objRoomId = $omServices->getRoomById($objRoom);
+                if (empty($objRoomId->return)) {
+                    Database::delete($this->table, "id = {$meeting_db['id']}");
+                    continue;
+                }
+                $objCurUs = $omServices->getRoomWithCurrentUsersById($objCurrentUsers);
             } catch  (SoapFault $e) {
                 echo $e->faultstring;
                 exit;
@@ -434,7 +433,7 @@ class openmeetings
 //                    'webVoiceConf' => ''    //    -- OPTIONAL - string
 //                );
 //                $returnVal = $this->setUserObjectAndGenerateRoomHashByURLAndRecFlag( array('room_id' => $meeting_db['id']) );
-//                $joinUrl = CONFIG_OMSERVER_BASE_URL . "?" .
+//                $joinUrl = CONFIG_OPENMEETINGS_SERVER_BASE_URL . "?" .
 //                           "secureHash=" . $returnVal;
 //
 //                $item['go_url'] = $joinUrl;
@@ -444,11 +443,17 @@ class openmeetings
         }
         return $new_meeting_list;
     }
-    function end_meeting($meetingId )
+
+    /**
+     * Send a command to the OpenMeetings server to close the meeting
+     * @param $meetingId
+     * @return int
+     */
+    function end_meeting($meetingId)
     {
         try {
             $this->loginUser();
-            $urlWsdl = CONFIG_OMSERVER_BASE_URL . "/services/RoomService?wsdl";
+            $urlWsdl = CONFIG_OPENMEETINGS_SERVER_BASE_URL . "/services/RoomService?wsdl";
             $omServices = new SoapClient( $urlWsdl );
             $objClose = new closeRoom();
             $objClose->SID = $this->sessionId;

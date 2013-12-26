@@ -29,7 +29,7 @@ $strings['ServerIsNotConfigured']  = "El servidor de videoconferencia no está c
 $strings['XUsersOnLine']        = "%s usuario(s) en la sala";
 
 $strings['host'] = 'Host de OpenMeetings';
-$strings['host_help'] = 'Este es el nombre del servidor donde su servidor OpenMeetings está corriendo. Puede ser localhost, una dirección IP (ej: 192.168.13.54) o un nombre de dominio (ej: mi.video.com).';
+$strings['host_help'] = 'Este es el nombre del servidor donde su servidor OpenMeetings está corriendo. Puede ser http://localhost:5080/openmeetings, una dirección IP (ej: http://192.168.13.54:5080/openmeetings) o un nombre de dominio (ej: http://mi.video.com:5080/openmeetings).';
 
 $strings['user'] = 'Usuario';
 $strings['user_help'] = 'Ingrese el usuario con el cual de conectará al servidor OpenMeetings';

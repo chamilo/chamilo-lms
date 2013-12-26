@@ -36,7 +36,7 @@ $strings['ServerIsNotConfigured']  = "Videoconference server is not configured";
 $strings['XUsersOnLine']        = "%s user(s) online";
 
 $strings['host'] = 'OpenMeetings host';
-$strings['host_help'] = 'This is the name of the server where your OpenMeeetings server is running. Might be localhost, an IP address (e.g. 192.168.13.54) or a domain name (e.g. my.video.com).';
+$strings['host_help'] = 'This is the full address of your OpenMeeetings server interface. Might be http://localhost:5080/openmeetings, an IP address (e.g. http://192.168.13.54:5080/openmeetings) or a domain name (e.g. http://my.video.com:5080/openmeetings).';
 
 $strings['salt'] = 'OpenMeetings salt';
 $strings['salt_help'] = 'This is the security key of your OpenMeetings server, which will allow your server to authentify the Chamilo installation. Refer to the OpenMeetings documentation to locate it. Try bbb-conf --salt';

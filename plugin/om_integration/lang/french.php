@@ -29,7 +29,7 @@ $strings['ServerIsNotConfigured']  = "Le serveur de vidéoconférence n'est pas 
 $strings['XUsersOnLine']        = "%s utilisateurs dans la salle";
 
 $strings['host'] = 'Hôte de OpenMeetings';
-$strings['host_help'] = "C'est le nom du serveur où le serveur de vidéoconférence a été habilité. Cela peut être localhost, une adresse IP (du genre 192.168.13.54) ou un nom de domaine (du genre ma.video.com).";
+$strings['host_help'] = "C'est le nom du serveur où le serveur de vidéoconférence a été habilité. Cela peut être http://localhost:5080/openmeetings, une adresse IP (du genre http://192.168.13.54:5080/openmeetings) ou un nom de domaine (du genre http://ma.videoconf.com:5080/openmeetings).";
 
 $strings['salt'] = 'Clef OpenMeetings';
 $strings['salt_help'] = "C'est la clef de sécurité de votre serveur OpenMeetings (appelée 'salt' en anglais) qui permet à votre serveur de vérifier l'identité de votre installation de Chamilo et ainsi l'autoriser à se connecter. Veuillez vous référer à la documentation de OpenMeetings pour la localiser, ou utilisez la commande 'bbb-conf --salt' si vous disposez d'un accès en ligne de commande au serveur de vidéoconférence.";

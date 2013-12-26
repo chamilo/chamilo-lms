@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$FeedbackDisplayOptions = "Manera en la cual se mostrará el comentario definido para cada pregunta. Esta opción define como un estudiante visualizará (o no) los comentarios (retro-alimentación) ingresados para cada alternativa en cada pregunta. Recomendamos evaluar las distintas opciones antes de invitar los estudiantes a tomar la prueba.";
 $ImportAikenQuizExplanationExample = "Este es el texto de la pregunta 1
 A. Respuesta 1
 B. Respuesta 2

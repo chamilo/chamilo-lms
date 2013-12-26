@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$FeedbackDisplayOptions = "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test. We recommend you try different options by editing your test options before having learners take it.";
 $ImportAikenQuizExplanationExample = "This is the text for question 1
 A. Answer 1
 B. Answer 2

@@ -960,7 +960,7 @@ class Exercise {
                 }
 
                 $radios_feedback[] = $form->createElement('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'),'2',array('id' =>'exerciseType_2'));
-                $form->addGroup($radios_feedback, null, get_lang('FeedbackType'), '');
+                $form->addGroup($radios_feedback, null, get_lang('FeedbackDisplayOptions'), '');
 
                 // Type of results display on the final page
                 $radios_results_disabled = array();

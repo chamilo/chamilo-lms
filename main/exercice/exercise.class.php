@@ -962,14 +962,7 @@ class Exercise {
                 $radios_feedback[] = $form->createElement('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'),'2',array('id' =>'exerciseType_2'));
                 $form->addGroup($radios_feedback, null, get_lang('FeedbackType'), '');
 
-                // test type
-                $radios = array();
-
-                $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
-                $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2', array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
-
-                $form->addGroup($radios, null, get_lang('QuestionsPerPage'), '');
-
+                // Type of results display on the final page
                 $radios_results_disabled = array();
                 $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
                 $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('DoNotShowScoreNorRightAnswer'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
@@ -977,6 +970,14 @@ class Exercise {
                 //$radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ExamModeWithFinalScoreShowOnlyFinalScoreWithCategoriesIfAvailable'),  '3', array('id'=>'result_disabled_3','onclick' => 'check_results_disabled()'));
 
                 $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '');
+
+                // Type of questions disposition on page
+                $radios = array();
+
+                $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
+                $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2', array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
+
+                $form->addGroup($radios, null, get_lang('QuestionsPerPage'), '');
 
             } else {
                 // if is Directfeedback but has not questions we can allow to modify the question type
@@ -992,19 +993,19 @@ class Exercise {
                     $radios_feedback[] = $form->createElement('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'),'2',array('id' =>'exerciseType_2'));
                     $form->addGroup($radios_feedback, null, get_lang('FeedbackType'));
 
-
                     //$form->addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
-                    // test type
-                    $radios = array();
-                    $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1');
-                    $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
-                    $form->addGroup($radios, null, get_lang('ExerciseType'));
-
                     $radios_results_disabled = array();
                     $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
                     $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('DoNotShowScoreNorRightAnswer'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
                     $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('OnlyShowScore'),  '2',array('id'=>'result_disabled_2','onclick' => 'check_results_disabled()'));
                     $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'),'');
+
+                    // Type of questions disposition on page
+                    $radios = array();
+                    $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1');
+                    $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
+                    $form->addGroup($radios, null, get_lang('ExerciseType'));
+
                 } else {
                     //Show options freeze
                     $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
@@ -1013,15 +1014,17 @@ class Exercise {
                     $result_disable_group = $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'),'');
                     $result_disable_group->freeze();
 
+                    //we force the options to the DirectFeedback exercisetype
+                    $form->addElement('hidden', 'exerciseFeedbackType', EXERCISE_FEEDBACK_TYPE_DIRECT);
+                    $form->addElement('hidden', 'exerciseType', ONE_PER_PAGE);
+                    
+                    // Type of questions disposition on page
                     $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
                     $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2', array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
 
                     $type_group = $form->addGroup($radios, null, get_lang('QuestionsPerPage'), '');
                     $type_group->freeze();
 
-                    //we force the options to the DirectFeedback exercisetype
-                    $form->addElement('hidden', 'exerciseFeedbackType', EXERCISE_FEEDBACK_TYPE_DIRECT);
-                    $form->addElement('hidden', 'exerciseType', ONE_PER_PAGE);
                 }
             }
 

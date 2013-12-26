@@ -6,6 +6,6 @@
 require_once '../../main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'plugin.class.php';
 
-require_once 'lib/om_integration.lib.php';
-require_once 'lib/om_integration_api.php';
-require_once 'lib/om_integration_plugin.class.php';
+require_once 'lib/openmeetings.lib.php';
+require_once 'lib/openmeetings_api.php';
+require_once 'lib/openmeetings_plugin.class.php';

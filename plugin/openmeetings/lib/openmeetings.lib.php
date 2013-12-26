@@ -66,7 +66,7 @@ class OpenMeetings
      * Checks whether a user is teacher in the current course
      * @return bool True if the user can be considered a teacher in this course, false otherwise
      */
-    function is_teacher()
+    function isTeacher()
     {
         return api_is_course_admin() || api_is_coach() || api_is_platform_admin();
     }
@@ -110,19 +110,19 @@ class OpenMeetings
      * Creating a Room for the meeting
     * @return bool True if the user is correct and false when is incorrect
     */
-    function create_meeting($params)
+    function createMeeting($params)
     {
         //$id = Database::insert($this->table, $params);
       try {
         $objAddRoom = new addRoomWithModerationAndExternalType();
-        $roomtypes_id = $isModerated = ( $this->is_teacher() ) ? 1 : 2 ;
+        $roomTypeId = $isModerated = ( $this->isTeacher() ) ? 1 : 2 ;
         $params['c_id'] = api_get_course_int_id();
         $course_name = 'COURSE_ID_' . $params['c_id'] .'_NAME_' . $params['meeting_name'];
         $urlWsdl = CONFIG_OPENMEETINGS_SERVER_BASE_URL . "/services/RoomService?wsdl";
 
         $objAddRoom->SID = $this->sessionId;
         $objAddRoom->name = $course_name;
-        $objAddRoom->roomtypes_id = $roomtypes_id;
+        $objAddRoom->roomtypes_id = $roomTypeId;
         $objAddRoom->comment = get_lang('Course').': ' . $params['meeting_name'] . ' Plugin for Chamilo';
         $objAddRoom->numberOfPartizipants = 40;
         $objAddRoom->ispublic = true;
@@ -143,7 +143,7 @@ class OpenMeetings
 
             Database::insert($this->table, $params);
 
-            $this->join_meeting($meetingId);
+            $this->joinMeeting($meetingId);
         } else {
             return -1;
         }
@@ -164,18 +164,18 @@ class OpenMeetings
      * @assert ('') === false
      * @assert ('abcdefghijklmnopqrstuvwxyzabcdefghijklmno') === false
      */
-    function join_meeting($meetingid)
+    function joinMeeting($meetingId)
     {
-        if (empty($meetingid)) {
+        if (empty($meetingId)) {
             return false;
         }
-        $meeting_data = Database::select('*', $this->table, array('where' => array('id = ? AND status = 1 ' => $meetingid)), 'first');
+        $meetingData = Database::select('*', $this->table, array('where' => array('id = ? AND status = 1 ' => $meetingId)), 'first');
 
-        if (empty($meeting_data)) {
-            if ($this->debug) error_log("meeting does not exist: $meetingid ");
+        if (empty($meetingData)) {
+            if ($this->debug) error_log("meeting does not exist: $meetingId ");
             return false;
         }
-        $params = array( 'room_id' => $meetingid );
+        $params = array( 'room_id' => $meetingId );
 
         $returnVal = $this->setUserObjectAndGenerateRoomHashByURLAndRecFlag( $params );
         //$urlWithoutProtocol = str_replace("http://",  CONFIG_OPENMEETINGS_SERVER_BASE_URL);
@@ -203,7 +203,7 @@ class OpenMeetings
      * @return bool True if server is running, false otherwise
      * @assert () === false
      */
-    function is_server_running()
+    function isServerRunning()
     {
         return true;
     }
@@ -211,19 +211,19 @@ class OpenMeetings
      * Gets the password for a specific meeting for the current user
      * @return string A moderator password if user is teacher, or the course code otherwise
      */
-    function get_user_meeting_password()
+    function getMeetingUserPassword()
     {
-        if ($this->is_teacher()) {
-            return $this->get_mod_meeting_password();
+        if ($this->isTeacher()) {
+            return $this->getMeetingModerationPassword();
         } else {
             return api_get_course_id();
         }
     }
     /**
      * Generated a moderator password for the meeting
-     * @return string A password for the moderation of the videoconference
+     * @return string A password for the moderation of the video conference
      */
-    function get_mod_meeting_password()
+    function getMeetingModerationPassword()
     {
         return api_get_course_id().'mod';
     }
@@ -233,7 +233,7 @@ class OpenMeetings
      * @return mixed Array of information on success, false on error
      * @assert (array()) === false
      */
-    function get_meeting_info($params)
+    function getMeetingInfo($params)
     {
         try {
             $result = $this->api->getMeetingInfoArray($params);
@@ -247,6 +247,11 @@ class OpenMeetings
         }
         return false;
     }
+
+    /**
+     * @param array $params Array of parameters
+     * @return mixed
+     */
     function setUserObjectAndGenerateRecordingHashByURL( $params )
     {
         $username = $_SESSION['_user']['username'];
@@ -272,6 +277,10 @@ class OpenMeetings
         return $orFn->return;
      }
 
+    /**
+     * @param Array $params Array of parameters
+     * @return mixed
+     */
     function setUserObjectAndGenerateRoomHashByURLAndRecFlag( $params )
     {
 
@@ -283,7 +292,7 @@ class OpenMeetings
         $userId = $_SESSION['_user']['user_id'];
         $systemType = 'Chamilo';
         $room_id = $params['room_id'];
-        $becomeModerator = ( $this->is_teacher() ? 1 : 0 );
+        $becomeModerator = ( $this->isTeacher() ? 1 : 0 );
         $allowRecording = 1; //Provisional
 
         $urlWsdl = CONFIG_OPENMEETINGS_SERVER_BASE_URL . "/services/UserService?wsdl";
@@ -312,11 +321,11 @@ class OpenMeetings
      * Gets all the course meetings saved in the plugin_openmeetings table
      * @return array Array of current open meeting rooms
      */
-    function get_course_meetings()
+    function getCourseMeetings()
     {
         $new_meeting_list = array();
         $item = array();
-        $pass = $this->get_user_meeting_password();
+        $pass = $this->getMeetingUserPassword();
         $this->loginUser();
         $meeting_list = Database::select('*', $this->table, array('where' => array('c_id = ? ' => api_get_course_int_id())));
 
@@ -370,8 +379,8 @@ class OpenMeetings
             $meeting_om = $current_room;
 
             if (empty( $meeting_om )) {
-                if ($meeting_db['status'] == 1 && $this->is_teacher()) {
-                    $this->end_meeting($meeting_db['id']);
+                if ($meeting_db['status'] == 1 && $this->isTeacher()) {
+                    $this->endMeeting($meeting_db['id']);
                 }
             } else {
                 $meeting_om['add_to_calendar_url'] = api_get_self().'?action=add_to_calendar&id='.$meeting_db['id'].'&start='.api_strtotime($meeting_db['startTime']);
@@ -449,7 +458,7 @@ class OpenMeetings
      * @param $meetingId
      * @return int
      */
-    function end_meeting($meetingId)
+    function endMeeting($meetingId)
     {
         try {
             $this->loginUser();

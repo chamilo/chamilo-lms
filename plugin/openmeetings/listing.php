@@ -16,7 +16,7 @@ $tpl = new Template($tool_name);
 $om = new openmeetings();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
-$teacher = $om->is_teacher();
+$teacher = $om->isTeacher();
 
 api_protect_course_script(true);
 $message = null;
@@ -56,7 +56,7 @@ if ($teacher) {
             }
             break;
         case 'end':
-            $om->end_meeting($_GET['id']);
+            $om->endMeeting($_GET['id']);
             $message = Display::return_message(get_lang('MeetingClosed').'<br />'.get_lang('MeetingClosedComment'), 'success', false);
             break;
         case 'publish':
@@ -70,7 +70,7 @@ if ($teacher) {
     }
 }
 
-$meetings = $om->get_course_meetings();
+$meetings = $om->getCourseMeetings();
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
 }

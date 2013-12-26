@@ -15,13 +15,13 @@ $om = new openmeetings();
 
 if ($om->plugin_enabled) {
 
-    if ($om->is_server_running()) {
+    if ($om->isServerRunning()) {
 
         if (isset($_GET['launch']) && $_GET['launch'] == 1) {
 
             $meeting_params = array();
             $meeting_params['meeting_name'] = api_get_course_id();
-            $meetings = $om->get_course_meetings();
+            $meetings = $om->getCourseMeetings();
 
             // Select the meeting with more participantCount.
             $selectedMeeting = array();
@@ -37,17 +37,17 @@ if ($om->plugin_enabled) {
 
             if ($om->loginUser() && !empty($selectedMeeting)) {
             //if (false/*$om->meeting_exists($meeting_params['meeting_name'])*/) {
-                $url = $om->join_meeting($selectedMeeting['id']);
+                $url = $om->joinMeeting($selectedMeeting['id']);
                 if ($url) {
                     header('location: '.$url);
                     exit;
                 }
             } else {
 
-                if ( $om->is_teacher() && $om->loginUser()) {
+                if ( $om->isTeacher() && $om->loginUser()) {
 
                     //$url =
-                    $om->create_meeting($meeting_params);
+                    $om->createMeeting($meeting_params);
                     //header('location: '.$url);
                     exit;
                 } else {

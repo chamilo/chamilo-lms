@@ -5434,9 +5434,9 @@ class learnpath
 
         // Change the path of mp3 to absolute.
 
-        // The first regexp deals with ../../../ urls.
+        // The first regexp deals with :// urls.
         if (strpos($content, api_get_path(WEB_COURSE_PATH)) !== false) {
-            $content = preg_replace("|(flashvars=\"file=)(\.+/)+|", "$1" . api_get_path(REL_COURSE_PATH) . $_course['path'] . '/document/', $content);
+            $content = preg_replace("|(flashvars=\"file=)([^:/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $_course['path'] . '/document/', $content);
             // The second regexp deals with audio/ urls.
             $content = preg_replace("|(flashvars=\"file=)([^/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $_course['path'] . '/document/$2/', $content);
         }

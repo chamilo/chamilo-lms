@@ -1,6 +1,6 @@
 <?php
 
-class OpenMeetings
+class OpenMeetingsAPI
 {
     private $_securitySalt;
     private $_omServerBaseUrl;

@@ -1,6 +1,6 @@
 <?php
 
-class om_integrationPlugin extends Plugin
+class openmeetingsPlugin extends Plugin
 {
     public $is_course_plugin = true;
 

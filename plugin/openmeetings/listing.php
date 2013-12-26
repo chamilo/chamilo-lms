@@ -9,7 +9,7 @@
 
 $course_plugin = 'openmeetings'; //needed in order to load the plugin lang variables
 require_once dirname(__FILE__).'/config.php';
-$plugin = om_integrationPlugin::create();
+$plugin = openmeetingsPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 $tpl = new Template($tool_name);
 
@@ -86,7 +86,7 @@ $tpl->assign('meetings', $meetings);
 $conference_url = api_get_path(WEB_PLUGIN_PATH).'openmeetings/start.php?launch=1&'.api_get_cidreq();
 $tpl->assign('conference_url', $conference_url);
 $tpl->assign('users_online', $users_online);
-$tpl->assign('bbb_status', $status);
+$tpl->assign('openmeetings_status', $status);
 $tpl->assign('show_join_button', $show_join_button);
 
 //$tpl->assign('actions', $actions);

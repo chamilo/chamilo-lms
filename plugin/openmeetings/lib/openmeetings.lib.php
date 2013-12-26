@@ -17,7 +17,7 @@ include_once 'services/getRoomById/getRoomById.class.php';
 /**
  * Open Meetings-Chamilo connector class
  */
-class om_integration
+class openmeetings
 {
 
     var $url;
@@ -37,7 +37,7 @@ class om_integration
     function __construct()
     {
         // initialize video server settings from global settings
-        $plugin = om_integrationPlugin::create();
+        $plugin = openmeetingsPlugin::create();
 
         $om_plugin = $plugin->get('tool_enable');
         $om_host   = $plugin->get('host');

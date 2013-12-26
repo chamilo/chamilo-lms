@@ -10,4 +10,4 @@
  * Queries
  */
 require_once dirname(__FILE__).'/config.php';
-om_integrationPlugin::create()->uninstall();
+openmeetingsPlugin::create()->uninstall();

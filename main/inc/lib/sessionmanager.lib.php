@@ -268,12 +268,12 @@ class SessionManager
         $sql = "SELECT count(id) as total_rows FROM (
                 SELECT
                  IF (
-					(s.date_start <= '$today' AND '$today' < s.date_end) OR
+					(s.date_start <= '$today' AND '$today' <= s.date_end) OR
                     (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start,'".$today."' ".") <= s.nb_days_access_before_beginning) OR
                     (s.nb_days_access_after_end > 0 AND DATEDIFF('".$today."',s.date_end) <= s.nb_days_access_after_end) OR
                     (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
 					(s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
-					('$today' < s.date_end AND '0000-00-00' = s.date_start)
+					('$today' <= s.date_end AND '0000-00-00' = s.date_start)
 				, 1, 0)
 				as session_active,
 				s.id,
@@ -294,12 +294,12 @@ class SessionManager
                 $sql = "SELECT count(id) as total_rows FROM (
                 SELECT
                   IF (
-					(s.date_start <= '$today' AND '$today' < s.date_end) OR
+					(s.date_start <= '$today' AND '$today' <= s.date_end) OR
                     (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start,'".$today."' ".") <= s.nb_days_access_before_beginning) OR
                     (s.nb_days_access_after_end > 0 AND DATEDIFF('".$today."',s.date_end) <= s.nb_days_access_after_end) OR
                     (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
 					(s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
-					('$today' < s.date_end AND '0000-00-00' = s.date_start)
+					('$today' <= s.date_end AND '0000-00-00' = s.date_start)
 				, 1, 0)
 				as session_active,
 				s.id
@@ -382,12 +382,12 @@ class SessionManager
 
 		$select = "SELECT * FROM (SELECT
                 IF (
-					(s.date_start <= '$today' AND '$today' < s.date_end) OR
+					(s.date_start <= '$today' AND '$today' <= s.date_end) OR
                     (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start,'".$today."' ".") <= s.nb_days_access_before_beginning) OR
                     (s.nb_days_access_after_end > 0 AND DATEDIFF('".$today."',s.date_end) <= s.nb_days_access_after_end) OR
                     (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
 					(s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
-					('$today' < s.date_end AND '0000-00-00' = s.date_start)
+					('$today' <= s.date_end AND '0000-00-00' = s.date_start)
 				, 1, 0)
 				as session_active,
 				s.name,

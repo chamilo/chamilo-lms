@@ -38,22 +38,21 @@ class CourseHomeController extends CommonController
 
         $result = $this->autolaunch();
 
-        $show_autolaunch_lp_warning = $result['show_autolaunch_lp_warning'];
-        $show_autolaunch_exercise_warning = $result['show_autolaunch_exercise_warning'];
+        $showAutoLaunchLpWarning = $result['show_autolaunch_lp_warning'];
+        $showAutoLaunchExerciseWarning = $result['show_autolaunch_exercise_warning'];
 
-        if ($show_autolaunch_lp_warning) {
+        if ($showAutoLaunchLpWarning) {
             $this->getTemplate()->assign(
                 'lp_warning',
                 Display::return_message(get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP'), 'warning')
             );
         }
-        if ($show_autolaunch_exercise_warning) {
+        if ($showAutoLaunchExerciseWarning) {
             $this->getTemplate()->assign(
                 'exercise_warning',
                 Display::return_message(get_lang('TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise'), 'warning')
             );
         }
-
         if ($this->isCourseTeacher()) {
             $editIcons = Display::url(
                 Display::return_icon('edit.png'),
@@ -69,17 +68,6 @@ class CourseHomeController extends CommonController
             $this->getRequest()->getSession()->set('coursesAlreadyVisited', $coursesAlreadyVisited);
         }
 
-        $introduction = Display::return_introduction_section(
-            $this->get('url_generator'),
-            TOOL_COURSE_HOMEPAGE,
-            array(
-                'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
-                'CreateDocumentDir'    => 'document/',
-                'BaseHref'             => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/'
-            )
-        );
-
-        $this->getTemplate()->assign('introduction_text', $introduction);
         $this->getRequest()->getSession()->remove('toolgroup');
         $this->getRequest()->getSession()->remove('_gid');
 
@@ -104,7 +92,16 @@ class CourseHomeController extends CommonController
         }
 
         $result = require_once api_get_path(SYS_CODE_PATH).'course_home/'.$script;
-        $this->getTemplate()->assign('icons', $result);
+        $toolList = $result['tool_list'];
+        $this->getTemplate()->assign('icons', $result['content']);
+
+        $introduction = Display::return_introduction_section(
+            $this->get('url_generator'),
+            TOOL_COURSE_HOMEPAGE,
+            $toolList
+        );
+
+        $this->getTemplate()->assign('introduction_text', $introduction);
 
         if (api_get_setting('show_session_data') == 'true' && $sessionId) {
             $sessionInfo = \CourseHome::show_session_data($sessionId);
@@ -121,7 +118,7 @@ class CourseHomeController extends CommonController
      */
     private function autolaunch()
     {
-        $show_autolaunch_exercise_warning = false;
+        $showAutoLaunchExerciseWarning = false;
 
         // Exercise auto-launch
         $auto_launch = api_get_course_setting('enable_exercise_auto_launch');
@@ -131,7 +128,7 @@ class CourseHomeController extends CommonController
             //Exercise list
             if ($auto_launch == 2) {
                 if (api_is_platform_admin() || api_is_allowed_to_edit()) {
-                    $show_autolaunch_exercise_warning = true;
+                    $showAutoLaunchExerciseWarning = true;
                 } else {
                     $session_key = 'exercise_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                     if (!isset($_SESSION[$session_key])) {
@@ -164,7 +161,7 @@ class CourseHomeController extends CommonController
                     $data = Database::fetch_array($result,'ASSOC');
                     if (!empty($data['iid'])) {
                         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
-                            $show_autolaunch_exercise_warning = true;
+                            $showAutoLaunchExerciseWarning = true;
                         } else {
                             $session_key = 'exercise_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                             if (!isset($_SESSION[$session_key])) {
@@ -182,14 +179,14 @@ class CourseHomeController extends CommonController
         }
 
         /* Auto launch code */
-        $show_autolaunch_lp_warning = false;
+        $showAutoLaunchLpWarning = false;
         $auto_launch = api_get_course_setting('enable_lp_auto_launch');
         if (!empty($auto_launch)) {
             $session_id = api_get_session_id();
             //LP list
             if ($auto_launch == 2) {
                 if (api_is_platform_admin() || api_is_allowed_to_edit()) {
-                    $show_autolaunch_lp_warning = true;
+                    $showAutoLaunchLpWarning = true;
                 } else {
                     $session_key = 'lp_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                     if (!isset($_SESSION[$session_key])) {
@@ -222,7 +219,7 @@ class CourseHomeController extends CommonController
                     $lp_data = Database::fetch_array($result,'ASSOC');
                     if (!empty($lp_data['id'])) {
                         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
-                            $show_autolaunch_lp_warning = true;
+                            $showAutoLaunchLpWarning = true;
                         } else {
                             $session_key = 'lp_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                             if (!isset($_SESSION[$session_key])) {
@@ -240,8 +237,8 @@ class CourseHomeController extends CommonController
         }
 
         return array(
-            'show_autolaunch_exercise_warning' => $show_autolaunch_exercise_warning,
-            'show_autolaunch_lp_warning' => $show_autolaunch_lp_warning
+            'show_autolaunch_exercise_warning' => $showAutoLaunchExerciseWarning,
+            'show_autolaunch_lp_warning' => $showAutoLaunchLpWarning
         );
     }
 

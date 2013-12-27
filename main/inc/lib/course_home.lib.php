@@ -462,7 +462,7 @@ class CourseHome
         $check = false;
 
         foreach ($list as $line) {
-            //Admin can see all tools even if the course_hide_tools configuration is set
+            // Admin can see all tools even if the course_hide_tools configuration is set
             if ($is_platform_admin) {
                 continue;
             }
@@ -576,10 +576,10 @@ class CourseHome
      * Displays the tools of a certain category.
      * @param Symfony\Component\Routing\RouterInterface $urlGenerator
      * @param array List of tools as returned by get_tools_category()
-     * @param   int rows
-     * @return void
+     * @param bool rows
+     * @return string
      */
-    public static function show_tools_category($urlGenerator, $all_tools_list, $rows = false)
+    public static function show_tools_category($urlGenerator, $toolList, $rows = false)
     {
         $rowDiv =  '<div class="row">';
         $theme = api_get_setting('homepage_view');
@@ -587,19 +587,19 @@ class CourseHome
         if ($theme == 'vertical_activity') {
             //ordering by get_lang name
             $order_tool_list = array();
-            if (is_array($all_tools_list) && count($all_tools_list)>0) {
-                foreach ($all_tools_list as $key => $new_tool) {
+            if (is_array($toolList) && count($toolList)>0) {
+                foreach ($toolList as $key => $new_tool) {
                     $tool_name = self::translate_tool_name($new_tool);
                     $order_tool_list [$key]= $tool_name;
                 }
                 natsort($order_tool_list);
                 $my_temp_tool_array = array();
                 foreach ($order_tool_list as $key => $new_tool) {
-                    $my_temp_tool_array[] = $all_tools_list[$key];
+                    $my_temp_tool_array[] = $toolList[$key];
                 }
-                $all_tools_list = $my_temp_tool_array;
+                $toolList = $my_temp_tool_array;
             } else {
-                $all_tools_list = array();
+                $toolList = array();
             }
         }
         $courseInfo = api_get_course_info();
@@ -609,13 +609,12 @@ class CourseHome
 
         $session_id = api_get_session_id();
 
-        $i = 0;
         $items = array();
         $app_plugin = new AppPlugin();
 
-        if (isset($all_tools_list)) {
+        if (isset($toolList)) {
             $lnk = '';
-            foreach ($all_tools_list as & $tool) {
+            foreach ($toolList as & $tool) {
                 $item = array();
 
                 $tool['original_link'] = $tool['link'];
@@ -629,11 +628,7 @@ class CourseHome
                 }
 
                 if ($tool['image'] == 'scormbuilder.gif') {
-                    // display links to lp only for current session
-                    /*if ($session_id != $tool['session_id']) {
-                        continue;
-                    }*/
-                    // check if the published learnpath is visible for student
+                    // Check if the published learnpath is visible for student
                     $published_lp_id = self::get_published_lp_id_from_link($tool['link']);
                     if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($published_lp_id, api_get_user_id())) {
                         continue;
@@ -816,18 +811,13 @@ class CourseHome
                 $item['icon']       = Display::url($icon, $tool_link_params['href'], $tool_link_params);
                 $item['tool']       = $tool;
                 $item['name']       = $tool_name;
-
                 $tool_link_params['id'] = 'is'.$tool_link_params['id'];
                 $item['link']       = Display::url($tool_name.$session_img, $tool_link_params['href'], $tool_link_params);
-
                 $items[] = $item;
-
-                $i++;
             } // end of foreach
         }
 
         $i = 0;
-
         $html = '';
         $counter = 0;
 
@@ -927,7 +917,11 @@ class CourseHome
                 $i++;
             }
         }
-        return $html;
+
+        return array(
+            'content' => $html,
+            'tool_list' => $items
+        );
     }
 
     /**
@@ -1178,6 +1172,29 @@ class CourseHome
     public static function getCustomIconPath($courseInfo)
     {
         return api_get_path(WEB_DATA_COURSE_PATH).$courseInfo['directory'].'/upload/course_home_icons/';
+    }
+
+    /**
+     * @param string $text
+     * @param array $toolList
+     * @return string
+     */
+    public static function replaceTextWithToolUrls($text, $toolList)
+    {
+        if (empty($toolList)) {
+            return $text;
+        }
+
+        foreach ($toolList as $tool) {
+            if (!isset($tool['icon'])) {
+                continue;
+            }
+            $toolName = $tool['tool']['name'];
+            $search = array("{{ ".$toolName." }}", "((".$toolName."}}");
+            $text = str_replace($search, $tool['icon'], $text);
+        }
+
+        return $text;
 
     }
 }

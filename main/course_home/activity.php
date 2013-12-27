@@ -28,38 +28,48 @@ $urlGenerator = $app['url_generator'];
 $content = null;
 
 // Start of tools for CourseAdmins (teachers/tutors)
-
+$totalList = array();
 if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, true)) {
-    $my_list = CourseHome::get_tools_category(TOOL_AUTHORING);
-	$items = CourseHome::show_tools_category($urlGenerator, $my_list);
-    $content .= return_block(get_lang('Authoring'), $items);
+    $list = CourseHome::get_tools_category(TOOL_AUTHORING);
+	$result = CourseHome::show_tools_category($urlGenerator, $list);
+    $content .= return_block(get_lang('Authoring'), $result['content']);
+    $totalList = $result['tool_list'];
 
-    $my_list = CourseHome::get_tools_category(TOOL_INTERACTION);
+    $list = CourseHome::get_tools_category(TOOL_INTERACTION);
     $list2 = CourseHome::get_tools_category(TOOL_COURSE_PLUGIN);
+    $list = array_merge($list, $list2);
+    $result =  CourseHome::show_tools_category($urlGenerator, $list);
+    $totalList = array_merge($totalList, $result['tool_list']);
 
-    $my_list = array_merge($my_list, $list2);
-    $items =  CourseHome::show_tools_category($urlGenerator, $my_list);
+    $content .= return_block(get_lang('Interaction'), $result['content']);
 
-    $content .= return_block(get_lang('Interaction'), $items);
+    $list = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
+    $totalList = array_merge($totalList, $list);
+    $result = CourseHome::show_tools_category($urlGenerator, $list);
 
-    $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
-    $items = CourseHome::show_tools_category($urlGenerator, $my_list);
+    $totalList = array_merge($totalList, $result['tool_list']);
 
-    $content .= return_block(get_lang('Administration'), $items);
+    $content .= return_block(get_lang('Administration'), $result['content']);
 
 } elseif (api_is_coach()) {
 
     $content .=  '<div class="row">';
-    $my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
-    $content .= CourseHome::show_tools_category($urlGenerator, $my_list);
+    $list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
+    $content .= CourseHome::show_tools_category($urlGenerator, $result['content']);
+    $totalList = array_merge($totalList, $result['tool_list']);
     $content .= '</div>';
 } else {
-	$my_list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
-	if (count($my_list) > 0) {
+    $list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
+    if (count($list) > 0) {
         $content .= '<div class="row">';
-        $content .= CourseHome::show_tools_category($urlGenerator, $my_list);
+        $result = CourseHome::show_tools_category($urlGenerator, $list);
+        $content .= $result['content'];
+        $totalList = array_merge($totalList, $result['tool_list']);
         $content .= '</div>';
-	}
+    }
 }
 
-return $content;
+return array(
+    'content' => $content,
+    'tool_list' => $totalList
+);

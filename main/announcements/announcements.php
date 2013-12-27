@@ -647,9 +647,11 @@ if ($display_form) {
 		echo '		</div>
 					</div>';
 
-        echo '<div class="control-group"><div class="controls">';
-        echo '<label class="checkbox" ><input name="send_to_users_in_session" type="checkbox" />'.get_lang('SendToUsersInSessions').'</label>';
-        echo '</div></div>';
+        if (api_get_session_id() == 0) {
+            echo '<div class="control-group"><div class="controls">';
+            echo '<label class="checkbox" ><input name="send_to_users_in_session" type="checkbox" />'.get_lang('SendToUsersInSessions').'</label>';
+            echo '</div></div>';
+        }
 
 		if (!isset($announcement_to_modify) ) $announcement_to_modify ='';
 

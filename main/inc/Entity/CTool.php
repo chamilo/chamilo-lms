@@ -567,12 +567,14 @@ class CTool
     }
 
     /**
+     * Creates a gray icon.
      * @param \Imagine\Image\ImagineInterface $imagine
      * @return bool
      */
     public function createGrayIcon($imagine)
     {
-        if (empty($this->getCustomIcon())) {
+        $customIcon = $this->getCustomIcon();
+        if (empty($customIcon)) {
             return false;
         }
         if (file_exists($this->getAbsolutePath())) {
@@ -586,6 +588,10 @@ class CTool
         }
     }
 
+    /**
+     * Replace the $this->image png extension to gif
+     * @return string
+     */
     public function imageGifToPng()
     {
         return str_replace('.gif', '.png', $this->getImage());

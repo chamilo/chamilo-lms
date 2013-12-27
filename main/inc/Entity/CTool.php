@@ -530,22 +530,36 @@ class CTool
         return $this->sessionId;
     }
 
+    /**
+     * @return string
+     */
     public function getCustomIcon()
     {
         return $this->customIcon;
     }
 
+    /**
+     * @param string $customIcon
+     * @return $this
+     */
     public function setCustomIcon($customIcon)
     {
         $this->customIcon = $customIcon;
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
     }
 
+    /**
+     * @param string $description
+     * @return $this
+     */
     public function setDescription($description)
     {
         $this->description = $description;

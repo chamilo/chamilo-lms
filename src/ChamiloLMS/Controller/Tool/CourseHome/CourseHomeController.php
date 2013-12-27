@@ -422,7 +422,7 @@ class CourseHomeController extends CommonController
         if (!$itemFromDatabase) {
             $this->createNotFoundException();
         }
-
+        /** @var CTool $item */
         $item = clone $itemFromDatabase;
         $item->setId(null);
         $item->setSessionId($sessionId);
@@ -443,8 +443,8 @@ class CourseHomeController extends CommonController
             $entityManager = $this->getManager();
             $entityManager->persist($item);
             $entityManager->flush();
-
-            if (!empty($item->getCustomIcon())) {
+            $customIcon = $item->getCustomIcon();
+            if (!empty($customIcon)) {
                 $item->createGrayIcon($this->get('imagine'));
             }
 
@@ -484,7 +484,8 @@ class CourseHomeController extends CommonController
             $entityManager->persist($item);
             $entityManager->flush();
 
-            if (!empty($item->getCustomIcon())) {
+            $customIcon = $item->getCustomIcon();
+            if (!empty($customIcon)) {
                 $item->createGrayIcon($this->get('imagine'));
             }
 

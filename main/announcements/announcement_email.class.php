@@ -133,7 +133,8 @@ class AnnouncementEmail
      *
      * @return array
      */
-    public function sent_to() {
+    public function sent_to()
+    {
         $sent_to = $this->sent_to_info();
         $users = $sent_to['users'];
         $users = $users ? $users : array();
@@ -247,7 +248,8 @@ class AnnouncementEmail
     /**
      * Send emails to users.
      */
-    public function send() {
+    public function send($sendToUsersInSession = false)
+    {
         $sender = $this->sender();
         $subject = $this->subject();
         $message = $this->message();
@@ -257,6 +259,21 @@ class AnnouncementEmail
 
         foreach ($users as $user) {
             MessageManager::send_message_simple($user['user_id'], $subject, $message, $sender['user_id']);
+        }
+
+        if ($sendToUsersInSession) {
+            $sessionList = SessionManager::get_session_by_course($this->course['code']);
+            if (!empty($sessionList)) {
+                foreach ($sessionList as $sessionInfo) {
+                    $sessionId = $sessionInfo['id'];
+                    $userList = CourseManager::get_user_list_from_course_code($this->course['code'], $sessionId);
+                    if (!empty($userList)) {
+                        foreach ($userList as $user) {
+                            MessageManager::send_message_simple($user['user_id'], $subject, $message, $sender['user_id']);
+                        }
+                    }
+                }
+            }
         }
         $this->log_mail_sent();
     }

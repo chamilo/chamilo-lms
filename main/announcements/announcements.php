@@ -366,7 +366,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
                 /*		MAIL FUNCTION	*/
                 if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
-                    AnnouncementManager::send_email($id);
+                    AnnouncementManager::send_email($id, $sendToUsersInSession);
                 }
 				$message = get_lang('AnnouncementModified');
 			}
@@ -386,7 +386,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
                 /*		MAIL FUNCTION	*/
                 if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
-                    AnnouncementManager::send_email($insert_id);
+                    AnnouncementManager::send_email($insert_id, $sendToUsersInSession);
                 }
 
 			} // end condition token

@@ -472,8 +472,6 @@ class AnnouncementManager {
             // the message is sent to everyone, so we set the group to 0
             api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", api_get_user_id(), '0');
         }
-
-
     }
 
     /**
@@ -1177,9 +1175,10 @@ class AnnouncementManager {
         //api_item_property_update($_course, 'announcement_attachment',  $id,'AnnouncementAttachmentDeleted', api_get_user_id());
     }
 
-    public static function send_email($annoucement_id) {
+    public static function send_email($annoucement_id, $sendToUsersInSession = false)
+    {
         $email = AnnouncementEmail::create(null, $annoucement_id);
-        $email->send();
+        $email->send($sendToUsersInSession);
     }
 
 }

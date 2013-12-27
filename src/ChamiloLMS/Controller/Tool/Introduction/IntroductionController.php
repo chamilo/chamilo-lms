@@ -45,7 +45,10 @@ class IntroductionController extends CommonController
 			$content = $values['content'];
 
             $sql = "REPLACE $TBL_INTRODUCTION
-                    SET c_id = $courseId, id='$tool', intro_text='".\Database::escape_string($content)."', session_id='".intval($sessionId)."'";
+                    SET c_id = $courseId,
+                        id = '$tool',
+                        intro_text='".\Database::escape_string($content)."',
+                        session_id='".intval($sessionId)."'";
             \Database::query($sql);
             $message = \Display::return_message(get_lang('IntroductionTextUpdated'), 'confirmation', false);
         } else {

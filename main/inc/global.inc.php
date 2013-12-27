@@ -570,9 +570,13 @@ $app->before(
             $app['template']->assign('course', $course);
 
             $sessionId = $request->get('id_session');
+
+            if (empty($sessionId)) {
+                $sessionId = api_get_session_id();
+            }
+
             $session = $app['orm.em']->getRepository('Entity\Session')->findOneById($sessionId);
             $app['course_session'] = $session;
-
             $app['template']->assign('course_session', $session);
         } else {
             $app['course'] = null;

@@ -412,7 +412,7 @@ class CourseHome
         // Condition for the session
         $session_id 			= api_get_session_id();
         $course_id              = api_get_course_int_id();
-        $condition_session 		= api_get_session_condition($session_id, true, true);
+        $condition_session = api_get_session_condition($session_id, true, true);
 
         $studentView = isset($_SESSION['studentview']) ? $_SESSION['studentview'] : null;
 
@@ -475,10 +475,10 @@ class CourseHome
         while ($temp_row = Database::fetch_assoc($result)) {
             if ($check) {
                 if (!in_array($temp_row['name'], $hide_list)) {
-                    $all_tools_list[] = $temp_row;
+                    $all_tools_list[$temp_row['name']] = $temp_row;
                 }
             } else {
-                $all_tools_list[] = $temp_row;
+                $all_tools_list[$temp_row['name']] = $temp_row;
             }
         }
 

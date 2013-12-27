@@ -14,6 +14,21 @@ use ChamiloLMS\Controller\BaseController;
  */
 class CommonController extends BaseController
 {
+    /**
+     * @return bool
+     */
+    public function isCourseTeacher()
+    {
+        $course = $this->getCourse();
+        if (!$course) {
+            return false;
+        } else {
+            $course->getId();
+            $role = "ROLE_TEACHER_COURSE_".$course->getId().'_SESSION_0';
+            //var_dump($role);
+            return $this->getSecurity()->isGranted($role);
+        }
+    }
 
     /**
      * {@inheritdoc}

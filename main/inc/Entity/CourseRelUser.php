@@ -45,7 +45,7 @@ class CourseRelUser
     /**
      * @var boolean
      *
-     * @ORM\Column(name="status", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $status;
 

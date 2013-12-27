@@ -299,11 +299,13 @@ class User implements AdvancedUserInterface, \Serializable, EquatableInterface
         return $this->dropBoxSentFiles;
     }
 
+    /**
+     * @return ArrayCollection
+     */
     public function getDropBoxReceivedFiles()
     {
         return $this->dropBoxReceivedFiles;
     }
-
 
     /**
      * @return ArrayCollection
@@ -447,7 +449,12 @@ class User implements AdvancedUserInterface, \Serializable, EquatableInterface
     public function getRoles()
     {
         $roles = $this->roles->toArray();
-        //$roles[] = new Auth\Role($this);
+        $courses = $this->getCourses();
+        if (!empty($courses)) {
+            foreach ($courses as $course) {
+                $roles[] = new Auth\Role($this, $course);
+            }
+        }
         return $roles;
     }
 
@@ -460,6 +467,18 @@ class User implements AdvancedUserInterface, \Serializable, EquatableInterface
         $this->roles->add($role);
 
         return $this;
+    }
+
+    /**
+     * @param string $role
+     * @return bool
+     */
+    public function hasRole($role)
+    {
+        if (in_array($role, $this->getRoles())) {
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Entity\CTool;
 use ChamiloLMS\Form\CourseHomeToolType;
 use \Display;
+use Doctrine\Common\Collections\Criteria;
 
 /**
  * Class CourseHomeController
@@ -29,8 +30,6 @@ class CourseHomeController extends CommonController
      */
     public function indexAction($cidReq, $id_session = null)
     {
-        api_protect_course_script(true);
-
         $courseCode = api_get_course_id();
         $sessionId = api_get_session_id();
         $userId = $this->getUser()->getUserId();
@@ -55,12 +54,14 @@ class CourseHomeController extends CommonController
             );
         }
 
-        $editIcons = Display::url(
-            Display::return_icon('edit.png'),
-            $this->generateUrl('course_home.controller:iconListAction', array('course' => api_get_course_id()))
-        );
-        $this->getTemplate()->assign('edit_icons', $editIcons);
+        if ($this->isCourseTeacher()) {
+            $editIcons = Display::url(
+                Display::return_icon('edit.png'),
+                $this->generateUrl('course_home.controller:iconListAction', array('course' => api_get_course_id()))
+            );
 
+            $this->getTemplate()->assign('edit_icons', $editIcons);
+        }
 
         if (!isset($coursesAlreadyVisited[$courseCode])) {
             event_access_course();
@@ -115,6 +116,9 @@ class CourseHomeController extends CommonController
         return new Response($response, 200, array());
     }
 
+    /**
+     * @return array
+     */
     private function autolaunch()
     {
         $show_autolaunch_exercise_warning = false;
@@ -276,8 +280,8 @@ class CourseHomeController extends CommonController
      */
     public function showIconAction($iconId)
     {
-        if (!api_is_allowed_to_edit(null, true)) {
-            return null;
+        if (!$this->isCourseTeacher()) {
+            return $this->abort(404);
         }
         $entityManager = $this->getManager();
         $criteria = array('cId' => api_get_course_int_id(), 'id' => $iconId);
@@ -298,8 +302,8 @@ class CourseHomeController extends CommonController
      */
     public function hideIconAction($iconId)
     {
-        if (!api_is_allowed_to_edit(null, true)) {
-            return null;
+        if (!$this->isCourseTeacher()) {
+            return $this->abort(404);
         }
 
         $entityManager = $this->getManager();
@@ -321,8 +325,8 @@ class CourseHomeController extends CommonController
      */
     public function deleteIcon($iconId)
     {
-        if (!api_is_allowed_to_edit(null, true)) {
-            return null;
+        if (!$this->isCourseTeacher()) {
+            return $this->abort(404);
         }
 
         $entityManager = $this->getManager();
@@ -339,12 +343,121 @@ class CourseHomeController extends CommonController
      */
     public function iconListAction()
     {
-        $criteria = array('cId' => $this->getCourse()->getId(), 'sessionId' => 0);
-        $items = $this->getRepository()->findBy($criteria);
+        /*$roles = $this->getUser()->getRoles();
+        foreach ($roles as $role) {
+            var_dump($role->getRole());
+        }*/
 
-        $this->getTemplate()->assign('items', $items);
+        if (!$this->isCourseTeacher()) {
+            return $this->abort(404);
+        }
+        $sessionId = intval($this->getRequest()->get('id_session'));
+        $itemsFromSession = array();
+        if (!empty($sessionId)) {
+
+            $query = $this->getManager()->createQueryBuilder('a');
+            $query->select('s');
+            $query->from('Entity\CTool', 's');
+            $query->where('s.cId  = :courseId AND s.sessionId = :sessionId')
+                ->setParameters(
+                    array(
+                        'courseId' => $this->getCourse()->getId(),
+                        'sessionId' => $sessionId
+                    )
+                );
+            $itemsFromSession = $query->getQuery()->getResult();
+
+            $itemNameList = array();
+            foreach ($itemsFromSession as $item) {
+                $itemNameList[] = $item->getName();
+            }
+
+            //$itemsFromSession = $this->getRepository()->findBy($criteria);
+            $query = $this->getManager()->createQueryBuilder('a');
+            $query->select('s');
+            $query->from('Entity\CTool', 's');
+            $query->where('s.cId  = :courseId AND s.sessionId = 0')
+                ->setParameters(
+                    array(
+                        'courseId' => $this->getCourse()->getId()
+                    )
+                );
+            if (!empty($itemNameList)) {
+                $query->andWhere($query->expr()->notIn('s.name', $itemNameList));
+            }
+            $itemsFromCourse = $query->getQuery()->getResult();
+        } else {
+            $criteria = array('cId' => $this->getCourse()->getId(), 'sessionId' => 0);
+            $itemsFromCourse = $this->getRepository()->findBy($criteria);
+        }
+
+        $this->getTemplate()->assign('items_from_course', $itemsFromCourse);
+        $this->getTemplate()->assign('items_from_session', $itemsFromSession);
         $this->getTemplate()->assign('links', $this->generateLinks());
         return $this->get('template')->render_template($this->getTemplatePath().'tool/list.tpl');
+    }
+
+    /**
+     *
+     * @Route("/{itemName}/add")
+     * @Method({"GET|POST"})
+     * @param $itemName
+     * @return mixed
+     */
+    public function addIconAction($itemName)
+    {
+        if (!$this->isCourseTeacher()) {
+            return $this->abort(404);
+        }
+
+        $sessionId = intval($this->getRequest()->get('id_session'));
+
+        if (empty($sessionId)) {
+            return $this->abort(500);
+        }
+
+        $criteria = array('cId' => $this->getCourse()->getId(), 'sessionId' => 0, 'name' => $itemName);
+        $itemFromDatabase = $this->getRepository()->findOneBy($criteria);
+
+        if (!$itemFromDatabase) {
+            $this->createNotFoundException();
+        }
+
+        $item = clone $itemFromDatabase;
+        $item->setId(null);
+        $item->setSessionId($sessionId);
+        $form = $this->createForm($this->getFormType(), $item);
+
+        $form->handleRequest($this->getRequest());
+
+        if ($form->isValid()) {
+
+            $query = $this->getManager()->createQueryBuilder('a');
+            $query->select('MAX(s.id) as id');
+            $query->from('Entity\CTool', 's');
+            $query->where('s.cId  = :courseId')->setParameter('courseId', $this->getCourse()->getId());
+            $result = $query->getQuery()->getArrayResult();
+            $maxId = $result[0]['id'] + 1;
+            $item->setId($maxId);
+
+            $entityManager = $this->getManager();
+            $entityManager->persist($item);
+            $entityManager->flush();
+
+            if (!empty($item->getCustomIcon())) {
+                $item->createGrayIcon($this->get('imagine'));
+            }
+
+            $this->get('session')->getFlashBag()->add('success', "Added");
+            $url = $this->generateUrl('course_home.controller:iconListAction', array('id_session' => $sessionId));
+            return $this->redirect($url);
+        }
+
+        $this->getTemplate()->assign('item', $item);
+        $this->getTemplate()->assign('form', $form->createView());
+        $this->getTemplate()->assign('links', $this->generateLinks());
+        return $this->get('template')->render_template($this->getTemplatePath().'tool/add.tpl');
+
     }
 
     /**
@@ -353,42 +466,22 @@ class CourseHomeController extends CommonController
      */
     public function editIconAction($itemId)
     {
-        $sessionId = $this->getRequest()->get('id_session');
+        if (!$this->isCourseTeacher()) {
+            return $this->abort(404);
+        }
 
-        $criteria = array('cId' => $this->getCourse()->getId(), 'sessionId' => 0, 'id' => $itemId);
+        $sessionId = intval($this->getRequest()->get('id_session'));
+
+        $criteria = array('cId' => $this->getCourse()->getId(), 'id' => $itemId);
         /** @var CTool $item */
         $item = $this->getRepository()->findOneBy($criteria);
-        $item->setSessionId($sessionId);
 
         $form = $this->createForm($this->getFormType(), $item);
         $form->handleRequest($this->getRequest());
 
         if ($form->isValid()) {
-            $sessionId = $item->getSessionId();
             $entityManager = $this->getManager();
-
-            if (!empty($sessionId)) {
-                $criteria = array('cId' => $this->getCourse()->getId(), 'sessionId' => $sessionId, 'id' => $itemId);
-                /** @var CTool $item */
-                $itemFromDb = $this->getRepository()->findOneBy($criteria);
-                if (empty($itemFromDb)) {
-                    $newTool = clone $item;
-
-                    $query = $this->getManager()->createQueryBuilder('a');
-                    $query->select('MAX(s.id) as id');
-                    $query->from('Entity\CTool', 's');
-                    $query->where('s.cId  = :courseId')->setParameter('courseId', $this->getCourse()->getId());
-                    $result = $query->getQuery()->getArrayResult();
-                    $maxId = $result[0]['id'] + 1;
-                    $newTool->setId($maxId);
-                } else {
-                    $newTool = $item;
-                }
-                $entityManager->persist($newTool);
-            } else {
-                $entityManager->persist($item);
-            }
-
+            $entityManager->persist($item);
             $entityManager->flush();
 
             if (!empty($item->getCustomIcon())) {
@@ -396,7 +489,7 @@ class CourseHomeController extends CommonController
             }
 
             $this->get('session')->getFlashBag()->add('success', "Updated");
-            $url = $this->generateUrl('course_home.controller:iconListAction');
+            $url = $this->generateUrl('course_home.controller:iconListAction', array('id_session' => $sessionId));
             return $this->redirect($url);
         }
 
@@ -412,16 +505,22 @@ class CourseHomeController extends CommonController
      */
     public function deleteIconAction($itemId)
     {
-        $criteria = array('cId' => $this->getCourse()->getId(), 'sessionId' => 0, 'id' => $itemId);
+        if (!$this->isCourseTeacher()) {
+            return $this->abort(404);
+        }
+
+        $criteria = array('cId' => $this->getCourse()->getId(), 'id' => $itemId);
+
         /** @var CTool $item */
         $item = $this->getRepository()->findOneBy($criteria);
-
-        $item->setCustomIcon(null);
-
         $entityManager = $this->getManager();
-        $entityManager->persist($item);
+        if (!empty($item->getSessionId())) {
+            $entityManager->remove($item);
+        } else {
+            $item->setCustomIcon(null);
+            $entityManager->persist($item);
+        }
         $entityManager->flush();
-
         $this->get('session')->getFlashBag()->add('success', "Deleted");
 
         $this->getTemplate()->assign('links', $this->generateLinks());

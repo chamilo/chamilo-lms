@@ -29,6 +29,45 @@ abstract class BaseController extends FlintController
     protected $pimple;
 
     /**
+     * This method should return the entity's repository.
+     *
+     * @abstract
+     * @return \Doctrine\ORM\EntityRepository
+     */
+    abstract protected function getRepository();
+
+    /**
+     * This method should return a new entity instance to be used for the "create" action.
+     *
+     * @abstract
+     * @return Object
+     */
+    abstract protected function getNewEntity();
+
+    /**
+     * Returns a new Form Type
+     * @return AbstractType
+     */
+    abstract protected function getFormType();
+
+    /**
+     * Returns the template path
+     * */
+    abstract protected function getTemplatePath();
+
+    /**
+     * Returns the controller alias
+     * @example for QuestionScoreController: question_score_controller
+     */
+    abstract protected function getControllerAlias();
+
+    /**
+     * Array with links
+     * @return array
+     */
+    abstract protected function generateLinks();
+
+    /**
      * @param Application $app
      */
     public function __construct(Application $app)
@@ -105,43 +144,12 @@ abstract class BaseController extends FlintController
     }
 
     /**
-     * This method should return the entity's repository.
-     *
-     * @abstract
-     * @return \Doctrine\ORM\EntityRepository
+     * @return \Symfony\Component\Security\Core\SecurityContext
      */
-    abstract protected function getRepository();
-
-    /**
-     * This method should return a new entity instance to be used for the "create" action.
-     *
-     * @abstract
-     * @return Object
-     */
-    abstract protected function getNewEntity();
-
-    /**
-     * Returns a new Form Type
-     * @return AbstractType
-     */
-    abstract protected function getFormType();
-
-    /**
-     * Returns the template path
-     * */
-    abstract protected function getTemplatePath();
-
-    /**
-     * Returns the controller alias
-     * @example for QuestionScoreController: question_score_controller
-     */
-    abstract protected function getControllerAlias();
-
-    /**
-     * Array with links
-     * @return array
-     */
-    abstract protected function generateLinks();
+    public function getSecurity()
+    {
+        return $this->get('security');
+    }
 
     /**
      * @return \Doctrine\ORM\EntityManager

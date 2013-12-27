@@ -197,7 +197,27 @@ $app['allow_admin_toolbar'] = array(
     'ROLE_QUESTION_MANAGER',
     'ROLE_SESSION_MANAGER'
 );
+/*
+use ChamiloLMS\Component\Auth\CourseVoter;
+use ChamiloLMS\Component\Auth\CourseAccessDecisionManager;
 
+$app['course_decision_manager'] = $app->share(function($app) {
+    return new CourseAccessDecisionManager();
+});
+
+$app['course_voter'] = $app->share(function($app) {
+    return new CourseVoter($app['course_decision_manager']);
+});
+
+$app['security.voters'] = $app->extend('security.voters', function($voters) use ($app) {
+    $voters[] = $app['course_voter'];
+    return $voters;
+});
+
+$app['security.access_manager'] = $app->share(function($app) {
+    return new AccessDecisionManager($app['security.voters'], 'unanimous');
+});
+*/
 use SilexOpauth\OpauthExtension;
 
 $strategies = isset($_configuration['strategies']) ? $_configuration['strategies'] : null;
@@ -673,6 +693,8 @@ $app['pages.controller'] = $app->share(
         return new PagesController($app['pages.repository']);
     }
 );
+
+//@todo improve loading of controllers.
 
 $app['index.controller'] = $app->share(
     function () use ($app) {

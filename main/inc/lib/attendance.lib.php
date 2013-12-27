@@ -160,9 +160,9 @@ class Attendance
                 if (api_is_platform_admin()) {
                     $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
                     if ($attendance[5] == 1) {
-                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('visible.png', get_lang('Hide'), array(), ICON_SIZE_SMALL).'</a>';
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('visible.png', get_lang('Hide'), array(), ICON_SIZE_SMALL).'</a>';
                     } else {
-                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToRestore').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_restore&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('invisible.png', get_lang('Show'), array(), ICON_SIZE_SMALL).'</a>';
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_restore&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('invisible.png', get_lang('Show'), array(), ICON_SIZE_SMALL).'</a>';
                         $attendance[2] = '<del>'.$attendance[2].'</del>';
                     }
                 } else {
@@ -172,7 +172,7 @@ class Attendance
                         $actions .= Display::return_icon('visible.png', get_lang('Hide'));
                     } else {
                         $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
-                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('visible.png', get_lang('Hide'), array(), ICON_SIZE_SMALL).'</a>';
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('visible.png', get_lang('Hide'), array(), ICON_SIZE_SMALL).'</a>';
                     }
                 }
 

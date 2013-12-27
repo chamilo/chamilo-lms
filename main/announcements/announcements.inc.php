@@ -21,7 +21,7 @@ class AnnouncementManager {
         return array('((user_name))', '((user_firstname))', '((user_lastname))', '((teacher_name))', '((teacher_email))', '((course_title))', '((course_link))');
     }
 
-    public static function parse_content($content, $course_code) {
+    public static function parse_content($content, $course_code, $session_id = 0) {
         $reader_info = api_get_user_info(api_get_user_id());
         $course_info = api_get_course_info($course_code);
         $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
@@ -34,7 +34,7 @@ class AnnouncementManager {
                 break;
             }
         }
-        $course_link = api_get_course_url();
+        $course_link = api_get_course_url($course_code, $session_id);
 
         $data['user_name'] = $reader_info['username'];
         $data['user_firstname'] = $reader_info['firstname'];
@@ -655,8 +655,8 @@ class AnnouncementManager {
     /**
      * this function shows the form for sending a message to a specific group or user.
      */
-    public static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected) {
-
+    public static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected)
+    {
         echo '<select name="not_selected_form[]" size="7" class="span4" multiple>';
         // adding the groups to the select form
         if ($group_list) {

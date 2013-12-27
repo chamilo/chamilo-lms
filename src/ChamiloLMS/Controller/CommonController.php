@@ -23,6 +23,9 @@ class CommonController extends BaseController
         if (!$course) {
             return false;
         } else {
+            if ($this->getSecurity()->isGranted('ROLE_ADMIN')) {
+                return true;
+            }
             $course->getId();
             $role = "ROLE_TEACHER_COURSE_".$course->getId().'_SESSION_0';
             //var_dump($role);

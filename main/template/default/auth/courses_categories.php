@@ -63,6 +63,9 @@ $stok = Security::get_token();
 
                 echo '<li class="nav-header">'.get_lang('CourseCategories').'</li>';
 
+                $category_link = '<a href="'. api_get_self().'?action=display_courses&amp;category_code=&amp;hidden_links='.$hidden_links.'">'.get_lang('All').' </a>';
+                echo '<li>'.$category_link.'</li>';
+
                 // level 1
                 foreach ($browse_course_categories[0] as $category) {
                     $category_name = $category['name'];

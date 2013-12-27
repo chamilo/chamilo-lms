@@ -515,7 +515,8 @@ class CourseHomeController extends CommonController
         /** @var CTool $item */
         $item = $this->getRepository()->findOneBy($criteria);
         $entityManager = $this->getManager();
-        if (!empty($item->getSessionId())) {
+        $sessionId = $item->getSessionId();
+        if (!empty($sessionId)) {
             $entityManager->remove($item);
         } else {
             $item->setCustomIcon(null);
@@ -565,5 +566,4 @@ class CourseHomeController extends CommonController
     {
         return new CourseHomeToolType();
     }
-
 }

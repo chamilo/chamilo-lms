@@ -346,6 +346,18 @@ class Security
             $config->set('CSS.AllowImportant', true);
             $config->set('CSS.AllowTricky', true); // We need for the flv player the css definition display: none;
             $config->set('CSS.Proprietary', true);
+
+            // Allow uri scheme.
+            $config->set('URI.AllowedSchemes', array(
+                'http' => true,
+                'https' => true,
+                'mailto' => true,
+                'ftp' => true,
+                'nntp' => true,
+                'news' => true,
+                'data' => true,
+            ));
+
             $purifier[$user_status] = new HTMLPurifier($config);
         }
 

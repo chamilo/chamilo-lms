@@ -71,7 +71,7 @@ switch ($action) {
         }
 
         $start = $limit * $page - $limit;
-        if ($start < 0 ) {
+        if ($start < 0) {
             $start = 0;
         }
 
@@ -101,7 +101,7 @@ switch ($action) {
 
         $result = Database::query($sql);
         $results = array();
-        while ($row = Database::fetch_array($result, 'ASSOC')){
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
             $results[] = $row;
         }
 
@@ -115,7 +115,7 @@ switch ($action) {
         $i=0;
 
         if (!empty($results)) {
-            foreach($results as $row) {
+            foreach ($results as $row) {
                 $sql = "SELECT SUM(count_question_id) as count_question_id FROM (
                             SELECT 1 as count_question_id FROM  $track_attempt a
                             WHERE user_id = {$row['exe_user_id']} and exe_id = {$row['exe_id']}
@@ -132,12 +132,13 @@ switch ($action) {
                 $h = floor($remaining/3600);
                 $m = floor(($remaining - ($h*3600))/60);
                 $s = ($remaining - ($h*3600) - ($m*60));
-                $array = array( $row['firstname'],
-                                $row['lastname'],
-                                api_format_date($row['start_date'], DATE_TIME_FORMAT_LONG).' ['.($h>0?$h.':':'').sprintf("%02d",$m).':'.sprintf("%02d",$s).']',
-                                $row['count_questions'],
-                                round($row['score']*100).'%'
-                               );
+                $array = array(
+                    $row['firstname'],
+                    $row['lastname'],
+                    api_format_date($row['start_date'], DATE_TIME_FORMAT_LONG).' ['.($h>0?$h.':':'').sprintf("%02d",$m).':'.sprintf("%02d",$s).']',
+                    $row['count_questions'],
+                    round($row['score']*100).'%'
+                );
                 $response->rows[$i]['cell'] = $array;
                 $i++;
             }

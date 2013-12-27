@@ -156,7 +156,8 @@ $UserList = array();
 $msg = '';
 if (intval($_POST['formSent']) == 1) {
     $sessions_list = $_POST['SessionsList'];
-    $affected_rows = SessionManager::suscribe_sessions_to_hr_manager($user_id, $sessions_list);
+    $userInfo = api_get_user_info($user_id);
+    $affected_rows = SessionManager::suscribe_sessions_to_hr_manager($userInfo, $sessions_list);
     if ($affected_rows) {
         $msg = get_lang('AssignedSessionsHaveBeenUpdatedSuccessfully');
     }

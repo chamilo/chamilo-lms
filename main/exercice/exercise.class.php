@@ -677,7 +677,8 @@ class Exercise {
      *
      * @author - Olivier Brouckaert
      */
-    function save($type_e = '') {
+    function save($type_e = '')
+    {
         global $_course;
         $TBL_EXERCICES      = Database::get_course_table(TABLE_QUIZ_TEST);
 
@@ -724,7 +725,7 @@ class Exercise {
                 $end_time = '0000-00-00 00:00:00';
             }
 
-            $sql="UPDATE $TBL_EXERCICES SET
+            $sql = "UPDATE $TBL_EXERCICES SET
 				    title='".Database::escape_string($exercise)."',
 					description='".Database::escape_string($description)."'";
 
@@ -917,9 +918,8 @@ class Exercise {
 
         $form->addElement('header', $form_title);
 
-        // title
+        // Title.
         $form->addElement('text', 'exerciseTitle', get_lang('ExerciseName'), array('class' => 'span6','id'=>'exercise_title'));
-        //$form->applyFilter('exerciseTitle','html_filter');
 
         $form->addElement('advanced_settings','
 			<a href="javascript://" onclick=" return show_media()">
@@ -946,11 +946,6 @@ class Exercise {
         $form->addElement('html','<div id="options" style="">');
 
         if ($type=='full') {
-
-            /*$feedback_option[0]=get_lang('ExerciseAtTheEndOfTheTest');
-             $feedback_option[1]=get_lang('DirectFeedback');
-            $feedback_option[2]=get_lang('NoFeedback');
-            */
             //Can't modify a DirectFeedback question
             if ($this->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_DIRECT ) {
                 // feedback type
@@ -965,16 +960,9 @@ class Exercise {
                 }
 
                 $radios_feedback[] = $form->createElement('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'),'2',array('id' =>'exerciseType_2'));
-                $form->addGroup($radios_feedback, null, get_lang('FeedbackType'), '');
+                $form->addGroup($radios_feedback, null, array(get_lang('FeedbackType'),get_lang('FeedbackDisplayOptions')), '');
 
-                // test type
-                $radios = array();
-
-                $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
-                $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2', array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
-
-                $form->addGroup($radios, null, get_lang('QuestionsPerPage'), '');
-
+                // Type of results display on the final page
                 $radios_results_disabled = array();
                 $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
                 $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('DoNotShowScoreNorRightAnswer'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
@@ -982,6 +970,14 @@ class Exercise {
                 //$radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ExamModeWithFinalScoreShowOnlyFinalScoreWithCategoriesIfAvailable'),  '3', array('id'=>'result_disabled_3','onclick' => 'check_results_disabled()'));
 
                 $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'), '');
+
+                // Type of questions disposition on page
+                $radios = array();
+
+                $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
+                $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2', array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
+
+                $form->addGroup($radios, null, get_lang('QuestionsPerPage'), '');
 
             } else {
                 // if is Directfeedback but has not questions we can allow to modify the question type
@@ -995,21 +991,21 @@ class Exercise {
                         $radios_feedback[] = $form->createElement('radio', 'exerciseFeedbackType', null, get_lang('DirectFeedback'), '1', array('id' =>'exerciseType_1' , 'onclick' => 'check_direct_feedback()'));
                     }
                     $radios_feedback[] = $form->createElement('radio', 'exerciseFeedbackType', null, get_lang('NoFeedback'),'2',array('id' =>'exerciseType_2'));
-                    $form->addGroup($radios_feedback, null, get_lang('FeedbackType'));
-
+                    $form->addGroup($radios_feedback, null, array(get_lang('FeedbackType'),get_lang('FeedbackDisplayOptions')));
 
                     //$form->addElement('select', 'exerciseFeedbackType',get_lang('FeedbackType'),$feedback_option,'onchange="javascript:feedbackselection()"');
-                    // test type
-                    $radios = array();
-                    $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1');
-                    $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
-                    $form->addGroup($radios, null, get_lang('ExerciseType'));
-
                     $radios_results_disabled = array();
                     $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
                     $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('DoNotShowScoreNorRightAnswer'),  '1',array('id'=>'result_disabled_1','onclick' => 'check_results_disabled()'));
                     $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('OnlyShowScore'),  '2',array('id'=>'result_disabled_2','onclick' => 'check_results_disabled()'));
                     $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'),'');
+
+                    // Type of questions disposition on page
+                    $radios = array();
+                    $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1');
+                    $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2');
+                    $form->addGroup($radios, null, get_lang('ExerciseType'));
+
                 } else {
                     //Show options freeze
                     $radios_results_disabled[] = $form->createElement('radio', 'results_disabled', null, get_lang('ShowScoreAndRightAnswer'), '0', array('id'=>'result_disabled_0'));
@@ -1018,15 +1014,17 @@ class Exercise {
                     $result_disable_group = $form->addGroup($radios_results_disabled, null, get_lang('ShowResultsToStudents'),'');
                     $result_disable_group->freeze();
 
+                    //we force the options to the DirectFeedback exercisetype
+                    $form->addElement('hidden', 'exerciseFeedbackType', EXERCISE_FEEDBACK_TYPE_DIRECT);
+                    $form->addElement('hidden', 'exerciseType', ONE_PER_PAGE);
+                    
+                    // Type of questions disposition on page
                     $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
                     $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2', array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
 
                     $type_group = $form->addGroup($radios, null, get_lang('QuestionsPerPage'), '');
                     $type_group->freeze();
 
-                    //we force the options to the DirectFeedback exercisetype
-                    $form->addElement('hidden', 'exerciseFeedbackType', EXERCISE_FEEDBACK_TYPE_DIRECT);
-                    $form->addElement('hidden', 'exerciseType', ONE_PER_PAGE);
                 }
             }
 
@@ -1050,7 +1048,7 @@ class Exercise {
             $radiocat[] = $form->createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesShuffled'),'1');
             $radiocat[] = $form->createElement('radio', 'randomByCat', null, get_lang('YesWithCategoriesSorted'),'2');
             $radiocat[] = $form->createElement('radio', 'randomByCat', null, get_lang('No'),'0');
-            $form->addGroup($radiocat, null, get_lang('RandomQuestionByCategory'), '');
+            $radioCatGroup = $form->addGroup($radiocat, null, get_lang('RandomQuestionByCategory'), '');
             $form->addElement('html','<div class="clear">&nbsp;</div>');
 
             // add the radio display the category name for student
@@ -1221,14 +1219,37 @@ class Exercise {
             $defaults['index_document'] = 'checked="checked"';
         }
         $form->setDefaults($defaults);
+
+        // Freeze some elements.
+        if ($this->id != 0 && $this->edit_exercise_in_lp == false) {
+            $elementsToFreeze = array(
+                'randomQuestions',
+                //'randomByCat',
+                'exerciseAttempts',
+                'propagate_neg',
+                'enabletimercontrol',
+                'review_answers'
+            );
+
+            foreach ($elementsToFreeze as $elementName) {
+                /** @var HTML_QuickForm_element $element */
+                $element = $form->getElement($elementName);
+                $element->freeze();
+            }
+
+            $radioCatGroup->freeze();
+
+            //$form->freeze();
+        }
     }
 
     /**
      * function which process the creation of exercises
-     * @param FormValidator $form the formvalidator instance
+     * @param FormValidator $form
+     * @param string
      */
-    function processCreation($form, $type='') {
-
+    function processCreation($form, $type = '')
+    {
         $this->updateTitle(htmlentities($form->getSubmitValue('exerciseTitle')));
         $this->updateDescription($form->getSubmitValue('exerciseDescription'));
         $this->updateAttempts($form->getSubmitValue('exerciseAttempts'));
@@ -1283,7 +1304,6 @@ class Exercise {
             $this->random_answers=0;
         }
         $this->save($type);
-
     }
 
     function search_engine_save() {

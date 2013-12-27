@@ -30,15 +30,15 @@ $group_id	= intval($_GET['id']);
 if (empty($group_id)) {
 	api_not_allowed();
 } else {
-	$group_info = GroupPortalManager::get_group_data($group_id);
-	if (empty($group_info)) {
-		api_not_allowed();
-	}
-	//only admin or moderator can do that
-	$user_role = GroupPortalManager::get_user_group_role(api_get_user_id(), $group_id);
-	if (!in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
-		api_not_allowed();
-	}
+    $group_info = GroupPortalManager::get_group_data($group_id);
+    if (empty($group_info)) {
+        api_not_allowed();
+    }
+    //only admin or moderator can do that
+    $user_role = GroupPortalManager::get_user_group_role(api_get_user_id(), $group_id);
+    if (!in_array($user_role, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_MODERATOR))) {
+        api_not_allowed();
+    }
 }
 
 // Group information
@@ -46,34 +46,34 @@ $admins		= GroupPortalManager::get_users_by_group($group_id, true, array(GROUP_U
 $show_message = '';
 
 if (isset($_GET['action']) && $_GET['action']=='accept') {
-	// we add a user only if is a open group
-	$user_join = intval($_GET['u']);
-	//if i'm a moderator
-	if (GroupPortalManager::is_group_moderator($group_id)) {
-		GroupPortalManager::update_user_role($user_join, $group_id);
-		$show_message = get_lang('UserAdded');
-	}
+    // we add a user only if is a open group
+    $user_join = intval($_GET['u']);
+    //if i'm a moderator
+    if (GroupPortalManager::is_group_moderator($group_id)) {
+        GroupPortalManager::update_user_role($user_join, $group_id);
+        $show_message = get_lang('UserAdded');
+    }
 }
 
 if (isset($_GET['action']) && $_GET['action']=='deny') {
-	// we add a user only if is a open group
-	$user_join = intval($_GET['u']);
-	//if i'm a moderator
-	if (GroupPortalManager::is_group_moderator($group_id)) {
-		GroupPortalManager::delete_user_rel_group($user_join, $group_id);
-		$show_message = get_lang('UserDeleted');
-	}
+    // we add a user only if is a open group
+    $user_join = intval($_GET['u']);
+    //if i'm a moderator
+    if (GroupPortalManager::is_group_moderator($group_id)) {
+        GroupPortalManager::delete_user_rel_group($user_join, $group_id);
+        $show_message = get_lang('UserDeleted');
+    }
 }
 
 
 if (isset($_GET['action']) && $_GET['action']=='set_moderator') {
-	// we add a user only if is a open group
-	$user_moderator= intval($_GET['u']);
-	//if i'm the admin
-	if (GroupPortalManager::is_group_admin($group_id)) {
-		GroupPortalManager::update_user_role($user_moderator, $group_id, GROUP_USER_PERMISSION_MODERATOR);
-		$show_message = get_lang('UserChangeToModerator');
-	}
+    // we add a user only if is a open group
+    $user_moderator= intval($_GET['u']);
+    //if i'm the admin
+    if (GroupPortalManager::is_group_admin($group_id)) {
+        GroupPortalManager::update_user_role($user_moderator, $group_id, GROUP_USER_PERMISSION_MODERATOR);
+        $show_message = get_lang('UserChangeToModerator');
+    }
 }
 
 $users	= GroupPortalManager::get_users_by_group($group_id, true, array(GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER), 0, 1000);

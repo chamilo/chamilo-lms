@@ -155,7 +155,8 @@ switch ($action) {
 
             $course = api_get_course_info_by_id($_GET['course_id']);
             require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-            $exercises = get_all_exercises($course, intval($_GET['session_id']), false, $_GET['q']);
+            $session_id = (!empty($_GET['session_id'])) ?  intval($_GET['session_id']) : 0 ;
+            $exercises = get_all_exercises($course, $session_id, false, $_GET['q'], true, 2);
 
             foreach ($exercises as $exercise)    
             {

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$FeedbackDisplayOptions = "Détermine la manière dont se montreront les commentaires (feedback) enregistrés pour chacune des alternatives des questions présentées à l'apprenant. Nous recommandons fortement l'évaluation de ces différents modes de feedback avant d'inviter les apprenant à passer le test.";
 $ExerciseWasActivatedFromXToY = "Le test a été activé du %s au %s";
 $SelectAnAnswerToContinue = "Veuillez sélectionner une réponse avant de continuer";
 $IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed = "Si vous continuez, vos réponses seront enregistrées et plus aucune modification ne sera autorisée par la suite. Êtes-vous certain de vouloir terminer ce test?";

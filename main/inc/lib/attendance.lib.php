@@ -169,7 +169,7 @@ class Attendance
                     $is_locked_attendance = self::is_locked_attendance($attendance[0]);
                     if ($is_locked_attendance) {
                         $actions .= Display::return_icon('edit_na.png', get_lang('Edit')).'&nbsp;';
-                        $actions .= Display::return_icon('delete_na.png', get_lang('Delete'));
+                        $actions .= Display::return_icon('visible.png', get_lang('Hide'));
                     } else {
                         $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
                         $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('visible.png', get_lang('Hide'), array(), ICON_SIZE_SMALL).'</a>';

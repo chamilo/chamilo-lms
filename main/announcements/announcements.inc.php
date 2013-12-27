@@ -268,7 +268,7 @@ class AnnouncementManager {
      * @param string    Comment describing the attachment
      * @return int      false on failure, ID of the announcement on success
      */
-    public static function add_announcement($emailTitle, $newContent, $sent_to, $file = array(), $file_comment = null, $end_date = null) {
+    public static function add_announcement($emailTitle, $newContent, $sent_to, $file = array(), $file_comment = null, $end_date = null, $sendToUsersInSession = false) {
         global $_course;
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 
@@ -325,6 +325,11 @@ class AnnouncementManager {
                 // the message is sent to everyone, so we set the group to 0
                 api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '0');
             }
+
+            if ($sendToUsersInSession) {
+                self::addAnnouncementToAllUsersInSessions($last_id);
+            }
+
             return $last_id;
         }
     }
@@ -333,7 +338,7 @@ class AnnouncementManager {
       STORE ANNOUNCEMENT  GROUP ITEM
      */
 
-    public static function add_group_announcement($emailTitle, $newContent, $to, $to_users, $file = array(), $file_comment = '') {
+    public static function add_group_announcement($emailTitle, $newContent, $to, $to_users, $file = array(), $file_comment = '', $sendToUsersInSession = false) {
         global $_course;
 
         // database definitions
@@ -384,6 +389,11 @@ class AnnouncementManager {
                 }
             }
         }
+
+        if ($sendToUsersInSession) {
+            self::addAnnouncementToAllUsersInSessions($last_id);
+        }
+
         return $last_id;
     }
 
@@ -403,7 +413,7 @@ class AnnouncementManager {
      * @param string file comment
      *
      */
-    public static function edit_announcement($id, $emailTitle, $newContent, $to, $file = array(), $file_comment = '') {
+    public static function edit_announcement($id, $emailTitle, $newContent, $to, $file = array(), $file_comment = '', $sendToUsersInSession = false) {
         global $_course;
 
         $course_id = api_get_course_int_id();
@@ -434,6 +444,11 @@ class AnnouncementManager {
         $sql_delete = "DELETE FROM $tbl_item_property WHERE c_id = $course_id AND ref='$id' AND tool='announcement'";
         $result = Database::query($sql_delete);
 
+
+        if ($sendToUsersInSession) {
+            self::addAnnouncementToAllUsersInSessions($id);
+        }
+
         // store in item_property (first the groups, then the users
 
         if (!is_null($to)) {
@@ -457,6 +472,44 @@ class AnnouncementManager {
             // the message is sent to everyone, so we set the group to 0
             api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, "AnnouncementUpdated", api_get_user_id(), '0');
         }
+
+
+    }
+
+    /**
+     * @param int $announcementId
+     */
+    public static function addAnnouncementToAllUsersInSessions($announcementId)
+    {
+        $courseCode = api_get_course_id();
+        $_course = api_get_course_info();
+
+        $sessionList = SessionManager::get_session_by_course(api_get_course_id());
+
+        if (!empty($sessionList)) {
+            foreach ($sessionList as $sessionInfo) {
+                $sessionId = $sessionInfo['id'];
+                $userList = CourseManager::get_user_list_from_course_code($courseCode, $sessionId);
+
+                if (!empty($userList)) {
+                    foreach ($userList as $user) {
+                        api_item_property_update(
+                            $_course,
+                            TOOL_ANNOUNCEMENT,
+                            $announcementId,
+                            "AnnouncementUpdated",
+                            api_get_user_id(),
+                            0,
+                            $user['user_id'],
+                            0,
+                            0,
+                            $sessionId
+                        );
+                    }
+                }
+            }
+        }
+
     }
 
     /*

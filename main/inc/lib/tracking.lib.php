@@ -3169,6 +3169,97 @@ class Tracking
         $html = '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
         return $html;
     }
+    /**
+     * Get the progress of a exercise
+     * @param   int $sessionId  The session ID (session.id)
+     * @param   int $courseId   The course ID (course.id)
+     * @param   int $exerciseId The quiz ID (c_quiz.id)
+     * @param   int $answer     The answer status (0 = incorrect, 1 = correct, 2 = both)
+     * @param   array   $options    An array of options you can pass to the query (limit, where and order)
+     * @return array An array with the data of exercise(s) progress
+     */
+    public static function get_exercise_progress($sessionId = 0, $courseId = 0, $exerciseId = 0, $answer = 2, $options = array())
+    {
+        // Get tables names
+        $session                = Database::get_main_table(TABLE_MAIN_SESSION);
+        $user                   = Database::get_main_table(TABLE_MAIN_USER);
+        $quiz                   = Database::get_course_table(TABLE_QUIZ_TEST);
+        $quiz_answer            = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $quiz_question          = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $table_stats_exercises  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $table_stats_attempt    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+
+        $course = api_get_course_info_by_id($courseId);
+        $exercise = current(get_exercise_by_id($exerciseId));
+
+        $where = " WHERE a.course_code = '%s'";
+        if (!empty($sessionId)) {
+            $where .= " AND a.session_id = %d
+                        AND q.id = %d";
+        } else
+        {
+            $where .= " AND q.title = '%s'";
+        }
+
+        //2 = show all questions (wrong and correct answered)
+        if ($answer != 2)
+        {
+            $where .= sprintf(' AND qa.correct = %d', $answer);
+        }
+
+        $limit = null;
+        if (!empty($options['limit'])) {
+            $limit = " LIMIT ".$options['limit'];
+        }
+
+        if (!empty($options['where'])) {
+            $where .= ' AND '.$options['where'];
+        }
+
+        $order = null;
+        if (!empty($options['order'])) {
+            $order = " ORDER BY ".$options['order'];
+        }
+
+        $sql = "SELECT
+            s.name as session,
+            CONCAT (q.c_id, q.id) as exercise_id,
+            q.title as quiz_title,
+            u.username,
+            u.lastname,
+            u.firstname,
+            a.tms as time,
+            qa.question_id,
+            qq.question,
+            qa.answer,
+            qa.correct
+        FROM $table_stats_attempt a
+        LEFT JOIN $quiz_answer qa ON a.answer = qa.id_auto
+        LEFT JOIN  $quiz_question qq ON qq.id = qa.question_id
+        INNER JOIN $table_stats_exercises e ON e.exe_id = a.exe_id
+        INNER JOIN $session s ON s.id = a.session_id
+        INNER JOIN $quiz q ON q.id = e.exe_exo_id
+        INNER JOIN $user u ON u.user_id = a.user_id
+        $where $order $limit";
+
+        if (!empty($sessionId))
+        {
+            $sql_query = sprintf($sql, $course['code'], $sessionId,  $exerciseId);
+        } else
+        {
+            $sql_query = sprintf($sql, $course['code'], $exercise['title']);
+        }
+
+        $rs = Database::query($sql_query);
+        while ($row = Database::fetch_array($rs))
+        {
+            $row['correct'] = ($row['correct'] == 1) ? get_lang('Yes') : get_lang('No');
+            $data[] = $row;
+        }
+        return $data;
+    }
 }
 
 /**

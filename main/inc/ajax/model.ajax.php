@@ -271,7 +271,7 @@ switch ($action) {
         break;
     case 'get_exercise_progress':
         //@TODO replace this for a more efficient function (not retrieving the whole data)
-        $records = SessionManager::get_exercise_progress(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']));
+        $records = Tracking::get_exercise_progress(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']));
         $count = count($records);
         break;
     case 'get_session_access_overview':
@@ -643,7 +643,7 @@ switch ($action) {
             'correct'
         );
 
-        $result = SessionManager::get_exercise_progress($sessionId, $courseId, $exerciseId, $answer,
+        $result = Tracking::get_exercise_progress($sessionId, $courseId, $exerciseId, $answer,
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",

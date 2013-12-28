@@ -124,11 +124,10 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId)) {
 }
 echo '</div>';
 
-if (empty($error_message)) {
-    $error_message = isset($_GET['error_message']) ? Security::remove_XSS($_GET['error_message']) : null;
-}
+$error_message = Session::read('error_message');
 if (!empty($error_message)) {
     echo $error_message;
+    Session::erase('error_message');
 }
 
 if (!empty($my_folder_data['description'])) {
@@ -151,7 +150,7 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
         get_lang('Actions')
     );
     $column_model   = array (
-        array('name'=>'type',           'index'=>'file',            'width'=>'10',   'align'=>'left', 'search' => 'false'),
+        array('name'=>'type',           'index'=>'file',            'width'=>'10',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
@@ -173,7 +172,7 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
     );
 
     $column_model   = array (
-        array('name'=>'type',           'index'=>'file',            'width'=>'10',   'align'=>'left', 'search' => 'false'),
+        array('name'=>'type',           'index'=>'file',            'width'=>'10',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),

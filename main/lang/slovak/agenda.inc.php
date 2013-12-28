@@ -68,7 +68,11 @@ $RepeatedEventViewOriginalEvent = "Pozrieť pôvodnú udalosť";
 $ICalFileImport = "Importovať iCal/ics súbor";
 $AllUsersOfThePlatform = "Všetci používatelia platformy";
 $GlobalEvent = "Globálna udalosť";
+$ModifyEvent = "Editovať udalosť";
 $EndDateCannotBeBeforeTheStartDate = "Dátum ukončenia nemôže byť skôr ako dátum začiatku";
 $AgendaSortChronologicallyUp = "Zoradiť agendu chronologicky (vzostupne)";
 $AgendaSortChronologicallyDown = "Zoradiť agendu chronologicky (zostupne)";
+$SelectACourse = "Vybrať kurz";
+$DisableEndDate = "Vypnúť dátum konca";
+$AllEvents = "Všetky udalosti";
 ?>

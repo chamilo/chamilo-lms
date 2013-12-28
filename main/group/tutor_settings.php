@@ -87,32 +87,6 @@ function sort_users($user_a, $user_b)
     }
 }
 
-/**
- * Function to check the given max number of members per group
- */
-function check_max_number_of_members($value)
-{
-    $max_member_no_limit = $value['max_member_no_limit'];
-    if ($max_member_no_limit == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
-        return true;
-    }
-    $max_member = $value['max_member'];
-    return is_numeric($max_member);
-}
-
-/**
- * Function to check if the number of selected group members is valid
- */
-function check_group_members($value)
-{
-    if ($value['max_member_no_limit'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
-        return true;
-    }
-    if (isset($value['max_member']) && isset($value['group_members']) && $value['max_member'] < count($value['group_members'])) {
-        return array ('group_members' => get_lang('GroupTooMuchMembers'));
-    }
-    return true;
-}
 
 /*	MAIN CODE */
 

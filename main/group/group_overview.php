@@ -80,8 +80,10 @@ if (isset($_GET['action'])) {
                     exit;
                     break;
                 case 'xls':
-                    Export::export_table_xls($data);
-                    exit;
+                    if (!empty($data)) {
+                        Export::export_table_xls($data);
+                        exit;
+                    }
                     break;
             }
             break;

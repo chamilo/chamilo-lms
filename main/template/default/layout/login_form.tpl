@@ -1,7 +1,6 @@
-{% if login_language_form %}
+{% if login_form %}
 
     <div id="login_block" class="well sidebar-nav">
-
         {{ login_language_form }}
 
         {% if plugin_login_top is not null %}

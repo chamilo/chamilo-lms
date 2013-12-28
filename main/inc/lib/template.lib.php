@@ -32,7 +32,15 @@ class Template
     public $params = array();
     public $force_plugin_load = false;
 
-    function __construct(
+    /**
+     * @param string $title
+     * @param bool $show_header
+     * @param bool $show_footer
+     * @param bool $show_learnpath
+     * @param bool $hide_global_chat
+     * @param bool $load_plugins
+     */
+    public function __construct(
         $title = '',
         $show_header = true,
         $show_footer = true,
@@ -40,7 +48,7 @@ class Template
         $hide_global_chat = false,
         $load_plugins = true
     ) {
-        //Page title
+        // Page title
         $this->title            = $title;
         $this->show_learnpath   = $show_learnpath;
         $this->hide_global_chat = $hide_global_chat;

@@ -151,6 +151,10 @@ class Course
 							$title = $resource->title;
 							$description = $resource->description;
 							break;
+                        case RESOURCE_TEST_CATEGORY:
+                            $title = $resource->title;
+                            $description = $resource->description;
+                            break;
 						case RESOURCE_QUIZQUESTION:
 							$title = $resource->question;
 							$description = $resource->description;
@@ -298,6 +302,10 @@ class Course
 							}
 							break;
 
+                        case RESOURCE_TEST_CATEGORY:
+                            $resource->title = api_to_system_encoding($resource->title, $this->encoding);
+                            $resource->description = api_to_system_encoding($resource->description, $this->encoding);
+                            break;
 						case RESOURCE_SCORM:
 							$resource->title = api_to_system_encoding($resource->title, $this->encoding);
 							break;

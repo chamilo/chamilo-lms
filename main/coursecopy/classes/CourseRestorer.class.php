@@ -30,10 +30,10 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
-define('FILE_SKIP', 1);
-define('FILE_RENAME', 2);
-define('FILE_OVERWRITE', 3);
-define('UTF8_CONVERT', false); //false by default
+define('FILE_SKIP',             1);
+define('FILE_RENAME',           2);
+define('FILE_OVERWRITE',        3);
+define('UTF8_CONVERT', 		false); //false by default
 
 /**
  * Class to restore items from a course object to a Chamilo-course
@@ -43,17 +43,16 @@ define('UTF8_CONVERT', false); //false by default
  */
 class CourseRestorer
 {
-    /**
-     * The course-object
-     */
-    /** @var Course */
+	/**
+	 * The course-object
+	 */
     public $course;
     public $destination_course_info;
 
-    /**
-     * What to do with files with same name (FILE_SKIP, FILE_RENAME or
-     * FILE_OVERWRITE)
-     */
+	/**
+	 * What to do with files with same name (FILE_SKIP, FILE_RENAME or
+	 * FILE_OVERWRITE)
+	 */
     public $file_option;
     public $set_tools_invisible_by_default;
     public $skip_content;
@@ -68,6 +67,7 @@ class CourseRestorer
        // 'forum_topics',
         'glossary',
         'quizzes',
+        'test_category',
         'links',
         'learnpaths',
         'surveys',
@@ -92,26 +92,26 @@ class CourseRestorer
 	 */
     public function __construct($course)
     {
-        $this->course							= $course;
-        $course_info 							= api_get_course_info($this->course->code);
+		$this->course							= $course;
+		$course_info 							= api_get_course_info($this->course->code);
         if (!empty($course_info)) {
-            $this->course_origin_id 				= $course_info['real_id'];
+		    $this->course_origin_id 				= $course_info['real_id'];
         } else {
             $this->course_origin_id = null;
         }
-        $this->file_option 						= FILE_RENAME;
-        $this->set_tools_invisible_by_default 	= false;
-        $this->skip_content 					= array();
-    }
+		$this->file_option 						= FILE_RENAME;
+		$this->set_tools_invisible_by_default 	= false;
+		$this->skip_content 					= array();
+	}
 
-    /**
-     * Set the file-option
-     * @param constant $options What to do with files with same name (FILE_SKIP, FILE_RENAME or FILE_OVERWRITE)
-     */
+	/**
+	 * Set the file-option
+	 * @param constant $options What to do with files with same name (FILE_SKIP, FILE_RENAME or FILE_OVERWRITE)
+	 */
     function set_file_option($option)
     {
-        $this->file_option = $option;
-    }
+		$this->file_option = $option;
+	}
     function set_add_text_in_items($status)
     {
         $this->add_text_in_items = $status;
@@ -121,13 +121,13 @@ class CourseRestorer
         $this->tool_copy_settings = $array;
     }
 
-    /**
-     * Restore a course.
-     * @param 	string 	The code of the Chamilo-course in
-     * @param	int		The session id
-     * @param	bool	Course settings are going to be restore.
-     * @param bool $respect_base_content
-     */
+	/**
+	 * Restore a course.
+	 * @param 	string 	The code of the Chamilo-course in
+	 * @param	int		The session id
+	 * @param	bool	Course settings are going to be restore?
+
+	 */
     public function restore(
         $destination_course_code = '',
         $session_id = 0,
@@ -145,7 +145,7 @@ class CourseRestorer
 		}
 		$this->destination_course_id = $course_info['real_id'];
 
-        // Getting first teacher (for the forums)
+        //Getting first teacher (for the forums)
         $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
         $this->first_teacher_id = api_get_user_id();
 
@@ -1308,6 +1308,76 @@ class CourseRestorer
 	}
 
 	/**
+     * @todo : add session id when used for session
+     */
+    function restore_test_category($session_id, $respect_base_content, $destination_course_code)
+    {
+        $course_id = api_get_course_int_id();
+        // Let's restore the categories
+        $tab_test_category_id_old_new = array(); // used to build the quiz_question_rel_category table
+        if ($this->course->has_resources(RESOURCE_TEST_CATEGORY))
+        {
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_TEST_CATEGORY] as $id => $CourseCopyTestcategory )
+            {
+                $tab_test_category_id_old_new[$CourseCopyTestcategory->source_id] = $id;
+                // check if this test_category already exist in the destination BDD
+                // do not Database::escape_string $title and $description, it will be done later
+                $title = $CourseCopyTestcategory->title;
+                $description = $CourseCopyTestcategory->description;
+
+                if (Testcategory::category_exists_with_title($title))
+                {
+                    switch ($this->file_option)
+                    {
+                        case FILE_SKIP:
+                            //Do nothing
+                            break;
+                        case FILE_RENAME:
+                            $new_title = $title."_";
+                            while (Testcategory::category_exists_with_title($new_title))
+                            {
+                                $new_title .= "_";
+                            }
+                            $test_category = new Testcategory(0, $new_title, $description);
+                            $new_id = $test_category->addCategoryInBDD();
+                            $tab_test_category_id_old_new[$CourseCopyTestcategory->source_id] = $new_id;
+                            break;
+                        case FILE_OVERWRITE:
+                            $id = Testcategory::get_category_id_for_title($title);
+                            $my_cat = new Testcategory($id);
+                            $my_cat->name = $title;
+                            $my_cat->modifyCategory();
+                            $tab_test_category_id_old_new[$CourseCopyTestcategory->source_id] = $id;
+                            break;
+                    }
+                }
+                else
+                {
+                    // create a new test_category
+                    $test_category = new Testcategory(0, $title, $description);
+                    $new_id = $test_category->addCategoryInBDD();
+                    $tab_test_category_id_old_new[$CourseCopyTestcategory->source_id] = $new_id;
+                }
+                $this->course->resources[RESOURCE_TEST_CATEGORY][$id]->destination_id = $tab_test_category_id_old_new[$CourseCopyTestcategory->source_id];
+            }
+        }
+        // lets check if quizzes-question are restored too, to redo the link between test_category and quizzes question for questions restored
+        // we can use the source_id field
+        // question source_id => category source_id
+        if ($this->course->has_resources(RESOURCE_QUIZQUESTION)) {
+            // check the category number of each question restored
+            foreach ($resources[RESOURCE_QUIZQUESTION] as $id => $CourseCopyQuestion) {
+                $new_quiz_question_id = $resources[RESOURCE_QUIZQUESTION][$id]->destination_id;
+                $question_category = $CourseCopyQuestion->question_category;
+                if ($question_category > 0) {
+                    Testcategory::add_category_for_question_id($tab_test_category_id_old_new[$question_category], $new_quiz_question_id, $course_id);
+                }
+            }
+        }
+    }
+
+    /**
 	 * Restore surveys
 	 */
     function restore_surveys()

@@ -2,6 +2,10 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$DeleteUsersNotInList = "Unsubscribe students which are not in the imported list";
+$IfSessionExistsUpdate = "If a session exists, update it";
+$SearchCourseBySession = "Search course by session";
+$GlobalLinkUseDoubleColumnPrivateToShowPrivately = "Use ::private at the end of the link to show it only to logged-in users";
 $CourseVisibilityHidden = "Hidden - Completely hidden to all users except the administrators";
 $ApplyAllLanguages = "Apply this change to all available languages";
 $CareerUpdated = "Career updated successfully";

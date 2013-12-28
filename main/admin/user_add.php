@@ -152,7 +152,7 @@ $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allow
 
 // Username
 if (api_get_setting('login_is_email') != 'true') {
-    $form->addElement('text', 'username', get_lang('LoginName'), array('id'=> 'username', 'maxlength' => USERNAME_MAX_LENGTH));
+    $form->addElement('text', 'username', get_lang('LoginName'), array('id'=> 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'autocomplete' => 'off'));
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
     $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
@@ -181,9 +181,10 @@ if (count($extAuthSource) > 0) {
     	$group[] = $form->createElement('static', '', '', '<br />');
     }
 }
+
 $group[] = $form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
 $group[] = $form->createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);
-$group[] = $form->createElement('password', 'password', null, array('id'=> 'password', 'onkeydown' => 'javascript: password_switch_radio_button();'));
+$group[] = $form->createElement('password', 'password', null, array('id'=> 'password', 'autocomplete' => 'off', 'onkeydown' => 'javascript: password_switch_radio_button();'));
 
 $form->addGroup($group, 'password', get_lang('Password'), '');
 

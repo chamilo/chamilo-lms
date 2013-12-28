@@ -92,7 +92,6 @@ elseif (isset($_POST['number_of_groups'])) {
         if ($number_of_groups > 1) {
     ?>
     <script type="text/javascript">
-    <!--
     var number_of_groups = <?php echo $number_of_groups; ?>;
     function switch_state(key) {
         for( i=1; i<number_of_groups; i++) {
@@ -124,7 +123,6 @@ elseif (isset($_POST['number_of_groups'])) {
             element.value = ref.value;
         }
     }
-    -->
     </script>
     <?php
 		}
@@ -136,7 +134,7 @@ elseif (isset($_POST['number_of_groups'])) {
 				$cat_options[$category['id']] = $category['title'];
 			}
 		}
-		$form = new FormValidator('create_groups_step2');
+        $form = new FormValidator('create_groups_step2', 'POST', api_get_self().'?'.api_get_cidreq());
 
 		// Modify the default templates
 		$renderer = $form->defaultRenderer();
@@ -216,7 +214,7 @@ EOT;
 	$categories = GroupManager :: get_categories();
 	//echo '<blockquote>';
 	if (count($categories) > 1 || isset ($categories[0]) && $categories[0]['id'] != GroupManager::VIRTUAL_COURSE_CATEGORY) {
-		$create_groups_form = new FormValidator('create_groups');
+        $create_groups_form = new FormValidator('create_groups', 'post', api_get_self().'?'.api_get_cidreq());
 		$create_groups_form->addElement('header', '', $nameTools);
 		$group_el = array ();
 		$group_el[] = $create_groups_form->createElement('static', null, null, get_lang('Create'));
@@ -231,24 +229,6 @@ EOT;
 	} else {
 		echo get_lang('NoCategoriesDefined');
 	}
-	//echo '</blockquote>';
-
-	/*
-	 * Show form to generate groups from virtual courses
-	 */
-	$virtual_courses = CourseManager :: get_virtual_courses_linked_to_real_course($_course['sysCode']);
-	if (count($virtual_courses) > 0) {
-		echo '<b>'.get_lang('CreateGroupsFromVirtualCourses').'</b>';
-		echo '<blockquote>';
-		echo get_lang('CreateGroupsFromVirtualCoursesInfo');
-		$create_virtual_groups_form = new FormValidator('create_virtual_groups');
-		$create_virtual_groups_form->addElement('hidden', 'action');
-		$create_virtual_groups_form->addElement('submit', 'submit', get_lang('Ok'));
-		$create_virtual_groups_form->setDefaults(array('action' => 'create_virtual_groups'));
-		$create_virtual_groups_form->display();
-		echo '</blockquote>';
-	}
-
 	/*
 	 * Show form to generate subgroups
 	 */

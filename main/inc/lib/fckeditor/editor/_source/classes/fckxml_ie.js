@@ -38,6 +38,7 @@ FCKXml.prototype =
 
 		oXmlHttp.open( "GET", urlToCall, false ) ;
 
+        try { oXmlHttp.responseType = 'msxml-document'; } catch(e){}
 		oXmlHttp.send( null ) ;
 
 		if ( oXmlHttp.status == 200 || oXmlHttp.status == 304 || ( oXmlHttp.status == 0 && oXmlHttp.readyState == 4 ) )

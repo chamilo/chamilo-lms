@@ -89,6 +89,7 @@ define('TOOL_LINK', 'link');
 define('TOOL_COURSE_DESCRIPTION', 'course_description');
 define('TOOL_SEARCH', 'search');
 define('TOOL_LEARNPATH', 'learnpath');
+define('TOOL_AGENDA', 'agenda');
 define('TOOL_ANNOUNCEMENT', 'announcement');
 define('TOOL_FORUM', 'forum');
 define('TOOL_FORUM_CATEGORY','forum_category');
@@ -100,6 +101,7 @@ define('TOOL_THREAD', 'thread');
 define('TOOL_POST', 'post');
 define('TOOL_DROPBOX', 'dropbox');
 define('TOOL_QUIZ', 'quiz');
+define('TOOL_TEST_CATEGORY', 'test_category');
 define('TOOL_USER', 'user');
 define('TOOL_GROUP', 'group');
 define('TOOL_BLOGS', 'blog_management'); // Smartblogs (Kevin Van Den Haute :: kevin@develop-it.be)
@@ -152,12 +154,26 @@ define('DIR_HOTPOTATOES','/HotPotatoes_files');
 // event logs types
 define('LOG_COURSE_DELETE',                     'course_deleted');
 define('LOG_COURSE_CREATE',                     'course_created');
+
+// @todo replace 'soc_gr' with social_group
+define('LOG_GROUP_PORTAL_CREATED',			    'soc_gr_created');
+define('LOG_GROUP_PORTAL_UPDATED',			    'soc_gr_updated');
+define('LOG_GROUP_PORTAL_DELETED',			    'soc_gr_deleted');
+define('LOG_GROUP_PORTAL_USER_DELETE_ALL',		'soc_gr_delete_users');
+
+define('LOG_GROUP_PORTAL_ID',			        'soc_gr_portal_id');
+define('LOG_GROUP_PORTAL_REL_USER_ARRAY',		'soc_gr_user_array');
+
+define('LOG_GROUP_PORTAL_USER_SUBSCRIBED',  	'soc_gr_u_subs');
+define('LOG_GROUP_PORTAL_USER_UNSUBSCRIBED',	'soc_gr_u_unsubs');
+define('LOG_GROUP_PORTAL_USER_UPDATE_ROLE',		'soc_gr_update_role');
+
 define('LOG_USER_DELETE',                       'user_deleted');
 define('LOG_USER_CREATE',                       'user_created');
 define('LOG_USER_ENABLE',                       'user_enable');
 define('LOG_USER_DISABLE',                      'user_disable');
-define('LOG_USER_FIELD_CREATE',			'user_field_created');
-define('LOG_USER_FIELD_DELETE',			'user_field_deleted');
+define('LOG_USER_FIELD_CREATE',			        'user_field_created');
+define('LOG_USER_FIELD_DELETE',			        'user_field_deleted');
 define('LOG_SESSION_CREATE',                    'session_created');
 define('LOG_SESSION_DELETE',                    'session_deleted');
 define('LOG_SESSION_CATEGORY_CREATE',           'session_category_created');
@@ -176,12 +192,13 @@ define('LOG_CAREER_CREATE',                     'career_created');
 define('LOG_CAREER_DELETE',                     'career_deleted');
 
 define('LOG_USER_PERSONAL_DOC_DELETED',         'user_doc_deleted');
+define('LOG_WIKI_ACCESS',                       'wiki_page_view');
 
 // event logs data types
 define('LOG_COURSE_CODE',                       'course_code');
 define('LOG_USER_ID',                           'user_id');
 define('LOG_USER_OBJECT',                       'user_object');
-define('LOG_USER_FIELD_VARIABLE',		'user_field_variable');
+define('LOG_USER_FIELD_VARIABLE',		        'user_field_variable');
 define('LOG_SESSION_ID',                        'session_id');
 define('LOG_SESSION_CATEGORY_ID',               'session_category_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY',   'settings_category');
@@ -193,6 +210,8 @@ define('LOG_PROMOTION_ID',                      'promotion_id');
 define('LOG_GRADEBOOK_LOCKED',                   'gradebook_locked');
 define('LOG_GRADEBOOK_UNLOCKED',                 'gradebook_unlocked');
 define('LOG_GRADEBOOK_ID',                       'gradebook_id');
+
+define('LOG_WIKI_PAGE_ID',                       'wiki_page_id');
 
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 
@@ -921,14 +940,17 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
 
 /**
  * Function used to protect an admin script.
- * The function blocks access when the user has no platform admin rights.
- * This is only the first proposal, test and improve!
  *
- * @author Roan Embrechts
+ * The function blocks access when the user has no platform admin rights with an error message printed on default output
+ * @param bool Whether to allow session admins as well
+ * @param bool Whether to allow HR directors as well
+ * @param string An optional message (already passed through get_lang)
+ * @return bool True if user is allowed, false otherwise. The function also outputs an error message in case not allowed
+ * @author Roan Embrechts (original author)
  */
-function api_protect_admin_script($allow_sessions_admins = false) {
-    if (!api_is_platform_admin($allow_sessions_admins)) {
-        api_not_allowed(true);
+function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = false, $message = null) {
+    if (!api_is_platform_admin($allow_sessions_admins, $allow_drh)) {
+        api_not_allowed(true, $message);
         return false;
     }
     return true;
@@ -1056,7 +1078,7 @@ function _api_format_user($user, $add_password = false) {
         $firstname = $user['firstName'];
         $lastname = $user['lastName'];
     }
-    $result['phone']= $user['phone'];
+    $result['phone'] = $user['phone'];
 
     $result['complete_name'] 	= api_get_person_name($firstname, $lastname);
 
@@ -1147,6 +1169,9 @@ function _api_format_user($user, $add_password = false) {
     if ($add_password) {
         $result['password'] = $user['password'];
     }
+
+    $result['creator_id'] = $user['creator_id'];
+    $result['registration_date'] = $user['registration_date'];
 
     return $result;
 }
@@ -1324,9 +1349,10 @@ function api_get_cidreq($add_session_id = true, $add_group_id = true) {
  *
  * Now if the course_code is given, the returned array gives info about that
  * particular course, not specially the current one.
- * @todo    Same behaviour as api_get_user_info so that api_get_course_id becomes absolete too.
+ * @param string Course code
+ * @todo    Same behaviour as api_get_user_info so that api_get_course_id becomes obsolete too.
  */
-function api_get_course_info($course_code = null) {
+function api_get_course_info($course_code = null, $strict = false) {
     if (!empty($course_code)) {
         $course_code        = Database::escape_string($course_code);
         $course_table       = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -2183,16 +2209,17 @@ function api_get_self() {
 /**
  * Checks whether current user is a platform administrator
  * @param boolean Whether session admins should be considered admins or not
+ * @param boolean Whether HR directors should be considered admins or not
  * @return boolean True if the user has platform admin rights,
  * false otherwise.
  * @see usermanager::is_admin(user_id) for a user-id specific function
  */
-function api_is_platform_admin($allow_sessions_admins = false) {
+function api_is_platform_admin($allow_sessions_admins = false, $allow_drh = false) {
     if ($_SESSION['is_platformAdmin']) {
         return true;
     }
     global $_user;
-    return $allow_sessions_admins && isset($_user['status']) && $_user['status'] == SESSIONADMIN;
+    return isset($_user['status']) && (($allow_sessions_admins && $_user['status'] == SESSIONADMIN) || ($allow_drh && $_user['status'] == DRH));
 }
 
 /**
@@ -2954,7 +2981,7 @@ function api_not_allowed($print_headers = false, $message = null) {
         exit;
     }
 
-    if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE)) {
+    if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE || $this_section == SECTION_PLATFORM_ADMIN)) {
 
         //only display form and return to the previous URL if there was a course ID included
         if ($user_id != 0 && !api_is_anonymous()) {
@@ -3050,8 +3077,11 @@ function api_get_datetime($time = null) {
  * @param int       The session ID (optional)
  * @return int      -1 on error, 0 if invisible, 1 if visible
  */
-function api_get_item_visibility($_course, $tool, $id, $session=0) {
-    if (!is_array($_course) || count($_course) == 0 || empty($tool) || empty($id)) { return -1; }
+function api_get_item_visibility($_course, $tool, $id, $session=0)
+{
+    if (!is_array($_course) || count($_course) == 0 || empty($tool) || empty($id)) {
+        return -1;
+    }
     $tool = Database::escape_string($tool);
     $id = Database::escape_string($id);
     $session = (int) $session;
@@ -3088,7 +3118,18 @@ function api_get_item_visibility($_course, $tool, $id, $session=0) {
  * @version January 2005
  * @desc update the item_properties table (if entry not exists, insert) of the course
  */
-function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $user_id, $to_group_id = 0, $to_user_id = null, $start_visible = 0, $end_visible = 0, $session_id = 0) {
+function api_item_property_update(
+    $_course,
+    $tool,
+    $item_id,
+    $lastedit_type,
+    $user_id,
+    $to_group_id = 0,
+    $to_user_id = null,
+    $start_visible = 0,
+    $end_visible = 0,
+    $session_id = 0
+) {
 
     // Definition of variables.
     $tool           = Database::escape_string($tool);
@@ -3256,14 +3297,14 @@ function api_item_property_update($_course, $tool, $item_id, $lastedit_type, $us
  * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
  * @param int       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
  */
-function api_get_item_property_by_tool($tool, $course_code, $session_id = null) {
+function api_get_item_property_by_tool($tool, $course_code, $session_id = null)
+{
 
     $course_info    = api_get_course_info($course_code);
     $tool           = Database::escape_string($tool);
 
     // Definition of tables.
     $item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $session_condition = '';
     $session_id = intval($session_id);
     $session_condition = ' AND id_session = '.$session_id;
     $course_id	 = $course_info['real_id'];
@@ -3747,7 +3788,7 @@ function api_max_sort_value($user_course_category, $user_id) {
  * @return boolean true or false
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function string_2_boolean($string) {
+function api_string_2_boolean($string) {
     if ($string == 'true') {
         return true;
     }
@@ -3756,6 +3797,7 @@ function string_2_boolean($string) {
     }
     return false;
 }
+
 
 /**
  * Determines the number of plugins installed for a given location
@@ -6168,6 +6210,7 @@ function api_is_global_chat_enabled(){
 
 /**
  * @todo Fix tool_visible_by_default_at_creation labels
+ * @todo Add sessionId parameter to avoid using context
  */
 function api_set_default_visibility($item_id, $tool_id, $group_id = null) {
     $original_tool_id = $tool_id;
@@ -6525,7 +6568,8 @@ function api_get_bytes_memory_limit($mem){
  * @return $user_info (array): user_id, lastname, firstname, username, email, ...
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-function api_get_user_info_from_official_code($official_code = '') {
+function api_get_user_info_from_official_code($official_code = '')
+{
     if (empty($official_code)) { return false; }
     $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE official_code ='".Database::escape_string($official_code)."'";
     $result = Database::query($sql);
@@ -6643,7 +6687,8 @@ function api_get_user_blocked_by_captcha($username)
  * @return string
  * @author hubert borderiou
  */
-function api_get_short_text_from_html($in_html, $in_number_char) {
+function api_get_short_text_from_html($in_html, $in_number_char)
+{
     $out_res = api_remove_tags_with_space($in_html, false);
     $postfix = "...";
     if (strlen($out_res) > $in_number_char) {
@@ -6755,4 +6800,38 @@ function api_can_login_as($loginAsUserId, $userId = null)
     };
 
     return (api_is_platform_admin() OR (api_is_session_admin() && $user_info['status'] == 5) OR $isDrh());
+}
+
+/**
+ * @return bool
+ */
+function api_is_allowed_in_course()
+{
+    return Session::read('is_allowed_in_course');
+}
+
+/**
+ * Show a string in
+ * @param string $sql
+ */
+function api_error_log($string)
+{
+    // Clean query
+    $bt = debug_backtrace();
+    $caller = array_shift($bt);;
+    $string = str_replace(array("\r", "\n", "\t", "\10"), '', $string);
+
+    error_log("-------------------------------------");
+    error_log($string);
+    error_log("File: ".$caller['file']." +".$caller['line']);
+    error_log("-------------------------------------");
+}
+
+/**
+ * Show a string in
+ * @param string $sql
+ */
+function api_elog($string)
+{
+    return api_error_log($string);
 }

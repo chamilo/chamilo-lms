@@ -443,7 +443,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                 /* >>>>>>>> External authentication modules <<<<<<<<< */
             } else { // no standard Chamilo login - try external authentification
                 //huh... nothing to do... we shouldn't get here
-                error_log('Chamilo Authentication file '. $extAuthSource[$uData['auth_source']]['login']. ' could not be found - this might prevent your system from doing the corresponding authentication process',0);
+                error_log('Chamilo Authentication file defined in $extAuthSource could not be found - this might prevent your system from doing the corresponding authentication process',0);
             }
         } else {
             // login failed, Database::num_rows($result) <= 0
@@ -521,7 +521,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                     $protocol = api_get_setting('sso_authentication_protocol');
                     // sso_authentication_domain can list
                     // several, comma-separated, domains
-                    $master_urls = split(',',api_get_setting('sso_authentication_domain'));
+                    $master_urls = preg_split('/,/',api_get_setting('sso_authentication_domain'));
                     if (!empty($master_urls)) {
                         $master_auth_uri = api_get_setting('sso_authentication_auth_uri');
                         foreach ($master_urls as $mu) {
@@ -920,6 +920,9 @@ $is_courseCoach     = false; //course coach
 //Course - User permissions
 $is_sessionAdmin    = false;
 $is_courseCoach     = false; //course coach
+$is_courseAdmin     = false;
+$is_courseTutor     = false;
+$is_courseMember    = false;
 
 if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
 {
@@ -964,18 +967,18 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
             Session::write('_courseUser',$_courseUser);
         }
 
-        //We are in a session course? Check session permissions
+        // We are in a session course? Check session permissions
         if (!empty($session_id)) {
-            //I'm not the teacher of the course
+            // I'm not the teacher of the course
             if ($is_courseAdmin == false) {
-                // this user has no status related to this course
+                // This user has no status related to this course
                 // The user is subscribed in a session? The user is a Session coach a Session admin ?
 
                 $tbl_session             = Database :: get_main_table(TABLE_MAIN_SESSION);
                 $tbl_session_course      = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
                 $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-                //Session coach, session admin, course coach admin
+                // Session coach, session admin or course coach admin
                 $sql = "SELECT session.id_coach, session_admin_id, session_rcru.id_user
                         FROM $tbl_session session, $tbl_session_course_user session_rcru
                         WHERE  session_rcru.id_session  = session.id AND
@@ -986,9 +989,9 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
                         ";
 
                 $result = Database::query($sql);
-                $row     = Database::store_result($result);
+                $row = Database::store_result($result);
 
-                //Am I a session admin?
+                // Am I a session admin?
                 if (isset($row) && isset($row[0]) && $row[0]['session_admin_id'] == $user_id) {
                     $_courseUser['role'] = 'Professor';
                     $is_courseMember     = false;
@@ -1005,6 +1008,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
                            "AND session.id_coach = $user_id ".
                            "AND sc.course_code = '$_cid'";
                     $result = Database::query($sql);
+
                     if (Database::num_rows($result)) {
                         $_courseUser['role'] = 'Professor';
                         $is_courseMember     = true;
@@ -1063,7 +1067,7 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
                                     break;
                             }
                         } else {
-                            //unregister user
+                            // Unregister user
                             $is_courseMember     = false;
                             $is_courseTutor      = false;
                             $is_courseAdmin      = false;
@@ -1073,6 +1077,21 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
                         }
                     }
                 }
+
+                // Drh can enter to a course as an student see BT#6770
+                if (api_drh_can_access_all_session_content()) {
+                    $sessionInfo = SessionManager::getSessionFollowedByDrh($user_id, $session_id);
+                    if (!empty($sessionInfo) && !empty($sessionInfo['course_list'])) {
+                        if (isset($sessionInfo['course_list'][$_course['real_id']])) {
+                            $_courseUser['role'] = '';
+                            $is_courseMember     = true;
+                            $is_courseTutor      = false;
+                            $is_courseCoach      = false;
+                            $is_sessionAdmin     = false;
+                        }
+                    }
+                }
+
             }
 
             //If I'm the admin platform i'm a teacher of the course

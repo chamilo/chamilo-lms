@@ -2,6 +2,27 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$FeedbackDisplayOptions = "Manera en la cual se mostrará el comentario definido para cada pregunta. Esta opción define como un estudiante visualizará (o no) los comentarios (retro-alimentación) ingresados para cada alternativa en cada pregunta. Recomendamos evaluar las distintas opciones antes de invitar los estudiantes a tomar la prueba.";
+$ImportAikenQuizExplanationExample = "Este es el texto de la pregunta 1
+A. Respuesta 1
+B. Respuesta 2
+C. Respuesta 3
+ANSWER: B
+
+Este es el texto de la pregunta 2 (notese la línea blanca arriba)
+A. Respuesta 1
+B. Respuesta 2
+C. Respuesta 3
+D. Respuesta 4
+ANSWER: D
+ANSWER_EXPLANATION: Este es un texto opcional de retroalimentación que aparecerá al costado de la respuesta correcta.";
+$ImportAikenQuizExplanation = "El formato Aiken es un simple formato texto (archivo .txt) con varios bloques de preguntas, cada bloque separado por una línea blanca. La primera línea es la pregunta. Las líneas de respuestas tienen un prefijo de letra y punto, y la respuesta correcta sigue, con el prefijo 'ANSWER:'. Ver ejemplo a continuación.";
+$ExerciseAikenErrorNoAnswerOptionGiven = "El archivo importado tiene por lo menos una pregunta sin respuesta (o las respuestas no incluyen la letra de prefijo requerida). Asegúrese de que cada pregunta tengo por lo mínimo una respuesta y que esté prefijada por una letra y un punto o una paréntesis, como sigue: A. Respuesta uno";
+$ExerciseAikenErrorNoCorrectAnswerDefined = "El archivo importado contiene por lo menos una pregunta sin ninguna respuesta definida. Asegúrese que todas las preguntas tienen una línea tipo ANSWER: [letra], y vuelva a intentar.";
+$ThereWasAProblemWithYourFile = "Hubo un error desconocido en su archivo. Por favor revise su formato e intente nuevamente.";
+$YouMustUploadAZipOrTxtFile = "Tiene que subir un archivo .txt o .zip";
+$NoTxtFileFoundInTheZip = "No se encontró ningun archivo .txt en el zip";
+$ImportAikenQuiz = "Importar quiz en formato Aiken";
 $ExerciseWasActivatedFromXToY = "El ejercicio estuvo disponible desde %s hasta %s";
 $SelectAnAnswerToContinue = "Tiene que seleccionar una respuesta para poder continuar";
 $IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed = "Si continua, sus respuestas serán guardadas, y no podrá más modificarlas. Está seguro que desea terminar?";

@@ -1862,6 +1862,10 @@ class learnpath
         $package_type = '';
         $at_root = false;
         $manifest = '';
+        $aicc_match_crs = 0;
+        $aicc_match_au = 0;
+        $aicc_match_des = 0;
+        $aicc_match_cst = 0;
 
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
         if (is_array($zipContentArray) && count($zipContentArray) > 0) {
@@ -1874,14 +1878,33 @@ class learnpath
                     $package_type = 'scorm';
                     break; // Exit the foreach loop.
                 }
-                elseif (preg_match('/aicc\//i', $thisContent['filename'])) {
-                    // If found an aicc directory... (!= false means it cannot be false (error) or 0 (no match)).
-                    $package_type = 'aicc';
+                elseif (preg_match('/aicc\//i', $thisContent['filename'])  || in_array(strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION)), array( 'crs','au','des','cst'))) {
+                    $ext = strtolower(pathinfo($thisContent['filename'], PATHINFO_EXTENSION));
+                    switch ($ext) {
+                        case 'crs':
+                            $aicc_match_crs = 1;
+                            break;
+                        case 'au':
+                            $aicc_match_au = 1;
+                            break;
+                        case 'des':
+                            $aicc_match_des = 1;
+                            break;
+                        case 'cst':
+                            $aicc_match_cst = 1;
+                            break;
+                        default:
+                            break;
+                    }
                     //break; // Don't exit the loop, because if we find an imsmanifest afterwards, we want it, not the AICC.
                 } else {
                     $package_type = '';
                 }
             }
+        }
+        if (empty($package_type) && 4 == ($aicc_match_crs + $aicc_match_au + $aicc_match_des + $aicc_match_cst)) {
+                // If found an aicc directory... (!= false means it cannot be false (error) or 0 (no match)).
+                $package_type = 'aicc';
         }
         return $package_type;
     }
@@ -6788,16 +6811,7 @@ class learnpath
 
             $result = Database::query($sql_doc);
             $row 	= Database::fetch_array($result);
-
-            $explode = explode('.', $row['title']);
-
-            if (count($explode) > 1) {
-                for ($i = 0; $i < count($explode) - 1; $i++)
-                    $item_title .= $explode[$i];
-            } else {
-                $item_title = $row['title'];
-            }
-
+            $item_title = $row['title'];
             $item_title = str_replace('_', ' ', $item_title);
             if (empty ($item_title)) {
                 $path_parts = pathinfo($row['path']);
@@ -7185,7 +7199,7 @@ class learnpath
         $return .= '<select id="previous" name="previous" style="width:100%;" size="1" class="learnpath_item_form">';
         $return .= '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
         for ($i = 0; $i < count($arrLP); $i++) {
-            if ($arrLP[$i]['parent_item_id'] == $parent_item_id && $arrLP[$i]['id'] != $id) {
+            if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
                 if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
                     $selected = 'selected="selected" ';
                 elseif ($action == 'add')
@@ -7855,7 +7869,8 @@ class learnpath
      */
     public function get_documents() {
     	$course_info = api_get_course_info();
-    	$document_tree = DocumentManager::get_document_preview($course_info, $this->lp_id, null, 0, true);
+        $sessionId = api_get_session_id();
+    	$document_tree = DocumentManager::get_document_preview($course_info, $this->lp_id, null, $sessionId, true);
     	return $document_tree;
     }
 

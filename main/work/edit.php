@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 $language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
 
 require_once '../inc/global.inc.php';
@@ -8,7 +10,7 @@ $current_course_tool  = TOOL_STUDENTPUBLICATION;
 
 api_protect_course_script(true);
 
-// Including necessary files
+// Including files
 require_once 'work.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
@@ -192,7 +194,7 @@ if ($form->validate()) {
                 }
 
                 if ($_POST['qualification'] > $_POST['qualification_over']) {
-                    Display::display_error_message(get_lang('QualificationMustNotBeMoreThanQualificationOver'));
+                    $error_message .= Display::return_message(get_lang('QualificationMustNotBeMoreThanQualificationOver'), 'error');
                 } else {
                     $sql = "UPDATE  " . $work_table . "
                             SET	title = '".Database::escape_string($title)."',
@@ -204,7 +206,7 @@ if ($form->validate()) {
                 api_item_property_update($_course, 'work', $item_to_edit_id, 'DocumentUpdated', $user_id);
 
                 $succeed = true;
-                $error_message .= Display::return_message(get_lang('ItemUpdated'), false);
+                $error_message .= Display::return_message(get_lang('ItemUpdated'), 'warning');
             } else {
                 $error_message .= Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error');
             }
@@ -216,11 +218,16 @@ if ($form->validate()) {
         // Bad token or can't add works
         $error_message = Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error');
     }
+
+    if (!empty($error_message)) {
+        Session::write('error_message', $error_message);
+    }
+
     $script = 'work_list.php';
     if ($is_allowed_to_edit) {
         $script = 'work_list_all.php';
     }
-    header('Location: '.api_get_path(WEB_CODE_PATH).'work/'.$script.'?'.api_get_cidreq().'&id='.$work_id.'&error_message='.$error_message);
+    header('Location: '.api_get_path(WEB_CODE_PATH).'work/'.$script.'?'.api_get_cidreq().'&id='.$work_id);
     exit;
 }
 

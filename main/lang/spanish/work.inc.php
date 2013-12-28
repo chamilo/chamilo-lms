@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$WorkFileNotUploadedDirXDoesNotExist = "La tarea no pudo ser enviada porque la carpeta %s no existe";
+$FolderDoesntExistsInFileSystem = "La carpeta destino no existe en el servidor";
 $HandedOutDate = "Fecha de recepción";
 $HandedOut = "Entregado";
 $HandOutDateLimit = "Fecha límite de entrega";

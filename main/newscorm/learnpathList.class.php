@@ -163,4 +163,31 @@ class learnpathList {
     function get_flat_list() {
         return $this->list;
     }
+    /**
+     *  Gets a list of lessons  of the given course_code and session_id
+     *  This functions doesn't need user_id
+     *  @param string Text code of the course
+     *  @param int  Id of session
+     *  @return array List of lessons with lessons id as keys
+     */
+    function get_course_lessons($course_code, $session_id) {
+        $tbl_course_lp          = Database::get_course_table(TABLE_LP_MAIN);
+
+        $course = api_get_course_info($course_code);
+        //QUery
+        $sql = "SELECT * FROM $tbl_course_lp
+        WHERE c_id = %s ";  //TODO AND session_id = %s ? 
+        $sql_query = sprintf($sql, $course['real_id']);
+        $result = Database::query($sql_query);
+
+        $lessons = array();
+        while ($row = Database::fetch_array($result))
+        {
+            if (api_get_item_visibility($course, 'learnpath', $row['id'],  $session_id))
+            {
+                $lessons[$row['id']] = $row;
+            }
+        }
+        return $lessons;
+    }
 }

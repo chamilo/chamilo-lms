@@ -548,22 +548,26 @@ class UrlManager
     }
 
     /**
-     * @param int $id
+     * @param int $categoryId
      * @param int $urlId
      * @return int
      */
-    public static function addCourseCategoryToUrl($id, $urlId)
+    public static function addCourseCategoryToUrl($categoryId, $urlId)
     {
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-        $sql = "INSERT INTO $table
-                SET
-                course_category_id = '".intval($id)."',
-                access_url_id = ".intval($urlId);
-        Database::query($sql);
+        $exists = self::relationUrlCourseCategoryExist($categoryId, $urlId);
+        if (empty($exists)) {
+            $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
 
-        return Database::insert_id();
+            $sql = "INSERT INTO $table
+                    SET
+                    course_category_id = '".intval($categoryId)."',
+                    access_url_id = ".intval($urlId);
+            Database::query($sql);
+
+            return Database::insert_id();
+        }
+        return 0;
     }
-
 
     /**
      * Add a group of sessions into a group of URLs
@@ -650,7 +654,7 @@ class UrlManager
             $url_id=1;
         }
         $result = false;
-        $count = UrlManager::relation_url_session_exist($session_id,$url_id);
+        $count = UrlManager::relation_url_session_exist($session_id, $url_id);
         $session_id	= intval($session_id);
         if (empty($count) && !empty($session_id)) {
             $url_id = intval($url_id);
@@ -882,15 +886,14 @@ class UrlManager
         }
 
         // Adding
+
         foreach ($list as $id) {
-            if (!in_array($id, $existingItems)) {
-                UrlManager::addCourseCategoryToUrl($id, $urlId);
-                $categoryInfo = getCategoryById($id);
-                $children = getChildren($categoryInfo['code']);
-                if (!empty($children)) {
-                    foreach ($children as $category) {
-                        UrlManager::addCourseCategoryToUrl($category['id'], $urlId);
-                    }
+            UrlManager::addCourseCategoryToUrl($id, $urlId);
+            $categoryInfo = getCategoryById($id);
+            $children = getChildren($categoryInfo['code']);
+            if (!empty($children)) {
+                foreach ($children as $category) {
+                    UrlManager::addCourseCategoryToUrl($category['id'], $urlId);
                 }
             }
         }

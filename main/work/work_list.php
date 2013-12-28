@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 $language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
 
 require_once '../inc/global.inc.php';
@@ -67,9 +69,10 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId)) {
 }
 echo '</div>';
 
-$error_message = isset($_GET['error_message']) ? Security::remove_XSS($_GET['error_message']) : null;
+$error_message = Session::read('error_message');
 if (!empty($error_message)) {
     echo $error_message;
+    Session::erase('error_message');
 }
 
 if (!empty($my_folder_data['description'])) {
@@ -100,8 +103,6 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
 
     $columns = array(
         get_lang('Type'),
-        get_lang('FirstName'),
-        get_lang('LastName'),
         get_lang('Title'),
         get_lang('Qualification'),
         get_lang('Date'),
@@ -110,9 +111,7 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
     );
 
     $column_model   = array (
-        array('name'=>'type', 'index'=>'file', 'width'=>'5',   'align'=>'left', 'search' => 'false'),
-        array('name'=>'firstname', 'index'=>'firstname', 'width'=>'35', 'align'=>'left', 'search' => 'true'),
-        array('name'=>'lastname', 'index'=>'lastname', 'width'=>'35', 'align'=>'left', 'search' => 'true'),
+        array('name'=>'type', 'index'=>'file', 'width'=>'5',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
         array('name'=>'title', 'index'=>'title', 'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
         array('name'=>'qualification',	'index'=>'qualification', 'width'=>'10',   'align'=>'left', 'search' => 'true'),
         array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'30',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
@@ -124,17 +123,13 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
 
     $columns  = array(
         get_lang('Type'),
-        get_lang('FirstName'),
-        get_lang('LastName'),
         get_lang('Title'),
         get_lang('Date'),
         get_lang('Actions')
     );
 
     $column_model   = array (
-        array('name'=>'type',           'index'=>'file',            'width'=>'5',   'align'=>'left', 'search' => 'false'),
-        array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
+        array('name'=>'type',           'index'=>'file',            'width'=>'5',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
         array('name'=>'title',          'index'=>'title',           'width'=>'60',   'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
         array('name'=>'sent_date',       'index'=>'sent_date',      'width'=>'30',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true', 'sortable'=>'false'),
         array('name'=>'actions',        'index'=>'actions',         'width'=>'20',   'align'=>'left', 'search' => 'false', 'sortable'=>'false')

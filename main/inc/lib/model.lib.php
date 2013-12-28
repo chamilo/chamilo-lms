@@ -9,8 +9,8 @@
  * Class
  * @package chamilo.library
  */
-class Model {
-
+class Model
+{
     public $table;
     public $columns;
     public $required;

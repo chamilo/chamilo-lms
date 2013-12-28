@@ -2,6 +2,31 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AllowMemberLeaveGroup = "Permitir a los miembros de dejar el grupo";
+$CreatedByXYOnZ = "Creado/a por <a href=\"%s\">%s</a> el %s";
+$LoginWithExternalAccount = "Ingresar con una cuenta externa";
+$NumberOfGroupsToCreate = "Cantidad de grupos a crear";
+$CoachesSubscribedAsATeacherInCourseX = "Tutores inscritos como profesores en curso %s";
+$EnrollStudentsFromExistingSessions = "Suscribir estudiantes de sesiones existentes";
+$EnrollTrainersFromExistingSessions = "Suscribir tutores de sesiones existentes";
+$AddingStudentsFromSessionXToSessionY = "Añadiendo estudiantes de la sesión %s a la sesión %s";
+$AddUserGroupToThatURL = "Agregar clases a una URL";
+$FirstLetter = "Primer letra";
+$UserGroupList = "Lista de clases";
+$AddUserGroupToURL = "Agregar clases a una URL";
+$UserGroupListInX = "Clases de %s";
+$UserGroupListInPlatform = "Lista de clases en la plataforma.";
+$EditUserGroupToURL = "Editar clases de una URL";
+$ManageUserGroup = "Administrar clases";
+$RegistrationDisabled = "Disculpe, está intentando acceder a la página de registro del portal, pero el registro de usuarios está actualmente deshabilitada. Por favor, contacte al administrador(Véase información de contacto). Si usted ya tiene una cuenta en nuestro sitio.";
+$CasDirectCourseAccess = "Ingrese el curso con autentificación CAS";
+$TeachersWillBeAddedAsCoachInAllCourseSessions = "Los profesores serán agregados como tutores en todos los cursos dentre de las sesiones.";
+$YesImSure = "Si, estoy seguro.";
+$NoIWantToTurnBack = "No, deseo regresar.";
+$IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed = "Si continúa se guardará sus respuestas. Cualquier cambio no posterir no será permitido.";
+$SpecialCourses = "Cursos especiales";
+$Roles = "Roles";
+$ToolCurriculum = "Curriculum";
 $ToReviewXYZ = "%s por revisar (%s)";
 $UnansweredXYZ = "%s sin responder (%s)";
 $AnsweredXYZ = "%s respondidas (%s)+(%s)";
@@ -1468,17 +1493,4 @@ $DataTableSearch = "Buscar";
 $HideColumn = "Ocultar columna";
 $DisplayColumn = "Mostrar columna";
 $LegalAgreementAccepted = "Condiciones legales aceptadas";
-
-$ManageUserGroup = "Administrar clases";
-$EditUserGroupToURL = "Editar clases de una URL";
-$UserGroupListInPlatform = "Lista de clases en la plataforma.";
-$UserGroupListIn  = "Clases de ";
-$AddUserGroupToURL = "Agregar clases a una URL";
-$UserGroupList = "Lista de clases";
-$FirstLetter = "Primer letra";
-$AddUserGroupToThatURL = "Agregar clases a una URL";
-$AddingStudentsFromSessionXToSessionY = "Adding students from session <b>%s</b> to session <b>%s </b>";
-$EnrollTrainersFromExistingSessions = "Enroll trainers from existing sessions";
-$EnrollStudentsFromExistingSessions = "Enroll students from existing sessions";
-$CoachesSubscribedAsATeacherInCourseX = "Coaches will be subcribed as a teacher in the course %s";
 ?>

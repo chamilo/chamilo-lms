@@ -1,27 +1,27 @@
 <?php
-	/**
-	 * The frame that contains the image to be edited.
-	 * @author Wei Zhuo
-	 * @author Paul Moers <mail@saulmade.nl> - watermarking and replace code + several small enhancements <http://www.saulmade.nl/FCKeditor/FCKPlugins.php>
-	 * @version $Id: editorFrame.php,v 1.7 2006/12/20 18:19:28 thierrybo Exp $
-	 * @package ImageManager
-	 */
+/**
+ * The frame that contains the image to be edited.
+ * @author Wei Zhuo
+ * @author Paul Moers <mail@saulmade.nl> - watermarking and replace code + several small enhancements <http://www.saulmade.nl/FCKeditor/FCKPlugins.php>
+ * @version $Id: editorFrame.php,v 1.7 2006/12/20 18:19:28 thierrybo Exp $
+ * @package ImageManager
+ */
 
-	require_once('config.inc.php');
-	require_once('Classes/ImageManager.php');
-	require_once('Classes/ImageEditor.php');
+require_once('config.inc.php');
+require_once('Classes/ImageManager.php');
+require_once('Classes/ImageEditor.php');
 
-	//default path is /
-	$relative = '/';
+//default path is /
+$relative = '/';
 
-	$manager = new ImageManager($IMConfig);
-	$editor = new ImageEditor($manager);
+$manager = new ImageManager($IMConfig);
+$editor = new ImageEditor($manager);
 
-	// process any uploaded files
-	$imageRelative = $manager->processUploads();
+// process any uploaded files
+$imageRelative = $manager->processUploads();
 
-	// get image info and process any action
-	$imageInfo = $editor->processImage($imageRelative);
+// get image info and process any action
+$imageInfo = $editor->processImage($imageRelative);
 
 ?>
 <!--[if IE]>
@@ -35,14 +35,12 @@
 <script type="text/javascript" src="assets/wz_dragdrop.js"></script>
 <script type="text/javascript" src="assets/EditorContent.js"></script>
 <script type="text/javascript" src="assets/editorFrame.js"></script>
-
 <style>
-
-	/* for centering the image vertically in IE */
-	html, body
-	{
-		height: 100%;
-	}
+/* for centering the image vertically in IE */
+html, body
+{
+    height: 100%;
+}
 
 </style>
 

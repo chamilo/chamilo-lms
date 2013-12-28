@@ -138,7 +138,6 @@ $form->add_textfield('name', get_lang('GroupName'));
 $form->addElement('textarea', 'description', get_lang('Description'), array ('class' => 'span6', 'rows' => 6));
 
 $complete_user_list = GroupManager :: fill_groups_list($current_group['id']);
-
 usort($complete_user_list, 'sort_users');
 
 $possible_users = array();

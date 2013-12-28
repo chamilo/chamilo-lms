@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$WorkFileNotUploadedDirXDoesNotExist = "Assignment could not be uploaded because folder %s does not exist";
+$FolderDoesntExistsInFileSystem = "Target folder doesn't exist on the server.";
 $HandedOutDate = "Time of reception";
 $HandedOut = "Handed out";
 $HandOutDateLimit = "Deadline";

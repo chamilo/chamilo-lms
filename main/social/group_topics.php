@@ -22,18 +22,16 @@ $message_id = intval($_GET['msg_id']);
 
 //todo @this validation could be in a function in group_portal_manager
 if (empty($group_id)) {
-	api_not_allowed(true);
-
+    api_not_allowed(true);
 } else {
-	$group_info = GroupPortalManager::get_group_data($group_id);
-
-	if (empty($group_info)) {
-		api_not_allowed(true);
-	}
-	$is_member = GroupPortalManager::is_group_member($group_id);
-	if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED && !$is_member ) {
-		api_not_allowed(true);
-	}
+    $group_info = GroupPortalManager::get_group_data($group_id);
+    if (empty($group_info)) {
+        api_not_allowed(true);
+    }
+    $is_member = GroupPortalManager::is_group_member($group_id);
+    if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED && !$is_member) {
+        api_not_allowed(true);
+    }
 }
 
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
@@ -48,24 +46,24 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
 // save message group
 if (isset($_POST['token']) && $_POST['token'] === $_SESSION['sec_token']) {
 
-	if (isset($_POST['action'])) {
-		$title        = isset($_POST['title']) ? $_POST['title'] : null;
-		$content      = $_POST['content'];
-		$group_id     = intval($_POST['group_id']);
-		$parent_id    = intval($_POST['parent_id']);
+    if (isset($_POST['action'])) {
+        $title        = isset($_POST['title']) ? $_POST['title'] : null;
+        $content      = $_POST['content'];
+        $group_id     = intval($_POST['group_id']);
+        $parent_id    = intval($_POST['parent_id']);
 
-		if ($_POST['action'] == 'reply_message_group') {
-			$title = cut($content, 50);
-		}
-		if ($_POST['action'] == 'edit_message_group') {
-			$edit_message_id =  intval($_POST['message_id']);
-			$res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id, $edit_message_id, 0, $topic_id);
-		} else {
-			if ($_POST['action'] == 'add_message_group' && !$is_member) {
-				api_not_allowed();
-			}
-			$res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id, 0, $topic_id);
-		}
+        if ($_POST['action'] == 'reply_message_group') {
+            $title = cut($content, 50);
+        }
+        if ($_POST['action'] == 'edit_message_group') {
+            $edit_message_id =  intval($_POST['message_id']);
+            $res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id, $edit_message_id, 0, $topic_id);
+        } else {
+            if ($_POST['action'] == 'add_message_group' && !$is_member) {
+                api_not_allowed();
+            }
+            $res = MessageManager::send_message(0, $title, $content, $_FILES, '', $group_id, $parent_id, 0, $topic_id);
+        }
 
 		// display error messages
 		if (!$res) {
@@ -156,17 +154,16 @@ $(document).ready(function() {
 	    	url,
 	        {},
 	        	function(responseText, textStatus, XMLHttpRequest) {
-	                        dialog.dialog({
-	                            modal	: true,
-	            				width	: 520,
-	            				height	: 400,
-	                        });
+                    dialog.dialog({
+                        modal	: true,
+                        width	: 520,
+                        height	: 400,
+                    });
 				});
 	            //prevent the browser to follow the link
 	            return false;
 	        });
         });
-
 
 </script>';
 

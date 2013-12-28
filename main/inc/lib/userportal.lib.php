@@ -21,7 +21,8 @@ class IndexManager {
 		}
 	}
 
-	function set_login_form($setLoginForm = true) {
+	function set_login_form($setLoginForm = true)
+    {
 		global $loginFailed;
 
 		$login_form = '';
@@ -207,8 +208,10 @@ class IndexManager {
 	}
 
 	/* Includes a created page */
-	function return_home_page() {
-
+	function return_home_page()
+    {
+        $userId = api_get_user_id();
+        global $_configuration;
 		// Including the page for the news
 		$html = '';
 
@@ -216,6 +219,11 @@ class IndexManager {
 			$open = @(string)file_get_contents(api_get_path(SYS_PATH).$this->home.$_GET['include']);
 			$html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 		} else {
+            // Hiding home top when user not connected.
+            if (isset($_configuration['hide_home_top_when_connected']) && $_configuration['hide_home_top_when_connected'] && !empty($userId)) {
+                return $html;
+            }
+
 			if (!empty($_SESSION['user_language_choice'])) {
 				$user_selected_language = $_SESSION['user_language_choice'];
 			} elseif (!empty($_SESSION['_user']['language'])) {
@@ -223,6 +231,7 @@ class IndexManager {
 			} else {
 				$user_selected_language = api_get_setting('platformLanguage');
 			}
+
 			if (!file_exists($this->home.'home_news_'.$user_selected_language.'.html')) {
 				if (file_exists($this->home.'home_top.html')) {
 					$home_top_temp = file($this->home.'home_top.html');
@@ -884,7 +893,14 @@ class IndexManager {
 		$my_account_content = '<ul class="nav nav-list">';
 
 		if ($show_create_link) {
-			$my_account_content .= '<li><a href="main/create_course/add_course.php" class="add course">'.(api_get_setting('course_validation') == 'true' ? get_lang('CreateCourseRequest') : get_lang('CourseCreate')).'</a></li>';
+			$my_account_content .= '<li><a href="main/create_course/add_course.php" class="add course">';
+            if (api_get_setting('course_validation') == 'true' && !api_is_platform_admin()) {
+                $my_account_content .= get_lang('CreateCourseRequest');
+            }
+            else {
+                $my_account_content .= get_lang('CourseCreate');
+            }
+            $my_account_content .= '</a></li>';
 		}
 
         //Sort courses

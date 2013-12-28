@@ -2,6 +2,10 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$DeleteUsersNotInList = "Desinscribir los alumnos que no están en una sesión en la lista importada";
+$IfSessionExistsUpdate = "Si la sesión existe, actualizarla con los datos del archivo";
+$SearchCourseBySession = "Buscar curso por sesión";
+$GlobalLinkUseDoubleColumnPrivateToShowPrivately = "Use ::private pegado al fin del enlace si quiere mostrarlo solo a los usuarios identificados";
 $CourseVisibilityHidden = "Invisible - Totalmente invisible para todos los usuarios a parte de los administradores";
 $ApplyAllLanguages = "Aplicar cambio a todos los lenguajes habilitados";
 $CareerUpdated = "Carrera actualizada satisfactoriamente";

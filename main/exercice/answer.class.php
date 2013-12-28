@@ -545,6 +545,7 @@ class Answer
 
 		$this->cancel();
 	}
+
 	/**
 	 * Duplicates answers by copying them into another question
 	 *

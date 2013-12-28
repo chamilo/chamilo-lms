@@ -594,7 +594,7 @@ if ($show_full_profile) {
         //Pending invitations
         if (!isset($_GET['u']) || (isset($_GET['u']) && $_GET['u']==api_get_user_id())) {
             if ($count_pending_invitations > 0) {
-                $invitations .=  '<div><h3>'.get_lang('PendingInvitations').'</h3></div>';
+                $invitations =  '<div><h3>'.get_lang('PendingInvitations').'</h3></div>';
                 for ($i=0;$i<$count_pending_invitations;$i++) {
                     $user_invitation_id = $pending_invitations[$i]['user_sender_id'];
                     $invitations .=  '<div id="dpending_'.$user_invitation_id.'" class="friend_invitations">';

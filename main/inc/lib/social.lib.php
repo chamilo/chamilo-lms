@@ -40,7 +40,6 @@ class SocialManager extends UserManager
     public static function show_list_type_friends()
     {
         $friend_relation_list = array();
-        $count_list = 0;
         $tbl_my_friend_relation_type = Database :: get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
         $sql = 'SELECT id,title FROM '.$tbl_my_friend_relation_type.' WHERE id<>6 ORDER BY id ASC';
         $result = Database::query($sql);
@@ -82,8 +81,15 @@ class SocialManager extends UserManager
     {
         $tbl_my_friend_relation_type = Database :: get_main_table(TABLE_MAIN_USER_FRIEND_RELATION_TYPE);
         $tbl_my_friend = Database :: get_main_table(TABLE_MAIN_USER_REL_USER);
-        $sql = 'SELECT rt.id as id FROM '.$tbl_my_friend_relation_type.' rt '.
-            'WHERE rt.id=(SELECT uf.relation_type FROM '.$tbl_my_friend.' uf WHERE  user_id='.((int) $user_id).' AND friend_user_id='.((int) $user_friend).' AND uf.relation_type <> '.USER_RELATION_TYPE_RRHH.' )';
+        $sql = 'SELECT rt.id as id FROM '.$tbl_my_friend_relation_type.' rt
+                WHERE rt.id = (
+                    SELECT uf.relation_type FROM '.$tbl_my_friend.' uf
+                    WHERE
+                        user_id='.((int) $user_id).' AND
+                        friend_user_id='.((int) $user_friend).' AND
+                        uf.relation_type <> '.USER_RELATION_TYPE_RRHH.'
+                    LIMIT 1
+                )';
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res, 'ASSOC');
@@ -249,7 +255,9 @@ class SocialManager extends UserManager
     {
         $list_friend_invitation = array();
         $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
-        $sql = 'SELECT user_sender_id,send_date,title,content FROM '.$tbl_message.' WHERE user_receiver_id='.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
+        $sql = 'SELECT user_sender_id,send_date,title,content
+                FROM '.$tbl_message.'
+                WHERE user_receiver_id='.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list_friend_invitation[] = $row;
@@ -267,7 +275,9 @@ class SocialManager extends UserManager
     {
         $list_friend_invitation = array();
         $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
-        $sql = 'SELECT user_receiver_id, send_date,title,content FROM '.$tbl_message.' WHERE user_sender_id = '.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
+        $sql = 'SELECT user_receiver_id, send_date,title,content
+                FROM '.$tbl_message.'
+                WHERE user_sender_id = '.intval($user_id).' AND msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         while ($row = Database::fetch_array($res, 'ASSOC')) {
             $list_friend_invitation[$row['user_receiver_id']] = $row;
@@ -277,15 +287,20 @@ class SocialManager extends UserManager
 
     /**
      * Accepts invitation
-     * @param int user sender id
-     * @param int user receiver id
+     * @param int $user_send_id
+     * @param int $user_receiver_id
      * @author isaac flores paz
      * @author Julio Montoya <gugli100@gmail.com> Cleaning code
      */
     public static function invitation_accepted($user_send_id, $user_receiver_id)
     {
         $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
-        $sql = 'UPDATE '.$tbl_message.' SET msg_status='.MESSAGE_STATUS_INVITATION_ACCEPTED.' WHERE user_sender_id='.((int) $user_send_id).' AND user_receiver_id='.((int) $user_receiver_id).';';
+        $sql = "UPDATE $tbl_message
+                SET msg_status = ".MESSAGE_STATUS_INVITATION_ACCEPTED."
+                WHERE
+                    user_sender_id = ".((int) $user_send_id)." AND
+                    user_receiver_id=".((int) $user_receiver_id)." AND
+                    msg_status = ".MESSAGE_STATUS_INVITATION_PENDING;
         Database::query($sql);
     }
 
@@ -299,9 +314,11 @@ class SocialManager extends UserManager
     public static function invitation_denied($user_send_id, $user_receiver_id)
     {
         $tbl_message = Database::get_main_table(TABLE_MAIN_MESSAGE);
-        //$msg_status=7;
-        //$sql='UPDATE '.$tbl_message.' SET msg_status='.$msg_status.' WHERE user_sender_id='.((int)$user_send_id).' AND user_receiver_id='.((int)$user_receiver_id).';';
-        $sql = 'DELETE FROM '.$tbl_message.' WHERE user_sender_id='.((int) $user_send_id).' AND user_receiver_id='.((int) $user_receiver_id).';';
+        $sql = 'DELETE FROM '.$tbl_message.'
+                WHERE
+                    user_sender_id =  '.((int) $user_send_id).' AND
+                    user_receiver_id='.((int) $user_receiver_id).' AND
+                    msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         Database::query($sql);
     }
 
@@ -316,7 +333,8 @@ class SocialManager extends UserManager
     {
         $tbl_user_friend = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $user_id = api_get_user_id();
-        $sql = 'UPDATE '.$tbl_user_friend.' SET relation_type='.((int) $type_qualify).' WHERE user_id='.((int) $user_id).' AND friend_user_id='.((int) $id_friend_qualify).';';
+        $sql = 'UPDATE '.$tbl_user_friend.' SET relation_type='.((int) $type_qualify).'
+                WHERE user_id = '.((int) $user_id).' AND friend_user_id='.(int) $id_friend_qualify;
         Database::query($sql);
     }
 
@@ -776,25 +794,32 @@ class SocialManager extends UserManager
 
     /**
      * Displays a sortable table with the list of online users.
-     * @param array $user_list
+     * @param array $user_list The list of users to be shown
+     * @param bool $wrap Whether we want the function to wrap the spans list in a div or not
+     * @return string HTML block or null if and ID was defined
+     * @assert (null) === false
      */
-    public static function display_user_list($user_list)
+    public static function display_user_list($user_list, $wrap = true)
     {
-        if ($_GET['id'] == '') {
-            $column_size = '9';
-            $add_row = false;
-            if (api_is_anonymous()) {
-                $column_size = '12';
-                $add_row = true;
-            }
+        $html = null;
+        if (isset($_GET['id']) or count($user_list) < 1) {
+            return false;
+        }
+        $column_size = '9';
+        $add_row = false;
+        if (api_is_anonymous()) {
+            $column_size = '12';
+            $add_row = true;
+        }
 
-            $extra_params = array();
-            $course_url = '';
-            if (strlen($_GET['cidReq']) > 0) {
-                $extra_params['cidReq'] = Security::remove_XSS($_GET['cidReq']);
-                $course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
-            }
+        $extra_params = array();
+        $course_url = '';
+        if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
+            $extra_params['cidReq'] = Security::remove_XSS($_GET['cidReq']);
+            $course_url = '&amp;cidReq='.Security::remove_XSS($_GET['cidReq']);
+        }
 
+        if ($wrap) {
             if ($add_row) {
                 $html .='<div class="row">';
             }
@@ -802,45 +827,47 @@ class SocialManager extends UserManager
             $html .= '<div class="span'.$column_size.'">';
 
             $html .= '<ul id="online_grid_container" class="thumbnails">';
+        }
 
-            foreach ($user_list as $uid) {
-                $user_info = api_get_user_info($uid);
-                //Anonymous users can't have access to the profile
-                if (!api_is_anonymous()) {
-                    if (api_get_setting('allow_social_tool') == 'true') {
-                        $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$uid.$course_url;
-                    } else {
-                        $url = '?id='.$uid.$course_url;
-                    }
+        foreach ($user_list as $uid) {
+            $user_info = api_get_user_info($uid);
+            //Anonymous users can't have access to the profile
+            if (!api_is_anonymous()) {
+                if (api_get_setting('allow_social_tool') == 'true') {
+                    $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$uid.$course_url;
                 } else {
-                    $url = '#';
+                    $url = '?id='.$uid.$course_url;
                 }
-                $image_array = UserManager::get_user_picture_path_by_id($uid, 'system', false, true);
-
-                // reduce image
-                $name = $user_info['complete_name'];
-                $status_icon = Display::span('', array('class' => 'online_user_in_text'));
-                $user_status = $user_info['status'] == 1 ? Display::span('', array('class' => 'teacher_online')) : Display::span('', array('class' => 'student_online'));
-
-                if ($image_array['file'] == 'unknown.jpg' || !file_exists($image_array['dir'].$image_array['file'])) {
-                    $friends_profile['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';
-                    $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
-                } else {
-                    $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);
-                    $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
-                }
-                $name = '<a href="'.$url.'">'.$status_icon.$user_status.$name.'</a><br>';
-                $html .= '<li class="span'.($column_size / 3).'"><div class="thumbnail">'.$img.'<div class="caption">'.$name.'</div</div></li>';
+            } else {
+                $url = '#';
             }
-            $counter = $_SESSION['who_is_online_counter'];
+            $image_array = UserManager::get_user_picture_path_by_id($uid, 'system', false, true);
 
+            // reduce image
+            $name = $user_info['complete_name'];
+            $status_icon = Display::span('', array('class' => 'online_user_in_text'));
+            $user_status = $user_info['status'] == 1 ? Display::span('', array('class' => 'teacher_online')) : Display::span('', array('class' => 'student_online'));
+
+            if ($image_array['file'] == 'unknown.jpg' || !file_exists($image_array['dir'].$image_array['file'])) {
+                $friends_profile['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';
+                $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
+            } else {
+                $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);
+                $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
+            }
+            $name = '<a href="'.$url.'">'.$status_icon.$user_status.$name.'</a><br>';
+            $html .= '<li class="span'.($column_size / 3).'"><div class="thumbnail">'.$img.'<div class="caption">'.$name.'</div</div></li>';
+        }
+        $counter = $_SESSION['who_is_online_counter'];
+
+        if ($wrap) {
             $html .= '</ul></div>';
-            if (count($user_list) >= 9) {
-                $html .= '<div class="span'.$column_size.'"><a class="btn btn-large" id="link_load_more_items" data_link="'.$counter.'" >'.get_lang('More').'</a></div>';
-            }
-            if ($add_row) {
-                $html .= '</div>';
-            }
+        }
+        if (count($user_list) >= 9) {
+            $html .= '<div class="span'.$column_size.'"><a class="btn btn-large" id="link_load_more_items" data_link="'.$counter.'" >'.get_lang('More').'</a></div>';
+        }
+        if ($wrap && $add_row) {
+            $html .= '</div>';
         }
         return $html;
     }

@@ -1,5 +1,5 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 require_once '../global.inc.php';
 
 $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
@@ -9,7 +9,7 @@ $event_name = isset($_REQUEST['eventName']) ? $_REQUEST['eventName'] : null;
 api_protect_admin_script();
 
 switch ($action) {
-	case 'getEventTypes':
+    case 'getEventTypes':
         $events = get_all_event_types();
         print json_encode($events);
         break;
@@ -17,7 +17,7 @@ switch ($action) {
         $users = UserManager::get_user_list();
         print json_encode($users);
         break;
-    case 'get_event_users' :
+    case 'get_event_users':
         $users = get_event_users($event_name);
         print json_encode($users);
         break;

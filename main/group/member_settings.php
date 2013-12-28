@@ -16,7 +16,7 @@
 // Name of the language file that needs to be included
 $language_file = 'group';
 
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool  = TOOL_GROUP;
 
@@ -24,13 +24,13 @@ $current_course_tool  = TOOL_GROUP;
 api_protect_course_script(true);
 
 $group_id = api_get_group_id();
-$current_group = GroupManager :: get_group_properties($group_id);
+$current_group = GroupManager::get_group_properties($group_id);
 
 $nameTools = get_lang('EditGroup');
 $interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
 $interbreadcrumb[] = array ('url' => 'group_space.php?'.api_get_cidReq(), 'name' => $current_group['name']);
 
-$is_group_member = GroupManager :: is_tutor_of_group(api_get_user_id(), $group_id);
+$is_group_member = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
 
 if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
     api_not_allowed(true);
@@ -88,28 +88,15 @@ function sort_users($user_a, $user_b)
 }
 
 /**
- * Function to check the given max number of members per group
- */
-function check_max_number_of_members($value)
-{
-    $max_member_no_limit = $value['max_member_no_limit'];
-    if ($max_member_no_limit == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
-        return true;
-    }
-    $max_member = $value['max_member'];
-    return is_numeric($max_member);
-}
-
-/**
  * Function to check if the number of selected group members is valid
  */
 function check_group_members($value)
 {
-    if ($value['max_member_no_limit'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
+    if ($value['max_student'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
         return true;
     }
-    if (isset($value['max_member']) && isset($value['group_members']) && $value['max_member'] < count($value['group_members'])) {
-        return array ('group_members' => get_lang('GroupTooMuchMembers'));
+    if (isset($value['max_student']) && isset($value['group_members']) && $value['max_student'] < count($value['group_members'])) {
+        return array('group_members' => get_lang('GroupTooMuchMembers'));
     }
     return true;
 }
@@ -127,12 +114,9 @@ $(document).ready( function() {
 // Build form
 $form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidreq());
 $form->addElement('hidden', 'action');
-$form->addElement('hidden', 'referer');
-
-$complete_user_list = GroupManager :: fill_groups_list($current_group['id']);
-
+$form->addElement('hidden', 'max_student', $current_group['max_student']);
+$complete_user_list = GroupManager::fill_groups_list($current_group['id']);
 usort($complete_user_list, 'sort_users');
-
 $possible_users = array();
 foreach ($complete_user_list as $index => $user) {
     $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
@@ -172,6 +156,9 @@ $group_members_element->setButtonAttributes('add', array('class' => 'btn arrowr'
 $group_members_element->setButtonAttributes('remove', array('class' => 'btn arrowl'));
 $form->addFormRule('check_group_members');
 
+/*$url = '<a class="btn btn-danger" href="'.api_get_self().'?'.api_get_cidreq(true, false).'&action=empty&amp;id='.$group_id.'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('EmptyGroup').'">'.
+    get_lang('EmptyGroup').'</a>&nbsp;';
+$form->addElement('label', null, $url);*/
 // submit button
 $form->addElement('style_submit_button', 'submit', get_lang('SaveSettings'), 'class="save"');
 
@@ -193,6 +180,18 @@ if ($form->validate()) {
     }
     exit;
 }
+
+$action = isset($_GET['action']) ? $_GET['action'] : null;
+switch ($action) {
+    case 'empty':
+        if (api_is_allowed_to_edit(false, true)) {
+            GroupManager :: unsubscribe_all_users($group_id);
+            Display :: display_confirmation_message(get_lang('GroupEmptied'));
+        }
+        break;
+
+}
+
 
 $defaults = $current_group;
 $defaults['group_members'] = $selected_users;
@@ -217,6 +216,7 @@ if (isset($_GET['show_message_sucess'])) {
 
 $form->setDefaults($defaults);
 echo GroupManager::getSettingBar('member');
+
 $form->display();
 
 Display :: display_footer();

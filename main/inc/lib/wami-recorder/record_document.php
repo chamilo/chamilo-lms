@@ -29,7 +29,6 @@ if ($wamiuserid != api_get_user_id() || api_get_user_id() == 0 || $wamiuserid ==
 //clean
 $waminame = Security::remove_XSS($waminame);
 $waminame = Database::escape_string($waminame);
-$waminame = addslashes(trim($waminame));
 $waminame = replace_dangerous_char($waminame, 'strict');
 $waminame = disable_dangerous_file($waminame);
 $wamidir  = Security::remove_XSS($wamidir);
@@ -39,7 +38,6 @@ if (empty($content)) {
     exit;
 }
 
-//security extension
 $ext = explode('.', $waminame);
 $ext = strtolower($ext[sizeof($ext) - 1]);
 
@@ -69,7 +67,6 @@ if (file_exists($saveDir.'/'.$waminame_noex.'.'.$ext)) {
 }
 
 $documentPath = $saveDir.'/'.$waminame_to_save;
-
 // Add to disk
 $fh = fopen($documentPath, 'w') or die("can't open file");
 fwrite($fh, $content);
@@ -80,7 +77,6 @@ $addToLP = false;
 if (isset($_REQUEST['lp_item_id']) && !empty($_REQUEST['lp_item_id'])) {
     $lpItemId = $_REQUEST['lp_item_id'];
     $lp = isset($_SESSION['oLP']) ? $_SESSION['oLP'] : null;
-
     if (!empty($lp)) {
         $addToLP = true;
         // Converts wav into mp3
@@ -88,12 +84,14 @@ if (isset($_REQUEST['lp_item_id']) && !empty($_REQUEST['lp_item_id'])) {
         $ffmpeg = \FFMpeg\FFMpeg::create();
         $oldWavFile = $documentPath;
         if (file_exists($oldWavFile)) {
-            $video = $ffmpeg->open($documentPath);
+            $video = $ffmpeg->open($oldWavFile);
+
             $waminame_to_save = str_replace('wav', 'mp3', $waminame_to_save);
             $documentPath = $saveDir.'/'.$waminame_to_save;
             $title_to_save = $waminame_to_save;
-
+            //$video->save(new \FFMpeg\Format\Audio\Vorbis());
             $result = $video->save(new FFMpeg\Format\Audio\Mp3(), $documentPath);
+
             if ($result) {
                 unlink($oldWavFile);
             }

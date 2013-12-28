@@ -1111,10 +1111,12 @@ function api_is_western_name_order($format = null, $language = null) {
     }
 
     $language_is_supported = api_is_language_supported($language);
+
     if (!$language_is_supported || empty($language)) {
         $language = api_get_interface_language(false, true);
     }
     if (!isset($order[$format][$language])) {
+
         $test_name = api_get_person_name('%f', '%l', '%t', $format, $language);
         $order[$format][$language] = stripos($test_name, '%f') <= stripos($test_name, '%l');
     }

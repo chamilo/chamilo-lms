@@ -74,7 +74,8 @@ class learnpathItem
      * @param	integer	course int id
 	 * @return	boolean	True on success, false on failure
 	 */
-	public function __construct($id, $user_id = null, $course_id = null, $item_content = null) {
+	public function __construct($id, $user_id = null, $course_id = null, $item_content = null)
+    {
 		// Get items table.
 		if (!isset($user_id)) { $user_id = api_get_user_id(); }
 		if (self::debug > 0) { error_log("learnpathItem constructor: id: $id user_id: $user_id course_id: $course_id item_content: $item_content", 0); }
@@ -2592,7 +2593,11 @@ class learnpathItem
 	 	return true;
 	 }
 
-     function add_audio() {
+    /**
+     * @return bool|null|string
+     */
+    public function add_audio()
+    {
         $course_info = api_get_course_info();
         $filepath = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document/';
 
@@ -2600,7 +2605,7 @@ class learnpathItem
             mkdir($filepath.'audio', api_get_permissions_for_new_directories());
             $audio_id = add_document($course_info, '/audio', 'folder', 0, 'audio');
             api_item_property_update($course_info, TOOL_DOCUMENT, $audio_id, 'FolderCreated', api_get_user_id(), null, null, null, null, api_get_session_id());
-			api_item_property_update($course_info, TOOL_DOCUMENT, $audio_id, 'invisible', api_get_user_id(), null, null, null, null, api_get_session_id());
+            api_item_property_update($course_info, TOOL_DOCUMENT, $audio_id, 'invisible', api_get_user_id(), null, null, null, null, api_get_session_id());
         }
 
         $key = 'file';
@@ -2623,7 +2628,12 @@ class learnpathItem
         return $file_path;
     }
 
-     function add_audio_from_documents($doc_id) {
+    /**
+     * @param int $doc_id
+     * @return string
+     */
+    public function add_audio_from_documents($doc_id)
+    {
         $course_info = api_get_course_info();
         $document_data = DocumentManager::get_document_data_by_id($doc_id, $course_info['code']);
 
@@ -2631,24 +2641,29 @@ class learnpathItem
             $file_path = basename($document_data['path']);
             // Store the mp3 file in the lp_item table.
             $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-            $sql_insert_audio = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file_path)."'
-                                 WHERE c_id = {$course_info['real_id']} AND id = '".Database::escape_string($this->db_id)."'";
-            Database::query($sql_insert_audio);
+            $sql = "UPDATE $tbl_lp_item SET audio = '".Database::escape_string($file_path)."'
+                    WHERE c_id = {$course_info['real_id']} AND id = ".intval($this->db_id);
+            Database::query($sql);
         }
         return $file_path;
     }
 
-    function remove_audio() {
+    /**
+     * @return bool
+     */
+    public function remove_audio()
+    {
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $course_id = api_get_course_int_id();
         if (empty($this->db_id)) {
             return false;
         }
-        $sql 	= "UPDATE $tbl_lp_item SET audio = '' WHERE c_id = $course_id AND id IN (".$this->db_id.")";
+        $sql = "UPDATE $tbl_lp_item SET audio = '' WHERE c_id = $course_id AND id IN (".$this->db_id.")";
         Database::query($sql);
     }
 
-    static function humanize_status($status, $decorate = true) {
+    static function humanize_status($status, $decorate = true)
+    {
         $mylanglist = array(
             'completed' => 'ScormCompstatus',
             'incomplete' => 'ScormIncomplete',

@@ -694,12 +694,15 @@ class survey_manager
 	 *
 	 * @todo one sql call should do the trick
 	 */
-    public static function get_questions($survey_id) {
+    public static function get_questions($survey_id, $course_id = '') {
 		// Table definitions
 		$tbl_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
-        $course_id = api_get_course_int_id();
+		if (empty($course_id))
+		{
+			$course_id = api_get_course_int_id();
+		}
 
 		// Getting the information of the question
 		$sql = "SELECT * FROM $tbl_survey_question WHERE c_id = $course_id AND survey_id='".Database::escape_string($survey_id)."'";
@@ -1265,16 +1268,12 @@ class survey_manager
 	 */
 	static function get_people_who_filled_survey($survey_id, $all_user_info = false, $course_id = null)
     {
-
 		// Database table definition
 		$table_survey_answer 		= Database :: get_course_table(TABLE_SURVEY_ANSWER);
 		$table_user					= Database :: get_main_table(TABLE_MAIN_USER);
 
 		// Variable initialisation
 		$return = array();
-
-		// Getting the survey information
-		$survey_data	= survey_manager::get_survey($survey_id);
 
 		if (empty($course_id)) {
             $course_id  = api_get_course_int_id();
@@ -1288,11 +1287,11 @@ class survey_manager
 						FROM $table_survey_answer answered_user
 						LEFT JOIN $table_user as user ON answered_user.user = user.user_id
 						WHERE 	answered_user.c_id = $course_id AND
-								survey_id= '".Database::escape_string($survey_data['survey_id'])."' ".
+								survey_id= '".Database::escape_string($survey_id)."' ".
                         $order_clause;
 		} else {
 			$sql = "SELECT DISTINCT user FROM $table_survey_answer
-			        WHERE c_id = $course_id AND survey_id= '".Database::escape_string($survey_data['survey_id'])."'  ";
+			        WHERE c_id = $course_id AND survey_id= '".Database::escape_string($survey_id)."'  ";
 		}
 
 		$res = Database::query($sql);

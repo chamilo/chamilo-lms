@@ -19,6 +19,9 @@
 $language_file = 'group';
 
 require_once '../inc/global.inc.php';
+
+$is_allowed_in_course = api_is_allowed_to_edit(false, true);
+
 $this_section = SECTION_COURSES;
 $current_course_tool  = TOOL_GROUP;
 
@@ -27,12 +30,12 @@ api_protect_course_script(true);
 
 $htmlHeadXtra[] = '<script>
 $(document).ready( function() {
-	for (i=0;i<$(".actions").length;i++) {
+	for (i=0; i<$(".actions").length; i++) {
 		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
 			$(".actions:eq("+i+")").hide();
 		}
 	}
- } );
+});
  </script>';
 $nameTools = get_lang('GroupManagement');
 $course_id = api_get_course_int_id();
@@ -45,7 +48,7 @@ if (api_get_setting('allow_group_categories') == 'false') {
     $num = Database::num_rows($res);
     if ($num == 0) {
         $sql = "INSERT INTO ".$cat_table." ( c_id, id , title , description , forum_state, wiki_state, max_student, self_reg_allowed, self_unreg_allowed, groups_per_user, display_order)
-        VALUES ($course_id, '2', '".lang2db(get_lang('DefaultGroupCategory'))."', '', '1', '1', '8', '0', '0', '0', '0');";
+        VALUES ($course_id, '2', '".Database::escape_string(get_lang('DefaultGroupCategory'))."', '', '1', '1', '8', '0', '0', '0', '0');";
         Database::query($sql);
     }
 }
@@ -142,10 +145,7 @@ if (api_is_allowed_to_edit(false, true)) {
                 GroupManager :: delete_groups($my_get_id);
                 Display :: display_confirmation_message(get_lang('GroupDel'));
                 break;
-            case 'empty_one':
-                GroupManager :: unsubscribe_all_users($my_get_id);
-                Display :: display_confirmation_message(get_lang('GroupEmptied'));
-                break;
+
             case 'fill_one':
                 GroupManager :: fill_groups($my_get_id);
                 Display :: display_confirmation_message(get_lang('GroupFilledGroups'));
@@ -161,7 +161,7 @@ if (api_is_allowed_to_edit(false, true)) {
 echo '<div class="actions">';
 if (api_is_allowed_to_edit(false, true)) {
     echo '<a href="group_creation.php?'.api_get_cidreq().'">'.
-        Display::return_icon('new_group.png', get_lang('NewGroupCreate'),'',ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('new_group.png', get_lang('NewGroupCreate'), '', ICON_SIZE_MEDIUM).'</a>';
 
     if (api_get_setting('allow_group_categories') == 'true') {
         echo '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.

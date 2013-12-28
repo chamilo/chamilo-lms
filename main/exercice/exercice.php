@@ -381,6 +381,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     echo '<a href="hotpotatoes.php?'.api_get_cidreq().'">'.Display :: return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     // link to import qti2 ...
     echo '<a href="qti2.php?'.api_get_cidreq().'">'.Display :: return_icon('import_qti2.png', get_lang('ImportQtiQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="aiken.php?'.api_get_cidreq().'">'.Display :: return_icon('import_aiken.png', get_lang('ImportAikenQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="upload_exercise.php?'.api_get_cidreq().'">'.Display :: return_icon('import_excel.png', get_lang('ImportExcelQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 

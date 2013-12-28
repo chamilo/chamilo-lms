@@ -229,21 +229,13 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
 	/*$query = "SELECT DISTINCT u.user_id as login_user_id, login_date FROM ".$track_online_table ."  e , $table_user u
             GROUP by u.user_id
             ORDER BY $column $direction
-            LIMIT $from, $number_of_items"; */
+            LIMIT $from, $number_of_items";*/
 
 	$result = Database::query($query);
 	if ($result) {
-        /*$valid_date_time = new DateTime();
-        $diff = "PT".$time_limit.'M';
-        $valid_date_time->sub(new DateInterval($diff));*/
 		$users_online = array();
-		while(list($login_user_id, $login_date) = Database::fetch_row($result)) {
+		while (list($login_user_id, $login_date) = Database::fetch_row($result)) {
             $users_online[] = $login_user_id;
-            /*$user_login_date = new DateTime($login_date);
-            var_dump($user_login_date->format('Y-m-d H:i:s'), $valid_date_time->format('Y-m-d H:i:s'));
-			if ($user_login_date->format('Y-m-d H:i:s') > $valid_date_time->format('Y-m-d H:i:s')) {
-
-			}*/
 		}
 		return $users_online;
 	} else {
@@ -251,7 +243,8 @@ function who_is_online($from, $number_of_items, $column = null, $direction = nul
 	}
 }
 
-function who_is_online_count($time_limit = null, $friends = false) {
+function who_is_online_count($time_limit = null, $friends = false)
+{
     if (empty($time_limit)) {
         $time_limit = api_get_setting('time_limit_whosonline');
     } else {
@@ -296,10 +289,9 @@ function who_is_online_count($time_limit = null, $friends = false) {
 		}
 	}
 
-    //dev purposes show all users online
-
+    // Dev purposes show all users online
     /*$table_user = Database::get_main_table(TABLE_MAIN_USER);
-    $query = "SELECT count(*)  as count FROM ".$table_user ."   ";*/
+    $query = "SELECT count(*)  as count FROM ".$table_user;*/
 
 	$result = Database::query($query);
 	if (Database::num_rows($result) > 0) {
@@ -318,7 +310,8 @@ function who_is_online_count($time_limit = null, $friends = false) {
 * @param    string  Course code (could be empty, but then the function returns false)
 * @return   array   Each line gives a user id and a login time
 */
-function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit, $course_code) {
+function who_is_online_in_this_course($from, $number_of_items, $uid, $time_limit, $course_code)
+{
 	if (empty($course_code)) return false;
 
     if (empty($time_limit)) {

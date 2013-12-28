@@ -344,13 +344,18 @@ class MySpace {
     }
     /**
      * Display a sortable table that contains an overview off all the progress of the user in a session
+     * @param   int $sessionId  The session ID
+     * @param   int $courseId   The course ID
+     * @param   int $exerciseId The quiz ID
+     * @param   int $answer Answer status (0 = incorrect, 1 = correct, 2 = both)
+     * @return  string  HTML array of results formatted for gridJS
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
     function display_tracking_exercise_progress_overview($sessionId = 0, $courseId = 0, $exerciseId = 0, $answer = 2) {
 
         /**
-         * Column name
-         * The order is important you need to check the $column variable in the model.ajax.php file
+         * Column names
+         * The column order is important. Check $column variable in the main/inc/ajax/model.ajax.php file
          */
         $columns = array(
             get_lang('Session'), 
@@ -382,9 +387,8 @@ class MySpace {
             array('name'=>'answer',         'index'=>'answer',        'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
             array('name'=>'correct',        'index'=>'correct',       'align'=>'left', 'search' => 'true'),
         );
-        //get dinamic column names
+        //get dynamic column names
 
-        $action_links = '';
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_progress&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId)  . '&exercise_id=' . intval($exerciseId) . '&answer=' . intval($answer);
 
@@ -395,7 +399,7 @@ class MySpace {
         $extra_params['height'] = 'auto';
 
         $tableId = 'exerciseProgressOverview';
-        $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+        $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), '', true);
 
         $return = '<script>$(function() {'. $table . 
             'jQuery("#'.$tableId.'").jqGrid("navGrid","#'.$tableId.'_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});

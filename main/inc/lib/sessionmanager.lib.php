@@ -502,12 +502,17 @@ class SessionManager
         return $num;
     }
     /**
-     *  Get the progress of a exercise
-     *  @param int session id
-     *  @return array
+     * Get the progress of a exercise
+     * @param   int $sessionId  The session ID (session.id)
+     * @param   int $courseId   The course ID (course.id)
+     * @param   int $exerciseId The quiz ID (c_quiz.id)
+     * @param   int $answer     The answer status (0 = incorrect, 1 = correct, 2 = both)
+     * @param   array   $options    An array of options you can pass to the query (limit, where and order)
+     * @return array An array with the data of exercise(s) progress
      */
     public static function get_exercise_progress($sessionId = 0, $courseId = 0, $exerciseId = 0, $answer = 2, $options = array())
     {
+        // Get tables names
         $session                = Database::get_main_table(TABLE_MAIN_SESSION);
         $user                   = Database::get_main_table(TABLE_MAIN_USER);
         $quiz                   = Database::get_course_table(TABLE_QUIZ_TEST);

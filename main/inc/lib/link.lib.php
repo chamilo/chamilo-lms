@@ -241,43 +241,37 @@ function addlinkcategory($type)
  * Used to delete a link or a category
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function deletelinkcategory($type)
+function deletelinkcategory($id, $type)
 {
 	global $catlinkstatus;
     $_course = api_get_course_info();
+    $course_id = api_get_course_int_id();
 	$tbl_link              = Database :: get_course_table(TABLE_LINK);
 	$tbl_categories        = Database :: get_course_table(TABLE_LINK_CATEGORY);
-	$TABLE_ITEM_PROPERTY   = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
-    $course_id = api_get_course_int_id();
 
+    $id = intval($id);
 	if ($type == 'link') {
-		global $id;
 		// -> Items are no longer fysically deleted, but the visibility is set to 2 (in item_property).
 		// This will make a restore function possible for the platform administrator.
-		if (isset ($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
-			$sql = "UPDATE $tbl_link SET on_homepage='0' WHERE c_id = $course_id AND id='" . intval($_GET['id']) . "'";
-			Database :: query($sql);
-		}
+
+        $sql = "UPDATE $tbl_link SET on_homepage='0' WHERE c_id = $course_id AND id='" . $id . "'";
+        Database :: query($sql);
+
 		api_item_property_update($_course, TOOL_LINK, $id, 'delete', api_get_user_id());
 		delete_link_from_search_engine(api_get_course_id(), $id);
 		$catlinkstatus = get_lang('LinkDeleted');
-		unset ($id);
 		Display :: display_confirmation_message(get_lang('LinkDeleted'));
 	}
 
 	if ($type == 'category') {
-		global $id;
-		if (isset ($_GET['id']) && !empty ($_GET['id'])) {
-			// First we delete the category itself and afterwards all the links of this category.
-			$sql = "DELETE FROM " . $tbl_categories . " WHERE c_id = $course_id AND id='" . intval($_GET['id']) . "'";
-			Database :: query($sql);
-			$sql = "DELETE FROM " . $tbl_link . " WHERE c_id = $course_id AND category_id='" . intval($_GET['id']) . "'";
-			$catlinkstatus = get_lang('CategoryDeleted');
-			unset ($id);
-			Database :: query($sql);
-			Display :: display_confirmation_message(get_lang('CategoryDeleted'));
-		}
+        // First we delete the category itself and afterwards all the links of this category.
+        $sql = "DELETE FROM " . $tbl_categories . " WHERE c_id = $course_id AND id='" .$id. "'";
+        Database :: query($sql);
+        $sql = "DELETE FROM " . $tbl_link . " WHERE c_id = $course_id AND category_id='" .$id. "'";
+        $catlinkstatus = get_lang('CategoryDeleted');
+        Database :: query($sql);
+        Display :: display_confirmation_message(get_lang('CategoryDeleted'));
 	}
 }
 
@@ -344,7 +338,6 @@ function get_link_info($id)
  */
 function editlinkcategory($type)
 {
-
 	global $catlinkstatus;
 	global $id;
 	global $submit_link;
@@ -638,12 +631,14 @@ function showlinksofcategory($catid) {
 			    $link_validator  = ''.Display::url(Display::return_icon('preview_view.png', get_lang('CheckURL'), array(), 16), '#', array('onclick'=>"check_url('".$myrow['id']."', '".addslashes($myrow['url'])."');"));
 			    $link_validator .= Display::span('', array('id'=>'url_id_'.$myrow['id']));
 			}
+            $icon = Display::return_icon('link.gif', get_lang('Link'));
 
     		if ($myrow['visibility'] == '1') {
     			echo '<tr class="'.$css_class.'">';
     			echo '<td align="center" valign="middle" width="15">';
     			echo '<a href="link_goto.php?'.api_get_cidreq().'&amp;link_id='.$myrow['id'].'&amp;link_url='.urlencode($myrow['url']).'" target="_blank">
-    			         <img src="../../main/img/link.gif" border="0" alt="'.get_lang('Link').'"/></a></td>
+    			        '.$icon.'
+    			         </a></td>
     			         <td width="80%" valign="top"><a href="link_goto.php?'.api_get_cidreq().'&amp;link_id='.$myrow['id'].'&amp;link_url='.urlencode($myrow['url']).'" target="'.$myrow['target'].'">';
     			echo Security :: remove_XSS($myrow['title']);
     			echo '</a>';

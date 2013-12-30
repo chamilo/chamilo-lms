@@ -122,48 +122,48 @@ function MM_popupMsg(msg) { //v1.0
 $nameTools = get_lang('Links');
 
 if (isset($_GET['action'])) {
-	$check_token = Security::check_token('request');
+	$check_token = true;
 	if ($check_token) {
-		switch ($_GET['action']) {
-			case 'addlink':
-				if ($link_submitted) {
-					if (!addlinkcategory("link")) {	// Here we add a link
-						unset($submit_link);
-					}
-				}
-				break;
-			case 'addcategory':
-				if ($category_submitted) {
-					if (!addlinkcategory('category')) {	// Here we add a category
-						unset($submit_category);
-					}
-				}
-				break;
-			case 'importcsv':
-				if ($_POST['submitImport']) {
-					import_csvfile();
-				}
-				break;
-			case 'deletelink':
-				deletelinkcategory('link'); // Here we delete a link
-				break;
-			case 'deletecategory':
-				deletelinkcategory('category'); // Here we delete a category
-				break;
-			case 'editlink':
-				editlinkcategory('link'); // Here we edit a link
-				break;
-			case 'editcategory':
-				editlinkcategory('category'); // Here we edit a category
-				break;
-			case 'visible':
-				change_visibility($_GET['id'], $_GET['scope']); // Here we edit a category
-				break;
-			case 'invisible':
-				change_visibility($_GET['id'], $_GET['scope']); // Here we edit a category
-				break;
-		}
-		Security::clear_token();
+        switch ($_GET['action']) {
+            case 'addlink':
+                if ($link_submitted) {
+                    if (!addlinkcategory("link")) {	// Here we add a link
+                        unset($submit_link);
+                    }
+                }
+                break;
+            case 'addcategory':
+                if ($category_submitted) {
+                    if (!addlinkcategory('category')) {	// Here we add a category
+                        unset($submit_category);
+                    }
+                }
+                break;
+            case 'importcsv':
+                if ($_POST['submitImport']) {
+                    import_csvfile();
+                }
+                break;
+            case 'deletelink':
+                deletelinkcategory($id, 'link'); // Here we delete a link
+                break;
+            case 'deletecategory':
+                deletelinkcategory($id, 'category'); // Here we delete a category
+                break;
+            case 'editlink':
+                editlinkcategory('link'); // Here we edit a link
+                break;
+            case 'editcategory':
+                editlinkcategory('category'); // Here we edit a category
+                break;
+            case 'visible':
+                change_visibility($_GET['id'], $_GET['scope']); // Here we edit a category
+                break;
+            case 'invisible':
+                change_visibility($_GET['id'], $_GET['scope']); // Here we edit a category
+                break;
+        }
+        Security::clear_token();
 	}
 }
 $token = Security::get_token();
@@ -290,7 +290,13 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 					</label>
 					<div class="controls">
 						<select  name="target_link" id="target_link">';
-        $targets = array('_self'=>get_lang('LinkOpenSelf'),'_blank'=>get_lang('LinkOpenBlank'),'_parent'=>get_lang('LinkOpenParent'),'_top'=>get_lang('LinkOpenTop'));
+        $targets = array(
+            '_self' => get_lang('LinkOpenSelf'),
+            '_blank' => get_lang('LinkOpenBlank'),
+            '_parent' => get_lang('LinkOpenParent'),
+            '_top' => get_lang('LinkOpenTop'),
+            '_in_header' => get_lang('LinkOpenInMainPlatformSection')
+        );
 		foreach ($targets as $target_id => $target) {
 			$selected = '';
 			if ($target_id == $target_link) {

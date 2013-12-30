@@ -22,15 +22,41 @@ require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
 $link_url = html_entity_decode(Security::remove_XSS($_GET['link_url']));
-$link_id = intval($_GET['link_id']);
+$linkId = intval($_GET['link_id']);
 
-// Launch event
-event_link($link_id);
+require_once api_get_path(LIBRARY_PATH).'link.lib.php';
+$linkInfo = get_link_info($linkId);
+if ($linkInfo['target'] == '_in_header') {
+    $tpl = $app['template'];
+    $url = $linkInfo['url'];
 
-header("Cache-Control: no-store, no-cache, must-revalidate");   // HTTP/1.1
-header("Cache-Control: post-check=0, pre-check=0", false);
-header("Pragma: no-cache");                                     // HTTP/1.0
-header("Location: $link_url");
+    $interbreadcrumb[] = array('url' => 'link.php', 'name' => get_lang('Links'));
 
-// To be sure that the script stops running after the redirection
-exit;
+    $frame = '<iframe name="page" onload="javascript:resizeIframe(this);" style="width:100%;frameBorder:0px; height:500px" src="'.$url.'">
+             </iframe>';
+    $js = "<script>
+    function resizeIframe(obj) {
+        /*var body = obj.contentWindow.document.body;
+        var height =$(obj, top.document).height();
+        console.log(height);
+        console.log(jQuery('iframe',top.document).height());
+        obj.style.height = height;*/
+    }
+    </script>";
+    $tpl->assign('content', $js.$frame);
+    $tpl->display_one_col_template();
+} else {
+
+
+
+    // Launch event
+    event_link($linkId);
+
+    header("Cache-Control: no-store, no-cache, must-revalidate");   // HTTP/1.1
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache");                                     // HTTP/1.0
+    header("Location: $link_url");
+
+    // To be sure that the script stops running after the redirection
+    exit;
+}

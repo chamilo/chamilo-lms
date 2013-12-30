@@ -110,6 +110,7 @@ class Role extends SymfonyRole implements \Serializable
          */
         return \serialize(array(
             $this->id,
+            $this->name,
             $this->role
         ));
     }
@@ -121,6 +122,7 @@ class Role extends SymfonyRole implements \Serializable
     {
         list(
             $this->id,
+            $this->name,
             $this->role
         ) = \unserialize($serialized);
     }

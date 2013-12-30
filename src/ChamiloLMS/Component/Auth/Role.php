@@ -15,16 +15,17 @@ use Entity\CourseRelUser;
 class Role implements RoleInterface
 {
     private $user;
-    private $courseRelUser;
 
     /**
      * @param AdvancedUserInterface $user
-     * @param CourseRelUser $courseRelUser
+     * @param string $status
+     * @param int $courseId
      */
-    public function __construct(AdvancedUserInterface $user, CourseRelUser $courseRelUser)
+    public function __construct(AdvancedUserInterface $user, $status, $courseId)
     {
         $this->user = $user;
-        $this->courseRelUser = $courseRelUser;
+        $this->status = $status;
+        $this->courseId = $courseId;
     }
 
     /**
@@ -33,10 +34,9 @@ class Role implements RoleInterface
     public function getRole()
     {
         $role = 'ROLE';
-        if (empty($this->courseRelUser)) {
-            return null;
-        }
-        $status = $this->courseRelUser->getStatus();
+        $status = $this->status;
+        $courseId = $this->courseId;
+
         switch ($status) {
             case STUDENT:
                 $role .= '_STUDENT';
@@ -45,7 +45,7 @@ class Role implements RoleInterface
                 $role .= '_TEACHER';
                 break;
         }
-        $courseId = $this->courseRelUser->getCId();
+
         $role .= '_COURSE_'.$courseId.'_SESSION_0';
         return $role;
     }

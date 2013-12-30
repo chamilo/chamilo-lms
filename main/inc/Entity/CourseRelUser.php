@@ -139,8 +139,6 @@ class CourseRelUser
         return $this->cId;
     }
 
-
-
     /**
      * Set courseCode
      *

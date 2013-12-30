@@ -65,7 +65,7 @@ class OpenMeetingsGateway
     /**
      * TODO: Get Error Service and show detailed Error Message
      */
-    function loginuser()
+    function loginUser()
     {
         $restService = new OpenMeetingsRestService();
         

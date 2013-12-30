@@ -35,14 +35,16 @@ class Attendance
 	 * Get the total number of attendance inside current course and current session
 	 * @see SortableTable#get_total_number_of_items()
 	 */
-	static function get_number_of_attendances() {
+	static function get_number_of_attendances($active = -1) {
 		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
-
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id);
         $course_id = api_get_course_int_id();
 		$sql = "SELECT COUNT(att.id) AS total_number_of_items FROM $tbl_attendance att
 		        WHERE c_id = $course_id $condition_session ";
+        if ($active == 1 || $active == 0) {
+            $sql .= "AND att.active = $active";
+        }
 		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
 		return $obj->total_number_of_items;
@@ -102,10 +104,9 @@ class Attendance
             $direction = 'ASC';
         }
 
-        $active_plus = 'att.active = 1';
-
-        if (api_is_platform_admin()) {
-            $active_plus = ' 1 = 1 ';
+        $active_plus = '';
+        if ((isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') || !api_is_allowed_to_edit(null, true)) {
+            $active_plus = 'AND att.active = 1';
         }
 
 		$sql = "SELECT
@@ -117,7 +118,7 @@ class Attendance
                     att.active AS col5,
                     att.session_id
 				FROM $tbl_attendance att
-				WHERE c_id = $course_id AND $active_plus $condition_session
+				WHERE c_id = $course_id $active_plus $condition_session
 				ORDER BY col$column $direction LIMIT $from,$number_of_items ";
 
 		$res = Database::query($sql);

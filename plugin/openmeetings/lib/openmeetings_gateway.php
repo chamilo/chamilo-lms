@@ -27,26 +27,30 @@ require_once ('openmeetings_rest_service.php');
 /**
  * Class OpenMeetingsGateway
  */
-class OpenMeetingsGateway {
-	var $session_id = "";
-	var $config;
+class OpenMeetingsGateway
+{
+	public $session_id = "";
+	public $config;
 	
 	function __construct($cfg)
     {
 		$this->config = $cfg;
 	}
 	
-	function getRestUrl($name) {
+	function getRestUrl($name)
+    {
 		return $this->getUrl() . "/services/" . $name . "/";
 	}
 	
-	function getUrl() {
+	function getUrl()
+    {
 		// FIXME protocol should be added
 		$port = $this->config["port"] == 80 ? '' : ":" . $this->config["port"];
 		return $this->config["protocol"] . "://" . $this->config["host"] . $port . "/" . $this->config["webappname"];
 	}
 	
-	function var_to_str($in) {
+	function var_to_str($in)
+    {
 		if (is_bool($in)) {
 			return $in ? "true" : "false";
 		} else {
@@ -57,14 +61,15 @@ class OpenMeetingsGateway {
 	/**
 	 * TODO: Get Error Service and show detailed Error Message
 	 */
-	function loginuser() {
-		$restService = new openmeetings_rest_service();
+	function loginuser()
+    {
+		$restService = new OpenMeetingsRestService();
 		
 		$response = $restService->call($this->getRestUrl("UserService") . "getSession", "session_id");
 		
 		if ($restService->getError()) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>';
-			print_r($result);
+			print_r($response);
 			echo '</pre>';
 		} else {
 			$err = $restService->getError();
@@ -98,13 +103,14 @@ class OpenMeetingsGateway {
 			return false;
 		}
 	}
-	function updateRoomWithModeration($openmeetings) {
-		$restService = new openmeetings_rest_service();
+	function updateRoomWithModeration($openmeetings)
+    {
+		$restService = new OpenMeetingsRestService();
 		// echo $restService."<br/>";
 		$err = $restService->getError();
 		if ($err) {
 			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
+			echo '<h2>Debug</h2><pre>' . htmlspecialchars($restService->getDebug(), ENT_QUOTES) . '</pre>';
 			exit();
 		}
 		
@@ -138,13 +144,14 @@ class OpenMeetingsGateway {
 	/*
 	 * public String setUserObjectAndGenerateRecordingHashByURL(String SID, String username, String firstname, String lastname, Long externalUserId, String externalUserType, Long recording_id)
 	 */
-	function setUserObjectAndGenerateRecordingHashByURL($username, $firstname, $lastname, $userId, $systemType, $recording_id) {
-		$restService = new openmeetings_rest_service();
+	function setUserObjectAndGenerateRecordingHashByURL($username, $firstname, $lastname, $userId, $systemType, $recording_id)
+    {
+		$restService = new OpenMeetingsRestService();
 		$result = $restService->call($this->getRestUrl("UserService") . 'setUserObjectAndGenerateRecordingHashByURL?SID=' . $this->session_id 
 				. '&username=' . urlencode($username) . '&firstname=' . urlencode($firstname) . '&lastname=' . urlencode($lastname) 
 				. '&externalUserId=' . $userId . '&externalUserType=' . urlencode($systemType) . '&recording_id=' . $recording_id, 'return');
 		
-		if ($client_roomService->fault) {
+		if ($restService->fault) {
 			echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>';
 			print_r($result);
 			echo '</pre>';
@@ -158,13 +165,14 @@ class OpenMeetingsGateway {
 		}
 		return - 1;
 	}
-	function setUserObjectAndGenerateRoomHashByURLAndRecFlag($username, $firstname, $lastname, $profilePictureUrl, $email, $userId, $systemType, $room_id, $becomeModerator, $allowRecording) {
-		$restService = new openmeetings_rest_service();
+	function setUserObjectAndGenerateRoomHashByURLAndRecFlag($username, $firstname, $lastname, $profilePictureUrl, $email, $userId, $systemType, $room_id, $becomeModerator, $allowRecording)
+    {
+		$restService = new OpenMeetingsRestService();
 		// echo $restService."<br/>";
 		$err = $restService->getError();
 		if ($err) {
 			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
+			echo '<h2>Debug</h2><pre>' . htmlspecialchars($restService->getDebug(), ENT_QUOTES) . '</pre>';
 			exit();
 		}
 		
@@ -189,13 +197,14 @@ class OpenMeetingsGateway {
 		}
 		return - 1;
 	}
-	function deleteRoom($openmeetings) {
+	function deleteRoom($openmeetings)
+    {
 		// echo $client_roomService."<br/>";
-		$restService = new openmeetings_rest_service();
+		$restService = new OpenMeetingsRestService();
 		$err = $restService->getError();
 		if ($err) {
 			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
+			echo '<h2>Debug</h2><pre>' . htmlspecialchars($restService->getDebug(), ENT_QUOTES) . '</pre>';
 			exit();
 		}
 		
@@ -222,8 +231,9 @@ class OpenMeetingsGateway {
 	/**
 	 * Generate a new room hash for entering a conference room
 	 */
-	function setUserObjectAndGenerateRoomHash($username, $firstname, $lastname, $profilePictureUrl, $email, $externalUserId, $externalUserType, $room_id, $becomeModeratorAsInt, $showAudioVideoTestAsInt) {
-		$restService = new openmeetings_rest_service();
+	function setUserObjectAndGenerateRoomHash($username, $firstname, $lastname, $profilePictureUrl, $email, $externalUserId, $externalUserType, $room_id, $becomeModeratorAsInt, $showAudioVideoTestAsInt)
+    {
+		$restService = new OpenMeetingsRestService();
 		
 		$result = $restService->call($this->getRestUrl("UserService") . "setUserObjectAndGenerateRoomHash?SID=" . $this->session_id 
 				. "&username=" . urlencode($username) . "&firstname=" . urlencode($firstname) . "&lastname=" . urlencode($lastname) 
@@ -234,7 +244,7 @@ class OpenMeetingsGateway {
 		$err = $restService->getError();
 		if ($err) {
 			echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-			echo '<h2>Debug</h2><pre>' . htmlspecialchars($client->getDebug(), ENT_QUOTES) . '</pre>';
+			echo '<h2>Debug</h2><pre>' . htmlspecialchars($restService->getDebug(), ENT_QUOTES) . '</pre>';
 			exit();
 		}
 		
@@ -257,10 +267,11 @@ class OpenMeetingsGateway {
 	/**
 	 * Create a new conference room
 	 */
-	function createRoomWithModAndType($openmeetings) {
+	function createRoomWithModAndType($openmeetings)
+    {
 		global $USER;
 		
-		$restService = new openmeetings_rest_service();
+		$restService = new OpenMeetingsRestService();
 		
 		$isModeratedRoom = "false";
 		if ($openmeetings->is_moderated_room == 1) {
@@ -293,8 +304,9 @@ class OpenMeetingsGateway {
 	/**
 	 * Get list of available recordings made by this instance
 	 */
-	function getRecordingsByExternalRooms() {
-		$restService = new openmeetings_rest_service();
+	function getRecordingsByExternalRooms()
+    {
+		$restService = new OpenMeetingsRestService();
 		
 		$url = $this->getRestUrl("RoomService") . "getFlvRecordingByExternalRoomType?SID=" . $this->session_id 
 			. "&externalRoomType=" . urlencode($this->config["moduleKey"]);
@@ -307,8 +319,9 @@ class OpenMeetingsGateway {
 	/**
 	 * Get list of available recordings made by user
 	 */
-	function getRecordingsByExternalUser($id) {
-		$restService = new openmeetings_rest_service();
+	function getRecordingsByExternalUser($id)
+    {
+		$restService = new OpenMeetingsRestService();
 		
 		$url = $this->getRestUrl("RoomService") . "getFlvRecordingByExternalUserId?SID=" . $this->session_id 
 			. "&externalUserId=" . $id;
@@ -318,6 +331,3 @@ class OpenMeetingsGateway {
 		return $result;
 	}
 }
-
-?>
-

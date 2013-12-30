@@ -19,20 +19,18 @@
 /*	INIT SECTION */
 
 require_once '../inc/global.inc.php';
-$this_section = SECTION_COURSES;
-
-$link_url = html_entity_decode(Security::remove_XSS($_GET['link_url']));
-$linkId = intval($_GET['link_id']);
-
 require_once api_get_path(LIBRARY_PATH).'link.lib.php';
+
+$this_section = SECTION_COURSES;
+$linkId = intval($_GET['link_id']);
 $linkInfo = get_link_info($linkId);
+
 if ($linkInfo['target'] == '_in_header') {
+
     $tpl = $app['template'];
     $url = $linkInfo['url'];
-
     $interbreadcrumb[] = array('url' => 'link.php', 'name' => get_lang('Links'));
-
-    $frame = '<iframe name="page" onload="javascript:resizeIframe(this);" style="width:100%;frameBorder:0px; height:500px" src="'.$url.'">
+    $frame = '<iframe name="page" onload="javascript:resizeIframe(this);" style="width:100%;height:500px" frameBorder=0px; src="'.$url.'">
              </iframe>';
     $js = "<script>
     function resizeIframe(obj) {
@@ -47,7 +45,7 @@ if ($linkInfo['target'] == '_in_header') {
     $tpl->display_one_col_template();
 } else {
 
-
+    $link_url = html_entity_decode(Security::remove_XSS($_GET['link_url']));
 
     // Launch event
     event_link($linkId);

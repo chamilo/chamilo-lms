@@ -488,7 +488,7 @@ class CourseHome
 
         switch ($course_tool_category) {
             case TOOL_AUTHORING:
-                $sql_links = "SELECT tl.*, tip.visibility
+                $sql_links = "SELECT tl.*, tip.visibility, tl.id link_id
                     FROM $course_link_table tl
                     LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
                     WHERE 	tl.c_id = $course_id AND
@@ -505,7 +505,7 @@ class CourseHome
                 */
                 break;
             case TOOL_STUDENT_VIEW:
-                $sql_links = "SELECT tl.*, tip.visibility
+                $sql_links = "SELECT tl.*, tip.visibility, tl.id link_id
                     FROM $course_link_table tl
                     LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
                         WHERE 	tl.c_id 		= $course_id AND
@@ -513,7 +513,7 @@ class CourseHome
                                 tl.on_homepage	='1' $condition_session";
                 break;
             case TOOL_ADMIN:
-                $sql_links = "SELECT tl.*, tip.visibility
+                $sql_links = "SELECT tl.*, tip.visibility, tl.id link_id
                     FROM $course_link_table tl
                     LEFT JOIN $course_item_property_table tip ON tip.tool='link' AND tip.ref=tl.id
                     WHERE 	tl.c_id = $course_id AND
@@ -539,6 +539,7 @@ class CourseHome
                     $properties['image']        = ($links_row['visibility'] == '0') ? 'file_html.gif' : 'file_html.gif';
                     $properties['adminlink']    = api_get_path(WEB_CODE_PATH).'link/link.php?action=editlink&id='.$links_row['id'];
                     $properties['target']       = $links_row['target'];
+                    $properties['link_id']      = !empty($links_row['link_id']) ? $links_row['link_id'] : null;
                     $tmp_all_tools_list[]       = $properties;
                 }
             }
@@ -616,8 +617,16 @@ class CourseHome
             $lnk = '';
             foreach ($toolList as & $tool) {
                 $item = array();
+                $tool['admin'] = isset($tool['admin']) ? $tool['admin'] : null;
+                $tool['id'] = isset($tool['id']) ? $tool['id'] : null;
+                $tool['target'] = isset($tool['target']) ? $tool['target'] : null;
 
-                $tool['original_link'] = $tool['link'];
+                if (isset($tool['link_id'])) {
+                    $tool['original_link'] = api_get_path(WEB_CODE_PATH).'link/link_goto.php?link_id='.$tool['link_id'].'&'.api_get_cidreq();
+                    $tool['link'] = $tool['original_link'];
+                } else {
+                    $tool['original_link'] = $tool['link'];
+                }
 
                 // Re-writing URL for new tools
                 $newTools = array(TOOL_CURRICULUM);
@@ -651,21 +660,29 @@ class CourseHome
                 if ($is_allowed_to_edit && !api_is_coach()) {
                     if (empty($session_id)) {
                         if ($tool['visibility'] == '1' && $tool['admin'] != '1') {
-                            $link['name'] = Display::return_icon('visible.gif', get_lang('Deactivate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
-                            $link['cmd'] = $urlGenerator->generate(
-                                'course_home.controller:hideIconAction',
-                                array('course' => api_get_course_id(), 'iconId' => $tool['id'])
+                            $link['name'] = Display::return_icon(
+                                'visible.gif',
+                                get_lang('Deactivate'),
+                                array('id' => 'linktool_'.$tool['id']),
+                                ICON_SIZE_MEDIUM,
+                                false
                             );
-                            //'hide=yes';
+                            if (!empty($tool['id'])) {
+                                $link['cmd'] = $urlGenerator->generate(
+                                    'course_home.controller:hideIconAction',
+                                    array('course' => api_get_course_id(), 'iconId' => $tool['id'])
+                                );
+                            }
                             $lnk[] = $link;
                         }
                         if ($tool['visibility'] == '0' && $tool['admin'] != '1') {
                             $link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
-                            //$link['cmd'] = 'restore=yes';
-                            $link['cmd'] = $urlGenerator->generate(
-                                'course_home.controller:showIconAction',
-                                array('course' => api_get_course_id(), 'iconId' => $tool['id'])
-                            );
+                            if (!empty($tool['id'])) {
+                                $link['cmd'] = $urlGenerator->generate(
+                                    'course_home.controller:showIconAction',
+                                    array('course' => api_get_course_id(), 'iconId' => $tool['id'])
+                                );
+                            }
                             $lnk[] = $link;
                         }
                     }

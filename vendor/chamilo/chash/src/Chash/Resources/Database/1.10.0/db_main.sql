@@ -1333,7 +1333,7 @@ VALUES
 ('default_calendar_view', 'agendaWeek', 'Week'),
 ('default_calendar_view', 'agendaDay', 'Day'),
 ('documents_default_visibility_defined_in_course', 'true', 'Yes'),
-('documents_default_visibility_defined_in_course', 'false', 'No')
+('documents_default_visibility_defined_in_course', 'false', 'No'),
 ('allow_personal_user_files', 'true', 'Yes'),
 ('allow_personal_user_files', 'false', 'No');
 

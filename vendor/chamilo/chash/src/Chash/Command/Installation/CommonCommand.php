@@ -924,7 +924,7 @@ class CommonCommand extends AbstractCommand
     }
 
     /**
-     * @param \Symfony\Component\Console\Input\InputInterface $input
+     * @param InputInterface $input
      * @param array $params
      * @return array
      */
@@ -941,7 +941,7 @@ class CommonCommand extends AbstractCommand
     }
 
     /**
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param OutputInterface $output
      * @param string $version
      * @param string $updateInstallation
      * @param string $defaultTempFolder
@@ -1276,10 +1276,9 @@ class CommonCommand extends AbstractCommand
         $connection->update('user', array('phone' => $settings['phone']), array('user_id' => '1'));
         $connection->update('user', array('password' => $settings['password']), array('user_id' => '1'));
         $connection->update('user', array('email' => $settings['email']), array('user_id' => '1'));
+        // Admin user.
         $connection->update('user', array('language' => $settings['language']), array('user_id' => '1'));
-
-        // Already updated by the script
-        //$connection->insert('admin', array('user_id' => 1));
+        // Anonymous user.
         $connection->update('user', array('language' => $settings['language']), array('user_id' => '2'));
     }
 

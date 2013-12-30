@@ -2653,6 +2653,7 @@ function api_display_tool_title($title_element) {
  * @author Roan Embrechts
  * @author Patrick Cool
  * @author Julio Montoya, changes added in Chamilo
+ * @deprecated see main/template/default/layout/breadcrumb.tpl
  * @version 1.2
  * @todo rewrite code so it is easier to understand
  */
@@ -2664,7 +2665,8 @@ function api_display_tool_view_option() {
     $sourceurl = '';
     $is_framed = false;
     // Exceptions apply for all multi-frames pages
-    if (strpos($_SERVER['REQUEST_URI'], 'chat/chat_banner.php') !== false) { // The chat is a multiframe bit that doesn't work too well with the student_view, so do not show the link
+    // The chat is a multiframe bit that doesn't work too well with the student_view, so do not show the link
+    if (strpos($_SERVER['REQUEST_URI'], 'chat/chat_banner.php') !== false) {
         $is_framed = true;
         return '';
     }
@@ -2694,13 +2696,14 @@ function api_display_tool_view_option() {
     $defaultClass = 'btn btn-default btn-xs';
 
     $output_string = '';
-    if (!empty($_SESSION['studentview'])) {
-        if ($_SESSION['studentview'] == 'studentview') {
+    $studentView = Session::read('studentview');
+    if (!empty($studentView)) {
+        if ($studentView == 'studentview') {
             // We have to remove the isStudentView=true from the $sourceurl
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
             $output_string .= '<a class=" btn btn-success" href="'.$sourceurl.'&isStudentView=false" target="_self">'.get_lang('CourseManagerview').'</a>';
-        } elseif ($_SESSION['studentview'] == 'teacherview') {
+        } elseif ($studentView == 'teacherview') {
             // Switching to teacherview
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);

@@ -42,7 +42,7 @@ class Attendance
 		$condition_session = api_get_session_condition($session_id);
         $course_id = api_get_course_int_id();
 		$sql = "SELECT COUNT(att.id) AS total_number_of_items FROM $tbl_attendance att
-		        WHERE c_id = $course_id AND att.active = 1 $condition_session ";
+		        WHERE c_id = $course_id $condition_session ";
 		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
 		return $obj->total_number_of_items;

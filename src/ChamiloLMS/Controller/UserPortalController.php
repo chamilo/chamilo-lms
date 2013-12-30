@@ -3,7 +3,6 @@
 
 namespace ChamiloLMS\Controller;
 
-use Composer\Repository\Pear\BaseChannelReader;
 use Silex\Application;
 use \ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\Response;
@@ -99,8 +98,8 @@ class UserPortalController extends CommonController
      */
     public function toggleStudentViewAction(Application $app)
     {
-        if (!api_is_allowed_to_edit()) {
-            return null;
+        if (!api_is_allowed_to_edit(false, false, false, false)) {
+            return '';
         }
 
         /** @var Request $request */

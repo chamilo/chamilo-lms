@@ -124,7 +124,9 @@ class IntroductionController extends CommonController
 
         $form = new \FormValidator('form', 'post', $url);
         $form->add_html_editor('content', null, null, false, $editor_config);
-        $form->addElement('label', get_lang('YouCanUseAllTheseTags'), '(('.implode(')) <br /> ((', $this->getTags()).'))');
+        if ($tool == 'course_homepage') {
+            $form->addElement('label', get_lang('YouCanUseAllTheseTags'), '(('.implode(')) <br /> ((', $this->getTags()).'))');
+        }
         $form->addElement('button', 'submit', get_lang('SaveIntroText'));
         return $form;
     }

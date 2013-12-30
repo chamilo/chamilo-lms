@@ -26,6 +26,7 @@ class OpenMeetingsPlugin extends Plugin
         $sql = "CREATE TABLE IF NOT EXISTS $table (
                 id INT unsigned NOT NULL auto_increment PRIMARY KEY,
                 c_id INT unsigned NOT NULL DEFAULT 0,
+                session_id INT unsigned NOT NULL DEFAULT 0,
                 meeting_name VARCHAR(255) NOT NULL DEFAULT '',
                 attendee_pw VARCHAR(255) NOT NULL DEFAULT '',
                 moderator_pw VARCHAR(255) NOT NULL DEFAULT '',

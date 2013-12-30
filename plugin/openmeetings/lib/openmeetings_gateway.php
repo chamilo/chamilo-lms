@@ -72,13 +72,11 @@ class OpenMeetingsGateway
         $response = $restService->call($this->getRestUrl("UserService") . "getSession", "session_id");
         
         if ($restService->getError()) {
-            echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>';
-            print_r($response);
-            echo '</pre>';
+            error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($response,1));
         } else {
             $err = $restService->getError();
             if ($err) {
-                echo '<h2>Error</h2><pre>' . $err . '</pre>';
+                error_log('Error: ' . $err);
             } else {
                 $this->session_id = $response;
                 
@@ -87,13 +85,11 @@ class OpenMeetingsGateway
                         . "&userpass=" . urlencode($this->config["adminPass"]));
                 
                 if ($restService->getError()) {
-                    echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>';
-                    print_r($result);
-                    echo '</pre>';
+                    error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($result,1));
                 } else {
                     $err = $restService->getError();
                     if ($err) {
-                        echo '<h2>Error</h2><pre>' . $err . '</pre>';
+                        error_log('Error '. $err);
                     } else {
                         $returnValue = $result;
                     }
@@ -113,8 +109,8 @@ class OpenMeetingsGateway
         // echo $restService."<br/>";
         $err = $restService->getError();
         if ($err) {
-            echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-            echo '<h2>Debug</h2><pre>' . htmlspecialchars($restService->getDebug(), ENT_QUOTES) . '</pre>';
+            error_log('Constructor error: ' . $err);
+            error_log('Debug: ' . $restService->getDebug());
             exit();
         }
         
@@ -130,13 +126,11 @@ class OpenMeetingsGateway
                 . "&demoTime=0" . "&isModeratedRoom=" . $this->var_to_str($isModeratedRoom));
         
         if ($restService->fault) {
-            echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>';
-            print_r($result);
-            echo '</pre>';
+            error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($result,1));
         } else {
             $err = $restService->getError();
             if ($err) {
-                echo '<h2>Error</h2><pre>' . $err . '</pre>';
+                error_log('Error: ' . $err);
             } else {
                 // echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
                 return $result;
@@ -156,13 +150,11 @@ class OpenMeetingsGateway
                 . '&externalUserId=' . $userId . '&externalUserType=' . urlencode($systemType) . '&recording_id=' . $recording_id, 'return');
         
         if ($restService->fault) {
-            echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>';
-            print_r($result);
-            echo '</pre>';
+            error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($result,1));
         } else {
             $err = $restService->getError();
             if ($err) {
-                echo '<h2>Error</h2><pre>' . $err . '</pre>';
+                error_log('Error: '.$err);
             } else {
                 return $result;
             }
@@ -175,8 +167,8 @@ class OpenMeetingsGateway
         // echo $restService."<br/>";
         $err = $restService->getError();
         if ($err) {
-            echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-            echo '<h2>Debug</h2><pre>' . htmlspecialchars($restService->getDebug(), ENT_QUOTES) . '</pre>';
+            error_log('Constructor error: ' . $err);
+            error_log('Debug: ' . $restService->getDebug());;
             exit();
         }
         
@@ -187,13 +179,11 @@ class OpenMeetingsGateway
                 . "&showAudioVideoTestAsInt=1" . "&allowRecording=" . $this->var_to_str($allowRecording));
         
         if ($restService->fault) {
-            echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>';
-            print_r($result);
-            echo '</pre>';
+            error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($result,1));
         } else {
             $err = $restService->getError();
             if ($err) {
-                echo '<h2>Error</h2><pre>' . $err . '</pre>';
+                error_log('Error: '.$err);
             } else {
                 // echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
                 return $result;
@@ -207,8 +197,8 @@ class OpenMeetingsGateway
         $restService = new OpenMeetingsRestService();
         $err = $restService->getError();
         if ($err) {
-            echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-            echo '<h2>Debug</h2><pre>' . htmlspecialchars($restService->getDebug(), ENT_QUOTES) . '</pre>';
+            error_log('Constructor error: ' . $err);
+            error_log('Debug: ' . $restService->getDebug());;
             exit();
         }
         
@@ -216,13 +206,11 @@ class OpenMeetingsGateway
                 . "&rooms_id=" . $openmeetings->room_id);
         
         if ($restService->fault) {
-            echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>';
-            print_r($result);
-            echo '</pre>';
+            error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($result,1));
         } else {
             $err = $restService->getError();
             if ($err) {
-                echo '<h2>Error</h2><pre>' . $err . '</pre>';
+                error_log('Error: '.$err);
             } else {
                 // echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
                 // return $result["return"];
@@ -247,19 +235,17 @@ class OpenMeetingsGateway
         
         $err = $restService->getError();
         if ($err) {
-            echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
-            echo '<h2>Debug</h2><pre>' . htmlspecialchars($restService->getDebug(), ENT_QUOTES) . '</pre>';
+            error_log('Constructor error: ' . $err);
+            error_log('Debug: ' . $restService->getDebug());;
             exit();
         }
         
         if ($restService->getError()) {
-            echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>';
-            print_r($result);
-            echo '</pre>';
+            error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($result,1));
         } else {
             $err = $restService->getError();
             if ($err) {
-                echo '<h2>Error</h2><pre>' . $err . '</pre>';
+                error_log('Error: '.$err);
             } else {
                 // echo '<h2>Result</h2><pre>'; print_r($result["return"]); echo '</pre>';
                 return $result;
@@ -291,13 +277,11 @@ class OpenMeetingsGateway
         $result = $restService->call($url, "return");
         
         if ($restService->fault) {
-            echo '<h2>Fault (Expect - The request contains an invalid SOAP body)</h2><pre>';
-            print_r($result);
-            echo '</pre>';
+            error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($result,1));
         } else {
             $err = $restService->getError();
             if ($err) {
-                echo '<h2>Error</h2><pre>' . $err . '</pre>';
+                error_log('Error: '.$err);
             } else {
                 return $result;
             }

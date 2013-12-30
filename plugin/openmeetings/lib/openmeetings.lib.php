@@ -149,7 +149,7 @@ class OpenMeetings
             $meetingId = $params['id'] = $s->return;
             $params['status'] = '1';
             $params['meeting_name'] = $course_name;
-            $params['created_at'] = date('l jS \of F Y h:i:s A');
+            $params['created_at'] = api_get_utc_datetime();
 
             Database::insert($this->table, $params);
 

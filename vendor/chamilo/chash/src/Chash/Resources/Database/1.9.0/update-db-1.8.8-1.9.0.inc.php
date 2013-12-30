@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-$update = function ($_configuration, $mainConnection, $courseList, $dryRun, $output, $upgrade) {
+$update = function ($_configuration, $mainConnection, $courseList, $dryRun, $output, $upgrade, $removeUnusedTables) {
 
     $sysCoursePath = $upgrade->getCourseSysPath();
     $portalSettings = $upgrade->getPortalSettings();
@@ -315,7 +315,7 @@ $update = function ($_configuration, $mainConnection, $courseList, $dryRun, $out
                     $old_table = $prefix.$table;
 
                     $course_id = $row_course['id'];
-                    $new_table = DB_COURSE_PREFIX.$table;
+                    $newTable = DB_COURSE_PREFIX.$table;
 
                     $sm = $courseConnection->getSchemaManager();
                     $tableExists = $sm->tablesExist($old_table);
@@ -356,9 +356,28 @@ $update = function ($_configuration, $mainConnection, $courseList, $dryRun, $out
                                             if (empty($row['post_id'])) {
                                                 $row['post_id'] = 0;
                                             }
+                                            if (empty($row['forum_id'])) {
+                                                $row['forum_id'] = 0;
+                                            }
+                                            break;
+                                        case 'wiki_conf':
+                                            /*
+                                                Bug in wiki_conf check if there's already a key courseId/pageId
+                                                if so then just skip inserting the same page_ids.
+                                            */
+                                            $pageId = $row['page_id'];
+                                            $sql = "SELECT COUNT(page_id) as count FROM $newTable
+                                                    WHERE page_id = $pageId AND c_id = $course_id";
+                                            $result = $mainConnection->executeQuery($sql);
+                                            $rowResult = $result->fetch();
+                                            if ($rowResult['count'] >= 1) {
+                                                $output->writeln("Skipping content of the c_wiki_conf:");
+                                                $output->writeln(print_r($row, 1));
+                                                continue 2;
+                                            }
                                             break;
                                     }
-                                    $mainConnection->insert($new_table, $row);
+                                    $mainConnection->insert($newTable, $row);
                                     $id = $mainConnection->lastInsertId();
                                 }
 
@@ -370,13 +389,13 @@ $update = function ($_configuration, $mainConnection, $courseList, $dryRun, $out
                             }
 
                             if ($dryRun) {
-                                // $output->writeln("$count/$oldCount rows to be inserted in $new_table");
+                                // $output->writeln("$count/$oldCount rows to be inserted in $newTable");
                             } else {
-                                //$output->writeln("$count/$oldCount rows inserted in $new_table");
+                                //$output->writeln("$count/$oldCount rows inserted in $newTable");
                             }
 
                             if ($oldCount != $count) {
-                                $output->writeln("<error>Count of new and old table doesn't match: $oldCount - $new_table</error>");
+                                $output->writeln("<error>Count of new and old table doesn't match: $oldCount - $newTable</error>");
                             }
                         }
                     } else {
@@ -385,10 +404,28 @@ $update = function ($_configuration, $mainConnection, $courseList, $dryRun, $out
                 }
                 $progress->advance();
             }
-
             $progress->finish();
             $output->writeln("<comment>End course migration.</comment>");
 
+            // Drop prefix tables
+            if ($removeUnusedTables && $dryRun == false) {
+                $output->writeln("<comment>Removing unused tables:</comment>");
+
+                $onlyPrefix = $upgrade->getTablePrefix($_configuration);
+                if (!empty($onlyPrefix)) {
+                    $sql = "SHOW TABLES LIKE '".$onlyPrefix."%'";
+
+                    $result = $courseConnection->executeQuery($sql);
+                    while ($row = $result->fetch()) {
+                        $table = current($row);
+                        if (!empty($table)) {
+                            $sql = "DROP TABLE $table";
+                            $output->writeln("<comment>$sql</comment>");
+                            $courseConnection->executeQuery($sql);
+                        }
+                    }
+                }
+            }
 
             /* Start work fix */
             $output->writeln("<comment>Starting work fix:</comment>");
@@ -413,6 +450,8 @@ $update = function ($_configuration, $mainConnection, $courseList, $dryRun, $out
 
                     $course_dir 		= $sysCoursePath.'/'.$course['directory'];
                     $base_work_dir 		= $course_dir.'/work';
+
+                    $output->writeln("<comment>Using 'base_work_dir': $base_work_dir.</comment>");
 
                     //2. Looping if there are works with no parents
                     if (!empty($work_list)) {

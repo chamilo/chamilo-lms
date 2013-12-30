@@ -49,9 +49,14 @@ class CommonChamiloDatabaseCommand extends CommonCommand
         $configuration = $this->getConfigurationHelper()->readConfigurationFile($configurationFile);
 
         if (empty($configuration)) {
-            $output->writeln('<error>The configuration file was not found.</error>');
-            $output->writeln('<comment>Try</comment> <info>prefix:command --conf=/var/www/chamilo/config/configuration.php</info>');
-            exit;
+            // Test out a few possibilities
+            $configurationFile = $this->getConfigurationHelper()->getConfigurationFilePath();
+            $configuration = $this->getConfigurationHelper()->readConfigurationFile($configurationFile);
+            if (empty($configuration)) {
+                $output->writeln('<error>The configuration file was not found.</error>');
+                $output->writeln('<comment>Try</comment> <info>prefix:command --conf=/var/www/chamilo/config/configuration.php</info>');
+                exit;
+            }
         }
 
         $this->setConfigurationArray($configuration);

@@ -60,7 +60,55 @@ ALTER TABLE session_rel_course MODIFY COLUMN nbr_users int unsigned NOT NULL def
 ALTER TABLE track_e_exercices MODIFY COLUMN session_id int unsigned NOT NULL default 0;
 ALTER TABLE track_e_exercices MODIFY COLUMN exe_exo_id int unsigned NOT NULL default 0;
 
-TRUNCATE  roles;
+ALTER TABLE track_e_default MODIFY COLUMN default_event_type VARCHAR(255);
+ALTER TABLE track_e_default MODIFY COLUMN default_value_type VARCHAR(255);
+ALTER TABLE usergroup ADD COLUMN allow_members_leave_group int NOT NULL DEFAULT 1;
+
+ALTER TABLE c_quiz_answer MODIFY COLUMN answer longtext NOT NULL;
+ALTER TABLE c_quiz_answer MODIFY COLUMN comment longtext;
+ALTER TABLE c_announcement MODIFY COLUMN content longtext;
+ALTER TABLE c_attendance MODIFY COLUMN description longtext;
+ALTER TABLE c_calendar_event MODIFY COLUMN content longtext;
+ALTER TABLE c_blog_comment MODIFY COLUMN comment longtext NOT NULL;
+ALTER TABLE c_course_description MODIFY COLUMN content longtext;
+ALTER TABLE c_forum_forum MODIFY COLUMN forum_comment longtext;
+ALTER TABLE c_forum_post MODIFY COLUMN post_text longtext;
+ALTER TABLE c_glossary MODIFY COLUMN description longtext NOT NULL;
+ALTER TABLE c_group_category MODIFY COLUMN description longtext NOT NULL;
+ALTER TABLE c_group_info MODIFY COLUMN description longtext;
+ALTER TABLE c_lp MODIFY COLUMN description longtext;
+ALTER TABLE c_notebook MODIFY COLUMN description longtext NOT NULL;
+ALTER TABLE c_quiz MODIFY COLUMN description longtext;
+ALTER TABLE c_quiz MODIFY COLUMN text_when_finished longtext;
+ALTER TABLE c_quiz_question MODIFY COLUMN question longtext NOT NULL;
+ALTER TABLE c_quiz_question MODIFY COLUMN description longtext;
+ALTER TABLE c_quiz_category MODIFY COLUMN description longtext NOT NULL;
+ALTER TABLE c_student_publication MODIFY COLUMN description longtext;
+ALTER TABLE c_survey MODIFY COLUMN intro longtext;
+ALTER TABLE c_survey_question MODIFY COLUMN survey_question_comment longtext NOT NULL;
+ALTER TABLE c_survey_question MODIFY COLUMN survey_question longtext NOT NULL;
+ALTER TABLE c_thematic MODIFY COLUMN content longtext;
+ALTER TABLE c_thematic_advance MODIFY COLUMN content longtext;
+ALTER TABLE c_thematic_plan MODIFY COLUMN description longtext;
+ALTER TABLE c_tool_intro MODIFY COLUMN intro_text longtext NOT NULL;
+ALTER TABLE c_wiki MODIFY COLUMN content longtext NOT NULL;
+ALTER TABLE c_student_publication_comment MODIFY COLUMN comment longtext;
+
+ALTER TABLE sys_announcement MODIFY COLUMN content longtext NOT NULL;
+ALTER TABLE shared_survey MODIFY COLUMN intro longtext;
+ALTER TABLE shared_survey_question MODIFY COLUMN survey_question longtext NOT NULL;
+ALTER TABLE shared_survey_question_option MODIFY COLUMN option_text longtext NOT NULL;
+ALTER TABLE sys_calendar MODIFY COLUMN content longtext;
+ALTER TABLE system_template MODIFY COLUMN content longtext NOT NULL;
+ALTER TABLE message MODIFY COLUMN content longtext NOT NULL;
+ALTER TABLE track_e_attempt MODIFY COLUMN answer longtext NOT NULL;
+ALTER TABLE track_e_attempt_recording MODIFY COLUMN teacher_comment longtext NOT NULL;
+ALTER TABLE personal_agenda MODIFY COLUMN `text` longtext;
+
+ALTER TABLE c_tool ADD COLUMN custom_icon varchar(255) DEFAULT NULL;
+ALTER TABLE c_tool ADD COLUMN description text DEFAULT NULL;
+
+TRUNCATE roles;
 INSERT INTO roles (id, name, role) VALUES('1', 'Teacher', 'ROLE_TEACHER');
 INSERT INTO roles (id, name, role) VALUES('4', 'RRHH', 'ROLE_RRHH');
 INSERT INTO roles (id, name, role) VALUES('3', 'Session Manager', 'ROLE_SESSION_MANAGER');
@@ -71,7 +119,7 @@ INSERT INTO roles (id, name, role) VALUES('17', 'Question Manager', 'ROLE_QUESTI
 INSERT INTO roles (id, name, role) VALUES('18', 'Global admin', 'ROLE_GLOBAL_ADMIN');
 
 -- Admin
-TRUNCATE  users_roles;
+TRUNCATE users_roles;
 INSERT INTO users_roles VALUES (1, 11);
 
 DELETE FROM settings_current WHERE variable = 'session_tutor_reports_visibility';
@@ -131,6 +179,7 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('disable_copy_paste', NULL, 'radio', 'Platform', 'false','DisableCopyPasteTitle','DisableCopyPasteComment', NULL, NULL, 1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('showonline','session','checkbox','Platform','true','ShowOnlineTitle','ShowOnlineComment',NULL,'ShowOnlineSession', 0);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('documents_default_visibility_defined_in_course', NULL,'radio','Tools','false','DocumentsDefaultVisibilityDefinedInCourseTitle','DocumentsDefaultVisibilityDefinedInCourseComment',NULL, NULL, 1);
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_personal_user_files', NULL,'radio','Tools','false','AllowPersonalUserFilesTitle','AllowPersonalUserFilesComment',NULL, NULL, 1);
 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('session_tutor_reports_visibility', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('session_tutor_reports_visibility', 'false', 'No');
@@ -158,6 +207,8 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('default_ca
 
 INSERT INTO settings_options (variable, value, display_text) VALUES ('documents_default_visibility_defined_in_course', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('documents_default_visibility_defined_in_course', 'false', 'No');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_personal_user_files', 'true', 'Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_personal_user_files', 'false', 'No');
 
 TRUNCATE branch_transaction_status;
 INSERT INTO branch_transaction_status VALUES (1, 'To be executed'), (2, 'Executed successfully'), (3, 'Execution deprecated'), (4, 'Execution failed');
@@ -165,4 +216,4 @@ INSERT INTO branch_transaction_status VALUES (1, 'To be executed'), (2, 'Execute
 UPDATE course_field SET field_type = 3 WHERE field_variable = 'special_course';
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.052' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.056' WHERE variable = 'chamilo_database_version';

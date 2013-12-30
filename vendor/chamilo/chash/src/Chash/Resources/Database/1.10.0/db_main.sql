@@ -178,7 +178,7 @@ CREATE TABLE IF NOT EXISTS course (
   subscribe tinyint NOT NULL default '1',
   unsubscribe tinyint NOT NULL default '1',
   registration_code varchar(255) NOT NULL default '',
-  legal TEXT  NOT NULL,
+  legal text  NOT NULL,
   activate_legal INT NOT NULL DEFAULT 0,
   add_teachers_to_sessions_courses tinyint NOT NULL default 0,
   PRIMARY KEY (id),
@@ -490,7 +490,7 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS php_session;
 CREATE TABLE IF NOT EXISTS php_session (
   session_id varchar(255) NOT NULL,
-  session_value LONGTEXT NOT NULL,
+  session_value longtext NOT NULL,
   session_time int NOT NULL,
   PRIMARY KEY (session_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -967,6 +967,7 @@ VALUES
 ('breadcrumb_navigation_display', NULL, 'radio', 'Platform','true','BreadcrumbNavigationDisplayTitle', 'BreadcrumbNavigationDisplayComment', NULL, NULL, 1),
 ('default_calendar_view', NULL, 'radio', 'Platform','month','DefaultCalendarViewTitle', 'DefaultCalendarViewComment', NULL, NULL, 1),
 ('documents_default_visibility_defined_in_course', NULL,'checkbox','Tools','false','DocumentsDefaultVisibilityDefinedInCourseTitle','DocumentsDefaultVisibilityDefinedInCourseComment',NULL, NULL, 1),
+('allow_personal_user_files', NULL,'radio','Tools','false','AllowPersonalUserFilesTitle','AllowPersonalUserFilesComment',NULL, NULL, 1),
 ('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001', 'DatabaseVersion', '', NULL, NULL, 0); -- base value, updated at end of file. Don't change here
 
 UNLOCK TABLES;
@@ -1332,7 +1333,9 @@ VALUES
 ('default_calendar_view', 'agendaWeek', 'Week'),
 ('default_calendar_view', 'agendaDay', 'Day'),
 ('documents_default_visibility_defined_in_course', 'true', 'Yes'),
-('documents_default_visibility_defined_in_course', 'false', 'No');
+('documents_default_visibility_defined_in_course', 'false', 'No')
+('allow_personal_user_files', 'true', 'Yes'),
+('allow_personal_user_files', 'false', 'No');
 
 UNLOCK TABLES;
 
@@ -1352,7 +1355,7 @@ CREATE TABLE IF NOT EXISTS sys_announcement (
   visible_student tinyint NOT NULL default 0,
   visible_guest tinyint NOT NULL default 0,
   title varchar(250) NOT NULL default '',
-  content text NOT NULL,
+  content longtext NOT NULL,
   lang varchar(70) NULL default NULL,
   access_url_id INT NOT NULL default 1,
   PRIMARY KEY  (id)
@@ -1371,7 +1374,7 @@ CREATE TABLE IF NOT EXISTS shared_survey (
   author varchar(250) default NULL,
   lang varchar(20) default NULL,
   template varchar(20) default NULL,
-  intro text,
+  intro longtext,
   surveythanks text,
   creation_date datetime NOT NULL default '0000-00-00 00:00:00',
   course_code varchar(40) NOT NULL default '',
@@ -1379,12 +1382,11 @@ CREATE TABLE IF NOT EXISTS shared_survey (
   UNIQUE KEY id (survey_id)
 );
 
-
 DROP TABLE IF EXISTS shared_survey_question;
 CREATE TABLE IF NOT EXISTS shared_survey_question (
   question_id int NOT NULL auto_increment,
   survey_id int NOT NULL default '0',
-  survey_question text NOT NULL,
+  survey_question longtext NOT NULL,
   survey_question_comment text NOT NULL,
   type varchar(250) NOT NULL default '',
   display varchar(10) NOT NULL default '',
@@ -1394,17 +1396,15 @@ CREATE TABLE IF NOT EXISTS shared_survey_question (
   PRIMARY KEY  (question_id)
 );
 
-
 DROP TABLE IF EXISTS shared_survey_question_option;
 CREATE TABLE IF NOT EXISTS shared_survey_question_option (
   question_option_id int NOT NULL auto_increment,
   question_id int NOT NULL default '0',
   survey_id int NOT NULL default '0',
-  option_text text NOT NULL,
+  option_text longtext NOT NULL,
   sort int NOT NULL default '0',
   PRIMARY KEY  (question_option_id)
 );
-
 
 DROP TABLE IF EXISTS templates;
 CREATE TABLE IF NOT EXISTS templates (
@@ -1430,7 +1430,6 @@ CREATE TABLE IF NOT EXISTS openid_association (
   created bigint NOT NULL,
   PRIMARY KEY  (id)
 );
-
 
 DROP TABLE IF EXISTS gradebook_category;
 CREATE TABLE IF NOT EXISTS gradebook_category (
@@ -1670,7 +1669,7 @@ DROP TABLE IF EXISTS sys_calendar;
 CREATE TABLE IF NOT EXISTS sys_calendar (
   id int unsigned NOT NULL auto_increment,
   title varchar(255) NOT NULL,
-  content text,
+  content longtext,
   start_date datetime NOT NULL default '0000-00-00 00:00:00',
   end_date datetime NOT NULL default '0000-00-00 00:00:00',
   access_url_id INT NOT NULL default 1,
@@ -1684,7 +1683,7 @@ CREATE TABLE IF NOT EXISTS system_template (
   title varchar(250) NOT NULL,
   comment text NOT NULL,
   image varchar(250) NOT NULL,
-  content text NOT NULL,
+  content longtext NOT NULL,
   PRIMARY KEY  (id)
 );
 
@@ -2598,7 +2597,7 @@ CREATE TABLE IF NOT EXISTS message(
     msg_status tinyint unsigned not null default 0,
     send_date datetime not null default '0000-00-00 00:00:00',
     title varchar(255) not null,
-    content text not null,
+    content longtext not null,
     group_id int unsigned not null default 0,
     parent_id int unsigned not null default 0,
     update_date datetime not null default '0000-00-00 00:00:00',
@@ -2826,6 +2825,7 @@ CREATE TABLE IF NOT EXISTS usergroup (
     picture varchar(255) NOT NULL,
     url varchar(255) NOT NULL,
     visibility int NOT NULL,
+    allow_members_leave_group int NOT NULL DEFAULT 1,
     updated_on varchar(255) NOT NULL,
     created_on varchar(255) NOT NULL,
     PRIMARY KEY (id)
@@ -3078,7 +3078,7 @@ CREATE TABLE course_type (
     id int unsigned not null auto_increment primary key,
     name varchar(50) not null,
     translation_var char(40) default 'UndefinedCourseTypeLabel',
-    description TEXT default '',
+    description text default '',
     props text default ''
 );
 
@@ -3193,8 +3193,8 @@ CREATE TABLE track_e_default (
   default_user_id int unsigned NOT NULL default 0,
   default_cours_code varchar(40) NOT NULL default '',
   default_date datetime NOT NULL default '0000-00-00 00:00:00',
-  default_event_type varchar(20) NOT NULL default '',
-  default_value_type varchar(20) NOT NULL default '',
+  default_event_type varchar(255) NOT NULL default '',
+  default_value_type varchar(255) NOT NULL default '',
   default_value text NOT NULL,
   c_id int unsigned default NULL,
   session_id int unsigned default 0,
@@ -3243,7 +3243,7 @@ CREATE TABLE track_e_attempt (
     exe_id int default NULL,
     user_id int NOT NULL default 0,
     question_id int NOT NULL default 0,
-    answer text NOT NULL,
+    answer longtext NOT NULL,
     teacher_comment text NOT NULL,
     marks float(6,2) NOT NULL default 0,
     position int default 0,
@@ -3266,7 +3266,7 @@ CREATE TABLE track_e_attempt_recording (
     marks int NOT NULL,
     insert_date datetime NOT NULL default '0000-00-00 00:00:00',
     author int unsigned NOT NULL,
-    teacher_comment text NOT NULL,
+    teacher_comment longtext NOT NULL,
     session_id INT NOT NULL DEFAULT 0
 );
 ALTER TABLE track_e_attempt_recording ADD INDEX (exe_id);
@@ -3434,7 +3434,7 @@ CREATE TABLE personal_agenda (
   id int NOT NULL auto_increment,
   user int unsigned,
   title text,
-  `text` text,
+  `text` longtext,
   `date` datetime DEFAULT NULL,
   enddate datetime DEFAULT NULL,
   course varchar(255),
@@ -3594,6 +3594,53 @@ CREATE TABLE curriculum_rel_user (
     score int unsigned not null default 0 -- the temporary total score given to the user for the information he completed
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS tool;
+CREATE TABLE tool (
+    id int unsigned not null primary key AUTO_INCREMENT,
+    name varchar(255),
+    image varchar(255),
+    description TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO tool (name) VALUES('agenda');
+INSERT INTO tool (name) VALUES('announcements');
+INSERT INTO tool (name) VALUES('gradebook');
+INSERT INTO tool (name) VALUES('exercise');
+INSERT INTO tool (name) VALUES('document');
+INSERT INTO tool (name) VALUES('link');
+INSERT INTO tool (name) VALUES('forum');
+INSERT INTO tool (name) VALUES('glossary');
+
+DROP TABLE IF EXISTS session_path;
+CREATE TABLE session_path (
+    id int unsigned not null primary key AUTO_INCREMENT,
+    name varchar(255),
+    description TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS session_tree;
+CREATE TABLE session_tree (
+    id int unsigned not null primary key AUTO_INCREMENT,
+    session_path_id int unsigned not null,
+    session_id int unsigned,
+    course_id int unsigned,
+    tool_id int unsigned,
+    type varchar(255),
+    lft int,
+    lvl int,
+    rgt int,
+    root int,
+    parent_id int
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS user_session_path;
+CREATE TABLE user_session_path (
+    id int unsigned not null primary key AUTO_INCREMENT,
+    session_path_id int unsigned,
+    user_id int unsigned,
+    status varchar(100),
+    percentage int unsigned
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.052' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.056' WHERE variable = 'chamilo_database_version';

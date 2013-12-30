@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console;
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class UpgradeCommand
@@ -35,16 +36,19 @@ class UpgradeCommand extends CommonCommand
     {
         $this
             ->setName('chamilo:upgrade')
-            ->setDescription('Execute a chamilo migration to a specified version or the latest available version.')
-            ->addArgument('version', InputArgument::REQUIRED, 'The version to migrate to.', null)
+            ->setDescription('Execute a chamilo migration to a specified version or the latest available version')
+            ->addArgument('version', InputArgument::REQUIRED, 'The version to migrate to', null)
             ->addOption('path', null, InputOption::VALUE_OPTIONAL, 'The path to the chamilo folder')
-            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Execute the migration as a dry run.')
+            ->addOption('dry-run', null, InputOption::VALUE_NONE, 'Execute the migration as a dry run')
             ->addOption('update-installation', null, InputOption::VALUE_OPTIONAL, 'Updates the portal with the current zip file. http:// or /var/www/file.zip')
-            ->addOption('temp-folder', null, InputOption::VALUE_OPTIONAL, 'The temp folder.', '/tmp')
-            ->addOption('download-package', null, InputOption::VALUE_OPTIONAL, 'Downloads the chamilo package', 'true')
-            ->addOption('silent', null, InputOption::VALUE_NONE, 'Execute the migration with out asking questions.')
+            ->addOption('temp-folder', null, InputOption::VALUE_OPTIONAL, 'The temp folder', '/tmp')
+            ->addOption('download-package', null, InputOption::VALUE_OPTIONAL, 'Download the chamilo package', 'true')
+            ->addOption('silent', null, InputOption::VALUE_NONE, 'Execute the migration without asking questions')
             ->addOption('linux-user', null, InputOption::VALUE_OPTIONAL, 'user', 'www-data')
-            ->addOption('linux-group', null, InputOption::VALUE_OPTIONAL, 'group', 'www-data');
+            ->addOption('linux-group', null, InputOption::VALUE_OPTIONAL, 'group', 'www-data')
+            ->addOption('custom-package', null, InputOption::VALUE_OPTIONAL, 'Custom zip package location.', '')
+            ->addOption('remove-unused-table', null, InputOption::VALUE_NONE, 'Remove unused tables.')
+        ;
             //->addOption('force', null, InputOption::VALUE_NONE, 'Force the update. Only for tests');
     }
 
@@ -59,9 +63,12 @@ class UpgradeCommand extends CommonCommand
     protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
     {
         $startTime = time();
+
         if (PHP_SAPI != 'cli') {
             $this->commandLine = false;
         }
+
+        $removeUnusedTables = $input->getOption('remove-unused-table');
 
         // Setting up Chash
         $command = $this->getApplication()->find('chash:setup');
@@ -76,7 +83,6 @@ class UpgradeCommand extends CommonCommand
 
         $inputSetup = new ArrayInput($arguments);
         $command->run($inputSetup, $output);
-
         $migrationFile = $command->getMigrationFile();
 
         if (empty($migrationFile) || !file_exists($migrationFile)) {
@@ -84,13 +90,15 @@ class UpgradeCommand extends CommonCommand
             return 0;
         }
 
-        // Checking Resources/Database dir
-        $migrationFileFolder = $this->getInstallationFolder();
-        if (!is_dir($migrationFileFolder)) {
-            $output->writeln("<comment>The migration directory was not detected: </comment><info>$migrationFileFolder</info>");
+        // Checking Resources/Database dir. Getting the Resources/Database/1.8.7/db_main.sql.
+        $testFolder = $this->getInstallationFolder().'1.8.7/db_main.sql';
+        $installationFolder = $this->getInstallationFolder();
+
+        if (!file_exists($testFolder)) {
+            $output->writeln("<error>The migration directory was not detected: </error><info>$installationFolder</info>");
             return 0;
         } else {
-            $output->writeln("<comment>Reading migrations from directory: </comment><info>$migrationFileFolder</info>");
+            $output->writeln("<comment>Reading migrations from directory: </comment><info>$installationFolder</info>");
         }
 
         $this->setMigrationConfigurationFile($command->getMigrationFile());
@@ -102,6 +110,12 @@ class UpgradeCommand extends CommonCommand
         $silent = $input->getOption('silent') == true;
         $tempFolder = $input->getOption('temp-folder');
         $downloadPackage = $input->getOption('download-package') == 'true' ? true : false;
+
+        $customPackage = $input->getOption('custom-package');
+        if (!empty($customPackage)) {
+            $downloadPackage = false;
+        }
+
         $updateInstallation = $input->getOption('update-installation');
 
         // Setting the configuration path and configuration array
@@ -121,9 +135,10 @@ class UpgradeCommand extends CommonCommand
 
         // Checking configuration file.
         if (!is_writable($configurationPath)) {
-            $output->writeln("<comment>Folder ".$configurationPath." must have writable permissions</comment>");
+            $output->writeln("<comment>Folder ".$configurationPath." must have writeable permissions</comment>");
             return 0;
         }
+
         $this->setConfigurationPath($configurationPath);
 
         // $_configuration['password_encryption'] must exists
@@ -131,7 +146,7 @@ class UpgradeCommand extends CommonCommand
         if (isset($_configuration['password_encryption'])) {
             $output->writeln("<comment> \$_configuration[password_encryption] value found: </comment><info>".$_configuration['password_encryption']."</info>");
         } else {
-            $output->writeln("<error>\$_configuration['password_encryption'] not found. The key 'password_encryption' or the variable '\$userPasswordCrypted' must exists in the configuration.php file </error>");
+            $output->writeln("<error>\$_configuration['password_encryption'] not found. The key 'password_encryption' or the variable '\$userPasswordCrypted' must exist in the configuration.php file </error>");
             return 0;
         }
 
@@ -166,7 +181,7 @@ class UpgradeCommand extends CommonCommand
         // Checking system_version.
 
         if (!isset($_configuration['system_version']) || empty($_configuration['system_version'])) {
-            $output->writeln("<comment>You have something wrong in your Chamilo installation. Check it with the chamilo:status command</comment>");
+            $output->writeln("<comment>There is something wrong in your Chamilo installation. Check it with the chamilo:status command</comment>");
             return 0;
         }
 
@@ -193,7 +208,7 @@ class UpgradeCommand extends CommonCommand
         $versionInfo = $this->getAvailableVersionInfo($version);
 
         if (empty($versionInfo)) {
-            $output->writeln("<comment>The version is not supported: $version</comment>");
+            $output->writeln("<comment>The current version ($version) is not supported</comment>");
             return 0;
         }
 
@@ -220,6 +235,10 @@ class UpgradeCommand extends CommonCommand
                     $output->writeln("<comment>Chash was not able to unzip the downloaded package for version: $originalVersion</comment>");
                     return 0;
                 }
+            } else {
+                if (!empty($customPackage)) {
+                    $chamiloLocationPath = $customPackage;
+                }
             }
         }
 
@@ -227,12 +246,27 @@ class UpgradeCommand extends CommonCommand
 
         if ($dryRun == false) {
             if ($downloadPackage) {
-                $output->writeln("<comment>When the installation process finished the files located here:<comment>");
+                $output->writeln("<comment>When the installation process finishes, the files located here:<comment>");
                 $output->writeln("<info>$chamiloLocationPath</info>");
-                $output->writeln("<comment>will be copied in your portal here: </comment><info>".$this->getRootSys()."</info>");
+                $output->writeln("<comment>will be copied to your portal here: </comment><info>".$this->getRootSys()."</info>");
+            }
+
+            if ($removeUnusedTables) {
+                if (version_compare($currentVersion, '1.9.0', '<')) {
+                    $onlyPrefix = $this->getTablePrefix($_configuration);
+                    if (!empty($onlyPrefix)) {
+                        $output->writeln("<comment>--remove-unused-table option is on. Unused tables will be removed.<comment>");
+                        $tablesToDelete = "SHOW TABLES LIKE '".$onlyPrefix."%';";
+                        $output->writeln("<comment>All tables that match this query will be deleted:</comment> <info>$tablesToDelete</info>");
+                    } else {
+                        $output->writeln("<comment>--remove-unused-table option is on. But any table will be removed.<comment>");
+                    }
+                } else {
+                    $output->writeln("<comment>--remove-unused-table option is on. This does not affect this $originalVersion version.<comment>");
+                }
             }
         } else {
-            $output->writeln("<comment>When the installation process finished PHP files are not going to be updated (--dry-run is on).</comment>");
+            $output->writeln("<comment>When the installation process finishes, PHP files are not going to be updated (--dry-run is on).</comment>");
         }
 
         if ($silent == false) {
@@ -249,7 +283,7 @@ class UpgradeCommand extends CommonCommand
             $dialog = $this->getHelperSet()->get('dialog');
             if (!$dialog->askConfirmation(
                 $output,
-                '<question>Are you sure you want to upgrade from version</question> <info>'.$_configuration['system_version'].'</info> <comment>to version </comment><info>'.$version.'</info> (y/N)',
+                '<question>Are you sure you want to upgrade from version</question> <info>'.$_configuration['system_version'].'</info> <comment>to version</comment> <info>'.$version.'</info> (y/N)',
                 false
             )
             ) {
@@ -302,12 +336,12 @@ class UpgradeCommand extends CommonCommand
         foreach ($versionList as $versionItem => $versionInfo) {
             if (version_compare($versionItem, $currentVersion, '>') && version_compare($versionItem, $version, '<=')) {
                 $output->writeln("----------------------------------------------------------------");
-                $output->writeln("<comment>Starting migration from version: </comment><info>$oldVersion</info><comment> to </comment><info>$versionItem ");
+                $output->writeln("<comment>Starting migration from version: </comment><info>$oldVersion</info><comment> to version </comment><info>$versionItem ");
                 $output->writeln("");
 
                 if (isset($versionInfo['require_update']) && $versionInfo['require_update'] == true) {
                     // Greater than my current version.
-                    $this->startMigration($courseList, $path, $versionItem, $dryRun, $output);
+                    $this->startMigration($courseList, $path, $versionItem, $dryRun, $output, $removeUnusedTables);
                     $oldVersion = $versionItem;
                     $output->writeln("----------------------------------------------------------------");
                 } else {
@@ -316,7 +350,7 @@ class UpgradeCommand extends CommonCommand
             }
         }
 
-        // Update chamilo files
+        // Update chamilo files.
         if ($dryRun == false) {
             $this->copyPackageIntoSystem($output, $chamiloLocationPath, null);
             if ($version == '1.10.0') {
@@ -353,10 +387,10 @@ class UpgradeCommand extends CommonCommand
         $newParams = array('system_version' => $version);
         $this->updateConfiguration($output, $dryRun, $newParams);
 
-        $output->writeln("<comment>Hurrah!!! You just finish to migrate. Too check the current status of your platform. Run </comment><info>chamilo:status</info>");
+        $output->writeln("<comment>Hurray!!! You just finished this migration. To check the current status of your platform, run </comment><info>chamilo:status</info>");
         $endTime = time();
-        $totalTimeInSeconds = round(($endTime - $startTime)/60, 2);
-        $output->writeln("<comment>The script took $totalTimeInSeconds minutes.</comment>");
+        $totalTimeInMinutes = round(($endTime - $startTime)/60, 2);
+        $output->writeln("<comment>The script took $totalTimeInMinutes minutes to execute.</comment>");
     }
 
     /**
@@ -369,8 +403,9 @@ class UpgradeCommand extends CommonCommand
      * @param Console\Output\OutputInterface $output
      *
      * @return bool
+     * @throws \Exception
      */
-    public function startMigration($courseList, $path, $toVersion, $dryRun, Console\Output\OutputInterface $output)
+    public function startMigration($courseList, $path, $toVersion, $dryRun, Console\Output\OutputInterface $output, $removeUnusedTables = false)
     {
         // Cleaning query list.
         $this->queryList = array();
@@ -383,7 +418,7 @@ class UpgradeCommand extends CommonCommand
         $versionInfo = $this->getAvailableVersionInfo($toVersion);
         $installPath = $this->getInstallationFolder().$toVersion.'/';
 
-        $output->writeln("<comment>Reading installation directory for version $toVersion: <info>'$installPath'</info>");
+        $output->writeln("<comment>Reading installation directory for version $toVersion: <info>'$installPath'</info></comment>");
 
         // Filling sqlList array with "pre" db changes.
         if (isset($versionInfo['pre']) && !empty($versionInfo['pre'])) {
@@ -447,16 +482,20 @@ class UpgradeCommand extends CommonCommand
         if (isset($versionInfo['update_db']) && !empty($versionInfo['update_db'])) {
             $sqlToInstall = $installPath.$versionInfo['update_db'];
             if (is_file($sqlToInstall) && file_exists($sqlToInstall)) {
+
                 if ($dryRun) {
                     $output->writeln("<comment>File to be executed but not fired because of dry-run option: <info>'$sqlToInstall'</info>");
                 } else {
                     $output->writeln("<comment>Executing update db: <info>'$sqlToInstall'</info>");
                 }
+
                 require $sqlToInstall;
 
                 if (!empty($update)) {
-                    $update($_configuration, $conn, $courseList, $dryRun, $output, $this);
+                    $update($_configuration, $conn, $courseList, $dryRun, $output, $this, $removeUnusedTables);
                 }
+            } else {
+                $output->writeln(sprintf("File doesn't exist: '<info>%s</info>'", $sqlToInstall));
             }
         }
 
@@ -475,6 +514,8 @@ class UpgradeCommand extends CommonCommand
                         $updateFiles($_configuration, $conn, $courseList, $dryRun, $output, $this);
                     }
                 }
+            } else {
+                $output->writeln(sprintf("File doesn't exist: '<info>%s</info>'", $sqlToInstall));
             }
         }
 
@@ -504,10 +545,12 @@ class UpgradeCommand extends CommonCommand
      *
      * Process the queryList array and executes queries to the correct section (main, user, course, etc)
      *
-     * @param array course list
-     * @param $output
+     * @param array $courseList
+     * @param Console\Output\OutputInterface $output
+     * @param $path
      * @param $version
      * @param $dryRun
+     * @param $type
      * @return bool
      * @throws \Exception
      */
@@ -520,7 +563,7 @@ class UpgradeCommand extends CommonCommand
             foreach ($dbList as &$dbInfo) {
 
                 $output->writeln("");
-                $output->writeln("<comment>Loading section:</comment> <info>$section</info> <comment>using database key </comment><info>".$dbInfo['database']."</info>");
+                $output->writeln("<comment>Loading section:</comment> <info>$section</info> <comment>using database key</comment> <info>".$dbInfo['database']."</info>");
                 $output->writeln("--------------------------");
 
                 if ($dbInfo['status'] == 'complete') {
@@ -533,7 +576,7 @@ class UpgradeCommand extends CommonCommand
                     !empty($this->queryList[$type][$section])
                 ) {
                     $queryList = $this->queryList[$type][$section];
-                    $output->writeln("<comment>Loading query list: '$type' - '$section'</comment>");
+                    $output->writeln("<comment>Loading queries list: '$type' - '$section'</comment>");
 
                     if (!empty($queryList)) {
 
@@ -586,7 +629,6 @@ class UpgradeCommand extends CommonCommand
                     return false;
                 }
             }
-
         }
         $this->queryList = array();
 
@@ -598,21 +640,17 @@ class UpgradeCommand extends CommonCommand
      * Reads a sql file and adds queries  in the queryList array.
      *
      * @param string $sqlFilePath
-     * @param $output
+     * @param Console\Output\OutputInterface $output
      * @param string type
      */
     public function fillQueryList($sqlFilePath, $output, $type)
     {
-        if (is_file($sqlFilePath) && file_exists($sqlFilePath)) {
-            $output->writeln(sprintf("Processing file type: $type '<info>%s</info>'... ", $sqlFilePath));
-            $sections = $this->getSections();
+        $output->writeln(sprintf("Processing file type: $type '<info>%s</info>'... ", $sqlFilePath));
+        $sections = $this->getSections();
 
-            foreach ($sections as $section) {
-                $sqlList = $this->getSQLContents($sqlFilePath, $section);
-                $this->setQueryList($sqlList, $section, $type);
-            }
-        } else {
-            $output->writeln(sprintf("File doesn't exist: '<info>%s</info>'... ", $sqlFilePath));
+        foreach ($sections as $section) {
+            $sqlList = $this->getSQLContents($sqlFilePath, $section, $output);
+            $this->setQueryList($sqlList, $section, $type);
         }
     }
 
@@ -705,7 +743,7 @@ class UpgradeCommand extends CommonCommand
 
     /**
      * Sets the database list
-     * @param $list
+     * @param array $list
      */
     public function setDatabaseList($list)
     {
@@ -713,7 +751,8 @@ class UpgradeCommand extends CommonCommand
     }
 
     /**
-     *
+     * @param Console\Output\OutputInterface $output
+     * @param array $courseList
      * @param string $path
      * @param string $version
      * @param string $type
@@ -728,7 +767,7 @@ class UpgradeCommand extends CommonCommand
         $newConfigurationFile = $configurationPath.'db_migration_status_'.$version.'_'.$type.'.yml';
         if (file_exists($newConfigurationFile)) {
             $yaml = new Parser();
-            $output->writeln("<comment>Loading database list status from file:</comment> <info>$newConfigurationFile</info>");
+            $output->writeln("<comment>Loading databases list status from file:</comment> <info>$newConfigurationFile</info>");
 
             return $yaml->parse(file_get_contents($newConfigurationFile));
         } else {
@@ -757,7 +796,7 @@ class UpgradeCommand extends CommonCommand
     }
 
     /**
-     *
+     * @param Console\Output\OutputInterface $output
      * @param array $courseList
      * @param string $path
      * @param string $section
@@ -779,54 +818,33 @@ class UpgradeCommand extends CommonCommand
      *
      * @param string $file
      * @param string $section
-     * @param bool $printErrors
+     * @param Console\Output\OutputInterface $output
      *
      * @return array|bool
      */
-    public function getSQLContents($file, $section, $printErrors = true)
+    public function getSQLContents($file, $section, $output)
     {
-        //check given parameters
-        if (empty($file)) {
-            $error = "Missing name of file to parse in get_sql_file_contents()";
-            if ($printErrors) {
-                echo $error;
-            }
-
+        if (empty($file) || file_exists($file) == false) {
+            $output->writeln(sprintf("File doesn't exist: '<info>%s</info>'... ", $file));
             return false;
         }
+
         if (!in_array($section, array('main', 'user', 'stats', 'scorm', 'course'))) {
-            $error = "Section '$section' is not authorized in getSQLContents()";
-            if ($printErrors) {
-                echo $error;
-            }
-
+            $output->writeln(sprintf("Section is <info>%s</info> not authorized in getSQLContents()", $section));
             return false;
         }
-        $filepath = $file;
-        if (!is_file($filepath) or !is_readable($filepath)) {
-            $error = "File $filepath not found or not readable in getSQLContents()";
-            if ($printErrors) {
-                echo $error;
-            }
 
-            return false;
-        }
-        //read the file in an array
         // Empty lines should not be executed as SQL statements, because errors occur, see Task #2167.
-        $file_contents = file($filepath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-        if (!is_array($file_contents) or count($file_contents) < 1) {
-            $error = "File $filepath looks empty in getSQLContents()";
-            if ($printErrors) {
-                echo $error;
-            }
-
+        $fileContents = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        if (!is_array($fileContents) or count($fileContents) < 1) {
+            $output->writeln(sprintf("File '<info>%s</info>' looks empty in getSQLContents()", $file));
             return false;
         }
 
-        //prepare the resulting array
-        $section_contents = array();
+        // Prepare the resulting array
+        $sectionContents = array();
         $record = false;
-        foreach ($file_contents as $line) {
+        foreach ($fileContents as $line) {
             if (substr($line, 0, 2) == '--') {
                 //This is a comment. Check if section name, otherwise ignore
                 $result = array();
@@ -845,27 +863,25 @@ class UpgradeCommand extends CommonCommand
             } else {
                 if ($record) {
                     if (!empty($line)) {
-                        $section_contents[] = $line;
+                        $sectionContents[] = $line;
                     }
                 }
             }
         }
 
-        // Now we have our section's SQL statements group ready, return
-
-        return $section_contents;
+        return $sectionContents;
     }
 
     /**
      * Creates the course tables with the prefix c_
-     * @param $output
+     * @param Console\Output\OutputInterface $output
      * @param string $dryRun
+     * @return int
      */
     public function createCourseTables($output, $dryRun)
     {
-
         if ($dryRun) {
-            $output->writeln("<comment>Creating c_* tables but dry-run is on. 0 tables created.</comment>");
+            $output->writeln("<comment>Creating c_* tables but dry-run is on. 0 table created.</comment>");
             return 0;
         }
 

@@ -118,11 +118,11 @@ function search_users($needle,$type) {
     } else {
         $return .= '<select id="origin" name="NoAssignedUsersList[]" multiple="multiple" size="20" style="width:340px;">';
 	      while($user = Database :: fetch_array($rs)) {
-		      $person_name = api_get_person_name($user['firstname'], $user['lastname']);
-		      $return .= '<option value="'.$user['user_id'].'" title="'.htmlspecialchars($person_name,ENT_QUOTES).'">'.$person_name.' ('.$user['username'].')</option>';
+		        $person_name = api_get_person_name($user['firstname'], $user['lastname']);
+		        $return .= '<option value="'.$user['user_id'].'" title="'.htmlspecialchars($person_name,ENT_QUOTES).'">'.$person_name.' ('.$user['username'].')</option>';
 	      }
-	        $return .= '</select>';
-	        $xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
+	      $return .= '</select>';
+	      $xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
     }
 	}
 	return $xajax_response;

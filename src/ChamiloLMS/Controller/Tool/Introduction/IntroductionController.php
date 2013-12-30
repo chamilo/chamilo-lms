@@ -3,6 +3,7 @@
 
 namespace ChamiloLMS\Controller\Tool\Introduction;
 
+use Entity\CToolIntro;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use ChamiloLMS\Controller\CommonController;
@@ -38,7 +39,7 @@ class IntroductionController extends CommonController
             array('tool' => $tool, 'course' => api_get_course_id())
         );
 
-        $form = $this->getForm($url);
+        $form = $this->getForm($url, $tool);
 
         if ($form->validate()) {
             $values  = $form->exportValues();
@@ -82,22 +83,27 @@ class IntroductionController extends CommonController
         $request = $this->getRequest();
         $courseId = $request->get('courseId');
         $sessionId = $request->get('sessionId');
-        $tool = \Database::escape_string($tool);
+        $criteria = array(
+            'sessionId' => $sessionId,
+            'id' => $tool,
+            'cId' => $courseId
+        );
 
-        $TBL_INTRODUCTION = \Database::get_course_table(TABLE_TOOL_INTRO);
-	    \Database::query("DELETE FROM $TBL_INTRODUCTION
-	                      WHERE c_id = $courseId AND id='".$tool."' AND session_id='".intval($sessionId)."'");
-		$message = \Display::return_message(get_lang('IntroductionTextDeleted'), 'confirmation');
+        $toolIntro = $this->getRepository()->findOneBy($criteria);
+        if ($toolIntro) {
+            $this->getManager()->remove($toolIntro);
+            $this->getManager()->flush();
+            $this->get('session')->getFlashBag()->add('success', "IntroductionTextDeleted");
+        }
 
         $url = $this->generateUrl(
             'introduction.controller:editAction',
             array('tool' => $tool, 'course' => api_get_course_id())
         );
 
-        $form = $this->getForm($url);
+        $form = $this->getForm($url, $tool);
 
         $this->getTemplate()->assign('content', $form->return_form());
-        $this->getTemplate()->assign('message', $message);
         $response = $this->getTemplate()->renderLayout('layout_1_col.tpl');
         return new Response($response, 200, array());
     }
@@ -105,9 +111,10 @@ class IntroductionController extends CommonController
     /**
      *
      * @param $url
+     * @param string
      * @return \FormValidator
      */
-    private function getForm($url)
+    private function getForm($url, $tool)
     {
         $toolbar_set = 'IntroductionTool';
         $width = '100%';
@@ -117,7 +124,51 @@ class IntroductionController extends CommonController
 
         $form = new \FormValidator('form', 'post', $url);
         $form->add_html_editor('content', null, null, false, $editor_config);
+        $form->addElement('label', get_lang('YouCanUseAllTheseTags'), '(('.implode(')) <br /> ((', $this->getTags()).'))');
         $form->addElement('button', 'submit', get_lang('SaveIntroText'));
         return $form;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getRepository()
+    {
+        return $this->get('orm.em')->getRepository('Entity\CToolIntro');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getNewEntity()
+    {
+        return new CToolIntro();
+    }
+
+    private function getTags()
+    {
+        return array(
+            'course_description',
+            'quiz',
+            'announcement',
+            'forum',
+            'dropbox',
+            'user',
+            'group',
+            'chat',
+            'student_publication',
+            'survey',
+            'wiki',
+            'gradebook',
+            'glossary',
+            'notebook',
+            'attendance',
+            'course_progress',
+            'curriculum',
+            'blog_management',
+            'tracking',
+            'course_setting',
+            'course_maintenance'
+        );
     }
 }

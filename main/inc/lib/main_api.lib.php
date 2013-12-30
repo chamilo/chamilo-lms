@@ -6812,14 +6812,20 @@ function api_is_allowed_in_course()
 
 /**
  * Show a string in
- * @param string $sql
+ * @param string $string Some string to dump, removing tabs, spaces, newlines, etc (usually most useful for SQL queries)
+ * @param int $dump Set to 1 to use print_r()
  */
-function api_error_log($string)
+function api_error_log($string, $dump = 0)
 {
     // Clean query
     $bt = debug_backtrace();
     $caller = array_shift($bt);;
-    $string = str_replace(array("\r", "\n", "\t", "\10"), '', $string);
+    if ($dump == 1) {
+        $string = print_r($string, 1);
+    } else {
+        $string = str_replace(array("\r", "\n", "\t", "\10"), '', $string);
+        $string = str_replace('    ',' ', $string);
+    }
 
     error_log("-------------------------------------");
     error_log($string);
@@ -6828,10 +6834,11 @@ function api_error_log($string)
 }
 
 /**
- * Show a string in
- * @param string $sql
+ * Show a string in the default error_log. Alias for api_error_log().
+ * @param string $string Some string to dump, removing tabs, spaces, newlines, etc (usually most useful for SQL queries)
+ * @param int $dump Set to 1 to use print_r()
  */
-function api_elog($string)
+function api_elog($string, $dump = 0)
 {
-    return api_error_log($string);
+    return api_error_log($string, $dump);
 }

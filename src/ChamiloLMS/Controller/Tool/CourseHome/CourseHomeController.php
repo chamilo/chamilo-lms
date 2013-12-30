@@ -140,15 +140,15 @@ class CourseHomeController extends CommonController
                     }
                 }
             } else {
-                $table = Database::get_course_table(TABLE_QUIZ_TEST);
+                $table = \Database::get_course_table(TABLE_QUIZ_TEST);
                 $course_id = api_get_course_int_id();
                 $condition = '';
                 if (!empty($session_id)) {
                     $condition =  api_get_session_condition($session_id);
                     $sql = "SELECT iid FROM $table WHERE c_id = $course_id AND autolaunch = 1 $condition LIMIT 1";
-                    $result = Database::query($sql);
+                    $result = \Database::query($sql);
                     //If we found nothing in the session we just called the session_id =  0 autolaunch
-                    if (Database::num_rows($result) ==  0) {
+                    if (\Database::num_rows($result) ==  0) {
                         $condition = '';
                     } else {
                         //great, there is an specific auto lunch for this session we leave the $condition
@@ -156,9 +156,9 @@ class CourseHomeController extends CommonController
                 }
 
                 $sql = "SELECT iid FROM $table WHERE c_id = $course_id AND autolaunch = 1 $condition LIMIT 1";
-                $result = Database::query($sql);
-                if (Database::num_rows($result) >  0) {
-                    $data = Database::fetch_array($result,'ASSOC');
+                $result = \Database::query($sql);
+                if (\Database::num_rows($result) >  0) {
+                    $data = \Database::fetch_array($result,'ASSOC');
                     if (!empty($data['iid'])) {
                         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
                             $showAutoLaunchExerciseWarning = true;
@@ -198,15 +198,15 @@ class CourseHomeController extends CommonController
                     }
                 }
             } else {
-                $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+                $lp_table = \Database::get_course_table(TABLE_LP_MAIN);
                 $course_id = api_get_course_int_id();
                 $condition = '';
                 if (!empty($session_id)) {
                     $condition =  api_get_session_condition($session_id);
                     $sql = "SELECT id FROM $lp_table WHERE c_id = $course_id AND autolunch = 1 $condition LIMIT 1";
-                    $result = Database::query($sql);
+                    $result = \Database::query($sql);
                     //If we found nothing in the session we just called the session_id =  0 autolunch
-                    if (Database::num_rows($result) ==  0) {
+                    if (\Database::num_rows($result) ==  0) {
                         $condition = '';
                     } else {
                         //great, there is an specific auto lunch for this session we leave the $condition
@@ -214,9 +214,9 @@ class CourseHomeController extends CommonController
                 }
 
                 $sql = "SELECT id FROM $lp_table WHERE c_id = $course_id AND autolunch = 1 $condition LIMIT 1";
-                $result = Database::query($sql);
-                if (Database::num_rows($result) >  0) {
-                    $lp_data = Database::fetch_array($result,'ASSOC');
+                $result = \Database::query($sql);
+                if (\Database::num_rows($result) >  0) {
+                    $lp_data = \Database::fetch_array($result,'ASSOC');
                     if (!empty($lp_data['id'])) {
                         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
                             $showAutoLaunchLpWarning = true;
@@ -340,11 +340,6 @@ class CourseHomeController extends CommonController
      */
     public function iconListAction()
     {
-        /*$roles = $this->getUser()->getRoles();
-        foreach ($roles as $role) {
-            var_dump($role->getRole());
-        }*/
-
         if (!$this->isCourseTeacher()) {
             return $this->abort(404);
         }

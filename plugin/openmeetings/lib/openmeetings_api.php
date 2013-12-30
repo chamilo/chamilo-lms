@@ -1,14 +1,30 @@
 <?php
-
+/**
+ * OpenMeetings API
+ * @package chamilo.plugin.openmeetings
+ */
+/**
+ * Class OpenMeetingsAPI
+ */
 class OpenMeetingsAPI
 {
     private $_securitySalt;
     private $_serverBaseUrl;
+
+    /**
+     * Constructor
+     */
     function __construct()
     {
             $this->_securitySalt  = CONFIG_SECURITY_SALT;
             $this->_serverBaseUrl  = CONFIG_OPENMEETINGS_SERVER_BASE_URL;
     }
+
+    /**
+     * Gets info about a given meeting
+     * @param $infoParams
+     * @return array|null
+     */
     function getMeetingInfoArray($infoParams)
     {
             

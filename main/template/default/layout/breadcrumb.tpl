@@ -1,0 +1,31 @@
+<script>
+    $(document).ready( function() {
+        $('.toggle_student_view').on('click', function() {
+            $.ajax({
+                url: '{{ url('toggle_student_view') }}',
+                success: function(data) {
+                    location.reload();
+                }
+            });
+        });
+    });
+</script>
+<ul class="breadcrumb">
+    {{ breadcrumb }}
+
+    {% if ("student_view_enabled" | get_setting) == 'true' %}
+        {% if is_granted('ROLE_TEACHER') %}
+            <div id="view_as_link" class="pull-right">
+                {% if app.session.get('studentview') == 'studentview' %}
+                    <a class="btn btn-success btn-xs toggle_student_view" target="_self">
+                        {{ 'StudentView' | trans }}
+                    </a>
+                {% else %}
+                    <a class="btn btn-default btn-xs toggle_student_view"target="_self">
+                        {{ 'CourseManagerview' | trans }}
+                    </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endif %}
+</ul>

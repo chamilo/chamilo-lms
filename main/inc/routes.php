@@ -493,6 +493,8 @@ $app->get('/userportal', 'userPortal.controller:indexAction')
     ->before($userIsLoggedIn)
     ->before($removeCidReset);
 
+$app->get('/toggleStudentView', 'userPortal.controller:toggleStudentViewAction')->bind('toggle_student_view');
+
 $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexAction')
     ->before($userIsLoggedIn)
     ->before($removeCidReset)

@@ -822,17 +822,17 @@ class Display
     }
 
     /**
-     * Returns the htmlcode for an image
+     * Returns the html code for an image
      *
      * @param string $image_path the filename of the file (in the main/img/ folder
      * @param string $alt_text the alt text (probably a language variable)
      * @param array additional attributes (for instance height, width, onclick, ...)
      * @param bool $applyFilter
      * @author Julio Montoya 2010
+     * @return string
      */
     public static function img($image_path, $alt_text = '', $additional_attributes = array(), $applyFilter = true)
     {
-
         // Sanitizing the parameter $image_path
         if ($applyFilter) {
             $image_path = Security::filter_img_path($image_path);
@@ -856,12 +856,13 @@ class Display
     }
 
     /**
-     * Returns the htmlcode for a tag (h3, h1, div, a, button), etc
+     * Returns the html code for a tag (h3, h1, div, a, button), etc
      *
-     * @param string $image the filename of the file (in the main/img/ folder
-     * @param string $alt_text the alt text (probably a language variable)
-     * @param array additional attributes (for instance height, width, onclick, ...)
+     * @param string $tag the filename of the file (in the main/img/ folder
+     * @param string $content the alt text (probably a language variable)
+     * @param array $additional_attributes (for instance height, width, onclick, ...)
      * @author Julio Montoya 2010
+     * @return string
      */
     public static function tag($tag, $content, $additional_attributes = array())
     {
@@ -884,6 +885,10 @@ class Display
 
     /**
      * Creates a URL anchor
+     * @param string $name
+     * @param string $url
+     * @param array $extra_attributes
+     * @return string
      */
     public static function url($name, $url, $extra_attributes = array())
     {

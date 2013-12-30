@@ -3,6 +3,7 @@
 
 namespace ChamiloLMS\Controller;
 
+use Composer\Repository\Pear\BaseChannelReader;
 use Silex\Application;
 use \ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +28,7 @@ class UserPortalController extends CommonController
     {
         // @todo Use filters like "after/before|finish" to manage user access
         api_block_anonymous_users();
+
 
         // Abort request because the user is not allowed here - @todo use filters
         if ($app['allowed'] == false) {
@@ -90,5 +92,26 @@ class UserPortalController extends CommonController
         $response = $app['template']->render_template('userportal/index.tpl');
 
         return new Response($response, 200, array());
+    }
+
+    /**
+     * Toggle the student view action
+     */
+    public function toggleStudentViewAction(Application $app)
+    {
+        if (!api_is_allowed_to_edit()) {
+            return null;
+        }
+
+        /** @var Request $request */
+        $request = $app['request'];
+        $studentView = $request->getSession()->get('studentview');
+        if (empty($studentView) || $studentView == 'studentview') {
+            $request->getSession()->set('studentview', 'teacherview');
+            return 'teacherview';
+        } else {
+            $request->getSession()->set('studentview', 'studentview');
+            return 'studentview';
+        }
     }
 }

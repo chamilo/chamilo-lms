@@ -7,7 +7,7 @@
     {% if api_is_allowed_to_edit %}
         <div class="row">
             <div id="learning_path_breadcrumb_zone" class="col-md-12">
-                {{ breadcrumb }}
+                {% include app.template_style ~ "/layout/breadcrumb.tpl" %}
             </div>
         </div>
     {% endif %}

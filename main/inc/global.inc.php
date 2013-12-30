@@ -331,10 +331,11 @@ $app->before(
         }
 
         // Starting the session for more info see: http://silex.sensiolabs.org/doc/providers/session.html
-        $request->getSession()->start();
+        $session = $request->getSession();
+        $session->start();
 
         // Setting session obj
-        Session::setSession($app['session']);
+        Session::setSession($session);
 
         UserManager::setEntityManager($app['orm.em']);
 
@@ -575,11 +576,20 @@ $app->before(
                 $sessionId = api_get_session_id();
             }
 
-            $session = $app['orm.em']->getRepository('Entity\Session')->findOneById($sessionId);
-            $app['course_session'] = $session;
-            $app['template']->assign('course_session', $session);
+            $courseSession = $app['orm.em']->getRepository('Entity\Session')->findOneById($sessionId);
+            $app['course_session'] = $courseSession;
+            $app['template']->assign('course_session', $courseSession);
         } else {
             $app['course'] = null;
+        }
+
+        $studentView = $request->get('isStudentView');
+        if (!empty($studentView)) {
+            if ($studentView == 'true') {
+                $session->set('studentview', 'studentview');
+            } else {
+                $session->set('studentview', 'teacherview');
+            }
         }
     }
 );

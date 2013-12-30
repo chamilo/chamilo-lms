@@ -125,7 +125,11 @@ class IntroductionController extends CommonController
         $form = new \FormValidator('form', 'post', $url);
         $form->add_html_editor('content', null, null, false, $editor_config);
         if ($tool == 'course_homepage') {
-            $form->addElement('label', get_lang('YouCanUseAllTheseTags'), '(('.implode(')) <br /> ((', $this->getTags()).'))');
+            $form->addElement(
+                'label',
+                get_lang('YouCanUseAllTheseTags'),
+                '(('.implode(')) <br /> ((', \CourseHome::availableTools()).'))'
+            );
         }
         $form->addElement('button', 'submit', get_lang('SaveIntroText'));
         return $form;
@@ -147,30 +151,4 @@ class IntroductionController extends CommonController
         return new CToolIntro();
     }
 
-    private function getTags()
-    {
-        return array(
-            'course_description',
-            'quiz',
-            'announcement',
-            'forum',
-            'dropbox',
-            'user',
-            'group',
-            'chat',
-            'student_publication',
-            'survey',
-            'wiki',
-            'gradebook',
-            'glossary',
-            'notebook',
-            'attendance',
-            'course_progress',
-            'curriculum',
-            'blog_management',
-            'tracking',
-            'course_setting',
-            'course_maintenance'
-        );
-    }
 }

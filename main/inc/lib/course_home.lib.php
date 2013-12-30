@@ -1153,7 +1153,8 @@ class CourseHome
     /**
     * Show a toolbar with shortcuts to the course tool
     */
-    static function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL) {
+    static function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL)
+    {
         $navigation_items = self::get_navigation_items(false);
         $html = '';
         if (!empty($navigation_items)) {
@@ -1164,7 +1165,7 @@ class CourseHome
             }
             $html .= '<div id="'.$style_id.'">';
 
-            foreach ($navigation_items as $key => $navigation_item) {
+            foreach ($navigation_items as $navigation_item) {
                 if (strpos($navigation_item['link'],'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
                     $html .= '<a href="javascript: void(0);" onclick="javascript: window.open(\''.$navigation_item['link'].'\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')" target="' . $navigation_item['target'] . '"';
                 } else {
@@ -1214,7 +1215,44 @@ class CourseHome
             $text = str_replace($search, $tool['icon'], $text);
         }
 
-        return $text;
+        // Cleaning tags that are not used.
+        $tools = self::availableTools();
+        foreach ($tools as $toolName) {
+            $search = array("{{ ".$toolName." }}", "{{".$toolName."}}", "((".$toolName."))", "(( ".$toolName." ))");
+            $text = str_replace($search, null, $text);
+        }
 
+        return $text;
+    }
+
+    /**
+     * Available tools
+     * @return array
+     */
+    public static function availableTools()
+    {
+        return array(
+            'course_description',
+            'quiz',
+            'announcement',
+            'forum',
+            'dropbox',
+            'user',
+            'group',
+            'chat',
+            'student_publication',
+            'survey',
+            'wiki',
+            'gradebook',
+            'glossary',
+            'notebook',
+            'attendance',
+            'course_progress',
+            'curriculum',
+            'blog_management',
+            'tracking',
+            'course_setting',
+            'course_maintenance'
+        );
     }
 }

@@ -11,7 +11,7 @@ $course_plugin = 'openmeetings'; //needed in order to load the plugin lang varia
 require_once dirname(__FILE__).'/config.php';
 $tool_name = get_lang('Videoconference');
 $tpl = new Template($tool_name);
-$om = new openmeetings();
+$om = new OpenMeetings();
 
 if ($om->plugin_enabled) {
 
@@ -20,7 +20,7 @@ if ($om->plugin_enabled) {
         if (isset($_GET['launch']) && $_GET['launch'] == 1) {
 
             $meeting_params = array();
-            $meeting_params['meeting_name'] = api_get_course_id();
+            $meeting_params['meeting_name'] = api_get_course_id().'-'.api_get_session_id();
             $meetings = $om->getCourseMeetings();
 
             // Select the meeting with more participantCount.

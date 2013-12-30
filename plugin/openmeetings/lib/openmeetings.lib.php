@@ -85,15 +85,15 @@ class OpenMeetings
             if (empty($_SESSION['sessOpenMeeting'])) {
                 $gsFun = $omServices->getSession($objGetSession);
                 $_SESSION['sessOpenMeeting'] = $objloginUser->SID = $this->sessionId = $gsFun->return->session_id;
-                $objloginUser->username = CONFIG_OMUSER_SALT;
-                $objloginUser->userpass = CONFIG_OMPASS_SALT;
+                $objloginUser->username = CONFIG_OPENMEETINGS_USER_SALT;
+                $objloginUser->userpass = CONFIG_OPENMEETINGS_PASS_SALT;
 
                 $luFn = $omServices->loginUser($objloginUser);
 
                 if ($luFn->return > 0) {
-                 return true;
+                    return true;
                 } else {
-                 return false;
+                    return false;
                 }
             } else {
                 $this->sessionId = $_SESSION['sessOpenMeeting'];
@@ -117,7 +117,7 @@ class OpenMeetings
         $objAddRoom = new addRoomWithModerationAndExternalType();
         $roomTypeId = $isModerated = ( $this->isTeacher() ) ? 1 : 2 ;
         $params['c_id'] = api_get_course_int_id();
-        $course_name = 'COURSE_ID_' . $params['c_id'] .'_NAME_' . $params['meeting_name'];
+        $course_name = 'C'.$params['c_id'].'-'.api_get_session_id();
         $urlWsdl = CONFIG_OPENMEETINGS_SERVER_BASE_URL . "/services/RoomService?wsdl";
 
         $objAddRoom->SID = $this->sessionId;
@@ -130,13 +130,23 @@ class OpenMeetings
         $objAddRoom->isDemoRoom = false;
         $objAddRoom->demoTime = false;
         $objAddRoom->isModeratedRoom = $isModerated;
-        $objAddRoom->externalRoomType = true;
+        $objAddRoom->externalRoomType = 'chamilo';
 
-        $omServices = new SoapClient( $urlWsdl );
-        $adFun = $omServices->addRoomWithModerationAndExternalType( $objAddRoom );
+        $omServices = new SoapClient($urlWsdl, array("trace" => 1, "exceptions" => true, "cache_wsdl" => WSDL_CACHE_NONE));
 
-        if ($adFun->return > -1) {
-            $meetingId = $params['id'] = $adFun->return;
+        try {
+            $s = $omServices->addRoomWithModerationAndExternalType($objAddRoom);
+            //error_log($omServices->__getLastRequest());
+            //error_log($omServices->__getLastResponse());
+        } catch (SoapFault $e) {
+            echo "<h1>Warning</h1>
+                <p>We have detected some problems </br>
+                Fault: {$e->faultstring}</p>";
+            return -1;
+        }
+
+        if ($s->return > -1) {
+            $meetingId = $params['id'] = $s->return;
             $params['status'] = '1';
             $params['meeting_name'] = $course_name;
             $params['created_at'] = date('l jS \of F Y h:i:s A');
@@ -327,7 +337,7 @@ class OpenMeetings
         $item = array();
         $pass = $this->getMeetingUserPassword();
         $this->loginUser();
-        $meeting_list = Database::select('*', $this->table, array('where' => array('c_id = ? ' => api_get_course_int_id())));
+        $meeting_list = Database::select('*', $this->table, array('where' => array('c_id = ? ' => api_get_course_int_id(), 'session_id = ? ' => api_get_session_id())));
 
         $urlWsdl = CONFIG_OPENMEETINGS_SERVER_BASE_URL . "/services/RoomService?wsdl";
         $omServices = new SoapClient($urlWsdl);

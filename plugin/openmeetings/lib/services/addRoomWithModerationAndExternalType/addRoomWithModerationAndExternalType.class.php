@@ -1,10 +1,11 @@
 <?php
 class addRoomWithModerationAndExternalType{
+    // params as defined in WSDL
     public $SID;
     public $name;
     public $roomtypes_id;
     public $comment;
-    public $numberOfPartizapants;
+    public $numberOfPartizipants;
     public $ispublic;
     public $appointment;
     public $isDemoRoom;

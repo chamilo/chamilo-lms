@@ -13,7 +13,7 @@ $plugin = openmeetingsPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 $tpl = new Template($tool_name);
 
-$om = new openmeetings();
+$om = new OpenMeetings();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $teacher = $om->isTeacher();
@@ -76,7 +76,8 @@ if (!empty($meetings)) {
 }
 
 $users_online = $meetings->participantCount;
-$status = !$meetings->isClosed;
+//$status = !$meetings->isClosed;
+$status = $om->isServerRunning();
 $meeting_exists = !$meetings->isClosed;//$om->meeting_exists(api_get_course_id());
 $show_join_button = false;
 if ($meeting_exists || $teacher) {
@@ -95,4 +96,5 @@ $tpl->assign('show_join_button', $show_join_button);
 $tpl->assign('message', $message);
 $listing_tpl = 'openmeetings/listing.tpl';
 $content = $tpl->fetch($listing_tpl);
-$tpl->assign('content', $content);$tpl->display_one_col_template();
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

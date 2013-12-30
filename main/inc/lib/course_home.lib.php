@@ -787,14 +787,17 @@ class CourseHome
                 }
 
                 if (!empty($tool['custom_icon'])) {
+                    //self::getCustomIconPath($courseInfo)
                     $icon = Display::img(
-                        self::getCustomIconPath($courseInfo).$tool['image'],
+                        $tool['image'],
                         null,
                         array('class' => 'tool-icon', 'id' => 'toolimage_'.$tool['id'])
                     );
                 } else {
+                    $image = (substr($tool['image'], 0, strpos($tool['image'], '.'))).'.png';
+
                     $icon = Display::return_icon(
-                        $tool['image'],
+                        $image,
                         null,
                         array('class' => 'tool-icon', 'id' => 'toolimage_'.$tool['id']),
                         ICON_SIZE_BIG,
@@ -1190,7 +1193,7 @@ class CourseHome
                 continue;
             }
             $toolName = $tool['tool']['name'];
-            $search = array("{{ ".$toolName." }}", "((".$toolName."}}");
+            $search = array("{{ ".$toolName." }}", "{{".$toolName."}}", "((".$toolName."))", "(( ".$toolName." ))");
             $text = str_replace($search, $tool['icon'], $text);
         }
 

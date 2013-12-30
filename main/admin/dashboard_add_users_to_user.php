@@ -106,21 +106,21 @@ function search_users($needle,$type) {
         $i = 0;
         while ($user = Database :: fetch_array($rs)) {
             $i++;
-            if ($i<=10) {
+            if ($i <= 10) {
                 $person_name = api_get_person_name($user['firstname'], $user['lastname']);
                 $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_user(\''.$user['user_id'].'\',\''.$person_name.' ('.$user['username'].')'.'\')">'.$person_name.' ('.$user['username'].')</a><br />';
             } else {
                 $return .= '...<br />';
             }
-       }
+        }
 
        $xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));
     } else {
         $return .= '<select id="origin" name="NoAssignedUsersList[]" multiple="multiple" size="20" style="width:340px;">';
-	        while($user = Database :: fetch_array($rs)) {
+	      while($user = Database :: fetch_array($rs)) {
 		      $person_name = api_get_person_name($user['firstname'], $user['lastname']);
 		      $return .= '<option value="'.$user['user_id'].'" title="'.htmlspecialchars($person_name,ENT_QUOTES).'">'.$person_name.' ('.$user['username'].')</option>';
-	    }
+	      }
 	        $return .= '</select>';
 	        $xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
     }

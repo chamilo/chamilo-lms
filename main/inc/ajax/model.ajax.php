@@ -343,7 +343,7 @@ switch ($action) {
 $total_pages = 0;
 if ($count > 0) {
     if (!empty($limit)) {
-        $total_pages = ceil($count/$limit);
+        $total_pages = ceil((float)$count/(float)$limit);
     }
 }
 if ($page > $total_pages) {

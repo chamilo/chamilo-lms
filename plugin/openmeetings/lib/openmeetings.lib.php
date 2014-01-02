@@ -71,7 +71,11 @@ class OpenMeetings
         return api_is_course_admin() || api_is_coach() || api_is_platform_admin();
     }
     /**
-     * Login the user with OM Server
+     * Login the user with OM Server. This generates a session ID that is
+     * specific to the current user, but that does not require specific user data
+     *
+     * It is similar to opening a PHP session. In fact, the session ID is kept
+     * inside the $_SESSION['openmeetings_session'] session variable
      * @return bool True if the user is correct and false when is incorrect
      */
     function loginUser()
@@ -81,23 +85,23 @@ class OpenMeetings
             //$urlWsdl = CONFIG_OPENMEETINGS_SERVER_URL . "/services/UserService?wsdl";
             //$omServices = new SoapClient( $urlWsdl );
             //Verifying if there is already an active session
-            if (empty($_SESSION['sessOpenMeeting'])) {
+            if (empty($_SESSION['openmeetings_session'])) {
                 //$gsFun = $omServices->getSession($objGetSession);
 
                 //$loginUser = $omServices->loginUser(array('SID' => $this->sessionId, 'username' => $this->user, 'userpass' => $this->pass));
                 $loginUser = $this->gateway->loginUser();
-                $_SESSION['sessOpenMeeting'] = $this->sessionId = $this->gateway->session_id;
+                $this->sessionId = $_SESSION['openmeetings_session'] = $this->gateway->session_id;
 
                 if ($loginUser) {
-                    error_log(__FILE__.' '.__LINE__.' user logged in');
+                    //error_log(__FILE__.' '.__LINE__.' user logged in and received session ID '.$this->gateway->session_id);
                     return true;
                 } else {
-                    error_log(__FILE__.' '.__LINE__);
+                    //error_log(__FILE__.' '.__LINE__);
                     return false;
                 }
             } else {
-                error_log(__LINE__.' '.$_SESSION['sessOpenMeeting']);
-                $this->sessionId = $_SESSION['sessOpenMeeting'];
+                //error_log(__FILE__.' '.__LINE__.' '.$_SESSION['openmeetings_session']);
+                $this->sessionId = $_SESSION['openmeetings_session'];
                 return true;
             }
         } catch (SoapFault $e) {
@@ -495,12 +499,15 @@ class OpenMeetings
             $omServices = new SoapClient( $urlWsdl );
             $objClose = new Chamilo\Plugin\OpenMeetings\Room();
             $objClose->SID = $this->sessionId;
-            $objClose->room_id = $meetingId;
+            $objClose->room_id = intval($meetingId);
             $objClose->status = false;
-            $crFn = $omServices->closeRoom( $objClose );
-            if ($crFn > 0) {
+            $roomClosed = $omServices->closeRoom( $objClose );
+            error_log('Closing');
+            if ($roomClosed > 0) {
+                error_log('Closing returned '.print_r($roomClosed,1));
                 Database::update($this->table, array('status' => 0, 'closed_at' => api_get_utc_datetime()), array('id = ? ' => $meetingId));
             }
+            error_log('Finished closing');
         } catch (SoapFault $e) {
             echo "<h1>Warning</h1>
             <p>We have detected some problems </br>

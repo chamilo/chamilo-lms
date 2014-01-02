@@ -113,7 +113,7 @@ class OpenMeetings
     */
     function createMeeting($params)
     {
-        //$id = Database::insert($this->table, $params);
+      //$id = Database::insert($this->table, $params);
       try {
         $objAddRoom = new Chamilo\Plugin\OpenMeetings\Room();
         $roomTypeId = $isModerated = ( $this->isTeacher() ) ? 1 : 2 ;
@@ -130,7 +130,7 @@ class OpenMeetings
         $objAddRoom->isDemoRoom = false;
         $objAddRoom->demoTime = false;
         $objAddRoom->isModeratedRoom = $isModerated;
-        $objAddRoom->externalRoomType = 'chamilo';
+        $objAddRoom->externalRoomType = 'chamilolms';
 
         $omServices = new SoapClient($urlWsdl, array("trace" => 1, "exceptions" => true, "cache_wsdl" => WSDL_CACHE_NONE));
 
@@ -138,6 +138,7 @@ class OpenMeetings
             $s = $omServices->addRoomWithModerationAndExternalType($objAddRoom);
             //error_log($omServices->__getLastRequest());
             //error_log($omServices->__getLastResponse());
+            error_log(print_r($s,1));
         } catch (SoapFault $e) {
             echo "<h1>Warning</h1>
                 <p>We have detected some problems </br>
@@ -145,6 +146,7 @@ class OpenMeetings
             return -1;
         }
 
+        //if we get here, this means addRoomWithModerationAndExternalType worked
         if ($s->return > -1) {
             $meetingId = $params['id'] = $s->return;
             $params['status'] = '1';

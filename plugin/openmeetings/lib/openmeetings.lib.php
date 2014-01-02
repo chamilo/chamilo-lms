@@ -26,6 +26,7 @@ class OpenMeetings
     public $logout_url = null;
     public $plugin_enabled = false;
     public $sessionId = "";
+    public $roomName = '';
 
     /**
      * Constructor (generates a connection to the API and the Chamilo settings
@@ -58,7 +59,7 @@ class OpenMeetings
             $this->gateway = new OpenMeetingsGateway();
             $this->plugin_enabled = $om_plugin;
             // The room has a name composed of C + course ID + '-' + session ID
-            $this->room_name = 'C'.api_get_course_int_id().'-'.api_get_session_id();
+            $this->roomName = 'C'.api_get_course_int_id().'-'.api_get_session_id();
         }
     }
     /**
@@ -120,7 +121,7 @@ class OpenMeetings
         $urlWsdl = CONFIG_OPENMEETINGS_SERVER_URL . "/services/RoomService?wsdl";
 
         $objAddRoom->SID = $this->sessionId;
-        $objAddRoom->name = $this->room_name;
+        $objAddRoom->name = $this->roomName;
         $objAddRoom->roomtypes_id = $roomTypeId;
         $objAddRoom->comment = get_lang('Course').': ' . $params['meeting_name'] . ' Plugin for Chamilo';
         $objAddRoom->numberOfPartizipants = 40;
@@ -147,7 +148,7 @@ class OpenMeetings
         if ($s->return > -1) {
             $meetingId = $params['id'] = $s->return;
             $params['status'] = '1';
-            $params['meeting_name'] = $course_name;
+            $params['meeting_name'] = $this->roomName;
             $params['created_at'] = api_get_utc_datetime();
 
             Database::insert($this->table, $params);
@@ -336,7 +337,7 @@ class OpenMeetings
         $item = array();
         $this->loginUser();
         $meeting_list = Database::select('*', $this->table, array('where' => array('c_id = ? ' => api_get_course_int_id(), ' AND session_id = ? ' => api_get_session_id())));
-
+        error_log(print_r($meeting_list,1));
         $urlWsdl = CONFIG_OPENMEETINGS_SERVER_URL . "/services/RoomService?wsdl";
         $omServices = new SoapClient($urlWsdl);
         $objRoom = new Chamilo\Plugin\OpenMeetings\Room();

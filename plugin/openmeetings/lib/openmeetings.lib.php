@@ -89,10 +89,10 @@ class OpenMeetings
                 $_SESSION['sessOpenMeeting'] = $this->sessionId = $this->gateway->session_id;
 
                 if ($loginUser) {
-                    error_log(__LINE__.' user logged in');
+                    error_log(__FILE__.' '.__LINE__.' user logged in');
                     return true;
                 } else {
-                    error_log(__LINE__);
+                    error_log(__FILE__.' '.__LINE__);
                     return false;
                 }
             } else {
@@ -337,7 +337,9 @@ class OpenMeetings
         $item = array();
         $this->loginUser();
         $meeting_list = Database::select('*', $this->table, array('where' => array('c_id = ? ' => api_get_course_int_id(), ' AND session_id = ? ' => api_get_session_id())));
-        error_log(print_r($meeting_list,1));
+
+        error_log(__FILE__.' '.__FUNCTION__.' '.__LINE__.' '.print_r($meeting_list,1));
+
         $urlWsdl = CONFIG_OPENMEETINGS_SERVER_URL . "/services/RoomService?wsdl";
         $omServices = new SoapClient($urlWsdl);
         $objRoom = new Chamilo\Plugin\OpenMeetings\Room();
@@ -376,24 +378,24 @@ class OpenMeetings
             //if( empty($objCurUs->returnMeetingID) ) continue;
 
             $current_room = array(
-                'roomtype' => $objCurUs->return->roomtype->roomtypes_id,
-                'meetingName' => $objCurUs->return->name,
-                'meetingId' => $objCurUs->return->meetingID,
-                'createTime' => $objCurUs->return->rooms_id,
-                'showMicrophoneStatus' => $objCurUs->return->showMicrophoneStatus,
-                'attendeePw' => $objCurUs->return->attendeePW,
-                'moderatorPw' => $objCurUs->return->moderators,
-                'isClosed' => $objCurUs->return->isClosed,
-                'allowRecording' => $objCurUs->return->allowRecording,
-                'startTime' => $objCurUs->return->startTime,
-                'endTime' => $objCurUs->return->updatetime,
-                'participantCount' => count($objCurUs->return->currentusers),
-                'maxUsers' => $objCurUs->return->numberOfPartizipants,
-                'moderatorCount' => count($objCurUs->return->moderators)
+                'roomtype' => $objRoomId->return->roomtype->roomtypes_id,
+                'meetingName' => $objRoomId->return->name,
+                'meetingId' => $objRoomId->return->meetingID,
+                'createTime' => $objRoomId->return->rooms_id,
+                'showMicrophoneStatus' => $objRoomId->return->showMicrophoneStatus,
+                'attendeePw' => $objRoomId->return->attendeePW,
+                'moderatorPw' => $objRoomId->return->moderators,
+                'isClosed' => $objRoomId->return->isClosed,
+                'allowRecording' => $objRoomId->return->allowRecording,
+                'startTime' => $objRoomId->return->startTime,
+                'endTime' => $objRoomId->return->updatetime,
+                'participantCount' => count($objRoomId->return->currentusers),
+                'maxUsers' => $objRoomId->return->numberOfPartizipants,
+                'moderatorCount' => count($objRoomId->return->moderators)
             );
                 // Then interate through attendee results and return them as part of the array:
-            if (!empty($objCurUs->return->currentusers)) {
-                    foreach ($objCurUs->return->currentusers as $a)
+            if (!empty($objRoomId->return->currentusers)) {
+                    foreach ($objRoomId->return->currentusers as $a)
                       $current_room[] = array(
                                 'userId' => $a->username,
                                 'fullName' => $a->firstname . " " . $a->lastname,

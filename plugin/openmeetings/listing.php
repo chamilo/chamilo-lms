@@ -74,6 +74,7 @@ $meetings = $om->getCourseMeetings();
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
 }
+error_log(__FILE__.':'.__LINE__.': '.print_r($meetings,1));
 
 $users_online = $meetings->participantCount;
 //$status = !$meetings->isClosed;

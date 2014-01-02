@@ -1,7 +1,17 @@
 <?php
-class addRoomWithModerationAndExternalType{
-    // params as defined in WSDL
+/**
+ * Definition for the room class
+ * @package chamilo.plugin.videoconference
+ */
+namespace Chamilo\Plugin\OpenMeetings;
+/**
+ * Class room
+ */
+class Room
+{
     public $SID;
+    public $rooms_id;
+    public $status;
     public $name;
     public $roomtypes_id;
     public $comment;
@@ -12,4 +22,8 @@ class addRoomWithModerationAndExternalType{
     public $demoTime;
     public $isModeratedRoom;
     public $externalRoomType;
+
+    public function __construct()
+    {
+    }
 }

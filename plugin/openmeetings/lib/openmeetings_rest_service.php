@@ -72,21 +72,25 @@ class OpenMeetingsRestService
                 // Success
                 break;
             case 503 :
-                die ( 'Your call to OpenMeetings Web Services failed and returned an HTTP status of 503.   
+                error_log( 'Your call to OpenMeetings Web Services failed and returned an HTTP status of 503.
                                  That means: Service unavailable. An internal problem prevented us from returning data to you.' );
+                return false;
                 break;
             case 403 :
-                die ( 'Your call to OpenMeetings Web Services failed and returned an HTTP status of 403.   
+                error_log( 'Your call to OpenMeetings Web Services failed and returned an HTTP status of 403.
                                  That means: Forbidden. You do not have permission to access this resource, or are over your rate limit.' );
+                return false;
                 break;
             case 400 :
                 // You may want to fall through here and read the specific XML error
-                die ( 'Your call to OpenMeetings Web Services failed and returned an HTTP status of 400.   
+                error_log( 'Your call to OpenMeetings Web Services failed and returned an HTTP status of 400.
                                  That means:  Bad request. The parameters passed to the service did not match as expected.   
                                  The exact error is returned in the XML response.' );
+                return false;
                 break;
             default :
-                die ( 'Your call to OpenMeetings Web Services returned an unexpected HTTP status of: ' . $status_code [0] . " Request " . $request );
+                error_log( 'Your call to OpenMeetings Web Services returned an unexpected HTTP status of: ' . $status_code [0] . " Request " . $request );
+                return false;
         }
         
             // Get the XML from the response, bypassing the header

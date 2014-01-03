@@ -1060,8 +1060,14 @@ if (in_array($action, $allowed_actions)) {
         switch ($export_format) {
             case 'xls':
                 //TODO add date if exists
-                $file_name = (!empty($action)) ? $action : 'company_report'; 
-                Export::export_table_xls($array, $file_name);
+                $file_name = (!empty($action)) ? $action : 'company_report';
+                require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
+                $browser = new Browser();
+                if ($browser->getPlatform() == Browser::PLATFORM_WINDOWS) {
+                    Export::export_table_xls($array, $file_name, 'ISO-8859-15');
+                } else {
+                    Export::export_table_xls($array, $file_name, 'ISO-8859-15');
+                }
                 break;
             case 'csv':
             default:

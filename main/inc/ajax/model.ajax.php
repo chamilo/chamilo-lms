@@ -1066,7 +1066,7 @@ if (in_array($action, $allowed_actions)) {
                 if ($browser->getPlatform() == Browser::PLATFORM_WINDOWS) {
                     Export::export_table_xls($array, $file_name, 'ISO-8859-15');
                 } else {
-                    Export::export_table_xls($array, $file_name, 'ISO-8859-15');
+                    Export::export_table_xls($array, $file_name);
                 }
                 break;
             case 'csv':

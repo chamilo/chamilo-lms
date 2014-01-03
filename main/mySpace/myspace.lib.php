@@ -71,9 +71,9 @@ class MySpace {
 		$session_id  = intval($session_id);
 
 	    $sql = 'SELECT login_course_date, logout_course_date FROM ' . $tbl_track_course . '
-                WHERE   user_id = '.$user_id.' AND 
-                        course_code="'.$course_code.'" AND 
-                        session_id = '.$session_id.' 
+                WHERE   user_id = '.$user_id.' AND
+                        course_code="'.$course_code.'" AND
+                        session_id = '.$session_id.'
                 ORDER BY login_course_date ASC';
 	    $rs = Database::query($sql);
 	    $connections = array();
@@ -85,12 +85,12 @@ class MySpace {
 	    }
 	    return $connections;
 	}
-    
+
     static function get_connections_from_course_list($user_id, $course_list, $session_id = 0) {
 		// Database table definitions
 	    $tbl_track_course 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         if (empty($course_list)) {
-            return false;   
+            return false;
         }
 
 		// protect data
@@ -98,18 +98,18 @@ class MySpace {
 		$course_code = Database::escape_string($course_code);
 		$session_id  = intval($session_id);
         $new_course_list = array();;
-        foreach ($course_list as $course_item) {            
+        foreach ($course_list as $course_item) {
             $new_course_list[] =  '"'.Database::escape_string($course_item['code']).'"';
         }
         $course_list = implode(', ', $new_course_list);
-        
+
         if (empty($course_list)) {
-            return false;   
+            return false;
         }
 	    $sql = 'SELECT login_course_date, logout_course_date, course_code FROM ' . $tbl_track_course . '
-                WHERE   user_id = '.$user_id.' AND 
-                        course_code IN ('.$course_list.') AND 
-                        session_id = '.$session_id.' 
+                WHERE   user_id = '.$user_id.' AND
+                        course_code IN ('.$course_list.') AND
+                        session_id = '.$session_id.'
                 ORDER BY login_course_date ASC';
 	    $rs = Database::query($sql);
 	    $connections = array();
@@ -276,22 +276,22 @@ class MySpace {
      */
     public function display_tracking_lp_progress_overview($sessionId = '', $courseId = '') {
 
-        $course = api_get_course_info_by_id($courseId); 
+        $course = api_get_course_info_by_id($courseId);
         /**
          * Column name
          * The order is important you need to check the $column variable in the model.ajax.php file
          */
         $columns = array(
-            get_lang('Username'), 
-            get_lang('FirstName'), 
-            get_lang('LastName'), 
+            get_lang('Username'),
+            get_lang('FirstName'),
+            get_lang('LastName'),
         );
         //add lessons of course
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
         $lessons = LearnpathList::get_course_lessons($course['code'], $sessionId);
 
         //create columns array
-        foreach ($lessons as $lesson_id => $lesson) 
+        foreach ($lessons as $lesson_id => $lesson)
         {
             $columns[] = $lesson['name'];
         }
@@ -307,7 +307,7 @@ class MySpace {
             array('name'=>'lastname',   'index'=>'lastname',     'align'=>'left', 'search' => 'true'),
         );
         //get dinamic column names
-        foreach ($lessons as $lesson_id => $lesson) 
+        foreach ($lessons as $lesson_id => $lesson)
         {
             $column_model[] = array('name'=> $lesson['id'],   'index'=>$lesson['id'],    'align'=>'left', 'search' => 'true');
         }
@@ -329,7 +329,7 @@ class MySpace {
 
         $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
-        $return = '<script>$(function() {'. $table . 
+        $return = '<script>$(function() {'. $table .
             'jQuery("#'.$tableId.'").jqGrid("navGrid","#'.$tableId.'_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
                 jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{
                        caption:"",
@@ -358,16 +358,16 @@ class MySpace {
          * The column order is important. Check $column variable in the main/inc/ajax/model.ajax.php file
          */
         $columns = array(
-            get_lang('Session'), 
-            get_lang('ExerciseId'), 
-            get_lang('ExerciseName'), 
-            get_lang('Username'), 
-            get_lang('LastName'), 
-            get_lang('FirstName'), 
-            get_lang('Time'), 
-            get_lang('QuestionId'), 
-            get_lang('QuestionTitle'), 
-            get_lang('Answer'), 
+            get_lang('Session'),
+            get_lang('ExerciseId'),
+            get_lang('ExerciseName'),
+            get_lang('Username'),
+            get_lang('LastName'),
+            get_lang('FirstName'),
+            get_lang('Time'),
+            get_lang('QuestionId'),
+            get_lang('QuestionTitle'),
+            get_lang('Answer'),
             get_lang('Correct'),
         );
 
@@ -401,7 +401,7 @@ class MySpace {
         $tableId = 'exerciseProgressOverview';
         $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), '', true);
 
-        $return = '<script>$(function() {'. $table . 
+        $return = '<script>$(function() {'. $table .
             'jQuery("#'.$tableId.'").jqGrid("navGrid","#'.$tableId.'_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
                 jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{
                        caption:"",
@@ -420,15 +420,15 @@ class MySpace {
      */
     function display_survey_overview($sessionId = 0, $courseId = 0, $surveyId = 0, $answer = 2) {
 
-        $course = api_get_course_info_by_id($courseId); 
+        $course = api_get_course_info_by_id($courseId);
         /**
          * Column name
          * The order is important you need to check the $column variable in the model.ajax.php file
          */
         $columns = array(
-            get_lang('Username'), 
-            get_lang('FirstName'), 
-            get_lang('LastName'), 
+            get_lang('Username'),
+            get_lang('FirstName'),
+            get_lang('LastName'),
         );
         //add lessons of course
         $questions = survey_manager::get_questions($surveyId, $courseId);
@@ -459,7 +459,7 @@ class MySpace {
 
         //Table Id
         $tableId = 'lpProgress';
-        
+
         //Autowidth
         $extra_params['autowidth'] = 'true';
 
@@ -468,7 +468,7 @@ class MySpace {
 
         $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
-        $return = '<script>$(function() {'. $table . 
+        $return = '<script>$(function() {'. $table .
             'jQuery("#'.$tableId.'").jqGrid("navGrid","#'.$tableId.'_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
                 jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{
                        caption:"",
@@ -600,7 +600,7 @@ class MySpace {
 
         $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
-        $return = '<script>$(function() {'. $table . 
+        $return = '<script>$(function() {'. $table .
             'jQuery("#'.$tableId.'").jqGrid("navGrid","#'.$tableId.'_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
                 jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{
                        caption:"",
@@ -655,7 +655,7 @@ class MySpace {
 
         $table = Display::grid_js($tableId, $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
-        $return = '<script>$(function() {'. $table . 
+        $return = '<script>$(function() {'. $table .
             'jQuery("#'.$tableId.'").jqGrid("navGrid","#'.$tableId.'_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
                 jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{
                        caption:"",
@@ -817,11 +817,11 @@ class MySpace {
 	 * @param string Order direction
 	 * @return array Results
 	 */
-	public function get_course_data_tracking_overview($from, $number_of_items, $column, $direction) {		
+	public function get_course_data_tracking_overview($from, $number_of_items, $column, $direction) {
 		$main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $from = intval($from);
         $number_of_items = intval($number_of_items);
-        
+
 		$sql = "SELECT code AS col0, title AS col1 FROM $main_course_table";
 		$sql .= " ORDER BY col$column $direction ";
 		$sql .= " LIMIT $from,$number_of_items";
@@ -1644,7 +1644,7 @@ class MySpace {
 		$sql = "SELECT course.code as col1, course.title as col2
 				FROM $tbl_course course
 				WHERE course.code IN (".implode(',',$courses_code).")";
-		
+
 		if (!in_array($direction, array('ASC','DESC'))) $direction = 'ASC';
 
 	    $column = intval($column);
@@ -1655,7 +1655,7 @@ class MySpace {
 
 		$res = Database::query($sql);
 		while ($row_course = Database::fetch_row($res)) {
-            
+
 			$course_code = $row_course[0];
 			$course_info = api_get_course_info($course_code);
 			$avg_assignments_in_course = $avg_messages_in_course = $nb_students_in_course = $avg_progress_in_course = $avg_score_in_course = $avg_time_spent_in_course = $avg_score_in_exercise = 0;
@@ -1674,9 +1674,9 @@ class MySpace {
 				$nb_students_in_course = count($users);
 				$avg_assignments_in_course  = Tracking::count_student_assignments($users, $course_code, $session_id);
 				$avg_messages_in_course     = Tracking::count_student_messages($users, $course_code, $session_id);
-				$avg_progress_in_course     = Tracking::get_avg_student_progress($users, $course_code, array(), $session_id);                
+				$avg_progress_in_course     = Tracking::get_avg_student_progress($users, $course_code, array(), $session_id);
 				$avg_score_in_course        = Tracking::get_avg_student_score($users, $course_code, array(), $session_id);
-				$avg_score_in_exercise      = Tracking::get_avg_student_exercise_score($users, $course_code, 0, $session_id);				                
+				$avg_score_in_exercise      = Tracking::get_avg_student_exercise_score($users, $course_code, 0, $session_id);
 				$avg_time_spent_in_course   = Tracking::get_time_spent_on_the_course($users, $course_code, $session_id);
 
 				$avg_progress_in_course = round($avg_progress_in_course / $nb_students_in_course, 2);
@@ -2218,7 +2218,7 @@ class MySpace {
 		xml_parse($parser, api_utf8_encode_xml(file_get_contents($file)));
 		xml_parser_free($parser);
 		return $users;
-	}	
+	}
 }
 
     

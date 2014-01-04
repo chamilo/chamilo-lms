@@ -31,10 +31,12 @@ class Room
         $this->table = Database::get_main_table('plugin_openmeetings');
         if (!empty($id)) {
             $roomData = Database::select('*', $this->table, array('where' => array('id = ?' => $id)), 'first');
-            $this->rooms_id = $this->room_id = $roomData['room_id'];
-            $this->status = $roomData['status'];
-            $this->name = $roomData['meeting_name'];
-            $this->comment = $roomData['welcome_msg'];
+            if (!empty($roomData)) {
+                $this->rooms_id = $this->room_id = $roomData['room_id'];
+                $this->status = $roomData['status'];
+                $this->name = $roomData['meeting_name'];
+                $this->comment = $roomData['welcome_msg'];
+            }
         }
     }
 }

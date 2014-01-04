@@ -26,11 +26,11 @@ class Room
     public $externalRoomType = 'chamilolms';
     private $table;
 
-    public function __construct($id)
+    public function __construct($id = null)
     {
-        $this->table = Database::get_main_table('plugin_openmeetings');
+        $this->table = \Database::get_main_table('plugin_openmeetings');
         if (!empty($id)) {
-            $roomData = Database::select('*', $this->table, array('where' => array('id = ?' => $id)), 'first');
+            $roomData = \Database::select('*', $this->table, array('where' => array('id = ?' => $id)), 'first');
             if (!empty($roomData)) {
                 $this->rooms_id = $this->room_id = $roomData['room_id'];
                 $this->status = $roomData['status'];

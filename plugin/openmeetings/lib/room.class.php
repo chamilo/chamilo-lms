@@ -13,7 +13,7 @@ class Room
     // Defining plural and non-plural because of inconsistency in OpenMeetings
     public $rooms_id;
     public $room_id;
-    public $status; //false for closed, true for open
+    public $status = false; //false for closed, true for open
     public $name;
     public $roomtypes_id;
     public $comment;

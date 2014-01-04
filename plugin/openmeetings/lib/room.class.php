@@ -21,9 +21,18 @@ class Room
     public $isDemoRoom;
     public $demoTime;
     public $isModeratedRoom;
-    public $externalRoomType;
+    public $externalRoomType = 'chamilolms';
+    private $table;
 
-    public function __construct()
+    public function __construct($id)
     {
+        $this->table = Database::get_main_table('plugin_openmeetings');
+        if (!empty($id)) {
+            $roomData = Database::select('*', $this->table, array('where' => array('id = ?' => $id)), 'first');
+            $this->rooms_id = $roomData['room_id'];
+            $this->status = $roomData['status'];
+            $this->name = $roomData['meeting_name'];
+            $this->comment = $roomData['welcome_msg'];
+        }
     }
 }

@@ -15,14 +15,14 @@ class Room
     public $room_id;
     public $status = false; //false for closed, true for open
     public $name;
-    public $roomtypes_id;
+    public $roomtypes_id = 1;
     public $comment;
-    public $numberOfPartizipants;
-    public $ispublic;
-    public $appointment;
-    public $isDemoRoom;
-    public $demoTime;
-    public $isModeratedRoom;
+    public $numberOfPartizipants = 40;
+    public $ispublic = false;
+    public $appointment = false;
+    public $isDemoRoom = false;
+    public $demoTime = 0;
+    public $isModeratedRoom = true;
     public $externalRoomType = 'chamilolms';
     private $table;
 

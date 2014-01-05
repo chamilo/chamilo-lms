@@ -9,7 +9,7 @@ The tasks related to the development of this plugin:
 * (private system access) https://task.beeznest.com/issues/7046
 * https://issues.apache.org/jira/browse/OPENMEETINGS-802
 People involved:
-* Financed by the Commission Scolaire des Hautes-Rivières, Québec, Canada
+* Financed by the Commission Scolaire des Hautes-Rivières, Québec, Canada (and coordinated/executed by the TICFP team)
 * First draft developed by Francis Gonzales Tello - Independent (at the time)
 * First stable version published by Yannick Warnier - BeezNest/Chamilo team
 * Maxim Solodovnik - OpenMeetings team - many thanks to him!

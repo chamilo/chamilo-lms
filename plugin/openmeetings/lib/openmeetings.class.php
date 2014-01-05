@@ -135,7 +135,7 @@ class OpenMeetings
         $roomId = null;
         $meetingData = \Database::select('*', $this->table, array('where' => array('c_id = ?' => $this->chamiloCourseId, ' AND session_id = ? ' => $this->chamiloSessionId)), 'first');
         if ($meetingData != false && count($meetingData) > 0) {
-            error_log('Found previous room reference - reusing');
+            //error_log('Found previous room reference - reusing');
             // There has been a room in the past for this course. It should
             // still be on the server, so update (instead of creating a new one)
             // This fills the following attributes: status, name, comment, chamiloCourseId, chamiloSessionId
@@ -151,7 +151,7 @@ class OpenMeetings
             }
 
         } else {
-            error_log('Found no previous room - creating');
+            //error_log('Found no previous room - creating');
             $room = new Room();
             $room->SID = $this->sessionId;
             $room->name = $this->roomName;

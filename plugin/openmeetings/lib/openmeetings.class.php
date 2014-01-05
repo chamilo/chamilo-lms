@@ -135,6 +135,7 @@ class OpenMeetings
         $roomId = null;
         $meetingData = \Database::select('*', $this->table, array('where' => array('c_id = ?' => $this->chamiloCourseId, ' AND session_id = ? ' => $this->chamiloSessionId)), 'first');
         if ($meetingData != false && count($meetingData) > 0) {
+            error_log(print_r($meetingData,1));
             //error_log('Found previous room reference - reusing');
             // There has been a room in the past for this course. It should
             // still be on the server, so update (instead of creating a new one)
@@ -214,18 +215,7 @@ class OpenMeetings
         //$imgWithoutProtocol = str_replace("http://", $_SESSION['_user']['avatar'] );
 
         $iframe = $this->url . "/?" .
-                "secureHash=" . $returnVal /*.
-                '&username=FRAGOTE' .
-                '&firstname=DD' .
-                '&lastname=DDDD' .
-                '&profilePictureUrl=X' .
-                '&email=xxx' .
-                '&externalUserId=fragote' .
-                '&room_id=38' .
-                '&scopeRoomId=38' .
-                '&becomeModeratorAsInt=1' .
-                '&showAudioVideoTestAsInt=0' .
-                '&allowRecording=1'*/;
+                "secureHash=" . $returnVal;
 
         printf("<iframe src='%s' width='%s' height = '%s' />", $iframe, "100%", 640);
     }

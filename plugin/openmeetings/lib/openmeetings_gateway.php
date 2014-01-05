@@ -132,7 +132,7 @@ class OpenMeetingsGateway
             $isModeratedRoom = true;
         }
         
-        $result = $this->rest->call($this->getRestUrl("RoomService")
+        $url = $this->getRestUrl($this->getRestUrl("RoomService")
                 . "updateRoomWithModeration?SID=" . $this->sessionId
                 . "&room_id=" . $room->room_id
                 . "&name=" . urlencode($room->name)
@@ -144,7 +144,9 @@ class OpenMeetingsGateway
                 . "&isDemoRoom=false"
                 . "&demoTime=0"
                 . "&isModeratedRoom=" . $this->var_to_str($isModeratedRoom));
-        
+        error_log($url);
+        $result = $this->rest->call($url);
+
         if ($result->fault) {
             error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($result,1));
         } else {

@@ -1,5 +1,4 @@
 <?php
-
 class OpenMeetingsPlugin extends Plugin
 {
     public $is_course_plugin = true;
@@ -23,10 +22,15 @@ class OpenMeetingsPlugin extends Plugin
     function install()
     {
         $table = Database::get_main_table('plugin_openmeetings');
+        // id is the internal unique ID (keeps track of historical sessions
+        // status is 0 for closed, 1 for open (available)
+        // room_id is a reference to the meeting ID on the OpenMeetings server.
+        // Any c_id + session_id occurence gets a unique new meeting ID to avoid issues with the number of rooms, as indicated in https://issues.apache.org/jira/browse/OPENMEETINGS-802#comment-13860340
         $sql = "CREATE TABLE IF NOT EXISTS $table (
                 id INT unsigned NOT NULL auto_increment PRIMARY KEY,
                 c_id INT unsigned NOT NULL DEFAULT 0,
                 session_id INT unsigned NOT NULL DEFAULT 0,
+                room_id INT unsigned NOT NULL DEFAULT 0,
                 meeting_name VARCHAR(255) NOT NULL DEFAULT '',
                 attendee_pw VARCHAR(255) NOT NULL DEFAULT '',
                 moderator_pw VARCHAR(255) NOT NULL DEFAULT '',

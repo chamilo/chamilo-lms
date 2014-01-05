@@ -24,11 +24,21 @@ class Room
     public $demoTime = 0;
     public $isModeratedRoom = true;
     public $externalRoomType = 'chamilolms';
+    public $chamiloCourseId;
+    public $chamiloSessionId;
     private $table;
 
-    public function __construct($id = null)
+    public function __construct()
     {
         $this->table = \Database::get_main_table('plugin_openmeetings');
+    }
+
+    /**
+     * Sets the room ID and loads as much info as possible from the local table
+     * @param int $id The room ID (from table.room_id)
+     */
+    public function loadRoomId($id)
+    {
         if (!empty($id)) {
             $roomData = \Database::select('*', $this->table, array('where' => array('id = ?' => $id)), 'first');
             if (!empty($roomData)) {
@@ -36,6 +46,8 @@ class Room
                 $this->status = $roomData['status'];
                 $this->name = $roomData['meeting_name'];
                 $this->comment = $roomData['welcome_msg'];
+                $this->chamiloCourseId = $roomData['c_id'];
+                $this->chamiloSessionId = $roomData['session_id'];
             }
         }
     }

@@ -9,11 +9,11 @@
 
 $course_plugin = 'openmeetings'; //needed in order to load the plugin lang variables
 require_once dirname(__FILE__).'/config.php';
-$plugin = openmeetingsPlugin::create();
+$plugin = \OpenMeetingsPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
 $tpl = new Template($tool_name);
 
-$om = new OpenMeetings();
+$om = new Chamilo\Plugin\OpenMeetings\OpenMeetings();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $teacher = $om->isTeacher();
@@ -60,9 +60,11 @@ if ($teacher) {
             $message = Display::return_message(get_lang('MeetingClosed').'<br />'.get_lang('MeetingClosedComment'), 'success', false);
             break;
         case 'publish':
+            // Not implemented yet
             //$result = $om->publish_meeting($_GET['id']);
             break;
         case 'unpublish':
+            // Not implemented yet
             //$result = $om->unpublish_meeting($_GET['id']);
             break;
         default:
@@ -74,7 +76,7 @@ $meetings = $om->getCourseMeetings();
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
 }
-error_log(__FILE__.':'.__LINE__.': '.print_r($meetings,1));
+//error_log(__FILE__.':'.__LINE__.': '.print_r($meetings,1));
 
 $users_online = $meetings->participantCount;
 //$status = !$meetings->isClosed;

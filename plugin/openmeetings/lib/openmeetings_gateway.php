@@ -302,7 +302,7 @@ class OpenMeetingsGateway
                 . '&demoTime=' . $room->demoTime
                 . '&isModeratedRoom=' . $room->isModeratedRoom
                 . '&externalRoomType=' . $room->externalRoomType;
-        error_log($url);
+        //error_log($url);
         $result = $this->rest->call($url);
         
         if ($this->rest->fault) {
@@ -312,7 +312,7 @@ class OpenMeetingsGateway
             if ($err) {
                 error_log('Error: '.$err);
             } else {
-                error_log('Creation of a new room succeeded: ID '.print_r($result,1));
+                //error_log('Creation of a new room succeeded: ID '.print_r($result,1));
                 return $result;
             }
         }

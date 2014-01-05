@@ -134,8 +134,8 @@ class OpenMeetings
         // First, try to see if there is an active room for this course and session
         $roomId = null;
         $meetingData = \Database::select('*', $this->table, array('where' => array('c_id = ?' => $this->chamiloCourseId, ' AND session_id = ? ' => $this->chamiloSessionId)), 'first');
-        if (count($meetingData) > 0) {
-            //error_log('Found previous room reference - reusing');
+        if ($meetingData != false && count($meetingData) > 0) {
+            error_log('Found previous room reference - reusing');
             // There has been a room in the past for this course. It should
             // still be on the server, so update (instead of creating a new one)
             // This fills the following attributes: status, name, comment, chamiloCourseId, chamiloSessionId
@@ -153,23 +153,16 @@ class OpenMeetings
         } else {
             error_log('Found no previous room - creating');
             $room = new Room();
-            // Room types are described here http://openmeetings.apache.org/RoomService.html#addRoomWithModerationAndExternalType
-            // 1 = Conference, 2 = Audience, 3 = Restricted, 4 = Interview
-            $roomTypeId = ( $this->isTeacher() ) ? 1 : 2 ;
-            $isModerated = ($roomTypeId > 0); //bool
-            $urlWsdl = $this->url . "/services/RoomService?wsdl";
-
             $room->SID = $this->sessionId;
             $room->name = $this->roomName;
-            $room->roomtypes_id = $roomTypeId;
-            $room->comment = get_lang('Course').': ' . $params['meeting_name'] . ' Plugin for Chamilo';
-            $room->numberOfPartizipants = 40;
-            $room->ispublic = true;
-            $room->appointment = false;
-            $room->isDemoRoom = false;
-            $room->demoTime = 0;
-            $room->isModeratedRoom = $isModerated;
-            $room->externalRoomType = 'chamilolms';
+            $room->roomtypes_id = $room->roomtypes_id;
+            $room->comment = urlencode(get_lang('Course').': ' . $params['meeting_name'] . ' Plugin for Chamilo');
+            $room->numberOfPartizipants = $room->numberOfPartizipants;
+            $room->ispublic = $room->getString('isPublic');
+            $room->appointment = $room->getString('appointment');
+            $room->isDemoRoom = $room->getString('isDemoRoom');
+            $room->demoTime = $room->demoTime;
+            $room->isModeratedRoom = $room->getString('isModeratedRoom');
             $roomId = $this->gateway->createRoomWithModAndType($room);
         }
 

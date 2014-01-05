@@ -287,28 +287,23 @@ class OpenMeetingsGateway
     /**
      * Create a new conference room
      */
-    function createRoomWithModAndType($openmeetings)
+    function createRoomWithModAndType($room)
     {
-        $isModeratedRoom = "false";
-        if ($openmeetings->is_moderated_room == 1) {
-            $isModeratedRoom = "true";
-        }
-        
         $url = $this->getRestUrl("RoomService")
                 . 'addRoomWithModerationAndExternalType?'
-                . 'SID=' . $this->sessionId
-                . '&name=' . urlencode($openmeetings->roomname)
-                . '&roomtypes_id=' . $openmeetings->type
-                . '&comment='. urlencode('Created by SOAP-Gateway')
-                . '&numberOfPartizipants=' . $openmeetings->max_user
-                . '&ispublic=false'
-                . '&appointment=false'
-                . '&isDemoRoom=false'
-                . '&demoTime=0'
-                . '&isModeratedRoom=' . $isModeratedRoom
-                . '&externalRoomType=' . urlencode($this->config["moduleKey"]);
-        
-        $result = $this->rest->call($url, "return");
+                . 'SID=' . $room->SID
+                . '&name=' . $room->roomname
+                . '&roomtypes_id=' . $room->roomtypes_id
+                . '&comment='. $room->comment
+                . '&numberOfPartizipants=' . $room->numberOfPartizipants
+                . '&ispublic=' . $room->ispublic
+                . '&appointment=' . $room->appointment
+                . '&isDemoRoom=' . $room->isDemoRoom
+                . '&demoTime=' . $room->demoTime
+                . '&isModeratedRoom=' . $room->isModeratedRoom
+                . '&externalRoomType=' . $room->externalRoomType;
+        error_log($url);
+        $result = $this->rest->call($url);
         
         if ($this->rest->fault) {
             error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($result,1));
@@ -317,7 +312,7 @@ class OpenMeetingsGateway
             if ($err) {
                 error_log('Error: '.$err);
             } else {
-                //error_log('Creation of a new room succeeded: ID '.$result);
+                error_log('Creation of a new room succeeded: ID '.print_r($result,1));
                 return $result;
             }
         }

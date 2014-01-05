@@ -76,14 +76,17 @@ $meetings = $om->getCourseMeetings();
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
 }
-//error_log(__FILE__.':'.__LINE__.': '.print_r($meetings,1));
+$openMeeting = false;
+foreach ($meetings as $meeting) {
+    if ($meeting['status'] == 1) {
+        $openMeeting = true;
+    }
+}
 
 $users_online = $meetings->participantCount;
-//$status = !$meetings->isClosed;
 $status = $om->isServerRunning();
-$meeting_exists = !$meetings->isClosed;//$om->meeting_exists(api_get_course_id());
 $show_join_button = false;
-if ($meeting_exists || $teacher) {
+if ($openMeeting || $teacher) {
     $show_join_button = true;
 }
 

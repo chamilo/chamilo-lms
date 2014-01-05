@@ -135,7 +135,7 @@ class OpenMeetings
         $roomId = null;
         $meetingData = \Database::select('*', $this->table, array('where' => array('c_id = ?' => $this->chamiloCourseId, ' AND session_id = ? ' => $this->chamiloSessionId)), 'first');
         if ($meetingData != false && count($meetingData) > 0) {
-            error_log(print_r($meetingData,1));
+            //error_log(print_r($meetingData,1));
             //error_log('Found previous room reference - reusing');
             // There has been a room in the past for this course. It should
             // still be on the server, so update (instead of creating a new one)
@@ -349,6 +349,7 @@ class OpenMeetings
     function getCourseMeetings()
     {
         $newMeetingsList = array();
+        $openMeeting = false;
         $item = array();
         $meetingsList = \Database::select('*', $this->table, array('where' => array('c_id = ? ' => api_get_course_int_id(), ' AND session_id = ? ' => api_get_session_id())));
 

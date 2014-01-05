@@ -6,7 +6,7 @@
         <a href="{{ conference_url }}" target="_blank" class="btn btn-primary btn-large">
             {{ 'EnterConference'|get_lang }}
         </a>
-        <span id="users_online" class="label label-warning">{{ 'XUsersOnLine'| get_lang | format(users_online) }} </span>
+        <!--span id="users_online" class="label label-warning">{{ 'XUsersOnLine'| get_lang | format(users_online) }} </span-->
     </div>
   {% endif %}
 

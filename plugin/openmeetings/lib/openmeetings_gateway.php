@@ -144,7 +144,7 @@ class OpenMeetingsGateway
                 . "&isDemoRoom=false"
                 . "&demoTime=0"
                 . "&isModeratedRoom=" . $this->var_to_str($isModeratedRoom));
-        error_log($url);
+        //error_log($url);
         $result = $this->rest->call($url);
 
         if ($result->fault) {

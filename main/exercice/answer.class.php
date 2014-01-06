@@ -129,6 +129,31 @@ class Answer
 		}
 		$this->nbrAnswers=$i-1;
 	}
+    
+     /**
+     * returns all answer ids from this question Id
+     *
+     * @author - Yoselyn Castillo
+     * @return - array - $id (answer ids)
+     */
+    function selectAnswerId()
+    {
+		    $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
+		    $questionId = $this->questionId;
+
+		    $sql="SELECT id FROM
+		          $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id ='".$questionId."'";
+
+		    $result = Database::query($sql);
+		    $id = array();
+		    // while a record is found
+        if (Database::num_rows($result) > 0) {
+            while ($object = Database::fetch_array($result)) {
+    			      $id[] = $object['id'];
+    		    }
+        }
+		    return $id;
+	}
 
     /**
      * reads answer informations from the data base ordered by parameter
@@ -454,19 +479,20 @@ class Answer
      */
     function updateAnswers($answer, $comment, $correct, $weighting, $position, $destination, $hotspot_coordinates, $hotspot_type)
     {
-		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
-
-		$questionId=$this->questionId;
-		$sql = "UPDATE $TBL_REPONSES SET
-                answer = '".Database::escape_string($answer)."',
+		    $TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
+        $idAnswer = $this->selectAnswerId();
+        $id = $this->getQuestionType() == 3 ? $idAnswer[0] : Database::escape_string($position);
+		    $questionId=$this->questionId;
+		    $sql = "UPDATE $TBL_REPONSES SET
+        answer = '".Database::escape_string($answer)."',
 				comment = '".Database::escape_string($comment)."',
-                correct = '".Database::escape_string($correct)."',
+        correct = '".Database::escape_string($correct)."',
 				ponderation = '".Database::escape_string($weighting)."',
 				position = '".Database::escape_string($position)."',
 				destination = '".Database::escape_string($destination)."',
 				hotspot_coordinates = '".Database::escape_string($hotspot_coordinates)."',
-                hotspot_type = '".Database::escape_string($hotspot_type)."'
-				WHERE c_id = {$this->course_id} AND id = '".Database::escape_string($position)."'
+        hotspot_type = '".Database::escape_string($hotspot_type)."'
+				WHERE c_id = {$this->course_id} AND id = '$id'
 				AND question_id = '".Database::escape_string($questionId)."'";
         Database::query($sql);
 	}

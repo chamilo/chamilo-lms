@@ -260,7 +260,7 @@ function handle_stylesheets()
 
     $list_of_styles = array();
     $list_of_names  = array();
-    $selected = null;
+    $selected = '';
     $dirpath = '';
     $safe_style_dir = '';
 
@@ -275,13 +275,14 @@ function handle_stylesheets()
             if (is_dir($dirpath)) {
                 if ($style_dir != '.' && $style_dir != '..') {
                     if (isset($_POST['style']) && (isset($_POST['preview']) or isset($_POST['download'])) && $_POST['style'] == $style_dir) {
-                        $selected = $style_dir;
                         $safe_style_dir = $style_dir;
                     } else {
-                        if (!isset($_POST['style'])  && ($currentstyle == $style_dir || ($style_dir == 'chamilo' && !$currentstyle))) {
-                            $selected = $style_dir;
-                        } else {
-                            $selected = '';
+                        if ($currentstyle == $style_dir || ($style_dir == 'chamilo' && !$currentstyle)) {
+                            if (isset($_POST['style'])) {
+                                $selected = Database::escape_string($_POST['style']);
+                            } else {
+                                $selected = $style_dir;
+                            }
                         }
                     }
                     $show_name = ucwords(str_replace('_', ' ', $style_dir));
@@ -308,8 +309,8 @@ function handle_stylesheets()
         $select_list[$style_dir] = strip_tags($list_of_styles[$style_dir]);
     }
 
-    $form_change->addElement('select', 'style', get_lang('NameStylesheet'), $select_list);
-    $form_change->setDefaults('style', $selected);
+    $styles = &$form_change->addElement('select', 'style', get_lang('NameStylesheet'), $select_list);
+    $styles->setSelected($selected);
 
     if ($form_change->validate()) {
         // Submit stylesheets.

@@ -89,13 +89,41 @@ function search_users($needle,$type) {
 
 		$rs	= Database::query($sql);
 
-		$return .= '<select id="origin" name="NoAssignedUsersList[]" multiple="multiple" size="20" style="width:340px;">';
-		while($user = Database :: fetch_array($rs)) {
-			$person_name = api_get_person_name($user['firstname'], $user['lastname']);
-			$return .= '<option value="'.$user['user_id'].'" title="'.htmlspecialchars($person_name,ENT_QUOTES).'">'.$person_name.' ('.$user['username'].')</option>';
-		}
-		$return .= '</select>';
 		$xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
+        
+    if ($type == 'single') {
+        $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $access_url_id = api_get_current_access_url_id();
+        
+        $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
+                INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
+                WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
+                OR firstname LIKE "'.$needle.'%"
+                OR lastname LIKE "'.$needle.'%") AND user.status<>6 AND user.status<>'.DRH.' '.
+                $order_clause.
+               ' LIMIT 11';
+        $rs = Database::query($sql);
+        $i = 0;
+        while ($user = Database :: fetch_array($rs)) {
+            $i++;
+            if ($i <= 10) {
+                $person_name = api_get_person_name($user['firstname'], $user['lastname']);
+                $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_user(\''.$user['user_id'].'\',\''.$person_name.' ('.$user['username'].')'.'\')">'.$person_name.' ('.$user['username'].')</a><br />';
+            } else {
+                $return .= '...<br />';
+            }
+        }
+
+       $xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));
+    } else {
+        $return .= '<select id="origin" name="NoAssignedUsersList[]" multiple="multiple" size="20" style="width:340px;">';
+	      while($user = Database :: fetch_array($rs)) {
+		        $person_name = api_get_person_name($user['firstname'], $user['lastname']);
+		        $return .= '<option value="'.$user['user_id'].'" title="'.htmlspecialchars($person_name,ENT_QUOTES).'">'.$person_name.' ('.$user['username'].')</option>';
+	      }
+	      $return .= '</select>';
+	      $xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
+    }
 	}
 	return $xajax_response;
 }
@@ -105,6 +133,21 @@ $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 <!--
+function add_user_to_user (code, content) {
+	document.getElementById("user_to_add").value = "";
+	document.getElementById("ajax_list_users_single").innerHTML = "";
+
+	destination = document.getElementById("destination");
+
+	for (i=0;i<destination.length;i++) {
+		if(destination.options[i].text == content) {
+				return false;
+		}
+	}
+	destination.options[destination.length] = new Option(content,code);
+	destination.selectedIndex = -1;
+	sortOptions(destination.options);
+}
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
@@ -245,6 +288,8 @@ if(!empty($msg)) {
       echo Display :: get_alphabet_options($_POST['firstLetterUser']);
       ?>
      </select>
+     <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" onclick="moveItem(document.getElementById('user_to_add'), document.getElementById('destination'))" />
+     <div id="ajax_list_users_single"></div>
 </td>
 <td>&nbsp;</td></tr>
 <?php } ?>

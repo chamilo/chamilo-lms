@@ -1111,7 +1111,6 @@ class Display {
                     || ($course_info['status'] == '1' && $item_property['visibility'] == '0')
                     || !isset($item_property['visibility'])))
             {
-                //error_log(print_r($item_property,1));
                 // Also drop announcements and events that are not for the user or his group.
                 if (($item_property['tool'] == TOOL_ANNOUNCEMENT
                          || $item_property['tool'] == TOOL_CALENDAR_EVENT)

@@ -2406,11 +2406,15 @@ function api_is_course_session_coach($user_id, $course_code, $session_id) {
 
 /**
  * Checks whether the current user is a course or session coach
- * @param int - optional, session id
- * @param string - optional, course code
+ * @param int $session_id optional, session id
+ * @param string $course_code optional, course code
+ * @param int $userId The user ID
  * @return boolean True if current user is a course or session coach
  */
-function api_is_coach($session_id = 0, $course_code = null) {
+function api_is_coach($session_id = 0, $course_code = null, $userId = null) {
+    if (empty($userId)) {
+        $userId = api_get_user_id();
+    }
     if (!empty($session_id)) {
         $session_id = intval($session_id);
     } else {
@@ -2434,7 +2438,7 @@ function api_is_coach($session_id = 0, $course_code = null) {
 	if (!empty($course_code)) {
 	    $sql = "SELECT DISTINCT id, name, date_start, date_end
 				FROM $session_table INNER JOIN $session_rel_course_rel_user_table session_rc_ru
-	            ON session_rc_ru.id_user = '".api_get_user_id()."'
+	            ON session_rc_ru.id_user = '".$userId."'
 	            WHERE   session_rc_ru.course_code = '$course_code' AND
                         session_rc_ru.status = 2 AND
                         session_rc_ru.id_session = '$session_id'";
@@ -2445,7 +2449,7 @@ function api_is_coach($session_id = 0, $course_code = null) {
 	if (!empty($session_id)) {
 	    $sql = "SELECT DISTINCT id, name, date_start, date_end
 	         	FROM $session_table
-	         	WHERE session.id_coach =  '".api_get_user_id()."' AND id = '$session_id'
+	         	WHERE session.id_coach =  '".$userId."' AND id = '$session_id'
 				ORDER BY date_start, date_end, name";
 	    $result = Database::query($sql);
 	    if (!empty($sessionIsCoach)) {
@@ -2459,37 +2463,57 @@ function api_is_coach($session_id = 0, $course_code = null) {
 
 /**
  * Checks whether the current user is a session administrator
+ * @param int $userId The user ID
  * @return boolean True if current user is a course administrator
  */
-function api_is_session_admin() {
-    global $_user;
+function api_is_session_admin($userId = null) {
+    if (!empty($userId)) {
+        $_user = api_get_user_info($userId);
+    } else {
+        global $_user;
+    }
     return isset($_user['status']) && $_user['status'] == SESSIONADMIN;
 }
 
 /**
  * Checks whether the current user is a human resources manager
+ * @param int $userId The user ID
  * @return boolean True if current user is a human resources manager
  */
-function api_is_drh() {
-    global $_user;
+function api_is_drh($userId = null) {
+    if (!empty($userId)) {
+        $_user = api_get_user_info($userId);
+    } else {
+        global $_user;
+    }
     return isset($_user['status']) && $_user['status'] == DRH;
 }
 
 /**
  * Checks whether the current user is a student
+ * @param int $userId The user ID
  * @return boolean True if current user is a human resources manager
  */
-function api_is_student() {
-    global $_user;
+function api_is_student($userId = null) {
+    if (!empty($userId)) {
+        $_user = api_get_user_info($userId);
+    } else {
+        global $_user;
+    }
     return isset($_user['status']) && $_user['status'] == STUDENT;
 
 }
 /**
  * Checks whether the current user is a teacher
+ * @param int $userId The user ID
  * @return boolean True if current user is a human resources manager
  */
-function api_is_teacher() {
-    global $_user;
+function api_is_teacher($userId = null) {
+    if (!empty($userId)) {
+        $_user = api_get_user_info($userId);
+    } else {
+        global $_user;
+    }
     return isset($_user['status']) && $_user['status'] == COURSEMANAGER;
 }
 

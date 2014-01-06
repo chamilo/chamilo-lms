@@ -98,7 +98,7 @@ if (isset($exercise_stat_info['exe_id'])) {
 }
 
 //1. Check if this is a new attempt or a previous
-$countNotFinished = get_attempt_count_incomplete(api_get_user_id(), $objExercise->selectId(), $learnpath_id, $learnpath_item_id);
+$countNotFinished = $exercise_stat_info['num_exe'];
 $label = get_lang('StartTest');
 if ($time_control && !empty($clock_expired_time) || !empty($attempt_list)) {
 	$label = get_lang('ContinueTest');

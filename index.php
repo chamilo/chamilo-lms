@@ -5,11 +5,12 @@
  * @package chamilo.main
  */
 
+
 use \ChamiloSession as Session;
 
 define('CHAMILO_HOMEPAGE', true);
 
-$language_file = array('courses', 'index', 'userInfo');
+$language_file = array('courses', 'index');
 
 /* Flag forcing the 'current course' reset, as we're not inside a course anymore. */
 // Maybe we should change this into an api function? an example: CourseManager::unset();
@@ -50,7 +51,7 @@ $controller = new IndexManager($header_title);
 $loginFailed = isset($_GET['loginFailed']) ? true : isset($loginFailed);
 
 if (!empty($_GET['logout'])) {
-    $controller->logout();
+	$controller->logout();
 }
 
 /* Table definitions */
@@ -66,21 +67,19 @@ $_setting['display_courses_to_anonymous_users'] = 'true';
 /**
  * Registers in the track_e_default table (view in important activities in admin
  * interface) a possible attempted break in, sending auth data through get.
- * @todo This piece of code should probably move to local.inc.php where the actual login / logout procedure is handled.
- * The real use of this code block should be seriously considered as well.
- * This form should just use a security token and get done with it.
+ * @todo This piece of code should probably move to local.inc.php where the actual login / logout procedure is handled. The real use of this code block should be seriously considered as well. This form should just use a security token and get done with it.
  */
 if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
-    $i = api_get_anonymous_id();
-    event_system(LOG_ATTEMPTED_FORCED_LOGIN, 'tried_hacking_get', $_SERVER['REMOTE_ADDR'].(empty($_POST['login'])?'':'/'.$_POST['login']),null,$i);
-    echo 'Attempted breakin - sysadmins notified.';
-    session_destroy();
-    die();
+        $i = api_get_anonymous_id();
+        event_system(LOG_ATTEMPTED_FORCED_LOGIN, 'tried_hacking_get', $_SERVER['REMOTE_ADDR'].(empty($_POST['login'])?'':'/'.$_POST['login']),null,$i);
+	echo 'Attempted breakin - sysadmins notified.';
+	session_destroy();
+	die();
 }
 
 // Delete session neccesary for legal terms
 if (api_get_setting('allow_terms_conditions') == 'true') {
-    unset($_SESSION['term_and_condition']);
+	unset($_SESSION['term_and_condition']);
 }
 //If we are not logged in and customapages activated
 if (!api_get_user_id() && CustomPages::enabled()) {
@@ -99,38 +98,38 @@ if (!api_get_user_id() && CustomPages::enabled()) {
  */
 
 if (!empty($_POST['submitAuth'])) {
-    // The user has been already authenticated, we are now to find the last login of the user.
-    if (isset ($_user['user_id'])) {
-        $track_login_table      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $sql_last_login = "SELECT UNIX_TIMESTAMP(login_date)
+	// The user has been already authenticated, we are now to find the last login of the user.
+	if (isset ($_user['user_id'])) {
+		$track_login_table      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+		$sql_last_login = "SELECT UNIX_TIMESTAMP(login_date)
                                 FROM $track_login_table
                                 WHERE login_user_id = '".$_user['user_id']."'
                                 ORDER BY login_date DESC LIMIT 1";
-        $result_last_login = Database::query($sql_last_login);
-        if (!$result_last_login) {
-            if (Database::num_rows($result_last_login) > 0) {
-                $user_last_login_datetime = Database::fetch_array($result_last_login);
-                $user_last_login_datetime = $user_last_login_datetime[0];
-                Session::write('user_last_login_datetime', $user_last_login_datetime);
-            }
-        }
-        Database::free_result($result_last_login);
+		$result_last_login = Database::query($sql_last_login);
+		if (!$result_last_login) {
+			if (Database::num_rows($result_last_login) > 0) {
+				$user_last_login_datetime = Database::fetch_array($result_last_login);
+				$user_last_login_datetime = $user_last_login_datetime[0];
+				Session::write('user_last_login_datetime',$user_last_login_datetime);
+			}
+		}
+		Database::free_result($result_last_login);
 
-        //event_login();
-        if (api_is_platform_admin()) {
-            // decode all open event informations and fill the track_c_* tables
-            include api_get_path(LIBRARY_PATH).'stats.lib.inc.php';
-            decodeOpenInfos();
-        }
-    }
-    // End login -- if ($_POST['submitAuth'])
+		//event_login();
+		if (api_is_platform_admin()) {
+			// decode all open event informations and fill the track_c_* tables
+			include api_get_path(LIBRARY_PATH).'stats.lib.inc.php';
+			decodeOpenInfos();
+		}
+	}
+	// End login -- if ($_POST['submitAuth'])
 } else {
-    // Only if login form was not sent because if the form is sent the user was already on the page.
-    event_open();
+	// Only if login form was not sent because if the form is sent the user was already on the page.
+	event_open();
 }
 
 if (api_get_setting('display_categories_on_homepage') == 'true') {
-    $controller->tpl->assign('course_category_block', $controller->return_courses_in_categories());
+	$controller->tpl->assign('course_category_block', $controller->return_courses_in_categories());
 }
 
 // Facebook connexion, if activated
@@ -138,31 +137,18 @@ if (api_is_facebook_auth_activated() && !api_get_user_id()) {
     facebook_connect();
 }
 
-// before login plugin conditions
-$showLoginForm = true;
-if (api_is_anonymous()) {
-    if (!isset($_SESSION['before_login_accepted'])) {
-        if (in_array('before_login', $controller->tpl->plugin->get_installed_plugins())) {
-            $languageToActivate = api_get_plugin_setting('before_login', 'language');
-            if (api_get_interface_language() == $languageToActivate) {
-                $showLoginForm = false;
-            }
-        }
-    }
-}
-
-$controller->set_login_form($showLoginForm);
+$controller->set_login_form();
 
 //@todo move this inside the IndexManager
 if (!api_is_anonymous()) {
-    $controller->tpl->assign('profile_block', $controller->return_profile_block());
-    $controller->tpl->assign('user_image_block', $controller->return_user_image_block());
+	$controller->tpl->assign('profile_block', $controller->return_profile_block());
+    $controller->tpl->assign('user_image_block', $controller->return_user_image_block());    
 
-    if (api_is_platform_admin()) {
-        $controller->tpl->assign('course_block', $controller->return_course_block());
-    } else {
-        $controller->tpl->assign('teacher_block', $controller->return_teacher_link());
-    }
+	if (api_is_platform_admin()) {
+		$controller->tpl->assign('course_block',			$controller->return_course_block());
+	} else {
+		$controller->tpl->assign('teacher_block', 			$controller->return_teacher_link());
+	}
 }
 
 $hot_courses = null;
@@ -177,22 +163,30 @@ if (!isset($_REQUEST['include'])) {
     $announcements_block = $controller->return_announcements();
 }
 
-global $_configuration;
-//hiding global announcements when user not connected
-if (empty($_configuration['hide_global_announcements_when_not_connected']) || !empty($_user['user_id'])) {
-    $controller->tpl->assign('announcements_block', $announcements_block);
-}
-$controller->tpl->assign('home_page_block', $controller->return_home_page());
-$controller->tpl->assign('hot_courses', $hot_courses);
-$controller->tpl->assign('navigation_course_links', $controller->return_navigation_links());
-$controller->tpl->assign('notice_block', $controller->return_notice());
-$controller->tpl->assign('main_navigation_block', $controller->return_navigation_links());
-$controller->tpl->assign('help_block', $controller->return_help());
+$controller->tpl->assign('hot_courses',             $hot_courses);
+$controller->tpl->assign('announcements_block', 	$announcements_block);
+$controller->tpl->assign('home_page_block', 		$controller->return_home_page());
+
+$controller->tpl->assign('navigation_course_links', 	$controller->return_navigation_links());
+
+$controller->tpl->assign('notice_block',			$controller->return_notice());
+$controller->tpl->assign('main_navigation_block',	$controller->return_navigation_links());
+$controller->tpl->assign('help_block',              $controller->return_help());
 
 if (api_is_platform_admin() || api_is_drh()) {
-    $controller->tpl->assign('skills_block', $controller->return_skills_links());
+    $controller->tpl->assign('skills_block',            $controller->return_skills_links());
+}
+
+// direct login to course
+if (isset($_GET['firstpage'])) {
+    api_set_firstpage_parameter($_GET['firstpage']);
+    // if we are already logged, go directly to course
+    if (api_user_is_login()) {
+        echo "<script type='text/javascript'>self.location.href='index.php?firstpage=".$_GET['firstpage']."'</script>";
+    }
+}
+else {
+    api_delete_firstpage_parameter();
 }
 
 $controller->tpl->display_two_col_template();
-#api_block_anonymous_users
-#isset ($_user['user_id'])

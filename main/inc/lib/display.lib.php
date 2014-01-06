@@ -49,6 +49,9 @@ class Display {
         if (!empty($page_header)) {
             self::$global_template->assign('header', $page_header);
         }
+
+        self::$global_template->assign('course_code', api_get_course_id());
+
         echo self::$global_template->show_header_template();
     }
 

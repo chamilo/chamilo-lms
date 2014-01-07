@@ -412,6 +412,11 @@ function handle_uploaded_document(
  * @see    - enough_size() uses  dir_total_space() function
  */
 function enough_size($file_size, $dir, $max_dir_space) {
+    //if dir is archive ignore
+    if (api_get_path(SYS_ARCHIVE_PATH) == $dir) { 
+        return true; 
+    }
+
 	if ($max_dir_space) {
 		$already_filled_space = dir_total_space($dir);
 		if (($file_size + $already_filled_space) > $max_dir_space) {

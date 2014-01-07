@@ -58,11 +58,9 @@ class MultipleAnswer extends Question {
 							'.get_lang('Answer').'
 						</th>';
 				// show column comment when feedback is enable
-				if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM ) {
-                    $html .='<th>
-                                '.get_lang('Comment').'
-                            </th>';
-				}
+                $html .='<th>
+                            '.get_lang('Comment').'
+                        </th>';
 				$html .= '<th width="50px">
 							'.get_lang('Weighting').'
 						</th>
@@ -121,10 +119,7 @@ class MultipleAnswer extends Question {
 			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
-			// show comment when feedback is enable
-			if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
 				$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
-			}
 
 			$form->addElement('text', 'weighting['.$i.']',null, array('class' => "span1", 'value' => '0'));
 			$form -> addElement ('html', '</tr>');
@@ -213,11 +208,7 @@ class MultipleAnswer extends Question {
 				<th>'.get_lang("Choice").'</th>
 				<th>'. get_lang("ExpectedChoice").'</th>
 				<th>'. get_lang("Answer").'</th>';
-				if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { 
-    				$header .= '<th>'.get_lang("Comment").'</th>';
-				} else { 
-					$header .= '<th>&nbsp;</th>';
-				}
+        $header .= '<th>'.get_lang("Comment").'</th>';
         $header .= '</tr>';
         return $header;
 	}

@@ -810,8 +810,8 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $exerciseId = isset($_GET['exercise_id']) ? $_GET['exercise_id'] : null;
                 if (!empty($exerciseId)) {
                     $exerciseList = array();
-                    $exerciseInfo = current(get_exercise_by_id($exerciseId));
-                    $exerciseList[] = array('id' => $exerciseInfo['id'], 'text' => $exerciseInfo['title']);
+                    $exerciseInfo = current(get_exercise_by_id($exerciseId, $_GET['course_id']));
+                    $exerciseList[] = array('id' => $exerciseInfo['id'], 'text' => html_entity_decode($exerciseInfo['title']));
                 }
                 $exerciseFilter->addElement('select_ajax', 'exercise_name', get_lang('SearchExercise'), null, array('url' => $url, 'defaults' => $exerciseList));
                 $courseListUrl = api_get_self();

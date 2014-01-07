@@ -133,7 +133,8 @@ class AnnouncementEmail
      *
      * @return array
      */
-    public function sent_to() {
+    public function sent_to()
+    {
         $sent_to = $this->sent_to_info();
         $users = $sent_to['users'];
         $users = $users ? $users : array();
@@ -193,16 +194,18 @@ class AnnouncementEmail
      *
      * @return string
      */
-    public function message() {
+    public function message($course_code = null, $session_id = 0) {
         $title = $this->announcement('title');
         $title = stripslashes($title);
 
         $content = $this->announcement('content');
         $content = stripslashes($content);
-        $content = AnnouncementManager::parse_content($content, $this->course('code'));
+        $content = AnnouncementManager::parse_content($content, $this->course('code'), $session_id);
 
         $user_email = $this->sender('mail');
-        $course_param = api_get_cidreq();
+        //$course_param = api_get_cidreq();
+        // Build the link by hand because api_get_cidreq() doesn't accept course params
+        $course_param = 'cidReq='.api_get_course_id().'&amp;id_session='.$session_id.'&amp;gidReq='.api_get_group_id();
         $course_name = $this->course('title');
 
         $result = "<div>$content</div>";
@@ -247,7 +250,8 @@ class AnnouncementEmail
     /**
      * Send emails to users.
      */
-    public function send() {
+    public function send($sendToUsersInSession = false)
+    {
         $sender = $this->sender();
         $subject = $this->subject();
         $message = $this->message();
@@ -257,6 +261,22 @@ class AnnouncementEmail
 
         foreach ($users as $user) {
             MessageManager::send_message_simple($user['user_id'], $subject, $message, $sender['user_id']);
+        }
+
+        if ($sendToUsersInSession) {
+            $sessionList = SessionManager::get_session_by_course($this->course['code']);
+            if (!empty($sessionList)) {
+                foreach ($sessionList as $sessionInfo) {
+                    $sessionId = $sessionInfo['id'];
+                    $message = $this->message(null, $sessionId);
+                    $userList = CourseManager::get_user_list_from_course_code($this->course['code'], $sessionId);
+                    if (!empty($userList)) {
+                        foreach ($userList as $user) {
+                            MessageManager::send_message_simple($user['user_id'], $subject, $message, $sender['user_id']);
+                        }
+                    }
+                }
+            }
         }
         $this->log_mail_sent();
     }

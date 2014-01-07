@@ -3169,6 +3169,188 @@ class Tracking
         $html = '<img src="'.api_get_path(WEB_ARCHIVE_PATH).$img_file.'">';
         return $html;
     }
+    /**
+     * Get the progress of a exercise
+     * @param   int $sessionId  The session ID (session.id)
+     * @param   int $courseId   The course ID (course.id)
+     * @param   int $exerciseId The quiz ID (c_quiz.id)
+     * @param   int $answer     The answer status (0 = incorrect, 1 = correct, 2 = both)
+     * @param   array   $options    An array of options you can pass to the query (limit, where and order)
+     * @return array An array with the data of exercise(s) progress
+     */
+    public static function get_exercise_progress($sessionId = 0, $courseId = 0, $exerciseId = 0, $answer = 2, $options = array())
+    {
+        /*
+         * This method gets the data by blocks, as previous attempts at one single
+         * query made it take ages. The logic of query division is described below
+         */
+        // Get tables names
+        $tuser                   = Database::get_main_table(TABLE_MAIN_USER);
+        $tquiz                   = Database::get_course_table(TABLE_QUIZ_TEST);
+        $tquiz_answer            = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $tquiz_question          = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $ttrack_exercises  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $ttrack_attempt    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+
+        $sessions = array();
+        $courses = array();
+        // if session ID is defined but course ID is empty, get all the courses
+        // from that session
+        if (!empty($sessionId) && empty($courseId)) {
+            // $courses is an array of course int id as index and course details hash as value
+            $courses = SessionManager::get_course_list_by_session_id($sessionId);
+            $sessions[$sessionId] = api_get_session_info($sessionId);
+        } elseif (empty($sessionId) && !empty($courseId)) {
+            // if, to the contrary, course is defined but not sessions, get the sessions that include this course
+            // $sessions is an array like: [0] => ('id' => 3, 'name' => 'Session 35'), [1] => () etc;
+            $course = api_get_course_info_by_id($courseId);
+            $sessionsTemp = SessionManager::get_session_by_course($course['code']);
+            $courses[$courseId] = $course;
+            foreach ($sessionsTemp as $sessionItem) {
+                $sessions[$sessionItem['id']] = $sessionItem['name'];
+            }
+        } elseif (!empty($courseId) && !empty($sessionId)) {
+            //none is empty
+            $course = api_get_course_info_by_id($courseId);
+            $courses[$courseId] = array($course['code']);
+            $sessions[$sessionId] = api_get_session_info($sessionId);
+        } else {
+            //both are empty, not enough data, return an empty array
+            return array();
+        }
+        // Now we have two arrays of courses and sessions with enough data to proceed
+        // If no course could be found, we shouldn't return anything. Sessions can be empty (then we only return the pure-course-context results)
+        if (count($courses) < 1) {
+            return array();
+        }
+
+        $data = array();
+        // The following loop is less expensive than what it seems:
+        // - if a course was defined, then we only loop through sessions
+        // - if a session was defined, then we only loop through courses
+        // - if a session and a course were defined, then we only loop once
+        foreach ($courses as $courseIdx => $courseData) {
+            $where = '';
+            $whereParams = array();
+            $whereCourseCode = $courseData['code'];
+            $whereSessionParams = '';
+            if (count($sessions > 0)) {
+                foreach ($sessions as $sessionIdx => $sessionData) {
+                    if (!empty($sessionIdx)) {
+                        $whereSessionParams .= $sessionIdx.',';
+                    }
+                }
+                $whereSessionParams = substr($whereSessionParams,0,-1);
+            }
+
+            if (!empty($exerciseId)) {
+                $exerciseId = intval($exerciseId);
+                $where .= ' AND q.id = %d ';
+                $whereParams[] = $exerciseId;
+            }
+
+            /*
+             * This feature has been disabled for now, to avoid having to
+             * join two very large tables
+            //2 = show all questions (wrong and correct answered)
+            if ($answer != 2) {
+                $answer = intval($answer);
+                //$where .= ' AND qa.correct = %d';
+                //$whereParams[] = $answer;
+            }
+            */
+
+            $limit = '';
+            if (!empty($options['limit'])) {
+                $limit = " LIMIT ".$options['limit'];
+            }
+
+            if (!empty($options['where'])) {
+                $where .= ' AND '.Database::escape_string($options['where']);
+            }
+
+            $order = '';
+            if (!empty($options['order'])) {
+                $order = " ORDER BY ".$options['order'];
+            }
+
+            $sql = "SELECT
+                te.session_id,
+                ta.id as attempt_id,
+                te.exe_user_id as user_id,
+                te.exe_id as exercise_attempt_id,
+                ta.question_id,
+                ta.answer as answer_id,
+                ta.tms as time,
+                te.exe_exo_id as quiz_id,
+                CONCAT (q.c_id,'-', q.id) as exercise_id,
+                q.title as quiz_title
+                FROM $ttrack_exercises te, $ttrack_attempt ta, $tquiz q
+                WHERE te.exe_cours_id = '$whereCourseCode' ".(empty($whereSessionParams)?'':"AND te.session_id IN ($whereSessionParams)")."
+                  AND ta.exe_id = te.exe_id AND q.c_id = $courseIdx AND q.id = te.exe_exo_id
+                  $where $order $limit";
+            $sql_query = vsprintf($sql, $whereParams);
+
+            // Now browse through the results and get the data
+            $rs = Database::query($sql_query);
+            $userIds = array();
+            $questionIds = array();
+            $answerIds = array();
+            while ($row = Database::fetch_array($rs)) {
+                $userIds[$row['user_id']] = $row['user_id'];
+                $questionIds[$row['question_id']] = $row['question_id'];
+                $answerIds[$row['question_id']][$row['answer_id']] = $row['answer_id'];
+                $row['session'] = $sessions[$row['session_id']];
+                $data[] = $row;
+            }
+            // Now fill questions data. Query all questions and answers for this test to avoid
+            $sqlQuestions = "SELECT tq.c_id, tq.id as question_id, tq.question, tqa.id_auto, tqa.answer, tqa.correct
+                               FROM $tquiz_question tq, $tquiz_answer tqa
+                               WHERE tqa.question_id =tq.id and tqa.c_id = tq.c_id
+                                 AND tq.c_id = $courseIdx AND tq.id IN (".implode(',',$questionIds).")";
+            $resQuestions = Database::query($sqlQuestions);
+            while ($rowQuestion = Database::fetch_assoc($resQuestions)) {
+                $questionIds[$rowQuestion['question_id']] = $rowQuestion['question'];
+                $answerIds[$rowQuestion['question_id']][$rowQuestion['id_auto']] = array('answer' => $rowQuestion['answer'], 'correct' => $rowQuestion['correct']);
+            }
+            // Now fill users data
+            $sqlUsers = "SELECT user_id, username, lastname, firstname FROM $tuser WHERE user_id IN (".implode(',',$userIds).")";
+            $resUsers = Database::query($sqlUsers);
+            while ($rowUser = Database::fetch_assoc($resUsers)) {
+                $users[$rowUser['user_id']] = $rowUser;
+            }
+            foreach ($data as $id => $row) {
+                $data[$id]['firstname'] = $users[$row['user_id']]['firstname'];
+                $data[$id]['lastname'] = $users[$row['user_id']]['lastname'];
+                $data[$id]['username'] = $users[$row['user_id']]['username'];
+                $data[$id]['answer'] = $answerIds[$row['question_id']][$row['answer_id']]['answer'];
+                $data[$id]['correct'] = $answerIds[$row['question_id']][$row['answer_id']]['correct'];
+                $data[$id]['correct'] = ($data[$id]['correct']==0?get_lang('No'):get_lang('Yes'));
+                $data[$id]['question'] = $questionIds[$row['question_id']];
+
+            }
+
+            /*
+            The minimum expected array structure at the end is:
+            attempt_id,
+            exercise_id,
+            quiz_title,
+            username,
+            lastname,
+            firstname,
+            time,
+            question_id,
+            question,
+            answer,
+            correct
+            */
+
+
+        }
+        return $data;
+    }
 }
 
 /**

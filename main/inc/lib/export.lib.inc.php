@@ -68,7 +68,7 @@ class Export
             $file->put($row);
         }
 		$file->close();
-		DocumentManager::file_send_for_download($path, true, $filename.'.csv');
+		DocumentManager::file_send_for_download($path, false, $filename.'.csv');
         unlink($path);
         exit;
 	}
@@ -78,15 +78,20 @@ class Export
      * @param array $data
      * @param string $filename
      */
-    public static function export_table_xls($data, $filename = 'export')
+    public static function export_table_xls($data, $filename = 'export', $encoding = 'utf-8')
     {
         $file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xls';
         $handle = fopen($file, 'a+');
+        $systemEncoding = api_get_system_encoding();
         foreach ($data as $row) {
-            fwrite($handle, implode("\t", $row)."\n");
+            $string = implode("\t", $row);
+            if ($encoding != 'utf-8') {
+                $string = api_convert_encoding($string, $encoding, $systemEncoding);
+            }
+            fwrite($handle, $string."\n");
         }
         fclose($handle);
-        DocumentManager::file_send_for_download($file, true, $filename.'.xls');
+        DocumentManager::file_send_for_download($file, false, $filename.'.xls');
 	}
 
     /**

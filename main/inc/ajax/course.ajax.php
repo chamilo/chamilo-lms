@@ -160,7 +160,7 @@ switch ($action) {
 
             foreach ($exercises as $exercise)    
             {
-                $data[] = array('id' => $exercise['id'], 'text' => $exercise['title'] );
+                $data[] = array('id' => $exercise['id'], 'text' => html_entity_decode($exercise['title']) );
             }
             if (!empty($data)) 
             {

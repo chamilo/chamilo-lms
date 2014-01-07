@@ -271,7 +271,7 @@ switch ($action) {
         break;
     case 'get_exercise_progress':
         //@TODO replace this for a more efficient function (not retrieving the whole data)
-        $records = SessionManager::get_exercise_progress(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']));
+        $records = Tracking::get_exercise_progress(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']));
         $count = count($records);
         break;
     case 'get_session_access_overview':
@@ -643,7 +643,7 @@ switch ($action) {
             'correct'
         );
 
-        $result = SessionManager::get_exercise_progress($sessionId, $courseId, $exerciseId, $answer,
+        $result = Tracking::get_exercise_progress($sessionId, $courseId, $exerciseId, $answer,
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",
@@ -1060,8 +1060,14 @@ if (in_array($action, $allowed_actions)) {
         switch ($export_format) {
             case 'xls':
                 //TODO add date if exists
-                $file_name = (!empty($action)) ? $action : 'company_report'; 
-                Export::export_table_xls($array, $file_name);
+                $file_name = (!empty($action)) ? $action : 'company_report';
+                require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
+                $browser = new Browser();
+                if ($browser->getPlatform() == Browser::PLATFORM_WINDOWS) {
+                    Export::export_table_xls($array, $file_name, 'ISO-8859-15');
+                } else {
+                    Export::export_table_xls($array, $file_name);
+                }
                 break;
             case 'csv':
             default:

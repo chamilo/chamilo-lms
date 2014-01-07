@@ -1471,12 +1471,18 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
 }
 /**
  * Get exercise information by id
- * @param int Exercise Id
+ * @param int $exerciseId Exercise Id
+ * @param int $courseId The course ID (necessary as c_quiz.id is not unique)
  * @return array Exercise info 
  */
-function get_exercise_by_id($exerciseId = 0) {
+function get_exercise_by_id($exerciseId = 0, $courseId = null) {
     $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
-    $conditions  = array('where' => array('id = ?' => array($exerciseId)));
+    if (empty($courseId)) {
+        $courseId = api_get_course_int_id();
+    } else {
+        $courseId = intval($courseId);
+    }
+    $conditions  = array('where' => array('id = ?' => array($exerciseId), ' AND c_id = ? ' => $courseId));
     return Database::select('*', $TBL_EXERCICES, $conditions);
 }
 /**

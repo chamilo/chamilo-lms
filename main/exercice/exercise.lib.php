@@ -1508,23 +1508,28 @@ function get_exercise_by_id($exerciseId = 0) {
     return Database::select('*', $TBL_EXERCICES, $conditions);
 }
 /**
- * Getting all active exercises from a course from a session (if a session_id is provided we will show all the exercises in the course + all exercises in the session)
+ * Getting all exercises (active only or all) from a course from a session (if a session_id is provided we will show all the exercises in the course + all exercises in the session)
  * @param   array   course data
  * @param   int     session id
- * @param		int			course c_id
+ * @param	int		course c_id
+ * @param   boolean only_active_exercices
  * @return  array   array with exercise data
  * modified by Hubert Borderiou
  */
-function get_all_exercises_for_course_id($course_info = null, $session_id = 0, $course_id=0) {
+function get_all_exercises_for_course_id($course_info = null, $session_id = 0, $course_id=0, $only_active_exercices = true) {
+    $sql_active_exercices = "";
+    if (!$only_active_exercices) {
+        $sql_active_exercices = " OR active != 1 ";
+    }
    	$TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
     if ($session_id == -1) {
     	$session_id  = 0;
     }
     if ($session_id == 0) {
-    	$conditions = array('where'=>array('active = ? AND session_id = ? AND c_id = ?'=>array('1', $session_id, $course_id)), 'order'=>'title');
+    	$conditions = array('where'=>array("(active = ? $sql_active_exercices) AND session_id = ? AND c_id = ?" => array('1', $session_id, $course_id)), 'order'=>'title');
     } else {
         //All exercises
-    	$conditions = array('where'=>array('active = ? AND (session_id = 0 OR session_id = ? ) AND c_id=?' =>array('1', $session_id, $course_id)), 'order'=>'title');
+    	$conditions = array('where'=>array("(active = ? $sql_active_exercices) AND (session_id = 0 OR session_id = ? ) AND c_id=?" => array('1', $session_id, $course_id)), 'order'=>'title');
     }
     return Database::select('*',$TBL_EXERCICES, $conditions);
 }

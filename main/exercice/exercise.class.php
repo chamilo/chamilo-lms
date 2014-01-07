@@ -1169,7 +1169,7 @@ class Exercise {
 
                 $defaults['randomAnswers']          = $this->selectRandomAnswers();
                 $defaults['exerciseType']           = $this->selectType();
-                $defaults['exerciseTitle']          = $this->selectTitle();
+                $defaults['exerciseTitle']          = html_entity_decode($this->selectTitle());
                 $defaults['exerciseDescription']    = $this->selectDescription();
                 $defaults['exerciseAttempts']       = $this->selectAttempts();
                 $defaults['exerciseFeedbackType']   = $this->selectFeedbackType();
@@ -1212,7 +1212,7 @@ class Exercise {
                 $defaults['pass_percentage'] = '';
             }
         } else {
-            $defaults['exerciseTitle'] = $this->selectTitle();
+            $defaults['exerciseTitle'] = html_entity_decode($this->selectTitle());
             $defaults['exerciseDescription'] = $this->selectDescription();
         }
         if (api_get_setting('search_enabled') === 'true') {

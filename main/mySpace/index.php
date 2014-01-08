@@ -865,8 +865,6 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 	} else if($display == 'sessionoverview') {
 		MySpace::display_tracking_session_overview();
 	} else if($display == 'accessoverview') {
-        if (!empty($_GET['session_id'])) 
-        {
             if (!empty($_GET['course_id'])) 
             {
                 if(!empty($_GET['date_to']) && (!empty($_GET['date_from'])))
@@ -889,12 +887,8 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             {
                 Display::display_warning_message(get_lang('ChooseCourse'));
             }
-        } else
-        {
-            Display::display_warning_message(get_lang('ChooseSession'));
-        }
+
     } else if($display == 'lpprogressoverview') {
-        if (!empty($_GET['session_id'])) {
             if (!empty($_GET['course_id']))
             {
                 echo MySpace::display_tracking_lp_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']));
@@ -902,11 +896,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             {
                 Display::display_warning_message(get_lang('ChooseCourse'));
             }
-        } else {
-            Display::display_warning_message(get_lang('ChooseSession'));
-        }
     } else if($display == 'progressoverview') {
-        if (!empty($_GET['session_id'])) {
             if (!empty($_GET['course_id']))
             {
                 echo MySpace::display_tracking_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']));
@@ -914,9 +904,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             {
                 Display::display_warning_message(get_lang('ChooseCourse'));
             }
-        } else {
-            Display::display_warning_message(get_lang('ChooseSession'));
-        }
+
     } else if($display == 'exerciseprogress') {
             if (!empty($_GET['course_id']))
             {
@@ -933,8 +921,6 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 Display::display_warning_message(get_lang('ChooseCourse'));
             }
     } else if($display == 'surveyoverview') {
-        if (!empty($_GET['session_id']))
-        {
             if (!empty($_GET['course_id']))
             {
                 if (!empty($_GET['survey_id']))
@@ -948,9 +934,6 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             {
                 Display::display_warning_message(get_lang('ChooseCourse'));
             }
-        } else {
-            Display::display_warning_message(get_lang('ChooseSession'));
-        }
 	} else if($display == 'courseoverview') {
 		MySpace::display_tracking_course_overview();
 	} else {

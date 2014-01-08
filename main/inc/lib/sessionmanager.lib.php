@@ -974,7 +974,15 @@ class SessionManager
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      * @version Chamilo 1.9.6
      */
-    function get_user_data_access_tracking_overview($sessionId, $courseId, $studentId = 0, $profile = '', $date_from = '', $date_to = '', $options) {
+    function get_user_data_access_tracking_overview(
+        $sessionId,
+        $courseId,
+        $studentId = 0,
+        $profile = '',
+        $date_from = '',
+        $date_to = '',
+        $options
+    ) {
         global $_configuration;
         // database table definition
         $user                   = Database :: get_main_table(TABLE_MAIN_USER);
@@ -983,34 +991,29 @@ class SessionManager
         $track_e_course_access  = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
         global $export_csv;
-        if ($export_csv)
-        {
+        if ($export_csv) {
             $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
         } else {
             $is_western_name_order = api_is_western_name_order();
         }
 
-        if (isset($sessionId) && !empty($sessionId))
-        {
+        if (isset($sessionId) && !empty($sessionId)) {
             $where = sprintf(" WHERE a.session_id = %d", intval($sessionId));
         }
-        if (isset($courseId) && !empty($courseId))
-        {
+        if (isset($courseId) && !empty($courseId)) {
             $where .= sprintf(" AND c.id = %d", intval($courseId)) ;
         }
-        if (isset($studentId) && !empty($studentId))
-        {
+        if (isset($studentId) && !empty($studentId)) {
             $where .= sprintf(" AND u.user_id = %d", intval($studentId));
         }
-        if (isset($profile) && !empty($profile))
-        {
+        if (isset($profile) && !empty($profile)) {
             $where .= sprintf(" AND u.status = %d", intval($profile));
         }
-        if (!empty($date_to) && !empty($date_from))
-        {
-            $where .=  sprintf(" AND a.login_course_date >= '%s 00:00:00'
+        if (!empty($date_to) && !empty($date_from)) {
+            $where .= sprintf(" AND a.login_course_date >= '%s 00:00:00'
                         AND a.login_course_date <= '%s 23:59:59'", $date_to, $date_from);
         }
+
         $limit = null;
         if (!empty($options['limit'])) {
             $limit = " LIMIT ".$options['limit'];
@@ -1049,14 +1052,12 @@ class SessionManager
 
         $clicks = Tracking::get_total_clicks_by_session();
         $data = array ();
-        while ($user = Database::fetch_assoc($result))
-        {
+        while ($user = Database::fetch_assoc($result)) {
             $data[] = $user;
         }
 
         //foreach
-        foreach ($data as $key => $info)
-        {
+        foreach ($data as $key => $info) {
             #building array to display
             $return[] = array(
                 'logindate' => $info['login_course_date'],
@@ -1069,8 +1070,7 @@ class SessionManager
             );
         }
         //Search for ip, we do less querys if we iterate the final array
-        foreach ($return as $key => $info)
-        {
+        foreach ($return as $key => $info) {
             $sql = sprintf("SELECT login_ip FROM $track_e_login WHERE ('%s' BETWEEN login_date AND logout_date)", $info['logindate']); //TODO add select by user too
             $result = Database::query($sql);
             $ip = Database::fetch_assoc($result);

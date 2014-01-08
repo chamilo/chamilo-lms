@@ -2992,7 +2992,7 @@ function api_not_allowed($print_headers = false, $message = null)
         }
 
         if (!is_null(api_get_course_id())) {
-            api_set_firstpage_parameter(api_get_course_int_id());
+            api_set_firstpage_parameter(api_get_course_id());
         }
 
         // If the user has no user ID, then his session has expired
@@ -3038,7 +3038,7 @@ function api_not_allowed($print_headers = false, $message = null)
         // The session is over and we were not in a course,
         // or we try to get directly to a private course without being logged
         if (!is_null(api_get_course_int_id())) {
-            api_set_firstpage_parameter(api_get_course_int_id());
+            api_set_firstpage_parameter(api_get_course_id());
             $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
             $action = str_replace('&amp;', '&', $action);
             $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));

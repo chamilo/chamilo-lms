@@ -695,7 +695,9 @@ class SessionManager
      */
     public static function get_session_progress($sessionId, $courseId, $options)
     {
-
+        if (empty($sessionId)) {
+            $sessionId = 0;
+        }
         //tables
         $session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $user                   = Database::get_main_table(TABLE_MAIN_USER);
@@ -904,52 +906,58 @@ class SessionManager
             //Overall Total
             $overall_total =  ($course_description_progress + $exercises_progress + $forums_progress + $assignments_progress + $wiki_progress + $surveys_progress) / 6;
 
+            $link       =  '<a href="' . api_get_path(WEB_CODE_PATH) . 'mySpace/myStudents.php?student='. $user[0]. '&details=true&course=' . $course['code'] . '&id_session=' .  $sessionId . '"> %s </a>';
+            $linkForum  =  '<a href="' . api_get_path(WEB_CODE_PATH) . 'forum/index.php?cidReq=' . $course['code'] . '&id_session=' .  $sessionId . '"> %s </a>';
+            $linkWork   =  '<a href="' . api_get_path(WEB_CODE_PATH) . 'work/work.php?cidReq=' . $course['code'] . '&id_session=' .  $sessionId . '"> %s </a>';
+            $linkWiki   =  '<a href="' . api_get_path(WEB_CODE_PATH) . 'wiki/index.php?cidReq=' . $course['code'] . '&session_id=' .  $sessionId . '&action=statistics"> %s </a>';
+            $linkSurvey =  '<a href="' . api_get_path(WEB_CODE_PATH) . 'survey/survey_list.php?cidReq=' . $course['code'] . '&id_session=' .  $sessionId . '"> %s </a>';
+
             $table[] = array(
                 'lastname'  => $user[1],
                 'firstname' => $user[2],
                 'username'  => $user[3],
                 #'profile'   => '',
                 'total'     => round($overall_total,2) . '%',
-                'courses'   => $course_description_progress . '%',
-                'lessons'   => $lessons_progress . '%',
-                'exercises' => $exercises_progress . '%',
-                'forums'    => $forums_progress . '%',
-                'homeworks' => $assignments_progress . '%',
-                'wikis'     => $wiki_progress . '%',
-                'surveys'   => $surveys_progress . '%',
+                'courses'   => sprintf($link, $course_description_progress . '%'),
+                'lessons'   => sprintf($link, $lessons_progress . '%'),
+                'exercises' => sprintf($link, $exercises_progress . '%'),
+                'forums'    => sprintf($link, $forums_progress . '%'),
+                'homeworks' => sprintf($link, $assignments_progress . '%'),
+                'wikis'     => sprintf($link, $wiki_progress . '%'),
+                'surveys'   => sprintf($link, $surveys_progress . '%'),
                 //course description
                 'course_description_progress' => $course_description_progress . '%',
                 //lessons
-                'lessons_total'      => $lessons_total,
-                'lessons_done'       => $lessons_done,
-                'lessons_left'       => $lessons_left,
-                'lessons_progress'   => $lessons_progress . '%',
+                'lessons_total'      => sprintf($link, $lessons_total),
+                'lessons_done'       => sprintf($link, $lessons_done),
+                'lessons_left'       => sprintf($link, $lessons_left),
+                'lessons_progress'   => sprintf($link, $lessons_progress . '%'),
                 //exercises
-                'exercises_total'       => $exercises_total,
-                'exercises_done'        => $exercises_done,
-                'exercises_left'        => $exercises_left,
-                'exercises_progress'    => $exercises_progress . '%',
+                'exercises_total'       => sprintf($link, $exercises_total),
+                'exercises_done'        => sprintf($link, $exercises_done),
+                'exercises_left'        => sprintf($link, $exercises_left),
+                'exercises_progress'    => sprintf($link, $exercises_progress . '%'),
                 //forums
-                'forums_total'      => $forums_total,
-                'forums_done'       => $forums_done,
-                'forums_left'       => $forums_left,
-                'forums_progress'   => $forums_progress . '%',
+                'forums_total'      => sprintf($linkForum, $forums_total),
+                'forums_done'       => sprintf($linkForum, $forums_done),
+                'forums_left'       => sprintf($linkForum, $forums_left),
+                'forums_progress'   => sprintf($linkForum, $forums_progress . '%'),
                 //assignments
-                'assignments_total'     => $assignments_total,
-                'assignments_done'      => $assignments_done,
-                'assignments_left'      => $assignments_left,
-                'assignments_progress'  => $assignments_progress . '%',
+                'assignments_total'     => sprintf($linkWork, $assignments_total),
+                'assignments_done'      => sprintf($linkWork, $assignments_done),
+                'assignments_left'      => sprintf($linkWork, $assignments_left),
+                'assignments_progress'  => sprintf($linkWork, $assignments_progress . '%'),
                 //wiki
-                'wiki_total'        => $wiki_total,
-                'wiki_revisions'    => $wiki_revisions,
-                'wiki_read'         => $wiki_read,
-                'wiki_unread'       => $wiki_unread,
-                'wiki_progress'     => $wiki_progress . '%',
+                'wiki_total'        => sprintf($linkWiki, $wiki_total),
+                'wiki_revisions'    => sprintf($linkWiki, $wiki_revisions),
+                'wiki_read'         => sprintf($linkWiki, $wiki_read),
+                'wiki_unread'       => sprintf($linkWiki, $wiki_unread),
+                'wiki_progress'     => sprintf($linkWiki, $wiki_progress . '%'),
                 //survey
-                'surveys_total'     => $surveys_total,
-                'surveys_done'      => $surveys_done,
-                'surveys_left'      => $surveys_left,
-                'surveys_progress'  => $surveys_progress . '%',
+                'surveys_total'     => sprintf($linkSurvey, $surveys_total),
+                'surveys_done'      => sprintf($linkSurvey, $surveys_done),
+                'surveys_left'      => sprintf($linkSurvey, $surveys_left),
+                'surveys_progress'  => sprintf($linkSurvey, $surveys_progress . '%'),
                 );
         }
         return $table;

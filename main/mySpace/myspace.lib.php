@@ -494,15 +494,13 @@ class MySpace {
             get_lang('Username'),
             #get_lang('Profile'),
             get_lang('Total'),
-            get_lang('CourseDescription'),
+            get_lang('Courses'),
             get_lang('LearningPaths'),
             get_lang('Exercises'),
             get_lang('Forums'),
             get_lang('Assignments'),
             get_lang('ToolWiki'),
             get_lang('ToolSurvey'),
-            //course description
-            get_lang('CourseDescriptionProgress'),
             //Learning paths
             get_lang('LearnpathsTotal'),
             get_lang('LearnpathsDone'),
@@ -538,51 +536,49 @@ class MySpace {
 
         //Column config
         $column_model   = array(
-            array('name'=>'lastname',   'index'=>'lastname',     'align'=>'left', 'search' => 'true'),
-            array('name'=>'firstname',  'index'=>'firstname',    'align'=>'left', 'search' => 'true'),
-            array('name'=>'username',   'index'=>'username',     'align'=>'left', 'search' => 'true'),
-            #array('name'=>'profile',   'index'=>'username',     'align'=>'left', 'search' => 'true'),
-            array('name'=>'total',      'index'=>'total',        'align'=>'left', 'search' => 'true'),
-            array('name'=>'courses',    'index'=>'courses',      'align'=>'left', 'search' => 'true'),
-            array('name'=>'lessons',    'index'=>'lessons',      'align'=>'left', 'search' => 'true'),
-            array('name'=>'exercises',  'index'=>'exercises',    'align'=>'left', 'search' => 'true'),
-            array('name'=>'forums',     'index'=>'forums',       'align'=>'left', 'search' => 'true'),
-            array('name'=>'homeworks',  'index'=>'homeworks',    'align'=>'left', 'search' => 'true'),
-            array('name'=>'wikis',      'index'=>'wikis',        'align'=>'left', 'search' => 'true'),
-            array('name'=>'surveys',    'index'=>'surveys',      'align'=>'left', 'search' => 'true'),
-            //Course description
-            array('name'=>'course_description_progress',    'index'=>'course_description_progress',      'align'=>'left', 'search' => 'true'),
+            array('name'=>'lastname',   'index'=>'lastname',     'align'=>'left'),
+            array('name'=>'firstname',  'index'=>'firstname',    'align'=>'left'),
+            array('name'=>'username',   'index'=>'username',     'align'=>'left'),
+            #array('name'=>'profile',   'index'=>'username',     'align'=>'left'),
+            array('name'=>'total',      'index'=>'total',        'align'=>'left'),
+            array('name'=>'courses',    'index'=>'courses',      'align'=>'left', 'sortable' => 'false'),
+            array('name'=>'lessons',    'index'=>'lessons',      'align'=>'left', 'sortable' => 'false'),
+            array('name'=>'exercises',  'index'=>'exercises',    'align'=>'left', 'sortable' => 'false'),
+            array('name'=>'forums',     'index'=>'forums',       'align'=>'left', 'sortable' => 'false'),
+            array('name'=>'homeworks',  'index'=>'homeworks',    'align'=>'left', 'sortable' => 'false'),
+            array('name'=>'wikis',      'index'=>'wikis',        'align'=>'left', 'sortable' => 'false'),
+            array('name'=>'surveys',    'index'=>'surveys',      'align'=>'left', 'sortable' => 'false'),
             //Lessons
-            array('name'=>'lessons_total',    'index'=>'lessons_total',      'align'=>'left', 'search' => 'true'),
-            array('name'=>'lessons_done',     'index'=>'lessons_done',       'align'=>'left', 'search' => 'true'),
-            array('name'=>'lessons_left',     'index'=>'lessons_left',       'align'=>'left', 'search' => 'true'),
-            array('name'=>'lessons_progress', 'index'=>'lessons_progress',   'align'=>'left', 'search' => 'true'),
+            array('name'=>'lessons_total',    'index'=>'lessons_total',      'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'lessons_done',     'index'=>'lessons_done',       'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'lessons_left',     'index'=>'lessons_left',       'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'lessons_progress', 'index'=>'lessons_progress',   'align'=>'center', 'sortable' => 'false'),
             //Exercises
-            array('name'=>'exercises_total',    'index'=>'exercises_total',      'align'=>'left', 'search' => 'true'),
-            array('name'=>'exercises_done',     'index'=>'exercises_done',       'align'=>'left', 'search' => 'true'),
-            array('name'=>'exercises_left',     'index'=>'exercises_left',       'align'=>'left', 'search' => 'true'),
-            array('name'=>'exercises_progress', 'index'=>'exercises_progress',   'align'=>'left', 'search' => 'true'),
+            array('name'=>'exercises_total',    'index'=>'exercises_total',      'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'exercises_done',     'index'=>'exercises_done',       'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'exercises_left',     'index'=>'exercises_left',       'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'exercises_progress', 'index'=>'exercises_progress',   'align'=>'center', 'sortable' => 'false'),
             //Assignments
-            array('name'=>'forums_total',    'index'=>'forums_total',        'align'=>'left', 'search' => 'true'),
-            array('name'=>'forums_done',     'index'=>'forums_done',         'align'=>'left', 'search' => 'true'),
-            array('name'=>'forums_left',     'index'=>'forums_left',         'align'=>'left', 'search' => 'true'),
-            array('name'=>'forums_progress', 'index'=>'forums_progress',     'align'=>'left', 'search' => 'true'),
+            array('name'=>'forums_total',    'index'=>'forums_total',        'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'forums_done',     'index'=>'forums_done',         'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'forums_left',     'index'=>'forums_left',         'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'forums_progress', 'index'=>'forums_progress',     'align'=>'center', 'sortable' => 'false'),
             //Assignments
-            array('name'=>'assigments_total',    'index'=>'assigments_total',        'align'=>'left', 'search' => 'true'),
-            array('name'=>'assigments_done',     'index'=>'assigments_done',         'align'=>'left', 'search' => 'true'),
-            array('name'=>'assigments_left',     'index'=>'assigments_left',         'align'=>'left', 'search' => 'true'),
-            array('name'=>'assigments_progress', 'index'=>'assigments_progress',     'align'=>'left', 'search' => 'true'),
+            array('name'=>'assigments_total',    'index'=>'assigments_total',        'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'assigments_done',     'index'=>'assigments_done',         'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'assigments_left',     'index'=>'assigments_left',         'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'assigments_progress', 'index'=>'assigments_progress',     'align'=>'center', 'sortable' => 'false'),
             //Assignments
-            array('name'=>'wiki_total',         'index'=>'wiki_total',       'align'=>'left', 'search' => 'true'),
-            array('name'=>'wiki_revisions',     'index'=>'wiki_revisions',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'wiki_read',          'index'=>'wiki_read',        'align'=>'left', 'search' => 'true'),
-            array('name'=>'wiki_unread',        'index'=>'wiki_unread',      'align'=>'left', 'search' => 'true'),
-            array('name'=>'wiki_progress',      'index'=>'wiki_progress',    'align'=>'left', 'search' => 'true'),
+            array('name'=>'wiki_total',         'index'=>'wiki_total',       'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'wiki_revisions',     'index'=>'wiki_revisions',   'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'wiki_read',          'index'=>'wiki_read',        'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'wiki_unread',        'index'=>'wiki_unread',      'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'wiki_progress',      'index'=>'wiki_progress',    'align'=>'center', 'sortable' => 'false'),
             //Surveys
-            array('name'=>'surveys_total',    'index'=>'surveys_total',      'align'=>'left', 'search' => 'true'),
-            array('name'=>'surveys_done',     'index'=>'surveys_done',       'align'=>'left', 'search' => 'true'),
-            array('name'=>'surveys_left',     'index'=>'surveys_left',       'align'=>'left', 'search' => 'true'),
-            array('name'=>'surveys_progress', 'index'=>'surveys_progress',   'align'=>'left', 'search' => 'true'),
+            array('name'=>'surveys_total',    'index'=>'surveys_total',      'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'surveys_done',     'index'=>'surveys_done',       'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'surveys_left',     'index'=>'surveys_left',       'align'=>'center', 'sortable' => 'false'),
+            array('name'=>'surveys_progress', 'index'=>'surveys_progress',   'align'=>'center', 'sortable' => 'false'),
         );
 
         $action_links = '';
@@ -595,6 +591,47 @@ class MySpace {
         //Autowidth
         $extra_params['autowidth'] = 'true';
 
+        $extra_params['shrinkToFit'] = 'true';
+
+        $extra_params['headertitles'] = 'true';
+
+        $extra_params['groupHeaders'] = array(
+            'courses_detail' => array(
+                "startColumnName"   => 'courses',
+                "numberOfColumns"   =>  7,
+                "titleText"         =>  get_lang('Global'),
+                ),
+            'lessons' => array(
+                "startColumnName"   => 'lessons_total',
+                "numberOfColumns"   =>  4,
+                "titleText"         =>  get_lang('LearningPaths'),
+                ),
+            'exercises' => array(
+                "startColumnName"   => 'exercises_total',
+                "numberOfColumns"   =>  4,
+                "titleText"         =>  get_lang('Exercises'),
+                ),
+            'forums' => array(
+                "startColumnName"   => 'forums_total',
+                "numberOfColumns"   =>  4,
+                "titleText"         =>  get_lang('Forums'),
+                ),
+            'assignments' => array(
+                "startColumnName"   => 'assigments_total',
+                "numberOfColumns"   =>  4,
+                "titleText"         =>  get_lang('Assignments'),
+                ),
+            'wikis' => array(
+                "startColumnName"   => 'wiki_total',
+                "numberOfColumns"   =>  5,
+                "titleText"         =>  get_lang('Wiki'),
+                ),
+            'surveys' => array(
+                "startColumnName"   => 'surveys_total',
+                "numberOfColumns"   =>  4,
+                "titleText"         =>  get_lang('Survey'),
+                ),
+        );
         //height auto
         $extra_params['height'] = 'auto';
 

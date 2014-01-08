@@ -54,38 +54,46 @@ switch ($action) {
         break;
     case 'search_course':
         if (api_is_platform_admin()) {
-            $courseList = Coursemanager::get_courses_list(
-                0,
-                10,
-                1, //$orderby = 1,
-                'ASC',
-                -1,
-                $_REQUEST['q'],
-                null,
-                true
-            );
+            if (!empty($_GET['session_id'])) {
+                //if session is defined, lets find only courses of this session
+                $courseList = SessionManager::get_course_list_by_session_id(
+                    intval($_GET['session_id']), 
+                    $_GET['q']
+                );
+            } else {
+                //if session is not defined lets search all courses STARTING with $_GET['q']
+                //TODO change this function to search not only courses STARTING with $_GET['q']
+                $courseList = Coursemanager::get_courses_list(
+                    0, //offset
+                    10, //howMany
+                    1, //$orderby = 1
+                    'ASC',
+                    -1,  //visibility
+                    $_GET['q'],
+                    null, //$urlId
+                    true //AlsoSearchCode
+                );
+            }
+
             $results = array();
 
             require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
-            foreach ($courseList as $courseInfo) {
-                $title = $courseInfo['title'];
+            if (!empty($courseList)) {
 
-                if (!empty($courseInfo['category_code'])) {
-                    $parents = getParentsToString($courseInfo['category_code']);
-                    $title = $parents.$courseInfo['title'];
+                foreach ($courseList as $courseInfo) {
+                    $title = $courseInfo['title'];
+
+                    if (!empty($courseInfo['category_code'])) {
+                        $parents = getParentsToString($courseInfo['category_code']);
+                        $title = $parents.$courseInfo['title'];
+                    }
+
+                    $results[] = array(
+                        'id' => $courseInfo['id'],
+                        'text' => $title
+                        );
                 }
-
-                $results[] = array(
-                    'id' => $courseInfo['id'],
-                    'text' => $title
-                );
-            }
-
-            if (!empty($results)) {
-                /*foreach ($results as &$item) {
-                    $item['id'] = $item['code'];
-                }*/
                 echo json_encode($results);
             } else {
                 echo json_encode(array());

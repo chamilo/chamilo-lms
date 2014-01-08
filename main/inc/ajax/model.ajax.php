@@ -653,7 +653,7 @@ switch ($action) {
         break;
     case 'get_session_lp_progress':
         $sessionId = 0;
-        if (!empty($_GET['session_id']) && !empty($_GET['course_id']))
+        if (!empty($_GET['course_id']))
         {
             $sessionId = intval($_GET['session_id']);
             $courseId = intval($_GET['course_id']);
@@ -686,7 +686,7 @@ switch ($action) {
         break;
     case 'get_survey_overview':
         $sessionId = 0;
-        if (!empty($_GET['session_id']) && !empty($_GET['course_id']) && !empty($_GET['survey_id']))
+        if (!empty($_GET['course_id']) && !empty($_GET['survey_id']))
         {
             $sessionId = intval($_GET['session_id']);
             $courseId  = intval($_GET['course_id']);
@@ -764,7 +764,7 @@ switch ($action) {
             'surveys_progress' ,
             );
         $sessionId = 0;
-        if (!empty($_GET['course_id']) && !empty($_GET['session_id']))
+        if (!empty($_GET['course_id']))
         {
             $sessionId = intval($_GET['session_id']);
             $courseId = intval($_GET['course_id']);
@@ -788,7 +788,7 @@ switch ($action) {
             'timeLoggedIn',
         );
         $sessionId = 0;
-        if (!empty($_GET['course_id']) && !empty($_GET['session_id']))
+        if (!empty($_GET['course_id']))
         {
             $sessionId  = intval($_GET['session_id']);
             $courseId   = intval($_GET['course_id']);

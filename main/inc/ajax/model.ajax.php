@@ -640,7 +640,7 @@ switch ($action) {
             'question_id',
             'question',
             'answer',
-            'correct'
+            'correct',
         );
 
         $result = Tracking::get_exercise_progress($sessionId, $courseId, $exerciseId, $answer,

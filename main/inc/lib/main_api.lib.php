@@ -2406,15 +2406,11 @@ function api_is_course_session_coach($user_id, $course_code, $session_id) {
 
 /**
  * Checks whether the current user is a course or session coach
- * @param int $session_id optional, session id
- * @param string $course_code optional, course code
- * @param int $userId The user ID
+ * @param int - optional, session id
+ * @param string - optional, course code
  * @return boolean True if current user is a course or session coach
  */
-function api_is_coach($session_id = 0, $course_code = null, $userId = null) {
-    if (empty($userId)) {
-        $userId = api_get_user_id();
-    }
+function api_is_coach($session_id = 0, $course_code = null) {
     if (!empty($session_id)) {
         $session_id = intval($session_id);
     } else {
@@ -2438,7 +2434,7 @@ function api_is_coach($session_id = 0, $course_code = null, $userId = null) {
 	if (!empty($course_code)) {
 	    $sql = "SELECT DISTINCT id, name, date_start, date_end
 				FROM $session_table INNER JOIN $session_rel_course_rel_user_table session_rc_ru
-	            ON session_rc_ru.id_user = '".$userId."'
+	            ON session_rc_ru.id_user = '".api_get_user_id()."'
 	            WHERE   session_rc_ru.course_code = '$course_code' AND
                         session_rc_ru.status = 2 AND
                         session_rc_ru.id_session = '$session_id'";
@@ -2449,7 +2445,7 @@ function api_is_coach($session_id = 0, $course_code = null, $userId = null) {
 	if (!empty($session_id)) {
 	    $sql = "SELECT DISTINCT id, name, date_start, date_end
 	         	FROM $session_table
-	         	WHERE session.id_coach =  '".$userId."' AND id = '$session_id'
+	         	WHERE session.id_coach =  '".api_get_user_id()."' AND id = '$session_id'
 				ORDER BY date_start, date_end, name";
 	    $result = Database::query($sql);
 	    if (!empty($sessionIsCoach)) {
@@ -2463,57 +2459,37 @@ function api_is_coach($session_id = 0, $course_code = null, $userId = null) {
 
 /**
  * Checks whether the current user is a session administrator
- * @param int $userId The user ID
  * @return boolean True if current user is a course administrator
  */
-function api_is_session_admin($userId = null) {
-    if (!empty($userId)) {
-        $_user = api_get_user_info($userId);
-    } else {
-        global $_user;
-    }
+function api_is_session_admin() {
+    global $_user;
     return isset($_user['status']) && $_user['status'] == SESSIONADMIN;
 }
 
 /**
  * Checks whether the current user is a human resources manager
- * @param int $userId The user ID
  * @return boolean True if current user is a human resources manager
  */
-function api_is_drh($userId = null) {
-    if (!empty($userId)) {
-        $_user = api_get_user_info($userId);
-    } else {
-        global $_user;
-    }
+function api_is_drh() {
+    global $_user;
     return isset($_user['status']) && $_user['status'] == DRH;
 }
 
 /**
  * Checks whether the current user is a student
- * @param int $userId The user ID
  * @return boolean True if current user is a human resources manager
  */
-function api_is_student($userId = null) {
-    if (!empty($userId)) {
-        $_user = api_get_user_info($userId);
-    } else {
-        global $_user;
-    }
+function api_is_student() {
+    global $_user;
     return isset($_user['status']) && $_user['status'] == STUDENT;
 
 }
 /**
  * Checks whether the current user is a teacher
- * @param int $userId The user ID
  * @return boolean True if current user is a human resources manager
  */
-function api_is_teacher($userId = null) {
-    if (!empty($userId)) {
-        $_user = api_get_user_info($userId);
-    } else {
-        global $_user;
-    }
+function api_is_teacher() {
+    global $_user;
     return isset($_user['status']) && $_user['status'] == COURSEMANAGER;
 }
 
@@ -2953,7 +2929,8 @@ function api_not_found($print_headers = false) {
  * @version 1.0, February 2004
  * @version dokeos 1.8, August 2006
  */
-function api_not_allowed($print_headers = false, $message = null) {
+function api_not_allowed($print_headers = false, $message = null)
+{
     if (api_get_setting('sso_authentication') === 'true') {
         global $osso;
         if ($osso) {
@@ -3004,7 +2981,7 @@ function api_not_allowed($print_headers = false, $message = null) {
         exit;
     }
 
-    if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE)) {
+    if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE || $this_section == SECTION_PLATFORM_ADMIN)) {
 
         //only display form and return to the previous URL if there was a course ID included
         if ($user_id != 0 && !api_is_anonymous()) {
@@ -3015,7 +2992,7 @@ function api_not_allowed($print_headers = false, $message = null) {
         }
 
         if (!is_null(api_get_course_id())) {
-            api_set_firstpage_parameter(api_get_course_id());
+            api_set_firstpage_parameter(api_get_course_int_id());
         }
 
         // If the user has no user ID, then his session has expired
@@ -3057,12 +3034,11 @@ function api_not_allowed($print_headers = false, $message = null) {
     // Check if the cookies are enabled. If are enabled and if no course ID was included in the requested URL, then the user has either lost his session or is anonymous, so redirect to homepage
     if( !isset($_COOKIE['TestCookie']) && empty($_COOKIE['TestCookie']) ) {
         $msg = Display::return_message(get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error', false);
-    }
-    else {
+    } else {
         // The session is over and we were not in a course,
         // or we try to get directly to a private course without being logged
-        if (!is_null(api_get_course_id())) {
-            api_set_firstpage_parameter(api_get_course_id());
+        if (!is_null(api_get_course_int_id())) {
+            api_set_firstpage_parameter(api_get_course_int_id());
             $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
             $action = str_replace('&amp;', '&', $action);
             $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
@@ -3075,7 +3051,7 @@ function api_not_allowed($print_headers = false, $message = null) {
             $msg .= '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>';
             if (api_is_cas_activated()) {
                 $msg .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
-                $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", array('align'=>'center'));
+                $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_int_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", array('align'=>'center'));
                 $msg .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
                 $msg .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
                 $msg .= "<div style='display:none;'>";
@@ -3087,8 +3063,7 @@ function api_not_allowed($print_headers = false, $message = null) {
                 $msg .= "</div>";
             }
             $msg .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a></p>';
-        }
-        else {
+        } else {
             // we were not in a course, return to home page
             $msg = Display::return_message(get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a><br />', 'error', false);
         }
@@ -6909,32 +6884,37 @@ function api_elog($string, $dump = 0)
 }
 
 
-/*
+/**
  * Set the cookie to go directly to the course code $in_firstpage
  * after login
+ * @param in_firstpage is the course code of the course to go
  */
-function api_set_firstpage_parameter($in_firstpage) {
+function api_set_firstpage_parameter($in_firstpage)
+{
     setcookie("GotoCourse", $in_firstpage);
 }
 
-/*
+/**
  * Delete the cookie to go directly to the course code $in_firstpage
  * after login
  */
-function api_delete_firstpage_parameter() {
+function api_delete_firstpage_parameter()
+{
     setcookie("GotoCourse", "", time() - 3600);
 }
 
-/*
- * Return true if course_code for direct course access after login is set
+/**
+ * @return true if course_code for direct course access after login is set
  */
-function exist_firstpage_parameter() {
+function exist_firstpage_parameter()
+{
     return (isset($_COOKIE['GotoCourse']) && $_COOKIE['GotoCourse'] != "");
 }
 
-/*
- *
+/**
+ * @return return the course_code of the course where user login
  */
-function api_get_firstpage_parameter() {
+function api_get_firstpage_parameter()
+{
     return $_COOKIE['GotoCourse'];
 }

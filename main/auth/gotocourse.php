@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/*
+/**
  * Author : hubert.borderiou@grenet.fr
  * Allow the user to login to a course after reaching a course URL like
  * http://chamilo.chamilo.org/courses/MYCOURSE/?id_session=0
@@ -48,8 +48,7 @@ if (isset($_GET['firstpage'])) {
     $tpl->assign('content', '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>'.$msg);
     $tpl->display_one_col_template();
 
-}
-else {
+} else {
     api_delete_firstpage_parameter();
     Header('Location: '.api_get_path(WEB_PATH).'index.php');
 }

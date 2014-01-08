@@ -832,7 +832,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 </script>';
 
                 //answer Type
-                $answerFilter = new FormValidator('answer_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
+                /*$answerFilter = new FormValidator('answer_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
                 $options = array(
                     2 => get_lang('all'),
                     0 => get_lang('incorrect'),
@@ -855,7 +855,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                         window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&exercise_id="+exerciseId+"&answer="+answerType;
                         });
                     });
-                </script>';
+                </script>';*/
 
         }
     }

@@ -3306,14 +3306,14 @@ class Tracking
                 $data[] = $row;
             }
             // Now fill questions data. Query all questions and answers for this test to avoid
-            $sqlQuestions = "SELECT tq.c_id, tq.id as question_id, tq.question, tqa.id_auto, tqa.answer, tqa.correct
+            $sqlQuestions = "SELECT tq.c_id, tq.id as question_id, tq.question, tqa.id_auto, tqa.answer
                                FROM $tquiz_question tq, $tquiz_answer tqa
                                WHERE tqa.question_id =tq.id and tqa.c_id = tq.c_id
                                  AND tq.c_id = $courseIdx AND tq.id IN (".implode(',',$questionIds).")";
             $resQuestions = Database::query($sqlQuestions);
             while ($rowQuestion = Database::fetch_assoc($resQuestions)) {
                 $questionIds[$rowQuestion['question_id']] = $rowQuestion['question'];
-                $answerIds[$rowQuestion['question_id']][$rowQuestion['id_auto']] = array('answer' => $rowQuestion['answer'], 'correct' => $rowQuestion['correct']);
+                $answerIds[$rowQuestion['question_id']] = array('answer' => $rowQuestion['answer']);
             }
             // Now fill users data
             $sqlUsers = "SELECT user_id, username, lastname, firstname FROM $tuser WHERE user_id IN (".implode(',',$userIds).")";
@@ -3325,9 +3325,9 @@ class Tracking
                 $data[$id]['firstname'] = $users[$row['user_id']]['firstname'];
                 $data[$id]['lastname'] = $users[$row['user_id']]['lastname'];
                 $data[$id]['username'] = $users[$row['user_id']]['username'];
-                $data[$id]['answer'] = $answerIds[$row['question_id']][$row['answer_id']]['answer'];
-                $data[$id]['correct'] = $answerIds[$row['question_id']][$row['answer_id']]['correct'];
-                $data[$id]['correct'] = ($data[$id]['correct']==0?get_lang('No'):get_lang('Yes'));
+                $data[$id]['answer'] = $answerIds[$row['question_id']]['answer'];
+                //$data[$id]['correct'] = $answerIds[$row['question_id']][$row['answer_id']]['correct'];
+                //$data[$id]['correct'] = ($data[$id]['correct']==0?get_lang('No'):get_lang('Yes'));
                 $data[$id]['question'] = $questionIds[$row['question_id']];
 
             }
@@ -3335,6 +3335,7 @@ class Tracking
             /*
             The minimum expected array structure at the end is:
             attempt_id,
+            session name,
             exercise_id,
             quiz_title,
             username,
@@ -3344,7 +3345,6 @@ class Tracking
             question_id,
             question,
             answer,
-            correct
             */
 
 

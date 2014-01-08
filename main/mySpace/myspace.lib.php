@@ -368,7 +368,6 @@ class MySpace {
             get_lang('QuestionId'),
             get_lang('QuestionTitle'),
             get_lang('Answer'),
-            get_lang('Correct'),
         );
 
         /**
@@ -385,7 +384,6 @@ class MySpace {
             array('name'=>'question_id',    'index'=>'question_id',   'align'=>'left', 'search' => 'true'),
             array('name'=>'question',       'index'=>'question',      'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
             array('name'=>'answer',         'index'=>'answer',        'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
-            array('name'=>'correct',        'index'=>'correct',       'align'=>'left', 'search' => 'true'),
         );
         //get dynamic column names
 

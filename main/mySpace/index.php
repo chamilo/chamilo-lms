@@ -865,75 +865,54 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 	} else if($display == 'sessionoverview') {
 		MySpace::display_tracking_session_overview();
 	} else if($display == 'accessoverview') {
-            if (!empty($_GET['course_id'])) 
-            {
-                if(!empty($_GET['date_to']) && (!empty($_GET['date_from'])))
-                {
-                    if (!empty($_GET['student_id'])) 
-                    {
-                        echo MySpace::display_tracking_access_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['student_id']), '', $_GET['date_to'], $_GET['date_from']);
-                    } else if (!empty($_GET['profile']))
-                    {
-                        echo MySpace::display_tracking_access_overview(intval($_GET['session_id']), intval($_GET['course_id']), '', $_GET['profile'], $_GET['date_to'], $_GET['date_from']);
-                    } else 
-                    {
-                        Display::display_warning_message(get_lang('ChooseStudentOrProfile'));
-                    }
-                } else 
-                {
-                    Display::display_warning_message(get_lang('ChooseStartDateAndEndDate'));
+        if (!empty($_GET['course_id'])) {
+            if(!empty($_GET['date_to']) && (!empty($_GET['date_from']))) {
+                if (!empty($_GET['student_id'])) {
+                    echo MySpace::display_tracking_access_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['student_id']), '', $_GET['date_to'], $_GET['date_from']);
+                } else if (!empty($_GET['profile'])) {
+                    echo MySpace::display_tracking_access_overview(intval($_GET['session_id']), intval($_GET['course_id']), '', $_GET['profile'], $_GET['date_to'], $_GET['date_from']);
+                } else {
+                    Display::display_warning_message(get_lang('ChooseStudentOrProfile'));
                 }
-            } else
-            {
-                Display::display_warning_message(get_lang('ChooseCourse'));
+            } else {
+                Display::display_warning_message(get_lang('ChooseStartDateAndEndDate'));
             }
-
+        } else {
+            Display::display_warning_message(get_lang('ChooseCourse'));
+        }
     } else if($display == 'lpprogressoverview') {
-            if (!empty($_GET['course_id']))
-            {
-                echo MySpace::display_tracking_lp_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']));
-            } else
-            {
-                Display::display_warning_message(get_lang('ChooseCourse'));
-            }
+        if (!empty($_GET['course_id'])) {
+            echo MySpace::display_tracking_lp_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']));
+        } else {
+            Display::display_warning_message(get_lang('ChooseCourse'));
+        }
     } else if($display == 'progressoverview') {
-            if (!empty($_GET['course_id']))
-            {
-                echo MySpace::display_tracking_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']));
-            } else
-            {
-                Display::display_warning_message(get_lang('ChooseCourse'));
-            }
-
+        if (!empty($_GET['course_id'])) {
+            echo MySpace::display_tracking_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']));
+        } else {
+            Display::display_warning_message(get_lang('ChooseCourse'));
+        }
     } else if($display == 'exerciseprogress') {
-            if (!empty($_GET['course_id']))
-            {
-                if (!empty($_GET['exercise_id']))
-                {
-                    $answer = (isset($_GET['answer'])) ? intval($_GET['answer']) : 2;
-                    echo MySpace::display_tracking_exercise_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']), $answer);
-                } else
-                {
-                    Display::display_warning_message(get_lang('ChooseExercise'));
-                }
-            } else
-            {
-                Display::display_warning_message(get_lang('ChooseCourse'));
+        if (!empty($_GET['course_id'])) {
+            if (!empty($_GET['exercise_id'])) {
+                $answer = (isset($_GET['answer'])) ? intval($_GET['answer']) : 2;
+                echo MySpace::display_tracking_exercise_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']), $answer);
+            } else {
+                Display::display_warning_message(get_lang('ChooseExercise'));
             }
+        } else {
+            Display::display_warning_message(get_lang('ChooseCourse'));
+        }
     } else if($display == 'surveyoverview') {
-            if (!empty($_GET['course_id']))
-            {
-                if (!empty($_GET['survey_id']))
-                {
-                    echo MySpace::display_survey_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['survey_id']));
-                } else
-                {
-                    Display::display_warning_message(get_lang('ChooseSurvey'));
-                }
-            } else
-            {
-                Display::display_warning_message(get_lang('ChooseCourse'));
+        if (!empty($_GET['course_id'])) {
+            if (!empty($_GET['survey_id'])) {
+                echo MySpace::display_survey_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['survey_id']));
+            } else {
+                Display::display_warning_message(get_lang('ChooseSurvey'));
             }
+        } else {
+            Display::display_warning_message(get_lang('ChooseCourse'));
+        }
 	} else if($display == 'courseoverview') {
 		MySpace::display_tracking_course_overview();
 	} else {

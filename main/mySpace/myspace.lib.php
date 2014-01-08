@@ -351,8 +351,7 @@ class MySpace {
      * @return  string  HTML array of results formatted for gridJS
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
-    function display_tracking_exercise_progress_overview($sessionId = 0, $courseId = 0, $exerciseId = 0, $answer = 2) {
-
+    function display_tracking_exercise_progress_overview($sessionId = 0, $courseId = 0, $exerciseId = 0, $date_to, $date_from) {
         /**
          * Column names
          * The column order is important. Check $column variable in the main/inc/ajax/model.ajax.php file
@@ -390,7 +389,7 @@ class MySpace {
         //get dynamic column names
 
         // jqgrid will use this URL to do the selects
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_progress&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId)  . '&exercise_id=' . intval($exerciseId) . '&answer=' . intval($answer);
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_progress&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId)  . '&exercise_id=' . intval($exerciseId) . '&date_to=' . $date_to . '&date_from=' . $date_from;
 
         //Autowidth
         $extra_params['autowidth'] = 'true';

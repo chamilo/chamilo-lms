@@ -635,10 +635,9 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         if (in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview')))
         {
                 $courseFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
-                 $a = 'search_course_by_session';
-                if ( $display == 'exerciseprogress') 
-                {
-                   $a =  'search_course';
+                $a =  'search_course';
+                if (!empty($_GET['session_id'])) {
+                   $a = 'search_course_by_session';
                 }
                 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a='. $a .'&session_id=' . $_GET['session_id'];
 

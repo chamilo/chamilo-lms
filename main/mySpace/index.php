@@ -635,7 +635,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         if (in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview')))
         {
                 $courseFilter = new FormValidator('course_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
-                $a =  'search_course';
+                $a = 'search_course';
                 if (!empty($_GET['session_id'])) {
                    $a = 'search_course_by_session';
                 }
@@ -723,9 +723,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                             var filled = areBothFilled();
                             if (filled) {
                                 var date_to     = $(\'#date_to\').val();
-                                date_to = date_to.replace(/-/g,""); 
                                 var date_from   = $(\'#date_from\').val();
-                                date_from = date_from.replace(/-/g,""); 
                                 var sessionId   = $("#session_name").val();
                                 var courseId    = $("#course_name").val();
                                 var studentId   = $("#student_name").val();

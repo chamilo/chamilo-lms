@@ -794,8 +794,8 @@ switch ($action) {
             $courseId   = intval($_GET['course_id']);
             $studentId  = intval($_GET['student_id']);
             $profile    = intval($_GET['profile']);
-            $date_from  = intval($_GET['date_from']);
-            $date_to    = intval($_GET['date_to']);
+            $date_from  = $_GET['date_from'];
+            $date_to    = $_GET['date_to'];
         }
 
         $result = SessionManager::get_user_data_access_tracking_overview(intval($sessionId), intval($courseId), intval($studentId), intval($profile), $date_to, $date_from,

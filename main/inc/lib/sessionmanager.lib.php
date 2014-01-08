@@ -1008,11 +1008,8 @@ class SessionManager
         }
         if (!empty($date_to) && !empty($date_from))
         {
-            //FIX THIS
-            $to     = substr($date_to, 0, 4) .'-' . substr($date_to, 4, 2) . '-' . substr($date_to, 6, 2);
-            $from   = substr($date_from, 0, 4) . '-' . substr($date_from, 4, 2) . '-' . substr($date_from, 6, 2);
             $where .=  sprintf(" AND a.login_course_date >= '%s 00:00:00'
-                        AND a.login_course_date <= '%s 23:59:59'", $to, $from);
+                        AND a.login_course_date <= '%s 23:59:59'", $date_to, $date_from);
         }
         $limit = null;
         if (!empty($options['limit'])) {

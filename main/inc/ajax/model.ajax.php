@@ -271,7 +271,7 @@ switch ($action) {
         break;
     case 'get_exercise_progress':
         //@TODO replace this for a more efficient function (not retrieving the whole data)
-        $records = Tracking::get_exercise_progress(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']));
+        $records = Tracking::get_exercise_progress(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']), $_GET['date_from'], $_GET['date_to']);
         $count = count($records);
         break;
     case 'get_session_access_overview':
@@ -626,7 +626,8 @@ switch ($action) {
             $sessionId  = intval($_GET['session_id']);
             $courseId   = intval($_GET['course_id']);
             $exerciseId = intval($_GET['exercise_id']);
-            $answer     = intval($_GET['answer']);
+            $date_from  = $_GET['date_from'];
+            $date_to    = $_GET['date_to'];
         }
 
         $columns = array(
@@ -643,7 +644,7 @@ switch ($action) {
             'correct',
         );
 
-        $result = Tracking::get_exercise_progress($sessionId, $courseId, $exerciseId, $answer,
+        $result = Tracking::get_exercise_progress($sessionId, $courseId, $exerciseId, $date_from, $date_to,
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",

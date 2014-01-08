@@ -3178,7 +3178,7 @@ class Tracking
      * @param   array   $options    An array of options you can pass to the query (limit, where and order)
      * @return array An array with the data of exercise(s) progress
      */
-    public static function get_exercise_progress($sessionId = 0, $courseId = 0, $exerciseId = 0, $answer = 2, $options = array())
+    public static function get_exercise_progress($sessionId = 0, $courseId = 0, $exerciseId = 0, $date_from, $date_to, $options = array())
     {
         /*
          * This method gets the data by blocks, as previous attempts at one single
@@ -3274,6 +3274,10 @@ class Tracking
             $order = '';
             if (!empty($options['order'])) {
                 $order = " ORDER BY ".$options['order'];
+            }
+
+            if (!empty($date_to) && !empty($date_from)) {
+                $where .= sprintf(" AND (te.start_date BETWEEN '%s 00:00:00' AND '%s 23:59:59')", $date_from, $date_to);
             }
 
             $sql = "SELECT

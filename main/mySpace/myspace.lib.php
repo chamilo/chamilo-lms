@@ -417,7 +417,7 @@ class MySpace {
      * Display a sortable table that contains an overview off all the progress of the user in a session
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
-    function display_survey_overview($sessionId = 0, $courseId = 0, $surveyId = 0, $answer = 2) {
+    function display_survey_overview($sessionId = 0, $courseId = 0, $surveyId = 0, $date_to, $date_from) {
 
         $course = api_get_course_info_by_id($courseId);
         /**
@@ -454,7 +454,7 @@ class MySpace {
         $action_links = '';
 
         // jqgrid will use this URL to do the selects
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_survey_overview&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId) . '&survey_id=' . intval($surveyId);
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_survey_overview&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId) . '&survey_id=' . intval($surveyId) . '&date_to=' . $date_to . '&date_from=' . $date_from;
 
         //Table Id
         $tableId = 'lpProgress';

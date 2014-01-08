@@ -611,12 +611,15 @@ class SessionManager
      * @param array options order and limit keys
      * @return array table with user name, lp name, progress
      */
-    public static function get_survey_overview($sessionId = 0, $courseId = 0, $surveyId = 0, $options)
+    public static function get_survey_overview($sessionId = 0, $courseId = 0, $surveyId = 0, $date_from, $date_to, $options)
     {
         //tables
         $session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $user                   = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_course_lp_view     = Database::get_course_table(TABLE_LP_VIEW);
+        $c_survey               = Database::get_course_table(TABLE_SURVEY);
+        $c_survey_answer        = Database::get_course_table(TABLE_SURVEY_ANSWER);
+        $c_survey_question      = Database::get_course_table(TABLE_SURVEY_QUESTION);
 
         $course = api_get_course_info_by_id($courseId);
 
@@ -635,6 +638,12 @@ class SessionManager
         $order = null;
         if (!empty($options['order'])) {
             $order = " ORDER BY ".$options['order'];
+        }
+
+        $where_survey = '';
+        if (!empty($date_to) && !empty($date_from)) {
+            $where_survey = sprintf(" AND s.avail_from >= '%s'
+                        AND s.avail_till <= '%s'", $date_from, $date_to);
         }
 
         $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code
@@ -663,14 +672,15 @@ class SessionManager
 
             //Get questions by user
             $sql = "SELECT sa.question_id, sa.option_id
-            FROM c_survey_answer sa
-            INNER JOIN c_survey_question sq ON sq.question_id = sa.question_id
-            WHERE sa.survey_id = %d AND sa.c_id = %d AND sa.user = %d";
+            FROM $c_survey_answer sa
+            INNER JOIN $c_survey_question sq ON sq.question_id = sa.question_id
+            INNER JOIN $c_survey s ON sq.survey_id = s.survey_id
+            WHERE sa.survey_id = %d AND sa.c_id = %d AND sa.user = %d" . $where_survey;
 
             $sql_query = sprintf($sql, $surveyId, $courseId, $user['user_id']);
 
             $result = Database::query($sql_query);
-
+            
             $user_questions = array();
             while ($row = Database::fetch_array($result))
             {

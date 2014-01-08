@@ -194,7 +194,7 @@ switch ($action) {
             $result = Database::query($sql_query);
             while ($survey = Database::fetch_assoc($result)) 
             {
-                $data[] = array('id' => $survey['id'], 'text' => $survey['title'] );
+                $data[] = array('id' => $survey['id'], 'text' => strip_tags($survey['title']));
             }
             if (!empty($data)) 
             {

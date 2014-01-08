@@ -678,8 +678,8 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     $studentList[] = array('id' => $studentInfo['id'], 'text' => $studentInfo['username']);
                 }
 
-                $studentFilter->addElement('text', 'from', get_lang('From'), array('id' => 'date_from', 'value' => $_GET['date_from']));
-                $studentFilter->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to', 'value' => $_GET['date_to']));
+                $studentFilter->addElement('text', 'from', get_lang('From'), array('id' => 'date_from', 'value' => (!empty($_GET['date_from']) ? $_GET['date_from'] : '') ));
+                $studentFilter->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to', 'value' => (!empty($_GET['date_to']) ? $_GET['date_to'] : '') ));
 
                 $studentFilter->addElement('select_ajax', 'student_name', get_lang('SearchStudent'), null, array('url' => $url, 'defaults' => $studentList), array('class' => 'pull-left'));
                 $options = array(
@@ -749,9 +749,13 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $course = api_get_course_info_by_id($courseId);
                 $surveyList = array();
                 $exerciseInfo = survey_manager::get_survey($surveyId, 0, $course['code']);
-                $surveyList[] = array('id' => $exerciseInfo['id'], 'text' => $exerciseInfo['title']);
+                $surveyList[] = array('id' => $exerciseInfo['survey_id'], 'text' => strip_tags($exerciseInfo['title']));
             }
             $surveyOverview->addElement('select_ajax', 'survey_name', get_lang('SearchSurvey'), null, array('url' => $url, 'defaults' => $surveyList));
+
+            $surveyOverview->addElement('text', 'from', get_lang('From'), array('id' => 'date_from', 'value' => (!empty($_GET['date_from']) ? $_GET['date_from'] : '') ));
+            $surveyOverview->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to', 'value' => (!empty($_GET['date_to']) ? $_GET['date_to'] : '') ));
+
             $courseListUrl = api_get_self();
 
             echo '<div class="">';
@@ -761,14 +765,38 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             echo '<script>
             $(function() {
                 $("#survey_name").on("change", function() {
-                    var sessionId = $("#session_name").val();
-                    var courseId = $("#course_name").val();
-                    var surveyId  = $("#survey_name").val();
-                    window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&survey_id="+surveyId;
+                    var date_to     = $("#date_to").val();
+                    var date_from   = $("#date_from").val();
+                    var sessionId   = $("#session_name").val();
+                    var courseId    = $("#course_name").val();
+                    var surveyId    = $("#survey_name").val();
+                    window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&survey_id="+surveyId+"&date_to="+date_to+"&date_from="+date_from;
+                });
+                $("#date_from, #date_to").datepicker({
+                    dateFormat:  "yy-mm-dd",
+                    onSelect: function( selectedDate ) {
+                        var filled = areBothFilled();
+                        if (filled) {
+                            var date_to     = $("#date_to").val();
+                            var date_from   = $("#date_from").val();
+                            var sessionId   = $("#session_name").val();
+                            var courseId    = $("#course_name").val();
+                            var surveyId    = $("#survey_name").val();
+                            window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&survey_id="+surveyId+"&date_to="+date_to+"&date_from="+date_from;
+                        }
+                    }
                 });
             });
+            function areBothFilled() {
+                var returnValue = false;
+                if ((document.getElementById("date_from").value != "") && (document.getElementById("date_to").value != "")){
+                    returnValue = true;
+                }
+                return returnValue;
+            }
             </script>';
         }
+
         if (in_array($display, array('exerciseprogress')))
         {
                 //exercise
@@ -796,28 +824,28 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 echo '<script>
                 $(function() {
                     $("#exercise_name").on("change", function() {
-                        var date_to     = $(\'#date_to\').val();
-                        var date_from   = $(\'#date_from\').val();
-                        var sessionId = $("#session_name").val();
-                        var courseId = $("#course_name").val();
+                        var date_to     = $("#date_to").val();
+                        var date_from   = $("#date_from").val();
+                        var sessionId   = $("#session_name").val();
+                        var courseId    = $("#course_name").val();
                         var exerciseId  = $("#exercise_name").val();
                         window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&exercise_id="+exerciseId+"&date_to="+date_to+"&date_from="+date_from;
-                        });
                     });
                     $("#date_from, #date_to").datepicker({
-                        dateFormat:  \'yy-mm-dd\',
+                        dateFormat:  "yy-mm-dd",
                         onSelect: function( selectedDate ) {
                             var filled = areBothFilled();
                             if (filled) {
-                                var date_to     = $(\'#date_to\').val();
-                                var date_from   = $(\'#date_from\').val();
+                                var date_to     = $("#date_to").val();
+                                var date_from   = $("#date_from").val();
                                 var sessionId   = $("#session_name").val();
                                 var courseId    = $("#course_name").val();
-                                var exerciseId   = $("#exercise_name").val();
+                                var exerciseId  = $("#exercise_name").val();
                                 window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&exercise_id="+exerciseId+"&date_to="+date_to+"&date_from="+date_from;
                             }
                         }
                     });
+                });
                     function areBothFilled() {
                         var returnValue = false;
                         if ((document.getElementById("date_from").value != "") && (document.getElementById("date_to").value != "")){
@@ -851,13 +879,13 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }
     } else if($display == 'lpprogressoverview') {
         if (!empty($_GET['course_id'])) {
-            echo MySpace::display_tracking_lp_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']));
+            echo MySpace::display_tracking_lp_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), $_GET['date_to'], $_GET['date_from']);
         } else {
             Display::display_warning_message(get_lang('ChooseCourse'));
         }
     } else if($display == 'progressoverview') {
         if (!empty($_GET['course_id'])) {
-            echo MySpace::display_tracking_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']));
+            echo MySpace::display_tracking_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), $_GET['date_to'], $_GET['date_from']);
         } else {
             Display::display_warning_message(get_lang('ChooseCourse'));
         }
@@ -874,7 +902,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
     } else if($display == 'surveyoverview') {
         if (!empty($_GET['course_id'])) {
             if (!empty($_GET['survey_id'])) {
-                echo MySpace::display_survey_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['survey_id']));
+                echo MySpace::display_survey_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['survey_id']), $_GET['date_to'], $_GET['date_from']);
             } else {
                 Display::display_warning_message(get_lang('ChooseSurvey'));
             }

@@ -281,7 +281,7 @@ switch ($action) {
         break;
     case 'get_survey_overview':
         //@TODO replace this for a more efficient function (not retrieving the whole data)
-        $records = SessionManager::get_survey_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['survey_id']), $options);
+        $records = SessionManager::get_survey_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['survey_id']), $_GET['date_from'], $_GET['date_to'], $options);
         $count = count($records);
         break;
     /*case 'get_extra_fields':
@@ -692,6 +692,8 @@ switch ($action) {
             $sessionId = intval($_GET['session_id']);
             $courseId  = intval($_GET['course_id']);
             $surveyId  = intval($_GET['survey_id']);
+            $date_from  = $_GET['date_from'];
+            $date_to    = $_GET['date_to'];
             //$course    = api_get_course_info_by_id($courseId);
         }
         /**
@@ -710,7 +712,7 @@ switch ($action) {
             $columns[] = $question_id;
         }
 
-        $result = SessionManager::get_survey_overview($sessionId, $courseId, $surveyId,
+        $result = SessionManager::get_survey_overview($sessionId, $courseId, $surveyId, $date_from, $date_to,
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",

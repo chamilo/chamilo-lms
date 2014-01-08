@@ -939,7 +939,10 @@ class Display {
         // Adding extra params
         if (!empty($extra_params)) {
             foreach ($extra_params as $key => $element) {
-                $obj->$key = $element;
+                //groupHeaders has a especial treatment
+                if ($key != 'groupHeaders') {
+                    $obj->$key = $element;
+                }
             }
         }
 
@@ -972,8 +975,26 @@ class Display {
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
         //$json .= $beforeSelectRow;
+
         $json .= $json_encode;
+
         $json .= '});';
+
+        //Grouping headers option
+        if (isset($extra_params['groupHeaders'])) {
+            $groups = '';
+            foreach ($extra_params['groupHeaders'] as $group) {
+                //{ "startColumnName" : "courses", "numberOfColumns" : 1, "titleText" : "Order Info" },
+                $groups .= '{ "startColumnName" : "' . $group['startColumnName'] . '", "numberOfColumns" : ' . $group['numberOfColumns'] . ', "titleText" : "' . $group['titleText']  . '" },';
+
+            }
+            $json .= '$("#'.$div_id.'").jqGrid("setGroupHeaders", {
+                "useColSpanStyle" : false,
+                "groupHeaders"    : [
+                    ' . $groups . '
+                ]
+            });';
+        }
 
         $all_text = addslashes(get_lang('All'));
         $json .= '$("'.$obj->pager.' option[value='.$all_value.']").text("'.$all_text.'");';

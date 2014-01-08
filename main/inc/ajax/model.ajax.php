@@ -731,8 +731,6 @@ switch ($action) {
             'homeworks',
             'wikis',
             'surveys',
-            //course description
-            'course_description_progress',
             //exercises
             'lessons_total' ,
             'lessons_done' ,

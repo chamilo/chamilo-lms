@@ -653,7 +653,6 @@ class SessionManager
         $where $order $limit";
 
         $sql_query = sprintf($sql, $course['code'], intval($sessionId));
-
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs))
         {
@@ -676,8 +675,12 @@ class SessionManager
             FROM $c_survey_answer sa
             INNER JOIN $c_survey_question sq ON sq.question_id = sa.question_id "
             //." INNER JOIN $c_survey s ON sq.survey_id = s.survey_id "
-            ." INNER JOIN $c_survey_question_option sqo ON sqo.c_id = sa.c_id AND sqo.survey_id = sq.survey_id AND sqo.question_id = sq.question_id AND sqo.question_option_id = sa.option_id
-            WHERE sa.survey_id = %d AND sa.c_id = %d AND sa.user = %d" . $where_survey;
+            ." INNER JOIN $c_survey_question_option sqo ON sqo.c_id = sa.c_id 
+            WHERE sqo.survey_id = sq.survey_id 
+            AND sqo.question_id = sq.question_id 
+            AND sqo.question_option_id = sa.option_id 
+            AND sa.survey_id = %d AND sa.c_id = %d AND sa.user = %d 
+            " . $where_survey;
 
             $sql_query = sprintf($sql, $surveyId, $courseId, $user['user_id']);
 

@@ -658,9 +658,9 @@ class MySpace {
         //The order is important you need to check the the $column variable in the model.ajax.php file
         $columns = array(
             get_lang('LoginDate'),
-            get_lang('Username'),
-            get_lang('Firstname'),
-            get_lang('Lastname'),
+            get_lang('UserName'),
+            get_lang('FirstName'),
+            get_lang('LastName'),
             get_lang('Clicks'),
             get_lang('IP'),
             get_lang('TimeLoggedIn'),

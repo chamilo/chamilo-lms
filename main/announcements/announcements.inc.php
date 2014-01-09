@@ -21,7 +21,7 @@ class AnnouncementManager {
         return array('((user_name))', '((user_firstname))', '((user_lastname))', '((teacher_name))', '((teacher_email))', '((course_title))', '((course_link))');
     }
 
-    public static function parse_content($content, $course_code) {
+    public static function parse_content($content, $course_code, $announce = 0, $ann=0) {
         $reader_info = api_get_user_info(api_get_user_id());
         $course_info = api_get_course_info($course_code);
         $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
@@ -35,7 +35,7 @@ class AnnouncementManager {
             }
         }
         $course_link = api_get_course_url();
-
+        
         $data['user_name'] = $reader_info['username'];
         $data['user_firstname'] = $reader_info['firstname'];
         $data['user_lastname'] = $reader_info['lastname'];
@@ -43,6 +43,40 @@ class AnnouncementManager {
         $data['teacher_email'] = $teacher_email;
         $data['course_title'] = $course_info['name'];
         $data['course_link'] = Display::url($course_link, $course_link);
+       
+       
+
+        $content = str_replace(self::get_tags(), $data, $content);
+        return $content;
+    }
+    
+    /**
+     * parse announcement content when sending an email. It parses only teacher data
+     * @param	string content
+     * @param	int course code
+     * @return	string with the parsed content
+     */
+    
+     public static function parse_content_email($content, $course_code) {
+        $reader_info = api_get_user_info(api_get_user_id());
+        $course_info = api_get_course_info($course_code);
+        $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
+        
+        $teacher_name = '';
+        if (!empty($teacher_list)) {
+            foreach ($teacher_list as $teacher_data) {
+                $teacher_name = api_get_person_name($teacher_data['firstname'], $teacher_data['lastname']);
+                $teacher_email = $teacher_data['email'];
+                break;
+            }
+        }
+        $data['user_name'] = '((user_name))';
+        $data['user_firstname'] = '((user_firstname))';
+        $data['user_lastname'] = '((user_lastname))';
+        $data['teacher_name'] = $teacher_name;
+        $data['teacher_email'] = $teacher_email;
+        $data['course_title'] = $course_info['name'];
+        $data['course_link'] = Display::url($course_link, $course_link);       
 
         $content = str_replace(self::get_tags(), $data, $content);
         return $content;

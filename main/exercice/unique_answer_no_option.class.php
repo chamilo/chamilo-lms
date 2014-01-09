@@ -64,14 +64,15 @@ class UniqueAnswerNoOption extends Question {
 		$feedback_title='';
 		$comment_title='';
 
-		if ($obj_ex->selectFeedbackType()==0) {
-			$comment_title = '<th>'.get_lang('Comment').'</th>';
-		} elseif ($obj_ex->selectFeedbackType()==1) {
+		if ($obj_ex->selectFeedbackType()==1) {
 			$editor_config['Width']  = '250';
 			$editor_config['Height'] = '110';
 			$comment_title = '<th width="500" >'.get_lang('Comment').'</th>';
 			$feedback_title = '<th width="350px" >'.get_lang('Scenario').'</th>';
 		}
+        else {
+            $comment_title = '<th>'.get_lang('Comment').'</th>';
+        }
 
 		$html='<table class="data_table">
 					<tr style="text-align: center;">
@@ -196,12 +197,7 @@ class UniqueAnswerNoOption extends Question {
 			$form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
 			$form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
 			
-			if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
-				// feedback
-				$form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-			} elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {     
-         
-			}
+            $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
 			$form->addElement('text', 'weighting['.$i.']', null, array('class' => "span1", 'value' => '0'));
 			$form->addElement('html', '</tr>');
             $i++;				
@@ -238,12 +234,7 @@ class UniqueAnswerNoOption extends Question {
         $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
 
-        if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
-            // feedback
-            $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-        } elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {                    
-
-        }
+        $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
 
         //$form->addElement('select', 'destination'.$i, get_lang('SelectQuestion').' : ',$select_question,'multiple');
 
@@ -406,11 +397,7 @@ class UniqueAnswerNoOption extends Question {
 				<th>'.get_lang("Choice").'</th>
 				<th>'. get_lang("ExpectedChoice").'</th>
 				<th>'. get_lang("Answer").'</th>';
-				if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { 
-    				$header .= '<th>'.get_lang("Comment").'</th>';
-				} else { 
-					$header .= '<th>&nbsp;</th>';
-				}
+        $header .= '<th>'.get_lang("Comment").'</th>';
         $header .= '</tr>';
         return $header;	
 	}

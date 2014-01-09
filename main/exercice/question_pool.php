@@ -322,7 +322,7 @@ echo Display::form_row(get_lang("QuestionCategory"), $selectCourseCateogry);
 
 // Get exercice list for this course
 
-$exercise_list         = get_all_exercises_for_course_id($course_info, $session_id, $selected_course);
+$exercise_list         = get_all_exercises_for_course_id($course_info, $session_id, $selected_course, false);
 //Exercise List
 $my_exercise_list = array();
 $my_exercise_list['0']  = get_lang('AllExercises');

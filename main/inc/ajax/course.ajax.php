@@ -184,7 +184,7 @@ switch ($action) {
         {
             $survey     = Database :: get_course_table(TABLE_SURVEY);
             
-            $sql = "SELECT survey_id as id, title
+            $sql = "SELECT survey_id as id, title, anonymous
             FROM $survey 
             WHERE c_id = %d 
             AND session_id = %d 
@@ -194,6 +194,7 @@ switch ($action) {
             $result = Database::query($sql_query);
             while ($survey = Database::fetch_assoc($result)) 
             {
+                $survey['title'] .= ($survey['anonymous'] == 1) ? ' (' . get_lang('Anonymous') . ')': '';
                 $data[] = array('id' => $survey['id'], 'text' => strip_tags(html_entity_decode($survey['title'])));
             }
             if (!empty($data)) 

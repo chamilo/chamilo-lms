@@ -661,21 +661,25 @@ class SessionManager
 
         //Get survey questions
         $questions = survey_manager::get_questions($surveyId, $courseId);
+
+        //Survey is anonymous?
+        $result = Database::query(sprintf("SELECT anonymous FROM $c_survey WHERE survey_id = %d", $surveyId));
+        $row = Database::fetch_array($result);
+        $anonymous = ($row['anonymous'] == 1) ? true : false;
+
         $table = array();
         foreach ($users as $user)
         {
             $data = array(
-                'lastname'  => $user[1],
-                'firstname' => $user[2],
-                'username'  => $user[3],
+                'lastname'  => ($anonymous ? '***' : $user[1]),
+                'firstname' => ($anonymous ? '***' : $user[2]),
+                'username'  => ($anonymous ? '***' : $user[3]),
             );
 
             //Get questions by user
             $sql = "SELECT sa.question_id, sa.option_id, sqo.option_text, sq.type
             FROM $c_survey_answer sa
-            INNER JOIN $c_survey_question sq ON sq.question_id = sa.question_id "
-            //." INNER JOIN $c_survey s ON sq.survey_id = s.survey_id " 
-            ." 
+            INNER JOIN $c_survey_question sq ON sq.question_id = sa.question_id 
             LEFT JOIN $c_survey_question_option sqo ON sqo.c_id = sa.c_id 
             AND sqo.question_id = sq.question_id 
             AND sqo.question_option_id = sa.option_id 

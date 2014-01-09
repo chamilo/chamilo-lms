@@ -712,7 +712,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             if (!empty($studentId)) {
                 $studentList = array();
                 $studentInfo = UserManager::get_user_info_by_id($studentId);
-                $studentList[] = array('id' => $studentInfo['id'], 'text' => $studentInfo['username']);
+                $studentList[] = array('id' => $studentInfo['user_id'], 'text' => $studentInfo['username'] . ' (' . $studentInfo['firstname'] . ' ' . $studentInfo['lastname'] . ')');
             }
 
             $sessionFilter->addElement('select_ajax', 'student_name', get_lang('SearchStudent'), null, array('url' => $url, 'defaults' => $studentList, 'width' => '400px'), array('class' => 'pull-left'));

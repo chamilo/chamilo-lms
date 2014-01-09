@@ -145,7 +145,7 @@ switch ($action) {
             $result = Database::query($sql_query);
             while ($user = Database::fetch_assoc($result)) 
             {
-                $data[] = array('id' => $user['id'], 'text' => $user['username'] );
+                $data[] = array('id' => $user['id'], 'text' => $user['username'] . ' (' . $user['firstname'] . ' ' . $user['lastname'] . ')');
 
             }
             if (!empty($data)) 

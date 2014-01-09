@@ -607,11 +607,13 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 	echo '<br /><br />';
 
     if ($is_platform_admin && $view == 'admin' && in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'))) {
-        $self = api_get_self();
+        $self       = api_get_self();
+        $ajax_path  = api_get_path(WEB_AJAX_PATH);
+        $script     = '';
 
         //Session Filter
         $sessionFilter = new FormValidator('session_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
-        $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
+        $url = $ajax_path . 'session.ajax.php?a=search_session';
         $sessionList = array();
         $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
         if (!empty($sessionId)) {
@@ -626,7 +628,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         if (!empty($_GET['session_id'])) {
            $a = 'search_course_by_session';
         }
-        $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a='. $a .'&session_id=' . $_GET['session_id'];
+        $url = $ajax_path . 'course.ajax.php?a='. $a .'&session_id=' . $_GET['session_id'];
 
         $courseList = array();
         $courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;
@@ -640,7 +642,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         //Exercise filter    
         if (in_array($display, array('exerciseprogress'))) {
 
-            $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_exercise_by_course&session_id=' . $_GET['session_id'] . '&course_id=' . $_GET['course_id'];
+            $url = $ajax_path .'course.ajax.php?a=search_exercise_by_course&session_id=' . $_GET['session_id'] . '&course_id=' . $_GET['course_id'];
             $exerciseList = array();
             $exerciseId = isset($_GET['exercise_id']) ? $_GET['exercise_id'] : null;
             if (!empty($exerciseId)) {
@@ -678,7 +680,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         //survey filter
         if (in_array($display, array('surveyoverview'))) {
 
-            $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_survey_by_course&session_id=' . $_GET['session_id'] . '&course_id=' . $_GET['course_id'] . '&survey_id=' . $_GET['survey_id'];
+            $url = $ajax_path . 'course.ajax.php?a=search_survey_by_course&session_id=' . $_GET['session_id'] . '&course_id=' . $_GET['course_id'] . '&survey_id=' . $_GET['survey_id'];
             $surveyList = array();
             $surveyId = isset($_GET['survey_id']) ? intval($_GET['survey_id']) : null;
             $courseId = isset($_GET['course_id']) ? intval($_GET['course_id']) : null;
@@ -718,7 +720,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         //Student and profile filter
         if (in_array($display, array('accessoverview'))) {
 
-            $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_user_by_course&session_id=' . $_GET['session_id'] . '&course_id=' . $_GET['course_id'];
+            $url = $ajax_path . 'course.ajax.php?a=search_user_by_course&session_id=' . $_GET['session_id'] . '&course_id=' . $_GET['course_id'];
             $studentList = array();
             $studentId = isset($_GET['student_id']) ? $_GET['student_id'] : null;
             if (!empty($studentId)) {
@@ -738,28 +740,28 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 
             $script = '
                 $("#student_name").on("change", function() {
-                        var date_to     = $(\'#date_to\').val();
-                        var date_from   = $(\'#date_from\').val();
+                        var date_to     = $("#date_to").val();
+                        var date_from   = $("#date_from").val();
                         var sessionId   = $("#session_name").val();
                         var courseId    = $("#course_name").val();
                         var studentId   = $("#student_name").val();
                         window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&student_id="+studentId+"&date_to="+date_to+"&date_from="+date_from;
                     });
                     $("#profile").on("change", function() {
-                        var date_to     = $(\'#date_to\').val();
-                        var date_from   = $(\'#date_from\').val();
+                        var date_to     = $("#date_to").val();
+                        var date_from   = $("#date_from").val();
                         var sessionId   = $("#session_name").val();
                         var courseId    = $("#course_name").val();
                         var profile     = $("#profile").val();
                         window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&profile="+profile+"&date_to="+date_to+"&date_from="+date_from;
                     });
                     $( "#date_from, #date_to").datepicker({
-                        dateFormat:  \'yy-mm-dd\',
+                        dateFormat:  "yy-mm-dd",
                         onSelect: function( selectedDate ) {
                             var filled = areBothFilled();
                             if (filled) {
-                                var date_to     = $(\'#date_to\').val();
-                                var date_from   = $(\'#date_from\').val();
+                                var date_to     = $("#date_to").val();
+                                var date_from   = $("#date_from").val();
                                 var sessionId   = $("#session_name").val();
                                 var courseId    = $("#course_name").val();
                                 var studentId   = $("#student_name").val();
@@ -772,19 +774,19 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         //progress overview and Learning Path progress overview
         if (in_array($display, array('progressoverview', 'lpprogressoverview'))) {
             $script = '
-            $( "#date_from, #date_to").datepicker({
-                        dateFormat:  \'yy-mm-dd\',
-                        onSelect: function( selectedDate ) {
-                            var filled = areBothFilled();
-                            if (filled) {
-                                var date_to     = $(\'#date_to\').val();
-                                var date_from   = $(\'#date_from\').val();
-                                var sessionId   = $("#session_name").val();
-                                var courseId    = $("#course_name").val();
-                                window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&date_to="+date_to+"&date_from="+date_from;
-                            }
+                $( "#date_from, #date_to").datepicker({
+                    dateFormat:  yy-mm-dd,
+                    onSelect: function( selectedDate ) {
+                        var filled = areBothFilled();
+                        if (filled) {
+                            var date_to     = $(#date_to).val();
+                            var date_from   = $(#date_from).val();
+                            var sessionId   = $("#session_name").val();
+                            var courseId    = $("#course_name").val();
+                            window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&date_to="+date_to+"&date_from="+date_from;
                         }
-                    });
+                    }
+                });
             ';
         }
 
@@ -793,8 +795,6 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         $sessionFilter->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to', 'value' => (!empty($_GET['date_to']) ? $_GET['date_to'] : ''), 'style' => 'width:75px' ));
 
         //$sessionFilter->addElement('submit', '', get_lang('Generate'), 'id="generateReport"');
-
-
 
         echo '<div class="">';
         echo $sessionFilter->return_form();

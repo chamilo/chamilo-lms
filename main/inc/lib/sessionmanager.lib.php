@@ -720,6 +720,7 @@ class SessionManager
         //tables
         $session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $user                   = Database::get_main_table(TABLE_MAIN_USER);
+        $course_rel_user        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $workTable              = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
         $workTableAssignment    = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
         $forum                  = Database::get_course_table(TABLE_FORUM);
@@ -742,7 +743,7 @@ class SessionManager
             $users = CourseManager :: get_student_list_from_course_code($course_code, true, $sessionId);
         }*/
         $where = " WHERE course_code = '%s'
-        AND s.status <> 2 and id_session = %s";
+        AND s.status <> 2 ";
 
         $limit = null;
         if (!empty($options['limit'])) {
@@ -758,15 +759,26 @@ class SessionManager
             $order = " ORDER BY ".$options['order'];
         }
 
-        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code
-        FROM $session_course_user s
-        INNER JOIN $user u ON u.user_id = s.id_user
-        $where $order $limit";
-        $sql_query = sprintf($sql, $course['code'], $sessionId);
+        //TODO, fix create report without session
+        $queryVariables = array($course['code']);
+        if (!empty($sessionId)) {
+            $where .= ' AND id_session = %s';
+            $queryVariables[] = $sessionId;
+            $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code
+                FROM $session_course_user s
+                INNER JOIN $user u ON u.user_id = s.id_user
+                $where $order $limit";
+        } else {
+            $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code
+                FROM $course_rel_user s
+                INNER JOIN $user u ON  u.user_id = s.user_id
+                $where $order $limit";
+        }
+
+        $sql_query = vsprintf($sql, $queryVariables);
 
         $rs = Database::query($sql_query);
-        while ($user = Database::fetch_array($rs))
-        {
+        while ($user = Database::fetch_array($rs)) {
             $users[$user['user_id']] = $user;
         }
 

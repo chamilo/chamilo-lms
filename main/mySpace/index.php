@@ -749,7 +749,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $course = api_get_course_info_by_id($courseId);
                 $surveyList = array();
                 $exerciseInfo = survey_manager::get_survey($surveyId, 0, $course['code']);
-                $surveyList[] = array('id' => $exerciseInfo['survey_id'], 'text' => strip_tags($exerciseInfo['title']));
+                $surveyList[] = array('id' => $exerciseInfo['survey_id'], 'text' => strip_tags(html_entity_decode($exerciseInfo['title'])));
             }
             $surveyOverview->addElement('select_ajax', 'survey_name', get_lang('SearchSurvey'), null, array('url' => $url, 'defaults' => $surveyList));
 

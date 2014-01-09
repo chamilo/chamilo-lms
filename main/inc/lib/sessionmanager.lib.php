@@ -614,12 +614,13 @@ class SessionManager
     public static function get_survey_overview($sessionId = 0, $courseId = 0, $surveyId = 0, $date_from, $date_to, $options)
     {
         //tables
-        $session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $user                   = Database::get_main_table(TABLE_MAIN_USER);
-        $tbl_course_lp_view     = Database::get_course_table(TABLE_LP_VIEW);
-        $c_survey               = Database::get_course_table(TABLE_SURVEY);
-        $c_survey_answer        = Database::get_course_table(TABLE_SURVEY_ANSWER);
-        $c_survey_question      = Database::get_course_table(TABLE_SURVEY_QUESTION);
+        $session_course_user        = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $user                       = Database::get_main_table(TABLE_MAIN_USER);
+        $tbl_course_lp_view         = Database::get_course_table(TABLE_LP_VIEW);
+        $c_survey                   = Database::get_course_table(TABLE_SURVEY);
+        $c_survey_answer            = Database::get_course_table(TABLE_SURVEY_ANSWER);
+        $c_survey_question          = Database::get_course_table(TABLE_SURVEY_QUESTION);
+        $c_survey_question_option   = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 
         $course = api_get_course_info_by_id($courseId);
 
@@ -671,10 +672,11 @@ class SessionManager
             );
 
             //Get questions by user
-            $sql = "SELECT sa.question_id, sa.option_id
+            $sql = "SELECT sa.question_id, sa.option_id, sqo.option_text
             FROM $c_survey_answer sa
-            INNER JOIN $c_survey_question sq ON sq.question_id = sa.question_id
-            INNER JOIN $c_survey s ON sq.survey_id = s.survey_id
+            INNER JOIN $c_survey_question sq ON sq.question_id = sa.question_id "
+            //." INNER JOIN $c_survey s ON sq.survey_id = s.survey_id "
+            ." INNER JOIN $c_survey_question_option sqo ON sqo.c_id = sa.c_id AND sqo.survey_id = sq.survey_id AND sqo.question_id = sq.question_id AND sqo.question_option_id = sa.option_id
             WHERE sa.survey_id = %d AND sa.c_id = %d AND sa.user = %d" . $where_survey;
 
             $sql_query = sprintf($sql, $surveyId, $courseId, $user['user_id']);
@@ -690,7 +692,7 @@ class SessionManager
             //Match course lessons with user progress
             foreach ($questions as $question_id => $question)
             {
-                $data[$question_id] = $user_questions[$question_id]['option_id'];
+                $data[$question_id] = $user_questions[$question_id]['option_text'];
             }
 
             $table[] = $data;

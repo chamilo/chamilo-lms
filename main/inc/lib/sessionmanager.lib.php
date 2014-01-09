@@ -641,11 +641,11 @@ class SessionManager
             $order = " ORDER BY ".$options['order'];
         }
 
-        $where_survey = '';
+        /*$where_survey = '';
         if (!empty($date_to) && !empty($date_from)) {
             $where_survey = sprintf(" AND s.avail_from >= '%s'
                         AND s.avail_till <= '%s'", $date_from, $date_to);
-        }
+        }*/
 
         $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code
         FROM $session_course_user s
@@ -671,17 +671,17 @@ class SessionManager
             );
 
             //Get questions by user
-            $sql = "SELECT sa.question_id, sa.option_id, sqo.option_text
+            $sql = "SELECT sa.question_id, sa.option_id, sqo.option_text, sq.type
             FROM $c_survey_answer sa
             INNER JOIN $c_survey_question sq ON sq.question_id = sa.question_id "
-            //." INNER JOIN $c_survey s ON sq.survey_id = s.survey_id "
-            ." INNER JOIN $c_survey_question_option sqo ON sqo.c_id = sa.c_id 
-            WHERE sqo.survey_id = sq.survey_id 
+            //." INNER JOIN $c_survey s ON sq.survey_id = s.survey_id " 
+            ." 
+            LEFT JOIN $c_survey_question_option sqo ON sqo.c_id = sa.c_id 
             AND sqo.question_id = sq.question_id 
             AND sqo.question_option_id = sa.option_id 
-            AND sa.survey_id = %d AND sa.c_id = %d AND sa.user = %d 
-            " . $where_survey;
-
+            AND sqo.survey_id = sq.survey_id 
+            WHERE sa.survey_id = %d AND sa.c_id = %d AND sa.user = %d 
+            "; //. $where_survey;
             $sql_query = sprintf($sql, $surveyId, $courseId, $user['user_id']);
 
             $result = Database::query($sql_query);
@@ -695,7 +695,11 @@ class SessionManager
             //Match course lessons with user progress
             foreach ($questions as $question_id => $question)
             {
-                $data[$question_id] = $user_questions[$question_id]['option_text'];
+                $option_text = 'option_text';
+                if ($user_questions[$question_id]['type'] == 'open') {
+                    $option_text = 'option_id';
+                }
+                $data[$question_id] = $user_questions[$question_id][$option_text];
             }
 
             $table[] = $data;

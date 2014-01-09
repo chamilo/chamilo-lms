@@ -617,7 +617,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             $sessionInfo = SessionManager::fetch($sessionId);
             $sessionList[] = array('id' => $sessionInfo['id'], 'text' => $sessionInfo['name']);
         }
-        $sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchSession'), null, array('url' => $url, 'defaults' => $sessionList));
+        $sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchSession'), null, array('url' => $url, 'defaults' => $sessionList, 'width' => '400px'));
         $courseListUrl = api_get_self();
 
         echo '<div class="">';
@@ -648,7 +648,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     $courseInfo = api_get_course_info_by_id($courseId);
                     $courseList[] = array('id' => $courseInfo['real_id'], 'text' => $courseInfo['name']);
                 }
-                $courseFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList));
+                $courseFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList, 'width' => '400px'));
                 $courseListUrl = api_get_self();
 
                 echo '<div class="">';
@@ -678,10 +678,10 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     $studentList[] = array('id' => $studentInfo['id'], 'text' => $studentInfo['username']);
                 }
 
-                $studentFilter->addElement('text', 'from', get_lang('From'), array('id' => 'date_from', 'value' => (!empty($_GET['date_from']) ? $_GET['date_from'] : '') ));
-                $studentFilter->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to', 'value' => (!empty($_GET['date_to']) ? $_GET['date_to'] : '') ));
+                $studentFilter->addElement('text', 'from', get_lang('From'), array('id' => 'date_from', 'value' => (!empty($_GET['date_from']) ? $_GET['date_from'] : ''), 'style' => 'width:75px' ));
+                $studentFilter->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to', 'value' => (!empty($_GET['date_to']) ? $_GET['date_to'] : ''), 'style' => 'width:75px' ));
 
-                $studentFilter->addElement('select_ajax', 'student_name', get_lang('SearchStudent'), null, array('url' => $url, 'defaults' => $studentList), array('class' => 'pull-left'));
+                $studentFilter->addElement('select_ajax', 'student_name', get_lang('SearchStudent'), null, array('url' => $url, 'defaults' => $studentList, 'width' => '400px'), array('class' => 'pull-left'));
                 $options = array(
                     ''              => get_lang('Select'),
                     STUDENT         => get_lang('Student'),
@@ -751,10 +751,10 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $exerciseInfo = survey_manager::get_survey($surveyId, 0, $course['code']);
                 $surveyList[] = array('id' => $exerciseInfo['survey_id'], 'text' => strip_tags(html_entity_decode($exerciseInfo['title'])));
             }
-            $surveyOverview->addElement('select_ajax', 'survey_name', get_lang('SearchSurvey'), null, array('url' => $url, 'defaults' => $surveyList));
+            $surveyOverview->addElement('select_ajax', 'survey_name', get_lang('SearchSurvey'), null, array('url' => $url, 'defaults' => $surveyList, 'width' => '400px'));
 
-            $surveyOverview->addElement('text', 'from', get_lang('From'), array('id' => 'date_from', 'value' => (!empty($_GET['date_from']) ? $_GET['date_from'] : '') ));
-            $surveyOverview->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to', 'value' => (!empty($_GET['date_to']) ? $_GET['date_to'] : '') ));
+            $surveyOverview->addElement('text', 'from', get_lang('From'), array('id' => 'date_from', 'value' => (!empty($_GET['date_from']) ? $_GET['date_from'] : ''), 'style' => 'width:75px' ));
+            $surveyOverview->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to', 'value' => (!empty($_GET['date_to']) ? $_GET['date_to'] : ''), 'style' => 'width:75px' ));
 
             $courseListUrl = api_get_self();
 
@@ -809,10 +809,10 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     $exerciseInfo = current(get_exercise_by_id($exerciseId, $_GET['course_id']));
                     $exerciseList[] = array('id' => $exerciseInfo['id'], 'text' => html_entity_decode($exerciseInfo['title']));
                 }
-                $exerciseFilter->addElement('select_ajax', 'exercise_name', get_lang('SearchExercise'), null, array('url' => $url, 'defaults' => $exerciseList));
+                $exerciseFilter->addElement('select_ajax', 'exercise_name', get_lang('SearchExercise'), null, array('url' => $url, 'defaults' => $exerciseList, 'width' => '400px'));
 
-                $exerciseFilter->addElement('text', 'from', get_lang('From'), array('id' => 'date_from', 'value' => $_GET['date_from']));
-                $exerciseFilter->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to', 'value' => $_GET['date_to']));
+                $exerciseFilter->addElement('text', 'from', get_lang('From'), array('id' => 'date_from', 'value' => $_GET['date_from'], 'style' => 'width:75px'));
+                $exerciseFilter->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to', 'value' => $_GET['date_to'], 'style' => 'width:75px'));
 
 
                 $courseListUrl = api_get_self();

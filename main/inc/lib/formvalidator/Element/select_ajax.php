@@ -53,13 +53,18 @@ class HTML_QuickForm_Select_Ajax extends HTML_QuickForm_select
             $dataCondition = '$("#'.$this->getAttribute('name').'").select2("data", '.$result.')';
             $tags = ', tags : function() { return '.$result.'} ';
         }
+        $width = 'element';
+        $givenWidth = $this->getAttribute('width');
+        if (!empty($givenWidth)) {
+            $width = $givenWidth;
+        }
 
         $html .= '<script>
                 $(function() {
                     $("#'.$this->getAttribute('name').'").select2({
                         placeholder: "'.get_lang('SelectAnOption').'",
                         allowClear: true,
-                        width: "element",
+                        width: "'.$width.'",
                         minimumInputLength: 2,
                         // instead of writing the function to execute the request we use Select2s convenient helper
                         ajax: {

@@ -21,7 +21,7 @@ class AnnouncementManager {
         return array('((user_name))', '((user_firstname))', '((user_lastname))', '((teacher_name))', '((teacher_email))', '((course_title))', '((course_link))');
     }
 
-    public static function parse_content($content, $course_code, $announce = 0, $ann=0) {
+    public static function parse_content($content, $course_code) {
         $reader_info = api_get_user_info(api_get_user_id());
         $course_info = api_get_course_info($course_code);
         $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
@@ -44,14 +44,13 @@ class AnnouncementManager {
         $data['course_title'] = $course_info['name'];
         $data['course_link'] = Display::url($course_link, $course_link);
        
-       
-
         $content = str_replace(self::get_tags(), $data, $content);
         return $content;
     }
     
     /**
      * parse announcement content when sending an email. It parses only teacher data
+     *  @author yoselyn castillo
      * @param	string content
      * @param	int course code
      * @return	string with the parsed content

@@ -607,6 +607,8 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 	echo '<br /><br />';
 
     if ($is_platform_admin && $view == 'admin' && in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'))) {
+        $self = api_get_self();
+
         //Session Filter
         $sessionFilter = new FormValidator('session_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
         $url = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_session';
@@ -655,7 +657,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                         var sessionId   = $("#session_name").val();
                         var courseId    = $("#course_name").val();
                         var exerciseId  = $("#exercise_name").val();
-                        window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&exercise_id="+exerciseId+"&date_to="+date_to+"&date_from="+date_from;
+                        window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&exercise_id="+exerciseId+"&date_to="+date_to+"&date_from="+date_from;
                     });
                     $("#date_from, #date_to").datepicker({
                         dateFormat:  "yy-mm-dd",
@@ -667,7 +669,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                                 var sessionId   = $("#session_name").val();
                                 var courseId    = $("#course_name").val();
                                 var exerciseId  = $("#exercise_name").val();
-                                window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&exercise_id="+exerciseId+"&date_to="+date_to+"&date_from="+date_from;
+                                window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&exercise_id="+exerciseId+"&date_to="+date_to+"&date_from="+date_from;
                             }
                         }
                     });';
@@ -695,7 +697,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     var sessionId   = $("#session_name").val();
                     var courseId    = $("#course_name").val();
                     var surveyId    = $("#survey_name").val();
-                    window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&survey_id="+surveyId+"&date_to="+date_to+"&date_from="+date_from;
+                    window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&survey_id="+surveyId+"&date_to="+date_to+"&date_from="+date_from;
                 });
                 $("#date_from, #date_to").datepicker({
                     dateFormat:  "yy-mm-dd",
@@ -707,7 +709,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                             var sessionId   = $("#session_name").val();
                             var courseId    = $("#course_name").val();
                             var surveyId    = $("#survey_name").val();
-                            window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&survey_id="+surveyId+"&date_to="+date_to+"&date_from="+date_from;
+                            window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&survey_id="+surveyId+"&date_to="+date_to+"&date_from="+date_from;
                         }
                     }
                 });';
@@ -741,7 +743,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                         var sessionId   = $("#session_name").val();
                         var courseId    = $("#course_name").val();
                         var studentId   = $("#student_name").val();
-                        window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&student_id="+studentId+"&date_to="+date_to+"&date_from="+date_from;
+                        window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&student_id="+studentId+"&date_to="+date_to+"&date_from="+date_from;
                     });
                     $("#profile").on("change", function() {
                         var date_to     = $(\'#date_to\').val();
@@ -749,7 +751,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                         var sessionId   = $("#session_name").val();
                         var courseId    = $("#course_name").val();
                         var profile     = $("#profile").val();
-                        window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&profile="+profile+"&date_to="+date_to+"&date_from="+date_from;
+                        window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&profile="+profile+"&date_to="+date_to+"&date_from="+date_from;
                     });
                     $( "#date_from, #date_to").datepicker({
                         dateFormat:  \'yy-mm-dd\',
@@ -761,19 +763,38 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                                 var sessionId   = $("#session_name").val();
                                 var courseId    = $("#course_name").val();
                                 var studentId   = $("#student_name").val();
-                                window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&student_id="+studentId+"&date_to="+date_to+"&date_from="+date_from;
+                                window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&student_id="+studentId+"&date_to="+date_to+"&date_from="+date_from;
                             }
                         }
                     });';
         }
 
+        //progress overview and Learning Path progress overview
+        if (in_array($display, array('progressoverview', 'lpprogressoverview'))) {
+            $script = '
+            $( "#date_from, #date_to").datepicker({
+                        dateFormat:  \'yy-mm-dd\',
+                        onSelect: function( selectedDate ) {
+                            var filled = areBothFilled();
+                            if (filled) {
+                                var date_to     = $(\'#date_to\').val();
+                                var date_from   = $(\'#date_from\').val();
+                                var sessionId   = $("#session_name").val();
+                                var courseId    = $("#course_name").val();
+                                window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&date_to="+date_to+"&date_from="+date_from;
+                            }
+                        }
+                    });
+            ';
+        }
+
         //date filter
         $sessionFilter->addElement('text', 'from', get_lang('From'), array('id' => 'date_from', 'value' => (!empty($_GET['date_from']) ? $_GET['date_from'] : ''), 'style' => 'width:75px' ));
         $sessionFilter->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to', 'value' => (!empty($_GET['date_to']) ? $_GET['date_to'] : ''), 'style' => 'width:75px' ));
-        
-        $sessionFilter->addElement('submit', '', get_lang('Generate'), 'id="generateReport"');
 
-        $courseListUrl = api_get_self();
+        //$sessionFilter->addElement('submit', '', get_lang('Generate'), 'id="generateReport"');
+
+
 
         echo '<div class="">';
         echo $sessionFilter->return_form();
@@ -782,12 +803,12 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         $(function() {
             $("#session_name").on("change", function() {
                var sessionId = $(this).val();
-               window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId;
+               window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId;
             });
             $("#course_name").on("change", function() {
                 var sessionId = $("#session_name").val();
                 var courseId  = $("#course_name").val();
-                window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId;
+                window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId;
             });
             ' . $script . '
         });

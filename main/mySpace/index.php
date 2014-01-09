@@ -775,12 +775,12 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         if (in_array($display, array('progressoverview', 'lpprogressoverview'))) {
             $script = '
                 $( "#date_from, #date_to").datepicker({
-                    dateFormat:  yy-mm-dd,
+                    dateFormat:  "yy-mm-dd",
                     onSelect: function( selectedDate ) {
                         var filled = areBothFilled();
                         if (filled) {
-                            var date_to     = $(#date_to).val();
-                            var date_from   = $(#date_from).val();
+                            var date_to     = $("#date_to").val();
+                            var date_from   = $("#date_from").val();
                             var sessionId   = $("#session_name").val();
                             var courseId    = $("#course_name").val();
                             window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&date_to="+date_to+"&date_from="+date_from;
@@ -832,9 +832,9 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         if (!empty($_GET['course_id'])) {
             if(!empty($_GET['date_to']) && (!empty($_GET['date_from']))) {
                 if (!empty($_GET['student_id'])) {
-                    echo MySpace::display_tracking_access_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['student_id']), '', $_GET['date_to'], $_GET['date_from']);
+                    echo MySpace::display_tracking_access_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['student_id']), '',  $_GET['date_from'], $_GET['date_to']);
                 } else if (!empty($_GET['profile'])) {
-                    echo MySpace::display_tracking_access_overview(intval($_GET['session_id']), intval($_GET['course_id']), '', $_GET['profile'], $_GET['date_to'], $_GET['date_from']);
+                    echo MySpace::display_tracking_access_overview(intval($_GET['session_id']), intval($_GET['course_id']), '', $_GET['profile'], $_GET['date_from'], $_GET['date_to']);
                 } else {
                     Display::display_warning_message(get_lang('ChooseStudentOrProfile'));
                 }
@@ -846,20 +846,20 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }
     } else if($display == 'lpprogressoverview') {
         if (!empty($_GET['course_id'])) {
-            echo MySpace::display_tracking_lp_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), $_GET['date_to'], $_GET['date_from']);
+            echo MySpace::display_tracking_lp_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), $_GET['date_from'], $_GET['date_to']);
         } else {
             Display::display_warning_message(get_lang('ChooseCourse'));
         }
     } else if($display == 'progressoverview') {
         if (!empty($_GET['course_id'])) {
-            echo MySpace::display_tracking_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), $_GET['date_to'], $_GET['date_from']);
+            echo MySpace::display_tracking_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), $_GET['date_from'], $_GET['date_to']);
         } else {
             Display::display_warning_message(get_lang('ChooseCourse'));
         }
     } else if($display == 'exerciseprogress') {
         if (!empty($_GET['course_id'])) {
             if (!empty($_GET['exercise_id'])) {
-                echo MySpace::display_tracking_exercise_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']), $_GET['date_to'], $_GET['date_from']);
+                echo MySpace::display_tracking_exercise_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']), $_GET['date_from'], $_GET['date_to']);
             } else {
                 Display::display_warning_message(get_lang('ChooseExercise'));
             }
@@ -869,7 +869,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
     } else if($display == 'surveyoverview') {
         if (!empty($_GET['course_id'])) {
             if (!empty($_GET['survey_id'])) {
-                echo MySpace::display_survey_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['survey_id']), $_GET['date_to'], $_GET['date_from']);
+                echo MySpace::display_survey_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['survey_id']), $_GET['date_from'], $_GET['date_to']);
             } else {
                 Display::display_warning_message(get_lang('ChooseSurvey'));
             }

@@ -507,7 +507,7 @@ class SessionManager
      * @param array options order and limit keys
      * @return array table with user name, lp name, progress
      */
-    public static function get_session_lp_progress($sessionId = 0, $courseId = 0, $options)
+    public static function get_session_lp_progress($sessionId = 0, $courseId = 0, $date_from, $date_to, $options)
     {
         //tables
         $session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -705,7 +705,7 @@ class SessionManager
      * @param array options order and limit keys
      * @return array table with user name, lp name, progress
      */
-    public static function get_session_progress($sessionId, $courseId, $options)
+    public static function get_session_progress($sessionId, $courseId, $date_from, $date_to, $options)
     {
         if (empty($sessionId)) {
             $sessionId = 0;
@@ -1023,7 +1023,7 @@ class SessionManager
         }
         if (!empty($date_to) && !empty($date_from)) {
             $where .= sprintf(" AND a.login_course_date >= '%s 00:00:00'
-                        AND a.login_course_date <= '%s 23:59:59'", $date_to, $date_from);
+                        AND a.login_course_date <= '%s 23:59:59'", $date_from, $date_to);
         }
 
         $limit = null;

@@ -274,7 +274,7 @@ class MySpace {
      * Display a sortable table that contains an overview off all the progress of the user in a session
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
-    public function display_tracking_lp_progress_overview($sessionId = '', $courseId = '') {
+    public function display_tracking_lp_progress_overview($sessionId = '', $courseId = '', $date_from, $date_to) {
 
         $course = api_get_course_info_by_id($courseId);
         /**
@@ -316,7 +316,7 @@ class MySpace {
 
         $action_links = '';
         // jqgrid will use this URL to do the selects
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_lp_progress&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId);
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_lp_progress&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId) . '&date_to=' . $date_to . '&date_from=' . $date_from;
 
         //Table Id
         $tableId = 'lpProgress';
@@ -351,7 +351,7 @@ class MySpace {
      * @return  string  HTML array of results formatted for gridJS
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
-    function display_tracking_exercise_progress_overview($sessionId = 0, $courseId = 0, $exerciseId = 0, $date_to, $date_from) {
+    function display_tracking_exercise_progress_overview($sessionId = 0, $courseId = 0, $exerciseId = 0, $date_from, $date_to) {
         /**
          * Column names
          * The column order is important. Check $column variable in the main/inc/ajax/model.ajax.php file
@@ -417,7 +417,7 @@ class MySpace {
      * Display a sortable table that contains an overview off all the progress of the user in a session
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
-    function display_survey_overview($sessionId = 0, $courseId = 0, $surveyId = 0, $date_to, $date_from) {
+    function display_survey_overview($sessionId = 0, $courseId = 0, $surveyId = 0, $date_from, $date_to) {
 
         $course = api_get_course_info_by_id($courseId);
         /**
@@ -484,7 +484,7 @@ class MySpace {
      * Display a sortable table that contains an overview off all the progress of the user in a session
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
-    function display_tracking_progress_overview($sessionId = 0, $courseId = 0) {
+    function display_tracking_progress_overview($sessionId = 0, $courseId = 0,  $date_from, $date_to) {
 
        //The order is important you need to check the the $column variable in the model.ajax.php file
         $columns = array(
@@ -582,7 +582,7 @@ class MySpace {
 
         $action_links = '';
         // jqgrid will use this URL to do the selects
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_progress&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId);
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_progress&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId) . '&date_to=' . $date_to . '&date_from=' . $date_from;
 
         //Table Id
         $tableId = 'progressOverview';
@@ -654,7 +654,7 @@ class MySpace {
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      * @version Chamilo 1.9.6
      */
-    function display_tracking_access_overview($sessionId = 0, $courseId = 0, $studentId = '', $profile = '', $date_to, $date_from) {
+    function display_tracking_access_overview($sessionId = 0, $courseId = 0, $studentId = '', $profile = '', $date_from, $date_to) {
         //The order is important you need to check the the $column variable in the model.ajax.php file
         $columns = array(
             get_lang('LoginDate'),

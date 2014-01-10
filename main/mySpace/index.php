@@ -746,7 +746,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     url = url + "&student_id=" + $("#student_name").val();
                 }
                 if (!isEmpty($("#profile").val())) {
-                    url = url + "&profile=" + $("#profile_name").val();
+                    url = url + "&profile=" + $("#profile").val();
                 }
                 if (!isEmpty($("#survey_name").val())) {
                     url = url + "&survey_id=" + $("#survey_name").val();
@@ -790,7 +790,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 }
                 if (typeof $("#student_name") == "object") {
                     var studentId = $("#student_name").val();
-                    select2("#student_name", "' . $ajax_path . 'course.ajax.php?a=search_user_by_course&session_id=" + sessionId + "&course_id=" + courseId "&student_id=" + studentId);
+                    select2("#student_name", "' . $ajax_path . 'course.ajax.php?a=search_user_by_course&session_id=" + sessionId + "&course_id=" + courseId + "&student_id=" + studentId);
                 }
             });
             ' . $script . '

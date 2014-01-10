@@ -597,7 +597,7 @@ class UserGroup extends Model
      */
     public function getUsergroupsPagination($sidx, $sord, $start, $limit)
     {
-        $sord = in_array(strtolower($sord), array('asc', 'desc')) ? $sord : 'asc';
+        $sord = in_array(strtolower($sord), array('asc', 'desc')) ? $sord : 'desc';
 
         $start = intval($start);
         $limit = intval($limit);

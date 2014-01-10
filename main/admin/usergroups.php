@@ -48,12 +48,13 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = array(
-    get_lang('Name'), get_lang('Users'), get_lang('Courses'), get_lang('Sessions'), get_lang('Actions')
+    get_lang('Id'), get_lang('Name'), get_lang('Users'), get_lang('Courses'), get_lang('Sessions'), get_lang('Actions')
 );
 
 //Column config
 $column_model   = array(
-    array('name'=>'name',           'index'=>'name',        'width'=>'35',   'align'=>'left'),
+    array('name'=>'id',             'index'=>'id',          'width'=>'5',  'align'=>'left'),
+    array('name'=>'name',           'index'=>'name',        'width'=>'35',  'align'=>'left'),
     array('name'=>'users',    		'index'=>'users', 		'width'=>'15',  'align'=>'left'),
     array('name'=>'courses',    	'index'=>'courses', 	'width'=>'15',  'align'=>'left'),
     array('name'=>'sessions',    	'index'=>'sessions', 	'width'=>'15',  'align'=>'left'),
@@ -64,7 +65,8 @@ $column_model   = array(
 $extra_params['autowidth'] = 'true';
 //height auto
 $extra_params['height'] = 'auto';
-
+$extra_params['sortname'] = 'name';
+$extra_params['sortorder'] = 'desc';
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
     return \''
@@ -80,7 +82,7 @@ $action_links = 'function action_formatter (cellvalue, options, rowObject) {
 $(function() {
 <?php
     // grid definition see the $usergroup>display() function
-    echo Display::grid_js('usergroups',  $url,$columns, $column_model, $extra_params, array(), $action_links, true);
+    echo Display::grid_js('usergroups', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 ?>
 });
 </script>

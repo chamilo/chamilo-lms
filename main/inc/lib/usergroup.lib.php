@@ -597,7 +597,7 @@ class UserGroup extends Model
      */
     public function getUsergroupsPagination($sidx, $sord, $start, $limit)
     {
-        $sord = in_array(strtolower($sord), array('asc', 'desc')) ? $sord : 'desc';
+        $sord = in_array(strtolower($sord), array('asc', 'desc')) ? $sord : 'asc';
 
         $start = intval($start);
         $limit = intval($limit);
@@ -626,7 +626,7 @@ class UserGroup extends Model
             }
             $result = $new_result;
         }
-        $columns = array('name', 'users', 'courses','sessions');
+        $columns = array('id', 'name', 'users', 'courses','sessions');
 
         if (!in_array($sidx, $columns)) {
             $sidx = 'name';
@@ -634,6 +634,7 @@ class UserGroup extends Model
 
         // Multidimensional sort
         $result = msort($result, $sidx, $sord);
+
         return $result;
     }
 

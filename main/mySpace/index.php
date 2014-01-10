@@ -607,8 +607,11 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 	echo '<br /><br />';
 
     if ($is_platform_admin && $view == 'admin' && in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'))) {
+        //selft script
         $self       = api_get_self();
+        //ajax path
         $ajax_path  = api_get_path(WEB_AJAX_PATH);
+        //script initiatizion
         $script     = '';
 
         //Session Filter
@@ -715,14 +718,14 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $studentList[] = array('id' => $studentInfo['user_id'], 'text' => $studentInfo['username'] . ' (' . $studentInfo['firstname'] . ' ' . $studentInfo['lastname'] . ')');
             }
 
-            $sessionFilter->addElement('select_ajax', 'student_name', get_lang('SearchStudent'), null, array('url' => $url, 'defaults' => $studentList, 'width' => '400px'), array('class' => 'pull-left'));
+            $sessionFilter->addElement('select_ajax', 'student_name', get_lang('SearchStudent'), null, array('url' => $url, 'defaults' => $studentList, 'width' => '400px', 'class' => 'pull-right'));
             $options = array(
                 ''              => get_lang('Select'),
                 STUDENT         => get_lang('Student'),
                 COURSEMANAGER   => get_lang('CourseManager'),
                 DRH             => get_lang('Drh'),
                 );
-            $sessionFilter->addElement('select', 'profile', get_lang('Profile'),$options, array('id' => 'profile'));
+            $sessionFilter->addElement('select', 'profile', get_lang('Profile'),$options, array('id' => 'profile', 'class' => 'pull-left'));
 
             $script = '
                 $("#student_name").on("change", function() {
@@ -781,21 +784,59 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             $sessionFilter->addElement('text', 'from', get_lang('From'), array('id' => 'date_from', 'value' => (!empty($_GET['date_from']) ? $_GET['date_from'] : ''), 'style' => 'width:75px' ));
             $sessionFilter->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to', 'value' => (!empty($_GET['date_to']) ? $_GET['date_to'] : ''), 'style' => 'width:75px' ));
         }
-        //$sessionFilter->addElement('submit', '', get_lang('Generate'), 'id="generateReport"');
+        $sessionFilter->addElement('submit', '', get_lang('Generate'), 'id="generateReport"');
 
         echo '<div class="">';
         echo $sessionFilter->return_form();
         echo '</div>';
+        $a = 'search_course';
+        if (!empty($_GET['session_id'])) {
+           $a = 'search_course_by_session';
+        }
+        $url = $ajax_path . 'course.ajax.php?a='. $a .'&session_id=' . $_GET['session_id'];
         echo '<script>
         $(function() {
-            $("#session_name").on("change", function() {
-               var sessionId = $(this).val();
-               window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId;
+            $("#generateReport").click(function(e){
+                url = "'.$self.'?view=admin&display='.$display.'";
+                if (!isEmpty($("#session_name").val())) {
+                    url = url + "&session_id=" + $("#session_name").val();
+                }
+                if (!isEmpty($("#course_name").val())) {
+                    url = url + "&course_id=" + $("#course_name").val();
+                }
+                if (!isEmpty($("#student_name").val())) {
+                    url = url + "&student_id=" + $("#student_name").val();
+                }
+                if (!isEmpty($("#profile").val())) {
+                    url = url + "&profile=" + $("#profile_name").val();
+                }
+                if (!isEmpty($("#survey_name").val())) {
+                    url = url + "&survey_id=" + $("#survey_name").val();
+                }
+                if (!isEmpty($("#exercise_name").val())) {
+                    url = url + "&exercise_id=" + $("#exercise_name").val();
+                }
+                if (!isEmpty($("#date_from").val()) && !isEmpty($("#date_to").val())) {
+                    url = url + "&date_from=" + $("#date_from").val() + "&date_to=" + $("#date_to").val();
+                }
+                window.location = url;
+                e.preventDefault();
             });
+            $("#session_name").on("change", function() {
+                var sessionId = $(this).val();
+                //window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId;
+                select2("#course_name", "' .  $ajax_path . 'course.ajax.php?a=search_course_by_session&session_id=" + sessionId);
+            });
+
+            /*$("#course_name").attr("title", "test title");
+            var tip_options = {
+                placement : "right"
+            }
+            $("#course_name").tooltip(tip_options);*/
+
             $("#course_name").on("change", function() {
                 var sessionId = $("#session_name").val();
-                var courseId  = $("#course_name").val();
-                window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId;
+                //select2("#course_name", "' .  $ajax_path . 'course.ajax.php?a=search_course&session_id=" + sessionId);
             });
             ' . $script . '
         });
@@ -806,9 +847,39 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             }
             return returnValue;
         }
+        function isEmpty(str) {
+            return (!str || 0 === str.length);
+        }
+        function select2(divId, url) {
+            if (typeof $(divId).select2 == "function" && isEmpty($(divId).val())) {
+                $(divId).select2("destroy");
+            }
+            $(divId).select2({
+                placeholder: "Elegir una opción",
+                allowClear: true,
+                width: "400px",
+                minimumInputLength: 2,
+                // instead of writing the function to execute the request we use Select2s convenient helper
+                ajax: {
+                    url: url,
+                    dataType: "json",
+                    data: function (term, page) {
+                        return {
+                            q: term, // search term
+                            page_limit: 10,
+                        };
+                    },
+                    results: function (data, page) { // parse the results into the format expected by Select2.
+                                // since we are using custom formatting functions we do not need to alter remote JSON data
+                        return {
+                            results: data
+                        };
+                    }
+                }
+            });
+        }
         </script>';
-        
-        
+
     }
 
 	if ($display === 'useroverview') {

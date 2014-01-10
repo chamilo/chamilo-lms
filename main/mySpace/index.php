@@ -655,29 +655,6 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             }
             $sessionFilter->addElement('select_ajax', 'exercise_name', get_lang('SearchExercise'), null, array('url' => $url, 'defaults' => $exerciseList, 'width' => '400px'));
 
-            $script = '
-                    $("#exercise_name").on("change", function() {
-                        var date_to     = $("#date_to").val();
-                        var date_from   = $("#date_from").val();
-                        var sessionId   = $("#session_name").val();
-                        var courseId    = $("#course_name").val();
-                        var exerciseId  = $("#exercise_name").val();
-                        window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&exercise_id="+exerciseId+"&date_to="+date_to+"&date_from="+date_from;
-                    });
-                    $("#date_from, #date_to").datepicker({
-                        dateFormat:  "yy-mm-dd",
-                        onSelect: function( selectedDate ) {
-                            var filled = areBothFilled();
-                            if (filled) {
-                                var date_to     = $("#date_to").val();
-                                var date_from   = $("#date_from").val();
-                                var sessionId   = $("#session_name").val();
-                                var courseId    = $("#course_name").val();
-                                var exerciseId  = $("#exercise_name").val();
-                                window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&exercise_id="+exerciseId+"&date_to="+date_to+"&date_from="+date_from;
-                            }
-                        }
-                    });';
         }
 
         //survey filter
@@ -696,14 +673,6 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             }
             $sessionFilter->addElement('select_ajax', 'survey_name', get_lang('SearchSurvey'), null, array('url' => $url, 'defaults' => $surveyList, 'width' => '400px'));
 
-            $script = '
-                $("#survey_name").on("change", function() {
-                    var sessionId   = $("#session_name").val();
-                    var courseId    = $("#course_name").val();
-                    var surveyId    = $("#survey_name").val();
-                    //window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&survey_id="+surveyId;
-                });
-                ';
         }
 
         //Student and profile filter
@@ -822,6 +791,10 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 window.location = url;
                 e.preventDefault();
             });
+            $( "#date_from, #date_to").datepicker({
+                dateFormat:  "yy-mm-dd"
+            });
+                        
             $("#session_name").on("change", function() {
                 var sessionId = $(this).val();
                 //window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId;
@@ -836,11 +809,15 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 
             $("#course_name").on("change", function() {
                 var sessionId = $("#session_name").val();
+                var courseId = $("#course_name").val();
                 //select2("#course_name", "' .  $ajax_path . 'course.ajax.php?a=search_course&session_id=" + sessionId);
                 if (typeof $("#survey_name") == "object") {
-                    var courseId = $("#course_name").val();
                     var surveyId = $("#survey_name").val();
                     select2("#survey_name", "'.$ajax_path . 'course.ajax.php?a=search_survey_by_course&session_id=" + sessionId + "&course_id=" + courseId + "&survey_id=" + surveyId);
+                }
+                if (typeof $("#exercise_name") == "object") {
+                    var exerciseId = $("#exercise_name").val();
+                    select2("#exercise_name", "'.$ajax_path . 'course.ajax.php?a=search_exercise_by_course&session_id=" + sessionId + "&course_id=" + courseId + "&exercise_id=" + exerciseId);
                 }
             });
             ' . $script . '

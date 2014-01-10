@@ -108,7 +108,7 @@ class CourseRestorer
 	 * Set the file-option
 	 * @param constant $options What to do with files with same name (FILE_SKIP, FILE_RENAME or FILE_OVERWRITE)
 	 */
-    function set_file_option($option)
+    function set_file_option($option=FILE_OVERWRITE)
     {
 		$this->file_option = $option;
 	}

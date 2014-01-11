@@ -779,7 +779,9 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             $("#course_name").on("change", function() {
                 var sessionId = $("#session_name").val();
                 var courseId = $("#course_name").val();
-                //select2("#course_name", "'. $ajax_path . 'course.ajax.php?a=search_course&session_id=" + sessionId);
+                if (isEmpty(sessionId)) {
+                    select2("#course_name", "'. $ajax_path . 'course.ajax.php?a=search_course&session_id=" + sessionId);
+                }
                 if (typeof $("#survey_name") == "object") {
                     var surveyId = $("#survey_name").val();
                     select2("#survey_name", "' . $ajax_path . 'course.ajax.php?a=search_survey_by_course&session_id=" + sessionId + "&course_id=" + courseId + "&survey_id=" + surveyId);
@@ -790,7 +792,12 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 }
                 if (typeof $("#student_name") == "object") {
                     var studentId = $("#student_name").val();
-                    select2("#student_name", "' . $ajax_path . 'course.ajax.php?a=search_user_by_course&session_id=" + sessionId + "&course_id=" + courseId + "&student_id=" + studentId);
+                    urlajax = "' . $ajax_path . 'course.ajax.php?a=search_user_by_course&course_id=" + courseId + "&student_id=" + studentId
+                    if (!isEmpty(sessionId)) {
+                        urlajax = urlajax + "&session_id=" + sessionId;
+                        select2("#course_name", "' .  $ajax_path . 'course.ajax.php?a=search_course_by_session&session_id=" + sessionId);
+                    } 
+                    select2("#student_name", urlajax);
                 }
             });
             ' . $script . '

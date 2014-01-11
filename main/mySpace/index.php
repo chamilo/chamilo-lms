@@ -696,6 +696,37 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 );
             $sessionFilter->addElement('select', 'profile', get_lang('Profile'),$options, array('id' => 'profile', 'class' => 'pull-left'));
 
+            $script = '
+                $("#student_name").on("change", function() {
+                        var date_to     = $("#date_to").val();
+                        var date_from   = $("#date_from").val();
+                        var sessionId   = $("#session_name").val();
+                        var courseId    = $("#course_name").val();
+                        var studentId   = $("#student_name").val();
+                        window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&student_id="+studentId+"&date_to="+date_to+"&date_from="+date_from;
+                    });
+                    $("#profile").on("change", function() {
+                        var date_to     = $("#date_to").val();
+                        var date_from   = $("#date_from").val();
+                        var sessionId   = $("#session_name").val();
+                        var courseId    = $("#course_name").val();
+                        var profile     = $("#profile").val();
+                        window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&profile="+profile+"&date_to="+date_to+"&date_from="+date_from;
+                    });
+                    $( "#date_from, #date_to").datepicker({
+                        dateFormat:  "yy-mm-dd",
+                        onSelect: function( selectedDate ) {
+                            var filled = areBothFilled();
+                            if (filled) {
+                                var date_to     = $("#date_to").val();
+                                var date_from   = $("#date_from").val();
+                                var sessionId   = $("#session_name").val();
+                                var courseId    = $("#course_name").val();
+                                var studentId   = $("#student_name").val();
+                                window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&student_id="+studentId+"&date_to="+date_to+"&date_from="+date_from;
+                            }
+                        }
+                    });';
         }
 
         //progress overview and Learning Path progress overview
@@ -779,6 +810,10 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             $("#course_name").on("change", function() {
                 var sessionId = $("#session_name").val();
                 var courseId = $("#course_name").val();
+                var display = "' . $display . '"; 
+                if (display == "accessoverview" || display == "exerciseprogress") {
+                    window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId;
+                }
                 if (isEmpty(sessionId)) {
                     select2("#course_name", "'. $ajax_path . 'course.ajax.php?a=search_course&session_id=" + sessionId);
                 }
@@ -790,15 +825,15 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     var exerciseId = $("#exercise_name").val();
                     select2("#exercise_name", "' . $ajax_path . 'course.ajax.php?a=search_exercise_by_course&session_id=" + sessionId + "&course_id=" + courseId + "&exercise_id=" + exerciseId);
                 }
-                if (typeof $("#student_name") == "object") {
+                /*if (typeof $("#student_name") == "object") {
                     var studentId = $("#student_name").val();
                     urlajax = "' . $ajax_path . 'course.ajax.php?a=search_user_by_course&course_id=" + courseId + "&student_id=" + studentId
                     if (!isEmpty(sessionId)) {
                         urlajax = urlajax + "&session_id=" + sessionId;
                         select2("#course_name", "' .  $ajax_path . 'course.ajax.php?a=search_course_by_session&session_id=" + sessionId);
-                    } 
+                    }
                     select2("#student_name", urlajax);
-                }
+                }*/
             });
             ' . $script . '
         });

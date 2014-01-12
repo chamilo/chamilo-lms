@@ -349,9 +349,11 @@ class Template
         $_c = array(
             'id' => $course['id'],
             'code' => $course['code'],
+            'title' => $course['name'],
+            'visibility' => $course['visibility'],
             'language' => $course['language'],
             'directory' => $course['directory'],
-            'session' => api_get_session_id(),
+            'session_id' => api_get_session_id(),
         );
         $this->assign('_c',$_c);
     }

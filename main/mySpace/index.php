@@ -606,6 +606,37 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
     echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin">'.get_lang('LPExerciseResultsBySession').'</a>';
 	echo '<br /><br />';
 
+    switch ($display) {
+        case 'coaches':
+            echo '<h1>' . get_lang('DisplayCoaches') . '</h1>';
+            break;
+        case 'useroverview':
+            echo '<h1>' . get_lang('DisplayUserOverview') . '</h1>';
+            break;
+        case 'sessionoverview':
+            echo '<h1>' . get_lang('DisplaySessionOverview') . '</h1>';
+            break;
+        case 'accessoverview':
+            echo '<h1>' . get_lang('DisplayAccessOverview') . '</h1>';
+            break;
+        case 'surveyoverview':
+            echo '<h1>' . get_lang('DisplaySurveyOverview') . '</h1>';
+            break;
+        case 'lpprogressoverview':
+            echo '<h1>' . get_lang('DisplayLpProgressOverview') . '</h1>';
+            break;
+        case 'progressoverview':
+            echo '<h1>' . get_lang('DisplayProgressOverview') . '</h1>';
+            break;
+        case 'exerciseprogress':
+            echo '<h1>' . get_lang('DisplayExerciseProgress') . '</h1>';
+            break;
+        case 'courseoverview':
+            echo '<h1>' . get_lang('DisplayCourseOverview') . '</h1>';
+            break;
+    }
+    echo '<br /><br />';
+
     if ($is_platform_admin && $view == 'admin' && in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'))) {
         //selft script
         $self       = api_get_self();

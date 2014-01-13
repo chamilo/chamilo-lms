@@ -37,7 +37,7 @@ $session_id = api_get_session_id();
 if ($session_id == 0) {
     $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
 } else {
-    $cats = Category :: load_session_categories(null,$session_id);
+    $cats = Category :: load_session_categories(null, $session_id);
 }
 
 $form = new LinkAddEditForm(LinkAddEditForm :: TYPE_EDIT, $cats, null, $link, 'edit_link_form', api_get_self() . '?selectcat=' . $linkcat. '&editlink=' . $linkedit);

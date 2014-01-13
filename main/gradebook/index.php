@@ -825,7 +825,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
         }
 
 		$i = 0;
-      $allcat = array();
+    $allcat = array();
 		foreach ($cats as $cat) {
 		    if ($session_id != 0) {
                 $allcatSession = $catsResult;

@@ -169,18 +169,28 @@ class Category implements GradebookItem
             $cats[] = Category::create_root_category();
             return $cats;
         }
-        $cat = array();
+        $courseCode = api_get_course_info(api_get_course_id());
+        $courseCode = $courseCode['code'];
+        
         $cats = array();
         if (!empty ($session_id)) {
              $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-             $sql_session = 'SELECT id FROM '.$tbl_grade_categories. ' WHERE session_id = '.$session_id;
+             $sql_session = 'SELECT id, course_code FROM '.$tbl_grade_categories. ' WHERE session_id = '.(int) $session_id;
              $result_session = Database::query($sql_session);
              if (Database::num_rows($result_session) > 0) {
-                 $data_session = Database::fetch_array($result_session);
-                 $parent_id = $data_session['id'];
-                 $cat = Category::load($parent_id);
-                 $cats = Category::load(null, null, null, $parent_id, null, null, $order);
-                 return array_merge($cat,$cats);
+                $cat = array();                  
+                while ($data_session = Database::fetch_array($result_session)) {
+                    
+                    $parent_id = $data_session['id'];
+                    if ($data_session['course_code'] == $courseCode) {             
+                        $cat = Category::load($parent_id);
+                        $cats = Category::load(null,null,null,$parent_id,null,null,null);
+                        //$cat = array_merge($cat,$cats);
+                    }
+                }  
+               
+               
+                return array_merge($cat,$cats);
              }
          }
      }

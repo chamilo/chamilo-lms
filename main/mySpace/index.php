@@ -674,7 +674,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             $courseList[] = array('id' => $courseInfo['real_id'], 'text' => $courseInfo['name']);
         }
         $sessionFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList, 'width' => '400px'));
-        $sessionFilter->addRule('session_name', get_lang('ThisFieldIsRequired'), 'required');
+        
         //Exercise filter    
         if (in_array($display, array('exerciseprogress'))) {
 

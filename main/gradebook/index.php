@@ -131,7 +131,7 @@ $first_time = null;
 
 if (empty($cats)) {
 	$cats = Category :: load(0, null, $course_code, null, null, $session_id, false);//first time
-    $first_time=1;
+  $first_time = 1;
 }
 $_GET['selectcat'] = $cats[0]->get_id();
 
@@ -825,7 +825,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
         }
 
 		$i = 0;
-        $allcat = array();
+      $allcat = array();
 		foreach ($cats as $cat) {
 		    if ($session_id != 0) {
                 $allcatSession = $catsResult;

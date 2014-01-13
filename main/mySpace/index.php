@@ -674,7 +674,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             $courseList[] = array('id' => $courseInfo['real_id'], 'text' => $courseInfo['name']);
         }
         $sessionFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList, 'width' => '400px'));
-
+        $sessionFilter->addRule('session_name', get_lang('ThisFieldIsRequired'), 'required');
         //Exercise filter    
         if (in_array($display, array('exerciseprogress'))) {
 
@@ -798,6 +798,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         $url = $ajax_path . 'course.ajax.php?a='. $a .'&session_id=' . $_GET['session_id'];
         echo '<script>
         $(function() {
+            var display = "' . $display . '"; 
             $("#generateReport").click(function(e){
                 url = "'.$self.'?view=admin&display='.$display.'";
                 if (!isEmpty($("#session_name").val())) {
@@ -834,11 +835,11 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 select2("#course_name", "' .  $ajax_path . 'course.ajax.php?a=search_course_by_session&session_id=" + sessionId);
             });
 
-            /*$("#course_name").attr("title", "test title");
-            var tip_options = {
-                placement : "right"
+            if (display == "lpprogressoverview" || display == "progressoverview" || display == "surveyoverview") {
+                if (isEmpty($("#session_name").val())) {
+                    $("#course_name").select2("readonly", true);
+                }
             }
-            $("#course_name").tooltip(tip_options);*/
 
             $("#course_name").on("change", function() {
                 var sessionId = $("#session_name").val();
@@ -907,6 +908,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     }
                 }
             });
+            $(divId).select2("readonly", false);
         }
         </script>';
 

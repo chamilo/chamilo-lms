@@ -778,7 +778,7 @@ class GroupManager
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
         $sql = 'SELECT COUNT(gu.group_id) AS current_max FROM '.$group_user_table.' gu, '.$group_table.' g
 				WHERE g.c_id = '.$course_info['real_id'].'
-				AND gu.c_id = '.$course_info['real_id'].'
+				AND gu.c_id = g.c_id'
 				AND gu.group_id = g.id ';
         if ($category_id != null) {
             $category_id = Database::escape_string($category_id);

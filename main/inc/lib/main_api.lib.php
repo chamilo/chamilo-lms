@@ -878,7 +878,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     	switch ($course_info['visibility']) {
     		default:
     		case COURSE_VISIBILITY_CLOSED: //Completely closed: the course is only accessible to the teachers. - 0
-    			if (api_get_user_id() && !api_is_anonymous() && (api_is_allowed_to_edit())) {
+    			if (api_get_user_id() && !api_is_anonymous() && $is_allowed_in_course) {
     				$is_visible = true;
     			}
     			break;

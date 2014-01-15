@@ -3310,13 +3310,13 @@ class Tracking
                 $data[] = $row;
             }
             // Now fill questions data. Query all questions and answers for this test to avoid
-            $sqlQuestions = "SELECT tq.c_id, tq.id as question_id, tq.question, tqa.id_auto, tqa.answer, tqa.correct
+            $sqlQuestions = "SELECT tq.c_id, tq.id as question_id, tq.question, tqa.id_auto, tqa.answer, tqa.correct, tq.position
                                FROM $tquiz_question tq, $tquiz_answer tqa
                                WHERE tqa.question_id =tq.id and tqa.c_id = tq.c_id
                                  AND tq.c_id = $courseIdx AND tq.id IN (".implode(',',$questionIds).")";
             $resQuestions = Database::query($sqlQuestions);
             while ($rowQuestion = Database::fetch_assoc($resQuestions)) {
-                $questionIds[$rowQuestion['question_id']] = $rowQuestion['question'];
+                $questionIds[$rowQuestion['question_id']] = array('position' => $rowQuestion['position'], 'question' => $rowQuestion['question']);
                 $answerIds[$rowQuestion['question_id']] = array('answer' => $rowQuestion['answer'], 'correct' =>$rowQuestion['correct']);
             }
             // Now fill users data
@@ -3332,7 +3332,8 @@ class Tracking
                 $data[$id]['answer'] = $answerIds[$row['question_id']]['answer'];
                 $data[$id]['correct'] = $answerIds[$row['question_id']]['correct'];
                 $data[$id]['correct'] = ($data[$id]['correct'] == 0 ? get_lang('No') : get_lang('Yes'));
-                $data[$id]['question'] = $questionIds[$row['question_id']];
+                $data[$id]['question'] = $questionIds[$row['question_id']]['question'];
+                $data[$id]['question_id'] = $questionIds[$row['question_id']]['position'];
             }
 
             /*

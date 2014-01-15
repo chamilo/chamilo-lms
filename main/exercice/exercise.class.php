@@ -1169,7 +1169,7 @@ class Exercise {
 
                 $defaults['randomAnswers']          = $this->selectRandomAnswers();
                 $defaults['exerciseType']           = $this->selectType();
-                $defaults['exerciseTitle']          = $this->selectTitle();
+                $defaults['exerciseTitle']          = html_entity_decode($this->selectTitle());
                 $defaults['exerciseDescription']    = $this->selectDescription();
                 $defaults['exerciseAttempts']       = $this->selectAttempts();
                 $defaults['exerciseFeedbackType']   = $this->selectFeedbackType();
@@ -2367,7 +2367,7 @@ class Exercise {
                                 $answer .= '<font color="red"><s>' . $user_tags[$i] . '</s></font>';
                             } else {
                                 // adds a tabulation if no word has been typed by the student
-                                $answer .= '&nbsp;&nbsp;&nbsp;';
+                                $answer .= ''; // remove &nbsp; that causes issue
                             }
                         } else {
                             // switchable fill in the blanks
@@ -2388,7 +2388,7 @@ class Exercise {
                                 $answer .= '<font color="red"><s>' . $user_tags[$i] . '</s></font>';
                             } else {
                                 // adds a tabulation if no word has been typed by the student
-                                $answer .= '&nbsp;&nbsp;&nbsp;';
+                                $answer .= '';  // remove &nbsp; that causes issue
                             }
                         }
                         // adds the correct word, followed by ] to close the blank

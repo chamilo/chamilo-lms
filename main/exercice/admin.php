@@ -513,6 +513,13 @@ if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspot
 	require 'question_list_admin.inc.php';
 }
 
+// if we are in question authoring, display warning to user is feedback not shown at the end of the test -ref #6619
+// this test to displau only message in the question authoring page and not in the question list page too
+// if (is_object($objQuestion) && $objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM && ($newQuestion || $modifyQuestion || $editQuestion)) {
+if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM) {
+    Display::display_normal_message(get_lang("TestFeedbackNotShown"));
+}
+
 Session::write('objExercise', $objExercise);
 Session::write('objQuestion', $objQuestion);
 Session::write('objAnswer', $objAnswer);

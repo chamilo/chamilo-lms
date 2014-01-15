@@ -56,9 +56,7 @@ class MultipleAnswerCombination extends Question {
 							'.get_lang('Answer').'
 						</th>';				
 						// show column comment when feedback is enable						
-						if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM ) {	
-							$html .='<th>'.get_lang('Comment').'</th>';
-						}
+                        $html .='<th>'.get_lang('Comment').'</th>';
 						$html .= '</tr>';
         $form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
 
@@ -113,10 +111,8 @@ class MultipleAnswerCombination extends Question {
 			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 			
-			if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-				$form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
-			}
-			//only 1 answer the all deal ...			
+            $form->addElement('html_editor', 'comment['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
+			//only 1 answer the all deal ...
 			//$form->addElement('text', 'weighting['.$i.']',null, 'style="vertical-align:middle;margin-left: 0em;" size="5" value="10"');
 				
 			$form -> addElement ('html', '</tr>');
@@ -216,11 +212,7 @@ class MultipleAnswerCombination extends Question {
 				<th>'.get_lang("Choice").'</th>
 				<th>'. get_lang("ExpectedChoice").'</th>
 				<th>'. get_lang("Answer").'</i></th>';
-				if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { 
-    				$header .= '<th>'.get_lang("Comment").'</th>';
-				} else { 
-					$header .= '<th>&nbsp;</th>';
-				}
+        $header .= '<th>'.get_lang("Comment").'</th>';
         $header .= '</tr>';
         return $header;	  
 	}

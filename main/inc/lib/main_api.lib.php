@@ -2929,7 +2929,8 @@ function api_not_found($print_headers = false) {
  * @version 1.0, February 2004
  * @version dokeos 1.8, August 2006
  */
-function api_not_allowed($print_headers = false, $message = null) {
+function api_not_allowed($print_headers = false, $message = null)
+{
     if (api_get_setting('sso_authentication') === 'true') {
         global $osso;
         if ($osso) {
@@ -2980,7 +2981,7 @@ function api_not_allowed($print_headers = false, $message = null) {
         exit;
     }
 
-    if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE)) {
+    if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE || $this_section == SECTION_PLATFORM_ADMIN)) {
 
         //only display form and return to the previous URL if there was a course ID included
         if ($user_id != 0 && !api_is_anonymous()) {
@@ -3033,11 +3034,10 @@ function api_not_allowed($print_headers = false, $message = null) {
     // Check if the cookies are enabled. If are enabled and if no course ID was included in the requested URL, then the user has either lost his session or is anonymous, so redirect to homepage
     if( !isset($_COOKIE['TestCookie']) && empty($_COOKIE['TestCookie']) ) {
         $msg = Display::return_message(get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error', false);
-    }
-    else {
+    } else {
         // The session is over and we were not in a course,
         // or we try to get directly to a private course without being logged
-        if (!is_null(api_get_course_id())) {
+        if (!is_null(api_get_course_int_id())) {
             api_set_firstpage_parameter(api_get_course_id());
             $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
             $action = str_replace('&amp;', '&', $action);
@@ -3051,7 +3051,7 @@ function api_not_allowed($print_headers = false, $message = null) {
             $msg .= '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>';
             if (api_is_cas_activated()) {
                 $msg .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
-                $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", array('align'=>'center'));
+                $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_int_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", array('align'=>'center'));
                 $msg .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
                 $msg .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
                 $msg .= "<div style='display:none;'>";
@@ -3063,8 +3063,7 @@ function api_not_allowed($print_headers = false, $message = null) {
                 $msg .= "</div>";
             }
             $msg .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a></p>';
-        }
-        else {
+        } else {
             // we were not in a course, return to home page
             $msg = Display::return_message(get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a><br />', 'error', false);
         }
@@ -6885,32 +6884,37 @@ function api_elog($string, $dump = 0)
 }
 
 
-/*
+/**
  * Set the cookie to go directly to the course code $in_firstpage
  * after login
+ * @param in_firstpage is the course code of the course to go
  */
-function api_set_firstpage_parameter($in_firstpage) {
+function api_set_firstpage_parameter($in_firstpage)
+{
     setcookie("GotoCourse", $in_firstpage);
 }
 
-/*
+/**
  * Delete the cookie to go directly to the course code $in_firstpage
  * after login
  */
-function api_delete_firstpage_parameter() {
+function api_delete_firstpage_parameter()
+{
     setcookie("GotoCourse", "", time() - 3600);
 }
 
-/*
- * Return true if course_code for direct course access after login is set
+/**
+ * @return true if course_code for direct course access after login is set
  */
-function exist_firstpage_parameter() {
+function exist_firstpage_parameter()
+{
     return (isset($_COOKIE['GotoCourse']) && $_COOKIE['GotoCourse'] != "");
 }
 
-/*
- *
+/**
+ * @return return the course_code of the course where user login
  */
-function api_get_firstpage_parameter() {
+function api_get_firstpage_parameter()
+{
     return $_COOKIE['GotoCourse'];
 }

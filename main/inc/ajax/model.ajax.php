@@ -935,7 +935,7 @@ switch ($action) {
         $result = $new_result;
         break;
     case 'get_usergroups':
-        $columns = array('name', 'users', 'courses','sessions','actions');
+        $columns = array('id', 'name', 'users', 'courses','sessions','actions');
         $result = $obj->getUsergroupsPagination($sidx, $sord, $start, $limit);
         break;
     case 'get_extra_fields':

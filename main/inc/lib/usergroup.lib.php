@@ -626,7 +626,7 @@ class UserGroup extends Model
             }
             $result = $new_result;
         }
-        $columns = array('name', 'users', 'courses','sessions');
+        $columns = array('id', 'name', 'users', 'courses','sessions');
 
         if (!in_array($sidx, $columns)) {
             $sidx = 'name';
@@ -634,6 +634,7 @@ class UserGroup extends Model
 
         // Multidimensional sort
         $result = msort($result, $sidx, $sord);
+
         return $result;
     }
 

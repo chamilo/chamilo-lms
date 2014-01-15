@@ -1079,9 +1079,10 @@ class Display {
                             " ctt.image image, ctt.link link ".
                         " FROM $tool_edit_table tet, $course_tool_table ctt ".
                         " WHERE tet.c_id = $course_id AND
-                        		ctt.c_id = $course_id AND
-                        		tet.lastedit_date > '$oldestTrackDate' ".
-                        " AND ctt.name = tet.tool ".
+                                ctt.c_id = $course_id AND
+                                tet.lastedit_date > '$oldestTrackDate' ".
+                        // Special hack for work tool, which is called student_publication in c_tool and work in c_item_property :-/ BT#7104
+                        " AND (ctt.name = tet.tool OR (ctt.name = 'student_publication' AND tet.tool = 'work')) ".
                         " AND ctt.visibility = '1' ".
                         " AND tet.lastedit_user_id != $user_id AND tet.id_session = '".$course_info['id_session']."' ".
                         " ORDER BY tet.lastedit_date";
@@ -1105,7 +1106,7 @@ class Display {
                       && $item_property['tool'] != TOOL_CHAT)
                    )
                   )
-                // Take only what's visible or invisible but where the user is a teacher or where the visibility is unset.
+                // Take only what's visible or "invisible but where the user is a teacher" or where the visibility is unset.
                 && ($item_property['visibility'] == '1'
                     || ($course_info['status'] == '1' && $item_property['visibility'] == '0')
                     || !isset($item_property['visibility'])))
@@ -1131,6 +1132,9 @@ class Display {
                         continue;
                     }
 
+                }
+                if ($item_property['tool'] == 'work' && $item_property['type'] == 'DirectoryCreated') {
+                    $item_property['lastedit_type'] = 'WorkAdded';
                 }
                 $notifications[$item_property['tool']] = $item_property;
             }

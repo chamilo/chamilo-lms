@@ -586,13 +586,13 @@ class CourseBuilder
                 FROM '.$table_que.' as questions
                 LEFT JOIN '.$table_rel.' as quizz_questions
                 ON questions.id=quizz_questions.question_id
-                LEFT JOIN '.$table_qui.' as exercices
-                ON exercice_id=exercices.id
-                WHERE   questions.c_id = '.$course_id.'  AND
-                        quizz_questions.c_id = '.$course_id.' AND
-                        exercices.c_id = '.$course_id.' AND
+                LEFT JOIN '.$table_qui.' as exercises
+                ON quizz_questions.exercice_id = exercises.id
+                WHERE   questions.c_id = quizz_questions.c_id AND
+                        questions.c_id = exercises.c_id AND
+                        exercises.c_id = '.$course_id.' AND
                         (quizz_questions.exercice_id IS NULL OR
-                        exercices.active = -1)';
+                        exercises.active = -1)';
         $db_result = Database::query($sql);
         if (Database::num_rows($db_result) > 0) {
             $orphan_questions = new Quiz(-1, get_lang('OrphanQuestions', ''), '', 0, 0, 1, '', 0); // Tjis is the fictional test for collecting orphan questions.

@@ -25,21 +25,21 @@ $this_section = SECTION_CAMPUS;
 
 $header_title = null;
 if (!api_is_anonymous()) {
-	$header_title = " ";
+    $header_title = " ";
 }
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('bxslider'));
 $htmlHeadXtra[] ='
 <script type="text/javascript">
-	$(document).ready(function(){
-		$("#slider").bxSlider({
-			infiniteLoop	: true,
-			auto			: true,
-			pager			: true,
-			autoHover		: true,
-			pause			: 10000
-		});
-	});
+    $(document).ready(function(){
+        $("#slider").bxSlider({
+            infiniteLoop : true,
+            auto : true,
+            pager : true,
+            autoHover : true,
+            pause : 10000
+        });
+    });
 </script>';
 
 //set cookie for check if client browser are cookies enabled
@@ -51,7 +51,7 @@ $controller = new IndexManager($header_title);
 $loginFailed = isset($_GET['loginFailed']) ? true : isset($loginFailed);
 
 if (!empty($_GET['logout'])) {
-	$controller->logout();
+    $controller->logout();
 }
 
 /* Table definitions */
@@ -70,16 +70,16 @@ $_setting['display_courses_to_anonymous_users'] = 'true';
  * @todo This piece of code should probably move to local.inc.php where the actual login / logout procedure is handled. The real use of this code block should be seriously considered as well. This form should just use a security token and get done with it.
  */
 if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
-        $i = api_get_anonymous_id();
-        event_system(LOG_ATTEMPTED_FORCED_LOGIN, 'tried_hacking_get', $_SERVER['REMOTE_ADDR'].(empty($_POST['login'])?'':'/'.$_POST['login']),null,$i);
-	echo 'Attempted breakin - sysadmins notified.';
-	session_destroy();
-	die();
+    $i = api_get_anonymous_id();
+    event_system(LOG_ATTEMPTED_FORCED_LOGIN, 'tried_hacking_get', $_SERVER['REMOTE_ADDR'].(empty($_POST['login'])?'':'/'.$_POST['login']),null,$i);
+    echo 'Attempted breakin - sysadmins notified.';
+    session_destroy();
+    die();
 }
 
 // Delete session neccesary for legal terms
 if (api_get_setting('allow_terms_conditions') == 'true') {
-	unset($_SESSION['term_and_condition']);
+    unset($_SESSION['term_and_condition']);
 }
 //If we are not logged in and customapages activated
 if (!api_get_user_id() && CustomPages::enabled()) {
@@ -98,38 +98,39 @@ if (!api_get_user_id() && CustomPages::enabled()) {
  */
 
 if (!empty($_POST['submitAuth'])) {
-	// The user has been already authenticated, we are now to find the last login of the user.
-	if (isset ($_user['user_id'])) {
-		$track_login_table      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-		$sql_last_login = "SELECT UNIX_TIMESTAMP(login_date)
+    // The user has been already authenticated, we are now to find the last login of the user.
+    if (isset ($_user['user_id'])) {
+        $track_login_table      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $sql_last_login = "SELECT UNIX_TIMESTAMP(login_date)
                                 FROM $track_login_table
                                 WHERE login_user_id = '".$_user['user_id']."'
                                 ORDER BY login_date DESC LIMIT 1";
-		$result_last_login = Database::query($sql_last_login);
-		if (!$result_last_login) {
-			if (Database::num_rows($result_last_login) > 0) {
-				$user_last_login_datetime = Database::fetch_array($result_last_login);
-				$user_last_login_datetime = $user_last_login_datetime[0];
-				Session::write('user_last_login_datetime',$user_last_login_datetime);
-			}
-		}
-		Database::free_result($result_last_login);
+        $result_last_login = Database::query($sql_last_login);
+        if (!$result_last_login) {
+            if (Database::num_rows($result_last_login) > 0) {
+                $user_last_login_datetime = Database::fetch_array($result_last_login);
+                $user_last_login_datetime = $user_last_login_datetime[0];
+                Session::write('user_last_login_datetime',$user_last_login_datetime);
+            }
+        }
+        Database::free_result($result_last_login);
 
-		//event_login();
-		if (api_is_platform_admin()) {
-			// decode all open event informations and fill the track_c_* tables
-			include api_get_path(LIBRARY_PATH).'stats.lib.inc.php';
-			decodeOpenInfos();
-		}
-	}
-	// End login -- if ($_POST['submitAuth'])
-} else {
-	// Only if login form was not sent because if the form is sent the user was already on the page.
-	event_open();
+        //event_login();
+        if (api_is_platform_admin()) {
+            // decode all open event informations and fill the track_c_* tables
+            include api_get_path(LIBRARY_PATH).'stats.lib.inc.php';
+            decodeOpenInfos();
+        }
+    }
+    // End login -- if ($_POST['submitAuth'])
+}
+else {
+    // Only if login form was not sent because if the form is sent the user was already on the page.
+    event_open();
 }
 
 if (api_get_setting('display_categories_on_homepage') == 'true') {
-	$controller->tpl->assign('course_category_block', $controller->return_courses_in_categories());
+    $controller->tpl->assign('course_category_block', $controller->return_courses_in_categories());
 }
 
 // Facebook connexion, if activated
@@ -141,14 +142,15 @@ $controller->set_login_form();
 
 //@todo move this inside the IndexManager
 if (!api_is_anonymous()) {
-	$controller->tpl->assign('profile_block', $controller->return_profile_block());
+    $controller->tpl->assign('profile_block', $controller->return_profile_block());
     $controller->tpl->assign('user_image_block', $controller->return_user_image_block());    
 
-	if (api_is_platform_admin()) {
-		$controller->tpl->assign('course_block',			$controller->return_course_block());
-	} else {
-		$controller->tpl->assign('teacher_block', 			$controller->return_teacher_link());
-	}
+    if (api_is_platform_admin()) {
+        $controller->tpl->assign('course_block', $controller->return_course_block());
+    }
+    else {
+        $controller->tpl->assign('teacher_block', $controller->return_teacher_link());
+    }
 }
 
 $hot_courses = null;
@@ -163,18 +165,18 @@ if (!isset($_REQUEST['include'])) {
     $announcements_block = $controller->return_announcements();
 }
 
-$controller->tpl->assign('hot_courses',             $hot_courses);
-$controller->tpl->assign('announcements_block', 	$announcements_block);
-$controller->tpl->assign('home_page_block', 		$controller->return_home_page());
+$controller->tpl->assign('hot_courses', $hot_courses);
+$controller->tpl->assign('announcements_block', $announcements_block);
+$controller->tpl->assign('home_page_block', $controller->return_home_page());
 
-$controller->tpl->assign('navigation_course_links', 	$controller->return_navigation_links());
+$controller->tpl->assign('navigation_course_links', $controller->return_navigation_links());
 
-$controller->tpl->assign('notice_block',			$controller->return_notice());
-$controller->tpl->assign('main_navigation_block',	$controller->return_navigation_links());
-$controller->tpl->assign('help_block',              $controller->return_help());
+$controller->tpl->assign('notice_block', $controller->return_notice());
+$controller->tpl->assign('main_navigation_block', $controller->return_navigation_links());
+$controller->tpl->assign('help_block', $controller->return_help());
 
 if (api_is_platform_admin() || api_is_drh()) {
-    $controller->tpl->assign('skills_block',            $controller->return_skills_links());
+    $controller->tpl->assign('skills_block', $controller->return_skills_links());
 }
 
 // direct login to course

@@ -339,8 +339,23 @@ class Template
     private function set_course_parameters()
     {
         //Setting course id
-        $course_id       = api_get_course_int_id();
-        $this->course_id = $course_id;
+        $course = api_get_course_info();
+        if (empty($course)) {
+            $this->assign('course_is_set', false);
+            return;
+        }
+        $this->assign('course_is_set', true);
+        $this->course_id = $course['id'];
+        $_c = array(
+            'id' => $course['id'],
+            'code' => $course['code'],
+            'title' => $course['name'],
+            'visibility' => $course['visibility'],
+            'language' => $course['language'],
+            'directory' => $course['directory'],
+            'session_id' => api_get_session_id(),
+        );
+        $this->assign('_c',$_c);
     }
 
     /** Set user parameters */

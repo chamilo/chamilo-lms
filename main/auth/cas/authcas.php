@@ -169,4 +169,23 @@ function cas_logout()
 	phpCAS::logoutWithRedirectService(api_get_path(WEB_PATH));		
 }
 
+
+
+/*
+ * Return the direct URL to a course code with CAS login
+ */
+function get_cas_direct_URL($in_course_code) {
+    return api_get_path(WEB_PATH).'main/auth/cas/logincas.php?firstpage='.$in_course_code;
+}
+
+
+function getCASLogoHTML() {
+    $out_res = "";
+    if (api_get_setting("casLogoURL") != "") {
+        $out_res = "<img src='".api_get_setting("casLogoURL")."' alt='CAS Logo' />";
+    }
+    return $out_res;
+}
+
+
 ?>

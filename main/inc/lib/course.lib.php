@@ -1555,7 +1555,7 @@ class CourseManager
      *    @param boolean $full list to true if we want sessions students too
      *    @return array with user id
      */
-    public static function get_student_list_from_course_code($course_code, $with_session = false, $session_id = 0) {
+    public static function get_student_list_from_course_code($course_code, $with_session = false, $session_id = 0, $date_from, $date_to) {
         $session_id = intval($session_id);
         $course_code = Database::escape_string($course_code);
 

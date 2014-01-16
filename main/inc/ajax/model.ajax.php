@@ -266,22 +266,22 @@ switch ($action) {
     case 'get_session_progress':
         //@TODO replace this for a more efficient function (not retrieving the whole data)
         $course = api_get_course_info_by_id($courseId);
-        $users = CourseManager::get_student_list_from_course_code($course['code'], true, intval($_GET['session_id']));
+        $users = CourseManager::get_student_list_from_course_code($course['code'], true, $_GET['session_id'], $_GET['date_from'], $_GET['date_to']);
         $count = count($users);
         break;
     case 'get_exercise_progress':
         //@TODO replace this for a more efficient function (not retrieving the whole data)
-        $records = Tracking::get_exercise_progress(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']), $_GET['date_from'], $_GET['date_to']);
+        $records = Tracking::get_exercise_progress($_GET['session_id'], $_GET['course_id'], $_GET['exercise_id'], $_GET['date_from'], $_GET['date_to']);
         $count = count($records);
         break;
     case 'get_session_access_overview':
         //@TODO replace this for a more efficient function (not retrieving the whole data)
-        $records = SessionManager::get_user_data_access_tracking_overview($_GET['session_id'], $_GET['course_id'], $_GET['student_id'], $_GET['profile'], $_GET['date_to'], $_GET['date_from'], $options);
+        $records = SessionManager::get_user_data_access_tracking_overview($_GET['session_id'], $_GET['course_id'], $_GET['student_id'], $_GET['profile'], $_GET['date_from'], $_GET['date_to'], $options);
         $count = count($records);
         break;
     case 'get_survey_overview':
         //@TODO replace this for a more efficient function (not retrieving the whole data)
-        $records = SessionManager::get_survey_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['survey_id']), $_GET['date_from'], $_GET['date_to'], $options);
+        $records = SessionManager::get_survey_overview($_GET['session_id'], $_GET['course_id'], $_GET['survey_id'], $_GET['date_from'], $_GET['date_to'], $options);
         $count = count($records);
         break;
     /*case 'get_extra_fields':
@@ -343,7 +343,7 @@ switch ($action) {
 $total_pages = 0;
 if ($count > 0) {
     if (!empty($limit)) {
-        $total_pages = ceil($count/$limit);
+        $total_pages = ceil((float)$count/(float)$limit);
     }
 }
 if ($page > $total_pages) {
@@ -656,9 +656,11 @@ switch ($action) {
         $sessionId = 0;
         if (!empty($_GET['course_id']))
         {
-            $sessionId = intval($_GET['session_id']);
-            $courseId = intval($_GET['course_id']);
-            $course = api_get_course_info_by_id($courseId);
+            $sessionId  = intval($_GET['session_id']);
+            $courseId   = intval($_GET['course_id']);
+            $course     = api_get_course_info_by_id($courseId);
+            $date_from  = $_GET['date_from'];
+            $date_to    = $_GET['date_to'];
         }
         /**
          * Add lessons of course
@@ -677,7 +679,7 @@ switch ($action) {
         }
         $columns[] = 'total';
 
-        $result = SessionManager::get_session_lp_progress($sessionId, $courseId,
+        $result = SessionManager::get_session_lp_progress($sessionId, $courseId, $date_from, $date_to,
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",
@@ -689,9 +691,9 @@ switch ($action) {
         $sessionId = 0;
         if (!empty($_GET['course_id']) && !empty($_GET['survey_id']))
         {
-            $sessionId = intval($_GET['session_id']);
-            $courseId  = intval($_GET['course_id']);
-            $surveyId  = intval($_GET['survey_id']);
+            $sessionId  = intval($_GET['session_id']);
+            $courseId   = intval($_GET['course_id']);
+            $surveyId   = intval($_GET['survey_id']);
             $date_from  = $_GET['date_from'];
             $date_to    = $_GET['date_to'];
             //$course    = api_get_course_info_by_id($courseId);
@@ -769,10 +771,12 @@ switch ($action) {
         $sessionId = 0;
         if (!empty($_GET['course_id']))
         {
-            $sessionId = intval($_GET['session_id']);
-            $courseId = intval($_GET['course_id']);
+            $sessionId  = intval($_GET['session_id']);
+            $courseId   = intval($_GET['course_id']);
+            $date_from  = $_GET['date_from'];
+            $date_to    = $_GET['date_to'];
         }
-        $result = SessionManager::get_session_progress($sessionId, $courseId,
+        $result = SessionManager::get_session_progress($sessionId, $courseId, $date_from, $date_to, 
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",
@@ -801,7 +805,7 @@ switch ($action) {
             $date_to    = $_GET['date_to'];
         }
 
-        $result = SessionManager::get_user_data_access_tracking_overview(intval($sessionId), intval($courseId), intval($studentId), intval($profile), $date_to, $date_from,
+        $result = SessionManager::get_user_data_access_tracking_overview($sessionId, $courseId, $studentId, $profile, $date_from, $date_to,
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",

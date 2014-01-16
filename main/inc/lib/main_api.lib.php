@@ -2955,11 +2955,10 @@ function api_not_allowed($print_headers = false, $message = null) {
     $origin = isset($_GET['origin']) ? $_GET['origin'] : '';
 
     $msg = null;
-
     if (isset($message)) {
         $msg = $message;
     } else {
-        $msg = Display::return_message(get_lang('NotAllowedClickBack'), 'error', false);
+        $msg = Display::return_message(get_lang('NotAllowedClickBack').'<br/><br/><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a>', 'error', false);
     }
 
     $msg = Display::div($msg, array('align'=>'center'));
@@ -2981,7 +2980,7 @@ function api_not_allowed($print_headers = false, $message = null) {
         exit;
     }
 
-    if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE || $this_section == SECTION_PLATFORM_ADMIN)) {
+    if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE)) {
 
         //only display form and return to the previous URL if there was a course ID included
         if ($user_id != 0 && !api_is_anonymous()) {
@@ -2991,24 +2990,35 @@ function api_not_allowed($print_headers = false, $message = null) {
             exit;
         }
 
+        if (!is_null(api_get_course_id())) {
+            api_set_firstpage_parameter(api_get_course_id());
+        }
+
         // If the user has no user ID, then his session has expired
         $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
         $action = str_replace('&amp;', '&', $action);
         $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
-
-        //$form->addElement('text', 'login', get_lang('UserName'), array('size' => 17)); //old
-
         $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'span3 autocapitalize_off')); //new
-
-        //$form->addElement('password', 'password', get_lang('Password'), array('size' => 17)); //old
         $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'), 'class' => 'span3')); //new
         $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn span3'));
 
-        $content = Display::return_message(get_lang('NotAllowed').'<br />'.get_lang('PleaseLoginAgainFromFormBelow').'<br />', 'error', false);
-
+        // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (above)
+        $content = Display::return_message(get_lang('NotAllowed'), 'error', false);
+        $content .= '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>';
+        if (api_is_cas_activated()) {
+            $content .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
+            $content .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_id())."'>".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", array('align'=>'center'));
+            $content .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
+            $content .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
+            $content .= "<div style='display:none;'>";
+        }
         $content .= '<div class="well_login">';
         $content .= $form->return_form();
         $content .='</div>';
+        if (api_is_cas_activated()) {
+            $content .= "</div>";
+        }
+        $content .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a></p>';
 
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
@@ -3021,14 +3031,45 @@ function api_not_allowed($print_headers = false, $message = null) {
     }
     $msg = null;
     // Check if the cookies are enabled. If are enabled and if no course ID was included in the requested URL, then the user has either lost his session or is anonymous, so redirect to homepage
-	if( !isset($_COOKIE['TestCookie']) && empty($_COOKIE['TestCookie']) ) {
-		$msg = Display::return_message(get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error', false);
-	} elseif ($message == null){
-		$msg = Display::return_message(get_lang('NotAllowed').'<br /><br /><a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', 'error', false);
-	} else {
-	    $msg = Display::return_message($message.'&nbsp;<a href="'.$home_url.'">'.get_lang('PleaseLoginAgainFromHomepage').'</a><br />', 'error', false);
-	}
-    $msg = Display::div($msg, array('align'=>'center'));
+    if( !isset($_COOKIE['TestCookie']) && empty($_COOKIE['TestCookie']) ) {
+        $msg = Display::return_message(get_lang('NoCookies').'<br /><br /><a href="'.$home_url.'">'.get_lang('BackTo').' '.get_lang('CampusHomepage').'</a><br />', 'error', false);
+    }
+    else {
+        // The session is over and we were not in a course,
+        // or we try to get directly to a private course without being logged
+        if (!is_null(api_get_course_id())) {
+            api_set_firstpage_parameter(api_get_course_id());
+            $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
+            $action = str_replace('&amp;', '&', $action);
+            $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));
+            $form->addElement('text', 'login', null, array('placeholder' => get_lang('UserName'), 'class' => 'span3 autocapitalize_off')); //new
+            $form->addElement('password', 'password', null, array('placeholder' => get_lang('Password'), 'class' => 'span3')); //new
+            $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn span3'));
+
+            // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (bellow)
+            $msg = Display::return_message(get_lang('NotAllowed'), 'error', false);
+            $msg .= '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>';
+            if (api_is_cas_activated()) {
+                $msg .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
+                $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", array('align'=>'center'));
+                $msg .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
+                $msg .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
+                $msg .= "<div style='display:none;'>";
+            }
+            $msg .= '<div class="well_login">';
+            $msg .= $form->return_form();
+            $msg .='</div>';
+            if (api_is_cas_activated()) {
+                $msg .= "</div>";
+            }
+            $msg .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a></p>';
+        }
+        else {
+            // we were not in a course, return to home page
+            $msg = Display::return_message(get_lang('NotAllowed').'<br/><br/><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a><br />', 'error', false);
+        }
+    }
+//    $msg = Display::div($msg, array('align'=>'center'));
     $tpl->assign('content', $msg);
     $tpl->display_one_col_template();
     exit;
@@ -6812,14 +6853,20 @@ function api_is_allowed_in_course()
 
 /**
  * Show a string in
- * @param string $sql
+ * @param string $string Some string to dump, removing tabs, spaces, newlines, etc (usually most useful for SQL queries)
+ * @param int $dump Set to 1 to use print_r()
  */
-function api_error_log($string)
+function api_error_log($string, $dump = 0)
 {
     // Clean query
     $bt = debug_backtrace();
     $caller = array_shift($bt);;
-    $string = str_replace(array("\r", "\n", "\t", "\10"), '', $string);
+    if ($dump == 1) {
+        $string = print_r($string, 1);
+    } else {
+        $string = str_replace(array("\r", "\n", "\t", "\10"), '', $string);
+        $string = str_replace('    ',' ', $string);
+    }
 
     error_log("-------------------------------------");
     error_log($string);
@@ -6828,10 +6875,42 @@ function api_error_log($string)
 }
 
 /**
- * Show a string in
- * @param string $sql
+ * Show a string in the default error_log. Alias for api_error_log().
+ * @param string $string Some string to dump, removing tabs, spaces, newlines, etc (usually most useful for SQL queries)
+ * @param int $dump Set to 1 to use print_r()
  */
-function api_elog($string)
+function api_elog($string, $dump = 0)
 {
-    return api_error_log($string);
+    return api_error_log($string, $dump);
+}
+
+
+/*
+ * Set the cookie to go directly to the course code $in_firstpage
+ * after login
+ */
+function api_set_firstpage_parameter($in_firstpage) {
+    setcookie("GotoCourse", $in_firstpage);
+}
+
+/*
+ * Delete the cookie to go directly to the course code $in_firstpage
+ * after login
+ */
+function api_delete_firstpage_parameter() {
+    setcookie("GotoCourse", "", time() - 3600);
+}
+
+/*
+ * Return true if course_code for direct course access after login is set
+ */
+function exist_firstpage_parameter() {
+    return (isset($_COOKIE['GotoCourse']) && $_COOKIE['GotoCourse'] != "");
+}
+
+/*
+ *
+ */
+function api_get_firstpage_parameter() {
+    return $_COOKIE['GotoCourse'];
 }

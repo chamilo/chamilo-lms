@@ -42,6 +42,13 @@
                         </a>
                     </li>
                 </ul>
+                {% else %}
+                    {# direct login to course - no visible if logged and on the index page #}
+                    {% if course_code != "" %}
+                        <ul class="nav pull-right">
+                            <li class="dropdown" style="color:white;"><a href='{{ _p.web }}/main/auth/gotocourse.php?firstpage={{ course_code }}'>{{ "LoginEnter"|get_lang }}</a></li>
+                        </ul>
+                    {% endif %}
                 {% endif %}
             </div>
         </div>

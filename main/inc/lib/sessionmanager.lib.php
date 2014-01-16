@@ -507,8 +507,14 @@ class SessionManager
      * @param array options order and limit keys
      * @return array table with user name, lp name, progress
      */
-    public static function get_session_lp_progress($sessionId = 0, $courseId = 0, $options)
+    public static function get_session_lp_progress($sessionId = 0, $courseId = 0, $date_from, $date_to, $options)
     {
+        //escaping vars
+        $sessionId  = intval($sessionId);
+        $courseId   = intval($courseId);
+        $date_from  = Database :: escape_string($date_from);
+        $date_to    = Database :: escape_string($date_to);
+
         //tables
         $session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $user                   = Database::get_main_table(TABLE_MAIN_USER);
@@ -613,6 +619,13 @@ class SessionManager
      */
     public static function get_survey_overview($sessionId = 0, $courseId = 0, $surveyId = 0, $date_from, $date_to, $options)
     {
+        //escaping vars
+        $sessionId  = intval($sessionId);
+        $courseId   = intval($courseId);
+        $surveyId   = intval($surveyId);
+        $date_from  = Database::escape_string($date_from);
+        $date_to    = Database::escape_string($date_to);
+
         //tables
         $session_course_user        = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $user                       = Database::get_main_table(TABLE_MAIN_USER);
@@ -641,19 +654,18 @@ class SessionManager
             $order = " ORDER BY ".$options['order'];
         }
 
-        $where_survey = '';
+        /*$where_survey = '';
         if (!empty($date_to) && !empty($date_from)) {
             $where_survey = sprintf(" AND s.avail_from >= '%s'
                         AND s.avail_till <= '%s'", $date_from, $date_to);
-        }
+        }*/
 
         $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code
         FROM $session_course_user s
         INNER JOIN $user u ON u.user_id = s.id_user
         $where $order $limit";
 
-        $sql_query = sprintf($sql, $course['code'], intval($sessionId));
-
+        $sql_query = sprintf($sql, $course['code'], $sessionId);
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs))
         {
@@ -662,23 +674,31 @@ class SessionManager
 
         //Get survey questions
         $questions = survey_manager::get_questions($surveyId, $courseId);
+
+        //Survey is anonymous?
+        $result = Database::query(sprintf("SELECT anonymous FROM $c_survey WHERE survey_id = %d", $surveyId));
+        $row = Database::fetch_array($result);
+        $anonymous = ($row['anonymous'] == 1) ? true : false;
+
         $table = array();
         foreach ($users as $user)
         {
             $data = array(
-                'lastname'  => $user[1],
-                'firstname' => $user[2],
-                'username'  => $user[3],
+                'lastname'  => ($anonymous ? '***' : $user[1]),
+                'firstname' => ($anonymous ? '***' : $user[2]),
+                'username'  => ($anonymous ? '***' : $user[3]),
             );
 
             //Get questions by user
-            $sql = "SELECT sa.question_id, sa.option_id, sqo.option_text
+            $sql = "SELECT sa.question_id, sa.option_id, sqo.option_text, sq.type
             FROM $c_survey_answer sa
-            INNER JOIN $c_survey_question sq ON sq.question_id = sa.question_id "
-            //." INNER JOIN $c_survey s ON sq.survey_id = s.survey_id "
-            ." INNER JOIN $c_survey_question_option sqo ON sqo.c_id = sa.c_id AND sqo.survey_id = sq.survey_id AND sqo.question_id = sq.question_id AND sqo.question_option_id = sa.option_id
-            WHERE sa.survey_id = %d AND sa.c_id = %d AND sa.user = %d" . $where_survey;
-
+            INNER JOIN $c_survey_question sq ON sq.question_id = sa.question_id 
+            LEFT JOIN $c_survey_question_option sqo ON sqo.c_id = sa.c_id 
+            AND sqo.question_id = sq.question_id 
+            AND sqo.question_option_id = sa.option_id 
+            AND sqo.survey_id = sq.survey_id 
+            WHERE sa.survey_id = %d AND sa.c_id = %d AND sa.user = %d 
+            "; //. $where_survey;
             $sql_query = sprintf($sql, $surveyId, $courseId, $user['user_id']);
 
             $result = Database::query($sql_query);
@@ -692,7 +712,11 @@ class SessionManager
             //Match course lessons with user progress
             foreach ($questions as $question_id => $question)
             {
-                $data[$question_id] = $user_questions[$question_id]['option_text'];
+                $option_text = 'option_text';
+                if ($user_questions[$question_id]['type'] == 'open') {
+                    $option_text = 'option_id';
+                }
+                $data[$question_id] = $user_questions[$question_id][$option_text];
             }
 
             $table[] = $data;
@@ -705,7 +729,7 @@ class SessionManager
      * @param array options order and limit keys
      * @return array table with user name, lp name, progress
      */
-    public static function get_session_progress($sessionId, $courseId, $options)
+    public static function get_session_progress($sessionId, $courseId, $date_from, $date_to, $options)
     {
         if (empty($sessionId)) {
             $sessionId = 0;
@@ -713,6 +737,7 @@ class SessionManager
         //tables
         $session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $user                   = Database::get_main_table(TABLE_MAIN_USER);
+        $course_rel_user        = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $workTable              = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
         $workTableAssignment    = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
         $forum                  = Database::get_course_table(TABLE_FORUM);
@@ -735,7 +760,7 @@ class SessionManager
             $users = CourseManager :: get_student_list_from_course_code($course_code, true, $sessionId);
         }*/
         $where = " WHERE course_code = '%s'
-        AND s.status <> 2 and id_session = %s";
+        AND s.status <> 2 ";
 
         $limit = null;
         if (!empty($options['limit'])) {
@@ -751,15 +776,26 @@ class SessionManager
             $order = " ORDER BY ".$options['order'];
         }
 
-        $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code
-        FROM $session_course_user s
-        INNER JOIN $user u ON u.user_id = s.id_user
-        $where $order $limit";
-        $sql_query = sprintf($sql, $course['code'], $sessionId);
+        //TODO, fix create report without session
+        $queryVariables = array($course['code']);
+        if (!empty($sessionId)) {
+            $where .= ' AND id_session = %s';
+            $queryVariables[] = $sessionId;
+            $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code
+                FROM $session_course_user s
+                INNER JOIN $user u ON u.user_id = s.id_user
+                $where $order $limit";
+        } else {
+            $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code
+                FROM $course_rel_user s
+                INNER JOIN $user u ON  u.user_id = s.user_id
+                $where $order $limit";
+        }
+
+        $sql_query = vsprintf($sql, $queryVariables);
 
         $rs = Database::query($sql_query);
-        while ($user = Database::fetch_array($rs))
-        {
+        while ($user = Database::fetch_array($rs)) {
             $users[$user['user_id']] = $user;
         }
 
@@ -996,6 +1032,15 @@ class SessionManager
         $options
     ) {
         global $_configuration;
+
+        //escaping variables
+        $sessionId  = intval($sessionId);
+        $courseId   = intval($courseId);
+        $studentId  = intval($studentId);
+        $profile    = intval($profile);
+        $date_from  = Database::escape_string($date_from);
+        $date_to    = Database::escape_string($date_to);
+
         // database table definition
         $user                   = Database :: get_main_table(TABLE_MAIN_USER);
         $course                 = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -1010,20 +1055,20 @@ class SessionManager
         }
 
         if (isset($sessionId) && !empty($sessionId)) {
-            $where = sprintf(" WHERE a.session_id = %d", intval($sessionId));
+            $where = sprintf(" WHERE a.session_id = %d", $sessionId);
         }
         if (isset($courseId) && !empty($courseId)) {
-            $where .= sprintf(" AND c.id = %d", intval($courseId)) ;
+            $where .= sprintf(" AND c.id = %d", $courseId);
         }
         if (isset($studentId) && !empty($studentId)) {
-            $where .= sprintf(" AND u.user_id = %d", intval($studentId));
+            $where .= sprintf(" AND u.user_id = %d", $studentId);
         }
         if (isset($profile) && !empty($profile)) {
-            $where .= sprintf(" AND u.status = %d", intval($profile));
+            $where .= sprintf(" AND u.status = %d", $profile);
         }
         if (!empty($date_to) && !empty($date_from)) {
             $where .= sprintf(" AND a.login_course_date >= '%s 00:00:00'
-                        AND a.login_course_date <= '%s 23:59:59'", $date_to, $date_from);
+                        AND a.login_course_date <= '%s 23:59:59'", $date_from, $date_to);
         }
 
         $limit = null;
@@ -1053,6 +1098,7 @@ class SessionManager
                 ")."
 
                 a.logout_course_date,
+                a.counter,
                 c.title,
                 c.code,
                 u.user_id
@@ -1062,7 +1108,6 @@ class SessionManager
             $where $order $limit";
         $result = Database::query(sprintf($sql, $sessionId, $courseId));
 
-        $clicks = Tracking::get_total_clicks_by_session();
         $data = array ();
         while ($user = Database::fetch_assoc($result)) {
             $data[] = $user;
@@ -1070,22 +1115,34 @@ class SessionManager
 
         //foreach
         foreach ($data as $key => $info) {
+
+            //We are not using this becaouse the range its to small and no other date match the condition of this function
+            //$clicks = Tracking::get_total_clicks($info['user_id'], $courseId, $sessionId, $info['login_course_date'], $info['logout_course_date']);
+
             #building array to display
             $return[] = array(
+                'user_id' => $info['user_id'],
                 'logindate' => $info['login_course_date'],
                 'username' => $info['username'],
                 'firstname' => $info['firstname'],
                 'lastname' => $info['lastname'],
-                'clicks' => $clicks[$info['user_id']],
+                'clicks' => $info['counter'], //+ $clicks[$info['user_id']],
                 'ip' => '',
                 'timeLoggedIn' => gmdate("H:i:s", strtotime($info['logout_course_date']) - strtotime($info['login_course_date'])),
             );
         }
         //Search for ip, we do less querys if we iterate the final array
         foreach ($return as $key => $info) {
-            $sql = sprintf("SELECT login_ip FROM $track_e_login WHERE ('%s' BETWEEN login_date AND logout_date)", $info['logindate']); //TODO add select by user too
+            //closest lower ip
+            $sql = sprintf("SELECT login_ip FROM $track_e_login WHERE login_user_id = %d AND login_date < '%s' ORDER BY login_date DESC LIMIT 1", $info['user_id'], $info['logindate']); //TODO add select by user too
             $result = Database::query($sql);
             $ip = Database::fetch_assoc($result);
+            //if no ip founded, we search the closest higher ip
+            if (empty($ip['login_ip'])) {
+                $sql = sprintf("SELECT login_ip FROM $track_e_login WHERE login_user_id = %d AND login_date > '%s'  ORDER BY login_date ASC LIMIT 1", $info['user_id'], $info['logindate']); //TODO add select by user too
+                $result = Database::query($sql);
+                $ip = Database::fetch_assoc($result);
+            }
             #add ip to final array
             $return[$key]['ip'] = $ip['login_ip'];
         }

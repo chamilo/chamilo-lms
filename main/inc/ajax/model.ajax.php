@@ -1069,9 +1069,9 @@ if (in_array($action, $allowed_actions)) {
                 require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
                 $browser = new Browser();
                 if ($browser->getPlatform() == Browser::PLATFORM_WINDOWS) {
-                    Export::export_table_xls($array, $file_name, 'ISO-8859-15');
+                    Export::export_table_xls_html($array, $file_name, 'ISO-8859-15');
                 } else {
-                    Export::export_table_xls($array, $file_name);
+                    Export::export_table_xls_html($array, $file_name);
                 }
                 break;
             case 'csv':

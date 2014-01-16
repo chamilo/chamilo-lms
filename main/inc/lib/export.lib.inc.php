@@ -95,6 +95,34 @@ class Export
 	}
 
     /**
+     * Export tabular data to XLS-file (as html table)
+     * @param array $data
+     * @param string $filename
+     */
+    public static function export_table_xls_html($data, $filename = 'export', $encoding = 'utf-8')
+    {
+        $file = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xls';
+        $handle = fopen($file, 'a+');
+        $systemEncoding = api_get_system_encoding();
+        fwrite($handle, '<!DOCTYPE html><html><meta http-equiv="Content-Type" content="text/html" charset="utf-8" /><body><table>');
+        foreach ($data as $id => $row) {
+            foreach ($row as $id2 => $row2) {
+                $data[$id][$id2] = api_htmlentities($row2);
+            }
+        }
+        foreach ($data as $row) {
+            $string = implode("</td><td>", $row);
+            $string = '<tr><td>' . $string . '</td></tr>';
+            if ($encoding != 'utf-8') {
+                $string = api_convert_encoding($string, $encoding, $systemEncoding);
+            }
+            fwrite($handle, $string."\n");
+        }
+        fwrite($handle, '</table></body></html>');
+        fclose($handle);
+        DocumentManager::file_send_for_download($file, false, $filename.'.xls');
+    }
+    /**
     * Export tabular data to XML-file
     * @param array  Simple array of data to put in XML
     * @param string Name of file to be given to the user

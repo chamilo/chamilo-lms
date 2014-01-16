@@ -18,7 +18,7 @@ if ($om->isServerRunning()) {
     if (isset($_GET['launch']) && $_GET['launch'] == 1) {
 
         $meeting_params = array();
-        $meeting_params['meeting_name'] = api_get_course_id().'-'.api_get_session_id();
+        $meeting_params['meeting_name'] = 'C'.api_get_course_id().'-'.api_get_session_id();
         $meetings = $om->getCourseMeetings();
 
         $selectedMeeting = array();

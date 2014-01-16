@@ -288,23 +288,39 @@ class OpenMeetingsGateway
     
     /**
      * Create a new conference room
+     * @param   The room object
+     * @return  The REST call's result
      */
     function createRoomWithModAndType($room)
     {
+        $service = 'addRoomWithModerationAndExternalType';
+        if ($room->allowRecording) {
+            $service = 'addRoomWithModerationAndRecordingFlags';
+        } elseif ($room->isAudioOnly) {
+            $service = 'addRoomWithModerationExternalTypeAndAudioType';
+        }
         $url = $this->getRestUrl("RoomService")
-                . 'addRoomWithModerationAndExternalType?'
+                . $service.'?'
                 . 'SID=' . $room->SID
-                . '&name=' . $room->roomname
+                . '&name=' . $room->name
                 . '&roomtypes_id=' . $room->roomtypes_id
                 . '&comment='. $room->comment
                 . '&numberOfPartizipants=' . $room->numberOfPartizipants
-                . '&ispublic=' . $room->ispublic
-                . '&appointment=' . $room->appointment
-                . '&isDemoRoom=' . $room->isDemoRoom
+                . '&ispublic=' . $this->var_to_str($room->ispublic)
+                . '&appointment=' . $this->var_to_str($room->appointment)
+                . '&isDemoRoom=' . $this->var_to_str($room->isDemoRoom)
                 . '&demoTime=' . $room->demoTime
-                . '&isModeratedRoom=' . $room->isModeratedRoom
+                . '&isModeratedRoom=' . $this->var_to_str($room->isModeratedRoom)
                 . '&externalRoomType=' . $room->externalRoomType;
-        //error_log($url);
+        if ($room->allowRecording) {
+            $url .= '&allowUserQuestions=' . $this->var_to_str($room->allowUserQuestions)
+                 . '&isAudioOnly=' . $this->var_to_str($room->isAudioOnly)
+                 . '&waitForRecording=' . $this->var_to_str($room->waitForRecording)
+                 . '&allowRecording=' . $this->var_to_str($room->allowRecording);
+        } elseif ($room->isAudioOnly) {
+            $url .= '&isAudioOnly=' . $this->var_to_str($room->isAudioOnly);
+        }
+        error_log($url);
         $result = $this->rest->call($url);
         
         if ($this->rest->fault) {
@@ -318,7 +334,7 @@ class OpenMeetingsGateway
                 return $result;
             }
         }
-        return - 1;
+        return -1;
     }
 
     /**
@@ -338,11 +354,11 @@ class OpenMeetingsGateway
         //    . "getRoomTypes?"
         //    . "SID=" . $this->sessionId;
         //$url = $this->getRestUrl('JabberService') . 'getAvailableRooms?SID=' . $this->sessionId;
-        error_log(__FILE__.'+'.__LINE__.' Calling WS: '.$url);
+        //error_log(__FILE__.'+'.__LINE__.' Calling WS: '.$url);
         $result = $this->rest->call($url, "return");
         $rooms = array();
         foreach ($result as $room) {
-            error_log(__FILE__.'+'.__LINE__.': one room found on remote: '.print_r($room,1));
+            //error_log(__FILE__.'+'.__LINE__.': one room found on remote: '.print_r($room,1));
             if ($room['externalRoomType'] == $type && count($room['currentusers']) > 0 ) {
                 $rooms[] = $room;
             }
@@ -384,6 +400,21 @@ class OpenMeetingsGateway
         
         $result = $this->rest->call($url, "return");
         
+        return $result;
+    }
+    /**
+     * Get list of available recordings made for the given room
+     * @param   int $id Room ID
+     */
+    function getFlvRecordingsByRoomId($id)
+    {
+        $url = $this->getRestUrl("RoomService")
+            . "getFlvRecordingByRoomId?"
+            . "SID=" . $this->sessionId
+            . "&roomId=" . urlencode($id);
+
+        $result = $this->rest->call($url, "return");
+
         return $result;
     }
 

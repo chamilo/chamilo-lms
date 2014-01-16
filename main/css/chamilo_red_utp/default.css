@@ -1,0 +1,233 @@
+/*****************************************************
+ *  MAIN  - CHAMILO RED CSS
+ *****************************************************/
+
+/* Adding default style for the chamilo_X themes */
+@import url('../base_chamilo.css');
+
+/* the following for regular <a> elements */
+a {
+    text-decoration: none;
+    color :#ff0000;
+}
+a:visited {
+    text-decoration: none;    
+}
+a:hover {
+    text-decoration: none;
+    color: #f3840d;
+}
+a:active {
+    text-decoration: none;
+    color : #ff0000;
+}
+
+#header1 {
+    /* background-image:url(images/bg-header1.gif); */
+}
+
+.subnav-fixed {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    border-color: #d5d5d5;
+    border-width: 0 0 1px; /* drop the border on the fixed edges */
+    -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+            border-radius: 0;
+}
+
+.subnav .navbar-inner {  
+  background-color: #79AA0B; /* Old browsers */
+  background-repeat: repeat-x; /* Repeat the gradient */
+  background-image: -moz-linear-gradient(top, #D60B19 0%, #E8222F 100%); /* FF3.6+ */
+  
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#D60B19), color-stop(100%,#E8222F)); /* Chrome,Safari4+ */
+  background-image: -webkit-linear-gradient(top, #D60B19 0%, #E8222F 100%); /* Chrome 10+,Safari 5.1+ */
+  background-image: -ms-linear-gradient(top, #D60B19 0%,#E8222F 100%); /* IE10+ */
+  background-image: -o-linear-gradient(top, #D60B19 0%,#E8222F 100%); /* Opera 11.10+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#D60B19', endColorstr='#E8222F',GradientType=0 ); /* IE6-9 */
+  background-image: linear-gradient(top, #D60B19 0%,#E8222F 100%); /* W3C */  
+}
+
+.subnav .nav > li > a {
+    border-left: 1px solid #D60B19;
+    border-right: 1px solid #D60B19;
+}
+
+.subnav .nav > #current > a,
+.subnav .nav > #current > a:hover {  
+  color: #fff;
+  background-color: #D60B19;
+  border-right-color: #D60B19;  
+}
+
+.subnav .nav > li > a {
+    color:#fff;
+}
+
+/* Green hover */
+.subnav .navbar-inner li a:hover {
+    background: none repeat scroll 0 0 #E8222F;
+    color: #fff;
+}
+
+/*****************************************************
+ *  FOOTER STYLES                                    *
+ *****************************************************/
+footer {
+    background-color: #a90a0e;
+    background-image: url(images/bg-footer.gif);
+    background-repeat:repeat-x;
+    font-size: 12px;
+    color:#ffffff;
+    height: 9em;
+    overflow:hidden;
+    width: 100%;    
+}
+
+/* Sticky footer*/
+.push {
+    height: 9em; /* Very important */
+}
+#footer .copyright {
+    float: right;
+    padding-top:60px;
+    margin-right:5%;    
+}
+
+.footer_emails{
+    float: left;
+    padding-top:60px;
+    margin-right:5%;    
+}
+
+/*****************************************************
+ *  DISPLAY MESSAGES	                             *
+ *****************************************************/
+.normal-message {    
+    color: #00407F;	
+    border: 1px solid #CDE6F5;	
+    background: url("images/background_message.png") repeat-x scroll 0 0 #EAF8FE;
+}
+.warning-message {    
+    border: 1px solid #FFB30F;
+    color: #000;    
+	background: url("images/background_message.png") repeat-x scroll 0 0 #FFEFA7;
+}
+.confirmation-message {
+	border: 1px solid #1F8323;
+    color:#1F8323;
+	background: url("images/background_message.png") repeat-x scroll 0 0 #CAF0C7;
+}
+.error-message {        
+    border: 1px solid #FF0000;
+    color: #440000;
+	background: url("images/background_message.png") repeat-x scroll 0 0 #FFD1D1;
+}
+
+/* New training */
+.bottom-link {
+    background-image:url(images/button_back.jpg);
+}
+
+.social-menu-title {
+    background-color:#ff0000;
+}
+
+#social-content-online {
+    background-color:#ff0000;
+}
+        
+.admin_section li {
+    background-image:url(images/bullet.gif);
+}
+
+.system_announcements {
+    background: transparent url('images/systemenouvelles.jpg') no-repeat top  left;
+}
+
+.topa {
+    background:transparent url('images/logoa4.gif') no-repeat;
+}
+.topb {
+    background:transparent url('images/logob4.gif') no-repeat;
+}
+
+#bottomhellomindfactory {    
+    background:transparent url('images/textologo.jpg') no-repeat;
+}
+
+
+#exercise_close_link {
+    background: url(images/close.gif) no-repeat;
+}
+
+#exercise_close_link:hover {
+    background: url(images/close_highlight.gif) no-repeat;
+}
+
+/*including "login" image*/
+button.login {
+    background-image:url(images/bg-button.gif);
+}
+
+button.login:hover {
+}
+
+/*including "save" image*/
+button.save {
+    background-image:url(images/button_accept.gif);
+}
+/*including "add" image*/
+button.add {
+    background-image:url(images/button_add.gif);
+}
+/*including "cancel" image*/
+button.cancel {
+    background-image:url(images/button_delete.gif);
+}
+/*including "search" image*/
+button.search {
+    background-image:url(images/bg-button.gif);
+}
+/*including "plus" image*/
+button.plus {
+    background-image:url(images/button_plus.gif);
+}
+/*including "minus" image*/
+button.minus {
+    background-image:url(images/button_minus.gif);
+}
+/*including "next" image*/
+button.next {
+    background-image:url(images/button_next.gif);
+}
+/*including "back" image*/
+button.back {
+    background-image:url(images/button_back.gif);
+}
+/*including "refresh" image*/
+button.refresh {
+    background-image:url(images/button_refresh.gif);
+}
+/*including "upload" image*/
+button.upload {
+    background-image:url(images/button_upload.gif);
+}
+button.arrowr, input.arrowr {
+	background-image:url(images/2rightarrow.gif);	
+}
+button.arrowl, input.arrowl {
+    background-image:url(images/2leftarrow.gif);	
+}
+
+.refresh {
+    background-image:url(images/refresh.png);
+}
+
+.portal {
+    background-image:url(images/portal.png);
+}

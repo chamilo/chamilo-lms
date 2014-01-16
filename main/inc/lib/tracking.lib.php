@@ -2052,47 +2052,132 @@ class Tracking
         return $data;
     }
     /**
-     * Get total clicks by session
-     * @param    int        Session id (optional), if param $session_id is null(default) it'll return results including sessions, 0 = session is not filtered
-     * @return    array     data
-     * @todo    implement total click by $course_id
+     * Get total clicks
+     * THIS FUNCTION IS NOT BEEN USED, IT WAS MEANT TO BE USE WITH track_e_course_access.date_from and track_e_course_access.date_to, 
+     * BUT NO ROW MATCH THE CONDITION, IT SHOULD BE FINE TO USE IT WHEN YOU USE USER DEFINED DATES AND NO CHAMILO DATES
+     * @param   int     User Id
+     * @param   int     Course Id
+     * @param   int     Session Id (optional), if param $session_id is null(default) it'll return results including sessions, 0 = session is not filtered
+     * @param   string  Date from
+     * @param   string  Date to
+     * @return  array   Data
+     * @author  César Perales cesar.perales@beeznest.com 2014-01-16
      */
-    public static function get_total_clicks_by_session($session_id = null) {
+    public static function get_total_clicks($userId, $courseId, $sessionId = 0, $date_from = '', $date_to = '') 
+    {
+        $course = api_get_course_info_by_id($courseId);
         $tables = array(
-            TABLE_STATISTIC_TRACK_E_LASTACCESS => array('access_session_id','access_user_id'),
-            TABLE_STATISTIC_TRACK_E_ACCESS => array('access_session_id', 'access_user_id'),
-            #TABLE_STATISTIC_TRACK_E_LOGIN,
-            TABLE_STATISTIC_TRACK_E_DOWNLOADS => array('down_session_id', 'down_user_id'),
-            TABLE_STATISTIC_TRACK_E_LINKS => array('links_session_id', 'links_user_id'),
-            TABLE_STATISTIC_TRACK_E_ONLINE => array('session_id', 'login_user_id'),
+            TABLE_STATISTIC_TRACK_E_LASTACCESS => array(
+                'course'    => 'access_cours_code',
+                'session'   => 'access_session_id',
+                'user'      => 'access_user_id',
+                'start_date'=> 'access_date',
+                ),
+            TABLE_STATISTIC_TRACK_E_ACCESS => array(
+                'course'    => 'access_cours_code',
+                'session'   => 'access_session_id',
+                'user'      => 'access_user_id',
+                'start_date'=> 'access_date',
+                ),
+            #TABLE_STATISTIC_TRACK_E_LOGIN, array(,, 'login_date', 'logout_date');
+            TABLE_STATISTIC_TRACK_E_DOWNLOADS => array(
+                'course'    => 'down_cours_id',
+                'session'   => 'down_session_id',
+                'user'      => 'down_user_id',
+                'start_date'=> 'down_date',
+                ),
+            TABLE_STATISTIC_TRACK_E_LINKS => array(
+                'course'    => 'links_cours_id',
+                'session'   => 'links_session_id',
+                'user'      => 'links_user_id',
+                'start_date'=> 'links_date',
+                ),
+            TABLE_STATISTIC_TRACK_E_ONLINE => array(
+                'course'    => 'course',
+                'session'   => 'session_id',
+                'user'      => 'login_user_id',
+                'start_date'=> 'login_date',
+                ),
             #TABLE_STATISTIC_TRACK_E_HOTPOTATOES,
-            TABLE_STATISTIC_TRACK_E_COURSE_ACCESS => array('session_id', 'user_id'),
-            TABLE_STATISTIC_TRACK_E_EXERCICES => array('session_id', 'exe_user_id'),
-            TABLE_STATISTIC_TRACK_E_ATTEMPT => array('session_id', 'user_id'),
+            /*TABLE_STATISTIC_TRACK_E_COURSE_ACCESS => array(
+                'course'    => 'course_code',
+                'session'   => 'session_id',
+                'user'      => 'user_id',
+                'start_date'=> 'login_course_date',
+                'end_date'  => 'logout_course_date',
+                ),*/
+            TABLE_STATISTIC_TRACK_E_EXERCICES => array(
+                'course'    => 'exe_cours_id',
+                'session'   => 'session_id',
+                'user'      => 'exe_user_id',
+                'start_date'=> 'exe_date',
+                ),
+            TABLE_STATISTIC_TRACK_E_ATTEMPT => array(
+                'course'    => 'course_code',
+                'session'   => 'session_id',
+                'user'      => 'user_id',
+                'start_date'=> 'tms',
+                ),
             #TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING,
             #TABLE_STATISTIC_TRACK_E_DEFAULT,
-            TABLE_STATISTIC_TRACK_E_UPLOADS => array('upload_session_id', 'upload_user_id'),
+            TABLE_STATISTIC_TRACK_E_UPLOADS => array(
+                'course'    => 'upload_cours_id',
+                'session'   => 'upload_session_id',
+                'user'      => 'upload_user_id',
+                'start_date'=> 'upload_date',
+                ),
             #TABLE_STATISTIC_TRACK_E_HOTSPOT,
             #TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY,
             #TABLE_STATISTIC_TRACK_E_OPEN,
             );
 
-        if (isset($_GET['session_id']) && !empty($_GET['session_id']))
-        {
-            $sessionId = intval($_GET['session_id']);
-        }
+        $error_sql = '';
+        foreach ($tables as $tableName => $fields) {
+            //If session is defined, add it to query
+            $where = '';
+            if (isset($sessionId) && !empty($sessionId)) {
+                $sessionField = $fields['session'];
+                $where .= " AND $sessionField = $sessionId";
+            }
 
-        foreach ($tables as $tableName => $fields)
-        {
-            $sql = sprintf('SELECT %s as user, count(*) as total FROM %s WHERE %s = %s GROUP BY %s', $fields[1], $tableName, $fields[0], $sessionId, $fields[1]);
+            //filter by date
+            if (!empty($date_from) && !empty($date_to)) {
+                $fieldStartDate = $fields['start_date'];
+                if (!isset($fields['end_date'])) {
+                    $where .= sprintf(" AND ($fieldStartDate BETWEEN '%s' AND '%s' )", $date_from, $date_to) ;  
+                } else {
+                    $fieldEndDate = $fields['end_date'];
+                    $where .= sprintf(" AND fieldStartDate >= '%s'
+                        AND $fieldEndDate <= '%s'", $date_from, $date_to);
+                }
+            }
+
+
+            //query
+            $sql = "SELECT %s as user, count(*) as total
+                FROM %s
+                WHERE %s = '%s'
+                AND %s = %s
+                $where
+                GROUP BY %s";
+            $sql = sprintf($sql, 
+                $fields['user'],    //user field
+                $tableName,         //FROM 
+                $fields['course'],  //course condition
+                $course['code'],    //course condition
+                $fields['user'],    //user condition
+                $userId,            //user condition
+                $fields['user']     //GROUP BY
+                );
             $rs = Database::query($sql);
+
+            //iterate query
             if (Database::num_rows($rs) > 0) {
                 while ($row = Database::fetch_array($rs)) {
                     $data[$row['user']] = (isset($data[$row['user']])) ?  $data[$row['user']] + $row[total]: $row['total'];
                 }
             }
         }
-
         return $data;
     }
 

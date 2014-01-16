@@ -3393,11 +3393,14 @@ class Tracking
             $questionIds = array();
             $answerIds = array();
             while ($row = Database::fetch_array($rs)) {
-                $userIds[$row['user_id']] = $row['user_id'];
-                $questionIds[$row['question_id']] = $row['question_id'];
-                $answerIds[$row['question_id']][$row['answer_id']] = $row['answer_id'];
-                $row['session'] = $sessions[$row['session_id']];
-                $data[] = $row;
+                //only show if exercise is visible
+                if (api_get_item_visibility($courseData, 'quiz', $row['exercise_id'])) {
+                    $userIds[$row['user_id']] = $row['user_id'];
+                    $questionIds[$row['question_id']] = $row['question_id'];
+                    $answerIds[$row['question_id']][$row['answer_id']] = $row['answer_id'];
+                    $row['session'] = $sessions[$row['session_id']];
+                    $data[] = $row;
+                }
             }
             // Now fill questions data. Query all questions and answers for this test to avoid
             $sqlQuestions = "SELECT tq.c_id, tq.id as question_id, tq.question, tqa.id_auto, tqa.answer, tqa.correct, tq.position

@@ -922,9 +922,9 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         if (!empty($_GET['course_id'])) {
             if(!empty($_GET['date_to']) && (!empty($_GET['date_from']))) {
                 if (!empty($_GET['student_id'])) {
-                    echo MySpace::display_tracking_access_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['student_id']), '',  $_GET['date_from'], $_GET['date_to']);
+                    echo MySpace::display_tracking_access_overview($_GET['session_id'], $_GET['course_id'], $_GET['student_id'], '',  $_GET['date_from'], $_GET['date_to']);
                 } else if (!empty($_GET['profile'])) {
-                    echo MySpace::display_tracking_access_overview(intval($_GET['session_id']), intval($_GET['course_id']), '', $_GET['profile'], $_GET['date_from'], $_GET['date_to']);
+                    echo MySpace::display_tracking_access_overview($_GET['session_id'], $_GET['course_id'], '', $_GET['profile'], $_GET['date_from'], $_GET['date_to']);
                 } else {
                     Display::display_warning_message(get_lang('ChooseStudentOrProfile'));
                 }

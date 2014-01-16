@@ -316,7 +316,7 @@ class MySpace {
 
         $action_links = '';
         // jqgrid will use this URL to do the selects
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_lp_progress&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId) . '&date_to=' . $date_to . '&date_from=' . $date_from;
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_lp_progress&session_id=' . $sessionId . '&course_id=' . $courseId . '&date_to=' . $date_to . '&date_from=' . $date_from;
 
         //Table Id
         $tableId = 'lpProgress';
@@ -389,7 +389,7 @@ class MySpace {
         //get dynamic column names
 
         // jqgrid will use this URL to do the selects
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_progress&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId)  . '&exercise_id=' . intval($exerciseId) . '&date_to=' . $date_to . '&date_from=' . $date_from;
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_progress&session_id=' . $sessionId . '&course_id=' . $courseId  . '&exercise_id=' . $exerciseId . '&date_to=' . $date_to . '&date_from=' . $date_from;
 
         //Autowidth
         $extra_params['autowidth'] = 'true';
@@ -454,7 +454,7 @@ class MySpace {
         $action_links = '';
 
         // jqgrid will use this URL to do the selects
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_survey_overview&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId) . '&survey_id=' . intval($surveyId) . '&date_to=' . $date_to . '&date_from=' . $date_from;
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_survey_overview&session_id=' . $sessionId . '&course_id=' . $courseId . '&survey_id=' . $surveyId . '&date_to=' . $date_to . '&date_from=' . $date_from;
 
         //Table Id
         $tableId = 'lpProgress';
@@ -582,7 +582,7 @@ class MySpace {
 
         $action_links = '';
         // jqgrid will use this URL to do the selects
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_progress&session_id=' . intval($sessionId) . '&course_id=' . intval($courseId) . '&date_to=' . $date_to . '&date_from=' . $date_from;
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_session_progress&session_id=' . $sessionId . '&course_id=' . $courseId . '&date_to=' . $date_to . '&date_from=' . $date_from;
 
         //Table Id
         $tableId = 'progressOverview';

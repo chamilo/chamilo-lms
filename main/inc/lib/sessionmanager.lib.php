@@ -509,6 +509,12 @@ class SessionManager
      */
     public static function get_session_lp_progress($sessionId = 0, $courseId = 0, $date_from, $date_to, $options)
     {
+        //escaping vars
+        $sessionId  = intval($sessionId);
+        $courseId   = intval($courseId);
+        $date_from  = Database :: escape_string($date_from);
+        $date_to    = Database :: escape_string($date_to);
+
         //tables
         $session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $user                   = Database::get_main_table(TABLE_MAIN_USER);
@@ -613,6 +619,13 @@ class SessionManager
      */
     public static function get_survey_overview($sessionId = 0, $courseId = 0, $surveyId = 0, $date_from, $date_to, $options)
     {
+        //escaping vars
+        $sessionId  = intval($sessionId);
+        $courseId   = intval($courseId);
+        $surveyId   = intval($surveyId);
+        $date_from  = Database::escape_string($date_from);
+        $date_to    = Database::escape_string($date_to);
+
         //tables
         $session_course_user        = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $user                       = Database::get_main_table(TABLE_MAIN_USER);
@@ -652,7 +665,7 @@ class SessionManager
         INNER JOIN $user u ON u.user_id = s.id_user
         $where $order $limit";
 
-        $sql_query = sprintf($sql, $course['code'], intval($sessionId));
+        $sql_query = sprintf($sql, $course['code'], $sessionId);
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs))
         {
@@ -1019,6 +1032,15 @@ class SessionManager
         $options
     ) {
         global $_configuration;
+
+        //escaping variables
+        $sessionId  = intval($sessionId);
+        $courseId   = intval($courseId);
+        $studentId  = intval($studentId);
+        $profile    = intval($profile);
+        $date_from  = Database::escape_string($date_from);
+        $date_to    = Database::escape_string($date_to);
+
         // database table definition
         $user                   = Database :: get_main_table(TABLE_MAIN_USER);
         $course                 = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -1033,16 +1055,16 @@ class SessionManager
         }
 
         if (isset($sessionId) && !empty($sessionId)) {
-            $where = sprintf(" WHERE a.session_id = %d", intval($sessionId));
+            $where = sprintf(" WHERE a.session_id = %d", $sessionId);
         }
         if (isset($courseId) && !empty($courseId)) {
-            $where .= sprintf(" AND c.id = %d", intval($courseId)) ;
+            $where .= sprintf(" AND c.id = %d", $courseId);
         }
         if (isset($studentId) && !empty($studentId)) {
-            $where .= sprintf(" AND u.user_id = %d", intval($studentId));
+            $where .= sprintf(" AND u.user_id = %d", $studentId);
         }
         if (isset($profile) && !empty($profile)) {
-            $where .= sprintf(" AND u.status = %d", intval($profile));
+            $where .= sprintf(" AND u.status = %d", $profile);
         }
         if (!empty($date_to) && !empty($date_from)) {
             $where .= sprintf(" AND a.login_course_date >= '%s 00:00:00'

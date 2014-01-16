@@ -3265,6 +3265,11 @@ class Tracking
      */
     public static function get_exercise_progress($sessionId = 0, $courseId = 0, $exerciseId = 0, $date_from, $date_to, $options = array())
     {
+        $sessionId  = intval($sessionId);
+        $courseId   = intval($courseId);
+        $exerciseId = intval($exerciseId);
+        $date_from  = Database::escape_string($date_from);
+        $date_to    = Database::escape_string($date_to);
         /*
          * This method gets the data by blocks, as previous attempts at one single
          * query made it take ages. The logic of query division is described below

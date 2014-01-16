@@ -684,7 +684,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             if (!empty($exerciseId)) {
                 $exerciseList = array();
                 $exerciseInfo = current(get_exercise_by_id($exerciseId, $_GET['course_id']));
-                $exerciseList[] = array('id' => $exerciseInfo['id'], 'text' => html_entity_decode($exerciseInfo['title']));
+                $exerciseList[] = array('id' => $exerciseInfo['id'], 'text' => api_html_entity_decode($exerciseInfo['title']));
             }
             $sessionFilter->addElement('select_ajax', 'exercise_name', get_lang('SearchExercise'), null, array('url' => $url, 'defaults' => $exerciseList, 'width' => '400px'));
 
@@ -702,7 +702,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $surveyList = array();
                 $surveyInfo = survey_manager::get_survey($surveyId, 0, $course['code']);
                 $surveyInfo['title'] .= ($surveyInfo['anonymous'] == 1) ? ' (' . get_lang('Anonymous') . ')': '';
-                $surveyList[] = array('id' => $surveyInfo['survey_id'], 'text' => strip_tags(html_entity_decode($surveyInfo['title'])));
+                $surveyList[] = array('id' => $surveyInfo['survey_id'], 'text' => strip_tags(api_html_entity_decode($surveyInfo['title'])));
             }
             $sessionFilter->addElement('select_ajax', 'survey_name', get_lang('SearchSurvey'), null, array('url' => $url, 'defaults' => $surveyList, 'width' => '400px'));
 

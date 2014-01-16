@@ -3062,7 +3062,7 @@ function api_get_item_visibility($_course, $tool, $id, $session = 0, $user_id = 
     				tool = '$tool' AND
     				ref = $id AND
     				(id_session = $session OR id_session = 0 OR id_session IS NULL) $user_condition $type_condition $group_condition
-    		ORDER BY id_session DESC, lastedit_date DESC";
+    		ORDER BY id_session DESC, lastedit_date DESC LIMIT 1";
     $res = Database::query($sql);
 
     if ($res === false || Database::num_rows($res) == 0) { return -1; }

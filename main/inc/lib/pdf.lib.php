@@ -283,6 +283,9 @@ class PDF
      */
     public function content_to_pdf($document_html, $css = '', $pdf_name = '', $course_code = null)
     {
+
+        global $_configuration;
+
         if (empty($document_html)) {
             return false;
         }
@@ -308,7 +311,7 @@ class PDF
 
         $document_html= str_replace('../../','',$document_html);
         $document_html= str_replace('../','',$document_html);
-        $document_html= str_replace('courses/'.$course_code.'/document/','',$document_html);
+        $document_html= str_replace($_configuration['url_append'] .'/courses/'.$course_code.'/document/','',$document_html);//SOSPECHOSO
 
         if (!empty($course_data['path'])) {
             $document_path = api_get_path(SYS_COURSE_PATH).$course_data['path'].'/document/';

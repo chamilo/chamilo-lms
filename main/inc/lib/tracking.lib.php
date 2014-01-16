@@ -3379,7 +3379,7 @@ class Tracking
                 ta.answer as answer_id,
                 ta.tms as time,
                 te.exe_exo_id as quiz_id,
-                CONCAT (q.c_id,'-', q.id) as exercise_id,
+                CONCAT ('c', q.c_id, '_e', q.id) as exercise_id,
                 q.title as quiz_title
                 FROM $ttrack_exercises te, $ttrack_attempt ta, $tquiz q
                 WHERE te.exe_cours_id = '$whereCourseCode' ".(empty($whereSessionParams)?'':"AND te.session_id IN ($whereSessionParams)")."

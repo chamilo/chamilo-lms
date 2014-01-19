@@ -133,7 +133,10 @@ class Template
         $this->set_header_parameters();
         $this->set_footer_parameters();
 
+        $this->style = api_get_visual_theme();
         $this->assign('style', $this->style);
+        $this->assign('css_style', $this->style);
+        $this->assign('template', $this->app['template_style']);
 
         //Chamilo plugins
         if ($this->show_header) {

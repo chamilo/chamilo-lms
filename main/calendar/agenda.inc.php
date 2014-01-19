@@ -2738,6 +2738,12 @@ function show_add_form($id = '', $type = null)
                         echo $return;
                         //echo '<textarea class="span5"  rows="4" name="content">'.$content.'</textarea>';
                         echo '</div>
+                <label class="control-label">
+                    '.get_lang('AddAnnouncement').'&nbsp('.get_lang('SendMail').')
+                </label>
+                <div class = "controls">
+                    <input id="add_announcement" type="checkbox" name="add_announcement" checked="checked"/>
+                </div>
 			</div>';
 
             if ($agendaObj->type == 'course') {
@@ -4093,7 +4099,7 @@ function show_add_form($id = '', $type = null)
 
         $result = Database::query($sql);
         $last_id = Database::insert_id();
-
+        
         // add a attachment file in agenda
 
         add_agenda_attachment_file($file_comment, $last_id);

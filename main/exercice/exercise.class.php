@@ -1169,7 +1169,7 @@ class Exercise {
 
                 $defaults['randomAnswers']          = $this->selectRandomAnswers();
                 $defaults['exerciseType']           = $this->selectType();
-                $defaults['exerciseTitle']          = html_entity_decode($this->selectTitle());
+                $defaults['exerciseTitle']          = api_html_entity_decode($this->selectTitle());
                 $defaults['exerciseDescription']    = $this->selectDescription();
                 $defaults['exerciseAttempts']       = $this->selectAttempts();
                 $defaults['exerciseFeedbackType']   = $this->selectFeedbackType();
@@ -1250,7 +1250,7 @@ class Exercise {
      */
     function processCreation($form, $type = '')
     {
-        $this->updateTitle(htmlentities($form->getSubmitValue('exerciseTitle')));
+        $this->updateTitle(api_htmlentities($form->getSubmitValue('exerciseTitle')));
         $this->updateDescription($form->getSubmitValue('exerciseDescription'));
         $this->updateAttempts($form->getSubmitValue('exerciseAttempts'));
         $this->updateFeedbackType($form->getSubmitValue('exerciseFeedbackType'));

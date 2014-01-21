@@ -134,6 +134,8 @@ class Template
         $this->set_footer_parameters();
 
         $this->assign('style', $this->style);
+        $this->assign('css_style', $this->theme);
+        $this->assign('template', $this->style);
 
         //Chamilo plugins
         if ($this->show_header) {

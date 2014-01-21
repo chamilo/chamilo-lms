@@ -31,10 +31,10 @@ switch ($action) {
 		$tbl_my_user		     = Database::get_main_table(TABLE_MAIN_USER);
 		$tbl_my_user_friend      = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
 		$tbl_user 			     = Database::get_main_table(TABLE_MAIN_USER);
-        $tbl_access_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+    $tbl_access_url_rel_user = Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 		$search				     = Database::escape_string($_REQUEST['tag']);		
         
-        $access_url_id           = api_get_multiple_access_url() == 'true' ? api_get_current_access_url_id() : 0;
+    $access_url_id           = api_get_multiple_access_url() == 'true' ? api_get_current_access_url_id() : 0;
 		$user_id                 = api_get_user_id();
 		$is_western_name_order   = api_is_western_name_order();
             
@@ -42,21 +42,21 @@ switch ($action) {
 			//all users            
 			if (api_get_setting('allow_send_message_to_all_platform_users') == 'true' || api_is_platform_admin() ) {  
 			    if ($access_url_id != 0) {
-                    $sql = 'SELECT DISTINCT u.user_id as id, '.($is_western_name_order ? 'concat(u.firstname," ",u.lastname," ","( ",u.email," )")' : 'concat(u.lastname," ",u.firstname," ","( ",u.email," )")').' as name
+            $sql = 'SELECT DISTINCT u.user_id as id, '.($is_western_name_order ? 'concat(u.firstname," ",u.lastname," ","( ",u.email," )")' : 'concat(u.lastname," ",u.firstname," ","( ",u.email," )")').' as name
 				    FROM '.$tbl_user.' u LEFT JOIN'.$tbl_access_url_rel_user.' r ON u.user_id = r.user_id
-		 		    WHERE u.status <> 6  AND u.user_id <>'.$user_id.' AND r.access_url_id = '.$access_url_id.' AND '.($is_western_name_order ? 'concat(u.firstname, " ", u.lastname)' : 'concat(u.lastname, " ", u.firstname)').' LIKE CONCAT("%","'.$search.'","%") ';
+		 		  WHERE u.status <> 6  AND u.user_id <>'.$user_id.' AND r.access_url_id = '.$access_url_id.' AND '.($is_western_name_order ? 'concat(u.firstname, " ", u.lastname)' : 'concat(u.lastname, " ", u.firstname)').' LIKE CONCAT("%","'.$search.'","%") ';
 
-                } else {
+          } else {
 				    $sql = 'SELECT DISTINCT u.user_id as id, '.($is_western_name_order ? 'concat(u.firstname," ",u.lastname," ","( ",u.email," )")' : 'concat(u.lastname," ",u.firstname," ","( ",u.email," )")').' as name
 				    FROM '.$tbl_user.' u 
-		 		    WHERE u.status <> 6  AND u.user_id <>'.$user_id.' AND '.($is_western_name_order ? 'concat(u.firstname, " ", u.lastname)' : 'concat(u.lastname, " ", u.firstname)').' LIKE CONCAT("%","'.$search.'","%") ';
-                }
+		 		   WHERE u.status <> 6  AND u.user_id <>'.$user_id.' AND '.($is_western_name_order ? 'concat(u.firstname, " ", u.lastname)' : 'concat(u.lastname, " ", u.firstname)').' LIKE CONCAT("%","'.$search.'","%") ';
+          }
 			} else {				
 				//only my contacts
-                if ($access_url_id != 0) {
+          if ($access_url_id != 0) {
 				    $sql = 'SELECT DISTINCT u.user_id as id, '.($is_western_name_order ? 'concat(u.firstname," ",u.lastname," ","( ",u.email," )")' : 'concat(u.lastname," ",u.firstname," ","( ",u.email," )")').' as name
 				    FROM '.$tbl_access_url_rel_user.' r,'.$tbl_my_user_friend.' uf INNER JOIN '.$tbl_my_user.' AS u  ON uf.friend_user_id = u.user_id ' .
-		 		    'WHERE u.status <> 6 AND relation_type NOT IN('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') 
+		 		   'WHERE u.status <> 6 AND relation_type NOT IN('.USER_RELATION_TYPE_DELETED.', '.USER_RELATION_TYPE_RRHH.') 
 		 		           AND uf.user_id = '.$user_id.' AND friend_user_id<>'.$user_id.' AND u.user_id = r.user_id AND r.access_url_id ='.$access_url_id.'
 		 		           AND '.($is_western_name_order ? 'concat(u.firstname, " ", u.lastname)' : 'concat(u.lastname, " ", u.firstname)').' LIKE CONCAT("%","'.$search.'","%") ';
                 } else {

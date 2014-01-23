@@ -534,6 +534,161 @@ class Tracking
     }
 
     /**
+     * get teacher progress by course and session
+     * @param int course id
+     * @param int session id
+     * @return data array
+     */
+    static function get_teachers_progress_by_course($courseId, $sessionId) {
+           $course = api_get_course_info_by_id($courseId);
+           //get teachers
+           $sql = "SELECT id_session, id_user
+                   FROM `session_rel_course_rel_user`
+                   WHERE status = 2
+                   AND visibility = 1
+                   AND course_code = '%s' 
+                  AND id_session = %s";
+        $query = sprintf($sql,$course['code'], $sessionId);
+        $rs = Database::query($query);
+        $teachers = array();
+        while ($teacher = Database::fetch_array($rs,'ASSOC')) {
+       error_log(print_r($teacher,1));
+            $teachers[] = $teacher;
+        }
+       foreach ($teachers as $teacher) {
+            //total documents added
+            $sql = "SELECT count(*) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'DocumentAdded'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                        $courseId,
+                        $teacher['id_user'],
+                        $teacher['id_session']
+                       );
+   //error_log($query);
+            $rs = Database::query($query);
+            $totalDocuments = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalDocuments = $row[0];
+            }
+            //total links added
+            $sql = "SELECT count(*) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'LinkAdded'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                        $courseId,
+                        $teacher['id_user'],
+                        $teacher['id_session']
+                       );
+            $rs = Database::query($query);
+            
+            $totalLinks = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalLinks = $row[0];
+            }
+            //total forums added
+            $sql = "SELECT count(*) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'ForumthreadVisible'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                        $courseId,
+                        $teacher['id_user'],
+                        $teacher['id_session']
+                       );
+            $rs = Database::query($query);
+            
+            $totalForums = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalForums = $row[0];
+            }
+            //total wikis added
+            $sql = "SELECT COUNT(DISTINCT(ref)) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'WikiAdded'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                        $courseId,
+                        $teacher['id_user'],
+                        $teacher['id_session']
+                       );
+            $rs = Database::query($query);
+            
+            $totalWikis = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalWikis = $row[0];
+            }
+            //total works added
+            $sql = "SELECT COUNT(*) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'DirectoryCreated'
+                    AND tool = 'work'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                        $courseId,
+                        $teacher['id_user'],
+                        $teacher['id_session']
+                       );
+            $rs = Database::query($query);
+            
+            $totalWorks = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalWorks = $row[0];
+            }
+            //total announcements added
+            $sql = "SELECT COUNT(*) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'AnnouncementAdded'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                        $courseId,
+                        $teacher['id_user'],
+                        $teacher['id_session']
+                       );
+            $rs = Database::query($query);
+            
+            $totalAnnouncements = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalAnnouncements = $row[0];
+            }
+            $tutor = get_user_info_by_id($teacher['id_user']);
+            $data[] = array(
+                'course'        => $course['title'],
+                'session'       => $teacher['id_session'],
+                'tutor'         => $tutor['lastname'] . ' ' . $tutor['firstname'],
+                'documents'     => $totalDocuments,
+                'links'         => $totalLinks,
+                'forums'        => $totalForums,
+                'works'         => $totalWorks,
+                'wikis'         => $totalWikis,
+                'announcements' => $totalAnnouncements,
+                );
+        }
+        return $data;
+    }
+
+
+    /**
      * Returns the average student progress in the learning paths of the given
      * course.
      * @param   int/array    Student id(s)

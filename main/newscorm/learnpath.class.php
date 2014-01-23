@@ -9066,7 +9066,7 @@ EOD;
                         $image_moved = true;
                         $this->set_preview_image($new_file_name);
 
-                        //Resize to 32
+                        //Resize to 64px to use on course homepage
                         $temp->resize(64, 64, 0);
                         $temp->send_image($updir.'/'.$filename.'.64.'.$file_extension);
                         return true;

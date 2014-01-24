@@ -593,7 +593,7 @@ class Agenda
         }
 
         if (!empty($start)  && !empty($end)) {
-            $sql .= " AND (start_date >= '".$start."' AND (end_date <= '".$end."' OR end_date IS NULL) )";
+            $dateCondition = "((agenda.start_date >= '".$start."' OR agenda.start_date IS NULL) AND (agenda.end_date <= '".$end."' OR agenda.end_date IS NULL) AND )";
         }
 
         $result = Database::query($sql);
@@ -602,11 +602,12 @@ class Agenda
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 // to gather sent_tos
                 $sql = "SELECT to_user_id, to_group_id
-                    FROM ".$tbl_property." ip
+                    FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
                     WHERE   ip.tool         = '".TOOL_CALENDAR_EVENT."' AND
                             ref             = {$row['ref']} AND
                             ip.visibility   = '1' AND
-                            ip.c_id         = $course_id";
+                            ip.c_id         = $course_id AND
+                            $dateCondition";
                 $sent_to_result = Database::query($sql);
                 $user_to_array = array();
                 $group_to_array = array();

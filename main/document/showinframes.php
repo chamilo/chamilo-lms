@@ -409,7 +409,7 @@ if ($is_nanogong_available) {
         echo '<br/>';
         echo '<br/>';
         
-		echo '<applet id="applet" archive="../inc/lib/nanogong/nanogong.jar" code="gong.NanoGong" width="160" height="40">';
+		echo '<applet id="applet" archive="../inc/lib/nanogong/nanogong.jar" code="gong.NanoGong" width="160" height="95">';
             echo '<param name="SoundFileURL" value="'.$to_url.'" />';
             echo '<param name="ShowSaveButton" value="false" />';
             echo '<param name="ShowTime" value="true" />';

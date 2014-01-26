@@ -3407,7 +3407,7 @@ function WSCreateSession($params)
                 $results[] = 0;
                 continue;*/
         } else {
-            $rs = Database::query("SELECT 1 FROM $tbl_session WHERE name='".Datanbase::escape_string($name)."'");
+            $rs = Database::query("SELECT 1 FROM $tbl_session WHERE name='".Database::escape_string($name)."'");
             if (Database::num_rows($rs)) {
                 $results[] = 0;
                 continue;

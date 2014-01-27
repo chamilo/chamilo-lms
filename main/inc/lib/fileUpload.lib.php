@@ -256,7 +256,6 @@ function handle_uploaded_document(
 			$files_perm = api_get_permissions_for_new_files();
 
 			// What to do if the target file exists
-            error_log($what_if_file_exists);
 			switch ($what_if_file_exists) {
 				// Overwrite the file if it exists
 				case 'overwrite':

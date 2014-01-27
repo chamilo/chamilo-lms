@@ -2080,13 +2080,23 @@ class learnpath
 
             $audio = $row['audio'];
 
-            $file = '../../courses/'.$courseInfo['path'].'/document/audio/'.$audio;
+            $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$audio;
+            $url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$audio;
             if (!file_exists($file)) {
                 $lpPathInfo = $_SESSION['oLP']->generate_lp_folder(api_get_course_info());
-                $file = '../../courses/'.$_course['path'].'/document'.$lpPathInfo['dir'].$audio;
+                $file = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$lpPathInfo['dir'].$audio;
+                $url = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$lpPathInfo['dir'].$audio;
             }
 
-            $player = Display::getMediaPlayer($file, array('id' => 'lp_audio_media_player', 'autoplay' => $autostart_audio, 'width' => '100%'));
+            $player = Display::getMediaPlayer(
+                $file,
+                array(
+                    'id' => 'lp_audio_media_player',
+                    'url' => $url,
+                    'autoplay' => $autostart_audio,
+                    'width' => '100%'
+                )
+            );
 
             // The mp3 player.
             $output  = '<div id="container">';
@@ -2317,7 +2327,13 @@ class learnpath
         }
     }
 
-    public function get_preview_image_path($size = null, $path_type = 'web') {
+    /**
+     * @param string $size
+     * @param string $path_type
+     * @return bool|string
+     */
+    public function get_preview_image_path($size = null, $path_type = 'web')
+    {
         $preview_image = $this->get_preview_image();
         if (isset($preview_image) && !empty($preview_image)) {
             $image_sys_path = api_get_path(SYS_COURSE_PATH).$this->course_info['path'].'/upload/learning_path/images/';
@@ -4211,7 +4227,8 @@ class learnpath
      * @param	 string	Optional string giving the new image of this learnpath
      * @return bool   Returns true if theme name is not empty
      */
-    public function set_preview_image($name = '') {
+    public function set_preview_image($name = '')
+    {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::set_preview_image()', 0);
@@ -4224,7 +4241,7 @@ class learnpath
         if ($this->debug > 2) {
             error_log('New LP - lp updated with new preview image : ' . $this->preview_image, 0);
         }
-        $res = Database::query($sql);
+        Database::query($sql);
         return true;
     }
 
@@ -4250,7 +4267,7 @@ class learnpath
 	}
 	/**
 	* Sets the hide_toc_frame parameter of a LP (and save)
-	* @param	int	1 if frame is hiddent 0 thenelse
+	* @param	int	1 if frame is hidden 0 then else
 	* @return   bool    Returns true if author's name is not empty
 	*/
 	public function set_hide_toc_frame($hide) {
@@ -5061,7 +5078,8 @@ class learnpath
                 if ($arrLP[$i]['item_type'] != 'dokeos_chapter' && $arrLP[$i]['item_type'] != 'dokeos_module' && $arrLP[$i]['item_type'] != 'dir') {
                     $audio .= '<input type="file" name="mp3file' . $arrLP[$i]['id'] . '" id="mp3file" />';
                     if (!empty ($arrLP[$i]['audio'])) {
-                        $audio .= '<br />'.Security::remove_XSS($arrLP[$i]['audio']).'<br /><input type="checkbox" name="removemp3' . $arrLP[$i]['id'] . '" id="checkbox' . $arrLP[$i]['id'] . '" />' . get_lang('RemoveAudio');
+                        $audio .= '<br />'.Security::remove_XSS($arrLP[$i]['audio']).'<br />
+                        <input type="checkbox" name="removemp3' . $arrLP[$i]['id'] . '" id="checkbox' . $arrLP[$i]['id'] . '" />' . get_lang('RemoveAudio');
                     }
                 }
             }
@@ -5165,7 +5183,6 @@ class learnpath
         }
 
         $return .= '<div class="lp_tree well">';
-
         $return .= '<ul id="lp_item_list">';
         $return .='<h4>'.$this->name.'</h4><br>';
 

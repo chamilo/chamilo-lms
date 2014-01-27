@@ -1113,6 +1113,7 @@ class DocumentManager
      *
      * @param array $courseInfo
      * @param string $path
+     * @param int $sessionId
      * @return int id of document / false if no doc found
      */
     public static function get_document_id($courseInfo, $path, $sessionId = null)
@@ -3212,7 +3213,7 @@ class DocumentManager
      * @param   bool    When set to true, this runs the indexer without actually saving anything to any database
      * @return  bool    Returns true on presumed success, false on failure
      */
-    public function index_document(
+    public static function index_document(
         $docid,
         $course_code,
         $session_id = 0,
@@ -3539,5 +3540,140 @@ class DocumentManager
                 );
             }
         }
+    }
+
+    /**
+     * @param string $file
+     * @return string
+     */
+    public static function readNanogongFile($file)
+    {
+        $nanoGongJarFile = api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar';
+
+        $html = '<applet id="applet" archive="'.$nanoGongJarFile.'" code="gong.NanoGong" width="160" height="95">';
+            $html .= '<param name="SoundFileURL" value="'.$file.'" />';
+            $html .= '<param name="ShowSaveButton" value="false" />';
+            $html .= '<param name="ShowTime" value="true" />';
+            $html .= '<param name="ShowRecordButton" value="false" />';
+        $html .= '</applet>';
+        return $html;
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $path
+     * @param $courseInfo
+     * @param string $whatIfFileExists overwrite|rename
+     * @param null $userId
+     * @param null $groupId
+     * @param null $toUserId
+     * @return bool|path
+     */
+    public static function addFileToDocumentTool(
+        $filePath,
+        $path,
+        $courseInfo,
+        $userId,
+        $whatIfFileExists = 'overwrite',
+        $groupId = null,
+        $toUserId = null
+    ) {
+        if (!file_exists($filePath)) {
+            return false;
+        }
+
+        $fileInfo = pathinfo($filePath);
+
+        $file = array(
+            'name' => $fileInfo['basename'],
+            'tmp_name' => $filePath,
+            'size' => filesize($filePath),
+            'from_file' => true
+        );
+
+        $course_dir = $courseInfo['path'].'/document';
+        $baseWorkDir = api_get_path(SYS_COURSE_PATH).$course_dir;
+
+        $filePath = handle_uploaded_document(
+            $courseInfo,
+            $file,
+            $baseWorkDir,
+            $path,
+            $userId,
+            $groupId,
+            $toUserId,
+            false,
+            $whatIfFileExists,
+            false
+        );
+
+        if ($filePath) {
+            return DocumentManager::get_document_id($courseInfo, $filePath);
+        }
+        return false;
+    }
+
+    /**
+     * Converts wav to mp3 file.
+     * Requires the ffmpeg lib. In ubuntu: sudo apt-get install ffmpeg
+     * @param string $wavFile
+     * @param bool $removeWavFileIfSuccess
+     * @return bool
+     */
+    public static function convertWavToMp3($wavFile, $removeWavFileIfSuccess = false)
+    {
+        require_once '../../../../vendor/autoload.php';
+
+        if (file_exists($wavFile)) {
+            try {
+                $ffmpeg = \FFMpeg\FFMpeg::create();
+                $video = $ffmpeg->open($wavFile);
+                $mp3File = str_replace('wav', 'mp3', $wavFile);
+                $result = $video->save(new FFMpeg\Format\Audio\Mp3(), $mp3File);
+                if ($result && $removeWavFileIfSuccess) {
+                    unlink($wavFile);
+                }
+
+                if (file_exists($mp3File)) {
+                    return $mp3File;
+                }
+            } catch (Exception $e) {
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param string $documentData
+     * @param array $courseInfo
+     * @param string $whatIfFileExists
+     * @return bool|path
+     */
+    public static function addAndConvertWavToMp3($documentData, $courseInfo, $userId, $whatIfFileExists = 'overwrite')
+    {
+        if (empty($documentData)) {
+            return false;
+        }
+
+        if (isset($documentData['absolute_path']) && file_exists($documentData['absolute_path'])) {
+            $mp3FilePath = self::convertWavToMp3($documentData['absolute_path']);
+            //$mp3FilePath = str_replace('wav', 'mp3', $documentData['absolute_path']);
+            if (!empty($mp3FilePath)) {
+
+                $documentId = self::addFileToDocumentTool(
+                    $mp3FilePath,
+                    dirname($documentData['path']),
+                    $courseInfo,
+                    $userId,
+                    $whatIfFileExists
+                );
+
+                if (!empty($documentId)) {
+                    return $documentId;
+                }
+            }
+        }
+
+        return false;
     }
 }

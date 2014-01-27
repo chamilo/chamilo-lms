@@ -191,6 +191,7 @@ function handle_uploaded_document(
 	if (!$user_id) {
         die('Not a valid user.');
     }
+
 	// Strip slashes
 	$uploaded_file['name'] = stripslashes($uploaded_file['name']);
 	// Add extension to files without one (if possible)
@@ -236,8 +237,10 @@ function handle_uploaded_document(
 				$upload_path = $upload_path.'/';
 			}
 			$file_path = $upload_path.$clean_name;
+
 			// Full path to where we want to store the file with trailing slash
 			$where_to_save = $base_work_dir.$upload_path;
+
 			// At least if the directory doesn't exist, tell so
 			if (!is_dir($where_to_save)) {
 			    if ($output){
@@ -261,8 +264,9 @@ function handle_uploaded_document(
 				case 'overwrite':
 					// Check if the target file exists, so we can give another message
 					$file_exists = file_exists($store_path);
-					if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path)) {
+					if (moveUploadedFile($uploaded_file, $store_path)) {
 						chmod($store_path, $files_perm);
+
 						if ($file_exists) {
 							// UPDATE DATABASE
 							$document_id = DocumentManager::get_document_id($_course, $file_path);
@@ -327,7 +331,7 @@ function handle_uploaded_document(
 					$store_path = $where_to_save.$new_name;
 					$new_file_path = $upload_path.$new_name;
 
-					if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path)) {
+					if (moveUploadedFile($uploaded_file, $store_path)) {
 
 						chmod($store_path, $files_perm);
 
@@ -355,15 +359,14 @@ function handle_uploaded_document(
 						return false;
 					}
 					break;
-
-				// Only save the file if it doesn't exist or warn user if it does exist
 				default:
+                    // Only save the file if it doesn't exist or warn user if it does exist
 					if (file_exists($store_path)) {
 					    if ($output) {
 						  Display::display_error_message($clean_name.' '.get_lang('UplAlreadyExists'));
 						}
 					} else {
-						if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path)) {
+						if (moveUploadedFile($uploaded_file, $store_path)) {
 							chmod($store_path, $files_perm);
 
 							// Put the document data in the database
@@ -394,6 +397,21 @@ function handle_uploaded_document(
 				}
 		}
 	}
+}
+
+/**
+ * @param string $file
+ * @param string $storePath
+ * @return bool
+ */
+function moveUploadedFile($file, $storePath)
+{
+    $handleFromFile = isset($file['from_file']) && $file['from_file'] ? true : false;
+    if ($handleFromFile) {
+        return file_exists($file['tmp_name']);
+    } else {
+        return move_uploaded_file($file['tmp_name'], $storePath);
+    }
 }
 
 /**
@@ -703,7 +721,6 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
 				closedir($dir);
 			} else {
                 error_log('Could not create directory '.$base_work_dir.$upload_path.' to unzip files');
-
             }
 			chdir($save_dir); // Back to previous dir position
 		}
@@ -870,10 +887,25 @@ function filter_extension(&$filename) {
  * @param string $filetype
  * @param int $filesize
  * @param string $title
+ * @param string $comment
+ * @param int $readonly
+ * @param bool $save_visibility
+ * @param int $group_id
  * @param int $session_id Session ID, if any
  * @return id if inserted document
  */
-function add_document($_course, $path, $filetype, $filesize, $title, $comment = null, $readonly = 0, $save_visibility = true, $group_id = null, $session_id = 0) {
+function add_document(
+    $_course,
+    $path,
+    $filetype,
+    $filesize,
+    $title,
+    $comment = null,
+    $readonly = 0,
+    $save_visibility = true,
+    $group_id = null,
+    $session_id = 0
+) {
     if (empty($session_id)) {
         $session_id    = api_get_session_id();
     }

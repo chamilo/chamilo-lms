@@ -402,19 +402,14 @@ if ($is_nanogong_available) {
         }
 
 		//get file from tmp directory
-		$to_url=api_get_path(WEB_ARCHIVE_PATH).'temp/audio/'.$file_crip;
+		$to_url = api_get_path(WEB_ARCHIVE_PATH).'temp/audio/'.$file_crip;
         
         echo '<div align="center">';
         echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
         echo '<br/>';
         echo '<br/>';
-        
-		echo '<applet id="applet" archive="../inc/lib/nanogong/nanogong.jar" code="gong.NanoGong" width="160" height="95">';
-            echo '<param name="SoundFileURL" value="'.$to_url.'" />';
-            echo '<param name="ShowSaveButton" value="false" />';
-            echo '<param name="ShowTime" value="true" />';
-            echo '<param name="ShowRecordButton" value="false" />';
-        echo '</applet>';
+
+        echo DocumentManager::readNanogongFile($to_url);
 		
 		//erase temp file in tmp directory when return to documents
 		$_SESSION['temp_audio_nanogong']=$to_sys;      

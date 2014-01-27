@@ -2736,13 +2736,12 @@ function show_add_form($id = '', $type = null)
                         $oFCKeditor->Value = $content;
                         $return = $oFCKeditor->CreateHtml();
                         echo $return;
-                        //echo '<textarea class="span5"  rows="4" name="content">'.$content.'</textarea>';
                         echo '</div>
-                <label class="control-label">
-                    '.get_lang('AddAnnouncement').'&nbsp('.get_lang('SendMail').')
-                </label>
                 <div class = "controls">
+                    <label>
                     <input id="add_announcement" type="checkbox" name="add_announcement" checked="checked"/>
+                    '.get_lang('AddAnnouncement').'&nbsp('.get_lang('SendMail').')
+                    </label>
                 </div>
 			</div>';
 

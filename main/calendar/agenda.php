@@ -244,11 +244,17 @@ if (api_is_allowed_to_edit(false, true) OR
                     $end = mktime(23, 59, 59, $end_m, $end_d, $end_y);
                     $res = agenda_add_repeat_item($course_info, $id, $_POST['repeat_type'], $end, $_POST['selected_form'], $safe_file_comment);
                 }
+                $mailSent = 0;
                 if (isset($_POST['add_announcement'])) {
                     $ann_id = store_agenda_item_as_announcement($id);
                     AnnouncementManager::send_email($ann_id);
+                    $mailSent = 1;
+                    
                 }
                 Display::display_confirmation_message(get_lang('AddSuccess'));
+                if ($mailSent == 1) {
+                    Display::display_confirmation_message(get_lang('AdditionalMailWasSentToSelectedUsers'));
+                }
             } else {
                 show_add_form();
             }

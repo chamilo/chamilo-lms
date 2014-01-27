@@ -182,7 +182,7 @@ function submitVoice() {
 echo '<div align="center">';
 Display::display_icon('microphone.png', get_lang('PressRecordButton'),'','128');
 echo '<br/>';
-echo '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar" code="gong.NanoGong" width="250" height="40" ALIGN="middle">';
+echo '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar" code="gong.NanoGong" width="250" height="95" ALIGN="middle">';
 	//echo '<param name="ShowRecordButton" value="false" />'; // default true
 	// echo '<param name="ShowSaveButton" value="false" />'; //you can save in local computer | (default true)
 	//echo '<param name="ShowSpeedButton" value="false" />'; // default true

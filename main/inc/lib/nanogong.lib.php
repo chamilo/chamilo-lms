@@ -331,7 +331,7 @@ class Nanogong {
 				$html .= '<div id="nanogong_player_id" class="nanogong_player_container">';
 					$html .= '<div class="action_player">'.$actions.'</div>';				
 					$html .= '<div class="nanogong_player">';	
-						$html .= '<applet id="nanogong_player" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar" code="gong.NanoGong" width="250" height="40" ALIGN="middle">';
+						$html .= '<applet id="nanogong_player" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar" code="gong.NanoGong" width="250" height="95" ALIGN="middle">';
 						
 						$html .= '<param name="ShowRecordButton" value="false" />'; // default true
 						$html .= '<param name="ShowSaveButton" value="false" />'; //you can save in local computer | (default true)
@@ -547,7 +547,7 @@ class Nanogong {
 	
 		$html .= '<div id="nanogong_div">';
 	
-		$html .= '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar" code="gong.NanoGong" width="250" height="40" align="middle">';
+		$html .= '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar" code="gong.NanoGong" width="250" height="95" align="middle">';
 		//echo '<param name="ShowRecordButton" value="false" />'; // default true
 		// echo '<param name="ShowSaveButton" value="false" />'; //you can save in local computer | (default true)
 		//echo '<param name="ShowSpeedButton" value="false" />'; // default true

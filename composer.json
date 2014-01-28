@@ -39,7 +39,7 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "silex/silex": "1.*",
+        "silex/silex": "~1.1",
         "symfony/console"  : "~2.3",
         "symfony/twig-bridge": "~2.3",
         "symfony/doctrine-bridge": "2.3.*@dev",
@@ -84,7 +84,8 @@
         "opauth/openid": "0.1.0",
         "opauth/facebook": "0.2.1",
         "opauth/google": "0.2.2",
-        "media-alchemyst/media-alchemyst": "0.3.6"
+        "media-alchemyst/media-alchemyst": "0.3.6",
+        "php-ffmpeg/php-ffmpeg": "0.3.x-dev@dev"
     },
     "require-dev": {
         "knplabs/gaufrette": "0.2.*@dev",

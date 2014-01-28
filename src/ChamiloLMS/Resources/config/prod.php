@@ -66,11 +66,10 @@ if ($app['assetic.enabled']) {
     $css_path = api_get_path(SYS_CSS_PATH);
 
     $app['assetic.input.path_to_css'] = array(
-        $css_path.'bootstrap.css',
+        api_get_path(WEB_LIBRARY_PATH).'javascript/bootstrap/css/bootstrap.css',
         $css_path.'base.css',
         $css_path.'base_chamilo.css',
         $css_path.$app['app.theme'].'/default.css',
-        $css_path.'bootstrap-responsive.css',
         $css_path.'responsive.css',
     //  api_get_path(LIBRARY_PATH).'javascript/thickbox.css',
     //  api_get_path(LIBRARY_PATH).'javascript/chosen/chosen.css',

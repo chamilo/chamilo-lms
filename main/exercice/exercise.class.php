@@ -1017,7 +1017,7 @@ class Exercise {
                     //we force the options to the DirectFeedback exercisetype
                     $form->addElement('hidden', 'exerciseFeedbackType', EXERCISE_FEEDBACK_TYPE_DIRECT);
                     $form->addElement('hidden', 'exerciseType', ONE_PER_PAGE);
-                    
+
                     // Type of questions disposition on page
                     $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
                     $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2', array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
@@ -2023,7 +2023,7 @@ class Exercise {
         if ($answerType == ORAL_EXPRESSION) {
             require_once api_get_path(LIBRARY_PATH).'nanogong.lib.php';
             $exe_info = get_exercise_results_by_attempt($exeId);
-            $exe_info = $exe_info[$exeId];
+            $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
 
             $params = array();
             $params['course_id'] 	= api_get_course_int_id();

@@ -277,7 +277,7 @@ class DocumentManager
      *  @param string
      * 	@return true if the user is allowed to see the document, false otherwise
      * 	@author Sergio A Kessler, first version
-     * 	@author Roan Embrechts, bugfix     *
+     * 	@author Roan Embrechts, bugfix
      *  @todo not only check if a file is visible, but also check if the user is allowed to see the file??
      */
     public static function file_visible_to_user($this_course, $doc_url)
@@ -679,8 +679,14 @@ class DocumentManager
                     }
                     $document_folders[$row['id']] = $row['path'];
                 }
-                natsort($document_folders);
 
+                //sort($document_folders);
+
+                if (!empty($document_folders)) {
+                    natsort($document_folders);
+                }
+
+                //return results
                 return $document_folders;
             } else {
                 return false;
@@ -3247,7 +3253,6 @@ class DocumentManager
             //TODO: mime_content_type is deprecated, fileinfo php extension is enabled by default as of PHP 5.3.0
             // now versions of PHP on Debian testing(5.2.6-5) and Ubuntu(5.2.6-2ubuntu) are lower, so wait for a while
             $doc_mime = mime_content_type($doc_path);
-            //echo $doc_mime;
             $allowed_mime_types = self::file_get_mime_type(true);
 
             // mime_content_type does not detect correctly some formats that are going to be supported for index, so an extensions array is used for the moment

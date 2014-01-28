@@ -1558,7 +1558,7 @@ class Display {
     /**
      * @todo use twig
      */
-    static function group_button($title, $elements) {
+    public static function group_button($title, $elements) {
         $html = '<div class="btn-toolbar">
             <div class="btn-group">
             <button class="btn dropdown-toggle" data-toggle="dropdown">'.$title.' <span class="caret"></span></button>

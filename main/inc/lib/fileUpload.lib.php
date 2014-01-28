@@ -906,6 +906,8 @@ function add_document(
     $group_id = null,
     $session_id = 0
 ) {
+    $session_id = intval($session_id);
+
     if (empty($session_id)) {
         $session_id    = api_get_session_id();
     }

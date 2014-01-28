@@ -99,3 +99,7 @@ License
 
 - The bundle is licensed under the [MIT License](http://opensource.org/licenses/MIT)
 - The CSS and Javascript from the Twitter Bootstrap are licensed under the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/braincrafted/bootstrap-bundle/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+

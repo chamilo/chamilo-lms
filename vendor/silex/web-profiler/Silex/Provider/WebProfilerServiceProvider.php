@@ -64,11 +64,11 @@ class WebProfilerServiceProvider implements ServiceProviderInterface, Controller
 
         $app['data_collectors'] = array(
             'config'    => $app->share(function ($app) { return new ConfigDataCollector(); }),
-            'request'   => $app->share(function ($app) { return new RequestDataCollector($app); }),
+            'request'   => $app->share(function ($app) { return new RequestDataCollector(); }),
             'exception' => $app->share(function ($app) { return new ExceptionDataCollector(); }),
             'events'    => $app->share(function ($app) { return new EventDataCollector(); }),
             'logger'    => $app->share(function ($app) { return new LoggerDataCollector($app['logger']); }),
-            'time'      => $app->share(function ($app) { return new TimeDataCollector(); }),
+            'time'      => $app->share(function ($app) { return new TimeDataCollector(null, $app['stopwatch']); }),
             'router'    => $app->share(function ($app) { return new RouterDataCollector(); }),
             'memory'    => $app->share(function ($app) { return new MemoryDataCollector(); }),
         );

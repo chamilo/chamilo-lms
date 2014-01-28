@@ -2,8 +2,6 @@
 
 [![Build Status](https://secure.travis-ci.org/alchemy-fr/PHP-FFmpeg.png?branch=master)](http://travis-ci.org/alchemy-fr/PHP-FFmpeg)
 
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/607f3111-e2d7-44e8-8bcc-54dd64521983/big.png)](https://insight.sensiolabs.com/projects/607f3111-e2d7-44e8-8bcc-54dd64521983)
-
 An Object Oriented library to convert video/audio files with FFmpeg / AVConv.
 
 Check another amazing repo : [PHP FFMpeg extras](https://github.com/alchemy-fr/PHP-FFMpeg-Extras), you will find lots of Audio/Video formats there.
@@ -95,17 +93,11 @@ video. Frames can be extracted.
 You can transcode videos using the `FFMpeg\Media\Video:save` method. You will
 pass a `FFMpeg\Format\FormatInterface` for that.
 
-Please note that audio and video bitrate are set on the format.
-
 ```php
 $format = new Format\Video\X264();
 $format->on('progress', function ($video, $format, $percentage) {
     echo "$percentage % transcoded";
 });
-
-$format
-    -> setKiloBitrate(1000)
-    -> setAudioKiloBitrate(256);
 
 $video->save($format, 'video.avi');
 ```
@@ -183,19 +175,6 @@ filters solves this issue.
 $video->filters()->synchronize();
 ```
 
-###### Clip
-
-Cuts the video at a desired point.
-
-```php
-$video->filters()->clip(FFMpeg\Coordinate\TimeCode::fromSeconds(30), FFMpeg\Coordinate\TimeCode::fromSeconds(15));
-```
-
-The clip filter takes two parameters:
-
-- `$start`, an instance of `FFMpeg\Coordinate\TimeCode`, specifies the start point of the clip
-- `$duration`, optional, an instance of `FFMpeg\Coordinate\TimeCode`, specifies the duration of the clip
-
 #### Audio
 
 `FFMpeg\Media\Audio` can be transcoded, ie : change codec, isolate audio or
@@ -206,16 +185,11 @@ video. Frames can be extracted.
 You can transcode audios using the `FFMpeg\Media\Audio:save` method. You will
 pass a `FFMpeg\Format\FormatInterface` for that.
 
-Please note that audio kilobitrate is set on the audio format.
-
 ```php
 $format = new Format\Audio\Flac();
 $format->on('progress', function ($$audio, $format, $percentage) {
     echo "$percentage % transcoded";
 });
-
-$format
-    -> setAudioKiloBitrate(256);
 
 $audio->save($format, 'track.flac');
 ```

@@ -103,12 +103,4 @@ abstract class DefaultAudio extends EventEmitter implements AudioInterface, Prog
 
         return array($listener);
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getPasses()
-    {
-        return 1;
-    }
 }

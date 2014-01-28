@@ -5,6 +5,8 @@ namespace Chash\Command\Installation;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console;
 use Symfony\Component\Yaml\Dumper;
 use Symfony\Component\Yaml\Parser;
@@ -43,7 +45,6 @@ class UpgradeCommand extends CommonCommand
             ->addOption('update-installation', null, InputOption::VALUE_OPTIONAL, 'Updates the portal with the current zip file. http:// or /var/www/file.zip')
             ->addOption('temp-folder', null, InputOption::VALUE_OPTIONAL, 'The temp folder', '/tmp')
             ->addOption('download-package', null, InputOption::VALUE_OPTIONAL, 'Download the chamilo package', 'true')
-            ->addOption('silent', null, InputOption::VALUE_NONE, 'Execute the migration without asking questions')
             ->addOption('linux-user', null, InputOption::VALUE_OPTIONAL, 'user', 'www-data')
             ->addOption('linux-group', null, InputOption::VALUE_OPTIONAL, 'group', 'www-data')
             ->addOption('custom-package', null, InputOption::VALUE_OPTIONAL, 'Custom zip package location.', '')
@@ -55,12 +56,12 @@ class UpgradeCommand extends CommonCommand
     /**
      * Executes a command via CLI
      *
-     * @param   Console\Input\InputInterface $input
-     * @param   Console\Output\OutputInterface $output
+     * @param   InputInterface $input
+     * @param   OutputInterface $output
      *
      * @return int|null|void
      */
-    protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $startTime = time();
 
@@ -107,7 +108,7 @@ class UpgradeCommand extends CommonCommand
         $version = $originalVersion = $input->getArgument('version');
         $path = $input->getOption('path');
         $dryRun = $input->getOption('dry-run');
-        $silent = $input->getOption('silent') == true;
+        $silent = !$input->isInteractive();
         $tempFolder = $input->getOption('temp-folder');
         $downloadPackage = $input->getOption('download-package') == 'true' ? true : false;
 
@@ -319,6 +320,7 @@ class UpgradeCommand extends CommonCommand
         $this->setExtraDatabaseSettings($extraDatabaseSettings);
         $this->setDoctrineSettings();
         $conn = $this->getConnection();
+        $conn->getDatabasePlatform()->registerDoctrineTypeMapping('enum', 'string');
 
         if ($conn) {
             $output->writeln("<comment>Connection to the database established.</comment>");
@@ -341,7 +343,7 @@ class UpgradeCommand extends CommonCommand
 
                 if (isset($versionInfo['require_update']) && $versionInfo['require_update'] == true) {
                     // Greater than my current version.
-                    $this->startMigration($courseList, $path, $versionItem, $dryRun, $output, $removeUnusedTables);
+                    $this->startMigration($courseList, $path, $versionItem, $dryRun, $output, $removeUnusedTables, $input);
                     $oldVersion = $versionItem;
                     $output->writeln("----------------------------------------------------------------");
                 } else {
@@ -400,13 +402,22 @@ class UpgradeCommand extends CommonCommand
      * @param string $path
      * @param string $toVersion
      * @param bool $dryRun
-     * @param Console\Output\OutputInterface $output
+     * @param OutputInterface $output
+     * @param bool $removeUnusedTables
+     * @param InputInterface $mainInput
      *
      * @return bool
      * @throws \Exception
      */
-    public function startMigration($courseList, $path, $toVersion, $dryRun, Console\Output\OutputInterface $output, $removeUnusedTables = false)
-    {
+    public function startMigration(
+        $courseList,
+        $path,
+        $toVersion,
+        $dryRun,
+        OutputInterface $output,
+        $removeUnusedTables = false,
+        InputInterface $mainInput
+    ) {
         // Cleaning query list.
         $this->queryList = array();
 
@@ -445,9 +456,13 @@ class UpgradeCommand extends CommonCommand
 
             $output->writeln("<comment>Executing migrations:migrate ".$versionInfo['hook_to_doctrine_version']." --configuration=".$this->getMigrationConfigurationFile()."<comment>");
             $input = new ArrayInput($arguments);
+
             if ($this->commandLine == false) {
                 $input->setInteractive(false);
+            } else {
+                $input->setInteractive($mainInput->isInteractive());
             }
+
             $command->run($input, $output);
 
             $output->writeln("<comment>Migration ended successfully</comment>");
@@ -546,7 +561,7 @@ class UpgradeCommand extends CommonCommand
      * Process the queryList array and executes queries to the correct section (main, user, course, etc)
      *
      * @param array $courseList
-     * @param Console\Output\OutputInterface $output
+     * @param OutputInterface $output
      * @param $path
      * @param $version
      * @param $dryRun
@@ -640,7 +655,7 @@ class UpgradeCommand extends CommonCommand
      * Reads a sql file and adds queries  in the queryList array.
      *
      * @param string $sqlFilePath
-     * @param Console\Output\OutputInterface $output
+     * @param OutputInterface $output
      * @param string type
      */
     public function fillQueryList($sqlFilePath, $output, $type)
@@ -716,13 +731,13 @@ class UpgradeCommand extends CommonCommand
         }
 
         $databaseSection = array(
-            'main'  => array(
+            'main' => array(
                 array(
                     'database' => 'main_database',
                     'status' => 'waiting'
                 )
             ),
-            'user'  => array(
+            'user' => array(
                 array(
                     'database' => 'user_personal_database',
                     'status' => 'waiting'
@@ -751,7 +766,7 @@ class UpgradeCommand extends CommonCommand
     }
 
     /**
-     * @param Console\Output\OutputInterface $output
+     * @param OutputInterface $output
      * @param array $courseList
      * @param string $path
      * @param string $version
@@ -796,7 +811,7 @@ class UpgradeCommand extends CommonCommand
     }
 
     /**
-     * @param Console\Output\OutputInterface $output
+     * @param OutputInterface $output
      * @param array $courseList
      * @param string $path
      * @param string $section
@@ -818,7 +833,7 @@ class UpgradeCommand extends CommonCommand
      *
      * @param string $file
      * @param string $section
-     * @param Console\Output\OutputInterface $output
+     * @param OutputInterface $output
      *
      * @return array|bool
      */
@@ -874,7 +889,7 @@ class UpgradeCommand extends CommonCommand
 
     /**
      * Creates the course tables with the prefix c_
-     * @param Console\Output\OutputInterface $output
+     * @param OutputInterface $output
      * @param string $dryRun
      * @return int
      */

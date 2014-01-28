@@ -19,7 +19,7 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class DialogHelper extends Helper
+class DialogHelper extends InputAwareHelper
 {
     private $inputStream;
     private static $shell;
@@ -98,6 +98,10 @@ class DialogHelper extends Helper
      */
     public function ask(OutputInterface $output, $question, $default = null, array $autocomplete = null)
     {
+        if ($this->input && !$this->input->isInteractive()) {
+            return $default;
+        }
+
         $output->write($question);
 
         $inputStream = $this->inputStream ?: STDIN;
@@ -333,7 +337,7 @@ class DialogHelper extends Helper
     {
         $that = $this;
 
-        $interviewer = function() use ($output, $question, $default, $autocomplete, $that) {
+        $interviewer = function () use ($output, $question, $default, $autocomplete, $that) {
             return $that->ask($output, $question, $default, $autocomplete);
         };
 
@@ -363,7 +367,7 @@ class DialogHelper extends Helper
     {
         $that = $this;
 
-        $interviewer = function() use ($output, $question, $fallback, $that) {
+        $interviewer = function () use ($output, $question, $fallback, $that) {
             return $that->askHiddenResponse($output, $question, $fallback);
         };
 
@@ -401,7 +405,7 @@ class DialogHelper extends Helper
     }
 
     /**
-     * Return a valid unix shell
+     * Return a valid Unix shell
      *
      * @return string|Boolean  The valid shell name, false in case no valid shell is found
      */

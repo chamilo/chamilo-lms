@@ -6,16 +6,12 @@
  * https://speakerdeck.com/hhamon/symfony-extending-the-console-component
  * http://symfony.com/doc/2.0/components/console/introduction.html
  *
- * @author Yannick Warnier <yannick.warnier@beeznest.com>
  * @author Julio Montoya <gugli100@gmail.com>
- * @version 2.0
+ * @author Yannick Warnier <yannick.warnier@beeznest.com>
  * @license This script is provided under the terms of the GNU/GPLv3+ license
  */
 
-/**
- * Security check: do not allow any other calling method than command-line
- */
-
+/* Security check: do not allow any other calling method than command-line */
 if (PHP_SAPI != 'cli') {
     die("Chash cannot be called by any other method than the command line.");
 }
@@ -39,7 +35,7 @@ $application->addCommands(
     array(
         // DBAL Commands.
         new \Doctrine\DBAL\Tools\Console\Command\RunSqlCommand(),
-        new \Doctrine\DBAL\Tools\Console\Command\ImportCommand(),
+        //new \Doctrine\DBAL\Tools\Console\Command\ImportCommand(),
 
         // Migrations Commands.
         new \Doctrine\DBAL\Migrations\Tools\Console\Command\DiffCommand(),
@@ -55,6 +51,7 @@ $application->addCommands(
         new Chash\Command\Chash\SelfUpdateCommand(),
 
         new Chash\Command\Database\RunSQLCommand(),
+        new Chash\Command\Database\ImportCommand(),
         new Chash\Command\Database\DumpCommand(),
         new Chash\Command\Database\RestoreCommand(),
         new Chash\Command\Database\SQLCountCommand(),
@@ -63,11 +60,13 @@ $application->addCommands(
         new Chash\Command\Database\ShowConnInfoCommand(),
 
         new Chash\Command\Files\CleanDataFilesCommand(),
+        new Chash\Command\Files\CleanDeletedDocumentsCommand(),
         new Chash\Command\Files\CleanTempFolderCommand(),
         new Chash\Command\Files\CleanConfigFilesCommand(),
         new Chash\Command\Files\MailConfCommand(),
         new Chash\Command\Files\SetPermissionsAfterInstallCommand(),
         new Chash\Command\Files\GenerateTempFileStructureCommand(),
+        new Chash\Command\Files\ConvertVideosCommand(),
 
         new Chash\Command\Installation\InstallCommand(),
         new Chash\Command\Installation\WipeCommand(),
@@ -81,6 +80,7 @@ $application->addCommands(
         new Chash\Command\Translation\ImportLanguageCommand(),
         new Chash\Command\Translation\ListLanguagesCommand(),
         new Chash\Command\Translation\PlatformLanguageCommand(),
+        new Chash\Command\Translation\TermsPackageCommand(),
 
         new Chash\Command\User\ChangePassCommand(),
         new Chash\Command\User\DisableAdminsCommand(),
@@ -90,8 +90,3 @@ $application->addCommands(
     )
 );
 $application->run();
-
-//Interactive shell
-//$shell = new Console\Shell($application);
-//$shell->run();
-

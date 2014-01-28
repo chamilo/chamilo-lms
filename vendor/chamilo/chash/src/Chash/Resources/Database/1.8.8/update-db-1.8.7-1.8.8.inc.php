@@ -19,11 +19,9 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
     try {
         if (!empty($courseList)) {
             foreach ($courseList as $row_course) {
-
-                $prefix = $upgrade->getTablePrefix($_configuration, $row_course['db_name']);
-
                 $output->writeln('Updating course db: '.$row_course['db_name']);
 
+                $prefix = $upgrade->getTablePrefix($_configuration, $row_course['db_name']);
                 $table_lp_item_view = $prefix."lp_item_view";
                 $table_lp_view = $prefix."lp_view";
                 $table_lp_item = $prefix."lp_item";
@@ -37,10 +35,11 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
                 }
 
                 if (empty($courseConnection)) {
-                    $output->writeln("<info> We can't established a DB connection for this course: ".$row_course['db_name']);
+                    $output->writeln("<info>We can't established a DB connection for this course: ".$row_course['db_name']);
                 }
 
-                // Filling the track_e_exercices.orig_lp_item_view_id field  in order to have better traceability in exercises included in a LP see #3188
+                /* Filling the track_e_exercices.orig_lp_item_view_id field  in order to have better
+                traceability in exercises included in a LP see #3188 */
 
                 $query = "SELECT DISTINCT path as exercise_id, lp_item_id, lp_view_id, user_id, v.lp_id
                           FROM $table_lp_item_view iv INNER JOIN  $table_lp_view v
@@ -49,7 +48,6 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
                           WHERE item_type = 'quiz'";
 
                 $result = $courseConnection->executeQuery($query);
-                //$output->writeln($query);
                 $rows = $result->fetchAll();
 
                 if (count($rows) > 0) {
@@ -71,7 +69,9 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
                                   FROM $table_lp_item_view iv INNER JOIN  $table_lp_view v
                                   ON v.id = iv.lp_view_id INNER JOIN $table_lp_item i
                                   ON  i.id = lp_item_id
-                                  WHERE item_type = 'quiz' AND user_id =  {$row['user_id']} AND path = {$row['exercise_id']} ";
+                                  WHERE item_type = 'quiz' AND
+                                        user_id =  {$row['user_id']} AND
+                                        path = {$row['exercise_id']} ";
                         $sub_result = $courseConnection->executeQuery($sql);
                         $sub_rows = $sub_result->fetchAll();
                         $lp_item_view_id_list = array();
@@ -82,10 +82,10 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
 
                         foreach ($exe_list as $exe_id) {
                             $lp_item_view_id = $lp_item_view_id_list[$i];
-                            $update = "UPDATE track_e_exercices SET orig_lp_item_view_id  = '$lp_item_view_id' WHERE exe_id = $exe_id ";
+                            $update = "UPDATE track_e_exercices SET orig_lp_item_view_id  = '$lp_item_view_id'
+                                       WHERE exe_id = $exe_id ";
                             $statsConnection->executeQuery($update);
                             $output->writeln($update);
-
                         }
                     }
                 }
@@ -98,35 +98,42 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
 
         $output->writeln('<comment>Updating main/stat/user db:</comment>');
 
-        $sql = "INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value) values (4, 'mail_notify_invitation', 'MailNotifyInvitation',1,1,'1') ";
+        $sql = "INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value)
+                VALUES (4, 'mail_notify_invitation', 'MailNotifyInvitation',1,1,'1') ";
         $mainConnection->executeQuery($sql);
         $output->writeln($sql);
         $id = $mainConnection->lastInsertId();
 
-        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '1', 'AtOnce',1) ";
+        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order)
+                VALUES ($id, '1', 'AtOnce',1) ";
         $mainConnection->executeQuery($sql);
         $output->writeln($sql);
-        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '8', 'Daily',2) ";
+        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order)
+                VALUES ($id, '8', 'Daily',2) ";
         $mainConnection->executeQuery($sql);
         $output->writeln($sql);
-        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '0', 'No',3) ";
+        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order)
+                VALUES ($id, '0', 'No',3) ";
         $mainConnection->executeQuery($sql);
         $output->writeln($sql);
 
         $sql = "INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable, field_default_value)
-                values (4, 'mail_notify_message', 'MailNotifyMessage',1,1,'1')";
+                VALUES (4, 'mail_notify_message', 'MailNotifyMessage',1,1,'1')";
         $mainConnection->executeQuery($sql);
         $output->writeln($sql);
         $id = $mainConnection->lastInsertId();
 
-        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '1', 'AtOnce',1) ";
+        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order)
+                VALUES ($id, '1', 'AtOnce',1) ";
         $mainConnection->executeQuery($sql);
         $output->writeln($sql);
 
-        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '8', 'Daily',2) ";
+        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order)
+                VALUES ($id, '8', 'Daily',2) ";
         $mainConnection->executeQuery($sql);
         $output->writeln($sql);
-        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '0', 'No',3) ";
+        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order)
+                VALUES ($id, '0', 'No',3) ";
         $mainConnection->executeQuery($sql);
         $output->writeln($sql);
 
@@ -136,13 +143,16 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
         $output->writeln($sql);
         $id = $mainConnection->lastInsertId();
 
-        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '1', 'AtOnce',1) ";
+        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order)
+                VALUES ($id, '1', 'AtOnce',1) ";
         $mainConnection->executeQuery($sql);
         $output->writeln($sql);
-        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '8', 'Daily',2) ";
+        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order)
+                VALUES ($id, '8', 'Daily',2) ";
         $mainConnection->executeQuery($sql);
         $output->writeln($sql);
-        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order) values ($id, '0', 'No',3) ";
+        $sql = "INSERT INTO user_field_options (field_id, option_value, option_display_text, option_order)
+                VALUES ($id, '0', 'No',3) ";
         $mainConnection->executeQuery($sql);
         $output->writeln($sql);
 
@@ -157,11 +167,13 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
 
                 // Adding course to default URL just in case.
                 // Check if already exists
-                $sql = "SELECT course_code FROM access_url_rel_course WHERE course_code = '".$row['code']."' AND access_url_id = 1";
+                $sql = "SELECT course_code FROM access_url_rel_course
+                        WHERE course_code = '".$row['code']."' AND access_url_id = 1";
                 $result = $mainConnection->executeQuery($sql);
 
                 if ($result->rowCount() == 0) {
-                    $sql = "INSERT INTO access_url_rel_course SET course_code = '".$row['code']."', access_url_id = '1' ";
+                    $sql = "INSERT INTO access_url_rel_course
+                            SET course_code = '".$row['code']."', access_url_id = '1' ";
                     $mainConnection->executeQuery($sql);
                     $output->writeln($sql);
                 }
@@ -178,5 +190,4 @@ $update = function($_configuration, $mainConnection, $courseList, $dryRun, $outp
         $mainConnection->rollback();
         throw $e;
     }
-
 };

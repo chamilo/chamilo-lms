@@ -289,11 +289,16 @@ UPDATE settings_current SET variable='chamilo_database_version' WHERE variable='
 UPDATE settings_current SET selected_value = '1.8.8.14911' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
+DROP PROCEDURE IF EXISTS AddColumnUnlessExists;
+CREATE PROCEDURE AddColumnUnlessExists( IN dbName tinytext,	IN tableName tinytext,	IN fieldName tinytext, IN fieldDef text) BEGIN IF NOT EXISTS (		SELECT * FROM information_schema.COLUMNS	WHERE column_name = fieldName	and table_name = tableName		and table_schema=dbName) THEN set @ddl=CONCAT('ALTER TABLE ',dbName,'.',tableName, ' ADD COLUMN ', fieldName, ' ',fieldDef); prepare stmt from @ddl;		execute stmt;	END IF;end;
+
 call AddColumnUnlessExists(Database(), 'track_e_exercices', 'orig_lp_item_view_id', 'INT NOT NULL DEFAULT 0');
 
 -- xxUSERxx
+DROP PROCEDURE IF EXISTS dropIndexIfExists;
+CREATE PROCEDURE dropIndexIfExists(in theTable varchar(128), in theIndexName varchar(128) ) BEGIN  IF((SELECT COUNT(*) AS index_exists FROM information_schema.statistics WHERE TABLE_SCHEMA = DATABASE() and table_name = theTable AND index_name = theIndexName) > 0) THEN SET @s = CONCAT('DROP INDEX `' , theIndexName , '` ON `' , theTable, '`');   PREPARE stmt FROM @s;   EXECUTE stmt; END IF; END;
+
 ALTER TABLE personal_agenda MODIFY id INT NOT NULL;
---ALTER TABLE personal_agenda DROP PRIMARY KEY;
 ALTER TABLE personal_agenda ADD PRIMARY KEY (id);
 
 call dropIndexIfExists('personal_agenda', 'idx_personal_agenda_user');

@@ -16,6 +16,8 @@ Note: If you don't have Composer installed, check http://getcomposer.org/downloa
 Usage
 ====================
 
+Here are a few examples of how you can use Chash:
+
 In a Chamilo installation folder located in "/var/www/chamilo"
 
     cd /var/www/chamilo
@@ -41,8 +43,24 @@ Inside a chamilo folder execute db:sql_cli in order to enter to the SQL client o
 
     php /path/chash.php db:sql_cli --conf=main/inc/conf/configuration.php
 
+If you have configured Chash globally (see below), from any Chamilo directory:
+
+    chash translation:disable french
+
+
 Building the chash.phar file
 ====================
+
+This procedure is only required once, and is generally for developers. If you update chash frequently, you'll have to go through this each time you update, but never more than that.
+
+You need to have curl (in order to download packages required to build chash.phar)
+
+    apt-get install php5-curl
+
+If you don't have composer installed on your computer, you can just do the following to download and install it and run the command above (make sure you have PHP5 enabled on the command line):
+
+    curl -sS https://getcomposer.org/installer | php
+    php5 composer.phar update --no-dev --prefer-dist
 
 In order to generate the executable chash.phar file. You have to set first this php setting (in your cli php configuration file).
 
@@ -50,47 +68,36 @@ For example in Ubuntu /etc/php5/cli/php.ini
 
     phar.readonly = Off
 
-You need to download the third parties libraries via composer:
+(or you can also use the "-d phar.readonly=0" option as described below)
 
+You need to download the required third parties libraries via composer (this might take a few minutes):
+
+    cd chash
     composer update --no-dev --prefer-dist
-
-If you don't have composer installed on your computer, you can just do the following to download and install it and run the command above (make sure you have PHP5 enabled on the command line):
-
-    curl -sS https://getcomposer.org/installer | php
-    php5 composer.phar update --no-dev --prefer-dist
-
-Remember to add execution permissions to the phar file.
-
-You need to have curl (in order to download packages)
-
-    apt-get install php5-curl
 
 Then you can call the php createPhar.php file. A new chash.phar file will be created.
 
-Example:
+In detail:
 
     cd chash
     composer update --no-dev
     php -d phar.readonly=0 createPhar.php
-    chmod +x chash.phar
-    sudo ln -s /path/to/chash.phar /usr/local/bin/chash
-    Then you can call the chash.phar file in your Chamilo installation
 
-    cd /var/www/chamilo
-    chash
-
-If you're using php 5.3 with suhosin the phar will not be executed you can try this:
+If you're using php 5.3 with suhosin, the phar will not be executed. You can try this:
 
     php -d suhosin.executor.include.whitelist="phar" chash.phar
 
-or you can change this setting in your /etc/php5/cli/conf.d/suhosin.ini file (look for "executor"), although this might increase the vulnerability of your system.
+or you can change this setting in your /etc/php5/cli/conf.d/suhosin.ini file
+(look for "executor"), although this might increase the vulnerability of your
+system. The location of the file may vary depending on your operating system.
+
 
 Make it global
 ====================
 
-To get the most out of Chash, you should move the chash.phar file to your
-/usr/local/bin directory. You can do this getting inside the directory where
-you put chash.phar and doing:
+To get the most out of Chash, you should move the chash.phar file to
+(or link from) your /usr/local/bin directory. You can do this getting inside
+the directory where you put chash.phar and doing:
 
     chmod +x chash.phar
     sudo ln -s /path/to/chash.phar /usr/local/bin/chash
@@ -100,45 +107,81 @@ typing
 
     chash
 
-It will give you the details of what command you can use to run it properly.
+It will give you the details of the commands you can use to run it properly.
 
-The most useful command to us until now has been the "chash database:sql" command,
+The most useful command to us until now has been the "chash db:sql_cli" command,
 which puts you directly into a MySQL client session.
 
 Available commands:
 ====================
 
+    Available commands:
+      help                                  Displays help for a command
+      list                                  Lists commands
+      selfupdate                            Updates chash to the latest version
+      tasl                                  Creates a sub-language
+      tdl                                   Disables a (enabled) language
+      tel                                   Enables a (disabled) language
+      tl                                    Gets all languages as a list
+      tpl                                   Gets or sets the platform language
+      usl                                   Sets the users language to the one given
+
     chamilo
-      chamilo:install          Execute a Chamilo installation to a specified version
-      chamilo:status           Show the information of the current Chamilo installation
-      chamilo:upgrade          Execute a chamilo migration to a specified version or the latest available version.
-      chamilo:wipe             Prepares a portal for a new installation
+      chamilo:install                       Execute a Chamilo installation to a specified version.
+      chamilo:status                        Show the information of the current Chamilo installation
+      chamilo:upgrade                       Execute a chamilo migration to a specified version or the latest available version
+      chamilo:wipe                          Prepares a portal for a new installation
+
+    chash
+      chash:self-update                     Updates chash to the latest version
+      chash:setup                           Setups the migration.yml
 
     db
-        db:drop_databases       Drops all databases from the current Chamilo install
-        db:dump                 Outputs a dump of the database
-        db:full_backup          Generates a .tgz from the Chamilo files and database
-        db:restore              Allows you to restore an SQL dump right into the active database of a given Chamilo installation (which will also erase all previous data in that database)
-        db:show_conn_info       Shows database connection credentials for the current Chamilo install
-        db:sql_cli              Enters to the SQL command line
-        db:sql_count            Count the number of rows in a specific table
+      db:drop_databases                     Drops all databases from the current Chamilo install
+      db:dump                               Outputs a dump of the database
+      db:full_backup                        Generates a .tgz from the Chamilo files and database
+      db:restore                            Allows you to restore an SQL dump right into the active database of a given Chamilo installation (which will also erase all previous data in that database)
+      db:show_conn_info                     Shows database connection credentials for the current Chamilo install
+      db:sql_cli                            Enters to the SQL command line
+      db:sql_count                          Count the number of rows in a specific table
+
+    dbal
+      dbal:import                           Import SQL file(s) directly to Database.
+      dbal:run-sql                          Executes arbitrary SQL directly from the command line.
 
     files
-        files:clean_archives          Cleans the archives directory
-        files:clean_config_files      Cleans the config files to help you re-install
-        files:show_mail_conf          Returns the current mail config
+      files:clean_config_files              Cleans the config files to help you re-install
+      files:clean_data_files                Cleans the data directory
+      files:clean_deleted_documents         Cleans the documents that were deleted but left as _DELETED_
+      files:clean_temp_folder               Cleans the temp directory.
+      files:generate_temp_folders           Generate temp folder structure: twig
+      files:set_permissions_after_install   Set permissions
+      files:show_mail_conf                  Returns the current mail config
+
+    migrations
+      migrations:diff                       Generate a migration by comparing your current database to your mapping information.
+      migrations:execute                    Execute a single migration version up or down manually.
+      migrations:generate                   Generate a blank migration class.
+      migrations:migrate                    Execute a migration to a specified version or the latest available version.
+      migrations:status                     View the status of a set of migrations.
+      migrations:version                    Manually add and delete migration versions from the version table.
 
     translation
-        translation:export_language   Exports a Chamilo language package
-        translation:import_language   Import a Chamilo language package
-        translation:platform_language Gets or sets the platform language
+      translation:add_sub_language          Creates a sub-language
+      translation:disable                   Disables a (enabled) language
+      translation:enable                    Enables a (disabled) language
+      translation:export_language           Exports a Chamilo language package
+      translation:import_language           Import a Chamilo language package
+      translation:list                      Gets all languages as a list
+      translation:platform_language         Gets or sets the platform language
+      translation:terms_package             Generates a package of given language terms
 
     user
-        user:change_pass              Updates the user password to the one given
-        user:disable_admins           Makes the given user admin on the main portal
-        user:make_admin               Makes the given user admin on the main portal
-        user:reset_login              Outputs login link for given username
-        user:set_language             Sets the users language to the one given
+      user:change_pass                      Updates the user password to the one given
+      user:disable_admins                   Makes the given user admin on the main portal
+      user:make_admin                       Makes the given user admin on the main portal
+      user:reset_login                      Outputs login link for given username
+      user:set_language                     Sets the users language to the one given
 
 Licensing
 =========
@@ -157,3 +200,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Mail: info@chamilo.org
+
+Misc
+====
+
+[![Build Status](https://api.travis-ci.org/chamilo/chash.png)](https://travis-ci.org/chamilo/chash)

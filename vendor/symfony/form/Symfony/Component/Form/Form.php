@@ -91,6 +91,12 @@ class Form implements \IteratorAggregate, FormInterface
     private $submitted = false;
 
     /**
+     * The button that was used to submit the form
+     * @var Button
+     */
+    private $clickedButton;
+
+    /**
      * The form data in model format
      * @var mixed
      */
@@ -171,7 +177,7 @@ class Form implements \IteratorAggregate, FormInterface
     public function __clone()
     {
         $this->children = clone $this->children;
-        
+
         foreach ($this->children as $key => $child) {
             $this->children[$key] = clone $child;
         }
@@ -550,9 +556,23 @@ class Form implements \IteratorAggregate, FormInterface
                 }
 
                 foreach ($this->children as $name => $child) {
-                    if (isset($submittedData[$name]) || $clearMissing) {
+                    if (array_key_exists($name, $submittedData) || $clearMissing) {
                         $child->submit(isset($submittedData[$name]) ? $submittedData[$name] : null, $clearMissing);
                         unset($submittedData[$name]);
+
+                        if (null !== $this->clickedButton) {
+                            continue;
+                        }
+
+                        if ($child instanceof ClickableInterface && $child->isClicked()) {
+                            $this->clickedButton = $child;
+
+                            continue;
+                        }
+
+                        if (method_exists($child, 'getClickedButton') && null !== $child->getClickedButton()) {
+                            $this->clickedButton = $child->getClickedButton();
+                        }
                     }
                 }
 
@@ -730,6 +750,25 @@ class Form implements \IteratorAggregate, FormInterface
         }
 
         return true;
+    }
+
+    /**
+     * Returns the button that was used to submit the form.
+     *
+     * @return Button|null The clicked button or NULL if the form was not
+     *                     submitted
+     */
+    public function getClickedButton()
+    {
+        if ($this->clickedButton) {
+            return $this->clickedButton;
+        }
+
+        if ($this->parent && method_exists($this->parent, 'getClickedButton')) {
+            return $this->parent->getClickedButton();
+        }
+
+        return null;
     }
 
     /**
@@ -971,7 +1010,23 @@ class Form implements \IteratorAggregate, FormInterface
             $parent = $this->parent->createView();
         }
 
-        return $this->config->getType()->createView($this, $parent);
+        $type = $this->config->getType();
+        $options = $this->config->getOptions();
+
+        // The methods createView(), buildView() and finishView() are called
+        // explicitly here in order to be able to override either of them
+        // in a custom resolved form type.
+        $view = $type->createView($this, $parent);
+
+        $type->buildView($view, $this, $options);
+
+        foreach ($this->children as $name => $child) {
+            $view->children[$name] = $child->createView($view);
+        }
+
+        $type->finishView($view, $this, $options);
+
+        return $view;
     }
 
     /**

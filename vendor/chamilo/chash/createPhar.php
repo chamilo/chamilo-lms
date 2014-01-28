@@ -4,11 +4,13 @@
  * phar.readonly = Off
  */
 error_reporting(-1);
+
 $phar = new Phar('chash.phar');
 $phar->setSignatureAlgorithm(\Phar::SHA1);
 $phar->startBuffering();
 
 $phar->buildFromDirectory(__DIR__, '/\.php$/');
+$phar->buildFromDirectory(__DIR__, '/\.sql/');
 
 $defaultStub = $phar->createDefaultStub('chash.php');
 

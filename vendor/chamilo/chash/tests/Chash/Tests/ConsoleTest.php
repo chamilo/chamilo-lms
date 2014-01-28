@@ -10,18 +10,6 @@ class ConsoleTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $configurationFileContent = file_get_contents(__DIR__.'/../Resources/configuration.php');
-        vfsStreamWrapper::register();
-        $structure = array(
-            'chamilo' => array(
-                'config' => array(
-                    'configuration.php' => $configurationFileContent,
-                ),
-                'tests' => array(),
-                'data' => array('courses')
-            )
-        );
-        vfsStream::setup('root', null, $structure);
-
     }
 
     public function testListCommand()

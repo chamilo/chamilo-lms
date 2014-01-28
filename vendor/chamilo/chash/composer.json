@@ -1,7 +1,9 @@
 {
     "name": "chamilo/chash",
     "type": "library",
+    "description" : "Chamilo Shell",
     "homepage": "http://www.chamilo.org",
+    "license": "GPL-3.0",
     "support": {
         "forum": "http://www.chamilo.org/forum",
         "irc": "irc://irc.freenode.org/chamilo"
@@ -26,6 +28,7 @@
         "alchemy/zippy": "~0.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*"
+        "phpunit/phpunit": "3.7.*",
+        "mikey179/vfsstream": ">=1.2"
     }
 }

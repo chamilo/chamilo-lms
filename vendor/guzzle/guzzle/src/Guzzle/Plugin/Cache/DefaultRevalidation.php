@@ -60,7 +60,7 @@ class DefaultRevalidation implements RevalidationInterface
             ($resCache && ($resCache->hasDirective('no-cache') || $resCache->hasDirective('must-revalidate')));
 
         // Use the strong ETag validator if available and the response contains no Cache-Control directive
-        if (!$revalidate && !$reqCache && $response->hasHeader('ETag')) {
+        if (!$revalidate && !$resCache && $response->hasHeader('ETag')) {
             $revalidate = true;
         }
 
@@ -107,7 +107,7 @@ class DefaultRevalidation implements RevalidationInterface
         $dispatcher = $revalidate->getEventDispatcher();
         foreach ($dispatcher->getListeners() as $eventName => $listeners) {
             foreach ($listeners as $listener) {
-                if ($listener[0] instanceof CachePlugin) {
+                if (is_array($listener) && $listener[0] instanceof CachePlugin) {
                     $dispatcher->removeListener($eventName, $listener);
                 }
             }

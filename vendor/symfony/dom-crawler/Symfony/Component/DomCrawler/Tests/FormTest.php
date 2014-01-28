@@ -273,6 +273,16 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($dom->getElementsByTagName('form')->item(0), $form->getFormNode(), '->getFormNode() returns the form node associated with this form');
     }
 
+    public function testGetFormNodeFromNamedForm()
+    {
+        $dom = new \DOMDocument();
+        $dom->loadHTML('<html><form name="my_form"><input type="submit" /></form></html>');
+
+        $form = new Form($dom->getElementsByTagName('form')->item(0), 'http://example.com');
+
+        $this->assertSame($dom->getElementsByTagName('form')->item(0), $form->getFormNode(), '->getFormNode() returns the form node associated with this form');
+    }
+
     public function testGetMethod()
     {
         $form = $this->createForm('<form><input type="submit" /></form>');
@@ -326,6 +336,26 @@ class FormTest extends \PHPUnit_Framework_TestCase
         } catch (\InvalidArgumentException $e) {
             $this->assertTrue(true, '->offsetSet() throws an \InvalidArgumentException exception if the name is malformed.');
         }
+    }
+
+    public function testDisableValidation()
+    {
+        $form = $this->createForm('<form>
+            <select name="foo[bar]">
+                <option value="bar">bar</option>
+            </select>
+            <select name="foo[baz]">
+                <option value="foo">foo</option>
+            </select>
+            <input type="submit" />
+        </form>');
+
+        $form->disableValidation();
+
+        $form['foo[bar]']->select('foo');
+        $form['foo[baz]']->select('bar');
+        $this->assertEquals('foo', $form['foo[bar]']->getValue(), '->disableValidation() disables validation of all ChoiceFormField.');
+        $this->assertEquals('bar', $form['foo[baz]']->getValue(), '->disableValidation() disables validation of all ChoiceFormField.');
     }
 
     public function testOffsetUnset()

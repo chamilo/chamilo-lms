@@ -74,8 +74,7 @@ class UniqueEntityValidator extends ConstraintValidator
             }
         }
 
-        $className = $this->context->getClassName();
-        $class = $em->getClassMetadata($className);
+        $class = $em->getClassMetadata(get_class($entity));
         /* @var $class \Doctrine\Common\Persistence\Mapping\ClassMetadata */
 
         $criteria = array();
@@ -90,7 +89,7 @@ class UniqueEntityValidator extends ConstraintValidator
                 return;
             }
 
-            if ($class->hasAssociation($fieldName)) {
+            if (null !== $criteria[$fieldName] && $class->hasAssociation($fieldName)) {
                 /* Ensure the Proxy is initialized before using reflection to
                  * read its identifiers. This is necessary because the wrapped
                  * getter methods in the Proxy are being bypassed.
@@ -110,7 +109,7 @@ class UniqueEntityValidator extends ConstraintValidator
             }
         }
 
-        $repository = $em->getRepository($className);
+        $repository = $em->getRepository(get_class($entity));
         $result = $repository->{$constraint->repositoryMethod}($criteria);
 
         /* If the result is a MongoCursor, it must be advanced to the first

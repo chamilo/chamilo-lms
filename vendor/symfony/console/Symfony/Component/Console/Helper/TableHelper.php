@@ -23,6 +23,7 @@ class TableHelper extends Helper
 {
     const LAYOUT_DEFAULT = 0;
     const LAYOUT_BORDERLESS = 1;
+    const LAYOUT_COMPACT = 2;
 
     /**
      * Table headers.
@@ -45,6 +46,7 @@ class TableHelper extends Helper
     private $crossingChar;
     private $cellHeaderFormat;
     private $cellRowFormat;
+    private $cellRowContentFormat;
     private $borderFormat;
     private $padType;
 
@@ -89,7 +91,22 @@ class TableHelper extends Helper
                     ->setVerticalBorderChar(' ')
                     ->setCrossingChar(' ')
                     ->setCellHeaderFormat('<info>%s</info>')
-                    ->setCellRowFormat('<comment>%s</comment>')
+                    ->setCellRowFormat('%s')
+                    ->setCellRowContentFormat(' %s ')
+                    ->setBorderFormat('%s')
+                    ->setPadType(STR_PAD_RIGHT)
+                ;
+                break;
+
+            case self::LAYOUT_COMPACT:
+                $this
+                    ->setPaddingChar(' ')
+                    ->setHorizontalBorderChar('')
+                    ->setVerticalBorderChar(' ')
+                    ->setCrossingChar('')
+                    ->setCellHeaderFormat('<info>%s</info>')
+                    ->setCellRowFormat('%s')
+                    ->setCellRowContentFormat('%s')
                     ->setBorderFormat('%s')
                     ->setPadType(STR_PAD_RIGHT)
                 ;
@@ -102,7 +119,8 @@ class TableHelper extends Helper
                     ->setVerticalBorderChar('|')
                     ->setCrossingChar('+')
                     ->setCellHeaderFormat('<info>%s</info>')
-                    ->setCellRowFormat('<comment>%s</comment>')
+                    ->setCellRowFormat('%s')
+                    ->setCellRowContentFormat(' %s ')
                     ->setBorderFormat('%s')
                     ->setPadType(STR_PAD_RIGHT)
                 ;
@@ -143,6 +161,29 @@ class TableHelper extends Helper
     {
         $this->rows[] = array_values($row);
 
+        $keys = array_keys($this->rows);
+        $rowKey = array_pop($keys);
+
+        foreach ($row as $key => $cellValue) {
+            if (!strstr($cellValue, "\n")) {
+                continue;
+            }
+
+            $lines = explode("\n", $cellValue);
+            $this->rows[$rowKey][$key] = $lines[0];
+            unset($lines[0]);
+
+            foreach ($lines as $lineKey => $line) {
+                $nextRowKey = $rowKey + $lineKey + 1;
+
+                if (isset($this->rows[$nextRowKey])) {
+                    $this->rows[$nextRowKey][$key] = $line;
+                } else {
+                    $this->rows[$nextRowKey] = array($key => $line);
+                }
+            }
+        }
+
         return $this;
     }
 
@@ -162,6 +203,10 @@ class TableHelper extends Helper
      */
     public function setPaddingChar($paddingChar)
     {
+        if (!$paddingChar) {
+            throw new \LogicException('The padding char must not be empty');
+        }
+
         $this->paddingChar = $paddingChar;
 
         return $this;
@@ -238,6 +283,20 @@ class TableHelper extends Helper
     }
 
     /**
+     * Sets row cell content format.
+     *
+     * @param string $cellRowContentFormat
+     *
+     * @return TableHelper
+     */
+    public function setCellRowContentFormat($cellRowContentFormat)
+    {
+        $this->cellRowContentFormat = $cellRowContentFormat;
+
+        return $this;
+    }
+
+    /**
      * Sets table border format.
      *
      * @param string $borderFormat
@@ -309,11 +368,13 @@ class TableHelper extends Helper
             return;
         }
 
+        if (!$this->horizontalBorderChar && !$this->crossingChar) {
+            return;
+        }
+
         $markup = $this->crossingChar;
         for ($column = 0; $column < $count; $column++) {
-            $markup .= str_repeat($this->horizontalBorderChar, $this->getColumnWidth($column))
-                    .$this->crossingChar
-            ;
+            $markup .= str_repeat($this->horizontalBorderChar, $this->getColumnWidth($column)).$this->crossingChar;
         }
 
         $this->output->writeln(sprintf($this->borderFormat, $markup));
@@ -366,15 +427,11 @@ class TableHelper extends Helper
             $width += strlen($cell) - mb_strlen($cell, $encoding);
         }
 
-        $this->output->write(sprintf(
-            $cellFormat,
-            str_pad(
-                $this->paddingChar.$cell.$this->paddingChar,
-                $width,
-                $this->paddingChar,
-                $this->padType
-            )
-        ));
+        $width += $this->strlen($cell) - $this->computeLengthWithoutDecoration($cell);
+
+        $content = sprintf($this->cellRowContentFormat, $cell);
+
+        $this->output->write(sprintf($cellFormat, str_pad($content, $width, $this->paddingChar, $this->padType)));
     }
 
     /**
@@ -416,7 +473,7 @@ class TableHelper extends Helper
             $lengths[] = $this->getCellWidth($row, $column);
         }
 
-        return $this->columnWidths[$column] = max($lengths) + 2;
+        return $this->columnWidths[$column] = max($lengths) + strlen($this->cellRowContentFormat) - 2;
     }
 
     /**
@@ -429,15 +486,7 @@ class TableHelper extends Helper
      */
     private function getCellWidth(array $row, $column)
     {
-        if ($column < 0) {
-            return 0;
-        }
-
-        if (isset($row[$column])) {
-            return $this->strlen($row[$column]);
-        }
-
-        return $this->getCellWidth($row, $column - 1);
+        return isset($row[$column]) ? $this->computeLengthWithoutDecoration($row[$column]) : 0;
     }
 
     /**
@@ -447,6 +496,18 @@ class TableHelper extends Helper
     {
         $this->columnWidths = array();
         $this->numberOfColumns = null;
+    }
+
+    private function computeLengthWithoutDecoration($string)
+    {
+        $formatter = $this->output->getFormatter();
+        $isDecorated = $formatter->isDecorated();
+        $formatter->setDecorated(false);
+
+        $string = $formatter->format($string);
+        $formatter->setDecorated($isDecorated);
+
+        return $this->strlen($string);
     }
 
     /**

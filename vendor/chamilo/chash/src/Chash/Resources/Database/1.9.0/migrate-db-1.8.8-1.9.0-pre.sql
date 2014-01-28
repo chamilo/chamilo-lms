@@ -38,7 +38,6 @@ UNLOCK TABLES;
 CREATE TABLE IF NOT EXISTS announcement_rel_group (group_id int NOT NULL, announcement_id int NOT NULL, PRIMARY KEY (group_id, announcement_id));
 CREATE TABLE IF NOT EXISTS group_rel_group ( id int NOT NULL AUTO_INCREMENT, group_id int NOT NULL, subgroup_id int NOT NULL, relation_type int NOT NULL, PRIMARY KEY (id));
 CREATE TABLE IF NOT EXISTS chat (id INTEGER UNSIGNED NOT NULL AUTO_INCREMENT, from_user INTEGER, to_user INTEGER, message TEXT NOT NULL, sent DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00', recd INTEGER UNSIGNED NOT NULL DEFAULT 0, PRIMARY KEY (id));
-CREATE TABLE IF NOT EXISTS track_course_ranking (id   int unsigned not null PRIMARY KEY AUTO_INCREMENT, c_id  int unsigned not null, session_id  int unsigned not null default 0, url_id  int unsigned not null default 0, accesses int unsigned not null default 0, total_score int unsigned not null default 0, users int unsigned not null default 0, creation_date datetime not null);
 CREATE TABLE IF NOT EXISTS user_rel_course_vote ( id int unsigned not null AUTO_INCREMENT PRIMARY KEY,  c_id int unsigned not null,  user_id int unsigned not null, session_id int unsigned not null default 0,  url_id int unsigned not null default 0, vote int unsigned not null default 0);
 CREATE TABLE IF NOT EXISTS grade_model (id INTEGER  NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, description TEXT, default_lowest_eval_exclude TINYINT default null, default_external_eval_prefix VARCHAR(140) default null, PRIMARY KEY (id));
 CREATE TABLE IF NOT EXISTS grade_components (id INTEGER  NOT NULL AUTO_INCREMENT, percentage VARCHAR(255)  NOT NULL, title VARCHAR(255)  NOT NULL, acronym VARCHAR(255)  NOT NULL, grade_model_id INTEGER NOT NULL, PRIMARY KEY (id));
@@ -53,11 +52,12 @@ CREATE TABLE IF NOT EXISTS skill_profile ( id INTEGER  NOT NULL AUTO_INCREMENT, 
 CREATE TABLE IF NOT EXISTS skill_rel_profile ( id INTEGER  NOT NULL AUTO_INCREMENT, skill_id INTEGER  NOT NULL, profile_id INTEGER  NOT NULL, PRIMARY KEY (id));
 CREATE TABLE IF NOT EXISTS course_type (id int unsigned not null auto_increment primary key, name varchar(50) not null, translation_var char(40) default 'UndefinedCourseTypeLabel', description TEXT default '', props text default '');
 CREATE TABLE IF NOT EXISTS usergroup_rel_question (id int unsigned not null auto_increment primary key, c_id int unsigned not null, question_id int unsigned not null, usergroup_id int unsigned not null, coefficient float(6,2));
+CREATE TABLE IF NOT EXISTS track_course_ranking (id   int unsigned not null PRIMARY KEY AUTO_INCREMENT, c_id  int unsigned not null, session_id  int unsigned not null default 0, url_id  int unsigned not null default 0, accesses int unsigned not null default 0, total_score int unsigned not null default 0, users int unsigned not null default 0, creation_date datetime not null);
 CREATE TABLE IF NOT EXISTS track_stored_values (id int unsigned not null AUTO_INCREMENT PRIMARY KEY, user_id INT NOT NULL, sco_id INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS track_stored_values_stack (id int unsigned not null AUTO_INCREMENT PRIMARY KEY, user_id INT NOT NULL, sco_id INT NOT NULL, stack_order INT NOT NULL, course_id CHAR(40) NOT NULL, sv_key CHAR(64) NOT NULL, sv_value TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS track_e_attempt_coeff ( id int unsigned not null auto_increment primary key, attempt_id INT NOT NULL, marks_coeff float(6,2));
 
-LOCK TABLES group_rel_group WRITE, course_rel_user WRITE, session_rel_course_rel_user WRITE, course WRITE, gradebook_category WRITE, gradebook_link WRITE, chat WRITE, track_course_ranking WRITE, user_rel_course_vote WRITE, user WRITE;
+LOCK TABLES track_stored_values WRITE, track_stored_values_stack WRITE, group_rel_group WRITE, course_rel_user WRITE, session_rel_course_rel_user WRITE, course WRITE, gradebook_category WRITE, gradebook_link WRITE, chat WRITE, track_course_ranking WRITE, user_rel_course_vote WRITE, user WRITE;
 
 call AddColumnUnlessExists(Database(), 'course_rel_user', 'legal_agreement', 'INTEGER DEFAULT 0');
 call AddColumnUnlessExists(Database(), 'session_rel_course_rel_user', 'legal_agreement', 'INTEGER DEFAULT 0');
@@ -71,6 +71,11 @@ ALTER TABLE gradebook_category MODIFY COLUMN weight FLOAT NOT NULL;
 ALTER TABLE gradebook_link MODIFY COLUMN weight FLOAT  NOT NULL;
 ALTER TABLE course MODIFY COLUMN disk_quota bigint unsigned DEFAULT NULL;
 ALTER TABLE user MODIFY COLUMN username VARCHAR(100) NOT NULL;
+
+ALTER TABLE track_stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
+ALTER TABLE track_stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
+ALTER TABLE track_stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
+ALTER TABLE track_stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);
 
 call dropIndexIfExists('chat','idx_chat_to_user');
 call dropIndexIfExists('chat','idx_chat_from_user');
@@ -99,7 +104,7 @@ ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_uid (user_id);
 ALTER TABLE user_rel_course_vote ADD INDEX idx_ucv_cuid (user_id, c_id);
 UNLOCK TABLES;
 
-LOCK TABLES settings_options WRITE, user_field WRITE, gradebook_evaluation WRITE, gradebook_category WRITE, settings_current WRITE, event_email_template WRITE, event_sent WRITE, user_rel_event_type WRITE, usergroup_rel_session WRITE, usergroup_rel_course WRITE, usergroup_rel_user WRITE, admin WRITE, reservation_category_rights WRITE, course WRITE, user_api_key WRITE, track_e_default WRITE, track_e_exercices WRITE;
+LOCK TABLES settings_options WRITE, user_field WRITE, gradebook_evaluation WRITE, gradebook_category WRITE, settings_current WRITE, event_email_template WRITE, event_sent WRITE, user_rel_event_type WRITE, usergroup_rel_session WRITE, usergroup_rel_course WRITE, usergroup_rel_user WRITE, admin WRITE, reservation_category_rights WRITE, course WRITE, user_api_key WRITE;
 
 ALTER TABLE gradebook_category ADD COLUMN grade_model_id INT DEFAULT 0;
 ALTER TABLE settings_current ADD COLUMN access_url_locked INTEGER NOT NULL DEFAULT 0;
@@ -114,7 +119,6 @@ ALTER TABLE user_api_key ADD COLUMN created_date datetime DEFAULT NULL;
 ALTER TABLE user_api_key ADD COLUMN validity_start_date datetime DEFAULT NULL;
 ALTER TABLE user_api_key ADD COLUMN validity_end_date datetime DEFAULT NULL;
 ALTER TABLE user_api_key ADD COLUMN description text DEFAULT NULL;
-ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';
 
 call dropIndexIfExists('event_email_template', 'event_name_index');
 call dropIndexIfExists('event_sent', 'event_name_index');
@@ -123,22 +127,8 @@ call dropIndexIfExists('user_rel_event_type', 'event_name_index');
 ALTER TABLE user_rel_event_type ADD INDEX event_name_index (event_type_name);
 ALTER TABLE event_email_template ADD INDEX event_name_index (event_type_name);
 ALTER TABLE event_sent ADD INDEX event_name_index (event_type_name);
-ALTER TABLE track_e_default MODIFY COLUMN default_value TEXT;
 ALTER TABLE gradebook_evaluation MODIFY COLUMN weight FLOAT NOT NULL;
 
-UNLOCK TABLES;
-
-LOCK TABLES track_e_default WRITE, track_stored_values WRITE, track_stored_values_stack WRITE, track_e_attempt WRITE, track_e_attempt_recording WRITE, track_e_hotpotatoes WRITE, personal_agenda WRITE;
-ALTER TABLE track_stored_values ADD KEY (user_id, sco_id, course_id, sv_key);
-ALTER TABLE track_stored_values ADD UNIQUE (user_id, sco_id, course_id, sv_key);
-ALTER TABLE track_stored_values_stack ADD KEY (user_id, sco_id, course_id, sv_key, stack_order);
-ALTER TABLE track_stored_values_stack ADD UNIQUE (user_id, sco_id, course_id, sv_key, stack_order);
-ALTER TABLE track_e_attempt ADD COLUMN filename VARCHAR(255) DEFAULT NULL;
-ALTER TABLE track_e_default ADD COLUMN c_id INTEGER DEFAULT NULL;
-ALTER TABLE track_e_attempt_recording ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
-ALTER TABLE track_e_attempt ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
-ALTER TABLE track_e_hotpotatoes ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
-ALTER TABLE personal_agenda ADD COLUMN all_day INTEGER NOT NULL DEFAULT 0;
 UNLOCK TABLES;
 
 INSERT INTO user_field (field_type, field_variable, field_display_text, field_visible, field_changeable) values (1, 'already_logged_in','Already logged in',0,0), (1, 'update_type','Update script type',0,0), (1, 'google_calendar_url','Google Calendar URL',0,0), (1, 'user_chat_status','User chat status', 0, 0);
@@ -203,26 +193,43 @@ DELETE FROM settings_current WHERE variable = 'read_more_limit';
 DELETE FROM settings_current WHERE variable = 'user_order_by';
 DELETE FROM settings_options WHERE variable = 'user_order_by';
 
+DROP PROCEDURE IF EXISTS dropIndexIfExists;
+DROP PROCEDURE IF EXISTS AddColumnUnlessExists;
+
 -- Do not move this query
 UPDATE settings_current SET selected_value = '1.9.0.18715b' WHERE variable = 'chamilo_database_version';
 
 -- xxSTATSxx
 
+LOCK TABLES track_e_default WRITE, track_e_attempt WRITE, track_e_attempt_recording WRITE, track_e_hotpotatoes WRITE, track_e_exercices WRITE;
+
+ALTER TABLE track_e_attempt ADD COLUMN filename VARCHAR(255) DEFAULT NULL;
+ALTER TABLE track_e_default ADD COLUMN c_id INTEGER DEFAULT NULL;
+ALTER TABLE track_e_attempt_recording ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE track_e_attempt ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE track_e_hotpotatoes ADD COLUMN id INTEGER NOT NULL AUTO_INCREMENT, ADD PRIMARY KEY (id);
+ALTER TABLE track_e_default MODIFY COLUMN default_value TEXT;
+ALTER TABLE track_e_exercices ADD COLUMN questions_to_check TEXT NOT NULL DEFAULT '';
+UNLOCK TABLES;
+
 -- xxUSERxx
+LOCK TABLES personal_agenda WRITE;
+ALTER TABLE personal_agenda ADD COLUMN all_day INTEGER NOT NULL DEFAULT 0;
+UNLOCK TABLES;
 
 -- xxCOURSExx
 
-CREATE TABLE IF NOT EXISTS metadata (c_id INT NOT NULL, eid VARCHAR(250) NOT NULL, mdxmltext TEXT default '', md5 CHAR(32) default '', htmlcache1 TEXT default '', htmlcache2 TEXT default '', indexabletext TEXT default '', PRIMARY KEY (c_id, eid))
-ALTER TABLE lp ADD COLUMN hide_toc_frame INT NOT NULL DEFAULT 0;
-ALTER TABLE lp ADD COLUMN seriousgame_mode INT NOT NULL DEFAULT 0;
-ALTER TABLE lp_item_view MODIFY COLUMN suspend_data longtext;
-ALTER TABLE quiz ADD COLUMN review_answers INT NOT NULL DEFAULT 0;
-ALTER TABLE student_publication ADD COLUMN contains_file INT NOT NULL DEFAULT 1;
-ALTER TABLE student_publication ADD COLUMN allow_text_assignment INT NOT NULL DEFAULT 0;
-ALTER TABLE quiz ADD COLUMN random_by_category INT NOT NULL DEFAULT 0;
-ALTER TABLE quiz ADD COLUMN text_when_finished TEXT DEFAULT NULL;
-ALTER TABLE quiz ADD COLUMN display_category_name INT NOT NULL DEFAULT 1;
-ALTER TABLE quiz ADD COLUMN pass_percentage INT DEFAULT NULL;
-ALTER TABLE quiz_answer ADD COLUMN answer_code char(10) default '';
-ALTER TABLE quiz_question ADD COLUMN question_code char(10) default '';
-INSERT INTO course_setting (variable, value, category) VALUES ('allow_public_certificates', 0, 'certificates');
+CREATE TABLE IF NOT EXISTS metadata (c_id INT NOT NULL, eid VARCHAR(250) NOT NULL, mdxmltext TEXT default '', md5 CHAR(32) default '', htmlcache1 TEXT default '', htmlcache2 TEXT default '', indexabletext TEXT default '', PRIMARY KEY (c_id, eid));
+ALTER TABLE {prefix}lp ADD COLUMN hide_toc_frame INT NOT NULL DEFAULT 0;
+ALTER TABLE {prefix}lp ADD COLUMN seriousgame_mode INT NOT NULL DEFAULT 0;
+ALTER TABLE {prefix}lp_item_view MODIFY COLUMN suspend_data longtext;
+ALTER TABLE {prefix}quiz ADD COLUMN review_answers INT NOT NULL DEFAULT 0;
+ALTER TABLE {prefix}student_publication ADD COLUMN contains_file INT NOT NULL DEFAULT 1;
+ALTER TABLE {prefix}student_publication ADD COLUMN allow_text_assignment INT NOT NULL DEFAULT 0;
+ALTER TABLE {prefix}quiz ADD COLUMN random_by_category INT NOT NULL DEFAULT 0;
+ALTER TABLE {prefix}quiz ADD COLUMN text_when_finished TEXT DEFAULT NULL;
+ALTER TABLE {prefix}quiz ADD COLUMN display_category_name INT NOT NULL DEFAULT 1;
+ALTER TABLE {prefix}quiz ADD COLUMN pass_percentage INT DEFAULT NULL;
+ALTER TABLE {prefix}quiz_answer ADD COLUMN answer_code char(10) default '';
+ALTER TABLE {prefix}quiz_question ADD COLUMN question_code char(10) default '';
+INSERT INTO {prefix}course_setting (variable, value, category) VALUES ('allow_public_certificates', 0, 'certificates');

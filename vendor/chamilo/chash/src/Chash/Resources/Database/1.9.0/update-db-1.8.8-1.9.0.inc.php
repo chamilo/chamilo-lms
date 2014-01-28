@@ -13,8 +13,10 @@ $update = function ($_configuration, $mainConnection, $courseList, $dryRun, $out
 
     /** @var \Doctrine\DBAL\Connection $userConnection */
     $userConnection = $upgrade->getHelper($databaseList['user'][0]['database'])->getConnection();
+
     /** @var \Doctrine\DBAL\Connection $mainConnection */
     $mainConnection = $upgrade->getHelper($databaseList['main'][0]['database'])->getConnection();
+
     /** @var \Doctrine\DBAL\Connection $statsConnection */
     $statsConnection = $upgrade->getHelper($databaseList['stats'][0]['database'])->getConnection();
 
@@ -71,6 +73,12 @@ $update = function ($_configuration, $mainConnection, $courseList, $dryRun, $out
             if (!empty($rows)) {
                 $output->writeln('Moving users from class_user to usergroup_rel_user ');
                 foreach ($rows as $row) {
+                    if (empty($mapping_classes[$row['class_id']])) {
+                        // Cover a special case where data would not be
+                        // consistent - see BT#7254
+                        $output->writeln("<comment>Warning: data inconsistency: \$mapping_classes[".$row['class_id']."] was not defined, suggesting that this class ID was still used in class_user although the class had been removed</comment>");
+                        continue;
+                    }
                     $values = array(
                         'usergroup_id' => $mapping_classes[$row['class_id']],
                         'user_id' => $row['user_id']
@@ -100,6 +108,12 @@ $update = function ($_configuration, $mainConnection, $courseList, $dryRun, $out
                     $subResult = $mainConnection->executeQuery($sql_course);
                     $courseInfo = $subResult->fetch();
                     $course_id  = $courseInfo['id'];
+                    if (empty($mapping_classes[$row['class_id']])) {
+                        // Cover a special case where data would not be
+                        // consistent - see BT#7254
+                        $output->writeln("<comment>Warning: data inconsistency: \$mapping_classes[".$row['class_id']."] was not defined, suggesting that this class ID was still used in course_rel_class although the class had been removed</comment>");
+                        continue;
+                    }
                     $values = array(
                         'usergroup_id' => $mapping_classes[$row['class_id']],
                         'course_id' => $course_id
@@ -115,9 +129,9 @@ $update = function ($_configuration, $mainConnection, $courseList, $dryRun, $out
             }
         }
 
-        //Moving Stats DB to the main DB
+        // Moving Stats DB to the main DB.
 
-        $stats_table = array(
+        $statsTable = array(
             "track_c_browsers",
             "track_c_countries",
             "track_c_os",
@@ -143,37 +157,39 @@ $update = function ($_configuration, $mainConnection, $courseList, $dryRun, $out
             "track_stored_values_stack",
         );
 
-        // No rename we assume that stats are in the main db
-        /*
-        foreach ($stats_table as $stat_table) {
-            $sql = "ALTER TABLE $dbStatsForm.$stat_table RENAME $dbNameForm.$stat_table";
-            Database::query($sql);
-            $output->writeln($sql);
+        if (isset($_configuration['statistics_database'])) {
+            $statSchemaManager = $statsConnection->getSchemaManager();
+            if ($_configuration['main_database'] != $_configuration['statistics_database']) {
+                foreach ($statsTable as $table) {
+                    if ($statSchemaManager->tablesExist($table)) {
+                        $newTable = $_configuration['main_database'].'.'.$table;
+                        $statSchemaManager->renameTable($table, $newTable);
+                        $output->writeln("<comment>Renaming  $table to: </comment>".$newTable);
+                    }
+                }
+            }
         }
-        iDatabase::select_db($dbNameForm);
-        $statsConnection->
-        */
 
-        //Moving user database to the main database
-        $users_tables = array(
+        // Moving user database to the main database.
+        $usersTables = array(
             "personal_agenda",
             "personal_agenda_repeat",
             "personal_agenda_repeat_not",
             "user_course_category"
         );
 
-        // No rename we asumme that stats are in the main db
-
-        /*
-        if ($dbNameForm != $dbUserForm) {
-            iDatabase::select_db($dbUserForm);
-            foreach ($users_tables as $table) {
-                $sql = "ALTER TABLE $dbUserForm.$table RENAME $dbNameForm.$table";
-                iDatabase::query($sql);
-                $output->writeln($sql);
+        $userSchemaManager = $userConnection->getSchemaManager();
+        if (isset($_configuration['user_personal_database'])) {
+            if ($_configuration['main_database'] != $_configuration['user_personal_database']) {
+                foreach ($usersTables as $table) {
+                    if ($userSchemaManager->tablesExist($table)) {
+                        $newTable = $_configuration['main_database'].'.'.$table;
+                        $userSchemaManager->renameTable($table, $newTable);
+                        $output->writeln("<comment>Renaming  $table to: </comment>".$newTable);
+                    }
+                }
             }
-            iDatabase::select_db($dbNameForm);
-        }*/
+        }
 
         // Adding admin user in the access_url_rel_user table.
         $sql = "SELECT user_id FROM admin WHERE user_id = 1";
@@ -466,7 +482,7 @@ $update = function ($_configuration, $mainConnection, $courseList, $dryRun, $out
 
                             // Only create the folder once
                             if (!isset($work_dir_created[$work_key])) {
-                                //2.1 Creating a new work folder
+                                // 2.1 Creating a new work folder:
                                 $sql = "INSERT INTO $work_table SET
                                         c_id                = '$courseId',
                                         url         		= 'work/".$dir_name."',
@@ -516,14 +532,22 @@ $update = function ($_configuration, $mainConnection, $courseList, $dryRun, $out
                     }
 
                     // 3.0 Moving subfolders to the root.
-                    $sql 	= "SELECT * FROM $work_table WHERE parent_id <> 0 AND filetype ='folder' AND c_id = $courseId";
+                    $sql = "SELECT * FROM $work_table
+                               WHERE parent_id <> 0 AND filetype ='folder' AND c_id = $courseId";
                     $result = $mainConnection->executeQuery($sql);
                     $work_list = $result->fetchAll();
 
                     if (!empty($work_list)) {
                         foreach ($work_list as $work_folder) {
                             $folder_id = $work_folder['id'];
-                            check_work($mainConnection, $folder_id, $work_folder['url'], $work_table, $base_work_dir, $courseId);
+                            check_work(
+                                $mainConnection,
+                                $folder_id,
+                                $work_folder['url'],
+                                $work_table,
+                                $base_work_dir,
+                                $courseId
+                            );
                         }
                     }
                 }
@@ -590,6 +614,12 @@ function check_work($mainConnection, $folder_id, $work_url, $work_table, $base_w
     }
 }
 
+/**
+ * @param string $base_work_dir
+ * @param string $desired_dir_name
+ * @param array $portalSettings
+ * @return bool|string
+ */
 function create_unexisting_work_directory($base_work_dir, $desired_dir_name, $portalSettings)
 {
     $nb = '';

@@ -45,7 +45,7 @@ class Url
             $parts['query'] = QueryString::fromString($parts['query']);
         }
 
-        return new self($parts['scheme'], $parts['host'], $parts['user'],
+        return new static($parts['scheme'], $parts['host'], $parts['user'],
             $parts['pass'], $parts['port'], $parts['path'], $parts['query'],
             $parts['fragment']);
     }
@@ -468,13 +468,18 @@ class Url
     /**
      * Combine the URL with another URL. Follows the rules specific in RFC 3986 section 5.4.
      *
-     * @param string $url Relative URL to combine with
-     *
+     * @param string $url          Relative URL to combine with
+     * @param bool   $strictRfc386 Set to true to use strict RFC 3986 compliance when merging paths. When first
+     *                             released, Guzzle used an incorrect algorithm for combining relative URL paths. In
+     *                             order to not break users, we introduced this flag to allow the merging of URLs based
+     *                             on strict RFC 3986 section 5.4.1. This means that "http://a.com/foo/baz" merged with
+     *                             "bar" would become "http://a.com/foo/bar". When this value is set to false, it would
+     *                             become "http://a.com/foo/baz/bar".
      * @return Url
      * @throws InvalidArgumentException
      * @link http://tools.ietf.org/html/rfc3986#section-5.4
      */
-    public function combine($url)
+    public function combine($url, $strictRfc386 = false)
     {
         $url = self::factory($url);
 
@@ -503,6 +508,7 @@ class Url
             $this->username = $url->getUsername();
             $this->password = $url->getPassword();
             $this->path = $url->getPath();
+            $this->query = $url->getQuery();
             $this->fragment = $url->getFragment();
             return $this;
         }
@@ -512,20 +518,31 @@ class Url
 
         if (!$path) {
             if (count($query)) {
-                $this->query = $query;
+                $this->addQuery($query, $strictRfc386);
             }
         } else {
             if ($path[0] == '/') {
                 $this->path = $path;
+            } elseif ($strictRfc386) {
+                $this->path .= '/../' . $path;
             } else {
                 $this->path .= '/' . $path;
             }
             $this->normalizePath();
-            $this->query = $query;
+            $this->addQuery($query, $strictRfc386);
         }
 
         $this->fragment = $url->getFragment();
 
         return $this;
+    }
+
+    private function addQuery(QueryString $new, $strictRfc386)
+    {
+        if ($strictRfc386) {
+            $this->query = $new;
+        } else {
+            $this->query->merge($new);
+        }
     }
 }

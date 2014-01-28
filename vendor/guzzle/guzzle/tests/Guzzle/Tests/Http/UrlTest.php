@@ -154,7 +154,9 @@ class UrlTest extends \Guzzle\Tests\GuzzleTestCase
             array('http://u:a@www.example.com/path', 'test', 'http://u:a@www.example.com/path/test'),
             array('http://www.example.com/path', 'http://u:a@www.example.com/', 'http://u:a@www.example.com/'),
             array('/path?q=2', 'http://www.test.com/', 'http://www.test.com/path?q=2'),
-            array('http://api.flickr.com/services/', 'http://www.flickr.com/services/oauth/access_token', 'http://www.flickr.com/services/oauth/access_token')
+            array('http://api.flickr.com/services/', 'http://www.flickr.com/services/oauth/access_token', 'http://www.flickr.com/services/oauth/access_token'),
+            array('http://www.example.com/?foo=bar', 'some/path', 'http://www.example.com/some/path?foo=bar'),
+            array('http://www.example.com/?foo=bar', 'some/path?boo=moo', 'http://www.example.com/some/path?foo=bar&boo=moo'),
         );
     }
 
@@ -244,5 +246,52 @@ class UrlTest extends \Guzzle\Tests\GuzzleTestCase
         $url = Url::factory('http://foo.com/baz bar?a=b');
         $url->addPath('?');
         $this->assertEquals('http://foo.com/baz%20bar/%3F?a=b', (string) $url);
+    }
+
+    /**
+     * @link http://tools.ietf.org/html/rfc3986#section-5.4.1
+     */
+    public function rfc3986UrlProvider()
+    {
+        $result = array(
+            array('g', 'http://a/b/c/g'),
+            array('./g', 'http://a/b/c/g'),
+            array('g/', 'http://a/b/c/g/'),
+            array('/g', 'http://a/g'),
+            array('?y', 'http://a/b/c/d;p?y'),
+            array('g?y', 'http://a/b/c/g?y'),
+            array('#s', 'http://a/b/c/d;p?q=#s'),
+            array('g#s', 'http://a/b/c/g#s'),
+            array('g?y#s', 'http://a/b/c/g?y=#s'),
+            array(';x', 'http://a/b/c/;x'),
+            array('g;x', 'http://a/b/c/g;x'),
+            array('g;x?y#s', 'http://a/b/c/g;x?y=#s'),
+            array('', 'http://a/b/c/d;p?q'),
+            array('.', 'http://a/b/c'),
+            array('./', 'http://a/b/c/'),
+            array('..', 'http://a/b'),
+            array('../', 'http://a/b/'),
+            array('../g', 'http://a/b/g'),
+            array('../..', 'http://a/'),
+            array('../../', 'http://a/'),
+            array('../../g', 'http://a/g')
+        );
+
+        // This support was added in PHP 5.4.7: https://bugs.php.net/bug.php?id=62844
+        if (version_compare(PHP_VERSION, '5.4.7', '>=')) {
+            $result[] = array('//g', 'http://g');
+        }
+
+        return $result;
+    }
+
+    /**
+     * @dataProvider rfc3986UrlProvider
+     */
+    public function testCombinesUrlsUsingRfc3986($relative, $result)
+    {
+        $a = Url::factory('http://a/b/c/d;p?q');
+        $b = Url::factory($relative);
+        $this->assertEquals($result, trim((string) $a->combine($b, true), '='));
     }
 }

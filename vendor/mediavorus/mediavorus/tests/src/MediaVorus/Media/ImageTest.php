@@ -209,7 +209,7 @@ class ImageTest extends MediaTestCase
         $this->assertEquals(Image::ORIENTATION_90, $object1->getOrientation());
         $this->assertEquals(Image::ORIENTATION_180, $object2->getOrientation());
         $this->assertEquals(Image::ORIENTATION_270, $object3->getOrientation());
-        $this->assertNull($object4->getOrientation());
+        $this->assertEquals(Image::ORIENTATION_0, $object4->getOrientation());
     }
 
     /**

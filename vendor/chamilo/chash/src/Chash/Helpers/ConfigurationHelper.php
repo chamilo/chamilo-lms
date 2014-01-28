@@ -47,6 +47,7 @@ class ConfigurationHelper extends Helper
     public function chamiloVersions()
     {
         $versionList = array(
+            '1.8.6.2',
             '1.8.7',
             '1.8.8',
             '1.8.8.2',
@@ -330,6 +331,25 @@ class ConfigurationHelper extends Helper
         if (is_dir($sysPath.'data/courses')) {
             $finder->files()->in($sysPath.'data/courses/');
             $finder->directories()->in($sysPath.'data/courses/');
+        }
+
+        return $finder;
+    }
+    /**
+     * Gets the documents and folders marked DELETED
+     * @return array
+     */
+    public function getDeletedDocuments()
+    {
+        $finder = new Finder();
+        $sysPath = $this->getSysPath();
+
+        if (is_dir($sysPath.'courses')) {
+            $finder->in($sysPath.'courses/')->name('*DELETED*');
+        }
+
+        if (is_dir($sysPath.'data/courses')) {
+            $finder->in($sysPath.'data/courses/')->name('*DELETED*');
         }
 
         return $finder;

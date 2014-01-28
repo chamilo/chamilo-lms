@@ -14,7 +14,7 @@ env:
 services: mongodb
 
 before_script:
-  - pecl -q install -f mongo-1.3.4 && echo "extension=mongo.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+  - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - sh -c "if [ $DOCTRINE_ORM_VERSION ]; then composer require doctrine/orm:${DOCTRINE_ORM_VERSION} --dev --no-update; fi"
   - sh -c "if [ $SOLARIUM_VERSION ]; then composer require solarium/solarium:${SOLARIUM_VERSION} --dev --no-update; fi"
   - composer install --dev

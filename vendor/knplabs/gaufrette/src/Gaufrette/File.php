@@ -17,7 +17,7 @@ class File
 
     /**
      * Content variable is lazy. It will not be read from filesystem until it's requested first time
-     * @var content
+     * @var mixed content
      */
     protected $content = null;
 
@@ -70,7 +70,7 @@ class File
     /**
      * Returns the content
      *
-     * @throws Gaufrette\Exception\FileNotFound
+     * @throws FileNotFound
      *
      * @param  array  $metadata optional metadata which should be send when read
      * @return string
@@ -103,7 +103,7 @@ class File
         }
 
         try {
-            return $this->size = Util\Size::fromContent($this->getContent());
+            return $this->size = $this->filesystem->size($this->getKey());
         } catch (FileNotFound $exception) {
         }
 
@@ -121,7 +121,7 @@ class File
     }
 
     /**
-     * @param int size of the file
+     * @param int $size size of the file
      */
     public function setSize($size)
     {
@@ -146,7 +146,7 @@ class File
     }
 
     /**
-     * @param string name of the file
+     * @param string $name name of the file
      */
     public function setName($name)
     {
@@ -166,7 +166,7 @@ class File
     /**
      * Deletes the file from the filesystem
      *
-     * @throws Gaufrette\Exception\FileNotFound
+     * @throws FileNotFound
      * @throws \RuntimeException                when cannot delete file
      * @param  array                            $metadata optional metadata which should be send when write
      * @return boolean                          TRUE on success
@@ -181,7 +181,7 @@ class File
     /**
      * Creates a new file stream instance of the file
      *
-     * @return FileStream
+     * @return Stream
      */
     public function createStream()
     {

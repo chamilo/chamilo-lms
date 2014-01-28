@@ -331,6 +331,22 @@ class Form extends Link implements \ArrayAccess
     }
 
     /**
+     * Disables validation
+     *
+     * @return self
+     */
+    public function disableValidation()
+    {
+        foreach ($this->fields->all() as $field) {
+            if ($field instanceof Field\ChoiceFormField) {
+                $field->disableValidation();
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * Sets the node for the form.
      *
      * Expects a 'submit' button \DOMNode and finds the corresponding form element.
@@ -383,7 +399,7 @@ class Form extends Link implements \ArrayAccess
         $root = $document->appendChild($document->createElement('_root'));
 
         // add submitted button if it has a valid name
-        if ($this->button->hasAttribute('name') && $this->button->getAttribute('name')) {
+        if ('form' !== $this->button->nodeName && $this->button->hasAttribute('name') && $this->button->getAttribute('name')) {
             $this->set(new Field\InputFormField($document->importNode($this->button, true)));
         }
 

@@ -1,15 +1,6 @@
 CHANGELOG
 ---------
 
-* 0.4.1 (11-26-2013)
-
-  * Add Clip filter (@guimeira)
-
-* 0.4.0 (10-21-2013)
-
-  * Add support for video to audio transcoding
-  * BC Break : Add FormatInterface::getPasses and FormatInterface::getExtraParams
-
 * 0.3.5 (10-21-2013)
 
   * Add vorbis audio format (@jacobbudin).

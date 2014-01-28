@@ -1,3 +1,7 @@
+## v1.0.4 (2013-12-11)
+
+ * @mrkrstphr: Custom types (#21)
+
 ## v1.0.3 (2013-10-25)
 
  * @tdbui83: Redis cache (#20)

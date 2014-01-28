@@ -207,6 +207,20 @@ $queryBuilder = $documentManager->createQueryBuilder('Model\Article');
 $adapter = new DoctrineODMMongoDBAdapter($queryBuilder);
 ```
 
+### DoctrineODMPhpcrAdapter
+
+To paginate [Doctrine PHPCR-ODM](http://docs.doctrine-project.org/projects/doctrine-phpcr-odm/en/latest/) query builders.
+
+```php
+<?php
+
+use Pagerfanta\Adapter\DoctrineODMPhpcrAdapter;
+
+$queryBuilder = $documentManager->createQueryBuilder();
+$queryBuilder->from('Model\Article');
+$adapter = new DoctrineODMPhpcrAdapter($queryBuilder);
+```
+
 ### DoctrineCollectionAdapter
 
 To paginate a `Doctrine\Common\Collection\Collections` interface

@@ -1,0 +1,4 @@
+/vendor
+/nbproject
+composer.phar
+/tests/phpunit_report

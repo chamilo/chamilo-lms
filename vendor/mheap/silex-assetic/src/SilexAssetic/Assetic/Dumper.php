@@ -75,7 +75,7 @@ class Dumper
                 $iterator = $finder->files()->in($this->loader->getPaths($ns));
 
                 foreach ($iterator as $file) {
-                    $resource = new TwigResource($this->loader, $file->getRelativePathname());
+                    $resource = new TwigResource($this->loader, '@' . $ns . '/' . $file->getRelativePathname());
                     $this->lam->addResource($resource, 'twig');
                 }
             }

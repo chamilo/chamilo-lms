@@ -12,7 +12,6 @@
 namespace Symfony\Component\HttpFoundation\Session\Storage;
 
 use Symfony\Component\HttpFoundation\Session\SessionBagInterface;
-use Symfony\Component\HttpFoundation\Session\Storage\MetadataBag;
 
 /**
  * MockArraySessionStorage mocks the session for unit tests.
@@ -250,7 +249,7 @@ class MockArraySessionStorage implements SessionStorageInterface
      */
     protected function generateId()
     {
-        return sha1(uniqid(mt_rand()));
+        return hash('sha256', uniqid(mt_rand()));
     }
 
     protected function loadSession()

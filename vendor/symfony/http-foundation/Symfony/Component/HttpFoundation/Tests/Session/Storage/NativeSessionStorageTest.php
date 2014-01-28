@@ -59,7 +59,7 @@ class NativeSessionStorageTest extends \PHPUnit_Framework_TestCase
     protected function getStorage(array $options = array())
     {
         $storage = new NativeSessionStorage($options);
-        $storage->registerBag(new AttributeBag);
+        $storage->registerBag(new AttributeBag());
 
         return $storage;
     }
@@ -85,7 +85,11 @@ class NativeSessionStorageTest extends \PHPUnit_Framework_TestCase
     {
         $storage = $this->getStorage();
         $this->assertEquals('', $storage->getId());
+
         $storage->start();
+        $this->assertNotEquals('', $storage->getId());
+
+        $storage->save();
         $this->assertNotEquals('', $storage->getId());
     }
 

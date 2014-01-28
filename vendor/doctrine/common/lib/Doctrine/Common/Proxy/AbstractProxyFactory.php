@@ -115,8 +115,8 @@ abstract class AbstractProxyFactory
             ? $this->definitions[$className]
             : $this->getProxyDefinition($className);
         $fqcn       = $definition->proxyClassName;
-
         $proxy      = new $fqcn($definition->initializer, $definition->cloner);
+
         foreach ($definition->identifierFields as $idField) {
             $definition->reflectionFields[$idField]->setValue($proxy, $identifier[$idField]);
         }

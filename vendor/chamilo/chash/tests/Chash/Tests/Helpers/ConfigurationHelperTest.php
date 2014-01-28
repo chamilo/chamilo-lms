@@ -1,5 +1,5 @@
 <?php
-require_once 'vfsStream/vfsStream.php';
+//require_once __DIR__.'/../../../../vendor/mikey179/vfsStream/src/main/php/org/bovigo/vfs/vfsStream.php';
 
 use Chash\Helpers\ConfigurationHelper;
 
@@ -12,9 +12,10 @@ class ConfigurationHelperTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+/*
         vfsStreamWrapper::register();
         vfsStreamWrapper::setRoot(new vfsStreamDirectory('chamilo'));
-
+*/
     }
 
     public function testGetConfigurationPath()

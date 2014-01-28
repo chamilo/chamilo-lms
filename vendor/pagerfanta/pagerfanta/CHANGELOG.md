@@ -1,5 +1,6 @@
 ### 1.0.2 (-)
 
+  * Added `DoctrineODMPhpcrAdapter`
   * Added endpoint to `SolariumAdapter`
 
 ### 1.0.1 (2013-09-23)

@@ -1,4 +1,4 @@
-# whoops 
+# whoops
 php errors for cool kids
 
 [![Build Status](https://travis-ci.org/filp/whoops.png?branch=master)](https://travis-ci.org/filp/whoops) [![Total Downloads](https://poser.pugx.org/filp/whoops/downloads.png)](https://packagist.org/packages/filp/whoops)  [![Latest Stable Version](https://poser.pugx.org/filp/whoops/v/stable.png)](https://packagist.org/packages/filp/whoops)
@@ -19,6 +19,7 @@ powerful stacked error handling system.
 - Simple API for dealing with exceptions, trace frames & their data
 - Includes a pretty rad error page for your webapp projects
 - **NEW** Includes the ability to open referenced files directly in your editor and IDE
+- **NEW** Includes handlers for different response formats (JSON, XML, SOAP)
 - Includes a Silex Service Provider for painless integration with [Silex](http://silex.sensiolabs.org/)
 - Includes a Phalcon Service Provider for painless integration with [Phalcon](http://phalconphp.com/)
 - Includes a Module for equally painless integration with [Zend Framework 2](http://framework.zend.com/)
@@ -190,7 +191,7 @@ $handler->setEditor(
     function ($file, $line) {
         // if your development server is not local it's good to map remote files to local
         $translations = array('^' . __DIR__ => '~/Development/PhpStormOpener'); // change to your path
-        
+
         foreach ($translations as $from => $to) {
             $file = preg_replace('#' . $from . '#', $to, $file, 1);
         }
@@ -208,34 +209,8 @@ $handler->setEditor(
 - [`PrettyPageHandler`](https://github.com/filp/whoops/blob/master/src/Whoops/Handler/PrettyPageHandler.php) - Shows a pretty error page when something goes pants-up
 - [`CallbackHandler`](https://github.com/filp/whoops/blob/master/src/Whoops/Handler/CallbackHandler.php) - Wraps a closure or other callable as a handler. You do not need to use this handler explicitly, **whoops** will automatically wrap any closure or callable you pass to `Whoops\Run::pushHandler`
 - [`JsonResponseHandler`](https://github.com/filp/whoops/blob/master/src/Whoops/Handler/JsonResponseHandler.php) - Captures exceptions and returns information on them as a JSON string. Can be used to, for example, play nice with AJAX requests.
-
-## Contributing
-
-If you want to give me some feedback or make a suggestion, send me a message through
-twitter: [@imfilp](https://twitter.com/imfilp)
-
-If you want to get your hands dirty, great! Here's a couple of steps/guidelines:
-
-- Fork/clone this repo, and update dev dependencies using Composer
-
-```bash
-$ git clone git@github.com:filp/whoops.git
-$ cd whoops
-$ composer install --dev
-```
-
-- Create a new branch for your feature or fix
-
-```bash
-$ git checkout -b feature/flames-on-the-side
-```
-
-- Add your changes & tests for those changes (in `tests/`).
-- Remember to stick to the existing code style as best as possible. When in doubt, follow `PSR-2`.
-- Send me a pull request!
-
-If you don't want to go through all this, but still found something wrong or missing, please
-let me know, and/or **open a new issue report** so that I or others may take care of it.
+- [`XmlResponseHandler`](https://github.com/filp/whoops/blob/master/src/Whoops/Handler/XmlResponseHandler.php) - Captures exceptions and returns information on them as a XML string. Can be used to, for example, play nice with AJAX requests.
+- [`SoapResponseHandler`](https://github.com/filp/whoops/blob/master/src/Whoops/Handler/SoapResponseHandler.php) - Captures exceptions and returns information on them as a SOAP string. Might be used for SOAP Webservices.
 
 ## Authors
 

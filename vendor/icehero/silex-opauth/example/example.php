@@ -23,7 +23,7 @@ $app['opauth'] = array(
   )
 );
 
-$app->register(new OpauthExtension());
+$app->register(new OpauthExtension($app));
 
 
 // Listen for events

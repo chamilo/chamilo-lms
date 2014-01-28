@@ -19,6 +19,11 @@ class IniFileLoaderSpec extends \PhpSpec\ObjectBehavior
 
     function it_supports_inherited_configs()
     {
+        if (preg_match('{hiphop}', phpversion())) {
+            // HHVM does not support @ in ini files.
+            return;
+        }
+
         $this->load('inherit.ini')->shouldReturn(array(
             'hello' => 'world',
         ));

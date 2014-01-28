@@ -230,6 +230,8 @@ Configuration
      String or array describing metadata cache implementation.
    * **result_cache** (Default: setting specified by orm.default_cache):
      String or array describing result cache implementation.
+   * **types**
+     An array of custom types in the format of 'typeName' => 'Namespace\To\Type\Class'
  * **orm.ems.options**:
    Array of Entity Manager configuration sets indexed by each Entity Manager's
    name. Each value should look like **orm.em.options**.

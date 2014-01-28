@@ -21,6 +21,7 @@ use Doctrine\Common\Cache\XcacheCache;
 use Doctrine\Common\Cache\RedisCache;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriver;
 use Doctrine\Common\Persistence\Mapping\Driver\MappingDriverChain;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\Driver\Driver;
@@ -46,6 +47,7 @@ class DoctrineOrmServiceProvider
         $app['orm.em.default_options'] = array(
             'connection' => 'default',
             'mappings' => array(),
+            'types' => array()
         );
 
         $app['orm.ems.options.initializer'] = $app->protect(function () use ($app) {
@@ -162,6 +164,14 @@ class DoctrineOrmServiceProvider
                     }
                 }
                 $config->setMetadataDriverImpl($chain);
+
+                foreach ((array) $options['types'] as $typeName => $typeClass) {
+                    if (Type::hasType($typeName)) {
+                        Type::overrideType($typeName, $typeClass);
+                    } else {
+                        Type::addType($typeName, $typeClass);
+                    }
+                }
 
                 $configs[$name] = $config;
             }

@@ -80,7 +80,7 @@ class ProcessPipes
     }
 
     /**
-     * Closes unix pipes.
+     * Closes Unix pipes.
      *
      * Nothing happens in case file handles are used.
      */
@@ -156,8 +156,8 @@ class ProcessPipes
     /**
      * Writes stdin data.
      *
-     * @param Boolean $blocking Whether to use blocking calls or not.
-     * @param string  $stdin    The data to write.
+     * @param Boolean     $blocking Whether to use blocking calls or not.
+     * @param string|null $stdin    The data to write.
      */
     public function write($blocking, $stdin)
     {
@@ -247,6 +247,10 @@ class ProcessPipes
      */
     private function readStreams($blocking, $close = false)
     {
+        if (empty($this->pipes)) {
+            return array();
+        }
+
         $read = array();
 
         $r = $this->pipes;
@@ -256,7 +260,7 @@ class ProcessPipes
         // let's have a look if something changed in streams
         if (false === $n = @stream_select($r, $w, $e, 0, $blocking ? ceil(Process::TIMEOUT_PRECISION * 1E6) : 0)) {
             // if a system call has been interrupted, forget about it, let's try again
-            // otherwise, an error occured, let's reset pipes
+            // otherwise, an error occurred, let's reset pipes
             if (!$this->hasSystemCallBeenInterrupted()) {
                 $this->pipes = array();
             }

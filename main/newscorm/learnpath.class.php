@@ -5838,15 +5838,20 @@ class learnpath
         $arrLP = $this->arrMenu;
         unset ($this->arrMenu);
 
-        if ($action == 'add')
+        if ($action == 'add') {
             $legend .= get_lang('CreateTheExercise') . '&nbsp;:';
-        elseif ($action == 'move') $legend .= get_lang('MoveTheCurrentExercise') . '&nbsp;:';
-        else
+        } elseif ($action == 'move') {
+            $legend .= get_lang('MoveTheCurrentExercise') . '&nbsp;:';
+        } else {
             $legend .= get_lang('EditCurrentExecice') . '&nbsp;:';
+        }
+
         if (isset ($_GET['edit']) && $_GET['edit'] == 'true') {
             $legend .= Display :: return_warning_message(get_lang('Warning') . ' ! ' . get_lang('WarningEditingDocument'));
         }
+
         $legend .= '</legend>';
+        $return = '';
         $return .= '<div class="sectioncomment">';
 
         $return .= '<form method="POST">';
@@ -5865,6 +5870,7 @@ class learnpath
         $return .= '<td class="label"><label for="idParent">' . get_lang('Parent') . '</label></td>';
         $return .= '<td class="input">';
 
+        // Select for Parent item, root or chapter
         $return .= '<select id="idParent" style="width:100%;" name="parent" onChange="javascript: load_cbo(this.value);" size="1">';
 
         $return .= '<option class="top" value="0">' . $this->name . '</option>';
@@ -5898,9 +5904,7 @@ class learnpath
         $return .= '<td class="input">';
 
         $return .= '<select class="learnpath_item_form" style="width:100%;" id="previous" name="previous" size="1">';
-
         $return .= '<option class="top" value="0">' . get_lang('FirstPosition') . '</option>';
-
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
                 if ($extra_info['previous_item_id'] == $arrLP[$i]['id'])
@@ -5908,12 +5912,11 @@ class learnpath
                 elseif ($action == 'add') $selected = 'selected="selected" ';
                 else
                     $selected = '';
-
                 $return .= '<option ' . $selected . 'value="' . $arrLP[$i]['id'] . '">' . get_lang('After') . ' "' . $arrLP[$i]['title'] . '"</option>';
             }
         }
-
         $return .= '</select>';
+
         $return .= '</td>';
         $return .= '</tr>';
         if ($action != 'move') {
@@ -7585,7 +7588,10 @@ class learnpath
      *
      * @return string
      */
+
+
     public function get_js_dropdown_array() {
+
         $course_id = api_get_course_int_id();
 
         $return = 'var child_name = new Array();' . "\n";
@@ -7602,7 +7608,10 @@ class learnpath
         $i = 0;
 
         while ($row_zero = Database :: fetch_array($res_zero)) {
-        	$js_var = json_encode(get_lang('After').' '.$row_zero['title']);
+            if ($row_zero['item_type'] == TOOL_QUIZ) {
+                $row_zero['title'] = Exercise::get_formated_title_variable($row_zero['title']);
+            }
+            $js_var = json_encode(get_lang('After').' '.$row_zero['title']);
             $return .= 'child_name[0][' . $i . '] = '.$js_var.' ;' . "\n";
             $return .= 'child_value[0][' . $i++ . '] = "' . $row_zero['id'] . '";' . "\n";
         }
@@ -7620,7 +7629,7 @@ class learnpath
             $return .= 'child_value[' . $row['id'] . '] = new Array();' . "\n\n";
 
             while ($row_parent = Database :: fetch_array($res_parent)) {
-            	$js_var = json_encode(get_lang('After').' '.$row_parent['title']);
+                $js_var = json_encode(get_lang('After').' '.$row_parent['title']);
                 $return .= 'child_name[' . $row['id'] . '][' . $i . '] =   '.$js_var.' ;' . "\n";
                 $return .= 'child_value[' . $row['id'] . '][' . $i++ . '] = "' . $row_parent['id'] . '";' . "\n";
             }

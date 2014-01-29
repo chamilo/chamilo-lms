@@ -17,7 +17,11 @@ switch ($action) {
             if ($_SESSION['oLP']) {
                 //Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
-                echo $_SESSION['oLP']->add_item($_REQUEST['parent_id'], $_REQUEST['previous_id'], $_REQUEST['type'], $_REQUEST['id'], $_REQUEST['title'], null);
+                $title = $_REQUEST['title'];
+                if ($_REQUEST['type'] == TOOL_QUIZ) {
+                    $title = Exercise::format_title_variable($title);
+                }
+                echo $_SESSION['oLP']->add_item($_REQUEST['parent_id'], $_REQUEST['previous_id'], $_REQUEST['type'], $_REQUEST['id'], $title, null);
             }
         }
         break;

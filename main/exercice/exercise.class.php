@@ -98,12 +98,14 @@ class Exercise
     public $scoreTypeModel = 0;
     public $categoryMinusOne = true; // Shows the category -1: See BT#6540
     public $globalCategoryId = null;
+    public $onSuccessMessage = null;
+    public $onFailedMessage = null;
 
     /**
      * Constructor of the class
-     *
      * @author - Olivier Brouckaert
      * @param int $course_id
+     * @throws Exception
      */
     public function Exercise($course_id = null)
     {
@@ -196,6 +198,8 @@ class Exercise
             $this->pass_percentage = $object->pass_percentage;
             $this->is_gradebook_locked = api_resource_is_locked_by_gradebook($id, LINK_EXERCISE);
             $this->endButton = $object->end_button;
+            $this->onSuccessMessage = $object->on_success_message;
+            $this->onFailedMessage= $object->on_failed_message;
             $this->emailNotificationTemplate = $object->email_notification_template;
             $this->modelType = $object->model_type;
             $this->questionSelectionType = $object->question_selection_type;
@@ -389,6 +393,23 @@ class Exercise
     {
         return $this->endButton;
     }
+
+    /**
+     * @return string
+     */
+    public function getOnSuccessMessage()
+    {
+        return $this->onSuccessMessage;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOnFailedMessage()
+    {
+        return $this->onFailedMessage;
+    }
+
 
     /**
      * @author Hubert borderiou 30-11-11
@@ -1191,6 +1212,22 @@ class Exercise
     }
 
     /**
+     * @param string $value
+     */
+    public function setOnSuccessMessage($value)
+    {
+        $this->onSuccessMessage = $value;
+    }
+
+    /**
+     * @param string $value
+     */
+    public function setOnFailedMessage($value)
+    {
+        $this->onFailedMessage = $value;
+    }
+
+    /**
      * @param $value
      */
     public function setModelType($value)
@@ -1418,6 +1455,8 @@ class Exercise
         	        display_category_name = '".Database::escape_string($display_category_name)."',
                     pass_percentage = '".Database::escape_string($pass_percentage)."',
                     end_button = '".$this->selectEndButton()."',
+                    on_success_message = '".Database::escape_string($this->getOnSuccessMessage())."',
+                    on_failed_message = '".Database::escape_string($this->getOnFailedMessage())."',
                     email_notification_template = '".Database::escape_string($this->selectEmailNotificationTemplate())."',
                     model_type = '".$this->getModelType()."',
                     question_selection_type = '".$this->getQuestionSelectionType()."',
@@ -1438,11 +1477,36 @@ class Exercise
         } else {
             // Creates a new exercise
             $sql = "INSERT INTO $TBL_EXERCICES (
-                        c_id, start_time, end_time, title, description, sound, type, random, random_answers, active,
-                        max_attempt, feedback_type, expired_time, session_id, review_answers, random_by_category,
-                        text_when_finished, display_category_name, pass_percentage, end_button, email_notification_template,
-                        results_disabled, model_type, question_selection_type, score_type_model, global_category_id, hide_question_title)
-					VALUES(
+                        c_id,
+                        start_time,
+                        end_time,
+                        title,
+                        description,
+                        sound,
+                        type,
+                        random,
+                        random_answers,
+                        active,
+                        max_attempt,
+                        feedback_type,
+                        expired_time,
+                        session_id,
+                        review_answers,
+                        random_by_category,
+                        text_when_finished,
+                        display_category_name,
+                        pass_percentage,
+                        end_button,
+                        on_success_message,
+                        on_failed_message,
+                        email_notification_template,
+                        results_disabled,
+                        model_type,
+                        question_selection_type,
+                        score_type_model,
+                        global_category_id,
+                        hide_question_title
+                    ) VALUES (
 						".$this->course_id.",
 						'$start_time',
                         '$end_time',
@@ -1463,6 +1527,8 @@ class Exercise
 						'".Database::escape_string($display_category_name)."',
                         '".Database::escape_string($pass_percentage)."',
                         '".Database::escape_string($this->selectEndButton())."',
+                        '".Database::escape_string($this->getOnSuccessMessage())."',
+                        '".Database::escape_string($this->getOnFailedMessage())."',
                         '".Database::escape_string($this->selectEmailNotificationTemplate())."',
                         '".Database::escape_string($results_disabled)."',
                         '".Database::escape_string($this->getModelType())."',
@@ -2048,8 +2114,7 @@ class Exercise
             );
             $form->addElement('html', '</div>');
 
-
-              // Pass percentage.
+            // Pass percentage.
             $form->addElement(
                 'text',
                 'pass_percentage',
@@ -2059,7 +2124,10 @@ class Exercise
 
             $form->addRule('pass_percentage', get_lang('Numeric'), 'numeric');
 
-
+            // On success
+            $form->add_html_editor('on_success_message', get_lang('MessageOnSuccess'), false, false, $editor_config);
+            // On failed
+            $form->add_html_editor('on_failed_message', get_lang('MessageOnFailed'), false, false, $editor_config);
 
             $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?1=1';
 
@@ -2132,7 +2200,7 @@ class Exercise
                 array('id' => 'global_category_id')
             );
 
-            // Text when ending an exam
+            // Text when ending an exam.
             $form->add_html_editor('text_when_finished', get_lang('TextWhenFinished'), false, false, $editor_config);
 
             // Exam end button.
@@ -2233,6 +2301,8 @@ class Exercise
                 $defaults['display_category_name'] = $this->selectDisplayCategoryName();
                 $defaults['pass_percentage'] = $this->selectPassPercentage();
                 $defaults['end_button'] = $this->selectEndButton();
+                $defaults['on_success_message'] = $this->getOnSuccessMessage();
+                $defaults['on_failed_message'] = $this->getOnFailedMessage();
                 $defaults['email_notification_template'] = $this->selectEmailNotificationTemplate();
                 $defaults['model_type'] = $this->getModelType();
                 $defaults['question_selection_type'] = $this->getQuestionSelectionType();
@@ -2280,6 +2350,8 @@ class Exercise
                 $defaults['end_button'] = $this->selectEndButton();
                 $defaults['question_selection_type'] = 1;
                 $defaults['hide_question_title'] = 0;
+                $defaults['on_success_message'] = null;
+                $defaults['on_failed_message'] = null;
             }
         } else {
             $defaults['exerciseTitle'] = $this->selectTitle();
@@ -2315,11 +2387,13 @@ class Exercise
         $this->updatePassPercentage($form->getSubmitValue('pass_percentage'));
         $this->updateCategories($form->getSubmitValue('category'));
         $this->updateEndButton($form->getSubmitValue('end_button'));
+        $this->setOnSuccessMessage($form->getSubmitValue('on_success_message'));
+        $this->setOnFailedMessage($form->getSubmitValue('on_failed_message'));
         $this->updateEmailNotificationTemplate($form->getSubmitValue('email_notification_template'));
         $this->setModelType($form->getSubmitValue('model_type'));
         $this->setQuestionSelectionType($form->getSubmitValue('question_selection_type'));
         $this->setHideQuestionTitle($form->getSubmitValue('hide_question_title'));
-        var_dump($values);
+
         $this->setScoreTypeModel($form->getSubmitValue('score_type_model'));
         $this->setGlobalCategoryId($form->getSubmitValue('global_category_id'));
 
@@ -6572,7 +6646,11 @@ class Exercise
         if ($show_results || $show_only_score) {
             $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
             // Shows exercise header.
-            echo $this->show_exercise_result_header($user_info['complete_name'], api_convert_and_format_date($exercise_stat_info['start_date'], DATE_TIME_FORMAT_LONG), $exercise_stat_info['duration']);
+            echo $this->show_exercise_result_header(
+                $user_info['complete_name'],
+                api_convert_and_format_date($exercise_stat_info['start_date'], DATE_TIME_FORMAT_LONG),
+                $exercise_stat_info['duration']
+            );
         }
 
         // Display text when test is finished #4074 and for LP #4227
@@ -6737,9 +6815,7 @@ class Exercise
 
         if ($origin != 'learnpath') {
             if ($show_results || $show_only_score) {
-                $total_score_text .= '<div class="question_row">';
                 $total_score_text .= $this->get_question_ribbon($total_score, $total_weight, true);
-                $total_score_text .= '</div>';
             }
         }
 
@@ -6798,15 +6874,19 @@ class Exercise
      */
     public function get_question_ribbon($score, $weight, $check_pass_percentage = false)
     {
-        $ribbon = '<div class="ribbon">';
+        $eventMessage = null;
+        $ribbon = '<div class="question_row">';
+        $ribbon .= '<div class="ribbon">';
         if ($check_pass_percentage) {
             $is_success = ExerciseLib::is_success_exercise_result($score, $weight, $this->selectPassPercentage());
             // Color the final test score if pass_percentage activated
             $ribbon_total_success_or_error = "";
             if (ExerciseLib::is_pass_pourcentage_enabled($this->selectPassPercentage())) {
                 if ($is_success) {
+                    $eventMessage = $this->getOnSuccessMessage();
                     $ribbon_total_success_or_error = ' ribbon-total-success';
                 } else {
+                    $eventMessage = $this->getOnFailedMessage();
                     $ribbon_total_success_or_error = ' ribbon-total-error';
                 }
             }
@@ -6818,10 +6898,15 @@ class Exercise
         $ribbon .= ExerciseLib::show_score($score, $weight, false, true);
         $ribbon .= '</h3>';
         $ribbon .= '</div>';
+
         if ($check_pass_percentage) {
             $ribbon .= ExerciseLib::show_success_message($score, $weight, $this->selectPassPercentage());
         }
         $ribbon .= '</div>';
+        $ribbon .= '</div>';
+
+        $ribbon .= $eventMessage;
+
         return $ribbon;
     }
 

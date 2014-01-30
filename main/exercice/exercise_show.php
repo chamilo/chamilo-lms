@@ -707,14 +707,11 @@ $total_score_text = null;
 //Total score
 if ($origin!='learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
 	if ($show_results || $show_only_total_score ) {
-
-        $total_score_text .= '<div class="question_row">';
         $my_total_score_temp = $totalScore;
 	    if ($objExercise->selectPropagateNeg() == 0 && $my_total_score_temp < 0) {
 	        $my_total_score_temp = 0;
 	    }
         $total_score_text .= $objExercise->get_question_ribbon($my_total_score_temp, $totalWeighting, true);
-        $total_score_text .= '</div>';
 	}
 }
 

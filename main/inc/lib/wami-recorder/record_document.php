@@ -1,9 +1,10 @@
 <?php
-require_once '../../../inc/global.inc.php';
-//Add security from Chamilo
+/* For licensing terms, see /license.txt */
+
+// Add security from Chamilo
 api_protect_course_script();
 api_block_anonymous_users();
-//
+
 # Save the audio to a URL-accessible directory for playback.
 parse_str($_SERVER['QUERY_STRING'], $params);
 
@@ -78,29 +79,44 @@ if (!DocumentManager::enough_space(filesize($tmpfname), DocumentManager::get_cou
 unlink($tmpfname);
 
 
-//add to disk
+// Add to disk
 $fh = fopen($documentPath, 'w') or die("can't open file");
 fwrite($fh, $content);
 fclose($fh);
 
-//add document to database
-$doc_id = FileManager::add_document(
-    $_course,
-    $wamidir.'/'.$waminame_to_save,
-    'file',
-    filesize($documentPath),
-    $title_to_save
+error_log($documentPath);
+$fileInfo = pathinfo($documentPath);
+$courseInfo = api_get_course_info();
+
+$file = array(
+    'file' => array(
+        'name' => $fileInfo['basename'],
+        'tmp_name' => $documentPath,
+        'size' => filesize($documentPath),
+        'from_file' => true
+    )
 );
-api_item_property_update(
-    $_course,
-    TOOL_DOCUMENT,
-    $doc_id,
-    'DocumentAdded',
-    $_user['user_id'],
-    $groupId,
-    null,
-    null,
-    null,
-    $current_session_id
-);
-?>
+
+$output = true;
+$documentData = DocumentManager::upload_document($file, $wamidir, null, null, 0, 'overwrite', false, $output);
+
+if (!empty($documentData)) {
+    $newDocId = $documentData['id'];
+    $newMp3DocumentId = DocumentManager::addAndConvertWavToMp3($documentData, $courseInfo, api_get_user_id());
+
+    if ($newMp3DocumentId) {
+        $newDocId = $newMp3DocumentId;
+    }
+
+    if (isset($_REQUEST['lp_item_id']) && !empty($_REQUEST['lp_item_id'])) {
+        $lpItemId = $_REQUEST['lp_item_id'];
+        /** @var learnpath $lp */
+        $lp = isset($_SESSION['oLP']) ? $_SESSION['oLP'] : null;
+
+        if (!empty($lp)) {
+            $lp->set_modified_on();
+            $lpItem = new learnpathItem($lpItemId);
+            $lpItem->add_audio_from_documents($newDocId);
+        }
+    }
+}

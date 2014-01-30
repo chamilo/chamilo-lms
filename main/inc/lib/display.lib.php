@@ -1886,6 +1886,45 @@ class Display
         return $html;
     }
 
+
+    /**
+     * @param string $file
+     * @param array $params
+     * @return null|string
+     */
+    public static function getMediaPlayer($file, $params = array())
+    {
+        $fileInfo = pathinfo($file);
+
+        switch ($fileInfo['extension']) {
+            case 'wav':
+                if (isset($params['url'])) {
+                    return DocumentManager::readNanogongFile($params['url']);
+                }
+                break;
+            case 'mp3':
+            case 'webm':
+                $autoplay = null;
+                if (isset($params['autoplay']) && $params['autoplay'] == 'true') {
+                    $autoplay = 'autoplay';
+                }
+                $width = isset($params['width']) ? 'width="'.$params['width'].'"' : null;
+                $id = isset($params['id']) ? $params['id'] : $fileInfo['basename'];
+                $class = isset($params['class']) ? ' class="'.$params['class'].'"' : null;
+
+                $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$file.'" >';
+                $html .= '  <object width="'.$params['width'].'" height="50" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
+                                <param name="movie" value="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf" />
+                                <param name="flashvars" value="controls=true&file='.$fileInfo['basename'].'" />
+                            </object>';
+                $html .= '</audio>';
+                return $html;
+                break;
+        }
+
+        return null;
+    }
+
     /**
      *
      * @param int $nextValue

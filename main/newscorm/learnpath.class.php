@@ -5,8 +5,8 @@
  * learnpaths. It is used by the scorm class.
  *
  * @package chamilo.learnpath
- * @author    Yannick Warnier <ywarnier@beeznest.org>
- * @author    Julio Montoya   <gugli100@gmail.com> Several improvements and fixes
+ * @author Yannick Warnier <ywarnier@beeznest.org>
+ * @author Julio Montoya   <gugli100@gmail.com> Several improvements and fixes
  * @todo this file is too big, need a refactor more than 10000 lines!
  */
 /**
@@ -2263,7 +2263,7 @@ class learnpath
 
     /**
      * Returns the HTML necessary to print a mediaplayer block inside a page
-     * @return string    The mediaplayer HTML
+     * @return string	The mediaplayer HTML
      */
     public function get_mediaplayer($autostart = 'true')
     {
@@ -2303,18 +2303,32 @@ class learnpath
                 $autostart_audio = 'true';
             }
 
+            $courseInfo = api_get_course_info();
+
+            $audio = $row['audio'];
+
+            $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$audio;
+            $url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$audio;
+            if (!file_exists($file)) {
+                $lpPathInfo = $_SESSION['oLP']->generate_lp_folder(api_get_course_info());
+                $file = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$lpPathInfo['dir'].$audio;
+                $url = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$lpPathInfo['dir'].$audio;
+            }
+
+            $player = Display::getMediaPlayer(
+                $file,
+                array(
+                    'id' => 'lp_audio_media_player',
+                    'url' => $url,
+                    'autoplay' => $autostart_audio,
+                    'width' => '100%'
+                )
+            );
+
             // The mp3 player.
-            $url = api_get_path(WEB_LIBRARY_PATH).'mediaplayer/';
-            $fileUrl = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/audio/'.$row['audio'].'&autostart='.$autostart_audio;
-            $output = '<div id="container-player">';
-            $output .= '<script type="text/javascript" src="'.$url.'swfobject.js"></script>';
-            $output .= '<script type="text/javascript">
-                            var s1 = new SWFObject("'.$url.'player.swf","ply","250","20","9","#FFFFFF");
-                            s1.addParam("allowscriptaccess","always");
-                            s1.addParam("flashvars","file='.$fileUrl.'");
-                            s1.write("container-player");
-						</script></div>';
-            echo $output;
+            $output  = '<div id="container">';
+            $output .= $player;
+            $output .= '</div>';
         }
 
         return $output;
@@ -2584,6 +2598,11 @@ class learnpath
         }
     }
 
+    /**
+     * @param string $size
+     * @param string $path_type
+     * @return bool|string
+     */
     public function get_preview_image_path($size = null, $path_type = 'web')
     {
         $preview_image = $this->get_preview_image();
@@ -4663,7 +4682,7 @@ class learnpath
 
     /**
      * Sets the hide_toc_frame parameter of a LP (and save)
-     * @param    int    1 if frame is hiddent 0 thenelse
+     * @param    int    1 if frame is hidden 0 then else
      * @return   bool    Returns true if author's name is not empty
      */
     public function set_hide_toc_frame($hide)

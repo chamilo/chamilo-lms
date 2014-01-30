@@ -1,22 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
- *    This is the file manage library for Chamilo.
- *    Include/require it in your code to use its functionality.
- * @package chamilo.library
- */
+    This class contains functions that you can access statically.
 
-/**
-This class contains functions that you can access statically.
+    FileManager::list_all_directories($path)
+    FileManager::list_all_files($dir_array)
+    FileManager::compat_load_file($file_name)
+    FileManager::set_default_settings($upload_path, $filename, $filetype="file", $glued_table, $default_visibility='v')
 
-FileManager::list_all_directories($path)
-FileManager::list_all_files($dir_array)
-FileManager::compat_load_file($file_name)
-FileManager::set_default_settings($upload_path, $filename, $filetype="file", $glued_table, $default_visibility='v')
-
-@author Roan Embrechts
-@version 1.1, July 2004
+    @author Roan Embrechts
+    @version 1.1, July 2004
  * @package chamilo.library
  */
 
@@ -970,7 +963,7 @@ class FileManager
                     case 'overwrite':
                         // Check if the target file exists, so we can give another message
                         $file_exists = file_exists($store_path);
-                        if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path)) {
+                        if (self::moveUploadedFile($uploaded_file, $store_path)) {
                             chmod($store_path, $files_perm);
                             if ($file_exists) {
                                 // UPDATE DATABASE
@@ -1064,7 +1057,7 @@ class FileManager
                         $store_path = $where_to_save.$new_name;
                         $new_file_path = $upload_path.$new_name;
 
-                        if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path)) {
+                        if (self::moveUploadedFile($uploaded_file, $store_path)) {
 
                             chmod($store_path, $files_perm);
 
@@ -1122,7 +1115,7 @@ class FileManager
                                 Display::display_error_message($clean_name.' '.get_lang('UplAlreadyExists'));
                             }
                         } else {
-                            if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path)) {
+                            if (self::moveUploadedFile($uploaded_file, $store_path)) {
                                 chmod($store_path, $files_perm);
 
                                 // Put the document data in the database
@@ -1595,16 +1588,19 @@ class FileManager
 
     /**
      * Adds a new document to the database
-     *
-     * @param array $_course
+     * @param string $course
      * @param string $path
      * @param string $filetype
-     * @param int $filesize
-     * @param string $title
-     *
-     * @return id if inserted document
+     * @param string $filesize
+     * @param $title
+     * @param string $comment
+     * @param int $readonly
+     * @param bool $save_visibility
+     * @param int $group_id
+     * @param int $session_id Session ID, if any
+     * @return bool|int
      */
-    static function add_document(
+    public static function add_document(
         $course,
         $path,
         $filetype,
@@ -1613,9 +1609,14 @@ class FileManager
         $comment = null,
         $readonly = 0,
         $save_visibility = true,
-        $group_id = null
+        $group_id = null,
+        $session_id = 0
     ) {
-        $session_id = api_get_session_id();
+        $session_id = intval($session_id);
+        if (empty($session_id)) {
+            $session_id    = api_get_session_id();
+        }
+
         $readonly = intval($readonly);
         $comment = Database::escape_string($comment);
         $path = Database::escape_string($path);
@@ -2054,7 +2055,7 @@ class FileManager
      * @param string $base_work_dir
      * @param string $current_path, needed for recursivity
      */
-    static function add_all_documents_in_folder_to_database(
+    public static function add_all_documents_in_folder_to_database(
         $_course,
         $user_id,
         $base_work_dir,
@@ -2147,6 +2148,21 @@ class FileManager
                     }
                 }
             }
+        }
+    }
+
+    /**
+    * @param array $file
+    * @param string $storePath
+    * @return bool
+    **/
+    public static function moveUploadedFile($file, $storePath)
+    {
+        $handleFromFile = isset($file['from_file']) && $file['from_file'] ? true : false;
+        if ($handleFromFile) {
+            return file_exists($file['tmp_name']);
+        } else {
+            return move_uploaded_file($file['tmp_name'], $storePath);
         }
     }
 }

@@ -2,13 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *    This is the document library for Chamilo.
- *    It is / will be used to provide a service layer to all document-using tools.
- *    and eliminate code duplication fro group documents, scorm documents, main documents.
- *    Include/require it in your code to use its functionality.
+ * 	This is the document library for Chamilo.
+ * 	It is / will be used to provide a service layer to all document-using tools.
+ * 	and eliminate code duplication fro group documents, scorm documents, main documents.
+ * 	Include/require it in your code to use its functionality.
  *
- * @package chamilo.library
+ * 	@package chamilo.library
  */
+
 /**
  * Code
  */
@@ -20,6 +21,7 @@ class DocumentManager
     }
 
     /**
+     * @param string
      * @return the document folder quota for the current course, in bytes, or the default quota
      */
     public static function get_course_quota($course_code = null)
@@ -45,13 +47,14 @@ class DocumentManager
     }
 
     /**
-     *    Get the content type of a file by checking the extension
-     *    We could use mime_content_type() with php-versions > 4.3,
-     *    but this doesn't work as it should on Windows installations
+     * 	Get the content type of a file by checking the extension
+     * 	We could use mime_content_type() with php-versions > 4.3,
+     * 	but this doesn't work as it should on Windows installations
      *
-     * @param string $filename or boolean TRUE to return complete array
-     * @author ? first version
-     * @author Bert Vanderkimpen
+     * 	@param string $filename or boolean TRUE to return complete array
+     * 	@author ? first version
+     * 	@author Bert Vanderkimpen
+     *  @return string
      *
      */
     public static function file_get_mime_type($filename)
@@ -89,6 +92,7 @@ class DocumentManager
             'dotx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.template',
             'dvi' => 'application/x-dvi',
             'dwg' => 'application/vnd.dwg',
+            'dwf' => 'application/vnd.dwf',
             'dxf' => 'application/vnd.dxf',
             'dxr' => 'application/x-director',
             'eps' => 'application/postscript',
@@ -255,7 +259,8 @@ class DocumentManager
         //$filename will be an array if a . was found
         if (is_array($extension)) {
             $extension = strtolower($extension[sizeof($extension) - 1]);
-        } //file without extension
+        }
+        //file without extension
         else {
             $extension = 'empty';
         }
@@ -270,10 +275,12 @@ class DocumentManager
     }
 
     /**
-     * @return true if the user is allowed to see the document, false otherwise
-     * @author Sergio A Kessler, first version
-     * @author Roan Embrechts, bugfix
-     * @todo ??not only check if a file is visible, but also check if the user is allowed to see the file??
+     *  @param string
+     *  @param string
+     * 	@return true if the user is allowed to see the document, false otherwise
+     * 	@author Sergio A Kessler, first version
+     * 	@author Roan Embrechts, bugfix     
+     *  @todo not only check if a file is visible, but also check if the user is allowed to see the file??
      */
     public static function file_visible_to_user($this_course, $doc_url)
     {
@@ -2534,15 +2541,15 @@ class DocumentManager
     /**
      * Uploads a document
      *
-     * @param array     the $_FILES variable
-     * @param string    $path
-     * @param string    title
-     * @param string    comment
-     * @param int       unzip or not the file
-     * @param int       if_exists overwrite, rename or warn if exists (default)
-     * @param bool      index document (search xapian module)
-     * @param bool      print html messages
-     * @return unknown_type
+     * @param array $files the $_FILES variable
+     * @param string $path
+     * @param string $title
+     * @param string $comment
+     * @param int $unzip unzip or not the file
+     * @param int $if_exists if_exists overwrite, rename or warn if exists (default)
+     * @param bool $index_document index document (search xapian module)
+     * @param bool $show_output print html messages
+     * @return array|bool
      */
     public static function upload_document(
         $files,
@@ -3411,7 +3418,7 @@ class DocumentManager
      * @param   bool    When set to true, this runs the indexer without actually saving anything to any database
      * @return  bool    Returns true on presumed success, false on failure
      */
-    public function index_document(
+    public static function index_document(
         $docid,
         $course_code,
         $session_id = 0,
@@ -3642,11 +3649,19 @@ class DocumentManager
         return true;
     }
 
+    /**
+     * @return array
+     */
     public static function get_web_odf_extension_list()
     {
         return array('ods', 'odt');
     }
 
+    /**
+     * @param string $path
+     * @param bool $is_certificate_mode
+     * @return bool
+     */
     public static function is_folder_to_avoid($path, $is_certificate_mode = false)
     {
         $folders_to_avoid = array(
@@ -3695,6 +3710,9 @@ class DocumentManager
         return in_array($path, $folders_to_avoid);
     }
 
+    /**
+     * @return array
+     */
     static function get_system_folders()
     {
         $system_folders = array(
@@ -3710,6 +3728,196 @@ class DocumentManager
         return $system_folders;
     }
 
+    /**
+     * @param string $courseCode
+     * @return string 'visible' or 'invisible' string
+     */
+    public static function getDocumentDefaultVisibility($courseCode)
+    {
+        $settings = api_get_setting('tool_visible_by_default_at_creation');
 
+        $defaultVisibility = 'visible';
+
+        if (isset($settings['documents'])) {
+            $portalDefaultVisibility =  'invisible';
+            if ($settings['documents'] == 'true') {
+                $portalDefaultVisibility = 'visible';
+            }
+
+            $defaultVisibility = $portalDefaultVisibility;
+        }
+
+        if (api_get_setting('documents_default_visibility_defined_in_course') == 'true') {
+            $courseVisibility = api_get_course_setting('documents_default_visibility', $courseCode);
+            if (!empty($courseVisibility) && in_array($courseVisibility, array('visible', 'invisible'))) {
+                $defaultVisibility = $courseVisibility;
+            }
+        }
+        return $defaultVisibility;
+    }
+
+    /**
+     * @param array $courseInfo
+     * @param int $id doc id
+     * @param string $visibility visible/invisible
+     * @param int $userId
+     */
+    public static function updateVisibilityFromAllSessions($courseInfo, $id, $visibility, $userId)
+    {
+        $sessionList = SessionManager::get_session_by_course($courseInfo['code']);
+
+        if (!empty($sessionList)) {
+            foreach ($sessionList as $session) {
+                $sessionId = $session['id'];
+                api_item_property_update(
+                    $courseInfo,
+                    TOOL_DOCUMENT,
+                    $id,
+                    $visibility,
+                    $userId,
+                    null,
+                    null,
+                    null,
+                    null,
+                    $sessionId
+                );
+            }
+        }
+    }
+
+    /**
+     * @param string $file
+     * @return string
+     */
+    public static function readNanogongFile($file)
+    {
+        $nanoGongJarFile = api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar';
+
+        $html = '<applet id="applet" archive="'.$nanoGongJarFile.'" code="gong.NanoGong" width="160" height="95">';
+            $html .= '<param name="SoundFileURL" value="'.$file.'" />';
+            $html .= '<param name="ShowSaveButton" value="false" />';
+            $html .= '<param name="ShowTime" value="true" />';
+            $html .= '<param name="ShowRecordButton" value="false" />';
+        $html .= '</applet>';
+        return $html;
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $path
+     * @param $courseInfo
+     * @param string $whatIfFileExists overwrite|rename
+     * @param null $userId
+     * @param null $groupId
+     * @param null $toUserId
+     * @return bool|path
+     */
+    public static function addFileToDocumentTool(
+        $filePath,
+        $path,
+        $courseInfo,
+        $userId,
+        $whatIfFileExists = 'overwrite',
+        $groupId = null,
+        $toUserId = null
+    ) {
+        if (!file_exists($filePath)) {
+            return false;
+        }
+
+        $fileInfo = pathinfo($filePath);
+
+        $file = array(
+            'name' => $fileInfo['basename'],
+            'tmp_name' => $filePath,
+            'size' => filesize($filePath),
+            'from_file' => true
+        );
+
+        $course_dir = $courseInfo['path'].'/document';
+        $baseWorkDir = api_get_path(SYS_COURSE_PATH).$course_dir;
+
+        $filePath = handle_uploaded_document(
+            $courseInfo,
+            $file,
+            $baseWorkDir,
+            $path,
+            $userId,
+            $groupId,
+            $toUserId,
+            false,
+            $whatIfFileExists,
+            false
+        );
+
+        if ($filePath) {
+            return DocumentManager::get_document_id($courseInfo, $filePath);
+        }
+        return false;
+    }
+
+    /**
+     * Converts wav to mp3 file.
+     * Requires the ffmpeg lib. In ubuntu: sudo apt-get install ffmpeg
+     * @param string $wavFile
+     * @param bool $removeWavFileIfSuccess
+     * @return bool
+     */
+    public static function convertWavToMp3($wavFile, $removeWavFileIfSuccess = false)
+    {
+        require_once '../../../../vendor/autoload.php';
+
+        if (file_exists($wavFile)) {
+            try {
+                $ffmpeg = \FFMpeg\FFMpeg::create();
+                $video = $ffmpeg->open($wavFile);
+                $mp3File = str_replace('wav', 'mp3', $wavFile);
+                $result = $video->save(new FFMpeg\Format\Audio\Mp3(), $mp3File);
+                if ($result && $removeWavFileIfSuccess) {
+                    unlink($wavFile);
+                }
+
+                if (file_exists($mp3File)) {
+                    return $mp3File;
+                }
+            } catch (Exception $e) {
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param string $documentData
+     * @param array $courseInfo
+     * @param string $whatIfFileExists
+     * @return bool|path
+     */
+    public static function addAndConvertWavToMp3($documentData, $courseInfo, $userId, $whatIfFileExists = 'overwrite')
+    {
+        if (empty($documentData)) {
+            return false;
+        }
+
+        if (isset($documentData['absolute_path']) && file_exists($documentData['absolute_path'])) {
+            $mp3FilePath = self::convertWavToMp3($documentData['absolute_path']);
+            //$mp3FilePath = str_replace('wav', 'mp3', $documentData['absolute_path']);
+            if (!empty($mp3FilePath)) {
+
+                $documentId = self::addFileToDocumentTool(
+                    $mp3FilePath,
+                    dirname($documentData['path']),
+                    $courseInfo,
+                    $userId,
+                    $whatIfFileExists
+                );
+
+                if (!empty($documentId)) {
+                    return $documentId;
+                }
+            }
+        }
+
+        return false;
+    }
 }
-//end class DocumentManager
+

@@ -24,55 +24,58 @@ class Nanogong
     /* Files allowed to upload */
     public $available_extensions = array('mp3', 'wav', 'ogg');
 
+    /**
+     * @param array $params
+     */
     public function __construct($params = array())
     {
         $this->set_parameters($params);
     }
 
-    function create_user_folder()
+    /**
+     * @return bool
+     */
+    public function create_user_folder()
     {
-
-        //COURSE123/exercises/session_id/exercise_id/question_id/user_id
-        if (empty($this->store_path)) {
-            return false;
-        }
+		// COURSE123/exercises/session_id/exercise_id/question_id/user_id
+		if (empty($this->store_path)) {
+			return false;
+		}
 
         //@todo use an array to create folders
-        $folders_to_create = array();
+		$folders_to_create = array();
 
-        //Trying to create the courses/COURSE123/exercises/ dir just in case
+        // Trying to create the courses/COURSE123/exercises/ dir just in case.
+        $directoryPermissions = api_get_permissions_for_new_directories();
+
         if (!is_dir($this->store_path)) {
-            mkdir($this->store_path);
+            mkdir($this->store_path, $directoryPermissions);
         }
 
         if (!is_dir($this->store_path.$this->session_id)) {
-            mkdir($this->store_path.$this->session_id);
+            mkdir($this->store_path.$this->session_id, $directoryPermissions);
+        }
+        if (!is_dir($this->store_path.$this->session_id.'/'.$this->exercise_id)) {
+            mkdir($this->store_path.$this->session_id.'/'.$this->exercise_id, $directoryPermissions);
         }
 
-        if (!empty($this->exercise_id) && !is_dir($this->store_path.$this->session_id.'/'.$this->exercise_id)) {
-            mkdir($this->store_path.$this->session_id.'/'.$this->exercise_id);
-        }
-
-        if (!empty($this->question_id) && !is_dir(
-            $this->store_path.$this->session_id.'/'.$this->exercise_id.'/'.$this->question_id
-        )
+        if (!is_dir($this->store_path.$this->session_id.'/'.$this->exercise_id.'/'.$this->question_id)
         ) {
-            mkdir($this->store_path.$this->session_id.'/'.$this->exercise_id.'/'.$this->question_id);
+            mkdir($this->store_path.$this->session_id.'/'.$this->exercise_id.'/'.$this->question_id, $directoryPermissions);
         }
 
-        if (!empty($this->user_id) && !is_dir(
-            $this->store_path.$this->session_id.'/'.$this->exercise_id.'/'.$this->question_id.'/'.$this->user_id
-        )
+        if (!empty($this->user_id) &&
+            !is_dir($this->store_path.$this->session_id.'/'.$this->exercise_id.'/'.$this->question_id.'/'.$this->user_id)
         ) {
-            mkdir($this->store_path.$this->session_id.'/'.$this->exercise_id.'/'.$this->question_id.'/'.$this->user_id);
+            mkdir($this->store_path.$this->session_id.'/'.$this->exercise_id.'/'.$this->question_id.'/'.$this->user_id, $directoryPermissions);
         }
-    }
+	}
 
     /**
      * Setting parameters: course id, session id, etc
      * @param    array
      */
-    function set_parameters($params = array())
+    public function set_parameters($params = array())
     {
 
         //Setting course id
@@ -146,7 +149,7 @@ class Nanogong
      *
      * @return string
      */
-    function generate_filename()
+    public function generate_filename()
     {
         if (!empty($this->params)) {
             //filename
@@ -170,7 +173,7 @@ class Nanogong
      * Delete audio file
      * @return int
      */
-    function delete_files()
+    public function delete_files()
     {
         $delete_found = 0;
         if ($this->can_edit) {
@@ -194,7 +197,7 @@ class Nanogong
      * Tricky stuff to deal with the feedback = 0 in exercises (all question per page)
      * @param int $exe_id
      */
-    function replace_with_real_exe($exe_id)
+    public function replace_with_real_exe($exe_id)
     {
         $filename = null;
         //@ugly fix
@@ -218,7 +221,7 @@ class Nanogong
      * @param bool $load_from_database
      * @return null|string
      */
-    function load_filename_if_exists($load_from_database = false)
+    public function load_filename_if_exists($load_from_database = false)
     {
         $filename = null;
         //@ugly fix
@@ -266,7 +269,7 @@ class Nanogong
      *
      * @return string
      */
-    function get_public_url($force_download = 0)
+    public function get_public_url($force_download = 0)
     {
         $params = $this->get_params(true);
         $url = api_get_path(WEB_AJAX_PATH).'nanogong.ajax.php?a=get_file&download='.$force_download.'&'.$params;
@@ -376,10 +379,10 @@ class Nanogong
 
                 $html .= '<param name="ShowRecordButton" value="false" />'; // default true
                 $html .= '<param name="ShowSaveButton" value="false" />'; //you can save in local computer | (default true)
-                //echo '<param name="ShowSpeedButton" value="false" />'; // default true
                 //echo '<param name="ShowAudioLevel" value="false" />'; //  it displays the audiometer | (default true)
                 $html .= '<param name="ShowTime" value="true" />'; // default false
                 $html .= '<param name="Color" value="#FFFFFF" />';
+                $html .= '<param name="ShowSpeedButton" value="false" />';
                 //echo '<param name="StartTime" value="10.5" />';
                 //echo '<param name="EndTime" value="65" />';
                 $html .= '<param name="AudioFormat" value="ImaADPCM" />'; // ImaADPCM (more speed), Speex (more compression)|(default Speex)
@@ -444,7 +447,7 @@ class Nanogong
      * Returns the nanogong javascript code
      * @return string
      */
-    function return_js()
+    public function return_js()
     {
         $params = $this->get_params(true);
         $url = api_get_path(WEB_AJAX_PATH).'nanogong.ajax.php?a=save_file&'.$params.'&is_nano=1';
@@ -568,7 +571,6 @@ class Nanogong
 				return false;
 			}
 			</script>';
-
         return $js;
     }
 
@@ -576,7 +578,7 @@ class Nanogong
      * Returns the HTML form to upload a nano file or upload a file
      * @param string
      */
-    function return_form($message = null)
+    public function return_form($message = null)
     {
 
         $params = $this->get_params(true);
@@ -604,7 +606,7 @@ class Nanogong
         ).'nanogong/nanogong.jar" code="gong.NanoGong" width="250" height="40" align="middle">';
         //echo '<param name="ShowRecordButton" value="false" />'; // default true
         // echo '<param name="ShowSaveButton" value="false" />'; //you can save in local computer | (default true)
-        //echo '<param name="ShowSpeedButton" value="false" />'; // default true
+        $html .= '<param name="ShowSpeedButton" value="false" />'; // default true
         //echo '<param name="ShowAudioLevel" value="false" />'; //  it displays the audiometer | (default true)
         $html .= '<param name="ShowTime" value="true" />'; // default false
         $html .= '<param name="Color" value="#FFFFFF" />'; // default #FFFFFF
@@ -651,7 +653,7 @@ class Nanogong
      * @param bool $return_as_query
      * @return bool|string
      */
-    function get_params($return_as_query = false)
+    public function get_params($return_as_query = false)
     {
         if (empty($this->params)) {
             return false;
@@ -667,7 +669,7 @@ class Nanogong
      * @param $attribute
      * @return mixed
      */
-    function get_param_value($attribute)
+    public function get_param_value($attribute)
     {
         if (isset($this->params[$attribute])) {
             return $this->params[$attribute];
@@ -678,7 +680,7 @@ class Nanogong
      * Show a button to load the form
      * @return string
      */
-    function show_button()
+    public function show_button()
     {
         $params_string = $this->get_params(true);
         $html = '<br />'.Display::url(
@@ -689,7 +691,6 @@ class Nanogong
             array('class' => 'btn thickbox')
         );
         $html .= '<br /><br />'.Display::return_message(get_lang('UseTheMessageBelowToAddSomeComments'));
-
         return $html;
     }
 }

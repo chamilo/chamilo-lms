@@ -282,7 +282,7 @@ class Exercise
      *
      * @return string - exercise title
      */
-    function selectTitle()
+    public function selectTitle()
     {
         return $this->exercise;
     }
@@ -292,7 +292,7 @@ class Exercise
      *
      * @return numeric - exercise attempts
      */
-    function selectAttempts()
+    public function selectAttempts()
     {
         return $this->attempts;
     }
@@ -302,7 +302,7 @@ class Exercise
      *
      * @return int exercise attempts
      */
-    function selectFeedbackType()
+    public function selectFeedbackType()
     {
         return $this->feedback_type;
     }
@@ -310,7 +310,7 @@ class Exercise
     /**
      * returns the time limit
      */
-    function selectTimeLimit()
+    public function selectTimeLimit()
     {
         return $this->timeLimit;
     }
@@ -322,7 +322,7 @@ class Exercise
      *
      * @return string - exercise description
      */
-    function selectDescription()
+    public function selectDescription()
     {
         return $this->description;
     }
@@ -333,7 +333,7 @@ class Exercise
      * @author Olivier Brouckaert
      * @return string - exercise description
      */
-    function selectSound()
+    public function selectSound()
     {
         return $this->sound;
     }
@@ -374,6 +374,9 @@ class Exercise
         return $this->emailNotificationTemplate;
     }
 
+    /**
+     * @return int
+     */
     public function getModelType()
     {
         return $this->modelType;
@@ -531,31 +534,48 @@ class Exercise
         $this->categories_grouping = (bool) $status;
     }
 
+    /**
+     * @return int
+     */
     public function getHideQuestionTitle()
     {
         return $this->hideQuestionTitle;
     }
 
+    /**
+     * @param $value
+     */
     public function setHideQuestionTitle($value)
     {
         $this->hideQuestionTitle = intval($value);
     }
 
+    /**
+     * @return int
+     */
     public function getScoreTypeModel()
     {
         return $this->scoreTypeModel;
     }
 
+    /**
+     * @param int $value
+     */
     public function setScoreTypeModel($value)
     {
         $this->scoreTypeModel = intval($value);
     }
-
+    /**
+     * @return int
+     */
     public function getGlobalCategoryId()
     {
         return $this->globalCategoryId;
     }
 
+    /**
+     * @param int $value
+     */
     public function setGlobalCategoryId($value)
     {
         if (is_array($value) && isset($value[0])) {
@@ -683,6 +703,9 @@ class Exercise
         return $count;
     }
 
+    /**
+     * @return array
+     */
     public function getQuestionOrderedListByName()
     {
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -1152,28 +1175,40 @@ class Exercise
     }
 
     /**
-     * @param $text
+     * @param string $text
      */
     public function updateEmailNotificationTemplate($text)
     {
         $this->emailNotificationTemplate = $text;
     }
 
+    /**
+     * @param int $value
+     */
     public function updateEndButton($value)
     {
         $this->endButton = intval($value);
     }
 
+    /**
+     * @param $value
+     */
     public function setModelType($value)
     {
         $this->modelType = intval($value);
     }
 
+    /**
+     * @param intval $value
+     */
     public function setQuestionSelectionType($value)
     {
         $this->questionSelectionType = intval($value);
     }
 
+    /**
+     * @return int
+     */
     public function getQuestionSelectionType()
     {
         return $this->questionSelectionType;
@@ -1269,7 +1304,7 @@ class Exercise
     }
 
     /**
-     * enables the exercise
+     * Enables the exercise
      *
      * @author - Olivier Brouckaert
      */
@@ -1279,7 +1314,7 @@ class Exercise
     }
 
     /**
-     * disables the exercise
+     * Disables the exercise
      *
      * @author - Olivier Brouckaert
      */
@@ -1288,16 +1323,25 @@ class Exercise
         $this->active = 0;
     }
 
+    /**
+     * Disable results
+     */
     public function disable_results()
     {
         $this->results_disabled = true;
     }
 
+    /**
+     * Enable results
+     */
     public function enable_results()
     {
         $this->results_disabled = false;
     }
 
+    /**
+     * @param int $results_disabled
+     */
     public function updateResultsDisabled($results_disabled)
     {
         $this->results_disabled = intval($results_disabled);
@@ -2095,7 +2139,8 @@ class Exercise
             $group = array(
                 $form->createElement('radio', 'end_button', null, get_lang('ExerciseEndButtonCourseHome'), '0'),
                 $form->createElement('radio', 'end_button', null, get_lang('ExerciseEndButtonExerciseHome'), '1'),
-                $form->createElement('radio', 'end_button', null, get_lang('ExerciseEndButtonDisconnect'), '2')
+                $form->createElement('radio', 'end_button', null, get_lang('ExerciseEndButtonDisconnect'), '2'),
+                $form->createElement('radio', 'end_button', null, get_lang('ExerciseEndButtonNoButton'), '3')
             );
             $form->addGroup($group, null, get_lang('ExerciseEndButton'));
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
@@ -5902,6 +5947,8 @@ class Exercise
                 $url = $app['url_generator']->generate('logout');
                 $html = Display::url(get_lang('Logout'), $url, array('class' => 'btn btn-large'));
                 break;
+            case '3':
+                break;
         }
         return $html;
 
@@ -7775,10 +7822,5 @@ class Exercise
 
             return $counterAnsweredQuestions;
         }
-
-
-
-
     }
-
 }

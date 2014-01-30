@@ -1,0 +1,39 @@
+Thank you for downloading the NanoGong applet!
+
+Use the NanoGong Applet
+-----------------------
+
+NanoGong is a 'simple' Java applet which you can put in any web page. We have
+included an example index.html at the root directory so that you can quickly
+make a web page with NanoGong by modifying the given page.
+
+Here are the brief steps to create your NanoGong page:
+
+1) Modify the index.html with appropriate content, you may change the filename
+   as well if you want to
+2) Copy both index.html and nanogong.jar to the location where you usually put
+   your web pages in
+3) Open a browser and type in the location of the index.html you have just
+   uploaded
+
+Done! In just 3 steps you will have a NanoGong page ready on the Web.
+
+If you want to look at more examples on using the NanoGong applet you can visit
+the NanoGong project website at
+
+	http://nanogong.ust.hk/
+
+
+Build the NanoGong Applet
+-------------------------
+
+This package contains the necessary source code for creating your own version of
+NanoGong applet. The JSpeex library is provided in binary form inside the jspeex
+directory. The build file, build.xml, at the root directory can be used to
+compile the source code as well as pack the resulting class files together with
+the JSpeex library in a Jar file.
+
+To sign the Jar file, which is necessary for the proper execution of the
+NanoGong applet, you can either provide a keystore file called 'keystore.jks',
+or sign the Jar file manually. Please refer to the build file for details.
+

@@ -6918,3 +6918,21 @@ function api_get_firstpage_parameter()
 {
     return $_COOKIE['GotoCourse'];
 }
+
+/**
+ * Return true on https install
+ * @return boolean
+ */
+function api_is_https()
+{
+    return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off');
+}
+
+/**
+ * Return protocol (http or https)
+ * @return string
+ */
+function api_get_protocol()
+{
+    return api_is_https() ? 'https' : 'http';
+}

@@ -1169,7 +1169,7 @@ class Exercise {
 
                 $defaults['randomAnswers']          = $this->selectRandomAnswers();
                 $defaults['exerciseType']           = $this->selectType();
-                $defaults['exerciseTitle']          = api_html_entity_decode($this->selectTitle());
+                $defaults['exerciseTitle']          = $this->get_formated_title();
                 $defaults['exerciseDescription']    = $this->selectDescription();
                 $defaults['exerciseAttempts']       = $this->selectAttempts();
                 $defaults['exerciseFeedbackType']   = $this->selectFeedbackType();
@@ -1250,7 +1250,7 @@ class Exercise {
      */
     function processCreation($form, $type = '')
     {
-        $this->updateTitle(api_htmlentities($form->getSubmitValue('exerciseTitle')));
+        $this->updateTitle(Exercise::format_title_variable($form->getSubmitValue('exerciseTitle')));
         $this->updateDescription($form->getSubmitValue('exerciseDescription'));
         $this->updateAttempts($form->getSubmitValue('exerciseAttempts'));
         $this->updateFeedbackType($form->getSubmitValue('exerciseFeedbackType'));
@@ -3723,13 +3723,13 @@ class Exercise {
                 $isRandomByCategory = $this->selectRandomByCat();
                 // on tri les categories en fonction du terme entre [] en tete de la description de la categorie
                 /*
-                 * ex de catégories :
+                 * ex de catÃ©gories :
                  * [biologie] Maitriser les mecanismes de base de la genetique
                  * [biologie] Relier les moyens de depenses et les agents infectieux
                  * [biologie] Savoir ou est produite l'enrgie dans les cellules et sous quelle forme
                  * [chimie] Classer les molles suivant leur pouvoir oxydant ou reacteur
-                 * [chimie] Connaître la denition de la theoie acide/base selon Brönsted
-                 * [chimie] Connaître les charges des particules
+                 * [chimie] ConnaÃ®tre la denition de la theoie acide/base selon BrÃ¶nsted
+                 * [chimie] ConnaÃ®tre les charges des particules
                  * On veut dans l'ordre des groupes definis par le terme entre crochet au debut du titre de la categorie
                 */
                 // If test option is Grouped By Categories
@@ -3989,4 +3989,39 @@ class Exercise {
         }
         return $out_max_score;
     }
+
+    /**
+     * @return string
+     */
+    public function get_formated_title()
+    {
+        return api_html_entity_decode($this->selectTitle());
+    }
+
+    /**
+     * @param $in_title
+     * @return string
+     */
+    public static function get_formated_title_variable($in_title) {
+        return api_html_entity_decode($in_title);
+    }
+
+    /**
+     * @return string
+     */
+    public function format_title()
+    {
+        return api_htmlentities($this->title);
+    }
+
+
+    /**
+     * @param $in_title
+     * @return string
+     */
+    public static function format_title_variable($in_title)
+    {
+        return api_htmlentities($in_title);
+    }
+
 }

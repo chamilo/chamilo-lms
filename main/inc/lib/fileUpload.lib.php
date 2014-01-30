@@ -329,9 +329,9 @@ function handle_uploaded_document(
 				case 'rename':
           if (Database :: num_rows($result) > 0) {
 					    $new_name = unique_name($where_to_save, $clean_name);
-              } else {
-                  $new_name = $clean_name;
-              }
+          } else {
+              $new_name = $clean_name;
+          }
 					$store_path = $where_to_save.$new_name;
 					$new_file_path = $upload_path.$new_name;
 

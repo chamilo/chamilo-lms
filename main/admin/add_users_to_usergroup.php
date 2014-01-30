@@ -30,7 +30,7 @@ $interbreadcrumb[]= array('url' => 'usergroups.php','name' => get_lang('Classes'
 $tool_name=get_lang('SubscribeUsersToClass');
 
 $add_type = 'multiple';
-if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!='') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -153,6 +153,27 @@ if ($use_extra_fields) {
         $final_result = $extra_field_result[0];
     }
 }
+// Filters
+$filters = array(
+    array('type' => 'text', 'name' => 'username', 'label' => get_lang('Username')),
+    array('type' => 'text', 'name' => 'firstname', 'label' => get_lang('FirstName')),
+    array('type' => 'text', 'name' => 'lastname', 'label' => get_lang('LastName')),
+    array('type' => 'text', 'name' => 'official_code', 'label' => get_lang('OfficialCode')),
+    array('type' => 'text', 'name' => 'email', 'label' => get_lang('Email'))
+);
+
+$searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
+$searchForm->addElement('hidden', 'id', $id);
+foreach ($filters as $param) {
+    $searchForm->addElement($param['type'], $param['name'], $param['label']);
+}
+$searchForm->addElement('button', 'submit', get_lang('Search'));
+
+$filterData = array();
+if ($searchForm->validate()) {
+    $filterData = $searchForm->getSubmitValues();
+}
+
 $data       = $usergroup->get($id);
 $list_in    = $usergroup->get_users_by_usergroup($id);
 $list_all    = $usergroup->get_users_by_usergroup();
@@ -162,8 +183,25 @@ if (api_is_western_name_order()) {
     $order = array('firstname');
 }
 
+$conditions = array();
+
+if (!empty($first_letter_user)) {
+    $conditions['lastname'] = $conditions;
+}
+
+if (!empty($filters) && !empty($filterData)) {
+    foreach ($filters as $filter) {
+        if (isset($filter['name']) && isset($filterData[$filter['name']])) {
+            $value = $filterData[$filter['name']];
+            if (!empty($value)) {
+                $conditions[$filter['name']] = $value;
+            }
+        }
+    }
+}
+
 $elements_not_in = $elements_in = array();
-$complete_user_list = UserManager::get_user_list(array(), $order);
+$complete_user_list = UserManager::get_user_list_like(array(), $order);
 
 if (!empty($complete_user_list)) {
     foreach ($complete_user_list as $item) {
@@ -172,7 +210,10 @@ if (!empty($complete_user_list)) {
                 continue;
             }
         }
-        if ($item['status'] == 6 ) continue; //avoid anonymous users
+        // Avoid anonymous users
+        if ($item['status'] == 6 ) {
+            continue;
+        }
 
         if (in_array($item['user_id'], $list_in)) {
             $person_name = api_get_person_name($item['firstname'], $item['lastname']).' ('.$item['username'].')';
@@ -184,7 +225,7 @@ if (!empty($complete_user_list)) {
 $user_with_any_group = isset($_REQUEST['user_with_any_group']) && !empty($_REQUEST['user_with_any_group']) ? true : false;
 
 if ($user_with_any_group) {
-    $user_list = UserManager::get_user_list_like(array('lastname' => $first_letter_user), $order, true);
+    $user_list = UserManager::get_user_list_like($conditions, $order, true);
     $new_user_list = array();
     foreach ($user_list as $item) {
         if (!in_array($item['user_id'], $list_all)) {
@@ -193,7 +234,7 @@ if ($user_with_any_group) {
     }
     $user_list = $new_user_list;
 } else {
-    $user_list = UserManager::get_user_list_like(array('lastname' => $first_letter_user), $order, true);
+    $user_list = UserManager::get_user_list_like($conditions, $order, true);
 }
 
 if (!empty($user_list)) {
@@ -214,6 +255,7 @@ if (!empty($user_list)) {
 }
 
 $add_type == 'unique' ? true : false;
+
 Display::display_header($tool_name);
 
 echo '<div class="actions">';
@@ -222,8 +264,12 @@ echo '<a href="usergroups.php">'.
 
 echo '<a href="usergroup_user_import.php">'.
     Display::return_icon('import_csv.png', get_lang('Import'), array(), ICON_SIZE_MEDIUM).'</a>';
-
 echo '</div>';
+
+echo Display::page_subheader(get_lang('FilterUser'));
+
+$searchForm->display();
+
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">
 <?php
@@ -232,7 +278,7 @@ echo '<legend>'.$tool_name.': '.$data['name'].'</legend>';
 if ($add_type=='multiple') {
     if (is_array($extra_field_list)) {
         if (is_array($new_field_list) && count($new_field_list)>0 ) {
-            echo '<h3>'.get_lang('FilterUsers').'</h3>';
+            echo '<h3>'.get_lang('FilterByUser').'</h3>';
             foreach ($new_field_list as $new_field) {
                 echo $new_field['name'];
                 $varname = 'field_'.$new_field['variable'];
@@ -258,6 +304,7 @@ if ($add_type=='multiple') {
 echo Display::input('hidden', 'id', $id);
 echo Display::input('hidden', 'form_sent', '1');
 echo Display::input('hidden', 'add_type', null);
+
 if (!empty($errorMsg)) {
     Display::display_normal_message($errorMsg);
 }
@@ -322,8 +369,7 @@ if (!empty($errorMsg)) {
 ?>
 </form>
 <script>
-function moveItem(origin , destination){
-
+function moveItem(origin , destination) {
     for(var i = 0 ; i<origin.options.length ; i++) {
         if(origin.options[i].selected) {
             destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
@@ -333,7 +379,6 @@ function moveItem(origin , destination){
     }
     destination.selectedIndex = -1;
     sortOptions(destination.options);
-
 }
 
 function sortOptions(options) {
@@ -344,9 +389,8 @@ function sortOptions(options) {
 
     newOptions = newOptions.sort(mysort);
     options.length = 0;
-    for(i = 0 ; i < newOptions.length ; i++)
+    for (i = 0 ; i < newOptions.length ; i++)
         options[i] = newOptions[i];
-
 }
 
 function mysort(a, b) {

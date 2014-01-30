@@ -254,27 +254,26 @@ function handle_uploaded_document(
 			$file_size = $uploaded_file['size'];
 
 			$files_perm = api_get_permissions_for_new_files();
-            
-            $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-            $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-            $doc_path = '/'.$clean_name;
-            $sql = "SELECT DISTINCT docs.id
-                        FROM  " . $TABLE_ITEMPROPERTY . "  AS last, " . $TABLE_DOCUMENT . "  AS docs
-                        WHERE docs.id = last.ref
-                        AND docs.path = '$doc_path'
-                        AND last.tool = '" . TOOL_DOCUMENT . "'
-                        AND last.visibility = 1
-                        AND docs.session_id = $current_session_id
-                        AND last.id_session = $current_session_id
-                        AND last.c_id = {$_course['real_id']}
-                        AND docs.c_id = {$_course['real_id']} ";
-            $result = Database::query($sql);
+      $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+      $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+      $doc_path = '/'.$clean_name;
+      $sql = "SELECT DISTINCT docs.id
+              FROM  " . $TABLE_ITEMPROPERTY . "  AS last, " . $TABLE_DOCUMENT . "  AS docs
+              WHERE docs.id = last.ref
+              AND docs.path = '$doc_path'
+              AND last.tool = '" . TOOL_DOCUMENT . "'
+              AND last.visibility = 1
+              AND docs.session_id = $current_session_id
+              AND last.id_session = $current_session_id
+              AND last.c_id = {$_course['real_id']}
+              AND docs.c_id = {$_course['real_id']} ";
+      $result = Database::query($sql);
 
 			// What to do if the target file exists
 			switch ($what_if_file_exists) {
 				// Overwrite the file if it exists
 				case 'overwrite':
-               		// Check if the target file exists, so we can give another message
+              // Check if the target file exists, so we can give another message
 					$file_exists = file_exists($store_path);
 					if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path)) {
 						chmod($store_path, $files_perm);
@@ -328,11 +327,11 @@ function handle_uploaded_document(
 
 				// Rename the file if it exists
 				case 'rename':
-                    if (Database :: num_rows($result) > 0) {
+          if (Database :: num_rows($result) > 0) {
 					    $new_name = unique_name($where_to_save, $clean_name);
-                    } else {
-                        $new_name = $clean_name;
-                    }
+              } else {
+                  $new_name = $clean_name;
+              }
 					$store_path = $where_to_save.$new_name;
 					$new_file_path = $upload_path.$new_name;
 

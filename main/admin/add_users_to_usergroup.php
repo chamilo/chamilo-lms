@@ -107,7 +107,7 @@ $first_letter_user = '';
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent              = $_POST['form_sent'];
-    $elements_posted        = $_POST['elements_in_name'];
+    $elements_posted        = isset($_POST['elements_in_name']) ? $_POST['elements_in_name'] : null;
     $first_letter_user      = $_POST['firstLetterUser'];
 
     if (!is_array($elements_posted)) {
@@ -163,11 +163,18 @@ $filters = array(
 );
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
+//$searchForm->addElement('html', '<table>');
+$searchForm->add_header(get_lang('FilterUser'));
+$renderer =& $searchForm->defaultRenderer();
+
 $searchForm->addElement('hidden', 'id', $id);
 foreach ($filters as $param) {
+    //$searchForm->addElement('html', '<tr>');
     $searchForm->addElement($param['type'], $param['name'], $param['label']);
+    //$searchForm->addElement('html', '</tr>');
 }
 $searchForm->addElement('button', 'submit', get_lang('Search'));
+//$searchForm->addElement('html', '</table>');
 
 $filterData = array();
 if ($searchForm->validate()) {
@@ -176,7 +183,7 @@ if ($searchForm->validate()) {
 
 $data       = $usergroup->get($id);
 $list_in    = $usergroup->get_users_by_usergroup($id);
-$list_all    = $usergroup->get_users_by_usergroup();
+$list_all   = $usergroup->get_users_by_usergroup();
 
 $order = array('lastname');
 if (api_is_western_name_order()) {
@@ -186,7 +193,7 @@ if (api_is_western_name_order()) {
 $conditions = array();
 
 if (!empty($first_letter_user)) {
-    $conditions['lastname'] = $conditions;
+    $conditions['lastname'] = $first_letter_user;
 }
 
 if (!empty($filters) && !empty($filterData)) {
@@ -262,14 +269,15 @@ echo '<div class="actions">';
 echo '<a href="usergroups.php">'.
     Display::return_icon('back.png', get_lang('Back'), array(), ICON_SIZE_MEDIUM).'</a>';
 
+echo Display::url(get_lang('AdvancedSearch'), '#', array('class' => 'advanced_options', 'id' => 'advanced_search'));
+
 echo '<a href="usergroup_user_import.php">'.
     Display::return_icon('import_csv.png', get_lang('Import'), array(), ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
-echo Display::page_subheader(get_lang('FilterUser'));
-
+echo '<div id="advanced_search_options" style="display:none">';
 $searchForm->display();
-
+echo '</div>';
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">
 <?php

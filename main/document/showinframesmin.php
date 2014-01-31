@@ -81,7 +81,7 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
                                        //  $("<div>I am a div courses</div>").prependTo("body");
                                       }, "mainFrame",
                                       { load: [
-                                              {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js"},
+                                              {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
                                             {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
                                             {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"}
                                            ]
@@ -95,7 +95,7 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
 
                                       }, "mainFrame",
                                       { load: [
-                                              {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js"},
+                                              {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
                                             {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
                                             {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"}
                                            ]
@@ -106,7 +106,7 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 <!--
-    var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.min.js\';
+    var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js\';
 -->
 </script>';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';

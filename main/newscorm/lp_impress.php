@@ -52,7 +52,7 @@ if ($debug) {
 $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();
 
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/impress/impress-demo.css');
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'impress/impress-demo.css');
 
 $list = $_SESSION['oLP']->get_toc();
 

@@ -36,9 +36,6 @@ function validate(form,list) {
 }
 </script>';
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-
 $htmlHeadXtra[] = '<script>
 
 $(document).ready(function () {

@@ -11,7 +11,7 @@ exit;
 $language_file = array('reportlib');
 $cidReset = true;
 
-// including files 
+// including files
 require_once '../inc/global.inc.php';
 require_once 'reports.lib.php';
 
@@ -28,7 +28,7 @@ $tool_name=get_lang('Reports');
 
 // Displaying the header
 foreach (array('jquery.ba-bbq.min.js', 'jquery.validate.js', 'jquery.form.js', 'jquery.form.wizard.js', 'jquery.dataTables.min.js') as $js)
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$js.'" type="text/javascript" language="javascript"></script>'."\n";
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).$js.'" type="text/javascript" language="javascript"></script>';
 
 // FIXME
 $htmlHeadXtra[] = '    <style type="text/css">
@@ -47,7 +47,7 @@ $htmlHeadXtra[] = '    <style type="text/css">
 				margin-right : 1em;
 				text-align: right;
 			}
-			
+
 			#data {
 				font-size : 0.7em;
 			}
@@ -94,7 +94,7 @@ $htmlHeadXtra[] = '    <style type="text/css">
 			.navigation_button {
 				width : 70px;
 			}
-			
+
 			#data {
 				overflow : auto;
 				display: none;
@@ -165,7 +165,7 @@ foreach ($reports_template as $key => $value) {
     </div>
     <div id="wizardShowButton">
         <?php echo get_lang('ShowWizard'); ?>
-    </div>		
+    </div>
     <p id="data"></p>
 </div>
 <div id="result" class="result">
@@ -183,7 +183,7 @@ foreach ($reports_template as $key => $value) {
 					$("#wizardContent").show();
 					$("#wizardShowButton").hide();
 				});
-				$("#reportsBuilderWizardForm").formwizard({ 
+				$("#reportsBuilderWizardForm").formwizard({
 				 	formPluginEnabled: true,
 				 	validationEnabled: true,
 				 	focusFirstInput : true,
@@ -196,7 +196,7 @@ foreach ($reports_template as $key => $value) {
 						},
 						beforeSubmit: function(data){$("#data").html("data sent to the server: " + $.param(data));},
 						resetForm: false
-				 	}	
+				 	}
 				 }
 				);
   		});

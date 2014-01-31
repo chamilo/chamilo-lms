@@ -22,10 +22,7 @@ SessionManager::protect_session_edit();
 $interbreadcrumb[] = array('url' => 'index.php',       'name' => get_lang('Sessions'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui-i18n'));
-
 $htmlHeadXtra = api_get_datetime_picker_js($htmlHeadXtra);
 
 $id = null;

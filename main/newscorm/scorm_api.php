@@ -1766,8 +1766,6 @@ function attach_glossary_into_scorm(type) {
     if (type == 'automatic') {
         $.ajax({
             contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(object) {
-            },
             type: "POST",
             url: my_protocol+"//"+location.host+work_path+"/main/glossary/glossary_ajax_request.php",
             data: "glossary_data=true",

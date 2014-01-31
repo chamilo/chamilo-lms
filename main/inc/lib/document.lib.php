@@ -279,7 +279,7 @@ class DocumentManager
      *  @param string
      * 	@return true if the user is allowed to see the document, false otherwise
      * 	@author Sergio A Kessler, first version
-     * 	@author Roan Embrechts, bugfix     
+     * 	@author Roan Embrechts, bugfix
      *  @todo not only check if a file is visible, but also check if the user is allowed to see the file??
      */
     public static function file_visible_to_user($this_course, $doc_url)
@@ -2872,7 +2872,7 @@ class DocumentManager
 
     static function generate_jplayer_jquery($params = array())
     {
-        $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
+        $js_path = api_get_path(WEB_LIBRARY_JS_PATH);
 
         $jplayer_definition = ' $("#jquery_jplayer_'.$params['count'].'").jPlayer({
                             ready: function() {

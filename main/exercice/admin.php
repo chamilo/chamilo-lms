@@ -348,8 +348,6 @@ $(function() {
 
 </script>';
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/JavaScriptFlashGateway.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_CODE_PATH).'plugin/hotspot/hotspot.js"></script>';
 $htmlHeadXtra[] = "<script>

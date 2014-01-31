@@ -19,9 +19,6 @@ block_students();
 
 $edit_cat = isset($_REQUEST['editcat']) ? $_REQUEST['editcat'] : '';
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function() {
     $("#skills").fcbkcomplete({
@@ -36,18 +33,18 @@ $(document).ready(function() {
         filter_selected: true,
         newel: true
     });
-    
+
     $(".closebutton").click(function() {
-        var skill_id = ($(this).attr("id")).split("_")[1];        
-        if (skill_id) {            
-            $.ajax({ 
-                url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=remove_skill", 
+        var skill_id = ($(this).attr("id")).split("_")[1];
+        if (skill_id) {
+            $.ajax({
+                url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=remove_skill",
                 data: "gradebook_id='.$edit_cat.'&skill_id="+skill_id,
-                success: function(return_value) {                    
+                success: function(return_value) {
                     if (return_value == 1 ) {
                             $("#skill_"+skill_id).remove();
                     }
-                }        
+                }
             });
         }
     });
@@ -56,26 +53,26 @@ $(document).ready(function() {
 function check_skills() {
     //selecting only selected users
     $("#skills option:selected").each(function() {
-        var skill_id = $(this).val();        
-        if (skill_id != "" ) {            
-            $.ajax({ 
-                url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=skill_exists", 
+        var skill_id = $(this).val();
+        if (skill_id != "" ) {
+            $.ajax({
+                url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=skill_exists",
                 data: "skill_id="+skill_id,
-                success: function(return_value) {                    
+                success: function(return_value) {
                 if (return_value == 0 ) {
-                        alert("'.get_lang('SkillDoesNotExist').'");                                                
+                        alert("'.get_lang('SkillDoesNotExist').'");
                         //Deleting select option tag
-                        $("#skills option[value="+skill_id+"]").remove();                        
+                        $("#skills option[value="+skill_id+"]").remove();
                         //Deleting holder
                         $(".holder li").each(function () {
                             if ($(this).attr("rel") == skill_id) {
                                 $(this).remove();
                             }
-                        });                        
-                    }                    
-                },            
-            });                
-        }        
+                        });
+                    }
+                },
+            });
+        }
     });
 }
 </script>';
@@ -86,32 +83,32 @@ $form     = new CatForm(CatForm :: TYPE_EDIT, $catedit[0], 'edit_cat_form');
 
 if ($form->validate()) {
 	$values = $form->getSubmitValues();
-    
+
     $cat = new Category();
-	
+
     if (!empty($values['hid_id'])) {
         $cat = $cat->load($values['hid_id']);
         if (isset($cat[0])) {
             $cat = $cat[0];
         }
     }
-    
+
 	$cat->set_id($values['hid_id']);
 	$cat->set_name($values['name']);
-    
+
 	if (empty ($values['course_code'])) {
 		$cat->set_course_code(null);
 	}else {
 		$cat->set_course_code($values['course_code']);
 	}
-    
+
     $cat->set_grade_model_id($values['grade_model_id']);
-	$cat->set_description($values['description']);	
-	$cat->set_skills($values['skills']);    
+	$cat->set_description($values['description']);
+	$cat->set_skills($values['skills']);
 	$cat->set_user_id($values['hid_user_id']);
 	$cat->set_parent_id($values['hid_parent_id']);
 	$cat->set_weight($values['weight']);
-    
+
 	if ($values['hid_parent_id'] == 0 ) {
 		$cat->set_certificate_min_score($values['certif_min_score']);
 	}
@@ -121,7 +118,7 @@ if ($form->validate()) {
 		$visible = 1;
 	}
 	$cat->set_visible($visible);
-	$cat->save();    
+	$cat->save();
 	header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?editcat=&selectcat=' . $cat->get_parent_id());
 	exit;
 }

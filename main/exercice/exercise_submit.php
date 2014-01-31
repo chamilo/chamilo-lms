@@ -59,8 +59,8 @@ if (api_get_setting('show_glossary_in_extra_tools') == 'true') {
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
 
 // This library is necessary for the time control feature
-$htmlHeadXtra[]= api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
-$htmlHeadXtra[]= api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
+$htmlHeadXtra[]= api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'epiclock/stylesheet/jquery.epiclock.css');
+$htmlHeadXtra[]= api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'epiclock/renderers/minute/epiclock.minute.css');
 $htmlHeadXtra[]= api_get_js('epiclock/javascript/jquery.dateformat.min.js');
 $htmlHeadXtra[]= api_get_js('epiclock/javascript/jquery.epiclock.min.js');
 $htmlHeadXtra[]= api_get_js('epiclock/renderers/minute/epiclock.minute.js');

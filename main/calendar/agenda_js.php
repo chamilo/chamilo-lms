@@ -32,8 +32,8 @@ $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui','jquery-ui-i18n'
 $htmlHeadXtra[] = api_get_js('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = api_get_js('fullcalendar/fullcalendar.min.js');
 $htmlHeadXtra[] = api_get_js('fullcalendar/gcal.js');
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/fullcalendar/fullcalendar.css');
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/qtip2/jquery.qtip.min.css');
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'fullcalendar/fullcalendar.css');
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'qtip2/jquery.qtip.min.css');
 
 if (api_is_platform_admin() && $type == 'admin') {
     $type = 'admin';

@@ -246,12 +246,6 @@ class ExerciseController extends CommonController
      */
     public function editQuestionAction(Application $app, $id)
     {
-        $extraJS = array();
-        //@todo improve this JS includes should be added using twig
-        $extraJS[]      = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-        $extraJS[]      = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-        $app['extraJS'] = $extraJS;
-
         // Setting exercise obj.
         $exercise                      = new \Exercise();
         $exercise->edit_exercise_in_lp = true;

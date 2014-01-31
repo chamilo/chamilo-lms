@@ -20,7 +20,7 @@ $url = $timeline->get_url($_GET['id']);
 $item = $timeline->get($_GET['id']);
 $interbreadcrumb[]=array('url' => '#','name' => $item['headline']);
 
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/timeline/timeline.css');
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'timeline/timeline.css');
 $htmlHeadXtra[] = api_get_js('timeline/timeline-min.js');
 $htmlHeadXtra[] = '
 <script>

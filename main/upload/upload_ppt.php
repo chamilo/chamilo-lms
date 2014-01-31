@@ -18,7 +18,6 @@ $language_file[] = "scormdocument";
 // global settings initialisation
 require_once '../inc/global.inc.php';
 
-$htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<script>
 	var myUpload = new upload(0);
 </script>';

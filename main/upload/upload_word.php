@@ -31,7 +31,6 @@ $form_style = '
 #dynamic_div_waiter_container{float:left;}
 </style>';
 
-$htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript">
 	var myUpload = new upload(0);
 </script>';

@@ -26,7 +26,7 @@ $interbreadcrumb[] = array('url' => 'document.php', 'name' => get_lang('Document
 $htmlHeadXtra[] = api_get_js('jqplot/jquery.jqplot.min.js');
 $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.pieRenderer.min.js');
 $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.donutRenderer.min.js');
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/jqplot/jquery.jqplot.min.css');
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'jqplot/jquery.jqplot.min.css');
 
 $course_code    = api_get_course_id();
 $course_id      = api_get_course_int_id();

@@ -14,7 +14,7 @@ require_once '../global.inc.php';
 $action = $_REQUEST['a'];
 
 unset($_REQUEST['a']);
-$js_path 		= api_get_path(WEB_LIBRARY_PATH).'javascript/';
+$js_path 		= api_get_path(WEB_LIBRARY_JS_PATH);
 
 //Fix in order to add the exe_id
 

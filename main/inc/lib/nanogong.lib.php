@@ -373,9 +373,7 @@ class Nanogong
                 $html .= '<div id="nanogong_player_id" class="nanogong_player_container">';
                 $html .= '<div class="action_player">'.$actions.'</div>';
                 $html .= '<div class="nanogong_player">';
-                $html .= '<applet id="nanogong_player" archive="'.api_get_path(
-                    WEB_LIBRARY_PATH
-                ).'nanogong/nanogong.jar" code="gong.NanoGong" width="250" height="40" ALIGN="middle">';
+                $html .= '<applet id="nanogong_player" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar" code="gong.NanoGong" width="250" height="40" ALIGN="middle">';
 
                 $html .= '<param name="ShowRecordButton" value="false" />'; // default true
                 $html .= '<param name="ShowSaveButton" value="false" />'; //you can save in local computer | (default true)
@@ -402,7 +400,7 @@ class Nanogong
                 ).$download_button.'</div>';
 
             } elseif (in_array($path_info['extension'], array('mp3', 'ogg', 'wav'))) {
-                $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
+                $js_path = api_get_path(WEB_LIBRARY_JS_PATH);
 
                 $html .= '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins/blue/jplayer.blue.monday.css" type="text/css">';
                 //$html .= '<link rel="stylesheet" href="' . $js_path . 'jquery-jplayer/skins/chamilo/jplayer.blue.monday.css" type="text/css">';
@@ -577,10 +575,10 @@ class Nanogong
     /**
      * Returns the HTML form to upload a nano file or upload a file
      * @param string
+     * @return string
      */
     public function return_form($message = null)
     {
-
         $params = $this->get_params(true);
         $url = api_get_path(WEB_AJAX_PATH).'nanogong.ajax.php?a=save_file&'.$params;
 
@@ -601,9 +599,7 @@ class Nanogong
 
         $html .= '<div id="nanogong_div">';
 
-        $html .= '<applet id="nanogong" archive="'.api_get_path(
-            WEB_LIBRARY_PATH
-        ).'nanogong/nanogong.jar" code="gong.NanoGong" width="250" height="40" align="middle">';
+        $html .= '<applet id="nanogong" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar" code="gong.NanoGong" width="250" height="40" align="middle">';
         //echo '<param name="ShowRecordButton" value="false" />'; // default true
         // echo '<param name="ShowSaveButton" value="false" />'; //you can save in local computer | (default true)
         $html .= '<param name="ShowSpeedButton" value="false" />'; // default true

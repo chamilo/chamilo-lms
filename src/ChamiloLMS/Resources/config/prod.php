@@ -53,6 +53,7 @@ $app['temp.paths']->folders[] = $app['temp.path'].'temp';
 // Assetic.
 
 if ($app['assetic.enabled']) {
+    $jsFolder = api_get_path(SYS_LIBRARY_JS_PATH);
     // Assetic cache folder.
     $app['assetic.path_to_cache'] = $app['temp.path'].'assetic';
 
@@ -66,30 +67,28 @@ if ($app['assetic.enabled']) {
     $css_path = api_get_path(SYS_CSS_PATH);
 
     $app['assetic.input.path_to_css'] = array(
-        api_get_path(WEB_LIBRARY_PATH).'javascript/bootstrap/css/bootstrap.css',
+        $jsFolder.'bootstrap/css/bootstrap.css',
         $css_path.'base.css',
         $css_path.'base_chamilo.css',
         $css_path.$app['app.theme'].'/default.css',
         $css_path.'responsive.css',
-    //  api_get_path(LIBRARY_PATH).'javascript/thickbox.css',
-    //  api_get_path(LIBRARY_PATH).'javascript/chosen/chosen.css',
         $css_path.$app['app.theme'].'/learnpath.css',
         $css_path.$app['app.theme'].'/scorm.css',
-        api_get_path(LIBRARY_PATH).'javascript/chat/css/chat.css',
-        api_get_path(LIBRARY_PATH).'javascript/jquery-ui/'.$app['jquery_ui_theme'].'/jquery-ui-custom.css',
-        api_get_path(LIBRARY_PATH).'javascript/jquery-ui/default.css',
+        $jsFolder.'chat/css/chat.css',
+        $jsFolder.'jquery-ui/'.$app['jquery_ui_theme'].'/jquery-ui-custom.css',
+        $jsFolder.'jquery-ui/default.css',
         //api_get_path(LIBRARY_PATH).'javascript/bxslider/bx_styles/bx_styles.css',
     );
 
     $app['assetic.output.path_to_css'] = 'css/'.$app['app.theme'].'/style.css';
 
     $app['assetic.input.path_to_js'] = array(
-        api_get_path(LIBRARY_PATH).'javascript/modernizr.js',
-        api_get_path(LIBRARY_PATH).'javascript/jquery.js',
+        $jsFolder.'javascript/modernizr.js',
+        $jsFolder.'javascript/jquery.js',
         //api_get_path(LIBRARY_PATH).'javascript/chosen/chosen.jquery.min.js',
-        api_get_path(LIBRARY_PATH).'javascript/jquery-ui/css/'.$app['jquery_ui_theme'].'/jquery-ui-custom.min.js',
+        $jsFolder.'javascript/jquery-ui/css/'.$app['jquery_ui_theme'].'/jquery-ui-custom.min.js',
         //api_get_path(LIBRARY_PATH).'javascript/thickbox.js',
-        api_get_path(LIBRARY_PATH).'javascript/bootstrap/bootstrap.js',
+        $jsFolder.'javascript/bootstrap/bootstrap.js',
         //api_get_path(LIBRARY_PATH).'javascript/bxslider/jquery.bxSlider.min.js',
     );
 

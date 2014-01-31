@@ -1,4 +1,4 @@
-<script type="text/javascript" src="{{ _p.web_lib }}javascript/rtc/RecordRTC.js"></script>
+<script type="text/javascript" src="{{ _p.web_library_js_path }}rtc/RecordRTC.js"></script>
 <script type="text/javascript" src="{{ _p.web_lib }}swfobject/swfobject.js"></script>
 <script type="text/javascript" src="{{ _p.web_lib }}wami-recorder/recorder.js"></script>
 <script type="text/javascript" src="{{ _p.web_lib }}wami-recorder/gui.js"></script>

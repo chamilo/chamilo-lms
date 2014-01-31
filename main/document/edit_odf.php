@@ -14,7 +14,7 @@ $document_id = $_GET['id'];
 if ($document_id) {
     $document_data = DocumentManager::get_document_data_by_id($document_id);
     if (empty($document_data)) {
-        api_not_allowed();    
+        api_not_allowed();
     }
 } else {
     api_not_allowed();
@@ -42,18 +42,18 @@ $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$head
 
 if ($show_web_odf) {
     $htmlHeadXtra[] = api_get_js('webodf/webodf.js');
-    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/webodf/webodf.css');
+    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'webodf/webodf.css');
     $htmlHeadXtra[] = '
-    <script type="text/javascript" charset="utf-8">        
+    <script type="text/javascript" charset="utf-8">
         function init() {
-                var odfelement = document.getElementById("odf"),
-                odfcanvas = new odf.OdfCanvas(odfelement);
-                odfcanvas.load("'.$file_url_web.'");
+            var odfelement = document.getElementById("odf"),
+            odfcanvas = new odf.OdfCanvas(odfelement);
+            odfcanvas.load("'.$file_url_web.'");
         }
-        $(document).ready(function() {        
+        $(document).ready(function() {
             window.setTimeout(init, 0);
-        });        
-  </script>';  
+        });
+  </script>';
 }
 
 $interbreadcrumb[]=array("url"=>"./document.php?curdirpath=".urlencode($my_cur_dir_path).$req_gid, "name"=> get_lang('Documents'));
@@ -61,7 +61,7 @@ $interbreadcrumb[]=array("url"=>"./document.php?curdirpath=".urlencode($my_cur_d
 // Interbreadcrumb for the current directory root path
 if (empty($document_data['parents'])) {
     $interbreadcrumb[] = array('url' => '#', 'name' => $document_data['title']);
-} else {    
+} else {
     foreach($document_data['parents'] as $document_sub_data) {
         if ($document_data['title'] == $document_sub_data['title']) {
             continue;

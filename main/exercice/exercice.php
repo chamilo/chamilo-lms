@@ -28,7 +28,7 @@ require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = api_get_js('qtip2/jquery.qtip.min.js');
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/qtip2/jquery.qtip.min.css');
+$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'qtip2/jquery.qtip.min.css');
 
 // Access control
 api_protect_course_script(true);

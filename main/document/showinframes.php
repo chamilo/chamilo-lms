@@ -142,7 +142,7 @@ $frameheight = 135;
 if (api_is_course_admin()) {
     $frameheight = 165;
 }
-$mathJaxUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/math_jax/MathJax.js?config=default';
+$mathJaxUrl = api_get_path(WEB_LIBRARY_JS_PATH).'math_jax/MathJax.js?config=default';
 
 $js_glossary_in_documents = '';
 if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
@@ -151,8 +151,8 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
             //  $("<div>I am a div courses</div>").prependTo("body");
         }, "top.mainFrame",
         { load: [
-                {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
-                {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.js"},
+                {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.highlight.js"},
                 {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_manual.js"},
                 {type:"script", id:"_fr4", src:"'.$mathJaxUrl.'"}
            ]
@@ -164,10 +164,10 @@ if (api_get_setting('show_glossary_in_documents') == 'ismanual') {
             //  $("<div>I am a div courses</div>").prependTo("body");
         }, "top.mainFrame",
         { load: [
-                {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
-                {type:"script", id:"_fr4", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
-                {type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
-                {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.js"},
+                {type:"script", id:"_fr4", src:"'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery-ui/smoothness/jquery-ui-1.8.21.custom.min.js"},
+                {type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery-ui/smoothness/jquery-ui-1.8.21.custom.css"},
+                {type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.highlight.js"},
                 {type:"script", id:"_fr3", src:"'.api_get_path(WEB_LIBRARY_PATH).'fckeditor/editor/plugins/glossary/fck_glossary_automatic.js"},
                 {type:"script", id:"_fr6", src:"'.$mathJaxUrl.'"}
            ]
@@ -180,7 +180,7 @@ $js_glossary_in_documents = '
     }, "top.mainFrame",
     {
         load: [
-            {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js"},
+            {type:"script", id:"_fr1", src:"'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.js"},
             {type:"script", id:"_fr2", src:"'.$mathJaxUrl.'"}
         ]
     }
@@ -194,7 +194,7 @@ $htmlHeadXtra[] = api_get_js('math_jax/MathJax.js?config=TeX-AMS-MML_HTMLorMML')
 if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
     $show_web_odf  = true;
     $htmlHeadXtra[] = api_get_js('webodf/webodf.js');
-    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/webodf/webodf.css');
+    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'webodf/webodf.css');
     $htmlHeadXtra[] = '
     <script charset="utf-8">
         function init() {
@@ -207,14 +207,10 @@ if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
         });
   </script>';
 }
-
 $execute_iframe = true;
-
 if ($jplayer_supported) {
-
     $extension = api_strtolower($pathinfo['extension']);
-
-    $js_path 		= api_get_path(WEB_LIBRARY_PATH).'javascript/';
+    $js_path 		= api_get_path(WEB_LIBRARY_JS_PATH);
     $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins/blue/jplayer.blue.monday.css" type="text/css">';
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.min.js"></script>';
 
@@ -261,10 +257,10 @@ if (!$jplayer_supported && $execute_iframe) {
 
     $htmlHeadXtra[] = '<script type="text/javascript">
     <!--
-        var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.js\';
+        var jQueryFrameReadyConfigPath = \''.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.js\';
     -->
     </script>';
-    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
+    $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.frameready.js"></script>';
     $htmlHeadXtra[] = '<script>
     <!--
         var updateContentHeight = function() {
@@ -411,14 +407,14 @@ if ($is_nanogong_available) {
 
 		//get file from tmp directory
 		$to_url = api_get_path(WEB_ARCHIVE_PATH).'temp/audio/'.$file_crip;
-        
+
         echo '<div align="center">';
         echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
         echo '<br/>';
         echo '<br/>';
 
         echo DocumentManager::readNanogongFile($to_url);
-		
+
 		//erase temp file in tmp directory when return to documents
 		$_SESSION['temp_audio_nanogong']=$to_sys;
     echo '</div>';

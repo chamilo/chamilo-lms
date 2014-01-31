@@ -50,22 +50,22 @@ chamilo_courseCode = '{{ course_code }}';
                 {
                     type:"script",
                     id:"_fr1",
-                    src:"{{ _p.web_library_path}}javascript/jquery.js"
+                    src:"{{ _p.web_library_js_path }}jquery.js"
                 },
                 {
                     type:"script",
                     id:"_fr4",
-                    src:"{{ _p.web_library_path}}javascript/jquery-ui/js/jquery-ui.custom.js"
+                    src:"{{ _p.web_library_js_path }}jquery-ui/js/jquery-ui.custom.js"
                 },
                 {
                     type:"stylesheet",
                     id:"_fr5",
-                    src:"{{ _p.web_library_path}}javascript/jquery-ui/css/smoothness/jquery-ui.custom.min.css"
+                    src:"{{ _p.web_library_js_path }}jquery-ui/css/smoothness/jquery-ui.custom.min.css"
                 },
                 {
                     type:"script",
                     id:"_fr2",
-                    src:"{{ _p.web_library_path}}javascript/jquery.highlight.js"
+                    src:"{{ _p.web_library_js_path }}jquery.highlight.js"
                 }
                 ]
             }
@@ -79,19 +79,19 @@ chamilo_courseCode = '{{ course_code }}';
                     {
                         type:"script",
                         id:"_fr1",
-                        src:"{{ _p.web_library_path}}javascript/jquery.js"},
+                        src:"{{ _p.web_library_js_path }}jquery.js"},
                     {
                         type:"script",
                         id:"_fr4",
-                        src:"{{ _p.web_library_path}}javascript/jquery-ui/js/jquery-ui.custom.js"},
+                        src:"{{ _p.web_library_js_path }}jquery-ui/js/jquery-ui.custom.js"},
                     {
                         type:"stylesheet",
                         id:"_fr5",
-                        src:"{{ _p.web_library_path}}javascript/jquery-ui/css/smoothness/jquery-ui-custom.css"},
+                        src:"{{ _p.web_library_js_path }}jquery-ui/css/smoothness/jquery-ui-custom.css"},
                     {
                         type:"script",
                         id:"_fr2",
-                        src:"{{ _p.web_library_path}}javascript/jquery.highlight.js"
+                        src:"{{ _p.web_library_js_path }}jquery.highlight.js"
                     }
                 ]}
             );

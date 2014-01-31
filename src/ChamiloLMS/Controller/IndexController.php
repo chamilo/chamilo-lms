@@ -92,7 +92,7 @@ class IndexController extends CommonController
         );
 
         if (api_get_setting('use_virtual_keyboard') == 'true') {
-            $extra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/keyboard/keyboard.css');
+            $extra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'keyboard/keyboard.css');
             $extra[] = api_get_js('keyboard/jquery.keyboard.js');
         }
 
@@ -181,7 +181,7 @@ class IndexController extends CommonController
         $app['template']->assign('error', $app['security.last_error']($request));
         $extra = array();
         if (api_get_setting('use_virtual_keyboard') == 'true') {
-            $extra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/keyboard/keyboard.css');
+            $extra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'keyboard/keyboard.css');
             $extra[] = api_get_js('keyboard/jquery.keyboard.js');
         }
         $app['extraJS'] = $extra;

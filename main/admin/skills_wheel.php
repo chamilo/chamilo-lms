@@ -24,9 +24,6 @@ $htmlHeadXtra[] = api_get_js('d3/d3.v2.min.js');
 $htmlHeadXtra[] = api_get_js('d3/colorbrewer.js');
 $htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-
 $tpl = $app['template'];
 
 $load_user = 0;

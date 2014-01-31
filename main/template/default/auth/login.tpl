@@ -2,8 +2,8 @@
 {% block content %}
 
     {% if ("use_virtual_keyboard" | get_setting) == 'true' %}
-        <link href="{{ _p.web_lib }}javascript/keyboard/keyboard.css" rel="stylesheet" type="text/css" />
-        <script src="{{ _p.web_lib }}javascript/keyboard/jquery.keyboard.js" type="text/javascript" language="javascript"></script>
+        <link href="{{ _p.web_library_js_path }}keyboard/keyboard.css" rel="stylesheet" type="text/css" />
+        <script src="{{ _p.web_library_js_path }}keyboard/jquery.keyboard.js" type="text/javascript" language="javascript"></script>
         <script>
             $(function(){
                 $('.virtualkey').keyboard({

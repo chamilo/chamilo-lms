@@ -10,8 +10,6 @@ api_protect_admin_script(true);
 $message = null;
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password');
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 if (isset($_configuration['allow_strength_pass_checker']) && $_configuration['allow_strength_pass_checker']) {
 $htmlHeadXtra[] = '
 <script>

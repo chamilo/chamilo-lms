@@ -96,7 +96,6 @@ event_access_tool(TOOL_UPLOAD);
  *    Prepare the header
  */
 
-$htmlHeadXtra[] = '<script language="javascript" src="../inc/lib/javascript/upload.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<script type="text/javascript">
 	var myUpload = new upload(0);
 </script>';

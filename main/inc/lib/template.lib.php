@@ -359,6 +359,7 @@ class Template
             'web_plugin_path' => api_get_path(WEB_PLUGIN_PATH),
             'web_lib' => api_get_path(WEB_LIBRARY_PATH),
             'web_library_path' => api_get_path(WEB_LIBRARY_PATH),
+            'web_library_js_path' => api_get_path(WEB_LIBRARY_JS_PATH),
             'public_web' => api_get_path(WEB_PUBLIC_PATH)
         );
 
@@ -399,9 +400,9 @@ class Template
             $css[] = api_get_path(WEB_PUBLIC_PATH).'css/'.$this->theme.'/style.css';
         } else {
             // Bootstrap
-            $css[] = api_get_cdn_path(api_get_path(WEB_LIBRARY_PATH).'javascript/bootstrap/css/bootstrap.css');
+            $css[] = api_get_cdn_path(api_get_path(WEB_LIBRARY_JS_PATH).'bootstrap/css/bootstrap.css');
 
-            //$css[] = api_get_cdn_path(api_get_path(WEB_LIBRARY_PATH).'javascript/bootstrap/css/bootstrap-theme.css');
+            //$css[] = api_get_cdn_path(api_get_path(WEB_LIBRARY_JS_PATH).'bootstrap/css/bootstrap-theme.css');
 
             // Base CSS.
             $css[] = api_get_cdn_path($cssPath.'base.css');
@@ -416,16 +417,17 @@ class Template
             }
 
             if (api_is_global_chat_enabled()) {
-                $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
+                $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'chat/css/chat.css';
             }
 
-            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/css/'.$this->jquery_ui_theme.'/jquery-ui-custom.css';
-            //$css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/jquery-ui/default.css';
+            $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'jquery-ui/css/'.$this->jquery_ui_theme.'/jquery-ui-custom.css';
+            //$css[] = api_get_path(WEB_LIBRARY_JS_PATH).'jquery-ui/default.css';
         }
 
-        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/font-awesome/css/font-awesome.css';
-        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';
-        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
+        $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'font-awesome/css/font-awesome.css';
+        $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'thickbox.css';
+        $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'chosen/chosen.css';
+        $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'tag/style.css';
 
         $css_file_to_string = null;
         foreach ($css as $file) {
@@ -450,8 +452,8 @@ class Template
         $navigator_info = api_get_navigator();
         if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
             $css_file_to_string .= 'img, div { behavior: url('.api_get_path(
-                WEB_LIBRARY_PATH
-            ).'javascript/iepngfix/iepngfix.htc) } '."\n";
+                    WEB_LIBRARY_JS_PATH
+            ).'iepngfix/iepngfix.htc) } '."\n";
         }
 
         if (!$disable_js_and_css_files) {
@@ -489,10 +491,10 @@ class Template
     {
         global $disable_js_and_css_files, $htmlHeadXtra;
 
-        $jsFolder = api_get_path(WEB_LIBRARY_PATH).'javascript/';
+        $jsFolder = api_get_path(WEB_LIBRARY_JS_PATH);
 
         if ($this->app['assetic.enabled']) {
-            $js_files = array(
+            $jsFiles = array(
                 api_get_path(WEB_PATH).'web/js/script.js',
                 $jsFolder.'chosen/chosen.jquery.min.js',
                 $jsFolder.'thickbox.js',
@@ -500,41 +502,44 @@ class Template
             );
         } else {
             //JS files
-            $js_files = array(
+            $jsFiles = array(
                 $jsFolder.'modernizr.js',
                 $jsFolder.'jquery.js',
                 $jsFolder.'chosen/chosen.jquery.min.js',
                 $jsFolder.'jquery-ui/js/jquery-ui.custom.js',
                 $jsFolder.'thickbox.js',
-
+                $jsFolder.'tag/jquery.fcbkcomplete.js',
                 $jsFolder.'bootstrap/js/bootstrap.js',
+                $jsFolder.'upload.js',
+                $jsFolder.'calendar/tbl_change.js',
+                $jsFolder.'textareacounter/jquery.textareaCounter.plugin.js'
             );
         }
 
-        $this->app['html_editor']->getJavascriptToInclude($js_files);
+        $this->app['html_editor']->getJavascriptToInclude($jsFiles);
 
         if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP
             if ($this->show_learnpath == false && $this->show_footer == true && $this->app['template.hide_global_chat'] == false) {
-                $js_files[] = $jsFolder.'chat/js/chat.js';
+                $jsFiles[] = $jsFolder.'chat/js/chat.js';
             }
         }
 
         if (api_get_setting('accessibility_font_resize') == 'true') {
-            $js_files[] = $jsFolder.'fontresize.js';
+            $jsFiles[] = $jsFolder.'fontresize.js';
         }
 
         if (api_get_setting('include_asciimathml_script') == 'true') {
-            $js_files[] = $jsFolder.'asciimath/ASCIIMathML.js';
+            $jsFiles[] = $jsFolder.'asciimath/ASCIIMathML.js';
         }
 
         if (api_get_setting('disable_copy_paste') == 'true') {
-            $js_files[] = $jsFolder.'jquery.nocutcopypaste.js';
+            $jsFiles[] = $jsFolder.'jquery.nocutcopypaste.js';
         }
 
         $js_file_to_string = null;
 
-        foreach ($js_files as $js_file) {
+        foreach ($jsFiles as $js_file) {
             $js_file_to_string .= api_get_js_simple($js_file);
         }
 

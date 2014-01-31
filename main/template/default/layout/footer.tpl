@@ -134,6 +134,14 @@ function mysort(a, b) {
     return 0;
 }
 
+// Global loading for ajax calls.
+
+$(document).bind("ajaxSend", function(){
+    $("#loading_block").show();
+}).bind("ajaxComplete", function(){
+    $("#loading_block").hide();
+});
+
 $("form").on("click", ' .advanced_parameters', function() {
     var id = $(this).attr('id') + '_options';
     var button = $(this);

@@ -75,9 +75,6 @@ $group_id = api_get_group_id();
 $htmlHeadXtra[] = to_javascript();
 $htmlHeadXtra[] = user_group_filter_javascript();
 
-// this loads the javascript that is needed for the date popup selection
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/calendar/tbl_change.js" type="text/javascript" ></script>';
-
 // setting the name of the tool
 $nameTools = get_lang('Agenda'); // language variable in trad4all.inc.php
 // showing the header if we are not in the learning path, if we are in

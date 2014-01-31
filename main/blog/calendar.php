@@ -110,7 +110,6 @@ table.calendar .monthyear a:hover
     } // end if
 //-->
 </script>
-<script src="<?php echo api_get_path(WEB_LIBRARY_PATH).'javascript/calendar/tbl_change.js'; ?>"></script>
 <script type="text/javascript">
 <!--
 var month_names = new Array(

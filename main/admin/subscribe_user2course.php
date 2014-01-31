@@ -37,8 +37,8 @@ $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAd
 $htmlHeadXtra[] = '
 <script type="text/javascript">
 function validate_filter() {
-        document.formulaire.form_sent.value=0;
-        document.formulaire.submit();
+    document.formulaire.form_sent.value=0;
+    document.formulaire.submit();
 }
 </script>';
 

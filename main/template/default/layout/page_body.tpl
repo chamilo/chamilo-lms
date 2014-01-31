@@ -9,6 +9,8 @@
     {{ knp_menu_render('actions_menu', { 'currentClass': 'active'}) }}
 {% endif %}
 
+<span id="loading_block" style="display:none">Loading ...</span>
+
 {# Page header #}
 {% if header != '' %}
     <div class="page-header">

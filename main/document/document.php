@@ -526,7 +526,7 @@ if (isset($_GET['createdir'])) {
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('CreateDir'));
 }
 
-$js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
+$js_path = api_get_path(WEB_LIBRARY_JS_PATH);
 
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins/chamilo/jplayer.blue.monday.css" type="text/css">';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.min.js"></script>';

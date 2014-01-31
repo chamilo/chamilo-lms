@@ -36,9 +36,6 @@ function denied_friend (element_input) {
     friend_user_id=user_id[1];
     $.ajax({
         contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(objeto) {
-            $("#id_response").html("<img src=\'../inc/lib/javascript/indicator.gif\' />");
-        },
         type: "POST",
         url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=deny_friend",
         data: "denied_friend_id="+friend_user_id,
@@ -56,15 +53,13 @@ function register_friend(element_input) {
 		user_friend_id=user_id[1];
         $.ajax({
            contentType: "application/x-www-form-urlencoded",
-           beforeSend: function(objeto) {
-               $("div#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
-               type: "POST",
-               url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=add_friend",
-               data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",
-               success: function(data) {
-                   $("div#"+name_div_id).hide("slow");
-                   $("#id_response").html(data);
-               }
+           type: "POST",
+           url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=add_friend",
+           data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",
+           success: function(data) {
+               $("div#"+name_div_id).hide("slow");
+               $("#id_response").html(data);
+           }
 		});
     }
 }

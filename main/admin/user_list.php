@@ -26,8 +26,6 @@ $htmlHeadXtra[] = '<script>
 function load_course_list (div_course,my_user_id) {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
-		beforeSend: function(objeto) {
-            $("div#"+div_course).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 		type: "POST",
 		url: "'.$url.'",
 		data: "user_id="+my_user_id,
@@ -41,8 +39,6 @@ function load_course_list (div_course,my_user_id) {
 function load_session_list (div_session,my_user_id) {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
-		beforeSend: function(objeto) {
-            $("div#"+div_session).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
 		type: "POST",
 		url: "'.$urlSession.'",
 		data: "user_id="+my_user_id,

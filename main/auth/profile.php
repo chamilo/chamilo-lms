@@ -34,9 +34,6 @@ if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user[
     api_not_allowed(true);
 }
 
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-$htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-
 $htmlHeadXtra[] = '<script>
 function confirmation(name) {
     if (confirm("'.get_lang('AreYouSureToDelete', '').' " + name + " ?")) {
@@ -49,13 +46,10 @@ function show_image(image,width,height) {
 	width = parseInt(width) + 20;
 	height = parseInt(height) + 20;
 	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \'\');
-
 }
 function generate_open_id_form() {
 	$.ajax({
 		contentType: "application/x-www-form-urlencoded",
-		beforeSend: function(objeto) {
-		/*$("#div_api_key").html("Loading...");*/ },
 		type: "POST",
 		url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=generate_api_key",
 		data: "num_key_id="+"",

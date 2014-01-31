@@ -135,12 +135,6 @@ class JuryController extends CommonController
     */
     public function addMembersAction(Application $app, $id)
     {
-        $extraJS = array(
-            '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />',
-            '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript"></script>'
-        );
-        $app['extraJS'] = $extraJS;
-
         $juryUserType = new JuryMembersType();
         $juryMember =  new Entity\JuryMembers();
         $juryMember->setJuryId($id);

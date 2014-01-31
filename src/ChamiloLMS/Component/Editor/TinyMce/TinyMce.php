@@ -16,7 +16,7 @@ class TinyMce extends Editor
      */
     public function getJavascriptToInclude(& $files)
     {
-        $jsFolder = api_get_path(WEB_LIBRARY_PATH).'javascript/';
+        $jsFolder = api_get_path(WEB_LIBRARY_JS_PATH);
         $files[] = $jsFolder.'tinymce/tinymce.min.js';
     }
 

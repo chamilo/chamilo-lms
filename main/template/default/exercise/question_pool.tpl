@@ -137,9 +137,6 @@
     function ajaxAction(obj) {
         var url = $(obj).attr('data-url');
         $.ajax({
-            beforeSend: function(obj) {
-                $("#result").html("<img src=\'{{ _p.web_img }}loadingAnimation.gif\' />");
-            },
             type: "POST",
             url: url,
             success: function(data) {

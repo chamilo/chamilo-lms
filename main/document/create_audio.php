@@ -41,9 +41,6 @@ if (empty($document_data)) {
 }
 $document_id = $document_data['id'];
 $dir = $document_data['path'];
-//jquery textareaCounter
-$htmlHeadXtra[] = '<script src="../inc/lib/javascript/textareacounter/jquery.textareaCounter.plugin.js" type="text/javascript"></script>';
-
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
 // Please, do not modify this dirname formatting

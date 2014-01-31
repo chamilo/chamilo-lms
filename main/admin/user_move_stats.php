@@ -557,8 +557,6 @@ $htmlHeadXtra[] = '<script type="text/javascript">
         var session_id = document.getElementById(unique_id).options[document.getElementById(unique_id).selectedIndex].value;
          $.ajax({
             contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(objeto) {
-            $("div#reponse_"+unique_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
             type: "POST",
             url: "user_move_stats.php",
             data: "load_ajax=1"+"&unique_id="+unique_id+"&user_id="+user_id+"&session_id="+session_id,
@@ -570,18 +568,6 @@ $htmlHeadXtra[] = '<script type="text/javascript">
     function view_stat (unique_id, user_id) {
         var session_id = document.getElementById(unique_id).options[document.getElementById(unique_id).selectedIndex].value;
         load_thick("user_move_stats.php?load_ajax=1&view_stat=1"+"&unique_id="+unique_id+"&user_id="+user_id+"&session_id="+session_id,"");
-/*
-         $.ajax({
-            contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(objeto) {
-            $("div#reponse_"+unique_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
-            type: "POST",
-            url: "user_move_stats.php",
-            data: "load_ajax=1&view_stat=1"+"&unique_id="+unique_id+"&user_id="+user_id+"&session_id="+session_id,
-            success: function(datos) {
-             $("div#reponse_"+unique_id).html(datos);
-            }
-        });*/
     }
 
 

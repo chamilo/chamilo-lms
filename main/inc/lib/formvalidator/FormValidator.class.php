@@ -349,7 +349,6 @@ EOT;
         }
         $this->with_progress_bar = true;
         $this->updateAttributes("onsubmit=\"javascript: myUpload.start('dynamic_div','" . api_get_path(WEB_IMG_PATH) . "progress_bar.gif','" . $label . "','" . $this->getAttribute('id') . "')\"");
-        $this->addElement('html', '<script language="javascript" src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/upload.js" type="text/javascript"></script>');
         $this->addElement('html', '<script type="text/javascript">var myUpload = new upload(' . (abs(intval($delay)) * 1000) . ');</script>');
     }
 
@@ -372,7 +371,7 @@ EOT;
             require_once api_get_path(LIBRARY_PATH) . 'xajax/xajax.inc.php';
         }
 
-        $xajax_upload = new xajax(api_get_path(WEB_LIBRARY_PATH) . 'upload.xajax.php');
+        $xajax_upload = new xajax(api_get_path(WEB_LIBRARY_PATH).'upload.xajax.php');
         $xajax_upload->registerFunction('updateProgress');
 
         // IMPORTANT : must be the first element of the form
@@ -403,10 +402,9 @@ EOT;
         }
 
         // Get the xajax code
-        $this->addElement('html', $xajax_upload->getJavascript(api_get_path(WEB_LIBRARY_PATH) . 'xajax'));
+        $this->addElement('html', $xajax_upload->getJavascript(api_get_path(WEB_LIBRARY_PATH).'xajax'));
 
         // Get the upload code
-        $this->addElement('html', '<script language="javascript" src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/upload.js" type="text/javascript"></script>');
         $this->addElement('html', '<script type="text/javascript">var myUpload = new upload(' . (abs(intval($delay)) * 1000) . ');</script>');
 
         if (!$wait_after_upload) {

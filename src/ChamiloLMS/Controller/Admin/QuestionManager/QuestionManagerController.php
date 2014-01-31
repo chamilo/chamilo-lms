@@ -32,12 +32,6 @@ class QuestionManagerController
      */
     public function editQuestionAction(Application $app, $id)
     {
-        $extraJS = array();
-        //@todo improve this JS includes should be added using twig
-        $extraJS[]      = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-        $extraJS[]      = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
-        $app['extraJS'] = $extraJS;
-
         // Setting exercise obj.
         $exercise                      = new \Exercise();
         $exercise->edit_exercise_in_lp = true;
@@ -306,16 +300,6 @@ class QuestionManagerController
      */
     public function newCategoryAction(Application $app)
     {
-        $extraJS = array();
-        //@todo improve this JS includes should be added using twig
-        $extraJS[]      = '<link href="'.api_get_path(
-            WEB_LIBRARY_PATH
-        ).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-        $extraJS[]      = '<script src="'.api_get_path(
-            WEB_LIBRARY_PATH
-        ).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript"></script>';
-        $app['extraJS'] = $extraJS;
-
         $url  = $app['url_generator']->generate('admin_category_new');
         $form = new \FormValidator('new', 'post', $url);
 
@@ -351,12 +335,6 @@ class QuestionManagerController
      */
     public function editCategoryAction(Application $app, $id)
     {
-        $extraJS = array();
-        //@todo improve this JS includes should be added using twig
-        $extraJS[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-        $extraJS[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript"></script>';
-        $app['extraJS'] = $extraJS;
-
         $objcat = new \Testcategory($id);
 
         if (!empty($objcat->c_id) || empty($objcat->id)) {

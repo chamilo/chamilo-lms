@@ -28,7 +28,7 @@ $tool_name = get_lang('LDAPImport');
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 
-$htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
+$htmlHeadXtra[] = '<script>
 var buttoncheck = 1;
 function checkAll() {
 	//var boxes = document.form.elements[\'checkboxes[]\'];

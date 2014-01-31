@@ -220,11 +220,9 @@ for($i=$thisYear-5;$i <= ($thisYear+5);$i++)
 
   </td>
 </tr>
-
 </table>
-
 </form>
-<script type="text/javascript">
+<script>
 <?php if($year_start=="0000") echo "setDisable(document.form.nolimit);\r\n"; ?>
 function setDisable(select){
 	document.form.day_start.disabled = (select.checked) ? true : false;
@@ -237,4 +235,3 @@ function setDisable(select){
 </script>
 <?php
 Display::display_footer();
-?>

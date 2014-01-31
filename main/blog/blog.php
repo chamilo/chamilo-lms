@@ -180,9 +180,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
 /*
 	DISPLAY
 */
-$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/calendar/tbl_change.js"></script>';
-
-switch ($current_page){
+switch ($current_page) {
 	case 'new_post' :
 		$nameTools = get_lang('NewPost');
 		$interbreadcrumb[] = array ('url' => "blog.php?blog_id=$blog_id", "name" => Blog :: get_blog_title($blog_id));

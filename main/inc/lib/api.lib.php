@@ -255,8 +255,11 @@ define('SYS_ARCHIVE_PATH', 'SYS_ARCHIVE_PATH');
 define('WEB_ARCHIVE_PATH', 'WEB_ARCHIVE_PATH');
 define('INCLUDE_PATH', 'INCLUDE_PATH');
 define('LIBRARY_PATH', 'LIBRARY_PATH');
+define('SYS_LIBRARY_JS_PATH', 'SYS_LIBRARY_JS_PATH');
 define('CONFIGURATION_PATH', 'CONFIGURATION_PATH');
 define('WEB_LIBRARY_PATH', 'WEB_LIBRARY_PATH');
+define('WEB_LIBRARY_JS_PATH', 'WEB_LIBRARY_JS_PATH');
+
 define('WEB_AJAX_PATH', 'WEB_AJAX_PATH');
 define('SYS_TEST_PATH', 'SYS_TEST_PATH');
 define('WEB_TEMPLATE_PATH', 'WEB_TEMPLATE_PATH');
@@ -505,6 +508,7 @@ define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
  * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/main/css
  * api_get_path(INCLUDE_PATH)                   /var/www/chamilo/main/inc/
  * api_get_path(LIBRARY_PATH)                   /var/www/chamilo/main/inc/lib/
+ * api_get_path(SYS_LIBRARY_JS_PATH)                /var/www/chamilo/main/inc/lib/javascript
  * api_get_path(CONFIGURATION_PATH)             /var/www/chamilo/main/inc/conf/
  * api_get_path(SYS_LANG_PATH)                  /var/www/chamilo/main/lang/
  * api_get_path(SYS_PLUGIN_PATH)                /var/www/chamilo/plugin/
@@ -522,6 +526,7 @@ define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
  * api_get_path(WEB_IMG_PATH)                   http://www.mychamilo.org/chamilo/main/img/
  * api_get_path(WEB_CSS_PATH)                   http://www.mychamilo.org/chamilo/main/css/
  * api_get_path(WEB_LIBRARY_PATH)               http://www.mychamilo.org/chamilo/main/inc/lib/
+ * api_get_path(WEB_LIBRARY_JS_PATH)            http://www.mychamilo.org/chamilo/main/inc/lib/javascript
  * api_get_path(WEB_TEMPLATE_PATH)              http://www.mychamilo.org/chamilo/main/template/
  *
  *
@@ -560,8 +565,10 @@ function api_get_path($path_type, $path = null) {
         WEB_ARCHIVE_PATH        => 'temp/',
         INCLUDE_PATH            => 'inc/',
         LIBRARY_PATH            => 'inc/lib/',
+        SYS_LIBRARY_JS_PATH     => 'inc/lib/javascript/',
         CONFIGURATION_PATH      => 'inc/conf/',
         WEB_LIBRARY_PATH        => 'inc/lib/',
+        WEB_LIBRARY_JS_PATH     => 'inc/lib/javascript/',
         WEB_AJAX_PATH           => 'inc/ajax/',
         SYS_TEST_PATH           => 'tests/',
         WEB_TEMPLATE_PATH       => 'template/',
@@ -655,9 +662,7 @@ function api_get_path($path_type, $path = null) {
         $paths[WEB_CODE_PATH]           = $root_web.$code_folder;
         $paths[REL_DATA_PATH]           = $root_rel.'data/';
 
-
         $paths[WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[WEB_DATA_PATH].'default_course_document/';
-
         $paths[REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[REL_DATA_PATH].'default_course_document/';
 
 
@@ -674,16 +679,14 @@ function api_get_path($path_type, $path = null) {
         $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
         $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
         $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
-
+        $paths[WEB_LIBRARY_JS_PATH]     = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_JS_PATH];
         $paths[WEB_AJAX_PATH]           = $paths[WEB_PUBLIC_PATH].'main/'.$paths[WEB_AJAX_PATH];
-
         $paths[WEB_PLUGIN_PATH]         = $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
         $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];
-
         $paths[WEB_TEMPLATE_PATH]       = $paths[WEB_CODE_PATH].$paths[WEB_TEMPLATE_PATH];
-
         $paths[INCLUDE_PATH]            = $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH];
         $paths[LIBRARY_PATH]            = $paths[SYS_CODE_PATH].$paths[LIBRARY_PATH];
+        $paths[SYS_LIBRARY_JS_PATH]     = $paths[SYS_CODE_PATH].$paths[SYS_LIBRARY_JS_PATH];
         $paths[CONFIGURATION_PATH]      = $paths[SYS_CODE_PATH].$paths[CONFIGURATION_PATH];
 
         $is_this_function_initialized = true;
@@ -703,6 +706,7 @@ function api_get_path($path_type, $path = null) {
                 WEB_PLUGIN_PATH         => 'plugin/',
                 WEB_ARCHIVE_PATH        => 'archive/',
                 WEB_LIBRARY_PATH        => 'inc/lib/',
+                WEB_LIBRARY_JS_PATH     => 'inc/lib/javascript/',
                 WEB_AJAX_PATH           => 'inc/ajax/',
                 WEB_PUBLIC_PATH         => 'web/',
             );
@@ -722,6 +726,7 @@ function api_get_path($path_type, $path = null) {
             $paths[WEB_PLUGIN_PATH]         = $paths[WEB_PATH].$web_paths[WEB_PLUGIN_PATH];
             $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$web_paths[WEB_ARCHIVE_PATH];
             $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$web_paths[WEB_LIBRARY_PATH];
+            $paths[WEB_LIBRARY_JS_PATH]     = $paths[WEB_CODE_PATH].$web_paths[WEB_LIBRARY_JS_PATH];
             $paths[WEB_AJAX_PATH]           = $paths[WEB_CODE_PATH].$web_paths[WEB_AJAX_PATH];
             $paths[WEB_PUBLIC_PATH]         = $paths[WEB_PATH].$web_paths[WEB_PUBLIC_PATH];
         }
@@ -5633,7 +5638,7 @@ function api_check_browscap() {
  * Returns the <script> HTML tag
  */
 function api_get_js($file) {
-    return '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$file.'"></script>'."\n";
+    return '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_JS_PATH).$file.'"></script>'."\n";
 }
 
 /**
@@ -5731,7 +5736,7 @@ function api_get_available_jquery_ui_languages() {
  */
 function api_get_jquery_libraries_js($libraries) {
     $js = '';
-    $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
+    $js_path = api_get_path(WEB_LIBRARY_JS_PATH);
     $isocode = api_get_language_isocode();
 
     if (in_array('jquery-ui-i18n', $libraries)) {
@@ -6151,16 +6156,15 @@ function api_get_security_key() {
 }
 
 function api_get_datetime_picker_js($htmlHeadXtra) {
-    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript" language="javascript"></script>';
-    $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript" language="javascript"></script>';
+    $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_JS_PATH).'datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
 
     $isocode = api_get_language_isocode();
     if ($isocode != 'en') {
-        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/localization/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript" language="javascript"></script>';
+        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'datetimepicker/localization/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript" language="javascript"></script>';
     }
     return $htmlHeadXtra;
 }
-
 
 function api_detect_user_roles($user_id, $courseId, $session_id = 0) {
     $user_roles = array();
@@ -6211,7 +6215,13 @@ function api_detect_user_roles($user_id, $courseId, $session_id = 0) {
     return $user_roles;
 }
 
-function api_get_roles_to_string($roles) {
+/**
+ * @param $roles
+ * @return null|string
+ *
+ */
+function api_get_roles_to_string($roles)
+{
     $role_names = array();
     if (!empty($roles)) {
         foreach ($roles as $role) {
@@ -6224,7 +6234,11 @@ function api_get_roles_to_string($roles) {
     return null;
 }
 
-
+/**
+ * @param int $courseId
+ * @param int $session_id
+ * @return bool
+ */
 function api_coach_can_edit_view_results($courseId = null, $session_id = null) {
     $user_id = api_get_user_id();
 
@@ -6252,11 +6266,14 @@ function api_coach_can_edit_view_results($courseId = null, $session_id = null) {
     }
 }
 
+/**
+ * @param string $file
+ * @return string
+ */
 function api_get_js_simple($file)
 {
     return '<script type="text/javascript" src="'.$file.'"></script>'."\n";
 }
-
 
 function api_set_settings_and_plugins()
 {

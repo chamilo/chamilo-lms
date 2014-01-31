@@ -72,8 +72,6 @@ class BranchController extends CommonController
     */
     public function addDirectorAction($id)
     {
-        $extraJS[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
-
         $type = new BranchUsersType();
         $branchUsers =  new Entity\BranchUsers();
 

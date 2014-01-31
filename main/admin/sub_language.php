@@ -33,9 +33,6 @@ $htmlHeadXtra[] ='<script type="text/javascript">
 		if (is_new_language.length>0 && is_new_language!="_" && file_id!="" && button_name!="") {
 			$.ajax({
 				contentType: "application/x-www-form-urlencoded",
-				beforeSend: function(objeto) {
-					$("#div_message_information_id").html("<div class=\"normal-message\"><img src=\'../inc/lib/javascript/indicator.gif\' /></div>");
-				},
 				type: "POST",
 				url: "../admin/sub_language_ajax.inc.php",
 				data: "new_language="+is_new_language+"&variable_language="+is_variable_language+"&file_id="+file_id+"&id="+'.intval($_REQUEST['id']).'+"&sub="+'.intval($_REQUEST['sub_language_id']).',

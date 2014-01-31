@@ -172,13 +172,10 @@ function toogle_course (element_html, course_code){
 
      $.ajax({
         contentType: "application/x-www-form-urlencoded",
-        beforeSend: function(objeto) {
-        $("div#"+content).html("<img src=\'../inc/lib/javascript/indicator.gif\' />"); },
         type: "POST",
         url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=toogle_course",
         data: "load_ajax="+id_elem+"&action="+action+"&course_code="+course_code,
         success: function(datos) {
-         $("div#"+content).html(datos);
         }
     });
 }
@@ -227,9 +224,6 @@ function register_friend(element_input) {
         user_friend_id=user_id[1];
         $.ajax({
             contentType: "application/x-www-form-urlencoded",
-            beforeSend: function(objeto) {
-                $("div#dpending_"+user_friend_id).html("<img src=\'../inc/lib/javascript/indicator.gif\' />");
-            },
             type: "POST",
             url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=add_friend",
             data: "friend_id="+user_friend_id+"&is_my_friend="+"friend",

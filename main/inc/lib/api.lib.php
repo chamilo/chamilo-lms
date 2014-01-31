@@ -6813,7 +6813,7 @@ function api_get_user_info_from_official_code($official_code = '') {
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
-        return _api_format_user($result_array);
+        return api_format_user($result_array);
     }
     return false;
 }

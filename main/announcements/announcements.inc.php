@@ -56,7 +56,7 @@ class AnnouncementManager {
      * @return	string with the parsed content
      */
     
-     public static function parseContentEmail($content, $courseCode) {
+     public static function parseEmailContent($content, $courseCode) {
         $readerInfo = api_get_user_info(api_get_user_id());
         $courseInfo = api_get_course_info($courseCode);
         $teacherList = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);

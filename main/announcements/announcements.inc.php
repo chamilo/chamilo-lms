@@ -50,13 +50,14 @@ class AnnouncementManager {
     
     /**
      * parse announcement content when sending an email. It parses only teacher data
-     *  @author yoselyn castillo
+     * @author yoselyn castillo
      * @param	string content
      * @param	int course code
      * @return	string with the parsed content
      */
     
      public static function parseEmailContent($content, $courseCode) {
+        
         $readerInfo = api_get_user_info(api_get_user_id());
         $courseInfo = api_get_course_info($courseCode);
         $teacherList = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);

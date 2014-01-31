@@ -25,6 +25,7 @@
     <applet id="nanogongApplet" archive="{{ _p.web_lib }}nanogong/nanogong.jar" code="gong.NanoGong" width="250" height="95">
         <param name="ShowTime" value="true" />
         <param name="AudioFormat" value="ImaADPCM" />
+        <param name="ShowSpeedButton" value="false" />
     </applet>
 
     <form name="form_nanogong">
@@ -35,6 +36,9 @@
     </form>
     <span id="nanogong_result" ></span>
 </div>
+
+<span id="record-result"></span>
+<div class="clear"></div>
 
 <script>
 
@@ -151,7 +155,7 @@ $(document).ready(function() {
             return false;
         });
     } else {
-        // Nothing
+        $('#record-result').html("{{ 'RecordIsNotAvailable' | get_lang }}");
     }
 
     // Start web RTC code

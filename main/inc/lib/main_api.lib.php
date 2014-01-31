@@ -863,7 +863,7 @@ function api_valid_email($address) {
  * @author Roan Embrechts
  */
 function api_protect_course_script($print_headers = false, $allow_session_admins = false, $allow_drh = false) {
-    global $is_allowed_in_course;
+    $is_allowed_in_course = api_is_allowed_in_course();
     $is_visible = false;
 
     if (api_is_drh()) {

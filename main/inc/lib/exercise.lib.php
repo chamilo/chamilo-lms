@@ -15,6 +15,7 @@
  */
 
 use ChamiloSession as Session;
+
 class ExerciseLib
 {
 
@@ -720,6 +721,12 @@ class ExerciseLib
         return $html;
     }
 
+    /**
+     * @param float $score
+     * @param float $weight
+     * @param bool $pass_percentage
+     * @return bool
+     */
     public static function is_success_exercise_result($score, $weight, $pass_percentage)
     {
         $percentage = Text::float_format(($score / ($weight != 0 ? $weight : 1)) * 100, 1);
@@ -731,18 +738,21 @@ class ExerciseLib
         return false;
     }
 
+    /**
+     * @param float $score
+     * @param float $weight
+     * @param bool $pass_percentage
+     * @return string
+     */
     public static function show_success_message($score, $weight, $pass_percentage)
     {
         $res = "";
         if (self::is_pass_pourcentage_enabled($pass_percentage)) {
             $is_success = self::is_success_exercise_result($score, $weight, $pass_percentage);
-
-            $icon = '';
             if ($is_success) {
                 $html = get_lang('CongratulationsYouPassedTheTest');
                 $icon = Display::return_icon('completed.png', get_lang('Correct'), array(), ICON_SIZE_MEDIUM);
             } else {
-                //$html .= Display::return_message(get_lang('YouDidNotReachTheMinimumScore'), 'warning');
                 $html = get_lang('YouDidNotReachTheMinimumScore');
                 $icon = Display::return_icon('warning.png', get_lang('Wrong'), array(), ICON_SIZE_MEDIUM);
             }

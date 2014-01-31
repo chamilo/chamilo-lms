@@ -89,7 +89,10 @@ class Exercise
     public $categoryWithQuestionList;
     public $mediaList;
     public $loadQuestionAJAX = false;
+    // Notification send to the teacher.
     public $emailNotificationTemplate = null;
+    // Notification send to the student.
+    public $emailNotificationTemplateToUser = null;
     public $countQuestions = 0;
     public $fastEdition = false;
     public $modelType = 1;
@@ -100,6 +103,8 @@ class Exercise
     public $globalCategoryId = null;
     public $onSuccessMessage = null;
     public $onFailedMessage = null;
+    public $emailAlert;
+    public $notifyUserByEmail = 0;
 
     /**
      * Constructor of the class
@@ -201,6 +206,8 @@ class Exercise
             $this->onSuccessMessage = $object->on_success_message;
             $this->onFailedMessage= $object->on_failed_message;
             $this->emailNotificationTemplate = $object->email_notification_template;
+            $this->emailNotificationTemplateToUser = $object->email_notification_template_to_user;
+            $this->notifyUserByEmail = $object->notify_user_by_email;
             $this->modelType = $object->model_type;
             $this->questionSelectionType = $object->question_selection_type;
             $this->hideQuestionTitle = $object->hide_question_title;
@@ -376,6 +383,22 @@ class Exercise
     public function selectEmailNotificationTemplate()
     {
         return $this->emailNotificationTemplate;
+    }
+
+    /**
+     * @return string
+     */
+    public function selectEmailNotificationTemplateToUser()
+    {
+        return $this->emailNotificationTemplateToUser;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNotifyUserByEmail()
+    {
+        return $this->notifyUserByEmail;
     }
 
     /**
@@ -1204,6 +1227,23 @@ class Exercise
     }
 
     /**
+     * @param string $text
+     */
+    public function updateEmailNotificationTemplateToUser($text)
+    {
+        $this->emailNotificationTemplateToUser = $text;
+    }
+
+    /**
+     * @param string $value
+     */
+    public function setNotifyUserByEmail($value)
+    {
+        $this->notifyUserByEmail = $value;
+    }
+
+
+    /**
      * @param int $value
      */
     public function updateEndButton($value)
@@ -1458,6 +1498,8 @@ class Exercise
                     on_success_message = '".Database::escape_string($this->getOnSuccessMessage())."',
                     on_failed_message = '".Database::escape_string($this->getOnFailedMessage())."',
                     email_notification_template = '".Database::escape_string($this->selectEmailNotificationTemplate())."',
+                    email_notification_template_to_user = '".Database::escape_string($this->selectEmailNotificationTemplateToUser())."',
+                    notify_user_by_email = '".Database::escape_string($this->getNotifyUserByEmail())."',
                     model_type = '".$this->getModelType()."',
                     question_selection_type = '".$this->getQuestionSelectionType()."',
                     hide_question_title = '".$this->getHideQuestionTitle()."',
@@ -1500,6 +1542,8 @@ class Exercise
                         on_success_message,
                         on_failed_message,
                         email_notification_template,
+                        email_notification_template_to_user,
+                        notify_user_by_email,
                         results_disabled,
                         model_type,
                         question_selection_type,
@@ -1530,6 +1574,8 @@ class Exercise
                         '".Database::escape_string($this->getOnSuccessMessage())."',
                         '".Database::escape_string($this->getOnFailedMessage())."',
                         '".Database::escape_string($this->selectEmailNotificationTemplate())."',
+                        '".Database::escape_string($this->selectEmailNotificationTemplateToUser())."',
+                        '".Database::escape_string($this->getNotifyUserByEmail())."',
                         '".Database::escape_string($results_disabled)."',
                         '".Database::escape_string($this->getModelType())."',
                         '".Database::escape_string($this->getQuestionSelectionType())."',
@@ -2244,15 +2290,43 @@ class Exercise
 
             if ($this->emailAlert) {
 
-                // Text when ending an exam
+                // Email notification template
                 $form->add_html_editor(
                     'email_notification_template',
-                    array(get_lang('EmailNotificationTemplate'), get_lang('EmailNotificationTemplateDescription')),
+                    array(get_lang('EmailNotificationTemplateToTeacher'), get_lang('EmailNotificationTemplateToTeacherDescription')),
                     null,
                     false,
                     $editor_config
                 );
             }
+
+            $group = array(
+                $form->createElement(
+                    'radio', 'notify_user_by_email', null, get_lang('Yes'), '1', array('id' => 'notify_user_by_email_on', 'class' => 'advanced_options_open', 'rel' => 'notify_user_by_email_options')
+                ),
+                $form->createElement(
+                    'radio', 'notify_user_by_email', null, get_lang('No'), '0', array('id' => 'notify_user_by_email_off', 'class' => 'advanced_options_close', 'rel' => 'notify_user_by_email_options')
+                )
+            );
+
+            $form->addGroup($group, null, get_lang('NotifyUserByEmail'));
+            $hide = 'style="display:none"';
+
+            if ($this->notifyUserByEmail == 1) {
+                $hide = null;
+            }
+
+            $form->addElement('html', '<div id="notify_user_by_email_options" '.$hide.'>');
+
+            // Email notification template to user
+            $form->add_html_editor(
+                'email_notification_template_to_user',
+                array(get_lang('EmailNotificationTemplateToUser'), get_lang('EmailNotificationTemplateToUserDescription')),
+                null,
+                false,
+                $editor_config
+            );
+            $form->addElement('html', '</div>');
 
             // End advanced setting.
             $form->addElement('html', '</div>');
@@ -2304,6 +2378,8 @@ class Exercise
                 $defaults['on_success_message'] = $this->getOnSuccessMessage();
                 $defaults['on_failed_message'] = $this->getOnFailedMessage();
                 $defaults['email_notification_template'] = $this->selectEmailNotificationTemplate();
+                $defaults['email_notification_template_to_user'] = $this->selectEmailNotificationTemplateToUser();
+                $defaults['notify_user_by_email'] = $this->getNotifyUserByEmail();
                 $defaults['model_type'] = $this->getModelType();
                 $defaults['question_selection_type'] = $this->getQuestionSelectionType();
                 $defaults['score_type_model'] = $this->getScoreTypeModel();
@@ -2390,6 +2466,8 @@ class Exercise
         $this->setOnSuccessMessage($form->getSubmitValue('on_success_message'));
         $this->setOnFailedMessage($form->getSubmitValue('on_failed_message'));
         $this->updateEmailNotificationTemplate($form->getSubmitValue('email_notification_template'));
+        $this->updateEmailNotificationTemplateToUser($form->getSubmitValue('email_notification_template_to_user'));
+        $this->setNotifyUserByEmail($form->getSubmitValue('notify_user_by_email'));
         $this->setModelType($form->getSubmitValue('model_type'));
         $this->setQuestionSelectionType($form->getSubmitValue('question_selection_type'));
         $this->setHideQuestionTitle($form->getSubmitValue('hide_question_title'));
@@ -4895,6 +4973,9 @@ class Exercise
         return $return_array;
     }
 
+    /**
+     * @return array
+     */
     public function returnNotificationTag()
     {
         return array(
@@ -4905,17 +4986,20 @@ class Exercise
             '{{ exercise.start_time }}',
             '{{ exercise.end_time }}',
             '{{ exercise.question_and_answer_ids }}',
-            '{{ exercise.assert_count }}'
+            '{{ exercise.assert_count }}',
+            '{{ exercise_result_message }}' // if success or failed
         );
     }
 
     /**
-     * @param $exeId
+     * @param int $exeId
+     * @param array
+     * @param bool
      * @return bool
      */
-    public function sendCustomNotification($exeId, $exerciseResult = array())
+    public function sendCustomNotification($exeId, $exerciseResult = array(), $exerciseWasPassed = false)
     {
-        if ($this->emailAlert) {
+        if (!empty($this->emailNotificationTemplate) or !empty($this->emailNotificationTemplateToUser)) {
 
             // Getting attempt info
             $trackExerciseInfo = ExerciseLib::get_exercise_track_exercise_info($exeId);
@@ -4923,18 +5007,21 @@ class Exercise
             if (empty($trackExerciseInfo)) {
                 return false;
             }
+        }
+
+        if ($this->emailAlert) {
 
             if (!empty($this->emailNotificationTemplate)) {
                 $twig = new \Twig_Environment(new \Twig_Loader_String());
                 $twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
-                $template = $this->emailNotificationTemplate;
+                $template = "{% autoescape false %} ".$this->emailNotificationTemplate."{% endautoescape %}";
             } else {
                 global $app;
                 $twig = $app['twig'];
                 $template = 'default/mail/exercise/end_exercise_notification.tpl';
             }
 
-            $userInfo = UserManager::get_user_info_by_id($trackExerciseInfo['exe_user_id']);
+            $userInfo = api_get_user_info($trackExerciseInfo['exe_user_id'], false, false, true);
             $courseInfo = api_get_course_info_by_id($trackExerciseInfo['c_id']);
 
             $twig->addGlobal('student', $userInfo);
@@ -4942,6 +5029,12 @@ class Exercise
             $twig->addGlobal('exercise.start_time', $trackExerciseInfo['start_time']);
             $twig->addGlobal('exercise.end_time', $trackExerciseInfo['end_time']);
             $twig->addGlobal('course', $courseInfo);
+
+            if ($exerciseWasPassed) {
+                $twig->addGlobal('exercise_result_message', $this->getOnSuccessMessage());
+            } else {
+                $twig->addGlobal('exercise_result_message', $this->getOnFailedMessage());
+            }
 
             $resultInfo = array();
             $resultInfoToString = null;
@@ -4982,19 +5075,96 @@ class Exercise
             try {
                 $twig->parse($twig->tokenize($template));
                 $content = $twig->render($template);
+
+                $subject = get_lang('ExerciseResult');
+
+                if (!empty($teachers)) {
+                    foreach ($teachers as $user_id => $teacher_data) {
+                        MessageManager::send_message_simple($user_id, $subject, $content);
+                    }
+                }
+
+
             } catch (Twig_Error_Syntax $e) {
                 // $template contains one or more syntax errors
+                Display::display_warning_message(get_lang('ThereIsAnErrorInTheTemplate'));
                echo $e->getMessage();
             }
+        }
 
-            // Student who finish the exercise
-            $subject = get_lang('ExerciseResult');
+        // Message send only to student.
+        if ($this->notifyUserByEmail == 1) {
 
-            if (!empty($teachers)) {
-                foreach ($teachers as $user_id => $teacher_data) {
-                    MessageManager::send_message_simple($user_id, $subject, $content);
+            // Message send only to student.
+
+            if (!empty($this->emailNotificationTemplateToUser)) {
+                $twig = new \Twig_Environment(new \Twig_Loader_String());
+                $twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
+                $template = "{% autoescape false %} ".$this->emailNotificationTemplateToUser."{% endautoescape %}";
+            } else {
+                global $app;
+                $twig = $app['twig'];
+                $template = 'default/mail/exercise/end_exercise_notification_to_user.tpl';
+            }
+
+            $userInfo = api_get_user_info($trackExerciseInfo['exe_user_id'], false, false, true);
+            $courseInfo = api_get_course_info_by_id($trackExerciseInfo['c_id']);
+
+            $twig->addGlobal('student', $userInfo);
+            $twig->addGlobal('exercise', $this);
+            $twig->addGlobal('exercise.start_time', $trackExerciseInfo['start_time']);
+            $twig->addGlobal('exercise.end_time', $trackExerciseInfo['end_time']);
+            $twig->addGlobal('course', $courseInfo);
+
+            if ($exerciseWasPassed) {
+                $twig->addGlobal('exercise_result_message', $this->getOnSuccessMessage());
+            } else {
+                $twig->addGlobal('exercise_result_message', $this->getOnFailedMessage());
+            }
+
+            $resultInfo = array();
+            $resultInfoToString = null;
+            $countCorrectToString = null;
+
+            if (!empty($exerciseResult)) {
+
+                $countCorrect = array();
+                $countCorrect['correct'] = 0;
+                $countCorrect['total'] = 0;
+                $counter = 1;
+                foreach ($exerciseResult as $questionId => $result) {
+                    $resultInfo[$questionId] = isset($result['details']['user_choices']) ? $result['details']['user_choices'] : null;
+                    $correct = $result['score']['pass'] ? 1 : 0;
+                    $countCorrect['correct'] += $correct;
+                    $countCorrect['total'] = $counter;
+                    $counter++;
+                }
+
+                if (!empty($resultInfo)) {
+                    $resultInfoToString = json_encode($resultInfo);
+                }
+
+                if (!empty($countCorrect)) {
+                    $countCorrectToString = json_encode($countCorrect);
                 }
             }
+
+            $twig->addGlobal('question_and_answer_ids', $resultInfoToString);
+            $twig->addGlobal('asserts', $countCorrectToString);
+
+            try {
+                $twig->parse($twig->tokenize($template));
+                $content = $twig->render($template);
+                // Student who finish the exercise
+                MessageManager::send_message_simple(api_get_user_id(), get_lang('ExerciseResult'), $content);
+
+            } catch (Twig_Error_Syntax $e) {
+                // $template contains one or more syntax errors
+                Display::display_warning_message(get_lang('ThereIsAnErrorInTheTemplate'));
+                echo $e->getMessage();
+            }
+
+
         }
     }
 
@@ -6598,13 +6768,12 @@ class Exercise
         return $this->displayQuestionListByAttempt($exeId, false, true);
     }
 
-
     /**
      * Display the exercise results
-     * @param int   attempt id (exe_id)
-     * @param bool  save users results (true) or just show the results (false)
-     * @param bool return array with exercise result info
-     * @param mixed
+     * @param int  $exe_id
+     * @param bool $saveUserResult save users results (true) or just show the results (false)
+     * @param bool $returnExerciseResult return array with exercise result info
+     * @return mixed
      */
     public function displayQuestionListByAttempt($exe_id, $saveUserResult = false, $returnExerciseResult = false)
     {
@@ -6857,7 +7026,8 @@ class Exercise
 
             // Send notification.
             if (!api_is_allowed_to_edit(null, true)) {
-                $this->sendCustomNotification($exe_id, $exerciseResultInfo);
+                $isSuccess = ExerciseLib::is_success_exercise_result($total_score, $total_weight, $this->selectPassPercentage());
+                $this->sendCustomNotification($exe_id, $exerciseResultInfo, $isSuccess);
                 $this->sendNotificationForOpenQuestions($question_list_answers, $origin, $exe_id);
                 $this->sendNotificationForOralQuestions($question_list_answers, $origin, $exe_id);
             }
@@ -7834,8 +8004,11 @@ class Exercise
     }
 
     /**
-     * @param int $exeId
-     * @param array $exercise_stat_info
+     * @param $exeId
+     * @param $exercise_stat_info
+     * @param $remindList
+     * @param $currentQuestion
+     * @return int|null
      */
     public static function getNextQuestionId($exeId, $exercise_stat_info, $remindList, $currentQuestion)
     {

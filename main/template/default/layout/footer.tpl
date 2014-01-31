@@ -161,6 +161,16 @@ $(document).ready( function() {
         });
     });
 
+    $(".advanced_options_open").on("click", function() {
+        var id = $(this).attr('rel');
+        $("#"+id).show();
+    });
+
+    $(".advanced_options_close").on("click", function() {
+        var id = $(this).attr('rel');
+        $("#"+id).hide();
+    });
+
     $(function() {
         $('a').tooltip({
             placement: 'right',

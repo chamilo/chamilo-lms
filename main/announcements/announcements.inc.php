@@ -56,25 +56,25 @@ class AnnouncementManager {
      * @return	string with the parsed content
      */
     
-     public static function parse_content_email($content, $course_code) {
-        $reader_info = api_get_user_info(api_get_user_id());
-        $course_info = api_get_course_info($course_code);
-        $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
+     public static function parseContentEmail($content, $courseCode) {
+        $readerInfo = api_get_user_info(api_get_user_id());
+        $courseInfo = api_get_course_info($courseCode);
+        $teacherList = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
         
-        $teacher_name = '';
-        if (!empty($teacher_list)) {
-            foreach ($teacher_list as $teacher_data) {
-                $teacher_name = api_get_person_name($teacher_data['firstname'], $teacher_data['lastname']);
-                $teacher_email = $teacher_data['email'];
+        $teacherName = '';
+        if (!empty($teacherList)) {
+            foreach ($teacherList as $teacherData) {
+                $teacherName = api_get_person_name($teacherData['firstname'], $teacherData['lastname']);
+                $teacherEmail = $teacherData['email'];
                 break;
             }
         }
         $data['user_name'] = '((user_name))';
         $data['user_firstname'] = '((user_firstname))';
         $data['user_lastname'] = '((user_lastname))';
-        $data['teacher_name'] = $teacher_name;
-        $data['teacher_email'] = $teacher_email;
-        $data['course_title'] = $course_info['name'];
+        $data['teacher_name'] = $teacherName;
+        $data['teacher_email'] = $teacherEmail;
+        $data['course_title'] = $courseInfo['name'];
         $data['course_link'] = Display::url($course_link, $course_link);       
 
         $content = str_replace(self::get_tags(), $data, $content);

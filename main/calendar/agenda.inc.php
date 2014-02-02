@@ -2751,7 +2751,13 @@ function show_add_form($id = '', $type = null)
 				<label class="control-label">
                     '.get_lang('AddAnAttachment').'&nbsp;</label>
 				<div class="controls">
-                    <input type="file" name="user_upload"/>  '.get_lang('Comment').' <input name="file_comment" type="text" size="20" />
+                    <input type="file" name="user_upload"/>
+                </div>
+                <label class="control-label">'.
+                    get_lang('Comment').'
+                </label>  
+                <div class="controls">  
+                    <textarea name="file_comment" type="textarea"></textarea>
                 </div>
              </div>';
             }

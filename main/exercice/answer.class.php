@@ -129,7 +129,7 @@ class Answer
 		}
 		$this->nbrAnswers=$i-1;
 	}
-    
+
      /**
      * returns all answer ids from this question Id
      *
@@ -266,8 +266,9 @@ class Answer
 	 * @param - integer $id - answer ID
 	 * @return - string - answer title
 	 */
-	function selectAnswer($id) {
-		return $this->answer[$id];
+	function selectAnswer($id)
+    {
+        return isset($this->answer[$id]) ? $this->answer[$id] : null;
 	}
 
 	/**
@@ -386,7 +387,7 @@ class Answer
 	 */
 	function selectComment($id)
 	{
-		return $this->comment[$id];
+        return isset($this->comment[$id]) ? $this->comment[$id] : null;
 	}
 
 	/**

@@ -1558,7 +1558,7 @@ class Display {
     /**
      * @todo use twig
      */
-    static function group_button($title, $elements) {
+    public static function group_button($title, $elements) {
         $html = '<div class="btn-toolbar">
             <div class="btn-group">
             <button class="btn dropdown-toggle" data-toggle="dropdown">'.$title.' <span class="caret"></span></button>
@@ -1571,11 +1571,21 @@ class Display {
         return $html;
     }
 
+    /**
+     * @param string $file
+     * @param array $params
+     * @return null|string
+     */
     public static function getMediaPlayer($file, $params = array())
     {
         $fileInfo = pathinfo($file);
 
         switch ($fileInfo['extension']) {
+            case 'wav':
+                if (isset($params['url'])) {
+                    return DocumentManager::readNanogongFile($params['url']);
+                }
+                break;
             case 'mp3':
             case 'webm':
                 $autoplay = null;
@@ -1587,14 +1597,13 @@ class Display {
                 $class = isset($params['class']) ? ' class="'.$params['class'].'"' : null;
 
                 $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$file.'" >';
-                $html .=  '<object width="'.$params['width'].'" height="50" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
+                $html .= '  <object width="'.$params['width'].'" height="50" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
                                 <param name="movie" value="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf" />
                                 <param name="flashvars" value="controls=true&file='.$fileInfo['basename'].'" />
                             </object>';
-                 $html .= '</audio>';
+                $html .= '</audio>';
                 return $html;
                 break;
-
         }
 
         return null;

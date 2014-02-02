@@ -60,8 +60,33 @@
 
 {% raw %}
 <script>
+
+$("form").on("click", ' .advanced_parameters', function() {
+    var id = $(this).attr('id') + '_options';
+    var button = $(this);
+    $("#"+id).toggle(function() {
+        button.toggleClass('active');
+    });
+});
+
+
 /* Makes row highlighting possible */
 $(document).ready( function() {
+    /**
+     * Advanced options
+     * Usage
+     * <a id="link" href="url">Advanced</a>
+     * <div id="link_options">
+     *     hidden content :)
+     * </div>
+     * */
+    $(".advanced_options").on("click", function() {
+        var id = $(this).attr('id') + '_options';
+        var button = $(this);
+        $("#"+id).toggle(function() {
+            button.toggleClass('active');
+        });
+    });
 
     // Chosen select
     $(".chzn-select").chosen({

@@ -277,7 +277,7 @@ class DocumentManager
      *  @param string
      * 	@return true if the user is allowed to see the document, false otherwise
      * 	@author Sergio A Kessler, first version
-     * 	@author Roan Embrechts, bugfix     *
+     * 	@author Roan Embrechts, bugfix
      *  @todo not only check if a file is visible, but also check if the user is allowed to see the file??
      */
     public static function file_visible_to_user($this_course, $doc_url)
@@ -679,8 +679,14 @@ class DocumentManager
                     }
                     $document_folders[$row['id']] = $row['path'];
                 }
-                natsort($document_folders);
 
+                //sort($document_folders);
+
+                if (!empty($document_folders)) {
+                    natsort($document_folders);
+                }
+
+                //return results
                 return $document_folders;
             } else {
                 return false;
@@ -1113,6 +1119,7 @@ class DocumentManager
      *
      * @param array $courseInfo
      * @param string $path
+     * @param int $sessionId
      * @return int id of document / false if no doc found
      */
     public static function get_document_id($courseInfo, $path, $sessionId = null)
@@ -3212,7 +3219,7 @@ class DocumentManager
      * @param   bool    When set to true, this runs the indexer without actually saving anything to any database
      * @return  bool    Returns true on presumed success, false on failure
      */
-    public function index_document(
+    public static function index_document(
         $docid,
         $course_code,
         $session_id = 0,
@@ -3246,7 +3253,6 @@ class DocumentManager
             //TODO: mime_content_type is deprecated, fileinfo php extension is enabled by default as of PHP 5.3.0
             // now versions of PHP on Debian testing(5.2.6-5) and Ubuntu(5.2.6-2ubuntu) are lower, so wait for a while
             $doc_mime = mime_content_type($doc_path);
-            //echo $doc_mime;
             $allowed_mime_types = self::file_get_mime_type(true);
 
             // mime_content_type does not detect correctly some formats that are going to be supported for index, so an extensions array is used for the moment
@@ -3539,5 +3545,140 @@ class DocumentManager
                 );
             }
         }
+    }
+
+    /**
+     * @param string $file
+     * @return string
+     */
+    public static function readNanogongFile($file)
+    {
+        $nanoGongJarFile = api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar';
+
+        $html = '<applet id="applet" archive="'.$nanoGongJarFile.'" code="gong.NanoGong" width="160" height="95">';
+            $html .= '<param name="SoundFileURL" value="'.$file.'" />';
+            $html .= '<param name="ShowSaveButton" value="false" />';
+            $html .= '<param name="ShowTime" value="true" />';
+            $html .= '<param name="ShowRecordButton" value="false" />';
+        $html .= '</applet>';
+        return $html;
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $path
+     * @param $courseInfo
+     * @param string $whatIfFileExists overwrite|rename
+     * @param null $userId
+     * @param null $groupId
+     * @param null $toUserId
+     * @return bool|path
+     */
+    public static function addFileToDocumentTool(
+        $filePath,
+        $path,
+        $courseInfo,
+        $userId,
+        $whatIfFileExists = 'overwrite',
+        $groupId = null,
+        $toUserId = null
+    ) {
+        if (!file_exists($filePath)) {
+            return false;
+        }
+
+        $fileInfo = pathinfo($filePath);
+
+        $file = array(
+            'name' => $fileInfo['basename'],
+            'tmp_name' => $filePath,
+            'size' => filesize($filePath),
+            'from_file' => true
+        );
+
+        $course_dir = $courseInfo['path'].'/document';
+        $baseWorkDir = api_get_path(SYS_COURSE_PATH).$course_dir;
+
+        $filePath = handle_uploaded_document(
+            $courseInfo,
+            $file,
+            $baseWorkDir,
+            $path,
+            $userId,
+            $groupId,
+            $toUserId,
+            false,
+            $whatIfFileExists,
+            false
+        );
+
+        if ($filePath) {
+            return DocumentManager::get_document_id($courseInfo, $filePath);
+        }
+        return false;
+    }
+
+    /**
+     * Converts wav to mp3 file.
+     * Requires the ffmpeg lib. In ubuntu: sudo apt-get install ffmpeg
+     * @param string $wavFile
+     * @param bool $removeWavFileIfSuccess
+     * @return bool
+     */
+    public static function convertWavToMp3($wavFile, $removeWavFileIfSuccess = false)
+    {
+        require_once '../../../../vendor/autoload.php';
+
+        if (file_exists($wavFile)) {
+            try {
+                $ffmpeg = \FFMpeg\FFMpeg::create();
+                $video = $ffmpeg->open($wavFile);
+                $mp3File = str_replace('wav', 'mp3', $wavFile);
+                $result = $video->save(new FFMpeg\Format\Audio\Mp3(), $mp3File);
+                if ($result && $removeWavFileIfSuccess) {
+                    unlink($wavFile);
+                }
+
+                if (file_exists($mp3File)) {
+                    return $mp3File;
+                }
+            } catch (Exception $e) {
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param string $documentData
+     * @param array $courseInfo
+     * @param string $whatIfFileExists
+     * @return bool|path
+     */
+    public static function addAndConvertWavToMp3($documentData, $courseInfo, $userId, $whatIfFileExists = 'overwrite')
+    {
+        if (empty($documentData)) {
+            return false;
+        }
+
+        if (isset($documentData['absolute_path']) && file_exists($documentData['absolute_path'])) {
+            $mp3FilePath = self::convertWavToMp3($documentData['absolute_path']);
+            //$mp3FilePath = str_replace('wav', 'mp3', $documentData['absolute_path']);
+            if (!empty($mp3FilePath)) {
+
+                $documentId = self::addFileToDocumentTool(
+                    $mp3FilePath,
+                    dirname($documentData['path']),
+                    $courseInfo,
+                    $userId,
+                    $whatIfFileExists
+                );
+
+                if (!empty($documentId)) {
+                    return $documentId;
+                }
+            }
+        }
+
+        return false;
     }
 }

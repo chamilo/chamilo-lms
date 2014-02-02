@@ -168,6 +168,7 @@ function submitVoice() {
 	//	
 	var applet = document.getElementById("nanogong");	
 	var ret = applet.sendGongRequest( "PostToForm", urlnanogong, "voicefile", cookie, "temp");//'PostToForm', postURL, inputname, cookie, filename
+
 	if (ret == null)  { 
 	    alert(lang_failled_to_submit); 
 	} else {

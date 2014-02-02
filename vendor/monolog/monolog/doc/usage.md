@@ -7,6 +7,10 @@ Installation
 Monolog is available on Packagist ([monolog/monolog](http://packagist.org/packages/monolog/monolog))
 and as such installable via [Composer](http://getcomposer.org/).
 
+```bash
+php composer.phar require monolog/monolog '~1.4'
+```
+
 If you do not use Composer, you can grab the code from GitHub, and use any
 PSR-0 compatible autoloader (e.g. the [Symfony2 ClassLoader component](https://github.com/symfony/ClassLoader))
 to load Monolog classes.
@@ -84,7 +88,7 @@ $logger->pushProcessor(function ($record) {
 ```
 
 Monolog provides some built-in processors that can be used in your project.
-Look at the README file for the list.
+Look at the [README file](https://github.com/Seldaek/monolog/blob/master/README.mdown) for the list.
 
 > Tip: processors can also be registered on a specific handler instead of
   the logger to apply only for this handler.

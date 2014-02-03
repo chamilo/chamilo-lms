@@ -27,7 +27,7 @@ if (isset($_configuration['add_document_to_work'])) {
     define('ADD_DOCUMENT_TO_WORK', false);
 }
 
-$_configuration['work_user_comments'] = true;
+//$_configuration['work_user_comments'] = false;
 if (isset($_configuration['work_user_comments'])) {
     define('ALLOW_USER_COMMENTS', $_configuration['work_user_comments']);
 } else {

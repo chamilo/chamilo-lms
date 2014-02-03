@@ -12,7 +12,6 @@ use \ChamiloSession as Session;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-
 /**
  * Constants declaration
  */
@@ -508,7 +507,7 @@ define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
  * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/main/css
  * api_get_path(INCLUDE_PATH)                   /var/www/chamilo/main/inc/
  * api_get_path(LIBRARY_PATH)                   /var/www/chamilo/main/inc/lib/
- * api_get_path(SYS_LIBRARY_JS_PATH)                /var/www/chamilo/main/inc/lib/javascript
+ * api_get_path(SYS_LIBRARY_JS_PATH)            /var/www/chamilo/web/ChamiloLMS/js
  * api_get_path(CONFIGURATION_PATH)             /var/www/chamilo/main/inc/conf/
  * api_get_path(SYS_LANG_PATH)                  /var/www/chamilo/main/lang/
  * api_get_path(SYS_PLUGIN_PATH)                /var/www/chamilo/plugin/
@@ -526,7 +525,7 @@ define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
  * api_get_path(WEB_IMG_PATH)                   http://www.mychamilo.org/chamilo/main/img/
  * api_get_path(WEB_CSS_PATH)                   http://www.mychamilo.org/chamilo/main/css/
  * api_get_path(WEB_LIBRARY_PATH)               http://www.mychamilo.org/chamilo/main/inc/lib/
- * api_get_path(WEB_LIBRARY_JS_PATH)            http://www.mychamilo.org/chamilo/main/inc/lib/javascript
+ * api_get_path(WEB_LIBRARY_JS_PATH)            http://www.mychamilo.org/chamilo/web/ChamiloLMS/javascript
  * api_get_path(WEB_TEMPLATE_PATH)              http://www.mychamilo.org/chamilo/main/template/
  *
  *
@@ -565,10 +564,10 @@ function api_get_path($path_type, $path = null) {
         WEB_ARCHIVE_PATH        => 'temp/',
         INCLUDE_PATH            => 'inc/',
         LIBRARY_PATH            => 'inc/lib/',
-        SYS_LIBRARY_JS_PATH     => 'inc/lib/javascript/',
+        SYS_LIBRARY_JS_PATH     => 'web/ChamiloLMS/js/',
         CONFIGURATION_PATH      => 'inc/conf/',
         WEB_LIBRARY_PATH        => 'inc/lib/',
-        WEB_LIBRARY_JS_PATH     => 'inc/lib/javascript/',
+        WEB_LIBRARY_JS_PATH     => 'web/ChamiloLMS/js/',
         WEB_AJAX_PATH           => 'inc/ajax/',
         SYS_TEST_PATH           => 'tests/',
         WEB_TEMPLATE_PATH       => 'template/',
@@ -665,7 +664,6 @@ function api_get_path($path_type, $path = null) {
         $paths[WEB_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[WEB_DATA_PATH].'default_course_document/';
         $paths[REL_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[REL_DATA_PATH].'default_course_document/';
 
-
         $paths[SYS_CODE_PATH]           = $root_sys.$code_folder;
 
         // Now we can switch into api_get_path() "terminology".
@@ -679,7 +677,8 @@ function api_get_path($path_type, $path = null) {
         $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
         $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
         $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
-        $paths[WEB_LIBRARY_JS_PATH]     = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_JS_PATH];
+        //$paths[WEB_LIBRARY_JS_PATH]     = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_JS_PATH];
+        $paths[WEB_LIBRARY_JS_PATH]     = $paths[WEB_PATH].$paths[WEB_LIBRARY_JS_PATH];
         $paths[WEB_AJAX_PATH]           = $paths[WEB_PUBLIC_PATH].'main/'.$paths[WEB_AJAX_PATH];
         $paths[WEB_PLUGIN_PATH]         = $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
         $paths[WEB_ARCHIVE_PATH]        = $paths[WEB_PATH].$paths[WEB_ARCHIVE_PATH];

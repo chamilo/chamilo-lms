@@ -1,0 +1,22 @@
+@charset "utf-8";
+/*
+ * CSS Document
+ * Written by Ryan Yonzon
+ * http://ryan.rawswift.com/
+ */
+ 
+html, body {
+	/* FF hack: or we'll have double scrollbar showing on the browser */
+	/*margin:0px; */
+	 /* hide browser's main scrollbar */
+	/*overflow:hidden;*/
+}
+
+#main_container {
+	width:100%;
+	background-color:#ffffff; /* DO NOT REMOVE THIS; or you'll have issue w/ the scrollbar, when the mouse pointer is on a white space */
+	overflow-x: hidden;
+	overflow-y: scroll;
+	height:100%;	/* this will make sure that the height will extend at the bottom */
+	position:absolute; /* container div must be absolute, for our fixed bar to work */
+}

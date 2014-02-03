@@ -1,0 +1,24 @@
+@charset "utf-8";
+/*
+ * CSS Document
+ * Written by Ryan Yonzon
+ * http://ryan.rawswift.com/
+ */
+ 
+/*
+ * IE hack 
+ */
+html, body {
+	/*margin:0px;*/
+	/* hide browser's main scrollbar */
+	/*overflow:hidden; */
+	/* make sure we'll use 100% of the page's height */
+	/*height:100%; */
+}
+
+#main_container {
+	width:100%; /* make sure we'll use 100% of page's width */
+	background-color:#ffffff; /* DO NOT REMOVE THIS; or you'll have issue w/ the scrollbar, when the mouse pointer is on a white space */
+	overflow-x: hidden;
+	overflow-y: scroll;
+}

@@ -150,18 +150,33 @@ $("form").on("click", ' .advanced_parameters', function() {
     });
 });
 
-/** Makes row highlighting possible */
+
+// Support for AJAX loaded modal window.
+// Focuses on first input textbox after it loads the window.
+/*
+$('[data-toggle="modal"]').click(function(e) {
+    e.preventDefault();
+    var url = $(this).attr('href');
+    if (url.indexOf('#') == 0) {
+        $(url).modal('open');
+    } else {
+        $.get(url, function(data) {
+            $('<div class="modal hide fade">' + data + '</div>').modal();
+        }).success(function() { $('input:text:visible:first').focus(); });
+    }
+});*/
+
 $(document).ready( function() {
     /**
-     * Advanced options
-     * Usage
-     * <a id="link" href="url">Advanced</a>
-     * <div id="link_options" style="display:none">
-     *     hidden content :)
-     * </div>
-     * */
+    * Advanced options
+    * Usage
+    * <a id="link" href="http://">Advanced</a>
+    * <div id="link_options" style="display:none">
+    *     hidden content :)
+    * </div>
+    * */
 
-     $(".advanced_options").on("click", function() {
+    $(".advanced_options").on("click", function() {
         var id = $(this).attr('id') + '_options';
         var button = $(this);
         $("#"+id).toggle(function() {
@@ -169,6 +184,11 @@ $(document).ready( function() {
         });
     });
 
+    /**
+     * <a class="advanced_options_open" href="http://" rel="div_id">Open</a>
+     * <a class="advanced_options_close" href="http://" rel="div_id">Close</a>
+     * <div id="div_id">Div content</div>
+     * */
     $(".advanced_options_open").on("click", function() {
         var id = $(this).attr('rel');
         $("#"+id).show();
@@ -179,6 +199,7 @@ $(document).ready( function() {
         $("#"+id).hide();
     });
 
+    // Tooltip.
     $(function() {
         $('a').tooltip({
             placement: 'right',
@@ -187,6 +208,7 @@ $(document).ready( function() {
         });
     });
 
+    /** Makes row highlighting possible */
 
     $('.advanced_parameters').addClass('btn-default');
     //$('.btn').addClass('btn-default');

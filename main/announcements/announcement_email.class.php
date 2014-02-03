@@ -199,7 +199,7 @@ class AnnouncementEmail
 
         $content = $this->announcement('content');
         $content = stripslashes($content);
-        $content = AnnouncementManager::parse_content($content, $this->course('code'));
+        $content = AnnouncementManager::parseEmailContent($content, $this->course('code'));
 
         $user_email = $this->sender('mail');
         $course_param = api_get_cidreq();

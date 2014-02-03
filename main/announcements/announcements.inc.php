@@ -13,15 +13,18 @@
  */
 class AnnouncementManager {
 
-    public function __construct() {
+    public function __construct()
+    {
 
     }
 
-    public static function get_tags() {
+    public static function get_tags()
+    {
         return array('((user_name))', '((user_firstname))', '((user_lastname))', '((teacher_name))', '((teacher_email))', '((course_title))', '((course_link))');
     }
 
-    public static function parse_content($content, $course_code) {
+    public static function parse_content($content, $course_code)
+    {
         $reader_info = api_get_user_info(api_get_user_id());
         $course_info = api_get_course_info($course_code);
         $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
@@ -35,7 +38,7 @@ class AnnouncementManager {
             }
         }
         $course_link = api_get_course_url();
-
+        
         $data['user_name'] = $reader_info['username'];
         $data['user_firstname'] = $reader_info['firstname'];
         $data['user_lastname'] = $reader_info['lastname'];
@@ -43,6 +46,40 @@ class AnnouncementManager {
         $data['teacher_email'] = $teacher_email;
         $data['course_title'] = $course_info['name'];
         $data['course_link'] = Display::url($course_link, $course_link);
+       
+        $content = str_replace(self::get_tags(), $data, $content);
+        return $content;
+    }
+    
+    /**
+     * parse announcement content when sending an email. It parses only teacher data
+     * @author  yoselyn castillo
+     * @param	string content
+     * @param	int course code
+     * @return	string with the parsed content
+     */
+    
+     public static function parseEmailContent($content, $courseCode)
+     {
+        $readerInfo = api_get_user_info(api_get_user_id());
+        $courseInfo = api_get_course_info($courseCode);
+        $teacherList = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
+        
+        $teacherName = '';
+        if (!empty($teacherList)) {
+            foreach ($teacherList as $teacherData) {
+                $teacherName = api_get_person_name($teacherData['firstname'], $teacherData['lastname']);
+                $teacherEmail = $teacherData['email'];
+                break;
+            }
+        }
+        $data['user_name'] = '((user_name))';
+        $data['user_firstname'] = '((user_firstname))';
+        $data['user_lastname'] = '((user_lastname))';
+        $data['teacher_name'] = $teacherName;
+        $data['teacher_email'] = $teacherEmail;
+        $data['course_title'] = $courseInfo['name'];
+        $data['course_link'] = Display::url($course_link, $course_link);       
 
         $content = str_replace(self::get_tags(), $data, $content);
         return $content;
@@ -54,7 +91,8 @@ class AnnouncementManager {
      * @param	int session id
      * @return	array html with the content and count of announcements or false otherwise
      */
-    public static function get_all_annoucement_by_course($course_info, $session_id = 0) {
+    public static function get_all_annoucement_by_course($course_info, $session_id = 0)
+    {
         $session_id = intval($session_id);
         $course_id = $course_info['real_id'];
 
@@ -89,7 +127,8 @@ class AnnouncementManager {
      * @param    int     ID of the element of the corresponding type
      * @return   bool    False on failure, True on success
      */
-    public static function change_visibility_announcement($_course, $id) {
+    public static function change_visibility_announcement($_course, $id)
+    {
         $session_id = api_get_session_id();
         $item_visibility = api_get_item_visibility($_course, TOOL_ANNOUNCEMENT, $id, $session_id);
         if ($item_visibility == '1') {
@@ -105,7 +144,8 @@ class AnnouncementManager {
      * @param array the course array
      * @param int 	the announcement id
      */
-    public static function delete_announcement($_course, $id) {
+    public static function delete_announcement($_course, $id)
+    {
         api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, 'delete', api_get_user_id());
     }
 
@@ -113,7 +153,8 @@ class AnnouncementManager {
      * Deletes all announcements by course
      * @param array the course array
      */
-    public static function delete_all_announcements($_course) {
+    public static function delete_all_announcements($_course)
+    {
         $announcements = self::get_all_annoucement_by_course($_course, api_get_session_id());
 
 
@@ -126,7 +167,8 @@ class AnnouncementManager {
      * Displays one specific announcement
      * @param $announcement_id, the id of the announcement you want to display
      */
-    public static function display_announcement($announcement_id) {
+    public static function display_announcement($announcement_id)
+    {
         if ($announcement_id != strval(intval($announcement_id))) {
             return false;
         } // potencial sql injection
@@ -244,7 +286,8 @@ class AnnouncementManager {
         }
     }
 
-    public static function get_last_announcement_order() {
+    public static function get_last_announcement_order()
+    {
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $course_id = api_get_course_int_id();
         $sql_max = "SELECT MAX(display_order) FROM $tbl_announcement WHERE c_id = $course_id ";
@@ -268,7 +311,8 @@ class AnnouncementManager {
      * @param string    Comment describing the attachment
      * @return int      false on failure, ID of the announcement on success
      */
-    public static function add_announcement($emailTitle, $newContent, $sent_to, $file = array(), $file_comment = null, $end_date = null) {
+    public static function add_announcement($emailTitle, $newContent, $sent_to, $file = array(), $file_comment = null, $end_date = null)
+    {
         global $_course;
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 
@@ -333,7 +377,8 @@ class AnnouncementManager {
       STORE ANNOUNCEMENT  GROUP ITEM
      */
 
-    public static function add_group_announcement($emailTitle, $newContent, $to, $to_users, $file = array(), $file_comment = '') {
+    public static function add_group_announcement($emailTitle, $newContent, $to, $to_users, $file = array(), $file_comment = '')
+    {
         global $_course;
 
         // database definitions
@@ -403,7 +448,8 @@ class AnnouncementManager {
      * @param string file comment
      *
      */
-    public static function edit_announcement($id, $emailTitle, $newContent, $to, $file = array(), $file_comment = '') {
+    public static function edit_announcement($id, $emailTitle, $newContent, $to, $file = array(), $file_comment = '')
+    {
         global $_course;
 
         $course_id = api_get_course_int_id();
@@ -463,7 +509,8 @@ class AnnouncementManager {
       MAIL FUNCTIONS
      */
 
-    public static function update_mail_sent($insert_id) {
+    public static function update_mail_sent($insert_id)
+    {
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
         if ($insert_id != strval(intval($insert_id))) {
             return false;
@@ -481,8 +528,8 @@ class AnnouncementManager {
      * @param	int user id
      * @return	array html with the content and count of announcements or false otherwise
      */
-    public static function get_all_annoucement_by_user_course($course_code, $user_id) {
-
+    public static function get_all_annoucement_by_user_course($course_code, $user_id)
+    {
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
 
@@ -531,8 +578,8 @@ class AnnouncementManager {
     /**
      * this function shows the form for sending a message to a specific group or user.
      */
-    public static function show_to_form($to_already_selected) {
-
+    public static function show_to_form($to_already_selected)
+    {
         $user_list = self::get_course_users();
         $group_list = self::get_course_groups();
 
@@ -569,7 +616,8 @@ class AnnouncementManager {
     /**
      * this function shows the form for sending a message to a specific group or user.
      */
-    public static function show_to_form_group($group_id) {
+    public static function show_to_form_group($group_id)
+    {
         echo "<table id=\"recipient_list\" style=\"display: none;\">";
         echo "<tr>";
         echo "<td>";
@@ -645,7 +693,8 @@ class AnnouncementManager {
     /**
      * this function shows the form for sending a message to a specific group or user.
      */
-    public static function construct_selected_select_form($group_list = null, $user_list = null, $to_already_selected) {
+    public static function construct_selected_select_form($group_list = null, $user_list = null, $to_already_selected)
+    {
         // we separate the $to_already_selected array (containing groups AND users into
         // two separate arrays
         $groupuser = array();
@@ -712,7 +761,8 @@ class AnnouncementManager {
      * @param type $annoucement_id
      * @return array
      */
-    public static function get_by_id($course_id, $annoucement_id) {
+    public static function get_by_id($course_id, $annoucement_id)
+    {
         $annoucement_id = intval($annoucement_id);
         $course_id = $course_id ? intval($course_id) : api_get_course_int_id();
 
@@ -738,7 +788,8 @@ class AnnouncementManager {
      * including users from linked courses
      * @todo deprecate this function, use CourseManager class
      */
-    public static function get_course_users() {
+    public static function get_course_users()
+    {
         //this would return only the users from real courses:
         $session_id = api_get_session_id();
         if ($session_id != 0) {
@@ -754,7 +805,8 @@ class AnnouncementManager {
      * this function gets all the groups of the course,
      * not including linked courses
      */
-    public static function get_course_groups() {
+    public static function get_course_groups()
+    {
         $session_id = api_get_session_id();
         if ($session_id != 0) {
             $new_group_list = CourseManager::get_group_list_of_course(api_get_course_id(), $session_id, 1);
@@ -773,7 +825,8 @@ class AnnouncementManager {
      * This tools loads all the users and all the groups who have received
      * a specific item (in this case an announcement item)
      */
-    public static function load_edit_users($tool, $id) {
+    public static function load_edit_users($tool, $id)
+    {
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $tool = Database::escape_string($tool);
         $id = Database::escape_string($id);
@@ -808,7 +861,8 @@ class AnnouncementManager {
      * returns the javascript for setting a filter
      * this goes into the $htmlHeadXtra[] array
      */
-    public static function user_group_filter_javascript() {
+    public static function user_group_filter_javascript()
+    {
         return "<script language=\"JavaScript\" type=\"text/JavaScript\">
 		<!--
 		function jumpMenu(targ,selObj,restore)
@@ -829,7 +883,8 @@ class AnnouncementManager {
      * setting the target people/groups
      * this goes into the $htmlHeadXtra[] array
      */
-    public static function to_javascript() {
+    public static function to_javascript()
+    {
         $www = api_get_path(WEB_PATH);
         /*
          * Do not allow this kind of behaviour. js minifieds should be manage by the template class or assetic or whatever see #4757 for more info
@@ -860,7 +915,8 @@ class AnnouncementManager {
      * 			containing all the id's of the groups (resp. users) who have received this message.
      * @author Patrick Cool <patrick.cool@>
      */
-    public static function sent_to_form($sent_to_array) {
+    public static function sent_to_form($sent_to_array)
+    {
         // we find all the names of the groups
         $group_names = self::get_course_groups();
 
@@ -931,7 +987,8 @@ class AnnouncementManager {
      * @param    array   Array of strings that define the type and id of each destination
      * @return   array   Array of groups and users (each an array of IDs)
      */
-    public static function separate_users_groups($to) {
+    public static function separate_users_groups($to)
+    {
         foreach ($to as $to_item) {
             list($type, $id) = explode(':', $to_item);
             switch ($type) {
@@ -960,7 +1017,8 @@ class AnnouncementManager {
      * @param    int     ID of the element of the corresponding type
      * @return   array   Array of users and groups to whom the element has been sent
      */
-    public static function sent_to($tool, $id) {
+    public static function sent_to($tool, $id)
+    {
         global $_course;
         global $tbl_item_property;
 
@@ -1003,7 +1061,8 @@ class AnnouncementManager {
      * @author Arthur Portugal
      * @version November 2009, dokeos 1.8.6.2
      */
-    public static function get_attachment($announcement_id) {
+    public static function get_attachment($announcement_id)
+    {
         $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $announcement_id = intval($announcement_id);
         $course_id = api_get_course_int_id();
@@ -1024,7 +1083,8 @@ class AnnouncementManager {
      * @param array  uploaded file $_FILES
      * @return int  -1 if failed, 0 if unknown (should not happen), 1 if success
      */
-    public static function add_announcement_attachment_file($announcement_id, $file_comment, $file) {
+    public static function add_announcement_attachment_file($announcement_id, $file_comment, $file)
+    {
         global $_course;
         $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $return = 0;
@@ -1068,7 +1128,8 @@ class AnnouncementManager {
      * @param string file comment
      * @return int
      */
-    public static function edit_announcement_attachment_file($id_attach, $file, $file_comment) {
+    public static function edit_announcement_attachment_file($id_attach, $file, $file_comment)
+    {
         global $_course;
         $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $return = 0;
@@ -1114,7 +1175,8 @@ class AnnouncementManager {
      * @param integer attachment file Id
      *
      */
-    public static function delete_announcement_attachment_file($id) {
+    public static function delete_announcement_attachment_file($id)
+    {
         $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $id = intval($id);
         $course_id = api_get_course_int_id();
@@ -1124,7 +1186,8 @@ class AnnouncementManager {
         //api_item_property_update($_course, 'announcement_attachment',  $id,'AnnouncementAttachmentDeleted', api_get_user_id());
     }
 
-    public static function send_email($annoucement_id) {
+    public static function send_email($annoucement_id)
+    {
         $email = AnnouncementEmail::create(null, $annoucement_id);
         $email->send();
     }

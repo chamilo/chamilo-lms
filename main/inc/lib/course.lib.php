@@ -1914,9 +1914,8 @@ class CourseManager
      * that real course.
      * @todo Remove globals
      */
-    public static function delete_course($code) {
-        global $_configuration;
-
+    public static function delete_course($code)
+    {
         $table_course                       = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_user                  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $table_course_class                 = Database::get_main_table(TABLE_MAIN_COURSE_CLASS);
@@ -1926,6 +1925,7 @@ class CourseManager
         $table_course_survey                = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY);
         $table_course_survey_question       = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
         $table_course_survey_question_option= Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
+        $table_course_rel_url               = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
         $table_stats_hotpots        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
         $table_stats_attempt        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -1938,7 +1938,6 @@ class CourseManager
         $table_stats_downloads      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
         $table_stats_links          = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LINKS);
         $table_stats_uploads        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_UPLOADS);
-
 
         $code = Database::escape_string($code);
         $sql = "SELECT * FROM $table_course WHERE code='".$code."'";
@@ -2034,6 +2033,10 @@ class CourseManager
         $sql = "DELETE FROM $table_session_course_user WHERE course_code='".$code."'";
         Database::query($sql);
 
+        // Delete from Course - URL
+        $sql = "DELETE FROM $table_course_rel_url WHERE course_code = '".$code."'";
+        Database::query($sql);
+
         $sql = 'SELECT survey_id FROM '.$table_course_survey.' WHERE course_code="'.$code.'"';
         $result_surveys = Database::query($sql);
         while($surveys = Database::fetch_array($result_surveys)) {
@@ -2045,6 +2048,7 @@ class CourseManager
             $sql = 'DELETE FROM '.$table_course_survey.' WHERE survey_id="'.$survey_id.'"';
             Database::query($sql);
         }
+
 
         // Delete the course from the stats tables
 
@@ -2071,8 +2075,7 @@ class CourseManager
         $sql = "DELETE FROM $table_stats_uploads WHERE upload_cours_id = '".$code."'";
         Database::query($sql);
 
-        global $_configuration;
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
             $url_id = 1;
             if (api_get_current_access_url_id() != -1) {

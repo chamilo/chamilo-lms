@@ -1672,7 +1672,14 @@ class CourseRestorer
 				Database::query($sql);
 				$new_lp_id = Database::insert_id();
 				if ($lp->visibility) {
-					$sql = "INSERT INTO $table_tool SET c_id = ".$this->destination_course_id." , name='".self::DBUTF8escapestring($lp->name)."', link='newscorm/lp_controller.php?action=view&lp_id=$new_lp_id', image='scormbuilder.gif', visibility='1', admin='0', address='squaregrey.gif'";
+					$sql = "INSERT INTO $table_tool SET
+					            c_id = ".$this->destination_course_id.",
+					            name = '".self::DBUTF8escapestring($lp->name)."',
+					            link = 'newscorm/lp_controller.php?action=view&lp_id=$new_lp_id&id_session=$session_id',
+					            image = 'scormbuilder.gif',
+					            visibility = '1',
+					            admin = '0',
+					            address = 'squaregrey.gif'";
 					Database::query($sql);
 				}
 

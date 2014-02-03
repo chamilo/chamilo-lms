@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AdditionalMailWasSentToSelectedUsers = "Additionally, a new announcement has been created and sent to selected users";
 $AgendaAdd = "Add event";
 $ShowAllEvents = "All events";
 $ShowCurrent = "Current month";

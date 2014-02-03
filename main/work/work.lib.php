@@ -214,11 +214,14 @@ function get_work_data_by_id($id)
 	$work_table	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$sql = "SELECT * FROM  $work_table WHERE id = $id AND c_id = $course_id";
 	$result = Database::query($sql);
-	$return = array();
+    $work = array();
 	if (Database::num_rows($result)) {
-		$return = Database::fetch_array($result, 'ASSOC');
+		$work = Database::fetch_array($result, 'ASSOC');
+        if (empty($work['title'])) {
+            $work['title'] = basename($work['url']);
+        }
 	}
-	return $return;
+	return $work;
 }
 
 /**

@@ -1557,6 +1557,7 @@ class CourseManager
 
         $table_session_course               = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $table_session_course_user          = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $table_course_rel_url               = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $table_course_survey                = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY);
         $table_course_survey_question       = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
         $table_course_survey_question_option= Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
@@ -1613,6 +1614,9 @@ class CourseManager
         $sql = "DELETE FROM $table_session_course WHERE c_id='".$courseId."'";
         Database::query($sql);
         $sql = "DELETE FROM $table_session_course_user WHERE c_id='".$courseId."'";
+        Database::query($sql);
+        // Delete from Course - URL
+        $sql = "DELETE FROM $table_course_rel_url WHERE course_code = '".$code."'";
         Database::query($sql);
 
         $sql = 'SELECT survey_id FROM '.$table_course_survey.' WHERE course_code="'.$code.'"';

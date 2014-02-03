@@ -233,9 +233,12 @@ class Statistics
                 $row[2] = $row[2];
             } else {
                 if (!empty($row[2])) {
-                    $row[2] = unserialize($row[2]);
+                    $originalData = $row[2];
+                    $row[2] = unserialize($originalData);
                     if (is_array($row[2]) && !empty($row[2])) {
                         $row[2] = implode_with_key(', ', $row[2]);
+                    } else {
+                        $row[2] = $originalData;
                     }
                 }
             }

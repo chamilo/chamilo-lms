@@ -695,13 +695,7 @@ class GlossaryManager
         $html .= '</body></html>';
         $course_code = api_get_course_id();
         $pdf         = new PDF();
-        //$pdf->set_custom_header($title);
-        /*$css_file = api_get_path(SYS_CODE_PATH).'css/print.css';
-        if (file_exists($css_file)) {
-            $css = @file_get_contents($css_file);
-        } else {
-            $css = '';
-        }*/
+        $css = null;
         $pdf->content_to_pdf($html, $css, get_lang('Glossary').'_'.$course_code, $course_code);
     }
 }

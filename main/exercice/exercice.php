@@ -940,7 +940,8 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
         if ($is_allowedToEdit) {
             $item = Display::tag(
                 'td',
-                '<img src="../img/hotpotatoes_s.png" alt="HotPotatoes" /> <a href="showinframes.php?file='.$path.'&cid='.api_get_course_id(
+                Display::return_icon('hotpotatoes_s.png').'
+                <a href="showinframes.php?file='.$path.'&cid='.api_get_course_id(
                 ).'&uid='.api_get_user_id().'"'.(!$active ? 'class="invisible"' : '').'>'.$title.'</a> '
             );
             $item .= Display::tag('td', '-');

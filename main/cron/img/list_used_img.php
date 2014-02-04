@@ -8,7 +8,7 @@
  */
 if (PHP_SAPI!='cli') { die('Run this script through the command line or comment this line in the code'); }
 require_once '../../inc/global.inc.php';
-$path = api_get_path(SYS_CODE_PATH).'img/';
+$path = api_get_path(SYS_IMG_PATH);
 ini_set('memory_limit','128M');
 ini_set('max_execution_time','240');
 /**
@@ -93,7 +93,7 @@ function get_all_php_files($base_path) {
         	if (in_array($ext,array('.php','html','.htm','.css'))) {
                   $files[] = $base_path.$item;
         	}
-        } 
+        }
     }
     $list = null;
     return $files;

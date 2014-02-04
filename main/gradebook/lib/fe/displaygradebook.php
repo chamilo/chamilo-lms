@@ -23,7 +23,7 @@ class DisplayGradebook
 			if ($page != 'statistics') {
 			    $header .= '<a href="'.Security::remove_XSS($_SESSION['gradebook_dest']).'?selectcat=' . $selectcat . '">'. Display::return_icon(('back.png'),get_lang('FolderView'),'',ICON_SIZE_MEDIUM).'</a>';
     			if ($evalobj->get_course_code() == null) {
-                    //Disabling code when course code is null see issue #2705
+                    // Disabling code when course code is null see issue #2705
     				//$header .= '<a href="gradebook_add_user.php?selecteval=' . $evalobj->get_id() . '"><img src="../img/add_user_big.gif" alt="' . get_lang('AddStudent') . '" align="absmiddle" /> ' . get_lang('AddStudent') . '</a>';
     			} elseif (!$evalobj->has_results()) {
     				$header .= '<a href="gradebook_add_result.php?selectcat=' . $selectcat . '&selecteval=' . $evalobj->get_id() . '">
@@ -105,7 +105,7 @@ class DisplayGradebook
                 $evalinfo .= '<br /><a href="gradebook_statistics.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.Display::return_icon(('statistics.png'),get_lang('ViewStatistics'),'',ICON_SIZE_MEDIUM).'</a>';
             }
         }
-        $evalinfo .= '</td><td><img style="float:right; position:relative;" src="../img/tutorial.gif"></td></table>';
+        $evalinfo .= '</td><td>'.Display::return_icon('tutorial.gif').'</td></table>';
 		echo $evalinfo;
 		echo $header;
 	}
@@ -136,15 +136,20 @@ class DisplayGradebook
 		}
 		$header .= '</td></select></form>';
 		if (!$catobj->get_id() == '0') {
-			$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?selectcat=' . $catobj->get_parent_id() . '"><img src="../img/gradebook.gif" border="0" alt="'.get_lang('Up').'" /></a></td>';
+			$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?selectcat=' . $catobj->get_parent_id() . '">
+			'.Display::return_icon('gradebook.gif', get_lang('Up')).'</a></td>';
 		}
 		$header .= '<td style="vertical-align: top;">'.$simple_search_form->toHtml().'</td>';
-		$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?exportpdf=&offset='.Security::remove_XSS($_GET['offset']).'&search=' . Security::remove_XSS($_GET['search']).'&selectcat=' . $catobj->get_id() . '"><img src=../img/icons/32/pdf.png alt=' . get_lang('ExportPDF') . '/> ' . get_lang('ExportPDF') . '</a>';
-		$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?print=&selectcat=' . $catobj->get_id() . '" target="_blank"><img src="../img/icons/32/printer.png" alt=' . get_lang('Print') . '/> ' . get_lang('Print') . '</a>';
+		$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?exportpdf=&offset='.Security::remove_XSS($_GET['offset']).'&search=' . Security::remove_XSS($_GET['search']).'&selectcat=' . $catobj->get_id() . '">
+		    '.Display::return_icon('pdf.png', get_lang('ExportPDF')).' '.get_lang('ExportPDF').'</a>';
+		$header .= '<td style="vertical-align: top;"><a href="' . api_get_self() . '?print=&selectcat=' . $catobj->get_id() . '" target="_blank">
+		    '.Display::return_icon('printer.png', get_lang('Print')).' '. get_lang('Print') . '</a>';
 		$header .= '</td></tr></table>';
 		if (!$catobj->get_id() == '0') {
-			$header .= '<table border="0" cellpadding="5"><tr><td><form name="itemfilter" method="post" action="' . api_get_self() . '?selectcat=' . $catobj->get_id() . '"><input type="checkbox" name="showeval" onclick="document.itemfilter.submit()" ' . (($showeval == '1') ? 'checked' : '') . '>Show Evaluations &nbsp;';
-			$header .= '<input type="checkbox" name="showlink" onclick="document.itemfilter.submit()" ' . (($showlink == '1') ? 'checked' : '') . '>'.get_lang('ShowLinks').'</form></td></tr></table>';
+			$header .= '<table border="0" cellpadding="5"><tr><td><form name="itemfilter" method="post" action="' . api_get_self() . '?selectcat=' . $catobj->get_id() . '">
+			    <input type="checkbox" name="showeval" onclick="document.itemfilter.submit()" ' . (($showeval == '1') ? 'checked' : '') . '>Show Evaluations &nbsp;';
+			$header .= '<input type="checkbox" name="showlink" onclick="document.itemfilter.submit()" ' . (($showlink == '1') ? 'checked' : '') . '>'.get_lang('ShowLinks').'</form>
+			</td></tr></table>';
 		}
 		if (isset ($_GET['search'])) {
 			$header .= '<b>'.get_lang('SearchResults').' :</b>';
@@ -269,7 +274,8 @@ class DisplayGradebook
 					//$header .= '<td style="vertical-align: top;"><a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&selectcat=' . $catobj->get_id() . '"><img src="../img/view_list.gif" alt="' . get_lang('FlatView') . '" /> ' . get_lang('FlatView') . '</a>';
 				}
 			} else {
-				$header .= '<td style="vertical-align: top;"><a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&exportpdf=&selectcat=' . $catobj->get_id() . '" target="_blank"><img src="../img/icons/32/pdf.png" alt="' . get_lang('ExportPDF') . '" /> ' . get_lang('ExportPDF') . '</a>';
+				$header .= '<td style="vertical-align: top;"><a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&exportpdf=&selectcat=' . $catobj->get_id() . '" target="_blank">
+				'.Display::return_icon('pdf.png', get_lang('ExportPDF')).' ' . get_lang('ExportPDF') . '</a>';
 			}
 			$header .= '</td></tr>';
 		}
@@ -283,8 +289,6 @@ class DisplayGradebook
 		$course_code = $my_category['course_code'];
         $courseInfo = api_get_course_info($course_code);
 		$status_user = api_get_status_of_user_in_course($user_id, $courseInfo['real_id']);
-
-		//$header .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat=0"><img src="../img/folder_new.gif" alt="' . get_lang('AddGradebook') . '" /></a></td>';
 
 		if (api_is_allowed_to_edit(null, true)) {
 			if ($selectcat == '0') {
@@ -458,7 +462,7 @@ class DisplayGradebook
 				}
 			} else {
 				$header .= '<td style="vertical-align: top;"><a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&exportpdf=&selectcat=' . $catobj->get_id() . '" target="_blank">
-							<img src="../img/icons/32/pdf.png" alt="' . get_lang('ExportPDF') . '" /> ' . get_lang('ExportPDF') . '</a>';
+							'.Display::return_icon('pdf.png', get_lang('ExportPDF')).' '. get_lang('ExportPDF') . '</a>';
 			}
 			$header .= '</td></tr>';
             $header.='</table></div>';

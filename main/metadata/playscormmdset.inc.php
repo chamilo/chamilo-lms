@@ -1,5 +1,5 @@
-<?php 
-/** 
+<?php
+/**
  * Chamilo metadata/playscormmdset.inc.php
  * 2005/11/16
  * Copyright (C) 2005 rene.haentjens@UGent.be -  see metadata/md_funcs.php
@@ -170,7 +170,6 @@ else
     <title>Scorm package
     </title>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>">
-    <link rel="stylesheet" href="<?php echo api_get_path(WEB_CODE_PATH); ?>css/default.css" type="text/css" media="screen,projection" />
     <style type="text/css" media="screen, projection">
     /*<![CDATA[*/
     @import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/default.css";

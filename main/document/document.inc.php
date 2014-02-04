@@ -895,7 +895,9 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
                     $modify_icons .= '&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq(
                     ).'&amp;curdirpath='.$curdirpath.'&amp;selectcat='.Security::remove_XSS(
                         $_GET['selectcat']
-                    ).'&amp;set_certificate='.$id.$req_gid.'&amp;'.$sort_params.'"><img src="../img/'.$visibility_icon_certificate.'.png" border="0" title="'.$certificate.'" alt="" /></a>';
+                    ).'&amp;set_certificate='.$id.$req_gid.'&amp;'.$sort_params.'">
+                        '.Display::return_icon($visibility_icon_certificate.'.png', $certificate).'
+                    </a>';
                     if ($is_preview) {
                         $modify_icons .= '&nbsp;<a target="_blank"  href="'.api_get_self().'?'.api_get_cidreq(
                         ).'&amp;curdirpath='.$curdirpath.'&amp;set_preview='.$id.$req_gid.'&amp;'.$sort_params.'" >'.

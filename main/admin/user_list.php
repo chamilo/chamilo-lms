@@ -64,8 +64,6 @@ function active_user(element_div) {
 	if (confirm("'.get_lang('AreYouSureToEditTheUserStatus', '').'")) {
 		 $.ajax({
 			contentType: "application/x-www-form-urlencoded",
-			beforeSend: function(objeto) {
-				$(ident).attr("src","'.api_get_path(WEB_IMG_PATH).'loading1.gif'.'"); }, //candy eye stuff
 			type: "GET",
 			url: "'.api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=active_user",
 			data: "user_id="+user_id[1]+"&status="+status,

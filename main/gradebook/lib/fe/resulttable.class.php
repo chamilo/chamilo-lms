@@ -81,7 +81,7 @@ class ResultTable extends SortableTable
 
 		// determine sorting type
 		$col_adjust = $this->iscourse == '1' ? 1 : 0;
-        
+
 		switch ($this->column) {
 			// first name or last name
 			case (0 + $col_adjust):
@@ -101,23 +101,23 @@ class ResultTable extends SortableTable
 				break;
             //Score
 			case (2 + $col_adjust):
-				$sorting = ResultsDataGenerator :: RDG_SORT_SCORE;                
+				$sorting = ResultsDataGenerator :: RDG_SORT_SCORE;
 				break;
 			case (3 + $col_adjust):
 				$sorting = ResultsDataGenerator :: RDG_SORT_MASK;
 				break;
 		}
-        
+
 		if ($this->direction == 'DESC') {
 			$sorting |= ResultsDataGenerator :: RDG_SORT_DESC;
 		} else {
 			$sorting |= ResultsDataGenerator :: RDG_SORT_ASC;
 		}
-        
+
 		$data_array = $this->datagen->get_data($sorting, $from, $this->per_page);
-        
+
 		// generate the data to display
-		$sortable_data = array();		
+		$sortable_data = array();
 		foreach ($data_array as $item) {
 			$row = array ();
 			if ($this->iscourse == '1') {
@@ -130,9 +130,9 @@ class ResultTable extends SortableTable
 				$row[] = $item['lastname'];
 				$row[] = $item['firstname'];
 			}
-            
+
 			$row[] =  Display::bar_progress($item['percentage_score'], false, $item['score'], true);
-            //$row[] =  Display::bar_progress($item['percentage_score'], true);                        
+            //$row[] =  Display::bar_progress($item['percentage_score'], true);
 			if ($scoredisplay->is_custom()) {
 				$row[] = $item['display'];
 			}
@@ -144,8 +144,8 @@ class ResultTable extends SortableTable
 
 		return $sortable_data;
 	}
-    
-	private function build_edit_column ($item) { 
+
+	private function build_edit_column ($item) {
 		$status=CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
 		$locked_status = $this->evaluation->get_locked();
 		if (api_is_allowed_to_edit(null, true) && $locked_status == 0) {//api_is_course_admin()
@@ -153,19 +153,19 @@ class ResultTable extends SortableTable
 			$edit_column .= ' <a href="' . api_get_self() . '?delete_mark=' . $item['result_id'] . '&selecteval=' . $this->evaluation->get_id() . '">'.Display::return_icon('delete.png', get_lang('Delete'),'','22').'</a>';
 		}
 		if ($this->evaluation->get_course_code() == null) {
-			$edit_column.= '&nbsp;<a href="' . api_get_self() . '?resultdelete=' . $item['result_id'] . '&selecteval=' . $this->evaluation->get_id() . '" onclick="return confirmationuser();"><img src="../img/delete.gif" border="0" title="' . get_lang('Delete') . '" alt="" /></a>';
-		    $edit_column.= '&nbsp;<a href="user_stats.php?userid=' . $item['id'] . '&selecteval=' . $this->evaluation->get_id() . '"><img src="../img/statistics.gif" width="17px" border="0" title="' . get_lang('Statistics') . '" alt="" /></a>';
+			$edit_column.= '&nbsp;<a href="' . api_get_self() . '?resultdelete=' . $item['result_id'] . '&selecteval=' . $this->evaluation->get_id() . '" onclick="return confirmationuser();">
+			'.Display::return_icon('delete.png', get_lang('Delete')).' </a>';
+		    $edit_column.= '&nbsp;<a href="user_stats.php?userid=' . $item['id'] . '&selecteval=' . $this->evaluation->get_id() . '">
+		    '.Display::return_icon('statistics.gif', get_lang('Statistics')).'</a>';
 		}
-		// Evaluation's origin is a link        
+		// Evaluation's origin is a link
 		if ($this->evaluation->get_category_id() < 0) {
 			$link = LinkFactory :: get_evaluation_link ($this->evaluation->get_id());
 
 			$doc_url = $link->get_view_url($item['id']);
-            
+
 			if ($doc_url != null) {
-				$edit_column .= '&nbsp;<a href="'. $doc_url . '" target="_blank">'
-								.'<img src="'. api_get_path(WEB_CODE_PATH) . 'img/link.gif" border="0" title="' . get_lang('OpenDocument') . '" alt="" />'
-								.'</a>';
+				$edit_column .= '&nbsp;<a href="'. $doc_url . '" target="_blank">'.Display::return_icon('link.gif', get_lang('OpenDocument')).'</a>';
 			}
 		}
 		return $edit_column;

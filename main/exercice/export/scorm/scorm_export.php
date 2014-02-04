@@ -36,7 +36,7 @@ class ScormAssessmentItem
         $this->question = $question;
         //$this->answer = new Answer($question->id);
         $this->question->setAnswer();
-        
+
         $this->questionIdent = "QST_" . $question->id ;
         $this->standalone = $standalone;
         //echo "<pre>".print_r($this,1)."</pre>";
@@ -68,7 +68,7 @@ class ScormAssessmentItem
      	if($this->standalone){return '</html>';}
      	return '';
      }
-     
+
 	/**
 	 * Start document header
 	 */
@@ -76,7 +76,7 @@ class ScormAssessmentItem
 		if($this->standalone){return '<head>'. "\n";}
 		return '';
 	}
-    
+
 	/**
 	 * Print CSS inclusion
 	 */
@@ -85,14 +85,12 @@ class ScormAssessmentItem
 		if ($this->standalone) {
 			$css = '<style type="text/css" media="screen, projection">'."\n";
 			$css .= '/*<![CDATA[*/'."\n";
-			//$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/default.css";'."\n";			
 			$css .= '/*]]>*/'."\n";
 			$css .= '</style>'."\n";
 			$css .= '<style type="text/css" media="print">'."\n";
 			$css .= '/*<![CDATA[*/'."\n";
-			//$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/print.css";'."\n";
 			$css .= '/*]]>*/'."\n";
-			$css .= '</style>'."\n";            
+			$css .= '</style>'."\n";
 		}
 		return $css;
 	}
@@ -281,21 +279,21 @@ class ScormSection
      function end_page() {
        return '</html>';
      }
-     
+
 	/**
 	 * Start document header
 	 */
 	function start_header() {
 		return '<head>'. "\n";
 	}
-    
+
 	/**
 	 * Print CSS inclusion
 	 */
 	function css() {
 		$css = '<style type="text/css" media="screen, projection">'."\n";
 		$css .= '/*<![CDATA[*/'."\n";
-		//$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/default.css";'."\n";		
+		//$css .= '@import "'.api_get_path(WEB_PATH).'main/css/public_admin/default.css";'."\n";
 		$css .= '/*]]>*/'."\n";
 		$css .= '</style>'."\n";
 		$css .= '<style type="text/css" media="print">'."\n";
@@ -312,7 +310,7 @@ class ScormSection
 	function end_header() {
 		return '</head>'. "\n";
 	}
-    
+
     /**
      * Start the itemBody
      *
@@ -320,7 +318,7 @@ class ScormSection
     function start_js() {
        return '<script type="text/javascript" language="javascript">'. "\n";
     }
-    
+
 	/**
 	 * Common JS functions
 	 */
@@ -495,7 +493,7 @@ class ScormSection
     function end_js() {
        return '</script>'. "\n";
     }
-    
+
     /**
      * Start the itemBody
      *

@@ -291,7 +291,7 @@ class IndexController extends CommonController
     }
 
     /**
-     * @todo move all this getDocument* Actions into another controller
+     * @todo move all this getDocument* actions into another controller
      * @param Application $app
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse|void
      */

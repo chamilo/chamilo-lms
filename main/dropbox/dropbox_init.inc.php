@@ -361,7 +361,7 @@ if ($view == 'sent' OR empty($view)) {
 
 if (isset($origin) && $origin == 'learnpath') {
     // if we come from the learning path we have to include the stylesheet and the required javascripts manually.
-    echo '<link rel="stylesheet" type="text/css" href="', api_get_path(WEB_CODE_PATH), 'css/default.css">';
+    //echo '<link rel="stylesheet" type="text/css" href="', api_get_path(WEB_CODE_PATH), 'css/default.css">';
     echo $javascript;
 } else {
     Display::display_header($nameTools, 'Dropbox');

@@ -100,7 +100,7 @@ $(function() {
 			$(".row_odd  td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#F9F9F9",   "border-left":"none","border-right":"none"});
 			$(".row_even td.checkboxes_col_"+calendar_id).css({"opacity":"1","background-color":"#FFF", 	 "border-left":"none","border-right":"none"});
 			$(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",true);
-			$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/lock.gif");
+			$(this).attr("src","'.api_get_path(WEB_IMG_PATH).'lock.gif");
 			$(this).attr("title","'.get_lang('DateUnLock').'");
 			$(this).attr("alt","'.get_lang('DateUnLock').'");
 			$(this).attr("class","img_lock");
@@ -135,9 +135,7 @@ $(function() {
 			$(".checkboxes_col_"+calendar_id).find(".switch").each(function(index) {
                 $(this).removeClass("disabled");
             });
-
-
-			$(this).attr("src","'.api_get_path(WEB_CODE_PATH).'img/unlock.gif");
+			$(this).attr("src","'.api_get_path(WEB_IMG_PATH).'unlock.gif");
 			$(this).attr("title","'.get_lang('DateLock').'");
 			$(this).attr("alt","'.get_lang('DateLock').'");
 			$(this).attr("class","img_unlock");

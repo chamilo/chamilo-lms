@@ -90,8 +90,6 @@ if (!empty($group_id)) {
     Display::display_header($nameTools, 'Agenda');
 } elseif (empty($origin) or $origin != 'learnpath') {
     Display::display_header($nameTools, 'Agenda');
-} else {
-    echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"".api_get_path(WEB_CODE_PATH)."css/default.css\"/>";
 }
 
 /*

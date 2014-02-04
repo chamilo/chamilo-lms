@@ -81,9 +81,6 @@ $htmlHeadXtra[] = '<script>
 
 		$.ajax({
 			contentType: "application/x-www-form-urlencoded",
-			beforeSend: function(objeto) {
-				$("#id_content_message").html("<div class=\"normal-message\"><img src=\"' . api_get_path(WEB_PATH) . 'main/img/loading1.gif\" /></div>");
-			},
 			type: "POST",
 			url: "../admin/languages.php",
 			data: "id="+link_id+"&visibility="+my_visibility+"&sent_http_request=1",

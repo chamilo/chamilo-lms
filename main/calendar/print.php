@@ -32,11 +32,6 @@ $result			= Database::query($sql);
 <html>
 <head>
 <title><?php echo get_lang('Print'); ?></title>
-<style type="text/css" media="screen, projection">
-/*<![CDATA[*/
-@import "../css/<?php echo api_get_setting('stylesheets'); ?>/default.css";
-/*]]>*/
-</style>
 </head>
 <body style="margin: 15px; padding: 0px;">
 

@@ -498,7 +498,7 @@ if ($slide_id != 'all') {
 			echo '<tr>';
 			echo '<td align="center">';
 			echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$row['id'].'&origin=slideshow&amp;origin_opt='.$edit_slide_id.'&amp;">
-			      <img src="../img/edit.gif" border="0" title="'.get_lang('Modify').'" alt="'.get_lang('Modify').'" /></a><br />';
+			      '.Display::return_icon('edit.gif', get_lang('Modify')).'</a><br />';
 			$aux = explode('.', htmlspecialchars($image_files_only[$slide]));
 			$ext = $aux[count($aux) - 1];
 			echo $image_files_only[$slide].' <br />';

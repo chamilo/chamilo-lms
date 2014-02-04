@@ -496,7 +496,7 @@ if ($modifyAnswers) {
             "#F7BDE2");
     }
 
-    Display::tag('h3', get_lang('Question') . ": " . $questionName . ' <img src="../img/info3.gif" title="' . strip_tags(get_lang('HotspotChoose')) . '" alt="' . strip_tags(get_lang('HotspotChoose')) . '" />');
+    Display::tag('h3', get_lang('Question') . ": " . $questionName.' '.Display::return_icon('info3.gif', get_lang('HotspotChoose')));
     if (!empty($msgErr)) {
         Display::display_normal_message($msgErr); //main API
     }

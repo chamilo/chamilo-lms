@@ -44,7 +44,7 @@ return array(
 	'french' =>           array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
 	'frisian' =>          array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
 	'friulian' =>         array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
-    'galician' =>         array('format' => 'title last_name, first_name',  'sort_by' => 'last_name'),
+    'galician' =>         array('format' => 'title last_name first_name',  'sort_by' => 'last_name'),
 	'georgian' =>         array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
 	'german' =>           array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),
 	'greek' =>            array('format' => 'title first_name last_name',  'sort_by' => 'first_name'),

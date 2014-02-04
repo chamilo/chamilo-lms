@@ -25,12 +25,14 @@ class UserGroup extends Model
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_USERGROUP);
+
         $this->usergroup_rel_user_table = Database::get_main_table(TABLE_USERGROUP_REL_USER);
         $this->usergroup_rel_course_table = Database::get_main_table(TABLE_USERGROUP_REL_COURSE);
         $this->usergroup_rel_session_table = Database::get_main_table(TABLE_USERGROUP_REL_SESSION);
         $this->access_url_rel_usergroup = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USERGROUP);
-
         $this->table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $this->table_user = Database::get_main_table(TABLE_MAIN_USER);
+
         global $_configuration;
         if (isset($_configuration['enable_multiple_url_support_for_classes'])) {
             $this->useMultipleUrl = $_configuration['enable_multiple_url_support_for_classes'];

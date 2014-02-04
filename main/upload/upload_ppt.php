@@ -94,7 +94,7 @@ $form->addElement('html', Display::return_message($message, 'info', false));
 
 // build the form
 $div_upload_limit = get_lang('UploadMaxSize').' : '.ini_get('post_max_size');
-$form->addElement('file', 'user_file', array('<img src="../img/powerpoint_big.gif" />', $div_upload_limit));
+$form->addElement('file', 'user_file', array(Display::return_icon('powerpoint_big.gif'), $div_upload_limit));
 $form->addElement('checkbox', 'take_slide_name', '', get_lang('TakeSlideName'));
 if (api_get_setting('search_enabled') == 'true') {
     require_once(api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php');

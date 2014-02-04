@@ -86,8 +86,10 @@ if (!$export_to_csv) {
 	echo '<div class="actions" style ="font-size:10pt;">';
 	if ($global) {
 
-        echo '<div style="float:right"> <a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'"><img align="absbottom" src="../img/csv.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>' .
-                '<a href="javascript: void(0);" onclick="javascript: window.print()"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a></div>';
+        echo '<div style="float:right"> <a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'">
+            '.Display::return_icon('csv.gif', get_lang('ExportAsCSV')).' &nbsp;'.get_lang('ExportAsCSV').'</a>' .
+                '<a href="javascript: void(0);" onclick="javascript: window.print()">
+                '.Display::return_icon('printmgr.gif', get_lang('Print')).' </a></div>';
 
 		$menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher">'.get_lang('TeacherInterface').'</a>';
         if (api_is_platform_admin()) {
@@ -111,7 +113,8 @@ if (!$export_to_csv) {
 		     <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>&nbsp;|&nbsp';
        echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking').'</a>';
 		echo ' | '.get_lang('ExamTracking').'';
-         echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsXLS').'</a><br /><br />';
+         echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'">
+         '.Display::return_icon('excel.gif', get_lang('ExportAsXLS')).' </a><br /><br />';
 
 	}
     echo '</div>';

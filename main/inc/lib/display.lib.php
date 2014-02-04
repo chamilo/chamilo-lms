@@ -787,7 +787,6 @@ class Display
 
         $image      = trim($image);
         $theme      = 'css/'.api_get_visual_theme().'/icons/';
-        $icon       = '';
         $size_extra = '';
 
         if (isset($size)) {
@@ -797,7 +796,7 @@ class Display
             $size = ICON_SIZE_SMALL;
         }
 
-        //Checking the theme icons folder example: main/css/chamilo/icons/XXX
+        // Checking the theme icons folder example: main/css/chamilo/icons/XXX
         if (is_file($code_path.$theme.$size_extra.$image)) {
             $icon = $w_code_path.$theme.$size_extra.$image;
         } elseif (is_file($code_path.'img/icons/'.$size_extra.$image)) {
@@ -807,6 +806,7 @@ class Display
             //Checking the img/ folder
             $icon = $w_code_path.'img/'.$image;
         }
+
         $icon = api_get_cdn_path($icon);
         if ($return_only_path) {
             return $icon;

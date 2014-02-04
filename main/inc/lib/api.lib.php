@@ -246,6 +246,7 @@ define('SYS_CODE_PATH', 'SYS_CODE_PATH');
 define('SYS_CSS_PATH', 'SYS_CSS_PATH');
 define('SYS_LANG_PATH', 'SYS_LANG_PATH');
 define('WEB_IMG_PATH', 'WEB_IMG_PATH');
+define('SYS_IMG_PATH', 'SYS_IMG_PATH');
 define('WEB_CSS_PATH', 'WEB_CSS_PATH');
 define('SYS_PLUGIN_PATH', 'SYS_PLUGIN_PATH');
 define('PLUGIN_PATH', 'SYS_PLUGIN_PATH'); // deprecated ?
@@ -523,6 +524,8 @@ define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
  * api_get_path(WEB_PLUGIN_PATH)                http://www.mychamilo.org/chamilo/plugin/
  * api_get_path(WEB_ARCHIVE_PATH)               http://www.mychamilo.org/chamilo/archive/
  * api_get_path(WEB_IMG_PATH)                   http://www.mychamilo.org/chamilo/main/img/
+ * api_get_path(SYS_IMG_PATH)                   /var/www/chamilo/web/ChamiloLMS/img/
+ *
  * api_get_path(WEB_CSS_PATH)                   http://www.mychamilo.org/chamilo/main/css/
  * api_get_path(WEB_LIBRARY_PATH)               http://www.mychamilo.org/chamilo/main/inc/lib/
  * api_get_path(WEB_LIBRARY_JS_PATH)            http://www.mychamilo.org/chamilo/web/ChamiloLMS/javascript
@@ -555,10 +558,11 @@ function api_get_path($path_type, $path = null) {
         WEB_DATA_COURSE_PATH    => 'courses/',
         WEB_DATA_PATH           => '/',
         SYS_COURSE_PATH         => 'data/',
-        SYS_CSS_PATH            => 'css/',
+        SYS_CSS_PATH            => 'web/ChamiloLMS/css/',
         SYS_LANG_PATH           => 'lang/',
         WEB_IMG_PATH            => 'img/',
-        WEB_CSS_PATH            => 'css/',
+        SYS_IMG_PATH            => 'img/',
+        WEB_CSS_PATH            => 'web/ChamiloLMS/css/',
         SYS_PLUGIN_PATH         => 'plugin/',
         WEB_PLUGIN_PATH         => 'plugin/',
         WEB_ARCHIVE_PATH        => 'temp/',
@@ -672,12 +676,12 @@ function api_get_path($path_type, $path = null) {
         $paths[SYS_ARCHIVE_PATH]        = $app['sys_temp_path'];
         $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
         $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
-        $paths[SYS_CSS_PATH]            = $paths[SYS_CODE_PATH].$paths[SYS_CSS_PATH];
+        $paths[SYS_CSS_PATH]            = $paths[SYS_PATH].$paths[SYS_CSS_PATH];
+        $paths[WEB_CSS_PATH]            = $paths[WEB_PATH].$paths[WEB_CSS_PATH];
+        $paths[WEB_IMG_PATH]            = $paths[WEB_PATH].$paths[WEB_IMG_PATH];
+        $paths[SYS_IMG_PATH]            = $paths[SYS_PATH].$paths[SYS_IMG_PATH];
 
-        $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
-        $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
         $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
-        //$paths[WEB_LIBRARY_JS_PATH]     = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_JS_PATH];
         $paths[WEB_LIBRARY_JS_PATH]     = $paths[WEB_PATH].$paths[WEB_LIBRARY_JS_PATH];
         $paths[WEB_AJAX_PATH]           = $paths[WEB_PUBLIC_PATH].'main/'.$paths[WEB_AJAX_PATH];
         $paths[WEB_PLUGIN_PATH]         = $paths[WEB_PATH].$paths[WEB_PLUGIN_PATH];
@@ -3639,7 +3643,7 @@ function api_get_visual_theme() {
  * Note: Directory names (names of themes) in the file system should contain ASCII-characters only.
  */
 function api_get_themes() {
-    $cssdir = api_get_path(SYS_PATH).'main/css/';
+    $cssdir = api_get_path(SYS_CSS_PATH);
     $list_dir = array();
     $list_name = array();
 

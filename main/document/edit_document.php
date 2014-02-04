@@ -294,9 +294,9 @@ if ($is_allowed_to_edit) {
 
                         if (!is_file($filepath.'css/frames.css')) {
                             $platform_theme = api_get_setting('stylesheets');
-                            if (file_exists(api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css')) {
+                            if (file_exists(api_get_path(SYS_CSS_PATH).'themes/'.$platform_theme.'/frames.css')) {
                                 copy(
-                                    api_get_path(SYS_CODE_PATH).'css/'.$platform_theme.'/frames.css',
+                                    api_get_path(SYS_CSS_PATH).'themes/'.$platform_theme.'/frames.css',
                                     $filepath.'css/frames.css'
                                 );
                                 $doc_id = FileManager::add_document(

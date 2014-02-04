@@ -397,7 +397,7 @@ class Template
 
         // Loads only 1 css file
         if ($this->app['assetic.enabled']) {
-            $css[] = api_get_path(WEB_PUBLIC_PATH).'css/'.$this->theme.'/style.css';
+            $css[] = api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/style.css';
         } else {
             // Bootstrap
             $css[] = api_get_cdn_path(api_get_path(WEB_LIBRARY_JS_PATH).'bootstrap/css/bootstrap.css');
@@ -408,7 +408,7 @@ class Template
             $css[] = api_get_cdn_path($cssPath.'base.css');
 
             // Default theme CSS.
-            $css[] = api_get_cdn_path($cssPath.$this->theme.'/default.css');
+            $css[] = api_get_cdn_path($cssPath.'themes/'.$this->theme.'/default.css');
 
             // Extra CSS files.
             if ($this->show_learnpath) {
@@ -459,7 +459,7 @@ class Template
         if (!$disable_js_and_css_files) {
             $this->assign('css_file_to_string', $css_file_to_string);
 
-            $style_print = api_get_css(api_get_cdn_path($cssPath.$this->theme.'/print.css'), 'print');
+            $style_print = api_get_css(api_get_cdn_path($cssPath.'themes/'.$this->theme.'/print.css'), 'print');
             $this->assign('css_style_print', $style_print);
         }
     }
@@ -1086,7 +1086,7 @@ class Template
     {
         $_course = api_get_course_info();
         $html = '';
-        $logo = api_get_path(SYS_CODE_PATH).'css/'.$theme.'/images/header-logo.png';
+        $logo = api_get_path(SYS_CSS_PATH).'themes/'.$theme.'/images/header-logo.png';
 
         $site_name = api_get_setting('siteName');
         if (file_exists($logo)) {

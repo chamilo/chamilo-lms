@@ -29,8 +29,6 @@ header('Content-Type: text/html; charset='. api_get_system_encoding());
 <title>Calendar</title>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>">
 <style type="text/css">
-/*<![CDATA[*/
-@import "<?php echo api_get_path(WEB_CODE_PATH); ?>css/<?php echo api_get_setting('stylesheets'); ?>/default.css";
 table.calendar {
 	width: 100%;
 	font-size: 12px;
@@ -92,7 +90,6 @@ table.calendar .monthyear a:hover
 	/*color: #ff0000;*/
 	/*background-color: #ffff00;*/
 }
-/*]]>*/
 </style>
 <script type="text/javascript">
 /* <![CDATA[ */

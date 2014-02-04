@@ -69,7 +69,6 @@ if ($app['assetic.enabled']) {
     $app['assetic.input.path_to_css'] = array(
         $jsFolder.'bootstrap/css/bootstrap.css',
         $css_path.'base.css',
-        $css_path.'base_chamilo.css',
         $css_path.$app['app.theme'].'/default.css',
         $css_path.'responsive.css',
         $css_path.$app['app.theme'].'/learnpath.css',

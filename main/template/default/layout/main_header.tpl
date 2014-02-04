@@ -17,7 +17,6 @@
         </ul>
     </div>
     <div id="wrapper">
-
         {# Bug and help notifications #}
         {% if 0 %}
         <ul id="navigation" class="notification-panel">
@@ -47,7 +46,6 @@
         {% endif %}
 
         {% block main_div_container %}
-
             <div id="main" class="container {{ classMain }}">
         {% endblock main_div_container %}
 
@@ -55,10 +53,9 @@
                 <div class="row">
                     <div id="header_left" class="col-md-4">
                         {# logo #}
-
                         <div id="logo">
                             <a href="{{ _p.web }}">
-                                <img title="{{ "siteName" | get_setting }}" src="{{ _p.web_css }}/{{ app.theme }}/images/header-logo.png" />
+                                <img title="{{ "siteName" | get_setting }}" src="{{ _p.web_css }}themes/{{ app.theme }}/images/header-logo.png" />
                             </a>
                         </div>
 

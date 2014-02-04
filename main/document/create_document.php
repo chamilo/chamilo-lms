@@ -26,7 +26,7 @@ var hide_bar = function() {
     $("#template_col").hide();
     $("#doc_form").removeClass("span9");
     $("#doc_form").addClass("span11");
-    $("#hide_bar_template").css({"background-image" : \'url("../img/hide2.png")\'})
+    //$("#hide_bar_template").css({"background-image" : \'url("../img/hide2.png")\'})
 }
 
 $(document).ready(function() {
@@ -41,7 +41,7 @@ $(document).ready(function() {
             $("#template_col").show();
             $("#doc_form").removeClass("span11");
             $("#doc_form").addClass("span9");
-            $(this).css("background-image", \'url("../img/hide0.png")\');
+            //$(this).css("background-image", \'url("../img/hide0.png")\');
         }
     );
 });
@@ -478,7 +478,7 @@ if ($form->validate()) {
         if (!is_file($filepath.'css/frames.css')) {
             // Make a copy of the current css for the new document
             copy(
-                api_get_path(SYS_CODE_PATH).'css/'.api_get_setting('stylesheets').'/frames.css',
+                api_get_path(SYS_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/frames.css',
                 $filepath.'css/frames.css'
             );
             $doc_id = FileManager::add_document(

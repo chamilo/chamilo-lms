@@ -189,8 +189,6 @@ function handle_plugins()
 */
 function handle_stylesheets()
 {
-    global $_configuration;
-
     // Current style.
     $currentStyle = api_get_setting('stylesheets');
 
@@ -214,13 +212,12 @@ function handle_stylesheets()
 
     $form->addRule('new_stylesheet', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
     $form->addRule('new_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
-
     $form->addElement('style_submit_button', 'stylesheet_upload', get_lang('Upload'), array('class'=>'save'));
 
     $show_upload_form = false;
 
-    if (!is_writable(api_get_path(SYS_CODE_PATH).'css/')) {
-        Display::display_error_message(api_get_path(SYS_CODE_PATH).'css/'.get_lang('IsNotWritable'));
+    if (!is_writable(api_get_path(SYS_CSS_PATH))) {
+        Display::display_error_message(api_get_path(SYS_CSS_PATH).' '.get_lang('IsNotWritable'));
     } else {
         // Uploading a new stylesheet.
         if ($urlId == 1) {
@@ -258,16 +255,15 @@ function handle_stylesheets()
     $list_of_styles = array();
     $list_of_names  = array();
     $selected = null;
-    $dirpath = '';
-    $safe_style_dir = '';
 
-    if ($handle = @opendir(api_get_path(SYS_PATH).'main/css/')) {
+    $safe_style_dir = '';
+    if ($handle = @opendir(api_get_path(SYS_CSS_PATH).'themes/')) {
         $counter = 1;
         while (false !== ($style_dir = readdir($handle))) {
             if (substr($style_dir, 0, 1) == '.') { // Skip directories starting with a '.'
                 continue;
             }
-            $dirpath = api_get_path(SYS_PATH).'main/css/'.$style_dir;
+            $dirpath = api_get_path(SYS_CSS_PATH).'themes/'.$style_dir;
 
             if (is_dir($dirpath)) {
                 if ($style_dir != '.' && $style_dir != '..') {
@@ -299,7 +295,6 @@ function handle_stylesheets()
     }
 
     $form_change->addElement('select', 'style', get_lang('NameStylesheet'), $select_list);
-
     $form_change->setDefaults(array('style' => $selected));
 
     if ($form_change->validate()) {
@@ -310,7 +305,7 @@ function handle_stylesheets()
         }
         if (isset($_POST['download'])) {
             $arch = api_get_path(SYS_ARCHIVE_PATH).$safe_style_dir.'.zip';
-            $dir = api_get_path(SYS_CODE_PATH).'css/'.$safe_style_dir;
+            $dir = api_get_path(SYS_CSS_PATH).'themes/'.$safe_style_dir;
             if (is_dir($dir)) {
                 $zip = new PclZip($arch);
                 // Remove path prefix except the style name and put file on disk
@@ -363,8 +358,8 @@ function upload_stylesheet($values, $picture)
     $style_name = api_preg_replace('/[^A-Za-z0-9]/', '', $values['name_stylesheet']);
 
     // Create the folder if needed.
-    if (!is_dir(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/')) {
-        mkdir(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/', api_get_permissions_for_new_directories());
+    if (!is_dir(api_get_path(SYS_CSS_PATH).'themes/'.$style_name.'/')) {
+        mkdir(api_get_path(SYS_CSS_PATH).'themes/'.$style_name.'/', api_get_permissions_for_new_directories());
     }
 
     $info = pathinfo($picture['name']);
@@ -403,10 +398,10 @@ function upload_stylesheet($values, $picture)
                 // If the zip does not contain a single directory, extract it.
                 if (!$single_directory) {
                     // Extract zip file.
-                    $zip->extractTo(api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/');
+                    $zip->extractTo(api_get_path(SYS_CSS_PATH).'themes/'.$style_name.'/');
                     $result = true;
                 } else {
-                    $extraction_path = api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/';
+                    $extraction_path = api_get_path(SYS_CSS_PATH).'themes/'.$style_name.'/';
                     for ($i = 0; $i < $num_files; $i++) {
                         $entry = $zip->getNameIndex($i);
                         if (substr($entry, -1) == '/') continue;
@@ -440,7 +435,7 @@ function upload_stylesheet($values, $picture)
         }
     } else {
         // Simply move the file.
-        move_uploaded_file($picture['tmp_name'], api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/'.$picture['name']);
+        move_uploaded_file($picture['tmp_name'], api_get_path(SYS_CSS_PATH).'themes/'.$style_name.'/'.$picture['name']);
         $result = true;
     }
     return $result;
@@ -534,7 +529,7 @@ function store_stylesheets()
  */
 function is_style($style)
 {
-    $dir = api_get_path(SYS_PATH).'main/css/';
+    $dir = api_get_path(SYS_CSS_PATH).'themes/';
     $dirs = scandir($dir);
     $style = str_replace(array('/', '\\'), array('', ''), $style); // Avoid slashes or backslashes.
     if (in_array($style, $dirs) && is_dir($dir.$style)) {

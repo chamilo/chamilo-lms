@@ -53,13 +53,13 @@ class PDF
     {
         Display :: display_no_header();
 
-        //Assignments
+        // Assignments.
         Display::$global_template->assign('pdf_content', $content);
 
         $organization = api_get_setting('Institution');
-        $img = api_get_path(SYS_CODE_PATH) . 'css/' . api_get_visual_theme() . '/images/header-logo.png';
+        $img = api_get_path(SYS_CSS_PATH).'themes/'.api_get_visual_theme().'/images/header-logo.png';
         if (file_exists($img)) {
-            $img = api_get_path(WEB_CODE_PATH) . 'css/' . api_get_visual_theme() . '/images/header-logo.png';
+            $img = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/images/header-logo.png';
             $organization = "<img src='$img'>";
         } else {
             if (!empty($organization)) {
@@ -203,7 +203,7 @@ class PDF
                 $document_html = preg_replace($clean_search, '', $document_html);
 
                 //absolute path for frames.css //TODO: necessary?
-                $absolute_css_path = api_get_path(WEB_CODE_PATH) . 'css/' . api_get_setting('stylesheets') . '/frames.css';
+                $absolute_css_path = api_get_path(WEB_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/frames.css';
                 $document_html = str_replace('href="./css/frames.css"', $absolute_css_path, $document_html);
 
                 if (!empty($course_data['path'])) {
@@ -303,10 +303,8 @@ class PDF
         $document_html = preg_replace($clean_search, '', $document_html);
 
         //absolute path for frames.css //TODO: necessary?
-        $absolute_css_path = api_get_path(WEB_CODE_PATH) . 'css/' . api_get_setting('stylesheets') . '/frames.css';
+        $absolute_css_path = api_get_path(WEB_CSS_PATH).'themes/'.api_get_setting('stylesheets').'/frames.css';
         $document_html = str_replace('href="./css/frames.css"', 'href="' . $absolute_css_path . '"', $document_html);
-
-        //$document_html=str_replace('<link rel="stylesheet" http://my.chamilo.net/main/css/chamilo/frames.css type="text/css" />','', $document_html);
 
         $document_html = str_replace('../../', '', $document_html);
         $document_html = str_replace('../', '', $document_html);

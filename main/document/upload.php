@@ -62,8 +62,8 @@ function check_unzip() {
 
 function advanced_parameters() {
 	if(document.getElementById(\'options\').style.display == \'none\') {
-	document.getElementById(\'options\').style.display = \'block\';
-	document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
+        document.getElementById(\'options\').style.display = \'block\';
+        document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
 	} else {
         document.getElementById(\'options\').style.display = \'none\';
         document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
@@ -227,7 +227,9 @@ $form->addElement('file', 'file', array(get_lang('File'), $label), 'style="width
 $form->addElement('text', 'title', get_lang('Title'), array('size' => '20', 'style' => 'width:300px', 'id' => 'title_file'));
 $form->addElement('textarea', 'comment', get_lang('Comment'), 'wrap="virtual" style="width:300px;"');
 
-$advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" ><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>';
+$advanced = '<a href="javascript://" onclick=" return advanced_parameters()">
+<span id="img_plus_and_minus"><div style="vertical-align:top;" >
+<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>';
 // Advanced parameters
 $form -> addElement('advanced_settings', $advanced);
 $form -> addElement('html', '<div id="options" style="display:none">');

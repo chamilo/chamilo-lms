@@ -348,6 +348,7 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
 
         $path_image_in_default_course = api_get_path(WEB_DEFAULT_COURSE_DOCUMENT_PATH);
         $new_content_html = str_replace('/main/default_course_document', $path_image_in_default_course, $new_content_html);
+        // @todo check this
         $new_content_html = str_replace('/main/img/', api_get_path(WEB_IMG_PATH), $new_content_html);
 
         Display::display_reduced_header();

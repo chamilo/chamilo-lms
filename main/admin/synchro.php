@@ -169,7 +169,6 @@ $tool_name = get_lang('SpeedTest');
 //<script type="text/javascript" src="jquery-1.3.1.min.js"></script>
 //<script type="text/javascript" src="ui.core.min.js"></script>
 $htmlHeadXtra[] = <<<EOB
-<link rel="stylesheet" href="css/style.css" type="text/css" />
 <script type="text/javascript" src="jquery.query-2.0.1.js"></script>
 <script type="text/javascript" src="ui.progressbar.min.js"></script>
 <script type="text/javascript" src="config.js"></script>

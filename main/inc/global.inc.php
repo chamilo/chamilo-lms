@@ -516,12 +516,14 @@ $app->before(
                 $catalogue->add(array('foo' => 'bar'));
                 $dumper->dump($catalogue, array('path' => $app['sys_temp_path']));
             } else {
+                $translationPath = $app['root_sys'].'src/ChamiloLMS/Resources/translations/';
+
                 $translator->addLoader('pofile', new PoFileLoader());
-                $file = $app['root_sys'].'main/locale/'.$locale.'.po';
+                $file = $translationPath.$locale.'.po';
                 if (file_exists($file)) {
                     $translator->addResource('pofile', $file, $locale);
                 }
-                $customFile = $app['root_sys'].'main/locale/'.$locale.'.custom.po';
+                $customFile = $translationPath.$locale.'.custom.po';
                 if (file_exists($customFile)) {
                     $translator->addResource('pofile', $customFile, $locale);
                 }

@@ -7,10 +7,10 @@ require_once 'main/inc/global.inc.php';
 $dir = api_get_path(SYS_CODE_PATH).'lang/';
 
 //Destination
-$save_path = api_get_path(SYS_PATH).'resources/locale/';
+$save_path = api_get_path(SYS_PATH).'src/ChamiloLMS/Resources/translations';
 
 if (!is_dir(api_get_path(SYS_PATH).'resources')) {
-    mkdir(api_get_path(SYS_PATH).'resources');
+    //mkdir(api_get_path(SYS_PATH).'resources');
 }
 
 //The new po files will be saved in  $dir.'/LC_MESSAGES/';

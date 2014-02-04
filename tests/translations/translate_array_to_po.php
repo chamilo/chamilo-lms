@@ -11,7 +11,7 @@ $to_dir = api_get_path(SYS_CODE_PATH).'lang/spanish';
 
 $po_lang = 'es_ES';
 
-$save_path = api_get_path(SYS_PATH).'resources/locale/';
+$save_path = api_get_path(SYS_PATH).'src/ChamiloLMS/Resources/translations/';
 $save_dir_path = $save_path.$po_lang;
 
 //The new po files will be saved in  $dir.'/LC_MESSAGES/';

@@ -36,6 +36,7 @@ require_once 'aiccItem.class.php';
  * @param   integer New item ID
  */
 function initialize_item($lp_id, $user_id, $view_id, $next_item) {
+    global $debug;
     $return = '';
     if ($debug > 0) { error_log('In initialize_item('.$lp_id.','.$user_id.','.$view_id.','.$next_item.')', 0); }
     /*$item_id may be one of:

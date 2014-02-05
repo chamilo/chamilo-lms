@@ -1486,16 +1486,23 @@ class Exercise {
      * Works with exercises in sessions
      * @return int quantity of user's exercises deleted
      */
-    function clean_results() {
+    function clean_results($clean_lp_tests = false) {
         $table_track_e_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $table_track_e_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+        $sql_where = '  AND
+                        orig_lp_id = 0 AND
+                        orig_lp_item_id = 0';
+
+        if ($clean_lp_tests) {
+            $sql_where = "";
+        }
 
         $sql_select = "SELECT exe_id FROM $table_track_e_exercises
 					   WHERE 	exe_cours_id = '".api_get_course_id()."' AND
 								exe_exo_id = ".$this->id." AND
-								orig_lp_id = 0 AND
-								orig_lp_item_id = 0 AND
-								session_id = ".api_get_session_id()."";
+								session_id = ".api_get_session_id()." ".
+                                $sql_where;
 
         $result   = Database::query($sql_select);
         $exe_list = Database::store_result($result);
@@ -1512,8 +1519,13 @@ class Exercise {
 
         //delete TRACK_E_EXERCICES table
         $sql = "DELETE FROM $table_track_e_exercises
-				WHERE exe_cours_id = '".api_get_course_id()."' AND exe_exo_id = ".$this->id." AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id = ".api_get_session_id()."";
+                WHERE exe_cours_id = '".api_get_course_id()."'
+                AND exe_exo_id = ".$this->id."
+                $sql_where
+                AND session_id = ".api_get_session_id()."";
+
         Database::query($sql);
+
         return $i;
     }
 

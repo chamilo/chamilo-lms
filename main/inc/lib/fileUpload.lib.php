@@ -257,7 +257,8 @@ function handle_uploaded_document(
       $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
       $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
       $doc_path = '/'.$clean_name;
-      $sql = "SELECT DISTINCT docs.id
+      $docId = DocumentManager :: get_document_id($_course, $doc_path, $current_session_id);
+      /*$sql = "SELECT DISTINCT docs.id
               FROM  " . $TABLE_ITEMPROPERTY . "  AS last, " . $TABLE_DOCUMENT . "  AS docs
               WHERE docs.id = last.ref
               AND docs.path = '$doc_path'
@@ -267,7 +268,7 @@ function handle_uploaded_document(
               AND last.id_session = $current_session_id
               AND last.c_id = {$_course['real_id']}
               AND docs.c_id = {$_course['real_id']} ";
-      $result = Database::query($sql);
+      $result = Database::query($sql);*/
 
 			// What to do if the target file exists
 			switch ($what_if_file_exists) {
@@ -277,7 +278,7 @@ function handle_uploaded_document(
 					$file_exists = file_exists($store_path);
 					if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path)) {
 						chmod($store_path, $files_perm);
-						if ($file_exists && Database::num_rows($result) > 0) {
+						if ($file_exists && $docId) {
 						  
 							// UPDATE DATABASE
 							$document_id = DocumentManager::get_document_id($_course, $file_path);
@@ -327,7 +328,7 @@ function handle_uploaded_document(
 
 				// Rename the file if it exists
 				case 'rename':
-          if (Database :: num_rows($result) > 0) {
+          if ($docId) {
 					    $new_name = unique_name($where_to_save, $clean_name);
           } else {
               $new_name = $clean_name;
@@ -367,13 +368,13 @@ function handle_uploaded_document(
 				// Only save the file if it doesn't exist or warn user if it does exist
 				default:
                 
-					if (file_exists($store_path) && Database::num_rows($result) > 0) {
+					if (file_exists($store_path) && $docId) {
 					    if ($output) {
 						  Display::display_error_message($clean_name.' '.get_lang('UplAlreadyExists'));
 						}
 					} else {
 						if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path)) {
-							chmod($store_path, $files_perm);
+						    chmod($store_path, $files_perm);
 
 							// Put the document data in the database
 							$document_id = add_document($_course, $file_path, 'file', $file_size, $document_name, null, 0, true);

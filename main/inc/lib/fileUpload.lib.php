@@ -258,19 +258,7 @@ function handle_uploaded_document(
       $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
       $doc_path = '/'.$clean_name;
       $docId = DocumentManager :: get_document_id($_course, $doc_path, $current_session_id);
-      /*$sql = "SELECT DISTINCT docs.id
-              FROM  " . $TABLE_ITEMPROPERTY . "  AS last, " . $TABLE_DOCUMENT . "  AS docs
-              WHERE docs.id = last.ref
-              AND docs.path = '$doc_path'
-              AND last.tool = '" . TOOL_DOCUMENT . "'
-              AND last.visibility = 1
-              AND docs.session_id = $current_session_id
-              AND last.id_session = $current_session_id
-              AND last.c_id = {$_course['real_id']}
-              AND docs.c_id = {$_course['real_id']} ";
-      $result = Database::query($sql);*/
-
-			// What to do if the target file exists
+      		// What to do if the target file exists
 			switch ($what_if_file_exists) {
 				// Overwrite the file if it exists
 				case 'overwrite':

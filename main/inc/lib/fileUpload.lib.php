@@ -254,8 +254,6 @@ function handle_uploaded_document(
 			$file_size = $uploaded_file['size'];
 
 			$files_perm = api_get_permissions_for_new_files();
-                       $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-                       $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
                        $doc_path = '/'.$clean_name;
                        $docId = DocumentManager :: get_document_id($_course, $doc_path, $current_session_id);
       		        // What to do if the target file exists

@@ -2877,7 +2877,6 @@ class DocumentManager
         $path = Database::escape_string(str_replace('_', '\_', $path));
         $added_slash = ($path == '/') ? '' : '/';
 
-
         //$condition_session = " AND (id_session = '$session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $tbl_course WHERE code = '".$course_info['code']."' )))";
         $condition_session = " AND (id_session = '$session_id' OR  id_session = '0' )";
 
@@ -2913,7 +2912,7 @@ class DocumentManager
         if ($lp_id) {
             $return .= '<div class="lp_resource_element">';
             $return .= Display::return_icon('new_doc.gif', '', array(), ICON_SIZE_SMALL);
-            $return .= Display::url(get_lang('NewDocument'), api_get_self() . '?' . api_get_cidreq() . '&action=add_item&type=' . TOOL_DOCUMENT . '&lp_id=' . $_SESSION['oLP']->lp_id);
+            $return .= Display::url(get_lang('NewDocument'), api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id);
             $return .= '</div>';
         } else {
             $return .= Display::div(Display::url(Display::return_icon('close.png', get_lang('Close'), array(), ICON_SIZE_SMALL), ' javascript:void(0);', array('id' => 'close_div_' . $course_info['real_id'] . '_' . $session_id, 'class' => 'close_div')), array('style' => 'position:absolute;right:10px'));
@@ -3129,7 +3128,7 @@ class DocumentManager
                         // Show the "image name" not the filename of the image.
                         if ($lp_id) {
                             //LP URL
-                            $url = api_get_self() . '?cidReq=' . Security::remove_XSS($_GET['cidReq']) . '&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' . $lp_id;
+                            $url = api_get_self() . '?'.api_get_cidreq().'&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' . $lp_id;
                             if (!empty($overwrite_url)) {
                                 $url = $overwrite_url . '&document_id=' . $key;
                             }

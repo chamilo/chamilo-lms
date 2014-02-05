@@ -7,9 +7,7 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
 use \ChamiloSession as Session;
-
 $debug = 0;
 if ($debug > 0) error_log('New LP -+- Entered lp_controller.php -+- (action: '.$_REQUEST['action'].')', 0);
 
@@ -376,7 +374,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
         if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'view' && !isset($_REQUEST['exeId'])) {
             $_REQUEST['action'] = 'build';
         }
-        $_SESSION['studentview'] = null;
+        //$_SESSION['studentview'] = null;
     }
 }
 

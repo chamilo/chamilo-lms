@@ -179,11 +179,11 @@ switch ($action) {
         break;
     case 'get_work_teacher':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
-        $count = getWorkListTeacher($start, $limit, $sidx, $sord, $where_condition, true);
+        $count = getWorkListTeacher(0, $limit, $sidx, $sord, $where_condition, true);
         break;
     case 'get_work_student':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
-        $count = getWorkListStudent($start, $limit, $sidx, $sord, $where_condition, true);
+        $count = getWorkListStudent(0, $limit, $sidx, $sord, $where_condition, true);
 
         break;
     case 'get_work_user_list_all':
@@ -205,10 +205,10 @@ switch ($action) {
 
         if (empty($documents)) {
             $where_condition .= " AND u.user_id = ".api_get_user_id();
-            $count = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition, null, true);
+            $count = get_work_user_list(0, $limit, $sidx, $sord, $work_id, $where_condition, null, true);
         } else {
             $count = get_work_user_list_from_documents(
-                $start,
+                0,
                 $limit,
                 $sidx,
                 $sord,
@@ -1060,13 +1060,13 @@ if (in_array($action, $allowed_actions)) {
         switch ($export_format) {
             case 'xls':
                 //TODO add date if exists
-                $file_name = (!empty($action)) ? $action : 'company_report'; 
+                $file_name = (!empty($action)) ? $action : 'company_report';
                 Export::export_table_xls($array, $file_name);
                 break;
             case 'csv':
             default:
                 //TODO add date if exists
-                $file_name = (!empty($action)) ? $action : 'company_report'; 
+                $file_name = (!empty($action)) ? $action : 'company_report';
                 Export::export_table_csv($array, $file_name);
                 break;
         }

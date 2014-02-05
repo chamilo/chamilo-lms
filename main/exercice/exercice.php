@@ -202,6 +202,31 @@ HotPotGCt($documentPath, 1, api_get_user_id());
 if ($is_allowedToEdit) {
 
     if (!empty($choice)) {
+
+        // All test choice, clean all test's results
+        if ($choice == 'clean_all_test') {
+            $check = Security::check_token('get');
+            if ($check) {
+                // list des exercices dans un test
+                // we got variable $course_id $course_info session api_get_session_id()
+                $tab_exercise_list = get_all_exercises_for_course_id($course_info, api_get_session_id(), $course_id, false);
+
+                $quantity_results_deleted = 0;
+                foreach ($tab_exercise_list as $exeItem) {
+                    // delete result for test, if not in a gradebook
+                    $exercise_action_locked = api_resource_is_locked_by_gradebook($exeItem['id'], LINK_EXERCISE);
+                    if ($exercise_action_locked == false) {
+                        $objExerciseTmp = new Exercise();
+                        if ($objExerciseTmp->read($exeItem['id'])) {
+                            $quantity_results_deleted += $objExerciseTmp->clean_results(true);
+                        }
+                    }
+                }
+                Display :: display_confirmation_message(sprintf(get_lang('XResultsCleaned'), $quantity_results_deleted));
+            }
+        }
+
+        // single exercise choice
         // construction of Exercise
 
         $objExerciseTmp = new Exercise();
@@ -247,7 +272,7 @@ if ($is_allowedToEdit) {
                         break;
                     case 'clean_results' : //clean student results
                         if ($exercise_action_locked == false) {
-                            $quantity_results_deleted = $objExerciseTmp->clean_results();
+                            $quantity_results_deleted = $objExerciseTmp->clean_results(true);
                             Display :: display_confirmation_message(sprintf(get_lang('XResultsCleaned'), $quantity_results_deleted));
                         }
                         break;
@@ -365,6 +390,8 @@ if ($is_allowedToEdit) {
 }
 $total = $total_exercises + $hp_count;
 
+
+$token = Security::get_token();
 if ($is_allowedToEdit && $origin != 'learnpath') {
     echo '<a href="exercise_admin.php?'.api_get_cidreq().'">'.Display :: return_icon('new_exercice.png', get_lang('NewEx'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="question_create.php?'.api_get_cidreq().'">'.Display :: return_icon('new_question.png', get_lang('AddQ'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -383,6 +410,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     echo '<a href="qti2.php?'.api_get_cidreq().'">'.Display :: return_icon('import_qti2.png', get_lang('ImportQtiQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="aiken.php?'.api_get_cidreq().'">'.Display :: return_icon('import_aiken.png', get_lang('ImportAikenQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="upload_exercise.php?'.api_get_cidreq().'">'.Display :: return_icon('import_excel.png', get_lang('ImportExcelQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo Display::url(Display::return_icon('clean_all.png', get_lang('CleanAllStudentsResultsForAllTests'), '', ICON_SIZE_MEDIUM), '', array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToEmptyAllTestResults'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token));
 }
 
 if ($is_allowedToEdit) {
@@ -442,7 +470,8 @@ if (!empty($exercise_list)) {
         $mylpid = (empty($learnpath_id) ? '' : '&learnpath_id='.$learnpath_id);
         $mylpitemid = (empty($learnpath_item_id) ? '' : '&learnpath_item_id='.$learnpath_item_id);
 
-        $token = Security::get_token();
+        // $token = Security::get_token(); // has been moved above
+
         $i = 1;
 
         if ($is_allowedToEdit) {

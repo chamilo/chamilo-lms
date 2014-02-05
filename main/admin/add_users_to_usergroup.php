@@ -27,7 +27,7 @@ $interbreadcrumb[]= array('url' => 'usergroups.php','name' => get_lang('Classes'
 // Database Table Definitions
 
 // setting the name of the tool
-$tool_name=get_lang('SubscribeUsersToClass');
+$tool_name = get_lang('SubscribeUsersToClass');
 
 $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!='') {
@@ -103,6 +103,10 @@ if (is_array($extra_field_list)) {
 
 $usergroup = new UserGroup();
 $id = intval($_GET['id']);
+
+if (empty($id)) {
+    api_not_allowed(true);
+}
 $first_letter_user = '';
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
@@ -163,15 +167,12 @@ $filters = array(
 );
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
-//$searchForm->addElement('html', '<table>');
-$searchForm->add_header(get_lang('FilterUser'));
+$searchForm->add_header(get_lang('AdvancedSearch'));
 $renderer =& $searchForm->defaultRenderer();
 
 $searchForm->addElement('hidden', 'id', $id);
 foreach ($filters as $param) {
-    //$searchForm->addElement('html', '<tr>');
     $searchForm->addElement($param['type'], $param['name'], $param['label']);
-    //$searchForm->addElement('html', '</tr>');
 }
 $searchForm->addElement('button', 'submit', get_lang('Search'));
 //$searchForm->addElement('html', '</table>');

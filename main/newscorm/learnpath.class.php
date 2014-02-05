@@ -3125,7 +3125,11 @@ class learnpath
                                 $lp_item_id = Database::escape_string($lp_item_id);
                                 $lp_view_id = Database::escape_string($lp_view_id);
                                 $sql = "SELECT count(*) FROM $lp_item_view_table
-                                        WHERE c_id = $course_id AND lp_item_id='" . (int) $lp_item_id . "' AND lp_view_id ='" . (int) $lp_view_id . "' AND status='completed'";
+                                        WHERE
+                                            c_id = $course_id AND
+                                            lp_item_id='" . (int) $lp_item_id . "' AND
+                                            lp_view_id ='" . (int) $lp_view_id . "' AND
+                                            status='completed'";
                                 $result = Database::query($sql);
                                 $row_count = Database :: fetch_row($result);
                                 $count_item_view = (int) $row_count[0];

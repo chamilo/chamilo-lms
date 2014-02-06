@@ -1490,7 +1490,6 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
                 prop.ref = work.id AND
                 prop.c_id = $course_id AND
                 prop.tool='work' AND
-                work.active = 1 AND
                 prop.visibility <> 2 AND
                 work.c_id = $course_id
             )

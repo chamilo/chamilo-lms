@@ -1944,15 +1944,32 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
         $extra_conditions .= " AND parent_id  = ".$work_id."  ";
 
-        $select = 'SELECT DISTINCT u.user_id, work.id as id, title as title, description, url, sent_date, contains_file, has_properties, view_properties,
-                    qualification, weight, allow_text_assignment, u.firstname, u.lastname, u.username, parent_id, accepted, qualificator_id';
-
+        $select = 'SELECT DISTINCT
+                        u.user_id,
+                        work.id as id,
+                        title as title,
+                        description,
+                        url,
+                        sent_date,
+                        contains_file,
+                        has_properties,
+                        view_properties,
+                        qualification,
+                        weight,
+                        allow_text_assignment,
+                        u.firstname,
+                        u.lastname,
+                        u.username,
+                        parent_id,
+                        accepted,
+                        qualificator_id';
         if ($getCount) {
             $select = "SELECT DISTINCT count(u.user_id) as count ";
         }
 
         $user_condition = "INNER JOIN $user_table u  ON (work.user_id = u.user_id) ";
-        $work_condition = "$iprop_table prop INNER JOIN $work_table work ON (prop.ref = work.id AND prop.c_id = $course_id AND work.c_id = $course_id ) ";
+        $work_condition = "$iprop_table prop INNER JOIN $work_table work
+                           ON (prop.ref = work.id AND prop.c_id = $course_id AND work.c_id = $course_id ) ";
 
         $work_assignment = get_work_assignment_by_id($work_id);
 
@@ -1962,9 +1979,9 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
         $sql = " $select
                 FROM $work_condition  $user_condition
-                WHERE $extra_conditions $where_condition $condition_session ";
-        $sql .= " ORDER BY $column $direction ";
-        $sql .= " LIMIT $start, $limit";
+                WHERE $extra_conditions $where_condition $condition_session
+                ORDER BY $column $direction
+                LIMIT $start, $limit";
 
         $result = Database::query($sql);
         $works = array();
@@ -2028,7 +2045,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
             if (
                 ($can_read && $work['accepted'] == '1') ||
-                ($is_author && in_array($work['accepted'], array('1','0'))) ||
+                ($is_author && in_array($work['accepted'], array('1', '0'))) ||
                 $is_allowed_to_edit
             ) {
 
@@ -2048,8 +2065,8 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
                 // File name.
                 $link_to_download = null;
-
-                if ($work['contains_file']) {
+                // If URL is present then there's a file to download keep BC.
+                if ($work['contains_file'] || !empty($work['url'])) {
                     $link_to_download = '<a href="download.php?id='.$item_id.'">'.Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';
                 } else {
                    //$link_to_download = '<a href="view.php?id='.$item_id.'">'.Display::return_icon('save_na.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';

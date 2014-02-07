@@ -220,7 +220,8 @@ class GDWrapper extends ImageWrapper {
         if ($handler) {
             $this->image_validated = true;
             $this->bg = $handler;
-            @imagealphablending($this->bg, true);	
+            @imagealphablending($this->bg, false);
+            @imagesavealpha($this->bg, true);	
         }           
     }
     	
@@ -259,6 +260,8 @@ class GDWrapper extends ImageWrapper {
 			$deltaw = (int)(($thumbw - $width) / 2);
 			$deltah = (int)(($thumbh - $height) / 2);
 			$dst_img = @ImageCreateTrueColor($thumbw, $thumbh);
+            		@imagealphablending($dst_img, false);
+		        @imagesavealpha($dst_img, true);	
 			if (!empty($this->color)) {
 				@imagefill($dst_img, 0, 0, $this->color);
 			}
@@ -276,6 +279,8 @@ class GDWrapper extends ImageWrapper {
 			$deltaw = 0;
 			$deltah = 0;
 			$dst_img = @ImageCreateTrueColor($width, $height);
+            		@imagealphablending($dst_img, false);
+		        @imagesavealpha($dst_img, true);	
 			$this->width = $width;
 			$this->height = $height;
 		}

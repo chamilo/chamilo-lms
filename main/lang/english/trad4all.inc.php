@@ -2,6 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$LoginDate = "Login date";
+$ChooseStartDateAndEndDate = "Choose start and end dates";
+$WorkAdded = "Work added";
 $AllowMemberLeaveGroup = "Allow members to leave group";
 $CreatedByXYOnZ = "Create by <a href=\"%s\">%s</a> on %s";
 $LoginWithExternalAccount = "Login without an institutional account";

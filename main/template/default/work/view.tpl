@@ -16,7 +16,9 @@
     {% for comment in comments %}
         <li>
             <div class="page-header">
-                <a href="{{ _p.web_code }}"><img height="24" src="{{ comment.picture }}"/> {{ comment.username }} </a>- {{ comment.sent_at | api_get_local_time }}
+                <a href="{{ _p.web_code }}">
+                    <img height="24" src="{{ comment.picture }}"/> {{ comment.username }}
+                </a>- {{ comment.sent_at | api_get_local_time }}
             </div>
 
         <p>

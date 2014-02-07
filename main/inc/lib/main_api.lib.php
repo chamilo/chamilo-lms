@@ -3132,7 +3132,7 @@ function api_get_item_visibility($_course, $tool, $id, $session=0)
     				tool = '$tool' AND
     				ref = $id AND
     				(id_session = $session OR id_session = 0)
-    		ORDER BY id_session DESC, lastedit_date DESC";
+    		ORDER BY id_session DESC, lastedit_date DESC LIMIT 1";
     $res = Database::query($sql);
     if ($res === false || Database::num_rows($res) == 0) { return -1; }
     $row = Database::fetch_array($res);
@@ -6568,6 +6568,7 @@ function api_set_memory_limit($mem){
     }
     return false;
 }
+
 /**
  * Gets memory limit in bytes
  * @param string The memory size (128M, 1G, 1000K, etc)
@@ -6917,4 +6918,22 @@ function exist_firstpage_parameter()
 function api_get_firstpage_parameter()
 {
     return $_COOKIE['GotoCourse'];
+}
+
+/**
+ * Return true on https install
+ * @return boolean
+ */
+function api_is_https()
+{
+    return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off');
+}
+
+/**
+ * Return protocol (http or https)
+ * @return string
+ */
+function api_get_protocol()
+{
+    return api_is_https() ? 'https' : 'http';
 }

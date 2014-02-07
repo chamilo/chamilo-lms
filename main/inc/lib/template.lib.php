@@ -98,7 +98,6 @@ class Template
         $this->twig->addFilter('get_setting', new Twig_Filter_Function('api_get_setting'));
         $this->twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
         $this->twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
-
         $this->twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
         $this->twig->addFilter(
             'display_page_subheader',
@@ -134,6 +133,8 @@ class Template
         $this->set_footer_parameters();
 
         $this->assign('style', $this->style);
+        $this->assign('css_style', $this->theme);
+        $this->assign('template', $this->style);
 
         //Chamilo plugins
         if ($this->show_header) {
@@ -354,6 +355,8 @@ class Template
             'language' => $course['language'],
             'directory' => $course['directory'],
             'session_id' => api_get_session_id(),
+            'user_is_teacher' => api_is_course_admin(),
+            'student_view' => (!empty($_GET['isStudentView']) && $_GET['isStudentView'] == 'true'),
         );
         $this->assign('_c',$_c);
     }
@@ -395,6 +398,10 @@ class Template
             'web_img'    => api_get_path(WEB_IMG_PATH),
             'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
             'web_lib'    => api_get_path(WEB_LIBRARY_PATH),
+            'web_self' => api_get_self(),
+            'web_query_vars' => api_htmlentities($_SERVER['QUERY_STRING']),
+            'web_self_query_vars' => api_htmlentities($_SERVER['REQUEST_URI']),
+            'web_cid_query' => api_get_cidreq(),
         );
         $this->assign('_p', $_p);
 
@@ -759,12 +766,12 @@ class Template
         }
         $this->assign('header_extra_content', $extra_header);
 
-        if ($this->show_header == 1) {
+        //if ($this->show_header == 1) {
             header('Content-Type: text/html; charset='.api_get_system_encoding());
             header(
                 'X-Powered-By: '.$_configuration['software_name'].' '.substr($_configuration['system_version'], 0, 1)
             );
-        }
+        //}
     }
 
     /**

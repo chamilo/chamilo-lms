@@ -19,7 +19,8 @@ $category = isset($_GET['category']) ? $_GET['category'] : null;
 if (!empty($category)) {
     $parentInfo = getCategory($category);
 }
-$categoryId = isset($_GET['id']) ? $_GET['id'] : null;
+$categoryId = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
+
 if (!empty($categoryId)) {
     $categoryInfo = getCategory($categoryId);
 }
@@ -33,20 +34,20 @@ if (!empty($action)) {
                 (isset($_configuration['enable_multiple_url_support_for_course_category']) &&
                 $_configuration['enable_multiple_url_support_for_course_category'])
             ) {
-                deleteNode($_GET['id']);
+                deleteNode($categoryId);
                 header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
                 exit();
             }
         } else {
-            deleteNode($_GET['id']);
+            deleteNode($categoryId);
             header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
             exit();
         }
-    } elseif (($action == 'add' || $action == 'edit') && $_POST['formSent']) {
+    } elseif (($action == 'add' || $action == 'edit') && isset($_POST['formSent']) && $_POST['formSent']) {
         if ($action == 'add') {
             $ret = addNode($_POST['code'], $_POST['name'], $_POST['auth_course_child'], $category);
         } else {
-            $ret = editNode($_POST['code'], $_POST['name'], $_POST['auth_course_child'], $_GET['id']);
+            $ret = editNode($_POST['code'], $_POST['name'], $_POST['auth_course_child'], $categoryId);
         }
         if ($ret) {
             $action = '';
@@ -54,7 +55,7 @@ if (!empty($action)) {
             $errorMsg = get_lang('CatCodeAlreadyUsed');
         }
     } elseif ($action == 'moveUp') {
-        moveNodeUp($_GET['id'], $_GET['tree_pos'], $category);
+        moveNodeUp($categoryId, $_GET['tree_pos'], $category);
         header('Location: ' . api_get_self() . '?category=' . Security::remove_XSS($category));
         exit();
     }
@@ -82,7 +83,7 @@ if ($action == 'add' || $action == 'edit') {
         if (!empty($category)) {
             $form_title .= ' ' . get_lang('Into') . ' ' . Security::remove_XSS($category);
         }
-        $url = api_get_self().'?action='.Security::remove_XSS($action).'&category='.Security::remove_XSS($category).'&id='.Security::remove_XSS($_GET['id']);
+        $url = api_get_self().'?action='.Security::remove_XSS($action).'&category='.Security::remove_XSS($category).'&id='.$categoryId;
         $form = new FormValidator('course_category', 'post', $url);
         $form->addElement('header', '', $form_title);
         $form->addElement('hidden', 'formSent', 1);

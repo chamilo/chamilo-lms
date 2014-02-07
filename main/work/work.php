@@ -8,7 +8,7 @@
 
 use ChamiloSession as Session;
 
-$language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
+$language_file = array('exercice', 'work', 'document', 'admin', 'gradebook', 'tracking');
 
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_STUDENTPUBLICATION;

@@ -92,10 +92,10 @@ class CourseRestorer
 	 */
     public function __construct($course)
     {
-		$this->course							= $course;
-		$course_info 							= api_get_course_info($this->course->code);
+        $this->course = $course;
+        $course_info = api_get_course_info($this->course->code);
         if (!empty($course_info)) {
-		    $this->course_origin_id 				= $course_info['real_id'];
+            $this->course_origin_id = $course_info['real_id'];
         } else {
             $this->course_origin_id = null;
         }
@@ -112,10 +112,12 @@ class CourseRestorer
     {
 		$this->file_option = $option;
 	}
+
     function set_add_text_in_items($status)
     {
         $this->add_text_in_items = $status;
     }
+
     function set_tool_copy_settings($array)
     {
         $this->tool_copy_settings = $array;
@@ -1318,8 +1320,7 @@ class CourseRestorer
         if ($this->course->has_resources(RESOURCE_TEST_CATEGORY))
         {
             $resources = $this->course->resources;
-            foreach ($resources[RESOURCE_TEST_CATEGORY] as $id => $CourseCopyTestcategory )
-            {
+            foreach ($resources[RESOURCE_TEST_CATEGORY] as $id => $CourseCopyTestcategory ) {
                 $tab_test_category_id_old_new[$CourseCopyTestcategory->source_id] = $id;
                 // check if this test_category already exist in the destination BDD
                 // do not Database::escape_string $title and $description, it will be done later
@@ -1591,6 +1592,8 @@ class CourseRestorer
 	 */
 	function restore_learnpaths($session_id = 0, $respect_base_content = false)
     {
+        $session_id = intval($session_id);
+
 		if ($this->course->has_resources(RESOURCE_LEARNPATH)) {
 			$table_main 	= Database::get_course_table(TABLE_LP_MAIN);
 			$table_item 	= Database::get_course_table(TABLE_LP_ITEM);
@@ -1672,7 +1675,16 @@ class CourseRestorer
 				Database::query($sql);
 				$new_lp_id = Database::insert_id();
 				if ($lp->visibility) {
-					$sql = "INSERT INTO $table_tool SET c_id = ".$this->destination_course_id." , name='".self::DBUTF8escapestring($lp->name)."', link='newscorm/lp_controller.php?action=view&lp_id=$new_lp_id', image='scormbuilder.gif', visibility='1', admin='0', address='squaregrey.gif'";
+					$sql = "INSERT INTO $table_tool SET
+					            c_id = ".$this->destination_course_id.",
+					            name = '".self::DBUTF8escapestring($lp->name)."',
+					            link = 'newscorm/lp_controller.php?action=view&lp_id=$new_lp_id&id_session=$session_id',
+					            image = 'scormbuilder.gif',
+					            visibility = '1',
+					            admin = '0',
+					            address = 'squaregrey.gif',
+					            session_id = $session_id
+                            ";
 					Database::query($sql);
 				}
 

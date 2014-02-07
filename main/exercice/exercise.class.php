@@ -1017,7 +1017,7 @@ class Exercise {
                     //we force the options to the DirectFeedback exercisetype
                     $form->addElement('hidden', 'exerciseFeedbackType', EXERCISE_FEEDBACK_TYPE_DIRECT);
                     $form->addElement('hidden', 'exerciseType', ONE_PER_PAGE);
-                    
+
                     // Type of questions disposition on page
                     $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SimpleExercise'),    '1', array('onclick' => 'check_per_page_all()', 'id'=>'option_page_all'));
                     $radios[] = $form->createElement('radio', 'exerciseType', null, get_lang('SequentialExercise'),'2', array('onclick' => 'check_per_page_one()', 'id'=>'option_page_one'));
@@ -1169,7 +1169,7 @@ class Exercise {
 
                 $defaults['randomAnswers']          = $this->selectRandomAnswers();
                 $defaults['exerciseType']           = $this->selectType();
-                $defaults['exerciseTitle']          = html_entity_decode($this->selectTitle());
+                $defaults['exerciseTitle']          = $this->get_formated_title();
                 $defaults['exerciseDescription']    = $this->selectDescription();
                 $defaults['exerciseAttempts']       = $this->selectAttempts();
                 $defaults['exerciseFeedbackType']   = $this->selectFeedbackType();
@@ -1250,7 +1250,7 @@ class Exercise {
      */
     function processCreation($form, $type = '')
     {
-        $this->updateTitle(htmlentities($form->getSubmitValue('exerciseTitle')));
+        $this->updateTitle(Exercise::format_title_variable($form->getSubmitValue('exerciseTitle')));
         $this->updateDescription($form->getSubmitValue('exerciseDescription'));
         $this->updateAttempts($form->getSubmitValue('exerciseAttempts'));
         $this->updateFeedbackType($form->getSubmitValue('exerciseFeedbackType'));
@@ -1486,16 +1486,23 @@ class Exercise {
      * Works with exercises in sessions
      * @return int quantity of user's exercises deleted
      */
-    function clean_results() {
+    function clean_results($clean_lp_tests = false) {
         $table_track_e_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $table_track_e_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+        $sql_where = '  AND
+                        orig_lp_id = 0 AND
+                        orig_lp_item_id = 0';
+
+        if ($clean_lp_tests) {
+            $sql_where = "";
+        }
 
         $sql_select = "SELECT exe_id FROM $table_track_e_exercises
 					   WHERE 	exe_cours_id = '".api_get_course_id()."' AND
 								exe_exo_id = ".$this->id." AND
-								orig_lp_id = 0 AND
-								orig_lp_item_id = 0 AND
-								session_id = ".api_get_session_id()."";
+								session_id = ".api_get_session_id()." ".
+                                $sql_where;
 
         $result   = Database::query($sql_select);
         $exe_list = Database::store_result($result);
@@ -1512,8 +1519,13 @@ class Exercise {
 
         //delete TRACK_E_EXERCICES table
         $sql = "DELETE FROM $table_track_e_exercises
-				WHERE exe_cours_id = '".api_get_course_id()."' AND exe_exo_id = ".$this->id." AND orig_lp_id = 0 AND orig_lp_item_id = 0 AND session_id = ".api_get_session_id()."";
+                WHERE exe_cours_id = '".api_get_course_id()."'
+                AND exe_exo_id = ".$this->id."
+                $sql_where
+                AND session_id = ".api_get_session_id()."";
+
         Database::query($sql);
+
         return $i;
     }
 
@@ -2023,7 +2035,7 @@ class Exercise {
         if ($answerType == ORAL_EXPRESSION) {
             require_once api_get_path(LIBRARY_PATH).'nanogong.lib.php';
             $exe_info = get_exercise_results_by_attempt($exeId);
-            $exe_info = $exe_info[$exeId];
+            $exe_info = isset($exe_info[$exeId]) ? $exe_info[$exeId] : null;
 
             $params = array();
             $params['course_id'] 	= api_get_course_int_id();
@@ -3723,13 +3735,13 @@ class Exercise {
                 $isRandomByCategory = $this->selectRandomByCat();
                 // on tri les categories en fonction du terme entre [] en tete de la description de la categorie
                 /*
-                 * ex de catégories :
+                 * ex de catÃ©gories :
                  * [biologie] Maitriser les mecanismes de base de la genetique
                  * [biologie] Relier les moyens de depenses et les agents infectieux
                  * [biologie] Savoir ou est produite l'enrgie dans les cellules et sous quelle forme
                  * [chimie] Classer les molles suivant leur pouvoir oxydant ou reacteur
-                 * [chimie] Connaître la denition de la theoie acide/base selon Brönsted
-                 * [chimie] Connaître les charges des particules
+                 * [chimie] ConnaÃ®tre la denition de la theoie acide/base selon BrÃ¶nsted
+                 * [chimie] ConnaÃ®tre les charges des particules
                  * On veut dans l'ordre des groupes definis par le terme entre crochet au debut du titre de la categorie
                 */
                 // If test option is Grouped By Categories
@@ -3989,4 +4001,39 @@ class Exercise {
         }
         return $out_max_score;
     }
+
+    /**
+     * @return string
+     */
+    public function get_formated_title()
+    {
+        return api_html_entity_decode($this->selectTitle());
+    }
+
+    /**
+     * @param $in_title
+     * @return string
+     */
+    public static function get_formated_title_variable($in_title) {
+        return api_html_entity_decode($in_title);
+    }
+
+    /**
+     * @return string
+     */
+    public function format_title()
+    {
+        return api_htmlentities($this->title);
+    }
+
+
+    /**
+     * @param $in_title
+     * @return string
+     */
+    public static function format_title_variable($in_title)
+    {
+        return api_htmlentities($in_title);
+    }
+
 }

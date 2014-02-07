@@ -22,7 +22,7 @@ if (empty($work_data)) {
     exit;
 }
 
-//prevent some stuff
+// Prevent some stuff.
 if (empty($path)) {
     $path = '/';
 }
@@ -42,7 +42,8 @@ $temp_zip_file = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
 $zip_folder = new PclZip($temp_zip_file);
 
 $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-$prop_table              = Database::get_course_table(TABLE_ITEM_PROPERTY);
+$prop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+$tableUser = Database::get_main_table(TABLE_MAIN_USER);
 
 // Put the files in the zip
 // 2 possibilities: admins get all files and folders in the selected folder (except for the deleted ones)
@@ -51,6 +52,7 @@ $prop_table              = Database::get_course_table(TABLE_ITEM_PROPERTY);
 //admins are allowed to download invisible files
 $files = array();
 $course_id = api_get_course_int_id();
+$sessionId = api_get_session_id();
 
 $filenameCondition = null;
 if (array_key_exists('filename', $work_data)) {
@@ -61,17 +63,21 @@ if (api_is_allowed_to_edit()) {
     //Search for all files that are not deleted => visibility != 2
     $sql = "SELECT DISTINCT url, title, description, insert_user_id, insert_date, contains_file $filenameCondition
             FROM $tbl_student_publication AS work INNER JOIN $prop_table AS props
-                ON (
-                    props.c_id = $course_id AND
-                    work.c_id = $course_id AND
-                    work.id = props.ref
-                  )
- 			WHERE   props.tool='work' AND
- 			        work.parent_id = $work_id AND
- 			        work.filetype = 'file' AND
- 			        props.visibility<>'2' AND
- 			        work.active = 1 AND
- 			        work.post_group_id = $groupId
+            INNER JOIN $tableUser as u
+            ON (
+                props.c_id = $course_id AND
+                work.c_id = $course_id AND
+                work.id = props.ref AND
+                props.tool='work' AND
+                work.user_id = u.user_id
+            )
+ 			WHERE
+                work.parent_id = $work_id AND
+                work.filetype = 'file' AND
+                props.visibility <> '2' AND
+                work.active IN (0, 1) AND
+                work.post_group_id = $groupId AND
+                session_id = $sessionId
             ";
 
 } else {
@@ -113,7 +119,7 @@ while ($not_deleted_file = Database::fetch_assoc($query)) {
 
     $user_info = api_get_user_info($not_deleted_file['insert_user_id']);
     $insert_date = api_get_local_time($not_deleted_file['insert_date']);
-    $insert_date = str_replace(array(':','-', ' '), '_', $insert_date);
+    $insert_date = str_replace(array(':', '-', ' '), '_', $insert_date);
 
     $title = basename($not_deleted_file['title']);
     if (!empty($filenameCondition)) {
@@ -123,7 +129,7 @@ while ($not_deleted_file = Database::fetch_assoc($query)) {
     }
 
     $filename = $insert_date.'_'.$user_info['username'].'_'.$title;
-
+    // File exists
     if (file_exists($sys_course_path.$_course['path'].'/'.$not_deleted_file['url']) && !empty($not_deleted_file['url'])) {
         $files[basename($not_deleted_file['url'])] = $filename;
         $addStatus = $zip_folder->add(
@@ -133,10 +139,9 @@ while ($not_deleted_file = Database::fetch_assoc($query)) {
             PCLZIP_CB_PRE_ADD,
             'my_pre_add_callback'
         );
-    }
-
+    } else {
     // Convert texts in html files
-    if ($not_deleted_file['contains_file'] == 0) {
+    //if ($not_deleted_file['contains_file'] == 0) {
         $filename = trim($filename).".html";
         $work_temp = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'_'.$filename;
         file_put_contents($work_temp, $not_deleted_file['description']);

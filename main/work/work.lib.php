@@ -27,7 +27,7 @@ if (isset($_configuration['add_document_to_work'])) {
     define('ADD_DOCUMENT_TO_WORK', false);
 }
 
-$_configuration['work_user_comments'] = true;
+//$_configuration['work_user_comments'] = false;
 if (isset($_configuration['work_user_comments'])) {
     define('ALLOW_USER_COMMENTS', $_configuration['work_user_comments']);
 } else {
@@ -214,11 +214,14 @@ function get_work_data_by_id($id)
 	$work_table	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 	$sql = "SELECT * FROM  $work_table WHERE id = $id AND c_id = $course_id";
 	$result = Database::query($sql);
-	$return = array();
+    $work = array();
 	if (Database::num_rows($result)) {
-		$return = Database::fetch_array($result, 'ASSOC');
+		$work = Database::fetch_array($result, 'ASSOC');
+        if (empty($work['title'])) {
+            $work['title'] = basename($work['url']);
+        }
 	}
-	return $return;
+	return $work;
 }
 
 /**
@@ -1443,8 +1446,7 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
     $user_table      = Database::get_main_table(TABLE_MAIN_USER);
 
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
-    $session_id     = api_get_session_id();
+    $session_id = api_get_session_id();
     $condition_session  = api_get_session_condition($session_id);
 
     $course_id      = api_get_course_int_id();
@@ -1481,13 +1483,19 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
         $where_condition .= " AND u.user_id =  ".intval($onlyMeUserId);
     }
 
-    $sql = "SELECT count(*) as count ".
-           " FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ".
-           " ON (prop.ref=work.id AND prop.c_id = $course_id ".
-           " AND prop.tool='work' AND work.active = 1 ".
-           " AND prop.visibility <> 2 AND work.c_id = $course_id ) ".
-           "   INNER JOIN $user_table u  ON (work.user_id = u.user_id) ".
-           " WHERE $extra_conditions $where_condition $condition_session ";
+    $sql = "SELECT count(*) as count
+            FROM $iprop_table prop
+            INNER JOIN $work_table work
+            ON (
+                prop.ref = work.id AND
+                prop.c_id = $course_id AND
+                prop.tool='work' AND
+                prop.visibility <> 2 AND
+                work.c_id = $course_id
+            )
+            INNER JOIN $user_table u ON (work.user_id = u.user_id)
+            WHERE $extra_conditions $where_condition $condition_session";
+
     $result = Database::query($sql);
 
     $users_with_work = 0;
@@ -1654,7 +1662,6 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
                 $work['title'] = basename($work['url']);
             }
             $work['title'] = Display::url($work['title'], $url.'&id='.$workId);
-
             $work['title'] .= ' '.Display::label(get_count_work($work['id']), 'success');
             $work['sent_date'] = date_to_str_ago($work['sent_date']).' <br />'.api_get_local_time($work['sent_date']);
 
@@ -1937,15 +1944,32 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
         $extra_conditions .= " AND parent_id  = ".$work_id."  ";
 
-        $select = 'SELECT DISTINCT u.user_id, work.id as id, title as title, description, url, sent_date, contains_file, has_properties, view_properties,
-                    qualification, weight, allow_text_assignment, u.firstname, u.lastname, u.username, parent_id, accepted, qualificator_id';
-
+        $select = 'SELECT DISTINCT
+                        u.user_id,
+                        work.id as id,
+                        title as title,
+                        description,
+                        url,
+                        sent_date,
+                        contains_file,
+                        has_properties,
+                        view_properties,
+                        qualification,
+                        weight,
+                        allow_text_assignment,
+                        u.firstname,
+                        u.lastname,
+                        u.username,
+                        parent_id,
+                        accepted,
+                        qualificator_id';
         if ($getCount) {
             $select = "SELECT DISTINCT count(u.user_id) as count ";
         }
 
         $user_condition = "INNER JOIN $user_table u  ON (work.user_id = u.user_id) ";
-        $work_condition = "$iprop_table prop INNER JOIN $work_table work ON (prop.ref = work.id AND prop.c_id = $course_id AND work.c_id = $course_id ) ";
+        $work_condition = "$iprop_table prop INNER JOIN $work_table work
+                           ON (prop.ref = work.id AND prop.c_id = $course_id AND work.c_id = $course_id ) ";
 
         $work_assignment = get_work_assignment_by_id($work_id);
 
@@ -1955,9 +1979,9 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
         $sql = " $select
                 FROM $work_condition  $user_condition
-                WHERE $extra_conditions $where_condition $condition_session ";
-        $sql .= " ORDER BY $column $direction ";
-        $sql .= " LIMIT $start, $limit";
+                WHERE $extra_conditions $where_condition $condition_session
+                ORDER BY $column $direction
+                LIMIT $start, $limit";
 
         $result = Database::query($sql);
         $works = array();
@@ -2021,7 +2045,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
             if (
                 ($can_read && $work['accepted'] == '1') ||
-                ($is_author && in_array($work['accepted'], array('1','0'))) ||
+                ($is_author && in_array($work['accepted'], array('1', '0'))) ||
                 $is_allowed_to_edit
             ) {
 
@@ -2037,12 +2061,12 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 }
 
                 // Type.
-                $work['type'] = build_document_icon_tag('file', $work['file']);
+                $work['type'] = build_document_icon_tag('file', $work['url']);
 
                 // File name.
                 $link_to_download = null;
-
-                if ($work['contains_file']) {
+                // If URL is present then there's a file to download keep BC.
+                if ($work['contains_file'] || !empty($work['url'])) {
                     $link_to_download = '<a href="download.php?id='.$item_id.'">'.Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';
                 } else {
                    //$link_to_download = '<a href="view.php?id='.$item_id.'">'.Display::return_icon('save_na.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';
@@ -2072,9 +2096,9 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                     } else {
                         if ($qualification_exists) {
                             $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Edit').'"  >'.
-                            Display::return_icon('rate_work.png', get_lang('CorrectAndRate'),array(), ICON_SIZE_SMALL).'</a>';
+                            Display::return_icon('rate_work.png', get_lang('CorrectAndRate'), array(), ICON_SIZE_SMALL).'</a>';
                         } else {
-                            $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'&gradebook='.Security::remove_XSS($_GET['gradebook']).'" title="'.get_lang('Modify').'">'.
+                            $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'">'.
                             Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
                         }
                     }
@@ -2103,7 +2127,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
                     if (api_get_course_setting('student_delete_own_publication') == 1) {
                         if (api_is_allowed_to_session_edit(false, true)) {
-                            $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'&gradebook='.Security::remove_XSS($_GET['gradebook']).'" title="'.get_lang('Modify').'">'.
+                            $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'">'.
                                 Display::return_icon('edit.png', get_lang('Comment'),array(), ICON_SIZE_SMALL).'</a>';
                         }
                         $action .= ' <a href="'.$url.'work.php?'.api_get_cidreq().'&action=delete&amp;item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';

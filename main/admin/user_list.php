@@ -105,11 +105,11 @@ function clear_session_list (div_session) {
 
 function display_advanced_search_form () {
     if ($("#advanced_search_form").css("display") == "none") {
-            $("#advanced_search_form").css("display","block");
-            $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
+        $("#advanced_search_form").css("display","block");
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
     } else {
-            $("#advanced_search_form").css("display","none");
-            $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
+        $("#advanced_search_form").css("display","none");
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
     }
 }
 

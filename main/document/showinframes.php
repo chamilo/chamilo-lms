@@ -30,7 +30,7 @@ require_once '../inc/global.inc.php';
 api_protect_course_script();
 
 $noPHP_SELF = true;
-$header_file = Security::remove_XSS($_GET['file']);
+$header_file = isset($_GET['file']) ? Security::remove_XSS($_GET['file']) : null;
 $document_id = intval($_GET['id']);
 
 $course_info = api_get_course_info();
@@ -41,7 +41,9 @@ if (empty($course_info)) {
     api_not_allowed(true);
 }
 
-//Generate path 
+$show_web_odf = false;
+
+//Generate path
 if (!$document_id) {
     $document_id = DocumentManager::get_document_id($course_info, $header_file);
 }
@@ -402,19 +404,14 @@ if ($is_nanogong_available) {
         }
 
 		//get file from tmp directory
-		$to_url=api_get_path(WEB_ARCHIVE_PATH).'temp/audio/'.$file_crip;
+		$to_url = api_get_path(WEB_ARCHIVE_PATH).'temp/audio/'.$file_crip;
         
         echo '<div align="center">';
         echo '<a class="btn" href="'.$file_url_web.'" target="_blank">'.get_lang('Download').'</a>';
         echo '<br/>';
         echo '<br/>';
-        
-		echo '<applet id="applet" archive="../inc/lib/nanogong/nanogong.jar" code="gong.NanoGong" width="160" height="40">';
-            echo '<param name="SoundFileURL" value="'.$to_url.'" />';
-            echo '<param name="ShowSaveButton" value="false" />';
-            echo '<param name="ShowTime" value="true" />';
-            echo '<param name="ShowRecordButton" value="false" />';
-        echo '</applet>';
+
+        echo DocumentManager::readNanogongFile($to_url);
 		
 		//erase temp file in tmp directory when return to documents
 		$_SESSION['temp_audio_nanogong']=$to_sys;      

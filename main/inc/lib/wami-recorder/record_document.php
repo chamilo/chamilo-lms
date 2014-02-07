@@ -72,54 +72,39 @@ $fh = fopen($documentPath, 'w') or die("can't open file");
 fwrite($fh, $content);
 fclose($fh);
 
-$addToLP = false;
 
-if (isset($_REQUEST['lp_item_id']) && !empty($_REQUEST['lp_item_id'])) {
-    $lpItemId = $_REQUEST['lp_item_id'];
-    $lp = isset($_SESSION['oLP']) ? $_SESSION['oLP'] : null;
-    if (!empty($lp)) {
-        $addToLP = true;
-        // Converts wav into mp3
-        require_once '../../../../vendor/autoload.php';
-        $ffmpeg = \FFMpeg\FFMpeg::create();
-        $oldWavFile = $documentPath;
-        if (file_exists($oldWavFile)) {
-            $video = $ffmpeg->open($oldWavFile);
+$fileInfo = pathinfo($documentPath);
+$courseInfo = api_get_course_info();
 
-            $waminame_to_save = str_replace('wav', 'mp3', $waminame_to_save);
-            $documentPath = $saveDir.'/'.$waminame_to_save;
-            $title_to_save = $waminame_to_save;
-            //$video->save(new \FFMpeg\Format\Audio\Vorbis());
-            $result = $video->save(new FFMpeg\Format\Audio\Mp3(), $documentPath);
+$file = array(
+    'file' => array(
+        'name' => $fileInfo['basename'],
+        'tmp_name' => $documentPath,
+        'size' => filesize($documentPath),
+        'from_file' => true
+    )
+);
 
-            if ($result) {
-                unlink($oldWavFile);
-            }
+$output = true;
+$documentData = DocumentManager::upload_document($file, $wamidir, null, null, 0, 'overwrite', false, $output);
+
+if (!empty($documentData)) {
+    $newDocId = $documentData['id'];
+    $newMp3DocumentId = DocumentManager::addAndConvertWavToMp3($documentData, $courseInfo, api_get_user_id());
+
+    if ($newMp3DocumentId) {
+        $newDocId = $newMp3DocumentId;
+    }
+
+    if (isset($_REQUEST['lp_item_id']) && !empty($_REQUEST['lp_item_id'])) {
+        $lpItemId = $_REQUEST['lp_item_id'];
+        /** @var learnpath $lp */
+        $lp = isset($_SESSION['oLP']) ? $_SESSION['oLP'] : null;
+
+        if (!empty($lp)) {
+            $lp->set_modified_on();
+            $lpItem = new learnpathItem($lpItemId);
+            $lpItem->add_audio_from_documents($newDocId);
         }
     }
 }
-
-if (file_exists($documentPath)) {
-    // Add document to database
-    $newDocId = add_document($_course, $wamidir.'/'.$waminame_to_save, 'file', filesize($documentPath), $title_to_save);
-
-    api_item_property_update(
-        $_course,
-        TOOL_DOCUMENT,
-        $newDocId,
-        'DocumentAdded',
-        api_get_user_id(),
-        $groupId,
-        null,
-        null,
-        null,
-        $current_session_id
-    );
-
-    if ($addToLP) {
-        $lp->set_modified_on();
-        $lpItem = new learnpathItem($lpItemId);
-        $lpItem->add_audio_from_documents($newDocId);
-    }
-}
-

@@ -204,13 +204,13 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 	}
 
 	if (empty($group_id)) {
-        $form->addElement('advanced_settings', get_lang('FilesAttachment').'<span id="filepaths">
+        $form->addElement('label', null, get_lang('FilesAttachment').'<span id="filepaths">
                     <div id="filepath_1">
                         <input type="file" name="attach_1"/><br />
                         '.get_lang('Description').'&nbsp;&nbsp;<input type="text" name="legend[]" /><br /><br />
                     </div>
                 </span>');
-		$form->addElement('advanced_settings','<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),Text::format_file_size(api_get_setting('message_max_upload_filesize'))).')');
+		$form->addElement('label', null, '<span id="link-more-attach"><a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a></span>&nbsp;('.sprintf(get_lang('MaximunFileSizeX'),Text::format_file_size(api_get_setting('message_max_upload_filesize'))).')');
 	}
 
 	$form->addElement('style_submit_button','compose',api_xml_http_response_encode(get_lang('SendMessage')),'class="save"');

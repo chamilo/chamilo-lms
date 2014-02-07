@@ -27,24 +27,6 @@ require_once 'survey.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
 $htmlHeadXtra[] = '<script>
-    function advanced_parameters() {
-        if(document.getElementById(\'options\').style.display == \'none\') {
-                document.getElementById(\'options\').style.display = \'block\';
-                document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon(
-    'div_hide.gif',
-    get_lang('Hide'),
-    array('style' => 'vertical-align:middle')
-).'&nbsp;'.get_lang('AdvancedParameters').'\';
-        } else {
-                document.getElementById(\'options\').style.display = \'none\';
-                document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon(
-    'div_show.gif',
-    get_lang('Show'),
-    array('style' => 'vertical-align:middle')
-).'&nbsp;'.get_lang('AdvancedParameters').'\';
-        }
-    }
-
     function setFocus(){
       $("#surveycode_title").focus();
     }
@@ -174,18 +156,8 @@ $form->addElement(
     array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false)
 );
 
-// Aditional Parameters
-$form->addElement(
-    'advanced_settings',
-    '<a href="javascript: void(0);" onclick="javascript: advanced_parameters();" >
-        <span id="plus_minus">&nbsp;'.Display::return_icon(
-        'div_show.gif',
-        null,
-        array('style' => 'vertical-align:middle')
-    ).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>'
-);
-
-$form->addElement('html', '<div id="options" style="display: none;">');
+$form->addElement('advanced_settings', 'options', get_lang('AdvancedParameters'));
+$form->addElement('html', '<div id="options_options" style="display: none;">');
 
 if (Gradebook::is_active()) {
     // An option: Qualify the fact that survey has been answered in the gradebook

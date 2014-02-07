@@ -198,9 +198,8 @@ if (api_is_platform_admin()) {
     $form->addElement('hidden', 'id_coach', api_get_user_id());
 }
 
-$form->addElement('advanced_settings','<a class="btn btn-show advanced_parameters" id="advanced_params" href="javascript://">'.get_lang('AdvancedParameters').'</a>');
+$form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
 $form->addElement('html','<div id="advanced_params_options" style="display:none">');
-
 //Dates
 $form->addElement('text', 'display_start_date', array(get_lang('SessionDisplayStartDate'), get_lang('SessionDisplayStartDateComment')), array('id' => 'display_start_date'));
 $form->addElement('text', 'display_end_date', array(get_lang('SessionDisplayEndDate'), get_lang('SessionDisplayEndDateComment')), array('id' => 'display_end_date'));

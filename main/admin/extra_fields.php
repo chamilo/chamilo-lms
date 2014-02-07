@@ -97,19 +97,6 @@ $(function() {
                 break;
         }
     });
-
-    var value = 1;
-    $("#advanced_parameters").on("click", function() {
-        $("#options").toggle(function() {
-            if (value == 1) {
-                $("#advanced_parameters").addClass("btn-hide");
-                value = 0;
-            } else {
-                $("#advanced_parameters").removeClass("btn-hide");
-                value = 1;
-            }
-        });
-    });
 });
 </script>';
 

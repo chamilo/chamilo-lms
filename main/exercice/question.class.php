@@ -1494,7 +1494,7 @@ abstract class Question
 
             if ($this->exercise->fastEdition == false) {
                 // Advanced parameters
-                $form->addElement('advanced_settings', '<a class="btn btn-show advanced_parameters" id="advanced_params" href="javascript://">'.get_lang('AdvancedParameters').'</a>');
+                $form->addElement('advanced_settings', 'advanced_params', get_lang('AdvancedParameters'));
                 $form->addElement('html', '<div id="advanced_params_options" style="display:none;">');
             }
 

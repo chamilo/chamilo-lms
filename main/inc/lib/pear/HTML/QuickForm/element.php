@@ -96,6 +96,7 @@ class HTML_QuickForm_element extends HTML_Common
             //'checkbox',
             'group'
         );
+
         if (in_array($this->getType(), $array)) {
             if (empty($attributes)) {
                 $attributes = array('class' => 'form-control ');

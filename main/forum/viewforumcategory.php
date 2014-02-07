@@ -28,22 +28,14 @@ $language_file = 'forum';
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
 
-$htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
-    $(document).ready(function(){ $(\'.hide-me\').slideUp() });
-    function hidecontent(content){ $(content).slideToggle(\'normal\'); }
-    </script>';
-$htmlHeadXtra[] = '<script type="text/javascript" language="javascript">
-
-        function advanced_parameters() {
-            if(document.getElementById(\'options\').style.display == \'none\') {
-                    document.getElementById(\'options\').style.display = \'block\';
-                    document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-            } else {
-                    document.getElementById(\'options\').style.display = \'none\';
-                    document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-            }
-        }
-    </script>';
+$htmlHeadXtra[] = '<script>
+    $(document).ready(function(){
+        $(\'.hide-me\').slideUp()
+    });
+    function hidecontent(content){
+        $(content).slideToggle(\'normal\');
+    }
+</script>';
 
 // The section (tabs)
 $this_section = SECTION_COURSES;
@@ -80,7 +72,7 @@ $interbreadcrumb[] = array('url' => 'index.php?gradebook='.$gradebook.'&amp;sear
 
 if (!empty($_GET['action']) && !empty($_GET['content'])) {
     if ($_GET['action']=='add' && $_GET['content']=='forum' ) {
-    	$interbreadcrumb[] = array('url' =>'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&amp;origin='.$origin,'name' => $current_forum_category['cat_title']);    	   	 
+    	$interbreadcrumb[] = array('url' =>'viewforumcategory.php?forumcategory='.$current_forum_category['cat_id'].'&amp;origin='.$origin,'name' => $current_forum_category['cat_title']);
         $interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('AddForum'));
     }
 } else {
@@ -300,7 +292,7 @@ if ($action_forums != 'add') {
                 //$number_forum_topics_and_posts=get_post_topics_of_forum($forum['forum_id']); // deprecated
                 // the number of topics and posts
                 $my_number_threads = isset($forum['number_of_threads']) ? $forum['number_of_threads'] : '';
-                
+
                 $my_number_posts = isset($forum['number_of_posts']) ? $forum['number_of_posts'] : '';
                 echo '<td>'.$my_number_threads.'</td>';
                 echo '<td>'.$my_number_posts.'</td>';

@@ -9,6 +9,7 @@
 
 // protect a course script
 api_protect_course_script(true);
+$error = isset($error) ? $error : null;
 
 // error messages
 if ($error) {
@@ -33,12 +34,10 @@ $form->applyFilter('title','html_filter');
 $form->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'TrainingDescription', 'Width' => '100%', 'Height' => '150'));
 
 // Adavanced Parameters
+if (Gradebook::is_active()) {
+    $form->addElement('advanced_settings', 'id_qualify', get_lang('AdvancedParameters'));
 
-$advanced = '<a href="javascript://" class = "advanced_parameters" ><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a>';
-if (Gradebook::is_active()) {  
-    $form -> addElement('advanced_settings',$advanced);
-
-    $form->addElement('html','<div id="id_qualify" style="display:none">');
+    $form->addElement('html','<div id="id_qualify_options" style="display:none">');
 
     // Qualify Attendance for gradebook option
     $form->addElement('checkbox', 'attendance_qualify_gradebook', '', get_lang('QualifyAttendanceGradebook'),'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');

@@ -1730,18 +1730,9 @@ class Exercise
         }
 
         $form->add_html_editor('exerciseDescription', get_lang('ExerciseDescription'), false, false, $editor_config);
+        $form->addElement('advanced_settings', 'options', get_lang('AdvancedParameters'));
 
-        $form->addElement(
-            'advanced_settings',
-            '<a href="javascript://" onclick=" return advanced_parameters()">
-                <span id="img_plus_and_minus">
-                <div style="vertical-align:top;" >
-                    '.Display::return_icon('div_show.gif').' '.addslashes(get_lang('AdvancedParameters')).'</div>
-                </span>
-            </a>'
-        );
-
-        $form->addElement('html', '<div id="options" style="">');
+        $form->addElement('html', '<div id="options_options" style="display:none">');
 
         // Model type
         $radio = array(

@@ -572,7 +572,7 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 					$form_folder->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'work', 'Width' => '80%', 'Height' => '200'));
 
 					$there_is_a_end_date = false;
-					$form_folder->addElement('advanced_settings', Display::url(get_lang('AdvancedParameters'), '#', array('id' => 'work', 'class' => 'advanced_options')));
+                    $form_folder->addElement('advanced_settings', 'work', get_lang('AdvancedParameters'));
 					$form_folder->addElement('html', '<div id="work_options" style="display: none;">');
 
 					if (empty($default)) {

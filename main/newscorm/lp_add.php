@@ -119,8 +119,7 @@ $form->applyFilter('lp_name', 'html_filter');
 $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('hidden', 'post_time', time());
 $form->addElement('hidden', 'action', 'add_lp');
-
-$form->addElement('advanced_settings', Display::url(get_lang('AdvancedParameters'), '#', array('id'=> 'lp', 'class' => 'advanced_options')));
+$form->addElement('advanced_settings', 'lp', get_lang('AdvancedParameters'));
 $form->addElement('html','<div id="lp_options" style="display:none">');
 
 $items = learnpath::get_category_from_course_into_select(api_get_course_int_id());

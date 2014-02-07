@@ -51,21 +51,7 @@ if (isset($_GET['origin'])) {
     $origin =  Security::remove_XSS($_GET['origin']);
 }
 
-// javascript
-$htmlHeadXtra[] = '<script>
-        function advanced_parameters() {
-            if(document.getElementById(\'id_qualify\').style.display == \'none\') {
-                document.getElementById(\'id_qualify\').style.display = \'block\';
-                document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-            } else {
-                document.getElementById(\'id_qualify\').style.display = \'none\';
-                document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-            }
-        }
-</script>';
-
 /* MAIN DISPLAY SECTION */
-
 /* Retrieving forum and forum category information */
 
 $current_forum = get_forum_information($_GET['forum']); // Note: This has to be validated that it is an existing forum.

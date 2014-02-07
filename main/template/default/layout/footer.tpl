@@ -142,15 +142,6 @@ $(document).bind("ajaxSend", function(){
     $("#loading_block").hide();
 });
 
-$("form").on("click", ' .advanced_parameters', function() {
-    var id = $(this).attr('id') + '_options';
-    var button = $(this);
-    $("#"+id).toggle(function() {
-        button.toggleClass('active');
-    });
-});
-
-
 // Support for AJAX loaded modal window.
 // Focuses on first input textbox after it loads the window.
 /*
@@ -212,9 +203,6 @@ $(document).ready( function() {
     });
 
     /** Makes row highlighting possible */
-
-    $('.advanced_parameters').addClass('btn-default');
-    //$('.btn').addClass('btn-default');
 
     // Chosen select.
     $(".chzn-select").chosen({

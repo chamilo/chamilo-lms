@@ -248,17 +248,8 @@ function show_add_forum_form($inputvalues = array(), $lp_id)
         $group[] = $form->createElement('radio', 'allow_anonymous', null, get_lang('No'), 0);
         $form->addGroup($group, 'allow_anonymous_group', get_lang('AllowAnonymousPosts'), '&nbsp;');
     }
-
-    $form->addElement(
-        'advanced_settings',
-        '<a href="javascript://" onclick="advanced_parameters()" ><span id="plus_minus">&nbsp;'.Display::return_icon(
-            'div_show.gif',
-            get_lang('Show'),
-            array('style' => 'vertical-align:middle')
-        ).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>',
-        ''
-    );
-    $form->addElement('html', '<div id="options" style="display:none">');
+    $form->addElement('advanced_settings', 'options', get_lang('AdvancedParameters'));
+    $form->addElement('html', '<div id="options_options" style="display:none">');
 
     $group = array();
     $group[] = $form->createElement('radio', 'students_can_edit', null, get_lang('Yes'), 1);
@@ -2344,17 +2335,8 @@ function show_add_post_form($action = '', $id = '', $form_values = '')
     );
 
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement(
-        'advanced_settings',
-        '<a href="javascript://" onclick="return advanced_parameters()">
-    						  <span id="img_plus_and_minus">&nbsp;'.Display::return_icon(
-            'div_show.gif',
-            get_lang('Show'),
-            array('style' => 'vertical-align:middle')
-        ).' '.get_lang('AdvancedParameters').'</span></a>'
-    );
-
-    $form->addElement('html', '<div id="id_qualify" style="display:none">');
+    $form->addElement('advanced_settings', 'id_qualify', get_lang('AdvancedParameters'));
+    $form->addElement('html', '<div id="id_qualify_options" style="display:none">');
 
     if ((api_is_course_admin() || api_is_course_coach() || api_is_course_tutor()) && !($my_thread)) {
 
@@ -2874,16 +2856,8 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
             : array('ToolbarSet' => 'ForumStudent', 'Width' => '100%', 'Height' => '400', 'UserStatus' => 'student')
     );
     $form->addRule('post_text', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement(
-        'advanced_settings',
-        '<a href="javascript://" onclick="return advanced_parameters()"><span id="img_plus_and_minus">'.Display::return_icon(
-            'div_show.gif',
-            get_lang('Show'),
-            array('style' => 'vertical-align:middle')
-        ).''.get_lang('AdvancedParameters').'</span></a>'
-    );
-
-    $form->addElement('html', '<div id="id_qualify" style="display:none">');
+    $form->addElement('advanced_settings', 'id_qualify', get_lang('AdvancedParameters'));
+    $form->addElement('html', '<div id="id_qualify_options" style="display:none">');
 
     if (!isset($_GET['edit'])) {
         if (Gradebook::is_active()) {

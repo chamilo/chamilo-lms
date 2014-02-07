@@ -91,7 +91,7 @@ function lp_upload_quiz_main() {
         16
     ).get_lang('DownloadExcelTemplate');
 
-    $form->addElement('advanced_settings', $link);
+    $form->addElement('label', null, $link);
 
     //button send document
     $form->addElement('style_submit_button', 'submit_upload_quiz', get_lang('Send'), 'class="upload"');

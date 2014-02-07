@@ -94,16 +94,6 @@ function clear_session_list (div_session) {
 	$("div#"+div_session).hide("");
 }
 
-function display_advanced_search_form () {
-    if ($("#advanced_search_form").css("display") == "none") {
-            $("#advanced_search_form").css("display","block");
-            $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
-    } else {
-            $("#advanced_search_form").css("display","none");
-            $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedSearch').'\');
-    }
-}
-
 $(document).ready(function() {
     var select_val = $("#input_select_extra_data").val();
     if ( document.getElementById(\'extra_data_text\')) {
@@ -631,12 +621,12 @@ $renderer =& $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
 $form->addElement('text','keyword',get_lang('keyword'), 'size="25"');
 $form->addElement('style_submit_button', 'submit',get_lang('Search'),'class="btn"');
-$form->addElement('static','search_advanced_link',null,'<a href="javascript://" class = "advanced_parameters" onclick="display_advanced_search_form();"><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedSearch').'</span></a>');
-
+$form->addElement('advanced_settings', 'user_list_filter', get_lang('AdvancedSearch'));
 $actions  = '';
 if (api_is_platform_admin()) {
 	$actions .= '<span style="float:right;">'.
-		 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('new_user.png',get_lang('AddUsers'),'',ICON_SIZE_MEDIUM).'</a>'.
+		 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
+            Display::return_icon('new_user.png',get_lang('AddUsers'),'',ICON_SIZE_MEDIUM).'</a>'.
 		 '</span>';
 }
 $actions .= $form->return_form();
@@ -669,7 +659,7 @@ while ($row_admin = Database::fetch_row($res_admin)) {
 // display advanced search form
 $form = new FormValidator('advanced_search','get');
 
-$form->addElement('html','<div id="advanced_search_form" style="display:none;">');
+$form->addElement('html','<div id="user_list_filter_options" style="display:none;">');
 $form->addElement('header', get_lang('AdvancedSearch'));
 $form->addElement('html', '<table>');
 

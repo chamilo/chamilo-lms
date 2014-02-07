@@ -73,11 +73,7 @@ $form->addElement('hidden', 'uploadPath');
 $form->addElement('hidden', 'fld', $fld);
 $form->addElement('hidden', 'imgcount', $imgcount);
 $form->addElement('hidden', 'finish', $finish);
-
 $form->addElement('html', GenerateHiddenList($imgparams));
-
-$form->addElement('advanced_settings', Display::return_icon('hotpotatoes.jpg', get_lang('HotPotatoes')));
-
 $label = get_lang('DownloadImg').' : ';
 if ($finish == 0) {
     $label = get_lang('DownloadFile').' : ';
@@ -86,19 +82,14 @@ if ($finish == 0) {
 $form->addElement('file', 'userFile', $label);
 $form->addElement('button', 'submit', get_lang('SendFile'));
 
-
 // If finish is set; it's because the user came from this script in the first place (displaying hidden "finish" field).
 if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) {
-
-
     // Moved this down here as the upload handling functions give output.
     if ($form->validate()) {
-
         //initialise $finish
         if (!isset($finish)) {
             $finish = 0;
         }
-
         //if the size is not defined, it's probably because there has been an error or no file was submitted
         if (!$_FILES['userFile']['size']) {
             $dialogBox .= get_lang('SendFileError').'<br />'.get_lang('Notice').' : '.get_lang(

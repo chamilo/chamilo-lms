@@ -2683,7 +2683,6 @@ class CourseManager
                 }
 
                 $params['icon'] = Display::return_icon('blackboard.png', $course_info['title'], array(), ICON_SIZE_LARGE);
-
                 $params['right_actions'] = '';
 
                 if (api_is_platform_admin()) {

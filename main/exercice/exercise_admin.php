@@ -86,16 +86,6 @@ $htmlHeadXtra[] = '<script>
         });
     });
 
-	function advanced_parameters() {
-		if(document.getElementById(\'options\').style.display == \'none\') {
-			document.getElementById(\'options\').style.display = \'block\';
-			document.getElementById(\'img_plus_and_minus\').innerHTML=\' '.Display::return_icon('div_hide.gif').' '.addslashes(get_lang('AdvancedParameters')).'\';
-		} else {
-			document.getElementById(\'options\').style.display = \'none\';
-			document.getElementById(\'img_plus_and_minus\').innerHTML=\' '.Display::return_icon('div_show.gif').' '.addslashes(get_lang('AdvancedParameters')).'\';
-		}
-	}
-
     function FCKeditor_OnComplete( editorInstance ) {
            if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
               HideFCKEditorByInstanceName (editorInstance.Name);
@@ -230,7 +220,6 @@ function setFocus(){
 $(document).ready(function () {
     setFocus();
 });
-window.onload = advanced_parameters;
 </script>';
 
 // INIT EXERCISE

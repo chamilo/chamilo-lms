@@ -796,8 +796,8 @@ class Display
         $return_only_path = false
     ) {
 
-        $code_path   = api_get_path(SYS_CODE_PATH);
-        $w_code_path = api_get_path(WEB_CODE_PATH);
+        $code_path   = api_get_path(SYS_IMG_PATH);
+        $w_code_path = api_get_path(WEB_IMG_PATH);
 
         $image      = trim($image);
         $theme      = 'css/'.api_get_visual_theme().'/icons/';
@@ -811,14 +811,15 @@ class Display
         }
 
         // Checking the theme icons folder example: main/css/chamilo/icons/XXX
+
         if (is_file($code_path.$theme.$size_extra.$image)) {
             $icon = $w_code_path.$theme.$size_extra.$image;
-        } elseif (is_file($code_path.'img/icons/'.$size_extra.$image)) {
+        } elseif (is_file($code_path.'icons/'.$size_extra.$image)) {
             //Checking the main/img/icons/XXX/ folder
-            $icon = $w_code_path.'img/icons/'.$size_extra.$image;
+            $icon = $w_code_path.'icons/'.$size_extra.$image;
         } else {
             //Checking the img/ folder
-            $icon = $w_code_path.'img/'.$image;
+            $icon = $w_code_path.$image;
         }
 
         $icon = api_get_cdn_path($icon);

@@ -821,7 +821,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 		foreach ($cats as $cat) {
 			$allcat  = $cat->get_subcategories($stud_id, $course_code, $session_id);
 			$alleval = $cat->get_evaluations($stud_id);
-			$alllink = $cat->get_links($stud_id,true);
+			$alllink = $cat->get_links($stud_id);
 
 			if ($cat->get_parent_id() != 0 ) {
 				$i++;

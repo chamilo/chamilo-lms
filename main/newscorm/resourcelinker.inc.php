@@ -51,10 +51,8 @@ function show_folder_up()
     $level = FileManager::get_levels($folder);
 
     if ($level == 1) {
-        echo "<a href='".api_get_self(
-        )."?content=Document&amp;source_forum=".$_GET['source_forum']."&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no'><img src='../img/folder_up.gif' border='0' />".get_lang(
-            'LevelUp'
-        )."</a>";
+        echo "<a href='".api_get_self()."?content=Document&amp;source_forum=".$_GET['source_forum']."&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no'>
+        ".Display::return_icon('folder_up.gif', get_lang('LevelUp'))."</a>";
     }
     if ($level && $level != 0 && $level != 1) {
         $folder_up = $folder;
@@ -62,10 +60,8 @@ function show_folder_up()
         $last = count($folder_temp) - 1;
         unset($folder_temp[$last]);
         $folder_up = implode('/', $folder_temp);
-        echo "<a href='".api_get_self(
-        )."?content=Document&amp;source_forum=".$_GET['source_forum']."&amp;folder=$folder_up&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no'><img src='../img/folder_up.gif' border='0' />".get_lang(
-            'LevelUp'
-        )."</a>";
+        echo "<a href='".api_get_self()."?content=Document&amp;source_forum=".$_GET['source_forum']."&amp;folder=$folder_up&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no'>
+        ".Display::return_icon('folder_up.gif', get_lang('LevelUp'))."</a>";
     }
 }
 
@@ -100,10 +96,10 @@ function show_documents($folder)
             if (FileManager::get_levels($row['path']) - 1 == 1) {
                 // showing the right icon.
                 if (file_or_folder($row['path'])) {
-                    echo '<img src="../img/file.gif" align="middle" />';
+                    echo Display::return_icon('file.gif');
                 } else {
                     $image = FileManager::choose_image($row['path']);
-                    echo "<img src=\"../img/$image\" align=\"middle\" />";
+                    echo Display::return_icon($image);
                 }
 
                 // Folders should be clickable.
@@ -153,10 +149,10 @@ function show_documents($folder)
                 $good_key = key($good_paths);
                 // Showing the right icon.
                 if (file_or_folder($path)) {
-                    echo '<img src="../img/file.gif" align="middle" />';
+                    echo Display::return_icon('file.gif');
                 } else {
                     $image = FileManager::choose_image($path);
-                    echo "<img src=\"../img/$image\" align=\"middle\" />";
+                    echo Display::return_icon($image);
                 }
 
                 // Folders should be clickable
@@ -246,33 +242,38 @@ function display_addedresource_link($type, $id, $style = '')
             $TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
             $result = Database::query("SELECT * FROM $TABLEAGENDA WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
-            echo '<img src="../img/agenda.gif" align="middle" /> <a href="../calendar/agenda.php"'.$styling.'>'.$myrow['title']."</a><br />\n";
+            echo Display::return_icon('agenda.gif');
+            echo ' <a href="../calendar/agenda.php"'.$styling.'>'.$myrow['title']."</a>
+                <br />";
             break;
         case 'Ad_Valvas':
             $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
             $result = Database::query("SELECT * FROM $tbl_announcement WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
-            echo '<img src="../img/valves.gif" align="middle" /> <a href="../announcements/announcements.php"'.$styling.'>'.$myrow['title']."</a><br />\n";
+            echo Display::return_icon('valves.gif');
+            echo ' <a href="../announcements/announcements.php"'.$styling.'>'.$myrow['title']."</a><br />\n";
             break;
         case 'Link':
             $TABLETOOLLINK = Database::get_course_table(TABLE_LINK);
             $result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
-            echo '<img src="../img/links.gif" align="middle" /> <a href="#" onclick="javascript:window.open(\'../link/link_goto.php?link_id='.$myrow['id'].'&amp;link_url='.urlencode(
-                $myrow['url']
-            )."','MyWindow','width=500,height=400,top='+((screen.height-400)/2)+',left='+((screen.width-500)/2)+',scrollbars=1,resizable=1,menubar=1'); return false;\"".$styling.'>'.$myrow['title']."</a><br />\n";
+            echo Display::return_icon('links.gif');
+            echo ' <a href="#" onclick="javascript:window.open(\'../link/link_goto.php?link_id='.$myrow['id'].'&amp;link_url='.urlencode($myrow['url'])."','MyWindow','width=500,height=400,top='+((screen.height-400)/2)+',left='+((screen.width-500)/2)+',scrollbars=1,resizable=1,menubar=1'); return false;\"".$styling.'>'.
+                $myrow['title']."</a><br />";
             break;
         case 'Exercise':
             $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
             $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND iid = $id");
             $myrow = Database::fetch_array($result);
-            echo '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercise_submit.php?exerciseId='.$myrow['id'].'"'.$styling.'>'.$myrow['title']."</a><br />\n";
+            echo Display::return_icon('quiz.gif');
+            echo ' <a href="../exercice/exercise_submit.php?exerciseId='.$myrow['id'].'"'.$styling.'>'.$myrow['title']."</a><br />";
             break;
         case 'Forum':
             $TBL_FORUMS = Database::get_course_table(TABLE_FORUM);
             $result = Database::query("SELECT * FROM $TBL_FORUMS WHERE c_id = $course_id AND forum_id=$id");
             $myrow = Database::fetch_array($result);
-            echo '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewforum.php?forum='.$myrow['forum_id'].'&amp;md5='.$myrow['md5'].'"'.$styling.'>'.$myrow['forum_name']."</a><br />\n";
+            echo Display::return_icon('forum.gif');
+            echo ' <a href="../phpbb/viewforum.php?forum='.$myrow['forum_id'].'&amp;md5='.$myrow['md5'].'"'.$styling.'>'.$myrow['forum_name']."</a><br />";
             break;
         case 'Thread': //=topics
             //@deprecated bb_posts, bb_posts_text, bb_forums
@@ -294,7 +295,8 @@ function display_addedresource_link($type, $id, $style = '')
             $sql = "SELECT * FROM $tbl_post p WHERE c_id = $course_id AND post_id = $id";
             $result = Database::query($sql);
             $post = Database::fetch_object($result);
-            echo '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$post->topic_id.'&amp;forum='.$post->forum_id.'"'.$styling.'>'.$post->post_title."</a><br />\n";
+            echo Display::return_icon('forum.gif');
+            echo ' <a href="../phpbb/viewtopic.php?topic='.$post->topic_id.'&amp;forum='.$post->forum_id.'"'.$styling.'>'.$post->post_title."</a><br />";
             break;
         case 'Document':
             $dbTable = Database::get_course_table(TABLE_DOCUMENT);
@@ -318,11 +320,12 @@ function display_addedresource_link($type, $id, $style = '')
             }
 
             $in_frames = in_array($ext, $array_ext);
-
-            echo '<img src="../img/'.$image.'" align="middle" /> <a href="../document/'.($in_frames ? 'showinframes.php?file=' : 'download.php?doc_url=').$myrow['path'].'"'.$styling.'>'.$filename."</a><br />\n";
+            echo Display::return_icon($image);
+            echo ' <a href="../document/'.($in_frames ? 'showinframes.php?file=' : 'download.php?doc_url=').$myrow['path'].'"'.$styling.'>'.$filename."</a><br />";
             break;
         case 'Externallink':
-            echo '<img src="../img/links.gif" align="middle" /> <a href="'.$id.'"'.$styling.'>'.$id."</a><br />\n";
+            echo Display::return_icon('links.gif');
+            echo ' <a href="'.$id.'"'.$styling.'>'.$id."</a><br />\n";
             break;
     }
 }
@@ -351,8 +354,6 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
     $_course = api_get_course_info();
 
     $course_id = api_get_course_int_id();
-
-
     $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
     $hyperlink_target_parameter = ''; //or e.g. 'target="_blank"'
 
@@ -388,21 +389,20 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+                    echo Display::return_icon('checkbox_on2.gif');
+                    //echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
                 } else {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
-                    //echo "&nbsp;";
+                    echo Display::return_icon('checkbox_on2.gif', 'on', array('style' => 'visibility: hidden' ));
+                    //echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
                 }
             }
+
             if (($builder != 'builder') && ($icon != 'wrap')) {
                 echo "</td><td>";
             }
 
             if ($myrow['title'] == '') {
-                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang(
-                    'StepDeleted2'
-                )."</span>";
-
+                echo "<span class='messagesmall'>".get_lang('StepDeleted1')." $type ".get_lang('StepDeleted2')."</span>";
                 return (true);
             }
 
@@ -410,7 +410,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                 return (shorten($myrow['title'], $length));
             }
             if ($icon == 'icon') {
-                echo "<img src='../img/agenda.gif' align=\"absmiddle\" alt='agenda'>";
+                echo Display::return_icon('agenda.gif');
             }
             if ($builder != 'builder') {
                 echo "<a href=\"".api_get_self(
@@ -469,12 +469,13 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+                    echo Display::return_icon('checkbox_on2.gif');
                 } else {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
+                    echo Display::return_icon('checkbox_on2.gif', 'on', array('style' => 'visibility: hidden'));
                     //echo "&nbsp;";
                 }
             }
+
             if (($builder != 'builder') && ($icon != 'wrap')) {
                 echo "</td><td>";
             }
@@ -492,7 +493,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                 return (shorten($title, $length));
             }
             if ($icon == 'icon') {
-                echo "<img src='../img/valves.gif' align=\"absmiddle\" alt='ad valvas'>";
+                echo Display::return_icon('valves.gif');
             }
             if ($builder != 'builder') {
                 echo "<a href=\"".api_get_self(
@@ -543,10 +544,9 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+                    echo Display::return_icon('checkbox_on2.gif');
                 } else {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
-                    //echo "&nbsp;";
+                    echo Display::return_icon('checkbox_on2.gif', 'on', array('style' => 'visibility: hidden'));
                 }
             }
             if (($builder != 'builder') && ($icon != 'wrap')) {
@@ -566,9 +566,9 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             }
             if ($icon == 'icon') {
                 if ($linktype == 'Link _self') {
-                    echo "<img src='../img/links.gif' align=\"absmiddle\" alt='links'>";
+                    echo Display::return_icon('links.gif', get_lang('Links'));
                 } else {
-                    echo "<img src='../img/link_blank.gif' align=\"absmiddle\" alt='blank links'>";
+                    echo Display::return_icon('link_blank.gif');
                 }
             }
             $thelink = $myrow['url'];
@@ -625,10 +625,9 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+                    echo Display::return_icon('checkbox_on2.gif');
                 } else {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
-                    //echo "&nbsp;";
+                    echo Display::return_icon('checkbox_on2.gif', 'on', array('style' => 'visibility: hidden'));
                 }
             }
             if (($builder != 'builder') && ($icon != 'wrap')) {
@@ -647,7 +646,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                 return (shorten($myrow['title'], $length));
             }
             if ($icon == 'icon') {
-                echo "<img src='../img/quiz.gif' align=\"absmiddle\" alt='quizz'>";
+                echo Display::return_icon('quiz.gif');
             }
             if ($builder != 'builder') {
                 echo "<a href=\"".api_get_self(
@@ -706,10 +705,9 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+                    echo Display::return_icon('checkbox_on2.gif');
                 } else {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
-                    //echo "&nbsp;";
+                    echo Display::return_icon('checkbox_on2.gif', 'on', array('style' => 'visibility: hidden'));
                 }
             }
             if (($builder != 'builder') && ($icon != 'wrap')) {
@@ -728,7 +726,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                 return (shorten($name, $length));
             }
             if ($icon == 'icon') {
-                echo "<img src='../img/jqz.jpg' align=\"absmiddle\" alt='hot potatoes'>";
+                echo Display::return_icon('jqz.gif');
             }
 
             $cid = $_course['official_code'];
@@ -782,10 +780,9 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+                    echo Display::return_icon('checkbox_on2.gif');
                 } else {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
-                    //echo "&nbsp;";
+                    echo Display::return_icon('checkbox_on2.gif', 'on', array('style' => 'visibility: hidden'));
                 }
             }
             if (($builder != 'builder') && ($icon != 'wrap')) {
@@ -805,7 +802,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                 return (shorten($myrow['forum_name'], $length));
             }
             if ($icon == 'icon') {
-                echo "<img src='../img/forum.gif' align=\"absmiddle\" alt='forum'>";
+                echo Display::return_icon('forum.gif');
             }
             $forumparameters = "forum=".$myrow["forum_id"]."&md5=".$myrow["md5"];
             if ($builder != 'builder') {
@@ -858,10 +855,9 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+                    echo Display::return_icon('checkbox_on2.gif');
                 } else {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
-                    //echo "&nbsp;";
+                    echo Display::return_icon('checkbox_on2.gif', 'on', array('style' => 'visibility: hidden'));
                 }
             }
             if (($builder != 'builder') && ($icon != 'wrap')) {
@@ -881,7 +877,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                 return (shorten($myrow['topic_title'], $length));
             }
             if ($icon == 'icon') {
-                echo "<img src='../img/forum.gif' align=\"absmiddle\" alt='forum'>";
+                echo Display::return_icon('forum.gif');
             }
             if ($builder != 'builder') {
                 echo "<a href=\"".api_get_self(
@@ -942,10 +938,9 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+                    echo Display::return_icon('checkbox_on2.gif');
                 } else {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
-                    //echo "&nbsp;";
+                    echo Display::return_icon('checkbox_on2.gif', 'on', array('style' => 'visibility: hidden'));
                 }
             }
             if (($builder != 'builder') && ($icon != 'wrap')) {
@@ -965,7 +960,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                 return (shorten($myrow["post_title"], $length));
             }
             if ($icon == 'icon') {
-                echo "<img src='../img/forum.gif' align=\"absmiddle\" alt='forum'>";
+                echo Display::return_icon('forum.gif');
             }
             if ($builder != 'builder') {
                 echo "<a href=\"".api_get_self()."?action=closelesson&source_forum=".intval(
@@ -1017,10 +1012,9 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
 
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+                    echo Display::return_icon('checkbox_on2.gif');
                 } else {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
-                    //echo "&nbsp;";
+                    echo Display::return_icon('checkbox_on2.gif', 'on', array('style' => 'visibility: hidden'));
                 }
             }
             if (($builder != 'builder') && ($icon != 'wrap')) {
@@ -1049,7 +1043,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                 return (shorten($filename, $length));
             }
             if ($icon == 'icon') {
-                echo "<img src='../img/$image' align=\"absmiddle\" alt='$image'>";
+                echo Display::return_icon($image);
             }
             if ($builder != 'builder') {
                 echo "<a href=\"".api_get_self(
@@ -1107,10 +1101,9 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+                    echo Display::return_icon('checkbox_on2.gif');
                 } else {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
-                    //echo "&nbsp;";
+                    echo Display::return_icon('checkbox_on2.gif', 'on', array('style' => 'visibility: hidden'));
                 }
             }
             if (($builder != 'builder') && ($icon != 'wrap')) {
@@ -1129,7 +1122,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                 return (shorten($name, $length));
             }
             if ($icon == 'icon') {
-                echo "<img src='../img/works.gif' align=\"absmiddle\">";
+                echo Display::return_icon('works.gif');
             }
             if ($builder != 'builder') {
                 echo "<a href=\"".api_get_self(
@@ -1177,10 +1170,9 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+                    echo Display::return_icon('checkbox_on2.gif');
                 } else {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
-                    //echo "&nbsp;";
+                    echo Display::return_icon('checkbox_on2.gif', 'on', array('style' => 'visibility: hidden'));
                 }
             }
             if (($builder != 'builder') && ($icon != 'wrap')) {
@@ -1199,7 +1191,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                 return (shorten($name, $length));
             }
             if ($icon == 'icon') {
-                echo "<img src='../img/dropbox.gif' align=\"absmiddle\">";
+                echo Display::return_icon('dropbox.gif');
             }
 
             if ($builder != 'builder') {
@@ -1248,10 +1240,9 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+                    echo Display::return_icon('checkbox_on2.gif');
                 } else {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
-                    //echo "&nbsp;";
+                    echo Display::return_icon('checkbox_on2.gif', 'on', array('style' => 'visibility: hidden'));
                 }
             }
             if (($builder != 'builder') && ($icon != 'wrap')) {
@@ -1270,7 +1261,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                 return (shorten($name, $length));
             }
             if ($icon == 'icon') {
-                echo "<img src='../img/introduction.gif' align=\"absmiddle\" alt='introduction'>";
+                echo Display::return_icon('introduction.gif');
             }
 
             if ($builder != 'builder') {
@@ -1317,10 +1308,9 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+                    echo Display::return_icon('checkbox_on2.gif');
                 } else {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
-                    //echo "&nbsp;";
+                    echo Display::return_icon('checkbox_on2.gif', 'on', array('style' => 'visibility: hidden'));
                 }
             }
             if (($builder != 'builder') && ($icon != 'wrap')) {
@@ -1339,7 +1329,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                 return (shorten($name, $length));
             }
             if ($icon == 'icon') {
-                echo "<img src='../img/info.gif' align=\"absmiddle\" alt='info'>";
+                echo Display::return_icon('info.gif');
             }
 
             if ($builder != 'builder') {
@@ -1386,10 +1376,9 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+                    echo Display::return_icon('checkbox_on2.gif');
                 } else {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
-                    //echo "&nbsp;";
+                    echo Display::return_icon('checkbox_on2.gif', 'on', array('style' => 'visibility: hidden'));
                 }
             }
             if (($builder != 'builder') && ($icon != 'wrap')) {
@@ -1408,7 +1397,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                 return (shorten($name, $length));
             }
             if ($icon == 'icon') {
-                echo "<img src='../img/group.gif' align=\"absmiddle\" alt='group'>";
+                echo Display::return_icon('group.gif');
             }
 
             if ($builder != 'builder') {
@@ -1457,10 +1446,9 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
             }
             if ($icon != 'nolink') {
                 if ($completed == 'completed') {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on'>";
+                    echo Display::return_icon('checkbox_on2.gif');
                 } else {
-                    echo "<img src='../img/checkbox_on2.gif' border='0' width='13' height='11' alt='on' style='visibility: hidden'>";
-                    //echo "&nbsp;";
+                    echo Display::return_icon('checkbox_on2.gif', 'on', array('style' => 'visibility: hidden'));
                 }
             }
             if (($builder != 'builder') && ($icon != 'wrap')) {
@@ -1479,7 +1467,7 @@ function display_addedresource_link_in_learnpath($type, $id, $completed, $id_in_
                 return (shorten($name, $length));
             }
             if ($icon == 'icon') {
-                echo "<img src='../img/members.gif' align=\"absmiddle\" alt='members'>";
+                echo Display::return_icon('members.gif');
             }
 
             if ($builder != 'builder') {
@@ -1833,7 +1821,9 @@ function remove_resource($resource_key)
 function show_addresource_button($additionalparameters = '')
 {
     global $charset;
-    echo '<label for="addresources"><img src="../img/attachment.gif" /></label><input class="link_alike" type="submit" name="addresources" id="addresources" value="'.api_htmlentities(
+    echo '<label for="addresources">
+        '.Display::return_icon('attachment.gif').'
+        </label><input class="link_alike" type="submit" name="addresources" id="addresources" value="'.api_htmlentities(
         get_lang('Attachment'),
         ENT_QUOTES,
         $charset
@@ -1858,7 +1848,6 @@ function delete_one_added_resource($source_type, $source_id, $resource_type, $re
  */
 function delete_added_resource($type, $id)
 {
-    $_course = api_get_course_info();
     $course_id = api_get_course_int_id();
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES);
     $sql = "DELETE FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type' and source_id='$id'";
@@ -1871,7 +1860,6 @@ function delete_added_resource($type, $id)
  */
 function delete_all_resources_type($type)
 {
-    $_course = api_get_course_info();
     $course_id = api_get_course_int_id();
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES);
     $sql = "DELETE FROM $TABLERESOURCE WHERE c_id = $course_id AND source_type='$type'";
@@ -1943,13 +1931,6 @@ function update_added_resources($type, $id)
 function display_added_resources($type, $id, $style = '')
 {
     $course_id = api_get_course_int_id();
-    // The array containing the icons
-    $arr_icons = array(
-        'Agenda' => '../img/agenda.gif',
-        'Ad Valvas' => '../img/valves.gif',
-        'Link' => '../img/links.gif',
-        'Exercise' => '../img/quiz.gif'
-    );
 
     global $origin;
     $TABLERESOURCE = Database::get_course_table(TABLE_LINKED_RESOURCES);
@@ -2008,9 +1989,9 @@ function display_resources($showdeleteimg)
                 echo "<a href=".api_get_self(
                 )."?showresources=true&amp;source_forum=".$_GET['source_forum']."&amp;resourceaction=removeresource&amp;locationkey=".key(
                     $addedresource
-                )."&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no><img src='../img/delete.gif' border='0' alt='resource ".get_lang(
-                    'Delete'
-                )."' /></a><br />";
+                )."&amp;source_id=$source_id&amp;action=$action&amp;learnpath_id=$learnpath_id&amp;chapter_id=$chapter_id&amp;originalresource=no>
+                    ".Display::return_icon('delete.gif', get_lang('Delete'))."
+                </a><br />";
             }
             echo '</td></tr>';
             next($addedresource);
@@ -2101,34 +2082,32 @@ function rl_get_html_resource_link($course_code, $type, $id, $style = '', $new_w
             $TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
             $result = Database::query("SELECT * FROM $TABLEAGENDA WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
-            $output = '<img src="../img/agenda.gif" align="middle" /> <a href="../calendar/agenda.php"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />\n";
+            $output = Display::return_icon('agenda.gif').' <a href="../calendar/agenda.php"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />\n";
             break;
         case TOOL_ANNOUNCEMENT:
             $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
             $result = Database::query("SELECT * FROM $tbl_announcement WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
-            $output = '<img src="../img/valves.gif" align="middle" /> <a href="../announcements/announcements.php"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />\n";
+            $output = Display::return_icon('valves.gif').' <a href="../announcements/announcements.php"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />\n";
             break;
         case TOOL_LINK:
             //doesn't take $target into account
             $TABLETOOLLINK = Database::get_course_table(TABLE_LINK);
             $result = Database::query("SELECT * FROM $TABLETOOLLINK WHERE c_id = $course_id AND id=$id");
             $myrow = Database::fetch_array($result);
-            $output = '<img src="../img/links.gif" align="middle" /> <a href="#" onclick="javascript:window.open(\'../link/link_goto.php?link_id='.$myrow['id'].'&amp;link_url='.urlencode(
-                $myrow['url']
-            )."','MyWindow','width=500,height=400,top='+((screen.height-400)/2)+',left='+((screen.width-500)/2)+',scrollbars=1,resizable=1,menubar=1'); return false;\"".$styling.'>'.$myrow['title']."</a><br />\n";
+            $output = Display::return_icon('links.gif').' <a href="#" onclick="javascript:window.open(\'../link/link_goto.php?link_id='.$myrow['id'].'&amp;link_url='.urlencode($myrow['url'])."','MyWindow','width=500,height=400,top='+((screen.height-400)/2)+',left='+((screen.width-500)/2)+',scrollbars=1,resizable=1,menubar=1'); return false;\"".$styling.'>'.$myrow['title']."</a><br />";
             break;
         case TOOL_QUIZ:
             $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
             $result = Database::query("SELECT * FROM $TBL_EXERCICES WHERE c_id = $course_id AND iid = $id");
             $myrow = Database::fetch_array($result);
-            $output = '<img src="../img/quiz.gif" align="middle" /> <a href="../exercice/exercise_submit.php?exerciseId='.$myrow['id'].'"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />\n";
+            $output = Display::return_icon('quiz.gif').' <a href="../exercice/exercise_submit.php?exerciseId='.$myrow['id'].'"'.$styling.' '.$target.'>'.$myrow['title']."</a><br />";
             break;
         case TOOL_FORUM:
             $TBL_FORUMS = Database::get_course_table(TABLE_FORUM);
             $result = Database::query("SELECT * FROM $TBL_FORUMS WHERE c_id = $course_id AND forum_id=$id");
             $myrow = Database::fetch_array($result);
-            $output = '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewforum.php?forum='.$myrow['forum_id'].'&md5='.$myrow['md5'].'"'.$styling.' '.$target.'>'.$myrow['forum_name']."</a><br />\n";
+            $output = Display::return_icon('forum.gif').' <a href="../phpbb/viewforum.php?forum='.$myrow['forum_id'].'&md5='.$myrow['md5'].'"'.$styling.' '.$target.'>'.$myrow['forum_name']."</a><br />";
             break;
         case TOOL_THREAD: //=topics
             //$tbl_forum 		= Database::get_course_table(TABLE_FORUM);
@@ -2138,7 +2117,7 @@ function rl_get_html_resource_link($course_code, $type, $id, $style = '', $new_w
             $sql_title = "SELECT * FROM $tbl_post WHERE c_id = $course_id AND post_id=".$id;
             $result_title = Database::query($sql_title);
             $myrow_title = Database::fetch_array($result_title);
-            $output = '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$myrow_title['thread_id'].'&forum='.$myrow_title['forum_id'].'" '.$styling.' '.$target.'>'.$myrow_title['post_title']."</a><br />\n";
+            $output = Display::return_icon('forum.gif').' <a href="../phpbb/viewtopic.php?topic='.$myrow_title['thread_id'].'&forum='.$myrow_title['forum_id'].'" '.$styling.' '.$target.'>'.$myrow_title['post_title']."</a><br />\n";
             break;
         case TOOL_POST:
             $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
@@ -2146,7 +2125,7 @@ function rl_get_html_resource_link($course_code, $type, $id, $style = '', $new_w
             $sql = "SELECT * FROM $tbl_post p WHERE c_id = $course_id AND p.post_id = $id";
             $result = Database::query($sql);
             $post = Database::fetch_array($result);
-            $output = '<img src="../img/forum.gif" align="middle" /> <a href="../phpbb/viewtopic.php?topic='.$post['thread_id'].'&forum='.$post['forum_id'].'"'.$styling.' '.$target.'>'.$post['post_title']."</a><br />\n";
+            $output = Display::return_icon('forum.gif').' <a href="../phpbb/viewtopic.php?topic='.$post['thread_id'].'&forum='.$post['forum_id'].'"'.$styling.' '.$target.'>'.$post['post_title']."</a><br />";
             break;
         case TOOL_DOCUMENT:
             $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
@@ -2160,7 +2139,7 @@ function rl_get_html_resource_link($course_code, $type, $id, $style = '', $new_w
             $ext = strtolower($ext[sizeof($ext) - 1]);
             $myrow['path'] = rawurlencode($myrow['path']);
             $in_frames = in_array($ext, array('htm', 'html', 'gif', 'jpg', 'jpeg', 'png'));
-            $output = '<img src="../img/'.$image.'" align="middle" /> <a href="../document/'.($in_frames ? 'showinframes.php?file=' : 'download.php?doc_url=').$myrow['path'].'"'.$styling.' '.$target.'>'.$filename."</a><br />\n";
+            $output = Display::return_icon($image).' <a href="../document/'.($in_frames ? 'showinframes.php?file=' : 'download.php?doc_url=').$myrow['path'].'"'.$styling.' '.$target.'>'.$filename."</a><br />";
             break;
         /*
         case 'Externallink':

@@ -10,7 +10,7 @@ var src=document.getElementsByTagName('script');
 var src=src[src.length-1].getAttribute('src');
 // remove the inc/lib/javascript/thickbox.js part (30 characters)
 var src=src.substr(0,src.length-30);
-var tb_pathToImage = src+"img/loadingAnimation.gif";
+var tb_pathToImage = "";
 
 var close_image = src+"img/close.png";
 
@@ -139,10 +139,10 @@ function tb_show(caption, url, imageGroup) {
 			TB_WIDTH = imageWidth + 30;
 			TB_HEIGHT = imageHeight + 60;
 			$("#TB_window").append("<div id='TB_closeWindow'><a href='#' id='TB_closeWindowButton'><img src='"+close_image+"'/></a></div>");
-			
-			$("#TB_window").append("<a href='' id='TB_ImageOff' title='Close'><img id='TB_Image' src='"+url+"' width='"+imageWidth+"' height='"+imageHeight+"' alt='"+caption+"'/></a>"); 
+
+			$("#TB_window").append("<a href='' id='TB_ImageOff' title='Close'><img id='TB_Image' src='"+url+"' width='"+imageWidth+"' height='"+imageHeight+"' alt='"+caption+"'/></a>");
 			$("#TB_window").append("<div id='TB_caption'>"+caption+"<div id='TB_secondLine'>" + TB_imageCount + TB_PrevHTML + TB_NextHTML + "</div></div>")
-			
+
 
 			$("#TB_closeWindowButton").click(tb_remove);
 

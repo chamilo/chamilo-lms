@@ -118,7 +118,7 @@ if ($count > 0) {
     foreach ($results as $result) {
         // Fill the result array.
         if (empty($result['thumbnail'])) {
-            $result['thumbnail'] = '../img/no_document_thumb.jpg';
+            $result['thumbnail'] = Display::return_icon('no_document_thumb.jpg');
         }
 
         if (!empty($result['url'])) {
@@ -176,11 +176,10 @@ if (count($blocks) > 0) {
 
     $mode_selector = '<div id="mode-selector">';
     $mode_selector .= sprintf($search_link, api_get_path(WEB_CODE_PATH), 'gallery', $_REQUEST['query'], $get_params);
-    $mode_selector .= '<img src="../img/'. (($mode=='gallery')?'ButtonGallOn':'ButtonGallOff') .'.png" /></a>';
+    $mode_selector .= Display::return_icon((($mode=='gallery')?'ButtonGallOn':'ButtonGallOff') .'.png').'</a>';
     $mode_selector .= sprintf($search_link, api_get_path(WEB_CODE_PATH), 'default', $_REQUEST['query'], $get_params);
-    $mode_selector .= '<img src="../img/'.(($mode=='default')?'ButtonListOn':'ButtonListOff').'.png" /></a>';
+    $mode_selector .= Display::return_icon((($mode=='default')?'ButtonListOn':'ButtonListOff') .'.png').'</a>';
     $mode_selector .= '</div>';
-
     echo '<div id="search-results-container">';
     echo $mode_selector;
     $s->display();

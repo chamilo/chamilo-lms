@@ -354,7 +354,8 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isse
         Display::display_reduced_header();
 
         echo '<style>body {background:none;}</style><style media="print" type="text/css"> #print_div { visibility:hidden; } </style>';
-        echo '<a href="javascript:window.print();" style="float:right; padding:4px;" id="print_div"><img src="../img/printmgr.gif" alt="'.get_lang('Print').'"/>'.get_lang('Print').'</a>';
+        echo '<a href="javascript:window.print();" style="float:right; padding:4px;" id="print_div">';
+        echo Display::return_icon('printmgr.gif', get_lang('Print')).' '.get_lang('Print').'</a>';
         if (is_file($qr_code_filename) && is_readable($qr_code_filename)) {
             $new_content_html = str_replace('((certificate_barcode))', Display::img($qr_code_web_filename), $new_content_html);
         }

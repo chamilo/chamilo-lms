@@ -121,8 +121,7 @@ Display::display_header(null, 'Path');
 
 $suredel = trim(get_lang('AreYouSureToDelete'));
 //@todo move this somewhere else css/fix.css
-
-$iconUrl = api_get_path(WEB_CODE_PATH).'img/';
+$iconUrl = api_get_path(WEB_IMG_PATH);
 ?>
 <style>
     #feedback { font-size: 1.4em; }

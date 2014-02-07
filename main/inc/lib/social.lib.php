@@ -412,7 +412,7 @@ class SocialManager extends UserManager {
 
         //display course entry
         $result .= '<div id="div_'.$count.'">';
-        $result .= '<h3><img src="../img/nolines_plus.gif" id="btn_'.$count.'" onclick="toogle_course(this,\''.$course_id.'\' )">';
+        $result .= '<h3>'.Display::return_icon('nolines_plus.gif', null, array('id' => 'btn_'.$count, 'onclick' => 'toogle_course(this,\''.$course_id.'\' )'));
         $result .= $s_htlm_status_icon;
 
         //show a hyperlink to the course, unless the course is closed and user is not course admin
@@ -716,7 +716,7 @@ class SocialManager extends UserManager {
                 $user_status = $user_info['status'] == 1 ? Display::span('', array('class' => 'teacher_online')) : Display::span('', array('class' => 'student_online'));
 
                 if ($image_array['file'] == 'unknown.jpg' || !file_exists($image_array['dir'].$image_array['file'])) {
-                    $friends_profile['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';
+                    $friends_profile['file'] = api_get_path(WEB_IMG_PATH).'unknown_180_100.jpg';
                     $img = '<img title = "'.$name.'" alt="'.$name.'" src="'.$friends_profile['file'].'">';
                 } else {
                     $friends_profile = UserManager::get_picture_user($uid, $image_array['file'], 80, USER_IMAGE_SIZE_ORIGINAL);

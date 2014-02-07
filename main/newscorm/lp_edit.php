@@ -201,7 +201,7 @@ if ($_SESSION['oLP']->get_hide_toc_frame() == 1) {
     $form -> display();
     echo '</div>';
     echo '<div class="span6" align="center">';
-    echo '<img src="../img/course_setting_layout.png" />';
+    echo Display::return_icon('course_setting_layout.png');
     echo '</div>';
 }
 echo '</div>';

@@ -190,12 +190,7 @@ if ($setting_visualisation=='checkbox')
 }
 echo "</form><br />";
 
-// ---------------------------------------------------
-// 			LEGEND
-// ---------------------------------------------------
 echo '<strong>'.get_lang('Legend').'</strong><br />';
-echo '<img src="../img/wrong.gif" /> '.get_lang('UserHasPermissionNot').'<br />';
-echo '<img src="../img/checkbox_on2.gif" /> '.get_lang('UserHasPermission').'<br />';
-echo '<img src="../img/checkbox_on3.gif" /> '.get_lang('UserHasPermissionByRoleGroup').'<br />';
-
-?>
+echo Display::return_icon('wrong.gif').' '.get_lang('UserHasPermissionNot').'<br />';
+echo Display::return_icon('checkbox_on2.gif').' '.get_lang('UserHasPermission').'<br />';
+echo Display::return_icon('checkbox_on3.gif').' '.get_lang('UserHasPermissionByRoleGroup').'<br />';

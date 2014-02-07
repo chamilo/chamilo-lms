@@ -12,7 +12,6 @@
 $language_file = array('admin');
 // including the global file
 $cidReset = true;
-require_once  '../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 // setting breadcrumbs
@@ -22,12 +21,12 @@ api_protect_admin_script(true);
 $nameTools = get_lang('SpecialExports');
 
 // include additional libraries
-require_once '../document/document.inc.php';
+require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 // include additional libraries
-require_once '../coursecopy/classes/CourseBuilder.class.php';
-require_once '../coursecopy/classes/CourseArchiver.class.php';
-require_once '../coursecopy/classes/CourseRestorer.class.php';
-require_once '../coursecopy/classes/CourseSelectForm.class.php';
+require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseBuilder.class.php';
+require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseArchiver.class.php';
+require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseRestorer.class.php';
+require_once api_get_path(SYS_CODE_PATH).'coursecopy/classes/CourseSelectForm.class.php';
 
 if (function_exists('ini_set')) {
 	api_set_memory_limit('256M');
@@ -260,9 +259,9 @@ function fullexportspecial(){
                 $query_session_doc = Database::query($sql_session_doc);
                 while ($rows_course_session_file = Database::fetch_assoc($query_session_doc)) {
                     $zip_folder->add($FileZip['PATH_COURSE'].$_course['directory'].'/document'.$rows_course_session_file['path'],
-                                     PCLZIP_OPT_ADD_PATH, $_course['directory']."/".$rows_session['name'],
-                                     PCLZIP_OPT_REMOVE_PATH, $FileZip['PATH_COURSE'].$_course['directory'].'/document'.$FileZip['PATH_REMOVE']
-                                    );
+                        PCLZIP_OPT_ADD_PATH, $_course['directory']."/".$rows_session['name'],
+                        PCLZIP_OPT_REMOVE_PATH, $FileZip['PATH_COURSE'].$_course['directory'].'/document'.$FileZip['PATH_REMOVE']
+                    );
                 }
             }
         }

@@ -4566,7 +4566,7 @@ class CourseManager
 
             /* Introduction text */
 
-            $intro_text='<p style="text-align: center;">
+            $intro_text = '<p style="text-align: center;">
                             <img src="'.api_get_path(REL_CODE_PATH).'img/mascot.png" alt="Mr. Chamilo" title="Mr. Chamilo" />
                             <h2>'.Database::escape_string(get_lang('IntroductionText')).'</h2>
                          </p>';

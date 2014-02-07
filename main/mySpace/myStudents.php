@@ -789,7 +789,10 @@ if (empty($_GET['details'])) {
     			if ($from_myspace) {
     				$from ='&from=myspace';
     			}
-    			$link = Display::url('<img src="../img/2rightarrow.gif" border="0" />','lp_tracking.php?course='.Security::remove_XSS($_GET['course']).$from.'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student_id='.$user_info['user_id'].'&id_session='.$session_id);
+    			$link = Display::url(
+                    Display::return_icon('2rightarrow.gif'),
+                    'lp_tracking.php?course='.Security::remove_XSS($_GET['course']).$from.'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student_id='.$user_info['user_id'].'&id_session='.$session_id
+                );
                 echo Display::tag('td', $link);
     		}
 
@@ -797,7 +800,7 @@ if (empty($_GET['details'])) {
     			echo '<td>';
     				if ($any_result === true) {
     					echo '<a href="myStudents.php?action=reset_lp&sec_token='.$token.'&course='.Security::remove_XSS($_GET['course']).'&details='.Security::remove_XSS($_GET['details']).'&origin='.Security::remove_XSS($_GET['origin']).'&lp_id='.$learnpath['id'].'&student='.$user_info['user_id'].'&details=true&id_session='.Security::remove_XSS($_GET['id_session']).'">';
-    					echo Display::return_icon('clean.png',get_lang('Clean'),'',ICON_SIZE_SMALL).'</a>';
+    					echo Display::return_icon('clean.png', get_lang('Clean'), '', ICON_SIZE_SMALL).'</a>';
     					echo '</a>';
     				}
     				echo '</td>';

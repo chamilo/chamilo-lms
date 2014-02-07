@@ -26,7 +26,6 @@ var hide_bar = function() {
     $("#template_col").hide();
     $("#doc_form").removeClass("span9");
     $("#doc_form").addClass("span11");
-    //$("#hide_bar_template").css({"background-image" : \'url("../img/hide2.png")\'})
 }
 
 $(document).ready(function() {
@@ -41,7 +40,6 @@ $(document).ready(function() {
             $("#template_col").show();
             $("#doc_form").removeClass("span11");
             $("#doc_form").addClass("span9");
-            //$(this).css("background-image", \'url("../img/hide0.png")\');
         }
     );
 });

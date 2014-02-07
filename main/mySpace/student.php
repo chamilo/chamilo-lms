@@ -111,8 +111,12 @@ if (api_is_allowed_to_create_course() || api_is_drh()) {
 		echo '</div>';
 	} else {
 		echo '<div class="actions"><div style="float:right;">
-				<a href="javascript: void(0);" onclick="javascript: window.print();"><img align="absbottom" src="../img/printmgr.gif">&nbsp;'.get_lang('Print').'</a>
-				<a href="'.api_get_self().'?export=csv"><img align="absbottom" src="../img/excel.gif">&nbsp;'.get_lang('ExportAsCSV').'</a>
+				<a href="javascript: void(0);" onclick="javascript: window.print();">
+				'.Display::return_icon('printmgr.gif', get_lang('Print')).'
+				</a>
+				<a href="'.api_get_self().'?export=csv">
+				    '.Display::return_icon('excel.gif', get_lang('ExportAsCSV')).'
+				&nbsp;'.get_lang('ExportAsCSV').'</a>
 			  </div></div>';
 	}
 

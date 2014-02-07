@@ -1,7 +1,7 @@
-<div class="span6">    
+<div class="span6">
     <div class="well_border">
         <h4>
-            <img src="{{ _p.web_main }}img/icons/22/user.png" alt="{{ 'Users' | get_lang }}">
+            <img src="{{ _p.web_img_path }}icons/22/user.png" alt="{{ 'Users' | get_lang }}">
             {{ 'Users' | get_lang }}
         </h4>
         <div style="list-style-type:none">
@@ -43,7 +43,7 @@
 <div class="span6">
     <div class="well_border ">
         <h4>
-            <img src="{{ _p.web_main }}img/icons/22/session.png" alt="{{ 'Sessions' | trans }}">{{ 'Sessions' | trans }}
+            <img src="{{ _p.web_img_path }}icons/22/session.png" alt="{{ 'Sessions' | trans }}">{{ 'Sessions' | trans }}
         </h4>
         <div style="list-style-type:none">
             <form method="GET" class="form-search" action="{{ _p.web_main }}session/session_list.php">

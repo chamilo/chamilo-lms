@@ -22,12 +22,6 @@ function openid_form() {
     $form->addElement('text', 'openid_url', array(get_lang('OpenIDURL'), Display::url(get_lang('OpenIDWhatIs'), 'main/auth/openid/whatis.php')), array('class' => 'openid_input'));
     $form->addElement('button', 'submit', get_lang('Login'));
     return $form->return_form();
-    /*
-      return '<label for="openid_url">'.get_lang('OpenIDURL').' <a href="main/auth/openid/whatis.php" title="'.get_lang('OpenIDWhatIs').'">'.Display::return_icon('info3.gif',get_lang('Info')).'</a></label>
-      <input type="text" id="openid_url" name="openid_url" style="background: url(main/img/openid_small_logo.png) no-repeat; background-color: #fff; background-position: 0 50%; padding-left:18px;" value="http://"></input>
-     * <input type="submit" name="openid_login" value="'.get_lang('Enter').'" /><br /><br /></form></div>';
-     *
-     */
 }
 
 /**

@@ -132,12 +132,7 @@ if ($region_value == 'en') {
 }
 
 $tpl->assign('region_value', 	$region_value);
-
-$export_icon = '../img/export.png';
-$export_icon_low = '../img/export_low_fade.png';
-$export_icon_high = '../img/export_high_fade.png';
-
-$tpl->assign('export_ical_confidential_icon', Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')));
+$tpl->assign('export_ical_confidential_icon', Display::return_icon('export.png', get_lang('ExportiCalConfidential')));
 
 $actions = null;
 if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false,true) OR $is_group_tutor) {
@@ -207,9 +202,7 @@ $form->addElement('label', get_lang('Title'), '<div id="simple_title"></div>');
 $form->addElement('label', get_lang('Description'), '<div id="simple_content"></div>');
 $tpl->assign('form_simple', $form->return_form());
 
-
 $form = new FormValidator('add_event_form', null, null);
-
 if (!empty($select)) {
     $form->addElement(
         'label',
@@ -241,7 +234,6 @@ $form->addElement(
 );
 
 if ($type == 'course') {
-
     $form->addElement('html', '<div id="add_as_announcement_div">');
     $form->addElement('checkbox', 'add_as_annonuncement', array(null, null, get_lang('AddAsAnnouncement').' ('.get_lang('SendEmail').')'));
     $form->addElement('html', '</div>');

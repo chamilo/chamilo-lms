@@ -67,13 +67,13 @@ function format_specific_fields_selects($sf_terms, $op, $prefilter_prefix='') {
     // Process each prefix type term
     $i = 0;
     $max = count($sf_terms);
-    $multiple_selects .='';
+    $multiple_selects ='';
     foreach ($sf_terms as $prefix => $sf_term_array) {
         if ($prefix == $prefilter_prefix) continue;
         $multiple_select = '';
         if ($i>0) {
             //print "+" image
-            $multiple_select .= '<td><img class="sf-select-splitter" src="../img/search-big-plus.gif" alt="plus-sign-decoration"/></td>';
+            $multiple_select .= '<td><img class="sf-select-splitter" src="'.api_get_path(WEB_IMG_PATH).'search-big-plus.gif" /></td>';
         }
         //sorting the array of terms
         $temp = array();

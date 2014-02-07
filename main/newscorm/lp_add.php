@@ -42,16 +42,6 @@ $(document).ready(function () {
     setFocus();
 });
 
-function advanced_parameters() {
-    if(document.getElementById(\'options\').style.display == \'none\') {
-        document.getElementById(\'options\').style.display = \'block\';
-        document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.$hideImg.'&nbsp;'.get_lang('AdvancedParameters').'\';
-    } else {
-        document.getElementById(\'options\').style.display = \'none\';
-        document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;'.$showImg.'&nbsp;'.get_lang('AdvancedParameters').'\';
-    }
-}
-
 function activate_start_date() {
 	if(document.getElementById(\'start_date_div\').style.display == \'none\') {
 		document.getElementById(\'start_date_div\').style.display = \'block\';
@@ -127,13 +117,11 @@ $form->addElement('header', null, get_lang('AddLpToStart'));
 $form->addElement('text', 'lp_name', api_ucfirst(get_lang('LPName')), array('class' => 'span6'));
 $form->applyFilter('lp_name', 'html_filter');
 $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
-
 $form->addElement('hidden', 'post_time', time());
 $form->addElement('hidden', 'action', 'add_lp');
 
-$advanced = '<a href="javascript://" onclick=" return advanced_parameters()"><span id="img_plus_and_minus"><div style="vertical-align:top;" >&nbsp;'.$showImg.'&nbsp;'.get_lang('AdvancedParameters').'</div></span></a>';
-$form -> addElement('advanced_settings',$advanced);
-$form -> addElement('html','<div id="options" style="display:none">');
+$form->addElement('advanced_settings', Display::url(get_lang('AdvancedParameters'), '#', array('id'=> 'lp', 'class' => 'advanced_options')));
+$form->addElement('html','<div id="lp_options" style="display:none">');
 
 $items = learnpath::get_category_from_course_into_select(api_get_course_int_id());
 if (!empty($items)) {

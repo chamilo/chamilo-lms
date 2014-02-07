@@ -814,8 +814,8 @@ class GroupPortalManager
 	 * @param	bool	If we want that the function returns the /main/img/unknown.jpg image set it at true
 	 * @return	array 	Array of 2 elements: 'dir' and 'file' which contain the dir and file as the name implies if image does not exist it will return the unknow image if anonymous parameter is true if not it returns an empty er's
 	 */
-	public static function get_group_picture_path_by_id($id, $type = 'none', $preview = false, $anonymous = false) {
-
+	public static function get_group_picture_path_by_id($id, $type = 'none', $preview = false, $anonymous = false)
+    {
 		switch ($type) {
 			case 'system': // Base: absolute system path.
 				$base = api_get_path(SYS_CODE_PATH);
@@ -859,6 +859,7 @@ class GroupPortalManager
 		} else {
 			$dir = $base.'upload/users/groups/'.$id.'/';
 		}
+
 		if (empty($picture_filename) && $anonymous) {
 			return array('dir' => $base.'img/', 'file' => 'unknown.jpg');
 		}
@@ -897,12 +898,12 @@ class GroupPortalManager
      * @param string style css
      * @return array with the file and the style of an image i.e $array['file'] $array['style']
      */
-   public static function get_picture_group($id, $picture_file, $height, $size_picture = GROUP_IMAGE_SIZE_MEDIUM , $style = '') {
-    	$patch_profile = 'upload/users/groups/';
+   public static function get_picture_group($id, $picture_file, $height, $size_picture = GROUP_IMAGE_SIZE_MEDIUM , $style = '')
+   {
     	$picture = array();
     	$picture['style'] = $style;
     	if ($picture_file == 'unknown.jpg') {
-    		$picture['file'] = api_get_path(WEB_CODE_PATH).'img/'.$picture_file;
+    		$picture['file'] = api_get_path(WEB_IMG_PATH).$picture_file;
     		return $picture;
     	}
 
@@ -936,7 +937,6 @@ class GroupPortalManager
 				$picture['style'] = ' style="padding-top:'.$margin.'px; width:'.$dimension['width'].'px; height:'.$dimension['height'].';" ';
 			}
 		} else {
-			//$file = api_get_path(SYS_CODE_PATH).$patch_profile.$user_id.'/'.$picture_file;
             $file = $image_array_sys['dir'].$picture_file;
 			if (file_exists($file) && !is_dir($file)) {
 				$picture['file'] = $image_array['dir'].$picture_file;

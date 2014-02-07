@@ -291,9 +291,6 @@ function selectAll(cbList,bSelect,showwarning) {
 			}
 			document.new_calendar_item.submit();
 		}
-
-
-
 }
 
 function reverseAll(cbList)
@@ -303,34 +300,6 @@ function reverseAll(cbList)
 		cbList[i].checked  = !(cbList[i].checked)
 		cbList[i].selected = !(cbList[i].selected)
 	}
-}
-
-function plus_attachment() {
-				if (document.getElementById('options').style.display == 'none') {
-					document.getElementById('options').style.display = 'block';
-        document.getElementById('plus').innerHTML='&nbsp;".$hideImg."&nbsp;".get_lang(
-'AddAnAttachment'
-)."';
-				} else {
-				document.getElementById('options').style.display = 'none';
-    document.getElementById('plus').innerHTML='&nbsp;".$showImg."&nbsp;".get_lang(
-'AddAnAttachment'
-)."';
-				}
-}
-
-function plus_repeated_event() {
-				if (document.getElementById('options2').style.display == 'none') {
-					document.getElementById('options2').style.display = 'block';
-        document.getElementById('plus2').innerHTML='&nbsp;".$hideImg."&nbsp;".get_lang(
-    'RepeatEvent'
-    )."';
-				} else {
-				document.getElementById('options2').style.display = 'none';
-    document.getElementById('plus2').innerHTML='&nbsp;".$showImg."&nbsp;".get_lang(
-    'RepeatEvent'
-    )."';
-				}
 }
 
 /*
@@ -802,7 +771,6 @@ function display_courseadmin_links($filter = 0)
     }
     $form = null;
     if (!isset($_GET['action'])) {
-        $form = show_to($filter, 'selected_form_id_search');
         $actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar_na.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
     } else {
         $actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
@@ -1356,10 +1324,6 @@ function display_one_agenda_item($agenda_id)
 
             // a coach can only delete an element belonging to his session
             // DISPLAY: edit delete button (course admin only)
-            $export_icon = '../img/export.png';
-            $export_icon_low = '../img/export_low_fade.png';
-            $export_icon_high = '../img/export_high_fade.png';
-
             echo '<th style="text-align:right">';
             if (!$repeat && api_is_allowed_to_edit(false, true)) {
                 // edit
@@ -1603,14 +1567,8 @@ function show_add_form($id = '', $type = null)
 
     // Repeating the calendar item
     if (empty($id)) {
-        $form->addElement('label', null, '
-            <a href="javascript://" onclick="return plus_repeated_event();">
-            <span id="plus2">
-            '.$showImg.'&nbsp;'.get_lang('RepeatEvent').'
-            </span></a>'
-        );
-
-        $form->addElement('html', '<div id="options2" style="display:none">');
+        $form->addElement('label', null, Display::url(get_lang('RepeatEvent'), '#', array('id' => 'repeat', 'class' => 'advanced_options')));
+        $form->addElement('html', '<div id="repeat_options" style="display:none">');
 
         $form->addElement('checkbox', 'repeat', null, get_lang('RepeatEvent'));
         $options = array(
@@ -1619,8 +1577,7 @@ function show_add_form($id = '', $type = null)
             'monthlyByDate' => get_lang('RepeatMonthlyByDate'),
             //'monthlyByDay' => get_lang('RepeatMonthlyByDay'),
             //'monthlyByDayR' => get_lang('RepeatMonthlyByDayR'),
-            'yearly' => get_lang('RepeatYearly'),
-
+            'yearly' => get_lang('RepeatYearly')
         );
         $form->addElement('select', 'repeat_type', get_lang('RepeatType'), $options);
 

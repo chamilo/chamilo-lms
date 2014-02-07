@@ -162,11 +162,13 @@ function toogle_course (element_html, course_code){
     my_image=image_show[2];
     var content = \'social_content\' + id_elem[1];
     if (my_image=="nolines_plus.gif") {
-        $(id_button).attr("src","../img/nolines_minus.gif"); var action = "load_course";
+        $(id_button).attr("src","'.api_get_path(WEB_IMG_PATH).'nolines_minus.gif");
+        var action = "load_course";
         $("div#"+content).show("fast");
     } else {
         $("div#"+content).hide("fast");
-        $(id_button).attr("src","../img/nolines_plus.gif"); var action = "unload";
+        $(id_button).attr("src","'.api_get_path(WEB_IMG_PATH).'nolines_plus.gif");
+        var action = "unload";
         return false;
     }
 

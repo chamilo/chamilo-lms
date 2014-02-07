@@ -59,7 +59,7 @@ function upload(latency){
 	this.start = start;
 	this.startRealUpload = startRealUpload;
 	var __progress_bar_domid = '';
-	var __progress_bar_img = '../img/progress_bar.gif';
+	var __progress_bar_img = 'indicator.gif';
 	var __progress_bar_text = 'Uploading... Please wait';
 	var __progress_bar_interval = 1;
 	var __upload_form_domid = '';

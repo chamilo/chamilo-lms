@@ -738,7 +738,7 @@ if ($content == 'Agenda') {
 
     while ($myrow = Database::fetch_array($result)) {
         echo "<table width=\"100%\"><tr><td bgcolor=\"#E6E6E6\">";
-        echo "<img src='../img/agenda.gif' alt='agenda'>";
+        echo Display::return_icon('agenda.gif');
         echo api_convert_and_format_date($myrow['start_date'], null, date_default_timezone_get())."<br />";
         echo "<b>".$myrow['title']."</b></td></tr><tr><td>";
         echo $myrow['content']."<br />";
@@ -783,7 +783,8 @@ if ($content == 'Document' || (empty($content) && (api_is_allowed_to_edit() || i
     // showing the blue bar with the path in it when we are not in the root
     if (FileManager::get_levels($folder)) {
         echo "<table width=\"100%\"><tr><td bgcolor=\"#4171B5\">";
-        echo "<img src=\"../img/opendir.gif\" alt='directory'><font color=\"#ffffff\"><b>";
+        echo Display::return_icon('opendir.gif');
+        echo "<font color=\"#ffffff\"><b>";
         echo $folder."</b></font></td></tr></table>";
     }
 
@@ -801,7 +802,7 @@ if ($content == 'Ad_Valvas') {
     $result = Database::query($sql);
     while ($myrow = Database::fetch_array($result)) {
         echo "<table width=\"100%\"><tr><td>";
-        echo "<img src='../img/valves.gif' alt='advalvas'>";
+        echo Display::return_icon('valves.gif');
         echo api_convert_and_format_date($myrow['end_date'], DATE_FORMAT_LONG, date_default_timezone_get());
         echo "</td></tr><tr><td>";
         echo $myrow['title']."<br />";
@@ -830,7 +831,9 @@ if ($content == 'Forum') {
                 echo "<tr><td bgcolor='#4171B5' colspan='2'><font color='white'><b>".$myrow['cat_title']."</b></font></td></tr>";
             }
             $old_cat_title = $myrow['cat_title'];
-            echo "<tr><td><img src='../img/forum.gif'><a href='".api_get_self(
+            echo "<tr><td>";
+            echo Display::return_icon('forum.gif');
+            echo "<a href='".api_get_self(
             )."?content=Forum&category=".$myrow['cat_id']."&forum=".$myrow['forum_id']."&action=$action&lp_id=$learnpath_id&parent_item_id=$chapter_id&originalresource=no'>".$myrow['forum_name']."</td><td>";
             showorhide_addresourcelink('Forum', $myrow['forum_id']);
             echo "</td></tr>";
@@ -908,7 +911,8 @@ if ($content == 'Link') {
     if (Database::num_rows($result) > 0) {
         echo "<table width=\"100%\"><tr><td bgcolor=\"#E6E6E6\"><i>".get_lang('NoCategory')."</i></td></tr></table>";
         while ($myrow = Database::fetch_array($result)) {
-            echo "<img src='../img/links.gif'>".$myrow['title'];
+            echo Display::return_icon('links.gif');
+            echo $myrow['title'];
             echo "<br />";
             showorhide_addresourcelink($content, $myrow['id']);
             echo "<br /><br />";
@@ -923,7 +927,8 @@ if ($content == 'Link') {
         echo "<table width=\"100%\"><tr><td bgcolor=\"#E6E6E6\"><i>".$myrow['category_title']."</i></td></tr></table>";
         $result_links = Database::query($sql_links);
         while ($myrow = Database::fetch_array($result_links)) {
-            echo "<img src='../img/links.gif' />".$myrow['title'];
+            echo Display::return_icon('links.gif');
+            echo $myrow['title'];
             echo "<br />";
             showorhide_addresourcelink($content, $myrow['id']);
             echo "<br /><br />";
@@ -937,7 +942,8 @@ if (($content == 'Exercise') || ($content == 'HotPotatoes')) {
     $TBL_EXERCICES = Database::get_course_table(TABLE_QUIZ_TEST);
     $result = Database::query("SELECT * FROM ".$TBL_EXERCICES." WHERE active='1' ORDER BY iid ASC");
     while ($myrow = Database::fetch_array($result)) {
-        echo "<img src='../img/quiz.gif'>".$myrow['title']."<br />";
+        echo Display::return_icon('quiz.gif');
+        echo $myrow['title']."<br />";
         showorhide_addresourcelink($content, $myrow["id"]);
         echo "<br /><br />";
     }
@@ -950,10 +956,10 @@ if (($content == 'Exercise') || ($content == 'HotPotatoes')) {
         $result = Database::query($sql);
         while ($myrow = Database::fetch_array($result)) {
             $path = $myrow['path'];
-            echo "<img src='../img/jqz.jpg'>".GetQuizName($path, $documentPath)."<br />";
+            echo Display::return_icon('jqz.gif');
+            echo GetQuizName($path, $documentPath)."<br />";
             showorhide_addresourcelink('HotPotatoes', $myrow['id']);
             echo "<br /><br />";
-
         }
     }
 }

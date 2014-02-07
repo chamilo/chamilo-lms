@@ -5755,7 +5755,7 @@ class learnpath
         $elements = array();
         $return_audio = null;
 
-        $iconSysPath = api_get_path(SYS_CODE_PATH).'img/';
+        $iconSysPath = api_get_path(SYS_IMG_PATH);
 
         for ($i = 0; $i < count($arrLP); $i++) {
             $title = $arrLP[$i]['title'];
@@ -6084,11 +6084,11 @@ class learnpath
      */
     public function build_tree()
     {
-        $iconSysPath = api_get_path(SYS_CODE_PATH).'img/';
+        $iconSysPath = api_get_path(SYS_IMG_PATH);
         $iconWebPath = api_get_path(WEB_IMG_PATH);
         $course_id = api_get_course_int_id();
 
-        $return = "<script type=\"text/javascript\">\n";
+        $return = "<script type=\"text/javascript\">";
         $return .= "\tm = new dTree('m');\n\n";
         $return .= "\tm.config.folderLinks		= true;\n";
         $return .= "\tm.config.useCookies		= true;\n";
@@ -8930,7 +8930,7 @@ class learnpath
         $arrLP = $this->arrMenu;
         unset($this->arrMenu);
 
-        $imgSysPath = api_get_path(SYS_CODE_PATH).'img/';
+        $imgSysPath = api_get_path(SYS_IMG_PATH);
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['id'] == $item_id) {

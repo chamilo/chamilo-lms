@@ -1457,7 +1457,7 @@ class UserManager
 
         $production_path = self::get_user_picture_path_by_id($user_id, 'web', true);
         $production_dir = $production_path['dir'].$user_id.'/';
-        $del_image = api_get_path(WEB_CODE_PATH).'img/delete.gif';
+        $del_image = api_get_path(WEB_IMG_PATH).'delete.png';
         $del_text = get_lang('Delete');
         $production_list = '';
         if (count($productions) > 0) {
@@ -3101,11 +3101,12 @@ class UserManager
     * @param string style css
     * @return array with the file and the style of an image i.e $array['file'] $array['style']
     */
-    public static function get_picture_user($user_id, $picture_file, $height, $size_picture = USER_IMAGE_SIZE_MEDIUM , $style = '') {
+    public static function get_picture_user($user_id, $picture_file, $height, $size_picture = USER_IMAGE_SIZE_MEDIUM , $style = '')
+    {
         $picture = array();
         $picture['style'] = $style;
         if ($picture_file == 'unknown.jpg') {
-            $picture['file'] = api_get_path(WEB_CODE_PATH).'img/'.$picture_file;
+            $picture['file'] = api_get_path(WEB_IMG_PATH).$picture_file;
             return $picture;
         }
         switch ($size_picture) {
@@ -3149,15 +3150,14 @@ class UserManager
             } else {
                 switch ($size_picture) {
                     case 'big_' :
-                        $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg'; break;
+                        $picture['file'] = api_get_path(WEB_IMG_PATH).'unknown.jpg'; break;
                     case 'medium_' :
-                        $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_50_50.jpg'; break;
+                        $picture['file'] = api_get_path(WEB_IMG_PATH).'unknown_50_50.jpg'; break;
                     case 'small_' :
-                        $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg'; break;
+                        $picture['file'] = api_get_path(WEB_IMG_PATH).'unknown.jpg'; break;
                     default:
-                        $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown.jpg'; break;
+                        $picture['file'] = api_get_path(WEB_IMG_PATH).'unknown.jpg'; break;
                 }
-
             }
         }
         return $picture;

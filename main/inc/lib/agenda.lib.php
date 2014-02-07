@@ -1069,16 +1069,8 @@ class Agenda
         $form->addElement('text', 'end_date', get_lang('EndDate'));
 
         if (empty($id)) {
-            $form->addElement(
-                'advanced_settings',
-                '<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2">
-                                                  <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang(
-                    'RepeatEvent'
-                ).'</span>
-                                </a>'
-            );
-            $form->addElement('html', '<div style="display:block">');
-
+            $form->addElement('label', null, Display::url(get_lang('RepeatEvent'), '#', array('id' => 'repeat', 'class' => 'advanced_options')));
+            $form->addElement('html', '<div id="repeat_options" style="display:block">');
             $form->addElement('checkbox', 'repeat', null, get_lang('RepeatEvent'));
 
             $repeat_events = array(

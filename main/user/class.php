@@ -85,8 +85,8 @@ $extra_params['height'] = 'auto';
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
 return \''
-    .' <a href="class.php?action=add_class&id=\'+options.rowId+\'"><img src="../img/icons/22/user_to_class.png" title="'.get_lang('SubscribeUsersToClass').'"></a>'
-    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="../img/delete.png"></a>\';
+    .' <a href="class.php?action=add_class&id=\'+options.rowId+\'"><img src="'.api_get_path(WEB_IMG_PATH).'icons/22/user_to_class.png" title="'.get_lang('SubscribeUsersToClass').'"></a>'
+    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."\'".')) return false;" href="?action=delete&id=\'+options.rowId+\'"><img title="'.get_lang('Delete').'" src="'.api_get_path(WEB_IMG_PATH).'delete.png"></a>\';
 }';
 ?>
 <script>

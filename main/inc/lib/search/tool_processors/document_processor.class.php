@@ -87,11 +87,11 @@ class document_processor extends search_processor {
             $name = '';
             if ($row = Database::fetch_array($dk_result)) {
                 $name = $row['title'];
-                $url = api_get_path(WEB_PATH) . 'courses/%s/document%s';
+                $url = api_get_path(WEB_PATH).'courses/%s/document%s';
                 $url = sprintf($url, $course_path, $row['path']);
                 // Get the image path
                 $icon = FileManager::choose_image(basename($row['path']));
-                $thumbnail = api_get_path(WEB_CODE_PATH) . 'img/' . $icon;
+                $thumbnail = api_get_path(WEB_IMG_PATH).$icon;
                 $image = $thumbnail;
                 //FIXME: use big images
                 // get author

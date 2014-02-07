@@ -108,7 +108,7 @@
                 {% if app.breadcrumbs %}
                     {{ app.breadcrumbs }}
                 {% else %}
-                    {% include app.template_style ~ "/layout/breadcrumb.tpl" %}
+                {% include app.template_style ~ "/layout/breadcrumb.tpl" %}
                 {% endif %}
             </header>
 

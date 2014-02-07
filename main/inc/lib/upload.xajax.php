@@ -24,7 +24,7 @@ function updateProgress($div_id, $upload_id, $waitAfterupload = false) {
 	if($waitAfterupload && $ul_info['est_sec']<2) {
 		$percent = 100;
 		$objResponse -> addAssign($div_id.'_label' , 'innerHTML', get_lang('UploadFile').' : '.$percent.' %');
-		$objResponse -> addAssign($div_id.'_waiter_frame','innerHTML','<img src="'.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif" />');
+		$objResponse -> addAssign($div_id.'_waiter_frame','innerHTML', '<img src="'.api_get_path(WEB_IMG_PATH).'progress_bar.gif" />');
 		$objResponse -> addScript('clearInterval("myUpload.__progress_bar_interval")');
 	}
 	$objResponse -> addAssign($div_id.'_label' , 'innerHTML', get_lang('UploadFile').' : '.$percent.' %');
@@ -32,5 +32,3 @@ function updateProgress($div_id, $upload_id, $waitAfterupload = false) {
 
 	return $objResponse;
 }
-
-?>

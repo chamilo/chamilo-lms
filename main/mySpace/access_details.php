@@ -216,7 +216,9 @@ $form->display();
     <?php
     if ($result_to_print != "")  {
         echo '<br /><div class="slider_menu">
-        <a href="#" onclick="return sliderAction();"><img src="../img/icons/22/zoom_in.png"></a>
+        <a href="#" onclick="return sliderAction();">
+            '.Display::return_icon('zoom_in.png').'
+        </a>
         </div>';
     }?>
     </div>

@@ -1128,10 +1128,8 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
      */
     function getElementJs($raw = true, $min = true)
     {
-        $js = '@data_dir@'.DIRECTORY_SEPARATOR
-            .'@package_name@'.DIRECTORY_SEPARATOR;
-
-        $js = api_get_path(LIBRARY_PATH).'javascript'.DIRECTORY_SEPARATOR.'pear'.DIRECTORY_SEPARATOR;
+        //$js = '@data_dir@'.DIRECTORY_SEPARATOR.'@package_name@'.DIRECTORY_SEPARATOR;
+        $js = api_get_path(SYS_LIBRARY_JS_PATH).'pear'.DIRECTORY_SEPARATOR;
 
         if ($min) {
             $js .= 'qfamsHandler-min.js';

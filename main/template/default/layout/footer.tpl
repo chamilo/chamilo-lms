@@ -177,6 +177,7 @@ $(document).ready( function() {
     * */
 
     $(".advanced_options").on("click", function() {
+        event.preventDefault();
         var id = $(this).attr('id') + '_options';
         var button = $(this);
         $("#"+id).toggle(function() {
@@ -190,11 +191,13 @@ $(document).ready( function() {
      * <div id="div_id">Div content</div>
      * */
     $(".advanced_options_open").on("click", function() {
+        event.preventDefault();
         var id = $(this).attr('rel');
         $("#"+id).show();
     });
 
     $(".advanced_options_close").on("click", function() {
+        event.preventDefault();
         var id = $(this).attr('rel');
         $("#"+id).hide();
     });

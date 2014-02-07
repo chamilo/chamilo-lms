@@ -307,10 +307,10 @@ EOT;
 EOT;
         }
 
-        $web_path = api_get_path(WEB_PATH);
+        $web_path = api_get_path(WEB_IMG_PATH);
         $subscribe_label = get_lang('Subscribe');
         echo <<<EOT
-                    <input type="image" name="unsub" src="$web_path/main/img/enroll.gif" alt="$subscribe_label" />$subscribe_label
+                    <input type="image" name="unsub" src="$web_path/enroll.gif" alt="$subscribe_label" />$subscribe_label
                 </form>
 EOT;
         return true;

@@ -156,8 +156,10 @@ if ($survey_data['survey_type'] == 0) {
     echo '</div>';
 } else {
     echo '<div class="actionsbig">';
-    //echo '<a href="group.php?'.api_get_cidreq().'&amp;action=add&amp;survey_id='.$survey_id.'"><img src="../img/yesno.gif" /><br />'.get_lang('Add groups').'</a></div>';
-    echo '<a style="padding-left:0px;" href="question.php?'.api_get_cidreq().'&amp;action=add&type=personality&amp;survey_id='.$survey_id.'"><img src="../img/yesno.gif" /></a></div>';
+    echo '<a style="padding-left:0px;" href="question.php?'.api_get_cidreq().'&amp;action=add&type=personality&amp;survey_id='.$survey_id.'">
+            '.Display::return_icon('yesno.gif').'
+            </a>
+    </div>';
     echo '</div>';
 }
 

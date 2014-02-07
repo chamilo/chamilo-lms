@@ -160,14 +160,10 @@ class GradeModel extends Model
             $template_title =
                 '&nbsp{element} <!-- BEGIN error --> <span class="form_error">{error}</span><!-- END error -->
                  <a href="javascript:plusItem('.($counter + 1).')">
-                <img style="display: '.(($counter >= $nr_items) ? 'inline' : 'none').';" id="plus-'.($counter + 1).'" src="../img/icons/22/add.png" alt="'.get_lang(
-                    'Add'
-                ).'" title="'.get_lang('Add').'"></img>
-            </a>
+                 '.Display::return_icon('add.png', get_lang('Add'), array('style' => 'display: '.(($counter >= $nr_items) ? 'inline' : 'none'), 'id' => 'plus-'.($counter + 1))).'
+                 </a>
             <a href="javascript:minItem('.($counter).')">
-                <img style="display: '.(($counter >= $nr_items) ? 'inline' : 'none').';" id="min-'.$counter.'" src="../img/delete.png" alt="'.get_lang(
-                    'Delete'
-                ).'" title="'.get_lang('Delete').'"></img>
+                '.Display::return_icon('delete.png', get_lang('Delete'), array('style' => 'display: '.(($counter >= $nr_items) ? 'inline' : 'none'), 'id' => 'min-'.$counter)).'
             </a>
             </div></p></div>';
 

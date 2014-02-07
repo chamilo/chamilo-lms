@@ -523,7 +523,7 @@ define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
  * api_get_path(WEB_CODE_PATH)                  http://www.mychamilo.org/chamilo/main/
  * api_get_path(WEB_PLUGIN_PATH)                http://www.mychamilo.org/chamilo/plugin/
  * api_get_path(WEB_ARCHIVE_PATH)               http://www.mychamilo.org/chamilo/archive/
- * api_get_path(WEB_IMG_PATH)                   http://www.mychamilo.org/chamilo/main/img/
+ * api_get_path(WEB_IMG_PATH)                   http://www.mychamilo.org/chamilo/web/chamiloLMS/img/
  * api_get_path(SYS_IMG_PATH)                   /var/www/chamilo/web/ChamiloLMS/img/
  *
  * api_get_path(WEB_CSS_PATH)                   http://www.mychamilo.org/chamilo/main/css/
@@ -678,7 +678,7 @@ function api_get_path($path_type, $path = null) {
         $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
         $paths[SYS_CSS_PATH]            = $paths[SYS_PATH].$paths[SYS_CSS_PATH];
         $paths[WEB_CSS_PATH]            = $paths[WEB_PATH].$paths[WEB_CSS_PATH];
-        $paths[WEB_IMG_PATH]            = $paths[WEB_PATH].$paths[WEB_IMG_PATH];
+        $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
         $paths[SYS_IMG_PATH]            = $paths[SYS_PATH].$paths[SYS_IMG_PATH];
 
         $paths[WEB_LIBRARY_PATH]        = $paths[WEB_CODE_PATH].$paths[WEB_LIBRARY_PATH];
@@ -689,7 +689,7 @@ function api_get_path($path_type, $path = null) {
         $paths[WEB_TEMPLATE_PATH]       = $paths[WEB_CODE_PATH].$paths[WEB_TEMPLATE_PATH];
         $paths[INCLUDE_PATH]            = $paths[SYS_CODE_PATH].$paths[INCLUDE_PATH];
         $paths[LIBRARY_PATH]            = $paths[SYS_CODE_PATH].$paths[LIBRARY_PATH];
-        $paths[SYS_LIBRARY_JS_PATH]     = $paths[SYS_CODE_PATH].$paths[SYS_LIBRARY_JS_PATH];
+        $paths[SYS_LIBRARY_JS_PATH]     = $paths[SYS_PATH].$paths[SYS_LIBRARY_JS_PATH];
         $paths[CONFIGURATION_PATH]      = $paths[SYS_CODE_PATH].$paths[CONFIGURATION_PATH];
 
         $is_this_function_initialized = true;
@@ -1233,9 +1233,9 @@ function api_format_user($user, $add_password = false) {
     //Getting user avatar
 
 	$picture_filename   = trim($user['picture_uri']);
-	$avatar             = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
-	$avatar_small       = api_get_path(WEB_CODE_PATH).'img/unknown_22.jpg';
-    $avatar_sys_path    = api_get_path(SYS_CODE_PATH).'img/unknown.jpg';
+	$avatar             = api_get_path(WEB_IMG_PATH).'unknown.jpg';
+	$avatar_small       = api_get_path(WEB_IMG_PATH).'unknown_22.jpg';
+    $avatar_sys_path    = api_get_path(SYS_IMG_PATH).'unknown.jpg';
 	$dir                = 'upload/users/'.$user_id.'/';
 
     if (!empty($picture_filename)) {

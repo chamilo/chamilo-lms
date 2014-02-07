@@ -36,16 +36,6 @@ $(document).ready(function () {
     setFocus();
 });
 
-function advanced_parameters() {
-    if(document.getElementById(\'options\').style.display == \'none\') {
-        document.getElementById(\'options\').style.display = \'block\';
-        document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
-    } else {
-        document.getElementById(\'options\').style.display = \'none\';
-        document.getElementById(\'img_plus_and_minus\').innerHTML=\'&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AdvancedParameters').'\';
-    }
-}
-
 function activate_start_date() {
 	if(document.getElementById(\'start_date_div\').style.display == \'none\') {
 		document.getElementById(\'start_date_div\').style.display = \'block\';

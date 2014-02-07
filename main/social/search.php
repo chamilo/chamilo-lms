@@ -50,7 +50,7 @@ if ($query !='') {
             $url = $user_info['profile_url'];
 
             if (empty($user['picture_uri'])) {
-                $picture['file'] = api_get_path(WEB_CODE_PATH).'img/unknown_180_100.jpg';
+                $picture['file'] = api_get_path(WEB_IMG_PATH).'unknown_180_100.jpg';
                 $img = '<img src="'.$picture['file'].'">';
             } else {
                 $picture = UserManager::get_picture_user($user['user_id'], $user['picture_uri'], 80, USER_IMAGE_SIZE_ORIGINAL);

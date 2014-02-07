@@ -315,10 +315,8 @@ switch ($action) {
             $form->addRule('new_dir', get_lang('ThisFieldIsRequired'), 'required');
 
             $form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
-
-            $form->addElement('advanced_settings', '<a href="javascript: void(0);" onclick="javascript: return plus();"><span id="plus">'.Display::return_icon('div_show.gif',get_lang('AdvancedParameters'), array('style' => 'vertical-align:center')).' '.get_lang('AdvancedParameters').'</span></a>');
-
-            $form->addElement('html', '<div id="options" style="display: none;">');
+            $form->addElement('advanced_settings', Display::url(get_lang('AdvancedParameters'), '#', array('id' => 'add_work', 'class' => 'advanced_options')));
+            $form->addElement('html', '<div id="add_work_options" style="display: none;">');
 
             //QualificationOfAssignment
             $form->addElement('text', 'qualification_value', get_lang('QualificationNumeric'));

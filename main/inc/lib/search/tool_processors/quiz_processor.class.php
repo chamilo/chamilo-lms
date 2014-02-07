@@ -119,13 +119,13 @@ class quiz_processor extends search_processor {
 
             //actually author isn't saved on exercise tool, but prepare for when it's ready
             $sql = "SELECT insert_user_id FROM $item_property_table
-                    WHERE ref = $doc_id AND tool = '" . TOOL_DOCUMENT . "' AND c_id = $course_id 
+                    WHERE ref = $doc_id AND tool = '" . TOOL_DOCUMENT . "' AND c_id = $course_id
                     LIMIT 1";
 
             $name = '';
             if ($row = Database::fetch_array($dk_result)) {
                 // Get the image path
-                $thumbnail = api_get_path(WEB_PATH) . 'main/img/quiz.gif';
+                $thumbnail = api_get_path(WEB_IMG_PATH).'quiz.gif';
                 $image = $thumbnail; //FIXME: use big images
                 $name = $row['title'];
                 // get author

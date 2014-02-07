@@ -572,14 +572,8 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 					$form_folder->add_html_editor('description', get_lang('Description'), false, false, array('ToolbarSet' => 'work', 'Width' => '80%', 'Height' => '200'));
 
 					$there_is_a_end_date = false;
-					$form_folder -> addElement('advanced_settings',
-                        '<a href="javascript://" onclick="javascript: return plus();" >
-                         <span id="plus">&nbsp;<img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />
-                         &nbsp;'.get_lang('AdvancedParameters').'
-                         </span>
-                         </a>'
-                    );
-					$form_folder->addElement('html', '<div id="options" style="display: none;">');
+					$form_folder->addElement('advanced_settings', Display::url(get_lang('AdvancedParameters'), '#', array('id' => 'work', 'class' => 'advanced_options')));
+					$form_folder->addElement('html', '<div id="work_options" style="display: none;">');
 
 					if (empty($default)) {
 						$default = api_get_local_time();
@@ -1416,16 +1410,6 @@ function to_javascript_work() {
     $origin = isset($_REQUEST['origin']) && !empty($_REQUEST['origin']) ? api_get_tools_lists($_REQUEST['origin']) : '';
 
 	$js = '<script>
-			function plus() {
-				if(document.getElementById(\'options\').style.display == \'none\') {
-					document.getElementById(\'options\').style.display = \'block\';
-					document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide', ''), array('style' => 'vertical-align:middle')).'&nbsp;'.addslashes(get_lang('AdvancedParameters', '')).'\';
-				} else {
-					document.getElementById(\'options\').style.display = \'none\';
-					document.getElementById(\'plus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show', ''), array('style' => 'vertical-align:middle')).'&nbsp;'.addslashes(get_lang('AdvancedParameters', '')).'\';
-				}
-			}
-
 			function updateDocumentTitle(value) {
 				var temp = value.indexOf("/");
 				//linux path

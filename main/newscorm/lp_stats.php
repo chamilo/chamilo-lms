@@ -71,10 +71,14 @@ if ($origin == 'tracking') {
     $url_suffix = '&lp_id=' . $lp_id;
 }
 if (!empty($_GET['extend_all'])) {
-    $extend_all_link = '<a href="' . api_get_self() . '?action=stats' . $url_suffix . '"><img src="../img/view_less_stats.gif" alt="fold_view" border="0" title="' . get_lang('HideAllAttempts') . '"></a>';
+    $extend_all_link = '<a href="' . api_get_self() . '?action=stats' . $url_suffix . '">
+        '.Display::return_icon('view_less_stats.gif', get_lang('HideAllAttempts') ).'
+        </a>';
     $extend_all = 1;
 } else {
-    $extend_all_link = '<a href="' . api_get_self() . '?action=stats&extend_all=1' . $url_suffix . '"><img src="../img/view_more_stats.gif" alt="extend_view" border="0" title="' . get_lang('ShowAllAttempts') . '"></a>';
+    $extend_all_link = '<a href="' . api_get_self() . '?action=stats&extend_all=1' . $url_suffix . '">
+        '.Display::return_icon('view_more_stats.gif', get_lang('ShowAllAttempts') ).'
+        </a>';
 }
 
 if ($origin != 'tracking') {
@@ -263,7 +267,8 @@ if (is_array($list) && count($list) > 0) {
             $extend_link = '';
             if (!empty($inter_num)) {
                 $extend_link = '<a href="' . api_get_self() . '?action=stats&fold_id=' . $my_item_id . $url_suffix . '">
-                                <img src="../img/visible.gif" alt="' . get_lang('HideAttemptView') . '" title="' . get_lang('HideAttemptView') . '"  border="0"></a>';
+                                '.Display::return_icon('visible.gif', get_lang('HideAttemptView') ).'
+                                </a>';
             }
             $title = $row['mytitle'];
 
@@ -296,10 +301,13 @@ if (is_array($list) && count($list) > 0) {
                     if (!empty($_GET['extend_attempt_id']) && $_GET['extend_attempt_id'] == $row['iv_id']) {
                         // The extend button for this attempt has been clicked.
                         $extend_this_attempt = 1;
-                        $extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&fold_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/visible.gif" alt="' . get_lang('HideAttemptView') . '" title="' . get_lang('HideAttemptView') . '" border="0"></a>';
+                        $extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&fold_attempt_id=' . $row['iv_id'] . $url_suffix . '">
+                        '.Display::return_icon('visible.gif', get_lang('HideAttemptView')).'</a>';
                     } else { // Same case if fold_attempt_id is set, so not implemented explicitly.
                         // The extend button for this attempt has not been clicked.
-                        $extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/invisible.gif" alt="' . get_lang('ExtendAttemptView') . '" title="' . get_lang('ExtendAttemptView') . '"  border="0"></a>';
+                        $extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '">
+                        '.Display::return_icon('invisible.gif', get_lang('ExtendAttemptView')).'
+                        </a>';
                     }
                 }
 
@@ -480,10 +488,13 @@ if (is_array($list) && count($list) > 0) {
                 if (!empty($_GET['extend_attempt_id']) && $_GET['extend_attempt_id'] == $row['iv_id']) {
                     // The extend button for this attempt has been clicked.
                     $extend_this_attempt = 1;
-                    $extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&fold_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/visible.gif" alt="' . get_lang('HideAttemptView') . '" title="' . get_lang('HideAttemptView') . '" border="0"></a>' . "\n";
+                    $extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&fold_attempt_id=' . $row['iv_id'] . $url_suffix . '">
+                    '.Display::return_icon('visible.gif', get_lang('HideAttemptView')).'</a>';
                 } else { // Same case if fold_attempt_id is set, so not implemented explicitly.
                     // The extend button for this attempt has not been clicked.
-                    $extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/invisible.gif" alt="' . get_lang('ExtendAttemptView') . '" title="' . get_lang('ExtendAttemptView') . '" border="0"></a>' . "\n";
+                    $extend_attempt_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '">
+                    '.Display::return_icon('invisible.gif', get_lang('ExtendAttemptView')).'
+                    </a>';
                 }
             }
 
@@ -495,7 +506,8 @@ if (is_array($list) && count($list) > 0) {
 
             $extend_link = '';
             if ($inter_num > 1) {
-                $extend_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '"><img src="../img/invisible.gif" alt="' . get_lang('ExtendAttemptView') . '" title="' . get_lang('ExtendAttemptView') . '"  border="0"></a>';
+                $extend_link = '<a href="' . api_get_self() . '?action=stats&extend_id=' . $my_item_id . '&extend_attempt_id=' . $row['iv_id'] . $url_suffix . '">
+                '.Display::return_icon('invisible.gif', get_lang('ExtendAttemptView')).'</a>';
             }
 
             $lesson_status = $row['mystatus'];
@@ -635,9 +647,13 @@ if (is_array($list) && count($list) > 0) {
                     $num = Database :: num_rows($resultLastAttempt);
                     if ($num > 0) {
                         if (isset($_GET['extend_attempt']) && $_GET['extend_attempt'] == 1 && (isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id) && (isset($_GET['lp_item_id']) && $_GET['lp_item_id'] == $my_id)) {
-                            $correct_test_link = '<a href="' . api_get_self() . '?action=stats' . $my_url_suffix . '&session_id=' . api_get_session_id() . '&lp_item_id=' . $my_id . '"><img src="../img/view_less_stats.gif" alt="fold_view" border="0" title="' . get_lang('HideAllAttempts') . '"></a>';
+                            $correct_test_link = '<a href="' . api_get_self() . '?action=stats' . $my_url_suffix . '&session_id=' . api_get_session_id() . '&lp_item_id=' . $my_id . '">
+                            '.Display::return_icon('view_less_stats.gif', get_lang('HideAllAttempts') ).'
+                            </a>';
                         } else {
-                            $correct_test_link = '<a href="' . api_get_self() . '?action=stats&extend_attempt=1' . $my_url_suffix . '&session_id=' . api_get_session_id() . '&lp_item_id=' . $my_id . '"><img src="../img/view_more_stats.gif" alt="extend_view" border="0" title="' . get_lang('ShowAllAttemptsByExercise') . '"></a>';
+                            $correct_test_link = '<a href="' . api_get_self() . '?action=stats&extend_attempt=1' . $my_url_suffix . '&session_id=' . api_get_session_id() . '&lp_item_id=' . $my_id . '">
+                            '.Display::return_icon('view_more_stats.gif', get_lang('ShowAllAttemptsByExercise') ).'
+                            </a>';
                         }
                     } else {
                         $correct_test_link = '-';
@@ -650,13 +666,13 @@ if (is_array($list) && count($list) > 0) {
 
                 if ((isset($_GET['lp_id']) && $_GET['lp_id'] == $my_lp_id && false)) {
 
-                    $output .= '<tr class =' . $oddclass . '>
-                                    <td>' . $extend_link . '</td>
-                                    <td colspan="4">' . $title . '</td>
+                    $output .= '<tr class ='.$oddclass.'>
+                                    <td>'.$extend_link.'</td>
+                                    <td colspan="4">'.$title.'</td>
                                     <td colspan="2">&nbsp;</td>
                                     <td colspan="2">&nbsp;</td>
                                     <td colspan="2">&nbsp;</td>
-                                    <td>' . $correct_test_link . '</td>
+                                    <td>'.$correct_test_link.'</td>
                                 </tr>';
                     $output .= '</tr>';
                 } else {
@@ -816,17 +832,17 @@ if (is_array($list) && count($list) > 0) {
                                             <td colspan="2">'.$time_attemp . '</td>';
                             if ($origin != 'tracking') {
                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-                                    $output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '"></td>';
+                                    $output .= '<td><img src="' . api_get_path(WEB_IMG_PATH).'quiz_na.gif" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '"></td>';
                                 } else {
                                     $output .= '<td><a href="../exercice/exercise_show.php?origin=' . $origin . '&id=' . $my_exe_id . '&cidReq=' . $course_code . $from_link . '" target="_parent">
-                                                    <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '"></a></td>';
+                                                    <img src="' . api_get_path(WEB_IMG_PATH).'quiz.gif" alt="' . get_lang('ShowAttempt') . '" title="' . get_lang('ShowAttempt') . '"></a></td>';
                                 }
                             } else {
                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-                                    $output .= '<td><img src="' . api_get_path(WEB_IMG_PATH) . 'quiz_na.gif" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></td>';
+                                    $output .= '<td><img src="' . api_get_path(WEB_IMG_PATH).'quiz_na.gif" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></td>';
                                 } else {
                                     $output .= '<td><a href="../exercice/exercise_show.php?cidReq=' . $course_code . '&origin=correct_exercise_in_lp&id=' . $my_exe_id . '" target="_parent">
-                                                     <img src="' . api_get_path(WEB_IMG_PATH) . 'quiz.gif" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></a></td>';
+                                                    <img src="' . api_get_path(WEB_IMG_PATH).'quiz.gif" alt="' . get_lang('ShowAndQualifyAttempt') . '" title="' . get_lang('ShowAndQualifyAttempt') . '"></a></td>';
                                 }
                             }
                             $output .= '</tr>';

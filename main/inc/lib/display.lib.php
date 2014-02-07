@@ -723,25 +723,39 @@ class Display
             $sourceurl = str_replace('&isHidden=true', '', $sourceurl);
             $sourceurl = str_replace('&isHidden=false', '', $sourceurl);
 
-            $output_string_menu .= ' <a href="'.$sourceurl.'&isHidden=false"><img src="../../main/img/expand.gif" alt="'.'Show menu1'.'" padding:"2px"/></a>';
+            $output_string_menu .= ' <a href="'.$sourceurl.'&isHidden=false">
+            '.Display::return_icon('expand.gif', 'Show menu1').'
+            </a>';
         } elseif ($isHidden == 'false' && $_SESSION['hideMenu']) {
             $sourceurl = str_replace('&isHidden=true', '', $sourceurl);
             $sourceurl = str_replace('&isHidden=false', '', $sourceurl);
 
             $_SESSION['hideMenu'] = 'shown';
-            $output_string_menu .= '<div id="leftimg"><a href="'.$sourceurl.'&isHidden=true"><img src="../../main/img/collapse.gif" alt="'.'Hide menu2'.'" padding:"2px"/></a></div>';
+            $output_string_menu .= '<div id="leftimg"><a href="'.$sourceurl.'&isHidden=true">
+                '.Display::return_icon('collapse.gif', 'Hide menu2').'
+            </a>
+            </div>';
         } elseif ($_SESSION['hideMenu']) {
             if ($_SESSION['hideMenu'] == 'shown') {
-                $output_string_menu .= '<div id="leftimg"><a href="'.$sourceurl.'&isHidden=true"><img src="../../main/img/collapse.gif" alt="'.'Hide menu3'.' padding:"2px"/></a></div>';
+                $output_string_menu .= '<div id="leftimg"><a href="'.$sourceurl.'&isHidden=true">
+                '.Display::return_icon('collapse.gif', 'Hide menu3').'
+                </a>
+                </div>';
             }
             if ($_SESSION['hideMenu'] == 'hidden') {
                 $sourceurl = str_replace('&isHidden=true', '', $sourceurl);
-                $output_string_menu .= '<a href="'.$sourceurl.'&isHidden=false"><img src="../../main/img/expand.gif" alt="'.'Hide menu4'.' padding:"2px"/></a>';
+                $output_string_menu .= '<a href="'.$sourceurl.'&isHidden=false">
+                '.Display::return_icon('expand.gif', 'Hide menu4').'
+                </a>';
             }
         } elseif (!$_SESSION['hideMenu']) {
             $_SESSION['hideMenu'] = 'shown';
             if (isset($_cid)) {
-                $output_string_menu .= '<div id="leftimg"><a href="'.$sourceurl.'&isHidden=true"><img src="main/img/collapse.gif" alt="'.'Hide menu5'.' padding:"2px"/></a></div>';
+                $output_string_menu .= '<div id="leftimg">
+                <a href="'.$sourceurl.'&isHidden=true">
+                    '.Display::return_icon('collapse.gif', 'Hide menu5').'
+                </a>
+                </div>';
             }
         }
     }

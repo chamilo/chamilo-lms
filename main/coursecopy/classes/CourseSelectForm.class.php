@@ -142,9 +142,8 @@ class CourseSelectForm
 			echo '</h3>';
 		}
 		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
-		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="javascript: myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy', '').'\',\'upload_form\')">';
+		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="javascript: myUpload.start(\'dynamic_div\', \'\' ,\''.get_lang('PleaseStandBy', '').'\',\'upload_form\')">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
-
 		if (!empty($hidden_fields['destination_course']) && !empty($hidden_fields['origin_course']) && !empty($hidden_fields['destination_session']) && !empty($hidden_fields['origin_session']) ) {
 			echo '<input type="hidden" name="destination_course" 	value="'.$hidden_fields['destination_course'].'"/>';
 			echo '<input type="hidden" name="origin_course" 		value="'.$hidden_fields['origin_course'].'"/>';
@@ -562,8 +561,8 @@ class CourseSelectForm
 		</script>
 		<?php
 
-		//get destination course title
-		if(!empty($hidden_fields['destination_course'])) {
+		// Get destination course title
+		if (!empty($hidden_fields['destination_course'])) {
 			$course_infos = CourseManager::get_course_information($hidden_fields['destination_course']);
 			echo '<h3>';
 				echo get_lang('DestinationCourse').' : '.$course_infos['title'];
@@ -571,13 +570,13 @@ class CourseSelectForm
 		}
 
 		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
-		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy').'\',\'upload_form\')">';
+		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="myUpload.start(\'dynamic_div\',\'\',\''.get_lang('PleaseStandBy').'\',\'upload_form\')">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
 		foreach ($list_course as $course){
 			foreach ($course->resources as $type => $resources) {
 				if (count($resources) > 0) {
 					echo '<img id="img_'.$course->code.'" src="'.$iconPath.'1.gif" onclick="javascript:exp('."'$course->code'".');" />';
-					echo '<b  onclick="javascript:exp('."'$course->code'".');" > '.$course->code.'</b><br />';
+					echo '<b onclick="javascript:exp('."'$course->code'".');" > '.$course->code.'</b><br />';
 					echo '<div id="div_'.$course->code.'">';
 					echo '<blockquote>';
 

@@ -850,7 +850,7 @@ class Blog
                     array('title' => $username)
                 ).' - <a href="blog.php?action=view_post&amp;blog_id='.$blog_id.'&amp;post_id='.$blog_post['post_id'].'#add_comment" title="'.get_lang(
                     'ReadPost'
-                ).'" >'.get_lang('Comments').': '.$blog_post_comments['number_of_comments'].'</a></span>'."\n";
+                ).'" >'.get_lang('Comments').': '.$blog_post_comments['number_of_comments'].'</a></span>';
                 echo '</div>';
             }
         } else {
@@ -951,7 +951,7 @@ class Blog
         if (api_is_allowed('BLOG_'.$blog_id, 'article_edit', $task_id)) {
             $blog_post_actions .= '<a href="blog.php?action=edit_post&amp;blog_id='.$blog_id.'&amp;post_id='.$post_id.'&amp;article_id='.$blog_post['post_id'].'&amp;task_id='.$task_id.'" title="'.get_lang(
                 'EditThisPost'
-            ).'"><img src="../img/edit.gif" /></a>';
+            ).'">'.Display::return_icon('edit.png').'</a>';
         }
 
         if (api_is_allowed('BLOG_'.$blog_id, 'article_delete', $task_id)) {
@@ -959,7 +959,7 @@ class Blog
                 'DeleteThisArticle'
             ).'" onclick="javascript:if(!confirm(\''.addslashes(
                 api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
-            ).'\')) return false;"><img src="../img/delete.gif" border="0" /></a>';
+            ).'\')) return false;">'.Display::return_icon('delete.png').'</a>';
         }
 
         if (api_is_allowed('BLOG_'.$blog_id, 'article_rate')) {
@@ -1192,7 +1192,7 @@ class Blog
                     'DeleteThisComment'
                 ).'" onclick="javascript:if(!confirm(\''.addslashes(
                     api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
-                ).'\')) return false;"><img src="../img/delete.gif" border="0" /></a>';
+                ).'\')) return false;">'.Display::return_icon('delete.png').'</a>';
             }
             if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_rate')) {
                 $rating_select = Blog::display_rating_form('comment', $blog_id, $post_id, $comment['comment_id']);
@@ -1350,14 +1350,10 @@ class Blog
             global $color2;
 
             echo '<div class="actions">';
-            echo '<a href="'.api_get_self(
-            ).'?action=manage_tasks&amp;blog_id='.$blog_id.'&amp;do=add"><img src="../img/blog_newtasks.gif" border="0" align="middle" alt="'.get_lang(
-                'AddTasks'
-            ).'" />'.get_lang('AddTasks').'</a> ';
-            echo '<a href="'.api_get_self(
-            ).'?action=manage_tasks&amp;blog_id='.$blog_id.'&amp;do=assign"><img src="../img/blog_task.gif" border="0" align="middle" alt="'.get_lang(
-                'AssignTasks'
-            ).'" />'.get_lang('AssignTasks').'</a>';
+            echo '<a href="'.api_get_self().'?action=manage_tasks&amp;blog_id='.$blog_id.'&amp;do=add">'.
+                Display::return_icon('blog_newtasks.gif', get_lang('AddTasks')).' '.get_lang('AddTasks').'</a> ';
+            echo '<a href="'.api_get_self().'?action=manage_tasks&amp;blog_id='.$blog_id.'&amp;do=assign">'.
+                Display::return_icon('blog_task.gif', get_lang('AssignTasks')).''.get_lang('AssignTasks').'</a>';
             ?>
         <a href="<?php echo api_get_self(); ?>?action=manage_rights&amp;blog_id=<?php echo $blog_id ?>"
            title="<?php echo get_lang('ManageRights') ?>"><?php echo Display::return_icon(
@@ -1372,11 +1368,11 @@ class Blog
             echo '<span class="blogpost_title">'.get_lang('TaskList').'</span><br />';
             echo "<table class=\"data_table\">";
             echo    "<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">",
-            "<th width='240'><b>", get_lang('Title'), "</b></th>\n",
-            "<th><b>", get_lang('Description'), "</b></th>\n",
-            "<th><b>", get_lang('Color'), "</b></th>\n",
-            "<th width='50'><b>", get_lang('Modify'), "</b></th>\n",
-            "</tr>\n";
+            "<th width='240'><b>", get_lang('Title'), "</b></th>",
+            "<th><b>", get_lang('Description'), "</b></th>",
+            "<th><b>", get_lang('Color'), "</b></th>",
+            "<th width='50'><b>", get_lang('Modify'), "</b></th>",
+            "</tr>";
 
 
             $sql = " SELECT
@@ -1409,14 +1405,12 @@ class Blog
                     '<td>'.Security::remove_XSS($task['description']).'</td>',
                     '<td><span style="background-color: #'.$task['color'].'">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td>',
                 '<td width="50">',
-                    '<a href="'.api_get_self(
-                    ).'?action=manage_tasks&amp;blog_id='.$task['blog_id'].'&amp;do=edit&amp;task_id='.$task['task_id'].'">',
-                    '<img src="../img/edit.gif" border="0" title="'.get_lang('EditTask').'" />',
-                "</a>\n",
-                    '<a href="'.$delete_link.'"',
-                $delete_confirm,
-                    '><img src="../img/'.$delete_icon.'" border="0" title="'.$delete_title.'" />',
-                "</a>\n",
+                    '<a href="'.api_get_self().'?action=manage_tasks&amp;blog_id='.$task['blog_id'].'&amp;do=edit&amp;task_id='.$task['task_id'].'">',
+                    Display::return_icon('edit.png', get_lang('EditTask')),
+                "</a>",
+                    '<a href="'.$delete_link.'"', $delete_confirm,'>
+                    '.Display::return_icon($delete_icon, $delete_title).
+                "</a>",
                 '</td>',
                 '</tr>';
             }
@@ -1442,11 +1436,11 @@ class Blog
         echo '<span class="blogpost_title">'.get_lang('AssignedTasks').'</span><br />';
         echo "<table class=\"data_table\">";
         echo    "<tr bgcolor=\"$color2\" align=\"center\" valign=\"top\">",
-        "<th width='240'><b>", get_lang('Member'), "</b></th>\n",
-        "<th><b>", get_lang('Task'), "</b></th>\n",
-        "<th><b>", get_lang('Description'), "</b></th>\n",
-        "<th><b>", get_lang('TargetDate'), "</b></th>\n",
-        "<th width='50'><b>", get_lang('Modify'), "</b></th>\n",
+        "<th width='240'><b>", get_lang('Member'), "</b></th>",
+        "<th><b>", get_lang('Task'), "</b></th>",
+        "<th><b>", get_lang('Description'), "</b></th>",
+        "<th><b>", get_lang('TargetDate'), "</b></th>",
+        "<th width='50'><b>", get_lang('Modify'), "</b></th>",
         "</tr>";
 
         $course_id = api_get_course_int_id();
@@ -1484,17 +1478,16 @@ class Blog
                 '<td>'.stripslashes($assignment['description']).'</td>',
                 '<td>'.$assignment['target_date'].'</td>',
             '<td width="50">',
-                '<a href="'.api_get_self(
-                ).'?action=manage_tasks&amp;blog_id='.$assignment['blog_id'].'&amp;do=edit_assignment&amp;task_id='.$assignment['task_id'].'&amp;user_id='.$assignment['user_id'].'">',
-                '<img src="../img/edit.gif" border="0" title="'.get_lang('EditTask').'" />',
-            "</a>\n",
+                '<a href="'.api_get_self().'?action=manage_tasks&amp;blog_id='.$assignment['blog_id'].'&amp;do=edit_assignment&amp;task_id='.$assignment['task_id'].'&amp;user_id='.$assignment['user_id'].'">',
+                Display::return_icon('edit.png', get_lant('EditTask')),
+            "</a>",
                 '<a href="'.api_get_self(
                 ).'?action=manage_tasks&amp;blog_id='.$assignment['blog_id'].'&amp;do=delete_assignment&amp;task_id='.$assignment['task_id'].'&amp;user_id='.$assignment['user_id'].'" ',
                 'onclick="javascript:if(!confirm(\''.addslashes(
                     api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
                 ).'\')) return false;"',
-                '<img src="../img/'.$delete_icon.'" border="0" title="'.$delete_title.'" />',
-            "</a>\n",
+                Display::return_icon($delete_icon, $delete_title),
+            "</a>",
             '</td>',
             '</tr>';
         }
@@ -1560,25 +1553,25 @@ class Blog
 					</label>
 					<div class="controls">';
         echo "\t\t\t".'<table class="data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
-        echo "\t\t\t\t".'<tr>'."\n";
-        echo "\t\t\t\t\t".'<th colspan="2" style="width:223px;">'.get_lang('ArticleManager').'</th>'."\n";
-        echo "\t\t\t\t\t".'<th width:223px;>'.get_lang('CommentManager').'</th>'."\n";
-        echo "\t\t\t\t".'</tr>'."\n";
-        echo "\t\t\t\t".'<tr>'."\n";
+        echo "\t\t\t\t".'<tr>'."";
+        echo "\t\t\t\t\t".'<th colspan="2" style="width:223px;">'.get_lang('ArticleManager').'</th>'."";
+        echo "\t\t\t\t\t".'<th width:223px;>'.get_lang('CommentManager').'</th>'."";
+        echo "\t\t\t\t".'</tr>'."";
+        echo "\t\t\t\t".'<tr>'."";
         echo "\t\t\t\t\t".'<th style="width:111px;"><label for="articleDelete">'.get_lang(
             'Delete'
-        ).'</label></th>'."\n";
-        echo "\t\t\t\t\t".'<th style="width:112px;"><label for="articleEdit">'.get_lang('Edit').'</label></th>'."\n";
+        ).'</label></th>'."";
+        echo "\t\t\t\t\t".'<th style="width:112px;"><label for="articleEdit">'.get_lang('Edit').'</label></th>'."";
         echo "\t\t\t\t\t".'<th style="width:223px;"><label for="commentsDelete">'.get_lang(
             'Delete'
-        ).'</label></th>'."\n";
-        echo "\t\t\t\t".'</tr>'."\n";
-        echo "\t\t\t\t".'<tr>'."\n";
-        echo "\t\t\t\t\t".'<td style="text-align:center;"><input id="articleDelete" name="chkArticleDelete" type="checkbox" /></td>'."\n";
-        echo "\t\t\t\t\t".'<td style="text-align:center;"><input id="articleEdit" name="chkArticleEdit" type="checkbox" /></td>'."\n";
-        echo "\t\t\t\t\t".'<td style="border:1px dotted #808080; text-align:center;"><input id="commentsDelete" name="chkCommentsDelete" type="checkbox" /></td>'."\n";
-        echo "\t\t\t\t".'</tr>'."\n";
-        echo "\t\t\t".'</table>'."\n";
+        ).'</label></th>'."";
+        echo "\t\t\t\t".'</tr>'."";
+        echo "\t\t\t\t".'<tr>'."";
+        echo "\t\t\t\t\t".'<td style="text-align:center;"><input id="articleDelete" name="chkArticleDelete" type="checkbox" /></td>'."";
+        echo "\t\t\t\t\t".'<td style="text-align:center;"><input id="articleEdit" name="chkArticleEdit" type="checkbox" /></td>'."";
+        echo "\t\t\t\t\t".'<td style="border:1px dotted #808080; text-align:center;"><input id="commentsDelete" name="chkCommentsDelete" type="checkbox" /></td>'."";
+        echo "\t\t\t\t".'</tr>'."";
+        echo "\t\t\t".'</table>'."";
         echo '		</div>
 				</div>';
 
@@ -1671,42 +1664,42 @@ class Blog
             $arrPermissions[] = $row['action'];
         }
 
-        echo "\t".'<tr>'."\n";
+        echo "\t".'<tr>'."";
         echo "\t\t".'<td style="text-align:right; vertical-align:top;">'.get_lang(
             'TaskManager'
-        ).':&nbsp;&nbsp;</td>'."\n";
-        echo "\t\t".'<td>'."\n";
+        ).':&nbsp;&nbsp;</td>'."";
+        echo "\t\t".'<td>'."";
         echo "\t\t\t".'<table  class="data_table" cellspacing="0" style="border-collapse:collapse; width:446px;">';
-        echo "\t\t\t\t".'<tr>'."\n";
-        echo "\t\t\t\t\t".'<th colspan="2" style="width:223px;">'.get_lang('ArticleManager').'</th>'."\n";
-        echo "\t\t\t\t\t".'<th width:223px;>'.get_lang('CommentManager').'</th>'."\n";
-        echo "\t\t\t\t".'</tr>'."\n";
-        echo "\t\t\t\t".'<tr>'."\n";
+        echo "\t\t\t\t".'<tr>'."";
+        echo "\t\t\t\t\t".'<th colspan="2" style="width:223px;">'.get_lang('ArticleManager').'</th>'."";
+        echo "\t\t\t\t\t".'<th width:223px;>'.get_lang('CommentManager').'</th>'."";
+        echo "\t\t\t\t".'</tr>'."";
+        echo "\t\t\t\t".'<tr>'."";
         echo "\t\t\t\t\t".'<th style="width:111px;"><label for="articleDelete">'.get_lang(
             'Delete'
-        ).'</label></th>'."\n";
-        echo "\t\t\t\t\t".'<th style="width:112px;"><label for="articleEdit">'.get_lang('Edit').'</label></th>'."\n";
+        ).'</label></th>'."";
+        echo "\t\t\t\t\t".'<th style="width:112px;"><label for="articleEdit">'.get_lang('Edit').'</label></th>'."";
         echo "\t\t\t\t\t".'<th style="width:223px;"><label for="commentsDelete">'.get_lang(
             'Delete'
-        ).'</label></th>'."\n";
-        echo "\t\t\t\t".'</tr>'."\n";
-        echo "\t\t\t\t".'<tr>'."\n";
+        ).'</label></th>';
+        echo "\t\t\t\t".'</tr>';
+        echo "\t\t\t\t".'<tr>';
         echo "\t\t\t\t\t".'<td style="text-align:center;"><input '.((in_array(
             'article_delete',
             $arrPermissions
-        )) ? 'checked ' : '').'id="articleDelete" name="chkArticleDelete" type="checkbox" /></td>'."\n";
+        )) ? 'checked ' : '').'id="articleDelete" name="chkArticleDelete" type="checkbox" /></td>';
         echo "\t\t\t\t\t".'<td style="text-align:center;"><input '.((in_array(
             'article_edit',
             $arrPermissions
-        )) ? 'checked ' : '').'id="articleEdit" name="chkArticleEdit" type="checkbox" /></td>'."\n";
+        )) ? 'checked ' : '').'id="articleEdit" name="chkArticleEdit" type="checkbox" /></td>';
         echo "\t\t\t\t\t".'<td style="text-align:center;"><input '.((in_array(
             'article_comments_delete',
             $arrPermissions
-        )) ? 'checked ' : '').'id="commentsDelete" name="chkCommentsDelete" type="checkbox" /></td>'."\n";
-        echo "\t\t\t\t".'</tr>'."\n";
-        echo "\t\t\t".'</table>'."\n";
-        echo "\t\t".'</td>'."\n";
-        echo "\t".'</tr>'."\n";
+        )) ? 'checked ' : '').'id="commentsDelete" name="chkCommentsDelete" type="checkbox" /></td>';
+        echo "\t\t\t\t".'</tr>';
+        echo "\t\t\t".'</table>';
+        echo "\t\t".'</td>';
+        echo "\t".'</tr>';
         /* end of edit */
 
         echo '<tr>
@@ -1835,8 +1828,7 @@ class Blog
             }
         }
         echo '</select>
-
-							<select name="task_month">';
+                <select name="task_month">';
         for ($i = 1; $i <= 12; $i++) {
             // values need to have double digits
             $value = ($i <= 9 ? "0".$i : $i);
@@ -1848,16 +1840,17 @@ class Blog
             }
         }
         echo '</select>
-
-							<select name="task_year">
-								<option value="'.($year - 1).'">'.($year - 1).'</option>
-								<option value="'.$year.'" selected> '.$year.' </option>';
+                <select name="task_year">
+                    <option value="'.($year - 1).'">'.($year - 1).'</option>
+                    <option value="'.$year.'" selected> '.$year.' </option>';
         for ($i = 1; $i <= 5; $i++) {
             $value = $year + $i;
-            echo "\t\t\t\t<option value=\"".$value."\">".$value."</option>\n";
+            echo "<option value=\"".$value."\">".$value."</option>";
         }
         echo '</select>
-							<a title="Kalender" href="javascript:openCalendar(\'assign_task\', \'task_\')"><img src="../img/calendar_select.gif" border="0" align="absmiddle"/></a>';
+                <a title="Kalender" href="javascript:openCalendar(\'assign_task\', \'task_\')">
+                '.Display::return_icon('calendar_select.gif').'
+                </a>';
         echo '		</div>
 				</div>';
 
@@ -2003,20 +1996,22 @@ class Blog
         }
 
         echo '</select>
-						<a title="Kalender" href="javascript:openCalendar(\'assign_task\', \'task_\')"><img src="../img/calendar_select.gif" border="0" align="absmiddle"/></a>
-					 </td>
-					</tr>
-					<tr>
-						<td align="right">&nbsp;</td>
-						<input type="hidden" name="action" value="" />
-						<input type="hidden" name="old_task_id" value="'.$task_id.'" />
-						<input type="hidden" name="old_user_id" value="'.$user_id.'" />
-						<input type="hidden" name="old_target_date" value="'.$old_date.'" />
-						<input type="hidden" name="assign_task_edit_submit" value="true" />
-						<td><br /><button class="save type="submit" name="Submit">'.get_lang('Ok').'</button></td>
-					</tr>
-				</table>
-			</form>';
+                <a title="Kalender" href="javascript:openCalendar(\'assign_task\', \'task_\')">
+                '.Display::return_icon('calendar_select.gif').'
+                </a>
+             </td>
+            </tr>
+            <tr>
+                <td align="right">&nbsp;</td>
+                <input type="hidden" name="action" value="" />
+                <input type="hidden" name="old_task_id" value="'.$task_id.'" />
+                <input type="hidden" name="old_user_id" value="'.$user_id.'" />
+                <input type="hidden" name="old_target_date" value="'.$old_date.'" />
+                <input type="hidden" name="assign_task_edit_submit" value="true" />
+                <td><br /><button class="save type="submit" name="Submit">'.get_lang('Ok').'</button></td>
+            </tr>
+        </table>
+    </form>';
     }
 
     /**
@@ -2636,31 +2631,21 @@ class Blog
                         if (is_array($tasks[$curday])) {
                             // Add tasks to calendar
                             foreach ($tasks[$curday] as $task) {
-                                echo '<a href="blog.php?action=execute_task&amp;blog_id='.$task['blog_id'].'&amp;task_id='.stripslashes(
-                                    $task['task_id']
-                                ).'" title="'.$task['title'].' : '.get_lang(
-                                    'InBlog'
-                                ).' : '.$task['blog_name'].' - '.get_lang(
-                                    'ExecuteThisTask'
-                                ).'"><img src="../img/blog_task.gif" alt="Task" title="'.get_lang(
-                                    'ExecuteThisTask'
-                                ).'" /></a>';
+                                echo '<a href="blog.php?action=execute_task&amp;blog_id='.$task['blog_id'].'&amp;task_id='.stripslashes($task['task_id']).'" title="'.$task['title'].' : '.get_lang('InBlog').' : '.$task['blog_name'].' - '.get_lang('ExecuteThisTask').'">'.
+                                    Display::return_icon('blog_task.gif', get_lant('ExecuteThisTask')).'
+                                    </a>';
                             }
                         }
                     }
-
-                    echo "</td>\n";
-
+                    echo "</td>";
                     $curday++;
                 } else {
-                    echo "<td>&nbsp;</td>\n";
+                    echo "<td>&nbsp;</td>";
                 }
             }
-
-            echo "</tr>\n";
+            echo "</tr>";
         }
-
-        echo "</table>\n";
+        echo "</table>";
     }
 
     /**
@@ -2758,8 +2743,8 @@ class Blog
 
                 $url_start_blog = 'blog.php'."?"."blog_id=".$info_log[3]."&amp;".api_get_cidreq();
                 $title = $info_log[0];
-                $image = '<img src="../img/blog.gif" border="0" align="absmiddle" alt="'.$title.'">'."\n";
-                $list_name = '<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_blog.'">'.$image.'</a></div><a href="'.$url_start_blog.'">'.$title.'</a>'.$session_img."\n";
+                $image = Display::return_icon('blog.gif', $title);
+                $list_name = '<div style="float: left; width: 35px; height: 22px;"><a href="'.$url_start_blog.'">'.$image.'</a></div><a href="'.$url_start_blog.'">'.$title.'</a>'.$session_img;
 
                 $list_body_blog[] = $list_name;
                 $list_body_blog[] = $info_log[1];
@@ -2767,19 +2752,17 @@ class Blog
                 $visibility_icon = ($info_log[2] == 0) ? 'invisible' : 'visible';
                 $visibility_info = ($info_log[2] == 0) ? 'Visible' : 'Invisible';
                 $my_image .= '<a href="'.api_get_self().'?action=edit&amp;blog_id='.$info_log[3].'">';
-                $my_image .= '<img src="../img/edit.gif" border="0" title="'.get_lang('EditBlog').'" />';
-                $my_image .= "</a>\n";
+                $my_image .= Display::return_icon('edit.png', get_lang('EditBlog'));
+                $my_image .= "</a>";
                 $my_image .= '<a href="'.api_get_self().'?action=delete&amp;blog_id='.$info_log[3].'" ';
                 $my_image .= 'onclick="javascript:if(!confirm(\''.addslashes(
                     api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)
                 ).'\')) return false;" >';
-                $my_image .= '<img src="../img/delete.gif" border="0" title="'.get_lang('DeleteBlog').'" />';
-                $my_image .= "</a>\n";
+                $my_image .= Display::return_icon('delete.png', get_lang('DeleteBlog'));
+                $my_image .= "</a>";
                 $my_image .= '<a href="'.api_get_self().'?action=visibility&amp;blog_id='.$info_log[3].'">';
-                $my_image .= '<img src="../img/'.$visibility_icon.'.gif" border="0" title="'.get_lang(
-                    $visibility_info
-                ).'" />';
-                $my_image .= "</a>\n";
+                $my_image .= Display::return_icon($visibility_icon.'.gif', get_lang('$visibility_info'));
+                $my_image .= "</a>";
 
                 $list_body_blog[] = $my_image;
                 $my_image = '';

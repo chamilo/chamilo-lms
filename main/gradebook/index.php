@@ -46,8 +46,8 @@ $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.donutRenderer.min.js');*/
 
 $htmlHeadXtra[] = '<script>
 
-var show_icon = "../img/view_more_stats.gif";
-var hide_icon = "../img/view_less_stats.gif";
+var show_icon = "'.api_get_path(WEB_IMG_PATH).'view_more_stats.gif";
+var hide_icon = "'.api_get_path(WEB_IMG_PATH).'view_less_stats.gif";
 
 $(document).ready(function() {
 
@@ -66,10 +66,6 @@ $(document).ready(function() {
         $(this).addClass("view_children");
         $(this).find("img").attr("src", show_icon);
     });
-
-
-
-
 /*
   var s1 = [["a",25]];
   var s2 = [["a", 0], ["a", 10], ["a", 10], ["a", 5]];

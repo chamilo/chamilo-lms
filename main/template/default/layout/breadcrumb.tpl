@@ -1,14 +1,14 @@
 <script>
-    $(document).ready( function() {
-        $('.toggle_student_view').on('click', function() {
-            $.ajax({
-                url: '{{ url('toggle_student_view') }}',
-                success: function(data) {
-                    location.reload();
-                }
-            });
+$(document).ready( function() {
+    $('.toggle_student_view').on('click', function() {
+        $.ajax({
+            url: '{{ url('toggle_student_view') }}',
+            success: function(data) {
+                location.reload();
+            }
         });
     });
+});
 </script>
 
 {% if breadcrumb %}

@@ -1545,10 +1545,7 @@ class survey_question
      */
     function create_form($form_content)
     {
-
         global $survey_data;
-
-        //$tool_name = '<img src="../img/'.self::icon_question($_GET['type']).'" alt="'.get_lang(ucfirst($_GET['type'])).'" title="'.get_lang(ucfirst($_GET['type'])).'" />';
         $tool_name = Display::return_icon(
             survey_manager::icon_question(Security::remove_XSS($_GET['type'])),
             get_lang(ucfirst(Security::remove_XSS($_GET['type']))),
@@ -1875,15 +1872,14 @@ class ch_yesno extends survey_question
         $this->html .= '			<table>';
         $this->html .= '	<tr>';
         $this->html .= '		<td align="right"><label for="answers[0]">1</label></td>';
-
         $this->html .= '		<td width="550">'.api_return_html_area('answers[0]', stripslashes($form_content['answers'][0]), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
-        $this->html .= '		<td><input style="width:22px" src="../img/icons/22/down.png"  type="image" class="down" value="move_down[0]" name="move_down[0]"/></td>';
+        $this->html .= '		<td><input style="width:22px" src="'.api_get_path(WEB_IMG_PATH).'icons/22/down.png"  type="image" class="down" value="move_down[0]" name="move_down[0]"/></td>';
         $this->html .= '	</tr>';
         $this->html .= '	<tr>';
         $this->html .= '		<td align="right"><label for="answers[1]">2</label></td>';
         //$this->html .= '		<td><input type="text" name="answers[1]" id="answers[1]" value="'.$form_content['answers'][1].'" /></td>';
         $this->html .= '		<td width="550">'.api_return_html_area('answers[1]', stripslashes($form_content['answers'][1]), '', '', null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120')).'</td>';
-        $this->html .= '		<td><input style="width:22px" type="image" src="../img/icons/22/up.png" value="move_up[1]" name="move_up[1]" /></td>';
+        $this->html .= '		<td><input style="width:22px" type="image" src="'.api_get_path(WEB_IMG_PATH).'icons/22/up.png" value="move_up[1]" name="move_up[1]" /></td>';
         $this->html .= '	</tr>';
         $this->html .= '			</table>';
         $this->html .= '		</div>';
@@ -2274,13 +2270,13 @@ class ch_dropdown extends survey_question
             ).'" /></td>';
             $this->html .= '		<td>';
             if ($key < $total_number_of_answers - 1) {
-                $this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
+                $this->html .= '<input type="image" style="width:22px"   src='.api_get_path(WEB_IMG_PATH).'icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
             }
             if ($key > 0) {
-                $this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
+                $this->html .= '<input type="image" style="width:22px"   src='.api_get_path(WEB_IMG_PATH).'icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
             }
             if ($total_number_of_answers > 2) {
-                $this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
+                $this->html .= '<input type="image" style="width:22px"   src='.api_get_path(WEB_IMG_PATH).'icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
             }
             $this->html .= ' 		</td>';
             $this->html .= '	</tr>';
@@ -2492,13 +2488,13 @@ class ch_score extends survey_question
             ).'</td>';
             $this->html .= '		<td>';
             if ($key < $total_number_of_answers - 1) {
-                $this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
+                $this->html .= '			<input type="image" style="width:22px"   src='.api_get_path(WEB_IMG_PATH).'icons/22/down.png"  value="move_down['.$key.']" name="move_down['.$key.']"/>';
             }
             if ($key > 0) {
-                $this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
+                $this->html .= '			<input type="image" style="width:22px"   src='.api_get_path(WEB_IMG_PATH).'icons/22/up.png"  value="move_up['.$key.']" name="move_up['.$key.']"/>';
             }
             if ($total_number_of_answers > 2) {
-                $this->html .= '			<input type="image" style="width:22px"   src="../img/icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
+                $this->html .= '			<input type="image" style="width:22px"   src='.api_get_path(WEB_IMG_PATH).'icons/22/delete.png"  value="delete_answer['.$key.']" name="delete_answer['.$key.']"/>';
             }
             $this->html .= ' 		</td>';
             $this->html .= '	</tr>';

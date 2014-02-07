@@ -283,7 +283,7 @@ function get_work_assignment_by_id($id, $courseId = null)
  * @param string $add_in_where_query
  * @return array
  */
-function getWorkList($id, $my_folder_data, $add_in_where_query)
+function getWorkList($id, $my_folder_data, $add_in_where_query = null)
 {
     $work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
@@ -732,7 +732,7 @@ function showStudentWorkGrid()
 
     $html = '<script>
     $(function() {
-        '.Display::grid_js('workList', $url, $columns, $columnModel, $params, array(), array(), true).'
+        '.Display::grid_js('workList', $url, $columns, $columnModel, $params, array(), null, true).'
     });
     </script>';
 

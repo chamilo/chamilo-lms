@@ -23,8 +23,6 @@
  * @todo rewrite functions to comply with phpDocumentor
  * @todo remove code duplication
  */
-
-
 use \ChamiloSession as Session;
 
 /**
@@ -34,9 +32,7 @@ use \ChamiloSession as Session;
  */
 function deleteitem($id)
 {
-
     $course_id = api_get_course_int_id();
-
     $tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
     $tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
     // Get the display order for this item before it is deleted.
@@ -102,17 +98,16 @@ function deletemodule($parent_item_id)
 
     // Delete the chapter itself.
     $sql = "DELETE FROM $tbl_learnpath_chapter WHERE c_id = $course_id AND (id=$parent_item_id and lp_id=$learnpath_id)";
-    $result = Database::query($sql);
+    Database::query($sql);
     // Delete items from that chapter.
     $sql2 = "DELETE FROM $tbl_learnpath_item WHERE c_id = $course_id AND parent_item_id=$parent_item_id";
-    $result = Database::query($sql2);
+    Database::query($sql2);
 
     // Update all other chapters accordingly.
     $sql = "UPDATE $tbl_learnpath_item SET display_order = display_order-1 WHERE c_id = $course_id AND display_order > $display_order AND parent_item_id = $parent_id";
-    $result = Database::query($sql);
+    Database::query($sql);
     $sql = "UPDATE $tbl_learnpath_chapter SET display_order = display_order-1 WHERE c_id = $course_id AND display_order > $display_order AND parent_item_id = $parent_id";
-    $result = Database::query($sql);
-
+    Database::query($sql);
     return true;
 }
 
@@ -131,7 +126,7 @@ function deletepath($path_id)
     $course_id = api_get_course_int_id();
 
     $sql = "DELETE FROM $tbl_learnpath_main WHERE c_id = $course_id AND lp_id='$path_id'";
-    $result = Database::query($sql);
+    Database::query($sql);
 
     //@TODO check how this function is used before uncommenting the following
     //also delete all elements inside that path
@@ -349,8 +344,6 @@ function array_learnpath_categories()
     while ($row = Database::fetch_array($result)) {
         $array_learnpath_categories[] = array($row['id'], $row['chapter_name']);
     }
-
-    //$array_learnpath_categories = array($array_learnpath_categories_name, $array_learnpath_categories_id);
     return $array_learnpath_categories;
 }
 
@@ -398,14 +391,16 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array(), $level
             // do not diplay useless information
             //echo "<tr><td>&nbsp;$lg_nochapters</td></tr>";
         } else {
-            echo "  <tr align='center' valign='top'><td><b>&nbsp;$lg_title_and_desc </b></td>\n"."    <td><b>&nbsp;$lg_add_learnpath_item </b></td>\n";
+            echo "<tr align='center' valign='top'>
+                <td><b>&nbsp;$lg_title_and_desc </b></td>
+                <td><b>&nbsp;$lg_add_learnpath_item </b></td>";
             if (is_prereq($learnpath_id)) {
-                echo "    <td bgcolor='#ddddee'><b>&nbsp;$lg_prerequisites_limit </b></td>\n";
+                echo "<td bgcolor='#ddddee'><b>&nbsp;$lg_prerequisites_limit </b></td>";
             } else {
-                echo "    <td><b>&nbsp;$lg_prerequisites </b></td>\n";
+                echo "<td><b>&nbsp;$lg_prerequisites </b></td>";
             }
-
-            echo "    <td colspan='2'><b>&nbsp;$lg_change_order </b></td><td><b>&nbsp;$lg_add_prereqi </b></td>\n"."    <td><b>&nbsp;$lg_add_title_and_desc </b></td><td><b>&nbsp;$lg_delete </b></td>\n"."  </tr>\n";
+            echo "<td colspan='2'><b>&nbsp;$lg_change_order </b></td><td><b>&nbsp;$lg_add_prereqi </b></td>
+                    <td><b>&nbsp;$lg_add_title_and_desc </b></td><td><b>&nbsp;$lg_delete </b></td></tr>";
         }
     }
 
@@ -428,67 +423,67 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array(), $level
                     $oddclass = 'row_even';
                 }
 
-                //echo '<tr class="'.$oddclass.'">'."\n".'  <td>'.str_repeat("&nbsp;&gt;", $level)."<img src='../img/documents.gif' alt='folder'/><a href='".api_get_self()."?lp_id=$learnpath_id&item_id={$row['id']}&action=add&type=learnpathitem&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9'><b>&nbsp;".$row['title']."</b></a>"."<br /><i><div align='justify'>&nbsp;".str_repeat("&nbsp;&nbsp;&nbsp;", $level)."</i></td>\n".'  <td  align="center"><a href="'.api_get_self()."?lp_id=$learnpath_id&item_id={$row['id']}&action=add&type=learnpathitem&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9"><img src='../img/0.gif' width='13' height='13' border='0' title='$lg_add_learnpath_item'></a></td>\n"."  <td";
-                echo '<tr class="'.$oddclass.'">'."\n".'  <td>'.str_repeat(
-                    "&nbsp;&gt;",
-                    $level
-                )."<img src='../img/documents.gif' alt='folder'/><a href='".api_get_self(
-                )."?lp_id=$learnpath_id&parent_item_id=".$row['id']."&action=add_sub_item'><b>&nbsp;".$row['title']."</b></a>"."<br /><i><div align='justify'>&nbsp;".str_repeat(
-                    "&nbsp;&nbsp;&nbsp;",
-                    $level
-                )."</i></td>\n".'  <td  align="center"><a href="'.api_get_self(
-                )."?lp_id=$learnpath_id&parent_item_id=".$row['id']."&action=add_sub_item\"><img src='../img/0.gif' width='13' height='13' border='0' title='$lg_add_learnpath_item'></a></td>\n"."  <td";
+                echo '<tr class="'.$oddclass.'">
+                    <td>'.str_repeat("&nbsp;&gt;", $level ).
+                    Display::return_icon('documents.gif').'
+                    <a href="'.api_get_self().'?lp_id='.$learnpath_id.'&parent_item_id='.$row['id'].'&action=add_sub_item">
+                        <b>&nbsp;'.$row['title'].'</b>
+                    </a>
+                    <br /><i>
+                    <div align="justify">&nbsp;'.str_repeat("&nbsp;&nbsp;&nbsp;", $level).'</i></td>
+                    <td align="center">
+                    <a href="'.api_get_self().'?lp_id='.$learnpath_id.'&parent_item_id='.$row['id'].'&action=add_sub_item">
+                        '.Display::return_icon('0.gif', $lg_add_learnpath_item).'
+                    </a>
+                    </td><td';
                 if (is_prereq($learnpath_id)) {
                     echo " bgcolor='#ddddee'";
                 }
-                echo ">".$row['prerequisite']."</td>\n";
+                echo ">".$row['prerequisite']."</td>";
 
                 // Showing the edit, delete and move icons.
                 if (api_is_allowed_to_edit()) {
                     $myaction = 'move_item';
                     if ($i < $num_modules) {
                         // If we are still under the number of chapters in this section, show "move down".
-                        //echo "  <td align=center>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=".$myaction."&amp;direction=down&amp;moduleid=".$parent_item_id."&amp;id=".$row['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lg_move_down\">"."</a></td>\n";
-                        echo "  <td align=center>"."<a href='".api_get_self(
-                        )."?lp_id=$learnpath_id&action=".$myaction."&direction=down&moduleid=".$parent_item_id."&id=".$row['id']."'>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lg_move_down\">"."</a></td>\n";
+                        echo '<td align="center">
+                            <a href="'.api_get_self().'?lp_id='.$learnpath_id.'&action='.$myaction.'&direction=down&moduleid='.$parent_item_id.'&id='.$row['id'].'">
+                                '.Display::return_icon('down.gif', $lg_move_down).'
+                            </a>
+                            </td>';
                     } else {
-                        echo '  <td align="center">&nbsp;</td>'."\n";
+                        echo '<td align="center">&nbsp;</td>';
                     }
 
                     if ($i > 1) {
-                        //echo '  <td align="center">'."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=".$myaction."&amp;direction=up&amp;moduleid=".$parent_item_id."&amp;id=".$row['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lg_move_up\">"."</a>"."</td>\n";
-                        echo '  <td align="center">'."<a href='".api_get_self(
-                        )."?lp_id=$learnpath_id&action=".$myaction."&direction=up&moduleid=".$parent_item_id."&id=".$row['id']."'>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lg_move_up\">"."</a>"."</td>\n";
+                        echo '<td align="center">
+                        <a href="'.api_get_self().'?lp_id='.$learnpath_id.'&action='.$myaction.'&direction=up&moduleid='.$parent_item_id.'&id='.$row['id'].'">
+                            '.Display::return_icon('up.gif', $lg_move_up).'
+                        </a></td>';
                     } else {
-                        echo '  <td align="center">&nbsp;</td>'."\n";
+                        echo '<td align="center">&nbsp;</td>';
                     }
 
-                    echo "  <td align='center'>&nbsp;</td>\n";
-                    //echo "  <td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=editmodule&amp;id=".$row['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lg_edit_learnpath_module\">"."</a>"."</td>\n";
-                    echo "  <td align='center'>"."<a href='".api_get_self(
-                    )."?lp_id=$learnpath_id&action=edititem&id=".$row['id']."'>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lg_edit_learnpath_module\">"."</a>"."</td>\n";
-
-                    //echo "  <td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=deletemodule&amp;id=".$row['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9 onclick=\"javascript: return confirmation('".$row['chapter_name']."');\">"."<img src=\"../img/delete.gif\" border=\"0\" title=\"$lg_delete_learnpath_module\">"."</a>"."</td>\n";
-                    echo "  <td align='center'>"."<a href='".api_get_self(
-                    )."?lp_id=$learnpath_id&action=delete_item&id=".$row['id']."' onclick=\"javascript: return confirmation('".$row['title']."');\">"."<img src=\"../img/delete.gif\" border=\"0\" title=\"$lg_delete_learnpath_module\">"."</a>"."</td>\n";
+                    echo "<td align='center'>&nbsp;</td>";
+                    echo '<td align="center">
+                            <a href="'.api_get_self().'?lp_id='.$learnpath_id.'&action=edititem&id='.$row['id'].'">
+                            '.Display::return_icon('edit.gif', $lg_edit_learnpath_module).'
+                            </a>
+                            </td>';
+                    echo '<td align="center">
+                        <a href="'.api_get_self().'?lp_id='.$learnpath_id.'&action=delete_item&id='.$row['id'].' onclick="javascript: return confirmation("'.$row['title'].'"); ">
+                            '.Display::return_icon('delete.gif', $lg_delete_learnpath_module).'
+                        </a></td>';
                 }
-
-                echo "</tr>\n";
+                echo "</tr>";
                 $i++;
-
                 $xml_output .= "<items>";
-
-                //display_learnpath_items($row['id']);
                 display_learnpath_chapters($row['id'], $tree, $level + 1);
-
                 $xml_output .= "</items>";
                 $xml_output .= "</chapter>";
-
-            } else //if //($row['item_type'] === 'item')
-            {
+            } else {
                 $row_items = $row;
-                echo "<tr>\n  <td colspan='2' valign='top'>";
-                //require 'resourcelinker.inc.php';
+                echo "<tr><td colspan='2' valign='top'>";
                 display_addedresource_link_in_learnpath(
                     $row_items['item_type'],
                     $row_items['ref'],
@@ -515,8 +510,6 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array(), $level
 
                     if ($row_items['prerequisite'] != '') {
                         $prereq = $row_items['prerequisite'];
-
-                        //if ($row_items['prereq_type'] == 'i') {
                         // item
                         $sql_items2 = "SELECT * FROM $tbl_lp_item WHERE id='$prereq'"; // Check if prereq has been deleted.
                         $result_items2 = Database::query($sql_items2);
@@ -557,31 +550,38 @@ function display_learnpath_chapters($parent_item_id = 0, $tree = array(), $level
 
                     // Move
                     if ($i < $num_modules) {
-                        echo "<td align='center'>"."<a href='".api_get_self(
-                        )."?lp_id=$learnpath_id&amp;action=moveitem&amp;type=item&amp;direction=down&amp;moduleid=".$parent_item_id."&amp;id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/down.gif\" border=\"0\" title=\"$lg_move_down\">"."</a>"."</td>";
+                        echo "<td align='center'>".
+                            "<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=moveitem&amp;type=item&amp;direction=down&amp;moduleid=".$parent_item_id."&amp;id=".$row_items['id']."'>
+                        ".Display::return_icon('down.gif', $lg_move_down)."
+                        </a></td>";
                     } else {
                         echo "<td width='30' align='center'>&nbsp;</td>";
                     }
 
                     if ($i > 1) {
-                        echo "<td align='center'>"."<a href='".api_get_self(
-                        )."?lp_id=$learnpath_id&amp;action=moveitem&amp;type=item&amp;direction=up&amp;moduleid=".$parent_item_id."&amp;id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/up.gif\" border=\"0\" title=\"$lg_move_up\">"."</a>";
+                        echo "<td align='center'>"."<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=moveitem&amp;type=item&amp;direction=up&amp;moduleid=".$parent_item_id."&amp;id=".$row_items['id']."'>
+                            ".Display::return_icon('up.gif', $lg_move_up)."
+                            </a>";
                     } else {
                         echo "<td width='30' align='center'>&nbsp;</td>";
                     }
-                    echo "</td>"."<td align='center'>";
+                    echo "</td><td align='center'>";
 
                     // Edit prereq
-                    echo "<a href='".api_get_self(
-                    )."?lp_id=$learnpath_id&amp;action=edititemprereq&amp;id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/scormpre.gif\" border=\"0\" title=\"$lg_add_prereq\">"."</a>"."</td>";
-
+                    echo "<a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=edititemprereq&amp;id=".$row_items['id']."'>
+                        ".Display::return_icon('scormpre.gif', $lg_add_prereq)."
+                        </a></td>";
                     // Edit
-                    echo "<td align='center'><a href='".api_get_self(
-                    )."?lp_id=$learnpath_id&amp;action=edititem&amp;id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/edit.gif\" border=\"0\" title=\"$lg_edit_learnpath_item\">"."</a>"."</td>";
+                    echo "<td align='center'>
+                            <a href='".api_get_self()."?lp_id=$learnpath_id&amp;action=edititem&amp;id=".$row_items['id']."'>
+                            ".Display::return_icon('edit.gif', $lg_edit_learnpath_item)."</a>
+                            </td>";
 
                     // Delete
-                    echo "<td align='center'><a href='".api_get_self(
-                    )."?lp_id=$learnpath_id&action=deleteitem&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9>"."<img src=\"../img/delete.gif\" border=\"0\" title=\"$lg_delete_learnpath_item\" onclick=\"javascript: return confirmation('".$row_items['item_type']."');\">"."</a>";
+                    echo "<td align='center'>
+                        <a href='".api_get_self()."?lp_id=$learnpath_id&action=deleteitem&id=".$row_items['id']."'>
+                        ".Display::return_icon('delete.gif', $lg_delete_learnpath_item, array('onclick' => "javascript: return confirmation('".$row_items['item_type']."')"))."
+                        </a>";
                 }
                 $i++;
                 echo "</td></tr>";
@@ -675,32 +675,39 @@ function display_learnpath_items($categoryid)
 
             // Move
             if ($i < $number_items) {
-                echo "<td align='center'><a href='".api_get_self(
-                )."?lp_id=$learnpath_id&action=moveitem&direction=down&moduleid=".$categoryid."&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/down.gif\" border=\"0\" title=\"$lg_move_down\"></a></td>";
+                echo "<td align='center'><a href='".api_get_self()."?lp_id=$learnpath_id&action=moveitem&direction=down&moduleid=".$categoryid."&id=".$row_items['id']."'>
+                    ".Display::return_icon('down.gif', $lg_move_down)."
+                    </a></td>";
             } else {
                 echo "<td width='30' align='center'>&nbsp;</td>";
             }
 
             if ($i > 1) {
-                echo "<td align='center'><a href='".api_get_self(
-                )."?lp_id=$learnpath_id&action=moveitem&direction=up&moduleid=".$categoryid."&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/up.gif\" border=\"0\" title=\"$lg_move_up\"></a>";
+                echo "<td align='center'>
+                        <a href='".api_get_self()."?lp_id=$learnpath_id&action=moveitem&direction=up&moduleid=".$categoryid."&id=".$row_items['id']."'>
+                        ".Display::return_icon('up.gif', $lg_move_up)."
+                    </a>";
             } else {
                 echo "<td width='30' align='center'>&nbsp;</td>";
             }
             echo "</td><td align='center'>";
 
             // Edit prereq
-            echo "<a href='".api_get_self(
-            )."?lp_id=$learnpath_id&action=edititemprereq&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/scormpre.gif\" border=\"0\" title=\"$lg_add_prereq\"></a></td>";
+            echo "<a href='".api_get_self()."?lp_id=$learnpath_id&action=edititemprereq&id=".$row_items['id']."'>
+                ".Display::return_icon('scormpre.gif', $lg_add_prereq)."
+            </a></td>";
 
             // Edit
-            echo "<td align='center'><a href='".api_get_self(
-            )."?lp_id=$learnpath_id&action=edititem&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/edit.gif\" border=\"0\" title=\"$lg_edit_learnpath_item\"></a></td>";
+            echo "<td align='center'>
+                <a href='".api_get_self()."?lp_id=$learnpath_id&action=edititem&id=".$row_items['id']."'>
+                ".Display::return_icon('edit.gif', $lg_edit_learnpath_item)."
+                </a></td>";
 
             // Delete
             echo "<td align='center'>";
-            echo "<a href='".api_get_self(
-            )."?lp_id=$learnpath_id&action=deleteitem&id=".$row_items['id']."'&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9><img src=\"../img/delete.gif\" border=\"0\" title=\"$lg_delete_learnpath_item\" onclick=\"javascript: return confirmation('".$langThisItem."');\"></a>";
+            echo "<a href='".api_get_self()."?lp_id=$learnpath_id&action=deleteitem&id=".$row_items['id']."'>
+                ".Display::return_icon('delete.gif', $lg_delete_learnpath_item, array('onclick' => "javascript: return confirmation('".$langThisItem."');"))."
+            </a>";
         }
         $i++;
         echo "</td></tr>";
@@ -932,15 +939,7 @@ function prereqcheck($id_in_path)
  */
 function get_learnpath_tree($learnpath_id)
 {
-    //error_log('New LP - In learnpath_functions::get_learnpath_tree', 0);
-    // Init elems
-    //global $tbl_learnpath_item, $tbl_learnpath_chapter;
-    /*
-    $tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
-    $tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
-    */
     $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-
     $tree = array();
     $chapters = array();
     $all_items_by_chapter = array();
@@ -1181,11 +1180,7 @@ function get_tracking_table($learnpath_id, $user_id, $parent_item_id = 0, $tree 
             }
 
             $link = get_addedresource_link_in_learnpath($elem['item_type'], $elem['id'], $elem['item_id']);
-            //$link = display_addedresource_link_in_learnpath($elem['item_type'], $elem['id'], $row['status'], $elem['item_id'], 'player', 'none');
-
-            //$mytable .= "<tr class='$oddclass'>"
             echo "<tr class='$oddclass'>"."<td class='mystatus'>".str_repeat("&nbsp;", $level * 2 + 2);
-            //."<a href='$link?SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9' target='toc'>hop</a>"
             display_addedresource_link_in_learnpath(
                 $elem['item_type'],
                 $elem['ref'],
@@ -1195,7 +1190,8 @@ function get_tracking_table($learnpath_id, $user_id, $parent_item_id = 0, $tree 
                 'wrap'
             );
             //we should also add the total score here
-            echo "<td>"."<font color='$color'><div class='mystatus'>".$statusmessage."</div></font>"."</td>"."<td>"."<div class='mystatus' align='center'>".($myrow['score'] == 0 ? '-' : $myrow['score'])."</div>"."</td>"."</tr>\n";
+            echo "<td>"."<font color='$color'><div class='mystatus'>".$statusmessage."</div></font></td><td>
+            <div class='mystatus' align='center'>".($myrow['score'] == 0 ? '-' : $myrow['score'])."</div></td></tr>";
             $counter++;
         }
     }
@@ -1344,9 +1340,9 @@ function export_exercise($item_id)
     $test .= "<h3>".$exerciseTitle."</h3>";
 
     if (!empty ($exerciseSound)) {
-        $test .= "<a href=\"../document/download.php?doc_url=%2Faudio%2F".$exerciseSound."\"&SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9 target=\"_blank\"><img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=".get_lang(
-            "Sound"
-        )."\" /></a>";
+        $test .= "<a href=\"../document/download.php?doc_url=%2Faudio%2F".$exerciseSound."\" target=\"_blank\">
+            ".Display::return_icon('sound.gif', get_lang("Sound"))."
+            </a>";
     }
 
     // Writing the .js file with to check the correct answers begin.
@@ -1372,7 +1368,7 @@ function export_exercise($item_id)
     $s = "
         <p>$exerciseDescription</p>
         <table width='100%' border='0' cellpadding='1' cellspacing='0'>
-         <form method='post' action=''><input type=\"hidden\" name=\"SQMSESSID\" value=\"36812c2dea7d8d6e708d5e6a2f09b0b9\" />
+         <form method='post' action=''>
          <input type='hidden' name='formSent' value='1' />
          <input type='hidden' name='exerciseType' value='".$exerciseType."' />
          <input type='hidden' name='questionNum' value='".$questionNum."' />
@@ -1407,9 +1403,7 @@ function export_exercise($item_id)
 
                     // Destruction of the Question object.
                     unset ($objQuestionTmp);
-
                     $test .= '<tr><td>'.get_lang('AlreadyAnswered').' &quot;'.$questionName.'&quot;</td></tr>';
-
                     break;
                 }
             }
@@ -1484,7 +1478,7 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
             /* ]]> */
             </script>
             <br /><br />
-            <form><input type=\"hidden\" name=\"SQMSESSID\" value=\"36812c2dea7d8d6e708d5e6a2f09b0b9\" />
+            <form>
                 <table cols='3'	width='100%' align='center'>
                     <tr>
                     <td	align='middle'><input type = 'button' value	= '  ".$langDone."  ' onclick = \"javascript: doQuit('completed');\" id='button2' name='button2'></td>
@@ -1917,10 +1911,9 @@ function exportitem($id, $item_id, $item_type, $add_scorm_communications = false
                 $target = '_blank';
             }
             // 3. Write the link to the export string.
-            $expcontent .= "<a href='$thelink?SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9' target='".$target."'>$LPname</a>";
+            $expcontent .= "<a href='$thelink' target='".$target."'>$LPname</a>";
             // 4. Change the element type for later changes (this is lost, however, so useless here).
             $item_type = 'Link'; // To put this to the filename.
-            //$LPname="<a href='$thelink?SQMSESSID=36812c2dea7d8d6e708d5e6a2f09b0b9' target=".$target.">$LPname</a>";
             // I am still not sure about Link export : to export them as files or they can appear in the TOC at once ?
             // To enable the second possibility, unrem the row $LPname=...
             break;

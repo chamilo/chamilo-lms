@@ -791,12 +791,10 @@ function display_new_wiki_form()
         echo '</div>';
         echo '</div>';
         //to define as an individual assignment
-        echo '<div style= "border : 1px dotted; padding:4px; margin-top:20px;"><img src="../img/icons/22/wiki_assignment.png" title="'.get_lang(
-            'CreateAssignmentPage'
-        ).'" alt="'.get_lang('CreateAssignmentPage').'"/>&nbsp;'.get_lang(
-            'DefineAssignmentPage'
-        ).': <input type="checkbox" name="assignment" value="1"></div>'; // 1= teacher 2 =student
-        //
+        echo '<div style= "border : 1px dotted; padding:4px; margin-top:20px;">
+            <img src="'.api_get_path(WEB_IMG_PATH).'icons/22/wiki_assignment.png" title="'.get_lang('CreateAssignmentPage').'" alt="'.get_lang('CreateAssignmentPage').'"/>&nbsp;'.get_lang('DefineAssignmentPage').':
+            <input type="checkbox" name="assignment" value="1"></div>';
+            // 1= teacher 2 =student
         echo'</div>';
 
     }
@@ -1020,7 +1018,7 @@ function display_wiki_entry($newtitle)
             echo '<form name="form_export2PDF" method="post" action="index.php">';
             echo '<input type="hidden" name="action" value="export_to_pdf">';
             echo '<input type="hidden" name="wiki_id" value="'.$row['id'].'">';
-            echo '<input type="image" src="../img/icons/22/pdf.png" border ="0" title="'.get_lang(
+            echo '<input type="image" src="'.api_get_path(WEB_IMG_PATH).'icons/22/pdf.png" border ="0" title="'.get_lang(
                 'ExportToPDF'
             ).'" alt="'.get_lang('ExportToPDF').'" style=" width:22px; border:none; margin-top: -9px">';
             echo '</form>';
@@ -1032,7 +1030,7 @@ function display_wiki_entry($newtitle)
                 echo '<form name="form_export2DOC" method="post" action="index.php" >';
                 echo '<input type=hidden name="export2DOC" value="export2doc">';
                 echo '<input type=hidden name="doc_id" value="'.$row['id'].'">';
-                echo '<input type="image" src="../img/icons/22/export_to_documents.png" border ="0" title="'.get_lang(
+                echo '<input type="image" src="'.api_get_path(WEB_IMG_PATH).'icons/22/export_to_documents.png" border ="0" title="'.get_lang(
                     'ExportToDocArea'
                 ).'" alt="'.get_lang('ExportToDocArea').'" style=" width:22px; border:none; margin-top: -6px">';
                 echo '</form>';
@@ -2080,9 +2078,7 @@ function auto_add_page_users($assignment_type)
         $existing_image = $image_path['file'];
         $photo = '<img src="'.$image_repository.$existing_image.'" alt="'.$name.'"  width="40" height="50" align="top" title="'.$name.'"  />';
     } else {
-        $photo = '<img src="'.api_get_path(
-            WEB_CODE_PATH
-        )."img/unknown.jpg".'" alt="'.$name.'"  width="40" height="50" align="top"  title="'.$name.'"  />';
+        $photo = '<img src="'.api_get_path(WEB_IMG_PATH)."unknown.jpg".'" alt="'.$name.'"  width="40" height="50" align="top"  title="'.$name.'"  />';
     }
 
     //teacher assignment title
@@ -2303,7 +2299,7 @@ function display_wiki_search_results($search_term, $search_content = 0, $all_ver
                     ICON_SIZE_SMALL
                 );
             } elseif ($obj->assignment == 0) {
-                $ShowAssignment = '<img src="../img/px_transparent.gif" />';
+                $ShowAssignment = '<img src="'.api_get_path(WEB_IMG_PATH).'px_transparent.gif" />';
             }
 
             $row = array();

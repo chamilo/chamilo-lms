@@ -3221,7 +3221,7 @@ class DocumentManager
     ) {
 
         $img_path = api_get_path(WEB_IMG_PATH);
-        $img_sys_path = api_get_path(SYS_CODE_PATH).'img/';
+        $img_sys_path = api_get_path(SYS_IMG_PATH);
         $web_code_path = api_get_path(WEB_CODE_PATH);
 
         $return = '';

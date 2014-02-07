@@ -883,7 +883,7 @@ class PageController
                             ).'" method="post">';
                             $courses_list_string .= '<input type="hidden" name="sec_token" value="'.$stok.'">';
                             $courses_list_string .= '<input type="hidden" name="subscribe" value="'.$course['code'].'" />';
-                            $courses_list_string .= '<input type="image" name="unsub" src="main/img/enroll.gif" alt="'.get_lang('Subscribe').'" />'.get_lang('Subscribe').'
+                            $courses_list_string .= '<input type="image" name="unsub" src="'.api_get_path(WEB_IMG_PATH).'enroll.gif" alt="'.get_lang('Subscribe').'" />'.get_lang('Subscribe').'
                             </form>';
                         } else {
                             $courses_list_string .= '<br />'.get_lang('SubscribingNotAllowed');

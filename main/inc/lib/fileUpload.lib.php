@@ -260,7 +260,7 @@ function handle_uploaded_document(
 			switch ($what_if_file_exists) {
 				// Overwrite the file if it exists
 				case 'overwrite':
-                                  // Check if the target file exists, so we can give another message
+                                       // Check if the target file exists, so we can give another message
 					$file_exists = file_exists($store_path);
 					if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path)) {
 						chmod($store_path, $files_perm);

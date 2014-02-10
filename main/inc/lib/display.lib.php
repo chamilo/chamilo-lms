@@ -1036,23 +1036,25 @@ class Display {
      * @param array     Course information array, containing at least elements 'db' and 'k'
      * @return string   The HTML link to be shown next to the course
      */
-    public static function show_notification($course_info) {
+    public static function show_notification($course_info)
+    {
         $t_track_e_access 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-        $user_id = api_get_user_id();
-
         $course_tool_table	= Database::get_course_table(TABLE_TOOL_LIST);
         $tool_edit_table 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-
         $course_code        = Database::escape_string($course_info['code']);
-        $course_id          = $course_info['real_id'];
 
+        $user_id = api_get_user_id();
+        $course_id = $course_info['real_id'];
         $course_info['id_session'] = intval($course_info['id_session']);
+
         // Get the user's last access dates to all tools of this course
-        $sqlLastTrackInCourse = "SELECT * FROM $t_track_e_access USE INDEX (access_cours_code, access_user_id)
-                                 WHERE  access_cours_code = '".$course_code."' AND
-                                        access_user_id = '$user_id' AND
-                                        access_session_id ='".$course_info['id_session']."'";
-        $resLastTrackInCourse = Database::query($sqlLastTrackInCourse);
+        $sql = "SELECT *
+                FROM $t_track_e_access USE INDEX (access_cours_code, access_user_id)
+                WHERE
+                    access_cours_code = '".$course_code."' AND
+                    access_user_id = '$user_id' AND
+                    access_session_id ='".$course_info['id_session']."'";
+        $resLastTrackInCourse = Database::query($sql);
 
         $oldestTrackDate = $oldestTrackDateOrig = '3000-01-01 00:00:00';
         while ($lastTrackInCourse = Database::fetch_array($resLastTrackInCourse)) {
@@ -1061,6 +1063,7 @@ class Display {
                 $oldestTrackDate = $lastTrackInCourse['access_date'];
             }
         }
+
         if ($oldestTrackDate == $oldestTrackDateOrig) {
             //if there was no connexion to the course ever, then take the
             // course creation date as a reference
@@ -1076,18 +1079,26 @@ class Display {
         }
 
         // Get the last edits of all tools of this course.
-        $sql = "SELECT tet.*, tet.lastedit_date last_date, tet.tool tool, tet.ref ref, ".
-                            " tet.lastedit_type type, tet.to_group_id group_id, ".
-                            " ctt.image image, ctt.link link ".
-                        " FROM $tool_edit_table tet, $course_tool_table ctt ".
-                        " WHERE tet.c_id = $course_id AND
-                                ctt.c_id = $course_id AND
-                                tet.lastedit_date > '$oldestTrackDate' ".
-                        // Special hack for work tool, which is called student_publication in c_tool and work in c_item_property :-/ BT#7104
-                        " AND (ctt.name = tet.tool OR (ctt.name = 'student_publication' AND tet.tool = 'work')) ".
-                        " AND ctt.visibility = '1' ".
-                        " AND tet.lastedit_user_id != $user_id AND tet.id_session = '".$course_info['id_session']."' ".
-                        " ORDER BY tet.lastedit_date";
+        $sql = "SELECT
+                    tet.*,
+                    tet.lastedit_date last_date,
+                    tet.tool tool,
+                    tet.ref ref,
+                    tet.lastedit_type type,
+                    tet.to_group_id group_id,
+                    ctt.image image,
+                    ctt.link link
+                FROM $tool_edit_table tet, $course_tool_table ctt
+                WHERE
+                    tet.c_id = $course_id AND
+                    ctt.c_id = $course_id AND
+                    tet.lastedit_date > '$oldestTrackDate' ".
+                    // Special hack for work tool, which is called student_publication in c_tool and work in c_item_property :-/ BT#7104
+                    " AND (ctt.name = tet.tool OR (ctt.name = 'student_publication' AND tet.tool = 'work')) ".
+                    " AND ctt.visibility = '1' ".
+                    " AND tet.lastedit_user_id != $user_id AND tet.id_session = '".$course_info['id_session']."'
+                 ORDER BY tet.lastedit_date";
+
         $res = Database::query($sql);
         // Get the group_id's with user membership.
         $group_ids = GroupManager :: get_group_ids($course_info['real_id'], $user_id);
@@ -1097,7 +1108,7 @@ class Display {
         while ($res && ($item_property = Database::fetch_array($res))) {
             // First thing to check is if the user never entered the tool
             // or if his last visit was earlier than the last modification.
-            if ((!isset ($lastTrackInCourseDate[$item_property['tool']])
+            if ((!isset($lastTrackInCourseDate[$item_property['tool']])
                  || $lastTrackInCourseDate[$item_property['tool']] < $item_property['lastedit_date'])
                 // Drop the tool elements that are part of a group that the
                 // user is not part of.
@@ -1130,10 +1141,9 @@ class Display {
                 // If it's a learning path, ensure it is currently visible to the user
                 if ($item_property['tool'] == TOOL_LEARNPATH) {
                     require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-                    if (!learnpath::is_lp_visible_for_student($item_property['ref'],$user_id, $course_code)) {
+                    if (!learnpath::is_lp_visible_for_student($item_property['ref'], $user_id, $course_code)) {
                         continue;
                     }
-
                 }
                 if ($item_property['tool'] == 'work' && $item_property['type'] == 'DirectoryCreated') {
                     $item_property['lastedit_type'] = 'WorkAdded';

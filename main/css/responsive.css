@@ -327,7 +327,7 @@ The more frequent ones have been marked with *
 
     /* Subnav */
     .subnav {
-        border:1px solid #fff;
+        border:none;
         position: static;
         top: auto;
         z-index: auto;
@@ -344,17 +344,15 @@ The more frequent ones have been marked with *
         border: 0;
     }
     .subnav .nav > li + li > a {
-        border-top: 1px solid #e5e5e5;
+        border-top: none;
     }
     .subnav .nav > li:first-child > a,
     .subnav .nav > li:first-child > a:hover {
-        -webkit-border-radius: 4px 4px 0 0;
-            -moz-border-radius: 4px 4px 0 0;
-                border-radius: 4px 4px 0 0;
+        border-radius: none;
+        
     }
 
     .subnav .navbar-inner li a:hover {
-        background-color: #666;
         color: #fff;
     }
 

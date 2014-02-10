@@ -365,12 +365,15 @@
     padding-left: 17px;
     padding-top: 4px;
 }
-.scorm_title_text {
-    margin-left: 10px;
-    font-weight: bold;
-    background:#eee;
-    font-size: 16px;
-    color: #444;
-    width: 89%;
-    padding: 1px 5px 3px 8px;
+#scorm_title {
+    font-weight: normal;
+    background-color:#000;
+    font-size: 18px;
+    background-image: none;
+}
+#learning_path_main #control {
+  opacity: 1;
+}
+.buttons a img:hover{
+opacity: 0.7;
 }

@@ -71,13 +71,198 @@ a:active {
 .controls .btn{
     background:#2E75A3;
     color: #FFFFFF;
-    border:none;
+    border-color: #2E75A3;
+    border: 1px solid transparent;
+    border-radius: 4px;
     padding: 5px 25px;
     text-shadow: none;
 }
 .controls .btn:hover{
     background:#0F466A;
+    border-color: #2E75A3;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #FFFFFF;
 }
+.breadcrumb {
+  margin-bottom: 0;
+  background-color: #b1d6ec;
+  background-image: none;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 1px solid #B1D6EC;
+  box-shadow: none;
+}
+.breadcrumb a{
+  color: #333;
+  font-size: 13px;
+  line-height: 30px;
+  text-transform: none;
+}
+
+.breadcrumb li{
+    font-size: 14px;
+    text-shadow: none;
+    text-transform: uppercase;
+}
+.breadcrumb a.btn-mini{
+    font-size: 12px;
+    line-height: 17px;
+    text-transform: none;
+}
+.breadcrumb a.btn-success {
+  background-color: #FD6600;
+  background-image: none;
+  border: 1px solid #FD6600;
+  color: #FFFFFF;
+}
+.btn{
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.428571429;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+       -o-user-select: none;
+          user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  border-color: #ccc;
+}
+.btn:hover{
+  color: #333;
+  text-decoration: none;
+}
+.btn-primary{
+    background-color:#2E75A3;
+    background-image: none;
+    border-color: #2E75A3;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.btn-primary:hover{
+    background-color:#0F466A;
+    color: #FFFFFF;
+}
+
+/* styles for the star rater */
+.star-rating{
+    list-style:none;
+    margin: 0px;
+    padding:0px;
+    width: 125px;
+    height: 25px;
+    position: relative;
+    overflow:hidden;
+    background: url(images/start-level.png) top left repeat-x;
+}
+.star-rating li{
+    padding:0px;
+    margin:0px;
+    width:25px;
+    height:25px;
+    float: left;
+}
+.star-rating li a{
+    display:block;
+    width:25px;
+    height: 25px;
+    line-height:25px;
+    text-decoration: none;
+    text-indent: -9000px;
+    z-index: 20;
+    position: absolute;
+    padding: 0px;
+    overflow:hidden;
+}
+.star-rating li a:hover{
+    background: url(images/start-level.png) left bottom;
+    z-index: 2;
+    left: 0px;
+    border:none;
+}
+.star-rating a.one-star{
+    left: 0px;
+}
+.star-rating a.one-star:hover{
+    width:25px;
+}
+.star-rating a.two-stars{
+    left:25px;
+}
+.star-rating a.two-stars:hover{
+    width: 50px;
+}
+.star-rating a.three-stars{
+    left: 50px;
+}
+.star-rating a.three-stars:hover{
+    width: 75px;
+}
+.star-rating a.four-stars{
+    left: 75px;
+}
+.star-rating a.four-stars:hover{
+    width: 100px;
+}
+.star-rating a.five-stars{
+    left: 100px;
+}
+.star-rating a.five-stars:hover{
+    width: 125px;
+}
+.star-rating li.current-rating{
+    background: url(images/start-level.png) left center;
+    position: absolute;
+    height: 25px;
+    display: block;
+    text-indent: -9000px;
+    z-index: 1;
+}
+
+/*CSS PARA CONTENIDO DE CURSO INTRODUCCION*/
+
+.page-course-intro{
+    padding: 3em;
+    border: 1px solid #DDDDDD;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    margin-bottom: 2em;
+}
+
+.page-course-intro ul{
+    list-style-image:url(images/vineta.png);
+    padding-top: 10px;
+}
+.page-course-intro a{
+    color: #FD6600;
+}
+.page-course-intro a:hover{
+    color: #FD6600;
+    text-decoration: underline;
+}
+
+
+/*FIN DE INTRODUCCION DEL CURSO*/
+.fc-header-title h2{
+    color: #2E75A3;
+}
+.fc-first .fc-widget-header{
+    font-size: 14px;
+    font-weight: normal;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
 .well {
   background-color: rgba(96,165,209, 0.1);
   border: 1px solid rgba(96,165,209, 0.1);
@@ -98,6 +283,9 @@ a:active {
     color: #0F466A;
     padding-bottom: 10px;
 }
+#homepage .row .span9 p,#homepage .row .span9 ol {
+    color: #6E6E6E;
+}
 #homepage .row .span9 a{
     color: #0F466A;
 }
@@ -108,8 +296,23 @@ a:active {
     background-color:#2E75A3;
     color: #FFFFFF;
     font-weight: normal;
-    font-size: 18px;
+    font-size: 14px;
     padding-left: 10px;
+    width: 250px;
+    -webkit-border-top-left-radius: 10px;
+    -webkit-border-top-right-radius: 10px;
+    -moz-border-radius-topleft: 10px;
+    -moz-border-radius-topright: 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+#course_tools .course-title-tools h3 {
+    margin-top: 10px;
+    background-color:#2E75A3;
+    color: #FFFFFF;
+    font-weight: normal;
+    font-size: 16px;
+    padding: 5px 5px 5px 10px;
     width: 250px;
     -webkit-border-top-left-radius: 10px;
     -webkit-border-top-right-radius: 10px;
@@ -134,13 +337,24 @@ a:active {
   min-height: 20px;
   padding: 19px;
 }
+.well_border .row .span2 {
+  width: 98px;
+}
+.well_border .row .span2 .thumbnail {
+  background-color: #FFFFFF;
+  background-image: none;
+}
 #hot_courses .row .span9 .well_border .row .span6{
-    width: 600px;
+    width: auto;
 }
 .categories-course-description h3{
-    font-weight: normal;
     color: #0F466A;
 }
+#course_tools .content a {
+  font-size: 12px;
+  font-weight: normal;
+}
+
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
@@ -271,3 +485,19 @@ button.arrowl, input.arrowl {
 .portal {
     background-image:url(images/portal.png);
 }
+/*+++++++++++++++++++++++++++++++++
+RESPONSIVE CSS
++++++++++++++++++++++++++++++++++*/
+
+.navbar .brand {
+  float: left;
+  font-size: 16px;
+  font-weight: 200;
+  line-height: 20px;
+  padding-bottom: 12px;
+  padding-top: 8px;
+}
+
+/*+++++++++++++++++++++++++++++++++
+END RESPONSIVE CSS
++++++++++++++++++++++++++++++++++*/

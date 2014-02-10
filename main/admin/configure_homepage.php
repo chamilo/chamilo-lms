@@ -769,7 +769,8 @@ switch ($action) {
 		  <td><textarea name="notice_text" cols="30" rows="5" wrap="virtual" style="width: 350px;"><?php echo $notice_text; ?></textarea></td>
 		</tr>
         <tr>
-          <td><input type="checkbox" value="<?php echo get_lang('ApplyAllLanguages'); ?>"/></td>
+          <td><label><?php echo get_lang('ApplyAllLanguages'); ?></label>
+          <td><input type="checkbox" name="all_langs" value="<?php echo get_lang('ApplyAllLanguages'); ?>"/></td>
         </tr>
 		<tr>
 		  <td>&nbsp;</td>

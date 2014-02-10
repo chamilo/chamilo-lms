@@ -2114,12 +2114,14 @@ class learnpath
      * @param   string  Course code (optional)
      * @return	bool	True if
      */
-    public static function is_lp_visible_for_student($lp_id, $student_id, $course = null) {
+    public static function is_lp_visible_for_student($lp_id, $student_id, $courseCode = null) {
         $lp_id = (int)$lp_id;
-        $course = api_get_course_info($course);
-        $tbl_learnpath = Database :: get_course_table(TABLE_LP_MAIN);
+        $course = api_get_course_info($courseCode);
+        $tbl_learnpath = Database::get_course_table(TABLE_LP_MAIN);
         // Get current prerequisite
-        $sql = "SELECT id, prerequisite, publicated_on, expired_on FROM $tbl_learnpath WHERE c_id = ".$course['real_id']." AND id = $lp_id";
+        $sql = "SELECT id, prerequisite, publicated_on, expired_on
+                FROM $tbl_learnpath
+                WHERE c_id = ".$course['real_id']." AND id = $lp_id";
         $rs  = Database::query($sql);
         $now = time();
         if (Database::num_rows($rs)>0) {
@@ -2129,7 +2131,14 @@ class learnpath
             $progress = 0;
 
             if (!empty($prerequisite)) {
-                $progress = self::get_db_progress($prerequisite,$student_id,'%', '', false, api_get_session_id());
+                $progress = self::get_db_progress(
+                    $prerequisite,
+                    $student_id,
+                    '%',
+                    $courseCode,
+                    false,
+                    api_get_session_id()
+                );
                 $progress = intval($progress);
                 if ($progress < 100) {
                     $is_visible = false;
@@ -2139,7 +2148,7 @@ class learnpath
             // Also check the time availability of the LP
 
             if ($is_visible) {
-	            //Adding visibility reestrinctions
+	            //Adding visibility restrictions
 	            if (!empty($row['publicated_on']) && $row['publicated_on'] != '0000-00-00 00:00:00') {
 	            	if ($now < api_strtotime($row['publicated_on'], 'UTC')) {
 	            		//api_not_allowed();

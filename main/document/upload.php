@@ -252,10 +252,9 @@ if (api_get_setting('search_enabled') == 'true') {
 	$form->addElement('html', '</div>');
 }
 
-$form->addElement('html', '<label><input type="radio" name="if_exists" value="nothing"/>&nbsp;'.get_lang('UplDoNothing').'</label>');
-$form->addElement('html', '<label><input type="radio" name="if_exists" value="overwrite"/>&nbsp;'.get_lang('UplOverwriteLong').'</label>');
-$form->addElement('html', '<label><input type="radio" checked="checked" name="if_exists" value="rename"/>&nbsp;'.get_lang('UplRenameLong').'</label>');
-
+$form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lang('UplDoNothing'), 'nothing');
+$form->addElement('radio', 'if_exists', '', get_lang('UplOverwriteLong'), 'overwrite');
+$form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename',array('checked="checked"'));
 // Close the java script and avoid the footer up
 $form->addElement('html', '</div>');
 

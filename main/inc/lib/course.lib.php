@@ -3212,7 +3212,8 @@ class CourseManager
      * @param bool      Whether to show the document quick-loader or not
      * @return void
      */
-    public static function display_courses($user_id, $load_dirs = false) {
+    public static function display_courses($user_id, $load_dirs = false)
+    {
         $user_id = intval($user_id);
         if (empty($user_id)) {
             $user_id = api_get_user_id();
@@ -3224,12 +3225,16 @@ class CourseManager
         $result = Database::query($sql);
         $html = null;
         while ($row = Database::fetch_array($result)) {
-            $params = array();
             // We simply display the title of the category.
-            $params['icon'] = Display::return_icon('folder_yellow.png', $row['title'], array(), ICON_SIZE_LARGE);
-            $params['title'] = $row['title'];
-            $params['class'] = 'table_user_course_category';
-            $html .= self::course_item_parent(self::course_item_html($params, true), self :: display_courses_in_category($row['id'], $load_dirs));
+            $params = array(
+               'icon' => Display::return_icon('folder_yellow.png', $row['title'], array(), ICON_SIZE_LARGE),
+               'title' => $row['title'],
+               'class' => 'table_user_course_category'
+            );
+            $html .= self::course_item_parent(
+                self::course_item_html($params, true),
+                self :: display_courses_in_category($row['id'], $load_dirs)
+            );
         }
 
         // Step 2: We display the course without a user category.
@@ -3244,7 +3249,8 @@ class CourseManager
      * @param bool      Whether to show the document quick-loader or not
      *  @return void
      */
-    public static function display_courses_in_category($user_category_id, $load_dirs = false) {
+    public static function display_courses_in_category($user_category_id, $load_dirs = false)
+    {
         $user_id = api_get_user_id();
         // Table definitions
         $TABLECOURS                     = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -3261,17 +3267,29 @@ class CourseManager
         }
 
         //AND course_rel_user.relation_type<>".COURSE_RELATION_TYPE_RRHH."
-        $sql = "SELECT course.id, course.title, course.code, course.subscribe subscr, course.unsubscribe unsubscr, course_rel_user.status status,
-                                        course_rel_user.sort sort, course_rel_user.user_course_cat user_course_cat
-                                        FROM    $TABLECOURS      course,
-                                                $TABLECOURSUSER  course_rel_user, ".$TABLE_ACCESS_URL_REL_COURSE." url
-                                        WHERE   course.code = course_rel_user.course_code AND url.course_code = course.code AND
-                                                course_rel_user.user_id = '".$user_id."' AND
-                                                course_rel_user.user_course_cat='".$user_category_id."' $without_special_courses ";
+        $sql = "SELECT
+                course.id,
+                course.title,
+                course.code,
+                course.subscribe subscr,
+                course.unsubscribe unsubscr,
+                course_rel_user.status status,
+                course_rel_user.sort sort,
+                course_rel_user.user_course_cat user_course_cat
+                FROM $TABLECOURS      course,
+                     $TABLECOURSUSER  course_rel_user,
+                     $TABLE_ACCESS_URL_REL_COURSE url
+                WHERE
+                    course.code = course_rel_user.course_code AND
+                    url.course_code = course.code AND
+                    course_rel_user.user_id = '".$user_id."' AND
+                    course_rel_user.user_course_cat='".$user_category_id."'
+                    $without_special_courses ";
+
         // If multiple URL access mode is enabled, only fetch courses
         // corresponding to the current URL.
         if (api_get_multiple_access_url() && $current_url_id != -1) {
-            $sql .= " AND url.course_code=course.code AND access_url_id='".$current_url_id."'";
+            $sql .= " AND url.course_code = course.code AND access_url_id='".$current_url_id."'";
         }
         // Use user's classification for courses (if any).
         $sql .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
@@ -3288,7 +3306,6 @@ class CourseManager
             if ($course_info['visibility'] == COURSE_VISIBILITY_HIDDEN) {
                 continue;
             }
-            //$course['id_session'] = null;
             $course_info['id_session'] = null;
             $course_info['status'] = $course['status'];
 
@@ -3301,7 +3318,7 @@ class CourseManager
 
             // For each course, get if there is any notification icon to show
             // (something that would have changed since the user's last visit).
-            $show_notification = Display :: show_notification($course_info);
+            $show_notification = Display::show_notification($course_info);
 
             // New code displaying the user's status in respect to this course.
             $status_icon = Display::return_icon('blackboard.png', $course_info['title'], array(), ICON_SIZE_LARGE);

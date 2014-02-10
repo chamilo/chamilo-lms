@@ -242,7 +242,7 @@ function get_work_count_by_student($user_id, $work_id)
                 c_id = $course_id AND
                 parent_id = $work_id AND
                 user_id = $user_id AND
-                active = 1 AND
+                active IN (0, 1) AND
                 session_id = $session_id ";
 	$result = Database::query($sql);
 	$return = 0;
@@ -283,7 +283,7 @@ function get_work_assignment_by_id($id, $courseId = null)
  * @param string $add_in_where_query
  * @return array
  */
-function getWorkList($id, $my_folder_data, $add_in_where_query)
+function getWorkList($id, $my_folder_data, $add_in_where_query = null)
 {
     $work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
@@ -313,7 +313,13 @@ function getWorkList($id, $my_folder_data, $add_in_where_query)
     if ($is_allowed_to_edit) {
         $active_condition = ' active IN (0, 1)';
         $sql = "SELECT *  FROM  $work_table
-                WHERE c_id = $course_id $add_in_where_query $condition_session AND $active_condition AND (parent_id = 0) $contains_file_query ";
+                WHERE
+                  c_id = $course_id
+                  $add_in_where_query
+                  $condition_session AND
+                  $active_condition AND
+                  (parent_id = 0)
+                  $contains_file_query ";
         if (!empty($group_id)) {
             $sql .= " AND post_group_id = '".$group_id."' ";
         }
@@ -328,9 +334,13 @@ function getWorkList($id, $my_folder_data, $add_in_where_query)
             $subdirs_query = "AND parent_id = 0";
         }
         //@todo how we can active or not an assignment?
-        $active_condition = ' AND active IN (1,0)';
+        $active_condition = ' AND active IN (1, 0)';
         $sql = "SELECT * FROM  $work_table
-                $group_query $subdirs_query $add_in_where_query $active_condition $condition_session
+                $group_query
+                $subdirs_query
+                $add_in_where_query
+                $active_condition
+                $condition_session
                 ORDER BY title";
     }
 
@@ -732,7 +742,7 @@ function showStudentWorkGrid()
 
     $html = '<script>
     $(function() {
-        '.Display::grid_js('workList', $url, $columns, $columnModel, $params, array(), array(), true).'
+        '.Display::grid_js('workList', $url, $columns, $columnModel, $params, array(), null, true).'
     });
     </script>';
 
@@ -992,7 +1002,6 @@ function deleteDirWork($id)
 	$course_id = api_get_course_int_id();
 
 	if (!empty($work_data['url'])) {
-
         if ($check) {
 
             // Deleting all contents inside the folder
@@ -1209,7 +1218,7 @@ function insert_all_directory_in_course_table($base_work_dir)
                title        = '',
                description 	= '',
                author      	= '',
-               active		= '0',
+               active		= '1',
                accepted		= '1',
                filetype		= 'folder',
                post_group_id = '".$group_id."',
@@ -1446,8 +1455,7 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
     $user_table      = Database::get_main_table(TABLE_MAIN_USER);
 
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
-    $session_id     = api_get_session_id();
+    $session_id = api_get_session_id();
     $condition_session  = api_get_session_condition($session_id);
 
     $course_id      = api_get_course_int_id();
@@ -1464,7 +1472,7 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
     if ($is_allowed_to_edit) {
         $extra_conditions .= ' AND work.active IN (0, 1) ';
     } else {
-        $extra_conditions .= ' AND work.active = 1 AND accepted = 1';
+        $extra_conditions .= ' AND work.active IN (0, 1) AND accepted = 1';
         if (isset($course_info['show_score']) && $course_info['show_score'] == 1) {
             $extra_conditions .= " AND work.user_id = ".api_get_user_id()." ";
         } else {
@@ -1484,13 +1492,19 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
         $where_condition .= " AND u.user_id =  ".intval($onlyMeUserId);
     }
 
-    $sql = "SELECT count(*) as count ".
-           " FROM ".$iprop_table." prop INNER JOIN ".$work_table." work ".
-           " ON (prop.ref=work.id AND prop.c_id = $course_id ".
-           " AND prop.tool='work' AND work.active = 1 ".
-           " AND prop.visibility <> 2 AND work.c_id = $course_id ) ".
-           "   INNER JOIN $user_table u  ON (work.user_id = u.user_id) ".
-           " WHERE $extra_conditions $where_condition $condition_session ";
+    $sql = "SELECT count(*) as count
+            FROM $iprop_table prop
+            INNER JOIN $work_table work
+            ON (
+                prop.ref = work.id AND
+                prop.c_id = $course_id AND
+                prop.tool='work' AND
+                prop.visibility <> 2 AND
+                work.c_id = $course_id
+            )
+            INNER JOIN $user_table u ON (work.user_id = u.user_id)
+            WHERE $extra_conditions $where_condition $condition_session";
+
     $result = Database::query($sql);
 
     $users_with_work = 0;
@@ -1657,7 +1671,6 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
                 $work['title'] = basename($work['url']);
             }
             $work['title'] = Display::url($work['title'], $url.'&id='.$workId);
-
             $work['title'] .= ' '.Display::label(get_count_work($work['id']), 'success');
             $work['sent_date'] = date_to_str_ago($work['sent_date']).' <br />'.api_get_local_time($work['sent_date']);
 
@@ -1736,7 +1749,7 @@ function get_work_user_list_from_documents(
 
     $sql = "    (
                     $select1 FROM $userTable u
-                    INNER JOIN $workTable w ON (u.user_id = w.user_id AND w.active = 1 AND w.filetype = 'file')
+                    INNER JOIN $workTable w ON (u.user_id = w.user_id AND w.active IN (0, 1) AND w.filetype = 'file')
                     WHERE
                         w.c_id = $courseId
                         $userCondition
@@ -1746,7 +1759,7 @@ function get_work_user_list_from_documents(
 
                 ) UNION (
                     $select2 FROM $workTable w
-                    INNER JOIN $workRelDocument w_rel ON (w_rel.work_id = w.id AND w.active = 1)
+                    INNER JOIN $workRelDocument w_rel ON (w_rel.work_id = w.id AND w.active IN (0, 1))
                     INNER JOIN $documentTable d ON (w_rel.document_id = d.id AND d.c_id = w.c_id)
                     INNER JOIN $userTable u ON (u.user_id = $studentId)
                     WHERE
@@ -1759,7 +1772,7 @@ function get_work_user_list_from_documents(
                                 user_id = $studentId AND
                                 c_id = $courseId AND
                                 filetype = 'file' AND
-                                active = 1
+                                active IN (0, 1)
                                 $sessionCondition
                                 $workParentCondition
                             )
@@ -1905,7 +1918,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
     $group_id       = api_get_group_id();
     $course_info    = api_get_course_info(api_get_course_id());
 
-    $work_id       = intval($work_id);
+    $work_id        = intval($work_id);
     $column         = !empty($column) ? Database::escape_string($column) : 'sent_date';
     $start          = intval($start);
     $limit          = intval($limit);
@@ -1932,23 +1945,40 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
             $extra_conditions .= ' AND work.active IN (0, 1) ';
         } else {
             if (isset($course_info['show_score']) &&  $course_info['show_score'] == 1) {
-                $extra_conditions .= " AND (u.user_id = ".api_get_user_id()." AND work.active IN (0, 1) OR work.active = 1) ";
+                $extra_conditions .= " AND (u.user_id = ".api_get_user_id()." AND work.active IN (0, 1)) ";
             } else {
-                $extra_conditions .= ' AND work.active = 1 ';
+                $extra_conditions .= ' AND work.active IN (0, 1) ';
             }
         }
 
-        $extra_conditions .= " AND parent_id  = ".$work_id."  ";
+        $extra_conditions .= " AND parent_id  = ".$work_id." ";
 
-        $select = 'SELECT DISTINCT u.user_id, work.id as id, title as title, description, url, sent_date, contains_file, has_properties, view_properties,
-                    qualification, weight, allow_text_assignment, u.firstname, u.lastname, u.username, parent_id, accepted, qualificator_id';
-
+        $select = 'SELECT DISTINCT
+                        u.user_id,
+                        work.id as id,
+                        title as title,
+                        description,
+                        url,
+                        sent_date,
+                        contains_file,
+                        has_properties,
+                        view_properties,
+                        qualification,
+                        weight,
+                        allow_text_assignment,
+                        u.firstname,
+                        u.lastname,
+                        u.username,
+                        parent_id,
+                        accepted,
+                        qualificator_id';
         if ($getCount) {
             $select = "SELECT DISTINCT count(u.user_id) as count ";
         }
 
         $user_condition = "INNER JOIN $user_table u  ON (work.user_id = u.user_id) ";
-        $work_condition = "$iprop_table prop INNER JOIN $work_table work ON (prop.ref = work.id AND prop.c_id = $course_id AND work.c_id = $course_id ) ";
+        $work_condition = "$iprop_table prop INNER JOIN $work_table work
+                           ON (prop.ref = work.id AND prop.c_id = $course_id AND work.c_id = $course_id ) ";
 
         $work_assignment = get_work_assignment_by_id($work_id);
 
@@ -1958,9 +1988,9 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
         $sql = " $select
                 FROM $work_condition  $user_condition
-                WHERE $extra_conditions $where_condition $condition_session ";
-        $sql .= " ORDER BY $column $direction ";
-        $sql .= " LIMIT $start, $limit";
+                WHERE $extra_conditions $where_condition $condition_session
+                ORDER BY $column $direction
+                LIMIT $start, $limit";
 
         $result = Database::query($sql);
         $works = array();
@@ -2024,7 +2054,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
             if (
                 ($can_read && $work['accepted'] == '1') ||
-                ($is_author && in_array($work['accepted'], array('1','0'))) ||
+                ($is_author && in_array($work['accepted'], array('1', '0'))) ||
                 $is_allowed_to_edit
             ) {
 
@@ -2044,8 +2074,8 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
                 // File name.
                 $link_to_download = null;
-
-                if ($work['contains_file']) {
+                // If URL is present then there's a file to download keep BC.
+                if ($work['contains_file'] || !empty($work['url'])) {
                     $link_to_download = '<a href="download.php?id='.$item_id.'">'.Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';
                 } else {
                    //$link_to_download = '<a href="view.php?id='.$item_id.'">'.Display::return_icon('save_na.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';
@@ -2362,9 +2392,18 @@ function get_list_users_without_publication($task_id, $studentId = null)
 	$task_id = intval($task_id);
 
 	if ($session_id == 0) {
-		$sql = "SELECT user_id as id FROM $work_table WHERE c_id = $course_id AND parent_id='$task_id' AND active = 1";
+		$sql = "SELECT user_id as id FROM $work_table
+		        WHERE
+		            c_id = $course_id AND
+		            parent_id='$task_id' AND
+		            active IN (0, 1)";
 	} else {
-		$sql = "SELECT user_id as id FROM $work_table WHERE c_id = $course_id AND parent_id='$task_id' and session_id='".$session_id."' AND active = 1";
+		$sql = "SELECT user_id as id FROM $work_table
+		        WHERE
+		            c_id = $course_id AND
+		            parent_id='$task_id' AND
+		            session_id='".$session_id."' AND
+		            active IN (0, 1)";
 	}
 
 	$result = Database::query($sql);

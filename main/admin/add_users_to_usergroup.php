@@ -224,7 +224,10 @@ if (!empty($complete_user_list)) {
         }
 
         if (in_array($item['user_id'], $list_in)) {
-            $person_name = api_get_person_name($item['firstname'], $item['lastname']).' ('.$item['username'].')';
+            $person_name = api_get_person_name(
+                $item['firstname'],
+                $item['lastname']
+            ).' ('.$item['username'].') '.$item['official_code'];
             $elements_in[$item['user_id']] = $person_name;
         }
     }
@@ -253,7 +256,10 @@ if (!empty($user_list)) {
             }
         }
         if ($item['status'] == 6 ) continue; //avoid anonymous users
-        $person_name = api_get_person_name($item['firstname'], $item['lastname']).' ('.$item['username'].')';
+        $person_name = api_get_person_name(
+            $item['firstname'],
+            $item['lastname']
+        ).' ('.$item['username'].') '.$item['official_code'];
         if (in_array($item['user_id'], $list_in)) {
             //$elements_in[$item['user_id']] = $person_name;
         } else {
@@ -296,7 +302,7 @@ if ($add_type=='multiple') {
                 foreach ($new_field['data'] as $option) {
                     $checked='';
                     if (isset($_POST[$varname])) {
-                        if ($_POST[$varname]==$option[1]) {
+                        if ($_POST[$varname] == $option[1]) {
                             $checked = 'selected="true"';
                         }
                     }

@@ -85,12 +85,12 @@ class learnpath
      * @param $in_current_item_id
      * @return int
      */
-    private static function get_level_for_item($in_tab_items, $in_current_item_id) {
+    private static function get_level_for_item($in_tab_items, $in_current_item_id)
+    {
         $parent_item_id = $in_tab_items[$in_current_item_id]->parent;
         if ($parent_item_id == 0) {
             return 0;
-        }
-        else {
+        } else {
             return learnpath::get_level_for_item($in_tab_items, $parent_item_id) + 1;
         }
     }

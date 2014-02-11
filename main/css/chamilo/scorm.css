@@ -25,7 +25,7 @@
 
 .inner_lp_toc .scorm_item a {
     font-weight: normal;
-    font-size: 14px;
+    font-size: 12px;
     margin-right: 1px;
     padding-bottom: 2px;
     text-decoration: none;
@@ -269,6 +269,12 @@ opacity: 0.7;
 }
 
 /*STYLES PROCESS LESSION*/
+.inner_lp_toc .scrom_completed {
+    
+    background-image: url("images/blue_arrow.png") !important;
+    background-position: 250px center !important;
+    background-repeat: no-repeat;
+}
 
 .inner_lp_toc .scorm_item_highlight {
     background-color: #00aad4;
@@ -276,4 +282,38 @@ opacity: 0.7;
     background-position: 250px center !important;
     background-repeat: no-repeat;
     border: 1px solid #00aad4;
+}
+
+
+.inner_lp_toc .scorm_item_1 {
+  background-color: #d7eef4;
+  background-image: none;
+  border-bottom-color: #CCCCCC;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  color: #444444;
+  font-weight: normal;
+  margin-right: 1px;
+  padding-bottom: 10px;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 10px;
+  text-shadow: 0 1px 1px #F6F6F6;
+}
+#learning_path_main #control {
+  background-image: none;
+  background-color: #d7eef4;
+  bottom: 0;
+  height: 34px;
+  margin-bottom: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: auto;
+  padding-bottom: 8px;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 8px;
+  position: absolute;
+  text-align: center;
+  width: 100%;
 }

@@ -20,7 +20,7 @@ $language_file = 'group';
 
 require_once '../inc/global.inc.php';
 
-$is_allowed_in_course = api_is_allowed_to_edit(false, true);
+$is_allowed_in_course = api_is_allowed_in_course();
 
 $this_section = SECTION_COURSES;
 $current_course_tool  = TOOL_GROUP;

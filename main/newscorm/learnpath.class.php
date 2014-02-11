@@ -2865,6 +2865,18 @@ class learnpath
                 'browsed'       => '../img/completed.png',
             );
 
+            // Style Status
+
+            $class_name = array (
+                'not attempted' => 'scrom_not_attempted',
+                'incomplete'    => 'scrom_incomplete',
+                'failed'        => 'scrom_failed',
+                'completed'     => 'scrom_completed',
+                'passed'        => 'scrom_passed',
+                'succeeded'     => 'scrom_succeeded',
+                'browsed'       => 'scrom_completed',
+            );
+
             $style = 'scorm_item';
             $scorm_color_background = 'scorm_item';
             $style_item = 'scorm_item';
@@ -2880,18 +2892,18 @@ class learnpath
                     $scorm_color_background = 'scorm_item_2';
                 }
                 if ($item['type'] == 'dokeos_module' || $item['type'] == 'dokeos_chapter') {
-                	$scorm_color_background =' scorm_item_section ';
+                    $scorm_color_background =' scorm_item_section ';
                 }
             }
 
             if ($scorm_color_background != '') {
-                $html .= '<div id="toc_' . $item['id'] . '" class="' . $scorm_color_background . '">';
+                $html .= '<div id="toc_' . $item['id'] . '" class="' . $scorm_color_background . ' '.$class_name[$item['status']].' ">';
             }
 
             // The anchor will let us center the TOC on the currently viewed item &^D
             if ($item['type'] != 'dokeos_module' && $item['type'] != 'dokeos_chapter') {
                 $html .= '<div class="' . $style_item . '" style="padding-left: ' . ($item['level'] * 1.5) . 'em; padding-right:' . ($item['level'] / 2) . 'em"             title="' . $item['description'] . '" >';
-                $html .= '<a name="atoc_' . $item['id'] . '" ></a>';
+                $html .= '<a name="atoc_' . $item['id'] . '" />';
             } else {
                 $html .= '<div class="' . $style_item . '" style="padding-left: ' . ($item['level'] * 2) . 'em; padding-right:' . ($item['level'] * 1.5) . 'em"             title="' . $item['description'] . '" >';
             }
@@ -2928,7 +2940,8 @@ class learnpath
                             status <> 'incomplete'";
             $result = Database::query($sql);
             $count = Database :: num_rows($result);*/
-            if ($item['type'] == 'quiz') {
+            
+            /*if ($item['type'] == 'quiz') {
                 if ($item['status'] == 'completed') {
                     $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name[$item['status']] . "' alt='" . substr($item['status'], 0, 1) . "' width='14' />";
                 } else {
@@ -2939,6 +2952,7 @@ class learnpath
                     $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name[$item['status']] . "' alt='" . substr($item['status'], 0, 1) . "' width='14' />";
                 }
             }
+            */
 
             $html .= "</div>";
 
@@ -2951,7 +2965,6 @@ class learnpath
         $html .= "</div>";
         return $html;
     }
-
     /**
      * Gets the learnpath maker name - generally the editor's name
      * @return	string	Learnpath maker name

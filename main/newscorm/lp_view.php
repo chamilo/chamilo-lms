@@ -332,7 +332,7 @@ if ($is_allowed_to_edit) {
                 <tr>
                     <td>';
                         echo '<a href="lp_controller.php?action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();">
-                            <img src="../img/lp_arrow.gif" />
+                            <img src="../img/btn_home.png" />
                         </a>
                     </td>
                     <td>';
@@ -378,7 +378,7 @@ if ($is_allowed_to_edit) {
         <!-- end image preview Layout -->
 
         <div id="author_name">
-            <?php echo $_SESSION['oLP']->get_author(); ?>
+            <?php echo $_SESSION['oLP']->get_author(); ?> 
         </div>
 
         <!-- media player layout -->

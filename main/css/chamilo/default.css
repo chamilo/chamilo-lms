@@ -103,7 +103,6 @@ a:active {
 .breadcrumb li{
     font-size: 14px;
     text-shadow: none;
-    text-transform: uppercase;
 }
 .breadcrumb a.btn-mini{
     font-size: 12px;

@@ -165,7 +165,7 @@ if (!empty($course) && !empty($_user['user_id'])) {
 		$message = str_replace($emoticon_text7, $emoticon_img7, $message);
 		$message = str_replace($emoticon_text8, $emoticon_img8, $message);
 		$message = str_replace($emoticon_text9, $emoticon_img9, $message);
-		$message = str_replace($emoticon_text10, $emoticon_img10, $message);
+		//$message = str_replace($emoticon_text10, $emoticon_img10, $message);
 		$message = str_replace($emoticon_text11, $emoticon_img11, $message);
 		$message = str_replace($emoticon_text12, $emoticon_img12, $message);
 		$message = str_replace($emoticon_text13, $emoticon_img13, $message);
@@ -195,7 +195,7 @@ if (!empty($course) && !empty($_user['user_id'])) {
 
 		if (!api_is_anonymous()) {
 			if (!empty($message)) {
-				$message = make_clickable($message);
+				//$message = make_clickable($message);
                 if (!file_exists($chat_path.$basename_chat.'.log.html')) {
 					$doc_id = add_document($_course, $basepath_chat.'/'.$basename_chat.'.log.html', 'file', 0, $basename_chat.'.log.html');
 

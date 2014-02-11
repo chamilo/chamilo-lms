@@ -147,29 +147,61 @@ class UserGroup extends Model
     /**
      * Gets a list of course ids by user group
      * @param   int user group id
+     * @param array $conditionsLike
      * @return  array
      */
-    public function get_courses_by_usergroup($id)
+    public function get_courses_by_usergroup($id, $loadCourseData = false)
     {
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
             $from = $this->usergroup_rel_course_table." c
-                    INNER JOIN {$this->access_url_rel_usergroup} a ON (a.usergroup_id = c.usergroup_id) ";
-            $where = array('where' => array('a.usergroup_id = ? AND access_url_id = ? ' => array($id, $urlId)));
+                    INNER JOIN {$this->access_url_rel_usergroup} a
+                    ON (a.usergroup_id = c.usergroup_id) ";
+            $whereConditionSql = 'a.usergroup_id = ? AND access_url_id = ? ';
+            $whereConditionValues = array($id, $urlId);
         } else {
-            $from = $this->usergroup_rel_course_table;
-            $where = array('where' => array('usergroup_id = ?' => $id));
+            $whereConditionSql = 'usergroup_id = ?';
+            $whereConditionValues = array($id);
+            $from = $this->usergroup_rel_course_table." c ";
+        }
+
+        if ($loadCourseData) {
+            $from .= " INNER JOIN {$this->table_course} as course ON c.course_id = course.id";
+        }
+
+        /*
+        if (!empty($conditionsLike)) {
+            $from .= " INNER JOIN {$this->table_course} as course ON c.course_id = course.id";
+            $conditionSql = array();
+            foreach ($conditionsLike as $field => $value) {
+                $conditionSql[] = $field.' LIKE %?%';
+                $whereConditionValues[] = $value;
+            }
+            $whereConditionSql .= ' AND '.implode(' AND ', $conditionSql);
+        }*/
+
+        $where = array('where' => array($whereConditionSql => $whereConditionValues));
+
+        if ($loadCourseData) {
+            $select = 'course.*';
+        } else {
+            $select = 'course_id';
         }
 
         $results = Database::select(
-            'course_id',
+            $select,
             $from,
             $where
         );
+
         $array = array();
         if (!empty($results)) {
             foreach ($results as $row) {
-                $array[] = $row['course_id'];
+                if ($loadCourseData) {
+                    $array[$row['id']] = $row;
+                } else {
+                    $array[] = $row['course_id'];
+                }
             }
         }
         return $array;

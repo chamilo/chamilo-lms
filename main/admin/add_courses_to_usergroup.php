@@ -42,7 +42,6 @@ $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script>
 function add_user_to_session (code, content) {
-
     document.getElementById("user_to_add").value = "";
     document.getElementById("ajax_list_users_single").innerHTML = "";
 
@@ -93,21 +92,58 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
 }
 
-$data = $usergroup->get($id);
-$course_list_in = $usergroup->get_courses_by_usergroup($id);
-$course_list = CourseManager::get_courses_list(0, 0, 'title', 'asc', -1, null, api_get_current_access_url_id());
 
-$elements_not_in = $elements_in= array();
+// Filters
+$filters = array(
+    array('type' => 'text', 'name' => 'code', 'label' => get_lang('CourseCode')),
+    array('type' => 'text', 'name' => 'title', 'label' => get_lang('Title')),
+    /*array('type' => 'text', 'name' => 'lastname', 'label' => get_lang('LastName')),
+    array('type' => 'text', 'name' => 'official_code', 'label' => get_lang('OfficialCode')),
+    array('type' => 'text', 'name' => 'email', 'label' => get_lang('Email'))*/
+);
 
-if (!empty($course_list)) {
-    foreach ($course_list as $item) {
-        if (in_array($item['id'], $course_list_in)) {
-            $elements_in[$item['id']] = $item['title']." (".$item['visual_code'].")";
-        } else {
-            $elements_not_in[$item['id']] = $item['title']." (".$item['visual_code'].")";
+$searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
+$searchForm->add_header(get_lang('AdvancedSearch'));
+$renderer =& $searchForm->defaultRenderer();
+$searchForm->addElement('hidden', 'id', $id);
+foreach ($filters as $param) {
+    $searchForm->addElement($param['type'], $param['name'], $param['label']);
+}
+$searchForm->addElement('button', 'submit', get_lang('Search'));
+
+$filterData = array();
+if ($searchForm->validate()) {
+    $filterData = $searchForm->getSubmitValues();
+}
+
+$conditions = array();
+if (!empty($filters) && !empty($filterData)) {
+    foreach ($filters as $filter) {
+        if (isset($filter['name']) && isset($filterData[$filter['name']])) {
+            $value = $filterData[$filter['name']];
+            if (!empty($value)) {
+                $conditions[$filter['name']] = $value;
+            }
         }
     }
 }
+
+$data = $usergroup->get($id);
+$course_list_in = $usergroup->get_courses_by_usergroup($id, true);
+$course_list = CourseManager::get_courses_list(0, 0, 'title', 'asc', -1, null, api_get_current_access_url_id(), false, $conditions);
+
+$elements_not_in = $elements_in = array();
+
+foreach ($course_list_in as $course) {
+    $elements_in[$course['id']] = $course['title']." (".$course['visual_code'].")";
+}
+
+if (!empty($course_list)) {
+    foreach ($course_list as $item) {
+        $elements_not_in[$item['id']] = $item['title']." (".$item['visual_code'].")";
+    }
+}
+
 $ajax_search = $add_type == 'unique' ? true : false;
 
 //checking for extra field with filter on
@@ -178,40 +214,18 @@ if ($add_type == 'multiple') {
 
 echo '<div class="actions">';
 echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back'), array(), ICON_SIZE_MEDIUM).'</a>';
+echo Display::url(get_lang('AdvancedSearch'), '#', array('class' => 'advanced_options', 'id' => 'advanced_search'));
 echo '</div>';
+
+echo '<div id="advanced_search_options" style="display:none">';
+$searchForm->display();
+echo '</div>';
+
 ?>
 
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 
 <?php echo '<legend>'.$data['name'].': '.$tool_name.'</legend>';
-
-$extra_field_list = array();
-if ($add_type == 'multiple') {
-    if (is_array($extra_field_list) && !empty($extra_field_list)) {
-        if (is_array($new_field_list) && count($new_field_list) > 0) {
-            echo '<h3>'.get_lang('FilterUsers').'</h3>';
-            foreach ($new_field_list as $new_field) {
-                echo $new_field['name'];
-                $varname = 'field_'.$new_field['variable'];
-                echo '&nbsp;<select name="'.$varname.'">';
-                echo '<option value="0">--'.get_lang('Select').'--</option>';
-                foreach ($new_field['data'] as $option) {
-                    $checked='';
-                    if (isset($_POST[$varname])) {
-                        if ($_POST[$varname]==$option[1]) {
-                            $checked = 'selected="true"';
-                        }
-                    }
-                    echo '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
-                }
-                echo '</select>';
-                echo '&nbsp;&nbsp;';
-            }
-            echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
-            echo '<br /><br />';
-        }
-    }
-}
 echo Display::input('hidden', 'id', $id);
 echo Display::input('hidden', 'form_sent', '1');
 echo Display::input('hidden', 'add_type', null);

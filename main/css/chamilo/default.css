@@ -67,6 +67,10 @@ a:active {
 /*****************************************************
  *  STYLE THEME CHAMILO                              *
  *****************************************************/
+.welcome-mascot{
+  background: url(images/chamilo-welcome.png) no-repeat right center;
+  padding-right: 200px;
+}
 
 .controls .btn{
     background:#2E75A3;

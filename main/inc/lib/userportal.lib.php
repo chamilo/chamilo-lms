@@ -246,8 +246,12 @@ class IndexManager {
 					$home_top_temp = file_get_contents($this->home.'home_top.html');
 				}
 			}
-			if (trim($home_top_temp) == '' && api_is_platform_admin()) {
-				$home_top_temp = get_lang('PortalHomepageDefaultIntroduction');
+			if (trim($home_top_temp) == '') {
+			    if (api_is_platform_admin()) {
+					$home_top_temp = '<div class="welcome-mascot">' . get_lang('PortalHomepageDefaultIntroduction') . '</div>';
+				}
+			} else {
+				$home_top_temp = '<div class="welcome-home-top-temp">' . $home_top_temp . '</div>';
 			}
 			$open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
 			$html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));

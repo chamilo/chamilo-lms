@@ -66,60 +66,60 @@ if (!empty($course) && !empty($_user['user_id'])) {
 
 	/*	Constants and variables */
 
-	$tbl_user	= Database::get_main_table(TABLE_MAIN_USER);
-	$sent 		= $_REQUEST['sent'];
+    $tbl_user	= Database::get_main_table(TABLE_MAIN_USER);
+    $sent 		= isset($_REQUEST['sent']) ? $_REQUEST['sent'] : null;
 
-	/*	MAIN CODE */
+    /*	MAIN CODE */
 
-	$query = "SELECT lastname, firstname, username FROM $tbl_user WHERE user_id='".intval($_user['user_id'])."'";
-	$result = Database::query($query);
+    $query = "SELECT lastname, firstname, username FROM $tbl_user WHERE user_id='".intval($_user['user_id'])."'";
+    $result = Database::query($query);
 
-	list($pseudo_user) = Database::fetch_row($result);
+    list($pseudo_user) = Database::fetch_row($result);
 
-	$isAllowed = !(empty($pseudo_user) || !$_cid);
-	$isMaster = (bool)$is_courseAdmin;
+    $isAllowed = !(empty($pseudo_user) || !$_cid);
+    $isMaster = (bool)$is_courseAdmin;
 
-	$firstname = Database::result($result, 0, 'firstname');
-	$lastname  = Database::result($result, 0, 'lastname');
+    $firstname = Database::result($result, 0, 'firstname');
+    $lastname  = Database::result($result, 0, 'lastname');
 
-	$date_now = date('Y-m-d');
+    $date_now = date('Y-m-d');
 
-	$basepath_chat = '';
-	$document_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-	if (!empty($group_id)) {
-		$group_info = GroupManager :: get_group_properties($group_id);
-		$basepath_chat = $group_info['directory'].'/chat_files';
-	} else {
-		$basepath_chat = '/chat_files';
-	}
-	$chat_path = $document_path.$basepath_chat.'/';
+    $basepath_chat = '';
+    $document_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+    if (!empty($group_id)) {
+        $group_info = GroupManager :: get_group_properties($group_id);
+        $basepath_chat = $group_info['directory'].'/chat_files';
+    } else {
+        $basepath_chat = '/chat_files';
+    }
+    $chat_path = $document_path.$basepath_chat.'/';
 
-	if (!is_dir($chat_path)) {
-		if (is_file($chat_path)) {
-			@unlink($chat_path);
-		}
-	}
+    if (!is_dir($chat_path)) {
+        if (is_file($chat_path)) {
+            @unlink($chat_path);
+        }
+    }
 
-	require 'header_frame.inc.php';
-	$chat_size = 0;
+    require 'header_frame.inc.php';
+    $chat_size = 0;
 
 	// Define emoticons
-	$emoticon_text1 = ':-)';
-	$emoticon_img1  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_smile.gif" alt="'.get_lang('Smile').'" title="'.get_lang('Smile').'" />';
-	$emoticon_text2 = ':-D';
-	$emoticon_img2  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_biggrin.gif" alt="'.get_lang('BigGrin').'" title="'.get_lang('BigGrin').'" />';
-	$emoticon_text3 = ';-)';
-	$emoticon_img3  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_wink.gif" alt="'.get_lang('Wink').'" title="'.get_lang('Wink').'" />';
-	$emoticon_text4 = ':-P';
-	$emoticon_img4  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_razz.gif" alt="'.get_lang('Avid').'" title="'.get_lang('Avid').'" />';
-	$emoticon_text5 = '8-)';
-	$emoticon_img5  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_cool.gif" alt="'.get_lang('Cool').'" title="'.get_lang('Cool').'" />';
-	$emoticon_text6 = ':-o)';
-	$emoticon_img6  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_surprised.gif" alt="'.get_lang('Surprised').'" title="'.get_lang('Surprised').'" />';
-	$emoticon_text7 = '=;';
-	$emoticon_img7  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_hand.gif" alt="'.get_lang('Hand').'" title="'.get_lang('Hand').'" />';
-	$emoticon_text8 = '=8-o';
-	$emoticon_img8  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_eek.gif" alt="'.get_lang('Amazing').'" title="'.get_lang('Amazing').'" />';
+    $emoticon_text1 = ':-)';
+    $emoticon_img1  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_smile.gif" alt="'.get_lang('Smile').'" title="'.get_lang('Smile').'" />';
+    $emoticon_text2 = ':-D';
+    $emoticon_img2  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_biggrin.gif" alt="'.get_lang('BigGrin').'" title="'.get_lang('BigGrin').'" />';
+    $emoticon_text3 = ';-)';
+    $emoticon_img3  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_wink.gif" alt="'.get_lang('Wink').'" title="'.get_lang('Wink').'" />';
+    $emoticon_text4 = ':-P';
+    $emoticon_img4  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_razz.gif" alt="'.get_lang('Avid').'" title="'.get_lang('Avid').'" />';
+    $emoticon_text5 = '8-)';
+    $emoticon_img5  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_cool.gif" alt="'.get_lang('Cool').'" title="'.get_lang('Cool').'" />';
+    $emoticon_text6 = ':-o)';
+    $emoticon_img6  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_surprised.gif" alt="'.get_lang('Surprised').'" title="'.get_lang('Surprised').'" />';
+    $emoticon_text7 = '=;';
+    $emoticon_img7  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_hand.gif" alt="'.get_lang('Hand').'" title="'.get_lang('Hand').'" />';
+    $emoticon_text8 = '=8-o';
+    $emoticon_img8  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_eek.gif" alt="'.get_lang('Amazing').'" title="'.get_lang('Amazing').'" />';
 	$emoticon_text9 = ':-|)';
 	$emoticon_img9  = '<img src="'.api_get_path(WEB_IMG_PATH).'smileys/icon_neutral.gif" alt="'.get_lang('Neutral').'" title="'.get_lang('Neutral').'" />';
 	$emoticon_text8 = ':-k';

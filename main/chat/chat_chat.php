@@ -20,52 +20,52 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'groupmanager.lib.php';
 
 $course = $_GET['cidReq'];
-$session_id = intval($_SESSION['id_session']);
-$group_id 	= intval($_SESSION['_gid']);
+$session_id = api_get_session_id();
+$group_id 	= api_get_group_id();
 
 // if we have the session set up
 if (!empty($course)) {
-	$reset = (bool)$_GET['reset'];
-	$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-	$query = "SELECT username FROM $tbl_user WHERE user_id='".intval($_user['user_id'])."'";
-	$result = Database::query($query);
+    $reset = isset($_GET['reset']) ? (bool)$_GET['reset'] : null;
+    $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+    $query = "SELECT username FROM $tbl_user WHERE user_id='".intval($_user['user_id'])."'";
+    $result = Database::query($query);
 
-	list($pseudo_user) = Database::fetch_row($result);
+    list($pseudo_user) = Database::fetch_row($result);
 
-	$isAllowed = !(empty($pseudo_user) || !$_cid);
-	$isMaster = (bool)$is_courseAdmin;
+    $isAllowed = !(empty($pseudo_user) || !$_cid);
+    $isMaster = (bool)$is_courseAdmin;
 
-	$date_now = date('Y-m-d');
-	$basepath_chat = '';
-	$document_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-	if (!empty($group_id)) {
-		$group_info = GroupManager :: get_group_properties($group_id);
-		$basepath_chat = $group_info['directory'].'/chat_files';
-	} else {
-		$basepath_chat = '/chat_files';
-	}
-	$chat_path = $document_path.$basepath_chat.'/';
+    $date_now = date('Y-m-d');
+    $basepath_chat = '';
+    $document_path = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
+    if (!empty($group_id)) {
+        $group_info = GroupManager :: get_group_properties($group_id);
+        $basepath_chat = $group_info['directory'].'/chat_files';
+    } else {
+        $basepath_chat = '/chat_files';
+    }
+    $chat_path = $document_path.$basepath_chat.'/';
 
-	$TABLEITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
+    $TABLEITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-	$course_id = api_get_course_int_id();
+    $course_id = api_get_course_int_id();
 
-	if (!is_dir($chat_path)) {
-		if (is_file($chat_path)) {
-			@unlink($chat_path);
-		}
+    if (!is_dir($chat_path)) {
+        if (is_file($chat_path)) {
+            @unlink($chat_path);
+        }
 
-		if (!api_is_anonymous()) {
-			@mkdir($chat_path, api_get_permissions_for_new_directories());
-			// Save chat files document for group into item property
-			if (!empty($group_id)) {
-				$doc_id = add_document($_course, $basepath_chat, 'folder', 0, 'chat_files');
-				$sql = "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
-						VALUES ($course_id, 'document',1,NOW(),NOW(),$doc_id,'FolderCreated',1,$group_id,NULL,0)";
-				Database::query($sql);
-			}
-		}
-	}
+        if (!api_is_anonymous()) {
+            @mkdir($chat_path, api_get_permissions_for_new_directories());
+            // Save chat files document for group into item property
+            if (!empty($group_id)) {
+                $doc_id = add_document($_course, $basepath_chat, 'folder', 0, 'chat_files');
+                $sql = "INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility)
+                        VALUES ($course_id, 'document',1,NOW(),NOW(),$doc_id,'FolderCreated',1,$group_id,NULL,0)";
+                Database::query($sql);
+            }
+        }
+    }
 
 	$filename_chat = '';
 	if (!empty($group_id)) {
@@ -146,12 +146,7 @@ if (!empty($course)) {
 		echo strip_tags(api_html_entity_decode($this_line), '<br> <span> <b> <i> <img> <font>');
 	}
 	echo '</div>';
-
-	?>
-
-	<a name="bottom" style="text-decoration:none;">&nbsp;</a>
-
-	<?php
+	echo '<a name="bottom" style="text-decoration:none;">&nbsp;</a>';
 	if ($isMaster || $is_courseCoach) {
 		$rand = mt_rand(1, 1000);
 		echo '<div style="margin-left: 5px;">';

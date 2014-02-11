@@ -494,9 +494,9 @@ if ($form->validate()) {
 	$extension = 'html';
 
 	$content = Security::remove_XSS($values['content'], COURSEMANAGERLOWSECURITY);
-
-	if (strpos($content, '/css/frames.css') === false) {
-		$content = str_replace('</head>', '<style> body{margin:10px;}</style><link rel="stylesheet" href="./css/frames.css" type="text/css" /></head>', $content);
+	
+	if (strpos($content, '/css/frames.css') == false) {
+		$content = str_replace('</head>', '<link rel="stylesheet" href="./css/frames.css" type="text/css" /><style> body{margin:50px;}</style></head>', $content);
 	}
 	if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
 		$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].'/courses/', $content);

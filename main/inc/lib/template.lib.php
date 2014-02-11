@@ -432,8 +432,7 @@ class Template
         //Base CSS
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
 
-        //Default theme CSS
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
+        //Default CSS responsive design
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css');
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
 
@@ -445,6 +444,7 @@ class Template
             $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/learnpath.css';
             $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/scorm.css';
         }
+        
 
         if (api_is_global_chat_enabled()) {
             $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
@@ -452,6 +452,8 @@ class Template
 
         $css[] = api_get_path(WEB_CSS_PATH).'font_awesome/css/font-awesome.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/mediaelementplayer.css';
+        //THEME CSS STYLE
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
 
         $css_file_to_string = null;
         foreach ($css as $file) {

@@ -752,12 +752,21 @@ if (!empty($action)) {
 }
 
 // Create a search-box
-$form = new FormValidator('search_simple','get', '', '', array('class' => 'form-search'),false);
-$renderer =& $form->defaultRenderer();
+$form = new FormValidator('search_simple', 'get', '', '', array('class' => 'form-search'), false);
+$renderer = & $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span> ');
-$form->addElement('text','keyword',get_lang('keyword'), 'size="25"');
-$form->addElement('style_submit_button', 'submit',get_lang('Search'),'class="btn"');
-$form->addElement('static','search_advanced_link',null,'<a href="javascript://" class = "advanced_parameters" onclick="display_advanced_search_form();"><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedSearch').'</span></a>');
+$form->addElement('text','keyword', get_lang('keyword'), 'size="25"');
+$form->addElement('style_submit_button', 'submit', get_lang('Search'),'class="btn"');
+$form->addElement(
+    'static',
+    'search_advanced_link',
+    null,
+    '<a href="javascript://" class = "advanced_parameters" onclick="display_advanced_search_form();">
+        <span id="img_plus_and_minus">&nbsp;'.
+        Display::return_icon('div_show.gif', get_lang('Show'), array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedSearch').'
+        </span>
+    </a>'
+);
 
 $actions  = '';
 if (api_is_platform_admin()) {
@@ -765,7 +774,7 @@ if (api_is_platform_admin()) {
 		 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.Display::return_icon('new_user.png',get_lang('AddUsers'),'',ICON_SIZE_MEDIUM).'</a>'.
 		 '</span>';
 }
-$actions .=$form->return_form();
+$actions .= $form->return_form();
 
 if (isset ($_GET['keyword'])) {
 	$parameters = array ('keyword' => Security::remove_XSS($_GET['keyword']));
@@ -791,8 +800,8 @@ while ($row_admin = Database::fetch_row($res_admin)) {
 	$_admins_list[] = $row_admin[0];
 }
 
-// display advaced search form
-$form = new FormValidator('advanced_search','get');
+// Display Advanced search form.
+$form = new FormValidator('advanced_search', 'get');
 
 $form->addElement('html','<div id="advanced_search_form" style="display:none;">');
 $form->addElement('header', get_lang('AdvancedSearch'));
@@ -823,7 +832,6 @@ $status_options[DRH] = get_lang('Drh');
 $status_options[SESSIONADMIN] = get_lang('Administrator');
 $form->addElement('select','keyword_status',get_lang('Profile'),$status_options, array('style'=>'margin-left:17px'));
 $form->addElement('html', '</td></tr>');
-
 $form->addElement('html', '<tr><td>');
 $active_group = array();
 $active_group[] = $form->createElement('checkbox','keyword_active','', get_lang('Active'));

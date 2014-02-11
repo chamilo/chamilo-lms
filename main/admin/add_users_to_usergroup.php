@@ -157,6 +157,7 @@ if ($use_extra_fields) {
         $final_result = $extra_field_result[0];
     }
 }
+
 // Filters
 $filters = array(
     array('type' => 'text', 'name' => 'username', 'label' => get_lang('Username')),
@@ -175,7 +176,6 @@ foreach ($filters as $param) {
     $searchForm->addElement($param['type'], $param['name'], $param['label']);
 }
 $searchForm->addElement('button', 'submit', get_lang('Search'));
-//$searchForm->addElement('html', '</table>');
 
 $filterData = array();
 if ($searchForm->validate()) {

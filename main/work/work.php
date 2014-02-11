@@ -129,8 +129,10 @@ if (!empty($group_id)) {
         } else {
             $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('StudentPublications'));
         }
-        $url_dir = 'work.php?id=' . $work_id;
-        $interbreadcrumb[] = array ('url' => $url_dir,'name' =>  $my_folder_data['title']);
+
+        if (!empty($my_folder_data)) {
+            $interbreadcrumb[] = array ('url' => 'work.php?id=' . $work_id, 'name' =>  $my_folder_data['title']);
+        }
 
         if ($action == 'upload_form') {
             $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('UploadADocument'));
@@ -267,7 +269,7 @@ switch ($action) {
 
         $work_parents = array();
         if (empty($my_folder_data)) {
-            $work_parents = getWorkList($work_id, $my_folder_data, $add_query);
+            $work_parents = getWorkList($work_id, $my_folder_data, null);
         }
 
         if (api_is_allowed_to_edit()) {

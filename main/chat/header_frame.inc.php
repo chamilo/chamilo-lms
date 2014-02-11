@@ -35,37 +35,29 @@ if (empty($mycourseid)) {
  * Choose CSS style (platform's, user's, or course's)
  */
 $my_style = api_get_visual_theme();
+$chat_size_old = isset($chat_size_old) ? $chat_size_old : null;
+$chat_size_new = isset($chat_size_new) ? $chat_size_new : null;
+$connected_new = isset($connected_new) ? $connected_new : null;
+$connected_old = isset($connected_old) ? $connected_old : null;
 
-
-
-?><!DOCTYPE html
-     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo api_get_language_isocode(); ?>" lang="<?php echo api_get_language_isocode(); ?>">
+?><!DOCTYPE html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>">
-<title>Chat</title>
-<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH).$my_style; ?>/default.css">
-<style>
-	a{
-		font-size: 12px;
-	}
-
-	.background_submit{
-		background: url(../img/chat_little.gif) 2px 2px no-repeat;
-		padding: 2px 1px 1px 20px;
-	}
-	TH{
-		font-size: 12px;
-	}
-</style>
-
-<script type="text/javascript" language="javascript">
-<!--
+    <meta charset="<?php echo api_get_system_encoding(); ?>" />
+    <title>Chat</title>
+    <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH).$my_style; ?>/default.css">
+    <style>
+        .background_submit {
+            background: url(../img/chat_little.gif) 2px 2px no-repeat;
+            padding: 2px 1px 1px 20px;
+        }
+        th {
+            font-size: 12px;
+        }
+    </style>
+<script>
 function updateChat()
 {
-	if ('<?php echo $chat_size_old; ?>' != '<?php echo $chat_size_new; ?>')
-	{
+	if ('<?php echo $chat_size_old; ?>' != '<?php echo $chat_size_new; ?>') {
 		parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size_new.'&'.api_get_cidreq(); ?>#bottom';
 	}
 }
@@ -85,27 +77,22 @@ function submitHiddenForm()
 
 function eventMessage()
 {
-	<?php if($chat_size): ?>
+	<?php if (isset($chat_size) && $chat_size): ?>
 	parent.chat_hidden.document.formHidden.chat_size_old.value='<?php echo $chat_size; ?>';
 	parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size.'&'.api_get_cidreq(); ?>#bottom';
 	<?php endif; ?>
 	document.formMessage.message.focus();
 }
 
-function send_message(evenement){
-
-    for (prop in evenement)
-    {
+function send_message(evenement) {
+    for (prop in evenement) {
     	if(prop == 'which') touche = evenement.which; else touche = evenement.keyCode;
     }
 
-    if (touche == 13)
-    {
+    if (touche == 13) {
     	document.formMessage.submit();
     }
 }
-
-//-->
 </script>
 </head>
 <body <?php echo $bodyXtra; ?> >

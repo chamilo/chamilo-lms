@@ -77,6 +77,25 @@ class learnpath
     public $course_int_id;
     public $course_info = array();
 
+
+
+    /**
+     * Get the depth level of LP item
+     * @param $in_tab_items
+     * @param $in_current_item_id
+     * @return int
+     */
+    private static function get_level_for_item($in_tab_items, $in_current_item_id)
+    {
+        $parent_item_id = $in_tab_items[$in_current_item_id]->parent;
+        if ($parent_item_id == 0) {
+            return 0;
+        } else {
+            return learnpath::get_level_for_item($in_tab_items, $parent_item_id) + 1;
+        }
+    }
+
+
     /**
     * Class constructor. Needs a database handler, a course code and a learnpath id from the database.
     * Also builds the list of items into $this->items.
@@ -280,22 +299,10 @@ class learnpath
                     break;
             }
 
-            // Items is a list of pointers to all items, classified by DB ID, not SCO id.
-            if ($row['parent_item_id'] == 0 || empty ($this->items[$row['parent_item_id']])) {
-                if (is_object($this->items[$row['id']])) {
-                  $this->items[$row['id']]->set_level(0);
-                }
-            } else {
-                $level = $this->items[$row['parent_item_id']]->get_level() + 1;
-                $this->items[$row['id']]->set_level($level);
-                if (is_object($this->items[$row['parent_item_id']])) {
-                    // Items is a list of pointers from item DB ids to item objects.
-                    $this->items[$row['parent_item_id']]->add_child($row['id']);
-                } else {
-                    if ($this->debug > 2) {
-                        error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - The parent item (' . $row['parent_item_id'] . ') of item ' . $row['id'] . ' could not be found', 0);
-                    }
-                }
+            // Setting the object level with variable $this->items[$i][parent]
+            foreach ($this->items as $itemLPObject) {
+                $level = learnpath::get_level_for_item($this->items, $itemLPObject->db_id);
+                $itemLPObject->level = $level;
             }
 
             // Setting the view in the item object.
@@ -2114,12 +2121,14 @@ class learnpath
      * @param   string  Course code (optional)
      * @return	bool	True if
      */
-    public static function is_lp_visible_for_student($lp_id, $student_id, $course = null) {
+    public static function is_lp_visible_for_student($lp_id, $student_id, $courseCode = null) {
         $lp_id = (int)$lp_id;
-        $course = api_get_course_info($course);
-        $tbl_learnpath = Database :: get_course_table(TABLE_LP_MAIN);
+        $course = api_get_course_info($courseCode);
+        $tbl_learnpath = Database::get_course_table(TABLE_LP_MAIN);
         // Get current prerequisite
-        $sql = "SELECT id, prerequisite, publicated_on, expired_on FROM $tbl_learnpath WHERE c_id = ".$course['real_id']." AND id = $lp_id";
+        $sql = "SELECT id, prerequisite, publicated_on, expired_on
+                FROM $tbl_learnpath
+                WHERE c_id = ".$course['real_id']." AND id = $lp_id";
         $rs  = Database::query($sql);
         $now = time();
         if (Database::num_rows($rs)>0) {
@@ -2129,7 +2138,14 @@ class learnpath
             $progress = 0;
 
             if (!empty($prerequisite)) {
-                $progress = self::get_db_progress($prerequisite,$student_id,'%', '', false, api_get_session_id());
+                $progress = self::get_db_progress(
+                    $prerequisite,
+                    $student_id,
+                    '%',
+                    $courseCode,
+                    false,
+                    api_get_session_id()
+                );
                 $progress = intval($progress);
                 if ($progress < 100) {
                     $is_visible = false;
@@ -2139,7 +2155,7 @@ class learnpath
             // Also check the time availability of the LP
 
             if ($is_visible) {
-	            //Adding visibility reestrinctions
+	            //Adding visibility restrictions
 	            if (!empty($row['publicated_on']) && $row['publicated_on'] != '0000-00-00 00:00:00') {
 	            	if ($now < api_strtotime($row['publicated_on'], 'UTC')) {
 	            		//api_not_allowed();

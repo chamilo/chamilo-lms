@@ -132,10 +132,10 @@ if (!empty($course)) {
 	array_splice($content, 0, $remove);
 	require 'header_frame.inc.php';
 
-	if ($_GET['origin'] == 'whoisonline') {  //the caller
+	if (isset($_GET['origin']) && $_GET['origin'] == 'whoisonline') {  //the caller
 		$content[0] = get_lang('CallSent').'<br />'.$content[0];
 	}
-	if ($_GET['origin'] == 'whoisonlinejoin') {   //the joiner (we have to delete the chat request to him when he joins the chat)
+	if (isset($_GET['origin']) && $_GET['origin'] == 'whoisonlinejoin') {   //the joiner (we have to delete the chat request to him when he joins the chat)
 		$track_user_table = Database::get_main_table(TABLE_MAIN_USER);
 		$sql = "UPDATE $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text='' WHERE (user_id = ".$_user['user_id'].")";
 		$result = Database::query($sql);

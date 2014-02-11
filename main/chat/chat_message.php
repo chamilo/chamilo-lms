@@ -250,7 +250,7 @@ if (!empty($course) && !empty($_user['user_id'])) {
 		echo  "<a href=\"javascript:insert('".$emoticon_text7."')\">".$emoticon_img7."</a>";
 		echo  "<a href=\"javascript:insert('".$emoticon_text8."')\">".$emoticon_img8."</a>";
 		echo  "<a href=\"javascript:insert('".$emoticon_text9."')\">".$emoticon_img9."</a>";
-		echo  "<a href=\"javascript:insert('".$emoticon_text10."')\">".$emoticon_img10."</a>";
+		//echo  "<a href=\"javascript:insert('".$emoticon_text10."')\">".$emoticon_img10."</a>";
 		echo  "<a href=\"javascript:insert('".$emoticon_text11."')\">".$emoticon_img11."</a>";
 		echo  "<a href=\"javascript:insert('".$emoticon_text12."')\">".$emoticon_img12."</a>";
 		echo  "<a href=\"javascript:insert('".$emoticon_text13."')\">".$emoticon_img13."</a>";

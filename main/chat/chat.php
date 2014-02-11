@@ -48,9 +48,8 @@ $cidreq = Security::remove_XSS($_GET['cidReq']);
 
 ?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo api_get_language_isocode(); ?>" lang="<?php echo api_get_language_isocode(); ?>">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
+<meta charset="<?php echo api_get_system_encoding(); ?>" />
 <?php
 echo'<title>'.get_lang('Chat').' - '.$mycourseid.' - '.api_get_setting('siteName').'</title>';
 

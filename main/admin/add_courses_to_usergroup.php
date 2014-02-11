@@ -4,41 +4,39 @@
 *   @package chamilo.admin
 */
 
-// name of the language file that needs to be included
-$language_file = array('admin','registration');
+// Name of the language file that needs to be included.
+$language_file = array('admin', 'registration');
 
-// resetting the course id
+// Resetting the course id.
 $cidReset = true;
 
-// including some necessary files
+// Including some necessary files.
 require_once '../inc/global.inc.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
 require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
 
 $xajax = new xajax();
-
-//$xajax->debugOn();
 $xajax->registerFunction('search');
 
-// setting the section (for the tabs)
+// Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
 
-// Access restrictions
+// Access restrictions.
 api_protect_admin_script(true);
 
-// setting breadcrumbs
-$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[]=array('url' => 'usergroups.php','name' => get_lang('Classes'));
+// Setting breadcrumbs.
+$interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'usergroups.php','name' => get_lang('Classes'));
 
-// Database Table Definitions
-
-// setting the name of the tool
-$tool_name=get_lang('SubscribeClassToCourses');
+// Setting the name of the tool.
+$tool_name = get_lang('SubscribeClassToCourses');
 
 $add_type = 'multiple';
-if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
+
+$add = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
@@ -70,23 +68,23 @@ function remove_item(origin) {
 }
 
 function validate_filter() {
-        document.formulaire.add_type.value = \''.$add_type.'\';
-        document.formulaire.form_sent.value=0;
-        document.formulaire.submit();
+    document.formulaire.add_type.value = \''.$add_type.'\';
+    document.formulaire.form_sent.value=0;
+    document.formulaire.submit();
 }
 </script>';
 
-
 $form_sent  = 0;
 $errorMsg   = '';
-$sessions=array();
+$sessions = array();
 $usergroup = new UserGroup();
 $id = intval($_GET['id']);
-if ($_POST['form_sent']) {
+
+if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $elements_posted = $_POST['elements_in_name'];
     if (!is_array($elements_posted)) {
-        $elements_posted=array();
+        $elements_posted = array();
     }
     if ($form_sent == 1) {
         $usergroup->subscribe_courses_to_usergroup($id, $elements_posted);
@@ -94,6 +92,7 @@ if ($_POST['form_sent']) {
         exit;
     }
 }
+
 $data = $usergroup->get($id);
 $course_list_in = $usergroup->get_courses_by_usergroup($id);
 $course_list = CourseManager::get_courses_list(0, 0, 'title', 'asc', -1, null, api_get_current_access_url_id());
@@ -168,12 +167,12 @@ $xajax->processRequests();
 Display::display_header($tool_name);
 
 if ($add_type == 'multiple') {
-    $link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.
+    $link_add_type_unique = '<a href="'.api_get_self().'?add='.$add.'&add_type=unique">'.
         Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
     $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
 } else {
     $link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
-    $link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.
+    $link_add_type_multiple = '<a href="'.api_get_self().'?add='.$add.'&add_type=multiple">'.
         Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 
@@ -186,8 +185,9 @@ echo '</div>';
 
 <?php echo '<legend>'.$data['name'].': '.$tool_name.'</legend>';
 
-if ($add_type=='multiple') {
-    if (is_array($extra_field_list)) {
+$extra_field_list = array();
+if ($add_type == 'multiple') {
+    if (is_array($extra_field_list) && !empty($extra_field_list)) {
         if (is_array($new_field_list) && count($new_field_list) > 0) {
             echo '<h3>'.get_lang('FilterUsers').'</h3>';
             foreach ($new_field_list as $new_field) {

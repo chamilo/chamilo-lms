@@ -22,7 +22,7 @@
 		{% if _u.logged  == 0 %}
 			{% include "default/layout/login_form.tpl" %}
 		{% endif %}
-
+        
 		{# User picture #}
         {{ user_image_block }}
 

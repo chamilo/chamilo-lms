@@ -2904,30 +2904,28 @@ class learnpath
                 $html .= '<div id="toc_' . $item['id'] . '" class="' . $scorm_color_background . '">';
             }
 
-            // The anchor will let us center the TOC on the currently viewed item &^D
-            if ($item['type'] != 'dokeos_module' && $item['type'] != 'dokeos_chapter') {
-                $html .= '<div class="' . $style_item . '" style="padding-left: ' . ($item['level'] * 1.5) . 'em; padding-right:' . ($item['level'] / 2) . 'em"             title="' . $item['description'] . '" >';
-                $html .= '<a name="atoc_' . $item['id'] . '" ></a>';
-            } else {
-                $html .= '<div class="' . $style_item . '" style="padding-left: ' . ($item['level'] * 2) . 'em; padding-right:' . ($item['level'] * 1.5) . 'em"             title="' . $item['description'] . '" >';
-            }
+            // Learning path title
             $title = $item['title'];
             if (empty ($title)) {
                 $title = rl_get_resource_name(api_get_course_id(), $this->get_id(), $item['id']);
             }
-
             $title = Security::remove_XSS($title);
-            if ($item['type'] != 'dokeos_chapter' && $item['type'] != 'dir' && $item['type'] != 'dokeos_module') {
-                //$html .= "<a href='lp_controller.php?".api_get_cidreq()."&action=content&lp_id=".$this->get_id()."&item_id=".$item['id']."' target='lp_content_frame_name'>".$title."</a>" ;
-                $url = $this->get_link('http', $item['id'], $toc_list);
-                //$html .= '<a href="'.$url.'" target="content_name" onClick="top.load_item('.$item['id'].',\''.$url.'\');">'.$title.'</a>' ;
-                //$html .= '<a href="" onClick="top.load_item('.$item['id'].',\''.$url.'\');return false;">'.$title.'</a>' ;
 
-                //<img align="absbottom" width="13" height="13" src="../img/lp_document.png">&nbsp;background:#aaa;
+             // Learning path personalization
+            // build the LP tree
+            // The anchor atoc_ will let us center the TOC on the currently viewed item &^D
+            if ($item['type'] != 'dokeos_module' && $item['type'] != 'dokeos_chapter') {
+                $html .= '<div class="'.$style_item .' scorm_item_level_'.$item['level'].' scorm_type_'.learnpath::format_scorm_type_item($item['type']).'" title="'.$item['description'].'" >';
+                $html .= '<a name="atoc_'.$item['id'].'" />';
+            } else {
+                $html .= '<div class="'.$style_item.' scorm_section_level_'.$item['level'].'" title="'.$item['description'].'" >';
+            }
+            // display title
+            if ($item['type'] != 'dokeos_chapter' && $item['type'] != 'dir' && $item['type'] != 'dokeos_module') {
+                $this->get_link('http', $item['id'], $toc_list);
                 $html .= '<a href="" onClick="switch_item(' .$mycurrentitemid . ',' .$item['id'] . ');' .'return false;" >' . stripslashes($title) . '</a>';
-            } elseif ($item['type'] == 'dokeos_module' || $item['type'] == 'dokeos_chapter') {
-                $html .= "<img align='absbottom' width='13' height='13' src='../img/lp_dokeos_module.png'>&nbsp;" . stripslashes($title);
-            } elseif ($item['type'] == 'dir') {
+            } else {
+                // if you want to put an image before, you should use css
                 $html .= stripslashes($title);
             }
 
@@ -9290,6 +9288,19 @@ EOD;
             }
         }
     }
+
+
+    /**
+     * Return the scorm item type object with spaces replaced with _
+     * The return result is use to build a css classname like scorm_type_$return
+     * @param $in_type
+     * @return mixed
+     */
+    private static function format_scorm_type_item($in_type)
+    {
+        return str_replace(' ', '_', $in_type);
+    }
+
 }
 
 if (!function_exists('trim_value')) {

@@ -446,6 +446,11 @@ class Template
             $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/scorm.css';
         }
 
+        // if we have a scorm file in theme dont use default_scorm.css file
+        if (!is_file(api_get_path(SYS_CSS_PATH) . $this->theme . '/scorm.css')) {
+            $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'/default_scorm.css');
+        }
+
         if (api_is_global_chat_enabled()) {
             $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
         }

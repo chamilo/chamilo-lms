@@ -4967,8 +4967,7 @@ class learnpath
     }
 
     /**
-     * Function that creates a table structure with a learning path his modules, chapters and documents.
-     * Also the actions for the modules, chapters and documents are in this table.
+     * Function that creates a html list of learning path items so that we can add audio files to them
      * @author Kevin Van Den Haute
      * @param int $lp_id
      * @return string

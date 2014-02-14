@@ -241,16 +241,13 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
 
     if ($form_sent == 1) {
-        if ($relation_type == GROUP_USER_PERMISSION_PENDING_INVITATION) {
-            $relations = array(GROUP_USER_PERMISSION_PENDING_INVITATION, GROUP_USER_PERMISSION_READER);
-            $users_by_group      = GroupPortalManager::get_users_by_group($group_id, null, $relations);
-            $user_id_relation    = array_keys($users_by_group);
-            $user_relation_diff  = array_diff($user_id_relation, $UserList);
+        $users_by_group = GroupPortalManager::get_users_by_group($group_id, null, array($relation_type));
+        $user_id_relation    = array_keys($users_by_group);
+        $user_relation_diff  = array_diff($user_id_relation, $UserList);
+        if (!empty($user_relation_diff)) {
             foreach ($user_relation_diff as $user_id) {
                 GroupPortalManager::delete_user_rel_group($user_id, $group_id);
             }
-        } else {
-            GroupPortalManager::delete_users($group_id, $relation_type);
         }
         $result = GroupPortalManager::add_users_to_groups($UserList, array($group_id), $relation_type);
         Display :: display_confirmation_message(get_lang('UsersEdited'));
@@ -269,14 +266,7 @@ if ($ajax_search) {
         // data for destination user list
         $id = intval($_POST['id']);
         $relation_type = intval($_POST['relation']);
-        $condition_relation = "";
-
-        if ($relation_type == GROUP_USER_PERMISSION_PENDING_INVITATION) {
-            $condition_relation = " AND groups.relation_type IN (".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_READER.") ";
-        } else {
-            $condition_relation = " AND groups.relation_type = '$relation_type' ";
-        }
-
+        $condition_relation = " AND groups.relation_type = '$relation_type' ";
         $sql = "SELECT user.user_id, user.username, user.lastname, user.firstname
                 FROM $tbl_group_rel_user groups
                 INNER JOIN  $tbl_user user ON user.user_id = groups.user_id
@@ -401,7 +391,8 @@ if ($add_type == 'multiple') {
 <?php } ?>
 <option value=""><?php echo get_lang('SelectARelationType')?></option>
 <option value="<?php echo GROUP_USER_PERMISSION_ADMIN ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_ADMIN)?'selected=selected':'') ?> > <?php echo get_lang('Admin') ?></option>
-<option value="<?php echo GROUP_USER_PERMISSION_PENDING_INVITATION ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_PENDING_INVITATION)?'selected=selected':'') ?> > <?php echo get_lang('Reader') ?></option>
+<option value="<?php echo GROUP_USER_PERMISSION_READER ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_READER)?'selected=selected':'') ?> > <?php echo get_lang('Reader') ?></option>
+<option value="<?php echo GROUP_USER_PERMISSION_PENDING_INVITATION ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_PENDING_INVITATION)?'selected=selected':'') ?> > <?php echo get_lang('PendingInvitation') ?></option>
 <option value="<?php echo GROUP_USER_PERMISSION_MODERATOR ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_MODERATOR)?'selected=selected':'') ?> > <?php echo get_lang('Moderator') ?></option>
 <option value="<?php echo GROUP_USER_PERMISSION_HRM ?>" <?php echo ((isset($_POST['relation']) && $_POST['relation']==GROUP_USER_PERMISSION_HRM)?'selected=selected':'') ?> > <?php echo get_lang('Drh') ?></option>
 </select>
@@ -491,9 +482,12 @@ if (!empty($errorMsg)) {
 	<?php
 	if (!empty($sessionUsersList)) {
 		foreach($sessionUsersList as $enreg) { ?>
-			<option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['firstname'].' '.$enreg['lastname'].' ('.$enreg['username'].')'; ?></option>
+			<option value="<?php echo $enreg['user_id']; ?>">
+                <?php echo $enreg['firstname'].' '.$enreg['lastname'].' ('.$enreg['username'].')'; ?>
+            </option>
 	<?php }
-	} unset($sessionUsersList);?>
+	} unset($sessionUsersList);
+    ?>
   </select>
   </div>
   </td>
@@ -511,8 +505,8 @@ if (!empty($errorMsg)) {
 
 <script>
 function moveItem(origin , destination) {
-	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {
+	for (var i = 0 ; i<origin.options.length ; i++) {
+		if (origin.options[i].selected) {
 			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
 			origin.options[i]=null;
 			i = i-1;
@@ -546,7 +540,6 @@ function mysort(a, b) {
 }
 
 function valide() {
-
 	var relation_select = document.getElementById('relation');
 	if (relation_select && relation_select.value=="") {
 		alert("<?php echo get_lang('YouMustChooseARelationType')?>");

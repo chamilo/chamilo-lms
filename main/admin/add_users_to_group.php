@@ -69,11 +69,7 @@ function search_users($needle, $type, $relation_type)
             $without_user_id = " AND user.user_id NOT IN(".implode(',', $user_ids).") ";
         }
 
-        if ($relation_type == GROUP_USER_PERMISSION_PENDING_INVITATION) {
-            $condition_relation = " AND groups.relation_type IN (".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_READER.") ";
-        } else {
-            $condition_relation = " AND groups.relation_type = '$relation_type' ";
-        }
+        $condition_relation = " AND groups.relation_type = '$relation_type' ";
 
         // data for destination user list
         $sql = "SELECT user.user_id, user.username, user.lastname, user.firstname
@@ -349,12 +345,7 @@ if ($ajax_search) {
         // data for destination user list
         $id = intval($_POST['id']);
         $relation_type = intval($_POST['relation']);
-
-        if ($relation_type == GROUP_USER_PERMISSION_PENDING_INVITATION) {
-            $condition_relation = " AND groups.relation_type IN (".GROUP_USER_PERMISSION_PENDING_INVITATION.",".GROUP_USER_PERMISSION_READER.") ";
-        } else {
-            $condition_relation = " AND groups.relation_type = '$relation_type' ";
-        }
+        $condition_relation = " AND groups.relation_type = '$relation_type' ";
 
         $sql = "SELECT user.user_id, user.username, user.lastname, user.firstname
                 FROM $tbl_group_rel_user groups

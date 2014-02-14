@@ -251,7 +251,6 @@ function showConfirmationPopup(obj, urlParam)
             }
         ]
     });
-    console.log('dd');
     // prevent the browser to follow the link
     return false;
 }

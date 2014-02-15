@@ -12,6 +12,7 @@
  */
 class SessionManager
 {
+    public static $_debug = false;
     public function __construct()
     {
     }
@@ -794,6 +795,9 @@ class SessionManager
 
         $sql_query = vsprintf($sql, $queryVariables);
 
+        if (self::$_debug) {
+            error_log($sql_query);
+        }
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs)) {
             $users[$user['user_id']] = $user;
@@ -804,7 +808,10 @@ class SessionManager
          */
         $sql = "SELECT * FROM $tbl_course_lp
         WHERE c_id = %s ";  //AND session_id = %s
-        $sql_query = sprintf($sql, $course['id']);
+        $sql_query = sprintf($sql, $course['real_id']);
+        if (self::$_debug) {
+            error_log($sql_query);
+        }
         $result = Database::query($sql_query);
         $lessons_total = 0;
         while ($row = Database::fetch_array($result))
@@ -833,7 +840,12 @@ class SessionManager
         AND parent_id = 0
         AND active IN (1, 0)
         AND  session_id = %s";
+
+
         $sql_query = sprintf($sql, $course['real_id'], $sessionId);
+        if (self::$_debug) {
+            error_log($sql_query);
+        }
         $result = Database::query($sql_query);
         $row = Database::fetch_array($result);
         $assignments_total = $row['count'];
@@ -844,6 +856,9 @@ class SessionManager
         $sql = "SELECT count(distinct page_id)  as count FROM $wiki
             WHERE c_id = %s and session_id = %s";
         $sql_query = sprintf($sql, $course['real_id'], $sessionId);
+        if (self::$_debug) {
+            error_log($sql_query);
+        }
         $result = Database::query($sql_query);
         $row = Database::fetch_array($result);
         $wiki_total = $row['count'];
@@ -872,6 +887,9 @@ class SessionManager
         FROM $forum f
         where f.c_id = %s and f.session_id = %s";
         $sql_query = sprintf($sql, $course['real_id'], $sessionId);
+        if (self::$_debug) {
+            error_log($sql_query);
+        }
         $result = Database::query($sql_query);
         $row = Database::fetch_array($result);
         $forums_total = $row['count'];
@@ -888,6 +906,9 @@ class SessionManager
             AND access_session_id = %s
             AND access_user_id = %s ";
             $sql_query  = sprintf($sql, $course['code'], $sessionId, $user['user_id']);
+            if (self::$_debug) {
+                error_log($sql_query);
+            }
             $result     = Database::query($sql_query);
             $row        = Database::fetch_array($result);
             $course_description_progress = ($row['count'] > 0) ? 100 : 0;
@@ -906,7 +927,12 @@ class SessionManager
             //Assignments
             $assignments_done       = Tracking::count_student_assignments($user['user_id'], $course['code'], $sessionId);
             $assignments_left       = $assignments_total - $assignments_done;
-            $assignments_progress   =  round((( $assignments_done * 100 ) / $assignments_total ), 2);
+            if (!empty($assignments_total)) {
+                $assignments_progress   =  round((( $assignments_done * 100 ) / $assignments_total ), 2);
+            } else {
+                $assignments_progress = 0;
+            }
+
 
             //Wiki
             //total revisions per user
@@ -914,6 +940,9 @@ class SessionManager
             FROM $wiki
             where c_id = %s and session_id = %s and user_id = %s";
             $sql_query  = sprintf($sql, $course['real_id'], $sessionId, $user['user_id']);
+            if (self::$_debug) {
+                error_log($sql_query);
+            }
             $result     = Database::query($sql_query);
             $row        = Database::fetch_array($result);
             $wiki_revisions =  $row['count'];
@@ -926,17 +955,29 @@ class SessionManager
             AND default_value_type = 'wiki_page_id'
             AND c_id = %s";
             $sql_query  = sprintf($sql, $user['user_id'], $course['code'], $course['real_id']);
+            if (self::$_debug) {
+                error_log($sql_query);
+            }
             $result     = Database::query($sql_query);
             $row        = Database::fetch_array($result);
 
             $wiki_read          = $row['count'];
             $wiki_unread        = $wiki_total - $wiki_read;
-            $wiki_progress      = round((( $wiki_read * 100 ) /  $wiki_total), 2);
+            if (!empty($wiki_total)) {
+                $wiki_progress      = round((( $wiki_read * 100 ) /  $wiki_total), 2);
+            } else {
+                $wiki_progress      = 0;
+            }
+
 
             //Surveys
             $surveys_done       = (isset($survey_user_list[$user['user_id']]) ? $survey_user_list[$user['user_id']] : 0);
             $surveys_left       = $surveys_total - $surveys_done;
-            $surveys_progress   = round((( $surveys_done * 100 ) /  $surveys_total), 2);
+            if (!empty($surveys_total)) {
+                $surveys_progress   = round((( $surveys_done * 100 ) /  $surveys_total), 2);
+            } else {
+                $surveys_progress = 0;
+            }
 
             //Forums
             #$forums_done = Tracking::count_student_messages($user['user_id'], $course_code, $session_id);
@@ -944,12 +985,19 @@ class SessionManager
             INNER JOIN $forum f ON f.forum_id = p.forum_id
             WHERE p.poster_id = %s and f.session_id = %s and p.c_id = %s";
             $sql_query  = sprintf($sql, $user['user_id'], $sessionId, $course['real_id']);
+            if (self::$_debug) {
+                error_log($sql_query);
+            }
             $result     = Database::query($sql_query);
             $row        = Database::fetch_array($result);
 
             $forums_done        = $row['count'];
             $forums_left        = $forums_total - $forums_done;
-            $forums_progress    = round((( $forums_done * 100 ) /  $forums_total), 2);
+            if (!empty($forums_total)) {
+                $forums_progress    = round((( $forums_done * 100 ) /  $forums_total), 2);
+            } else {
+                $forums_progress = 0;
+            }
 
             //Overall Total
             $overall_total =  ($course_description_progress + $exercises_progress + $forums_progress + $assignments_progress + $wiki_progress + $surveys_progress) / 6;
@@ -2107,6 +2155,8 @@ class SessionManager
 		$session_category_table       = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 		$user_table                   = Database::get_main_table(TABLE_MAIN_USER);
 		$table_access_url_rel_session = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $session_course_table         = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $course_table                 = Database::get_main_table(TABLE_MAIN_COURSE);
 
 		$access_url_id = api_get_current_access_url_id();
 
@@ -2117,11 +2167,13 @@ class SessionManager
 				INNER JOIN $user_table u ON s.id_coach = u.user_id
 				INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
 				LEFT JOIN  $session_category_table sc ON s.session_category_id = sc.id
+				LEFT JOIN $session_course_table sco ON (sco.id_session = s.id)
+				INNER JOIN $course_table c ON sco.course_code = c.code
 				WHERE ar.access_url_id = $access_url_id ";
 
 		if (count($conditions)>0) {
-			$sql_query .= ' AND ';
 			foreach ($conditions as $field=>$value) {
+                $sql_query .= ' AND ';
                 $field = Database::escape_string($field);
                 $value = Database::escape_string($value);
 				$sql_query .= $field." '".$value."'";
@@ -2131,6 +2183,9 @@ class SessionManager
 			$sql_query .= ' ORDER BY '.Database::escape_string(implode(',',$order_by));
 		}
         //echo $sql_query;
+        if (self::$_debug) {
+            error_log(preg_replace('/\s+/', ' ', $sql_query));
+        }
 		$sql_result = Database::query($sql_query);
         if (Database::num_rows($sql_result)>0) {
     		while ($result = Database::fetch_array($sql_result)) {

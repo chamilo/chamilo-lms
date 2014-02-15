@@ -49,7 +49,7 @@ switch ($action) {
         break;
     case 'search_session_by_course':
         if (api_is_platform_admin()) {
-            $results = SessionManager::get_sessions_list(array('s.name LIKE' => "%".$_REQUEST['q']."%"));
+            $results = SessionManager::get_sessions_list(array('s.name LIKE' => "%".$_REQUEST['q']."%", 'c.id ='=>$_REQUEST['course_id']));
             $results2 = array();
             if (!empty($results)) {
                 foreach ($results as $item) {

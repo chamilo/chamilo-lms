@@ -65,7 +65,7 @@ switch ($action) {
                 //TODO change this function to search not only courses STARTING with $_GET['q']
                 $courseList = Coursemanager::get_courses_list(
                     0, //offset
-                    10, //howMany
+                    0, //howMany
                     1, //$orderby = 1
                     'ASC',
                     -1,  //visibility

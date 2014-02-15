@@ -59,13 +59,19 @@ class HTML_QuickForm_Select_Ajax extends HTML_QuickForm_select
             $width = $givenWidth;
         }
 
+        //Get the minimumInputLength for select2
+        $minimumInputLength = ($this->getAttribute('minimumInputLength') > 3)?
+            $this->getAttribute('minimumInputLength') :
+            3
+        ;
+
         $html .= '<script>
                 $(function() {
                     $("#'.$this->getAttribute('name').'").select2({
                         placeholder: "'.get_lang('SelectAnOption').'",
                         allowClear: true,
                         width: "'.$width.'",
-                        minimumInputLength: 2,
+                        minimumInputLength: ' . $minimumInputLength . ',
                         // instead of writing the function to execute the request we use Select2s convenient helper
                         ajax: {
                             url: "'.$this->getAttribute('url').'",

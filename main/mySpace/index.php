@@ -44,6 +44,9 @@ $count_sessions 	= 0;
 $count_courses		= 0;
 $title 				= null;
 
+//Set Minimun Input Length = 3 used with Select2
+$minimumInputLength = 3;
+
 // Access control
 api_block_anonymous_users();
 
@@ -671,7 +674,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }
 
         $url = $ajax_path . 'session.ajax.php?a='. $an . '&course_id=' . $_GET['course_id'];
-        $sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchSession'), null, array('url' => $url, 'defaults' => $sessionList, 'width' => '400px'));
+        $sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchSession'), null, array('url' => $url, 'defaults' => $sessionList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
 
         //course filter
         /*
@@ -681,7 +684,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }
         */
         $url = $ajax_path . 'course.ajax.php?a='. $a .'&session_id=' . $_GET['session_id'];
-        $sessionFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList, 'width' => '400px'));
+        $sessionFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
         
         //Exercise filter    
         if (in_array($display, array('exerciseprogress'))) {
@@ -694,7 +697,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $exerciseInfo = current(get_exercise_by_id($exerciseId, $_GET['course_id']));
                 $exerciseList[] = array('id' => $exerciseInfo['id'], 'text' => api_html_entity_decode($exerciseInfo['title']));
             }
-            $sessionFilter->addElement('select_ajax', 'exercise_name', get_lang('SearchExercise'), null, array('url' => $url, 'defaults' => $exerciseList, 'width' => '400px'));
+            $sessionFilter->addElement('select_ajax', 'exercise_name', get_lang('SearchExercise'), null, array('url' => $url, 'defaults' => $exerciseList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
 
         }
 
@@ -712,7 +715,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $surveyInfo['title'] .= ($surveyInfo['anonymous'] == 1) ? ' (' . get_lang('Anonymous') . ')': '';
                 $surveyList[] = array('id' => $surveyInfo['survey_id'], 'text' => strip_tags(api_html_entity_decode($surveyInfo['title'])));
             }
-            $sessionFilter->addElement('select_ajax', 'survey_name', get_lang('SearchSurvey'), null, array('url' => $url, 'defaults' => $surveyList, 'width' => '400px'));
+            $sessionFilter->addElement('select_ajax', 'survey_name', get_lang('SearchSurvey'), null, array('url' => $url, 'defaults' => $surveyList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
 
         }
 
@@ -728,7 +731,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $studentList[] = array('id' => $studentInfo['user_id'], 'text' => $studentInfo['username'] . ' (' . $studentInfo['firstname'] . ' ' . $studentInfo['lastname'] . ')');
             }
 
-            $sessionFilter->addElement('select_ajax', 'student_name', get_lang('SearchStudent'), null, array('url' => $url, 'defaults' => $studentList, 'width' => '400px', 'class' => 'pull-right'));
+            $sessionFilter->addElement('select_ajax', 'student_name', get_lang('SearchStudent'), null, array('url' => $url, 'defaults' => $studentList, 'width' => '400px', 'class' => 'pull-right', 'minimumInputLength' => $minimumInputLength));
             $options = array(
                 ''              => get_lang('Select'),
                 STUDENT         => get_lang('Student'),
@@ -930,7 +933,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 placeholder: "Elegir una opción",
                 allowClear: true,
                 width: "400px",
-                minimumInputLength: 2,
+                minimumInputLength: ' . $minimumInputLength . ',
                 // instead of writing the function to execute the request we use Select2s convenient helper
                 ajax: {
                     url: url,

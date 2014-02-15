@@ -22,13 +22,15 @@
 		{% if _u.logged  == 0 %}
 			{% include "default/layout/login_form.tpl" %}
 		{% endif %}
-        
+        <div class="block_user_info">
 		{# User picture #}
         {{ user_image_block }}
+        
 
         {# User Profile links #}
 		{{ profile_block }}
-
+        </div>
+        <div class="block_tools_info">
         {# Course block - admin #}
 		{{ course_block }}
 
@@ -55,7 +57,7 @@
 
 		{# Skills #}
 		{{ skills_block }}
-
+        </div>
 		{# Plugin courses sidebar #}
         {# Plugins for footer section #}
 

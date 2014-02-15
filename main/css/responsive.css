@@ -296,14 +296,57 @@ The more frequent ones have been marked with *
     header{
         margin-top: 15px;
     }
-    #top_main_content .menu-column {
-        float: left;
-        width: 100%;
-    }
-    .menu-column .group-one{
-        width: 100%;
-    }
     
+    #top_main_content .menu-column {
+        width: 97%;
+    }
+    #top_main_content .menu-column .block_user_info{
+        width: 715px;
+        clear: both;
+        
+    }
+     #top_main_content .menu-column .block_tools_info{
+        width: 715px;
+        clear: both;
+        
+     }
+     #top_main_content .menu-column .block_tools_info #help_block{
+       display: none;
+       visibility: hidden;
+        
+     }
+    #top_main_content .menu-column #user_image_block{
+        float: left;
+        width: 100px;
+        background: none;
+        border:none;
+    }
+    #top_main_content .menu-column #user_image_block img{
+        border: 3px solid #FFFFFF;
+        -webkit-box-shadow: 1px 0px 9px 0px rgba(50, 50, 50, 0.71);
+        -moz-box-shadow:    1px 0px 9px 0px rgba(50, 50, 50, 0.71);
+            box-shadow:         1px 0px 9px 0px rgba(50, 50, 50, 0.71);
+    }
+     #top_main_content .menu-column #profile_block{
+        float: left;
+        width: 520px;
+        margin-left: 10px;
+        background: none;
+        border:none;
+     }
+    
+     .nav-list > li > a {
+      padding-bottom: 10px;
+      padding-left: 15px;
+      padding-right: 15px;
+      padding-top: 10px;
+      font-size: 18px;
+    }
+    /*CSS ICON BLOCK USER*/
+   .inbox-social{
+        background-image: url("images/inbox.png");
+    }
+
     /* only for the course tools */
     #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {
         float: left;

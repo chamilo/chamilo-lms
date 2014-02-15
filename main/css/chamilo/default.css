@@ -501,6 +501,27 @@ RESPONSIVE CSS
   padding-top: 8px;
 }
 
+@media (min-width: 481px) and (max-width: 800px) {
+/*CSS ICON BLOCK USER*/
+   .inbox-social{
+        background: url("images/inbox.png") no-repeat left center;
+        padding-left: 30px;
+    }
+    .new-message-social{
+        background: url("images/new.png") no-repeat left center;
+        padding-left: 30px;
+    }
+    .invitations-social{
+        background: url("images/invitation.png") no-repeat left center;
+        padding-left: 30px;
+    }
+    .profile-social{
+        background: url("images/perfil.png") no-repeat left center;
+        padding-left: 30px;
+    }
+
+
+}
 /*+++++++++++++++++++++++++++++++++
 END RESPONSIVE CSS
 +++++++++++++++++++++++++++++++++*/

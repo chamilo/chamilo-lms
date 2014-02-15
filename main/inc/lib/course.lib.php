@@ -1594,7 +1594,7 @@ class CourseManager
             if ($session_id != 0) {
                 $sql_query .= ' AND scu.id_session = '.$session_id;
             }
-            
+                
             $rs = Database::query($sql_query);
             while($student = Database::fetch_array($rs)) {
                 $students[$student['id_user']] = $student;

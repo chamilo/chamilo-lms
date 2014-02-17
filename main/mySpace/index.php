@@ -44,6 +44,9 @@ $count_sessions 	= 0;
 $count_courses		= 0;
 $title 				= null;
 
+//Set Minimun Input Length = 3 used with Select2
+$minimumInputLength = 3;
+
 // Access control
 api_block_anonymous_users();
 
@@ -617,7 +620,8 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 
         //Session Filter
         $sessionFilter = new FormValidator('session_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
-        $sessionAjax = "search_session";
+        $a = 'search_course';
+        $an = 'search_session';
         switch ($display) {
             case 'coaches':
                $tool_name = get_lang('DisplayCoaches');
@@ -636,7 +640,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 break;
             case 'lpprogressoverview':
                $tool_name = get_lang('DisplayLpProgressOverview');
-               $sessionAjax = 'search_session_all';
+               $a = $an = 'search_session_all';
                 break;
             case 'progressoverview':
                $tool_name = get_lang('DisplayProgressOverview');
@@ -650,12 +654,11 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }
 
         $sessionFilter->addElement('header', '', $tool_name);
-
-        $url = $ajax_path . 'session.ajax.php?a=' . $sessionAjax;
-
-        $a = 'search_course';
-        $an = 'search_session';
-
+//<<<<<<< HEAD
+        
+//=======
+//        $url = $ajax_path . 'session.ajax.php?a=' . $sessionAjax;
+//>>>>>>> 3d4cd1fb23d8b65bea0b816416dc9c45302ccf9a
         $sessionList = array();
         $courseList = array();
         $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
@@ -663,7 +666,9 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 
         if (!empty($sessionId)) {
             $sessionList = array();
-
+//<<<<<<< HEAD
+//            $sessionInfo = SessionManager::fetch($sessionId);
+//            $sessionList[] = array('id' => $sessionInfo['id'], 'text' => $sessionInfo['name']);
             if ($sessionId == 'T') {
                 $sessionInfo = SessionManager::fetch($sessionId);
                 $sessionList[] = array('id' => 'T', 'text' => 'TODOS');
@@ -671,11 +676,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $sessionInfo = SessionManager::fetch($sessionId);
                 $sessionList[] = array('id' => $sessionInfo['id'], 'text' => $sessionInfo['name']);
             }
-
-            $sessionInfo = SessionManager::fetch($sessionId);
-            $sessionList[] = array('id' => $sessionInfo['id'], 'text' => $sessionInfo['name']);
             $a = 'search_course_by_session';
-
         }
 
         if (!empty($courseId)) {
@@ -683,13 +684,16 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             $courseInfo = api_get_course_info_by_id($courseId);
             $courseList[] = array('id' => $courseInfo['real_id'], 'text' => $courseInfo['name']);
             $an = 'search_session_by_course';
+//=======
+//           
+//>>>>>>> 3d4cd1fb23d8b65bea0b816416dc9c45302ccf9a
         }
 
         $url = $ajax_path . 'session.ajax.php?a='. $an . '&course_id=' . $_GET['course_id'];
-        $sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchSession'), null, array('url' => $url, 'defaults' => $sessionList, 'width' => '400px'));
+        $sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchSession'), null, array('url' => $url, 'defaults' => $sessionList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
 
         //course filter
-       
+        /*
         $a = 'search_course';
         if (!empty($_GET['session_id'])) {
             $a = 'search_course_by_session';
@@ -698,9 +702,13 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         if ($display == 'lpprogressoverview') {
             $a = 'search_course_by_session_all';
         }
-        
+<<<<<<< HEAD
+        */
+//=======
+//
+//>>>>>>> 3d4cd1fb23d8b65bea0b816416dc9c45302ccf9a
         $url = $ajax_path . 'course.ajax.php?a='. $a .'&session_id=' . $_GET['session_id'];
-        $sessionFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList, 'width' => '400px'));
+        $sessionFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
         
         //Exercise filter    
         if (in_array($display, array('exerciseprogress'))) {
@@ -713,7 +721,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $exerciseInfo = current(get_exercise_by_id($exerciseId, $_GET['course_id']));
                 $exerciseList[] = array('id' => $exerciseInfo['id'], 'text' => api_html_entity_decode($exerciseInfo['title']));
             }
-            $sessionFilter->addElement('select_ajax', 'exercise_name', get_lang('SearchExercise'), null, array('url' => $url, 'defaults' => $exerciseList, 'width' => '400px'));
+            $sessionFilter->addElement('select_ajax', 'exercise_name', get_lang('SearchExercise'), null, array('url' => $url, 'defaults' => $exerciseList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
 
         }
 
@@ -731,7 +739,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $surveyInfo['title'] .= ($surveyInfo['anonymous'] == 1) ? ' (' . get_lang('Anonymous') . ')': '';
                 $surveyList[] = array('id' => $surveyInfo['survey_id'], 'text' => strip_tags(api_html_entity_decode($surveyInfo['title'])));
             }
-            $sessionFilter->addElement('select_ajax', 'survey_name', get_lang('SearchSurvey'), null, array('url' => $url, 'defaults' => $surveyList, 'width' => '400px'));
+            $sessionFilter->addElement('select_ajax', 'survey_name', get_lang('SearchSurvey'), null, array('url' => $url, 'defaults' => $surveyList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
 
         }
 
@@ -747,7 +755,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $studentList[] = array('id' => $studentInfo['user_id'], 'text' => $studentInfo['username'] . ' (' . $studentInfo['firstname'] . ' ' . $studentInfo['lastname'] . ')');
             }
 
-            $sessionFilter->addElement('select_ajax', 'student_name', get_lang('SearchStudent'), null, array('url' => $url, 'defaults' => $studentList, 'width' => '400px', 'class' => 'pull-right'));
+            $sessionFilter->addElement('select_ajax', 'student_name', get_lang('SearchStudent'), null, array('url' => $url, 'defaults' => $studentList, 'width' => '400px', 'class' => 'pull-right', 'minimumInputLength' => $minimumInputLength));
             $options = array(
                 ''              => get_lang('Select'),
                 STUDENT         => get_lang('Student'),
@@ -874,8 +882,6 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             $("#session_name").on("change", function() {
                 var sessionId = $("#session_name").val();
                 var courseId  = $("#course_name").val();
-                console.log("session:"+sessionId);
-                console.log("course:"+courseId);
                 if (isEmpty(sessionId)) {
                         select2("#course_name", "' .  $ajax_path . 'course.ajax.php?a=search_course");
                     if (isEmpty(courseId)) {
@@ -887,10 +893,20 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     select2("#course_name", "' .  $ajax_path . 'course.ajax.php?a=search_course_by_session&session_id=" + sessionId);
                 }
                 //window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId;
+//<<<<<<< HEAD
+//                /*
+//                if (isEmpty(courseId)) {
+//                    select2("#course_name", "'. $ajax_path . 'course.ajax.php?a=' . $a . '&session_id=" + sessionId);
+//=======
+              select2("#course_name", "' .  $ajax_path . 'course.ajax.php?a=' . $a . '&session_id=" + sessionId);
+//          });
 
-                if (isEmpty(courseId)) {
-                    select2("#course_name", "'. $ajax_path . 'course.ajax.php?a=' . $a . '&session_id=" + sessionId);
-                }
+//            if (display == "lpprogressoverview" || display == "progressoverview" || display == "surveyoverview") {
+//                if (isEmpty($("#session_name").val())) {
+//                    $("#course_name").select2("readonly", true);
+//>>>>>>> 3d4cd1fb23d8b65bea0b816416dc9c45302ccf9a
+//                }
+//                */
             });
 
             $("#course_name").on("change", function() {
@@ -912,9 +928,11 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 if (display == "accessoverview" || display == "exerciseprogress") {
                     window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId;
                 }
+                /*
                 if (isEmpty(sessionId)) {
                     select2("#session_name", "' .  $ajax_path . 'session.ajax.php?a=search_session_by_course&course_id=" + courseId);
                 }
+                */
                 if (typeof $("#survey_name") == "object") {
                     var surveyId = $("#survey_name").val();
                     select2("#survey_name", "' . $ajax_path . 'course.ajax.php?a=search_survey_by_course&session_id=" + sessionId + "&course_id=" + courseId + "&survey_id=" + surveyId);
@@ -955,7 +973,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 placeholder: "Elegir una opción",
                 allowClear: true,
                 width: "400px",
-                minimumInputLength: 2,
+                minimumInputLength: ' . $minimumInputLength . ',
                 // instead of writing the function to execute the request we use Select2s convenient helper
                 ajax: {
                     url: url,

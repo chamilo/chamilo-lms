@@ -744,8 +744,10 @@ class SessionManager
      */
     public static function get_session_progress($sessionId, $courseId, $date_from, $date_to, $options)
     {
+        $getAllSessions = false;
         if (empty($sessionId)) {
             $sessionId = 0;
+            $getAllSessions = true;
         }
         //tables
         $session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -794,14 +796,18 @@ class SessionManager
         if (!empty($sessionId)) {
             $where .= ' AND id_session = %s';
             $queryVariables[] = $sessionId;
-            $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code
+            $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, 
+                u.email, s.course_code, s.id_session
                 FROM $session_course_user s
                 INNER JOIN $user u ON u.user_id = s.id_user
                 $where $order $limit";
         } else {
-            $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code
-                FROM $course_rel_user s
-                INNER JOIN $user u ON  u.user_id = s.user_id
+//            $where .= ' AND id_session = %s';
+//            $queryVariables[] = $sessionId;
+            $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, 
+                u.email, s.course_code, s.id_session
+                FROM $session_course_user s
+                INNER JOIN $user u ON u.user_id = s.id_user
                 $where $order $limit";
         }
 
@@ -838,21 +844,29 @@ class SessionManager
          *  Exercises
          */
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-        $exercises = get_all_exercises($course, $sessionId);
+        $exercises = get_all_exercises($course, $sessionId, false, '', $getAllSessions);
         $exercises_total = count($exercises);
 
         /**
          *  Assignments
          */
         //total
-        $sql = "SELECT count(w.id) as count
-        FROM $workTable w
-        LEFT JOIN  $workTableAssignment a ON (a.publication_id = w.id AND a.c_id = w.c_id)
-        WHERE w.c_id = %s
-        AND parent_id = 0
-        AND active IN (1, 0)
-        AND  session_id = %s";
-
+        if ($getAllSessions) {
+            $sql = "SELECT count(w.id) as count
+            FROM $workTable w
+            LEFT JOIN  $workTableAssignment a ON (a.publication_id = w.id AND a.c_id = w.c_id)
+            WHERE w.c_id = %s
+            AND parent_id = 0
+            AND active IN (1, 0)";
+        } else {
+            $sql = "SELECT count(w.id) as count
+            FROM $workTable w
+            LEFT JOIN  $workTableAssignment a ON (a.publication_id = w.id AND a.c_id = w.c_id)
+            WHERE w.c_id = %s
+            AND parent_id = 0
+            AND active IN (1, 0)
+            AND  session_id = %s";
+        }
 
         $sql_query = sprintf($sql, $course['real_id'], $sessionId);
         if (self::$_debug) {
@@ -865,8 +879,13 @@ class SessionManager
         /**
          * Wiki
          */
-        $sql = "SELECT count(distinct page_id)  as count FROM $wiki
-            WHERE c_id = %s and session_id = %s";
+        if ($getAllSessions) {
+            $sql = "SELECT count(distinct page_id)  as count FROM $wiki
+                WHERE c_id = %s";
+        } else {
+            $sql = "SELECT count(distinct page_id)  as count FROM $wiki
+                WHERE c_id = %s and session_id = %s";
+        }
         $sql_query = sprintf($sql, $course['real_id'], $sessionId);
         if (self::$_debug) {
             error_log($sql_query);
@@ -895,9 +914,15 @@ class SessionManager
          * Forums
          */
         //total
-        $sql = "SELECT count(*) as count
-        FROM $forum f
-        where f.c_id = %s and f.session_id = %s";
+        if ($getAllSessions) {
+            $sql = "SELECT count(*) as count
+            FROM $forum f
+            where f.c_id = %s";
+        } else {
+            $sql = "SELECT count(*) as count
+            FROM $forum f
+            where f.c_id = %s and f.session_id = %s";
+        }
         $sql_query = sprintf($sql, $course['real_id'], $sessionId);
         if (self::$_debug) {
             error_log($sql_query);
@@ -917,7 +942,7 @@ class SessionManager
             AND access_cours_code = '%s'
             AND access_session_id = %s
             AND access_user_id = %s ";
-            $sql_query  = sprintf($sql, $course['code'], $sessionId, $user['user_id']);
+            $sql_query  = sprintf($sql, $course['code'], $user['id_session'], $user['user_id']);
             if (self::$_debug) {
                 error_log($sql_query);
             }
@@ -927,17 +952,17 @@ class SessionManager
 
             //Lessons
             //TODO: Lessons done and left is calculated by progress per item in lesson, maybe we should calculate it only per completed lesson?
-            $lessons_progress   = Tracking::get_avg_student_progress($user['user_id'], $course['code'], array(), $sessionId);
+            $lessons_progress   = Tracking::get_avg_student_progress($user['user_id'], $course['code'], array(), $user['id_session']);
             $lessons_done       = ($lessons_progress * $lessons_total) / 100;
             $lessons_left       = $lessons_total - $lessons_done;
 
             //Exercises
-            $exercises_progress     = str_replace('%', '', Tracking::get_exercise_student_progress($exercises, $user['user_id'], $course['code'], $sessionId));
+            $exercises_progress     = str_replace('%', '', Tracking::get_exercise_student_progress($exercises, $user['user_id'], $course['code'], $user['id_session']));
             $exercises_done         = ($exercises_progress * $exercises_total) / 100;
             $exercises_left         = $exercises_total - $exercises_done;
 
             //Assignments
-            $assignments_done       = Tracking::count_student_assignments($user['user_id'], $course['code'], $sessionId);
+            $assignments_done       = Tracking::count_student_assignments($user['user_id'], $course['code'], $user['id_session']);
             $assignments_left       = $assignments_total - $assignments_done;
             if (!empty($assignments_total)) {
                 $assignments_progress   =  round((( $assignments_done * 100 ) / $assignments_total ), 2);
@@ -951,7 +976,7 @@ class SessionManager
             $sql = "SELECT count(*) as count
             FROM $wiki
             where c_id = %s and session_id = %s and user_id = %s";
-            $sql_query  = sprintf($sql, $course['real_id'], $sessionId, $user['user_id']);
+            $sql_query  = sprintf($sql, $course['real_id'], $user['id_session'], $user['user_id']);
             if (self::$_debug) {
                 error_log($sql_query);
             }
@@ -996,7 +1021,7 @@ class SessionManager
             $sql = "SELECT count(distinct f.forum_id) as count FROM $forum_post p
             INNER JOIN $forum f ON f.forum_id = p.forum_id
             WHERE p.poster_id = %s and f.session_id = %s and p.c_id = %s";
-            $sql_query  = sprintf($sql, $user['user_id'], $sessionId, $course['real_id']);
+            $sql_query  = sprintf($sql, $user['user_id'], $user['id_session'], $course['real_id']);
             if (self::$_debug) {
                 error_log($sql_query);
             }
@@ -1014,11 +1039,11 @@ class SessionManager
             //Overall Total
             $overall_total =  ($course_description_progress + $exercises_progress + $forums_progress + $assignments_progress + $wiki_progress + $surveys_progress) / 6;
 
-            $link       =  '<a href="' . api_get_path(WEB_CODE_PATH) . 'mySpace/myStudents.php?student='. $user[0]. '&details=true&course=' . $course['code'] . '&id_session=' .  $sessionId . '"> %s </a>';
-            $linkForum  =  '<a href="' . api_get_path(WEB_CODE_PATH) . 'forum/index.php?cidReq=' . $course['code'] . '&id_session=' .  $sessionId . '"> %s </a>';
-            $linkWork   =  '<a href="' . api_get_path(WEB_CODE_PATH) . 'work/work.php?cidReq=' . $course['code'] . '&id_session=' .  $sessionId . '"> %s </a>';
-            $linkWiki   =  '<a href="' . api_get_path(WEB_CODE_PATH) . 'wiki/index.php?cidReq=' . $course['code'] . '&session_id=' .  $sessionId . '&action=statistics"> %s </a>';
-            $linkSurvey =  '<a href="' . api_get_path(WEB_CODE_PATH) . 'survey/survey_list.php?cidReq=' . $course['code'] . '&id_session=' .  $sessionId . '"> %s </a>';
+            $link       =  '<a href="' . api_get_path(WEB_CODE_PATH) . 'mySpace/myStudents.php?student='. $user[0]. '&details=true&course=' . $course['code'] . '&id_session=' .  $user['id_session'] . '"> %s </a>';
+            $linkForum  =  '<a href="' . api_get_path(WEB_CODE_PATH) . 'forum/index.php?cidReq=' . $course['code'] . '&id_session=' .  $user['id_session'] . '"> %s </a>';
+            $linkWork   =  '<a href="' . api_get_path(WEB_CODE_PATH) . 'work/work.php?cidReq=' . $course['code'] . '&id_session=' .  $user['id_session'] . '"> %s </a>';
+            $linkWiki   =  '<a href="' . api_get_path(WEB_CODE_PATH) . 'wiki/index.php?cidReq=' . $course['code'] . '&session_id=' .  $user['id_session'] . '&action=statistics"> %s </a>';
+            $linkSurvey =  '<a href="' . api_get_path(WEB_CODE_PATH) . 'survey/survey_list.php?cidReq=' . $course['code'] . '&id_session=' .  $user['id_session'] . '"> %s </a>';
 
             $table[] = array(
                 'lastname'  => $user[1],

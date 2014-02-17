@@ -166,7 +166,8 @@ if (!empty($attempts)) {
 			$row['result'] = $score;
 		}
 
-		if (in_array($objExercise->results_disabled, array(RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS, RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES))) {
+		if (in_array($objExercise->results_disabled, array(RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS, RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES))
+            || ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY && $objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END)) {
 			$row['attempt_link'] = $attempt_link;
 		}
 		$my_attempt_array[] = $row;
@@ -185,7 +186,12 @@ if (!empty($attempts)) {
 			$header_names = array(get_lang('Attempt'), get_lang('StartDate'));
 			break;
 		case RESULT_DISABLE_SHOW_SCORE_ONLY:
-			$header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('Score'));
+            if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_END) {
+			    $header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('Score'));
+            }
+            else {
+                $header_names = array(get_lang('Attempt'), get_lang('StartDate'), get_lang('Score'), get_lang('Details'));
+            }
 			break;
 	}
 	$column = 0;

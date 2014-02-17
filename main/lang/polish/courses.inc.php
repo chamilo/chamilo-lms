@@ -84,6 +84,7 @@ $Collapse = "Zwiń";
 $CourseDetails = "Opis kursu";
 $GroupPendingInvitations = "Oczekujące zaproszenia do grupy";
 $Compose = "Utwórz";
+$EmptyHeaderLine = "Jest pusta linia w nagłówku wybranego pliku";
 $EnrollToCourseXSuccessful = "Zostałeś zarejestrowany na kurs: %s";
 $ThereAreNoCoursesInThisCategory = "Brak kursu w tej kategorii";
 ?>

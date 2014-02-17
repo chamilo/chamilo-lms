@@ -77,7 +77,6 @@ $langUserHasPermissionNot = "Пользователь не обладает пр
 $langUserHasPermission = "Пользователь обладает правами";
 $langLegend = "Легенда (надпись)";
 $langUserHasPermissionByRoleGroup = "Пользователь имеет права этой группы";
-$EditPost = "Редактировать статью";
 $AddBlog = "Создать новый блог";
 $EditBlog = "Редактировать заголовок и подзаголовок";
 $DeleteBlog = "Удалить этот блог";

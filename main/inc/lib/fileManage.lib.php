@@ -28,7 +28,7 @@ function update_db_info($action, $old_path, $new_path = '') {
     		WHERE path='".$old_path."' OR path LIKE '".$old_path."/%'";
         */
         $old_path = Database::escape_string($old_path);
-        $to_delete = "WHERE c_id = $course_id AND path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%'";
+        $to_delete = "WHERE c_id = $course_id AND (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
         $query = "DELETE FROM $dbTable " . $to_delete;
 
         $result = Database::query("SELECT id FROM $dbTable " . $to_delete);
@@ -65,7 +65,7 @@ function update_db_info($action, $old_path, $new_path = '') {
 		$new_path = Database::escape_string($new_path);
 		$query = "UPDATE $dbTable
 		SET path = CONCAT('".$new_path."', SUBSTRING(path, LENGTH('".$old_path."')+1) )
-		WHERE c_id = $course_id AND path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%'";
+		WHERE c_id = $course_id AND (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
 	}	
 	Database::query($query);
 }

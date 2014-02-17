@@ -38,6 +38,7 @@ $EndsAt = "Kończy się (zamknięcie)";
 $QualificationOfAssignment = "Ocena zadania";
 $MakeQualifiable = "Dodaj do dziennika ocen";
 $QualificationNumberOver = "Wynik";
+$WeightInTheGradebook = "Waga wewnątrz oceny";
 $DatesAvailables = "Dostępne daty";
 $ExpiresAt = "Wygasa";
 $AddToCalendar = "Dodaj do kalendarza";

@@ -77,7 +77,6 @@ $langUserHasPermissionNot = "用戶沒有權限";
 $langUserHasPermission = "用戶有權限";
 $langLegend = "圖例";
 $langUserHasPermissionByRoleGroup = "用戶有群組的權限";
-$EditPost = "編輯文章";
 $AddBlog = "創建新網誌";
 $EditBlog = "編輯標題及副標題";
 $DeleteBlog = "刪除本網誌";

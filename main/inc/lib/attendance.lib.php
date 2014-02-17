@@ -35,14 +35,16 @@ class Attendance
 	 * Get the total number of attendance inside current course and current session
 	 * @see SortableTable#get_total_number_of_items()
 	 */
-	static function get_number_of_attendances() {
+	static function get_number_of_attendances($active = -1) {
 		$tbl_attendance = Database :: get_course_table(TABLE_ATTENDANCE);
-
 		$session_id = api_get_session_id();
 		$condition_session = api_get_session_condition($session_id);
         $course_id = api_get_course_int_id();
 		$sql = "SELECT COUNT(att.id) AS total_number_of_items FROM $tbl_attendance att
-		        WHERE c_id = $course_id AND att.active = 1 $condition_session ";
+		        WHERE c_id = $course_id $condition_session ";
+        if ($active == 1 || $active == 0) {
+            $sql .= "AND att.active = $active";
+        }
 		$res = Database::query($sql);
 		$obj = Database::fetch_object($res);
 		return $obj->total_number_of_items;
@@ -102,10 +104,9 @@ class Attendance
             $direction = 'ASC';
         }
 
-        $active_plus = 'att.active = 1';
-
-        if (api_is_platform_admin()) {
-            $active_plus = ' 1 = 1 ';
+        $active_plus = '';
+        if ((isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') || !api_is_allowed_to_edit(null, true)) {
+            $active_plus = 'AND att.active = 1';
         }
 
 		$sql = "SELECT
@@ -117,7 +118,7 @@ class Attendance
                     att.active AS col5,
                     att.session_id
 				FROM $tbl_attendance att
-				WHERE c_id = $course_id AND $active_plus $condition_session
+				WHERE c_id = $course_id $active_plus $condition_session
 				ORDER BY col$column $direction LIMIT $from,$number_of_items ";
 
 		$res = Database::query($sql);
@@ -150,29 +151,37 @@ class Attendance
                 }
 
             } else {
-                $attendance[1] = '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.$student_param.'"><del>'.$attendance[1].'</del></a>'.$session_star;
+                $attendance[1] = '<a class="muted" href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance[0].$param_gradebook.$student_param.'">'.$attendance[1].'</a>'.$session_star;
             }
+
+            if ($attendance[5] == 1) {
+                $attendance[3] = '<center>'.$attendance[3].'</center>';
+            }
+            else {
+                $attendance[3] = '<center><span class="muted">'.$attendance[3].'</span></center>';
+            }
+
 			$attendance[3] = '<center>'.$attendance[3].'</center>';
 			if (api_is_allowed_to_edit(null, true)) {
 				$actions  = '';
 				$actions .= '<center>';
 
                 if (api_is_platform_admin()) {
-                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.png',get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
+                    $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
                     if ($attendance[5] == 1) {
-                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('visible.png', get_lang('Hide'), array(), ICON_SIZE_SMALL).'</a>';
                     } else {
-                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToRestore').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_restore&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('invisible.png',get_lang('Restore'), array(), ICON_SIZE_SMALL).'</a>';
-                        $attendance[2] = '<del>'.$attendance[2].'</del>';
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_restore&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('invisible.png', get_lang('Show'), array(), ICON_SIZE_SMALL).'</a>';
+                        $attendance[2] = '<span class="muted">'.$attendance[2].'</span>';
                     }
                 } else {
                     $is_locked_attendance = self::is_locked_attendance($attendance[0]);
                     if ($is_locked_attendance) {
-                        $actions .= Display::return_icon('edit_na.png',get_lang('Edit')).'&nbsp;';
-                        $actions .= Display::return_icon('delete_na.png',get_lang('Delete'));
+                        $actions .= Display::return_icon('edit_na.png', get_lang('Edit')).'&nbsp;';
+                        $actions .= Display::return_icon('visible.png', get_lang('Hide'));
                     } else {
-                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.png',get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
-                        $actions .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_edit&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>&nbsp;';
+                        $actions .= '<a href="index.php?'.api_get_cidreq().'&action=attendance_delete&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('visible.png', get_lang('Hide'), array(), ICON_SIZE_SMALL).'</a>';
                     }
                 }
 
@@ -187,12 +196,12 @@ class Attendance
                         } else {
                             $message_alert = get_lang('UnlockMessageInformation');
                         }
-                        $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.$message_alert.'\')) return false;" href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('unlock.png',get_lang('LockAttendance')).'</a>';
+                        $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.$message_alert.'\')) return false;" href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('unlock.png', get_lang('LockAttendance')).'</a>';
                     } else {
                         if (api_is_platform_admin()) {
-                            $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToUnlockTheAttendance').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('locked.png',get_lang('UnlockAttendance')).'</a>';
+                            $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToUnlockTheAttendance').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$attendance[0].$param_gradebook.'">'.Display::return_icon('locked.png', get_lang('UnlockAttendance')).'</a>';
                         } else {
-                            $actions .= '&nbsp;'.Display::return_icon('locked_na.png',get_lang('LockedAttendance'));
+                            $actions .= '&nbsp;'.Display::return_icon('locked_na.png', get_lang('LockedAttendance'));
                         }
                     }
                 }
@@ -710,7 +719,7 @@ class Attendance
 		$color_bar = '';
 
 		if ($faults_porcent > 25  ) {
-			$color_bar = '#F11';
+			$color_bar = '#f28989';
 		} else if ($faults_porcent > 10) {
 			$color_bar = '#F90';
 		}

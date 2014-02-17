@@ -78,7 +78,6 @@ $langUserHasPermissionNot = "Korisnik nema prava";
 $langUserHasPermission = "Korisnik ima prava";
 $langLegend = "Kazalo";
 $langUserHasPermissionByRoleGroup = "Korisnik ima prava grupe kojoj pripada";
-$EditPost = "Uredi članak";
 $AddBlog = "Dodaj novi blog";
 $EditBlog = "Uredi naslov i podnaslov";
 $DeleteBlog = "Obriši ovaj blog";

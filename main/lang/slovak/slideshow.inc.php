@@ -16,4 +16,8 @@ $SlideShow = "Prezentácia";
 $PreviousSlide = "Predchádzajúci snímok";
 $NextSlide = "Nasledujúci snímok";
 $ViewSlideshow = "Prezrieť si prezentáciu";
+$FirstSlide = "Prvá snímka";
+$LastSlide = "Posledná snímka";
+$ResizingAuto = "Automatické nastavenie veľkosti (predvolené)";
+$ResizingAutoComment = "Táto prezentácia sa bude automaticky meniť veľkosť podľa veľkosti vašej obrazovky. Toto je predvolená možnosť.";
 ?>

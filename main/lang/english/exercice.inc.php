@@ -2,6 +2,70 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$TestFeedbackNotShown = "This test is configured not to display feedback to learners. Comments will not be seen at the end of the test, but may be useful for you, as teacher, when reviewing the question details.";
+$FeedbackDisplayOptions = "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test. We recommend you try different options by editing your test options before having learners take it.";
+$ImportAikenQuizExplanationExample = "This is the text for question 1
+A. Answer 1
+B. Answer 2
+C. Answer 3
+ANSWER: B
+
+This is the text for question 2
+A. Answer 1
+B. Answer 2
+C. Answer 3
+D. Answer 4
+ANSWER: D
+ANSWER_EXPLANATION: this is an optional feedback comment that will appear next to the correct answer.";
+$ImportAikenQuizExplanation = "The Aiken format comes in a simple text (.txt) file, with several question blocks, each separated by a blank line. The first line is the question, the answer lines are prefixed by a letter and a dot, and the correct answer comes next with the ANSWER: prefix. See example below.";
+$ExerciseAikenErrorNoAnswerOptionGiven = "The imported file has at least one question without any answer (or the answers do not include the required prefix letter). Please make sure each question has at least one answer and that it is prefixed by a letter and a dot or a parenthesis, like this: A. answer one";
+$ExerciseAikenErrorNoCorrectAnswerDefined = "The imported file includes at least one question without any correct answer defined. Please make sure all questions include the ANSWER: [Letter] line.";
+$ThereWasAProblemWithYourFile = "There was an unknown issue with your file. Please review its format and try again.";
+$YouMustUploadAZipOrTxtFile = "You must upload a .txt or .zip file";
+$NoTxtFileFoundInTheZip = "No .txt file found in zip";
+$ImportAikenQuiz = "Import Aiken quiz";
+$ExerciseWasActivatedFromXToY = "Exercise was activated from %s to %s";
+$SelectAnAnswerToContinue = "Select an answer to continue";
+$IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed = "If you continue your answers will be saved, any change will be not allowed later. Are you sure you want to continue?";
+$YesImSure = "Yes, I'm sure!";
+$NoIWantToTurnBack = "No, I want to continue the exercise.";
+$QuestionReused = "Question added in the exercise";
+$QuestionCopied = "Question copied to the exercise";
+$ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected = "-1 = All questions will be selected.
+ 0 = No questions will be selected.";
+$EmailNotificationTemplateDescription = "You can customize the email sent to users when they finished the exercise. You can use tags like these:
+
+1. {{ student.username }}
+2. {{ student.firstname }}
+3. {{ student.lastname }}
+4. {{ student.official_code }}
+5. {{ exercise.title }}
+6. {{ exercise.start_time }}
+7. {{ exercise.end_time }}
+8. {{ course.title }}
+9. {{ course.code }}";
+$EmailNotificationTemplate = "Email notification template";
+$ExerciseEndButtonDisconnect = "Logout";
+$ExerciseEndButtonExerciseHome = "Exercise list.";
+$ExerciseEndButtonCourseHome = "Course home";
+$ExerciseEndButton = "Exercise end button";
+$HideQuestionTitle = "Hide question title";
+$QuestionSelection = "Question selection type";
+$OrderedCategoriesByParentWithQuestionsRandom = "Ordered categories by parent with random questions";
+$OrderedCategoriesByParentWithQuestionsOrdered = "Ordered categories by parent with questions ordered";
+$RandomCategoriesWithRandomQuestionsNoQuestionGrouped = "Random categories with random questions (questions not grouped)";
+$RandomCategoriesWithQuestionsOrderedNoQuestionGrouped = "Random categories with questions ordered (questions not grouped)";
+$RandomCategoriesWithRandomQuestions = "Random categories with random questions";
+$OrderedCategoriesAlphabeticallyWithRandomQuestions = "Ordered categories alphabetically with random questions";
+$RandomCategoriesWithQuestionsOrdered = "Random categories with questions ordered";
+$OrderedCategoriesAlphabeticallyWithQuestionsOrdered = "Ordered categories alphabetically with questions ordered";
+$UsingCategories = "Using categories";
+$OrderedByUser = "Ordered by user";
+$ToReview = "To be reviewed";
+$Unanswered = "Unanswered";
+$Answered = "Answered";
+$CurrentQuestion = "Current question";
+$MediaQuestions = "Shareable enunciates";
 $AddedToLPCannotBeAccessed = "This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.";
 $langExercice = "Test";
 $langActivate = "Show";
@@ -351,6 +415,7 @@ $AreYouSureToDeleteResults = "Are you sure to delete results";
 $ExerciseCopied = "Exercise copied";
 $AreYouSureToCopy = "Are you sure to copy";
 $EditingExerciseCauseProblemsInLP = "Editing exercise cause problems in Learning Path";
+$ExerciseWithFeedbackWithoutCorrectionComment = "Note: This test has been setup to hide the expected answers.";
 $SessionIsReadOnly = "The session is read only";
 $EnableTimerControl = "Enable time control";
 $ExerciseTotalDurationInMinutes = "Total duration in minutes of the test";

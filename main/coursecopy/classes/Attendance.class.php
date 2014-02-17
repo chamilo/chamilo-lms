@@ -6,10 +6,11 @@ require_once 'Resource.class.php';
  * @package chamilo.backup
  */
 
-class Attendance extends Resource {
+class Attendance extends Resource
+{
 		
-	var $params = array();	
-	var $attendance_calendar = array();	
+    public $params = array();
+    public $attendance_calendar = array();
 	
 	
 	/**
@@ -17,17 +18,20 @@ class Attendance extends Resource {
 	 * 
 	 * @param array parameters	
 	 */
-	public function __construct($params) {
+    public function __construct($params)
+    {
 		parent::Resource($params['id'], RESOURCE_ATTENDANCE);
 		$this->params = $params;
 	}
 
-	public function show() {
+    public function show()
+    {
 		parent::show();
 		echo $this->params['name'];
 	}
 	
-	public function add_attendance_calendar($data) {		
+    public function add_attendance_calendar($data)
+    {
 		$this->attendance_calendar[] = $data;
 	}	
 }

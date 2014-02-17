@@ -61,7 +61,7 @@ if ( empty ( $action ) ) {              $action         = $_REQUEST['action']; }
 $id = intval($_REQUEST['id']); //exe id
 
 if (empty($id)) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 if (api_is_course_session_coach(api_get_user_id(), api_get_course_id(), api_get_session_id())) {
@@ -70,7 +70,7 @@ if (api_is_course_session_coach(api_get_user_id(), api_get_course_id(), api_get_
     }
 }
 
-$is_allowedToEdit = api_is_allowed_to_edit(null,true) || $is_courseTutor || api_is_session_admin() || api_is_drh();
+$is_allowedToEdit = api_is_allowed_to_edit(null, true) || $is_courseTutor || api_is_session_admin() || api_is_drh();
 
 //Getting results from the exe_id. This variable also contain all the information about the exercise
 $track_exercise_info = get_exercise_track_exercise_info($id);
@@ -428,12 +428,12 @@ foreach ($questionList as $questionId) {
             </tr></table>';
 
             if ($answerType!= HOT_SPOT_DELINEATION) {
-                $item_list=explode('@@',$destination);
-                //print_R($item_list);
+                $item_list = explode('@@',$destination);
+
                 $try = $item_list[0];
                 $lp = $item_list[1];
-                $destinationid= $item_list[2];
-                $url=$item_list[3];
+                $destinationid = $item_list[2];
+                $url = $item_list[3];
                 $table_resume='';
             } else {
                 if ($next==0) {

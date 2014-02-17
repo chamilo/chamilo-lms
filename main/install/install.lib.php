@@ -93,6 +93,18 @@ function check_php_setting($php_setting, $recommended_value, $return_success = f
     }
 }
 
+
+/**
+ *  This function return the value of a php.ini setting if not "" or if exists, otherwise return false
+ */
+function check_php_setting_exists($php_setting) {
+    if (ini_get($php_setting) != "") {
+        return ini_get($php_setting);
+    }
+    return false;
+} 
+
+
 /**
  * Returns a textual value ('ON' or 'OFF') based on a requester 2-state ini- configuration setting.
  *
@@ -1056,6 +1068,12 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
 
     //  SERVER REQUIREMENTS
     echo '<div class="RequirementHeading"><h2>'.get_lang('ServerRequirements').'</h2>';
+    
+    $timezone = check_php_setting_exists("date.timezone");
+    if (!$timezone) {
+        echo "<div class='warning-message'>".Display::return_icon('warning.png',get_lang('Warning'),'',ICON_SIZE_MEDIUM).get_lang("DateTimezoneSettingNotSet")."</div>";
+    }
+    
     echo '<div class="RequirementText">'.get_lang('ServerRequirementsInfo').'</div>';
     echo '<div class="RequirementContent">';
     echo '<table class="table">
@@ -2144,11 +2162,11 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
     $content = '<?php echo "123"; exit;';
 
     if (is_writable($file_name)) {
-        if ($handler = @fopen($file_name, "w")) {
-            //write content
-            if (fwrite($handler , $content)) {
+        if ($handler = @fopen($file_name, "w")) {
+            //write content
+            if (fwrite($handler, $content)) {
                 $sock_errno = ''; $sock_errmsg = '';
-                $url = api_get_path(WEB_COURSE_PATH).'/'.$course_attempt_name.'/'.$file;
+                $url = api_get_path(WEB_COURSE_PATH).$course_attempt_name.'/'.$file;
 
                 $parsed_url = parse_url($url);
                 //$scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] : ''; //http
@@ -2156,7 +2174,7 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
                 $path = isset($parsed_url['path']) ? $parsed_url['path'] : '/';
                 $port = isset($parsed_url['port']) ? $parsed_url['port'] : '80';
 
-                //Check fsockopen
+                //Check fsockopen (doesn't work with https)
                 if ($fp = @fsockopen(str_replace('http://', '', $url), -1, $sock_errno, $sock_errmsg, 60)) {
                     $out  = "GET $path HTTP/1.1\r\n";
                     $out .= "Host: $host\r\n";

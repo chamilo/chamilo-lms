@@ -21,51 +21,55 @@ api_protect_course_script(true);
 /*	Create the groups */
 
 if (isset ($_POST['action'])) {
-	switch ($_POST['action']) {
-		case 'create_groups':
-			$groups = array();
+    switch ($_POST['action']) {
+        case 'create_groups':
+            $groups = array();
 
-			for ($i = 0; $i < $_POST['number_of_groups']; $i ++) {
-				$group1['name'] = empty($_POST['group_'.$i.'_name']) ? get_lang('Group').' '.$i : $_POST['group_'.$i.'_name'];
-				$group1['category'] = isset($_POST['group_'.$i.'_category']) ? $_POST['group_'.$i.'_category'] : null;
-				$group1['tutor'] = isset($_POST['group_'.$i.'_tutor']) ? $_POST['group_'.$i.'_tutor'] : null;
-				$group1['places'] = isset($_POST['group_'.$i.'_places']) ? $_POST['group_'.$i.'_places'] : null;
-				$groups[] = $group1;
-			}
+            for ($i = 0; $i < $_POST['number_of_groups']; $i ++) {
+                $group1['name'] = empty($_POST['group_'.$i.'_name']) ? get_lang('Group').' '.$i : $_POST['group_'.$i.'_name'];
+                $group1['category'] = isset($_POST['group_'.$i.'_category']) ? $_POST['group_'.$i.'_category'] : null;
+                $group1['tutor'] = isset($_POST['group_'.$i.'_tutor']) ? $_POST['group_'.$i.'_tutor'] : null;
+                $group1['places'] = isset($_POST['group_'.$i.'_places']) ? $_POST['group_'.$i.'_places'] : null;
+                $groups[] = $group1;
+            }
 
-			foreach ($groups as $index => $group) {
-				if (!empty($_POST['same_tutor'])) {
-					$group['tutor'] = $_POST['group_0_tutor'];
-				}
-				if (!empty($_POST['same_places'])) {
-					$group['places'] = $_POST['group_0_places'];
-				}
-				if (api_get_setting('allow_group_categories') == 'false') {
-					$group['category'] = GroupManager::DEFAULT_GROUP_CATEGORY;
-				} elseif ($_POST['same_category']) {
-					$group['category'] = $_POST['group_0_category'];
-				}
-				GroupManager :: create_group($group['name'], $group['category'], $group['tutor'], $group['places']);
-			}
-			$msg = urlencode(count($groups).' '.get_lang('GroupsAdded'));
-			header('Location: group.php?action=show_msg&msg='.$msg);
-			break;
-		case 'create_virtual_groups':
-			$ids = GroupManager :: create_groups_from_virtual_courses();
-			$msg = urlencode(count($ids).' '.get_lang('GroupsAdded'));
-			header('Location: group.php?action=show_msg&msg='.$msg);
-			break;
-		case 'create_subgroups':
-			GroupManager :: create_subgroups($_POST['base_group'], $_POST['number_of_groups']);
-			$msg = urlencode($_POST['number_of_groups'].' '.get_lang('GroupsAdded'));
-			header('Location: group.php?action=show_msg&msg='.$msg);
-			break;
-		case 'create_class_groups':
-			$ids = GroupManager :: create_class_groups($_POST['group_category']);
-			$msg = urlencode(count($ids).' '.get_lang('GroupsAdded'));
-			header('Location: group.php?action=show_msg&msg='.$msg);
-			break;
-	}
+            foreach ($groups as $index => $group) {
+                if (!empty($_POST['same_tutor'])) {
+                    $group['tutor'] = $_POST['group_0_tutor'];
+                }
+                if (!empty($_POST['same_places'])) {
+                    $group['places'] = $_POST['group_0_places'];
+                }
+                if (api_get_setting('allow_group_categories') == 'false') {
+                    $group['category'] = GroupManager::DEFAULT_GROUP_CATEGORY;
+                } elseif ($_POST['same_category']) {
+                    $group['category'] = $_POST['group_0_category'];
+                }
+                GroupManager :: create_group($group['name'], $group['category'], $group['tutor'], $group['places']);
+            }
+            $msg = urlencode(count($groups).' '.get_lang('GroupsAdded'));
+            header('Location: group.php?action=show_msg&msg='.$msg);
+            exit;
+            break;
+        case 'create_virtual_groups':
+            $ids = GroupManager :: create_groups_from_virtual_courses();
+            $msg = urlencode(count($ids).' '.get_lang('GroupsAdded'));
+            header('Location: group.php?action=show_msg&msg='.$msg);
+            exit;
+            break;
+        case 'create_subgroups':
+            GroupManager :: create_subgroups($_POST['base_group'], $_POST['number_of_groups']);
+            $msg = urlencode($_POST['number_of_groups'].' '.get_lang('GroupsAdded'));
+            header('Location: group.php?action=show_msg&msg='.$msg);
+            exit;
+            break;
+        case 'create_class_groups':
+            $ids = GroupManager :: create_class_groups($_POST['group_category']);
+            $msg = urlencode(count($ids).' '.get_lang('GroupsAdded'));
+            header('Location: group.php?action=show_msg&msg='.$msg);
+            exit;
+            break;
+    }
 }
 
 $nameTools = get_lang('GroupCreation');
@@ -73,7 +77,7 @@ $interbreadcrumb[] = array ('url' => 'group.php', 'name' => get_lang('Groups'));
 Display :: display_header($nameTools, 'Group');
 
 if (!api_is_allowed_to_edit(false, true)) {
-	api_not_allowed();
+    api_not_allowed();
 }
 
 /*	MAIN TOOL CODE */
@@ -81,53 +85,46 @@ if (!api_is_allowed_to_edit(false, true)) {
 /*	Show group-settings-form */
 
 elseif (isset($_POST['number_of_groups'])) {
-	if (!is_numeric($_POST['number_of_groups']) || intval($_POST['number_of_groups']) < 1) {
-		Display :: display_error_message(get_lang('PleaseEnterValidNumber').'<br /><br /><a href="group_creation.php?'.api_get_cidreq().'">&laquo; '.get_lang('Back').'</a>', false);
-	} else {
-		$number_of_groups = intval($_POST['number_of_groups']);
-		if ($number_of_groups > 1) {
-?>
-	<script type="text/javascript">
-	<!--
-	var number_of_groups = <?php echo $number_of_groups; ?>;
-	function switch_state(key)
-	{
-		for( i=1; i<number_of_groups; i++)
-		{
-			element = document.getElementById(key+'_'+i);
-			element.disabled = !element.disabled;
-			disabled = element.disabled;
-		}
-		ref = document.getElementById(key+'_0');
-		if( disabled )
-		{
-			ref.addEventListener("change", copy, false);
-		}
-		else
-		{
-			ref.removeEventListener("change", copy, false);
-		}
-		copy_value(key);
-	}
-	function copy(e)
-	{
-		key = e.currentTarget.id;
-		var re = new RegExp ('_0', '') ;
-		var key = key.replace(re, '') ;
-		copy_value(key);
-	}
-	function copy_value(key)
-	{
-		ref = document.getElementById(key+'_0');
-		for( i=1; i<number_of_groups; i++)
-		{
-			element = document.getElementById(key+'_'+i);
-			element.value = ref.value;
-		}
-	}
-	-->
-	</script>
-<?php
+    if (!is_numeric($_POST['number_of_groups']) || intval($_POST['number_of_groups']) < 1) {
+        Display :: display_error_message(get_lang('PleaseEnterValidNumber').'<br /><br /><a href="group_creation.php?'.api_get_cidreq().'">&laquo; '.get_lang('Back').'</a>', false);
+    } else {
+        $number_of_groups = intval($_POST['number_of_groups']);
+        if ($number_of_groups > 1) {
+    ?>
+    <script type="text/javascript">
+    var number_of_groups = <?php echo $number_of_groups; ?>;
+    function switch_state(key) {
+        for( i=1; i<number_of_groups; i++) {
+            element = document.getElementById(key+'_'+i);
+            element.disabled = !element.disabled;
+            disabled = element.disabled;
+        }
+        ref = document.getElementById(key+'_0');
+        if( disabled ) {
+            ref.addEventListener("change", copy, false);
+        } else {
+            ref.removeEventListener("change", copy, false);
+        }
+        copy_value(key);
+    }
+
+    function copy(e) {
+        key = e.currentTarget.id;
+        var re = new RegExp ('_0', '') ;
+        var key = key.replace(re, '') ;
+        copy_value(key);
+    }
+
+    function copy_value(key) {
+        ref = document.getElementById(key+'_0');
+        for( i=1; i<number_of_groups; i++)
+        {
+            element = document.getElementById(key+'_'+i);
+            element.value = ref.value;
+        }
+    }
+    </script>
+    <?php
 		}
 		$group_categories = GroupManager :: get_categories();
 		$group_id = GroupManager :: get_number_of_groups() + 1;
@@ -137,7 +134,7 @@ elseif (isset($_POST['number_of_groups'])) {
 				$cat_options[$category['id']] = $category['title'];
 			}
 		}
-		$form = new FormValidator('create_groups_step2');
+        $form = new FormValidator('create_groups_step2', 'POST', api_get_self().'?'.api_get_cidreq());
 
 		// Modify the default templates
 		$renderer = $form->defaultRenderer();
@@ -217,7 +214,7 @@ EOT;
 	$categories = GroupManager :: get_categories();
 	//echo '<blockquote>';
 	if (count($categories) > 1 || isset ($categories[0]) && $categories[0]['id'] != GroupManager::VIRTUAL_COURSE_CATEGORY) {
-		$create_groups_form = new FormValidator('create_groups');
+        $create_groups_form = new FormValidator('create_groups', 'post', api_get_self().'?'.api_get_cidreq());
 		$create_groups_form->addElement('header', '', $nameTools);
 		$group_el = array ();
 		$group_el[] = $create_groups_form->createElement('static', null, null, get_lang('Create'));
@@ -232,24 +229,6 @@ EOT;
 	} else {
 		echo get_lang('NoCategoriesDefined');
 	}
-	//echo '</blockquote>';
-
-	/*
-	 * Show form to generate groups from virtual courses
-	 */
-	$virtual_courses = CourseManager :: get_virtual_courses_linked_to_real_course($_course['sysCode']);
-	if (count($virtual_courses) > 0) {
-		echo '<b>'.get_lang('CreateGroupsFromVirtualCourses').'</b>';
-		echo '<blockquote>';
-		echo get_lang('CreateGroupsFromVirtualCoursesInfo');
-		$create_virtual_groups_form = new FormValidator('create_virtual_groups');
-		$create_virtual_groups_form->addElement('hidden', 'action');
-		$create_virtual_groups_form->addElement('submit', 'submit', get_lang('Ok'));
-		$create_virtual_groups_form->setDefaults(array('action' => 'create_virtual_groups'));
-		$create_virtual_groups_form->display();
-		echo '</blockquote>';
-	}
-
 	/*
 	 * Show form to generate subgroups
 	 */
@@ -323,7 +302,6 @@ EOT;
 		$create_class_groups_form->display();
 		echo '</blockquote>';
 	}
-
 }
 
 /*	FOOTER */

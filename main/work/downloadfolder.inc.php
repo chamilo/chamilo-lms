@@ -17,54 +17,86 @@ api_protect_course_script(true);
 require_once 'work.lib.php';
 
 $work_data = get_work_data_by_id($work_id);
+$groupId = api_get_group_id();
 if (empty($work_data)) {
     exit;
 }
 
-//prevent some stuff
+// Prevent some stuff.
 if (empty($path)) {
-	$path = '/';
+    $path = '/';
 }
 
 if (empty($_course) || empty($_course['path'])) {
     api_not_allowed();
 }
+
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 
 //zip library for creation of the zipfile
 require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 
-//Creating a ZIP file
+// Creating a ZIP file
 $temp_zip_file = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
 
 $zip_folder = new PclZip($temp_zip_file);
 
 $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-$prop_table              = Database::get_course_table(TABLE_ITEM_PROPERTY);
+$prop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
+$tableUser = Database::get_main_table(TABLE_MAIN_USER);
 
-//Put the files in the zip
-//2 possibilities: admins get all files and folders in the selected folder (except for the deleted ones)
-//normal users get only visible files that are in visible folders
+// Put the files in the zip
+// 2 possibilities: admins get all files and folders in the selected folder (except for the deleted ones)
+// normal users get only visible files that are in visible folders
 
 //admins are allowed to download invisible files
 $files = array();
 $course_id = api_get_course_int_id();
+$sessionId = api_get_session_id();
+
+$filenameCondition = null;
+if (array_key_exists('filename', $work_data)) {
+    $filenameCondition = ", filename";
+}
 
 if (api_is_allowed_to_edit()) {
     //Search for all files that are not deleted => visibility != 2
-    $sql = "SELECT url, title, description, insert_user_id, insert_date, contains_file
+    $sql = "SELECT DISTINCT url, title, description, insert_user_id, insert_date, contains_file $filenameCondition
             FROM $tbl_student_publication AS work INNER JOIN $prop_table AS props
-                ON (props.c_id = $course_id AND
-                    work.c_id = $course_id AND
-                    work.id = props.ref)
- 			WHERE   props.tool='work' AND
- 			        work.parent_id = $work_id AND
- 			        work.filetype = 'file' AND
- 			        props.visibility<>'2' ";
+            INNER JOIN $tableUser as u
+            ON (
+                props.c_id = $course_id AND
+                work.c_id = $course_id AND
+                work.id = props.ref AND
+                props.tool='work' AND
+                work.user_id = u.user_id
+            )
+ 			WHERE
+                work.parent_id = $work_id AND
+                work.filetype = 'file' AND
+                props.visibility <> '2' AND
+                work.active IN (0, 1) AND
+                work.post_group_id = $groupId AND
+                session_id = $sessionId
+            ";
 
 } else {
+    $courseInfo = api_get_course_info();
+
+    allowOnlySubscribedUser(api_get_user_id(), $work_id, $courseInfo['real_id']);
+
+    $userCondition = null;
+
+    // All users
+    if ($courseInfo['show_score'] == 0) {
+        // Do another filter
+    } else {
+        // Only teachers
+        $userCondition = " AND props.insert_user_id = ".api_get_user_id();
+    }
+
     //for other users, we need to create a zipfile with only visible files and folders
-    $sql = "SELECT url, title, description, insert_user_id, insert_date, contains_file
+    $sql = "SELECT DISTINCT url, title, description, insert_user_id, insert_date, contains_file $filenameCondition
             FROM $tbl_student_publication AS work INNER JOIN $prop_table AS props
                 ON (props.c_id = $course_id AND
                     work.c_id = $course_id AND
@@ -72,13 +104,14 @@ if (api_is_allowed_to_edit()) {
            WHERE
                     props.tool='work' AND
                     work.accepted = 1 AND
+                    work.active = 1 AND
                     work.parent_id = $work_id AND
-                    work.filetype='file' AND
+                    work.filetype = 'file' AND
                     props.visibility = '1' AND
-                    props.insert_user_id='".api_get_user_id()."'
+                    work.post_group_id = $groupId
+                    $userCondition
             ";
 }
-
 $query = Database::query($sql);
 
 //add tem to the zip file
@@ -86,25 +119,43 @@ while ($not_deleted_file = Database::fetch_assoc($query)) {
 
     $user_info = api_get_user_info($not_deleted_file['insert_user_id']);
     $insert_date = api_get_local_time($not_deleted_file['insert_date']);
-    $insert_date = str_replace(array(':','-', ' '), '_', $insert_date);
-    $filename = $insert_date.'_'.$user_info['username'].'_'.basename($not_deleted_file['title']);
+    $insert_date = str_replace(array(':', '-', ' '), '_', $insert_date);
 
-    if (file_exists($sys_course_path.$_course['path'].'/'.$not_deleted_file['url']) && !empty($not_deleted_file['url'])) {
-        $files[basename($not_deleted_file['url'])] = $filename;
-        $zip_folder->add($sys_course_path.$_course['path'].'/'.$not_deleted_file['url'], PCLZIP_OPT_REMOVE_PATH, $sys_course_path.$_course['path'].'/work', PCLZIP_CB_PRE_ADD, 'my_pre_add_callback');
+    $title = basename($not_deleted_file['title']);
+    if (!empty($filenameCondition)) {
+        if (isset($not_deleted_file['filename']) && !empty($not_deleted_file['filename'])) {
+            $title = $not_deleted_file['filename'];
+        }
     }
 
-    //Convert texts in html files
-    if ($not_deleted_file['contains_file'] == 0) {
+    $filename = $insert_date.'_'.$user_info['username'].'_'.$title;
+    // File exists
+    if (file_exists($sys_course_path.$_course['path'].'/'.$not_deleted_file['url']) && !empty($not_deleted_file['url'])) {
+        $files[basename($not_deleted_file['url'])] = $filename;
+        $addStatus = $zip_folder->add(
+            $sys_course_path.$_course['path'].'/'.$not_deleted_file['url'],
+            PCLZIP_OPT_REMOVE_PATH,
+            $sys_course_path.$_course['path'].'/work',
+            PCLZIP_CB_PRE_ADD,
+            'my_pre_add_callback'
+        );
+    } else {
+    // Convert texts in html files
+    //if ($not_deleted_file['contains_file'] == 0) {
         $filename = trim($filename).".html";
         $work_temp = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'_'.$filename;
         file_put_contents($work_temp, $not_deleted_file['description']);
         $files[basename($work_temp)] = $filename;
-        $zip_folder->add($work_temp, PCLZIP_OPT_REMOVE_PATH, api_get_path(SYS_ARCHIVE_PATH), PCLZIP_CB_PRE_ADD, 'my_pre_add_callback');
+        $addStatus = $zip_folder->add(
+            $work_temp,
+            PCLZIP_OPT_REMOVE_PATH,
+            api_get_path(SYS_ARCHIVE_PATH),
+            PCLZIP_CB_PRE_ADD,
+            'my_pre_add_callback'
+        );
         @unlink($work_temp);
     }
 }
-
 
 if (!empty($files)) {
     //logging
@@ -112,7 +163,6 @@ if (!empty($files)) {
 
     //start download of created file
     $name = basename($work_data['title']).'.zip';
-
     if (Security::check_abs_path($temp_zip_file, api_get_path(SYS_ARCHIVE_PATH))) {
         DocumentManager::file_send_for_download($temp_zip_file, true, $name);
         @unlink($temp_zip_file);
@@ -124,13 +174,14 @@ if (!empty($files)) {
 
 /*	Extra function (only used here) */
 
-function my_pre_add_callback($p_event, &$p_header) {
-	global $files;
-	if (isset($files[basename($p_header['stored_filename'])])) {
-		$p_header['stored_filename'] = $files[basename($p_header['stored_filename'])];
-		return 1;
-	}
-	return 0;
+function my_pre_add_callback($p_event, &$p_header)
+{
+    global $files;
+    if (isset($files[basename($p_header['stored_filename'])])) {
+        $p_header['stored_filename'] = $files[basename($p_header['stored_filename'])];
+        return 1;
+    }
+    return 0;
 }
 
 /**
@@ -141,14 +192,15 @@ function my_pre_add_callback($p_event, &$p_header) {
  * @param array $arr2 second array
  * @return difference between the two arrays
  */
-function diff($arr1, $arr2) {
-	$res = array();
-	$r = 0;
-	foreach ($arr1 as $av) {
-		if (!in_array($av, $arr2)) {
-			$res[$r] = $av;
-			$r++;
-		}
-	}
-	return $res;
+function diff($arr1, $arr2)
+{
+    $res = array();
+    $r = 0;
+    foreach ($arr1 as $av) {
+        if (!in_array($av, $arr2)) {
+            $res[$r] = $av;
+            $r++;
+        }
+    }
+    return $res;
 }

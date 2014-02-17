@@ -16,7 +16,8 @@ class CourseSelectForm
 	 * @param array $hidden_fiels Hidden fields to add to the form.
 	 * @param boolean the document array will be serialize. This is used in the course_copy.php file
 	 */
-	static function display_form($course, $hidden_fields = null, $avoid_serialize=false) {
+	static function display_form($course, $hidden_fields = null, $avoid_serialize = false)
+    {
         global $charset;
 		$resource_titles[RESOURCE_EVENT]                = get_lang('Events');
 		$resource_titles[RESOURCE_ANNOUNCEMENT] 		= get_lang('Announcements');
@@ -26,6 +27,7 @@ class CourseSelectForm
 		$resource_titles[RESOURCE_FORUM]                = get_lang('Forums');
         $resource_titles[RESOURCE_FORUMCATEGORY]        = get_lang('ForumCategory');
 		$resource_titles[RESOURCE_QUIZ] 				= get_lang('Tests');
+        $resource_titles[RESOURCE_TEST_CATEGORY] 		= get_lang('QuestionCategory');
 		$resource_titles[RESOURCE_LEARNPATH]            = get_lang('ToolLearnpath');
 		$resource_titles[RESOURCE_SCORM]                = 'SCORM';
 		$resource_titles[RESOURCE_TOOL_INTRO]           = get_lang('ToolIntro');
@@ -34,6 +36,7 @@ class CourseSelectForm
 		$resource_titles[RESOURCE_WIKI]                 = get_lang('Wiki');
 		$resource_titles[RESOURCE_THEMATIC]             = get_lang('Thematic');
 		$resource_titles[RESOURCE_ATTENDANCE]           = get_lang('Attendance');
+        $resource_titles[RESOURCE_WORK]                 = get_lang('ToolStudentPublication');
 ?>
 		<script>
 			function exp(item) {
@@ -139,6 +142,7 @@ class CourseSelectForm
 		}
         echo '<script src="'.api_get_path(WEB_CODE_PATH).'inc/lib/javascript/upload.js" type="text/javascript"></script>';
 		echo '<script type="text/javascript">var myUpload = new upload(1000);</script>';
+
 		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="javascript: myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy', '').'\',\'upload_form\')">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
 
@@ -346,10 +350,13 @@ class CourseSelectForm
 	/**
 	 * Get the posted course
 	 * @param string who calls the function? It can be copy_course, create_backup, import_backup or recycle_course
+     * @param int
+     * @param string
 	 * @return course The course-object with all resources selected by the user
 	 * in the form given by display_form(...)
 	 */
-	static function get_posted_course($from = '', $session_id = 0, $course_code = '') {
+	static function get_posted_course($from = '', $session_id = 0, $course_code = '')
+    {
         $course = null;
 
         if (isset($_POST['course'])) {
@@ -360,7 +367,7 @@ class CourseSelectForm
 
 		//Create the resource DOCUMENT objects
 		//Loading the results from the checkboxes of ethe javascript
-		$resource       = $_POST['resource'][RESOURCE_DOCUMENT];
+		$resource       = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
 
 		$course_info 	= api_get_course_info($course_code);
 		$table_doc 		= Database::get_course_table(TABLE_DOCUMENT);
@@ -470,8 +477,8 @@ class CourseSelectForm
 					case RESOURCE_DOCUMENT:
 						// Mark folders to import which are not selected by the user to import,
 						// but in which a document was selected.
-						$documents = $_POST['resource'][RESOURCE_DOCUMENT];
-						if (is_array($resources))
+						$documents = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
+						if (!empty($resources) && is_array($resources))
 							foreach($resources as $id => $obj) {
 								if ($obj->file_type == 'folder' && ! isset($_POST['resource'][RESOURCE_DOCUMENT][$id]) && is_array($documents)) {
 									foreach($documents as $id_to_check => $post_value) {
@@ -485,7 +492,7 @@ class CourseSelectForm
 								}
 							}
 					default :
-						if (is_array($resources)) {
+						if (!empty($resources) && is_array($resources)) {
 							foreach ($resources as $id => $obj) {
 								$resource_is_used_elsewhere = $course->is_linked_resource($obj);
                                 //var_dump($obj, $resource_is_used_elsewhere);

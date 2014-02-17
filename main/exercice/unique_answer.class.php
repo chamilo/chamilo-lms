@@ -63,15 +63,16 @@ class UniqueAnswer extends Question {
 		$feedback_title='';
 		$comment_title='';
 
-		if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
-			$comment_title = '<th>'.get_lang('Comment').'</th>';            
-		} elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+		if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
             //Scenario
 			$editor_config['Width'] = '250';
 			$editor_config['Height'] = '110';
 			$comment_title = '<th width="500px" >'.get_lang('Comment').'</th>';
 			$feedback_title = '<th width="350px" >'.get_lang('Scenario').'</th>';
 		}
+        else {
+            $comment_title = '<th>'.get_lang('Comment').'</th>';
+        }
 
 		$html='<table class="data_table">
                 <tr style="text-align: center;">
@@ -197,10 +198,7 @@ class UniqueAnswer extends Question {
             
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
-            if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
-                // feedback
-                $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-            } elseif ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {                
+            if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
                 $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
                 // Direct feedback
           
@@ -214,6 +212,9 @@ class UniqueAnswer extends Question {
                 
                 $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}', 'scenario');            
                 
+            }
+            else {
+                $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
             }
             $form->addElement('text', 'weighting['.$i.']', null, array('class' => "span1", 'value' => '0'));                    
             $form->addElement ('html', '</tr>');                
@@ -354,11 +355,7 @@ class UniqueAnswer extends Question {
 				<th>'.get_lang("Choice").'</th>
 				<th>'. get_lang("ExpectedChoice").'</th>
 				<th>'. get_lang("Answer").'</th>';        
-				if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) { 
-    				$header .= '<th>'.get_lang("Comment").'</th>';
-				} else { 
-					$header .= '<th>&nbsp;</th>';
-				}
+        $header .= '<th>'.get_lang("Comment").'</th>';
         $header .= '</tr>';
         return $header;	
     }

@@ -12,7 +12,8 @@ require_once 'Course.class.php';
  *
  * @todo Use archive-folder of Chamilo?
  */
-class CourseArchiver {
+class CourseArchiver
+{
 
     /**
      * Delete old temp-dirs
@@ -33,7 +34,8 @@ class CourseArchiver {
      * Write a course and all its resources to a zip-file.
      * @return string A pointer to the zip-file
      */
-    static function write_course($course) {
+    static function write_course($course)
+    {
         $perm_dirs = api_get_permissions_for_new_directories();
 
         CourseArchiver::clean_backup_dir();
@@ -70,11 +72,10 @@ class CourseArchiver {
             error_log(__FILE__ . ' line ' . __LINE__ . ': ' . (ini_get('track_errors') != false ? $php_errormsg : 'error not recorded because track_errors is off in your php.ini'), 0);
         }
         
-        //Documents
         
         // Copy all documents to the temp-dir        
-        if (is_array($course->resources[RESOURCE_DOCUMENT])) {
-            foreach ($course->resources[RESOURCE_DOCUMENT] as $id => $document) {
+        if (isset($course->resources[RESOURCE_DOCUMENT]) && is_array($course->resources[RESOURCE_DOCUMENT])) {
+            foreach ($course->resources[RESOURCE_DOCUMENT] as $document) {
                 if ($document->file_type == DOCUMENT) {
                     $doc_dir = $backup_dir . $document->path;
                     @mkdir(dirname($doc_dir), $perm_dirs, true);
@@ -88,35 +89,43 @@ class CourseArchiver {
         }
 
         // Copy all scorm documents to the temp-dir
-        if (is_array($course->resources[RESOURCE_SCORM])) {
-            foreach ($course->resources[RESOURCE_SCORM] as $id => $document) {
+        if (isset($course->resources[RESOURCE_SCORM]) && is_array($course->resources[RESOURCE_SCORM])) {
+            foreach ($course->resources[RESOURCE_SCORM] as $document) {
                 $doc_dir = dirname($backup_dir . $document->path);
                 @mkdir($doc_dir, $perm_dirs, true);
                 copyDirTo($course->path . $document->path, $doc_dir, false);
             }
         }
 
-        //Copy calendar attachments
+        // Copy calendar attachments.
 
-        if (is_array($course->resources[RESOURCE_EVENT])) {
+        if (isset($course->resources[RESOURCE_EVENT]) && is_array($course->resources[RESOURCE_EVENT])) {
             $doc_dir = dirname($backup_dir . '/upload/calendar/');
             @mkdir($doc_dir, $perm_dirs, true);
             copyDirTo($course->path . 'upload/calendar/', $doc_dir, false);
         }
 
-        //Copy learningpath author image		
-        if (is_array($course->resources[RESOURCE_LEARNPATH])) {
+        // Copy Learning path author image.
+        if (isset($course->resources[RESOURCE_LEARNPATH]) && is_array($course->resources[RESOURCE_LEARNPATH])) {
             $doc_dir = dirname($backup_dir . '/upload/learning_path/');
             @mkdir($doc_dir, $perm_dirs, true);
             copyDirTo($course->path . 'upload/learning_path/', $doc_dir, false);
         }
 
-        //Copy announcements attachments
+        // Copy announcements attachments.
 
-        if (is_array($course->resources[RESOURCE_ANNOUNCEMENT])) {
+        if (isset($course->resources[RESOURCE_ANNOUNCEMENT]) && is_array($course->resources[RESOURCE_ANNOUNCEMENT])) {
             $doc_dir = dirname($backup_dir . '/upload/announcements/');
             @mkdir($doc_dir, $perm_dirs, true);
             copyDirTo($course->path . 'upload/announcements/', $doc_dir, false);
+        }
+
+        // Copy work folders (only folders)
+        if (isset($course->resources[RESOURCE_WORK]) && is_array($course->resources[RESOURCE_WORK])) {
+            $doc_dir = dirname($backup_dir . '/upload/work/');
+            @mkdir($doc_dir, $perm_dirs, true);
+            // @todo: adjust to only create subdirs, but not copy files
+            copyDirTo($course->path . 'upload/work/', $doc_dir, false);
         }
 
         // Zip the course-contents
@@ -145,7 +154,7 @@ class CourseArchiver {
                     $date = $file_parts[0];
                     $ext = $file_parts[1];
                     if ($ext == 'zip' && ($user_id != null && $owner_id == $user_id || $user_id == null)) {
-                        $date = substr($date, 0, 4) . '-' . substr($date, 4, 2) . '-' . substr($date, 6, 2) . ' ' . substr($date, 8, 2) . ':' . substr($date, 10, 2) . ':' . substr($date, 12, 2);
+                        $date = substr($date, 0, 4) . '-' . substr($date, 4, 2) . '-' . substr($date, 6, 2) . ' ' . substr($date, 9, 2) . ':' . substr($date, 11, 2) . ':' . substr($date, 13, 2);
                         $backup_files[] = array('file' => $file, 'date' => $date, 'course_code' => $course_code);
                     }
                 }
@@ -162,7 +171,7 @@ class CourseArchiver {
         $new_filename = uniqid('') . '.zip';
         $new_dir = api_get_path(SYS_ARCHIVE_PATH);
         if (is_dir($new_dir) && is_writable($new_dir)) {
-            move_uploaded_file($file, api_get_path(SYS_ARCHIVE_PATH) . '' . $new_filename);
+            move_uploaded_file($file, api_get_path(SYS_ARCHIVE_PATH).$new_filename);
             return $new_filename;
         }
         return false;
@@ -174,7 +183,8 @@ class CourseArchiver {
      * @param boolean $delete Delete the file after reading the course?
      * @todo Check if the archive is a correct Chamilo-export
      */
-    static function read_course($filename, $delete = false) {
+    static function read_course($filename, $delete = false)
+    {
         CourseArchiver::clean_backup_dir();
         // Create a temp directory
         $tmp_dir_name = 'CourseArchiver_' . uniqid('');

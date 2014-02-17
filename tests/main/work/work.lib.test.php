@@ -5,7 +5,7 @@ require_once(api_get_path(LIBRARY_PATH).'course.lib.php');
 
 class TestWork extends UnitTestCase {
 
-	 
+
 	/**
 	 * @param	string	Base work dir (.../work)
 	 * @param 	string $desiredDirName complete path of the desired name
@@ -20,8 +20,8 @@ class TestWork extends UnitTestCase {
 		$res=create_unexisting_work_directory($base_work_dir,$desired_dir_name);
 		$this->assertTrue(is_bool($res));
 	}
-	 
-	 
+
+
 	 /**
 	 * Builds the form thats enables the user to
 	 * select a directory to browse/upload in
@@ -68,17 +68,6 @@ class TestWork extends UnitTestCase {
 		$group=array();
 		$res=convert_date_to_array($date,$group);
 		$this->assertTrue(is_array($res));
-		//var_dump($res);
-	}
-
-	/**
-	 * @param string e.g converts "2008-10-06 12:45:00" to timestamp
-	 */
-
-	function testconvert_date_to_number() {
-		$default='2008-10-06 12:45:00';
-		$res=convert_date_to_number($default);
-		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
 
@@ -163,30 +152,6 @@ class TestWork extends UnitTestCase {
 	}
 
 	/**
-	* Display the list of student publications, taking into account the user status
-	*
-	* @param $currentCourseRepositoryWeb, the web location of the course folder
-	* @param $link_target_parameter - should there be a target parameter for the links
-	* @param $dateFormatLong - date format
-	* @param $origin - typically empty or 'learnpath'
-	*/
-
-	function testdisplay_student_publications_list() {
-		global $charset,$timeNoSecFormat,$dateFormatShort,$gradebook,$dateFormatLong;
-		$work_dir='';
-		$sub_course_dir='';
-		$currentCourseRepositoryWeb='';
-		$link_target_parameter='';
-		$origin='learnpath';
-		$add_in_where_query='';
-		ob_start();
-		$res=display_student_publications_list($work_dir,$sub_course_dir,$currentCourseRepositoryWeb, $link_target_parameter, $dateFormatLong, $origin,$add_in_where_query='');
-		$this->assertTrue(is_null($res));
-		ob_end_clean();
-		//var_dump($res);
-	}
-
-	/**
 	* Displays all options for this tool.
 	* These are
 	* - make all files visible / invisible
@@ -247,30 +212,6 @@ class TestWork extends UnitTestCase {
 		$res=get_parent_directories($my_cur_dir_path);
 		$this->assertTrue(is_array($res));
 		//var_dump($res);
-	}
-
-	/**
-	 * Returns a list of subdirectories found in the given directory.
-	 *
-	 * The list return starts from the given base directory.
-	 * If you require the subdirs of /var/www/ (or /var/www), you will get 'abc/', 'def/', but not '/var/www/abc/'...
-	 * @param	string	Base dir
-	 * @param	integer	0 if we only want dirs from this level, 1 if we want to recurse into subdirs
-	 * @return	strings_array	The list of subdirs in 'abc/' form, -1 on error, and 0 if none found
-	 * @todo	Add a session check to see if subdirs_list doesn't exist yet (cached copy)
-	 */
-
-	function testget_subdirs_list() {
-		$path_name = api_get_path(SYS_PATH);
-		$basedir = $path_name.'/';
-		$dh = opendir($basedir);
-		$entry = readdir($dh);
-		$dirs_list[] = $entry;
-		$res=get_subdirs_list($basedir='',$recurse=0);
-		$this->assertTrue(is_numeric($res));
-		$this->assertTrue(is_array($dirs_list));
-		//var_dump($res);
-		//var_dump($dirs_list);
 	}
 
 	/**
@@ -386,7 +327,7 @@ class TestWork extends UnitTestCase {
 		$this->assertTrue(is_numeric($res));
 		//var_dump($res);
 	}
-	
+
 		/**
 	 * Delete a work-tool directory
 	 * @param	string	Base "work" directory for this course as /var/www/dokeos/courses/ABCD/work/

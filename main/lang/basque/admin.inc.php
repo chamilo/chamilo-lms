@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$CasMainActivateComment = "CAS autentifikazioa aktibatzeari esker, erabiltzaileek beren CAS egiaztagiriarekin autentifikatu ahal izango dute.
+$CasMainActivateComment = "CAS autentifikazioa aktibatzeari esker, erabiltzaileek beren CAS egiaztagiriarekin autentifikatu ahal izango dute. 
 Joan  Plugin-era ezarri daitekeen 'CAS Login' botoi bat gehitzeko, zure Chamilo kanpuseko harrera orrian.";
 $UsersRegisteredInAnyGroup = "Erabiltzailea ez dago ikastaro batean ere erregistraturik";
 $ShowHotCoursesComment = "Gehien egindako ikastaroen zerrenda orri nagusiari gehituko zaio";
@@ -1159,7 +1159,7 @@ $TimezoneValueTitle = "Ordutegi gunea";
 $TimezoneValueComment = "Erakundeko bulego nagusiaren ordutegi gune berbera ezarri beharko litzateke atari honetarako ordutegi gune gisa. Hutsik uzten badugu, zerbitzariaren ordutegi gunea erabiliko du.
 Konfiguratzen badugu, ordu guztiak sisteman ordutegi honetan oinarriturik agertuko dira. Horrelako ezarpenak erabiltzailearen ordutegi guneak baino lehentasun txikiagoa edukiko du, erabiltzaileak, profil hedatuaren bitartez, beretzako beste bat gaitu eta hautatzen badu.";
 $UseUsersTimezoneTitle = "Erabili erabiltzaileen ordutegi guneak";
-$UseUsersTimezoneComment = "Aktibatu erabiltzaileek beren ordutegi guneak hautatzeko gaitasuna. Ordutegi gunearen eremua ikusgai eta  aldagarri izateko ezarri beharko litzateke kudeaketa ataleko Profila ezarri menuan, erabiltzaileek berena hautatu baino lehen.
+$UseUsersTimezoneComment = "Aktibatu erabiltzaileek beren ordutegi guneak hautatzeko gaitasuna. Ordutegi gunearen eremua ikusgai eta  aldagarri izateko ezarri beharko litzateke kudeaketa ataleko Profila ezarri menuan, erabiltzaileek berena hautatu baino lehen. 
 Behin konfiguratu eta gero, beren ordutegi gunean ikusi ahal izango dituzte esleitutako derrigortasun datak eta denborako beste erreferentzia batzuk eta, horrela, erroreak gutxituko dira banaketa egiteko orduan.";
 $FieldTypeTimezone = "Ordutegi gunea";
 $AssignedSessionsHaveBeenUpdatedSuccessfully = "Bakoitzari emandako saioak ongi eguneratu dira";
@@ -1355,8 +1355,8 @@ $SSOServerUnAuthURIComment = "Erabiltzailea deskonektatzen duen orriaren helbide
 $SSOServerProtocolTitle = "Single Sign On (Erregistro bakarra) zerbitzariaren protokoloa";
 $SSOServerProtocolComment = "Single Sign On (Erregistro bakarra) zerbitzariaren domeinuari aurrezenbakia jartzeko protokolo katea (https:// erabiltzea gomendatzen dizugu, zure zerbitzariak gaitasun hau baliatu ahal badu, zeren eta segurtasunik gabeko protokoloak autentifikazio gaietarako arriskutsuak baitira)";
 $EnabledWirisTitle = "WIRIS editatzaile matematikoa";
-$EnabledWirisComment = "Aktibatu WIRIS editatzaile matematikoa. Plugin hau instalatuz gero, WIRIS editatzailea eta WIRIS CAS lortuko dituzu.
-Aktibazioa ez da erabat gauzatuko, aldez aurretik WIRISen PHP plugin for FCKeditor deskargatu ez bada eta beraren edukiak konprimatu ez badira Chamiloren direktorioan: main/inc/lib/fckeditor/editor/plugins/fckeditor_wiris/
+$EnabledWirisComment = "Aktibatu WIRIS editatzaile matematikoa. Plugin hau instalatuz gero, WIRIS editatzailea eta WIRIS CAS lortuko dituzu. 
+Aktibazioa ez da erabat gauzatuko, aldez aurretik WIRISen PHP plugin for FCKeditor deskargatu ez bada eta beraren edukiak konprimatu ez badira Chamiloren direktorioan: main/inc/lib/fckeditor/editor/plugins/fckeditor_wiris/ 
 Hau beharrezkoa da Wiris jabetzako softwarea delako eta Wirisen zerbitzuak komertzialak direlako. Pluginean doitzeak egiteko, editatu configuration.ini fitxategia edo ordezkatu bere edukia Chamilorekin batera datorren configuration.ini.default fitxategiaz.";
 $AllowSpellCheckTitle = "Zuzentzaile ortografikoa";
 $AllowSpellCheckComment = "Gaitu zuzentzaile ortografikoa";
@@ -1619,9 +1619,11 @@ $LdapDescriptionComment = "
     CASek kudeatzen du erabiltzailearen autentifikazioa, ez da LDAP aktibatzea eskatzen.
 
 
+
+
 I. LDAP konfigurazioa
 Editatu main/inc/conf/auth.conf.php konfigurazioa
--> Editatu bektoreen balioak $extldap_config
+-> Editatu bektoreen balioak \$extldap_config
 
 Parametroak honako hauek dira
 
@@ -1634,9 +1636,9 @@ Parametroak honako hauek dira
     *protokoloaren bertsioa (2 edo 3) (e b : 'protocol_version' => 3)
     *erabiltzailea_bilatu (e b : 'user_search' => 'sAMAccountName=%username%')
     *kodeketa (e b : 'encoding' => 'UTF-8')
-    *eguneratu_erabiltzaileinfo (e b : 'update_userinfo' => true)
+    *eguneratu_erabiltzaileinfo (e b : 'update_userinfo' => true) 
 
--> Erabiltzailearen eta LDAP atributuen arteko korrespondentziak eguneratzeko, editatu bektoreak $extldap_user_correspondance
+-> Erabiltzailearen eta LDAP atributuen arteko korrespondentziak eguneratzeko, editatu bektoreak \$extldap_user_correspondance
 Bektoreen balioak honakoak dira <chamilo_field> => >ldap_field>
 Bektoreen egitura  main/auth/external_login/ldap.conf.php  fitxategian azalduta dago
 
@@ -1644,32 +1646,33 @@ Bektoreen egitura  main/auth/external_login/ldap.conf.php  fitxategian azalduta 
 II. Aktibatu LDAP autentifikazioa
 Editatu  main/inc/conf/configuration.php
 -> Iruzkinik gabeko lerroak
-extAuthSource[extldap][login] = _configuration['root_sys']._configuration['code_append'].'auth/external_login/login.ldap.php';
-extAuthSource[extldap][newUser] = _configuration['root_sys']._configuration['code_append'].'auth/external_login/newUser.ldap.php';
+\$extAuthSource[\"extldap\"][\"login\"] =\$_configuration['root_sys'].\$_configuration['code_append'].\"auth/external_login/login.ldap.php\";
+\$extAuthSource[\"extldap\"][\"newUser\"] =\$_configuration['root_sys'].\$_configuration['code_append'].\"auth/external_login/newUser.ldap.php\";
 
 N.B. : LDAP erabiltzaileek eta plataformako erabiltzaileek konektatzean eremu berberak erabiltzen dituzte.
-N.B. : LDAP aktibatzeak [LDAP] Kanpo autentifikazioa menua gehitzen du, erabiltzaileen 'gehitu edo aldatu' orrietan.";
+N.B. : LDAP aktibatzeak [LDAP] Kanpo autentifikazioa menua gehitzen du, erabiltzaileen \"gehitu edo aldatu\" orrietan.";
 $ShibbolethMainActivateTitle = "Shibboleth autentifikazioa";
 $ShibbolethMainActivateComment = "Lehehengo eta behin, Shibboleth konfiguratu beharko duzu zure web zerbitzarirako.
 
 Chamilorako konfiguratzeko
 editatu  main/auth/shibboleth/config/aai.class.php  fitxategia.
 
-Aldatu result objektuen balioak, zure Shibboleth atributuen izenarekin:
+Aldatu $result objektuen balioak, zure Shibboleth atributuen izenarekin:
 
-    result->unique_id = 'mail';
-    result->firstname = 'cn';
-    result->lastname = 'uid';
-    result->email = 'mail';
-    result->language = '-';
-    result->gender = '-';
-    result->address = '-';
-    esult->staff_category = '-';
-    result->home_organization_type = '-';
-    result->home_organization = '-';
-    result->affiliation = '-';
-    result->persistent_id = '-';
+    $result->unique_id = 'mail';
+    $result->firstname = 'cn';
+    $result->lastname = 'uid';
+    $result->email = 'mail';
+    $result->language = '-';
+    $result->gender = '-';
+    $result->address = '-';
+    $result->staff_category = '-';
+    $result->home_organization_type = '-';
+    $result->home_organization = '-';
+    $result->affiliation = '-';
+    $result->persistent_id = '-';
     ...
+
 
 Joan Plugin-era, 'Shibboleth Login' botoi konfiguragarria gehitzeko zure Chamilo kampuserako.";
 $LdapDescriptionTitle = "LDAP autentifikazioa";

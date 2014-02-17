@@ -8,7 +8,6 @@
  */
 // name of the language file that needs to be included
 $language_file = 'admin';
-
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
@@ -26,18 +25,18 @@ $interbreadcrumb[] = array ('url' => 'usergroups.php', 'name' => get_lang('Class
 set_time_limit(0);
 
 $form = new FormValidator('export_users');
-$form->addElement('header',  $tool_name);
-$form->addElement('style_submit_button', 'submit',get_lang('Export'),'class="save"');
+$form->addElement('header', $tool_name);
+$form->addElement('style_submit_button', 'submit', get_lang('Export'), 'class="save"');
 
 if ($form->validate()) {
     $user_group = new UserGroup;
     $header = array(array('name', 'description'));
-	$data = $user_group->get_all_for_export();    
-    $data = array_merge($header, $data);    
-    $filename = 'export_classes_'.api_get_local_time();    
-    Export::export_table_csv($data,$filename);
+    $data = $user_group->get_all_for_export();
+    $data = array_merge($header, $data);
+    $filename = 'export_classes_'.api_get_local_time();
+    Export::export_table_csv($data, $filename);
     exit;
 }
 Display :: display_header($tool_name);
 $form->display();
-Display :: display_footer();
+Display::display_footer();

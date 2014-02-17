@@ -73,11 +73,11 @@ function GetQuizName($fname, $fpath) {
  * Added conditional to the table if is empty.
  */
 function GetComment($path, $course_code = '') {
-    global $dbTable;    
+    $dbTable = Database::get_course_table(TABLE_DOCUMENT);
     $course_info = api_get_course_info($course_code);            
     $path = Database::escape_string($path);
     if (!empty($course_info) && !empty($path)) {
-        $query = "SELECT comment FROM $dbTable WHERE c_id = {$course_info['real_id']} AND path='$path'";
+        $query = "SELECT comment FROM $dbTable WHERE c_id = {$course_info['real_id']}";
         $result = Database::query($query);
         while ($row = Database::fetch_array($result)) {
             return $row[0];

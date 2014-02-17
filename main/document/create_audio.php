@@ -274,20 +274,17 @@ $(document).ready(function(){
 		var voiceslist=document.form2.voices     
 		var voices=new Array()
 		
-		<!--Default message -->
-		voices[0]=["<?php echo get_lang('FirstSelectALanguage'); ?>"]
-		
 		<!--German -->
-		voices[1]=["<?php echo get_lang('Female').' (de1)'; ?>|de1", "<?php echo get_lang('Male').' (de2)'; ?>|de2", "<?php echo get_lang('Female').' (de3)'; ?>|de3", "<?php echo get_lang('Male').' (de4)'; ?>|de4", "<?php echo get_lang('Female').' (de5)'; ?>|de5", "<?php echo get_lang('Male').' (de6)'; ?>|de6", "<?php echo get_lang('Female').' (de7)'; ?>|de7", "<?php echo get_lang('Female').' (de8 HQ)'; ?>|de8"]
+		voices[0]=["<?php echo get_lang('Female').' (de1)'; ?>|de1", "<?php echo get_lang('Male').' (de2)'; ?>|de2", "<?php echo get_lang('Female').' (de3)'; ?>|de3", "<?php echo get_lang('Male').' (de4)'; ?>|de4", "<?php echo get_lang('Female').' (de5)'; ?>|de5", "<?php echo get_lang('Male').' (de6)'; ?>|de6", "<?php echo get_lang('Female').' (de7)'; ?>|de7", "<?php echo get_lang('Female').' (de8 HQ)'; ?>|de8"]
 		
 		<!--English -->
-		voices[2]=["<?php echo get_lang('Male').' (en1)'; ?>|en1", "<?php echo get_lang('Male').' (en2 HQ)'; ?>|en2", "<?php echo get_lang('Female').' (us1)'; ?>| us1", "<?php echo get_lang('Male').' (us2)'; ?>|us2", "<?php echo get_lang('Male').' (us3)'; ?>|us3", "<?php echo get_lang('Female').'(us4 HQ)'; ?>|us4"]	
+		voices[1]=["<?php echo get_lang('Male').' (en1)'; ?>|en1", "<?php echo get_lang('Male').' (en2 HQ)'; ?>|en2", "<?php echo get_lang('Female').' (us1)'; ?>| us1", "<?php echo get_lang('Male').' (us2)'; ?>|us2", "<?php echo get_lang('Male').' (us3)'; ?>|us3", "<?php echo get_lang('Female').'(us4 HQ)'; ?>|us4"]	
 		
 		<!--Spanish -->
-		voices[3]=["<?php echo get_lang('Male').' (es5 HQ)'; ?>|es5"]
+		voices[2]=["<?php echo get_lang('Male').' (es5 HQ)'; ?>|es5"]
 		
 		<!--French -->
-		voices[4]=["<?php echo get_lang('Female').' (fr8 HQ)'; ?>|fr8"]
+		voices[3]=["<?php echo get_lang('Female').' (fr8 HQ)'; ?>|fr8"]
 			
 			 
 		function update_voices(selectedvoicegroup){
@@ -295,9 +292,7 @@ $(document).ready(function(){
 		for (i=0; i<voices[selectedvoicegroup].length; i++)
 			voiceslist.options[voiceslist.options.length]=new Option(voices[selectedvoicegroup][i].split("|")[0], voices[selectedvoicegroup][i].split("|")[1])
 		}
-		</script>    
-
-     
+		</script>
     <?php
 	}//end pediaphon
 	
@@ -494,7 +489,7 @@ function downloadMP3_pediaphon($filepath, $dir){
 	//adding the file
 	
 		
-		if($clean_lang=='de'){
+		if ($clean_lang=='de'){
 			$url_pediaphon='http://www.pediaphon.org/~bischoff/radiopedia/sprich_multivoice.cgi';
 			$find_t2v = '/http\:\/\/www\.pediaphon\.org\/\~bischoff\/radiopedia\/mp3\/(.*)\.mp3\"/';
 		}		
@@ -503,7 +498,7 @@ function downloadMP3_pediaphon($filepath, $dir){
 			$find_t2v = '/http\:\/\/www\.pediaphon\.org\/\~bischoff\/radiopedia\/mp3\/'.$clean_lang.'\/(.*)\.mp3\"/';
 		}
 
-		$data="stimme=".$clean_voices."&inputtext=".$clean_text."&speed=".$clean_speed."&go=go";
+		$data="stimme=".$clean_voices."&inputtext=".$clean_text."&speed=".$clean_speed."&go=speak";
 		$opts = array('http' =>
 			array(
 			 'method'  => 'POST',
@@ -513,20 +508,22 @@ function downloadMP3_pediaphon($filepath, $dir){
 			)
 		);                   
 		$context  = stream_context_create($opts);
+                // Download the whole HTML page
 		$previous_returntext2voice = file_get_contents($url_pediaphon,false,$context);
 		
-		//clean file contents
-		
+		//extract the audio file path
 		$search_source=preg_match($find_t2v, $previous_returntext2voice, $hits);
 		$souce_end=substr($hits[0], 0,-1);
+		//download file
 		$returntext2voice = file_get_contents($souce_end);
-				
 		//save file
-		file_put_contents($documentPath, $returntext2voice);
-		
+		$f = @file_put_contents($documentPath, $returntext2voice);
+		if ($f === false && !empty($php_errormsg)) {
+                    error_log($php_errormsg);
+                }
 		//add document to database
 		$current_session_id = api_get_session_id();
-		$groupId=$_SESSION['_gid'];
+		$groupId = $_SESSION['_gid'];
 		$file_size = filesize($documentPath);
 		$relativeUrlPath=$dir;
 		$doc_id = add_document($_course, $relativeUrlPath.$audio_filename, 'file', filesize($documentPath), $audio_title);

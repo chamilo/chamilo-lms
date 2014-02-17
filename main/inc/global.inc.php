@@ -137,7 +137,7 @@ if (!$_configuration['db_host']) {
 if (!empty($_configuration['multiple_access_urls'])) {
     $_configuration['access_url'] = 1;
     $access_urls = api_get_access_urls();
-    
+
     $root_rel = api_get_self();
     $root_rel = substr($root_rel,1);
     $pos = strpos($root_rel,'/');
@@ -317,6 +317,7 @@ if (file_exists($mail_conf)) {
 // ===== "who is logged in?" module section =====
 
 
+
 // check and modify the date of user in the track.e.online table
 if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
     LoginCheck(isset($_user['user_id']) ? $_user['user_id'] : '');
@@ -325,8 +326,9 @@ if (!$x = strpos($_SERVER['PHP_SELF'], 'whoisonline.php')) {
 // ===== end "who is logged in?" module section =====
 
 if (api_get_setting('server_type') == 'test') {
-    error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
-    //error_reporting(-1);
+    //error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+    ini_set('display_errors', '1');
+    error_reporting(-1);
 } else {
     /*
     Server type is not test
@@ -583,8 +585,8 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
             $q_last_connection = Database::query($sql_last_connection);
             $i_id_last_connection = Database::result($q_last_connection, 0, 'login_id');
         }
-
-        $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date=NOW() WHERE login_id='$i_id_last_connection'";
+        $now = api_get_utc_datetime(time());
+        $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date='$now' WHERE login_id='$i_id_last_connection'";
         Database::query($s_sql_update_logout_date);
     }
 }

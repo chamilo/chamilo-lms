@@ -1032,7 +1032,7 @@ function api_get_months_long($language = null) {
  * @author Carlos Vargas <carlos.vargas@dokeos.com> - initial implementation.
  * @author Ivan Tcholakov
  */
-function api_get_person_name($first_name, $last_name, $title = null, $format = null, $language = null, $encoding = null) {
+function api_get_person_name($first_name, $last_name, $title = null, $format = null, $language = null, $encoding = null, $username = null) {
     static $valid = array();
     if (empty($format)) {
         $format = PERSON_NAME_COMMON_CONVENTION;
@@ -1051,6 +1051,10 @@ function api_get_person_name($first_name, $last_name, $title = null, $format = n
             switch ($format) {
                 case PERSON_NAME_COMMON_CONVENTION:
                     $valid[$format][$language] = _api_get_person_name_convention($language, 'format');
+                    $usernameOrderFromDatabase = api_get_setting('user_name_order');
+                    if (isset($usernameOrderFromDatabase) && !empty($usernameOrderFromDatabase)) {
+                        $valid[$format][$language] = $usernameOrderFromDatabase;
+                    }
                     break;
                 case PERSON_NAME_WESTERN_ORDER:
                     $valid[$format][$language] = '%t %f %l';
@@ -1069,11 +1073,26 @@ function api_get_person_name($first_name, $last_name, $title = null, $format = n
             $valid[$format][$language] = _api_validate_person_name_format($format);
         }
     }
+
     $format = $valid[$format][$language];
-    $person_name = str_replace(array('%f', '%l', '%t'), array($first_name, $last_name, $title), $format);
-    if (strpos($format, '%F') !== false || strpos($format, '%L') !== false || strpos($format, '%T') !== false) {
-        $person_name = str_replace(array('%F', '%L', '%T'), array(api_strtoupper($first_name, $encoding), api_strtoupper($last_name, $encoding), api_strtoupper($title, $encoding)), $person_name);
-    }
+
+    $keywords = array('%firstname', '%f', '%F', '%lastname', '%l', '%L', '%title', '%t', '%T', '%username', '%u', '%U');
+
+    $values = array(
+        $first_name,
+        $first_name,
+        api_strtoupper($first_name, $encoding),
+        $last_name,
+        $last_name,
+        api_strtoupper($last_name, $encoding),
+        $title,
+        $title,
+        api_strtoupper($title, $encoding),
+        $username,
+        $username,
+        api_strtoupper($username, $encoding),
+    );
+    $person_name = str_replace($keywords, $values, $format);
     return _api_clean_person_name($person_name);
 }
 
@@ -1092,6 +1111,7 @@ function api_is_western_name_order($format = null, $language = null) {
     }
 
     $language_is_supported = api_is_language_supported($language);
+
     if (!$language_is_supported || empty($language)) {
         $language = api_get_interface_language(false, true);
     }
@@ -1112,6 +1132,11 @@ function api_is_western_name_order($format = null, $language = null) {
  * @author Ivan Tcholakov
  */
 function api_sort_by_first_name($language = null) {
+    $userNameSortBy = api_get_setting('user_name_sort_by');
+    if (!empty($userNameSortBy) && in_array($userNameSortBy, array('firstname', 'lastname'))) {
+        return $userNameSortBy == 'firstname' ? true : false;
+    }
+
     static $sort_by_first_name = array();
 
     $language_is_supported = api_is_language_supported($language);
@@ -1121,6 +1146,7 @@ function api_sort_by_first_name($language = null) {
     if (!isset($sort_by_first_name[$language])) {
         $sort_by_first_name[$language] = _api_get_person_name_convention($language, 'sort_by');
     }
+
     return $sort_by_first_name[$language];
 }
 

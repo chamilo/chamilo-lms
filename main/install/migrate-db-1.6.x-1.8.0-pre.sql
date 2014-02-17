@@ -45,8 +45,8 @@ CREATE TABLE session_rel_course(id_session smallint unsigned NOT NULL default '0
 CREATE TABLE session_rel_course_rel_user(id_session smallint unsigned NOT NULL default '0', course_code char(40) NOT NULL default '', id_user int unsigned NOT NULL default '0', PRIMARY KEY  (id_session,course_code,id_user), KEY id_user (id_user), KEY course_code (course_code));
 CREATE TABLE session_rel_user(id_session mediumint unsigned NOT NULL default '0', id_user mediumint unsigned NOT NULL default '0', PRIMARY KEY  (id_session,id_user));
 
-CREATE TABLE shared_survey (survey_id int unsigned NOT NULL auto_increment,code varchar(20) default NULL,title text default NULL,subtitle text default NULL,author varchar(250) default NULL,lang varchar(20) default NULL,template varchar(20) default NULL,intro text,surveythanks text,creation_date datetitme NOT NULL default '0000-00-00 00:00:00',course_code varchar(40) NOT NULL default '',PRIMARY KEY (survey_id));
-CREATE TABLE shared_survey_question (question_id int not null auto_increment,survey_id int not null default 0,survey_question text not null,survey_question_comment text not null,type varchar(250) not null default '',display varchar(10) not null default '',sort int not null default 0,code varchar(40) not null default '', max_value int NOT NULL DEFAULT '',primary key (question_id));
+CREATE TABLE shared_survey (survey_id int unsigned NOT NULL auto_increment, code varchar(20) default NULL,title text default NULL,subtitle text default NULL,author varchar(250) default NULL,lang varchar(20) default NULL,template varchar(20) default NULL,intro text,surveythanks text,creation_date datetime NOT NULL default '0000-00-00 00:00:00',course_code varchar(40) NOT NULL default '',PRIMARY KEY (survey_id));
+CREATE TABLE shared_survey_question (question_id int not null auto_increment,survey_id int not null default 0,survey_question text not null,survey_question_comment text not null,type varchar(250) not null default '',display varchar(10) not null default '',sort int not null default 0,code varchar(40) not null default '', max_value int NOT NULL, primary key (question_id));
 CREATE TABLE shared_survey_question_option (question_option_id int NOT NULL auto_increment,question_id int NOT NULL default 0,survey_id int NOT NULL default 0,option_text text NOT NULL,sort int NOT NULL default 0,primary key (question_option_id));
 
 ALTER TABLE sys_announcement CHANGE visible_teacher visible_teacher_temp enum('true','false') NOT NULL DEFAULT 'false';
@@ -142,9 +142,9 @@ DELETE FROM course_module WHERE link = 'coursecopy/backup.php';
 DELETE FROM course_module WHERE link = 'coursecopy/copy_course.php';
 DELETE FROM course_module WHERE link = 'coursecopy/recycle_course.php';
 UPDATE course_module SET link = 'newscorm/lp_controller.php' WHERE link = 'scorm/scormdocument.php';
-INSERT INTO course_module(name,link,image,row,column,position) VALUES ('blog','blog/blog.php','blog.gif',1,2,'basic'); 
-INSERT INTO course_module(name,link,image,row,column,position) VALUES ('blog_management','blog/blog_admin.php','blog_admin.gif',1,2,'courseadmin'); 
-INSERT INTO course_module(name,link,image,row,column,position) VALUES ('course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin'); 
+INSERT INTO course_module(name,link,image,row,column,position) VALUES ('blog','blog/blog.php','blog.gif',1,2,'basic');
+INSERT INTO course_module(name,link,image,row,column,position) VALUES ('blog_management','blog/blog_admin.php','blog_admin.gif',1,2,'courseadmin');
+INSERT INTO course_module(name,link,image,row,column,position) VALUES ('course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin');
 INSERT INTO course_module(name,link,image,row,column,position) VALUES ('survey','survey/survey_list.php','survey.gif',2,1,'courseadmin');
 
 -- xxSTATSxx

@@ -12,17 +12,18 @@ require_once 'Event.class.php';
  */
 class Course
 {
-	var $resources;
-	var $code;
-	var $path;
-	var $destination_path;
-	var $destination_db;
-	var $encoding;
+    public $resources;
+    public $code;
+    public $path;
+    public $destination_path;
+    public $destination_db;
+    public $encoding;
 
 	/**
 	 * Create a new Course-object
 	 */
-	function __construct() {
+    function __construct()
+    {
 		$this->resources    = array();
 		$this->code         = '';
 		$this->path         = '';
@@ -33,28 +34,30 @@ class Course
 	/**
 	 * Check if a resource links to the given resource
 	 */
-	function is_linked_resource(& $resource_to_check) {
-		foreach($this->resources as $type => $resources) {
-			if (is_array($resources)) {
-				foreach($resources as $id => $resource) {
-					if( $resource->links_to($resource_to_check) ) {
-						return true;
-					}
-					if ($type == RESOURCE_LEARNPATH && get_class($resource)=='CourseCopyLearnpath') {
-						if($resource->has_item($resource_to_check)) {
-							return true;
-						}
-					}
-				}
-			}
-		}
-		return false;
-	}
+    function is_linked_resource(& $resource_to_check)
+    {
+        foreach ($this->resources as $type => $resources) {
+            if (is_array($resources)) {
+                foreach ($resources as $id => $resource) {
+                    if ($resource->links_to($resource_to_check) ) {
+                        return true;
+                    }
+                    if ($type == RESOURCE_LEARNPATH && get_class($resource)=='CourseCopyLearnpath') {
+                        if ($resource->has_item($resource_to_check)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
 	/**
 	 * Add a resource from a given type to this course
 	 */
-	function add_resource(& $resource) {
+    function add_resource(& $resource)
+    {
 		$this->resources[$resource->get_type()][$resource->get_id()] = $resource;
 	}
 
@@ -64,16 +67,21 @@ class Course
 	 * given type. If no type is given, check if course has resources of any
 	 * type.
 	 */
-	function has_resources($resource_type = null) {
+    function has_resources($resource_type = null)
+    {
 		if( $resource_type != null) {
-			return is_array($this->resources[$resource_type]) && ( count($this->resources[$resource_type]) > 0 );
+            return isset($this->resources[$resource_type]) && is_array($this->resources[$resource_type]) && (count(
+                    $this->resources[$resource_type]
+                ) > 0);
 		}
 		return (count($this->resources) > 0);
 	}
+
 	/**
 	 * Show this course resources
 	 */
-	function show()	{/*
+    function show()
+    { /*
 		echo '<pre>';
 		print_r($this);
 		echo '</pre>';*/
@@ -84,7 +92,8 @@ class Course
 	 * This sample text is to be used for course language or encoding detection if there is missing (meta)data in the archive.
 	 * @return string	The resulting sample text extracted from some common resources' data fields.
 	 */
-	public function get_sample_text() {
+    public function get_sample_text()
+    {
 
 		$sample_text = '';
 		foreach ($this->resources as $type => & $resources) {
@@ -142,6 +151,10 @@ class Course
 							$title = $resource->title;
 							$description = $resource->description;
 							break;
+                        case RESOURCE_TEST_CATEGORY:
+                            $title = $resource->title;
+                            $description = $resource->description;
+                            break;
 						case RESOURCE_QUIZQUESTION:
 							$title = $resource->question;
 							$description = $resource->description;
@@ -172,6 +185,10 @@ class Course
 							$title 			= $resource->params['name'];
 							$description 	= $resource->params['description'];
 							break;
+                        case RESOURCE_WORK:
+                            $title = $resource->title;
+                            $description = $resource->description;
+                            break;
 						default:
 							break;
 					}
@@ -285,6 +302,10 @@ class Course
 							}
 							break;
 
+                        case RESOURCE_TEST_CATEGORY:
+                            $resource->title = api_to_system_encoding($resource->title, $this->encoding);
+                            $resource->description = api_to_system_encoding($resource->description, $this->encoding);
+                            break;
 						case RESOURCE_SCORM:
 							$resource->title = api_to_system_encoding($resource->title, $this->encoding);
 							break;
@@ -311,7 +332,11 @@ class Course
 							$resource->content = api_to_system_encoding($resource->content, $this->encoding);
 							$resource->reflink = api_to_system_encoding($resource->reflink, $this->encoding);
 							break;
-
+                        case RESOURCE_WORK:
+                            $resource->url = api_to_system_encoding($resource->url, $this->encoding);
+                            $resource->title = api_to_system_encoding($resource->title, $this->encoding);
+                            $resource->description = api_to_system_encoding($resource->description, $this->encoding);
+                            break;
 						default:
 							break;
 					}
@@ -324,7 +349,8 @@ class Course
     /**
 	* Serialize the course with the best serializer available
 	*/
-	public static function serialize($course) {
+    public static function serialize($course)
+    {
 		if (extension_loaded('igbinary')) {
 			return igbinary_serialize($course);
 		} else {
@@ -335,7 +361,8 @@ class Course
 	/**
 	* Unserialize the course with the best serializer available
 	*/
-	public static function unserialize($course) {
+    public static function unserialize($course)
+    {
 		if (extension_loaded('igbinary')) {
 			return igbinary_unserialize($course);
 		} else {

@@ -78,7 +78,6 @@ $langUserHasPermissionNot = "Uporabnik nima dovoljenja";
 $langUserHasPermission = "Uporabnik ima dovoljenja";
 $langLegend = "Legenda";
 $langUserHasPermissionByRoleGroup = "Uporabnik ima dovoljenje v okviru svoje skupine";
-$EditPost = "Uredi objavo";
 $AddBlog = "Dodaj blog";
 $EditBlog = "Uredi blog";
 $DeleteBlog = "Odstrani blog";

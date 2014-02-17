@@ -41,24 +41,6 @@ $tbl_session_rel_course_rel_user 	= Database :: get_main_table(TABLE_MAIN_SESSIO
 $tbl_session_rel_user 				= Database :: get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_track_login 					= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
 
-
-/*
-  	FUNCTIONS
-  */
- 
-/*Posible Deprecated*/
-
-function is_coach() {
-  	global $tbl_session_course;
-	$sql = "SELECT course_code FROM $tbl_session_course WHERE id_coach='".intval($_SESSION["_uid"])."'";
-	$result = Database::query($sql);
-	if (Database::num_rows($result) > 0) {
-		return true;
-	}
-	return false;
-}
-
-
 /**
  * MAIN PART
  */
@@ -68,6 +50,7 @@ if (isset($_POST['export'])) {
 } else {
 	$order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
 }
+
 if (isset($_GET["id_student"])) {
 	$id_student = intval($_GET["id_student"]);
 	$sql_coachs = "SELECT DISTINCT srcru.id_user as id_coach" .
@@ -89,9 +72,23 @@ if (isset($_GET["id_student"])) {
 $result_coachs = Database::query($sql_coachs);
 
 if (api_is_western_name_order()) {
-	echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('ConnectionTime').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
+	echo '<table class="data_table">
+	    <tr>
+            <th>'.get_lang('FirstName').'</th>
+            <th>'.get_lang('LastName').'</th>
+            <th>'.get_lang('ConnectionTime').'</th>
+            <th>'.get_lang('AdminCourses').'</th>
+            <th>'.get_lang('Students').'</th>
+        </tr>';
 } else {
-	echo '<table class="data_table"><tr><th>'.get_lang('LastName').'</th><th>'.get_lang('FirstName').'</th><th>'.get_lang('ConnectionTime').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
+	echo '<table class="data_table">
+	        <tr>
+                <th>'.get_lang('LastName').'</th>
+                <th>'.get_lang('FirstName').'</th>
+                <th>'.get_lang('ConnectionTime').'</th>
+                <th>'.get_lang('AdminCourses').'</th>
+                <th>'.get_lang('Students').'</th>
+	        </tr>';
 }
 
 if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
@@ -139,9 +136,21 @@ if (Database::num_rows($result_coachs) > 0) {
 			$css_class = "row_odd";
 			if ($i % 20 == 0 && $i != 0) {
 				if (api_is_western_name_order()) {
-					echo '<tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('ConnectionTime').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
+					echo '<tr>
+					    <th>'.get_lang('FirstName').'</th>
+                        <th>'.get_lang('LastName').'</th>
+                        <th>'.get_lang('ConnectionTime').'</th>
+                        <th>'.get_lang('AdminCourses').'</th>
+                        <th>'.get_lang('Students').'</th>
+					</tr>';
 				} else {
-					echo '<tr><th>'.get_lang('LastName').'</th><th>'.get_lang('FirstName').'</th><th>'.get_lang('ConnectionTime').'</th><th>'.get_lang('AdminCourses').'</th><th>'.get_lang('Students').'</th></tr>';
+					echo '<tr>
+					    <th>'.get_lang('LastName').'</th>
+                        <th>'.get_lang('FirstName').'</th>
+                        <th>'.get_lang('ConnectionTime').'</th>
+                        <th>'.get_lang('AdminCourses').'</th>
+                        <th>'.get_lang('Students').'</th>
+					</tr>';
 				}
 			}
 		} else {
@@ -151,9 +160,31 @@ if (Database::num_rows($result_coachs) > 0) {
 		$i++;
 
 		if (api_is_western_name_order()) {
-			echo '<tr class="'.$css_class.'"><td>'.$firstname.'</td><td>'.$lastname.'</td><td>'.$s_connection_time.'</td><td><a href="course.php?type=coach&user_id='.$id_coach.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td><td><a href="student.php?type=coach&user_id='.$id_coach.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td></tr>';
+			echo '<tr class="'.$css_class.'">
+			        <td>'.$firstname.'</td><td>'.$lastname.'</td><td>'.$s_connection_time.'</td>
+			        <td>
+			            <a href="course.php?type=coach&user_id='.$id_coach.'">
+			            <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" />
+			            </a>
+                    </td>
+			        <td>
+			            <a href="student.php?type=coach&user_id='.$id_coach.'">
+			                <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" />
+			            </a>
+			            </td>
+                    </tr>';
 		} else {
-			echo '<tr class="'.$css_class.'"><td>'.$lastname.'</td><td>'.$firstname.'</td><td>'.$s_connection_time.'</td><td><a href="course.php?type=coach&user_id='.$id_coach.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td><td><a href="student.php?type=coach&user_id='.$id_coach.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td></tr>';
+			echo '<tr class="'.$css_class.'">
+			        <td>'.$lastname.'</td><td>'.$firstname.'</td>
+			        <td>'.$s_connection_time.'</td>
+			        <td>
+			            <a href="course.php?type=coach&user_id='.$id_coach.'">
+			            <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a></td>
+                    <td>
+                        <a href="student.php?type=coach&user_id='.$id_coach.'">
+                        <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
+                    </td>
+                    </tr>';
 		}
 
 		if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
@@ -176,5 +207,6 @@ if (isset($_POST['export'])){
 }
 
 echo "<br /><br />";
-echo "<form method='post' action='coaches.php'><button type='submit' class='save' name='export' value='".get_lang('exportExcel')."'>".get_lang('exportExcel')."</button><form>";
+echo "<form method='post' action='coaches.php'>
+        <button type='submit' class='save' name='export' value='".get_lang('exportExcel')."'>".get_lang('exportExcel')."</button><form>";
 Display::display_footer();

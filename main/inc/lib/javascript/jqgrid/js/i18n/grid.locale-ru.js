@@ -7,7 +7,8 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
 **/
-$.jgrid = {
+$.jgrid = $.jgrid || {};
+$.extend($.jgrid,{
 	defaults : {
 		recordtext: "Просмотр {0} - {1} из {2}",
 	  emptyrecords: "Нет записей для просмотра",
@@ -18,10 +19,8 @@ $.jgrid = {
     caption: "Поиск...",
     Find: "Найти",
     Reset: "Сброс",
-    odata : ['равно', 'не равно', 'меньше', 'меньше или равно','больше','больше или равно', 'начинается с','не начинается с','находится в','не находится в','заканчивается на','не заканчивается на','содержит','не содержит'],
-    groupOps: [	{ op: "AND", text: "все" },	{ op: "OR",  text: "любой" }	],
-    matchText: " совпадает",
-    rulesText: " правила"
+    odata: [{ oper:'eq', text:"равно"},{ oper:'ne', text:"не равно"},{ oper:'lt', text:"меньше"},{ oper:'le', text:"меньше или равно"},{ oper:'gt', text:"больше"},{ oper:'ge', text:"больше или равно"},{ oper:'bw', text:"начинается с"},{ oper:'bn', text:"не начинается с"},{ oper:'in', text:"находится в"},{ oper:'ni', text:"не находится в"},{ oper:'ew', text:"заканчивается на"},{ oper:'en', text:"не заканчивается на"},{ oper:'cn', text:"содержит"},{ oper:'nc', text:"не содержит"}],
+    groupOps: [	{ op: "AND", text: "все" },	{ op: "OR",  text: "любой" }	]
 	},
 	edit : {
     addCaption: "Добавить запись",
@@ -41,11 +40,11 @@ $.jgrid = {
         email: "некорректное значение e-mail",
         integer: "Пожалуйста, введите целое число",
         date: "Пожалуйста, введите правильную дату",
-        url: "неверная ссылка. Необходимо ввести префикс ('http://' or 'https://')",
-		nodefined : " is not defined!",
-		novalue : " return value is required!",
-		customarray : "Custom function should return array!",
-		customfcheck : "Custom function should be present in case of custom checking!"
+        url: "неверная ссылка. Необходимо ввести префикс ('http://' или 'https://')",
+		nodefined : " не определено!",
+		novalue : " возвращаемое значение обязательно!",
+		customarray : "Пользовательская функция должна возвращать массив!",
+		customfcheck : "Пользовательская функция должна присутствовать в случаи пользовательской проверки!"
 		}
 	},
 	view : {
@@ -102,6 +101,7 @@ $.jgrid = {
 			S: function (j) {return j < 11 || j > 13 ? ['st', 'nd', 'rd', 'th'][Math.min((j - 1) % 10, 3)] : 'th'},
 			srcformat: 'Y-m-d',
 			newformat: 'd.m.Y',
+			parseRe : /[Tt\\\/:_;.,\t\s-]/,
 			masks : {
 	            ISO8601Long:"Y-m-d H:i:s",
 	            ISO8601Short:"Y-m-d",
@@ -123,5 +123,5 @@ $.jgrid = {
 	  checkbox : {disabled:true},
 		idName : 'id'
 	}
-};
+});
 })(jQuery);

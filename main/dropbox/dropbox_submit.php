@@ -95,55 +95,55 @@ if (isset($_POST['submitWork'])) {
             // Transform any .php file in .phps fo security
             $dropbox_filename = php2phps($dropbox_filename);
             if (!filter_extension($dropbox_filename)) {
-            	$error = true;
-            	$errormsg = get_lang('UplUnableToSaveFileFilteredExtension');
+                $error = true;
+                $errormsg = get_lang('UplUnableToSaveFileFilteredExtension');
             } else {
-	            // set title
-	            $dropbox_title = $dropbox_filename;
+                // set title
+                $dropbox_title = $dropbox_filename;
 
-	            // set author
-	            if ($_POST['authors'] == '') {
-	                $_POST['authors'] = getUserNameFromId($_user['user_id']);
-	            }
+                // set author
+                if ($_POST['authors'] == '') {
+                    $_POST['authors'] = getUserNameFromId($_user['user_id']);
+                }
 
-				if ($dropbox_overwrite) {
-					$dropbox_person = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
+                if ($dropbox_overwrite) {
+                    $dropbox_person = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
 
-					foreach ($dropbox_person->sentWork as $w) {
-						if ($w->title == $dropbox_filename) {
-						    if (($w->recipients[0]['id'] > dropbox_cnf('mailingIdBase')) xor $thisIsAMailing) {
-								$error = true;
-								$errormsg = get_lang('MailingNonMailingError');
-							}
-							if ( ($w->recipients[0]['id'] == $_user['user_id']) xor $thisIsJustUpload) {
-								$error = true;
-								$errormsg = get_lang('MailingJustUploadSelectNoOther');
-							}
-							$dropbox_filename = $w->filename;
-							$found = true;
-							break;
-						}
-					}
-				} else {
-					// rename file to login_filename_uniqueId format
-					$dropbox_filename = getLoginFromId( $_user['user_id']) . '_' . $dropbox_filename . '_'.uniqid('');
-				}
+                    foreach ($dropbox_person->sentWork as $w) {
+                        if ($w->title == $dropbox_filename) {
+                            if (($w->recipients[0]['id'] > dropbox_cnf('mailingIdBase')) xor $thisIsAMailing) {
+                                $error = true;
+                                $errormsg = get_lang('MailingNonMailingError');
+                            }
+                            if (($w->recipients[0]['id'] == $_user['user_id']) xor $thisIsJustUpload) {
+                                $error = true;
+                                $errormsg = get_lang('MailingJustUploadSelectNoOther');
+                            }
+                            $dropbox_filename = $w->filename;
+                            $found = true;
+                            break;
+                        }
+                    }
+                } else {
+                    // rename file to login_filename_uniqueId format
+                    $dropbox_filename = getLoginFromId( $_user['user_id']) . '_' . $dropbox_filename . '_'.uniqid('');
+                }
 
-				if (!is_dir(dropbox_cnf('sysPath'))) {
-					//The dropbox subdir doesn't exist yet so make it and create the .htaccess file
-	                mkdir(dropbox_cnf('sysPath'), api_get_permissions_for_new_directories()) or die(get_lang('ErrorCreatingDir').' (code 404)');
-					$fp = fopen(dropbox_cnf('sysPath').'/.htaccess', 'w') or die(get_lang('ErrorCreatingDir').' (code 405)');
-					fwrite($fp, "AuthName AllowLocalAccess
-	                             AuthType Basic
+                if (!is_dir(dropbox_cnf('sysPath'))) {
+                    //The dropbox subdir doesn't exist yet so make it and create the .htaccess file
+                    mkdir(dropbox_cnf('sysPath'), api_get_permissions_for_new_directories()) or die(get_lang('ErrorCreatingDir').' (code 404)');
+                    $fp = fopen(dropbox_cnf('sysPath').'/.htaccess', 'w') or die(get_lang('ErrorCreatingDir').' (code 405)');
+                    fwrite($fp, "AuthName AllowLocalAccess
+                                 AuthType Basic
 
-	                             order deny,allow
-	                             deny from all
+                                 order deny,allow
+                                 deny from all
 
-	                             php_flag zlib.output_compression off") or die(get_lang('ErrorCreatingDir').' (code 406)');
-	            }
+                                 php_flag zlib.output_compression off") or die(get_lang('ErrorCreatingDir').' (code 406)');
+                }
 
-				if ($error) {}
-				elseif ($thisIsAMailing) {
+				if ($error) {
+                } elseif ($thisIsAMailing) {
 				    if (preg_match(dropbox_cnf('mailingZipRegexp'), $dropbox_title)) {
 			            $newWorkRecipients = dropbox_cnf('mailingIdBase');
 					} else {
@@ -172,7 +172,7 @@ if (isset($_POST['submitWork'])) {
 				// After uploading the file, create the db entries
 
 	        	if (!$error) {
-		            @move_uploaded_file( $dropbox_filetmpname, dropbox_cnf('sysPath') . '/' . $dropbox_filename)
+		            @move_uploaded_file($dropbox_filetmpname, dropbox_cnf('sysPath') . '/' . $dropbox_filename)
 		            	or die(get_lang('UploadError').' (code 407)');
 		            new Dropbox_SentWork($_user['user_id'], $dropbox_title, $_POST['description'], strip_tags($_POST['authors']), $dropbox_filename, $dropbox_filesize, $newWorkRecipients);
 	        	}
@@ -180,219 +180,15 @@ if (isset($_POST['submitWork'])) {
         }
     } //end if(!$error)
 
-
     /**
      * SUBMIT FORM RESULTMESSAGE
      */
-
     if (!$error) {
 		$return_message = get_lang('FileUploadSucces');
     } else {
 		$return_message = $errormsg;
     }
-} // end if ( isset( $_POST['submitWork']))
-
-
-/**
- * EXAMINE OR SEND MAILING (NEW)
- * @deprecated The $_GET[mailingIndex] is never called
- */
-
-/*
-if (isset($_GET['mailingIndex'])) {
-    // examine or send
-    $dropbox_person = new Dropbox_Person( $_user['user_id'], $is_courseAdmin, $is_courseTutor);
-	if (isset($_SESSION['sentOrder'])) {
-		$dropbox_person->orderSentWork($_SESSION['sentOrder']);
-	}
-    $i = $_GET['mailingIndex'];
-    $mailing_item = $dropbox_person->sentWork[$i];
-    $mailing_title = $mailing_item->title;
-    $mailing_file = dropbox_cnf('sysPath') . '/' . $mailing_item->filename;
-    $errormsg = '<b>' . $mailing_item->recipients[0]['name'] . ' ('
-    	. "<a href='dropbox_download.php?origin=$origin&id=".urlencode($mailing_item->id)."'>"
-		. htmlspecialchars($mailing_title, ENT_QUOTES, api_get_system_encoding()) . '</a>):</b><br /><br />';
-
-    if (preg_match( dropbox_cnf('mailingZipRegexp'), $mailing_title, $nameParts)) {
-		$var = api_strtoupper($nameParts[2]);  // the variable part of the name
-		$course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-		$sel = "SELECT u.user_id, u.lastname, u.firstname, cu.status
-				FROM ".$_configuration['main_database'].".user u
-				LEFT JOIN $course_user cu
-				ON cu.user_id = u.user_id AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." AND cu.course_code = '".$_course['sysCode']."'";
-		$sel .= " WHERE u.".dropbox_cnf("mailingWhere".$var)." = '";
-
-		$preFix = $nameParts[1]; $postFix = $nameParts[3];
-		$preLen = api_strlen($preFix); $postLen = api_strlen($postFix);
-
-	    require api_get_path(LIBRARY_PATH) . 'pclzip/pclzip.lib.php';
-
-		$zipFile = new PclZip($mailing_file);
-		$goodFiles  = array();
-		$zipContent = $zipFile->listContent();
-		$ucaseFiles = array();
-
-		if ($zipContent) {
-			foreach( $zipFile->listContent() as $thisContent) {
-	            $thisFile = substr(strrchr('/' . $thisContent['filename'], '/'), 1);
-	            $thisFileUcase = strtoupper($thisFile);
-				if (preg_match("~.(php.*|phtml)$~i", $thisFile)) {
-		            $error = true;
-		            $errormsg .= $thisFile . ': ' . get_lang('MailingZipPhp');
-					break;
-				} elseif (!$thisContent['folder']) {
-		            if ($ucaseFiles[$thisFileUcase]) {
-			            $error = true;
-			            $errormsg .= $thisFile . ': ' . get_lang('MailingZipDups');
-						break;
-		            } else {
-			            $goodFiles[$thisFile] = findRecipient($thisFile);
-			            $ucaseFiles[$thisFileUcase] = 'yep';
-		            }
-				}
-			}
-		} else {
-            $error = true;
-            $errormsg .= get_lang('MailingZipEmptyOrCorrupt');
-        }
-
-		if (!$error) {
-			$students = array();  // collect all recipients in this course
-
-			foreach ($goodFiles as $thisFile => $thisRecip) {
-				$errormsg .= htmlspecialchars($thisFile, ENT_QUOTES, api_get_system_encoding()) . ': ';
-	            if (is_string($thisRecip)) { // see findRecipient
-					$errormsg .= '<font color="#FF0000">'
-						. htmlspecialchars($thisRecip, ENT_QUOTES, api_get_system_encoding()) . '</font><br />';
-	            } else {
-					if ( isset( $_GET['mailingSend'])) {
-			            $errormsg .= get_lang('MailingFileSentTo');
-		            } else {
-						$errormsg .= get_lang('MailingFileIsFor');
-		            }
-					$errormsg .= htmlspecialchars(api_get_person_name($thisRecip[2], $thisRecip[1]), ENT_QUOTES, api_get_system_encoding());
-
-					if (is_null($thisRecip[3])) {
-						$errormsg .= get_lang('MailingFileNotRegistered');
-					} else {
-						$students[] = $thisRecip[0];
-					}
-					$errormsg .= '<br />';
-	            }
-			}
-
-			// find student course members not among the recipients
-
-			$course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-			$sql = "SELECT u.lastname, u.firstname
-					FROM $course_user cu
-					LEFT JOIN  ".$_configuration['main_database'].".user u
-					ON cu.user_id = u.user_id AND cu.course_code = '".$_course['sysCode']."'
-					WHERE cu.status = 5
-					AND u.user_id NOT IN ('" . implode("', '" , $students) . "')";
-	        $result = Database::query($sql);
-
-	        if (Database::num_rows($result) > 0) {
-		        $remainingUsers = '';
-		        while ($res = Database::fetch_array($result)) {
-					$remainingUsers .= ', ' . htmlspecialchars(api_get_person_name($res[1], $res[0]), ENT_QUOTES, api_get_system_encoding());
-		        }
-		        $errormsg .= '<br />' . get_lang('MailingNothingFor') . api_substr($remainingUsers, 1) . '.<br />';
-	        }
-
-			if (isset($_GET['mailingSend'])) {
-				chdir(dropbox_cnf('sysPath'));
-				$zipFile->extract(PCLZIP_OPT_REMOVE_ALL_PATH);
-
-				$mailingPseudoId = dropbox_cnf('mailingIdBase') + $mailing_item->id;
-
-				foreach ($goodFiles as $thisFile => $thisRecip) {
-		            if (is_string($thisRecip)) { // remove problem file
-			            @unlink(dropbox_cnf('sysPath') . '/' . $thisFile);
-		            } else {
-				        $newName = getLoginFromId( $_user['user_id']) . '_' . $thisFile . '_' . uniqid('');
-				        if (rename(dropbox_cnf('sysPath') . '/' . $thisFile, dropbox_cnf('sysPath') . '/' . $newName))
-							new Dropbox_SentWork($mailingPseudoId, $thisFile, $mailing_item->description, $mailing_item->author, $newName, $thisContent['size'], array($thisRecip[0]));
-		            }
-				}
-
-			    $sendDT = api_get_utc_datetime();
-			    // set filesize to zero on send, to avoid 2nd send (see index.php)
-				$sql = "UPDATE ".dropbox_cnf("tbl_file")."
-						SET filesize = '0' , upload_date = '".$sendDT."', last_upload_date = '".$sendDT."'
-						WHERE id='".addslashes($mailing_item->id)."'";
-				$result = Database::query($sql);
-			} elseif ($mailing_item->filesize != 0) {
-		        $errormsg .= '<br />' . get_lang('MailingNotYetSent') . '<br />';
-			}
-        }
-    } else {
-        $error = true;
-        $errormsg .= get_lang('MailingWrongZipfile');
-    }
-
-
-    //EXAMINE OR SEND MAILING RESULTMESSAGE
-
-
-    if ($error) {
-        ?>
-		<b><font color="#FF0000"><?php echo $errormsg?></font></b><br /><br />
-		<a href="index.php<?php echo "?origin=$origin"; ?>"><?php echo get_lang('BackList'); ?></a><br />
-		<?php
-    } else {
-        ?>
-		<?php echo $errormsg?><br /><br />
-		<a href="index.php<?php echo "?origin=$origin"; ?>"><?php echo get_lang('BackList'); ?></a><br />
-		<?php
-    }
 }
-*/
-
-function findRecipient($thisFile) {
-	// string result = error message, array result = [user_id, lastname, firstname, status]
-	global $nameParts, $preFix, $preLen, $postFix, $postLen;
-    if (preg_match(dropbox_cnf('mailingFileRegexp'), $thisFile, $matches)) {
-        $thisName = $matches[1];
-        if (api_substr($thisName, 0, $preLen) == $preFix) {
-            if ($postLen == 0 || api_substr($thisName, -$postLen) == $postFix) {
-	            $thisRecip = api_substr($thisName, $preLen, api_strlen($thisName) - $preLen - $postLen);
-	            if ($thisRecip) {
-	            	return getUser($thisRecip);
-	            }
-	            return ' <'.get_lang('MailingFileNoRecip', '').'>';
-            } else {
-	            return ' <'.get_lang('MailingFileNoPostfix', '').$postFix.'>';
-            }
-        } else {
-            return ' <'.get_lang('MailingFileNoPrefix', '').$preFix.'>';
-        }
-    } else {
-        return ' <'.get_lang('MailingFileFunny', '').'>';
-    }
-}
-
-function getUser($thisRecip) {
-	// string result = error message, array result = [user_id, lastname, firstname]
-
-	global $var, $sel;
-    if (isset($students)) {
-        unset($students);
-    }
-
-    $result = Database::query($sel . $thisRecip . "'");
-    while ( ($res = Database::fetch_array($result))) {$students[] = $res;}
-    Database::free_result($result);
-
-	if (count($students) == 1) {
-    	return($students[0]);
-	} elseif (count($students) > 1) {
-    	return ' <'.get_lang('MailingFileRecipDup', '').$var."= $thisRecip>";
-	} else {
-    	return ' <'.get_lang('MailingFileRecipNotFound', '').$var."= $thisRecip>";
-	}
-}
-
 
 /**
  * DELETE RECEIVED OR SENT FILES - EDIT FEEDBACK

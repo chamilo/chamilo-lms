@@ -77,7 +77,6 @@ $langUserHasPermissionNot = "ليس للمستخدم الحقوق التالية
 $langUserHasPermission = "للمستخدم الحقوق التالية";
 $langLegend = "Legend";
 $langUserHasPermissionByRoleGroup = "للمستخدم حقوق مجموعته";
-$EditPost = "تحرير مقال";
 $AddBlog = "إنشئ مدونة جديدة";
 $EditBlog = "تعديل العنوان والعنوان الفرعي";
 $DeleteBlog = "حذف هذه المدونة";

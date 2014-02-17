@@ -44,5 +44,26 @@ $langClarContent3 = "</p><p><b>Teoria edukacyjna</b><p>Dla prowadz±cych zajęci
 $langClarContent4 = "jest miejscem, w którym znajdziesz pomoc podczas projektowania swojego kursu: od poznania narzędzi, przez ich integrację w jasn± i spójn± strategię aż do obiektywnej oceny przebiegu procesu nauczania.</p>";
 $langClarContent1 = "Wyczyść zawartość";
 $langClarContent2 = "Wyczyść zawartość";
+$langHGroups = "Pomoc - Grupy";
+$langGroupsContent = "Zawartość grup";
 $langGuide = "Podręcznik";
+$HSurvey = "Pomoc - Ankiety";
+$SurveyContent = "Uzyskanie właściwej informacji zwrotnej z Twoich kursów jest niezwykle ważne. Znajdziesz dedykowane nieocenione narzędzie Ankiety do uzyskania skutecznej informacji zwrotnej od użytkowników.<br><br>
+<b>Tworzenie nowej ankiety</b><br><br>
+Kliknij na link 'Utwórz nową ankietę' i wypełnij 'kod Ankiety' oraz 'tytuł Ankiety'. Z pomocą kalendarza, można kontrolować czas trwania ankiety. Nie ma potrzeby, aby była dostępna przez cały rok. Umożliwiaj dostęp do niej pod  koniec programu szkoleniowego. Wypełniając pola tekstowe 'Wprowadzenie do ankiety' oraz \"Podziękowanie za udział w ankiecie' jest dobrą praktyką. To sprawi, że ankieta będzie jasna i przyjazna dla ankietowanych.<br><br>
+<b>Dodawanie pytań do ankiety</b><br><br>
+Kiedy zarys ankiety, jest już utworzony, czas na tworzenie pytań. Narzędzie \"Ankiety\" ma wiele typów pytań: otwarte/ zamknięte pytania, skuteczność, QCM, wielokrotne odpowiedzi... Należy znaleźć z pewnością wszystko, co będzie potrzebne dla (coraz większych) wymagań zwrotnych.<br>
+<b>Podgląd ankiety</b><br><br>
+Po utworzeniu pytań, możesz sprawdzić, jak będzie wyglądać ankieta. Kliknij na ikonę \"Podgląd\" a podgląd ekranu pokaże jej wygląd.<br><br>
+<b>Publikowanie ankiety</b><br><br>
+Zadowolony z podglądu? Jakieś zmiany do wykonania? Nie? W takim razie kliknij na ikonę 'Publikuj ankietę', aby wysłać ją do wybranej listy odbiorców. Tak jak w przypadku tworzenia grup, skorzystaj z listy 'Użytkownicy kursu' po lewej oraz z listy 'Odbiorcy' po prawej, aby tego dokonać. Następnie wypełnij pole 'Tytuł emaila' oraz 'Tekst wiadomości e-mail'. Potencjalni ankietowani będą powiadamiani drogą elektroniczną o dostępności ankiety. Pomyśl dokładnie o treści wiadomości e-mail, ponieważ będzie ona odgrywać dużą rolę w motywowaniu użytkownikom do jej wypełnienia.<br><br>
+<b>Sprawozdania z ankiet</b><br><br>
+Analiza ankiet jest żmudnym zadaniem. Narzędzie raportowania ankiet pomoże z analizami, sortuje raporty według pytań, użytkowników, porównań itp. ..<br><br>
+<b>Zarządzanie ankietami</b><br><br>
+Podczas zarządzania ankietami pojawi się kilka nowych ikon, oprócz zwykłych opcji \"Edytuj\" i \"Usuń\". Możesz przeglądać, publikować i śledzić swoje ankiety i odpowiedzi za ich pomocą.<br>";
+$HBlogs = "Pomoc - Projekt";
+$BlogsContent = "Narzędzie Projektu ułatwia pracę przy wspólnych projektach.
+Jednym ze sposobów wykorzystania tego narzędzia jest użycie go, do przypisania autorom zobowiązanych do prowadzenia pisemnych sprawozdań z działalności w ciągu dnia/tygodnia.
+W połączeniu z tym, jest to narzędzie do zarządzania zadaniami, przez które można przypisać odpowiednie zadania do każdego z wyznaczonych autorów (np. zgłosić do ewolucji norm bezpieczeństwa w biznesie).
+Pozycja reprezentująca nowe treści to artykuł. Aby utworzyć nowy artykuł, kliknij na link w menu, który podpowie ci co zrobić. Aby edytować (jeśli jesteś autorem artykułu) lub dodać komentarz do artykułu, po prostu kliknij na tytuł tego artykułu.";
 ?>

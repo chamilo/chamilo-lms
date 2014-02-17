@@ -2,7 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$Inbox = "Inbox";
+$MessageEmptyMessageOrSubject = "Uveďte, prosím predmet alebo správu";
+$Inbox = "Prijaté správy";
 $Messages = "Správy";
 $SendMessage = "Poslať správu";
 $NewMessage = "Nová správa";
@@ -11,7 +12,7 @@ $DeleteSelectedMessages = "Zmazať vybrané správy";
 $SelectAll = "Označiť všetko";
 $DeselectAll = "Zrušiť všetko";
 $ReplyToMessage = "Odpovedať na túto správu";
-$BackToInbox = "Späť na Inbox";
+$BackToInbox = "Späť na Prijaté správy";
 $MessageSentTo = "Správa bola poslaná na";
 $SendMessageTo = "Poslať na";
 $Myself = "mne";
@@ -28,4 +29,16 @@ $MessageDeleted = "Správa bola zmazaná";
 $ConfirmDeleteMessage = "Naozaj chcete zmazať vybranú správu?";
 $DeleteMessage = "Zmazať správu";
 $ReadMessage = "Čítať správu";
+$SendInviteMessage = "Poslať pozvánku";
+$SendMessageInvitation = "Ste si istí, že chcete poslať tieto pozvánky?";
+$MessageTool = "Nástroj správ";
+$WriteAMessage = "Napísať správu";
+$AlreadyReadMessage = "Správa prečítaná";
+$UnReadMessage = "Neprečítané správy";
+$MessageSent = "Správa odoslaná";
+$MailMarkSelectedAsUnread = "Označiť ako neprečítané";
+$MailMarkSelectedAsRead = "Označiť ako prečítané";
+$YouShouldWriteAMessage = "Mali by ste napísať správu";
+$SelectedMessagesUnRead = "Vybrané správy boli označené ako neprečítané";
+$SelectedMessagesRead = "Vybrané správy boli označené ako prečítané";
 ?>

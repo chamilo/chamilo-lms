@@ -159,7 +159,9 @@ if (count($_POST) > 0) {
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $types[$row['question_id']] = $row['type'];
         }
-
+        if ($survey_data['anonymous'] == 0) {
+            $survey_invitation['user'] = api_get_user_id();
+        }
         // Looping through all the post values
         foreach ($_POST as $key => & $value) {
             // If the post value key contains the string 'question' then it is an answer on a question
@@ -219,7 +221,9 @@ if (count($_POST) > 0) {
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $types[$row['question_id']] = $row['type'];
         }
-
+        if ($survey_data['anonymous'] == 0) {
+            $survey_invitation['user'] = api_get_user_id();
+        }
         // Looping through all the post values
         foreach ($_POST as $key => & $value) {
             // If the post value key contains the string 'question' then it is an answer to a question

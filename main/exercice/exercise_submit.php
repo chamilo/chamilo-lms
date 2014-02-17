@@ -215,7 +215,6 @@ if ($objExercise->selectAttempts() > 0) {
 if ($debug) { error_log("4. Setting the exe_id: $exe_id");} ;
 
 //5. Getting user exercise info (if the user took the exam before) - generating exe_id
-//var_dump($learnpath_id.' - '.$learnpath_item_id.' - '.$learnpath_item_view_id);
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info($learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
 
 $clock_expired_time = null;
@@ -327,14 +326,14 @@ if ($time_control) {
     if ($debug) { error_log("7 No time control"); };
 }
 
-// Get time left for exipiring time
+// Get time left for expiring time
 $time_left = api_strtotime($clock_expired_time,'UTC') - time();
 
 /*
  * The time control feature is enable here - this feature is enable for a jquery plugin called epiclock
  * for more details of how it works see this link : http://eric.garside.name/docs.html?p=epiclock
  */
-if ($time_control) { //Sends the exercice form when the expired time is finished
+if ($time_control) { //Sends the exercise form when the expired time is finished
 	$htmlHeadXtra[] = $objExercise->show_time_control_js($time_left);
 }
 
@@ -875,16 +874,16 @@ if (!empty($error)) {
             }
 
             function save_now_all(validate) {
-            	//1. Input choice
+            	// 1. Input choice.
            		var my_choice = $(\'*[name*="choice"]\').serialize();
 
-           		//2. Reminder
+           		// 2. Reminder.
            		var remind_list = $(\'*[name*="remind_list"]\').serialize();
 
-           		//3. Hotspots
+           		// 3. Hotspots.
            		var hotspot = $(\'*[name*="hotspot"]\').serialize();
 
-           		//Question list
+           		// Question list.
            		var question_list = ['.implode(',', $questionList).'];
 
            		var free_answers = {};
@@ -901,7 +900,8 @@ if (!empty($error)) {
                    		}
                		}
            		});
-           		//lok+(fgt)= data base
+
+           		// lok+(fgt)= data base
            		free_answers = $.param(free_answers);
 
           		$("#save_all_reponse").html("'.addslashes(Display::return_icon('loading1.gif')).'");

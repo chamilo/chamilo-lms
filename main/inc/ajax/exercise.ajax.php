@@ -39,7 +39,9 @@ switch ($action) {
         }
         // get index row - i.e. user click to sort $sord = $_GET['sord'];
         // get the direction
-        if (!$sidx) $sidx = 1;
+        if (!$sidx) {
+            $sidx = 1;
+        }
 
         $track_exercise        = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $user_table            = Database::get_main_table(TABLE_MAIN_USER);
@@ -69,7 +71,7 @@ switch ($action) {
         }
 
         $start = $limit * $page - $limit;
-        if ($start < 0 ) {
+        if ($start < 0) {
             $start = 0;
         }
 
@@ -99,7 +101,7 @@ switch ($action) {
 
         $result = Database::query($sql);
         $results = array();
-        while ($row = Database::fetch_array($result, 'ASSOC')){
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
             $results[] = $row;
         }
 
@@ -113,7 +115,7 @@ switch ($action) {
         $i=0;
 
         if (!empty($results)) {
-            foreach($results as $row) {
+            foreach ($results as $row) {
                 $sql = "SELECT SUM(count_question_id) as count_question_id FROM (
                             SELECT 1 as count_question_id FROM  $track_attempt a
                             WHERE user_id = {$row['exe_user_id']} and exe_id = {$row['exe_id']}
@@ -130,12 +132,13 @@ switch ($action) {
                 $h = floor($remaining/3600);
                 $m = floor(($remaining - ($h*3600))/60);
                 $s = ($remaining - ($h*3600) - ($m*60));
-                $array = array( $row['firstname'],
-                                $row['lastname'],
-                                api_format_date($row['start_date'], DATE_TIME_FORMAT_LONG).' ['.($h>0?$h.':':'').sprintf("%02d",$m).':'.sprintf("%02d",$s).']',
-                                $row['count_questions'],
-                                round($row['score']*100).'%'
-                               );
+                $array = array(
+                    $row['firstname'],
+                    $row['lastname'],
+                    api_format_date($row['start_date'], DATE_TIME_FORMAT_LONG).' ['.($h>0?$h.':':'').sprintf("%02d",$m).':'.sprintf("%02d",$s).']',
+                    $row['count_questions'],
+                    round($row['score']*100).'%'
+                );
                 $response->rows[$i]['cell'] = $array;
                 $i++;
             }
@@ -178,19 +181,19 @@ switch ($action) {
         }
         break;
     case 'add_question_to_reminder':
-    	$objExercise  = $_SESSION['objExercise'];
-    	if (empty($objExercise)) {
-    		echo 0;
-    		exit;
-    	} else {
-    		$objExercise->edit_question_to_remind($_REQUEST['exe_id'], $_REQUEST['question_id'], $_REQUEST['action']);
-    	}
-    	break;
+        $objExercise  = $_SESSION['objExercise'];
+        if (empty($objExercise)) {
+            echo 0;
+            exit;
+        } else {
+            $objExercise->edit_question_to_remind($_REQUEST['exe_id'], $_REQUEST['question_id'], $_REQUEST['action']);
+        }
+        break;
     case 'save_exercise_by_now':
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
 
-        //Use have permissions?
+        // Use have permissions?
         if (api_is_allowed_to_session_edit()) {
 
             //"all" or "simple" strings means that there's one or all questions exercise type
@@ -212,20 +215,22 @@ switch ($action) {
             //Attempt id
             $exe_id = $_REQUEST['exe_id'];
 
-            if ($debug) error_log("exe_id = $exe_id ");
-            if ($debug) error_log("type = $type ");
-            if ($debug) error_log("choice = ".print_r($choice, 1)." ");
-            if ($debug) error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates,1));
-            if ($debug) error_log("remind_list = ".print_r($remind_list, 1));
+            if ($debug) {
+                error_log("exe_id = $exe_id ");
+                error_log("type = $type ");
+                error_log("choice = ".print_r($choice, 1)." ");
+                error_log("hot_spot_coordinates = ".print_r($hot_spot_coordinates, 1));
+                error_log("remind_list = ".print_r($remind_list, 1));
+            }
 
-            //Exercise information
+            // Exercise information.
             $objExercise             = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;
 
-            //Question info
+            // Question info.
             $question_id             = intval($_REQUEST['question_id']);
             $question_list           = $_SESSION['questionList'];
 
-            //If exercise or question is not set then exit
+            // If exercise or question is not set then exit.
             if (empty($question_list) || empty($objExercise)) {
                 echo 'error';
                 exit;
@@ -274,7 +279,6 @@ switch ($action) {
             	}
             }
 
-
             //No exe id? Can't save answer.
             if (empty($exe_id)) {
                 //Fires an error
@@ -296,7 +300,7 @@ switch ($action) {
 
             unset($objQuestionTmp);
 
-            //Looping the question list
+            // Looping the question list
 
             foreach ($question_list as $my_question_id) {
                 if ($debug) error_log("Saving question_id = $my_question_id ");

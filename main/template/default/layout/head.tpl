@@ -21,20 +21,18 @@
 {% raw %}
 if ((navigator.userAgent.toLowerCase().indexOf('msie') != -1 ) && ( navigator.userAgent.toLowerCase().indexOf('opera') == -1 )) {
     window.attachEvent( 'onunload', function() {
-            window['__flash__removeCallback'] = function ( instance, name ) {
-                try {
-                    if ( instance ) {
-                        instance[name] = null ;
-                    }
-                } catch ( flashEx ) {
+        window['__flash__removeCallback'] = function ( instance, name ) {
+            try {
+                if ( instance ) {
+                    instance[name] = null ;
                 }
-            } ;
+            } catch ( flashEx ) {
+            }
+        } ;
     });
 }
 {% endraw %}
 //]]>
-
-
 
 function setCheckbox(value, table_id) {
     checkboxes = $("#"+table_id+" input:checkbox");
@@ -141,7 +139,7 @@ $(document).scroll(function() {
         }
     }
 
-    //Admin -> Settings toolbar
+    // Admin -> Settings toolbar.
     if ($('body').width() > 959) {
         if ($('.new_actions').length) {
             if (!$('.new_actions').attr('data-top')) {
@@ -165,7 +163,7 @@ $(document).scroll(function() {
         }
     }
 
-    //Bottom actions
+    // Bottom actions.
     if ($('.bottom_actions').length) {
         if (!$('.bottom_actions').attr('data-top')) {
             // If already fixed, then do nothing
@@ -196,31 +194,93 @@ $(document).scroll(function() {
     }
 });
 
+function showConfirmationPopup(obj, urlParam)
+{
+    if (urlParam) {
+        url = urlParam
+    } else {
+        url = obj.href;
+    }
+
+    var dialog  = $("#dialog");
+    if ($("#dialog").length == 0) {
+        dialog  = $('<div id="dialog" style="display:none">{{ "ConfirmYourChoice" | get_lang }} </div>').appendTo('body');
+    }
+
+    var width_value = 350;
+    var height_value = 150;
+    var resizable_value = true;
+
+    var new_param = get_url_params(url, 'width');
+    if (new_param) {
+        width_value = new_param;
+    }
+
+    var new_param = get_url_params(url, 'height')
+    if (new_param) {
+        height_value = new_param;
+    }
+
+    var new_param = get_url_params(url, 'resizable');
+    if (new_param) {
+        resizable_value = new_param;
+    }
+
+    // Show dialog
+    dialog.dialog({
+        modal       : true,
+        width       : width_value,
+        height      : height_value,
+        resizable   : resizable_value,
+        buttons: [
+            {
+                text: '{{ 'Yes' | get_lang }}',
+                click: function() {
+                    window.location = url;
+                },
+                icons:{
+                    primary:'ui-icon-locked'
+                }
+            },
+            {
+                text: '{{ 'No' | get_lang }}',
+                click: function() { $(this).dialog("close"); },
+                icons:{
+                    primary:'ui-icon-locked'
+                }
+            }
+        ]
+    });
+    // prevent the browser to follow the link
+    return false;
+}
+
 $(function() {
 
     check_brand();
 
-    //Removes the yellow input in Chrome
+    // Removes the yellow input in Chrome
     if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
         $(window).load(function(){
             $('input:-webkit-autofill').each(function(){
                 var text = $(this).val();
                 var name = $(this).attr('name');
                 $(this).after(this.outerHTML).remove();
+                //var has_string = $(name).find(":contains('[')");
                 $('input[name=' + name + ']').val(text);
             });
         });
     }
 
-    //Fixes buttons to the new btn class
+    // Fixes buttons to the new btn class.
     if (!$('#button').hasClass('btn')) {
         $("button").addClass('btn');
     }
 
-    //Dropdown effect
+    // Dropdown effect.
     $('.dropdown-toggle').dropdown();
 
-    //Responsive effect
+    // Responsive effect.
     $(".collapse").collapse();
 
     $(".accordion_jquery").accordion({
@@ -230,7 +290,7 @@ $(function() {
         header: ".accordion-heading"
     });
 
-    //Global popup
+    // Global popup
     $('.ajax').on('click', function() {
         var url     = this.href;
         var dialog  = $("#dialog");
@@ -238,42 +298,49 @@ $(function() {
             dialog  = $('<div id="dialog" style="display:none"></div>').appendTo('body');
         }
 
-        width_value = 580;
-        height_value = 450;
-        resizable_value = true;
+        var width_value = 580;
+        var height_value = 450;
+        var resizable_value = true;
 
-        new_param = get_url_params(url, 'width');
+        var new_param = get_url_params(url, 'width');
         if (new_param) {
             width_value = new_param;
         }
 
-        new_param = get_url_params(url, 'height')
+        var new_param = get_url_params(url, 'height')
         if (new_param) {
             height_value = new_param;
         }
 
-        new_param = get_url_params(url, 'resizable');
+        var new_param = get_url_params(url, 'resizable');
         if (new_param) {
             resizable_value = new_param;
         }
 
         // load remote content
         dialog.load(
-                        url,
-                        {},
-                        function(responseText, textStatus, XMLHttpRequest) {
-                                dialog.dialog({
-                                        modal       : true,
-                                        width       : width_value,
-                                        height      : height_value,
-                                        resizable   : resizable_value
-                                });
-        });
-        //prevent the browser to follow the link
+            url,
+            {},
+            function(responseText, textStatus, XMLHttpRequest) {
+                dialog.dialog({
+                    modal       : true,
+                    width       : width_value,
+                    height      : height_value,
+                    resizable   : resizable_value
+                });
+            }
+        );
+        // prevent the browser to follow the link
         return false;
     });
 
-    //old jquery.menu.js
+    // Global confirmation
+    $('.popup-confirmation').on('click', function() {
+        showConfirmationPopup(this);
+        return false;
+    });
+
+    // old jquery.menu.js
     $('#navigation a').stop().animate({
         'marginLeft':'50px'
     },1000);

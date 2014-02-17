@@ -84,6 +84,7 @@ $Collapse = "Replier";
 $CourseDetails = "Description du cours";
 $GroupPendingInvitations = "Invitations de groupe en attente";
 $Compose = "Composer";
+$EmptyHeaderLine = "Les premières lignes du fichier sélectionné sont vides";
 $EnrollToCourseXSuccessful = "Vous avez été inscrit au cours %s";
 $ThereAreNoCoursesInThisCategory = "Aucun cours dans la catégorie courante";
 ?>

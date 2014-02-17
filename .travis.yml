@@ -1,0 +1,13 @@
+language: php
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+
+before_script: composer install -n
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq php5-imagick php5-curl
+
+script: phpunit -c tests/phpunit

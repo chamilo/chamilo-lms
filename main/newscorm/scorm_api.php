@@ -35,6 +35,7 @@ require_once 'learnpathItem.class.php';
 require_once 'scorm.class.php';
 
 $file   = (empty($_SESSION['file'])?'':$_SESSION['file']);
+/** @var Learnpath $oLP */
 $oLP    = unserialize($_SESSION['lpobject']);
 $oItem 	= $oLP->items[$oLP->current];
 
@@ -47,7 +48,7 @@ $user = api_get_user_info();
 header('Content-type: text/javascript');
 
 ?>var scorm_logs=<?php echo ((empty($oLP->scorm_debug) or (!api_is_course_admin() && !api_is_platform_admin()) )?'0':'3');?>; //debug log level for SCORM. 0 = none, 1=light, 2=a lot, 3=all - displays logs in log frame
-var lms_logs=0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
+var lms_logs = 0; //debug log level for LMS actions. 0=none, 1=light, 2=a lot, 3=all
 
 // API Object initialization (eases access later on)
 function APIobject() {
@@ -157,7 +158,7 @@ olms.launch_data = '<?php echo $oItem->get_launch_data();?>';
 olms.max_time_allowed = '<?php echo $oItem->get_max_time_allowed();?>';
 olms.interactions = new Array(<?php echo $oItem->get_interactions_js_array();?>);
 olms.item_objectives = new Array();
-olms.info_lms_item=new Array();
+olms.info_lms_item = new Array();
 
 // Chamilo internal variables (not SCORM)
 // olms.saved_lesson_status = 'not attempted';
@@ -181,6 +182,9 @@ olms.lms_item_credit = '<?php echo $oItem->get_credit();?>';
 olms.lms_item_lesson_mode = '<?php echo $oItem->get_lesson_mode();?>';
 olms.lms_item_launch_data = '<?php echo $oItem->get_launch_data();?>';
 olms.lms_item_core_exit = '<?php echo $oItem->get_core_exit();?>';
+olms.lms_course_id = '<?php echo $oLP->get_course_int_id(); ?>';
+olms.lms_course_code = '<?php echo $oLP->getCourseCode(); ?>';
+
 <?php echo $oLP->get_items_details_as_js('olms.lms_item_types');?>
 
 olms.asset_timer = 0;
@@ -209,7 +213,7 @@ $(document).ready(function() {
         if (olms.lms_item_types['i'+olms.info_lms_item[1]] != 'sco') {
             LMSInitialize();
         } else {
-            logit_lms('Cant execute LMSInitialize() ');
+            logit_lms('Cant execute LMSInitialize() (type is sco)',2);
         }
     });
 });
@@ -219,7 +223,7 @@ $(document).ready(function() {
 //oxajax = new XAJAXobject();
 
 // This code was moved inside LMSInitialize()
-if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset') {
+if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
     xajax_start_timer();
 }
 
@@ -268,7 +272,10 @@ function LMSInitialize() {
             url: "lp_ajax_initialize.php",
             data: params,
             dataType: 'script',
-            async: false
+            async: false,
+            success:function(data) {
+                jQuery("video:not(.skip), audio:not(.skip)").mediaelementplayer();
+            }
         });
 
         olms.lms_initialized = 1;
@@ -294,7 +301,7 @@ function LMSInitialize() {
 
         logit_scorm('LMSInitialize() with params: '+log);
 
-        if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset') {
+	    if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
             xajax_start_timer();
         }
 
@@ -801,7 +808,7 @@ function SetValue(param, val) {
  */
 function savedata(origin) {
     //origin can be 'commit', 'finish' or 'terminate' (depending on the calling function)
-    logit_lms('function savedata() with origin: ' + origin);
+    logit_lms('function savedata() with origin: ' + origin, 3);
 
     //Status is NOT modified here see the lp_ajax_save_item.php file
 
@@ -812,15 +819,15 @@ function savedata(origin) {
     old_item_id = olms.info_lms_item[0];
 
     var item_to_save = olms.lms_item_id;
-    logit_lms('item_to_save original: ' + item_to_save);
+    logit_lms('item_to_save original: ' + item_to_save, 3);
 
     //If saving session_time value we asume that is from the old item not the current one
     if (olms.session_time != '' && olms.session_time != '0') {
-        logit_lms('item_to_save changed to: ' + old_item_id);
+        logit_lms('item_to_save changed to: ' + old_item_id, 3);
         item_to_save = old_item_id;
     }
 
-    logit_lms('item_to_save final: ' + item_to_save);
+    logit_lms('item_to_save final: ' + item_to_save, 3);
 
     //Original behaviour
     //xajax_save_item_scorm(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, old_item_id);
@@ -1016,24 +1023,24 @@ function addEvent(elm, evType, fn, useCapture){
  */
 function addListeners(){
     //exit if the browser doesn't support ID or tag retrieval
-    logit_lms('Entering addListeners()',2);
+    logit_lms('Entering addListeners()', 3);
     if (!document.getElementsByTagName){
-        logit_lms("getElementsByTagName not available",2);
+        logit_lms("getElementsByTagName not available", 2);
         return;
     }
     if (!document.getElementById){
-        logit_lms("getElementById not available",2);
+        logit_lms("getElementById not available", 2);
         return;
     }
     //assign event handlers to objects
-    if (olms.lms_lp_type==1 || olms.lms_item_type=='asset'){
-        logit_lms('Chamilo LP or asset',2);
+    if (olms.lms_lp_type==1 || olms.lms_item_type=='asset' || olms.lms_item_type == 'document') {
+        logit_lms('Chamilo LP or asset');
         //if this path is a Chamilo learnpath, then start manual save
         //when something is loaded in there
         addEvent(window, 'unload', lms_save_asset,false);
-        logit_lms('Added event listener lms_save_asset() on window unload',2);
+        logit_lms('Added event listener lms_save_asset() on window unload', 3);
     }
-    logit_lms('Quitting addListeners()',2);
+    logit_lms('Quitting addListeners()');
 }
 
 /**
@@ -1049,7 +1056,7 @@ function lms_save_asset() {
     }
 
     //For scorms do not show stats
-    if (olms.lms_lp_type == 2) {
+    if (olms.lms_lp_type == 2 && olms.lms_lp_item_type != 'document') {
        olms.execute_stats = false;
     }
 
@@ -1057,10 +1064,10 @@ function lms_save_asset() {
         olms.execute_stats = true;
     }
 
-    if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset') {
+    if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
         logit_lms('lms_save_asset');
         logit_lms('execute_stats :'+ olms.execute_stats);
-        xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.session_time, olms.suspend_data, olms.lesson_location, olms.interactions, olms.lms_item_core_exit);
+        xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.session_time, olms.suspend_data, olms.lesson_location, olms.interactions, olms.lms_item_core_exit, olms.lms_item_type);
         if (olms.item_objectives.length>0) {
             xajax_save_objectives(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,olms.item_objectives);
         }
@@ -1075,7 +1082,7 @@ function lms_save_asset() {
  * Saving the status will be dealt with by the XAJAX function.
  */
 function chamilo_void_save_asset(score, max, min, status) {
-    logit_lms('chamilo_void_save_asset',2);
+    logit_lms('chamilo_void_save_asset', 3);
     olms.score = score;
     if ((max == null) || (max == '')){
         max = 100;
@@ -1096,15 +1103,32 @@ function chamilo_void_save_asset(score, max, min, status) {
  */
 function logit_scorm(message, priority) {
     if (scorm_logs) {
-        log_in_log("SCORM: " + message);
+        log_in_log("SCORM: " + message, priority);
     }
     return false;
 }
 
-function log_in_log(message) {
+function log_in_log(message, priority) {
     var ua = $.browser;
-    if (ua.mozilla) {
-        console.log(message);
+    if (ua.mozilla || ua.webkit) {
+        // Colorize a little
+        var color = "color: black";
+        switch (priority) {
+            case 0:
+                color = "color:red;font-weight:bold";
+                break;
+            case 1:
+                color = "color:orange";
+                break;
+            case 2:
+                color = "color:green";
+                break;
+            case 3:
+                color = "color:blue";
+            break;
+        }
+        // Log in console with syntax colouring
+        console.log("%c"+message, color);
     } else {
         if (window.console) {
             window.console.log(message);
@@ -1119,7 +1143,7 @@ function log_in_log(message) {
  */
 function logit_lms(message, priority){
     if (scorm_logs) {
-        log_in_log("LMS: " + message);
+        log_in_log("LMS: " + message, priority);
     }
     return false;
 }
@@ -1190,7 +1214,7 @@ function update_toc(update_action, update_id, change_ids) {
                 }
                 break;
             default:
-                logit_lms('Update action unknown',2);
+                logit_lms('Update action unknown',1);
                 break;
         }
     }
@@ -1218,7 +1242,7 @@ function update_stats() {
  * Update the stats frame using a reload of the frame to avoid unsynched data
  */
 function update_stats_page() {
-    logit_lms('update_stats_page');
+    logit_lms('update_stats_page',3);
     var myframe = document.getElementById('content_id');
     var mysrc = myframe.location.href;
     if(mysrc == 'lp_controller.php?action=stats'){
@@ -1238,8 +1262,8 @@ function update_stats_page() {
  * @param	string  Display mode (absolute 'abs' or percentage '%').Defaults to %
  */
 function update_progress_bar(nbr_complete, nbr_total, mode) {
-    logit_lms('update_progress_bar('+nbr_complete+', '+nbr_total+', '+mode+')',2);
-    logit_lms('update_progress_bar with params: lms_lp_id= '+olms.lms_lp_id+', lms_view_id= '+olms.lms_view_id+' lms_user_id= '+olms.lms_user_id,2);
+    logit_lms('update_progress_bar('+nbr_complete+', '+nbr_total+', '+mode+')',3);
+    logit_lms('update_progress_bar with params: lms_lp_id= '+olms.lms_lp_id+', lms_view_id= '+olms.lms_view_id+' lms_user_id= '+olms.lms_user_id,3);
 
     if (mode == '') {
         mode='%';
@@ -1321,7 +1345,7 @@ function switch_item(current_item, next_item){
     var orig_item_type      = olms.lms_item_types['i'+current_item];
     var next_item_type      = olms.lms_item_types['i'+next_item];
 
-    logit_lms('switch_item() called with params '+olms.lms_item_id+' and '+next_item+'',0);
+    logit_lms('switch_item() called with params '+olms.lms_item_id+' and '+next_item+'',2);
 
     /*
      There are four "cases" for switching items:
@@ -1345,12 +1369,12 @@ function switch_item(current_item, next_item){
         if (next_item_type != 'sco' ) {
             //case 1
             logit_lms('Case 1');
-            xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.asset_timer, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
+            xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.asset_timer, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit, orig_item_type);
             xajax_switch_item_details(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, next_item);
         } else {
             logit_lms('Case 2');
             //case 2
-            xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.asset_timer, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
+            xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.asset_timer, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit, orig_item_type);
             xajax_switch_item_details(olms.lms_lp_id,olms.lms_user_id,olms.lms_view_id,olms.lms_item_id,next_item);
         }
     } else {
@@ -1397,7 +1421,7 @@ function switch_item(current_item, next_item){
         // new status
         savedata('finish');
     }
-    xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.session_time, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit);
+    xajax_save_item(olms.lms_lp_id, olms.lms_user_id, olms.lms_view_id, olms.lms_item_id, olms.score, olms.max, olms.min, olms.lesson_status, olms.session_time, olms.suspend_data, olms.lesson_location,olms.interactions, olms.lms_item_core_exit, olms.lms_item_type);
     */
 
     olms.execute_stats = false;
@@ -1442,10 +1466,10 @@ function switch_item(current_item, next_item){
             break;
     }
 
-    var mysrc = 'lp_controller.php?action=content&lp_id='+olms.lms_lp_id+'&item_id='+next_item;
+    var mysrc = 'lp_controller.php?action=content&lp_id='+olms.lms_lp_id+'&item_id='+next_item+'&cidReq='+olms.lms_course_code;
     var cont_f = $("#content_id");
 
-    <?php if($oLP->mode == 'fullscreen'){ ?>
+    <?php if($oLP->mode == 'fullscreen') { ?>
     cont_f = window.open(''+mysrc,'content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
     cont_f.onload=function(){
         olms.info_lms_item[0]=olms.info_lms_item[1];
@@ -1455,24 +1479,33 @@ function switch_item(current_item, next_item){
     }
 
     <?php } else { ?>
+            log_in_log('loading '+mysrc+' in frame');
             cont_f.attr("src",mysrc);
     <?php } ?>
 
-    if (olms.lms_lp_type==1 || olms.lms_item_type == 'asset'){
+    if (olms.lms_lp_type==1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
         xajax_start_timer();
     }
+
 
     //(4) refresh the audio player if needed
     $.ajax({
         type: "POST",
         url: "lp_nav.php",
         data: "",
+        beforeSend: function() {
+            $.each($('audio'), function () {
+                var player = new MediaElementPlayer($(this));
+                player.pause();
+            });
+        },
         success: function(tmp_data) {
             if ($("#lp_media_file").length != 0) {
                 $("#lp_media_file").html(tmp_data);
             }
         }
     });
+
     return true;
 }
 
@@ -1499,7 +1532,7 @@ function switch_item(current_item, next_item){
  * @return  void
  * @uses lp_ajax_save_item.php through an AJAX call
  */
-function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit) {
+function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit, item_type) {
     var params = '';
     params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
     params += '&iid='+lms_item_id+'&s='+score+'&max='+max+'&min='+min;
@@ -1507,8 +1540,8 @@ function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score
     params += '&suspend='+suspend_data+'&loc='+lesson_location;
     params += '&core_exit='+lms_item_core_exit;
     //console.info(session_time);
-    if (olms.lms_lp_type == 1) {
-        logit_lms('xajax_save_item with params:' + params);
+    if (olms.lms_lp_type == 1 || item_type == 'document') {
+        logit_lms('xajax_save_item with params:' + params,3);
         $.ajax({
             type:"POST",
             data: params,
@@ -1592,7 +1625,7 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
         is_interactions='false';
     }
 
-    logit_lms('xajax_save_item_scorm with params:' + params);
+    logit_lms('xajax_save_item_scorm with params:' + params,3);
 
     $.ajax({
         type:"POST",
@@ -1612,7 +1645,7 @@ function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id)
  * @uses    lp_ajax_start_timer.php
  */
 function xajax_start_timer() {
-    logit_lms('xajax_start_timer() called');
+    logit_lms('xajax_start_timer() called',3);
     $.ajax({
         type: "GET",
         url: "lp_ajax_start_timer.php",
@@ -1621,10 +1654,10 @@ function xajax_start_timer() {
         success: function(time) {
             olms.asset_timer = time;
             olms.asset_timer_total = 0;
-            logit_lms('xajax_start_timer result: ' + time);
+            logit_lms('xajax_start_timer result: ' + time,3);
 
             var date = new Date(time * 1000);
-            logit_lms('xajax_start_timer result: ' + date.toString());
+            logit_lms('xajax_start_timer result: ' + date.toString(),3);
         }
     });
 }
@@ -1644,7 +1677,7 @@ function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,ite
     params += '&iid='+lms_item_id;
     obj_string = '';
 
-    logit_lms('xajax_save_objectives with params:' + params);
+    logit_lms('xajax_save_objectives with params:' + params, 3);
 
     for (i in item_objectives){
         obj_string += '&objectives['+i+']=';
@@ -1675,6 +1708,7 @@ function xajax_save_objectives(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,ite
  * @uses    lp_ajax_switch_item.php
  */
 function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id,next_item) {
+
     var params = {
         'lid': lms_lp_id,
         'uid': lms_user_id,
@@ -1683,7 +1717,7 @@ function xajax_switch_item_details(lms_lp_id,lms_user_id,lms_view_id,lms_item_id
         'next': next_item
     };
 
-    logit_lms('xajax_switch_item_details with params:' + params);
+    logit_lms('xajax_switch_item_details with params:' + params, 3);
 
     $.ajax({
         type: "POST",
@@ -1736,7 +1770,6 @@ function attach_glossary_into_scorm(type) {
         logit_lms('attach_glossary_into_scorm failed', 0);
         return false;
     }
-    //logit_lms('attach_glossary_into_scorm', 0);
 
     try {
         var doc = f.contentWindow ? f.contentWindow.document : f.contentDocument ? f.contentDocument : f.document;
@@ -1792,7 +1825,6 @@ function attach_glossary_into_scorm(type) {
                         }
                         //alert(n + ' ' + my_index);
                         $("iframe").contents().find('body').removeHighlight().highlight(n,my_index)
-                        //logit_lms(n+ ' - '+my_index, 0);
                     }
                 }
 

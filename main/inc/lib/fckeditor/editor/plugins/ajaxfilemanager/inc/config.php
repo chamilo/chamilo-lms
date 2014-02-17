@@ -16,8 +16,9 @@
 // Loading the global initialization file.
 require_once '../../../../../../inc/global.inc.php';
 
-// Loading document repositories settings.
+api_block_anonymous_users();
 
+// Loading document repositories settings.
 require_once api_get_path(LIBRARY_PATH).'fckeditor/repository.php';
 
 //FILESYSTEM CONFIG
@@ -48,7 +49,6 @@ define('DIR_AJAX_JS', DIR_AJAX_ROOT.'jscripts'.DIRECTORY_SEPARATOR);
 define('DIR_AJAX_EDIT_AREA', DIR_AJAX_JS.'edit_area'.DIRECTORY_SEPARATOR);
 define('DIR_LANG', DIR_AJAX_ROOT.'langs'.DIRECTORY_SEPARATOR);
 
-
 //Class Declarations
 define('CLASS_FILE', DIR_AJAX_INC.'class.file.php');
 define("CLASS_UPLOAD", DIR_AJAX_INC.'class.upload.php');
@@ -68,7 +68,6 @@ if (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['config']) && file_exists(dirname
 }
 
 require_once dirname(__FILE__).DIRECTORY_SEPARATOR.$configBaseFileName;
-
 
 // Loading the selected language file.
 require_once DIR_AJAX_LANGS.CONFIG_LANG_DEFAULT.".php";

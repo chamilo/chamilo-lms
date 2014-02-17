@@ -15,14 +15,21 @@
  * This function allows easy activating and inactivating of regions
  * @author Julio Montoya <gugli100@gmail.com> Beeznest 2012
  */
-function handle_regions() {
+function handle_regions()
+{
 
     if (isset($_POST['submit_plugins'])) {
         store_regions();
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
-        event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
+        event_system(
+            LOG_CONFIGURATION_SETTINGS_CHANGE,
+            LOG_CONFIGURATION_SETTINGS_CATEGORY,
+            $category,
+            api_get_utc_datetime(),
+            $user_id
+        );
         Display :: display_confirmation_message(get_lang('SettingsStored'));
     }
 
@@ -30,11 +37,12 @@ function handle_regions() {
     $possible_plugins  = $plugin_obj->read_plugins_from_path();
     $installed_plugins = $plugin_obj->get_installed_plugins();
 
-    if (!empty($installed_plugins)) {
+    /*if (!empty($installed_plugins)) {
         $not_installed = array_diff($possible_plugins, $installed_plugins);
     } else {
         $not_installed = $possible_plugins;
-    }
+    }*/
+
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
     echo '<table class="data_table">';
     echo '<tr>';
@@ -54,7 +62,7 @@ function handle_regions() {
         $plugin_region_list[$plugin_item] = $plugin_item;
     }
 
-    //Removing course tool
+    // Removing course tool
     unset($plugin_region_list['course_tool_plugin']);
 
     foreach ($installed_plugins as $plugin) {
@@ -88,7 +96,8 @@ function handle_regions() {
     echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
 }
 
-function handle_extensions() {
+function handle_extensions()
+{
     echo Display::page_subheader(get_lang('ConfigureExtensions'));
     echo '<a class="btn" href="configure_extensions.php?display=ppt2lp">'.get_lang('Ppt2lp').'</a>';
 
@@ -99,7 +108,8 @@ function handle_extensions() {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com> Beeznest 2012
  */
-function handle_plugins() {
+function handle_plugins()
+{
     $plugin_obj = new AppPlugin();
 
      if (isset($_POST['submit_plugins'])) {
@@ -183,7 +193,8 @@ function handle_plugins() {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com>, Chamilo
 */
-function handle_stylesheets() {
+function handle_stylesheets()
+{
     global $_configuration;
 
     // Current style.
@@ -249,7 +260,7 @@ function handle_stylesheets() {
 
     $list_of_styles = array();
     $list_of_names  = array();
-    $selected = null;
+    $selected = '';
     $dirpath = '';
     $safe_style_dir = '';
 
@@ -264,13 +275,14 @@ function handle_stylesheets() {
             if (is_dir($dirpath)) {
                 if ($style_dir != '.' && $style_dir != '..') {
                     if (isset($_POST['style']) && (isset($_POST['preview']) or isset($_POST['download'])) && $_POST['style'] == $style_dir) {
-                        $selected = $style_dir;
                         $safe_style_dir = $style_dir;
                     } else {
-                        if (!isset($_POST['style'])  && ($currentstyle == $style_dir || ($style_dir == 'chamilo' && !$currentstyle))) {
-                            $selected = $style_dir;
-                        } else {
-                            $selected = '';
+                        if ($currentstyle == $style_dir || ($style_dir == 'chamilo' && !$currentstyle)) {
+                            if (isset($_POST['style'])) {
+                                $selected = Database::escape_string($_POST['style']);
+                            } else {
+                                $selected = $style_dir;
+                            }
                         }
                     }
                     $show_name = ucwords(str_replace('_', ' ', $style_dir));
@@ -287,18 +299,18 @@ function handle_stylesheets() {
                 }
             }
         }
-        @closedir($handle);
+        closedir($handle);
     }
 
-    //Sort styles in alphabetical order
+    // Sort styles in alphabetical order.
     asort($list_of_names);
     $select_list = array();
     foreach ($list_of_names as $style_dir=>$item) {
         $select_list[$style_dir] = strip_tags($list_of_styles[$style_dir]);
     }
 
-    $form_change->addElement('select', 'style', get_lang('NameStylesheet'), $select_list);
-    $form_change->setDefaults('style', $selected);
+    $styles = &$form_change->addElement('select', 'style', get_lang('NameStylesheet'), $select_list);
+    $styles->setSelected($selected);
 
     if ($form_change->validate()) {
         // Submit stylesheets.
@@ -351,7 +363,8 @@ function handle_stylesheets() {
  * @version May 2008
  * @since Dokeos 1.8.5
  */
-function upload_stylesheet($values, $picture) {
+function upload_stylesheet($values, $picture)
+{
     $result = false;
     // Valid name for the stylesheet folder.
     $style_name = api_preg_replace('/[^A-Za-z0-9]/', '', $values['name_stylesheet']);
@@ -403,7 +416,8 @@ function upload_stylesheet($values, $picture) {
                     $extraction_path = api_get_path(SYS_CODE_PATH).'css/'.$style_name.'/';
                     for ($i = 0; $i < $num_files; $i++) {
                         $entry = $zip->getNameIndex($i);
-                        if (substr($entry, -1) == '/') continue;
+                        if (substr($entry, -1) == '/')
+                            continue;
 
                         $pos_slash = strpos($entry, '/');
                         $entry_without_first_dir = substr($entry, $pos_slash + 1);
@@ -440,7 +454,11 @@ function upload_stylesheet($values, $picture) {
     return $result;
 }
 
-function store_regions() {
+/**
+ * Store plugin regions.
+ */
+function store_regions()
+{
      $plugin_obj = new AppPlugin();
 
     // Get a list of all current 'Plugins' settings
@@ -477,7 +495,8 @@ function store_regions() {
  * This function allows easy activating and inactivating of plugins
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function store_plugins() {
+function store_plugins()
+{
     $plugin_obj = new AppPlugin();
 
     // Get a list of all current 'Plugins' settings
@@ -506,7 +525,8 @@ function store_plugins() {
  * This function allows the platform admin to choose which should be the default stylesheet
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 */
-function store_stylesheets() {
+function store_stylesheets()
+{
     // Insert the stylesheet.
     $style = Database::escape_string($_POST['style']);
     if (is_style($style)) {
@@ -521,7 +541,8 @@ function store_stylesheets() {
  * @param string    Style
  * @return bool     True if this style is recognized, false otherwise
  */
-function is_style($style) {
+function is_style($style)
+{
     $dir = api_get_path(SYS_PATH).'main/css/';
     $dirs = scandir($dir);
     $style = str_replace(array('/', '\\'), array('', ''), $style); // Avoid slashes or backslashes.
@@ -536,7 +557,8 @@ function is_style($style) {
  * TODO: support for multiple site. aka $_configuration['access_url'] == 1
  * @author Marco Villegas <marvil07@gmail.com>
  */
-function handle_search() {
+function handle_search()
+{
     global $SettingsStored, $_configuration;
 
     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -841,7 +863,7 @@ function add_edit_template() {
     // Initialize the object.
     $form = new FormValidator('template', 'post', 'settings.php?category=Templates&action='.Security::remove_XSS($_GET['action']).'&id='.Security::remove_XSS($_GET['id']));
 
-    // Settting the form elements: the header.
+    // Setting the form elements: the header.
     if ($_GET['action'] == 'add') {
         $title = get_lang('AddTemplate');
     } else {
@@ -849,16 +871,16 @@ function add_edit_template() {
     }
     $form->addElement('header', '', $title);
 
-    // Settting the form elements: the title of the template.
+    // Setting the form elements: the title of the template.
     $form->add_textfield('title', get_lang('Title'), false);
 
-    // Settting the form elements: the content of the template (wysiwyg editor).
+    // Setting the form elements: the content of the template (wysiwyg editor).
     $form->addElement('html_editor', 'template_text', get_lang('Text'), null, array('ToolbarSet' => 'AdminTemplates', 'Width' => '100%', 'Height' => '400'));
 
-    // Settting the form elements: the form to upload an image to be used with the template.
+    // Setting the form elements: the form to upload an image to be used with the template.
     $form->addElement('file','template_image',get_lang('Image'),'');
 
-    // Settting the form elements: a little bit information about the template image.
+    // Setting the form elements: a little bit information about the template image.
     $form->addElement('static', 'file_comment', '', get_lang('TemplateImageComment100x70'));
 
     // Getting all the information of the template when editing a template.
@@ -887,7 +909,7 @@ function add_edit_template() {
         // Setting the information of the template that we are editing.
         $form->setDefaults($defaults);
     }
-    // Settting the form elements: the submit button.
+    // Setting the form elements: the submit button.
     $form->addElement('style_submit_button' , 'submit', get_lang('Ok') ,'class="save"');
 
     // Setting the rules: the required fields.
@@ -1274,14 +1296,14 @@ function generate_settings_form($settings, $settings_by_access_list) {
         switch ($row['variable']) {
             case 'pdf_export_watermark_enable':
                 $url =  PDF::get_watermark(null);
-                $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
 
                 if ($url != false) {
-                    $delete_url = '<a href="?delete_watermark">'.Display::return_icon('delete.png',get_lang('DelImage')).'</a>';
-                    $form->addElement('html', '<a href="'.$url.'">'.$url.' '.$delete_url.'</a>');
+                    $delete_url = '<a href="?delete_watermark">'.get_lang('DelImage').' '.Display::return_icon('delete.png',get_lang('DelImage')).'</a>';
+                    $form->addElement('html', '<div style="max-height:100px; max-width:100px; margin-left:162px; margin-bottom:10px; clear:both;"><img src="'.$url.'" style="margin-bottom:10px;" />'.$delete_url.'</div>');
                 }
 
-                $allowed_picture_types = array ('jpg', 'jpeg', 'png', 'gif');
+                $form->addElement('file', 'pdf_export_watermark_path', get_lang('AddWaterMark'));
+                $allowed_picture_types = array('jpg', 'jpeg', 'png', 'gif');
                 $form->addRule('pdf_export_watermark_path', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 
                 break;
@@ -1303,11 +1325,12 @@ function generate_settings_form($settings, $settings_by_access_list) {
 }
 
 /**
- * Searchs a platform setting in all categories except from the Plugins category
+ * Searches a platform setting in all categories except from the Plugins category
  * @param string $search
  * @return array
  */
-function search_setting($search) {
+function search_setting($search)
+{
     if (empty($search)) {
         return array();
     }

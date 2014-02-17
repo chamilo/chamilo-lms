@@ -116,7 +116,7 @@ class SubLanguageManager {
      * @param String The path file (/var/www/chamilo/main/lang/spanish/gradebook.inc.php)
      * @param String The new sub-language
      * @param String The language variable
-     * @return void()
+     * @return Boolean True on success, False on error
      */
     public static function write_data_in_file($path_file, $new_term, $new_variable) {
         $return_value = false;

@@ -10,17 +10,6 @@
 require_once dirname(__FILE__).DIRECTORY_SEPARATOR."config.php";
 
 /**
- * force to ensure existence of stripos
- */
-if (!function_exists("stripos")) {
-
-    function stripos($str, $needle, $offset = 0) {
-        return @strpos(strtolower($str), strtolower($needle), $offset);
-    }
-
-}
-
-/**
  * get the current Url but not the query string specified in $excls
  *
  * @param array $excls specify those unwanted query string
@@ -273,7 +262,11 @@ function getParentPath($value) {
  * @param string $value
  * @return  boolean
  */
-function isUnderRoot($value) {
+function isUnderRoot($value)
+{
+    if (empty($value)) {
+        return false;
+    }
     $roorPath = strtolower(addTrailingSlash(backslashToSlash(getRealPath(CONFIG_SYS_ROOT_PATH))));
     if (file_exists($value) && @strpos(strtolower(addTrailingSlash(backslashToSlash(getRealPath($value)))), $roorPath) === 0) {
         return true;
@@ -726,8 +719,18 @@ if (!function_exists('mime_content_type')) {
  * @param string $path the path to the document
  * @return boolean
  */
-function isListingDocument($path) {
+function isListingDocument($path)
+{
+    global $PathChamiloAjaxFileManager;
     $file = basename($path);
+    $filePath = realpath($path);
+    $allowedPath = realpath($PathChamiloAjaxFileManager);
+
+    $check = Security::check_abs_path($filePath, $allowedPath);
+    if ($check == false) {
+        return false;
+    }
+
     if (CONFIG_SYS_PATTERN_FORMAT == 'list') {// comma delimited vague file/folder name
         if (is_dir($path)) {
             $includeDir = trimlrm(CONFIG_SYS_INC_DIR_PATTERN);
@@ -752,14 +755,10 @@ function isListingDocument($path) {
         }
     } elseif (CONFIG_SYS_PATTERN_FORMAT == 'csv') {//comma delimited file/folder name
         if (is_dir($path)) {
-
             $includeDir = trimlrm(CONFIG_SYS_INC_DIR_PATTERN);
             $excludeDir = trimlrm(CONFIG_SYS_EXC_DIR_PATTERN);
-
             if (!empty($includeDir) && !empty($excludeDir)) {
-
                 $validDir = explode(',', $includeDir);
-
                 $invalidDir = explode(",", $excludeDir);
 
                 if (array_search(basename($path), $validDir) !== false && array_search(basename($path), $invalidDir) === false) {

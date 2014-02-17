@@ -76,7 +76,7 @@ if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create
 }
 
 // filter actions
-$actions = array('sortmycourses', 'createcoursecategory', 'subscribe', 'deletecoursecategory', 'display_courses', 'display_random_courses' , 'subscribe_user_with_password');
+$actions = array('sortmycourses', 'createcoursecategory', 'subscribe', 'deletecoursecategory', 'display_courses', 'display_random_courses', 'subscribe_user_with_password');
 $action = 'display_random_courses';
 $nameTools = get_lang('SortMyCourses');
 
@@ -117,8 +117,6 @@ if (empty($nameTools)) {
 
 // course description controller object
 $courses_controller = new CoursesController();
-
-
 
 // We are moving a course or category of the user up/down the list (=Sort My Courses).
 if (isset($_GET['move'])) {
@@ -191,6 +189,7 @@ if (isset($_POST['unsubscribe'])) {
             //$message = remove_user_from_course($_user['user_id'], $_POST['unsubscribe']);
 	}
 }
+
 switch ($action) {
     case 'subscribe_user_with_password':
         $courses_controller->subscribe_user($_POST['subscribe_user_with_password'], $_POST['search_term'], $_POST['category_code']);

@@ -112,7 +112,7 @@ class WS {
 		// if we are behind a reverse proxy, assume it will send the 
 		// HTTP_X_FORWARDED_FOR header and use this IP instead
 		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			list($ip1,$ip2) = split(',',$_SERVER['HTTP_X_FORWARDED_FOR']);
+			list($ip1,$ip2) = preg_split('/,/',$_SERVER['HTTP_X_FORWARDED_FOR']);
 			$ip = trim($ip1);
 		}
 		$security_key = $ip.$this->_configuration['security_key'];

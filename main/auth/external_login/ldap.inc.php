@@ -1,22 +1,23 @@
 <?php
 
-// External login module : LDAP 
+// External login module : LDAP
 /**
  * This files is included by newUser.ldap.php and login.ldap.php
  * It implements the functions nedded by both files
  * */
 //Includes the configuration file
-require_once dirname(__FILE__) . '/../../inc/global.inc.php';
-require_once dirname(__FILE__) . '/../../inc/conf/auth.conf.php';
+require_once dirname(__FILE__).'/../../inc/global.inc.php';
+require_once dirname(__FILE__).'/../../inc/conf/auth.conf.php';
 
 /**
  * Returns a transcoded and trimmed string
  *
- * @param string 
- * @return string 
+ * @param string
+ * @return string
  * @author ndiechburg <noel@cblue.be>
  * */
-function extldap_purify_string($string) {
+function extldap_purify_string($string)
+{
     global $extldap_config;
     if (isset($extldap_config['encoding'])) {
         return trim(api_to_system_encoding($string, $extldap_config['encoding']));
@@ -31,11 +32,13 @@ function extldap_purify_string($string) {
  * @return resource ldap link identifier or false
  * @author ndiechburg <noel@cblue.be>
  * */
-function extldap_connect() {
+function extldap_connect()
+{
     global $extldap_config;
 
-    if (!is_array($extldap_config['host']))
+    if (!is_array($extldap_config['host'])) {
         $extldap_config['host'] = array($extldap_config['host']);
+    }
 
     foreach ($extldap_config['host'] as $host) {
         //Trying to connect
@@ -46,9 +49,10 @@ function extldap_connect() {
         }
         if (!$ds) {
             $port = isset($extldap_config['port']) ? $ldap_config['port'] : 389;
-            error_log('EXTLDAP ERROR : cannot connect to ' . $extldap_config['host'] . ':' . $port);
-        } else
+            error_log('EXTLDAP ERROR : cannot connect to '.$extldap_config['host'].':'.$port);
+        } else {
             break;
+        }
     }
     if (!$ds) {
         error_log('EXTLDAP ERROR : no valid server found');
@@ -76,11 +80,12 @@ function extldap_connect() {
  *
  * @return mixed false if user cannot authenticate on ldap, user ldap entry if tha succeeds
  * @author ndiechburg <noel@cblue.be>
- * Modified by hubert.borderiou@grenet.fr 
+ * Modified by hubert.borderiou@grenet.fr
  * Add possibility to get user info from LDAP without check password (if CAS auth and LDAP profil update)
- * 
+ *
  * */
-function extldap_authenticate($username, $password, $in_auth_with_no_password = false) {
+function extldap_authenticate($username, $password, $in_auth_with_no_password = false)
+{
     global $extldap_config;
 
     if (empty($username) or empty($password)) {
@@ -102,21 +107,25 @@ function extldap_authenticate($username, $password, $in_auth_with_no_password = 
     //Search distinguish name of user
     $sr = ldap_search($ds, $extldap_config['base_dn'], $user_search);
     if (!$sr) {
-        error_log('EXTLDAP ERROR : ldap_search(' . $ds . ', ' . $extldap_config['base_dn'] . ", $user_search) failed");
+        error_log('EXTLDAP ERROR : ldap_search('.$ds.', '.$extldap_config['base_dn'].", $user_search) failed");
         return false;
     }
     $entries_count = ldap_count_entries($ds, $sr);
 
     if ($entries_count > 1) {
-        error_log('EXTLDAP ERROR : more than one entry for that user ( ldap_search(ds, ' . $extldap_config['base_dn'] . ", $user_search) )");
+        error_log(
+            'EXTLDAP ERROR : more than one entry for that user ( ldap_search(ds, '.$extldap_config['base_dn'].", $user_search) )"
+        );
         return false;
     }
     if ($entries_count < 1) {
-        error_log('EXTLDAP ERROR :  No entry for that user ( ldap_search(ds, ' . $extldap_config['base_dn'] . ", $user_search) )");
+        error_log(
+            'EXTLDAP ERROR :  No entry for that user ( ldap_search(ds, '.$extldap_config['base_dn'].", $user_search) )"
+        );
         return false;
     }
     $users = ldap_get_entries($ds, $sr);
-    $user = $users[0];
+    $user  = $users[0];
 
     // If we just want to have user info from LDAP and not to check password
     if ($in_auth_with_no_password) {
@@ -127,7 +136,7 @@ function extldap_authenticate($username, $password, $in_auth_with_no_password = 
     if ($ubind !== false) {
         return $user;
     } else {
-        error_log('EXTLDAP : Wrong password for ' . $user['dn']);
+        error_log('EXTLDAP : Wrong password for '.$user['dn']);
         return false;
     }
 }
@@ -141,7 +150,8 @@ function extldap_authenticate($username, $password, $in_auth_with_no_password = 
  * @return array userinfo array
  * @author ndiechburg <noel@cblue.be>
  * */
-function extldap_get_chamilo_user($ldap_user, $cor = null) {
+function extldap_get_chamilo_user($ldap_user, $cor = null)
+{
     global $extldap_user_correspondance;
     if (is_null($cor)) {
         $cor = $extldap_user_correspondance;
@@ -172,7 +182,7 @@ function extldap_get_chamilo_user($ldap_user, $cor = null) {
                 if (isset($ldap_user[$ldap_field][0])) {
                     $chamilo_user[$chamilo_field] = extldap_purify_string($ldap_user[$ldap_field][0]);
                 } else {
-                    error_log('EXTLDAP WARNING : ' . $ldap_field . '[0] field is not set in ldap array');
+                    error_log('EXTLDAP WARNING : '.$ldap_field.'[0] field is not set in ldap array');
                 }
                 break;
         }
@@ -182,7 +192,7 @@ function extldap_get_chamilo_user($ldap_user, $cor = null) {
 
 /**
  * Please declare here all the function you use in extldap_user_correspondance
- * All these functions must have an $ldap_user parameter. This parameter is the 
+ * All these functions must have an $ldap_user parameter. This parameter is the
  * array returned by the ldap for the user
  * */
 
@@ -194,11 +204,13 @@ function extldap_get_chamilo_user($ldap_user, $cor = null) {
   return $ldap_user['cn'].$ldap['sn'].'@gmail.com';
   }
  */
-function extldap_get_status($ldap_user) {
+function extldap_get_status($ldap_user)
+{
     return STUDENT;
 }
 
-function extldap_get_admin($ldap_user) {
+function extldap_get_admin($ldap_user)
+{
     return false;
 }
 
@@ -209,23 +221,27 @@ function extldap_get_admin($ldap_user) {
  * @return string the serach string
  * @author ndiechburg <noel@cblue.be>
  * */
-function extldap_get_user_search_string($username) {
+function extldap_get_user_search_string($username)
+{
     global $extldap_config;
     // init
-    $filter = '(' . $extldap_config['user_search'] . ')';
+    $filter = '('.$extldap_config['user_search'].')';
     // replacing %username% by the actual username
     $filter = str_replace('%username%', $username, $filter);
     // append a global filter if needed
-    if (isset($extldap_config['filter']) && $extldap_config['filter'] != "")
-        $filter = '(&' . $filter . '(' . $extldap_config['filter'] . '))';
+    if (isset($extldap_config['filter']) && $extldap_config['filter'] != "") {
+        $filter = '(&'.$filter.'('.$extldap_config['filter'].'))';
+    }
 
     return $filter;
 }
+
 /**
  * Imports all LDAP users into Chamilo
  * @return bool false on error, true otherwise
  */
-function extldap_import_all_users() {
+function extldap_import_all_users()
+{
     global $extldap_config;
     //echo "Connecting...\n";
     $ds = extldap_connect();
@@ -241,9 +257,9 @@ function extldap_import_all_users() {
         return false;
     }
     //browse ASCII values from a to z to avoid 1000 results limit of LDAP
-    $count = 0;
-    $alphanum = array('0','1','2','3','4','5','6','7','8','9');
-    for ($a=97;$a<=122;$a++) {
+    $count    = 0;
+    $alphanum = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+    for ($a = 97; $a <= 122; $a++) {
         $alphanum[] = chr($a);
     }
     foreach ($alphanum as $char1) {
@@ -253,15 +269,15 @@ function extldap_import_all_users() {
             //Search distinguish name of user
             $sr = ldap_search($ds, $extldap_config['base_dn'], $user_search);
             if (!$sr) {
-                error_log('EXTLDAP ERROR : ldap_search(' . $ds . ', ' . $extldap_config['base_dn'] . ", $user_search) failed");
+                error_log('EXTLDAP ERROR : ldap_search('.$ds.', '.$extldap_config['base_dn'].", $user_search) failed");
                 return false;
             }
             //echo "Getting entries\n";
             $users = ldap_get_entries($ds, $sr);
             //echo "Entries: ".$users['count']."\n";
-            for ($key = 0; $key < $users['count']; $key ++) {
+            for ($key = 0; $key < $users['count']; $key++) {
                 $user_id = extldap_add_user_by_array($users[$key], true);
-                $count ++;
+                $count++;
                 if ($user_id) {
                     // echo "User #$user_id created or updated\n";
                 } else {
@@ -273,48 +289,87 @@ function extldap_import_all_users() {
     //echo "Found $count users in total\n";
     @ldap_close($ds);
 }
+
 /**
  * Insert users from an array of user fields
  */
-function extldap_add_user_by_array($data, $update_if_exists = true) {
-    $lastname = api_convert_encoding($data['sn'][0], api_get_system_encoding(), 'UTF-8');
-    $firstname = api_convert_encoding($data['cn'][0], api_get_system_encoding(), 'UTF-8');
-    $email = $data['mail'][0];
-    // Get uid from dn
-    $dn_array=ldap_explode_dn($data['dn'],1);
-    $username = $dn_array[0]; // uid is first key
-    $outab[] = $data['edupersonprimaryaffiliation'][0]; // Here, "student"
-    //$val = ldap_get_values_len($ds, $entry, "userPassword");
-    //$val = ldap_get_values_len($ds, $data, "userPassword");
-    //$password = $val[0];
+function extldap_add_user_by_array($data, $update_if_exists = true)
+{
+    global $extldap_user_correspondance;
+
+    $lastname  = api_convert_encoding($data[$extldap_user_correspondance['lastname']][0], api_get_system_encoding(), 'UTF-8');
+    $firstname = api_convert_encoding($data[$extldap_user_correspondance['firstname']][0], api_get_system_encoding(), 'UTF-8');
+    $email     = $data[$extldap_user_correspondance['email']][0];
+    $username  = $data[$extldap_user_correspondance['username']][0];
+
     // TODO the password, if encrypted at the source, will be encrypted twice, which makes it useless. Try to fix that.
-    $password = $data['userPassword'][0];
-    $structure=$data['edupersonprimaryorgunitdn'][0];
-    $array_structure=explode(",", $structure);
-    $array_val=explode("=", $array_structure[0]);
-    $etape=$array_val[1];
-    $array_val=explode("=", $array_structure[1]);
-    $annee=$array_val[1];
+    $passwordKey = isset($extldap_user_correspondance['password']) ? $extldap_user_correspondance['password'] : 'userPassword';
+    $password        = $data[$passwordKey][0];
+
+    // Structure
+  /*  $structure       = $data['edupersonprimaryorgunitdn'][0];
+    $array_structure = explode(",", $structure);
+    $array_val       = explode("=", $array_structure[0]);
+    $etape           = $array_val[1];
+    $array_val       = explode("=", $array_structure[1]);
+    $annee           = $array_val[1];
+*/
     // To ease management, we add the step-year (etape-annee) code
-    $official_code=$etape."-".$annee;
-    $auth_source='ldap';
+    //$official_code = $etape."-".$annee;
+    $official_code = api_convert_encoding($data[$extldap_user_correspondance['official_code']][0], api_get_system_encoding(), 'UTF-8');
+    $auth_source   = 'ldap';
+
     // No expiration date for students (recover from LDAP's shadow expiry)
-    $expiration_date='0000-00-00 00:00:00';
-    $active=1;
-    if(empty($status)){$status = 5;}
-    if(empty($phone)){$phone = '';}
-    if(empty($picture_uri)){$picture_uri = '';}
+    $expiration_date = '0000-00-00 00:00:00';
+    $active          = 1;
+    if (empty($status)) {
+        $status = 5;
+    }
+    if (empty($phone)) {
+        $phone = '';
+    }
+    if (empty($picture_uri)) {
+        $picture_uri = '';
+    }
     // Adding user
     $user_id = 0;
     if (UserManager::is_username_available($username)) {
         //echo "$username\n";
-        $user_id = UserManager::create_user($firstname,$lastname,$status,$email,$username,$password,$official_code,api_get_setting('platformLanguage'),$phone,$picture_uri,$auth_source,$expiration_date,$active);
+        $user_id = UserManager::create_user(
+            $firstname,
+            $lastname,
+            $status,
+            $email,
+            $username,
+            $password,
+            $official_code,
+            api_get_setting('platformLanguage'),
+            $phone,
+            $picture_uri,
+            $auth_source,
+            $expiration_date,
+            $active
+        );
     } else {
         if ($update_if_exists) {
-            $user = UserManager::get_user_info($username);
-            $user_id=$user['user_id'];
+            $user    = UserManager::get_user_info($username);
+            $user_id = $user['user_id'];
             //echo "$username\n";
-            UserManager::update_user($user_id, $firstname, $lastname, $username, null, null, $email, $status, $official_code, $phone, $picture_uri, $expiration_date, $active);
+            UserManager::update_user(
+                $user_id,
+                $firstname,
+                $lastname,
+                $username,
+                null,
+                null,
+                $email,
+                $status,
+                $official_code,
+                $phone,
+                $picture_uri,
+                $expiration_date,
+                $active
+            );
         }
     }
     return $user_id;

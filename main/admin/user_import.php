@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 /**
  * This tool allows platform admins to add users by uploading a CSV or XML file
- * @todo Add some langvars to DLTT
  * @package chamilo.admin
  */
 
@@ -22,7 +21,8 @@ require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 // Set this option to true to enforce strict purification for usenames.
 $purification_option_for_usernames = false;
 
-function validate_data($users) {
+function validate_data($users)
+{
     global $defined_auth_sources;
     $errors = array();
     $usernames = array();
@@ -85,7 +85,8 @@ function validate_data($users) {
 /**
  * Add missing user-information (which isn't required, like password, username etc).
  */
-function complete_missing_data($user) {
+function complete_missing_data($user)
+{
     global $purification_option_for_usernames;
     // 1. Create a username if necessary.
     if (UserManager::is_username_empty($user['UserName'])) {
@@ -110,30 +111,49 @@ function complete_missing_data($user) {
 
 /**
  * Save the imported data
- * @param   array   List of users
+ * @param   array   $users List of users
  * @return  void
  * @uses global variable $inserted_in_course, which returns the list of courses the user was inserted in
  */
-function save_data($users) {
+function save_data($users)
+{
     global $inserted_in_course;
     // Not all scripts declare the $inserted_in_course array (although they should).
     if (!isset($inserted_in_course)) {
         $inserted_in_course = array();
     }
     require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-    $send_mail = $_POST['sendMail'] ? 1 : 0;
+    $send_mail = $_POST['sendMail'] ? true : false;
     if (is_array($users)) {
-        foreach ($users as $index => $user)	{
+        foreach ($users as $user) {
             $user = complete_missing_data($user);
             $user['Status'] = api_status_key($user['Status']);
-            $user_id = UserManager :: create_user($user['FirstName'], $user['LastName'], $user['Status'], $user['Email'], $user['UserName'], $user['Password'], $user['OfficialCode'], $user['language'], $user['PhoneNumber'], '', $user['AuthSource'], null, 1, 0, null, null, $send_mail);
+            $user_id = UserManager :: create_user(
+                $user['FirstName'],
+                $user['LastName'],
+                $user['Status'],
+                $user['Email'],
+                $user['UserName'],
+                $user['Password'],
+                $user['OfficialCode'],
+                $user['language'],
+                $user['PhoneNumber'],
+                '',
+                $user['AuthSource'],
+                null,
+                1,
+                0,
+                null,
+                null,
+                $send_mail
+            );
             if (!is_array($user['Courses']) && !empty($user['Courses'])) {
                 $user['Courses'] = array($user['Courses']);
             }
             if (is_array($user['Courses'])) {
-                foreach ($user['Courses'] as $index => $course) {
-                    if (CourseManager :: course_exists($course)) {
-                        CourseManager :: subscribe_user($user_id, $course,$user['Status']);
+                foreach ($user['Courses'] as $course) {
+                    if (CourseManager::course_exists($course)) {
+                        CourseManager::subscribe_user($user_id, $course, $user['Status']);
                         $course_info = CourseManager::get_course_information($course);
                         $inserted_in_course[$course] = $course_info['title'];
                     }
@@ -144,13 +164,14 @@ function save_data($users) {
                             if ($vcourse['code'] == $course) {
                                 // Ignore, this has already been inserted.
                             } else {
-                                CourseManager :: subscribe_user($user_id, $vcourse['code'],$user['Status']);
+                                CourseManager :: subscribe_user($user_id, $vcourse['code'], $user['Status']);
                                 $inserted_in_course[$vcourse['code']] = $vcourse['title'];
                             }
                         }
                     }
                 }
             }
+
             if (!empty($user['ClassName'])) {
                 $class_id = ClassManager :: get_class_id($user['ClassName']);
                 ClassManager :: add_user($user_id, $class_id);
@@ -160,11 +181,11 @@ function save_data($users) {
             global $extra_fields;
 
             // We are sure that the extra field exists.
-            foreach($extra_fields as $extras) {
+            foreach ($extra_fields as $extras) {
                 if (isset($user[$extras[1]])) {
                     $key 	= $extras[1];
                     $value 	= $user[$extras[1]];
-                    UserManager::update_extra_field_value($user_id, $key,$value);
+                    UserManager::update_extra_field_value($user_id, $key, $value);
                 }
             }
         }
@@ -176,7 +197,8 @@ function save_data($users) {
  * @param string $file Path to the CSV-file
  * @return array All userinformation read from the file
  */
-function parse_csv_data($file) {
+function parse_csv_data($file)
+{
     $users = Import :: csv_to_array($file);
     foreach ($users as $index => $user) {
         if (isset ($user['Courses'])) {
@@ -188,30 +210,36 @@ function parse_csv_data($file) {
 }
 /**
  * XML-parser: handle start of element
+ * @param   string  $parser Deprecated?
+ * @param   string  $data The data to be parsed
  */
-function element_start($parser, $data) {
+function element_start($parser, $data)
+{
     $data = api_utf8_decode($data);
     global $user;
     global $current_tag;
     switch ($data) {
-        case 'Contact' :
+        case 'Contact':
             $user = array ();
             break;
-        default :
+        default:
             $current_tag = $data;
     }
 }
 
 /**
  * XML-parser: handle end of element
+ * @param   string  $parser Deprecated?
+ * @param   string  $data   The data to be parsed
  */
-function element_end($parser, $data) {
+function element_end($parser, $data)
+{
     $data = api_utf8_decode($data);
     global $user;
     global $users;
     global $current_value;
     switch ($data) {
-        case 'Contact' :
+        case 'Contact':
             if ($user['Status'] == '5') {
                 $user['Status'] = STUDENT;
             }
@@ -220,7 +248,7 @@ function element_end($parser, $data) {
             }
             $users[] = $user;
             break;
-        default :
+        default:
             $user[$data] = $current_value;
             break;
     }
@@ -228,8 +256,12 @@ function element_end($parser, $data) {
 
 /**
  * XML-parser: handle character data
+ * @param   string  $parser Parser (deprecated?)
+ * @param   string  $data The data to be parsed
+ * @return  void
  */
-function character_data($parser, $data) {
+function character_data($parser, $data)
+{
     $data = trim(api_utf8_decode($data));
     global $current_value;
     $current_value = $data;
@@ -238,12 +270,10 @@ function character_data($parser, $data) {
 /**
  * Read the XML-file
  * @param string $file Path to the XML-file
- * @return array All userinformation read from the file
+ * @return array All user information read from the file
  */
-function parse_xml_data($file) {
-    global $current_tag;
-    global $current_value;
-    global $user;
+function parse_xml_data($file)
+{
     global $users;
     $users = array();
     $parser = xml_parser_create('UTF-8');
@@ -256,10 +286,11 @@ function parse_xml_data($file) {
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
-api_protect_admin_script(true);
+api_protect_admin_script(true, null, 'login');
 
 
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
+
 if (is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
@@ -272,16 +303,17 @@ $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 $user_id_error = array();
 $error_message = '';
 
-if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
+if ($_POST['formSent'] and $_FILES['import_file']['size'] !== 0) {
     $file_type = $_POST['file_type'];
     Security::clear_token();
     $tok = Security::get_token();
-    $allowed_file_mimetype = array('csv','xml');
+    $allowed_file_mimetype = array('csv', 'xml');
     $error_kind_file = false;
 
-    $ext_import_file = substr($_FILES['import_file']['name'],(strrpos($_FILES['import_file']['name'],'.')+1));
+    $uploadInfo = pathinfo($_FILES['import_file']['name']);
+    $ext_import_file = $uploadInfo['extension'];
 
-    if (in_array($ext_import_file,$allowed_file_mimetype)) {
+    if (in_array($ext_import_file, $allowed_file_mimetype)) {
         if (strcmp($file_type, 'csv') === 0 && $ext_import_file == $allowed_file_mimetype[0]) {
             $users	= parse_csv_data($_FILES['import_file']['tmp_name']);
             $errors = validate_data($users);
@@ -297,8 +329,9 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
         $error_kind_file = true;
     }
 
-    // List user id whith error.
+    // List user id with error.
     $users_to_insert = $user_id_error = array();
+
     if (is_array($errors)) {
         foreach ($errors as $my_errors) {
             $user_id_error[] = $my_errors['UserName'];
@@ -327,33 +360,23 @@ if ($_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
     } else {
         $see_message_import = get_lang('FileImported');
     }
-    /*
-    $msg2 = '';
-    if (count($inserted_in_course) > 1) {
-        $msg2 .= '<br>'.get_lang('UsersSubscribedToSeveralCoursesBecauseOfVirtualCourses').':';
-        foreach ($inserted_in_course as $course) {
-            $msg2 .= ' '.$course.',';
-        }
-        $msg2 = substr($msg2, 0, -1);
-        $msg2 .= '</br>';
-    }
-    */
 
     if (count($errors) != 0) {
         $warning_message = '<ul>';
         foreach ($errors as $index => $error_user) {
             $warning_message .= '<li><b>'.$error_user['error'].'</b>: ';
-            $warning_message .= '<strong>'.$error_user['UserName'].'</strong>&nbsp;('.api_get_person_name($error_user['FirstName'], $error_user['LastName']).')';
+            $warning_message .=
+                '<strong>'.$error_user['UserName'].'</strong>&nbsp;('.
+                api_get_person_name($error_user['FirstName'], $error_user['LastName']).')';
             $warning_message .= '</li>';
         }
         $warning_message .= '</ul>';
     }
 
     // if the warning message is too long then we display the warning message trough a session
-    if (api_strlen($warning_message) > 150) {
-        $_SESSION['session_message_import_users'] = $warning_message;
-        $warning_message = 'session_message';
-    }
+
+    $_SESSION['session_message_import_users'] = $warning_message;
+    $warning_message = 'session_message';
 
     if ($error_kind_file) {
         $error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
@@ -374,8 +397,20 @@ $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'formSent');
 $form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
 $group = array();
-$group[] = $form->createElement('radio', 'file_type', '', 'CSV (<a href="example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)', 'csv');
-$group[] = $form->createElement('radio', 'file_type', null, 'XML (<a href="example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)', 'xml');
+$group[] = $form->createElement(
+    'radio',
+    'file_type',
+    '',
+    'CSV (<a href="example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)',
+    'csv'
+    );
+$group[] = $form->createElement(
+    'radio',
+    'file_type',
+    null,
+    'XML (<a href="example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)',
+    'xml'
+    );
 $form->addGroup($group, '', get_lang('FileType'), '<br/>');
 
 $group = array();
@@ -413,8 +448,8 @@ if ($count_fields > 0) {
 
     <blockquote>
 <pre>
-<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;<font style="color:red;"><?php if (count($list) > 0) echo implode(';', $list).';'; ?></font>Courses;
-<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;<font style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></font>xxx1|xxx2|xxx3;<br />
+<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;<span style="color:red;"><?php if (count($list) > 0) echo implode(';', $list).';'; ?></span>Courses;
+<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;<span style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></span>xxx1|xxx2|xxx3;<br />
 </pre>
     </blockquote>
 
@@ -433,7 +468,7 @@ if ($count_fields > 0) {
         <b>&lt;Email&gt;xxx&lt;/Email&gt;</b>
         &lt;OfficialCode&gt;xxx&lt;/OfficialCode&gt;
         &lt;PhoneNumber&gt;xxx&lt;/PhoneNumber&gt;
-        &lt;Status&gt;user/teacher/drh<?php if ($result_xml != '') { echo '<br /><font style="color:red;">', $result_xml; echo '</font>'; } ?>&lt;/Status&gt;
+        &lt;Status&gt;user/teacher/drh<?php if ($result_xml != '') { echo '<br /><span style="color:red;">', $result_xml; echo '</span>'; } ?>&lt;/Status&gt;
         &lt;Courses&gt;xxx1|xxx2|xxx3&lt;/Courses&gt;
         &lt;/Contact&gt;
 &lt;/Contacts&gt;

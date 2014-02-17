@@ -23,6 +23,9 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $this_section = SECTION_MYPROFILE;
 }
 
+
+$htmlHeadXtra[] = api_get_password_checker_js('#username', '#password1');
+
 $_SESSION['this_section'] = $this_section;
 
 if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
@@ -142,7 +145,7 @@ $form->addRule('lastname' , get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 
 //    USERNAME
-$form->addElement('text', 'username', get_lang('UserName'), array('maxlength' => USERNAME_MAX_LENGTH, 'size' => USERNAME_MAX_LENGTH));
+$form->addElement('text', 'username', get_lang('UserName'), array('id' => 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'size' => USERNAME_MAX_LENGTH));
 if (api_get_setting('profile', 'login') !== 'true') {
     $form->freeze('username');
 }
@@ -204,7 +207,7 @@ $form->addRule('phone', get_lang('EmailWrong'), 'email');*/
 
 //    PICTURE
 if (is_profile_editable() && api_get_setting('profile', 'picture') == 'true') {
-    $form->addElement('file', 'picture', ($user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang('AddImage')));
+    $form->addElement('file', 'picture', ($user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang('AddImage')), array('class' => 'picture-form'));
     $form->add_progress_bar();
     if (!empty($user_data['picture_uri'])) {
         $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
@@ -257,7 +260,11 @@ if (api_get_setting('extended_profile') == 'true') {
 //    PASSWORD, if auth_source is platform
 if (is_platform_authentication() && is_profile_editable() && api_get_setting('profile', 'password') == 'true') {
     $form->addElement('password', 'password0', array(get_lang('Pass'), get_lang('Enter2passToChange')), array('size' => 40));
-    $form->addElement('password', 'password1', get_lang('NewPass'), array('size' => 40));
+    $form->addElement('password', 'password1', get_lang('NewPass'), array('id'=> 'password1', 'size' => 40));
+
+    if (isset($_configuration['allow_strength_pass_checker']) && $_configuration['allow_strength_pass_checker']) {
+        $form->addElement('label', null, '<div id="password_progress"></div>');
+    }
     $form->addElement('password', 'password2', get_lang('Confirmation'), array('size' => 40));
     //    user must enter identical password twice so we can prevent some user errors
     $form->addRule(array('password1', 'password2'), get_lang('PassTwo'), 'compare');
@@ -351,12 +358,13 @@ function upload_user_production($user_id) {
  * @return    bool true o false
  * @uses Gets user ID from global variable
  */
-function check_user_password($password){
+function check_user_password($password) {
     global $_user;
     $user_id = api_get_user_id();
     if ($user_id != strval(intval($user_id)) || empty($password)) { return false; }
     $table_user = Database :: get_main_table(TABLE_MAIN_USER);
     $password = api_get_encrypted_password($password);
+    $password = Database::escape_string($password);
     $sql_password = "SELECT * FROM $table_user WHERE user_id='".$user_id."' AND password='".$password."'";
     $result = Database::query($sql_password);
     return Database::num_rows($result) != 0;

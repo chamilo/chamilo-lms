@@ -40,6 +40,9 @@ $_cid = api_get_course_id();
 $test = $_REQUEST['test'];
 $score = $_REQUEST['score'];
 $origin = $_REQUEST['origin'];
+$learnpath_item_id = intval($_REQUEST['learnpath_item_id']);
+$course_info = api_get_course_info();
+$course_id = $course_info['real_id'];
 $jscript2run = '';
 
 /**
@@ -102,6 +105,9 @@ if ($origin != 'learnpath') {
 } else {
     $htmlHeadXtra[] = $jscript2run;
     Display::display_reduced_header();
+    $update_sql = "UPDATE $TABLE_LP_ITEM_VIEW SET status = 'completed'
+                   WHERE c_id = $course_id AND lp_item_id= $learnpath_item_id";
+    Database::query($update_sql); 
     Display::display_confirmation_message(get_lang('HotPotatoesFinished'));
     Display::display_footer();
 }

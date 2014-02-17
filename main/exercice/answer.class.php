@@ -10,116 +10,116 @@
 /**
  * Code
  */
-if(!class_exists('Answer')):
 /**
  * Answer class
 * @package chamilo.exercise
  */
-class Answer {
-	public $questionId;
+class Answer
+{
+    public $questionId;
 
-	// these are arrays
-	public $answer;
-	public $correct;
-	public $comment;
-	public $weighting;
-	public $position;
-	public $hotspot_coordinates;
-	public $hotspot_type;
-	public $destination;
-	// these arrays are used to save temporarily new answers
-	// then they are moved into the arrays above or deleted in the event of cancellation
-	public $new_answer;
-	public $new_correct;
-	public $new_comment;
-	public $new_weighting;
-	public $new_position;
-	public $new_hotspot_coordinates;
-	public $new_hotspot_type;
+    // these are arrays
+    public $answer;
+    public $correct;
+    public $comment;
+    public $weighting;
+    public $position;
+    public $hotspot_coordinates;
+    public $hotspot_type;
+    public $destination;
+    // these arrays are used to save temporarily new answers
+    // then they are moved into the arrays above or deleted in the event of cancellation
+    public $new_answer;
+    public $new_correct;
+    public $new_comment;
+    public $new_weighting;
+    public $new_position;
+    public $new_hotspot_coordinates;
+    public $new_hotspot_type;
 
-	public $nbrAnswers;
-	public $new_nbrAnswers;
-	public $new_destination; // id of the next question if feedback option is set to Directfeedback
+    public $nbrAnswers;
+    public $new_nbrAnswers;
+    public $new_destination; // id of the next question if feedback option is set to Directfeedback
     public $course; //Course information
 
-/**
-	 * constructor of the class
-	 *
-	 * @author 	Olivier Brouckaert
-	 * @param 	integer	Question ID that answers belong to
-	 */
-	function Answer($questionId, $course_id = null) {
-		
-		$this->questionId			= intval($questionId);
-		$this->answer				= array();
-		$this->correct				= array();
-		$this->comment				= array();
-		$this->weighting			= array();
-		$this->position				= array();
-		$this->hotspot_coordinates	= array();
-		$this->hotspot_type 		= array();
-		$this->destination  		= array();
-		// clears $new_* arrays
-		$this->cancel();
-        
-        if (!empty($course_id)) {            
+    /**
+     * constructor of the class
+     *
+     * @author 	Olivier Brouckaert
+     * @param 	integer	Question ID that answers belong to
+     */
+    function Answer($questionId, $course_id = null)
+    {
+        $this->questionId			= intval($questionId);
+        $this->answer				= array();
+        $this->correct				= array();
+        $this->comment				= array();
+        $this->weighting			= array();
+        $this->position				= array();
+        $this->hotspot_coordinates	= array();
+        $this->hotspot_type 		= array();
+        $this->destination  		= array();
+        // clears $new_* arrays
+        $this->cancel();
+
+        if (!empty($course_id)) {
             $course_info = api_get_course_info_by_id($course_id);
-        } else {            
+        } else {
             $course_info = api_get_course_info();
         }
-        
+
         $this->course    = $course_info;
-        $this->course_id = $course_info['real_id'];        
+        $this->course_id = $course_info['real_id'];
 
-		// fills arrays
-		$objExercise = new Exercise($this->course_id);
-		$objExercise->read($_REQUEST['exerciseId']);		
-		if ($objExercise->random_answers=='1') {
-			$this->readOrderedBy('rand()', '');// randomize answers
-		} else {
-			$this->read(); // natural order
-		}
-	}
+        // fills arrays
+        $objExercise = new Exercise($this->course_id);
+        $objExercise->read($_REQUEST['exerciseId']);
+        if ($objExercise->random_answers == '1') {
+            $this->readOrderedBy('rand()', '');// randomize answers
+        } else {
+            $this->read(); // natural order
+        }
+    }
 
-	/**
-	 * Clears $new_* arrays
-	 *
-	 * @author - Olivier Brouckaert
-	 */
-	function cancel() {
-		$this->new_answer				= array();
-		$this->new_correct				= array();
-		$this->new_comment				= array();
-		$this->new_weighting			= array();
-		$this->new_position				= array();
-		$this->new_hotspot_coordinates	= array();
-		$this->new_hotspot_type			= array();
-		$this->new_nbrAnswers			= 0;
-		$this->new_destination			= array();
-	}
+    /**
+     * Clears $new_* arrays
+     *
+     * @author - Olivier Brouckaert
+     */
+    function cancel() {
+        $this->new_answer				= array();
+        $this->new_correct				= array();
+        $this->new_comment				= array();
+        $this->new_weighting			= array();
+        $this->new_position				= array();
+        $this->new_hotspot_coordinates	= array();
+        $this->new_hotspot_type			= array();
+        $this->new_nbrAnswers			= 0;
+        $this->new_destination			= array();
+    }
 
-	/**
-	 * Reads answer informations from the data base
-	 *
-	 * @author - Olivier Brouckaert
-	 */
-	function read() {		
-		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
-		$questionId = $this->questionId;
-        
-		$sql="SELECT id, id_auto, answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination  FROM
-		      $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id ='".$questionId."' ORDER BY position";
+    /**
+     * Reads answer informations from the data base
+     *
+     * @author - Olivier Brouckaert
+     */
+    function read() {
+        $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $questionId = $this->questionId;
 
-		$result = Database::query($sql);
-		$i=1;
+        $sql="SELECT id, id_auto, answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination  FROM
+              $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id ='".$questionId."' ORDER BY position";
+
+        $result = Database::query($sql);
+        $i=1;
 
 		// while a record is found
-		while($object=Database::fetch_object($result)) {
+		while ($object=Database::fetch_object($result)) {
 			$this->id[$i]					= $object->id;
 			$this->answer[$i]				= $object->answer;
 			$this->correct[$i]				= $object->correct;
 			$this->comment[$i]				= $object->comment;
-			$this->weighting[$i]			= $object->ponderation;            
+			$this->weighting[$i]			= $object->ponderation;
 			$this->position[$i]				= $object->position;
 			$this->hotspot_coordinates[$i]	= $object->hotspot_coordinates;
 			$this->hotspot_type[$i]			= $object->hotspot_type;
@@ -129,36 +129,62 @@ class Answer {
 		}
 		$this->nbrAnswers=$i-1;
 	}
-	/**
-	 * reads answer informations from the data base ordered by parameter
-	 * @param	string	Field we want to order by
-	 * @param	string	DESC or ASC
-	 * @author 	Frederic Vauthier
-	 */
-	function readOrderedBy($field, $order='ASC') {		
+
+     /**
+     * returns all answer ids from this question Id
+     *
+     * @author - Yoselyn Castillo
+     * @return - array - $id (answer ids)
+     */
+    function selectAnswerId()
+    {
+		    $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
+		    $questionId = $this->questionId;
+
+		    $sql="SELECT id FROM
+		          $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id ='".$questionId."'";
+
+		    $result = Database::query($sql);
+		    $id = array();
+		    // while a record is found
+        if (Database::num_rows($result) > 0) {
+            while ($object = Database::fetch_array($result)) {
+    			      $id[] = $object['id'];
+    		    }
+        }
+		    return $id;
+	}
+
+    /**
+     * reads answer informations from the data base ordered by parameter
+     * @param	string	Field we want to order by
+     * @param	string	DESC or ASC
+     * @author 	Frederic Vauthier
+     */
+    function readOrderedBy($field, $order='ASC')
+    {
 		$field = Database::escape_string($field);
 		if (empty($field)) {
 			$field = 'position';
 		}
-        
+
 		if ($order != 'ASC' && $order!='DESC') {
 			$order = 'ASC';
 		}
-        
-                
+
 		$TBL_ANSWER   = Database::get_course_table(TABLE_QUIZ_ANSWER);
 		$TBL_QUIZ     = Database::get_course_table(TABLE_QUIZ_QUESTION);
 		$questionId=intval($this->questionId);
-		
+
 		$sql = "SELECT type FROM $TBL_QUIZ WHERE c_id = {$this->course_id} AND id = $questionId";
-		$result_question=Database::query($sql);
-		$question_type=Database::fetch_array($result_question);
-		
-		$sql="SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type, destination, id_auto " .
-				"FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id='".$questionId."'   " .
-				"ORDER BY $field $order";		
-		$result=Database::query($sql);	
-		
+		$result_question = Database::query($sql);
+		$question_type = Database::fetch_array($result_question);
+
+		$sql = "SELECT answer,correct,comment,ponderation,position, hotspot_coordinates, hotspot_type, destination, id_auto " .
+               "FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id='".$questionId."'   " .
+               "ORDER BY $field $order";
+		$result=Database::query($sql);
+
 		$i=1;
 		// while a record is found
 		$doubt_data = null;
@@ -175,9 +201,9 @@ class Answer {
 			$this->destination[$i]	= $object->destination;
 			$this->autoId[$i]		= $object->id_auto;
 			$i++;
-		}		
-		
-		if ($question_type['type'] == UNIQUE_ANSWER_NO_OPTION && !empty($doubt_data)) {		    
+		}
+
+		if ($question_type['type'] == UNIQUE_ANSWER_NO_OPTION && !empty($doubt_data)) {
 		    $this->answer[$i]       = $doubt_data->answer;
 			$this->correct[$i]		= $doubt_data->correct;
 			$this->comment[$i]		= $doubt_data->comment;
@@ -185,11 +211,10 @@ class Answer {
 			$this->position[$i]		= $doubt_data->position;
 			$this->destination[$i]	= $doubt_data->destination;
 			$this->autoId[$i]		= $doubt_data->id_auto;
-			$i++;		     
+			$i++;
 	    }
-        $this->nbrAnswers=$i-1;
+        $this->nbrAnswers = $i-1;
 	}
-
 
 	/**
 	 * returns the autoincrement id identificator
@@ -197,7 +222,8 @@ class Answer {
 	 * @author - Juan Carlos Ra�a
 	 * @return - integer - answer num
 	 */
-	function selectAutoId($id) {
+	function selectAutoId($id)
+    {
 		return $this->autoId[$id];
 	}
 
@@ -207,7 +233,8 @@ class Answer {
 	 * @author - Olivier Brouckaert
 	 * @return - integer - number of answers
 	 */
-	function selectNbrAnswers() {
+	function selectNbrAnswers()
+    {
 		return $this->nbrAnswers;
 	}
 
@@ -217,7 +244,8 @@ class Answer {
 	 * @author - Olivier Brouckaert
 	 * @return - integer - the question ID
 	 */
-	function selectQuestionId() {
+	function selectQuestionId()
+    {
 		return $this->questionId;
 	}
 
@@ -231,41 +259,42 @@ class Answer {
 		return $this->destination[$id];
 	}
 
-/**
+    /**
 	 * returns the answer title
 	 *
 	 * @author - Olivier Brouckaert
 	 * @param - integer $id - answer ID
 	 * @return - string - answer title
 	 */
-	function selectAnswer($id) {
-		return $this->answer[$id];
+	function selectAnswer($id)
+    {
+        return isset($this->answer[$id]) ? $this->answer[$id] : null;
 	}
 
 	/**
 	 * return array answer by id else return a bool
 	 */
 	function selectAnswerByAutoId($auto_id) {
-		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);        
-        
+		$TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
+
 		$auto_id = intval($auto_id);
-		$sql="SELECT id, answer FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
+		$sql="SELECT id, answer, id_auto FROM $TBL_ANSWER WHERE c_id = {$this->course_id} AND id_auto='$auto_id'";
 		$rs = Database::query($sql);
 
-		if (Database::num_rows($rs)>0) {
+		if (Database::num_rows($rs) > 0) {
 			$row = Database::fetch_array($rs);
 			return $row;
 		}
 		return false;
 	}
 
-	/**
-	 * returns the answer title from an answer's position
-	 *
-	 * @author - Yannick Warnier
-	 * @param - integer $id - answer ID
-	 * @return - bool - answer title
-	 */
+    /**
+     * returns the answer title from an answer's position
+     *
+     * @author - Yannick Warnier
+     * @param - integer $id - answer ID
+     * @return - bool - answer title
+     */
 	function selectAnswerIdByPosition($pos) {
 		foreach ($this->position as $k => $v) {
 			if ($v != $pos) { continue; }
@@ -274,31 +303,32 @@ class Answer {
 		return false;
 	}
 
-	/**
-	 * Returns a list of answers
-	 * @author Yannick Warnier <ywarnier@beeznest.org>
-	 * @return array	List of answers where each answer is an array of (id, answer, comment, grade) and grade=weighting
-	 */
-	 function getAnswersList($decode = false) {
+    /**
+     * Returns a list of answers
+     * @author Yannick Warnier <ywarnier@beeznest.org>
+     * @return array	List of answers where each answer is an array of (id, answer, comment, grade) and grade=weighting
+     */
+	 function getAnswersList($decode = false)
+     {
 	 	$list = array();
 	 	for($i = 1; $i<=$this->nbrAnswers;$i++){
 	 		if(!empty($this->answer[$i])){
-	 			
+
 	 			//Avoid problems when parsing elements with accents
 	 			if ($decode) {
 	        		$this->answer[$i] 	= api_html_entity_decode($this->answer[$i], ENT_QUOTES, api_get_system_encoding());
 	        		$this->comment[$i]	= api_html_entity_decode($this->comment[$i], ENT_QUOTES, api_get_system_encoding());
 	 			}
-	        	
+
 	 			$list[] = array(
-						'id'            => $i,
-						'answer'        => $this->answer[$i],
-						'comment'       => $this->comment[$i],
-						'grade'         => $this->weighting[$i],
-						'hotspot_coord' => $this->hotspot_coordinates[$i],
-						'hotspot_type'	=> $this->hotspot_type[$i],
-						'correct'		=> $this->correct[$i],
-						'destination'	=> $this->destination[$i]
+                    'id'            => $i,
+                    'answer'        => $this->answer[$i],
+                    'comment'       => $this->comment[$i],
+                    'grade'         => $this->weighting[$i],
+                    'hotspot_coord' => $this->hotspot_coordinates[$i],
+                    'hotspot_type'	=> $this->hotspot_type[$i],
+                    'correct'		=> $this->correct[$i],
+                    'destination'	=> $this->destination[$i]
 				);
 	 		}
 	 	}
@@ -357,7 +387,7 @@ class Answer {
 	 */
 	function selectComment($id)
 	{
-		return $this->comment[$id];
+        return isset($this->comment[$id]) ? $this->comment[$id] : null;
 	}
 
 	/**
@@ -420,7 +450,8 @@ class Answer {
 	 * @param coordinates 	Coordinates for hotspot exercises (optional)
 	 * @param integer		Type for hotspot exercises (optional)
 	 */
-	function createAnswer($answer,$correct,$comment,$weighting,$position,$new_hotspot_coordinates = null, $new_hotspot_type = null, $destination='') {
+	function createAnswer($answer,$correct,$comment,$weighting, $position, $new_hotspot_coordinates = null, $new_hotspot_type = null, $destination='')
+    {
 		$this->new_nbrAnswers++;
 		$id=$this->new_nbrAnswers;
 		$this->new_answer[$id]=$answer;
@@ -433,28 +464,38 @@ class Answer {
 		$this->new_destination[$id] = $destination;
 	}
 
-	/**
-	 * updates an answer
-	 *
-	 * @author Toon Keppens
-	 * @param	string	Answer title
-	 * @param	string	Answer comment
-	 * @param	integer	Answer weighting
-	 * @param	integer	Answer position
-	 */
-	function updateAnswers($answer,$comment,$weighting,$position,$destination) {
-		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
-
-		$questionId=$this->questionId;
-		$sql = "UPDATE $TBL_REPONSES SET 
-                answer = '".Database::escape_string($answer)."',
-				comment = '".Database::escape_string($comment)."', 
-				ponderation = '".Database::escape_string($weighting)."', 
-				position = '".Database::escape_string($position)."', 
-				destination = '".Database::escape_string($destination)."'
-				WHERE c_id = {$this->course_id} AND id = '".Database::escape_string($position)."'
+    /**
+     * Updates an answer
+     *
+     * @author Toon Keppens
+     *
+     * @param string $answer
+     * @param string $comment
+     * @param string $correct
+     * @param string $weighting
+     * @param string $position
+     * @param string $destination
+     * @param string $hotspot_coordinates
+     * @param string $hotspot_type
+     */
+    function updateAnswers($answer, $comment, $correct, $weighting, $position, $destination, $hotspot_coordinates, $hotspot_type)
+    {
+		    $TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
+        $idAnswer = $this->selectAnswerId();
+        $id = $this->getQuestionType() == 3 ? $idAnswer[0] : Database::escape_string($position);
+		    $questionId=$this->questionId;
+		    $sql = "UPDATE $TBL_REPONSES SET
+        answer = '".Database::escape_string($answer)."',
+				comment = '".Database::escape_string($comment)."',
+        correct = '".Database::escape_string($correct)."',
+				ponderation = '".Database::escape_string($weighting)."',
+				position = '".Database::escape_string($position)."',
+				destination = '".Database::escape_string($destination)."',
+				hotspot_coordinates = '".Database::escape_string($hotspot_coordinates)."',
+        hotspot_type = '".Database::escape_string($hotspot_type)."'
+				WHERE c_id = {$this->course_id} AND id = '$id'
 				AND question_id = '".Database::escape_string($questionId)."'";
-		Database::query($sql);
+        Database::query($sql);
 	}
 
 	/**
@@ -462,18 +503,17 @@ class Answer {
 	 *
 	 * @author - Olivier Brouckaert
 	 */
-	function save() {
-		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
-        $table_track_e_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+	function save()
+    {
+		$TBL_REPONSES = Database::get_course_table(TABLE_QUIZ_ANSWER);
 		$questionId   = intval($this->questionId);
-       
-		       
+
 		$c_id = $this->course['real_id'];
 		// inserts new answers into data base
         $flag = 0;
-		$sql = "INSERT INTO $TBL_REPONSES (c_id, id, question_id, answer, correct, comment, ponderation, position, hotspot_coordinates,hotspot_type, destination) VALUES ";
+		$sql = "INSERT INTO $TBL_REPONSES (c_id, id, question_id, answer, correct, comment, ponderation, position, hotspot_coordinates, hotspot_type, destination) VALUES ";
 		for ($i=1;$i <= $this->new_nbrAnswers; $i++) {
-           
+
 			$answer					= Database::escape_string($this->new_answer[$i]);
             $correct				= Database::escape_string($this->new_correct[$i]);
 			$comment				= Database::escape_string($this->new_comment[$i]);
@@ -482,16 +522,29 @@ class Answer {
 			$hotspot_coordinates	= Database::escape_string($this->new_hotspot_coordinates[$i]);
 			$hotspot_type			= Database::escape_string($this->new_hotspot_type[$i]);
 			$destination			= Database::escape_string($this->new_destination[$i]);
+
             if (!(isset($this->position[$i]))) {
                 $flag = 1;
 			    $sql.="($c_id, '$i','$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
             } else {
-                $this->updateAnswers($answer, $comment, $weighting, $position, $destination);
+                // https://support.chamilo.org/issues/6558
+                // function updateAnswers already escape_string, error if we do it twice. Feed function updateAnswers with none escaped strings
+                $this->updateAnswers(
+                    $this->new_answer[$i],
+                    $this->new_comment[$i],
+                    $this->new_correct[$i],
+                    $this->new_weighting[$i],
+                    $this->new_position[$i],
+                    $this->new_destination[$i],
+                    $this->new_hotspot_coordinates[$i],
+                    $this->new_hotspot_type[$i]
+                );
             }
         }
+
 		if ($flag == 1) {
-        $sql = api_substr($sql,0,-1);        
-		Database::query($sql);
+            $sql = api_substr($sql,0,-1);
+            Database::query($sql);
         }
         if (count($this->position) > $this->new_nbrAnswers) {
             $i = $this->new_nbrAnswers+1;
@@ -501,7 +554,7 @@ class Answer {
                 Database::query($sql);
                 $i++;
             }
-            
+
         }
 
 		// moves $new_* arrays
@@ -516,46 +569,47 @@ class Answer {
 		$this->nbrAnswers=$this->new_nbrAnswers;
 		$this->destination=$this->new_destination;
 		// clears $new_* arrays
-        
+
 		$this->cancel();
 	}
+
 	/**
 	 * Duplicates answers by copying them into another question
 	 *
 	 * @author Olivier Brouckaert
 	 * @param  int question id
-     * @param  array destination course info (result of the function api_get_course_info() ) 
+     * @param  array destination course info (result of the function api_get_course_info() )
 	 */
-	function duplicate($newQuestionId, $course_info = null) {        
+	function duplicate($newQuestionId, $course_info = null) {
         if (empty($course_info)) {
             $course_info = $this->course;
         } else {
             $course_info = $course_info;
         }
-        
+
 		$TBL_REPONSES = Database :: get_course_table(TABLE_QUIZ_ANSWER);
-        
+
         if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE || self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE) {
-            
+
             //Selecting origin options
             $origin_options = Question::readQuestionOption($this->selectQuestionId(), $this->course['real_id']);
-            
-            
+
+
             if (!empty($origin_options)) {
                 foreach($origin_options as $item) {
             	   $new_option_list[]=$item['id'];
                 }
             }
-            
+
             $destination_options = Question::readQuestionOption($newQuestionId, $course_info['real_id']);
             $i=0;
             $fixed_list = array();
             if (!empty($destination_options)) {
-                foreach($destination_options as $item) {                 
+                foreach($destination_options as $item) {
                     $fixed_list[$new_option_list[$i]] = $item['id'];
                     $i++;
                 }
-            }            
+            }
         }
 
 		// if at least one answer
@@ -563,20 +617,20 @@ class Answer {
 			// inserts new answers into data base
 			$sql = "INSERT INTO $TBL_REPONSES (c_id, id,question_id,answer,correct,comment, ponderation,position,hotspot_coordinates,hotspot_type,destination) VALUES";
 			$c_id = $course_info['real_id'];
-			
+
 			for ($i=1;$i <= $this->nbrAnswers;$i++) {
-                if ($this->course['id'] != $course_info['id']) {                    
+                if ($this->course['id'] != $course_info['id']) {
                 	$this->answer[$i]  = DocumentManager::replace_urls_inside_content_html_from_copy_course($this->answer[$i],$this->course['id'], $course_info['id']) ;
-                    $this->comment[$i] = DocumentManager::replace_urls_inside_content_html_from_copy_course($this->comment[$i],$this->course['id'], $course_info['id']) ;                    
+                    $this->comment[$i] = DocumentManager::replace_urls_inside_content_html_from_copy_course($this->comment[$i],$this->course['id'], $course_info['id']) ;
                 }
-                
+
 				$answer					= Database::escape_string($this->answer[$i]);
 				$correct				= Database::escape_string($this->correct[$i]);
-                
-                if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE || self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ) {                    
+
+                if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE || self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ) {
                     $correct = $fixed_list[intval($correct)];
                 }
-                
+
 				$comment				= Database::escape_string($this->comment[$i]);
 				$weighting				= Database::escape_string($this->weighting[$i]);
 				$position				= Database::escape_string($this->position[$i]);
@@ -591,4 +645,3 @@ class Answer {
 		}
 	}
 }
-endif;

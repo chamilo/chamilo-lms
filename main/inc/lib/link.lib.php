@@ -20,17 +20,20 @@
 
 /* FUNCTIONS */
 
-class Link extends Model {
-    var $table;
-    var $is_course_model = true;
-    var $columns = array('id', 'c_id','url','title','description','category_id', 'display_order', 'on_homepage', 'target', 'session_id');
-    var $required = array('url', 'title');
+class Link extends Model
+{
+    public $table;
+    public $is_course_model = true;
+    public $columns = array('id', 'c_id','url','title','description','category_id', 'display_order', 'on_homepage', 'target', 'session_id');
+    public $required = array('url', 'title');
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->table =  Database::get_course_table(TABLE_LINK);
 	}
 
-    public function save($params, $show_query = null) {
+    public function save($params, $show_query = null)
+    {
         $course_info = api_get_course_info();
         $params['session_id'] = api_get_session_id();
         $params['category_id'] = isset($params['category_id']) ? $params['category_id'] : 0;
@@ -50,7 +53,8 @@ class Link extends Model {
  * @todo replace strings by constants
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function addlinkcategory($type) {
+function addlinkcategory($type)
+{
 	global $catlinkstatus;
 	global $msgErr;
 
@@ -115,16 +119,16 @@ function addlinkcategory($type) {
 			$catlinkstatus = get_lang('LinkAdded');
 			Database :: query($sql);
 			$link_id = Database :: insert_id();
-            
+
             if ($link_id) {
-                api_set_default_visibility($link_id, TOOL_LINK);           
+                api_set_default_visibility($link_id, TOOL_LINK);
             }
 
 			if ((api_get_setting('search_enabled') == 'true') && $link_id && extension_loaded('xapian')) {
 				require_once api_get_path(LIBRARY_PATH) . 'search/ChamiloIndexer.class.php';
 				require_once api_get_path(LIBRARY_PATH) . 'search/IndexableChunk.class.php';
 				require_once api_get_path(LIBRARY_PATH) . 'specific_fields_manager.lib.php';
-                
+
                 $course_int_id = api_get_course_int_id();
 
 				$courseid = api_get_course_id();
@@ -236,7 +240,8 @@ function addlinkcategory($type) {
  * Used to delete a link or a category
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
-function deletelinkcategory($type) {
+function deletelinkcategory($type)
+{
 	global $catlinkstatus;
 	global $_course;
 	$tbl_link              = Database :: get_course_table(TABLE_LINK);
@@ -281,7 +286,8 @@ function deletelinkcategory($type) {
  * @param string $course_id Course code
  * @param int $document_id Document id to delete
  */
-function delete_link_from_search_engine($course_id, $link_id) {
+function delete_link_from_search_engine($course_id, $link_id)
+{
 	// Remove from search engine if enabled.
 	if (api_get_setting('search_enabled') == 'true') {
 		$tbl_se_ref = Database :: get_main_table(TABLE_MAIN_SEARCH_ENGINE_REF);
@@ -313,7 +319,8 @@ function delete_link_from_search_engine($course_id, $link_id) {
  *
  * */
 
-function get_link_info($id) {
+function get_link_info($id)
+{
      $tbl_link      = Database :: get_course_table(TABLE_LINK);
      $course_id     = api_get_course_int_id();
      $sql           = "SELECT * FROM " . $tbl_link . " WHERE c_id = $course_id AND id='" . intval($id) . "' ";
@@ -334,7 +341,8 @@ function get_link_info($id) {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @todo replace the globals with the appropriate $_POST or $_GET values
  */
-function editlinkcategory($type) {
+function editlinkcategory($type)
+{
 
 	global $catlinkstatus;
 	global $id;
@@ -440,9 +448,9 @@ function editlinkcategory($type) {
 			// Update search enchine and its values table if enabled.
 			if (api_get_setting('search_enabled') == 'true') {
 				$link_id = intval($_POST['id']);
-                
+
                 $course_int_id = api_get_course_int_id();
-                
+
 				$course_id = api_get_course_id();
 				$link_url = Database :: escape_string($_POST['urllink']);
 				$link_title = Database :: escape_string($_POST['title']);
@@ -549,7 +557,7 @@ function editlinkcategory($type) {
 
 		// This is used to put the modified info of the category-form into the database.
 		if ($submit_category) {
-			$sql = "UPDATE " . $tbl_categories . " 
+			$sql = "UPDATE " . $tbl_categories . "
                     SET category_title='" . Database :: escape_string($_POST['category_title']) . "', description='" . Database :: escape_string($_POST['description']) . "'
 			        WHERE c_id = $course_id AND id='" . Database :: escape_string($_POST['id']) . "'";
 			Database :: query($sql);
@@ -923,7 +931,8 @@ function import_link($linkdata) {
  * CSV file import functions
  * @author René Haentjens , Ghent University
  */
-function import_csvfile() {
+function import_csvfile()
+{
 
 	global $catlinkstatus; // Feedback message to user.
 
@@ -977,17 +986,46 @@ function import_csvfile() {
 }
 
 /**
+ * This function checks if the url is a vimeo link
+ * @author Julio Montoya
+ * @version 1.0
+ */
+function isVimeoLink($url)
+{
+	$isLink = strrpos($url, "vimeo.com");
+    return $isLink;
+}
+
+function getVimeoLinkId($url)
+{
+    $possibleUrls = array(
+        'http://www.vimeo.com/',
+        'http://vimeo.com/',
+        'https://www.vimeo.com/',
+        'https://vimeo.com/'
+    );
+    $url = str_replace($possibleUrls, '', $url);
+
+    if (is_numeric($url)) {
+        return $url;
+    }
+    return false;
+}
+
+/**
  * This function checks if the url is a youtube link
  * @author Jorge Frisancho
  * @author Julio Montoya - Fixing code
  * @version 1.0
  */
-function is_youtube_link($url) {
+function is_youtube_link($url)
+{
 	$is_youtube_link = strrpos($url, "youtube") || strrpos($url, "youtu.be");
     return $is_youtube_link;
 }
 
-function get_youtube_video_id($url) {
+function get_youtube_video_id($url)
+{
     // This is the length of YouTube's video IDs
 	$len = 11;
 

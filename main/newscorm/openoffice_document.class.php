@@ -7,13 +7,15 @@
  * to help in the conversion of Office documents to learning paths
  * @package chamilo.learnpath
  * @author	Eric Marguin <eric.marguin@dokeos.com>
+ * @author Julio Montoya
  * @license	GNU/GPL
  */
 
 /**
  * Defines the "OpenofficeDocument" child of class "learnpath"
  */
-abstract class OpenofficeDocument extends learnpath {
+abstract class OpenofficeDocument extends learnpath
+{
 
     public $first_item = 0;
     public $original_charset = 'utf-8';
@@ -25,31 +27,36 @@ abstract class OpenofficeDocument extends learnpath {
      * @param	integer	Learnpath ID in DB
      * @param	integer	User ID
      */
-    public function __construct($course_code = null, $resource_id = null, $user_id = null) {
+    public function __construct($course_code = null, $resource_id = null, $user_id = null)
+    {
         if ($this->debug > 0) {
             error_log('In OpenofficeDocument::OpenofficeDocument()', 0);
         }
         if (!empty($course_code) && !empty($resource_id) && !empty($user_id)) {
             parent::__construct($course_code, $resource_id, $user_id);
-        } else {
-            // Do nothing but still build the presentation object.
         }
     }
 
-    public function convert_document($file, $action_after_conversion = 'make_lp') {
-        global $_course, $_user, $_configuration;
-        $this->file_name = pathinfo($file['name'], PATHINFO_FILENAME);        
+    /**
+     * @param string $file
+     * @param string $action_after_conversion
+     * @return bool|int
+     */
+    public function convert_document($file, $action_after_conversion = 'make_lp')
+    {
+        global $_course;
+        $this->file_name = pathinfo($file['name'], PATHINFO_FILENAME);
         // Create the directory
-        $result = $this->generate_lp_folder($_course, $this->file_name);                        
-                
+        $result = $this->generate_lp_folder($_course, $this->file_name);
+
          // Create the directory
         $this->base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
         ///learning_path/ppt_dirname directory
-        $this->created_dir = substr($result['dir'], 0, strlen($result['dir']) -1);        
+        $this->created_dir = substr($result['dir'], 0, strlen($result['dir']) -1);
         $this->file_path = $this->created_dir.'/'.replace_dangerous_char($file['name'], 'strict');
-        
+
         //var_dump($this->file_name, $this->file_path, $this->base_work_dir, $this->created_dir);
-    
+
         /*
          * Original code
         global $_course, $_user, $_configuration;
@@ -69,9 +76,9 @@ abstract class OpenofficeDocument extends learnpath {
         $this->base_work_dir = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 
         $this->created_dir = create_unexisting_directory($_course, $_user['user_id'], api_get_session_id(), 0, 0, $this->base_work_dir, $dir_name);
-       
+
             var_dump($this->file_name, $this->file_path, $this->base_work_dir, $this->created_dir);
-        
+
         */
 
         $ppt2lp_host = api_get_setting('service_ppt2lp', 'host');
@@ -96,7 +103,7 @@ abstract class OpenofficeDocument extends learnpath {
             $cmd .= ' -p ' . api_get_setting('service_ppt2lp', 'port');
             // Call to the function implemented by child.
             $cmd .= $this->add_command_parameters();
-            // To allow openoffice to manipulate docs.            
+            // To allow openoffice to manipulate docs.
             @chmod($this->base_work_dir, 0777);
             @chmod($this->base_work_dir.$this->created_dir, 0777);
             @chmod($this->base_work_dir.$this->file_path, 0777);
@@ -107,7 +114,7 @@ abstract class OpenofficeDocument extends learnpath {
             $files = array();
             $return = 0;
             $shell = exec($cmd, $files, $return);
-            
+
             if ($return != 0) { // If the java application returns an error code.
                 switch ($return) {
                     // Can't connect to openoffice.
@@ -141,7 +148,7 @@ abstract class OpenofficeDocument extends learnpath {
             // files info
             $files = $result['files'];
         }
-        
+
         if (!empty($files)) {
             // Create lp
             $this->lp_id = learnpath::add_lp($_course['id'], $this->file_name, '', 'guess', 'manual');
@@ -165,7 +172,8 @@ abstract class OpenofficeDocument extends learnpath {
      * @param   array current ppt file
      * @return  array images files
      */
-    private function _get_remote_ppt2lp_files($file) {
+    private function _get_remote_ppt2lp_files($file)
+    {
         require_once api_get_path(LIBRARY_PATH) . 'nusoap/nusoap.php';
         // host
         $ppt2lp_host = api_get_setting('service_ppt2lp', 'host');

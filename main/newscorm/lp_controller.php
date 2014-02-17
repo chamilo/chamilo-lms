@@ -7,9 +7,7 @@
  * @package chamilo.learnpath
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
-
 use \ChamiloSession as Session;
-
 $debug = 0;
 if ($debug > 0) error_log('New LP -+- Entered lp_controller.php -+- (action: '.$_REQUEST['action'].')', 0);
 
@@ -69,6 +67,165 @@ form .label {
     text-shadow:none;
 }
 </style>';
+$ajax_url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php';
+$htmlHeadXtra[] = '
+<script>
+    /*
+    Script to manipuplate Learning Path items with Drag and drop
+     */
+    var newOrderData = "";
+    var lptree_debug = "";  // for debug
+    var lp_id_list = "";    // for debug
+
+    // uncomment for some debug display utility
+    /*
+    $(document).ready(function() {
+        buildLPtree_debug($("#lp_item_list"), 0, 0);
+        alert(lp_id_list+"\n\n"+lptree_debug);
+    });
+    */
+
+    function buildLPtree(in_elem, in_parent_id) {
+        var item_tag = in_elem.get(0).tagName;
+        var item_id =  in_elem.attr("id");
+        var parent_id = item_id;
+
+        if (item_tag == "LI" && item_id != undefined) {
+            // in_parent_id de la forme UL_x
+            newOrderData += item_id+"|"+get_UL_integer_id(in_parent_id)+"^";
+        }
+
+        in_elem.children().each(function () {
+            buildLPtree($(this), parent_id);
+        });
+    }
+
+    // same than buildLPtree with some text display for debug in string lptree_debug
+    function buildLPtree_debug(in_elem, in_lvl, in_parent_id) {
+        var item_tag = in_elem.get(0).tagName;
+        var item_id =  in_elem.attr("id");
+        var parent_id = item_id;
+
+        if (item_tag == "LI" && item_id != undefined) {
+            for (i=0; i < 4 * in_lvl; i++) {
+                lptree_debug += " ";
+            }
+            lptree_debug += " Lvl="+(in_lvl - 1)/2+" ("+item_tag+" "+item_id+" Fils de="+in_parent_id+") \n";
+            // in_parent_id de la forme UL_x
+            lp_id_list += item_id+"|"+get_UL_integer_id(in_parent_id)+"^";
+        }
+
+        in_elem.children().each(function () {
+            buildLPtree_debug($(this), in_lvl + 1, parent_id);
+        });
+    }
+
+    // return the interge part of an UL id
+    // (0 for lp_item_list)
+    function get_UL_integer_id(in_ul_id) {
+        in_parent_integer_id = in_ul_id;
+        in_parent_integer_id = in_parent_integer_id.replace("lp_item_list", "0");
+        in_parent_integer_id = in_parent_integer_id.replace("UL_", "");
+        return in_parent_integer_id;
+    }
+
+    $(function() {
+
+        $(".item_data").live("mouseover", function(event) {
+            $(".button_actions", this).show();
+        });
+
+        $(".item_data").live("mouseout", function() {
+            $(".button_actions",this).hide();
+        });
+
+        $(".button_actions").hide();
+
+        $( ".lp_resource" ).sortable({
+            items: ".lp_resource_element ",
+            handle: ".moved", //only the class "moved"
+            cursor: "move",
+            connectWith: "#lp_item_list",
+            placeholder: "ui-state-highlight", //defines the yellow highlight
+
+            start: function(event, ui) {
+                $(ui.item).css("width", "160px");
+                $(ui.item).find(".item_data").attr("style", "");
+
+            },
+            stop: function(event, ui) {
+                $(ui.item).css("width", "100%");
+            },
+        });
+
+        $("#lp_item_list").sortable({
+            items: "li",
+            handle: ".moved", //only the class "moved"
+            cursor: "move",
+            placeholder: "ui-state-highlight", //defines the yellow highlight
+
+            update: function(event, ui) {
+                buildLPtree($("#lp_item_list"), 0);
+                var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
+
+                $.post(
+                    "'.$ajax_url.'",
+                    order,
+                    function(reponse){
+                        $("#message").html(reponse);
+                        order = "";
+                        newOrderData = "";
+                    }
+                );
+            },
+
+            receive: function(event, ui) {
+                var id = $(ui.item).attr("data_id");
+                var type = $(ui.item).attr("data_type");
+                var title = $(ui.item).attr("title");
+                processReceive = true;
+
+                if (ui.item.parent()[0]) {
+                    var parent_id = $(ui.item.parent()[0]).attr("id");
+                    var previous_id = $(ui.item.prev()).attr("id");
+
+                    if (parent_id) {
+                        parent_id = parent_id.split("_")[1];
+                        var params = {
+                            "a": "add_lp_item",
+                            "id": id,
+                            "parent_id": parent_id,
+                            "previous_id": previous_id,
+                            "type": type,
+                            "title" : title
+                        };
+                        $.ajax({
+                            type: "GET",
+                            url: "'.$ajax_url.'",
+                            data: params,
+                            async: false,
+                            success: function(data) {
+                                if (data == -1) {
+                                } else {
+                                    $(".normal-message").hide();
+                                    $(ui.item).attr("id", data);
+                                    $(ui.item).addClass("lp_resource_element_new");
+                                    $(ui.item).find(".item_data").attr("style", "");
+                                    $(ui.item).addClass("record li_container");
+                                    $(ui.item).removeClass("lp_resource_element");
+                                    $(ui.item).removeClass("doc_resource");
+                                }
+                            }
+                        });
+                    }
+                }//
+            }//end receive
+        });
+        processReceive = false;
+    });
+</script>
+';
+
 
 // Flag to allow for anonymous user - needs to be set before global.inc.php.
 $use_anonymous = true;
@@ -167,7 +324,7 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         if ($debug > 0) error_log('New LP - found row - type dokeos - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                         $oLP = new learnpath(api_get_course_id(), $lp_id, api_get_user_id());
                         if ($oLP !== false) { $lp_found = true; } else { error_log($oLP->error, 0); }
-                         break;
+                        break;
                     case 2:
                         if ($debug > 0) error_log('New LP - found row - type scorm - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
                         $oLP = new scorm(api_get_course_id(), $lp_id, api_get_user_id());
@@ -217,11 +374,20 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
         if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'view' && !isset($_REQUEST['exeId'])) {
             $_REQUEST['action'] = 'build';
         }
-        $_SESSION['studentview'] = null;
+        //$_SESSION['studentview'] = null;
     }
 }
 
 $action = (!empty($_REQUEST['action']) ? $_REQUEST['action'] : '');
+
+// format title to be displayed correctly if QUIZ
+$post_title = "";
+if (isset($_POST['title'])) {
+    $post_title = $_POST['title'];
+    if (isset($_POST['type']) && isset($_POST['title']) && $_POST['type'] == TOOL_QUIZ && !empty($_POST['title'])) {
+        $post_title = Exercise::format_title_variable($_POST['title']);
+    }
+}
 
 switch ($action) {
     case 'add_item':
@@ -237,7 +403,7 @@ switch ($action) {
         } else {
             $_SESSION['refresh'] = 1;
 
-            if (isset($_POST['submit_button']) && !empty($_POST['title'])) {
+            if (isset($_POST['submit_button']) && !empty($post_title)) {
                 // If a title was sumbitted:
 
                 //Updating the lp.modified_on
@@ -247,6 +413,7 @@ switch ($action) {
                     // Check post_time to ensure ??? (counter-hacking measure?)
                     require 'lp_add_item.php';
                 } else {
+
                     $_SESSION['post_time'] = $_POST['post_time'];
                     if ($_POST['type'] == TOOL_DOCUMENT) {
                         if (isset($_POST['path']) && $_GET['edit'] != 'true') {
@@ -254,10 +421,10 @@ switch ($action) {
                         } else {
                             $document_id = $_SESSION['oLP']->create_document($_course);
                         }
-                        $new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $document_id, $_POST['title'], $_POST['description'], $_POST['prerequisites']);
+                        $new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $document_id, $post_title, $_POST['description'], $_POST['prerequisites']);
                     } else {
                         // For all other item types than documents, load the item using the item type and path rather than its ID.
-                        $new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $_POST['path'], $_POST['title'], $_POST['description'], $_POST['prerequisites'], $_POST['maxTimeAllowed']);
+                        $new_item_id = $_SESSION['oLP']->add_item($_POST['parent'], $_POST['previous'], $_POST['type'], $_POST['path'], $post_title, $_POST['description'], $_POST['prerequisites'], $_POST['maxTimeAllowed']);
                     }
                     $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
                     header('Location: '.$url);
@@ -284,14 +451,18 @@ switch ($action) {
             if (isset($_REQUEST['id'])) {
                 $lp_item_obj = new learnpathItem($_REQUEST['id']);
 
-                //Remove audio
-                if (isset($_POST['delete_file']) && $_POST['delete_file'] == 1) {
-                     $lp_item_obj->remove_audio();
+                // Remove audio
+                if (isset($_GET['delete_file']) && $_GET['delete_file'] == 1) {
+                    $lp_item_obj->remove_audio();
+
+                    $url = api_get_self().'?action=add_audio&lp_id='.intval($_SESSION['oLP']->lp_id).'&id='.$lp_item_obj->get_id().'&'.api_get_cidreq();
+                    header('Location: '.$url);
+                    exit;
                 }
 
-                //Upload audio
+                // Upload audio
                 if (isset($_FILES['file']) && !empty($_FILES['file'])) {
-                    //Updating the lp.modified_on
+                    // Updating the lp.modified_on
                     $_SESSION['oLP']->set_modified_on();
                     $lp_item_obj->add_audio();
                 }
@@ -403,7 +574,7 @@ switch ($action) {
         if (!$lp_found) { error_log('New LP - No learnpath given for edit item', 0); require 'lp_list.php'; }
         else {
             $_SESSION['refresh'] = 1;
-            if (isset($_POST['submit_button']) && !empty($_POST['title'])) {
+            if (isset($_POST['submit_button']) && !empty($post_title)) {
 
                 //Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
@@ -413,7 +584,7 @@ switch ($action) {
                 if (isset($_FILES['mp3'])) {
                     $audio = $_FILES['mp3'];
                 }
-                $_SESSION['oLP']->edit_item($_REQUEST['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description'], $_POST['prerequisites'], $audio, $_POST['maxTimeAllowed']);
+                $_SESSION['oLP']->edit_item($_REQUEST['id'], $_POST['parent'], $_POST['previous'], $post_title, $_POST['description'], $_POST['prerequisites'], $audio, $_POST['maxTimeAllowed']);
 
                 if (isset($_POST['content_lp'])) {
                     $_SESSION['oLP']->edit_document($_course);
@@ -468,8 +639,7 @@ switch ($action) {
             if (isset($_POST['submit_button'])) {
                 //Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
-
-                $_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $_POST['title'], $_POST['description']);
+                $_SESSION['oLP']->edit_item($_GET['id'], $_POST['parent'], $_POST['previous'], $post_title, $_POST['description']);
                 $is_success = true;
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id);
                 header('Location: '.$url);

@@ -175,14 +175,14 @@ array(array('ref'=>'SOAP-ENC:arrayType','wsdl:arrayType' => 'tns:result_createUs
 );
 
 // Register the method to expose
-$server->register('WSCreateUsers',			// method name
-    array('createUsers' => 'tns:createUsers'),		// input parameters
-    array('return' => 'tns:results_createUsers'),	// output parameters
-    'urn:WSRegistration',							// namespace
-    'urn:WSRegistration#WSCreateUsers',		// soapaction
-    'rpc',											// style
-    'encoded',										// use
-    'This service adds a user'						// documentation
+$server->register('WSCreateUsers',                 // method name
+    array('createUsers' => 'tns:createUsers'),     // input parameters
+    array('return' => 'tns:results_createUsers'),  // output parameters
+    'urn:WSRegistration',                          // namespace
+    'urn:WSRegistration#WSCreateUsers',            // soapaction
+    'rpc',                                         // style
+    'encoded',                                     // use
+    'This service adds a user'                     // documentation
 );
 
 
@@ -245,9 +245,9 @@ function WSCreateUsers($params) {
                     $sql .= " password='".Database::escape_string($password)."',";
                 }
                 if (!is_null($auth_source)) {
-                    $sql .=	" auth_source='".Database::escape_string($auth_source)."',";
+                    $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
                 }
-                $sql .=	"
+                $sql .=    "
                         email='".Database::escape_string($email)."',
                         status='".Database::escape_string($status)."',
                         official_code='".Database::escape_string($official_code)."',
@@ -255,7 +255,7 @@ function WSCreateUsers($params) {
                         expiration_date='".Database::escape_string($expiration_date)."',
                         active='1',
                         hr_dept_id=".intval($hr_dept_id);
-                $sql .=	" WHERE user_id='".$r_check_user[0]."'";
+                $sql .=    " WHERE user_id='".$r_check_user[0]."'";
                 Database::query($sql);
                 $results[] = $r_check_user[0];
                 continue;
@@ -295,9 +295,9 @@ function WSCreateUsers($params) {
                                     status = '".Database::escape_string($status)."',
                                     password = '".Database::escape_string($password)."',
                                     email = '".Database::escape_string($email)."',
-                                    official_code	= '".Database::escape_string($official_code)."',
-                                    picture_uri 	= '".Database::escape_string($picture_uri)."',
-                                    creator_id  	= '".Database::escape_string($creator_id)."',
+                                    official_code    = '".Database::escape_string($official_code)."',
+                                    picture_uri     = '".Database::escape_string($picture_uri)."',
+                                    creator_id      = '".Database::escape_string($creator_id)."',
                                     auth_source = '".Database::escape_string($auth_source)."',
                                     phone = '".Database::escape_string($phone)."',
                                     language = '".Database::escape_string($language)."',
@@ -377,20 +377,21 @@ $server->wsdl->addComplexType(
         'original_user_id_name' => array('name' => 'original_user_id_name', 'type' => 'xsd:string'),
         'original_user_id_value' => array('name' => 'original_user_id_value', 'type' => 'xsd:string'),
         'extra' => array('name' => 'extra', 'type' => 'tns:extrasList'),
-        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string'),
+        'active' => array('name' => 'extra', 'type' => 'xsd:string')
     )
 );
 
 
 // Register the method to expose
-$server->register('WSCreateUser',				// method name
-    array('createUser' => 'tns:createUser'),		// input parameters
-    array('return' => 'xsd:string'),	            // output parameters
-    'urn:WSRegistration',							// namespace
-    'urn:WSRegistration#WSCreateUser',		// soapaction
-    'rpc',											// style
-    'encoded',										// use
-    'This service adds a user'						// documentation
+$server->register('WSCreateUser',                // method name
+    array('createUser' => 'tns:createUser'),     // input parameters
+    array('return' => 'xsd:string'),             // output parameters
+    'urn:WSRegistration',                        // namespace
+    'urn:WSRegistration#WSCreateUser',           // soapaction
+    'rpc',                                       // style
+    'encoded',                                   // use
+    'This service adds a user'                   // documentation
 );
 
 
@@ -417,7 +418,7 @@ function WSCreateUser($params) {
     $picture_uri = '';
     $auth_source = PLATFORM_AUTH_SOURCE;
     $expiration_date = '0000-00-00 00:00:00';
-    $active = 1;
+    $active = !isset($params['active']) || !intval($params['active']) ? 0 : 1;
     $hr_dept_id = 0;
     $extra = null;
     $original_user_id_name = $params['original_user_id_name'];
@@ -445,9 +446,9 @@ function WSCreateUser($params) {
                 $sql .= " password='".Database::escape_string($password)."',";
             }
             if (!is_null($auth_source)) {
-                $sql .=	" auth_source='".Database::escape_string($auth_source)."',";
+                $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
             }
-            $sql .=	"
+            $sql .=    "
                     email='".Database::escape_string($email)."',
                     status='".Database::escape_string($status)."',
                     official_code='".Database::escape_string($official_code)."',
@@ -455,14 +456,14 @@ function WSCreateUser($params) {
                     expiration_date='".Database::escape_string($expiration_date)."',
                     active='1',
                     hr_dept_id=".intval($hr_dept_id);
-            $sql .=	" WHERE user_id='".$r_check_user[0]."'";
+            $sql .=    " WHERE user_id='".$r_check_user[0]."'";
             Database::query($sql);
 
             return  $r_check_user[0];
 
         } else {
             return 0;
-            //return 0;	// user id already exits
+            //return 0;    // user id already exits
         }
     }
 
@@ -495,9 +496,9 @@ function WSCreateUser($params) {
                     status = '".Database::escape_string($status)."',
                     password = '".Database::escape_string($password)."',
                     email = '".Database::escape_string($email)."',
-                    official_code	= '".Database::escape_string($official_code)."',
-                    picture_uri 	= '".Database::escape_string($picture_uri)."',
-                    creator_id  	= '".Database::escape_string($creator_id)."',
+                    official_code    = '".Database::escape_string($official_code)."',
+                    picture_uri     = '".Database::escape_string($picture_uri)."',
+                    creator_id      = '".Database::escape_string($creator_id)."',
                     auth_source = '".Database::escape_string($auth_source)."',
                     phone = '".Database::escape_string($phone)."',
                     language = '".Database::escape_string($language)."',
@@ -625,14 +626,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_creat
 );
 
 // Register the method to expose
-$server->register('WSCreateUsersPasswordCrypted',                               // method name
-    array('createUsersPasswordCrypted' => 'tns:createUsersPasswordCrypted'),	// input parameters
-    array('return' => 'tns:results_createUsersPassEncrypt'),                    // output parameters
-    'urn:WSRegistration',													    // namespace
-    'urn:WSRegistration#WSCreateUsersPasswordCrypted',                          // soapaction
-    'rpc',																	    // style
-    'encoded',																    // use
-    'This service adds users to the system'									    // documentation
+$server->register('WSCreateUsersPasswordCrypted',                            // method name
+    array('createUsersPasswordCrypted' => 'tns:createUsersPasswordCrypted'), // input parameters
+    array('return' => 'tns:results_createUsersPassEncrypt'),                 // output parameters
+    'urn:WSRegistration',                                                    // namespace
+    'urn:WSRegistration#WSCreateUsersPasswordCrypted',                       // soapaction
+    'rpc',                                                                   // style
+    'encoded',                                                               // use
+    'This service adds users to the system'                                  // documentation
 );
 
 // Define the method WSCreateUsersPasswordCrypted
@@ -715,7 +716,7 @@ function WSCreateUsersPasswordCrypted($params) {
         if (!empty($user_param['expiration_date'])) { $expiration_date = $user_param['expiration_date']; }
 
         // Check whether x_user_id exists into user_field_values table.
-        $sql = "SELECT field_value,user_id	FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
+        $sql = "SELECT field_value,user_id    FROM $t_uf uf,$t_ufv ufv WHERE ufv.field_id=uf.id AND field_variable='$original_user_id_name' AND field_value='$original_user_id_value'";
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
         $count_row = Database::num_rows($res);
@@ -732,9 +733,9 @@ function WSCreateUsersPasswordCrypted($params) {
                 username='".Database::escape_string($loginName)."',";
 
                 if (!is_null($auth_source)) {
-                    $sql .=	" auth_source='".Database::escape_string($auth_source)."',";
+                    $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
                 }
-                $sql .=	"
+                $sql .=    "
                         password='".Database::escape_string($password)."',
                         email='".Database::escape_string($email)."',
                         status='".Database::escape_string($status)."',
@@ -743,7 +744,7 @@ function WSCreateUsersPasswordCrypted($params) {
                         expiration_date='".Database::escape_string($expiration_date)."',
                         active='1',
                         hr_dept_id=".intval($hr_dept_id);
-                $sql .=	" WHERE user_id='".$r_check_user[0]."'";
+                $sql .=    " WHERE user_id='".$r_check_user[0]."'";
                 Database::query($sql);
 
                 if (is_array($extra_list) && count($extra_list) > 0) {
@@ -788,9 +789,9 @@ function WSCreateUsersPasswordCrypted($params) {
                 status = '".Database::escape_string($status)."',
                 password = '".Database::escape_string($password)."',
                 email = '".Database::escape_string($email)."',
-                official_code	= '".Database::escape_string($official_code)."',
-                picture_uri 	= '".Database::escape_string($picture_uri)."',
-                creator_id  	= '".Database::escape_string($creator_id)."',
+                official_code    = '".Database::escape_string($official_code)."',
+                picture_uri     = '".Database::escape_string($picture_uri)."',
+                creator_id      = '".Database::escape_string($creator_id)."',
                 auth_source = '".Database::escape_string($auth_source)."',
                 phone = '".Database::escape_string($phone)."',
                 language = '".Database::escape_string($language)."',
@@ -878,12 +879,12 @@ $server->wsdl->addComplexType(
 
 // Register the method to expose
 $server->register('WSCreateUserPasswordCrypted',                            // method name
-    array('createUserPasswordCrypted' => 'tns:createUserPasswordCrypted'),	// input parameters
-    array('return' => 'xsd:string'),								        // output parameters
-    'urn:WSRegistration',													// namespace
+    array('createUserPasswordCrypted' => 'tns:createUserPasswordCrypted'),  // input parameters
+    array('return' => 'xsd:string'),                                        // output parameters
+    'urn:WSRegistration',                                                   // namespace
     'urn:WSRegistration#WSCreateUserPasswordCrypted',                       // soapaction
-    'rpc',																	// style
-    'encoded',																// use
+    'rpc',                                                                  // style
+    'encoded',                                                              // use
     'This service adds users'                                               // documentation
 );
 
@@ -972,9 +973,9 @@ function WSCreateUserPasswordCrypted($params) {
                     username='".Database::escape_string($loginName)."',";
 
             if (!is_null($auth_source)) {
-                $sql .=	" auth_source='".Database::escape_string($auth_source)."',";
+                $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
             }
-            $sql .=	"
+            $sql .=    "
                     password='".Database::escape_string($password)."',
                     email='".Database::escape_string($email)."',
                     status='".Database::escape_string($status)."',
@@ -983,7 +984,7 @@ function WSCreateUserPasswordCrypted($params) {
                     expiration_date='".Database::escape_string($expiration_date)."',
                     active='1',
                     hr_dept_id=".intval($hr_dept_id);
-            $sql .=	" WHERE user_id='".$r_check_user[0]."'";
+            $sql .=    " WHERE user_id='".$r_check_user[0]."'";
             if ($debug) error_log($sql);
             Database::query($sql);
 
@@ -1028,9 +1029,9 @@ function WSCreateUserPasswordCrypted($params) {
                 status              = '".Database::escape_string($status)."',
                 password            = '".Database::escape_string($password)."',
                 email               = '".Database::escape_string($email)."',
-                official_code	    = '".Database::escape_string($official_code)."',
-                picture_uri 	    = '".Database::escape_string($picture_uri)."',
-                creator_id  	    = '".Database::escape_string($creator_id)."',
+                official_code        = '".Database::escape_string($official_code)."',
+                picture_uri         = '".Database::escape_string($picture_uri)."',
+                creator_id          = '".Database::escape_string($creator_id)."',
                 auth_source         = '".Database::escape_string($auth_source)."',
                 phone               = '".Database::escape_string($phone)."',
                 language            = '".Database::escape_string($language)."',
@@ -1226,14 +1227,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editU
 );
 
 // Register the method to expose
-$server->register('WSEditUsers',				// method name
-    array('editUsers' => 'tns:editUsers'),			// input parameters
-    array('return' => 'tns:results_editUsers'),		// output parameters
-    'urn:WSRegistration',							// namespace
-    'urn:WSRegistration#WSEditUsers',			// soapaction
-    'rpc',											// style
-    'encoded',										// use
-    'This service edits a user from wiener'			// documentation
+$server->register('WSEditUsers',                // method name
+    array('editUsers' => 'tns:editUsers'),      // input parameters
+    array('return' => 'tns:results_editUsers'), // output parameters
+    'urn:WSRegistration',                       // namespace
+    'urn:WSRegistration#WSEditUsers',           // soapaction
+    'rpc',                                      // style
+    'encoded',                                  // use
+    'This service edits a user from wiener'     // documentation
 );
 
 // Define the method WSEditUsers
@@ -1316,7 +1317,7 @@ function WSEditUsers($params) {
             $sql .= " password='".Database::escape_string($password)."',";
         }
         if (!is_null($auth_source)) {
-            $sql .=	" auth_source='".Database::escape_string($auth_source)."',";
+            $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
         }
         // Exception for admins in case no status is provided in WS call...
         $sqladmin = "SELECT user_id FROM $t_admin WHERE user_id = ".intval($user_id);
@@ -1327,7 +1328,7 @@ function WSEditUsers($params) {
         } else {
             $status = 5;
         }
-        $sql .=	"
+        $sql .=    "
                 email='".Database::escape_string($email)."',
                 status='".Database::escape_string($status)."',
                 official_code='".Database::escape_string($official_code)."',
@@ -1340,7 +1341,7 @@ function WSEditUsers($params) {
         if (!is_null($creator_id)) {
             $sql .= ", creator_id='".Database::escape_string($creator_id)."'";
         }
-        $sql .=	" WHERE user_id='$user_id'";
+        $sql .=    " WHERE user_id='$user_id'";
         $return = @Database::query($sql);
 
         if (is_array($extra_list) && count($extra_list) > 0) {
@@ -1390,14 +1391,14 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSEditUser',		        // method name
-    array('editUser' => 'tns:editUser'),			// input parameters
-    array('return' => 'xsd:string'),                // output parameters
-    'urn:WSRegistration',							// namespace
-    'urn:WSRegistration#WSEditUser',          // soapaction
-    'rpc',											// style
-    'encoded',										// use
-    'This service edits a user from wiener'			// documentation
+$server->register('WSEditUser',              // method name
+    array('editUser' => 'tns:editUser'),     // input parameters
+    array('return' => 'xsd:string'),         // output parameters
+    'urn:WSRegistration',                    // namespace
+    'urn:WSRegistration#WSEditUser',         // soapaction
+    'rpc',                                   // style
+    'encoded',                               // use
+    'This service edits a user from wiener'  // documentation
 );
 
 // Define the method WSEditUser
@@ -1470,7 +1471,7 @@ function WSEditUser($params) {
         $sql .= " password='".Database::escape_string($password)."',";
     }
     if (!is_null($auth_source)) {
-        $sql .=	" auth_source='".Database::escape_string($auth_source)."',";
+        $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
     }
     // Exception for admins in case no status is provided in WS call...
     $sqladmin = "SELECT user_id FROM $t_admin WHERE user_id = ".intval($user_id);
@@ -1481,7 +1482,7 @@ function WSEditUser($params) {
     } else {
         $status = 5;
     }
-    $sql .=	"
+    $sql .=    "
             email='".Database::escape_string($email)."',
             status='".Database::escape_string($status)."',
             official_code='".Database::escape_string($official_code)."',
@@ -1494,7 +1495,7 @@ function WSEditUser($params) {
     if (!is_null($creator_id)) {
         $sql .= ", creator_id='".Database::escape_string($creator_id)."'";
     }
-    $sql .=	" WHERE user_id='$user_id'";
+    $sql .=    " WHERE user_id='$user_id'";
     $return = @Database::query($sql);
 
     if (is_array($extra_list) && count($extra_list) > 0) {
@@ -1581,14 +1582,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editU
 );
 
 // Register the method to expose
-$server->register('WSEditUsersPasswordCrypted',					// method name
-    array('editUsersPasswordCrypted' => 'tns:editUsersPasswordCrypted'),	// input parameters
-    array('return' => 'tns:results_editUsersPasswordCrypted'),			// output parameters
-    'urn:WSRegistration',												// namespace
-    'urn:WSRegistration#WSEditUsersPasswordCrypted',				// soapaction
-    'rpc',																// style
-    'encoded',															// use
-    'This service edits a user'											// documentation
+$server->register('WSEditUsersPasswordCrypted',                           // method name
+    array('editUsersPasswordCrypted' => 'tns:editUsersPasswordCrypted'),  // input parameters
+    array('return' => 'tns:results_editUsersPasswordCrypted'),            // output parameters
+    'urn:WSRegistration',                                                 // namespace
+    'urn:WSRegistration#WSEditUsersPasswordCrypted',                      // soapaction
+    'rpc',                                                                // style
+    'encoded',                                                            // use
+    'This service edits a user'                                           // documentation
 );
 
 // Define the method WSEditUsersPasswordCrypted
@@ -1697,7 +1698,7 @@ function WSEditUsersPasswordCrypted($params) {
             $sql .= " password='".Database::escape_string($password)."',";
         }
         if (!is_null($auth_source)) {
-            $sql .=	" auth_source='".Database::escape_string($auth_source)."',";
+            $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
         }
         // Exception for admins in case no status is provided in WS call...
         $sqladmin = "SELECT user_id FROM $t_admin WHERE user_id = ".intval($user_id);
@@ -1708,7 +1709,7 @@ function WSEditUsersPasswordCrypted($params) {
         } else {
             $status = 5;
         }
-        $sql .=	"
+        $sql .=    "
                 email='".Database::escape_string($email)."',
                 status='".Database::escape_string($status)."',
                 official_code='".Database::escape_string($official_code)."',
@@ -1721,7 +1722,7 @@ function WSEditUsersPasswordCrypted($params) {
         if (!is_null($creator_id)) {
             $sql .= ", creator_id='".Database::escape_string($creator_id)."'";
         }
-        $sql .=	" WHERE user_id='$user_id'";
+        $sql .=    " WHERE user_id='$user_id'";
         $return = @Database::query($sql);
 
         if (is_array($extra_list) && count($extra_list) > 0) {
@@ -1772,14 +1773,14 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSEditUserPasswordCrypted',					// method name
-    array('editUserPasswordCrypted' => 'tns:editUserPasswordCrypted'),	// input parameters
-    array('return' => 'xsd:string'),									// output parameters
-    'urn:WSRegistration',												// namespace
-    'urn:WSRegistration#WSEditUserPasswordCrypted',				// soapaction
-    'rpc',																// style
-    'encoded',															// use
-    'This service edits a user'											// documentation
+$server->register('WSEditUserPasswordCrypted',                         // method name
+    array('editUserPasswordCrypted' => 'tns:editUserPasswordCrypted'), // input parameters
+    array('return' => 'xsd:string'),                                   // output parameters
+    'urn:WSRegistration',                                              // namespace
+    'urn:WSRegistration#WSEditUserPasswordCrypted',                    // soapaction
+    'rpc',                                                             // style
+    'encoded',                                                         // use
+    'This service edits a user'                                        // documentation
 );
 
 // Define the method WSEditUserPasswordCrypted
@@ -1871,7 +1872,7 @@ function WSEditUserPasswordCrypted($params) {
         $sql .= " password='".Database::escape_string($password)."',";
     }
     if (!is_null($auth_source)) {
-        $sql .=	" auth_source='".Database::escape_string($auth_source)."',";
+        $sql .=    " auth_source='".Database::escape_string($auth_source)."',";
     }
     // Exception for admins in case no status is provided in WS call...
     $sqladmin = "SELECT user_id FROM $t_admin WHERE user_id = ".intval($user_id);
@@ -1882,7 +1883,7 @@ function WSEditUserPasswordCrypted($params) {
     } else {
         $status = 5;
     }
-    $sql .=	"
+    $sql .=    "
                 email='".Database::escape_string($email)."',
                 status='".Database::escape_string($status)."',
                 official_code='".Database::escape_string($official_code)."',
@@ -1895,7 +1896,7 @@ function WSEditUserPasswordCrypted($params) {
     if (!is_null($creator_id)) {
         $sql .= ", creator_id='".Database::escape_string($creator_id)."'";
     }
-    $sql .=	" WHERE user_id='$user_id'";
+    $sql .=    " WHERE user_id='$user_id'";
     $return = @Database::query($sql);
 
     if (is_array($extra_list) && count($extra_list) > 0) {
@@ -1965,14 +1966,14 @@ function WSHelperActionOnUsers($params, $type) {
     }
 }
 
-$server->register('WSDeleteUsers',			// method name
-    array('user_ids' => 'tns:user_ids'),	// input parameters
-    array(),	// output parameters
-    'urn:WSRegistration',							// namespace
-    'urn:WSRegistration#WSDeleteUsers',		// soapaction
-    'rpc',											// style
-    'encoded',										// use
-    'Deletes users provided as parameters from the system'		// documentation
+$server->register('WSDeleteUsers',                         // method name
+    array('user_ids' => 'tns:user_ids'),                   // input parameters
+    array(),                                               // output parameters
+    'urn:WSRegistration',                                  // namespace
+    'urn:WSRegistration#WSDeleteUsers',                    // soapaction
+    'rpc',                                                 // style
+    'encoded',                                             // use
+    'Deletes users provided as parameters from the system' // documentation
 );
 
 function WSDeleteUsers($params) {
@@ -1980,14 +1981,14 @@ function WSDeleteUsers($params) {
 }
 
 /** WSDisableUsers **/
-$server->register('WSDisableUsers',			// method name
-    array('user_ids' => 'tns:user_ids'),	// input parameters
-    array(),	// output parameters
-    'urn:WSRegistration',							// namespace
-    'urn:WSRegistration#WSDisableUsers',		// soapaction
-    'rpc',											// style
-    'encoded',										// use
-    'Disables users provided as parameters from the system'		// documentation
+$server->register('WSDisableUsers',                         // method name
+    array('user_ids' => 'tns:user_ids'),                    // input parameters
+    array(),                                                // output parameters
+    'urn:WSRegistration',                                   // namespace
+    'urn:WSRegistration#WSDisableUsers',                    // soapaction
+    'rpc',                                                  // style
+    'encoded',                                              // use
+    'Disables users provided as parameters from the system' // documentation
 );
 
 function WSDisableUsers($params) {
@@ -1995,14 +1996,14 @@ function WSDisableUsers($params) {
 }
 
 /** WSEnableUsers **/
-$server->register('WSEnableUsers',			// method name
-    array('user_ids' => 'tns:user_ids'),	// input parameters
-    array(),	// output parameters
-    'urn:WSRegistration',							// namespace
-    'urn:WSRegistration#WSEnableUsers',		// soapaction
-    'rpc',											// style
-    'encoded',										// use
-    'Enables users provided as parameters'		// documentation
+$server->register('WSEnableUsers',            // method name
+    array('user_ids' => 'tns:user_ids'),      // input parameters
+    array(),                                  // output parameters
+    'urn:WSRegistration',                     // namespace
+    'urn:WSRegistration#WSEnableUsers',       // soapaction
+    'rpc',                                    // style
+    'encoded',                                // use
+    'Enables users provided as parameters'    // documentation
 );
 
 function WSEnableUsers($params) {
@@ -2091,28 +2092,22 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_creat
 );
 
 // Register the method to expose
-$server->register('WSCreateCourse',			// method name
-    array('createCourse' => 'tns:createCourse'),	// input parameters
-    array('return' => 'tns:results_createCourse'),	// output parameters
-    'urn:WSRegistration',							// namespace
-    'urn:WSRegistration#WSCreateCourse',		// soapaction
-    'rpc',											// style
-    'encoded',										// use
-    'This service adds a course'		// documentation
+$server->register('WSCreateCourse',                // method name
+    array('createCourse' => 'tns:createCourse'),   // input parameters
+    array('return' => 'tns:results_createCourse'), // output parameters
+    'urn:WSRegistration',                          // namespace
+    'urn:WSRegistration#WSCreateCourse',           // soapaction
+    'rpc',                                         // style
+    'encoded',                                     // use
+    'This service adds a course'                   // documentation
 );
 
 // Define the method WSCreateCourse
-function WSCreateCourse($params) {
-
-    global $_configuration;
-
+function WSCreateCourse($params)
+{
     if (!WSHelperVerifyKey($params)) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
-
-    $t_cfv = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $table_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-    $table_course_category = Database :: get_main_table(TABLE_MAIN_CATEGORY);
     $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
 
     $courses_params = $params['courses'];
@@ -2295,14 +2290,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_creat
 
 
 // Register the method to expose
-$server->register('WSCreateCourseByTitle',					// method name
-    array('createCourseByTitle' => 'tns:createCourseByTitle'),		// input parameters
-    array('return' => 'tns:results_createCourseByTitle'),			// output parameters
-    'urn:WSRegistration',											// namespace
-    'urn:WSRegistration#WSCreateCourseByTitle',				// soapaction
-    'rpc',															// style
-    'encoded',														// use
-    'This service adds a course by title'				// documentation
+$server->register('WSCreateCourseByTitle',                     // method name
+    array('createCourseByTitle' => 'tns:createCourseByTitle'), // input parameters
+    array('return' => 'tns:results_createCourseByTitle'),      // output parameters
+    'urn:WSRegistration',                                      // namespace
+    'urn:WSRegistration#WSCreateCourseByTitle',                // soapaction
+    'rpc',                                                     // style
+    'encoded',                                                 // use
+    'This service adds a course by title'                      // documentation
 );
 
 // Define the method WSCreateCourseByTitle
@@ -2314,10 +2309,9 @@ function WSCreateCourseByTitle($params) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $t_cfv 					= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $table_field 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-    $table_course_category 	= Database::get_main_table(TABLE_MAIN_CATEGORY);
-    $table_course 			= Database::get_main_table(TABLE_MAIN_COURSE);
+    $t_cfv                     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+    $table_field             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+    $table_course             = Database::get_main_table(TABLE_MAIN_COURSE);
 
     $courses_params = $params['courses'];
     $results = array();
@@ -2518,14 +2512,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editC
 );
 
 // Register the method to expose
-$server->register('WSEditCourse',			// method name
-    array('editCourse' => 'tns:editCourse'),	// input parameters
-    array('return' => 'tns:results_editCourse'),			// output parameters
-    'urn:WSRegistration',						// namespace
-    'urn:WSRegistration#WSEditCourse',	// soapaction
-    'rpc',										// style
-    'encoded',									// use
-    'This service edits a course'	// documentation
+$server->register('WSEditCourse',                // method name
+    array('editCourse' => 'tns:editCourse'),     // input parameters
+    array('return' => 'tns:results_editCourse'), // output parameters
+    'urn:WSRegistration',                        // namespace
+    'urn:WSRegistration#WSEditCourse',           // soapaction
+    'rpc',                                       // style
+    'encoded',                                   // use
+    'This service edits a course'                // documentation
 );
 
 // Define the method WSEditCourse
@@ -2538,8 +2532,8 @@ function WSEditCourse($params){
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $table_field 	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+    $t_cfv             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+    $table_field     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
     $courses_params = $params['courses'];
     $results = array();
@@ -2564,7 +2558,7 @@ function WSEditCourse($params){
         $extra_list = $course_param['extra'];
 
         // Get course code from id from remote system.
-        $sql = "SELECT course_code	FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
+        $sql = "SELECT course_code    FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
 
@@ -2675,14 +2669,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:fields_cours
 
 
 // Register the method to expose
-$server->register('WSCourseDescription',				// method name
-    array('courseDescription' => 'tns:courseDescription'),	// input parameters
-    array('return' => 'tns:fields_course_desc_list'),		// output parameters
-    'urn:WSRegistration',									// namespace
-    'urn:WSRegistration#WSCourseDescription',			// soapaction
-    'rpc',													// style
-    'encoded',												// use
-    'This service edits a course description'	// documentation
+$server->register('WSCourseDescription',                    // method name
+    array('courseDescription' => 'tns:courseDescription'),  // input parameters
+    array('return' => 'tns:fields_course_desc_list'),       // output parameters
+    'urn:WSRegistration',                                   // namespace
+    'urn:WSRegistration#WSCourseDescription',               // soapaction
+    'rpc',                                                  // style
+    'encoded',                                              // use
+    'This service edits a course description'               // documentation
 );
 
 // Define the method WSCourseDescription
@@ -2696,8 +2690,8 @@ function WSCourseDescription($params) {
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $table_field 	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+    $t_cfv             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+    $table_field     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
     $array_course_desc_id = array();
     $array_course__desc_default_title = array();
@@ -2708,7 +2702,7 @@ function WSCourseDescription($params) {
     $original_course_id_value = $params['original_course_id_value'];
 
     // Get course code from id from remote system.
-    $sql = "SELECT course_code	FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
+    $sql = "SELECT course_code    FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
     $res = Database::query($sql);
     $row = Database::fetch_row($res);
 
@@ -2840,14 +2834,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editC
 
 
 // Register the method to expose
-$server->register('WSEditCourseDescription',			// method name
-    array('editCourseDescription' => 'tns:editCourseDescription'),				// input parameters
-    array('return' => 'tns:results_editCourseDescription'),						// output parameters
-    'urn:WSRegistration',									// namespace
-    'urn:WSRegistration#WSEditCourseDescription',		// soapaction
-    'rpc',													// style
-    'encoded',												// use
-    'This service edits a course description'	// documentation
+$server->register('WSEditCourseDescription',                       // method name
+    array('editCourseDescription' => 'tns:editCourseDescription'), // input parameters
+    array('return' => 'tns:results_editCourseDescription'),        // output parameters
+    'urn:WSRegistration',                                          // namespace
+    'urn:WSRegistration#WSEditCourseDescription',                  // soapaction
+    'rpc',                                                         // style
+    'encoded',                                                     // use
+    'This service edits a course description'                      // documentation
 );
 
 // Define the method WSEditCourseDescription
@@ -2861,8 +2855,8 @@ function WSEditCourseDescription($params) {
 
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $table_field 	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+    $t_cfv             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+    $table_field     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
     $courses_params = $params['course_desc'];
     $results = array();
@@ -2878,7 +2872,7 @@ function WSEditCourseDescription($params) {
         $orig_course_id_value[] = $original_course_id_value;
 
         // Get course code from id from the remote system.
-        $sql = "SELECT course_code	FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
+        $sql = "SELECT course_code    FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
 
@@ -2915,7 +2909,7 @@ function WSEditCourseDescription($params) {
         $res_check_id = Database::query($sql_check_id);
 
         if (Database::num_rows($res_check_id) > 0) {
-            $sql = "UPDATE $t_course_desc SET title='$course_desc_title', content = '$course_desc_content' 
+            $sql = "UPDATE $t_course_desc SET title='$course_desc_title', content = '$course_desc_content'
                     WHERE c_id = {$course_info['real_id']} AND id = '".$course_desc_id."'";
             Database::query($sql);
         } else {
@@ -2998,14 +2992,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_delet
 'tns:result_deleteCourse'
 );
 
-$server->register('WSDeleteCourse',			// method name
-    array('deleteCourse' => 'tns:deleteCourse'),	// input parameters
-    array('return' => 'tns:results_deleteCourse'),	// output parameters
-    'urn:WSRegistration',							// namespace
-    'urn:WSRegistration#WSDeleteCourse',		// soapaction
-    'rpc',											// style
-    'encoded',										// use
-    'This service deletes a course '				// documentation
+$server->register('WSDeleteCourse',                // method name
+    array('deleteCourse' => 'tns:deleteCourse'),   // input parameters
+    array('return' => 'tns:results_deleteCourse'), // output parameters
+    'urn:WSRegistration',                          // namespace
+    'urn:WSRegistration#WSDeleteCourse',           // soapaction
+    'rpc',                                         // style
+    'encoded',                                     // use
+    'This service deletes a course '               // documentation
 );
 
 
@@ -3017,8 +3011,8 @@ function WSDeleteCourse($params) {
     }
 
     $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
-    $t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $table_field 	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+    $t_cfv             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+    $table_field     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
     $courses_params = $params['courses'];
     $results = array();
@@ -3030,7 +3024,7 @@ function WSDeleteCourse($params) {
         $original_course_id_name = $course_param['original_course_id_name'];
         $orig_course_id_value[] = $original_course_id_value;
         // Get course code from id from the remote system.
-        $sql_course = "SELECT course_code	FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
+        $sql_course = "SELECT course_code    FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
         $res_course = Database::query($sql_course);
         $row_course = Database::fetch_row($res_course);
 
@@ -3138,14 +3132,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_creat
 );
 
 // Register the method to expose
-$server->register('WSCreateSession',			// method name
-    array('createSession' => 'tns:createSession'),	// input parameters
-    array('return' => 'tns:results_createSession'),	// output parameters
-    'urn:WSRegistration',							// namespace
-    'urn:WSRegistration#WSCreateSession',		// soapaction
-    'rpc',											// style
-    'encoded',										// use
-    'This service edits a session'					// documentation
+$server->register('WSCreateSession',                // method name
+    array('createSession' => 'tns:createSession'),  // input parameters
+    array('return' => 'tns:results_createSession'), // output parameters
+    'urn:WSRegistration',                           // namespace
+    'urn:WSRegistration#WSCreateSession',           // soapaction
+    'rpc',                                          // style
+    'encoded',                                      // use
+    'This service edits a session'                  // documentation
 );
 
 
@@ -3158,10 +3152,10 @@ function WSCreateSession($params) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
-    $tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
-    $t_sf 			= Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-    $t_sfv 			= Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
+    $tbl_user        = Database::get_main_table(TABLE_MAIN_USER);
+    $tbl_session    = Database::get_main_table(TABLE_MAIN_SESSION);
+    $t_sf             = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
+    $t_sfv             = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
 
     $sessions_params = $params['sessions'];
     $results = array();
@@ -3185,7 +3179,7 @@ function WSCreateSession($params) {
         $orig_session_id_value[] = $session_param['original_session_id_value'];
         $extra_list = $session_param['extra'];
         // Check if exits remote system's session id into session_field_values table.
-        $sql = "SELECT field_value	FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
+        $sql = "SELECT field_value    FROM $t_sf sf,$t_sfv sfv WHERE sfv.field_id=sf.id AND field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
         $res = Database::query($sql);
         $row = Database::fetch_row($res);
         if (Database::num_rows($res) > 0) {
@@ -3328,14 +3322,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_editS
 
 
 // Register the method to expose
-$server->register('WSEditSession',		// method name
-    array('editSession' => 'tns:editSession'),	// input parameters
-    array('return' => 'tns:results_editSession'),				// output parameters
-    'urn:WSRegistration',						// namespace
-    'urn:WSRegistration#WSEditSession',	// soapaction
-    'rpc',										// style
-    'encoded',									// use
-    'This service edits a session'				// documentation
+$server->register('WSEditSession',                // method name
+    array('editSession' => 'tns:editSession'),    // input parameters
+    array('return' => 'tns:results_editSession'), // output parameters
+    'urn:WSRegistration',                         // namespace
+    'urn:WSRegistration#WSEditSession',           // soapaction
+    'rpc',                                        // style
+    'encoded',                                    // use
+    'This service edits a session'                // documentation
 );
 
 // define the method WSEditSession
@@ -3347,8 +3341,8 @@ function WSEditSession($params) {
         return return_error(WS_ERROR_SECRET_KEY);
     }
 
-    $tbl_user		= Database::get_main_table(TABLE_MAIN_USER);
-    $tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
+    $tbl_user        = Database::get_main_table(TABLE_MAIN_USER);
+    $tbl_session    = Database::get_main_table(TABLE_MAIN_SESSION);
     $t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
     $t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
 
@@ -3410,10 +3404,10 @@ function WSEditSession($params) {
                     "name='".addslashes($name)."', " .
                     "date_start='".$date_start."', " .
                     "date_end='".$date_end."', " .
-                    "id_coach='".		$id_coach."', " .
-                    "session_admin_id='".		intval($_user['user_id'])."', " .
-                    "nb_days_access_before_beginning='".		$nb_days_acess_before."', " .
-                    "nb_days_access_after_end='".		$nb_days_acess_after."'" .
+                    "id_coach='".        $id_coach."', " .
+                    "session_admin_id='".        intval($_user['user_id'])."', " .
+                    "nb_days_access_before_beginning='".        $nb_days_acess_before."', " .
+                    "nb_days_access_after_end='".        $nb_days_acess_after."'" .
                     " WHERE id='".$id."'";
             Database::query($sql);
             $id_session = Database::insert_id();
@@ -3457,17 +3451,17 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:deleteSessio
 );
 
 $server->wsdl->addComplexType(
-	'subscribeUserToCourseParams',
-	'complexType',
-	'struct',
-	'all',
-	'',
-	array(
-		'original_user_id_values'   => array('name' => 'original_user_id_values',   'type' => 'tns:originalUsersList'),
-		'original_user_id_name'     => array('name' => 'original_user_id_name',     'type' => 'xsd:string'),
-		'original_course_id_value'  => array('name' => 'original_course_id_value',  'type' => 'xsd:string'),
-		'original_course_id_name'   => array('name' => 'original_course_id_value',  'type' => 'xsd:string')
-	)
+    'subscribeUserToCourseParams',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'original_user_id_values'   => array('name' => 'original_user_id_values',   'type' => 'tns:originalUsersList'),
+        'original_user_id_name'     => array('name' => 'original_user_id_name',     'type' => 'xsd:string'),
+        'original_course_id_value'  => array('name' => 'original_course_id_value',  'type' => 'xsd:string'),
+        'original_course_id_name'   => array('name' => 'original_course_id_value',  'type' => 'xsd:string')
+    )
 );
 
 /* Register WSDeleteSession function */
@@ -3531,14 +3525,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_delet
 'tns:result_deleteSession'
 );
 
-$server->register('WSDeleteSession',			// method name
-    array('deleteSession' => 'tns:deleteSession'),	// input parameters
-    array('return' => 'tns:results_deleteSession'),	// output parameters
-    'urn:WSRegistration',							// namespace
-    'urn:WSRegistration#WSDeleteSession',		// soapaction
-    'rpc',											// style
-    'encoded',										// use
-    'This service deletes a session '				// documentation
+$server->register('WSDeleteSession',                // method name
+    array('deleteSession' => 'tns:deleteSession'),  // input parameters
+    array('return' => 'tns:results_deleteSession'), // output parameters
+    'urn:WSRegistration',                           // namespace
+    'urn:WSRegistration#WSDeleteSession',           // soapaction
+    'rpc',                                          // style
+    'encoded',                                      // use
+    'This service deletes a session '               // documentation
 );
 
 // define the method WSDeleteSession
@@ -3692,14 +3686,14 @@ $server->wsdl->addComplexType(
 
 
 // Register the method to expose
-$server->register('WSSubscribeUserToCourse',					// method name
-    array('subscribeUserToCourse' => 'tns:subscribeUserToCourse_arg'),	// input parameters
-    array('return' => 'tns:subscribeUserToCourse_return'),			// output parameters
-    'urn:WSRegistration',											// namespace
-    'urn:WSRegistration#WSSubscribeUserToCourse',				// soapaction
-    'rpc',															// style
-    'encoded',														// use
-    'This service subscribes a user to a course' 					// documentation
+$server->register('WSSubscribeUserToCourse',                            // method name
+    array('subscribeUserToCourse' => 'tns:subscribeUserToCourse_arg'),  // input parameters
+    array('return' => 'tns:subscribeUserToCourse_return'),              // output parameters
+    'urn:WSRegistration',                                               // namespace
+    'urn:WSRegistration#WSSubscribeUserToCourse',                       // soapaction
+    'rpc',                                                              // style
+    'encoded',                                                          // use
+    'This service subscribes a user to a course'                        // documentation
 );
 
 // define the method WSSubscribeUserToCourse
@@ -3734,11 +3728,13 @@ function WSSubscribeUserToCourse($params) {
         } else {
             // User was found
             $course_id = CourseManager::get_course_id_from_original_id($original_course_id['original_course_id_value'], $original_course_id['original_course_id_name']);
+            if ($debug) error_log('WSSubscribeUserToCourse course_id: '.$course_id);
             if ($course_id == 0) {
                 // Course was not found
                 $result['result'] = 0;
             } else {
                 $course_code = CourseManager::get_course_code_from_course_id($course_id);
+                if ($debug) error_log('WSSubscribeUserToCourse course_code: '.$course_code);
                 if (!CourseManager::add_user_to_course($user_id, $course_code, $status)) {
                     $result['result'] = 0;
                 }
@@ -3773,27 +3769,24 @@ $server->wsdl->addComplexType(
 'struct',
 'all',
 '',
-array (
-        'message'      => array('name' => 'message',    'type' => 'xsd:string'),
-     )
+    array('message' => array('name' => 'message',    'type' => 'xsd:string'))
 );
 
 
 // Register the method to expose
-$server->register('WSSubscribeUserToCourseSimple',                    // method name
-    array('subscribeUserToCourseSimple' => 'tns:subscribeUserToCourseSimple_arg'),  // input parameters
-    array('return' => 'xsd:string'),            // output parameters
-    'urn:WSRegistration',                                           // namespace
-    'urn:WSRegistration#WSSubscribeUserToCourseSimple',               // soapaction
-    'rpc',                                                          // style
-    'encoded',                                                      // use
-    'This service subscribes a user to a course in a simple way'                    // documentation
+$server->register('WSSubscribeUserToCourseSimple',                                 // method name
+    array('subscribeUserToCourseSimple' => 'tns:subscribeUserToCourseSimple_arg'), // input parameters
+    array('return' => 'xsd:string'),                                               // output parameters
+    'urn:WSRegistration',                                                          // namespace
+    'urn:WSRegistration#WSSubscribeUserToCourseSimple',                            // soapaction
+    'rpc',                                                                         // style
+    'encoded',                                                                     // use
+    'This service subscribes a user to a course in a simple way'                   // documentation
 );
 
 // define the method WSSubscribeUserToCourse
 function WSSubscribeUserToCourseSimple($params) {
     global $debug;
-    //$debug = true;
 
     if ($debug) error_log('WSSubscribeUserToCourseSimple');
     if ($debug) error_log('Params '. print_r($params, 1));
@@ -3866,16 +3859,16 @@ array (
 
 // Register the method to expose
 $server->register('WSGetUser',                   // method name
-    array('GetUser' => 'tns:GetUserArg'),       // input parameters
-    array('return' => 'tns:User'),   // output parameters
+    array('GetUser' => 'tns:GetUserArg'),        // input parameters
+    array('return' => 'tns:User'),               // output parameters
     'urn:WSRegistration',                        // namespace
-    'urn:WSRegistration#WSGetUser',                // soapaction
+    'urn:WSRegistration#WSGetUser',              // soapaction
     'rpc',                                       // style
     'encoded',                                   // use
     'This service get user information by id'    // documentation
 );
 
-// define the method WSSubscribeUserToCourse
+// define the method WSGetUser
 function WSGetUser($params) {
     global $debug;
     if ($debug) error_log('WSGetUser');
@@ -3916,17 +3909,17 @@ $server->wsdl->addComplexType(
     )
 );
 // Register the method to expose
-$server->register('WSGetUserFromUsername',                   // method name
-    array('GetUserFromUsername' => 'tns:GetUserArgUsername'),// input params
-    array('return' => 'tns:User'),   // output parameters
-    'urn:WSRegistration',                        // namespace
-    'urn:WSRegistration#WSGetUserFromUsername',  // soapaction
-    'rpc',                                       // style
-    'encoded',                                   // use
-    'This service get user information by username' // documentation
+$server->register('WSGetUserFromUsername',                     // method name
+    array('GetUserFromUsername' => 'tns:GetUserArgUsername'),  // input params
+    array('return' => 'tns:User'),                             // output parameters
+    'urn:WSRegistration',                                      // namespace
+    'urn:WSRegistration#WSGetUserFromUsername',                // soapaction
+    'rpc',                                                     // style
+    'encoded',                                                 // use
+    'This service get user information by username'            // documentation
 );
 
-// define the method WSSubscribeUserToCourse
+// define the method WSGetUserFromUsername
 function WSGetUserFromUsername($params) {
     global $debug;
     if ($debug) error_log('WSGetUserFromUsername');
@@ -4019,14 +4012,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_unsus
 );
 
 // Register the method to expose
-$server->register('WSUnsubscribeUserFromCourse',					// method name
-    array('unsuscribeUserFromCourse' => 'tns:unsuscribeUserFromCourse'),// input parameters
-    array('return' => 'tns:results_unsuscribeUserFromCourse'),			// output parameters
-    'urn:WSRegistration',												// namespace
-    'urn:WSRegistration#WSUnsubscribeUserFromCourse',				// soapaction
-    'rpc',																// style
-    'encoded',															// use
-    'This service unsubscribes a user from a course' 					// documentation
+$server->register('WSUnsubscribeUserFromCourse',                         // method name
+    array('unsuscribeUserFromCourse' => 'tns:unsuscribeUserFromCourse'), // input parameters
+    array('return' => 'tns:results_unsuscribeUserFromCourse'),           // output parameters
+    'urn:WSRegistration',                                                // namespace
+    'urn:WSRegistration#WSUnsubscribeUserFromCourse',                    // soapaction
+    'rpc',                                                               // style
+    'encoded',                                                           // use
+    'This service unsubscribes a user from a course'                     // documentation
 );
 
 // define the method WSUnsubscribeUserFromCourse
@@ -4038,10 +4031,10 @@ function WSUnsubscribeUserFromCourse($params) {
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
     $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
     $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-    $table_course 	= Database :: get_main_table(TABLE_MAIN_COURSE);
+    $table_course     = Database :: get_main_table(TABLE_MAIN_COURSE);
     $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
-    $t_cfv 			= Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-    $table_field 	= Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+    $t_cfv             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+    $table_field     = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
 
     $userscourses_params = $params['userscourses'];
     $results = array();
@@ -4049,10 +4042,10 @@ function WSUnsubscribeUserFromCourse($params) {
     $orig_course_id_value = array();
     foreach($userscourses_params as $usercourse_param) {
 
-        $original_user_id_values 	= $usercourse_param['original_user_id_values'];
-        $original_user_id_name 		= $usercourse_param['original_user_id_name'];
-        $original_course_id_value 	= $usercourse_param['original_course_id_value'];
-        $original_course_id_name 	= $usercourse_param['original_course_id_name'];
+        $original_user_id_values     = $usercourse_param['original_user_id_values'];
+        $original_user_id_name         = $usercourse_param['original_user_id_name'];
+        $original_course_id_value     = $usercourse_param['original_course_id_value'];
+        $original_course_id_name     = $usercourse_param['original_course_id_name'];
         $orig_course_id_value[] = $original_course_id_value;
 
         // Get user id from original user id
@@ -4076,9 +4069,9 @@ function WSUnsubscribeUserFromCourse($params) {
 
         // Get course code from original course id
 
-        $sql_course 	= "SELECT course_code	FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
-        $res_course 	= Database::query($sql_course);
-        $row_course 	= Database::fetch_row($res_course);
+        $sql_course     = "SELECT course_code    FROM $table_field cf,$t_cfv cfv WHERE cfv.field_id=cf.id AND field_variable='$original_course_id_name' AND field_value='$original_course_id_value'";
+        $res_course     = Database::query($sql_course);
+        $row_course     = Database::fetch_row($res_course);
 
         $course_code = $row_course[0];
 
@@ -4184,14 +4177,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_subsc
 );
 
 // Register the method to expose
-$server->register('WSSuscribeUsersToSession',						// method name
-    array('subscribeUsersToSession' => 'tns:subscribeUsersToSession'),	// input parameters
-    array('return' => 'tns:results_subscribeUsersToSession'),			// output parameters
-    'urn:WSRegistration',												// namespace
-    'urn:WSRegistration#WSSuscribeUsersToSession',				// soapaction
-    'rpc',																// style
-    'encoded',															// use
-    'This service subscribes a user to a session' 						// documentation
+$server->register('WSSuscribeUsersToSession',                          // method name
+    array('subscribeUsersToSession' => 'tns:subscribeUsersToSession'), // input parameters
+    array('return' => 'tns:results_subscribeUsersToSession'),          // output parameters
+    'urn:WSRegistration',                                              // namespace
+    'urn:WSRegistration#WSSuscribeUsersToSession',                     // soapaction
+    'rpc',                                                             // style
+    'encoded',                                                         // use
+    'This service subscribes a user to a session'                      // documentation
 );
 
 // define the method WSSuscribeUsersToSession
@@ -4206,10 +4199,10 @@ function WSSuscribeUsersToSession($params){
     $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
     $t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
     $t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-    $tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-       $tbl_session_rel_user 				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
-       $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
+    $tbl_session_rel_course                = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+    $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+       $tbl_session_rel_user                 = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+       $tbl_session                        = Database::get_main_table(TABLE_MAIN_SESSION);
 
        $userssessions_params = $params['userssessions'];
     $results = array();
@@ -4327,6 +4320,71 @@ function WSSuscribeUsersToSession($params){
     return $output;
 }
 
+// --------------------------------------------------------------------
+// WSSubscribeUserToSessionSimple
+// --------------------------------------------------------------------
+$server->wsdl->addComplexType(
+    'subscribeUserToSessionSimple_arg',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'session'    => array('name' => 'session',    'type' => 'xsd:string'), // Session ID
+        'user_id'    => array('name' => 'user_id',    'type' => 'xsd:string'), // Chamilo user_id
+        'secret_key' => array('name' => 'secret_key', 'type' => 'xsd:string')
+    )
+);
+$server->register('WSSubscribeUserToSessionSimple',                                   // method name
+    array('subscribeUserToSessionSimple' => 'tns:subscribeUserToSessionSimple_arg'),  // input parameters
+    array('return' => 'xsd:string'),                                                  // output parameters
+    'urn:WSRegistration',                                                             // namespace
+    'urn:WSRegistration#WSSubscribeUserToSessionSimple',                              // soapaction
+    'rpc',                                                                            // style
+    'encoded',                                                                        // use
+    'This service subscribes a user to a session in a simple way'                     // documentation
+);
+function WSSubscribeUserToSessionSimple($params) {
+    global $debug;
+
+    if ($debug) {
+      error_log('WSSubscribeUserToSessionSimple with params=[' . serialize($params). ']');
+    }
+
+    // Check security key
+    if (!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+
+    // Get input parameters
+    $session_id = intval($params['session']);  // Session ID
+    $user_id    = intval($params['user_id']);  // Chamilo user id
+
+    // Get user id
+    $user_data = UserManager::get_user_info_by_id($user_id);
+
+    // Prepare answer
+    $result = 0;
+
+    if (empty($user_data)) {
+        $result = "User {$user_id} does not exist";
+        if ($debug) { error_log($result); }
+        return $result;
+    }
+    if (!empty($session_id) && is_numeric($session_id)) {
+        $session_data = api_get_session_info($session_id);
+        if (empty($session_data)) {
+            $result = "Session {$session_id} does not exist.";
+            if ($debug) { error_log($result); }
+        } else {
+            SessionManager::suscribe_users_to_session($session_id, array($user_id), SESSION_VISIBLE_READ_ONLY, false, false);
+            if ($debug) error_log('User registered to the course: '.$session_id);
+            $result = 1;
+        }
+    }
+    return $result;
+}
+
 /* Register WSUnsuscribeUsersFromSession function */
 // Register the data structures used by the service
 $server->wsdl->addComplexType(
@@ -4392,14 +4450,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_unsub
 );
 
 // Register the method to expose
-$server->register('WSUnsuscribeUsersFromSession',							// method name
-    array('unsubscribeUsersFromSession' => 'tns:unsubscribeUsersFromSession'),	// input parameters
-    array('return' => 'tns:results_unsubscribeUsersFromSession'),				// output parameters
-    'urn:WSRegistration',														// namespace
-    'urn:WSRegistration#WSUnsuscribeUsersFromSession',					// soapaction
-    'rpc',																		// style
-    'encoded',																	// use
-    'This service unsubscribes a user to a session' 							// documentation
+$server->register('WSUnsuscribeUsersFromSession',                              // method name
+    array('unsubscribeUsersFromSession' => 'tns:unsubscribeUsersFromSession'), // input parameters
+    array('return' => 'tns:results_unsubscribeUsersFromSession'),              // output parameters
+    'urn:WSRegistration',                                                      // namespace
+    'urn:WSRegistration#WSUnsuscribeUsersFromSession',                         // soapaction
+    'rpc',                                                                     // style
+    'encoded',                                                                 // use
+    'This service unsubscribes a user to a session'                            // documentation
 );
 
 // define the method WSUnsuscribeUsersFromSession
@@ -4414,10 +4472,10 @@ function WSUnsuscribeUsersFromSession($params) {
     $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
     $t_sf = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
     $t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
-    $tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-       $tbl_session_rel_user 				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
-       $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
+    $tbl_session_rel_course                = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+    $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+       $tbl_session_rel_user                 = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+       $tbl_session                        = Database::get_main_table(TABLE_MAIN_SESSION);
 
        $userssessions_params = $params['userssessions'];
     $results = array();
@@ -4656,14 +4714,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_subsc
 );
 
 // Register the method to expose
-$server->register('WSSuscribeCoursesToSession',						// method name
-    array('subscribeCoursesToSession' => 'tns:subscribeCoursesToSession'),	// input parameters
-    array('return' => 'tns:results_subscribeCoursesToSession'),				// output parameters
-    'urn:WSRegistration',													// namespace
-    'urn:WSRegistration#WSSuscribeCoursesToSession',					// soapaction
-    'rpc',																	// style
-    'encoded',																// use
-    'This service subscribes a course to a session' 						// documentation
+$server->register('WSSuscribeCoursesToSession',                            // method name
+    array('subscribeCoursesToSession' => 'tns:subscribeCoursesToSession'), // input parameters
+    array('return' => 'tns:results_subscribeCoursesToSession'),            // output parameters
+    'urn:WSRegistration',                                                  // namespace
+    'urn:WSRegistration#WSSuscribeCoursesToSession',                       // soapaction
+    'rpc',                                                                 // style
+    'encoded',                                                             // use
+    'This service subscribes a course to a session'                        // documentation
 );
 
 // Define the method WSSuscribeCoursesToSession
@@ -4677,11 +4735,11 @@ function WSSuscribeCoursesToSession($params) {
     if ($debug) error_log('WSSuscribeCoursesToSession: '.print_r($params, 1));
 
     // initialisation
-    $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
-    $tbl_session_rel_user				= Database::get_main_table(TABLE_MAIN_SESSION_USER);
-    $tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
+    $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $tbl_session                        = Database::get_main_table(TABLE_MAIN_SESSION);
+    $tbl_session_rel_user                = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+    $tbl_session_rel_course                = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+    $tbl_course                            = Database::get_main_table(TABLE_MAIN_COURSE);
     $t_sf                               = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
     $t_sfv                              = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
     $t_cfv                              = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
@@ -4885,14 +4943,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:result_unsub
 
 
 // Register the method to expose
-$server->register('WSUnsuscribeCoursesFromSession',							// method name
-    array('unsubscribeCoursesFromSession' => 'tns:unsubscribeCoursesFromSession'),	// input parameters
-    array('return' => 'tns:results_unsubscribeCoursesFromSession'),					// output parameters
-    'urn:WSRegistration',															// namespace
-    'urn:WSRegistration#WSUnsuscribeCoursesFromSession',						// soapaction
-    'rpc',																			// style
-    'encoded',																		// use
-    'This service subscribes a course to a session' 								// documentation
+$server->register('WSUnsuscribeCoursesFromSession',                                // method name
+    array('unsubscribeCoursesFromSession' => 'tns:unsubscribeCoursesFromSession'), // input parameters
+    array('return' => 'tns:results_unsubscribeCoursesFromSession'),                // output parameters
+    'urn:WSRegistration',                                                          // namespace
+    'urn:WSRegistration#WSUnsuscribeCoursesFromSession',                           // soapaction
+    'rpc',                                                                         // style
+    'encoded',                                                                     // use
+    'This service subscribes a course to a session'                                // documentation
 );
 
 // define the method WSUnsuscribeCoursesFromSession
@@ -4903,10 +4961,10 @@ function WSUnsuscribeCoursesFromSession($params) {
     }
 
        // Initialisation
-    $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-    $tbl_session						= Database::get_main_table(TABLE_MAIN_SESSION);
-    $tbl_session_rel_course				= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $tbl_course							= Database::get_main_table(TABLE_MAIN_COURSE);
+    $tbl_session_rel_course_rel_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+    $tbl_session                        = Database::get_main_table(TABLE_MAIN_SESSION);
+    $tbl_session_rel_course                = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+    $tbl_course                            = Database::get_main_table(TABLE_MAIN_COURSE);
     $t_sf                               = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
     $t_sfv                              = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
     $t_cfv                              = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
@@ -5029,14 +5087,14 @@ array(array('ref' => 'SOAP-ENC:arrayType', 'wsdl:arrayType' => 'tns:course[]')),
 
 
 // Register the method to expose
-$server->register('WSListCourses',				// method name
-    array('secret_key' => 'xsd:string', 'original_course_id_name' => 'xsd:string'),	// input parameters
-    array('return' => 'tns:courses'),		// output parameters
-    'urn:WSRegistration',									// namespace
-    'urn:WSRegistration#WSListCourses',			// soapaction
-    'rpc',													// style
-    'encoded',												// use
-    'This service list courses available on the system'	// documentation
+$server->register('WSListCourses',                                                  // method name
+    array('secret_key' => 'xsd:string', 'original_course_id_name' => 'xsd:string'), // input parameters
+    array('return' => 'tns:courses'),                                               // output parameters
+    'urn:WSRegistration',                                                           // namespace
+    'urn:WSRegistration#WSListCourses',                                             // soapaction
+    'rpc',                                                                          // style
+    'encoded',                                                                      // use
+    'This service list courses available on the system'                             // documentation
 );
 
 // define the method WSListCourses
@@ -5099,14 +5157,14 @@ $server->wsdl->addComplexType(
 );
 
 // Register the method to expose
-$server->register('WSUpdateUserApiKey',			// method name
-    array('userApiKey' => 'tns:userApiKey'),	// input parameters
-    array('return' => 'xsd:string'),            // output parameters
-    'urn:WSRegistration',						// namespace
-    'urn:WSRegistration#WSListCourses',			// soapaction
-    'rpc',										// style
-    'encoded',									// use
-    'This service return user api key'          // documentation
+$server->register('WSUpdateUserApiKey',      // method name
+    array('userApiKey' => 'tns:userApiKey'), // input parameters
+    array('return' => 'xsd:string'),         // output parameters
+    'urn:WSRegistration',                    // namespace
+    'urn:WSRegistration#WSListCourses',      // soapaction
+    'rpc',                                   // style
+    'encoded',                               // use
+    'This service return user api key'       // documentation
 );
 
 
@@ -5143,6 +5201,96 @@ function WSUpdateUserApiKey($params) {
         }
     }
     return $apikey;
+}
+
+/** WSListSessions **/
+$server->wsdl->addComplexType(
+    'session_arg',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'date_start'  => array('name' => 'date_start',  'type' => 'xsd:string'),
+        'date_end'    => array('name' => 'date_end',    'type' => 'xsd:string'),
+        'secret_key'  => array('name' => 'secret_key',  'type' => 'xsd:string')
+    )
+);
+
+$server->wsdl->addComplexType(
+    'session',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'id' => array ('name' => 'id'  , 'type' => 'xsd:int'),
+        'title' => array ('name' => 'title', 'type' => 'xsd:string'),
+        'url' => array ('name' => 'url', 'type' => 'xsd:string'),
+        'date_start' => array ('name' => 'date_start', 'type' => 'xsd:string'),
+        'date_end' => array ('name' => 'date_end', 'type' => 'xsd:string'),
+    )
+);
+
+$server->wsdl->addComplexType(
+    'sessions',
+    'complexType',
+    'array',
+    '',
+    'SOAP-ENC:Array',
+    array(),
+    array(
+        array('ref'=>'SOAP:ENC:arrayType',
+            'wsdl:arrayType'=>'tns:session[]')
+    ),
+    'tns:session'
+);
+
+// Register the method to expose
+$server->register('WSListSessions',           // method name
+    array('input'  => 'tns:session_arg'),     // input parameters
+    array('return' => 'tns:sessions'),        // output parameters
+    'urn:WSRegistration',                     // namespace
+    'urn:WSRegistration#WSListSessions',      // soapaction
+    'rpc',                                    // style
+    'encoded',                                // use
+    'This service returns a list of sessions' // documentation
+);
+
+
+/**
+ * Get a list of sessions (id, title, url, date_start, date_end) and
+ * return to caller. Date start can be set to ask only for the sessions
+ * starting at or after this date. Date end can be set to ask only for the
+ * sessions ending before or at this date.
+ * Function registered as service. Returns strings in UTF-8.
+ * @param array List of parameters (security key, date_start and date_end)
+ * @return array Sessions list (id=>[title=>'title',url='http://...',date_start=>'...',date_end=>''])
+ */
+function WSListSessions($params) {
+    if(!WSHelperVerifyKey($params)) {
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+    $sql_params = array();
+    // Dates should be provided in YYYY-MM-DD format, UTC
+    if (!empty($params['date_start'])) {
+        $sql_params['s.date_start >='] = $params['date_start'];
+    }
+    if (!empty($params['date_end'])) {
+        $sql_params['s.date_end <='] = $params['date_end'];
+    }
+    $sessions_list = SessionManager::get_sessions_list($sql_params);
+    $return_list = array();
+    foreach ($sessions_list as $session) {
+        $return_list[] = array(
+            'id' => $session['id'],
+            'title' => $session['name'],
+            'url' => api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session['id'], // something like http://my.chamilo.net/main/session/index.php?session_id=5
+            'date_start' => $session['date_start'],
+            'date_end' => $session['date_end'],
+        );
+    }
+    return $return_list;
 }
 
 // Use the request to (try to) invoke the service

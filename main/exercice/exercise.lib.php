@@ -87,35 +87,46 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
     	if ($answerType == MATCHING) {
             $s .= '<table class="data_table">';
+            // Iterate through answers
+    		$x = 1;
+            //mark letters for each answer
+    		$letter = 'A';
+    		$answer_matching = array();
+            $cpt1 = array();
+            for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
+                $answerCorrect = $objAnswerTmp->isCorrect($answerId);
+                $numAnswer = $objAnswerTmp->selectAutoId($answerId);
 
-    		$x = 1; //iterate through answers
-    		$letter = 'A'; //mark letters for each answer
-    		$answer_matching = $cpt1 = array();
+                $answer = $objAnswerTmp->selectAnswer($answerId);
+                if ($answerCorrect == 0) {
+                    // options (A, B, C, ...) that will be put into the list-box
+                    // have the "correct" field set to 0 because they are answer
+                    $cpt1[$x] = $letter;
+    				$answer_matching[$x] = $objAnswerTmp->selectAnswerByAutoId($numAnswer);
+                    $x++;
+                    $letter++;
+                }
+            }
 
-    		for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
-    			$answerCorrect = $objAnswerTmp->isCorrect($answerId);
-    			$numAnswer = $objAnswerTmp->selectAutoId($answerId);
-    			$answer=$objAnswerTmp->selectAnswer($answerId);
-    			if ($answerCorrect==0) {
-    				// options (A, B, C, ...) that will be put into the list-box
-    				// have the "correct" field set to 0 because they are answer
-    				$cpt1[$x] = $letter;
-    				$answer_matching[$x]=$objAnswerTmp->selectAnswerByAutoId($numAnswer);
-    				$x++; $letter++;
-    			}
-    		}
-    		$i = 1;
+            $i = 1;
 
-    		$select_items[0]['id'] = 0;
-    		$select_items[0]['letter'] = '--';
-    		$select_items[0]['answer'] = '';
+            $select_items[0]['id'] = 0;
+            $select_items[0]['letter'] = '--';
+            $select_items[0]['answer'] = '';
+            foreach ($answer_matching as $id => $value) {
+                $select_items[$i]['id'] 	= $value['id'];
+                $select_items[$i]['letter'] = $cpt1[$id];
+                $select_items[$i]['answer'] = $value['answer'];
+                $i++;
+            }
 
-    		foreach ($answer_matching as $id => $value) {
-    			$select_items[$i]['id'] 	= $value['id'];
-    			$select_items[$i]['letter'] = $cpt1[$id];
-    			$select_items[$i]['answer'] = $value['answer'];
-    			$i ++;
-    		}
+            $user_choice_array_position = array();
+            if (!empty($user_choice)) {
+                foreach ($user_choice as $item) {
+                    $user_choice_array_position[$item['position']] = $item['answer'];
+                }
+            }
+
     		$num_suggestions = ($nbrAnswers - $x) + 1;
 
     	} elseif ($answerType == FREE_ANSWER) {
@@ -195,6 +206,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         		$user_choice_array[] = $item['answer'];
         	}
         }
+
 
     	for ($answerId=1; $answerId <= $nbrAnswers; $answerId++) {
     		$answer          = $objAnswerTmp->selectAnswer($answerId);
@@ -391,48 +403,93 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
             	$s.='</tr>';
 
     		} elseif ($answerType == FILL_IN_BLANKS) {
+                /*
+                 * In the FILL_IN_BLANKS test
+                 * you mustn't have [ and ] in the textarea
+                 * you mustn't have :: in the textarea
+                 * the text to find mustn't be empty or contains only spaces
+                 * the text to find mustn't contains HTML tags
+                 * the text to find mustn't contains char "
+                 */
+
     			list($answer) = explode('::', $answer);
 
-                //Correct answer
+                // $correct_answer_list array of array with correct anwsers 0=> [0=>[\p] 1=>[plop]]
     			api_preg_match_all('/\[[^]]+\]/', $answer, $correct_answer_list);
 
-                //Student's answezr
+                // get student answer to display it if student go back to previous fillBlank answer question in a test
     			if (isset($user_choice[0]['answer'])) {
     				api_preg_match_all('/\[[^]]+\]/', $user_choice[0]['answer'], $student_answer_list);
-    				$student_answer_list = $student_answer_list[0];
+                    $student_answer_list_tobecleaned = $student_answer_list[0];
+                    $student_answer_list = array();
+                    // here we got the student answer in a test
+                    // let's clean up the results
+                    /*
+                    Array
+                    (
+                        [0] => Array
+                        (
+                            [0] => [<font color="red"><s>yer</s></font> / <font color="green"><b>ici</b></font>]
+                            [1] => [<font color="red"><s>plop</s></font> / <font color="green"><b>/p</b></font>]
+                        )
+                    )
+                    */
+                    for ($i=0; $i < count($student_answer_list_tobecleaned); $i++) {
+                        $answer_corrected = $student_answer_list_tobecleaned[$i];
+                        /*
+                         * we got if student answer is wrong
+                         * [<font color="red"><s>rrr</s></font> / <font color="green"><b>/p</b></font>]
+                         * or if student answer is good
+                         * [plop / <font color="green"><b>plop</b></font>]
+                         * or if student didn't answer []
+                         */
+                        $answer_corrected = api_preg_replace('| / <font color="green"><b>.*$|', '', $answer_corrected);
+                        /*
+                         * we got [<font color="red"><s>rrr</s></font> or [plop or [
+                         */
+                        $answer_corrected = api_preg_replace('/^\[/', '', $answer_corrected);
+                        /*
+                         * we got <font color="red"><s>rrr</s></font> or plop
+                         * non breakable spaces &nbsp;&nbsp;&nbsp; from /main/exercice/exercise.class.php have been removed l 2391 and l 2370
+                         */
+                        $answer_corrected = api_preg_replace('|^<font color="red"><s>|', '', $answer_corrected);
+                        $answer_corrected = api_preg_replace('|</s></font>$|', '', $answer_corrected);
+                        $answer_corrected = '['.$answer_corrected.']';
+                        /*
+                         * we got [rrr] or [plop] or []
+                         */
+                        $student_answer_list[] = $answer_corrected;
+                    }
     			}
 
-                //If debug
+                // If display preview of answer in test view for exemple, set the student answer to the correct answers
                 if ($debug_mark_answer) {
+                    // contain the rights answers surronded with brackets
     				$student_answer_list = $correct_answer_list[0];
                 }
 
-    			if (!empty($correct_answer_list) && !empty($student_answer_list)) {
-    			    $correct_answer_list = $correct_answer_list[0];
-    			    $i = 0;
+                // Split the response by bracket
+                // tab_comments is an array with text surrounding the text to find
+                // we add a space before and after the answer_question to be sure to have a block of text before and after [xxx] patterns
+                // so we have n text to find ([xxx]) and n+1 blockc of texts before, beteween and after the text to find
+                $tab_comments = api_preg_split('/\[[^]]+\]/', ' '.$answer.' ');
 
-    			    foreach ($correct_answer_list as $correct_item) {
-    			        $value = null;
-    			        if (isset($student_answer_list[$i]) && !empty($student_answer_list[$i])) {
-
-    			        	//Cleaning student answer list
-    			            $value = strip_tags($student_answer_list[$i]);
-    			            $value = api_substr($value, 1, api_strlen($value)-2);
-    			            $value = explode('/', $value);
-
-    			            if (!empty($value[0])) {
-    			            	$value = str_replace('&nbsp;', '',  trim($value[0]));
-    			            }
-                            $correct_item = preg_quote($correct_item);
-                            $correct_item = api_preg_replace('|/|', '\/', $correct_item);   // to prevent error if there is a / in the text to find
-    			            $answer = api_preg_replace('/'.$correct_item.'/', Display::input('text', "choice[$questionId][]", $value), $answer, 1);
-    			        }
-    			        $i++;
-    			    }
-    			} else {
-    				$answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
-    			}
+                if (!empty($correct_answer_list) && !empty($student_answer_list)) {
+                    $answer = "";
+                    $i = 0;
+                    foreach ($student_answer_list as $student_item) {
+                        $student_response = api_substr($student_item, 1, api_strlen($student_item) - 2);  // remove surronding brackets
+                        $answer .= $tab_comments[$i].Display::input('text', "choice[$questionId][]", $student_response);
+                        $i++;
+                    }
+                    $answer .= $tab_comments[$i];
+                } else {
+                    // display exercice with empty input fields
+                    // every [xxx] are replaced with an empty input field
+                    $answer = api_preg_replace('/\[[^]]+\]/', Display::input('text', "choice[$questionId][]", '', $attributes), $answer);
+                }
     			$s .= $answer;
+
             } elseif ($answerType == MATCHING) {
     			// matching type, showing suggestions and answers
     			// TODO: replace $answerId by $numAnswer
@@ -451,7 +508,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     			            <select name="choice['.$questionId.']['.$numAnswer.']">';
 
     				// fills the list-box
-    				foreach ($select_items as $key=>$val) {
+    				foreach ($select_items as $key => $val) {
     					// set $debug_mark_answer to true at function start to
     					// show the correct answer with a suffix '-x'
     					$selected = '';
@@ -460,16 +517,18 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     							$selected = 'selected="selected"';
     						}
     					}
-    					if (isset($user_choice[$matching_correct_answer]) && $val['id'] == $user_choice[$matching_correct_answer]['answer']) {
+                        //$user_choice_array_position
+                        if (isset($user_choice_array_position[$numAnswer]) && $val['id'] == $user_choice_array_position[$numAnswer]) {
     					    $selected = 'selected="selected"';
     					}
-    					$s .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].$help.'</option>';
+    					/*if (isset($user_choice_array[$matching_correct_answer]) && $val['id'] == $user_choice_array[$matching_correct_answer]['answer']) {
+    					    $selected = 'selected="selected"';
+    					}*/
+    					$s .= '<option value="'.$val['id'].'" '.$selected.'>'.$val['letter'].'</option>';
 
     				}  // end foreach()
 
     				$s .= '</select></td>';
-    				//print_r($select_items);
-    				//right part (answers)
     				$s.='<td width="45%" valign="top" >';
     				if (isset($select_items[$lines_count])) {
     					$s.='<span style="float:left; width:5%;"><b>'.$select_items[$lines_count]['letter'].'.</b></span>'.
@@ -839,17 +898,17 @@ function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_co
     }
 
     $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-    $TBL_GROUP_REL_USER         = Database :: get_course_table(TABLE_GROUP_USER);
-    $TBL_GROUP                  = Database :: get_course_table(TABLE_GROUP);
     $TBL_USER                   = Database :: get_main_table(TABLE_MAIN_USER);
 
-    $sql .= "SELECT * FROM $TBL_TRACK_HOTPOTATOES thp JOIN $TBL_USER u ON thp.exe_user_id = u.user_id WHERE thp.exe_cours_id = '$course_code' AND exe_name LIKE '$in_hotpot_path%'";
+    $sql = "SELECT * FROM $TBL_TRACK_HOTPOTATOES thp JOIN $TBL_USER u ON thp.exe_user_id = u.user_id WHERE thp.exe_cours_id = '$course_code' AND exe_name LIKE '$in_hotpot_path%'";
 
     // just count how many answers
     if ($in_get_count) {
         $res = Database::query($sql);
         return Database::num_rows($res);
     }
+
+    $in_column = Database::escape_string($in_column);
 
     // get a number of sorted results
     $sql .= " $where_condition ORDER BY $in_column $in_direction  LIMIT $in_from, $in_number_of_items";
@@ -1189,7 +1248,7 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
 
                         //Admin can always delete the attempt
                         if ($locked == false || api_is_platform_admin()) {
-                            $ip = TrackingUserLog::get_ip_from_user_event($results[$i]['exe_user_id'], $results[$i]['exe_date'], false);
+                            $ip = TrackingUserLog::get_ip_from_user_event($results[$i]['exe_user_id'], date('Y-m-d h:i:s'), false);
                             $actions .= '<a href="http://www.whatsmyip.org/ip-geo-location/?ip='.$ip.'" target="_blank"><img src="'.api_get_path(WEB_CODE_PATH).'img/icons/22/info.png" title="'.$ip.'" /></a>';
 
                             $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.intval($_GET['filter_by_user']).'&filter=' . $filter . '&exerciseId='.$exercise_id.'&delete=delete&did=' . $id . '"
@@ -1385,9 +1444,15 @@ function convert_score($score, $weight) {
  * Getting all active exercises from a course from a session (if a session_id is provided we will show all the exercises in the course + all exercises in the session)
  * @param   array   course data
  * @param   int     session id
+ * @param   boolean Check publications dates
+ * @param   string  Search exercise name
+ * @param   boolean Search exercises in all sessions
+ * @param   int     0 = only inactive exercises 
+ *                  1 = only active exercises, 
+ *                  2 = all exercises
  * @return  array   array with exercise data
  */
-function get_all_exercises($course_info = null, $session_id = 0, $check_publication_dates = false) {
+function get_all_exercises($course_info = null, $session_id = 0, $check_publication_dates = false, $search_exercise = '', $search_all_sessions = false, $active = 2) {
     $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
     $course_id = api_get_course_int_id();
 
@@ -1409,34 +1474,62 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
         $time_conditions .= " (start_time = '0000-00-00 00:00:00'   AND end_time =  '0000-00-00 00:00:00'))  "; // nothing is set
     }
 
-    if ($session_id == 0) {
-    	$conditions = array('where'=>array('active = ? AND session_id = ? AND c_id = ? '.$time_conditions => array('1', $session_id, $course_id)), 'order'=>'title');
-    } else {
-        //All exercises
-    	$conditions = array('where'=>array('active = ? AND  (session_id = 0 OR session_id = ? ) AND c_id = ? '.$time_conditions => array('1', $session_id, $course_id)), 'order'=>'title');
+    $needle_where   = (!empty($search_exercise)) ? " AND title LIKE '?' "       : '';
+    $needle         = (!empty($search_exercise)) ? "%" . $search_exercise . "%" : ''; 
+
+    //Show courses by active status
+    $active_sql = '';
+    if ($active != 2) {
+        $active_sql = sprintf(' active = %d AND', $active);
+    }
+
+
+    if ($search_all_sessions == true) 
+    {
+        $conditions = array('where'=>array($active_sql . ' c_id = ? '. $needle_where . $time_conditions => array($course_id, $needle)), 'order'=>'title');
+    } else 
+    {
+        if ($session_id == 0) {
+            $conditions = array('where'=>array($active_sql . ' session_id = ? AND c_id = ? '. $needle_where . $time_conditions => array($session_id, $course_id, $needle)), 'order'=>'title');
+        } else {
+            $conditions = array('where'=>array($active_sql . ' (session_id = 0 OR session_id = ? ) AND c_id = ? ' . $needle_where . $time_conditions => array($session_id, $course_id, $needle)), 'order'=>'title');
+        }
     }
     return Database::select('*',$TBL_EXERCICES, $conditions);
 }
-
-
 /**
- * Getting all active exercises from a course from a session (if a session_id is provided we will show all the exercises in the course + all exercises in the session)
+ * Get exercise information by id
+ * @param int Exercise Id
+ * @return array Exercise info 
+ */
+function get_exercise_by_id($exerciseId = 0) {
+    $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
+    $conditions  = array('where' => array('id = ?' => array($exerciseId)));
+    return Database::select('*', $TBL_EXERCICES, $conditions);
+}
+/**
+ * Getting all exercises (active only or all) from a course from a session (if a session_id is provided we will show all the exercises in the course + all exercises in the session)
  * @param   array   course data
  * @param   int     session id
- * @param		int			course c_id
+ * @param	int		course c_id
+ * @param   boolean only_active_exercices
  * @return  array   array with exercise data
  * modified by Hubert Borderiou
  */
-function get_all_exercises_for_course_id($course_info = null, $session_id = 0, $course_id=0) {
+function get_all_exercises_for_course_id($course_info = null, $session_id = 0, $course_id=0, $only_active_exercices = true) {
+    $sql_active_exercices = "";
+    if (!$only_active_exercices) {
+        $sql_active_exercices = " OR active != 1 ";
+    }
    	$TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
     if ($session_id == -1) {
     	$session_id  = 0;
     }
     if ($session_id == 0) {
-    	$conditions = array('where'=>array('active = ? AND session_id = ? AND c_id = ?'=>array('1', $session_id, $course_id)), 'order'=>'title');
+    	$conditions = array('where'=>array("(active = ? $sql_active_exercices) AND session_id = ? AND c_id = ?" => array('1', $session_id, $course_id)), 'order'=>'title');
     } else {
         //All exercises
-    	$conditions = array('where'=>array('active = ? AND (session_id = 0 OR session_id = ? ) AND c_id=?' =>array('1', $session_id, $course_id)), 'order'=>'title');
+    	$conditions = array('where'=>array("(active = ? $sql_active_exercices) AND (session_id = 0 OR session_id = ? ) AND c_id=?" => array('1', $session_id, $course_id)), 'order'=>'title');
     }
     return Database::select('*',$TBL_EXERCICES, $conditions);
 }
@@ -2110,6 +2203,14 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         $show_only_score = true;
     }
 
+    // Not display expected answer, but score, and feedback
+    $show_all_but_expected_answer = false;
+    if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY && $objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END) {
+        $show_all_but_expected_answer = true;
+        $show_results = true;
+        $show_only_score = false;
+    }
+
     if ($show_results || $show_only_score) {
         $user_info   = api_get_user_info($exercise_stat_info['exe_user_id']);
         //Shows exercise header
@@ -2133,13 +2234,14 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         foreach ($question_list as $questionId) {
 
             // creates a temporary Question object
-            $objQuestionTmp = Question :: read($questionId);
+            $objQuestionTmp = Question::read($questionId);
 
             //this variable commes from exercise_submit_modal.php
             ob_start();
 
             // We're inside *one* question. Go through each possible answer for this question
             $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null, 'exercise_result', array(), $save_user_result, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);
+
             if (empty($result)) {
                 continue;
             }
@@ -2241,11 +2343,16 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         echo Testcategory::get_stats_table_by_attempt($objExercise->id, $category_list);
     }
 
+    if ($show_all_but_expected_answer) {
+        $exercise_content .= "<div class='normal-message'>".get_lang("ExerciseWithFeedbackWithoutCorrectionComment")."</div>";
+    }
+
     echo $total_score_text;
     echo $exercise_content;
     if (!$show_only_score) {
         echo $total_score_text;
     }
+
 
     if ($save_user_result) {
 
@@ -2295,4 +2402,24 @@ function get_question_ribbon($objExercise, $score, $weight, $check_pass_percenta
 
     $ribbon .= '</div>';
     return $ribbon;
+}
+
+function detectInputAppropriateClass($countLetter)
+{
+    $limits = array(
+        0 => 'input-mini',
+        10 => 'input-mini',
+        15 => 'input-medium',
+        20 => 'input-xlarge',
+        40 => 'input-xlarge',
+        60 => 'input-xxlarge',
+        100  => 'input-xxlarge',
+        200 => 'input-xxlarge',
+    );
+    foreach ($limits as $size => $item) {
+        if ($countLetter <= $size) {
+            return $item;
+        }
+    }
+    return $limits[0];
 }

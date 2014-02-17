@@ -78,7 +78,6 @@ $langUserHasPermissionNot = "O usuário não tem permissão";
 $langUserHasPermission = "O usuário possui permissões";
 $langLegend = "Legenda";
 $langUserHasPermissionByRoleGroup = "O usuário possui privilégios do seu grupo";
-$EditPost = "Editar artigo";
 $AddBlog = "Criar um novo blog";
 $EditBlog = "Editar título e subtítulo";
 $DeleteBlog = "Excluir este blog";

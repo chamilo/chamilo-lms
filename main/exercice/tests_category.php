@@ -120,16 +120,13 @@ function delete_category_form($in_action) {
     if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
         $category_id = Security::remove_XSS($_GET['category_id']);
         $catobject = new Testcategory($category_id);
-        if ($catobject->getCategoryQuestionsNumber() == 0) {
             if ($catobject->removeCategory()) {
                 Display::display_confirmation_message(get_lang('DeleteCategoryDone'));
             } else {
                 Display::display_error_message(get_lang('CannotDeleteCategoryError'));
             }
-        } else {
-            Display::display_error_message(get_lang('CannotDeleteCategory'));
         }
-    } else {
+    else {
         Display::display_error_message(get_lang('CannotDeleteCategoryError'));
     }
     display_add_category();
@@ -208,16 +205,10 @@ function display_categories() {
         echo '</div>';
         echo '<div>';
         echo '<a href="' . api_get_self() . '?action=editcategory&amp;category_id=' . $row['id'] . '">' . Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL) . '</a>';
-        if ($nb_question > 0) {
-            echo '<a href="javascript:void(0)" onclick="alert(\'' . protectJSDialogQuote(get_lang('CannotDeleteCategory')) . '\')">';
-            echo Display::return_icon('delete_na.png', get_lang('CannotDeleteCategory'), array(), ICON_SIZE_SMALL);
-            echo '</a>';
-        } else {
             $rowname = protectJSDialogQuote($row['title']);
             echo ' <a href="' . api_get_self() . '?action=deletecategory&amp;category_id=' . $row['id'] . '" ';
             echo 'onclick="return confirmDelete(\'' . protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure') . '[' . $rowname) . '] ?\', \'id_cat' . $row['id'] . '\');">';
             echo Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
-        }
         echo '</div>';
     }
 }

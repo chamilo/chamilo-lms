@@ -37,13 +37,13 @@ function toogle_minipanel() {
     $('#learning_path_left_zone').hide(50);
     $('#learning_path_right_zone').css('margin-left','10px');
     $('#hide_bar table').css('backgroundImage','url(../img/hide2.png)').css('backgroundColor','#EEEEEE');
-
 }
 
-var left_width = 292;  // (relative) hide_bar position
 var left_width_mini = 20;  // (relative) hide_bar position
 
 $(document).ready(function() {
+
+    var left_width = $('learning_path_left_zone').width();
 
    //Adding div to hide panel
     $('#learning_path_right_zone').before('<div id="hide_bar" style="float: left; width: 10px; height: 1000px;">' +
@@ -67,21 +67,21 @@ $(document).ready(function() {
 
     var original = $('#content_id').height();
 
-    // Adding funcionality
-    $( "#hide_bar" ).click(function() {
-        $('#hide_bar table').toggle(function() {
-            if ($('#hide_bar').position().left >= left_width) {
-                toogle_minipanel();
-            }
-        },
-        function(){
-            // Show navigation left zone
-            $('#learning_path_left_zone').show(50);
-            $('#learning_path_right_zone').css('marginLeft', left_width + 10 + 'px');
-            $('#hide_bar table').css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
-            $('#learning_path_main  #control').remove();
-            $('#content_id').css({ height: original});
+    // Adding functionality
+
+    $('#hide_bar table').toggle(function(){
+        if ($('#hide_bar').position().left >= left_width) {
+            toogle_minipanel();
         }
-    );
+    },
+    function() {
+        // Show navigation left zone
+        $('#learning_path_left_zone').show(50);
+        $('#learning_path_right_zone').css('marginLeft', left_width + 10 + 'px');
+        $('#hide_bar table').css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
+        $('#learning_path_main  #control').remove();
+        $('#content_id').css({ height: original});
     });
+
+
 });

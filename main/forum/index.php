@@ -13,7 +13,7 @@
  *                      multiple forums per group
  * - sticky messages
  * - new view option: nested view
- * - quoting a message 
+ * - quoting a message
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @copyright Ghent University
@@ -93,11 +93,11 @@ if ($actions == 'add') {
             $interbreadcrumb[] = array('url' =>'index.php?gradebook='.$gradebook.'&amp;search='.$search_forum, 'name' => get_lang('Forum'));
             $interbreadcrumb[] = array('url' =>'#', 'name' => get_lang('AddForumCategory'));
             break;
-        default:            
+        default:
             break;
     }
 } else {
-    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('ForumCategories'));    
+    $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('ForumCategories'));
 }
 
 Display::display_header('');
@@ -108,9 +108,9 @@ Display::display_introduction_section(TOOL_FORUM);
 $form_count = 0;
 
 if (api_is_allowed_to_edit(false, true)) {
-	
-	//if is called from a learning path lp_id	
-	$lp_id = isset($_REQUEST['lp_id']) ? Security::remove_XSS($_REQUEST['lp_id']): null;		
+
+	//if is called from a learning path lp_id
+	$lp_id = isset($_REQUEST['lp_id']) ? Security::remove_XSS($_REQUEST['lp_id']): null;
 	handle_forum_and_forumcategories($lp_id);
 }
 
@@ -174,7 +174,7 @@ $session_id = api_get_session_id();
 echo '<div class="actions">';
 
 //if is called from learning path
-if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){	
+if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])){
     echo "<a href=\"../newscorm/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-5\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"),'',ICON_SIZE_MEDIUM)."</a>";
 }
 if (!empty($forum_list)) {
@@ -198,7 +198,7 @@ if (is_array($forum_categories_list)) {
 
          // The forums in this category.
         $forums_in_category = get_forums_in_category($forum_category['cat_id']);
-        
+
         echo '<table class="forum_table">';
 
         // Validacion when belongs to a session.
@@ -243,7 +243,7 @@ if (is_array($forum_categories_list)) {
             echo '</tr>';
 
             // Step 5: We display all the forums in this category.
-            
+
             foreach ($forum_list as $forum) {
                 // Here we clean the whatnew_post_info array a little bit because to display the icon we
                 // test if $whatsnew_post_info[$forum['forum_id']] is empty or not.
@@ -259,7 +259,7 @@ if (is_array($forum_categories_list)) {
                 }
 
                 // Note: This can be speeded up if we transform the $forum_list to an array that uses the forum_category as the key.
-                if ($forum['forum_category'] == $forum_category['cat_id']) {                    
+                if ($forum['forum_category'] == $forum_category['cat_id']) {
                     // The forum has to be showed if
                     // 1.v it is a not a group forum (teacher and student)
                     // 2.v it is a group forum and it is public (teacher and student)
@@ -278,10 +278,10 @@ if (is_array($forum_categories_list)) {
                     } else {
                         // you are not a teacher
                         // it is not a group forum => show forum (invisible forums are already left out see get_forums function)
-                        if ($forum['forum_of_group'] == '0') {    
+                        if ($forum['forum_of_group'] == '0') {
                             $show_forum = true;
                         } else {
-                            $show_forum = GroupManager::user_has_access($user_id, $forum['forum_of_group'], GroupManager::GROUP_TOOL_FORUM); 
+                            $show_forum = GroupManager::user_has_access($user_id, $forum['forum_of_group'], GroupManager::GROUP_TOOL_FORUM);
                         }
                     }
 
@@ -328,7 +328,7 @@ if (is_array($forum_categories_list)) {
 
                         echo '</td>';
 
-                        // Validacion when belongs to a session
+                        // Validation when belongs to a session
                         $session_img = api_get_session_image($forum['session_id'], $_user['status']);
 
                         if ($forum['forum_of_group'] != '0') {
@@ -402,8 +402,8 @@ if (is_array($forum_categories_list)) {
                     }
                 }
             }
-        } else {     
-            echo '<tr><td>'.get_lang('NoForumInThisCategory').'</td>'.(api_is_allowed_to_edit(false, true) ? '<td colspan="6"></td>' : '<td colspan="6"></td>').'</tr>';     
+        } else {
+            echo '<tr><td>'.get_lang('NoForumInThisCategory').'</td>'.(api_is_allowed_to_edit(false, true) ? '<td colspan="6"></td>' : '<td colspan="6"></td>').'</tr>';
         }
         echo '</table>';
     }

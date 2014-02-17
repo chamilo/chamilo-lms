@@ -17,7 +17,9 @@ class Notification extends Model
 {
     public $table;
     public $columns = array('id', 'dest_user_id', 'dest_mail', 'title', 'content', 'send_freq', 'created_at', 'sent_at');
-    public $max_content_length = 254; //Max lenght of the notification.content field
+
+    //Max length of the notification.content field
+    public $max_content_length = 254;
     public $debug = false;
 
     /* message, invitation, group messages */
@@ -45,6 +47,9 @@ class Notification extends Model
     const NOTIFICATION_TYPE_INVITATION = 2;
     const NOTIFICATION_TYPE_GROUP = 3;
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->table = Database::get_main_table(TABLE_NOTIFICATION);
@@ -61,21 +66,28 @@ class Notification extends Model
 
     /**
      *  Send the notifications
-     *  @param int notification frecuency
+     *  @param int notification frequency
      */
-    public function send($frec = 8)
+    public function send($frequency = 8)
     {
-        $notifications = $this->find('all', array('where' => array('sent_at IS NULL AND send_freq = ?' => $frec)));
+        $notifications = $this->find('all', array('where' => array('sent_at IS NULL AND send_freq = ?' => $frequency)));
 
         if (!empty($notifications)) {
             foreach ($notifications as $item_to_send) {
-                //Sending email
-                api_mail_html($item_to_send['dest_mail'], $item_to_send['dest_mail'], Security::filter_terms($item_to_send['title']), Security::filter_terms($item_to_send['content']), $this->admin_name, $this->admin_email);
+                // Sending email
+                api_mail_html(
+                    $item_to_send['dest_mail'],
+                    $item_to_send['dest_mail'],
+                    Security::filter_terms($item_to_send['title']),
+                    Security::filter_terms($item_to_send['content']),
+                    $this->admin_name,
+                    $this->admin_email
+                );
                 if ($this->debug) {
                     error_log('Sending message to: '.$item_to_send['dest_mail']);
                 }
 
-                //Updating
+                // Updating
                 $item_to_send['sent_at'] = api_get_utc_datetime();
                 $this->update($item_to_send);
                 if ($this->debug) {
@@ -102,15 +114,15 @@ class Notification extends Model
         $avoid_my_self = false;
 
         switch ($this->type) {
-            case self::NOTIFICATION_TYPE_MESSAGE;
+            case self::NOTIFICATION_TYPE_MESSAGE:
                 $setting_to_check = 'mail_notify_message';
                 $default_status = self::NOTIFY_MESSAGE_AT_ONCE;
                 break;
-            case self::NOTIFICATION_TYPE_INVITATION;
+            case self::NOTIFICATION_TYPE_INVITATION:
                 $setting_to_check = 'mail_notify_invitation';
                 $default_status = self::NOTIFY_INVITATION_AT_ONCE;
                 break;
-            case self::NOTIFICATION_TYPE_GROUP;
+            case self::NOTIFICATION_TYPE_GROUP:
                 $setting_to_check = 'mail_notify_group_message';
                 $default_status = self::NOTIFY_GROUP_AT_ONCE;
                 $avoid_my_self = true;
@@ -128,7 +140,7 @@ class Notification extends Model
                 }
                 $user_info = api_get_user_info($user_id);
 
-                //Extra field was deleted or removed? Use the default status
+                // Extra field was deleted or removed? Use the default status.
                 if (empty($setting_info)) {
                     $user_setting = $default_status;
                 } else {
@@ -154,13 +166,28 @@ class Notification extends Model
                                 $extra_headers = array();
                                 $extra_headers['reply_to']['mail'] = $sender_info['email'];
                                 $extra_headers['reply_to']['name'] = $sender_info['complete_name'];
-                                api_mail_html($name, $user_info['mail'], Security::filter_terms($title), Security::filter_terms($content), $sender_info['complete_name'], $sender_info['email'], $extra_headers);
+                                api_mail_html(
+                                    $name,
+                                    $user_info['mail'],
+                                    Security::filter_terms($title),
+                                    Security::filter_terms($content),
+                                    $sender_info['complete_name'],
+                                    $sender_info['email'],
+                                    $extra_headers
+                                );
                             } else {
-                                api_mail_html($name, $user_info['mail'], Security::filter_terms($title), Security::filter_terms($content), $sender_info['complete_name'], $sender_info['email']);
+                                api_mail_html(
+                                    $name,
+                                    $user_info['mail'],
+                                    Security::filter_terms($title),
+                                    Security::filter_terms($content),
+                                    $this->admin_name,
+                                    $this->admin_email
+                                );
                             }
                         }
                         $params['sent_at'] = api_get_utc_datetime();
-                    //Saving the notification to be sent some day
+                        // Saving the notification to be sent some day.
                     default:
                         $params['dest_user_id'] = $user_id;
                         $params['dest_mail'] = $user_info['mail'];
@@ -176,8 +203,9 @@ class Notification extends Model
 
     /**
      * Formats the content in order to add the welcome message, the notification preference, etc
-     * @param	string 	the content
-     * @param	array	result of api_get_user_info() or GroupPortalManager:get_group_data()
+     * @param   string 	the content
+     * @param   array	result of api_get_user_info() or GroupPortalManager:get_group_data()
+     * @return string
      * */
     public function format_content($content, $sender_info)
     {

@@ -11,9 +11,6 @@
  * @since 31/December/2008
  */
 
-//error_reporting(E_ALL);
-//error_reporting(E_ALL ^ E_NOTICE);
-
 //Access Control Setting
 /**
 * turn off => false
@@ -34,9 +31,11 @@ define('CONFIG_SYS_DEMO_ENABLE', false);
 define('CONFIG_SYS_VIEW_ONLY', false); //diabled the system, view only
 define('CONFIG_SYS_THUMBNAIL_VIEW_ENABLE', true);//REMOVE THE thumbnail view if false
 
+$editor = isset($_GET['editor']) ? Security::remove_XSS($_GET['editor']) : null;
+
 //User Permissions
 //Hack by Juan Carlos Raña Trabado
-if(empty($_course['path']) || Security::remove_XSS($_GET['editor'])=="stand_alone") {
+if(empty($_course['path']) || $editor =="stand_alone") {
 	define('CONFIG_OPTIONS_DELETE', true);
 	define('CONFIG_OPTIONS_CUT', true);
 	define('CONFIG_OPTIONS_COPY', true);
@@ -45,7 +44,7 @@ if(empty($_course['path']) || Security::remove_XSS($_GET['editor'])=="stand_alon
 	define('CONFIG_OPTIONS_UPLOAD', true);
 	define('CONFIG_OPTIONS_EDITABLE', false); //disable image editor and text editor
 } else {
-	
+
 	if(api_is_allowed_to_edit()) {
 		//api_is_allowed_to_edit() from Chamilo
 		define('CONFIG_OPTIONS_DELETE', true);
@@ -78,7 +77,7 @@ these two paths accept relative path only, don't use absolute path
 
 // Integration for Chamilo
 
-if(!empty($_course['path']) && Security::remove_XSS($_GET['editor'])!="stand_alone") {
+if(!empty($_course['path']) && $editor != "stand_alone") {
 	if(!empty($group_properties['directory'])) {
 		$PathChamiloAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document'.$group_properties['directory'].'/';
 	} else {
@@ -99,15 +98,19 @@ if(!empty($_course['path']) && Security::remove_XSS($_GET['editor'])!="stand_alo
 		$PathChamiloAjaxFileManager='../../../../../../../home/default_platform_document/';
 	} else {
 		//my profile
-		$my_path					= UserManager::get_user_picture_path_by_id(api_get_user_id(),'none');
-                $dir = api_get_path(SYS_CODE_PATH).$my_path['dir'];
-                if (!is_dir($dir)) {
-                    mkdir($dir);
-                }
-                if (!is_dir($dir.'my_files')) {
-                    mkdir($dir.'my_files');
-                }
-		$PathChamiloAjaxFileManager	= '../../../../../../../main/'.$my_path['dir'].'my_files/';
+		$my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'none');
+        if (!empty($my_path['dir'])) {
+            $dir = api_get_path(SYS_CODE_PATH).$my_path['dir'];
+            if (!is_dir($dir)) {
+                mkdir($dir);
+            }
+            if (!is_dir($dir.'my_files')) {
+                mkdir($dir.'my_files');
+            }
+            $PathChamiloAjaxFileManager	= '../../../../../../../main/'.$my_path['dir'].'my_files/';
+        } else {
+            api_not_allowed();
+        }
 	}
 }
 
@@ -115,8 +118,6 @@ define('CONFIG_SYS_DEFAULT_PATH',	$PathChamiloAjaxFileManager);
 define('CONFIG_SYS_ROOT_PATH',		$PathChamiloAjaxFileManager);
 
 // end chamilo
-
-
 
 define('CONFIG_SYS_FOLDER_SHOWN_ON_TOP', true); //show your folders on the top of list if true or order by name
 define("CONFIG_SYS_DIR_SESSION_PATH", session_save_path()); // Hack by Juan Carlos Raña
@@ -141,12 +142,12 @@ define('CONFIG_EDITABLE_VALID_EXTS', 'txt,htm,html'); //make you include all the
 
 define('CONFIG_OVERWRITTEN', false); //overwirte when processing paste
 define('CONFIG_UPLOAD_VALID_EXTS', 'gif,jpg,jpeg,png,bmp,tif,psd,zip,sit,rar,gz,tar,htm,html,mov,mpg,avi,asf,mpeg,wmv,ogg,ogx,ogv,oga, aif,aiff,wav,mp3,swf,flv, mp4, aac, ppt,rtf,doc, pdf,xls,txt,flv,odt,ods,odp,odg,odc,odf,odb,odi,pps,docx,pptx,xlsx,accdb,xml,mid, midi, svg, svgz, mm');//Updated for Chamilo
-	
+
 //define viewable valid exts
 $viewable='gif,bmp,txt,jpg,jpeg,png,tif,html,htm,mp3,wav,wmv,wma,rm,rmvb,mov,swf,flv,mp4,aac,avi,mpg,mpeg,asf,mid,midi';//updated by Chamilo
 $viewable_array = explode(" ",$viewable);
 
-if (api_browser_support('svg')){				
+if (api_browser_support('svg')){
 	$viewable_array[]=',svg';
 }
 if (api_browser_support('ogg')){
@@ -206,7 +207,7 @@ tinymce
 fckeditor
 */
 //CONFIG_EDITOR_NAME replaced CONFIG_THEME_MODE since @version 0.8
-define('CONFIG_EDITOR_NAME', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['editor'])?secureFileName($_GET['editor']):'fckeditor')); // run mode fckeditor (Chamilo editor)
+define('CONFIG_EDITOR_NAME', (CONFIG_QUERY_STRING_ENABLE && !empty($editor)?secureFileName($editor):'fckeditor')); // run mode fckeditor (Chamilo editor)
 define('CONFIG_THEME_NAME', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['theme'])?secureFileName($_GET['theme']):'default'));  //change the theme to your custom theme rather than default
 define('CONFIG_DEFAULT_VIEW', (CONFIG_SYS_THUMBNAIL_VIEW_ENABLE?'thumbnail':'detail')); //thumbnail or detail
 define('CONFIG_DEFAULT_PAGINATION_LIMIT', 10000); //change 10 by 10000 while pagination is deactivated on Chamilo

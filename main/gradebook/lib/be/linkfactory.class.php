@@ -76,6 +76,8 @@ class LinkFactory
 		switch ($type) {
 			case LINK_EXERCISE:
 				return new ExerciseLink();
+            case LINK_HOTPOTATOES:
+                return new ExerciseLink(1);
 			case LINK_DROPBOX:
 				return new DropboxLink();
 			case LINK_STUDENTPUBLICATION:
@@ -99,6 +101,7 @@ class LinkFactory
 		//LINK_DROPBOX,
 		return array (LINK_EXERCISE,
 					  //LINK_DROPBOX,
+                      LINK_HOTPOTATOES,
 					  LINK_STUDENTPUBLICATION,
 					  LINK_LEARNPATH,
                       LINK_FORUM_THREAD,

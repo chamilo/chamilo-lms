@@ -227,7 +227,10 @@ if (!isset($_GET['running'])) {
   	$urlForm 		= api_get_path(WEB_PATH);
 	$pathForm 		= api_get_path(SYS_PATH);
 
-	$emailForm      = $_SERVER['SERVER_ADMIN'];
+        $emailForm = 'webmaster@localhost';
+        if (!empty($_SERVER['SERVER_ADMIN'])) {
+            $emailForm      = $_SERVER['SERVER_ADMIN'];
+        }
 	$email_parts = explode('@', $emailForm);
 	if (isset($email_parts[1]) && $email_parts[1] == 'localhost') {
 		$emailForm .= '.localdomain';

@@ -116,7 +116,7 @@ if ($_POST['form_sent']) {
                 foreach ($result['users_added'] as $user) {
                     $user_info = api_get_user_info($user);
                     if (!empty($user_info)) {
-                        $user_added_list[] = $i . '. ' . api_get_person_name($user_info['firstname'], $user_info['lastname']);
+                        $user_added_list[] = $i . '. ' . api_get_person_name($user_info['firstname'], $user_info['lastname'], null, null, null, null, $user_info['username']);
                         $i++;
                     }
                 }
@@ -168,13 +168,15 @@ if ($ajax_search) {
         $sessionUsersList[$user['user_id']] = $user;
     }
 } else {
-    $Users = UrlManager::get_url_rel_user_data();
+    $order_clause = api_sort_by_first_name() ? ' ORDER BY username, firstname, lastname' : ' ORDER BY username, lastname, firstname';
+
+    $Users = UrlManager::get_url_rel_user_data(null, $order_clause);
     foreach ($Users as $user) {
         if ($user['access_url_id'] == $access_url_id) {
             $sessionUsersList[$user['user_id']] = $user;
         }
     }
-    $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
+
     $sql = "SELECT u.user_id, lastname, firstname, username
 	  	  	FROM $tbl_user u WHERE status <> " . ANONYMOUS . " " .
             $order_clause;
@@ -188,7 +190,6 @@ if ($ajax_search) {
     }
 }
 
-
 if ($add_type == 'multiple') {
     $link_add_type_unique = '<a href="' . api_get_self() . '?add_type=unique&access_url_id=' . $access_url_id . '">' . get_lang('SessionAddTypeUnique') . '</a>';
     $link_add_type_multiple = get_lang('SessionAddTypeMultiple');
@@ -196,7 +197,6 @@ if ($add_type == 'multiple') {
     $link_add_type_unique = get_lang('SessionAddTypeUnique');
     $link_add_type_multiple = '<a href="' . api_get_self() . '?add_type=multiple&access_url_id=' . $access_url_id . '">' . get_lang('SessionAddTypeMultiple') . '</a>';
 }
-
 $url_list = UrlManager::get_url_data();
 ?>
 
@@ -232,19 +232,19 @@ $url_list = UrlManager::get_url_data();
 <input type="hidden" name="form_sent" value="1" />
 <input type="hidden" name="add_type" value = "<?php echo $add_type ?>" />
 
-    <?php
-    if (!empty($errorMsg)) {
-        Display::display_normal_message($errorMsg); //main API
-    }
-    ?>
+<?php
+if (!empty($errorMsg)) {
+    Display::display_normal_message($errorMsg); //main API
+}
+?>
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
     <td>
     <h3>
-    <?php 
-            $total_users = count($nosessionUsersList) +  count($sessionUsersList); 
-            echo get_lang('TotalAvailableUsers').' '.$total_users;
+    <?php
+        $total_users = count($nosessionUsersList) +  count($sessionUsersList);
+        echo get_lang('TotalAvailableUsers').' '.$total_users;
     ?>
     </h3>
     </td>
@@ -255,86 +255,67 @@ $url_list = UrlManager::get_url_data();
   <td></td>
   <td align="center"><b><?php echo get_lang('UserListIn') . ' ' . $url_selected; ?> : <?php echo count($sessionUsersList); ?></b></td>
 </tr>
-
 <tr>
   <td align="center">
   <div id="content_source">
-                    <?php
-                    if ($ajax_search) {
-                        ?>
-    		<input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)" />
-    		<div id="ajax_list_users"></div>
-                        <?php
-                    } else {
-                        ?>
-    	  <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:380px;">
-                            <?php
-                            foreach ($nosessionUsersList as $enreg) {
-                                ?>
-        			<option value="<?php echo $enreg['user_id']; ?>"><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']) . ' (' . $enreg['username'] . ')'; ?></option>
-                                <?php
-                            }
-                            unset($nosessionUsersList);
-                            ?>
-
-    	  </select>
-                        <?php
-                    }
-                    ?>
+    <?php if ($ajax_search) { ?>
+    <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,document.formulaire.access_url_id.options[document.formulaire.access_url_id.selectedIndex].value)" />
+    <div id="ajax_list_users"></div>
+    <?php } else { ?>
+    <select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:380px;">
+    <?php
+        foreach ($nosessionUsersList as $enreg) {
+    ?>
+    <option value="<?php echo $enreg['user_id']; ?>"><?php echo $enreg['username'].' - '.api_get_person_name($enreg['firstname'], $enreg['lastname']); ?></option>
+    <?php
+     }
+    unset($nosessionUsersList);
+    ?>
+    </select>
+        <?php
+    }
+    ?>
   </div>
   </td>
   <td width="10%" valign="middle" align="center">
-                <?php
-                if ($ajax_search) {
-                    ?>
-    	<button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination_users'))"> </button>
-                    <?php
-                } else {
-                    ?>
-    	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" ></button>
-    	<br /><br />
-    	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" ></button>
-                    <?php
-                }
-                ?>
+    <?php if ($ajax_search) { ?>
+        <button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination_users'))"> </button>
+    <?php } else { ?>
+        <button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin_users'), document.getElementById('destination_users'))" ></button>
+        <br /><br />
+        <button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination_users'), document.getElementById('origin_users'))" ></button>
+    <?php } ?>
 	<br /><br /><br /><br /><br /><br />
   </td>
   <td align="center">
   <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" style="width:380px;">
-
-                    <?php
-                    foreach ($sessionUsersList as $enreg) {
-                        ?>
-    	<option value="<?php echo $enreg['user_id']; ?>"><?php echo api_get_person_name($enreg['firstname'], $enreg['lastname']) . ' (' . $enreg['username'] . ')'; ?></option>
-
-                        <?php
-                    }
-                    unset($sessionUsersList);
-                    ?>
-
+    <?php
+    foreach ($sessionUsersList as $enreg) {
+        ?>
+        <option value="<?php echo $enreg['user_id']; ?>">
+            <?php echo $enreg['username'].' - '.api_get_person_name($enreg['firstname'], $enreg['lastname']); ?>
+        </option>
+    <?php
+    }
+    unset($sessionUsersList);
+    ?>
   </select></td>
 </tr>
-
 <tr>
 	<td colspan="3" align="center">
 		<br />
-                <?php
-                if (isset($_GET['add']))
-                    echo '<button class="save" type="button" onclick="valide()" >' . get_lang('AddUsersToURL') . '</button>';
-                else
-                    echo '<button class="save" type="button" onclick="valide()" >' . get_lang('EditUsersToURL') . '</button>';
-                ?>
+        <?php
+        if (isset($_GET['add'])) {
+            echo '<button class="save" type="button" onclick="valide()" >' . get_lang('AddUsersToURL') . '</button>';
+        } else {
+            echo '<button class="save" type="button" onclick="valide()" >' . get_lang('EditUsersToURL') . '</button>';
+        }
+        ?>
 	</td>
 </tr>
-
-
-
-
 </table>
-
 </form>
-<script type="text/javascript">
-<!--
+<script>
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
@@ -368,23 +349,14 @@ function mysort(a, b) {
 	return 0;
 }
 
-function valide(){
+function valide() {
 	var options = document.getElementById('destination_users').options;
 	for (i = 0 ; i<options.length ; i++)
 		options[i].selected = true;
-	/*
-	var options = document.getElementById('destination_classes').options;
-	for (i = 0 ; i<options.length ; i++)
-		options[i].selected = true;
-		*/
 	document.forms.formulaire.submit();
 }
-
-
-function loadUsersInSelect(select){
-
+function loadUsersInSelect(select) {
 	var xhr_object = null;
-
 	if(window.XMLHttpRequest) // Firefox
 		xhr_object = new XMLHttpRequest();
 	else if(window.ActiveXObject) // Internet Explorer
@@ -394,10 +366,7 @@ function loadUsersInSelect(select){
 
 	//xhr_object.open("GET", "loadUsersInSelect.ajax.php?id_session=<?php echo $id_session ?>&letter="+select.options[select.selectedIndex].text, false);
 	xhr_object.open("POST", "loadUsersInSelect.ajax.php");
-
 	xhr_object.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-
 	nosessionUsers = makepost(document.getElementById('origin_users'));
 	sessionUsers = makepost(document.getElementById('destination_users'));
 	nosessionClasses = makepost(document.getElementById('origin_classes'));
@@ -417,12 +386,8 @@ function makepost(select){
 	var ret = "";
 	for (i = 0 ; i<options.length ; i++)
 		ret = ret + options[i].value +'::'+options[i].text+";;";
-
 	return ret;
-
 }
--->
-
 </script>
 <?php
 Display::display_footer();

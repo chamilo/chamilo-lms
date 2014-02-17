@@ -7,7 +7,8 @@
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
 **/
-$.jgrid = {
+$.jgrid = $.jgrid || {};
+$.extend($.jgrid,{
 	defaults : {
 		recordtext: "{0} - {1} от {2}",
 		emptyrecords: "Няма запис(и)",
@@ -18,10 +19,8 @@ $.jgrid = {
 		caption: "Търсене...",
 		Find: "Намери",
 		Reset: "Изчисти",
-		odata : ['равно', 'различно', 'по-малко', 'по-малко или=','по-голямо','по-голямо или =', 'започва с','не започва с','се намира в','не се намира в','завършва с','не завършава с','съдържа', 'не съдържа' ],
-	    groupOps: [	{ op: "AND", text: "&nbsp;И " },	{ op: "OR",  text: "ИЛИ" }	],
-		matchText: " включи",
-		rulesText: " клауза"
+		odata: [{ oper:'eq', text:"равно"},{ oper:'ne', text:"различно"},{ oper:'lt', text:"по-малко"},{ oper:'le', text:"по-малко или="},{ oper:'gt', text:"по-голямо"},{ oper:'ge', text:"по-голямо или ="},{ oper:'bw', text:"започва с"},{ oper:'bn', text:"не започва с"},{ oper:'in', text:"се намира в"},{ oper:'ni', text:"не се намира в"},{ oper:'ew', text:"завършва с"},{ oper:'en', text:"не завършава с"},{ oper:'cn', text:"съдържа"},{ oper:'nc', text:"не съдържа"}],
+	    groupOps: [	{ op: "AND", text: "&nbsp;И " },	{ op: "OR",  text: "ИЛИ" }	]
 	},
 	edit : {
 		addCaption: "Нов Запис",
@@ -107,6 +106,7 @@ $.jgrid = {
 			},
 			srcformat: 'Y-m-d',
 			newformat: 'd/m/Y',
+			parseRe : /[Tt\\\/:_;.,\t\s-]/,
 			masks : {
 				ISO8601Long:"Y-m-d H:i:s",
 				ISO8601Short:"Y-m-d",
@@ -128,5 +128,5 @@ $.jgrid = {
 		checkbox : {disabled:true},
 		idName : 'id'
 	}
-};
+});
 })(jQuery);

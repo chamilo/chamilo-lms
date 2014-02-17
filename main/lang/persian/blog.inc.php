@@ -78,7 +78,6 @@ $langUserHasPermissionNot = "کاربر اجازه دسترسی ندارد";
 $langUserHasPermission = "کاربر اجازه دسترسی دارد";
 $langLegend = "افسانه";
 $langUserHasPermissionByRoleGroup = "کاربر در گروه خودش حق دارد";
-$EditPost = "ویرایش یک وظیفه";
 $AddBlog = "ساخت یک پروژه";
 $EditBlog = "ویرایش یک پروژه";
 $DeleteBlog = "حذف این پروژه";

@@ -112,18 +112,18 @@ function prepare_course_repository($course_repository, $course_code) {
     $perm = api_get_permissions_for_new_directories();
     $perm_file = api_get_permissions_for_new_files();
     $htmlpage = "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\">\n    <title>Not authorized</title>\n  </head>\n  <body>\n  </body>\n</html>";
-    $cp = api_get_path(SYS_COURSE_PATH).$course_repository;        
-    
+    $cp = api_get_path(SYS_COURSE_PATH).$course_repository;
+
     //Creating document folder
-    mkdir($cp, $perm);        
+    mkdir($cp, $perm);
     mkdir($cp . '/document', $perm);
-    $cpt = $cp.'/document/index.html';    
+    $cpt = $cp.'/document/index.html';
     $fd = fopen($cpt, 'w');
     fwrite($fd, $htmlpage);
     fclose($fd);
-    
+
     /*
-    @chmod($cpt, $perm_file);    
+    @chmod($cpt, $perm_file);
     @copy($cpt, $cp . '/document/index.html');
     mkdir($cp . '/document/images', $perm);
     @copy($cpt, $cp . '/document/images/index.html');
@@ -137,14 +137,14 @@ function prepare_course_repository($course_repository, $course_code) {
     @copy($cpt, $cp . '/document/flash/index.html');
     mkdir($cp . '/document/video', $perm);
     @copy($cpt, $cp . '/document/video/index.html');    */
-    
+
     //Creatind dropbox folder
     mkdir($cp . '/dropbox', $perm);
     $cpt = $cp.'/dropbox/index.html';
     $fd = fopen($cpt, 'w');
     fwrite($fd, $htmlpage);
     fclose($fd);
-    @chmod($cpt, $perm_file);  
+    @chmod($cpt, $perm_file);
     mkdir($cp . '/group', $perm);
     @copy($cpt, $cp . '/group/index.html');
     mkdir($cp . '/page', $perm);
@@ -175,7 +175,7 @@ function prepare_course_repository($course_repository, $course_code) {
     @copy($cpt, $cp . '/upload/announcements/index.html');
     mkdir($cp . '/upload/announcements/images', $perm);
     @copy($cpt, $cp . '/upload/announcements/images/index.html');
-    
+
     //Oral expression question type
     mkdir($cp . '/exercises', $perm);
     @copy($cpt, $cp . '/exercises/index.html');
@@ -199,7 +199,7 @@ function prepare_course_repository($course_repository, $course_code) {
     $string = str_replace("\r", "", "<?" . "php
     \$cidReq = \"$course_code\";
     \$dbname = \"$course_code\";
-        
+
     include(\"".api_get_path(SYS_CODE_PATH)."course_home/course_home.php\");
     ?>");
     fwrite($fd, $string);
@@ -475,7 +475,7 @@ function create_course_tables($course_db_name = null) {
     $TBL_METADATA               = $course_db_name . 'metadata';
 
     $add_to_all_tables = ' c_id INT NOT NULL, ';
-    
+
 
     /*  Announcement tool	*/
 
@@ -653,15 +653,15 @@ function create_course_tables($course_db_name = null) {
     Database::query($sql);
 
     $sql = "ALTER TABLE `".$TABLETOOLFORUMPOST . "` ADD INDEX idx_forum_post_visible (visible)";
-    Database::query($sql);    
-    
+    Database::query($sql);
+
     // Forum Mailcue
     $sql = "
         CREATE TABLE `".$TABLETOOLFORUMMAILCUE."` (
          $add_to_all_tables
          id int NOT NULL auto_increment,
-         user_id int default NULL, 
-         thread_id int default NULL, 
+         user_id int default NULL,
+         thread_id int default NULL,
          post_id int default NULL,
          PRIMARY KEY (id, c_id, thread_id, user_id, post_id )
         )" . $charset_clause;
@@ -799,9 +799,9 @@ function create_course_tables($course_db_name = null) {
         position mediumint unsigned NOT NULL default 1,
         hotspot_coordinates text,
         hotspot_type enum('square','circle','poly','delineation','oar') default NULL,
-        destination text NOT NULL,        
+        destination text NOT NULL,
         answer_code char(10) default '',
-        PRIMARY KEY (c_id, id_auto)  
+        PRIMARY KEY (c_id, id_auto)
         )" . $charset_clause;
     Database::query($sql);
 
@@ -1433,10 +1433,10 @@ function create_course_tables($course_db_name = null) {
 
     $sql = "ALTER TABLE `$TABLELPITEM` ADD INDEX (lp_id)";
     Database::query($sql);
-    
+
     $sql = "ALTER TABLE $TABLELPITEM ADD INDEX idx_c_lp_item_cid_lp_id (c_id, lp_id)";
     Database::query($sql);
-    
+
     $sql = "CREATE TABLE IF NOT EXISTS `$TABLELPITEMVIEW` (
     	$add_to_all_tables
     	" .
@@ -1462,11 +1462,11 @@ function create_course_tables($course_db_name = null) {
 
     $sql = "ALTER TABLE `$TABLELPITEMVIEW` ADD INDEX (lp_view_id) ";
     Database::query($sql);
-    
+
     $sql = "ALTER TABLE $TABLELPITEMVIEW ADD INDEX idx_c_lp_item_view_cid_lp_view_id_lp_item_id (c_id, lp_view_id, lp_item_id) ";
     Database::query($sql);
-    
-    
+
+
     $sql = "CREATE TABLE IF NOT EXISTS `$TABLELPIVINTERACTION`(
     	 $add_to_all_tables" .
         "id             bigint unsigned     auto_increment," .
@@ -1659,7 +1659,7 @@ function create_course_tables($course_db_name = null) {
 
     $sql = "
         CREATE TABLE `" . $tbl_role . "` (
-        	$add_to_all_tables            
+        	$add_to_all_tables
             role_id int NOT NULL AUTO_INCREMENT,
             role_name varchar( 250 ) NOT NULL default '',
             role_comment text,
@@ -1668,7 +1668,7 @@ function create_course_tables($course_db_name = null) {
         )" . $charset_clause;
 
     Database::query($sql);
-    
+
     $sql = "
         CREATE TABLE `" . $tbl_role_group . "` (
         	$add_to_all_tables
@@ -1693,7 +1693,7 @@ function create_course_tables($course_db_name = null) {
         )" . $charset_clause;
 
     Database::query($sql);
-    
+
     $sql = "
         CREATE TABLE `" . $tbl_role_user . "` (
         	$add_to_all_tables
@@ -1808,7 +1808,7 @@ function create_course_tables($course_db_name = null) {
       value int NOT NULL default '0',
       PRIMARY KEY  (c_id, question_option_id)
     )" . $charset_clause;
-    
+
     $result = Database::query($sql);
 
     $sql = "CREATE TABLE `".$TABLESURVEYANSWER."` (
@@ -2105,7 +2105,7 @@ function fill_course_repository($course_repository, $fill_with_exemplary_content
         $flash_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/flash/';
         $video_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/video/';
         $cert_code_path = api_get_path(SYS_CODE_PATH).'default_course_document/certificates/';
-        
+
         $course_documents_folder_images = $sys_course_path.$course_repository.'/document/images/gallery/';
         $course_documents_folder_audio = $sys_course_path.$course_repository.'/document/audio/';
         $course_documents_folder_flash = $sys_course_path.$course_repository.'/document/flash/';
@@ -2251,7 +2251,7 @@ function fill_course_repository($course_repository, $fill_with_exemplary_content
 
         }
         $default_document_array['cert'] = $cert_array;
-        
+
     }
     return $default_document_array;
 }
@@ -2391,6 +2391,8 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'enable_lp_auto_launch',0,'learning_path')");
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'pdf_export_watermark_text','','learning_path')");
     Database::query("INSERT INTO $TABLESETTING (c_id, variable,value,category) VALUES ($course_id, 'allow_public_certificates','','certificates')");
+    Database::query("INSERT INTO $TABLESETTING (c_id, variable, value) VALUES ($course_id, 'documents_default_visibility', 'visible')");
+
 
 
     /* Course homepage tools for platform admin only */
@@ -2408,32 +2410,32 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
     // Example material should be in the same language as the course is.
     $language_interface_original = $language_interface;
     $language_interface          = $language;
-    
+
     //Share folder
     Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/shared_folder','".get_lang('UserFolders')."','folder','0')");
     $example_doc_id = Database :: insert_id();
     Database::query("INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
-    
+
     //Chat folder
     Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/chat_files','".get_lang('ChatFiles')."','folder','0')");
     $example_doc_id = Database :: insert_id();
     Database::query("INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
-    
+
     $sys_course_path = api_get_path(SYS_COURSE_PATH);
     $perm = api_get_permissions_for_new_directories();
     $perm_file = api_get_permissions_for_new_files();
-    
+
     $chat_path = $sys_course_path.$course_repository.'/document/chat_files';
-    
+
     if (!is_dir($chat_path)) {
         @mkdir($chat_path, api_get_permissions_for_new_directories());
     }
-    
+
     /*    Documents   */
     if ($fill_with_exemplary_content) {
-        
+
         Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id,path,title,filetype,size) VALUES ($course_id,'/images','".get_lang('Images')."','folder','0')");
-        $example_doc_id = Database :: insert_id();    
+        $example_doc_id = Database :: insert_id();
         Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
         Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/images/gallery','".get_lang('DefaultCourseImages')."','folder','0')");
@@ -2449,7 +2451,7 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
         Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
         Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/video','".get_lang('Video')."','folder','0')");
-        $example_doc_id = Database :: insert_id();    
+        $example_doc_id = Database :: insert_id();
         Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
         Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'/certificates','".get_lang('Certificates')."','folder','0')");
@@ -2457,7 +2459,7 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
         Database::query("INSERT INTO $TABLEITEMPROPERTY  (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$example_doc_id,'DocumentAdded',1,0,NULL,0)");
 
         // FILL THE COURSE DOCUMENT WITH DEFAULT COURSE PICTURES
-            
+
         $folders_to_copy_from_default_course =  array(
             'images',
             'audio',
@@ -2465,83 +2467,83 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
             'video',
             'certificates',
         );
-        
+
         $default_course_path = api_get_path(SYS_CODE_PATH).'default_course_document/';
-        
+
         $default_document_array = array();
-        foreach ($folders_to_copy_from_default_course as $folder) {        
+        foreach ($folders_to_copy_from_default_course as $folder) {
             $default_course_folder_path = $default_course_path.$folder.'/';
             $files = browse_folders($default_course_folder_path, array(), $folder);
             $sorted_array = sort_pictures($files, 'dir');
-            $sorted_array = array_merge($sorted_array, sort_pictures($files, 'file'));          
+            $sorted_array = array_merge($sorted_array, sort_pictures($files, 'file'));
             $default_document_array[$folder] = $sorted_array;
         }
-        
+
         //echo '<pre>'; print_r($default_document_array);exit;
-        
+
         //Light protection (adding index.html in every document folder)
         $htmlpage = "<!DOCTYPE html>\n<html lang=\"en\">\n <head>\n <meta charset=\"utf-8\">\n <title>Not authorized</title>\n  </head>\n  <body>\n  </body>\n</html>";
-        
+
         $example_cert_id = 0;
         if (is_array($default_document_array) && count($default_document_array) > 0) {
             foreach ($default_document_array as $media_type => $array_media) {
                 $path_documents = "/$media_type/";
-                
-                //hack until feature #5242 is implemented 
+
+                //hack until feature #5242 is implemented
                 if ($media_type == 'images') {
                     $media_type = 'images/gallery';
                     $images_folder = $sys_course_path.$course_repository."/document/images/";
-                    
+
                     if (!is_dir($images_folder)) {
-                        //Creating index.html 
+                        //Creating index.html
                         mkdir($images_folder, $perm);
                         $fd = fopen($images_folder.'index.html', 'w');
-                        fwrite($fd, $htmlpage);                    
+                        fwrite($fd, $htmlpage);
                         @chmod($images_folder.'index.html', $perm_file);
                     }
                 }
-                
+
                 $course_documents_folder = $sys_course_path.$course_repository."/document/$media_type/";
                 $default_course_path = api_get_path(SYS_CODE_PATH).'default_course_document'.$path_documents;
-                
+
                 //echo 'try '.$course_documents_folder; echo '<br />';
-                
+
                 if (!is_dir($course_documents_folder)) {
-                    //Creating index.html 
+                    //Creating index.html
                     mkdir($course_documents_folder, $perm);
                     $fd = fopen($course_documents_folder.'index.html', 'w');
-                    fwrite($fd, $htmlpage);                    
+                    fwrite($fd, $htmlpage);
                     @chmod($course_documents_folder.'index.html', $perm_file);
                 }
-                
+
                 if (is_array($array_media) && count($array_media)>0) {
                     foreach ($array_media as $key => $value) {
                         if (isset($value['dir']) && !empty($value['dir'])) {
-                            
+
                             if (!is_dir($course_documents_folder.$value['dir'])) {
                                 //Creating folder
                                 mkdir($course_documents_folder.$value['dir'], $perm);
-                                                                
+
                                 //Creating index.html (for light protection)
                                 $index_html = $course_documents_folder.$value['dir'].'/index.html';
                                 $fd = fopen($index_html, 'w');
-                                fwrite($fd, $htmlpage); 
+                                fwrite($fd, $htmlpage);
                                 @chmod($index_html, $perm_file);
-                                
+
                                 //Inserting folder in the DB
                                 $folder_path = substr($value['dir'], 0, strlen($value['dir']) - 1);
                                 $temp = explode('/', $folder_path);
                                 $title = $temp[count($temp)-1];
-                                
-                                //hack until feature #5242 is implemented 
+
+                                //hack until feature #5242 is implemented
                                 if ($title == 'gallery') {
                                     $title = get_lang('DefaultCourseImages');
                                 }
-                                
+
                                 if ($media_type == 'images/gallery') {
-                                    $folder_path = 'gallery/'.$folder_path;                                    
+                                    $folder_path = 'gallery/'.$folder_path;
                                 }
-                                
+
                                 Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'$path_documents".$folder_path."','".$title."','folder','0')");
                                 $image_id = Database :: insert_id();
                                 Database::query("INSERT INTO $TABLEITEMPROPERTY (c_id, tool,insert_user_id,insert_date,lastedit_date,ref,lastedit_type,lastedit_user_id,to_group_id,to_user_id,visibility) VALUES ($course_id,'document',1,NOW(),NOW(),$image_id,'DocumentAdded',1,0,NULL,0)");
@@ -2552,16 +2554,16 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
                             if (!file_exists($course_documents_folder.$value['file'])) {
                                 //Copying file
                                 copy($default_course_path.$value['file'], $course_documents_folder.$value['file']);
-                                chmod($course_documents_folder.$value['file'], $perm_file);                                
+                                chmod($course_documents_folder.$value['file'], $perm_file);
                                 //echo $default_course_path.$value['file']; echo ' - '; echo $course_documents_folder.$value['file']; echo '<br />';
                                 $temp = explode('/', $value['file']);
                                 $file_size = filesize($course_documents_folder.$value['file']);
-                                
-                                //hack until feature #5242 is implemented 
+
+                                //hack until feature #5242 is implemented
                                 if ($media_type == 'images/gallery') {
-                                    $value["file"] = 'gallery/'.$value["file"];                                    
+                                    $value["file"] = 'gallery/'.$value["file"];
                                 }
-                                
+
                                 //Inserting file in the DB
                                 Database::query("INSERT INTO $TABLETOOLDOCUMENT (c_id, path,title,filetype,size) VALUES ($course_id,'$path_documents".$value["file"]."','".$temp[count($temp)-1]."','file','$file_size')");
                                 $image_id = Database :: insert_id();
@@ -2636,10 +2638,10 @@ function fill_db_course($course_id, $course_repository, $language, $fill_with_ex
         Database::query("INSERT INTO $TABLEQUIZANSWERSLIST (c_id, id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id,  '2', '1', '".lang2db(get_lang('AdmitError')) . "', '0', '".lang2db(get_lang('NoSeduction')) . "', '-5', '2')");
         Database::query("INSERT INTO $TABLEQUIZANSWERSLIST (c_id, id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id,  '3', '1', '".lang2db(get_lang('Force')) . "', '1', '".lang2db(get_lang('Indeed')) . "', '5', '3')");
         Database::query("INSERT INTO $TABLEQUIZANSWERSLIST (c_id, id, question_id, answer, correct, comment, ponderation, position) VALUES ($course_id,  '4', '1', '".lang2db(get_lang('Contradiction')) . "', '1', '".lang2db(get_lang('NotFalse')) . "', '5', '4')");
-        
+
         $html=Database::escape_string('<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td width="110" valign="top" align="left"><img src="'.api_get_path(WEB_CODE_PATH).'default_course_document/images/mr_dokeos/thinking.jpg"></td><td valign="top" align="left">'.get_lang('Antique').'</td></tr></table>');
 
-        Database::query('INSERT INTO '.$TABLEQUIZ . 
+        Database::query('INSERT INTO '.$TABLEQUIZ .
           ' (c_id, title, description, type, random, random_answers, active, results_disabled ) ' .
           ' VALUES ('.$course_id.', "'.lang2db(get_lang('ExerciceEx')) . '",' .
           ' "'.$html.'", "1", "0", "0", "1", "0")');
@@ -2741,6 +2743,7 @@ function register_course($params) {
     } else {
         $visibility         = $params['visibility'];
     }
+
     $subscribe          = isset($params['subscribe']) ? intval($params['subscribe']) : ($visibility == COURSE_VISIBILITY_OPEN_PLATFORM ? 1 : 0);
     $unsubscribe        = isset($params['unsubscribe']) ? intval($params['unsubscribe']) : 0;
 
@@ -2778,7 +2781,7 @@ function register_course($params) {
         $expiration_date = api_get_utc_datetime($expiration_date);
     }
 
-    if ($visibility < 0 || $visibility > 3) {
+    if ($visibility < 0 || $visibility > 4) {
         $error_msg[] = 'visibility is invalid';
         $ok_to_register_course = false;
     }
@@ -2866,7 +2869,7 @@ function register_course($params) {
             }
 
             // Adding the course to an URL.
-            global $_configuration;            
+            global $_configuration;
             if ($_configuration['multiple_access_urls']) {
                 $url_id = 1;
                 if (api_get_current_access_url_id() != -1) {

@@ -303,7 +303,10 @@ function multiple_answer_true_false_onchange(variable) {
     var result = variable.checked;
     var id = variable.id;
     var weight_id = "weighting_" + id;
-    var array_result=new Array(); array_result[1]="1"; array_result[0]= "-0.50"; array_result[-1]= "0";
+    var array_result=new Array();
+    array_result[1]="1";
+    array_result[0]= "-0.50";
+    array_result[-1]= "0";
     if (result) {
         result = 1;
     } else {
@@ -429,14 +432,14 @@ function DetectFlashVer(reqMajorVer, reqMinorVer, reqRevision)
 </script>";
 
 Display::display_header($nameTools,'Exercise');
-
+/*
 if ($objExercise->exercise_was_added_in_lp) {
     if ($objExercise->force_edit_exercise_in_lp == true) {
         Display::display_warning_message(get_lang('ForceEditingExerciseInLPWarning'));
     } else {
         Display::display_warning_message(get_lang('EditingExerciseCauseProblemsInLP'));
     }
-}
+}*/
 
 // If we are in a test
 $inATest = isset($exerciseId) && $exerciseId > 0;
@@ -451,13 +454,13 @@ if ($inATest) {
     }
     echo '<a href="overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&preview=1">'.Display::return_icon('preview_view.png', get_lang('Preview'),'',ICON_SIZE_MEDIUM).'</a>';
 
-    echo Display::url(Display::return_icon('test_results.png', get_lang('Results'),'',ICON_SIZE_MEDIUM), 'exercise_report.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id);
+    echo Display::url(
+        Display::return_icon('test_results.png', get_lang('Results'),'',ICON_SIZE_MEDIUM),
+        'exercise_report.php?'.api_get_cidReq().'&exerciseId='.$objExercise->id
+    );
 
-    if ($objExercise->edit_exercise_in_lp == false) {
-        echo '<a href="">'.Display::return_icon('settings_na.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
-    } else {
-        echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.Display::return_icon('settings.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
-    }
+    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
+        Display::return_icon('settings.png', get_lang('ModifyExercise'),'',ICON_SIZE_MEDIUM).'</a>';
 
     $maxScoreAllQuestions = 0;
     if (!empty($objExercise->questionList)) {
@@ -508,6 +511,13 @@ if (isset($_GET['hotspotadmin'])) {
 if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspotadmin'])) {
 	// question list management
 	require 'question_list_admin.inc.php';
+}
+
+// if we are in question authoring, display warning to user is feedback not shown at the end of the test -ref #6619
+// this test to displau only message in the question authoring page and not in the question list page too
+// if (is_object($objQuestion) && $objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM && ($newQuestion || $modifyQuestion || $editQuestion)) {
+if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM) {
+    Display::display_normal_message(get_lang("TestFeedbackNotShown"));
 }
 
 Session::write('objExercise', $objExercise);

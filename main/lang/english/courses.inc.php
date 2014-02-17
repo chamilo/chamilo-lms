@@ -84,6 +84,7 @@ $Collapse = "Collapse";
 $CourseDetails = "Course description";
 $GroupPendingInvitations = "Group pending invitations";
 $Compose = "Compose";
+$EmptyHeaderLine = "There is an empty line in the header of selected file";
 $EnrollToCourseXSuccessful = "You have been registered to course: %s";
 $ThereAreNoCoursesInThisCategory = "No course at this category level";
 ?>

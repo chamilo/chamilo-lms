@@ -23,12 +23,39 @@ api_protect_admin_script(true);
 $is_platform_admin = api_is_platform_admin() ? 1 : 0;
 
 $message = null;
-
+$htmlHeadXtra[] = api_get_password_checker_js('#username', '#password');
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+
+if (isset($_configuration['allow_strength_pass_checker']) && $_configuration['allow_strength_pass_checker']) {
+    $htmlHeadXtra[] = '
+    <script>
+    $(document).ready(function() {
+        $("input[name=\'password[password_auto]\']").each(function(index, value) {
+            $(this).click(function() {
+                var value = $(this).attr("value");
+                if (value == 0) {
+                    $("#password_progress").show();
+                    $(".password-verdict").show();
+                    $(".error-list").show();
+                } else {
+                    $("#password_progress").hide();
+                    $(".password-verdict").hide();
+                    $(".error-list").hide();
+                }
+            });
+        });
+    });
+    </script>';
+}
+
 $htmlHeadXtra[] = '
 <script>
-<!--
+$("#status_select").ready(function() {
+    if ($(this).attr("value") != '.STUDENT.') {
+        $("#id_platform_admin").hide();
+    }
+});
 function enable_expiration_date() { //v2.0
 	document.user_add.radio_expiration_date[0].checked=false;
 	document.user_add.radio_expiration_date[1].checked=true;
@@ -63,11 +90,10 @@ function display_drh_list(){
             document.getElementById("id_platform_admin").style.display="none";
 	}
 }
-//-->
 </script>';
 
 if (!empty($_GET['message'])) {
-	$message = urldecode($_GET['message']);
+    $message = urldecode($_GET['message']);
 }
 
 $interbreadcrumb[] = array ('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
@@ -126,7 +152,7 @@ $form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allow
 
 // Username
 if (api_get_setting('login_is_email') != 'true') {
-    $form->addElement('text', 'username', get_lang('LoginName'), array('maxlength' => USERNAME_MAX_LENGTH));
+    $form->addElement('text', 'username', get_lang('LoginName'), array('id'=> 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'autocomplete' => 'off'));
     $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
     $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
@@ -155,10 +181,16 @@ if (count($extAuthSource) > 0) {
     	$group[] = $form->createElement('static', '', '', '<br />');
     }
 }
+
 $group[] = $form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
 $group[] = $form->createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);
-$group[] = $form->createElement('password', 'password', null, array('onkeydown' => 'javascript: password_switch_radio_button();'));
+$group[] = $form->createElement('password', 'password', null, array('id'=> 'password', 'autocomplete' => 'off', 'onkeydown' => 'javascript: password_switch_radio_button();'));
+
 $form->addGroup($group, 'password', get_lang('Password'), '');
+
+if (isset($_configuration['allow_strength_pass_checker']) && $_configuration['allow_strength_pass_checker']) {
+    $form->addElement('label', null, '<div id="password_progress" style="display:none"></div>');
+}
 
 // Status
 $status = array();

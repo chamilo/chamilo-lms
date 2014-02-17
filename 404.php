@@ -10,3 +10,4 @@ $msg = get_lang('FileNotFound');
 Display::display_header($msg);
 Display::display_error_message($msg);
 Display::display_footer();
+

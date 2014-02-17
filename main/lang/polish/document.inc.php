@@ -141,16 +141,20 @@ $TemplateTitlePlan = "Plan";
 $TemplateTitlePlanDescription = "Spis treści";
 $TemplateTitleTeacher = "Twój Instruktor";
 $TemplateTitleProduction = "Produkcja";
+$TemplateTitleProductionDescription = "Nadzorowany opis produkcji";
 $TemplateTitleAnalyze = "Analizuj";
 $TemplateTitleAnalyzeDescription = "Analizuj opis";
 $TemplateTitleSynthetize = "Połącz";
 $TemplateTitleSynthetizeDescription = "Połącz opis";
 $TemplateTitleText = "Strona tekstu";
+$TemplateTitleTextDescription = "Zwykła strona tekstowa";
 $TemplateTitleLeftImage = "Lewy obraz";
 $TemplateTitleLeftImageDescription = "Lewy obraz";
 $TemplateTitleTextCentered = "Tekst i obraz wyśrodkowano";
+$TemplateTitleTextCenteredDescription = "Tekst z wyśrodkowanycm obrazem i legendą";
 $TemplateTitleComparison = "Porównaj";
 $TemplateTitleComparisonDescription = "2 kolumny tekstu";
+$TemplateTitleDiagram = "Wyjaśnienie diagramu";
 $TemplateTitleDiagramDescription = "Obraz po lewej stronie, komentarz po prawej";
 $TemplateTitleImage = "Tylko obrazek";
 $TemplateTitleImageDescription = "Tylko obrazek";
@@ -199,6 +203,7 @@ $TemplateTitleCycleDescription = "2 listy z okrągłymi strzałkami";
 $TemplateTitleLearnerWonder = "Wątpliwości studenta";
 $TemplateTitleLearnerWonderDescription = "Opis wątpliwości studenta";
 $TemplateTitleTimeline = "Faza osi czasowej";
+$TemplateTitleTimelineDescription = "3 listy z relacyjną strzałką";
 $TemplateTitleStopAndThink = "Zatrzymaj się i pomyśl";
 $TemplateTitleListLeftListDescription = "Lewa lista z instruktorem";
 $TemplateTitleStopAndThinkDescription = "Układ zachęcający do zatrzymania się i przemyśleń";
@@ -209,9 +214,11 @@ $CreateFolder = "Utwórz katalog";
 $HelpDefaultDirDocuments = "INFORMACJE WIDOCZNE tylko dla nauczyciela:\n  Katalog zawiera archiwa domyślne. Można usunąć pliki lub dodać nowe, ale jeśli plik jest ukryty, gdy jest umieszczony w dokumencie WWW, studenci nie będą mogli go zobaczyć w tym dokumencie. Umieszczając plik w dokumencie WWW, najpierw upewnij się, że jest widoczny. Katalogi mogą pozostać ukryte.";
 $HelpSharedFolder = "Katalog zawiera pliki, które inni uczniowie (lub Ty) przesłali do kursu przez edytor (o ile nie zrobili tego poprzez narzędzia grupy). Domyślnie będą widoczne dla trenera, ale ukryte dla innych studentów (chyba, że mają bezpośredni dostęp do plików). Jeśli pokazujesz katalog jednego użytkownika, jest on widoczny dla pozostałych użytkowników.";
 $TemplateImage = "Ikonka szablonu";
+$ToPlayTheMediaYouWillNeedToUpdateYourBrowserToARecentVersionYouCanAlsoDownloadTheFile = "Aby odtwarzać media musisz zaktualizować przeglądarkę do najnowszej wersji lub zaktualizować wtyczkę Flash. Sprawdź, czy plik ma odpowiednie rozszerzenie.";
 $UpdateRequire = "Aktualizacja wymaga";
 $MoveElement = "Przenieś element";
 $CertificateName = "Nazwa";
+$HelpFolderLearningPaths = "INFORMACJE WIDOCZNE tylko dla nauczyciela:\nFolder zawiera dokumenty, które są tworzone przez narzędzie Ścieżki edukacyjnej. Wewnątrz tego folderu można edytować plik HTML, który jest generowany przez import treści z ścieżki edukacyjnej, na przykład jak te importowane przez Chamilo Rapid. Polecamy ukryć ten folder przed studentami.";
 $CopyToMyFiles = "Skopiuj do mojego prywatnego obszaru pliku";
 $Export2PDF = "Eksportuj do formatu PDF";
 $ResourceShared = "Udostępnione zasoby";
@@ -224,6 +231,17 @@ $FileExistsChangeToSave = "Ta nazwa pliku już istnieje, wybierz inną, aby zapi
 $FileSavedAs = "Plik zapisany jako";
 $FileExportAs = "Plik eksportowano jako";
 $UserFolder = "Katalog użytkownika";
+$HelpUsersFolder = "INFORMACJE WIDOCZNE tylko dla nauczyciela: \ nFolder użytkowników zawiera folder każdego użytkownika, który ma dostęp do niego przez narzędzie dokumentów, lub gdy jakiś plik został przesłany w kursie za pośrednictwem internetowego edytora. Jeśli nie doszło do żadnych okoliczności, to nie powstał żaden folder użytkownika. W przypadku grup, pliki, które są wysyłane za pośrednictwem edytora zostaną dodane w folderze każdej grupy, który jest dostępny tylko dla studentów z tej grupy.
+
+Folder użytkowników i każdy z zawartych w nim folderów będą domyślnie ukryte dla wszystkich studentów, ale każdy student może zobaczyć zawartość jego/jej katalogu poprzez internetowy edytor. Jeśli jednak student zna adres pliku lub folderu innego studenta, może uzyskać do niego dostęp.
+
+Jeśli folder studenta jest widoczny, inni studenci mogą zobaczyć, co zawiera. W tym przypadku, student, który jest właścicielem folderu może też (w narzędziach dokumentów tylko w jego/jej folderze): tworzyć i edytować dokumenty internetowe, konwertować dokument na szablon do użytku osobistego, tworzyć i edytować rysunki w formatach SVG i PNG, zapisywać pliki audio w formacie WAV, tworzyć pliki audio w formacie MP3 z tekstu, tworzyć snapshops z kamery internetowej, wysyłać dokumenty, tworzyć foldery,przenosić foldery i pliki, usuwać pliki i foldery, oraz pobrać kopię zapasową jego/jej folderu.
+
+Ponadto, narzędzie dokumentów jest zsynchronizowane z menedżerem plików edytora internetowego, więc zmiany w dokumentach dokonywane w którymkolwiek z nich będą widoczne w obu miejscach.
+
+Folder użytkownika jest nie tylko miejscem do plików depozytowych, użytkownik staje się menedżerem dokumentów, z których studenci korzystają w trakcie kursu. Pamiętaj też, że każdy użytkownik może skopiować plik, który jest widoczny z dowolnego folderu w narzędziach Dokumentów (niezależnie czy on jest właścicielem folderu czy nie) do jego/jej portfolio lub osobistych dokumentów w sieci społecznej, która będzie dostępna dla niego/niej w innych kursach.";
+$HelpFolderChat = "INFORMACJE WIDOCZNE tylko dla nauczyciela: \nFolder zawiera wszystkie sesje, które zostały otwarte w czacie. Chociaż sesje czatu często mogą być banalne, inne mogą być bardzo interesujące i godne włączenia ich jako dodatkowego dokumentu roboczego. Aby to zrobić, nie zmieniając widoczności folderu, należy ustawić plik jako widoczny i połącz go tam, gdzie uznasz za stosowne. Nie jest zalecane, aby katalog był widoczny dla wszystkich.";
+$HelpFolderCertificates = "INFORMACJE WIDOCZNE tylko dla nauczyciela:\nFolder zawiera różne certyfikaty szablonów, które zostały utworzone za pomocą narzędzia oceny. Nie jest zalecane, aby katalog był widoczny dla wszystkich.";
 $DestinationDirectory = "Katalog docelowy";
 $CreateAudio = "Utwórz dzwięk";
 $InsertText2Audio = "Wpisz tekst, który chcesz przekonwertować do pliku audio";
@@ -235,6 +253,7 @@ $Male = "Mężczyzna";
 $GoogleAudio = "Użyj usługi dżwiękowej Google";
 $vozMe = "Użyj usługi dźwiękowej vozMe";
 $HelpGoogleAudio = "Obsługuje maksymalnie 100 znaków w różnych językach. Pliki są generowane i zapisywane automatycznie w katalogu Chamilo, gdzie aktualnie jesteś.";
+$HelpvozMe = "Obsługuje tekst kilku tysięcy znaków, można również wybrać rodzaj głosu, męski lub żeński. Działa z mniejszą ilością języków, jednak jakość dźwięku jest niższa. Ponadto, trzeba  pobrać pliki ręcznie w nowym oknie.";
 $SaveMP3 = "Zapisz mp3";
 $Speed = "Prędkość";
 $GoFaster = "Szybciej";
@@ -243,6 +262,7 @@ $Normal = "Normalnie";
 $Slow = "Powoli";
 $SlowDown = "Wolniej";
 $Pediaphon = "Użyj usługi dźwiękowej Pediaphon";
+$HelpPediaphon = "Obsługuje tekst z kilku tysięcy znaków, w różnych typach męskich i żeńskich głosów (w zależności od języka). Pliki audio zostaną wygenerowane i automatycznie zapisane w folderze Chamilo, w którym jesteś.";
 $FirstSelectALanguage = "Wybierz język";
 $RenameAndComment = "Zmień nazwę i skomentuj";
 $YouAreCurrentlyUsingXOfYourX = "Aktualnie używasz %s MB (%s) z Twoich %s MB.";

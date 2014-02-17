@@ -40,10 +40,8 @@ if (!class_exists('GlobalMultipleAnswer')):
 							' . get_lang('Answer') . '
 						</th>';
 
-            // Espace entre l'entete et les r�ponses					
-            if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-                $html .='<th>' . get_lang('Comment') . '</th>';
-            }
+            // Espace entre l'entete et les reponses
+            $html .='<th>' . get_lang('Comment') . '</th>';
             $html .='</tr>';
             
             
@@ -116,10 +114,7 @@ if (!class_exists('GlobalMultipleAnswer')):
                 $form->addElement('html_editor', 'answer[' . $i . ']', null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
                 $form->addRule('answer[' . $i . ']', get_lang('ThisFieldIsRequired'), 'required');
 
-                // show comment when feedback is enable
-                if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
-                    $form->addElement('html_editor', 'comment[' . $i . ']', null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
-                }
+                $form->addElement('html_editor', 'comment[' . $i . ']', null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 
                 $form->addElement('html', '</tr>');
             }
@@ -243,11 +238,7 @@ if (!class_exists('GlobalMultipleAnswer')):
 				<th>' . get_lang("Choice") . '</th>
 				<th>' . get_lang("ExpectedChoice") . '</th>
 				<th>' . get_lang("Answer") . '</th>';
-            if ($feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
-                $header .= '<th>' . get_lang("Comment") . '</th>';
-            } else {
-                $header .= '<th>&nbsp;</th>';
-            }
+            $header .= '<th>' . get_lang("Comment") . '</th>';
             $header .= '</tr>';
             return $header;
         }

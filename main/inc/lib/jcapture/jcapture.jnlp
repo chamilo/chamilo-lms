@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jnlp spec="1.0+" codebase="" href="">
+    <information>
+        <title>jCapture</title>
+        <vendor>Hammurapi Group</vendor>
+    </information>
+    
+    <resources>
+        <!-- Application Resources -->
+        <j2se version="1.7+" href="http://java.sun.com/products/autodl/j2se" />
+        <jar href="lib/jcapture.jar" main="true" />
+    </resources>
+    
+    <applet-desc 
+         name="jCapture Applet"
+         main-class="com.hammurapi.jcapture.JCaptureApplet"
+         width="300"
+         height="300">
+     </applet-desc>
+     <update check="background"/>
+</jnlp>                                   

@@ -78,7 +78,6 @@ $langUserHasPermissionNot = "Kullanıcının izni yok";
 $langUserHasPermission = "Kullanıcının izni var";
 $langLegend = "Efsane";
 $langUserHasPermissionByRoleGroup = "Kullanıcının grubuna ait hakları mevcut";
-$EditPost = "Bir görev düzenle";
 $AddBlog = "Yeni proje oluştur";
 $EditBlog = "Bir proje düzenle";
 $DeleteBlog = "Bu projeyi sil";

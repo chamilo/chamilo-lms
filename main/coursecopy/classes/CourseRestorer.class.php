@@ -24,6 +24,7 @@ require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
 require_once 'Glossary.class.php';
 require_once 'wiki.class.php';
 require_once 'Thematic.class.php';
+require_once 'Work.class.php';
 
 require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
@@ -45,53 +46,59 @@ class CourseRestorer
 	/**
 	 * The course-object
 	 */
-	var $course;
-
-	var $destination_course_info;
+    public $course;
+    public $destination_course_info;
 
 	/**
 	 * What to do with files with same name (FILE_SKIP, FILE_RENAME or
 	 * FILE_OVERWRITE)
 	 */
-	var $file_option;
-	var $set_tools_invisible_by_default;
-	var $skip_content;
-    var $tools_to_restore = array(
-                            'announcements',
-                            'attendance',
-                            'course_descriptions',
-                            'documents',
-                            'events',
-                            'forum_category',
-                            'forums',
-                           // 'forum_topics',
-                            'glossary',
-                            'quizzes',
-                            'links',
-                            'learnpaths',
-                            'surveys',
-                            //'scorm_documents', ??
-                            'tool_intro',
-                            'thematic',
-                            'wiki'
-        );
+    public $file_option;
+    public $set_tools_invisible_by_default;
+    public $skip_content;
+    public $tools_to_restore = array(
+        'announcements',
+        'attendance',
+        'course_descriptions',
+        'documents',
+        'events',
+        'forum_category',
+        'forums',
+       // 'forum_topics',
+        'glossary',
+        'quizzes',
+        'test_category',
+        'links',
+        'learnpaths',
+        'surveys',
+        //'scorm_documents', ??
+        'tool_intro',
+        'thematic',
+        'wiki',
+        'works',
+    );
 
     /** Setting per tool */
-    var $tool_copy_settings = array();
+    public $tool_copy_settings = array();
 
     /**
      * If true adds the text "copy" in the title of an item (only for LPs right now)
      *
      **/
-    var $add_text_in_items = false;
+    public $add_text_in_items = false;
 
 	/**
 	 * Create a new CourseRestorer
 	 */
-	function __construct($course) {
-		$this->course							= $course;
-		$course_info 							= api_get_course_info($this->course->code);
-		$this->course_origin_id 				= $course_info['real_id'];
+    public function __construct($course)
+    {
+        $this->course = $course;
+        $course_info = api_get_course_info($this->course->code);
+        if (!empty($course_info)) {
+            $this->course_origin_id = $course_info['real_id'];
+        } else {
+            $this->course_origin_id = null;
+        }
 		$this->file_option 						= FILE_RENAME;
 		$this->set_tools_invisible_by_default 	= false;
 		$this->skip_content 					= array();
@@ -99,16 +106,20 @@ class CourseRestorer
 
 	/**
 	 * Set the file-option
-	 * @param constant $options What to do with files with same name (FILE_SKIP,
-	 * FILE_RENAME or FILE_OVERWRITE)
+	 * @param constant $options What to do with files with same name (FILE_SKIP, FILE_RENAME or FILE_OVERWRITE)
 	 */
-	function set_file_option($option) {
+    function set_file_option($option=FILE_OVERWRITE)
+    {
 		$this->file_option = $option;
 	}
-    function set_add_text_in_items($status) {
+
+    function set_add_text_in_items($status)
+    {
         $this->add_text_in_items = $status;
     }
-    function set_tool_copy_settings($array) {
+
+    function set_tool_copy_settings($array)
+    {
         $this->tool_copy_settings = $array;
     }
 
@@ -119,7 +130,12 @@ class CourseRestorer
 	 * @param	bool	Course settings are going to be restore?
 
 	 */
-	function restore($destination_course_code = '', $session_id = 0, $update_course_settings = false, $respect_base_content = false) {
+    public function restore(
+        $destination_course_code = '',
+        $session_id = 0,
+        $update_course_settings = false,
+        $respect_base_content = false
+    ) {
 		if ($destination_course_code == '') {
 			$course_info = api_get_course_info();
 			$this->destination_course_info = $course_info;
@@ -134,6 +150,7 @@ class CourseRestorer
         //Getting first teacher (for the forums)
         $teacher_list = CourseManager::get_teacher_list_from_course_code($course_info['code']);
         $this->first_teacher_id = api_get_user_id();
+
         if (!empty($teacher_list)) {
             foreach ($teacher_list  as $teacher) {
                 $this->first_teacher_id = $teacher['user_id'];
@@ -170,37 +187,6 @@ class CourseRestorer
             $function_build = 'restore_'.$tool;
             $this->$function_build($session_id, $respect_base_content, $destination_course_code);
         }
-
-        /*
-		$this->restore_links($session_id);
-		$this->restore_documents($session_id, $destination_course_code);
-		$this->restore_quizzes($session_id, $respect_base_content);
-		$this->restore_glossary($session_id);
-		$this->restore_learnpaths($session_id, $respect_base_content);
-		$this->restore_course_descriptions($session_id);
-		$this->restore_wiki($session_id);
-		$this->restore_thematic($session_id);
-		$this->restore_attendance($session_id);
-
-		if (!empty($session_id)) {
-
-		} else {
-			//$this->restore_links();
-			$this->restore_tool_intro();
-			$this->restore_events();
-			$this->restore_announcements();
-			//$this->restore_documents();
-			$this->restore_scorm_documents();
-			//$this->restore_course_descriptions();
-			//$this->restore_quizzes(); // after restore_documents! (for correct import of sound/video)
-			//$this->restore_learnpaths();
-			$this->restore_surveys();
-			$this->restore_student_publication();
-			//$this->restore_glossary();
-			//$this->restore_wiki();
-			//$this->restore_thematic();
-			//$this->restore_attendance();
-		}*/
 
 		if ($update_course_settings) {
 		    $this->restore_course_settings($destination_course_code);
@@ -246,28 +232,6 @@ class CourseRestorer
 				}
 			}
 		}
-
-		/*
-		// Restore the linked-resources
-		$table = Database :: get_course_table(TABLE_LINKED_RESOURCES);
-		foreach ($this->course->resources as $type => $resources) {
-			if (is_array($resources))
-				foreach ($resources as $id => $resource) {
-					$linked_resources = $resource->get_linked_resources();
-					foreach ($linked_resources as $to_type => $to_ids) {
-						foreach ($to_ids as $index => $to_id) {
-							$to_resource = $this->course->resources[$to_type][$to_id];
-							$sql = "INSERT INTO ".$table." SET
-
-									source_type = '".$type."',
-									source_id = '".$resource->destination_id."',
-									resource_type='".$to_type."',
-									resource_id='".$to_resource->destination_id."' ";
-							Database::query($sql);
-						}
-					}
-				}
-		}*/
 	}
 
 	/**
@@ -275,7 +239,8 @@ class CourseRestorer
 	 *
 	 * @return unknown_type
 	 */
-	function restore_course_settings($destination_course_code) {
+    function restore_course_settings($destination_course_code)
+    {
 	    $origin_course_info = api_get_course_info($destination_course_code);
 	    $course_info = $this->course->info;
 	    $params['course_language'] = $course_info['language'];
@@ -294,7 +259,8 @@ class CourseRestorer
      * @param   int session id
      *
 	 */
-	function restore_documents($session_id = 0, $respect_base_content = false, $destination_course_code = '') {
+    function restore_documents($session_id = 0, $respect_base_content = false, $destination_course_code = '')
+    {
 		$perm 			= api_get_permissions_for_new_directories();
         $course_info 	= api_get_course_info($destination_course_code);
         if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
@@ -640,7 +606,8 @@ class CourseRestorer
 	 * Restore scorm documents
 	 * TODO @TODO check that the restore function with renaming doesn't break the scorm structure!
 	 */
-	function restore_scorm_documents() {
+	function restore_scorm_documents()
+    {
 		$perm = api_get_permissions_for_new_directories();
 
 		if ($this->course->has_resources(RESOURCE_SCORM)) {
@@ -700,7 +667,8 @@ class CourseRestorer
 	/**
 	 * Restore forums
 	 */
-	function restore_forums() {
+	function restore_forums()
+    {
 		if ($this->course->has_resources(RESOURCE_FORUM)) {
 			$table_forum = Database::get_course_table(TABLE_FORUM);
 			$resources = $this->course->resources;
@@ -752,7 +720,8 @@ class CourseRestorer
 	/**
 	 * Restore forum-categories
 	 */
-	function restore_forum_category($my_id = null) {
+	function restore_forum_category($my_id = null)
+    {
 		$forum_cat_table = Database :: get_course_table(TABLE_FORUM_CATEGORY);
 		$resources = $this->course->resources;
         if (!empty($resources[RESOURCE_FORUMCATEGORY])) {
@@ -790,7 +759,8 @@ class CourseRestorer
 	/**
 	 * Restore a forum-topic
 	 */
-	function restore_topic($thread_id, $forum_id) {
+	function restore_topic($thread_id, $forum_id)
+    {
 		$table = Database :: get_course_table(TABLE_FORUM_THREAD);
 		$topic = $this->course->resources[RESOURCE_FORUMTOPIC][$thread_id];
 
@@ -826,7 +796,8 @@ class CourseRestorer
 	 * Restore a forum-post
 	 * @TODO Restore tree-structure of posts. For example: attachments to posts.
 	 */
-	function restore_post($id, $topic_id, $forum_id) {
+    function restore_post($id, $topic_id, $forum_id)
+    {
 		$table_post = Database :: get_course_table(TABLE_FORUM_POST);
 		$post = $this->course->resources[RESOURCE_FORUMPOST][$id];
         $params = (array) $post->obj;
@@ -846,7 +817,8 @@ class CourseRestorer
 	/**
 	 * Restore links
 	 */
-	function restore_links($session_id = 0) {
+	function restore_links($session_id = 0)
+    {
 		if ($this->course->has_resources(RESOURCE_LINK)) {
 			$link_table = Database :: get_course_table(TABLE_LINK);
 			$resources = $this->course->resources;
@@ -879,7 +851,8 @@ class CourseRestorer
 	/**
 	 * Restore tool intro
 	 */
-	function restore_tool_intro() {
+	function restore_tool_intro()
+    {
 		if ($this->course->has_resources(RESOURCE_TOOL_INTRO)) {
 			$tool_intro_table = Database :: get_course_table(TABLE_TOOL_INTRO);
 			$resources = $this->course->resources;
@@ -898,14 +871,16 @@ class CourseRestorer
 	/**
 	 * Restore a link-category
 	 */
-	function restore_link_category($id,$session_id = 0) {
+    function restore_link_category($id, $session_id = 0)
+    {
 		$condition_session = "";
 		if (!empty($session_id)) {
 			$condition_session = " , session_id = '$session_id' ";
 		}
 
-		if ($id == 0)
+        if ($id == 0) {
 			return 0;
+        }
 		$link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY);
 		$resources = $this->course->resources;
 		$link_cat = $resources[RESOURCE_LINKCATEGORY][$id];
@@ -926,7 +901,8 @@ class CourseRestorer
 	/**
 	 * Restore events
 	 */
-	function restore_events() {
+    function restore_events()
+    {
 		if ($this->course->has_resources(RESOURCE_EVENT)) {
 			$table = Database :: get_course_table(TABLE_AGENDA);
 			$resources = $this->course->resources;
@@ -987,7 +963,8 @@ class CourseRestorer
 	/**
 	 * Restore course-description
 	 */
-	function restore_course_descriptions($session_id = 0) {
+    function restore_course_descriptions($session_id = 0)
+    {
 		if ($this->course->has_resources(RESOURCE_COURSEDESCRIPTION)) {
 			$table = Database :: get_course_table(TABLE_COURSE_DESCRIPTION);
 			$resources = $this->course->resources;
@@ -1018,7 +995,8 @@ class CourseRestorer
 	/**
 	 * Restore announcements
 	 */
-	function restore_announcements() {
+    function restore_announcements()
+    {
 		if ($this->course->has_resources(RESOURCE_ANNOUNCEMENT)) {
 			$table = Database :: get_course_table(TABLE_ANNOUNCEMENT);
 			$resources = $this->course->resources;
@@ -1082,7 +1060,8 @@ class CourseRestorer
 	/**
 	 * Restore Quiz
 	 */
-	function restore_quizzes($session_id = 0, $respect_base_content = false) {
+    function restore_quizzes($session_id = 0, $respect_base_content = false)
+    {
 		if ($this->course->has_resources(RESOURCE_QUIZ)) {
 			$table_qui = Database :: get_course_table(TABLE_QUIZ_TEST);
 			$table_rel = Database :: get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -1100,9 +1079,10 @@ class CourseRestorer
                 }
 
 				$doc = '';
-				if (strlen($quiz->sound) > 0) {
-					if ($this->course->resources[RESOURCE_DOCUMENT][$quiz->sound]->is_restored()) {
-						echo $sql = "SELECT path FROM ".$table_doc." WHERE c_id = ".$this->destination_course_id."  AND id = ".$resources[RESOURCE_DOCUMENT][$quiz->sound]->destination_id;
+                if (!empty($quiz->sound)) {
+                    if (isset($this->course->resources[RESOURCE_DOCUMENT][$quiz->sound]) &&
+                        $this->course->resources[RESOURCE_DOCUMENT][$quiz->sound]->is_restored()) {
+                        $sql = "SELECT path FROM ".$table_doc." WHERE c_id = ".$this->destination_course_id."  AND id = ".$resources[RESOURCE_DOCUMENT][$quiz->sound]->destination_id;
 						$doc = Database::query($sql);
 						$doc = Database::fetch_object($doc);
 						$doc = str_replace('/audio/', '', $doc->path);
@@ -1140,7 +1120,7 @@ class CourseRestorer
                         'text_when_finished' => $quiz->text_when_finished,
                         'expired_time' => (int)$quiz->expired_time,
                     );
-                  
+
                     if ($respect_base_content) {
                         $my_session_id = $quiz->session_id;
                         if (!empty($quiz->session_id)) {
@@ -1178,9 +1158,10 @@ class CourseRestorer
 	 * Restore quiz-questions
      * @params int question id
 	 */
-	function restore_quiz_question($id) {
+    function restore_quiz_question($id)
+    {
 		$resources = $this->course->resources;
-		$question = $resources[RESOURCE_QUIZQUESTION][$id];
+        $question = isset($resources[RESOURCE_QUIZQUESTION][$id]) ? $resources[RESOURCE_QUIZQUESTION][$id] : null;
 
 		$new_id = 0;
 
@@ -1329,9 +1310,79 @@ class CourseRestorer
 	}
 
 	/**
+     * @todo : add session id when used for session
+     */
+    function restore_test_category($session_id, $respect_base_content, $destination_course_code)
+    {
+        $course_id = api_get_course_int_id();
+        // Let's restore the categories
+        $tab_test_category_id_old_new = array(); // used to build the quiz_question_rel_category table
+        if ($this->course->has_resources(RESOURCE_TEST_CATEGORY))
+        {
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_TEST_CATEGORY] as $id => $CourseCopyTestcategory ) {
+                $tab_test_category_id_old_new[$CourseCopyTestcategory->source_id] = $id;
+                // check if this test_category already exist in the destination BDD
+                // do not Database::escape_string $title and $description, it will be done later
+                $title = $CourseCopyTestcategory->title;
+                $description = $CourseCopyTestcategory->description;
+
+                if (Testcategory::category_exists_with_title($title))
+                {
+                    switch ($this->file_option)
+                    {
+                        case FILE_SKIP:
+                            //Do nothing
+                            break;
+                        case FILE_RENAME:
+                            $new_title = $title."_";
+                            while (Testcategory::category_exists_with_title($new_title))
+                            {
+                                $new_title .= "_";
+                            }
+                            $test_category = new Testcategory(0, $new_title, $description);
+                            $new_id = $test_category->addCategoryInBDD();
+                            $tab_test_category_id_old_new[$CourseCopyTestcategory->source_id] = $new_id;
+                            break;
+                        case FILE_OVERWRITE:
+                            $id = Testcategory::get_category_id_for_title($title);
+                            $my_cat = new Testcategory($id);
+                            $my_cat->name = $title;
+                            $my_cat->modifyCategory();
+                            $tab_test_category_id_old_new[$CourseCopyTestcategory->source_id] = $id;
+                            break;
+                    }
+                }
+                else
+                {
+                    // create a new test_category
+                    $test_category = new Testcategory(0, $title, $description);
+                    $new_id = $test_category->addCategoryInBDD();
+                    $tab_test_category_id_old_new[$CourseCopyTestcategory->source_id] = $new_id;
+                }
+                $this->course->resources[RESOURCE_TEST_CATEGORY][$id]->destination_id = $tab_test_category_id_old_new[$CourseCopyTestcategory->source_id];
+            }
+        }
+        // lets check if quizzes-question are restored too, to redo the link between test_category and quizzes question for questions restored
+        // we can use the source_id field
+        // question source_id => category source_id
+        if ($this->course->has_resources(RESOURCE_QUIZQUESTION)) {
+            // check the category number of each question restored
+            foreach ($resources[RESOURCE_QUIZQUESTION] as $id => $CourseCopyQuestion) {
+                $new_quiz_question_id = $resources[RESOURCE_QUIZQUESTION][$id]->destination_id;
+                $question_category = $CourseCopyQuestion->question_category;
+                if ($question_category > 0) {
+                    Testcategory::add_category_for_question_id($tab_test_category_id_old_new[$question_category], $new_quiz_question_id, $course_id);
+                }
+            }
+        }
+    }
+
+    /**
 	 * Restore surveys
 	 */
-	function restore_surveys() {
+    function restore_surveys()
+    {
 		if ($this->course->has_resources(RESOURCE_SURVEY)) {
 			$table_sur = Database :: get_course_table(TABLE_SURVEY);
 			$table_que = Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -1474,7 +1525,8 @@ class CourseRestorer
 	/**
 	 * Check availability of a survey code
 	 */
-	function is_survey_code_available($survey_code)	{
+    function is_survey_code_available($survey_code)
+    {
 		$table_sur = Database :: get_course_table(TABLE_SURVEY);
 		$sql = "SELECT * FROM $table_sur WHERE c_id = ".$this->destination_course_id." AND code='".self::DBUTF8escapestring($survey_code)."'";
 		$result = Database::query($sql);
@@ -1484,7 +1536,8 @@ class CourseRestorer
 	/**
 	 * Restore survey-questions
 	 */
-	function restore_survey_question($id, $survey_id) {
+    function restore_survey_question($id, $survey_id)
+    {
 		$resources = $this->course->resources;
 		$question = $resources[RESOURCE_SURVEYQUESTION][$id];
 
@@ -1537,7 +1590,10 @@ class CourseRestorer
 	/**
 	 * Restore learnpaths
 	 */
-	function restore_learnpaths($session_id = 0, $respect_base_content = false) {
+	function restore_learnpaths($session_id = 0, $respect_base_content = false)
+    {
+        $session_id = intval($session_id);
+
 		if ($this->course->has_resources(RESOURCE_LEARNPATH)) {
 			$table_main 	= Database::get_course_table(TABLE_LP_MAIN);
 			$table_item 	= Database::get_course_table(TABLE_LP_ITEM);
@@ -1619,7 +1675,16 @@ class CourseRestorer
 				Database::query($sql);
 				$new_lp_id = Database::insert_id();
 				if ($lp->visibility) {
-					$sql = "INSERT INTO $table_tool SET c_id = ".$this->destination_course_id." , name='".self::DBUTF8escapestring($lp->name)."', link='newscorm/lp_controller.php?action=view&lp_id=$new_lp_id', image='scormbuilder.gif', visibility='1', admin='0', address='squaregrey.gif'";
+					$sql = "INSERT INTO $table_tool SET
+					            c_id = ".$this->destination_course_id.",
+					            name = '".self::DBUTF8escapestring($lp->name)."',
+					            link = 'newscorm/lp_controller.php?action=view&lp_id=$new_lp_id&id_session=$session_id',
+					            image = 'scormbuilder.gif',
+					            visibility = '1',
+					            admin = '0',
+					            address = 'squaregrey.gif',
+					            session_id = $session_id
+                            ";
 					Database::query($sql);
 				}
 
@@ -1948,7 +2013,8 @@ class CourseRestorer
 	/**
 	* Restore Thematics
 	*/
-	function restore_thematic($session_id = 0) {
+    function restore_thematic($session_id = 0)
+    {
 		if ($this->course->has_resources(RESOURCE_THEMATIC)) {
 			$table_thematic 		= Database :: get_course_table(TABLE_THEMATIC);
 			$table_thematic_advance = Database :: get_course_table(TABLE_THEMATIC_ADVANCE);
@@ -1997,7 +2063,8 @@ class CourseRestorer
 	* Restore Attendance
 	*/
 
-	function restore_attendance($session_id = 0) {
+    function restore_attendance($session_id = 0)
+    {
 		if ($this->course->has_resources(RESOURCE_ATTENDANCE)) {
 			$table_attendance 		   = Database :: get_course_table(TABLE_ATTENDANCE);
 			$table_attendance_calendar = Database :: get_course_table(TABLE_ATTENDANCE_CALENDAR);
@@ -2026,19 +2093,60 @@ class CourseRestorer
 		}
 	}
 
-    function DBUTF8($str) {
+    /**
+     * Restore Work
+     */
+    function restore_works($session_id = 0)
+    {
+        $perm = api_get_permissions_for_new_directories();
+        if ($this->course->has_resources(RESOURCE_WORK)) {
+            $table_work 		   = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+            $table_work_assignment = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+
+            $resources = $this->course->resources;
+            foreach ($resources[RESOURCE_WORK] as $id => $obj) {
+
+                // check resources inside html from fckeditor tool and copy correct urls into recipient course
+                $obj->params['description'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($obj->params['description'], $this->course->code, $this->course->destination_path, $this->course->backup_path, $this->course->info['path']);
+                $obj->params['id'] = null;
+                $obj->params['c_id'] = $this->destination_course_id;
+
+                $last_id = Database::insert($table_work, $obj->params);
+                // re-create dir
+                // @todo check security against injection of dir in crafted course backup here!
+                $path = $obj->params['url'];
+                $path = '/'.str_replace('/','',substr($path,1));
+                $destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/work'.$path;
+                $r = @mkdir($destination_path, $perm);
+                if ($r === false) {
+                    error_log('Failed creating directory '.$destination_path.' in course restore for work tool');
+                }
+
+                if (is_numeric($last_id)) {
+                    api_item_property_update($this->destination_course_info, 'work', $last_id,"DirectoryCreated", api_get_user_id());
+                }
+            }
+        }
+    }
+
+    function DBUTF8($str)
+    {
 		if (UTF8_CONVERT) {
             $str = utf8_encode($str);
         }
 		return $str;
 	}
 
-	function DBUTF8escapestring($str) {
-		if (UTF8_CONVERT) $str = utf8_encode($str);
+    function DBUTF8escapestring($str)
+    {
+        if (UTF8_CONVERT) {
+            $str = utf8_encode($str);
+        }
 		return Database::escape_string($str);
 	}
 
-    function DBUTF8_array($array) {
+    function DBUTF8_array($array)
+    {
         if (UTF8_CONVERT) {
             foreach ($array as &$item)  {
                 $item = utf8_encode($item);

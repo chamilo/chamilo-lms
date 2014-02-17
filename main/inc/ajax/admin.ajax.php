@@ -4,6 +4,8 @@
  * Responses to AJAX calls
  */
 
+// Language files that need to be included.
+$language_file = array('admin');
 require_once '../global.inc.php';
 require_once api_get_path(SYS_CODE_PATH).'admin/statistics/statistics.lib.php';
 
@@ -12,29 +14,29 @@ api_protect_admin_script();
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 
 switch ($action) {
-	case 'update_changeable_setting':        
+    case 'update_changeable_setting':
         $url_id = api_get_current_access_url_id();
-        
-        if (api_is_global_platform_admin() && $url_id == 1) {            
-            if (isset($_GET['id']) && !empty($_GET['id'])) {                
+
+        if (api_is_global_platform_admin() && $url_id == 1) {
+            if (isset($_GET['id']) && !empty($_GET['id'])) {
                 $params = array('variable = ? ' =>  array($_GET['id']));
-                $data = api_get_settings_params($params);                
+                $data = api_get_settings_params($params);
                 if (!empty($data)) {
-                    foreach ($data as $item) {                
+                    foreach ($data as $item) {
                         $params = array('id' =>$item['id'], 'access_url_changeable' => $_GET['changeable']);
-                        api_set_setting_simple($params);        
+                        api_set_setting_simple($params);
                     }
-                }                
+                }
                 echo '1';
-            }        
+            }
         }
         break;
-        
+
     case 'version':
         echo version_check();
         break;
 }
-    
+
 
 /**
  * Displays either the text for the registration or the message that the installation is (not) up to date
@@ -42,11 +44,12 @@ switch ($action) {
  * @return string html code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version august 2006
- * @todo have a 6monthly re-registration
+ * @todo have a 6 monthly re-registration
  */
-function version_check() {
+function version_check()
+{
     $tbl_settings = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-    $sql = 'SELECT selected_value FROM  '.$tbl_settings.' WHERE variable="registered" ';
+    $sql = 'SELECT selected_value FROM '.$tbl_settings.' WHERE variable = "registered" ';
     $result = Database::query($sql);
     $row = Database::fetch_array($result, 'ASSOC');
 
@@ -54,7 +57,7 @@ function version_check() {
     $return = '';
     if ($row['selected_value'] == 'false') {
         $return .= get_lang('VersionCheckExplanation');
-        $return .= '<form class="well" action="'.api_get_self().'" id="VersionCheck" name="VersionCheck" method="post">';
+        $return .= '<form class="well" action="'.api_get_path(WEB_CODE_PATH).'admin/index.php" id="VersionCheck" name="VersionCheck" method="post">';
         $return .= '<label class="checkbox"><input type="checkbox" name="donotlistcampus" value="1" id="checkbox" />'.get_lang('HideCampusFromPublicPlatformsList');
         $return .= '</label><button type="submit" class="btn btn-primary" name="Register" value="'.get_lang('EnableVersionCheck').'" id="register" >'.get_lang('EnableVersionCheck').'</button>';
         $return .= '</form>';
@@ -73,19 +76,23 @@ function version_check() {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University (the modifications)
  * @author Yannick Warnier <ywarnier@beeznest.org> for the move to HTTP request
  * @copyright (C) 2001 The phpBB Group
- * @return language string with some layout (color)
+ * @return string language string with some layout (color)
  */
-function check_system_version() {
+function check_system_version()
+{
     global $_configuration;
     $system_version = trim($_configuration['system_version']); // the chamilo version of your installation
 
     if (ini_get('allow_url_fopen') == 1) {
         // The number of courses
-        $number_of_courses = statistics::count_courses();
+        $number_of_courses = Statistics::count_courses();
 
         // The number of users
-        $number_of_users = statistics::count_users();
-        $number_of_active_users = statistics::count_users(null,null,null,true);
+        $number_of_users = Statistics::count_users();
+        $number_of_active_users = Statistics::count_users(null, null, null, true);
+
+        // The number of sessions
+        $number_of_sessions = Statistics::count_sessions();
 
         $data = array(
             'url' => api_get_path(WEB_PATH),
@@ -95,6 +102,7 @@ function check_system_version() {
             'numberofcourses' => $number_of_courses,
             'numberofusers' => $number_of_users,
             'numberofactiveusers' => $number_of_active_users,
+            'numberofsessions' => $number_of_sessions,
             //The donotlistcampus setting recovery should be improved to make
             // it true by default - this does not affect numbers counting
             'donotlistcampus' => api_get_setting('donotlistcampus'),
@@ -133,7 +141,8 @@ function check_system_version() {
  * @param bool   Include HTTP Request headers?
  * @param bool   Include HTTP Response headers?
  */
-function _http_request($ip, $port = 80, $uri = '/', $getdata = array(), $timeout = 1, $req_hdr = false, $res_hdr = false) {
+function _http_request($ip, $port = 80, $uri = '/', $getdata = array(), $timeout = 5, $req_hdr = false, $res_hdr = false)
+{
     $verb = 'GET';
     $ret = '';
     $getdata_str = count($getdata) ? '?' : '';
@@ -153,7 +162,9 @@ function _http_request($ip, $port = 80, $uri = '/', $getdata = array(), $timeout
 
     $req .= $crlf;
 
-    if ($req_hdr) { $ret .= $req; }
+    if ($req_hdr) {
+        $ret .= $req;
+    }
     if (($fp = @fsockopen($ip, $port, $errno, $errstr, $timeout)) == false) {
         return "Error $errno: $errstr\n";
     }

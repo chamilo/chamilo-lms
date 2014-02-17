@@ -2,7 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
-$langInvalidId = "Accés invàlid.<BR>Si no estàs enregistrat, utilitza el <a href='claroline/auth/inscription.php'>formulari per enregistrar-te</a></font color>";
+$langInvalidId = "Accés denegat - nom d'usuari i/o contrasenya incorrecte/s";
 $langWelcome = "Benvingut !";
 $langPass = "Contrasenya";
 $langEnter = "Retorna a la llista dels meus cursos";

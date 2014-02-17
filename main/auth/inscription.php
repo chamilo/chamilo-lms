@@ -17,8 +17,10 @@ require_once '../inc/global.inc.php';
 require_once api_get_path(CONFIGURATION_PATH).'profile.conf.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
+$htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
+
 if (api_get_setting('allow_registration') === 'false') {
-    api_not_allowed(true);
+    api_not_allowed(true,get_lang('RegistrationDisabled'));
 }
 
 if (!empty($_SESSION['user_language_choice'])) {
@@ -51,10 +53,10 @@ if ($user_already_registered_show_terms == false) {
     if (api_is_western_name_order()) {
         //	FIRST NAME and LAST NAME
         $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
-        $form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
+        $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40));
     } else {
         //	LAST NAME and FIRST NAME
-        $form->addElement('text', 'lastname',  get_lang('LastName'),  array('size' => 40));
+        $form->addElement('text', 'lastname', get_lang('LastName'), array('size' => 40));
         $form->addElement('text', 'firstname', get_lang('FirstName'), array('size' => 40));
     }
     $form->applyFilter(array('lastname', 'firstname'), 'trim');
@@ -68,7 +70,7 @@ if ($user_already_registered_show_terms == false) {
     }
 
     if (api_get_setting('login_is_email') == 'true') {
-        $form->applyFilter('email','trim');
+        $form->applyFilter('email', 'trim');
         if (api_get_setting('registration', 'email') != 'true') {
             $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
         }
@@ -90,7 +92,7 @@ if ($user_already_registered_show_terms == false) {
 
     //	USERNAME
     if (api_get_setting('login_is_email') != 'true') {
-        $form->addElement('text', 'username', get_lang('UserName'), array('size' => USERNAME_MAX_LENGTH));
+        $form->addElement('text', 'username', get_lang('UserName'), array('id' => 'username', 'size' => USERNAME_MAX_LENGTH));
         $form->applyFilter('username','trim');
         $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
         $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string)USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
@@ -99,8 +101,13 @@ if ($user_already_registered_show_terms == false) {
     }
 
     //	PASSWORD
-    $form->addElement('password', 'pass1', get_lang('Pass'),         array('size' => 20, 'autocomplete' => 'off'));
-    $form->addElement('password', 'pass2', get_lang('Confirmation'), array('size' => 20, 'autocomplete' => 'off'));
+    $form->addElement('password', 'pass1', get_lang('Pass'), array('id' => 'pass1', 'size' => 20, 'autocomplete' => 'off'));
+
+    if (isset($_configuration['allow_strength_pass_checker']) && $_configuration['allow_strength_pass_checker']) {
+        $form->addElement('label', null, '<div id="password_progress"></div>');
+    }
+
+    $form->addElement('password', 'pass2', get_lang('Confirmation'), array('id' => 'pass2', 'size' => 20, 'autocomplete' => 'off'));
     $form->addRule('pass1', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
     $form->addRule(array('pass1', 'pass2'), get_lang('PassTwo'), 'compare');
@@ -251,7 +258,7 @@ if (!CustomPages::enabled()) {
 
     // Forbidden to self-register
     if (api_get_setting('allow_registration') == 'false') {
-        api_not_allowed(true);
+        api_not_allowed(true,get_lang('RegistrationDisabled'));
     }
 
     if (api_get_setting('allow_registration') == 'approval') {

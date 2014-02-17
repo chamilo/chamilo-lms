@@ -78,7 +78,6 @@ $langUserHasPermissionNot = "Потребителят няма права";
 $langUserHasPermission = "Потребителят има права";
 $langLegend = "Легенда";
 $langUserHasPermissionByRoleGroup = "Потребителят има правата на своята група";
-$EditPost = "Редактиране на статия";
 $AddBlog = "Нов проект";
 $EditBlog = "Редактиране на проекта";
 $DeleteBlog = "Изтриване на блога";

@@ -2,52 +2,67 @@
 
 /* For licensing terms, see /license.txt */
 /**
- *  @author Julio Montoya <gugli100@gmail.com>
- *  @todo better organization of the class, methods and variables
+ * @author Julio Montoya <gugli100@gmail.com>
+ * @todo better organization of the class, methods and variables
  *
  * */
 
-require_once api_get_path(LIBRARY_PATH) . 'banner.lib.php';
-require_once api_get_path(LIBRARY_PATH) . 'symfony/Twig/Autoloader.php';
+require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
+require_once api_get_path(LIBRARY_PATH).'symfony/Twig/Autoloader.php';
 
-class Template {
+class Template
+{
 
-    var $style = 'default'; //see the template folder
-    var $preview_theme = null;
-    var $theme; // the chamilo theme public_admin, chamilo, chamilo_red, etc
-    var $title = null;
-    var $show_header;
-    var $show_footer;
-    var $help;
-    var $menu_navigation = array(); //Used in the userportal.lib.php function: return_navigation_course_links()
-    var $show_learnpath = false; // This is a learnpath section or not?
-    var $plugin = null;
-    var $course_id = null;
-    var $user_is_logged_in = false;
-    var $twig = null;
+    public $style = 'default'; //see the template folder
+    public $preview_theme = null;
+    public $theme; // the chamilo theme public_admin, chamilo, chamilo_red, etc
+    public $title = null;
+    public $show_header;
+    public $show_footer;
+    public $help;
+    public $menu_navigation = array(); //Used in the userportal.lib.php function: return_navigation_course_links()
+    public $show_learnpath = false; // This is a learnpath section or not?
+    public $plugin = null;
+    public $course_id = null;
+    public $user_is_logged_in = false;
+    public $twig = null;
 
     /* Loads chamilo plugins */
-    var $load_plugins = false;
-    var $params = array();
-    var $force_plugin_load = false;
+    public $load_plugins = false;
+    public $params = array();
+    public $force_plugin_load = false;
 
-    function __construct($title = '', $show_header = true, $show_footer = true, $show_learnpath = false, $hide_global_chat = false, $load_plugins = true) {
-
-        //Page title
-        $this->title = $title;
-        $this->show_learnpath = $show_learnpath;
+    /**
+     * @param string $title
+     * @param bool $show_header
+     * @param bool $show_footer
+     * @param bool $show_learnpath
+     * @param bool $hide_global_chat
+     * @param bool $load_plugins
+     */
+    public function __construct(
+        $title = '',
+        $show_header = true,
+        $show_footer = true,
+        $show_learnpath = false,
+        $hide_global_chat = false,
+        $load_plugins = true
+    ) {
+        // Page title
+        $this->title            = $title;
+        $this->show_learnpath   = $show_learnpath;
         $this->hide_global_chat = $hide_global_chat;
-        $this->load_plugins = $load_plugins;
+        $this->load_plugins     = $load_plugins;
 
         //Twig settings
         Twig_Autoloader::register();
 
         $template_paths = array(
-            api_get_path(SYS_CODE_PATH) . 'template', //template folder
-            api_get_path(SYS_PLUGIN_PATH)           //plugin folder
+            api_get_path(SYS_CODE_PATH).'template', //template folder
+            api_get_path(SYS_PLUGIN_PATH) //plugin folder
         );
 
-        $cache_folder = api_get_path(SYS_ARCHIVE_PATH) . 'twig';
+        $cache_folder = api_get_path(SYS_ARCHIVE_PATH).'twig';
 
         if (!is_dir($cache_folder)) {
             mkdir($cache_folder, api_get_permissions_for_new_directories());
@@ -59,19 +74,19 @@ class Template {
         if (api_get_setting('server_type') == 'test') {
             $options = array(
                 //'cache' => api_get_path(SYS_ARCHIVE_PATH), //path to the cache folder
-                'autoescape' => false,
-                'debug' => true,
-                'auto_reload' => true,
-                'optimizations' => 0, // turn on optimizations with -1
+                'autoescape'       => false,
+                'debug'            => true,
+                'auto_reload'      => true,
+                'optimizations'    => 0, // turn on optimizations with -1
                 'strict_variables' => false, //If set to false, Twig will silently ignore invalid variables
             );
         } else {
             $options = array(
-                'cache' => $cache_folder, //path to the cache folder
-                'autoescape' => false,
-                'debug' => false,
-                'auto_reload' => false,
-                'optimizations' => -1, // turn on optimizations with -1
+                'cache'            => $cache_folder, //path to the cache folder
+                'autoescape'       => false,
+                'debug'            => false,
+                'auto_reload'      => false,
+                'optimizations'    => -1, // turn on optimizations with -1
                 'strict_variables' => false //If set to false, Twig will silently ignore invalid variables
             );
         }
@@ -83,12 +98,14 @@ class Template {
         $this->twig->addFilter('get_setting', new Twig_Filter_Function('api_get_setting'));
         $this->twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
         $this->twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
-
         $this->twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
-        $this->twig->addFilter('display_page_subheader', new Twig_Filter_Function('Display::page_subheader_and_translate'));
+        $this->twig->addFilter(
+            'display_page_subheader',
+            new Twig_Filter_Function('Display::page_subheader_and_translate')
+        );
         $this->twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
         $this->twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
-
+        $this->twig->addFilter('api_get_local_time', new Twig_Filter_Function('api_get_local_time'));
 
         /*
           $lexer = new Twig_Lexer($this->twig, array(
@@ -116,6 +133,8 @@ class Template {
         $this->set_footer_parameters();
 
         $this->assign('style', $this->style);
+        $this->assign('css_style', $this->theme);
+        $this->assign('template', $this->style);
 
         //Chamilo plugins
         if ($this->show_header) {
@@ -139,11 +158,13 @@ class Template {
         }
     }
 
-    public static function get_icon_path($image, $size = ICON_SIZE_SMALL) {
+    public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
+    {
         return Display:: return_icon($image, '', array(), $size, false, true);
     }
 
-    public static function format_date($timestamp, $format = null) {
+    public static function format_date($timestamp, $format = null)
+    {
         return api_format_date($timestamp, $format);
     }
 
@@ -155,24 +176,26 @@ class Template {
      * @param object $item
      * @return string
      */
-    public static function key($item){
-        $id = isset($item->id) ? $item->id : null;
-        $c_id = isset($item->c_id) ? $item->c_id : null;
+    public static function key($item)
+    {
+        $id     = isset($item->id) ? $item->id : null;
+        $c_id   = isset($item->c_id) ? $item->c_id : null;
         $result = '';
-        if($c_id){
+        if ($c_id) {
             $result = "c_id=$c_id";
         }
-        if($id){
-            if($result){
+        if ($id) {
+            if ($result) {
                 $result .= "&amp;id=$id";
-            }else{
+            } else {
                 $result .= "&amp;id=$id";
             }
         }
         return $result;
     }
 
-    function set_help($help_input = null) {
+    function set_help($help_input = null)
+    {
         if (!empty($help_input)) {
             $help = $help_input;
         } else {
@@ -182,10 +205,14 @@ class Template {
         $help_content = '';
         if (api_get_setting('enable_help_link') == 'true') {
             if (!empty($help)) {
-                $help = Security::remove_XSS($help);
+                $help         = Security::remove_XSS($help);
                 $help_content = '<li class="help">';
-                $help_content .= '<a href="' . api_get_path(WEB_CODE_PATH) . 'help/help.php?open=' . $help . '&height=400&width=600" class="ajax" title="' . get_lang('Help') . '">';
-                $help_content .= '<img src="' . api_get_path(WEB_IMG_PATH) . 'help.large.png" alt="' . get_lang('Help') . '" title="' . get_lang('Help') . '" />';
+                $help_content .= '<a href="'.api_get_path(
+                        WEB_CODE_PATH
+                    ).'help/help.php?open='.$help.'&height=400&width=600" class="ajax" title="'.get_lang('Help').'">';
+                $help_content .= '<img src="'.api_get_path(WEB_IMG_PATH).'help.large.png" alt="'.get_lang(
+                        'Help'
+                    ).'" title="'.get_lang('Help').'" />';
                 $help_content .= '</a></li>';
             }
         }
@@ -197,7 +224,8 @@ class Template {
      * @todo finish it!
      * */
 
-    function set_actions($actions) {
+    function set_actions($actions)
+    {
         $action_string = '';
         if (!empty($actions)) {
             foreach ($actions as $action) {
@@ -210,7 +238,8 @@ class Template {
     /**
      * Shortcut to display a 1 col layout (index.php)
      * */
-    function display_one_col_template() {
+    function display_one_col_template()
+    {
         $tpl = $this->get_template('layout/layout_1_col.tpl');
         $this->display($tpl);
     }
@@ -218,7 +247,8 @@ class Template {
     /**
      * Shortcut to display a 2 col layout (userportal.php)
      * */
-    function display_two_col_template() {
+    function display_two_col_template()
+    {
         $tpl = $this->get_template('layout/layout_2_col.tpl');
         $this->display($tpl);
     }
@@ -226,7 +256,8 @@ class Template {
     /**
      * Displays an empty template
      */
-    function display_blank_template() {
+    function display_blank_template()
+    {
         $tpl = $this->get_template('layout/blank.tpl');
         $this->display($tpl);
     }
@@ -234,7 +265,8 @@ class Template {
     /**
      * Displays an empty template
      */
-    function display_no_layout_template() {
+    function display_no_layout_template()
+    {
         $tpl = $this->get_template('layout/no_layout.tpl');
         $this->display($tpl);
     }
@@ -243,7 +275,8 @@ class Template {
      * Sets the footer visibility
      * @param bool true if we show the footer
      */
-    function set_footer($status) {
+    function set_footer($status)
+    {
         $this->show_footer = $status;
         $this->assign('show_footer', $status);
     }
@@ -252,13 +285,14 @@ class Template {
      * Sets the header visibility
      * @param bool true if we show the header
      */
-    function set_header($status) {
+    function set_header($status)
+    {
         $this->show_header = $status;
         $this->assign('show_header', $status);
 
         //Toolbar
         $show_admin_toolbar = api_get_setting('show_admin_toolbar');
-        $show_toolbar = 0;
+        $show_toolbar       = 0;
 
         switch ($show_admin_toolbar) {
             case 'do_not_show':
@@ -280,7 +314,7 @@ class Template {
         $this->assign('show_toolbar', $show_toolbar);
 
         //Only if course is available
-        $show_course_shortcut = null;
+        $show_course_shortcut        = null;
         $show_course_navigation_menu = null;
 
         if (!empty($this->course_id) && $this->user_is_logged_in) {
@@ -297,24 +331,44 @@ class Template {
         $this->assign('show_course_navigation_menu', $show_course_navigation_menu);
     }
 
-    function get_template($name) {
-        return $this->style . '/' . $name;
+    function get_template($name)
+    {
+        return $this->style.'/'.$name;
     }
 
     /** Set course parameters */
-    private function set_course_parameters() {
+    private function set_course_parameters()
+    {
         //Setting course id
-        $course_id = api_get_course_int_id();
-        $this->course_id = $course_id;
+        $course = api_get_course_info();
+        if (empty($course)) {
+            $this->assign('course_is_set', false);
+            return;
+        }
+        $this->assign('course_is_set', true);
+        $this->course_id = $course['id'];
+        $_c = array(
+            'id' => $course['id'],
+            'code' => $course['code'],
+            'title' => $course['name'],
+            'visibility' => $course['visibility'],
+            'language' => $course['language'],
+            'directory' => $course['directory'],
+            'session_id' => api_get_session_id(),
+            'user_is_teacher' => api_is_course_admin(),
+            'student_view' => (!empty($_GET['isStudentView']) && $_GET['isStudentView'] == 'true'),
+        );
+        $this->assign('_c',$_c);
     }
 
     /** Set user parameters */
-    private function set_user_parameters() {
-        $user_info = array();
-        $user_info['logged'] = 0;
+    private function set_user_parameters()
+    {
+        $user_info               = array();
+        $user_info['logged']     = 0;
         $this->user_is_logged_in = false;
         if (api_user_is_login()) {
-            $user_info = api_get_user_info(api_get_user_id());
+            $user_info           = api_get_user_info(api_get_user_id());
             $user_info['logged'] = 1;
 
             $user_info['is_admin'] = 0;
@@ -323,41 +377,48 @@ class Template {
             }
 
             $user_info['messages_count'] = MessageManager::get_new_messages();
-            $this->user_is_logged_in = true;
+            $this->user_is_logged_in     = true;
         }
         //Setting the $_u array that could be use in any template
         $this->assign('_u', $user_info);
     }
 
     /** Set system parameters */
-    private function set_system_parameters() {
+    private function set_system_parameters()
+    {
         global $_configuration;
 
         //Setting app paths/URLs
-        $_p = array('web' => api_get_path(WEB_PATH),
+        $_p = array(
+            'web'        => api_get_path(WEB_PATH),
             'web_course' => api_get_path(WEB_COURSE_PATH),
-            'web_main' => api_get_path(WEB_CODE_PATH),
-            'web_css' => api_get_path(WEB_CSS_PATH),
-            'web_ajax' => api_get_path(WEB_AJAX_PATH),
-            'web_img' => api_get_path(WEB_IMG_PATH),
+            'web_main'   => api_get_path(WEB_CODE_PATH),
+            'web_css'    => api_get_path(WEB_CSS_PATH),
+            'web_ajax'   => api_get_path(WEB_AJAX_PATH),
+            'web_img'    => api_get_path(WEB_IMG_PATH),
             'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
-            'web_lib' => api_get_path(WEB_LIBRARY_PATH),
+            'web_lib'    => api_get_path(WEB_LIBRARY_PATH),
+            'web_self' => api_get_self(),
+            'web_query_vars' => api_htmlentities($_SERVER['QUERY_STRING']),
+            'web_self_query_vars' => api_htmlentities($_SERVER['REQUEST_URI']),
+            'web_cid_query' => api_get_cidreq(),
         );
         $this->assign('_p', $_p);
 
         //Here we can add system parameters that can be use in any template
         $_s = array(
-            'software_name' => $_configuration['software_name'],
+            'software_name'  => $_configuration['software_name'],
             'system_version' => $_configuration['system_version'],
-            'site_name' => api_get_setting('siteName'),
-            'institution' => api_get_setting('Institution')
+            'site_name'      => api_get_setting('siteName'),
+            'institution'    => api_get_setting('Institution')
         );
         $this->assign('_s', $_s);
     }
 
     /**
      * Set theme, include CSS files  */
-    function set_css_files() {
+    function set_css_files()
+    {
         global $disable_js_and_css_files;
         $css = array();
 
@@ -377,17 +438,25 @@ class Template {
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
 
         //Extra CSS files
-        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/thickbox.css';
-        $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chosen/chosen.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
 
         if ($this->show_learnpath) {
-            $css[] = api_get_path(WEB_CSS_PATH) . $this->theme . '/learnpath.css';
-            $css[] = api_get_path(WEB_CSS_PATH) . $this->theme . '/scorm.css';
+            $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/learnpath.css';
+            $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/scorm.css';
+        }
+
+        // if we have a scorm file in theme dont use default_scorm.css file
+        if (!is_file(api_get_path(SYS_CSS_PATH) . $this->theme . '/scorm.css')) {
+            $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'/default_scorm.css');
         }
 
         if (api_is_global_chat_enabled()) {
-            $css[] = api_get_path(WEB_LIBRARY_PATH) . 'javascript/chat/css/chat.css';
+            $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
         }
+
+        $css[] = api_get_path(WEB_CSS_PATH).'font_awesome/css/font-awesome.css';
+        $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/mediaelementplayer.css';
 
         $css_file_to_string = null;
         foreach ($css as $file) {
@@ -411,13 +480,13 @@ class Template {
 
         $navigator_info = api_get_navigator();
         if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-            $css_file_to_string .= 'img, div { behavior: url(' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/iepngfix/iepngfix.htc) } ' . "\n";
+            $css_file_to_string .= 'img, div { behavior: url('.api_get_path(WEB_LIBRARY_PATH).'javascript/iepngfix/iepngfix.htc) } '."\n";
         }
 
         if (!$disable_js_and_css_files) {
             $this->assign('css_file_to_string', $css_file_to_string);
 
-            $style_print = api_get_css(api_get_cdn_path(api_get_path(WEB_CSS_PATH) . $this->theme . '/print.css'), 'print');
+            $style_print = api_get_css(api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/print.css'), 'print');
             $this->assign('css_style_print', $style_print);
         }
 
@@ -425,20 +494,23 @@ class Template {
         $logo = return_logo($this->theme);
         $this->assign('logo', $logo);
     }
+
     /**
      * Declare and define the template variable that will be used to load
      * javascript libraries in the header.
      */
-    function set_js_files() {
+    function set_js_files()
+    {
         global $disable_js_and_css_files, $htmlHeadXtra;
 
         //JS files
         $js_files = array(
             'modernizr.js',
-            'jquery.min.js',
+            'jquery.js',
             'chosen/chosen.jquery.min.js',
             'thickbox.js',
             'bootstrap/bootstrap.js',
+            'mediaelement/mediaelement-and-player.min.js'
         );
 
         if (api_is_global_chat_enabled()) {
@@ -476,12 +548,13 @@ class Template {
             //$extra_headers = '';
             if (isset($htmlHeadXtra) && $htmlHeadXtra) {
                 foreach ($htmlHeadXtra as & $this_html_head) {
-                    $extra_headers .= $this_html_head . "\n";
+                    $extra_headers .= $this_html_head."\n";
                 }
             }
             $this->assign('extra_headers', $extra_headers);
         }
     }
+
     /**
      * Special function to declare last-minute JS libraries which depend on
      * other things to be declared first. In particular, it might be useful
@@ -489,7 +562,8 @@ class Template {
      * upset when a variable is used in a function (even if not used yet)
      * when this variable hasn't been defined yet.
      */
-    function set_js_files_post() {
+    function set_js_files_post()
+    {
         global $disable_js_and_css_files, $htmlHeadXtra;
         $js_files = array();
         if (api_is_global_chat_enabled()) {
@@ -511,11 +585,12 @@ class Template {
     /**
      * Set header parameters
      */
-    private function set_header_parameters() {
+    private function set_header_parameters()
+    {
         global $httpHeadXtra, $_course, $interbreadcrumb, $language_file, $noPHP_SELF, $_configuration, $this_section;
-        $help = $this->help;
-        $nameTools = $this->title;
-        $navigation = return_navigation_array();
+        $help                  = $this->help;
+        $nameTools             = $this->title;
+        $navigation            = return_navigation_array();
         $this->menu_navigation = $navigation['menu_navigation'];
 
         $this->assign('system_charset', api_get_system_encoding());
@@ -548,11 +623,12 @@ class Template {
 
         $title_string = '';
         for ($i = 0; $i < count($title_list); $i++) {
-            $title_string .=$title_list[$i];
+            $title_string .= $title_list[$i];
             if (isset($title_list[$i + 1])) {
                 $item = trim($title_list[$i + 1]);
-                if (!empty($item))
-                    $title_string .=' - ';
+                if (!empty($item)) {
+                    $title_string .= ' - ';
+                }
             }
         }
 
@@ -569,30 +645,30 @@ class Template {
         if (!empty($_configuration['cdn_enable'])) {
             $prefetch .= '<meta http-equiv="x-dns-prefetch-control" content="on">';
             foreach ($_configuration['cdn'] as $host => $exts) {
-                $prefetch .= '<link rel="dns-prefetch" href="' . $host . '">';
+                $prefetch .= '<link rel="dns-prefetch" href="'.$host.'">';
             }
         }
 
         $this->assign('prefetch', $prefetch);
         $this->assign('text_direction', api_get_text_direction());
-        $this->assign('section_name', 'section-' . $this_section);
+        $this->assign('section_name', 'section-'.$this_section);
 
-        $favico = '<link rel="shortcut icon" href="' . api_get_path(WEB_PATH) . 'favicon.ico" type="image/x-icon" />';
+        $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
 
         if (isset($_configuration['multiple_access_urls']) && $_configuration['multiple_access_urls']) {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
-                $url_info = api_get_access_url($access_url_id);
-                $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
+                $url_info  = api_get_access_url($access_url_id);
+                $url       = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
                 $clean_url = replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
-                $homep = api_get_path(REL_PATH) . 'home/' . $clean_url; //homep for Home Path
-                $icon_real_homep = api_get_path(SYS_PATH) . 'home/' . $clean_url;
+                $homep           = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
+                $icon_real_homep = api_get_path(SYS_PATH).'home/'.$clean_url;
 
                 //we create the new dir for the new sites
-                if (is_file($icon_real_homep . 'favicon.ico')) {
-                    $favico = '<link rel="shortcut icon" href="' . $homep . 'favicon.ico" type="image/x-icon" />';
+                if (is_file($icon_real_homep.'favicon.ico')) {
+                    $favico = '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';
                 }
             }
         }
@@ -606,7 +682,9 @@ class Template {
         if (api_get_setting('show_link_bug_notification') == 'true' && $this->user_is_logged_in) {
             $bug_notification_link = '<li class="report">
 		        						<a href="http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs" target="_blank">
-		        						<img src="' . api_get_path(WEB_IMG_PATH) . 'bug.large.png" style="vertical-align: middle;" alt="' . get_lang('ReportABug') . '" title="' . get_lang('ReportABug') . '"/></a>
+		        						<img src="'.api_get_path(WEB_IMG_PATH).'bug.large.png" style="vertical-align: middle;" alt="'.get_lang('ReportABug').'" title="'.get_lang(
+                    'ReportABug'
+                ).'"/></a>
 		    						  </li>';
         }
 
@@ -622,10 +700,10 @@ class Template {
 
         //Profile link
         if (api_get_setting('allow_social_tool') == 'true') {
-            $profile_url = api_get_path(WEB_CODE_PATH).'social/home.php';
+            $profile_url  = api_get_path(WEB_CODE_PATH).'social/home.php';
             $profile_link = Display::url(get_lang('Profile'), $profile_url);
         } else {
-            $profile_url = api_get_path(WEB_CODE_PATH).'auth/profile.php';
+            $profile_url  = api_get_path(WEB_CODE_PATH).'auth/profile.php';
             $profile_link = Display::url(get_lang('Profile'), $profile_url);
         }
         $this->assign('profile_link', $profile_link);
@@ -633,9 +711,9 @@ class Template {
 
         //Message link
         $message_link = null;
-        $message_url = null;
+        $message_url  = null;
         if (api_get_setting('allow_message_tool') == 'true') {
-            $message_url = api_get_path(WEB_CODE_PATH).'messages/inbox.php';
+            $message_url  = api_get_path(WEB_CODE_PATH).'messages/inbox.php';
             $message_link = '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.get_lang('Inbox').'</a>';
         }
         $this->assign('message_link', $message_link);
@@ -654,20 +732,28 @@ class Template {
 
 
         $count_unread_message = 0;
-        if (api_get_setting('allow_message_tool')=='true') {
+        if (api_get_setting('allow_message_tool') == 'true') {
             // get count unread message and total invitations
             $count_unread_message = MessageManager::get_number_of_messages(true);
         }
 
         $total_invitations = 0;
-        if (api_get_setting('allow_social_tool')=='true') {
-            $number_of_new_messages_of_friend   = SocialManager::get_message_number_invitation_by_user_id(api_get_user_id());
-            $group_pending_invitations = GroupPortalManager::get_groups_by_user(api_get_user_id(), GROUP_USER_PERMISSION_PENDING_INVITATION,false);
-            $group_pending_invitations = 0;
-            if (!empty($group_pending_invitations )) {
+        if (api_get_setting('allow_social_tool') == 'true') {
+            $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(
+                api_get_user_id()
+            );
+            $group_pending_invitations        = GroupPortalManager::get_groups_by_user(
+                api_get_user_id(),
+                GROUP_USER_PERMISSION_PENDING_INVITATION,
+                false
+            );
+            $group_pending_invitations        = 0;
+            if (!empty($group_pending_invitations)) {
                 $group_pending_invitations = count($group_pending_invitations);
             }
-            $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval($count_unread_message);
+            $total_invitations = intval($number_of_new_messages_of_friend) + $group_pending_invitations + intval(
+                    $count_unread_message
+                );
         }
         $total_invitations = (!empty($total_invitations) ? Display::badge($total_invitations) : null);
 
@@ -685,16 +771,19 @@ class Template {
         }
         $this->assign('header_extra_content', $extra_header);
 
-        if ($this->show_header == 1) {
-            header('Content-Type: text/html; charset=' . api_get_system_encoding());
-            header('X-Powered-By: ' . $_configuration['software_name'] . ' ' . substr($_configuration['system_version'], 0, 1));
-        }
+        //if ($this->show_header == 1) {
+            header('Content-Type: text/html; charset='.api_get_system_encoding());
+            header(
+                'X-Powered-By: '.$_configuration['software_name'].' '.substr($_configuration['system_version'], 0, 1)
+            );
+        //}
     }
 
     /**
      * Set footer parameteres
      */
-    private function set_footer_parameters() {
+    private function set_footer_parameters()
+    {
         global $_configuration;
 
         //Show admin data
@@ -702,7 +791,10 @@ class Template {
 
         if (api_get_setting('show_administrator_data') == 'true') {
             //Administrator name
-            $administrator_data = get_lang('Manager') . ' : ' . Display::encrypted_mailto_link(api_get_setting('emailAdministrator'), api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname')));
+            $administrator_data = get_lang('Manager').' : '.Display::encrypted_mailto_link(
+                    api_get_setting('emailAdministrator'),
+                    api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))
+                );
             $this->assign('administrator_name', $administrator_data);
         }
 
@@ -717,21 +809,21 @@ class Template {
         //Tutor name
         if (api_get_setting('show_tutor_data') == 'true') {
             // Course manager
-            $id_course = api_get_course_id();
+            $id_course  = api_get_course_id();
             $id_session = api_get_session_id();
             if (isset($id_course) && $id_course != -1) {
                 $tutor_data = '';
                 if ($id_session != 0) {
                     $coachs_email = CourseManager::get_email_of_tutor_to_session($id_session, $id_course);
-                    $email_link = array();
+                    $email_link   = array();
                     foreach ($coachs_email as $coach) {
                         $email_link[] = Display::encrypted_mailto_link($coach['email'], $coach['complete_name']);
                     }
                     if (count($coachs_email) > 1) {
-                        $tutor_data .= get_lang('Coachs') . ' : ';
+                        $tutor_data .= get_lang('Coachs').' : ';
                         $tutor_data .= array_to_string($email_link, CourseManager::USER_SEPARATOR);
                     } elseif (count($coachs_email) == 1) {
-                        $tutor_data .= get_lang('Coach') . ' : ';
+                        $tutor_data .= get_lang('Coach').' : ';
                         $tutor_data .= array_to_string($email_link, CourseManager::USER_SEPARATOR);
                     } elseif (count($coachs_email) == 0) {
                         $tutor_data .= '';
@@ -746,7 +838,7 @@ class Template {
             $id_course = api_get_course_id();
             if (isset($id_course) && $id_course != -1) {
                 $teacher_data = '';
-                $mail = CourseManager::get_emails_of_tutors_to_course($id_course);
+                $mail         = CourseManager::get_emails_of_tutors_to_course($id_course);
                 if (!empty($mail)) {
                     $teachers_parsed = array();
                     foreach ($mail as $value) {
@@ -758,7 +850,7 @@ class Template {
                     if (count($mail) > 1) {
                         $label = get_lang('Teachers');
                     }
-                    $teacher_data .= $label . ' : ' . array_to_string($teachers_parsed, CourseManager::USER_SEPARATOR);
+                    $teacher_data .= $label.' : '.array_to_string($teachers_parsed, CourseManager::USER_SEPARATOR);
                 }
                 $this->assign('teachers', $teacher_data);
             }
@@ -767,39 +859,45 @@ class Template {
           $this->assign('execution_stats', $stats); */
     }
 
-    function show_header_template() {
+    function show_header_template()
+    {
         $tpl = $this->get_template('layout/show_header.tpl');
         $this->display($tpl);
     }
 
-    function show_footer_template() {
+    function show_footer_template()
+    {
         $tpl = $this->get_template('layout/show_footer.tpl');
         $this->display($tpl);
     }
 
     /* Sets the plugin content in a template variable */
-    function set_plugin_region($plugin_region) {
+    function set_plugin_region($plugin_region)
+    {
         if (!empty($plugin_region)) {
             $region_content = $this->plugin->load_region($plugin_region, $this, $this->force_plugin_load);
             if (!empty($region_content)) {
-                $this->assign('plugin_' . $plugin_region, $region_content);
+                $this->assign('plugin_'.$plugin_region, $region_content);
             } else {
-                $this->assign('plugin_' . $plugin_region, null);
+                $this->assign('plugin_'.$plugin_region, null);
             }
         }
         return null;
     }
 
-    public function fetch($template = null) {
+    public function fetch($template = null)
+    {
         $template = $this->twig->loadTemplate($template);
         return $template->render($this->params);
     }
 
-    public function assign($tpl_var, $value = null) {
+    public function assign($tpl_var, $value = null)
+    {
         $this->params[$tpl_var] = $value;
     }
 
-    public function display($template) {
+    public function display($template)
+    {
         echo $this->twig->render($template, $this->params);
     }
 }

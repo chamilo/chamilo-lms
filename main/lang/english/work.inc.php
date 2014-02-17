@@ -2,6 +2,11 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$WorkFileNotUploadedDirXDoesNotExist = "Assignment could not be uploaded because folder %s does not exist";
+$FolderDoesntExistsInFileSystem = "Target folder doesn't exist on the server.";
+$HandedOutDate = "Time of reception";
+$HandedOut = "Handed out";
+$HandOutDateLimit = "Deadline";
 $Tools = "Tools";
 $SendWork = "Upload paper";
 $langTooBig = "You didn't choose any file to send, or it is too big";

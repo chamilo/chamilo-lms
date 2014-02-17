@@ -600,10 +600,14 @@ class CourseHome
             }
         }
         $web_code_path = api_get_path(WEB_CODE_PATH);
-        $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+        $session_id = api_get_session_id();
         $is_platform_admin = api_is_platform_admin();
 
-        $session_id = api_get_session_id();
+        if ($session_id == 0 ) {
+            $is_allowed_to_edit = api_is_allowed_to_edit(null, true) && api_is_course_admin();
+        } else {
+            $is_allowed_to_edit = api_is_allowed_to_edit(null, true) && !api_is_coach();
+        }
 
         $i = 0;
         $items = array();
@@ -641,7 +645,7 @@ class CourseHome
                 unset($lnk);
 
                 $item['extra'] = null;
-                if ($is_allowed_to_edit && !api_is_coach()) {
+                if ($is_allowed_to_edit) {
 
                     if (empty($session_id)) {
                         if ($tool['visibility'] == '1' && $tool['admin'] != '1') {
@@ -747,7 +751,7 @@ class CourseHome
                 $icon = Display::return_icon($tool['image'], $tool_name, array('class' => 'tool-icon', 'id' => 'toolimage_'.$tool['id']), ICON_SIZE_BIG, false);
 
                 // Validation when belongs to a session
-                $session_img = api_get_session_image($tool['session_id'], $_user['status']);
+                $session_img = api_get_session_image($tool['session_id'], (!empty($_user['status']) ? $_user['status'] : ''));
                 if ($studentview) {
                     $tool_link_params['href'] .= '&isStudentView=true';
                 }

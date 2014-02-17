@@ -34,7 +34,8 @@
  * and then using $secure->clean['var'] as a filtered equivalent, although
  * this is *not* mandatory at all.
  */
-class Security {
+class Security
+{
     public static $clean = array();
 
     /**
@@ -44,11 +45,16 @@ class Security {
      * @param	string	Checker path under which the path should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
      * @return	bool	True if the path is under the checker, false otherwise
      */
-    public static function check_abs_path($abs_path, $checker_path) {
-        global $_configuration;
-        if (empty($checker_path)) { return false; } // The checker path must be set.
+    public static function check_abs_path($abs_path, $checker_path)
+    {
+        // The checker path must be set.
+        if (empty($checker_path)) {
+            return false;
+        }
 
         $true_path = str_replace("\\", '/', realpath($abs_path));
+        $checker_path = str_replace("\\", '/', realpath($checker_path));
+
         $found = strpos($true_path.'/', $checker_path);
 
         if ($found === 0) {
@@ -61,13 +67,6 @@ class Security {
                     return true;
                 }
             }
-            // Code specific to courses directory stored on other disk.
-            /*
-            $checker_path = str_replace(api_get_path(SYS_COURSE_PATH), $_configuration['symbolic_course_folder_abs'], $checker_path);
-            $found = strpos($true_path.'/', $checker_path);
-            if ($found === 0) {
-                return true;
-            }*/
         }
         return false;
     }
@@ -79,8 +78,12 @@ class Security {
      * @param	string	Checker path under which the path should be (absolute path, with trailing slash, get it from api_get_path(SYS_COURSE_PATH))
      * @return	bool	True if the path is under the checker, false otherwise
      */
-    public static function check_rel_path($rel_path, $checker_path) {
-        if (empty($checker_path)) { return false; } // The checker path must be set.
+    public static function check_rel_path($rel_path, $checker_path)
+    {
+        // The checker path must be set.
+        if (empty($checker_path)) {
+            return false;
+        }
         $current_path = getcwd(); // No trailing slash.
         if (substr($rel_path, -1, 1) != '/') {
             $rel_path = '/'.$rel_path;
@@ -100,8 +103,10 @@ class Security {
      * other languages' files extensions)
      * @param   string  Unfiltered filename
      * @param   string  Filtered filename
+     * @return string
      */
-    public static function filter_filename($filename) {
+    public static function filter_filename($filename)
+    {
         require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
         return disable_dangerous_file($filename);
     }
@@ -112,7 +117,8 @@ class Security {
      * @param	string	The array in which to get the token ('get' or 'post')
      * @return	bool	True if it's the right token, false otherwise
      */
-    public static function check_token($request_type = 'post') {
+    public static function check_token($request_type = 'post')
+    {
         switch ($request_type) {
             case 'request':
                 if (isset($_SESSION['sec_token']) && isset($_REQUEST['sec_token']) && $_SESSION['sec_token'] === $_REQUEST['sec_token']) {
@@ -143,7 +149,8 @@ class Security {
      * most session hijacking attacks.
      * @return	bool	True if the user agent is the same, false otherwise
      */
-    public static function check_ua() {
+    public static function check_ua()
+    {
         if (isset($_SESSION['sec_ua']) and $_SESSION['sec_ua'] === $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed']) {
             return true;
         }
@@ -154,7 +161,8 @@ class Security {
      * Clear the security token from the session
      * @return void
      */
-    public static function clear_token() {
+    public static function clear_token()
+    {
         $_SESSION['sec_token'] = null;
         unset($_SESSION['sec_token']);
     }
@@ -168,7 +176,8 @@ class Security {
      * Check the token with check_token()
      * @return	string	Hidden-type input ready to insert into a form
      */
-    public static function get_HTML_token() {
+    public static function get_HTML_token()
+    {
         $token = md5(uniqid(rand(), TRUE));
         $string = '<input type="hidden" name="sec_token" value="'.$token.'" />';
         $_SESSION['sec_token'] = $token;
@@ -184,13 +193,18 @@ class Security {
      * Check the token with check_token()
      * @return	string	Token
      */
-    public static function get_token() {
+    public static function get_token()
+    {
         $token = md5(uniqid(rand(), TRUE));
         $_SESSION['sec_token'] = $token;
         return $token;
     }
 
-    public static function get_existing_token() {
+    /**
+     * @return string
+     */
+    public static function get_existing_token()
+    {
         if (isset($_SESSION['sec_token']) && !empty($_SESSION['sec_token'])) {
             return $_SESSION['sec_token'];
         } else {
@@ -203,7 +217,8 @@ class Security {
      * most cases of session hijacking.
      * @return void
      */
-    public static function get_ua() {
+    public static function get_ua()
+    {
         $_SESSION['sec_ua_seed'] = uniqid(rand(), TRUE);
         $_SESSION['sec_ua'] = $_SERVER['HTTP_USER_AGENT'].$_SESSION['sec_ua_seed'];
     }
@@ -215,7 +230,8 @@ class Security {
      * @param	array	Additional options
      * @return	bool	True if variable was filtered and added to the current object, false otherwise
      */
-    public static function filter($var, $type = 'string', $options = array()) {
+    public static function filter($var, $type = 'string', $options = array())
+    {
         // This function has not been finished! Do not use!
         $result = false;
         // Get variable name and value.
@@ -246,7 +262,7 @@ class Security {
                 return false;
         }
         if (!empty($option['save'])) {
-            $this->clean[$name] = $result;
+            self::$clean[$name] = $result;
         }
         return $result;
     }
@@ -257,7 +273,8 @@ class Security {
      * @param	string	Variable name
      * @return	mixed	Variable or NULL on error
      */
-    public static function get($varname) {
+    public static function get($varname)
+    {
         if (isset(self::$clean[$varname])) {
             return self::$clean[$varname];
         }
@@ -272,7 +289,8 @@ class Security {
      * @param   integer The user status,constant allowed (STUDENT, COURSEMANAGER, ANONYMOUS, COURSEMANAGERLOWSECURITY)
      * @return	mixed	Filtered string or array
      */
-    public static function remove_XSS($var, $user_status = ANONYMOUS, $filter_terms = false) {
+    public static function remove_XSS($var, $user_status = ANONYMOUS, $filter_terms = false)
+    {
     	if ($filter_terms) {
     		$var = self::filter_terms($var);
     	}
@@ -328,10 +346,20 @@ class Security {
             $config->set('CSS.AllowImportant', true);
             $config->set('CSS.AllowTricky', true); // We need for the flv player the css definition display: none;
             $config->set('CSS.Proprietary', true);
+
+            // Allow uri scheme.
+            $config->set('URI.AllowedSchemes', array(
+                'http' => true,
+                'https' => true,
+                'mailto' => true,
+                'ftp' => true,
+                'nntp' => true,
+                'news' => true,
+                'data' => true,
+            ));
+
             $purifier[$user_status] = new HTMLPurifier($config);
         }
-
-
 
         if (is_array($var)) {
             return $purifier[$user_status]->purifyArray($var);
@@ -347,27 +375,29 @@ class Security {
      * @param	string content to be filter
      * @return 	string
      */
-    static function filter_terms($text) {
+    static function filter_terms($text)
+    {
     	static $bad_terms = array();
 
-    	if (empty($bad_terms)) {
-    		$list = api_get_setting('filter_terms');
-    		$list = explode("\n", $list);
-    		$list = array_filter($list);
-    		if (!empty($list)) {
-    			foreach($list as $term) {
-    				$term = str_replace(array("\r\n", "\r", "\n", "\t"), '', $term);
-    				$html_entities_value = api_htmlentities($term, ENT_QUOTES, api_get_system_encoding());
-    				$bad_terms[] = $term;
-    				if ($term != $html_entities_value) {
-    					$bad_terms[] = $html_entities_value;
-    				}
-    			}
-    			$bad_terms = array_filter($bad_terms);
-    		}
-    	}
+        if (empty($bad_terms)) {
+            $list = api_get_setting('filter_terms');
+            $list = explode("\n", $list);
+            $list = array_filter($list);
+            if (!empty($list)) {
+                foreach ($list as $term) {
+                    $term = str_replace(array("\r\n", "\r", "\n", "\t"), '', $term);
+                    $html_entities_value = api_htmlentities($term, ENT_QUOTES, api_get_system_encoding());
+                    $bad_terms[] = $term;
+                    if ($term != $html_entities_value) {
+                        $bad_terms[] = $html_entities_value;
+                    }
+                }
+                $bad_terms = array_filter($bad_terms);
+            }
+        }
 
     	$replace = '***';
+
     	if (!empty($bad_terms)) {
     		//Fast way
     		$new_text = str_ireplace($bad_terms, $replace, $text, $count);
@@ -403,7 +433,8 @@ class Security {
      * @return string                   Returns sanitized image path or an empty string when the image path is not secure.
      * @author Ivan Tcholakov, March 2011
      */
-    public static function filter_img_path($image_path) {
+    public static function filter_img_path($image_path)
+    {
         static $allowed_extensions = array('png', 'gif', 'jpg', 'jpeg');
         $image_path = htmlspecialchars(trim($image_path)); // No html code is allowed.
         // We allow static images only, query strings are forbidden.

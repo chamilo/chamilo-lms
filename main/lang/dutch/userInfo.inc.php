@@ -95,7 +95,6 @@ $UnsubscribeFromPlatformSuccess = "Uw account %s werd volledig verwijderd van he
 $ToChangeYourEmailMustTypeYourPassword = "Om uw e-mailadres te kunnen wijzigen, moet u uw wachtwoord bevestigen";
 $Invitations = "Invitaties";
 $MyGroups = "Mijn groepen";
-$EditProfile = "Profiel wijzigen";
 $Social = "Sociaal";
 $Profile = "Profiel";
 $MyFriends = "Mijn vrienden";

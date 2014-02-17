@@ -9,18 +9,21 @@
 /**
  * Code
  */
-require_once api_get_path(LIBRARY_PATH) . 'tracking.lib.php';
+require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course_category.lib.php';
 
 /**
  * Auth can be used to instanciate objects or as a library to manage courses
  * @package chamilo.auth
  */
-class Auth {
+class Auth
+{
 
     /**
      * Constructor
      */
-    public function __construct() {
+    public function __construct()
+    {
 
     }
 
@@ -29,7 +32,8 @@ class Auth {
      * @param   int User id
      * @return  array an array containing all the information of the courses of the given user
      */
-    public function get_courses_of_user($user_id) {
+    public function get_courses_of_user($user_id)
+    {
         $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
@@ -373,180 +377,31 @@ class Auth {
 
     /**
      * Counts the number of courses in a given course category
-     * @param   string  Category code
+     * @param   string  $categoryCode Category code
      * @return  int     Count of courses
      */
-    public function count_courses_in_category($category_code) {
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $TABLE_COURSE_FIELD = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $TABLE_COURSE_FIELD_VALUE = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-
-        // get course list auto-register
-        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON " .
-                " tcfv.field_id =  tcf.id WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
-
-        $special_course_result = Database::query($sql);
-        if (Database::num_rows($special_course_result) > 0) {
-            $special_course_list = array();
-            while ($result_row = Database::fetch_array($special_course_result)) {
-                $special_course_list[] = '"' . $result_row['course_code'] . '"';
-            }
-        }
-        $without_special_courses = '';
-        if (!empty($special_course_list)) {
-            $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
-        }
-
-        $sql = "SELECT * FROM $tbl_course WHERE category_code" . (empty($category_code) ? " IS NULL" : "='" . $category_code . "'") . $without_special_courses;
-        // Showing only the courses of the current Dokeos access_url_id.
-        global $_configuration;
-        if ($_configuration['multiple_access_urls']) {
-            $url_access_id = api_get_current_access_url_id();
-            if ($url_access_id != -1) {
-                $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $sql = "SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course
-                                        ON (url_rel_course.course_code=course.code)
-                                        WHERE access_url_id = $url_access_id AND category_code" . (empty($category_code) ? " IS NULL" : "='" . $category_code . "'") . $without_special_courses;
-            }
-        }
-        return Database::num_rows(Database::query($sql));
+    public function count_courses_in_category($categoryCode)
+    {
+        return countCoursesInCategory($categoryCode);
     }
 
     /**
      * get the browsing of the course categories (faculties)
      * @return array    array containing a list with all the categories and subcategories(if needed)
      */
-    public function browse_course_categories() {
-        $tbl_courses_nodes = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT * FROM $tbl_courses_nodes ORDER BY tree_pos ASC";
-        $result = Database::query($sql);
-        $categories = array();
-        while ($row = Database::fetch_array($result)) {
-            $count_courses = $this->count_courses_in_category($row['code']);
-            $row['count_courses'] = $count_courses;
-            if (!isset($row['parent_id'])) {
-                $categories[0][$row['tree_pos']] = $row;
-            } else {
-                $categories[$row['parent_id']][$row['tree_pos']] = $row;
-            }
-        }
-        return $categories;
+    public function browse_course_categories()
+    {
+        return browseCourseCategories();
     }
 
     /**
      * Display all the courses in the given course category. I could have used a parameter here
-     * @param   string  Category code
+     * @param   string  $categoryCode Category code
      * @return  array   Courses data
      */
-    public function browse_courses_in_category($category_code, $random_value = null) {
-        global $_configuration;
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $TABLE_COURSE_FIELD = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $TABLE_COURSE_FIELD_VALUE = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-
-
-        // Get course list auto-register
-        $sql = "SELECT course_code FROM $TABLE_COURSE_FIELD_VALUE tcfv INNER JOIN $TABLE_COURSE_FIELD tcf ON tcfv.field_id = tcf.id
-                WHERE tcf.field_variable = 'special_course' AND tcfv.field_value = 1 ";
-
-        $special_course_result = Database::query($sql);
-        if (Database::num_rows($special_course_result) > 0) {
-            $special_course_list = array();
-            while ($result_row = Database::fetch_array($special_course_result)) {
-                $special_course_list[] = '"' . $result_row['course_code'] . '"';
-            }
-        }
-
-        $without_special_courses = '';
-        if (!empty($special_course_list)) {
-            $without_special_courses = ' AND course.code NOT IN (' . implode(',', $special_course_list) . ')';
-        }
-
-        if (!empty($random_value)) {
-            $random_value = intval($random_value);
-
-            $sql = "SELECT COUNT(*) FROM $tbl_course";
-            $result = Database::query($sql);
-            list($num_records) = Database::fetch_row($result);
-
-            if ($_configuration['multiple_access_urls']) {
-
-                $url_access_id = api_get_current_access_url_id();
-                $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-
-                $sql = "SELECT COUNT(*) FROM $tbl_course course INNER JOIN $tbl_url_rel_course as url_rel_course ON (url_rel_course.course_code=course.code)
-                        WHERE access_url_id = $url_access_id ";
-                $result = Database::query($sql);
-                list($num_records) = Database::fetch_row($result);
-
-                $sql = "SELECT course.id FROM $tbl_course course INNER JOIN $tbl_url_rel_course as url_rel_course
-                        ON (url_rel_course.course_code=course.code)
-                        WHERE   access_url_id = $url_access_id AND
-                                RAND()*$num_records< $random_value
-                                $without_special_courses ORDER BY RAND() LIMIT 0, $random_value";
-            } else {
-                $sql = "SELECT id FROM $tbl_course course WHERE RAND()*$num_records< $random_value $without_special_courses ORDER BY RAND() LIMIT 0, $random_value";
-            }
-
-            $result = Database::query($sql);
-            $id_in = null;
-            while (list($id) = Database::fetch_row($result)) {
-                if ($id_in) {
-                    $id_in.=",$id";
-                } else {
-                    $id_in = "$id";
-                }
-            }
-            $sql = "SELECT * FROM $tbl_course WHERE id IN($id_in)";
-        } else {
-            $category_code = Database::escape_string($category_code);
-            if (empty($category_code)) {
-                $sql = "SELECT * FROM $tbl_course WHERE 1=1 $without_special_courses ORDER BY title ";
-            } else {
-                $sql = "SELECT * FROM $tbl_course WHERE category_code='$category_code' $without_special_courses ORDER BY title ";
-            }
-
-            //showing only the courses of the current Chamilo access_url_id
-            if ($_configuration['multiple_access_urls']) {
-                $url_access_id = api_get_current_access_url_id();
-                $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-                $sql = "SELECT * FROM $tbl_course as course INNER JOIN $tbl_url_rel_course as url_rel_course
-                        ON (url_rel_course.course_code=course.code)
-                        WHERE access_url_id = $url_access_id AND category_code='$category_code' $without_special_courses ORDER BY title";
-            }
-        }
-
-        $result = Database::query($sql);
-        $courses = array();
-        while ($row = Database::fetch_array($result)) {
-            $row['registration_code'] = !empty($row['registration_code']);
-            $count_users = CourseManager::get_users_count_in_course($row['code']);
-            $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
-
-            if ($row['tutor_name'] == '0') {
-                $row['tutor_name'] = get_lang('NoManager');
-            }
-            $point_info = CourseManager::get_course_ranking($row['id'], 0);
-            $courses[] = array(
-                'real_id' => $row['id'],
-                'point_info' => $point_info,
-                'code' => $row['code'],
-                'directory' => $row['directory'],
-                'db' => $row['db_name'],
-                'visual_code' => $row['visual_code'],
-                'title' => $row['title'],
-                'tutor' => $row['tutor_name'],
-                'subscribe' => $row['subscribe'],
-                'unsubscribe' => $row['unsubscribe'],
-                'registration_code' => $row['registration_code'],
-                'creation_date' => $row['creation_date'],
-                'visibility' => $row['visibility'],
-                'count_users' => $count_users,
-                'count_connections' => $count_connections_last_month
-            );
-        }
-
-        return $courses;
+    public function browse_courses_in_category($categoryCode, $randomValue = null)
+    {
+        return browseCoursesInCategory($categoryCode, $randomValue);
     }
 
     /**
@@ -555,7 +410,8 @@ class Auth {
      * @param string $search_term: the string that the user submitted, what we are looking for
      * @return array an array containing a list of all the courses (the code, directory, dabase, visual_code, title, ... ) matching the the search term.
      */
-    public function search_courses($search_term) {
+    public function search_courses($search_term)
+    {
         $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLE_COURSE_FIELD = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
         $TABLE_COURSE_FIELD_VALUE = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
@@ -595,7 +451,12 @@ class Auth {
             $row['registration_code'] = !empty($row['registration_code']);
             $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
             $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
+
+            $point_info = CourseManager::get_course_ranking($row['id'], 0);
+
             $courses[] = array(
+                'real_id' => $row['id'],
+                'point_info' => $point_info,
                 'code' => $row['code'],
                 'directory' => $row['directory'],
                 'db' => $row['db_name'],
@@ -619,7 +480,8 @@ class Auth {
      * @param string Course code
      * @return string  Message about results
      */
-    public function subscribe_user($course_code) {
+    public function subscribe_user($course_code)
+    {
         $user_id = api_get_user_id();
         $all_course_information = CourseManager::get_course_information($course_code);
 

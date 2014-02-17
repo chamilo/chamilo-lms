@@ -97,7 +97,8 @@ class GradebookDataGenerator
 			$row = array ();
 			$row[] = $item;
 			$row[] = $item->get_name();
-			$row[] = $item->get_description();
+            // display the 2 first line of description, and all description on mouseover (https://support.chamilo.org/issues/6588)
+			$row[] = '<span title="'.api_remove_tags_with_space($item->get_description()).'">'.api_get_short_text_from_html($item->get_description(), 160).'</span>';
 			$row[] = $item->get_weight();
 			/*if (api_is_allowed_to_edit(null, true)) {
 				$row[] = $this->build_date_column($item);

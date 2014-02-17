@@ -31,7 +31,10 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
     $return_value            = SubLanguageManager::add_file_in_language_directory($path_folder);
 
     //update variable language
+    // Replace double quotes to avoid parse errors
     $new_language = str_replace('"', '\"',$new_language);
+    // Replace new line signs to avoid parse errors - see #6773
+    $new_language = str_replace("\n","\\n",$new_language);
     $all_file_of_directory[$language_variable]="\"".api_convert_encoding($new_language, api_get_system_encoding(),'UTF-8')."\";";
     $result_array = array();
 
@@ -40,7 +43,7 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
     }
     $variables_with_problems = '';
     if (!empty($result_array)) {
-        foreach($result_array as $key =>$result) {
+        foreach ($result_array as $key => $result) {
             if ($result == false) {
                 $variables_with_problems .=$key.' <br />';
             }

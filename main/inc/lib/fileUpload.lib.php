@@ -78,7 +78,7 @@ function get_document_title($name) {
 	// If they upload .htaccess...
 	$name = disable_dangerous_file($name);
 	$ext = substr(strrchr($name, '.'), 0);
-	return addslashes(substr($name, 0, strlen($name) - strlen(strstr($name, $ext))));
+	return substr($name, 0, strlen($name) - strlen(strstr($name, $ext)));
 }
 
 /**
@@ -89,34 +89,36 @@ function get_document_title($name) {
  */
 function process_uploaded_file($uploaded_file, $show_output = true) {
 	// Checking the error code sent with the file upload.
-
-	switch ($uploaded_file['error']) {
-		case 1:
-			// The uploaded file exceeds the upload_max_filesize directive in php.ini.
-			if ($show_output)
-                Display::display_error_message(get_lang('UplExceedMaxServerUpload').ini_get('upload_max_filesize'));
-			return false;
-		case 2:
-			// The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
-			// Not used at the moment, but could be handy if we want to limit the size of an upload (e.g. image upload in html editor).
-			$max_file_size = intval($_POST['MAX_FILE_SIZE']);
-			if ($show_output) {
-                Display::display_error_message(get_lang('UplExceedMaxPostSize'). format_file_size($max_file_size));
-			}
-			return false;
-		case 3:
-			// The uploaded file was only partially uploaded.
-		    if ($show_output) {
-			     Display::display_error_message(get_lang('UplPartialUpload').' '.get_lang('PleaseTryAgain'));
-		    }
-			return false;
-		case 4:
-			// No file was uploaded.
-		    if ($show_output) {
-			     Display::display_error_message(get_lang('UplNoFileUploaded').' '. get_lang('UplSelectFileFirst'));
-		    }
-			return false;
-	}
+    if (isset($uploaded_file['error'])) {
+        switch ($uploaded_file['error']) {
+            case 1:
+                // The uploaded file exceeds the upload_max_filesize directive in php.ini.
+                if ($show_output) {
+                    Display::display_error_message(get_lang('UplExceedMaxServerUpload').ini_get('upload_max_filesize'));
+                }
+                return false;
+            case 2:
+                // The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
+                // Not used at the moment, but could be handy if we want to limit the size of an upload (e.g. image upload in html editor).
+                $max_file_size = intval($_POST['MAX_FILE_SIZE']);
+                if ($show_output) {
+                    Display::display_error_message(get_lang('UplExceedMaxPostSize'). format_file_size($max_file_size));
+                }
+                return false;
+            case 3:
+                // The uploaded file was only partially uploaded.
+                if ($show_output) {
+                     Display::display_error_message(get_lang('UplPartialUpload').' '.get_lang('PleaseTryAgain'));
+                }
+                return false;
+            case 4:
+                // No file was uploaded.
+                if ($show_output) {
+                     Display::display_error_message(get_lang('UplNoFileUploaded').' '. get_lang('UplSelectFileFirst'));
+                }
+                return false;
+        }
+    }
 
 	if (!file_exists($uploaded_file['tmp_name'])) {
 	    // No file was uploaded.
@@ -174,15 +176,29 @@ function process_uploaded_file($uploaded_file, $show_output = true) {
  * @param boolean Optional output parameter. So far only use for unzip_uploaded_document function. If no output wanted on success, set to false.
  * @return path of the saved file
  */
-function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upload_path, $user_id, $to_group_id = 0, $to_user_id = null, $unzip = 0, $what_if_file_exists = '', $output = true) {
-	if (!$user_id) die('Not a valid user.');
+function handle_uploaded_document(
+    $_course,
+    $uploaded_file,
+    $base_work_dir,
+    $upload_path,
+    $user_id,
+    $to_group_id = 0,
+    $to_user_id = null,
+    $unzip = 0,
+    $what_if_file_exists = '',
+    $output = true
+) {
+	if (!$user_id) {
+        die('Not a valid user.');
+    }
+
 	// Strip slashes
 	$uploaded_file['name'] = stripslashes($uploaded_file['name']);
 	// Add extension to files without one (if possible)
 	$uploaded_file['name'] = add_ext_on_mime($uploaded_file['name'], $uploaded_file['type']);
 	$current_session_id    = api_get_session_id();
 
-    //Just in case process_uploaded_file is not called
+    // Just in case process_uploaded_file is not called
     $max_filled_space = DocumentManager::get_course_quota();
 
 	// Check if there is enough space to save the file
@@ -209,24 +225,22 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 		// No "dangerous" files
 		$clean_name = disable_dangerous_file($clean_name);
 
+        // Checking file extension
 		if (!filter_extension($clean_name)) {
 		    if ($output) {
                 Display::display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
 		    }
 			return false;
 		} else {
-			// Extension is good
-			//echo '<br />clean name = '.$clean_name;
-			//echo '<br />upload_path = '.$upload_path;
 			// If the upload path differs from / (= root) it will need a slash at the end
 			if ($upload_path != '/') {
 				$upload_path = $upload_path.'/';
 			}
-			//echo '<br />upload_path = '.$upload_path;
 			$file_path = $upload_path.$clean_name;
-			//echo '<br />file path = '.$file_path;
+
 			// Full path to where we want to store the file with trailing slash
 			$where_to_save = $base_work_dir.$upload_path;
+
 			// At least if the directory doesn't exist, tell so
 			if (!is_dir($where_to_save)) {
 			    if ($output){
@@ -234,10 +248,9 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 				}
 				return false;
 			}
-			//echo '<br />where to save = '.$where_to_save;
 			// Full path of the destination
 			$store_path = $where_to_save.$clean_name;
-			//echo '<br />store path = '.$store_path;
+
 			// Name of the document without the extension (for the title)
 			$document_name = get_document_title($uploaded_file['name']);
 			// Size of the uploaded file (in bytes)
@@ -251,35 +264,50 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 				case 'overwrite':
 					// Check if the target file exists, so we can give another message
 					$file_exists = file_exists($store_path);
-					if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path)) {
+					if (moveUploadedFile($uploaded_file, $store_path)) {
 						chmod($store_path, $files_perm);
+
 						if ($file_exists) {
 							// UPDATE DATABASE
 							$document_id = DocumentManager::get_document_id($_course, $file_path);
 
 							if (is_numeric($document_id)) {
-								// Update filesize
+								// Update file size
 								update_existing_document($_course, $document_id, $uploaded_file['size']);
 
 								// Update document item_property
 								api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentUpdated', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
 
-                                //Redo visibility
+                                // Redo visibility
                                 api_set_default_visibility(TOOL_DOCUMENT, $document_id);
-							}
+							} else {
+                                // There might be cases where the file exists on disk but there is no registration of that in the database
+                                // In this case, and if we are in overwrite mode, overwrite and create the db record
+                                $document_id = add_document($_course, $file_path, 'file', $file_size, $document_name, null, 0, true, null, $current_session_id);
+                                if ($document_id) {
+                                    // Put the document in item_property update
+                                    api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
+
+                                    // Redo visibility
+                                    api_set_default_visibility(TOOL_DOCUMENT, $document_id);
+                                }
+                            }
 							// If the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course, $upload_path, $user_id);
 							// Display success message with extra info to user
 							if ($output) {
 								Display::display_confirmation_message(get_lang('UplUploadSucceeded').'<br />'.$file_path .' '. get_lang('UplFileOverwritten'), false);
-							}
+        					}
 							return $file_path;
 						} else {
 							// Put the document data in the database
-							$document_id = add_document($_course, $file_path, 'file', $file_size, $document_name, null, 0, true);
+							$document_id = add_document($_course, $file_path, 'file', $file_size, $document_name, null, 0, true, null, $current_session_id);
 							if ($document_id) {
 								// Put the document in item_property update
 								api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
+
+                                // Redo visibility
+                                api_set_default_visibility(TOOL_DOCUMENT, $document_id);
 							}
 							// If the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course, $upload_path, $user_id);
@@ -303,7 +331,7 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 					$store_path = $where_to_save.$new_name;
 					$new_file_path = $upload_path.$new_name;
 
-					if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path)) {
+					if (moveUploadedFile($uploaded_file, $store_path)) {
 
 						chmod($store_path, $files_perm);
 
@@ -312,6 +340,9 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 						if ($document_id) {
 							// Update document item_property
 							api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
+
+                            // Redo visibility
+                            api_set_default_visibility(TOOL_DOCUMENT, $document_id);
 						}
 						// If the file is in a folder, we need to update all parent folders
 						item_property_update_on_folder($_course, $upload_path, $user_id);
@@ -328,15 +359,14 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 						return false;
 					}
 					break;
-
-				// Only save the file if it doesn't exist or warn user if it does exist
 				default:
+                    // Only save the file if it doesn't exist or warn user if it does exist
 					if (file_exists($store_path)) {
 					    if ($output) {
 						  Display::display_error_message($clean_name.' '.get_lang('UplAlreadyExists'));
 						}
 					} else {
-						if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path)) {
+						if (moveUploadedFile($uploaded_file, $store_path)) {
 							chmod($store_path, $files_perm);
 
 							// Put the document data in the database
@@ -345,6 +375,8 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 							if ($document_id) {
 								// Update document item_property
 								api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $user_id, $to_group_id, $to_user_id, null, null, $current_session_id);
+                                // Redo visibility
+                                api_set_default_visibility(TOOL_DOCUMENT, $document_id);
 							}
 							// If the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course,$upload_path,$user_id);
@@ -365,6 +397,21 @@ function handle_uploaded_document($_course, $uploaded_file, $base_work_dir, $upl
 				}
 		}
 	}
+}
+
+/**
+ * @param string $file
+ * @param string $storePath
+ * @return bool
+ */
+function moveUploadedFile($file, $storePath)
+{
+    $handleFromFile = isset($file['from_file']) && $file['from_file'] ? true : false;
+    if ($handleFromFile) {
+        return file_exists($file['tmp_name']);
+    } else {
+        return move_uploaded_file($file['tmp_name'], $storePath);
+    }
 }
 
 /**
@@ -404,7 +451,7 @@ function dir_total_space($dir_path) {
 	$save_dir = getcwd();
 	chdir($dir_path) ;
 	$handle = opendir($dir_path);
-
+    $sumSize = 0;
 	while ($element = readdir($handle)) {
 		if ( $element == '.' || $element == '..') {
 			continue; // Skip the current and parent directories
@@ -593,10 +640,10 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
 	$zip_file = new PclZip($uploaded_file['tmp_name']);
 
 	// Check the zip content (real size and file extension)
-	if (file_exists($uploaded_file)) {
-
+	if (file_exists($uploaded_file['tmp_name'])) {
 		$zip_content_array = $zip_file->listContent();
 		$ok_scorm = false;
+        $realFileSize = 0;
 		foreach ($zip_content_array as & $this_content) {
 			if (preg_match('~.(php.*|phtml)$~i', $this_content['filename'])) {
 				return api_failure::set_failure('php_file_in_zip_file');
@@ -627,7 +674,7 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
 		}
 
 		// It happens on Linux that $upload_path sometimes doesn't start with '/'
-		if ($upload_path[0] != '/') {
+		if ($upload_path[0] != '/' && substr($base_work_dir,-1,1) != '/') {
 			$upload_path = '/'.$upload_path;
 		}
 
@@ -651,14 +698,13 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
 			// PHP method - slower...
 			$save_dir = getcwd();
 			chdir($base_work_dir.$upload_path);
-			$unzippingState = $zip_file->extract();
+            $unzippingState = $zip_file->extract();
 			for ($j=0; $j < count($unzippingState); $j++) {
 				$state = $unzippingState[$j];
 
 				// Fix relative links in html files
 				$extension = strrchr($state['stored_filename'], '.');
 			}
-
 			if ($dir = @opendir($base_work_dir.$upload_path)) {
 				while ($file = readdir($dir)) {
 					if ($file != '.' && $file != '..') {
@@ -673,7 +719,9 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
 				}
 
 				closedir($dir);
-			}
+			} else {
+                error_log('Could not create directory '.$base_work_dir.$upload_path.' to unzip files');
+            }
 			chdir($save_dir); // Back to previous dir position
 		}
 	}
@@ -710,6 +758,7 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 
 	$zip_content_array = (array)$zip_file->listContent();
 
+    $real_filesize = 0;
 	foreach($zip_content_array as & $this_content) {
 		$real_filesize += $this_content['size'];
 	}
@@ -838,10 +887,30 @@ function filter_extension(&$filename) {
  * @param string $filetype
  * @param int $filesize
  * @param string $title
+ * @param string $comment
+ * @param int $readonly
+ * @param bool $save_visibility
+ * @param int $group_id
+ * @param int $session_id Session ID, if any
  * @return id if inserted document
  */
-function add_document($_course, $path, $filetype, $filesize, $title, $comment = null, $readonly = 0, $save_visibility = true, $group_id = null) {
-	$session_id    = api_get_session_id();
+function add_document(
+    $_course,
+    $path,
+    $filetype,
+    $filesize,
+    $title,
+    $comment = null,
+    $readonly = 0,
+    $save_visibility = true,
+    $group_id = null,
+    $session_id = 0
+) {
+    $session_id = intval($session_id);
+
+    if (empty($session_id)) {
+        $session_id    = api_get_session_id();
+    }
 	$readonly      = intval($readonly);
 	$comment       = Database::escape_string($comment);
 	$path          = Database::escape_string($path);
@@ -926,6 +995,7 @@ function item_property_update_on_folder($_course, $path, $user_id) {
 
 	$exploded_path = explode('/', $path);
 	$course_id = api_get_course_int_id();
+    $newpath = '';
 	foreach ($exploded_path as $key => & $value) {
 		// We don't want a slash before our first slash
 		if ($key != 0) {
@@ -1152,7 +1222,7 @@ function replace_img_path_in_html_file($original_img_path, $new_img_path, $html_
 
 	$fp = fopen($html_file, 'r');
 	$buffer = fread($fp, filesize($html_file));
-
+    $new_html_content = '';
 
 	// Fix the image tags
 
@@ -1435,7 +1505,7 @@ function build_missing_files_form($missing_files, $upload_path, $file_name) {
 	$added_slash = ($upload_path == '/') ? '' : '/';
 	$folder_id      = DocumentManager::get_document_id(api_get_course_info(), $upload_path);
 	// Build the form
-	$form .= "<p><strong>".get_lang('MissingImagesDetected')."</strong></p>"
+	$form = "<p><strong>".get_lang('MissingImagesDetected')."</strong></p>"
 		."<form method=\"post\" action=\"".api_get_self()."\" enctype=\"multipart/form-data\">"
 		// Related_file is the path to the file that has missing images
 		."<input type=\"hidden\" name=\"related_file\" value=\"".$upload_path.$added_slash.$file_name."\" />"

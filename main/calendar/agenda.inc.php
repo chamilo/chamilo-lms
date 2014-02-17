@@ -34,7 +34,7 @@ $(function() {
         } else {
             url = String(window.location)+temp;
             window.location.replace(url);
-        }    
+        }
     });
 });
 </script>';
@@ -1033,7 +1033,7 @@ function construct_to_select_form($group_list = null, $user_list = null, $filter
         }
         $result .= "</optgroup>";
     }
-    
+
     // adding the individual users to the select form
     if (!empty($user_list)) {
         $result .= '<optgroup label="'.get_lang('FilterByUser').'">';
@@ -1549,11 +1549,7 @@ function change_visibility($tool, $id, $visibility)
     $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $tool = Database::escape_string($tool);
     $id = Database::escape_string($id);
-    /*
-      $sql="SELECT * FROM $TABLE_ITEM_PROPERTY WHERE tool='".TOOL_CALENDAR_EVENT."' AND ref='$id'";
-      $result=Database::query($sql) or die (Database::error());
-      $row=Database::fetch_array($result);
-     */
+
     if ($visibility == 0) {
         $sql_visibility = "UPDATE $TABLE_ITEM_PROPERTY SET visibility='0' WHERE tool='$tool' AND ref='$id'";
         api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id, "invisible", api_get_user_id());
@@ -1584,6 +1580,7 @@ function display_courseadmin_links($filter = 0)
         $actions = "<a href='agenda_js.php?type=course&".api_get_cidreq()."'>".Display::return_icon('calendar.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
     }
 
+    $actions .= "<a href='agenda_list.php?type=course&".api_get_cidreq()."'>".Display::return_icon('week.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
     $actions .= "<a href='agenda.php?".api_get_cidreq()."&amp;sort=asc&amp;toolgroup=".api_get_group_id()."&action=add'>".Display::return_icon('new_event.png', get_lang('AgendaAdd'), '', ICON_SIZE_MEDIUM)."</a>";
     $actions .= "<a href='agenda.php?".api_get_cidreq()."&action=importical'>".Display::return_icon('import_calendar.png', get_lang('ICalFileImport'), '', ICON_SIZE_MEDIUM)."</a>";
     $actions .= $form;
@@ -2739,8 +2736,13 @@ function show_add_form($id = '', $type = null)
                         $oFCKeditor->Value = $content;
                         $return = $oFCKeditor->CreateHtml();
                         echo $return;
-                        //echo '<textarea class="span5"  rows="4" name="content">'.$content.'</textarea>';
                         echo '</div>
+                <div class = "controls">
+                    <label>
+                    <input id="add_announcement" type="checkbox" name="add_announcement" checked="checked"/>
+                    '.get_lang('AddAnnouncement').'&nbsp('.get_lang('SendMail').')
+                    </label>
+                </div>
 			</div>';
 
             if ($agendaObj->type == 'course') {
@@ -2749,7 +2751,13 @@ function show_add_form($id = '', $type = null)
 				<label class="control-label">
                     '.get_lang('AddAnAttachment').'&nbsp;</label>
 				<div class="controls">
-                    <input type="file" name="user_upload"/>  '.get_lang('Comment').' <input name="file_comment" type="text" size="20" />
+                    <input type="file" name="user_upload"/>
+                </div>
+                <label class="control-label">'.
+                    get_lang('Comment').'
+                </label>  
+                <div class="controls">  
+                    <textarea name="file_comment" type="textarea"></textarea>
                 </div>
              </div>';
             }
@@ -4096,7 +4104,7 @@ function show_add_form($id = '', $type = null)
 
         $result = Database::query($sql);
         $last_id = Database::insert_id();
-
+        
         // add a attachment file in agenda
 
         add_agenda_attachment_file($file_comment, $last_id);

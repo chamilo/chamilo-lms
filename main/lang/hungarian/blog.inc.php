@@ -78,7 +78,6 @@ $langUserHasPermissionNot = "A felhasználó nem rendelkezik jogokkal";
 $langUserHasPermission = "A felhasználó rendelkezik jogokkal";
 $langLegend = "Jelmagyarázat";
 $langUserHasPermissionByRoleGroup = "A felhasználó rendelkezik jogokkal a csoportjához";
-$EditPost = "Üzenet szerkesztése";
 $AddBlog = "Blog hozzáadása";
 $EditBlog = "Blog szerkesztése";
 $DeleteBlog = "Blog törlése";

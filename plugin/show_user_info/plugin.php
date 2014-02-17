@@ -9,15 +9,13 @@
  * Plugin details (must be present)
  */
 
-//the plugin title
+// The plugin title
 $plugin_info['title']      = 'Show user information';
-
-//the comments that go with the plugin
+// The comments that go with the plugin
 $plugin_info['comment']     = "Shows a welcome message, (this is an example to uses the template system: Twig)";
-//the plugin version
+// The plugin version
 $plugin_info['version']     = '1.0';
-//the plugin author
+// The plugin author
 $plugin_info['author']      = 'Julio Montoya';
-
-//set the smarty templates that are going to be used
+// Set the templates that are going to be used
 $plugin_info['templates']   = array('template.tpl');

@@ -60,6 +60,7 @@ $langRequestDenied = "Odmowa realizacji tego połączenia";
 $UsageDatacreated = "Utworzono dane użytkowania";
 $SessionView = "Wyświetlaj kurs wg sesji";
 $CourseView = "Wyświetl pełną listę kursów";
+$DropboxFileAdded = "Plik skrzynki nadawczej dodany";
 $NewMessageInForum = "Nowa wiadomość wysłana na forum";
 $FolderCreated = "Nowy katalog utworzony";
 $LinkAdded = "Ocena dodana";

@@ -128,9 +128,13 @@ class CoursesController { // extends Controller {
     }
 
     /**
-     * Search courses
+     *
+     * @param string $search_term
+     * @param string $message
+     * @param string $error
+     * @param string $content
      */
-    public function search_courses($search_term, $message = '', $error = '') {
+    public function search_courses($search_term, $message = '', $error = '', $content = null) {
 
         $data = array();
 
@@ -148,13 +152,14 @@ class CoursesController { // extends Controller {
 
         // we need only the course codes as these will be used to match against the courses of the category
         if ($user_courses != '') {
-            foreach ($user_courses as $key => $value) {
-                    $user_coursecodes[] = $value['code'];
+            foreach ($user_courses as $value) {
+                $user_coursecodes[] = $value['code'];
             }
         }
 
         $data['user_coursecodes'] = $user_coursecodes;
         $data['message']    = $message;
+        $data['content']    = $content;
         $data['error']      = $error;
         $data['action']     = 'display_courses';
 
@@ -163,17 +168,16 @@ class CoursesController { // extends Controller {
         $this->view->set_layout('layout');
         $this->view->set_template('courses_categories');
         $this->view->render();
-
     }
 
     /**
-     * Auto user subcription to a course
+     * Auto user subscription to a course
      */
-    public function subscribe_user($course_code, $search_term, $category_code) {
-        $data = array();
+    public function subscribe_user($course_code, $search_term, $category_code)
+    {
         $courseInfo = api_get_course_info($course_code);
         // The course must be open in order to access the auto subscription
-        if (in_array($courseInfo['visibility'], array(COURSE_VISIBILITY_CLOSED, COURSE_VISIBILITY_REGISTERED))) {
+        if (in_array($courseInfo['visibility'], array(COURSE_VISIBILITY_CLOSED, COURSE_VISIBILITY_REGISTERED, COURSE_VISIBILITY_HIDDEN))) {
             $error = get_lang('SubscribingNotAllowed');
             //$message = get_lang('SubscribingNotAllowed');
         } else {
@@ -181,16 +185,16 @@ class CoursesController { // extends Controller {
             if (!$result) {
                 $error = get_lang('CourseRegistrationCodeIncorrect');
             } else {
-                //Redirect directly to the course after subscription
+                // Redirect directly to the course after subscription
                 $message = $result['message'];
                 $content = $result['content'];
             }
         }
 
         if (!empty($search_term)) {
-            $this->search_courses($search_term, $message, $error);
+            $this->search_courses($search_term, $message, $error, $content);
         } else {
-            $this->courses_categories('subcribe', $category_code, $message, $error, $content);
+            $this->courses_categories('subscribe', $category_code, $message, $error, $content);
         }
         return $result;
     }

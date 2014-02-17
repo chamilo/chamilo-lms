@@ -78,7 +78,6 @@ $langUserHasPermissionNot = "Das Mitglied hat keine Rechte";
 $langUserHasPermission = "Das Mitglied hat Rechte";
 $langLegend = "Legende";
 $langUserHasPermissionByRoleGroup = "Das Mitglied hat die Rechte seiner Gruppen";
-$EditPost = "Aufgabel bearbeiten";
 $AddBlog = "Neues Projekt hinzufügen";
 $EditBlog = "Projekt bearbeiten";
 $DeleteBlog = "Projekt löschen";

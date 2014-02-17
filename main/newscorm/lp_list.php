@@ -126,10 +126,11 @@ $total = count($categories);
 $counterCategories = 1;
 
 foreach ($categories as $item) {
-    $list = new LearnpathList(api_get_user_id(), null, null, null, false, $item->getId());
+    $categoryId = $item->getId();
+    $list = new LearnpathList(api_get_user_id(), null, null, null, false, $categoryId);
     $flat_list = $list->get_flat_list();
     // Hiding categories with out LPs.
-    if (empty($flat_list)) {
+    if (empty($flat_list) && $categoryId == 0) {
         continue;
     }
 

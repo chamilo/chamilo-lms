@@ -664,7 +664,7 @@ class MySpace {
             get_lang('Clicks'),
             get_lang('IP'),
             get_lang('TimeLoggedIn'),
-            get_lang('Session'),
+            get_lang('Section'),
         );
 
         $column_model   = array(

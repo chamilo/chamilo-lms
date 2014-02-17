@@ -407,9 +407,6 @@ class Template
             // Base CSS.
             $css[] = api_get_cdn_path($cssPath.'base.css');
 
-            // Default theme CSS.
-            $css[] = api_get_cdn_path($cssPath.'themes/'.$this->theme.'/default.css');
-
             // Extra CSS files.
             if ($this->show_learnpath) {
                 //$css[] = $cssPath.$this->theme.'/learnpath.css';
@@ -428,6 +425,9 @@ class Template
         $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'thickbox.css';
         $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'chosen/chosen.css';
         $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'tag/style.css';
+
+        // Default theme CSS.
+        $css[] = api_get_cdn_path($cssPath.'themes/'.$this->theme.'/default.css');
 
         $css_file_to_string = null;
         foreach ($css as $file) {
@@ -457,10 +457,10 @@ class Template
         }
 
         if (!$disable_js_and_css_files) {
-            $this->assign('css_file_to_string', $css_file_to_string);
-
             $style_print = api_get_css(api_get_cdn_path($cssPath.'themes/'.$this->theme.'/print.css'), 'print');
             $this->assign('css_style_print', $style_print);
+
+            $this->assign('css_file_to_string', $css_file_to_string);
         }
     }
 

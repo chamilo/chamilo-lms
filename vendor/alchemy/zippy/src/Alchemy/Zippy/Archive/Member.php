@@ -68,8 +68,8 @@ class Member implements MemberInterface
      * @param AdapterInterface  $adapter          The archive adapter interface
      * @param String            $location         The path of the archive member
      * @param Integer           $fileSize         The uncompressed file size
-     * @param \DateTime         $lastModifiedDate The last modifed date of the member
-     * @param Boolean           $isDir            Tells wheteher the member is a directory or not
+     * @param \DateTime         $lastModifiedDate The last modified date of the member
+     * @param Boolean           $isDir            Tells whether the member is a directory or not
      */
     public function __construct(ResourceInterface $resource, AdapterInterface $adapter, $location, $fileSize, \DateTime $lastModifiedDate, $isDir)
     {

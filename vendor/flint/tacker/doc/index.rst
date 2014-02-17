@@ -57,6 +57,24 @@ Getting Started
     $configurator = new Configurator($loader);
     $configurator->configure(new Pimple, 'config.json');
 
+Inheriting
+~~~~~~~~~~
+
+All of the loaders supports inherited configuration files. Theese are supported through a special ``@import`` key.
+``@import`` can contain a single string like ``config.json`` or an array of configuration files to load. In yaml
+it would look something like:
+
+.. code-block:: yaml
+
+    @import:
+        - config.json
+        - another.yaml
+        - third.ini
+
+.. note::
+
+    ``IniFileLoader`` does only support inheriting a single file, this is a limitation of the ini format.
+
 Replacing Values
 ~~~~~~~~~~~~~~~~
 

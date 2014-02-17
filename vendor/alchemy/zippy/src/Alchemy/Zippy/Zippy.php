@@ -89,7 +89,7 @@ class Zippy
     /**
      * Adds a strategy.
      *
-     * The last strategy added is preffered over the other ones.
+     * The last strategy added is preferred over the other ones.
      * You can add a strategy twice ; when doing this, the first one is removed
      * when inserting the second one.
      *

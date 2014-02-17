@@ -38,7 +38,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             ->create();
 
         if (0 === count($files)) {
-           throw new NotSupportedException('Can not create empty zip archive');
+            throw new NotSupportedException('Can not create empty zip archive');
         }
 
         if ($recursive) {
@@ -51,7 +51,7 @@ class ZipAdapter extends AbstractBinaryAdapter
         $cwd = getcwd();
         $collection = $this->manager->handle($cwd, $files);
 
-        chdir($collection->getContext());
+        $this->chdir($collection->getContext());
         $builder->setWorkingDirectory($collection->getContext());
 
         try {
@@ -67,7 +67,7 @@ class ZipAdapter extends AbstractBinaryAdapter
             $error = $e;
         }
 
-        chdir($cwd);
+        $this->chdir($cwd);
 
         if ($error) {
             throw $error;
@@ -133,7 +133,7 @@ class ZipAdapter extends AbstractBinaryAdapter
         $members = array();
 
         foreach ($this->parser->parseFileListing($process->getOutput() ?: '') as $member) {
-               $members[] = new Member(
+            $members[] = new Member(
                 $resource,
                 $this,
                 $member['location'],

@@ -1,0 +1,6 @@
+{
+    "@import" : [
+        "config.json",
+        "config2.json"
+    ]
+}

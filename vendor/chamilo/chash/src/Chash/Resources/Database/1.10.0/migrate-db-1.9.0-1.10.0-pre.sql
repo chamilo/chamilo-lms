@@ -50,6 +50,10 @@ CREATE TABLE IF NOT EXISTS access_url_rel_course_category (access_url_id int uns
 
 ALTER TABLE c_student_publication ADD COLUMN filename varchar(255) DEFAULT NULL;
 ALTER TABLE course ADD COLUMN add_teachers_to_sessions_courses tinyint NOT NULL default 0;
+ALTER TABLE c_quiz ADD COLUMN on_success_message longtext default '';
+ALTER TABLE c_quiz ADD COLUMN on_failed_message longtext default '';
+ALTER TABLE c_quiz ADD COLUMN email_notification_template_to_user longtext default '';
+ALTER TABLE c_quiz ADD COLUMN notify_user_by_email int default 0;
 
 ALTER TABLE c_tool_intro MODIFY COLUMN intro_text MEDIUMTEXT NOT NULL;
 ALTER TABLE user MODIFY COLUMN hr_dept_id int unsigned default 0;
@@ -181,6 +185,9 @@ INSERT INTO settings_current (variable, subkey, type, category, selected_value, 
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('documents_default_visibility_defined_in_course', NULL,'radio','Tools','false','DocumentsDefaultVisibilityDefinedInCourseTitle','DocumentsDefaultVisibilityDefinedInCourseComment',NULL, NULL, 1);
 INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('allow_personal_user_files', NULL,'radio','Tools','false','AllowPersonalUserFilesTitle','AllowPersonalUserFilesComment',NULL, NULL, 1);
 
+DELETE FROM settings_current WHERE variable = 'upload_extensions_whitelist';
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('upload_extensions_whitelist', NULL, 'textfield', 'Security', 'htm;html;jpg;jpeg;gif;png;swf;avi;mpg;mpeg;mov;flv;doc;docx;xls;xlsx;ppt;pptx;odt;odp;ods;pdf,webm,oga,ogg,ogv,h264', 'UploadExtensionsWhitelist', 'UploadExtensionsWhitelistComment', NULL, NULL, 0);
+
 INSERT INTO settings_options (variable, value, display_text) VALUES ('session_tutor_reports_visibility', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('session_tutor_reports_visibility', 'false', 'No');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('gradebook_show_percentage_in_reports', 'true', 'Yes');
@@ -204,7 +211,6 @@ INSERT INTO settings_options (variable, value, display_text) VALUES ('default_ca
 INSERT INTO settings_options (variable, value, display_text) VALUES ('default_calendar_view', 'basicWeek', 'BasicWeek');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('default_calendar_view', 'agendaWeek', 'Week');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('default_calendar_view', 'agendaDay', 'Day');
-
 INSERT INTO settings_options (variable, value, display_text) VALUES ('documents_default_visibility_defined_in_course', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('documents_default_visibility_defined_in_course', 'false', 'No');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_personal_user_files', 'true', 'Yes');
@@ -216,4 +222,4 @@ INSERT INTO branch_transaction_status VALUES (1, 'To be executed'), (2, 'Execute
 UPDATE course_field SET field_type = 3 WHERE field_variable = 'special_course';
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.056' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.060' WHERE variable = 'chamilo_database_version';

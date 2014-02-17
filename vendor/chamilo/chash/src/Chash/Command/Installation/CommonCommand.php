@@ -499,6 +499,10 @@ class CommonCommand extends AbstractCommand
                 'require_update' => false,
                 'parent' => '1.9.0'
             ),
+            '1.9.x' => array(
+              'require_update' => false,
+              'parent' => '1.9.0'
+            ),
             '1.10.0'  => array(
                 'require_update' => true,
                 'pre' => 'migrate-db-1.9.0-1.10.0-pre.sql',
@@ -966,8 +970,12 @@ class CommonCommand extends AbstractCommand
             $versionTag = str_replace('.', '_', $version);
             $updateInstallation = "https://github.com/chamilo/chamilo-lms/archive/CHAMILO_".$versionTag."_STABLE.zip";
 
-            if ($version == 'master') {
-                $updateInstallation = "https://github.com/chamilo/chamilo-lms/archive/master.zip";
+            switch($version) {
+                case 'master':
+                    $updateInstallation = "https://github.com/chamilo/chamilo-lms/archive/master.zip";
+                    break;
+                case '1.9.x':
+                    $updateInstallation = "https://github.com/chamilo/chamilo-lms/archive/1.9.x.zip";
             }
         }
 

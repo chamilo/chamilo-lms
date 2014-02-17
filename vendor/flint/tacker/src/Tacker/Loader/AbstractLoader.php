@@ -38,13 +38,18 @@ abstract class AbstractLoader extends FileLoader
             return $parameters;
         }
 
-        $import = $parameters['@import'];
+        $imports = (array) $parameters['@import'];
+        $inherited = array();
 
         unset($parameters['@import']);
 
-        $this->setCurrentDir(dirname($import));
+        foreach ($imports as $import) {
+            $this->setCurrentDir(dirname($import));
 
-        return array_replace($this->import($import, null, false, $resource), $parameters);
+            $inherited = array_replace($inherited, $this->import($import, null, false, $resource));
+        }
+
+        return array_replace($inherited, $parameters);
     }
 
     abstract protected function read($resource);

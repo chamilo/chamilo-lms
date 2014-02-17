@@ -77,7 +77,7 @@ class TargetLocator
         $url = parse_url($resource);
 
         if (isset($url['scheme']) && $this->isLocalFilesystem($url['scheme'])) {
-            $resource = $url['path'] = $this->cleanupPath($url['path']);;
+            $resource = $url['path'] = $this->cleanupPath($url['path']);
         }
 
         // resource is a URI
@@ -118,9 +118,10 @@ class TargetLocator
     }
 
     /**
-     * Checks wheteher the path belong to the context
+     * Checks whether the path belong to the context
      *
      * @param String $path A resource path
+     * @param String $context
      *
      * @return Boolean
      */

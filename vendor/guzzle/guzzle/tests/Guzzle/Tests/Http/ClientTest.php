@@ -155,7 +155,7 @@ class ClientTest extends \Guzzle\Tests\GuzzleTestCase
         $options = $client->getConfig('curl.options');
         $this->assertArrayNotHasKey(CURLOPT_CAINFO, $options);
         $this->assertSame(false, $options[CURLOPT_SSL_VERIFYPEER]);
-        $this->assertSame(2, $options[CURLOPT_SSL_VERIFYHOST]);
+        $this->assertSame(0, $options[CURLOPT_SSL_VERIFYHOST]);
     }
 
     public function testClientAllowsUnsafeOperationIfRequested()
@@ -244,9 +244,9 @@ class ClientTest extends \Guzzle\Tests\GuzzleTestCase
             array($u, 'relative/path/to/resource?a=b&c=d', $u . 'relative/path/to/resource?a=b&c=d'),
             array($u, '/absolute/path/to/resource', $this->getServer()->getUrl() . 'absolute/path/to/resource'),
             array($u, '/absolute/path/to/resource?a=b&c=d', $this->getServer()->getUrl() . 'absolute/path/to/resource?a=b&c=d'),
-            array($u2, '/absolute/path/to/resource?a=b&c=d', $this->getServer()->getUrl()  . 'absolute/path/to/resource?z=1&a=b&c=d'),
+            array($u2, '/absolute/path/to/resource?a=b&c=d', $this->getServer()->getUrl()  . 'absolute/path/to/resource?a=b&c=d&z=1'),
             array($u2, 'relative/path/to/resource', $this->getServer()->getUrl() . 'base/relative/path/to/resource?z=1'),
-            array($u2, 'relative/path/to/resource?another=query', $this->getServer()->getUrl() . 'base/relative/path/to/resource?z=1&another=query')
+            array($u2, 'relative/path/to/resource?another=query', $this->getServer()->getUrl() . 'base/relative/path/to/resource?another=query&z=1')
         );
     }
 
@@ -256,7 +256,7 @@ class ClientTest extends \Guzzle\Tests\GuzzleTestCase
     public function testBuildsRelativeUrls($baseUrl, $url, $result)
     {
         $client = new Client($baseUrl);
-        $this->assertEquals($client->get($url)->getUrl(), $result);
+        $this->assertEquals($result, $client->get($url)->getUrl());
     }
 
     public function testAllowsConfigsToBeChangedAndInjectedInBaseUrl()

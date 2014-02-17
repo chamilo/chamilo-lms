@@ -59,7 +59,7 @@ $application->addCommands(
         new Chash\Command\Database\DropDatabaseCommand(),
         new Chash\Command\Database\ShowConnInfoCommand(),
 
-        new Chash\Command\Files\CleanDataFilesCommand(),
+        new Chash\Command\Files\CleanCoursesFilesCommand(),
         new Chash\Command\Files\CleanDeletedDocumentsCommand(),
         new Chash\Command\Files\CleanTempFolderCommand(),
         new Chash\Command\Files\CleanConfigFilesCommand(),
@@ -67,6 +67,7 @@ $application->addCommands(
         new Chash\Command\Files\SetPermissionsAfterInstallCommand(),
         new Chash\Command\Files\GenerateTempFileStructureCommand(),
         new Chash\Command\Files\ConvertVideosCommand(),
+        new Chash\Command\Files\ShowDiskUsageCommand(),
 
         new Chash\Command\Installation\InstallCommand(),
         new Chash\Command\Installation\WipeCommand(),

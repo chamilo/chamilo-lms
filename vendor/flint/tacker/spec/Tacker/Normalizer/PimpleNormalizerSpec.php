@@ -50,5 +50,6 @@ class PimpleNormalizerSpec extends \PhpSpec\ObjectBehavior
 
         $this->normalize('%path%')->shouldReturn('%path%');
         $this->normalize('sub_path_%path%')->shouldReturn('sub_path_%path%');
+        $this->normalize(true)->shouldReturn(true);
     }
 }

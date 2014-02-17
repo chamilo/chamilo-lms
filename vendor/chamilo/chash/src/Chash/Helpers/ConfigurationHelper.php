@@ -318,7 +318,7 @@ class ConfigurationHelper extends Helper
      /**
      * @return array
      */
-    public function getDataFiles()
+    public function getCoursesFiles()
     {
         $finder = new Finder();
         $sysPath = $this->getSysPath();
@@ -385,11 +385,15 @@ class ConfigurationHelper extends Helper
     /**
      * @return Finder
      */
-    public function getDataFolders()
+    public function getDataFolders($depth = null)
     {
         $finder = new Finder();
         $sysPath = $this->getSysPath();
-        $finder->directories()->in($sysPath);
+        if (!isset($depth)) {
+            $finder->directories()->in($sysPath);
+        } else {
+            $finder->directories()->depth($depth)->in($sysPath);
+        }
         $finder->path('courses');
         $finder->path('data/courses');
         
@@ -410,18 +414,42 @@ class ConfigurationHelper extends Helper
     }
 
     /**
+     * Lists the directories in the archive/ or data/temp/ directory (depends on Chamilo version)
      * @return Finder
      */
     public function getTempFolders()
     {
         $finder = new Finder();
         $sysPath = $this->getSysPath();
-        $finder->directories()->in($sysPath);
-        $finder->path('archive');
-        $finder->path('data/temp');
+        if (is_dir($sysPath.'archive')) {
+            $finder->directories()->in($sysPath.'archive/');
+        }
+        if (is_dir($sysPath.'data/temp')) {
+            $finder->directories->in($sysPath.'data/temp/');
+        }
+        return $finder;
+    }
+    /**
+     * Lists the files in the archive/ or data/temp/ directory (depends on Chamilo version)
+     * @return Finder
+     */
+    public function getTempFiles()
+    {
+        $finder = new Finder();
+        $sysPath = $this->getSysPath();
+        if (is_dir($sysPath.'archive')) {
+            $finder->in($sysPath.'archive/');
+        }
+        if (is_dir($sysPath.'data/temp')) {
+            $finder->in($sysPath.'data/temp/');
+        }
         return $finder;
     }
 
+    /**
+     * Sets the system's root path (e.g. /var/www/chamilo/)
+     * @param $sysPath
+     */
     public function setSysPath($sysPath)
     {
         $this->sysPath = $sysPath;

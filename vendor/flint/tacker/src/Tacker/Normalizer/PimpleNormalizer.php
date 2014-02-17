@@ -27,7 +27,9 @@ class PimpleNormalizer implements \Tacker\Normalizer
             return isset($this->pimple[$match[1]]) ? $this->pimple[$match[1]] : $match[0];
         }
 
-        return preg_replace_callback('{%%|%([a-z0-9_.]+)%}', array($this, 'callback'), $value);
+        $result = preg_replace_callback('{%%|%([a-z0-9_.]+)%}', array($this, 'callback'), $value, -1, $count);
+
+        return $count ? $result : $value;
     }
 
     /**

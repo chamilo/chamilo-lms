@@ -13,7 +13,9 @@ class EnvironmentNormalizer implements \Tacker\Normalizer
      */
     public function normalize($value)
     {
-        return preg_replace_callback('{##|#([A-Z0-9_]+)#}', array($this, 'callback'), $value);
+        $result = preg_replace_callback('{##|#([A-Z0-9_]+)#}', array($this, 'callback'), $value, -1, $count);
+
+        return $count ? $result : $value;
     }
 
     /**

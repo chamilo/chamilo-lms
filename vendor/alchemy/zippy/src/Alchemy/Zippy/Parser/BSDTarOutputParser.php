@@ -13,7 +13,7 @@ namespace Alchemy\Zippy\Parser;
 use Alchemy\Zippy\Exception\RuntimeException;
 
 /**
- * This class is responsable of parsing GNUTar command line output
+ * This class is responsible of parsing GNUTar command line output
  */
 class BSDTarOutputParser implements ParserInterface
 {
@@ -35,7 +35,7 @@ class BSDTarOutputParser implements ParserInterface
 
         // BSDTar outputs two differents format of date according to the mtime
         // of the member. If the member is younger than six months the year is not shown.
-        // On 4.5+ FreeBSD sytem the day is displayed first
+        // On 4.5+ FreeBSD system the day is displayed first
         $dateFormats = array('M d Y', 'M d H:i', 'd M Y', 'd M H:i');
 
         foreach ($lines as $line) {
@@ -44,14 +44,14 @@ class BSDTarOutputParser implements ParserInterface
             // drw-rw-r--  0 toto titi     0 Jan  3  1980 practice/
             // -rw-rw-r--  0 toto titi     10240 Jan 22 13:31 practice/records
             if (!preg_match_all("#" .
-                            self::PERMISSIONS   . "\s+" .   // match (drw-r--r--)
-                            self::HARD_LINK     . "\s+" .   // match (1)
-                            self::OWNER         . "\s" .    // match (toto)
-                            self::GROUP         . "\s+" .   // match (titi)
-                            self::FILESIZE      . "\s+" .   // match (0)
-                            self::DATE          . "\s+" .   // match (Jan  3  1980)
-                            self::FILENAME      .           // match (practice)
-                            "#", $line, $matches, PREG_SET_ORDER
+                self::PERMISSIONS   . "\s+" .   // match (drw-r--r--)
+                self::HARD_LINK     . "\s+" .   // match (1)
+                self::OWNER         . "\s" .    // match (toto)
+                self::GROUP         . "\s+" .   // match (titi)
+                self::FILESIZE      . "\s+" .   // match (0)
+                self::DATE          . "\s+" .   // match (Jan  3  1980)
+                self::FILENAME      .           // match (practice)
+                "#", $line, $matches, PREG_SET_ORDER
             )) {
                 continue;
             }
@@ -65,7 +65,7 @@ class BSDTarOutputParser implements ParserInterface
             $date = null;
 
             foreach ($dateFormats as $format) {
-                $date = \DateTime::createFromFormat($format,  $chunks[6]);
+                $date = \DateTime::createFromFormat($format, $chunks[6]);
 
                 if (false === $date) {
                     continue;
@@ -94,9 +94,9 @@ class BSDTarOutputParser implements ParserInterface
      */
     public function parseInflatorVersion($output)
     {
-        $chuncks = explode(' ', $output, 3);
+        $chunks = explode(' ', $output, 3);
 
-        if (2 > count($chuncks)) {
+        if (2 > count($chunks)) {
             return null;
         }
 

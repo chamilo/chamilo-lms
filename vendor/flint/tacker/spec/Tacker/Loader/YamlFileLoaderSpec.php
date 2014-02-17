@@ -21,4 +21,12 @@ class YamlFileLoaderSpec extends \PhpSpec\ObjectBehavior
     {
         $this->load('inherit.yml')->shouldReturn(array('hello' => 'world'));
     }
+
+    function it_supports_multiple_inherited_configs()
+    {
+        $this->load('multiple_inherited.yml')->shouldReturn(array(
+            "hello" => "world",
+            "multiple" => true,
+        ));
+    }
 }

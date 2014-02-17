@@ -49,7 +49,7 @@ class CleanTempFolderCommand extends CommonChamiloDatabaseCommand
             }
         }
 
-        $files = $this->getConfigurationHelper()->getTempFolders();
+        $files = $this->getConfigurationHelper()->getTempFiles();
         $this->removeFiles($files, $output);
     }
 

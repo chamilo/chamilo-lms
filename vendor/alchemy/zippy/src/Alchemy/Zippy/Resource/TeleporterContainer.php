@@ -34,10 +34,10 @@ class TeleporterContainer extends \Pimple
     public function fromResource(Resource $resource)
     {
         switch (true) {
-            case is_resource($resource->getOriginal()) :
+            case is_resource($resource->getOriginal()):
                 $teleporter = 'stream-teleporter';
                 break;
-            case is_string($resource->getOriginal()) :
+            case is_string($resource->getOriginal()):
                 $data = parse_url($resource->getOriginal());
 
                 if (!isset($data['scheme']) || 'file' === $data['scheme']) {

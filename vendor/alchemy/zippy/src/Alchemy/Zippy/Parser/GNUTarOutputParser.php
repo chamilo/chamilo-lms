@@ -13,7 +13,7 @@ namespace Alchemy\Zippy\Parser;
 use Alchemy\Zippy\Exception\RuntimeException;
 
 /**
- * This class is responsable of parsing GNUTar command line output
+ * This class is responsible of parsing GNUTar command line output
  */
 class GNUTarOutputParser implements ParserInterface
 {
@@ -77,13 +77,13 @@ class GNUTarOutputParser implements ParserInterface
      */
     public function parseInflatorVersion($output)
     {
-        $chuncks = explode(' ', $output, 3);
+        $chunks = explode(' ', $output, 3);
 
-        if (2 > count($chuncks)) {
+        if (2 > count($chunks)) {
             return null;
         }
 
-        list($name, $version) = $chuncks;
+        list($name, $version) = $chunks;
 
         return $version;
     }

@@ -3,7 +3,6 @@
 namespace Guzzle\Http;
 
 use Guzzle\Common\Exception\InvalidArgumentException;
-use Guzzle\Parser\ParserRegistry;
 
 /**
  * Parses and generates URLs based on URL parts. In favor of performance, URL parts are not validated.
@@ -161,6 +160,8 @@ class Url
      */
     public function getParts()
     {
+        $query = (string) $this->query;
+
         return array(
             'scheme' => $this->scheme,
             'user' => $this->username,
@@ -168,7 +169,7 @@ class Url
             'host' => $this->host,
             'port' => $this->port,
             'path' => $this->getPath(),
-            'query' => (string) $this->query ?: null,
+            'query' => $query !== '' ? $query : null,
             'fragment' => $this->fragment,
         );
     }
@@ -468,18 +469,18 @@ class Url
     /**
      * Combine the URL with another URL. Follows the rules specific in RFC 3986 section 5.4.
      *
-     * @param string $url          Relative URL to combine with
-     * @param bool   $strictRfc386 Set to true to use strict RFC 3986 compliance when merging paths. When first
-     *                             released, Guzzle used an incorrect algorithm for combining relative URL paths. In
-     *                             order to not break users, we introduced this flag to allow the merging of URLs based
-     *                             on strict RFC 3986 section 5.4.1. This means that "http://a.com/foo/baz" merged with
-     *                             "bar" would become "http://a.com/foo/bar". When this value is set to false, it would
-     *                             become "http://a.com/foo/baz/bar".
+     * @param string $url           Relative URL to combine with
+     * @param bool   $strictRfc3986 Set to true to use strict RFC 3986 compliance when merging paths. When first
+     *                              released, Guzzle used an incorrect algorithm for combining relative URL paths. In
+     *                              order to not break users, we introduced this flag to allow the merging of URLs based
+     *                              on strict RFC 3986 section 5.4.1. This means that "http://a.com/foo/baz" merged with
+     *                              "bar" would become "http://a.com/foo/bar". When this value is set to false, it would
+     *                              become "http://a.com/foo/baz/bar".
      * @return Url
      * @throws InvalidArgumentException
      * @link http://tools.ietf.org/html/rfc3986#section-5.4
      */
-    public function combine($url, $strictRfc386 = false)
+    public function combine($url, $strictRfc3986 = false)
     {
         $url = self::factory($url);
 
@@ -518,18 +519,18 @@ class Url
 
         if (!$path) {
             if (count($query)) {
-                $this->addQuery($query, $strictRfc386);
+                $this->addQuery($query, $strictRfc3986);
             }
         } else {
             if ($path[0] == '/') {
                 $this->path = $path;
-            } elseif ($strictRfc386) {
+            } elseif ($strictRfc3986) {
                 $this->path .= '/../' . $path;
             } else {
                 $this->path .= '/' . $path;
             }
             $this->normalizePath();
-            $this->addQuery($query, $strictRfc386);
+            $this->addQuery($query, $strictRfc3986);
         }
 
         $this->fragment = $url->getFragment();
@@ -539,10 +540,10 @@ class Url
 
     private function addQuery(QueryString $new, $strictRfc386)
     {
-        if ($strictRfc386) {
-            $this->query = $new;
-        } else {
-            $this->query->merge($new);
+        if (!$strictRfc386) {
+            $new->merge($this->query);
         }
+
+        $this->query = $new;
     }
 }

@@ -5,11 +5,11 @@
     "keywords": ["zip", "tar", "bzip", "compression"],
     "license": "MIT",
     "authors": [
-    {
-        "name": "Phraseanet Team",
-        "email": "info@alchemy.fr",
-        "homepage": "http://www.phraseanet.com/"
-    }
+        {
+            "name": "Alchemy",
+            "email": "dev.team@alchemy.fr",
+            "homepage": "http://www.alchemy.fr/"
+        }
     ],
     "require": {
         "php"                  : ">=5.3.3",
@@ -21,7 +21,8 @@
     },
     "require-dev": {
         "ext-zip"              : "*",
-        "symfony/finder"       : "~2.0"
+        "symfony/finder"       : "~2.0",
+        "sami/sami"            : "dev-master@dev"
     },
     "suggest": {
         "ext-zip"              : "To use the ZipExtensionAdapter"

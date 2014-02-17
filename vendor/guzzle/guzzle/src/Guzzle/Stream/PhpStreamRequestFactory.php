@@ -114,9 +114,15 @@ class PhpStreamRequestFactory implements StreamRequestFactoryInterface
     protected function addDefaultContextOptions(RequestInterface $request)
     {
         $this->setContextValue('http', 'method', $request->getMethod());
-        $this->setContextValue('http', 'header', $request->getHeaderLines());
-        // Force 1.0 for now until PHP fully support chunked transfer-encoding decoding
-        $this->setContextValue('http', 'protocol_version', '1.0');
+        $headers = $request->getHeaderLines();
+
+        // "Connection: close" is required to get streams to work in HTTP 1.1
+        if (!$request->hasHeader('Connection')) {
+            $headers[] = 'Connection: close';
+        }
+
+        $this->setContextValue('http', 'header', $headers);
+        $this->setContextValue('http', 'protocol_version', $request->getProtocolVersion());
         $this->setContextValue('http', 'ignore_errors', true);
     }
 
@@ -147,7 +153,7 @@ class PhpStreamRequestFactory implements StreamRequestFactoryInterface
      */
     protected function addSslOptions(RequestInterface $request)
     {
-        if ($verify = $request->getCurlOptions()->get(CURLOPT_SSL_VERIFYPEER)) {
+        if ($request->getCurlOptions()->get(CURLOPT_SSL_VERIFYPEER)) {
             $this->setContextValue('ssl', 'verify_peer', true, true);
             if ($cafile = $request->getCurlOptions()->get(CURLOPT_CAINFO)) {
                 $this->setContextValue('ssl', 'cafile', $cafile, true);
@@ -235,7 +241,7 @@ class PhpStreamRequestFactory implements StreamRequestFactoryInterface
     {
         // Set the size on the stream if it was returned in the response
         foreach ($this->lastResponseHeaders as $header) {
-            if (($pos = stripos($header, 'Content-Length:')) === 0) {
+            if ((stripos($header, 'Content-Length:')) === 0) {
                 $stream->setSize(trim(substr($header, 15)));
             }
         }

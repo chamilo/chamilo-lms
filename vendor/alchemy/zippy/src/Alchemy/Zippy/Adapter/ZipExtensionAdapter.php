@@ -243,7 +243,7 @@ class ZipExtensionAdapter extends AbstractAdapter
         $cwd = getcwd();
         $collection = $this->manager->handle($cwd, $files);
 
-        chdir($collection->getContext());
+        $this->chdir($collection->getContext());
 
         $adapter = $this;
 
@@ -289,7 +289,7 @@ class ZipExtensionAdapter extends AbstractAdapter
             $error = $e;
         }
 
-        chdir($cwd);
+        $this->chdir($cwd);
 
         if ($error) {
             throw $error;

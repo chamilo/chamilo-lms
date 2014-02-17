@@ -1,0 +1,3 @@
+@import:
+    - config.yml
+    - config2.yml

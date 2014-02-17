@@ -39,15 +39,15 @@ class GuzzleTeleporter extends AbstractTeleporter
      */
     public function teleport(Resource $resource, $context)
     {
-        $response = $this->client->get($resource->getOriginal())->send();
+        $target = $this->getTarget($context, $resource);
+
+        $stream = fopen($target, 'w');
+        $response = $this->client->get($resource->getOriginal(), null, $stream)->send();
+        fclose($stream);
 
         if (!$response->isSuccessful()) {
             throw new RuntimeException(sprintf('Unable to fetch %s', $resource->getOriginal()));
         }
-
-        $response->getBody()->seek(0);
-
-        $this->writeTarget($response->getBody(true), $resource, $context);
 
         return $this;
     }

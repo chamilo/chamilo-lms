@@ -30,6 +30,7 @@ class EnvfileNormalizerSpec extends ObjectBehavior
         $locator->locate(Argument::any())->willReturn(null);
 
         $this->normalize('#ENV_VAR#')->shouldReturn('#ENV_VAR#');
+        $this->normalize(true)->shouldReturn(true);
     }
 
     function it_falls_back_on_dist_file($locator)

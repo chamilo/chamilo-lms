@@ -120,6 +120,7 @@ class PrettyPageHandler extends Handler
 
             // @todo: asset compiler
             "stylesheet" => file_get_contents($this->getResource("css/whoops.base.css")),
+            "jquery"     => file_get_contents($this->getResource("js/zepto.min.js")),
             "javascript" => file_get_contents($this->getResource("js/whoops.base.js")),
 
             // Template paths:
@@ -410,8 +411,6 @@ class PrettyPageHandler extends Handler
      */
     public function getResourcesPath()
     {
-        trigger_error(__METHOD__ . " is deprecated by PrettyPageHandler::getResourcePaths", E_USER_DEPRECATED);
-
         $allPaths = $this->getResourcePaths();
 
         // Compat: return only the first path
@@ -425,7 +424,6 @@ class PrettyPageHandler extends Handler
      */
     public function setResourcesPath($resourcesPath)
     {
-        trigger_error(__METHOD__ . " is deprecated by PrettyPageHandler::addResourcePath", E_USER_DEPRECATED);
         $this->addResourcePath($resourcesPath);
     }
 }

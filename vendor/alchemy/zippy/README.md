@@ -7,14 +7,14 @@ through commandline utilities or PHP extension.
 
 ## Adapters
 
-Zippy currently support
+Zippy currently supports
 
  - zip
  - PHP zip
  - GNU tar
  - BSD tar
 
-Which bring support to file types
+Which brings support to file types
 
  - .tar
  - .zip

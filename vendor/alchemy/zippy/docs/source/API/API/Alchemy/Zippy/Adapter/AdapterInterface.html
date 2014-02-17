@@ -65,7 +65,7 @@
                     Array
                 </td>
                 <td class="last">
-                    <a href="#method_listMembers">listMembers</a>(String $path)
+                    <a href="#method_listMembers">listMembers</a>(<a href="../../../Alchemy/Zippy/Adapter/Resource/ResourceInterface.html"><abbr title="Alchemy\Zippy\Adapter\Resource\ResourceInterface">ResourceInterface</abbr></a> $resource)
                     <p>Returns the list of all archive members</p>
                 </td>
                 <td></td>
@@ -75,7 +75,7 @@
                     Array
                 </td>
                 <td class="last">
-                    <a href="#method_add">add</a>($path, $files, $recursive = true)
+                    <a href="#method_add">add</a>(<a href="../../../Alchemy/Zippy/Adapter/Resource/ResourceInterface.html"><abbr title="Alchemy\Zippy\Adapter\Resource\ResourceInterface">ResourceInterface</abbr></a> $resource, String|Array|<a href="http://php.net/Traversable"><abbr title="Traversable">Traversable</abbr></a> $files, Boolean $recursive = true)
                     <p>Adds a file to the archive</p>
                 </td>
                 <td></td>
@@ -95,7 +95,7 @@
                     Array
                 </td>
                 <td class="last">
-                    <a href="#method_remove">remove</a>(String $path, String|Array|<a href="http://php.net/Traversable"><abbr title="Traversable">Traversable</abbr></a> $files)
+                    <a href="#method_remove">remove</a>(<a href="../../../Alchemy/Zippy/Adapter/Resource/ResourceInterface.html"><abbr title="Alchemy\Zippy\Adapter\Resource\ResourceInterface">ResourceInterface</abbr></a> $resource, String|Array|<a href="http://php.net/Traversable"><abbr title="Traversable">Traversable</abbr></a> $files)
                     <p>Removes a member of the archive</p>
                 </td>
                 <td></td>
@@ -105,7 +105,7 @@
                     <a href="http://php.net/SplFileInfo"><abbr title="SplFileInfo">SplFileInfo</abbr></a>
                 </td>
                 <td class="last">
-                    <a href="#method_extract">extract</a>(String $path, String|null $to = null)
+                    <a href="#method_extract">extract</a>(<a href="../../../Alchemy/Zippy/Adapter/Resource/ResourceInterface.html"><abbr title="Alchemy\Zippy\Adapter\Resource\ResourceInterface">ResourceInterface</abbr></a> $resource, String|null $to = null)
                     <p>Extracts an entire archive</p>
                 </td>
                 <td></td>
@@ -115,7 +115,7 @@
                     <a href="http://php.net/SplFileInfo"><abbr title="SplFileInfo">SplFileInfo</abbr></a>
                 </td>
                 <td class="last">
-                    <a href="#method_extractMembers">extractMembers</a>(String $path, Array $members, String|null $to = null)
+                    <a href="#method_extractMembers">extractMembers</a>(<a href="../../../Alchemy/Zippy/Adapter/Resource/ResourceInterface.html"><abbr title="Alchemy\Zippy\Adapter\Resource\ResourceInterface">ResourceInterface</abbr></a> $resource, Array $members, String|null $to = null)
                     <p>Extracts specific members of the archive</p>
                 </td>
                 <td></td>
@@ -126,7 +126,7 @@
         <h2>Details</h2>
 
                         <h3 id="method_open">
-        <div class="location">at line 30</div>
+        <div class="location">at line 31</div>
         <code>            public            <a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a>
     <strong>open</strong>(String $path)</code>
     </h3>
@@ -173,7 +173,7 @@
     </div>
 
                 <h3 id="method_create">
-        <div class="location">at line 48</div>
+        <div class="location">at line 49</div>
         <code>            public            <a href="../../../Alchemy/Zippy/Archive/ArchiveInterface.html"><abbr title="Alchemy\Zippy\Archive\ArchiveInterface">ArchiveInterface</abbr></a>
     <strong>create</strong>(String $path, String|Array|<a href="http://php.net/Traversable"><abbr title="Traversable">Traversable</abbr></a>|null $files = null, Boolean $recursive = true)</code>
     </h3>
@@ -235,7 +235,7 @@
     </div>
 
                 <h3 id="method_isSupported">
-        <div class="location">at line 55</div>
+        <div class="location">at line 56</div>
         <code>            public            Boolean
     <strong>isSupported</strong>()</code>
     </h3>
@@ -259,9 +259,9 @@
     </div>
 
                 <h3 id="method_listMembers">
-        <div class="location">at line 66</div>
+        <div class="location">at line 67</div>
         <code>            public            Array
-    <strong>listMembers</strong>(String $path)</code>
+    <strong>listMembers</strong>(<a href="../../../Alchemy/Zippy/Adapter/Resource/ResourceInterface.html"><abbr title="Alchemy\Zippy\Adapter\Resource\ResourceInterface">ResourceInterface</abbr></a> $resource)</code>
     </h3>
     <div class="details">
         <p>Returns the list of all archive members</p>
@@ -271,8 +271,8 @@
 
                     <table>
                     <tr>
-                <td>String</td>
-                <td>$path</td>
+                <td><a href="../../../Alchemy/Zippy/Adapter/Resource/ResourceInterface.html"><abbr title="Alchemy\Zippy\Adapter\Resource\ResourceInterface">ResourceInterface</abbr></a></td>
+                <td>$resource</td>
                 <td>The path to the archive</td>
             </tr>
             </table>
@@ -302,9 +302,9 @@
     </div>
 
                 <h3 id="method_add">
-        <div class="location">at line 80</div>
+        <div class="location">at line 81</div>
         <code>            public            Array
-    <strong>add</strong>($path, $files, $recursive = true)</code>
+    <strong>add</strong>(<a href="../../../Alchemy/Zippy/Adapter/Resource/ResourceInterface.html"><abbr title="Alchemy\Zippy\Adapter\Resource\ResourceInterface">ResourceInterface</abbr></a> $resource, String|Array|<a href="http://php.net/Traversable"><abbr title="Traversable">Traversable</abbr></a> $files, Boolean $recursive = true)</code>
     </h3>
     <div class="details">
         <p>Adds a file to the archive</p>
@@ -314,19 +314,19 @@
 
                     <table>
                     <tr>
-                <td></td>
-                <td>$path</td>
-                <td></td>
+                <td><a href="../../../Alchemy/Zippy/Adapter/Resource/ResourceInterface.html"><abbr title="Alchemy\Zippy\Adapter\Resource\ResourceInterface">ResourceInterface</abbr></a></td>
+                <td>$resource</td>
+                <td>The path to the archive</td>
             </tr>
                     <tr>
-                <td></td>
+                <td>String|Array|<a href="http://php.net/Traversable"><abbr title="Traversable">Traversable</abbr></a></td>
                 <td>$files</td>
-                <td></td>
+                <td>An array of paths to add, relative to cwd</td>
             </tr>
                     <tr>
-                <td></td>
+                <td>Boolean</td>
                 <td>$recursive</td>
-                <td></td>
+                <td>Whether or not to recurse in the provided directories</td>
             </tr>
             </table>
 
@@ -359,7 +359,7 @@
     </div>
 
                 <h3 id="method_getName">
-        <div class="location">at line 87</div>
+        <div class="location">at line 88</div>
         <code>        static    public            String
     <strong>getName</strong>()</code>
     </h3>
@@ -383,9 +383,9 @@
     </div>
 
                 <h3 id="method_remove">
-        <div class="location">at line 100</div>
+        <div class="location">at line 101</div>
         <code>            public            Array
-    <strong>remove</strong>(String $path, String|Array|<a href="http://php.net/Traversable"><abbr title="Traversable">Traversable</abbr></a> $files)</code>
+    <strong>remove</strong>(<a href="../../../Alchemy/Zippy/Adapter/Resource/ResourceInterface.html"><abbr title="Alchemy\Zippy\Adapter\Resource\ResourceInterface">ResourceInterface</abbr></a> $resource, String|Array|<a href="http://php.net/Traversable"><abbr title="Traversable">Traversable</abbr></a> $files)</code>
     </h3>
     <div class="details">
         <p>Removes a member of the archive</p>
@@ -395,8 +395,8 @@
 
                     <table>
                     <tr>
-                <td>String</td>
-                <td>$path</td>
+                <td><a href="../../../Alchemy/Zippy/Adapter/Resource/ResourceInterface.html"><abbr title="Alchemy\Zippy\Adapter\Resource\ResourceInterface">ResourceInterface</abbr></a></td>
+                <td>$resource</td>
                 <td>The path to the archive</td>
             </tr>
                     <tr>
@@ -435,20 +435,20 @@
     </div>
 
                 <h3 id="method_extract">
-        <div class="location">at line 113</div>
+        <div class="location">at line 116</div>
         <code>            public            <a href="http://php.net/SplFileInfo"><abbr title="SplFileInfo">SplFileInfo</abbr></a>
-    <strong>extract</strong>(String $path, String|null $to = null)</code>
+    <strong>extract</strong>(<a href="../../../Alchemy/Zippy/Adapter/Resource/ResourceInterface.html"><abbr title="Alchemy\Zippy\Adapter\Resource\ResourceInterface">ResourceInterface</abbr></a> $resource, String|null $to = null)</code>
     </h3>
     <div class="details">
         <p>Extracts an entire archive</p>
-        <p></p>
+        <p>Note that any existing files will be overwritten by the adapter</p>
         <div class="tags">
                             <h4>Parameters</h4>
 
                     <table>
                     <tr>
-                <td>String</td>
-                <td>$path</td>
+                <td><a href="../../../Alchemy/Zippy/Adapter/Resource/ResourceInterface.html"><abbr title="Alchemy\Zippy\Adapter\Resource\ResourceInterface">ResourceInterface</abbr></a></td>
+                <td>$resource</td>
                 <td>The path to the archive</td>
             </tr>
                     <tr>
@@ -487,9 +487,9 @@
     </div>
 
                 <h3 id="method_extractMembers">
-        <div class="location">at line 127</div>
+        <div class="location">at line 130</div>
         <code>            public            <a href="http://php.net/SplFileInfo"><abbr title="SplFileInfo">SplFileInfo</abbr></a>
-    <strong>extractMembers</strong>(String $path, Array $members, String|null $to = null)</code>
+    <strong>extractMembers</strong>(<a href="../../../Alchemy/Zippy/Adapter/Resource/ResourceInterface.html"><abbr title="Alchemy\Zippy\Adapter\Resource\ResourceInterface">ResourceInterface</abbr></a> $resource, Array $members, String|null $to = null)</code>
     </h3>
     <div class="details">
         <p>Extracts specific members of the archive</p>
@@ -499,8 +499,8 @@
 
                     <table>
                     <tr>
-                <td>String</td>
-                <td>$path</td>
+                <td><a href="../../../Alchemy/Zippy/Adapter/Resource/ResourceInterface.html"><abbr title="Alchemy\Zippy\Adapter\Resource\ResourceInterface">ResourceInterface</abbr></a></td>
+                <td>$resource</td>
                 <td>The path to the archive</td>
             </tr>
                     <tr>

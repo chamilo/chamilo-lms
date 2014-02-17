@@ -11,7 +11,7 @@
 namespace Alchemy\Zippy\Parser;
 
 /**
- * This class is responsable of parsing GNUTar command line output
+ * This class is responsible of parsing GNUTar command line output
  */
 class ZipOutputParser implements ParserInterface
 {
@@ -65,13 +65,13 @@ class ZipOutputParser implements ParserInterface
     {
         $lines = array_values(array_filter(explode("\n", $output, 3)));
 
-        $chuncks = explode(' ', $lines[1], 3);
+        $chunks = explode(' ', $lines[1], 3);
 
-        if (2 > count($chuncks)) {
+        if (2 > count($chunks)) {
             return null;
         }
 
-        list($name, $version) = $chuncks;
+        list($name, $version) = $chunks;
 
         return $version;
     }
@@ -83,13 +83,13 @@ class ZipOutputParser implements ParserInterface
     {
         $lines = array_values(array_filter(explode("\n", $output, 2)));
         $firstLine = array_shift($lines);
-        $chuncks = explode(' ', $firstLine, 3);
+        $chunks = explode(' ', $firstLine, 3);
 
-        if (2 > count($chuncks)) {
+        if (2 > count($chunks)) {
             return null;
         }
 
-        list($name, $version) = $chuncks;
+        list($name, $version) = $chunks;
 
         return $version;
     }

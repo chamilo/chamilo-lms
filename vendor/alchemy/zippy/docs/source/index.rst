@@ -181,7 +181,7 @@ the executable by its name;
     // customize ZIP deflator
     $zippy->adapters['zip.deflator'] = '/usr/local/bin/unzip';
 
-The following binary are customable
+The following binary are customisable
 
 - gnu-tar.inflator
 - gnu-tar.deflator

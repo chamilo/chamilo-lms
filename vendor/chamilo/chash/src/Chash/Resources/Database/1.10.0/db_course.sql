@@ -1318,12 +1318,16 @@ CREATE TABLE c_quiz (
   pass_percentage int(11) DEFAULT NULL,
   autolaunch INT DEFAULT 0,
   end_button int NOT NULL DEFAULT 0,
-  email_notification_template text default '',
+  email_notification_template longtext default '',
+  email_notification_template_to_user longtext default '',
   model_type INT default 1,
   question_selection_type INT default 1,
   hide_question_title INT default 0,
   score_type_model INT default 0,
   global_category_id INT default NULL,
+  on_success_message longtext default '',
+  on_failed_message longtext default '',
+  notify_user_by_email int default 0,
   PRIMARY KEY (iid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;

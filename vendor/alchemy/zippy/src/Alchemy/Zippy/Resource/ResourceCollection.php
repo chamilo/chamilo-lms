@@ -55,7 +55,7 @@ class ResourceCollection extends ArrayCollection
     }
 
     /**
-     * Tells wheter the collection is temporary or not.
+     * Tells whether the collection is temporary or not.
      *
      * A ResourceCollection is temporary when it required a temporary folder to
      * fetch data

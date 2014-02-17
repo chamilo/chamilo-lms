@@ -2,7 +2,7 @@ language: php
 
 before_script:
   - sudo apt-get install bsdtar zip
-  - sudo easy_install sphinx
+#  - sudo easy_install sphinx
   - composer install --dev --prefer-source
 
 env:
@@ -17,11 +17,15 @@ env:
 
 php:
   - 5.3.3
-  - 5.3
+#  - 5.3
   - 5.4
   - 5.5
+
+matrix:
+  allow_failures:
+    - php: 5.5
 
 script:
   - phpunit -v --coverage-text
   - phpunit -v -c phpunit-functional.xml.dist
-  - sh -c "cd docs && make clean && make html"
+#  - sh -c "cd docs && make clean && make html"

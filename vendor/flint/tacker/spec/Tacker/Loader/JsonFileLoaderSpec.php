@@ -23,4 +23,12 @@ class JsonFileLoaderSpec extends \PhpSpec\ObjectBehavior
             'hello' => 'world',
         ));
     }
+
+    function it_supports_multiple_inherited_configs()
+    {
+        $this->load('multiple_inherited.json')->shouldReturn(array(
+            "hello" => "world",
+            "multiple" => true,
+        ));
+    }
 }

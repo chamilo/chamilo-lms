@@ -33,5 +33,23 @@ abstract class AbstractAdapter implements AdapterInterface
         return new Archive($this->createResource($path), $this, $this->manager);
     }
 
+    /**
+     * Change current working directory to another
+     *
+     * @param string $target the target directory
+     *
+     * @return AdapterInterface
+     *
+     * @throws RuntimeException In case of failure
+     */
+    protected function chdir($target)
+    {
+        if (false === @chdir($target)) {
+            throw new RuntimeException(sprintf('Unable to chdir to `%s`', $target));
+        }
+
+        return $this;
+    }
+
     abstract protected function createResource($path);
 }

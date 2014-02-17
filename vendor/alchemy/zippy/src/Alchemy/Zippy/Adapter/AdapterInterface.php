@@ -125,7 +125,7 @@ Interface AdapterInterface
      * @return \SplFileInfo The extracted archive
      *
      * @throws RuntimeException         In case of failure
-     * @throws InvalidArgumentException In case no members could be removed or provide extract target direcotry is not valid
+     * @throws InvalidArgumentException In case no members could be removed or provide extract target directory is not valid
      */
     public function extractMembers(ResourceInterface $resource, $members, $to = null);
 }

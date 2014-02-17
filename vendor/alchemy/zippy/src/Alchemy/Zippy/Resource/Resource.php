@@ -49,7 +49,7 @@ class Resource
     }
 
     /**
-     * Returns wheter the resource can be processed in place given a context or not.
+     * Returns whether the resource can be processed in place given a context or not.
      *
      * For example :
      *   - /path/to/file1 can be processed to file1 in /path/to context

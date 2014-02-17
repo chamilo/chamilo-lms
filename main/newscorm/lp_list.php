@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This file was origially the copy of document.php, but many modifications happened since then ;
+ * This file was originally the copy of document.php, but many modifications happened since then ;
  * the direct file view is not any more needed, if the user uploads a scorm zip file, a directory
  * will be automatically created for it, and the files will be uncompressed there for example ;
  *
@@ -106,10 +106,9 @@ $token = Security::get_token();
 /* DISPLAY SCORM LIST */
 
 $categories_temp = learnpath::get_categories(api_get_course_int_id());
-
 $category_test = new Entity\CLpCategory();
 $category_test->setId(0);
-$category_test->setName(get_lang('NoCategory'));
+$category_test->setName(get_lang('WithOutCategory'));
 $category_test->setPosition(0);
 
 $categories = array(
@@ -129,6 +128,10 @@ $counterCategories = 1;
 foreach ($categories as $item) {
     $list = new LearnpathList(api_get_user_id(), null, null, null, false, $item->getId());
     $flat_list = $list->get_flat_list();
+    // Hiding categories with out LPs.
+    if (empty($flat_list)) {
+        continue;
+    }
 
     $edit_link = null;
     $delete_link = null;

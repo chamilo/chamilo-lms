@@ -36,7 +36,7 @@
 
         {# Course block - teacher #}
 		{{ teacher_block }}
-
+        </div>
 		{# Notice #}
 		{{ notice_block }}
 
@@ -57,7 +57,7 @@
 
 		{# Skills #}
 		{{ skills_block }}
-        </div>
+        
 		{# Plugin courses sidebar #}
         {# Plugins for footer section #}
 

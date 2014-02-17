@@ -75,7 +75,7 @@ a:active {
  *  STYLE THEME CHAMILO                              *
  *****************************************************/
 .welcome-mascot{
-  background: url(images/chamilo-welcome.png) no-repeat right center;
+  background: url(images/chamilo-welcome.png) no-repeat right 0;
   padding-right: 200px;
   padding-bottom: 2em;
   padding-top: 2em;
@@ -324,7 +324,6 @@ a:active {
     font-weight: bold;
     color: #0191C7;
     padding-bottom: 10px;
-    line-height: 28px;
 }
 #homepage .row .span9 p,#homepage .row .span9 ol {
     color: #6E6E6E;

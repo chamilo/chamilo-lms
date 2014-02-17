@@ -634,7 +634,7 @@ class SystemAnnouncementManager
 		$user_selected_language = Database::escape_string(api_get_interface_language());
 		$table                  = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
 
-        $cut_size = 500;
+        $cut_size = 800;
 		$now  = api_get_utc_datetime();
 
 		$sql = "SELECT * FROM ".$table."
@@ -667,7 +667,7 @@ class SystemAnnouncementManager
 		$html = '';
 		if (Database::num_rows($announcements) > 0) {
 			$html .=  Display::page_header(get_lang('SystemAnnouncements'));
-			$html .=  '<div id="container-slider" class="span6"><ul id="slider">';
+            $options = array();
 			while ($announcement = Database::fetch_object($announcements)) {
                 $content = $announcement->content;
                 $url = api_get_path(WEB_PUBLIC_PATH).'news/'.$announcement->id;
@@ -676,9 +676,13 @@ class SystemAnnouncementManager
                         $content = Text::cut($announcement->content, $cut_size).' '.Display::url(get_lang('More'), $url);
                     }
                 }
-                $html .=  '<li><h2>'.$announcement->title.'</h2>'.$content.'</li>';
+                $options[]= array(
+                    'title' => $announcement->title,
+                    'content' => $content,
+                );
 			}
-			$html .= '</ul></div>';
+            $html .= Display::getSlider('portal_news', $options);
+
 		}
 		return $html;
 	}

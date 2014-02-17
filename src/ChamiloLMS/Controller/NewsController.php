@@ -29,7 +29,7 @@ class NewsController
         } else {
             $visibility = api_is_allowed_to_create_course() ? \SystemAnnouncementManager::VISIBLE_TEACHER : \SystemAnnouncementManager::VISIBLE_STUDENT;
         }
-        $content =  \SystemAnnouncementManager ::display_announcements_slider($visibility, $id);
+        $content =  \SystemAnnouncementManager::display_announcements_slider($visibility, $id);
 
         $app['template']->assign('content', $content);
         $app['template']->assign('actions', $actions);

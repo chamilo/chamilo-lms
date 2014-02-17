@@ -6611,3 +6611,21 @@ abbr {
     padding: 0px 0px 2px 0;
 }
 
+#portal_news {
+    display:block;
+}
+
+#portal_news .carousel-caption {
+    color: #000011;
+}
+
+div.new_html_code {
+    width:200px;
+    height:300px;
+    overflow:hidden;
+    display:block;
+}
+
+#portal_news .carousel-caption {
+    bottom:40px;
+}

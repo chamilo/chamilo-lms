@@ -193,6 +193,10 @@ $(document).ready( function() {
         $("#"+id).hide();
     });
 
+    $('.carousel').carousel({
+        interval: 10000
+    });
+
     // Tooltip.
     $(function() {
         $('a').tooltip({

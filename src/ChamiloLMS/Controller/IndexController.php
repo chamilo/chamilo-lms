@@ -74,23 +74,7 @@ class IndexController extends CommonController
         //http://userguide.icu-project.org/formatparse/datetime for date formats
         $formatter->setPattern("EEEE d MMMM Y");
         echo $formatter->format(time());*/
-
-        //@todo improve this JS includes should be added using twig
-        $extra = array(
-            api_get_jquery_libraries_js(array('bxslider')),
-            '<script>
-            $(document).ready(function(){
-                $("#slider").bxSlider({
-                    infiniteLoop	: true,
-                    auto			: true,
-                    pager			: true,
-                    autoHover		: true,
-                pause			: 10000
-                });
-            });
-            </script>'
-        );
-
+        $extra = array();
         if (api_get_setting('use_virtual_keyboard') == 'true') {
             $extra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'keyboard/keyboard.css');
             $extra[] = api_get_js('keyboard/jquery.keyboard.js');

@@ -2103,4 +2103,47 @@ class Display
         }
         return $html;
     }
+
+    public static function getSlider($name, $options)
+    {
+        $html =
+            '<div id="'.$name.'" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">';
+
+        for ($i = 0; $i < count($options); $i++) {
+            $active = null;
+            if ($i == 0) {
+                $active = 'active';
+            }
+            $html .= '<li data-target="#'.$name.'" class ="'.$active.' data-slide-to="'.$i.'"></li>';
+        }
+        $html .= '</ol><div class="carousel-inner">';
+        $counter = 0;
+        foreach ($options as $option) {
+            $title = $option['title'];
+            $content = $option['content'];
+            //$title = $option['img']
+            $active = null;
+            if ($counter == 0) {
+                $active = 'active';
+            }
+            $html .=  '<div class=" '.$active.' item">
+                            <div class="new_html_code"></div>
+                            <div class="carousel-caption">
+                                <h2>'.$title.'</h2>
+                                <p>'.$content.'</p>
+                            </div>
+                        </div>';
+            $counter++;
+        }
+        $html .= '</div>';
+
+        $html .= '<a class="carousel-control left" href="#'.$name.'" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left"></span></a>';
+        $html .= '<a class="carousel-control right" href="#'.$name.'" data-slide="next"> <span class="glyphicon glyphicon-chevron-right"></span></a>';
+        $html .= '</div>';
+        return $html;
+
+
+
+    }
 }

@@ -75,8 +75,7 @@ if ($app['assetic.enabled']) {
         $css_path.$app['app.theme'].'/scorm.css',
         $jsFolder.'chat/css/chat.css',
         $jsFolder.'jquery-ui/'.$app['jquery_ui_theme'].'/jquery-ui-custom.css',
-        $jsFolder.'jquery-ui/default.css',
-        //api_get_path(LIBRARY_PATH).'javascript/bxslider/bx_styles/bx_styles.css',
+        $jsFolder.'jquery-ui/default.css'
     );
 
     $app['assetic.output.path_to_css'] = 'css/'.$app['app.theme'].'/style.css';
@@ -87,8 +86,7 @@ if ($app['assetic.enabled']) {
         //api_get_path(LIBRARY_PATH).'javascript/chosen/chosen.jquery.min.js',
         $jsFolder.'javascript/jquery-ui/css/'.$app['jquery_ui_theme'].'/jquery-ui-custom.min.js',
         //api_get_path(LIBRARY_PATH).'javascript/thickbox.js',
-        $jsFolder.'javascript/bootstrap/bootstrap.js',
-        //api_get_path(LIBRARY_PATH).'javascript/bxslider/jquery.bxSlider.min.js',
+        $jsFolder.'javascript/bootstrap/bootstrap.js'
     );
 
     $app['assetic.output.path_to_js'] = 'js/script.js';

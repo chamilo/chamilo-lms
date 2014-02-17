@@ -321,7 +321,7 @@ class DocumentManager
             // Force the browser to save the file instead of opening it
 
             global $_configuration;
-            if (!empty($_configuration['enable_x_sendfile_headers'])) {
+            if (isset($_configuration['enable_x_sendfile_headers']) && !empty($_configuration['enable_x_sendfile_headers'])) {
                 header("X-Sendfile: $filename");
             }
 

@@ -515,6 +515,24 @@ RESPONSIVE CSS
         background: url("images/perfil.png") no-repeat left center;
         padding-left: 30px;
     }
+    .add-course{
+        background: url("images/course.png") no-repeat left center;
+        padding-left: 30px;
+    }
+    .history-course{
+        background: url("images/history.png") no-repeat left center;
+        padding-left: 30px;
+    }
+    .list-course{
+        background: url("images/list-course.png") no-repeat left center;
+        padding-left: 30px;
+    }
+    .order-course{
+        background: url("images/order-course.png") no-repeat left center;
+        padding-left: 30px;
+    }
+
+
 
 
 }

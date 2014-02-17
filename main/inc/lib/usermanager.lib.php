@@ -1272,16 +1272,16 @@ class UserManager
 
         switch ($type) {
             case 'system': // Base: absolute system path.
-                $base = api_get_path(SYS_DATA_PATH);
-                $base_unknown = api_get_path(SYS_CODE_PATH);
+                $base = api_get_path(SYS_IMG_PATH);
+                $base_unknown = api_get_path(SYS_IMG_PATH);
                 break;
             case 'rel': // Base: semi-absolute web path (no server base).
-                $base = api_get_path(REL_DATA_PATH);
-                $base_unknown = api_get_path(REL_CODE_PATH);
+                $base = api_get_path(REL_DATA_PATH).'img/';
+                $base_unknown = api_get_path(REL_CODE_PATH).'img/';
                 break;
             case 'web': // Base: absolute web path.
-                $base = api_get_path(WEB_DATA_PATH);
-                $base_unknown = api_get_path(WEB_CODE_PATH);
+                $base = api_get_path(WEB_IMG_PATH);
+                $base_unknown = api_get_path(WEB_IMG_PATH);
                 break;
             case 'none':
             default: // Base: empty, the result path below will be relative.
@@ -1290,7 +1290,14 @@ class UserManager
         }
 
         if (empty($id) || empty($type)) {
-            return $anonymous ? array('dir' => $base.'img/', 'file' => 'unknown.jpg') : array('dir' => '', 'file' => '');
+            return $anonymous ?
+                array(
+                    'dir' => $base,
+                    'file' => 'unknown.jpg') :
+                array(
+                    'dir' => '',
+                    'file' => ''
+                );
         }
 
         $user_id = intval($id);
@@ -1300,7 +1307,7 @@ class UserManager
         $res = Database::query($sql);
 
         if (!Database::num_rows($res)) {
-            return $anonymous ? array('dir' => $base_unknown.'img/', 'file' => 'unknown.jpg') : array('dir' => '', 'file' => '');
+            return $anonymous ? array('dir' => $base_unknown, 'file' => 'unknown.jpg') : array('dir' => '', 'file' => '');
         }
 
         $user = Database::fetch_array($res);
@@ -1316,7 +1323,7 @@ class UserManager
             $dir = $base.'upload/users/'.$user_id.'/';
         }
         if (empty($picture_filename) && $anonymous) {
-            return array('dir' => $base_unknown.'img/', 'file' => 'unknown.jpg');
+            return array('dir' => $base_unknown, 'file' => 'unknown.jpg');
         }
         return array(
             'dir' => $dir,

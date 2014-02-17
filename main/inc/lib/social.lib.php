@@ -15,9 +15,11 @@
  *
 *    @package chamilo.social
  */
-class SocialManager extends UserManager {
+class SocialManager extends UserManager
+{
 
-    public function __construct() {
+    public function __construct()
+    {
     }
 
     /**

@@ -1558,7 +1558,7 @@ class CourseManager
     public static function get_student_list_from_course_code($course_code, $with_session = false, $session_id = 0, $date_from, $date_to) {
         $session_id = intval($session_id);
         $course_code = Database::escape_string($course_code);
-
+        
         $students = array();
 
         if ($session_id == 0) {
@@ -1574,11 +1574,27 @@ class CourseManager
         // students subscribed to the course through a session
 
         if ($with_session) {
-            $sql_query = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)."
-                          WHERE course_code = '$course_code' AND status <> 2";
-            if ($session_id != 0) {
-                $sql_query .= ' AND id_session = '.$session_id;
+            
+            $joinSession = "";
+            //Session creation date
+            if (!empty($date_from) && !empty($date_to)) {
+                $joinSession = "INNER JOIN " . Database::get_main_table(TABLE_MAIN_SESSION) . " s";
             }
+            
+            $sql_query = "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER)." scu
+                          $joinSession
+                          WHERE scu.course_code = '$course_code' AND scu.status <> 2";
+            
+            if (!empty($date_from) && !empty($date_to)) {
+                $date_from = Database::escape_string($date_from);
+                $date_to = Database::escape_string($date_to);
+                $sql_query .= " AND s.date_start >= '$date_from' AND s.date_end <= '$date_to'";
+            }
+            
+            if ($session_id != 0) {
+                $sql_query .= ' AND scu.id_session = '.$session_id;
+            }
+                
             $rs = Database::query($sql_query);
             while($student = Database::fetch_array($rs)) {
                 $students[$student['id_user']] = $student;

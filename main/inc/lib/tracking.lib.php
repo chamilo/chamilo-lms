@@ -3460,6 +3460,7 @@ class Tracking
             //none is empty
             $course = api_get_course_info_by_id($courseId);
             $courses[$courseId] = array($course['code']);
+            $courses[$courseId]['code'] = $course['code'];
             $sessions[$sessionId] = api_get_session_info($sessionId);
         } else {
             //both are empty, not enough data, return an empty array
@@ -3574,6 +3575,7 @@ class Tracking
                 $users[$rowUser['user_id']] = $rowUser;
             }
             foreach ($data as $id => $row) {
+                $data[$id]['session'] = $sessions[$row['session_id']]['name'];
                 $data[$id]['firstname'] = $users[$row['user_id']]['firstname'];
                 $data[$id]['lastname'] = $users[$row['user_id']]['lastname'];
                 $data[$id]['username'] = $users[$row['user_id']]['username'];

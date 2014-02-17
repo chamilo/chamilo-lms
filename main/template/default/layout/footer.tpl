@@ -197,6 +197,10 @@ $(document).ready( function() {
         interval: 10000
     });
 
+    $('.actions').addClass('btn-group');
+
+    $('.actions a').addClass('btn btn-default');
+
     // Tooltip.
     $(function() {
         $('a').tooltip({

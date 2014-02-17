@@ -249,13 +249,11 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $form->addElement('style_submit_button', 'submit', get_lang('SearchCourse'), 'class="btn"');
     $form->addElement('static', 'search_advanced_link', null, '<a href="course_list.php?search=advanced">'.get_lang('AdvancedSearch').'</a>');
 
-    $actions .= '<div style="float: right; ">';
     $actions .= '<a href="course_add.php">'.Display::return_icon('new_course.png', get_lang('AddCourse'),'',ICON_SIZE_MEDIUM).'</a> ';
 
     if (api_get_setting('course_validation') == 'true') {
         $actions .= '<a href="course_request_review.php">'.Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests'),'',ICON_SIZE_MEDIUM).'</a>';
     }
-    $actions .= '</div>';
     $actions .= $form->return_form();
 
     // Create a sortable table with the course data

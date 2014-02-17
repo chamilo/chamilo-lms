@@ -617,19 +617,18 @@ if (!empty($action)) {
 
 // Create a search-box
 $form = new FormValidator('search_simple','get', '', '', array('class' => 'form-search'),false);
-$renderer =& $form->defaultRenderer();
-$renderer->setElementTemplate('<span>{element}</span> ');
-$form->addElement('text','keyword',get_lang('keyword'), 'size="25"');
-$form->addElement('style_submit_button', 'submit',get_lang('Search'),'class="btn"');
+/*$renderer =& $form->defaultRenderer();
+$renderer->setElementTemplate('<span>{element}</span> ');*/
+$form->addElement('text', 'keyword', get_lang('keyword'));
+$form->addElement('button', 'submit' ,get_lang('Search'));
 $form->addElement('advanced_settings', 'user_list_filter', get_lang('AdvancedSearch'));
 $actions  = '';
 if (api_is_platform_admin()) {
-	$actions .= '<span style="float:right;">'.
-		 '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
-            Display::return_icon('new_user.png',get_lang('AddUsers'),'',ICON_SIZE_MEDIUM).'</a>'.
-		 '</span>';
+	$actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
+            Display::return_icon('new_user.png',get_lang('AddUsers'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 $actions .= $form->return_form();
+
 
 if (isset ($_GET['keyword'])) {
 	$parameters = array ('keyword' => Security::remove_XSS($_GET['keyword']));

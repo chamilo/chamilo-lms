@@ -53,8 +53,16 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_text($elementName=null, $elementLabel=null, $attributes=null)
+    function HTML_QuickForm_text($elementName = null, $elementLabel = null, $attributes = null)
     {
+        if (isset($attributes) && is_array($attributes) && !empty($attributes['class'])) {
+            $attributes['class'] .= $attributes['class'].' form-control';
+        } else {
+            if (empty($attributes['class'])) {
+                $attributes = array('class' => 'form-control');
+            }
+        }
+
         HTML_QuickForm_input::HTML_QuickForm_input($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->setType('text');
@@ -89,10 +97,6 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
      */
     function setMaxlength($maxlength)
     {
-        $this->updateAttributes(array('maxlength'=>$maxlength));
-    } //end func setMaxlength
-
-    // }}}
-
-} //end class HTML_QuickForm_text
-?>
+        $this->updateAttributes(array('maxlength' => $maxlength ));
+    }
+}

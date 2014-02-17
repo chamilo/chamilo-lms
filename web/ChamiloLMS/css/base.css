@@ -199,14 +199,13 @@ footer .container .row {
 }
 
 .actions {
-    min-height: 20px;
-    padding: 8px 15px;
     margin-top: 10px;
-    margin-bottom: 20px;
-    background-color: #f5f5f5;
-    border: 1px solid #e3e3e3;
-    border-radius: 4px;
-    height: 50px;
+    margin-bottom: 10px;
+}
+
+.actions form {
+    margin-left: 10px;
+    float:right;
 }
 
 .actions .actions-pagination {
@@ -243,14 +242,10 @@ footer .container .row {
 }
 
 .actions a {
-    display: block;
-    float: left;
-    margin-right: 10px;
-    vertical-align: middle;
 }
 
 .actions .btn-toolbar {
-    margin: 0px;
+
 }
 
 #friend-container .thumbnail {

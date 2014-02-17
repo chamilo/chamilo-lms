@@ -34,7 +34,7 @@ $nameTools = get_lang('MySpace');
 $user_id = api_get_user_id();
 $is_coach = api_is_coach($_GET['session_id']); // This is used?
 
-$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+$session_id = isset($_GET['session_id']) ? ($_GET['session_id'] == 'T' ? 'T' :intval($_GET['session_id'])) : 0;
 
 $is_platform_admin 	= api_is_platform_admin();
 $is_drh 			= api_is_drh();
@@ -617,7 +617,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 
         //Session Filter
         $sessionFilter = new FormValidator('session_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
-
+        $sessionAjax = "search_session";
         switch ($display) {
             case 'coaches':
                $tool_name = get_lang('DisplayCoaches');
@@ -636,6 +636,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 break;
             case 'lpprogressoverview':
                $tool_name = get_lang('DisplayLpProgressOverview');
+               $sessionAjax = 'search_session_all';
                 break;
             case 'progressoverview':
                $tool_name = get_lang('DisplayProgressOverview');
@@ -649,21 +650,31 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }
 
         $sessionFilter->addElement('header', '', $tool_name);
-        $url = $ajax_path . 'session.ajax.php?a=search_session';
+        $url = $ajax_path . 'session.ajax.php?a=' . $sessionAjax;
         $sessionList = array();
         $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
         if (!empty($sessionId)) {
             $sessionList = array();
-            $sessionInfo = SessionManager::fetch($sessionId);
-            $sessionList[] = array('id' => $sessionInfo['id'], 'text' => $sessionInfo['name']);
+            if ($sessionId == 'T') {
+                $sessionInfo = SessionManager::fetch($sessionId);
+                $sessionList[] = array('id' => 'T', 'text' => 'TODOS');
+            } else {
+                $sessionInfo = SessionManager::fetch($sessionId);
+                $sessionList[] = array('id' => $sessionInfo['id'], 'text' => $sessionInfo['name']);
+            }
         }
         $sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchSession'), null, array('url' => $url, 'defaults' => $sessionList, 'width' => '400px'));
 
         //course filter
         $a = 'search_course';
         if (!empty($_GET['session_id'])) {
-           $a = 'search_course_by_session';
+            $a = 'search_course_by_session';
         }
+        
+        if ($display == 'lpprogressoverview') {
+            $a = 'search_course_by_session_all';
+        }
+
         $url = $ajax_path . 'course.ajax.php?a='. $a .'&session_id=' . $_GET['session_id'];
 
         $courseList = array();
@@ -782,19 +793,25 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }*/
 
         //date filter
-        if (!in_array($display, array('surveyoverview', 'progressoverview', 'lpprogressoverview'))) {
+//        if (!in_array($display, array('surveyoverview', 'progressoverview', 'lpprogressoverview'))) {
             $sessionFilter->addElement('text', 'from', get_lang('From'), array('id' => 'date_from', 'value' => (!empty($_GET['date_from']) ? $_GET['date_from'] : ''), 'style' => 'width:75px' ));
             $sessionFilter->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to', 'value' => (!empty($_GET['date_to']) ? $_GET['date_to'] : ''), 'style' => 'width:75px' ));
-        }
+//        }
         $sessionFilter->addElement('submit', '', get_lang('Generate'), 'id="generateReport"');
 
         echo '<div class="">';
         echo $sessionFilter->return_form();
         echo '</div>';
         $a = 'search_course';
+        
         if (!empty($_GET['session_id'])) {
            $a = 'search_course_by_session';
         }
+        
+        if ($display == 'lpprogressoverview') {
+            $a = 'search_course_by_session_all';
+        }
+        
         $url = $ajax_path . 'course.ajax.php?a='. $a .'&session_id=' . $_GET['session_id'];
         echo '<script>
         $(function() {
@@ -832,7 +849,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             $("#session_name").on("change", function() {
                 var sessionId = $(this).val();
                 //window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId;
-                select2("#course_name", "' .  $ajax_path . 'course.ajax.php?a=search_course_by_session&session_id=" + sessionId);
+                select2("#course_name", "' .  $ajax_path . 'course.ajax.php?a=' . $a . '&session_id=" + sessionId);
             });
 
             if (display == "lpprogressoverview" || display == "progressoverview" || display == "surveyoverview") {
@@ -937,7 +954,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
     } else if($display == 'lpprogressoverview') {
         if (!empty($_GET['session_id'])) {
             if (!empty($_GET['course_id'])) {
-                echo MySpace::display_tracking_lp_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), $_GET['date_from'], $_GET['date_to']);
+                echo MySpace::display_tracking_lp_progress_overview($sessionId, intval($_GET['course_id']), $_GET['date_from'], $_GET['date_to']);
             } else {
                 Display::display_warning_message(get_lang('ChooseCourse'));
             }

@@ -510,7 +510,7 @@ class SessionManager
     public static function get_session_lp_progress($sessionId = 0, $courseId = 0, $date_from, $date_to, $options)
     {
         //escaping vars
-        $sessionId  = intval($sessionId);
+        $sessionId  = $sessionId == 'T' ? 'T' : intval($sessionId);
         $courseId   = intval($courseId);
         $date_from  = Database :: escape_string($date_from);
         $date_to    = Database :: escape_string($date_to);
@@ -533,8 +533,14 @@ class SessionManager
             // Registered students in session.
             $users = CourseManager :: get_student_list_from_course_code($course_code, true, $sessionId);
         }*/
+        
+        $sessionCond = 'and id_session = %s';
+        if ($sessionId == 'T') {
+            $sessionCond = "";
+        }
+        
         $where = " WHERE course_code = '%s'
-        AND s.status <> 2 and id_session = %s";
+        AND s.status <> 2 $sessionCond";
 
         $limit = null;
         if (!empty($options['limit'])) {
@@ -554,9 +560,9 @@ class SessionManager
         FROM $session_course_user s
         INNER JOIN $user u ON u.user_id = s.id_user
         $where $order $limit";
-
+        
         $sql_query = sprintf($sql, $course['code'], $sessionId);
-
+        
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs))
         {
@@ -576,13 +582,19 @@ class SessionManager
                 'username'  => $user[3],
             );
 
+            $sessionCond = 'AND v.session_id = %d';
+            if ($sessionId == 'T') {
+                $sessionCond = "";
+            }
+            
             //Get lessons progress by user
             $sql = "SELECT v.lp_id as id, v.progress
             FROM  $tbl_course_lp_view v
-            WHERE v.session_id = %d
-            AND v.c_id = %d
-            AND v.user_id = %d";
-            $sql_query = sprintf($sql, $sessionId, $courseId, $user['user_id']);
+            WHERE v.c_id = %d
+            AND v.user_id = %d
+            $sessionCond";
+            
+            $sql_query = sprintf($sql, $courseId, $user['user_id'], $sessionId);
 
             $result = Database::query($sql_query);
 
@@ -1046,6 +1058,7 @@ class SessionManager
         $course                 = Database :: get_main_table(TABLE_MAIN_COURSE);
         $track_e_login          = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $track_e_course_access  = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $sessionTable           = Database :: get_main_table(TABLE_MAIN_SESSION);
 
         global $export_csv;
         if ($export_csv) {
@@ -1101,7 +1114,8 @@ class SessionManager
                 a.counter,
                 c.title,
                 c.code,
-                u.user_id
+                u.user_id,
+                a.session_id
             FROM $track_e_course_access a
             INNER JOIN $user u ON a.user_id = u.user_id
             INNER JOIN $course c ON a.course_code = c.code
@@ -1116,6 +1130,14 @@ class SessionManager
         //foreach
         foreach ($data as $key => $info) {
 
+            $sql = "SELECT
+                    name
+                    FROM $sessionTable
+                    WHERE 
+                    id = {$info['session_id']}";
+            $result = Database::query($sql);
+            $session = Database::fetch_assoc($result);
+           
             //We are not using this becaouse the range its to small and no other date match the condition of this function
             //$clicks = Tracking::get_total_clicks($info['user_id'], $courseId, $sessionId, $info['login_course_date'], $info['logout_course_date']);
 
@@ -1129,7 +1151,7 @@ class SessionManager
                 'clicks' => $info['counter'], //+ $clicks[$info['user_id']],
                 'ip' => '',
                 'timeLoggedIn' => gmdate("H:i:s", strtotime($info['logout_course_date']) - strtotime($info['login_course_date'])),
-            );
+                'session' => $session['name']);
         }
         //Search for ip, we do less querys if we iterate the final array
         foreach ($return as $key => $info) {
@@ -2481,7 +2503,37 @@ class SessionManager
 		}
 		return $courses;
 	}
+        /**
+	 * Gets the list of courses by session filtered by access_url
+	 * @param int session id
+         * @param string course_name
+	 * @return array list of courses
+	 */
+        public static function get_course_list_by_session_id_like($session_id, $course_name = '')
+    {
+		$tbl_course				= Database::get_main_table(TABLE_MAIN_COURSE);
+		$tbl_session_rel_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
+		// select the courses
+		$sql = "SELECT * FROM $tbl_course c INNER JOIN $tbl_session_rel_course src ON c.code = src.course_code
+		        WHERE src.id_session like '$session_id'";
+        if (!empty($course_name))
+        {
+            $course_name = Database::escape_string($course_name);
+            $sql .= " AND UPPER(c.title) LIKE UPPER('%$course_name%') ";
+        }
+
+        $sql .= "ORDER BY title;";
+		$result 	= Database::query($sql);
+		$num_rows 	= Database::num_rows($result);
+		$courses = array();
+		if ($num_rows > 0) {
+			while ($row = Database::fetch_array($result,'ASSOC'))	{
+				$courses[$row['id']] = $row;
+			}
+		}
+		return $courses;
+	}
 	/**
 	 * Get the session id based on the original id and field name in the extra fields. Returns 0 if session was not found
 	 *

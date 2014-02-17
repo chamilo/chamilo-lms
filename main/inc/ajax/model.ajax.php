@@ -265,7 +265,7 @@ switch ($action) {
     case 'get_session_lp_progress':
     case 'get_session_progress':
         //@TODO replace this for a more efficient function (not retrieving the whole data)
-        $course = api_get_course_info_by_id($courseId);
+        $course = api_get_course_info_by_id($_GET['course_id']);
         $users = CourseManager::get_student_list_from_course_code($course['code'], true, $_GET['session_id'], $_GET['date_from'], $_GET['date_to']);
         $count = count($users);
         break;
@@ -656,7 +656,7 @@ switch ($action) {
         $sessionId = 0;
         if (!empty($_GET['course_id']))
         {
-            $sessionId  = intval($_GET['session_id']);
+            $sessionId  = $sessionId == 'T' ? 'T' : intval($_GET['session_id']);
             $courseId   = intval($_GET['course_id']);
             $course     = api_get_course_info_by_id($courseId);
             $date_from  = $_GET['date_from'];
@@ -793,6 +793,7 @@ switch ($action) {
             'clicks',
             'ip',
             'timeLoggedIn',
+            'session'
         );
         $sessionId = 0;
         if (!empty($_GET['course_id']))

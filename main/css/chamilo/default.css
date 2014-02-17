@@ -24,9 +24,9 @@ a:active {
 .navbar .nav > li > a {
     float: none;
     line-height: 20px;
-    padding-bottom: 11px;
+    padding-bottom: 13px;
     padding-right: 10px;
-    padding-top: 9px;
+    padding-top: 13px;
 }
 .subnav .navbar-inner {
     background-color: #0191C7; /* Old browsers */
@@ -74,7 +74,20 @@ a:active {
 /*****************************************************
  *  STYLE THEME CHAMILO                              *
  *****************************************************/
+.welcome-mascot{
+  background: url(images/chamilo-welcome.png) no-repeat right center;
+  padding-right: 200px;
+  padding-bottom: 2em;
+  padding-top: 2em;
+}
 
+.nav-list > li > a {
+    font-size: 14px;
+    padding-bottom: 6px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 6px;
+}
 .controls .btn{
     background:#2E75A3;
     color: #FFFFFF;
@@ -283,7 +296,7 @@ a:active {
 
 /*FIN DE INTRODUCCION DEL CURSO*/
 .fc-header-title h2{
-    color: #2E75A3;
+    color: #0191C7;
 }
 .fc-first .fc-widget-header{
     font-size: 14px;
@@ -307,10 +320,11 @@ a:active {
     border-radius: 10px;
 }
 #homepage .row .span9 h2{
-    font-size: 28px;
-    font-weight: normal;
-    color: #0F466A;
+    font-size: 26px;
+    font-weight: bold;
+    color: #0191C7;
     padding-bottom: 10px;
+    line-height: 28px;
 }
 #homepage .row .span9 p,#homepage .row .span9 ol {
     color: #6E6E6E;
@@ -337,10 +351,10 @@ a:active {
 }
 #course_tools .course-title-tools h3 {
     margin-top: 10px;
-    background-color:#2E75A3;
+    background-color:#0191C7;
     color: #FFFFFF;
-    font-weight: normal;
-    font-size: 16px;
+    font-weight: bold;
+    font-size: 18px;
     padding: 5px 5px 5px 10px;
     width: 250px;
     -webkit-border-top-left-radius: 10px;
@@ -383,7 +397,18 @@ a:active {
   font-size: 12px;
   font-weight: normal;
 }
-
+#main_content .course-box .row .span7{
+  width: 730px;
+}
+#main_content .course-box .row .span7 .row .span6 {
+    width: 615px;
+}
+#main_content .course-box .row .span7 .row .span6 h3{
+  font-size: 20px;
+}
+#course_category li, #hot_courses h5, .course_item h5, .categories-course-description h5, .course-box h5 {
+  font-weight: normal;
+}
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/

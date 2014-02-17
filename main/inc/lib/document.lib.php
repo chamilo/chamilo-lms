@@ -320,6 +320,11 @@ class DocumentManager
         if ($forced) {
             // Force the browser to save the file instead of opening it
 
+            global $_configuration;
+            if (!empty($_configuration['enable_x_sendfile_headers'])) {
+                header("X-Sendfile: $filename");
+            }
+
             header('Content-type: application/octet-stream');
             header('Content-length: ' . $len);
             if (preg_match("/MSIE 5.5/", $_SERVER['HTTP_USER_AGENT'])) {

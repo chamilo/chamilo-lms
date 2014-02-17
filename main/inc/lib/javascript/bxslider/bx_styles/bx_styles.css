@@ -58,7 +58,7 @@
     color: #FFFFFF;
     font-size: 12px;
     margin-right: 5px;
-    padding: 3px 8px 3px 6px;
+    padding: 3px 8px 2px 6px;
     text-decoration: none;
 }
 .bx-auto .start {
@@ -137,4 +137,22 @@
     cursor: pointer;
     font-size: 1.1em;
     text-decoration: none;
+}
+/*****************************************************
+ *  PARA EL RESPONSIVE DESING                                 *
+ *****************************************************/
+@media (max-width: 981px) {
+#container-slider {
+  margin: 5px auto;
+  min-height: 200px;
+  padding: 0;
+  z-index: 0;
+}
+#container-slider #slider li img{
+    width: 730px;
+    min-height: 300px;
+}
+#top_main_content #announcements .span6{
+    width: 730px;
+}
 }

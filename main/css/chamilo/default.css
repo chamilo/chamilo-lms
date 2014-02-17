@@ -21,20 +21,27 @@ a:active {
     text-decoration: none;
     color : #3757f7;
 }
-
+.navbar .nav > li > a {
+    float: none;
+    line-height: 20px;
+    padding-bottom: 11px;
+    padding-right: 10px;
+    padding-top: 9px;
+}
 .subnav .navbar-inner {
-    background-color: #2E75A3; /* Old browsers */
+    background-color: #0191C7; /* Old browsers */
     background-repeat: repeat-x; /* Repeat the gradient */
     background-image: none;
 }
 
 .subnav .nav > li > a {
-    border-left: 1px solid #2E75A3;
-    border-right: 1px solid #2E75A3;
+    border-left: 1px solid #0191C7;
+    border-right: 1px solid #0191C7;
     color: white;
     font-weight: normal;
-    font-size: 12px;
+    font-size: 14px;
 }
+
 
 .subnav .nav > #current > a,
 .subnav .nav > #current > a:hover {  
@@ -226,6 +233,29 @@ a:active {
     text-indent: -9000px;
     z-index: 1;
 }
+/*CSS SLIDER ANUNCIOS*/
+
+.pagerslide h2{
+    font-size: 18px;
+    font-family: 'Raleway', sans-serif;
+    background-color:  #0191C7;
+    color: #FFFFFF;
+    padding-left: 15px;
+}
+.controls .btn{
+    background:#DA462A;
+    color: #FFFFFF;
+    border:none;
+    padding: 5px 25px;
+    text-shadow: none;
+}
+#top_main_content #announcements .page-header{
+  display: none;
+  line-height: 1;
+}
+#top_main_content #announcements .span6 {
+  width: 800px;
+}
 
 /*CSS PARA CONTENIDO DE CURSO INTRODUCCION*/
 
@@ -359,7 +389,7 @@ a:active {
  *****************************************************/
 footer {
     height: 6em;    
-    background-color: #0f466a;
+    background-color: #0191C7;
     background-image: none;
     background-repeat:repeat-x;    
     color:#ffffff;
@@ -369,7 +399,7 @@ footer .container .row {
   padding-top: 5px;
 }
 footer a:link, footer a:visited {
-  color: #ccc;
+  color: #F1D40D;
 }
 /*****************************************************
  *  DISPLAY MESSAGES	                             *
@@ -531,7 +561,14 @@ RESPONSIVE CSS
         background: url("images/order-course.png") no-repeat left center;
         padding-left: 30px;
     }
-
+    .sidebar-nav h4 {
+        color: #037FB2;
+        font-size: 18px;
+        padding-bottom: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 10px;
+    }
 
 
 

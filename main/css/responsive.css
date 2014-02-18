@@ -362,7 +362,8 @@ The more frequent ones have been marked with *
     display: none;
     }
     .pagerslide h2 {
-    width: 707px;
+    display: none;
+    visibility: hidden;
     }
     #login_block #formLogin, #login_block #lang_form, #notice_block .homepage_notice {
       color: #666666;

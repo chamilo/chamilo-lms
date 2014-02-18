@@ -180,12 +180,11 @@ if (count($groups_pop) > 0) {
     $social_right_content .= '<div class="social-groups-home-title">'.get_lang('Popular').'</div>';
     $social_right_content .= Display::return_sortable_grid('home_group', array(), $groups_pop, array('hide_navigation'=>true, 'per_page' => 100), array(), false, array(true, true, true,true,true));
 }
+
 $social_right_content .= '</div>';
 
 $app['title'] = get_lang('SocialNetwork');
 $tpl = $app['template'];
 
-$tpl->assign('social_left_content', $social_left_content);
-$tpl->assign('social_right_content', $social_right_content);
-$social_layout = $tpl->get_template('layout/social_layout.tpl');
-$tpl->display($social_layout);
+$tpl->assign('content', $social_right_content);
+$tpl->display_one_col_template();

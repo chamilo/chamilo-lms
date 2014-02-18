@@ -167,15 +167,10 @@ if (api_get_setting('allow_social_tool') == 'true') {
 }
 
 $tpl = $app['template'];
-if (api_get_setting('allow_social_tool') == 'true') {
-    $tpl->assign('social_left_content', $social_left_content);
-    $tpl->assign('social_right_content', $social_right_content);
-    $social_layout = $tpl->get_template('layout/social_layout.tpl');
-    $tpl->display($social_layout);
-} else {
-    $content = $social_right_content;
-    $tpl->assign('actions', $actions);
-    $tpl->assign('message', $show_message);
-    $tpl->assign('content', $content);
-    $tpl->display_one_col_template();
-}
+
+$content = $social_right_content;
+$tpl->assign('actions', $actions);
+$tpl->assign('message', $show_message);
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();
+

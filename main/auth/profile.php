@@ -804,24 +804,25 @@ $url_big_image = $big_image.'?rnd='.time();
 $show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') == 'true' ? true : false;
 
 if (api_get_setting('allow_social_tool') == 'true') {
-    echo '<div class="row-fluid">';
+    /*echo '<div class="row-fluid">';
     echo '<div class="span3">';
     echo SocialManager::show_social_menu('home', null, api_get_user_id(), false, $show_delete_account_button);
     echo '</div>';
     echo '<div class="span9">';
     $form->display();
-    echo '</div>';
+    echo '</div>';*/
 } else {
-    // Style position:absolute has been removed for Opera-compatibility.
-    //echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:3px;width:250px;" >';
-    echo '<div id="image-message-container" style="float:right;display:inline;padding:3px;width:230px;" >';
 
-    if ($image == 'unknown.jpg') {
-        echo '<img '.$img_attributes.' />';
-    } else {
-        echo '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
-    }
-    echo '</div>';
-    $form->display();
 }
+// Style position:absolute has been removed for Opera-compatibility.
+//echo '<div id="image-message-container" style="float:right;display:inline;position:absolute;padding:3px;width:250px;" >';
+echo '<div id="image-message-container" style="float:right;display:inline;padding:3px;width:230px;" >';
+
+if ($image == 'unknown.jpg') {
+    echo '<img '.$img_attributes.' />';
+} else {
+    echo '<input type="image" '.$img_attributes.' onclick="javascript: return show_image(\''.$url_big_image.'\',\''.$big_image_width.'\',\''.$big_image_height.'\');"/>';
+}
+echo '</div>';
+$form->display();
 Display :: display_footer();

@@ -126,7 +126,7 @@ class HTML_Common
     function _getTabs()
     {
         return str_repeat($this->_getTab(), $this->_tabOffset);
-    } // end func _getTabs
+    }
 
     /**
      * Returns an HTML formatted attribute string

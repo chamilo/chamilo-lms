@@ -4844,9 +4844,11 @@ i.size-32.icon-new-work {
     padding: 15px;
     margin: 0 auto;
 }
+.form-signin-block button {
+    margin-top: 10px;
+}
 
 .form-signin-block input[type="password"] {
-    margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
@@ -4856,7 +4858,6 @@ i.size-32.icon-new-work {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
-
 
 .form-signin {
     max-width: 330px;

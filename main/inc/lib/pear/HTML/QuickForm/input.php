@@ -40,6 +40,7 @@ require_once 'HTML/QuickForm/element.php';
  */
 class HTML_QuickForm_input extends HTML_QuickForm_element
 {
+    public $icon;
     // {{{ constructor
 
     /**
@@ -52,13 +53,14 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_input($elementName=null, $elementLabel=null, $attributes=null)
+    function HTML_QuickForm_input($elementName = null, $elementLabel = null, $attributes = null)
     {
         $this->HTML_QuickForm_element($elementName, $elementLabel, $attributes);
-    } //end constructor
 
-    // }}}
-    // {{{ setType()
+        if (isset($attributes) && is_array($attributes) && !empty($attributes['icon'])) {
+            $this->icon = $attributes['icon'];
+        }
+    }
 
     /**
      * Sets the element type
@@ -72,10 +74,7 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
     {
         $this->_type = $type;
         $this->updateAttributes(array('type'=>$type));
-    } // end func setType
-
-    // }}}
-    // {{{ setName()
+    }
 
     /**
      * Sets the input field name
@@ -151,7 +150,15 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
         } else {
-            return $this->_getTabs() . '<input' . $this->_getAttrString($this->_attributes) . ' />';
+            $html = null;
+            if (!empty($this->icon)) {
+                $html .= '<div class="input-group"><span class="input-group-addon"><i class="'.$this->icon.'"></i></span>';
+            }
+            $html .= $this->_getTabs().'<input' . $this->_getAttrString($this->_attributes).' />';
+            if (!empty($this->icon)) {
+                $html .= '</div>';
+            }
+            return $html;
         }
     } //end func toHtml
 

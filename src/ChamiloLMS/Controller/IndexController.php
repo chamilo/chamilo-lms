@@ -236,7 +236,8 @@ class IndexController extends CommonController
             array(
                 'class' => 'input-medium autocapitalize_off virtualkey',
                 'placeholder' => get_lang('UserName'),
-                'autofocus' => 'autofocus'
+                'autofocus' => 'autofocus',
+                'icon' => 'fa fa-user fa-fw'
             )
         );
         $form->addElement(
@@ -245,7 +246,8 @@ class IndexController extends CommonController
             null,
             array(
                 'placeholder' => get_lang('Pass'),
-                'class' => 'input-medium virtualkey'
+                'class' => 'input-medium virtualkey',
+                'icon' => 'fa fa-key fa-fw'
             )
         );
         $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn btn-primary btn-block'));

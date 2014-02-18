@@ -334,12 +334,11 @@ class PageController
         $form = new FormValidator('formLogin', 'POST', null, null, array('class' => 'form-vertical'));
         // 'placeholder'=>get_lang('UserName')
         //'autocomplete'=>"off",
-
         $form->addElement(
             'text',
             'login',
             get_lang('UserName'),
-            array('class' => 'span2 autocapitalize_off', 'autofocus' => 'autofocus')
+            array('class' => 'span2 autocapitalize_off', 'autofocus' => 'autofocus', 'icon' => 'fa fa-key fa-fw')
         );
         $form->addElement('password', 'password', get_lang('Pass'), array('class' => 'span2'));
         $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));

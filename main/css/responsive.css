@@ -284,6 +284,7 @@ The more frequent ones have been marked with *
     }
 }
 
+
 @media (min-width: 481px) and (max-width: 800px) {
     /* No topbar */
     #topbar {
@@ -344,10 +345,10 @@ The more frequent ones have been marked with *
     #top_main_content .menu-column #reservation_block, #top_main_content .menu-column #notice_block, #top_main_content .menu-column #help_block {
         clear: both;
         display: inline-block;
-        width: 98%;
+        width: 96%;
     }
     #top_main_content .menu-column .well{
-        padding: 5px;
+        padding: 15px;
     }
      .nav-list > li > a {
       padding-bottom: 10px;
@@ -361,7 +362,7 @@ The more frequent ones have been marked with *
     display: none;
     }
     .pagerslide h2 {
-    width: 715px;
+    width: 707px;
     }
     #login_block #formLogin, #login_block #lang_form, #notice_block .homepage_notice {
       color: #666666;
@@ -505,7 +506,7 @@ The more frequent ones have been marked with *
     }
     #top_main_content .span3 {
         clear: both;
-        width: 100%;
+        width: 97%;
     }
     /* Footer fixes */
 
@@ -527,6 +528,20 @@ The more frequent ones have been marked with *
     footer .container .row {
         padding-top: 15px;
     }
+}
+
+@media (max-width: 600px) {
+
+#top_main_content .span3 {
+    clear: both;
+    width: 100%;
+}
+#top_main_content .menu-column #reservation_block, #top_main_content .menu-column #notice_block, #top_main_content .menu-column #help_block {
+  clear: both;
+  display: inline-block;
+  width: 94%;
+}
+
 }
 
 @media (min-width: 801px) and (max-width: 979px) {

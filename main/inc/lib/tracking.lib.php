@@ -534,6 +534,161 @@ class Tracking
     }
 
     /**
+     * get teacher progress by course and session
+     * @param int course id
+     * @param int session id
+     * @return data array
+     */
+    static function get_teachers_progress_by_course($courseId, $sessionId) {
+           $course = api_get_course_info_by_id($courseId);
+           //get teachers
+           $sql = "SELECT id_session, id_user
+                   FROM `session_rel_course_rel_user`
+                   WHERE status = 2
+                   AND visibility = 1
+                   AND course_code = '%s' 
+                  AND id_session = %s";
+        $query = sprintf($sql,$course['code'], $sessionId);
+        $rs = Database::query($query);
+        $teachers = array();
+        while ($teacher = Database::fetch_array($rs,'ASSOC')) {
+       error_log(print_r($teacher,1));
+            $teachers[] = $teacher;
+        }
+       foreach ($teachers as $teacher) {
+            //total documents added
+            $sql = "SELECT count(*) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'DocumentAdded'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                        $courseId,
+                        $teacher['id_user'],
+                        $teacher['id_session']
+                       );
+   //error_log($query);
+            $rs = Database::query($query);
+            $totalDocuments = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalDocuments = $row[0];
+            }
+            //total links added
+            $sql = "SELECT count(*) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'LinkAdded'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                        $courseId,
+                        $teacher['id_user'],
+                        $teacher['id_session']
+                       );
+            $rs = Database::query($query);
+            
+            $totalLinks = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalLinks = $row[0];
+            }
+            //total forums added
+            $sql = "SELECT count(*) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'ForumthreadVisible'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                        $courseId,
+                        $teacher['id_user'],
+                        $teacher['id_session']
+                       );
+            $rs = Database::query($query);
+            
+            $totalForums = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalForums = $row[0];
+            }
+            //total wikis added
+            $sql = "SELECT COUNT(DISTINCT(ref)) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'WikiAdded'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                        $courseId,
+                        $teacher['id_user'],
+                        $teacher['id_session']
+                       );
+            $rs = Database::query($query);
+            
+            $totalWikis = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalWikis = $row[0];
+            }
+            //total works added
+            $sql = "SELECT COUNT(*) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'DirectoryCreated'
+                    AND tool = 'work'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                        $courseId,
+                        $teacher['id_user'],
+                        $teacher['id_session']
+                       );
+            $rs = Database::query($query);
+            
+            $totalWorks = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalWorks = $row[0];
+            }
+            //total announcements added
+            $sql = "SELECT COUNT(*) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'AnnouncementAdded'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                        $courseId,
+                        $teacher['id_user'],
+                        $teacher['id_session']
+                       );
+            $rs = Database::query($query);
+            
+            $totalAnnouncements = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalAnnouncements = $row[0];
+            }
+            $tutor = get_user_info_by_id($teacher['id_user']);
+            $data[] = array(
+                'course'        => $course['title'],
+                'session'       => $teacher['id_session'],
+                'tutor'         => $tutor['lastname'] . ' ' . $tutor['firstname'],
+                'documents'     => $totalDocuments,
+                'links'         => $totalLinks,
+                'forums'        => $totalForums,
+                'works'         => $totalWorks,
+                'wikis'         => $totalWikis,
+                'announcements' => $totalAnnouncements,
+                );
+        }
+        return $data;
+    }
+
+
+    /**
      * Returns the average student progress in the learning paths of the given
      * course.
      * @param   int/array    Student id(s)
@@ -3305,6 +3460,7 @@ class Tracking
             //none is empty
             $course = api_get_course_info_by_id($courseId);
             $courses[$courseId] = array($course['code']);
+            $courses[$courseId]['code'] = $course['code'];
             $sessions[$sessionId] = api_get_session_info($sessionId);
         } else {
             //both are empty, not enough data, return an empty array
@@ -3379,7 +3535,7 @@ class Tracking
                 ta.answer as answer_id,
                 ta.tms as time,
                 te.exe_exo_id as quiz_id,
-                CONCAT (q.c_id,'-', q.id) as exercise_id,
+                CONCAT ('c', q.c_id, '_e', q.id) as exercise_id,
                 q.title as quiz_title
                 FROM $ttrack_exercises te, $ttrack_attempt ta, $tquiz q
                 WHERE te.exe_cours_id = '$whereCourseCode' ".(empty($whereSessionParams)?'':"AND te.session_id IN ($whereSessionParams)")."
@@ -3393,11 +3549,14 @@ class Tracking
             $questionIds = array();
             $answerIds = array();
             while ($row = Database::fetch_array($rs)) {
-                $userIds[$row['user_id']] = $row['user_id'];
-                $questionIds[$row['question_id']] = $row['question_id'];
-                $answerIds[$row['question_id']][$row['answer_id']] = $row['answer_id'];
-                $row['session'] = $sessions[$row['session_id']];
-                $data[] = $row;
+                //only show if exercise is visible
+                if (api_get_item_visibility($courseData, 'quiz', $row['exercise_id'])) {
+                    $userIds[$row['user_id']] = $row['user_id'];
+                    $questionIds[$row['question_id']] = $row['question_id'];
+                    $answerIds[$row['question_id']][$row['answer_id']] = $row['answer_id'];
+                    $row['session'] = $sessions[$row['session_id']];
+                    $data[] = $row;
+                }
             }
             // Now fill questions data. Query all questions and answers for this test to avoid
             $sqlQuestions = "SELECT tq.c_id, tq.id as question_id, tq.question, tqa.id_auto, tqa.answer, tqa.correct, tq.position
@@ -3416,6 +3575,7 @@ class Tracking
                 $users[$rowUser['user_id']] = $rowUser;
             }
             foreach ($data as $id => $row) {
+                $data[$id]['session'] = $sessions[$row['session_id']]['name'];
                 $data[$id]['firstname'] = $users[$row['user_id']]['firstname'];
                 $data[$id]['lastname'] = $users[$row['user_id']]['lastname'];
                 $data[$id]['username'] = $users[$row['user_id']]['username'];

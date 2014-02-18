@@ -34,7 +34,7 @@ $nameTools = get_lang('MySpace');
 $user_id = api_get_user_id();
 $is_coach = api_is_coach($_GET['session_id']); // This is used?
 
-$session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+$session_id = isset($_GET['session_id']) ? ($_GET['session_id'] == 'T' ? 'T' :intval($_GET['session_id'])) : 0;
 
 $is_platform_admin 	= api_is_platform_admin();
 $is_drh 			= api_is_drh();
@@ -620,7 +620,8 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 
         //Session Filter
         $sessionFilter = new FormValidator('session_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
-
+        $a = 'search_course';
+        $an = 'search_session';
         switch ($display) {
             case 'coaches':
                $tool_name = get_lang('DisplayCoaches');
@@ -639,9 +640,11 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 break;
             case 'lpprogressoverview':
                $tool_name = get_lang('DisplayLpProgressOverview');
+               $a = $an = 'search_session_all';
                 break;
             case 'progressoverview':
                $tool_name = get_lang('DisplayProgressOverview');
+               $a = $an = 'search_session_all';
                 break;
             case 'exerciseprogress':
                $tool_name = get_lang('DisplayExerciseProgress');
@@ -652,8 +655,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }
 
         $sessionFilter->addElement('header', '', $tool_name);
-        $a = 'search_course';
-        $an = 'search_session';
+
         $sessionList = array();
         $courseList = array();
         $sessionId = isset($_GET['session_id']) ? intval(Security::remove_XSS($_GET['session_id'])) : null;
@@ -661,8 +663,14 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 
         if (!empty($sessionId)) {
             $sessionList = array();
-            $sessionInfo = SessionManager::fetch($sessionId);
-            $sessionList[] = array('id' => $sessionInfo['id'], 'text' => $sessionInfo['name']);
+
+            if ($sessionId == 'T') {
+                $sessionInfo = SessionManager::fetch($sessionId);
+                $sessionList[] = array('id' => 'T', 'text' => 'TODOS');
+            } else {
+                $sessionInfo = SessionManager::fetch($sessionId);
+                $sessionList[] = array('id' => $sessionInfo['id'], 'text' => $sessionInfo['name']);
+            }
             $a = 'search_course_by_session';
         }
 
@@ -671,6 +679,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             $courseInfo = api_get_course_info_by_id($courseId);
             $courseList[] = array('id' => $courseInfo['real_id'], 'text' => $courseInfo['name']);
             $an = 'search_session_by_course';
+
         }
 
         $url = $ajax_path . 'session.ajax.php?a='. $an . '&course_id=' . $courseId;
@@ -680,8 +689,13 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         /*
         $a = 'search_course';
         if (!empty($_GET['session_id'])) {
-           $a = 'search_course_by_session';
+            $a = 'search_course_by_session';
         }
+        
+        if ($display == 'lpprogressoverview') {
+            $a = 'search_course_by_session_all';
+        }
+
         */
         $url = $ajax_path . 'course.ajax.php?a='. $a .'&session_id=' . $sessionId;
         $sessionFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
@@ -792,10 +806,10 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }*/
 
         //date filter
-        if (!in_array($display, array('surveyoverview', 'progressoverview', 'lpprogressoverview'))) {
+        if (!in_array($display, array('surveyoverview', 'progressoverview'))) {
             $sessionFilter->addElement('text', 'from', get_lang('From'), array('id' => 'date_from', 'value' => (!empty($_GET['date_from']) ? $_GET['date_from'] : ''), 'style' => 'width:75px' ));
             $sessionFilter->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to', 'value' => (!empty($_GET['date_to']) ? $_GET['date_to'] : ''), 'style' => 'width:75px' ));
-        }
+       }
         $sessionFilter->addElement('submit', '', get_lang('Generate'), 'id="generateReport"');
 
         echo '<div class="">';
@@ -805,6 +819,11 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         if (!empty($sessionId)) {
            $a = 'search_course_by_session';
         }
+        
+        if ($display == 'lpprogressoverview' || $display == 'progressoverview') {
+            $a = 'search_course_by_session_all';
+        }
+       
         $url = $ajax_path . 'course.ajax.php?a='. $a .'&session_id=' . $sessionId;
         echo '<script>
         $(function() {
@@ -848,35 +867,22 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 dateFormat:  "yy-mm-dd"
             });
                         
-            $("#session_name").on("change", function() {
-                var sessionId = $("#session_name").val();
-                var courseId  = $("#course_name").val();
-                console.log("session:"+sessionId);
-                console.log("course:"+courseId);
-                if (isEmpty(sessionId)) {
-                        select2("#course_name", "' .  $ajax_path . 'course.ajax.php?a=search_course");
-                    if (isEmpty(courseId)) {
-                        select2("#session_name", "' .  $ajax_path . 'session.ajax.php?a=search_session");
-                    } else {
-                        select2("#session_name", "' .  $ajax_path . 'session.ajax.php?a=search_session_by_course&course_id=" + courseId);
-                    }
-                } else {
-                    select2("#course_name", "' .  $ajax_path . 'course.ajax.php?a=search_course_by_session&session_id=" + sessionId);
-                }
+             $("#session_name").on("change", function() {
+                var sessionId = $(this).val();
                 //window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId;
-                /*
-                if (isEmpty(courseId)) {
-                    select2("#course_name", "'. $ajax_path . 'course.ajax.php?a=search_course_by_session&session_id=" + sessionId);
-                }
-                */
+                select2("#course_name", "' .  $ajax_path . 'course.ajax.php?a=' . $a . '&session_id=" + sessionId);
+            });
+
+            if (display == "lpprogressoverview" || display == "progressoverview" || display == "surveyoverview") {
+                if (isEmpty($("#session_name").val())) {
+                    $("#course_name").select2("readonly", true);
+                }}
             });
 
             $("#course_name").on("change", function() {
                 var sessionId = $("#session_name").val();
                 var courseId = $("#course_name").val();
                 var display = "' . $display . '";
-                console.log("session:"+sessionId);
-                console.log("course:"+courseId);
                 if (isEmpty(courseId)) {
                     select2("#session_name", "' .  $ajax_path . 'session.ajax.php?a=search_session");
                     if (isEmpty(sessionId)) {
@@ -911,8 +917,8 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                         select2("#course_name", "' .  $ajax_path . 'course.ajax.php?a=search_course_by_session&session_id=" + sessionId);
                     }
                     select2("#student_name", urlajax);
-                }*/
-            });
+                }
+            });*/
             ' . $script . '
         });
         function areBothFilled() {
@@ -969,6 +975,31 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 
 	if ($display === 'useroverview') {
 		MySpace::display_tracking_user_overview();
+    } else if($display == 'teacheroverview') {
+        $file_handle = fopen("/tmp/list.sql", "r");
+        while (!feof($file_handle)) {
+                $line = fgets($file_handle);
+                $courses = SessionManager::get_course_list_by_session_id(trim($line));
+                $course = current($courses);
+                $data[] = current(Tracking::get_teachers_progress_by_course($course['id'], $course['id_session']));
+        }
+        fclose($file_handle);
+        echo get_lang('Downloading');
+        MySpace::export_csv(
+            array(
+                'Name',
+                'Sección',
+                'tutor',
+                'carga de archivos',
+                'publicación de enlaces',
+                'foros',
+                'tareas',
+                'wikis',
+                'anuncios',
+                ),
+            $data
+        );
+
 	} else if($display == 'sessionoverview') {
 		MySpace::display_tracking_session_overview();
 	} else if($display == 'accessoverview') {
@@ -990,7 +1021,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
     } else if($display == 'lpprogressoverview') {
         if (!empty($_GET['session_id'])) {
             if (!empty($_GET['course_id'])) {
-                echo MySpace::display_tracking_lp_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), $_GET['date_from'], $_GET['date_to']);
+                echo MySpace::display_tracking_lp_progress_overview($sessionId, intval($_GET['course_id']), $_GET['date_from'], $_GET['date_to']);
             } else {
                 Display::display_warning_message(get_lang('ChooseCourse'));
             }
@@ -1000,7 +1031,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
     } else if($display == 'progressoverview') {
         if (!empty($_GET['session_id'])) {
             if (!empty($_GET['course_id'])) {
-                echo MySpace::display_tracking_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), $_GET['date_from'], $_GET['date_to']);
+                echo MySpace::display_tracking_progress_overview($sessionId, intval($_GET['course_id']), $_GET['date_from'], $_GET['date_to']);
             } else {
                 Display::display_warning_message(get_lang('ChooseCourse'));
             }

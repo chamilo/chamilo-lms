@@ -664,6 +664,7 @@ class MySpace {
             get_lang('Clicks'),
             get_lang('IP'),
             get_lang('TimeLoggedIn'),
+            get_lang('Section'),
         );
 
         $column_model   = array(
@@ -674,6 +675,7 @@ class MySpace {
             array('name'=>'clicks',         'index'=>'clicks',         'align'=>'left', 'search' => 'true'),
             array('name'=>'ip',             'index'=>'ip',             'align'=>'left', 'search' => 'true'),
             array('name'=>'timeloggedin',   'index'=>'timeLoggedIn',   'align'=>'left', 'search' => 'true'),
+            array('name'=>'session',   'index'=>'session',   'align'=>'left')
         );
 
         $action_links = '';

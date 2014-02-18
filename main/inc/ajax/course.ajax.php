@@ -126,6 +126,36 @@ switch ($action) {
             }
         }
         break;
+    case 'search_course_by_session_all':
+        if (api_is_platform_admin())
+        {
+            if ($_GET['session_id'] == 'TODOS' || $_GET['session_id'] == 'T') {
+                $_GET['session_id'] = '%';
+            }
+            
+            $results = SessionManager::get_course_list_by_session_id_like($_GET['session_id'], $_GET['q']);
+
+            //$results = SessionManager::get_sessions_list(array('s.name LIKE' => "%".$_REQUEST['q']."%"));
+            $results2 = array();
+            if (!empty($results)) {
+                foreach ($results as $item) {
+                    $item2 = array();
+                    foreach ($item as $id => $internal) {
+                        if ($id == 'id') {
+                            $item2[$id] = $internal;
+                        }
+                        if ($id == 'title') {
+                            $item2['text'] = $internal;
+                        }
+                    }
+                    $results2[] = $item2;
+                }
+                echo json_encode($results2);
+            } else {
+                echo json_encode(array());
+            }
+        }
+        break;    
     case 'search_user_by_course':
         if (api_is_platform_admin())
         {

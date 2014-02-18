@@ -30,17 +30,58 @@ class Display {
     static $global_template;
     static $preview_style = null;
 
-    public function __construct() {
+    public function __construct()
+    {
+    }
+
+    /**
+     * @return array
+     */
+    public static function toolList()
+    {
+        return array(
+            'group',
+            'work',
+            'glossary',
+            'forum',
+            'course_description',
+            'gradebook',
+            'attendance',
+            'course_progress',
+            'notebook'
+        );
     }
 
      /**
      * Displays the page header
      * @param string The name of the page (will be showed in the page title)
      * @param string Optional help file name
+     * @param string $page_header
      */
-    public static function display_header($tool_name ='', $help = null, $page_header = null) {
+    public static function display_header($tool_name ='', $help = null, $page_header = null)
+    {
         self::$global_template = new Template($tool_name);
+
+        // Fixing tools with any help it takes xxx part of main/xxx/index.php
+        if (empty($help)) {
+            $currentURL = api_get_self();
+            preg_match('/main\/([^*\/]+)/', $currentURL, $matches);
+            $toolList = self::toolList();
+            if (!empty($matches)) {
+
+                foreach ($matches as $match) {
+                    if (in_array($match, $toolList)) {
+                        $help = explode('_', $match);
+                        $help = array_map('ucfirst', $help);
+                        $help = implode('', $help);
+                        break;
+                    }
+                }
+            }
+        }
+
         self::$global_template->set_help($help);
+
         if (!empty(self::$preview_style)) {
             self::$global_template->preview_theme = self::$preview_style;
             self::$global_template->set_css_files();

@@ -1976,7 +1976,7 @@ class CourseManager
         }
         $this_course = Database::fetch_array($res);
         $count = 0;
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
             require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
             $url_id = 1;
             if (api_get_current_access_url_id() != -1) {

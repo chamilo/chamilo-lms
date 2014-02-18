@@ -289,6 +289,7 @@ The more frequent ones have been marked with *
     #topbar {
         display:none;
     }
+    
     .subnav .dropdown-menu li a {
     color: #FFFFFF;
     font-weight: normal;
@@ -478,7 +479,7 @@ The more frequent ones have been marked with *
     }
     /* Some fixes for w~720px */
     .section-mycampus #top_main_content .content-column {
-        float: none;
+        float: left;
         width: 720px;
     }
     .section-mycampus #homepage {
@@ -501,6 +502,10 @@ The more frequent ones have been marked with *
      #top_main_content .span9 {
         float: left;
         width: 720px;
+    }
+    #top_main_content .span3 {
+        clear: both;
+        width: 100%;
     }
     /* Footer fixes */
 

@@ -156,3 +156,9 @@
     width: 730px;
 }
 }
+@media (min-width: 481px) and (max-width: 800px) {
+#container-slider #slider li img {
+  min-height: 266px;
+  width: 625px;
+}
+}

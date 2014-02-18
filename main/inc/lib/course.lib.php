@@ -1975,189 +1975,190 @@ class CourseManager
             return;
         }
         $this_course = Database::fetch_array($res);
-
-        self::create_database_dump($code);
-        if (!self::is_virtual_course_from_system_code($code)) {
-            // If this is not a virtual course, look for virtual courses that depend on this one, if any
-            $virtual_courses = self::get_virtual_courses_linked_to_real_course($code);
-            foreach ($virtual_courses as $index => $virtual_course) {
-                // Unsubscribe all classes from the virtual course
-                $sql = "DELETE FROM $table_course_class WHERE course_code='".$virtual_course['code']."'";
-                Database::query($sql);
-                // Unsubscribe all users from the virtual course
-                $sql = "DELETE FROM $table_course_user WHERE course_code='".$virtual_course['code']."'";
-                Database::query($sql);
-                // Delete the course from the sessions tables
-                $sql = "DELETE FROM $table_session_course WHERE course_code='".$virtual_course['code']."'";
-                Database::query($sql);
-                $sql = "DELETE FROM $table_session_course_user WHERE course_code='".$virtual_course['code']."'";
-                Database::query($sql);
-                // Delete the course from the survey tables
-                $sql = "DELETE FROM $table_course_survey WHERE course_code='".$virtual_course['code']."'";
-                Database::query($sql);
-                $sql = "DELETE FROM $table_course_survey_user WHERE db_name='".$virtual_course['db_name']."'";
-                Database::query($sql);
-                $sql = "DELETE FROM $table_course_survey_reminder WHERE db_name='".$virtual_course['db_name']."'";
-                Database::query($sql);
-
-                // Delete the course from the stats tables
-
-                $sql = "DELETE FROM $table_stats_hotpots WHERE exe_cours_id = '".$virtual_course['code']."'";
-                Database::query($sql);
-                $sql = "DELETE FROM $table_stats_attempt WHERE course_code = '".$virtual_course['code']."'";
-                Database::query($sql);
-                $sql = "DELETE FROM $table_stats_exercises WHERE exe_cours_id = '".$virtual_course['code']."'";
-                Database::query($sql);
-                $sql = "DELETE FROM $table_stats_access WHERE access_cours_code = '".$virtual_course['code']."'";
-                Database::query($sql);
-                $sql = "DELETE FROM $table_stats_lastaccess WHERE access_cours_code = '".$virtual_course['code']."'";
-                Database::query($sql);
-                $sql = "DELETE FROM $table_stats_course_access WHERE course_code = '".$virtual_course['code']."'";
-                Database::query($sql);
-                $sql = "DELETE FROM $table_stats_online WHERE course = '".$virtual_course['code']."'";
-                Database::query($sql);
-                $sql = "DELETE FROM $table_stats_default WHERE default_cours_code = '".$virtual_course['code']."'";
-                Database::query($sql);
-                $sql = "DELETE FROM $table_stats_downloads WHERE down_cours_id = '".$virtual_course['code']."'";
-                Database::query($sql);
-                $sql = "DELETE FROM $table_stats_links WHERE links_cours_id = '".$virtual_course['code']."'";
-                Database::query($sql);
-                $sql = "DELETE FROM $table_stats_uploads WHERE upload_cours_id = '".$virtual_course['code']."'";
-                Database::query($sql);
-
-                // Delete the course from the course table
-                $sql = "DELETE FROM $table_course WHERE code='".$virtual_course['code']."'";
-                Database::query($sql);
-            }
-
-            $sql = "SELECT * FROM $table_course WHERE code='".$code."'";
-            $res = Database::query($sql);
-            $course = Database::fetch_array($res);
-            $course_tables = get_course_tables();
-
-            //Cleaning c_x tables
-            if (!empty($course['id'])) {
-                foreach($course_tables as $table) {
-                    $table = Database::get_course_table($table);
-                    $sql = "DELETE FROM $table WHERE c_id = {$course['id']} ";
-                    Database::query($sql);
-                }
-            }
-            $course_dir = api_get_path(SYS_COURSE_PATH).$course['directory'];
-            $archive_dir = api_get_path(SYS_ARCHIVE_PATH).$course['directory'].'_'.time();
-            if (is_dir($course_dir)) {
-                rename($course_dir, $archive_dir);
-            }
-        }
-
-        // Unsubscribe all classes from the course
-        $sql = "DELETE FROM $table_course_class WHERE course_code='".$code."'";
-        Database::query($sql);
-        // Unsubscribe all users from the course
-        $sql = "DELETE FROM $table_course_user WHERE course_code='".$code."'";
-        Database::query($sql);
-        // Delete the course from the sessions tables
-        $sql = "DELETE FROM $table_session_course WHERE course_code='".$code."'";
-        Database::query($sql);
-        $sql = "DELETE FROM $table_session_course_user WHERE course_code='".$code."'";
-        Database::query($sql);
-
-        // Delete from Course - URL
-        $sql = "DELETE FROM $table_course_rel_url WHERE course_code = '".$code."'";
-        Database::query($sql);
-
-        $sql = 'SELECT survey_id FROM '.$table_course_survey.' WHERE course_code="'.$code.'"';
-        $result_surveys = Database::query($sql);
-        while($surveys = Database::fetch_array($result_surveys)) {
-            $survey_id = $surveys[0];
-            $sql = 'DELETE FROM '.$table_course_survey_question.' WHERE survey_id="'.$survey_id.'"';
-            Database::query($sql);
-            $sql = 'DELETE FROM '.$table_course_survey_question_option.' WHERE survey_id="'.$survey_id.'"';
-            Database::query($sql);
-            $sql = 'DELETE FROM '.$table_course_survey.' WHERE survey_id="'.$survey_id.'"';
-            Database::query($sql);
-        }
-
-
-        // Delete the course from the stats tables
-
-        $sql = "DELETE FROM $table_stats_hotpots WHERE exe_cours_id = '".$code."'";
-        Database::query($sql);
-        $sql = "DELETE FROM $table_stats_attempt WHERE course_code = '".$code."'";
-        Database::query($sql);
-        $sql = "DELETE FROM $table_stats_exercises WHERE exe_cours_id = '".$code."'";
-        Database::query($sql);
-        $sql = "DELETE FROM $table_stats_access WHERE access_cours_code = '".$code."'";
-        Database::query($sql);
-        $sql = "DELETE FROM $table_stats_lastaccess WHERE access_cours_code = '".$code."'";
-        Database::query($sql);
-        $sql = "DELETE FROM $table_stats_course_access WHERE course_code = '".$code."'";
-        Database::query($sql);
-        $sql = "DELETE FROM $table_stats_online WHERE course = '".$code."'";
-        Database::query($sql);
-        $sql = "DELETE FROM $table_stats_default WHERE default_cours_code = '".$code."'";
-        Database::query($sql);
-        $sql = "DELETE FROM $table_stats_downloads WHERE down_cours_id = '".$code."'";
-        Database::query($sql);
-        $sql = "DELETE FROM $table_stats_links WHERE links_cours_id = '".$code."'";
-        Database::query($sql);
-        $sql = "DELETE FROM $table_stats_uploads WHERE upload_cours_id = '".$code."'";
-        Database::query($sql);
-
-        if (api_is_multiple_url_enabled()) {
+        $count = 0;
+        if ($_configuration['multiple_access_urls']) {
             require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
             $url_id = 1;
             if (api_get_current_access_url_id() != -1) {
                 $url_id = api_get_current_access_url_id();
             }
             UrlManager::delete_url_rel_course($code, $url_id);
+            $count = UrlManager::getcountUrlRelCourse($code);
         }
-
-        // Delete the course from the database
-        $sql = "DELETE FROM $table_course WHERE code='".$code."'";
-        Database::query($sql);
-
-        // delete extra course fields
-        $t_cf         = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
-        $t_cfv         = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
-
-        $sql = "SELECT distinct field_id FROM $t_cfv WHERE course_code = '$code'";
-        $res_field_ids = @Database::query($sql);
-
-        while($row_field_id = Database::fetch_row($res_field_ids)){
-            $field_ids[] = $row_field_id[0];
-        }
-
-        //delete from table_course_field_value from a given course_code
-
-        $sql_course_field_value = "DELETE FROM $t_cfv WHERE course_code = '$code'";
-        @Database::query($sql_course_field_value);
-
-        $sql = "SELECT distinct field_id FROM $t_cfv";
-        $res_field_all_ids = @Database::query($sql);
-
-        while($row_field_all_id = Database::fetch_row($res_field_all_ids)){
-            $field_all_ids[] = $row_field_all_id[0];
-        }
-
-        if (is_array($field_ids) && count($field_ids) > 0) {
-            foreach ($field_ids as $field_id) {
-                // check if field id is used into table field value
-                if (is_array($field_all_ids)) {
-                    if (in_array($field_id, $field_all_ids)) {
-                        continue;
-                    } else {
-                        $sql_course_field = "DELETE FROM $t_cf WHERE id = '$field_id'";
-                        Database::query($sql_course_field);
+        if ($count == 0) {
+            self::create_database_dump($code);
+            if (!self::is_virtual_course_from_system_code($code)) {
+                // If this is not a virtual course, look for virtual courses that depend on this one, if any
+                $virtual_courses = self::get_virtual_courses_linked_to_real_course($code);
+                foreach ($virtual_courses as $index => $virtual_course) {
+                    // Unsubscribe all classes from the virtual course
+                    $sql = "DELETE FROM $table_course_class WHERE course_code='".$virtual_course['code']."'";
+                    Database::query($sql);
+                    // Unsubscribe all users from the virtual course
+                    $sql = "DELETE FROM $table_course_user WHERE course_code='".$virtual_course['code']."'";
+                    Database::query($sql);
+                    // Delete the course from the sessions tables
+                    $sql = "DELETE FROM $table_session_course WHERE course_code='".$virtual_course['code']."'";
+                    Database::query($sql);
+                    $sql = "DELETE FROM $table_session_course_user WHERE course_code='".$virtual_course['code']."'";
+                    Database::query($sql);
+                    // Delete the course from the survey tables
+                    $sql = "DELETE FROM $table_course_survey WHERE course_code='".$virtual_course['code']."'";
+                    Database::query($sql);
+                    $sql = "DELETE FROM $table_course_survey_user WHERE db_name='".$virtual_course['db_name']."'";
+                    Database::query($sql);
+                    $sql = "DELETE FROM $table_course_survey_reminder WHERE db_name='".$virtual_course['db_name']."'";
+                    Database::query($sql);
+    
+                    // Delete the course from the stats tables
+    
+                    $sql = "DELETE FROM $table_stats_hotpots WHERE exe_cours_id = '".$virtual_course['code']."'";
+                    Database::query($sql);
+                    $sql = "DELETE FROM $table_stats_attempt WHERE course_code = '".$virtual_course['code']."'";
+                    Database::query($sql);
+                    $sql = "DELETE FROM $table_stats_exercises WHERE exe_cours_id = '".$virtual_course['code']."'";
+                    Database::query($sql);
+                    $sql = "DELETE FROM $table_stats_access WHERE access_cours_code = '".$virtual_course['code']."'";
+                    Database::query($sql);
+                    $sql = "DELETE FROM $table_stats_lastaccess WHERE access_cours_code = '".$virtual_course['code']."'";
+                    Database::query($sql);
+                    $sql = "DELETE FROM $table_stats_course_access WHERE course_code = '".$virtual_course['code']."'";
+                    Database::query($sql);
+                    $sql = "DELETE FROM $table_stats_online WHERE course = '".$virtual_course['code']."'";
+                    Database::query($sql);
+                    $sql = "DELETE FROM $table_stats_default WHERE default_cours_code = '".$virtual_course['code']."'";
+                    Database::query($sql);
+                    $sql = "DELETE FROM $table_stats_downloads WHERE down_cours_id = '".$virtual_course['code']."'";
+                    Database::query($sql);
+                    $sql = "DELETE FROM $table_stats_links WHERE links_cours_id = '".$virtual_course['code']."'";
+                    Database::query($sql);
+                    $sql = "DELETE FROM $table_stats_uploads WHERE upload_cours_id = '".$virtual_course['code']."'";
+                    Database::query($sql);
+    
+                    // Delete the course from the course table
+                    $sql = "DELETE FROM $table_course WHERE code='".$virtual_course['code']."'";
+                    Database::query($sql);
+                }
+    
+                $sql = "SELECT * FROM $table_course WHERE code='".$code."'";
+                $res = Database::query($sql);
+                $course = Database::fetch_array($res);
+                $course_tables = get_course_tables();
+    
+                //Cleaning c_x tables
+                if (!empty($course['id'])) {
+                    foreach($course_tables as $table) {
+                        $table = Database::get_course_table($table);
+                        $sql = "DELETE FROM $table WHERE c_id = {$course['id']} ";
+                        Database::query($sql);
+                    }
+                }
+                $course_dir = api_get_path(SYS_COURSE_PATH).$course['directory'];
+                $archive_dir = api_get_path(SYS_ARCHIVE_PATH).$course['directory'].'_'.time();
+                if (is_dir($course_dir)) {
+                    rename($course_dir, $archive_dir);
+                }
+            }
+    
+            // Unsubscribe all classes from the course
+            $sql = "DELETE FROM $table_course_class WHERE course_code='".$code."'";
+            Database::query($sql);
+            // Unsubscribe all users from the course
+            $sql = "DELETE FROM $table_course_user WHERE course_code='".$code."'";
+            Database::query($sql);
+            // Delete the course from the sessions tables
+            $sql = "DELETE FROM $table_session_course WHERE course_code='".$code."'";
+            Database::query($sql);
+            $sql = "DELETE FROM $table_session_course_user WHERE course_code='".$code."'";
+            Database::query($sql);
+    
+            // Delete from Course - URL
+            $sql = "DELETE FROM $table_course_rel_url WHERE course_code = '".$code."'";
+            Database::query($sql);
+    
+            $sql = 'SELECT survey_id FROM '.$table_course_survey.' WHERE course_code="'.$code.'"';
+            $result_surveys = Database::query($sql);
+            while($surveys = Database::fetch_array($result_surveys)) {
+                $survey_id = $surveys[0];
+                $sql = 'DELETE FROM '.$table_course_survey_question.' WHERE survey_id="'.$survey_id.'"';
+                Database::query($sql);
+                $sql = 'DELETE FROM '.$table_course_survey_question_option.' WHERE survey_id="'.$survey_id.'"';
+                Database::query($sql);
+                $sql = 'DELETE FROM '.$table_course_survey.' WHERE survey_id="'.$survey_id.'"';
+                Database::query($sql);
+            }
+    
+    
+            // Delete the course from the stats tables
+    
+            $sql = "DELETE FROM $table_stats_hotpots WHERE exe_cours_id = '".$code."'";
+            Database::query($sql);
+            $sql = "DELETE FROM $table_stats_attempt WHERE course_code = '".$code."'";
+            Database::query($sql);
+            $sql = "DELETE FROM $table_stats_exercises WHERE exe_cours_id = '".$code."'";
+            Database::query($sql);
+            $sql = "DELETE FROM $table_stats_access WHERE access_cours_code = '".$code."'";
+            Database::query($sql);
+            $sql = "DELETE FROM $table_stats_lastaccess WHERE access_cours_code = '".$code."'";
+            Database::query($sql);
+            $sql = "DELETE FROM $table_stats_course_access WHERE course_code = '".$code."'";
+            Database::query($sql);
+            $sql = "DELETE FROM $table_stats_online WHERE course = '".$code."'";
+            Database::query($sql);
+            $sql = "DELETE FROM $table_stats_default WHERE default_cours_code = '".$code."'";
+            Database::query($sql);
+            $sql = "DELETE FROM $table_stats_downloads WHERE down_cours_id = '".$code."'";
+            Database::query($sql);
+            $sql = "DELETE FROM $table_stats_links WHERE links_cours_id = '".$code."'";
+            Database::query($sql);
+            $sql = "DELETE FROM $table_stats_uploads WHERE upload_cours_id = '".$code."'";
+            Database::query($sql);
+    
+            // Delete the course from the database
+            $sql = "DELETE FROM $table_course WHERE code='".$code."'";
+            Database::query($sql);
+    
+            // delete extra course fields
+            $t_cf         = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
+            $t_cfv         = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
+    
+            $sql = "SELECT distinct field_id FROM $t_cfv WHERE course_code = '$code'";
+            $res_field_ids = @Database::query($sql);
+    
+            while($row_field_id = Database::fetch_row($res_field_ids)){
+                $field_ids[] = $row_field_id[0];
+            }
+    
+            //delete from table_course_field_value from a given course_code
+    
+            $sql_course_field_value = "DELETE FROM $t_cfv WHERE course_code = '$code'";
+            @Database::query($sql_course_field_value);
+    
+            $sql = "SELECT distinct field_id FROM $t_cfv";
+            $res_field_all_ids = @Database::query($sql);
+    
+            while($row_field_all_id = Database::fetch_row($res_field_all_ids)){
+                $field_all_ids[] = $row_field_all_id[0];
+            }
+    
+            if (is_array($field_ids) && count($field_ids) > 0) {
+                foreach ($field_ids as $field_id) {
+                    // check if field id is used into table field value
+                    if (is_array($field_all_ids)) {
+                        if (in_array($field_id, $field_all_ids)) {
+                            continue;
+                        } else {
+                            $sql_course_field = "DELETE FROM $t_cf WHERE id = '$field_id'";
+                            Database::query($sql_course_field);
+                        }
                     }
                 }
             }
+    
+            // Add event to system log
+            $user_id = api_get_user_id();
+            event_system(LOG_COURSE_DELETE, LOG_COURSE_CODE, $code, api_get_utc_datetime(), $user_id, $code);
         }
-
-        // Add event to system log
-        $user_id = api_get_user_id();
-        event_system(LOG_COURSE_DELETE, LOG_COURSE_CODE, $code, api_get_utc_datetime(), $user_id, $code);
-
     }
 
     /**

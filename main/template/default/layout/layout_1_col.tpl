@@ -9,25 +9,25 @@
             {{ plugin_content_top}}
         </div>
     {% endif %}
+
     {% if app.template.show_header == true %}
-        <div class="col-md-12">
+        <div class="col-lg-10 col-sm-11">
     {% endif %}
 
-        {% include app.template_style ~ "/layout/page_body.tpl" %}
+    {% include app.template_style ~ "/layout/page_body.tpl" %}
 
-        {% block content %}
-            {% if content is not null %}
-                <section id="main_content">
-                {{ content }}
-                </section>
-            {% endif %}
-        {% endblock %}
+    {% block content %}
+        {% if content is not null %}
+            <section id="main_content">
+            {{ content }}
+            </section>
+        {% endif %}
+    {% endblock %}
 
     {% if app.template.show_header == true %}
         &nbsp;
     </div>
     {% endif %}
-
 
     {#  Plugin bottom  #}
     {% if plugin_content_bottom %}

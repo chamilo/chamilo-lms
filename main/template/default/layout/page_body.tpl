@@ -1,4 +1,7 @@
-{# Actions  #}
+{# Breadcrumb #}
+{% include app.template_style ~ "/layout/breadcrumb.tpl" %}
+
+{# Actions #}
 {% if actions != '' %}
     <div class="actions">
         {{ actions }}

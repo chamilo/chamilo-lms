@@ -660,28 +660,32 @@ class Template
         $notification = $this->returnNotificationMenu();
         $this->assign('notification_menu', $notification);
 
-        // Preparing values for the menu
-
         // Profile link.
-
         $this->assign('is_profile_editable', api_is_profile_readable());
+
+        $visibility = api_is_allowed_to_create_course() ? \SystemAnnouncementManager::VISIBLE_TEACHER : \SystemAnnouncementManager::VISIBLE_STUDENT;
+        $announcements = \SystemAnnouncementManager::getAnnouncements($visibility, null, 'resumed', false, 50);
+        $this->assign('news_counter', count($announcements));
+        $this->assign('news_list', $announcements);
 
         $profile_link = null;
         if (api_get_setting('allow_social_tool') == 'true') {
-            $profile_link = '<a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">'.get_lang('Profile').'</a>';
+            $profile_link = api_get_path(WEB_CODE_PATH).'social/home.php';
         } else {
             if (api_is_profile_readable()) {
-                $profile_link = '<a href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php">'.get_lang('Profile').'</a>';
+                $profile_link = api_get_path(WEB_CODE_PATH).'auth/profile.php';
             }
         }
         $this->assign('profile_link', $profile_link);
 
+        $this->assign('settings_link', api_get_path(WEB_CODE_PATH).'auth/profile.php');
+
         // Message link.
-        $message_link = null;
+        $messageUrl = null;
         if (api_get_setting('allow_message_tool') == 'true') {
-            $message_link = '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.get_lang('Inbox').'</a>';
+            $messageUrl = api_get_path(WEB_CODE_PATH).'messages/inbox.php';
         }
-        $this->assign('message_link', $message_link);
+        $this->assign('message_link', $messageUrl);
 
         $institution = api_get_setting('Institution');
         $portal_name = empty($institution) ? api_get_setting('siteName') : $institution;
@@ -877,10 +881,7 @@ class Template
             $home_top = @(string)file_get_contents($homep.$menutabs.'_'.$lang.$ext);
         } elseif (is_file($homep.$menutabs.$lang.$ext) && is_readable($homep.$menutabs.$lang.$ext)) {
             $home_top = @(string)file_get_contents($homep.$menutabs.$lang.$ext);
-        } else {
-            //$errorMsg = get_lang('HomePageFilesNotReadable');
         }
-
         $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
 
         $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top);
@@ -894,7 +895,6 @@ class Template
                     $navigation[SECTION_CAMPUS] = null;
                 }
             } else {
-                //$lis .= Display::tag('li', $open);
                 $lis .= $open;
             }
         }
@@ -1219,11 +1219,11 @@ class Template
         $possible_tabs = $this->getTabs();
 
         // Campus Homepage
-        if (api_get_setting('show_tabs', 'campus_homepage') == 'true') {
+        /*if (api_get_setting('show_tabs', 'campus_homepage') == 'true') {
             $navigation[SECTION_CAMPUS] = $possible_tabs[SECTION_CAMPUS];
         } else {
             $menu_navigation[SECTION_CAMPUS] = $possible_tabs[SECTION_CAMPUS];
-        }
+        }*/
 
         if (api_get_user_id() && !api_is_anonymous()) {
             // My Courses
@@ -1450,7 +1450,6 @@ class Template
 
         foreach ($navigation as $index => $navigation_info) {
             if (!empty($navigation_info['title'])) {
-
                 if ($navigation_info['url'] == '#') {
                     $final_navigation[$index] = $navigation_info['title'];
                 } else {
@@ -1474,9 +1473,6 @@ class Template
                 foreach ($final_navigation as $bread) {
                     $bread_check = trim(strip_tags($bread));
                     if (!empty($bread_check)) {
-                        if ($final_navigation_count - 1 > $i) {
-                            //$bread .= '<span class="divider">/</span>';
-                        }
                         $lis .= Display::tag('li', $bread);
                         $i++;
                     }

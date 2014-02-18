@@ -210,6 +210,12 @@ $(document).ready( function() {
         });
     });
 
+    $('.minify').click(function(e) {
+        $('body').toggleClass("minified");
+        $(this).effect("highlight", {}, 500);
+        e.preventDefault();
+    });
+
     /** Makes row highlighting possible */
 
     // Chosen select.

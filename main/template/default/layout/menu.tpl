@@ -1,57 +1,135 @@
-{% if menu is not null %}
-<div class="navbar navbar-default nav-menu">
 
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-collapse">
-            <span class="sr-only"> {{ "Toggle navigation" | trans }}</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-    </div>
 
-    <div id="menu-collapse" class="navbar-collapse collapse">
-        <ul class="nav navbar-nav">
-            {{ menu }}
-        </ul>
+    <div class="navbar navbar-default navbar-static-top">
+        <div class="{{ containerClass }}">
 
-        {% if _u.logged == 1 %}
-        <ul class="nav navbar-nav navbar-right">
-            {% if is_profile_editable == true %}
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        {% if ('allow_message_tool' | get_setting) == 'true' %}
-                            {{ _u.messages_count }}
-                        {% endif %}
-                        <img src="{{ _u.avatar_small }}"/>
-                        {{ _u.complete_name }}
-                        <b class="caret"></b>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#menu-collapse">
+                <span class="sr-only"> {{ "Toggle navigation" | trans }}</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+
+        <div id="menu-collapse" class="collapse navbar-collapse">
+            <a class="navbar-brand" href="{{ _p.web }}">Chamilo</a>
+            {% if menu is not null %}
+            <ul class="nav navbar-nav">
+                {{ menu }}
+            </ul>
+            {% endif %}
+
+            {% if _u.logged == 1 %}
+            <ul class="nav navbar-nav navbar-right">
+
+                <li class="purple dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <i class="fa fa-bell fa-lg"></i>
+                        <span class="badge badge-important">{{ news_counter }}</span>
                     </a>
-                    <ul class="dropdown-menu">
+
+                    <ul class="pull-right dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
+                        <li class="dropdown-header">
+                            <i class="icon-warning-sign"></i>
+                            {{ news_counter }} Notifications
+                        </li>
+
+                        {% for new in news_list %}
+                            <li>
+                                <a href="#">
+                                    <div class="clearfix">
+                                    <span class="pull-left">
+                                        <i class="btn btn-xs no-hover btn-pink icon-comment"></i>
+                                        {{ new.title }}
+                                    </span>
+                                        <span class="pull-right badge badge-info"></span>
+                                    </div>
+                                </a>
+                            </li>
+                        {% endfor %}
                         <li>
-                            {{ profile_link }}
-                            {{ message_link }}
+                            <a href=" {{ url('portal_news') }}">
+                                {{ 'SeeAllNotifications' | trans }}
+                                <i class="fa fa-arrow-right"></i>
+                            </a>
                         </li>
                     </ul>
                 </li>
-            {% else %}
+
+                <li class="green dropdown">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <i class="fa fa-envelope fa-lg"></i>
+                        <span class="badge badge-success">{{ messages_count }}</span>
+                    </a>
+                    <ul class="pull-right dropdown-navbar dropdown-menu dropdown-caret dropdown-close">
+                        <li class="dropdown-header">
+                            <i class="icon-envelope-alt"></i>
+                            5 Messages
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="msg-body">
+                                    <span class="msg-title">
+                                        <span class="blue">joe doe:</span>
+                                        Test message
+                                    </span>
+                                    <span class="msg-time">
+                                        <i class="icon-time"></i>
+                                        <span>a moment ago</span>
+                                    </span>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href=" {{ message_link }}">
+                                {{ 'SeeAllMessages' | trans }}
+                                <i class="fa fa-arrow-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                {% if is_profile_editable == true %}
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            {% if ('allow_message_tool' | get_setting) == 'true' %}
+                                {{ _u.messages_count }}
+                            {% endif %}
+                            <img class="user-photo-nav" src="{{ _u.avatar_small }}"/>
+                            {{ _u.complete_name }}
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="{{ profile_link }}">
+                                    <i class="fa fa-user"></i>
+                                    {{ 'Profile' | trans }}
+                                </a>
+                                <a href="{{ settings_link }}">
+                                    <i class="fa fa-cogs"></i>
+                                    {{ 'Settings' | trans }}
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li>
+                        <a>
+                            {% if ('allow_message_tool' | get_setting) == 'true' %}
+                                {{ _u.messages_count }}
+                            {% endif %}
+                            <img src="{{ _u.avatar_small }}"/>
+                            {{ _u.complete_name }}
+                        </a>
+                    </li>
+                {% endif %}
                 <li>
-                    <a>
-                        {% if ('allow_message_tool' | get_setting) == 'true' %}
-                            {{ _u.messages_count }}
-                        {% endif %}
-                        <img src="{{ _u.avatar_small }}"/>
-                        {{ _u.complete_name }}
+                    <a id="logout_button" class="logout" title="{{ "Logout"|get_lang }}" href="{{ url('logout') }}" >
+                        <i class="fa fa-power-off"></i>
                     </a>
                 </li>
+            </ul>
             {% endif %}
-            <li>
-                <a id="logout_button" class="logout" title="{{ "Logout"|get_lang }}" href="{{ url('logout') }}" >
-                    <img src="{{ "exit.png"|icon(22) }}">
-                </a>
-            </li>
-        </ul>
-        {% endif %}
+        </div>
     </div>
-</div>
-{% endif %}

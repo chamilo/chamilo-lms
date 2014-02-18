@@ -23,7 +23,8 @@ a:active {
 
 .navbar-default {
     background-color: #0191C7;
-    border-color: #0073A0;
+    /*border-color: #0073A0;*/
+    border-color: transparent;
 }
 .navbar-default .navbar-brand {
     color: #ECF0F1;

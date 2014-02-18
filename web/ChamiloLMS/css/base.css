@@ -6624,3 +6624,103 @@ div.new_html_code {
 #portal_news .carousel-caption {
     bottom:40px;
 }
+
+.sidebar {
+    float: left;
+    position: relative;
+    border: 1px solid #ccc;
+    border-width: 0 1px 0 0;
+    background-color: #f2f2f2;
+    padding: 0px;
+}
+
+header .navbar {
+    margin-bottom: 0px;
+}
+
+.breadcrumbs {
+    position: relative;
+    border-bottom: 1px solid #e5e5e5;
+    background-color: #f5f5f5;
+    min-height: 41px;
+    line-height: 40px;
+    padding: 0 12px 0 0;
+    display: block;
+}
+
+.breadcrumb {
+    padding: 0 12px 0 0;
+}
+.breadcrumb img {
+    padding-left:10px;
+    padding-right:2px;
+}
+
+.shortcuts {
+    background-color: #fafafa;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+    line-height: 39px;
+    max-height: 50px;
+
+    padding: 4px;
+    margin:4px;
+}
+
+.purple {
+    color: #a069c3!important;
+}
+
+.navbar-nav > li.purple > a {
+    background-color: #892e65;
+}
+
+.navbar-nav > li.green > a {
+    background-color: #2e8965;
+}
+
+.navbar-nav>li.green>a:hover, .navbar-nav>li.green>a:focus{
+    background-color:#2c7659;
+}
+
+.navbar-nav>li.purple>a:hover, .navbar-nav>li.purple > a:focus{
+    background-color:#762c59;
+}
+
+.green {
+    color: #69aa46!important;
+}
+
+.user-photo-nav {
+    margin: -4px 8px 0 0;
+    max-width: 40px;
+}
+
+.minified .sidebar, .minified nav>ul>li {
+    overflow: visible;
+}
+
+.minified .sidebar {
+    width: 60px;
+}
+
+.minified .sidebar #sidebar>ul>li>a .text {
+    position: absolute;
+    z-index: 1000;
+    background: #e9ebec;
+    min-height: 40px;
+    width: 150px;
+    padding: 8px 15px;
+    border: 1px solid #dbdee0;
+    top: 0;
+    left: 39px;
+    display: none!important;
+}
+
+.minified .shortcuts-large {
+    display: none;
+}
+
+.minified .shortcuts-mini {
+    display: block !important;
+}

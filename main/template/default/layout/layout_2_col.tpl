@@ -70,7 +70,7 @@
             {% endif %}
         {% endblock %}
 	</div>
-	<div class="col-md-9 content-column">
+	<div class="col-md-6 content-column">
         {% block right_column %}
 
             {#  Plugin bottom  #}

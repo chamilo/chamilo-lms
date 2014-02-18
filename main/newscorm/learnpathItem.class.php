@@ -65,20 +65,25 @@ class learnpathItem
 	const debug = 0; // Logging parameter.
 
 	/**
-	 * Class constructor. Prepares the learnpath_item for later launch
+	 * Prepares the learnpath_item for later launch
 	 *
 	 * Don't forget to use set_lp_view() if applicable after creating the item.
 	 * Setting an lp_view will finalise the item_view data collection
 	 * @param	integer	Learnpath item ID
 	 * @param	integer	User ID
      * @param	integer	course int id
+     * @param array $item_content
 	 * @return	boolean	True on success, false on failure
 	 */
 	public function __construct($id, $user_id = null, $course_id = null, $item_content = null)
     {
 		// Get items table.
-		if (!isset($user_id)) { $user_id = api_get_user_id(); }
-		if (self::debug > 0) { error_log("learnpathItem constructor: id: $id user_id: $user_id course_id: $course_id item_content: $item_content", 0); }
+		if (!isset($user_id)) {
+            $user_id = api_get_user_id();
+        }
+		if (self::debug > 0) {
+            error_log("learnpathItem constructor: id: $id user_id: $user_id course_id: $course_id item_content: $item_content", 0);
+        }
 		$id = intval($id);
 
         if (empty($item_content)) {
@@ -89,7 +94,6 @@ class learnpathItem
                 $course_id = intval($course_id);
             }
             $sql = "SELECT * FROM $items_table WHERE c_id = $course_id AND id = $id";
-            //error_log('New LP - Creating item object from DB: '.$sql, 0);
             $res = Database::query($sql);
             if (Database::num_rows($res) < 1) {
                 $this->error = 'Could not find given learnpath item in learnpath_item table';
@@ -116,11 +120,13 @@ class learnpathItem
 		$this->display_order = $row['display_order'];
 		$this->prereq_string = $row['prerequisite'];
 		$this->max_time_allowed = $row['max_time_allowed'];
+
 		if (isset($row['launch_data'])){
 			$this->launch_data = $row['launch_data'];
 		}
 		$this->save_on_close = true;
 		$this->db_id = $id;
+
         //$this->seriousgame_mode = $this->get_seriousgame_mode();
         $this->seriousgame_mode = 0;
 
@@ -1835,7 +1841,8 @@ class learnpathItem
 	 * @param	integer	Level
 	 * @return  void
 	 */
-	public function set_level($int = 0) {
+	public function set_level($int = 0)
+    {
 		if (self::debug > 0) { error_log('learnpathItem::set_level('.$int.')', 0); }
 		if (!empty($int) AND $int == strval(intval($int))) { $this->level = $int; }
 	}
@@ -1843,6 +1850,7 @@ class learnpathItem
 	/**
 	 * Sets the lp_view id this item view is registered to
 	 * @param	integer	lp_view DB ID
+     * @param int $course_id
 	 * @return  void
 	 * @todo //todo insert into lp_item_view if lp_view not exists
 	 */
@@ -1853,6 +1861,9 @@ class learnpathItem
 	    } else {
 	        $course_id = intval($course_id);
 	    }
+
+        $lpItemId = $this->get_id();
+
 	    if (self::debug > 0) { error_log('learnpathItem::set_lp_view('.$lp_view_id.')', 0); }
 		if (!empty($lp_view_id) and $lp_view_id = intval(strval($lp_view_id))) {
 	 		$this->view_id = $lp_view_id;
@@ -1861,7 +1872,7 @@ class learnpathItem
 		 	// Get the lp_item_view with the highest view_count.
 		 	$sql = "SELECT * FROM $item_view_table
                     WHERE   c_id = $course_id AND
-                            lp_item_id = ".$this->get_id()." AND
+                            lp_item_id = ".$lpItemId." AND
                             lp_view_id = ".$lp_view_id."
                     ORDER BY view_count DESC";
 
@@ -1879,6 +1890,7 @@ class learnpathItem
                 $this->current_stop_time 	= $this->current_start_time + $row['total_time'];
 				$this->lesson_location      = $row['lesson_location'];
 				$this->core_exit            = $row['core_exit'];
+
 			 	if (self::debug > 2) { error_log('learnpathItem::set_lp_view() - Updated item object with database values', 0); }
 
 			 	// Now get the number of interactions for this little guy.

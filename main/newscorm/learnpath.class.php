@@ -77,8 +77,6 @@ class learnpath
     public $course_int_id;
     public $course_info = array();
 
-
-
     /**
      * Get the depth level of LP item
      * @param $in_tab_items
@@ -94,7 +92,6 @@ class learnpath
             return learnpath::get_level_for_item($in_tab_items, $parent_item_id) + 1;
         }
     }
-
 
     /**
     * Class constructor. Needs a database handler, a course code and a learnpath id from the database.
@@ -201,9 +198,13 @@ class learnpath
         $lp_table = Database::get_course_table(TABLE_LP_VIEW);
 
         // Selecting by view_count descending allows to get the highest view_count first.
-        $sql = "SELECT * FROM $lp_table WHERE c_id = $course_id AND lp_id = '$lp_id' AND user_id = '$user_id' $session ORDER BY view_count DESC";
+        $sql = "SELECT * FROM $lp_table
+                WHERE c_id = $course_id AND lp_id = '$lp_id' AND user_id = '$user_id' $session
+                ORDER BY view_count DESC";
         $res = Database::query($sql);
-        if ($this->debug > 2) { error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0); }
+        if ($this->debug > 2) {
+            error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - querying lp_view: ' . $sql, 0);
+        }
 
         if (Database :: num_rows($res) > 0) {
             if ($this->debug > 2) {
@@ -220,9 +221,10 @@ class learnpath
                 error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - NOT Found previous view', 0);
             }
             $this->attempt = 1;
-            $sql_ins = "INSERT INTO $lp_table (c_id, lp_id, user_id, view_count, session_id) VALUES ($course_id, $lp_id, $user_id, 1, $session_id)";
-            $res_ins = Database::query($sql_ins);
-            $this->lp_view_id = Database :: insert_id();
+            $sql_ins = "INSERT INTO $lp_table (c_id, lp_id, user_id, view_count, session_id)
+                        VALUES ($course_id, $lp_id, $user_id, 1, $session_id)";
+            Database::query($sql_ins);
+            $this->lp_view_id = Database::insert_id();
             if ($this->debug > 2) {
                 error_log('New LP - learnpath::__construct() ' . __LINE__ . ' - inserting new lp_view: ' . $sql_ins, 0);
             }
@@ -230,7 +232,9 @@ class learnpath
 
         // Initialise items.
         $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT * FROM $lp_item_table WHERE c_id = $course_id AND lp_id = '".$this->lp_id."' ORDER BY parent_item_id, display_order";
+        $sql = "SELECT * FROM $lp_item_table
+                WHERE c_id = $course_id AND lp_id = '".$this->lp_id."'
+                ORDER BY parent_item_id, display_order";
         $res = Database::query($sql);
 
         if ($this->debug > 2) {

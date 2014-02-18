@@ -335,18 +335,11 @@ a:active {
     color: #FD6600;
 }
 .page-header h2{
-    background-color:#2E75A3;
-    color: #FFFFFF;
-    font-weight: normal;
-    font-size: 14px;
+    color: #0191C7;
+    font-weight: bold;
+    font-size: 20px;
     padding-left: 10px;
     width: 250px;
-    -webkit-border-top-left-radius: 10px;
-    -webkit-border-top-right-radius: 10px;
-    -moz-border-radius-topleft: 10px;
-    -moz-border-radius-topright: 10px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
 }
 #course_tools .course-title-tools h3 {
     margin-top: 10px;
@@ -364,9 +357,9 @@ a:active {
     border-top-right-radius: 10px;
 }
 .page-header {
-  border-bottom-color: #60A5D1;
+  border-bottom-color: #0191C7;
   border-bottom-style: solid;
-  border-bottom-width: 1px;
+  border-bottom-width: 2px;
   box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   padding-bottom: 0px;
 }

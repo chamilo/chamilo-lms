@@ -342,6 +342,12 @@ The more frequent ones have been marked with *
         background: none;
         border:none;
      }
+
+     input.span2, textarea.span2, .uneditable-input.span2 {
+        height: 45px;
+        width: 97%;
+    }
+
     #top_main_content .menu-column #reservation_block, #top_main_content .menu-column #notice_block, #top_main_content .menu-column #help_block {
         clear: both;
         display: inline-block;
@@ -549,6 +555,19 @@ The more frequent ones have been marked with *
     #wrapper{
         padding-left: 1em;
         padding-right: 1em;
+    }
+    #top_main_content .span9 {
+    float: left;
+    width: 570px;
+    }
+    .section-mycampus #hot_courses .page-header {
+    width: 565px;
+    }
+    .well_border .row .span2 .thumbnail {
+      background-color: #FFFFFF;
+      background-image: none;
+      float: left;
+      margin-right: 10px;
     }
 }
 

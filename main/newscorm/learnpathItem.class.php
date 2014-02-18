@@ -1856,6 +1856,8 @@ class learnpathItem
 	 */
 	public function set_lp_view($lp_view_id, $course_id = null)
     {
+        $lp_view_id = intval($lp_view_id);
+
 	    if (empty($course_id)) {
 	        $course_id = api_get_course_int_id();
 	    } else {
@@ -1864,57 +1866,73 @@ class learnpathItem
 
         $lpItemId = $this->get_id();
 
+        if (empty($lpItemId)) {
+            if (self::debug > 0) {
+                error_log('learnpathItem::set_lp_view('.$lp_view_id.') $lpItemId is empty', 0);
+            }
+            return false;
+        }
+
+        if (empty($lp_view_id)) {
+            if (self::debug > 0) {
+                error_log('learnpathItem::set_lp_view('.$lp_view_id.') $lp_view_id is empty', 0);
+            }
+            return false;
+        }
+
 	    if (self::debug > 0) { error_log('learnpathItem::set_lp_view('.$lp_view_id.')', 0); }
-		if (!empty($lp_view_id) and $lp_view_id = intval(strval($lp_view_id))) {
-	 		$this->view_id = $lp_view_id;
 
-		 	$item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-		 	// Get the lp_item_view with the highest view_count.
-		 	$sql = "SELECT * FROM $item_view_table
-                    WHERE   c_id = $course_id AND
-                            lp_item_id = ".$lpItemId." AND
-                            lp_view_id = ".$lp_view_id."
-                    ORDER BY view_count DESC";
+        $this->view_id = $lp_view_id;
 
-		 	if (self::debug > 2) { error_log('learnpathItem::set_lp_view() - Querying lp_item_view: '.$sql, 0); }
-		 	$res = Database::query($sql);
-		 	if (Database::num_rows($res) > 0) {
-		 		$row = Database::fetch_array($res);
-		 		$this->db_item_view_id      = $row['id'];
-		 		$this->attempt_id           = $row['view_count'];
-				$this->current_score        = $row['score'];
-				$this->current_data         = $row['suspend_data'];
-				$this->view_max_score       = $row['max_score'];
-				$this->status               = $row['status'];
-                $this->current_start_time	= $row['start_time'];
-                $this->current_stop_time 	= $this->current_start_time + $row['total_time'];
-				$this->lesson_location      = $row['lesson_location'];
-				$this->core_exit            = $row['core_exit'];
+        $item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        // Get the lp_item_view with the highest view_count.
+        $sql = "SELECT * FROM $item_view_table
+                WHERE   c_id = $course_id AND
+                        lp_item_id = ".$lpItemId." AND
+                        lp_view_id = ".$lp_view_id."
+                ORDER BY view_count DESC";
 
-			 	if (self::debug > 2) { error_log('learnpathItem::set_lp_view() - Updated item object with database values', 0); }
+        if (self::debug > 2) {
+            error_log('learnpathItem::set_lp_view() - Querying lp_item_view: '.$sql, 0);
+        }
+        $res = Database::query($sql);
+        if (Database::num_rows($res) > 0) {
+            $row = Database::fetch_array($res);
+            $this->db_item_view_id      = $row['id'];
+            $this->attempt_id           = $row['view_count'];
+            $this->current_score        = $row['score'];
+            $this->current_data         = $row['suspend_data'];
+            $this->view_max_score       = $row['max_score'];
+            $this->status               = $row['status'];
+            $this->current_start_time	= $row['start_time'];
+            $this->current_stop_time 	= $this->current_start_time + $row['total_time'];
+            $this->lesson_location      = $row['lesson_location'];
+            $this->core_exit            = $row['core_exit'];
 
-			 	// Now get the number of interactions for this little guy.
-			 	$item_view_interaction_table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
-			 	$sql = "SELECT * FROM $item_view_interaction_table WHERE c_id = $course_id AND lp_iv_id = '".$this->db_item_view_id."'";
-                //error_log('sql10->'.$sql);
-				$res = Database::query($sql);
-				if ($res !== false) {
-					$this->interactions_count = Database::num_rows($res);
-				} else {
-					$this->interactions_count = 0;
-				}
-			 	// Now get the number of objectives for this little guy.
-			 	$item_view_objective_table = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
-			 	$sql = "SELECT * FROM $item_view_objective_table WHERE c_id = $course_id AND lp_iv_id = '".$this->db_item_view_id."'";
-                //error_log('sql11->'.$sql);
-				$res = Database::query($sql);
-				if ($res !== false) {
-					$this->objectives_count = Database::num_rows($res);
-				} else {
-					$this->objectives_count = 0;
-				}
-		 	}
-	 	}
+            if (self::debug > 2) { error_log('learnpathItem::set_lp_view() - Updated item object with database values', 0); }
+
+            // Now get the number of interactions for this little guy.
+            $item_view_interaction_table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
+            $sql = "SELECT * FROM $item_view_interaction_table WHERE c_id = $course_id AND lp_iv_id = '".$this->db_item_view_id."'";
+            //error_log('sql10->'.$sql);
+            $res = Database::query($sql);
+            if ($res !== false) {
+                $this->interactions_count = Database::num_rows($res);
+            } else {
+                $this->interactions_count = 0;
+            }
+            // Now get the number of objectives for this little guy.
+            $item_view_objective_table = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
+            $sql = "SELECT * FROM $item_view_objective_table WHERE c_id = $course_id AND lp_iv_id = '".$this->db_item_view_id."'";
+            //error_log('sql11->'.$sql);
+            $res = Database::query($sql);
+            if ($res !== false) {
+                $this->objectives_count = Database::num_rows($res);
+            } else {
+                $this->objectives_count = 0;
+            }
+        }
+
 		// End
 		if (self::debug > 2) { error_log('New LP - End of learnpathItem::set_lp_view()', 0); }
 	}

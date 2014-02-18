@@ -141,37 +141,54 @@
 /*****************************************************
  *  PARA EL RESPONSIVE DESING                                 *
  *****************************************************/
-@media (max-width: 981px) {
-#container-slider {
-  margin: 5px auto;
-  min-height: 200px;
-  padding: 0;
-  z-index: 0;
+@media (width: 981px) {
+    #container-slider {
+      margin: 5px auto;
+      min-height: 200px;
+      padding: 0;
+      z-index: 0;
+    }
+    #container-slider #slider li img{
+        max-height: 237px;
+        height: 100%;
+        width: 100%;
+        max-width: 725px;
+    }
+    #top_main_content #announcements .span6{
+        width: 730px;
+    }
+    #container-slider {
+    padding-left: 0px;
+    }
 }
-#container-slider #slider li img{
-    width: 730px;
-    min-height: 300px;
+
+@media (min-width: 601px) and (max-width: 800px) {
+    #container-slider #slider li img {
+      max-height: 300px;
+      height: 100%;
+      width: 100%;
+      max-width: 725px;
+    }
+    
+    #container-slider .pagerslide h2 {
+        display: none;
+        visibility: hidden;
+    }
+    #container-slider {
+    padding-left: 0px;
+    }
 }
-#top_main_content #announcements .span6{
-    width: 730px;
-}
-}
-@media (min-width: 481px) and (max-width: 800px) {
+@media (min-width: 421px) and (max-width: 600px) {
 #container-slider #slider li img {
-  min-height: 266px;
-  width: 725px;
-}
-}
-@media (max-width: 600px) {
-#container-slider #slider li img {
-  min-height: 237px;
-  width: 559px;
+  max-height: 237px;
+  height: 100%;
+  width: 100%;
+  max-width: 559px;
 }
 .bx-pager {
-  width: 600px;
-}
-#container-slider .pagerslide h2 {
-  display: none;
-  visibility: hidden;
+        width: 600px;
+    }
+#container-slider {
+    padding-left: 0px;
 }
 }

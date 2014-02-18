@@ -40,12 +40,18 @@ $chat_size_new = isset($chat_size_new) ? $chat_size_new : null;
 $connected_new = isset($connected_new) ? $connected_new : null;
 $connected_old = isset($connected_old) ? $connected_old : null;
 
+header('Content-Type: text/html; charset='.api_get_system_encoding());
+
 ?><!DOCTYPE html>
+<html>
 <head>
     <meta charset="<?php echo api_get_system_encoding(); ?>" />
     <title>Chat</title>
     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH).$my_style; ?>/default.css">
     <style>
+        a {
+            font-size: 12px;
+        }
         .background_submit {
             background: url(../img/chat_little.gif) 2px 2px no-repeat;
             padding: 2px 1px 1px 20px;

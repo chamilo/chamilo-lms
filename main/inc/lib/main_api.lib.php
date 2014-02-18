@@ -259,6 +259,7 @@ define('SYS_CODE_PATH', 'SYS_CODE_PATH');
 define('SYS_LANG_PATH', 'SYS_LANG_PATH');
 define('WEB_IMG_PATH', 'WEB_IMG_PATH');
 define('WEB_CSS_PATH', 'WEB_CSS_PATH');
+define('SYS_CSS_PATH', 'SYS_CSS_PATH');
 define('SYS_PLUGIN_PATH', 'SYS_PLUGIN_PATH');
 define('PLUGIN_PATH', 'SYS_PLUGIN_PATH'); // deprecated ?
 define('WEB_PLUGIN_PATH', 'WEB_PLUGIN_PATH');
@@ -400,6 +401,7 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
  * api_get_path(SYS_PLUGIN_PATH)                /var/www/chamilo/plugin/
  * api_get_path(SYS_TEST_PATH)                  /var/www/chamilo/tests/
  * api_get_path(SYS_TEMPLATE_PATH)              /var/www/chamilo/main/template/
+ * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/main/css/
  *
  * api_get_path(WEB_SERVER_ROOT_PATH)           http://www.mychamilo.org/
  * api_get_path(WEB_PATH)                       http://www.mychamilo.org/chamilo/
@@ -445,6 +447,7 @@ function api_get_path($path_type, $path = null) {
         SYS_LANG_PATH           => 'lang/',
         WEB_IMG_PATH            => 'img/',
         WEB_CSS_PATH            => 'css/',
+        SYS_CSS_PATH            => 'css/',
         SYS_PLUGIN_PATH         => 'plugin/',
         WEB_PLUGIN_PATH         => 'plugin/',
         SYS_ARCHIVE_PATH        => 'archive/',
@@ -560,6 +563,7 @@ function api_get_path($path_type, $path = null) {
         $paths[SYS_ARCHIVE_PATH]        = $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
         $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
         $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
+        $paths[SYS_CSS_PATH]            = $paths[SYS_CODE_PATH].$paths[SYS_CSS_PATH];
 
         $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
         $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];

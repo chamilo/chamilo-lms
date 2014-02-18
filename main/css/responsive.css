@@ -409,7 +409,7 @@ The more frequent ones have been marked with *
 
     /* Remove any padding from the body */
     body {
-        padding-top: 0;
+        padding: 0;
     }
 
     #topbar_push {
@@ -533,16 +533,23 @@ The more frequent ones have been marked with *
 
 @media (max-width: 600px) {
 
-#top_main_content .span3 {
-    clear: both;
-    width: 100%;
-}
-#top_main_content .menu-column #reservation_block, #top_main_content .menu-column #notice_block, #top_main_content .menu-column #help_block {
-  clear: both;
-  display: inline-block;
-  width: 94%;
-}
-
+    #top_main_content .span3 {
+        clear: both;
+        width: 100%;
+    }
+    #top_main_content .menu-column #reservation_block, #top_main_content .menu-column #notice_block, #top_main_content .menu-column #help_block {
+      clear: both;
+      display: inline-block;
+      width: 94%;
+    }
+    footer {
+        padding-top: 2em;
+        padding-bottom: 2em;
+    }
+    #wrapper{
+        padding-left: 1em;
+        padding-right: 1em;
+    }
 }
 
 @media (min-width: 801px) and (max-width: 979px) {

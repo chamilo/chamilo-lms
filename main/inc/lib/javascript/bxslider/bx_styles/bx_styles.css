@@ -177,6 +177,9 @@
     #container-slider {
     padding-left: 0px;
     }
+    .bx-pager {
+        width: 700px;
+    }
 }
 @media (min-width: 421px) and (max-width: 600px) {
 #container-slider #slider li img {

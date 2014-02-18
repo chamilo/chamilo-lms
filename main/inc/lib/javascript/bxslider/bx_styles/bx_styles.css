@@ -159,6 +159,19 @@
 @media (min-width: 481px) and (max-width: 800px) {
 #container-slider #slider li img {
   min-height: 266px;
-  width: 625px;
+  width: 725px;
+}
+}
+@media (max-width: 600px) {
+#container-slider #slider li img {
+  min-height: 237px;
+  width: 559px;
+}
+.bx-pager {
+  width: 600px;
+}
+#container-slider .pagerslide h2 {
+  display: none;
+  visibility: hidden;
 }
 }

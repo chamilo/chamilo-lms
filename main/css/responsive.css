@@ -303,7 +303,7 @@ The more frequent ones have been marked with *
         width: 97%;
     }
     #top_main_content .menu-column .block_user_info{
-        width: 390px;
+        width: 445px;
         clear: both;
         float: left;
         
@@ -328,6 +328,7 @@ The more frequent ones have been marked with *
         float: left;
         background: none;
         border:none;
+        box-shadow: none;
     }
     #top_main_content .menu-column #user_image_block img{
         border: 3px solid #FFFFFF;
@@ -341,6 +342,7 @@ The more frequent ones have been marked with *
         margin-left: 10px;
         background: none;
         border:none;
+        box-shadow: none;
      }
 
      input.span2, textarea.span2, .uneditable-input.span2 {
@@ -646,6 +648,21 @@ The more frequent ones have been marked with *
     }
     .section-social .span5 {
         width: 350px;
+    }
+    
+}
+@media (min-width: 980px) and (max-width: 1024px) {
+
+    .bx-next {
+        display: none;
+        visibility: hidden;
+    }
+    .bx-prev {
+        display: none;
+        visibility: hidden;
+    }
+    #container-slider {
+      padding-left: 0;
     }
 }
 

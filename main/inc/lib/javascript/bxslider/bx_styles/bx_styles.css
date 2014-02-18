@@ -195,3 +195,21 @@
     padding-left: 0px;
 }
 }
+
+@media (min-width: 980px) and (max-width: 1024px) {
+#container-slider {
+      padding-left: 0;
+    }
+    #container-slider #slider li img {
+      max-height: 300px;
+      height: 100%;
+      width: 100%;
+      max-width: 695px;
+    }
+    .pagerslide h2 {
+        width: 85%;
+    }
+    .bx-pager {
+        width: 85%;
+    }
+}

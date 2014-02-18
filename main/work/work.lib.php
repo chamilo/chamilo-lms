@@ -1747,37 +1747,36 @@ function get_work_user_list_from_documents(
     $workCondition = " AND w_rel.work_id = $workId";
     $workParentCondition  = " AND w.parent_id = $workId";
 
-    $sql = "    (
-                    $select1 FROM $userTable u
-                    INNER JOIN $workTable w ON (u.user_id = w.user_id AND w.active IN (0, 1) AND w.filetype = 'file')
-                    WHERE
-                        w.c_id = $courseId
-                        $userCondition
-                        $sessionCondition
-                        $whereCondition
-                        $workParentCondition
-
-                ) UNION (
-                    $select2 FROM $workTable w
-                    INNER JOIN $workRelDocument w_rel ON (w_rel.work_id = w.id AND w.active IN (0, 1))
-                    INNER JOIN $documentTable d ON (w_rel.document_id = d.id AND d.c_id = w.c_id)
-                    INNER JOIN $userTable u ON (u.user_id = $studentId)
-                    WHERE
-                        w.c_id = $courseId
-                        $workCondition
-                        $sessionCondition AND
-                        d.id NOT IN
-                            (SELECT w.document_id id FROM $workTable w
-                            WHERE
-                                user_id = $studentId AND
-                                c_id = $courseId AND
-                                filetype = 'file' AND
-                                active IN (0, 1)
-                                $sessionCondition
-                                $workParentCondition
-                            )
-                )
-            ";
+    $sql = "(
+                $select1 FROM $userTable u
+                INNER JOIN $workTable w ON (u.user_id = w.user_id AND w.active IN (0, 1) AND w.filetype = 'file')
+                WHERE
+                    w.c_id = $courseId
+                    $userCondition
+                    $sessionCondition
+                    $whereCondition
+                    $workParentCondition
+            ) UNION (
+                $select2 FROM $workTable w
+                INNER JOIN $workRelDocument w_rel ON (w_rel.work_id = w.id AND w.active IN (0, 1) AND w_rel.c_id = w.c_id)
+                INNER JOIN $documentTable d ON (w_rel.document_id = d.id AND d.c_id = w.c_id)
+                INNER JOIN $userTable u ON (u.user_id = $studentId)
+                WHERE
+                    w.c_id = $courseId
+                    $workCondition
+                    $sessionCondition AND
+                    d.id NOT IN (
+                        SELECT w.document_id id
+                        FROM $workTable w
+                        WHERE
+                            user_id = $studentId AND
+                            c_id = $courseId AND
+                            filetype = 'file' AND
+                            active IN (0, 1)
+                            $sessionCondition
+                            $workParentCondition
+                    )
+            )";
 
     $start = intval($start);
     $limit = intval($limit);
@@ -1800,6 +1799,7 @@ function get_work_user_list_from_documents(
     $work_data = get_work_data_by_id($workId);
 
     $qualificationExists = false;
+
     if (!empty($work_data['qualification']) && intval($work_data['qualification']) > 0) {
         $qualificationExists = true;
     }
@@ -1821,7 +1821,6 @@ function get_work_user_list_from_documents(
         $userId = $row['user_id'];
         $documentId = $row['document_id'];
         $itemId = $row['id'];
-
         $addLinkShowed = false;
 
         if (empty($documentId)) {
@@ -1832,6 +1831,7 @@ function get_work_user_list_from_documents(
             }
         } else {
             $documentToWork = getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $userId);
+
             if (empty($documentToWork)) {
                 $url = $urlAdd.'&document_id='.$documentId.'&id='.$workId;
                 $editLink = Display::url($addIcon, $url);
@@ -1862,7 +1862,8 @@ function get_work_user_list_from_documents(
             $viewLink = Display::url($viewIcon, $urlView.'&id='.$itemId);
         }
 
-        $row['type'] = build_document_icon_tag('file', $row['file']);
+        //$row['type'] = build_document_icon_tag('file', $row['url']);
+        $row['type'] = null;
 
         if ($qualificationExists) {
             if (empty($row['qualificator_id'])) {
@@ -1930,8 +1931,8 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
     $work_data          = get_work_data_by_id($work_id);
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
     $condition_session  = api_get_session_condition($session_id);
-
     $locked = api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION);
+
 
     if (!empty($work_data)) {
 

@@ -77,11 +77,11 @@
 
     <div id="wrapper">
         {# Bug and help notifications #}
-        {% if 0 %}
+
         <ul id="navigation" class="notification-panel">
             {% if ("enable_help_link" | get_setting) == 'true' %}
                 <li class="help">
-                    <a href="{{ _p.web_img }}help/help.php?open={{ help_content }}&height=400&width=600" class="ajax" title="{{ "help"|get_lang }}">
+                    <a href="{{ _p.web_main }}help/help.php?open={{ help_content }}&height=400&width=600" class="ajax" title="{{ "help"|get_lang }}">
                         <img src="{{ _p.web_img }}help.large.png" alt="{{ "help"|get_lang }}" title="{{ "help"|get_lang }}" />
                     </a>
                 </li>
@@ -94,12 +94,11 @@
                     {% set bugLink = 'http://support.chamilo.org/projects/chamilo-18/wiki/How_to_report_bugs' %}
                 {% endif %}
                 <a href="{{ bugLink }}" target="_blank">
-                    <img src="{{ _p.web_img }}bug.large.png" style="vertical-align: middle;" alt="{{ "ReportABug"|get_lang }}" title="{{ "ReportABug"|get_lang }}"/>
+                    <img src="{{ _p.web_img }}bug.large.png" alt="{{ "ReportABug"|get_lang }}" title="{{ "ReportABug"|get_lang }}"/>
                 </a>
             </li>
             {% endif %}
         </ul>
-        {% endif %}
 
         {# topbar #}
         {% include app.template_style ~ "/layout/topbar.tpl" %}

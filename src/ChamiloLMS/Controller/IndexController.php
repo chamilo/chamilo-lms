@@ -133,7 +133,7 @@ class IndexController extends CommonController
             if (api_get_setting('show_hot_courses') == 'true') {
                 $hotCourses = $pageController->returnHotCourses();
             }
-            $announcementsBlock = $pageController->return_announcements();
+            $announcementsBlock = $pageController->getAnnouncements();
         }
 
         $template->assign('hot_courses', $hotCourses);

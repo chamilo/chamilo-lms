@@ -569,6 +569,10 @@ $app->match('/certificates/{id}', 'certificate.controller:indexAction', 'GET');
 
 /** Portal news */
 $app->match('/news/{id}', 'news.controller:indexAction', 'GET')
+    ->bind('portal_news_per_id');
+
+/** Portal news */
+$app->match('/news', 'news.controller:newsAction', 'GET')
     ->bind('portal_news');
 
 /** LP controller (subscribe users to a LP) */

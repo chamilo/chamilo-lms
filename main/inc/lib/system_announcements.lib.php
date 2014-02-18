@@ -624,33 +624,41 @@ class SystemAnnouncementManager
 		return $message_sent; //true if at least one e-mail was sent
 	}
 
-	/**
-	* Displays announcements as an slideshow
-	* @param int $visible VISIBLE_GUEST, VISIBLE_STUDENT or VISIBLE_TEACHER
-	* @param int $id The identifier of the announcement to display
-	*/
-	public static function display_announcements_slider($visible, $id = null)
+    /**
+     * @param $visible
+     * @param null $id
+     * @param string $type
+     * @param bool $getCount
+     * @param int $cutSize
+     * @return string
+     */
+    public static function getAnnouncements($visible, $id = null, $type = 'resumed', $getCount = false, $cutSize = 800)
     {
-		$user_selected_language = Database::escape_string(api_get_interface_language());
-		$table                  = Database :: get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $user_selected_language = Database::escape_string(api_get_interface_language());
+        $table = Database::get_main_table(TABLE_MAIN_SYSTEM_ANNOUNCEMENTS);
+        $now  = api_get_utc_datetime();
+        $select = '*';
+        if ($getCount) {
+            $select = 'count(*) as count';
+        }
 
-        $cut_size = 800;
-		$now  = api_get_utc_datetime();
+        $sql = "SELECT $select
+                FROM $table
+				WHERE
+				( lang = '$user_selected_language' OR lang IS NULL) AND
+				( '$now' >= date_start AND '$now' <= date_end) ";
 
-		$sql = "SELECT * FROM ".$table."
-				WHERE ( lang = '$user_selected_language' OR lang IS NULL) AND ( '$now' >= date_start AND '$now' <= date_end) ";
-
-		switch ($visible) {
-			case self::VISIBLE_GUEST :
-				$sql .= " AND visible_guest = 1 ";
-				break;
-			case self::VISIBLE_STUDENT :
-				$sql .= " AND visible_student = 1 ";
-				break;
-			case self::VISIBLE_TEACHER :
-				$sql .= " AND visible_teacher = 1 ";
-				break;
-		}
+        switch ($visible) {
+            case self::VISIBLE_GUEST :
+                $sql .= " AND visible_guest = 1 ";
+                break;
+            case self::VISIBLE_STUDENT :
+                $sql .= " AND visible_student = 1 ";
+                break;
+            case self::VISIBLE_TEACHER :
+                $sql .= " AND visible_teacher = 1 ";
+                break;
+        }
 
         if (isset($id) && !empty($id)) {
             $id = intval($id);
@@ -662,28 +670,73 @@ class SystemAnnouncementManager
             $sql .= " AND access_url_id IN ('1', '$current_url_id') ";
         }
 
-		$sql .= " ORDER BY date_start DESC";
-		$announcements = Database::query($sql);
-		$html = '';
-		if (Database::num_rows($announcements) > 0) {
-			$html .=  Display::page_header(get_lang('SystemAnnouncements'));
-            $options = array();
-			while ($announcement = Database::fetch_object($announcements)) {
+        $sql .= " ORDER BY date_start DESC";
+        $announcements = Database::query($sql);
+        if ($getCount) {
+            $announcement = Database::fetch_array($announcements);
+            return $announcement['count'];
+        }
+
+        $options = array();
+        if (Database::num_rows($announcements) > 0) {
+            while ($announcement = Database::fetch_object($announcements)) {
                 $content = $announcement->content;
                 $url = api_get_path(WEB_PUBLIC_PATH).'news/'.$announcement->id;
                 if (empty($id)) {
-                    if (api_strlen(strip_tags($content)) > $cut_size) {
-                        $content = Text::cut($announcement->content, $cut_size).' '.Display::url(get_lang('More'), $url);
+                    if ($type == 'resumed') {
+                        if (api_strlen(strip_tags($content)) > $cutSize) {
+                            $content = Security::remove_XSS(Text::cut($announcement->content, $cutSize)).
+                                       ' '.Display::url(get_lang('More'), $url);
+                        }
+                    } else {
+                        $content = $announcement->content;
                     }
                 }
+                $announcement->title = Text::cut($announcement->title, $cutSize);
                 $options[]= array(
                     'title' => $announcement->title,
                     'content' => $content,
                 );
-			}
-            $html .= Display::getSlider('portal_news', $options);
+            }
+        }
+        return $options;
+    }
 
+	/**
+	* Displays announcements as an slideshow
+	* @param int $visible VISIBLE_GUEST, VISIBLE_STUDENT or VISIBLE_TEACHER
+	* @param int $id The identifier of the announcement to display
+    * @return string
+	*/
+	public static function display_announcements_slider($visible, $id = null)
+    {
+        $announcements = self::getAnnouncements($visible, $id, 'resumed');
+        $html = null;
+		if (!empty($announcements)) {
+			$html .= Display::page_header(get_lang('SystemAnnouncements'));
+            $html .= Display::getSlider('portal_news', $announcements);
 		}
 		return $html;
 	}
+
+    /**
+     * Displays announcements as an slideshow
+     * @param int $visible VISIBLE_GUEST, VISIBLE_STUDENT or VISIBLE_TEACHER
+     * @param int $id The identifier of the announcement to display
+     * @param string $type
+     * @return string
+     */
+    public static function displayAnnouncementsList($visible, $id = null, $type = 'resumed')
+    {
+        $announcements = self::getAnnouncements($visible, $id, $type);
+        $html = null;
+        if (!empty($announcements)) {
+            $html .= Display::page_header(get_lang('SystemAnnouncements'));
+            foreach($announcements as $announcement) {
+                $html .= Display::page_subheader2($announcement['title']);
+                $html .= "<p> ".$announcement['content']."</p>";
+            }
+        }
+        return $html;
+    }
 }

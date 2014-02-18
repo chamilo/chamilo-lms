@@ -384,7 +384,7 @@ class PageController
      * @assert () != ''
      * @assert (1) != ''
      */
-    public function return_announcements($user_id = null, $show_slide = true)
+    public function getAnnouncements($user_id = null, $show_slide = true)
     {
         // Display System announcements
         $announcement = isset($_GET['announcement']) ? intval($_GET['announcement']) : null;
@@ -393,18 +393,18 @@ class PageController
             $visibility = api_is_allowed_to_create_course(
             ) ? SystemAnnouncementManager::VISIBLE_TEACHER : SystemAnnouncementManager::VISIBLE_STUDENT;
             if ($show_slide) {
-                $announcements = SystemAnnouncementManager :: display_announcements_slider($visibility, $announcement);
+                $announcements = SystemAnnouncementManager::display_announcements_slider($visibility, $announcement);
             } else {
-                $announcements = SystemAnnouncementManager :: display_all_announcements($visibility, $announcement);
+                $announcements = SystemAnnouncementManager::display_all_announcements($visibility, $announcement);
             }
         } else {
             if ($show_slide) {
-                $announcements = SystemAnnouncementManager :: display_announcements_slider(
+                $announcements = SystemAnnouncementManager::display_announcements_slider(
                     SystemAnnouncementManager::VISIBLE_GUEST,
                     $announcement
                 );
             } else {
-                $announcements = SystemAnnouncementManager :: display_all_announcements(
+                $announcements = SystemAnnouncementManager::display_all_announcements(
                     SystemAnnouncementManager::VISIBLE_GUEST,
                     $announcement
                 );

@@ -54,7 +54,6 @@ class OpenMeetings
             $this->externalType = substr(api_get_path(WEB_PATH), strpos(api_get_path(WEB_PATH), '://')+3, -1);
         }
         $this->externalType = 'chamilolms.'.$this->externalType;
-
         $this->table = \Database::get_main_table('plugin_openmeetings');
 
         if ($om_plugin) {
@@ -136,10 +135,24 @@ class OpenMeetings
     public function createMeeting($params)
     {
         global $_configuration;
-        //$id = \Database::insert($this->table, $params);
-        // First, try to see if there is an active room for this course and session
+        // First, try to see if there is an active room for this course and session.
         $roomId = null;
-        $meetingData = \Database::select('*', $this->table, array('where' => array('c_id = ?' => $this->chamiloCourseId, ' AND session_id = ? ' => $this->chamiloSessionId)), 'first');
+
+        $meetingData = \Database::select(
+            '*',
+            $this->table,
+            array(
+                'where' =>
+                array(
+                    'c_id = ?' => $this->chamiloCourseId,
+                    ' AND session_id = ? ' => $this->chamiloSessionId,
+                    ' AND status <> ? ' => 2,
+
+                )
+            ),
+            'first'
+        );
+
         if ($meetingData != false && count($meetingData) > 0) {
             //error_log(print_r($meetingData,1));
             //error_log('Found previous room reference - reusing');
@@ -165,7 +178,7 @@ class OpenMeetings
             //$room->roomtypes_id = $room->roomtypes_id;
             $room->comment = urlencode(get_lang('Course').': ' . $params['meeting_name'] . ' - '.$_configuration['software_name']);
             //$room->numberOfPartizipants = $room->numberOfPartizipants;
-            $room->ispublic = $room->getString('isPublic','false');
+            $room->ispublic = $room->getString('isPublic', 'false');
             //$room->appointment = $room->getString('appointment');
             //$room->isDemoRoom = $room->getString('isDemoRoom');
             //$room->demoTime = $room->demoTime;
@@ -210,21 +223,20 @@ class OpenMeetings
         if (empty($meetingId)) {
             return false;
         }
-        $meetingData = \Database::select('*', $this->table, array('where' => array('id = ? AND status = 1 ' => $meetingId)), 'first');
+        $meetingData = \Database::select(
+            '*',
+            $this->table,
+            array('where' => array('id = ? AND status = 1 ' => $meetingId)),
+            'first'
+        );
 
         if (empty($meetingData)) {
             if ($this->debug) error_log("meeting does not exist: $meetingId ");
             return false;
         }
-        $params = array( 'room_id' => $meetingData['room_id'] );
-
-        $returnVal = $this->setUserObjectAndGenerateRoomHashByURLAndRecFlag( $params );
-        //$urlWithoutProtocol = str_replace("http://",  CONFIG_OPENMEETINGS_SERVER_URL);
-        //$imgWithoutProtocol = str_replace("http://", $_SESSION['_user']['avatar'] );
-
-        $iframe = $this->url . "/?" .
-                "secureHash=" . $returnVal;
-
+        $params = array('room_id' => $meetingData['room_id']);
+        $returnVal = $this->setUserObjectAndGenerateRoomHashByURLAndRecFlag($params);
+        $iframe = $this->url . "/?" ."secureHash=" . $returnVal;
         printf("<iframe src='%s' width='%s' height = '%s' />", $iframe, "100%", 640);
     }
 
@@ -302,7 +314,7 @@ class OpenMeetings
         $systemType = 'chamilo';
         $room_id = $params['room_id'];
 
-        $urlWsdl = $this->url . "/services/UserService?wsdl";
+        $urlWsdl = $this->url."/services/UserService?wsdl";
         $omServices = new \SoapClient($urlWsdl);
         $objRec = new User();
 
@@ -324,7 +336,6 @@ class OpenMeetings
      */
     public function setUserObjectAndGenerateRoomHashByURLAndRecFlag($params)
     {
-
         $username = $_SESSION['_user']['username'];
         $firstname = $_SESSION['_user']['firstname'];
         $lastname = $_SESSION['_user']['lastname'];
@@ -336,7 +347,7 @@ class OpenMeetings
         $becomeModerator = ( $this->isTeacher() ? 1 : 0 );
         $allowRecording = 1; //Provisional
 
-        $urlWsdl = $this->url . "/services/UserService?wsdl";
+        $urlWsdl = $this->url."/services/UserService?wsdl";
         $omServices = new \SoapClient($urlWsdl);
         $objRec = new User();
 
@@ -371,12 +382,13 @@ class OpenMeetings
             array('where' =>
                 array(
                     'c_id = ? ' => api_get_course_int_id(),
-                    ' AND session_id = ? ' => api_get_session_id()
+                    ' AND session_id = ? ' => api_get_session_id(),
+                    ' AND status <> ? ' => 2 // status deleted
                 )
             )
         );
-        $urlWsdl = $this->url . "/services/RoomService?wsdl";
-        $omServices = new \SoapClient($urlWsdl);
+        /*$urlWsdl = $this->url."/services/RoomService?wsdl";
+        $omServices = new \SoapClient($urlWsdl);*/
         $room = new Room();
 
         /*
@@ -489,6 +501,7 @@ class OpenMeetings
                     $remoteMeeting['add_to_calendar_url'] = api_get_self().'?action=add_to_calendar&id='.$meetingDb['id'].'&start='.api_strtotime($meetingDb['startTime']);
                 }
                 $remoteMeeting['end_url'] = api_get_self().'?action=end&id='.$meetingDb['id'];
+                $remoteMeeting['delete_url'] = api_get_self().'?action=delete&id='.$meetingDb['id'];
 
                 //$record_array = array();
 
@@ -561,22 +574,56 @@ class OpenMeetings
 
     /**
      * Send a command to the OpenMeetings server to close the meeting
-     * @param $meetingId
+     * @param int $meetingId
      * @return int
      */
     public function endMeeting($meetingId)
     {
         try {
-            $urlWsdl = $this->url . "/services/RoomService?wsdl";
-            $ws = new \SoapClient( $urlWsdl );
             $room = new Room($meetingId);
             $room->SID = $this->sessionId;
             $room->room_id = intval($meetingId);
             $room->status = false;
+
+            $urlWsdl = $this->url."/services/RoomService?wsdl";
+            $ws = new \SoapClient($urlWsdl);
+
             $roomClosed = $ws->closeRoom($room);
             if ($roomClosed > 0) {
-                \Database::update($this->table, array('status' => 0, 'closed_at' => api_get_utc_datetime()), array('id = ? ' => $meetingId));
+                \Database::update(
+                    $this->table,
+                    array(
+                        'status' => 0,
+                        'closed_at' => api_get_utc_datetime()
+                    ),
+                    array('id = ? ' => $meetingId)
+                );
             }
+            //error_log(__FILE__.'+'.__LINE__.' Finished closing');
+        } catch (SoapFault $e) {
+            error_log(__FILE__.'+'.__LINE__.' Warning: We have detected some problems: Fault: '.$e->faultstring);
+            exit;
+            return -1;
+        }
+    }
+
+    /**
+     * @param int $id
+     */
+    public function deleteMeeting($id)
+    {
+        try {
+            $room = new Room();
+            $room->loadRoomId($id);
+            $this->gateway->deleteRoom($room);
+            \Database::update(
+                $this->table,
+                array(
+                    'status' => 2
+                ),
+                array('id = ? ' => $id)
+            );
+
             //error_log(__FILE__.'+'.__LINE__.' Finished closing');
         } catch (SoapFault $e) {
             error_log(__FILE__.'+'.__LINE__.' Warning: We have detected some problems: Fault: '.$e->faultstring);

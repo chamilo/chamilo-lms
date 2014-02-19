@@ -51,7 +51,6 @@ class OpenMeetingsGateway
             error_log('Debug: ' . $this->rest->getDebug());;
             exit();
         }
-
     }
 
     function getRestUrl($name)
@@ -83,7 +82,6 @@ class OpenMeetingsGateway
 
         if ($this->rest->getError()) {
             error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($response,1));
-
         } else {
             $err = $this->rest->getError();
             if ($err) {
@@ -98,7 +96,6 @@ class OpenMeetingsGateway
                         . "&username=" . $this->_user
                         . "&userpass=" . $this->_pass;
                 $result = $this->rest->call($url);
-                //error_log(__FILE__.'+'.__LINE__.': '.$url);
                 if ($this->rest->getError()) {
                     error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($result,1));
                 } else {
@@ -118,6 +115,7 @@ class OpenMeetingsGateway
             return false;
         }
     }
+
     function updateRoomWithModeration($room)
     {
         $err = $this->rest->getError();
@@ -189,6 +187,7 @@ class OpenMeetingsGateway
         }
         return - 1;
     }
+
     function setUserObjectAndGenerateRoomHashByURLAndRecFlag($username, $firstname, $lastname, $profilePictureUrl, $email, $userId, $systemType, $room_id, $becomeModerator, $allowRecording)
     {
         $err = $this->rest->getError();
@@ -226,17 +225,21 @@ class OpenMeetingsGateway
         }
         return - 1;
     }
+
+    /**
+     * @param Room $openmeetings
+     * @return array|bool|int|null
+     */
     function deleteRoom($openmeetings)
     {
         $err = $this->rest->getError();
         if ($err) {
             error_log('Constructor error: ' . $err);
-            error_log('Debug: ' . $this->rest->getDebug());;
+            error_log('Debug: ' . $this->rest->getDebug());
             exit();
         }
-
-        $result = $this->rest->call($this->getRestUrl("RoomService") . "deleteRoom?SID=" . $this->sessionId
-                . "&rooms_id=" . $openmeetings->room_id);
+        $url = $this->getRestUrl("RoomService")."deleteRoom?SID=".$this->sessionId."&rooms_id=".$openmeetings->room_id;
+        $result = $this->rest->call($url);
 
         if ($result->fault) {
             error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($result,1));
@@ -320,7 +323,6 @@ class OpenMeetingsGateway
         } elseif ($room->isAudioOnly) {
             $url .= '&isAudioOnly=' . $this->var_to_str($room->isAudioOnly);
         }
-        error_log($url);
         $result = $this->rest->call($url);
 
         if ($this->rest->fault) {

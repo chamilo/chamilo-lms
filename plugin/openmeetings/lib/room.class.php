@@ -4,6 +4,7 @@
  * @package chamilo.plugin.videoconference
  */
 namespace Chamilo\Plugin\OpenMeetings;
+
 /**
  * Class room
  */
@@ -48,11 +49,31 @@ class Room
         global $_configuration;
         $this->name = 'C'.api_get_real_course_id().'-'.api_get_session_id();
         $accessUrl = api_get_access_url($_configuration['access_url']);
-        $this->externalRoomType = substr($accessUrl['url'],strpos($accessUrl['url'],'://')+3,-1);
-        if (strcmp($this->externalRoomType,'localhost') == 0) {
-            $this->externalRoomType = substr(api_get_path(WEB_PATH),strpos(api_get_path(WEB_PATH),'://')+3,-1);
+        $this->externalRoomType = substr($accessUrl['url'], strpos($accessUrl['url'],'://')+3,-1);
+        if (strcmp($this->externalRoomType, 'localhost') == 0) {
+            $this->externalRoomType = substr(api_get_path(WEB_PATH), strpos(api_get_path(WEB_PATH),'://')+3, -1);
         }
         $this->externalRoomType = 'chamilolms.'.$this->externalRoomType;
+    }
+
+    /**
+     * Get Room by id
+     * @param int $id
+     */
+    public function getRoom($id)
+    {
+        if (!empty($id)) {
+            $roomData = \Database::select('*', $this->table, array('where' => array('id = ?' => $id)), 'first');
+            if (!empty($roomData)) {
+                $this->rooms_id = $this->room_id = $roomData['room_id'];
+                $this->status = $roomData['status'];
+                $this->name = $roomData['meeting_name'];
+                $this->comment = $roomData['welcome_msg'];
+                $this->allowRecording = $roomData['record'];
+                $this->chamiloCourseId = $roomData['c_id'];
+                $this->chamiloSessionId = $roomData['session_id'];
+            }
+        }
     }
 
     /**
@@ -74,13 +95,15 @@ class Room
             }
         }
     }
+
     /**
      * Gets a string from a boolean attribute
      * @param string $attribute Name of the attribute
      * @param mixed  $voidReturn What to return if the value is not defined
      * @return string The boolean value expressed as string ('true' or 'false')
      */
-    public function getString($attribute, $voidReturn = false) {
+    public function getString($attribute, $voidReturn = false)
+    {
         if (empty($attribute)) {
             return false;
         }

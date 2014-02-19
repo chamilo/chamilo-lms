@@ -593,7 +593,7 @@ class Agenda
         }
 
         if (!empty($start)  && !empty($end)) {
-            $dateCondition = "((agenda.start_date >= '".$start."' OR agenda.start_date IS NULL) AND (agenda.end_date <= '".$end."' OR agenda.end_date IS NULL) AND )";
+            $dateCondition = "((agenda.start_date >= '".$start."' OR agenda.start_date IS NULL) AND (agenda.end_date <= '".$end."' OR agenda.end_date IS NULL))";
         }
 
         $result = Database::query($sql);

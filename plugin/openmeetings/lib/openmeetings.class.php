@@ -420,10 +420,12 @@ class OpenMeetings
                     foreach ($rec as $info) {
                         $recordings[$i]['filename'] = $info['fileHash'];
                         $recordings[$i]['image'] = $info['previewImage'];
-                        $recordings[$i]['link1'] = sprintf($link,$recordings[$i]['filename'], $meetingDb['room_id'], $this->sessionId);
-                        $recordings[$i]['link2'] = sprintf($link,$info['alternateDownload'], $meetingDb['room_id'], $this->sessionId);
+                        $recordings[$i]['link1'] = sprintf($link, $recordings[$i]['filename'], $meetingDb['room_id'], $this->sessionId);
+                        $recordings[$i]['link2'] = sprintf($link, $info['alternateDownload'], $meetingDb['room_id'], $this->sessionId);
                         $recordings[$i]['end'] = $info['recordEnd'];
-                        $links[] = $info['fileName'].' '.\Display::url('[1]', $recordings[$i]['link1'], array('target' => '_blank')).' '.\Display::url('[2]', $recordings[$i]['link2'], array('target' => '_blank'));
+                        $links[] = $info['fileName'].' '.
+                            \Display::url('[1]', $recordings[$i]['link1'], array('target' => '_blank')).' '.
+                            \Display::url('[2]', $recordings[$i]['link2'], array('target' => '_blank'));
                     }
                 }
                 $item['show_links']  = implode('<br />', $links);

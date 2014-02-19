@@ -8,15 +8,16 @@
  * Initialization
  */
 namespace Chamilo\Plugin\OpenMeetings;
+
 include_once __DIR__.'/session.class.php';
 include_once __DIR__.'/room.class.php';
 include_once __DIR__.'/user.class.php';
+
 /**
  * Open Meetings-Chamilo connector class
  */
 class OpenMeetings
 {
-
     public $url;
     public $user;
     public $pass;
@@ -34,10 +35,12 @@ class OpenMeetings
 
     /**
      * Constructor (generates a connection to the API and the Chamilo settings
-     * required for the connection to the videoconference server)
+     * required for the connection to the video conference server)
      */
-    function __construct()
+    public function __construct()
     {
+        global $_configuration;
+
         // initialize video server settings from global settings
         $plugin = \OpenMeetingsPlugin::create();
 
@@ -45,11 +48,10 @@ class OpenMeetings
         $om_host   = $plugin->get('host');
         $om_user   = $plugin->get('user');
         $om_pass   = $plugin->get('pass');
-        global $_configuration;
         $accessUrl = api_get_access_url($_configuration['access_url']);
-        $this->externalType = substr($accessUrl['url'],strpos($accessUrl['url'],'://')+3,-1);
-        if (strcmp($this->externalType,'localhost') == 0) {
-            $this->externalType = substr(api_get_path(WEB_PATH),strpos(api_get_path(WEB_PATH),'://')+3,-1);
+        $this->externalType = substr($accessUrl['url'], strpos($accessUrl['url'], '://')+3, -1);
+        if (strcmp($this->externalType, 'localhost') == 0) {
+            $this->externalType = substr(api_get_path(WEB_PATH), strpos(api_get_path(WEB_PATH), '://')+3, -1);
         }
         $this->externalType = 'chamilolms.'.$this->externalType;
 
@@ -82,14 +84,16 @@ class OpenMeetings
             $this->sessionId = $this->gateway->sessionId;
         }
     }
+
     /**
      * Checks whether a user is teacher in the current course
      * @return bool True if the user can be considered a teacher in this course, false otherwise
      */
-    function isTeacher()
+    public function isTeacher()
     {
         return api_is_course_admin() || api_is_coach() || api_is_platform_admin();
     }
+
     /**
      * Login the user with OM Server. This generates a session ID that is
      * specific to the current user, but that does not require specific user data
@@ -124,11 +128,12 @@ class OpenMeetings
         }
     }
     */
+
     /*
      * Creating a Room for the meeting
     * @return bool True if the user is correct and false when is incorrect
     */
-    function createMeeting($params)
+    public function createMeeting($params)
     {
         global $_configuration;
         //$id = \Database::insert($this->table, $params);
@@ -191,6 +196,7 @@ class OpenMeetings
             return -1;
         }
     }
+
     /**
      * Returns a meeting "join" URL
      * @param string The name of the meeting (usually the course code)
@@ -199,7 +205,7 @@ class OpenMeetings
      * @assert ('') === false
      * @assert ('abcdefghijklmnopqrstuvwxyzabcdefghijklmno') === false
      */
-    function joinMeeting($meetingId)
+    public function joinMeeting($meetingId)
     {
         if (empty($meetingId)) {
             return false;
@@ -221,24 +227,26 @@ class OpenMeetings
 
         printf("<iframe src='%s' width='%s' height = '%s' />", $iframe, "100%", 640);
     }
+
     /**
      * Checks if the videoconference server is running.
      * Function currently disabled (always returns 1)
      * @return bool True if server is running, false otherwise
      * @assert () === false
      */
-    function isServerRunning()
+    public function isServerRunning()
     {
         // Always return true for now as this requires the openmeetings object
         // to have been instanciated and this includes a loginUser() which
         // connects to the server
         return true;
     }
+
      /**
      * Gets the password for a specific meeting for the current user
      * @return string A moderator password if user is teacher, or the course code otherwise
      */
-    function getMeetingUserPassword()
+    public function getMeetingUserPassword()
     {
         if ($this->isTeacher()) {
             return $this->getMeetingModerationPassword();
@@ -246,31 +254,37 @@ class OpenMeetings
             return api_get_course_id();
         }
     }
+
     /**
      * Generated a moderator password for the meeting
      * @return string A password for the moderation of the video conference
      */
-    function getMeetingModerationPassword()
+    public function getMeetingModerationPassword()
     {
         return api_get_course_id().'mod';
     }
+
     /**
      * Get information about the given meeting
      * @param array ...?
      * @return mixed Array of information on success, false on error
      * @assert (array()) === false
      */
-    function getMeetingInfo($params)
+    public function getMeetingInfo($params)
     {
         try {
             $result = $this->api->getMeetingInfoArray($params);
             if ($result == null) {
-                if ($this->debug) error_log(__FILE__.'+'.__LINE__." Failed to get any response. Maybe we can't contact the OpenMeetings server.");
+                if ($this->debug) {
+                    error_log(__FILE__.'+'.__LINE__." Failed to get any response. Maybe we can't contact the OpenMeetings server.");
+                }
             } else {
                 return $result;
             }
         } catch (Exception $e) {
-            if ($this->debug) error_log(__FILE__.'+'.__LINE__.' Caught exception: ', $e->getMessage(), "\n");
+            if ($this->debug) {
+                error_log(__FILE__.'+'.__LINE__.' Caught exception: ', $e->getMessage(), "\n");
+            }
         }
         return false;
     }
@@ -279,7 +293,7 @@ class OpenMeetings
      * @param array $params Array of parameters
      * @return mixed
      */
-    function setUserObjectAndGenerateRecordingHashByURL( $params )
+    public function setUserObjectAndGenerateRecordingHashByURL( $params )
     {
         $username = $_SESSION['_user']['username'];
         $firstname = $_SESSION['_user']['firstname'];
@@ -289,7 +303,7 @@ class OpenMeetings
         $room_id = $params['room_id'];
 
         $urlWsdl = $this->url . "/services/UserService?wsdl";
-        $omServices = new \SoapClient( $urlWsdl );
+        $omServices = new \SoapClient($urlWsdl);
         $objRec = new User();
 
         $objRec->SID = $this->sessionId;
@@ -299,16 +313,16 @@ class OpenMeetings
         $objRec->externalUserId = $userId;
         $objRec->externalUserType = $systemType;
         $objRec->recording_id = $recording_id;
-
         $orFn = $omServices->setUserObjectAndGenerateRecordingHashByURL( $objRec );
+
         return $orFn->return;
-     }
+    }
 
     /**
      * @param Array $params Array of parameters
      * @return mixed
      */
-    function setUserObjectAndGenerateRoomHashByURLAndRecFlag( $params )
+    public function setUserObjectAndGenerateRoomHashByURLAndRecFlag($params)
     {
 
         $username = $_SESSION['_user']['username'];
@@ -323,7 +337,7 @@ class OpenMeetings
         $allowRecording = 1; //Provisional
 
         $urlWsdl = $this->url . "/services/UserService?wsdl";
-        $omServices = new \SoapClient( $urlWsdl );
+        $omServices = new \SoapClient($urlWsdl);
         $objRec = new User();
 
         $objRec->SID = $this->sessionId;
@@ -338,8 +352,7 @@ class OpenMeetings
         $objRec->becomeModeratorAsInt = $becomeModerator;
         $objRec->showAudioVideoTestAsInt = 1;
         $objRec->allowRecording = $allowRecording;
-
-        $rcFn = $omServices->setUserObjectAndGenerateRoomHashByURLAndRecFlag( $objRec );
+        $rcFn = $omServices->setUserObjectAndGenerateRoomHashByURLAndRecFlag($objRec);
 
         return $rcFn->return;
     }
@@ -348,18 +361,24 @@ class OpenMeetings
      * Gets all the course meetings saved in the plugin_openmeetings table
      * @return array Array of current open meeting rooms
      */
-    function getCourseMeetings()
+    public function getCourseMeetings()
     {
         $newMeetingsList = array();
-        $openMeeting = false;
         $item = array();
-        $meetingsList = \Database::select('*', $this->table, array('where' => array('c_id = ? ' => api_get_course_int_id(), ' AND session_id = ? ' => api_get_session_id())));
-
-        //error_log(__FILE__.'+'.__LINE__.' Meetings found: '.print_r($meetingsList,1));
-
+        $meetingsList = \Database::select(
+            '*',
+            $this->table,
+            array('where' =>
+                array(
+                    'c_id = ? ' => api_get_course_int_id(),
+                    ' AND session_id = ? ' => api_get_session_id()
+                )
+            )
+        );
         $urlWsdl = $this->url . "/services/RoomService?wsdl";
         $omServices = new \SoapClient($urlWsdl);
         $room = new Room();
+
         /*
         try {
             $rooms = $this->gateway->getRoomsWithCurrentUsersByType();
@@ -381,157 +400,160 @@ class OpenMeetings
         */
         $room->SID = $this->sessionId;
         //error_log(__FILE__.'+'.__LINE__.' Meetings found: '.print_r($room->SID,1));
-
-        foreach ($meetingsList as $meetingDb) {
-            //$room->rooms_id = $meetingDb['room_id'];
-            error_log(__FILE__.'+'.__LINE__.' Meetings found: '.print_r($meetingDb,1));
-            $remoteMeeting = array();
-            $meetingDb['created_at'] = api_get_local_time($meetingDb['created_at']);
-            $meetingDb['closed_at'] = (!empty($meetingDb['closed_at'])?api_get_local_time($meetingDb['closed_at']):'');
-            // Fixed value for now
-            $meetingDb['participantCount'] = 40;
-            $rec = $this->gateway->getFlvRecordingsByRoomId($meetingDb['room_id']);
-            $recordings = array();
-            $links = array();
-            $i = 0;
-            // Links to videos look like these:
-            // http://video2.openmeetings.com:5080/openmeetings/DownloadHandler?fileName=flvRecording_4.avi&moduleName=lzRecorderApp&parentPath=&room_id=&sid=dfc0cac396d384f59242aa66e5a9bbdd
-            $link = $this->url . '/DownloadHandler?fileName=%s&moduleName=lzRecorderApp&parentPath=&room_id=%s&sid=%s';
-            foreach ($rec as $info) {
-                $recordings[$i]['filename'] = $info['fileHash'];
-                $recordings[$i]['image'] = $info['previewImage'];
-                $recordings[$i]['link1'] = sprintf($link,$recordings[$i]['filename'], $meetingDb['room_id'], $this->sessionId);
-                $recordings[$i]['link2'] = sprintf($link,$info['alternateDownload'], $meetingDb['room_id'], $this->sessionId);
-                $recordings[$i]['end'] = $info['recordEnd'];
-                $links[] = $info['fileName'].' '.\Display::url('[1]', $recordings[$i]['link1'], array('target' => '_blank')).' '.\Display::url('[2]', $recordings[$i]['link2'], array('target' => '_blank'));
-            }
-            $item['show_links']  = implode('<br />', $links);
-
-            // The following code is currently commented because the web service
-            // says this is not allowed by the SOAP user.
-            /*
-            try {
-                // Get the conference room object from OpenMeetings server - requires SID and rooms_id to be defined
-                $objRoomId = $this->gateway->getRoomById($meetingDb['room_id']);
-                if (empty($objRoomId->return)) {
-                    error_log(__FILE__.'+'.__LINE__.' Emptyyyyy ');
-                    //\Database::delete($this->table, "id = {$meetingDb['id']}");
-                    // Don't delete expired rooms, just mark as closed
-                    \Database::update($this->table, array('status' => 0, 'closed_at' => api_get_utc_datetime()), array('id = ? ' => $meetingDb['id']));
-                    continue;
+        if (!empty($meetingsList)) {
+            foreach ($meetingsList as $meetingDb) {
+                //$room->rooms_id = $meetingDb['room_id'];
+                error_log(__FILE__.'+'.__LINE__.' Meetings found: '.print_r($meetingDb, 1));
+                $remoteMeeting = array();
+                $meetingDb['created_at'] = api_get_local_time($meetingDb['created_at']);
+                $meetingDb['closed_at'] = (!empty($meetingDb['closed_at']) ? api_get_local_time($meetingDb['closed_at']):'');
+                // Fixed value for now
+                $meetingDb['participantCount'] = 40;
+                $rec = $this->gateway->getFlvRecordingsByRoomId($meetingDb['room_id']);
+                $recordings = array();
+                $links = array();
+                $i = 0;
+                // Links to videos look like these:
+                // http://video2.openmeetings.com:5080/openmeetings/DownloadHandler?fileName=flvRecording_4.avi&moduleName=lzRecorderApp&parentPath=&room_id=&sid=dfc0cac396d384f59242aa66e5a9bbdd
+                $link = $this->url.'/DownloadHandler?fileName=%s&moduleName=lzRecorderApp&parentPath=&room_id=%s&sid=%s';
+                if (!empty($rec)) {
+                    foreach ($rec as $info) {
+                        $recordings[$i]['filename'] = $info['fileHash'];
+                        $recordings[$i]['image'] = $info['previewImage'];
+                        $recordings[$i]['link1'] = sprintf($link,$recordings[$i]['filename'], $meetingDb['room_id'], $this->sessionId);
+                        $recordings[$i]['link2'] = sprintf($link,$info['alternateDownload'], $meetingDb['room_id'], $this->sessionId);
+                        $recordings[$i]['end'] = $info['recordEnd'];
+                        $links[] = $info['fileName'].' '.\Display::url('[1]', $recordings[$i]['link1'], array('target' => '_blank')).' '.\Display::url('[2]', $recordings[$i]['link2'], array('target' => '_blank'));
+                    }
                 }
-                //$objCurUs = $omServices->getRoomWithCurrentUsersById($objCurrentUsers);
-            } catch  (SoapFault $e) {
-                error_log(__FILE__.'+'.__LINE__.' '.$e->faultstring);
-                exit;
-            }
-            //if( empty($objCurUs->returnMeetingID) ) continue;
+                $item['show_links']  = implode('<br />', $links);
 
-            $current_room = array(
-                'roomtype' => $objRoomId->return->roomtype->roomtypes_id,
-                'meetingName' => $objRoomId->return->name,
-                'meetingId' => $objRoomId->return->meetingID,
-                'createTime' => $objRoomId->return->rooms_id,
-                'showMicrophoneStatus' => $objRoomId->return->showMicrophoneStatus,
-                'attendeePw' => $objRoomId->return->attendeePW,
-                'moderatorPw' => $objRoomId->return->moderators,
-                'isClosed' => $objRoomId->return->isClosed,
-                'allowRecording' => $objRoomId->return->allowRecording,
-                'startTime' => $objRoomId->return->startTime,
-                'endTime' => $objRoomId->return->updatetime,
-                'participantCount' => count($objRoomId->return->currentusers),
-                'maxUsers' => $objRoomId->return->numberOfPartizipants,
-                'moderatorCount' => count($objRoomId->return->moderators)
-            );
-                // Then interate through attendee results and return them as part of the array:
-            if (!empty($objRoomId->return->currentusers)) {
-                    foreach ($objRoomId->return->currentusers as $a)
-                      $current_room[] = array(
-                                'userId' => $a->username,
-                                'fullName' => $a->firstname . " " . $a->lastname,
-                                'isMod' => $a->isMod
-                      );
-            }
-
-            $remoteMeeting = $current_room;
-            */
-
-            if (empty( $remoteMeeting )) {
-            /*
-                error_log(__FILE__.'+'.__LINE__.' Empty remote Meeting for now');
-                if ($meetingDb['status'] == 1 && $this->isTeacher()) {
-                    $this->endMeeting($meetingDb['id']);
+                // The following code is currently commented because the web service
+                // says this is not allowed by the SOAP user.
+                /*
+                try {
+                    // Get the conference room object from OpenMeetings server - requires SID and rooms_id to be defined
+                    $objRoomId = $this->gateway->getRoomById($meetingDb['room_id']);
+                    if (empty($objRoomId->return)) {
+                        error_log(__FILE__.'+'.__LINE__.' Emptyyyyy ');
+                        //\Database::delete($this->table, "id = {$meetingDb['id']}");
+                        // Don't delete expired rooms, just mark as closed
+                        \Database::update($this->table, array('status' => 0, 'closed_at' => api_get_utc_datetime()), array('id = ? ' => $meetingDb['id']));
+                        continue;
+                    }
+                    //$objCurUs = $omServices->getRoomWithCurrentUsersById($objCurrentUsers);
+                } catch  (SoapFault $e) {
+                    error_log(__FILE__.'+'.__LINE__.' '.$e->faultstring);
+                    exit;
                 }
-            */
-            } else {
-                $remoteMeeting['add_to_calendar_url'] = api_get_self().'?action=add_to_calendar&id='.$meetingDb['id'].'&start='.api_strtotime($meetingDb['startTime']);
-            }
-            $remoteMeeting['end_url'] = api_get_self().'?action=end&id='.$meetingDb['id'];
+                //if( empty($objCurUs->returnMeetingID) ) continue;
 
-            //$record_array = array();
+                $current_room = array(
+                    'roomtype' => $objRoomId->return->roomtype->roomtypes_id,
+                    'meetingName' => $objRoomId->return->name,
+                    'meetingId' => $objRoomId->return->meetingID,
+                    'createTime' => $objRoomId->return->rooms_id,
+                    'showMicrophoneStatus' => $objRoomId->return->showMicrophoneStatus,
+                    'attendeePw' => $objRoomId->return->attendeePW,
+                    'moderatorPw' => $objRoomId->return->moderators,
+                    'isClosed' => $objRoomId->return->isClosed,
+                    'allowRecording' => $objRoomId->return->allowRecording,
+                    'startTime' => $objRoomId->return->startTime,
+                    'endTime' => $objRoomId->return->updatetime,
+                    'participantCount' => count($objRoomId->return->currentusers),
+                    'maxUsers' => $objRoomId->return->numberOfPartizipants,
+                    'moderatorCount' => count($objRoomId->return->moderators)
+                );
+                    // Then interate through attendee results and return them as part of the array:
+                if (!empty($objRoomId->return->currentusers)) {
+                        foreach ($objRoomId->return->currentusers as $a)
+                          $current_room[] = array(
+                                    'userId' => $a->username,
+                                    'fullName' => $a->firstname . " " . $a->lastname,
+                                    'isMod' => $a->isMod
+                          );
+                }
+                $remoteMeeting = $current_room;
+                */
 
-//            if ($meetingDb['record'] == 1) {
-//                $recordingParams = array(
-//                    'meetingId' => $meetingDb['id'],        //-- OPTIONAL - comma separate if multiple ids
-//                );
-//
-//                $records = $this->api->getRecordingsWithXmlResponseArray($recordingParams);
-//                if (!empty($records)) {
-//                    $count = 1;
-//                    if (isset($records['message']) && !empty($records['message'])) {
-//                        if ($records['messageKey'] == 'noRecordings') {
-//                            $record_array[] = get_lang('NoRecording');
-//                        } else {
-//                            //$record_array[] = $records['message'];
-//                        }
-//                    } else {
-//                        foreach ($records as $record) {
-//                            if (is_array($record) && isset($record['recordId'])) {
-//                                $url = Display::url(get_lang('ViewRecord'), $record['playbackFormatUrl'], array('target' => '_blank'));
-//                                if ($this->is_teacher()) {
-//                                    $url .= Display::url(Display::return_icon('link.gif',get_lang('CopyToLinkTool')), api_get_self().'?action=copy_record_to_link_tool&id='.$meetingDb['id'].'&record_id='.$record['recordId']);
-//                                    $url .= Display::url(Display::return_icon('agenda.png',get_lang('AddToCalendar')), api_get_self().'?action=add_to_calendar&id='.$meetingDb['id'].'&start='.api_strtotime($meetingDb['created_at']).'&url='.$record['playbackFormatUrl']);
-//                                    $url .= Display::url(Display::return_icon('delete.png',get_lang('Delete')), api_get_self().'?action=delete_record&id='.$record['recordId']);
-//                                }
-//                                //$url .= api_get_self().'?action=publish&id='.$record['recordID'];
-//                                $count++;
-//                                $record_array[] = $url;
-//                            } else {
-//
-//                            }
-//                        }
-//                    }
-//                }
-//                //var_dump($record_array);
-//                $item['show_links']  = implode('<br />', $record_array);
-//
-//            }
-//
-             //$item['created_at'] = api_convert_and_format_date($meetingDb['created_at']);
-//            //created_at
-//
-//            $item['publish_url'] = api_get_self().'?action=publish&id='.$meetingDb['id'];
-//            $item['unpublish_url'] = api_get_self().'?action=unpublish&id='.$meetingDb['id'];
-//
-            //if ($meetingDb['status'] == 1) {
-//                $joinParams = array(
-//                    'meetingId' => $meetingDb['id'],        //-- REQUIRED - A unique id for the meeting
-//                    'username' => $this->user_complete_name,    //-- REQUIRED - The name that will display for the user in the meeting
-//                    'password' => $pass,            //-- REQUIRED - The attendee or moderator password, depending on what's passed here
-//                    'createTime' => '',            //-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
-//                    'userID' => '',            //    -- OPTIONAL - string
-//                    'webVoiceConf' => ''    //    -- OPTIONAL - string
-//                );
-//                $returnVal = $this->setUserObjectAndGenerateRoomHashByURLAndRecFlag( array('room_id' => $meetingDb['id']) );
-//                $joinUrl = CONFIG_OPENMEETINGS_SERVER_URL . "?" .
-//                           "secureHash=" . $returnVal;
-//
-//                $item['go_url'] = $joinUrl;
-            //}
-            $item = array_merge($item, $meetingDb, $remoteMeeting);
-            //error_log(__FILE__.'+'.__LINE__.'  Item: '.print_r($item,1));
-            $newMeetingsList[] = $item;
-        } //end foreach $meetingsList
+                if (empty( $remoteMeeting )) {
+                /*
+                    error_log(__FILE__.'+'.__LINE__.' Empty remote Meeting for now');
+                    if ($meetingDb['status'] == 1 && $this->isTeacher()) {
+                        $this->endMeeting($meetingDb['id']);
+                    }
+                */
+                } else {
+                    $remoteMeeting['add_to_calendar_url'] = api_get_self().'?action=add_to_calendar&id='.$meetingDb['id'].'&start='.api_strtotime($meetingDb['startTime']);
+                }
+                $remoteMeeting['end_url'] = api_get_self().'?action=end&id='.$meetingDb['id'];
+
+                //$record_array = array();
+
+    //            if ($meetingDb['record'] == 1) {
+    //                $recordingParams = array(
+    //                    'meetingId' => $meetingDb['id'],        //-- OPTIONAL - comma separate if multiple ids
+    //                );
+    //
+    //                $records = $this->api->getRecordingsWithXmlResponseArray($recordingParams);
+    //                if (!empty($records)) {
+    //                    $count = 1;
+    //                    if (isset($records['message']) && !empty($records['message'])) {
+    //                        if ($records['messageKey'] == 'noRecordings') {
+    //                            $record_array[] = get_lang('NoRecording');
+    //                        } else {
+    //                            //$record_array[] = $records['message'];
+    //                        }
+    //                    } else {
+    //                        foreach ($records as $record) {
+    //                            if (is_array($record) && isset($record['recordId'])) {
+    //                                $url = Display::url(get_lang('ViewRecord'), $record['playbackFormatUrl'], array('target' => '_blank'));
+    //                                if ($this->is_teacher()) {
+    //                                    $url .= Display::url(Display::return_icon('link.gif',get_lang('CopyToLinkTool')), api_get_self().'?action=copy_record_to_link_tool&id='.$meetingDb['id'].'&record_id='.$record['recordId']);
+    //                                    $url .= Display::url(Display::return_icon('agenda.png',get_lang('AddToCalendar')), api_get_self().'?action=add_to_calendar&id='.$meetingDb['id'].'&start='.api_strtotime($meetingDb['created_at']).'&url='.$record['playbackFormatUrl']);
+    //                                    $url .= Display::url(Display::return_icon('delete.png',get_lang('Delete')), api_get_self().'?action=delete_record&id='.$record['recordId']);
+    //                                }
+    //                                //$url .= api_get_self().'?action=publish&id='.$record['recordID'];
+    //                                $count++;
+    //                                $record_array[] = $url;
+    //                            } else {
+    //
+    //                            }
+    //                        }
+    //                    }
+    //                }
+    //                //var_dump($record_array);
+    //                $item['show_links']  = implode('<br />', $record_array);
+    //
+    //            }
+    //
+                 //$item['created_at'] = api_convert_and_format_date($meetingDb['created_at']);
+    //            //created_at
+    //
+    //            $item['publish_url'] = api_get_self().'?action=publish&id='.$meetingDb['id'];
+    //            $item['unpublish_url'] = api_get_self().'?action=unpublish&id='.$meetingDb['id'];
+    //
+                //if ($meetingDb['status'] == 1) {
+    //                $joinParams = array(
+    //                    'meetingId' => $meetingDb['id'],        //-- REQUIRED - A unique id for the meeting
+    //                    'username' => $this->user_complete_name,    //-- REQUIRED - The name that will display for the user in the meeting
+    //                    'password' => $pass,            //-- REQUIRED - The attendee or moderator password, depending on what's passed here
+    //                    'createTime' => '',            //-- OPTIONAL - string. Leave blank ('') unless you set this correctly.
+    //                    'userID' => '',            //    -- OPTIONAL - string
+    //                    'webVoiceConf' => ''    //    -- OPTIONAL - string
+    //                );
+    //                $returnVal = $this->setUserObjectAndGenerateRoomHashByURLAndRecFlag( array('room_id' => $meetingDb['id']) );
+    //                $joinUrl = CONFIG_OPENMEETINGS_SERVER_URL . "?" .
+    //                           "secureHash=" . $returnVal;
+    //
+    //                $item['go_url'] = $joinUrl;
+                //}
+                $item = array_merge($item, $meetingDb, $remoteMeeting);
+                //error_log(__FILE__.'+'.__LINE__.'  Item: '.print_r($item,1));
+                $newMeetingsList[] = $item;
+            } //end foreach $meetingsList
+        }
+
         return $newMeetingsList;
     }
 
@@ -540,7 +562,7 @@ class OpenMeetings
      * @param $meetingId
      * @return int
      */
-    function endMeeting($meetingId)
+    public function endMeeting($meetingId)
     {
         try {
             $urlWsdl = $this->url . "/services/RoomService?wsdl";
@@ -551,7 +573,6 @@ class OpenMeetings
             $room->status = false;
             $roomClosed = $ws->closeRoom($room);
             if ($roomClosed > 0) {
-                //error_log(__FILE__.'+'.__LINE__.' Closing returned '.print_r($roomClosed,1));
                 \Database::update($this->table, array('status' => 0, 'closed_at' => api_get_utc_datetime()), array('id = ? ' => $meetingId));
             }
             //error_log(__FILE__.'+'.__LINE__.' Finished closing');

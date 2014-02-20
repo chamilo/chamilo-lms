@@ -412,10 +412,9 @@ class Tracking
                         FROM $tbl_stats_exercise
                         WHERE exe_exo_id IN ('".$exercise_id."')
     			        $condition_user AND
-                        orig_lp_id = 0 AND
                         status = '' AND
-                        exe_cours_id = '$course_code' AND
-                        orig_lp_item_id = 0 $condition_session
+                        exe_cours_id = '$course_code'
+                        $condition_session
                         ORDER BY exe_date DESC";
 
     			$res = Database::query($sql);

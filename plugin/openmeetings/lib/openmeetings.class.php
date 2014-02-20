@@ -429,7 +429,7 @@ class OpenMeetings
                 // http://video2.openmeetings.com:5080/openmeetings/DownloadHandler?fileName=flvRecording_4.avi&moduleName=lzRecorderApp&parentPath=&room_id=&sid=dfc0cac396d384f59242aa66e5a9bbdd
                 $link = $this->url.'/DownloadHandler?fileName=%s&moduleName=lzRecorderApp&parentPath=&room_id=%s&sid=%s';
                 if (!empty($rec)) {
-                    $link1 = sprintf($link, $rec['filename'], $meetingDb['room_id'], $this->sessionId);
+                    $link1 = sprintf($link, $rec['fileName'], $meetingDb['room_id'], $this->sessionId);
                     $link2 = sprintf($link, $rec['alternateDownload'], $meetingDb['room_id'], $this->sessionId);
                     $links[] = $rec['fileName'].' '.
                         \Display::url('[1]', $link1, array('target' => '_blank')).' '.

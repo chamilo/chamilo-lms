@@ -44,7 +44,7 @@ require_once 'aiccItem.class.php';
  * @param   array   Interactions array
  * @param   string  Core exit SCORM string
  */
-function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1, $min = -1, $status = '', $time = 0, $suspend = '', $location = '', $interactions = array(), $core_exit = 'none')
+function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1, $min = -1, $status = '', $time = 0, $suspend = '', $location = '', $interactions = array(), $core_exit = 'none', $sessionId = null, $courseId = null)
 {
     $return = null;
 
@@ -57,6 +57,9 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
 
     $mylp = null;
     $lpobject = Session::read('lpobject');
+    if (!is_object($lpobject) && isset($sessionId) && isset($courseId)) {
+        $lpobject = new learnpathItem($lp_id, $user_id, $courseId);
+    }
     if (isset($lpobject)) {
         $oLP = unserialize($lpobject);
         if ($debug) error_log("lpobject was set");
@@ -298,5 +301,8 @@ echo save_item(
     (!empty($_REQUEST['suspend'])?$_REQUEST['suspend']:null),
     (!empty($_REQUEST['loc'])?$_REQUEST['loc']:null),
     $interactions,
-    (!empty($_REQUEST['core_exit'])?$_REQUEST['core_exit']:'')
+    (!empty($_REQUEST['core_exit'])?$_REQUEST['core_exit']:''),
+    '',
+    (!empty($_REQUEST['session_id'])?$_REQUEST['session_id']:''),
+    (!empty($_REQUEST['course_id'])?$_REQUEST['course_id']:'')
 );

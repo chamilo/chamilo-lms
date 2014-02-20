@@ -539,23 +539,24 @@ class Tracking
      * @param int session id
      * @return data array
      */
-    static function get_teachers_progress_by_course($courseId, $sessionId) {
-           $course = api_get_course_info_by_id($courseId);
-           //get teachers
-           $sql = "SELECT id_session, id_user
-                   FROM `session_rel_course_rel_user`
-                   WHERE status = 2
-                   AND visibility = 1
-                   AND course_code = '%s' 
-                  AND id_session = %s";
+    static function get_teachers_progress_by_course($courseId, $sessionId)
+    {
+        $course = api_get_course_info_by_id($courseId);
+        //get teachers
+        $sql = "SELECT scu.id_session, scu.id_user, s.name
+                FROM session_rel_course_rel_user scu, session s
+                WHERE scu.id_session = s.id
+                AND scu.status = 2
+                AND scu.visibility = 1
+                AND scu.course_code = '%s'
+               AND scu.id_session = %s";
         $query = sprintf($sql,$course['code'], $sessionId);
         $rs = Database::query($query);
         $teachers = array();
         while ($teacher = Database::fetch_array($rs,'ASSOC')) {
-       error_log(print_r($teacher,1));
             $teachers[] = $teacher;
         }
-       foreach ($teachers as $teacher) {
+        foreach ($teachers as $teacher) {
             //total documents added
             $sql = "SELECT count(*) as total
                     FROM c_item_property
@@ -674,8 +675,8 @@ class Tracking
             $tutor = get_user_info_by_id($teacher['id_user']);
             $data[] = array(
                 'course'        => $course['title'],
-                'session'       => $teacher['id_session'],
-                'tutor'         => $tutor['lastname'] . ' ' . $tutor['firstname'],
+                'session'       => $teacher['name'],
+                'tutor'         => $tutor['username'] . ' - ' . $tutor['lastname'] . ' ' . $tutor['firstname'],
                 'documents'     => $totalDocuments,
                 'links'         => $totalLinks,
                 'forums'        => $totalForums,

@@ -10,7 +10,7 @@ $strings['MeetingClosedComment'] = "Si ha pedido grabar la sesión de videoconfe
 $strings['CloseMeeting']        = "Cerrar sala";
 
 $strings['MeetingDeleted']        = "Eliminar sala";
-$strings['MeetingDeletedComment'] = "Eliminar sala";
+$strings['MeetingDeletedComment'] = "";
 
 $strings['VideoConferenceXCourseX']             = "Videoconferencia #%s, curso %s";
 $strings['VideoConferenceAddedToTheCalendar']   = "Videoconferencia añadida al calendario";

@@ -17,7 +17,7 @@ $strings['MeetingClosedComment'] = "If you have asked for your sessions to be re
 $strings['CloseMeeting']        = "Close meeting";
 
 $strings['MeetingDeleted']        = "Delete meeting";
-$strings['MeetingDeletedComment'] = "Delete meeting";
+$strings['MeetingDeletedComment'] = "";
 
 $strings['VideoConferenceXCourseX']             = "Videoconference #%s course %s";
 $strings['VideoConferenceAddedToTheCalendar']   = "Videoconference added to the calendar";

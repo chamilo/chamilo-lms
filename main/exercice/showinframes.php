@@ -17,10 +17,10 @@ $doc_url = str_replace(array('../', '\\', '\\0', '..'), array('', '', '', ''), u
 $cid                = api_get_course_id();
 $document_path      = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $document_web_path  = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document';
-$origin             = $_REQUEST['origin'];
-$learnpath_id       = $_REQUEST['learnpath_id'];
-$learnpath_item_id  = $_REQUEST['learnpath_item_id'];
-$time               = $_REQUEST['time'];
+$origin             = isset($_REQUEST['origin']) ? $_REQUEST['origin'] : null;
+$learnpath_id       = isset($_REQUEST['learnpath_id']) ? $_REQUEST['learnpath_id'] : null;
+$learnpath_item_id  = isset($_REQUEST['learnpath_item_id']) ? $_REQUEST['learnpath_item_id'] : null;
+$time               = isset($_REQUEST['time']) ? $_REQUEST['time'] : null;
 
 $user_id = api_get_user_id();
 $full_file_path = $document_path.$doc_url;

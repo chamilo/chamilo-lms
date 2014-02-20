@@ -888,8 +888,8 @@ function get_count_exam_hotpotatoes_results($in_hotpot_path) {
 }
 
 //function get_exam_results_hotpotatoes_data($from, $number_of_items, $column, $direction, $exercise_id, $extra_where_conditions = null, $get_count = false) {
-function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_column, $in_direction, $in_hotpot_path, $in_get_count = false, $where_condition = null) {
-
+function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_column, $in_direction, $in_hotpot_path, $in_get_count = false, $where_condition = null)
+{
     $tab_res = array();
     $course_code = api_get_course_id();
     // by default in_column = 1 If parameters given, it is the name of the column witch is the bdd field name
@@ -900,7 +900,8 @@ function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_co
     $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
     $TBL_USER                   = Database :: get_main_table(TABLE_MAIN_USER);
 
-    $sql = "SELECT * FROM $TBL_TRACK_HOTPOTATOES thp JOIN $TBL_USER u ON thp.exe_user_id = u.user_id WHERE thp.exe_cours_id = '$course_code' AND exe_name LIKE '$in_hotpot_path%'";
+    $sql = "SELECT * FROM $TBL_TRACK_HOTPOTATOES thp JOIN $TBL_USER u ON thp.exe_user_id = u.user_id
+            WHERE thp.exe_cours_id = '$course_code' AND exe_name LIKE '$in_hotpot_path%'";
 
     // just count how many answers
     if ($in_get_count) {
@@ -1447,8 +1448,8 @@ function convert_score($score, $weight) {
  * @param   boolean Check publications dates
  * @param   string  Search exercise name
  * @param   boolean Search exercises in all sessions
- * @param   int     0 = only inactive exercises 
- *                  1 = only active exercises, 
+ * @param   int     0 = only inactive exercises
+ *                  1 = only active exercises,
  *                  2 = all exercises
  * @return  array   array with exercise data
  */
@@ -1475,7 +1476,7 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
     }
 
     $needle_where   = (!empty($search_exercise)) ? " AND title LIKE '?' "       : '';
-    $needle         = (!empty($search_exercise)) ? "%" . $search_exercise . "%" : ''; 
+    $needle         = (!empty($search_exercise)) ? "%" . $search_exercise . "%" : '';
 
     //Show courses by active status
     $active_sql = '';
@@ -1484,10 +1485,10 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
     }
 
 
-    if ($search_all_sessions == true) 
+    if ($search_all_sessions == true)
     {
         $conditions = array('where'=>array($active_sql . ' c_id = ? '. $needle_where . $time_conditions => array($course_id, $needle)), 'order'=>'title');
-    } else 
+    } else
     {
         if ($session_id == 0) {
             $conditions = array('where'=>array($active_sql . ' session_id = ? AND c_id = ? '. $needle_where . $time_conditions => array($session_id, $course_id, $needle)), 'order'=>'title');
@@ -1500,7 +1501,7 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
 /**
  * Get exercise information by id
  * @param int Exercise Id
- * @return array Exercise info 
+ * @return array Exercise info
  */
 function get_exercise_by_id($exerciseId = 0) {
     $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);

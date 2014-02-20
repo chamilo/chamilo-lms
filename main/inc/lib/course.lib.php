@@ -1975,7 +1975,17 @@ class CourseManager
             return;
         }
         $this_course = Database::fetch_array($res);
-
+        $count = 0;
+        if (api_is_multiple_url_enabled()) {
+            require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
+            $url_id = 1;
+            if (api_get_current_access_url_id() != -1) {
+                $url_id = api_get_current_access_url_id();
+            }
+            UrlManager::delete_url_rel_course($code, $url_id);
+            $count = UrlManager::getcountUrlRelCourse($code);
+        }
+        if ($count == 0) {
         self::create_database_dump($code);
         if (!self::is_virtual_course_from_system_code($code)) {
             // If this is not a virtual course, look for virtual courses that depend on this one, if any
@@ -2104,15 +2114,6 @@ class CourseManager
         $sql = "DELETE FROM $table_stats_uploads WHERE upload_cours_id = '".$code."'";
         Database::query($sql);
 
-        if (api_is_multiple_url_enabled()) {
-            require_once api_get_path(LIBRARY_PATH).'urlmanager.lib.php';
-            $url_id = 1;
-            if (api_get_current_access_url_id() != -1) {
-                $url_id = api_get_current_access_url_id();
-            }
-            UrlManager::delete_url_rel_course($code, $url_id);
-        }
-
         // Delete the course from the database
         $sql = "DELETE FROM $table_course WHERE code='".$code."'";
         Database::query($sql);
@@ -2157,7 +2158,7 @@ class CourseManager
         // Add event to system log
         $user_id = api_get_user_id();
         event_system(LOG_COURSE_DELETE, LOG_COURSE_CODE, $code, api_get_utc_datetime(), $user_id, $code);
-
+        }
     }
 
     /**

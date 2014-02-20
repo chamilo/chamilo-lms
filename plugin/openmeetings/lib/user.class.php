@@ -4,6 +4,7 @@
  * @package chamilo.plugin.openmeetings
  */
 namespace Chamilo\Plugin\OpenMeetings;
+
 /**
  * Class User
  */

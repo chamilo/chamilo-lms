@@ -36,7 +36,7 @@ class OpenMeetingsGateway
     private $_pass;
     private $_url;
 
-    function __construct($host, $user, $pass)
+    public function __construct($host, $user, $pass)
     {
         $this->_user = urlencode($user);
         $this->_pass = urlencode($pass);
@@ -53,17 +53,28 @@ class OpenMeetingsGateway
         }
     }
 
-    function getRestUrl($name)
+    /**
+     * @param string $name
+     * @return string
+     */
+    public function getRestUrl($name)
     {
         return $this->getUrl() . "/services/" . $name . "/";
     }
 
-    function getUrl()
+    /**
+     * @return string
+     */
+    public function getUrl()
     {
         return $this->_url;
     }
 
-    function var_to_str($in)
+    /**
+     * @param bool $in
+     * @return string
+     */
+    public function var_to_str($in)
     {
         if (is_bool($in)) {
             return $in ? "true" : "false";
@@ -75,13 +86,13 @@ class OpenMeetingsGateway
     /**
      * TODO: Get Error Service and show detailed Error Message
      */
-    function loginUser()
+    public function loginUser()
     {
         $returnValue = 0;
         $response = $this->rest->call($this->getRestUrl("UserService") . "getSession", "session_id");
 
         if ($this->rest->getError()) {
-            error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($response,1));
+            error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($response, 1));
         } else {
             $err = $this->rest->getError();
             if ($err) {
@@ -97,7 +108,7 @@ class OpenMeetingsGateway
                         . "&userpass=" . $this->_pass;
                 $result = $this->rest->call($url);
                 if ($this->rest->getError()) {
-                    error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($result,1));
+                    error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($result, 1));
                 } else {
                     $err = $this->rest->getError();
                     if ($err) {
@@ -116,7 +127,11 @@ class OpenMeetingsGateway
         }
     }
 
-    function updateRoomWithModeration($room)
+    /**
+     * @param Room $room
+     * @return array|bool|int|null
+     */
+    public function updateRoomWithModeration($room)
     {
         $err = $this->rest->getError();
         if ($err) {
@@ -146,7 +161,7 @@ class OpenMeetingsGateway
         $result = $this->rest->call($url);
 
         if ($result->fault) {
-            error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($result,1));
+            error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($result, 1));
         } else {
             $err = $this->rest->getError();
             if ($err) {
@@ -160,10 +175,16 @@ class OpenMeetingsGateway
         return - 1;
     }
 
-    /*
-     * public String setUserObjectAndGenerateRecordingHashByURL(String SID, String username, String firstname, String lastname, Long externalUserId, String externalUserType, Long recording_id)
+    /**
+     * @param $username
+     * @param $firstname
+     * @param $lastname
+     * @param $userId
+     * @param $systemType
+     * @param $recording_id
+     * @return array|bool|int|null
      */
-    function setUserObjectAndGenerateRecordingHashByURL($username, $firstname, $lastname, $userId, $systemType, $recording_id)
+    public function setUserObjectAndGenerateRecordingHashByURL($username, $firstname, $lastname, $userId, $systemType, $recording_id)
     {
         $result = $this->rest->call($this->getRestUrl("UserService")
                 . 'setUserObjectAndGenerateRecordingHashByURL?'
@@ -176,7 +197,7 @@ class OpenMeetingsGateway
                 . '&recording_id=' . $recording_id, 'return');
 
         if ($result->fault) {
-            error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($result,1));
+            error_log('Fault (Expect - The request contains an invalid SOAP body) '.print_r($result, 1));
         } else {
             $err = $this->rest->getError();
             if ($err) {
@@ -188,7 +209,20 @@ class OpenMeetingsGateway
         return - 1;
     }
 
-    function setUserObjectAndGenerateRoomHashByURLAndRecFlag($username, $firstname, $lastname, $profilePictureUrl, $email, $userId, $systemType, $room_id, $becomeModerator, $allowRecording)
+    /**
+     * @param $username
+     * @param $firstname
+     * @param $lastname
+     * @param $profilePictureUrl
+     * @param $email
+     * @param $userId
+     * @param $systemType
+     * @param $room_id
+     * @param $becomeModerator
+     * @param $allowRecording
+     * @return array|bool|int|null
+     */
+    public function setUserObjectAndGenerateRoomHashByURLAndRecFlag($username, $firstname, $lastname, $profilePictureUrl, $email, $userId, $systemType, $room_id, $becomeModerator, $allowRecording)
     {
         $err = $this->rest->getError();
         if ($err) {
@@ -230,7 +264,7 @@ class OpenMeetingsGateway
      * @param Room $openmeetings
      * @return array|bool|int|null
      */
-    function deleteRoom($openmeetings)
+    public function deleteRoom($openmeetings)
     {
         $err = $this->rest->getError();
         if ($err) {
@@ -259,7 +293,7 @@ class OpenMeetingsGateway
     /**
      * Generate a new room hash for entering a conference room
      */
-    function setUserObjectAndGenerateRoomHash($username, $firstname, $lastname, $profilePictureUrl, $email, $externalUserId, $externalUserType, $room_id, $becomeModeratorAsInt, $showAudioVideoTestAsInt)
+    public function setUserObjectAndGenerateRoomHash($username, $firstname, $lastname, $profilePictureUrl, $email, $externalUserId, $externalUserType, $room_id, $becomeModeratorAsInt, $showAudioVideoTestAsInt)
     {
         $result = $this->rest->call($this->getRestUrl("UserService")
                 . "setUserObjectAndGenerateRoomHash?"
@@ -291,10 +325,10 @@ class OpenMeetingsGateway
 
     /**
      * Create a new conference room
-     * @param   The room object
+     * @param   Room The room object
      * @return  The REST call's result
      */
-    function createRoomWithModAndType($room)
+    public function createRoomWithModAndType($room)
     {
         $service = 'addRoomWithModerationAndExternalType';
         if ($room->allowRecording) {
@@ -341,7 +375,8 @@ class OpenMeetingsGateway
 
     /**
      * Gets the list of open rooms of type "Chamilo"
-     * @param   string  $type The type of external system connecting to OpenMeetings
+     * @param  string  $type The type of external system connecting to OpenMeetings
+     * @return bool
      */
     public function getRoomsWithCurrentUsersByType($type = 'chamilolms')
     {
@@ -393,7 +428,7 @@ class OpenMeetingsGateway
     /**
      * Get list of available recordings made by this instance
      */
-    function getRecordingsByExternalRooms()
+    public function getRecordingsByExternalRooms()
     {
         $url = $this->getRestUrl("RoomService")
             . "getFlvRecordingByExternalRoomType?"
@@ -404,12 +439,13 @@ class OpenMeetingsGateway
 
         return $result;
     }
+
     /**
      * Get list of available recordings made for the given room
      * @param   int $id Room ID
      * @return array
      */
-    function getFlvRecordingsByRoomId($id)
+    public function getFlvRecordingsByRoomId($id)
     {
         $url = $this->getRestUrl("RoomService")
             . "getFlvRecordingByRoomId?"
@@ -424,7 +460,7 @@ class OpenMeetingsGateway
     /**
      * Get list of available recordings made by user
      */
-    function getRecordingsByExternalUser($id)
+    public function getRecordingsByExternalUser($id)
     {
         $url = $this->getRestUrl("RoomService")
             . "getFlvRecordingByExternalUserId?"

@@ -231,7 +231,9 @@ class OpenMeetings
         );
 
         if (empty($meetingData)) {
-            if ($this->debug) error_log("meeting does not exist: $meetingId ");
+            if ($this->debug) {
+                error_log("meeting does not exist: $meetingId ");
+            }
             return false;
         }
         $params = array('room_id' => $meetingData['room_id']);
@@ -305,7 +307,7 @@ class OpenMeetings
      * @param array $params Array of parameters
      * @return mixed
      */
-    public function setUserObjectAndGenerateRecordingHashByURL( $params )
+    public function setUserObjectAndGenerateRecordingHashByURL($params)
     {
         $username = $_SESSION['_user']['username'];
         $firstname = $_SESSION['_user']['firstname'];
@@ -325,7 +327,7 @@ class OpenMeetings
         $objRec->externalUserId = $userId;
         $objRec->externalUserType = $systemType;
         $objRec->recording_id = $recording_id;
-        $orFn = $omServices->setUserObjectAndGenerateRecordingHashByURL( $objRec );
+        $orFn = $omServices->setUserObjectAndGenerateRecordingHashByURL($objRec);
 
         return $orFn->return;
     }
@@ -609,6 +611,7 @@ class OpenMeetings
 
     /**
      * @param int $id
+     * @return int
      */
     public function deleteMeeting($id)
     {
@@ -623,7 +626,7 @@ class OpenMeetings
                 ),
                 array('id = ? ' => $id)
             );
-
+            return $id;
             //error_log(__FILE__.'+'.__LINE__.' Finished closing');
         } catch (SoapFault $e) {
             error_log(__FILE__.'+'.__LINE__.' Warning: We have detected some problems: Fault: '.$e->faultstring);

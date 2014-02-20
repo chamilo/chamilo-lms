@@ -423,24 +423,18 @@ class OpenMeetings
                 $meetingDb['closed_at'] = (!empty($meetingDb['closed_at']) ? api_get_local_time($meetingDb['closed_at']):'');
                 // Fixed value for now
                 $meetingDb['participantCount'] = 40;
-                $rec = $this->gateway->getFlvRecordingsByRoomId($meetingDb['room_id']);
-                $recordings = array();
+                $rec = $this->gateway->getFlvRecordingByRoomId($meetingDb['room_id']);
                 $links = array();
-                $i = 0;
                 // Links to videos look like these:
                 // http://video2.openmeetings.com:5080/openmeetings/DownloadHandler?fileName=flvRecording_4.avi&moduleName=lzRecorderApp&parentPath=&room_id=&sid=dfc0cac396d384f59242aa66e5a9bbdd
                 $link = $this->url.'/DownloadHandler?fileName=%s&moduleName=lzRecorderApp&parentPath=&room_id=%s&sid=%s';
                 if (!empty($rec)) {
-                    foreach ($rec as $info) {
-                        $recordings[$i]['filename'] = $info['fileHash'];
-                        $recordings[$i]['image'] = $info['previewImage'];
-                        $recordings[$i]['link1'] = sprintf($link, $recordings[$i]['filename'], $meetingDb['room_id'], $this->sessionId);
-                        $recordings[$i]['link2'] = sprintf($link, $info['alternateDownload'], $meetingDb['room_id'], $this->sessionId);
-                        $recordings[$i]['end'] = $info['recordEnd'];
-                        $links[] = $info['fileName'].' '.
-                            \Display::url('[1]', $recordings[$i]['link1'], array('target' => '_blank')).' '.
-                            \Display::url('[2]', $recordings[$i]['link2'], array('target' => '_blank'));
-                    }
+                    $link1 = sprintf($link, $rec['filename'], $meetingDb['room_id'], $this->sessionId);
+                    $link2 = sprintf($link, $rec['alternateDownload'], $meetingDb['room_id'], $this->sessionId);
+                    $links[] = $rec['fileName'].' '.
+                        \Display::url('[1]', $link1, array('target' => '_blank')).' '.
+                        \Display::url('[2]', $link2, array('target' => '_blank'));
+
                 }
                 $item['show_links']  = implode('<br />', $links);
 

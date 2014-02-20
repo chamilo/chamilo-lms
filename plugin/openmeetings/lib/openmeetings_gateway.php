@@ -441,11 +441,11 @@ class OpenMeetingsGateway
     }
 
     /**
-     * Get list of available recordings made for the given room
+     * Get the recording from the room
      * @param   int $id Room ID
      * @return array
      */
-    public function getFlvRecordingsByRoomId($id)
+    public function getFlvRecordingByRoomId($id)
     {
         $url = $this->getRestUrl("RoomService")
             . "getFlvRecordingByRoomId?"

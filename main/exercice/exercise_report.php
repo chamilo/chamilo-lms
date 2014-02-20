@@ -23,6 +23,7 @@ require_once '../gradebook/lib/be.inc.php';
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = api_get_jqgrid_js();
+$htmlHeadXtra[] = api_get_datepicker_js();
 
 // Access control
 api_protect_course_script(true, false, true);
@@ -221,7 +222,19 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
         $actions .='<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon('statistics.png', get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&hotpotato_name='.Security::remove_XSS($_GET['path']).'&exerciseId='.intval($_GET['exerciseId']).'" >'.
         Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
-        $actions .= Display::url(Display::return_icon('clean_before_date.png', get_lang('CleanStudentsResultsBeforeDate'), '', ICON_SIZE_MEDIUM), '', array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToEmptyTestResults'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice_report.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token));
+        // clean result before a selected date icon
+        $actions .= Display::url(
+            Display::return_icon('clean_before_date.png', get_lang('CleanStudentsResultsBeforeDate'), '', ICON_SIZE_MEDIUM), '', array('onclick' => "javascript:display_date_picker()", 'href' => '#')
+        );
+        // clean result before a selected date datepicker popup
+        $actions .= Display::span(
+            Display::input('input', 'datepicker_start', get_lang('SelectADateOnTheCalendar'),
+                array('onmouseover'=>'datepicker_input_mouseover()', 'id'=>'datepicker_start', 'onchange'=>'datepicker_input_changed()', 'readonly'=>'readonly')
+            ).
+            Display::button('delete', get_lang('Delete'),
+                array('onclick'=>'submit_datepicker()')),
+            array('style'=>'display:none', 'id'=>'datepicker_span')
+        );
     }
 } else {
     $actions .= '<a href="exercice.php">'.Display :: return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -240,6 +253,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) && $_GET['delete'] == 'de
     }
 }
 
+
 if ($is_allowedToEdit || $is_tutor) {
     $nameTools = get_lang('StudentScore');
     $interbreadcrumb[] = array("url" => "exercice.php?gradebook=$gradebook", "name" => get_lang('Exercices'));
@@ -256,6 +270,27 @@ if ($is_allowedToEdit || $is_tutor) {
 }
 
 Display :: display_header($nameTools);
+
+// Clean all results for this test before the selected date
+$datepicker_language = get_datepicker_langage_code();
+if (($is_allowedToEdit || $is_tutor || api_is_coach()) && isset($_GET['delete_before_date']) && $locked == false) {
+    // ask for the date
+    $check = Security::check_token('get');
+    if ($check) {
+        // delete attempts before date $_GET['delete_before_date']
+        $dateUTC = api_get_utc_datetime($_GET['delete_before_date']);
+        if (api_is_valid_date($_GET['delete_before_date'])) {
+            $objExerciseTmp = new Exercise();
+            if ($objExerciseTmp->read($exercise_id)) {
+                $nb_del = $objExerciseTmp->clean_results(true, $_GET['delete_before_date']);
+                Display :: display_confirmation_message(sprintf(get_lang('XResultsCleaned'), $nb_del));
+            }
+        }
+    }
+}
+
+// Security token to protect deletion
+$token = Security::get_token();
 
 $actions = Display::div($actions, array('class' => 'actions'));
 
@@ -384,6 +419,7 @@ $extra_params['autowidth'] = 'true';
 //height auto
 $extra_params['height'] = 'auto';
 ?>
+
 <script>
 
     function setSearchSelect(columnName) {
@@ -426,11 +462,11 @@ $extra_params['height'] = 'auto';
     }
 
     $(function() {
-<?php
-echo Display::grid_js('results', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
+        <?php
+        echo Display::grid_js('results', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
-if ($is_allowedToEdit || $is_tutor) {
-    ?>
+        if ($is_allowedToEdit || $is_tutor) {
+            ?>
 
                 //setSearchSelect("status");
                 //
@@ -472,14 +508,72 @@ if ($is_allowedToEdit || $is_tutor) {
                 var sgrid = $("#results")[0];
                 sgrid.triggerToolbar();
 
-<?php } ?>
+        <?php } ?>
         });
+
+        // datepicker functions
+        var datapickerInputModified = false;
+
+        /**
+         * return true if the datepicker input has been modified
+         */
+        function datepicker_input_changed() {
+            datapickerInputModified = true;
+        }
+
+        /**
+        * disply the datepicker calendar on mouse over the input
+        */
+        function datepicker_input_mouseover() {
+            $('#datepicker_start').datepicker( "show" );
+        }
+
+        /**
+        * display or hide the datepicker input, calendar and button
+        */
+        function display_date_picker() {
+            $('#datepicker_span').toggle();
+            $('#datepicker_start').datepicker( "show" );
+        }
+
+        /**
+        * confirm deletion
+        */
+        function submit_datepicker() {
+            if (datapickerInputModified) {
+                var dateTypeVar = $('#datepicker_start').datepicker('getDate');
+                var dateForBDD = $.datepicker.formatDate('yy-mm-dd', dateTypeVar);
+                // format the date for confirm box
+                var selectedDate = $.datepicker.formatDate( "DD, MM d, yy", dateTypeVar, {
+                    dayNamesShort: $.datepicker.regional[ "<?php echo $datepicker_language; ?>" ].dayNamesShort,
+                    dayNames: $.datepicker.regional[ "<?php echo $datepicker_language; ?>" ].dayNames,
+                    monthNamesShort: $.datepicker.regional[ "<?php echo $datepicker_language; ?>" ].monthNamesShort,
+                    monthNames: $.datepicker.regional[ "<?php echo $datepicker_language; ?>" ].monthNames
+                });
+                if (confirm("<?php echo convert_double_quote_to_single(get_lang('AreYouSureDeleteTestResultBeforeDateD')) ?>"+" "+selectedDate)) {
+                    self.location.href = "exercise_report.php?<?php echo api_get_cidreq(); ?>&exerciseId=<?php echo $exercise_id; ?>&delete_before_date="+dateForBDD+"&sec_token=<?php echo $token; ?>";
+                }
+            }
+        }
+
+        /**
+        * initiate datepicker
+        */
+        $(function(){
+            $( "#datepicker_start" ).datepicker({
+                defaultDate: "",
+                changeMonth: false,
+                numberOfMonths: 1
+            });
+        });
+
 </script>
 <form id="export_report_form" method="post" action="exercise_report.php">
     <input type="hidden" name="csvBuffer" id="csvBuffer" value="" />
     <input type="hidden" name="export_report" id="export_report" value="1" />
     <input type="hidden" name="exerciseId" id="exerciseId" value="<?php echo $exercise_id ?>" />
 </form>
+
 <?php
 echo Display::grid_html('results');
 Display :: display_footer();

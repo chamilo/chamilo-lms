@@ -200,7 +200,6 @@ switch ($action) {
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $work_id = $_REQUEST['work_id'];
         $courseInfo = api_get_course_info();
-
         $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
 
         if (empty($documents)) {
@@ -218,15 +217,6 @@ switch ($action) {
                 true
             );
         }
-/*
-        // All
-        if ($courseInfo['show_score'] == '0') {
-            $count = get_count_work($work_id, null, api_get_user_id());
-        } else {
-            // Only my stuff
-            $count = get_count_work($work_id, api_get_user_id());
-        }
-*/
         break;
     case 'get_exercise_results':
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';

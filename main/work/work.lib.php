@@ -3380,6 +3380,30 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $group_id)
 }
 
 /**
+ * Delete all work by student
+ * @param int $userId
+ * @param array $courseInfo
+ * @return array return deleted items
+ */
+function deleteAllWorkPerUser($userId, $courseInfo)
+{
+    $deletedItems = array();
+    $workPerUser = getWorkPerUser($userId);
+    if (!empty($workPerUser)) {
+        foreach ($workPerUser as $work) {
+            $work = $work['work'];
+            foreach ($work->user_results as $userResult) {
+                $result = deleteWorkItem($userResult['id'], $courseInfo);
+                if ($result) {
+                    $deletedItems[] = $userResult;
+                }
+            }
+        }
+    }
+    return $deletedItems;
+}
+
+/**
  * @param int $item_id
  * @param array course info
  * @return bool

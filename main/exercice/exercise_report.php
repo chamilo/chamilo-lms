@@ -532,8 +532,13 @@ $extra_params['height'] = 'auto';
         * display or hide the datepicker input, calendar and button
         */
         function display_date_picker() {
-            $('#datepicker_span').toggle();
-            $('#datepicker_start').datepicker( "show" );
+            if (!$('#datepicker_span').is(":visible")) {
+                $('#datepicker_span').show();
+                $('#datepicker_start').datepicker( "show" );
+            } else {
+                $('#datepicker_start').datepicker( "hide" );
+                $('#datepicker_span').hide();
+            }
         }
 
         /**

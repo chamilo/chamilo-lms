@@ -3813,6 +3813,39 @@ function setting_gettext() {
 }
 
 /**
+ * Return true is $in_date is a valid date
+ * date format yyyy-mm-dd hh:mm:ss
+ * @param $in_date
+ */
+function api_is_valid_date($in_date) {
+    if (preg_match('/^([0-9]{4})-([0-1][0-9])-([0-3][0-9])( ([0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?$/', $in_date, $tab_matches)) {
+        if (checkdate($tab_matches[2], $tab_matches[3], $tab_matches[1])
+            && (($tab_matches[5] <= 23 && $tab_matches[6] <= 59 && $tab_matches[7] <= 59)
+                || ($tab_matches[5] == 24 && $tab_matches[6] == '00' && $tab_matches[7] == '00'))) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/**
+ * Return the encoding country code for jquery datepicker
+ * used for exemple in main/exercice/exercise_report.php
+ */
+function get_datepicker_langage_code() {
+    $languaje   = 'en-GB';
+    $platform_isocode = strtolower(api_get_language_isocode());
+
+    // languages supported by jqgrid see files in main/inc/lib/javascript/jqgrid/js/i18n
+    $datapicker_langs = array('af', 'ar', 'ar-DZ', 'az', 'bg', 'bs', 'ca', 'cs', 'cy-GB', 'da', 'de', 'el', 'en-AU', 'en-GB', 'en-NZ', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr', 'fr-CH', 'gl', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'is', 'it', 'ja', 'ka', 'kk', 'km', 'ko', 'lb', 'lt', 'lv', 'mk', 'ml', 'ms', 'nl', 'nl-BE', 'no', 'pl', 'pt', 'pt-BR', 'rm', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sr-SR', 'sv', 'ta', 'th', 'tj', 'tr', 'uk', 'vi', 'zh-CN', 'zh-HK', 'zh-TW');
+    if (in_array($platform_isocode, $datapicker_langs)) {
+        $languaje = $platform_isocode;
+    }
+    return $languaje;
+}
+
+
+/**
  * Functions for internal use behind this API
  */
 

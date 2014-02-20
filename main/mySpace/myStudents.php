@@ -875,7 +875,6 @@ if (empty($_GET['details'])) {
 		$t_quiz = Database :: get_course_table(TABLE_QUIZ_TEST);
 		$sql_exercices = "SELECT quiz.title, id FROM " . $t_quiz . " AS quiz
 						  WHERE quiz.c_id =  ".$info_course['real_id']." AND
-						  		active='1' AND
 								(quiz.session_id = $session_id OR quiz.session_id = 0)
 							ORDER BY quiz.title ASC ";
 
@@ -885,7 +884,7 @@ if (empty($_GET['details'])) {
 			while ($exercices = Database :: fetch_array($result_exercices)) {
 				$exercise_id = intval($exercices['id']);
 
-				$count_attempts   = Tracking::count_student_exercise_attempts($student_id, $course_code, $exercise_id, 0, 0, $session_id);
+				$count_attempts   = Tracking::count_student_exercise_attempts($student_id, $course_code, $exercise_id, 0, 0, $session_id, 2);
 				$score_percentage = Tracking::get_avg_student_exercise_score($student_id, $course_code, $exercise_id, $session_id);
 
 				$csv_content[] = array (
@@ -917,9 +916,7 @@ if (empty($_GET['details'])) {
 				                            exe_user_id     ="'.$student_id.'" AND
 				                            exe_cours_id    ="'.$course_code.'" AND
                                             session_id      ="'.$session_id.'" AND
-				                            status          = "" AND
-				                            orig_lp_id      = 0 AND
-				                            orig_lp_item_id = 0
+				                            status          = ""
 				                            ORDER BY exe_date DESC LIMIT 1';
 				$result_last_attempt = Database::query($sql_last_attempt);
 				if (Database :: num_rows($result_last_attempt) > 0) {

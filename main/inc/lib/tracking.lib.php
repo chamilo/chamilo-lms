@@ -441,14 +441,23 @@ class Tracking
 
     /**
      * Get count student's exercise COMPLETED attempts
-     * @param    int     Student id
-     * @param    string    Course code
-     * @param    int        Exercise id
-     * @param    int        Learning path id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
-     * @param    int        Learning path item id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
+     * @param $student_id
+     * @param $course_code
+     * @param $exercise_id
+     * @param int $lp_id
+     * @param int $lp_item_id
+     * @param int $session_id
+     * @param int $find_all_lp  0 = just LP specified
+     *                          1 = LP specified or whitout LP,
+     *                          2 = all rows
+     * @internal param \Student $int id
+     * @internal param \Course $string code
+     * @internal param \Exercise $int id
+     * @internal param \Learning $int path id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
+     * @internal param \Learning $int path item id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
      * @return  int     count of attempts
      */
-    public static function count_student_exercise_attempts($student_id, $course_code, $exercise_id, $lp_id = 0, $lp_item_id = 0, $session_id = 0) {
+    public static function count_student_exercise_attempts($student_id, $course_code, $exercise_id, $lp_id = 0, $lp_item_id = 0, $session_id = 0, $find_all_lp = 0) {
     	$course_code = Database::escape_string($course_code);
     	$student_id  = intval($student_id);
     	$exercise_id = intval($exercise_id);
@@ -465,10 +474,16 @@ class Tracking
                 WHERE  ex.exe_cours_id = '$course_code'
                 AND ex.exe_exo_id = $exercise_id
                 AND status = ''
-                AND orig_lp_id = $lp_id
-                AND orig_lp_item_id = $lp_item_id
                 AND exe_user_id= $student_id
                 AND session_id = $session_id ";
+
+        if ($find_all_lp == 1) {
+            $sql .= "AND (orig_lp_id = $lp_id OR orig_lp_id = 0)
+                AND (orig_lp_item_id = $lp_item_id OR orig_lp_item_id = 0)";
+        } elseif ($find_all_lp == 0) {
+            $sql .= "AND orig_lp_id = $lp_id
+                AND orig_lp_item_id = $lp_item_id";
+        }
 
     	$rs = Database::query($sql);
     	$row = Database::fetch_row($rs);

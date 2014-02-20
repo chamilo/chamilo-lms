@@ -9,6 +9,9 @@ $strings['MeetingClosed']       = "Sala cerrada";
 $strings['MeetingClosedComment'] = "Si ha pedido grabar la sesión de videoconferencia en los parámetros del curso, esta grabación aparecerá en la lista siguiente una vez generada.";
 $strings['CloseMeeting']        = "Cerrar sala";
 
+$strings['MeetingDeleted']        = "Eliminar sala";
+$strings['MeetingDeletedComment'] = "Eliminar sala";
+
 $strings['VideoConferenceXCourseX']             = "Videoconferencia #%s, curso %s";
 $strings['VideoConferenceAddedToTheCalendar']   = "Videoconferencia añadida al calendario";
 $strings['VideoConferenceAddedToTheLinkTool']   = "Videoconferencia añadida como enlace. Puede editar y publicar el enlace en la página principal del curso desde la herramienta de enlace.";

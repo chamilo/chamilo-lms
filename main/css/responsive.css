@@ -538,8 +538,17 @@ The more frequent ones have been marked with *
         padding-top: 15px;
     }
     .social-menu .social-background-content .thumbnail{
-        background-color: #FFFFFF;
         border:none;
+        box-shadow: none;
+    }
+    .thumbnail > img{
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        border: 3px solid #FFFFFF;
+        -webkit-box-shadow: 1px 0px 6px 0px rgba(50, 50, 50, 0.71);
+        -moz-box-shadow:    1px 0px 6px 0px rgba(50, 50, 50, 0.71);
+            box-shadow:         1px 0px 6px 0px rgba(50, 50, 50, 0.71);
     }
 }
 
@@ -592,7 +601,21 @@ The more frequent ones have been marked with *
     #announcements{
         clear: both;
     }
-    
+    #settings .span6 {
+      min-height: 260px;
+      width: 100%;
+    }
+    #settings .form-search .span3 {
+        float: left;
+        width: 76%;
+        height: 34px;
+        margin-right: 5px;
+    }
+    #settings .row .span6 .well_border ul li{
+        font-size: 15px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
 
 }
 

@@ -34,9 +34,9 @@ if (isset($_SESSION['gradebook'])) {
 
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array(
-            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-            'name' => get_lang('ToolGradebook')
-        );
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 // The breadcrumbs.
 $interbreadcrumb[] = array('url' => './exercice.php', 'name' => get_lang('Exercices'));
@@ -69,35 +69,32 @@ if (api_is_allowed_to_edit(null, true)) {
 /** Display */
 $nameTools = get_lang('HotPotatoesTests');
 
-$form = new FormValidator('hotpotatoes', 'post', api_get_self()."?".api_get_cidreq(), null, array('enctype' => 'multipart/form-data'));    
+$form = new FormValidator('hotpotatoes', 'post', api_get_self()."?".api_get_cidreq(), null, array('enctype' => 'multipart/form-data'));
 $form->addElement('header', $nameTools);
 $form->addElement('hidden', 'uploadPath');
 $form->addElement('hidden', 'fld', $fld);
 $form->addElement('hidden', 'imgcount', $imgcount);
 $form->addElement('hidden', 'finish', $finish);
-
 $form->addElement('html', GenerateHiddenList($imgparams));
-
 $form->addElement('advanced_settings', Display::return_icon('hotpotatoes.jpg', get_lang('HotPotatoes')));
-
 $label = get_lang('DownloadImg').' : ';
 if ($finish == 0) {
     $label = get_lang('DownloadFile').' : ';
-}    
+}
 
 $form->addElement('file', 'userFile', $label);
 $form->addElement('button', 'submit', get_lang('SendFile'));
 
-
 // If finish is set; it's because the user came from this script in the first place (displaying hidden "finish" field).
 if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) {
-    
 
     // Moved this down here as the upload handling functions give output.
     if ($form->validate()) {
 
-        //initialise $finish
-        if (!isset($finish)) { $finish = 0; }
+        // Initialise $finish
+        if (!isset($finish)) {
+            $finish = 0;
+        }
 
         //if the size is not defined, it's probably because there has been an error or no file was submitted
         if (!$_FILES['userFile']['size']) {
@@ -117,7 +114,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                 //$doc_id = add_document($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);
                 //api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
                 @mkdir($document_sys_path.$uploadPath.'/'.$fld, api_get_permissions_for_new_directories());
-                $doc_id = add_document($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);                    
+                $doc_id = add_document($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);
                 api_item_property_update($_course, TOOL_DOCUMENT, $doc_id, 'FolderCreated', api_get_user_id());
             } else {
                 // It is not the first step... get the filename directly from the system params.
@@ -131,8 +128,9 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                 if ($finish == 2) {
                     $imgparams = $_POST['imgparams'];
                     $checked = CheckImageName($imgparams, $filename);
-                    if ($checked) { $imgcount = $imgcount-1; }
-                    else {
+                    if ($checked) {
+                        $imgcount = $imgcount-1;
+                    } else {
                         $dialogBox .= $filename.' '.get_lang('NameNotEqual');
                         my_delete($document_sys_path.$uploadPath.'/'.$fld.'/'.$filename);
                         update_db_info('delete', $uploadPath.'/'.$fld.'/'.$filename);
@@ -146,15 +144,19 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                         $finish = 2;
                         // Get number and name of images from the files contents.
                         GetImgParams('/'.$filename, $document_sys_path.$uploadPath.'/'.$fld, $imgparams, $imgcount);
-                        if ($imgcount == 0) // There is no img link, so finish the upload process.
-                            { $finish = 1; }
-                        else // There is still one or more img missing.
-                            { $dialogBox .= get_lang('DownloadEnd'); }
+                        if ($imgcount == 0) {
+                            // There is no img link, so finish the upload process.
+                            $finish = 1;
+                        } else {
+                            // There is still one or more img missing.
+                            $dialogBox .= get_lang('DownloadEnd');
+                        }
                     }
                 }
 
                 $title = @htmlspecialchars(GetQuizName($filename, $document_sys_path.$uploadPath.'/'.$fld.'/'), ENT_COMPAT, api_get_system_encoding());
-                $query = "UPDATE $dbTable SET comment='".Database::escape_string($title)."' WHERE c_id = $course_id AND path=\"".$uploadPath."/".$fld."/".$filename."\"";
+                $query = "UPDATE $dbTable SET comment='".Database::escape_string($title)."'
+                         WHERE c_id = $course_id AND path=\"".$uploadPath."/".$fld."/".$filename."\"";
                 Database::query($query);
                 api_item_property_update($_course, TOOL_QUIZ, $id, 'QuizAdded', api_get_user_id());
 
@@ -163,14 +165,15 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                     // delete?
                     //$dialogBox .= get_lang('NoImg');
                 }
-                $finish = 0;    // error
+                $finish = 0;
+                // error
                 if (api_failure::get_last_failure() == 'not_enough_space') {
                     $dialogBox .= get_lang('NoSpace');
                 } elseif (api_failure::get_last_failure() == 'php_file_in_zip_file') {
                     $dialogBox .= get_lang('ZipNoPhp');
                 }
             }
-        }        
+        }
     }
     if ($finish == 1) { /** ok -> send to main exercises page */
         header('Location: exercice.php?'.api_get_cidreq());
@@ -180,10 +183,12 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
     Display::display_header($nameTools, get_lang('Exercise'));
 
     echo '<div class="actions">';
-    echo '<a href="exercice.php?show=test">'.Display :: return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="exercice.php?show=test">'.
+        Display :: return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).
+        '</a>';
     echo '</div>';
 
-    if ($finish==2) { // If we are in the img upload process.
+    if ($finish == 2) { // If we are in the img upload process.
         $dialogBox .= get_lang('ImgNote_st').$imgcount.get_lang('ImgNote_en').'<br />';
         while (list($key, $string) = each($imgparams)) {
             $dialogBox .= $string.'; ';
@@ -193,8 +198,8 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
     if ($dialogBox) {
         Display::display_normal_message($dialogBox, false);
     }
-    
-    $form->display();    
+
+    $form->display();
 }
 // Display the footer.
 Display::display_footer();

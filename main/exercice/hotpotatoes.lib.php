@@ -7,8 +7,9 @@
  * @author Istvan Mandak (original author)
  */
 
-$dbTable = Database::get_course_table(TABLE_DOCUMENT); // TODO: This is a global variable with too simple name, conflicts are possible. Better eliminate it. Correct the test unit too.
-
+/* TODO: This is a global variable with too simple name, conflicts are possible.
+Better eliminate it. Correct the test unit too. */
+$dbTable = Database::get_course_table(TABLE_DOCUMENT);
 
 /**
  * Creates a hotpotato directory.
@@ -17,7 +18,8 @@ $dbTable = Database::get_course_table(TABLE_DOCUMENT); // TODO: This is a global
  * @param   string      Wanted path
  * @return  boolean     Always true so far
  */
-function hotpotatoes_init($base_work_dir) {
+function hotpotatoes_init($base_work_dir)
+{
     //global $_course, $_user;
     $document_path = $base_work_dir.'/';
     if (!is_dir($document_path)) {
@@ -40,12 +42,13 @@ function hotpotatoes_init($base_work_dir) {
 }
 
 /**
- * Gets the title of the quizz file given as parameter.
+ * Gets the title of the quiz file given as parameter.
  * @param   string    File name
  * @param   string    File path
  * @return  string    The exercise title
  */
-function GetQuizName($fname, $fpath) {
+function GetQuizName($fname, $fpath)
+{
     $title = GetComment($fname);
     if (trim($title) == '') {
         if (file_exists($fpath.$fname)) {
@@ -72,9 +75,10 @@ function GetQuizName($fname, $fpath) {
  * @return  string    Comment from the database record
  * Added conditional to the table if is empty.
  */
-function GetComment($path, $course_code = '') {
+function GetComment($path, $course_code = '')
+{
     $dbTable = Database::get_course_table(TABLE_DOCUMENT);
-    $course_info = api_get_course_info($course_code);            
+    $course_info = api_get_course_info($course_code);
     $path = Database::escape_string($path);
     if (!empty($course_info) && !empty($path)) {
         $query = "SELECT comment FROM $dbTable WHERE c_id = {$course_info['real_id']}";
@@ -92,12 +96,14 @@ function GetComment($path, $course_code = '') {
  * @param    string    Comment to set
  * @return   string    Result of the database operation (Database::query will output some message directly on error anyway)
  */
-function SetComment($path, $comment) {
+function SetComment($path, $comment)
+{
     global $dbTable;
     $path = Database::escape_string($path);
     $comment = Database::escape_string($comment);
     $course_id = api_get_course_int_id();
-    $query = "UPDATE $dbTable SET comment='$comment' WHERE $course_id AND path='$path'";
+    $query = "UPDATE $dbTable SET comment='$comment'
+              WHERE $course_id AND path='$path'";
     $result = Database::query($query);
     return $result;
 }
@@ -107,7 +113,8 @@ function SetComment($path, $comment) {
  * @param    string    Urlencoded path
  * @return   string    The file contents or false on security error
  */
-function ReadFileCont($full_file_path) {
+function ReadFileCont($full_file_path)
+{
     if (empty($full_file_path)) {
         return false;
     }
@@ -125,17 +132,20 @@ function ReadFileCont($full_file_path) {
 }
 
 /**
- * Writes the file contents into the given filepath.
+ * Writes the file contents into the given file path.
  * @param    string    Urlencoded path
  * @param    string    The file contents
  * @return   boolean   True on success, false on security error
  */
-function WriteFileCont($full_file_path, $content) {
+function WriteFileCont($full_file_path, $content)
+{
     // Check if this is not an attack, trying to get into other directories or something like that.
     global $_course;
     if (Security::check_abs_path(dirname($full_file_path).'/', api_get_path(SYS_COURSE_PATH).$_course['path'].'/')) {
         // Check if this is not an attack, trying to upload a php file or something like that.
-        if (basename($full_file_path) != Security::filter_filename(basename($full_file_path))) { return false; }
+        if (basename($full_file_path) != Security::filter_filename(basename($full_file_path))) {
+            return false;
+        }
         if (!($fp = fopen(urldecode($full_file_path), 'w'))) {
             //die('Could not open Quiz input.');
         }
@@ -151,7 +161,8 @@ function WriteFileCont($full_file_path, $content) {
  * @param    string    An image tag (<img src="...." ...>)
  * @return   string    The image file name or an empty string
  */
-function GetImgName($imgtag) {
+function GetImgName($imgtag)
+{
     // Select src tag from img tag.
     $match = array();
     //preg_match('/(src=(["\'])1.*(["\'])1)/i', $imgtag, $match);            //src
@@ -182,7 +193,8 @@ function GetImgName($imgtag) {
  * @param    string    An image tag
  * @return   string    The image source or ""
  */
-function GetSrcName($imgtag) {
+function GetSrcName($imgtag)
+{
     // Select src tag from img tag.
     $match = array();
     preg_match("|(src=\".*\" )|U", $imgtag, $match);            //src
@@ -203,7 +215,8 @@ function GetSrcName($imgtag) {
  * @param    reference    Reference to a list of image parameters (emptied, then used to return results)
  * @param    reference    Reference to a counter of images (emptied, then used to return results)
  */
-function GetImgParams($fname, $fpath, &$imgparams, &$imgcount) {
+function GetImgParams($fname, $fpath, &$imgparams, &$imgcount)
+{
     // Select img tags from context.
     $imgparams = array();
     //phpinfo();
@@ -228,7 +241,8 @@ function GetImgParams($fname, $fpath, &$imgparams, &$imgcount) {
  * @param    array    List of image parameters
  * @return   string   String containing the hidden parameters built from the list given
  */
-function GenerateHiddenList($imgparams) {
+function GenerateHiddenList($imgparams)
+{
     $list = '';
     if (is_array($imgparams)) {
         while (list($int, $string) = each($imgparams)) {
@@ -244,7 +258,8 @@ function GenerateHiddenList($imgparams) {
  * @param    string       Node we are looking for in the array
  * @return   mixed        Node name or false if not found
  */
-function myarraysearch(&$array, $node) {
+function myarraysearch(&$array, $node)
+{
     $match = false;
     $tmp_array = array();
     for ($i = 0; $i < count($array); $i++) {
@@ -265,7 +280,8 @@ function myarraysearch(&$array, $node) {
  * @return   mixed            String given if found, false otherwise
  * @uses     myarraysearch    This function is just an additional layer on the myarraysearch() function
  */
-function CheckImageName(&$imgparams, $string) {
+function CheckImageName(&$imgparams, $string)
+{
     $checked = myarraysearch($imgparams, $string);
     return $checked;
 }
@@ -275,17 +291,17 @@ function CheckImageName(&$imgparams, $string) {
  * @param    string    The content to replace
  * @return   string    The modified content
  */
-function ReplaceImgTag($content) {
+function ReplaceImgTag($content)
+{
     $newcontent = $content;
     $matches = array();
     preg_match_all('(<img .*>)', $content, $matches);
-    $imgcount = 0;
     while (list($int, $match) = each($matches)) {
         while (list($key, $imgtag) = each($match)) {
             $imgname = GetSrcName($imgtag);
-            if ($imgname == '') {}                                // Valid or invalid image name.
-            else {
-
+            if ($imgname == '') {
+                // Valid or invalid image name.
+            } else {
                 $prehref = $imgname;
                 $posthref = basename($imgname);
                 $newcontent = str_replace($prehref, $posthref, $newcontent);
@@ -301,7 +317,8 @@ function ReplaceImgTag($content) {
  * @param    integer   Length to reach
  * @return   string    Modified folder name
  */
-function FillFolderName($name, $nsize) {
+function FillFolderName($name, $nsize)
+{
     $str = '';
     for ($i = 0; $i < $nsize - strlen($name); $i++) {
         $str .= '0';
@@ -315,7 +332,8 @@ function FillFolderName($name, $nsize) {
  * @param    string    Folder path
  * @return   string    Folder name (modified)
  */
-function GenerateHpFolder($folder) {
+function GenerateHpFolder($folder)
+{
     $filelist = array();
     if ($dir = @opendir($folder)) {
         while (($file = readdir($dir)) !== false) {
@@ -334,10 +352,12 @@ function GenerateHpFolder($folder) {
         $name = FillFolderName(mt_rand(1, 99999), 6);
         $checked = myarraysearch($filelist, $name);
         // As long as we find the name in the array, continue looping. As soon as we have a new element, quit.
-        if ($checked) { $w = 1;    }
-        else { $w = 0; }
+        if ($checked) {
+            $w = 1;
+        } else {
+            $w = 0;
+        }
     } while ($w == 1);
-
     return $name;
 }
 
@@ -346,18 +366,20 @@ function GenerateHpFolder($folder) {
  * @param    string    Path
  * @return   string    Folder name stripped down
  */
-function GetFolderName($fname) {
+function GetFolderName($fname)
+{
     $name = explode('/', $fname);
     $name = $name[sizeof($name) - 2];
     return $name;
 }
 
 /**
- * Gets the folder path (withouth the name of the folder itself) ?
+ * Gets the folder path (with out the name of the folder itself) ?
  * @param    string    Path
  * @return   string    Path stripped down
  */
-function GetFolderPath($fname) {
+function GetFolderPath($fname)
+{
     $str = '';
     $name = explode('/', $fname);
     for ($i = 0; $i < sizeof($name) - 1; $i++) {
@@ -371,7 +393,8 @@ function GetFolderPath($fname) {
  * @param    string    Path
  * @return   integer   1 if a subfolder was found, 0 otherwise
  */
-function CheckSubFolder($path) {
+function CheckSubFolder($path)
+{
     $folder = GetFolderPath($path);
     $dflag = 0;
     if ($dir = @opendir($folder)) {
@@ -396,7 +419,8 @@ function CheckSubFolder($path) {
  * @param    integer    User id
  * @return   void       No return value, but echoes results
  */
-function HotPotGCt($folder, $flag, $user_id) {
+function HotPotGCt($folder, $flag, $user_id)
+{
     // Garbage Collector
     $filelist = array();
     if ($dir = @opendir($folder)) {
@@ -409,7 +433,7 @@ function HotPotGCt($folder, $flag, $user_id) {
                     } else {
                         $filelist[] = $file;
                     }
-               }
+                }
             }
         }
         closedir($dir);

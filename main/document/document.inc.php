@@ -557,7 +557,7 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
             }
         }
 
-        //Move button
+        // Move button.
         if ($is_certificate_mode || in_array($path, DocumentManager::get_system_folders())) {
             $modify_icons .= '&nbsp;' . Display::return_icon('move_na.png', get_lang('Move'), array(), ICON_SIZE_SMALL) . '</a>';
         } else {
@@ -586,7 +586,7 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
             }
         }
 
-        //Delete button
+        // Delete button
         if (in_array($path, DocumentManager::get_system_folders())) {
             $modify_icons .= '&nbsp;' . Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'), array(), ICON_SIZE_SMALL);
         } else {

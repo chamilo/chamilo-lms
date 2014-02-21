@@ -531,7 +531,7 @@ if (!empty($docs_and_folders)) {
         if ($file['filetype'] == 'file') {
             $path_info = pathinfo($file['path']);
             $extension = strtolower($path_info['extension']);
-            //@todo use a js loop to autogenerate this code
+            //@todo use a js loop to auto generate this code
             if (in_array($extension, array('ogg', 'mp3', 'wav'))) {
                 // Get the document data from the ID
                 $document_data = DocumentManager::get_document_data_by_id($file['id'], api_get_course_id(), false, $session_id);

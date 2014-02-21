@@ -634,6 +634,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 break;
             case 'accessoverview':
                $tool_name = get_lang('DisplayAccessOverview');
+               $a = $an = 'search_session_all';
                 break;
             case 'surveyoverview':
                $tool_name = get_lang('DisplaySurveyOverview');

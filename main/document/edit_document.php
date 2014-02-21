@@ -397,7 +397,13 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 
 	//if ($extension == 'htm' || $extension == 'html')
 	// HotPotatoes tests are html files, but they should not be edited in order their functionality to be preserved.
-	if (($extension == 'htm' || $extension == 'html') && stripos($dir, '/HotPotatoes_files') === false) {
+
+    $showSystemFolders = api_get_course_setting('show_system_folders');
+    $condition = stripos($dir, '/HotPotatoes_files') === false;
+    if ($showSystemFolders == 1) {
+        $condition = true;
+    }
+	if (($extension == 'htm' || $extension == 'html') && $condition) {
 		if (empty($readonly) && $readonly == 0) {
 			$_SESSION['showedit'] = 1;
             $form->add_html_editor('content','', false, false, $html_editor_config);

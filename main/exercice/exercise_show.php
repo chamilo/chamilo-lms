@@ -166,7 +166,7 @@ if (!empty($track_exercise_info)) {
 	// if the results_disabled of the Quiz is 1 when block the script
 	$result_disabled		= $track_exercise_info['results_disabled'];
 
-	if (!(api_is_platform_admin() || api_is_course_admin()) ) {
+	if (!(api_is_platform_admin() || api_is_course_admin() || api_is_course_coach()) ) {
 		if ($result_disabled == 1) {
 			//api_not_allowed();
 			$show_results = false;

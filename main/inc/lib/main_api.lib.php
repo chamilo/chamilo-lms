@@ -3133,7 +3133,8 @@ function api_get_item_visibility($_course, $tool, $id, $session=0)
     				tool = '$tool' AND
     				ref = $id AND
     				(id_session = $session OR id_session = 0)
-    		ORDER BY id_session DESC, lastedit_date DESC";
+    		ORDER BY id_session DESC, lastedit_date DESC
+            LIMIT 1";
     $res = Database::query($sql);
     if ($res === false || Database::num_rows($res) == 0) { return -1; }
     $row = Database::fetch_array($res);

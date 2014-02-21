@@ -2572,7 +2572,7 @@ class SessionManager
             $sql .= " AND c.title LIKE '%$course_name%' ";
         }
 
-        $sql .= "ORDER BY title;";
+        $sql .= " ORDER BY title;";
 		$result 	= Database::query($sql);
 		$num_rows 	= Database::num_rows($result);
 		$courses = array();

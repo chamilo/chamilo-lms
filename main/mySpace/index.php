@@ -979,6 +979,31 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 
 	if ($display === 'useroverview') {
 		MySpace::display_tracking_user_overview();
+    } else if($display == 'teacheroverview') {
+        $file_handle = fopen("/tmp/list.sql", "r");
+        while (!feof($file_handle)) {
+                $line = fgets($file_handle);
+                $courses = SessionManager::get_course_list_by_session_id(trim($line));
+                $course = current($courses);
+                $data[] = current(Tracking::get_teachers_progress_by_course($course['id'], $course['id_session']));
+        }
+        fclose($file_handle);
+        echo get_lang('Downloading');
+        MySpace::export_csv(
+            array(
+                'Name',
+                'Sección',
+                'tutor',
+                'carga de archivos',
+                'publicación de enlaces',
+                'foros',
+                'tareas',
+                'wikis',
+                'anuncios',
+                ),
+            $data
+        );
+
 	} else if($display == 'sessionoverview') {
 		MySpace::display_tracking_session_overview();
 	} else if($display == 'accessoverview') {

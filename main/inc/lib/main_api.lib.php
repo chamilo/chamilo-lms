@@ -3124,10 +3124,10 @@ function api_get_item_visibility($_course, $tool, $id, $session=0)
         return -1;
     }
     $tool = Database::escape_string($tool);
-    $id = Database::escape_string($id);
+    $id = intval($id);
     $session = (int) $session;
     $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $course_id	 = $_course['real_id'];
+    $course_id	 = intval($_course['real_id']);
     $sql = "SELECT visibility FROM $TABLE_ITEMPROPERTY
     		WHERE 	c_id = $course_id AND
     				tool = '$tool' AND
@@ -3135,6 +3135,7 @@ function api_get_item_visibility($_course, $tool, $id, $session=0)
     				(id_session = $session OR id_session = 0)
     		ORDER BY id_session DESC, lastedit_date DESC
             LIMIT 1";
+
     $res = Database::query($sql);
     if ($res === false || Database::num_rows($res) == 0) { return -1; }
     $row = Database::fetch_array($res);

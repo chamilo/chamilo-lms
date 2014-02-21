@@ -472,13 +472,14 @@ class DocumentManager
      * @param int $to_group_id
      * @param int $to_user_id
      * @param boolean $can_see_invisible
+     * @param boolean $search
      * @return array with all document data
      */
     public static function get_all_document_data(
         $_course,
         $path = '/',
         $to_group_id = 0,
-        $to_user_id = NULL,
+        $to_user_id = null,
         $can_see_invisible = false,
         $search = false
     ) {
@@ -522,14 +523,14 @@ class DocumentManager
                        ." last.lastedit_date, "
                        ." last.visibility, "
                        ." last.insert_user_id "
-                   ." FROM $TABLE_ITEMPROPERTY AS last INNER JOIN $TABLE_DOCUMENT AS docs "
-                       ." ON (docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND "
-                       ." docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']}) "
-                   ." WHERE "
-                       ." docs.path LIKE '" . $path . $added_slash . "%' AND "
-                       ." docs.path NOT LIKE '" . $path . $added_slash . "%/%' AND "
-                       .$to_field." = ".$to_value." AND "
-                       ." last.visibility ".$visibility_bit.$condition_session;
+               ." FROM $TABLE_ITEMPROPERTY AS last INNER JOIN $TABLE_DOCUMENT AS docs "
+                   ." ON (docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND "
+                   ." docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']}) "
+               ." WHERE "
+                   ." docs.path LIKE '" . $path . $added_slash . "%' AND "
+                   ." docs.path NOT LIKE '" . $path . $added_slash . "%/%' AND "
+                   .$to_field." = ".$to_value." AND "
+                   ." last.visibility ".$visibility_bit.$condition_session;
 
         $result = Database::query($sql);
 
@@ -634,10 +635,10 @@ class DocumentManager
 
     /**
      * Gets the paths of all folders in a course
-     * can show all folders (exept for the deleted ones) or only visible ones
+     * can show all folders (except for the deleted ones) or only visible ones
      * @param array $_course
-     * @param boolean $can_see_invisible
      * @param int $to_group_id
+     * @param boolean $can_see_invisible
      * @return array with paths
      */
     public static function get_all_document_folders($_course, $to_group_id = '0', $can_see_invisible = false)
@@ -775,6 +776,8 @@ class DocumentManager
      * @param int    $user_id id of the current user
      * @param string $file path stored in the database
      * @param int    $document_id in case you dont have the file path ,insert the id of the file here and leave $file in blank ''
+     * @param bool $to_delete
+     * @param int $sessionId
      * @return boolean true/false
      * */
     public static function check_readonly(
@@ -1241,21 +1244,21 @@ class DocumentManager
      * @param string $title
      * @param string $description
      * @param int $document_id_for_template the document id
-     * @param string $couse_code
+     * @param string $course_code
      * @param int $user_id
      */
-    public static function set_document_as_template($title, $description, $document_id_for_template, $couse_code, $user_id, $image)
+    public static function set_document_as_template($title, $description, $document_id_for_template, $course_code, $user_id, $image)
     {
         // Database table definition
         $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
 
         // creating the sql statement
-        $sql = "INSERT INTO " . $table_template . "
-                    (title, description, course_code, user_id, ref_doc, image)
+        $sql = "INSERT INTO $table_template
+                (title, description, course_code, user_id, ref_doc, image)
                 VALUES (
                     '" . Database::escape_string($title) . "',
                     '" . Database::escape_string($description) . "',
-                    '" . Database::escape_string($couse_code) . "',
+                    '" . Database::escape_string($course_code) . "',
                     '" . Database::escape_string($user_id) . "',
                     '" . Database::escape_string($document_id_for_template) . "',
                     '" . Database::escape_string($image) . "')";

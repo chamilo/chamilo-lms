@@ -161,7 +161,12 @@
     padding-left: 0px;
     }
 }
-
+@media (width: 600px){
+    .bx-pager {
+        width: 700px;
+        margin-top: -20px;
+    }
+}
 @media (min-width: 601px) and (max-width: 800px) {
     #container-slider #slider li img {
       max-height: 300px;

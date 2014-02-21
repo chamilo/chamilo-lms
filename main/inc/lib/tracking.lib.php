@@ -351,13 +351,22 @@ class Tracking
     /**
      * Gets the score average from all tests in a course by student
      *
-     * @param    mixed		Student(s) id
-     * @param    string 	Course code
-     * @param    int    	Exercise id (optional), filtered by exercise
-     * @param    int    	Session id (optional), if param $session_id is null it'll return results including sessions, 0 = session is not filtered
-     * @return   string 	value (number %) Which represents a round integer about the score average.
+     * @param $student_id
+     * @param $course_code
+     * @param int $exercise_id
+     * @param null $session_id
+     * @param int $active_filter    2 for consider all tests
+     *                              1 for active <> -1
+     *                              0 for active <> 0
+     * @param int $into_lp  1 for all exercises
+     *                      0 for whitout LP
+     * @internal param \Student $mixed id
+     * @internal param \Course $string code
+     * @internal param \Exercise $int id (optional), filtered by exercise
+     * @internal param \Session $int id (optional), if param $session_id is null it'll return results including sessions, 0 = session is not filtered
+     * @return   string    value (number %) Which represents a round integer about the score average.
      */
-    public static function get_avg_student_exercise_score($student_id, $course_code, $exercise_id = 0, $session_id = null) {
+    public static function get_avg_student_exercise_score($student_id, $course_code, $exercise_id = 0, $session_id = null, $active_filter = 1, $into_lp = 0) {
     	$course_info = api_get_course_info($course_code);
 
     	if (!empty($course_info)) {
@@ -378,8 +387,23 @@ class Tracking
     			$session_id = intval($session_id);
     			$condition_session = " AND session_id = $session_id ";
     		}
+            if ($active_filter == 1) {
+                $condition_active = 'AND active <> -1';
+            } elseif ($active_filter == 0) {
+                $condition_active = 'AND active <> 0';
+            } else {
+                $condition_active = '';
+            }
+            $condition_into_lp = '';
+            $select_lp_id = '';
+            if ($into_lp == 0) {
+                $condition_into_lp = 'AND orig_lp_id = 0 AND orig_lp_item_id = 0';
+            } else {
+                $select_lp_id = ', orig_lp_id as lp_id ';
+            }
+
     		$sql = "SELECT count(id) FROM $tbl_course_quiz
-    				WHERE c_id = {$course_info['real_id']} AND active <> -1 $condition_quiz ";
+    				WHERE c_id = {$course_info['real_id']} $condition_active $condition_quiz ";
     		$count_quiz = Database::fetch_row(Database::query($sql));
 
     		if (!empty($count_quiz[0]) && !empty($student_id)) {
@@ -392,7 +416,7 @@ class Tracking
 
     			if (empty($exercise_id)) {
     				$sql = "SELECT id FROM $tbl_course_quiz
-    						WHERE c_id = {$course_info['real_id']} AND active <> -1 $condition_quiz";
+    						WHERE c_id = {$course_info['real_id']} $condition_active $condition_quiz";
                     $result = Database::query($sql);
                     $exercise_list = array();
     				$exercise_id = null;
@@ -409,18 +433,19 @@ class Tracking
     			$count_quiz = Database::fetch_row(Database::query($sql));
 
     			$sql = "SELECT SUM(exe_result/exe_weighting*100) as avg_score, COUNT(*) as num_attempts
+    			        $select_lp_id
                         FROM $tbl_stats_exercise
                         WHERE exe_exo_id IN ('".$exercise_id."')
     			        $condition_user AND
-                        orig_lp_id = 0 AND
                         status = '' AND
-                        exe_cours_id = '$course_code' AND
-                        orig_lp_item_id = 0 $condition_session
+                        exe_cours_id = '$course_code'
+                        $condition_session
+                        $condition_into_lp
                         ORDER BY exe_date DESC";
 
     			$res = Database::query($sql);
     			$row = Database::fetch_array($res);
-    			$quiz_avg_score = 0;
+    			$quiz_avg_score = null;
 
     			if (!empty($row['avg_score'])) {
     				$quiz_avg_score = round($row['avg_score'],2);
@@ -432,7 +457,26 @@ class Tracking
     			if (is_array($student_id)) {
     				$quiz_avg_score = round($quiz_avg_score / count($student_id), 2);
     			}
-    			return $quiz_avg_score;
+                if ($into_lp == 0) {
+                    return $quiz_avg_score;
+                } else {
+                    if (!empty($row['lp_id'])) {
+                        $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
+                        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+                        $sql = "SELECT lp.name FROM $tbl_lp as lp, $tbl_course as c WHERE
+                            c.code = '$course_code' AND
+                            lp.id = ".$row['lp_id']." AND
+                            lp.c_id = c.id
+                            LIMIT 1;
+                            ";
+                        $result = Database::query($sql);
+                        $row_lp = Database::fetch_row($result);
+                        $lp_name = $row_lp[0];
+                        return array($quiz_avg_score, $lp_name);
+                    } else {
+                        return array($quiz_avg_score, null);
+                    }
+                }
     		}
     	}
     	return null;
@@ -441,14 +485,23 @@ class Tracking
 
     /**
      * Get count student's exercise COMPLETED attempts
-     * @param    int     Student id
-     * @param    string    Course code
-     * @param    int        Exercise id
-     * @param    int        Learning path id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
-     * @param    int        Learning path item id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
+     * @param $student_id
+     * @param $course_code
+     * @param $exercise_id
+     * @param int $lp_id
+     * @param int $lp_item_id
+     * @param int $session_id
+     * @param int $find_all_lp  0 = just LP specified
+     *                          1 = LP specified or whitout LP,
+     *                          2 = all rows
+     * @internal param \Student $int id
+     * @internal param \Course $string code
+     * @internal param \Exercise $int id
+     * @internal param \Learning $int path id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
+     * @internal param \Learning $int path item id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
      * @return  int     count of attempts
      */
-    public static function count_student_exercise_attempts($student_id, $course_code, $exercise_id, $lp_id = 0, $lp_item_id = 0, $session_id = 0) {
+    public static function count_student_exercise_attempts($student_id, $course_code, $exercise_id, $lp_id = 0, $lp_item_id = 0, $session_id = 0, $find_all_lp = 0) {
     	$course_code = Database::escape_string($course_code);
     	$student_id  = intval($student_id);
     	$exercise_id = intval($exercise_id);
@@ -465,10 +518,16 @@ class Tracking
                 WHERE  ex.exe_cours_id = '$course_code'
                 AND ex.exe_exo_id = $exercise_id
                 AND status = ''
-                AND orig_lp_id = $lp_id
-                AND orig_lp_item_id = $lp_item_id
                 AND exe_user_id= $student_id
                 AND session_id = $session_id ";
+
+        if ($find_all_lp == 1) {
+            $sql .= "AND (orig_lp_id = $lp_id OR orig_lp_id = 0)
+                AND (orig_lp_item_id = $lp_item_id OR orig_lp_item_id = 0)";
+        } elseif ($find_all_lp == 0) {
+            $sql .= "AND orig_lp_id = $lp_id
+                AND orig_lp_item_id = $lp_item_id";
+        }
 
     	$rs = Database::query($sql);
     	$row = Database::fetch_row($rs);

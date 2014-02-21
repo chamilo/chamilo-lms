@@ -545,6 +545,10 @@ The more frequent ones have been marked with *
         clear: both;
         width: 100%;
     }
+    #top_main_content .menu-column #user_image_block {
+        display: none;
+        visibility: hidden;
+    }
     #top_main_content .menu-column #reservation_block, #top_main_content .menu-column #notice_block, #top_main_content .menu-column #help_block {
       clear: both;
       display: inline-block;
@@ -570,6 +574,10 @@ The more frequent ones have been marked with *
       background-image: none;
       float: left;
       margin-right: 10px;
+    }
+    #top_main_content .menu-column .block_user_info {
+        float: left;
+        width: 280px;
     }
 }
 
@@ -661,9 +669,7 @@ The more frequent ones have been marked with *
         display: none;
         visibility: hidden;
     }
-    #container-slider {
-      padding-left: 0;
-    }
+    
 }
 
 /* LARGE DESKTOP SCREENS */

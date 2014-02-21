@@ -903,7 +903,6 @@ function get_count_exam_hotpotatoes_results($in_hotpot_path) {
  */
 function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_column, $in_direction, $in_hotpot_path, $in_get_count = false, $where_condition = null)
 {
-    $tab_res = array();
     $course_code = api_get_course_id();
     // by default in_column = 1 If parameters given, it is the name of the column witch is the bdd field name
     if ($in_column == 1) {
@@ -915,10 +914,11 @@ function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_co
     $in_number_of_items = intval($in_number_of_items);
     $in_from = intval($in_from);
 
-    $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-    $TBL_USER                   = Database :: get_main_table(TABLE_MAIN_USER);
+    $TBL_TRACK_HOTPOTATOES = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+    $TBL_USER = Database :: get_main_table(TABLE_MAIN_USER);
 
-    $sql = "SELECT * FROM $TBL_TRACK_HOTPOTATOES thp JOIN $TBL_USER u ON thp.exe_user_id = u.user_id
+    $sql = "SELECT * FROM $TBL_TRACK_HOTPOTATOES thp
+            JOIN $TBL_USER u ON thp.exe_user_id = u.user_id
             WHERE thp.exe_cours_id = '$course_code' AND exe_name LIKE '$in_hotpot_path%'";
 
     // just count how many answers
@@ -932,18 +932,31 @@ function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_co
             LIMIT $in_from, $in_number_of_items";
 
     $res = Database::query($sql);
+    $result = array();
+    $apiIsAllowedToEdit = api_is_allowed_to_edit();
+    $urlBase = api_get_path(WEB_CODE_PATH).'exercice/hotpotatoes_exercise_report.php?action=delete&'.api_get_cidreq().'&id=';
     while ($data = Database::fetch_array($res)) {
-        $tab_one_res = array();
-        $tab_one_res['firstname'] = $data['firstname'];
-        $tab_one_res['lastname'] = $data['lastname'];
-        $tab_one_res['username'] = $data['username'];
-        $tab_one_res['group_name'] = implode("<br/>",GroupManager::get_user_group_name($data['user_id']));
-        $tab_one_res['exe_date'] = $data['exe_date'];
-        $tab_one_res['score'] = $data['exe_result'].'/'.$data['exe_weighting'];
-        $tab_one_res['actions'] = "";
-        $tab_res[] = $tab_one_res;
+        $actions = null;
+
+        if ($apiIsAllowedToEdit) {
+            $url = $urlBase.$data['id'].'&path='.$data['exe_name'];
+            $actions = Display::url(
+                Display::return_icon('delete.png', get_lang('Delete')),
+                $url
+            );
+        }
+
+        $result[] = array(
+            'firstname' => $data['firstname'],
+            'lastname' => $data['lastname'],
+            'username' => $data['username'],
+            'group_name' => implode("<br/>", GroupManager::get_user_group_name($data['user_id'])),
+            'exe_date' => $data['exe_date'],
+            'score' => $data['exe_result'].' / '.$data['exe_weighting'],
+            'actions' => $actions,
+        );
     }
-    return $tab_res;
+    return $result;
 }
 
 /**

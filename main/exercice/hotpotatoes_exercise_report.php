@@ -9,6 +9,8 @@
 /**
  * Code
  */
+use ChamiloSession as Session;
+
 // name of the language file that needs to be included
 $language_file = array('exercice');
 
@@ -38,7 +40,7 @@ require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'statsUtils.lib.inc.php';
 
 // document path
-$documentPath = api_get_path(SYS_COURSE_PATH) . $_course['path'] . "/document";
+$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 
 /*	Constants and variables */
 $is_allowedToEdit           = api_is_allowed_to_edit(null, true) || api_is_drh();
@@ -93,6 +95,19 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     $actions .= '<a href="exercice.php">' . Display :: return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 
+if ($is_allowedToEdit) {
+    $action = isset($_GET['action']) ? $_GET['action'] : null;
+    switch ($action) {
+        case 'delete':
+            $fileToDelete = isset($_GET['id']) ? $_GET['id'] : null;
+            deleteAttempt($fileToDelete);
+            Session::write('message', Display::return_message(get_lang('ItemDeleted')));
+            break;
+
+    }
+}
+
+
 //Deleting an attempt
 //if ( ($is_allowedToEdit || $is_tutor || api_is_coach()) && $_GET['delete'] == 'delete' && !empty ($_GET['did']) && $locked == false) {
 //    $exe_id = intval($_GET['did']);
@@ -105,6 +120,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 //        exit;
 //    }
 //}
+$nameTools = get_lang('Results');
 
 if ($is_allowedToEdit || $is_tutor) {
     $nameTools = get_lang('StudentScore');
@@ -116,9 +132,9 @@ if ($is_allowedToEdit || $is_tutor) {
 } else {
     $interbreadcrumb[] = array("url" => "exercice.php","name" => get_lang('Exercices'));
     $objExerciseTmp = new Exercise();
-    if ($objExerciseTmp->read($exercise_id)) {
+    /*if ($objExerciseTmp->read($exercise_id)) {
         $nameTools = get_lang('Results').': '.$objExerciseTmp->name;
-    }
+    }*/
 }
 
 Display :: display_header($nameTools);
@@ -167,17 +183,16 @@ $form->setDefaults(array('export_format' => 'csv'));
 $extra .= $form->return_form();
 $extra .= '</div>';
 
-if ($is_allowedToEdit)
+if ($is_allowedToEdit) {
     echo $extra;
+}
 
 echo $actions;
 
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_hotpotatoes_exercise_results&path='.$hotpotatoes_path.'&filter_by_user='.$filter_user;
-
-//$activeurl = '?sidx=session_active';
 $action_links = '';
 
-//Generating group list
+// Generating group list
 
 $group_list = GroupManager::get_group_list();
 $group_parameters = array('group_all:'.get_lang('All'),'group_none:'.get_lang('None'));
@@ -190,8 +205,8 @@ if (!empty($group_parameters)) {
 }
 
 if ($is_allowedToEdit || $is_tutor) {
-	// The order is important you need to check the the $column variable in the model.ajax.php file
-	$columns = array(
+    // The order is important you need to check the the $column variable in the model.ajax.php file
+    $columns = array(
         get_lang('FirstName'),
         get_lang('LastName'),
         get_lang('LoginName'),
@@ -225,11 +240,15 @@ if ($is_allowedToEdit || $is_tutor) {
     }';
 } else {
     //The order is important you need to check the the $column variable in the model.ajax.php file
-	$columns = array(get_lang('StartDate'), get_lang('Score'), get_lang('Actions'));
+    $columns = array(
+        get_lang('StartDate'),
+        get_lang('Score'),
+        get_lang('Actions')
+    );
 
-  //Column config
-  // @todo fix search firstname/lastname that doesn't work. rmove search for the moment
-	$column_model  = array(
+    //Column config
+    // @todo fix search firstname/lastname that doesn't work. rmove search for the moment
+    $column_model  = array(
         array('name'=>'exe_date',		    'index'=>'exe_date',		'width'=>'60',   'align'=>'left', 'search' => 'false'),
         array('name'=>'score',			    'index'=>'exe_result',	'width'=>'50',   'align'=>'left', 'search' => 'false'),
         array('name'=>'actions',        'index'=>'actions',     'width'=>'60',  'align'=>'left', 'search' => 'false')
@@ -241,12 +260,8 @@ $extra_params['autowidth'] = 'true';
 
 //height auto
 $extra_params['height'] = 'auto';
-//$extra_params['excel'] = 'excel';
-//$extra_params['rowList'] = array(20, 50, 100, 500, 1000, 2000, 5000, 10000);
-
 ?>
 <script>
-
 function setSearchSelect(columnName) {
     $("#results").jqGrid('setColProp', columnName,
     {
@@ -287,8 +302,8 @@ function exportExcel() {
 }
 
 $(function() {
-    <?php
-    echo Display::grid_js('results', $url,$columns,$column_model, $extra_params, array(), $action_links, true);
+<?php
+    echo Display::grid_js('results', $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 
     if ($is_allowedToEdit || $is_tutor) { ?>
 
@@ -323,5 +338,7 @@ $(function() {
 </form>
 <?php
 
+$message = Session::read('message');
+echo isset($message) ? $message : null;
 echo Display::grid_html('results');
 Display :: display_footer();

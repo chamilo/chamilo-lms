@@ -448,3 +448,15 @@ function HotPotGCt($folder, $flag, $user_id)
         }
     }
 }
+
+/**
+ * Deletes an attempt from TABLE_STATISTIC_TRACK_E_HOTPOTATOES
+ * @param int $id
+ */
+function deleteAttempt($id)
+{
+    $table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+    $id = intval($id);
+    $sql = "DELETE FROM $table WHERE id = $id";
+    Database::query($sql);
+}

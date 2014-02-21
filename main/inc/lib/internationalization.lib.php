@@ -3693,13 +3693,18 @@ function api_detect_encoding($string, $language = null) {
     $encodings = api_get_valid_encodings();
     foreach ($encodings as & $encoding) {
         if (api_is_encoding_supported($encoding) && !api_is_utf8($encoding)) {
-            $result_array = & _api_compare_n_grams(
-                _api_generate_n_grams(
-                    api_substr($string, 0, LANGUAGE_DETECT_MAX_LENGTH, $encoding),
-                    $encoding
-                ),
+            $stringToParse = api_substr($string, 0, LANGUAGE_DETECT_MAX_LENGTH, $encoding);
+
+            $strintToParse2 = _api_generate_n_grams(
+                $stringToParse,
                 $encoding
             );
+
+            $result_array = _api_compare_n_grams(
+                $strintToParse2,
+                $encoding
+            );
+
             if (!empty($result_array)) {
                 list($key, $delta_points) = each($result_array);
                 if ($delta_points < $delta_points_min) {

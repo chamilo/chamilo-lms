@@ -235,7 +235,7 @@ $introduction_section .= '<div class="row course-tools-intro"><div class="span12
 $introduction_section .=  $thematic_description_html;
 $introduction_section .=  '</div>';
 
-$introduction_section .=  '<div class="span12"><div class="page-course-intro">';
+$introduction_section .=  '<div class="home-course-intro span12"><div class="page-course-intro">';
 if ($intro_dispDefault) {
 	$intro_content = $intro_content;
 	if (!empty($intro_content))	{

@@ -273,7 +273,7 @@ a:active {
 /*CSS PARA CONTENIDO DE CURSO INTRODUCCION*/
 
 .page-course-intro{
-    padding: 3em;
+    padding: 2em;
     border: 1px solid #DDDDDD;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
@@ -343,24 +343,16 @@ a:active {
 }
 #course_tools .course-title-tools h3 {
     margin-top: 10px;
-    background-color:#0191C7;
-    color: #FFFFFF;
-    font-weight: bold;
-    font-size: 18px;
-    padding: 5px 5px 5px 10px;
-    width: 250px;
-    -webkit-border-top-left-radius: 10px;
-    -webkit-border-top-right-radius: 10px;
-    -moz-border-radius-topleft: 10px;
-    -moz-border-radius-topright: 10px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+    color: #0191C7;
+    font-weight: normal;
+    
+    
 }
 .page-header {
   border-bottom-color: #0191C7;
   border-bottom-style: solid;
-  border-bottom-width: 2px;
-  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  border-bottom-width: 1px;
+  box-shadow: none;
   padding-bottom: 0px;
 }
 .well_border{
@@ -410,7 +402,7 @@ footer {
     background-image: none;
     background-repeat:repeat-x;    
     color:#ffffff;
-    border-top: 7px solid #60a5d1;   
+    border-top: none;   
 }
 footer .container .row {
   padding-top: 5px;

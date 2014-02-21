@@ -507,7 +507,7 @@ The more frequent ones have been marked with *
         display: none;
     }
     .section-mycampus .hot-course-box, .section-mycourses .course-box {
-        width: 660px;
+        width: 95%;
     }
      #top_main_content .span9 {
         float: left;
@@ -536,6 +536,10 @@ The more frequent ones have been marked with *
 
     footer .container .row {
         padding-top: 15px;
+    }
+    .social-menu .social-background-content .thumbnail{
+        background-color: #FFFFFF;
+        border:none;
     }
 }
 
@@ -580,14 +584,15 @@ The more frequent ones have been marked with *
         width: 280px;
     }
     .section-mycampus .hot-course-box, .section-mycourses .course-box {
-        width: 535px;
+        width: 94%;
     }
     .course-box-thumbnail-box{
         float: left;
     }
-    #main_content .course-box .row .span7 .row .span6 h3 {
-        font-size: 16px;
+    #announcements{
+        clear: both;
     }
+    
 
 }
 

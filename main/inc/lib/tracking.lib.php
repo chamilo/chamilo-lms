@@ -3560,31 +3560,46 @@ class Tracking
                 }
             }
             // Now fill questions data. Query all questions and answers for this test to avoid
-            $sqlQuestions = "SELECT tq.c_id, tq.id as question_id, tq.question, tqa.id_auto, tqa.answer, tqa.correct, tq.position
+            $sqlQuestions = "SELECT tq.c_id, tq.id as question_id, tq.question, tqa.id_auto, 
+                                    tqa.answer, tqa.correct, tq.position, tqa.id_auto as answer_id
                                FROM $tquiz_question tq, $tquiz_answer tqa
                                WHERE tqa.question_id =tq.id and tqa.c_id = tq.c_id
                                  AND tq.c_id = $courseIdx AND tq.id IN (".implode(',',$questionIds).")";
+
             $resQuestions = Database::query($sqlQuestions);
+            $answer = array();
             while ($rowQuestion = Database::fetch_assoc($resQuestions)) {
-                $questionIds[$rowQuestion['question_id']] = array('position' => $rowQuestion['position'], 'question' => $rowQuestion['question']);
-                $answerIds[$rowQuestion['question_id']] = array('answer' => $rowQuestion['answer'], 'correct' =>$rowQuestion['correct']);
+                $questionId = $rowQuestion['question_id'];
+                $answerId = $rowQuestion['answer_id'];
+                $answer[$questionId][$answerId] = array(
+                                                        'position' => $rowQuestion['position'],
+                                                        'question' => $rowQuestion['question'],
+                                                        'answer' => $rowQuestion['answer'],
+                                                        'correct' => $rowQuestion['correct']
+                                                       );
+                $question[$questionId]['question'] = $rowQuestion['question'];
+                
             }
+            
             // Now fill users data
             $sqlUsers = "SELECT user_id, username, lastname, firstname FROM $tuser WHERE user_id IN (".implode(',',$userIds).")";
             $resUsers = Database::query($sqlUsers);
             while ($rowUser = Database::fetch_assoc($resUsers)) {
                 $users[$rowUser['user_id']] = $rowUser;
             }
+            
             foreach ($data as $id => $row) {
+                $rowQuestId = $row['question_id'];
+                $rowAnsId = $row['answer_id'];
+                
                 $data[$id]['session'] = $sessions[$row['session_id']]['name'];
                 $data[$id]['firstname'] = $users[$row['user_id']]['firstname'];
                 $data[$id]['lastname'] = $users[$row['user_id']]['lastname'];
                 $data[$id]['username'] = $users[$row['user_id']]['username'];
-                $data[$id]['answer'] = $answerIds[$row['question_id']]['answer'];
-                $data[$id]['correct'] = $answerIds[$row['question_id']]['correct'];
-                $data[$id]['correct'] = ($data[$id]['correct'] == 0 ? get_lang('No') : get_lang('Yes'));
-                $data[$id]['question'] = $questionIds[$row['question_id']]['question'];
-                $data[$id]['question_id'] = $questionIds[$row['question_id']]['position'];
+                $data[$id]['answer'] = $answer[$rowQuestId][$rowAnsId]['answer'];
+                $data[$id]['correct'] = ($answer[$rowQuestId][$rowAnsId]['correct'] == 0 ? get_lang('No') : get_lang('Yes'));
+                $data[$id]['question'] = $question[$questionId]['question'];
+                $data[$id]['question_id'] = $rowQuestId;
             }
 
             /*

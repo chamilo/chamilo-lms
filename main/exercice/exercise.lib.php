@@ -883,10 +883,24 @@ function get_count_exam_results($exercise_id, $extra_where_conditions) {
     return $count;
 }
 
+/**
+ * @param string $in_hotpot_path
+ * @return int
+ */
 function get_count_exam_hotpotatoes_results($in_hotpot_path) {
     return get_exam_results_hotpotatoes_data(0, 0, '', '', $in_hotpot_path, true, '');
 }
 
+/**
+ * @param int $in_from
+ * @param int $in_number_of_items
+ * @param int $in_column
+ * @param int  $in_direction
+ * @param string $in_hotpot_path
+ * @param bool $in_get_count
+ * @param null $where_condition
+ * @return array|int
+ */
 function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_column, $in_direction, $in_hotpot_path, $in_get_count = false, $where_condition = null)
 {
     $tab_res = array();
@@ -895,6 +909,11 @@ function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_co
     if ($in_column == 1) {
         $in_column = 'firstname';
     }
+    $in_hotpot_path = Database::escape_string($in_hotpot_path);
+    $in_direction = Database::escape_string($in_direction);
+    $in_column = Database::escape_string($in_column);
+    $in_number_of_items = intval($in_number_of_items);
+    $in_from = intval($in_from);
 
     $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
     $TBL_USER                   = Database :: get_main_table(TABLE_MAIN_USER);
@@ -907,11 +926,10 @@ function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_co
         $res = Database::query($sql);
         return Database::num_rows($res);
     }
-
-    $in_column = Database::escape_string($in_column);
-
     // get a number of sorted results
-    $sql .= " $where_condition ORDER BY $in_column $in_direction  LIMIT $in_from, $in_number_of_items";
+    $sql .= " $where_condition
+            ORDER BY $in_column $in_direction
+            LIMIT $in_from, $in_number_of_items";
 
     $res = Database::query($sql);
     while ($data = Database::fetch_array($res)) {
@@ -950,7 +968,6 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     $TBL_EXERCICES              = Database :: get_course_table(TABLE_QUIZ_TEST);
     $TBL_GROUP_REL_USER         = Database :: get_course_table(TABLE_GROUP_USER);
     $TBL_GROUP                  = Database :: get_course_table(TABLE_GROUP);
-
     $TBL_TRACK_EXERCICES        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
     $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);

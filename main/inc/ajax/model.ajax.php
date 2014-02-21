@@ -542,7 +542,12 @@ switch ($action) {
     case 'get_hotpotatoes_exercise_results':
         $course = api_get_course_info();
         $documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
-        $columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_date',  'score', 'actions');
+
+        if (api_is_allowed_to_edit(null, true) || api_is_drh()) {
+            $columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_date',  'score', 'actions');
+        } else {
+            $columns = array('exe_date',  'score', 'actions');
+        }
         $result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $where_condition);
         break;
     case 'get_sessions_tracking':

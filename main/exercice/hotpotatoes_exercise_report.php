@@ -102,6 +102,9 @@ if ($is_allowedToEdit) {
             $fileToDelete = isset($_GET['id']) ? $_GET['id'] : null;
             deleteAttempt($fileToDelete);
             Session::write('message', Display::return_message(get_lang('ItemDeleted')));
+            $url = api_get_self().'?'.api_get_cidreq().'&path='.$hotpotatoes_path;
+            header("Location: $url");
+            exit;
             break;
 
     }
@@ -338,7 +341,8 @@ $(function() {
 </form>
 <?php
 
-$message = Session::read('message');
-echo isset($message) ? $message : null;
+$showMessage = Session::read('message');
+Session::erase('message');
+echo isset($showMessage) ? $showMessage : null;
 echo Display::grid_html('results');
 Display :: display_footer();

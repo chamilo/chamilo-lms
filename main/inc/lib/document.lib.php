@@ -578,7 +578,7 @@ class DocumentManager
                 $ids_to_remove = array();
                 $my_repeat_ids = $temp = array();
 
-                // Selecting repetead ids
+                // Selecting repeated ids
                 foreach ($doc_list as $row) {
                     if (in_array($row['id'], array_keys($temp))) {
                         $my_repeat_ids[] = $row['id'];
@@ -3434,17 +3434,17 @@ class DocumentManager
      */
     public static function is_folder_to_avoid($path, $is_certificate_mode = false)
     {
-        $folders_to_avoid = array(
+        $foldersToAvoid = array(
             '/HotPotatoes_files',
             '/certificates',
         );
+        $systemFolder = api_get_course_setting('show_system_folders');
 
-        if (basename($path) == 'css') {
-            return true;
+        if ($systemFolder == 1) {
+            $foldersToAvoid = array();
         }
 
-        //Skip hotpotatoes results
-        if (strstr($path, 'HotPotatoes_files')) {
+        if (basename($path) == 'css') {
             return true;
         }
 
@@ -3455,28 +3455,28 @@ class DocumentManager
             }
         }
 
-        //Admin setting for Hide/Show the folders of all users
+        // Admin setting for Hide/Show the folders of all users
         if (api_get_setting('show_users_folders') == 'false') {
-            $folders_to_avoid[] = '/shared_folder';
+            $foldersToAvoid[] = '/shared_folder';
 
             if (strstr($path, 'shared_folder_session_')) {
                 return true;
             }
         }
 
-        //Admin setting for Hide/Show Default folders to all users
+        // Admin setting for Hide/Show Default folders to all users
         if (api_get_setting('show_default_folders') == 'false') {
-            $folders_to_avoid[] = '/images';
-            $folders_to_avoid[] = '/flash';
-            $folders_to_avoid[] = '/audio';
-            $folders_to_avoid[] = '/video';
+            $foldersToAvoid[] = '/images';
+            $foldersToAvoid[] = '/flash';
+            $foldersToAvoid[] = '/audio';
+            $foldersToAvoid[] = '/video';
         }
 
-        //Admin setting for Hide/Show chat history folder
+        // Admin setting for Hide/Show chat history folder
         if (api_get_setting('show_chat_folder') == 'false') {
-            $folders_to_avoid[] = '/chat_files';
+            $foldersToAvoid[] = '/chat_files';
         }
-        return in_array($path, $folders_to_avoid);
+        return in_array($path, $foldersToAvoid);
     }
 
     /**
@@ -3486,6 +3486,7 @@ class DocumentManager
     {
         $system_folders = array(
             '/certificates',
+            '/HotPotatoes_files',
             '/chat_files',
             '/images',
             '/flash',

@@ -858,7 +858,8 @@ if (empty($_GET['details'])) {
 		<table class="data_table">
 			<tr>
 				<th><?php echo get_lang('Exercices'); ?></th>
-				<th><?php echo get_lang('AverageScore').' '.Display :: return_icon('info3.gif', get_lang('AverageScore'), array('align' => 'absmiddle', 'hspace' => '3px')) ?></th>
+                <th><?php echo get_lang('LearningPath');?></th>
+				<th><?php echo get_lang('AvgCourseScore').' '.Display :: return_icon('info3.gif', get_lang('AverageScore'), array('align' => 'absmiddle', 'hspace' => '3px')) ?></th>
 				<th><?php echo get_lang('Attempts'); ?></th>
 				<th><?php echo get_lang('LatestAttempt'); ?></th>
 				<th><?php echo get_lang('AllAttempts'); ?></th>
@@ -883,14 +884,23 @@ if (empty($_GET['details'])) {
 		if (Database :: num_rows($result_exercices) > 0) {
 			while ($exercices = Database :: fetch_array($result_exercices)) {
 				$exercise_id = intval($exercices['id']);
-
+                $lp_name = '';
 				$count_attempts   = Tracking::count_student_exercise_attempts($student_id, $course_code, $exercise_id, 0, 0, $session_id, 2);
-				$score_percentage = Tracking::get_avg_student_exercise_score($student_id, $course_code, $exercise_id, $session_id);
+				$score_percentage = Tracking::get_avg_student_exercise_score($student_id, $course_code, $exercise_id, $session_id, 1, 0);
 
+                if (!isset($score_percentage) && $count_attempts > 0) {
+                    $scores_lp = Tracking::get_avg_student_exercise_score($student_id, $course_code, $exercise_id, $session_id, 2, 1);
+                    $score_percentage = $scores_lp[0];
+                    $lp_name = $scores_lp[1];
+                } else {
+                    $lp_name = '-';
+                }
+                $lp_name = (!empty($lp_name))? $lp_name: get_lang('NoLearnpath');
 				$csv_content[] = array (
 					$exercices['title'],
 					$score_percentage . '%',
 					$count_attempts
+
 				);
 
 				if ($i % 2) $css_class = 'row_odd';
@@ -898,7 +908,17 @@ if (empty($_GET['details'])) {
 
 				echo '<tr class="'.$css_class.'"><td>'.$exercices['title'].'</td>';
 
-				echo '<td>';
+                echo '<td>';
+
+                if (!empty($lp_name)) {
+                    echo $lp_name;
+                } else {
+                    echo '-';
+                }
+
+                echo '</td>';
+
+                echo '<td>';
 
 				if ($count_attempts > 0) {
 					echo $score_percentage . '%';

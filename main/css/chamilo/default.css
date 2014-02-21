@@ -548,35 +548,35 @@ RESPONSIVE CSS
 /*CSS ICON BLOCK USER*/
    .inbox-social{
         background: url("images/inbox.png") no-repeat left center;
-        padding-left: 30px;
+        padding-left: 40px;
     }
     .new-message-social{
         background: url("images/new.png") no-repeat left center;
-        padding-left: 30px;
+        padding-left: 40px;
     }
     .invitations-social{
         background: url("images/invitation.png") no-repeat left center;
-        padding-left: 30px;
+        padding-left: 40px;
     }
     .profile-social{
         background: url("images/perfil.png") no-repeat left center;
-        padding-left: 30px;
+        padding-left: 40px;
     }
     .add-course{
         background: url("images/course.png") no-repeat left center;
-        padding-left: 30px;
+        padding-left: 40px;
     }
     .history-course{
         background: url("images/history.png") no-repeat left center;
-        padding-left: 30px;
+        padding-left: 40px;
     }
     .list-course{
         background: url("images/list-course.png") no-repeat left center;
-        padding-left: 30px;
+        padding-left: 40px;
     }
     .order-course{
         background: url("images/order-course.png") no-repeat left center;
-        padding-left: 30px;
+        padding-left: 40px;
     }
     .sidebar-nav h4 {
         color: #037FB2;
@@ -586,8 +586,13 @@ RESPONSIVE CSS
         padding-right: 15px;
         padding-top: 10px;
     }
-
-
+    #profile_block .nav-list li, #course_block .nav-list li{
+        padding-bottom: 5px;
+        padding-top: 5px;
+    }
+    #top_main_content .menu-column #user_image_block{
+      box-shadow: none;
+    }
 
 }
 /*+++++++++++++++++++++++++++++++++

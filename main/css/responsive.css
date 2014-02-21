@@ -579,6 +579,16 @@ The more frequent ones have been marked with *
         float: left;
         width: 280px;
     }
+    .section-mycampus .hot-course-box, .section-mycourses .course-box {
+        width: 535px;
+    }
+    .course-box-thumbnail-box{
+        float: left;
+    }
+    #main_content .course-box .row .span7 .row .span6 h3 {
+        font-size: 16px;
+    }
+
 }
 
 @media (min-width: 801px) and (max-width: 979px) {

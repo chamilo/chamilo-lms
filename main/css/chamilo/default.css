@@ -595,6 +595,17 @@ RESPONSIVE CSS
     }
 
 }
+@media (max-width: 600px) {
+#main_content .course-box .row .span7 .row .span6 {
+  float: left;
+  width: 615px;
+  padding-left: 10px;
+}
+#main_content .course-box .row .span7 .row .span6 h3 {
+        font-size: 16px;
+        width: 500px;
+    }
+}
 /*+++++++++++++++++++++++++++++++++
 END RESPONSIVE CSS
 +++++++++++++++++++++++++++++++++*/

@@ -81,13 +81,17 @@ if (isset($_GET['action']) && $_GET['action']=='delete_moderator') {
 	}
 }
 
-$users	= GroupPortalManager::get_users_by_group($group_id, false, array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR), 0 , 1000);
+$users	= GroupPortalManager::get_users_by_group(
+    $group_id,
+    false,
+    array(GROUP_USER_PERMISSION_ADMIN, GROUP_USER_PERMISSION_READER, GROUP_USER_PERMISSION_MODERATOR),
+    0,
+    1000
+);
 $new_member_list = array();
 
 $social_left_content = SocialManager::show_social_menu('member_list',$group_id);
-
 $social_right_content = '<h2>'.$group_info['name'].'</h2>';
-
 $social_right_content .= '<div style="width:90%">';
 
 foreach($users as $user) {

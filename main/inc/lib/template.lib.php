@@ -194,29 +194,29 @@ class Template
         return $result;
     }
 
-    function set_help($help_input = null)
+    /**
+     * @param string $helpInput
+     */
+    function set_help($helpInput = null)
     {
-        if (!empty($help_input)) {
-            $help = $help_input;
+        if (!empty($helpInput)) {
+            $help = $helpInput;
         } else {
             $help = $this->help;
         }
 
-        $help_content = '';
+        $content = '';
         if (api_get_setting('enable_help_link') == 'true') {
             if (!empty($help)) {
-                $help         = Security::remove_XSS($help);
-                $help_content = '<li class="help">';
-                $help_content .= '<a href="'.api_get_path(
-                        WEB_CODE_PATH
-                    ).'help/help.php?open='.$help.'&height=400&width=600" class="ajax" title="'.get_lang('Help').'">';
-                $help_content .= '<img src="'.api_get_path(WEB_IMG_PATH).'help.large.png" alt="'.get_lang(
-                        'Help'
-                    ).'" title="'.get_lang('Help').'" />';
-                $help_content .= '</a></li>';
+                $help = Security::remove_XSS($help);
+                $content = '<li class="help">';
+                $content .= Display::url(
+                    Display::return_icon('help.large.png', get_lang('Help')),
+                    api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help.'&height=400&width=600', array('class' => 'ajax'));
+                $content .= '</li>';
             }
         }
-        $this->assign('help_content', $help_content);
+        $this->assign('help_content', $content);
     }
 
     /*

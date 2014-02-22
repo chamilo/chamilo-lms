@@ -200,7 +200,6 @@ switch ($action) {
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
         $work_id = $_REQUEST['work_id'];
         $courseInfo = api_get_course_info();
-
         $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
 
         if (empty($documents)) {
@@ -218,15 +217,6 @@ switch ($action) {
                 true
             );
         }
-/*
-        // All
-        if ($courseInfo['show_score'] == '0') {
-            $count = get_count_work($work_id, null, api_get_user_id());
-        } else {
-            // Only my stuff
-            $count = get_count_work($work_id, api_get_user_id());
-        }
-*/
         break;
     case 'get_exercise_results':
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
@@ -549,12 +539,17 @@ switch ($action) {
         }
         $result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
 		break;
-	case 'get_hotpotatoes_exercise_results':
-		$course = api_get_course_info();
-		$documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
-		$columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_date',  'score', 'actions');
-		$result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $where_condition); //get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
-		break;
+    case 'get_hotpotatoes_exercise_results':
+        $course = api_get_course_info();
+        $documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
+
+        if (api_is_allowed_to_edit(null, true) || api_is_drh()) {
+            $columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_date',  'score', 'actions');
+        } else {
+            $columns = array('exe_date',  'score', 'actions');
+        }
+        $result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $where_condition);
+        break;
     case 'get_sessions_tracking':
         if (api_is_drh()) {
             $sessions = SessionManager::get_sessions_followed_by_drh(api_get_user_id(), $start, $limit);
@@ -1079,10 +1074,10 @@ if (in_array($action, $allowed_actions)) {
         foreach ($result as $row) {
             //print_r($row);
             // if results tab give not id, set id to $i otherwise id="null" for all <tr> of the jqgrid - ref #4235
-            if ($row['id'] == "") {
-                $response->rows[$i]['id']=$i;
+            if (!isset($row['id']) || isset($row['id']) && $row['id'] == '') {
+                $response->rows[$i]['id']= $i;
             } else {
-                $response->rows[$i]['id']=$row['id'];
+                $response->rows[$i]['id']= $row['id'];
             }
             $array = array();
             foreach ($columns as $col) {

@@ -102,10 +102,10 @@ $_SESSION['scorm_item_id'] = $lp_item_id;
 
 // Reinit exercises variables to avoid spacename clashes (see exercise tool)
 if (isset($exerciseResult) || isset($_SESSION['exerciseResult'])) {
-    Session::erase($exerciseResult);
+    Session::erase('exerciseResult');
+    Session::erase('objExercise');
+    Session::erase('questionList');
 }
-unset($_SESSION['objExercise']);
-unset($_SESSION['questionList']);
 
 // additional APIs
 $htmlHeadXtra[] = '<script>

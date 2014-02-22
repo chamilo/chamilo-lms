@@ -31,9 +31,11 @@ define('CONFIG_SYS_DEMO_ENABLE', false);
 define('CONFIG_SYS_VIEW_ONLY', false); //diabled the system, view only
 define('CONFIG_SYS_THUMBNAIL_VIEW_ENABLE', true);//REMOVE THE thumbnail view if false
 
+$editor = isset($_GET['editor']) ? Security::remove_XSS($_GET['editor']) : null;
+
 //User Permissions
 //Hack by Juan Carlos Raña Trabado
-if(empty($_course['path']) || Security::remove_XSS($_GET['editor'])=="stand_alone") {
+if(empty($_course['path']) || $editor =="stand_alone") {
 	define('CONFIG_OPTIONS_DELETE', true);
 	define('CONFIG_OPTIONS_CUT', true);
 	define('CONFIG_OPTIONS_COPY', true);
@@ -75,7 +77,7 @@ these two paths accept relative path only, don't use absolute path
 
 // Integration for Chamilo
 
-if(!empty($_course['path']) && Security::remove_XSS($_GET['editor'])!="stand_alone") {
+if(!empty($_course['path']) && $editor != "stand_alone") {
 	if(!empty($group_properties['directory'])) {
 		$PathChamiloAjaxFileManager='../../../../../../../courses/'.$_course['path'].'/document'.$group_properties['directory'].'/';
 	} else {
@@ -205,7 +207,7 @@ tinymce
 fckeditor
 */
 //CONFIG_EDITOR_NAME replaced CONFIG_THEME_MODE since @version 0.8
-define('CONFIG_EDITOR_NAME', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['editor'])?secureFileName($_GET['editor']):'fckeditor')); // run mode fckeditor (Chamilo editor)
+define('CONFIG_EDITOR_NAME', (CONFIG_QUERY_STRING_ENABLE && !empty($editor)?secureFileName($editor):'fckeditor')); // run mode fckeditor (Chamilo editor)
 define('CONFIG_THEME_NAME', (CONFIG_QUERY_STRING_ENABLE && !empty($_GET['theme'])?secureFileName($_GET['theme']):'default'));  //change the theme to your custom theme rather than default
 define('CONFIG_DEFAULT_VIEW', (CONFIG_SYS_THUMBNAIL_VIEW_ENABLE?'thumbnail':'detail')); //thumbnail or detail
 define('CONFIG_DEFAULT_PAGINATION_LIMIT', 10000); //change 10 by 10000 while pagination is deactivated on Chamilo

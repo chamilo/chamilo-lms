@@ -752,7 +752,7 @@ if (!empty($exercise_list)) {
                                         $attempt_text = sprintf(get_lang('ExerciseWasActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
                                     }
                                 }
-                                            
+
                             } else {
                                 //$attempt_text = get_lang('ExamNotAvailableAtThisTime');
                                 if ($row['start_time'] != '0000-00-00 00:00:00') {

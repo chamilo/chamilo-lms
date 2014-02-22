@@ -262,7 +262,11 @@ function getParentPath($value) {
  * @param string $value
  * @return  boolean
  */
-function isUnderRoot($value) {
+function isUnderRoot($value)
+{
+    if (empty($value)) {
+        return false;
+    }
     $roorPath = strtolower(addTrailingSlash(backslashToSlash(getRealPath(CONFIG_SYS_ROOT_PATH))));
     if (file_exists($value) && @strpos(strtolower(addTrailingSlash(backslashToSlash(getRealPath($value)))), $roorPath) === 0) {
         return true;

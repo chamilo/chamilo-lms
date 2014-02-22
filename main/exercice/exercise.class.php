@@ -1482,11 +1482,13 @@ class Exercise {
 
     /**
      * Cleans the student's results only for the Exercise tool (Not from the LP)
-     * The LP results are NOT deleted
+     * The LP results are NOT deleted by default, otherwise put $clean_lp_tests = true
      * Works with exercises in sessions
+     * @param bool $clean_lp_tests
+     * @param int $clean_result_before_date
      * @return int quantity of user's exercises deleted
      */
-    function clean_results($clean_lp_tests = false) {
+    function clean_results($clean_lp_tests = false, $clean_result_before_date = '0') {
         $table_track_e_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $table_track_e_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
@@ -1494,8 +1496,15 @@ class Exercise {
                         orig_lp_id = 0 AND
                         orig_lp_item_id = 0';
 
+        // if we want to delete results from LP too
         if ($clean_lp_tests) {
             $sql_where = "";
+        }
+
+        // if we want to delete attempts before date $clean_result_before_date
+        // $clean_result_before_date must be a valid UTC-0 date yyyy-mm-dd
+        if ($clean_result_before_date != '0') {
+            $sql_where .= "  AND exe_date <= '$clean_result_before_date' ";
         }
 
         $sql_select = "SELECT exe_id FROM $table_track_e_exercises
@@ -1507,7 +1516,8 @@ class Exercise {
         $result   = Database::query($sql_select);
         $exe_list = Database::store_result($result);
 
-        //deleting TRACK_E_ATTEMPT table
+        // deleting TRACK_E_ATTEMPT table
+        // check if exe in learning path or not
         $i = 0;
         if (is_array($exe_list) && count($exe_list) > 0) {
             foreach($exe_list as $item) {
@@ -1517,13 +1527,12 @@ class Exercise {
             }
         }
 
-        //delete TRACK_E_EXERCICES table
+        // delete TRACK_E_EXERCICES table
         $sql = "DELETE FROM $table_track_e_exercises
                 WHERE exe_cours_id = '".api_get_course_id()."'
                 AND exe_exo_id = ".$this->id."
                 $sql_where
                 AND session_id = ".api_get_session_id()."";
-
         Database::query($sql);
 
         return $i;

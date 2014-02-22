@@ -5894,6 +5894,10 @@ function api_get_jqgrid_js() {
     return api_get_jquery_libraries_js(array('jqgrid'));
 }
 
+function api_get_datepicker_js() {
+    return api_get_jquery_libraries_js(array('datepicker'));
+}
+
 /**
  * Returns the jquery library js and css headers
  *
@@ -5956,8 +5960,27 @@ function api_get_jquery_libraries_js($libraries) {
     	$js .= api_get_js('bxslider/jquery.bxSlider.min.js');
     	$js .= api_get_css($js_path.'bxslider/bx_styles/bx_styles.css');
     }
+
+    // jquery datepicker
+    if (in_array('datepicker',$libraries)) {
+        $languaje   = 'en-GB';
+        $platform_isocode = strtolower(api_get_language_isocode());
+
+        // languages supported by jqgrid see files in main/inc/lib/javascript/jqgrid/js/i18n
+        $datapicker_langs = array('af', 'ar', 'ar-DZ', 'az', 'bg', 'bs', 'ca', 'cs', 'cy-GB', 'da', 'de', 'el', 'en-AU', 'en-GB', 'en-NZ', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr', 'fr-CH', 'gl', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'is', 'it', 'ja', 'ka', 'kk', 'km', 'ko', 'lb', 'lt', 'lv', 'mk', 'ml', 'ms', 'nl', 'nl-BE', 'no', 'pl', 'pt', 'pt-BR', 'rm', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sr-SR', 'sv', 'ta', 'th', 'tj', 'tr', 'uk', 'vi', 'zh-CN', 'zh-HK', 'zh-TW');
+        if (in_array($platform_isocode, $datapicker_langs)) {
+            $languaje = $platform_isocode;
+        }
+//        $js .= api_get_css($js_path.'jqgrid/css/ui.jqgrid.css');
+        $js .= api_get_js('jquery-ui/ui/i18n/jquery.ui.datepicker-'.$languaje.'.js');
+    }
+
     return $js;
 }
+
+
+
+
 
 /**
  * Returns the course's URL
@@ -6940,4 +6963,15 @@ function api_is_https()
 function api_get_protocol()
 {
     return api_is_https() ? 'https' : 'http';
+}
+
+/**
+ * Return a string where " are replaced with 2 '
+ * It is usefull when you pass a PHP variable in a Javascript browser dialog
+ * e.g. : alert("<?php get_lang('message') ?>");
+ * and message contains character "
+ * @param $in_text
+ */
+function convert_double_quote_to_single($in_text) {
+    return api_preg_replace('/"/', "''", $in_text);
 }

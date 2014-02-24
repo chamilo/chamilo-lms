@@ -1414,7 +1414,7 @@ class UserManager
                 case self::USER_FIELD_TYPE_SELECT_MULTIPLE:
                     $sqluo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowuf['id'];
                     $resuo = Database::query($sqluo);
-                    $values = split(';', $fvalues);
+                    $values = explode(';', $fvalues);
                     if (Database::num_rows($resuo) > 0) {
                         $check = false;
                         while ($rowuo = Database::fetch_array($resuo)) {
@@ -1639,7 +1639,7 @@ class UserManager
                 $twolist = explode('|', $fieldoptions);
                 $counter = 0;
                 foreach ($twolist as $individual_list) {
-                    $splitted_individual_list = split(';', $individual_list);
+                    $splitted_individual_list = explode(';', $individual_list);
                     foreach ($splitted_individual_list as $individual_list_option) {
                         //echo 'counter:'.$counter;
                         if ($counter == 0) {
@@ -1651,7 +1651,7 @@ class UserManager
                     $counter++;
                 }
             } else {
-                $list = split(';', $fieldoptions);
+                $list = explode(';', $fieldoptions);
             }
             foreach ($list as $option) {
                 $option = Database::escape_string($option);
@@ -1732,7 +1732,7 @@ class UserManager
             $twolist = explode('|', $fieldoptions);
             $counter = 0;
             foreach ($twolist as $individual_list) {
-                $splitted_individual_list = split(';', $individual_list);
+                $splitted_individual_list = explode(';', $individual_list);
                 foreach ($splitted_individual_list as $individual_list_option) {
                     //echo 'counter:'.$counter;
                     if ($counter == 0) {
@@ -1744,7 +1744,7 @@ class UserManager
                 $counter++;
             }
         } else {
-            $templist = split(';', $fieldoptions);
+            $templist = explode(';', $fieldoptions);
             $list = array_map('trim', $templist);
         }
 
@@ -1864,7 +1864,7 @@ class UserManager
                         $rowu = Database::fetch_array($resu);
                         $fval = $rowu['fval'];
                         if ($row['type'] == self::USER_FIELD_TYPE_SELECT_MULTIPLE) {
-                            $fval = split(';', $rowu['fval']);
+                            $fval = explode(';', $rowu['fval']);
                         }
                     } else {
                         $row_df = Database::fetch_array($res_df);
@@ -1931,7 +1931,7 @@ class UserManager
                     $rowu = Database::fetch_array($resu);
                     $fval = $rowu['fval'];
                     if ($row['type'] == self::USER_FIELD_TYPE_SELECT_MULTIPLE) {
-                        $fval = split(';', $rowu['fval']);
+                        $fval = explode(';', $rowu['fval']);
                     }
                 }
                 if ($prefix) {

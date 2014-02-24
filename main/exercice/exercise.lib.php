@@ -1422,6 +1422,7 @@ function convert_score($score, $weight) {
  * @param   int     0 = only inactive exercises 
  *                  1 = only active exercises, 
  *                  2 = all exercises
+ *                  3 = active <> -1
  * @return  array   array with exercise data
  */
 function get_all_exercises($course_info = null, $session_id = 0, $check_publication_dates = false, $search_exercise = '', $search_all_sessions = false, $active = 2) {
@@ -1451,7 +1452,9 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
 
     //Show courses by active status
     $active_sql = '';
-    if ($active != 2) {
+    if ($active == 3) {
+        $active_sql = ' active <> -1 AND';
+    } else if ($active != 2) {
         $active_sql = sprintf(' active = %d AND', $active);
     }
 

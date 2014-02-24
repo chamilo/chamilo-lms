@@ -193,12 +193,12 @@ switch ($action) {
             $course = api_get_course_info_by_id($_GET['course_id']);
             require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
             $session_id = (!empty($_GET['session_id'])) ?  intval($_GET['session_id']) : 0 ;
-            $exercises = get_all_exercises($course, $session_id, false, $_GET['q'], true, 2);
+            $exercises = get_all_exercises($course, $session_id, false, $_GET['q'], true, 3);
 
             foreach ($exercises as $exercise) {
-                if (api_get_item_visibility($course, 'quiz', $exercise['id'])) {
+                //if (api_get_item_visibility($course, 'quiz', $exercise['id'])) {
                     $data[] = array('id' => $exercise['id'], 'text' => html_entity_decode($exercise['title']) );
-                }
+                //}
             }
             if (!empty($data)) {
                 echo json_encode($data);

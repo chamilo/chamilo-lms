@@ -1688,4 +1688,5 @@ $SpaceUsedOnSystemCannotBeMeasuredOnWindows = "The space used on disk cannot be 
 $XOldTablesDeleted = "%d old tables deleted";
 $XOldDatabasesDeleted = "%d old databases deleted";
 $ExtensionShouldBeLoaded = "This extension should be loaded.";
+$SearchSessions = "Session search";
 ?>

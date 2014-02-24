@@ -3507,6 +3507,7 @@ class CourseManager
 
         $course_access_settings     = CourseManager::get_access_settings($course_info['code']);
         $course_visibility          = $course_access_settings['visibility'];
+
         if ($course_visibility == COURSE_VISIBILITY_HIDDEN) {
             return '';
         }
@@ -3524,7 +3525,14 @@ class CourseManager
                     if (empty($course_info['id_session'])) {
                         $course_info['id_session'] = 0;
                     }
-                    if ($user_in_course_status == COURSEMANAGER || ($date_start <= $now && $date_end >= $now) || $date_start == '0000-00-00') {
+
+                    $sessionCourseAvailable = false;
+                    $sessionCourseStatus = api_get_session_visibility($course_info['id_session'], $course_info['code']);
+                    if (in_array($sessionCourseStatus, array(SESSION_VISIBLE_READ_ONLY, SESSION_VISIBLE))) {
+                        $sessionCourseAvailable = true;
+                    }
+
+                    if ($user_in_course_status == COURSEMANAGER || $sessionCourseAvailable) {
                         $session_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'];
                         $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'].'">'.$course_info['name'].'</a>';
                     } else {

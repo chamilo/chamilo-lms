@@ -963,9 +963,9 @@ class IndexManager {
 
         // If we're not in the history view...
         if (!isset($_GET['history'])) {
-            //Display special courses
+            // Display special courses.
             $special_courses = CourseManager::display_special_courses($user_id, $this->load_directories_preview);
-            //Display courses
+            // Display courses.
             $courses_html .= CourseManager::display_courses($user_id, $this->load_directories_preview);
         }
 
@@ -1002,8 +1002,9 @@ class IndexManager {
                             $is_coach_course = api_is_coach($session_id, $course['code']);
                             $allowed_time = 0;
                             $dif_time_after = 0;
+
                             if ($date_session_start != '0000-00-00') {
-                                if ($is_coach_course) {
+                                if ($is_coach_course && !isset($_GET['history'])) {
                                     $allowed_time = api_strtotime($date_session_start) - ($days_access_before_beginning*86400);
                                     if ($session_now > $date_session_end) {
                                         $dif_time_after = $session_now - api_strtotime($date_session_end);
@@ -1014,7 +1015,8 @@ class IndexManager {
                                 }
                             }
                             if ($session_now > $allowed_time && $days_access_after_end >= $dif_time_after-1) {
-                                // Read only and accessible
+                                // Read only and accessible.
+
                                 if (api_get_setting('hide_courses_in_sessions') == 'false') {
                                     $c = CourseManager::get_logged_user_course_html(
                                         $course,
@@ -1037,7 +1039,7 @@ class IndexManager {
                         if ($count_courses_session > 0) {
                             $params = array();
 
-                            $session_box = Display :: get_session_title_box($session_id);
+                            $session_box = Display::get_session_title_box($session_id);
 
                             $params['icon'] =  Display::return_icon('window_list.png', $session_box['title'], array('id' => 'session_img_'.$session_id), ICON_SIZE_LARGE);
                             $extra_info = !empty($session_box['coach']) ? $session_box['coach'] : null;

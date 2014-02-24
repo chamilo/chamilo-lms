@@ -3527,8 +3527,8 @@ class CourseManager
                     }
 
                     $sessionCourseAvailable = false;
-                    $sessionCourseStatus = api_get_session_visibility($course_info['id_session'], $course_info['code']);
-                    if (in_array($sessionCourseStatus, array(SESSION_VISIBLE_READ_ONLY, SESSION_VISIBLE))) {
+                    $sessionCourseStatus = api_get_session_visibility($session_id, $course_info['code']);
+                    if (in_array($sessionCourseStatus, array(SESSION_VISIBLE_READ_ONLY, SESSION_VISIBLE, SESSION_AVAILABLE))) {
                         $sessionCourseAvailable = true;
                     }
 

@@ -743,7 +743,7 @@ function api_get_cdn_path($web_path) {
  *
  */
 function api_is_cas_activated() {
-    return api_get_setting(cas_activate) == "true";
+    return api_get_setting('cas_activate') == "true";
 }
 
 /**

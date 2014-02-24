@@ -122,8 +122,21 @@ The more frequent ones have been marked with *
 }
 
 @media (min-width: 321px) and (max-width: 480px) {
+    body {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
     header #header_center, header #header_right, header #header_left {
         display:none;
+    }
+    #top_main_content .menu-column #reservation_block, #top_main_content .menu-column #notice_block, #top_main_content .menu-column #help_block {
+      clear: both;
+      display: block;
+      width: auto;
+    }
+    #profile_block .nav-list li, #course_block .nav-list li {
+        padding-bottom: 3px;
+        padding-top: 3px;
     }
     .navbar {
       margin-top: 0em;
@@ -144,6 +157,25 @@ The more frequent ones have been marked with *
     #chatmain {
         display:none;
     }
+    #top_main_content .menu-column #profile_block{
+        float: none;
+        clear: both;
+        width: 250px;
+        margin-left: 10px;
+        background: none;
+        border:none;
+        box-shadow: none;
+     }
+     #top_main_content .menu-column #course_block{
+        float: none;
+        clear: both;
+        width: 250px;
+        margin-left: 10px;
+        background: none;
+        border:none;
+        box-shadow: none;
+     }
+
 
     /* No topbar */
     #topbar {
@@ -261,17 +293,18 @@ The more frequent ones have been marked with *
         display: none;
     }
     .section-mycampus #homepage {
-        width: 400px;
+        width: auto;
     }
     .section-mycampus #hot_courses {
         width: 400px;
     }
     .section-mycourses #top_main_content {
-        margin-right: 15px;
+        margin-right: 0px;
     }
     .section-mycourses #main_content {
         margin-right: 15px;
-        width: 400px;
+        width: 100%
+        ;
     }
     .section-mycourses .course-box .course-box-actions {
         display: none;
@@ -352,8 +385,8 @@ The more frequent ones have been marked with *
 
     #top_main_content .menu-column #reservation_block, #top_main_content .menu-column #notice_block, #top_main_content .menu-column #help_block {
         clear: both;
-        display: inline-block;
-        width: 96%;
+        display: block;
+        width: auto;
     }
     #top_main_content .menu-column .well{
         padding: 15px;
@@ -375,7 +408,7 @@ The more frequent ones have been marked with *
     }
     #login_block #formLogin, #login_block #lang_form, #notice_block .homepage_notice {
       color: #666666;
-      font-size: 16px;
+      font-size: 14px;
       padding-bottom: 3px;
       padding-left: 15px;
       padding-right: 15px;
@@ -549,9 +582,7 @@ The more frequent ones have been marked with *
         -moz-border-radius: 10px;
         border-radius: 10px;
         border: 3px solid #FFFFFF;
-        -webkit-box-shadow: 1px 0px 6px 0px rgba(50, 50, 50, 0.71);
-        -moz-box-shadow:    1px 0px 6px 0px rgba(50, 50, 50, 0.71);
-            box-shadow:         1px 0px 6px 0px rgba(50, 50, 50, 0.71);
+        box-shadow: none;
     }
 }
 
@@ -566,9 +597,7 @@ The more frequent ones have been marked with *
         visibility: hidden;
     }
     #top_main_content .menu-column #reservation_block, #top_main_content .menu-column #notice_block, #top_main_content .menu-column #help_block {
-      clear: both;
-      display: inline-block;
-      width: 94%;
+      /*width: 94%;*/
     }
     footer {
         padding-top: 2em;
@@ -579,8 +608,8 @@ The more frequent ones have been marked with *
         padding-right: 1em;
     }
     #top_main_content .span9 {
-    float: left;
-    width: 570px;
+    width: 100%;
+    clear: both;
     }
     .section-mycampus #hot_courses .page-header {
     width: 565px;
@@ -593,13 +622,15 @@ The more frequent ones have been marked with *
       background-image: none;
       float: left;
       margin-right: 10px;
+      border: none;
+      box-shadow: none;
     }
     #top_main_content .menu-column .block_user_info {
         float: left;
         width: 280px;
     }
     .section-mycampus .hot-course-box, .section-mycourses .course-box {
-        width: 94%;
+        width: auto;
     }
     .course-box-thumbnail-box{
         float: left;

@@ -84,8 +84,8 @@ a:active {
 .nav-list > li > a {
     font-size: 14px;
     padding-bottom: 6px;
-    padding-left: 15px;
-    padding-right: 15px;
+   /* padding-left: 15px;
+    padding-right: 15px;*/
     padding-top: 6px;
 }
 .controls .btn{
@@ -246,6 +246,14 @@ a:active {
     text-indent: -9000px;
     z-index: 1;
 }
+/*ICON INBOX*/
+.home-icon{
+  background:url(images/);
+}
+
+
+/* END ICON INBOX */
+
 /*CSS SLIDER ANUNCIOS*/
 
 .pagerslide h2{
@@ -312,7 +320,7 @@ a:active {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
   margin-bottom: 20px;
   min-height: 20px;
-  padding: 19px;
+  padding: 20px 10px;
 }
 .sidebar-nav img{
     -webkit-border-radius: 10px;
@@ -323,7 +331,7 @@ a:active {
     font-size: 26px;
     font-weight: bold;
     color: #0191C7;
-    padding-bottom: 10px;
+    padding-bottom: 8px;
 }
 #homepage .row .span9 p,#homepage .row .span9 ol {
     color: #6E6E6E;
@@ -523,6 +531,73 @@ button.arrowl, input.arrowl {
 .portal {
     background-image:url(images/portal.png);
 }
+
+/*CSS ICON BLOCK USER*/
+   .inbox-social{
+        background: url("images/sprite-icon.png") no-repeat 0 0;
+        padding-left: 40px;
+    }
+    .inbox-social:hover{
+        background: url("images/sprite-icon.png") no-repeat 0 -43px;
+    }
+    .new-message-social{
+        background: url("images/sprite-icon.png") no-repeat 0 -75px;
+        padding-left: 40px;
+    }
+    .new-message-social:hover{
+        background: url("images/sprite-icon.png") no-repeat 0 -108px;
+        padding-left: 40px;
+    }
+    .invitations-social{
+        background: url("images/sprite-icon.png") no-repeat 0 -148px;
+        padding-left: 40px;
+    }
+    .invitations-social:hover{
+        background: url("images/sprite-icon.png") no-repeat 0 -191px;
+        padding-left: 40px;
+    }
+    .profile-social{
+        background: url("images/sprite-icon.png") no-repeat 0 -236px;
+        padding-left: 40px;
+    }
+    .profile-social:hover{
+        background: url("images/sprite-icon.png") no-repeat 0 -278px;
+        padding-left: 40px;
+    }
+    .add-course{
+        background: url("images/sprite-icon.png") no-repeat 0 -320px;
+        padding-left: 40px;
+    }
+    .add-course:hover{
+        background: url("images/sprite-icon.png") no-repeat 0 -363px;
+        padding-left: 40px;
+    }
+    .order-course{
+        background: url("images/sprite-icon.png") no-repeat 0 -408px;
+        padding-left: 40px;
+    }
+    .order-course:hover{
+        background: url("images/sprite-icon.png") no-repeat 0 -451px;
+        padding-left: 40px;
+    }
+    .history-course{
+        background: url("images/sprite-icon.png") no-repeat 0 -489px;
+        padding-left: 40px;
+    }
+    .history-course:hover{
+        background: url("images/sprite-icon.png") no-repeat 0 -532px;
+        padding-left: 40px;
+    }
+    .list-course{
+        background: url("images/sprite-icon.png") no-repeat 0 -575px;
+        padding-left: 40px;
+    }
+    .list-course:hover{
+        background: url("images/sprite-icon.png") no-repeat 0 -618px;
+        padding-left: 40px;
+    }
+    
+
 /*+++++++++++++++++++++++++++++++++
 RESPONSIVE CSS
 +++++++++++++++++++++++++++++++++*/
@@ -537,39 +612,7 @@ RESPONSIVE CSS
 }
 
 @media (min-width: 481px) and (max-width: 800px) {
-/*CSS ICON BLOCK USER*/
-   .inbox-social{
-        background: url("images/inbox.png") no-repeat left center;
-        padding-left: 40px;
-    }
-    .new-message-social{
-        background: url("images/new.png") no-repeat left center;
-        padding-left: 40px;
-    }
-    .invitations-social{
-        background: url("images/invitation.png") no-repeat left center;
-        padding-left: 40px;
-    }
-    .profile-social{
-        background: url("images/perfil.png") no-repeat left center;
-        padding-left: 40px;
-    }
-    .add-course{
-        background: url("images/course.png") no-repeat left center;
-        padding-left: 40px;
-    }
-    .history-course{
-        background: url("images/history.png") no-repeat left center;
-        padding-left: 40px;
-    }
-    .list-course{
-        background: url("images/list-course.png") no-repeat left center;
-        padding-left: 40px;
-    }
-    .order-course{
-        background: url("images/order-course.png") no-repeat left center;
-        padding-left: 40px;
-    }
+
     .sidebar-nav h4 {
         color: #037FB2;
         font-size: 18px;
@@ -590,12 +633,101 @@ RESPONSIVE CSS
 @media (max-width: 600px) {
 #main_content .course-box .row .span7 .row .span6 {
   float: left;
-  width: 615px;
+  /*width: 615px;*/
   padding-left: 10px;
 }
 #main_content .course-box .row .span7 .row .span6 h3 {
         font-size: 16px;
-        width: 500px;
+        /*width: 500px;*/
+    }
+}
+
+@media (min-width: 801px){
+  .nav-list > li > a {
+  font-size: 13px;
+  padding-bottom: 6px;
+  padding-top: 6px;
+}
+
+/*CSS ICON BLOCK USER*/
+   .inbox-social{
+        background: url("images/sprite-icon.png") no-repeat 0 0;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    .inbox-social:hover{
+        background: url("images/sprite-icon.png") no-repeat 0 -36px;
+        background-size: 25px auto;
+    }
+    .new-message-social{
+        background: url("images/sprite-icon.png") no-repeat 0 -65px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    .new-message-social:hover{
+        background: url("images/sprite-icon.png") no-repeat 0 -93px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    .invitations-social{
+        background: url("images/sprite-icon.png") no-repeat 0 -127px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    .invitations-social:hover{
+        background: url("images/sprite-icon.png") no-repeat 0 -163px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    .profile-social{
+        background: url("images/sprite-icon.png") no-repeat 0 -198px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    .profile-social:hover{
+        background: url("images/sprite-icon.png") no-repeat 0 -233px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    .add-course{
+        background: url("images/sprite-icon.png") no-repeat 0 -267px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    .add-course:hover{
+        background: url("images/sprite-icon.png") no-repeat 0 -303px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    .order-course{
+        background: url("images/sprite-icon.png") no-repeat 0 -339px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    .order-course:hover{
+        background: url("images/sprite-icon.png") no-repeat 0 -375px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    .history-course{
+        background: url("images/sprite-icon.png") no-repeat 0 -410px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    .history-course:hover{
+        background: url("images/sprite-icon.png") no-repeat 0 -446px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    .list-course{
+        background: url("images/sprite-icon.png") no-repeat 0 -480px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    .list-course:hover{
+        background: url("images/sprite-icon.png") no-repeat 0 -516px;
+        padding-left: 30px;
+        background-size: 25px auto;
     }
 }
 /*+++++++++++++++++++++++++++++++++

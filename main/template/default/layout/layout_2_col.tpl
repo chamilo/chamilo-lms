@@ -37,6 +37,7 @@
         {# Course block - teacher #}
 		{{ teacher_block }}
         </div>
+        <div class="user_notification">
 		{# Notice #}
 		{{ notice_block }}
 
@@ -51,7 +52,7 @@
 
 		{# Search (xapian) #}
 		{{ search_block }}
-
+        </div>
 		{# Classes #}
 		{{ classes_block }}
 

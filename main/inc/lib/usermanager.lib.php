@@ -184,7 +184,7 @@ class UserManager
                 $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
                 $email_admin = api_get_setting('emailAdministrator');
 
-                if ($_configuration['multiple_access_urls']) {
+                if (api_is_multiple_url_enabled()) {
                     $access_url_id = api_get_current_access_url_id();
                     if ($access_url_id != -1) {
                         $url = api_get_access_url($access_url_id);
@@ -646,7 +646,7 @@ class UserManager
             $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
             $email_admin = api_get_setting('emailAdministrator');
 
-            if ($_configuration['multiple_access_urls']) {
+            if (api_is_multiple_url_enabled()) {
                 $access_url_id = api_get_current_access_url_id();
                 if ($access_url_id != -1) {
                     $url = api_get_access_url($access_url_id);
@@ -2174,7 +2174,6 @@ class UserManager
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['courses'] = UserManager::get_courses_list_by_session($user_id, $row['id']);
             }
         }
-
         return $categories;
 
     }

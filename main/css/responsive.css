@@ -136,6 +136,24 @@ The more frequent ones have been marked with *
     #header_right #notifications {
       padding:0;
     }
+    #top_main_content .span6 {
+        width: 100%;
+    }
+    legend {
+        margin-bottom: 10px;
+        color:#0191C7;
+        border-bottom:  1px solid #0191C7;
+    }
+    #login_block #formLogin, #login_block #lang_form, #notice_block .homepage_notice {
+      color: #777777;
+      font-size: 14px;        
+    }
+    #main_content .course-box .row .span7 .row .span6 h3 {
+        font-size: 14px;
+        font-weight: normal;
+        width: 35%;
+        line-height: 19px;
+    }
     footer #footer_left, footer #footer_center{
         display: none;
     }
@@ -145,6 +163,10 @@ The more frequent ones have been marked with *
         text-align: center;
         width: 100%;
     }
+    .welcome-home-top-temp img{
+        height: 100%;
+        max-width: 100%;
+    }                
 
     #top_main_content .menu-column #reservation_block, #top_main_content .menu-column #notice_block, #top_main_content .menu-column #help_block {
       clear: both;
@@ -250,6 +272,17 @@ The more frequent ones have been marked with *
     /* No resize font */
     .resize_font {
         display:none;
+    }
+    .fc-header {
+        margin-top: 36px;
+    }
+    .fc-header-title h2 {
+        font-size: 19px;
+        font-weight: normal;
+        left: 20px;
+        position: absolute;
+        text-transform: uppercase;
+        top: 179px;
     }
 
     h3 {

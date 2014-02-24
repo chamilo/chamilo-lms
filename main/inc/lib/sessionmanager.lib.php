@@ -523,7 +523,7 @@ class SessionManager
 
         $where = " WHERE a.course_code = '%s'";
         if (!empty($sessionId)) {
-            $where .= " AND a.session_id = %d 
+            $where .= " AND a.session_id = %d
                         AND q.id = %d";
         } else
         {
@@ -571,10 +571,10 @@ class SessionManager
         INNER JOIN $user u ON u.user_id = a.user_id
         $where $order $limit";
 
-        if (!empty($sessionId)) 
+        if (!empty($sessionId))
         {
             $sql_query = sprintf($sql, $course['code'], $sessionId,  $exerciseId);
-        } else 
+        } else
         {
             $sql_query = sprintf($sql, $course['code'], $exercise['title']);
         }
@@ -2402,9 +2402,9 @@ class SessionManager
         $getSql = false
     ) {
 		// Database Table Definitions
-		$tbl_session 			= 	Database::get_main_table(TABLE_MAIN_SESSION);
-		$tbl_session_rel_user 	= 	Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_session_rel_access_url =   Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+		$tbl_session 			= Database::get_main_table(TABLE_MAIN_SESSION);
+		$tbl_session_rel_user 	= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
 		$userId = intval($userId);
 		$assigned_sessions_to_hrm = array();

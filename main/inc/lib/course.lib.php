@@ -733,15 +733,15 @@ class CourseManager
      * @return array Course list
      *
      **/
-    public static function get_course_list_as_coach($user_id, $include_courses_in_sessions = false) {
-
-        //1. Getting courses as teacher (No session)
+    public static function get_course_list_as_coach($user_id, $include_courses_in_sessions = false)
+    {
+        // 1. Getting courses as teacher (No session)
         $courses_temp = CourseManager::get_course_list_of_user_as_course_admin($user_id);
-        $courses_as_admin = array();
+        $courseList = array();
 
         if (!empty($courses_temp)) {
-            foreach($courses_temp as $course_item) {
-                $courses_as_admin[0][$course_item['course_code']] = $course_item['course_code'];
+            foreach ($courses_temp as $course_item) {
+                $courseList[0][$course_item['course_code']] = $course_item['course_code'];
             }
         }
 
@@ -754,13 +754,13 @@ class CourseManager
                     $courses  = Tracking :: get_courses_followed_by_coach($user_id, $session_item['id']);
                     if (is_array($courses)) {
                         foreach($courses as $course_item) {
-                            $courses_as_admin[$session_item['id']][$course_item] = $course_item;
+                            $courseList[$session_item['id']][$course_item] = $course_item;
                         }
                     }
                 }
             }
         }
-        return $courses_as_admin;
+        return $courseList;
     }
 
     /**

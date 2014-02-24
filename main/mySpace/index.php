@@ -210,6 +210,7 @@ if (empty($session_id)) {
     // Getting courses followed by a coach (No session courses).
     $courses = CourseManager::get_course_list_as_coach($user_id, false);
 
+    // Courses with no session:
     if (isset($courses[0])) {
         $courses = $courses[0];
     }
@@ -325,7 +326,7 @@ if (empty($session_id)) {
         // average posts
         $nb_posts = $nb_posts / $nb_students;
 
-        echo Display::page_subheader('<img src="'.api_get_path(WEB_IMG_PATH).'teachers.gif">&nbsp;'.get_lang('Overview'));
+        echo Display::page_subheader(get_lang('Overview'));
 
         echo '<div class="report_section">
                     <table class="table table-bordered">
@@ -344,7 +345,7 @@ if (empty($session_id)) {
                         </table>';
         echo '</div>';
 
-        echo Display::page_subheader(Display::return_icon('students.gif').'&nbsp;'.get_lang('Students').' ('.$nb_students.')');
+        echo Display::page_subheader(get_lang('Students').' ('.$nb_students.')');
 
         if ($export_csv) {
             //csv part
@@ -359,11 +360,10 @@ if (empty($session_id)) {
             $csv_content[] = array();
         } else {
 
-            $countActiveUsers = SessionManager::getCountUserTracking(null, 1);
-            $countInactiveUsers = SessionManager::getCountUserTracking(null, 0);
-
             $lastConnectionDate = api_get_utc_datetime(strtotime('15 days ago'));
 
+            $countActiveUsers = SessionManager::getCountUserTracking(null, 1);
+            $countInactiveUsers = SessionManager::getCountUserTracking(null, 0);
             $countSleepingTeachers = SessionManager::getTeacherTracking(api_get_user_id(), 1, $lastConnectionDate, true);
             $countSleepingStudents =SessionManager::getCountUserTracking(null, 1, $lastConnectionDate);
 
@@ -393,7 +393,6 @@ if (empty($session_id)) {
                             <td>'.Display::url(get_lang('SleepingStudents'), api_get_path(WEB_CODE_PATH).'mySpace/student.php?sleeping_days=15').'</td>
                             <td align="right">'.$countSleepingStudents.'</td>
                         </tr>
-
                         <tr>
                             <td>'.get_lang('AverageCoursePerStudent').'</td>
                             <td align="right">'.(is_null($avg_courses_per_student) ? '' : $avg_courses_per_student).'</td>
@@ -460,13 +459,13 @@ if (empty($session_id)) {
         $courses = Tracking::get_courses_followed_by_coach($user_id, $session_id);
     }
 
-    //Courses for the user
+    // Courses for the user
     $count_courses = count($courses);
 
-    //Sessions for the user
+    // Sessions for the user
     $count_sessions = count($sessions);
 }
-
+/*
 if ($count_courses || $count_sessions) {
     //If we are in course
     if (empty($session_id)) {
@@ -696,7 +695,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 STUDENT         => get_lang('Student'),
                 COURSEMANAGER   => get_lang('CourseManager'),
                 DRH             => get_lang('Drh'),
-                );
+            );
             $studentFilter->addElement('select', 'profile', get_lang('Profile'),$options, array('id' => 'profile'));
 
             echo '<div class="">';
@@ -751,32 +750,6 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     return returnValue;
                 }
             </script>';
-
-            /*//profile filter
-            $profileFilter = new FormValidator('answer_filter', 'get', '', '', array('class'=> 'form-horizontal'), false);
-            $options = array(
-                STUDENT         => get_lang('Student'),
-                COURSEMANAGER   => get_lang('CourseManager'),
-                DRH             => get_lang('Drh'),
-                );
-            $profileFilter->addElement('select', 'profile', get_lang('Profile'),$options, array('id' => 'profile'));
-            $courseListUrl = api_get_self();
-
-            echo '<div class="">';
-            echo $profileFilter->return_form();
-            echo '</div>';
-
-            echo '<script>
-            $(function() {
-                $("#profile").on("change", function() {
-                    var sessionId = $("#session_name").val();
-                    var courseId = $("#course_name").val();
-                    var studentId  = $("#student_name").val();
-                    var profileId  = $("#profile").val();
-                    window.location = "'.$courseListUrl.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&student_id="+studentId+"&profile_id="+profileId;
-                    });
-                });
-            </script>';*/
         }
 
         if (in_array($display, array('surveyoverview'))) {
@@ -1116,7 +1089,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 		}
 		$table->display();
 	}
-}
+}*/
 
 // Send the csv file if asked
 if ($export_csv) {

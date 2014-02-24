@@ -1233,48 +1233,57 @@ class Tracking
      * @param    int        Session id (optional)
      * @return    array    Courses list
      */
-    public static function get_courses_followed_by_coach($coach_id, $id_session = '') {
-
+    public static function get_courses_followed_by_coach($coach_id, $id_session = null)
+    {
         $coach_id = intval($coach_id);
-        if (!empty ($id_session))
-        $id_session = intval($id_session);
+        if (!empty($id_session)) {
+            $id_session = intval($id_session);
+        }
 
-        $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
-        $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
-        $tbl_course = Database :: get_main_table(TABLE_MAIN_COURSE);
+        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
-        // At first, courses where $coach_id is coach of the course
+        // At first, courses where $coach_id is coach of the course.
 
-        $sql = 'SELECT DISTINCT course_code FROM ' . $tbl_session_course_user . ' WHERE id_user=' . $coach_id.' AND status=2';
-
-        global $_configuration;
+        $sql = 'SELECT DISTINCT course_code
+                FROM ' . $tbl_session_course_user . '
+                WHERE id_user = ' . $coach_id.' AND status = 2';
         if (api_is_multiple_url_enabled()) {
             $tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1){
-                $sql = 'SELECT DISTINCT scu.course_code FROM ' . $tbl_session_course_user . ' scu INNER JOIN '.$tbl_course_rel_access_url.' cru
-                    ON (scu.course_code = cru.course_code)
-                    WHERE scu.id_user=' . $coach_id.' AND scu.status=2 AND cru.access_url_id = '.$access_url_id;
+                $sql = 'SELECT DISTINCT scu.course_code
+                        FROM ' . $tbl_session_course_user . ' scu
+                        INNER JOIN '.$tbl_course_rel_access_url.' cru
+                        ON (scu.course_code = cru.course_code)
+                        WHERE
+                            scu.id_user=' . $coach_id.' AND
+                            scu.status=2 AND
+                            cru.access_url_id = '.$access_url_id;
             }
         }
 
-        if (!empty ($id_session))
-        $sql .= ' AND id_session=' . $id_session;
+        if (!empty($id_session)) {
+            $sql .= ' AND id_session=' . $id_session;
+        }
+
+        $courseList = array();
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            $a_courses[$row['course_code']] = $row['course_code'];
+            $courseList[$row['course_code']] = $row['course_code'];
         }
 
         // Then, courses where $coach_id is coach of the session
 
         $sql = 'SELECT DISTINCT session_course.course_code
-                    FROM ' . $tbl_session_course . ' as session_course
-                    INNER JOIN ' . $tbl_session . ' as session
-                        ON session.id = session_course.id_session
-                        AND session.id_coach = ' . $coach_id . '
-                    INNER JOIN ' . $tbl_course . ' as course
-                        ON course.code = session_course.course_code';
+                FROM ' . $tbl_session_course . ' as session_course
+                INNER JOIN ' . $tbl_session . ' as session
+                    ON session.id = session_course.id_session
+                    AND session.id_coach = ' . $coach_id . '
+                INNER JOIN ' . $tbl_course . ' as course
+                    ON course.code = session_course.course_code';
 
         if (api_is_multiple_url_enabled()) {
             $tbl_course_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -1303,10 +1312,10 @@ class Tracking
 
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
-            $a_courses[$row['course_code']] = $row['course_code'];
+            $courseList[$row['course_code']] = $row['course_code'];
         }
 
-        return $a_courses;
+        return $courseList;
     }
 
     /**

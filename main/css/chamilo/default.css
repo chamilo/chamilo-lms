@@ -730,6 +730,11 @@ RESPONSIVE CSS
         background-size: 25px auto;
     }
 }
+@media (min-width: 321px) and (max-width: 480px){
+footer {
+    height: 5em;
+  }
+}
 /*+++++++++++++++++++++++++++++++++
 END RESPONSIVE CSS
 +++++++++++++++++++++++++++++++++*/

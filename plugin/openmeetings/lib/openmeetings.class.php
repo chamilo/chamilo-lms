@@ -432,8 +432,8 @@ class OpenMeetings
                     $link1 = sprintf($link, $rec['fileHash'], $meetingDb['room_id'], $this->sessionId);
                     $link2 = sprintf($link, $rec['alternateDownload'], $meetingDb['room_id'], $this->sessionId);
                     $links[] = $rec['fileName'].' '.
-                        \Display::url('[1]', $link1, array('target' => '_blank')).' '.
-                        \Display::url('[2]', $link2, array('target' => '_blank'));
+                        \Display::url('[.flv]', $link1, array('target' => '_blank')).' '.
+                        \Display::url('[.avi]', $link2, array('target' => '_blank'));
 
                 }
                 $item['show_links']  = implode('<br />', $links);

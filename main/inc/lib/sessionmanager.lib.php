@@ -814,7 +814,7 @@ class SessionManager
         $sql_query = vsprintf($sql, $queryVariables);
 
         if (self::$_debug) {
-            error_log($sql_query);
+            error_log(preg_replace('/\s+/', ' ', $sql_query));
         }
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs)) {
@@ -828,7 +828,7 @@ class SessionManager
         WHERE c_id = %s ";  //AND session_id = %s
         $sql_query = sprintf($sql, $course['real_id']);
         if (self::$_debug) {
-            error_log($sql_query);
+            error_log(preg_replace('/\s+/', ' ', $sql_query));
         }
         $result = Database::query($sql_query);
         $lessons_total = 0;
@@ -870,7 +870,7 @@ class SessionManager
 
         $sql_query = sprintf($sql, $course['real_id'], $sessionId);
         if (self::$_debug) {
-            error_log($sql_query);
+            error_log(preg_replace('/\s+/', ' ', $sql_query));
         }
         $result = Database::query($sql_query);
         $row = Database::fetch_array($result);
@@ -888,7 +888,7 @@ class SessionManager
         }
         $sql_query = sprintf($sql, $course['real_id'], $sessionId);
         if (self::$_debug) {
-            error_log($sql_query);
+            error_log(preg_replace('/\s+/', ' ', $sql_query));
         }
         $result = Database::query($sql_query);
         $row = Database::fetch_array($result);
@@ -925,7 +925,7 @@ class SessionManager
         }
         $sql_query = sprintf($sql, $course['real_id'], $sessionId);
         if (self::$_debug) {
-            error_log($sql_query);
+            error_log(preg_replace('/\s+/', ' ', $sql_query));
         }
         $result = Database::query($sql_query);
         $row = Database::fetch_array($result);
@@ -944,7 +944,7 @@ class SessionManager
             AND access_user_id = %s ";
             $sql_query  = sprintf($sql, $course['code'], $user['id_session'], $user['user_id']);
             if (self::$_debug) {
-                error_log($sql_query);
+                error_log(preg_replace('/\s+/', ' ', $sql_query));
             }
             $result     = Database::query($sql_query);
             $row        = Database::fetch_array($result);
@@ -958,7 +958,7 @@ class SessionManager
 
             //Exercises
             $exercises_progress     = str_replace('%', '', Tracking::get_exercise_student_progress($exercises, $user['user_id'], $course['code'], $user['id_session']));
-            $exercises_done         = ($exercises_progress * $exercises_total) / 100;
+            $exercises_done         = round(($exercises_progress * $exercises_total) / 100);
             $exercises_left         = $exercises_total - $exercises_done;
 
             //Assignments
@@ -978,7 +978,7 @@ class SessionManager
             where c_id = %s and session_id = %s and user_id = %s";
             $sql_query  = sprintf($sql, $course['real_id'], $user['id_session'], $user['user_id']);
             if (self::$_debug) {
-                error_log($sql_query);
+                error_log(preg_replace('/\s+/', ' ', $sql_query));
             }
             $result     = Database::query($sql_query);
             $row        = Database::fetch_array($result);
@@ -993,7 +993,7 @@ class SessionManager
             AND c_id = %s";
             $sql_query  = sprintf($sql, $user['user_id'], $course['code'], $course['real_id']);
             if (self::$_debug) {
-                error_log($sql_query);
+                error_log(preg_replace('/\s+/', ' ', $sql_query));
             }
             $result     = Database::query($sql_query);
             $row        = Database::fetch_array($result);
@@ -1023,7 +1023,7 @@ class SessionManager
             WHERE p.poster_id = %s and f.session_id = %s and p.c_id = %s";
             $sql_query  = sprintf($sql, $user['user_id'], $user['id_session'], $course['real_id']);
             if (self::$_debug) {
-                error_log($sql_query);
+                error_log(preg_replace('/\s+/', ' ', $sql_query));
             }
             $result     = Database::query($sql_query);
             $row        = Database::fetch_array($result);

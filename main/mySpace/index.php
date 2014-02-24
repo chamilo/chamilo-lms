@@ -659,8 +659,8 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 
         $sessionList = array();
         $courseList = array();
-        $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
-        $courseId = isset($_GET['course_id']) ? $_GET['course_id'] : null;
+        $sessionId = isset($_GET['session_id']) ? intval(Security::remove_XSS($_GET['session_id'])) : null;
+        $courseId = isset($_GET['course_id']) ? intval(Security::remove_XSS($_GET['course_id'])) : null;
 
         if (!empty($sessionId)) {
             $sessionList = array();
@@ -683,7 +683,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 
         }
 
-        $url = $ajax_path . 'session.ajax.php?a='. $an . '&course_id=' . $_GET['course_id'];
+        $url = $ajax_path . 'session.ajax.php?a='. $an . '&course_id=' . $courseId;
         $sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchSession'), null, array('url' => $url, 'defaults' => $sessionList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
 
         //course filter
@@ -698,19 +698,18 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }
 
         */
-
-        $url = $ajax_path . 'course.ajax.php?a='. $a .'&session_id=' . $_GET['session_id'];
+        $url = $ajax_path . 'course.ajax.php?a='. $a .'&session_id=' . $sessionId;
         $sessionFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
         
         //Exercise filter    
         if (in_array($display, array('exerciseprogress'))) {
 
-            $url = $ajax_path .'course.ajax.php?a=search_exercise_by_course&session_id=' . $_GET['session_id'] . '&course_id=' . $_GET['course_id'];
+            $url = $ajax_path .'course.ajax.php?a=search_exercise_by_course&session_id=' . $sessionId . '&course_id=' . $courseId;
             $exerciseList = array();
-            $exerciseId = isset($_GET['exercise_id']) ? $_GET['exercise_id'] : null;
+            $exerciseId = isset($_GET['exercise_id']) ? Security::remove_XSS($_GET['exercise_id']) : null;
             if (!empty($exerciseId)) {
                 $exerciseList = array();
-                $exerciseInfo = current(get_exercise_by_id($exerciseId, $_GET['course_id']));
+                $exerciseInfo = current(get_exercise_by_id($exerciseId, $courseId));
                 $exerciseList[] = array('id' => $exerciseInfo['id'], 'text' => api_html_entity_decode($exerciseInfo['title']));
             }
             $sessionFilter->addElement('select_ajax', 'exercise_name', get_lang('SearchExercise'), null, array('url' => $url, 'defaults' => $exerciseList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
@@ -720,10 +719,9 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         //survey filter
         if (in_array($display, array('surveyoverview'))) {
 
-            $url = $ajax_path . 'course.ajax.php?a=search_survey_by_course&session_id=' . $_GET['session_id'] . '&course_id=' . $_GET['course_id'] . '&survey_id=' . $_GET['survey_id'];
             $surveyList = array();
-            $surveyId = isset($_GET['survey_id']) ? intval($_GET['survey_id']) : null;
-            $courseId = isset($_GET['course_id']) ? intval($_GET['course_id']) : null;
+            $surveyId = isset($_GET['survey_id']) ? intval(Security::remove_XSS($_GET['survey_id'])) : null;
+            $url = $ajax_path . 'course.ajax.php?a=search_survey_by_course&session_id=' . $sessionId . '&course_id=' . $courseId . '&survey_id=' . $surveyId;
             if (!empty($surveyId)) {
                 $course = api_get_course_info_by_id($courseId);
                 $surveyList = array();
@@ -738,9 +736,9 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         //Student and profile filter
         if (in_array($display, array('accessoverview'))) {
 
-            $url = $ajax_path . 'course.ajax.php?a=search_user_by_course&session_id=' . $_GET['session_id'] . '&course_id=' . $_GET['course_id'];
+            $url = $ajax_path . 'course.ajax.php?a=search_user_by_course&session_id=' . $sessionId . '&course_id=' . $courseId;
             $studentList = array();
-            $studentId = isset($_GET['student_id']) ? $_GET['student_id'] : null;
+            $studentId = isset($_GET['student_id']) ? intval(Security::remove_XSS($_GET['student_id'])) : null;
             if (!empty($studentId)) {
                 $studentList = array();
                 $studentInfo = UserManager::get_user_info_by_id($studentId);
@@ -819,8 +817,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         echo $sessionFilter->return_form();
         echo '</div>';
         $a = 'search_course';
-        
-        if (!empty($_GET['session_id'])) {
+        if (!empty($sessionId)) {
            $a = 'search_course_by_session';
         }
         
@@ -828,7 +825,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             $a = 'search_course_by_session_all';
         }
        
-        $url = $ajax_path . 'course.ajax.php?a='. $a .'&session_id=' . $_GET['session_id'];
+        $url = $ajax_path . 'course.ajax.php?a='. $a .'&session_id=' . $sessionId;
         echo '<script>
         $(function() {
             if (display == "lpprogressoverview" || display == "progressoverview" || display == "surveyoverview") {

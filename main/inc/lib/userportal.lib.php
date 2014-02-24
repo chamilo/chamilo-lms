@@ -937,7 +937,6 @@ class IndexManager {
 	 * */
 	function return_courses_and_sessions($user_id)
     {
-        $session_categories = array();
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
 
 		if ($load_history) {
@@ -1015,9 +1014,15 @@ class IndexManager {
                                 }
                             }
                             if ($session_now > $allowed_time && $days_access_after_end >= $dif_time_after-1) {
-                                //read only and accesible
+                                // Read only and accessible
                                 if (api_get_setting('hide_courses_in_sessions') == 'false') {
-                                    $c = CourseManager::get_logged_user_course_html($course, $session_id, 'session_course_item', true, $this->load_directories_preview);
+                                    $c = CourseManager::get_logged_user_course_html(
+                                        $course,
+                                        $session_id,
+                                        'session_course_item',
+                                        true,
+                                        $this->load_directories_preview
+                                    );
                                     $html_courses_session .= $c[1];
                                 }
                                 $count_courses_session++;

@@ -776,12 +776,12 @@ class UserGroup extends Model
 
     }
     /**
- * Add a user to a class. If the class is subscribed to a course, the new
- * user will also be subscribed to that course.
- * @param int $user_id The user id
- * @param int $class_id The class id
- */
- public function addUser($userId, $classId)
+    * Add a user to a class. If the class is subscribed to a course, the new
+    * user will also be subscribed to that course.
+    * @param int $user_id The user id
+    * @param int $class_id The class id
+    */
+    public function addUser($userId, $classId)
     {   
         $table_rel_user = Database::get_main_table(TABLE_USERGROUP_REL_USER);
         $userId  = intval($userId);

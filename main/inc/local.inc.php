@@ -822,7 +822,7 @@ if (isset($cidReset) && $cidReset) {
 
         // these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
         // Moreover, if we want to track a course with another session it can be usefull
-        if (!empty($_GET['id_session'])) {
+        if (!empty($_GET['id_session']) && is_numeric($_GET['id_session'])) {
             $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
             $sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_SESSION['id_session']). '"';
             $rs = Database::query($sql);
@@ -885,7 +885,7 @@ if (isset($cidReset) && $cidReset) {
                                     login_course_date > now() - INTERVAL $session_lifetime SECOND
                         ORDER BY login_course_date DESC LIMIT 0,1";
                     $result = Database::query($sql);
-
+                    
                     if (Database::num_rows($result) > 0) {
                         $i_course_access_id = Database::result($result,0,0);
                         //We update the course tracking table

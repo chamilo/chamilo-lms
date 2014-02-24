@@ -3476,7 +3476,8 @@ class CourseManager
      * @todo move code for what's new icons to a separate function to clear things up
      * @todo add a parameter user_id so that it is possible to show the courselist of other users (=generalisation). This will prevent having to write a new function for this.
      */
-    public static function get_logged_user_course_html($course, $session_id = 0, $class = 'courses', $session_accessible = true, $load_dirs = false) {
+    public static function get_logged_user_course_html($course, $session_id = 0, $class = 'courses', $session_accessible = true, $load_dirs = false)
+    {
         global $nosession, $nbDigestEntries, $digest, $thisCourseSysCode, $orderKey;
         $user_id  = api_get_user_id();
         $course_info = api_get_course_info($course['code']);
@@ -3504,12 +3505,12 @@ class CourseManager
         $tbl_session                = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_category       = Database :: get_main_table(TABLE_MAIN_SESSION_CATEGORY);
 
-        $course_access_settings     = CourseManager :: get_access_settings($course_info['code']);
+        $course_access_settings     = CourseManager::get_access_settings($course_info['code']);
         $course_visibility          = $course_access_settings['visibility'];
         if ($course_visibility == COURSE_VISIBILITY_HIDDEN) {
             return '';
         }
-        $user_in_course_status      = CourseManager :: get_user_in_course_status(api_get_user_id(), $course_info['code']);
+        $user_in_course_status = CourseManager::get_user_in_course_status(api_get_user_id(), $course_info['code']);
 
         $is_coach = api_is_coach($course_info['id_session'], $course['code']);
 
@@ -3517,7 +3518,6 @@ class CourseManager
         // Show a hyperlink to the course, unless the course is closed and user is not course admin.
         $session_url = '';
         $session_title = '';
-
         if ($session_accessible) {
             if ($course_visibility != COURSE_VISIBILITY_CLOSED || $user_in_course_status == COURSEMANAGER) {
                 if (!$nosession) {
@@ -3527,6 +3527,8 @@ class CourseManager
                     if ($user_in_course_status == COURSEMANAGER || ($date_start <= $now && $date_end >= $now) || $date_start == '0000-00-00') {
                         $session_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'];
                         $session_title = '<a href="'.api_get_path(WEB_COURSE_PATH).$course_info['path'].'/?id_session='.$course_info['id_session'].'">'.$course_info['name'].'</a>';
+                    } else {
+                        $session_title = $course_info['name'];
                     }
                 } else {
                     $session_url   = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/';

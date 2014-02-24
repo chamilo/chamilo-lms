@@ -2108,19 +2108,17 @@ class UserManager
         // Get the list of sessions per user
         $now = api_get_utc_datetime();
 
-        $condition_date_end = "";
         if ($is_time_over) {
             $condition_date_end = " AND (session.date_end < '$now' AND session.date_end != '0000-00-00')  ";
         } else {
             if (api_is_allowed_to_create_course()) {
-                //Teachers can access the session depending in the access_coach date
+                // Teachers can access the session depending in the access_coach date
                 $condition_date_end = null;
             } else {
                 $condition_date_end = " AND (session.date_end >= '$now' OR session.date_end = '0000-00-00') ";
             }
         }
 
-        // ORDER BY session_category_id, date_start, date_end
         $sql = "SELECT DISTINCT
                     session.id,
                     session.name,
@@ -2133,10 +2131,14 @@ class UserManager
                     nb_days_access_before_beginning,
                     nb_days_access_after_end
 
-              FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id)
-                    INNER JOIN $tbl_session_course_user as session_rel_course_user ON (session_rel_course_user.id_session = session.id)
+              FROM $tbl_session as session
+                  LEFT JOIN $tbl_session_category session_category
+                  ON (session_category_id = session_category.id)
+                  INNER JOIN $tbl_session_course_user as session_rel_course_user
+                  ON (session_rel_course_user.id_session = session.id)
               WHERE (
-                        session_rel_course_user.id_user = $user_id OR session.id_coach = $user_id
+                        session_rel_course_user.id_user = $user_id OR
+                        session.id_coach = $user_id
                     )  $condition_date_end
               ORDER BY session_category_name, name";
 

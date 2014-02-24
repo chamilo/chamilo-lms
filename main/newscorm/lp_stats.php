@@ -48,7 +48,7 @@ $course_id = $course_info['real_id'];
 if (isset($_GET['student_id'])) {
     $student_id = intval($_GET['student_id']);
 }
-$session_id = api_get_session_id();
+$session_id = ($_GET['id_session'])? intval($_GET['id_session']) : api_get_session_id();
 $session_condition = api_get_session_condition($session_id);
 
 //When origin is not set that means that the lp_stats are viewed from the "man running" icon
@@ -859,10 +859,10 @@ if (!empty($a_my_id)) {
     //var_dump($my_studen_id, $my_course_id,$a_my_id);
     if (isset($_GET['extend_attempt'])) {
         //"Right green cross" extended
-        $total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, $a_my_id, api_get_session_id(), false, false);
+        $total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, $a_my_id, $session_id, false, false);
     } else {
         //"Left green cross" extended
-        $total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, $a_my_id, api_get_session_id(), false, true);
+        $total_score = Tracking::get_avg_student_score($my_studen_id, $my_course_id, $a_my_id, $session_id, false, true);
     }
 } else {
     // Extend all "left green cross"
@@ -870,12 +870,12 @@ if (!empty($a_my_id)) {
         $my_course_id = Database::escape_string($_GET['course']);
         //    var_dump($student_id, $my_course_id );
         if (!empty($student_id) && !empty($my_course_id)) {
-            $total_score = Tracking::get_avg_student_score($student_id, $my_course_id, array(intval($_GET['lp_id'])), api_get_session_id(), false, false);
+            $total_score = Tracking::get_avg_student_score($student_id, $my_course_id, array(intval($_GET['lp_id'])), $session_id, false, false);
         } else {
             $total_score = 0;
         }
     } else {
-        $total_score = Tracking::get_avg_student_score(api_get_user_id(), api_get_course_id(), array(intval($_GET['lp_id'])), api_get_session_id(), false, false);
+        $total_score = Tracking::get_avg_student_score(api_get_user_id(), api_get_course_id(), array(intval($_GET['lp_id'])), $session_id, false, false);
     }
 }
 

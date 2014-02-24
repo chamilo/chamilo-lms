@@ -100,8 +100,22 @@ if (!empty($my_folder_data)) {
     }
 }
 
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
-$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$work_id, 'name' =>  $parent_data['title']);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
+    'name' => get_lang('StudentPublications')
+);
+
+if (api_is_allowed_to_edit()) {
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$work_id,
+        'name' =>  $parent_data['title']
+    );
+} else {
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$work_id,
+        'name' =>  $parent_data['title']
+    );
+}
 
 // form title
 $form_title = get_lang('Edit');
@@ -111,14 +125,14 @@ $interbreadcrumb[] = array('url' => '#', 'name'  => $form_title);
 $form = new FormValidator(
     'form',
     'POST',
-    api_get_self()."?".api_get_cidreq()."&id=".$work_id."&gradebook=".Security::remove_XSS($_GET['gradebook'])."&origin=$origin",
+    api_get_self()."?".api_get_cidreq()."&id=".$work_id,
     '',
     array('enctype' => "multipart/form-data")
 );
 $form->addElement('header', $form_title);
 
 $show_progress_bar = false;
-
+/*
 if ($submitGroupWorkUrl) {
     // For user coming from group space to publish his work
     $realUrl = str_replace($_configuration['root_sys'], api_get_path(WEB_PATH), str_replace("\\", '/', realpath($submitGroupWorkUrl)));
@@ -128,7 +142,7 @@ if ($submitGroupWorkUrl) {
     $text_document->freeze();
 } elseif ($item_id && ($is_allowed_to_edit or $is_author)) {
     $workUrl = $currentCourseRepositoryWeb . $workUrl;
-}
+}*/
 
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'item_id', $item_id);

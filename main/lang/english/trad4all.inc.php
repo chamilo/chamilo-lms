@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ShowSystemFolders = "Show system folders.";
+$LoginToGoToThisCourse = "Please login to go to this course";
 $LoginDate = "Login date";
 $ChooseStartDateAndEndDate = "Choose start and end dates";
 $WorkAdded = "Work added";

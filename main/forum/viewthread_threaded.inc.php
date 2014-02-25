@@ -26,8 +26,7 @@ require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 $rows = get_posts($_GET['thread']); // Note: This has to be cleaned first.
 $rows = calculate_children($rows);
 
-
-if ($_GET['post']) {
+if (isset($_GET['post']) && $_GET['post']) {
     $display_post_id = intval($_GET['post']); // note: this has to be cleaned first
 } else {
     // we need to display the first post
@@ -56,8 +55,6 @@ $prev_next_array=array();
 
 $clean_forum_id  = intval($_GET['forum']);
 $clean_thread_id = intval($_GET['thread']);
-
-
 $group_id = api_get_group_id();
 
 foreach ($rows as $post) {
@@ -87,7 +84,7 @@ foreach ($rows as $post) {
     $count++;
 }
 
-$locked = api_resource_is_locked_by_gradebook($clean_thread_id, LINK_FORUM_THREAD);            
+$locked = api_resource_is_locked_by_gradebook($clean_thread_id, LINK_FORUM_THREAD);
 
 /* NAVIGATION CONTROLS */
 
@@ -97,10 +94,10 @@ $next_id=$current_id+1;
 $prev_id=$current_id-1;
 
 // text
-$first_message=get_lang('FirstMessage');
-$last_message=get_lang('LastMessage');
-$next_message=get_lang('NextMessage');
-$prev_message=get_lang('PrevMessage');
+$first_message = get_lang('FirstMessage');
+$last_message = get_lang('LastMessage');
+$next_message = get_lang('NextMessage');
+$prev_message = get_lang('PrevMessage');
 
 // images
 $first_img 	= Display::return_icon('action_first.png',get_lang('FirstMessage'), array('style' => 'vertical-align: middle;'));
@@ -158,12 +155,14 @@ echo "<tr>";
 echo "<td rowspan=\"3\" class=\"$leftclass\">";
 $username = sprintf(get_lang('LoginX'), $rows[$display_post_id]['username']);
 if ($rows[$display_post_id]['user_id']=='0') {
-    $name=prepare4display($rows[$display_post_id]['poster_name']);
+    $name = prepare4display($rows[$display_post_id]['poster_name']);
 } else {
-    $name=api_get_person_name($rows[$display_post_id]['firstname'], $rows[$display_post_id]['lastname']);
+    $name = api_get_person_name($rows[$display_post_id]['firstname'], $rows[$display_post_id]['lastname']);
 }
 
-if (api_get_course_setting('allow_user_image_forum')) {echo '<br />'.display_user_image($rows[$display_post_id]['user_id'],$name, $origin).'<br />';	}
+if (api_get_course_setting('allow_user_image_forum')) {
+    echo '<br />'.display_user_image($rows[$display_post_id]['user_id'],$name, $origin).'<br />';
+}
 echo display_user_link($rows[$display_post_id]['user_id'], $name, $origin, $username)."<br />";
 echo api_convert_and_format_date($rows[$display_post_id]['post_date']).'<br /><br />';
 // get attach id
@@ -172,8 +171,7 @@ $id_attach = !empty($attachment_list)?$attachment_list['id']:'';
 
 // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
 // The course admin him/herself can do this off course always
-//if (($current_forum['allow_edit']==1 AND $rows[$display_post_id]['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true) && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))) {
-if ( GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) OR  ($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))) {    
+if (GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) OR  ($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))) {
     if ($locked == false) {
         echo "<a href=\"editpost.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;origin=".$origin."&amp;post=".$rows[$display_post_id]['post_id']."&amp;id_attach=".$id_attach."\">".Display::return_icon('edit.png',get_lang('Edit'), array(), ICON_SIZE_SMALL)."</a>";
     }
@@ -206,10 +204,10 @@ $userinf=api_get_user_info($rows[$display_post_id]['user_id']);
 $user_status=api_get_status_of_user_in_course($rows[$display_post_id]['user_id'],api_get_course_id());
 if (api_is_allowed_to_edit(null,true)) {
     if ($post_id > $post_minor ) {
-        //if ($user_status!=1) {        
-            $current_qualify_thread=show_qualify('1', $rows[$display_post_id]['user_id'],$_GET['thread']);            
-            
-            if ($locked == false) { 
+        //if ($user_status!=1) {
+            $current_qualify_thread=show_qualify('1', $rows[$display_post_id]['user_id'],$_GET['thread']);
+
+            if ($locked == false) {
                 echo "<a href=\"forumqualify.php?".api_get_cidreq()."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=list&amp;post=".$rows[$display_post_id]['post_id']."&amp;user=".$rows[$display_post_id]['user_id']."&amp;user_id=".$rows[$display_post_id]['user_id']."&amp;origin=".$origin."&amp;idtextqualify=".$current_qualify_thread."\" >".Display::return_icon('new_test_small.gif',get_lang('Qualify'))."</a>";
             }
         //}
@@ -277,7 +275,5 @@ if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['threa
   unset($_SESSION['whatsnew_post_info'][$current_forum['forum_id']][$current_thread['thread_id']][$row['post_id']]);
 }
 echo "</table>";
-
-// 		Displaying the thread (structure)
 
 echo $thread_structure;

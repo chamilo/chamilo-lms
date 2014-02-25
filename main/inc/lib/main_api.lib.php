@@ -743,7 +743,7 @@ function api_get_cdn_path($web_path) {
  *
  */
 function api_is_cas_activated() {
-    return api_get_setting(cas_activate) == "true";
+    return api_get_setting('cas_activate') == "true";
 }
 
 /**
@@ -1933,11 +1933,15 @@ function api_get_session_info($session_id) {
 
 /**
  * Gets the session visibility by session id
- * @param int       session id
- * @return int      0 = session still available, SESSION_VISIBLE_READ_ONLY = 1, SESSION_VISIBLE = 2, SESSION_INVISIBLE = 3
+ * @param int $session_id
+ * @param string $course_code
+ * @param bool $ignore_visibility_for_admins
+ * @return int  0 = session still available, SESSION_VISIBLE_READ_ONLY = 1, SESSION_VISIBLE = 2, SESSION_INVISIBLE = 3
  */
-function api_get_session_visibility($session_id, $course_code = null, $ignore_visibility_for_admins = true) {
-    $visibility = 0; //means that the session is still available
+function api_get_session_visibility($session_id, $course_code = null, $ignore_visibility_for_admins = true)
+{
+    // Means that the session is still available.
+    $visibility = 0;
 
     if (api_is_platform_admin()) {
         if ($ignore_visibility_for_admins) {
@@ -1951,7 +1955,12 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
         $session_id = intval($session_id);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $sql = "SELECT visibility, date_start, date_end, nb_days_access_after_end, nb_days_access_before_beginning
+        $sql = "SELECT
+                      visibility,
+                      date_start,
+                      date_end,
+                      nb_days_access_after_end,
+                      nb_days_access_before_beginning
                 FROM $tbl_session
                 WHERE id = $session_id ";
 
@@ -1965,9 +1974,7 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
             if ($row['date_start'] == '0000-00-00' && $row['date_end'] == '0000-00-00') {
                 return SESSION_AVAILABLE;
             } else {
-
-
-                //If datestart is set
+                // If date start is set.
                 if (!empty($row['date_start']) && $row['date_start'] != '0000-00-00') {
                     $row['date_start'] = $row['date_start'].' 00:00:00';
                     if ($now > api_strtotime($row['date_start'], 'UTC')) {
@@ -1977,7 +1984,7 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                     }
                 }
 
-                //if date_end is set
+                // if date_end is set.
                 if (!empty($row['date_end']) && $row['date_end'] != '0000-00-00') {
                     $row['date_end'] = $row['date_end'].' 00:00:00';
                     //only if date_start said that it was ok
@@ -1996,12 +2003,12 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                 }
             }
 
-            //If I'm a coach the visibility can change in my favor depending in the nb_days_access_after_end and nb_days_access_before_beginning values
+            /* If I'm a coach the visibility can change in my favor depending in
+             the nb_days_access_after_end and nb_days_access_before_beginning */
             $is_coach = api_is_coach($session_id, $course_code);
 
             if ($is_coach) {
-
-                //Test end date
+                // Test end date.
                 if (isset($row['date_end']) && !empty($row['date_end']) && $row['date_end'] != '0000-00-00' && $row['nb_days_access_after_end'] != '0') {
                     $end_date_for_coach = new DateTime($row['date_end']);
                     $number_of_days = "P".intval($row['nb_days_access_after_end']).'D';
@@ -2014,7 +2021,7 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                     }
                 }
 
-                //Test start date
+                // Test start date.
                 if (isset($row['date_start']) && !empty($row['date_start']) && $row['date_start'] != '0000-00-00' && $row['nb_days_access_before_beginning'] != '0') {
                     $start_date_for_coach = new DateTime($row['date_start']);
                     $number_of_days = "P".intval($row['nb_days_access_before_beginning']).'D';
@@ -3842,6 +3849,13 @@ function api_string_2_boolean($string) {
     return false;
 }
 
+/**
+ * Too keep BC
+ * @deprecated use api_string_2_boolean
+ */
+function string_2_boolean($string) {
+    return api_string_2_boolean($string);
+}
 
 /**
  * Determines the number of plugins installed for a given location

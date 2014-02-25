@@ -590,7 +590,7 @@ switch ($action) {
                 } else {
                     $session_date_string = implode(' ', $session_date);
                 }
-                $sessionUrl = api_get_path(WEB_CODE_PATH).'mySpace/index.php?session_id='.$session['id'];
+                $sessionUrl = api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='.$session['id'];
                 $result[] = array(
                     'name' => $session['name'],
                     'date' => $session_date_string,

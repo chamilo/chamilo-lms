@@ -18,16 +18,18 @@ use ChamiloSession as Session;
  */
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
+$_configuration['add_document_to_work'] = true;
 if (isset($_configuration['add_document_to_work'])) {
     define('ADD_DOCUMENT_TO_WORK', $_configuration['add_document_to_work']);
 } else {
     define('ADD_DOCUMENT_TO_WORK', false);
 }
 
-//$_configuration['work_user_comments'] = false;
+$_configuration['work_user_comments'] = true;
 if (isset($_configuration['work_user_comments'])) {
     define('ALLOW_USER_COMMENTS', $_configuration['work_user_comments']);
 } else {
@@ -2773,7 +2775,6 @@ function getWorkDescriptionToolbar()
  */
 function getWorkComments($work)
 {
-
     if (ADD_DOCUMENT_TO_WORK == false) {
         return array();
     }
@@ -2791,21 +2792,100 @@ function getWorkComments($work)
             ";
     $result = Database::query($sql);
     $comments = Database::store_result($result, 'ASSOC');
+    $urlPath = api_get_path(WEB_CODE_PATH).'work/download_comment_file.php?'.api_get_cidreq();
+    $deleteUrl = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_attachment';
     foreach ($comments as &$comment) {
-        $pictureInfo = UserManager::get_picture_user($comment['user_id'], $comment['picture_uri'], 24, USER_IMAGE_SIZE_SMALL);
+        $pictureInfo = UserManager::get_picture_user(
+            $comment['user_id'],
+            $comment['picture_uri'],
+            24,
+            USER_IMAGE_SIZE_SMALL
+        );
+
+        if (!empty($comment['file'])) {
+            $comment['file_url'] = $urlPath.'&comment_id='.$comment['id'];
+            $comment['delete_file_url'] = $deleteUrl.'&comment_id='.$comment['id'];
+        }
+
         $comment['picture'] = $pictureInfo['file'];
     }
     return $comments;
 }
 
+
+/**
+ * @param int $id comment id
+ * @param array $courseInfo
+ * @return string
+ */
+function getWorkComment($id, $courseInfo = array())
+{
+    if (ADD_DOCUMENT_TO_WORK == false) {
+        return array();
+    }
+    if (empty($courseInfo)) {
+        $courseInfo = api_get_course_info();
+    }
+
+    if (empty($courseInfo['real_id'])) {
+        return array();
+    }
+
+    $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
+    $id = intval($id);
+
+    $sql = "SELECT * FROM $commentTable
+            WHERE id = $id AND c_id = ".$courseInfo['real_id'];
+    $result = Database::query($sql);
+    $comment = array();
+    if (Database::num_rows($result)) {
+        $comment = Database::fetch_array($result, 'ASSOC');
+        $filePath = null;
+        $fileUrl = null;
+        if (!empty($comment['file'])) {
+            $work = get_work_data_by_id($comment['work_id']);
+            $workParent = get_work_data_by_id($work['parent_id']);
+            $filePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work/'.$workParent['url'].'/'.$comment['file'];
+            $fileUrl = api_get_path(WEB_CODE_PATH).'work/download_comment_file.php?comment_id='.$id;
+        }
+        $comment['file_path'] = $filePath;
+        $comment['file_url'] = $fileUrl;
+    }
+    return $comment;
+}
+
+/**
+ * @param int $id
+ * @param array $courseInfo
+ */
+function deleteCommentFile($id, $courseInfo = array())
+{
+    $workComment = getWorkComment($id, $courseInfo);
+    if (isset($workComment['file']) && !empty($workComment['file'])) {
+        if (file_exists($workComment['file_path'])) {
+            $result = my_delete($workComment['file_path']);
+            if ($result) {
+                $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
+                $params = array('file' => '');
+                Database::update(
+                    $commentTable,
+                    $params,
+                    array('id = ? AND c_id = ? ' => array($workComment['id'], $workComment['c_id']))
+                );
+            }
+        }
+    }
+}
+
 /**
  * Adds a comments to the work document
+ * @param array $courseInfo
  * @param int $userId
  * @param array $work
  * @param array $data
  * @return int
  */
-function addWorkComment($userId, $work, $data)
+function addWorkComment($courseInfo, $userId, $work, $data)
 {
     if (ADD_DOCUMENT_TO_WORK == false) {
         return null;
@@ -2824,7 +2904,28 @@ function addWorkComment($userId, $work, $data)
         'comment' => $data['comment'],
         'sent_at' => api_get_utc_datetime()
     );
-    return Database::insert($commentTable, $params);
+
+    $commentId = Database::insert($commentTable, $params);
+    $fileData = isset($data['file']) ? $data['file'] : null;
+    if (!empty($commentId) && !empty($fileData)) {
+        $workParent = get_work_data_by_id($work['parent_id']);
+        if (!empty($workParent)) {
+            $uploadDir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work'.$workParent['url'];
+            $newFileName = 'comment_'.$commentId.'_'.php2phps(
+                replace_dangerous_char($fileData['name'], 'strict')
+            );
+            $newFilePath = $uploadDir.'/'.$newFileName;
+            $result = move_uploaded_file($fileData['tmp_name'], $newFilePath);
+            if ($result) {
+                $params = array('file' => $newFileName);
+                Database::update(
+                    $commentTable,
+                    $params,
+                    array('id = ? AND c_id = ? ' => array($commentId, $work['c_id']))
+                );
+            }
+        }
+    }
 }
 
 /**
@@ -2842,6 +2943,7 @@ function getWorkCommentForm($work)
         api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&action=send_comment&'.api_get_cidreq()
     );
     $form->addElement('textarea', 'comment', get_lang('Comment'), array('class' => 'span5', 'rows' => '8'));
+    $form->addElement('file', 'file', get_lang('Attachment'));
     $form->addRule('comment', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('hidden', 'id', $work['id']);
     $form->addElement('button', 'button', get_lang('Send'));

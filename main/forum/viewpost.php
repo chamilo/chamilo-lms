@@ -22,9 +22,11 @@ require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 $htmlHeadXtra[] = '<script language="javascript">
-                                        $(document).ready(function(){ $(\'.hide-me\').slideUp() });
-                                    function hidecontent(content){ $(content).slideToggle(\'normal\'); }
-                                    </script>';
+$(document).ready(function(){ $(\'.hide-me\').slideUp() });
+    function hidecontent(content){
+        $(content).slideToggle(\'normal\');
+    }
+</script>';
 
 // Are we in a lp ?
 $origin = '';
@@ -43,7 +45,6 @@ $current_thread = get_thread_information($_GET['thread']); // Note: This has to 
 $current_forum = get_forum_information($current_thread['forum_id']); // Note: This has to be validated that it is an existing forum.
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 $whatsnew_post_info = $_SESSION['whatsnew_post_info'];
-
 /* Header and Breadcrumbs */
 
 if (isset($_SESSION['gradebook'])){
@@ -52,9 +53,9 @@ if (isset($_SESSION['gradebook'])){
 
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array (
-            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-            'name' => get_lang('ToolGradebook')
-        );
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 
 if ($origin == 'learnpath') {
@@ -98,7 +99,8 @@ if (!empty($message)) {
     Display :: display_confirmation_message(get_lang($message));
 }
 
-if ($message != 'PostDeletedSpecial') { // In this case the first and only post of the thread is removed.
+// In this case the first and only post of the thread is removed.
+if ($message != 'PostDeletedSpecial') {
     // This increases the number of times the thread has been viewed.
     increase_thread_view($_GET['thread']);
 
@@ -172,9 +174,7 @@ if ($message != 'PostDeletedSpecial') { // In this case the first and only post 
     echo "</table>";
 
     include_once('viewpost.inc.php');
-} // if ($message != 'PostDeletedSpecial') // In this case the first and only post of the thread is removed.
-
-/* FOOTER */
+}
 
 if ($origin != 'learnpath') {
     Display :: display_footer();

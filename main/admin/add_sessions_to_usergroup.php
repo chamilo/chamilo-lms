@@ -196,6 +196,10 @@ echo '<a href="javascript://" class="advanced_parameters" style="margin-top: 8px
 echo '</div>';
 
 ?>
+
+<?php echo '<div id="advancedSearch" style="display: none">'. get_lang('SearchSessions'); ?> :
+     <input name="SearchSession" onchange = "xajax_search_sessions(this.value,'searchbox')" onkeyup="this.onchange()">
+     </div>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <?php
 echo '<legend>'.$data['name'].': '.$tool_name.'</legend>';
@@ -253,9 +257,6 @@ if(!empty($errorMsg)) {
       ?>
      </select>
 <?php echo '<br />'; ?>
-<?php echo '<div id="advancedSearch" style="display: none">'. get_lang('SearchSessions'); ?> :
-     <input name="SearchSession" onchange = "xajax_search_sessions(this.value,'searchbox')" onkeyup="this.onchange()">
-     </div>
 </td>
 <td align="center">&nbsp;</td>
 </tr>

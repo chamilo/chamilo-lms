@@ -11,18 +11,34 @@
  * @author jmontoya
  *
  */
-class AnnouncementManager {
+class AnnouncementManager
+{
 
     public function __construct()
     {
-
     }
 
+    /**
+     * @return array
+     */
     public static function get_tags()
     {
-        return array('((user_name))', '((user_firstname))', '((user_lastname))', '((teacher_name))', '((teacher_email))', '((course_title))', '((course_link))');
+        return array(
+            '((user_name))',
+            '((user_firstname))',
+            '((user_lastname))',
+            '((teacher_name))',
+            '((teacher_email))',
+            '((course_title))',
+            '((course_link))'
+        );
     }
 
+    /**
+     * @param string $content
+     * @param string $course_code
+     * @return mixed
+     */
     public static function parse_content($content, $course_code)
     {
         $reader_info = api_get_user_info(api_get_user_id());
@@ -38,7 +54,7 @@ class AnnouncementManager {
             }
         }
         $course_link = api_get_course_url();
-        
+
         $data['user_name'] = $reader_info['username'];
         $data['user_firstname'] = $reader_info['firstname'];
         $data['user_lastname'] = $reader_info['lastname'];
@@ -46,25 +62,25 @@ class AnnouncementManager {
         $data['teacher_email'] = $teacher_email;
         $data['course_title'] = $course_info['name'];
         $data['course_link'] = Display::url($course_link, $course_link);
-       
+
         $content = str_replace(self::get_tags(), $data, $content);
+
         return $content;
     }
-    
+
     /**
      * parse announcement content when sending an email. It parses only teacher data
      * @author  yoselyn castillo
      * @param	string content
-     * @param	int course code
+     * @param	string course code
      * @return	string with the parsed content
      */
-    
      public static function parseEmailContent($content, $courseCode)
      {
         $readerInfo = api_get_user_info(api_get_user_id());
         $courseInfo = api_get_course_info($courseCode);
         $teacherList = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
-        
+
         $teacherName = '';
         if (!empty($teacherList)) {
             foreach ($teacherList as $teacherData) {
@@ -79,7 +95,7 @@ class AnnouncementManager {
         $data['teacher_name'] = $teacherName;
         $data['teacher_email'] = $teacherEmail;
         $data['course_title'] = $courseInfo['name'];
-        $data['course_link'] = Display::url($course_link, $course_link);       
+        $data['course_link'] = Display::url($course_link, $course_link);
 
         $content = str_replace(self::get_tags(), $data, $content);
         return $content;
@@ -1019,7 +1035,6 @@ class AnnouncementManager {
      */
     public static function sent_to($tool, $id)
     {
-        global $_course;
         global $tbl_item_property;
 
         $tool = Database::escape_string($tool);
@@ -1029,7 +1044,9 @@ class AnnouncementManager {
         $sent_to = array();
         $course_id = api_get_course_int_id();
 
-        $sql = "SELECT to_group_id, to_user_id FROM $tbl_item_property WHERE c_id = $course_id AND tool = '$tool' AND ref=" . $id;
+        $sql = "SELECT to_group_id, to_user_id
+                FROM $tbl_item_property
+                WHERE c_id = $course_id AND tool = '$tool' AND ref=" . $id;
         $result = Database::query($sql);
 
         while ($row = Database::fetch_array($result)) {
@@ -1181,17 +1198,15 @@ class AnnouncementManager {
         $id = intval($id);
         $course_id = api_get_course_int_id();
         $sql = "DELETE FROM $tbl_announcement_attachment WHERE c_id = $course_id AND id = $id";
-        $result = Database::query($sql);
-        // update item_property
-        //api_item_property_update($_course, 'announcement_attachment',  $id,'AnnouncementAttachmentDeleted', api_get_user_id());
+        Database::query($sql);
     }
 
-    public static function send_email($annoucement_id)
+    /**
+     * @param $id
+     */
+    public static function send_email($id)
     {
-        $email = AnnouncementEmail::create(null, $annoucement_id);
+        $email = AnnouncementEmail::create(null, $id);
         $email->send();
     }
-
 }
-
-//end class

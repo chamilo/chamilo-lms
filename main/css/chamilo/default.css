@@ -248,12 +248,90 @@ a:active {
 }
 /*ICON INBOX*/
 .home-icon{
-  background:url(images/);
+  background:url(images/sprite-icon-social.png) no-repeat 0 0;
+  background-size: 24px auto;
+  padding-left: 30px;
 }
-
-
+.home-icon:hover{
+  background:url(images/sprite-icon-social.png) no-repeat 0 -34px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.messages-icon{
+  background:url(images/sprite-icon-social.png) no-repeat 0 -62px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.messages-icon:hover{
+  background:url(images/sprite-icon-social.png) no-repeat 0 -89px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.invitations-icon{
+  background:url(images/sprite-icon-social.png) no-repeat 0 -120px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.invitations-icon:hover{
+  background:url(images/sprite-icon-social.png) no-repeat 0 -153px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.shared-profile-icon{
+  background:url(images/sprite-icon-social.png) no-repeat 0 -186px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.shared-profile-icon:hover{
+  background:url(images/sprite-icon-social.png) no-repeat 0 -221px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.friends-icon{
+  background:url(images/sprite-icon-social.png) no-repeat 0 -256px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.friends-icon:hover{
+  background:url(images/sprite-icon-social.png) no-repeat 0 -291px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.browse-groups-icon{
+  background:url(images/sprite-icon-social.png) no-repeat 0 -325px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.browse-groups-icon:hover{
+  background:url(images/sprite-icon-social.png) no-repeat 0 -358px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.search-icon {
+  background:url(images/sprite-icon-social.png) no-repeat 0 -392px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.search-icon:hover {
+  background:url(images/sprite-icon-social.png) no-repeat 0 -427px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.myfiles-icon {
+  background:url(images/sprite-icon-social.png) no-repeat 0 -462px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.myfiles-icon:hover {
+  background:url(images/sprite-icon-social.png) no-repeat 0 -497px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
 /* END ICON INBOX */
-
+.nav-list > .active > a, .nav-list > .active > a:hover {
+  color: #333333;
+  background: none;
+}
 /*CSS SLIDER ANUNCIOS*/
 
 .pagerslide h2{
@@ -596,7 +674,7 @@ button.arrowl, input.arrowl {
         background: url("images/sprite-icon.png") no-repeat 0 -618px;
         padding-left: 40px;
     }
-    
+
 
 /*+++++++++++++++++++++++++++++++++
 RESPONSIVE CSS

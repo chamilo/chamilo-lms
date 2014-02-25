@@ -31,40 +31,40 @@ class Tracking
      * @return timestamp $nb_seconds
      */
     public static function get_time_spent_on_the_platform(
-        $user_id,
-        $time_filter = 'last_7_days',
+        $userId,
+        $timeFilter = 'last_7_days',
         $start_date = null,
         $end_date = null
     ) {
         $tbl_track_login = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $condition_time = '';
 
-        if (is_array($user_id)) {
-            $userList = array_map('intval', $user_id);
+        if (is_array($userId)) {
+            $userList = array_map('intval', $userId);
             $userCondition = " login_user_id IN ('".implode("','", $userList)."')";
         } else {
-            $userCondition = " login_user_id = ".intval($user_id);
+            $userCondition = " login_user_id = ".intval($userId);
         }
 
-        if (empty($time_filter)) {
-            $time_filter = 'last_week';
+        if (empty($timeFilter)) {
+            $timeFilter = 'last_week';
         }
 
         $today = date('Y-m-d H:i:s');
 
-        switch ($time_filter) {
+        switch ($timeFilter) {
             case 'last_7_days':
-                $new_date = strtotime('-7 day');
-                $new_date = date('Y-m-d H:i:s', $new_date);
+                $new_date = date('Y-m-d H:i:s', strtotime('-7 day'));
                 $condition_time = ' AND (login_date >= "'.$new_date.'" AND logout_date <= "'.$today.'") ';
                 break;
             case 'last_30_days':
-                $new_date = strtotime('-30 day');
-                $new_date = date('Y-m-d H:i:s', $new_date);
+                $new_date = date('Y-m-d H:i:s', strtotime('-30 day'));
                 $condition_time = ' AND (login_date >= "'.$new_date.'" AND logout_date <= "'.$today.'") ';
                break;
             case 'custom':
                 if (!empty($start_date) && !empty($end_date)) {
+                    $start_date = Database::escape_string($start_date);
+                    $end_date = Database::escape_string($end_date);
                     $condition_time = ' AND (login_date >= "'.$start_date.'" AND logout_date <= "'.$end_date.'" ) ';
                 }
                 break;

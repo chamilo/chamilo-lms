@@ -34,12 +34,23 @@ if (user_is_author($id) || $course_info['show_score'] == 0 && $work['active'] ==
     if (($course_info['show_score'] == 0 && $work['active'] == 1 && $work['accepted'] == 1) ||
         api_is_allowed_to_edit() || user_is_author($id)
     ) {
-
-        if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'send_comment') {
-            addWorkComment(api_get_user_id(), $work, $_POST);
-            $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
-            header('Location: '.$url);
-            exit;
+        $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+        switch($action) {
+            case 'send_comment':
+                if (isset($_FILES["file"])) {
+                    $_POST['file'] = $_FILES["file"];
+                }
+                addWorkComment(api_get_course_info(), api_get_user_id(), $work, $_POST);
+                $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
+                header('Location: '.$url);
+                exit;
+                break;
+            case 'delete_attachment':
+                deleteCommentFile($_REQUEST['comment_id'], api_get_course_info());
+                $url = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
+                header('Location: '.$url);
+                exit;
+                break;
         }
 
         $comments = getWorkComments($work);
@@ -50,6 +61,7 @@ if (user_is_author($id) || $course_info['show_score'] == 0 && $work['active'] ==
         $tpl->assign('work_comment_enabled', ALLOW_USER_COMMENTS);
         $tpl->assign('comments', $comments);
         $tpl->assign('form', $commentForm);
+        $tpl->assign('is_allowed_to_edit', api_is_allowed_to_edit());
 
         $template = $tpl->get_template('work/view.tpl');
         $content  = $tpl->fetch($template);

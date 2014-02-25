@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS c_student_publication_comment (
   work_id INT NOT NULL,
   c_id INT NOT NULL,
   comment text,
+  file VARCHAR(255),
   user_id int NOT NULL,
   sent_at datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

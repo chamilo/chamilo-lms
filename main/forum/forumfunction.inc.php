@@ -2880,19 +2880,28 @@ function get_whats_new()
     //Session::erase('whatsnew_post_info');
 
     $course_id = api_get_course_int_id();
+    $lastForumAccess = Session::read('last_forum_access');
 
-    if (!$_SESSION['last_forum_access']) {
+    if (!$lastForumAccess) {
         $sql = "SELECT * FROM ".$tracking_last_tool_access."
-                WHERE access_user_id='".Database::escape_string($_user['user_id'])."' AND access_cours_code='".Database::escape_string($_course['sysCode'])."' AND access_tool='".Database::escape_string($tool)."'";
+                WHERE
+                    access_user_id='".Database::escape_string($_user['user_id'])."' AND
+                    access_cours_code='".Database::escape_string($_course['sysCode'])."' AND
+                    access_tool='".Database::escape_string($tool)."'";
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
         $_SESSION['last_forum_access'] = $row['access_date'];
     }
 
-    if (!$_SESSION['whatsnew_post_info']) {
-        if ($_SESSION['last_forum_access'] != '') {
+    $whatsNew = Session::read('whatsnew_post_info');
+
+    if (!$whatsNew) {
+        if ($lastForumAccess != '') {
             $whatsnew_post_info = array();
-            $sql = "SELECT * FROM ".$table_posts." WHERE c_id = $course_id AND post_date>'".Database::escape_string($_SESSION['last_forum_access'])."'"; // note: check the performance of this query.
+            $sql = "SELECT * FROM $table_posts
+                    WHERE
+                        c_id = $course_id AND
+                        post_date >'".Database::escape_string($_SESSION['last_forum_access'])."'"; // note: check the performance of this query.
             $result = Database::query($sql);
             while ($row = Database::fetch_array($result)) {
                 $whatsnew_post_info[$row['forum_id']][$row['thread_id']][$row['post_id']] = $row['post_date'];
@@ -2919,10 +2928,8 @@ function get_post_topics_of_forum($forum_id)
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
     $course_id = api_get_course_int_id();
 
-    $sql = "SELECT count(*) as number_of_posts FROM $table_posts WHERE forum_id='".$forum_id."'";
     if (api_is_allowed_to_edit(null, true)) {
         $sql = "SELECT count(*) as number_of_posts
                 FROM $table_posts posts, $table_threads threads, $table_item_property item_property

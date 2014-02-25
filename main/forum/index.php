@@ -24,6 +24,8 @@
 /**
  * Code
  */
+
+use \ChamiloSession as Session;
 // Name of the language file that needs to be included.
 $language_file = 'forum';
 
@@ -36,15 +38,15 @@ $htmlHeadXtra[] = '<script>
     function hidecontent(content){ $(content).slideToggle(\'normal\'); }
     </script>';
 $htmlHeadXtra[] = '<script type="text/javascript">
-        function advanced_parameters() {
-            if(document.getElementById(\'options\').style.display == \'none\') {
-                    document.getElementById(\'options\').style.display = \'block\';
-                    document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-            } else {
-                    document.getElementById(\'options\').style.display = \'none\';
-                    document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-            }
-        }
+function advanced_parameters() {
+    if (document.getElementById(\'options\').style.display == \'none\') {
+        document.getElementById(\'options\').style.display = \'block\';
+        document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Hide'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+    } else {
+        document.getElementById(\'options\').style.display = \'none\';
+        document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+    }
+}
 </script>';
 
 // The section (tabs).
@@ -124,8 +126,8 @@ if ($actions == 'notify' && isset($_GET['content']) && isset($_GET['id'])) {
 }
 
 get_whats_new();
-$whatsnew_post_info = array();
-$whatsnew_post_info = $_SESSION['whatsnew_post_info'];
+
+$whatsnew_post_info = Session::read('whatsnew_post_info');
 
 /* TRACKING */
 

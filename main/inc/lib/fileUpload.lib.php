@@ -239,12 +239,14 @@ function handle_uploaded_document(
 			// Full path to where we want to store the file with trailing slash
 			$where_to_save = $base_work_dir.$upload_path;
 			// At least if the directory doesn't exist, tell so
-			if (!is_dir($where_to_save)) {
-			    if ($output){
-				    Display::display_error_message(get_lang('DestDirectoryDoesntExist').' ('.$upload_path.')');
-				}
-				return false;
-			}
+            if (!is_dir($where_to_save)) {
+                if (!mkdir($where_to_save, api_get_permissions_for_new_directories())) {
+                    if ($output) {
+                        Display::display_error_message(get_lang('DestDirectoryDoesntExist').' ('.$upload_path.')');
+                    }
+                    return false;
+                }
+            }
 			// Full path of the destination
 			$store_path = $where_to_save.$clean_name;
 

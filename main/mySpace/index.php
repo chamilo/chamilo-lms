@@ -315,14 +315,14 @@ if (!empty($students)) {
 
     if ($export_csv) {
         //csv part
-        $csv_content[] = array(get_lang('Students', ''));
-        $csv_content[] = array(get_lang('InactivesStudents', ''), $nb_inactive_students);
-        $csv_content[] = array(get_lang('AverageTimeSpentOnThePlatform', ''), $avg_time_spent);
-        $csv_content[] = array(get_lang('AverageCoursePerStudent', ''), $avg_courses_per_student);
-        $csv_content[] = array(get_lang('AverageProgressInLearnpath', ''), is_null($avg_total_progress) ? null : round($avg_total_progress, 2).'%');
-        $csv_content[] = array(get_lang('AverageResultsToTheExercices', ''), is_null($avg_results_to_exercises) ? null : round($avg_results_to_exercises, 2).'%');
-        $csv_content[] = array(get_lang('AveragePostsInForum', ''), $nb_posts);
-        $csv_content[] = array(get_lang('AverageAssignments', ''), $nb_assignments);
+        $csv_content[] = array(get_lang('Students'));
+        $csv_content[] = array(get_lang('InactivesStudents'), $nb_inactive_students);
+        $csv_content[] = array(get_lang('AverageTimeSpentOnThePlatform'), $avg_time_spent);
+        $csv_content[] = array(get_lang('AverageCoursePerStudent'), $avg_courses_per_student);
+        $csv_content[] = array(get_lang('AverageProgressInLearnpath'), is_null($avg_total_progress) ? null : round($avg_total_progress, 2).'%');
+        $csv_content[] = array(get_lang('AverageResultsToTheExercices'), is_null($avg_results_to_exercises) ? null : round($avg_results_to_exercises, 2).'%');
+        $csv_content[] = array(get_lang('AveragePostsInForum'), $nb_posts);
+        $csv_content[] = array(get_lang('AverageAssignments'), $nb_assignments);
         $csv_content[] = array();
     } else {
         $lastConnectionDate = api_get_utc_datetime(strtotime('15 days ago'));
@@ -357,7 +357,7 @@ if (!empty($students)) {
                     </tr>
                     <tr>
                         <td>'.get_lang('AverageCoursePerStudent').'</td>
-                        <td align="right">'.(is_null($avg_courses_per_student) ? '' : $avg_courses_per_student).'</td>
+                        <td align="right">'.(is_null($avg_courses_per_student) ? '' : round($avg_courses_per_student, 2)).'</td>
                     </tr>
                     <tr>
                         <td>'.get_lang('InactivesStudents').'</td>
@@ -384,7 +384,7 @@ if (!empty($students)) {
                         <td align="right">'.(is_null($nb_assignments) ? '' : round($nb_assignments, 2)).'</td>
                     </tr>
                 </table>
-                <a class="btn" href="'.api_get_path(WEB_CODE_PATH).'mySpace/student.php'.'">
+                <a class="btn" href="'.api_get_path(WEB_CODE_PATH).'mySpace/student.php">
                 '.get_lang('SeeStudentList').'
                 </a>
              </div><br />';

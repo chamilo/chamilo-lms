@@ -86,10 +86,10 @@ class Tracking
 
     /**
      * Calculates the time spent on the course
-     * @param     integer     User id
-     * @param     string         Course code
-     * @param     int            Session id (optional)
-     * @return     timestamp     Time in seconds
+     * @param integer $user_id
+     * @param string  $course_code
+     * @param int Session id (optional)
+     * @return timestamp     Time in seconds
      */
     public static function get_time_spent_on_the_course($user_id, $course_code, $session_id = 0)
     {
@@ -105,10 +105,7 @@ class Tracking
     		$condition_user = " AND user_id = '$user_id' ";
     	}
 
-    	$sql = "SELECT
-                SUM (
-                  UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)
-                ) as nb_seconds
+    	$sql = "SELECT SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds
                 FROM $tbl_track_course
                 WHERE
                     UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) AND

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SearchSessions = "Session Search";
 $DeleteUsersNotInList = "Unsubscribe students which are not in the imported list";
 $IfSessionExistsUpdate = "If a session exists, update it";
 $SearchCourseBySession = "Search course by session";
@@ -1688,5 +1689,4 @@ $SpaceUsedOnSystemCannotBeMeasuredOnWindows = "The space used on disk cannot be 
 $XOldTablesDeleted = "%d old tables deleted";
 $XOldDatabasesDeleted = "%d old databases deleted";
 $ExtensionShouldBeLoaded = "This extension should be loaded.";
-$SearchSessions = "Session search";
 ?>

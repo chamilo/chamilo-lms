@@ -2,6 +2,11 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SelectADateOnTheCalendar = "Select a date from the calendar";
+$AreYouSureDeleteTestResultBeforeDateD = "Are you sure you want to clean results for this test before the selected date ?";
+$CleanStudentsResultsBeforeDate = "Clean all results before a selected date";
+$AreYouSureToEmptyAllTestResults = "Clear all learners results for every exercises ?";
+$CleanAllStudentsResultsForAllTests = "Are you sure to delete all test's results ?";
 $TestFeedbackNotShown = "This test is configured not to display feedback to learners. Comments will not be seen at the end of the test, but may be useful for you, as teacher, when reviewing the question details.";
 $FeedbackDisplayOptions = "How should we show the feedback/comment for each question? This option defines how it will be shown to the learner when taking the test. We recommend you try different options by editing your test options before having learners take it.";
 $ImportAikenQuizExplanationExample = "This is the text for question 1

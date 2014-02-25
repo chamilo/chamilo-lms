@@ -24,17 +24,27 @@ class Tracking
 {
     /**
      * Calculates the time spent on the platform by a user
-     * @param   int    User id
+     * @param   int|array User id
      * @param   string type of time filter: 'last_week' or 'custom'
      * @param   strgin  start date date('Y-m-d H:i:s')
      * @param   strgin  end date date('Y-m-d H:i:s')
      * @return timestamp $nb_seconds
      */
-    public static function get_time_spent_on_the_platform($user_id, $time_filter = 'last_7_days', $start_date = null, $end_date = null)
-    {
-        $tbl_track_login = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-
+    public static function get_time_spent_on_the_platform(
+        $user_id,
+        $time_filter = 'last_7_days',
+        $start_date = null,
+        $end_date = null
+    ) {
+        $tbl_track_login = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $condition_time = '';
+
+        if (is_array($user_id)) {
+            $userList = array_map('intval', $user_id);
+            $userCondition = " login_user_id IN ('".implode("','", $userList)."')";
+        } else {
+            $userCondition = " login_user_id = ".intval($user_id);
+        }
 
         if (empty($time_filter)) {
             $time_filter = 'last_week';
@@ -54,47 +64,24 @@ class Tracking
                 $condition_time = ' AND (login_date >= "'.$new_date.'" AND logout_date <= "'.$today.'") ';
                break;
             case 'custom':
-                if (!empty($start_date) && !empty($end_date))  {
+                if (!empty($start_date) && !empty($end_date)) {
                     $condition_time = ' AND (login_date >= "'.$start_date.'" AND logout_date <= "'.$end_date.'" ) ';
                 }
                 break;
         }
 
-    	$sql = 'SELECT login_date, logout_date FROM '.$tbl_track_login.'
-                WHERE login_user_id = '.intval($user_id).$condition_time;
+    	$sql = 'SELECT SUM(TIMESTAMPDIFF(SECOND, login_date, logout_date)) diff
+    	        FROM '.$tbl_track_login.'
+                WHERE '.$userCondition.$condition_time;
     	$rs = Database::query($sql);
+        $row = Database::fetch_array($rs, 'ASSOC');
+        $diff = $row['diff'];
 
-    	$nb_seconds = 0;
-
-    	$wrong_logout_dates = false;
-
-    	while ($a_connections = Database::fetch_array($rs)) {
-
-    		$s_login_date = $a_connections["login_date"];
-    		$s_logout_date = $a_connections["logout_date"];
-
-    		$i_timestamp_login_date = strtotime($s_login_date);
-    		$i_timestamp_logout_date = strtotime($s_logout_date);
-
-    		if ($i_timestamp_logout_date > 0) {
-    			// @TODO YW 20110708: for some reason the result here is often
-    			// negative, resulting in a negative time total. Considering the
-    			// logout_date is > 0, this can only mean that the database
-    			// contains items where the login_date is higher (=later) than
-    			// the logout date for a specific connexion. This has to be
-    			// analyzed and fixed. Also see the get_time_spent_on_the_course
-    			// for SQL summing.
-    			$nb_seconds += abs($i_timestamp_logout_date - $i_timestamp_login_date);
-    		} else { // there are wrong datas in db, then we can't give a wrong time
-    			$wrong_logout_dates = true;
-    		}
-    	}
-
-    	if($nb_seconds>0 || !$wrong_logout_dates) {
-    		return $nb_seconds;
-    	} else {
-    		return -1; //-1 means we have wrong datas in the db
-    	}
+        if ($diff >= 0) {
+            return $diff;
+        } else {
+            return -1;
+        }
     }
 
     /**
@@ -106,13 +93,10 @@ class Tracking
      */
     public static function get_time_spent_on_the_course($user_id, $course_code, $session_id = 0)
     {
-    	// protect datas
     	$course_code = Database::escape_string($course_code);
     	$session_id  = intval($session_id);
 
     	$tbl_track_course = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-
-    	$condition_user = "";
     	if (is_array($user_id)) {
     	    $user_id = array_map('intval', $user_id);
     		$condition_user = " AND user_id IN (".implode(',',$user_id).") ";
@@ -122,7 +106,9 @@ class Tracking
     	}
 
     	$sql = "SELECT
-                SUM(UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)) as nb_seconds
+                SUM (
+                  UNIX_TIMESTAMP(logout_course_date) - UNIX_TIMESTAMP(login_course_date)
+                ) as nb_seconds
                 FROM $tbl_track_course
                 WHERE
                     UNIX_TIMESTAMP(logout_course_date) > UNIX_TIMESTAMP(login_course_date) AND
@@ -154,7 +140,6 @@ class Tracking
     	}
     	return false;
     }
-
 
     /**
      * Get las connection date for a student
@@ -196,6 +181,44 @@ class Tracking
     		}
     	}
     	return false;
+    }
+
+    /**
+     * Get las connection date for a student
+     * @param array Student id array
+     * @param int $days
+     * @param bool $getCount
+     * @return int
+     */
+    public static function getInactiveUsers($studentList, $days, $getCount = true)
+    {
+        if (empty($studentList)) {
+            return 0;
+        }
+        $days = intval($days);
+        $date = api_get_utc_datetime(strtotime($days.' days ago'));
+        $studentList = array_map('intval', $studentList);
+
+        $tbl_track_login = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $select = " SELECT login_user_id ";
+        if ($getCount) {
+            $select = " SELECT count(DISTINCT login_user_id) as count";
+        }
+        $sql = "$select
+                FROM $tbl_track_login
+                WHERE
+                    login_user_id IN (' ". implode("','", $studentList) . "' ) AND
+                    login_date < '$date'
+                ";
+        $rs = Database::query($sql);
+        if (Database::num_rows($rs) > 0) {
+            if ($getCount) {
+                $count = Database::fetch_array($rs);
+                return $count['count'];
+            }
+            return Database::store_result($rs, 'ASSOC');
+        }
+        return false;
     }
 
     /**
@@ -555,69 +578,60 @@ class Tracking
      * @param    bool        Will return an array of the type: [sum_of_progresses, number] if it is set to true
      * @return double        Average progress of the user in this course
      */
-    public static function get_avg_student_progress($student_id, $course_code, $lp_ids = array(), $session_id = null, $return_array = false)
+    public static function get_avg_student_progress($student_id, $course_code = null, $lp_ids = array(), $session_id = null, $return_array = false)
     {
+        $conditions = array();
     	// Get the information of the course.
     	$course_info = api_get_course_info($course_code);
     	if (!empty($course_info)) {
-    		// table definition
-    		$tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW);
-    		$tbl_course_lp = Database :: get_course_table(TABLE_LP_MAIN);
+            $conditions[] = " c_id = {$course_info['real_id']} ";
+        }
+        // table definition
+        $tbl_course_lp_view = Database :: get_course_table(TABLE_LP_VIEW);
 
-    		// Compose a filter based on optional learning paths list given
-    		$condition_lp = "";
-
-    		if (!empty($lp_ids)) {
-    			if (count($lp_ids) > 0) {
-    				$condition_lp ="  AND id IN(".implode(',',$lp_ids).") ";
-    			}
-    		}
-    		$session_id = intval($session_id);
-    		$sql = "SELECT id FROM $tbl_course_lp lp WHERE c_id = {$course_info['real_id']} $condition_lp";
-    		$res_count_lp = Database::query($sql);
-
-    		// count the number of learning paths
-    		$lp_id = array();
-    		while ($row_lp = Database::fetch_array($res_count_lp,'ASSOC')) {
-                $lp_id[] = $row_lp['id'];
-            }
-            $count_lp = count($lp_id);
-            // If there is at least one learning path and one student.
-            if ($count_lp>0 && !empty($student_id)) {
-                if (is_array($student_id)) {
-                    array_walk($student_id,'intval');
-                    $condition_user = " lp_view.user_id IN (".implode(',',$student_id).") AND ";
-                } else {
-                    $student_id = intval($student_id);
-                    $condition_user = " lp_view.user_id = '$student_id' AND ";
-                }
-                // Get last view for each student (in case of multi-attempt)
-                // Also filter on LPs of this session
-                $sql_maxes = "SELECT MAX(view_count), progress FROM $tbl_course_lp_view lp_view
-                              WHERE 	c_id = {$course_info['real_id']} AND
-                                    $condition_user session_id = $session_id AND
-                                    lp_view.lp_id IN (".implode(',',$lp_id).")
-                              GROUP BY lp_id, user_id";
-                $res_maxes = Database::query($sql_maxes);
-                $sum =  0;
-                while ($row_maxes = Database::fetch_array($res_maxes)) {
-                    $sum += $row_maxes[1];
-                }
-                // average progress = total sum divided by the number of views
-                // summed up.
-                $number_items = count($lp_id);
-                if ($number_items == 0) {
-                    return 0; //not necessary to return something else if there is no view
-                }
-                if (!$return_array) {
-                    $avg_progress = round($sum / $number_items, 1);
-                    return $avg_progress;
-                } else {
-                    return array($sum, $number_items);
-                }
+        // Compose a filter based on optional learning paths list given
+        $condition_lp = null;
+        if (!empty($lp_ids)) {
+            if (count($lp_ids) > 0) {
+                $lp_ids = array_map('intval', $lp_ids);
+                $conditions[] = " lp_view.lp_id IN(".implode(',', $lp_ids).") ";
             }
         }
-        return null;
+
+        // If there is at least one learning path and one student.
+        if (!empty($student_id)) {
+            if (is_array($student_id)) {
+                $student_id = array_map('intval', $student_id);
+                $conditions[] = " lp_view.user_id IN (".implode(',', $student_id).")  ";
+            } else {
+                $student_id = intval($student_id);
+                $conditions[] = " lp_view.user_id = '$student_id' ";
+            }
+            if (!empty($session_id)) {
+                $conditions[] = " session_id = $session_id ";
+            }
+            $conditionToString = implode('AND', $conditions);
+
+            // Get last view for each student (in case of multi-attempt)
+            // Also filter on LPs of this session
+            $sql = " SELECT
+                        MAX(view_count),
+                        AVG(progress) average,
+                        SUM(progress) sum_progress,
+                        count(progress) count_progress
+                      FROM $tbl_course_lp_view lp_view
+                      WHERE
+                      $conditionToString
+                      GROUP BY lp_id";
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result, 'ASSOC');
+            if (!$return_array) {
+                $avg_progress = round($row['average'], 1);
+                return $avg_progress;
+            } else {
+                return array($row['sum_progress'], $row['count_progress']);
+            }
+        }
     }
 
     /**
@@ -944,6 +958,89 @@ class Tracking
             }
         }
         return null;
+    }
+
+    /**
+     * This function gets:
+     * 1. The score average from all SCORM Test items in all LP in a course-> All the answers / All the max scores.
+     * 2. The score average from all Tests (quiz) in all LP in a course-> All the answers / All the max scores.
+     * 3. And finally it will return the average between 1. and 2.
+     * This function does not take the results of a Test out of a LP
+     *
+     * @param   int|array   Array of user ids or an user id
+     * @param   string      Course code
+     * @param   array       List of LP ids
+     * @param   int         Session id (optional), if param $session_id is null(default) it'll return results including sessions, 0 = session is not filtered
+     * @param   bool        Returns an array of the type [sum_score, num_score] if set to true
+     * @param   bool        get only the latest attempts or ALL attempts
+     * @return  string      Value (number %) Which represents a round integer explain in got in 3.
+     */
+    public static function getAverageStudentScore(
+        $student_id,
+        $course_code = null,
+        $lp_ids = array(),
+        $session_id = null
+    ) {
+        $tbl_stats_exercices        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $tbl_stats_attempts         = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+        if (empty($student_id)) {
+            return 0;
+        }
+
+        $conditions = array();
+
+        if (!empty($course_code)) {
+            $course = api_get_course_info($course_code);
+            $course_id = $course['real_id'];
+            $conditions[] = " c_id =  {$course['real_id']}";
+        }
+
+        // get course tables names
+        $tbl_quiz_questions = Database :: get_course_table(TABLE_QUIZ_QUESTION);
+        $lp_table           = Database :: get_course_table(TABLE_LP_MAIN);
+        $lp_item_table      = Database :: get_course_table(TABLE_LP_ITEM);
+        $lp_view_table      = Database :: get_course_table(TABLE_LP_VIEW);
+        $lp_item_view_table = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
+
+        // Compose a filter based on optional learning paths list given
+
+        if (!empty($lp_ids) && count($lp_ids) > 0) {
+            $conditions[] = " id IN(".implode(',', $lp_ids).") ";
+        }
+
+        // Compose a filter based on optional session id
+        $session_id = intval($session_id);
+        if (!empty($session_id)) {
+            $conditions[] = " session_id = $session_id ";
+        }
+
+        if (is_array($student_id)) {
+            array_walk($student_id, 'intval');
+            $conditions[] =" lp_view.user_id IN (".implode(',', $student_id).") ";
+        } else {
+            $conditions[] =" lp_view.user_id = $student_id ";
+        }
+
+        $conditionsToString = implode('AND ', $conditions);
+        //lp_iv.max_score as max_score_item_view,
+        $sql = "SELECT  SUM(lp_iv.score) sum_score,
+                        SUM(lp_i.max_score) sum_max_score,
+                        count(*) as count
+                FROM $lp_item_view_table as lp_iv
+                INNER JOIN $lp_item_table as lp_i
+                ON lp_i.id = lp_iv.lp_item_id
+                INNER JOIN $lp_table as lp
+                ON lp.id = lp_i.lp_id
+                INNER JOIN $lp_view_table as lp_view
+                ON (lp_view.lp_id = lp.id)
+                WHERE (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."') AND
+                $conditionsToString
+                ";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result, 'ASSOC');
+        return ($row['sum_score'] / $row['sum_max_score'])*100;
+
     }
 
     /**
@@ -1478,12 +1575,12 @@ class Tracking
         $a_course = CourseManager::get_course_information($course_code);
         if (!empty($a_course)) {
             // table definition
-            $tbl_item_property          = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-            $tbl_document 				= Database :: get_course_table(TABLE_DOCUMENT);
+            $tbl_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+            $tbl_document = Database :: get_course_table(TABLE_DOCUMENT);
             $course_id	 = $a_course['real_id'];
             if (is_array($student_id)) {
-                $student_id = array_map('intval', $student_id);
-                $condition_user = " AND ip.insert_user_id IN (".implode(',', $student_id).") ";
+                $studentList = array_map('intval', $student_id);
+                $condition_user = " AND ip.insert_user_id IN ('".implode(',', $studentList)."') ";
             } else {
                 $student_id = intval($student_id);
                 $condition_user = " AND ip.insert_user_id = '$student_id' ";
@@ -1495,7 +1592,7 @@ class Tracking
                 $condition_session = " AND pub.session_id = $session_id ";
             }
 
-            $sql = "SELECT count(ip.tool)
+            $sql = "SELECT count(ip.tool) AS count
                     FROM $tbl_item_property ip INNER JOIN $tbl_document pub
                             ON ip.ref = pub.id
                     WHERE 	ip.c_id  = $course_id AND
@@ -1505,7 +1602,7 @@ class Tracking
                             $condition_user $condition_session ";
             $rs = Database::query($sql);
             $row = Database::fetch_row($rs);
-            return $row[0];
+            return $row['count'];
         }
         return null;
     }
@@ -1517,83 +1614,98 @@ class Tracking
      * @param    int            Session id (optional), if param $session_id is null(default) return count of assignments including sessions, 0 = session is not filtered
      * @return    int            Count of assignments
      */
-    public static function count_student_assignments($student_id, $course_code, $session_id = null)
+    public static function count_student_assignments($student_id, $course_code = null, $session_id = null)
     {
+        if (empty($student_id)) {
+            return 0;
+        }
+
+        $conditions = array();
+
         // Get the information of the course
         $a_course = CourseManager::get_course_information($course_code);
         if (!empty($a_course)) {
-            // table definition
-            $tbl_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-            $tbl_student_publication = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
             $course_id = $a_course['real_id'];
-
-            if (is_array($student_id)) {
-                $condition_user = " AND ip.insert_user_id IN (".implode(',',$student_id).") ";
-            } else {
-                $condition_user = " AND ip.insert_user_id = '$student_id' ";
-            }
-
-            $condition_session = "";
-            if (isset($session_id)) {
-                $session_id = intval($session_id);
-                $condition_session = " AND pub.session_id = $session_id ";
-            }
-
-            $sql = "SELECT count(ip.tool)
-                    FROM $tbl_item_property ip INNER JOIN $tbl_student_publication pub
-                            ON ip.ref = pub.id
-                    WHERE 	ip.c_id  = $course_id AND
-                            pub.c_id  = $course_id AND
-                            ip.tool='work'
-                            $condition_user $condition_session ";
-            $rs = Database::query($sql);
-            $row = Database::fetch_row($rs);
-            return $row[0];
+            $conditions[]= " ip.c_id  = $course_id AND pub.c_id  = $course_id ";
         }
-        return null;
+
+        // table definition
+        $tbl_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+        $tbl_student_publication = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+
+        if (is_array($student_id)) {
+            $studentList = array_map('intval', $student_id);
+            $conditions[]= " ip.insert_user_id IN ('".implode("','", $studentList)."') ";
+        } else {
+            $student_id = intval($student_id);
+            $conditions[]= " ip.insert_user_id = '$student_id' ";
+        }
+        if (isset($session_id)) {
+            $session_id = intval($session_id);
+            $conditions[]= " pub.session_id = $session_id ";
+        }
+        $conditionToString = implode('AND', $conditions);
+
+        $sql = "SELECT count(ip.tool) as count
+                FROM $tbl_item_property ip
+                INNER JOIN $tbl_student_publication pub ON ip.ref = pub.id
+                WHERE
+                    ip.tool='work' AND
+                    $conditionToString";
+        $rs = Database::query($sql);
+        $row = Database::fetch_array($rs, 'ASSOC');
+        return $row['count'];
     }
 
     /**
      * Count messages per student inside forum tool
-     * @param    int        Student id
+     * @param    int|array        Student id
      * @param    string    Course code
-     * @param    int        Session id (optional), if param $session_id is null(default) return count of messages including sessions, 0 = session is not filtered
+     * @param    int        Session id (optional), if param $session_id is
+     * null(default) return count of messages including sessions, 0 = session is not filtered
      * @return    int        Count of messages
      */
-    public static function count_student_messages($student_id, $courseCode, $session_id = null)
+    public static function count_student_messages($student_id, $courseCode = null, $session_id = null)
     {
-        $student_id = intval($student_id);
+        if (empty($student_id)) {
+            return 0;
+        }
 
         $courseInfo = api_get_course_info($courseCode);
+        $courseCondition = null;
+        $conditions = array();
         if (!empty($courseInfo)) {
-
-            // Table definition
-            $tbl_forum_post = Database :: get_course_table(TABLE_FORUM_POST);
-            $tbl_forum      = Database :: get_course_table(TABLE_FORUM);
             $course_id	    = $courseInfo['real_id'];
-
-            if (is_array($student_id)) {
-                $condition_user = " AND post.poster_id IN (".implode(',',$student_id).") ";
-            } else {
-                $condition_user = " AND post.poster_id = '$student_id' ";
-            }
-
-            $condition_session = "";
-            if (isset($session_id)) {
-                $session_id = intval($session_id);
-                $condition_session = " AND forum.session_id = $session_id";
-            }
-
-            $sql = "SELECT 1 FROM $tbl_forum_post post INNER JOIN $tbl_forum forum
-                    ON forum.forum_id = post.forum_id
-                    WHERE 	post.c_id  = $course_id AND
-                            forum.c_id = $course_id
-                            $condition_user $condition_session ";
-            $rs = Database::query($sql);
-            return Database::num_rows($rs);
-        } else {
-            return null;
+            $conditions[]= " post.c_id  = $course_id AND forum.c_id = $course_id ";
         }
+
+        // Table definition.
+        $tbl_forum_post = Database :: get_course_table(TABLE_FORUM_POST);
+        $tbl_forum      = Database :: get_course_table(TABLE_FORUM);
+
+        if (is_array($student_id)) {
+            $studentList = array_map('intval', $student_id);
+            $conditions[]= " post.poster_id IN ('".implode("','", $studentList)."') ";
+        } else {
+            $student_id = intval($student_id);
+            $conditions[]= " post.poster_id = '$student_id' ";
+        }
+
+        if (isset($session_id)) {
+            $session_id = intval($session_id);
+            $conditions[]= " forum.session_id = $session_id";
+        }
+
+        $conditionsToString = implode('AND ', $conditions);
+        $sql = "SELECT count(poster_id) as count
+                FROM $tbl_forum_post post INNER JOIN $tbl_forum forum
+                ON forum.forum_id = post.forum_id
+                WHERE $conditionsToString";
+
+        $rs = Database::query($sql);
+        $row = Database::fetch_array($rs, 'ASSOC');
+        $count = $row['count'];
+        return $count;
     }
 
     /**

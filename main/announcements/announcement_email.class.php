@@ -1,9 +1,8 @@
 <?php
-
+/* For licensing terms, see /license.txt */
 /**
  * Announcement Email
  *
- * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  * @author Julio Montoya <gugli100@gmail.com> Adding session support
  */
@@ -12,6 +11,7 @@ class AnnouncementEmail
     protected $course = null;
     protected $announcement = null;
     public $session_id = null;
+
     /**
      *
      * @param int|array $course
@@ -23,6 +23,7 @@ class AnnouncementEmail
     {
         return new self($course, $announcement);
     }
+
     /**
      * @param int $course
      * @param int $announcement
@@ -208,17 +209,17 @@ class AnnouncementEmail
 
     /**
      * Email message
-     *
+     * @param int $receiverUserId
      * @return string
      */
-    public function message()
+    public function message($receiverUserId)
     {
         $title = $this->announcement('title');
         $title = stripslashes($title);
 
         $content = $this->announcement('content');
         $content = stripslashes($content);
-        $content = AnnouncementManager::parseEmailContent($content, $this->course('code'));
+        $content = AnnouncementManager::parse_content($receiverUserId, $content, $this->course('code'));
 
         $user_email = $this->sender('mail');
         $course_param = api_get_cidreq();
@@ -271,12 +272,12 @@ class AnnouncementEmail
     {
         $sender = $this->sender();
         $subject = $this->subject();
-        $message = $this->message();
 
         // Send email one by one to avoid antispam
         $users = $this->sent_to();
 
         foreach ($users as $user) {
+            $message = $this->message($user['user_id']);
             MessageManager::send_message_simple(
                 $user['user_id'],
                 $subject,

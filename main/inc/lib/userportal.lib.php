@@ -3,25 +3,30 @@
 
 use \ChamiloSession as Session;
 
-class IndexManager {
-	var $tpl 	= false; //An instance of the template engine
-	var $name 	= '';
+class IndexManager
+{
+    //An instance of the template engine
+	public $tpl 	= false;
+    public $name 	= '';
+    public $home			= '';
+    public $default_home 	= 'home/';
 
-	var $home			= '';
-	var $default_home 	= 'home/';
+    public function __construct($title)
+    {
+        $this->tpl = new Template($title);
+        $this->home     = api_get_home_path();
+        $this->user_id  = api_get_user_id();
+        $this->load_directories_preview = false;
 
-	function __construct($title) {
-		$this->tpl = new Template($title);
-		$this->home     = api_get_home_path();
-		$this->user_id  = api_get_user_id();
-		$this->load_directories_preview = false;
+        if (api_get_setting('show_documents_preview') == 'true') {
+            $this->load_directories_preview = true;
+        }
+    }
 
-		if (api_get_setting('show_documents_preview') == 'true') {
-			$this->load_directories_preview = true;
-		}
-	}
-
-	function set_login_form($setLoginForm = true)
+    /**
+     * @param bool $setLoginForm
+     */
+    function set_login_form($setLoginForm = true)
     {
 		global $loginFailed;
 
@@ -55,8 +60,8 @@ class IndexManager {
 		}
 	}
 
-
-	function return_exercise_block($personal_course_list) {
+	function return_exercise_block($personal_course_list)
+    {
 		require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
 		$exercise_list = array();
 		if (!empty($personal_course_list)) {
@@ -937,6 +942,8 @@ class IndexManager {
 	 * */
 	function return_courses_and_sessions($user_id)
     {
+        global $_configuration;
+
         $load_history = (isset($_GET['history']) && intval($_GET['history']) == 1) ? true : false;
 
 		if ($load_history) {
@@ -1038,9 +1045,7 @@ class IndexManager {
 
                         if ($count_courses_session > 0) {
                             $params = array();
-
                             $session_box = Display::get_session_title_box($session_id);
-
                             $params['icon'] =  Display::return_icon('window_list.png', $session_box['title'], array('id' => 'session_img_'.$session_id), ICON_SIZE_LARGE);
                             $extra_info = !empty($session_box['coach']) ? $session_box['coach'] : null;
                             $extra_info .= !empty($session_box['coach']) ? ' - '.$session_box['dates'] : $session_box['dates'];
@@ -1067,7 +1072,14 @@ class IndexManager {
                             }
 
                             $params['description'] =  isset($session_box['description']) ? $session_box['description'] : null;
-                            $sessions_with_no_category .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_courses_session);
+
+                            $parentInfo = CourseManager::course_item_html($params, true);
+
+                            if (isset($_configuration['show_simple_session_info']) && $_configuration['show_simple_session_info']) {
+                                $params['title'] = $session_box['title'];
+                                $parentInfo = CourseManager::course_item_html_no_icon($params);
+                            }
+                            $sessions_with_no_category .= CourseManager::course_item_parent($parentInfo, $html_courses_session);
                         }
                     }
 				} else {
@@ -1140,7 +1152,13 @@ class IndexManager {
                                 $params['right_actions'] .=  '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).'</a>';
                             }
 
-                            $html_sessions .= CourseManager::course_item_html($params, true).$html_courses_session;
+                            $parentInfo = CourseManager::course_item_html($params, true);
+                            if (isset($_configuration['show_simple_session_info']) && $_configuration['show_simple_session_info']) {
+                                $params['title'] = $session_box['title'];
+                                $parentInfo = CourseManager::course_item_html_no_icon($params);
+                            }
+
+                            $html_sessions .= $parentInfo.$html_courses_session;
                         }
                     }
 

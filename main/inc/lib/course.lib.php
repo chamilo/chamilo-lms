@@ -3087,6 +3087,42 @@ class CourseManager
      * Builds the course block in user_portal.php
      * @todo use Twig
      */
+    public static function course_item_html_no_icon($params)
+    {
+        $html = '<div class="course_item">';
+        $html .= '<div class="row">';
+        $html .= '<div class="span7">';
+
+        $notifications = isset($params['notifications']) ? $params['notifications'] : null;
+
+        $html .='<h3>'.$params['title'].$notifications.'</h3> ';
+
+        if (isset($params['description'])) {
+            $html .= '<p>'.$params['description'].'</p>';
+        }
+        if (!empty($params['subtitle'])) {
+            $html .= '<small>'.$params['subtitle'].'</small>';
+        }
+        if (!empty($params['teachers'])) {
+            $html .= '<h5>'.Display::return_icon('teacher.png', get_lang('Teacher'), array(), ICON_SIZE_TINY).$params['teachers'].'</h5>';
+        }
+        if (!empty($params['coaches'])) {
+            $html .= '<h5>'.Display::return_icon('teacher.png', get_lang('Coach'), array(), ICON_SIZE_TINY).$params['coaches'].'</h5>';
+        }
+
+        $html .= '</div>';
+        $params['right_actions'] = isset($params['right_actions']) ? $params['right_actions'] : null;
+        $html .= '<div class="span1 pull-right course-box-actions">'.$params['right_actions'].'</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        return $html;
+    }
+
+
+    /**
+     * Builds the course block in user_portal.php
+     * @todo use Twig
+     */
     public static function course_item_html($params, $is_sub_content = false) {
         $html = '';
         $class = "well course-box";

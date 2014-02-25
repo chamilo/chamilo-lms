@@ -3849,6 +3849,13 @@ function api_string_2_boolean($string) {
     return false;
 }
 
+/**
+ * Too keep BC
+ * @deprecated use api_string_2_boolean
+ */
+function string_2_boolean($string) {
+    return api_string_2_boolean($string);
+}
 
 /**
  * Determines the number of plugins installed for a given location

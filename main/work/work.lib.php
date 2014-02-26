@@ -2785,29 +2785,28 @@ function getWorkComments($work)
     $courseId = intval($work['c_id']);
     $workId = intval($work['id']);
 
-    $sql = "SELECT c.*, u.firstname, u.lastname, u.username, u.picture_uri
+    $sql = "SELECT c.id, c.user_id, u.firstname, u.lastname, u.username, u.picture_uri
             FROM $commentTable c INNER JOIN $userTable u ON(u.user_id = c.user_id)
             WHERE c_id = $courseId AND work_id = $workId
             ORDER BY sent_at
             ";
     $result = Database::query($sql);
     $comments = Database::store_result($result, 'ASSOC');
-    $urlPath = api_get_path(WEB_CODE_PATH).'work/download_comment_file.php?'.api_get_cidreq();
-    $deleteUrl = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$workId.'&action=delete_attachment';
-    foreach ($comments as &$comment) {
-        $pictureInfo = UserManager::get_picture_user(
-            $comment['user_id'],
-            $comment['picture_uri'],
-            24,
-            USER_IMAGE_SIZE_SMALL
-        );
+    if (!empty($comments)) {
+        foreach ($comments as &$comment) {
+            $pictureInfo = UserManager::get_picture_user(
+                $comment['user_id'],
+                $comment['picture_uri'],
+                24,
+                USER_IMAGE_SIZE_SMALL
+            );
+            $comment['picture'] = $pictureInfo['file'];
+            $commentInfo = getWorkComment($comment['id']);
 
-        if (!empty($comment['file'])) {
-            $comment['file_url'] = $urlPath.'&comment_id='.$comment['id'];
-            $comment['delete_file_url'] = $deleteUrl.'&comment_id='.$comment['id'];
+            if (!empty($commentInfo)) {
+                $comment = array_merge($comment, $commentInfo);
+            }
         }
-
-        $comment['picture'] = $pictureInfo['file'];
     }
     return $comments;
 }
@@ -2842,14 +2841,21 @@ function getWorkComment($id, $courseInfo = array())
         $comment = Database::fetch_array($result, 'ASSOC');
         $filePath = null;
         $fileUrl = null;
+        $deleteUrl = null;
+        $fileName = null;
         if (!empty($comment['file'])) {
             $work = get_work_data_by_id($comment['work_id']);
             $workParent = get_work_data_by_id($work['parent_id']);
             $filePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work/'.$workParent['url'].'/'.$comment['file'];
-            $fileUrl = api_get_path(WEB_CODE_PATH).'work/download_comment_file.php?comment_id='.$id;
+            $fileUrl = api_get_path(WEB_CODE_PATH).'work/download_comment_file.php?comment_id='.$id.'&'.api_get_cidreq();
+            $deleteUrl = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$comment['work_id'].'&action=delete_attachment&comment_id='.$id;
+            $fileParts = explode('_', $comment['file']);
+            $fileName = str_replace($fileParts[0].'_'.$fileParts[1].'_', '', $comment['file']);
         }
+        $comment['delete_file_url'] = $deleteUrl;
         $comment['file_path'] = $filePath;
         $comment['file_url'] = $fileUrl;
+        $comment['file_name_to_show'] = $fileName;
     }
     return $comment;
 }
@@ -2892,10 +2898,6 @@ function addWorkComment($courseInfo, $userId, $work, $data)
     }
 
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
-
-    if (empty($data['comment'])) {
-        return null;
-    }
 
     $params = array(
         'work_id' => $work['id'],
@@ -2942,9 +2944,10 @@ function getWorkCommentForm($work)
         'post',
         api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&action=send_comment&'.api_get_cidreq()
     );
-    $form->addElement('textarea', 'comment', get_lang('Comment'), array('class' => 'span5', 'rows' => '8'));
+
     $form->addElement('file', 'file', get_lang('Attachment'));
-    $form->addRule('comment', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addElement('textarea', 'comment', get_lang('Comment'), array('class' => 'span5', 'rows' => '8'));
+    //$form->addRule('comment', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('hidden', 'id', $work['id']);
     $form->addElement('button', 'button', get_lang('Send'));
     return $form->return_form();

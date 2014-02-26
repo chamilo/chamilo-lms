@@ -28,7 +28,7 @@
                 <p>
                     <a href="{{ comment.file_url }}">
                         <img src="{{ "attachment.gif"|icon(32) }}">
-                        {{ 'Download' | get_lang }}
+                        {{ comment.file_name_to_show }}
                     </a>
                     {% if is_allowed_to_edit %}
                         <a href="{{ comment.delete_file_url }}">

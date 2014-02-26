@@ -28,8 +28,8 @@ if (user_is_author($id) || $course_info['show_score'] == 0 && $work['active'] ==
     } else {
         $url_dir = 'work_list.php?id='.$my_folder_data['id'];
     }
-    $interbreadcrumb[] = array('url' => $url_dir, 'name' =>  $my_folder_data['title']);
-    $interbreadcrumb[] = array('url' => '#','name' =>  $work['title']);
+    $interbreadcrumb[] = array('url' => $url_dir, 'name' => $my_folder_data['title']);
+    $interbreadcrumb[] = array('url' => '#','name' => $work['title']);
 
     if (($course_info['show_score'] == 0 && $work['active'] == 1 && $work['accepted'] == 1) ||
         api_is_allowed_to_edit() || user_is_author($id)

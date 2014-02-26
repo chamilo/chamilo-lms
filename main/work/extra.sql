@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS c_student_publication_comment (
   file VARCHAR(255),
   user_id int NOT NULL,
   sent_at datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+);
 
 ALTER TABLE c_student_publication ADD COLUMN document_id int DEFAULT 0;
 

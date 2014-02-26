@@ -21,9 +21,12 @@
                 </a>- {{ comment.sent_at | api_get_local_time }}
             </div>
             <p>
-                {{ comment.comment }}
+                {% if comment.comment is not empty %}
+                    {{ comment.comment }}
+                {% else %}
+                    {{ 'HereIsYourFeedback' | get_lang }}
+                {% endif %}
             </p>
-
             {% if comment.file_url is not empty %}
                 <p>
                     <a href="{{ comment.file_url }}">

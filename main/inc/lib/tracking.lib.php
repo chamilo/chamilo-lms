@@ -978,9 +978,6 @@ class Tracking
         $lp_ids = array(),
         $session_id = null
     ) {
-        $tbl_stats_exercices        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-        $tbl_stats_attempts         = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
         if (empty($student_id)) {
             return 0;
         }
@@ -989,8 +986,8 @@ class Tracking
 
         if (!empty($course_code)) {
             $course = api_get_course_info($course_code);
-            $course_id = $course['real_id'];
-            $conditions[] = " c_id =  {$course['real_id']}";
+            $courseId = $course['real_id'];
+            $conditions[] = " c_id = $courseId";
         }
 
         // get course tables names
@@ -1024,13 +1021,13 @@ class Tracking
         $sql = "SELECT  SUM(lp_iv.score) sum_score,
                         SUM(lp_i.max_score) sum_max_score,
                         count(*) as count
-                FROM $lp_item_view_table as lp_iv
+                FROM $lp_table as lp
                 INNER JOIN $lp_item_table as lp_i
-                ON lp_i.id = lp_iv.lp_item_id
-                INNER JOIN $lp_table as lp
-                ON lp.id = lp_i.lp_id
+                ON lp.id = lp_id AND lp.c_id = lp_i.c_id
                 INNER JOIN $lp_view_table as lp_view
-                ON (lp_view.lp_id = lp.id)
+                ON lp_view.lp_id = lp_i.lp_id AND lp_view.c_id = lp_i.c_id
+                INNER JOIN $lp_item_view_table as lp_iv
+                ON lp_i.id = lp_iv.lp_item_id AND lp_view.c_id = lp_iv.c_id AND lp_iv.lp_view_id = lp_view.id
                 WHERE (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."') AND
                 $conditionsToString
                 ";

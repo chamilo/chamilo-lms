@@ -91,7 +91,7 @@ class FillBlanks extends Question
 				if (window.attachEvent) {
 					editorInstance.EditorDocument.attachEvent("onkeyup", updateBlanks) ;
 				} else {
-					editorInstance.EditorDocument.addEventListener("keyup",updateBlanks,true);
+					editorInstance.EditorDocument.addEventListener("keyup", updateBlanks, true);
 				}
 			}
 
@@ -102,8 +102,9 @@ class FillBlanks extends Question
                     field = document.getElementById("answer");
                     var answer = field.value;
                 } else {
-                    var oEditor = FCKeditorAPI.GetInstance(\'answer\');
-                    answer =  oEditor.GetXHTML( true ) ;
+                    var oEditor = FCKeditorAPI.GetInstance("answer");
+                    //var answer =  oEditor.GetXHTML(true);
+                    var answer = oEditor.EditorDocument.body.innerHTML;
                 }
 
                 var blanks = answer.match(/\[[^\]]*\]/g);

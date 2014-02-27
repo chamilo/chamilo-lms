@@ -198,7 +198,7 @@ function lp_upload_quiz_action_handling() {
             $feedback_false_list[$l] = $column_data;//a complete line where 1st column is 'FeedbackFalse' for wrong answers
             $l++;
         } elseif (in_array($i, $question_description_index)) {
-            $question_description[$m] = $column_data;//a complete line where 1st column is 'Description'
+            $question_description[$m] = $column_data; //a complete line where 1st column is 'EnrichQuestion'
             $m++;
         }
     }

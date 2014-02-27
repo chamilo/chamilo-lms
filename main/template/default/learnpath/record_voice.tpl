@@ -11,7 +11,7 @@
     <button id="stop" class="btn" disabled="">{{ 'StopRecordingAudio' | get_lang }}</button>
 </div>
 
-<div id="wami" style="float:left">
+<div id="wami" style="float:left; z-index:6000">
     <a id="record-wami" class="btn btn-info">{{ 'ActivateAudioRecorder' | get_lang }}</a>
     <br />
     <div id="wami-recorder">
@@ -137,7 +137,7 @@ function setupGUI() {
 var rtcEnabled = false;
 
 $(document).ready(function() {
-    var isChrome =  navigator.webkitGetUserMedia;
+    var isChrome = navigator.webkitGetUserMedia;
 
     $('#rtc').hide();
     $('#wami').hide();
@@ -213,18 +213,14 @@ $(document).ready(function() {
     record.on('click', function() {
 
         record.disabled = true;
-
         var myURL = (window.URL || window.webkitURL || {});
-
         if (navigator.getUserMedia) {
-
             navigator.getUserMedia({
                     audio: true,
                     video: false
             },
             function(stream) {
                 if (window.IsChrome) stream = new window.MediaStream(stream.getAudioTracks());
-
                 preview.src = myURL.createObjectURL(stream);
                     console.log(preview.src);
                 preview.play();

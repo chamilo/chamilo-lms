@@ -16,6 +16,9 @@ $strings['MeetingClosed']       = "Meeting closed";
 $strings['MeetingClosedComment'] = "If you have asked for your sessions to be recorded, the recording will be available in the list below when it has been completely generated.";
 $strings['CloseMeeting']        = "Close meeting";
 
+$strings['MeetingDeleted']        = "Delete meeting";
+$strings['MeetingDeletedComment'] = "";
+
 $strings['VideoConferenceXCourseX']             = "Videoconference #%s course %s";
 $strings['VideoConferenceAddedToTheCalendar']   = "Videoconference added to the calendar";
 $strings['VideoConferenceAddedToTheLinkTool']   = "Videoconference added to the link tool";

@@ -17,11 +17,6 @@ require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
 $course_info = api_get_course_info(api_get_course_id());
-
-if (!empty($course_info)) {
-    //api_protect_course_script();
-}
-
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 
@@ -37,7 +32,13 @@ if ($from == 'myspace') {
 }
 
 // Access restrictions.
-$is_allowedToTrack = api_is_platform_admin() || api_is_allowed_to_create_course() || api_is_session_admin() || api_is_drh() || api_is_course_tutor() || api_is_course_admin();
+$is_allowedToTrack =
+    api_is_platform_admin() ||
+    api_is_allowed_to_create_course() ||
+    api_is_session_admin() ||
+    api_is_drh() ||
+    api_is_course_tutor() ||
+    api_is_course_admin();
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);
@@ -167,10 +168,10 @@ Display::display_header($nameTools, 'Tracking');
 // getting all the students of the course
 if (empty($session_id)) {
     // Registered students in a course outside session.
-    $a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id());
+    $a_students = CourseManager::get_student_list_from_course_code(api_get_course_id());
 } else {
     // Registered students in session.
-    $a_students = CourseManager :: get_student_list_from_course_code(api_get_course_id(), true, api_get_session_id());
+    $a_students = CourseManager::get_student_list_from_course_code(api_get_course_id(), true, api_get_session_id());
 }
 
 $nbStudents = count($a_students);
@@ -182,7 +183,10 @@ if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_pro
         $user_array[] = $key;
     }
     // Fetching only the user that are loaded NOT ALL user in the portal.
-    $additional_user_profile_info = TrackingCourseLog::get_addtional_profile_information_of_field_by_user($_GET['additional_profile_field'],$user_array);
+    $additional_user_profile_info = TrackingCourseLog::get_addtional_profile_information_of_field_by_user(
+        $_GET['additional_profile_field'],
+        $user_array
+    );
     $extra_info = UserManager::get_extra_field_information($_GET['additional_profile_field']);
 }
 
@@ -207,7 +211,7 @@ if (isset($_GET['users_tracking_per_page'])) {
     $users_tracking_per_page= '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
 }
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.$users_tracking_per_page.'">
-'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a>';
+     '.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
 
 echo '</span>';
 echo '</div>';
@@ -215,11 +219,19 @@ echo '</div>';
 
 echo '<div class="actions">';
 // Create a search-box.
-$form_search = new FormValidator('search_simple', 'GET', api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq(), '', array('class' => 'form-search'), false);
+$form_search = new FormValidator(
+    'search_simple',
+    'GET',
+    api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq(),
+    '',
+    array('class' => 'form-search'),
+    false
+);
 $renderer = $form_search->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span>');
 $form_search->addElement('hidden', 'from', Security::remove_XSS($from));
 $form_search->addElement('hidden', 'session_id', api_get_session_id());
+$form_search->addElement('hidden', 'id_session', api_get_session_id());
 $form_search->addElement('text', 'user_keyword');
 $form_search->addElement('style_submit_button', 'submit', get_lang('SearchUsers'), 'class="search"');
 $form_search->display();
@@ -243,8 +255,8 @@ if (count($a_students) > 0) {
         'never' => get_lang('Never')
     );
 
-    $el = $form -> addElement('select', 'since', '<img width="ICON_SIZE_SMALL" align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" border="0" />'.get_lang('RemindInactivesLearnersSince'), $options);
-    $el -> setSelected(7);
+    $el = $form->addElement('select', 'since', '<img width="ICON_SIZE_SMALL" align="middle" src="'.api_get_path(WEB_IMG_PATH).'messagebox_warning.gif" border="0" />'.get_lang('RemindInactivesLearnersSince'), $options);
+    $el->setSelected(7);
 
     $form->addElement('hidden', 'action', 'add');
     $form->addElement('hidden', 'remindallinactives', 'true');
@@ -367,7 +379,7 @@ if (count($a_students) > 0) {
         echo "<span title='".get_lang('DisplayColumn')." ".$tab_table_header[$i]."' class='unhide_button hide' onclick='foldup($index)'>".Display :: return_icon('move.png', get_lang('DisplayColumn'), array('align'=>'absmiddle', 'hspace'=>'3px'), 16)." ".$tab_table_header[$i]."</span>";
     }
     echo "</div>";
-    // display the table
+    // Display the table
     echo "<div id='reporting_table'>";
     $table->display();
     echo "</div>";

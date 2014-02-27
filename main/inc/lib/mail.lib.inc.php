@@ -55,7 +55,8 @@ function api_mail($recipient_name, $recipient_email, $subject, $message, $sender
  * @return          returns true if mail was sent
  * @see             class.phpmailer.php
  */
-function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name = '', $sender_email = '', $extra_headers = null, $data_file = array(), $embedded_image = false) {
+function api_mail_html($recipient_name, $recipient_email, $subject, $message, $sender_name = '', $sender_email = '', $extra_headers = array(), $data_file = array(), $embedded_image = false)
+{
     global $platform_email;
 
     $mail = new PHPMailer();
@@ -173,6 +174,11 @@ function api_mail_html($recipient_name, $recipient_email, $subject, $message, $s
                 case 'contenttype':
                 case 'content-type':
                     $mail->ContentType = $value;
+                    break;
+                case 'reply_to':
+                    if (isset($value['mail']) && isset($value['name'])) {
+                        $mail->AddReplyTo($value['mail'], $value['name']);
+                    }
                     break;
                 default:
                     $mail->AddCustomHeader($key.':'.$value);

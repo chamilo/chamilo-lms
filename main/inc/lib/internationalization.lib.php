@@ -57,7 +57,6 @@ define ('LANGUAGE_DETECT_MAX_LENGTH', 2000);
 // $max_delta = 400 * 350 = 140000 is the best detection with lowest speed.
 define ('LANGUAGE_DETECT_MAX_DELTA', 140000);
 
-
 /**
  * Initialization
  */
@@ -91,7 +90,6 @@ function api_set_internationalization_default_encoding($encoding) {
     _api_iconv_set_encoding('iconv_internal_encoding', $encoding);
     return $result;
 }
-
 
 /**
  * Language support
@@ -402,7 +400,6 @@ function api_get_language_isocode($language = null, $default_code = 'en') {
     return $iso_code[$language];
 }
 
-
 /**
  * Gets language isocode column from the language table
  *
@@ -420,7 +417,6 @@ function api_get_platform_isocodes() {
     return $iso_code;
 }
 
-
 /**
  * Gets text direction according to the given language.
  * @param string $language	This is the name of the folder containing translations for the corresponding language (e.g 'arabic', 'english', ...).
@@ -429,7 +425,6 @@ function api_get_platform_isocodes() {
  */
 function api_get_text_direction($language = null) {
     static $text_direction = array();
-
     /*
      * Not necessary to validate the language because the list if rtl/ltr is harcoded
      *
@@ -480,7 +475,6 @@ function api_is_latin1_compatible($language) {
     return in_array($language, $latin1_languages);
 }
 
-
 /**
  * Language recognition
  * Based on the publication:
@@ -489,7 +483,6 @@ function api_is_latin1_compatible($language) {
  * and Information Retrieval, 1994.
  * @link http://citeseer.ist.psu.edu/cache/papers/cs/810/http:zSzzSzwww.info.unicaen.frzSz~giguetzSzclassifzSzcavnar_trenkle_ngram.pdf/n-gram-based-text.pdf
  */
-
 function api_detect_language(&$string, $encoding = null) {
     if (empty($encoding)) {
         $encoding = _api_mb_internal_encoding();
@@ -504,7 +497,6 @@ function api_detect_language(&$string, $encoding = null) {
     list($key, $delta_points) = each($result_array);
     return strstr($key, ':', true);
 }
-
 
 /**
  * Date and time conversions and formats
@@ -1010,7 +1002,6 @@ function api_get_months_long($language = null) {
     return $months['months_long'];
 }
 
-
 /**
  * Name order conventions
  */
@@ -1150,7 +1141,6 @@ function api_sort_by_first_name($language = null) {
     return $sort_by_first_name[$language];
 }
 
-
 /**
  * A safe way to calculate binary lenght of a string (as number of bytes)
  */
@@ -1171,7 +1161,6 @@ function api_byte_count(& $string) {
     }
     return strlen($string);
 }
-
 
 /**
  * Multibyte string conversion functions
@@ -1601,7 +1590,6 @@ function api_transliterate($string, $unknown = '?', $from_encoding = null) {
     }
     return $result;
 }
-
 
 /**
  * Common multibyte string functions
@@ -2612,7 +2600,6 @@ function api_ucwords($string, $encoding = null) {
     return ucwords($string);
 }
 
-
 /**
  * String operations using regular expressions
  */
@@ -2735,7 +2722,6 @@ function api_preg_split($pattern, $subject, $limit = -1, $flags = 0, $encoding =
     }
     return preg_split(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $limit, $flags);
 }
-
 
 /**
  * Obsolete string operations using regular expressions, to be deprecated
@@ -2943,7 +2929,6 @@ function api_split($pattern, $string, $limit = null) {
     return split($pattern, $string, $limit);
 }
 
-
 /**
  * String comparison
  */
@@ -3019,7 +3004,6 @@ function api_strnatcmp($string1, $string2, $language = null, $encoding = null) {
     }
     return strnatcmp($string1, $string2);
 }
-
 
 /**
  * Sorting arrays
@@ -3421,7 +3405,6 @@ function api_rsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encodi
     return rsort($array, $sort_flag);
 }
 
-
 /**
  * Common sting operations with arrays
  */
@@ -3459,7 +3442,6 @@ function api_in_array_nocase($needle, $haystack, $strict = false, $encoding = nu
     }
     return false;
 }
-
 
 /**
  * Encoding management functions
@@ -3665,19 +3647,26 @@ function api_get_valid_encodings() {
     if (!is_array($encodings)) {
         $encodings = array('english', array('ISO-8859-15'));
     }
-    $result1 = array(); $result2 = array(); $result3 = array();
+
+    $result1 = array();
+    $result2 = array();
+    $result3 = array();
+
     foreach ($encodings as $value) {
-        $encoding = api_refine_encoding_id(trim($value[0]));
-        if (!empty($encoding)) {
-            if (strpos($encoding, 'ISO-') === 0) {
-                $result1[] = $encoding;
-            } elseif (strpos($encoding, 'WINDOWS-') === 0) {
-                $result2[] = $encoding;
-            } else {
-                $result3[] = $encoding;
+        if (!empty($value)) {
+            $encoding = api_refine_encoding_id(trim($value[0]));
+            if (!empty($encoding)) {
+                if (strpos($encoding, 'ISO-') === 0) {
+                    $result1[] = $encoding;
+                } elseif (strpos($encoding, 'WINDOWS-') === 0) {
+                    $result2[] = $encoding;
+                } else {
+                    $result3[] = $encoding;
+                }
             }
         }
     }
+
     $result1 = array_unique($result1);
     $result2 = array_unique($result2);
     $result3 = array_unique($result3);
@@ -3704,7 +3693,18 @@ function api_detect_encoding($string, $language = null) {
     $encodings = api_get_valid_encodings();
     foreach ($encodings as & $encoding) {
         if (api_is_encoding_supported($encoding) && !api_is_utf8($encoding)) {
-            $result_array = & _api_compare_n_grams(_api_generate_n_grams(api_substr($string, 0, LANGUAGE_DETECT_MAX_LENGTH, $encoding), $encoding), $encoding);
+            $stringToParse = api_substr($string, 0, LANGUAGE_DETECT_MAX_LENGTH, $encoding);
+
+            $strintToParse2 = _api_generate_n_grams(
+                $stringToParse,
+                $encoding
+            );
+
+            $result_array = _api_compare_n_grams(
+                $strintToParse2,
+                $encoding
+            );
+
             if (!empty($result_array)) {
                 list($key, $delta_points) = each($result_array);
                 if ($delta_points < $delta_points_min) {
@@ -3843,7 +3843,6 @@ function get_datepicker_langage_code() {
     }
     return $languaje;
 }
-
 
 /**
  * Functions for internal use behind this API

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SearchSessions = "Session Search";
 $DeleteUsersNotInList = "Unsubscribe students which are not in the imported list";
 $IfSessionExistsUpdate = "If a session exists, update it";
 $SearchCourseBySession = "Search course by session";

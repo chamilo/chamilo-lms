@@ -54,7 +54,7 @@ function _api_get_latin1_compatible_languages() {
  * @param int $n_max (optional)			The limit if the number of characters that a n-gram may contain.
  * @return array						An array that contains cunstructed n-grams, sorted in reverse order by their frequences. Frequences are not stored in the array.
  */
-function &_api_generate_n_grams(&$string, $encoding, $n_grams_max = 350, $n_max = 4) {
+function _api_generate_n_grams(&$string, $encoding, $n_grams_max = 350, $n_max = 4) {
     if (empty($string)) {
         return array();
     }
@@ -91,7 +91,7 @@ function &_api_generate_n_grams(&$string, $encoding, $n_grams_max = 350, $n_max 
  * If you set the value of $max_delta too low, no language will be recognized.
  * $max_delta = 400 * 350 = 140000 is the best detection with lowest speed.
  */
-function & _api_compare_n_grams(&$n_grams, $encoding, $max_delta = LANGUAGE_DETECT_MAX_DELTA) {
+function _api_compare_n_grams(&$n_grams, $encoding, $max_delta = LANGUAGE_DETECT_MAX_DELTA) {
     static $language_profiles;
     if (!isset($language_profiles)) {
         // Reading the language profile files from the internationalization database.

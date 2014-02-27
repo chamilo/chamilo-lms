@@ -184,8 +184,7 @@ $header[] = get_lang('Email');
 
 $data = array();
 
-if (count($formateurs) > 0) {
-
+if (!empty($formateurs) && count($formateurs) > 0) {
     $i = 1;
     foreach ($formateurs as $formateur) {
         $user_id = $formateur["user_id"];
@@ -219,7 +218,6 @@ if (count($formateurs) > 0) {
         } else {
             $css_class = "row_even";
         }
-
         $i++;
 
         if ($is_western_name_order) {

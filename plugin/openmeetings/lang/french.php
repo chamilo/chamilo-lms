@@ -9,6 +9,9 @@ $strings['MeetingClosed']       = "Session fermée";
 $strings['MeetingClosedComment'] = "Si vous avez demandé l'enregistrement des sessions de conférence, cet enregistrement apparaîtra dans la liste ci-dessous dans quelques instants.";
 $strings['CloseMeeting']        = "Fermer la session";
 
+$strings['MeetingDeleted']        = "Supprimer la session";
+$strings['MeetingDeletedComment'] = "";
+
 $strings['VideoConferenceXCourseX']             = "Vidéoconférence #%s, cours %s";
 $strings['VideoConferenceAddedToTheCalendar']   = "Vidéoconférence ajoutée au calendrier";
 $strings['VideoConferenceAddedToTheLinkTool']   = "Vidéoconférence ajoutée comme lien. Vous pouvez éditer et publier le lien sur la page principale du cours depuis l'outil liens.";

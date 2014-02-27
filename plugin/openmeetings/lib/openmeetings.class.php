@@ -231,7 +231,9 @@ class OpenMeetings
         );
 
         if (empty($meetingData)) {
-            if ($this->debug) error_log("meeting does not exist: $meetingId ");
+            if ($this->debug) {
+                error_log("meeting does not exist: $meetingId ");
+            }
             return false;
         }
         $params = array('room_id' => $meetingData['room_id']);
@@ -305,7 +307,7 @@ class OpenMeetings
      * @param array $params Array of parameters
      * @return mixed
      */
-    public function setUserObjectAndGenerateRecordingHashByURL( $params )
+    public function setUserObjectAndGenerateRecordingHashByURL($params)
     {
         $username = $_SESSION['_user']['username'];
         $firstname = $_SESSION['_user']['firstname'];
@@ -325,7 +327,7 @@ class OpenMeetings
         $objRec->externalUserId = $userId;
         $objRec->externalUserType = $systemType;
         $objRec->recording_id = $recording_id;
-        $orFn = $omServices->setUserObjectAndGenerateRecordingHashByURL( $objRec );
+        $orFn = $omServices->setUserObjectAndGenerateRecordingHashByURL($objRec);
 
         return $orFn->return;
     }
@@ -421,24 +423,18 @@ class OpenMeetings
                 $meetingDb['closed_at'] = (!empty($meetingDb['closed_at']) ? api_get_local_time($meetingDb['closed_at']):'');
                 // Fixed value for now
                 $meetingDb['participantCount'] = 40;
-                $rec = $this->gateway->getFlvRecordingsByRoomId($meetingDb['room_id']);
-                $recordings = array();
+                $rec = $this->gateway->getFlvRecordingByRoomId($meetingDb['room_id']);
                 $links = array();
-                $i = 0;
                 // Links to videos look like these:
                 // http://video2.openmeetings.com:5080/openmeetings/DownloadHandler?fileName=flvRecording_4.avi&moduleName=lzRecorderApp&parentPath=&room_id=&sid=dfc0cac396d384f59242aa66e5a9bbdd
                 $link = $this->url.'/DownloadHandler?fileName=%s&moduleName=lzRecorderApp&parentPath=&room_id=%s&sid=%s';
                 if (!empty($rec)) {
-                    foreach ($rec as $info) {
-                        $recordings[$i]['filename'] = $info['fileHash'];
-                        $recordings[$i]['image'] = $info['previewImage'];
-                        $recordings[$i]['link1'] = sprintf($link, $recordings[$i]['filename'], $meetingDb['room_id'], $this->sessionId);
-                        $recordings[$i]['link2'] = sprintf($link, $info['alternateDownload'], $meetingDb['room_id'], $this->sessionId);
-                        $recordings[$i]['end'] = $info['recordEnd'];
-                        $links[] = $info['fileName'].' '.
-                            \Display::url('[1]', $recordings[$i]['link1'], array('target' => '_blank')).' '.
-                            \Display::url('[2]', $recordings[$i]['link2'], array('target' => '_blank'));
-                    }
+                    $link1 = sprintf($link, $rec['fileHash'], $meetingDb['room_id'], $this->sessionId);
+                    $link2 = sprintf($link, $rec['alternateDownload'], $meetingDb['room_id'], $this->sessionId);
+                    $links[] = $rec['fileName'].' '.
+                        \Display::url('[.flv]', $link1, array('target' => '_blank')).' '.
+                        \Display::url('[.avi]', $link2, array('target' => '_blank'));
+
                 }
                 $item['show_links']  = implode('<br />', $links);
 
@@ -609,6 +605,7 @@ class OpenMeetings
 
     /**
      * @param int $id
+     * @return int
      */
     public function deleteMeeting($id)
     {
@@ -623,7 +620,7 @@ class OpenMeetings
                 ),
                 array('id = ? ' => $id)
             );
-
+            return $id;
             //error_log(__FILE__.'+'.__LINE__.' Finished closing');
         } catch (SoapFault $e) {
             error_log(__FILE__.'+'.__LINE__.' Warning: We have detected some problems: Fault: '.$e->faultstring);

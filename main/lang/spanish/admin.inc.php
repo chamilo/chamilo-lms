@@ -1715,4 +1715,5 @@ $SpaceUsedOnSystemCannotBeMeasuredOnWindows = "El espacio usado en el disco no p
 $XOldTablesDeleted = "%d tablas antiguas eliminadas";
 $XOldDatabasesDeleted = "%d bases de datos antiguas eliminadas";
 $ExtensionShouldBeLoaded = "Esta extensión debería ser cargada.";
+$SearchSessions = "Búsqueda de sesiones";
 ?>

@@ -219,7 +219,7 @@ if ($form->validate()) {
             $params['title']                = $title;
             $params['exemplary_content']    = $exemplary_content;
             $params['wanted_code']          = $wanted_code;
-            $params['category_code']        = $category_code;
+            $params['course_category']        = $category_code;
             $params['course_language']      = $course_language;
             $params['gradebook_model_id']   = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
 

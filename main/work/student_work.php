@@ -54,13 +54,44 @@ if (!empty($group_id)) {
     }
 }
 
+$action = isset($_GET['action']) ? $_GET['action'] : null;
+
+switch ($action) {
+    case 'delete_all':
+        if (api_is_allowed_to_edit()) {
+            $deletedItems = deleteAllWorkPerUser($studentId, $courseInfo);
+            if (!empty($deletedItems)) {
+                $message = get_lang('DocDel').'<br >';
+                foreach ($deletedItems as $item) {
+                    $message .= $item['title'].'<br />';
+                }
+                $message = Display::return_message($message, 'info', false);
+                Session::write('message', $message);
+            }
+            header('Location: '.api_get_self().'?studentId='.$studentId.'&'.api_get_cidreq());
+            exit;
+        }
+        break;
+}
+
 $interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
 $interbreadcrumb[] = array ('url' => '#', 'name' => $userInfo['complete_name']);
 
 Display :: display_header(null);
 
+echo Session::read('message');
+Session::erase('message');
+
 echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
+        Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).'</a>';
+if (api_is_allowed_to_edit()) {
+    echo '<a
+            onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;"
+            href="'.api_get_path(WEB_CODE_PATH).'work/student_work.php?action=delete_all&studentId='.$studentId.'&'.api_get_cidreq().'">'.
+        Display::return_icon('delete.png', get_lang('DeleteAllFiles'), '', ICON_SIZE_MEDIUM).'</a>';
+}
+
 echo '</div>';
 
 $workPerUser = getWorkPerUser($studentId);
@@ -68,7 +99,9 @@ $workPerUser = getWorkPerUser($studentId);
 $table = new HTML_Table(array('class' => 'data_table'));
 $column = 0;
 $row = 0;
-$headers = array(get_lang('Title'), get_lang('HandedOutDate'), get_lang('HandOutDateLimit'), get_lang('Score'), get_lang('Actions'));
+$headers = array(
+    get_lang('Title'), get_lang('HandedOutDate'), get_lang('HandOutDateLimit'), get_lang('Score'), get_lang('Actions')
+);
 foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
     $column++;

@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 /**
  * 	Saving the scores.
@@ -24,20 +23,19 @@ if (isset($_GET['origin']) && $_GET['origin'] == 'learnpath') {
 
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
-
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
+
+$test = $_REQUEST['test'];
 $full_file_path = $documentPath.$test;
 
 my_delete($full_file_path.$_user['user_id'].".t.html");
 
 $TABLETRACK_HOTPOTATOES = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-$tbl_learnpath_user = Database::get_course_table(TABLE_LEARNPATH_USER);
 $TABLE_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 
 $_cid = api_get_course_id();
-$test = $_REQUEST['test'];
+
 $score = $_REQUEST['score'];
 $origin = $_REQUEST['origin'];
 $learnpath_item_id = intval($_REQUEST['learnpath_item_id']);
@@ -54,9 +52,9 @@ $jscript2run = '';
  * @param	integer	Score to save inside the tracking tables (HP and learnpath)
  * @return	void
  */
-function save_scores($file, $score) {
-    global $origin, $_user, $_cid,
-    $TABLETRACK_HOTPOTATOES;
+function save_scores($file, $score)
+{
+    global $origin, $_user, $_cid, $TABLETRACK_HOTPOTATOES;
     // if tracking is disabled record nothing
     $weighting = 100; // 100%
     $date = api_get_utc_datetime();
@@ -107,7 +105,7 @@ if ($origin != 'learnpath') {
     Display::display_reduced_header();
     $update_sql = "UPDATE $TABLE_LP_ITEM_VIEW SET status = 'completed'
                    WHERE c_id = $course_id AND lp_item_id= $learnpath_item_id";
-    Database::query($update_sql); 
+    Database::query($update_sql);
     Display::display_confirmation_message(get_lang('HotPotatoesFinished'));
     Display::display_footer();
 }

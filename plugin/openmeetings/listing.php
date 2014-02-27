@@ -79,17 +79,19 @@ if ($teacher) {
 }
 
 $meetings = $om->getCourseMeetings();
+$openMeeting = false;
+$users_online = 0;
+
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
-}
-$openMeeting = false;
-foreach ($meetings as $meeting) {
-    if ($meeting['status'] == 1) {
-        $openMeeting = true;
+    foreach ($meetings as $meeting) {
+        if ($meeting['status'] == 1) {
+            $openMeeting = true;
+        }
     }
+    $users_online = $meetings->participantCount;
 }
 
-$users_online = $meetings->participantCount;
 $status = $om->isServerRunning();
 $show_join_button = false;
 if ($openMeeting || $teacher) {
@@ -103,8 +105,6 @@ $tpl->assign('conference_url', $conference_url);
 $tpl->assign('users_online', $users_online);
 $tpl->assign('openmeetings_status', $status);
 $tpl->assign('show_join_button', $show_join_button);
-
-//$tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $listing_tpl = 'openmeetings/listing.tpl';
 $content = $tpl->fetch($listing_tpl);

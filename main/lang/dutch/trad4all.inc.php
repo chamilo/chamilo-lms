@@ -852,4 +852,5 @@ $YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYou
 $UserList = "Gebruikerslijst";
 $CourseCatalog = "Cursuscatalogus";
 $LoginToGoToThisCourse = "Gelieve in te loggen om het document te bekijken";
+$HereIsYourFeedback = "In onderstaande bijlage kan je feedback vinden.";
 ?>

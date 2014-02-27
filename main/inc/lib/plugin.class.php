@@ -2,7 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
+ * Class Plugin
  * Base class for plugins
+ *
  *
  * This class has to be extended by every plugin. It defines basic methods
  * to install/uninstall and get information about a plugin
@@ -12,16 +14,15 @@
  * @author Laurent Opprecht <laurent@opprecht.info>
  * @author Julio Montoya <gugli100@gmail.com> added course settings support + lang variable fixes
  * @author Yannick Warnier <ywarnier@beeznest.org> added documentation
- *
  */
 class Plugin
 {
     protected $version = '';
     protected $author = '';
     protected $fields = array();
-
     private $settings = null;
-    private $strings = null; //translation strings
+    // Translation strings.
+    private $strings = null;
     public $is_course_plugin = false;
 
     /**
@@ -33,9 +34,9 @@ class Plugin
      * main/img/icons/64/plugin_name_na.png
      * @example
      * $course_settings = array(
-                    array('name' => 'big_blue_button_welcome_message',  'type' => 'text'),
-                    array('name' => 'big_blue_button_record_and_store', 'type' => 'checkbox')
-        );
+          array('name' => 'big_blue_button_welcome_message',  'type' => 'text'),
+          array('name' => 'big_blue_button_record_and_store', 'type' => 'checkbox')
+       );
      */
     public $course_settings = array();
     /**
@@ -68,7 +69,6 @@ class Plugin
     public function get_info()
     {
         $result = array();
-
         $result['title']            = $this->get_title();
         $result['comment']          = $this->get_comment();
         $result['version']          = $this->get_version();
@@ -83,12 +83,12 @@ class Plugin
                 $result[$name] = $value;
             }
         }
+
         return $result;
     }
 
     /**
      * Returns the "system" name of the plugin in lowercase letters
-     * @param string Name of the plugin
      * @return string
      */
     public function get_name()
@@ -96,12 +96,12 @@ class Plugin
         $result = get_class($this);
         $result = str_replace('Plugin', '', $result);
         $result = strtolower($result);
+
         return $result;
     }
 
     /**
      * Returns the title of the plugin
-     * @param string title of the plugin
      * @return string
      */
     public function get_title()
@@ -111,7 +111,6 @@ class Plugin
 
     /**
      * Returns the description of the plugin
-     * @param string description of the plugin
      * @return string
      */
     public function get_comment()
@@ -121,7 +120,6 @@ class Plugin
 
     /**
      * Returns the version of the plugin
-     * @param string Version of the plugin
      * @return string
      */
     public function get_version()
@@ -131,7 +129,6 @@ class Plugin
 
     /**
      * Returns the author of the plugin
-     * @param string Author(s) of the plugin
      * @return string
      */
     public function get_author()
@@ -141,7 +138,6 @@ class Plugin
 
     /**
      * Returns the contents of the CSS defined by the plugin
-     * @param string The CSS string
      * @return array
      */
     public function get_css()
@@ -154,6 +150,7 @@ class Plugin
         $css = array();
         $css[] = file_get_contents($path);
         $result = implode($css);
+
         return $result;
     }
 
@@ -197,12 +194,14 @@ class Plugin
         }
         $result->setDefaults($defaults);
         $result->addElement('style_submit_button', 'submit_button', $this->get_lang('Save'));
+
         return $result;
     }
 
     /**
      * Returns the value of a given plugin global setting
      * @param string Name of the plugin
+     *
      * @return string Value of the plugin
      */
     public function get($name)
@@ -226,12 +225,14 @@ class Plugin
             $settings = api_get_settings_params(array("subkey = ? AND category = ? AND type = ? " => array($this->get_name(), 'Plugins', 'setting')));
             $this->settings = $settings;
         }
+
         return $this->settings;
     }
 
     /**
      * Tells whether language variables are defined for this plugin or not
      * @param string System name of the plugin
+     *
      * @return boolean True if the plugin has language variables defined, false otherwise
      */
     public function get_lang_plugin_exists($name)
@@ -242,6 +243,7 @@ class Plugin
     /**
      * Hook for the get_lang() function to check for plugin-defined language terms
      * @param string Name of the language variable we are looking for
+     *
      * @return string The translated language term of the plugin
      */
     public function get_lang($name)
@@ -275,6 +277,7 @@ class Plugin
         if (isset($this->strings[$name])) {
             return $this->strings[$name];
         }
+
         return get_lang($name);
     }
 
@@ -282,11 +285,12 @@ class Plugin
      * Caller for the install_course_fields() function
      * @param int The course's integer ID
      * @param boolean Whether to add a tool link on the course homepage
+     *
      * @return void
      */
-    public function course_install($course_id, $add_tool_link = true)
+    public function course_install($courseId, $addToolLink = true)
     {
-        $this->install_course_fields($course_id, $add_tool_link);
+        $this->install_course_fields($courseId, $addToolLink);
     }
 
     /**
@@ -299,12 +303,12 @@ class Plugin
     {
         $plugin_name = $this->get_name();
         $t_course = Database::get_course_table(TABLE_COURSE_SETTING);
-
         $course_id = intval($course_id);
+
         if (empty($course_id)) {
             return false;
         }
-        //Ads course settings
+        // Ads course settings.
         if (!empty($this->course_settings)) {
             foreach ($this->course_settings as $setting) {
                 $variable = Database::escape_string($setting['name']);
@@ -388,6 +392,7 @@ class Plugin
     /**
      * Install the course fields and tool link of this plugin in all courses
      * @param boolean Whether we want to add a plugin link on the course homepage
+     *
      * @return void
      */
     public function install_course_fields_in_all_courses($add_tool_link = true)

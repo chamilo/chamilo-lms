@@ -1481,7 +1481,7 @@ abstract class Question
      * @param   int     Type of question (see constants at beginning of question.class.php)
      * @param   int     Question level/category
      */
-    function create_question ($quiz_id, $question_name, $max_score = 0, $type = 1, $level = 1) {
+    function create_question ($quiz_id, $question_name, $question_description = "" , $max_score = 0, $type = 1, $level = 1) {
         $course_id = api_get_course_int_id();
 
         $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -1494,30 +1494,31 @@ abstract class Question
 
         // Get the max position
         $sql = "SELECT max(position) as max_position"
-               ." FROM $tbl_quiz_question q INNER JOIN $tbl_quiz_rel_question r"
-               ." ON q.id = r.question_id"
-               ." AND exercice_id = $quiz_id AND q.c_id = $course_id AND r.c_id = $course_id";
+            ." FROM $tbl_quiz_question q INNER JOIN $tbl_quiz_rel_question r"
+            ." ON q.id = r.question_id"
+            ." AND exercice_id = $quiz_id AND q.c_id = $course_id AND r.c_id = $course_id";
         $rs_max = Database::query($sql, __FILE__, __LINE__);
         $row_max = Database::fetch_object($rs_max);
         $max_position = $row_max->max_position +1;
 
         // Insert the new question
-        $sql = "INSERT INTO $tbl_quiz_question (c_id, question, ponderation, position, type, level)
-                VALUES ($course_id, '".Database::escape_string($question_name)."', '$max_score', $max_position, $type, $level)";
+        $sql = "INSERT INTO $tbl_quiz_question (c_id, question, description, ponderation, position, type, level)
+                VALUES ($course_id, '".Database::escape_string($question_name)."', '".Database::escape_string($question_description)."', '$max_score', $max_position, $type, $level)";
+
         $rs = Database::query($sql);
         // Get the question ID
         $question_id = Database::get_last_insert_id();
 
         // Get the max question_order
         $sql = "SELECT max(question_order) as max_order "
-              ."FROM $tbl_quiz_rel_question WHERE c_id = $course_id AND exercice_id = $quiz_id ";
+            ."FROM $tbl_quiz_rel_question WHERE c_id = $course_id AND exercice_id = $quiz_id ";
         $rs_max_order = Database::query($sql);
         $row_max_order = Database::fetch_object($rs_max_order);
         $max_order = $row_max_order->max_order + 1;
         // Attach questions to quiz
         $sql = "INSERT INTO $tbl_quiz_rel_question "
-              ."(c_id, question_id,exercice_id,question_order)"
-              ." VALUES($course_id, $question_id, $quiz_id, $max_order)";
+            ."(c_id, question_id,exercice_id,question_order)"
+            ." VALUES($course_id, $question_id, $quiz_id, $max_order)";
         $rs = Database::query($sql);
         return $question_id;
     }

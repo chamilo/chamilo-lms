@@ -80,10 +80,10 @@ function lp_upload_quiz_actions() {
 }
 
 function lp_upload_quiz_secondary_actions() {
- $lp_id = Security::remove_XSS($_GET['lp_id']);
- $return.= '';
- $return.='<a href="exercise_report.php?' . api_get_cidreq() . '">' . Display :: return_icon('reporting32.png', get_lang('Tracking')) . get_lang('Tracking') . '</a>';
- return $return;
+    $lp_id = Security::remove_XSS($_GET['lp_id']);
+    $return = '';
+    $return.='<a href="exercise_report.php?' . api_get_cidreq() . '">' . Display :: return_icon('reporting32.png', get_lang('Tracking')) . get_lang('Tracking') . '</a>';
+    return $return;
 }
 
 function lp_upload_quiz_main() {
@@ -136,6 +136,7 @@ function lp_upload_quiz_action_handling() {
     $feedback_true_index = array();
     $feedback_false_index = array();
     $number_questions = 0;
+    $question_description_index = array();
     // Reading all the first column items sequencially to create breakpoints
     for ($i = 1; $i <= $data->sheets[0]['numRows']; $i++) {
         if ($data->sheets[0]['cells'][$i][1] == 'Quiz' && $i == 1) {
@@ -151,7 +152,10 @@ function lp_upload_quiz_action_handling() {
             $feedback_true_index[] = $i; // FeedbackTrue position (line)
         } elseif ($data->sheets[0]['cells'][$i][1] == 'FeedbackFalse') {
             $feedback_false_index[] = $i; // FeedbackFalse position (line)
+        } elseif ($data->sheets[0]['cells'][$i][1] == 'EnrichQuestion') {
+            $question_description_index[] = $i;
         }
+
     }
     // Variables
     $quiz = array();
@@ -161,8 +165,9 @@ function lp_upload_quiz_action_handling() {
     $score_list = array();
     $feedback_true_list = array();
     $feedback_false_list = array();
+    $question_description = array();
     // Get questions
-    $k = $z = $q = $l = 0;
+    $k = $z = $q = $l = $m = 0;
     for ($i = 1; $i <= $data->sheets[0]['numRows']; $i++) {
         if (is_array($data->sheets[0]['cells'][$i])) {
             $column_data = $data->sheets[0]['cells'][$i];
@@ -192,6 +197,9 @@ function lp_upload_quiz_action_handling() {
         } elseif (in_array($i, $feedback_false_index)) {
             $feedback_false_list[$l] = $column_data;//a complete line where 1st column is 'FeedbackFalse' for wrong answers
             $l++;
+        } elseif (in_array($i, $question_description_index)) {
+            $question_description[$m] = $column_data;//a complete line where 1st column is 'Description'
+            $m++;
         }
     }
 
@@ -236,12 +244,19 @@ function lp_upload_quiz_action_handling() {
             // Import questions
             for ($i = 0; $i < $number_questions; $i++) {
                 // Create questions
+
+
                 $question_title = $question[$i][2]; // Question name
+                $question_description_text = "<p></p>";
+                if (isset($question_description[$i][2])) {
+                    $question_description_text =  "<p>".$question_description[$i][2]."</p>"; // Question description, if any
+                }
+
                 // Unique answers are the only question types available for now
                 // through xls-format import
                 $unique_answer = new UniqueAnswer();
                 if ($question_title != '') {
-                    $question_id = $unique_answer->create_question($quiz_id, ($question_title));
+                    $question_id = $unique_answer->create_question($quiz_id, $question_title, $question_description_text);
                 }
                 if (is_array($new_answer[$i])) {
                     $id = 1;
@@ -258,13 +273,13 @@ function lp_upload_quiz_action_handling() {
                         } else {
                             $comment = $feedback_false_list[$i][2];
                         }
-    /*
-                        if ($id == 1) {
-                            $comment = $feedback_true_list[$i][2];
-                        } elseif ($id == 2) {
-                            $comment = $feedback_false_list[$i][2];
-                        }
-    */
+                        /*
+                                            if ($id == 1) {
+                                                $comment = $feedback_true_list[$i][2];
+                                            } elseif ($id == 2) {
+                                                $comment = $feedback_false_list[$i][2];
+                                            }
+                        */
                         // Create answer
                         $unique_answer->create_answer($id, $question_id, $answer, $comment, $score, $correct);
                         $id++;

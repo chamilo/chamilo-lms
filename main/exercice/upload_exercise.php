@@ -274,11 +274,11 @@ function lp_upload_quiz_action_handling() {
                             $comment = $feedback_false_list[$i][2];
                         }
                         /*
-                                            if ($id == 1) {
-                                                $comment = $feedback_true_list[$i][2];
-                                            } elseif ($id == 2) {
-                                                $comment = $feedback_false_list[$i][2];
-                                            }
+                        if ($id == 1) {
+                            $comment = $feedback_true_list[$i][2];
+                        } elseif ($id == 2) {
+                            $comment = $feedback_false_list[$i][2];
+                        }
                         */
                         // Create answer
                         $unique_answer->create_answer($id, $question_id, $answer, $comment, $score, $correct);

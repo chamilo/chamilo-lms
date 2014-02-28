@@ -1017,7 +1017,6 @@ class Tracking
         }
 
         $conditionsToString = implode('AND ', $conditions);
-        //lp_iv.max_score as max_score_item_view,
         $sql = "SELECT  SUM(lp_iv.score) sum_score,
                         SUM(lp_i.max_score) sum_max_score,
                         count(*) as count
@@ -1033,6 +1032,11 @@ class Tracking
                 ";
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
+
+        if (empty($row['sum_max_score'])) {
+            return 0;
+        }
+
         return ($row['sum_score'] / $row['sum_max_score'])*100;
 
     }

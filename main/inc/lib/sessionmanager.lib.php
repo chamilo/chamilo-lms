@@ -3527,12 +3527,8 @@ class SessionManager
 
         if (!empty($lastConnectionDate)) {
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
-            $where .=  " AND l.login_date = (
-                            SELECT MAX(a.login_date)
-                            FROM $loginTable as a
-                            WHERE a.login_user_id = u.user_id
-                         )";
-            $where .= " AND l.login_date <= '$lastConnectionDate' ";
+            $where .=  " AND l.login_date <= '$lastConnectionDate' ";
+
         }
 
         $sql .= $where;

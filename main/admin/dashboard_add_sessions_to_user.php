@@ -30,15 +30,16 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdm
 $interbreadcrumb[] = array('url' => 'user_list.php','name' => get_lang('UserList'));
 
 // Database Table Definitions
-$tbl_session 			= 	Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_session_rel_user 	= 	Database::get_main_table(TABLE_MAIN_SESSION_USER);
-$tbl_session_rel_access_url = 	Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+$tbl_session 			= Database::get_main_table(TABLE_MAIN_SESSION);
+$tbl_session_rel_user 	= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+$tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
 // Initializing variables
 $user_id = isset($_GET['user']) ? intval($_GET['user']) : null;
 $user_info = api_get_user_info($user_id);
 $user_anonymous = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
+$ajax_search = false;
 
 // Setting the name of the tool
 if (UserManager::is_admin($user_id)) {
@@ -286,7 +287,9 @@ if(!empty($msg)) {
 	if (is_array($assigned_sessions_to_hrm)) {
 		foreach($assigned_sessions_to_hrm as $enreg) {
 	?>
-		<option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"'; ?>><?php echo $enreg['name'] ?></option>
+		<option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"'; ?>>
+            <?php echo $enreg['name'] ?>
+        </option>
 	<?php }
 	}?>
   </select></td>

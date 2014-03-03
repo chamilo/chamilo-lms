@@ -2399,7 +2399,8 @@ class SessionManager
         $limit = null,
         $getCount = false,
         $getOnlySessionId = false,
-        $getSql = false
+        $getSql = false,
+        $orderCondition = null
     ) {
 		// Database Table Definitions
 		$tbl_session 			= Database::get_main_table(TABLE_MAIN_SESSION);
@@ -2424,6 +2425,10 @@ class SessionManager
             $limitCondition = " LIMIT ".intval($start). ", ".intval($limit);
         }
 
+        if (empty($orderCondition)) {
+            $orderCondition = " ORDER BY s.name ";
+        }
+
 		if (api_is_multiple_url_enabled()) {
            $sql = " $select FROM $tbl_session s
                     INNER JOIN $tbl_session_rel_user sru ON (sru.id_session = s.id)
@@ -2432,6 +2437,7 @@ class SessionManager
                         sru.id_user = '$userId' AND
                         sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND
                         access_url_id = ".api_get_current_access_url_id()."
+                        $orderCondition
                         $limitCondition";
         } else {
             $sql = "$select FROM $tbl_session s
@@ -2440,6 +2446,7 @@ class SessionManager
                         sru.id_session = s.id AND
                         sru.id_user = '$userId' AND
                         sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."'
+                        $orderCondition
                         $limitCondition";
         }
 

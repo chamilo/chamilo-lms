@@ -659,8 +659,8 @@ class MySpace {
         $columns = array(
             get_lang('LoginDate'),
             get_lang('UserName'),
-            get_lang('FirstName'),
             get_lang('LastName'),
+            get_lang('FirstName'),
             get_lang('Clicks'),
             get_lang('IP'),
             get_lang('TimeLoggedIn'),

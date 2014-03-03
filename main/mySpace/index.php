@@ -691,7 +691,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }
 
         $url = $ajax_path . 'session.ajax.php?a='. $an . '&course_id=' . $courseId;
-        $sessionFilter->addElement('select_ajax', 'session_name', get_lang('SearchSession'), null, array('url' => $url, 'defaults' => $sessionList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
+        $sessionFilter->addElement('select_ajax', 'session_name', get_lang('Search') . " " . get_lang('Section'), null, array('url' => $url, 'defaults' => $sessionList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
 
         //course filter
         /*
@@ -719,7 +719,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $exerciseInfo = current(get_exercise_by_id($exerciseId, $courseId));
                 $exerciseList[] = array('id' => $exerciseInfo['id'], 'text' => api_html_entity_decode($exerciseInfo['title']));
             }
-            $sessionFilter->addElement('select_ajax', 'exercise_name', get_lang('SearchExercise'), null, array('url' => $url, 'defaults' => $exerciseList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
+            $sessionFilter->addElement('select_ajax', 'exercise_name', get_lang('Search') . " " . get_lang('Assessment'), null, array('url' => $url, 'defaults' => $exerciseList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
 
         }
 

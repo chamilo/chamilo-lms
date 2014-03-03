@@ -178,7 +178,6 @@ echo '</div>';
 echo Display::page_header(sprintf(get_lang('AssignSessionsToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])));
 
 $assigned_sessions_to_hrm = SessionManager::get_sessions_followed_by_drh($user_id);
-
 $assigned_sessions_id = array_keys($assigned_sessions_to_hrm);
 
 $without_assigned_sessions = '';
@@ -255,7 +254,9 @@ if(!empty($msg)) {
 	<?php
 	while ($enreg = Database::fetch_array($result)) {
 	?>
-		<option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"';?>><?php echo $enreg['name']; ?></option>
+		<option value="<?php echo $enreg['id']; ?>" <?php echo 'title="'.htmlspecialchars($enreg['name'],ENT_QUOTES).'"';?>>
+            <?php echo $enreg['name']; ?>
+        </option>
 	<?php } ?>
 	</select></div>
   </td>

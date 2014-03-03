@@ -2391,6 +2391,7 @@ class SessionManager
      * @param bool $getCount
      * @param bool $getOnlySessionId
      * @param bool $getSql
+     * @param string $orderCondition
 	 * @return array sessions
 	 */
 	public static function get_sessions_followed_by_drh(
@@ -2408,7 +2409,6 @@ class SessionManager
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
 		$userId = intval($userId);
-		$assigned_sessions_to_hrm = array();
 
         $select = " SELECT * ";
 
@@ -2461,12 +2461,13 @@ class SessionManager
             return $row['count'];
         }
 
+        $sessions = array();
         if (Database::num_rows($result) > 0) {
 			while ($row = Database::fetch_array($result))	{
-				$assigned_sessions_to_hrm[$row['id']] = $row;
+                $sessions[$row['id']] = $row;
 			}
 		}
-		return $assigned_sessions_to_hrm;
+		return $sessions;
 	}
 
 	/**

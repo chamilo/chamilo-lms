@@ -280,7 +280,6 @@ if (!empty($students)) {
     // Inactive students
     $inactiveUsers = Tracking::getInactiveUsers($studentIds, $daysAgo);
     $totalTimeSpent = Tracking::get_time_spent_on_the_platform($studentIds);
-
     $posts = Tracking::count_student_messages($studentIds);
     $countAssignments = Tracking::count_student_assignments($studentIds);
     $progress  = Tracking::get_avg_student_progress($studentIds);
@@ -333,11 +332,10 @@ if (!empty($students)) {
         $csv_content[] = array();
     } else {
         $lastConnectionDate = api_get_utc_datetime(strtotime('15 days ago'));
-        $countActiveUsers = SessionManager::getCountUserTracking(null, 1);
-        $countInactiveUsers = SessionManager::getCountUserTracking(null, 0);
-
+        $countActiveUsers = $nb_students; //SessionManager::getCountUserTracking(null, 1);
+        $countInactiveUsers = SessionManager::getCountUserTracking(null, 0, null, $sessionIdList, $studentIds);
         $countSleepingTeachers = SessionManager::getTeacherTracking(api_get_user_id(), 1, $lastConnectionDate, true, $sessionIdList);
-        $countSleepingStudents = SessionManager::getCountUserTracking(null, 1, $lastConnectionDate);
+        $countSleepingStudents = SessionManager::getCountUserTracking(null, 1, $lastConnectionDate, $sessionIdList, $studentIds);
 
         $form = new FormValidator('search_user', 'get', api_get_path(WEB_CODE_PATH).'mySpace/student.php');
         $form->addElement('text', 'keyword', get_lang('User'));

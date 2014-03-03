@@ -3449,6 +3449,8 @@ class SessionManager
      * @param string $keyword
      * @param string $active
      * @param string $lastConnectionDate
+     * @param array $sessionIdList
+     * @param array $studentIdList
      * @return array|int
      */
     public static function getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -3461,7 +3463,9 @@ class SessionManager
         $direction = 'asc',
         $keyword = null,
         $active = null,
-        $lastConnectionDate = null
+        $lastConnectionDate = null,
+        $sessionIdList = array(),
+        $studentIdList = array()
     ) {
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -3492,16 +3496,30 @@ class SessionManager
         switch ($status) {
             case 'drh':
                 // Classic DRH
-                $studentListSql = UserManager::get_users_followed_by_drh($userId, STUDENT, true, true);
-                $statusConditions = " AND u.user_id IN (".$studentListSql.") ";
+                if (empty($sessionIdList)) {
+                    $studentListSql = UserManager::get_users_followed_by_drh($userId, STUDENT, true, true);
+                } else {
+                    $studentListSql = $studentIdList;
+                }
+                if (!empty($studentListSql)) {
+                    $studentListSql = array_map('intval', $studentListSql);
+                    $statusConditions = " AND u.user_id IN (".$studentListSql.") ";
+                }
                 break;
             case 'drh_all':
                 // Show all by DRH
-                $sessionsListSql = SessionManager::get_sessions_followed_by_drh($userId, null, null, false, true, true);
-                $statusConditions = " AND s.id IN (".$sessionsListSql.") ";
+                if (empty($sessionIdList)) {
+                    $sessionsListSql = SessionManager::get_sessions_followed_by_drh($userId, null, null, false, true, true);
+                } else {
+                    $sessionsListSql = $sessionIdList;
+                }
+                if (!empty($sessionsListSql)) {
+                    $sessionsListSql = array_map('intval', $sessionsListSql);
+                    $statusConditions = " AND s.id IN (".$sessionsListSql.") ";
+                }
                 break;
             case 'session_admin';
-                $statusConditions = " AND s.id_coach = $userId";
+                $statusConditions = " AND s.id_coach = $userId ";
                 break;
             case 'admin':
                 break;
@@ -3716,10 +3734,17 @@ class SessionManager
      * @param string $keyword
      * @param string $active
      * @param string $lastConnectionDate
+     * @param array $sessionIdList
+     * @param array $studentIdList
      * @return array|int
      */
-    public static function getCountUserTracking($keyword = null, $active = null, $lastConnectionDate = null)
-    {
+    public static function getCountUserTracking(
+        $keyword = null,
+        $active = null,
+        $lastConnectionDate = null,
+        $sessionIdList = array(),
+        $studentIdList = array()
+    ) {
         if (!isset($keyword)) {
             $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
         }
@@ -3740,7 +3765,9 @@ class SessionManager
                     null,
                     $keyword,
                     $active,
-                    $lastConnectionDate
+                    $lastConnectionDate,
+                    $sessionIdList,
+                    $studentIdList
                 );
             } else {
                 $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -3753,7 +3780,9 @@ class SessionManager
                     null,
                     $keyword,
                     $active,
-                    $lastConnectionDate
+                    $lastConnectionDate,
+                    $sessionIdList,
+                    $studentIdList
                 );
             }
         } else {
@@ -3768,7 +3797,9 @@ class SessionManager
                     null,
                     $keyword,
                     $active,
-                    $lastConnectionDate
+                    $lastConnectionDate,
+                    $sessionIdList,
+                    $studentIdList
                 );
             } else {
                 $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -3781,7 +3812,9 @@ class SessionManager
                     null,
                     $keyword,
                     $active,
-                    $lastConnectionDate
+                    $lastConnectionDate,
+                    $sessionIdList,
+                    $studentIdList
                 );
             }
         }

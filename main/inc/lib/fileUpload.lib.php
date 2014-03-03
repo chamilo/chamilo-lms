@@ -1140,7 +1140,17 @@ function search_img_from_html($html_file) {
  * @return  string  actual directory name if it succeeds,
  *          boolean false otherwise
  */
-function create_unexisting_directory($_course, $user_id, $session_id, $to_group_id, $to_user_id, $base_work_dir, $desired_dir_name, $title = null, $visibility = '') {
+function create_unexisting_directory(
+    $_course,
+    $user_id,
+    $session_id,
+    $to_group_id,
+    $to_user_id,
+    $base_work_dir,
+    $desired_dir_name,
+    $title = null,
+    $visibility = null
+) {
 	$nb = '';
     // add numerical suffix to directory if another one of the same number already exists
 	while (file_exists($base_work_dir.$desired_dir_name.$nb)) {

@@ -101,6 +101,7 @@ $to_group_id = api_get_group_id();
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $group_member_with_upload_rights = false;
+$groupId = api_get_group_id();
 
 // If the group id is set, we show them group documents
 $group_properties = array();
@@ -829,9 +830,20 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
             $dir_name = disable_dangerous_file($dir_name);
             $dir_check = $base_work_dir.$dir_name;
 
-
             if (!is_dir($dir_check)) {
-                $created_dir = create_unexisting_directory($_course, api_get_user_id(), $session_id, $to_group_id, $to_user_id, $base_work_dir, $dir_name, $post_dir_name);
+                $visibility = empty($groupId) ? null : 1;
+
+                $created_dir = create_unexisting_directory(
+                    $_course,
+                    api_get_user_id(),
+                    $session_id,
+                    $to_group_id,
+                    $to_user_id,
+                    $base_work_dir,
+                    $dir_name,
+                    $post_dir_name,
+                    $visibility
+                );
 
                 if ($created_dir) {
                     Display::display_confirmation_message('<span title="'.$created_dir.'">'.get_lang('DirCr').'</span>', false);

@@ -3327,13 +3327,11 @@ function api_item_property_update(
                     SET lastedit_date = '$time', lastedit_user_id='$user_id' $set_type
                     WHERE $filter";
     }
-
-    $res = Database::query($sql);
+    Database::query($sql);
     // Insert if no entries are found (can only happen in case of $lastedit_type switch is 'default').
     if (Database::affected_rows() == 0) {
-        $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type,   lastedit_user_id,$to_field,  visibility,   start_visible,   end_visible, id_session)
+        $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, id_session)
                 VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
-
         $res = Database::query($sql);
         if (!$res) {
             return false;
@@ -3442,9 +3440,9 @@ function api_get_track_item_property_history($tool, $ref) {
  * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
  * @param int       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
  */
-function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0) {
-
-    $course_info    = api_get_course_info_by_id($course_id);
+function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0)
+{
+    $course_info = api_get_course_info_by_id($course_id);
     if (empty($course_info)) {
         return false;
     }

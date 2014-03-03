@@ -511,26 +511,32 @@ class DocumentManager
 
         // Condition for search (get ALL folders and documents)
 
-        $sql = "SELECT  docs.id, "
-                       ." docs.filetype, "
-                       ." docs.path, "
-                       ." docs.title, "
-                       ." docs.comment, "
-                       ." docs.size, "
-                       ." docs.readonly, "
-                       ." docs.session_id, "
-                       ." last.id_session item_property_session_id, "
-                       ." last.lastedit_date, "
-                       ." last.visibility, "
-                       ." last.insert_user_id "
-               ." FROM $TABLE_ITEMPROPERTY AS last INNER JOIN $TABLE_DOCUMENT AS docs "
-                   ." ON (docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND "
-                   ." docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']}) "
-               ." WHERE "
-                   ." docs.path LIKE '" . $path . $added_slash . "%' AND "
-                   ." docs.path NOT LIKE '" . $path . $added_slash . "%/%' AND "
-                   .$to_field." = ".$to_value." AND "
-                   ." last.visibility ".$visibility_bit.$condition_session;
+        $sql = "SELECT
+                    docs.id,
+                    docs.filetype,
+                    docs.path,
+                    docs.title,
+                    docs.comment,
+                    docs.size,
+                    docs.readonly,
+                    docs.session_id,
+                    last.id_session item_property_session_id,
+                    last.lastedit_date,
+                    last.visibility,
+                    last.insert_user_id
+                FROM $TABLE_ITEMPROPERTY AS last
+                INNER JOIN $TABLE_DOCUMENT AS docs
+                ON (docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND
+                docs.c_id = {$_course['real_id']} AND
+                last.c_id = {$_course['real_id']})
+                WHERE
+                    docs.path LIKE '" . $path . $added_slash . "%' AND
+                    docs.path NOT LIKE '" . $path . $added_slash . "%/%' AND
+                    $to_field = $to_value AND
+                    last.visibility
+                    $visibility_bit
+                    $condition_session
+                ";
 
         $result = Database::query($sql);
 
@@ -618,7 +624,12 @@ class DocumentManager
                 // Checking parents visibility
                 $final_document_data = array();
                 foreach ($document_data as $row) {
-                    $is_visible = DocumentManager::check_visibility_tree($row['id'], $_course['code'], $current_session_id, api_get_user_id());
+                    $is_visible = DocumentManager::check_visibility_tree(
+                        $row['id'],
+                        $_course['code'],
+                        $current_session_id,
+                        api_get_user_id()
+                    );
                     if ($is_visible) {
                         $final_document_data[$row['id']] = $row;
                     }
@@ -1394,8 +1405,8 @@ class DocumentManager
             if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code']) || api_is_platform_admin()) {
                 $user_in_course = true;
             }
-            //Check if course is open then we can consider that the student is regitered to the course
-            if (isset($course_info) && in_array($course_info['visibility'], array(2, 3))) {
+            // Check if course is open then we can consider that the student is registered to the course
+            if (isset($course_info) && in_array($course_info['visibility'], array(COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD))) {
                 $user_in_course = true;
             }
         } else {
@@ -1405,7 +1416,6 @@ class DocumentManager
                 $user_in_course = true;
             }
         }
-
 
         //4. Checking document visibility (i'm repeating the code in order to be more clear when reading ) - jm
 
@@ -3198,15 +3208,22 @@ class DocumentManager
             }
             $course_info = api_get_course_info($course_code);
             if ($document_data['parent_id'] == false || empty($document_data['parent_id'])) {
+
                 $visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
+                var_dump($doc_id, $visible);
                 return $visible;
             } else {
-                $course_info = api_get_course_info($course_code);
                 $visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
 
                 if (!$visible) {
                     return false;
                 } else {
+                    echo '<pre>';
+                    echo 'parent';
+                    var_dump($document_data);
+                    var_dump($document_data['parent_id']);
+
+                    echo '</pre>';
                     return self::check_visibility_tree($document_data['parent_id'], $course_code, $session_id, $user_id);
                 }
             }

@@ -885,7 +885,7 @@ if (isset($cidReset) && $cidReset) {
                                     login_course_date > now() - INTERVAL $session_lifetime SECOND
                         ORDER BY login_course_date DESC LIMIT 0,1";
                     $result = Database::query($sql);
-
+                    
                     if (Database::num_rows($result) > 0) {
                         $i_course_access_id = Database::result($result,0,0);
                         //We update the course tracking table

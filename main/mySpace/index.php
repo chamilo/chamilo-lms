@@ -246,6 +246,13 @@ if ($is_drh) {
     $sessions = Tracking::get_sessions_coached_by_user($user_id);
 }
 
+$sessionIdList = array();
+if (!empty($sessions)) {
+    foreach ($sessions as $session) {
+        $sessionIdList[] = $session['id'];
+    }
+}
+
 // Courses for the user
 $count_courses = count($courses);
 
@@ -328,7 +335,8 @@ if (!empty($students)) {
         $lastConnectionDate = api_get_utc_datetime(strtotime('15 days ago'));
         $countActiveUsers = SessionManager::getCountUserTracking(null, 1);
         $countInactiveUsers = SessionManager::getCountUserTracking(null, 0);
-        $countSleepingTeachers = SessionManager::getTeacherTracking(api_get_user_id(), 1, $lastConnectionDate, true);
+
+        $countSleepingTeachers = SessionManager::getTeacherTracking(api_get_user_id(), 1, $lastConnectionDate, true, $sessionIdList);
         $countSleepingStudents = SessionManager::getCountUserTracking(null, 1, $lastConnectionDate);
 
         $form = new FormValidator('search_user', 'get', api_get_path(WEB_CODE_PATH).'mySpace/student.php');

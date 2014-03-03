@@ -3498,6 +3498,7 @@ class SessionManager
                 // Classic DRH
                 if (empty($sessionIdList)) {
                     $studentListSql = UserManager::get_users_followed_by_drh($userId, STUDENT, true, true);
+                    $studentListSql = array_keys($studentListSql);
                 } else {
                     $studentListSql = $studentIdList;
                 }
@@ -3510,6 +3511,7 @@ class SessionManager
                 // Show all by DRH
                 if (empty($sessionIdList)) {
                     $sessionsListSql = SessionManager::get_sessions_followed_by_drh($userId, null, null, false, true, true);
+                    $sessionsListSql = array_keys($sessionsListSql);
                 } else {
                     $sessionsListSql = $sessionIdList;
                 }

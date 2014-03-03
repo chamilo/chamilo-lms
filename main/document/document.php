@@ -36,6 +36,7 @@ require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
 $to_user_id = null;
+$parent_id = null;
 
 require_once 'document.inc.php';
 $lib_path = api_get_path(LIBRARY_PATH);

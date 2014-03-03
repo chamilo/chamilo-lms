@@ -615,9 +615,11 @@ class SessionManager
                 $data[$lesson['id']]  = $data[$lesson['id']] . '%';
                 $count++;
             }
-
-            $data['total'] = round($progress / $count, 2) . '%';
-
+            if ($count == 0) {
+                $data['total'] = 0;
+            } else {
+                $data['total'] = round($progress / $count, 2) . '%';
+            }
             $table[] = $data;
         }
         return $table;
@@ -1107,7 +1109,7 @@ class SessionManager
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      * @version Chamilo 1.9.6
      */
-    function get_user_data_access_tracking_overview(
+    static function get_user_data_access_tracking_overview(
         $sessionId,
         $courseId,
         $studentId = 0,
@@ -2229,7 +2231,6 @@ class SessionManager
 		if (count($order_by)>0) {
 			$sql_query .= ' ORDER BY '.Database::escape_string(implode(',',$order_by));
 		}
-        //echo $sql_query;
         if (self::$_debug) {
             error_log(preg_replace('/\s+/', ' ', $sql_query));
         }

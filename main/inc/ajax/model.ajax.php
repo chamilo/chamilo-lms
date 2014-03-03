@@ -656,12 +656,13 @@ switch ($action) {
         $sessionId = 0;
         if (!empty($_GET['course_id']))
         {
-            $sessionId  = $sessionId == 'T' ? 'T' : intval($_GET['session_id']);
+            $sessionId  = $_GET['session_id'] == 'T' ? 'T' : intval($_GET['session_id']);
             $courseId   = intval($_GET['course_id']);
             $course     = api_get_course_info_by_id($courseId);
             $date_from  = $_GET['date_from'];
             $date_to    = $_GET['date_to'];
         }
+
         /**
          * Add lessons of course
          *

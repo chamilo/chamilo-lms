@@ -88,9 +88,10 @@ switch ($action) {
                     }
                     $results2[] = $item2;
                 }
+                $results2[] = array('T', 'text' => 'TODOS', 'id' => 'T');
                 echo json_encode($results2);
             } else {
-                echo json_encode(array());
+                echo json_encode(array(array('T', 'text' => 'TODOS', 'id' => 'T')));
             }
         }
         break;

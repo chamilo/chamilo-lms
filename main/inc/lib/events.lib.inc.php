@@ -1472,9 +1472,11 @@ function event_course_login($course_code, $user_id, $session_id) {
     $user_id	 = Database::escape_string($user_id);
     $session_id  = Database::escape_string($session_id);
 
+    //@TODO: Check if should search for a previous row (LIKE local.inc.php line 880)
     $sql	= "INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter, session_id)
         	  VALUES('".$course_code."', '".$user_id."', '$time', '$time', '1', '".$session_id."')";
     Database::query($sql);
+    error_log (__FILE__);
 
     // Course catalog stats modifications see #4191
     CourseManager::update_course_ranking(null, null, null, null, true, false);

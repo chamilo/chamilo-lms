@@ -1472,10 +1472,32 @@ function event_course_login($course_code, $user_id, $session_id) {
     $user_id	 = Database::escape_string($user_id);
     $session_id  = Database::escape_string($session_id);
 
-    $sql	= "INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter, session_id)
-        	  VALUES('".$course_code."', '".$user_id."', '$time', '$time', '1', '".$session_id."')";
-    Database::query($sql);
+    $session_lifetime = 3600;
 
+    //We select the last record for the current course in the course tracking table
+    //But only if the login date is < than now + max_life_time
+    $sql = "SELECT course_access_id FROM $course_tracking_table
+                            WHERE   user_id     = $user_id AND
+                                    course_code = '$course_code' AND
+                                    session_id  = $session_id AND
+                                    login_course_date > now() - INTERVAL $session_lifetime SECOND
+                        ORDER BY login_course_date DESC LIMIT 0,1";
+    $result = Database::query($sql);
+    //error_log(preg_replace('/\s+/',' ',$sql));
+
+    if (Database::num_rows($result) > 0) {
+        $i_course_access_id = Database::result($result,0,0);
+        //We update the course tracking table
+        $sql = "UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1
+            WHERE course_access_id = ".intval($i_course_access_id)." AND session_id = ".$session_id;
+        Database::query($sql);
+        //error_log(preg_replace('/\s+/',' ',$sql));
+    } else {
+        $sql="INSERT INTO $course_tracking_table (course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
+            "VALUES('".$course_code."', '".$user_id."', '$time', '$time', '1','".$session_id."')";
+        Database::query($sql);
+        //error_log(preg_replace('/\s+/',' ',$sql));
+    }
     // Course catalog stats modifications see #4191
     CourseManager::update_course_ranking(null, null, null, null, true, false);
 }

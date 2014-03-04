@@ -1788,7 +1788,6 @@ class GroupManager
      */
     public static function user_has_access($user_id, $group_id, $tool)
     {
-
         // Admin have access everywhere
         if (api_is_platform_admin()) {
             return true;
@@ -1830,23 +1829,6 @@ class GroupManager
         // Check group properties
         $group_info = self :: get_group_properties($group_id);
 
-        /*if (api_get_setting('allow_group_categories') == 'true') {
-
-            // Check if group category exists
-            $category_group_info = self::get_category_from_group($group_id);
-
-            if (!empty($category_group_info)) {
-                // If exists check the category group status first
-                if ($category_group_info[$state_key] == self::TOOL_NOT_AVAILABLE) {
-                    return false;
-                } elseif($category_group_info[$state_key] == self::TOOL_PRIVATE && !$user_is_in_group) {
-                    return false;
-                }
-            }
-        }*/
-
-        // is_user_in_group() is more complete that the is_subscribed() function
-
         if ($group_info[$state_key] == self::TOOL_NOT_AVAILABLE) {
             return false;
         } elseif ($group_info[$state_key] == self::TOOL_PUBLIC) {
@@ -1864,6 +1846,8 @@ class GroupManager
 
     /**
      * Get all groups where a specific user is subscribed
+     * @param int $user_id
+     * @return array
      */
     public static function get_user_group_name($user_id)
     {
@@ -1871,12 +1855,45 @@ class GroupManager
         $table_group = Database::get_course_table(TABLE_GROUP);
         $user_id = intval($user_id);
         $course_id = api_get_course_int_id();
-        $sql_groups = "SELECT name FROM $table_group g  INNER JOIN $table_group_user gu
-                       ON (gu.group_id=g.id)
-		               WHERE    gu.c_id= $course_id AND
-                                g.c_id= $course_id AND
-                                gu.user_id = $user_id";
-        $res = Database::query($sql_groups);
+        $sql = "SELECT name
+                FROM $table_group g INNER JOIN $table_group_user gu
+                ON (gu.group_id=g.id)
+                WHERE
+                  gu.c_id= $course_id AND
+                  g.c_id= $course_id AND
+                  gu.user_id = $user_id";
+        $res = Database::query($sql);
+        $groups = array();
+        while ($group = Database::fetch_array($res)) {
+            $groups[] .= $group['name'];
+        }
+        return $groups;
+    }
+
+    /**
+     * Get all groups where a specific user is subscribed
+     * @param int $user_id
+     * @return array
+     */
+    public static function getAllGroupPerUserSubscription($user_id)
+    {
+        $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
+        $table_tutor_user = Database::get_course_table(TABLE_GROUP_TUTOR);
+        $table_group = Database::get_course_table(TABLE_GROUP);
+        $user_id = intval($user_id);
+        $course_id = api_get_course_int_id();
+        $sql = "SELECT DISTINCT name FROM $table_group g
+               INNER JOIN $table_group_user gu
+               ON (gu.group_id = g.id)
+               INNER JOIN $table_tutor_user tu
+               ON (tu.group_id = g.id)
+               WHERE
+                  tu.c_id= $course_id AND
+                  gu.c_id= $course_id AND
+                  g.c_id= $course_id AND
+                  (gu.user_id = $user_id OR tu.user_id = $user_id) ";
+
+        $res = Database::query($sql);
         $groups = array();
         while ($group = Database::fetch_array($res)) {
             $groups[] .= $group['name'];

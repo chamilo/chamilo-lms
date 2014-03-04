@@ -87,7 +87,6 @@ if (isset($_GET['id'])) {
 	// Update settings of existing category
 	$action = 'update_settings';
 	$form = new FormValidator('group_category', 'post', '?id='.$category['id']);
-	$form->addElement('header', $nameTools);
 	$form->addElement('hidden', 'id');
 } else {
     // Checks if the field was created in the table Category. It creates it if is neccesary
@@ -102,41 +101,49 @@ if (isset($_GET['id'])) {
 
 // If categories allowed, show title & description field
 if (api_get_setting('allow_group_categories') == 'true') {
+    $form->addElement('header', $nameTools);
+    $form->addElement('html', '<div class="row"><div class="span6">');
 	$form->add_textfield('title', get_lang('Title'));
+
+    // Groups per user
+    $possible_values = array();
+    for ($i = 1; $i <= 10; $i ++) {
+        $possible_values[$i] = $i;
+    }
+    $possible_values[GroupManager::GROUP_PER_MEMBER_NO_LIMIT] = get_lang('All');
+    $group = array(
+        $form->createElement('select', 'groups_per_user', null, $possible_values),
+        $form->createElement('static', null, null, get_lang('QtyOfUserCanSubscribe_PartAfterNumber'))
+    );
+    $form->addGroup($group, 'limit_group', get_lang('GroupLimit'), ' ', false);
+    $form->addRule('limit_group', get_lang('MaxGroupsPerUserInvalid'), 'callback', 'check_groups_per_user');
+
+    // Members per group
+    $group = array(
+        $form->createElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'), GroupManager::MEMBER_PER_GROUP_NO_LIMIT),
+        $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1, array('id' => 'max_member_selected')),
+        $form->createElement('text', 'max_member', null, array('class' => 'span1', 'id' => 'max_member')),
+        $form->createElement('static', null, null, ' '.get_lang('GroupPlacesThis'))
+    );
+    $form->addGroup($group, 'max_member_group', get_lang('GroupLimit'), '', false);
+    $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');
+
+    $form->addElement('html', '</div>');
+
+    $form->addElement('html', '<div class="span6">');
     // Description
     $form->addElement('textarea', 'description', get_lang('Description'), array ('class' => 'span6', 'rows' => 6));
+    $form->addElement('html', '</div>');
+    $form->addElement('html', '</div>');
 } else {
 	$form->addElement('hidden', 'title');
 	$form->addElement('hidden', 'description');
 }
 
+$form->addElement('header', get_lang('DefaultSettingsForNewGroups'));
 // Action
 $form->addElement('hidden', 'action');
 
-// Groups per user
-//$group[] = $form->createElement('static', null, null, get_lang('QtyOfUserCanSubscribe_PartBeforeNumber'));
-$possible_values = array ();
-for ($i = 1; $i <= 10; $i ++) {
-    $possible_values[$i] = $i;
-}
-$possible_values[GroupManager::GROUP_PER_MEMBER_NO_LIMIT] = get_lang('All');
-$group = array(
-    $form->createElement('select', 'groups_per_user', null, $possible_values),
-    $form->createElement('static', null, null, get_lang('QtyOfUserCanSubscribe_PartAfterNumber'))
-);
-$form->addGroup($group, 'limit_group', get_lang('GroupLimit'), ' ', false);
-$form->addRule('limit_group', get_lang('MaxGroupsPerUserInvalid'), 'callback', 'check_groups_per_user');
-$form->addElement('header', get_lang('DefaultSettingsForNewGroups'));
-
-// Members per group
-$group = array(
-    $form->createElement('radio', 'max_member_no_limit', get_lang('GroupLimit'), get_lang('NoLimit'), GroupManager::MEMBER_PER_GROUP_NO_LIMIT),
-    $form->createElement('radio', 'max_member_no_limit', null, get_lang('MaximumOfParticipants'), 1, array('id' => 'max_member_selected')),
-    $form->createElement('text', 'max_member', null, array('class' => 'span1', 'id' => 'max_member')),
-    $form->createElement('static', null, null, ' '.get_lang('GroupPlacesThis'))
-);
-$form->addGroup($group, 'max_member_group', get_lang('GroupLimit'), '', false);
-$form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');
 
 $form->addElement('html', '<div class="span6">');
 

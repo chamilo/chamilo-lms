@@ -5033,10 +5033,14 @@ class learnpath
         return $return;
     }
 
+    /**
+     * @param string string $update_audio
+     * @param bool $drop_element_here
+     * @return string
+     */
     public function return_new_tree($update_audio = 'false', $drop_element_here = false)
     {
         $return = '';
-
         $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 
         $course_id = api_get_course_int_id();
@@ -5048,14 +5052,13 @@ class learnpath
         $result = Database::query($sql);
         $arrLP = array();
         while ($row = Database :: fetch_array($result)) {
-            $row['title'] = Security :: remove_XSS($row['title']);
-            $row['description'] = Security :: remove_XSS($row['description']);
-            $arrLP[] = array (
+
+            $arrLP[] = array(
                 'id' => $row['id'],
                 'item_type' => $row['item_type'],
-                'title' => $row['title'],
+                'title' => Security :: remove_XSS($row['title']),
                 'path' => $row['path'],
-                'description' => $row['description'],
+                'description' => Security::remove_XSS($row['description']),
                 'parent_item_id' => $row['parent_item_id'],
                 'previous_item_id' => $row['previous_item_id'],
                 'next_item_id' => $row['next_item_id'],
@@ -5256,7 +5259,14 @@ class learnpath
         return $return;
     }
 
-    function print_recursive($elements, $default_data, $default_content) {
+    /**
+     * @param array $elements
+     * @param array $default_data
+     * @param array $default_content
+     * @return string
+     */
+    function print_recursive($elements, $default_data, $default_content)
+    {
         $return = '';
         foreach ($elements as $key => $item) {
             if (isset($item['load_data']) || empty($item['data'])) {
@@ -5288,6 +5298,7 @@ class learnpath
 
     /**
      * This function builds the action menu
+     * @param bool $returnContent
      * @return void
      */
     public function build_action_menu($returnContent = false)
@@ -5768,22 +5779,21 @@ class learnpath
      */
     public function display_resources()
     {
-        global $_course; // TODO: Don't use globals.
         $course_code = api_get_course_id();
 
-        //Get all the docs
-        $documents = $this->get_documents();
+        // Get all the docs.
+        $documents = $this->get_documents(true);
 
-        //Get all the exercises
+        // Get all the exercises.
         $exercises = $this->get_exercises();
 
-        // Get all the links
+        // Get all the links.
         $links = $this->get_links();
 
-        //Get al the student publications
+        // Get al the student publications.
         $works = $this->get_student_publications();
 
-        //Get al the forums
+        // Get al the forums.
         $forums = $this->get_forums(null, $course_code);
 
         $headers = array(
@@ -6824,6 +6834,7 @@ class learnpath
         $form->addElement('hidden', 'type', 'dokeos_' . $item_type);
         $form->addElement('hidden', 'post_time', time());
         $form->setDefaults($defaults);
+
         return $form->return_form();
     }
 
@@ -6834,12 +6845,11 @@ class learnpath
      * @param	mixed	Integer if document ID, string if info ('new')
      * @return	string	HTML form
      */
-    public function display_document_form($action = 'add', $id = 0, $extra_info = 'new') {
+    public function display_document_form($action = 'add', $id = 0, $extra_info = 'new')
+    {
         $course_id = api_get_course_int_id();
-        global $charset;
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $tbl_doc 	 = Database :: get_course_table(TABLE_DOCUMENT);
-
 
         $no_display_edit_textarea = false;
 
@@ -6878,7 +6888,9 @@ class learnpath
             }
         } elseif (is_numeric($extra_info)) {
             $sql_doc = "SELECT path, title FROM " . $tbl_doc . "
-                        WHERE c_id = ".$course_id." AND id = " . Database::escape_string($extra_info);
+                        WHERE
+                            c_id = ".$course_id." AND
+                            id = " . Database::escape_string($extra_info);
 
             $result = Database::query($sql_doc);
             $row 	= Database::fetch_array($result);
@@ -7939,12 +7951,24 @@ class learnpath
 
     /**
      * Creates a list with all the documents in it
+     * @param bool $showInvisibleFiles
      * @return string
      */
-    public function get_documents() {
+    public function get_documents($showInvisibleFiles = false)
+    {
     	$course_info = api_get_course_info();
         $sessionId = api_get_session_id();
-    	$document_tree = DocumentManager::get_document_preview($course_info, $this->lp_id, null, $sessionId, true);
+
+    	$document_tree = DocumentManager::get_document_preview(
+            $course_info,
+            $this->lp_id,
+            null,
+            $sessionId,
+            true,
+            null,
+            null,
+            $showInvisibleFiles
+        );
     	return $document_tree;
     }
 

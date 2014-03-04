@@ -2840,7 +2840,8 @@ class DocumentManager
      * @return string
      */
     static function get_document_preview(
-        $course_info, $lp_id = false,
+        $course_info,
+        $lp_id = false,
         $target = '',
         $session_id = 0,
         $add_move_button = false,
@@ -2863,7 +2864,7 @@ class DocumentManager
             }
         }
 
-        //condition for the session
+        // Condition for the session
         $session_id = intval($session_id);
 
         if (!$user_in_course) {
@@ -2891,7 +2892,6 @@ class DocumentManager
         $path = Database::escape_string(str_replace('_', '\_', $path));
         $added_slash = ($path == '/') ? '' : '/';
 
-        //$condition_session = " AND (id_session = '$session_id' OR (id_session = '0' AND insert_date <= (SELECT creation_date FROM $tbl_course WHERE code = '".$course_info['code']."' )))";
         $condition_session = " AND (id_session = '$session_id' OR  id_session = '0' )";
 
         $add_folder_filter = null;
@@ -2905,19 +2905,20 @@ class DocumentManager
             $lp_visibility_condition = " OR filetype='folder'";
         }
 
-        $sql_doc = "SELECT last.visibility, docs.*
-					FROM  $tbl_item_prop AS last, $tbl_doc AS docs
-    	            WHERE   docs.id = last.ref AND
-                            docs.path LIKE '" . $path . $added_slash . "%' AND
-                            docs.path NOT LIKE '%_DELETED_%' AND
-                            last.tool = '" . TOOL_DOCUMENT . "' $condition_session AND
-                            (last.visibility = '1' $lp_visibility_condition) AND
-                            docs.c_id = {$course_info['real_id']} AND
-                            last.c_id = {$course_info['real_id']}
-                            $add_folder_filter
-                    ORDER BY docs.title ASC";
+        $sql = "SELECT last.visibility, docs.*
+                FROM  $tbl_item_prop AS last, $tbl_doc AS docs
+                WHERE
+                    docs.id = last.ref AND
+                    docs.path LIKE '" . $path . $added_slash . "%' AND
+                    docs.path NOT LIKE '%_DELETED_%' AND
+                    last.tool = '" . TOOL_DOCUMENT . "' $condition_session AND
+                    (last.visibility = '1' $lp_visibility_condition) AND
+                    docs.c_id = {$course_info['real_id']} AND
+                    last.c_id = {$course_info['real_id']}
+                    $add_folder_filter
+                ORDER BY docs.title ASC";
 
-        $res_doc = Database::query($sql_doc);
+        $res_doc = Database::query($sql);
         $resources = Database::store_result($res_doc, 'ASSOC');
 
         $resources_sorted = array();

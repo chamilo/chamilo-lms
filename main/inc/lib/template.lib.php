@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 /**
  * @author Julio Montoya <gugli100@gmail.com>
@@ -12,7 +11,6 @@ require_once api_get_path(LIBRARY_PATH).'symfony/Twig/Autoloader.php';
 
 class Template
 {
-
     public $style = 'default'; //see the template folder
     public $preview_theme = null;
     public $theme; // the chamilo theme public_admin, chamilo, chamilo_red, etc

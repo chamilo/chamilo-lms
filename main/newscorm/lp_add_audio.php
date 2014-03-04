@@ -18,9 +18,9 @@ require_once 'resourcelinker.inc.php';
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
-$isStudentView  = (int) $_REQUEST['isStudentView'];
+$isStudentView  = isset($_REQUEST['isStudentView']) ? (int) $_REQUEST['isStudentView'] : null;
 $learnpath_id   = (int) $_REQUEST['lp_id'];
-$submit			= $_POST['submit_button'];
+$submit			= isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 
 $type = isset($_GET['type']) ? $_GET['type'] : null;
 $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -77,7 +77,7 @@ if (empty($lp_item_id)) {
 }
 
 $lp_item = new learnpathItem($lp_item_id);
-$tpl = new Template($tool_name);
+$tpl = new Template(null);
 $form = new FormValidator('add_audio', 'post', api_get_self().'?action=add_audio&id='.$lp_item_id, null, array('enctype' => 'multipart/form-data'));
 $suredel = trim(get_lang('AreYouSureToDelete'));
 
@@ -102,26 +102,20 @@ $page .= $_SESSION['oLP']->return_new_tree(null, true);
 // Show the template list.
 $page .= '</div>';
 
-$page .= '<div id="doc_form" class="span8">';
-$form->addElement('header', get_lang('RecordYourVoice'));
+$recordVoiceForm = Display::page_subheader(get_lang('RecordYourVoice'));
 
+$page .= '<div id="doc_form" class="span8">';
 $tpl->assign('unique_file_id', api_get_unique_id());
 $tpl->assign('course_code', api_get_course_id());
 $tpl->assign('php_session_id', session_id());
-
 $tpl->assign('filename', $lp_item->get_title().'_nano.wav');
-
 $tpl->assign('enable_nanogong', api_get_setting('enable_nanogong') == 'true' ? 1 : 0);
 $tpl->assign('enable_wami', api_get_setting('enable_wami_record') == 'true' ? 1 : 0);
-
-//$tpl->assign('cur_dir_path', api_remove_trailing_slash($lpPathInfo['dir']));
 $tpl->assign('cur_dir_path', '/audio');
 $tpl->assign('lp_item_id', $lp_item_id);
-
 $tpl->assign('lp_dir', api_remove_trailing_slash($lpPathInfo['dir']));
-$voiceContent = $tpl->fetch('default/learnpath/record_voice.tpl');
+$recordVoiceForm .= $tpl->fetch('default/learnpath/record_voice.tpl');
 
-$form->addElement('html', $voiceContent);
 $form->addElement('header', get_lang('UplUpload'));
 $form->addElement('html', $lp_item->get_title());
 $form->addElement('file', 'file', get_lang('AudioFile'), 'style="width: 250px"');
@@ -136,6 +130,7 @@ if (!empty($file)) {
     $audioPlayer = '<div id="preview">'.Display::getMediaPlayer($file, array('url' => $urlFile))."</div>";
     $form->addElement('label', get_lang('Preview'), $audioPlayer);
 }
+
 $form->addElement('button', 'submit', get_lang('Edit'));
 
 $course_info = api_get_course_info();
@@ -149,6 +144,7 @@ $document_tree = DocumentManager::get_document_preview(
     'lp_controller.php?action=add_audio&id='.$lp_item_id
 );
 
+$page .= $recordVoiceForm;
 $page .= $form->return_form();
 $page .= '<legend>'.get_lang('SelectAnAudioFileFromDocuments').'</legend>';
 $page .= $document_tree;

@@ -23,7 +23,6 @@ $workData = getWorkComment($commentId);
 $courseInfo = api_get_course_info();
 
 if (!empty($workData)) {
-
     if (
         empty($workData['file_path']) ||
         (isset($workData['file_path']) && !file_exists($workData['file_path']))
@@ -36,7 +35,7 @@ if (!empty($workData)) {
 
     if (user_is_author($workData['work_id']) || $courseInfo['show_score'] == 0 && $work['active'] == 1 && $work['accepted'] == 1) {
         if (Security::check_abs_path($workData['file_path'], api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')) {
-            DocumentManager::file_send_for_download($workData['file_path'], true);
+            DocumentManager::file_send_for_download($workData['file_path'], true, $workData['file_name_to_show']);
         }
     } else {
         api_not_allowed(true);

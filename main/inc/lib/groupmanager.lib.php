@@ -224,7 +224,7 @@ class GroupManager
         if ($lastId) {
             $desired_dir_name= '/'.replace_dangerous_char($name,'strict').'_groupdocs';
             $my_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository.'/document';
-            $unique_name = create_unexisting_directory($_course, api_get_user_id(), $session_id, $lastId, NULL, $my_path, $desired_dir_name);
+            $unique_name = create_unexisting_directory($_course, api_get_user_id(), $session_id, $lastId, null, $my_path, $desired_dir_name, null,  1);
 
             /* Stores the directory path into the group table */
             $sql = "UPDATE ".$table_group." SET name = '".Database::escape_string($name)."', secret_directory = '".$unique_name."'
@@ -1347,19 +1347,21 @@ class GroupManager
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT ug.id, u.user_id, u.lastname, u.firstname, u.email, u.username
-                FROM  $table_user u INNER JOIN $table_group_user ug ON (ug.user_id = u.user_id)
+                FROM  $table_user u INNER JOIN $table_group_user ug
+                ON (ug.user_id = u.user_id)
                 WHERE ug.c_id = $course_id AND
                       ug.group_id = $group_id
                 $order_clause";
         $db_result = Database::query($sql);
         $users = array();
         while ($user = Database::fetch_object($db_result)) {
-            $member['user_id']   = $user->user_id;
-            $member['firstname'] = $user->firstname;
-            $member['lastname']  = $user->lastname;
-            $member['email']     = $user->email;
-            $member['username']  = $user->username;
-            $users[$member['user_id']] = $member;
+            $users[$user->user_id] = array(
+                'user_id'   => $user->user_id,
+                'firstname' => $user->firstname,
+                'lastname'  => $user->lastname,
+                'email'     => $user->email,
+                'username'  => $user->username
+            );
         }
         return $users;
     }
@@ -2346,6 +2348,9 @@ class GroupManager
         return $data;
     }
 
+    /**
+     * @param string $default
+     */
     static function getSettingBar($default)
     {
         $activeSettings = null;

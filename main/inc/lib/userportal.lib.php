@@ -1145,11 +1145,11 @@ class IndexManager
                                 $params['link'] =  api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_id;
                             }
 
-                            $params['title'] .=  $session_link;
+                            $params['title'] = $session_link;
                             $params['subtitle'] =  (!empty($session_box['coach']) ? $session_box['coach'].' | ' : '').$session_box['dates'];
 
                             if (api_is_platform_admin()) {
-                                $params['right_actions'] .=  '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).'</a>';
+                                $params['right_actions'] =  '<a href="'.api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.$session_id.'">'.Display::return_icon('edit.png', get_lang('Edit'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).'</a>';
                             }
 
                             $parentInfo = CourseManager::course_item_html($params, true);
@@ -1167,10 +1167,10 @@ class IndexManager
                         $params['icon'] = Display::return_icon('folder_blue.png', $session_category['session_category']['name'], array(), ICON_SIZE_LARGE);
 
                         if (api_is_platform_admin()) {
-                            $params['right_actions'] .= '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$session_category['session_category']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
+                            $params['right_actions'] = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$session_category['session_category']['id'].'">'.Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
                         }
 
-                        $params['title'] .= $session_category['session_category']['name'];
+                        $params['title'] = $session_category['session_category']['name'];
 
                         if (api_is_platform_admin()) {
                             $params['link']   = api_get_path(WEB_CODE_PATH).'admin/session_category_edit.php?&id='.$session_category['session_category']['id'];
@@ -1189,8 +1189,10 @@ class IndexManager
                                 $params['subtitle'] = get_lang('Until').' '.$session_category_end_date;
                             }
                         }
-
-                        $sessions_with_category .= CourseManager::course_item_parent(CourseManager::course_item_html($params, true), $html_sessions);
+                        $sessions_with_category .= CourseManager::course_item_parent(
+                            CourseManager::course_item_html($params, true),
+                            $html_sessions
+                        );
                     }
 
 				}

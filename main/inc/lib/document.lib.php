@@ -511,26 +511,32 @@ class DocumentManager
 
         // Condition for search (get ALL folders and documents)
 
-        $sql = "SELECT  docs.id, "
-                       ." docs.filetype, "
-                       ." docs.path, "
-                       ." docs.title, "
-                       ." docs.comment, "
-                       ." docs.size, "
-                       ." docs.readonly, "
-                       ." docs.session_id, "
-                       ." last.id_session item_property_session_id, "
-                       ." last.lastedit_date, "
-                       ." last.visibility, "
-                       ." last.insert_user_id "
-               ." FROM $TABLE_ITEMPROPERTY AS last INNER JOIN $TABLE_DOCUMENT AS docs "
-                   ." ON (docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND "
-                   ." docs.c_id = {$_course['real_id']} AND last.c_id = {$_course['real_id']}) "
-               ." WHERE "
-                   ." docs.path LIKE '" . $path . $added_slash . "%' AND "
-                   ." docs.path NOT LIKE '" . $path . $added_slash . "%/%' AND "
-                   .$to_field." = ".$to_value." AND "
-                   ." last.visibility ".$visibility_bit.$condition_session;
+        $sql = "SELECT
+                    docs.id,
+                    docs.filetype,
+                    docs.path,
+                    docs.title,
+                    docs.comment,
+                    docs.size,
+                    docs.readonly,
+                    docs.session_id,
+                    last.id_session item_property_session_id,
+                    last.lastedit_date,
+                    last.visibility,
+                    last.insert_user_id
+                FROM $TABLE_ITEMPROPERTY AS last
+                INNER JOIN $TABLE_DOCUMENT AS docs
+                ON (docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND
+                docs.c_id = {$_course['real_id']} AND
+                last.c_id = {$_course['real_id']})
+                WHERE
+                    docs.path LIKE '" . $path . $added_slash . "%' AND
+                    docs.path NOT LIKE '" . $path . $added_slash . "%/%' AND
+                    $to_field = $to_value AND
+                    last.visibility
+                    $visibility_bit
+                    $condition_session
+                ";
 
         $result = Database::query($sql);
 
@@ -544,7 +550,9 @@ class DocumentManager
                 if (api_is_coach()) {
                     // Looking for course items that are invisible to hide it in the session
                     if (in_array($row['id'], array_keys($doc_list))) {
-                        if ($doc_list[$row['id']]['item_property_session_id'] == 0 && $doc_list[$row['id']]['session_id'] == 0) {
+                        if ($doc_list[$row['id']]['item_property_session_id'] == 0 &&
+                            $doc_list[$row['id']]['session_id'] == 0
+                        ) {
                             if ($doc_list[$row['id']]['visibility'] == 0) {
                                 unset($document_data[$row['id']]);
                                 continue;
@@ -561,19 +569,19 @@ class DocumentManager
                 if ($row['filetype'] == 'file' && pathinfo($row['path'], PATHINFO_EXTENSION) == 'html') {
                     // Templates management
                     $table_template = Database::get_main_table(TABLE_MAIN_TEMPLATES);
-                    $sql_is_template = "SELECT id FROM $table_template
-                                        WHERE course_code = '" . $_course['code'] . "'
-                                        AND user_id = '" . api_get_user_id() . "'
-                                        AND ref_doc = '" . $row['id'] . "'";
-                    $template_result = Database::query($sql_is_template);
+                    $sql = "SELECT id FROM $table_template
+                            WHERE
+                                course_code = '" . $_course['code'] . "' AND
+                                user_id = '" . api_get_user_id() . "' AND
+                                ref_doc = '" . $row['id'] . "'";
+                    $template_result = Database::query($sql);
                     $row['is_template'] = (Database::num_rows($template_result) > 0) ? 1 : 0;
                 }
-                //just filling $document_data
+                // Just filling $document_data.
                 $document_data[$row['id']] = $row;
             }
 
             // Only for the student we filter the results see BT#1652
-
             if (!api_is_coach() && !$is_allowed_to_edit) {
                 $ids_to_remove = array();
                 $my_repeat_ids = $temp = array();
@@ -585,6 +593,7 @@ class DocumentManager
                     }
                     $temp[$row['id']] = $row;
                 }
+
                 //@todo use the DocumentManager::is_visible function
                 // Checking disponibility in a session
                 foreach ($my_repeat_ids as $id) {
@@ -599,6 +608,7 @@ class DocumentManager
                         }
                     }
                 }
+
                 foreach ($doc_list as $key => $row) {
                     if (in_array($row['visibility'], array('0', '2')) && !in_array($row['id'], $my_repeat_ids)) {
                         $ids_to_remove[] = $row['id'];
@@ -618,7 +628,13 @@ class DocumentManager
                 // Checking parents visibility
                 $final_document_data = array();
                 foreach ($document_data as $row) {
-                    $is_visible = DocumentManager::check_visibility_tree($row['id'], $_course['code'], $current_session_id, api_get_user_id());
+                    $is_visible = DocumentManager::check_visibility_tree(
+                        $row['id'],
+                        $_course['code'],
+                        $current_session_id,
+                        api_get_user_id(),
+                        $to_group_id
+                    );
                     if ($is_visible) {
                         $final_document_data[$row['id']] = $row;
                     }
@@ -628,7 +644,6 @@ class DocumentManager
             }
             return $final_document_data;
         } else {
-            //display_error("Error getting document info from database (".Database::error().")!");
             return false;
         }
     }
@@ -658,22 +673,32 @@ class DocumentManager
             }
             if ($to_group_id <> 0) {
                $sql = "SELECT DISTINCT docs.id, path
-                    FROM $TABLE_ITEMPROPERTY  AS last INNER JOIN $TABLE_DOCUMENT  AS docs
-                    ON (docs.id = last.ref AND last.tool = '" . TOOL_DOCUMENT . "' AND last.c_id = {$_course['real_id']} AND docs.c_id = {$_course['real_id']} )
-					WHERE
-							docs.filetype 		= 'folder' AND
-							last.to_group_id	= " . $to_group_id . " AND
+                       FROM $TABLE_ITEMPROPERTY  AS last INNER JOIN $TABLE_DOCUMENT  AS docs
+                       ON (
+                            docs.id = last.ref AND
+                            last.tool = '" . TOOL_DOCUMENT . "' AND
+                            last.c_id = {$_course['real_id']} AND
+                            docs.c_id = {$_course['real_id']}
+                       )
+                       WHERE
+                            docs.filetype 		= 'folder' AND
+                            last.to_group_id	= " . $to_group_id . " AND
                             docs.path           NOT LIKE '%shared_folder%' AND
-            				last.visibility 	<> 2 $condition_session ";
+                            last.visibility 	<> 2 $condition_session ";
             } else {
                 $sql = "SELECT DISTINCT docs.id, path
                         FROM $TABLE_ITEMPROPERTY  AS last INNER JOIN $TABLE_DOCUMENT  AS docs
-                        ON (docs.id = last.ref AND last.tool = '" . TOOL_DOCUMENT . "' AND last.c_id = {$_course['real_id']} AND docs.c_id = {$_course['real_id']} )
+                        ON (
+                            docs.id = last.ref AND
+                            last.tool = '" . TOOL_DOCUMENT . "' AND
+                            last.c_id = {$_course['real_id']} AND
+                            docs.c_id = {$_course['real_id']}
+                        )
                         WHERE
-                                docs.filetype 		= 'folder' AND
-                                last.to_group_id	= 0  AND
-                                last.visibility 	<> 2
-                                $show_users_condition $condition_session ";
+                            docs.filetype 		= 'folder' AND
+                            last.to_group_id	= 0  AND
+                            last.visibility 	<> 2
+                            $show_users_condition $condition_session ";
             }
 
             $result = Database::query($sql);
@@ -686,13 +711,9 @@ class DocumentManager
                     $document_folders[$row['id']] = $row['path'];
                 }
 
-                //sort($document_folders);
-
                 if (!empty($document_folders)) {
                     natsort($document_folders);
                 }
-
-                //return results
                 return $document_folders;
             } else {
                 return false;
@@ -704,7 +725,8 @@ class DocumentManager
             $condition_session = api_get_session_condition($session_id);
             //get visible folders
             $visible_sql = "SELECT DISTINCT docs.id, path
-                        FROM  " . $TABLE_ITEMPROPERTY . "  AS last, " . $TABLE_DOCUMENT . "  AS docs
+                        FROM $TABLE_ITEMPROPERTY AS last,
+                        $TABLE_DOCUMENT AS docs
                         WHERE docs.id = last.ref
                         AND docs.filetype = 'folder'
                         AND last.tool = '" . TOOL_DOCUMENT . "'
@@ -720,32 +742,34 @@ class DocumentManager
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
             //get invisible folders
-            $invisible_sql = "SELECT DISTINCT docs.id, path
-                        FROM  " . $TABLE_ITEMPROPERTY . "  AS last, " . $TABLE_DOCUMENT . "  AS docs
-                        WHERE docs.id = last.ref
-                        AND docs.filetype = 'folder'
-                        AND last.tool = '" . TOOL_DOCUMENT . "'
-                        AND last.to_group_id = " . $to_group_id . "
-                        AND last.visibility = 0 $condition_session AND
-                        last.c_id = {$_course['real_id']}  AND
+            $sql = "SELECT DISTINCT docs.id, path
+                    FROM $TABLE_ITEMPROPERTY AS last, $TABLE_DOCUMENT AS docs
+                    WHERE
+                        docs.id = last.ref AND
+                        docs.filetype = 'folder' AND
+                        last.tool = '" . TOOL_DOCUMENT . "' AND
+                        last.to_group_id = " . $to_group_id . " AND
+                        last.visibility = 0 $condition_session AND
+                        last.c_id = {$_course['real_id']} AND
                         docs.c_id = {$_course['real_id']} ";
-            $invisibleresult = Database::query($invisible_sql);
+            $invisibleresult = Database::query($sql);
             while ($invisible_folders = Database::fetch_array($invisibleresult, 'ASSOC')) {
                 //condition for the session
                 $session_id = api_get_session_id();
                 $condition_session = api_get_session_condition($session_id);
                 //get visible folders in the invisible ones -> they are invisible too
-                $folder_in_invisible_sql = "SELECT DISTINCT docs.id, path
-                                FROM  " . $TABLE_ITEMPROPERTY . "  AS last, " . $TABLE_DOCUMENT . "  AS docs
-                                WHERE docs.id = last.ref
-                                AND docs.path LIKE '" . Database::escape_string($invisible_folders['path']) . "/%'
-                                AND docs.filetype = 'folder'
-                                AND last.tool = '" . TOOL_DOCUMENT . "'
-                                AND last.to_group_id = " . $to_group_id . "
-                                AND last.visibility = 1 $condition_session AND
-                                last.c_id = {$_course['real_id']}  AND
-                                docs.c_id = {$_course['real_id']}  ";
-                $folder_in_invisible_result = Database::query($folder_in_invisible_sql);
+                $sql = "SELECT DISTINCT docs.id, path
+                        FROM $TABLE_ITEMPROPERTY AS last, $TABLE_DOCUMENT AS docs
+                        WHERE
+                            docs.id = last.ref AND
+                            docs.path LIKE '" . Database::escape_string($invisible_folders['path']) . "/%' AND
+                            docs.filetype = 'folder' AND
+                            last.tool = '" . TOOL_DOCUMENT . "' AND
+                            last.to_group_id = " . $to_group_id . " AND
+                            last.visibility = 1 $condition_session AND
+                            last.c_id = {$_course['real_id']}  AND
+                            docs.c_id = {$_course['real_id']}  ";
+                $folder_in_invisible_result = Database::query($sql);
                 while ($folders_in_invisible_folder = Database::fetch_array($folder_in_invisible_result, 'ASSOC')) {
                     $invisiblefolders[$folders_in_invisible_folder['id']] = $folders_in_invisible_folder['path'];
                 }
@@ -1394,8 +1418,8 @@ class DocumentManager
             if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code']) || api_is_platform_admin()) {
                 $user_in_course = true;
             }
-            //Check if course is open then we can consider that the student is regitered to the course
-            if (isset($course_info) && in_array($course_info['visibility'], array(2, 3))) {
+            // Check if course is open then we can consider that the student is registered to the course
+            if (isset($course_info) && in_array($course_info['visibility'], array(COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD))) {
                 $user_in_course = true;
             }
         } else {
@@ -1405,7 +1429,6 @@ class DocumentManager
                 $user_in_course = true;
             }
         }
-
 
         //4. Checking document visibility (i'm repeating the code in order to be more clear when reading ) - jm
 
@@ -1437,7 +1460,6 @@ class DocumentManager
                 }
 
                 if (isset($item_info_in_session['visibility'])) {
-                    //if ($doc_id == 85) { var_dump($item_info_in_session);}
                     if ($item_info_in_session['visibility'] == 1) {
                         return true;
                     }
@@ -2248,37 +2270,25 @@ class DocumentManager
         } else {
             $destination = $destiny_path . '/' . $file_name;
         }
-        //var_dump("From $original ", "to $destination");
         $original_count = count(explode('/', $original));
         $destination_count = count(explode('/', $destination));
         if ($original_count == $destination_count) {
             //Nothing to change
             return true;
         }
-
-        $mode = '';
         if ($original_count > $destination_count) {
             $mode = 'outside';
         } else {
             $mode = 'inside';
         }
-        //echo $original_count.' '.$destination_count; var_dump($mode);
         //We do not select the $original_path becayse the file was already moved
         $content_html = file_get_contents($destiny_path . '/' . $file_name);
         $destination_file = $destiny_path . '/' . $file_name;
 
-
         $pre_original = strstr($original_path, 'document');
         $pre_destin = strstr($destiny_path, 'document');
-
-        //var_dump ("pre_original $pre_original");
-        //var_dump ("pre_destin $pre_destin");
-
         $pre_original = substr($pre_original, 8, strlen($pre_original));
         $pre_destin = substr($pre_destin, 8, strlen($pre_destin));
-
-        //var_dump ("pre_original $pre_original");
-        //var_dump ("pre_destin $pre_destin");
 
         $levels = count(explode('/', $pre_destin)) - 1;
         $link_to_add = '';
@@ -2302,11 +2312,7 @@ class DocumentManager
             $pre_destin = '..' . $pre_destin . '/';
         }
 
-        //var_dump($pre_original);
-
         $levels = explode('/', $pre_original);
-        //var_dump($levels);
-
         $count_pre_destination_levels = 0;
         foreach ($levels as $item) {
             if (!empty($item) && $item != '..') {
@@ -3182,9 +3188,10 @@ class DocumentManager
      * @param string $course_code
      * @param int $session_id
      * @param int $user_id
+     * @param int $groupId
      * @return bool
      */
-    public static function check_visibility_tree($doc_id, $course_code, $session_id, $user_id)
+    public static function check_visibility_tree($doc_id, $course_code, $session_id, $user_id, $groupId = 0)
     {
         $document_data = self::get_document_data_by_id($doc_id, $course_code, null, $session_id);
         if ($session_id != 0 && !$document_data) {
@@ -3192,22 +3199,24 @@ class DocumentManager
         }
 
         if (!empty($document_data)) {
-            //if admin or course teacher, allow anyway
+            // If admin or course teacher, allow anyway
             if (api_is_platform_admin() || CourseManager::is_course_teacher($user_id, $course_code)) {
                 return true;
             }
             $course_info = api_get_course_info($course_code);
             if ($document_data['parent_id'] == false || empty($document_data['parent_id'])) {
+                if (!empty($groupId)) {
+                    return true;
+                }
                 $visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
                 return $visible;
             } else {
-                $course_info = api_get_course_info($course_code);
                 $visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
 
                 if (!$visible) {
                     return false;
                 } else {
-                    return self::check_visibility_tree($document_data['parent_id'], $course_code, $session_id, $user_id);
+                    return self::check_visibility_tree($document_data['parent_id'], $course_code, $session_id, $user_id, $groupId);
                 }
             }
         } else {

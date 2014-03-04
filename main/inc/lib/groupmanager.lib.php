@@ -2153,6 +2153,8 @@ class GroupManager
             'groups' => array()
         );
 
+        $groupCategories = GroupManager :: get_categories();
+
         foreach ($groupData as $data) {
             $isCategory = empty($data['group']) ? true : false;
 
@@ -2209,9 +2211,15 @@ class GroupManager
 
                 if (empty($groupInfo)) {
                     $categoryInfo = self::getCategoryByTitle($data['category']);
+
                     $categoryId = null;
                     if (!empty($categoryInfo)) {
                         $categoryId = $categoryInfo['id'];
+                    } else {
+                        if (!empty($groupCategories) && isset($groupCategories[0])) {
+                            $defaultGroupCategory = $groupCategories[0];
+                            $categoryId = $defaultGroupCategory['id'];
+                        }
                     }
 
                     // Add

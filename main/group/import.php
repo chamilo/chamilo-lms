@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 // Name of the language file that needs to be included
-$language_file = 'group';
+$language_file = array('group', 'admin', 'registration');
 
 require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
@@ -31,6 +31,7 @@ $form->addElement('header', get_lang('ImportGroups'));
 $form->addElement('file', 'file', get_lang('File'));
 $form->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('checkbox', 'delete_not_in_file', null, get_lang('DeleteItemsNotInFile'));
+$form->addElement('label', null, Display::url(get_lang('ExampleCSVFile'), api_get_path(WEB_CODE_PATH).'group/example.csv'));
 $form->addElement('button', 'submit', get_lang('Import'));
 
 if ($form->validate()) {
@@ -42,7 +43,6 @@ if ($form->validate()) {
         if (!empty($result)) {
             $html = null;
             foreach ($result as $status => $data) {
-
                 if (empty($data['category']) && empty($data['group'])) {
                     continue;
                 }
@@ -66,6 +66,7 @@ if ($form->validate()) {
         }
     }
 }
+
 $form->display();
 
 Display::display_footer();

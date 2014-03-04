@@ -1471,7 +1471,6 @@ function event_course_login($course_code, $user_id, $session_id) {
     $course_code = Database::escape_string($course_code);
     $user_id	 = Database::escape_string($user_id);
     $session_id  = Database::escape_string($session_id);
-
     $session_lifetime = 3600;
 
     //We select the last record for the current course in the course tracking table

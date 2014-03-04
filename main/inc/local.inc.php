@@ -763,6 +763,7 @@ if (isset($cidReset) && $cidReset) {
                 //Course login
                 if (isset($_user['user_id'])) {
                     event_course_login($_course['code'], $_user['user_id'], api_get_session_id());
+                    error_log(__FILE__);
                 }
             }
         } else {

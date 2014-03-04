@@ -104,7 +104,6 @@ $form->addElement('hidden', 'action');
 
 // Group tutors
 $group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['id']);
-$selected_users = array();
 $selected_tutors = array();
 foreach ($group_tutor_list as $index => $user) {
     $selected_tutors[] = $user['user_id'];

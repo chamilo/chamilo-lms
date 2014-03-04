@@ -1347,19 +1347,21 @@ class GroupManager
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT ug.id, u.user_id, u.lastname, u.firstname, u.email, u.username
-                FROM  $table_user u INNER JOIN $table_group_user ug ON (ug.user_id = u.user_id)
+                FROM  $table_user u INNER JOIN $table_group_user ug
+                ON (ug.user_id = u.user_id)
                 WHERE ug.c_id = $course_id AND
                       ug.group_id = $group_id
                 $order_clause";
         $db_result = Database::query($sql);
         $users = array();
         while ($user = Database::fetch_object($db_result)) {
-            $member['user_id']   = $user->user_id;
-            $member['firstname'] = $user->firstname;
-            $member['lastname']  = $user->lastname;
-            $member['email']     = $user->email;
-            $member['username']  = $user->username;
-            $users[$member['user_id']] = $member;
+            $users[$user->user_id] = array(
+                'user_id'   => $user->user_id,
+                'firstname' => $user->firstname,
+                'lastname'  => $user->lastname,
+                'email'     => $user->email,
+                'username'  => $user->username
+            );
         }
         return $users;
     }

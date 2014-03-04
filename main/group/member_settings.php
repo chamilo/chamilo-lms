@@ -117,13 +117,9 @@ $form->addElement('hidden', 'action');
 $form->addElement('hidden', 'max_student', $current_group['max_student']);
 $complete_user_list = GroupManager::fill_groups_list($current_group['id']);
 usort($complete_user_list, 'sort_users');
-$possible_users = array();
-foreach ($complete_user_list as $index => $user) {
-    $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
-}
 
 // Group members
-$group_member_list = GroupManager :: get_subscribed_users($current_group['id']);
+$group_member_list = GroupManager::get_subscribed_users($current_group['id']);
 
 $selected_users = array ();
 foreach ($group_member_list as $index => $user) {
@@ -133,9 +129,7 @@ foreach ($group_member_list as $index => $user) {
 // possible : number_groups_left > 0 and is group member
 $possible_users = array();
 foreach ($complete_user_list as $index => $user) {
-    if ($user['number_groups_left'] > 0 || in_array($user['user_id'], $selected_users)) {
-        $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
-    }
+    $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
 }
 
 $group_members_element = $form->addElement('advmultiselect', 'group_members', get_lang('GroupMembers'), $possible_users, 'style="width: 280px;"');

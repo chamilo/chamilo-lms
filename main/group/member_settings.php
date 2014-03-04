@@ -150,9 +150,6 @@ $group_members_element->setButtonAttributes('add', array('class' => 'btn arrowr'
 $group_members_element->setButtonAttributes('remove', array('class' => 'btn arrowl'));
 $form->addFormRule('check_group_members');
 
-/*$url = '<a class="btn btn-danger" href="'.api_get_self().'?'.api_get_cidreq(true, false).'&action=empty&amp;id='.$group_id.'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('EmptyGroup').'">'.
-    get_lang('EmptyGroup').'</a>&nbsp;';
-$form->addElement('label', null, $url);*/
 // submit button
 $form->addElement('style_submit_button', 'submit', get_lang('SaveSettings'), 'class="save"');
 
@@ -183,9 +180,7 @@ switch ($action) {
             Display :: display_confirmation_message(get_lang('GroupEmptied'));
         }
         break;
-
 }
-
 
 $defaults = $current_group;
 $defaults['group_members'] = $selected_users;
@@ -197,7 +192,7 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
-Display :: display_header($nameTools, 'Group');
+Display::display_header($nameTools, 'Group');
 
 //@todo fix this
 if (isset($_GET['show_message_warning'])) {

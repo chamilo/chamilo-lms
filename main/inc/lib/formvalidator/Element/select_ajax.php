@@ -65,10 +65,15 @@ class HTML_QuickForm_Select_Ajax extends HTML_QuickForm_select
             3
         ;
 
+        $plHolder = $this->getAttribute('placeholder');
+        if (empty($plHolder)) {
+            $plHolder = get_lang('SelectAnOption');
+        }
+        
         $html .= '<script>
                 $(function() {
                     $("#'.$this->getAttribute('name').'").select2({
-                        placeholder: "'.get_lang('SelectAnOption').'",
+                        placeholder: "' . $plHolder . '",
                         allowClear: true,
                         width: "'.$width.'",
                         minimumInputLength: ' . $minimumInputLength . ',

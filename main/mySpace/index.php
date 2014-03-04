@@ -690,24 +690,19 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
 
         }
 
-        $url = $ajax_path . 'session.ajax.php?a='. $an . '&course_id=' . $courseId;
-        $sessionFilter->addElement('select_ajax', 'session_name', get_lang('Search') . " " . get_lang('Section'), null, array('url' => $url, 'defaults' => $sessionList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
+        if ($isSessionFirst) {
+            $url = $ajax_path . 'session.ajax.php?a='. $an . '&course_id=' . $courseId;
+            $sessionFilter->addElement('select_ajax', 'session_name', get_lang('Search') . " " . get_lang('Section'), null, array('url' => $url, 'defaults' => $sessionList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
 
-        //course filter
-        /*
-        $a = 'search_course';
-        if (!empty($_GET['session_id'])) {
-            $a = 'search_course_by_session';
-        }
-        
-        if ($display == 'lpprogressoverview') {
-            $a = 'search_course_by_session_all';
-        }
+            $url = $ajax_path . 'course.ajax.php?a='. $a .'&session_id=' . $sessionId;
+            $sessionFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
+        } else {
+            $url = $ajax_path . 'course.ajax.php?a='. $a .'&session_id=' . $sessionId;
+            $sessionFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
 
-        */
-        $url = $ajax_path . 'course.ajax.php?a='. $a .'&session_id=' . $sessionId;
-        $sessionFilter->addElement('select_ajax', 'course_name', get_lang('SearchCourse'), null, array('url' => $url, 'defaults' => $courseList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
-        
+            $url = $ajax_path . 'session.ajax.php?a='. $an . '&course_id=' . $courseId;
+            $sessionFilter->addElement('select_ajax', 'session_name', get_lang('Search') . " " . get_lang('Section'), null, array('url' => $url, 'defaults' => $sessionList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
+        }
         //Exercise filter    
         if (in_array($display, array('exerciseprogress'))) {
 

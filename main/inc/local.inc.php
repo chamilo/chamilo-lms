@@ -763,7 +763,6 @@ if (isset($cidReset) && $cidReset) {
                 //Course login
                 if (isset($_user['user_id'])) {
                     event_course_login($_course['code'], $_user['user_id'], api_get_session_id());
-                    error_log(__FILE__);
                 }
             }
         } else {
@@ -893,13 +892,11 @@ if (isset($cidReset) && $cidReset) {
                         //We update the course tracking table
                         $sql = "UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1
                                 WHERE course_access_id = ".intval($i_course_access_id)." AND session_id = ".api_get_session_id();
-                        //error_log($sql);
                         Database::query($sql);
                         //error_log(preg_replace('/\s+/',' ',$sql));
                     } else {
                         $sql="INSERT INTO $course_tracking_table (course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
                             "VALUES('".$course_code."', '".$_user['user_id']."', '$time', '$time', '1','".api_get_session_id()."')";
-                        //error_log($sql);
                         Database::query($sql);
                         //error_log(preg_replace('/\s+/',' ',$sql));
                     }

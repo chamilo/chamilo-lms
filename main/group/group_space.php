@@ -233,7 +233,7 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_
 	if ($current_group['doc_state'] == GroupManager::TOOL_PUBLIC) {
 		// Link to the documents area of this group
         $actions_array[] = array(
-            'url' => '../document/document.php?cidReq='.api_get_course_id().'&amp;origin='.$origin,
+            'url' => '../document/document.php?'.api_get_cidreq().'&amp;origin='.$origin,
             'content' => Display::return_icon('folder.png', get_lang('GroupDocument'), array(), ICON_SIZE_MEDIUM)
         );
 	}

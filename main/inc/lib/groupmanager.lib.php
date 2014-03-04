@@ -1330,7 +1330,7 @@ class GroupManager
     }
 
     /**
-     * Get all subscribed users (students and tutors) from a group
+     * Get all subscribed users (members) from a group
      * @param int $group_id
      * @return array An array with information of all users from the given group.
      *               (user_id, firstname, lastname, email)
@@ -1433,7 +1433,7 @@ class GroupManager
      * @param int $group_id
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @see subscribe_users. This function is almost an exact copy of that function.
-     * @return bool TRUE if successfull
+     * @return bool TRUE if successful
      */
     public static function subscribe_tutors($user_ids, $group_id)
     {
@@ -1456,7 +1456,7 @@ class GroupManager
      * Unsubscribe user(s) from a specified group in current course
      * @param mixed $user_ids Can be an array with user-id's or a single user-id
      * @param int $group_id
-     * @return bool TRUE if successfull
+     * @return bool TRUE if successful
      */
     public static function unsubscribe_users($user_ids, $group_id)
     {
@@ -1472,7 +1472,7 @@ class GroupManager
     /**
      * Unsubscribe all users from one or more groups
      * @param mixed $group_id Can be an array with group-id's or a single group-id
-     * @return bool TRUE if successfull
+     * @return bool TRUE if successful
      */
     public static function unsubscribe_all_users($group_ids)
     {
@@ -1504,7 +1504,7 @@ class GroupManager
      * Unsubscribe all tutors from one or more groups
      * @param mixed $group_id Can be an array with group-id's or a single group-id
      * @see unsubscribe_all_users. This function is almost an exact copy of that function.
-     * @return bool TRUE if successfull
+     * @return bool TRUE if successful
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      */
     public static function unsubscribe_all_tutors($group_ids)

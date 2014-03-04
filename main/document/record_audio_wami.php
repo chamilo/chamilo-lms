@@ -34,7 +34,7 @@ api_block_anonymous_users();
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
 if (empty($document_data)) {
     if (api_is_in_group()) {
-        $group_properties   = GroupManager::get_group_properties(api_get_group_id());        
+        $group_properties   = GroupManager::get_group_properties(api_get_group_id());
         $document_id        = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
         $document_data      = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
     }
@@ -48,8 +48,8 @@ $wamidir=$dir;
 if($wamidir=="/"){
  $wamidir="";
 }
-$wamiurlplay=api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$wamidir."/";
-
+$wamiurlplay = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document'.$wamidir."/";
+$groupId = api_get_group_id();
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
@@ -79,9 +79,8 @@ if (!is_dir($filepath)) {
 }
 
 //groups //TODO: clean
-if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != 0) {
-	$req_gid = '&amp;gidReq='.$_SESSION['_gid'];
-	$interbreadcrumb[] = array ("url" => "../group/group_space.php?gidReq=".$_SESSION['_gid'], "name" => get_lang('GroupSpace'));
+if (!empty($groupId)) {
+	$interbreadcrumb[] = array ("url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace'));
 	$noPHP_SELF = true;
 	$to_group_id = $_SESSION['_gid'];
 	$group = GroupManager :: get_group_properties($to_group_id);
@@ -91,7 +90,7 @@ if (isset ($_SESSION['_gid']) && $_SESSION['_gid'] != 0) {
 	}
 }
 
-$interbreadcrumb[] = array ("url" => "./document.php?id=".$document_id.$req_gid, "name" => get_lang('Documents'));
+$interbreadcrumb[] = array("url" => "./document.php?id=".$document_id.'&'.api_get_cidreq(), "name" => get_lang('Documents'));
 
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
@@ -100,7 +99,6 @@ if (!$is_allowed_in_course) {
 if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder(api_get_user_id(), Security::remove_XSS($dir),api_get_session_id()))) {
 	api_not_allowed(true);
 }
-
 
 /*	Header */
 event_access_tool(TOOL_DOCUMENT);
@@ -114,14 +112,14 @@ if (isset ($group)) {
 }
 
 // Interbreadcrumb for the current directory root path
-$counter = 0;   
+$counter = 0;
 if (isset($document_data['parents'])) {
     foreach($document_data['parents'] as $document_sub_data) {
         //fixing double group folder in breadcrumb
         if (api_get_group_id()) {
             if ($counter == 0) {
                 $counter++;
-                continue;  
+                continue;
             }
         }
         $interbreadcrumb[] = array('url' => $document_sub_data['document_url'], 'name' => $document_sub_data['title']);
@@ -129,16 +127,13 @@ if (isset($document_data['parents'])) {
     }
 }
 
-
 //make some vars
-$wamiuserid=api_get_user_id();
+$wamiuserid = api_get_user_id();
 
 Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';
 		echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
-
-
 ?>
 <!-- swfobject is a commonly used library to embed Flash content https://ajax.googleapis.com/ajax/libs/swfobject/2.2/ -->
 <script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH) ?>swfobject/swfobject.js"></script>
@@ -148,9 +143,7 @@ echo '</div>';
 
 <!-- GUI code... take it or leave it -->
 <script type="text/javascript" src="<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/gui.js"></script>
-
 <script type="text/javascript">
-
 	function newNameRecord() {
 		location.reload(true)
 	}
@@ -164,7 +157,7 @@ echo '</div>';
 			document.getElementById('audio_title').readOnly = true;
 			//document.getElementById('audio_title').style.display='none';
 			document.getElementById('audio_button').style.display='none';
-			
+
 			Wami.setup({
 				id : "wami",
 				onReady : setupGUI
@@ -175,7 +168,7 @@ echo '</div>';
 	function setupGUI() {
 		var waminame = document.getElementById("audio_title").value+".wav";//adding name file and extension
 	    var waminame_play=waminame;
-			
+
 		var gui = new Wami.GUI({
 			id : "wami",
 			singleButton : true,
@@ -184,15 +177,12 @@ echo '</div>';
 			buttonUrl : "<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/buttons.png",
 			swfUrl : 	"<?php echo api_get_path(WEB_LIBRARY_PATH) ?>wami-recorder/Wami.swf"
 		});
-	
+
 		gui.setPlayEnabled(false);
 	}
-
 </script>
 
-
 <div id="wami" style="margin-top:10px;"></div>
-
 <div align="center" style="margin-top:150px;">
 <form name="form_wami_recorder">
 <input placeholder="<?php echo get_lang('InputNameHere'); ?>" type="text" id="audio_title"><br/>

@@ -2704,32 +2704,32 @@ class DocumentManager
     }
 
     /**
-     * @param array paremeters: count, url, extension
+     * @param array parameters: count, url, extension
      * @return string
      */
     static function generate_jplayer_jquery($params = array())
     {
         $js_path = api_get_path(WEB_LIBRARY_PATH) . 'javascript/';
 
-        $jplayer_definition = ' $("#jquery_jplayer_' . $params['count'] . '").jPlayer({
-                            ready: function() {
-                                $(this).jPlayer("setMedia", {
-                                    ' . $params['extension'] . ' : "' . $params['url'] . '"
-                                });
-                            },
-                            play: function() { // To avoid both jPlayers playing together.
-                                $(this).jPlayer("pauseOthers");
-                            },
-                            //errorAlerts: true,
-                            //warningAlerts: true,
-                            swfPath: "' . $js_path . 'jquery-jplayer",
-                            //supplied: "m4a, oga, mp3, ogg, wav",
-                            supplied: "' . $params['extension'] . '",
-                            wmode: "window",
-                            solution: "flash, html",  // Do not change this setting
-                            cssSelectorAncestor: "#jp_container_' . $params['count'] . '",
-                        });  	 ' . "\n\n";
-        return $jplayer_definition;
+        $js = ' $("#jquery_jplayer_' . $params['count'] . '").jPlayer({
+                    ready: function() {
+                        $(this).jPlayer("setMedia", {
+                            ' . $params['extension'] . ' : "' . $params['url'] . '"
+                        });
+                    },
+                    play: function() { // To avoid both jPlayers playing together.
+                        $(this).jPlayer("pauseOthers");
+                    },
+                    //errorAlerts: true,
+                    //warningAlerts: true,
+                    swfPath: "' . $js_path . 'jquery-jplayer",
+                    //supplied: "m4a, oga, mp3, ogg, wav",
+                    supplied: "' . $params['extension'] . '",
+                    wmode: "window",
+                    solution: "flash, html",  // Do not change this setting
+                    cssSelectorAncestor: "#jp_container_' . $params['count'] . '",
+                });  	 ' . "\n\n";
+        return $js;
     }
 
     /**

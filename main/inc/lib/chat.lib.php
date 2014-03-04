@@ -134,16 +134,6 @@ class Chat extends Model
                 }
             }
         }
-
-        //print_r($_SESSION['chatHistory']);
-
-        /*
-          var_dump($_SESSION['openChatBoxes']);
-          var_dump($_SESSION['tsChatBoxes']);
-          var_dump($_SESSION['chatHistory']);
-          var_dump($items);
-         */
-        //print_r($_SESSION['chatHistory']);
         $sql = "UPDATE ".$this->table." SET recd = 1 WHERE to_user = '".$to_user_id."' AND recd = 0";
         Database::query($sql);
 
@@ -152,6 +142,7 @@ class Chat extends Model
         }
         echo json_encode(array('items' => $items));
     }
+
     /*
      * Returns an array of messages inside a chat session with a specific user
      * @param int The ID of the user with whom the current user is chatting

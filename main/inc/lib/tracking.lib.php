@@ -828,7 +828,6 @@ class Tracking
                             if ($debug) echo '<h3>Item Type: ' .$row_max_score['item_type'].'</h3>';
 
                             if ($row_max_score['item_type'] == 'sco') {
-                                //var_dump($row_max_score);
                                 // Check if it is sco (easier to get max_score)
                                 //when there's no max score, we assume 100 as the max score, as the SCORM 1.2 says that the value should always be between 0 and 100.
                                 if ($max_score == 0 || is_null($max_score) || $max_score == '') {
@@ -910,7 +909,6 @@ class Tracking
                         if ($debug) echo '<h3>$count_items '.$count_items.'</h3>';
                         if ($debug) echo '<h3>$score_of_scorm_calculate '.$score_of_scorm_calculate.'</h3>';
 
-                        // var_dump($score_of_scorm_calculate);
                         $global_result += $score_of_scorm_calculate;
                         if ($debug) echo '<h3>$global_result '.$global_result.'</h3>';
                     } // end while
@@ -2554,7 +2552,6 @@ class Tracking
                         $my_results_final[]                     = $my_results[$key];
                         $final_all_exercise_graph_list[] 		= $all_exercise_graph_list[$key];
                     }
-                    //var_dump($final_all_exercise_graph_name_list, $final_all_user_results, $final_all_exercise_graph_list);
                     $main_session_graph = self::generate_session_exercise_graph($final_all_exercise_graph_name_list, $my_results_final, $final_all_exercise_graph_list);
                 }
             //}
@@ -3088,8 +3085,6 @@ class Tracking
             $my_exercise_result = $my_exercise_result_array[0] *100;
         }
 
-        //var_dump($exercise_result, $my_exercise_result);
-
         $max     = 100;
         $pieces  = 5 ;
         $part    = round($max / $pieces);
@@ -3124,19 +3119,13 @@ class Tracking
             }
         }
 
-        //var_dump($my_final_array, $final_array); exit;
-
         //Fix to remove the data of the user with my data
-
         for($i = 0; $i<=count($my_final_array); $i++) {
             if (!empty($my_final_array[$i])) {
                 $my_final_array[$i] =  $final_array[$i] + 1; //Add my result
                 $final_array[$i] = 0;
             }
         }
-        //var_dump($my_final_array, $final_array); echo '<br />';
-
-        //echo '<pre>'; var_dump($my_exercise_result, $exercise_result,$x_axis);
 
         $cache = new pCache();
 
@@ -3218,8 +3207,6 @@ class Tracking
         if (isset($my_exercise_result_array[0])) {
             $my_exercise_result = $my_exercise_result_array[0] *100;
         }
-
-        //var_dump($exercise_result, $my_exercise_result);
 
         $max = 100;
         $pieces = 5 ;

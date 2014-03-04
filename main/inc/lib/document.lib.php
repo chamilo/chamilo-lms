@@ -1447,7 +1447,6 @@ class DocumentManager
                 }
 
                 if (isset($item_info_in_session['visibility'])) {
-                    //if ($doc_id == 85) { var_dump($item_info_in_session);}
                     if ($item_info_in_session['visibility'] == 1) {
                         return true;
                     }
@@ -2258,37 +2257,25 @@ class DocumentManager
         } else {
             $destination = $destiny_path . '/' . $file_name;
         }
-        //var_dump("From $original ", "to $destination");
         $original_count = count(explode('/', $original));
         $destination_count = count(explode('/', $destination));
         if ($original_count == $destination_count) {
             //Nothing to change
             return true;
         }
-
-        $mode = '';
         if ($original_count > $destination_count) {
             $mode = 'outside';
         } else {
             $mode = 'inside';
         }
-        //echo $original_count.' '.$destination_count; var_dump($mode);
         //We do not select the $original_path becayse the file was already moved
         $content_html = file_get_contents($destiny_path . '/' . $file_name);
         $destination_file = $destiny_path . '/' . $file_name;
 
-
         $pre_original = strstr($original_path, 'document');
         $pre_destin = strstr($destiny_path, 'document');
-
-        //var_dump ("pre_original $pre_original");
-        //var_dump ("pre_destin $pre_destin");
-
         $pre_original = substr($pre_original, 8, strlen($pre_original));
         $pre_destin = substr($pre_destin, 8, strlen($pre_destin));
-
-        //var_dump ("pre_original $pre_original");
-        //var_dump ("pre_destin $pre_destin");
 
         $levels = count(explode('/', $pre_destin)) - 1;
         $link_to_add = '';
@@ -2312,11 +2299,7 @@ class DocumentManager
             $pre_destin = '..' . $pre_destin . '/';
         }
 
-        //var_dump($pre_original);
-
         $levels = explode('/', $pre_original);
-        //var_dump($levels);
-
         $count_pre_destination_levels = 0;
         foreach ($levels as $item) {
             if (!empty($item) && $item != '..') {
@@ -3208,9 +3191,7 @@ class DocumentManager
             }
             $course_info = api_get_course_info($course_code);
             if ($document_data['parent_id'] == false || empty($document_data['parent_id'])) {
-
                 $visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
-                var_dump($doc_id, $visible);
                 return $visible;
             } else {
                 $visible = self::is_visible_by_id($doc_id, $course_info, $session_id, $user_id);
@@ -3218,12 +3199,6 @@ class DocumentManager
                 if (!$visible) {
                     return false;
                 } else {
-                    echo '<pre>';
-                    echo 'parent';
-                    var_dump($document_data);
-                    var_dump($document_data['parent_id']);
-
-                    echo '</pre>';
                     return self::check_visibility_tree($document_data['parent_id'], $course_code, $session_id, $user_id);
                 }
             }

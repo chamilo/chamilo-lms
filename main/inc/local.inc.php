@@ -885,19 +885,20 @@ if (isset($cidReset) && $cidReset) {
                                     login_course_date > now() - INTERVAL $session_lifetime SECOND
                         ORDER BY login_course_date DESC LIMIT 0,1";
                     $result = Database::query($sql);
+                    //error_log(preg_replace('/\s+/',' ',$sql));
 
                     if (Database::num_rows($result) > 0) {
                         $i_course_access_id = Database::result($result,0,0);
                         //We update the course tracking table
                         $sql = "UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1
                                 WHERE course_access_id = ".intval($i_course_access_id)." AND session_id = ".api_get_session_id();
-                        //error_log($sql);
                         Database::query($sql);
+                        //error_log(preg_replace('/\s+/',' ',$sql));
                     } else {
                         $sql="INSERT INTO $course_tracking_table (course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
                             "VALUES('".$course_code."', '".$_user['user_id']."', '$time', '$time', '1','".api_get_session_id()."')";
-                        //error_log($sql);
                         Database::query($sql);
+                        //error_log(preg_replace('/\s+/',' ',$sql));
                     }
                 }
             }

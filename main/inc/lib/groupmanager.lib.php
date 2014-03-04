@@ -2348,6 +2348,9 @@ class GroupManager
         return $data;
     }
 
+    /**
+     * @param string $default
+     */
     static function getSettingBar($default)
     {
         $activeSettings = null;

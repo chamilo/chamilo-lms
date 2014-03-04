@@ -100,8 +100,6 @@ if (isset($_GET['id'])) {
 	$form = new FormValidator('group_category');
 }
 
-$form->addElement('header', $nameTools);
-
 // If categories allowed, show title & description field
 if (api_get_setting('allow_group_categories') == 'true') {
 	$form->add_textfield('title', get_lang('Title'));

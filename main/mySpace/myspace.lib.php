@@ -484,7 +484,7 @@ class MySpace {
      * Display a sortable table that contains an overview off all the progress of the user in a session
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
-    function display_tracking_progress_overview($sessionId = 0, $courseId = 0,  $date_from, $date_to) {
+    static function display_tracking_progress_overview($sessionId = 0, $courseId = 0,  $date_from, $date_to) {
 
        //The order is important you need to check the the $column variable in the model.ajax.php file
         $columns = array(

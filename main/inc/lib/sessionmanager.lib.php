@@ -804,8 +804,6 @@ class SessionManager
                 INNER JOIN $user u ON u.user_id = s.id_user
                 $where $order $limit";
         } else {
-//            $where .= ' AND id_session = %s';
-//            $queryVariables[] = $sessionId;
             $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, 
                 u.email, s.course_code, s.id_session
                 FROM $session_course_user s
@@ -833,12 +831,16 @@ class SessionManager
             error_log(preg_replace('/\s+/', ' ', $sql_query));
         }
         $result = Database::query($sql_query);
-        $lessons_total = 0;
+        $arrLesson = array(array());
         while ($row = Database::fetch_array($result))
         {
-            if (api_get_item_visibility(api_get_course_info($course['code']), 'learnpath', $row['id'], $sessionId))
+            if (api_get_item_visibility(api_get_course_info($course['code']), 'learnpath', $row['id'], $row['session_id']))
             {
-                $lessons_total++;
+                if (empty($arrLesson[$row['session_id']]['lessons_total'])) {
+                    $arrLesson[$row['session_id']]['lessons_total'] = 1;
+                } else {
+                    $arrLesson[$row['session_id']]['lessons_total']++;
+                }
             }
         }
 
@@ -951,7 +953,13 @@ class SessionManager
             $result     = Database::query($sql_query);
             $row        = Database::fetch_array($result);
             $course_description_progress = ($row['count'] > 0) ? 100 : 0;
-
+            
+            if (!empty($arrLesson[$user['id_session']]['lessons_total'])) {
+                $lessons_total = $arrLesson[$user['id_session']]['lessons_total'];
+            } else {
+                $lessons_total = !empty($arrLesson[0]['lessons_total']) ? $arrLesson[0]['lessons_total'] : 0;
+            }
+            
             //Lessons
             //TODO: Lessons done and left is calculated by progress per item in lesson, maybe we should calculate it only per completed lesson?
             $lessons_progress   = Tracking::get_avg_student_progress($user['user_id'], $course['code'], array(), $user['id_session']);

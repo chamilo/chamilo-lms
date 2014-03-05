@@ -1496,4 +1496,5 @@ $DataTableSearch = "Buscar";
 $HideColumn = "Ocultar columna";
 $DisplayColumn = "Mostrar columna";
 $LegalAgreementAccepted = "Condiciones legales aceptadas";
+$ChooseEvaluation = "Seleccione la Evaluación";
 ?>

@@ -111,6 +111,8 @@ $(document).ready( function() {
         disable_search_threshold: 10
     });
 
+    $(".jp-jplayer audio").addClass('skip');
+
     // Mediaelement
     jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer(/* Options */);
 

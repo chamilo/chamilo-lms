@@ -12,6 +12,8 @@ $editor = isset($_GET['editor']) ? $_GET['editor'] : null;
 echo '<div id="content">';
 $count = 1;
 $thumbnailBaseUrl = CONFIG_URL_IMG_THUMBNAIL;
+global $is_user_in_group;
+$to_group_id = api_get_group_id();
 
 foreach ($fileList as $file) {
 

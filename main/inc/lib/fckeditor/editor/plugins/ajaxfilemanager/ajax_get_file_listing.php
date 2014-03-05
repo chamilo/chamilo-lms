@@ -89,6 +89,8 @@ echo "};";
 echo 'numRows = '.sizeof($fileList).";\n";
 echo "files = {\n";
 $count = 1;
+global $is_user_in_group;
+$to_group_id = api_get_group_id();
 
 foreach ($fileList as $file) {
     //show group's directory only if I'm member. Or if I'm a teacher. TODO: check groups not necessary because the student dont have access to main folder documents (only to document/group or document/shared_folder). Teachers can access to all groups ?

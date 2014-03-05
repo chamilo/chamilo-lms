@@ -133,21 +133,22 @@ if (!empty($file)) {
 
 $form->addElement('button', 'submit', get_lang('Edit'));
 
-$course_info = api_get_course_info();
-$document_tree = DocumentManager::get_document_preview(
-    $course_info,
+$courseInfo = api_get_course_info();
+$documentTree = DocumentManager::get_document_preview(
+    $courseInfo,
     null,
     null,
     0,
     false,
     '/audio',
-    'lp_controller.php?action=add_audio&id='.$lp_item_id
+    'lp_controller.php?action=add_audio&id='.$lp_item_id,
+    true
 );
 
 $page .= $recordVoiceForm;
 $page .= $form->return_form();
 $page .= '<legend>'.get_lang('SelectAnAudioFileFromDocuments').'</legend>';
-$page .= $document_tree;
+$page .= $documentTree;
 $page .= '</div>';
 $page .= '</div>';
 

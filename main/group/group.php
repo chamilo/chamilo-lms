@@ -47,22 +47,13 @@ if (api_get_setting('allow_group_categories') == 'false') {
     $res = Database::query($sql);
     $num = Database::num_rows($res);
     if ($num == 0) {
-        $sql = "INSERT INTO ".$cat_table." ( c_id, id , title , description , forum_state, wiki_state, max_student, self_reg_allowed, self_unreg_allowed, groups_per_user, display_order)
+        $sql = "INSERT INTO $cat_table (c_id, id , title , description , forum_state, wiki_state, max_student, self_reg_allowed, self_unreg_allowed, groups_per_user, display_order)
         VALUES ($course_id, '2', '".Database::escape_string(get_lang('DefaultGroupCategory'))."', '', '1', '1', '8', '0', '0', '0', '0');";
         Database::query($sql);
     }
 }
 
 /*	Header */
-
-if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
-    // So we are not in learnpath tool
-    event_access_tool(TOOL_GROUP);
-    if (!$is_allowed_in_course) {
-        api_not_allowed(true);
-    }
-}
-
 Display::display_header(get_lang('Groups'));
 
 // Tool introduction
@@ -71,14 +62,14 @@ Display::display_introduction_section(TOOL_GROUP);
 /*
  * Self-registration and un-registration
  */
- $my_group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
- $my_msg	  = isset($_GET['msg']) ? Security::remove_XSS($_GET['msg']) : null;
- $my_group    = isset($_REQUEST['group']) ? Security::remove_XSS($_REQUEST['group']) : null;
- $my_get_id1  = isset($_GET['id1']) ? Security::remove_XSS($_GET['id1']) : null;
- $my_get_id2  = isset($_GET['id2']) ? Security::remove_XSS($_GET['id2']) : null;
- $my_get_id   = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
+$my_group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
+$my_msg	  = isset($_GET['msg']) ? Security::remove_XSS($_GET['msg']) : null;
+$my_group    = isset($_REQUEST['group']) ? Security::remove_XSS($_REQUEST['group']) : null;
+$my_get_id1  = isset($_GET['id1']) ? Security::remove_XSS($_GET['id1']) : null;
+$my_get_id2  = isset($_GET['id2']) ? Security::remove_XSS($_GET['id2']) : null;
+$my_get_id   = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
 
-if (isset($_GET['action'])) {
+if (isset($_GET['action']) && $is_allowed_in_course) {
     switch ($_GET['action']) {
         case 'self_reg':
             if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $my_group_id)) {
@@ -206,7 +197,7 @@ if (api_get_setting('allow_group_categories') == 'true') {
         if (api_is_allowed_to_edit(false, true)) {
             $actions .= '<a href="group_category.php?'.api_get_cidreq().'&id='.$category['id'].'" title="'.get_lang('Edit').'">'.
                 Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>';
-            $actions .= '<a href="group.php?'.api_get_cidreq().'&action=delete_category&amp;id='.$category['id'].'"  onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'">'.
+            $actions .= '<a href="group.php?'.api_get_cidreq().'&action=delete_category&amp;id='.$category['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'">'.
                 Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
             if ($index != 0) {
                 $actions .=  ' <a href="group.php?'.api_get_cidreq().'&action=swap_cat_order&amp;id1='.$category['id'].'&amp;id2='.$group_cats[$index -1]['id'].'">'.

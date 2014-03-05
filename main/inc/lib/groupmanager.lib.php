@@ -442,33 +442,36 @@ class GroupManager
         if (empty($group_id) or !is_integer(intval($group_id))) {
             return null;
         }
-        $result = array();
+
 
         $table_group = Database :: get_course_table(TABLE_GROUP);
         $sql = "SELECT * FROM $table_group WHERE c_id = $course_id AND id = ".intval($group_id);
         $db_result = Database::query($sql);
         $db_object = Database::fetch_object($db_result);
 
-        $result['id']                             = $db_object->id;
-        $result['name']                         = $db_object->name;
-        $result['tutor_id']                     = isset($db_object->tutor_id)?$db_object->tutor_id:null;
-        $result['description']                    = $db_object->description;
-        $result['maximum_number_of_students']     = $db_object->max_student;
-        $result['max_student']     = $db_object->max_student;
-        $result['doc_state']                     = $db_object->doc_state;
-        $result['work_state']                     = $db_object->work_state;
-        $result['calendar_state']                 = $db_object->calendar_state;
-        $result['announcements_state']             = $db_object->announcements_state;
-        $result['forum_state']                     = $db_object->forum_state;
-        $result['wiki_state']                     = $db_object->wiki_state;
-        $result['chat_state']                     = $db_object->chat_state;
-        $result['directory']                     = $db_object->secret_directory;
-        $result['self_registration_allowed']     = $db_object->self_registration_allowed;
-        $result['self_unregistration_allowed']     = $db_object->self_unregistration_allowed;
+        $result = array();
 
-        $result['count_users']     = count(self::get_subscribed_users($group_id));
-        $result['count_tutor']     = count(self::get_subscribed_tutors($group_id));
-        $result['count_all'] = $result['count_users'] + $result['count_tutor'];
+        if ($db_object) {
+            $result['id']                             = $db_object->id;
+            $result['name']                         = $db_object->name;
+            $result['tutor_id']                     = isset($db_object->tutor_id)?$db_object->tutor_id:null;
+            $result['description']                    = $db_object->description;
+            $result['maximum_number_of_students']     = $db_object->max_student;
+            $result['max_student']     = $db_object->max_student;
+            $result['doc_state']                     = $db_object->doc_state;
+            $result['work_state']                     = $db_object->work_state;
+            $result['calendar_state']                 = $db_object->calendar_state;
+            $result['announcements_state']             = $db_object->announcements_state;
+            $result['forum_state']                     = $db_object->forum_state;
+            $result['wiki_state']                     = $db_object->wiki_state;
+            $result['chat_state']                     = $db_object->chat_state;
+            $result['directory']                     = $db_object->secret_directory;
+            $result['self_registration_allowed']     = $db_object->self_registration_allowed;
+            $result['self_unregistration_allowed']     = $db_object->self_unregistration_allowed;
+            $result['count_users']     = count(self::get_subscribed_users($group_id));
+            $result['count_tutor']     = count(self::get_subscribed_tutors($group_id));
+            $result['count_all'] = $result['count_users'] + $result['count_tutor'];
+        }
 
         return $result;
     }
@@ -1828,6 +1831,10 @@ class GroupManager
 
         // Check group properties
         $group_info = self :: get_group_properties($group_id);
+
+        if (empty($group_info)) {
+            return false;
+        }
 
         if ($group_info[$state_key] == self::TOOL_NOT_AVAILABLE) {
             return false;

@@ -2,6 +2,10 @@
 // name of the language file that needs to be included
 $language_file = array('resourcelinker','document');
 include('../../../../../../inc/global.inc.php');
+
+// Disabling access for anonymous users.
+api_block_anonymous_users();
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>

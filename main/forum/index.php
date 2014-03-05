@@ -32,12 +32,16 @@ $language_file = 'forum';
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_FORUM;
-
 $htmlHeadXtra[] = '<script>
-    $(document).ready(function(){ $(\'.hide-me\').slideUp() });
-    function hidecontent(content){ $(content).slideToggle(\'normal\'); }
-    </script>';
-$htmlHeadXtra[] = '<script type="text/javascript">
+
+$(document).ready(function() {
+    $(\'.hide-me\').slideUp();
+});
+
+function hidecontent(content){
+    $(content).slideToggle(\'normal\');
+}
+
 function advanced_parameters() {
     if (document.getElementById(\'options\').style.display == \'none\') {
         document.getElementById(\'options\').style.display = \'block\';

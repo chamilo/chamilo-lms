@@ -586,7 +586,7 @@ class Template
     private function set_header_parameters()
     {
         global $httpHeadXtra, $_course, $interbreadcrumb, $language_file, $noPHP_SELF, $_configuration, $this_section;
-        $help                  = $this->help;
+        $help = $this->help;
         $nameTools             = $this->title;
         $navigation            = return_navigation_array();
         $this->menu_navigation = $navigation['menu_navigation'];
@@ -599,8 +599,8 @@ class Template
             }
         }
 
-        $this->assign('online_button', Security::remove_XSS(Display::return_icon('online.png')));
-        $this->assign('offline_button', Security::remove_XSS(Display::return_icon('offline.png')));
+        $this->assign('online_button', Display::return_icon('online.png'));
+        $this->assign('offline_button',Display::return_icon('offline.png'));
 
         // Get language iso-code for this page - ignore errors
         $this->assign('document_language', api_get_language_isocode());

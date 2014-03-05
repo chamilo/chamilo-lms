@@ -202,10 +202,11 @@ switch ($action) {
             }
             if (!empty($data)) 
             {
+                $data[] = array('id' => 'T', 'text' => 'TODOS');
                 echo json_encode($data);
             } else
             {
-                echo json_encode(array());
+                echo json_encode(array(array('id' => 'T', 'text' => 'TODOS')));
             }
         }
         break;

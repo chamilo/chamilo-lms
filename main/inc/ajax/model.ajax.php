@@ -620,16 +620,12 @@ switch ($action) {
         );
         break;
     case 'get_exercise_progress':
-        $sessionId = 0;
-        if (!empty($_GET['course_id']) && !empty($_GET['exercise_id']))
-        {
-            $sessionId  = intval($_GET['session_id']);
-            $courseId   = intval($_GET['course_id']);
-            $exerciseId = intval($_GET['exercise_id']);
-            $date_from  = $_GET['date_from'];
-            $date_to    = $_GET['date_to'];
-        }
-
+        $sessionId  = intval($_GET['session_id']);
+        $courseId   = intval($_GET['course_id']);
+        $exerciseId = intval($_GET['exercise_id']);
+        $date_from  = $_GET['date_from'];
+        $date_to    = $_GET['date_to'];
+        
         $columns = array(
             'session',
             'exercise_id',

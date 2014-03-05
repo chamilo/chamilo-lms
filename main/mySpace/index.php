@@ -711,8 +711,12 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             $exerciseId = isset($_GET['exercise_id']) ? Security::remove_XSS($_GET['exercise_id']) : null;
             if (!empty($exerciseId)) {
                 $exerciseList = array();
-                $exerciseInfo = current(get_exercise_by_id($exerciseId, $courseId));
-                $exerciseList[] = array('id' => $exerciseInfo['id'], 'text' => api_html_entity_decode($exerciseInfo['title']));
+                if ($exerciseId == 'T') {
+                    $exerciseList[] = array('id' => 'T', 'text' => 'TODOS');
+                } else {
+                    $exerciseInfo = current(get_exercise_by_id($exerciseId, $courseId));
+                    $exerciseList[] = array('id' => $exerciseInfo['id'], 'text' => api_html_entity_decode($exerciseInfo['title']));
+                }
             }
             $sessionFilter->addElement('select_ajax', 'exercise_name', get_lang('Search') . " " . get_lang('Assessment'), null, array('url' => $url, 'defaults' => $exerciseList, 'width' => '400px', 'minimumInputLength' => $minimumInputLength));
 
@@ -1051,7 +1055,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             if (!empty($_GET['exercise_id'])) {
                 echo MySpace::display_tracking_exercise_progress_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']), $_GET['date_from'], $_GET['date_to']);
             } else {
-                Display::display_warning_message(get_lang('ChooseExercise'));
+                Display::display_warning_message(get_lang('ChooseEvaluation'));
             }
         } else {
             Display::display_warning_message(get_lang('ChooseCourse'));

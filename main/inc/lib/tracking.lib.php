@@ -3498,7 +3498,7 @@ class Tracking
         $ttrack_attempt    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-
+        
         $sessions = array();
         $courses = array();
         // if session ID is defined but course ID is empty, get all the courses
@@ -3514,7 +3514,7 @@ class Tracking
             $sessionsTemp = SessionManager::get_session_by_course($course['code']);
             $courses[$courseId] = $course;
             foreach ($sessionsTemp as $sessionItem) {
-                $sessions[$sessionItem['id']] = $sessionItem['name'];
+                $sessions[$sessionItem['id']] = $sessionItem;
             }
         } elseif (!empty($courseId) && !empty($sessionId)) {
             //none is empty
@@ -3607,7 +3607,7 @@ class Tracking
             $rs = Database::query($sql_query);
             $userIds = array();
             $questionIds = array();
-            $answerIds = array();
+            $answerIds = array(); 
             while ($row = Database::fetch_array($rs)) {
                 //only show if exercise is visible
                 if (api_get_item_visibility($courseData, 'quiz', $row['exercise_id'])) {
@@ -3627,6 +3627,7 @@ class Tracking
 
             $resQuestions = Database::query($sqlQuestions);
             $answer = array();
+            $question = array();
             while ($rowQuestion = Database::fetch_assoc($resQuestions)) {
                 $questionId = $rowQuestion['question_id'];
                 $answerId = $rowQuestion['answer_id'];
@@ -3646,7 +3647,7 @@ class Tracking
             while ($rowUser = Database::fetch_assoc($resUsers)) {
                 $users[$rowUser['user_id']] = $rowUser;
             }
-            
+           
             foreach ($data as $id => $row) {
                 $rowQuestId = $row['question_id'];
                 $rowAnsId = $row['answer_id'];
@@ -3657,10 +3658,9 @@ class Tracking
                 $data[$id]['username'] = $users[$row['user_id']]['username'];
                 $data[$id]['answer'] = $answer[$rowQuestId][$rowAnsId]['answer'];
                 $data[$id]['correct'] = ($answer[$rowQuestId][$rowAnsId]['correct'] == 0 ? get_lang('No') : get_lang('Yes'));
-                $data[$id]['question'] = $question[$questionId]['question'];
+                $data[$id]['question'] = $question[$rowQuestId]['question'];
                 $data[$id]['question_id'] = $rowQuestId;
             }
-
             /*
             The minimum expected array structure at the end is:
             attempt_id,

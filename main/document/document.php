@@ -1129,6 +1129,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
         $sortable_data = array();
 
         $count = 1;
+        $countedPaths = array();
         foreach ($docs_and_folders as $key => $document_data) {
             $row = array();
             $row['id'] = $document_data['id'];
@@ -1214,7 +1215,10 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
             $row[] = $size;
             $row[] = $document_name;
 
-            $total_size = $total_size + $size;
+            if (!isset($countedPaths[$document_data['path']])) {
+                $total_size = $total_size + $size;
+                $countedPaths[$document_data['path']] = true;
+            }
 
             if ((isset($_GET['keyword']) && search_keyword($document_name, $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
                 $sortable_data[] = $row;

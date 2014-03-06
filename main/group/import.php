@@ -28,7 +28,7 @@ Display::display_header($nameTools, 'Group');
 
 $form = new FormValidator('import', 'post', api_get_self().'?'.api_get_cidreq());
 $form->addElement('header', get_lang('ImportGroups'));
-$form->addElement('file', 'file', get_lang('File'));
+$form->addElement('file', 'file', get_lang('ImportCSVFileLocation'));
 $form->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('checkbox', 'delete_not_in_file', null, get_lang('DeleteItemsNotInFile'));
 $form->addElement('label', null, Display::url(get_lang('ExampleCSVFile'), api_get_path(WEB_CODE_PATH).'group/example.csv'));

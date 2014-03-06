@@ -1086,7 +1086,7 @@ function move_up_down($content, $direction, $id)
 /**
  * This function returns a piece of html code that make the links grey (=invisible for the student)
  *
- * @param boolean 0/1: 0 = invisible, 1 = visible
+ * @param int 0 = invisible, 1 = visible
  * @return string language variable
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -1094,7 +1094,8 @@ function move_up_down($content, $direction, $id)
  */
 function class_visible_invisible($current_visibility_status)
 {
-    if ($current_visibility_status == '0') {
+    $current_visibility_status = intval($current_visibility_status);
+    if ($current_visibility_status == 0) {
         return 'class="invisible"';
     }
 }
@@ -1113,12 +1114,12 @@ function get_forum_categories($id = '')
 {
     $table_categories = Database :: get_course_table(TABLE_FORUM_CATEGORY);
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-    $forum_categories_list = array();
 
     // Condition for the session
     $session_id = api_get_session_id();
-    $condition_session = api_get_session_condition($session_id);
     $course_id = api_get_course_int_id();
+
+    $condition_session = api_get_session_condition($session_id);
     $condition_session .= " AND forum_categories.c_id = $course_id AND item_properties.c_id = $course_id";
 
     if (empty($id)) {
@@ -1150,10 +1151,11 @@ function get_forum_categories($id = '')
                     $condition_session
                 ORDER BY forum_categories.cat_order ASC";
     }
-
     $result = Database::query($sql);
+    $forum_categories_list = array();
+
     while ($row = Database::fetch_array($result)) {
-        if ($id == '') {
+        if (empty($id)) {
             $forum_categories_list[$row['cat_id']] = $row;
         } else {
             $forum_categories_list = $row;
@@ -1165,36 +1167,38 @@ function get_forum_categories($id = '')
 /**
  * This function retrieves all the fora in a given forum category
  *
- * @param integer $cat_id the id of the forum category
- * @return an array containing all the information about the forums (regardless of their category)
+ * @param int $cat_id the id of the forum category
+ * @return array containing all the information about the forums (regardless of their category)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
 function get_forums_in_category($cat_id)
 {
-    $table_forums = Database :: get_course_table(TABLE_FORUM);
-    $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+    $table_forums = Database::get_course_table(TABLE_FORUM);
+    $table_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
     $forum_list = array();
     $course_id = api_get_course_int_id();
 
     $sql = "SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
-            WHERE forum.forum_category='".Database::escape_string($cat_id)."'
-                AND forum.forum_id=item_properties.ref
-                AND item_properties.visibility=1
-                AND item_properties.c_id = $course_id
-                AND item_properties.tool='".TOOL_FORUM."' AND
+            WHERE
+                forum.forum_category='".Database::escape_string($cat_id)."' AND
+                forum.forum_id=item_properties.ref AND
+                item_properties.visibility = 1 AND
+                item_properties.c_id = $course_id AND
+                item_properties.tool='".TOOL_FORUM."' AND
                 forum.c_id = $course_id
-                ORDER BY forum.forum_order ASC";
+            ORDER BY forum.forum_order ASC";
     if (is_allowed_to_edit()) {
         $sql = "SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
-                WHERE 	forum.forum_category		= '".Database::escape_string($cat_id)."' AND
-                		forum.forum_id				= item_properties.ref AND
-                		item_properties.visibility<>2 AND
-                		item_properties.tool		= '".TOOL_FORUM."' AND
-                        item_properties.c_id = $course_id AND
-                		forum.c_id 					= $course_id
+                WHERE
+                    forum.forum_category = '".Database::escape_string($cat_id)."' AND
+                	forum.forum_id = item_properties.ref AND
+                	item_properties.visibility <> 2 AND
+                	item_properties.tool = '".TOOL_FORUM."' AND
+                    item_properties.c_id = $course_id AND
+                	forum.c_id = $course_id
                 ORDER BY forum_order ASC";
     }
     $result = Database::query($sql);
@@ -1236,57 +1240,76 @@ function get_forums($id = '', $course_code = '')
     if ($id == '') {
         // Student
         // Select all the forum information of all forums (that are visible to students).
-        $sql = "SELECT * FROM $table_forums forum , ".$table_item_property." item_properties
-                WHERE forum.forum_id=item_properties.ref
-                AND item_properties.visibility=1
-                AND item_properties.tool='".TOOL_FORUM."'
-                $condition_session AND forum.c_id = $course_id AND item_properties.c_id = $course_id
+        $sql = "SELECT * FROM $table_forums forum, ".$table_item_property." item_properties
+                WHERE
+                    forum.forum_id=item_properties.ref AND
+                    item_properties.visibility=1 AND
+                    item_properties.tool='".TOOL_FORUM."'
+                    $condition_session AND
+                    forum.c_id = $course_id AND
+                    item_properties.c_id = $course_id
                 ORDER BY forum.forum_order ASC";
 
         // Select the number of threads of the forums (only the threads that are visible).
-        $sql2 = "SELECT count(*) AS number_of_threads, threads.forum_id FROM $table_threads threads, ".$table_item_property." item_properties
-                WHERE threads.thread_id=item_properties.ref
-                AND item_properties.visibility=1
-                AND item_properties.tool='".TOOL_FORUM_THREAD."' AND threads.c_id = $course_id AND item_properties.c_id = $course_id
+        $sql2 = "SELECT count(*) AS number_of_threads, threads.forum_id
+                FROM $table_threads threads, ".$table_item_property." item_properties
+                WHERE
+                    threads.thread_id=item_properties.ref AND
+                    item_properties.visibility=1 AND
+                    item_properties.tool='".TOOL_FORUM_THREAD."' AND
+                    threads.c_id = $course_id AND
+                    item_properties.c_id = $course_id
                 GROUP BY threads.forum_id";
 
         // Select the number of posts of the forum (post that are visible and that are in a thread that is visible).
-        $sql3 = "SELECT count(*) AS number_of_posts, posts.forum_id FROM $table_posts posts, $table_threads threads, ".$table_item_property." item_properties
-                WHERE posts.visible=1
-                    AND posts.thread_id=threads.thread_id
-                    AND threads.thread_id=item_properties.ref
-                    AND item_properties.visibility=1
-                    AND item_properties.tool='".TOOL_FORUM_THREAD."' AND threads.c_id = $course_id AND posts.c_id = $course_id AND item_properties.c_id = $course_id
+        $sql3 = "SELECT count(*) AS number_of_posts, posts.forum_id
+                FROM $table_posts posts, $table_threads threads, ".$table_item_property." item_properties
+                WHERE
+                    posts.visible=1 AND
+                    posts.thread_id=threads.thread_id AND
+                    threads.thread_id=item_properties.ref AND
+                    item_properties.visibility=1 AND
+                    item_properties.tool='".TOOL_FORUM_THREAD."' AND
+                    threads.c_id = $course_id AND
+                    posts.c_id = $course_id AND
+                    item_properties.c_id = $course_id
                 GROUP BY threads.forum_id";
 
-        //-------------- Course Admin  -----------------//
+        // Course Admin
         if (is_allowed_to_edit()) {
             // Select all the forum information of all forums (that are not deleted).
             $sql = "SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
-                            WHERE forum.forum_id=item_properties.ref
-                            AND item_properties.visibility<>2
-                            AND item_properties.tool='".TOOL_FORUM."'
-                            $condition_session AND forum.c_id = $course_id AND item_properties.c_id = $course_id
-                            ORDER BY forum_order ASC";
-            //echo $sql.'<hr />';
+                    WHERE
+                        forum.forum_id = item_properties.ref AND
+                        item_properties.visibility<>2 AND
+                        item_properties.tool='".TOOL_FORUM."'
+                        $condition_session AND
+                        forum.c_id = $course_id AND
+                        item_properties.c_id = $course_id
+                    ORDER BY forum_order ASC";
+
             // Select the number of threads of the forums (only the threads that are not deleted).
             $sql2 = "SELECT count(*) AS number_of_threads, threads.forum_id
                     FROM $table_threads threads, ".$table_item_property." item_properties
                     WHERE
                         threads.thread_id=item_properties.ref
                         AND item_properties.visibility<>2
-                        AND item_properties.tool='".TOOL_FORUM_THREAD."' AND threads.c_id = $course_id AND item_properties.c_id = $course_id
+                        AND item_properties.tool='".TOOL_FORUM_THREAD."' AND
+                        threads.c_id = $course_id AND
+                        item_properties.c_id = $course_id
                     GROUP BY threads.forum_id";
-            //echo $sql2.'<hr />';
             // Select the number of posts of the forum.
             $sql3 = "SELECT count(*) AS number_of_posts, posts.forum_id
                     FROM $table_posts posts, $table_threads threads, ".$table_item_property." item_properties
-                    WHERE posts.thread_id=threads.thread_id
-                        AND threads.thread_id=item_properties.ref
-                        AND item_properties.visibility=1
-                        AND item_properties.tool='".TOOL_FORUM_THREAD."' AND posts.c_id = $course_id AND threads.c_id = $course_id AND item_properties.c_id = $course_id
+                    WHERE
+                        posts.thread_id=threads.thread_id AND
+                        threads.thread_id=item_properties.ref AND
+                        item_properties.visibility=1 AND
+                        item_properties.tool='".TOOL_FORUM_THREAD."' AND
+                        posts.c_id = $course_id AND
+                        threads.c_id = $course_id AND
+                        item_properties.c_id = $course_id
                     GROUP BY threads.forum_id";
-            //echo $sql3.'<hr />';
         }
     } else {
         // GETTING ONE SPECIFIC FORUM
@@ -1296,21 +1319,30 @@ function get_forums($id = '', $course_code = '')
         //
         // Select all the forum information of the given forum (that is not deleted).
         $sql = "SELECT * FROM $table_forums forum , ".$table_item_property." item_properties
-                WHERE forum.forum_id=item_properties.ref
-                    AND forum_id='".Database::escape_string($id)."'
-                    AND item_properties.visibility<>2
-                    AND item_properties.tool='".TOOL_FORUM."'
-                    $condition_session  AND forum.c_id = $course_id AND item_properties.c_id = $course_id
+                WHERE
+                    forum.forum_id=item_properties.ref AND
+                    forum_id='".Database::escape_string($id)."' AND
+                    item_properties.visibility<>2 AND
+                    item_properties.tool='".TOOL_FORUM."'
+                    $condition_session AND
+                    forum.c_id = $course_id AND
+                    item_properties.c_id = $course_id
                 ORDER BY forum_order ASC";
 
         // Select the number of threads of the forum.
-        $sql2 = "SELECT count(*) AS number_of_threads, forum_id FROM $table_threads
-                WHERE forum_id=".Database::escape_string($id)." AND c_id = $course_id
+        $sql2 = "SELECT count(*) AS number_of_threads, forum_id
+                FROM $table_threads
+                WHERE
+                    forum_id=".Database::escape_string($id)." AND
+                    c_id = $course_id
                 GROUP BY forum_id";
 
         // Select the number of posts of the forum.
-        $sql3 = "SELECT count(*) AS number_of_posts, forum_id FROM $table_posts
-                WHERE forum_id=".Database::escape_string($id)."  AND c_id = $course_id
+        $sql3 = "SELECT count(*) AS number_of_posts, forum_id
+                FROM $table_posts
+                WHERE
+                    forum_id=".Database::escape_string($id)." AND
+                    c_id = $course_id
                 GROUP BY forum_id";
 
         // Select the last post and the poster (note: this is probably no longer needed).
@@ -1333,7 +1365,7 @@ function get_forums($id = '', $course_code = '')
         }
     }
 
-    // Handling the threadcount information.
+    // Handling the thread count information.
     $result2 = Database::query($sql2);
     while ($row2 = Database::fetch_array($result2)) {
         if ($id == '') {
@@ -3839,62 +3871,71 @@ function get_forums_of_group($group_id)
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-    $table_users = Database :: get_main_table(TABLE_MAIN_USER);
     $course_id = api_get_course_int_id();
 
     // Student
     // Select all the forum information of all forums (that are visible to students).
 
     $sql = "SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
-                WHERE forum.forum_of_group = '".Database::escape_string($group_id)."' AND
+            WHERE
+                forum.forum_of_group = '".Database::escape_string($group_id)."' AND
                 forum.c_id = $course_id AND
                 item_properties.c_id = $course_id AND
-                forum.forum_id=item_properties.ref AND
-                item_properties.visibility=1 AND
-                item_properties.tool='".TOOL_FORUM."'
-                ORDER BY forum.forum_order ASC";
+                forum.forum_id = item_properties.ref AND
+                item_properties.visibility = 1 AND
+                item_properties.tool = '".TOOL_FORUM."'
+            ORDER BY forum.forum_order ASC";
     // Select the number of threads of the forums (only the threads that are visible).
-    $sql2 = "SELECT count(thread_id) AS number_of_threads, threads.forum_id FROM $table_threads threads, ".$table_item_property." item_properties
-                    WHERE threads.thread_id=item_properties.ref AND
-                    threads.c_id = $course_id AND
-                    item_properties.c_id = $course_id AND
-                    item_properties.visibility=1 AND
-                    item_properties.tool='".TOOL_FORUM_THREAD."'
-                    GROUP BY threads.forum_id";
+    $sql2 = "SELECT count(thread_id) AS number_of_threads, threads.forum_id
+            FROM $table_threads threads, ".$table_item_property." item_properties
+            WHERE
+                threads.thread_id = item_properties.ref AND
+                threads.c_id = $course_id AND
+                item_properties.c_id = $course_id AND
+                item_properties.visibility = 1 AND
+                item_properties.tool='".TOOL_FORUM_THREAD."'
+            GROUP BY threads.forum_id";
     // Select the number of posts of the forum (post that are visible and that are in a thread that is visible).
-    $sql3 = "SELECT count(post_id) AS number_of_posts, posts.forum_id FROM $table_posts posts, $table_threads threads, ".$table_item_property." item_properties
+    $sql3 = "SELECT count(post_id) AS number_of_posts, posts.forum_id
+            FROM $table_posts posts, $table_threads threads, ".$table_item_property." item_properties
             WHERE posts.visible=1 AND
-            posts.c_id = $course_id AND
-            item_properties.c_id = $course_id AND
-            threads.c_id = $course_id
-            AND posts.thread_id=threads.thread_id
-            AND threads.thread_id=item_properties.ref
-            AND item_properties.visibility=1
-            AND item_properties.tool='".TOOL_FORUM_THREAD."'
+                posts.c_id = $course_id AND
+                item_properties.c_id = $course_id AND
+                threads.c_id = $course_id
+                AND posts.thread_id=threads.thread_id
+                AND threads.thread_id=item_properties.ref
+                AND item_properties.visibility = 1
+                AND item_properties.tool='".TOOL_FORUM_THREAD."'
             GROUP BY threads.forum_id";
 
-    //-------------- Course Admin  -----------------//
+    // Course Admin
     if (is_allowed_to_edit()) {
         // Select all the forum information of all forums (that are not deleted).
-        $sql = "SELECT * FROM ".$table_forums." forum , ".$table_item_property." item_properties
-                    WHERE forum.forum_of_group = '".Database::escape_string($group_id)."' AND
+        $sql = "SELECT *
+                FROM ".$table_forums." forum , ".$table_item_property." item_properties
+                WHERE
+                    forum.forum_of_group = '".Database::escape_string($group_id)."' AND
                     forum.c_id = $course_id AND
                     item_properties.c_id = $course_id AND
-                    forum.forum_id=item_properties.ref AND
-                    item_properties.visibility<>2 AND
-                    item_properties.tool='".TOOL_FORUM."'
-                    ORDER BY forum_order ASC";
+                    forum.forum_id = item_properties.ref AND
+                    item_properties.visibility <> 2 AND
+                    item_properties.tool = '".TOOL_FORUM."'
+                ORDER BY forum_order ASC";
 
         // Select the number of threads of the forums (only the threads that are not deleted).
-        $sql2 = "SELECT count(thread_id) AS number_of_threads, threads.forum_id FROM $table_threads threads, ".$table_item_property." item_properties
-                        WHERE threads.thread_id=item_properties.ref AND
-                        threads.c_id = $course_id AND
-                        item_properties.c_id = $course_id AND
-                        item_properties.visibility<>2 AND
-                        item_properties.tool='".TOOL_FORUM_THREAD."'
-                        GROUP BY threads.forum_id";
+        $sql2 = "SELECT count(thread_id) AS number_of_threads, threads.forum_id
+                 FROM $table_threads threads, ".$table_item_property." item_properties
+                 WHERE
+                    threads.thread_id=item_properties.ref AND
+                    threads.c_id = $course_id AND
+                    item_properties.c_id = $course_id AND
+                    item_properties.visibility <> 2 AND
+                    item_properties.tool='".TOOL_FORUM_THREAD."'
+                GROUP BY threads.forum_id";
         // Select the number of posts of the forum.
-        $sql3 = "SELECT count(post_id) AS number_of_posts, forum_id FROM $table_posts WHERE c_id = $course_id GROUP BY forum_id";
+        $sql3 = "SELECT count(post_id) AS number_of_posts, forum_id
+                FROM $table_posts
+                WHERE c_id = $course_id GROUP BY forum_id";
     }
 
     // Handling all the forum information.
@@ -3904,7 +3945,7 @@ function get_forums_of_group($group_id)
         $forum_list[$row['forum_id']] = $row;
     }
 
-    // Handling the threadcount information.
+    // Handling the thread count information.
     $result2 = Database::query($sql2);
     while ($row2 = Database::fetch_array($result2, 'ASSOC')) {
         if (is_array($forum_list)) {
@@ -3914,7 +3955,7 @@ function get_forums_of_group($group_id)
         }
     }
 
-    // Handling the postcount information.
+    // Handling the post count information.
     $result3 = Database::query($sql3);
     while ($row3 = Database::fetch_array($result3, 'ASSOC')) {
         if (is_array($forum_list)) {
@@ -3936,6 +3977,7 @@ function get_forums_of_group($group_id)
             $forum_list[$key]['last_poster_firstname'] = $last_post_info_of_forum['last_poster_firstname'];
         }
     }
+
     return $forum_list;
 }
 

@@ -57,7 +57,6 @@ function check_unzip() {
         document.upload.if_exists[0].checked=true;
         document.upload.if_exists[0].disabled=false;
         document.upload.if_exists[2].disabled=false;
-        }
     }
 }
 function setFocus(){
@@ -145,6 +144,7 @@ if ($is_certificate_array[0] == 'certificates') {
 }
 
 // Title of the tool
+$add_group_to_title = null;
 if ($to_group_id != 0) { // Add group name after for group documents
 	$add_group_to_title = ' ('.$group_properties['name'].')';
 }
@@ -172,6 +172,8 @@ if (empty($document_data['parents'])) {
 
 $this_section = SECTION_COURSES;
 
+$interbreadcrumb[] = array('url' => '#', 'name' => $nameTools);
+
 // Display the header
 Display::display_header($nameTools, 'Doc');
 
@@ -186,9 +188,9 @@ if (!empty($_FILES)) {
 echo '<div class="actions">';
 // Link back to the documents overview
 if ($is_certificate_mode) {
-	echo '<a href="document.php?id='.$document_id.'&selectcat=' . $selectcat.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+	//echo '<a href="document.php?id='.$document_id.'&selectcat=' . $selectcat.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 } else {
-	echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
+	//echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 
 // Link to create a folder

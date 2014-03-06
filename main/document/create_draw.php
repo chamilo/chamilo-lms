@@ -18,7 +18,6 @@
 // Name of the language file that needs to be included
 $language_file = array('document');
 
-require_once '../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/createdraw';
 $this_section = SECTION_COURSES;

@@ -600,30 +600,9 @@ if ($form->validate()) {
         }
     }
 
+    $interbreadcrumb[] = array('url' => '#', 'name' => $nameTools);
+
     Display :: display_header($nameTools, "Doc");
-
-    // actions
-    echo '<div class="actions">';
-
-    // link back to the documents overview
-    if ($is_certificate_mode) {
-        echo '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat='.Security::remove_XSS(
-            $_GET['selectcat']
-        ).'">'.Display::return_icon(
-            'back.png',
-            get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).'</a>';
-    } else {
-        echo '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.Display::return_icon(
-            'back.png',
-            get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'),
-            '',
-            ICON_SIZE_MEDIUM
-        ).'</a>';
-    }
-    echo '</div>';
 
     if ($is_certificate_mode) {
         $all_information_by_create_certificate = DocumentManager::get_all_info_to_certificate(

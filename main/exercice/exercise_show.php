@@ -29,7 +29,7 @@ require_once 'exercise.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 
 if (empty($origin) ) {
-    $origin = $_REQUEST['origin'];
+    $origin = isset($_REQUEST['origin']) ? $_REQUEST['origin'] : null;
 }
 
 if ($origin == 'learnpath') {

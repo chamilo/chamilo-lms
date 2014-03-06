@@ -88,28 +88,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 // Get vars from GET
 if (empty($exerciseId)) {
-    $exerciseId = isset($_GET['exerciseId'])?intval($_GET['exerciseId']):'0';
+    $exerciseId = isset($_GET['exerciseId']) ? intval($_GET['exerciseId']):'0';
 }
 if (empty($newQuestion)) {
-    $newQuestion = isset($_GET['newQuestion'])?$_GET['newQuestion']:0;
+    $newQuestion = isset($_GET['newQuestion']) ? $_GET['newQuestion'] : 0;
 }
 if (empty($modifyAnswers)) {
-    $modifyAnswers = isset($_GET['modifyAnswers'])?$_GET['modifyAnswers']:0;
+    $modifyAnswers = isset($_GET['modifyAnswers']) ? $_GET['modifyAnswers'] : 0;
 }
 if (empty($editQuestion)) {
-    $editQuestion = isset($_GET['editQuestion'])?$_GET['editQuestion']:0;
+    $editQuestion = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : 0;
 }
 if (empty($modifyQuestion)) {
-    $modifyQuestion = isset($_GET['modifyQuestion'])?$_GET['modifyQuestion']:0;
+    $modifyQuestion = isset($_GET['modifyQuestion']) ? $_GET['modifyQuestion'] : 0;
 }
 if (empty($deleteQuestion)) {
-    $deleteQuestion = isset($_GET['deleteQuestion'])?$_GET['deleteQuestion']:0;
+    $deleteQuestion = isset($_GET['deleteQuestion']) ? $_GET['deleteQuestion'] : 0;
 }
-
-$clone_question = isset($_REQUEST['clone_question']) ? $_REQUEST['clone_question']:0;
-
+$clone_question = isset($_REQUEST['clone_question']) ? $_REQUEST['clone_question'] : 0;
 if (empty($questionId)) {
-    $questionId = isset($_SESSION['questionId'])?$_SESSION['questionId']:0;
+    $questionId = isset($_SESSION['questionId']) ? $_SESSION['questionId'] : 0;
 }
 
 /* Cleaning all incomplete attempts of the admin/teacher to avoid weird problems

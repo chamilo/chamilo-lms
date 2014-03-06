@@ -11,7 +11,6 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
     /** @var \ChamiloLMS\Component\Editor\Editor */
     public $editor;
 
-
     /**
      * Class constructor
      * @param string  HTML editor name/id
@@ -26,8 +25,7 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
             return false;
         }
 
-        HTML_QuickForm_element :: HTML_QuickForm_element($name, $label, $attributes);
-
+        HTML_QuickForm_element::HTML_QuickForm_element($name, $label, $attributes);
         $this->_persistantFreeze = true;
         $this->_type = 'html_editor';
 

@@ -12,7 +12,6 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
  */
 class CkEditor extends Editor
 {
-
     /**
      * @return string
      */
@@ -37,7 +36,7 @@ class CkEditor extends Editor
      */
     public function createHtml()
     {
-        $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor" >
+        $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
                  '.$this->value.'
                  </textarea>';
         $html .= $this->editorReplace();
@@ -50,10 +49,11 @@ class CkEditor extends Editor
      */
     public function editorReplace()
     {
-        $toolbar  = new Toolbar\Basic($this->urlGenerator, $this->toolbarSet, $this->config, 'CkEditor');
+        $toolbar = new Toolbar\Basic($this->urlGenerator, $this->toolbarSet, $this->config, 'CkEditor');
         $toolbar->setLanguage($this->translator->getLocale());
         $config = $toolbar->getConfig();
         $javascript = $this->toJavascript($config);
+
         $html = "<script>
            CKEDITOR.replace('".$this->getName()."',
                $javascript

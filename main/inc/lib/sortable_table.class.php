@@ -130,7 +130,7 @@ class SortableTable extends HTML_Table
         }
         $this->table_id = $table_id;
 
-        parent :: __construct(array( 'id' => $table_id, 'class' => 'table table-striped table-hover'));
+        parent :: __construct(array( 'id' => $table_id, 'class' => 'table table-striped table-hover table-bordered'));
         $this->table_name = $table_name;
         $this->additional_parameters = array ();
         $this->param_prefix = $table_name.'_';

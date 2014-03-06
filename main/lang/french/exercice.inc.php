@@ -2,7 +2,36 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SelectADateOnTheCalendar = "Sélectionnez une date";
+$AreYouSureDeleteTestResultBeforeDateD = "Êtes vous sur de vouloir supprimer toutes les tentatives antérieures à la date sélectionnée ?";
+$CleanStudentsResultsBeforeDate = "Supprimer les tentatives antérieures à une date donnée";
+$AreYouSureToEmptyAllTestResults = "Êtes-vous certain de vouloir supprimer les résultats de tous les exercices ?";
+$CleanAllStudentsResultsForAllTests = "Supprimer tous les résultats de tous les exercices";
+$TestFeedbackNotShown = "Ce test est configuré pour ne pas montrer les commentaires (feedbacks) aux apprenants. Les commentaires des réponses aux questions ne seront pas affichés à la fin de ce test.";
 $FeedbackDisplayOptions = "Détermine la manière dont se montreront les commentaires (feedback) enregistrés pour chacune des alternatives des questions présentées à l'apprenant. Nous recommandons fortement l'évaluation de ces différents modes de feedback avant d'inviter les apprenant à passer le test.";
+$ImportAikenQuizExplanationExample = "Ceci est le texte de la question 1 
+A. Réponse 1 
+B. Réponse 2 
+C. Réponse 3
+ANSWER: B 
+
+Ceci est le texte de la question 2 
+A. Réponse 1 
+B. Réponse 2 
+C. Réponse 3
+D. Réponse 4
+ANSWER: D
+
+ANSWER_EXPLANATION: C'est un retour éventuel commentaire qui apparaîtra à côté de la bonne réponse.";
+$ImportAikenQuizExplanation = "Le format Aiken est un fichier (.txt) avec un texte simple, avec plusieurs blocs de questions, chacune séparée par une ligne blanche. La première ligne est la question, les lignes de réponse sont préfixés par une lettre et un point, et la bonne réponse vient avec le préfixe 'ANSWER'.
+Voir l'exemple ci-dessous.";
+$ExerciseAikenErrorNoAnswerOptionGiven = "Le fichier importé comporte au moins une question sans réponse (ou les réponses ne comprennent pas la lettre de préfixe requis). Assurez vous que chaque question a au moins une réponse et qu'il est précédé par une lettre et un point ou une parenthèse, comme ceci: 
+A. Réponse 1";
+$ExerciseAikenErrorNoCorrectAnswerDefined = "Le fichier importé comporte au moins une question sans réponse correcte défini. Assurez vous que toutes les questions comprennent la réponse: [Lettre] ligne.";
+$ThereWasAProblemWithYourFile = "Il y a un problème inconnu avec votre fichier. Examiner son format et essayez à nouveau.";
+$YouMustUploadAZipOrTxtFile = "Vous devez télécharger un fichier. Txt ou zip.";
+$NoTxtFileFoundInTheZip = "Aucun fichier txt. trouvé dans les zip";
+$ImportAikenQuiz = "Importer exercice Aiken";
 $ExerciseWasActivatedFromXToY = "Le test a été activé du %s au %s";
 $SelectAnAnswerToContinue = "Veuillez sélectionner une réponse avant de continuer";
 $IfYouContinueYourAnswerWillBeSavedAnyChangeWillBeNotAllowed = "Si vous continuez, vos réponses seront enregistrées et plus aucune modification ne sera autorisée par la suite. Êtes-vous certain de vouloir terminer ce test?";

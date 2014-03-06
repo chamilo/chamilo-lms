@@ -10,40 +10,40 @@
 $.jgrid = $.jgrid || {};
 $.extend($.jgrid,{
 	defaults : {
-		recordtext: "View {0} - {1} of {2}",
-		emptyrecords: "No records to view",
-		loadtext: "Loading...",
-		pgtext : "Page {0} of {1}"
+		recordtext: "Data {0} - {1} dari {2}",
+		emptyrecords: "Tidak ada data",
+		loadtext: "Memuat...",
+		pgtext : "Halaman {0} dari {1}"
 	},
 	search : {
-		caption: "Search...",
-		Find: "Find",
-		Reset: "Reset",
-		odata: [{ oper:'eq', text:'equal'},{ oper:'ne', text:'not equal'},{ oper:'lt', text:'less'},{ oper:'le', text:'less or equal'},{ oper:'gt', text:'greater'},{ oper:'ge', text:'greater or equal'},{ oper:'bw', text:'begins with'},{ oper:'bn', text:'does not begin with'},{ oper:'in', text:'is in'},{ oper:'ni', text:'is not in'},{ oper:'ew', text:'ends with'},{ oper:'en', text:'does not end with'},{ oper:'cn', text:'contains'},{ oper:'nc', text:'does not contain'},{ oper:'nu', text:'is null'},{ oper:'nn', text:'is not null'}],
-		groupOps: [{ op: "AND", text: "all" },{ op: "OR",  text: "any" }],
+		caption: "Pencarian",
+		Find: "Cari !",
+		Reset: "Segarkan",
+		odata: [{ oper:'eq', text:"sama dengan"},{ oper:'ne', text:"tidak sama dengan"},{ oper:'lt', text:"kurang dari"},{ oper:'le', text:"kurang dari atau sama dengan"},{ oper:'gt', text:"lebih besar"},{ oper:'ge', text:"lebih besar atau sama dengan"},{ oper:'bw', text:"dimulai dengan"},{ oper:'bn', text:"tidak dimulai dengan"},{ oper:'in', text:"di dalam"},{ oper:'ni', text:"tidak di dalam"},{ oper:'ew', text:"diakhiri dengan"},{ oper:'en', text:"tidak diakhiri dengan"},{ oper:'cn', text:"mengandung"},{ oper:'nc', text:"tidak mengandung"},{ oper:'nu', text:'is null'},{ oper:'nn', text:'is not null'}],
+		groupOps: [	{ op: "AND", text: "all" },	{ op: "OR",  text: "any" }	],
 		operandTitle : "Click to select search operation.",
 		resetTitle : "Reset Search Value"
 	},
 	edit : {
-		addCaption: "Add Record",
-		editCaption: "Edit Record",
+		addCaption: "Tambah Data",
+		editCaption: "Sunting Data",
 		bSubmit: "Submit",
-		bCancel: "Cancel",
-		bClose: "Close",
-		saveData: "Data has been changed! Save changes?",
-		bYes : "Yes",
-		bNo : "No",
-		bExit : "Cancel",
+		bCancel: "Tutup",
+		bClose: "Tutup",
+		saveData: "Data telah berubah! Simpan perubahan?",
+		bYes : "Ya",
+		bNo : "Tidak",
+		bExit : "Tutup",
 		msg: {
-			required:"Field is required",
-			number:"Please, enter valid number",
-			minValue:"value must be greater than or equal to ",
-			maxValue:"value must be less than or equal to",
-			email: "is not a valid e-mail",
-			integer: "Please, enter valid integer value",
-			date: "Please, enter valid date value",
-			url: "is not a valid URL. Prefix required ('http://' or 'https://')",
-			nodefined : " is not defined!",
+			required:"kolom wajib diisi",
+			number:"hanya nomer yang diperbolehkan",
+			minValue:"kolom harus lebih besar dari atau sama dengan",
+			maxValue:"kolom harus lebih kecil atau sama dengan",
+			email: "alamat e-mail tidak valid",
+			integer: "hanya nilai integer yang diperbolehkan",
+			date: "nilai tanggal tidak valid",
+			url: "Bukan URL yang valid. Harap gunakan ('http://' or 'https://')",
+			nodefined : " belum didefinisikan!",
 			novalue : " return value is required!",
 			customarray : "Custom function should return array!",
 			customfcheck : "Custom function should be present in case of custom checking!"
@@ -51,54 +51,54 @@ $.extend($.jgrid,{
 		}
 	},
 	view : {
-		caption: "View Record",
-		bClose: "Close"
+		caption: "Menampilkan data",
+		bClose: "Tutup"
 	},
 	del : {
-		caption: "Delete",
-		msg: "Delete selected record(s)?",
-		bSubmit: "Delete",
-		bCancel: "Cancel"
+		caption: "Hapus",
+		msg: "Hapus data terpilih?",
+		bSubmit: "Hapus",
+		bCancel: "Batalkan"
 	},
 	nav : {
 		edittext: "",
-		edittitle: "Edit selected row",
+		edittitle: "Sunting data terpilih",
 		addtext:"",
-		addtitle: "Add new row",
+		addtitle: "Tambah baris baru",
 		deltext: "",
-		deltitle: "Delete selected row",
+		deltitle: "Hapus baris terpilih",
 		searchtext: "",
-		searchtitle: "Find records",
+		searchtitle: "Temukan data",
 		refreshtext: "",
-		refreshtitle: "Reload Grid",
+		refreshtitle: "Segarkan Grid",
 		alertcap: "Warning",
-		alerttext: "Please, select row",
+		alerttext: "Harap pilih baris",
 		viewtext: "",
-		viewtitle: "View selected row"
+		viewtitle: "Tampilkan baris terpilih"
 	},
 	col : {
-		caption: "Select columns",
+		caption: "Pilih Kolom",
 		bSubmit: "Ok",
-		bCancel: "Cancel"
+		bCancel: "Batal"
 	},
 	errors : {
 		errcap : "Error",
-		nourl : "No url is set",
-		norecords: "No records to process",
-		model : "Length of colNames <> colModel!"
+		nourl : "Tidak ada url yang diset",
+		norecords: "Tidak ada data untuk diproses",
+		model : "Lebar dari colNames <> colModel!"
 	},
 	formatter : {
-		integer : {thousandsSeparator: ",", defaultValue: '0'},
-		number : {decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2, defaultValue: '0.00'},
-		currency : {decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2, prefix: "", suffix:"", defaultValue: '0.00'},
+		integer : {thousandsSeparator: ".", defaultValue: '0'},
+		number : {decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 2, defaultValue: '0'},
+		currency : {decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 2, prefix: "Rp. ", suffix:"", defaultValue: '0'},
 		date : {
 			dayNames:   [
-				"Sun", "Mon", "Tue", "Wed", "Thr", "Fri", "Sat",
-				"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+				"Ming", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab",
+				"Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"
 			],
 			monthNames: [
-				"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-				"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+				"Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des",
+				"Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"
 			],
 			AmPm : ["am","pm","AM","PM"],
 			S: function (j) {return j < 11 || j > 13 ? ['st', 'nd', 'rd', 'th'][Math.min((j - 1) % 10, 3)] : 'th';},

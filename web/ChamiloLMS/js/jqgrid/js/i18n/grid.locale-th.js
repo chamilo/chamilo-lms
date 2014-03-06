@@ -19,8 +19,10 @@ $.extend($.jgrid,{
 		caption: "กำลังค้นหา...",
 		Find: "ค้นหา",
 		Reset: "คืนค่ากลับ",
-		odata: [{ oper:'eq', text:"เท่ากับ"},{ oper:'ne', text:"ไม่เท่ากับ"},{ oper:'lt', text:"น้อยกว่า"},{ oper:'le', text:"ไม่มากกว่า"},{ oper:'gt', text:"มากกกว่า"},{ oper:'ge', text:"ไม่น้อยกว่า"},{ oper:'bw', text:"ขึ้นต้นด้วย"},{ oper:'bn', text:"ไม่ขึ้นต้นด้วย"},{ oper:'in', text:"มีคำใดคำหนึ่งใน"},{ oper:'ni', text:"ไม่มีคำใดคำหนึ่งใน"},{ oper:'ew', text:"ลงท้ายด้วย"},{ oper:'en', text:"ไม่ลงท้ายด้วย"},{ oper:'cn', text:"มีคำว่า"},{ oper:'nc', text:"ไม่มีคำว่า"}],
-		groupOps: [	{ op: "และ", text: "ทั้งหมด" },	{ op: "หรือ",  text: "ใดๆ" }	]
+		odata: [{ oper:'eq', text:"เท่ากับ"},{ oper:'ne', text:"ไม่เท่ากับ"},{ oper:'lt', text:"น้อยกว่า"},{ oper:'le', text:"ไม่มากกว่า"},{ oper:'gt', text:"มากกกว่า"},{ oper:'ge', text:"ไม่น้อยกว่า"},{ oper:'bw', text:"ขึ้นต้นด้วย"},{ oper:'bn', text:"ไม่ขึ้นต้นด้วย"},{ oper:'in', text:"มีคำใดคำหนึ่งใน"},{ oper:'ni', text:"ไม่มีคำใดคำหนึ่งใน"},{ oper:'ew', text:"ลงท้ายด้วย"},{ oper:'en', text:"ไม่ลงท้ายด้วย"},{ oper:'cn', text:"มีคำว่า"},{ oper:'nc', text:"ไม่มีคำว่า"},{ oper:'nu', text:'is null'},{ oper:'nn', text:'is not null'}],
+		groupOps: [	{ op: "และ", text: "ทั้งหมด" },	{ op: "หรือ",  text: "ใดๆ" }	],
+		operandTitle : "Click to select search operation.",
+		resetTitle : "Reset Search Value"
 	},
 	edit : {
 		addCaption: "เพิ่มข้อมูล",
@@ -102,7 +104,7 @@ $.extend($.jgrid,{
 			S: function (j) {return ''},
 			srcformat: 'Y-m-d',
 			newformat: 'd/m/Y',
-			parseRe : /[Tt\\\/:_;.,\t\s-]/,
+			parseRe : /[#%\\\/:_;.,\t\s-]/,
 			masks : {
 				ISO8601Long:"Y-m-d H:i:s",
 				ISO8601Short:"Y-m-d",

@@ -20,8 +20,10 @@ $.extend($.jgrid,{
 		caption: "Tra�i...",
 		Find: "Pretra�ivanje",
 		Reset: "Poni�ti",
-		odata : [{ oper:'eq', text:'jednak'}, { oper:'ne', text:'nije identi�an'}, { oper:'lt', text:'manje'}, { oper:'le', text:'manje ili identi�no'},{ oper:'gt', text:'ve�e'},{ oper:'ge', text:'ve�e ili identi�no'}, { oper:'bw', text:'po�inje sa'},{ oper:'bn', text:'ne po�inje sa '},{ oper:'in', text:'je u'},{ oper:'ni', text:'nije u'},{ oper:'ew', text:'zavr�ava sa'},{ oper:'en', text:'ne zavr�ava sa'},{ oper:'cn', text:'sadr�i'},{ oper:'nc', text:'ne sadr�i'}],
-		groupOps: [	{ op: "I", text: "sve" },	{ op: "ILI",  text: "bilo koji" }	]
+		odata : [{ oper:'eq', text:'jednak'}, { oper:'ne', text:'nije identi�an'}, { oper:'lt', text:'manje'}, { oper:'le', text:'manje ili identi�no'},{ oper:'gt', text:'ve�e'},{ oper:'ge', text:'ve�e ili identi�no'}, { oper:'bw', text:'po�inje sa'},{ oper:'bn', text:'ne po�inje sa '},{ oper:'in', text:'je u'},{ oper:'ni', text:'nije u'},{ oper:'ew', text:'zavr�ava sa'},{ oper:'en', text:'ne zavr�ava sa'},{ oper:'cn', text:'sadr�i'},{ oper:'nc', text:'ne sadr�i'},{ oper:'nu', text:'is null'},{ oper:'nn', text:'is not null'}],
+		groupOps: [	{ op: "I", text: "sve" },	{ op: "ILI",  text: "bilo koji" }	],
+		operandTitle : "Click to select search operation.",
+		resetTitle : "Reset Search Value"
 	},
 	edit : {
 		addCaption: "Dodaj zapis",
@@ -60,13 +62,13 @@ $.extend($.jgrid,{
 		bCancel: "Odustani"
 	},
 	nav : {
-		edittext: " ",
+		edittext: "",
 		edittitle: "Promijeni obilje�eni red",
-		addtext:" ",
+		addtext: "",
 		addtitle: "Dodaj novi red",
-		deltext: " ",
+		deltext: "",
 		deltitle: "Obri�i obilje�eni red",
-		searchtext: " ",
+		searchtext: "",
 		searchtitle: "Potra�i zapise",
 		refreshtext: "",
 		refreshtitle: "Ponovo preuzmi podatke",
@@ -89,21 +91,21 @@ $.extend($.jgrid,{
 	formatter : {
 		integer : {thousandsSeparator: ".", defaultValue: '0'},
 		number : {decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 2, defaultValue: '0,00'},
-		currency : {decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 2, prefix: "", suffix:" Kn", defaultValue: '0,00'},
+		currency : {decimalSeparator:",", thousandsSeparator: ".", decimalPlaces: 2, prefix: "", suffix:"", defaultValue: '0,00'},
 		date : {
 			dayNames:   [
 				"Ned", "Pon", "Uto", "Sri", "�et", "Pet", "Sub",
 				"Nedjelja", "Ponedjeljak", "Utorak", "Srijeda", "�etvrtak", "Petak", "Subota"
 			],
 			monthNames: [
-				"Sij", "Vel", "O�u", "Tra", "Svi", "Lip", "Srp", "Kol", "Ruj", "Lis", "Stu", "Pro",
+				"Sij", "Velj", "O�u", "Tra", "Svi", "Lip", "Srp", "Kol", "Ruj", "Lis", "Stu", "Pro",
 				"Sije�anj", "Velja�a", "O�ujak", "Travanj", "Svibanj", "Lipanj", "Srpanj", "Kolovoz", "Rujan", "Listopad", "Studeni", "Prosinac"
 			],
 			AmPm : ["am","pm","AM","PM"],
 			S: function (j) {return ''},
 			srcformat: 'Y-m-d',
 			newformat: 'd.m.Y.',
-			parseRe : /[Tt\\\/:_;.,\t\s-]/,
+			parseRe : /[#%\\\/:_;.,\t\s-]/,
 			masks : {
 				// see http://php.net/manual/en/function.date.php for PHP format used in jqGrid
 				// and see http://docs.jquery.com/UI/Datepicker/formatDate

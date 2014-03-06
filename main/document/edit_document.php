@@ -243,13 +243,13 @@ if ($is_allowed_to_edit) {
 
 		$filename   = stripslashes($_POST['filename']);
         $extension  = $_POST['extension'];
-
 		$content    = trim(str_replace(array("\r", "\n"), '', stripslashes($_POST['content'])));
 		$content    = Security::remove_XSS($content, COURSEMANAGERLOWSECURITY);
 
 		if (!strstr($content, '/css/frames.css')) {
 			$content = str_replace('</title></head>', '</title><link rel="stylesheet" href="../css/frames.css" type="text/css" /></head>', $content);
 		}
+
         if ($dir == '/') {
             $dir = '';
         }
@@ -339,9 +339,6 @@ if (file_exists($document_data['absolute_path'])) {
 	if (in_array($extension, array('html', 'htm'))) {
 		$content = file($document_data['absolute_path']);
 		$content = implode('', $content);
-		//$path_to_append = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$dir;
-	//	$content = str_replace('="./', '="'.$path_to_append, $content);
-		//$content = str_replace('mp3player.swf?son=.%2F', 'mp3player.swf?son='.urlencode($path_to_append), $content);
 	}
 }
 
@@ -381,7 +378,6 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 	$form->addElement('hidden', 'showedit');
 	$form->addElement('hidden', 'origin');
 	$form->addElement('hidden', 'origin_opt');
-
     $form->add_textfield('title', get_lang('Title'));
 
 	$defaults['title'] = $document_data['title'];
@@ -406,7 +402,7 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin() || $is_allowed_to_
 	if (($extension == 'htm' || $extension == 'html') && $condition) {
 		if (empty($readonly) && $readonly == 0) {
 			$_SESSION['showedit'] = 1;
-            $form->add_html_editor('content','', false, false, $html_editor_config);
+            $form->add_html_editor('content', '', false, false, $html_editor_config);
 		}
 	}
 

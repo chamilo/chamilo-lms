@@ -817,14 +817,14 @@ function _api_strnatcasercmp($string1, $string2) {
 }
 
 /**
- * A fuction that translates sorting flag constants from php core to correspondent constants from intl extension.
+ * A function that translates sorting flag constants from php core to correspondent constants from intl extension.
  * @param int $sort_flag (optional)		Sorting modifier flag as it is defined for php core. The default value is SORT_REGULAR.
  * @return int							Retturns the corresponding sorting modifier flag as it is defined in intl php-extension.
  */
 function _api_get_collator_sort_flag($sort_flag = SORT_REGULAR) {
     switch ($sort_flag) {
         case SORT_STRING:
-        case SORT_SORT_LOCALE_STRING:
+        case SORT_LOCALE_STRING:
             return Collator::SORT_STRING;
         case SORT_NUMERIC:
             return Collator::SORT_NUMERIC;

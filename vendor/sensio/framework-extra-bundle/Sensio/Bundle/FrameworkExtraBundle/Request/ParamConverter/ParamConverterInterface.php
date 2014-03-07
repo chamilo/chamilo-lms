@@ -24,20 +24,20 @@ interface ParamConverterInterface
 {
     /**
      * Stores the object in the request.
-     *
+     * 
      * @param Request                $request       The request
      * @param ConfigurationInterface $configuration Contains the name, class and options of the object
-     *
+     * 
      * @return boolean True if the object has been successfully set, else false
      */
-    public function apply(Request $request, ConfigurationInterface $configuration);
+    function apply(Request $request, ConfigurationInterface $configuration);
 
     /**
      * Checks if the object is supported.
-     *
+     * 
      * @param ConfigurationInterface $configuration Should be an instance of ParamConverter
-     *
+     * 
      * @return boolean True if the object is supported, else false
      */
-    public function supports(ConfigurationInterface $configuration);
+    function supports(ConfigurationInterface $configuration);
 }

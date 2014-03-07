@@ -42,6 +42,13 @@ header('Content-Type: application/pdf');
 header('Content-Disposition: attachment; filename="file.pdf"');
 echo $snappy->getOutput('http://www.github.com');
 
+// Merge multiple urls into one pdf
+// by sending an array of urls to getOutput()
+$snappy = new Pdf('/usr/local/bin/wkhtmltopdf');
+header('Content-Type: application/pdf');
+header('Content-Disposition: attachment; filename="file.pdf"');
+echo $snappy->getOutput(array('http://www.github.com','http://www.knplabs.com','http://www.php.net'));
+
 // .. or simply save the PDF to a file
 $snappy = new Pdf('/usr/local/bin/wkhtmltopdf');
 $snappy->generateFromHtml('<h1>Bill</h1><p>You owe me money, dude.</p>', '/tmp/bill-123.pdf');
@@ -88,11 +95,11 @@ use Knp\Snappy\Pdf;
 
 $myProjetDirectory = '/path/to/my/project';
 
-$snappy = new Pdf($myProjetDirectory . '/vendor/h4cc/wkhtmltopdf-i386/bin/wkhtmltopdf-i386');
+$snappy = new Pdf($myProjectDirectory . '/vendor/h4cc/wkhtmltopdf-i386/bin/wkhtmltopdf-i386');
 
 // or
 
-$snappy = new Pdf($myProjetDirectory . '/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64');
+$snappy = new Pdf($myProjectDirectory . '/vendor/h4cc/wkhtmltopdf-amd64/bin/wkhtmltopdf-amd64');
 ```
 
 

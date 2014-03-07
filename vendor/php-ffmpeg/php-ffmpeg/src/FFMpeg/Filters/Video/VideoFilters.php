@@ -68,6 +68,21 @@ class VideoFilters extends AudioFilters
     }
 
     /**
+     * Clips (cuts) the video.
+     *
+     * @param TimeCode $start
+     * @param TimeCode $duration
+     *
+     * @return VideoFilters
+     */
+    public function clip($start, $duration = null)
+    {
+        $this->media->addFilter(new ClipFilter($start, $duration));
+
+        return $this;
+    }
+
+    /**
      * Resamples the audio file.
      *
      * @param Integer $rate
@@ -77,6 +92,13 @@ class VideoFilters extends AudioFilters
     public function audioResample($rate)
     {
         $this->media->addFilter(new AudioResamplableFilter($rate));
+
+        return $this;
+    }
+
+    public function rotate($angle)
+    {
+        $this->media->addFilter(new RotateFilter($angle, 30));
 
         return $this;
     }

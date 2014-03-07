@@ -62,6 +62,44 @@ class FrameCollectionTest extends TestCase
     }
 
     /**
+     * @covers Whoops\Exception\FrameCollection::offsetExists
+     */
+    public function testArrayAccessExists()
+    {
+        $collection = $this->getFrameCollectionInstance();
+        $this->assertTrue(isset($collection[0]));
+    }
+
+    /**
+     * @covers Whoops\Exception\FrameCollection::offsetGet
+     */
+    public function testArrayAccessGet()
+    {
+        $collection = $this->getFrameCollectionInstance();
+        $this->assertInstanceOf('Whoops\\Exception\\Frame', $collection[0]);
+    }
+
+    /**
+     * @covers Whoops\Exception\FrameCollection::offsetSet
+     * @expectedException Exception
+     */
+    public function testArrayAccessSet()
+    {
+        $collection = $this->getFrameCollectionInstance();
+        $collection[0] = 'foo';
+    }
+
+    /**
+     * @covers Whoops\Exception\FrameCollection::offsetUnset
+     * @expectedException Exception
+     */
+    public function testArrayAccessUnset()
+    {
+        $collection = $this->getFrameCollectionInstance();
+        unset($collection[0]);
+    }
+
+    /**
      * @covers Whoops\Exception\FrameCollection::filter
      * @covers Whoops\Exception\FrameCollection::count
      */
@@ -120,6 +158,18 @@ class FrameCollectionTest extends TestCase
         foreach($frames as $frame) {
             $this->assertInstanceOf('Whoops\\Exception\\Frame', $frame);
         }
+    }
+
+    /**
+     * @covers Whoops\Exception\FrameCollection::getArray
+     */
+    public function testGetArrayImmutable()
+    {
+        $frames = $this->getFrameCollectionInstance();
+        $arr = $frames->getArray();
+        $arr[0] = 'foobar';
+        $newCopy = $frames->getArray();
+        $this->assertFalse($arr[0] === $newCopy);
     }
 
     /**

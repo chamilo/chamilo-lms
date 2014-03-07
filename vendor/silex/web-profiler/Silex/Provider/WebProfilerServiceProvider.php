@@ -15,10 +15,6 @@ use Symfony\Bundle\WebProfilerBundle\Controller\ExceptionController;
 use Symfony\Bundle\WebProfilerBundle\Controller\RouterController;
 use Symfony\Bundle\WebProfilerBundle\Controller\ProfilerController;
 use Symfony\Bundle\WebProfilerBundle\EventListener\WebDebugToolbarListener;
-use Symfony\Component\Form\Extension\DataCollector\FormDataCollector;
-use Symfony\Component\Form\Extension\DataCollector\FormDataExtractor;
-use Symfony\Component\Form\Extension\DataCollector\Proxy\ResolvedTypeFactoryDataCollectorProxy;
-use Symfony\Component\Form\Extension\DataCollector\Type\DataCollectorTypeExtension;
 use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\HttpKernel\EventListener\ProfilerListener;
 use Symfony\Component\HttpKernel\Profiler\FileProfilerStorage;
@@ -64,41 +60,18 @@ class WebProfilerServiceProvider implements ServiceProviderInterface, Controller
             array('time',      '@WebProfiler/Collector/time.html.twig'),
             array('router',    '@WebProfiler/Collector/router.html.twig'),
             array('memory',    '@WebProfiler/Collector/memory.html.twig'),
-            array('form',      '@WebProfiler/Collector/form.html.twig'),
         );
 
-        $app['data_collectors'] = $app->share(function ($app) {
-            return array(
-                'config'    => $app->share(function ($app) { return new ConfigDataCollector(); }),
-                'request'   => $app->share(function ($app) { return new RequestDataCollector(); }),
-                'exception' => $app->share(function ($app) { return new ExceptionDataCollector(); }),
-                'events'    => $app->share(function ($app) { return new EventDataCollector(); }),
-                'logger'    => $app->share(function ($app) { return new LoggerDataCollector($app['logger']); }),
-                'time'      => $app->share(function ($app) { return new TimeDataCollector(null, $app['stopwatch']); }),
-                'router'    => $app->share(function ($app) { return new RouterDataCollector(); }),
-                'memory'    => $app->share(function ($app) { return new MemoryDataCollector(); }),
-            );
-        });
-
-        if (isset($app['form.resolved_type_factory']) && class_exists('\Symfony\Component\Form\Extension\DataCollector\FormDataCollector')) {
-            $app['data_collectors.form.extractor'] = $app->share(function () { return new FormDataExtractor(); });
-
-            $app['data_collectors'] = $app->share($app->extend('data_collectors', function ($collectors, $app) {
-                $collectors['form'] = $app->share(function ($app) { return new FormDataCollector($app['data_collectors.form.extractor']); });
-
-                return $collectors;
-            }));
-
-            $app['form.resolved_type_factory'] = $app->share($app->extend('form.resolved_type_factory', function ($factory, $app) {
-                return new ResolvedTypeFactoryDataCollectorProxy($factory, $app['data_collectors']['form']($app));
-            }));
-
-            $app['form.type.extensions'] = $app->share($app->extend('form.type.extensions', function ($extensions, $app) {
-                $extensions[] = new DataCollectorTypeExtension($app['data_collectors']['form']($app));
-
-                return $extensions;
-            }));
-        }
+        $app['data_collectors'] = array(
+            'config'    => $app->share(function ($app) { return new ConfigDataCollector(); }),
+            'request'   => $app->share(function ($app) { return new RequestDataCollector(); }),
+            'exception' => $app->share(function ($app) { return new ExceptionDataCollector(); }),
+            'events'    => $app->share(function ($app) { return new EventDataCollector(); }),
+            'logger'    => $app->share(function ($app) { return new LoggerDataCollector($app['logger']); }),
+            'time'      => $app->share(function ($app) { return new TimeDataCollector(null, $app['stopwatch']); }),
+            'router'    => $app->share(function ($app) { return new RouterDataCollector(); }),
+            'memory'    => $app->share(function ($app) { return new MemoryDataCollector(); }),
+        );
 
         $app['web_profiler.controller.profiler'] = $app->share(function ($app) {
             return new ProfilerController($app['url_generator'], $app['profiler'], $app['twig'], $app['data_collector.templates'], $app['web_profiler.debug_toolbar.position']);

@@ -31,7 +31,15 @@ class Local implements Stream
      */
     public function open(StreamMode $mode)
     {
-        $fileHandle = @fopen($this->path, $mode->getMode());
+        $baseDirPath = dirname($this->path);
+        if ($mode->allowsWrite() && !is_dir($baseDirPath)) {
+            @mkdir($baseDirPath, 0755, true);
+        }
+        try {
+            $fileHandle = @fopen($this->path, $mode->getMode());
+        } catch (\Exception $e) {
+            $fileHandle = false;
+        }
 
         if (false === $fileHandle) {
             throw new \RuntimeException(sprintf('File "%s" cannot be opened', $this->path));

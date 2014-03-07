@@ -2,17 +2,27 @@
 
 [![Build Status](https://secure.travis-ci.org/alchemy-fr/PHP-FFmpeg.png?branch=master)](http://travis-ci.org/alchemy-fr/PHP-FFmpeg)
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/607f3111-e2d7-44e8-8bcc-54dd64521983/big.png)](https://insight.sensiolabs.com/projects/607f3111-e2d7-44e8-8bcc-54dd64521983)
+
 An Object Oriented library to convert video/audio files with FFmpeg / AVConv.
 
 Check another amazing repo : [PHP FFMpeg extras](https://github.com/alchemy-fr/PHP-FFMpeg-Extras), you will find lots of Audio/Video formats there.
 
 ## Your attention please
 
+### How this library works :
+
 This library requires a working FFMpeg install. You will need both FFMpeg and FFProbe binaries to use it.
-Be sure that these binaries can be located with system PATH to get the benefit of the binary detection, 
+Be sure that these binaries can be located with system PATH to get the benefit of the binary detection,
 otherwise you should have to explicitely give the binaries path on load.
 
 For Windows users : Please find the binaries at http://ffmpeg.zeranoe.com/builds/.
+
+### Known issues :
+
+- Using rotate and resize will produce a corrupted output when using 
+[libav](http://libav.org/) 0.8. The bug is fixed in version 9. This bug does not 
+appear in latest ffmpeg version.
 
 ## Installation
 
@@ -21,7 +31,7 @@ The recommended way to install PHP-FFMpeg is through [Composer](https://getcompo
 ```json
 {
     "require": {
-        "php-ffmpeg/php-ffmpeg": "0.3.x-dev@dev"
+        "php-ffmpeg/php-ffmpeg": "~0.4"
     }
 }
 ```
@@ -73,8 +83,17 @@ $ffmpeg = FFMpeg\FFMpeg::create(array(
 
 ### Manipulate media
 
-`FFMpeg\FFMpeg` creates media based on file paths. To open a file path, use the
-`FFMpeg\FFMpeg::open` method.
+`FFMpeg\FFMpeg` creates media based on URIs. URIs could be either a pointer to a
+local filesystem resource, an HTTP resource or any resource supported by FFmpeg.
+
+**Note** : To list all supported resource type of your FFmpeg build, use the
+`-protocols` command :
+
+```
+ffmpeg -protocols
+```
+
+To open a resource, use the `FFMpeg\FFMpeg::open` method.
 
 ```php
 $ffmpeg->open('video.mpeg');
@@ -93,11 +112,17 @@ video. Frames can be extracted.
 You can transcode videos using the `FFMpeg\Media\Video:save` method. You will
 pass a `FFMpeg\Format\FormatInterface` for that.
 
+Please note that audio and video bitrate are set on the format.
+
 ```php
 $format = new Format\Video\X264();
 $format->on('progress', function ($video, $format, $percentage) {
     echo "$percentage % transcoded";
 });
+
+$format
+    -> setKiloBitrate(1000)
+    -> setAudioKiloBitrate(256);
 
 $video->save($format, 'video.avi');
 ```
@@ -137,6 +162,20 @@ $video
     ->synchronize();
 ```
 
+###### Rotate
+
+Rotates a video to a given angle.
+
+```php
+$video->filters()->rotate($angle);
+```
+
+The `$angle` parameter must be one of the following constants :
+
+- `FFMpeg\Filters\Video\RotateFilter::ROTATE_90` : 90° clockwise
+- `FFMpeg\Filters\Video\RotateFilter::ROTATE_180` : 180°
+- `FFMpeg\Filters\Video\RotateFilter::ROTATE_270` : 90° counterclockwise
+
 ###### Resize
 
 Resizes a video to a given size.
@@ -175,6 +214,19 @@ filters solves this issue.
 $video->filters()->synchronize();
 ```
 
+###### Clip
+
+Cuts the video at a desired point.
+
+```php
+$video->filters()->clip(FFMpeg\Coordinate\TimeCode::fromSeconds(30), FFMpeg\Coordinate\TimeCode::fromSeconds(15));
+```
+
+The clip filter takes two parameters:
+
+- `$start`, an instance of `FFMpeg\Coordinate\TimeCode`, specifies the start point of the clip
+- `$duration`, optional, an instance of `FFMpeg\Coordinate\TimeCode`, specifies the duration of the clip
+
 #### Audio
 
 `FFMpeg\Media\Audio` can be transcoded, ie : change codec, isolate audio or
@@ -185,11 +237,16 @@ video. Frames can be extracted.
 You can transcode audios using the `FFMpeg\Media\Audio:save` method. You will
 pass a `FFMpeg\Format\FormatInterface` for that.
 
+Please note that audio kilobitrate is set on the audio format.
+
 ```php
 $format = new Format\Audio\Flac();
 $format->on('progress', function ($$audio, $format, $percentage) {
     echo "$percentage % transcoded";
 });
+
+$format
+    -> setAudioKiloBitrate(256);
 
 $audio->save($format, 'track.flac');
 ```

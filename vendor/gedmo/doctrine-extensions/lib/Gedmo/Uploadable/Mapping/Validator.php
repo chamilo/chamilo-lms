@@ -2,10 +2,11 @@
 
 namespace Gedmo\Uploadable\Mapping;
 
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Gedmo\Exception\InvalidMappingException;
 use Gedmo\Exception\UploadableCantWriteException;
 use Gedmo\Exception\UploadableInvalidPathException;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
  * This class is used to validate mapping information
@@ -61,21 +62,12 @@ class Validator
     );
 
     /**
-     * List of types which are valid for UploadableFileSize field for ORM
+     * List of types which are valid for UploadableFileSize field
      *
      * @var array
      */
     public static $validFileSizeTypes = array(
         'decimal'
-    );
-    
-    /**
-     * List of types which are valid for UploadableFileSize field for ODM
-     *
-     * @var array
-     */
-    public static $validFileSizeTypesODM = array(
-        'float'
     );
 
     /**
@@ -87,28 +79,24 @@ class Validator
     public static $validateWritableDirectory = true;
 
 
-    public static function validateFileNameField(ClassMetadata $meta, $field)
+    public static function validateFileNameField(ClassMetadataInfo $meta, $field)
     {
         self::validateField($meta, $field, self::UPLOADABLE_FILE_NAME, self::$validFileNameTypes);
     }
 
-    public static function validateFileMimeTypeField(ClassMetadata $meta, $field)
+    public static function validateFileMimeTypeField(ClassMetadataInfo $meta, $field)
     {
         self::validateField($meta, $field, self::UPLOADABLE_FILE_MIME_TYPE, self::$validFileMimeTypeTypes);
     }
 
-    public static function validateFilePathField(ClassMetadata $meta, $field)
+    public static function validateFilePathField(ClassMetadataInfo $meta, $field)
     {
         self::validateField($meta, $field, self::UPLOADABLE_FILE_PATH, self::$validFilePathTypes);
     }
 
-    public static function validateFileSizeField(ClassMetadata $meta, $field)
+    public static function validateFileSizeField(ClassMetadataInfo $meta, $field)
     {
-        if($meta instanceof \Doctrine\ODM\MongoDB\Mapping\ClassMetadataInfo) {
-            self::validateField($meta, $field, self::UPLOADABLE_FILE_SIZE, self::$validFileSizeTypesODM);
-        } else {
-            self::validateField($meta, $field, self::UPLOADABLE_FILE_SIZE, self::$validFileSizeTypes);
-        }
+        self::validateField($meta, $field, self::UPLOADABLE_FILE_SIZE, self::$validFileSizeTypes);
     }
 
     public static function validateField($meta, $field, $uploadableField, $validFieldTypes)

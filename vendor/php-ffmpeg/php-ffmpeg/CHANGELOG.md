@@ -1,6 +1,29 @@
 CHANGELOG
 ---------
 
+* 0.4.4 (12-17-2013)
+
+  * Fix width / height dimensions extraction.
+
+* 0.4.3 (12-02-2013)
+
+  * Fix using rotate and resize filters at the same time (#78)
+
+* 0.4.2 (11-29-2013)
+
+  * Add Rotate filter.
+  * Remove time_start metadata when using synchronize filter
+  * Remove restriction on filesystem resources.
+
+* 0.4.1 (11-26-2013)
+
+  * Add Clip filter (@guimeira)
+
+* 0.4.0 (10-21-2013)
+
+  * Add support for video to audio transcoding
+  * BC Break : Add FormatInterface::getPasses and FormatInterface::getExtraParams
+
 * 0.3.5 (10-21-2013)
 
   * Add vorbis audio format (@jacobbudin).

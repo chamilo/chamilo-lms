@@ -93,7 +93,7 @@ class SoftDeleteableListener extends MappedEventSubscriber
     }
 
     /**
-     * Maps additional metadata
+     * Mapps additional metadata
      *
      * @param EventArgs $eventArgs
      * @return void

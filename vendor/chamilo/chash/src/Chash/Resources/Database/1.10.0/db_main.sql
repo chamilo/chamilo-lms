@@ -967,7 +967,8 @@ VALUES
 ('breadcrumb_navigation_display', NULL, 'radio', 'Platform','true','BreadcrumbNavigationDisplayTitle', 'BreadcrumbNavigationDisplayComment', NULL, NULL, 1),
 ('default_calendar_view', NULL, 'radio', 'Platform','month','DefaultCalendarViewTitle', 'DefaultCalendarViewComment', NULL, NULL, 1),
 ('documents_default_visibility_defined_in_course', NULL,'checkbox','Tools','false','DocumentsDefaultVisibilityDefinedInCourseTitle','DocumentsDefaultVisibilityDefinedInCourseComment',NULL, NULL, 1),
-('allow_personal_user_files', NULL,'radio','Tools','false','AllowPersonalUserFilesTitle','AllowPersonalUserFilesComment',NULL, NULL, 1),
+('allow_personal_user_files', NULL,'radio','Tools','false','AllowPersonalUserFilesTitle','AllowPersonalUserFilesComment', NULL, NULL, 1),
+('bug_report_link', NULL, 'textfield','Platform', '','BugReportLinkTitle','BugReportLinkComment', NULL, NULL, 1),
 ('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001', 'DatabaseVersion', '', NULL, NULL, 0); -- base value, updated at end of file. Don't change here
 
 UNLOCK TABLES;
@@ -3643,4 +3644,4 @@ CREATE TABLE user_session_path (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.060' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.061' WHERE variable = 'chamilo_database_version';

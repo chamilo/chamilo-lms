@@ -96,6 +96,6 @@ return array(
     'Bt51\\Silex\\Provider\\GaufretteServiceProvider' => array($vendorDir . '/bt51/gaufrette-serviceprovider/src'),
     'Bc\\Bundle\\BootstrapBundle' => array($vendorDir . '/braincrafted/bootstrap-bundle'),
     'Assetic' => array($vendorDir . '/kriswallsmith/assetic/src'),
-    'Alchemy' => array($vendorDir . '/alchemy/binary-driver/src', $vendorDir . '/alchemy/zippy/src'),
+    'Alchemy' => array($vendorDir . '/alchemy/zippy/src', $vendorDir . '/alchemy/binary-driver/src'),
     '' => array($vendorDir . '/opauth/openid', $vendorDir . '/opauth/facebook', $vendorDir . '/opauth/google'),
 );

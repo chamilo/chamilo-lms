@@ -9,12 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\PropertyAccess\Tests;
+namespace Symfony\Component\PropertyAccess\Exception;
 
-class PropertyAccessorArrayTest extends PropertyAccessorCollectionTest
+/**
+ * Thrown when an index cannot be found.
+ *
+ * @author Stéphane Escandell <stephane.escandell@gmail.com>
+ */
+class NoSuchIndexException extends AccessException
 {
-    protected function getCollection(array $array)
-    {
-        return $array;
-    }
 }

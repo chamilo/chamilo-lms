@@ -28,10 +28,9 @@ class ORM extends BaseAdapterORM implements SluggableAdapter
             ->from($config['useObjectClass'], 'rec')
             ->where($qb->expr()->like(
                 'rec.' . $config['slug'],
-                ':slug')
+                $qb->expr()->literal($slug . '%'))
             )
         ;
-        $qb->setParameter('slug',$slug . '%');
 
         // use the unique_base to restrict the uniqueness check
         if ($config['unique'] && isset($config['unique_base'])) {

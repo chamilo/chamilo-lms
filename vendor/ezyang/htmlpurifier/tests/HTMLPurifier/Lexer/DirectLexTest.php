@@ -5,13 +5,14 @@ class HTMLPurifier_Lexer_DirectLexTest extends HTMLPurifier_Harness
 
     protected $DirectLex;
 
-    function setUp() {
+    public function setUp()
+    {
         $this->DirectLex = new HTMLPurifier_Lexer_DirectLex();
     }
 
     // internals testing
-    function test_parseAttributeString() {
-
+    public function test_parseAttributeString()
+    {
         $input[0] = 'href="about:blank" rel="nofollow"';
         $expect[0] = array('href'=>'about:blank', 'rel'=>'nofollow');
 
@@ -55,7 +56,7 @@ class HTMLPurifier_Lexer_DirectLexTest extends HTMLPurifier_Harness
         $expect[11] = array();
 
         $input[12] = '="" =""';
-        $expect[12] = array('"' => ''); // tough to say, just don't throw a loop
+        $expect[12] = array(); // tough to say, just don't throw a loop
 
         $input[13] = 'href="';
         $expect[13] = array('href' => '');
@@ -73,8 +74,8 @@ class HTMLPurifier_Lexer_DirectLexTest extends HTMLPurifier_Harness
 
     }
 
-    function testLineNumbers() {
-
+    public function testLineNumbers()
+    {
         //       .  .     .     .  .     .     .           .      .             .
         //       01234567890123 01234567890123 0123456789012345 0123456789012   012345
         $html = "<b>Line 1</b>\n<i>Line 2</i>\nStill Line 2<br\n/>Now Line 4\n\n<br />";

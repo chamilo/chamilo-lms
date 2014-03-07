@@ -2,6 +2,8 @@
 
 namespace Knp\Snappy;
 
+use Knp\Snappy\Exception as Exceptions;
+
 /**
  * Base generator class for medias
  *
@@ -337,7 +339,7 @@ abstract class AbstractGenerator implements GeneratorInterface
      * Builds the command string
      *
      * @param string $binary  The binary path/name
-     * @param string $input   Url or file location of the page to process
+     * @param string/array $input  Url(s) or file location(s) of the page(s) to process
      * @param string $output  File location to the image-to-be
      * @param array  $options An array of options
      *
@@ -374,7 +376,14 @@ abstract class AbstractGenerator implements GeneratorInterface
             }
         }
 
-        $command .= ' '.escapeshellarg($input).' '.escapeshellarg($output);;
+        if (is_array($input)) {
+            foreach ($input as $i) {
+                $command .= ' '.escapeshellarg($i).' ';
+            }
+            $command .= escapeshellarg($output);
+        } else {
+            $command .= ' '.escapeshellarg($input).' '.escapeshellarg($output);
+        }
 
         return $command;
     }
@@ -438,7 +447,7 @@ abstract class AbstractGenerator implements GeneratorInterface
                     $filename, $this->isDir($filename) ? 'directory' : 'link'
                 ));
             } elseif (false === $overwrite) {
-                throw new \InvalidArgumentException(sprintf(
+                throw new Exceptions\FileAlreadyExistsException(sprintf(
                     'The output file \'%s\' already exists.',
                     $filename
                 ));

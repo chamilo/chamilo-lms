@@ -68,7 +68,7 @@ class Method extends ConfigurationAnnotation
     }
 
     /**
-     * Only one method directive is allowed
+     * Only one cache directive is allowed
      *
      * @return Boolean
      * @see ConfigurationInterface

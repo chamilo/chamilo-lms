@@ -4,22 +4,10 @@ namespace FFMpeg\Tests\Media;
 
 use FFMpeg\Media\Audio;
 use Alchemy\BinaryDriver\Exception\ExecutionFailureException;
-use FFMpeg\Format\ProgressableInterface;
 use FFMpeg\Format\AudioInterface;
 
 class AudioTest extends AbstractStreamableTestCase
 {
-    /**
-     * @expectedException FFMpeg\Exception\InvalidArgumentException
-     */
-    public function testWithInvalidFile()
-    {
-        $driver = $this->getFFMpegDriverMock();
-        $ffprobe = $this->getFFProbeMock();
-
-        new Audio('/no/file', $driver, $ffprobe);
-    }
-
     public function testFiltersReturnsAudioFilters()
     {
         $driver = $this->getFFMpegDriverMock();
@@ -332,8 +320,4 @@ class AudioTest extends AbstractStreamableTestCase
     {
         return 'FFMpeg\Media\Audio';
     }
-}
-
-abstract class AudioProg implements ProgressableInterface, AudioInterface
-{
 }

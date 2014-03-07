@@ -3,12 +3,13 @@
 class HTMLPurifier_ChildDefHarness extends HTMLPurifier_ComplexHarness
 {
 
-    public function setUp() {
+    public function setUp()
+    {
         parent::setUp();
         $this->obj       = null;
         $this->func      = 'validateChildren';
-        $this->to_tokens = true;
         $this->to_html   = true;
+        $this->to_node_list = true;
     }
 
 }

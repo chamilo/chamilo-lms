@@ -9,12 +9,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\PropertyAccess\Tests;
+namespace Symfony\Component\PropertyAccess\Exception;
 
-class PropertyAccessorArrayObjectTest extends PropertyAccessorCollectionTest
+/**
+ * Thrown when a property path is not available.
+ *
+ * @author Stéphane Escandell <stephane.escandell@gmail.com>
+ */
+class AccessException extends RuntimeException
 {
-    protected function getCollection(array $array)
-    {
-        return new \ArrayObject($array);
-    }
 }

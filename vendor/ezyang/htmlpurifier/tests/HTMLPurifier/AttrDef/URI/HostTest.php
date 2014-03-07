@@ -6,8 +6,8 @@
 class HTMLPurifier_AttrDef_URI_HostTest extends HTMLPurifier_AttrDefHarness
 {
 
-    function test() {
-
+    public function test()
+    {
         $this->def = new HTMLPurifier_AttrDef_URI_Host();
 
         $this->assertDef('[2001:DB8:0:0:8:800:200C:417A]'); // IPv6
@@ -33,19 +33,27 @@ class HTMLPurifier_AttrDef_URI_HostTest extends HTMLPurifier_AttrDefHarness
         $this->assertDef('-f.top', false);
         $this->assertDef('ff.top');
         $this->assertDef('f1.top');
+        $this->assertDef('f1_f2.ex.top', false);
         $this->assertDef('f-.top', false);
 
         $this->assertDef("\xE4\xB8\xAD\xE6\x96\x87.com.cn", false);
 
     }
 
-    function testIDNA() {
+    public function testIDNA()
+    {
         if (!$GLOBALS['HTMLPurifierTest']['Net_IDNA2']) {
             return false;
         }
         $this->config->set('Core.EnableIDNA', true);
         $this->assertDef("\xE4\xB8\xAD\xE6\x96\x87.com.cn", "xn--fiq228c.com.cn");
         $this->assertDef("\xe2\x80\x85.com", false); // rejected
+    }
+
+    function testAllowUnderscore() {
+        $this->config->set('Core.AllowHostnameUnderscore', true);
+        $this->assertDef("foo_bar.example.com");
+        $this->assertDef("foo_.example.com", false);
     }
 
 }

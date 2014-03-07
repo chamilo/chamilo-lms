@@ -47,23 +47,11 @@ class DateTimeParamConverterTest extends \PHPUnit_Framework_TestCase
         $this->converter->apply($request, $config);
     }
 
-    public function testApplyOptionalWithEmptyAttribute()
-    {
-        $request = new Request(array(), array(), array('start' => null));
-        $config = $this->createConfiguration('DateTime', 'start');
-        $config->expects($this->once())
-            ->method('isOptional')
-            ->will($this->returnValue(true));
-
-        $this->assertFalse($this->converter->apply($request, $config));
-        $this->assertNull($request->attributes->get('start'));
-    }
-
     public function createConfiguration($class = null, $name = null)
     {
         $config = $this->getMock(
             'Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface', array(
-            'getClass', 'getAliasName', 'getOptions', 'getName', 'allowArray', 'isOptional'
+            'getClass', 'getAliasName', 'getOptions', 'getName', 'allowArray'
         ));
         if ($name !== null) {
             $config->expects($this->any())

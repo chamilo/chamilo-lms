@@ -68,7 +68,7 @@ class Inspector
     /**
      * Returns an Inspector for a previous Exception, if any.
      * @todo   Clean this up a bit, cache stuff a bit better.
-     * @return \Whoops\Exception\Inspector|null
+     * @return Inspector
      */
     public function getPreviousExceptionInspector()
     {
@@ -106,7 +106,18 @@ class Inspector
             $this->frames = new FrameCollection($frames);
 
             if ($previousInspector = $this->getPreviousExceptionInspector()) {
-                $this->frames->prependFrames($previousInspector->getFrames()->topDiff($this->frames));
+                // Keep outer frame on top of the inner one
+                $outerFrames = $this->frames;
+                $newFrames = clone $previousInspector->getFrames();
+                // I assume it will always be set, but let's be safe
+                if (isset($newFrames[0])) {
+                    $newFrames[0]->addComment(
+                        $previousInspector->getExceptionMessage(),
+                        'Exception message:'
+                    );
+                }
+                $newFrames->prependFrames($outerFrames->topDiff($newFrames));
+                $this->frames = $newFrames;
             }
         }
 

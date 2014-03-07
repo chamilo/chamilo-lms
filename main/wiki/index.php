@@ -962,20 +962,18 @@ echo '<br/>';
 if ($action =='mactiveusers') {
     echo '<div class="actions">'.get_lang('MostActiveUsers').'</div>';
     $sql='SELECT *, COUNT(*) AS NUM_EDIT FROM '.$tbl_wiki.'  WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' GROUP BY user_id';
-    $allpages=Database::query($sql);
+    $allpages = Database::query($sql);
 
     //show table
     if (Database::num_rows($allpages) > 0) {
-        $row = array ();
         while ($obj = Database::fetch_object($allpages)) {
-            $userinfo=Database::get_user_info_from_id($obj->user_id);
+            $userinfo = Database::get_user_info_from_id($obj->user_id);
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
-            $row = array ();
-
+            $row = array();
             if ($obj->user_id <> 0) {
                 $row[] = '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
                     Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
-                    '</a><a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=usercontrib&user_id='.urlencode($row['user_id']).
+                    '</a><a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=usercontrib&user_id='.urlencode($obj->user_id).
                     '&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'"></a>';
             } else {
                 $row[] = get_lang('Anonymous').' ('.$obj->user_ip.')';
@@ -1397,11 +1395,11 @@ if ($action =='searchpages') {
     echo '<div class="actions">'.get_lang('SearchPages').'</div>';
     echo '<div style="overflow:hidden">';
 
-	if ($_GET['mode_table']) {
+	if (isset($_GET['mode_table'])) {
 		if (! $_GET['SearchPages_table_page_nr']) {
-			$_GET['search_term']=$_POST['search_term'];
-			$_GET['search_content']=$_POST['search_content'];
-			$_GET['all_vers']=$_POST['all_vers'];
+			$_GET['search_term'] = $_POST['search_term'];
+			$_GET['search_content'] = $_POST['search_content'];
+			$_GET['all_vers'] = $_POST['all_vers'];
 		}
 		display_wiki_search_results(api_htmlentities($_GET['search_term']),api_htmlentities($_GET['search_content']),api_htmlentities($_GET['all_vers']));
 	} else {
@@ -1943,7 +1941,7 @@ if (isset($action ) && $action =='edit') {
 
 // Page history
 
-if ($action =='history' or $_POST['HistoryDifferences']) {
+if ($action =='history' or isset($_POST['HistoryDifferences'])) {
     if (!$_GET['title']) {
         Display::display_error_message(get_lang("MustSelectPage"));
         exit;

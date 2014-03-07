@@ -116,28 +116,24 @@ $form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidre
 $form->addElement('hidden', 'action');
 $form->addElement('hidden', 'max_student', $current_group['max_student']);
 $complete_user_list = GroupManager::fill_groups_list($current_group['id']);
-usort($complete_user_list, 'sort_users');
+
 $possible_users = array();
-foreach ($complete_user_list as $index => $user) {
-    $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
-}
-
-// Group members
-$group_member_list = GroupManager :: get_subscribed_users($current_group['id']);
-
-$selected_users = array ();
-foreach ($group_member_list as $index => $user) {
-    $selected_users[] = $user['user_id'];
-}
-
-// possible : number_groups_left > 0 and is group member
-$possible_users = array();
-foreach ($complete_user_list as $index => $user) {
-    if ($user['number_groups_left'] > 0 || in_array($user['user_id'], $selected_users)) {
+if (!empty($complete_user_list)) {
+    usort($complete_user_list, 'sort_users');
+    foreach ($complete_user_list as $index => $user) {
         $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
     }
 }
 
+// Group members
+$group_member_list = GroupManager::get_subscribed_users($current_group['id']);
+
+$selected_users = array ();
+if (!empty($group_member_list)) {
+    foreach ($group_member_list as $index => $user) {
+        $selected_users[] = $user['user_id'];
+    }
+}
 $group_members_element = $form->addElement('advmultiselect', 'group_members', get_lang('GroupMembers'), $possible_users, 'style="width: 280px;"');
 
 $group_members_element->setElementTemplate('
@@ -156,9 +152,6 @@ $group_members_element->setButtonAttributes('add', array('class' => 'btn arrowr'
 $group_members_element->setButtonAttributes('remove', array('class' => 'btn arrowl'));
 $form->addFormRule('check_group_members');
 
-/*$url = '<a class="btn btn-danger" href="'.api_get_self().'?'.api_get_cidreq(true, false).'&action=empty&amp;id='.$group_id.'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('EmptyGroup').'">'.
-    get_lang('EmptyGroup').'</a>&nbsp;';
-$form->addElement('label', null, $url);*/
 // submit button
 $form->addElement('style_submit_button', 'submit', get_lang('SaveSettings'), 'class="save"');
 
@@ -189,9 +182,7 @@ switch ($action) {
             Display :: display_confirmation_message(get_lang('GroupEmptied'));
         }
         break;
-
 }
-
 
 $defaults = $current_group;
 $defaults['group_members'] = $selected_users;
@@ -203,7 +194,7 @@ if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
-Display :: display_header($nameTools, 'Group');
+Display::display_header($nameTools, 'Group');
 
 //@todo fix this
 if (isset($_GET['show_message_warning'])) {

@@ -24,23 +24,64 @@
  * @package chamilo.library
  */
 
-class Display {
-
+class Display
+{
     /* The main template*/
-    static $global_template;
-    static $preview_style = null;
+    public static $global_template;
+    public static $preview_style = null;
 
-    public function __construct() {
+    public function __construct()
+    {
+    }
+
+    /**
+     * @return array
+     */
+    public static function toolList()
+    {
+        return array(
+            'group',
+            'work',
+            'glossary',
+            'forum',
+            'course_description',
+            'gradebook',
+            'attendance',
+            'course_progress',
+            'notebook'
+        );
     }
 
      /**
      * Displays the page header
      * @param string The name of the page (will be showed in the page title)
      * @param string Optional help file name
+     * @param string $page_header
      */
-    public static function display_header($tool_name ='', $help = null, $page_header = null) {
+    public static function display_header($tool_name ='', $help = null, $page_header = null)
+    {
         self::$global_template = new Template($tool_name);
+
+        // Fixing tools with any help it takes xxx part of main/xxx/index.php
+        if (empty($help)) {
+            $currentURL = api_get_self();
+            preg_match('/main\/([^*\/]+)/', $currentURL, $matches);
+            $toolList = self::toolList();
+            if (!empty($matches)) {
+
+                foreach ($matches as $match) {
+                    if (in_array($match, $toolList)) {
+                        $help = explode('_', $match);
+                        $help = array_map('ucfirst', $help);
+                        $help = implode('', $help);
+                        break;
+                    }
+                }
+            }
+        }
+
         self::$global_template->set_help($help);
+
         if (!empty(self::$preview_style)) {
             self::$global_template->preview_theme = self::$preview_style;
             self::$global_template->set_css_files();
@@ -1608,11 +1649,11 @@ class Display {
                 $id = isset($params['id']) ? $params['id'] : $fileInfo['basename'];
                 $class = isset($params['class']) ? ' class="'.$params['class'].'"' : null;
 
-                $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$file.'" >';
-                $html .= '  <object width="'.$params['width'].'" height="50" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
-                                <param name="movie" value="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf" />
-                                <param name="flashvars" value="controls=true&file='.$fileInfo['basename'].'" />
-                            </object>';
+                $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$params['url'].'" >';
+                $html .= '<object width="'.$width.'" height="50" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
+                            <param name="movie" value="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf" />
+                            <param name="flashvars" value="controls=true&file='.$params['url'].'" />
+                          </object>';
                 $html .= '</audio>';
                 return $html;
                 break;
@@ -1620,4 +1661,4 @@ class Display {
 
         return null;
     }
-} //end class Display
+}

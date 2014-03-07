@@ -8,10 +8,12 @@
  */
 require_once '../../../../../../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fckeditor/editor/plugins/ajaxfilemanager/inc/config.php';
-
+$editor = isset($_GET['editor']) ? $_GET['editor'] : null;
 echo '<div id="content">';
 $count = 1;
 $thumbnailBaseUrl = CONFIG_URL_IMG_THUMBNAIL;
+global $is_user_in_group;
+$to_group_id = api_get_group_id();
 
 foreach ($fileList as $file) {
 
@@ -230,7 +232,7 @@ foreach ($fileList as $file) {
                         echo '&nbsp;';
                 }
 
-                if ($_GET['editor'] != 'stand_alone') {
+                if ($editor != 'stand_alone') {
                     $path_chamilo_file = '../'.$file['path']; // fix for makes a good show when pressed next on window preview, don't only one image
                 } else {
                     $path_chamilo_file = $file['path'];

@@ -155,11 +155,15 @@ class manager
      * get the list of files and folders under this current fold
      * 	@return array
      */
-    function getFileList() {
+    function getFileList()
+    {
         $outputs = array();
         $files = array();
         $folders = array();
         $tem = array();
+
+        $to_group_id = api_get_group_id();
+        global $is_user_in_group;
 
         $dirHandler = @opendir($this->getCurrentFolderPath());
         if ($dirHandler) {

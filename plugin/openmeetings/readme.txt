@@ -13,3 +13,4 @@ People involved:
 * First draft developed by Francis Gonzales Tello - Independent (at the time)
 * First stable version published by Yannick Warnier - BeezNest/Chamilo team
 * Maxim Solodovnik - OpenMeetings team - many thanks to him!
+* Julio Montoya - Corrections and adding features.

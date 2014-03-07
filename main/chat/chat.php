@@ -31,7 +31,6 @@ if ($origin != 'whoisonline') {
 /*  TRACKING */
 
 event_access_tool(TOOL_CHAT);
-
 header('Content-Type: text/html; charset='.api_get_system_encoding());
 
 /*
@@ -48,6 +47,7 @@ $cidreq = Security::remove_XSS($_GET['cidReq']);
 
 ?>
 <!DOCTYPE html>
+<html>
 <head>
 <meta charset="<?php echo api_get_system_encoding(); ?>" />
 <?php

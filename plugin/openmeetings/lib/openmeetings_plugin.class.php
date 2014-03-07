@@ -1,14 +1,19 @@
 <?php
+
+/**
+ * Class OpenMeetingsPlugin
+ */
 class OpenMeetingsPlugin extends Plugin
 {
     public $is_course_plugin = true;
 
     //When creating a new course this settings are added to the course
-    public $course_settings = array(
-                    array('name' => 'openmeetings_record_and_store', 'type' => 'checkbox')
-    );
+    public $course_settings = array(array(
+        'name' => 'openmeetings_record_and_store',
+        'type' => 'checkbox'
+    ));
 
-    static function create()
+    public static function create()
     {
         static $result = null;
         return $result ? $result : $result = new self();
@@ -19,7 +24,7 @@ class OpenMeetingsPlugin extends Plugin
         parent::__construct('2.0', 'Francis Gonzales', array('tool_enable' => 'boolean', 'host' =>'text', 'user' => 'text', 'pass' => 'text'));
     }
 
-    function install()
+    public function install()
     {
         $table = Database::get_main_table('plugin_openmeetings');
         // id is the internal unique ID (keeps track of historical sessions
@@ -46,7 +51,7 @@ class OpenMeetingsPlugin extends Plugin
         $this->install_course_fields_in_all_courses();
     }
 
-    function uninstall()
+    public function uninstall()
     {
         $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
         $t_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);

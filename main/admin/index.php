@@ -90,6 +90,9 @@ if (api_is_platform_admin()) {
  		array('url'=>'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')),
  	);
 }
+
+$items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
+
 $blocks['users']['items'] = $items;
 $blocks['users']['extra'] = null;
 
@@ -204,8 +207,6 @@ if (api_is_platform_admin()) {
     }
     $items[] = array('url'=>'career_dashboard.php', 	'label' => get_lang('CareersAndPromotions'));
 }
-
-$items[] = array('url'=>'usergroups.php', 	'label' => get_lang('Classes'));
 
 $blocks['sessions']['items'] = $items;
 $blocks['sessions']['extra'] = null;

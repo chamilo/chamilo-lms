@@ -33,10 +33,7 @@ if (CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_UPLOAD) {
         $error = ERR_FILE_MOVE_FAILED;
     } elseif (!$upload->isPermittedFileExt(explode(",", CONFIG_UPLOAD_VALID_EXTS))) {
         $error = ERR_FILE_TYPE_NOT_ALLOWED;
-    } elseif (defined('CONFIG_UPLOAD_MAXSIZE') && CONFIG_UPLOAD_MAXSIZE && $upload->isSizeTooBig(
-            CONFIG_UPLOAD_MAXSIZE
-        )
-    ) {
+    } elseif (defined('CONFIG_UPLOAD_MAXSIZE') && CONFIG_UPLOAD_MAXSIZE && $upload->isSizeTooBig(CONFIG_UPLOAD_MAXSIZE)) {
         $error = sprintf(ERROR_FILE_TOO_BID, transformFileSize(CONFIG_UPLOAD_MAXSIZE));
     } else {
         include_once(CLASS_FILE);
@@ -67,12 +64,11 @@ if (CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_UPLOAD) {
 
             if (!empty($_course['path'])) {
                 //only inside courses
-                $fullPath        = $upload->getFilePath(
-                ); //get	ajaxmanager. Sample ../../../../../../../courses/TEST/document/Grupo_1_groupdocs/image.jpg
+                //get	ajaxmanager. Sample ../../../../../../../courses/TEST/document/Grupo_1_groupdocs/image.jpg
+                $fullPath        = $upload->getFilePath();
                 $folderInfo      = $manager->getFolderInfo(); //get	ajaxmanager
-                $mainPath        = getParentFolderPath(
-                    $folderInfo['path']
-                ); //get	ajaxmanager. Sample ../../../../../../../courses/TEST/document/Grupo_1_groupdocs/
+                //get	ajaxmanager. Sample ../../../../../../../courses/TEST/document/Grupo_1_groupdocs/
+                $mainPath        = getParentFolderPath($folderInfo['path']);
                 $chamiloFolder   = substr($fullPath, strlen($mainPath) - strlen($fullPath) - 1);
                 $chamiloFile     = $tem['name']; //get	ajaxmanager
                 $chamiloFileSize = filesize($fullPath); //get ajaxmanager
@@ -85,13 +81,12 @@ if (CONFIG_SYS_VIEW_ONLY || !CONFIG_OPTIONS_UPLOAD) {
                         if ($current_session_id == 0) {
                             $chamiloFolder = '/shared_folder/sf_user_'.api_get_user_id().$chamiloFolder;
                         } else {
-                            $chamiloFolder = '/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id(
-                                ).$chamiloFolder;
+                            $chamiloFolder = '/shared_folder_session_'.$current_session_id.'/sf_user_'.api_get_user_id().$chamiloFolder;
                         }
                     }
                 }
 
-                $doc_id             = add_document(
+                $doc_id = add_document(
                     $_course,
                     $chamiloFolder,
                     'file',

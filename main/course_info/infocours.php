@@ -331,6 +331,20 @@ $form->addGroup($group, '', array(get_lang("InfoAboutAdvanceInsideHomeCourse")),
 $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
 $form->addElement('html', '</div></div>');
 
+// Document settings
+$form->addElement('html', '<div><h3>'.Display::return_icon('folder.png', Security::remove_XSS(get_lang('Documents')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('Documents')).'</h3><div>');
+
+$group = array(
+    $form->createElement('radio', 'show_system_folders', null, get_lang('Yes'), 1),
+    $form->createElement('radio', 'show_system_folders', null, get_lang('No'), 2),
+
+);
+$form->addGroup($group, '', array(get_lang("ShowSystemFolders")), '');
+
+$form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
+$form->addElement('html', '</div></div>');
+
+
 // Certificate settings
 if (api_get_setting('allow_public_certificates')=='true') {
     $form->addElement('html', '<div><h3>'.Display::return_icon('certificate.png', Security::remove_XSS(get_lang('Certificates')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('Certificates')).'</h3><div>');

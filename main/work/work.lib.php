@@ -18,16 +18,18 @@ use ChamiloSession as Session;
  */
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
+require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
+$_configuration['add_document_to_work'] = true;
 if (isset($_configuration['add_document_to_work'])) {
     define('ADD_DOCUMENT_TO_WORK', $_configuration['add_document_to_work']);
 } else {
     define('ADD_DOCUMENT_TO_WORK', false);
 }
 
-//$_configuration['work_user_comments'] = false;
+$_configuration['work_user_comments'] = true;
 if (isset($_configuration['work_user_comments'])) {
     define('ALLOW_USER_COMMENTS', $_configuration['work_user_comments']);
 } else {
@@ -1747,37 +1749,36 @@ function get_work_user_list_from_documents(
     $workCondition = " AND w_rel.work_id = $workId";
     $workParentCondition  = " AND w.parent_id = $workId";
 
-    $sql = "    (
-                    $select1 FROM $userTable u
-                    INNER JOIN $workTable w ON (u.user_id = w.user_id AND w.active IN (0, 1) AND w.filetype = 'file')
-                    WHERE
-                        w.c_id = $courseId
-                        $userCondition
-                        $sessionCondition
-                        $whereCondition
-                        $workParentCondition
-
-                ) UNION (
-                    $select2 FROM $workTable w
-                    INNER JOIN $workRelDocument w_rel ON (w_rel.work_id = w.id AND w.active IN (0, 1))
-                    INNER JOIN $documentTable d ON (w_rel.document_id = d.id AND d.c_id = w.c_id)
-                    INNER JOIN $userTable u ON (u.user_id = $studentId)
-                    WHERE
-                        w.c_id = $courseId
-                        $workCondition
-                        $sessionCondition AND
-                        d.id NOT IN
-                            (SELECT w.document_id id FROM $workTable w
-                            WHERE
-                                user_id = $studentId AND
-                                c_id = $courseId AND
-                                filetype = 'file' AND
-                                active IN (0, 1)
-                                $sessionCondition
-                                $workParentCondition
-                            )
-                )
-            ";
+    $sql = "(
+                $select1 FROM $userTable u
+                INNER JOIN $workTable w ON (u.user_id = w.user_id AND w.active IN (0, 1) AND w.filetype = 'file')
+                WHERE
+                    w.c_id = $courseId
+                    $userCondition
+                    $sessionCondition
+                    $whereCondition
+                    $workParentCondition
+            ) UNION (
+                $select2 FROM $workTable w
+                INNER JOIN $workRelDocument w_rel ON (w_rel.work_id = w.id AND w.active IN (0, 1) AND w_rel.c_id = w.c_id)
+                INNER JOIN $documentTable d ON (w_rel.document_id = d.id AND d.c_id = w.c_id)
+                INNER JOIN $userTable u ON (u.user_id = $studentId)
+                WHERE
+                    w.c_id = $courseId
+                    $workCondition
+                    $sessionCondition AND
+                    d.id NOT IN (
+                        SELECT w.document_id id
+                        FROM $workTable w
+                        WHERE
+                            user_id = $studentId AND
+                            c_id = $courseId AND
+                            filetype = 'file' AND
+                            active IN (0, 1)
+                            $sessionCondition
+                            $workParentCondition
+                    )
+            )";
 
     $start = intval($start);
     $limit = intval($limit);
@@ -1800,6 +1801,7 @@ function get_work_user_list_from_documents(
     $work_data = get_work_data_by_id($workId);
 
     $qualificationExists = false;
+
     if (!empty($work_data['qualification']) && intval($work_data['qualification']) > 0) {
         $qualificationExists = true;
     }
@@ -1821,7 +1823,6 @@ function get_work_user_list_from_documents(
         $userId = $row['user_id'];
         $documentId = $row['document_id'];
         $itemId = $row['id'];
-
         $addLinkShowed = false;
 
         if (empty($documentId)) {
@@ -1832,6 +1833,7 @@ function get_work_user_list_from_documents(
             }
         } else {
             $documentToWork = getDocumentToWorkPerUser($documentId, $workId, $courseId, $sessionId, $userId);
+
             if (empty($documentToWork)) {
                 $url = $urlAdd.'&document_id='.$documentId.'&id='.$workId;
                 $editLink = Display::url($addIcon, $url);
@@ -1862,7 +1864,8 @@ function get_work_user_list_from_documents(
             $viewLink = Display::url($viewIcon, $urlView.'&id='.$itemId);
         }
 
-        $row['type'] = build_document_icon_tag('file', $row['file']);
+        //$row['type'] = build_document_icon_tag('file', $row['url']);
+        $row['type'] = null;
 
         if ($qualificationExists) {
             if (empty($row['qualificator_id'])) {
@@ -1930,8 +1933,8 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
     $work_data          = get_work_data_by_id($work_id);
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
     $condition_session  = api_get_session_condition($session_id);
-
     $locked = api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION);
+
 
     if (!empty($work_data)) {
 
@@ -2772,7 +2775,6 @@ function getWorkDescriptionToolbar()
  */
 function getWorkComments($work)
 {
-
     if (ADD_DOCUMENT_TO_WORK == false) {
         return array();
     }
@@ -2783,38 +2785,119 @@ function getWorkComments($work)
     $courseId = intval($work['c_id']);
     $workId = intval($work['id']);
 
-    $sql = "SELECT c.*, u.firstname, u.lastname, u.username, u.picture_uri
+    $sql = "SELECT c.id, c.user_id, u.firstname, u.lastname, u.username, u.picture_uri
             FROM $commentTable c INNER JOIN $userTable u ON(u.user_id = c.user_id)
             WHERE c_id = $courseId AND work_id = $workId
             ORDER BY sent_at
             ";
     $result = Database::query($sql);
     $comments = Database::store_result($result, 'ASSOC');
-    foreach ($comments as &$comment) {
-        $pictureInfo = UserManager::get_picture_user($comment['user_id'], $comment['picture_uri'], 24, USER_IMAGE_SIZE_SMALL);
-        $comment['picture'] = $pictureInfo['file'];
+    if (!empty($comments)) {
+        foreach ($comments as &$comment) {
+            $pictureInfo = UserManager::get_picture_user(
+                $comment['user_id'],
+                $comment['picture_uri'],
+                24,
+                USER_IMAGE_SIZE_SMALL
+            );
+            $comment['picture'] = $pictureInfo['file'];
+            $commentInfo = getWorkComment($comment['id']);
+
+            if (!empty($commentInfo)) {
+                $comment = array_merge($comment, $commentInfo);
+            }
+        }
     }
     return $comments;
 }
 
+
+/**
+ * @param int $id comment id
+ * @param array $courseInfo
+ * @return string
+ */
+function getWorkComment($id, $courseInfo = array())
+{
+    if (ADD_DOCUMENT_TO_WORK == false) {
+        return array();
+    }
+    if (empty($courseInfo)) {
+        $courseInfo = api_get_course_info();
+    }
+
+    if (empty($courseInfo['real_id'])) {
+        return array();
+    }
+
+    $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
+    $id = intval($id);
+
+    $sql = "SELECT * FROM $commentTable
+            WHERE id = $id AND c_id = ".$courseInfo['real_id'];
+    $result = Database::query($sql);
+    $comment = array();
+    if (Database::num_rows($result)) {
+        $comment = Database::fetch_array($result, 'ASSOC');
+        $filePath = null;
+        $fileUrl = null;
+        $deleteUrl = null;
+        $fileName = null;
+        if (!empty($comment['file'])) {
+            $work = get_work_data_by_id($comment['work_id']);
+            $workParent = get_work_data_by_id($work['parent_id']);
+            $filePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work/'.$workParent['url'].'/'.$comment['file'];
+            $fileUrl = api_get_path(WEB_CODE_PATH).'work/download_comment_file.php?comment_id='.$id.'&'.api_get_cidreq();
+            $deleteUrl = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$comment['work_id'].'&action=delete_attachment&comment_id='.$id;
+            $fileParts = explode('_', $comment['file']);
+            $fileName = str_replace($fileParts[0].'_'.$fileParts[1].'_', '', $comment['file']);
+        }
+        $comment['delete_file_url'] = $deleteUrl;
+        $comment['file_path'] = $filePath;
+        $comment['file_url'] = $fileUrl;
+        $comment['file_name_to_show'] = $fileName;
+    }
+    return $comment;
+}
+
+/**
+ * @param int $id
+ * @param array $courseInfo
+ */
+function deleteCommentFile($id, $courseInfo = array())
+{
+    $workComment = getWorkComment($id, $courseInfo);
+    if (isset($workComment['file']) && !empty($workComment['file'])) {
+        if (file_exists($workComment['file_path'])) {
+            $result = my_delete($workComment['file_path']);
+            if ($result) {
+                $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
+                $params = array('file' => '');
+                Database::update(
+                    $commentTable,
+                    $params,
+                    array('id = ? AND c_id = ? ' => array($workComment['id'], $workComment['c_id']))
+                );
+            }
+        }
+    }
+}
+
 /**
  * Adds a comments to the work document
+ * @param array $courseInfo
  * @param int $userId
  * @param array $work
  * @param array $data
  * @return int
  */
-function addWorkComment($userId, $work, $data)
+function addWorkComment($courseInfo, $userId, $work, $data)
 {
     if (ADD_DOCUMENT_TO_WORK == false) {
         return null;
     }
 
     $commentTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT);
-
-    if (empty($data['comment'])) {
-        return null;
-    }
 
     $params = array(
         'work_id' => $work['id'],
@@ -2823,7 +2906,28 @@ function addWorkComment($userId, $work, $data)
         'comment' => $data['comment'],
         'sent_at' => api_get_utc_datetime()
     );
-    return Database::insert($commentTable, $params);
+
+    $commentId = Database::insert($commentTable, $params);
+    $fileData = isset($data['file']) ? $data['file'] : null;
+    if (!empty($commentId) && !empty($fileData)) {
+        $workParent = get_work_data_by_id($work['parent_id']);
+        if (!empty($workParent)) {
+            $uploadDir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work'.$workParent['url'];
+            $newFileName = 'comment_'.$commentId.'_'.php2phps(
+                replace_dangerous_char($fileData['name'], 'strict')
+            );
+            $newFilePath = $uploadDir.'/'.$newFileName;
+            $result = move_uploaded_file($fileData['tmp_name'], $newFilePath);
+            if ($result) {
+                $params = array('file' => $newFileName);
+                Database::update(
+                    $commentTable,
+                    $params,
+                    array('id = ? AND c_id = ? ' => array($commentId, $work['c_id']))
+                );
+            }
+        }
+    }
 }
 
 /**
@@ -2840,8 +2944,10 @@ function getWorkCommentForm($work)
         'post',
         api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&action=send_comment&'.api_get_cidreq()
     );
+
+    $form->addElement('file', 'file', get_lang('Attachment'));
     $form->addElement('textarea', 'comment', get_lang('Comment'), array('class' => 'span5', 'rows' => '8'));
-    $form->addRule('comment', get_lang('ThisFieldIsRequired'), 'required');
+    //$form->addRule('comment', get_lang('ThisFieldIsRequired'), 'required');
     $form->addElement('hidden', 'id', $work['id']);
     $form->addElement('button', 'button', get_lang('Send'));
     return $form->return_form();
@@ -3376,6 +3482,30 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $group_id)
             remove_resource_from_course_gradebook($linkId);
         }
     }
+}
+
+/**
+ * Delete all work by student
+ * @param int $userId
+ * @param array $courseInfo
+ * @return array return deleted items
+ */
+function deleteAllWorkPerUser($userId, $courseInfo)
+{
+    $deletedItems = array();
+    $workPerUser = getWorkPerUser($userId);
+    if (!empty($workPerUser)) {
+        foreach ($workPerUser as $work) {
+            $work = $work['work'];
+            foreach ($work->user_results as $userResult) {
+                $result = deleteWorkItem($userResult['id'], $courseInfo);
+                if ($result) {
+                    $deletedItems[] = $userResult;
+                }
+            }
+        }
+    }
+    return $deletedItems;
 }
 
 /**

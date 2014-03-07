@@ -224,7 +224,7 @@ class Answer
 	 */
 	function selectAutoId($id)
     {
-		return $this->autoId[$id];
+		return isset($this->autoId[$id]) ? $this->autoId[$id] : null;
 	}
 
 	/**
@@ -255,8 +255,9 @@ class Answer
 	 * @author - Julio Montoya
 	 * @return - integer - the question ID
 	 */
-	function selectDestination($id) {
-		return $this->destination[$id];
+	function selectDestination($id)
+    {
+		return isset($this->destination[$id]) ? $this->destination[$id] : null;
 	}
 
     /**
@@ -375,7 +376,7 @@ class Answer
 	 */
 	function isCorrect($id)
 	{
-		return $this->correct[$id];
+		return isset($this->correct[$id]) ? $this->correct[$id] : null;
 	}
 
 	/**
@@ -399,7 +400,7 @@ class Answer
 	 */
 	function selectWeighting($id)
 	{
-		return $this->weighting[$id];
+		return isset($this->weighting[$id]) ? $this->weighting[$id] : null;
 	}
 
 	/**
@@ -411,7 +412,7 @@ class Answer
 	 */
 	function selectPosition($id)
 	{
-		return $this->position[$id];
+		return isset($this->position[$id]) ? $this->position[$id] : null;
 	}
 
 	/**
@@ -423,7 +424,7 @@ class Answer
 	 */
 	function selectHotspotCoordinates($id)
 	{
-		return $this->hotspot_coordinates[$id];
+		return isset($this->hotspot_coordinates[$id]) ? $this->hotspot_coordinates[$id] : null;
 	}
 
 	/**
@@ -435,11 +436,11 @@ class Answer
 	 */
 	function selectHotspotType($id)
 	{
-		return $this->hotspot_type[$id];
+		return isset($this->hotspot_type[$id]) ? $this->hotspot_type[$id] : null;
 	}
 
 	/**
-	 * creates a new answer
+	 * Creates a new answer
 	 *
 	 * @author Olivier Brouckaert
 	 * @param string 	answer title

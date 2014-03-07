@@ -15,7 +15,7 @@
 var mejs = mejs || {};
 
 // version number
-mejs.version = '2.13.0'; 
+mejs.version = '2.13.2'; 
 
 
 // player number (for missing, same id attr)
@@ -318,13 +318,13 @@ mejs.MediaFeatures = {
 		t.isAndroid = (ua.match(/android/i) !== null);
 		t.isBustedAndroid = (ua.match(/android 2\.[12]/) !== null);
 		t.isBustedNativeHTTPS = (location.protocol === 'https:' && (ua.match(/android [12]\./) !== null || ua.match(/macintosh.* version.* safari/) !== null));
-		t.isIE = (nav.appName.toLowerCase().indexOf("microsoft") != -1);
+		t.isIE = (nav.appName.toLowerCase().indexOf("microsoft") != -1 || nav.appName.toLowerCase().match(/trident/gi) !== null);
 		t.isChrome = (ua.match(/chrome/gi) !== null);
 		t.isFirefox = (ua.match(/firefox/gi) !== null);
 		t.isWebkit = (ua.match(/webkit/gi) !== null);
-		t.isGecko = (ua.match(/gecko/gi) !== null) && !t.isWebkit;
+		t.isGecko = (ua.match(/gecko/gi) !== null) && !t.isWebkit && !t.isIE;
 		t.isOpera = (ua.match(/opera/gi) !== null);
-		t.hasTouch = ('ontouchstart' in window && window.ontouchstart != null);
+		t.hasTouch = ('ontouchstart' in window); //  && window.ontouchstart != null); // this breaks iOS 7
 		
 		// borrowed from Modernizr
 		t.svg = !! document.createElementNS &&
@@ -349,30 +349,50 @@ mejs.MediaFeatures = {
 		// iOS
 		t.hasSemiNativeFullScreen = (typeof v.webkitEnterFullscreen !== 'undefined');
 		
-		// Webkit/firefox
+		// W3C
+		t.hasNativeFullscreen = (typeof v.requestFullscreen !== 'undefined');
+		
+		// webkit/firefox/IE11+
 		t.hasWebkitNativeFullScreen = (typeof v.webkitRequestFullScreen !== 'undefined');
 		t.hasMozNativeFullScreen = (typeof v.mozRequestFullScreen !== 'undefined');
+		t.hasMsNativeFullScreen = (typeof v.msRequestFullscreen !== 'undefined');
 		
-		t.hasTrueNativeFullScreen = (t.hasWebkitNativeFullScreen || t.hasMozNativeFullScreen);
+		t.hasTrueNativeFullScreen = (t.hasWebkitNativeFullScreen || t.hasMozNativeFullScreen || t.hasMsNativeFullScreen);
 		t.nativeFullScreenEnabled = t.hasTrueNativeFullScreen;
+		
+		// Enabled?
 		if (t.hasMozNativeFullScreen) {
-			t.nativeFullScreenEnabled = v.mozFullScreenEnabled;
+			t.nativeFullScreenEnabled = document.mozFullScreenEnabled;
+		} else if (t.hasMsNativeFullScreen) {
+			t.nativeFullScreenEnabled = document.msFullscreenEnabled;		
 		}
 		
-		
-		if (this.isChrome) {
+		if (t.isChrome) {
 			t.hasSemiNativeFullScreen = false;
 		}
 		
 		if (t.hasTrueNativeFullScreen) {
-			t.fullScreenEventName = (t.hasWebkitNativeFullScreen) ? 'webkitfullscreenchange' : 'mozfullscreenchange';
 			
+			t.fullScreenEventName = '';
+			if (t.hasWebkitNativeFullScreen) { 
+				t.fullScreenEventName = 'webkitfullscreenchange';
+				
+			} else if (t.hasMozNativeFullScreen) {
+				t.fullScreenEventName = 'mozfullscreenchange';
+				
+			} else if (t.hasMsNativeFullScreen) {
+				t.fullScreenEventName = 'MSFullscreenChange';
+			}
 			
 			t.isFullScreen = function() {
 				if (v.mozRequestFullScreen) {
 					return d.mozFullScreen;
+				
 				} else if (v.webkitRequestFullScreen) {
 					return d.webkitIsFullScreen;
+				
+				} else if (v.hasMsNativeFullScreen) {
+					return d.msFullscreenElement !== null;
 				}
 			}
 					
@@ -380,16 +400,26 @@ mejs.MediaFeatures = {
 		
 				if (t.hasWebkitNativeFullScreen) {
 					el.webkitRequestFullScreen();
+					
 				} else if (t.hasMozNativeFullScreen) {
 					el.mozRequestFullScreen();
+
+				} else if (t.hasMsNativeFullScreen) {
+					el.msRequestFullscreen();
+
 				}
 			}
 			
 			t.cancelFullScreen = function() {				
 				if (t.hasWebkitNativeFullScreen) {
 					document.webkitCancelFullScreen();
+					
 				} else if (t.hasMozNativeFullScreen) {
 					document.mozCancelFullScreen();
+					
+				} else if (t.hasMsNativeFullScreen) {
+					document.msExitFullscreen();
+					
 				}
 			}	
 			
@@ -1288,6 +1318,7 @@ mejs.HtmlMediaElementShim = {
 '<param name="wmode" value="transparent" />' +
 '<param name="allowScriptAccess" value="always" />' +
 '<param name="allowFullScreen" value="true" />' +
+'<param name="scale" value="default" />' + 
 '</object>';
 
 				} else {
@@ -1306,6 +1337,7 @@ mejs.HtmlMediaElementShim = {
 'flashvars="' + initVars.join('&') + '" ' +
 'width="' + width + '" ' +
 'height="' + height + '" ' +
+'scale="default"' + 
 'class="mejs-shim"></embed>';
 				}
 				break;
@@ -1640,30 +1672,26 @@ window.mejs = mejs;
 window.MediaElement = mejs.MediaElement;
 
 /*!
- * Adds Internationalization and localization to objects.
+ * Adds Internationalization and localization to mediaelement.
+ *
+ * This file does not contain translations, you have to add the manually.
+ * The schema is always the same: me-i18n-locale-[ISO_639-1 Code].js
+ *
+ * Examples are provided both for german and chinese translation.
+ *
  *
  * What is the concept beyond i18n?
  *   http://en.wikipedia.org/wiki/Internationalization_and_localization
  *
- *
- * This file both i18n methods and locale which is used to translate
- * strings into other languages.
- *
- * Default translations are not available, you have to add them
- * through locale objects which are named exactly as the langcode
- * they stand for. The default language is always english (en).
+ * What langcode should i use?
+ *   http://en.wikipedia.org/wiki/ISO_639-1
  *
  *
- * Wrapper built to be able to attach the i18n object to
- * other objects without changing more than one line.
- *
- *
- * LICENSE:
+ * License?
  *
  *   The i18n file uses methods from the Drupal project (drupal.js):
  *     - i18n.methods.t() (modified)
  *     - i18n.methods.checkPlain() (full copy)
- *     - i18n.methods.formatString() (full copy)
  *
  *   The Drupal project is (like mediaelementjs) licensed under GPLv2.
  *    - http://drupal.org/licensing/faq/#q1
@@ -1674,8 +1702,6 @@ window.MediaElement = mejs.MediaElement;
  * @author
  *   Tim Latz (latz.tim@gmail.com)
  *
- * @see
- *   me-i18n-locale.js
  *
  * @params
  *  - context - document, iframe ..
@@ -1695,22 +1721,19 @@ window.MediaElement = mejs.MediaElement;
 
 
     /**
-     * Get the current browser's language
-     *
-     * @see: i18n.methods.t()
+     * Get language, fallback to browser's language if empty
      */
-    i18n.locale.getLanguage = function () {
-        return i18n.locale.language || navigator.language;
+    i18n.getLanguage = function () {
+        var language = i18n.locale.language || window.navigator.userLanguage || window.navigator.language;
+        // convert to iso 639-1 (2-letters, lower case)
+        return language.substr(0, 2).toLowerCase();
     };
 
+    // i18n fixes for compatibility with WordPress
     if ( typeof mejsL10n != 'undefined' ) {
         i18n.locale.language = mejsL10n.language;
     }
 
-    /**
-     * Store the language the locale object was initialized with
-     */
-    i18n.locale.INIT_LANGUAGE = i18n.locale.getLanguage();
 
 
     /**
@@ -1735,73 +1758,27 @@ window.MediaElement = mejs.MediaElement;
     };
 
     /**
-     * Replace placeholders with sanitized values in a string.
-     *
-     * @param str
-     *   A string with placeholders.
-     * @param args
-     *   An object of replacements pairs to make. Incidences of any key in this
-     *   array are replaced with the corresponding value. Based on the first
-     *   character of the key, the value is escaped and/or themed:
-     *    - !variable: inserted as is
-     *    - @variable: escape plain text to HTML (i18n.methods.checkPlain)
-     *    - %variable: escape text and theme as a placeholder for user-submitted
-     *      content (checkPlain + <em class="placeholder" > )
-     *
-     * @see i18n.methods.t()
-     */
-    i18n.methods.formatString = function(str, args) {
-        // Transform arguments before inserting them.
-        for (var key in args) {
-            switch (key.charAt(0)) {
-                // Escaped only.
-                case '@':
-                    args[key] = i18n.methods.checkPlain(args[key]);
-                    break;
-                // Pass-through.
-                case '!':
-                    break;
-                // Escaped and placeholder.
-                case '%':
-                default:
-                    args[key] = '<em class="placeholder">' + i18n.methods.checkPlain(args[key]) + '</em>';
-                    break;
-            }
-            str = str.replace(key, args[key]);
-        }
-        return str;
-    };
-
-    /**
      * Translate strings to the page language or a given language.
      *
-     * See the documentation of the server-side t() function for further details.
      *
      * @param str
      *   A string containing the English string to translate.
-     * @param args
-     *   An object of replacements pairs to make after translation. Incidences
-     *   of any key in this array are replaced with the corresponding value.
-     *   See i18n.methods.formatString().
      *
      * @param options
      *   - 'context' (defaults to the default context): The context the source string
      *     belongs to.
      *
      * @return
-     *   The translated string.
+     *   The translated string, escaped via i18n.methods.checkPlain()
      */
-    i18n.methods.t = function (str, args, options) {
+    i18n.methods.t = function (str, options) {
 
         // Fetch the localized version of the string.
         if (i18n.locale.strings && i18n.locale.strings[options.context] && i18n.locale.strings[options.context][str]) {
             str = i18n.locale.strings[options.context][str];
         }
 
-        if (args) {
-            str = i18n.methods.formatString(str, args);
-        }
-        return str;
+        return i18n.methods.checkPlain(str);
     };
 
 
@@ -1811,25 +1788,25 @@ window.MediaElement = mejs.MediaElement;
      * @see i18n.methods.t()
      * @throws InvalidArgumentException
      */
-    i18n.t = function(str, args, options) {
+    i18n.t = function(str, options) {
 
         if (typeof str === 'string' && str.length > 0) {
 
             // check every time due language can change for
             // different reasons (translation, lang switcher ..)
-            var language = i18n.locale.getLanguage();
+            var language = i18n.getLanguage();
 
             options = options || {
                 "context" : language
             };
 
-            return i18n.methods.t(str, args, options);
+            return i18n.methods.t(str, options);
         }
         else {
             throw {
                 "name" : 'InvalidArgumentException',
                 "message" : 'First argument is either not a string or empty.'
-            }
+            };
         }
     };
 
@@ -1837,20 +1814,21 @@ window.MediaElement = mejs.MediaElement;
     exports.i18n = i18n;
 }(document, mejs));
 
+// i18n fixes for compatibility with WordPress
 ;(function(exports, undefined) {
 
     "use strict";
 
     if ( typeof mejsL10n != 'undefined' ) {
         exports[mejsL10n.language] = mejsL10n.strings;
-    };
+    }
 
 }(mejs.i18n.locale.strings));
 
 /*!
  * This is a i18n.locale language object.
  *
- *<de> German translation by Tim Latz, latz.tim@gmail.com
+ * German translation by Tim Latz, latz.tim@gmail.com
  *
  * @author
  *   Tim Latz (latz.tim@gmail.com)
@@ -1865,18 +1843,20 @@ window.MediaElement = mejs.MediaElement;
 
     "use strict";
 
-    exports.de = {
-        "Fullscreen" : "Vollbild",
-        "Go Fullscreen" : "Vollbild an",
-        "Turn off Fullscreen" : "Vollbild aus",
-        "Close" : "Schließen"
-    };
+    if (typeof exports.de === 'undefined') {
+        exports.de = {
+            "Fullscreen" : "Vollbild",
+            "Go Fullscreen" : "Vollbild an",
+            "Turn off Fullscreen" : "Vollbild aus",
+            "Close" : "Schließen"
+        };
+    }
 
 }(mejs.i18n.locale.strings));
 /*!
  * This is a i18n.locale language object.
  *
- *<de> Traditional chinese translation by Tim Latz, latz.tim@gmail.com
+ * Traditional chinese translation by Tim Latz, latz.tim@gmail.com
  *
  * @author
  *   Tim Latz (latz.tim@gmail.com)
@@ -1891,12 +1871,14 @@ window.MediaElement = mejs.MediaElement;
 
     "use strict";
 
-    exports.zh = {
-        "Fullscreen" : "全螢幕",
-        "Go Fullscreen" : "全屏模式",
-        "Turn off Fullscreen" : "退出全屏模式",
-        "Close" : "關閉"
-    };
+    if (typeof exports.zh === 'undefined') {
+        exports.zh = {
+            "Fullscreen" : "全螢幕",
+            "Go Fullscreen" : "全屏模式",
+            "Turn off Fullscreen" : "退出全屏模式",
+            "Close" : "關閉"
+        };
+    }
 
 }(mejs.i18n.locale.strings));
 
@@ -2001,9 +1983,9 @@ if (typeof jQuery != 'undefined') {
 							  ],
 						action: function(player, media) {
 								if (media.paused || media.ended) {
-										media.play();
+										player.play();
 								} else {
-										media.pause();
+										player.pause();
 								}
 						}
 				},
@@ -2158,8 +2140,7 @@ if (typeof jQuery != 'undefined') {
 
 				// override Apple's autoplay override for iPads
 				if (mf.isiPad && t.media.getAttribute('autoplay') !== null) {
-					t.media.load();
-					t.media.play();
+					t.play();
 				}
 
 			} else if (mf.isAndroid && t.options.AndroidUseNativeControls) {
@@ -2479,9 +2460,9 @@ if (typeof jQuery != 'undefined') {
 
 							if (t.options.clickToPlayPause) {
 								if (t.media.paused) {
-									t.media.play();
+									t.play();
 								} else {
-									t.media.pause();
+									t.pause();
 								}
 							}
 						};
@@ -2581,7 +2562,7 @@ if (typeof jQuery != 'undefined') {
 					}
 
 					if (t.options.loop) {
-						t.media.play();
+						t.play();
 					} else if (!t.options.alwaysShowControls && t.controlsEnabled) {
 						t.showControls();
 					}
@@ -2629,8 +2610,7 @@ if (typeof jQuery != 'undefined') {
 
 			// force autoplay for HTML5
 			if (autoplay && media.pluginType == 'native') {
-				media.load();
-				media.play();
+				t.play();
 			}
 
 
@@ -2840,14 +2820,12 @@ if (typeof jQuery != 'undefined') {
 					'<div class="mejs-overlay-button"></div>'+
 				'</div>')
 				.appendTo(layers)
-				.click(function() {
-                    if (t.options.clickToPlayPause) {
-                        if (media.paused) {
-                            media.play();
-                        } else {
-                            media.pause();
-                        }
-                    }
+				.bind('click touchstart', function() {
+					if (t.options.clickToPlayPause) {
+						if (media.paused) {
+							t.play();
+						}
+					}
 				});
 
 			/*
@@ -2979,6 +2957,7 @@ if (typeof jQuery != 'undefined') {
 			this.setControlsSize();
 		},
 		play: function() {
+			this.load();
 			this.media.play();
 		},
 		pause: function() {
@@ -2987,7 +2966,11 @@ if (typeof jQuery != 'undefined') {
 			} catch (e) {}
 		},
 		load: function() {
-			this.media.load();
+			if (!this.isLoaded) {
+				this.media.load();
+			}
+
+			this.isLoaded = true;
 		},
 		setMuted: function(muted) {
 			this.media.setMuted(muted);

@@ -14,6 +14,7 @@
 
 require_once '../../../../../../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fckeditor/editor/plugins/ajaxfilemanager/inc/config.php';
+$editor = isset($_GET['editor']) ? Security::remove_XSS($_GET['editor']) : null;
 
 require_once CLASS_SESSION_ACTION;
 $sessionAction = new SessionAction();
@@ -72,7 +73,7 @@ if (!empty($_GET['view'])) {
     <script type="text/javascript" src="jscripts/ajaxfilemanager.js"></script>
     <script type="text/javascript">
 
-        var mode_editor = '<?php echo Security::remove_XSS($_GET['editor']);?>';
+        var mode_editor = '<?php echo $editor;?>';
         <!-- Chamilo hack for general my files users  -->
         if (!mode_editor) {
             // Added by Ivan Tcholakov, 22-JUL-2009.

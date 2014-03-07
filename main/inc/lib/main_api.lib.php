@@ -259,6 +259,7 @@ define('SYS_CODE_PATH', 'SYS_CODE_PATH');
 define('SYS_LANG_PATH', 'SYS_LANG_PATH');
 define('WEB_IMG_PATH', 'WEB_IMG_PATH');
 define('WEB_CSS_PATH', 'WEB_CSS_PATH');
+define('SYS_CSS_PATH', 'SYS_CSS_PATH');
 define('SYS_PLUGIN_PATH', 'SYS_PLUGIN_PATH');
 define('PLUGIN_PATH', 'SYS_PLUGIN_PATH'); // deprecated ?
 define('WEB_PLUGIN_PATH', 'WEB_PLUGIN_PATH');
@@ -400,6 +401,7 @@ require_once dirname(__FILE__).'/internationalization.lib.php';
  * api_get_path(SYS_PLUGIN_PATH)                /var/www/chamilo/plugin/
  * api_get_path(SYS_TEST_PATH)                  /var/www/chamilo/tests/
  * api_get_path(SYS_TEMPLATE_PATH)              /var/www/chamilo/main/template/
+ * api_get_path(SYS_CSS_PATH)                   /var/www/chamilo/main/css/
  *
  * api_get_path(WEB_SERVER_ROOT_PATH)           http://www.mychamilo.org/
  * api_get_path(WEB_PATH)                       http://www.mychamilo.org/chamilo/
@@ -445,6 +447,7 @@ function api_get_path($path_type, $path = null) {
         SYS_LANG_PATH           => 'lang/',
         WEB_IMG_PATH            => 'img/',
         WEB_CSS_PATH            => 'css/',
+        SYS_CSS_PATH            => 'css/',
         SYS_PLUGIN_PATH         => 'plugin/',
         WEB_PLUGIN_PATH         => 'plugin/',
         SYS_ARCHIVE_PATH        => 'archive/',
@@ -560,6 +563,7 @@ function api_get_path($path_type, $path = null) {
         $paths[SYS_ARCHIVE_PATH]        = $paths[SYS_PATH].$paths[SYS_ARCHIVE_PATH];
         $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
         $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
+        $paths[SYS_CSS_PATH]            = $paths[SYS_CODE_PATH].$paths[SYS_CSS_PATH];
 
         $paths[WEB_CSS_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_CSS_PATH];
         $paths[WEB_IMG_PATH]            = $paths[WEB_CODE_PATH].$paths[WEB_IMG_PATH];
@@ -739,7 +743,7 @@ function api_get_cdn_path($web_path) {
  *
  */
 function api_is_cas_activated() {
-    return api_get_setting(cas_activate) == "true";
+    return api_get_setting('cas_activate') == "true";
 }
 
 /**
@@ -1929,11 +1933,15 @@ function api_get_session_info($session_id) {
 
 /**
  * Gets the session visibility by session id
- * @param int       session id
- * @return int      0 = session still available, SESSION_VISIBLE_READ_ONLY = 1, SESSION_VISIBLE = 2, SESSION_INVISIBLE = 3
+ * @param int $session_id
+ * @param string $course_code
+ * @param bool $ignore_visibility_for_admins
+ * @return int  0 = session still available, SESSION_VISIBLE_READ_ONLY = 1, SESSION_VISIBLE = 2, SESSION_INVISIBLE = 3
  */
-function api_get_session_visibility($session_id, $course_code = null, $ignore_visibility_for_admins = true) {
-    $visibility = 0; //means that the session is still available
+function api_get_session_visibility($session_id, $course_code = null, $ignore_visibility_for_admins = true)
+{
+    // Means that the session is still available.
+    $visibility = 0;
 
     if (api_is_platform_admin()) {
         if ($ignore_visibility_for_admins) {
@@ -1947,7 +1955,12 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
         $session_id = intval($session_id);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-        $sql = "SELECT visibility, date_start, date_end, nb_days_access_after_end, nb_days_access_before_beginning
+        $sql = "SELECT
+                      visibility,
+                      date_start,
+                      date_end,
+                      nb_days_access_after_end,
+                      nb_days_access_before_beginning
                 FROM $tbl_session
                 WHERE id = $session_id ";
 
@@ -1961,9 +1974,7 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
             if ($row['date_start'] == '0000-00-00' && $row['date_end'] == '0000-00-00') {
                 return SESSION_AVAILABLE;
             } else {
-
-
-                //If datestart is set
+                // If date start is set.
                 if (!empty($row['date_start']) && $row['date_start'] != '0000-00-00') {
                     $row['date_start'] = $row['date_start'].' 00:00:00';
                     if ($now > api_strtotime($row['date_start'], 'UTC')) {
@@ -1973,7 +1984,7 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                     }
                 }
 
-                //if date_end is set
+                // if date_end is set.
                 if (!empty($row['date_end']) && $row['date_end'] != '0000-00-00') {
                     $row['date_end'] = $row['date_end'].' 00:00:00';
                     //only if date_start said that it was ok
@@ -1992,12 +2003,12 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                 }
             }
 
-            //If I'm a coach the visibility can change in my favor depending in the nb_days_access_after_end and nb_days_access_before_beginning values
+            /* If I'm a coach the visibility can change in my favor depending in
+             the nb_days_access_after_end and nb_days_access_before_beginning */
             $is_coach = api_is_coach($session_id, $course_code);
 
             if ($is_coach) {
-
-                //Test end date
+                // Test end date.
                 if (isset($row['date_end']) && !empty($row['date_end']) && $row['date_end'] != '0000-00-00' && $row['nb_days_access_after_end'] != '0') {
                     $end_date_for_coach = new DateTime($row['date_end']);
                     $number_of_days = "P".intval($row['nb_days_access_after_end']).'D';
@@ -2010,7 +2021,7 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                     }
                 }
 
-                //Test start date
+                // Test start date.
                 if (isset($row['date_start']) && !empty($row['date_start']) && $row['date_start'] != '0000-00-00' && $row['nb_days_access_before_beginning'] != '0') {
                     $start_date_for_coach = new DateTime($row['date_start']);
                     $number_of_days = "P".intval($row['nb_days_access_before_beginning']).'D';
@@ -3316,13 +3327,11 @@ function api_item_property_update(
                     SET lastedit_date = '$time', lastedit_user_id='$user_id' $set_type
                     WHERE $filter";
     }
-
-    $res = Database::query($sql);
+    Database::query($sql);
     // Insert if no entries are found (can only happen in case of $lastedit_type switch is 'default').
     if (Database::affected_rows() == 0) {
-        $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type,   lastedit_user_id,$to_field,  visibility,   start_visible,   end_visible, id_session)
+        $sql = "INSERT INTO $TABLE_ITEMPROPERTY (c_id, tool,ref,insert_date,insert_user_id,lastedit_date,lastedit_type, lastedit_user_id, $to_field, visibility, start_visible, end_visible, id_session)
                 VALUES ($course_id, '$tool', '$item_id', '$time', '$user_id', '$time', '$lastedit_type', '$user_id', '$to_value', '$visibility', '$start_visible', '$end_visible', '$session_id')";
-
         $res = Database::query($sql);
         if (!$res) {
             return false;
@@ -3431,9 +3440,9 @@ function api_get_track_item_property_history($tool, $ref) {
  * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
  * @param int       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
  */
-function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0) {
-
-    $course_info    = api_get_course_info_by_id($course_id);
+function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0)
+{
+    $course_info = api_get_course_info_by_id($course_id);
     if (empty($course_info)) {
         return false;
     }
@@ -3838,6 +3847,13 @@ function api_string_2_boolean($string) {
     return false;
 }
 
+/**
+ * Too keep BC
+ * @deprecated use api_string_2_boolean
+ */
+function string_2_boolean($string) {
+    return api_string_2_boolean($string);
+}
 
 /**
  * Determines the number of plugins installed for a given location
@@ -5890,6 +5906,10 @@ function api_get_jqgrid_js() {
     return api_get_jquery_libraries_js(array('jqgrid'));
 }
 
+function api_get_datepicker_js() {
+    return api_get_jquery_libraries_js(array('datepicker'));
+}
+
 /**
  * Returns the jquery library js and css headers
  *
@@ -5952,8 +5972,27 @@ function api_get_jquery_libraries_js($libraries) {
     	$js .= api_get_js('bxslider/jquery.bxSlider.min.js');
     	$js .= api_get_css($js_path.'bxslider/bx_styles/bx_styles.css');
     }
+
+    // jquery datepicker
+    if (in_array('datepicker',$libraries)) {
+        $languaje   = 'en-GB';
+        $platform_isocode = strtolower(api_get_language_isocode());
+
+        // languages supported by jqgrid see files in main/inc/lib/javascript/jqgrid/js/i18n
+        $datapicker_langs = array('af', 'ar', 'ar-DZ', 'az', 'bg', 'bs', 'ca', 'cs', 'cy-GB', 'da', 'de', 'el', 'en-AU', 'en-GB', 'en-NZ', 'eo', 'es', 'et', 'eu', 'fa', 'fi', 'fo', 'fr', 'fr-CH', 'gl', 'he', 'hi', 'hr', 'hu', 'hy', 'id', 'is', 'it', 'ja', 'ka', 'kk', 'km', 'ko', 'lb', 'lt', 'lv', 'mk', 'ml', 'ms', 'nl', 'nl-BE', 'no', 'pl', 'pt', 'pt-BR', 'rm', 'ro', 'ru', 'sk', 'sl', 'sq', 'sr', 'sr-SR', 'sv', 'ta', 'th', 'tj', 'tr', 'uk', 'vi', 'zh-CN', 'zh-HK', 'zh-TW');
+        if (in_array($platform_isocode, $datapicker_langs)) {
+            $languaje = $platform_isocode;
+        }
+//        $js .= api_get_css($js_path.'jqgrid/css/ui.jqgrid.css');
+        $js .= api_get_js('jquery-ui/ui/i18n/jquery.ui.datepicker-'.$languaje.'.js');
+    }
+
     return $js;
 }
+
+
+
+
 
 /**
  * Returns the course's URL
@@ -6936,4 +6975,15 @@ function api_is_https()
 function api_get_protocol()
 {
     return api_is_https() ? 'https' : 'http';
+}
+
+/**
+ * Return a string where " are replaced with 2 '
+ * It is usefull when you pass a PHP variable in a Javascript browser dialog
+ * e.g. : alert("<?php get_lang('message') ?>");
+ * and message contains character "
+ * @param $in_text
+ */
+function convert_double_quote_to_single($in_text) {
+    return api_preg_replace('/"/', "''", $in_text);
 }

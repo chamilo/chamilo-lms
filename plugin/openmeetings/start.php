@@ -1,12 +1,10 @@
 <?php
 /**
- * This script initiates a videoconference session, calling the BigBlueButton API
- * @package chamilo.plugin.bigbluebutton
+ * This script initiates a video conference session
  */
 /**
  * Initialization
  */
-
 $course_plugin = 'openmeetings'; //needed in order to load the plugin lang variables
 require_once dirname(__FILE__).'/config.php';
 $tool_name = get_lang('Videoconference');
@@ -36,25 +34,23 @@ if ($om->isServerRunning()) {
         */
         // Check for the first meeting available with status = 1
         // (there should be only one at a time, as createMeeting checks for that first
-        foreach ($meetings as $meeting) {
-            if ($meeting['status'] == 1) {
-                $selectedMeeting = $meeting;
+        if (!empty($meetings)) {
+            foreach ($meetings as $meeting) {
+                if ($meeting['status'] == 1) {
+                    $selectedMeeting = $meeting;
+                }
             }
         }
+
         if (!empty($selectedMeeting)) {
-        //if (false/*$om->meeting_exists($meeting_params['meeting_name'])*/) {
             $url = $om->joinMeeting($selectedMeeting['id']);
             if ($url) {
                 header('location: '.$url);
                 exit;
             }
         } else {
-
-            if ( $om->isTeacher()) {
-
-                //$url =
+            if ($om->isTeacher()) {
                 $om->createMeeting($meeting_params);
-                //header('location: '.$url);
                 exit;
             } else {
                 $url = 'listing.php';

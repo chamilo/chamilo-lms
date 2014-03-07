@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 /**
  * @author Julio Montoya <gugli100@gmail.com>
@@ -12,7 +11,6 @@ require_once api_get_path(LIBRARY_PATH).'symfony/Twig/Autoloader.php';
 
 class Template
 {
-
     public $style = 'default'; //see the template folder
     public $preview_theme = null;
     public $theme; // the chamilo theme public_admin, chamilo, chamilo_red, etc
@@ -194,29 +192,29 @@ class Template
         return $result;
     }
 
-    function set_help($help_input = null)
+    /**
+     * @param string $helpInput
+     */
+    function set_help($helpInput = null)
     {
-        if (!empty($help_input)) {
-            $help = $help_input;
+        if (!empty($helpInput)) {
+            $help = $helpInput;
         } else {
             $help = $this->help;
         }
 
-        $help_content = '';
+        $content = '';
         if (api_get_setting('enable_help_link') == 'true') {
             if (!empty($help)) {
-                $help         = Security::remove_XSS($help);
-                $help_content = '<li class="help">';
-                $help_content .= '<a href="'.api_get_path(
-                        WEB_CODE_PATH
-                    ).'help/help.php?open='.$help.'&height=400&width=600" class="ajax" title="'.get_lang('Help').'">';
-                $help_content .= '<img src="'.api_get_path(WEB_IMG_PATH).'help.large.png" alt="'.get_lang(
-                        'Help'
-                    ).'" title="'.get_lang('Help').'" />';
-                $help_content .= '</a></li>';
+                $help = Security::remove_XSS($help);
+                $content = '<li class="help">';
+                $content .= Display::url(
+                    Display::return_icon('help.large.png', get_lang('Help')),
+                    api_get_path(WEB_CODE_PATH).'help/help.php?open='.$help.'&height=400&width=600', array('class' => 'ajax'));
+                $content .= '</li>';
             }
         }
-        $this->assign('help_content', $help_content);
+        $this->assign('help_content', $content);
     }
 
     /*
@@ -446,6 +444,11 @@ class Template
         }
         
 
+        // if we have a scorm file in theme dont use default_scorm.css file
+        if (!is_file(api_get_path(SYS_CSS_PATH) . $this->theme . '/scorm.css')) {
+            $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'/default_scorm.css');
+        }
+
         if (api_is_global_chat_enabled()) {
             $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
         }
@@ -587,7 +590,7 @@ class Template
     private function set_header_parameters()
     {
         global $httpHeadXtra, $_course, $interbreadcrumb, $language_file, $noPHP_SELF, $_configuration, $this_section;
-        $help                  = $this->help;
+        $help = $this->help;
         $nameTools             = $this->title;
         $navigation            = return_navigation_array();
         $this->menu_navigation = $navigation['menu_navigation'];
@@ -600,8 +603,8 @@ class Template
             }
         }
 
-        $this->assign('online_button', Security::remove_XSS(Display::return_icon('online.png')));
-        $this->assign('offline_button', Security::remove_XSS(Display::return_icon('offline.png')));
+        $this->assign('online_button', Display::return_icon('online.png'));
+        $this->assign('offline_button',Display::return_icon('offline.png'));
 
         // Get language iso-code for this page - ignore errors
         $this->assign('document_language', api_get_language_isocode());

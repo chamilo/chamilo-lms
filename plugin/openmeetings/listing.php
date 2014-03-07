@@ -15,7 +15,6 @@ $tpl = new Template($tool_name);
 
 $om = new Chamilo\Plugin\OpenMeetings\OpenMeetings();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-
 $teacher = $om->isTeacher();
 
 api_protect_course_script(true);
@@ -48,12 +47,19 @@ if ($teacher) {
             }
             break;
         case 'delete_record':
-            $om->delete_record($_GET['id']);
+            /*$result = $om->delete_record($_GET['id']);
             if ($result) {
                 $message = Display::return_message(get_lang('Deleted'), 'success');
             } else {
                 $message = Display::return_message(get_lang('Error'), 'error');
-            }
+            }*/
+            break;
+        case 'delete':
+            $om->deleteMeeting($_GET['id']);
+            unset($om);
+            $message = Display::return_message(get_lang('MeetingDeleted').'<br />'.get_lang('MeetingDeletedComment'), 'success', false);
+            header('Location: '.api_get_self());
+            exit;
             break;
         case 'end':
             $om->endMeeting($_GET['id']);
@@ -73,17 +79,19 @@ if ($teacher) {
 }
 
 $meetings = $om->getCourseMeetings();
+$openMeeting = false;
+$users_online = 0;
+
 if (!empty($meetings)) {
     $meetings = array_reverse($meetings);
-}
-$openMeeting = false;
-foreach ($meetings as $meeting) {
-    if ($meeting['status'] == 1) {
-        $openMeeting = true;
+    foreach ($meetings as $meeting) {
+        if ($meeting['status'] == 1) {
+            $openMeeting = true;
+        }
     }
+    $users_online = $meetings->participantCount;
 }
 
-$users_online = $meetings->participantCount;
 $status = $om->isServerRunning();
 $show_join_button = false;
 if ($openMeeting || $teacher) {
@@ -97,8 +105,6 @@ $tpl->assign('conference_url', $conference_url);
 $tpl->assign('users_online', $users_online);
 $tpl->assign('openmeetings_status', $status);
 $tpl->assign('show_join_button', $show_join_button);
-
-//$tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $listing_tpl = 'openmeetings/listing.tpl';
 $content = $tpl->fetch($listing_tpl);

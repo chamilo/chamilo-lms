@@ -120,7 +120,7 @@ if ($is_session_admin) {
 
 // Get views
 $views = array('admin', 'teacher', 'coach', 'drh');
-$view  = 'teacher';
+$view  = '';
 if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
     $view = $_GET['view'];
 }
@@ -135,8 +135,13 @@ if ($is_platform_admin) {
         $menu_items[] = Display::url(Display::return_icon('star_na.png', get_lang('AdminInterface'), array(), ICON_SIZE_MEDIUM), api_get_self().'?view=admin');
         $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
         $menu_items[] = Display::url(Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php');
-    } else {
+    } elseif ($view == 'teacher') {
         $menu_items[] = Display::url(Display::return_icon('teacher_na.png', get_lang('TeacherInterface'), array(), ICON_SIZE_MEDIUM), '');
+        $menu_items[] = Display::url(Display::return_icon('star.png', get_lang('AdminInterface'), array(), ICON_SIZE_MEDIUM), api_get_self().'?view=admin');
+        $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
+        $menu_items[] = Display::url(Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php');
+    } else {
+        $menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), ICON_SIZE_MEDIUM), '');
         $menu_items[] = Display::url(Display::return_icon('star.png', get_lang('AdminInterface'), array(), ICON_SIZE_MEDIUM), api_get_self().'?view=admin');
         $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
         $menu_items[] = Display::url(Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php');
@@ -198,7 +203,7 @@ if (empty($session_id) || in_array($display, array('accessoverview','lpprogresso
 
 echo '</div>';
 
-if (empty($session_id)) {
+if (!empty($view) && empty($session_id)) {
 
 	// Getting courses followed by a coach (No session courses)
     $courses  = CourseManager::get_course_list_as_coach($user_id, false);
@@ -303,7 +308,7 @@ if (empty($session_id)) {
         }
     }
 
-    if ($nb_students > 0 && $view != 'admin') {
+    if (!empty($view) && $nb_students > 0 && $view != 'admin') {
 
         // average progress
         $avg_total_progress = $avg_total_progress / $nb_students;

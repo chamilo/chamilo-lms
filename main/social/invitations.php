@@ -188,10 +188,5 @@ $social_right_content = Display::div($social_right_content, array('class' => 'sp
 
 $tpl = $app['template'];
 
-$tpl->assign('social_left_content', $social_left_content);
-$tpl->assign('social_right_content', $social_right_content);
-
+$tpl->assign('content', $social_right_content);
 $tpl->assign('message', $show_message);
-$tpl->assign('content', $content);
-$social_layout = $tpl->get_template('layout/social_layout.tpl');
-$tpl->display($social_layout);

@@ -117,7 +117,6 @@ jQuery(document).ready(function() {
 </script>';
 
 $allowed_views = array('mygroups','newest','pop');
-$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('SocialNetwork'));
 $content = null;
 
 if (isset($_GET['view']) && in_array($_GET['view'],$allowed_views)) {
@@ -149,11 +148,13 @@ $my_group_role = 0;
 
 $usergroup = new UserGroup();
 
-if ($group_id != 0 ) {
+if ($group_id != 0) {
 	$user_leave_message = false;
 	$user_added_group_message = false;
 	$user_invitation_sent = false;
 	$group_info = $usergroup->get($group_id);
+
+    $interbreadcrumb[]= array ('url' =>'#','name' => $group_info['name']);
 
 	if (isset($_GET['action']) && $_GET['action']=='leave') {
 		$user_leaved = intval($_GET['u']);
@@ -181,7 +182,7 @@ if ($group_id != 0 ) {
 $create_thread_link = '';
 
 if ($group_id != 0 ) {
-    $social_left_content = SocialManager::show_social_menu('groups',$group_id);
+    $social_left_content = SocialManager::show_social_menu('groups', $group_id);
 } else {
     $show_menu = 'browse_groups';
     if (isset($_GET['view']) && $_GET['view'] == 'mygroups') {
@@ -192,9 +193,11 @@ if ($group_id != 0 ) {
 
 $social_right_content = null;
 
-if ($group_id != 0 ) {
+if ($group_id != 0) {
 
 	$group_info = $usergroup->get($group_id);
+
+    $social_right_content .= $social_left_content;
 
 	//Loading group information
 	if (isset($_GET['status']) && $_GET['status']=='sent') {
@@ -204,7 +207,6 @@ if ($group_id != 0 ) {
 	if ($user_leave_message) {
 		$social_right_content .= Display::return_message(get_lang('UserIsNotSubscribedToThisGroup'), 'confirmation', false);
 	}
-
 	if ($user_added_group_message) {
 		$social_right_content .= Display::return_message(get_lang('UserIsSubscribedToThisGroup'), 'confirmation', false);
 	}
@@ -216,13 +218,13 @@ if ($group_id != 0 ) {
     $is_group_member = $usergroup->is_group_member($group_id);
 
 	// details about the current group
-	$social_right_content = '<div class="span9">';
+	$social_right_content .= '<div class="span9">';
 	$social_right_content .=  '<div id="social-group-details">';
 
     //Group's title
     $social_right_content .=  Display::tag('h4', Security::remove_XSS($group_info['name'], STUDENT, true));
 
-    //Privacy
+    // Privacy
     if (!$is_group_member) {
         $social_right_content .=  '<div class="social-group-details-info">';
             $social_right_content .=  '<span>'.get_lang('Privacy').' : </span>';
@@ -241,20 +243,7 @@ if ($group_id != 0 ) {
         }
     }
 
-    if (!empty($relation_group_title)) {
-        /*
-        echo '<div class="social-group-details-info">';
-        echo '<span>'.get_lang('StatusInThisGroup').' : </span>';
-        echo $relation_group_title;
-        echo '</div>';*/
-    }
-
-    //Group's tags
-    /*
-    if (!empty($tags)) {
-        $social_right_content .=  '<div id="social-group-details-info"><span>'.get_lang('Tags').' : </span>'.$tags.'</div>';
-    }*/
-		$social_right_content .=  '</div>';
+    $social_right_content .=  '</div>';
 	$social_right_content .=  '</div>';
 
 	//-- Show message groups
@@ -536,10 +525,5 @@ if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'show_message' && isset
 $tpl = $app['template'];
 
 $tpl->setHelp('Groups');
-$tpl->assign('social_left_content', $social_left_content);
-$tpl->assign('social_right_content', $social_right_content);
-
 $tpl->assign('message', $show_message);
-$tpl->assign('content', $content);
-$social_layout = $tpl->get_template('layout/social_layout.tpl');
-$tpl->display($social_layout);
+$tpl->assign('content', $social_right_content);

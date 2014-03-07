@@ -2,6 +2,38 @@
  * Common CSS for all themes
 */
 
+
+/* Sticky footer*/
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: #383e4b;
+    /* The html and body elements cannot have any padding or margin. */
+}
+
+/* background-color: #0191C7; */
+/* border-color: #0073A0; */
+/* border-color: transparent; */
+
+/* Wrapper for page content to push down footer */
+#wrapper {
+    min-height: 100%;
+    height: auto;
+    /* Negative indent footer by its height */
+    margin: 0 auto -60px;
+    /* Pad bottom by footer height */
+    padding: 0 0 60px;
+}
+
+/* Set the fixed height of the footer here */
+footer {
+    bottom: 0;
+}
+
 /* some changes to the bootstrap.css */
 
 /* when doing a var_dump*/
@@ -35,15 +67,6 @@ header {
 
 header #logo {
     padding: 0px 0px 15px 0px;
-}
-
-.breadcrumb {
-    margin-bottom: 0px;
-}
-
-.breadcrumb a, .breadcrumb li {
-    text-shadow:none;
-    font-size: 13px;
 }
 
 .badge-group {
@@ -154,32 +177,9 @@ header #logo {
     width: 110px;
 }
 
-/* Sticky footer*/
-
-html,
-body {
-    height: 100%;
-    /* The html and body elements cannot have any padding or margin. */
-}
-
-/* Wrapper for page content to push down footer */
-#wrapper {
-    min-height: 100%;
-    height: auto;
-    /* Negative indent footer by its height */
-    margin: 0 auto -60px;
-    /* Pad bottom by footer height */
-    padding: 0 0 60px;
-}
-
-/* Set the fixed height of the footer here */
-footer {
-    height: 150px;
-    background-color: #f5f5f5;
-}
 
 footer .container .row {
-    padding-top:50px;
+    /* padding-top:50px; */
 }
 
 .with-toolbar {
@@ -191,6 +191,7 @@ footer .container .row {
 }
 
 .page-header {
+    margin: 0px 0 20px;
     padding-bottom: 10px;
     border-bottom: 1px solid #ddd;
     -webkit-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
@@ -204,7 +205,7 @@ footer .container .row {
 }
 
 .actions form {
-    margin-left: 10px;
+    padding-top: 6px;
     float:right;
 }
 
@@ -4550,7 +4551,10 @@ i.size-32.icon-new-note {
     text-align: right;
     font-style: italic
 }
+#learning_path_main {
+    background-color: white;
 
+}
 #learning_path_main #control {
     text-align: center;
     background-image: -webkit-gradient(linear, left top, left bottom, from(#ececec), to(#fff));
@@ -5215,7 +5219,7 @@ a.invisible:link, a.invisible:visited {
 }
 
 footer a:link, footer a:visited {
-    color:#f1d40d;
+
 }
 /*
     NAVIGATION MENU
@@ -6626,35 +6630,8 @@ div.new_html_code {
     bottom:40px;
 }
 
-.sidebar {
-    float: left;
-    position: relative;
-    border: 1px solid #ccc;
-    border-width: 0 1px 0 0;
-    background-color: #f2f2f2;
-    padding: 0px;
-}
-
 header .navbar {
     margin-bottom: 0px;
-}
-
-.breadcrumbs {
-    position: relative;
-    border-bottom: 1px solid #e5e5e5;
-    background-color: #f5f5f5;
-    min-height: 41px;
-    line-height: 40px;
-    padding: 0 12px 0 0;
-    display: block;
-}
-
-.breadcrumb {
-    padding: 0 12px 0 0;
-}
-.breadcrumb img {
-    padding-left:10px;
-    padding-right:2px;
 }
 
 .shortcuts {
@@ -6724,4 +6701,93 @@ header .navbar {
 
 .minified .shortcuts-mini {
     display: block !important;
+}
+
+#main .breadcrumb {
+    /* margin: 0px -30px 30px -30px; */
+    margin: 0px -30px 5px -30px;
+    padding: 10px 30px;
+}
+
+.breadcrumb {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    height: 40px;
+    position: relative;
+    border-bottom: 1px solid #dbdee0;
+}
+
+#sidebar-left nav ul  li > a:hover, #sidebar-left nav ul li  > a:focus {
+    background-color: rgba(44, 62, 80, .4);
+}
+#sidebar-left nav ul  li > a:hover, #sidebar-left nav ul  li > a:focus {
+    text-decoration: none;
+}
+
+#sidebar-left nav ul li .fa {
+    margin-right: 10px;
+}
+#sidebar-left nav ul  a {
+    color: #ecf0f1;
+}
+
+.navbar-static-side {
+    z-index: 1;
+    position: absolute;
+}
+
+#main #sidebar-left {
+    /*width: 14.422%; */
+}
+
+#main #main_content {
+    padding: 0px 30px;
+    margin: 0;
+    height: 100%;
+    /* width: 85.578%;*/
+    background-color: white;
+}
+
+.no-sidebar {
+    background-color: white;
+}
+
+#main {
+    /* background-color: rgba(52, 73, 94, .9);*/
+/*    position: inherit;
+    margin: 0 0 0 250px;
+    padding: 0 30px;
+    min-height: 1300px;
+    border-left: 1px solid #e7e7e7;*/
+}
+
+#sidebar-left {
+    padding: 10px;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    background-color: #f5f5f5;
+}
+
+.navbar-brand , .navbar-brand :hover {
+    background: #1e8fc6;
+    text-align: center;
+}
+
+a#main-menu-toggle {
+    color: white;
+    position: absolute;
+    z-index: 1000;
+    top: 0;
+    left: 5px;
+    padding: 10px 12px;
+    font-size: 16px;
+    text-shadow: none;
+    text-decoration: none;
+    cursor: pointer;
 }

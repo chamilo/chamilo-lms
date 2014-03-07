@@ -61,17 +61,7 @@ function deselect_all(formita)
 */
 
 //$nameTools = get_lang('Messages');
-
-//api_display_tool_title(api_xml_http_response_encode(get_lang('Inbox')));
-if ($_GET['f']=='social') {
-	$this_section = SECTION_SOCIAL;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));
-	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Outbox'));
-} else {
-	$this_section = SECTION_MYPROFILE;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
-	$interbreadcrumb[]= array ('url' => '#','name' => get_lang('Outbox'));
-}
+$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/messages/inbox.php','name' => get_lang('Messages'));
 
 if ($_GET['f']=='social') {
 
@@ -98,11 +88,7 @@ if( trim($info_delete_outbox[0])=='delete' ) {
 	for ($i=1;$i<=$count_delete_outbox;$i++) {
 		MessageManager::delete_message_by_user_sender(api_get_user_id(),$info_delete_outbox[$i]);
 	}
-    $message_box=get_lang('SelectedMessagesDeleted').
-        '&nbsp
-        <br><a href="../social/index.php?#remote-tab-3">'.
-        get_lang('BackToOutbox').
-        '</a>';
+    $message_box=get_lang('SelectedMessagesDeleted');
     Display::display_normal_message(api_xml_http_response_encode($message_box),false);
     exit;
 }
@@ -114,11 +100,7 @@ if (isset($_REQUEST['action'])) {
 
 if (api_get_setting('allow_social_tool') == 'true') {
     $social_left_content = SocialManager::show_social_menu('messages');
-    $social_right_content .= '<div class="span9">';
-        $social_right_content .= '<div class="actions">';
-        $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php?f=social">'.Display::return_icon('back.png', get_lang('Back'), array(), 32).'</a>';
-        $social_right_content .= '</div>';
-    $social_right_content .= '</div>';
+
     $social_right_content .= '<div class="span9">';
 }
 //MAIN CONTENT
@@ -150,8 +132,8 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $social_right_content .= '</div>';
 }
 
-$app['title'] = get_lang('ComposeMessage');
 $tpl = $app['template'];
+$tpl->setTitle(get_lang('Outbox'));
 
 $content = $social_right_content;
 $tpl->assign('actions', $actions);

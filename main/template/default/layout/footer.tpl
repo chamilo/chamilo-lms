@@ -137,9 +137,9 @@ function mysort(a, b) {
 // Global loading for ajax calls.
 
 $(document).bind("ajaxSend", function(){
-    $("#loading_block").show();
+    //$("#loading_block").show();
 }).bind("ajaxComplete", function(){
-    $("#loading_block").hide();
+    //$("#loading_block").hide();
 });
 
 // Support for AJAX loaded modal window.
@@ -156,8 +156,22 @@ $('[data-toggle="modal"]').click(function(e) {
         }).success(function() { $('input:text:visible:first').focus(); });
     }
 });*/
+/**
+ * Fixes content height
+ **/
+function sizeContent() {
+    var newHeight = $("html").height() - $("header").height() - $("footer").height() + "px";
+    if ($("#main_content").css("height") < newHeight) {
+        $("#main_content").css("height", newHeight);
+    }
+}
+
+$(window).resize(sizeContent);
 
 $(document).ready( function() {
+
+    sizeContent();
+
     /**
     * Advanced options
     * Usage
@@ -197,9 +211,38 @@ $(document).ready( function() {
         interval: 10000
     });
 
-    $('.actions').addClass('btn-group');
+    $('.hidden-sidebar').click(function() {
+       $('#sidebar-left').toggle();
+        var display = $('#sidebar-left').css('display');
+        if (display == 'block') {
+           $('#main_content').addClass('col-lg-10 col-sm-11');
+        } else {
+           $('#main_content').removeClass('col-lg-10 col-sm-11');
+        }
+    });
 
-    $('.actions a').addClass('btn btn-default');
+    // Fixes forms inside actions.
+    $('.actions form').removeClass('form-horizontal').addClass('form-inline');
+
+    $('#template_settings').click(function() {
+        /*$('body').css('background-color', 'white');
+        $('html').css('background-color', 'white');*/
+        $('#main').removeClass('container-fluid');
+        $('#main').addClass('container');
+    });
+
+    $('.actions').addClass('btn-group');
+    $('.actions a').addClass('btn btn-icon');
+
+    $('.submenu').click(function(e) {
+        //$(this).find('ul').toggle();
+
+        $(this).find('ul').toggle(function(){
+            $(this).animate({},200);
+        },function(){
+            $(this).animate({},200);
+        });
+    });
 
     // Tooltip.
     $(function() {
@@ -223,7 +266,7 @@ $(document).ready( function() {
         disable_search_threshold: 10
     });
 
-    // Adv multiselect text inputs.
+    // Adv multi-select text inputs.
     $('.select_class_filter').each(function(){
         var inputId = $(this).attr('id');
 
@@ -252,13 +295,15 @@ $(document).ready( function() {
     /* For IOS users */
     $('.autocapitalize_off').attr('autocapitalize', 'off');
 
-    //Tool tip (in exercises)
-    var tip_options = {
+    // Tool tip (in exercises)
+    var tipOptions = {
         placement : 'right'
     }
-    $('.boot-tooltip').tooltip(tip_options);
+    $('.boot-tooltip').tooltip(tipOptions);
 
 });
 </script>
 {% endraw %}
 {{ execution_stats }}
+</body>
+</html>

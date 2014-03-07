@@ -65,7 +65,8 @@ class Template
         global $tool_name;
 
         // Page title
-        $this->title = isset($app['title']) ? $app['title'] : $tool_name;
+        $title = isset($app['title']) ? $app['title'] : $tool_name;
+        $this->setTitle($title);
         $this->show_learnpath = $app['template.show_learnpath'];
 
         /* Current themes: cupertino, smoothness, ui-lightness.
@@ -90,7 +91,7 @@ class Template
 
         $this->assign('style', $app['template_style']);
 
-        //Chamilo plugins
+        // Chamilo plugins
         if ($this->show_header) {
             if ($app['template.load_plugins'] && !empty($app['plugins'])) {
 
@@ -110,6 +111,15 @@ class Template
                 }
             }
         }
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+        $this->assign('header', $this->title);
     }
 
     /**
@@ -306,6 +316,8 @@ class Template
         $this->course_id = api_get_course_int_id();
         $this->app['course_code'] = api_get_course_id();
         $this->app['session_id'] = api_get_session_id();
+
+        //$this->app['page_controller']->return_welcome_to_course_block($this->app['template']);
     }
 
     /**
@@ -360,7 +372,7 @@ class Template
             'web_lib' => api_get_path(WEB_LIBRARY_PATH),
             'web_library_path' => api_get_path(WEB_LIBRARY_PATH),
             'web_library_js_path' => api_get_path(WEB_LIBRARY_JS_PATH),
-            'public_web' => api_get_path(WEB_PUBLIC_PATH)
+            'web_public' => api_get_path(WEB_PUBLIC_PATH)
         );
 
         $this->assign('_p', $_p);
@@ -423,6 +435,7 @@ class Template
 
         $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'font-awesome/css/font-awesome.css';
         $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'thickbox.css';
+        $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'pace/pace.css';
         $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'chosen/chosen.css';
         $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'tag/style.css';
 
@@ -511,6 +524,7 @@ class Template
                 $jsFolder.'tag/jquery.fcbkcomplete.js',
                 $jsFolder.'bootstrap/js/bootstrap.js',
                 $jsFolder.'upload.js',
+                $jsFolder.'pace/pace.min.js',
                 $jsFolder.'calendar/tbl_change.js',
                 $jsFolder.'textareacounter/jquery.textareaCounter.plugin.js'
             );
@@ -578,7 +592,6 @@ class Template
 
         $nameTools = $this->title;
         $navigation = $this->navigation_array;
-
         $this->menu_navigation = $navigation['menu_navigation'];
 
         $this->assign('system_charset', api_get_system_encoding());
@@ -615,7 +628,7 @@ class Template
 
         $this->assign('title_string', $title_string);
 
-        //Setting the theme and CSS files
+        // Setting the theme and CSS files.
         $this->setCssFiles();
         $this->setJsFiles();
 
@@ -1068,8 +1081,8 @@ class Template
 
             if (!empty($roleTemplate)) {
                 if (api_get_setting('show_tabs', 'platform_administration') == 'true') {
-                    $navigation['admin']['url'] = api_get_path(WEB_PUBLIC_PATH).'admin';
-                    $navigation['admin']['title'] = get_lang('PlatformAdmin');
+                    //$navigation['admin']['url'] = api_get_path(WEB_PUBLIC_PATH).'admin';
+                    //$navigation['admin']['title'] = get_lang('PlatformAdmin');
                 }
             }
             $this->app['admin_toolbar_roles'] = $roleTemplate;
@@ -1227,13 +1240,14 @@ class Template
 
         if (api_get_user_id() && !api_is_anonymous()) {
             // My Courses
-            if (api_get_setting('show_tabs', 'my_courses') == 'true') {
+            /*if (api_get_setting('show_tabs', 'my_courses') == 'true') {
                 $navigation['mycourses'] = $possible_tabs['mycourses'];
             } else {
                 $menu_navigation['mycourses'] = $possible_tabs['mycourses'];
-            }
+            }*/
 
             // My Profile
+            /*
             if (api_get_setting('show_tabs', 'my_profile') == 'true' && api_get_setting('allow_social_tool') != 'true') {
                 if (isset($possible_tabs['myprofile'])) {
                     $navigation['myprofile'] = $possible_tabs['myprofile'];
@@ -1242,25 +1256,28 @@ class Template
                 if (isset($possible_tabs['myprofile'])) {
                     $menu_navigation['myprofile'] = $possible_tabs['myprofile'];
                 }
-            }
+            }*/
 
             // My Agenda
+            /*
             if (api_get_setting('show_tabs', 'my_agenda') == 'true') {
                 $navigation['myagenda'] = $possible_tabs['myagenda'];
             } else {
                 $menu_navigation['myagenda'] = $possible_tabs['myagenda'];
-            }
+            }*/
 
             // Gradebook
+            /*
             if (api_get_setting('gradebook_enable') == 'true') {
                 if (api_get_setting('show_tabs', 'my_gradebook') == 'true') {
                     $navigation['mygradebook'] = $possible_tabs['mygradebook'];
                 } else {
                     $menu_navigation['mygradebook'] = $possible_tabs['mygradebook'];
                 }
-            }
+            }*/
 
             // Reporting
+            /*
             if (api_get_setting('show_tabs', 'reporting') == 'true') {
                 if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
                     $navigation['session_my_space'] = $possible_tabs['session_my_space'];
@@ -1273,8 +1290,8 @@ class Template
                 } else {
                     $menu_navigation['session_my_space'] = $possible_tabs['session_my_progress'];
                 }
-            }
-
+            }*/
+/*
             // Social Networking
             if (api_get_setting('show_tabs', 'social') == 'true') {
                 if (api_get_setting('allow_social_tool') == 'true') {
@@ -1283,15 +1300,16 @@ class Template
             } else {
                 $menu_navigation['social'] = isset($possible_tabs['social']) ? $possible_tabs['social'] : null;
             }
-
+*/
             // Dashboard
+            /*
             if (api_get_setting('show_tabs', 'dashboard') == 'true') {
                 if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
                     $navigation['dashboard'] = $possible_tabs['dashboard'];
                 }
             } else {
                 $menu_navigation['dashboard'] = isset($possible_tabs['dashboard']) ? $possible_tabs['dashboard'] : null;
-            }
+            }*/
 
             if (isset($possible_tabs['admin'])) {
                 $navigation['platform_admin'] = $possible_tabs['admin'];
@@ -1346,8 +1364,6 @@ class Template
         $session_id = api_get_session_id();
         $session_name = api_get_session_name($session_id);
         $_course = api_get_course_info();
-        $user_id = api_get_user_id();
-        $course_id = api_get_course_id();
 
         /*  Plugins for banner section */
         $web_course_path = api_get_path(WEB_COURSE_PATH);
@@ -1447,6 +1463,7 @@ class Template
 
         $final_navigation = array();
         $counter = 0;
+        $navigation[] = array('url' => '#', 'title' => strip_tags($this->title));
 
         foreach ($navigation as $index => $navigation_info) {
             if (!empty($navigation_info['title'])) {
@@ -1463,7 +1480,6 @@ class Template
         if (!empty($final_navigation)) {
             $lis = '';
             $i = 0;
-            $final_navigation_count = count($final_navigation);
 
             if (!empty($final_navigation)) {
                 if (!empty($home_link)) {

@@ -259,14 +259,7 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null)
     return $html;
 }
 
-/* MAIN SECTION */
-if ($_GET['f']=='social') {
-	$this_section = SECTION_SOCIAL;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('SocialNetwork'));
-} else {
-	$this_section = SECTION_MYPROFILE;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
-}
+$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/messages/inbox.php','name' => get_lang('Messages'));
 
 $social_right_content = null;
 $group_id = isset($_REQUEST['group_id']) ? intval($_REQUEST['group_id']) : null;
@@ -343,8 +336,8 @@ if (!isset($_POST['compose'])) {
 if (api_get_setting('allow_social_tool') == 'true') {
     $social_right_content .=  '</div>';
 }
-$app['title'] = get_lang('ComposeMessage');
 $tpl = $app['template'];
+$tpl->setTitle(get_lang('ComposeMessage'));
 
 $content = $social_right_content;
 $tpl->assign('actions', $actions);

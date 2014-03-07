@@ -114,8 +114,8 @@ class IndexController extends CommonController
         $this->setLoginForm($app);
 
         if (!api_is_anonymous()) {
-            $pageController->setProfileBlock();
-            $pageController->setUserImageBlock();
+            //$pageController->setProfileBlock();
+            //$pageController->setUserImageBlock();
 
             if (api_is_platform_admin()) {
                 $pageController->setCourseBlock();

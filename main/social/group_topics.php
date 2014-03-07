@@ -174,15 +174,11 @@ $(document).ready(function() {
 </script>';
 
 $this_section = SECTION_SOCIAL;
-$interbreadcrumb[] = array ('url' =>'home.php',      'name' => get_lang('Social'));
 $interbreadcrumb[] = array('url' => 'groups.php',   'name' => get_lang('Groups'));
-$interbreadcrumb[] = array('url' => '#',            'name' => get_lang('Thread'));
+$interbreadcrumb[] = array('url' => 'groups.php?id='.$group_id, 'name' => Security::remove_XSS($group_info['name']));
+//$interbreadcrumb[] = array('url' => 'groups.php?id='.$group_id.'#tabs_2',  'name' => get_lang('Discussions'));
+$interbreadcrumb[] = array('url' => '#',  'name' => get_lang('Discussions'));
 
-$social_right_content = '<div class="breadcrumb">
-                           <a href="groups.php?id='.$group_id.'">'.Security::remove_XSS($group_info['name'], STUDENT, true).'</a>
-                           <span class="divider">/</span>
-                           <a href="groups.php?id='.$group_id.'#tabs_2">'.get_lang('Discussions').'</a>
-                         </div> ';
 $social_left_content = SocialManager::show_social_menu('member_list', $group_id);
 $show_message = null;
 if (!empty($show_message)) {
@@ -195,9 +191,5 @@ $app['title'] = get_lang('Social');
 $tpl = $app['template'];
 
 $tpl->setHelp('Groups');
-$tpl->assign('social_left_content', $social_left_content);
-$tpl->assign('social_right_content', $social_right_content);
 $tpl->assign('message', $show_message);
-$tpl->assign('content', $content);
-$social_layout = $tpl->get_template('layout/social_layout.tpl');
-$tpl->display($social_layout);
+$tpl->assign('content', $social_right_content);

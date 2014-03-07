@@ -71,10 +71,8 @@ class AdminController extends CommonController
             register_site();
             $message = \Display::return_message(get_lang('VersionCheckEnabled'), 'confirmation');
         }
-
-        $blocks = array();
-
         $adminUrl = api_get_path(WEB_CODE_PATH).'admin/';
+        $blocks = array();
 
         /* Users */
         $blocks['users']['icon'] = \Display::return_icon('members.gif', get_lang('Users'), array(), ICON_SIZE_SMALL, false);
@@ -84,16 +82,16 @@ class AdminController extends CommonController
             $search_form = $this->getSearchForm($adminUrl.'user_list.php')->return_form();
             $blocks['users']['search_form'] = $search_form;
             $items = array(
-                array('url'=>$adminUrl.'user_list.php', 	'label' => get_lang('UserList')),
+                array('url' => $adminUrl.'user_list.php', 	'label' => get_lang('UserList')),
                 array('url' => $adminUrl.'user_add.php', 	'label' => get_lang('AddUsers')),
                 array('url' => $adminUrl.'user_export.php', 'label' => get_lang('ExportUserListXMLCSV')),
                 array('url' => $adminUrl.'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')),
             );
             if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
-                $items[] = array('url' => $adminUrl.'ldap_users_list.php', 	'label' => get_lang('ImportLDAPUsersIntoPlatform'));
+                $items[] = array('url' => $adminUrl.'ldap_users_list.php', 'label' => get_lang('ImportLDAPUsersIntoPlatform'));
             }
-            $items[] = array('url' => $adminUrl.'extra_fields.php?type=user', 	'label' => get_lang('ManageUserFields'));
-            $items[] = array('url'=> api_get_path(WEB_PUBLIC_PATH).'admin/administrator/roles', 	'label' => get_lang('Roles'));
+            $items[] = array('url' => $adminUrl.'extra_fields.php?type=user', 'label' => get_lang('ManageUserFields'));
+            $items[] = array('url'=> api_get_path(WEB_PUBLIC_PATH).'admin/administrator/roles', 'label' => get_lang('Roles'));
         } else {
             $items = array(
                 array('url' => $adminUrl.'user_list.php', 	'label' => get_lang('UserList')),
@@ -101,6 +99,9 @@ class AdminController extends CommonController
                 array('url' => $adminUrl.'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')),
             );
         }
+
+        $items[] = array('url' => $adminUrl.'usergroups.php', 	'label' => get_lang('Classes'));
+
         $blocks['users']['items'] = $items;
         $blocks['users']['extra'] = null;
 
@@ -206,7 +207,6 @@ class AdminController extends CommonController
             $items[] = array('url' => $adminUrl.'career_dashboard.php', 	'label' => get_lang('CareersAndPromotions'));
         }
 
-        $items[] = array('url' => $adminUrl.'usergroups.php', 	'label' => get_lang('Classes'));
         $items[] = array('url' => $adminUrl.'exercise_report.php', 	'label' => get_lang('ExerciseReport'));
         $items[] = array('url' => $adminUrl.'extra_fields.php?type=session', 	'label' => get_lang('ManageSessionFields'));
 

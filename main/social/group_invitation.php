@@ -13,10 +13,6 @@ $language_file=array('userInfo');
 // resetting the course id
 $cidReset=true;
 
-// including some necessary dokeos files
-require_once '../inc/global.inc.php';
-require_once '../inc/lib/xajax/xajax.inc.php';
-
 api_block_anonymous_users();
 
 $xajax = new xajax();
@@ -28,7 +24,6 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // setting breadcrumbs
 $this_section = SECTION_SOCIAL;
 
-$interbreadcrumb[]= array ('url' =>'home.php','name' => get_lang('Social'));
 $interbreadcrumb[]= array ('url' =>'groups.php','name' => get_lang('Groups'));
 
 // Database Table Definitions
@@ -516,9 +511,4 @@ $app['title'] = $tool_name;
 $tpl = $app['template'];
 
 $tpl->setHelp('Groups');
-$tpl->assign('social_left_content', $social_left_content);
-$tpl->assign('social_right_content', $social_right_content);
-
-$tpl->assign('content', $content);
-$social_layout = $tpl->get_template('layout/social_layout.tpl');
-$tpl->display($social_layout);
+$tpl->assign('content', $social_right_content);

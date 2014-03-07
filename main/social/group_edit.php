@@ -22,7 +22,6 @@ $this_section = SECTION_SOCIAL;
 $group_id = isset($_GET['id']) ? intval($_GET['id']) : intval($_POST['id']);
 $tool_name = get_lang('GroupEdit');
 
-$interbreadcrumb[] = array('url' => 'home.php', 'name' => get_lang('Social'));
 $interbreadcrumb[] = array('url' => 'groups.php', 'name' => get_lang('Groups'));
 
 $usergroup = new UserGroup();
@@ -69,10 +68,5 @@ $social_right_content .= '</div>';
 
 $app['title'] = $tool_name;
 $tpl = $app['template'];
-
 $tpl->setHelp('Groups');
-$tpl->assign('social_left_content', $social_left_content);
-$tpl->assign('social_right_content', $social_right_content);
-
-$social_layout = $tpl->get_template('layout/social_layout.tpl');
-$tpl->display($social_layout);
+$tpl->assign('content', $social_right_content);

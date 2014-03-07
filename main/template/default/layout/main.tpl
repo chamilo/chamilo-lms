@@ -1,22 +1,20 @@
 {% block header %}
 {% include app.template_style ~ "/layout/main_header.tpl" %}
 {% endblock %}
+
 {% block body %}
     {% block content %}
     {% endblock %}
-
-	{% if show_sniff == 1 %}
-	 	{% include app.template_style ~ "/layout/sniff.tpl" %}
-	{% endif %}
 {% endblock %}
 
 {% block footer %}
     {#  Footer  #}
     {% if show_footer == true %}
-        </div> <!-- end of #row" -->
-        </div> <!-- end of #main" -->
-        </div> <!-- end of #wrapper section -->
+        </div> <!-- end of row -->
+    </div> <!-- end of main -->
     {% endif %}
-{% include app.template_style ~ "/layout/main_footer.tpl" %}
+    {% if show_footer == true %}
+        {% include app.template_style ~ "/layout/footer.tpl" %}
+    {% endif %}
 {{ xhprof }}
 {% endblock %}

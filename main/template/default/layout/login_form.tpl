@@ -1,4 +1,4 @@
-<div id="login_block" class="well sidebar-nav">
+<div id="login_block" >
 
 	{{ login_language_form }}
 

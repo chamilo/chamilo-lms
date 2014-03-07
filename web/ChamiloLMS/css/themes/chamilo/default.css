@@ -20,9 +20,13 @@ a:active {
 }
 
 /** Navbar */
+html,
+body {
+
+}
 
 .navbar-default {
-    background-color: #0191C7;
+    background-color: #3498DB;
     /*border-color: #0073A0;*/
     border-color: transparent;
 }
@@ -92,10 +96,6 @@ a:active {
  *  FOOTER STYLES                                    *
  *****************************************************/
 footer {
-    background-color: #037fb2;
-    background-image: url(images/bg-footer.gif);
-    background-repeat:repeat-x;
-    color:#ffffff;
 }
 
 /*****************************************************
@@ -147,61 +147,6 @@ footer {
 
 #bottomhellomindfactory {
     background:transparent url('images/textologo.jpg') no-repeat;
-}
-
-/*including "login" image*/
-button.login {
-    /* background-image:url(images/bg-button.gif); */
-}
-/* including "save" image*/
-button.save {
-    /* background-image:url(images/button_accept.gif); */
-}
-/*including "add" image*/
-button.add {
-    /* background-image:url(images/button_add.gif); */
-}
-/*including "cancel" image*/
-button.cancel {
-    /* background-image:url(images/button_delete.gif); */
-}
-/*including "search" image*/
-button.search {
-    /* background-image:url(images/bg-button.gif); */
-}
-/*including "plus" image*/
-button.plus {
-    /* background-image:url(images/button_plus.gif); */
-}
-/*including "minus" image*/
-button.minus {
-    /* background-image:url(images/button_minus.gif); */
-}
-/*including "next" image*/
-button.next {
-    /* background-image:url(images/button_next.gif) !important; */
-}
-/*including "back" image*/
-button.back {
-    /* background-image:url(images/button_back.gif); */
-}
-/*including "refresh" image*/
-button.refresh {
-    /* background-image:url(images/button_refresh.gif); */
-}
-/*including "upload" image*/
-button.upload {
-    /* background-image:url(images/button_upload.gif); */
-}
-
-button.arrowr, input.arrowr {
-	/* background-image:url(images/2rightarrow.gif); */
-}
-button.arrowl, input.arrowl {
-    /* background-image:url(images/2leftarrow.gif); */
-}
-.refresh {
-    /* background-image:url(images/refresh.png); */
 }
 
 .portal {

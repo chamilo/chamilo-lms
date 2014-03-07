@@ -125,8 +125,5 @@ $app['title'] = get_lang('Social');
 $tpl = $app['template'];
 
 $tpl->setHelp('Groups');
-$tpl->assign('social_left_content', $social_left_content);
-$tpl->assign('social_right_content', $social_right_content);
+$tpl->assign('content', $social_right_content);
 $tpl->assign('message', $show_message);
-$social_layout = $tpl->get_template('layout/social_layout.tpl');
-$tpl->display($social_layout);

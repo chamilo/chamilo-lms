@@ -16,14 +16,7 @@ if (api_get_setting('allow_message_tool')!='true') {
 
 /*		HEADER  */
 
-if (isset($_REQUEST['f']) && $_REQUEST['f'] == 'social') {
-	$this_section = SECTION_SOCIAL;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/social/home.php','name' => get_lang('Social'));
-	$interbreadcrumb[]= array ('url' => 'inbox.php?f=social','name' => get_lang('Inbox'));
-} else {
-	$this_section = SECTION_MYPROFILE;
-	$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/auth/profile.php','name' => get_lang('Profile'));
-}
+$interbreadcrumb[]= array ('url' => api_get_path(WEB_PATH).'main/messages/inbox.php','name' => get_lang('Messages'));
 
 $social_right_content = null;
 
@@ -57,33 +50,15 @@ if (empty($_GET['id'])) {
     $show_menu = 'messages_inbox';
 }
 
-$message  = '';
+$message = MessageManager::show_message_box($id_message, $source);
 
-//LEFT COLUMN
-if (api_get_setting('allow_social_tool') == 'true') {
-    $social_left_content = SocialManager::show_social_menu($show_menu);
-    $message .='<div class="span9">';
-}
-//MAIN CONTENT
-$message .= MessageManager::show_message_box($id_message,$source);
-
-if (api_get_setting('allow_social_tool') == 'true') {
-    $message .='</div>';
-}
-
-if (!empty($message)) {
-    $social_right_content .= $message;
-} else {
+if (empty($message)) {
     api_not_allowed();
 }
 
-
-$app['title'] = get_lang('View');
 $tpl = $app['template'];
-
-$content = $social_right_content;
-
+//$tpl->setTitle(get_lang('Read'));
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
-$tpl->assign('content', $content);
+$tpl->assign('content', $social_right_content);
 $tpl->display_one_col_template();

@@ -467,6 +467,26 @@ EOT;
         return $return_value;
     }
 
+    public function addDoubleMultipleSelect($name, $label, $values, $attributes)
+    {
+        $group = $this->addElement('advmultiselect', $name, $label, $values, $attributes);
+        $group->setElementTemplate('
+{javascript}
+<table{class}>
+<!-- BEGIN label_2 --><tr><th>{label_2}</th><!-- END label_2 -->
+<!-- BEGIN label_3 --><th>&nbsp;</th><th>{label_3}</th></tr><!-- END label_3 -->
+<tr>
+  <td valign="top">{unselected}</td>
+  <td align="center">{add}<br /><br />{remove}</td>
+  <td valign="top">{selected}</td>
+</tr>
+</table>
+');
+
+        $group->setButtonAttributes('add', array('class' => 'btn arrowr'));
+        $group->setButtonAttributes('remove', array('class' => 'btn arrowl'));
+    }
+
     /**
      * @return string
      */
@@ -476,14 +496,16 @@ EOT;
             <div class="form-group">
                 <label class="col-sm-2 control-label">
                     <!-- BEGIN required -->
-                    <span class="form_required">*</span> <!-- END required -->{label}
+                    <span class="form_required">*</span> <!-- END required -->
+                    {label}
                 </label>
                 <div class="col-sm-10">
                     <table cellpadding="0" cellspacing="0">
                         <tr>
                             <!-- BEGIN error -->
                             <span class="form_error">{error}</span>
-                            <br /><!-- END error -->	<td>{element}</td>
+                            <br /><!-- END error -->
+                            <td>{element}</td>
                         </tr>
                     </table>
                 </div>

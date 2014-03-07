@@ -458,7 +458,8 @@ function modify_filter($user_id, $url_params, $row) {
 		/*if ($row[0] == api_get_user_id()) {
 			$result .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions')).'</a>&nbsp;&nbsp;';
 		}*/
-	} else {
+	}
+    if (api_is_platform_admin()) {
 		if ($current_user_status_label == $statusname[DRH] || UserManager::is_admin($user_id)) {
 			$result .= '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.Display::return_icon('user_subscribe_course.png', get_lang('AssignUsers'),'',ICON_SIZE_SMALL).'</a>';
 			$result .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses')).'</a>&nbsp;&nbsp;';
@@ -694,32 +695,8 @@ $active_group[] = $form->createElement('checkbox','keyword_active','', get_lang(
 $active_group[] = $form->createElement('checkbox','keyword_inactive','', get_lang('Inactive'));
 $form->addGroup($active_group,'',get_lang('ActiveAccount'),'<br/>',false);
 $form->addElement('html', '</td><td>');
-
 $form->addElement('checkbox', 'check_easy_passwords', null, get_lang('CheckEasyPasswords'));
-
-/*
- * @todo fix this code
-$extra_data = UserManager::get_extra_fields( 0,10,5, 'ASC', true, 1);
-var_dump($extra_data);
-$extra_options = array();
-if (!empty($extra_data)) {
-    $extra_options[0] = get_lang('All');
-    // get information about extra data for adding to input select
-    foreach ($extra_data as $field_variable => $field_value) {
-        $extra = UserManager::get_extra_field_information_by_name($field_variable);
-        $extra_options[$field_variable] = $extra['field_display_text'];
-    }
-
-    $form->addElement('select', 'keyword_extra_data', get_lang('ExtraData'), $extra_options, array('id'=>'input_select_extra_data', 'style'=>'margin-left:17px', 'onchange'=>'if(this.value!=0){document.getElementById(\'extra_data_text\').style.display=\'block\';document.getElementById(\'input_extra_text\').value = "";}else{document.getElementById(\'extra_data_text\').style.display=\'none\';}'));
-    $form->addElement('html', '<div id="extra_data_text" style="display:none;">');
-    $form->add_textfield('keyword_extra_data_text', '', false, array('style'=>'margin-left:17px', 'id'=>'input_extra_text'));
-    $form->addElement('html', '</div>');
-} else {
-    $form->addElement('html', '<div id="extra_data_text" style="display:none;">');
-}*/
-
 $form->addElement('html', '</td></tr>');
-
 $form->addElement('html', '<tr><td>');
 $form->addElement('button', 'submit',get_lang('SearchUsers'));
 $form->addElement('html', '</td></tr>');
@@ -760,11 +737,11 @@ $table->set_column_filter(7, 'status_filter');
 $table->set_column_filter(8, 'active_filter');
 $table->set_column_filter(10, 'modify_filter');
 
-if (api_is_platform_admin())
+if (api_is_platform_admin()) {
 	$table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));
+}
 
 $table_result = $table->return_table();
-
 $extra_search_options = '';
 
 //Try to search the user everywhere
@@ -830,4 +807,3 @@ $tpl = $app['template'];
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $form.$table_result.$extra_search_options);
-//$tpl->display_one_col_template();

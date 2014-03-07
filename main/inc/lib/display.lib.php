@@ -35,14 +35,7 @@ class Display
     {
         global $app;
         $app['classic_layout'] = true;
-        $app['title'] = $tool_name;
-
-        if ($app['allowed'] == true) {
-            //ob_start(array($app['template'], 'manageDisplay'));
-        } else {
-            //$app->run();
-            //exit;
-        }
+        $app['template']->setTitle($tool_name);
     }
 
     /**
@@ -50,11 +43,6 @@ class Display
      */
     public static function display_footer()
     {
-        //global $app;
-        //$out = ob_get_contents();
-        //ob_end_clean();
-        //$app['template']->assign('content', $out);
-        //$app->run();
     }
 
     /**
@@ -91,7 +79,7 @@ class Display
         $app['template.show_header']    = false;
         $app['template.show_footer']    = false;
         $app['template.show_learnpath'] = $show_learnpath;
-        $app['title'] = $tool_name;
+        $app['template']->setTitle($tool_name);
         self::$global_template = $app['template'];
     }
 
@@ -2141,9 +2129,7 @@ class Display
         $html .= '<a class="carousel-control left" href="#'.$name.'" data-slide="prev"> <span class="glyphicon glyphicon-chevron-left"></span></a>';
         $html .= '<a class="carousel-control right" href="#'.$name.'" data-slide="next"> <span class="glyphicon glyphicon-chevron-right"></span></a>';
         $html .= '</div>';
+
         return $html;
-
-
-
     }
 }

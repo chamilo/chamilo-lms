@@ -136,13 +136,13 @@ $(function() {
         }
     });
 
-    access_start_date_content = $("#access_end_date").val();
+    /*access_start_date_content = $("#access_end_date").val();
 
     if (access_start_date_content.length > 0) {
         $("#visibility_container").show();
     } else {
         $("#visibility_container").hide();
-    }
+    }*/
 
     $("#access_end_date").datetimepicker({
         dateFormat: "yy-mm-dd",

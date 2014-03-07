@@ -57,7 +57,6 @@ if (!empty($group_id)) {
 
 $app['title'] = get_lang('Agenda');
 $tpl = $app['template'];
-
 $tpl->assign('use_google_calendar', 0);
 
 $can_add_events = 0;
@@ -135,7 +134,12 @@ $tpl->assign('region_value', 	$region_value);
 $tpl->assign('export_ical_confidential_icon', Display::return_icon('export.png', get_lang('ExportiCalConfidential')));
 
 $actions = null;
-if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false,true) OR $is_group_tutor) {
+$filter = null;
+if (api_is_allowed_to_edit(false,true) OR
+    (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) &&
+    api_is_allowed_to_session_edit(false,true) OR
+    $is_group_tutor
+) {
     if ($type == 'course') {
         if (isset($_GET['user_id'])) {
             $filter = $_GET['user_id'];

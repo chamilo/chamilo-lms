@@ -751,7 +751,6 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $studentList[] = array('id' => $studentInfo['user_id'], 'text' => $studentInfo['username'] . ' (' . $studentInfo['firstname'] . ' ' . $studentInfo['lastname'] . ')');
             }
 
-            $sessionFilter->addElement('select_ajax', 'student_name', get_lang('SearchStudent'), null, array('placeholder' => 'Todos', 'url' => $url, 'defaults' => $studentList, 'width' => '400px', 'class' => 'pull-right', 'minimumInputLength' => $minimumInputLength));
             $options = array(
                 ''              => get_lang('Select'),
                 STUDENT         => get_lang('Student'),
@@ -759,6 +758,8 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 DRH             => get_lang('Drh'),
                 );
             $sessionFilter->addElement('select', 'profile', get_lang('Profile'),$options, array('id' => 'profile', 'class' => 'pull-left'));
+
+            $sessionFilter->addElement('select_ajax', 'student_name', get_lang('SearchUser'), null, array('placeholder' => 'Todos', 'url' => $url, 'defaults' => $studentList, 'width' => '400px', 'class' => 'pull-right', 'minimumInputLength' => $minimumInputLength));
 
             $script = '
                 $("#student_name").on("change", function() {

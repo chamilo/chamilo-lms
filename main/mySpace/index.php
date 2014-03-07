@@ -616,7 +616,6 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
     echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin">'.get_lang('LPExerciseResultsBySession').'</a>';
 	echo '<br /><br />';
 
-
     if ($is_platform_admin && $view == 'admin' && in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'))) {
         //selft script
         $self       = api_get_self();
@@ -1081,7 +1080,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }
 	} else if($display == 'courseoverview') {
 		MySpace::display_tracking_course_overview();
-	} else {
+	} else if(!empty($display)) {
 		if ($export_csv) {
 			$is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
 		} else {

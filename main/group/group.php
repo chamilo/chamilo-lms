@@ -74,7 +74,7 @@ Display::display_introduction_section(TOOL_GROUP);
  $my_get_id2  = isset($_GET['id2']) ? Security::remove_XSS($_GET['id2']) : null;
  $my_get_id   = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
 
-if (isset($_GET['action'])) {
+if (isset($_GET['action']) && $is_allowed_in_course) {
     switch ($_GET['action']) {
         case 'self_reg':
             if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $my_group_id)) {
@@ -191,11 +191,11 @@ if (api_is_allowed_to_edit(false, true)) {
 $group_cats = GroupManager::get_categories(api_get_course_id());
 echo '</div>';
 
+
 /*  List all categories */
 if (api_get_setting('allow_group_categories') == 'true') {
     foreach ($group_cats as $index => $category) {
         $group_list = GroupManager::get_group_list($category['id']);
-
         $label = Display::label(count($group_list).' '.get_lang('ExistingGroups'), 'info');
 
         $actions = null;

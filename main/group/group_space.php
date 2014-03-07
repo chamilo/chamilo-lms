@@ -28,9 +28,7 @@ require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
 /*	MAIN CODE */
 
 $group_id = api_get_group_id();
-
 $user_id = api_get_user_id();
-
 $current_group = GroupManager :: get_group_properties($group_id);
 
 if (empty($current_group)) {
@@ -54,21 +52,50 @@ if (is_array($forums_of_groups)) {
 	}
 }
 
-if ($current_group['doc_state'] != 1 && $current_group['calendar_state'] != 1 && $current_group['work_state'] != 1 && $current_group['announcements_state'] != 1 && $current_group['wiki_state'] != 1 && $current_group['chat_state'] != 1 && $forum_state_public != 1) {
-	if (!api_is_allowed_to_edit(null,true) && !GroupManager :: is_user_in_group($_user['user_id'], $current_group['id'])) {
-		echo api_not_allowed($print_headers);
+if ($current_group['doc_state'] != 1 &&
+    $current_group['calendar_state'] != 1 &&
+    $current_group['work_state'] != 1 &&
+    $current_group['announcements_state'] != 1 &&
+    $current_group['wiki_state'] != 1 &&
+    $current_group['chat_state'] != 1 &&
+    $forum_state_public != 1
+) {
+	if (!api_is_allowed_to_edit(null,true) && !GroupManager::is_user_in_group($user_id, $group_id)) {
+		api_not_allowed($print_headers);
 	}
 }
 
-/*	Header */
 
-Display::display_header($nameTools.' '.Security::remove_XSS($current_group['name']), 'Group');
+/*
+ * Register to group
+ */
+$subscribe_group = '';
+if (GroupManager :: is_self_registration_allowed($user_id, $current_group['id'])) {
+    $subscribe_group = '<a class="btn" href="'.api_get_self().'?selfReg=1&amp;group_id='.$current_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.get_lang("RegIntoGroup").'</a>';
+}
+
+/*
+ * Unregister from group
+ */
+$unsubscribe_group = '';
+if (GroupManager :: is_self_unregistration_allowed($user_id, $current_group['id'])) {
+    $unsubscribe_group = '<a class="btn" href="'.api_get_self().'?selfUnReg=1" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."'".')) return false;">'.get_lang("StudentUnsubscribe").'</a>';
+}
+
+$edit_url = '';
+if (api_is_allowed_to_edit(false, true) or GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id())) {
+    $my_origin = isset($origin) ? $origin : '';
+    $edit_url =  '<a href="'.api_get_path(WEB_CODE_PATH).'group/settings.php?cidReq='.api_get_course_id().'&origin='.$my_origin.'&gidReq='.api_get_group_id().'">'.
+        Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>';
+}
+
+/*	Header */
+Display::display_header(Security::remove_XSS($current_group['name']).' '.$edit_url.' '.$subscribe_group.' '.$unsubscribe_group, 'Group');
 
 /*	Introduction section (editable by course admin) */
 
 Display::display_introduction_section(TOOL_GROUP);
 
-/*	Actions and Action links */
 
 /*
  * User wants to register in this group
@@ -85,25 +112,6 @@ if (!empty($_GET['selfUnReg']) && GroupManager :: is_self_unregistration_allowed
     GroupManager :: unsubscribe_users($user_id, $current_group['id']);
     Display::display_normal_message(get_lang('StudentDeletesHimself'));
 }
-echo '<div class="actions">';
-echo '<a href="group.php">'.Display::return_icon('back.png',get_lang('BackToGroupList'),'',ICON_SIZE_MEDIUM).'</a>';
-
-/*
- * Register to group
- */
-$subscribe_group = '';
-if (GroupManager :: is_self_registration_allowed($user_id, $current_group['id'])) {
-	$subscribe_group = '<a class="btn" href="'.api_get_self().'?selfReg=1&amp;group_id='.$current_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.get_lang("RegIntoGroup").'</a>';
-}
-
-/*
- * Unregister from group
- */
-$unsubscribe_group = '';
-if (GroupManager :: is_self_unregistration_allowed($user_id, $current_group['id'])) {
-	$unsubscribe_group = '<a class="btn" href="'.api_get_self().'?selfUnReg=1" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES))."'".')) return false;">'.get_lang("StudentUnsubscribe").'</a>';
-}
-echo '&nbsp;</div>';
 
 if (isset($_GET['action'])) {
 	switch ($_GET['action']) {
@@ -115,22 +123,11 @@ if (isset($_GET['action'])) {
 
 /*	Main Display Area */
 
-$course_code = $_course['sysCode'];
+$course_code = api_get_course_id();
 $is_course_member = CourseManager :: is_user_subscribed_in_real_or_linked_course(api_get_user_id(), $course_code);
 
- /*
- * Edit the group
- */
-$edit_url = '';
-if (api_is_allowed_to_edit(false, true) or GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id())) {
-    $my_origin = isset($origin) ? $origin : '';
-    $edit_url =  '<a href="'.api_get_path(WEB_CODE_PATH).'group/settings.php?cidReq='.api_get_course_id().'&origin='.$my_origin.'&gidReq='.api_get_group_id().'">'.
-        Display::return_icon('edit.png', get_lang('EditGroup'),'',ICON_SIZE_SMALL).'</a>';
-}
+// Edit the group.
 
-echo Display::page_header(
-    Security::remove_XSS($current_group['name']).' '.$edit_url.' '.$subscribe_group.' '.$unsubscribe_group
-);
 
 if (!empty($current_group['description'])) {
 	echo '<p>'.Security::remove_XSS($current_group['description']).'</p>';
@@ -233,7 +230,7 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_
 	if ($current_group['doc_state'] == GroupManager::TOOL_PUBLIC) {
 		// Link to the documents area of this group
         $actions_array[] = array(
-            'url' => '../document/document.php?cidReq='.api_get_course_id().'&amp;origin='.$origin,
+            'url' => '../document/document.php?'.api_get_cidreq().'&amp;origin='.$origin,
             'content' => Display::return_icon('folder.png', get_lang('GroupDocument'), array(), ICON_SIZE_MEDIUM)
         );
 	}
@@ -297,7 +294,7 @@ if (count($tutors) == 0) {
 	isset($origin) ? $my_origin = $origin:$my_origin='';
     $tutor_info .= '<ul class="thumbnails">';
 	foreach ($tutors as $index => $tutor) {
-	    $tab_user_info = Database::get_user_info_from_id($tutor['user_id']);
+	    $tab_user_info = api_get_user_info($tutor['user_id']);
 	    $username = api_htmlentities(sprintf(get_lang('LoginX'), $tab_user_info['username']), ENT_QUOTES);
 		$image_path = UserManager::get_user_picture_path_by_id($tutor['user_id'], 'web', false, true);
 		$image_repository = $image_path['dir'];

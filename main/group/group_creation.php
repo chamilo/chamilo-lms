@@ -153,6 +153,7 @@ elseif (isset($_POST['number_of_groups'])) {
 
 EOT;
 		$renderer->setElementTemplate($element_template);
+        $form->addElement('header', $nameTools);
 		$form->addElement('hidden', 'action');
 		$form->addElement('hidden', 'number_of_groups');
 		$defaults = array ();
@@ -162,7 +163,6 @@ EOT;
 		if (api_get_setting('allow_group_categories') == 'true') {
 			$group_el[] = $form->createElement('static', null, null, '<b>'.get_lang('GroupCategory').'</b>');
 		}
-
 		$group_el[] = $form->createElement('static', null, null, '<b>'.get_lang('GroupPlacesThis').'</b>');
 		$form->addGroup($group_el, 'groups', null, "\n</td>\n<td>\n", false);
 		// Checkboxes
@@ -198,14 +198,12 @@ EOT;
 			}
 
 			$defaults['group_'.$group_number.'_name'] = get_lang('GroupSingle').' '.$prev.$group_id ++;
-
 			$form->addGroup($group_el, 'group_'.$group_number, null, '</td><td>', false);
 		}
 		$defaults['action'] = 'create_groups';
 		$defaults['number_of_groups'] = intval($_POST['number_of_groups']);
 		$form->setDefaults($defaults);
 		$form->addElement('style_submit_button', 'submit', get_lang('CreateGroup'), 'class="save"');
-        echo Display::tag('h2',$nameTools);
 		$form->display();
 	}
 } else {
@@ -213,7 +211,6 @@ EOT;
 	 * Show form to generate new groups
 	 */
 	$categories = GroupManager :: get_categories();
-
 	if (count($categories) > 1 || isset($categories[0]) && $categories[0]['id'] != GroupManager::VIRTUAL_COURSE_CATEGORY) {
 		$create_groups_form = new FormValidator('create_groups', 'post', api_get_self().'?'.api_get_cidreq());
 		$create_groups_form->addElement('header', $nameTools);
@@ -228,7 +225,6 @@ EOT;
 	} else {
 		echo get_lang('NoCategoriesDefined');
 	}
-
 	/*
 	 * Show form to generate subgroups
 	 */

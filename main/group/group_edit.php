@@ -43,10 +43,10 @@ if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
  */
 function search_members_keyword($firstname, $lastname, $username, $official_code, $keyword)
 {
-    if (api_strripos($firstname, $keyword) !== false || api_strripos($lastname, $keyword) !== false || api_strripos(
-        $username,
-        $keyword
-    ) !== false || api_strripos($official_code, $keyword) !== false
+    if (api_strripos($firstname, $keyword) !== false ||
+        api_strripos($lastname, $keyword) !== false ||
+        api_strripos($username, $keyword) !== false ||
+        api_strripos($official_code, $keyword) !== false
     ) {
         return true;
     } else {
@@ -54,9 +54,9 @@ function search_members_keyword($firstname, $lastname, $username, $official_code
     }
 }
 
-
 /**
- * function to sort users after getting the list in the db. Necessary because there are 2 or 3 queries. Called by usort()
+ * Function to sort users after getting the list in the DB.
+ * Necessary because there are 2 or 3 queries. Called by usort()
  */
 function sort_users($user_a, $user_b)
 {
@@ -108,10 +108,7 @@ function check_group_members($value)
     if ($value['max_member_no_limit'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
         return true;
     }
-    if (isset($value['max_member']) && isset($value['group_members']) && $value['max_member'] < count(
-        $value['group_members']
-    )
-    ) {
+    if (isset($value['max_member']) && isset($value['group_members']) && $value['max_member'] < count($value['group_members'])) {
         return array('group_members' => get_lang('GroupTooMuchMembers'));
     }
     return true;

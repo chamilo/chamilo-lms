@@ -102,7 +102,7 @@ $console->addCommands(
         new Chash\Command\Installation\UpgradeCommand(),
         new Chash\Command\Installation\InstallCommand(),
 
-        new Chash\Command\Files\CleanDataFilesCommand(),
+        new Chash\Command\Files\CleanCoursesFilesCommand(),
         new Chash\Command\Files\CleanTempFolderCommand(),
         new Chash\Command\Files\CleanConfigFilesCommand(),
         new Chash\Command\Files\MailConfCommand(),

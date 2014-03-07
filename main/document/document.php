@@ -740,7 +740,10 @@ if (
 
 /* 	DELETE FILE OR DIRECTORY */
 //Only teacher and all users into their group
-if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
+if ($is_allowed_to_edit ||
+    $group_member_with_upload_rights ||
+    is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)
+) {
     if (isset($_GET['deleteid'])) {
         if (!$is_allowed_to_edit) {
             if (api_is_coach()) {
@@ -947,7 +950,10 @@ if ($is_allowed_to_edit) {
 
 /* 	TEMPLATE ACTION */
 //Only teacher and all users into their group
-if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
+if ($is_allowed_to_edit ||
+    $group_member_with_upload_rights ||
+    is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)
+) {
     if (isset($_GET['add_as_template']) && !isset($_POST['create_template'])) {
 
         $document_id_for_template = intval($_GET['add_as_template']);
@@ -1039,6 +1045,7 @@ if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
 } else {
     $docs_and_folders = DocumentManager::get_all_document_data($_course, $curdirpath, $groupId, null, $is_allowed_to_edit || $group_member_with_upload_rights, false);
 }
+
 if (api_get_group_id() != 0) {
     if (api_is_allowed_to_edit() || GroupManager::is_subscribed(api_get_user_id(), api_get_group_id()) || GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id())) {
         $folders = DocumentManager::get_all_document_folders($_course, api_get_group_id(), $is_allowed_to_edit || $group_member_with_upload_rights);
@@ -1081,7 +1088,10 @@ if ($is_certificate_mode && $curdirpath != '/certificates') {
 
 $column_show = array();
 
-if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
+if ($is_allowed_to_edit ||
+    $group_member_with_upload_rights ||
+    is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)
+) {
 
     // TODO:check enable more options for shared folders
     /* CREATE NEW DOCUMENT OR NEW DIRECTORY / GO TO UPLOAD / DOWNLOAD ZIPPED FOLDER */
@@ -1181,10 +1191,12 @@ $total_size = 0;
 $sortable_data = array();
 
 if (isset($docs_and_folders) && is_array($docs_and_folders)) {
-    if (
-        api_get_group_id() == 0 ||
-        ( api_is_allowed_to_edit() || GroupManager::is_subscribed(api_get_user_id(), api_get_group_id()) ||
-        GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id()))
+    if (api_get_group_id() == 0 ||
+        (
+            api_is_allowed_to_edit() ||
+            GroupManager::is_subscribed(api_get_user_id(), api_get_group_id()) ||
+            GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id())
+        )
     ) {
         $count = 1;
         $countedPaths = array();
@@ -1289,7 +1301,6 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
 }
 
 if (!is_null($docs_and_folders)) {
-
     // Show download zipped folder icon
     global $total_size;
     if (!$is_certificate_mode && $total_size != 0 && (api_get_setting('students_download_folders') == 'true' || api_is_allowed_to_edit() || api_is_platform_admin())) {
@@ -1358,9 +1369,9 @@ if (count($row) == 12) {
 }
 
 $default_column = $is_allowed_to_edit ? 2 : 1;
-$tablename = $is_allowed_to_edit ? 'teacher_table' : 'student_table';
+$tableName = $is_allowed_to_edit ? 'teacher_table' : 'student_table';
 
-$table = new SortableTableFromArrayConfig($sortable_data, $default_column, 20, $tablename, $column_show, $column_order, 'ASC');
+$table = new SortableTableFromArrayConfig($sortable_data, $default_column, 20, $tableName, $column_show, $column_order, 'ASC');
 $query_vars = array();
 if (isset($_GET['keyword'])) {
     $query_vars['keyword'] = Security::remove_XSS($_GET['keyword']);

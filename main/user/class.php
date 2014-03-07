@@ -20,16 +20,21 @@ if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false'
 }
 
 
-$tool_name = get_lang("Classes");
-
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 //extra entries in breadcrumb
 $interbreadcrumb[] = array ("url" => "user.php", "name" => get_lang("ToolUser"));
 
 $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : 'registered';
+switch($type) {
+    case 'registered':
+        $tool_name = get_lang("RegisteredClasses");
+        break;
+    default:
+        $tool_name = get_lang("AvailableClasses");
+}
 
-Display :: display_header($tool_name, "User");
+Display::display_header($tool_name, "User");
 
 $usergroup = new UserGroup();
 
@@ -42,8 +47,6 @@ if (api_is_allowed_to_edit()) {
     }
     echo '</div>';
 }
-
-echo Display::page_header($tool_name);
 
 if (api_is_allowed_to_edit()) {
     $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -72,9 +75,9 @@ $columns = array(get_lang('Name'), get_lang('Users'), get_lang('Actions'));
 
 //Column config
 $column_model = array(
-                    array('name'=>'name',           'index'=>'name',        'width'=>'35',   'align'=>'left'),
-                    array('name'=>'users',    		'index'=>'users', 		'width'=>'15',  'align'=>'left'),
-                    array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'left','sortable'=>'false'),
+    array('name'=>'name',           'index'=>'name',        'width'=>'35',   'align'=>'left'),
+    array('name'=>'users',    		'index'=>'users', 		'width'=>'15',  'align'=>'left'),
+    array('name'=>'actions',        'index'=>'actions',     'width'=>'20',  'align'=>'left','sortable'=>'false'),
 );
 //Autowidth
 $extra_params['autowidth'] = 'true';
@@ -92,7 +95,6 @@ return \''
 <script>
 $(function() {
 <?php
-    // grid definition see the $usergroup>display() function
     echo Display::grid_js('usergroups',  $url, $columns, $column_model, $extra_params, array(), $action_links, true);
 ?>
 });

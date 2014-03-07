@@ -526,9 +526,11 @@ class DocumentManager
                     last.insert_user_id
                 FROM $TABLE_ITEMPROPERTY AS last
                 INNER JOIN $TABLE_DOCUMENT AS docs
-                ON (docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND
-                docs.c_id = {$_course['real_id']} AND
-                last.c_id = {$_course['real_id']})
+                ON (
+                    docs.id = last.ref AND last.tool = '".TOOL_DOCUMENT."' AND
+                    docs.c_id = {$_course['real_id']} AND
+                    last.c_id = {$_course['real_id']}
+                )
                 WHERE
                     docs.path LIKE '" . $path . $added_slash . "%' AND
                     docs.path NOT LIKE '" . $path . $added_slash . "%/%' AND
@@ -572,8 +574,8 @@ class DocumentManager
                     $sql = "SELECT id FROM $table_template
                             WHERE
                                 course_code = '" . $_course['code'] . "' AND
-                                user_id = '" . api_get_user_id() . "' AND
-                                ref_doc = '" . $row['id'] . "'";
+                                user_id = '".api_get_user_id()."' AND
+                                ref_doc = '".$row['id']."'";
                     $template_result = Database::query($sql);
                     $row['is_template'] = (Database::num_rows($template_result) > 0) ? 1 : 0;
                 }

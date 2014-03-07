@@ -334,6 +334,7 @@ class GroupManager
     /**
      * Create a group for every class subscribed to the current course
      * @param int $category_id The category in which the groups should be created
+     * @return array
      */
     public static function create_class_groups($category_id)
     {
@@ -343,8 +344,8 @@ class GroupManager
         $group_ids = array();
         foreach ($classes as $class) {
             $users_ids = $obj->get_users_by_usergroup($class['id']);
-            $group_id = self::create_group($class['name'],$category_id,0,count($users_ids));
-            self::subscribe_users($users_ids,$group_id);
+            $group_id = self::create_group($class['name'], $category_id, 0, count($users_ids));
+            self::subscribe_users($users_ids, $group_id);
             $group_ids[] = $group_id;
         }
         return $group_ids;

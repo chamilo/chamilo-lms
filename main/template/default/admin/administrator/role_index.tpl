@@ -2,17 +2,19 @@
     <div id="tabs-{{ loop.index }}" class="col-md-6">
         <div class="well_border {{ block_item.class }}">
             <h4>{{ block_item.icon }} {{ block_item.label }}</h4>
-            <div style="list-style-type:none">
+            <div>
                 {{ block_item.search_form }}
             </div>
-            {% if block_item.items is not null %}
+            {% if block_item.items is not empty %}
                 <ul>
                 {% for url in block_item.items %}
+                    {% if url.url is not empty %}
                     <li>
                         <a href="{{ url.url }}">
                             {{ url.label }}
                         </a>
                     </li>
+                    {% endif %}
                 {% endfor %}
                 </ul>
             {% endif %}

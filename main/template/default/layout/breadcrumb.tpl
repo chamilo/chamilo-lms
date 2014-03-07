@@ -1,9 +1,7 @@
 {# Breadcrumb #}
 
 {% if app.breadcrumbs %}
-    <div class="breadcrumbs">
-        {{ app.breadcrumbs }}
-    </div>
+    {{ app.breadcrumbs }}
 {% else %}
     <script>
     $(document).ready( function() {
@@ -18,7 +16,6 @@
     });
     </script>
     {% if breadcrumb %}
-        <div class="breadcrumbs">
         <ul class="breadcrumb">
             {{ breadcrumb }}
             {% if ("student_view_enabled" | get_setting) == 'true' %}
@@ -37,7 +34,6 @@
                 {% endif %}
             {% endif %}
         </ul>
-        </div>
     {% endif %}
 {% endif %}
 

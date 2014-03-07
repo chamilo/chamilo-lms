@@ -306,11 +306,27 @@ a:active {
   border-radius: none;
   box-shadow: none;
 }
+.invitation_confirm .thumbnail{
+    border: 1px solid rgba(96, 165, 209, 0.1);
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    display: block;
+    line-height: 1;
+    padding: 4px;
+    background-color: #EEF5FA;
+}
+.invitation_confirm a.thumbnail:hover{
+    border-color: rgba(96, 165, 209, 0.1);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    background-color: #FFFFFF;
+}
 .social-menu .well .thumbnail img{
   -webkit-border-radius: 10px;
--moz-border-radius: 10px;
-border-radius: 10px;
-border: 2px solid #FFFFFF;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  border: 2px solid #FFFFFF;
 }
 
 /*CSS SLIDER ANUNCIOS*/

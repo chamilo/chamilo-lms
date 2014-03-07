@@ -248,89 +248,58 @@ a:active {
 }
 /*ICON INBOX*/
 .home-icon{
-  background:url(images/sprite-icon-social.png) no-repeat 0 0;
+  background:url(images/icon-chamilo.png) no-repeat 0 0;
   background-size: 24px auto;
   padding-left: 30px;
 }
-.home-icon:hover{
-  background:url(images/sprite-icon-social.png) no-repeat 0 -34px;
-  background-size: 24px auto;
-  padding-left: 30px;
+.home-icon:hover,.messages-icon:hover, .invitations-icon:hover,.shared-profile-icon:hover,.friends-icon:hover,
+.browse-groups-icon:hover ,.search-icon:hover ,.myfiles-icon:hover {
+  opacity: 0.8;
 }
 .messages-icon{
-  background:url(images/sprite-icon-social.png) no-repeat 0 -62px;
-  background-size: 24px auto;
-  padding-left: 30px;
-}
-.messages-icon:hover{
-  background:url(images/sprite-icon-social.png) no-repeat 0 -89px;
+  background:url(images/icon-chamilo.png) no-repeat 0 -30px;
   background-size: 24px auto;
   padding-left: 30px;
 }
 .invitations-icon{
-  background:url(images/sprite-icon-social.png) no-repeat 0 -120px;
-  background-size: 24px auto;
-  padding-left: 30px;
-}
-.invitations-icon:hover{
-  background:url(images/sprite-icon-social.png) no-repeat 0 -153px;
+  background:url(images/icon-chamilo.png) no-repeat 0 -64px;
   background-size: 24px auto;
   padding-left: 30px;
 }
 .shared-profile-icon{
-  background:url(images/sprite-icon-social.png) no-repeat 0 -186px;
-  background-size: 24px auto;
-  padding-left: 30px;
-}
-.shared-profile-icon:hover{
-  background:url(images/sprite-icon-social.png) no-repeat 0 -221px;
+  background:url(images/icon-chamilo.png) no-repeat 0 -98px;
   background-size: 24px auto;
   padding-left: 30px;
 }
 .friends-icon{
-  background:url(images/sprite-icon-social.png) no-repeat 0 -256px;
+  background:url(images/icon-chamilo.png) no-repeat 0 -130px;
   background-size: 24px auto;
   padding-left: 30px;
 }
-.friends-icon:hover{
-  background:url(images/sprite-icon-social.png) no-repeat 0 -291px;
-  background-size: 24px auto;
-  padding-left: 30px;
-}
+
 .browse-groups-icon{
-  background:url(images/sprite-icon-social.png) no-repeat 0 -325px;
+  background:url(images/icon-chamilo.png) no-repeat 0 -163px;
   background-size: 24px auto;
   padding-left: 30px;
 }
-.browse-groups-icon:hover{
-  background:url(images/sprite-icon-social.png) no-repeat 0 -358px;
-  background-size: 24px auto;
-  padding-left: 30px;
-}
+
 .search-icon {
-  background:url(images/sprite-icon-social.png) no-repeat 0 -392px;
+  background:url(images/icon-chamilo.png) no-repeat 0 -198px;
   background-size: 24px auto;
   padding-left: 30px;
 }
-.search-icon:hover {
-  background:url(images/sprite-icon-social.png) no-repeat 0 -427px;
-  background-size: 24px auto;
-  padding-left: 30px;
-}
+
 .myfiles-icon {
-  background:url(images/sprite-icon-social.png) no-repeat 0 -462px;
+  background:url(images/icon-chamilo.png) no-repeat 0 -232px;
   background-size: 24px auto;
   padding-left: 30px;
 }
-.myfiles-icon:hover {
-  background:url(images/sprite-icon-social.png) no-repeat 0 -497px;
-  background-size: 24px auto;
-  padding-left: 30px;
-}
+
 /* END ICON INBOX */
 .nav-list > .active > a, .nav-list > .active > a:hover {
   color: #333333;
   background: none;
+  text-shadow:none;
 }
 /*CSS SLIDER ANUNCIOS*/
 
@@ -612,69 +581,41 @@ button.arrowl, input.arrowl {
 
 /*CSS ICON BLOCK USER*/
    .inbox-social{
-        background: url("images/sprite-icon.png") no-repeat 0 0;
+        background: url("images/icon-chamilo.png") no-repeat 0 -415px;
         padding-left: 40px;
     }
-    .inbox-social:hover{
-        background: url("images/sprite-icon.png") no-repeat 0 -43px;
+    .inbox-social:hover,.new-message-social:hover,.invitations-social:hover,.profile-social:hover,.add-course:hover,
+    .order-course:hover,.history-course:hover, .list-course:hover{
+        opacity: 0.8;
     }
     .new-message-social{
-        background: url("images/sprite-icon.png") no-repeat 0 -75px;
-        padding-left: 40px;
-    }
-    .new-message-social:hover{
-        background: url("images/sprite-icon.png") no-repeat 0 -108px;
+        background: url("images/icon-chamilo.png") no-repeat 0 -370px;
         padding-left: 40px;
     }
     .invitations-social{
-        background: url("images/sprite-icon.png") no-repeat 0 -148px;
-        padding-left: 40px;
-    }
-    .invitations-social:hover{
-        background: url("images/sprite-icon.png") no-repeat 0 -191px;
+        background: url("images/icon-chamilo.png") no-repeat 0 -455px;
         padding-left: 40px;
     }
     .profile-social{
-        background: url("images/sprite-icon.png") no-repeat 0 -236px;
-        padding-left: 40px;
-    }
-    .profile-social:hover{
-        background: url("images/sprite-icon.png") no-repeat 0 -278px;
+        background: url("images/icon-chamilo.png") no-repeat 0 -496px;
         padding-left: 40px;
     }
     .add-course{
-        background: url("images/sprite-icon.png") no-repeat 0 -320px;
-        padding-left: 40px;
-    }
-    .add-course:hover{
-        background: url("images/sprite-icon.png") no-repeat 0 -363px;
+        background: url("images/icon-chamilo.png") no-repeat 0 -327px;
         padding-left: 40px;
     }
     .order-course{
-        background: url("images/sprite-icon.png") no-repeat 0 -408px;
-        padding-left: 40px;
-    }
-    .order-course:hover{
-        background: url("images/sprite-icon.png") no-repeat 0 -451px;
+        background: url("images/icon-chamilo.png") no-repeat 0 -536px;
         padding-left: 40px;
     }
     .history-course{
-        background: url("images/sprite-icon.png") no-repeat 0 -489px;
-        padding-left: 40px;
-    }
-    .history-course:hover{
-        background: url("images/sprite-icon.png") no-repeat 0 -532px;
+        background: url("images/icon-chamilo.png") no-repeat 0 -576px;
         padding-left: 40px;
     }
     .list-course{
-        background: url("images/sprite-icon.png") no-repeat 0 -575px;
+        background: url("images/icon-chamilo.png") no-repeat 0 -618px;
         padding-left: 40px;
     }
-    .list-course:hover{
-        background: url("images/sprite-icon.png") no-repeat 0 -618px;
-        padding-left: 40px;
-    }
-
 
 /*+++++++++++++++++++++++++++++++++
 RESPONSIVE CSS
@@ -729,84 +670,53 @@ RESPONSIVE CSS
 
 /*CSS ICON BLOCK USER*/
    .inbox-social{
-        background: url("images/sprite-icon.png") no-repeat 0 0;
+        background: url("images/icon-chamilo.png") no-repeat 0 -345px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    .inbox-social:hover{
-        background: url("images/sprite-icon.png") no-repeat 0 -36px;
-        background-size: 25px auto;
-    }
+    
     .new-message-social{
-        background: url("images/sprite-icon.png") no-repeat 0 -65px;
+        background: url("images/icon-chamilo.png") no-repeat 0 -307px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    .new-message-social:hover{
-        background: url("images/sprite-icon.png") no-repeat 0 -93px;
-        padding-left: 30px;
-        background-size: 25px auto;
-    }
+    
     .invitations-social{
-        background: url("images/sprite-icon.png") no-repeat 0 -127px;
+        background: url("images/icon-chamilo.png") no-repeat 0 -378px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    .invitations-social:hover{
-        background: url("images/sprite-icon.png") no-repeat 0 -163px;
-        padding-left: 30px;
-        background-size: 25px auto;
-    }
+    
     .profile-social{
-        background: url("images/sprite-icon.png") no-repeat 0 -198px;
+        background: url("images/icon-chamilo.png") no-repeat 0 -414px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    .profile-social:hover{
-        background: url("images/sprite-icon.png") no-repeat 0 -233px;
-        padding-left: 30px;
-        background-size: 25px auto;
-    }
+    
     .add-course{
-        background: url("images/sprite-icon.png") no-repeat 0 -267px;
+        background: url("images/icon-chamilo.png") no-repeat 0 -274px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    .add-course:hover{
-        background: url("images/sprite-icon.png") no-repeat 0 -303px;
-        padding-left: 30px;
-        background-size: 25px auto;
-    }
+   
     .order-course{
-        background: url("images/sprite-icon.png") no-repeat 0 -339px;
+        background: url("images/icon-chamilo.png") no-repeat 0 -447px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    .order-course:hover{
-        background: url("images/sprite-icon.png") no-repeat 0 -375px;
-        padding-left: 30px;
-        background-size: 25px auto;
-    }
+    
     .history-course{
-        background: url("images/sprite-icon.png") no-repeat 0 -410px;
+        background: url("images/icon-chamilo.png") no-repeat 0 -481px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    .history-course:hover{
-        background: url("images/sprite-icon.png") no-repeat 0 -446px;
-        padding-left: 30px;
-        background-size: 25px auto;
-    }
+    
     .list-course{
-        background: url("images/sprite-icon.png") no-repeat 0 -480px;
+        background: url("images/icon-chamilo.png") no-repeat 0 -517px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    .list-course:hover{
-        background: url("images/sprite-icon.png") no-repeat 0 -516px;
-        padding-left: 30px;
-        background-size: 25px auto;
-    }
+    
 }
 @media (min-width: 321px) and (max-width: 480px){
 footer {

@@ -301,6 +301,18 @@ a:active {
   background: none;
   text-shadow:none;
 }
+.social-menu .well .thumbnail{
+  border: none;
+  border-radius: none;
+  box-shadow: none;
+}
+.social-menu .well .thumbnail img{
+  -webkit-border-radius: 10px;
+-moz-border-radius: 10px;
+border-radius: 10px;
+border: 2px solid #FFFFFF;
+}
+
 /*CSS SLIDER ANUNCIOS*/
 
 .pagerslide h2{

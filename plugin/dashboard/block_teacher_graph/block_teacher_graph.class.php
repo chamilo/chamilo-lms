@@ -23,7 +23,6 @@ require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
  */
 class BlockTeacherGraph extends Block
 {
-
     private $user_id;
     private $teachers;
     private $path;
@@ -64,7 +63,6 @@ class BlockTeacherGraph extends Block
      */
     public function get_block()
     {
-
     	global $charset;
     	$column = 1;
     	$data   = array();

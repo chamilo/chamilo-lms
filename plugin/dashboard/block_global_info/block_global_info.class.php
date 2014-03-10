@@ -61,15 +61,12 @@ class BlockGlobalInfo extends Block
      * it's important to use the name 'get_block' for beeing used from dashboard controller
      * @return array   column and content html
      */
-    public function get_block() {
-
+    public function get_block()
+    {
     	global $charset;
-
     	$column = 2;
     	$data   = array();
-    	$content = '';
-    	$data_table = '';
-    	$content = $this->get_content_html();
+        $content = $this->get_content_html();
     	$html = '
     	            <li class="widget color-red" id="intro">
     	                <div class="widget-head">
@@ -91,8 +88,8 @@ class BlockGlobalInfo extends Block
  	 * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
  	 * @return string  content html
  	 */
-     public function get_content_html() {
-
+     public function get_content_html()
+     {
          $global_data = $this->get_global_information_data();
          $content = '<div style="margin:10px;">';
          $content .= '<h3><font color="#000">'.get_lang('GlobalPlatformInformation').'</font></h3>';

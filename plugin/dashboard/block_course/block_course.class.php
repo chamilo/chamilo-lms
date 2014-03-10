@@ -32,13 +32,7 @@ class BlockCourse extends Block
         $this->user_id = $user_id;
         $this->path = 'block_course';
         if ($this->is_block_visible_for_user($user_id)) {
-            /*if (api_is_platform_admin()) {
-                $this->courses = CourseManager::get_real_course_list();
-            } else  {*/
-            $this->courses = CourseManager::get_courses_followed_by_drh(
-                $user_id
-            );
-            //}
+            $this->courses = CourseManager::get_courses_followed_by_drh($user_id);
         }
     }
 
@@ -72,8 +66,6 @@ class BlockCourse extends Block
         global $charset;
         $column = 2;
         $data = array();
-        $content = '';
-        $data_table = '';
         $content = $this->get_content_html();
         $html = '
 		            <li class="widget color-green" id="intro">
@@ -107,7 +99,6 @@ class BlockCourse extends Block
      */
     public function get_content_html()
     {
-
         $course_data = $this->get_course_information_data();
         $content = '<div style="margin:10px;">';
         $content .= '<h3><font color="#000">' . get_lang(
@@ -119,12 +110,8 @@ class BlockCourse extends Block
             $data_table .= '<tr>
 	    						<th>' . get_lang('CourseTitle') . '</th>
 	    						<th width="20%">' . get_lang('NbStudents') . '</th>
-	    						<th width="20%">' . get_lang(
-                    'AvgTimeSpentInTheCourse'
-                ) . '</th>
-	    						<th width="20%">' . get_lang(
-                    'ThematicAdvance'
-                ) . '</th>
+	    						<th width="20%">' . get_lang('AvgTimeSpentInTheCourse') . '</th>
+	    						<th width="20%">' . get_lang('ThematicAdvance') . '</th>
 	    					</tr>';
             $i = 1;
             foreach ($course_data as $course) {
@@ -149,9 +136,7 @@ class BlockCourse extends Block
         }
         $content .= $data_table;
         if (!empty($course_data)) {
-            $content .= '<div style="text-align:right;margin-top:10px;"><a href="' . api_get_path(
-                    WEB_CODE_PATH
-                ) . 'mySpace/course.php">' . get_lang('SeeMore') . '</a></div>';
+            $content .= '<div style="text-align:right;margin-top:10px;"><a href="' . api_get_path(WEB_CODE_PATH) . 'mySpace/course.php">' . get_lang('SeeMore') . '</a></div>';
         }
         $content .= '</div>';
 

@@ -36,13 +36,9 @@ class BlockDaily extends Block
         $this->user_id = $user_id;
         $this->path = 'block_daily';
         if ($this->is_block_visible_for_user($user_id)) {
-            /*if (api_is_platform_admin()) {
-                $this->courses = CourseManager::get_real_course_list();
-            } else  {*/
             $this->courses = CourseManager::get_courses_followed_by_drh(
                 $user_id
             );
-            //}
         }
     }
 
@@ -75,11 +71,8 @@ class BlockDaily extends Block
     {
 
         global $charset;
-
         $column = 2;
         $data = array();
-        $content = '';
-        $data_table = '';
         $content = $this->get_content_html();
         $html = '<li class="widget color-green" id="intro">
 		                <div class="widget-head">
@@ -112,7 +105,6 @@ class BlockDaily extends Block
      */
     public function get_content_html()
     {
-
         $course_data = $this->get_course_information_data();
         $content = '<div style="margin:10px;">';
         $content .= '<h3><font color="#000">' . get_lang(

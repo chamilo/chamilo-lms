@@ -227,9 +227,10 @@ class CourseManager
     }
 
     /**
-     * Returns all the information of a given coursecode from the course table
+     * Returns all the information of a given course code from the course table
      * @param string $course_code, the course code
      * @return an array with all the fields of the course table
+     * @deprecated use api_get_course_info()
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @assert (array(1,2,3)) === false
      */
@@ -2468,7 +2469,8 @@ class CourseManager
      * @param int         human resources manager id
      * @return array    courses
      */
-    public static function get_courses_followed_by_drh($user_id) {
+    public static function get_courses_followed_by_drh($user_id)
+    {
         // Database Table Definitions
         $tbl_course             =     Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_rel_user     =     Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -2478,13 +2480,21 @@ class CourseManager
         $assigned_courses_to_hrm = array();
 
         if (api_get_multiple_access_url()) {
-           $sql = "SELECT *, id as real_id FROM $tbl_course c
+           $sql = "SELECT *, c.id as real_id FROM $tbl_course c
                     INNER JOIN $tbl_course_rel_user cru ON (cru.c_id = c.id)
                     LEFT JOIN $tbl_course_rel_access_url a ON (a.c_id = c.id)
-                    WHERE cru.user_id = '$user_id' AND status = ".DRH." AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' AND access_url_id = ".api_get_current_access_url_id()."";
+                    WHERE
+                        cru.user_id = '$user_id' AND
+                        status = ".DRH." AND
+                        relation_type = '".COURSE_RELATION_TYPE_RRHH."' AND
+                        access_url_id = ".api_get_current_access_url_id()."";
         } else {
-            $sql = "SELECT *, id as real_id FROM $tbl_course c
-                    INNER JOIN $tbl_course_rel_user cru ON cru.c_id = c.c_id AND cru.user_id = '$user_id' AND status = ".DRH." AND relation_type = '".COURSE_RELATION_TYPE_RRHH."' ";
+            $sql = "SELECT *, c.id as real_id FROM $tbl_course c
+                    INNER JOIN $tbl_course_rel_user cru
+                    ON
+                        cru.c_id = c.id AND cru.user_id = '$user_id' AND
+                        status = ".DRH." AND
+                        relation_type = '".COURSE_RELATION_TYPE_RRHH."' ";
         }
         $rs_assigned_courses = Database::query($sql);
         if (Database::num_rows($rs_assigned_courses) > 0) {

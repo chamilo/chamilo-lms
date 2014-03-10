@@ -1645,8 +1645,8 @@ class SessionManager
      * @param int        Human resources manager or Session admin id
      * @return array     sessions
      */
-    public static function get_sessions_followed_by_drh($hr_manager_id) {
-        global $_configuration;
+    public static function get_sessions_followed_by_drh($hr_manager_id)
+    {
         // Database Table Definitions
         $tbl_session             =     Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_rel_user     =     Database::get_main_table(TABLE_MAIN_SESSION_USER);
@@ -1655,7 +1655,7 @@ class SessionManager
         $hr_manager_id = intval($hr_manager_id);
         $assigned_sessions_to_hrm = array();
 
-        if ($_configuration['multiple_access_urls']) {
+        if (api_is_multiple_url_enabled()) {
            $sql = "SELECT * FROM $tbl_session s INNER JOIN $tbl_session_rel_user sru ON (sru.id_session = s.id) LEFT JOIN $tbl_session_rel_access_url a  ON (s.id = a.session_id)
                    WHERE sru.id_user = '$hr_manager_id' AND sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND access_url_id = ".api_get_current_access_url_id()."";
         } else {

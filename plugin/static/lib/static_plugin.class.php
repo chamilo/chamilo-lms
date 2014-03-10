@@ -9,10 +9,9 @@
  */
 class StaticPlugin extends Plugin
 {
-
     /**
      *
-     * @return StaticPlugin 
+     * @return StaticPlugin
      */
     static function create()
     {

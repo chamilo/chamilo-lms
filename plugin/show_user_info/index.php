@@ -1,5 +1,4 @@
 <?php
-
 // A user must be logged in.
 $_template['show_message']   = false;
 

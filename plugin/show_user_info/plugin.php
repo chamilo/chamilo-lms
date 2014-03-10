@@ -10,12 +10,12 @@
  */
 
 // The plugin title
-$plugin_info['title']      = 'Show user information';
+$plugin_info['title'] = 'Show user information';
 // The comments that go with the plugin
-$plugin_info['comment']     = "Shows a welcome message, (this is an example to uses the template system: Twig)";
+$plugin_info['comment'] = "Shows a welcome message, (this is an example to uses the template system: Twig)";
 // The plugin version
-$plugin_info['version']     = '1.0';
+$plugin_info['version'] = '1.0';
 // The plugin author
-$plugin_info['author']      = 'Julio Montoya';
+$plugin_info['author'] = 'Julio Montoya';
 // Set the templates that are going to be used
-$plugin_info['templates']   = array('template.tpl');
+$plugin_info['templates'] = array('template.tpl');

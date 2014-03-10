@@ -4,6 +4,7 @@
 <!--[if IE 8]>    <html lang="{{ document_language }}" class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--><html lang="{{ document_language }}" class="no-js"> <!--<![endif]-->
 <head>
+<noscript>{{ "NoJavascript"|get_lang }}</noscript>
 <meta charset="{{ system_charset }}" />
 <link href="http://www.chamilo.org/documentation.php" rel="help" />
 <link href="http://www.chamilo.org/team.php" rel="author" />

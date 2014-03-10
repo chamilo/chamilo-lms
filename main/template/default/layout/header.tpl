@@ -4,7 +4,6 @@
     {% set classBody = '' %}
 {% endif %}
 <body dir="{{ text_direction }}" class="{{ section_name }} {{ classBody }}">
-<noscript>{{ "NoJavascript"|get_lang }}</noscript>
 {% set classMain = '' %}
 {% if show_toolbar == 1 %}
     {% set classMain = 'with-toolbar' %}

@@ -25,10 +25,25 @@
 
             {% if _u.logged  == 1 %}
             <ul class="nav main-menu">
+                {% if 0 %}
                 <li class="active">
                     <a href="{{ _p.web }}">
                         <i class="fa fa-home fa-lg"></i>
                         <span class="text">{{ 'Home' | get_lang }}</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="active">
+                    <a href="{{ _p.web_public }}main/dashboard/index.php">
+                        <i class="fa fa-dashboard fa-lg"></i> {{ 'Dashboard' | get_lang }}
+                    </a>
+                </li>
+
+                <li class="active">
+                    <a href="{{ _p.web_main }}calendar/agenda_js.php?type=personal">
+                        <i class="fa fa-calendar fa-lg"></i>
+                        <span class="text">{{ 'Agenda' | get_lang }}</span>
                     </a>
                 </li>
 
@@ -39,6 +54,7 @@
                     </a>
                 </li>
 
+
                 <li class="active">
                     <a href="{{ _p.web }}main/social/groups.php">
                         <i class="fa fa-users fa-lg"></i>
@@ -46,12 +62,7 @@
                     </a>
                 </li>
 
-                <li class="active">
-                    <a href="{{ _p.web }}main/calendar">
-                        <i class="fa fa-calendar fa-lg"></i>
-                        <span class="text">{{ 'Agenda' | get_lang }}</span>
-                    </a>
-                </li>
+
 
                 <li class="active">
                     <a href="{{ _p.web_main }}mySpace/index.php">
@@ -71,28 +82,28 @@
                         <ul class="nav nav-list" style="display:none">
                             <li>
                                 <a href="{{ _p.web_main }}admin/index.php">
-                                    <i class="fa fa-dashboard fa-lg"></i> {{ 'Dashboard' }}
+                                    <i class="fa fa-dashboard fa-lg"></i> {{ 'Dashboard' | get_lang }}
                                 </a>
                             </li>
 
                             <li>
                                 <a href="{{ _p.web_main }}admin/user_list.php">
-                                    <i class="fa fa-user fa-lg"></i> {{ 'Users' }}
+                                    <i class="fa fa-user fa-lg"></i> {{ 'Users' | get_lang }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ _p.web_main }}admin/usergroups.php">
-                                    <i class="fa fa-users fa-lg"></i>{{ 'Groups' }}
+                                    <i class="fa fa-users fa-lg"></i>{{ 'Groups' | get_lang }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ _p.web_main }}admin/course_list.php">
-                                    <i class="fa fa-book fa-lg"></i> {{ 'Courses' }}
+                                    <i class="fa fa-book fa-lg"></i> {{ 'Courses' | get_lang }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ _p.web_main }}session/session_list.php">
-                                    <i class="fa fa-sitemap fa-lg"></i>{{ 'Sessions' }}
+                                    <i class="fa fa-sitemap fa-lg"></i>{{ 'Sessions'| get_lang }}
                                 </a>
                             </li>
 

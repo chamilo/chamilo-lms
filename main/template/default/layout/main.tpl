@@ -1,5 +1,5 @@
 {% block header %}
-{% include app.template_style ~ "/layout/main_header.tpl" %}
+{% include app.template_style ~ "/layout/header.tpl" %}
 {% endblock %}
 
 {% block body %}

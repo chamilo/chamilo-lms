@@ -36,7 +36,15 @@
 
                 <li class="active">
                     <a href="{{ _p.web_public }}main/dashboard/index.php">
-                        <i class="fa fa-dashboard fa-lg"></i> {{ 'Dashboard' | get_lang }}
+                        <i class="fa fa-dashboard fa-lg"></i>
+                        <span class="text">{{ 'Dashboard' | get_lang }}</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ _p.web_public }}userportal">
+                        <i class="fa fa-book fa-lg"></i>
+                        <span class="text">{{ 'Courses' | get_lang }}</span>
                     </a>
                 </li>
 
@@ -54,15 +62,12 @@
                     </a>
                 </li>
 
-
                 <li class="active">
                     <a href="{{ _p.web }}main/social/groups.php">
                         <i class="fa fa-users fa-lg"></i>
                         <span class="text">{{ 'Groups' | get_lang }}</span>
                     </a>
                 </li>
-
-
 
                 <li class="active">
                     <a href="{{ _p.web_main }}mySpace/index.php">

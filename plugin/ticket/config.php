@@ -34,10 +34,10 @@ define('CAT_DOCU', 'DOC');
 define('CAT_FORO', 'FOR');
 define('CAT_ANNU', 'ANN');
 
-require_once __DIR__.'/../../main/inc/global.inc.php';
+//require_once __DIR__.'/../../main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'plugin.class.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
+//require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 include_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 require_once api_get_path(PLUGIN_PATH).PLUGIN_NAME.'/lib/ticket.class.php';

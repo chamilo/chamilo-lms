@@ -36,7 +36,7 @@ $tab_default_ext_auth_chamilo_logout_button_behaviour_eaclbb_form_alert_onoff = 
 $tab_default_ext_auth_chamilo_logout_button_behaviour_eaclbb_form_alert_text = api_get_setting('ext_auth_chamilo_logout_button_behaviour_eaclbb_form_alert_text');
 $defaults['eaclbb_form_link_url'] = $tab_default_ext_auth_chamilo_logout_button_behaviour_eaclbb_form_link_url['eaclbb_form_link_url'];
 $defaults['eaclbb_form_link_infobulle'] = $tab_default_ext_auth_chamilo_logout_button_behaviour_eaclbb_form_link_infobulle['eaclbb_form_link_infobulle'];
-$defaults['eaclbb_form_link_image'] = $tab_default_ext_auth_chamilo_logout_button_behaviour_eaclbb_form_link_image['eaclbb_form_link_image'];
+//$defaults['eaclbb_form_link_image'] = $tab_default_ext_auth_chamilo_logout_button_behaviour_eaclbb_form_link_image['eaclbb_form_link_image'];
 $defaults['eaclbb_form_alert_onoff'] = $tab_default_ext_auth_chamilo_logout_button_behaviour_eaclbb_form_alert_onoff['eaclbb_form_alert_onoff'];
 $defaults['eaclbb_form_alert_text'] = $tab_default_ext_auth_chamilo_logout_button_behaviour_eaclbb_form_alert_text['eaclbb_form_alert_text'];
 $form->setDefaults($defaults);

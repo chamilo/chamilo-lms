@@ -1,7 +1,7 @@
 <?php
 /* See license terms in /license.txt */
 
-require_once '../../main/inc/global.inc.php';
+//require_once '../../main/inc/global.inc.php';
 
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();

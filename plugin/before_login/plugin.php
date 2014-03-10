@@ -8,7 +8,7 @@
  */
 
 /* Plugin config */
-
+return;
 // The plugin title.
 $plugin_info['title']       = 'Show HTML before login';
 // The comments that go with the plugin.

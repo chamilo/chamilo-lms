@@ -3360,8 +3360,7 @@ function api_sort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encodin
             if (api_is_utf8($encoding)) {
                 $sort_flag = ($sort_flag == SORT_LOCALE_STRING) ? SORT_STRING : $sort_flag;
                 return collator_sort($collator, $array, _api_get_collator_sort_flag($sort_flag));
-            }
-            elseif ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
+            } elseif ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
                 global $_api_collator, $_api_encoding;
                 $_api_collator = $collator;
                 $_api_encoding = $encoding;

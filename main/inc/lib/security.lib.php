@@ -285,19 +285,33 @@ class Security
      * This function tackles the XSS injections.
      * Filtering for XSS is very easily done by using the htmlentities() function.
      * This kind of filtering prevents JavaScript snippets to be understood as such.
-     * @param	mixed	The variable to filter for XSS, this params can be a string or an array (example : array(x,y))
-     * @param   integer The user status,constant allowed (STUDENT, COURSEMANAGER, ANONYMOUS, COURSEMANAGERLOWSECURITY)
+     * @param string	The variable to filter for XSS, this params can be a string or an array (example : array(x,y))
+     * @param int The user status,constant allowed (STUDENT, COURSEMANAGER, ANONYMOUS, COURSEMANAGERLOWSECURITY)
+     * @param bool $filter_terms
      * @return	mixed	Filtered string or array
      */
-    public static function remove_XSS($var, $user_status = ANONYMOUS, $filter_terms = false)
+    public static function remove_XSS($var, $user_status = null, $filter_terms = false)
     {
     	if ($filter_terms) {
     		$var = self::filter_terms($var);
     	}
 
+        if (empty($user_status)) {
+            if (api_is_anonymous()) {
+                $user_status = ANONYMOUS;
+            } else {
+                if (api_is_allowed_to_edit()) {
+                    $user_status = COURSEMANAGER;
+                } else {
+                    $user_status = STUDENT;
+                }
+            }
+        }
+
         if ($user_status == COURSEMANAGERLOWSECURITY) {
             return $var;  // No filtering.
         }
+
         static $purifier = array();
         if (!isset($purifier[$user_status])) {
             if (!class_exists('HTMLPurifier')) {
@@ -309,7 +323,6 @@ class Security
                 mkdir($cache_dir, 0777);
             }
             $config = HTMLPurifier_Config::createDefault();
-            //$config->set('Cache.DefinitionImpl', null); // Enable this line for testing purposes, for turning off caching. Don't forget to disable this line later!
             $config->set('Cache.SerializerPath', $cache_dir);
             $config->set('Core.Encoding', api_get_system_encoding());
             $config->set('HTML.Doctype', 'XHTML 1.0 Transitional');
@@ -322,8 +335,9 @@ class Security
                 $config->set('Filter.Custom', array(new HTMLPurifier_Filter_AllowIframes()));
             }
 
-            //Shows _target attribute in anchors
+            // Shows _target attribute in anchors
             $config->set('Attr.AllowedFrameTargets', array('_blank','_top','_self', '_parent'));
+
             if ($user_status == STUDENT) {
                 global $allowed_html_student;
                 $config->set('HTML.SafeEmbed', true);
@@ -342,6 +356,7 @@ class Security
                 global $allowed_html_anonymous;
                 $config->set('HTML.Allowed', $allowed_html_anonymous);
             }
+
             $config->set('Attr.EnableID', true); // We need it for example for the flv player (ids of surrounding div-tags have to be preserved).
             $config->set('CSS.AllowImportant', true);
             $config->set('CSS.AllowTricky', true); // We need for the flv player the css definition display: none;
@@ -367,7 +382,6 @@ class Security
             return $purifier[$user_status]->purify($var);
         }
     }
-
 
     /**
      *

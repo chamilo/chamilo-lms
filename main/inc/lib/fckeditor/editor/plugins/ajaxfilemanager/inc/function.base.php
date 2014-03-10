@@ -1065,6 +1065,7 @@ function hideFolderName($folderName) {
 
     //show group's directory only if I'm member
     $show_doc_group = true;
+    global $is_user_in_group;
     if (preg_match("/$group_folder/", $folderName)) {
         $show_doc_group = false;
         if ($is_user_in_group) {

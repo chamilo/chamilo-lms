@@ -1137,7 +1137,6 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     AND tth.exe_cours_id = '" . api_get_course_id()."'
                     $hotpotatoe_where
                     $sqlWhereOption
-    				AND $where_condition
                 ORDER BY
                     tth.exe_cours_id ASC,
                     tth.exe_date DESC";
@@ -1189,7 +1188,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
         if (is_array($results)) {
 
             $users_array_id = array();
-            if ($_GET['gradebook'] == 'view') {
+            $from_gradebook = false;
+            if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
                 $from_gradebook = true;
             }
             $sizeof = count($results);

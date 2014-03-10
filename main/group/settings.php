@@ -29,7 +29,6 @@ $current_group = GroupManager :: get_group_properties($group_id);
 $nameTools = get_lang('EditGroup');
 $interbreadcrumb[] = array('url' => 'group.php', 'name' => get_lang('Groups'));
 $interbreadcrumb[] = array('url' => 'group_space.php?'.api_get_cidReq(), 'name' => $current_group['name']);
-
 $is_group_member = GroupManager :: is_tutor_of_group(api_get_user_id(), $group_id);
 
 if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
@@ -39,12 +38,13 @@ if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
 // Build form
 $form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidreq());
 $form->addElement('hidden', 'action');
+$form->addElement('html', '<div class="span12">');
+$form->addElement('header', $nameTools);
+$form->addElement('html', '</div>');
+$form->addElement('html', '<div class="span6">');
 
 // Group name
 $form->addElement('text', 'name', get_lang('GroupName'));
-
-// Description
-$form->addElement('textarea', 'description', get_lang('Description'), array ('class' => 'span6', 'rows' => 6));
 
 // Members per group
 $group = array(
@@ -55,6 +55,17 @@ $group = array(
 );
 $form->addGroup($group, 'max_member_group', get_lang('GroupLimit'), '', false);
 $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');
+
+$form->addElement('html', '</div>');
+
+$form->addElement('html', '<div class="span6">');
+// Description
+$form->addElement('textarea', 'description', get_lang('Description'), array ('class' => 'span6', 'rows' => 6));
+$form->addElement('html', '</div>');
+
+$form->addElement('html', '<div class="span12">');
+$form->addElement('header', get_lang('DefaultSettingsForNewGroups'));
+$form->addElement('html', '</div>');
 
 $form->addElement('html', '<div class="span6">');
 

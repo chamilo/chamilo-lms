@@ -605,9 +605,11 @@ class AnnouncementManager
         echo "<tr>";
         echo "<td>";
         echo "<select name=\"not_selected_form[]\" size=5 style=\"width:200px\" multiple>";
-        $group_users = GroupManager::get_subscribed_users($group_id);
+        $group_users = GroupManager::getStudentsAndTutors($group_id);
         foreach ($group_users as $user) {
-            echo '<option value="' . $user['user_id'] . '" title="' . sprintf(get_lang('LoginX'), $user['username']) . '" >' . api_get_person_name($user['firstname'], $user['lastname']) . '</option>';
+            echo '<option value="' . $user['user_id'] . '" title="' . sprintf(get_lang('LoginX'), $user['username']) . '" >' .
+                api_get_person_name($user['firstname'], $user['lastname']) .
+                '</option>';
         }
         echo '</select>';
         echo "</td>";

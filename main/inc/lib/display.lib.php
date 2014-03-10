@@ -24,11 +24,11 @@
  * @package chamilo.library
  */
 
-class Display {
-
+class Display
+{
     /* The main template*/
-    static $global_template;
-    static $preview_style = null;
+    public static $global_template;
+    public static $preview_style = null;
 
     public function __construct()
     {
@@ -1661,4 +1661,4 @@ class Display {
 
         return null;
     }
-} //end class Display
+}

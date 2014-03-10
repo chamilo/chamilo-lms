@@ -9,13 +9,16 @@
 /**
  * required files for getting data
  */
+require_once api_get_path(LIBRARY_PATH).'course_description.lib.php';
 
 /**
  * This class is used like controller for this session block plugin,
- * the class name must be registered inside path.info file (e.g: controller = "BlockSession"), so dashboard controller will be instantiate it
+ * the class name must be registered inside path.info file
+ * (e.g: controller = "BlockSession"), so dashboard controller will be instantiate it
  * @package chamilo.dashboard
  */
-class BlockSession extends Block {
+class BlockSession extends Block
+{
 
     private $user_id;
 	private $sessions;
@@ -25,15 +28,12 @@ class BlockSession extends Block {
 	/**
 	 * Constructor
 	 */
-    public function __construct ($user_id) {
+    public function __construct ($user_id)
+    {
     	$this->user_id 	= $user_id;
     	$this->path = 'block_session';
     	if ($this->is_block_visible_for_user($user_id)) {
-    		/*if (api_is_platform_admin()) {
-	    		$this->sessions = SessionManager::get_sessions_list();
-	    	} else {*/
-	    		$this->sessions = SessionManager::get_sessions_followed_by_drh($user_id);
-	    	//}
+            $this->sessions = SessionManager::get_sessions_followed_by_drh($user_id);
     	}
     }
 
@@ -42,7 +42,8 @@ class BlockSession extends Block {
 	 * @param	int		User id
 	 * @return	bool	Is block visible for user
 	 */
-    public function is_block_visible_for_user($user_id) {
+    public function is_block_visible_for_user($user_id)
+    {
     	$user_info = api_get_user_info($user_id);
 		$user_status = $user_info['status'];
 		$is_block_visible_for_user = false;
@@ -57,7 +58,8 @@ class BlockSession extends Block {
      * it's important to use the name 'get_block' for beeing used from dashboard controller
      * @return array   column and content html
      */
-    public function get_block() {
+    public function get_block()
+    {
 
 		global $charset;
 
@@ -88,7 +90,8 @@ class BlockSession extends Block {
  	 * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
  	 * @return string  content html
  	 */
-    public function get_content_html() {
+    public function get_content_html()
+    {
 
  		$content = '';
 		$sessions = $this->sessions;
@@ -108,7 +111,12 @@ class BlockSession extends Block {
 
 				$session_id = intval($session['id']);
 				$title = $session['name'];
-                $date_string = SessionManager::parse_session_dates($session);
+
+				if ($session['date_start'] != '0000-00-00' && $session['date_end'] != '0000-00-00') {
+					$date = get_lang('From').' '.api_convert_and_format_date($session['date_start'], DATE_FORMAT_SHORT, date_default_timezone_get()).' '.get_lang('To').' '.api_convert_and_format_date($session['date_end'], DATE_FORMAT_SHORT, date_default_timezone_get());
+				} else {
+					$date = ' - ';
+				}
 
 	 			$count_courses_in_session = count(Tracking::get_courses_list_from_session($session_id));
 
@@ -117,7 +125,7 @@ class BlockSession extends Block {
 
 				$sessions_table .= '<tr class="'.$class_tr.'">
 										<td>'.$title.'</td>
-										<td align="center">'.$date_string.'</td>
+										<td align="center">'.$date.'</td>
 										<td align="center">'.$count_courses_in_session.'</td>
 								   </tr>';
 				$i++;
@@ -141,7 +149,8 @@ class BlockSession extends Block {
 	 * Get number of sessions
 	 * @return int
 	 */
-	function get_number_of_sessions() {
+	function get_number_of_sessions()
+    {
 		return count($this->sessions);
 	}
 

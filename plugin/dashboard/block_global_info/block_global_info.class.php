@@ -10,6 +10,8 @@
 /**
  * required files for getting data
  */
+require_once api_get_path(SYS_CODE_PATH).'admin/statistics/statistics.lib.php';
+
 /**
  * This class is used like controller for this global info block plugin
  * the class name must be registered inside path.info file
@@ -59,15 +61,12 @@ class BlockGlobalInfo extends Block
      * it's important to use the name 'get_block' for beeing used from dashboard controller
      * @return array   column and content html
      */
-    public function get_block() {
-
+    public function get_block()
+    {
     	global $charset;
-
     	$column = 2;
     	$data   = array();
-    	$content = '';
-    	$data_table = '';
-    	$content = $this->get_content_html();
+        $content = $this->get_content_html();
     	$html = '
     	            <li class="widget color-red" id="intro">
     	                <div class="widget-head">
@@ -89,8 +88,8 @@ class BlockGlobalInfo extends Block
  	 * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
  	 * @return string  content html
  	 */
-     public function get_content_html() {
-
+     public function get_content_html()
+     {
          $global_data = $this->get_global_information_data();
          $content = '<div style="margin:10px;">';
          $content .= '<h3><font color="#000">'.get_lang('GlobalPlatformInformation').'</font></h3>';
@@ -139,7 +138,7 @@ class BlockGlobalInfo extends Block
             array(get_lang('NumberOfCoursesPublic'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_OPEN_WORLD.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::count_courses_by_visibility(COURSE_VISIBILITY_OPEN_WORLD).'</a>'),
             array(get_lang('NumberOfCoursesOpen'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_OPEN_PLATFORM.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::count_courses_by_visibility(COURSE_VISIBILITY_OPEN_PLATFORM).'</a>'),
             array(get_lang('NumberOfCoursesPrivate'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_REGISTERED.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::count_courses_by_visibility(COURSE_VISIBILITY_REGISTERED).'</a>'),
-            array(get_lang('NumberOfCoursesClosed'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_CLOSED.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::count_courses_by_visibility(COURSE_VISIBILITY_CLOSED).'</a>')
+            array(get_lang('NumberOfCoursesClosed'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_CLOSED.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::count_courses_by_visibility(COURSE_VISIBILITY_CLOSED).'</a>'),
             array(get_lang('NumberOfCoursesHidden'), '<a href="'.$path.'admin/course_list.php?keyword_code=&amp;keyword_title=&amp;keyword_language=%25&amp;keyword_category=&amp;keyword_visibility='.COURSE_VISIBILITY_HIDDEN.'&amp;keyword_subscribe=%25&amp;keyword_unsubscribe=%25&amp;submit=&amp;_qf__advanced_course_search=">'.Statistics::count_courses_by_visibility(COURSE_VISIBILITY_HIDDEN).'</a>')
         );
         return $global_info;

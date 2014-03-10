@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Register course widget.
+ * Register course widget. 
  * Handles user's registration action.
  * Display a register to course form if required.
- *
+ * 
  * @copyright (c) 2011 University of Geneva
  * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
  * @author Laurent Opprecht
@@ -14,14 +14,14 @@ class RegisterCourseWidget
     const ACTION_SUBSCRIBE = 'subscribe';
 
     const PARAM_SUBSCRIBE = 'subscribe';
-    const PARAM_PASSCODE  = 'course_registration_code';
+    const PARAM_PASSCODE = 'course_registration_code';
 
     /**
      * Returns $_POST data for $key is it exists or $default otherwise.
-     *
+     * 
      * @param string $key
      * @param object $default
-     * @return string
+     * @return string 
      */
     public static function post($key, $default = '')
     {
@@ -30,10 +30,10 @@ class RegisterCourseWidget
 
     /**
      * Returns $_GET data for $key is it exists or $default otherwise.
-     *
+     * 
      * @param string $key
      * @param object $default
-     * @return string
+     * @return string 
      */
     public static function get($key, $default = '')
     {
@@ -56,76 +56,80 @@ class RegisterCourseWidget
 
     /**
      * Handle the subscribe action.
-     *
+     * 
      * @return bool
      */
     function action_subscribe_user()
     {
         $action = self::get('action');
-        if ($action != self::ACTION_SUBSCRIBE) {
+        if ($action != self::ACTION_SUBSCRIBE)
+        {
             return false;
         }
 
         $course_code = self::post(self::PARAM_SUBSCRIBE);
-        if (empty($course_code)) {
+        if (empty($course_code))
+        {
             return false;
         }
-
+        
         $registration_code = self::post(self::PARAM_PASSCODE);
 
-        if ($this->subscribe_user($course_code, $registration_code)) {
+        if ($this->subscribe_user($course_code, $registration_code))
+        {
             Display::display_confirmation_message(get_lang('EnrollToCourseSuccessful'));
-
             return;
         }
-        if (!empty($registration_code)) {
+        if (!empty($registration_code))
+        {
             Display::display_error_message(get_lang('CourseRegistrationCodeIncorrect'));
         }
         $this->display_form($course_code);
-
         return true;
     }
 
     /**
      * Regiser a user to a course.
      * Returns true on success, false otherwise.
-     *
+     * 
      * @param string $course_code
      * @param string $registration_code
      * @param int $user_id
-     * @return bool
+     * @return bool 
      */
     function subscribe_user($course_code, $registration_code = '', $user_id = null)
     {
-        $course                  = $this->retrieve_course($course_code);
+        $course = $this->retrieve_course($course_code);
         $course_regisration_code = $course['registration_code'];
-        if (!empty($course_regisration_code) && $registration_code != $course_regisration_code) {
+        if (!empty($course_regisration_code) && $registration_code != $course_regisration_code)
+        {
             return false;
         }
 
-        if (empty($user_id)) {
+        if (empty($user_id))
+        {
             global $_user;
             $user_id = $_user['user_id'];
         }
 
-        return (bool)CourseManager::add_user_to_course($user_id, $course['real_id']);
+        return (bool) CourseManager::add_user_to_course($user_id, $course_code);
     }
 
     /**
      * Display the course registration form.
      * Asks for registration code/password.
-     *
+     * 
      * @param string $course_code
      */
     function display_form($course_code)
     {
         global $stok;
 
-        $course                         = $this->retrieve_course($course_code);
-        $self                           = $_SERVER['REQUEST_URI'];
-        $course_code                    = $course['code'];
-        $course_visual_code             = $course['visual_code'];
-        $course_title                   = $course['title'];
+        $course = $this->retrieve_course($course_code);
+        $self = $_SERVER['REQUEST_URI'];
+        $course_code = $course['code'];
+        $course_visual_code = $course['visual_code'];
+        $course_title = $course['title'];
         $submit_registration_code_label = get_lang("SubmitRegistrationCode");
         $course_requires_password_label = get_lang('CourseRequiresPassword');
 
@@ -148,10 +152,11 @@ EOT;
     /**
      *
      * @param type $course_code
-     * @return type
+     * @return type 
      */
     function retrieve_course($course_code)
     {
+        require_once api_get_path(SYS_PATH) . '/main/inc/lib/course.lib.php';
         return CourseManager::get_course_information($course_code);
     }
 

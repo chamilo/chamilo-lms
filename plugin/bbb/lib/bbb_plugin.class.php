@@ -70,7 +70,7 @@ class BBBPlugin extends Plugin
         Database::query($sql);
 
         //hack to get rid of Database::query warning (please add c_id...)
-        $sql = "DELETE FROM $t_tool WHERE name = 'videoconference' AND c_id = c_id";
+        $sql = "DELETE FROM $t_tool WHERE name = 'bbb' AND c_id = c_id";
         Database::query($sql);
 
         $sql = "DROP TABLE IF EXISTS plugin_bbb_meeting";

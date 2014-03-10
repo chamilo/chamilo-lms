@@ -1,6 +1,6 @@
 <?php
 /**
- * This script initiates a videoconference session, calling the BigBlueButton
+ * This script initiates a videoconference session, calling the BigBlueButton 
  * API
  * @package chamilo.plugin.bigbluebutton
  */
@@ -147,7 +147,7 @@ class bbb {
         }
     }
     /**
-     * Tells whether the given meeting exists and is running
+     * Tells whether the given meeting exists and is running 
      * (using course code as name)
      * @param string Meeting name (usually the course code)
      * @return bool True if meeting exists, false otherwise
@@ -246,14 +246,14 @@ class bbb {
         foreach ($meeting_list as $meeting_db) {
             $meeting_bbb = $this->get_meeting_info(array('meetingId' => $meeting_db['id'], 'password' => $pass));
 
-            $meeting_bbb['end_url'] = api_get_self().'?action=end&id='.$meeting_db['id'];
+            $meeting_bbb['end_url'] = api_get_self().'?'.api_get_cidreq().'&action=end&id='.$meeting_db['id'];
 
             if ((string)$meeting_bbb['returncode'] == 'FAILED') {
                 if ($meeting_db['status'] == 1 && $this->is_teacher()) {
                     $this->end_meeting($meeting_db['id']);
                 }
             } else {
-                $meeting_bbb['add_to_calendar_url'] = api_get_self().'?action=add_to_calendar&id='.$meeting_db['id'].'&start='.api_strtotime($meeting_db['created_at']);
+                $meeting_bbb['add_to_calendar_url'] = api_get_self().'?'.api_get_cidreq().'&action=add_to_calendar&id='.$meeting_db['id'].'&start='.api_strtotime($meeting_db['created_at']);
             }
 
             $record_array = array();
@@ -278,9 +278,9 @@ class bbb {
                             if (is_array($record) && isset($record['recordId'])) {
                                 $url = Display::url(get_lang('ViewRecord'), $record['playbackFormatUrl'], array('target' => '_blank'));
                                 if ($this->is_teacher()) {
-                                    $url .= Display::url(Display::return_icon('link.gif',get_lang('CopyToLinkTool')), api_get_self().'?action=copy_record_to_link_tool&id='.$meeting_db['id'].'&record_id='.$record['recordId']);
-                                    $url .= Display::url(Display::return_icon('agenda.png',get_lang('AddToCalendar')), api_get_self().'?action=add_to_calendar&id='.$meeting_db['id'].'&start='.api_strtotime($meeting_db['created_at']).'&url='.$record['playbackFormatUrl']);
-                                    $url .= Display::url(Display::return_icon('delete.png',get_lang('Delete')), api_get_self().'?action=delete_record&id='.$record['recordId']);
+                                    $url .= Display::url(Display::return_icon('link.gif',get_lang('CopyToLinkTool')), api_get_self().'?'.api_get_cidreq().'&action=copy_record_to_link_tool&id='.$meeting_db['id'].'&record_id='.$record['recordId']);
+                                    $url .= Display::url(Display::return_icon('agenda.png',get_lang('AddToCalendar')), api_get_self().'?'.api_get_cidreq().'&action=add_to_calendar&id='.$meeting_db['id'].'&start='.api_strtotime($meeting_db['created_at']).'&url='.$record['playbackFormatUrl']);
+                                    $url .= Display::url(Display::return_icon('delete.png',get_lang('Delete')), api_get_self().'?'.api_get_cidreq().'&action=delete_record&id='.$record['recordId']);
                                 }
                                 //$url .= api_get_self().'?action=publish&id='.$record['recordID'];
                                 $count++;
@@ -309,14 +309,15 @@ class bbb {
                         }
                     }
                 }
+                //var_dump($record_array);
                 $item['show_links']  = implode('<br />', $record_array);
             }
 
             $item['created_at'] = api_convert_and_format_date($meeting_db['created_at']);
             //created_at
 
-            $item['publish_url'] = api_get_self().'?action=publish&id='.$meeting_db['id'];
-            $item['unpublish_url'] = api_get_self().'?action=unpublish&id='.$meeting_db['id'];
+            $item['publish_url'] = api_get_self().'?'.api_get_cidreq().'&action=publish&id='.$meeting_db['id'];
+            $item['unpublish_url'] = api_get_self().'?'.api_get_cidreq().'&action=unpublish&id='.$meeting_db['id'];
 
             if ($meeting_db['status'] == 1) {
                 $joinParams = array(
@@ -413,8 +414,8 @@ class bbb {
         if (empty($ids) or (is_array($ids) && count($ids)==0)) { return false; }
         $recordingParams = array(
            /*
-            * NOTE: Set the recordId below to a valid id after you have
-            * created a recorded meeting, and received a real recordID
+            * NOTE: Set the recordId below to a valid id after you have 
+            * created a recorded meeting, and received a real recordID 
             * back from your BBB server using the
             * getRecordingsWithXmlResponseArray method.
             */
@@ -437,10 +438,10 @@ class bbb {
         if (empty($id) or empty($record_id)) {
             return false;
         }
+        require_once api_get_path(LIBRARY_PATH).'link.lib.php';
         $records =  BigBlueButtonBN::getRecordingsArray($id, $this->url, $this->salt);
         if (!empty($records)) {
             foreach ($records as $record) {
-                //error_log($record['recordID']);
                 if ($record['recordID'] == $record_id) {
                     if (is_array($record) && isset($record['recordID']) && isset($record['playbacks'])) {
                         foreach ($record['playbacks'] as $item) {

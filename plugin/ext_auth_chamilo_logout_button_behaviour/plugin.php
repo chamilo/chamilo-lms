@@ -9,7 +9,6 @@
  * Plugin details (must be present)
  */
 
-
 //the plugin title
 $plugin_info['title']      = 'Enable or disable logout button';
 
@@ -32,7 +31,7 @@ $form->addElement('style_submit_button', 'submit_button', get_lang('Save'));
 //get default value for form
 $tab_default_ext_auth_chamilo_logout_button_behaviour_eaclbb_form_link_url = api_get_setting('ext_auth_chamilo_logout_button_behaviour_eaclbb_form_link_url');
 $tab_default_ext_auth_chamilo_logout_button_behaviour_eaclbb_form_link_infobulle = api_get_setting('ext_auth_chamilo_logout_button_behaviour_eaclbb_form_link_infobulle');
-$tab_default_ext_auth_chamilo_logout_button_behaviour_eaclbb_form_link_image = api_get_setting('ext_auth_chamilo_logout_button_behaviour_eaclbb_form_link_image');
+$Tab_Default_Ext_Auth_Chamilo_Logout_Button_Behaviour_Eaclbb_Form_Link_Image = api_get_setting('ext_auth_chamilo_logout_button_behaviour_eaclbb_form_link_image');
 $tab_default_ext_auth_chamilo_logout_button_behaviour_eaclbb_form_alert_onoff = api_get_setting('ext_auth_chamilo_logout_button_behaviour_eaclbb_form_alert_onoff');
 $tab_default_ext_auth_chamilo_logout_button_behaviour_eaclbb_form_alert_text = api_get_setting('ext_auth_chamilo_logout_button_behaviour_eaclbb_form_alert_text');
 $defaults['eaclbb_form_link_url'] = $tab_default_ext_auth_chamilo_logout_button_behaviour_eaclbb_form_link_url['eaclbb_form_link_url'];
@@ -44,5 +43,5 @@ $form->setDefaults($defaults);
 //display form
 $plugin_info['settings_form'] = $form;
 
-//set the smarty templates that are going to be used
+// Set the templates that are going to be used
 $plugin_info['templates']   = array('template.tpl');

@@ -13,6 +13,11 @@
  * required files for getting data
  */
 
+require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
+require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
+require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
+require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
+require_once api_get_path(LIBRARY_PATH).'pchart/MyHorBar.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/result.class.php';
@@ -24,7 +29,8 @@ require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/category.class.php';
  * the class name must be registered inside path.info file (e.g: controller = "BlockStudentGraph"), so dashboard controller will be instantiate it
  * @package chamilo.dashboard
  */
-class BlockStudentGraph extends Block {
+class BlockStudentGraph extends Block
+{
 
     private $user_id;
 	private $students;
@@ -34,7 +40,8 @@ class BlockStudentGraph extends Block {
 	/**
 	 * Constructor
 	 */
-    public function __construct ($user_id) {
+    public function __construct ($user_id)
+    {
     	$this->user_id  = $user_id;
     	$this->path 	= 'block_student_graph';
     	if ($this->is_block_visible_for_user($user_id)) {
@@ -51,7 +58,8 @@ class BlockStudentGraph extends Block {
 	 * @param	int		User id
 	 * @return	bool	Is block visible for user
 	 */
-    public function is_block_visible_for_user($user_id) {
+    public function is_block_visible_for_user($user_id)
+    {
     	$user_info = api_get_user_info($user_id);
 		$user_status = $user_info['status'];
 		$is_block_visible_for_user = false;
@@ -62,14 +70,15 @@ class BlockStudentGraph extends Block {
     }
 
     /**
-     * This method return content html containing information about students and its position for showing it inside dashboard interface
-     * it's important to use the name 'get_block' for beeing used from dashboard controller
+     * This method return content html containing information about students
+     * and its position for showing it inside dashboard interface
+     * it's important to use the name 'get_block' for being used from dashboard controller
      * @return array   column and content html
      */
-    public function get_block() {
+    public function get_block()
+    {
 
     	global $charset;
-
     	$column = 1;
     	$data   = array();
 		$students_attendance_graph = $this->get_students_attendance_graph();
@@ -90,10 +99,12 @@ class BlockStudentGraph extends Block {
     }
 
     /**
- 	 * This method return a graph containing informations about students evaluation, it's used inside get_block method for showing it inside dashboard interface
+ 	 * This method return a graph containing information about students evaluation,
+     * it's used inside get_block method for showing it inside dashboard interface
  	 * @return string  img html
  	 */
-    public function get_students_attendance_graph() {
+    public function get_students_attendance_graph()
+    {
 
 		$students = $this->students;
  		$attendance = new Attendance();
@@ -138,7 +149,7 @@ class BlockStudentGraph extends Block {
 
 			// prepare cache for saving image
 			$graph_id = $this->user_id.'StudentEvaluationGraph';  	// the graph id
-			$cache = new pCache(api_get_path(SYS_ARCHIVE_PATH));
+			$cache = new pCache();
 
 			$data = $data_set->GetData();	// return $this->DataDescription
 
@@ -198,7 +209,8 @@ class BlockStudentGraph extends Block {
 	 * Get number of students
 	 * @return int
 	 */
-	function get_number_of_students() {
+	function get_number_of_students()
+    {
 		return count($this->students);
 	}
 }

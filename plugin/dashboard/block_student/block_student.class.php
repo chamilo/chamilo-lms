@@ -9,6 +9,7 @@
 /**
  * required files for getting data
  */
+require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/result.class.php';
@@ -20,7 +21,8 @@ require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/category.class.php';
  * the class name must be registered inside path.info file (e.g: controller = "BlockStudent"), so dashboard controller will be instantiate it
  * @package chamilo.dashboard
  */
-class BlockStudent extends Block {
+class BlockStudent extends Block
+{
 
     private $user_id;
 	private $students;
@@ -30,16 +32,12 @@ class BlockStudent extends Block {
 	/**
 	 * Constructor
 	 */
-    public function __construct ($user_id) {
+    public function __construct ($user_id)
+    {
     	$this->user_id  = $user_id;
     	$this->path 	= 'block_student';
     	if ($this->is_block_visible_for_user($user_id)) {
-    		/*if (api_is_platform_admin()) {
-	    		$this->students = UserManager::get_user_list(array('status' => STUDENT));
-	    	} else {*/
-
             $this->students =  UserManager::get_users_followed_by_drh($user_id, STUDENT);
-	    	//}
     	}
     }
 
@@ -48,7 +46,8 @@ class BlockStudent extends Block {
 	 * @param	int		User id
 	 * @return	bool	Is block visible for user
 	 */
-    public function is_block_visible_for_user($user_id) {
+    public function is_block_visible_for_user($user_id)
+    {
     	$user_info = api_get_user_info($user_id);
 		$user_status = $user_info['status'];
 		$is_block_visible_for_user = false;
@@ -63,7 +62,8 @@ class BlockStudent extends Block {
      * it's important to use the name 'get_block' for beeing used from dashboard controller
      * @return array   column and content html
      */
-    public function get_block() {
+    public function get_block()
+    {
     	global $charset;
     	$column = 1;
     	$data   = array();
@@ -89,7 +89,8 @@ class BlockStudent extends Block {
  	 * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
  	 * @return string  content html
  	 */
-    public function get_students_content_html_for_platform_admin() {
+    public function get_students_content_html_for_platform_admin()
+    {
  		$students = $this->students;
  		$content = '<div style="margin:10px;">';
  		$content .= '<h3><font color="#000">'.get_lang('YourStudents').'</font></h3>';
@@ -129,7 +130,7 @@ class BlockStudent extends Block {
 		 			foreach ($courses_by_user as $course) {
 		 				$course_code = $course['code'];
 		 				$course_title = $course['title'];
-		 				$time = api_time_to_hms(Tracking :: get_time_spent_on_the_course($student['user_id'], $course['real_id']));
+		 				$time = api_time_to_hms(Tracking :: get_time_spent_on_the_course($student['user_id'], $course_code));
 		 				$students_table .= '<tr '.$style.'>
 											<td align="right">'.$course_title.'</td>
 											<td align="right">'.$time.'</td>
@@ -157,8 +158,7 @@ class BlockStudent extends Block {
  		return $content;
  	}
 
-  	public function get_students_content_html_for_drh()
-    {
+  	public function get_students_content_html_for_drh() {
   		$attendance = new Attendance();
   		$students = $this->students;
  		$content = '<div style="margin:5px;">';
@@ -235,6 +235,7 @@ class BlockStudent extends Block {
                          </div>';
 		}
 		$content .= '</div>';
+
   		return $content;
   	}
 
@@ -242,7 +243,8 @@ class BlockStudent extends Block {
 	 * Get number of students
 	 * @return int
 	 */
-	function get_number_of_students() {
+	function get_number_of_students()
+    {
 		return count($this->students);
 	}
 }

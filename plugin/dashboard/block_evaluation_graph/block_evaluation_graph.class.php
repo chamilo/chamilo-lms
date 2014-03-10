@@ -11,6 +11,9 @@
 /**
  * required files for getting data
  */
+require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
+require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
+require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/gradebookitem.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/evaluation.class.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/result.class.php';
@@ -24,8 +27,8 @@ require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/category.class.php';
  * the class name must be registered inside path.info file (e.g: controller = "BlockEvaluationGraph"), so dashboard controller will be instantiate it
  * @package chamilo.dashboard
  */
-class BlockEvaluationGraph extends Block {
-
+class BlockEvaluationGraph extends Block
+{
     private $user_id;
 	private $courses;
 	private $sessions;
@@ -35,25 +38,18 @@ class BlockEvaluationGraph extends Block {
 	/**
 	 * Constructor
 	 */
-    public function __construct ($user_id) {
+    public function __construct($user_id)
+    {
     	$this->path = 'block_evaluation_graph';
     	$this->user_id 	= $user_id;
     	$this->bg_width = 450;
     	$this->bg_height = 350;
     	if ($this->is_block_visible_for_user($user_id)) {
-            //$this->courses  = CourseManager::get_real_course_list();
-    		/*if (api_is_platform_admin()) {
-	    		$this->courses  = CourseManager::get_real_course_list();
-	    		$this->sessions = SessionManager::get_sessions_list();
-	    	} else {*/
-	    		if (!api_is_session_admin()) {
-	    			$this->courses  = CourseManager::get_courses_followed_by_drh($user_id);
-	    		}
-	    		$this->sessions = SessionManager::get_sessions_followed_by_drh($user_id);
-	    	//}
+            if (!api_is_session_admin()) {
+                $this->courses  = CourseManager::get_courses_followed_by_drh($user_id);
+            }
+            $this->sessions = SessionManager::get_sessions_followed_by_drh($user_id);
     	}
-
-
     }
 
 	/**
@@ -61,7 +57,8 @@ class BlockEvaluationGraph extends Block {
 	 * @param	int		User id
 	 * @return	bool	Is block visible for user
 	 */
-    public function is_block_visible_for_user($user_id) {
+    public function is_block_visible_for_user($user_id)
+    {
     	$user_info = api_get_user_info($user_id);
 		$user_status = $user_info['status'];
 		$is_block_visible_for_user = false;
@@ -76,47 +73,46 @@ class BlockEvaluationGraph extends Block {
      * it's important to use the name 'get_block' for beeing used from dashboard controller
      * @return array   column and content html
      */
-    public function get_block() {
+    public function get_block()
+    {
 
 		global $charset;
-
     	$column = 1;
     	$data   = array();
 
 		$evaluations_base_courses_graph         = $this->get_evaluations_base_courses_graph();
-
 		$evaluations_courses_in_sessions_graph  = $this->get_evaluations_courses_in_sessions_graph();
 
 		$html = '<li class="widget color-orange" id="intro">
-			                <div class="widget-head">
-			                    <h3>'.get_lang('EvaluationsGraph').'</h3>
-			                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
-			                </div>
-			                <div class="widget-content" align="center">';
-			                	if (empty($evaluations_base_courses_graph) && empty($evaluations_courses_in_sessions_graph)) {
-			                		$html .= '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'),'UTF-8').'</p>';
-			                	} else {
-			                		// display evaluations base courses graph
-				                	if (!empty($evaluations_base_courses_graph)) {
-										foreach ($evaluations_base_courses_graph as $course_code => $img_html) {
-											$html .= '<div><strong>'.$course_code.'</strong></div>';
-											$html .= $img_html;
-										}
-				                	}
-				                	// display evaluations base courses graph
-				                	if (!empty($evaluations_courses_in_sessions_graph)) {
-										foreach ($evaluations_courses_in_sessions_graph as $session_id => $courses) {
-											$session_name = api_get_session_name($session_id);
-											$html .= '<div><strong>'.$session_name.':'.get_lang('Evaluations').'</strong></div>';
-											foreach ($courses as $course_code => $img_html) {
-												$html .= '<div><strong>'.$course_code.'</strong></div>';
-												$html .= $img_html;
-											}
-										}
-				                	}
-			                	}
-		$html .=        	'</div>
-			            </li>';
+                    <div class="widget-head">
+                        <h3>'.get_lang('EvaluationsGraph').'</h3>
+                        <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
+                    </div>
+                    <div class="widget-content" align="center">';
+                        if (empty($evaluations_base_courses_graph) && empty($evaluations_courses_in_sessions_graph)) {
+                            $html .= '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'),'UTF-8').'</p>';
+                        } else {
+                            // display evaluations base courses graph
+                            if (!empty($evaluations_base_courses_graph)) {
+                                foreach ($evaluations_base_courses_graph as $course_code => $img_html) {
+                                    $html .= '<div><strong>'.$course_code.'</strong></div>';
+                                    $html .= $img_html;
+                                }
+                            }
+                            // display evaluations base courses graph
+                            if (!empty($evaluations_courses_in_sessions_graph)) {
+                                foreach ($evaluations_courses_in_sessions_graph as $session_id => $courses) {
+                                    $session_name = api_get_session_name($session_id);
+                                    $html .= '<div><strong>'.$session_name.':'.get_lang('Evaluations').'</strong></div>';
+                                    foreach ($courses as $course_code => $img_html) {
+                                        $html .= '<div><strong>'.$course_code.'</strong></div>';
+                                        $html .= $img_html;
+                                    }
+                                }
+                            }
+                        }
+		$html .= '</div>
+			     </li>';
 
     	$data['column'] = $column;
     	$data['content_html'] = $html;
@@ -124,10 +120,13 @@ class BlockEvaluationGraph extends Block {
 	}
 
     /**
- 	 * This method return a graph containing informations about evaluations inside base courses, it's used inside get_block method for showing it inside dashboard interface
+ 	 * This method return a graph containing informations about evaluations
+     * inside base courses, it's used inside get_block method for showing
+     * it inside dashboard interface
  	 * @return string  img html
  	 */
-    public function get_evaluations_base_courses_graph() {
+    public function get_evaluations_base_courses_graph()
+    {
 		$graphs = array();
 		if (!empty($this->courses)) {
 			$courses_code = array_keys($this->courses);
@@ -160,7 +159,7 @@ class BlockEvaluationGraph extends Block {
 					   	$data_set->RemoveSerie("Items");
 					   	$data_set->SetAbsciseLabelSerie("Items");
 					    $graph_id = $this->user_id.'StudentEvaluationGraph';
-						$cache = new pCache(api_get_path(SYS_ARCHIVE_PATH));
+						$cache = new pCache();
 						// the graph id
 						$data = $data_set->GetData();
 						if ($cache->IsInCache($graph_id, $data)) {
@@ -211,19 +210,20 @@ class BlockEvaluationGraph extends Block {
  	}
 
 	/**
- 	 * This method return a graph containing informations about evaluations inside courses in sessions, it's used inside get_block method for showing it inside dashboard interface
+ 	 * This method return a graph containing information about evaluations
+     * inside courses in sessions, it's used inside get_block method for
+     * showing it inside dashboard interface
  	 * @return string  img html
  	 */
-    public function get_evaluations_courses_in_sessions_graph() {
+    public function get_evaluations_courses_in_sessions_graph()
+    {
 		$graphs = array();
 		if (!empty($this->sessions)) {
 			$session_ids = array_keys($this->sessions);
 			foreach ($session_ids as $session_id) {
 				$courses_code = array_keys(Tracking::get_courses_list_from_session($session_id));
 				$courses_graph = array();
-				foreach ($courses_code as $courseId) {
-                    $courseInfo = api_get_course_info_by_id($courseId);
-                    $course_code = $courseInfo['code'];
+				foreach ($courses_code as $course_code) {
 					$cats = Category::load(null, null, $course_code, null, null, $session_id);
 					if (isset($cats) && isset($cats[0])) {
 						$alleval = $cats[0]->get_evaluations(null, true, $course_code);
@@ -251,7 +251,7 @@ class BlockEvaluationGraph extends Block {
 						   	$data_set->RemoveSerie("Items");
 						   	$data_set->SetAbsciseLabelSerie("Items");
 						    $graph_id = $this->user_id.'StudentEvaluationGraph';
-							$cache = new pCache(api_get_path(SYS_ARCHIVE_PATH));
+							$cache = new pCache();
 							// the graph id
 							$data = $data_set->GetData();
 							if ($cache->IsInCache($graph_id, $data)) {

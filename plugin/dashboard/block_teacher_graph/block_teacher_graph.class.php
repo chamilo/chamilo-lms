@@ -9,14 +9,20 @@
 /**
  * required files for getting data
  */
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'course.lib.php';
+require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
+require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
+require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
+require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
 
 /**
  * This class is used like controller for teacher graph block plugin,
  * the class name must be registered inside path.info file (e.g: controller = "BlockTeacherGraph"), so dashboard controller will be instantiate it
  * @package chamilo.dashboard
  */
-class BlockTeacherGraph extends Block {
-
+class BlockTeacherGraph extends Block
+{
     private $user_id;
     private $teachers;
     private $path;
@@ -25,15 +31,12 @@ class BlockTeacherGraph extends Block {
 	/**
 	 * Controller
 	 */
-    public function __construct ($user_id) {
+    public function __construct ($user_id)
+    {
     	$this->user_id  = $user_id;
     	$this->path 	= 'block_teacher_graph';
     	if ($this->is_block_visible_for_user($user_id)) {
-    		/*if (api_is_platform_admin()) {
-	    		$this->teachers = UserManager::get_user_list(array('status' => COURSEMANAGER));
-	    	} else {*/
-	    		$this->teachers = UserManager::get_users_followed_by_drh($user_id, COURSEMANAGER);
-	    	//}
+            $this->teachers = UserManager::get_users_followed_by_drh($user_id, COURSEMANAGER);
     	}
     }
 
@@ -42,7 +45,8 @@ class BlockTeacherGraph extends Block {
 	 * @param	int		User id
 	 * @return	bool	Is block visible for user
 	 */
-    public function is_block_visible_for_user($user_id) {
+    public function is_block_visible_for_user($user_id)
+    {
     	$user_info = api_get_user_info($user_id);
 		$user_status = $user_info['status'];
 		$is_block_visible_for_user = false;
@@ -57,41 +61,43 @@ class BlockTeacherGraph extends Block {
      * it's important to use the name 'get_block' for beeing used from dashboard controller
      * @return array   column and content html
      */
-    public function get_block() {
+    public function get_block()
+    {
     	global $charset;
     	$column = 1;
     	$data   = array();
+		$teacher_information_graph = $this->get_teachers_information_graph();
+		$html = '
+                <li class="widget color-blue" id="intro">
+                    <div class="widget-head">
+                        <h3>'.get_lang('TeachersInformationsGraph').'</h3>
+                        <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
+                    </div>
+                    <div class="widget-content" align="center">
+                        <div style="padding:10px;"><strong>'.get_lang('TimeSpentOnThePlatformLastWeekByDay').'</strong></div>
+                        '.$teacher_information_graph.'
+                    </div>
+                </li>
+				';
 
-		/*if (api_is_platform_admin()) {
-			$teacher_content_html = $this->get_teachers_content_html_for_platform_admin();
-		} else if (api_is_drh()) {*/
-        $teacher_information_graph = $this->get_teachers_information_graph();
-		//}
-
-		$html = '<li class="widget color-blue" id="intro">
-			                <div class="widget-head">
-			                    <h3>'.get_lang('TeachersInformationsGraph').'</h3>
-			                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
-			                </div>
-			                <div class="widget-content" align="center">
-			                	<div style="padding:10px;"><strong>'.get_lang('TimeSpentOnThePlatformLastWeekByDay').'</strong></div>
-								'.$teacher_information_graph.'
-			                </div>
-			            </li>';
     	$data['column'] = $column;
     	$data['content_html'] = $html;
+
     	return $data;
+
     }
 
     /**
  	 * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
  	 * @return string  content html
  	 */
-    public function get_teachers_information_graph() {
+    public function get_teachers_information_graph()
+    {
 	 	$teachers = $this->teachers;
 		$graph = '';
+
  		$user_ids = array_keys($teachers);
- 		$a_last_week = Text::get_last_week();
+ 		$a_last_week = get_last_week();
 
 		if (is_array($user_ids) && count($user_ids) > 0) {
 			$data_set = new pData;
@@ -100,18 +106,20 @@ class BlockTeacherGraph extends Block {
 				$username = $teacher_info['username'];
 				$time_by_days = array();
 				foreach ($a_last_week as $day) {
+					// day is received as y-m-d 12:00:00
 					$start_date = api_get_utc_datetime($day);
 					$end_date = api_get_utc_datetime($day+(3600*24-1));
+
 					$time_on_platform_by_day = Tracking::get_time_spent_on_the_platform($user_id, 'custom', $start_date, $end_date);
 					$hours = floor($time_on_platform_by_day / 3600);
 					$min = floor(($time_on_platform_by_day - ($hours * 3600)) / 60);
 					$time_by_days[] = $min;
 				}
-				$data_set->AddPoint($time_by_days, $username);
+				$data_set->AddPoint($time_by_days,$username);
 				$data_set->AddSerie($username);
 			}
 
-			$last_week 	 = date('Y-m-d', $a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
+			$last_week 	 = date('Y-m-d',$a_last_week[0]).' '.get_lang('To').' '.date('Y-m-d', $a_last_week[6]);
 			$days_on_week = array();
 			foreach ($a_last_week as $weekday) {
 				$days_on_week[] = date('d/m',$weekday);
@@ -124,7 +132,7 @@ class BlockTeacherGraph extends Block {
 			$data_set->SetAbsciseLabelSerie("Days");
 			$graph_id = $this->user_id.'TeacherConnectionsGraph';
 
-			$cache = new pCache(api_get_path(SYS_ARCHIVE_PATH));
+			$cache = new pCache();
 			// the graph id
 			$data = $data_set->GetData();
 
@@ -169,6 +177,7 @@ class BlockTeacherGraph extends Block {
 		} else {
 			$graph = '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'),'UTF-8').'</p>';
 		}
+
  		return $graph;
 	}
 
@@ -176,7 +185,9 @@ class BlockTeacherGraph extends Block {
 	 * Get number of teachers
 	 * @return int
 	 */
-	function get_number_of_teachers() {
+	function get_number_of_teachers()
+    {
 		return count($this->teachers);
 	}
+
 }

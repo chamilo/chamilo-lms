@@ -11,8 +11,7 @@ $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 require_once dirname(__FILE__).'/config.php';
 $plugin = BBBPlugin::create();
 $tool_name = $plugin->get_lang('Videoconference');
-
-$tpl = $app['template'];
+$tpl = new Template($tool_name);
 
 $bbb = new bbb();
 $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -91,6 +90,7 @@ $tpl->assign('users_online', $users_online);
 $tpl->assign('bbb_status', $status);
 $tpl->assign('show_join_button', $show_join_button);
 
+//$tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $listing_tpl = 'bbb/listing.tpl';
 $content = $tpl->fetch($listing_tpl);

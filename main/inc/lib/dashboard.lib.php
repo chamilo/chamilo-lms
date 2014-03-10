@@ -73,7 +73,7 @@ class DashboardManager {
 		if (count($disabled_blocks_data) > 0) {
 			foreach ($disabled_blocks_data as $disabled_block) {
 				echo '<tr style="background-color:#eee">';
-				echo '<td><center><input type="checkbox" name="disabled_block" value="true" checked disabled /></center>';
+				echo '<td><input type="checkbox" name="disabled_block" value="true" checked disabled />';
 				for ($j = 0 ; $j < count($table_cols); $j++) {
 					if (isset($disabled_block[strtolower($table_cols[$j])])) {
 						if ($j == 2) {
@@ -96,7 +96,7 @@ class DashboardManager {
 
 		echo '</table>';
 		echo '<br />';
-		echo '<button class="save" type="submit" name="submit_dashboard_plugins" value="'.get_lang('EnableDashboardPlugins').'">'.get_lang('EnableDashboardPlugins').'</button></form>';
+		echo '<button class="btn btn-primary" type="submit" name="submit_dashboard_plugins" value="'.get_lang('EnableDashboardPlugins').'">'.get_lang('EnableDashboardPlugins').'</button></form>';
 	}
 
 	/**

@@ -87,7 +87,7 @@ function handle_regions()
     }
     echo '</table>';
     echo '<br />';
-    echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
+    echo '<button class="btn btn-primary" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button></form>';
 }
 
 function handle_extensions()
@@ -157,18 +157,22 @@ function handle_plugins()
             }
             echo '</td><td>';
 
-            echo '<h4>'.$plugin_info['title'].' <small>v '.$plugin_info['version'].'</small></h4>';
-            echo '<p>'.$plugin_info['comment'].'</p>';
-            echo '<p>'.get_lang('Author').': '.$plugin_info['author'].'</p>';
+            $version = isset($plugin_info['version']) ? $plugin_info['version'] : null;
+            $comment = isset($plugin_info['comment']) ? $plugin_info['comment'] : null;
+            $author = isset($plugin_info['author']) ? $plugin_info['author'] : null;
+
+            echo '<h4>'.$plugin_info['title'].' <small>v '.$version.'</small></h4>';
+            echo '<p>'.$comment.'</p>';
+            echo '<p>'.get_lang('Author').': '.$author.'</p>';
 
             echo '<div class="btn-group">';
             if (in_array($plugin, $installed_plugins)) {
-                 echo Display::url(get_lang('Configure'), 'configure_plugin.php?name='.$plugin, array('class' => 'btn'));
-                 echo Display::url(get_lang('Regions'), 'settings.php?category=Regions&name='.$plugin, array('class' => 'btn'));
+                 echo Display::url(get_lang('Configure'), 'configure_plugin.php?name='.$plugin, array('class' => 'btn btn-default'));
+                 echo Display::url(get_lang('Regions'), 'settings.php?category=Regions&name='.$plugin, array('class' => 'btn btn-default'));
             }
 
             if (file_exists(api_get_path(SYS_PLUGIN_PATH).$plugin.'/readme.txt')) {
-                 echo Display::url("readme.txt", api_get_path(WEB_PLUGIN_PATH).$plugin."/readme.txt", array('class' => 'btn ajax', '_target' => '_blank'));
+                 echo Display::url("readme.txt", api_get_path(WEB_PLUGIN_PATH).$plugin."/readme.txt", array('class' => 'btn btn-default ajax', '_target' => '_blank'));
             }
             echo '</div>';
             echo '</td></tr>';
@@ -177,7 +181,7 @@ function handle_plugins()
     echo '</table>';
 
     echo '<div class="form-actions bottom_actions">';
-    echo '<button class="save" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button>';
+    echo '<button class="btn btn-primary" type="submit" name="submit_plugins">'.get_lang('EnablePlugins').'</button>';
     echo '</div>';
     echo '</form>';
 }
@@ -212,7 +216,7 @@ function handle_stylesheets()
 
     $form->addRule('new_stylesheet', get_lang('InvalidExtension').' ('.implode(',', $allowed_file_types).')', 'filetype', $allowed_file_types);
     $form->addRule('new_stylesheet', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement('style_submit_button', 'stylesheet_upload', get_lang('Upload'), array('class'=>'save'));
+    $form->addElement('button', 'stylesheet_upload', get_lang('Upload'));
 
     $show_upload_form = false;
 
@@ -605,7 +609,7 @@ function handle_search()
 
     $default_values['search_enabled'] = $search_enabled;
 
-    $form->addElement('style_submit_button', 'submit', get_lang('Save'),'class="save"');
+    $form->addElement('button', 'submit', get_lang('Save'));
     $form->setDefaults($default_values);
 
     echo '<div id="search-options-form">';
@@ -898,7 +902,7 @@ function add_edit_template() {
         $form->setDefaults($defaults);
     }
     // Setting the form elements: the submit button.
-    $form->addElement('style_submit_button' , 'submit', get_lang('Ok') ,'class="save"');
+    $form->addElement('button' , 'submit', get_lang('Ok'));
 
     // Setting the rules: the required fields.
     $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
@@ -1300,7 +1304,7 @@ function generate_settings_form($settings, $settings_by_access_list, $settings_t
     if (!empty($settings)) {
         $form->setDefaults($default_values);
     }
-    $form->addElement('button', 'submit_fixed_in_bottom', get_lang('SaveSettings'), 'class="save"');
+    $form->addElement('button', 'submit_fixed_in_bottom', get_lang('SaveSettings'));
     return $form;
 }
 

@@ -1620,7 +1620,7 @@ class CourseManager
         $sql = "DELETE FROM $table_session_course_user WHERE c_id='".$courseId."'";
         Database::query($sql);
         // Delete from Course - URL
-        $sql = "DELETE FROM $table_course_rel_url WHERE course_code = '".$code."'";
+        $sql = "DELETE FROM $table_course_rel_url WHERE c_id = '".$code."'";
         Database::query($sql);
 
         $sql = 'SELECT survey_id FROM '.$table_course_survey.' WHERE course_code="'.$code.'"';

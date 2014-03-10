@@ -132,7 +132,7 @@ $(document).scroll(function() {
     }
 
     // Admin -> Settings toolbar.
-    if ($('body').width() > 959) {
+    if ($('body').width() > 959) {/*
         if ($('.new_actions').length) {
             if (!$('.new_actions').attr('data-top')) {
                 // If already fixed, then do nothing
@@ -152,7 +152,7 @@ $(document).scroll(function() {
             } else {
                 $('.new_actions').removeClass('new_actions-fixed');
             }
-        }
+        }*/
     }
 
     // Bottom actions.

@@ -100,11 +100,6 @@ if (api_get_setting('allow_skills_tool') == 'true') {
 
 $social_right_content .= '</div>';
 
-// Search box
-$social_right_content .= '<div class="span4">';
-$social_right_content .= UserManager::get_search_form('');
-$social_right_content .= '</br>';
-
 // Group box by age
 $results = $usergroup->get_groups_by_age(1,false);
 

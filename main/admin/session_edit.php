@@ -25,7 +25,6 @@ $tbl_session	= Database::get_main_table(TABLE_MAIN_SESSION);
 $id = intval($_GET['id']);
 
 SessionManager::protect_session_edit($id);
-
 $infos = SessionManager::fetch($id);
 
 $id_coach = $infos['id_coach'];
@@ -104,7 +103,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 $sql="SELECT user_id,lastname,firstname,username FROM $tbl_user WHERE status='1'".$order_clause;
 
-if ($_configuration['multiple_access_urls']) {
+if (api_is_multiple_url_enabled()) {
 	$table_access_url_rel_user= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1) {

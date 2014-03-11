@@ -881,7 +881,7 @@ function api_valid_email($address) {
  * @author Roan Embrechts
  */
 function api_protect_course_script($print_headers = false, $allow_session_admins = false, $allow_drh = false) {
-    global $is_allowed_in_course;
+    $is_allowed_in_course = api_is_allowed_in_course();
     $is_visible = false;
 
     if (api_is_drh()) {
@@ -966,7 +966,7 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
  * @author Roan Embrechts
  */
 function api_block_anonymous_users($print_headers = true) {
-    global $_user;
+    $_user = api_get_user_info();
     if (!(isset($_user['user_id']) && $_user['user_id']) || api_is_anonymous($_user['user_id'], true)) {
         api_not_allowed($print_headers);
         return false;
@@ -1403,7 +1403,6 @@ function api_get_course_info_by_id($id = null) {
         }
         return $_course;
     }
-    //global $_course;
     global $_course;
     if ($_course == '-1') $_course = array();
     return $_course;
@@ -2701,8 +2700,8 @@ function api_display_debug_info($debug_info) {
  * @return boolean, true: the user has the rights to edit, false: he does not
  */
 
-function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach = false, $check_student_view = true) {
-
+function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach = false, $check_student_view = true)
+{
     $my_session_id 				= api_get_session_id();
     $is_allowed_coach_to_edit 	= api_is_coach();
     $session_visibility 		= api_get_session_visibility($my_session_id);
@@ -5663,7 +5662,8 @@ function api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id = null,
     }
 }
 
-function api_protect_super_admin($admin_id_to_check, $my_user_id = null, $allow_session_admin = false) {
+function api_protect_super_admin($admin_id_to_check, $my_user_id = null, $allow_session_admin = false)
+{
     if (api_global_admin_can_edit_admin($admin_id_to_check, $my_user_id, $allow_session_admin)) {
         return true;
     } else {

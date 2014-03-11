@@ -257,17 +257,17 @@ a:active {
   opacity: 0.8;
 }
 .messages-icon{
-  background:url(images/icon-chamilo.png) no-repeat 0 -30px;
+  background:url(images/icon-chamilo.png) no-repeat 0 -29px;
   background-size: 24px auto;
   padding-left: 30px;
 }
 .invitations-icon{
-  background:url(images/icon-chamilo.png) no-repeat 0 -64px;
+  background:url(images/icon-chamilo.png) no-repeat 0 -61px;
   background-size: 24px auto;
   padding-left: 30px;
 }
 .shared-profile-icon{
-  background:url(images/icon-chamilo.png) no-repeat 0 -98px;
+  background:url(images/icon-chamilo.png) no-repeat 0 -96px;
   background-size: 24px auto;
   padding-left: 30px;
 }
@@ -290,7 +290,7 @@ a:active {
 }
 
 .myfiles-icon {
-  background:url(images/icon-chamilo.png) no-repeat 0 -232px;
+  background:url(images/icon-chamilo.png) no-repeat 0 -229px;
   background-size: 24px auto;
   padding-left: 30px;
 }
@@ -644,6 +644,10 @@ button.arrowl, input.arrowl {
         background: url("images/icon-chamilo.png") no-repeat 0 -618px;
         padding-left: 40px;
     }
+    .forum-btn{
+        background: url("images/icon-chamilo.png") no-repeat 0 -666px;
+        padding-left: 40px;
+    }
 
 /*+++++++++++++++++++++++++++++++++
 RESPONSIVE CSS
@@ -692,8 +696,8 @@ RESPONSIVE CSS
 @media (min-width: 801px){
   .nav-list > li > a {
   font-size: 13px;
-  padding-bottom: 6px;
-  padding-top: 6px;
+  padding-bottom: 8px;
+  padding-top: 8px;
 }
 
 /*CSS ICON BLOCK USER*/
@@ -744,6 +748,10 @@ RESPONSIVE CSS
         padding-left: 30px;
         background-size: 25px auto;
     }
+    .forum-btn {
+      background: url("images/icon-chamilo.png") no-repeat scroll 0 -552px / 25px auto rgba(0, 0, 0, 0);
+      padding-left: 30px;
+}
     
 }
 @media (min-width: 321px) and (max-width: 480px){

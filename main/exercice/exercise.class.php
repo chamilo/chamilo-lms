@@ -3296,13 +3296,13 @@ class Exercise {
      * Sends a notification when a user ends an examn
      *
      */
-    function send_notification_for_questions($question_list_answers, $origin, $exe_id) {
+    function send_mail_notification_for_exam($question_list_answers, $origin, $exe_id) {
         if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
             return null;
         }
         // Email configuration settings
-        $coursecode     = api_get_course_id();
-        $course_info    = api_get_course_info(api_get_course_id());
+        $courseCode     = api_get_course_id();
+        $courseInfo    = api_get_course_info($courseCode);
 
         $url_email = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&id='.$exe_id.'&action=qualify';
         $user_info = UserManager::get_user_info_by_id(api_get_user_id());
@@ -3334,7 +3334,7 @@ class Exercise {
         $msg    = str_replace("#firstName#",   $user_info['firstname'],$msg1);
         $msg1   = str_replace("#lastName#",    $user_info['lastname'],$msg);
         
-        $msg    = str_replace("#course#",      $course_info['name'],$msg1);
+        $msg    = str_replace("#course#",      $courseInfo['name'],$msg1);
 
         if ($origin != 'learnpath') {
             $msg.= get_lang('ClickToCommentAndGiveFeedback').', <br />
@@ -3413,10 +3413,10 @@ class Exercise {
         }
 
         if (!empty($open_question_list)) {
-            $msg .=  '<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
+            $msg .= '<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
                     <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
             $msg .= $open_question_list;
-            $msg.='</table><br />';
+            $msg .= '</table><br />';
 
 
             $msg1   = str_replace("#exercise#",    $this->exercise, $msg);
@@ -3426,7 +3426,7 @@ class Exercise {
             $msg    = str_replace("#course#",      $course_info['name'],$msg1);
 
             if ($origin != 'learnpath') {
-                $msg.= get_lang('ClickToCommentAndGiveFeedback').', <br />
+                $msg .= get_lang('ClickToCommentAndGiveFeedback').', <br />
                             <a href="#url#">#url#</a>';
             }
             $msg1 = str_replace("#url#", $url_email, $msg);

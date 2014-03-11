@@ -2306,7 +2306,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         // Send notification ..
         if (!api_is_allowed_to_edit(null,true)) {
             if (api_get_course_setting('email_alert_manager_on_new_quiz') == 1 ) {
-                $objExercise->send_notification_for_questions($question_list_answers, $origin, $exe_id);
+                $objExercise->send_mail_notification_for_exam($question_list_answers, $origin, $exe_id);
             }
             $objExercise->send_notification_for_open_questions($question_list_answers, $origin, $exe_id);
             $objExercise->send_notification_for_oral_questions($question_list_answers, $origin, $exe_id);

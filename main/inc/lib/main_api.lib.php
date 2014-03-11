@@ -1986,7 +1986,7 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
 
                 // If the end date was set.
                 if (!empty($row['date_end']) && $row['date_end'] != '0000-00-00') {
-                    $row['date_end'] = $row['date_end'].' 00:00:00';
+                    $row['date_end'] = $row['date_end'].' 23:59:59';
                     // Only if date_start said that it was ok
                     if ($visibility == SESSION_AVAILABLE) {
                         if ($now < api_strtotime($row['date_end'], 'UTC')) {

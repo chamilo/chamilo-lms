@@ -1949,7 +1949,6 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
     }
 
     $now = time();
-
     if (!empty($session_id)) {
         $session_id = intval($session_id);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -1986,7 +1985,9 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
 
                 // If the end date was set.
                 if (!empty($row['date_end']) && $row['date_end'] != '0000-00-00') {
+                    // End date finish at midnight.
                     $row['date_end'] = $row['date_end'].' 23:59:59';
+
                     // Only if date_start said that it was ok
                     if ($visibility == SESSION_AVAILABLE) {
                         if ($now < api_strtotime($row['date_end'], 'UTC')) {
@@ -2011,7 +2012,7 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                     $row['date_end'] != '0000-00-00' &&
                     $row['nb_days_access_after_end'] != '0'
                 ) {
-                    $end_date_for_coach = new DateTime($row['date_end']);
+                    $end_date_for_coach = new DateTime($row['date_end'].' 23:59:59');
                     $number_of_days = "P".intval($row['nb_days_access_after_end']).'D';
                     $end_date_for_coach->add(new DateInterval($number_of_days));
 
@@ -2028,7 +2029,7 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                     $row['date_start'] != '0000-00-00' &&
                     $row['nb_days_access_before_beginning'] != '0'
                 ) {
-                    $start_date_for_coach = new DateTime($row['date_start']);
+                    $start_date_for_coach = new DateTime($row['date_start'].' 00:00:00');
                     $number_of_days = "P".intval($row['nb_days_access_before_beginning']).'D';
                     $start_date_for_coach->sub(new DateInterval($number_of_days));
                     if ($start_date_for_coach->getTimestamp() < $now) {

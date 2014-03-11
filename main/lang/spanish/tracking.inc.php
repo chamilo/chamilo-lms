@@ -379,4 +379,7 @@ $FollowedSessions = "Sesiones seguidas";
 $FollowedCourses = "Cursos seguidos";
 $FollowedUsers = "Usuarios seguidos";
 $Timeline = "Línea del tiempo";
-?>
+$QuestionId = "ID de pregunta";
+$ExerciseId = "ID de ejercicio";
+$QuestionTitle = "Título pregunta";
+

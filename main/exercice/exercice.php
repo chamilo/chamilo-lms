@@ -416,7 +416,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
             get_lang('CleanAllStudentsResultsForAllTests'), '', ICON_SIZE_MEDIUM),
             '',
             array(
-                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToEmptyAllTestResults'), ENT_QUOTES, $charset))." ?"."')) return false;",
+                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToEmptyAllTestResults'), ENT_QUOTES, $charset))."')) return false;",
                 'href' => 'exercice.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token
             )
     );

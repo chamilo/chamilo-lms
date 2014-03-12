@@ -271,7 +271,7 @@ if (isset($_GET['view']) && $_GET['view']) {
                         $max_edit_time=1200; // 20 minutes
                         $rest_time=$max_edit_time-$time_editing;
 
-                        $userinfo = Database::get_user_info_from_id($last_row['is_editing']);
+                        $userinfo = api_get_user_info($last_row['is_editing']);
                         $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
                         $is_being_edited= get_lang('ThisPageisBeginEditedBy').' <a href=../user/userInfo.php?uInfo='.$userinfo['user_id'].'>'.
@@ -1016,7 +1016,7 @@ if ($action =='mactiveusers') {
     //show table
     if (Database::num_rows($allpages) > 0) {
         while ($obj = Database::fetch_object($allpages)) {
-            $userinfo = Database::get_user_info_from_id($obj->user_id);
+            $userinfo = api_get_user_info($obj->user_id);
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
             $row = array();
             if ($obj->user_id <> 0) {
@@ -1042,7 +1042,7 @@ if ($action =='mactiveusers') {
 // User contributions Juan Carlos Raña Trabado
 
 if ($action =='usercontrib') {
-    $userinfo=Database::get_user_info_from_id($_GET['user_id']);
+    $userinfo = api_get_user_info($_GET['user_id']);
     $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
     echo '<div class="actions">'.get_lang('UserContributions').': <a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
@@ -1063,7 +1063,7 @@ if ($action =='usercontrib') {
         $row = array ();
         while ($obj = Database::fetch_object($allpages)) {
             //get author
-            $userinfo=Database::get_user_info_from_id($obj->user_id);
+            $userinfo = api_get_user_info($obj->user_id);
 
             //get time
             $year 	 = substr($obj->dtime, 0, 4);
@@ -1537,7 +1537,7 @@ if ($action =='links') {
             $row = array ();
             while ($obj = Database::fetch_object($allpages)) {
                 //get author
-                $userinfo=Database::get_user_info_from_id($obj->user_id);
+                $userinfo = api_get_user_info($obj->user_id);
                 $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
                 //get time
@@ -1802,7 +1802,7 @@ if (isset($action) && $action =='edit') {
                     $max_edit_time=1200; // 20 minutes
                     $rest_time=$max_edit_time-$time_editing;
 
-                    $userinfo=Database::get_user_info_from_id($row['is_editing']);
+                    $userinfo = api_get_user_info($row['is_editing']);
                     $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
                     $is_being_edited= get_lang('ThisPageisBeginEditedBy').
@@ -2054,7 +2054,7 @@ if ($action == 'history' or isset($_POST['HistoryDifferences'])) {
             $total_versions=Database::num_rows($result);
 
             while ($row=Database::fetch_array($result)) {
-                $userinfo=Database::get_user_info_from_id($row['user_id']);
+                $userinfo = api_get_user_info($row['user_id']);
                 $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
                 echo '<li style="margin-bottom: 5px;">';
@@ -2199,7 +2199,7 @@ if ($action =='recentchanges') {
         $row = array ();
         while ($obj = Database::fetch_object($allpages)) {
             //get author
-            $userinfo=Database::get_user_info_from_id($obj->user_id);
+            $userinfo =api_get_user_info($obj->user_id);
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
             //get type assignment icon
@@ -2271,7 +2271,7 @@ if ($action  == 'allpages') {
         $row = array ();
         while ($obj = Database::fetch_object($allpages)) {
             //get author
-            $userinfo=Database::get_user_info_from_id($obj->user_id);
+            $userinfo = api_get_user_info($obj->user_id);
             $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
             //get type assignment icon
@@ -2342,7 +2342,7 @@ if ($action == 'discuss') {
     $result=Database::query($sql);
     $row=Database::fetch_array($result);
     $lastversiondate=api_get_local_time($row['dtime'], null, date_default_timezone_get());
-    $lastuserinfo=Database::get_user_info_from_id($row['user_id']);
+    $lastuserinfo = api_get_user_info($row['user_id']);
     $username = api_htmlentities(sprintf(get_lang('LoginX'), $lastuserinfo['username']), ENT_QUOTES);
 
     //select page to discuss
@@ -2526,7 +2526,7 @@ if ($action == 'discuss') {
             //echo '<div style="overflow:auto; height:170px;">';
 
             while ($row=Database::fetch_array($result)) {
-                $userinfo=Database::get_user_info_from_id($row['userc_id']);
+                $userinfo = api_get_user_info($row['userc_id']);
                 $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
 
                 if (($userinfo['status'])=="5") {

@@ -1438,8 +1438,8 @@ class Wiki
             //if modifying a wiki page
             //first, current author and time
             //Who is the author?
-            $userinfo=	Database::get_user_info_from_id($lastuser);
-            $email_user_author= get_lang('EditedBy').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+            $userinfo = api_get_user_info($lastuser);
+            $email_user_author = get_lang('EditedBy').': '.$userinfo['complete_name'];
 
             //When ?
             $year = substr($lastime, 0, 4);
@@ -1451,7 +1451,9 @@ class Wiki
             $email_date_changes=$day.' '.$month.' '.$year.' '.$hours.":".$minutes.":".$seconds;
 
             //second, extract data from first reg
-             $sql='SELECT * FROM '.$tbl_wiki.' WHERE  c_id = '.$course_id.' AND reflink="'.$id_or_ref.'" AND '.$groupfilter.$condition_session.' ORDER BY id ASC'; //id_or_ref is reflink from tblwiki
+            $sql = 'SELECT * FROM '.$tbl_wiki.'
+                    WHERE  c_id = '.$course_id.' AND reflink="'.$id_or_ref.'" AND '.$groupfilter.$condition_session.'
+                    ORDER BY id ASC';
 
             $result=Database::query($sql);
             $row=Database::fetch_array($result);
@@ -1470,8 +1472,8 @@ class Wiki
 
             //first, current author and time
             //Who is the author of last message?
-            $userinfo=	Database::get_user_info_from_id($lastuser);
-            $email_user_author= get_lang('AddedBy').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+            $userinfo = api_get_user_info($lastuser);
+            $email_user_author = get_lang('AddedBy').': '.$userinfo['complete_name'];
 
             //When ?
             $year = substr($lastime, 0, 4);
@@ -1508,8 +1510,8 @@ class Wiki
             $email_page_name=$row['title'];
 
             //Who is the author?
-            $userinfo=	Database::get_user_info_from_id($row['user_id']);
-            $email_user_author= get_lang('AddedBy').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+            $userinfo = api_get_user_info($row['user_id']);
+            $email_user_author= get_lang('AddedBy').': '.$userinfo['complete_name'];
 
             //When ?
             $year = substr($row['dtime'], 0, 4);
@@ -1540,10 +1542,8 @@ class Wiki
             $allow_send_mail=true;
 
             //Who is the author?
-            $userinfo=	Database::get_user_info_from_id(api_get_user_id());	//current user
-            $email_user_author= get_lang('DeletedBy').': '.api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
-
-
+            $userinfo = api_get_user_info(api_get_user_id());	//current user
+            $email_user_author = get_lang('DeletedBy').': '.$userinfo['complete_name'];
             //When ?
             $today = date('r');		//current time
             $email_date_changes=$today;
@@ -1556,8 +1556,8 @@ class Wiki
         ///make and send email
         if ($allow_send_mail) {
             while ($row=Database::fetch_array($result)) {
-                $userinfo = Database::get_user_info_from_id($row['user_id']);	//$row['user_id'] obtained from tbl_wiki_mailcue
-                $name_to = api_get_person_name($userinfo['firstname'], $userinfo['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
+                $userinfo = api_get_user_info($row['user_id']);	//$row['user_id'] obtained from tbl_wiki_mailcue
+                $name_to = $userinfo['complete_name'];
                 $email_to = $userinfo['email'];
                 $sender_name = api_get_setting('emailAdministrator');
                 $sender_email = api_get_setting('emailAdministrator');
@@ -1766,9 +1766,9 @@ class Wiki
         $all_students_pages = array();
 
         //data about teacher
-        $userinfo=Database::get_user_info_from_id(api_get_user_id());
+        $userinfo = api_get_user_info(api_get_user_id());
         $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username'], ENT_QUOTES));
-        $name = api_get_person_name($userinfo['firstname'], $userinfo['lastname'])." . ".$username;
+        $name = $userinfo['complete_name']." - ".$username;
         if (api_get_user_id()<>0) {
             $image_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'web',false, true);
             $image_repository = $image_path['dir'];
@@ -1914,7 +1914,7 @@ class Wiki
         if (Database::num_rows($result) > 0) {
             while ($obj = Database::fetch_object($result)) {
                 //get author
-                $userinfo=Database::get_user_info_from_id($obj->user_id);
+                $userinfo = api_get_user_info($obj->user_id);
 
                 //get time
                 $year 	 = substr($obj->dtime, 0, 4);
@@ -1941,7 +1941,7 @@ class Wiki
                     $row[] = '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.$obj->title.'</a>';
                 }
 
-                $row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])).'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
+                $row[] = $obj->user_id <>0 ? '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.api_htmlentities($userinfo['complete_name']).'</a>' : get_lang('Anonymous').' ('.$obj->user_ip.')';
                 $row[] = $year.'-'.$month.'-'.$day.' '.$hours.":".$minutes.":".$seconds;
 
                 if ($all_vers=='1') {

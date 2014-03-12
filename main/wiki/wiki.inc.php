@@ -237,6 +237,18 @@ class Wiki
         $tbl_wiki = $this->tbl_wiki;
         $tbl_wiki_conf = $this->tbl_wiki_conf;
         $_course = $this->courseInfo;
+        $_clean = array(
+            'task' => null,
+            'feedback1' => null,
+            'feedback2' => null,
+            'feedback3' => null,
+            'fprogress1' => null,
+            'fprogress2' => null,
+            'fprogress3' => null,
+            'max_text' => null,
+            'max_version' => null,
+            'delayedsubmit' => null
+        );
 
         // NOTE: visibility, visibility_disc and ratinglock_disc changes are not made here, but through the interce buttons
 
@@ -261,9 +273,8 @@ class Wiki
         $groupId = api_get_group_id();
 
         //cleaning config variables
-
         if (!empty($_POST['task'])) {
-            $_clean['task']= Database::escape_string($_POST['task']);
+            $_clean['task'] = Database::escape_string($_POST['task']);
         }
 
         if (!empty($_POST['feedback1']) || !empty($_POST['feedback2']) || !empty($_POST['feedback3'])) {
@@ -2156,7 +2167,7 @@ class Wiki
         $tbl_wiki = $this->tbl_wiki;
         $course_id = $this->course_id;
         $condition_session = $this->condition_session;
-        $isEditing = Databases::escape_string($isEditing);
+        $isEditing = Database::escape_string($isEditing);
 
         $sql = 'UPDATE '.$tbl_wiki.' SET is_editing="0", time_edit="0000-00-00 00:00:00"
                 WHERE c_id = '.$course_id.' AND is_editing="'.$isEditing.'" '.$condition_session;

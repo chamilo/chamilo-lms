@@ -475,13 +475,13 @@ class Wiki
         $_clean['fprogress2']=Database::escape_string($_POST['fprogress2']);
         $_clean['fprogress3']=Database::escape_string($_POST['fprogress3']);
 
-        if($_POST['initstartdate']==1) {
-            $_clean['startdate_assig']=Database::escape_string(self::get_date_from_select('startdate_assig'));
+        if (isset($_POST['initstartdate']) && $_POST['initstartdate'] == 1) {
+            $_clean['startdate_assig'] = Database::escape_string(self::get_date_from_select('startdate_assig'));
         } else {
-            $_clean['startdate_assig']=Database::escape_string($_POST['startdate_assig']);
+            $_clean['startdate_assig'] = Database::escape_string($_POST['startdate_assig']);
         }
 
-        if($_POST['initenddate']==1) {
+        if (isset($_POST['initenddate']) && $_POST['initenddate']==1) {
             $_clean['enddate_assig']=Database::escape_string(self::get_date_from_select('enddate_assig'));
         } else {
             $_clean['enddate_assig']=Database::escape_string($_POST['enddate_assig']);
@@ -1284,17 +1284,16 @@ class Wiki
      * @author Juan Carlos Raña <herodoto@telefonica.net>
      * @return int the current notification status
      */
-
     function check_notify_page($reflink)
     {
         $tbl_wiki = $this->tbl_wiki;
         $tbl_wiki_mailcue = $this->tbl_wiki_mailcue;
         $condition_session = $this->condition_session;
         $groupfilter = $this->groupfilter;
-
         $groupId = api_get_group_id();
-        $session_id=api_get_session_id();
+        $session_id = api_get_session_id();
         $course_id = api_get_course_int_id();
+        $userId = api_get_user_id();
 
         $sql = 'SELECT * FROM '.$tbl_wiki.'
                 WHERE c_id = '.$course_id.' AND reflink="'.$reflink.'" AND '.$groupfilter.$condition_session.' ORDER BY id ASC';
@@ -1306,7 +1305,7 @@ class Wiki
         $result=Database::query($sql);
         $row=Database::fetch_array($result);
 
-        $idm=$row['id'];
+        $idm = $row['id'];
 
         if (empty($idm)) {
             $status_notify=0;
@@ -1314,11 +1313,19 @@ class Wiki
             $status_notify=1;
         }
 
-        //change status
+        // Change status
         if (isset($_GET['actionpage']) && $_GET['actionpage'] =='locknotify' && $status_notify==0) {
-            $sql="INSERT INTO ".$tbl_wiki_mailcue." (c_id, id, user_id, type, group_id, session_id) VALUES
-            ($course_id, '".$id."','".api_get_user_id()."','P','".$groupId."','".$session_id."')";
-            Database::query($sql);
+            $sql = "SELECT id FROM $tbl_wiki_mailcue  WHERE c_id = $course_id AND id = $id AND user_id = $userId";
+            $result = Database::query($sql);
+            $exist = false;
+            if (Database::num_rows($result)) {
+                $exist = true;
+            }
+            if ($exist == false) {
+                $sql="INSERT INTO ".$tbl_wiki_mailcue." (c_id, id, user_id, type, group_id, session_id) VALUES
+                ($course_id, '".$id."','".api_get_user_id()."','P','".$groupId."','".$session_id."')";
+                Database::query($sql);
+            }
 
             $status_notify=1;
         }
@@ -1438,16 +1445,14 @@ class Wiki
         $condition_session = $this->condition_session;
         $groupfilter = $this->groupfilter;
         $_course = $this->courseInfo;
-
         $groupId = api_get_group_id();
         $session_id=api_get_session_id();
         $course_id = api_get_course_int_id();
 
         $group_properties  = GroupManager :: get_group_properties($groupId);
-        $group_name= $group_properties['name'];
-
-        $allow_send_mail=false; //define the variable to below
-
+        $group_name = $group_properties['name'];
+        $allow_send_mail = false; //define the variable to below
+        $email_assignment = null;
         if ($type=='P') {
             //if modifying a wiki page
             //first, current author and time
@@ -1565,14 +1570,17 @@ class Wiki
             $email_date_changes=$today;
 
             $sql = 'SELECT * FROM '.$tbl_wiki_mailcue.'
-                    WHERE c_id = '.$course_id.' AND id="'.$id.'" AND type="F" AND group_id="'.$groupId.'" AND session_id="'.$session_id.'"'; //type: P=page, D=discuss, F=wiki
-            $result=Database::query($sql);
-
-            $emailtext=get_lang('EmailWikipageDedeleted');
+                    WHERE
+                        c_id = '.$course_id.' AND
+                        id="'.$id.'" AND type="F" AND
+                        group_id="'.$groupId.'" AND
+                        session_id="'.$session_id.'"'; //type: P=page, D=discuss, F=wiki
+            $result = Database::query($sql);
+            $emailtext = get_lang('EmailWikipageDedeleted');
         }
         ///make and send email
         if ($allow_send_mail) {
-            while ($row=Database::fetch_array($result)) {
+            while ($row = Database::fetch_array($result)) {
                 $userinfo = api_get_user_info($row['user_id']);	//$row['user_id'] obtained from tbl_wiki_mailcue
                 $name_to = $userinfo['complete_name'];
                 $email_to = $userinfo['email'];

@@ -418,7 +418,9 @@ if (!in_array($action , array('addnew', 'searchpages', 'allpages', 'recentchange
 
 //In new pages go to new page
 if (isset($_POST['SaveWikiNew'])) {
-    $wiki->display_wiki_entry($_POST['reflink']);
+    if (isset($_POST['reflink'])) {
+        $wiki->display_wiki_entry($_POST['reflink']);
+    }
 }
 
 //More for export to course document area. See display_wiki_entry
@@ -1203,13 +1205,13 @@ if ($action =='mvisited') {
 
 if ($action =='wanted') {
     echo '<div class="actions">'.get_lang('WantedPages').'</div>';
-
     $pages = array();
     $refs = array();
 	$wanted = array();
-
     //get name pages
-    $sql='SELECT * FROM '.$tbl_wiki.'  WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' GROUP BY reflink ORDER BY reflink ASC';
+    $sql = 'SELECT * FROM '.$tbl_wiki.'
+            WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
+            GROUP BY reflink ORDER BY reflink ASC';
     $allpages=Database::query($sql);
 
     while ($row=Database::fetch_array($allpages)) {
@@ -1221,7 +1223,10 @@ if ($action =='wanted') {
 
     //get name refs in last pages
     $sql = 'SELECT  *  FROM   '.$tbl_wiki.' s1
-    		WHERE s1.c_id = '.$course_id.' AND id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.$condition_session.')';
+    		WHERE s1.c_id = '.$course_id.' AND id=(
+    		    SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2
+    		    WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.$condition_session.'
+            )';
 
     $allpages = Database::query($sql);
 
@@ -1241,9 +1246,9 @@ if ($action =='wanted') {
 	$wanted = array_unique($wanted);//make a unique list
 
 	//show table
+    $rows = array();
     foreach ($wanted as $wanted_show) {
-
-        $row = array ();
+        $row = array();
         $wanted_show=Security::remove_XSS($wanted_show);
         $row[] = '<a href="'.api_get_path(WEB_PATH).'main/wiki/index.php?cidReq=&action=addnew&title='.str_replace('_',' ',$wanted_show).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'" class="new_wiki_link">'.str_replace('_',' ',$wanted_show).'</a>';//meter un remove xss en lugar de htmlentities
         $rows[] = $row;
@@ -1459,7 +1464,7 @@ if ($action =='searchpages') {
     echo '<div style="overflow:hidden">';
 
 	if (isset($_GET['mode_table'])) {
-		if (! $_GET['SearchPages_table_page_nr']) {
+		if (!isset($_GET['SearchPages_table_page_nr'])) {
 			$_GET['search_term'] = $_POST['search_term'];
 			$_GET['search_content'] = $_POST['search_content'];
 			$_GET['all_vers'] = $_POST['all_vers'];
@@ -2134,33 +2139,49 @@ if ($action == 'history' or isset($_POST['HistoryDifferences'])) {
             echo '<button class="search" type="submit" name="HistoryDifferences2" value="HistoryDifferences2">'.get_lang('ShowDifferences').' '.get_lang('WordsDiff').'</button>';
             echo '</ul></form></div>';
         } else { // We show the differences between two versions
-            $sql_old= "SELECT * FROM $tbl_wiki
-                       WHERE c_id = $course_id AND id='".Database::escape_string($_POST['old'])."'";
-            $result_old=Database::query($sql_old);
-            $version_old=Database::fetch_array($result_old);
+            $version_old = array();
+            if (isset($_POST['old'])) {
+                $sql_old= "SELECT * FROM $tbl_wiki
+                           WHERE c_id = $course_id AND id='".Database::escape_string($_POST['old'])."'";
+                $result_old=Database::query($sql_old);
+                $version_old=Database::fetch_array($result_old);
+            }
+
             $sql_new="SELECT * FROM $tbl_wiki WHERE c_id = $course_id AND id='".Database::escape_string($_POST['new'])."'";
             $result_new=Database::query($sql_new);
             $version_new=Database::fetch_array($result_new);
+            $oldTime = isset($version_old['dtime']) ? $version_old['dtime'] : null;
+            $oldContent = isset($version_old['content']) ? $version_old['content'] : null;
 
             if (isset($_POST['HistoryDifferences'])) {
-                include('diff.inc.php');
+                include 'diff.inc.php';
                 //title
-                echo '<div id="wikititle">'.api_htmlentities($version_new['title']).' <font size="-2"><i>('.get_lang('DifferencesNew').'</i> <font style="background-color:#aaaaaa">'.$version_new['dtime'].'</font> <i>'.get_lang('DifferencesOld').'</i> <font style="background-color:#aaaaaa">'.$version_old['dtime'].'</font>) '.get_lang('Legend').':  <span class="diffAdded" >'.get_lang(WikiDiffAddedLine).'</span> <span class="diffDeleted" >'.get_lang(WikiDiffDeletedLine).'</span> <span class="diffMoved" >'.get_lang(WikiDiffMovedLine).'</span></font></div>';
+                echo '<div id="wikititle">'.api_htmlentities($version_new['title']).'
+                <font size="-2"><i>('.get_lang('DifferencesNew').'</i>
+                    <font style="background-color:#aaaaaa">'.$version_new['dtime'].'</font>
+                    <i>'.get_lang('DifferencesOld').'</i>
+                    <font style="background-color:#aaaaaa">'.$oldTime.'</font>
+                ) '.get_lang('Legend').':  <span class="diffAdded" >'.get_lang('WikiDiffAddedLine').'</span>
+                <span class="diffDeleted" >'.get_lang('WikiDiffDeletedLine').'</span> <span class="diffMoved">'.get_lang('WikiDiffMovedLine').'</span></font>
+                </div>';
             }
             if (isset($_POST['HistoryDifferences2'])) {
                 // including global PEAR diff libraries
                 require_once 'Text/Diff.php';
                 require_once 'Text/Diff/Renderer/inline.php';
                 //title
-                echo '<div id="wikititle">'.api_htmlentities($version_new['title']).' <font size="-2"><i>('.get_lang('DifferencesNew').'</i> <font style="background-color:#aaaaaa">'.$version_new['dtime'].'</font> <i>'.get_lang('DifferencesOld').'</i> <font style="background-color:#aaaaaa">'.$version_old['dtime'].'</font>) '.get_lang('Legend').':  <span class="diffAddedTex" >'.get_lang(WikiDiffAddedTex).'</span> <span class="diffDeletedTex" >'.get_lang(WikiDiffDeletedTex).'</span></font></div>';
+                echo '<div id="wikititle">'.api_htmlentities($version_new['title']).'
+                <font size="-2"><i>('.get_lang('DifferencesNew').'</i> <font style="background-color:#aaaaaa">'.$version_new['dtime'].'</font>
+                <i>'.get_lang('DifferencesOld').'</i> <font style="background-color:#aaaaaa">'.$version_old['dtime'].'</font>)
+                '.get_lang('Legend').':  <span class="diffAddedTex" >'.get_lang('WikiDiffAddedTex').'</span>
+                <span class="diffDeletedTex" >'.get_lang('WikiDiffDeletedTex').'</span></font></div>';
             }
 
             echo '<div class="diff"><br /><br />';
 
             if (isset($_POST['HistoryDifferences'])) {
-                echo '<table>'.diff( $version_old['content'], $version_new['content'], true, 'format_table_line' ).'</table>'; // format_line mode is better for words
+                echo '<table>'.diff($oldContent, $version_new['content'], true, 'format_table_line' ).'</table>'; // format_line mode is better for words
                 echo '</div>';
-
                 echo '<br />';
                 echo '<strong>'.get_lang('Legend').'</strong><div class="diff">' . "\n";
                 echo '<table><tr>';
@@ -2398,11 +2419,15 @@ if ($action == 'discuss') {
     $firstuserid=$row['user_id'];
 
     //mode assignment: previous to show  page type
+    $icon_assignment = null;
     if ($row['assignment']==1) {
         $icon_assignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDescExtra'),'',ICON_SIZE_SMALL);
     } elseif($row['assignment']==2) {
         $icon_assignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWorkExtra'),'',ICON_SIZE_SMALL);
     }
+
+    $countWPost = null;
+    $avg_WPost_score = null;
 
     //Show title and form to discuss if page exist
     if ($id!='') {

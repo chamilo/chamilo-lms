@@ -208,11 +208,13 @@ echo '</div>';
 
 // check last version
 if (isset($_GET['view']) && $_GET['view']) {
-    $sql='SELECT * FROM '.$tbl_wiki.' WHERE c_id = '.$course_id.' AND id="'.Database::escape_string($_GET['view']).'"'; //current view
+    $sql = 'SELECT * FROM '.$tbl_wiki.'
+            WHERE c_id = '.$course_id.' AND id="'.Database::escape_string($_GET['view']).'"'; //current view
     $result=Database::query($sql);
     $current_row=Database::fetch_array($result);
 
-    $sql='SELECT * FROM '.$tbl_wiki.' WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.' ORDER BY id DESC'; //last version
+    $sql = 'SELECT * FROM '.$tbl_wiki.'
+            WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.' ORDER BY id DESC'; //last version
     $result=Database::query($sql);
     $last_row=Database::fetch_array($result);
 
@@ -1293,7 +1295,8 @@ if ($action =='orphaned') {
 
     foreach ($orphaned as $orphaned_show) {
 		// get visibility status and title
-		$sql='SELECT  *  FROM   '.$tbl_wiki.' WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' AND reflink="'.Database::escape_string($orphaned_show).'" GROUP BY reflink';
+		$sql = 'SELECT  *  FROM   '.$tbl_wiki.'
+		        WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' AND reflink="'.Database::escape_string($orphaned_show).'" GROUP BY reflink';
         $allpages=Database::query($sql);
 		while ($row=Database::fetch_array($allpages)) {
 			$orphaned_title=$row['title'];
@@ -1493,7 +1496,8 @@ if ($action =='links') {
     if (!$_GET['title']) {
         Display::display_error_message(get_lang("MustSelectPage"));
     } else {
-        $sql='SELECT * FROM '.$tbl_wiki.' WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.'';
+        $sql = 'SELECT * FROM '.$tbl_wiki.'
+                WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.'';
         $result=Database::query($sql);
         $row=Database::fetch_array($result);
 
@@ -2032,7 +2036,8 @@ if ($action == 'history' or isset($_POST['HistoryDifferences'])) {
         // We show the complete history
         if (!$_POST['HistoryDifferences'] && !$_POST['HistoryDifferences2']) {
 
-            $sql='SELECT * FROM '.$tbl_wiki.'WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.' ORDER BY id DESC';
+            $sql = 'SELECT * FROM '.$tbl_wiki.'
+                    WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.' ORDER BY id DESC';
             $result=Database::query($sql);
 
             $title		= $_GET['title'];
@@ -2338,7 +2343,8 @@ if ($action == 'discuss') {
     }
 
     //first extract the date of last version
-    $sql='SELECT * FROM '.$tbl_wiki.' WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.' ORDER BY id DESC';
+    $sql = 'SELECT * FROM '.$tbl_wiki.'
+            WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.' ORDER BY id DESC';
     $result=Database::query($sql);
     $row=Database::fetch_array($result);
     $lastversiondate=api_get_local_time($row['dtime'], null, date_default_timezone_get());
@@ -2346,7 +2352,8 @@ if ($action == 'discuss') {
     $username = api_htmlentities(sprintf(get_lang('LoginX'), $lastuserinfo['username']), ENT_QUOTES);
 
     //select page to discuss
-    $sql='SELECT * FROM '.$tbl_wiki.' WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.' ORDER BY id ASC';
+    $sql = 'SELECT * FROM '.$tbl_wiki.'
+            WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.' ORDER BY id ASC';
     $result=Database::query($sql);
     $row=Database::fetch_array($result);
     $id=$row['id'];

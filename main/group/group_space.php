@@ -301,7 +301,7 @@ if (count($tutors) == 0) {
 	isset($origin) ? $my_origin = $origin:$my_origin='';
     $tutor_info .= '<ul class="thumbnails">';
 	foreach ($tutors as $index => $tutor) {
-	    $tab_user_info = Database::get_user_info_from_id($tutor['user_id']);
+	    $tab_user_info = api_get_user_info($tutor['user_id']);
 	    $username = api_htmlentities(sprintf(get_lang('LoginX'), $tab_user_info['username']), ENT_QUOTES);
 		$image_path = UserManager::get_user_picture_path_by_id($tutor['user_id'], 'web', false, true);
 		$image_repository = $image_path['dir'];
@@ -477,11 +477,11 @@ function email_filter($email) {
  */
 function user_icon_filter($user_id) {
 	global $origin;
-	$userinfo = Database::get_user_info_from_id($user_id);
+	$userinfo = api_get_user_info($user_id);
 	$image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
 	$image_repository = $image_path['dir'];
 	$existing_image = $image_path['file'];
-	$photo = '<center><img src="'.$image_repository.$existing_image.'" alt="'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'"  width="22" height="22" title="'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'" /></center>';
+	$photo = '<center><img src="'.$image_repository.$existing_image.'" alt="'.$userinfo['complete_name'].'"  width="22" height="22" title="'.$userinfo['complete_name'].'" /></center>';
 	return '<a href="../user/userInfo.php?origin='.$origin.'&amp;uInfo='.$user_id.'">'.$photo;
 }
 
@@ -496,7 +496,7 @@ function user_icon_filter($user_id) {
  * @return  string  HTML link
  */
 function user_name_filter($name, $url_params, $row) {
-    $tab_user_info = Database::get_user_info_from_id($row[0]);
+    $tab_user_info = api_get_user_info($row[0]);
     $username = api_htmlentities(sprintf(get_lang('LoginX'), $tab_user_info['username']), ENT_QUOTES);
     return '<a href="../user/userInfo.php?uInfo='.$row[0].'&amp;'.$url_params.'" title="'.$username.'">'.$name.'</a>';
 }

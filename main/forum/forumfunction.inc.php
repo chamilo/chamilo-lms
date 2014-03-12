@@ -149,7 +149,7 @@ function show_add_forumcategory_form($inputvalues = array(), $lp_id)
     // hidden field if from learning path
 
     $form->addElement('hidden', 'lp_id', $lp_id);
-    // Settting the form elements.
+    // Setting the form elements.
     $form->addElement('header', '', get_lang('AddForumCategory'));
     $form->addElement('text', 'forum_category_title', get_lang('Title'), 'class="input_titles" id="category_title"');
 
@@ -404,7 +404,7 @@ function show_edit_forumcategory_form($inputvalues = array())
     $gradebook = Security::remove_XSS($_GET['gradebook']);
     $form = new FormValidator('forumcategory', 'post', 'index.php?&amp;gradebook='.$gradebook.'');
 
-    // Settting the form elements.
+    // Setting the form elements.
     $form->addElement('header', '', get_lang('EditForumCategory'));
     $form->addElement('hidden', 'forum_category_id');
     $form->addElement('text', 'forum_category_title', get_lang('Title'), 'class="input_titles"');
@@ -2154,7 +2154,7 @@ function show_add_post_form($action = '', $id = '', $form_values = '')
 
     $form->addElement('header', $text);
 
-    // Settting the form elements.
+    // Setting the form elements.
     $form->addElement('hidden', 'forum_id', intval($my_forum));
     $form->addElement('hidden', 'thread_id', intval($my_thread));
     $form->addElement('hidden', 'gradebook', $my_gradebook);
@@ -2602,7 +2602,7 @@ function show_edit_post_form($current_post, $current_thread, $current_forum, $fo
     // Initialize the object.
     $form = new FormValidator('edit_post', 'post', api_get_self().'?forum='.Security::remove_XSS($_GET['forum']).'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;post='.Security::remove_XSS($_GET['post']));
     $form->addElement('header', get_lang('EditPost'));
-    // Settting the form elements.
+    // Setting the form elements.
     $form->addElement('hidden', 'post_id', $current_post['post_id']);
     $form->addElement('hidden', 'thread_id', $current_thread['thread_id']);
     $form->addElement('hidden', 'id_attach', $id_attach);
@@ -3554,7 +3554,7 @@ function forum_search()
     // Initialize the object.
     $form = new FormValidator('forumsearch', 'post', 'forumsearch.php?origin='.$origin.'');
 
-    // Settting the form elements.
+    // Setting the form elements.
     $form->addElement('header', '', get_lang('ForumSearch'));
     $form->addElement('text', 'search_term', get_lang('SearchTerm'), 'class="input_titles" id="search_title"');
     $form->applyFilter('search_term', 'html_filter');

@@ -333,8 +333,8 @@ a:active {
 
 .pagerslide h2{
     font-size: 18px;
-    font-family: 'Raleway', sans-serif;
-    background-color:  #0191C7;
+    font-weight: normal;
+    background-color:  #FD6600;
     color: #FFFFFF;
     padding-left: 15px;
 }

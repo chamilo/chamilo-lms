@@ -372,7 +372,9 @@ class Wiki
         $course_id = $this->course_id;
 
         //identify the first id by group = identify wiki
-        $sql = 'SELECT * FROM '.$tbl_wiki.'  WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' ORDER BY id DESC';
+        $sql = 'SELECT * FROM '.$tbl_wiki.'
+                WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
+                ORDER BY id DESC';
         $allpages = Database::query($sql);
         while ($row = Database::fetch_array($allpages)) {
             $id 		= $row['id'];
@@ -1257,7 +1259,8 @@ class Wiki
             Database::query($sql);
 
               //Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
-            $sql='SELECT * FROM '.$tbl_wiki.' WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.' ORDER BY id ASC';
+            $sql='SELECT * FROM '.$tbl_wiki.'
+                  WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.' ORDER BY id ASC';
             $result=Database::query($sql);
             $row=Database::fetch_array($result);
         }
@@ -1282,13 +1285,13 @@ class Wiki
         $session_id=api_get_session_id();
         $course_id = api_get_course_int_id();
 
-        $sql='SELECT * FROM '.$tbl_wiki.' WHERE c_id = '.$course_id.' AND reflink="'.$reflink.'" AND '.$groupfilter.$condition_session.' ORDER BY id ASC';
+        $sql = 'SELECT * FROM '.$tbl_wiki.'
+                WHERE c_id = '.$course_id.' AND reflink="'.$reflink.'" AND '.$groupfilter.$condition_session.' ORDER BY id ASC';
         $result=Database::query($sql);
         $row=Database::fetch_array($result);
-
         $id = $row['id'];
-
-        $sql='SELECT * FROM '.$tbl_wiki_mailcue.' WHERE c_id = '.$course_id.' AND id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="P"';
+        $sql='SELECT * FROM '.$tbl_wiki_mailcue.'
+              WHERE c_id = '.$course_id.' AND id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="P"';
         $result=Database::query($sql);
         $row=Database::fetch_array($result);
 
@@ -1340,10 +1343,9 @@ class Wiki
                 ORDER BY id ASC';
         $result=Database::query($sql);
         $row=Database::fetch_array($result);
-
         $id=$row['id'];
-
-        $sql='SELECT * FROM '.$tbl_wiki_mailcue.' WHERE c_id = '.$course_id.' AND id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="D"';
+        $sql = 'SELECT * FROM '.$tbl_wiki_mailcue.'
+             WHERE c_id = '.$course_id.' AND id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="D"';
         $result=Database::query($sql);
         $row=Database::fetch_array($result);
 
@@ -1363,7 +1365,8 @@ class Wiki
             $status_notify_disc=1;
         }
         if (isset($_GET['actionpage']) && $_GET['actionpage'] =='unlocknotifydisc' && $status_notify_disc==1) {
-            $sql='DELETE FROM '.$tbl_wiki_mailcue.' WHERE c_id = '.$course_id.' AND id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="D" AND c_id = '.$course_id;
+            $sql = 'DELETE FROM '.$tbl_wiki_mailcue.'
+                    WHERE c_id = '.$course_id.' AND id="'.$id.'" AND user_id="'.api_get_user_id().'" AND type="D" AND c_id = '.$course_id;
             Database::query($sql);
             $status_notify_disc=0;
         }
@@ -1454,7 +1457,6 @@ class Wiki
             $sql = 'SELECT * FROM '.$tbl_wiki.'
                     WHERE  c_id = '.$course_id.' AND reflink="'.$id_or_ref.'" AND '.$groupfilter.$condition_session.'
                     ORDER BY id ASC';
-
             $result=Database::query($sql);
             $row=Database::fetch_array($result);
 
@@ -1496,14 +1498,17 @@ class Wiki
             $email_page_name=$row['title'];
             if ($row['visibility_disc']==1) {
                 $allow_send_mail=true; //if visibility off - notify off
-                $sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE c_id = '.$course_id.' AND id="'.$id.'" AND type="'.$type.'" OR type="F" AND group_id="'.$groupId.'" AND session_id="'.$session_id.'"'; //type: P=page, D=discuss, F=full
+                $sql = 'SELECT * FROM '.$tbl_wiki_mailcue.'
+                        WHERE c_id = '.$course_id.' AND id="'.$id.'" AND type="'.$type.'" OR type="F" AND group_id="'.$groupId.'" AND session_id="'.$session_id.'"'; //type: P=page, D=discuss, F=full
                 $result=Database::query($sql);
                 $emailtext=get_lang('EmailWikiPageDiscAdded').' <strong>'.$email_page_name.'</strong> '.get_lang('Wiki');
             }
         } elseif($type=='A') {
             //for added pages
             $id=0; //for tbl_wiki_mailcue
-            $sql='SELECT * FROM '.$tbl_wiki.' WHERE c_id = '.$course_id.'  ORDER BY id DESC'; //the added is always the last
+            $sql = 'SELECT * FROM '.$tbl_wiki.'
+                    WHERE c_id = '.$course_id.'
+                    ORDER BY id DESC'; //the added is always the last
 
             $result=Database::query($sql);
             $row=Database::fetch_array($result);
@@ -1548,7 +1553,8 @@ class Wiki
             $today = date('r');		//current time
             $email_date_changes=$today;
 
-            $sql='SELECT * FROM '.$tbl_wiki_mailcue.'WHERE c_id = '.$course_id.' AND id="'.$id.'" AND type="F" AND group_id="'.$groupId.'" AND session_id="'.$session_id.'"'; //type: P=page, D=discuss, F=wiki
+            $sql = 'SELECT * FROM '.$tbl_wiki_mailcue.'
+                    WHERE c_id = '.$course_id.' AND id="'.$id.'" AND type="F" AND group_id="'.$groupId.'" AND session_id="'.$session_id.'"'; //type: P=page, D=discuss, F=wiki
             $result=Database::query($sql);
 
             $emailtext=get_lang('EmailWikipageDedeleted');
@@ -1867,10 +1873,10 @@ class Wiki
         if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
             if ($all_vers=='1') {
                 if ($search_content=='1') {
-                    $sql="SELECT * FROM ".$tbl_wiki."
+                    $sql = "SELECT * FROM ".$tbl_wiki."
                             WHERE c_id = $course_id AND title LIKE '%".Database::escape_string($search_term)."%' OR content LIKE '%".Database::escape_string($search_term)."%' AND ".$groupfilter.$condition_session."";//search all pages and all versions
                 } else {
-                    $sql="SELECT * FROM ".$tbl_wiki."
+                    $sql = "SELECT * FROM ".$tbl_wiki."
                             WHERE c_id = $course_id AND title LIKE '%".Database::escape_string($search_term)."%' AND ".$groupfilter.$condition_session."";//search all pages and all versions
                 }
             } else {
@@ -2056,7 +2062,8 @@ class Wiki
         $tbl_wiki = $this->tbl_wiki;
         $course_id = api_get_course_int_id();
         $id = intval($id);
-        $sql='SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND id = '.$id.' ';
+        $sql = 'SELECT * FROM '.$tbl_wiki.'
+                WHERE c_id = '.$course_id.' AND id = '.$id.' ';
         $result=Database::query($sql);
         $data = array();
         while ($row=Database::fetch_array($result,'ASSOC'))   {
@@ -2085,7 +2092,7 @@ class Wiki
         }
 
         $title = Database::escape_string($title);
-        $sql = "SELECT * FROM $tbl_wiki  WHERE c_id = $courseId AND reflink = '$title'";
+        $sql = "SELECT * FROM $tbl_wiki WHERE c_id = $courseId AND reflink = '$title'";
         $result = Database::query($sql);
         $data = array();
         if (Database::num_rows($result)) {
@@ -2111,16 +2118,20 @@ class Wiki
         $pageInfo = self::getPageByTitle($title, $courseId);
         if (!empty($pageInfo)) {
             $pageId = $pageInfo['id'];
-            $sql = "DELETE FROM $tbl_wiki_conf WHERE c_id = $courseId AND page_id = $pageId";
+            $sql = "DELETE FROM $tbl_wiki_conf
+                    WHERE c_id = $courseId AND page_id = $pageId";
             Database::query($sql);
 
-            $sql = 'DELETE FROM '.$tbl_wiki_discuss.' WHERE c_id = '.$courseId.' AND publication_id = '.$pageId;
+            $sql = 'DELETE FROM '.$tbl_wiki_discuss.'
+                    WHERE c_id = '.$courseId.' AND publication_id = '.$pageId;
             Database::query($sql);
 
-            $sql='DELETE FROM  '.$tbl_wiki_mailcue.' WHERE c_id = '.$courseId.' AND id = '.$pageId.' AND '.$groupfilter.$condition_session.'';
+            $sql='DELETE FROM  '.$tbl_wiki_mailcue.'
+                    WHERE c_id = '.$courseId.' AND id = '.$pageId.' AND '.$groupfilter.$condition_session.'';
             Database::query($sql);
 
-            $sql = 'DELETE FROM '.$tbl_wiki.' WHERE c_id = '.$courseId.' AND id = '.$pageId.' AND '.$groupfilter.$condition_session.'';
+            $sql = 'DELETE FROM '.$tbl_wiki.'
+                    WHERE c_id = '.$courseId.' AND id = '.$pageId.' AND '.$groupfilter.$condition_session.'';
             Database::query($sql);
             self::check_emailcue(0, 'E');
             return true;
@@ -2135,7 +2146,7 @@ class Wiki
         $condition_session = $this->condition_session;
 
         $sql = "SELECT * FROM $tbl_wiki
-        WHERE c_id = $course_id AND is_editing != '0' ".$condition_session;
+                WHERE c_id = $course_id AND is_editing != '0' ".$condition_session;
         $result = Database::query($sql);
         return Database::store_result($result, 'ASSOC');
     }
@@ -2147,8 +2158,8 @@ class Wiki
         $condition_session = $this->condition_session;
         $isEditing = Databases::escape_string($isEditing);
 
-        $sql='UPDATE '.$tbl_wiki.' SET is_editing="0", time_edit="0000-00-00 00:00:00"
-              WHERE c_id = '.$course_id.' AND is_editing="'.$isEditing.'" '.$condition_session;
+        $sql = 'UPDATE '.$tbl_wiki.' SET is_editing="0", time_edit="0000-00-00 00:00:00"
+                WHERE c_id = '.$course_id.' AND is_editing="'.$isEditing.'" '.$condition_session;
         Database::query($sql);
     }
 }

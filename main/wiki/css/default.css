@@ -59,6 +59,8 @@
 #wikicontent {
     padding-top:5px;
     min-height:300px;
+    font-size: 14px;
+    line-height: 24px;
 }
 
 #menuwiki {

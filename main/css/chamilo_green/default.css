@@ -98,7 +98,7 @@ a:active {
     text-shadow: none;
 }
 .controls .btn:hover{
-    background:#DF3A01;
+    background:#4B8A08;
     border: none;
     color: #FFFFFF;
 
@@ -334,12 +334,12 @@ a:active {
 .pagerslide h2{
     font-size: 18px;
     font-weight: normal;
-    background-color:  #87BA0A;
-    color: #FFFFFF;
+    background-color:  #D8D8D8;
+    color: #666666;
     padding-left: 15px;
 }
 .controls .btn{
-    background:#FD6600;
+    background:#87BA0A;
     color: #FFFFFF;
     border:none;
     padding: 5px 25px;

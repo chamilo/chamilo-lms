@@ -41,7 +41,9 @@ legend {
 header #logo {
     padding: 0px 0px 15px 0px;
 }
-
+header #logo img{
+    margin-left: 30px;
+}
 .subnav .brand {
     display:none;
 }
@@ -180,6 +182,7 @@ header #logo {
 
 header {
     margin-bottom: 11px;
+    margin-top: 20px;
 }
 
 .breadcrumb {

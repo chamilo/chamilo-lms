@@ -21,9 +21,6 @@ if (!api_get_multiple_access_url()) {
 	exit;
 }
 
-/*
-	Global constants and variables
-*/
 
 $form_sent = 0;
 $first_letter_course = '';
@@ -43,15 +40,18 @@ $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('Mult
 
 /*		MAIN CODE   */
 
-Display :: display_header($tool_name);
+Display::display_header($tool_name);
 
 echo '<div class="actions">';
-echo Display::url(Display::return_icon('edit.gif',get_lang('EditCoursesToURL'),''), api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php"');
+echo Display::url(
+    Display::return_icon('edit.png', get_lang('EditCoursesToURL'), ''),
+    api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php'
+);
 echo '</div>';
 
 api_display_tool_title($tool_name);
 
-if ($_POST['form_sent']) {
+if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 	$form_sent = $_POST['form_sent'];
 	$courses = is_array($_POST['course_list']) ? $_POST['course_list'] : array() ;
 	$url_list = is_array($_POST['url_list']) ? $_POST['url_list'] : array() ;
@@ -79,8 +79,7 @@ if(empty($first_letter_user)) {
 	$sql = "SELECT count(*) as num_courses FROM $tbl_course";
 	$result = Database::query($sql);
 	$num_row = Database::fetch_array($result);
-	if($num_row['num_courses']>1000)
-	{//if there are too much num_courses to gracefully handle with the HTML select list,
+    if ($num_row['num_courses']>1000) {
 	 // assign a default filter on users names
 		$first_letter_user = 'A';
 	}
@@ -153,8 +152,4 @@ unset($result);
  </table>
 </form>
 <?php
-/*
-		FOOTER
-*/
 Display :: display_footer();
-?>

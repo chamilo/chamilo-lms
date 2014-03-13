@@ -20,9 +20,6 @@ if (!api_get_multiple_access_url()) {
 	exit;
 }
 
-/*
-	Global constants and variables
-*/
 
 $form_sent = 0;
 $first_letter_user = '';
@@ -45,7 +42,9 @@ $interbreadcrumb[] = array ('url' => 'access_urls.php', 'name' => get_lang('Mult
 Display :: display_header($tool_name);
 
 echo '<div class="actions">';
-echo Display::url(Display::return_icon('edit.gif',get_lang('EditUsersToURL'),''), api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php">');
+echo Display::url(
+    Display::return_icon('edit.png', get_lang('EditUsersToURL'),''),
+    api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php');
 echo '</div>';
 
 api_display_tool_title($tool_name);
@@ -60,8 +59,7 @@ if ($_POST['form_sent']) {
 		$users[$key] = intval($value);
 	}
 
-	if ($form_sent == 1)
-	{
+	if ($form_sent == 1) {
 		if ( count($users) == 0 || count($url_list) == 0) {
 			Display :: display_error_message(get_lang('AtLeastOneUserAndOneURL'));
 			//header('Location: access_urls.php?action=show_message&message='.get_lang('AtLeastOneUserAndOneURL'));

@@ -160,9 +160,25 @@ define('DIR_HOTPOTATOES','/HotPotatoes_files');
 // Event logs types
 define('LOG_COURSE_DELETE',                     'course_deleted');
 define('LOG_COURSE_CREATE',                     'course_created');
-define('LOG_USER_CREATE',                       'user_created');
-define('LOG_USER_UPDATED',                      'user_updated');
+define('LOG_GROUP_PORTAL_CREATED',			    'soc_gr_created');
+define('LOG_GROUP_PORTAL_UPDATED',			    'soc_gr_updated');
+define('LOG_GROUP_PORTAL_DELETED',			    'soc_gr_deleted');
+define('LOG_GROUP_PORTAL_USER_DELETE_ALL',		'soc_gr_delete_users');
+
+define('LOG_GROUP_PORTAL_ID',			        'soc_gr_portal_id');
+define('LOG_GROUP_PORTAL_REL_USER_ARRAY',		'soc_gr_user_array');
+
+define('LOG_GROUP_PORTAL_USER_SUBSCRIBED',  	'soc_gr_u_subs');
+define('LOG_GROUP_PORTAL_USER_UNSUBSCRIBED',	'soc_gr_u_unsubs');
+define('LOG_GROUP_PORTAL_USER_UPDATE_ROLE',		'soc_gr_update_role');
+
 define('LOG_USER_DELETE',                       'user_deleted');
+define('LOG_USER_CREATE',                       'user_created');
+define('LOG_USER_ENABLE',                       'user_enable');
+define('LOG_USER_DISABLE',                      'user_disable');
+define('LOG_USER_FIELD_CREATE',			        'user_field_created');
+define('LOG_USER_FIELD_DELETE',			        'user_field_deleted');
+define('LOG_USER_UPDATED',                      'user_updated');
 define('LOG_USER_ACTIVATED',                    'user_activated');
 define('LOG_USER_DEACTIVATED',                  'user_deactivated');
 
@@ -182,10 +198,13 @@ define('LOG_PROMOTION_DELETE',                  'promotion_deleted');
 define('LOG_CAREER_CREATE',                     'career_created');
 define('LOG_CAREER_DELETE',                     'career_deleted');
 
+define('LOG_USER_PERSONAL_DOC_DELETED',         'user_doc_deleted');
+define('LOG_WIKI_ACCESS',                       'wiki_page_view');
 // Event logs data types
 define('LOG_COURSE_CODE',                       'course_code');
 define('LOG_USER_ID',                           'user_id');
 define('LOG_USER_OBJECT',                       'user_object');
+define('LOG_USER_FIELD_VARIABLE',		        'user_field_variable');
 define('LOG_SESSION_ID',                        'session_id');
 define('LOG_SESSION_CATEGORY_ID',               'session_category_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY',   'settings_category');
@@ -198,6 +217,7 @@ define('LOG_GRADEBOOK_LOCKED',                   'gradebook_locked');
 define('LOG_GRADEBOOK_UNLOCKED',                 'gradebook_unlocked');
 define('LOG_GRADEBOOK_ID',                       'gradebook_id');
 
+define('LOG_WIKI_PAGE_ID',                       'wiki_page_id');
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 
 //used when login_is_email setting is true

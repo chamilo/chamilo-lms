@@ -389,8 +389,8 @@ function getWorkPerUser($userId)
  */
 function getUniqueStudentAttempts($workId, $groupId, $course_id, $sessionId, $userId = null, $onlyUserList = array())
 {
-    $work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $user_table      = Database::get_main_table(TABLE_MAIN_USER);
+    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
     $course_id = intval($course_id);
     $workId = intval($workId);
@@ -408,23 +408,26 @@ function getUniqueStudentAttempts($workId, $groupId, $course_id, $sessionId, $us
         }
     }
 
-    $sql_document = "SELECT count(*) FROM (
-                        SELECT count(*)
-                        FROM $work_table w INNER JOIN $user_table u ON w.user_id = u.user_id
-                        WHERE   w.c_id = $course_id AND
-                                w.session_id = $sessionId AND
-                                w.parent_id = ".$workId." AND
-                                w.post_group_id = ".$groupId." AND
-                                w.active IN (0, 1) $studentCondition
-                        ";
+    $sql = "SELECT count(*) FROM (
+                SELECT count(*)
+                FROM $work_table w
+                INNER JOIN $user_table u
+                    ON w.user_id = u.user_id
+                WHERE
+                    w.c_id = $course_id AND
+                    w.session_id = $sessionId AND
+                    w.parent_id = ".$workId." AND
+                    w.post_group_id = ".$groupId." AND
+                    w.active IN (0, 1) $studentCondition
+                ";
 
     if (!empty($userId)) {
         $userId = intval($userId);
-        $sql_document .= " AND u.user_id = ".$userId;
+        $sql .= " AND u.user_id = ".$userId;
     }
-    $sql_document .= " GROUP BY u.user_id) as t";
+    $sql .= " GROUP BY u.user_id) as t";
 
-    $res_document = Database::query($sql_document);
+    $res_document = Database::query($sql);
     $rowCount = Database::fetch_row($res_document);
 
     return $rowCount[0];
@@ -759,6 +762,7 @@ function showStudentWorkGrid()
 function showTeacherWorkGrid()
 {
     $columnModel = array(
+        //array('name'=>'id', 'index'=>'id', 'width'=>'50', 'align'=>'left', 'hidden' => 'true'),
         array('name'=>'type', 'index'=>'type', 'width'=>'50', 'align'=>'left', 'sortable' => 'false'),
         array('name'=>'title', 'index'=>'title',  'width'=>'300',   'align'=>'left'),
         array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'150',  'align'=>'left'),
@@ -772,6 +776,8 @@ function showTeacherWorkGrid()
     $deleteUrl = api_get_path(WEB_AJAX_PATH).'work.ajax.php?a=delete_work&'.api_get_cidreq();
 
     $columns = array(
+
+        //get_lang('id'),
         get_lang('Type'),
         get_lang('Title'),
         get_lang('SentDate'),
@@ -3778,61 +3784,116 @@ function generateMoveForm($item_id, $path, $courseInfo, $groupId, $sessionId)
 }
 
 /**
- * @param array $userList
- * @param array $work_parents
- * @param int $group_id
- * @param int $course_id
- * @param int $session_id
+ * @param int $workId
  * @return string
  */
-function showStudentList($userList, $work_parents, $group_id, $course_id, $session_id)
+function showStudentList($workId)
 {
-    $table = new HTML_Table(array('class' => 'data_table'));
-    $column = 0;
-    $row = 0;
-    $headers = array(get_lang('Students'), get_lang('Works'));
-    foreach ($headers as $header) {
-        $table->setHeaderContents($row, $column, $header);
-        $column++;
-    }
-    $row++;
-    $column = 0;
+    $columnModel = array(
+        array('name'=>'student', 'index'=>'student', 'width'=>'150', 'align'=>'left', 'sortable' => 'false'),
+        array('name'=>'works', 'index'=>'works',  'width'=>'50',   'align'=>'left')
+    );
+    $token = null;
 
-    foreach ($userList as $userId) {
-        $user = api_get_user_info($userId);
-        $link = api_get_path(WEB_CODE_PATH).'work/student_work.php?'.api_get_cidreq().'&studentId='.$user['user_id'];
-        $url = Display::url(api_get_person_name($user['firstname'], $user['lastname']), $link);
-        $table->setCellContents($row, $column, $url);
-        $column++;
-        $userWorks = 0;
-        foreach ($work_parents as $work) {
-            $userWorks += getUniqueStudentAttempts($work->id, $group_id, $course_id, $session_id, $user['user_id']);
-        }
-        $cell = $userWorks." / ".count($work_parents);
-        $table->setCellContents($row, $column, $cell);
-        $row++;
-        $column = 0;
-    }
+    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_student_list_overview&work_id='.$workId.'&'.api_get_cidreq();
 
-    return $table->toHtml();
+    $columns = array(
+        get_lang('Students'),
+        get_lang('Works')
+    );
+
+    $params = array(
+        'autowidth' => 'true',
+        'height' => 'auto'
+    );
+
+    $html = '<script>
+    $(function() {
+        '.Display::grid_js('studentList', $url, $columns, $columnModel, $params, array(), null, true).'
+        $("#workList").jqGrid(
+            "navGrid",
+            "#studentList_pager",
+            { edit: false, add: false, del: false },
+            { height:280, reloadAfterSubmit:false }, // edit options
+            { height:280, reloadAfterSubmit:false }, // add options
+            { width:500 } // search options
+        );
+    });
+    </script>';
+    $html .= Display::grid_html('studentList');
+    return $html;
 }
 
 /**
- * @param string $course_code
- * @param int $session_id
- * @return array
+ * @param string $courseCode
+ * @param int $sessionId
+ * @param int $groupId
+ * @param int $start
+ * @param int $limit
+ * @param $sidx
+ * @param string $sord
+ * @param $getCount
+ * @return array|int
  */
-function getWorkUserList($course_code, $session_id)
+function getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sidx, $sord, $getCount = false)
 {
-    if (!empty($group_id)) {
-        $userList = GroupManager::get_users($group_id);
+    if (!empty($groupId)) {
+        $userList = GroupManager::get_users($groupId, false, $start, $limit, $getCount);
     } else {
-        if (empty($session_id)) {
-            $userList = CourseManager::get_user_list_from_course_code($course_code, $session_id, null, null, STUDENT);
-        } else {
-            $userList = CourseManager::get_user_list_from_course_code($course_code, $session_id, null, null, 0);
+        $limitString = null;
+        if (!empty($start) && !empty($limit)) {
+            $limitString = " LIMIT $start, $limit";
         }
-        $userList = array_keys($userList);
+        if (empty($sessionId)) {
+            $userList = CourseManager::get_user_list_from_course_code($courseCode, $sessionId, $limitString, null, STUDENT, $getCount);
+        } else {
+            $userList = CourseManager::get_user_list_from_course_code($courseCode, $sessionId, $limitString, null, 0, $getCount);
+        }
+        if ($getCount == false) {
+            $userList = array_keys($userList);
+        }
     }
     return $userList;
+}
+
+/**
+ * @param int $workId
+ * @param string $courseCode
+ * @param int $sessionId
+ * @param int $groupId
+ * @param int $start
+ * @param int $limit
+ * @param int $sidx
+ * @param string $sord
+ * @param bool $getCount
+ * @return array|int
+ */
+function getWorkUserListData($workId, $courseCode, $sessionId, $groupId, $start, $limit, $sidx, $sord, $getCount = false)
+{
+    $my_folder_data = get_work_data_by_id($workId);
+    $workParents = array();
+    if (empty($my_folder_data)) {
+        $workParents = getWorkList($workId, $my_folder_data, null);
+    }
+
+    $courseInfo = api_get_course_info($courseCode);
+    $userList = getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sidx, $sord, $getCount);
+    if ($getCount) {
+        return $userList;
+    }
+    $results = array();
+    if (!empty($userList)) {
+        foreach ($userList as $userId) {
+            $user = api_get_user_info($userId);
+            $link = api_get_path(WEB_CODE_PATH).'work/student_work.php?'.api_get_cidreq().'&studentId='.$user['user_id'];
+            $url = Display::url(api_get_person_name($user['firstname'], $user['lastname']), $link);
+            $userWorks = 0;
+            foreach ($workParents as $work) {
+                $userWorks += getUniqueStudentAttempts($work->id, $groupId, $courseInfo['real_id'], $sessionId, $user['user_id']);
+            }
+            $works = $userWorks." / ".count($workParents);
+            $results[] = array('student' => $url, 'works' => $works);
+        }
+    }
+    return $results;
 }

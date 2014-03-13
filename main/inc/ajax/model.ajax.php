@@ -36,6 +36,7 @@ if (!in_array(
     $action,
     array(
         'get_exercise_results',
+        'get_work_student_list_overview',
         'get_hotpotatoes_exercise_results',
         'get_work_teacher',
         'get_work_student',
@@ -217,6 +218,24 @@ switch ($action) {
                 true
             );
         }
+        break;
+    case 'get_work_student_list_overview':
+        if (!api_is_allowed_to_edit()) {
+            return 0;
+        }
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+        $workId = isset($_GET['work_id']) ? $_GET['work_id'] : null;
+        $count = getWorkUserListData(
+            $workId,
+            api_get_course_id(),
+            api_get_session_id(),
+            api_get_group_id(),
+            0,
+            $limit,
+            $sidx,
+            $sord,
+            true
+        );
         break;
     case 'get_exercise_results':
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
@@ -539,6 +558,25 @@ switch ($action) {
         }
         $result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
 		break;
+    case 'get_work_student_list_overview':
+        if (!api_is_allowed_to_edit()) {
+            return array();
+        }
+        require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
+        $columns = array(
+            'student', 'works'
+        );
+        $result = getWorkUserListData(
+            $workId,
+            api_get_course_id(),
+            api_get_session_id(),
+            api_get_group_id(),
+            $start,
+            $limit,
+            $sidx,
+            $sord
+        );
+        break;
     case 'get_hotpotatoes_exercise_results':
         $course = api_get_course_info();
         $documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
@@ -1009,6 +1047,7 @@ $allowed_actions = array(
     'get_session_progress',
     'get_exercise_progress',
     'get_exercise_results',
+    'get_work_student_list_overview',
     'get_hotpotatoes_exercise_results',
     'get_work_teacher',
     'get_work_student',

@@ -811,23 +811,26 @@ class Wiki
         //Show page. Show page to all users if isn't hide page. Mode assignments: if student is the author, can view
         if ($KeyVisibility=="1" || api_is_allowed_to_edit(false,true) || api_is_platform_admin() || ($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id()==$row['user_id']))) {
             echo '<div id="wikititle">';
-
+            $protect_page = null;
+            $lock_unlock_protect = null;
             // page action: protecting (locking) the page
-            if(api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+            if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
                 if (self::check_protect_page()==1) {
-                    $protect_page= Display::return_icon('lock.png', get_lang('PageLockedExtra'),'',ICON_SIZE_SMALL);
+                    $protect_page = Display::return_icon('lock.png', get_lang('PageLockedExtra'),'',ICON_SIZE_SMALL);
                     $lock_unlock_protect='unlock';
                 } else {
-                    $protect_page= Display::return_icon('unlock.png', get_lang('PageUnlockedExtra'),'',ICON_SIZE_SMALL);
+                    $protect_page = Display::return_icon('unlock.png', get_lang('PageUnlockedExtra'),'',ICON_SIZE_SMALL);
                     $lock_unlock_protect='lock';
                 }
             }
+
             if ($row['id']) {
                 echo '<span style="float:right;">';
                 echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_protect.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$protect_page.'</a>';
                 echo '</span>';
             }
-
+            $visibility_page = null;
+            $lock_unlock_visibility = null;
             //page action: visibility
             if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
                 if (self::check_visibility_page()==1) {
@@ -888,6 +891,7 @@ class Wiki
                     echo '</span>';
                 }
             }
+
             //export to print
             ?>
             <script>

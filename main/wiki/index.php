@@ -160,7 +160,7 @@ foreach ($result  as $is_editing_block) {
     }
 }
 echo '</div>';
-// saving a change
+// Saving a change
 
 if (isset($_POST['SaveWikiChange']) AND $_POST['title']<>'') {
     if(empty($_POST['title'])) {
@@ -183,7 +183,7 @@ if (isset($_POST['SaveWikiNew'])) {
         Display::display_error_message(get_lang("NoWikiPageTitle"));
     } elseif (strtotime($wiki->get_date_from_select('startdate_assig')) > strtotime($wiki->get_date_from_select('enddate_assig'))) {
         Display::display_error_message(get_lang("EndDateCannotBeBeforeTheStartDate"));
-    } elseif(!$wiki->double_post($_POST['wpost_id'])) {
+    } elseif (!$wiki->double_post($_POST['wpost_id'])) {
         //double post
     } else {
         $_clean['assignment'] = null;
@@ -305,68 +305,47 @@ if (isset($_GET['view']) && $_GET['view']) {
 }
 
 echo '<div style="overflow:hidden">';
-
-    if ($action == 'deletewiki') {
-        if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
-            if ($_GET['delete'] == 'yes') {
-                $return_message = $wiki->delete_wiki();
-                Display::display_confirmation_message($return_message);
-            }
+if ($action == 'deletewiki') {
+    if (api_is_allowed_to_edit(false, true) || api_is_platform_admin()) {
+        if ($_GET['delete'] == 'yes') {
+            $return_message = $wiki->delete_wiki();
+            Display::display_confirmation_message($return_message);
         }
     }
-    if ($action =='discuss' && isset($_POST['Submit']) && $_POST['Submit']) {
-        Display::display_confirmation_message(get_lang('CommentAdded'));
-    }
+}
+if ($action =='discuss' && isset($_POST['Submit']) && $_POST['Submit']) {
+    Display::display_confirmation_message(get_lang('CommentAdded'));
+}
 echo '</div>';
 
-/* WIKI WRAPPER */
+/* MAIN WIKI AREA */
 
-echo '<div id="wikiwrapper">';
+/** menuwiki (= actions of the page, not of the wiki tool) **/
 
-/** Actions bar (= action of the wiki tool, not of the page)**/
-
-//dynamic wiki menu
-?>
-<script type="text/javascript">
-function menu_wiki(){
- if(document.getElementById("menuwiki").style.width=="180px"){
-	var w=74;
-	var b=2;
-	var h=30;
- } else {
-	 var w=180;
-	 var b=1;
-	 var h=220;
- }
-
-document.getElementById("menuwiki").style.width=w+"px";
-document.getElementById("menuwiki").style.height=h+"px";
-document.getElementById("menuwiki").style.border=b+"px solid #cccccc";
-
-}
-</script>
-
-<?php
-
-echo '<div id="menuwiki" style="padding:2px;">';
-echo '&nbsp;<a href="index.php?cidReq='.$_course['id'].'&action=show&amp;title=index&session_id='.$session_id.'&group_id='.$groupId.'"'.$wiki->is_active_navigation_tab('show').'>'.
-    Display::return_icon('wiki.png',get_lang('HomeWiki'),'',ICON_SIZE_MEDIUM).'</a>&nbsp;';
-echo '&nbsp;<a href="javascript:void(0)" onClick="menu_wiki()">'.Display::return_icon('menu.png',get_lang('Menu'),'',ICON_SIZE_SMALL).'</a>';
+echo '<div class="actions">';
+/*        echo '&nbsp;<a href="index.php?cidReq='.$_course['id'].'&action=show&amp;title=index&session_id='.$session_id.'&group_id='.$groupId.'"'.$wiki->is_active_navigation_tab('show').'>'.
+    Display::return_icon('wiki.png',get_lang('HomeWiki'),'',ICON_SIZE_MEDIUM).'</a>&nbsp;';*/
+echo '<ul class="nav" style="margin-bottom:0px">
+    <li class="dropdown">
+    <a class="dropdown-toggle" href="javascript:void(0)">'.Display::return_icon('menu.png', get_lang('Menu'), '', ICON_SIZE_MEDIUM).'</a>';
 // menu home
-echo '<ul>';
-if ( api_is_allowed_to_session_edit(false,true) ) {
+echo '<ul class="dropdown-menu">';
+echo '<li><a href="index.php?cidReq='.$_course['id'].'&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('Home').'</a></li>';
+if (api_is_allowed_to_session_edit(false,true)) {
     //menu add page
-    echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=addnew&session_id='.$session_id.'&group_id='.$groupId.'"'.$wiki->is_active_navigation_tab('addnew').'>'.get_lang('AddNew').'</a> ';
+    echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=addnew&session_id='.$session_id.'&group_id='.$groupId.'"'.$wiki->is_active_navigation_tab('addnew').'>'.get_lang('AddNew').'</a>';
 }
+$lock_unlock_addnew = null;
+$protect_addnewpage = null;
 
 if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
     // page action: enable or disable the adding of new pages
     if ($wiki->check_addnewpagelock()==0) {
-        $protect_addnewpage= '<img src="../img/off.png" title="'.get_lang('AddOptionProtected').'" alt="'.get_lang('AddOptionProtected').'" width="8" height="8" />';
-        $lock_unlock_addnew='unlockaddnew';
+        $protect_addnewpage = Display::return_icon('off.png', get_lang('AddOptionProtected'));
+        $lock_unlock_addnew ='unlockaddnew';
     } else {
-        $protect_addnewpage= '<img src="../img/on.png" title="'.get_lang('AddOptionUnprotected').'" alt="'.get_lang('AddOptionUnprotected').'" width="8" height="8" />';
-        $lock_unlock_addnew='lockaddnew';
+        $protect_addnewpage = Display::return_icon('on.png', get_lang('AddOptionUnprotected'));
+        $lock_unlock_addnew ='lockaddnew';
     }
 }
 
@@ -379,42 +358,36 @@ echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=allpages&session_i
 echo '<li><a href="index.php?cidReq='.$_course['id'].'&action=recentchanges&session_id='.$session_id.'&group_id='.$groupId.'"'.$wiki->is_active_navigation_tab('recentchanges').'>'.get_lang('RecentChanges').'</a></li>';
 // menu delete all wiki
 if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
-        echo '<li><a href="index.php?action=deletewiki&amp;title='.api_htmlentities(urlencode($page)).'"'.$wiki->is_active_navigation_tab('deletewiki').'>'.get_lang('DeleteWiki').'</a></li>';
+    echo '<li><a href="index.php?action=deletewiki&amp;title='.api_htmlentities(urlencode($page)).'"'.$wiki->is_active_navigation_tab('deletewiki').'>'.get_lang('DeleteWiki').'</a></li>';
 }
 ///menu more
-echo '<li><a href="index.php?action=more&amp;title='.api_htmlentities(urlencode($page)).'"'.$wiki->is_active_navigation_tab('more').'>'.get_lang('More').'</a></li>';
+echo '<li><a href="index.php?action=more&amp;title='.api_htmlentities(urlencode($page)).'"'.$wiki->is_active_navigation_tab('more').'>'.get_lang('Statistics').'</a></li>';
+echo '</ul>';
+echo '</li>';
+
+//menu show page
+echo '<a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$groupId.'"'.$wiki->is_active_navigation_tab('showpage').'>'.Display::return_icon('page.png',get_lang('ShowThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
+
+if (api_is_allowed_to_session_edit(false,true) ) {
+    //menu edit page
+    echo '<a href="index.php?cidReq='.$_course['id'].'&action=edit&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$groupId.'"'.$wiki->is_active_navigation_tab('edit').'>'.Display::return_icon('edit.png',get_lang('EditThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
+
+    //menu discuss page
+    echo '<a href="index.php?action=discuss&amp;title='.api_htmlentities(urlencode($page)).'"'.$wiki->is_active_navigation_tab('discuss').'>'.Display::return_icon('discuss.png',get_lang('DiscussThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
+ }
+
+//menu history
+echo '<a href="index.php?cidReq='.$_course['id'].'&action=history&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$groupId.'"'.$wiki->is_active_navigation_tab('history').'>'.Display::return_icon('history.png',get_lang('ShowPageHistory'),'',ICON_SIZE_MEDIUM).'</a>';
+//menu linkspages
+echo '<a href="index.php?action=links&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$groupId.'"'.$wiki->is_active_navigation_tab('links').'>'.Display::return_icon('what_link_here.png',get_lang('LinksPages'),'',ICON_SIZE_MEDIUM).'</a>';
+
+//menu delete wikipage
+if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+    echo '<a href="index.php?action=delete&amp;title='.api_htmlentities(urlencode($page)).'"'.$wiki->is_active_navigation_tab('delete').'>'.Display::return_icon('delete.png',get_lang('DeleteThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
+}
 echo '</ul>';
 echo '</div>';
 
-/* MAIN WIKI AREA */
-
-echo '<div id="mainwiki">';
-/** menuwiki (= actions of the page, not of the wiki tool) **/
-if (!in_array($action , array('addnew', 'searchpages', 'allpages', 'recentchanges', 'deletewiki', 'more', 'mactiveusers', 'mvisited', 'mostchanged', 'orphaned', 'wanted'))) {
-    echo '<div class="actions">';
-
-    //menu show page
-    echo '&nbsp;&nbsp;<a href="index.php?cidReq='.$_course['id'].'&action=showpage&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$groupId.'"'.$wiki->is_active_navigation_tab('showpage').'>'.Display::return_icon('page.png',get_lang('ShowThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
-
-    if (api_is_allowed_to_session_edit(false,true) ) {
-        //menu edit page
-        echo '<a href="index.php?cidReq='.$_course['id'].'&action=edit&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$groupId.'"'.$wiki->is_active_navigation_tab('edit').'>'.Display::return_icon('edit.png',get_lang('EditThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
-
-        //menu discuss page
-        echo '<a href="index.php?action=discuss&amp;title='.api_htmlentities(urlencode($page)).'"'.$wiki->is_active_navigation_tab('discuss').'>'.Display::return_icon('discuss.png',get_lang('DiscussThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
-     }
-
-    //menu history
-    echo '<a href="index.php?cidReq='.$_course['id'].'&action=history&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$groupId.'"'.$wiki->is_active_navigation_tab('history').'>'.Display::return_icon('history.png',get_lang('ShowPageHistory'),'',ICON_SIZE_MEDIUM).'</a>';
-    //menu linkspages
-    echo '<a href="index.php?action=links&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.$session_id.'&group_id='.$groupId.'"'.$wiki->is_active_navigation_tab('links').'>'.Display::return_icon('what_link_here.png',get_lang('LinksPages'),'',ICON_SIZE_MEDIUM).'</a>';
-
-    //menu delete wikipage
-    if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
-        echo '<a href="index.php?action=delete&amp;title='.api_htmlentities(urlencode($page)).'"'.$wiki->is_active_navigation_tab('delete').'>'.Display::return_icon('delete.png',get_lang('DeleteThisPage'),'',ICON_SIZE_MEDIUM).'</a>';
-    }
-    echo '</div>';
-}
 
 //In new pages go to new page
 if (isset($_POST['SaveWikiNew'])) {
@@ -432,7 +405,7 @@ if (isset($_POST['export2DOC']) && $_POST['export2DOC']) {
     }
 }
 
-if (isset($action ) =='more') {
+if (isset($action) && $action =='more') {
 
     echo '<div class="actions">'.get_lang('More').'</div>';
     echo '<table border="0">';
@@ -1397,7 +1370,7 @@ if ($action =='mostlinked') {
 
 }
 
-/* Deete current page */
+/* Delete current page */
 
 if ($action =='delete') {
 
@@ -1605,7 +1578,7 @@ if ($action =='links') {
 
 // Adding a new page
 // Display the form for adding a new wiki page
-echo '<div style="overflow:hidden">';
+
 if ($action =='addnew') {
     if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
         api_not_allowed();
@@ -1835,10 +1808,9 @@ if (isset($action) && $action =='edit') {
                     exit;
                 }
 
-                //form
+                // Form.
+                echo '<div id="wikititle"><div style="width:70%;float:left;">'.$icon_assignment.str_repeat('&nbsp;',3).api_htmlentities($title).'</div></div>';
                 echo '<form name="form1" method="post" action="'.api_get_self().'?action=showpage&amp;title='.api_htmlentities(urlencode($page)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">';
-                echo '<div id="wikititle">';
-                echo '<div style="width:70%;float:left;">'.$icon_assignment.str_repeat('&nbsp;',3).api_htmlentities($title).'</div></div>';
 
                 if ((api_is_allowed_to_edit(false,true) || api_is_platform_admin()) && $row['reflink'] != 'index') {
 
@@ -1975,7 +1947,6 @@ if (isset($action) && $action =='edit') {
                     echo '</div>';
                 }
 
-                echo '</div>';
                 echo '<div id="wikicontent">';
 
                 echo '<input type="hidden" name="page_id" value="'.$page_id.'">';
@@ -2436,13 +2407,15 @@ if ($action == 'discuss') {
             echo '<div id="wikititle">';
 
             // discussion action: protecting (locking) the discussion
+            $addlock_disc = null;
+            $lock_unlock_disc = null;
             if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
                 if ($wiki->check_addlock_discuss()==1) {
-                    $addlock_disc= Display::return_icon('unlock.png', get_lang('UnlockDiscussExtra'),'',ICON_SIZE_SMALL);
-                    $lock_unlock_disc='unlockdisc';
+                    $addlock_disc = Display::return_icon('unlock.png', get_lang('UnlockDiscussExtra'),'',ICON_SIZE_SMALL);
+                    $lock_unlock_disc ='unlockdisc';
                 } else {
-                    $addlock_disc= Display::return_icon('lock.png', get_lang('LockDiscussExtra'),'',ICON_SIZE_SMALL);
-                    $lock_unlock_disc='lockdisc';
+                    $addlock_disc = Display::return_icon('lock.png', get_lang('LockDiscussExtra'),'',ICON_SIZE_SMALL);
+                    $lock_unlock_disc ='lockdisc';
                 }
             }
             echo '<span style="float:right">';
@@ -2450,7 +2423,8 @@ if ($action == 'discuss') {
             echo '</span>';
 
             // discussion action: visibility.  Show discussion to students if isn't hidden. Show page to all teachers if is hidden.
-
+            $visibility_disc = null;
+            $hide_show_disc = null;
             if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
                 if ($wiki->check_visibility_discuss()==1) {
                     /// TODO: 	Fix Mode assignments: If is hidden, show discussion to student only if student is the author
@@ -2459,11 +2433,11 @@ if ($action == 'discuss') {
                         //$visibility_disc= '<img src="../img/wiki/invisible.gif" title="'.get_lang('HideDiscussExtra').'" alt="'.get_lang('HideDiscussExtra').'" />';
 
                     //}
-                    $visibility_disc= Display::return_icon('visible.png', get_lang('ShowDiscussExtra'),'',ICON_SIZE_SMALL);
-                    $hide_show_disc='hidedisc';
+                    $visibility_disc = Display::return_icon('visible.png', get_lang('ShowDiscussExtra'),'',ICON_SIZE_SMALL);
+                    $hide_show_disc = 'hidedisc';
                 } else {
-                    $visibility_disc= Display::return_icon('invisible.png', get_lang('HideDiscussExtra'),'',ICON_SIZE_SMALL);
-                    $hide_show_disc='showdisc';
+                    $visibility_disc = Display::return_icon('invisible.png', get_lang('HideDiscussExtra'),'',ICON_SIZE_SMALL);
+                    $hide_show_disc = 'showdisc';
                 }
             }
             echo '<span style="float:right">';
@@ -2471,14 +2445,15 @@ if ($action == 'discuss') {
             echo '</span>';
 
             //discussion action: check add rating lock. Show/Hide list to rating for all student
-
+            $lock_unlock_rating_disc = null;
+            $ratinglock_disc = null;
             if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
                 if ($wiki->check_ratinglock_discuss()==1) {
-                    $ratinglock_disc= Display::return_icon('star.png', get_lang('UnlockRatingDiscussExtra'),'',ICON_SIZE_SMALL);
-                    $lock_unlock_rating_disc='unlockrating';
+                    $ratinglock_disc = Display::return_icon('star.png', get_lang('UnlockRatingDiscussExtra'),'',ICON_SIZE_SMALL);
+                    $lock_unlock_rating_disc = 'unlockrating';
                 } else {
-                    $ratinglock_disc= Display::return_icon('star_na.png', get_lang('LockRatingDiscussExtra'),'',ICON_SIZE_SMALL);
-                    $lock_unlock_rating_disc='lockrating';
+                    $ratinglock_disc = Display::return_icon('star_na.png', get_lang('LockRatingDiscussExtra'),'',ICON_SIZE_SMALL);
+                    $lock_unlock_rating_disc = 'lockrating';
                 }
             }
 
@@ -2680,8 +2655,5 @@ if ($action == 'discuss') {
             Display::display_normal_message(get_lang('DiscussNotAvailable'));
     }
 }
-echo '</div>'; // echo "<div style="overflow:hidden">";
-echo "</div>"; // echo "<div id='mainwiki'>";
-echo "</div>"; // echo "<div id='wikiwrapper'>";
 
 Display::display_footer();

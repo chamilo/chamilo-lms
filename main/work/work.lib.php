@@ -379,7 +379,7 @@ function getWorkPerUser($userId)
 }
 
 /**
- * @param int $workId
+ * @param mixed $workId
  * @param int $groupId
  * @param int $course_id
  * @param int $sessionId
@@ -393,7 +393,16 @@ function getUniqueStudentAttempts($workId, $groupId, $course_id, $sessionId, $us
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
     $course_id = intval($course_id);
-    $workId = intval($workId);
+    $workCondition = null;
+    if (is_array($workId)) {
+        $workId = array_map('intval', $workId);
+        $workId = implode("','", $workId);
+        $workCondition = " w.parent_id IN ('".$workId."') AND";
+    } else {
+        $workId = intval($workId);
+        $workCondition = " w.parent_id = ".$workId." AND";
+    }
+
     $sessionId = intval($sessionId);
     $groupId = intval($groupId);
 
@@ -416,7 +425,7 @@ function getUniqueStudentAttempts($workId, $groupId, $course_id, $sessionId, $us
                 WHERE
                     w.c_id = $course_id AND
                     w.session_id = $sessionId AND
-                    w.parent_id = ".$workId." AND
+                   $workCondition
                     w.post_group_id = ".$groupId." AND
                     w.active IN (0, 1) $studentCondition
                 ";
@@ -3791,7 +3800,7 @@ function showStudentList($workId)
 {
     $columnModel = array(
         array('name'=>'student', 'index'=>'student', 'width'=>'150', 'align'=>'left', 'sortable' => 'false'),
-        array('name'=>'works', 'index'=>'works',  'width'=>'50',   'align'=>'left')
+        array('name'=>'works', 'index'=>'works',  'width'=>'50', 'align'=>'left', 'sortable' => 'false')
     );
     $token = null;
 
@@ -3804,7 +3813,8 @@ function showStudentList($workId)
 
     $params = array(
         'autowidth' => 'true',
-        'height' => 'auto'
+        'height' => 'auto',
+        'rowNum' => 10
     );
 
     $html = '<script>
@@ -3876,6 +3886,13 @@ function getWorkUserListData($workId, $courseCode, $sessionId, $groupId, $start,
         $workParents = getWorkList($workId, $my_folder_data, null);
     }
 
+    $workIdList = array();
+    if (!empty($workParents)) {
+        foreach ($workParents as $work) {
+            $workIdList[] = $work->id;
+        }
+    }
+
     $courseInfo = api_get_course_info($courseCode);
     $userList = getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sidx, $sord, $getCount);
     if ($getCount) {
@@ -3888,8 +3905,8 @@ function getWorkUserListData($workId, $courseCode, $sessionId, $groupId, $start,
             $link = api_get_path(WEB_CODE_PATH).'work/student_work.php?'.api_get_cidreq().'&studentId='.$user['user_id'];
             $url = Display::url(api_get_person_name($user['firstname'], $user['lastname']), $link);
             $userWorks = 0;
-            foreach ($workParents as $work) {
-                $userWorks += getUniqueStudentAttempts($work->id, $groupId, $courseInfo['real_id'], $sessionId, $user['user_id']);
+            if (!empty($workIdList)) {
+                $userWorks = getUniqueStudentAttempts($workIdList, $groupId, $courseInfo['real_id'], $sessionId, $user['user_id']);
             }
             $works = $userWorks." / ".count($workParents);
             $results[] = array('student' => $url, 'works' => $works);

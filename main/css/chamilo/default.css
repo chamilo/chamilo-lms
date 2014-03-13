@@ -23,7 +23,7 @@ a:active {
 }
 .navbar .nav > li > a {
     float: none;
-    line-height: 20px;
+    line-height: 22px;
     padding-bottom: 13px;
     padding-right: 10px;
     padding-top: 13px;
@@ -334,10 +334,10 @@ a:active {
 
 .pagerslide h2{
     font-size: 18px;
-    font-family: 'Raleway', sans-serif;
     background-color:  #0191C7;
     color: #FFFFFF;
     padding-left: 15px;
+    font-weight: normal;
 }
 .controls .btn{
     background:#FD6600;

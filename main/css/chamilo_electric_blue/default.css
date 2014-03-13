@@ -98,7 +98,7 @@ a:active {
     text-shadow: none;
 }
 .controls .btn:hover{
-    background:#4B8A08;
+    background:#90B1F3;
     border: none;
     color: #FFFFFF;
 
@@ -339,7 +339,7 @@ a:active {
     padding-left: 15px;
 }
 .controls .btn{
-    background:#87BA0A;
+    background:#133AAC;
     color: #FFFFFF;
     border:none;
     padding: 5px 25px;
@@ -388,8 +388,8 @@ a:active {
     padding-bottom: 5px;
 }
 .well {
-  background-color: rgba(243,226,169, 0.1);
-  border: 1px solid rgba(243,226,169, 0.1);
+  background-color: rgba(96, 165, 209, 0.1);
+  border: 1px solid rgba(96, 165, 209, 0.1);
   border-radius: 8px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
   margin-bottom: 20px;

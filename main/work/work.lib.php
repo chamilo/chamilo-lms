@@ -287,19 +287,18 @@ function get_work_assignment_by_id($id, $courseId = null)
  */
 function getWorkList($id, $my_folder_data, $add_in_where_query = null)
 {
-    $work_table      = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
-    $course_id          = api_get_course_int_id();
-    $session_id         = api_get_session_id();
-    $condition_session  = api_get_session_condition($session_id);
-    $group_id           = api_get_group_id();
+    $course_id = api_get_course_int_id();
+    $session_id = api_get_session_id();
+    $condition_session = api_get_session_condition($session_id);
+    $group_id = api_get_group_id();
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
     $linkInfo = is_resource_in_course_gradebook(api_get_course_id(), 3 , $id, api_get_session_id());
 
     if ($linkInfo) {
         $workInGradeBookLinkId = $linkInfo['id'];
-
         if ($workInGradeBookLinkId) {
             if ($is_allowed_to_edit) {
                 if (intval($my_folder_data['qualification']) == 0) {
@@ -314,18 +313,16 @@ function getWorkList($id, $my_folder_data, $add_in_where_query = null)
     // Get list from database
     if ($is_allowed_to_edit) {
         $active_condition = ' active IN (0, 1)';
-        $sql = "SELECT *  FROM  $work_table
+        $sql = "SELECT * FROM $work_table
                 WHERE
-                  c_id = $course_id
-                  $add_in_where_query
-                  $condition_session AND
-                  $active_condition AND
-                  (parent_id = 0)
-                  $contains_file_query ";
-        if (!empty($group_id)) {
-            $sql .= " AND post_group_id = '".$group_id."' ";
-        }
-        $sql .= " ORDER BY sent_date DESC";
+                    c_id = $course_id
+                    $add_in_where_query
+                    $condition_session AND
+                    $active_condition AND
+                    (parent_id = 0)
+                    $contains_file_query AND
+                    post_group_id = '".$group_id."'
+                ORDER BY sent_date DESC";
     } else {
         if (!empty($group_id)) {
             // set to select only messages posted by the user's group
@@ -1632,7 +1629,7 @@ function getWorkListStudent($start, $limit, $column, $direction, $where_conditio
  */
 function getWorkListTeacher($start, $limit, $column, $direction, $where_condition, $getCount = false)
 {
-    $workTable         = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $workTableAssignment  = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 
     $course_id          = api_get_course_int_id();
@@ -1660,15 +1657,15 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
         $sql = " $select
                 FROM $workTable w
                 LEFT JOIN $workTableAssignment a ON (a.publication_id = w.id AND a.c_id = w.c_id)
-                WHERE w.c_id = $course_id
+                WHERE
+                    w.c_id = $course_id
                     $condition_session AND
                     $active_condition AND
-                    (parent_id = 0) $where_condition ";
-
-        $sql .= " AND post_group_id = '".$group_id."' ";
-
-        $sql .= " ORDER BY $column $direction ";
-        $sql .= " LIMIT $start, $limit";
+                    (parent_id = 0)
+                    $where_condition AND
+                    post_group_id = '".$group_id."'
+                ORDER BY $column $direction
+                LIMIT $start, $limit";
 
         $result = Database::query($sql);
 

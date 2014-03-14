@@ -571,8 +571,13 @@ The more frequent ones have been marked with *
                 text-align: center;
     }
     .new_actions .nav > li {
-        float: none;
+        float: left;
     }
+    .well.form-inline {
+    display: inline-block;
+    margin-top: 15px;
+    width: 100%;
+}
     .new_actions .nav > li > a {
         border: 0;
     }

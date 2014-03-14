@@ -18,7 +18,6 @@ a:hover {
 }
 a:active {
     text-decoration: none;
-    color : #3757f7;
 }
 .navbar .nav > li > a {
     float: none;
@@ -214,16 +213,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f68a7a', end
   padding-bottom: 5px;
   border: 1px solid #E1E1E0;
   box-shadow: none;
+  font-size: 12px;
 }
 .breadcrumb a{
   color: #333;
-  font-size: 13px;
+  f
   line-height: 30px;
   text-transform: none;
 }
 
 .breadcrumb li{
-    font-size: 14px;
+    
     text-shadow: none;
 }
 .breadcrumb a.btn-mini{
@@ -520,7 +520,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f68a7a', end
 
 /*FIN DE INTRODUCCION DEL CURSO*/
 .fc-header-title h2{
-    color: #FD6600;
+    color: #666;
 }
 .fc-first .fc-widget-header{
     font-size: 14px;
@@ -759,45 +759,83 @@ button.login {
 button.login:hover {
 }
 
-/*including "save" image*/
+/*including "save" image
 button.save {
     background-image:url(images/button_accept.gif);
 }
-/*including "add" image*/
+/*including "add" image
 button.add {
     background-image:url(images/button_add.gif);
+
 }
-/*including "cancel" image*/
+/*including "cancel" image
 button.cancel {
     background-image:url(images/button_delete.gif);
 }
-/*including "search" image*/
+/*including "search" image
 button.search {
     background-image:url(images/bg-button.gif);
+
 }
-/*including "plus" image*/
+/*including "plus" image
 button.plus {
     background-image:url(images/button_plus.gif);
 }
-/*including "minus" image*/
+/*including "minus" image
 button.minus {
     background-image:url(images/button_minus.gif);
 }
-/*including "next" image*/
+/*including "next" image
 button.next {
     background-image:url(images/button_next.gif) !important;
 }
-/*including "back" image*/
+/*including "back" image
 button.back {
     background-image:url(images/button_back.gif);
 }
-/*including "refresh" image*/
+/*including "refresh" image
 button.refresh {
     background-image:url(images/button_refresh.gif);
 }
-/*including "upload" image*/
+/*including "upload" image
 button.upload {
     background-image:url(images/button_upload.gif);
+}
+*/
+button.add, button.save, button.cancel, button.refresh, button.upload, button.search, button.login, button.plus, button.minus, button.next, button.back {
+  display: inline-block;
+  padding: 3px 25px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.428571429;
+  text-align: center;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.17);
+  cursor: pointer;
+  color: #FFFFFF;
+  background: #606e78; /* Old browsers */
+  background: -moz-linear-gradient(top, #606e78 0%, #495864 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#606e78), color-stop(100%,#495864)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #606e78 0%,#495864 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #606e78 0%,#495864 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #606e78 0%,#495864 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #606e78 0%,#495864 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#606e78', endColorstr='#495864',GradientType=0 ); /* IE6-9 */
+  border:1px solid rgba(0, 0, 0, 0.15);
+}
+.bottom_actions_fixed{
+  background: #f2f2f2; /* Old browsers */
+background: -moz-linear-gradient(top, #f2f2f2 0%, #fcfcfc 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f2f2f2), color-stop(100%,#fcfcfc)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #f2f2f2 0%,#fcfcfc 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #f2f2f2 0%,#fcfcfc 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, #f2f2f2 0%,#fcfcfc 100%); /* IE10+ */
+background: linear-gradient(to bottom, #f2f2f2 0%,#fcfcfc 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', endColorstr='#fcfcfc',GradientType=0 ); /* IE6-9 */
+  border: 1px solid #E1E1E0;
+}
+.new_actions-fixed {
+  top: 50px;
 }
 
 button.arrowr, input.arrowr {

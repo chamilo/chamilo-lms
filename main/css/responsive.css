@@ -123,11 +123,16 @@ The more frequent ones have been marked with *
 
 @media (min-width: 321px) and (max-width: 480px) {
     body {
-        padding-left: 5px;
-        padding-right: 5px;
+        padding-left: 0;
+        padding-right: 0;
     }
+    
     header #header_left {
         display: block;
+    }
+    .page-section{
+        padding-left: 1em;
+        padding-right: 1em;
     }
     header #header_center, header #header_right{
         display: none;
@@ -390,7 +395,11 @@ The more frequent ones have been marked with *
     header{
         margin-top: 15px;
     }
-    
+    #wrapper{
+        padding-left: 0;
+        padding-right: 0;
+    }
+
     #top_main_content .menu-column {
         width: 97%;
     }
@@ -662,10 +671,7 @@ The more frequent ones have been marked with *
         padding-top: 2em;
         padding-bottom: 2em;
     }
-    #wrapper{
-        padding-left: 1em;
-        padding-right: 1em;
-    }
+    
     #top_main_content .span9 {
     width: 100%;
     clear: both;

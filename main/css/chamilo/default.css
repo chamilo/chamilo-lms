@@ -23,10 +23,11 @@ a:active {
 }
 .navbar .nav > li > a {
     float: none;
-    line-height: 22px;
+    line-height: 24px;
     padding-bottom: 13px;
     padding-right: 10px;
     padding-top: 13px;
+    color: #FFFFFF;
 }
 .subnav .navbar-inner {
     background-color: #0191C7; /* Old browsers */
@@ -113,20 +114,21 @@ a:active {
   padding-bottom: 5px;
   border: 1px solid #B1D6EC;
   box-shadow: none;
+  font-size: 12px;
 }
 .breadcrumb a{
   color: #333;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 30px;
   text-transform: none;
 }
 
 .breadcrumb li{
-    font-size: 14px;
+    
     text-shadow: none;
 }
 .breadcrumb a.btn-mini{
-    font-size: 12px;
+   
     line-height: 17px;
     text-transform: none;
 }
@@ -650,6 +652,20 @@ button.arrowl, input.arrowl {
 .portal {
     background-image:url(images/portal.png);
 }
+.bottom_actions_fixed{
+  background: #f2f2f2; /* Old browsers */
+background: -moz-linear-gradient(top, #f2f2f2 0%, #fcfcfc 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f2f2f2), color-stop(100%,#fcfcfc)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #f2f2f2 0%,#fcfcfc 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #f2f2f2 0%,#fcfcfc 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, #f2f2f2 0%,#fcfcfc 100%); /* IE10+ */
+background: linear-gradient(to bottom, #f2f2f2 0%,#fcfcfc 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', endColorstr='#fcfcfc',GradientType=0 ); /* IE6-9 */
+  border: 1px solid #E1E1E0;
+}
+.new_actions-fixed {
+  top: 50px;
+}
 
 /*CSS ICON BLOCK USER*/
    .inbox-social{
@@ -703,9 +719,37 @@ RESPONSIVE CSS
   font-weight: 200;
   line-height: 20px;
   padding-bottom: 12px;
-  padding-top: 8px;
+  padding-top: 12px;
+  color: #FFFFFF;
 }
-
+.navbar-inner{
+  background: #2bb8ef; /* Old browsers */
+  background: -moz-linear-gradient(top, #2bb8ef 0%, #0191c7 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2bb8ef), color-stop(100%,#0191c7)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #2bb8ef 0%,#0191c7 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2bb8ef', endColorstr='#0191c7',GradientType=0 ); /* IE6-9 */
+}
+.dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
+  background-color: #FD6600;
+  color: #FFFFFF;
+}
+.navbar-search {
+  margin-bottom: 0;
+  margin-top: 11px;
+  position: relative;
+}
+.navbar-search .search-query {
+  background:#FFFFFF;
+  color: #666;
+  border: 1px solid #ffffff;
+}
+.navbar .nav .active > a, .navbar .nav .active > a:hover {
+  background:none;
+  color: #FFFFFF;
+}
 @media (min-width: 481px) and (max-width: 800px) {
 
     .sidebar-nav h4 {

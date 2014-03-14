@@ -133,9 +133,11 @@ $export_icon_high = '../img/export_high_fade.png';
 $tpl->assign('export_ical_confidential_icon', Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')));
 
 $actions = null;
+$filter = null;
 
 if (api_is_allowed_to_edit(false, true) OR
-    (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false, true) OR
+    (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) &&
+    api_is_allowed_to_session_edit(false, true) OR
     $is_group_tutor
 ) {
     if ($type == 'course') {

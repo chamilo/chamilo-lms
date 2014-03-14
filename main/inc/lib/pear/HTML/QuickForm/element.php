@@ -89,7 +89,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_element($elementName=null, $elementLabel=null, $attributes=null)
+    function HTML_QuickForm_element($elementName = null, $elementLabel = null, $attributes = null)
     {
         HTML_Common::HTML_Common($attributes);
         if (isset($elementName)) {
@@ -238,7 +238,7 @@ class HTML_QuickForm_element extends HTML_Common
         // Modified by Ivan Tcholakov, 16-MAR-2010.
         //return ('' != $value? htmlspecialchars($value): '&nbsp;') .
         //       $this->_getPersistantData();
-        
+
         $value =  ('' != $value ? @htmlspecialchars($value, ENT_COMPAT, HTML_Common::charset()): '&nbsp;') .
                $this->_getPersistantData();
         return '<span class="freeze">'.$value.'</span>';
@@ -378,7 +378,7 @@ class HTML_QuickForm_element extends HTML_Common
         switch ($event) {
             case 'createElement':
                 $className = get_class($this);
-                              
+
                 $this->$className($arg[0], $arg[1], $arg[2], $arg[3], $arg[4]);
                 break;
             case 'addElement':

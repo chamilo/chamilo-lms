@@ -80,19 +80,19 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
     * @var      array
     */
     var $_locale = array(
-        'en'    => array (
+        'en' => array (
             'weekdays_short'=> array ('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'),
             'weekdays_long' => array ('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'),
             'months_short'  => array ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'),
             'months_long'   => array ('January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December')
         ),
-        'de'    => array (
+        'de' => array (
             'weekdays_short'=> array ('So', 'Mon', 'Di', 'Mi', 'Do', 'Fr', 'Sa'),
             'weekdays_long' => array ('Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'),
             'months_short'  => array ('Jan', 'Feb', 'M&#xe4;rz', 'April', 'Mai', 'Juni', 'Juli', 'Aug', 'Sept', 'Okt', 'Nov', 'Dez'),
             'months_long'   => array ('Januar', 'Februar', 'M&#xe4;rz', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember')
         ),
-        'fr'    => array (
+        'fr' => array (
             'weekdays_short'=> array ('Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'),
             'weekdays_long' => array ('Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'),
             'months_short'  => array ('Jan', 'F&#xe9;v', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Ao&#xfb;t', 'Sep', 'Oct', 'Nov', 'D&#xe9;c'),
@@ -305,9 +305,6 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         }
     }
 
-    // }}}
-    // {{{ _createElements()
-
     function _createElements()
     {
         $this->_separator = $this->_elements = array();
@@ -315,8 +312,6 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
         $locale    =& $this->_locale[$this->_options['language']];
         $backslash =  false;
         // Modified by Ivan Tcholakov, 16-MAR-2010.
-        //for ($i = 0, $length = strlen($this->_options['format']); $i < $length; $i++) {
-        //    $sign = $this->_options['format']{$i};
         for ($i = 0, $length = api_strlen($this->_options['format']); $i < $length; $i++) {
             $sign = api_substr($this->_options['format'], $i, 1);
         //
@@ -503,7 +498,7 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
 
     function toHtml()
     {
-        include_once('HTML/QuickForm/Renderer/Default.php');
+        include_once 'HTML/QuickForm/Renderer/Default.php';
         $renderer = new HTML_QuickForm_Renderer_Default();
         $renderer->setElementTemplate('{element}');
         parent::accept($renderer);
@@ -531,7 +526,4 @@ class HTML_QuickForm_date extends HTML_QuickForm_group
             return parent::onQuickFormEvent($event, $arg, $caller);
         }
     }
-
-    // }}}
 }
-?>

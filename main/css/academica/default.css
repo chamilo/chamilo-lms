@@ -133,10 +133,17 @@ a:active {
     margin-top: -5px;
  }
 .navbar-inner{
-  background:#2FAFBC;
+  background: #f68a7a; /* Old browsers */
+background: -moz-linear-gradient(top, #f68a7a 0%, #f26954 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f68a7a), color-stop(100%,#f26954)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #f68a7a 0%,#f26954 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #f68a7a 0%,#f26954 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, #f68a7a 0%,#f26954 100%); /* IE10+ */
+background: linear-gradient(to bottom, #f68a7a 0%,#f26954 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f68a7a', endColorstr='#f26954',GradientType=0 ); /* IE6-9 */
 }
 .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
-  background-color: #FE9A2E;
+  background-color: #3A4751;
   color: #FFFFFF;
 }
 .navbar-search {

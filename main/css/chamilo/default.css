@@ -802,6 +802,19 @@ RESPONSIVE CSS
 footer {
     height: 5em;
   }
+.welcome-mascot{
+  background: none;
+  padding-right: 0px;
+  padding-bottom: 2em;
+  padding-top: 2em;
+}
+#homepage .row .span9 h2 {
+  color: #0191C7;
+  font-size: 22px;
+  font-weight: bold;
+  padding-bottom: 8px;
+  line-height: 25px;
+}
 }
 /*+++++++++++++++++++++++++++++++++
 END RESPONSIVE CSS

@@ -296,7 +296,7 @@ class AnnouncementManager
      */
     public static function add_announcement($emailTitle, $newContent, $sent_to, $file = array(), $file_comment = null, $end_date = null)
     {
-        global $_course;
+        $_course = api_get_course_info();
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 
         // filter data
@@ -320,37 +320,38 @@ class AnnouncementManager
 				title 			= '$emailTitle',
                 end_date        = '$end_date',
 				display_order 	= '$order',
-				session_id		= " . api_get_session_id();
+				session_id		= ".api_get_session_id();
         $result = Database::query($sql);
+
         if ($result === false) {
             return false;
         } else {
-            //Store the attach file
+            // Store the attach file.
             $last_id = Database::insert_id();
             if (!empty($file)) {
                 self::add_announcement_attachment_file($last_id, $file_comment, $_FILES['user_upload']);
             }
 
             // store in item_property (first the groups, then the users
-            if (!is_null($sent_to)) {
-                // !is_null($sent_to): when no user is selected we send it to everyone
+            if (empty($sent_to) || !empty($sent_to) && isset($sent_to[0]) && $sent_to[0] == 'everyone') {
+                // The message is sent to EVERYONE, so we set the group to 0
+                api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '0');
+            } else {
                 $send_to = self::separate_users_groups($sent_to);
-                // storing the selected groups
+
+                // Storing the selected groups
                 if (is_array($send_to['groups'])) {
                     foreach ($send_to['groups'] as $group) {
                         api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), $group);
                     }
                 }
 
-                // storing the selected users
+                // Storing the selected users
                 if (is_array($send_to['users'])) {
                     foreach ($send_to['users'] as $user) {
                         api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '', $user);
                     }
                 }
-            } else {
-                // the message is sent to everyone, so we set the group to 0
-                api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '0');
             }
             return $last_id;
         }
@@ -367,7 +368,7 @@ class AnnouncementManager
      */
     public static function add_group_announcement($emailTitle, $newContent, $to, $to_users, $file = array(), $file_comment = '')
     {
-        global $_course;
+        $_course = api_get_course_info();
 
         // Database definitions
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
@@ -388,6 +389,7 @@ class AnnouncementManager
                 display_order 	= '$order',
                 session_id		= " . api_get_session_id();
         $result = Database::query($sql);
+
         if ($result === false) {
             return false;
         }
@@ -395,7 +397,7 @@ class AnnouncementManager
         //store the attach file
         $last_id = Database::insert_id();
         if (!empty($file)) {
-            $save_attachment = self::add_announcement_attachment_file($last_id, $file_comment, $file);
+            self::add_announcement_attachment_file($last_id, $file_comment, $file);
         }
 
         // store in item_property (first the groups, then the users
@@ -938,13 +940,15 @@ class AnnouncementManager
 
     /**
      * This function separates the users from the groups
-     * users have a value USER:XXX (with XXX the dokeos id
-     * groups have a value GROUP:YYY (with YYY the group id)
+     * users have a value USER:XXX (with XXX the groups id have a value
+     *  GROUP:YYY (with YYY the group id)
      * @param    array   Array of strings that define the type and id of each destination
      * @return   array   Array of groups and users (each an array of IDs)
      */
     public static function separate_users_groups($to)
     {
+        $grouplist = array();
+        $userlist = array();
         foreach ($to as $to_item) {
             list($type, $id) = explode(':', $to_item);
             switch ($type) {
@@ -1036,7 +1040,7 @@ class AnnouncementManager
      */
     public static function add_announcement_attachment_file($announcement_id, $file_comment, $file)
     {
-        global $_course;
+        $_course = api_get_course_info();
         $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
         $return = 0;
         $announcement_id = intval($announcement_id);

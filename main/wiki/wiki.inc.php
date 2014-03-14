@@ -578,7 +578,7 @@ class Wiki
             echo '<td>'.get_lang('DescriptionOfTheTask').'</td>';
             echo '</tr>';
             echo '<tr>';
-            echo '<td>'.api_disp_html_area('task', '', '', '', null, array('ToolbarSet' => 'wiki_task', 'Width' => '580', 'Height' => '200')).'</td>';
+            echo '<td>'.api_disp_html_area('task', '', '', '', null, array('ToolbarSet' => 'wiki_task', 'Width' => '100%', 'Height' => '200')).'</td>';
             echo '</tr>';
             echo '</table>';
             echo '</div>';
@@ -811,23 +811,26 @@ class Wiki
         //Show page. Show page to all users if isn't hide page. Mode assignments: if student is the author, can view
         if ($KeyVisibility=="1" || api_is_allowed_to_edit(false,true) || api_is_platform_admin() || ($row['assignment']==2 && $KeyVisibility=="0" && (api_get_user_id()==$row['user_id']))) {
             echo '<div id="wikititle">';
-
+            $protect_page = null;
+            $lock_unlock_protect = null;
             // page action: protecting (locking) the page
-            if(api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+            if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
                 if (self::check_protect_page()==1) {
-                    $protect_page= Display::return_icon('lock.png', get_lang('PageLockedExtra'),'',ICON_SIZE_SMALL);
+                    $protect_page = Display::return_icon('lock.png', get_lang('PageLockedExtra'),'',ICON_SIZE_SMALL);
                     $lock_unlock_protect='unlock';
                 } else {
-                    $protect_page= Display::return_icon('unlock.png', get_lang('PageUnlockedExtra'),'',ICON_SIZE_SMALL);
+                    $protect_page = Display::return_icon('unlock.png', get_lang('PageUnlockedExtra'),'',ICON_SIZE_SMALL);
                     $lock_unlock_protect='lock';
                 }
             }
+
             if ($row['id']) {
                 echo '<span style="float:right;">';
                 echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_protect.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$protect_page.'</a>';
                 echo '</span>';
             }
-
+            $visibility_page = null;
+            $lock_unlock_visibility = null;
             //page action: visibility
             if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
                 if (self::check_visibility_page()==1) {
@@ -888,6 +891,7 @@ class Wiki
                     echo '</span>';
                 }
             }
+
             //export to print
             ?>
             <script>
@@ -2009,9 +2013,9 @@ class Wiki
         if (empty($default)) {
             $default = date('Y-m-d H:i:s');
         }
-        $parts = split(' ',$default);
-        list($d_year,$d_month,$d_day) = split('-',$parts[0]);
-        list($d_hour,$d_minute) = split(':',$parts[1]);
+        $parts = explode(' ', $default);
+        list($d_year,$d_month,$d_day) = explode('-',$parts[0]);
+        list($d_hour,$d_minute) = explode(':',$parts[1]);
 
         $month_list = array(
             1=>get_lang('JanuaryLong'),
@@ -2158,6 +2162,9 @@ class Wiki
         return false;
     }
 
+    /**
+     * @return array
+     */
     public function getAllWiki()
     {
         $tbl_wiki = $this->tbl_wiki;
@@ -2170,6 +2177,9 @@ class Wiki
         return Database::store_result($result, 'ASSOC');
     }
 
+    /**
+     * @param int $isEditing
+     */
     public function updateWikiIsEditing($isEditing)
     {
         $tbl_wiki = $this->tbl_wiki;
@@ -2180,5 +2190,1084 @@ class Wiki
         $sql = 'UPDATE '.$tbl_wiki.' SET is_editing="0", time_edit="0000-00-00 00:00:00"
                 WHERE c_id = '.$course_id.' AND is_editing="'.$isEditing.'" '.$condition_session;
         Database::query($sql);
+    }
+
+    /**
+     * Release of blocked pages to prevent concurrent editions
+     * @param int $userId
+     * @param string $action
+     */
+    function blockConcurrentEditions($userId, $action = null)
+    {
+        $result = self::getAllWiki();
+        foreach ($result  as $is_editing_block) {
+            $max_edit_time	= 1200; // 20 minutes
+            $timestamp_edit	= strtotime($is_editing_block['time_edit']);
+            $time_editing	= time()-$timestamp_edit;
+
+            //first prevent concurrent users and double version
+            if ($is_editing_block['is_editing'] == $userId) {
+                $_SESSION['_version']=$is_editing_block['version'];
+            } else {
+                unset($_SESSION['_version']);
+            }
+            //second checks if has exceeded the time that a page may be available or if a page was edited and saved by its author
+            if ($time_editing>$max_edit_time || ($is_editing_block['is_editing']==$userId && $action!='edit')) {
+                self::updateWikiIsEditing($is_editing_block['is_editing']);
+            }
+        }
+    }
+
+    function getStats()
+    {
+        $tbl_wiki = $this->tbl_wiki;
+        $course_id = $this->course_id;
+        $condition_session = $this->condition_session;
+        $groupfilter = $this->groupfilter;
+        $session_id = $this->session_id;
+        $tbl_wiki_conf = $this->tbl_wiki_conf;
+
+        echo '<div class="actions">'.get_lang('Statistics').'</div>';
+
+        // Check all versions of all pages
+        $total_words 			= 0;
+        $total_links 			= 0;
+        $total_links_anchors 	= 0;
+        $total_links_mail		= 0;
+        $total_links_ftp 		= 0;
+        $total_links_irc		= 0;
+        $total_links_news 		= 0;
+        $total_wlinks 			= 0;
+        $total_images 			= 0;
+        $clean_total_flash 		= 0;
+        $total_flash			= 0;
+        $total_mp3				= 0;
+        $total_flv_p 			= 0;
+        $total_flv				= 0;
+        $total_youtube			= 0;
+        $total_multimedia		= 0;
+        $total_tables			= 0;
+
+        $sql = "SELECT *, COUNT(*) AS TOTAL_VERS, SUM(hits) AS TOTAL_VISITS
+                FROM ".$tbl_wiki."
+                WHERE c_id = $course_id AND ".$groupfilter.$condition_session."";
+
+        $allpages=Database::query($sql);
+        while ($row = Database::fetch_array($allpages)) {
+            $total_versions = $row['TOTAL_VERS'];
+            $total_visits = intval($row['TOTAL_VISITS']);
+        }
+
+        $sql = "SELECT * FROM ".$tbl_wiki."
+                WHERE c_id = $course_id AND ".$groupfilter.$condition_session."";
+        $allpages = Database::query($sql);
+
+        while ($row=Database::fetch_array($allpages)) {
+            $total_words 			= $total_words + self::word_count($row['content']);
+            $total_links 			= $total_links+substr_count($row['content'], "href=");
+            $total_links_anchors 	= $total_links_anchors+substr_count($row['content'], 'href="#');
+            $total_links_mail		= $total_links_mail+substr_count($row['content'], 'href="mailto');
+            $total_links_ftp 		= $total_links_ftp+substr_count($row['content'], 'href="ftp');
+            $total_links_irc		= $total_links_irc+substr_count($row['content'], 'href="irc');
+            $total_links_news 		= $total_links_news+substr_count($row['content'], 'href="news');
+            $total_wlinks 			= $total_wlinks+substr_count($row['content'], "[[");
+            $total_images 			= $total_images+substr_count($row['content'], "<img");
+            $clean_total_flash = preg_replace('/player.swf/', ' ', $row['content']);
+            $total_flash			= $total_flash+substr_count($clean_total_flash, '.swf"');//.swf" end quotes prevent insert swf through flvplayer (is not counted)
+            $total_mp3				= $total_mp3+substr_count($row['content'], ".mp3");
+            $total_flv_p = $total_flv_p+substr_count($row['content'], ".flv");
+            $total_flv				=	$total_flv_p/5;
+            $total_youtube			= $total_youtube+substr_count($row['content'], "http://www.youtube.com");
+            $total_multimedia		= $total_multimedia+substr_count($row['content'], "video/x-msvideo");
+            $total_tables			= $total_tables+substr_count($row['content'], "<table");
+        }
+
+        //check only last version of all pages (current page)
+
+        $sql =' SELECT  *, COUNT(*) AS TOTAL_PAGES, SUM(hits) AS TOTAL_VISITS_LV
+                FROM  '.$tbl_wiki.' s1
+                WHERE s1.c_id = '.$course_id.' AND id=(
+                SELECT MAX(s2.id)
+                FROM '.$tbl_wiki.' s2
+                WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
+        $allpages = Database::query($sql);
+        while ($row=Database::fetch_array($allpages)) {
+            $total_pages	 		= $row['TOTAL_PAGES'];
+            $total_visits_lv 		= intval($row['TOTAL_VISITS_LV']);
+        }
+
+        $total_words_lv			= 0;
+        $total_links_lv			= 0;
+        $total_links_anchors_lv	= 0;
+        $total_links_mail_lv 	= 0;
+        $total_links_ftp_lv 	= 0;
+        $total_links_irc_lv 	= 0;
+        $total_links_news_lv 	= 0;
+        $total_wlinks_lv 		= 0;
+        $total_images_lv 		= 0;
+        $clean_total_flash_lv 	= 0;
+        $total_flash_lv			= 0;
+        $total_mp3_lv			= 0;
+        $total_flv_p_lv		    = 0;
+        $total_flv_lv			= 0;
+        $total_youtube_lv		= 0;
+        $total_multimedia_lv	= 0;
+        $total_tables_lv		= 0;
+
+        $sql = 'SELECT * FROM  '.$tbl_wiki.' s1
+                WHERE s1.c_id = '.$course_id.' AND id=(
+                    SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2
+                    WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.'
+                )';
+        $allpages = Database::query($sql);
+
+        while ($row=Database::fetch_array($allpages)) {
+            $total_words_lv 		= $total_words_lv+ self::word_count($row['content']);
+            $total_links_lv 		= $total_links_lv+substr_count($row['content'], "href=");
+            $total_links_anchors_lv	= $total_links_anchors_lv+substr_count($row['content'], 'href="#');
+            $total_links_mail_lv 	= $total_links_mail_lv+substr_count($row['content'], 'href="mailto');
+            $total_links_ftp_lv 	= $total_links_ftp_lv+substr_count($row['content'], 'href="ftp');
+            $total_links_irc_lv 	= $total_links_irc_lv+substr_count($row['content'], 'href="irc');
+            $total_links_news_lv 	= $total_links_news_lv+substr_count($row['content'], 'href="news');
+            $total_wlinks_lv 		= $total_wlinks_lv+substr_count($row['content'], "[[");
+            $total_images_lv 		= $total_images_lv+substr_count($row['content'], "<img");
+            $clean_total_flash_lv = preg_replace('/player.swf/', ' ', $row['content']);
+            $total_flash_lv			= $total_flash_lv+substr_count($clean_total_flash_lv, '.swf"');//.swf" end quotes prevent insert swf through flvplayer (is not counted)
+            $total_mp3_lv			= $total_mp3_lv+substr_count($row['content'], ".mp3");
+            $total_flv_p_lv = $total_flv_p_lv+substr_count($row['content'], ".flv");
+            $total_flv_lv			= $total_flv_p_lv/5;
+            $total_youtube_lv		= $total_youtube_lv+substr_count($row['content'], "http://www.youtube.com");
+            $total_multimedia_lv	= $total_multimedia_lv+substr_count($row['content'], "video/x-msvideo");
+            $total_tables_lv		= $total_tables_lv+substr_count($row['content'], "<table");
+        }
+
+        //Total pages edited at this time
+        $total_editing_now=0;
+        $sql = 'SELECT *, COUNT(*) AS TOTAL_EDITING_NOW
+                FROM  '.$tbl_wiki.' s1
+                WHERE is_editing!=0 AND s1.c_id = '.$course_id.' AND
+                id=(
+                    SELECT MAX(s2.id)
+                    FROM '.$tbl_wiki.' s2
+                    WHERE
+                        s2.c_id = '.$course_id.' AND
+                        s1.reflink = s2.reflink AND
+                        '.$groupfilter.' AND
+                        session_id='.$session_id.'
+        )';
+        //Can not use group by because the mark is set in the latest version
+        $allpages=Database::query($sql);
+        while ($row=Database::fetch_array($allpages)) {
+            $total_editing_now	= $row['TOTAL_EDITING_NOW'];
+        }
+        //Total hidden pages
+        $total_hidden=0;
+        $sql = 'SELECT * FROM '.$tbl_wiki.'
+                WHERE  c_id = '.$course_id.' AND  visibility=0 AND '.$groupfilter.$condition_session.'
+                GROUP BY reflink';
+        // or group by page_id. As the mark of hidden places it in all versions of the page, I can use group by to see the first
+        $allpages=Database::query($sql);
+        while ($row=Database::fetch_array($allpages)) {
+            $total_hidden = $total_hidden+1;
+        }
+
+        //Total protect pages
+        $total_protected=0;
+        $sql = 'SELECT * FROM '.$tbl_wiki.'
+                WHERE  c_id = '.$course_id.' AND editlock=1 AND '.$groupfilter.$condition_session.'
+                GROUP BY reflink';
+        // or group by page_id. As the mark of protected page is the first version of the page, I can use group by
+
+        $allpages=Database::query($sql);
+        while ($row=Database::fetch_array($allpages)) {
+            $total_protected = $total_protected+1;
+        }
+
+        // Total empty versions.
+        $total_empty_content=0;
+        $sql = 'SELECT * FROM '.$tbl_wiki.'
+                WHERE c_id = '.$course_id.' AND content="" AND '.$groupfilter.$condition_session.'';
+        $allpages=Database::query($sql);
+        while ($row=Database::fetch_array($allpages)) {
+            $total_empty_content	= $total_empty_content+1;
+        }
+
+        //Total empty pages (last version)
+
+        $total_empty_content_lv=0;
+        $sql = 'SELECT  * FROM  '.$tbl_wiki.' s1
+                WHERE s1.c_id = '.$course_id.' AND content="" AND id=(
+                SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2
+                WHERE s1.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
+        $allpages=Database::query($sql);
+        while ($row = Database::fetch_array($allpages)) {
+            $total_empty_content_lv	= $total_empty_content_lv+1;
+        }
+
+        // Total locked discuss pages
+        $total_lock_disc=0;
+        $sql = 'SELECT * FROM '.$tbl_wiki.'
+                WHERE c_id = '.$course_id.' AND addlock_disc=0 AND '.$groupfilter.$condition_session.'
+                GROUP BY reflink';//group by because mark lock in all vers, then always is ok
+        $allpages=Database::query($sql);
+        while ($row = Database::fetch_array($allpages)) {
+            $total_lock_disc	= $total_lock_disc+1;
+        }
+
+        // Total hidden discuss pages.
+        $total_hidden_disc = 0;
+        $sql = 'SELECT * FROM '.$tbl_wiki.'
+                WHERE c_id = '.$course_id.' AND visibility_disc=0 AND '.$groupfilter.$condition_session.'
+                GROUP BY reflink';
+        //group by because mark lock in all vers, then always is ok
+        $allpages = Database::query($sql);
+        while ($row = Database::fetch_array($allpages)) {
+            $total_hidden_disc	= $total_hidden_disc+1;
+        }
+
+        //Total versions with any short comment by user or system
+
+        $total_comment_version = 0;
+        $sql = 'SELECT * FROM '.$tbl_wiki.'
+                WHERE c_id = '.$course_id.' AND comment!="" AND '.$groupfilter.$condition_session.'';
+        $allpages=Database::query($sql);
+        while ($row = Database::fetch_array($allpages)) {
+            $total_comment_version	= $total_comment_version+1;
+        }
+
+        // Total pages that can only be scored by teachers.
+
+        $total_only_teachers_rating=0;
+        $sql = 'SELECT * FROM '.$tbl_wiki.'
+                WHERE c_id = '.$course_id.' AND
+                ratinglock_disc = 0 AND
+                '.$groupfilter.$condition_session.'
+                GROUP BY reflink';//group by because mark lock in all vers, then always is ok
+        $allpages=Database::query($sql);
+        while ($row=Database::fetch_array($allpages)) {
+            $total_only_teachers_rating	= $total_only_teachers_rating+1;
+        }
+
+        // Total pages scored by peers
+        // put always this line alfter check num all pages and num pages rated by teachers
+        $total_rating_by_peers=$total_pages-$total_only_teachers_rating;
+
+        //Total pages identified as standard task
+
+        $total_task=0;
+        $sql='SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.'
+              WHERE '.$tbl_wiki_conf.'.c_id = '.$course_id.' AND
+               '.$tbl_wiki_conf.'.task!="" AND
+               '.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND
+                '.$tbl_wiki.'.'.$groupfilter.$condition_session;
+        $allpages=Database::query($sql);
+        while ($row=Database::fetch_array($allpages)) {
+            $total_task=$total_task+1;
+        }
+
+        //Total pages identified as teacher page (wiki portfolio mode - individual assignment)
+
+        $total_teacher_assignment=0;
+        $sql = 'SELECT  * FROM  '.$tbl_wiki.' s1
+                WHERE s1.c_id = '.$course_id.' AND assignment=1 AND id=(SELECT MAX(s2.id)
+                FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
+                //mark all versions, but do not use group by reflink because y want the pages not versions
+        $allpages=Database::query($sql);
+        while ($row = Database::fetch_array($allpages)) {
+            $total_teacher_assignment=$total_teacher_assignment+1;
+        }
+
+        //Total pages identifies as student page (wiki portfolio mode - individual assignment)
+
+        $total_student_assignment=0;
+        $sql = 'SELECT  * FROM  '.$tbl_wiki.' s1
+                WHERE s1.c_id = '.$course_id.' AND assignment=2 AND
+                id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
+                //mark all versions, but do not use group by reflink because y want the pages not versions
+        $allpages=Database::query($sql);
+        while ($row=Database::fetch_array($allpages)) {
+            $total_student_assignment = $total_student_assignment+1;
+        }
+
+        //Current Wiki status add new pages
+        $sql = 'SELECT * FROM '.$tbl_wiki.'
+                WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
+                GROUP BY addlock';//group by because mark 0 in all vers, then always is ok
+        $allpages = Database::query($sql);
+        $wiki_add_lock = null;
+        while ($row=Database::fetch_array($allpages)) {
+            $wiki_add_lock=$row['addlock'];
+        }
+
+        if ($wiki_add_lock==1) {
+            $status_add_new_pag=get_lang('Yes');
+        } else {
+            $status_add_new_pag=get_lang('No');
+        }
+
+        //Creation date of the oldest wiki page and version
+
+        $first_wiki_date='0000-00-00 00:00:00';
+        $sql = 'SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
+                ORDER BY dtime ASC LIMIT 1';
+        $allpages=Database::query($sql);
+        while ($row=Database::fetch_array($allpages)) {
+            $first_wiki_date=$row['dtime'];
+        }
+
+        // Date of publication of the latest wiki version.
+
+        $last_wiki_date='0000-00-00 00:00:00';
+        $sql = 'SELECT * FROM '.$tbl_wiki.'  WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
+                ORDER BY dtime DESC LIMIT 1';
+        $allpages=Database::query($sql);
+        while ($row=Database::fetch_array($allpages)) {
+            $last_wiki_date=$row['dtime'];
+        }
+
+        // Average score of all wiki pages. (If a page has not scored zero rated)
+        $media_score = 0;
+        $sql = "SELECT *, SUM(score) AS TOTAL_SCORE FROM ".$tbl_wiki."
+                WHERE c_id = $course_id AND ".$groupfilter.$condition_session."
+                GROUP BY reflink ";
+        //group by because mark in all versions, then always is ok. Do not use "count" because using "group by", would give a wrong value
+        $allpages = Database::query($sql);
+        $total_score = 0;
+        while ($row=Database::fetch_array($allpages)) {
+            $total_score = $total_score+$row['TOTAL_SCORE'];
+        }
+
+        if (!empty($total_pages)) {
+            $media_score = $total_score/$total_pages;//put always this line alfter check num all pages
+        }
+
+        // Average user progress in his pages.
+
+        $media_progress=0;
+        $sql = 'SELECT  *, SUM(progress) AS TOTAL_PROGRESS
+                FROM  '.$tbl_wiki.' s1
+                WHERE s1.c_id = '.$course_id.' AND id=
+                (SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2
+                 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
+        //As the value is only the latest version I can not use group by
+        $allpages=Database::query($sql);
+        while ($row=Database::fetch_array($allpages)) {
+            $total_progress	= $row['TOTAL_PROGRESS'];
+        }
+
+        if (!empty($total_pages)) {
+            $media_progress=$total_progress/$total_pages;//put always this line alfter check num all pages
+        }
+
+        //Total users that have participated in the Wiki
+
+        $total_users=0;
+        $sql = 'SELECT * FROM '.$tbl_wiki.'
+                WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
+                GROUP BY user_id';
+        //as the mark of user it in all versions of the page, I can use group by to see the first
+        $allpages=Database::query($sql);
+        while ($row=Database::fetch_array($allpages)) {
+            $total_users = $total_users+1;
+        }
+
+        // Total of different IP addresses that have participated in the wiki
+        $total_ip=0;
+        $sql='SELECT * FROM '.$tbl_wiki.'
+              WHERE c_id = '.$course_id.' AND '.$groupfilter.$condition_session.'
+              GROUP BY user_ip';
+        $allpages=Database::query($sql);
+        while ($row=Database::fetch_array($allpages)) {
+            $total_ip	= $total_ip+1;
+        }
+
+        echo '<table class="data_table">';
+        echo '<thead>';
+        echo '<tr>';
+        echo '<th colspan="2">'.get_lang('General').'</th>';
+        echo '</tr>';
+        echo '</thead>';
+        echo '<tr>';
+        echo '<td>'.get_lang('StudentAddNewPages').'</td>';
+        echo '<td>'.$status_add_new_pag.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('DateCreateOldestWikiPage').'</td>';
+        echo '<td>'.$first_wiki_date.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('DateEditLatestWikiVersion').'</td>';
+        echo '<td>'.$last_wiki_date.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('AverageScoreAllPages').'</td>';
+        echo '<td>'.$media_score.' %</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('AverageMediaUserProgress').'</td>';
+        echo '<td>'.$media_progress.' %</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('TotalWikiUsers').'</td>';
+        echo '<td>'.$total_users.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('TotalIpAdress').'</td>';
+        echo '<td>'.$total_ip.'</td>';
+        echo '</tr>';
+        echo '</table>';
+        echo '<br/>';
+
+        echo '<table class="data_table">';
+        echo '<thead>';
+        echo '<tr>';
+        echo '<th colspan="2">'.get_lang('Pages').' '.get_lang('And').' '.get_lang('Versions').'</th>';
+        echo '</tr>';
+        echo '</thead>';
+        echo '<tr>';
+        echo '<td>'.get_lang('Pages').' - '.get_lang('NumContributions').'</td>';
+        echo '<td>'.$total_pages.' ('.get_lang('Versions').': '.$total_versions.')</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('EmptyPages').'</td>';
+        echo '<td>'.$total_empty_content_lv.' ('.get_lang('Versions').': '.$total_empty_content.')</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('NumAccess').'</td>';
+        echo '<td>'.$total_visits_lv.' ('.get_lang('Versions').': '.$total_visits.')</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('TotalPagesEditedAtThisTime').'</td>';
+        echo '<td>'.$total_editing_now.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('TotalHiddenPages').'</td>';
+        echo '<td>'.$total_hidden.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('NumProtectedPages').'</td>';
+        echo '<td>'.$total_protected.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('LockedDiscussPages').'</td>';
+        echo '<td>'.$total_lock_disc.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('HiddenDiscussPages').'</td>';
+        echo '<td>'.$total_hidden_disc.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('TotalComments').'</td>';
+        echo '<td>'.$total_comment_version.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('TotalOnlyRatingByTeacher').'</td>';
+        echo '<td>'.$total_only_teachers_rating.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('TotalRatingPeers').'</td>';
+        echo '<td>'.$total_rating_by_peers.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('TotalTeacherAssignments').' - '.get_lang('PortfolioMode').'</td>';
+        echo '<td>'.$total_teacher_assignment.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('TotalStudentAssignments').' - '.get_lang('PortfolioMode').'</td>';
+        echo '<td>'.$total_student_assignment.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('TotalTask').' - '.get_lang('StandardMode').'</td>';
+        echo '<td>'.$total_task.'</td>';
+        echo '</tr>';
+        echo '</table>';
+        echo '<br/>';
+
+        echo '<table class="data_table">';
+        echo '<thead>';
+        echo '<tr>';
+        echo '<th colspan="3">'.get_lang('ContentPagesInfo').'</th>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td></td>';
+        echo '<td>'.get_lang('InTheLastVersion').'</td>';
+        echo '<td>'.get_lang('InAllVersions').'</td>';
+        echo '</tr>';
+        echo '</thead>';
+        echo '<tr>';
+        echo '<td>'.get_lang('NumWords').'</td>';
+        echo '<td>'.$total_words_lv.'</td>';
+        echo '<td>'.$total_words.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('NumlinksHtmlImagMedia').'</td>';
+        echo '<td>'.$total_links_lv.' ('.get_lang('Anchors').':'.$total_links_anchors_lv.', Mail:'.$total_links_mail_lv.', FTP:'.$total_links_ftp_lv.' IRC:'.$total_links_irc_lv.', News:'.$total_links_news_lv.', ... ) </td>';
+        echo '<td>'.$total_links.' ('.get_lang('Anchors').':'.$total_links_anchors.', Mail:'.$total_links_mail.', FTP:'.$total_links_ftp.', IRC:'.$total_links_irc.', News:'.$total_links_news.', ... ) </td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('NumWikilinks').'</td>';
+        echo '<td>'.$total_wlinks_lv.'</td>';
+        echo '<td>'.$total_wlinks.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('NumImages').'</td>';
+        echo '<td>'.$total_images_lv.'</td>';
+        echo '<td>'.$total_images.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('NumFlash').'</td>';
+        echo '<td>'.$total_flash_lv.'</td>';
+        echo '<td>'.$total_flash.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('NumMp3').'</td>';
+        echo '<td>'.$total_mp3_lv.'</td>';
+        echo '<td>'.$total_mp3.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('NumFlvVideo').'</td>';
+        echo '<td>'.$total_flv_lv.'</td>';
+        echo '<td>'.$total_flv.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('NumYoutubeVideo').'</td>';
+        echo '<td>'.$total_youtube_lv.'</td>';
+        echo '<td>'.$total_youtube.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('NumOtherAudioVideo').'</td>';
+        echo '<td>'.$total_multimedia_lv.'</td>';
+        echo '<td>'.$total_multimedia.'</td>';
+        echo '</tr>';
+        echo '<tr>';
+        echo '<td>'.get_lang('NumTables').'</td>';
+        echo '<td>'.$total_tables_lv.'</td>';
+        echo '<td>'.$total_tables.'</td>';
+        echo '</tr>';
+        echo '</table>';
+    }
+
+    function getActiveUsers($action)
+    {
+        $tbl_wiki = $this->tbl_wiki;
+        $course_id = $this->course_id;
+        $condition_session = $this->condition_session;
+        $groupfilter = $this->groupfilter;
+        $_course = $this->courseInfo;
+
+        echo '<div class="actions">'.get_lang('MostActiveUsers').'</div>';
+        $sql='SELECT *, COUNT(*) AS NUM_EDIT FROM '.$tbl_wiki.'  WHERE  c_id = '.$course_id.' AND '.$groupfilter.$condition_session.' GROUP BY user_id';
+        $allpages = Database::query($sql);
+
+        //show table
+        if (Database::num_rows($allpages) > 0) {
+            while ($obj = Database::fetch_object($allpages)) {
+                $userinfo = api_get_user_info($obj->user_id);
+                $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
+                $row = array();
+                if ($obj->user_id <> 0) {
+                    $row[] = '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
+                        Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
+                        '</a><a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=usercontrib&user_id='.urlencode($obj->user_id).
+                        '&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'"></a>';
+                } else {
+                    $row[] = get_lang('Anonymous').' ('.$obj->user_ip.')';
+                }
+                $row[] ='<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=usercontrib&user_id='.urlencode($obj->user_id).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.$obj->NUM_EDIT.'</a>';
+                $rows[] = $row;
+            }
+
+            $table = new SortableTableFromArrayConfig($rows,1,10,'MostActiveUsersA_table','','','DESC');
+            $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action),'session_id'=>Security::remove_XSS($_GET['session_id']),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+            $table->set_header(0,get_lang('Author'), true);
+            $table->set_header(1,get_lang('Contributions'), true,array ('style' => 'width:30px;'));
+            $table->display();
+        }
+    }
+
+    public function getDiscuss($page)
+    {
+        $tbl_wiki = $this->tbl_wiki;
+        $course_id = $this->course_id;
+        $condition_session = $this->condition_session;
+        $groupfilter = $this->groupfilter;
+        $tbl_wiki_discuss = $this->tbl_wiki_discuss;
+
+        if (api_get_session_id()!=0 && api_is_allowed_to_session_edit(false,true)==false) {
+            api_not_allowed();
+        }
+
+        if (!$_GET['title']) {
+            Display::display_error_message(get_lang("MustSelectPage"));
+            exit;
+        }
+
+        //first extract the date of last version
+        $sql = 'SELECT * FROM '.$tbl_wiki.'
+                WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.'
+                ORDER BY id DESC';
+        $result=Database::query($sql);
+        $row=Database::fetch_array($result);
+        $lastversiondate=api_get_local_time($row['dtime'], null, date_default_timezone_get());
+        $lastuserinfo = api_get_user_info($row['user_id']);
+        $username = api_htmlentities(sprintf(get_lang('LoginX'), $lastuserinfo['username']), ENT_QUOTES);
+
+        //select page to discuss
+        $sql = 'SELECT * FROM '.$tbl_wiki.'
+                WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.'
+                ORDER BY id ASC';
+        $result=Database::query($sql);
+        $row=Database::fetch_array($result);
+        $id=$row['id'];
+        $firstuserid=$row['user_id'];
+
+        //mode assignment: previous to show  page type
+        $icon_assignment = null;
+        if ($row['assignment']==1) {
+            $icon_assignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDescExtra'),'',ICON_SIZE_SMALL);
+        } elseif($row['assignment']==2) {
+            $icon_assignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWorkExtra'),'',ICON_SIZE_SMALL);
+        }
+
+        $countWPost = null;
+        $avg_WPost_score = null;
+
+        //Show title and form to discuss if page exist
+        if ($id!='') {
+            //Show discussion to students if isn't hidden. Show page to all teachers if is hidden. Mode assignments: If is hidden, show pages to student only if student is the author
+            if ($row['visibility_disc']==1 || api_is_allowed_to_edit(false,true) || api_is_platform_admin() || ($row['assignment']==2 && $row['visibility_disc']==0 && (api_get_user_id()==$row['user_id']))) {
+                echo '<div id="wikititle">';
+
+                // discussion action: protecting (locking) the discussion
+                $addlock_disc = null;
+                $lock_unlock_disc = null;
+                if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+                    if (self::check_addlock_discuss() == 1) {
+                        $addlock_disc = Display::return_icon('unlock.png', get_lang('UnlockDiscussExtra'),'',ICON_SIZE_SMALL);
+                        $lock_unlock_disc ='unlockdisc';
+                    } else {
+                        $addlock_disc = Display::return_icon('lock.png', get_lang('LockDiscussExtra'),'',ICON_SIZE_SMALL);
+                        $lock_unlock_disc ='lockdisc';
+                    }
+                }
+                echo '<span style="float:right">';
+                echo '<a href="index.php?action=discuss&amp;actionpage='.$lock_unlock_disc.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$addlock_disc.'</a>';
+                echo '</span>';
+
+                // discussion action: visibility.  Show discussion to students if isn't hidden. Show page to all teachers if is hidden.
+                $visibility_disc = null;
+                $hide_show_disc = null;
+                if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+                    if (self::check_visibility_discuss()==1) {
+                        /// TODO: 	Fix Mode assignments: If is hidden, show discussion to student only if student is the author
+                        $visibility_disc = Display::return_icon('visible.png', get_lang('ShowDiscussExtra'),'',ICON_SIZE_SMALL);
+                        $hide_show_disc = 'hidedisc';
+                    } else {
+                        $visibility_disc = Display::return_icon('invisible.png', get_lang('HideDiscussExtra'),'',ICON_SIZE_SMALL);
+                        $hide_show_disc = 'showdisc';
+                    }
+                }
+                echo '<span style="float:right">';
+                echo '<a href="index.php?action=discuss&amp;actionpage='.$hide_show_disc.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$visibility_disc.'</a>';
+                echo '</span>';
+
+                //discussion action: check add rating lock. Show/Hide list to rating for all student
+                $lock_unlock_rating_disc = null;
+                $ratinglock_disc = null;
+                if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+                    if (self::check_ratinglock_discuss() == 1) {
+                        $ratinglock_disc = Display::return_icon('star.png', get_lang('UnlockRatingDiscussExtra'),'',ICON_SIZE_SMALL);
+                        $lock_unlock_rating_disc = 'unlockrating';
+                    } else {
+                        $ratinglock_disc = Display::return_icon('star_na.png', get_lang('LockRatingDiscussExtra'),'',ICON_SIZE_SMALL);
+                        $lock_unlock_rating_disc = 'lockrating';
+                    }
+                }
+
+                echo '<span style="float:right">';
+                echo '<a href="index.php?action=discuss&amp;actionpage='.$lock_unlock_rating_disc.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$ratinglock_disc.'</a>';
+                echo '</span>';
+
+                //discussion action: email notification
+                if (self::check_notify_discuss($page) == 1) {
+                    $notify_disc= Display::return_icon('messagebox_info.png', get_lang('NotifyDiscussByEmail'),'',ICON_SIZE_SMALL);
+                    $lock_unlock_notify_disc='unlocknotifydisc';
+                } else {
+                    $notify_disc= Display::return_icon('mail.png', get_lang('CancelNotifyDiscussByEmail'),'',ICON_SIZE_SMALL);
+                    $lock_unlock_notify_disc='locknotifydisc';
+                }
+                echo '<span style="float:right">';
+                echo '<a href="index.php?action=discuss&amp;actionpage='.$lock_unlock_notify_disc.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$notify_disc.'</a>';
+                echo '</span>';
+
+                echo $icon_assignment.'&nbsp;&nbsp;&nbsp;'.api_htmlentities($row['title']);
+
+                echo ' ('.get_lang('MostRecentVersionBy').' <a href="../user/userInfo.php?uInfo='.$lastuserinfo['user_id'].'">'.
+                    Display::tag('span', api_htmlentities(api_get_person_name($lastuserinfo['firstname'], $lastuserinfo['lastname'])), array('title'=>$username)).
+                    '</a> '.$lastversiondate.$countWPost.')'.$avg_WPost_score.' '; //TODO: read average score
+
+                echo '</div>';
+
+                if ($row['addlock_disc']==1 || api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+                //show comments but students can't add theirs
+                ?>
+                    <form name="form1" method="post" action="">
+                    <table>
+                        <tr>
+                            <td valign="top" ><?php echo get_lang('Comments');?>:</td>
+                            <?php  echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">';//prevent double post ?>
+                            <td><textarea name="comment" cols="80" rows="5" id="comment"></textarea></td>
+                        </tr>
+                        <tr>
+                            <?php
+                            //check if rating is allowed
+                            if ($row['ratinglock_disc']==1 || api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+                                ?>
+                                <td><?php echo get_lang('Rating');?>: </td>
+                                <td valign="top"><select name="rating" id="rating">
+                                        <option value="-" selected>-</option>
+                                        <option value="0">0</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                    </select></td>
+                            <?php
+                            } else {
+                                echo '<input type=hidden name="rating" value="-">';// must pass a default value to avoid rate automatically
+                            }
+                            ?>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td> <?php  echo '<button class="save" type="submit" name="Submit"> '.get_lang('Send').'</button>'; ?></td>
+                        </tr>
+                    </table>
+                    </form>
+
+                    <?php
+                    if (isset($_POST['Submit']) && self::double_post($_POST['wpost_id'])) {
+                        $dtime = date( "Y-m-d H:i:s" );
+                        $message_author = api_get_user_id();
+                        $sql="INSERT INTO $tbl_wiki_discuss (c_id, publication_id, userc_id, comment, p_score, dtime) VALUES
+                    	($course_id, '".$id."','".$message_author."','".Database::escape_string($_POST['comment'])."','".Database::escape_string($_POST['rating'])."','".$dtime."')";
+                        $result=Database::query($sql) or die(Database::error());
+                        self::check_emailcue($id, 'D', $dtime, $message_author);
+                    }
+                }//end discuss lock
+
+                echo '<hr noshade size="1">';
+                $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+
+                $sql="SELECT * FROM $tbl_wiki_discuss reviews, $user_table user
+                  WHERE reviews.c_id = $course_id AND reviews.publication_id='".$id."' AND user.user_id='".$firstuserid."'
+                  ORDER BY id DESC";
+                $result=Database::query($sql) or die(Database::error());
+
+                $countWPost = Database::num_rows($result);
+                echo get_lang('NumComments').": ".$countWPost; //comment's numbers
+
+                $sql = "SELECT SUM(p_score) as sumWPost
+                        FROM $tbl_wiki_discuss
+                        WHERE c_id = $course_id AND publication_id = '".$id."' AND NOT p_score='-'
+                        ORDER BY id DESC";
+                $result2=Database::query($sql) or die(Database::error());
+                $row2=Database::fetch_array($result2);
+
+                $sql = "SELECT * FROM $tbl_wiki_discuss
+                        WHERE c_id = $course_id AND publication_id='".$id."' AND NOT p_score='-'";
+                $result3=Database::query($sql) or die(Database::error());
+                $countWPost_score= Database::num_rows($result3);
+
+                echo ' - '.get_lang('NumCommentsScore').': '.$countWPost_score;//
+
+                if ($countWPost_score!=0) {
+                    $avg_WPost_score = round($row2['sumWPost'] / $countWPost_score,2).' / 10';
+                } else {
+                    $avg_WPost_score = $countWPost_score;
+                }
+
+                echo ' - '.get_lang('RatingMedia').': '.$avg_WPost_score; // average rating
+
+                $sql = 'UPDATE '.$tbl_wiki.' SET score="'.Database::escape_string($avg_WPost_score).'"
+                    WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session;
+                // check if work ok. TODO:
+                Database::query($sql);
+
+                echo '<hr noshade size="1">';
+                //echo '<div style="overflow:auto; height:170px;">';
+
+                while ($row=Database::fetch_array($result)) {
+                    $userinfo = api_get_user_info($row['userc_id']);
+                    $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
+
+                    if (($userinfo['status'])=="5") {
+                        $author_status=get_lang('Student');
+                    } else {
+                        $author_status=get_lang('Teacher');
+                    }
+
+                    $user_id=$row['userc_id'];
+                    $name = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+                    if ($user_id<>0) {
+                        $image_path = UserManager::get_user_picture_path_by_id($user_id,'web',false, true);
+                        $image_repository = $image_path['dir'];
+                        $existing_image = $image_path['file'];
+                        $author_photo= '<img src="'.$image_repository.$existing_image.'" alt="'.api_htmlentities($name).'"  width="40" height="50" align="top" title="'.api_htmlentities($name).'"  />';
+                    } else {
+                        $author_photo= '<img src="'.api_get_path(WEB_CODE_PATH)."img/unknown.jpg".'" alt="'.api_htmlentities($name).'"  width="40" height="50" align="top"  title="'.api_htmlentities($name).'"  />';
+                    }
+
+                    //stars
+                    $p_score=$row['p_score'];
+                    switch ($p_score) {
+                        case  0:
+                            $imagerating='<img src="../img/rating/stars_0.gif"/>';
+                            break;
+                        case  1:
+                            $imagerating='<img src="../img/rating/stars_5.gif"/>';
+                            break;
+                        case  2:
+                            $imagerating='<img src="../img/rating/stars_10.gif"/>';
+                            break;
+                        case  3:
+                            $imagerating='<img src="../img/rating/stars_15.gif"/>';
+                            break;
+                        case  4:
+                            $imagerating='<img src="../img/rating/stars_20.gif"/>';
+                            break;
+                        case  5:
+                            $imagerating='<img src="../img/rating/stars_25.gif"/>';
+                            break;
+                        case  6:
+                            $imagerating='<img src="../img/rating/stars_30.gif"/>';
+                            break;
+                        case  7:
+                            $imagerating='<img src="../img/rating/stars_35.gif"/>';
+                            break;
+                        case  8:
+                            $imagerating='<img src="../img/rating/stars_40.gif"/>';
+                            break;
+                        case  9:
+                            $imagerating='<img src="../img/rating/stars_45.gif"/>';
+                            break;
+                        case  10:
+                            $imagerating='<img src="../img/rating/stars_50.gif"/>';
+                            break;
+                    }
+                    echo '<p><table>';
+                    echo '<tr>';
+                    echo '<td rowspan="2">'.$author_photo.'</td>';
+                    echo '<td style=" color:#999999"><a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
+                        Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
+                        '</a> ('.$author_status.') '.api_get_local_time($row['dtime'], null, date_default_timezone_get()).' - '.get_lang('Rating').': '.$row['p_score'].' '.$imagerating.' </td>';
+                    echo '</tr>';
+                    echo '<tr>';
+                    echo '<td>'.api_htmlentities($row['comment']).'</td>';
+                    echo '</tr>';
+                    echo "</table>";
+                }
+            } else {
+                Display::display_warning_message(get_lang('LockByTeacher'),false);
+            }
+        } else {
+            Display::display_normal_message(get_lang('DiscussNotAvailable'));
+        }
+    }
+
+    /**
+     * Show all pages
+     */
+    function allPages($action)
+    {
+        $tbl_wiki = $this->tbl_wiki;
+        $course_id = $this->course_id;
+        $session_id = $this->session_id;
+        $groupfilter = $this->groupfilter;
+        $_course = $this->courseInfo;
+
+        echo '<div class="actions">'.get_lang('AllPages').'</div>';
+
+        if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) { //only by professors if page is hidden
+            $sql = 'SELECT  *
+                    FROM  '.$tbl_wiki.' s1
+        		    WHERE s1.c_id = '.$course_id.' AND id=(
+                    SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2
+                    WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')'; // warning don't use group by reflink because does not return the last version
+
+        } else {
+            $sql = 'SELECT  *  FROM   '.$tbl_wiki.' s1
+				WHERE visibility=1 AND s1.c_id = '.$course_id.' AND id=(
+                    SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2
+                    WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')'; // warning don't use group by reflink because does not return the last version
+        }
+
+        $allpages = Database::query($sql);
+
+        //show table
+        if (Database::num_rows($allpages) > 0) {
+            while ($obj = Database::fetch_object($allpages)) {
+                //get author
+                $userinfo = api_get_user_info($obj->user_id);
+                $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
+
+                //get type assignment icon
+                if ($obj->assignment==1) {
+                    $ShowAssignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDesc'),'',ICON_SIZE_SMALL);
+                } elseif ($obj->assignment==2) {
+                    $ShowAssignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWork'),'',ICON_SIZE_SMALL);
+                } elseif ($obj->assignment==0) {
+                    $ShowAssignment='<img src="../img/px_transparent.gif" />';
+                }
+
+                //get icon task
+                if (!empty($obj->task)) {
+                    $icon_task=Display::return_icon('wiki_task.png', get_lang('StandardTask'),'',ICON_SIZE_SMALL);
+                } else {
+                    $icon_task='<img src="../img/px_transparent.gif" />';
+                }
+
+                $row = array();
+                $row[] =$ShowAssignment.$icon_task;
+                $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.api_htmlentities($obj->title).'</a>';
+                if ($obj->user_id <>0) {
+                    $row[] =  '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
+                        Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
+                        '</a>';
+                }
+                else {
+                    $row[] =  get_lang('Anonymous').' ('.api_htmlentities($obj->user_ip).')';
+                }
+                $row[] = api_get_local_time($obj->dtime, null, date_default_timezone_get());
+
+                if (api_is_allowed_to_edit(false,true)|| api_is_platform_admin()) {
+                    $showdelete=' <a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=delete&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL);
+                }
+                if (api_is_allowed_to_session_edit(false,true) ) {
+                    $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=edit&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('edit.png', get_lang('EditPage'),'',ICON_SIZE_SMALL).'</a> <a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=discuss&title='.api_htmlentities(urlencode($obj->reflink)).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('discuss.png', get_lang('Discuss'),'',ICON_SIZE_SMALL).'</a> <a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=history&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('history.png', get_lang('History'),'',ICON_SIZE_SMALL).'</a> <a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=links&title='.api_htmlentities(urlencode($obj->reflink)).'&session_id='.api_htmlentities($_GET['session_id']).'&group_id='.api_htmlentities($_GET['group_id']).'">'.Display::return_icon('what_link_here.png', get_lang('LinksPages'),'',ICON_SIZE_SMALL).'</a>'.$showdelete;
+                }
+                $rows[] = $row;
+            }
+
+            $table = new SortableTableFromArrayConfig($rows,1,10,'AllPages_table','','','ASC');
+            $table->set_additional_parameters(array('cidReq' =>Security::remove_XSS($_GET['cidReq']),'action'=>Security::remove_XSS($action),'group_id'=>Security::remove_XSS($_GET['group_id'])));
+            $table->set_header(0,get_lang('Type'), true, array ('style' => 'width:30px;'));
+            $table->set_header(1,get_lang('Title'), true);
+            $table->set_header(2,get_lang('Author').' ('.get_lang('LastVersion').')', true);
+            $table->set_header(3,get_lang('Date').' ('.get_lang('LastVersion').')', true);
+            if (api_is_allowed_to_session_edit(false,true) ) {
+                $table->set_header(4,get_lang('Actions'), true, array ('style' => 'width:130px;'));
+            }
+            $table->display();
+        }
+    }
+
+    /**
+     * Get recent changes
+     * @param string $page
+     */
+    public function recentChanges($page, $action)
+    {
+        $tbl_wiki = $this->tbl_wiki;
+        $course_id = $this->course_id;
+        $condition_session = $this->condition_session;
+        $groupfilter = $this->groupfilter;
+        $tbl_wiki_conf = $this->tbl_wiki_conf;
+
+        if (api_is_allowed_to_session_edit(false,true) ) {
+            if (self::check_notify_all()==1) {
+                $notify_all= Display::return_icon('messagebox_info.png', get_lang('NotifyByEmail'),'',ICON_SIZE_SMALL).' '.get_lang('NotNotifyChanges');
+                $lock_unlock_notify_all='unlocknotifyall';
+            } else {
+                $notify_all=Display::return_icon('mail.png', get_lang('CancelNotifyByEmail'),'',ICON_SIZE_SMALL).' '.get_lang('NotifyChanges');
+                $lock_unlock_notify_all='locknotifyall';
+            }
+        }
+
+        echo '<div class="actions"><span style="float: right;">';
+        echo '<a href="index.php?action=recentchanges&amp;actionpage='.$lock_unlock_notify_all.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$notify_all.'</a>';
+        echo '</span>'.get_lang('RecentChanges').'</div>';
+
+        if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) { //only by professors if page is hidden
+            $sql = 'SELECT * FROM '.$tbl_wiki.', '.$tbl_wiki_conf.'
+        		WHERE 	'.$tbl_wiki_conf.'.c_id= '.$course_id.' AND
+        				'.$tbl_wiki.'.c_id= '.$course_id.' AND
+        				'.$tbl_wiki_conf.'.page_id='.$tbl_wiki.'.page_id AND
+        				'.$tbl_wiki.'.'.$groupfilter.$condition_session.'
+        		ORDER BY dtime DESC'; // new version
+        } else {
+            $sql = 'SELECT *
+                FROM '.$tbl_wiki.'
+                WHERE
+                    c_id = '.$course_id.' AND
+                    '.$groupfilter.$condition_session.' AND
+                    visibility=1
+                ORDER BY dtime DESC';
+            // old version TODO: Replace by the bottom line
+        }
+
+        $allpages = Database::query($sql);
+
+        //show table
+        if (Database::num_rows($allpages) > 0) {
+            $rows = array();
+            while ($obj = Database::fetch_object($allpages)) {
+                //get author
+                $userinfo = api_get_user_info($obj->user_id);
+                $username = api_htmlentities(sprintf(get_lang('LoginX'), $userinfo['username']), ENT_QUOTES);
+
+                //get type assignment icon
+                if ($obj->assignment==1) {
+                    $ShowAssignment=Display::return_icon('wiki_assignment.png', get_lang('AssignmentDesc'),'',ICON_SIZE_SMALL);
+                } elseif ($obj->assignment==2) {
+                    $ShowAssignment=Display::return_icon('wiki_work.png', get_lang('AssignmentWork'),'',ICON_SIZE_SMALL);
+                } elseif ($obj->assignment==0) {
+                    $ShowAssignment='<img src="../img/px_transparent.gif" />';
+                }
+
+                // Get icon task
+                if (!empty($obj->task)) {
+                    $icon_task=Display::return_icon('wiki_task.png', get_lang('StandardTask'),'',ICON_SIZE_SMALL);
+                } else {
+                    $icon_task='<img src="../img/px_transparent.gif" />';
+                }
+
+                $row = array();
+                $row[] = api_get_local_time($obj->dtime, null, date_default_timezone_get());
+                $row[] = $ShowAssignment.$icon_task;
+                $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['id'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&amp;view='.$obj->id.'&session_id='.api_get_session_id().'&group_id='.api_get_group_id().'">'.api_htmlentities($obj->title).'</a>';
+                $row[] = $obj->version>1 ? get_lang('EditedBy') : get_lang('AddedBy');
+                if ($obj->user_id <> 0 ) {
+                    $row[] = '<a href="../user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
+                        Display::tag('span', api_htmlentities(api_get_person_name($userinfo['firstname'], $userinfo['lastname'])), array('title'=>$username)).
+                        '</a>';
+                } else {
+                    $row[] = get_lang('Anonymous').' ('.api_htmlentities($obj->user_ip).')';
+                }
+                $rows[] = $row;
+            }
+
+            $table = new SortableTableFromArrayConfig($rows,0,10,'RecentPages_table','','','DESC');
+            $table->set_additional_parameters(
+                array(
+                    'cidReq' =>api_get_course_id(),
+                    'action'=>Security::remove_XSS($action),
+                    'session_id' => api_get_session_id(),
+                    'group_id' => api_get_group_id()
+                )
+            );
+            $table->set_header(0,get_lang('Date'), true, array ('style' => 'width:200px;'));
+            $table->set_header(1,get_lang('Type'), true, array ('style' => 'width:30px;'));
+            $table->set_header(2,get_lang('Title'), true);
+            $table->set_header(3,get_lang('Actions'), true, array ('style' => 'width:80px;'));
+            $table->set_header(4,get_lang('Author'), true);
+            $table->display();
+        }
     }
 }

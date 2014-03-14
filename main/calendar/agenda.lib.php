@@ -754,9 +754,12 @@ class Agenda
                             ip.id_session = $session_id
                     ";
         }
-
+        $dateCondition = null;
         if (!empty($start)  && !empty($end)) {
-            $dateCondition = "((agenda.start_date >= '".$start."' OR agenda.start_date IS NULL) AND (agenda.end_date <= '".$end."' OR agenda.end_date IS NULL))";
+            $dateCondition = "AND (
+                (agenda.start_date >= '".$start."' OR agenda.start_date IS NULL) AND
+                (agenda.end_date <= '".$end."' OR agenda.end_date IS NULL)
+            )";
         }
 
         $result = Database::query($sql);
@@ -769,7 +772,7 @@ class Agenda
                     WHERE   ip.tool         = '".TOOL_CALENDAR_EVENT."' AND
                             ref             = {$row['ref']} AND
                             ip.visibility   = '1' AND
-                            ip.c_id         = $course_id AND
+                            ip.c_id         = $course_id
                             $dateCondition";
                 $sent_to_result = Database::query($sql);
                 $user_to_array = array();
@@ -784,7 +787,6 @@ class Agenda
                 }
 
                 $event = array();
-
                 $event['id'] = 'course_'.$row['id'];
 
                 // To avoid doubles
@@ -793,9 +795,7 @@ class Agenda
                 }
 
                 $events_added[] = $row['id'];
-
                 $attachment = get_attachment($row['id'], $course_id);
-
                 $has_attachment = '';
 
                 if (!empty($attachment)) {

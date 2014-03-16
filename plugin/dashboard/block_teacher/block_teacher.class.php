@@ -12,10 +12,12 @@
 
 /**
  * This class is used like controller for teacher block plugin,
- * the class name must be registered inside path.info file (e.g: controller = "BlockTeacher"), so dashboard controller will be instantiate it
+ * the class name must be registered inside path.info file
+ * (e.g: controller = "BlockTeacher"), so dashboard controller will be instantiate it
  * @package chamilo.dashboard
  */
-class BlockTeacher extends Block {
+class BlockTeacher extends Block
+{
 
     private $user_id;
     private $teachers;
@@ -25,15 +27,12 @@ class BlockTeacher extends Block {
 	/**
 	 * Controller
 	 */
-    public function __construct ($user_id) {
+    public function __construct ($user_id)
+    {
     	$this->user_id  = $user_id;
     	$this->path 	= 'block_teacher';
     	if ($this->is_block_visible_for_user($user_id)) {
-    		/*if (api_is_platform_admin()) {
-	    		$this->teachers = UserManager::get_user_list(array('status' => COURSEMANAGER));
-	    	} else {*/
-	    		$this->teachers = UserManager::get_users_followed_by_drh($user_id, COURSEMANAGER);
-	    	//}
+	        $this->teachers = UserManager::get_users_followed_by_drh($user_id, COURSEMANAGER);
     	}
     }
 
@@ -42,7 +41,8 @@ class BlockTeacher extends Block {
 	 * @param	int		User id
 	 * @return	bool	Is block visible for user
 	 */
-    public function is_block_visible_for_user($user_id) {
+    public function is_block_visible_for_user($user_id)
+    {
     	$user_info = api_get_user_info($user_id);
 		$user_status = $user_info['status'];
 		$is_block_visible_for_user = false;
@@ -57,29 +57,24 @@ class BlockTeacher extends Block {
      * it's important to use the name 'get_block' for beeing used from dashboard controller
      * @return array   column and content html
      */
-    public function get_block() {
+    public function get_block()
+    {
 
     	global $charset;
-
     	$column = 1;
-    	$data   = array();
-
-		/*if (api_is_platform_admin()) {
-			$teacher_content_html = $this->get_teachers_content_html_for_platform_admin();
-		} else if (api_is_drh()) {*/
-			$teacher_content_html = $this->get_teachers_content_html_for_drh();
-		//}
+    	$data = array();
+		$teacher_content_html = $this->get_teachers_content_html_for_drh();
 
 		$html = '
-			            <li class="widget color-blue" id="intro">
-			                <div class="widget-head">
-			                    <h3>'.get_lang('TeachersInformationsList').'</h3>
-			                    <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
-			                </div>
-			                <div class="widget-content">
-								'.$teacher_content_html.'
-			                </div>
-			            </li>
+                <li class="widget color-blue" id="intro">
+                    <div class="widget-head">
+                        <h3>'.get_lang('TeachersInformationsList').'</h3>
+                        <div class="widget-actions"><a onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;" href="index.php?action=disable_block&path='.$this->path.'">'.Display::return_icon('close.gif',get_lang('Close')).'</a></div>
+                    </div>
+                    <div class="widget-content">
+                        '.$teacher_content_html.'
+                    </div>
+                </li>
 				';
 
     	$data['column'] = $column;
@@ -93,8 +88,8 @@ class BlockTeacher extends Block {
  	 * This method return a content html, it's used inside get_block method for showing it inside dashboard interface
  	 * @return string  content html
  	 */
-    public function get_teachers_content_html_for_platform_admin() {
-
+    public function get_teachers_content_html_for_platform_admin()
+    {
 	 	$teachers = $this->teachers;
 		$content = '<div style="margin:10px;">';
 		$content .= '<h3><font color="#000">'.get_lang('YourTeachers').'</font></h3>';
@@ -141,16 +136,17 @@ class BlockTeacher extends Block {
 	 	$content .= $teachers_table;
 
  		if (count($teachers) > 0) {
-			$content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin">'.get_lang('SeeMore').'</a></div>';
+			$content .= '<div style="text-align:right;margin-top:10px;">
+			<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin">'.get_lang('SeeMore').'</a></div>';
 		}
 
 		$content .= '</div>';
 
  		return $content;
-
 	}
 
-	public function get_teachers_content_html_for_drh() {
+	public function get_teachers_content_html_for_drh()
+    {
   		$teachers = $this->teachers;
  		$content = '<div style="margin:10px;">';
  		$content .= '<h3><font color="#000">'.get_lang('YourTeachers').'</font></h3>';
@@ -198,15 +194,14 @@ class BlockTeacher extends Block {
 		$content .= '</div>';
 
   		return $content;
-
   	}
 
     /**
 	 * Get number of teachers
 	 * @return int
 	 */
-	function get_number_of_teachers() {
+	function get_number_of_teachers()
+    {
 		return count($this->teachers);
 	}
-
 }

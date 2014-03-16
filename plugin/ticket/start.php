@@ -15,9 +15,7 @@ $bbb = new bbb();
 
 if ($bbb->plugin_enabled) {
     if ($bbb->is_server_running()) {
-
         if (isset($_GET['launch']) && $_GET['launch'] == 1) {
-
             $meeting_params = array();
             $meeting_params['meeting_name'] = api_get_course_id();
 

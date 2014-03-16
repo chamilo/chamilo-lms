@@ -73,8 +73,6 @@ if (api_is_anonymous()) {
         }
     }
 
-    //$_template['option1'] = api_get_plugin_setting('before_login', 'option1');
-    //$_template['option2'] = api_get_plugin_setting('before_login', 'option2');
     $_template['form_option1'] = $formHtml;
     $_template['form_option2'] = $formHtml2;
 }

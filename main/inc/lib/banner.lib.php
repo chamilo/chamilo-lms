@@ -418,7 +418,7 @@ function return_menu() {
             if (api_get_user_id() && !api_is_anonymous()) {
                 $lis .= $open_mtloggedin;
             } else {
-                $lis .= $open;    
+                $lis .= $open;
             }
         }
     }
@@ -516,8 +516,8 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
             } elseif(strstr($breadcrumb_step['name'], 'shared_folder_session_')) {
                 $navigation_item['title'] = get_lang('UserFolders');
             } elseif(strstr($breadcrumb_step['name'], 'sf_user_')) {
-                $userinfo = Database::get_user_info_from_id(substr($breadcrumb_step['name'], 8));
-                $navigation_item['title'] = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+                $userinfo = api_get_user_info(substr($breadcrumb_step['name'], 8));
+                $navigation_item['title'] = $userinfo['complete_name'];
             } elseif($breadcrumb_step['name'] == 'chat_files') {
                 $navigation_item['title'] = get_lang('ChatFiles');
             } elseif($breadcrumb_step['name'] == 'images') {

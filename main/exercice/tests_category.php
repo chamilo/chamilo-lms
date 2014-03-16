@@ -63,27 +63,27 @@ function edit_category_form($in_action) {
         $category_id = Security::remove_XSS($_GET['category_id']);
         $objcat = new Testcategory($category_id);
 
-        // initiate the object		
+        // initiate the object
         $form = new FormValidator('note', 'post', api_get_self() . '?action=' . $in_action . '&category_id=' . $category_id);
 
-        // settting the form elements			
+        // settting the form elements
         $form->addElement('header', get_lang('EditCategory'));
         $form->addElement('hidden', 'category_id');
         $form->addElement('text', 'category_name', get_lang('CategoryName'), array('size' => '95'));
         $form->add_html_editor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Width' => '90%', 'Height' => '200'));
         $form->addElement('style_submit_button', 'SubmitNote', get_lang('ModifyCategory'), 'class="add"');
 
-        // setting the defaults		
+        // setting the defaults
         $defaults = array();
         $defaults["category_id"] = $objcat->id;
         $defaults["category_name"] = $objcat->name;
         $defaults["category_description"] = $objcat->description;
         $form->setDefaults($defaults);
 
-        // setting the rules		
+        // setting the rules
         $form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');
 
-        // The validation or display		
+        // The validation or display
         if ($form->validate()) {
             $check = Security::check_token('post');
             if ($check) {
@@ -138,7 +138,7 @@ function add_category_form($in_action) {
     $in_action = Security::remove_XSS($in_action);
     // initiate the object
     $form = new FormValidator('note', 'post', api_get_self() . '?action=' . $in_action);
-    // settting the form elements	
+    // Setting the form elements
     $form->addElement('header', get_lang('AddACategory'));
     $form->addElement('text', 'category_name', get_lang('CategoryName'), array('size' => '95'));
     $form->add_html_editor('category_description', get_lang('CategoryDescription'), false, false, array('ToolbarSet' => 'test_category', 'Width' => '90%', 'Height' => '200'));

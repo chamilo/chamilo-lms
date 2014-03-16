@@ -220,11 +220,15 @@ if (!api_is_allowed_to_edit(null, true) && $event_type == 'course') {
 }
 
 $course_info = api_get_course_info();
+$agenda = new Agenda();
 
 if (api_is_allowed_to_edit(false, true) OR
-    (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) OR
-     GroupManager::user_has_access(api_get_user_id(), $group_id,  GroupManager::GROUP_TOOL_CALENDAR) && GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)
-    ) {
+    (api_get_course_setting('allow_user_edit_agenda') &&
+    !api_is_anonymous() &&
+    api_is_allowed_to_session_edit(false, true)) OR
+    GroupManager::user_has_access(api_get_user_id(), $group_id,  GroupManager::GROUP_TOOL_CALENDAR) &&
+    GroupManager::is_tutor_of_group(api_get_user_id(), $group_id)
+) {
     switch ($action) {
         case 'add':
             if (isset($_POST['submit_event']) && $_POST['submit_event']) {
@@ -236,23 +240,19 @@ if (api_is_allowed_to_edit(false, true) OR
                 if ($_POST['empty_end_date'] == 'on') {
                     $event_stop = '0000-00-00 00:00:00';
                 }
-                $id = agenda_add_item($course_info, $safe_title, $_POST['content'], $event_start, $event_stop, $_POST['selected_form'], false, $safe_file_comment);
-                if (!empty($_POST['repeat'])) {
+                $agenda->type = 'course';
+                $sendEmail = isset($_POST['add_announcement']) ? true : false;
+                $eventId = $agenda->add_event($event_start, $event_stop, false, null, $safe_title, $_POST['content'], $_POST['selected_form'], $sendEmail);
+
+                if (!empty($_POST['repeat']) && !empty($eventId)) {
                     $end_y = intval($_POST['repeat_end_year']);
                     $end_m = intval($_POST['repeat_end_month']);
                     $end_d = intval($_POST['repeat_end_day']);
                     $end = mktime(23, 59, 59, $end_m, $end_d, $end_y);
-                    $res = agenda_add_repeat_item($course_info, $id, $_POST['repeat_type'], $end, $_POST['selected_form'], $safe_file_comment);
-                }
-                $mailSent = 0;
-                if (isset($_POST['add_announcement'])) {
-                    $ann_id = store_agenda_item_as_announcement($id);
-                    AnnouncementManager::send_email($ann_id);
-                    $mailSent = 1;
-                    
+                    $agenda->addRepeatedItem($eventId, $_POST['repeat_type'], $end, $_POST['selected_form']);
                 }
                 Display::display_confirmation_message(get_lang('AddSuccess'));
-                if ($mailSent == 1) {
+                if ($sendEmail) {
                     Display::display_confirmation_message(get_lang('AdditionalMailWasSentToSelectedUsers'));
                 }
             } else {

@@ -894,7 +894,7 @@ class GroupManager
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
         $sql = 'SELECT COUNT(gu.group_id) AS current_max FROM '.$group_user_table.' gu, '.$group_table.' g
 				WHERE g.c_id = '.$course_info['real_id'].'
-				AND gu.c_id = g.c_id 
+				AND gu.c_id = g.c_id
 				AND gu.group_id = g.id ';
         if ($category_id != null) {
             $category_id = Database::escape_string($category_id);
@@ -930,23 +930,38 @@ class GroupManager
         Database::query($sql);
     }
 
-    // GROUP USERS FUNCTIONS
-
     /**
      * Get all users from a given group
      * @param int $group_id The group
      * @param bool $load_extra_info
+     * @param int $start
+     * @param int $limit
+     * @param bool $getCount
      * @return array list of user id
      */
-    public static function get_users($group_id, $load_extra_info = false)
+    public static function get_users($group_id, $load_extra_info = false, $start = null, $limit = null, $getCount = false)
     {
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
         $group_id = Database::escape_string($group_id);
         $course_id = api_get_course_int_id();
-        $sql = "SELECT user_id FROM $group_user_table WHERE c_id = $course_id AND group_id = $group_id";
+        $select = " SELECT user_id ";
+        if ($getCount) {
+            $select = " SELECT count(user_id) count";
+        }
+        $sql = "$select FROM $group_user_table
+                WHERE c_id = $course_id AND group_id = $group_id";
+        if (!empty($start) && !empty($limit)) {
+            $start = intval($start);
+            $limit = intval($limit);
+            $sql .= " LIMIT $start, $limit";
+        }
         $res = Database::query($sql);
-        $users = array ();
+        $users = array();
         while ($obj = Database::fetch_object($res)) {
+            if ($getCount) {
+                return $obj->count;
+                break;
+            }
             if ($load_extra_info) {
                 $users[] = api_get_user_info($obj->user_id);
             } else {

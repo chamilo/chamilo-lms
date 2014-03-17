@@ -28,7 +28,7 @@ class CourseUserDriver extends CourseDriver
                     'alias' => $alias,
                     'path' => $this->getCourseDocumentSysPath().$path,
                     //'alias' => $courseInfo['code'].' personal documents',
-                    'URL' => $this->getCourseDocumentWebPath().$path,
+                    'URL' => $this->getCourseDocumentRelativeWebPath().$path,
                     'accessControl' => 'access'
                 );
             }

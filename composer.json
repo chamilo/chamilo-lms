@@ -86,7 +86,8 @@
         "opauth/google": "0.2.2",
         "media-alchemyst/media-alchemyst": "0.3.6",
         "php-ffmpeg/php-ffmpeg": "0.4.4",
-        "php-unoconv/php-unoconv": "0.3.0"
+        "php-unoconv/php-unoconv": "0.3.0",
+        "sunra/php-simple-html-dom-parser": "1.5.0"
     },
     "require-dev": {
         "knplabs/gaufrette": "0.2.*@dev",

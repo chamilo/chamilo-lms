@@ -170,7 +170,6 @@ class Connector
         return $driverUpdated;
     }
 
-
     /**
      * Get default driver settings.
      * @return array
@@ -269,19 +268,35 @@ class Connector
             )
         );
 
-        foreach ($this->getDriverList() as $driverName) {
-            $driverClass = $this->getDriverClass($driverName);
-            /** @var Driver $driver */
-            $driver = new $driverClass();
-            $driver->setName($driverName);
-            $driver->setConnector($this);
-            $this->addDriver($driver);
-        }
+        $this->setDrivers();
 
         $opts['roots'] = $this->getRoots();
         return $opts;
     }
 
+    /**
+     * Set drivers from list
+     */
+    public function setDrivers()
+    {
+        foreach ($this->getDriverList() as $driverName) {
+            $this->setDriver($driverName);
+        }
+    }
+
+    /**
+     * Sets a driver.
+     * @param string $driverName
+     */
+    public function setDriver($driverName)
+    {
+        $driverClass = $this->getDriverClass($driverName);
+        /** @var Driver $driver */
+        $driver = new $driverClass();
+        $driver->setName($driverName);
+        $driver->setConnector($this);
+        $this->addDriver($driver);
+    }
 
     /**
      * Simple function to demonstrate how to control file access using "accessControl" callback.

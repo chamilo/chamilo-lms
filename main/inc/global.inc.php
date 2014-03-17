@@ -584,6 +584,7 @@ $app->before(
         } else {
             $app['course'] = null;
         }
+        $app['session']->set('course_session', $app['course']);
 
         $studentView = $request->get('isStudentView');
         if (!empty($studentView)) {

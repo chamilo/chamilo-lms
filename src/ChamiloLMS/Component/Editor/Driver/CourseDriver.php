@@ -22,7 +22,7 @@ class CourseDriver extends Driver
             return array(
                 'driver' => 'CourseDriver',
                 'path' => $this->getCourseDocumentSysPath(),
-                'URL' => $this->getCourseDocumentWebPath(),
+                'URL' => $this->getCourseDocumentRelativeWebPath(),
                 'accessControl' => array($this, 'access'),
                 'alias' => $alias,
                 'attributes' => array(
@@ -58,12 +58,26 @@ class CourseDriver extends Driver
     /**
      * @return string
      */
-    public function getCourseDocumentWebPath()
+    public function getCourseDocumentRelativeWebPath()
     {
         $url = null;
         if (isset($this->connector->course)) {
             $directory = $this->connector->course->getDirectory();
             $url = api_get_path(REL_COURSE_PATH).$directory.'/document/';
+        }
+        return $url;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getCourseDocumentWebPath()
+    {
+        $url = null;
+        if (isset($this->connector->course)) {
+            $directory = $this->connector->course->getDirectory();
+            $url = api_get_path(WEB_DATA_COURSE_PATH).$directory.'/document/';
         }
         return $url;
     }

@@ -637,7 +637,12 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 
         // Chamilo data filesystem.
         $app['chamilo.filesystem'] = $app->share(function () use ($app) {
-            $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem($app['paths'], $app['filesystem']);
+            $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem(
+                $app['paths'],
+                $app['filesystem'],
+                $app['editor_connector'],
+                $app['unoconv']
+            );
             return $filesystem;
         });
 
@@ -857,6 +862,7 @@ $app['html_editor'] = $app->share(function($app) {
 $app['editor_connector'] = $app->share(function ($app) {
     $token = $app['security']->getToken();
     $user = $token->getUser();
+    $course = $app['session']->get('course_session');
 
     return new Connector(
         $app['orm.em'],
@@ -865,9 +871,20 @@ $app['editor_connector'] = $app->share(function ($app) {
         $app['translator'],
         $app['security'],
         $user,
-        $app['course']
+        $course
     );
 });
+
+
+$app->register(new Unoconv\UnoconvServiceProvider(), array(
+    'unoconv.configuration' => array(
+        'unoconv.binaries' => $app['configuration']['unoconv.binaries'],
+        'timeout'          => 42,
+    ),
+    'unoconv.logger'  => $app->share(function () use ($app) {
+        return $app['monolog']; // use Monolog service provider
+    }),
+));
 
 
 /*

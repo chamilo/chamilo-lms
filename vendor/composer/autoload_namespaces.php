@@ -44,6 +44,7 @@ return array(
     'Symfony\\Bridge\\Monolog\\' => array($vendorDir . '/symfony/monolog-bridge'),
     'Symfony\\Bridge\\Doctrine\\' => array($vendorDir . '/symfony/doctrine-bridge'),
     'SwfTools' => array($vendorDir . '/swftools/swftools/src'),
+    'Sunra\\PhpSimple\\HtmlDomParser' => array($vendorDir . '/sunra/php-simple-html-dom-parser/Src'),
     'Silex\\Provider\\' => array($vendorDir . '/silex/web-profiler'),
     'SilexOpauth' => array($vendorDir . '/icehero/silex-opauth/src'),
     'SilexAssetic' => array($vendorDir . '/mheap/silex-assetic/src'),

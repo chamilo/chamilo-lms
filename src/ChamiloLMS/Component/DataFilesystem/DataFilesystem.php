@@ -6,6 +6,10 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console;
+use Unoconv\Unoconv;
+use Sunra\PhpSimple\HtmlDomParser;
+use ChamiloLMS\Component\Editor\Connector;
+use ChamiloLMS\Component\Editor\Driver\CourseDriver;
 
 /**
  * @todo use Gaufrette to manage course files (some day)
@@ -24,11 +28,15 @@ class DataFilesystem
     /**
      * @param array $paths
      * @param Filesystem $filesystem
+     * @param Unoconv $unoconv
      */
-    public function __construct($paths, Filesystem $filesystem)
+    public function __construct($paths, Filesystem $filesystem, Connector $editor, $unoconv = null)
     {
         $this->paths = $paths;
         $this->fs = $filesystem;
+        $this->unoconv = $unoconv;
+        $this->editor = $editor;
+        $this->editor->setDriver('CourseDriver');
     }
 
     /**
@@ -140,4 +148,92 @@ class DataFilesystem
         $styleSheetFolder = $this->paths['root_sys'].'main/css';
         return $finder->directories()->depth('== 0')->in($styleSheetFolder);
     }
+
+    /**
+     * Creates a empty file inside the temp folder
+     * @param string $fileName
+     * @param string $extension
+     * @return string
+     */
+    public function createTempFile($fileName = null, $extension = null)
+    {
+        if (empty($fileName)) {
+            $fileName = mt_rand();
+        }
+        if (!empty($extension)) {
+            $extension = ".$extension";
+        }
+        $filePath = $this->paths['sys_temp_path'].$fileName.$extension;
+        $this->fs->touch($filePath);
+        if ($this->fs->exists($filePath)) {
+            return $filePath;
+        }
+        return null;
+    }
+
+    /**
+     * Converts ../courses/ABC/document/file.jpg to
+     * http://chamilo/courses/ABC/document/file.jpg
+     * @param string $content
+     * @return string
+     */
+    public function convertRelativeToAbsoluteUrl($content)
+    {
+        /** @var CourseDriver $courseDriver */
+        $courseDriver = $this->editor->getDriver('CourseDriver');
+
+        $dom = HtmlDomParser::str_get_html($content);
+        //var_dump($this->editor->getDrivers());
+        /** @var \simple_html_dom_node $image */
+        foreach ($dom->find('img') as $image) {
+            $image->src = str_replace(
+                $courseDriver->getCourseDocumentRelativeWebPath(),
+                $courseDriver->getCourseDocumentWebPath(),
+                $image->src
+            );
+        }
+        return $dom;
+    }
+
+    /**
+     * Save string in a temp file
+     * @param string $content
+     * @param string $fileName
+     * @param string $extension
+     *
+     * @return string file path
+     */
+    public function putContentInTempFile($content, $filename = null, $extension = null)
+    {
+        $file = $this->createTempFile($filename, $extension);
+        if (!empty($file)) {
+            $this->fs->dumpFile($file, $content);
+            return $file;
+        }
+        return null;
+    }
+
+    /**
+     * @param string $filePath
+     * @param string $format
+     * @return string
+     */
+    public function transcode($filePath, $format)
+    {
+        if ($this->fs->exists($filePath)) {
+            $fileInfo = pathinfo($filePath);
+            $fileName = $fileInfo['filename'];
+            $newFilePath = str_replace(
+                $fileInfo['basename'],
+                $fileName.'.'.$format, $filePath
+            );
+            $this->unoconv->transcode($filePath, $format, $newFilePath);
+            if ($this->fs->exists($newFilePath)) {
+                return $newFilePath;
+
+            }
+        }
+        return false;
+    }
+
 }

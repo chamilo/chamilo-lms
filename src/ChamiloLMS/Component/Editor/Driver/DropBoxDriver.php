@@ -81,7 +81,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements InterfaceDriver
                         'alias' => 'dropbox',
                         'tmpPath' => $this->connector->paths['sys_temp_path'],
                         //'alias' => $courseInfo['code'].' personal documents',
-                        //'URL' => $this->getCourseDocumentWebPath().$path,
+                        //'URL' => $this->getCourseDocumentRelativeWebPath().$path,
                         'accessControl' => 'access'
                     );
                 }

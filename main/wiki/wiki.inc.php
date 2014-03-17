@@ -336,7 +336,7 @@ class Wiki
             $sql="INSERT INTO ".$tbl_wiki_conf." (c_id, page_id, task, feedback1, feedback2, feedback3, fprogress1, fprogress2, fprogress3, max_text, max_version, startdate_assig, enddate_assig, delayedsubmit)
                   VALUES ($course_id, '".$Id."','".$_clean['task']."','".$_clean['feedback1']."','".$_clean['feedback2']."','".$_clean['feedback3']."','".$_clean['fprogress1']."','".$_clean['fprogress2']."','".$_clean['fprogress3']."','".$_clean['max_text']."','".$_clean['max_version']."','".$_clean['startdate_assig']."','".$_clean['enddate_assig']."','".$_clean['delayedsubmit']."')";
         } else {
-            $sql = 'UPDATE'.$tbl_wiki_conf.' SET
+            $sql = 'UPDATE '.$tbl_wiki_conf.' SET
                         task="'.$_clean['task'].'",
                         feedback1="'.$_clean['feedback1'].'",
                         feedback2="'.$_clean['feedback2'].'",

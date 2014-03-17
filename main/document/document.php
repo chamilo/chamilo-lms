@@ -139,9 +139,9 @@ $document_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $message = '';
 
-if (Portfolio::controller()->accept()) {
+/*if (Portfolio::controller()->accept()) {
     Portfolio::controller()->run();
-}
+}*/
 
 switch ($action) {
     case 'download':
@@ -1440,10 +1440,10 @@ if (count($docs_and_folders) > 1) {
     if ($is_allowed_to_edit || $group_member_with_upload_rights) {
         $form_actions = array();
         $form_action['delete'] = get_lang('Delete');
-        $portfolio_actions = Portfolio::actions();
+        /*$portfolio_actions = Portfolio::actions();
         foreach ($portfolio_actions as $action) {
             $form_action[$action->get_name()] = $action->get_title();
-        }
+        }*/
         $table->set_form_actions($form_action, 'path');
     }
 }

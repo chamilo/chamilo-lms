@@ -281,7 +281,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
             }
 
             if ($filetype == 'file') {
-                $send_to = Portfolio::share('document', $document_data['id'], array('style' => 'float:right;'));
+                //$send_to = Portfolio::share('document', $document_data['id'], array('style' => 'float:right;'));
             }
         }
 

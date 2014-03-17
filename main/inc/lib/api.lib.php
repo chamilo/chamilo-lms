@@ -6981,3 +6981,12 @@ function api_is_allowed_in_course()
 {
     return Session::read('is_allowed_in_course');
 }
+
+function api_is_unoconv_installed()
+{
+    global $_configuration;
+    if (isset($_configuration['unoconv.binaries']) && !empty($_configuration['unoconv.binaries'])) {
+        return true;
+    }
+    return false;
+}

@@ -96,7 +96,7 @@ $is_allowed_to_edit = api_is_allowed_to_edit(false, true);
 
 // The page we are dealing with
 $page = isset($_GET['title']) ? $_GET['title']: 'index';
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = isset($_GET['action']) ? $_GET['action'] : 'showpage';
 $view = isset($_GET['view']) ? $_GET['view'] : null;
 
 $wiki->page = $page;

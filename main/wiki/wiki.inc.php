@@ -358,7 +358,7 @@ class Wiki
         self::check_emailcue($_clean['reflink'], 'P', $dtime, $_clean['user_id']);
         $this->setWikiData($Id);
 
-        return get_lang('ItemSaved');
+        return get_lang('Saved');
     }
 
     /**
@@ -714,7 +714,7 @@ class Wiki
                    '.$groupfilter.$condition_session.'
               ORDER BY id ASC';
         $result=Database::query($sql);
-        $row=Database::fetch_array($result);
+        $row = Database::fetch_array($result);
         $KeyVisibility=$row['visibility'];
 
         // second, show the last version
@@ -896,7 +896,7 @@ class Wiki
                     )
                 )
             ).'</div>';
-            echo '<div id="wikifooter">'.get_lang('Progress').': '.$row['progress'].'%&nbsp;&nbsp;&nbsp;'.get_lang('Rating').': '.$row['score'].'&nbsp;&nbsp;&nbsp;'.get_lang('Words').': '.self::word_count($content).'</div>';
+            echo '<div id="wikifooter">'.get_lang('Progress').': '.($row['progress']*10).'%&nbsp;&nbsp;&nbsp;'.get_lang('Rating').': '.$row['score'].'&nbsp;&nbsp;&nbsp;'.get_lang('Words').': '.self::word_count($content).'</div>';
         } //end filter visibility
     }
 
@@ -3524,7 +3524,7 @@ class Wiki
                 $row = array();
                 $row[] = $year.'-'.$month.'-'.$day.' '.$hours.":".$minutes.":".$seconds;
                 $row[] = $ShowAssignment;
-                $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&view='.$obj->id.'&session_id='.api_htmlentities(urlencode($_GET['$session_id'])).'&group_id='.api_htmlentities(urlencode($_GET['group_id'])).'">'.
+                $row[] = '<a href="'.api_get_self().'?cidReq='.$_course['code'].'&action=showpage&title='.api_htmlentities(urlencode($obj->reflink)).'&view='.$obj->id.'&session_id='.api_get_session_id().'&group_id='.api_get_group_id().'">'.
                     api_htmlentities($obj->title).'</a>';
                 $row[] = Security::remove_XSS($obj->version);
                 $row[] = Security::remove_XSS($obj->comment);
@@ -4336,15 +4336,15 @@ class Wiki
                     if (!empty($row['task'])) {
                         //previous change 0 by text
                         if ($row['startdate_assig']=='0000-00-00 00:00:00') {
-                            $message_task_startdate=get_lang('No');
+                            $message_task_startdate  =get_lang('No');
                         } else {
-                            $message_task_startdate=api_get_local_time($row['startdate_assig'], null, date_default_timezone_get());
+                            $message_task_startdate = api_get_local_time($row['startdate_assig'], null, date_default_timezone_get());
                         }
 
                         if ($row['enddate_assig']=='0000-00-00 00:00:00') {
-                            $message_task_enddate=get_lang('No');
+                            $message_task_enddate = get_lang('No');
                         } else {
-                            $message_task_endate = api_get_local_time($row['enddate_assig'], null, date_default_timezone_get());
+                            $message_task_enddate = api_get_local_time($row['enddate_assig'], null, date_default_timezone_get());
                         }
 
                         if ($row['delayedsubmit']==0) {

@@ -2030,9 +2030,9 @@ class Exercise {
             $extra = explode(':', $extra);
             if ($debug) error_log(print_r($extra, 1));
             // Fixes problems with negatives values using intval
-            $true_score     = intval($extra[0]);
-            $false_score    = intval($extra[1]);
-            $doubt_score    = intval($extra[2]);
+            $true_score     = floatval(trim($extra[0]));
+            $false_score    = floatval(trim($extra[1]));
+            $doubt_score    = floatval(trim($extra[2]));
         }
 
         $totalWeighting 		= 0;

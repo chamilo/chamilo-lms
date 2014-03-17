@@ -1,3 +1,4 @@
+{% if show_footer == true %}
 <footer{% block footer_open_attributes %}{% endblock footer_open_attributes %}>
     <!-- start of #footer section -->
     <div class="container">
@@ -160,9 +161,11 @@ $('[data-toggle="modal"]').click(function(e) {
  * Fixes content height
  **/
 function sizeContent() {
-    var newHeight = $("html").height() - $("header").height() - $("footer").height() + "px";
+    var newHeight = $("html").height() - $("footer").height() - $("header").height() + "px";
+
+    //console.log($("#page_wrapper").css("height"));
     if ($("#main_content").css("height") < newHeight) {
-        $("#main_content").css("height", newHeight);
+        $("#page_wrapper").css("height", newHeight);
     }
 }
 
@@ -305,5 +308,4 @@ $(document).ready( function() {
 </script>
 {% endraw %}
 {{ execution_stats }}
-</body>
-</html>
+{% endif %}

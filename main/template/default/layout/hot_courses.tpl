@@ -20,7 +20,7 @@ $(document).ready( function() {
     });
 });
 </script>
-<section id="hot_courses">
+<div id="hot_courses">
     <div class="row">
         <div class="col-md-12">
             {% if _u.is_admin %}
@@ -38,5 +38,5 @@ $(document).ready( function() {
         </div>
         {% include app.template_style ~ '/layout/hot_course_item.tpl' %}
     </div>
-</section>
+</div>
 {% endif %}

@@ -4962,11 +4962,12 @@ class learnpath
                     }
                     $preq = (empty($array[$i]['prerequisite']) ? '' : $array[$i]['prerequisite']);
                     $audio = isset($array[$i]['audio']) ? $array[$i]['audio'] : null;
+                    $path = isset($array[$i]['path']) ? $array[$i]['path'] : null;
                     $this->arrMenu[] = array(
                         'id' => $array[$i]['id'],
                         'item_type' => $array[$i]['item_type'],
                         'title' => $array[$i]['title'],
-                        'path' => $array[$i]['path'],
+                        'path' => $path,
                         'description' => $array[$i]['description'],
                         'parent_item_id' => $array[$i]['parent_item_id'],
                         'previous_item_id' => $array[$i]['previous_item_id'],
@@ -7569,11 +7570,12 @@ class learnpath
      * @param string $item_type
      * @return string
      */
-    public function display_manipulate($item_id, $item_type = TOOL_DOCUMENT) {
+    public function display_manipulate($item_id, $item_type = TOOL_DOCUMENT)
+    {
+        global $charset, $_course;
         $course_id = api_get_course_int_id();
         $course_code = api_get_course_id();
 
-        global $charset, $_course;
         $return = '<div class="actions">';
 
         switch ($item_type) {
@@ -7613,15 +7615,17 @@ class learnpath
 
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
         $item_id = intval($item_id);
-        $sql    = "SELECT * FROM " . $tbl_lp_item . " as lp WHERE lp.c_id = ".$course_id." AND lp.id = " . $item_id;
+        $sql = "SELECT * FROM " . $tbl_lp_item . " as lp
+                WHERE lp.c_id = ".$course_id." AND lp.id = " . $item_id;
         $result = Database::query($sql);
-
         $row = Database::fetch_assoc($result);
 
         $audio_player = null;
         // We display an audio player if needed.
         if (!empty($row['audio'])) {
-            $audio_player .= '<div class="lp_mediaplayer" id="container"><a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.</div>';
+            $audio_player .= '<div class="lp_mediaplayer" id="container">
+                              <a href="http://www.macromedia.com/go/getflashplayer">Get the Flash Player</a> to see this player.
+                              </div>';
             $audio_player .= '<script type="text/javascript" src="../inc/lib/mediaplayer/swfobject.js"></script>';
             $audio_player .= '<script>
                                 var s1 = new SWFObject("../inc/lib/mediaplayer/player.swf","ply","250","20","9","#FFFFFF");
@@ -7630,16 +7634,30 @@ class learnpath
                                 s1.write("container");
                             </script>';
         }
-        $url = api_get_self() . '?cidReq='.Security::remove_XSS($_GET['cidReq']).'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
 
-        $return .= Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), $url.'&action=edit_item&path_item=' . $row['path']);
-        $return .= Display::url(Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_SMALL), $url.'&action=move_item');
+        $url = api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
+
+        $return .= Display::url(
+            Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
+            $url.'&action=edit_item&path_item=' . $row['path']
+        );
+
+        $return .= Display::url(
+            Display::return_icon('move.png', get_lang('Move'), array(), ICON_SIZE_SMALL),
+            $url.'&action=move_item'
+        );
 
         // Commented for now as prerequisites cannot be added to chapters.
         if ($item_type != 'dokeos_chapter' && $item_type != 'chapter') {
-            $return .= Display::url(Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_SMALL), $url.'&action=edit_item_prereq');
+            $return .= Display::url(
+                Display::return_icon('accept.png', get_lang('LearnpathPrerequisites'), array(), ICON_SIZE_SMALL),
+                $url.'&action=edit_item_prereq'
+            );
         }
-        $return .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL), $url.'&action=delete_item');
+        $return .= Display::url(
+            Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL),
+            $url.'&action=delete_item'
+        );
 
          if ($item_type == TOOL_HOTPOTATOES ) {
             $document_data = DocumentManager::get_document_data_by_id($row['path'], $course_code);
@@ -7797,6 +7815,7 @@ class learnpath
         $form->addElement('hidden', 'parent', $data['parent_item_id']);
         $form->addElement('hidden', 'previous', $data['previous_item_id']);
         $form->setDefaults(array('title' => $data['title']));
+
         return $form->toHtml();
     }
 
@@ -7816,16 +7835,12 @@ class learnpath
         $row    = Database::fetch_array($result);
 
         $preq_id = $row['prerequisite'];
-        //$preq_mastery = $row['mastery_score'];
-        //$preq_max = $row['max_score'];
 
-        $return = $this->display_manipulate($item_id, TOOL_DOCUMENT);
+        //$return = $this->display_manipulate($item_id, TOOL_DOCUMENT);
         $return = '<legend>';
         $return .= get_lang('AddEditPrerequisites');
         $return .= '</legend>';
-
         $return .= '<form method="POST">';
-
         $return .= '<table class="data_table">';
         $return .= '<tr>';
         $return .= '<th height="24">' . get_lang('LearnpathPrerequisites') . '</th>';
@@ -7867,30 +7882,27 @@ class learnpath
         }
         $this->tree_array($arrLP);
         $arrLP = $this->arrMenu;
-        unset ($this->arrMenu);
+        unset($this->arrMenu);
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['id'] == $item_id)
                 break;
             $return .= '<tr>';
             $return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_QUIZ && $arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . '>';
-
             $return .= '<label for="id' . $arrLP[$i]['id'] . '">';
-
             $return .= '<input' . (($arrLP[$i]['id'] == $preq_id) ? ' checked="checked" ' : '') . (($arrLP[$i]['item_type'] == 'dokeos_module' || $arrLP[$i]['item_type'] == 'dokeos_chapter') ? ' disabled="disabled" ' : ' ') . 'id="id' . $arrLP[$i]['id'] . '" name="prerequisites" style="margin-left:' . $arrLP[$i]['depth'] * 10 . 'px; margin-right:10px;" type="radio" value="' . $arrLP[$i]['id'] . '" />';
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
             if (file_exists('../img/lp_' . $icon_name . '.png')) {
                 $return .= '<img alt="" src="../img/lp_' . $icon_name . '.png" style="margin-right:5px;" title="" />';
-            } else
+            } else {
                 if (file_exists('../img/lp_' . $icon_name . '.gif')) {
                     $return .= '<img alt="" src="../img/lp_' . $icon_name . '.gif" style="margin-right:5px;" title="" />';
                 } else {
                     $return .= Display::return_icon('folder_document.gif','',array('style'=>'margin-right:5px;'));
                 }
+            }
             $return .=  $arrLP[$i]['title'] . '</label>';
             $return .= '</td>';
-
-            //$return .= '<td class="radio"' . (($arrLP[$i]['item_type'] != TOOL_HOTPOTATOES) ? ' colspan="3"' : '') . ' />';
 
             if ($arrLP[$i]['item_type'] == TOOL_QUIZ) {
                 // lets update max_score Quiz information depending of the Quiz Advanced properties
@@ -7909,6 +7921,7 @@ class learnpath
                 $return .= '<center><input size="4" maxlength="3" name="max_' . $arrLP[$i]['id'] . '" type="text" value="' . $arrLP[$i]['max_score'] . '" disabled="true" /></center>';
                 $return .= '</td>';
             }
+
             if ($arrLP[$i]['item_type'] == TOOL_HOTPOTATOES) {
                 $return .= '<td class="exercise" style="border:1px solid #ccc;">';
                 $return .= '<center><input size="4" maxlength="3" name="min_' . $arrLP[$i]['id'] . '" type="text" value="' . (($arrLP[$i]['id'] == $preq_id) ? $preq_mastery : 0) . '" /></center>';
@@ -7924,8 +7937,8 @@ class learnpath
         $return .= '</table>';
         $return .= '<div style="padding-top:3px;">';
         $return .= '<button class="save" name="submit_button" type="submit">' . get_lang('ModifyPrerequisites') . '</button>';
-
         $return .= '</form>';
+
         return $return;
     }
 

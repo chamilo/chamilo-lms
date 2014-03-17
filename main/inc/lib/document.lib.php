@@ -1169,7 +1169,11 @@ class DocumentManager
 
         if (!empty($course_id) && !empty($path)) {
             $sql = "SELECT id FROM $TABLE_DOCUMENT
-                    WHERE c_id = $course_id AND path LIKE BINARY '$path' AND session_id = $sessionId LIMIT 1";
+                    WHERE
+                        c_id = $course_id AND
+                        path LIKE BINARY '$path' AND
+                        session_id = $sessionId
+                    LIMIT 1";
             $result = Database::query($sql);
             if ($result && Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
@@ -1207,7 +1211,8 @@ class DocumentManager
 
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
         $id = intval($id);
-        $sql = "SELECT * FROM $TABLE_DOCUMENT WHERE c_id = $course_id AND session_id = $session_id AND id = $id ";
+        $sql = "SELECT * FROM $TABLE_DOCUMENT
+                WHERE c_id = $course_id AND session_id = $session_id AND id = $id";
         $result = Database::query($sql);
         if ($result && Database::num_rows($result) == 1) {
             $row = Database::fetch_array($result, 'ASSOC');

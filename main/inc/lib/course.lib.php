@@ -4045,12 +4045,12 @@ class CourseManager
         //WHERE login_course_date <= '$today' AND login_course_date >= '$today_diff'
 
         //$table_course_access table uses the now() and interval ...
-
+       $now = api_get_utc_datetime(time());
        $sql = "SELECT COUNT(course_access_id) course_count, a.course_code, visibility ".
               "FROM $table_course c INNER JOIN $table_course_access a ".
               "  ON (c.code = a.course_code) INNER JOIN $table_course_url u ON u.course_code = a.course_code ".
               "  WHERE   u.access_url_id = ".$_configuration['access_url']." AND".
-              "          login_course_date <= now() AND ".
+              "          login_course_date <= '$now' AND ".
               "          login_course_date > DATE_SUB(now(), INTERVAL $days DAY) AND".
               "          visibility <> '".COURSE_VISIBILITY_CLOSED."' AND visibility <> '".COURSE_VISIBILITY_HIDDEN."'".
               "  GROUP BY course_code".

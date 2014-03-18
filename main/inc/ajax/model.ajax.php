@@ -996,6 +996,7 @@ switch ($action) {
         $columns = array('name', 'users', 'actions');
         $options = array('order'=>"name $sord", 'LIMIT'=> "$start , $limit");
         $options['course_id'] = $course_id;
+
         switch ($type) {
             case 'not_registered':
                 $options['where'] = array(" (course_id IS NULL OR course_id != ?) " => $course_id);
@@ -1017,8 +1018,8 @@ switch ($action) {
                     $url  = 'class.php?action=add_class_to_course&id='.$group['id'];
                     $icon = Display::return_icon('add.png', get_lang('Add'));
                 }
-                $group['actions']    = Display::url($icon, $url);
-                $new_result[]        = $group;
+                $group['actions'] = Display::url($icon, $url);
+                $new_result[] = $group;
             }
             $result = $new_result;
         }

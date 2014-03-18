@@ -318,7 +318,7 @@ class SystemAnnouncementManager {
 			Display :: display_normal_message(get_lang('InvalidEndDate'));
 			return false;
 		}
-		if( strlen(trim($title)) == 0) {
+		if (strlen(trim($title)) == 0) {
 			Display::display_normal_message(get_lang('InvalidTitle'));
 			return false;
 		}
@@ -566,8 +566,8 @@ class SystemAnnouncementManager {
 			return false;
 		}
 
-        $title      = api_html_entity_decode(stripslashes($title), ENT_QUOTES, $charset);
-        $content    = api_html_entity_decode(stripslashes(str_replace(array('\r\n', '\n', '\r'),'', $content)), ENT_QUOTES, $charset);
+        $title = api_html_entity_decode(stripslashes($title), ENT_QUOTES, $charset);
+        $content = api_html_entity_decode(stripslashes(str_replace(array('\r\n', '\n', '\r'),'', $content)), ENT_QUOTES, $charset);
 
         $message_sent = false;
 

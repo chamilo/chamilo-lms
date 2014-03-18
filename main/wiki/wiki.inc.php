@@ -150,7 +150,7 @@ class Wiki
     /**
      * detect and add style to ftp links
      * @author Juan Carlos Raña Trabado
-    **/
+     **/
     public function detect_ftp_link($input)
     {
         $ftplink='href="ftp';
@@ -235,10 +235,10 @@ class Wiki
     }
 
     /**
-    * This function saves a change in a wiki page
-    * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
-    * @return language string saying that the changes are stored
-    **/
+     * This function saves a change in a wiki page
+     * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
+     * @return language string saying that the changes are stored
+     **/
     public function save_wiki($values)
     {
         $tbl_wiki = $this->tbl_wiki;
@@ -362,10 +362,10 @@ class Wiki
     }
 
     /**
-    * This function restore a wikipage
-    * @author Juan Carlos Raña <herodoto@telefonica.net>
-    * @return string Message of success (to be printed on screen)
-    **/
+     * This function restore a wikipage
+     * @author Juan Carlos Raña <herodoto@telefonica.net>
+     * @return string Message of success (to be printed on screen)
+     **/
     public function restore_wikipage($r_page_id, $r_reflink, $r_title, $r_content, $r_group_id, $r_assignment, $r_progress, $c_version, $r_version, $r_linksto)
     {
         $tbl_wiki = $this->tbl_wiki;
@@ -390,10 +390,10 @@ class Wiki
     }
 
     /**
-    * This function delete a wiki
-    * @author Juan Carlos Raña <herodoto@telefonica.net>
-    * @return   string  Message of success (to be printed)
-    **/
+     * This function delete a wiki
+     * @author Juan Carlos Raña <herodoto@telefonica.net>
+     * @return   string  Message of success (to be printed)
+     **/
     public function delete_wiki()
     {
         $tbl_wiki = $this->tbl_wiki;
@@ -426,11 +426,11 @@ class Wiki
     }
 
     /**
-    * This function saves a new wiki page.
-    * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
-    * @todo consider merging this with the function save_wiki into one single function.
-    * @return string Message of success
-    **/
+     * This function saves a new wiki page.
+     * @author Patrick Cool <patrick.cool@ugent.be>, Ghent University
+     * @todo consider merging this with the function save_wiki into one single function.
+     * @return string Message of success
+     **/
     public function save_new_wiki($values)
     {
         $tbl_wiki = $this->tbl_wiki;
@@ -452,7 +452,7 @@ class Wiki
         if ($_clean['assignment']==2 || $_clean['assignment']==1) {
             $page = str_replace(' ','_',$values['title']."_uass".$assig_user_id);
         } else {
-             $page = str_replace(' ','_',$values['title']);
+            $page = str_replace(' ','_',$values['title']);
         }
         $_clean['reflink'] = Database::escape_string(strip_tags(api_htmlentities($page)));
         $_clean['title']   = Database::escape_string(strip_tags(trim($values['title'])));
@@ -526,7 +526,7 @@ class Wiki
             $var = $_clean['reflink'];
             $group_id = Security::remove_XSS($_GET['group_id']);
             if (!self::checktitle($var)) {
-               return get_lang('WikiPageTitleExist').'<a href="index.php?action=edit&amp;title='.$var.'&group_id='.$group_id.'">'.$values['title'].'</a>';
+                return get_lang('WikiPageTitleExist').'<a href="index.php?action=edit&amp;title='.$var.'&group_id='.$group_id.'">'.$values['title'].'</a>';
             } else {
                 $dtime = date( "Y-m-d H:i:s" );
                 $sql = "INSERT INTO ".$tbl_wiki." (c_id, reflink, title, content, user_id, group_id, dtime, visibility, visibility_disc, ratinglock_disc, assignment, comment, progress, version, linksto, user_ip, session_id) VALUES
@@ -833,10 +833,10 @@ class Wiki
             echo '<a href="index.php?action=showpage&amp;actionpage='.$lock_unlock_notify_page.'&amp;title='.api_htmlentities(urlencode($page)).'">'.$notify_page.'</a>';
             echo '</span>';
 
-             //ONly available if row['id'] is set
+            //ONly available if row['id'] is set
             if ($row['id']) {
                 //page action: export to pdf
-                echo '<span style="float:right;padding-top:5px;">';
+                echo '<span style="float:right;">';
                 echo '<form name="form_export2PDF" method="get" action="'.api_get_path(WEB_CODE_PATH).'wiki/index.php?'.api_get_cidreq().'" >';
                 echo '<input type="hidden" name="action" value="export_to_pdf">';
                 echo '<input type="hidden" name="wiki_id" value="'.$row['id'].'">';
@@ -844,7 +844,7 @@ class Wiki
                 echo '</form>';
                 echo '</span>';
 
-                //page action: copy last version to doc area
+                // Page action: copy last version to doc area
                 if (api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
                     echo '<span style="float:right;">';
                     echo '<form name="form_export2DOC" method="get" action="'.api_get_path(WEB_CODE_PATH).'wiki/index.php?'.api_get_cidreq().'" >';
@@ -854,18 +854,25 @@ class Wiki
                     echo '</form>';
                     echo '</span>';
                 }
+
+                if (api_is_unoconv_installed()) {
+                    echo '<span style="float:right;">';
+                    echo '<a href="'.api_get_path(WEB_CODE_PATH).'wiki/index.php?action=export_to_doc_file&id='.$row['id'].'">'.
+                        Display::return_icon('export_doc.png', get_lang('ExportToDoc'), array(), ICON_SIZE_SMALL).'</a>';
+                    echo '</span>';
+                }
             }
 
             //export to print
             ?>
             <script>
-            function goprint() {
-                var a = window.open('','','width=800,height=600');
-                a.document.open("text/html");
-                a.document.write(document.getElementById('wikicontent').innerHTML);
-                a.document.close();
-                a.print();
-            }
+                function goprint() {
+                    var a = window.open('','','width=800,height=600');
+                    a.document.open("text/html");
+                    a.document.write(document.getElementById('wikicontent').innerHTML);
+                    a.document.close();
+                    a.print();
+                }
             </script>
             <?php
             echo '<span style="float:right; cursor: pointer;">';
@@ -884,18 +891,18 @@ class Wiki
 
             echo '</div>';
             echo '<div id="wikicontent">'. self::make_wiki_link_clickable(
-                self::detect_external_link(
-                    self::detect_anchor_link(
-                        self::detect_mail_link(
-                            self::detect_ftp_link(
-                                self::detect_irc_link(
-                                    self::detect_news_link($content)
+                    self::detect_external_link(
+                        self::detect_anchor_link(
+                            self::detect_mail_link(
+                                self::detect_ftp_link(
+                                    self::detect_irc_link(
+                                        self::detect_news_link($content)
+                                    )
                                 )
                             )
                         )
                     )
-                )
-            ).'</div>';
+                ).'</div>';
             echo '<div id="wikifooter">'.get_lang('Progress').': '.($row['progress']*10).'%&nbsp;&nbsp;&nbsp;'.get_lang('Rating').': '.$row['score'].'&nbsp;&nbsp;&nbsp;'.get_lang('Words').': '.self::word_count($content).'</div>';
         } //end filter visibility
     }
@@ -908,36 +915,36 @@ class Wiki
     public function word_count($document)
     {
         $search = array(
-        '@<script[^>]*?>.*?</script>@si',
-        '@<style[^>]*?>.*?</style>@siU',
-        '@<div id="player.[^>]*?>.*?</div>@',
-        '@<![\s\S]*?--[ \t\n\r]*>@'
+            '@<script[^>]*?>.*?</script>@si',
+            '@<style[^>]*?>.*?</style>@siU',
+            '@<div id="player.[^>]*?>.*?</div>@',
+            '@<![\s\S]*?--[ \t\n\r]*>@'
         );
 
         $document = preg_replace($search, '', $document);
 
-          # strip all html tags
-          $wc = strip_tags($document);
-          $wc = html_entity_decode($wc, ENT_NOQUOTES, 'UTF-8');// TODO:test also old html_entity_decode(utf8_encode($wc))
+        # strip all html tags
+        $wc = strip_tags($document);
+        $wc = html_entity_decode($wc, ENT_NOQUOTES, 'UTF-8');// TODO:test also old html_entity_decode(utf8_encode($wc))
 
-          # remove 'words' that don't consist of alphanumerical characters or punctuation. And fix accents and some letters
-          $pattern = "#[^(\w|\d|\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@|á|é|í|ó|ú|à|è|ì|ò|ù|ä|ë|ï|ö|ü|Á|É|Í|Ó|Ú|À|È|Ò|Ù|Ä|Ë|Ï|Ö|Ü|â|ê|î|ô|û|Â|Ê|Î|Ô|Û|ñ|Ñ|ç|Ç)]+#";
-          $wc = trim(preg_replace($pattern, " ", $wc));
+        # remove 'words' that don't consist of alphanumerical characters or punctuation. And fix accents and some letters
+        $pattern = "#[^(\w|\d|\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@|á|é|í|ó|ú|à|è|ì|ò|ù|ä|ë|ï|ö|ü|Á|É|Í|Ó|Ú|À|È|Ò|Ù|Ä|Ë|Ï|Ö|Ü|â|ê|î|ô|û|Â|Ê|Î|Ô|Û|ñ|Ñ|ç|Ç)]+#";
+        $wc = trim(preg_replace($pattern, " ", $wc));
 
-          # remove one-letter 'words' that consist only of punctuation
-          $wc = trim(preg_replace("#\s*[(\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]\s*#", " ", $wc));
+        # remove one-letter 'words' that consist only of punctuation
+        $wc = trim(preg_replace("#\s*[(\'|\"|\.|\!|\?|;|,|\\|\/|\-|:|\&|@)]\s*#", " ", $wc));
 
-          # remove superfluous whitespace
-          $wc = preg_replace("/\s\s+/", " ", $wc);
+        # remove superfluous whitespace
+        $wc = preg_replace("/\s\s+/", " ", $wc);
 
-          # split string into an array of words
-          $wc = explode(" ", $wc);
+        # split string into an array of words
+        $wc = explode(" ", $wc);
 
-          # remove empty elements
-          $wc = array_filter($wc);
+        # remove empty elements
+        $wc = array_filter($wc);
 
-          # return the number of words
-          return count($wc);
+        # return the number of words
+        return count($wc);
     }
 
     /**
@@ -1145,7 +1152,7 @@ class Wiki
                     WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session;
             Database::query($sql);
 
-           //Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
+            //Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
             $sql = 'SELECT * FROM '.$tbl_wiki.'
                     WHERE
                         c_id = '.$course_id.' AND
@@ -1155,10 +1162,10 @@ class Wiki
             $result=Database::query($sql);
             $row=Database::fetch_array($result);
         }
-         return $row['visibility_disc'];
+        return $row['visibility_disc'];
     }
 
-     /**
+    /**
      * Lock add discussion
      * @author Juan Carlos Raña <herodoto@telefonica.net>
      * @return int current database status of lock dicuss and change if get action
@@ -1192,7 +1199,7 @@ class Wiki
                   WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session;
             Database::query($sql);
 
-              //Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
+            //Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
             $sql = 'SELECT * FROM '.$tbl_wiki.'
                     WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.'
                     ORDER BY id ASC';
@@ -1236,7 +1243,7 @@ class Wiki
                  WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session; //Visibility. Value to all,not only for the first
             Database::query($sql);
 
-              //Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
+            //Although the value now is assigned to all (not only the first), these three lines remain necessary. They do that by changing the page state is made when you press the button and not have to wait to change his page
             $sql='SELECT * FROM '.$tbl_wiki.'
                   WHERE c_id = '.$course_id.' AND reflink="'.Database::escape_string($page).'" AND '.$groupfilter.$condition_session.' ORDER BY id ASC';
             $result=Database::query($sql);
@@ -1618,7 +1625,7 @@ class Wiki
         $css = str_replace('../../img/', $root_rel.'main/img/', $css);
 
         $asciimathmal_script = (api_contains_asciimathml($wikiContents) || api_contains_asciisvg($wikiContents))
-           ? '<script src="'.api_get_path(TO_REL, SCRIPT_ASCIIMATHML).'" type="text/javascript"></script>'."\n" : '';
+            ? '<script src="'.api_get_path(TO_REL, SCRIPT_ASCIIMATHML).'" type="text/javascript"></script>'."\n" : '';
 
         $template = str_replace(array('{LANGUAGE}', '{ENCODING}', '{TEXT_DIRECTION}', '{TITLE}', '{CSS}', '{ASCIIMATHML_SCRIPT}'),
             array(api_get_language_isocode(), api_get_system_encoding(), api_get_text_direction(), $wikiTitle, $css, $asciimathmal_script),
@@ -1720,7 +1727,7 @@ class Wiki
     {
         if (isset($_SESSION['wpost_id'])) {
             if ($wpost_id == $_SESSION['wpost_id']) {
-                 return false;
+                return false;
             } else {
                 $_SESSION['wpost_id'] = $wpost_id;
                 return true;
@@ -1744,7 +1751,7 @@ class Wiki
         $groupId = api_get_group_id();
 
         if ($groupId==0) {
-              //extract course members
+            //extract course members
             if(!empty($session_id)) {
                 $a_users_to_add = CourseManager::get_user_list_from_course_code(api_get_course_id(), $session_id);
             } else {
@@ -1785,7 +1792,7 @@ class Wiki
         $link2teacher = $values['title'] = $title_orig."_uass".api_get_user_id();
 
         //first: teacher name, photo, and assignment description (original content)
-       // $content_orig_A='<div align="center" style="background-color: #F5F8FB;  border:double">'.$photo.'<br />'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'<br />('.get_lang('Teacher').')</div><br/><div>';
+        // $content_orig_A='<div align="center" style="background-color: #F5F8FB;  border:double">'.$photo.'<br />'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'<br />('.get_lang('Teacher').')</div><br/><div>';
         $content_orig_A='<div align="center" style="background-color: #F5F8FB; border:solid; border-color: #E6E6E6">
         <table border="0">
             <tr><td style="font-size:24px">'.get_lang('AssignmentDesc').'</td></tr>
@@ -1827,16 +1834,16 @@ class Wiki
                     <tr><td style="font-size:24px">'.get_lang('AssignmentWork').'</td></tr>
                     <tr><td>'.$photo.'<br />'.$name.'</td></tr></table>
                     </div>[['.$link2teacher.' | '.get_lang('AssignmentLinktoTeacherPage').']] ';
-                     //If $content_orig_B is added here, the task written by the professor was copied to the page of each student. TODO: config options
+                    //If $content_orig_B is added here, the task written by the professor was copied to the page of each student. TODO: config options
 
                     // AssignmentLinktoTeacherPage
-                     $all_students_pages[] = '<li>'.
-                     Display::tag(
-                         'span',
-                         strtoupper($o_user_to_add['lastname']).', '.$o_user_to_add['firstname'], array('title'=>$username)
-                     ).
-                     ' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>';
-                     //don't change this line without guaranteeing that users will be ordered by last names in the following format (surname, name)
+                    $all_students_pages[] = '<li>'.
+                        Display::tag(
+                            'span',
+                            strtoupper($o_user_to_add['lastname']).', '.$o_user_to_add['firstname'], array('title'=>$username)
+                        ).
+                        ' [['.$_POST['title']."_uass".$assig_user_id.' | '.$photo.']] '.$status_in_group.'</li>';
+                    //don't change this line without guaranteeing that users will be ordered by last names in the following format (surname, name)
                     $values['assignment']=2;
                 }
                 $this->assig_user_id = $assig_user_id;
@@ -1853,7 +1860,7 @@ class Wiki
                     sort($all_students_pages);
                     $values['content']=$content_orig_A.$content_orig_B.'<br/><div align="center" style="font-size:18px; background-color: #F5F8FB; border:solid; border-color:#E6E6E6">'.get_lang('AssignmentLinkstoStudentsPage').'</div><br/><div style="background-color: #F5F8FB; border:solid; border-color:#E6E6E6"><ol>'.implode($all_students_pages).'</ol></div><br/>';
                     $values['assignment']=1;
-                 }
+                }
                 $this->assig_user_id = $assig_user_id;
                 self::save_new_wiki($values);
             }
@@ -1888,12 +1895,12 @@ class Wiki
                 }
             } else {
                 if ($search_content=='1') {
-                   $sql = "SELECT * FROM ".$tbl_wiki." s1
+                    $sql = "SELECT * FROM ".$tbl_wiki." s1
                             WHERE s1.c_id = $course_id AND title LIKE '%".Database::escape_string($search_term)."%' OR content LIKE '%".Database::escape_string($search_term)."%' AND
                             id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s2.c_id = $course_id AND s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";// warning don't use group by reflink because don't return the last version
                 }
                 else {
-                   $sql = " SELECT * FROM ".$tbl_wiki." s1
+                    $sql = " SELECT * FROM ".$tbl_wiki." s1
                             WHERE s1.c_id = $course_id AND title LIKE '%".Database::escape_string($search_term)."%' AND
                             id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s2.c_id = $course_id AND s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";// warning don't use group by reflink because don't return the last version
                 }
@@ -1909,11 +1916,11 @@ class Wiki
                 }
             } else {
                 if($search_content=='1') {
-                   $sql = " SELECT * FROM ".$tbl_wiki." s1
+                    $sql = " SELECT * FROM ".$tbl_wiki." s1
                             WHERE s1.c_id = $course_id AND visibility=1 AND title LIKE '%".Database::escape_string($search_term)."%' OR content LIKE '%".Database::escape_string($search_term)."%' AND
                             id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s2.c_id = $course_id AND  s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";// warning don't use group by reflink because don't return the last version
-            } else {
-                   $sql = " SELECT * FROM ".$tbl_wiki." s1
+                } else {
+                    $sql = " SELECT * FROM ".$tbl_wiki." s1
                             WHERE s1.c_id = $course_id AND visibility=1 AND title LIKE '%".Database::escape_string($search_term)."%' AND
                             id=(SELECT MAX(s2.id) FROM ".$tbl_wiki." s2 WHERE s2.c_id = $course_id AND s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";// warning don't use group by reflink because don't return the last version
                 }
@@ -2058,8 +2065,8 @@ class Wiki
     }
 
     /**
-    * Converts 1-9 to 01-09
-    */
+     * Converts 1-9 to 01-09
+     */
     public function two_digits($number)
     {
         $number = (int)$number;
@@ -2471,7 +2478,7 @@ class Wiki
         $sql = 'SELECT  * FROM  '.$tbl_wiki.' s1
                 WHERE s1.c_id = '.$course_id.' AND assignment=1 AND id=(SELECT MAX(s2.id)
                 FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
-                //mark all versions, but do not use group by reflink because y want the pages not versions
+        //mark all versions, but do not use group by reflink because y want the pages not versions
         $allpages=Database::query($sql);
         while ($row = Database::fetch_array($allpages)) {
             $total_teacher_assignment=$total_teacher_assignment+1;
@@ -2483,7 +2490,7 @@ class Wiki
         $sql = 'SELECT  * FROM  '.$tbl_wiki.' s1
                 WHERE s1.c_id = '.$course_id.' AND assignment=2 AND
                 id=(SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2 WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
-                //mark all versions, but do not use group by reflink because y want the pages not versions
+        //mark all versions, but do not use group by reflink because y want the pages not versions
         $allpages=Database::query($sql);
         while ($row=Database::fetch_array($allpages)) {
             $total_student_assignment = $total_student_assignment+1;
@@ -2915,46 +2922,46 @@ class Wiki
                 echo '</div>';
 
                 if ($row['addlock_disc']==1 || api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
-                //show comments but students can't add theirs
-                ?>
+                    //show comments but students can't add theirs
+                    ?>
                     <form name="form1" method="post" action="">
-                    <table>
-                        <tr>
-                            <td valign="top" ><?php echo get_lang('Comments');?>:</td>
-                            <?php  echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">';//prevent double post ?>
-                            <td><textarea name="comment" cols="80" rows="5" id="comment"></textarea></td>
-                        </tr>
-                        <tr>
-                            <?php
-                            //check if rating is allowed
-                            if ($row['ratinglock_disc']==1 || api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+                        <table>
+                            <tr>
+                                <td valign="top" ><?php echo get_lang('Comments');?>:</td>
+                                <?php  echo '<input type="hidden" name="wpost_id" value="'.md5(uniqid(rand(), true)).'">';//prevent double post ?>
+                                <td><textarea name="comment" cols="80" rows="5" id="comment"></textarea></td>
+                            </tr>
+                            <tr>
+                                <?php
+                                //check if rating is allowed
+                                if ($row['ratinglock_disc']==1 || api_is_allowed_to_edit(false,true) || api_is_platform_admin()) {
+                                    ?>
+                                    <td><?php echo get_lang('Rating');?>: </td>
+                                    <td valign="top"><select name="rating" id="rating">
+                                            <option value="-" selected>-</option>
+                                            <option value="0">0</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                        </select></td>
+                                <?php
+                                } else {
+                                    echo '<input type=hidden name="rating" value="-">';// must pass a default value to avoid rate automatically
+                                }
                                 ?>
-                                <td><?php echo get_lang('Rating');?>: </td>
-                                <td valign="top"><select name="rating" id="rating">
-                                        <option value="-" selected>-</option>
-                                        <option value="0">0</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                        <option value="5">5</option>
-                                        <option value="6">6</option>
-                                        <option value="7">7</option>
-                                        <option value="8">8</option>
-                                        <option value="9">9</option>
-                                        <option value="10">10</option>
-                                    </select></td>
-                            <?php
-                            } else {
-                                echo '<input type=hidden name="rating" value="-">';// must pass a default value to avoid rate automatically
-                            }
-                            ?>
-                        </tr>
-                        <tr>
-                            <td>&nbsp;</td>
-                            <td> <?php  echo '<button class="save" type="submit" name="Submit"> '.get_lang('Send').'</button>'; ?></td>
-                        </tr>
-                    </table>
+                            </tr>
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td> <?php  echo '<button class="save" type="submit" name="Submit"> '.get_lang('Send').'</button>'; ?></td>
+                            </tr>
+                        </table>
                     </form>
 
                     <?php
@@ -3073,8 +3080,8 @@ class Wiki
                     echo '<td style=" color:#999999"><a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?uInfo='.$userinfo['user_id'].'">'.
                         Display::tag('span', api_htmlentities($userinfo['complete_name'])).
                         '</a> ('.$author_status.') '.
-                            api_get_local_time($row['dtime'], null, date_default_timezone_get()).
-                            ' - '.get_lang('Rating').': '.$row['p_score'].' '.$imagerating.' </td>';
+                        api_get_local_time($row['dtime'], null, date_default_timezone_get()).
+                        ' - '.get_lang('Rating').': '.$row['p_score'].' '.$imagerating.' </td>';
                     echo '</tr>';
                     echo '<tr>';
                     echo '<td>'.api_htmlentities($row['comment']).'</td>';
@@ -3108,14 +3115,14 @@ class Wiki
         		    WHERE s1.c_id = '.$course_id.' AND id=(
                     SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2
                     WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
-                     // warning don't use group by reflink because does not return the last version
+            // warning don't use group by reflink because does not return the last version
 
         } else {
             $sql = 'SELECT  *  FROM   '.$tbl_wiki.' s1
 				    WHERE visibility=1 AND s1.c_id = '.$course_id.' AND id=(
                         SELECT MAX(s2.id) FROM '.$tbl_wiki.' s2
                         WHERE s2.c_id = '.$course_id.' AND s1.reflink = s2.reflink AND '.$groupfilter.' AND session_id='.$session_id.')';
-                    // warning don't use group by reflink because does not return the last version
+            // warning don't use group by reflink because does not return the last version
         }
 
         $allpages = Database::query($sql);
@@ -3349,13 +3356,13 @@ class Wiki
                         WHERE s1.c_id = $course_id AND linksto LIKE '%".Database::escape_string($page)." %' AND id=(
                         SELECT MAX(s2.id) FROM ".$tbl_wiki." s2
                         WHERE s2.c_id = $course_id AND s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";
-                        //add blank space after like '%" " %' to identify each word
+                //add blank space after like '%" " %' to identify each word
             } else {
                 $sql = "SELECT * FROM ".$tbl_wiki." s1
                         WHERE s1.c_id = $course_id AND visibility=1 AND linksto LIKE '%".Database::escape_string($page)." %' AND id=(
                         SELECT MAX(s2.id) FROM ".$tbl_wiki." s2
                         WHERE s2.c_id = $course_id AND s1.reflink = s2.reflink AND ".$groupfilter.$condition_session.")";
-                        //add blank space after like '%" " %' to identify each word
+                //add blank space after like '%" " %' to identify each word
             }
 
             $allpages=Database::query($sql);
@@ -3628,8 +3635,8 @@ class Wiki
 
         //Only teachers and platform admin can edit the index page. Only teachers and platform admin can edit an assignment teacher
         if (($current_row['reflink']=='index' ||
-            $current_row['reflink']=='' ||
-            $current_row['assignment'] == 1
+                $current_row['reflink']=='' ||
+                $current_row['assignment'] == 1
             ) &&
             (!api_is_allowed_to_edit(false,true) && $this->group_id == 0)
         ) {
@@ -3689,22 +3696,22 @@ class Wiki
                         self::setMessage(Display::display_normal_message($is_being_edited, false, true));
                     } else {
                         self::setMessage(Display::display_confirmation_message(
-                            self::restore_wikipage(
-                                $current_row['page_id'],
-                                $current_row['reflink'],
-                                api_htmlentities($current_row['title']),
-                                api_htmlentities($current_row['content']),
-                                $current_row['group_id'],
-                                $current_row['assignment'],
-                                $current_row['progress'],
-                                $current_row['version'],
-                                $last_row['version'],
-                                $current_row['linksto']
-                            ).': <a href="index.php?cidReq='.$_course['code'].'&action=showpage&amp;title='.api_htmlentities(urlencode($last_row['reflink'])).'&session_id='.$last_row['session_id'].'&group_id='.$last_row['group_id'].'">'.
-                            api_htmlentities($last_row['title']).'</a>',
-                            false,
-                            true
-                        ));
+                                self::restore_wikipage(
+                                    $current_row['page_id'],
+                                    $current_row['reflink'],
+                                    api_htmlentities($current_row['title']),
+                                    api_htmlentities($current_row['content']),
+                                    $current_row['group_id'],
+                                    $current_row['assignment'],
+                                    $current_row['progress'],
+                                    $current_row['version'],
+                                    $last_row['version'],
+                                    $current_row['linksto']
+                                ).': <a href="index.php?cidReq='.$_course['code'].'&action=showpage&amp;title='.api_htmlentities(urlencode($last_row['reflink'])).'&session_id='.$last_row['session_id'].'&group_id='.$last_row['group_id'].'">'.
+                                api_htmlentities($last_row['title']).'</a>',
+                                false,
+                                true
+                            ));
                     }
                 }
             }
@@ -4092,7 +4099,7 @@ class Wiki
         echo '<ul class="nav" style="margin-bottom:0px">
                 <li class="dropdown">
                 <a class="dropdown-toggle" href="javascript:void(0)">'.Display::return_icon('menu.png', get_lang('Menu'), '', ICON_SIZE_MEDIUM).'</a>';
-    // menu home
+        // menu home
         echo '<ul class="dropdown-menu">';
         echo '<li><a href="index.php?action=showpage&title=index&cidReq='.$_course['id'].'&session_id='.$session_id.'&group_id='.$groupId.'">'.get_lang('Home').'</a></li>';
         if (api_is_allowed_to_session_edit(false,true)) {
@@ -4841,6 +4848,10 @@ class Wiki
                 //self::setMessage(Display::display_confirmation_message(get_lang('CommentAdded'));
                 self::getDiscuss($page);
                 break;
+            case 'export_to_doc_file':
+                self::exportTo($_GET['id'], 'odt');
+                exit;
+                break;
         }
     }
 
@@ -4885,6 +4896,26 @@ class Wiki
         $redirectUrl = $this->url.'&action=showpage&title=index';
         header('Location: '.$redirectUrl);
         exit;
+    }
+
+    /**
+     * Export wiki content in a odf
+     * @param int $id
+     * @param string int
+     * @return bool
+     */
+    public function exportTo($id, $format = 'doc')
+    {
+        $data = self::get_wiki_data($id);
+        if (!empty($data['content'])) {
+            global $app;
+            $content = $app['chamilo.filesystem']->convertRelativeToAbsoluteUrl($data['content']);
+            $filePath = $app['chamilo.filesystem']->putContentInTempFile($content, $data['reflink'], 'html');
+            $convertedFile = $app['chamilo.filesystem']->transcode($filePath, $format);
+
+            DocumentManager::file_send_for_download($convertedFile);
+        }
+        return false;
     }
 }
 

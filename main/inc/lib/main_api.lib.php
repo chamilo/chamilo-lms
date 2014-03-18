@@ -7055,3 +7055,9 @@ function api_get_protocol()
 function convert_double_quote_to_single($in_text) {
     return api_preg_replace('/"/', "''", $in_text);
 }
+
+
+function api_is_unoconv_installed()
+{
+    return false;
+}

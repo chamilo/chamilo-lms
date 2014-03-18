@@ -45,12 +45,21 @@ $this_section = SECTION_COURSES;
 /* 	ACCESS RIGHTS  */
 api_protect_course_script(true);
 
-if ($debug){ error_log('Entering exercise_result.php: '.print_r($_POST,1));}
+if ($debug) {
+    error_log('Entering exercise_result.php: '.print_r($_POST, 1));
+}
 
 // general parameters passed via POST/GET
-if ( empty ( $origin ) ) {                  $origin                 = Security::remove_XSS($_REQUEST['origin']);}
-if ( empty ( $objExercise ) ) {             $objExercise            = $_SESSION['objExercise'];}
-if ( empty ( $remind_list ) ) {             $remind_list            = $_REQUEST['remind_list'];}
+// general parameters passed via POST/GET
+if (empty($origin)) {
+    $origin = Security::remove_XSS($_REQUEST['origin']);
+}
+if (empty($objExercise)) {
+    $objExercise = $_SESSION['objExercise'];
+}
+if (empty($remind_list)) {
+    $remind_list = isset($_REQUEST['remind_list']) ? $_REQUEST['remind_list'] : null;
+}
 
 $exe_id = isset($_REQUEST['exe_id']) ? intval($_REQUEST['exe_id']) : 0;
 

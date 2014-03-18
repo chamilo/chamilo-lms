@@ -290,23 +290,33 @@ if ($is_allowedToEdit) {
 
     if (!empty($hpchoice)) {
         switch ($hpchoice) {
-            case 'delete' : // deletes an exercise
+            case 'delete' :
+                // deletes an exercise
                 $imgparams = array();
                 $imgcount = 0;
                 GetImgParams($file, $documentPath, $imgparams, $imgcount);
                 $fld = GetFolderName($file);
+
                 for ($i = 0; $i < $imgcount; $i++) {
                     my_delete($documentPath.$uploadPath."/".$fld."/".$imgparams[$i]);
                     update_db_info("delete", $uploadPath."/".$fld."/".$imgparams[$i]);
                 }
 
-                if (my_delete($documentPath.$file)) {
+                if (!is_dir($documentPath.$uploadPath."/".$fld."/")) {
+                    my_delete($documentPath.$file);
                     update_db_info("delete", $file);
+                } else {
+                    if (my_delete($documentPath.$file)) {
+                        update_db_info("delete", $file);
+                    }
                 }
+
                 // hotpotatoes folder may contains several tests so don't delete folder if not empty : http://support.chamilo.org/issues/2165
+
                 if (!(strstr($uploadPath, DIR_HOTPOTATOES) && !folder_is_empty($documentPath.$uploadPath."/".$fld."/"))) {
                     my_delete($documentPath.$uploadPath."/".$fld."/");
-                } break;
+                }
+                break;
             case 'enable' : // enables an exercise
                 $newVisibilityStatus = "1"; //"visible"
                 $query = "SELECT id FROM $TBL_DOCUMENT WHERE c_id = $course_id AND path='".Database :: escape_string($file)."'";

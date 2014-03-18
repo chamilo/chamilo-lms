@@ -342,8 +342,13 @@ class Display
      * @param bool	Filter (true) or not (false)
      * @return void
      */
-    public static function display_normal_message($message, $filter = true) {
-    	echo self::return_message($message, 'normal', $filter);
+    public static function display_normal_message($message, $filter = true, $returnValue = false) {
+    	$message = self::return_message($message, 'normal', $filter);
+        if ($returnValue) {
+            return $message;
+        } else {
+            echo $message;
+        }
     }
 
     /**
@@ -351,8 +356,14 @@ class Display
      * This can also be used for instance with the hint in the exercises
      *
      */
-    public static function display_warning_message($message, $filter = true) {
-    	echo self::return_message($message, 'warning', $filter);
+    public static function display_warning_message($message, $filter = true, $returnValue = false)
+    {
+        $message = self::return_message($message, 'warning', $filter);
+        if ($returnValue) {
+            return $message;
+        } else {
+            echo $message;
+        }
     }
 
     /**
@@ -360,8 +371,14 @@ class Display
      * @param bool	Filter (true) or not (false)
      * @return void
      */
-    public static function display_confirmation_message ($message, $filter = true) {
-        echo self::return_message($message, 'confirm', $filter);
+    public static function display_confirmation_message ($message, $filter = true, $returnValue = false)
+    {
+        $message = self::return_message($message, 'confirm', $filter);
+        if ($returnValue) {
+            return $message;
+        } else {
+            echo $message;
+        }
     }
 
     /**
@@ -371,11 +388,23 @@ class Display
      * @param bool	Filter (true) or not (false)
      * @return void
      */
-    public static function display_error_message ($message, $filter = true) {
-        echo self::return_message($message, 'error', $filter);
+    public static function display_error_message ($message, $filter = true, $returnValue = false)
+    {
+        $message = self::return_message($message, 'error', $filter);
+        if ($returnValue) {
+            return $message;
+        } else {
+            echo $message;
+        }
     }
 
-    public static function return_message_and_translate($message, $type='normal', $filter = true) {
+    /**
+     * @param string $message
+     * @param string $type
+     * @param bool $filter
+     */
+    public static function return_message_and_translate($message, $type='normal', $filter = true)
+    {
         $message = get_lang($message);
         echo self::return_message($message, $type, $filter);
     }
@@ -387,11 +416,13 @@ class Display
      * @param   bool    Whether to XSS-filter or not
      * @return  string  Message wrapped into an HTML div
      */
-    public static function return_message($message, $type='normal', $filter = true) {
+    public static function return_message($message, $type='normal', $filter = true)
+    {
         if ($filter) {
         	$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
             //$message = Security::remove_XSS($message);
         }
+
         $class = "";
         switch($type) {
             case 'warning':
@@ -420,7 +451,8 @@ class Display
      * @param string  optional, class from stylesheet
      * @return string encrypted mailto hyperlink
      */
-    public static function encrypted_mailto_link ($email, $clickable_text = null, $style_class = '') {
+    public static function encrypted_mailto_link ($email, $clickable_text = null, $style_class = '')
+    {
         if (is_null($clickable_text)) {
             $clickable_text = $email;
         }

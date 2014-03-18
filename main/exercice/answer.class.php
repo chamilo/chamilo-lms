@@ -99,35 +99,39 @@ class Answer
     }
 
     /**
-     * Reads answer informations from the data base
+     * Reads answer information from the database
      *
      * @author - Olivier Brouckaert
      */
-    function read() {
+    public function read()
+    {
         $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
         $questionId = $this->questionId;
 
-        $sql="SELECT id, id_auto, answer,correct,comment,ponderation, position, hotspot_coordinates, hotspot_type, destination  FROM
-              $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id ='".$questionId."' ORDER BY position";
+        $sql = "SELECT * FROM $TBL_ANSWER
+                WHERE
+                    c_id = {$this->course_id} AND
+                    question_id ='".$questionId."'
+                ORDER BY position";
 
         $result = Database::query($sql);
         $i=1;
 
 		// while a record is found
-		while ($object=Database::fetch_object($result)) {
-			$this->id[$i]					= $object->id;
-			$this->answer[$i]				= $object->answer;
-			$this->correct[$i]				= $object->correct;
-			$this->comment[$i]				= $object->comment;
-			$this->weighting[$i]			= $object->ponderation;
-			$this->position[$i]				= $object->position;
-			$this->hotspot_coordinates[$i]	= $object->hotspot_coordinates;
-			$this->hotspot_type[$i]			= $object->hotspot_type;
-			$this->destination[$i]			= $object->destination;
-			$this->autoId[$i]				= $object->id_auto;
+		while ($object = Database::fetch_object($result)) {
+			$this->id[$i] = $object->id;
+			$this->answer[$i] = $object->answer;
+			$this->correct[$i] = $object->correct;
+			$this->comment[$i] = $object->comment;
+			$this->weighting[$i] = $object->ponderation;
+			$this->position[$i] = $object->position;
+			$this->hotspot_coordinates[$i] = $object->hotspot_coordinates;
+			$this->hotspot_type[$i] = $object->hotspot_type;
+			$this->destination[$i] = $object->destination;
+			$this->autoId[$i] = $object->id_auto;
 			$i++;
 		}
-		$this->nbrAnswers=$i-1;
+		$this->nbrAnswers = $i-1;
 	}
 
      /**
@@ -136,27 +140,27 @@ class Answer
      * @author - Yoselyn Castillo
      * @return - array - $id (answer ids)
      */
-    function selectAnswerId()
+    public function selectAnswerId()
     {
-		    $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
-		    $questionId = $this->questionId;
+        $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $questionId = $this->questionId;
 
-		    $sql="SELECT id FROM
-		          $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id ='".$questionId."'";
+        $sql="SELECT id FROM
+              $TBL_ANSWER WHERE c_id = {$this->course_id} AND question_id ='".$questionId."'";
 
-		    $result = Database::query($sql);
-		    $id = array();
-		    // while a record is found
+        $result = Database::query($sql);
+        $id = array();
+        // while a record is found
         if (Database::num_rows($result) > 0) {
             while ($object = Database::fetch_array($result)) {
-    			      $id[] = $object['id'];
-    		    }
+                  $id[] = $object['id'];
+            }
         }
-		    return $id;
+        return $id;
 	}
 
     /**
-     * reads answer informations from the data base ordered by parameter
+     * Reads answer information from the data base ordered by parameter
      * @param	string	Field we want to order by
      * @param	string	DESC or ASC
      * @author 	Frederic Vauthier
@@ -185,10 +189,10 @@ class Answer
                "ORDER BY $field $order";
 		$result=Database::query($sql);
 
-		$i=1;
+		$i = 1;
 		// while a record is found
 		$doubt_data = null;
-		while($object=Database::fetch_object($result)) {
+		while($object = Database::fetch_object($result)) {
 		    if ($question_type['type'] == UNIQUE_ANSWER_NO_OPTION && $object->position == 666) {
 		        $doubt_data = $object;
                 continue;

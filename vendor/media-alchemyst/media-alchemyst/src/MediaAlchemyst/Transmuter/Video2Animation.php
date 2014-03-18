@@ -20,10 +20,11 @@ use MediaAlchemyst\Exception\SpecNotSupportedException;
 use MediaAlchemyst\Exception\RuntimeException;
 use MediaVorus\Media\MediaInterface;
 use FFMpeg\Coordinate\TimeCode;
+use MediaVorus\Media\Video as MediaVorusVideo;
 
 class Video2Animation extends AbstractTransmuter
 {
-    public static $autorotate = false;
+    public static $autorotate = true;
     public static $lookForEmbeddedPreview = false;
 
     public function execute(SpecificationInterface $spec, MediaInterface $source, $dest)
@@ -53,17 +54,44 @@ class Video2Animation extends AbstractTransmuter
                 $time += $pas;
             }
 
+            if (true === static::$autorotate && method_exists($source, 'getOrientation')) {
+                switch ($source->getOrientation()) {
+                    case MediaVorusVideo::ORIENTATION_90:
+                        $rotate = 90;
+                        break;
+                    case MediaVorusVideo::ORIENTATION_270:
+                        $rotate = -90;
+                        break;
+                    case MediaVorusVideo::ORIENTATION_180:
+                        $rotate = 180;
+                        break;
+                    default:
+                        $rotate = 0;
+                        break;
+                }
+            }
+
             foreach ($files as $file) {
                 $image = $this->container['imagine']->open($file);
 
-                if ($spec->getWidth() && $spec->getHeight()) {
-                    $box = $this->boxFromSize($spec, $image->getSize()->getWidth(), $image->getSize()->getHeight());
+                if (0 !== $rotate) {
+                    $image->rotate($rotate);
+                }
 
-                    if ($spec->getResizeMode() == Animation::RESIZE_MODE_OUTBOUND) {
-                        /* @var $image \Imagine\Gmagick\Image */
-                        $image = $image->thumbnail($box, ImageInterface::THUMBNAIL_OUTBOUND);
+                if ($spec->getWidth() && $spec->getHeight()) {
+                    if (0 !== $rotate / 90 % 2) {
+                        $box = $this->boxFromSize($spec, $image->getSize()->getHeight(), $image->getSize()->getWidth());
                     } else {
-                        $image = $image->resize($box);
+                        $box = $this->boxFromSize($spec, $image->getSize()->getWidth(), $image->getSize()->getHeight());
+                    }
+
+                    if (null !== $box) {
+                        if ($spec->getResizeMode() == Animation::RESIZE_MODE_OUTBOUND) {
+                            /* @var $image \Imagine\Gmagick\Image */
+                            $image = $image->thumbnail($box, ImageInterface::THUMBNAIL_OUTBOUND);
+                        } else {
+                            $image = $image->resize($box);
+                        }
                     }
                 }
 

@@ -6985,7 +6985,7 @@ function api_is_allowed_in_course()
 function api_is_unoconv_installed()
 {
     global $_configuration;
-    if (isset($_configuration['unoconv.binaries']) && !empty($_configuration['unoconv.binaries'])) {
+    if (isset($_configuration['services']['unoconv']['unoconv.binaries'])) {
         return true;
     }
     return false;

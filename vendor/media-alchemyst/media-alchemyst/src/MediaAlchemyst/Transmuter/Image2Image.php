@@ -26,7 +26,7 @@ use Pimple;
 
 class Image2Image extends AbstractTransmuter
 {
-    public static $autorotate = false;
+    public static $autorotate = true;
     public static $lookForEmbeddedPreview = false;
 
     private $palette;
@@ -107,16 +107,18 @@ class Image2Image extends AbstractTransmuter
             if ($spec->getWidth() && $spec->getHeight()) {
                 $box = $this->boxFromSize($spec, $image->getSize()->getWidth(), $image->getSize()->getHeight());
 
-                if ($spec->getResizeMode() == Image::RESIZE_MODE_OUTBOUND) {
-                    /* @var $image \Imagine\Gmagick\Image */
-                    $image = $image->thumbnail($box, ImageInterface::THUMBNAIL_OUTBOUND);
-                } else {
-                    $image = $image->resize($box);
+                if (null !== $box) {
+                    if ($spec->getResizeMode() == Image::RESIZE_MODE_OUTBOUND) {
+                        /* @var $image \Imagine\Gmagick\Image */
+                        $image = $image->thumbnail($box, ImageInterface::THUMBNAIL_OUTBOUND);
+                    } else {
+                        $image = $image->resize($box);
+                    }
                 }
             }
 
-            if (static::$autorotate) {
-                $image = $image->rotate(- $source->getOrientation());
+            if (static::$autorotate && null === $spec->getRotationAngle()) {
+                $image = $image->rotate($source->getOrientation());
             } elseif (null !== $angle = $spec->getRotationAngle()) {
                 $image = $image->rotate($angle);
             }

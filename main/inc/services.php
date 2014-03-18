@@ -34,6 +34,10 @@ $app->register(new Flint\Provider\RoutingServiceProvider(), array(
 ));
 
 if (isset($app['configuration']['services']['media-alchemyst'])) {
+    $unoconv = null;
+    if (isset($app['configuration']['services']['unoconv']['unoconv.binaries'])) {
+        $unoconv = $app['configuration']['services']['unoconv']['unoconv.binaries'];
+    }
     $app->register(new MediaAlchemystServiceProvider());
     $app->register(new PHPExiftoolServiceProvider());
     $app->register(new FFMpegServiceProvider());
@@ -53,7 +57,7 @@ if (isset($app['configuration']['services']['media-alchemyst'])) {
             'swftools.pdf2swf.binaries'    => '/path/to/custom/pdf2swf',
             'swftools.swfrender.binaries'  => '/path/to/custom/swfrender',
             'swftools.swfextract.binaries' => '/path/to/custom/swfextract',
-            'unoconv.binaries'             => $app['configuration']['services']['media-alchemyst']['unoconv_path'],
+            'unoconv.binaries'             => $unoconv,
             'unoconv.timeout'              => 60,
             //'exiftool.reader'              => '/path/to/custom/exiftool.reader',
             //'exiftool.writer'              => '/path/to/custom/exiftool.writer'
@@ -695,15 +699,13 @@ class ChamiloServiceProvider implements ServiceProviderInterface
             return null;
         });
 
-
-
         // Chamilo data filesystem.
         $app['chamilo.filesystem'] = $app->share(function () use ($app) {
             $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem(
                 $app['paths'],
                 $app['filesystem'],
                 $app['editor_connector'],
-                $app['unoconv']
+                $app['media-alchemyst']
             );
             return $filesystem;
         });
@@ -916,10 +918,10 @@ $app['introduction.controller'] = $app->share(
     }
 );
 
-if (isset($app['configuration']['unoconv.binaries'])) {
+/*if (isset($app['configuration']['unoconv.binaries'])) {
     $app->register(new Unoconv\UnoconvServiceProvider(), array(
         'unoconv.configuration' => array(
-            'unoconv.binaries' => $app['configuration']['unoconv.binaries'],
+            'unoconv.binaries' => $_configuration['services']['unoconv']['unoconv.binaries'],
             'timeout'          => 42,
         ),
         'unoconv.logger'  => $app->share(function () use ($app) {
@@ -927,7 +929,7 @@ if (isset($app['configuration']['unoconv.binaries'])) {
         }),
     ));
 }
-
+*/
 
 /*
 $app->register(

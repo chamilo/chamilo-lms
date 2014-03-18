@@ -1,6 +1,28 @@
 CHANGELOG
 ---------
 
+* 0.4.4 (01-31-2014)
+
+  * Avoid interpolation for image and videos.
+
+* 0.4.3 (12-03-2013)
+
+  * Fix autorotation and spec rotation conflict.
+
+* 0.4.2 (12-02-2013)
+
+  * Remove debug.
+
+* 0.4.1 (12-02-2013)
+
+  * Fix video to animation auto-rotation.
+
+* 0.4.0 (12-02-2013)
+
+  * Fix image auto-rotation.
+  * Add video auto-rotation.
+  * BC Break : PHP-FFmpeg 0.4 is required
+
 * 0.3.6 (10-21-2013)
 
   * Add compatibility with PHP-FFMpeg 0.4.

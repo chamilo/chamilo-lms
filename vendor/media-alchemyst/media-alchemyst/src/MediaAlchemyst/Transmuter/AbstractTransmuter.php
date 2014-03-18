@@ -57,6 +57,10 @@ abstract class AbstractTransmuter
             throw new InvalidArgumentException('The specification you provide must have width nad height');
         }
 
+        if ($spec->getWidth() >= $width && $spec->getHeight() >= $height) {
+            return null;
+        }
+
         if ($spec->getResizeMode() == Image::RESIZE_MODE_INBOUND_FIXEDRATIO) {
 
             $ratioOut = $spec->getWidth() / $spec->getHeight();

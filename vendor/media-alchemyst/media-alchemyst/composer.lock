@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "6b92045e7a8dc6acb9d1342ee9346a56",
+    "hash": "bd4e099178a5d91d0adb1f298f03534e",
     "packages": [
         {
             "name": "alchemy/binary-driver",
@@ -151,9 +151,10 @@
             ],
             "authors": [
                 {
-                    "name": "Jonathan Wage",
+                    "name": "Jonathan H. Wage",
                     "email": "jonwage@gmail.com",
-                    "homepage": "http://www.jwage.com/"
+                    "homepage": "http://www.jwage.com/",
+                    "role": "Creator"
                 },
                 {
                     "name": "Guilherme Blanco",
@@ -169,7 +170,7 @@
                     "email": "kontakt@beberlei.de"
                 },
                 {
-                    "name": "Johannes Schmitt",
+                    "name": "Johannes M. Schmitt",
                     "email": "schmittjoh@gmail.com",
                     "homepage": "http://jmsyst.com",
                     "role": "Developer of wrapped JMSSerializerBundle"
@@ -292,16 +293,16 @@
         },
         {
             "name": "mediavorus/mediavorus",
-            "version": "0.4.1",
+            "version": "0.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/romainneutron/MediaVorus.git",
-                "reference": "5d5c416353f48192f2202dd4be5c21d95f46b08d"
+                "reference": "b80ab6acd79f69b2040f7915e1393f08f68277fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/romainneutron/MediaVorus/zipball/5d5c416353f48192f2202dd4be5c21d95f46b08d",
-                "reference": "5d5c416353f48192f2202dd4be5c21d95f46b08d",
+                "url": "https://api.github.com/repos/romainneutron/MediaVorus/zipball/b80ab6acd79f69b2040f7915e1393f08f68277fc",
+                "reference": "b80ab6acd79f69b2040f7915e1393f08f68277fc",
                 "shasum": ""
             },
             "require": {
@@ -349,7 +350,7 @@
             "keywords": [
                 "metadata"
             ],
-            "time": "2013-10-21 12:36:49"
+            "time": "2013-11-28 16:41:54"
         },
         {
             "name": "monolog/monolog",
@@ -510,16 +511,16 @@
         },
         {
             "name": "php-ffmpeg/php-ffmpeg",
-            "version": "0.4.0",
+            "version": "0.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alchemy-fr/PHP-FFmpeg.git",
-                "reference": "0d82e5ad3cb50fd78882b5e15aaf57b39a274103"
+                "reference": "5a9d4a0f04b49afe48f81c797be6fe223bc97b00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alchemy-fr/PHP-FFmpeg/zipball/0d82e5ad3cb50fd78882b5e15aaf57b39a274103",
-                "reference": "0d82e5ad3cb50fd78882b5e15aaf57b39a274103",
+                "url": "https://api.github.com/repos/alchemy-fr/PHP-FFmpeg/zipball/5a9d4a0f04b49afe48f81c797be6fe223bc97b00",
+                "reference": "5a9d4a0f04b49afe48f81c797be6fe223bc97b00",
                 "shasum": ""
             },
             "require": {
@@ -575,7 +576,7 @@
                 "video",
                 "video processing"
             ],
-            "time": "2013-10-21 12:16:28"
+            "time": "2013-11-29 10:38:16"
         },
         {
             "name": "php-mp4box/php-mp4box",
@@ -785,12 +786,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Pimple.git",
-                "reference": "v1.0.2"
+                "reference": "ae11e57e8c2bb414b2ff93396dbbfc0eb92feb94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Pimple/zipball/v1.0.2",
-                "reference": "v1.0.2",
+                "url": "https://api.github.com/repos/fabpot/Pimple/zipball/ae11e57e8c2bb414b2ff93396dbbfc0eb92feb94",
+                "reference": "ae11e57e8c2bb414b2ff93396dbbfc0eb92feb94",
                 "shasum": ""
             },
             "require": {
@@ -1535,12 +1536,12 @@
             "version": "v1.1.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fabpot/Silex.git",
+                "url": "https://github.com/silexphp/Silex.git",
                 "reference": "b3a7beefa7e9a4d9d81bf207126f181858d4abda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Silex/zipball/b3a7beefa7e9a4d9d81bf207126f181858d4abda",
+                "url": "https://api.github.com/repos/silexphp/Silex/zipball/b3a7beefa7e9a4d9d81bf207126f181858d4abda",
                 "reference": "b3a7beefa7e9a4d9d81bf207126f181858d4abda",
                 "shasum": ""
             },

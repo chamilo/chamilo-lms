@@ -6,10 +6,11 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Console;
-use Unoconv\Unoconv;
 use Sunra\PhpSimple\HtmlDomParser;
 use ChamiloLMS\Component\Editor\Connector;
 use ChamiloLMS\Component\Editor\Driver\CourseDriver;
+use MediaAlchemyst\Alchemyst;
+use Unoconv\Unoconv;
 
 /**
  * @todo use Gaufrette to manage course files (some day)
@@ -25,18 +26,23 @@ class DataFilesystem
     /** @var \Symfony\Component\Filesystem\Filesystem  */
     private $fs;
 
+    /** @var Alchemyst  */
+    private $converter;
+    private $connector;
+
     /**
      * @param array $paths
      * @param Filesystem $filesystem
-     * @param Unoconv $unoconv
+     * @param Connector $connector
+     * @param Alchemyst $converter
      */
-    public function __construct($paths, Filesystem $filesystem, Connector $editor, $unoconv = null)
+    public function __construct($paths, Filesystem $filesystem, Connector $connector, $converter = null)
     {
         $this->paths = $paths;
         $this->fs = $filesystem;
-        $this->unoconv = $unoconv;
-        $this->editor = $editor;
-        $this->editor->setDriver('CourseDriver');
+        $this->converter = $converter;
+        $this->connector = $connector;
+        $this->connector->setDriver('CourseDriver');
     }
 
     /**
@@ -180,10 +186,10 @@ class DataFilesystem
     public function convertRelativeToAbsoluteUrl($content)
     {
         /** @var CourseDriver $courseDriver */
-        $courseDriver = $this->editor->getDriver('CourseDriver');
+        $courseDriver = $this->connector->getDriver('CourseDriver');
 
         $dom = HtmlDomParser::str_get_html($content);
-        //var_dump($this->editor->getDrivers());
+        //var_dump($this->connector->getDrivers());
         /** @var \simple_html_dom_node $image */
         foreach ($dom->find('img') as $image) {
             $image->src = str_replace(
@@ -227,7 +233,12 @@ class DataFilesystem
                 $fileInfo['basename'],
                 $fileName.'.'.$format, $filePath
             );
-            $this->unoconv->transcode($filePath, $format, $newFilePath);
+            /** @var \MediaAlchemyst\DriversContainer $drivers */
+            $drivers = $this->converter->getDrivers();
+            $unoconv = $drivers['unoconv'];
+            /** @var Unoconv $unoconv */
+            //$drivers = $this->converter->turnInto($filePath, $newFilePath);
+            $unoconv->transcode($filePath, $format, $newFilePath);
             if ($this->fs->exists($newFilePath)) {
                 return $newFilePath;
 

@@ -169,7 +169,7 @@ class IndexController extends CommonController
             $extra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'keyboard/keyboard.css');
             $extra[] = api_get_js('keyboard/jquery.keyboard.js');
         }
-        $app['template']->addResource($extra);
+        $app['template']->addResource($extra, 'string');
         $response = $app['template']->render_template('auth/login.tpl');
         return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
     }

@@ -2,6 +2,10 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SendOnlyAnEmailToMySelfToTest = "Send an email to myself for testing purposes.";
+$DeleteAllSelectedAttendances = "Delete all selected attendances";
+$AvailableClasses = "Available classes";
+$RegisteredClasses = "Registered classes";
 $DeleteItemsNotInFile = "Delete items not in file";
 $ImportGroups = "Import groups";
 $HereIsYourFeedback = "Here is your feedback";

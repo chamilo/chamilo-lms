@@ -2,6 +2,14 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SendOnlyAnEmailToMySelfToTest = "Enviar correo electrónico solamente a mi mismo para pruebas.";
+$DeleteAllSelectedAttendances = "Eliminar todas las hojas de asistencia seleccionadas";
+$AvailableClasses = "Clases disponibles";
+$RegisteredClasses = "Clases subscritas";
+$DeleteItemsNotInFile = "Eliminar elementos que no se encuentran en el archivo";
+$ImportGroups = "Importar grupos";
+$HereIsYourFeedback = "Respuesta del profesor:";
+$ShowSystemFolders = "Mostrar directorios del sistema.";
 $LoginToGoToThisCourse = "Conectarse para entrar al curso";
 $LoginDate = "Fecha de ingreso";
 $ChooseStartDateAndEndDate = "Elija fechas de inicio y de fin";

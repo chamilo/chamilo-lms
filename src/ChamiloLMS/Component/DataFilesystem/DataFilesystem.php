@@ -202,7 +202,8 @@ class DataFilesystem
     }
 
     /**
-     * Save string in a temp file
+     * Save string in a temp file.
+     *
      * @param string $content
      * @param string $fileName
      * @param string $extension

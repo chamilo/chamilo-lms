@@ -701,11 +701,15 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 
         // Chamilo data filesystem.
         $app['chamilo.filesystem'] = $app->share(function () use ($app) {
+                $mediaConverter = null;
+            if (isset($app['configuration']['services']['media-alchemyst'])) {
+                $mediaConverter = $app['media-alchemyst'];
+            }
             $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem(
                 $app['paths'],
                 $app['filesystem'],
                 $app['editor_connector'],
-                $app['media-alchemyst']
+                $mediaConverter
             );
             return $filesystem;
         });

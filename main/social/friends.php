@@ -126,5 +126,5 @@ $tpl = $app['template'];
 $tpl->assign('social_left_content', $social_left_content);
 $tpl->assign('social_right_content', $social_right_content);
 
-$social_layout = $tpl->get_template('layout/social_layout.tpl');
+$social_layout = $tpl->getTemplate('layout/social_layout.tpl');
 $tpl->display($social_layout);

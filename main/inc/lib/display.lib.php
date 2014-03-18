@@ -63,7 +63,7 @@ class Display
     {
         global $app;
         global $tool_name, $show_learnpath;
-        $disable_js_and_css_files       = true;
+        $app['template']->disableJsAndCss = true;
         $app['template.show_header']    = false;
         $app['template.show_footer']    = false;
         $app['template.show_learnpath'] = $show_learnpath;

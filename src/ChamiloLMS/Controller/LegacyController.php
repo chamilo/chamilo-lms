@@ -71,13 +71,15 @@ class LegacyController extends CommonController
             $app['template']->setHeader($app['template.show_header']);
 
             if (isset($htmlHeadXtra)) {
-                $app['template']->addJsFiles($htmlHeadXtra);
+                $app['template']->addResource($htmlHeadXtra, 'string');
             }
 
             if (isset($interbreadcrumb)) {
                 $app['template']->setBreadcrumb($interbreadcrumb);
                 $app['template']->loadBreadcrumbToTemplate();
             }
+
+            $app['template']->parseResources();
 
             if (isset($tpl)) {
                 $response = $app['twig']->render($app['default_layout']);

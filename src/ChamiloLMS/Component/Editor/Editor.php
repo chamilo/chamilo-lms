@@ -45,13 +45,21 @@ class Editor
     /** @var Router */
     public $urlGenerator;
 
+    /** @var \Template */
+    public $template;
+
     /**
      * @param Translator $translator
      * @param Router $urlGenerator
+     * @param \Template $template
      * @param Course $course
      */
-    public function __construct(Translator $translator, Router $urlGenerator, $course)
-    {
+    public function __construct(
+        Translator $translator,
+        Router $urlGenerator,
+        \Template $template,
+        $course
+    ) {
         $this->toolbarSet = 'Basic';
         $this->value = '';
         $this->config = array();
@@ -61,6 +69,7 @@ class Editor
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
         $this->course = $course;
+        $this->template = $template;
     }
 
     /**

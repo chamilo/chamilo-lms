@@ -25,6 +25,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Translation\Loader\PoFileLoader;
+use Symfony\Component\Translation\Loader\MoFileLoader;
+use Symfony\Component\Finder\Finder;
 
 // Determine the directory path for this file.
 $includePath = dirname(__FILE__);
@@ -290,11 +293,8 @@ $cidReset = null;
 
 /** Silex Middlewares. */
 
-/** A "before" middleware allows you to tweak the Request before the controller is executed. */
-
-use Symfony\Component\Translation\Loader\PoFileLoader;
-use Symfony\Component\Translation\Loader\MoFileLoader;
-use Symfony\Component\Finder\Finder;
+/* A "before" middleware allows you to tweak the Request
+ * before the controller is executed. */
 
 $app->before(
 
@@ -554,37 +554,6 @@ $app->before(
             var_dump($isCourseTool);
             var_dump(api_get_course_id());exit;
         }*/
-
-        // Setting course entity for controllers and templates.
-
-
-        // The course parameter is loaded.
-        $courseCode = $request->get('course');
-
-        if (empty($courseCode)) {
-            $courseCode = api_get_course_id();
-        }
-
-        if (!empty($courseCode)) {
-
-            // Converting /courses/XXX/ to a Entity/Course object.
-            $course = $app['orm.em']->getRepository('Entity\Course')->findOneByCode($courseCode);
-            $app['course'] = $course;
-            $app['template']->assign('course', $course);
-
-            $sessionId = $request->get('id_session');
-
-            if (empty($sessionId)) {
-                $sessionId = api_get_session_id();
-            }
-
-            $courseSession = $app['orm.em']->getRepository('Entity\Session')->findOneById($sessionId);
-            $app['course_session'] = $courseSession;
-            $app['template']->assign('course_session', $courseSession);
-        } else {
-            $app['course'] = null;
-        }
-        $app['session']->set('course_session', $app['course']);
 
         $studentView = $request->get('isStudentView');
         if (!empty($studentView)) {

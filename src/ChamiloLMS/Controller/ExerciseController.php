@@ -102,10 +102,7 @@ class ExerciseController extends CommonController
      */
     public function questionPoolAction(Application $app, $cidReq = null, $exerciseId = null)
     {
-        $extraJS = array();
-        //@todo improve this JS includes should be added using twig
-        $extraJS[]      = api_get_jqgrid_js();
-        $app['extraJS'] = $extraJS;
+        $app['template']->addResource(api_get_jqgrid_js());
 
         // @todo this should be auto
 

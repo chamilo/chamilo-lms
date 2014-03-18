@@ -1029,7 +1029,7 @@ $(function() {
 require_once 'controller.php';
 $controller = new DocumentController();
 
-$tpl = $controller->tpl->get_template('layout/layout_2_col.tpl');
+$tpl = $controller->tpl->getTemplate('layout/layout_2_col.tpl');
 $content = Display::grid_html('documents');
 
 if (!is_null($docs_and_folders)) {

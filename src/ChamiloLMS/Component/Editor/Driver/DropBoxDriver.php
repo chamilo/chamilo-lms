@@ -221,7 +221,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements InterfaceDriver
     {
         return array(
             //'id' => $file->getId().$file->getCId(),
-            'name' => 'dd',
+            'name' => 'Dropbox',
             //'ts' => $file->getUploadDate(),
             'mime' => 'directory',
             'read' => true,

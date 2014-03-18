@@ -82,9 +82,9 @@ abstract class BaseController extends FlintController
      */
     protected function getCourse()
     {
-        if (isset($this->app['course']) && !empty($this->app['course'])) {
+        //if (isset($this->app['course'])) {
             return $this->app['course'];
-        }
+        //}
         return false;
     }
 

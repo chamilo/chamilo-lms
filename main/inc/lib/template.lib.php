@@ -11,6 +11,7 @@ use Silex\Application;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Routing\Router;
+use ChamiloLMS\Component\Editor\Editor;
 
 class Template
 {
@@ -31,6 +32,8 @@ class Template
     public $force_plugin_load = true;
     public $navigation_array;
     public $loadBreadcrumb = true;
+    public $resources = array();
+    public $disableJsAndCss = false;
 
     /** @var SecurityContext */
     private $security;
@@ -38,6 +41,8 @@ class Template
     private $translator;
     /** @var Router */
     private $urlGenerator;
+    /** @var Editor */
+    private $htmlEditor;
 
     /**
      * @param Application $app
@@ -52,11 +57,13 @@ class Template
         SecurityContext $security,
         Translator $translator,
         Router $urlGenerator
+        //Editor $htmlEditor
     ) {
         $this->app = &$app;
         $this->security = $security;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
+        //$this->htmlEditor = $htmlEditor;
 
         $this->app['classic_layout'] = true;
         $this->navigation_array = $this->returnNavigationArray();
@@ -199,7 +206,7 @@ class Template
      * */
     public function display_one_col_template()
     {
-        $tpl = $this->get_template('layout/layout_1_col.tpl');
+        $tpl = $this->getTemplate('layout/layout_1_col.tpl');
         $this->display($tpl);
     }
 
@@ -208,7 +215,7 @@ class Template
      * */
     public function display_two_col_template()
     {
-        $tpl = $this->get_template('layout/layout_2_col.tpl');
+        $tpl = $this->getTemplate('layout/layout_2_col.tpl');
         $this->display($tpl);
     }
 
@@ -217,7 +224,7 @@ class Template
      */
     public function display_blank_template()
     {
-        $tpl = $this->get_template('layout/blank.tpl');
+        $tpl = $this->getTemplate('layout/blank.tpl');
         $this->display($tpl);
     }
 
@@ -226,7 +233,7 @@ class Template
      */
     public function display_no_layout_template()
     {
-        $tpl = $this->get_template('layout/no_layout.tpl');
+        $tpl = $this->getTemplate('layout/no_layout.tpl');
         $this->display($tpl);
     }
 
@@ -316,8 +323,6 @@ class Template
         $this->course_id = api_get_course_int_id();
         $this->app['course_code'] = api_get_course_id();
         $this->app['session_id'] = api_get_session_id();
-
-        //$this->app['page_controller']->return_welcome_to_course_block($this->app['template']);
     }
 
     /**
@@ -392,9 +397,7 @@ class Template
      */
     private function setCssFiles()
     {
-        global $disable_js_and_css_files;
         $css = array();
-
         $this->theme = api_get_visual_theme();
         if (isset($_POST['style']) && api_is_platform_admin()) {
             $this->preview_theme = $_POST['style'];
@@ -430,7 +433,6 @@ class Template
             }
 
             $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'jquery-ui/css/'.$this->jquery_ui_theme.'/jquery-ui-custom.css';
-            //$css[] = api_get_path(WEB_LIBRARY_JS_PATH).'jquery-ui/default.css';
         }
 
         $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'font-awesome/css/font-awesome.css';
@@ -442,68 +444,16 @@ class Template
         // Default theme CSS.
         $css[] = api_get_cdn_path($cssPath.'themes/'.$this->theme.'/default.css');
 
-        $css_file_to_string = null;
-        foreach ($css as $file) {
-            $css_file_to_string .= api_get_css($file);
-        }
+        $this->addResource($css, 'css');
 
-        // @todo move this somewhere else. Special fix when using tablets in order to see the text near icons
-        if (SHOW_TEXT_NEAR_ICONS == true) {
-            //hack in order to fix the actions buttons
-            $css_file_to_string .= '<style>
-                .td_actions a {
-                    float:left;
-                    width:100%;
-                }
-                .forum_message_left a {
-                    float:left;
-                    width:100%;
-                }
-                </style>';
-        }
-
-        $navigator_info = api_get_navigator();
-        if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
-            $css_file_to_string .= 'img, div { behavior: url('.api_get_path(
-                    WEB_LIBRARY_JS_PATH
-            ).'iepngfix/iepngfix.htc) } '."\n";
-        }
-
-        if (!$disable_js_and_css_files) {
-            $style_print = api_get_css(api_get_cdn_path($cssPath.'themes/'.$this->theme.'/print.css'), 'print');
-            $this->assign('css_style_print', $style_print);
-
-            $this->assign('css_file_to_string', $css_file_to_string);
+        if (!$this->disableJsAndCss) {
+            $style = api_get_css(api_get_cdn_path($cssPath.'themes/'.$this->theme.'/print.css'), 'print');
+            $this->addResource($style, 'no_js_css');
         }
     }
 
-    /**
-     * @param array $htmlHeadXtra
-     */
-    public function addJsFiles($htmlHeadXtra = array())
+    public function setJsFiles()
     {
-        $extra_headers = null;
-        if (isset($htmlHeadXtra) && $htmlHeadXtra) {
-            foreach ($htmlHeadXtra as $this_html_head) {
-                $extra_headers .= $this_html_head."\n";
-            }
-        }
-
-        if (isset($this->app['extraJS'])) {
-            foreach ($this->app['extraJS'] as $this_html_head) {
-                $extra_headers .= $this_html_head."\n";
-            }
-        }
-        $this->assign('extra_headers', $extra_headers);
-    }
-
-    /**
-     * Sets JS files
-     */
-    private function setJsFiles()
-    {
-        global $disable_js_and_css_files, $htmlHeadXtra;
-
         $jsFolder = api_get_path(WEB_LIBRARY_JS_PATH);
 
         if ($this->app['assetic.enabled']) {
@@ -530,7 +480,7 @@ class Template
             );
         }
 
-        $this->app['html_editor']->getJavascriptToInclude($jsFiles);
+        //$this->app['html_editor']->getJavascriptToInclude();
 
         if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP
@@ -550,35 +500,74 @@ class Template
         if (api_get_setting('disable_copy_paste') == 'true') {
             $jsFiles[] = $jsFolder.'jquery.nocutcopypaste.js';
         }
+        $this->addResource($jsFiles, 'js');
+    }
 
-        $js_file_to_string = null;
+    /**
+     * Get resource list.
+     * @return array
+     */
+    public function getResources()
+    {
+       return $this->resources;
+    }
 
-        foreach ($jsFiles as $js_file) {
-            $js_file_to_string .= api_get_js_simple($js_file);
-        }
-
-        // Loading email_editor js.
-        if (!api_is_anonymous() && api_get_setting('allow_email_editor') == 'true') {
-            $js_file_to_string .= $this->fetch($this->app['template_style'].'/mail_editor/email_link.js.tpl');
-        }
-
-        if (!$disable_js_and_css_files) {
-            $this->assign('js_file_to_string', $js_file_to_string);
-
-            $extra_headers = null;
-            if (isset($htmlHeadXtra) && $htmlHeadXtra) {
-                foreach ($htmlHeadXtra as $this_html_head) {
-                    $extra_headers .= $this_html_head."\n";
-                }
+    /**
+     * Add an item to the resources array.
+     * @param string $resource
+     * @param string $type js or css
+     */
+    public function addResource($resource, $type)
+    {
+        if (is_array($resource)) {
+            if (isset($this->resources[$type])) {
+                $this->resources[$type] = array_merge($this->resources[$type], $resource);
+            } else {
+                $this->resources[$type] = $resource;
             }
-
-            if (isset($this->app['extraJS'])) {
-                foreach ($this->app['extraJS'] as $this_html_head) {
-                    $extra_headers .= $this_html_head."\n";
-                }
-            }
-            $this->assign('extra_headers', $extra_headers);
+        } else {
+            $this->resources[$type][] = $resource;
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function parseResources()
+    {
+        $resourceToString = null;
+
+        foreach ($this->resources as $type => $resources) {
+            switch($type) {
+                case 'js':
+                    if ($this->disableJsAndCss == false) {
+                        foreach($resources as $resource) {
+                            $resourceToString .= api_get_js_simple($resource);
+                        }
+                    }
+                    break;
+                case 'css':
+                    if ($this->disableJsAndCss == false) {
+                        foreach($resources as $resource) {
+                            $resourceToString .= api_get_css($resource);
+                        }
+                    }
+                    break;
+                case 'string':
+                    if ($this->disableJsAndCss == false) {
+                        foreach($resources as $resource) {
+                            $resourceToString .= $resource;
+                        }
+                    }
+                    break;
+                case 'no_js_css':
+                    foreach($resources as $resource) {
+                        $resourceToString .= $resource;
+                    }
+                    break;
+            }
+        }
+        $this->assign('resources', $resourceToString);
     }
 
     /**
@@ -955,7 +944,7 @@ class Template
         if (empty($layout)) {
             $layout = $this->app['default_layout'];
         }
-        $this->addJsFiles();
+        $this->parseResources();
         return $this->app['twig']->render($this->app['template_style'].'/layout/'.$layout);
     }
 
@@ -987,7 +976,7 @@ class Template
      */
     public function renderTemplate($template, $elements = array())
     {
-        $this->addJsFiles();
+        $this->parseResources();
         return $this->app['twig']->render($this->app['template_style'].'/'.$template, $elements);
     }
 

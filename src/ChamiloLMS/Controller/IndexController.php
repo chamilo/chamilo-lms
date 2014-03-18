@@ -80,7 +80,8 @@ class IndexController extends CommonController
             $extra[] = api_get_js('keyboard/jquery.keyboard.js');
         }
 
-        $app['extraJS'] = $extra;
+        $app['template']->addResource(api_get_jqgrid_js(), 'string');
+
 
         $app['this_section'] = SECTION_CAMPUS;
         $request = $app['request'];
@@ -168,7 +169,7 @@ class IndexController extends CommonController
             $extra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'keyboard/keyboard.css');
             $extra[] = api_get_js('keyboard/jquery.keyboard.js');
         }
-        $app['extraJS'] = $extra;
+        $app['template']->addResource($extra);
         $response = $app['template']->render_template('auth/login.tpl');
         return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
     }

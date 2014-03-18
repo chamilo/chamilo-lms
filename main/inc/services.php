@@ -35,10 +35,8 @@ $app->register(new Flint\Provider\RoutingServiceProvider(), array(
 
 if (isset($app['configuration']['services']['media-alchemyst'])) {
     $app->register(new MediaAlchemystServiceProvider());
-
     $app->register(new PHPExiftoolServiceProvider());
     $app->register(new FFMpegServiceProvider());
-
     $app->register(new MediaVorusServiceProvider(), array(
         'media-alchemyst.configuration' => array(
             'ffmpeg.threads'               => 4,
@@ -197,6 +195,7 @@ $app['allow_admin_toolbar'] = array(
     'ROLE_QUESTION_MANAGER',
     'ROLE_SESSION_MANAGER'
 );
+
 /*
 use ChamiloLMS\Component\Auth\CourseVoter;
 use ChamiloLMS\Component\Auth\CourseAccessDecisionManager;
@@ -236,8 +235,6 @@ if (!empty($strategies)) {
     $app->register(new OpauthExtension());
 }
 
-
-
 /*
 $app['security.access_manager'] = $app->share(function($app) {
     return new AccessDecisionManager($app['security.voters'], 'unanimous');
@@ -256,12 +253,12 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 // Validator provider.
 $app->register(new Silex\Provider\ValidatorServiceProvider());
 
-// Form provider
+// Form provider.
 $app->register(new Silex\Provider\FormServiceProvider(), array(
     'form.secret' => sha1(__DIR__)
 ));
 
-// URL generator provider
+// URL generator provider.
 //$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 class ManagerRegistry extends AbstractManagerRegistry
@@ -294,14 +291,14 @@ class ManagerRegistry extends AbstractManagerRegistry
     }
 }
 
-// Setting up the Manager registry
+// Setting up the Manager registry in order to use entity in forms.
 $app['manager_registry'] = $app->share(function() use ($app) {
     $managerRegistry = new ManagerRegistry(null, array('db'), array('orm.em'), null, null, $app['orm.proxies_namespace']);
     $managerRegistry->setContainer($app);
     return $managerRegistry;
 });
 
-// Needed to use the "entity" option in Symfony forms
+// Needed to use the "entity" option in Symfony forms.
 $app['form.extensions'] = $app->share($app->extend('form.extensions', function ($extensions, $app) {
     $extensions[] = new \Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension($app['manager_registry']);
     return $extensions;
@@ -315,7 +312,7 @@ $app['validator.validator_factory'] = $app->share(function ($app) {
     return $factory;
 });
 
-// Setting Doctrine service provider (DBAL)
+// Setting Doctrine service provider (DBAL).
 if (isset($app['configuration']['main_database'])) {
 
     /* The database connection can be overwritten if you set $_configuration['db.options']
@@ -360,6 +357,7 @@ if (isset($app['configuration']['main_database'])) {
         $defaultDatabaseOptions = $app['configuration']['db.options'];
     }
 
+    // Doctrine service provider.
     $app->register(
         new Silex\Provider\DoctrineServiceProvider(),
         array(
@@ -418,7 +416,7 @@ $app->register(
     new Silex\Provider\TwigServiceProvider(),
     array(
         'twig.path' => array(
-            $app['sys_root'].'main/template', //template folder
+            $app['sys_root'].'src/ChamiloLMS/Resources/views', //template folder
             $app['sys_root'].'plugin' //plugin folder
         ),
         // twitter bootstrap form twig templates
@@ -434,7 +432,7 @@ $app->register(
     )
 );
 
-// Setting Twig options
+// Setting Twig options.
 $app['twig'] = $app->share(
     $app->extend('twig', function ($twig) {
         $twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
@@ -500,9 +498,9 @@ $app->register(new Grom\Silex\ImagineServiceProvider(), array(
 
 // Prompts Doctrine SQL queries using Monolog.
 
-$app['dbal_logger'] = $app->share(function() {
-    //return new Doctrine\DBAL\Logging\DebugStack();
-});
+/*$app['dbal_logger'] = $app->share(function() {
+    return new Doctrine\DBAL\Logging\DebugStack();
+});*/
 
 if ($app['debug']) {
     /*$logger = new Doctrine\DBAL\Logging\DebugStack();
@@ -593,7 +591,7 @@ $app->register(new GaufretteServiceProvider(), array(
 ));
 */
 
-// Use Symfony2 filesystem instead of custom scripts
+// Use Symfony2 filesystem instead of custom scripts.
 $app->register(new Neutron\Silex\Provider\FilesystemServiceProvider());
 
 /** Chamilo service provider. */
@@ -609,6 +607,35 @@ class ChamiloServiceProvider implements ServiceProviderInterface
         });
 
         $database = $app['database'];
+
+        $app['html_editor'] = $app->share(function($app) {
+            $editor = new ChamiloLMS\Component\Editor\CkEditor\CkEditor(
+                $app['translator'],
+                $app['url_generator'],
+                $app['template'],
+                $app['course']
+            );
+            $editor->setJavascriptToInclude();
+            return $editor;
+            /*return new ChamiloLMS\Component\Editor\TinyMce\TinyMce(
+                $app['translator'], $app['url_generator']
+            );*/
+        });
+
+        $app['editor_connector'] = $app->share(function ($app) {
+            $token = $app['security']->getToken();
+            $user = $token->getUser();
+
+            return new Connector(
+                $app['orm.em'],
+                $app['paths'],
+                $app['url_generator'],
+                $app['translator'],
+                $app['security'],
+                $user,
+                $app['course']
+            );
+        });
 
         // Template class
         $app['template'] = $app->share(function () use ($app) {
@@ -634,6 +661,41 @@ class ChamiloServiceProvider implements ServiceProviderInterface
                 'sys_log_path' => $app['sys_log_path']
             );
         });
+
+        $app['course'] = $app->share(function () use ($app) {
+            $request = $app['request'];
+            $session = $request->getSession();
+            $courseCode = $request->get('course');
+
+            if (empty($courseCode)) {
+                $courseCode = $session->get('_cid');
+            }
+
+            if (!empty($courseCode)) {
+                // Converting /courses/XXX/ to a Entity/Course object.
+                return $app['orm.em']->getRepository('Entity\Course')->findOneByCode($courseCode);
+                //$app['template']->assign('course', $course);
+                return $course;
+            }
+            return null;
+        });
+
+        $app['course_session']  = $app->share(function () use ($app) {
+            $request = $app['request'];
+            $session = $request->getSession();
+            $sessionId = $request->get('id_session');
+            if (empty($sessionId)) {
+                $sessionId = $session->get('id_session');
+            }
+            if (!empty($sessionId)) {
+                return $app['orm.em']->getRepository('Entity\Session')->findOneById($sessionId);
+//                $app['template']->assign('course_session', $courseSession);
+                return $courseSession;
+            }
+            return null;
+        });
+
+
 
         // Chamilo data filesystem.
         $app['chamilo.filesystem'] = $app->share(function () use ($app) {
@@ -854,26 +916,6 @@ $app['introduction.controller'] = $app->share(
     }
 );
 
-$app['html_editor'] = $app->share(function($app) {
-    return new ChamiloLMS\Component\Editor\CkEditor\CkEditor($app['translator'], $app['url_generator'], $app['course']);
-    //return new ChamiloLMS\Component\Editor\TinyMce\TinyMce($app['translator'], $app['url_generator']);
-});
-
-$app['editor_connector'] = $app->share(function ($app) {
-    $token = $app['security']->getToken();
-    $user = $token->getUser();
-    $course = $app['session']->get('course_session');
-
-    return new Connector(
-        $app['orm.em'],
-        $app['paths'],
-        $app['url_generator'],
-        $app['translator'],
-        $app['security'],
-        $user,
-        $course
-    );
-});
 
 
 $app->register(new Unoconv\UnoconvServiceProvider(), array(

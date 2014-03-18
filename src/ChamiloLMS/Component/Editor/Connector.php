@@ -128,6 +128,7 @@ class Connector
         $roots = array();
         /** @var Driver $driver */
         $drivers = $this->getDrivers();
+
         foreach ($drivers as $driver) {
             if ($processDefaultValues) {
                 $plugin = array(
@@ -152,7 +153,7 @@ class Connector
      */
     public function updateWithDefaultValues($driver)
     {
-        if (empty($driver)) {
+        if (empty($driver) || !isset($driver['driver'])) {
             return array();
         }
 
@@ -165,6 +166,7 @@ class Connector
         }
 
         $driverUpdated = array_merge($defaultDriver, $driver);
+
         $driverUpdated['driver'] = 'ChamiloLMS\Component\Editor\Driver\\'.$driver['driver'];
         $driverUpdated['attributes'] = $attributes;
         return $driverUpdated;

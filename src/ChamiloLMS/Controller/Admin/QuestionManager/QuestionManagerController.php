@@ -206,10 +206,7 @@ class QuestionManagerController
      */
     public function questionsAction(Application $app)
     {
-        $extraJS = array();
-        //@todo improve this JS includes should be added using twig
-        $extraJS[]      = api_get_jqgrid_js();
-        $app['extraJS'] = $extraJS;
+        $app['template']->addResource(api_get_jqgrid_js());
 
         // Getting CQuizCategory repo.
         /** @var \Gedmo\Tree\Entity\Repository\NestedTreeRepository $repo */

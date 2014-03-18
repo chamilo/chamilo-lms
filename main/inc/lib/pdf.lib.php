@@ -86,7 +86,7 @@ class PDF
         Display::$global_template->assign('add_signatures', $this->params['add_signatures']);
 
         //Getting template
-        $tpl = Display::$global_template->get_template('export/table_pdf.tpl');
+        $tpl = Display::$global_template->getTemplate('export/table_pdf.tpl');
         $html = Display::$global_template->fetch($tpl);
         $html = api_utf8_encode($html);
 

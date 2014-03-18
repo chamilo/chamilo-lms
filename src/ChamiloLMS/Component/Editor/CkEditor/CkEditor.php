@@ -21,12 +21,12 @@ class CkEditor extends Editor
     }
 
     /**
-     * @param array $files
+     * Set js to be include in the template
      */
-    public function getJavascriptToInclude(& $files)
+    public function setJavascriptToInclude()
     {
         $jsFolder = api_get_path(WEB_LIBRARY_JS_PATH);
-        $files[] = $jsFolder.'ckeditor/ckeditor.js';
+        $this->template->addResource($jsFolder.'ckeditor/ckeditor.js', 'js');
     }
 
     /**

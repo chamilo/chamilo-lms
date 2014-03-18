@@ -236,7 +236,7 @@ if ($form->validate()) {
                 $tpl->assign('course_title', Display::url($title, $link));
                 $tpl->assign('course_id', $course_info['code']);
 
-                $template = $tpl->get_template('create_course/add_course.tpl');
+                $template = $tpl->getTemplate('create_course/add_course.tpl');
                 $tpl->display($template);
             } else {
                 $message = Display :: return_message(get_lang('CourseCreationFailed'), 'error', false);

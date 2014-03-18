@@ -12,12 +12,12 @@ use ChamiloLMS\Component\Editor\TinyMce\Toolbar;
 class TinyMce extends Editor
 {
     /**
-     * @param array $files
+     * Set js to be include in the template
      */
-    public function getJavascriptToInclude(& $files)
+    public function setJavascriptToInclude()
     {
         $jsFolder = api_get_path(WEB_LIBRARY_JS_PATH);
-        $files[] = $jsFolder.'tinymce/tinymce.min.js';
+        $this->template->addResource($jsFolder.'tinymce/tinymce.min.js', 'js');
     }
 
     /**

@@ -344,9 +344,13 @@ class SystemAnnouncementManager {
 		$sql = "INSERT INTO ".$db_table." (title,content,date_start,date_end,visible_teacher,visible_student,visible_guest, lang, access_url_id)
 				VALUES ('".$title."','".$content."','".$start."','".$end."','".$visible_teacher."','".$visible_student."','".$visible_guest."',".$langsql.", ".$current_access_url_id.")";
 
-		if ($send_mail==1) {
-			SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student, $lang, $sendEmailTest);
-		}
+        if ($sendEmailTest) {
+            SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student, $lang, true);
+        } else {
+            if ($send_mail == 1) {
+                SystemAnnouncementManager::send_system_announcement_by_email($title, $content,$visible_teacher, $visible_student, $lang);
+            }
+        }
 		$res = Database::query($sql);
 		if ($res === false) {
 			Debug::log_s(mysql_error());

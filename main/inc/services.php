@@ -916,17 +916,17 @@ $app['introduction.controller'] = $app->share(
     }
 );
 
-
-
-$app->register(new Unoconv\UnoconvServiceProvider(), array(
-    'unoconv.configuration' => array(
-        'unoconv.binaries' => $app['configuration']['unoconv.binaries'],
-        'timeout'          => 42,
-    ),
-    'unoconv.logger'  => $app->share(function () use ($app) {
-        return $app['monolog']; // use Monolog service provider
-    }),
-));
+if (isset($app['configuration']['unoconv.binaries'])) {
+    $app->register(new Unoconv\UnoconvServiceProvider(), array(
+        'unoconv.configuration' => array(
+            'unoconv.binaries' => $app['configuration']['unoconv.binaries'],
+            'timeout'          => 42,
+        ),
+        'unoconv.logger'  => $app->share(function () use ($app) {
+            return $app['monolog']; // use Monolog service provider
+        }),
+    ));
+}
 
 
 /*

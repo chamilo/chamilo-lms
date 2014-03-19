@@ -144,7 +144,20 @@ The more frequent ones have been marked with *
     #top_main_content .span6 {
         width: 100%;
     }
-    
+    .well.form-inline {
+      clear: both;
+      display: inline-block;
+      margin-top: 22px;
+      width: 100%;
+    }
+    .nav.nav-pills {
+        background:#E9E9E9;
+    }
+    .new_actions .nav-tabs > li > a, .new_actions .nav-pills > li > a {
+        border: none;
+        padding-right: 7px;
+        padding-left: 7px;
+    }
     legend {
         margin-bottom: 10px;
         color:#0191C7;

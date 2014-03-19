@@ -135,6 +135,10 @@ switch ($action) {
         $count = 0;
 
         foreach ($course_list as $item) {
+           var_dump($course_list);Exit;
+            if(!$item['visibility']) {
+                echo "xxx";Exit;
+            }
             if (isset($course_id) && !empty($course_id)) {
                 if ($course_id != $item['id']) {
                     continue;

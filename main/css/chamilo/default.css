@@ -627,11 +627,19 @@ button.login:hover {
 
 /*including "save" image*/
 button.save {
-    background-image:url(images/button_accept.gif);
+    background:url(images/accept.png) 0 center no-repeat #F0F0F0;
+}
+button.save:hover {
+    background:url(images/accept.png) 0 center no-repeat #ffffff;
 }
 /*including "add" image*/
-button.add {
-    background-image:url(images/button_add.gif);
+.controls .btn.add {
+    background:url(images/add.png) 0 center no-repeat #FD6600;
+    padding-left: 36px;
+}
+.controls .btn.add:hover {
+    background:url(images/add.png) 0 center no-repeat #FF9900;
+    padding-left: 36px;
 }
 /*including "cancel" image*/
 button.cancel {
@@ -639,7 +647,10 @@ button.cancel {
 }
 /*including "search" image*/
 button.search {
-    background-image:url(images/bg-button.gif);
+    background:url(images/buttom.png) 0 center no-repeat #F0F0F0;
+}
+button.search:hover {
+    background:url(images/buttom.png) 0 center no-repeat #ffffff;
 }
 /*including "plus" image*/
 button.plus {
@@ -679,15 +690,61 @@ button.arrowl, input.arrowl {
 .portal {
     background-image:url(images/portal.png);
 }
+/*+++++++++++++++++++++++++++++++++++++++++++
+INSTALL CHAMILO
++++++++++++++++++++++++++++++++++++++++++++*/
+.install-mascot{
+  background: url(images/install.png) no-repeat center 0;
+  padding-top: 20em;
+}
+.install-chamilo .navbar{
+  display: none;
+}
+.install-chamilo footer{
+  display: none;
+}
+.install-chamilo .page-header {
+  border-bottom: 2px solid #FD6600;
+}
+.install-chamilo .page-header h1 {
+    line-height: 1;
+    color: #FD6600;
+}
+.install-chamilo header{
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.install-chamilo .RequirementHeading h2{
+  color: #2E75A3;
+}
+.well-install{
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top, #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#f6f6f6), color-stop(100%,#ededed)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+    padding: 3em;
+    border: 1px solid #E1E1E0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    margin-top: 3em;
+}
+/*+++++++++++++++++++++++++++++++++++++++++++
+END INSTALL CHAMILO
++++++++++++++++++++++++++++++++++++++++++++*/
 .bottom_actions_fixed{
-  background: #f2f2f2; /* Old browsers */
-background: -moz-linear-gradient(top, #f2f2f2 0%, #fcfcfc 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f2f2f2), color-stop(100%,#fcfcfc)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top, #f2f2f2 0%,#fcfcfc 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top, #f2f2f2 0%,#fcfcfc 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top, #f2f2f2 0%,#fcfcfc 100%); /* IE10+ */
-background: linear-gradient(to bottom, #f2f2f2 0%,#fcfcfc 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f2f2f2', endColorstr='#fcfcfc',GradientType=0 ); /* IE6-9 */
+  background: #2bb8ef; /* Old browsers */
+  background: -moz-linear-gradient(top, #2bb8ef 0%, #0191c7 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2bb8ef), color-stop(100%,#0191c7)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #2bb8ef 0%,#0191c7 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2bb8ef', endColorstr='#0191c7',GradientType=0 ); /* IE6-9 */
   border: 1px solid #E1E1E0;
 }
 .new_actions-fixed {
@@ -759,6 +816,7 @@ RESPONSIVE CSS
   background: linear-gradient(to bottom, #2bb8ef 0%,#0191c7 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2bb8ef', endColorstr='#0191c7',GradientType=0 ); /* IE6-9 */
 }
+
 .dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
   background-color: #FD6600;
   color: #FFFFFF;

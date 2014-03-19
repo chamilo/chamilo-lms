@@ -562,6 +562,9 @@ input.span3, textarea.span3, .uneditable-input.span3 {
 #course_category li, #hot_courses h5, .course_item h5, .categories-course-description h5, .course-box h5 {
   font-weight: normal;
 }
+.bottom_actions_fixed {
+  background: #EC5923;
+}
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
@@ -670,22 +673,29 @@ footer a:link, footer a:visited {
 #bottomhellomindfactory {    
     background:transparent url('images/textologo.jpg') no-repeat;
 }
-
-/*including "login" image*/
-button.login {
-    background-image:url(images/bg-button.gif);
-}
-
-button.login:hover {
+.new_actions-fixed{
+  top: 49px;
 }
 
 /*including "save" image*/
 button.save {
-    background-image:url(images/button_accept.gif);
+    background:url(images/accept.png) 0 center no-repeat #F0F0F0;
+    color: #666;
+    text-shadow:none;
+}
+button.save:hover {
+    background:url(images/accept.png) 0 center no-repeat #ffffff;
+    color: #666;
+    text-shadow:none;
 }
 /*including "add" image*/
-button.add {
-    background-image:url(images/button_add.gif);
+.controls .btn.add {
+    background:url(images/add.png) 0 center no-repeat #EC5923;
+    padding-left: 36px;
+}
+.controls .btn.add:hover {
+    background:url(images/add.png) 0 center no-repeat #EA4E15;
+    padding-left: 36px;
 }
 /*including "cancel" image*/
 button.cancel {
@@ -693,7 +703,14 @@ button.cancel {
 }
 /*including "search" image*/
 button.search {
-    background-image:url(images/bg-button.gif);
+    background:url(images/buttom.png) 0 center no-repeat #F0F0F0;
+    color: #666;
+    text-shadow:none;
+}
+button.search:hover {
+    background:url(images/buttom.png) 0 center no-repeat #ffffff;
+    color: #666;
+    text-shadow:none;
 }
 /*including "plus" image*/
 button.plus {
@@ -705,11 +722,17 @@ button.minus {
 }
 /*including "next" image*/
 button.next {
-    background-image:url(images/button_next.gif) !important;
+    background:url(images/next.png) 0 center no-repeat #F0F0F0;
+}
+button.next:hover {
+    background:url(images/next.png) 0 center no-repeat #ffffff;
 }
 /*including "back" image*/
 button.back {
-    background-image:url(images/button_back.gif);
+    background:url(images/previus.png) 0 center no-repeat #F0F0F0;
+}
+button.back:hover {
+    background:url(images/previus.png) 0 center no-repeat #ffffff;
 }
 /*including "refresh" image*/
 button.refresh {
@@ -721,10 +744,10 @@ button.upload {
 }
 
 button.arrowr, input.arrowr {
-	background-image:url(images/2rightarrow.gif);	
+  background-image:url(images/2rightarrow.gif); 
 }
 button.arrowl, input.arrowl {
-    background-image:url(images/2leftarrow.gif);	
+    background-image:url(images/2leftarrow.gif);  
 }
 .refresh {
     background-image:url(images/refresh.png);

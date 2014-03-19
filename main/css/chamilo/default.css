@@ -582,14 +582,19 @@ footer a:link, footer a:visited {
 .confirmation-message {
 	border: 1px solid #1F8323;
     color:#1F8323;
-	background: url("images/background_message.png") repeat-x scroll 0 0 #CAF0C7;
+	background: url("images/accept_data.png") no-repeat scroll 5px center #CAF0C7;
+  padding-left: 45px;
 }
 .error-message {
-    border: 1px solid #FF0000;
-    color: #440000;
-	background: url("images/background_message.png") repeat-x scroll 0 0 #FFD1D1;
+    border: 1px solid #FA5858;
+    color: #000;
+    padding-top: 5px;
+	  background: url("images/error.png") no-repeat scroll 5px center #F6CECE;
+    padding-left: 45px;
 }
-
+.error-message strong{
+  font-weight: normal;
+}
 .social-menu-title {
 	background-color:#00AAE3;
 }
@@ -662,11 +667,17 @@ button.minus {
 }
 /*including "next" image*/
 button.next {
-    background-image:url(images/button_next.gif) !important;
+    background:url(images/next.png) 0 center no-repeat #F0F0F0;
+}
+button.next:hover {
+    background:url(images/next.png) 0 center no-repeat #ffffff;
 }
 /*including "back" image*/
 button.back {
-    background-image:url(images/button_back.gif);
+    background:url(images/previus.png) 0 center no-repeat #F0F0F0;
+}
+button.back:hover {
+    background:url(images/previus.png) 0 center no-repeat #ffffff;
 }
 /*including "refresh" image*/
 button.refresh {
@@ -717,6 +728,13 @@ INSTALL CHAMILO
 .install-chamilo .RequirementHeading h2{
   color: #2E75A3;
 }
+.install-chamilo .page-header h2 {
+  color: #FD6600;
+  font-size: 20px;
+  font-weight: bold;
+  padding-left: 0;
+  width: 250px;
+}
 .well-install{
     background: #ffffff; /* Old browsers */
     background: -moz-linear-gradient(top, #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6+ */
@@ -732,6 +750,41 @@ INSTALL CHAMILO
     -moz-border-radius: 10px;
     border-radius: 10px;
     margin-top: 3em;
+}
+button.next.disabled {
+  cursor: default;
+  opacity: 0.65;
+}
+button.next.disabled:hover {
+  cursor: default;
+  opacity: 0.65;
+  background-image: none;
+}
+.install-chamilo .btn-success.btn-install {
+  float: right;
+  background: #ff9900; /* Old browsers */
+    background: -moz-linear-gradient(top, #ff9900 0%, #fd6600 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff9900), color-stop(100%,#fd6600)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ff9900 0%,#fd6600 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ff9900 0%,#fd6600 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ff9900 0%,#fd6600 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ff9900 0%,#fd6600 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff9900', endColorstr='#fd6600',GradientType=0 ); /* IE6-9 */
+    border:1px solid rgba(0, 0, 0, 0.15);
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.17);
+    color: #FFFFFF;
+    padding: 5px 25px;
+}
+.install-chamilo .btn-success.btn-install:hover {
+    background: #ff7b00; /* Old browsers */
+    background: -moz-linear-gradient(top, #ff7b00 0%, #fd6600 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff7b00), color-stop(100%,#fd6600)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ff7b00 0%,#fd6600 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ff7b00 0%,#fd6600 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ff7b00 0%,#fd6600 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ff7b00 0%,#fd6600 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff7b00', endColorstr='#fd6600',GradientType=0 ); /* IE6-9 */
+    color: #FFFFFF;
 }
 /*+++++++++++++++++++++++++++++++++++++++++++
 END INSTALL CHAMILO
@@ -932,17 +985,20 @@ footer {
     height: 5em;
   }
 .welcome-mascot{
-  background: none;
-  padding-right: 0px;
-  padding-bottom: 2em;
-  padding-top: 2em;
-}
+      background: none;
+      padding-right: 0px;
+      padding-bottom: 2em;
+      padding-top: 2em;
+    }
 #homepage .row .span9 h2 {
   color: #0191C7;
   font-size: 22px;
   font-weight: bold;
   padding-bottom: 8px;
   line-height: 25px;
+}
+#announcements{
+  display: none;
 }
 }
 /*+++++++++++++++++++++++++++++++++

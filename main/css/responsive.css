@@ -144,6 +144,7 @@ The more frequent ones have been marked with *
     #top_main_content .span6 {
         width: 100%;
     }
+    
     legend {
         margin-bottom: 10px;
         color:#0191C7;
@@ -714,14 +715,15 @@ The more frequent ones have been marked with *
     }
     #settings .form-search .span3 {
         float: left;
-        width: 76%;
+        width: 65%;
         height: 34px;
         margin-right: 5px;
     }
     #settings .row .span6 .well_border ul li{
-        font-size: 15px;
-        padding-top: 5px;
-        padding-bottom: 5px;
+        font-size: 13px;
+        padding-top: 3px;
+        padding-bottom: 3px;
+        line-height: 16px;
     }
     #course_tools .course-title-tools h3 {
         color: #0191C7;
@@ -852,5 +854,6 @@ The more frequent ones have been marked with *
         padding-left: 27px;
         padding-right:5px;
     }
+    
 }
 

@@ -9,28 +9,30 @@
  */
 ob_start();
 
-// names of the language file that needs to be included
-$language_file = array ('registration', 'index', 'trad4all', 'tracking', 'admin');
+// names of the language file that needs to be included.
+$language_file = array('registration', 'index', 'trad4all', 'tracking', 'admin');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 require_once 'myspace.lib.php';
 
 $userId = api_get_user_id();
-
 $this_section = SECTION_TRACKING;
 
 $nameTools = get_lang('Teachers');
 
 api_block_anonymous_users();
 $interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+
 Display :: display_header($nameTools);
 
 $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
+$active = isset($_GET['active']) ? intval($_GET['active']) : 1;
 
 $formateurs = array();
 if (api_is_drh() || api_is_platform_admin()) {
+
     // Followed teachers by drh
-    if (api_drh_can_access_all_session_content()) {
+    /*if (api_drh_can_access_all_session_content()) {
         $sessions = SessionManager::get_sessions_followed_by_drh($userId);
         if (!empty($sessions)) {
             $formateurs = array();
@@ -49,15 +51,13 @@ if (api_is_drh() || api_is_platform_admin()) {
         }
     } else {
         $formateurs = UserManager::get_users_followed_by_drh($userId, COURSEMANAGER);
-    }
+    }*/
 
     $lastConnectionDate = null;
-
     if (!empty($sleepingDays)) {
         $lastConnectionDate = api_get_utc_datetime(strtotime($sleepingDays.' days ago'));
     }
-
-    $formateurs = SessionManager::getTeacherTracking($userId, 1, $lastConnectionDate);
+    $formateurs = SessionManager::getTeacherTracking($userId, $active, $lastConnectionDate);
 
     $menu_items = array(
         Display::url(Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH)."auth/my_progress.php" ),
@@ -138,8 +138,8 @@ $start_date = $end_date = null;
 
 if ($form->validate()) {
     $values = $form->exportValues();
-    $start_date = $defaults['start_date'] =  $values['start_date'];
-    $end_date = $defaults['end_date']   =  $values['end_date'];
+    $start_date = $defaults['start_date'] = $values['start_date'];
+    $end_date = $defaults['end_date'] = $values['end_date'];
     $time_filter = 'custom';
     $time_label = sprintf(get_lang('TimeSpentBetweenXAndY'), $start_date, $end_date);
 }

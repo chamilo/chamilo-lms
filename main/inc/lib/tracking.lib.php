@@ -23,6 +23,80 @@ require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 class Tracking
 {
     /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    public static function getStats($userId)
+    {
+        if (api_is_drh() && api_drh_can_access_all_session_content()) {
+            $studentList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
+                'drh_all',
+                $userId,
+                false,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                array(),
+                array(),
+                STUDENT
+            );
+            $students = array();
+            foreach ($studentList as $studentData) {
+                $students[] = $studentData['user_id'];
+            }
+
+            $teacherList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
+                'drh_all',
+                $userId,
+                false,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                array(),
+                array(),
+                COURSEMANAGER
+            );
+            $teachers = array();
+            foreach ($teacherList as $teacherData) {
+                $teachers[] = $teacherData['user_id'];
+            }
+
+            $platformCourses = SessionManager::getAllCoursesFromAllSessionFromDrh($userId);
+            $courses = array();
+            foreach ($platformCourses as $course) {
+                $courses[$course] = $course;
+            }
+            $sessions = SessionManager::get_sessions_followed_by_drh($userId);
+        } else {
+            $students = array_keys(UserManager::get_users_followed_by_drh($userId, STUDENT));
+            $teachers = array_keys(UserManager::get_users_followed_by_drh($userId, COURSEMANAGER));
+
+            $platformCourses = CourseManager::get_courses_followed_by_drh($userId);
+            foreach ($platformCourses as $course) {
+                $courses[$course['code']] = $course['code'];
+            }
+
+            $sessions = SessionManager::get_sessions_followed_by_drh($userId);
+        }
+
+        return array(
+            'teachers' => $teachers,
+            'students' => $students,
+            'courses' => $courses,
+            'sessions' => $sessions
+        );
+    }
+
+    /**
      * Calculates the time spent on the platform by a user
      * @param   int|array User id
      * @param   string type of time filter: 'last_week' or 'custom'

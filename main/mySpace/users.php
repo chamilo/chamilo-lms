@@ -87,6 +87,7 @@ function get_users($from, $number_of_items, $column, $direction)
                 $active,
                 $lastConnectionDate
             );
+
         }
     } else {
         if (api_is_platform_admin()) {
@@ -103,6 +104,7 @@ function get_users($from, $number_of_items, $column, $direction)
                 $lastConnectionDate
             );
         } else {
+
             $students = UserManager::get_users_followed_by_drh(
                 api_get_user_id(),
                 null,
@@ -276,7 +278,7 @@ if ($export_csv) {
 } else {
     Display::display_header($nameTools);
     echo $actions;
-    $page_title = get_lang('Students');
+    $page_title = get_lang('Users');
     echo Display::page_subheader($page_title);
     if (isset($active)) {
         if ($active) {

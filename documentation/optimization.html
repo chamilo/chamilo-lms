@@ -173,6 +173,7 @@ If you prefer using <a href="http://php.net/manual/en/book.apc.php">APC</a>, you
         }
      ...
 </pre>
+<p>It is also worth noting that the Université de Genève, Switzerland, observed that the calculation of the total size used by course documents is one of the heaviest queries in Chamilo, so you might want to cache the results of this one as well, using the same technique.</p>
 <hr />
 <h2><a name="2.Slow-queries"></a>2. Slow queries</h2>
 Enable slow_queries in /etc/mysqld/my.cnf, restart MySQL then follow using sudo tail -f /var/log/mysql/mysql-slow.log

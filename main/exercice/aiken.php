@@ -10,7 +10,7 @@
  * Code
  */
 // name of the language file that needs to be included
-$language_file = 'exercice';
+$language_file = array('exercice', 'gradebook');
 
 // including the global Chamilo file
 require_once '../inc/global.inc.php';

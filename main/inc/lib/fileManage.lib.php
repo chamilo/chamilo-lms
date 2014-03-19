@@ -16,58 +16,43 @@
  * @desc Update the file or directory path in the document db document table
  *
  */
-function update_db_info($action, $old_path, $new_path = '') {
+function update_db_info($action, $old_path, $new_path = '')
+{
     $dbTable = Database::get_course_table(TABLE_DOCUMENT);
     $course_id = api_get_course_int_id();
-    
-	/* DELETE */
-	if ($action == 'delete') {
-		/*  // RH: metadata, update 2004/08/23
-		    these two lines replaced by new code below:
-        	$query = "DELETE FROM $dbTable
-    		WHERE path='".$old_path."' OR path LIKE '".$old_path."/%'";
-        */
-        $old_path = Database::escape_string($old_path);
-        $to_delete = "WHERE c_id = $course_id AND (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
-        $query = "DELETE FROM $dbTable " . $to_delete;
+    switch ($action) {
+        case 'delete':
+            $old_path = Database::escape_string($old_path);
+            $to_delete = "WHERE c_id = $course_id AND (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
+            $query = "DELETE FROM $dbTable " . $to_delete;
+            $result = Database::query("SELECT id FROM $dbTable " . $to_delete);
 
-        $result = Database::query("SELECT id FROM $dbTable " . $to_delete);
+            if (Database::num_rows($result)) {
+                require_once api_get_path(INCLUDE_PATH).'../metadata/md_funcs.php';
+                $mdStore = new mdstore(TRUE);  // create if needed
 
-        if (Database::num_rows($result)) {
-            require_once api_get_path(INCLUDE_PATH).'../metadata/md_funcs.php';
-            $mdStore = new mdstore(TRUE);  // create if needed
+                $md_type = (substr($dbTable, -13) == 'scormdocument') ? 'Scorm' : 'Document';
 
-            $md_type = (substr($dbTable, -13) == 'scormdocument') ? 'Scorm' : 'Document';
-
-            while ($row = Database::fetch_array($result)) {
-                $eid = $md_type . '.' . $row['id'];
-                $mdStore->mds_delete($eid);
-                $mdStore->mds_delete_offspring($eid);
+                while ($row = Database::fetch_array($result)) {
+                    $eid = $md_type . '.' . $row['id'];
+                    $mdStore->mds_delete($eid);
+                    $mdStore->mds_delete_offspring($eid);
+                }
             }
-        }
-	}
+            Database::query($query);
+            break;
+        case 'update':
+            if ($new_path[0] == '.') $new_path = substr($new_path, 1);
+            $new_path = str_replace('//', '/', $new_path);
 
-	/* UPDATE */
-
-	if ($action == 'update') {
-		//Display::display_normal_message("new_path = $new_path");
-		if ($new_path[0] == '.') $new_path = substr($new_path, 1);
-		$new_path = str_replace('//', '/', $new_path);
-		//Display::display_normal_message("character 0 = " . $new_path[0] . " 1=" . $new_path[1]);
-		//Display::display_normal_message("new_path = $new_path");
-
-		// Older broken version
-		//$query = "UPDATE $dbTable
-		//SET path = CONCAT('".$new_path."', SUBSTRING(path, LENGTH('".$old_path."')+1) )
-		//WHERE path = '".$old_path."' OR path LIKE '".$old_path."/%'";
-
-		// Attempt to update	- tested & working for root	dir
-		$new_path = Database::escape_string($new_path);
-		$query = "UPDATE $dbTable
-		SET path = CONCAT('".$new_path."', SUBSTRING(path, LENGTH('".$old_path."')+1) )
-		WHERE c_id = $course_id AND (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
-	}	
-	Database::query($query);
+            // Attempt to update	- tested & working for root	dir
+            $new_path = Database::escape_string($new_path);
+            $query = "UPDATE $dbTable SET
+                        path = CONCAT('".$new_path."', SUBSTRING(path, LENGTH('".$old_path."')+1) )
+                    WHERE c_id = $course_id AND (path LIKE BINARY '".$old_path."' OR path LIKE BINARY '".$old_path."/%')";
+            Database::query($query);
+            break;
+    }
 }
 
 /**
@@ -100,9 +85,8 @@ function check_name_exist($file_path) {
  * Deletes a file or a directory
  *
  * @author - Hugues Peeters
- * @param  - $file (String) - the path of file or directory to delete
- * @return - bolean - true if the delete succeed
- *           bolean - false otherwise.
+ * @param  $file (String) - the path of file or directory to delete
+ * @return boolean - true if the delete succeed, false otherwise.
  * @see    - delete() uses check_name_exist() and removeDir() functions
  */
 function my_delete($file) {
@@ -159,17 +143,19 @@ function removeDir($dir) {
 
 
 /**
- * Return true if folder is empty 
+ * Return true if folder is empty
  * @author : hubert.borderiou@grenet.fr
  * @param string $in_folder : folder path on disk
  * @return 1 if folder is empty, 0 otherwise
 */
 
 function folder_is_empty($in_folder) {
-    $tab_folder_content = scandir($in_folder);
     $folder_is_empty = 0;
-    if ((count($tab_folder_content) == 2 && in_array(".", $tab_folder_content) && in_array("..", $tab_folder_content)) || (count($tab_folder_content) < 2)) {
-        $folder_is_empty = 1;
+    if (is_dir($in_folder)) {
+        $tab_folder_content = scandir($in_folder);
+        if ((count($tab_folder_content) == 2 && in_array(".", $tab_folder_content) && in_array("..", $tab_folder_content)) || (count($tab_folder_content) < 2)) {
+            $folder_is_empty = 1;
+        }
     }
     return $folder_is_empty;
 }

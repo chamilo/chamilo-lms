@@ -291,7 +291,7 @@ class PDF
         $clean_search = array (
             '@<script[^>]*?>.*?</script>@si',
             '@<style[^>]*?>.*?</style>@siU'
-            );
+        );
 
         // Formatting the pdf
        	$course_data = api_get_course_info($course_code);
@@ -355,7 +355,7 @@ class PDF
         if (!empty($css)) {
             $this->pdf->WriteHTML($css, 1);
         }
-        $this->pdf->WriteHTML($document_html,2);
+        $this->pdf->WriteHTML($document_html, 2);
 
         if (empty($pdf_name)) {
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';

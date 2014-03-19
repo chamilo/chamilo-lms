@@ -53,6 +53,7 @@ class UserGroup extends Model
     public function getTotalCount()
     {
         $row = Database::select('count(*) as count', $this->table, array(), 'first');
+
         return $row['count'];
     }
 
@@ -64,14 +65,17 @@ class UserGroup extends Model
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
             $sql = "SELECT count(u.id) as count FROM ".$this->table." u
-                    INNER JOIN ".$this->access_url_rel_usergroup." a ON (u.id = a.usergroup_id)
+                    INNER JOIN ".$this->access_url_rel_usergroup." a
+                        ON (u.id = a.usergroup_id)
                     WHERE access_url_id = $urlId
             ";
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row  = Database::fetch_array($result);
+
                 return $row['count'];
             }
+
             return 0;
         } else {
             return $this->getTotalCount();
@@ -97,6 +101,7 @@ class UserGroup extends Model
                 $row  = Database::fetch_array($result);
                 return $row['count'];
             }
+
             return 0;
 
         } else {
@@ -106,6 +111,7 @@ class UserGroup extends Model
                 array('where' => array('course_id = ?' => $course_id)),
                 'first'
             );
+
             return $row['count'];
         }
     }
@@ -118,6 +124,7 @@ class UserGroup extends Model
     public function get_id_by_name($name)
     {
         $row = Database::select('id', $this->table, array('where' => array('name = ?' => $name)), 'first');
+
         return $row['id'];
     }
 
@@ -146,8 +153,8 @@ class UserGroup extends Model
 
     /**
      * Gets a list of course ids by user group
-     * @param   int user group id
-     * @param array $conditionsLike
+     * @param int user group id
+     * @param array $loadCourseData
      * @return  array
      */
     public function get_courses_by_usergroup($id, $loadCourseData = false)
@@ -204,11 +211,13 @@ class UserGroup extends Model
                 }
             }
         }
+
         return $array;
     }
 
     /**
      * @param array $options
+     *
      * @return array
      */
     public function get_usergroup_in_course($options = array())
@@ -235,13 +244,24 @@ class UserGroup extends Model
             $urlId = api_get_current_access_url_id();
             $sql .= " AND access_url_id = $urlId ";
         }
+
+        if (isset($options['LIMIT'])) {
+            $limits = explode(',', $options['LIMIT']);
+            $limits = array_map('intval', $limits);
+            if (isset($limits[0]) && isset($limits[1])) {
+                $sql .= " LIMIT ".$limits[0].', '.$limits[1];
+            }
+        }
+
         $result = Database::query($sql);
         $array = Database::store_result($result, 'ASSOC');
+
         return $array;
     }
 
     /**
      * @param array $options
+     *
      * @return array|bool
      */
     public function get_usergroup_not_in_course($options = array())
@@ -251,13 +271,13 @@ class UserGroup extends Model
             $course_id = intval($options['course_id']);
             unset($options['course_id']);
         }
+
         if (empty($course_id)) {
             return false;
         }
+
         if ($this->useMultipleUrl) {
-
             $urlId = api_get_current_access_url_id();
-
             $sql = "SELECT DISTINCT u.id, name
                     FROM {$this->table} u
                     INNER JOIN {$this->access_url_rel_usergroup} a
@@ -281,8 +301,16 @@ class UserGroup extends Model
             $sql .= " AND access_url_id = $urlId";
         }
 
+        if (isset($options['LIMIT'])) {
+            $limits = explode(',', $options['LIMIT']);
+            $limits = array_map('intval', $limits);
+            if (isset($limits[0]) && isset($limits[1])) {
+                $sql .= " LIMIT ".$limits[0].', '.$limits[1];
+            }
+        }
         $result = Database::query($sql);
         $array = Database::store_result($result, 'ASSOC');
+
         return $array;
     }
 

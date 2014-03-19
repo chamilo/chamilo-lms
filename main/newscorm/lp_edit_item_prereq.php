@@ -46,9 +46,8 @@ if ((!$is_allowed_to_edit) || ($isStudentView)) {
 }
 $course_id = api_get_course_int_id();
 
-
-$sql_query = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
-$result = Database::query($sql_query);
+$sql = "SELECT * FROM $tbl_lp WHERE c_id = $course_id AND id = $learnpath_id";
+$result = Database::query($sql);
 $therow = Database::fetch_array($result);
 
 /* SHOWING THE ADMIN TOOLS */

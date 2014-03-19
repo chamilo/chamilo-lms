@@ -2,6 +2,11 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SelectADateOnTheCalendar = "Seleccione una fecha del calendario";
+$AreYouSureDeleteTestResultBeforeDateD = "¿Está seguro que desea eliminar los resultados de este ejercicio antes de la fecha seleccionada?";
+$CleanStudentsResultsBeforeDate = "Eliminar todos los resultados antes de la fecha selecionada";
+$AreYouSureToEmptyAllTestResults = "¿Está seguro de eliminar todos los resultados de todos los ejercicios?";
+$CleanAllStudentsResultsForAllTests = "¿Está seguro de eliminar todos los resultados de los ejericios?";
 $TestFeedbackNotShown = "Esta prueba está configurada para no dar retro-alimentación a los alumnos. Los comentarios correspondientes no se mostrarán al fin de la prueba, pero podrían serle útil, como docente, en el momento de revisar los detalles de las preguntas.";
 $FeedbackDisplayOptions = "Manera en la cual se mostrará el comentario definido para cada pregunta. Esta opción define como un estudiante visualizará (o no) los comentarios (retro-alimentación) ingresados para cada alternativa en cada pregunta. Recomendamos evaluar las distintas opciones antes de invitar los estudiantes a tomar la prueba.";
 $ImportAikenQuizExplanationExample = "Este es el texto de la pregunta 1

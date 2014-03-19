@@ -1100,7 +1100,7 @@ class IndexManager
                         }
                         $date_session_start = $session['date_start'];
                         $date_session_end = $session['date_end'];
-                        $days_access_before_beginning   = $session['nb_days_access_before_beginning'];
+                        $days_access_before_beginning = $session['nb_days_access_before_beginning'];
                         $days_access_after_end  = $session['nb_days_access_after_end'];
 
                         $session_now = time();

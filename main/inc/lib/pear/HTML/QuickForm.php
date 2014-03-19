@@ -668,13 +668,20 @@ class HTML_QuickForm extends HTML_Common
 
         // Add the element if it is not an incompatible duplicate
         if (!empty($elementName) && isset($this->_elementIndex[$elementName])) {
-            if ($this->_elements[$this->_elementIndex[$elementName]]->getType() ==
-                $elementObject->getType()) {
+            if ($this->_elements[$this->_elementIndex[$elementName]]->getType() == $elementObject->getType()
+            ) {
                 $this->_elements[] =& $elementObject;
                 $elKeys = array_keys($this->_elements);
                 $this->_duplicateIndex[$elementName][] = end($elKeys);
             } else {
-                $error = PEAR::raiseError(null, QUICKFORM_INVALID_ELEMENT_NAME, null, E_USER_WARNING, "Element '$elementName' already exists in HTML_QuickForm::addElement()", 'HTML_QuickForm_Error', true);
+                $error = PEAR::raiseError(
+                    null,
+                    QUICKFORM_INVALID_ELEMENT_NAME,
+                    null,
+                    E_USER_WARNING,
+                    "Element '$elementName' already exists in HTML_QuickForm::addElement()", 'HTML_QuickForm_Error',
+                    true
+                );
                 return $error;
             }
         } else {
@@ -682,6 +689,7 @@ class HTML_QuickForm extends HTML_Common
             $elKeys = array_keys($this->_elements);
             $this->_elementIndex[$elementName] = end($elKeys);
         }
+
         if ($this->_freezeAll) {
             $elementObject->freeze();
         }

@@ -297,10 +297,10 @@ class GradebookTable extends SortableTable {
 
                     $row[] = $this->build_type_column($item, array('style' => 'padding-left:5px'));
 
-                    //Name
+                    // Name.
                     $row[] = $invisibility_span_open."&nbsp;&nbsp;&nbsp;  ".$this->build_name_link($item) . $invisibility_span_close;
 
-                    //Description
+                    // Description.
                     $row[] = $invisibility_span_open.$data[2].$invisibility_span_close;
 
                     //Weight

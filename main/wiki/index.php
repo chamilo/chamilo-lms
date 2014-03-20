@@ -102,9 +102,11 @@ $view = isset($_GET['view']) ? $_GET['view'] : null;
 $wiki->page = $page;
 $wiki->action = $action;
 
-/* MAIN CODE */
+// Setting wiki data
+if (!empty($view)) {
+    $wiki->setWikiData($view);
+}
 
-/* ACTIONS */
 $wiki->blockConcurrentEditions(api_get_user_id(), $action);
 
 /* MAIN WIKI AREA */
@@ -118,7 +120,6 @@ Display::display_header($tool_name, 'Wiki');
 
 // check last version
 if (!empty($view)) {
-    $wiki->setWikiData($view);
     $wiki->checkLastVersion($view);
 }
 

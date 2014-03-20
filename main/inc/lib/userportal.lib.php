@@ -901,8 +901,7 @@ class IndexManager
             $my_account_content .= '<li><a href="main/create_course/add_course.php" class="add course">';
             if (api_get_setting('course_validation') == 'true' && !api_is_platform_admin()) {
                 $my_account_content .= get_lang('CreateCourseRequest');
-            }
-            else {
+            } else {
                 $my_account_content .= get_lang('CourseCreate');
             }
             $my_account_content .= '</a></li>';

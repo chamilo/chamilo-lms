@@ -199,11 +199,12 @@ function get_icon_file_name($type) {
  * @param object $cat category object
  * @param int $selectcat id of selected category
  */
-function build_edit_icons_cat($cat, $selectcat) {
+function build_edit_icons_cat($cat, $selectcat)
+{
     $show_message = $cat->show_message_resource_delete($cat->get_course_code());
     $grade_model_id = $selectcat->get_grade_model_id();
-
     $selectcat = $selectcat->get_id();
+    $modify_icons = null;
 
     if ($show_message === false) {
         $visibility_icon = ($cat->is_visible() == 0) ? 'invisible' : 'visible';
@@ -258,6 +259,7 @@ function build_edit_icons_cat($cat, $selectcat) {
                 $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?deletecat=' . $cat->get_id() . '&amp;selectcat=' . $selectcat . '&amp;cidReq=' . $cat->get_course_code() . '" onclick="return confirmation();">' . Display::return_icon('delete.png', get_lang('DeleteAll'), '', ICON_SIZE_SMALL) . '</a>';
             }
         }
+
         return $modify_icons;
     }
 }

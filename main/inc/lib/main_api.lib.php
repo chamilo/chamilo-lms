@@ -5028,7 +5028,7 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
 function replace_dangerous_char($filename, $strict = 'loose') {
     // Safe replacements for some non-letter characters.
     static $search  = array(',', "\0", ' ', "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');
-    static $replace = array('_', '',   '_', '_',  '_',  '_',  '_', '-', '-',  '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
+    static $replace = array('_', '', '_', '_', '_', '_', '_', '-', '-', '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
 
     // Encoding detection.
     $encoding = api_detect_encoding($filename);

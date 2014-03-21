@@ -284,6 +284,12 @@ switch ($action) {
         $records = SessionManager::get_survey_overview($_GET['session_id'], $_GET['course_id'], $_GET['survey_id'], $_GET['date_from'], $_GET['date_to'], $options);
         $count = count($records);
         break;
+    case 'get_exercise_grade':
+        //@TODO replace this for a more efficient function (not retrieving the whole data)
+        $course = api_get_course_info_by_id($_GET['course_id']);
+        $users = CourseManager::get_student_list_from_course_code($course['code'], true, $_GET['session_id'], $_GET['date_from'], $_GET['date_to']);
+        $count = count($users);
+        break;
     /*case 'get_extra_fields':
         $type = $_REQUEST['type'];
         $obj = new ExtraField($type);
@@ -957,6 +963,82 @@ switch ($action) {
             $result = $new_result;
         }
         break;
+    case 'get_exercise_grade':
+        //@TODO replace this for a more efficient function (not retrieving the whole data)
+        $objExercise = new Exercise();
+        $exercises = $objExercise->getExercisesByCouseSession($_GET['course_id'], $_GET['session_id']);
+        $cntExer = 3;
+        if (!empty($exercises)) {
+            $cntExer += count($exercises);
+        }
+
+        $columns = array();
+        //Get dynamic column names
+        $i = 1;
+        foreach (range(1, $cntExer) as $cnt) {
+            switch ($cnt) {
+                case 1:
+                    $columns[] = 'username';
+                    break;
+                case 2:
+                    $columns[] = 'name';
+                    break;
+                case $cntExer:
+                    $columns[] = 'finalScore';
+                    break;
+                default:
+                    $columns[] = 'exer' . $i;
+                    $i++;
+                    break;
+            }
+        }
+       
+        $quizIds = array();
+        if (!empty($exercises)) {
+            foreach($exercises as $exercise) {
+                $quizIds[] = $exercise['id'];
+            }
+        }
+        
+        $course = api_get_course_info_by_id($_GET['course_id']);
+        $listUserSess = CourseManager::get_student_list_from_course_code($course['code'], true, $_GET['session_id']);
+        
+        $usersId = array_keys($listUserSess);
+        
+        $users = UserManager::get_user_list_by_ids($usersId, null, "lastname, firstname");
+        $exeResults = $objExercise->getExerciseAndResult($_GET['course_id'], $_GET['session_id'], $quizIds);
+        
+        $arrGrade = array();
+        foreach($exeResults as $exeResult) {
+            $arrGrade[$exeResult['exe_user_id']][$exeResult['exe_exo_id']] = $exeResult['exe_result'];
+        }
+
+        $result = array();
+        $i = 0;
+        foreach($users as $user) {
+            $result[$i]['username'] = $user['user_id'];
+            $result[$i]['name'] = $user['lastname'] . " " . $user['firstname'];
+            $j = 1;
+            $finalScore = 0;
+            foreach ($quizIds as $quizID) {
+                $grade = "";
+                if (!empty($arrGrade [$user['user_id']][$quizID]) || $arrGrade [$user['user_id']][$quizID] == 0) {
+                    $finalScore += $grade = $arrGrade [$user['user_id']][$quizID];
+                }
+                $result[$i]['exer' . $j] = $grade;
+                $j++;
+            }
+            
+            if ($finalScore > 20) {
+                $finalScore = 20;
+            }
+            
+            $result[$i]['finalScore'] = number_format($finalScore, 2);
+            
+            $i++;
+        }
+        $count = count($users);
+        break;
     case 'get_extra_field_options':
         $obj = new ExtraFieldOption($type);
         $columns = array('option_display_text', 'option_value', 'option_order');
@@ -1031,7 +1113,8 @@ $allowed_actions = array(
     //'get_extra_field_options',
     //'get_course_exercise_medias',
     'get_user_course_report',
-    'get_user_course_report_resumed'
+    'get_user_course_report_resumed',
+    'get_exercise_grade'
 );
 
 //5. Creating an obj to return a json
@@ -1086,7 +1169,6 @@ if (in_array($action, $allowed_actions)) {
 
     if (!empty($result)) {
         foreach ($result as $row) {
-            //print_r($row);
             // if results tab give not id, set id to $i otherwise id="null" for all <tr> of the jqgrid - ref #4235
             if ($row['id'] == "") {
                 $response->rows[$i]['id']=$i;

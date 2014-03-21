@@ -379,4 +379,7 @@ $FollowedSessions = "Sesiones seguidas";
 $FollowedCourses = "Cursos seguidos";
 $FollowedUsers = "Usuarios seguidos";
 $Timeline = "Línea del tiempo";
+$DisplayGradeOverview = "Reporte de Notas por Curso";
+$LpGradeReport = "Reporte de Notas por Curso";
+$FinalScore = "Nota Final";
 ?>

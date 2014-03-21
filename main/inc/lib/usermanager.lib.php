@@ -899,7 +899,7 @@ class UserManager
         return (strlen($username) > USERNAME_MAX_LENGTH);
     }
 
-    public static function get_user_list_by_ids($ids = array(), $active = null)
+    public static function get_user_list_by_ids($ids = array(), $active = null, $order = null)
     {
         if (empty($ids)) {
             return array();
@@ -915,6 +915,10 @@ class UserManager
             $sql .= ' AND active='.($active ? '1' : '0');
         }
 
+        if (!is_null($order)) {
+            $sql .= ' ORDER BY ' . $order;
+        }
+        
         $rs = Database::query($sql);
         $result = array();
         while ($row = Database::fetch_array($rs)) {

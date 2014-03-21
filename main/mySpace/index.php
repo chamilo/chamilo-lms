@@ -599,24 +599,33 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 }
 
 if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourstudents') {
+    echo '<a href="' . api_get_self() . '?view=admin&amp;display=coaches">' . get_lang('DisplayCoaches') . '</a> | ';
+    echo '<a href="' . api_get_self() . '?view=admin&amp;display=useroverview">' . get_lang('DisplayUserOverview') . '</a>';
+    if ($display == 'useroverview') {
+        echo ' ( <a href="' . api_get_self() . '?view=admin&amp;display=useroverview&amp;export=options">' . get_lang('ExportUserOverviewOptions') . '</a> )';
+    }
+    echo ' | <a href="' . api_get_self() . '?view=admin&amp;display=sessionoverview">' . get_lang('DisplaySessionOverview') . '</a>';
+    echo ' | <a href="' . api_get_self() . '?view=admin&amp;display=accessoverview">' . get_lang('DisplayAccessOverview') . '</a>';
+    echo ' | <a href="' . api_get_self() . '?view=admin&amp;display=surveyoverview">' . get_lang('DisplaySurveyOverview') . '</a>';
+    echo ' | <a href="' . api_get_self() . '?view=admin&amp;display=lpprogressoverview">' . get_lang('DisplayLpProgressOverview') . '</a>';
+    echo ' | <a href="' . api_get_self() . '?view=admin&amp;display=progressoverview">' . get_lang('DisplayProgressOverview') . '</a>';
+    echo ' | <a href="' . api_get_self() . '?view=admin&amp;display=exerciseprogress">' . get_lang('DisplayExerciseProgress') . '</a>';
+    echo ' | <a href="' . api_get_self() . '?view=admin&amp;display=courseoverview">' . get_lang('DisplayCourseOverview') . '</a>';
+    echo ' | <a href="' . api_get_path(WEB_CODE_PATH) . 'tracking/question_course_report.php?view=admin">' . get_lang('LPQuestionListResults') . '</a>';
+    echo ' | <a href="' . api_get_path(WEB_CODE_PATH) . 'tracking/course_session_report.php?view=admin">' . get_lang('LPExerciseResultsBySession') . '</a>';
+    echo ' | <a href="' . api_get_self() . '?view=admin&amp;display=lpgradereport">' . get_lang('LpGradeReport') . '</a>';
+    echo '<br /><br />';
 
-	echo '<a href="'.api_get_self().'?view=admin&amp;display=coaches">'.get_lang('DisplayCoaches').'</a> | ';
-	echo '<a href="'.api_get_self().'?view=admin&amp;display=useroverview">'.get_lang('DisplayUserOverview').'</a>';
-	if ($display == 'useroverview') {
-		echo ' ( <a href="'.api_get_self().'?view=admin&amp;display=useroverview&amp;export=options">'.get_lang('ExportUserOverviewOptions').'</a> )';
-	}
-	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=sessionoverview">'.get_lang('DisplaySessionOverview').'</a>';
-	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=accessoverview">'.get_lang('DisplayAccessOverview').'</a>';
-    echo ' | <a href="'.api_get_self().'?view=admin&amp;display=surveyoverview">'.get_lang('DisplaySurveyOverview').'</a>';
-    echo ' | <a href="'.api_get_self().'?view=admin&amp;display=lpprogressoverview">'.get_lang('DisplayLpProgressOverview').'</a>';
-    echo ' | <a href="'.api_get_self().'?view=admin&amp;display=progressoverview">'.get_lang('DisplayProgressOverview').'</a>';
-    echo ' | <a href="'.api_get_self().'?view=admin&amp;display=exerciseprogress">'.get_lang('DisplayExerciseProgress').'</a>';
-	echo ' | <a href="'.api_get_self().'?view=admin&amp;display=courseoverview">'.get_lang('DisplayCourseOverview').'</a>';
-    echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'tracking/question_course_report.php?view=admin">'.get_lang('LPQuestionListResults').'</a>';
-    echo ' | <a href="'.api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin">'.get_lang('LPExerciseResultsBySession').'</a>';
-	echo '<br /><br />';
-
-    if ($is_platform_admin && $view == 'admin' && in_array($display, array('accessoverview','lpprogressoverview', 'progressoverview', 'exerciseprogress', 'surveyoverview'))) {
+    $listToDisplay = array(
+                        'accessoverview',
+                        'lpprogressoverview', 
+                        'progressoverview', 
+                        'exerciseprogress', 
+                        'surveyoverview', 
+                        'lpgradereport'
+                    );
+    
+    if ($is_platform_admin && $view == 'admin' && in_array($display, $listToDisplay)) {
         //selft script
         $self       = api_get_self();
         //ajax path
@@ -658,6 +667,9 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 break;
             case 'courseoverview':
                $tool_name = get_lang('DisplayCourseOverview');
+                break;
+            case 'lpgradereport':
+               $tool_name = get_lang('DisplayGradeOverview');
                 break;
         }
 
@@ -798,27 +810,8 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                     });';
         }
 
-        //progress overview and Learning Path progress overview
-        /*if (in_array($display, array('progressoverview', 'lpprogressoverview'))) {
-            $script = '
-                $( "#date_from, #date_to").datepicker({
-                    dateFormat:  "yy-mm-dd",
-                    onSelect: function( selectedDate ) {
-                        var filled = areBothFilled();
-                        if (filled) {
-                            var date_to     = $("#date_to").val();
-                            var date_from   = $("#date_from").val();
-                            var sessionId   = $("#session_name").val();
-                            var courseId    = $("#course_name").val();
-                            window.location = "'.$self.'?view=admin&display='.$display.'&session_id="+sessionId+"&course_id="+courseId+"&date_to="+date_to+"&date_from="+date_from;
-                        }
-                    }
-                });
-            ';
-        }*/
-
         //date filter
-        if (!in_array($display, array('surveyoverview', 'progressoverview', 'exerciseprogress'))) {
+        if (!in_array($display, array('surveyoverview', 'progressoverview', 'exerciseprogress', 'lpgradereport'))) {
             $sessionFilter->addElement('text', 'from', get_lang('From'), array('id' => 'date_from', 'value' => (!empty($_GET['date_from']) ? $_GET['date_from'] : ''), 'style' => 'width:75px' ));
             $sessionFilter->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to', 'value' => (!empty($_GET['date_to']) ? $_GET['date_to'] : ''), 'style' => 'width:75px' ));
        }
@@ -1062,6 +1055,12 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
             } else {
                 Display::display_warning_message(get_lang('ChooseEvaluation'));
             }
+        } else {
+            Display::display_warning_message(get_lang('ChooseCourse'));
+        }
+    } else if($display == 'lpgradereport') {
+        if (!empty($_GET['course_id'])) {
+                echo MySpace::display_tracking_grade_overview(intval($_GET['session_id']), intval($_GET['course_id']), intval($_GET['exercise_id']));
         } else {
             Display::display_warning_message(get_lang('ChooseCourse'));
         }

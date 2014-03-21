@@ -1980,16 +1980,16 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
       <?php } else { ?>
       <td>
           <div class="control-group">
-              <label class="checkbox inline">
-                <input class="checkbox" type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" <?php echo ($encryptPassForm == 'sha1') ? 'checked="checked" ': ''; ?>/><?php echo 'sha1'; ?>
+              <label class="radio inline">
+                <input  type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" <?php echo ($encryptPassForm == 'sha1') ? 'checked="checked" ': ''; ?>/><?php echo 'sha1'; ?>
               </label>
 
-              <label class="checkbox inline">
-                <input class="checkbox" type="radio" name="encryptPassForm" value="md5" id="encryptPass0" <?php echo $encryptPassForm == 1 ? 'checked="checked" ' : ''; ?>/><?php echo 'md5'; ?>
+              <label class="radio inline">
+                <input type="radio" name="encryptPassForm" value="md5" id="encryptPass0" <?php echo $encryptPassForm == 1 ? 'checked="checked" ' : ''; ?>/><?php echo 'md5'; ?>
               </label>
 
-                <label class="checkbox inline">
-                    <input class="checkbox" type="radio" name="encryptPassForm" value="none" id="encryptPass2" <?php echo $encryptPassForm === '0' or $encryptPassForm === 0 ? 'checked="checked" ':''; ?>/><?php echo get_lang('None'); ?>
+                <label class="radio inline">
+                    <input type="radio" name="encryptPassForm" value="none" id="encryptPass2" <?php echo $encryptPassForm === '0' or $encryptPassForm === 0 ? 'checked="checked" ':''; ?>/><?php echo get_lang('None'); ?>
                 </label>
 
           </div>
@@ -2004,11 +2004,11 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
       <?php else: ?>
       <td>
           <div class="control-group">
-            <label class="checkbox inline">
-                <input class="checkbox" type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" <?php echo $allowSelfReg ? 'checked="checked" ' : ''; ?>/> <?php echo get_lang('Yes'); ?>
+            <label class="radio inline">
+                <input type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" <?php echo $allowSelfReg ? 'checked="checked" ' : ''; ?>/> <?php echo get_lang('Yes'); ?>
             </label>
-            <label class="checkbox inline">
-                <input class="checkbox" type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" <?php echo $allowSelfReg ? '' : 'checked="checked" '; ?>/><?php echo get_lang('No'); ?>
+            <label class="radio inline">
+                <input type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" <?php echo $allowSelfReg ? '' : 'checked="checked" '; ?>/><?php echo get_lang('No'); ?>
             </label>
           </div>
       </td>
@@ -2023,12 +2023,12 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
       <?php else: ?>
       <td>
           <div class="control-group">
-            <label class="checkbox inline">
-                <input class="checkbox" type="radio" name="allowSelfRegProf" value="1" id="allowSelfRegProf1" <?php echo $allowSelfRegProf ? 'checked="checked" ' : ''; ?>/>
+            <label class="radio inline">
+                <input type="radio" name="allowSelfRegProf" value="1" id="allowSelfRegProf1" <?php echo $allowSelfRegProf ? 'checked="checked" ' : ''; ?>/>
             <?php echo get_lang('Yes'); ?>
             </label>
-            <label class="checkbox inline">
-                <input class="checkbox" type="radio" name="allowSelfRegProf" value="0" id="allowSelfRegProf0" <?php echo $allowSelfRegProf ? '' : 'checked="checked" '; ?>/>
+            <label class="radio inline">
+                <input type="radio" name="allowSelfRegProf" value="0" id="allowSelfRegProf0" <?php echo $allowSelfRegProf ? '' : 'checked="checked" '; ?>/>
             <?php echo get_lang('No'); ?>
             </label>
           </div>

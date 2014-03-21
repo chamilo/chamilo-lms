@@ -135,15 +135,15 @@ switch ($action) {
         $count = 0;
 
         foreach ($course_list as $item) {
-           var_dump($course_list);Exit;
-            if(!$item['visibility']) {
-                echo "xxx";Exit;
-            }
-            if (isset($course_id) && !empty($course_id)) {
-                if ($course_id != $item['id']) {
-                    continue;
-                }
-            }
+//           var_dump($course_list);Exit;
+//            if(!$item['visibility']) {
+//                echo "xxx";Exit;
+//            }
+//            if (isset($course_id) && !empty($course_id)) {
+//                if ($course_id != $item['id']) {
+//                    continue;
+//                }
+//            }
             $list               = new LearnpathList(api_get_user_id(), $item['code'], $session_id);
             $flat_list          = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;

@@ -1480,10 +1480,7 @@ function display_license_agreement() {
     ?>
     <table>
 		<tr><td>
-            <p style="font-size:90%">
-            <textarea cols="90" rows="7" class="span6">
-            	<?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?>
-            </textarea></p>
+            <pre style="overflow: auto; height: 150px; margin-top: 5px;" class="span7"><?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?></pre>
         </td>
         </tr>
         <tr><td>

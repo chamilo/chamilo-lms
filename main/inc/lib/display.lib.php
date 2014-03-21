@@ -24,23 +24,64 @@
  * @package chamilo.library
  */
 
-class Display {
-
+class Display
+{
     /* The main template*/
-    static $global_template;
-    static $preview_style = null;
+    public static $global_template;
+    public static $preview_style = null;
 
-    public function __construct() {
+    public function __construct()
+    {
+    }
+
+    /**
+     * @return array
+     */
+    public static function toolList()
+    {
+        return array(
+            'group',
+            'work',
+            'glossary',
+            'forum',
+            'course_description',
+            'gradebook',
+            'attendance',
+            'course_progress',
+            'notebook'
+        );
     }
 
      /**
      * Displays the page header
      * @param string The name of the page (will be showed in the page title)
      * @param string Optional help file name
+     * @param string $page_header
      */
-    public static function display_header($tool_name ='', $help = null, $page_header = null) {
+    public static function display_header($tool_name ='', $help = null, $page_header = null)
+    {
         self::$global_template = new Template($tool_name);
+
+        // Fixing tools with any help it takes xxx part of main/xxx/index.php
+        if (empty($help)) {
+            $currentURL = api_get_self();
+            preg_match('/main\/([^*\/]+)/', $currentURL, $matches);
+            $toolList = self::toolList();
+            if (!empty($matches)) {
+
+                foreach ($matches as $match) {
+                    if (in_array($match, $toolList)) {
+                        $help = explode('_', $match);
+                        $help = array_map('ucfirst', $help);
+                        $help = implode('', $help);
+                        break;
+                    }
+                }
+            }
+        }
+
         self::$global_template->set_help($help);
+
         if (!empty(self::$preview_style)) {
             self::$global_template->preview_theme = self::$preview_style;
             self::$global_template->set_css_files();
@@ -301,8 +342,13 @@ class Display {
      * @param bool	Filter (true) or not (false)
      * @return void
      */
-    public static function display_normal_message($message, $filter = true) {
-    	echo self::return_message($message, 'normal', $filter);
+    public static function display_normal_message($message, $filter = true, $returnValue = false) {
+    	$message = self::return_message($message, 'normal', $filter);
+        if ($returnValue) {
+            return $message;
+        } else {
+            echo $message;
+        }
     }
 
     /**
@@ -310,8 +356,14 @@ class Display {
      * This can also be used for instance with the hint in the exercises
      *
      */
-    public static function display_warning_message($message, $filter = true) {
-    	echo self::return_message($message, 'warning', $filter);
+    public static function display_warning_message($message, $filter = true, $returnValue = false)
+    {
+        $message = self::return_message($message, 'warning', $filter);
+        if ($returnValue) {
+            return $message;
+        } else {
+            echo $message;
+        }
     }
 
     /**
@@ -319,8 +371,14 @@ class Display {
      * @param bool	Filter (true) or not (false)
      * @return void
      */
-    public static function display_confirmation_message ($message, $filter = true) {
-        echo self::return_message($message, 'confirm', $filter);
+    public static function display_confirmation_message ($message, $filter = true, $returnValue = false)
+    {
+        $message = self::return_message($message, 'confirm', $filter);
+        if ($returnValue) {
+            return $message;
+        } else {
+            echo $message;
+        }
     }
 
     /**
@@ -330,11 +388,23 @@ class Display {
      * @param bool	Filter (true) or not (false)
      * @return void
      */
-    public static function display_error_message ($message, $filter = true) {
-        echo self::return_message($message, 'error', $filter);
+    public static function display_error_message ($message, $filter = true, $returnValue = false)
+    {
+        $message = self::return_message($message, 'error', $filter);
+        if ($returnValue) {
+            return $message;
+        } else {
+            echo $message;
+        }
     }
 
-    public static function return_message_and_translate($message, $type='normal', $filter = true) {
+    /**
+     * @param string $message
+     * @param string $type
+     * @param bool $filter
+     */
+    public static function return_message_and_translate($message, $type='normal', $filter = true)
+    {
         $message = get_lang($message);
         echo self::return_message($message, $type, $filter);
     }
@@ -346,11 +416,13 @@ class Display {
      * @param   bool    Whether to XSS-filter or not
      * @return  string  Message wrapped into an HTML div
      */
-    public static function return_message($message, $type='normal', $filter = true) {
+    public static function return_message($message, $type='normal', $filter = true)
+    {
         if ($filter) {
         	$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
             //$message = Security::remove_XSS($message);
         }
+
         $class = "";
         switch($type) {
             case 'warning':
@@ -379,7 +451,8 @@ class Display {
      * @param string  optional, class from stylesheet
      * @return string encrypted mailto hyperlink
      */
-    public static function encrypted_mailto_link ($email, $clickable_text = null, $style_class = '') {
+    public static function encrypted_mailto_link ($email, $clickable_text = null, $style_class = '')
+    {
         if (is_null($clickable_text)) {
             $clickable_text = $email;
         }
@@ -1036,23 +1109,25 @@ class Display {
      * @param array     Course information array, containing at least elements 'db' and 'k'
      * @return string   The HTML link to be shown next to the course
      */
-    public static function show_notification($course_info) {
+    public static function show_notification($course_info)
+    {
         $t_track_e_access 	= Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
-        $user_id = api_get_user_id();
-
         $course_tool_table	= Database::get_course_table(TABLE_TOOL_LIST);
         $tool_edit_table 	= Database::get_course_table(TABLE_ITEM_PROPERTY);
-
         $course_code        = Database::escape_string($course_info['code']);
-        $course_id          = $course_info['real_id'];
 
+        $user_id = api_get_user_id();
+        $course_id = $course_info['real_id'];
         $course_info['id_session'] = intval($course_info['id_session']);
+
         // Get the user's last access dates to all tools of this course
-        $sqlLastTrackInCourse = "SELECT * FROM $t_track_e_access USE INDEX (access_cours_code, access_user_id)
-                                 WHERE  access_cours_code = '".$course_code."' AND
-                                        access_user_id = '$user_id' AND
-                                        access_session_id ='".$course_info['id_session']."'";
-        $resLastTrackInCourse = Database::query($sqlLastTrackInCourse);
+        $sql = "SELECT *
+                FROM $t_track_e_access USE INDEX (access_cours_code, access_user_id)
+                WHERE
+                    access_cours_code = '".$course_code."' AND
+                    access_user_id = '$user_id' AND
+                    access_session_id ='".$course_info['id_session']."'";
+        $resLastTrackInCourse = Database::query($sql);
 
         $oldestTrackDate = $oldestTrackDateOrig = '3000-01-01 00:00:00';
         while ($lastTrackInCourse = Database::fetch_array($resLastTrackInCourse)) {
@@ -1061,6 +1136,7 @@ class Display {
                 $oldestTrackDate = $lastTrackInCourse['access_date'];
             }
         }
+
         if ($oldestTrackDate == $oldestTrackDateOrig) {
             //if there was no connexion to the course ever, then take the
             // course creation date as a reference
@@ -1076,18 +1152,26 @@ class Display {
         }
 
         // Get the last edits of all tools of this course.
-        $sql = "SELECT tet.*, tet.lastedit_date last_date, tet.tool tool, tet.ref ref, ".
-                            " tet.lastedit_type type, tet.to_group_id group_id, ".
-                            " ctt.image image, ctt.link link ".
-                        " FROM $tool_edit_table tet, $course_tool_table ctt ".
-                        " WHERE tet.c_id = $course_id AND
-                                ctt.c_id = $course_id AND
-                                tet.lastedit_date > '$oldestTrackDate' ".
-                        // Special hack for work tool, which is called student_publication in c_tool and work in c_item_property :-/ BT#7104
-                        " AND (ctt.name = tet.tool OR (ctt.name = 'student_publication' AND tet.tool = 'work')) ".
-                        " AND ctt.visibility = '1' ".
-                        " AND tet.lastedit_user_id != $user_id AND tet.id_session = '".$course_info['id_session']."' ".
-                        " ORDER BY tet.lastedit_date";
+        $sql = "SELECT
+                    tet.*,
+                    tet.lastedit_date last_date,
+                    tet.tool tool,
+                    tet.ref ref,
+                    tet.lastedit_type type,
+                    tet.to_group_id group_id,
+                    ctt.image image,
+                    ctt.link link
+                FROM $tool_edit_table tet, $course_tool_table ctt
+                WHERE
+                    tet.c_id = $course_id AND
+                    ctt.c_id = $course_id AND
+                    tet.lastedit_date > '$oldestTrackDate' ".
+                    // Special hack for work tool, which is called student_publication in c_tool and work in c_item_property :-/ BT#7104
+                    " AND (ctt.name = tet.tool OR (ctt.name = 'student_publication' AND tet.tool = 'work')) ".
+                    " AND ctt.visibility = '1' ".
+                    " AND tet.lastedit_user_id != $user_id AND tet.id_session = '".$course_info['id_session']."'
+                 ORDER BY tet.lastedit_date";
+
         $res = Database::query($sql);
         // Get the group_id's with user membership.
         $group_ids = GroupManager :: get_group_ids($course_info['real_id'], $user_id);
@@ -1097,7 +1181,7 @@ class Display {
         while ($res && ($item_property = Database::fetch_array($res))) {
             // First thing to check is if the user never entered the tool
             // or if his last visit was earlier than the last modification.
-            if ((!isset ($lastTrackInCourseDate[$item_property['tool']])
+            if ((!isset($lastTrackInCourseDate[$item_property['tool']])
                  || $lastTrackInCourseDate[$item_property['tool']] < $item_property['lastedit_date'])
                 // Drop the tool elements that are part of a group that the
                 // user is not part of.
@@ -1130,10 +1214,9 @@ class Display {
                 // If it's a learning path, ensure it is currently visible to the user
                 if ($item_property['tool'] == TOOL_LEARNPATH) {
                     require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpath.class.php';
-                    if (!learnpath::is_lp_visible_for_student($item_property['ref'],$user_id, $course_code)) {
+                    if (!learnpath::is_lp_visible_for_student($item_property['ref'], $user_id, $course_code)) {
                         continue;
                     }
-
                 }
                 if ($item_property['tool'] == 'work' && $item_property['type'] == 'DirectoryCreated') {
                     $item_property['lastedit_type'] = 'WorkAdded';
@@ -1598,11 +1681,11 @@ class Display {
                 $id = isset($params['id']) ? $params['id'] : $fileInfo['basename'];
                 $class = isset($params['class']) ? ' class="'.$params['class'].'"' : null;
 
-                $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$file.'" >';
-                $html .= '  <object width="'.$params['width'].'" height="50" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
-                                <param name="movie" value="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf" />
-                                <param name="flashvars" value="controls=true&file='.$fileInfo['basename'].'" />
-                            </object>';
+                $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$params['url'].'" >';
+                $html .= '<object width="'.$width.'" height="50" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
+                            <param name="movie" value="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf" />
+                            <param name="flashvars" value="controls=true&file='.$params['url'].'" />
+                          </object>';
                 $html .= '</audio>';
                 return $html;
                 break;
@@ -1610,4 +1693,4 @@ class Display {
 
         return null;
     }
-} //end class Display
+}

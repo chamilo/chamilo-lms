@@ -141,7 +141,7 @@ $htmlHeadXtra[] = '
 
         $(".button_actions").hide();
 
-        $( ".lp_resource" ).sortable({
+        $(".lp_resource").sortable({
             items: ".lp_resource_element ",
             handle: ".moved", //only the class "moved"
             cursor: "move",
@@ -151,7 +151,6 @@ $htmlHeadXtra[] = '
             start: function(event, ui) {
                 $(ui.item).css("width", "160px");
                 $(ui.item).find(".item_data").attr("style", "");
-
             },
             stop: function(event, ui) {
                 $(ui.item).css("width", "100%");
@@ -163,7 +162,6 @@ $htmlHeadXtra[] = '
             handle: ".moved", //only the class "moved"
             cursor: "move",
             placeholder: "ui-state-highlight", //defines the yellow highlight
-
             update: function(event, ui) {
                 buildLPtree($("#lp_item_list"), 0);
                 var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
@@ -374,7 +372,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
         if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'view' && !isset($_REQUEST['exeId'])) {
             $_REQUEST['action'] = 'build';
         }
-        $_SESSION['studentview'] = null;
+        //$_SESSION['studentview'] = null;
     }
 }
 

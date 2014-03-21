@@ -171,7 +171,7 @@ class Promotion extends Model
 		$oFCKeditor->CreateHtml();
 
 		$form = new FormValidator('promotion', 'post', $url);
-        // Settting the form elements
+        // Setting the form elements
         $header = get_lang('Add');
         if ($action == 'edit') {
         	$header = get_lang('Modify');

@@ -2306,13 +2306,13 @@ function show_add_form($id = '', $type = null)
         $repeat = !empty($_POST['repeat']) ? true : false;
     }
 
-    $default_no_empty_end_date = 0;
     $course_info = null;
+
+    $agendaObj = new Agenda();
 
     // if the id is set then we are editing an agenda item
     if (!empty($id)) {
         $course_info = api_get_course_info();
-        $agendaObj = new Agenda();
         if (!empty($course_info)) {
             $agendaObj->set_course($course_info);
             $agendaObj->type = 'course';
@@ -2755,8 +2755,8 @@ function show_add_form($id = '', $type = null)
                 </div>
                 <label class="control-label">'.
                     get_lang('Comment').'
-                </label>  
-                <div class="controls">  
+                </label>
+                <div class="controls">
                     <textarea name="file_comment" type="textarea"></textarea>
                 </div>
              </div>';
@@ -4102,9 +4102,9 @@ function show_add_form($id = '', $type = null)
         $sql = "INSERT INTO ".$t_agenda." (c_id, title,content, start_date, end_date".(!empty($parent_id) ? ',parent_event_id' : '').", session_id)
             VALUES($course_id, '".$title."','".$content."', '".$start_date."','".$end_date."'".(!empty($parent_id) ? ','.((int) $parent_id) : '').", '".$id_session."')";
 
-        $result = Database::query($sql);
+        Database::query($sql);
         $last_id = Database::insert_id();
-        
+
         // add a attachment file in agenda
 
         add_agenda_attachment_file($file_comment, $last_id);

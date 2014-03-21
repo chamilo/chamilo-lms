@@ -675,8 +675,6 @@ class Skill extends Model
 
         $original_skill = $skills;
 
-        //var_dump($skills);
-
         //Show 1 item
         if (!empty($skill_id)) {
             if ($add_root) {

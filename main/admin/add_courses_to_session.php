@@ -5,22 +5,22 @@
  * @todo use formvalidator
  */
 
-// name of the language file that needs to be included
-$language_file='admin';
+// name of the language file that needs to be included.
+$language_file = 'admin';
 
-// resetting the course id
+// resetting the course id.
 $cidReset = true;
 
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'add_courses_to_session_functions.lib.php';
 
 $id_session = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
+$add = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
 SessionManager::protect_session_edit($id_session);
 
 $xajax = new xajax();
-//$xajax->debugOn();
-$xajax -> registerFunction (array('search_courses', 'AddCourseToSession', 'search_courses'));
+$xajax->registerFunction (array('search_courses', 'AddCourseToSession', 'search_courses'));
 
 // Setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -28,7 +28,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => 'session_list.php','name' => get_lang('SessionList'));
-$interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session,"name" => get_lang('SessionOverview'));
+$interbreadcrumb[] = array('url' => "resume_session.php?id_session=".$id_session, "name" => get_lang('SessionOverview'));
 
 // Database Table Definitions
 $tbl_session_rel_course_rel_user	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -155,10 +155,11 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 	$nbr_courses=count($CourseList);
 	Database::query("UPDATE $tbl_session SET nbr_courses=$nbr_courses WHERE id='$id_session'");
 
-	if (isset($_GET['add']))
+	if (isset($add)) {
 		header('Location: add_users_to_session.php?id_session='.$id_session.'&add=true');
-	else
+    } else {
 		header('Location: resume_session.php?id_session='.$id_session);
+    }
     exit;
 }
 
@@ -166,11 +167,13 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 Display::display_header($tool_name);
 
 if ($add_type == 'multiple') {
-	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
+	$link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$add.'&add_type=unique">'.
+        Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
 	$link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').' ';
 } else {
 	$link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'&nbsp;&nbsp;&nbsp;';
-	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+	$link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$add.'&add_type=multiple">'.
+        Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
 
 // the form header

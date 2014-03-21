@@ -152,7 +152,7 @@ class TestDatabase extends UnitTestCase {
 		$res=$this->dbase->get_course_table($short_table_name,$database_name);
 		$this->assertTrue(is_string($res));
 	}
-    
+
 	function testGetCourseTablePrefix() {
 		global $_configuration;
 		$res=$this->dbase->get_course_table_prefix($_configuration);
@@ -204,10 +204,6 @@ class TestDatabase extends UnitTestCase {
 		$this->assertTrue(is_string($res));
 	}
 
-	function testGetUserInfoFromIdOneIsArray() {
-		$res=$this->dbase->get_user_info_from_id(1);
-		$this->assertTrue(is_array($res));
-	}
 /* Fails for some reason on automated tests server
     function testGetUserInfoFromIdNullIsFalse() {
         // should be returning GLOBALS[_user] (=null) if param is null (in testing context)

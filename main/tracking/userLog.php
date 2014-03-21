@@ -131,11 +131,11 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
         echo "<h4>".get_lang('ListStudents')."</h4>";
         if( $is_allowedToTrackEverybodyInCourse ) {
             // if user can track everybody : list user of course
-            
+
             $sql = "SELECT count(user_id)
                     FROM $TABLECOURSUSER
                     WHERE course_code = '".Database::escape_string($_cid)."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH."";
-            
+
         } else {
             // if user can only track one group : list users of this group
             $sql = "SELECT count(user)
@@ -220,7 +220,7 @@ if( ( $is_allowedToTrack || $is_allowedToTrackEverybodyInCourse )) {
         if( $is_allowedToTrackEverybodyInCourse ) {
             // check if user is in this course
             $tracking_is_accepted = $is_course_member;
-            $tracked_user_info = Database::get_user_info_from_id($uInfo);
+            $tracked_user_info = api_get_user_info($uInfo);
         } else {
 
             // check if user is in the group of this tutor

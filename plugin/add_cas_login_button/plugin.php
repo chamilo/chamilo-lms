@@ -9,8 +9,6 @@
  * Plugin details (must be present)
  */
 
-
-
 //the plugin title
 $plugin_info['title']      = 'Add a button to login using CAS';
 
@@ -26,7 +24,7 @@ $form = new FormValidator('add_cas_button_form');
 $form->addElement('text', 'cas_button_label', 'CAS connexion title', '');
 $form->addElement('text', 'cas_button_comment', 'CAS connexion description', '');
 $form->addElement('text', 'cas_image_url', 'Logo URL if any (image, 50px height)');
-$form->addElement('style_submit_button', 'submit_button', get_lang('Save'));  
+$form->addElement('style_submit_button', 'submit_button', get_lang('Save'));
 //get default value for form
 $tab_default_add_cas_login_button_cas_button_label = api_get_setting('add_cas_login_button_cas_button_label');
 $tab_default_add_cas_login_button_cas_button_comment = api_get_setting('add_cas_login_button_cas_button_comment');

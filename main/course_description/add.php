@@ -2,16 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
-* View (MVC patter) for adding a course description 
+* View (MVC patter) for adding a course description
 * @author Christian Fasanando <christian1827@gmail.com>
 * @package chamilo.course_description
 */
 
 // protect a course script
 api_protect_course_script(true);
-
-//var_dump($_SESSION['studentview']);
-
 // display categories
 $categories = array ();
 foreach ($default_description_titles as $id => $title) {
@@ -35,8 +32,8 @@ foreach ($categories as $id => $title) {
 echo '</div>';
 
 // error messages
-if (isset($error) && intval($error) == 1) {	
-	Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);	
+if (isset($error) && intval($error) == 1) {
+	Display::display_error_message(get_lang('FormHasErrorsPleaseComplete'),false);
 }
 
 // default header title form
@@ -64,7 +61,7 @@ if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
 }
 $form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');
 
-// display default questions			
+// display default questions
 if (isset ($question[$description_type])) {
 	$message = '<strong>'.get_lang('QuestionPlan').'</strong><br />';
 	$message .= $question[$description_type];

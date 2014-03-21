@@ -27,7 +27,7 @@ $interbreadcrumb[]= array('url' => 'usergroups.php','name' => get_lang('Classes'
 // Database Table Definitions
 
 // setting the name of the tool
-$tool_name=get_lang('SubscribeUsersToClass');
+$tool_name = get_lang('SubscribeUsersToClass');
 
 $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!='') {
@@ -103,6 +103,10 @@ if (is_array($extra_field_list)) {
 
 $usergroup = new UserGroup();
 $id = intval($_GET['id']);
+
+if (empty($id)) {
+    api_not_allowed(true);
+}
 $first_letter_user = '';
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
@@ -153,6 +157,7 @@ if ($use_extra_fields) {
         $final_result = $extra_field_result[0];
     }
 }
+
 // Filters
 $filters = array(
     array('type' => 'text', 'name' => 'username', 'label' => get_lang('Username')),
@@ -163,18 +168,14 @@ $filters = array(
 );
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
-//$searchForm->addElement('html', '<table>');
-$searchForm->add_header(get_lang('FilterUser'));
+$searchForm->add_header(get_lang('AdvancedSearch'));
 $renderer =& $searchForm->defaultRenderer();
 
 $searchForm->addElement('hidden', 'id', $id);
 foreach ($filters as $param) {
-    //$searchForm->addElement('html', '<tr>');
     $searchForm->addElement($param['type'], $param['name'], $param['label']);
-    //$searchForm->addElement('html', '</tr>');
 }
 $searchForm->addElement('button', 'submit', get_lang('Search'));
-//$searchForm->addElement('html', '</table>');
 
 $filterData = array();
 if ($searchForm->validate()) {
@@ -223,7 +224,10 @@ if (!empty($complete_user_list)) {
         }
 
         if (in_array($item['user_id'], $list_in)) {
-            $person_name = api_get_person_name($item['firstname'], $item['lastname']).' ('.$item['username'].')';
+            $person_name = api_get_person_name(
+                $item['firstname'],
+                $item['lastname']
+            ).' ('.$item['username'].') '.$item['official_code'];
             $elements_in[$item['user_id']] = $person_name;
         }
     }
@@ -252,7 +256,10 @@ if (!empty($user_list)) {
             }
         }
         if ($item['status'] == 6 ) continue; //avoid anonymous users
-        $person_name = api_get_person_name($item['firstname'], $item['lastname']).' ('.$item['username'].')';
+        $person_name = api_get_person_name(
+            $item['firstname'],
+            $item['lastname']
+        ).' ('.$item['username'].') '.$item['official_code'];
         if (in_array($item['user_id'], $list_in)) {
             //$elements_in[$item['user_id']] = $person_name;
         } else {
@@ -295,7 +302,7 @@ if ($add_type=='multiple') {
                 foreach ($new_field['data'] as $option) {
                     $checked='';
                     if (isset($_POST[$varname])) {
-                        if ($_POST[$varname]==$option[1]) {
+                        if ($_POST[$varname] == $option[1]) {
                             $checked = 'selected="true"';
                         }
                     }

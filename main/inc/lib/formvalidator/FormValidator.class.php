@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 require_once api_get_path(LIBRARY_PATH) . 'pear/HTML/QuickForm.php';
@@ -116,7 +115,7 @@ class FormValidator extends HTML_QuickForm
      */
     function __construct($form_name, $method = 'post', $action = '', $target = '', $attributes = null, $track_submit = true)
     {
-        //Default form class
+        // Default form class.
         if (is_array($attributes) && !isset($attributes['class']) || empty($attributes)) {
             $attributes['class'] = 'form-horizontal';
         }
@@ -131,12 +130,10 @@ class FormValidator extends HTML_QuickForm
         $this->registerElementType('receivers', $dir . 'Element/receivers.php', 'HTML_QuickForm_receivers');
         $this->registerElementType('select_language', $dir . 'Element/select_language.php', 'HTML_QuickForm_Select_Language');
         $this->registerElementType('select_ajax', $dir . 'Element/select_ajax.php', 'HTML_QuickForm_Select_Ajax');
-
         $this->registerElementType('select_theme', $dir . 'Element/select_theme.php', 'HTML_QuickForm_Select_Theme');
         $this->registerElementType('style_submit_button', $dir . 'Element/style_submit_button.php', 'HTML_QuickForm_stylesubmitbutton');
         $this->registerElementType('style_reset_button', $dir . 'Element/style_reset_button.php', 'HTML_QuickForm_styleresetbutton');
         $this->registerElementType('button', $dir . 'Element/style_submit_button.php', 'HTML_QuickForm_stylesubmitbutton');
-
         $this->registerElementType('captcha', 'HTML/QuickForm/CAPTCHA.php', 'HTML_QuickForm_CAPTCHA');
         $this->registerElementType('CAPTCHA_Image', 'HTML/QuickForm/CAPTCHA/Image.php', 'HTML_QuickForm_CAPTCHA_Image');
 
@@ -320,7 +317,6 @@ EOT;
      */
     function add_html_editor($name, $label, $required = true, $full_page = false, $config = null)
     {
-
         $this->addElement('html_editor', $name, $label, 'rows="15" cols="80"', $config);
         $this->applyFilter($name, 'trim');
         $html_type = STUDENT_HTML;

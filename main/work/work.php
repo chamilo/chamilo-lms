@@ -112,7 +112,9 @@ if (!empty($group_id)) {
     $interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
     $interbreadcrumb[] = array ('url' =>'work.php?gidReq='.$group_id,'name' => get_lang('StudentPublications'));
     $url_dir = 'work.php?&id=' . $work_id;
-    $interbreadcrumb[] = array ('url' => $url_dir, 'name' =>  $my_folder_data['title']);
+    if (!empty($my_folder_data)) {
+        $interbreadcrumb[] = array ('url' => $url_dir, 'name' =>  $my_folder_data['title']);
+    }
 
     if ($action == 'upload_form') {
         $interbreadcrumb[] = array ('url' => 'work.php','name' => get_lang('UploadADocument'));
@@ -129,8 +131,10 @@ if (!empty($group_id)) {
         } else {
             $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('StudentPublications'));
         }
-        $url_dir = 'work.php?id=' . $work_id;
-        $interbreadcrumb[] = array ('url' => $url_dir,'name' =>  $my_folder_data['title']);
+
+        if (!empty($my_folder_data)) {
+            $interbreadcrumb[] = array ('url' => 'work.php?id=' . $work_id, 'name' =>  $my_folder_data['title']);
+        }
 
         if ($action == 'upload_form') {
             $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('UploadADocument'));
@@ -262,24 +266,14 @@ switch ($action) {
                 get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description'], STUDENT).
                 '</p></div></p>';
         }
-
-        $my_folder_data = get_work_data_by_id($work_id);
-
-        $work_parents = array();
-        if (empty($my_folder_data)) {
-            $work_parents = getWorkList($work_id, $my_folder_data, $add_query);
-        }
-
         if (api_is_allowed_to_edit()) {
-            $userList = getWorkUserList($course_code, $session_id);
-
             // Work list
             $content .= '<div class="row">';
             $content .= '<div class="span9">';
             $content .= showTeacherWorkGrid();
             $content .= '</div>';
             $content .= '<div class="span3">';
-            $content .= showStudentList($userList, $work_parents, $group_id, $course_id, $session_id);
+            $content .= showStudentList($work_id);
             $content .= '</div>';
         } else {
             $content .= showStudentWorkGrid();

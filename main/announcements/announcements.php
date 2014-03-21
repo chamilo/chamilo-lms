@@ -109,7 +109,7 @@ if (!empty($_POST['To']) and ($select_groupusers_status=="show")) {
 	$_SESSION['select_groupusers'] = "hide";
 }
 
-$origin = empty($_GET['origin']) ? '' : Security::remove_XSS($_GET['origin']);
+$origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : null;
 
 /* 	Action handling */
 

@@ -16,7 +16,7 @@ if ((api_get_setting('allow_spellcheck') == 'true')) {
 	$VSpellCheck='SpellCheck';
 }
 else{
-	$VSpellCheck='';	
+	$VSpellCheck='';
 }
 
 // This is the visible toolbar set when the editor has "normal" size.
@@ -41,12 +41,12 @@ $config['ToolbarSets']['Maximized'] = array(
 '/',
 	array('TableOC','Table','TableInsertRowAfter','TableDeleteRows','TableInsertColumnAfter','TableDeleteColumns','TableInsertCellAfter','TableDeleteCells','TableMergeCells','TableHorizontalSplitCell','TableVerticalSplitCell','TableCellProp','-','CreateDiv'),
 	array('UnorderedList','OrderedList','Rule','-','Outdent','Indent','Blockquote'),
-	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),	
+	array('JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'),
 	array('Bold','Italic','Underline','StrikeThrough','-','Subscript','Superscript','-','TextColor','BGColor'),
-	array($VSpellCheck),	
-	array('Style','FontFormat','FontName','FontSize'),	
+	array($VSpellCheck),
+	array('Style','FontFormat','FontName','FontSize'),
 	array('PageBreak','ShowBlocks','Source'),
-	array('FitWindow')	
+	array('FitWindow')
 );
 
 // Sets whether the toolbar can be collapsed/expanded or not.
@@ -55,7 +55,7 @@ $config['ToolbarSets']['Maximized'] = array(
 
 // Sets how the editor's toolbar should start - expanded or collapsed.
 // Possible values: true , false
-$config['ToolbarStartExpanded'] = false;
+$config['ToolbarStartExpanded'] = true;
 
 //This option sets the location of the toolbar.
 // Possible values: 'In' , 'None' , 'Out:[TargetId]' , 'Out:[TargetWindow]([TargetId])'

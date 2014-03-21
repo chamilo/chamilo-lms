@@ -48,6 +48,7 @@
   <li><a href="#6.Zlib-compression">Zlib compressed output</a></li>
   <li><a href="#7.High-numbers-memory">Memory considerations for high numbers of users</a></li>
   <li><a href="#8.Avoid-non-fixed-values">Avoiding non-fixed values</a></li>
+  <li><a href="#9.xsendfile">Speeding file downloads with mod_xsendfile</a></li>
 </ol>
 
 <h2><a name="1.Using-XCache"></a>1. Using xCache or APC</h2>
@@ -172,6 +173,7 @@ If you prefer using <a href="http://php.net/manual/en/book.apc.php">APC</a>, you
         }
      ...
 </pre>
+<p>It is also worth noting that the Université de Genève, Switzerland, observed that the calculation of the total size used by course documents is one of the heaviest queries in Chamilo, so you might want to cache the results of this one as well, using the same technique.</p>
 <hr />
 <h2><a name="2.Slow-queries"></a>2. Slow queries</h2>
 Enable slow_queries in /etc/mysqld/my.cnf, restart MySQL then follow using sudo tail -f /var/log/mysql/mysql-slow.log
@@ -261,6 +263,32 @@ or
 $platform_email['SMTP_MAILER']       = 'mail';
 </pre>
 In fact, the complete loading of mail.conf.php can also be avoided if loaded conditionally (with <i>require_once</i>) when sending an e-mail (which is the only case where it is useful).
+<hr />
+<h2><a name="#9.xsendfile"></a>Speeding file downloads with mod_xsendfile</h2>
+<p>It might have come to your attention that file downloads through Chamilo might get slow, under default conditions, in particular using Apache 2.</p>
+<p>There are several ways to fix this, one of which is removing the .htaccess inside the courses/ directory. This, however, will remove all permissions checks on the files contained in this directory, so... most of the time, not ideal unless your portal is *really* open to the world.</p>
+<p>Another technique, revealed to us by <a href="http://stackoverflow.com/users/46594/virtualblackfox">VirtualBlackFox</a> on <a href="http://stackoverflow.com/questions/3697748/fastest-way-to-serve-a-file-using-php">this Stackoverflow post</a>, is to use the X-SendFile module for Apache 2.2+ (other web servers might offer other solutions, or avoid the problem initially).</p>
+<p>Installing the X-SendFile module will depend on your operating system, but if you use Ubuntu, you'll have to check you are including the "universe" repository inside your packages sources (check /etc/apt/sources.list), then:
+<pre>
+sudo apt-get update
+sudo apt-get install libapache2-mod-xsendfile
+sudo service apache2 restart
+</pre>
+Once you're done with installing, you'll have to configure Chamilo to use it.<br />
+First, edit your VirtualHost or your Apache configuration in general (in Ubuntu, check the /etc/apache2/ or /etc/apache2/sites-available/ folder). This is done by adding the following line inside your configuration, and reloading Apache (example provided on the basis of a virtual host located in /etc/apache2/sites-available/my.chamilo.net.conf) :
+<pre>
+sudo vim /etc/apache2/sites-available/my.chamilo.net.conf
+# add the following line:
+  X-SendFile on
+# exit the file
+sudo service apache2 reload
+</pre>
+Finally, you'll have to got to your Chamilo configuration file, and add the following line at the very bottom of the file main/inc/conf/configuration.php:
+<pre>
+$_configuration['enable_x_sendfile_headers'] = true;
+</pre>
+Done! Now your downloads should go substantially faster. This is still a feature in observation. We're not sure the benefits are sufficient, so don't hesitate to let us know in <a href="https://support.chamilo.org/issues/6853">the related issue in Chamilo's tracking system</a>
+</p>
 <hr />
 <h2>Authors</h2>
 <ul>

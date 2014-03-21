@@ -7,19 +7,19 @@
 */
 
 // name of the language file that needs to be included
-$language_file='admin';
+$language_file = 'admin';
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 
 // including some necessary dokeos files
 require_once '../inc/global.inc.php';
 require_once '../inc/lib/xajax/xajax.inc.php';
 
 global $_configuration;
-
+$ajax_search = false;
 // create an ajax object
 $xajax = new xajax();
-$xajax -> registerFunction ('search_users');
+$xajax->registerFunction('search_users');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -32,107 +32,135 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdm
 $interbreadcrumb[] = array('url' => 'user_list.php','name' => get_lang('UserList'));
 
 // Database Table Definitions
-$tbl_user 			= 	Database::get_main_table(TABLE_MAIN_USER);
-$tbl_access_url_rel_user		= 	Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
+$tbl_access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
 // initializing variables
-$id_session=intval($_GET['id_session']);
 $user_id = intval($_GET['user']);
 $user_info = api_get_user_info($user_id);
 $user_anonymous  = api_get_anonymous_id();
 $current_user_id = api_get_user_id();
 
+$firstLetterUser = isset($_POST['firstLetterUser']) ? $_POST['firstLetterUser'] : null;
+
 // setting the name of the tool
 if (UserManager::is_admin($user_id)) {
-	$tool_name= get_lang('AssignUsersToPlatformAdministrator');
+    $tool_name= get_lang('AssignUsersToPlatformAdministrator');
 } else if ($user_info['status'] == SESSIONADMIN) {
-	$tool_name= get_lang('AssignUsersToSessionsAdministrator');
+    $tool_name= get_lang('AssignUsersToSessionsAdministrator');
 } else {
-	$tool_name= get_lang('AssignUsersToHumanResourcesManager');
+    $tool_name= get_lang('AssignUsersToHumanResourcesManager');
 }
 
 $add_type = 'multiple';
-if(isset($_GET['add_type']) && $_GET['add_type']!=''){
+if(isset($_GET['add_type']) && $_GET['add_type']!='') {
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
 if (!api_is_platform_admin()) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
-function search_users($needle,$type) {
-	global $_configuration,$tbl_access_url_rel_user,  $tbl_user, $user_anonymous, $current_user_id, $user_id;
+function search_users($needle,$type)
+{
+    global $tbl_access_url_rel_user,  $tbl_user, $user_anonymous, $current_user_id, $user_id;
 
-	$xajax_response = new XajaxResponse();
-	$return = '';
-	if(!empty($needle) && !empty($type)) {
-		// xajax send utf8 datas... datas in db can be non-utf8 datas
-		$charset = api_get_system_encoding();
-		$needle = api_convert_encoding($needle, $charset, 'utf-8');
+    $xajax_response = new XajaxResponse();
+    $return = '';
+    if (!empty($needle) && !empty($type)) {
+        // xajax send utf8 datas... datas in db can be non-utf8 datas
+        $charset = api_get_system_encoding();
+        $needle = api_convert_encoding($needle, $charset, 'utf-8');
 
-		$assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
-		$assigned_users_id = array_keys($assigned_users_to_hrm);
-		$without_assigned_users = '';
+        $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
+        $assigned_users_id = array_keys($assigned_users_to_hrm);
+        $without_assigned_users = '';
 
-		if (count($assigned_users_id) > 0) {
-			$without_assigned_users = " AND user.user_id NOT IN(".implode(',',$assigned_users_id).")";
-		}
-
-		if ($_configuration['multiple_access_urls']) {
-			$sql = "SELECT user.user_id, username, lastname, firstname FROM $tbl_user user LEFT JOIN $tbl_access_url_rel_user au ON (au.user_id = user.user_id)
-			WHERE  ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND status NOT IN(".DRH.", ".SESSIONADMIN.") AND user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id) $without_assigned_users AND access_url_id = ".api_get_current_access_url_id()."";
-
-		} else {
-			$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
-			WHERE  ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND status NOT IN(".DRH.", ".SESSIONADMIN.") AND user_id NOT IN ($user_anonymous, $current_user_id, $user_id) $without_assigned_users";
-		}
-
-		$rs	= Database::query($sql);
-
-		$xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
-        
-    if ($type == 'single') {
-        $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-        $access_url_id = api_get_current_access_url_id();
-        
-        $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
-                INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
-                WHERE access_url_id = '.$access_url_id.'  AND (username LIKE "'.$needle.'%"
-                OR firstname LIKE "'.$needle.'%"
-                OR lastname LIKE "'.$needle.'%") AND user.status<>6 AND user.status<>'.DRH.' '.
-                $order_clause.
-               ' LIMIT 11';
-        $rs = Database::query($sql);
-        $i = 0;
-        while ($user = Database :: fetch_array($rs)) {
-            $i++;
-            if ($i <= 10) {
-                $person_name = api_get_person_name($user['firstname'], $user['lastname']);
-                $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_user(\''.$user['user_id'].'\',\''.$person_name.' ('.$user['username'].')'.'\')">'.$person_name.' ('.$user['username'].')</a><br />';
-            } else {
-                $return .= '...<br />';
-            }
+        $westernOrder = api_is_western_name_order();
+        if ($westernOrder) {
+            $order_clause = " ORDER BY firstname, lastname";
+        } else {
+            $order_clause = " ORDER BY lastname, firstname";
         }
 
-       $xajax_response -> addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));
-    } else {
-        $return .= '<select id="origin" name="NoAssignedUsersList[]" multiple="multiple" size="20" style="width:340px;">';
-	      while($user = Database :: fetch_array($rs)) {
-		        $person_name = api_get_person_name($user['firstname'], $user['lastname']);
-		        $return .= '<option value="'.$user['user_id'].'" title="'.htmlspecialchars($person_name,ENT_QUOTES).'">'.$person_name.' ('.$user['username'].')</option>';
-	      }
-	      $return .= '</select>';
-	      $xajax_response -> addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
-    }
+        if (count($assigned_users_id) > 0) {
+            $without_assigned_users = " AND user.user_id NOT IN(".implode(',', $assigned_users_id).")";
+        }
+
+        if (api_is_multiple_url_enabled()) {
+            $sql = "SELECT user.user_id, username, lastname, firstname
+                    FROM $tbl_user user
+                    LEFT JOIN $tbl_access_url_rel_user au ON (au.user_id = user.user_id)
+                    WHERE
+                        ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND
+                        status NOT IN(".DRH.", ".SESSIONADMIN.") AND
+                        user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id)
+                        $without_assigned_users AND
+                        access_url_id = ".api_get_current_access_url_id()."
+                    $order_clause
+                    ";
+
+        } else {
+            $sql = "SELECT user_id, username, lastname, firstname
+                    FROM $tbl_user user
+                    WHERE
+                        ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%' AND
+                        status NOT IN(".DRH.", ".SESSIONADMIN.") AND
+                        user_id NOT IN ($user_anonymous, $current_user_id, $user_id)
+                    $without_assigned_users
+                    $order_clause
+            ";
+        }
+
+		$rs	= Database::query($sql);
+		$xajax_response->addAssign('ajax_list_users_multiple','innerHTML',api_utf8_encode($return));
+
+        if ($type == 'single') {
+            $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+            $access_url_id = api_get_current_access_url_id();
+
+            $sql = 'SELECT user.user_id, username, lastname, firstname
+                    FROM '.$tbl_user.' user
+                    INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
+                    WHERE
+                        access_url_id = '.$access_url_id.'  AND
+                        (
+                            username LIKE "'.$needle.'%" OR
+                            firstname LIKE "'.$needle.'%" OR
+                            lastname LIKE "'.$needle.'%"
+                        ) AND
+                        user.status<>6 AND user.status<>'.DRH.' '.
+                    $order_clause.
+                   ' LIMIT 11';
+            $rs = Database::query($sql);
+            $i = 0;
+            while ($user = Database :: fetch_array($rs)) {
+                $i++;
+                if ($i <= 10) {
+                    $person_name = api_get_person_name($user['firstname'], $user['lastname']);
+                    $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_user(\''.$user['user_id'].'\',\''.$person_name.' ('.$user['username'].')'.'\')">'.$person_name.' ('.$user['username'].')</a><br />';
+                } else {
+                    $return .= '...<br />';
+                }
+            }
+           $xajax_response->addAssign('ajax_list_users_single','innerHTML',api_utf8_encode($return));
+        } else {
+            $return .= '<select id="origin" name="NoAssignedUsersList[]" multiple="multiple" size="20" style="width:340px;">';
+            while($user = Database :: fetch_array($rs)) {
+                $person_name = api_get_person_name($user['firstname'], $user['lastname']);
+                $return .= '<option value="'.$user['user_id'].'" title="'.htmlspecialchars($person_name,ENT_QUOTES).'">'.$person_name.' ('.$user['username'].')</option>';
+            }
+            $return .= '</select>';
+            $xajax_response->addAssign('ajax_list_users_multiple', 'innerHTML', api_utf8_encode($return));
+        }
 	}
 	return $xajax_response;
 }
 
-$xajax -> processRequests();
+$xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script type="text/javascript">
-<!--
 function add_user_to_user (code, content) {
 	document.getElementById("user_to_add").value = "";
 	document.getElementById("ajax_list_users_single").innerHTML = "";
@@ -195,33 +223,77 @@ function remove_item(origin) {
 		}
 	}
 }
--->
 </script>';
 
 $formSent=0;
-$errorMsg = $firstLetterUser = '';
+$errorMsg = '';
 $UserList = array();
 
-$msg = '';
-if (intval($_POST['formSent']) == 1) {
-	$user_list = $_POST['UsersList'];
-	$affected_rows = UserManager::suscribe_users_to_hr_manager($user_id,$user_list);
-	if ($affected_rows)	{
-		$msg = get_lang('AssignedUsersHaveBeenUpdatedSuccessfully');
-	}
+// Filters
+$filters = array(
+    array('type' => 'text', 'name' => 'username', 'label' => get_lang('Username')),
+    array('type' => 'text', 'name' => 'firstname', 'label' => get_lang('FirstName')),
+    array('type' => 'text', 'name' => 'lastname', 'label' => get_lang('LastName')),
+    array('type' => 'text', 'name' => 'official_code', 'label' => get_lang('OfficialCode')),
+    array('type' => 'text', 'name' => 'email', 'label' => get_lang('Email'))
+);
+
+$searchForm = new FormValidator('search', 'get', api_get_self().'?user='.$user_id);
+$searchForm->add_header(get_lang('AdvancedSearch'));
+$renderer =& $searchForm->defaultRenderer();
+
+$searchForm->addElement('hidden', 'user', $user_id);
+foreach ($filters as $param) {
+    $searchForm->addElement($param['type'], $param['name'], $param['label']);
+}
+$searchForm->addElement('button', 'submit', get_lang('Search'));
+
+$filterData = array();
+if ($searchForm->validate()) {
+    $filterData = $searchForm->getSubmitValues();
 }
 
-// display header
+$conditions = array();
+if (!empty($filters) && !empty($filterData)) {
+    foreach ($filters as $filter) {
+        if (isset($filter['name']) && isset($filterData[$filter['name']])) {
+            $value = $filterData[$filter['name']];
+            if (!empty($value)) {
+                $conditions[$filter['name']] = $value;
+            }
+        }
+    }
+}
+
+$msg = '';
+if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
+	$user_list = $_POST['UsersList'];
+    $affected_rows = UserManager::suscribe_users_to_hr_manager($user_id, $user_list);
+    if ($affected_rows)	{
+        $msg = get_lang('AssignedUsersHaveBeenUpdatedSuccessfully');
+    }
+}
+
+// Display header
 Display::display_header($tool_name);
 
 // actions
-echo '<div class="actions">
-<span style="float: right;margin:0px;padding:0px;">
-<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.Display::return_icon('course_add.gif', get_lang('AssignCourses'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignCourses').'</a>
-<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.Display::return_icon('view_more_stats.gif', get_lang('AssignSessions'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignSessions').'</a></span>
-</div>';
+echo '<div class="actions">';
+echo '<span style="float: right;margin:0px;padding:0px;">
+<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.
+    Display::return_icon('course_add.gif', get_lang('AssignCourses'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignCourses').'</a>
+<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.
+    Display::return_icon('view_more_stats.gif', get_lang('AssignSessions'), array('style'=>'vertical-align:middle')).' '.get_lang('AssignSessions').'</a></span>';
+echo Display::url(get_lang('AdvancedSearch'), '#', array('class' => 'advanced_options', 'id' => 'advanced_search'));
+echo '</div>';
 
-echo Display::page_header(sprintf(get_lang('AssignUsersToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])));
+echo '<div id="advanced_search_options" style="display:none">';
+$searchForm->display();
+echo '</div>';
+
+echo Display::page_header(
+    sprintf(get_lang('AssignUsersToX'), api_get_person_name($user_info['firstname'], $user_info['lastname']))
+);
 
 $assigned_users_to_hrm = UserManager::get_users_followed_by_drh($user_id);
 $assigned_users_id = array_keys($assigned_users_to_hrm);
@@ -231,24 +303,49 @@ if (count($assigned_users_id) > 0) {
 }
 
 $search_user = '';
-if (isset($_POST['firstLetterUser'])) {
-	$needle = Database::escape_string($_POST['firstLetterUser']);
+if (!empty($firstLetterUser)) {
+	$needle = Database::escape_string($firstLetterUser);
 	$search_user ="AND ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%'";
 }
 
-
-if ($_configuration['multiple_access_urls']) {
-	$sql = "SELECT user.user_id, username, lastname, firstname FROM $tbl_user user  LEFT JOIN $tbl_access_url_rel_user au ON (au.user_id = user.user_id)
-			WHERE $without_assigned_users user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND status NOT IN(".DRH.", ".SESSIONADMIN.") $search_user AND access_url_id = ".api_get_current_access_url_id()."
-            ORDER BY firstname";
-} else {
-	$sql = "SELECT user_id, username, lastname, firstname FROM $tbl_user user
-			WHERE $without_assigned_users user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND status NOT IN(".DRH.", ".SESSIONADMIN.") $search_user 
-            ORDER BY firstname ";
+$sqlConditions = null;
+if (!empty($conditions)) {
+    $temp_conditions = array();
+    foreach ($conditions as $field => $value) {
+        $field = Database::escape_string($field);
+        $value = Database::escape_string($value);
+        $temp_conditions[] = $field.' LIKE \'%'.$value.'%\'';
+    }
+    if (!empty($temp_conditions)) {
+        $sqlConditions .= implode(' AND ', $temp_conditions);
+    }
+    if (!empty($sqlConditions)) {
+        $sqlConditions = " AND $sqlConditions";
+    }
 }
 
+if (api_is_multiple_url_enabled()) {
+	$sql = "SELECT user.user_id, username, lastname, firstname
+	        FROM $tbl_user user  LEFT JOIN $tbl_access_url_rel_user au ON (au.user_id = user.user_id)
+			WHERE
+                $without_assigned_users
+                user.user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
+                status NOT IN(".DRH.", ".SESSIONADMIN.") $search_user AND
+                access_url_id = ".api_get_current_access_url_id()."
+                $sqlConditions
+            ORDER BY firstname";
+} else {
+	$sql = "SELECT user_id, username, lastname, firstname
+	        FROM $tbl_user user
+			WHERE
+			    $without_assigned_users
+			    user_id NOT IN ($user_anonymous, $current_user_id, $user_id) AND
+			    status NOT IN(".DRH.", ".SESSIONADMIN.")
+			    $search_user
+			    $sqlConditions
+            ORDER BY firstname ";
+}
 $result	= Database::query($sql);
-
 ?>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?user=<?php echo $user_id ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <input type="hidden" name="formSent" value="1" />
@@ -285,7 +382,7 @@ if(!empty($msg)) {
      <select name="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple')">
       <option value="%">--</option>
       <?php
-      echo Display :: get_alphabet_options($_POST['firstLetterUser']);
+      echo Display::get_alphabet_options($firstLetterUser);
       ?>
      </select>
      <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" onclick="moveItem(document.getElementById('user_to_add'), document.getElementById('destination'))" />
@@ -301,24 +398,20 @@ if(!empty($msg)) {
 	while ($enreg = Database::fetch_array($result)) {
 		$person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']);
 	?>
-		<option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name,ENT_QUOTES).'"';?>><?php echo $person_name.' ('.$enreg['username'].')'; ?></option>
+		<option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name,ENT_QUOTES).'"';?>>
+            <?php echo $person_name.' ('.$enreg['username'].')'; ?>
+        </option>
 	<?php } ?>
 	</select></div>
   </td>
 
   <td width="10%" valign="middle" align="center">
-  <?php
-  if ($ajax_search) {
-  ?>
-  	<button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
-  <?php
-  }
-  else
-  {
-  ?>
-  	<button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))"></button>
-	<br /><br />
-	<button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))"></button>
+  <?php if ($ajax_search) { ?>
+    <button class="arrowl" type="button" onclick="remove_item(document.getElementById('destination'))"></button>
+  <?php } else { ?>
+    <button class="arrowr" type="button" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))" onclick="moveItem(document.getElementById('origin'), document.getElementById('destination'))"></button>
+    <br /><br />
+    <button class="arrowl" type="button" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))" onclick="moveItem(document.getElementById('destination'), document.getElementById('origin'))"></button>
   <?php
   }
   ?>
@@ -334,7 +427,9 @@ if(!empty($msg)) {
 		foreach($assigned_users_to_hrm as $enreg) {
 			$person_name = api_get_person_name($enreg['firstname'], $enreg['lastname']);
 	?>
-		<option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name,ENT_QUOTES).'"'; ?>><?php echo $person_name.' ('.$enreg['username'].')'; ?></option>
+		<option value="<?php echo $enreg['user_id']; ?>" <?php echo 'title="'.htmlspecialchars($person_name,ENT_QUOTES).'"'; ?>>
+            <?php echo $person_name.' ('.$enreg['username'].')'; ?>
+        </option>
 	<?php }
 	}?>
   </select></td>

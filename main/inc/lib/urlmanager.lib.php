@@ -44,7 +44,7 @@ class UrlManager
     * @param	int		is active or not
     * @return 	boolean if success
     */
-    public static function udpate($url_id, $url, $description, $active)
+    public static function update($url_id, $url, $description, $active)
     {
         $url_id = intval($url_id);
         $table_access_url= Database :: get_main_table(TABLE_MAIN_ACCESS_URL);
@@ -205,6 +205,24 @@ class UrlManager
         $result=Database::query($sql);
         $courses=Database::store_result($result);
         return $courses;
+    }
+
+    /**
+     * Gets the number of rows with a specific course_code in access_url_rel_course table
+     * @author Yoselyn Castillo
+     * @param string  code
+     * @return int Database::num_rows($res);
+     *
+     **/
+    public static function getCountUrlRelCourse($code)
+    {
+        $code = Database::escape_string($code);
+        $tableUrlRelCourse = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $sql = "SELECT *
+                FROM $tableUrlRelCourse
+                WHERE $tableUrlRelCourse.course_code = '$code'";
+        $res = Database::query($sql);
+        return Database::num_rows($res);
     }
 
     /**

@@ -143,12 +143,12 @@ class TestUrlManager extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	function testudpate() {
+	function testupdate() {
 		$url_id='';
 		$url='';
 		$description='';
 		$active='';
-		$res=UrlManager::udpate($url_id, $url, $description, $active);
+		$res=UrlManager::update($url_id, $url, $description, $active);
 		if(!is_null($res))$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}

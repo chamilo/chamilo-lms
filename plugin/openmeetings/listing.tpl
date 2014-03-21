@@ -48,8 +48,9 @@
                 {% if allow_to_edit %}
                     <td>
                     {% if meeting.status == 1 %}
-                        <a class="btn" href="{{ meeting.end_url }} "> {{ 'CloseMeeting'|get_lang }}</a>
+                        <a class="btn" href="{{ meeting.end_url }} "> {{ 'CloseMeeting' | get_lang }}</a>
                     {% endif %}
+                    <a class="btn btn-danger" href="{{ meeting.delete_url }} "> {{ 'DeleteMeeting' | get_lang }}</a>
                     </td>
                 {% endif %}
 

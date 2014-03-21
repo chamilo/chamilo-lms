@@ -184,7 +184,7 @@ class UserManager
                 $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
                 $email_admin = api_get_setting('emailAdministrator');
 
-                if ($_configuration['multiple_access_urls']) {
+                if (api_is_multiple_url_enabled()) {
                     $access_url_id = api_get_current_access_url_id();
                     if ($access_url_id != -1) {
                         $url = api_get_access_url($access_url_id);
@@ -646,7 +646,7 @@ class UserManager
             $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
             $email_admin = api_get_setting('emailAdministrator');
 
-            if ($_configuration['multiple_access_urls']) {
+            if (api_is_multiple_url_enabled()) {
                 $access_url_id = api_get_current_access_url_id();
                 if ($access_url_id != -1) {
                     $url = api_get_access_url($access_url_id);
@@ -1414,7 +1414,7 @@ class UserManager
                 case self::USER_FIELD_TYPE_SELECT_MULTIPLE:
                     $sqluo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowuf['id'];
                     $resuo = Database::query($sqluo);
-                    $values = split(';', $fvalues);
+                    $values = explode(';', $fvalues);
                     if (Database::num_rows($resuo) > 0) {
                         $check = false;
                         while ($rowuo = Database::fetch_array($resuo)) {
@@ -1639,7 +1639,7 @@ class UserManager
                 $twolist = explode('|', $fieldoptions);
                 $counter = 0;
                 foreach ($twolist as $individual_list) {
-                    $splitted_individual_list = split(';', $individual_list);
+                    $splitted_individual_list = explode(';', $individual_list);
                     foreach ($splitted_individual_list as $individual_list_option) {
                         //echo 'counter:'.$counter;
                         if ($counter == 0) {
@@ -1651,7 +1651,7 @@ class UserManager
                     $counter++;
                 }
             } else {
-                $list = split(';', $fieldoptions);
+                $list = explode(';', $fieldoptions);
             }
             foreach ($list as $option) {
                 $option = Database::escape_string($option);
@@ -1732,7 +1732,7 @@ class UserManager
             $twolist = explode('|', $fieldoptions);
             $counter = 0;
             foreach ($twolist as $individual_list) {
-                $splitted_individual_list = split(';', $individual_list);
+                $splitted_individual_list = explode(';', $individual_list);
                 foreach ($splitted_individual_list as $individual_list_option) {
                     //echo 'counter:'.$counter;
                     if ($counter == 0) {
@@ -1744,7 +1744,7 @@ class UserManager
                 $counter++;
             }
         } else {
-            $templist = split(';', $fieldoptions);
+            $templist = explode(';', $fieldoptions);
             $list = array_map('trim', $templist);
         }
 
@@ -1864,7 +1864,7 @@ class UserManager
                         $rowu = Database::fetch_array($resu);
                         $fval = $rowu['fval'];
                         if ($row['type'] == self::USER_FIELD_TYPE_SELECT_MULTIPLE) {
-                            $fval = split(';', $rowu['fval']);
+                            $fval = explode(';', $rowu['fval']);
                         }
                     } else {
                         $row_df = Database::fetch_array($res_df);
@@ -1931,7 +1931,7 @@ class UserManager
                     $rowu = Database::fetch_array($resu);
                     $fval = $rowu['fval'];
                     if ($row['type'] == self::USER_FIELD_TYPE_SELECT_MULTIPLE) {
-                        $fval = split(';', $rowu['fval']);
+                        $fval = explode(';', $rowu['fval']);
                     }
                 }
                 if ($prefix) {
@@ -2108,19 +2108,17 @@ class UserManager
         // Get the list of sessions per user
         $now = api_get_utc_datetime();
 
-        $condition_date_end = "";
         if ($is_time_over) {
             $condition_date_end = " AND (session.date_end < '$now' AND session.date_end != '0000-00-00')  ";
         } else {
             if (api_is_allowed_to_create_course()) {
-                //Teachers can access the session depending in the access_coach date
+                // Teachers can access the session depending in the access_coach date
                 $condition_date_end = null;
             } else {
                 $condition_date_end = " AND (session.date_end >= '$now' OR session.date_end = '0000-00-00') ";
             }
         }
 
-        // ORDER BY session_category_id, date_start, date_end
         $sql = "SELECT DISTINCT
                     session.id,
                     session.name,
@@ -2133,10 +2131,14 @@ class UserManager
                     nb_days_access_before_beginning,
                     nb_days_access_after_end
 
-              FROM $tbl_session as session LEFT JOIN $tbl_session_category session_category ON (session_category_id = session_category.id)
-                    INNER JOIN $tbl_session_course_user as session_rel_course_user ON (session_rel_course_user.id_session = session.id)
+              FROM $tbl_session as session
+                  LEFT JOIN $tbl_session_category session_category
+                  ON (session_category_id = session_category.id)
+                  INNER JOIN $tbl_session_course_user as session_rel_course_user
+                  ON (session_rel_course_user.id_session = session.id)
               WHERE (
-                        session_rel_course_user.id_user = $user_id OR session.id_coach = $user_id
+                        session_rel_course_user.id_user = $user_id OR
+                        session.id_coach = $user_id
                     )  $condition_date_end
               ORDER BY session_category_name, name";
 
@@ -2172,7 +2174,6 @@ class UserManager
                 $categories[$row['session_category_id']]['sessions'][$row['id']]['courses'] = UserManager::get_courses_list_by_session($user_id, $row['id']);
             }
         }
-
         return $categories;
 
     }
@@ -3135,15 +3136,14 @@ class UserManager
         $table_user_tag = Database::get_main_table(TABLE_MAIN_TAG);
         $table_user_tag_values = Database::get_main_table(TABLE_MAIN_USER_REL_TAG);
         $tags = UserManager::get_user_tags($user_id, $field_id);
-        //echo '<pre>';var_dump($tags);
         if (is_array($tags) && count($tags) > 0) {
             foreach ($tags as $key => $tag) {
                 if ($tag['count'] > '0') {
                     $sql = "UPDATE $table_user_tag SET count = count - 1  WHERE id = $key ";
-                    $result = Database::query($sql);
+                    Database::query($sql);
                 }
                 $sql = "DELETE FROM $table_user_tag_values WHERE user_id = $user_id AND tag_id = $key";
-                $result = Database::query($sql);
+                Database::query($sql);
             }
         }
     }
@@ -3461,20 +3461,41 @@ class UserManager
 
     /**
      * get users followed by human resource manager
-     * @param int          hr_dept id
-     * @param int        user status (optional)
+     * @param int hr_dept id
+     * @param int  user status (optional)
      * @param bool $getOnlyUserId
      * @param bool $getSql
      * @return array     users
      */
-    public static function get_users_followed_by_drh($hr_dept_id, $user_status = 0, $getOnlyUserId = false, $getSql = false)
-    {
+    public static function get_users_followed_by_drh(
+        $hr_dept_id,
+        $user_status = 0,
+        $getOnlyUserId = false,
+        $getSql = false,
+        $getCount = false,
+        $from = null,
+        $numberItems = null,
+        $column = null,
+        $direction = null,
+        $active = null,
+        $lastConnectionDate = null
+    ) {
         // Database Table Definitions
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_user_rel_user = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
         $hr_dept_id = intval($hr_dept_id);
+
+        $limitCondition = null;
+        if (isset($from) && isset($numberItems)) {
+            $from = intval($from);
+            $numberItems = intval($numberItems);
+            $limitCondition = "LIMIT $from, $numberItems";
+        }
+
+        $column = Database::escape_string($column);
+        $direction = in_array(strtolower($direction), array('asc', 'desc')) ? $direction : null;
 
         $condition_status = '';
         if (!empty($user_status)) {
@@ -3484,9 +3505,20 @@ class UserManager
         if ($getOnlyUserId) {
             $select = " SELECT u.user_id";
         }
+        if ($getCount) {
+            $select = " SELECT COUNT(DISTINCT(u.user_id)) as count ";
+        }
+
+        $join = null;
+        if (!empty($lastConnectionDate)) {
+            $loginTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+            $join .= " INNER JOIN $loginTable l ON (l.login_user_id = u.user_id) ";
+        }
+
         $sql = " $select FROM $tbl_user u
                 INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.user_id)
                 LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.user_id)
+                $join
                 WHERE
                     friend_user_id = '$hr_dept_id' AND
                     relation_type = '".USER_RELATION_TYPE_RRHH."'
@@ -3494,24 +3526,46 @@ class UserManager
                     access_url_id = ".api_get_current_access_url_id()."
                 ";
 
+        if (!is_null($active)) {
+            $active = intval($active);
+            $sql.= " AND active = $active";
+        }
+
+        if (!empty($lastConnectionDate)) {
+            $lastConnectionDate = Database::escape_string($lastConnectionDate);
+            $sql .=  " AND l.login_date <= '$lastConnectionDate' ";
+        }
+
         if ($getSql) {
             return $sql;
         }
 
-        if (api_is_western_name_order()) {
-            $sql .= " ORDER BY u.firstname, u.lastname ";
-        } else {
-            $sql .= " ORDER BY u.lastname, u.firstname ";
+        if ($getCount) {
+            $result = Database::query($sql);
+            $row = Database::fetch_array($result);
+            return $row['count'];
         }
 
-        $rs_assigned_users = Database::query($sql);
-        $assigned_users_to_hrm = array();
-        if (Database::num_rows($rs_assigned_users) > 0) {
-            while ($row_assigned_users = Database::fetch_array($rs_assigned_users)) {
-                $assigned_users_to_hrm[$row_assigned_users['user_id']] = $row_assigned_users;
+        $orderBy = null;
+        if (api_is_western_name_order()) {
+            $orderBy .= " ORDER BY u.firstname, u.lastname ";
+        } else {
+            $orderBy .= " ORDER BY u.lastname, u.firstname ";
+        }
+
+        if (!empty($column) && !empty($direction)) {
+            $orderBy = " ORDER BY $column $direction ";
+        }
+        $sql .= $orderBy;
+        $sql .= $limitCondition;
+        $result = Database::query($sql);
+        $users = array();
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_array($result)) {
+                $users[$row['user_id']] = $row;
             }
         }
-        return $assigned_users_to_hrm;
+        return $users;
     }
 
     /**

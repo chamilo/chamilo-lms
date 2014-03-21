@@ -80,7 +80,8 @@ $(document).ready( function() {
      *     hidden content :)
      * </div>
      * */
-    $(".advanced_options").on("click", function() {
+    $(".advanced_options").on("click", function(event) {
+        event.preventDefault();
         var id = $(this).attr('id') + '_options';
         var button = $(this);
         $("#"+id).toggle(function() {
@@ -88,10 +89,29 @@ $(document).ready( function() {
         });
     });
 
+    /**
+     * <a class="advanced_options_open" href="http://" rel="div_id">Open</a>
+     * <a class="advanced_options_close" href="http://" rel="div_id">Close</a>
+     * <div id="div_id">Div content</div>
+     * */
+    $(".advanced_options_open").on("click", function(event) {
+        event.preventDefault();
+        var id = $(this).attr('rel');
+        $("#"+id).show();
+    });
+
+    $(".advanced_options_close").on("click", function(event) {
+        event.preventDefault();
+        var id = $(this).attr('rel');
+        $("#"+id).hide();
+    });
+
     // Chosen select
     $(".chzn-select").chosen({
         disable_search_threshold: 10
     });
+
+    $(".jp-jplayer audio").addClass('skip');
 
     // Mediaelement
     jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer(/* Options */);

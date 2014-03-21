@@ -1706,7 +1706,7 @@ function rl_get_resource_link_for_learnpath($course_id, $learnpath_id, $id_in_pa
             $result = Database::query($sql);
             $myrow = Database::fetch_array($result);
             $docurl = str_replace('%2F', '/', urlencode($myrow['path']));
-            $link .= $main_course_path.'document'.$docurl.'?cidReq'.$course_code.'&id_session='.$session_id;
+            $link .= $main_course_path.'document'.$docurl.'?cidReq='.$course_code.'&id_session='.$session_id;
             $openmethod = 2;
             $officedoc = false;
             Session::write('openmethod',$openmethod);

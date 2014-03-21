@@ -2,6 +2,15 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SendOnlyAnEmailToMySelfToTest = "Send an email to myself for testing purposes.";
+$DeleteAllSelectedAttendances = "Delete all selected attendances";
+$AvailableClasses = "Available classes";
+$RegisteredClasses = "Registered classes";
+$DeleteItemsNotInFile = "Delete items not in file";
+$ImportGroups = "Import groups";
+$HereIsYourFeedback = "Here is your feedback";
+$ShowSystemFolders = "Show system folders.";
+$LoginToGoToThisCourse = "Please login to go to this course";
 $LoginDate = "Login date";
 $ChooseStartDateAndEndDate = "Choose start and end dates";
 $WorkAdded = "Work added";
@@ -42,7 +51,7 @@ $ExerciseAutoLaunch = "Auto-launch for exercises";
 $AllowFastExerciseEdition = "Enable exercise fast edition mode";
 $Username = "Username";
 $SignIn = "Sign in";
-$YouAreReg = "Your are registered to";
+$YouAreReg = "You are registered to";
 $ManageQuestionCategories = "Manage global questions categories";
 $ManageCourseFields = "Manage extra fields for courses";
 $ManageQuestionFields = "Manage extra fields for questions";

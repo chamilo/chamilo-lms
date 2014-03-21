@@ -180,19 +180,17 @@ if (empty($session_id)) {
 
 $student_id = intval($_GET['student']);
 
-$token = Security::get_token();
-
 // Action behaviour
 $check = Security::check_token('get');
 
 if ($check) {
 	switch ($_GET['action']) {
 		case 'reset_lp' :
-			$course		= isset($_GET['course']) ? $_GET['course']:"";
+                       $course		= isset($_GET['course']) ? $_GET['course']:"";
 			$lp_id		= isset($_GET['lp_id'])	 ? intval($_GET['lp_id']):"";
 
 			if (api_is_allowed_to_edit() && !empty($course) && !empty($lp_id) && !empty($student_id)) {
-				$course_info 	= api_get_course_info($course);
+			    $course_info 	= api_get_course_info($course);
                 delete_student_lp_events($student_id, $lp_id, $course_info, $session_id);
 
 				//@todo delete the stats.track_e_exercices records. First implement this http://support.chamilo.org/issues/1334
@@ -304,8 +302,9 @@ if (isset($message)) {
     echo $message;
 }
 
+$token = Security::get_token();
 if (!empty($student_id)) {
-
+    
 	// Actions bar
 	echo '<div class="actions">';
     echo '<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';

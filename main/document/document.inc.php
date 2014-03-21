@@ -186,8 +186,8 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
     } elseif (strstr($path, 'shared_folder_session_')) {
         $tooltip_title_alt = get_lang('UserFolders') . ' (' . api_get_session_name(api_get_session_id()) . ')';
     } elseif (strstr($tooltip_title, 'sf_user_')) {
-        $userinfo = Database::get_user_info_from_id(substr($tooltip_title, 8));
-        $tooltip_title_alt = get_lang('UserFolder') . ' ' . api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+        $userinfo = api_get_user_info(substr($tooltip_title, 8));
+        $tooltip_title_alt = get_lang('UserFolder') . ' ' . $userinfo['complete_name'];
     } elseif ($path == '/chat_files') {
         $tooltip_title_alt = get_lang('ChatFiles');
     } elseif ($path == '/learning_path') {
@@ -379,7 +379,7 @@ function build_document_icon_tag($type, $path) {
                 $basename = get_lang('UserFolders');
             }
         } elseif (strstr($basename, 'sf_user_')) {
-            $userinfo = Database::get_user_info_from_id(substr($basename, 8));
+            $userinfo = api_get_user_info(substr($basename, 8));
             $image_path = UserManager::get_user_picture_path_by_id(substr($basename, 8), 'web', false, true);
 
             if ($image_path['file'] == 'unknown.jpg') {
@@ -390,7 +390,7 @@ function build_document_icon_tag($type, $path) {
                 $icon = $image_path['dir'] . $image_path['file'];
             }
 
-            $basename = get_lang('UserFolder') . ' ' . api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+            $basename = get_lang('UserFolder') . ' ' . $userinfo['complete_name'];
         } elseif (strstr($path, 'shared_folder_session_')) {
             if ($is_allowed_to_edit) {
                 $basename = '***(' . api_get_session_name($current_session_id) . ')*** ' . get_lang('HelpUsersFolder');
@@ -557,7 +557,7 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
             }
         }
 
-        //Move button
+        // Move button.
         if ($is_certificate_mode || in_array($path, DocumentManager::get_system_folders())) {
             $modify_icons .= '&nbsp;' . Display::return_icon('move_na.png', get_lang('Move'), array(), ICON_SIZE_SMALL) . '</a>';
         } else {
@@ -586,7 +586,7 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
             }
         }
 
-        //Delete button
+        // Delete button
         if (in_array($path, DocumentManager::get_system_folders())) {
             $modify_icons .= '&nbsp;' . Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'), array(), ICON_SIZE_SMALL);
         } else {

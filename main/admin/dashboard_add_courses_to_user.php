@@ -7,9 +7,9 @@
 */
 
 // name of the language file that needs to be included
-$language_file='admin';
+$language_file = 'admin';
 // resetting the course id
-$cidReset=true;
+$cidReset = true;
 
 // including some necessary dokeos files
 require_once '../inc/global.inc.php';
@@ -17,10 +17,9 @@ require_once '../inc/lib/xajax/xajax.inc.php';
 
 global $_configuration;
 
-
 // create an ajax object
 $xajax = new xajax();
-$xajax -> registerFunction ('search_courses');
+$xajax->registerFunction('search_courses');
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -33,12 +32,11 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdm
 $interbreadcrumb[] = array('url' => 'user_list.php','name' => get_lang('UserList'));
 
 // Database Table Definitions
-$tbl_course 			= 	Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_course_rel_user 	= 	Database::get_main_table(TABLE_MAIN_COURSE_USER);
-$tbl_course_rel_access_url 	= 	Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+$tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
 // initializing variables
-$id_session=intval($_GET['id_session']);
 $user_id = intval($_GET['user']);
 $user_info = api_get_user_info($user_id);
 $user_anonymous  = api_get_anonymous_id();
@@ -54,7 +52,7 @@ if (UserManager::is_admin($user_id)) {
 }
 
 $add_type = 'multiple';
-if(isset($_GET['add_type']) && $_GET['add_type']!=''){
+if(isset($_GET['add_type']) && $_GET['add_type']!='') {
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -62,34 +60,34 @@ if (!api_is_platform_admin()) {
 	api_not_allowed(true);
 }
 
-function search_courses($needle,$type) {
-	global $_configuration, $tbl_course, $tbl_course_rel_user, $tbl_course_rel_access_url,$user_id;
+function search_courses($needle,$type)
+{
+    global $_configuration, $tbl_course, $tbl_course_rel_user, $tbl_course_rel_access_url,$user_id;
 
-	$xajax_response = new XajaxResponse();
-	$return = '';
-	if(!empty($needle) && !empty($type)) {
-		// xajax send utf8 datas... datas in db can be non-utf8 datas
-		$charset = api_get_system_encoding();
-		$needle = api_convert_encoding($needle, $charset, 'utf-8');
+    $xajax_response = new XajaxResponse();
+    $return = '';
+    if(!empty($needle) && !empty($type)) {
+        // xajax send utf8 datas... datas in db can be non-utf8 datas
+        $charset = api_get_system_encoding();
+        $needle = api_convert_encoding($needle, $charset, 'utf-8');
 
-		$assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($user_id);
-		$assigned_courses_code = array_keys($assigned_courses_to_hrm);
-		foreach ($assigned_courses_code as &$value) {
-			$value = "'".$value."'";
-		}
-		$without_assigned_courses = '';
-		if (count($assigned_courses_code) > 0) {
-			$without_assigned_courses = " AND c.code NOT IN(".implode(',',$assigned_courses_code).")";
-		}
+        $assigned_courses_to_hrm = CourseManager::get_courses_followed_by_drh($user_id);
+        $assigned_courses_code = array_keys($assigned_courses_to_hrm);
+        foreach ($assigned_courses_code as &$value) {
+            $value = "'".$value."'";
+        }
+        $without_assigned_courses = '';
+        if (count($assigned_courses_code) > 0) {
+            $without_assigned_courses = " AND c.code NOT IN(".implode(',',$assigned_courses_code).")";
+        }
 
-		if ($_configuration['multiple_access_urls']) {
-			$sql = "SELECT c.code, c.title FROM $tbl_course c LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
-				WHERE  c.code LIKE '$needle%' $without_assigned_courses AND access_url_id = ".api_get_current_access_url_id()."";
-		} else {
-			$sql = "SELECT c.code, c.title FROM $tbl_course c
-				WHERE  c.code LIKE '$needle%' $without_assigned_courses ";
-		}
-
+        if ($_configuration['multiple_access_urls']) {
+            $sql = "SELECT c.code, c.title FROM $tbl_course c LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
+                WHERE  c.code LIKE '$needle%' $without_assigned_courses AND access_url_id = ".api_get_current_access_url_id()."";
+        } else {
+            $sql = "SELECT c.code, c.title FROM $tbl_course c
+                WHERE  c.code LIKE '$needle%' $without_assigned_courses ";
+        }
 
 		$rs	= Database::query($sql);
 
@@ -103,11 +101,10 @@ function search_courses($needle,$type) {
 	return $xajax_response;
 }
 
-$xajax -> processRequests();
+$xajax->processRequests();
 $htmlHeadXtra[] = $xajax->getJavascript('../inc/lib/xajax/');
 $htmlHeadXtra[] = '
 <script type="text/javascript">
-<!--
 function moveItem(origin , destination) {
 	for(var i = 0 ; i<origin.options.length ; i++) {
 		if(origin.options[i].selected) {
@@ -155,7 +152,6 @@ function remove_item(origin) {
 		}
 	}
 }
--->
 </script>';
 
 $formSent=0;
@@ -163,12 +159,12 @@ $errorMsg = $firstLetterCourse = '';
 $UserList = array();
 
 $msg = '';
-if (intval($_POST['formSent']) == 1) {
-	$courses_list = $_POST['CoursesList'];
-	$affected_rows = CourseManager::suscribe_courses_to_hr_manager($user_id,$courses_list);
-	if ($affected_rows)	{
-		$msg = get_lang('AssignedCoursesHaveBeenUpdatedSuccessfully');
-	}
+if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
+    $courses_list = $_POST['CoursesList'];
+    $affected_rows = CourseManager::suscribe_courses_to_hr_manager($user_id,$courses_list);
+    if ($affected_rows)	{
+        $msg = get_lang('AssignedCoursesHaveBeenUpdatedSuccessfully');
+    }
 }
 
 // display header
@@ -200,15 +196,19 @@ if (isset($_POST['firstLetterCourse'])) {
 	$needle = "$needle%";
 }
 
-if ($_configuration['multiple_access_urls']) {
-	$sql 	= " SELECT c.code, c.title FROM $tbl_course c LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
-                WHERE  c.code LIKE '$needle' $without_assigned_courses AND access_url_id = ".api_get_current_access_url_id()."
-                ORDER BY c.title";
+if (api_is_multiple_url_enabled()) {
+	$sql = " SELECT c.code, c.title
+            FROM $tbl_course c
+            LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
+            WHERE
+                c.code LIKE '$needle' $without_assigned_courses AND
+                access_url_id = ".api_get_current_access_url_id()."
+            ORDER BY c.title";
 
 } else {
-	$sql 	= " SELECT c.code, c.title FROM $tbl_course c
-                WHERE  c.code LIKE '$needle' $without_assigned_courses 
-                ORDER BY c.title";
+	$sql= " SELECT c.code, c.title FROM $tbl_course c
+            WHERE  c.code LIKE '$needle' $without_assigned_courses
+            ORDER BY c.title";
 }
 
 

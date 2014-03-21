@@ -8,7 +8,7 @@
 // For more information: http://docs.fckeditor.net/FCKeditor_2.x/Developers_Guide/Configuration/Configuration_Options
 
 // This is the visible toolbar set when the editor has "normal" size.
-$config['ToolbarSets']['Normal'] = array(	
+$config['ToolbarSets']['Normal'] = array(
 	array('Link','Unlink'),
 	array('Image','flvPlayer','Flash','EmbedMovies','YouTube','MP3','mimetex'),
 	array('Table','Smiley'),
@@ -17,7 +17,7 @@ $config['ToolbarSets']['Normal'] = array(
 	'/',
 	array('FontName','FontSize'),
 	array('Bold','Italic','Underline'),
-	array('JustifyLeft','JustifyCenter','-','OrderedList','UnorderedList')	
+	array('JustifyLeft','JustifyCenter','-','OrderedList','UnorderedList')
 );
 
 // This is the visible toolbar set when the editor is maximized.
@@ -34,7 +34,7 @@ $config['ToolbarSets']['Maximized'] = array(
 
 // Sets how the editor's toolbar should start - expanded or collapsed.
 // Possible values: true , false
-$config['ToolbarStartExpanded'] = false;
+$config['ToolbarStartExpanded'] = true;
 
 //This option sets the location of the toolbar.
 // Possible values: 'In' , 'None' , 'Out:[TargetId]' , 'Out:[TargetWindow]([TargetId])'

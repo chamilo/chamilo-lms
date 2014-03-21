@@ -77,7 +77,7 @@ $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work_list.
 $interbreadcrumb[] = array('url' => '#', 'name'  => get_lang('UploadADocument'));
 
 $form = new FormValidator('form', 'POST', api_get_self()."?".api_get_cidreq()."&id=".$work_id, '', array('enctype' => "multipart/form-data"));
-setWorkUploadForm($form);
+setWorkUploadForm($form, $workInfo['allow_text_assignment']);
 $form->addElement('hidden', 'id', $work_id);
 $form->addElement('hidden', 'sec_token', $token);
 
@@ -85,6 +85,7 @@ $error_message = null;
 
 $succeed = false;
 if ($form->validate()) {
+
     if ($student_can_edit_in_session && $check) {
         $values = $form->getSubmitValues();
         // Process work

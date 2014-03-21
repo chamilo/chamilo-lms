@@ -15,6 +15,7 @@ require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
 $workId = isset($_GET['id']) ? intval($_GET['id']) : null;
+$origin = isset($origin) ? Security::remove_XSS($origin) : null;
 
 if (empty($workId)) {
     api_not_allowed(true);
@@ -62,9 +63,9 @@ $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 Display :: display_header(null);
 
 echo '<div class="actions">';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&origin='.$origin.'">'.Display::return_icon('back.png', get_lang('BackToWorksList'),'',ICON_SIZE_MEDIUM).'</a>';
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId)) {
-    echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'&origin='.$origin.'&gradebook='.$gradebook.'">';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId.'&origin='.$origin.'">';
     echo Display::return_icon('upload_file.png', get_lang('UploadADocument'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 echo '</div>';

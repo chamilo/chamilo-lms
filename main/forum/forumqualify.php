@@ -3,7 +3,7 @@
 
 /**
  * 	@package chamilo.forum
- *  @todo fix all this qualify files avoid including files, use classes POO jmontoya 
+ *  @todo fix all this qualify files avoid including files, use classes POO jmontoya
  */
 
 // name of the language file that needs to be included
@@ -29,7 +29,7 @@ if (isset($_GET['origin'])) {
 $user_id = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
 
 api_block_course_item_locked_by_gradebook($_GET['thread'], LINK_FORUM_THREAD);
-           
+
 $nameTools = get_lang('ToolForum');
 
 /*     Including necessary files */
@@ -48,7 +48,7 @@ $current_thread=get_thread_information($_GET['thread']); // note: this has to be
 $current_forum=get_forum_information($current_thread['forum_id']); // note: this has to be validated that it is an existing forum.
 $current_forum_category=get_forumcategory_information($current_forum['forum_category']);
 $group_id = api_get_group_id();
-        
+
 /*
     Header and Breadcrumbs
 */
@@ -96,14 +96,11 @@ if ($origin=='learnpath') {
         }
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
         $interbreadcrumb[]=array("url" => "#","name" => get_lang('QualifyThread'));
-        Display :: display_header('');        
+        Display :: display_header('');
     }
 }
 
-
-/*
-    Is the user allowed here?
-*/
+/* Is the user allowed here? */
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
 if (!api_is_allowed_to_edit(false,true) AND ($current_forum['visibility']==0 OR $current_thread['visibility']==0)) {
@@ -112,7 +109,6 @@ if (!api_is_allowed_to_edit(false,true) AND ($current_forum['visibility']==0 OR 
         exit;
     }
 }
-
 
 /*
     Actions
@@ -152,7 +148,7 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
             //new thread link
             if (api_is_allowed_to_edit(false,true) OR ($current_forum['allow_new_threads']==1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads']==1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous']==1)) {
                 if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
-                    echo '&nbsp;&nbsp;';                    
+                    echo '&nbsp;&nbsp;';
                 } else {
                     echo get_lang('ForumLocked');
                 }
@@ -206,7 +202,7 @@ if ($message<>'PostDeletedSpecial') {// in this case the first and only post of 
 } // if ($message<>'PostDeletedSpecial') // in this case the first and only post of the thread is removed
 
 if ($allowed_to_edit) {
-    $current_thread=get_thread_information($_GET['thread']);    
+    $current_thread=get_thread_information($_GET['thread']);
     $threadid=$current_thread['thread_id'];
     //show current qualify in my form
     $qualify=current_qualify_of_thread($threadid, api_get_session_id());
@@ -225,11 +221,11 @@ if ($allowed_to_edit) {
         $return_message = get_lang('QualificationCanNotBeGreaterThanMaxScore');
         Display :: display_error_message($return_message,false);
     }
-    
-    // show qualifications history    
-    $qualify_historic = get_historical_qualify($user_id, $threadid, $_GET['type']);    
+
+    // show qualifications history
+    $qualify_historic = get_historical_qualify($user_id, $threadid, $_GET['type']);
     $counter = count($qualify_historic);
-    
+
     $act_qualify = $_REQUEST['idtextqualify'];
     if ($counter>0) {
         if (isset($_GET['gradebook'])){
@@ -244,7 +240,7 @@ if ($allowed_to_edit) {
                         <a class="btn" href="forumqualify.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;thread='.$threadid.'&amp;user='.Security::remove_XSS($_GET['user']).'&amp;user_id='.Security::remove_XSS($_GET['user_id']).'&amp;type=false&amp;idtextqualify='.$act_qualify.$view_gradebook.'#history">'.
                     get_lang('Older').'</a>';
         }
-        
+
         $table_list.= '<br /><div class="btn-group">'.$buttons.'</div>';
         $table_list.= '<br /><table class="data_table">';
         $table_list.= '<tr>';

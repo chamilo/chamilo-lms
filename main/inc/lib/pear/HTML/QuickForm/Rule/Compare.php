@@ -64,8 +64,8 @@ class HTML_QuickForm_Rule_Compare extends HTML_QuickForm_Rule
     * @param  string     operator name
     * @return string     operator to use for validation
     */
-    function _findOperator($name)
-    {
+    function _findOperator($name) {
+        $name = trim($name);
         if (empty($name)) {
             return '===';
         } elseif (isset($this->_operators[$name])) {

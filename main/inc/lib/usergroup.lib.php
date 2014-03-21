@@ -53,6 +53,7 @@ class UserGroup extends Model
     public function getTotalCount()
     {
         $row = Database::select('count(*) as count', $this->table, array(), 'first');
+
         return $row['count'];
     }
 
@@ -64,14 +65,17 @@ class UserGroup extends Model
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
             $sql = "SELECT count(u.id) as count FROM ".$this->table." u
-                    INNER JOIN ".$this->access_url_rel_usergroup." a ON (u.id = a.usergroup_id)
+                    INNER JOIN ".$this->access_url_rel_usergroup." a
+                        ON (u.id = a.usergroup_id)
                     WHERE access_url_id = $urlId
             ";
             $result = Database::query($sql);
             if (Database::num_rows($result)) {
                 $row  = Database::fetch_array($result);
+
                 return $row['count'];
             }
+
             return 0;
         } else {
             return $this->getTotalCount();
@@ -97,6 +101,7 @@ class UserGroup extends Model
                 $row  = Database::fetch_array($result);
                 return $row['count'];
             }
+
             return 0;
 
         } else {
@@ -106,6 +111,7 @@ class UserGroup extends Model
                 array('where' => array('course_id = ?' => $course_id)),
                 'first'
             );
+
             return $row['count'];
         }
     }
@@ -118,6 +124,7 @@ class UserGroup extends Model
     public function get_id_by_name($name)
     {
         $row = Database::select('id', $this->table, array('where' => array('name = ?' => $name)), 'first');
+
         return $row['id'];
     }
 
@@ -146,37 +153,71 @@ class UserGroup extends Model
 
     /**
      * Gets a list of course ids by user group
-     * @param   int user group id
+     * @param int user group id
+     * @param array $loadCourseData
      * @return  array
      */
-    public function get_courses_by_usergroup($id)
+    public function get_courses_by_usergroup($id, $loadCourseData = false)
     {
         if ($this->useMultipleUrl) {
             $urlId = api_get_current_access_url_id();
             $from = $this->usergroup_rel_course_table." c
-                    INNER JOIN {$this->access_url_rel_usergroup} a ON (a.usergroup_id = c.usergroup_id) ";
-            $where = array('where' => array('a.usergroup_id = ? AND access_url_id = ? ' => array($id, $urlId)));
+                    INNER JOIN {$this->access_url_rel_usergroup} a
+                    ON (a.usergroup_id = c.usergroup_id) ";
+            $whereConditionSql = 'a.usergroup_id = ? AND access_url_id = ? ';
+            $whereConditionValues = array($id, $urlId);
         } else {
-            $from = $this->usergroup_rel_course_table;
-            $where = array('where' => array('usergroup_id = ?' => $id));
+            $whereConditionSql = 'usergroup_id = ?';
+            $whereConditionValues = array($id);
+            $from = $this->usergroup_rel_course_table." c ";
+        }
+
+        if ($loadCourseData) {
+            $from .= " INNER JOIN {$this->table_course} as course ON c.course_id = course.id";
+        }
+
+        /*
+        if (!empty($conditionsLike)) {
+            $from .= " INNER JOIN {$this->table_course} as course ON c.course_id = course.id";
+            $conditionSql = array();
+            foreach ($conditionsLike as $field => $value) {
+                $conditionSql[] = $field.' LIKE %?%';
+                $whereConditionValues[] = $value;
+            }
+            $whereConditionSql .= ' AND '.implode(' AND ', $conditionSql);
+        }*/
+
+        $where = array('where' => array($whereConditionSql => $whereConditionValues));
+
+        if ($loadCourseData) {
+            $select = 'course.*';
+        } else {
+            $select = 'course_id';
         }
 
         $results = Database::select(
-            'course_id',
+            $select,
             $from,
             $where
         );
+
         $array = array();
         if (!empty($results)) {
             foreach ($results as $row) {
-                $array[] = $row['course_id'];
+                if ($loadCourseData) {
+                    $array[$row['id']] = $row;
+                } else {
+                    $array[] = $row['course_id'];
+                }
             }
         }
+
         return $array;
     }
 
     /**
      * @param array $options
+     *
      * @return array
      */
     public function get_usergroup_in_course($options = array())
@@ -203,13 +244,24 @@ class UserGroup extends Model
             $urlId = api_get_current_access_url_id();
             $sql .= " AND access_url_id = $urlId ";
         }
+
+        if (isset($options['LIMIT'])) {
+            $limits = explode(',', $options['LIMIT']);
+            $limits = array_map('intval', $limits);
+            if (isset($limits[0]) && isset($limits[1])) {
+                $sql .= " LIMIT ".$limits[0].', '.$limits[1];
+            }
+        }
+
         $result = Database::query($sql);
         $array = Database::store_result($result, 'ASSOC');
+
         return $array;
     }
 
     /**
      * @param array $options
+     *
      * @return array|bool
      */
     public function get_usergroup_not_in_course($options = array())
@@ -219,13 +271,13 @@ class UserGroup extends Model
             $course_id = intval($options['course_id']);
             unset($options['course_id']);
         }
+
         if (empty($course_id)) {
             return false;
         }
+
         if ($this->useMultipleUrl) {
-
             $urlId = api_get_current_access_url_id();
-
             $sql = "SELECT DISTINCT u.id, name
                     FROM {$this->table} u
                     INNER JOIN {$this->access_url_rel_usergroup} a
@@ -249,8 +301,16 @@ class UserGroup extends Model
             $sql .= " AND access_url_id = $urlId";
         }
 
+        if (isset($options['LIMIT'])) {
+            $limits = explode(',', $options['LIMIT']);
+            $limits = array_map('intval', $limits);
+            if (isset($limits[0]) && isset($limits[1])) {
+                $sql .= " LIMIT ".$limits[0].', '.$limits[1];
+            }
+        }
         $result = Database::query($sql);
         $array = Database::store_result($result, 'ASSOC');
+
         return $array;
     }
 

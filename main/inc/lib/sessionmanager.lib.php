@@ -523,7 +523,7 @@ class SessionManager
 
         $where = " WHERE a.course_code = '%s'";
         if (!empty($sessionId)) {
-            $where .= " AND a.session_id = %d 
+            $where .= " AND a.session_id = %d
                         AND q.id = %d";
         } else
         {
@@ -571,10 +571,10 @@ class SessionManager
         INNER JOIN $user u ON u.user_id = a.user_id
         $where $order $limit";
 
-        if (!empty($sessionId)) 
+        if (!empty($sessionId))
         {
             $sql_query = sprintf($sql, $course['code'], $sessionId,  $exerciseId);
-        } else 
+        } else
         {
             $sql_query = sprintf($sql, $course['code'], $exercise['title']);
         }
@@ -2391,6 +2391,7 @@ class SessionManager
      * @param bool $getCount
      * @param bool $getOnlySessionId
      * @param bool $getSql
+     * @param string $orderCondition
 	 * @return array sessions
 	 */
 	public static function get_sessions_followed_by_drh(
@@ -2399,15 +2400,15 @@ class SessionManager
         $limit = null,
         $getCount = false,
         $getOnlySessionId = false,
-        $getSql = false
+        $getSql = false,
+        $orderCondition = null
     ) {
 		// Database Table Definitions
-		$tbl_session 			= 	Database::get_main_table(TABLE_MAIN_SESSION);
-		$tbl_session_rel_user 	= 	Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $tbl_session_rel_access_url =   Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+		$tbl_session 			= Database::get_main_table(TABLE_MAIN_SESSION);
+		$tbl_session_rel_user 	= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
 
 		$userId = intval($userId);
-		$assigned_sessions_to_hrm = array();
 
         $select = " SELECT * ";
 
@@ -2424,6 +2425,10 @@ class SessionManager
             $limitCondition = " LIMIT ".intval($start). ", ".intval($limit);
         }
 
+        if (empty($orderCondition)) {
+            $orderCondition = " ORDER BY s.name ";
+        }
+
 		if (api_is_multiple_url_enabled()) {
            $sql = " $select FROM $tbl_session s
                     INNER JOIN $tbl_session_rel_user sru ON (sru.id_session = s.id)
@@ -2432,6 +2437,7 @@ class SessionManager
                         sru.id_user = '$userId' AND
                         sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."' AND
                         access_url_id = ".api_get_current_access_url_id()."
+                        $orderCondition
                         $limitCondition";
         } else {
             $sql = "$select FROM $tbl_session s
@@ -2440,6 +2446,7 @@ class SessionManager
                         sru.id_session = s.id AND
                         sru.id_user = '$userId' AND
                         sru.relation_type = '".SESSION_RELATION_TYPE_RRHH."'
+                        $orderCondition
                         $limitCondition";
         }
 
@@ -2454,12 +2461,13 @@ class SessionManager
             return $row['count'];
         }
 
+        $sessions = array();
         if (Database::num_rows($result) > 0) {
 			while ($row = Database::fetch_array($result))	{
-				$assigned_sessions_to_hrm[$row['id']] = $row;
+                $sessions[$row['id']] = $row;
 			}
 		}
-		return $assigned_sessions_to_hrm;
+		return $sessions;
 	}
 
 	/**
@@ -2476,8 +2484,7 @@ class SessionManager
 		// select the courses
 		$sql = "SELECT * FROM $tbl_course c INNER JOIN $tbl_session_rel_course src ON c.code = src.course_code
 		        WHERE src.id_session = '$session_id'";
-        if (!empty($course_name))
-        {
+        if (!empty($course_name)) {
             $course_name = Database::escape_string($course_name);
             $sql .= " AND c.title LIKE '%$course_name%' ";
         }
@@ -3442,6 +3449,9 @@ class SessionManager
      * @param string $keyword
      * @param string $active
      * @param string $lastConnectionDate
+     * @param array $sessionIdList
+     * @param array $studentIdList
+     * @param int $filterByStatus
      * @return array|int
      */
     public static function getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -3454,8 +3464,13 @@ class SessionManager
         $direction = 'asc',
         $keyword = null,
         $active = null,
-        $lastConnectionDate = null
+        $lastConnectionDate = null,
+        $sessionIdList = array(),
+        $studentIdList = array(),
+        $filterByStatus = null
     ) {
+        $filterByStatus = intval($filterByStatus);
+
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -3466,7 +3481,6 @@ class SessionManager
         $userId = intval($userId);
 
         $limitCondition = null;
-
         if (isset($from) && isset($numberItems)) {
             $from = intval($from);
             $numberItems = intval($numberItems);
@@ -3483,18 +3497,42 @@ class SessionManager
 
         $statusConditions = null;
         switch ($status) {
-            // Classic DRH
             case 'drh':
-                $studentListSql = UserManager::get_users_followed_by_drh($userId, STUDENT, true, true);
-                $statusConditions = " AND u.user_id IN (".$studentListSql.") ";
+                // Classic DRH
+                if (empty($studentIdList)) {
+                    $studentListSql = UserManager::get_users_followed_by_drh($userId, $filterByStatus, true, false);
+                    $studentIdList = array_keys($studentListSql);
+                    $studentListSql = "'".implode("','", $studentIdList)."'";
+                } else {
+                    $studentIdList = array_map('intval', $studentIdList);
+                    $studentListSql = "'".implode("','", $studentIdList)."'";
+                }
+                if (!empty($studentListSql)) {
+                    $statusConditions = " AND u.user_id IN (".$studentListSql.") ";
+                }
                 break;
-                // Show all by DRH
             case 'drh_all':
-                $sessionsListSql = SessionManager::get_sessions_followed_by_drh($userId, null, null, false, true, true);
-                $statusConditions = " AND s.id IN (".$sessionsListSql.") ";
+                // Show all by DRH
+                if (empty($sessionIdList)) {
+                    $sessionsListSql = SessionManager::get_sessions_followed_by_drh(
+                        $userId,
+                        null,
+                        null,
+                        false,
+                        true,
+                        true
+                    );
+                } else {
+                    $sessionIdList = array_map('intval', $sessionIdList);
+                    $sessionsListSql = "'".implode("','", $sessionIdList)."'";
+                }
+
+                if (!empty($sessionsListSql)) {
+                    $statusConditions = " AND s.id IN (".$sessionsListSql.") ";
+                }
                 break;
             case 'session_admin';
-                $statusConditions = " AND s.id_coach = $userId";
+                $statusConditions = " AND s.id_coach = $userId ";
                 break;
             case 'admin':
                 break;
@@ -3525,14 +3563,13 @@ class SessionManager
                       $activeCondition
                     ";
 
+        if (!empty($filterByStatus)) {
+            $where .= " AND u.status = ".$filterByStatus;
+        }
+
         if (!empty($lastConnectionDate)) {
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
-            $where .=  " AND l.login_date = (
-                            SELECT MAX(a.login_date)
-                            FROM $loginTable as a
-                            WHERE a.login_user_id = u.user_id
-                         )";
-            $where .= " AND l.login_date <= '$lastConnectionDate' ";
+            $where .=  " AND l.login_date <= '$lastConnectionDate' ";
         }
 
         $sql .= $where;
@@ -3540,12 +3577,12 @@ class SessionManager
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
             $sql .= " AND (
-                        u.username LIKE '%$keyword%' OR
-                        u.firstname LIKE '%$keyword%' OR
-                        u.lastname LIKE '%$keyword%' OR
-                        u.official_code LIKE '%$keyword%' OR
-                        u.email LIKE '%$keyword%'
-                    )";
+                u.username LIKE '%$keyword%' OR
+                u.firstname LIKE '%$keyword%' OR
+                u.lastname LIKE '%$keyword%' OR
+                u.official_code LIKE '%$keyword%' OR
+                u.email LIKE '%$keyword%'
+            )";
         }
 
         if ($getCount) {
@@ -3558,11 +3595,15 @@ class SessionManager
             return $count;
         }
 
-        $sql .= "ORDER BY $column $direction
-                $limitCondition";
+        if (!empty($column) && !empty($direction)) {
+            $sql .= " ORDER BY $column $direction ";
+        }
+
+        $sql .= $limitCondition;
 
         $result = Database::query($sql);
         $result = Database::store_result($result);
+
         return $result ;
     }
 
@@ -3714,23 +3755,26 @@ class SessionManager
      * @param string $keyword
      * @param string $active
      * @param string $lastConnectionDate
+     * @param array $sessionIdList
+     * @param array $studentIdList
      * @return array|int
      */
-    public static function getCountUserTracking($keyword = null, $active = null, $lastConnectionDate = null)
-    {
-        if (!isset($keyword)) {
-            $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
-        }
-
-        if (!isset($active)) {
-            $active = isset($_GET['active']) ? $_GET['active'] : null;
-        }
+    public static function getCountUserTracking(
+        $keyword = null,
+        $active = null,
+        $lastConnectionDate = null,
+        $sessionIdList = array(),
+        $studentIdList = array(),
+        $userStatus = null
+    ) {
+        $userId = api_get_user_id();
 
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
+
                 $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
                     'drh_all',
-                    api_get_user_id(),
+                    $userId,
                     true,
                     null,
                     null,
@@ -3738,85 +3782,100 @@ class SessionManager
                     null,
                     $keyword,
                     $active,
-                    $lastConnectionDate
+                    $lastConnectionDate,
+                    $sessionIdList,
+                    $studentIdList,
+                    $userStatus
                 );
             } else {
-                $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
-                    'drh',
-                    api_get_user_id(),
+
+                $count = UserManager::get_users_followed_by_drh(
+                    $userId,
+                    null,
+                    false,
+                    false,
                     true,
                     null,
                     null,
                     null,
                     null,
-                    $keyword,
                     $active,
-                    $lastConnectionDate
+                    $lastConnectionDate,
+                    array(),
+                    array(),
+                    $userStatus
+
                 );
             }
         } else {
-            if (api_is_platform_admin()) {
-                $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
-                    'admin',
-                    api_get_user_id(),
-                    true,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $keyword,
-                    $active,
-                    $lastConnectionDate
-                );
-            } else {
-                $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
-                    'teacher',
-                    api_get_user_id(),
-                    true,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $keyword,
-                    $active,
-                    $lastConnectionDate
-                );
-            }
+            $count = UserManager::get_users_followed_by_drh(
+                $userId,
+                $userStatus,
+                false,
+                false,
+                true,
+                null,
+                null,
+                null,
+                null,
+                $active,
+                $lastConnectionDate
+            );
         }
         return $count;
     }
 
     /**
+     * Get teachers followed by a user
      * @param int $userId
      * @param int $active
      * @param string $lastConnectionDate
      * @param bool $getCount
+     * @param array $sessionIdList
      * @return array|int
      */
-    public static function getTeacherTracking($userId, $active = 1, $lastConnectionDate = null, $getCount = false)
-    {
+    public static function getTeacherTracking(
+        $userId,
+        $active = 1,
+        $lastConnectionDate = null,
+        $getCount = false,
+        $sessionIdList = array()
+    ) {
         $teacherResult = array();
 
         if (api_is_drh() || api_is_platform_admin()) {
             // Followed teachers by drh
             if (api_drh_can_access_all_session_content()) {
-                $sessions = SessionManager::get_sessions_followed_by_drh($userId);
-                if (!empty($sessions)) {
+                if (empty($sessionIdList)) {
+                    $sessions = SessionManager::get_sessions_followed_by_drh($userId);
+                    $sessionIdList = array();
                     foreach ($sessions as $session) {
-                        $coursesFromSession = SessionManager::get_course_list_by_session_id($session['id']);
-                        foreach ($coursesFromSession as $course) {
-                            $teachers = CourseManager::get_teacher_list_from_course_code($course['code']);
-                            foreach ($teachers as $teacher) {
-                                if (isset($teacherResult[$teacher['user_id']])) {
-                                    continue;
-                                }
-                                $teacherResult[$teacher['user_id']] = $teacher;
-                            }
-                        }
+                        $sessionIdList[] = $session['id'];
                     }
+                }
+                $sessionIdList = array_map('intval', $sessionIdList);
+                $sessionToString = implode("', '",  $sessionIdList);
+
+                $course = Database::get_main_table(TABLE_MAIN_COURSE);
+                $sessionCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+                $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+                // Select the teachers.
+                $sql = "SELECT cu.user_id FROM $course c
+                        INNER JOIN $sessionCourse src ON c.code = src.course_code
+                        INNER JOIN $courseUser cu ON (cu.course_code = c.code)
+		                WHERE src.id_session IN ('$sessionToString') AND cu.status = 1";
+                $result = Database::query($sql);
+                $teacherListId = array();
+                while($row = Database::fetch_array($result, 'ASSOC')) {
+                    $teacherListId[$row['user_id']] = $row['user_id'];
                 }
             } else {
                 $teacherResult = UserManager::get_users_followed_by_drh($userId, COURSEMANAGER);
+                $teacherListId = array();
+                foreach ($teacherResult as $userInfo) {
+                    $teacherListId[] = $userInfo['user_id'];
+                }
             }
         }
 
@@ -3835,22 +3894,12 @@ class SessionManager
                 $sql .= " INNER JOIN $tableLogin l ON (l.login_user_id = u.user_id) ";
             }
             $active = intval($active);
-            $teacherListId = array();
-            foreach ($teacherResult as $userInfo) {
-                $teacherListId[] = $userInfo['user_id'];
-            }
-
             $teacherListId = implode("','", $teacherListId);
-            $where = " WHERE u.active = $active  AND u.user_id IN ('$teacherListId') ";
+            $where = " WHERE u.active = $active AND u.user_id IN ('$teacherListId') ";
 
             if (!empty($lastConnectionDate)) {
                 $lastConnectionDate = Database::escape_string($lastConnectionDate);
-                $where .= " AND l.login_date = (
-                                SELECT MAX(a.login_date)
-                                FROM $tableLogin as a
-                                WHERE a.login_user_id = u.user_id
-                            ) AND ";
-                $where .= "  l.login_date <= '$lastConnectionDate' ";
+                $where .= " AND l.login_date <= '$lastConnectionDate' ";
             }
 
             $sql .= $where;

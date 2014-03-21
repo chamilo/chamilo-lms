@@ -262,7 +262,11 @@ function getParentPath($value) {
  * @param string $value
  * @return  boolean
  */
-function isUnderRoot($value) {
+function isUnderRoot($value)
+{
+    if (empty($value)) {
+        return false;
+    }
     $roorPath = strtolower(addTrailingSlash(backslashToSlash(getRealPath(CONFIG_SYS_ROOT_PATH))));
     if (file_exists($value) && @strpos(strtolower(addTrailingSlash(backslashToSlash(getRealPath($value)))), $roorPath) === 0) {
         return true;
@@ -1061,6 +1065,7 @@ function hideFolderName($folderName) {
 
     //show group's directory only if I'm member
     $show_doc_group = true;
+    global $is_user_in_group;
     if (preg_match("/$group_folder/", $folderName)) {
         $show_doc_group = false;
         if ($is_user_in_group) {

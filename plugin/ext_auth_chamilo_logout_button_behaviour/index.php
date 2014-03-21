@@ -1,9 +1,12 @@
 <?php
 // personalize the logout button behaviour
 global $_user;
-$_template['show_message']   = false;
+$_template['show_message'] = false;
 
-if (!api_is_anonymous() && api_get_setting('cas_activate') == 'true' && $_user['auth_source'] == CAS_AUTH_SOURCE) {
+if (!api_is_anonymous() &&
+    api_get_setting('cas_activate') == 'true' &&
+    $_user['auth_source'] == CAS_AUTH_SOURCE
+) {
     $_template['show_message']   = true;
     // the link URL
     $link_url = "#";
@@ -30,7 +33,7 @@ if (!api_is_anonymous() && api_get_setting('cas_activate') == 'true' && $_user['
     if (!empty($plugin_info['settings']['ext_auth_chamilo_logout_button_behaviour_eaclbb_form_alert_text'])) {
         $alert_text = $plugin_info['settings']['ext_auth_chamilo_logout_button_behaviour_eaclbb_form_alert_text'];
     }
-    
+
     $_template['link_url'] = $link_url;
     $_template['link_infobulle'] = $link_infobulle;
     $_template['link_image'] = $link_image;

@@ -2,6 +2,33 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ForumsTotal = "Total des forums";
+$ExercisesProgress = "Progrès des exercices";
+$ExercisesLeft = "Exercices incomplètes";
+$ExercisesDone = "Exercices terminés";
+$ExercisesTotal = "Total d'exercices";
+$CourseDescriptionProgress = "Progrès des descriptions de cours";
+$LearnpathsProgress = "Parcours en progrès";
+$LearnpathsLeft = "Parcours incomplètes";
+$LearnpathsDone = "Parcours accomplies";
+$LearnpathsTotal = "Nombre de parcours";
+$TimeLoggedIn = "Durée de connexion (hh:mm)";
+$AnswerIndicator = "Statut de réponse";
+$ChooseSurvey = "Choisir une enquête";
+$SearchSurvey = "Recherche enquêtes";
+$ChooseExercise = "Choisir un exercice";
+$SearchExercise = "Rechercher exercices";
+$ChooseSession = "Choisir une session";
+$SearchSession = "Rechercher sessions";
+$ChooseStudent = "Choisir un étudiant";
+$SearchStudent = "Rechercher utilisateurs";
+$ChooseCourse = "Choisir un cours";
+$SearchCourse = "Rechercher cours";
+$DisplaySurveyOverview = "Vue d'ensemble des enquêtes";
+$DisplayProgressOverview = "Rapport de lecture et participation";
+$DisplayLpProgressOverview = "Rapport de progression des parcours";
+$DisplayExerciseProgress = "Rapport de progression des exercices";
+$DisplayAccessOverview = "Rapport d'accès par utilisateur";
 $AssignSessionsTo = "Assigner des sessions à %s";
 $langToolName = "Importer des cours Blackboard";
 $TrackingDisabled = "Le système de suivi a été désactivé par l'administrateur système.";

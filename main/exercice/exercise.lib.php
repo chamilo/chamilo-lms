@@ -883,49 +883,80 @@ function get_count_exam_results($exercise_id, $extra_where_conditions) {
     return $count;
 }
 
+/**
+ * @param string $in_hotpot_path
+ * @return int
+ */
 function get_count_exam_hotpotatoes_results($in_hotpot_path) {
     return get_exam_results_hotpotatoes_data(0, 0, '', '', $in_hotpot_path, true, '');
 }
 
-//function get_exam_results_hotpotatoes_data($from, $number_of_items, $column, $direction, $exercise_id, $extra_where_conditions = null, $get_count = false) {
-function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_column, $in_direction, $in_hotpot_path, $in_get_count = false, $where_condition = null) {
-
-    $tab_res = array();
+/**
+ * @param int $in_from
+ * @param int $in_number_of_items
+ * @param int $in_column
+ * @param int  $in_direction
+ * @param string $in_hotpot_path
+ * @param bool $in_get_count
+ * @param null $where_condition
+ * @return array|int
+ */
+function get_exam_results_hotpotatoes_data($in_from, $in_number_of_items, $in_column, $in_direction, $in_hotpot_path, $in_get_count = false, $where_condition = null)
+{
     $course_code = api_get_course_id();
     // by default in_column = 1 If parameters given, it is the name of the column witch is the bdd field name
     if ($in_column == 1) {
         $in_column = 'firstname';
     }
+    $in_hotpot_path = Database::escape_string($in_hotpot_path);
+    $in_direction = Database::escape_string($in_direction);
+    $in_column = Database::escape_string($in_column);
+    $in_number_of_items = intval($in_number_of_items);
+    $in_from = intval($in_from);
 
-    $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
-    $TBL_USER                   = Database :: get_main_table(TABLE_MAIN_USER);
+    $TBL_TRACK_HOTPOTATOES = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+    $TBL_USER = Database :: get_main_table(TABLE_MAIN_USER);
 
-    $sql = "SELECT * FROM $TBL_TRACK_HOTPOTATOES thp JOIN $TBL_USER u ON thp.exe_user_id = u.user_id WHERE thp.exe_cours_id = '$course_code' AND exe_name LIKE '$in_hotpot_path%'";
+    $sql = "SELECT * FROM $TBL_TRACK_HOTPOTATOES thp
+            JOIN $TBL_USER u ON thp.exe_user_id = u.user_id
+            WHERE thp.exe_cours_id = '$course_code' AND exe_name LIKE '$in_hotpot_path%'";
 
     // just count how many answers
     if ($in_get_count) {
         $res = Database::query($sql);
         return Database::num_rows($res);
     }
-
-    $in_column = Database::escape_string($in_column);
-
     // get a number of sorted results
-    $sql .= " $where_condition ORDER BY $in_column $in_direction  LIMIT $in_from, $in_number_of_items";
+    $sql .= " $where_condition
+            ORDER BY $in_column $in_direction
+            LIMIT $in_from, $in_number_of_items";
 
     $res = Database::query($sql);
+    $result = array();
+    $apiIsAllowedToEdit = api_is_allowed_to_edit();
+    $urlBase = api_get_path(WEB_CODE_PATH).'exercice/hotpotatoes_exercise_report.php?action=delete&'.api_get_cidreq().'&id=';
     while ($data = Database::fetch_array($res)) {
-        $tab_one_res = array();
-        $tab_one_res['firstname'] = $data['firstname'];
-        $tab_one_res['lastname'] = $data['lastname'];
-        $tab_one_res['username'] = $data['username'];
-        $tab_one_res['group_name'] = implode("<br/>",GroupManager::get_user_group_name($data['user_id']));
-        $tab_one_res['exe_date'] = $data['exe_date'];
-        $tab_one_res['score'] = $data['exe_result'].'/'.$data['exe_weighting'];
-        $tab_one_res['actions'] = "";
-        $tab_res[] = $tab_one_res;
+        $actions = null;
+
+        if ($apiIsAllowedToEdit) {
+            $url = $urlBase.$data['id'].'&path='.$data['exe_name'];
+            $actions = Display::url(
+                Display::return_icon('delete.png', get_lang('Delete')),
+                $url
+            );
+        }
+
+        $result[] = array(
+            'firstname' => $data['firstname'],
+            'lastname' => $data['lastname'],
+            'username' => $data['username'],
+            'group_name' => implode("<br/>", GroupManager::get_user_group_name($data['user_id'])),
+            'exe_date' => $data['exe_date'],
+            'score' => $data['exe_result'].' / '.$data['exe_weighting'],
+            'actions' => $actions,
+        );
     }
-    return $tab_res;
+    return $result;
 }
 
 /**
@@ -950,7 +981,6 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     $TBL_EXERCICES              = Database :: get_course_table(TABLE_QUIZ_TEST);
     $TBL_GROUP_REL_USER         = Database :: get_course_table(TABLE_GROUP_USER);
     $TBL_GROUP                  = Database :: get_course_table(TABLE_GROUP);
-
     $TBL_TRACK_EXERCICES        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
     $TBL_TRACK_HOTPOTATOES      = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
     $TBL_TRACK_ATTEMPT_RECORDING= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
@@ -1107,7 +1137,6 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                     AND tth.exe_cours_id = '" . api_get_course_id()."'
                     $hotpotatoe_where
                     $sqlWhereOption
-    				AND $where_condition
                 ORDER BY
                     tth.exe_cours_id ASC,
                     tth.exe_date DESC";
@@ -1159,7 +1188,8 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
         if (is_array($results)) {
 
             $users_array_id = array();
-            if ($_GET['gradebook'] == 'view') {
+            $from_gradebook = false;
+            if (isset($_GET['gradebook']) && $_GET['gradebook'] == 'view') {
                 $from_gradebook = true;
             }
             $sizeof = count($results);
@@ -1447,8 +1477,8 @@ function convert_score($score, $weight) {
  * @param   boolean Check publications dates
  * @param   string  Search exercise name
  * @param   boolean Search exercises in all sessions
- * @param   int     0 = only inactive exercises 
- *                  1 = only active exercises, 
+ * @param   int     0 = only inactive exercises
+ *                  1 = only active exercises,
  *                  2 = all exercises
  * @return  array   array with exercise data
  */
@@ -1475,7 +1505,7 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
     }
 
     $needle_where   = (!empty($search_exercise)) ? " AND title LIKE '?' "       : '';
-    $needle         = (!empty($search_exercise)) ? "%" . $search_exercise . "%" : ''; 
+    $needle         = (!empty($search_exercise)) ? "%" . $search_exercise . "%" : '';
 
     //Show courses by active status
     $active_sql = '';
@@ -1484,10 +1514,10 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
     }
 
 
-    if ($search_all_sessions == true) 
+    if ($search_all_sessions == true)
     {
         $conditions = array('where'=>array($active_sql . ' c_id = ? '. $needle_where . $time_conditions => array($course_id, $needle)), 'order'=>'title');
-    } else 
+    } else
     {
         if ($session_id == 0) {
             $conditions = array('where'=>array($active_sql . ' session_id = ? AND c_id = ? '. $needle_where . $time_conditions => array($session_id, $course_id, $needle)), 'order'=>'title');
@@ -1500,7 +1530,7 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
 /**
  * Get exercise information by id
  * @param int Exercise Id
- * @return array Exercise info 
+ * @return array Exercise info
  */
 function get_exercise_by_id($exerciseId = 0) {
     $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);

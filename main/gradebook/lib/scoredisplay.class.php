@@ -91,12 +91,12 @@ class ScoreDisplay
             $this->category_id = $category_id;
         }
 
-        //Loading portal settings + using standard functions
+        // Loading portal settings + using standard functions.
 
         $value = api_get_setting('gradebook_score_display_coloring');
         $value = $value['my_display_coloring'];
 
-        //Settting coloring
+        // Setting coloring.
         $this->coloring_enabled = $value == 'true' ? true : false;
 
         if ($this->coloring_enabled) {

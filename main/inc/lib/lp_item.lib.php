@@ -2,15 +2,14 @@
 
 /**
  * Class lp_item
- *  made to manipulate datas of lp_item table
+ *  made to manipulate data of lp_item table
  *
- * This class is still incomplte
+ * This class is still incomplete
  * You can add lp_item database manipulation function here
  *
  */
-
-
-class LpItem {
+class LpItem
+{
     public $c_id=0;
     public $id=0;
     public $lp_id=0;
@@ -34,11 +33,14 @@ class LpItem {
     public $search_did=0;
     public $audio="";
 
-    public function __construct($in_c_id=0, $in_id=0) {
+    public function __construct($in_c_id=0, $in_id=0)
+    {
         if ($in_c_id > 0 && $in_id >0) {
             $item_view_table = Database::get_course_table(TABLE_LP_ITEM);
-            $sql = "SELECT * FROM $item_view_table WHERE c_id=".Database::escape_string($in_c_id)."
-                    AND id=".Database::escape_string($in_id);
+            $sql = "SELECT * FROM $item_view_table
+                    WHERE
+                        c_id=".Database::escape_string($in_c_id)." AND
+                        id=".Database::escape_string($in_id);
 
             $res = Database::query($sql);
             $data = Database::fetch_array($res);
@@ -69,33 +71,36 @@ class LpItem {
         }
     }
 
-    public function update_in_bdd() {
+    /**
+     * Update in database
+     */
+    public function update_in_bdd()
+    {
         $item_view_table = Database::get_course_table(TABLE_LP_ITEM);
         if ($this->c_id > 0 && $this->id > 0) {
             $sql = "UPDATE $item_view_table SET
-                    lp_id = '".Database::escape_string($this->lp_id)."' ,
-                    item_type = '".Database::escape_string($this->item_type)."' ,
-                    ref = '".Database::escape_string($this->ref)."' ,
-                    title = '".Database::escape_string($this->title)."' ,
-                    description = '".Database::escape_string($this->description)."' ,
-                    path = '".Database::escape_string($this->path)."' ,
-                    min_score = '".Database::escape_string($this->min_score)."' ,
-                    max_score = '".Database::escape_string($this->max_score)."' ,
-                    mastery_score = '".Database::escape_string($this->mastery_score)."' ,
-                    parent_item_id = '".Database::escape_string($this->parent_item_id)."' ,
-                    previous_item_id = '".Database::escape_string($this->previous_item_id)."' ,
-                    next_item_id = '".Database::escape_string($this->next_item_id)."' ,
-                    display_order = '".Database::escape_string($this->display_order)."' ,
-                    prerequisite = '".Database::escape_string($this->prerequisite)."' ,
-                    parameters = '".Database::escape_string($this->parameters)."' ,
-                    launch_data = '".Database::escape_string($this->launch_data)."' ,
-                    max_time_allowed = '".Database::escape_string($this->max_time_allowed)."' ,
-                    terms = '".Database::escape_string($this->terms)."' ,
-                    search_did = '".Database::escape_string($this->search_did)."' ,
-                    audio = '".Database::escape_string($this->audio)."'
+                        lp_id = '".Database::escape_string($this->lp_id)."' ,
+                        item_type = '".Database::escape_string($this->item_type)."' ,
+                        ref = '".Database::escape_string($this->ref)."' ,
+                        title = '".Database::escape_string($this->title)."' ,
+                        description = '".Database::escape_string($this->description)."' ,
+                        path = '".Database::escape_string($this->path)."' ,
+                        min_score = '".Database::escape_string($this->min_score)."' ,
+                        max_score = '".Database::escape_string($this->max_score)."' ,
+                        mastery_score = '".Database::escape_string($this->mastery_score)."' ,
+                        parent_item_id = '".Database::escape_string($this->parent_item_id)."' ,
+                        previous_item_id = '".Database::escape_string($this->previous_item_id)."' ,
+                        next_item_id = '".Database::escape_string($this->next_item_id)."' ,
+                        display_order = '".Database::escape_string($this->display_order)."' ,
+                        prerequisite = '".Database::escape_string($this->prerequisite)."' ,
+                        parameters = '".Database::escape_string($this->parameters)."' ,
+                        launch_data = '".Database::escape_string($this->launch_data)."' ,
+                        max_time_allowed = '".Database::escape_string($this->max_time_allowed)."' ,
+                        terms = '".Database::escape_string($this->terms)."' ,
+                        search_did = '".Database::escape_string($this->search_did)."' ,
+                        audio = '".Database::escape_string($this->audio)."'
                     WHERE c_id=".$this->c_id." AND id=".$this->id;
             Database::query($sql);
         }
     }
-
 }

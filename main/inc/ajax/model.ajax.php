@@ -94,16 +94,17 @@ function get_where_clause($col, $oper, $val)
     return " $col {$ops[$oper]} '$val' ";
 }
 
-$where_condition = ""; //if there is no search request sent by jqgrid, $where should be empty
+//if there is no search request sent by jqgrid, $where should be empty
+$where_condition = "";
+$operation = isset($_REQUEST['oper'])  ? $_REQUEST['oper']  : false;
+$export_format = isset($_REQUEST['export_format'])  ? $_REQUEST['export_format']  : 'csv';
+$search_field = isset($_REQUEST['searchField'])  ? $_REQUEST['searchField']  : false;
+$search_oper = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   : false;
+$search_string = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
+$search = isset($_REQUEST['_search']) ? $_REQUEST['_search'] : false;
+$forceSearch = isset($_REQUEST['_force_search']) ? $_REQUEST['_force_search'] : false;
 
-$operation    = isset($_REQUEST['oper'])  ? $_REQUEST['oper']  : false;
-$export_format    = isset($_REQUEST['export_format'])  ? $_REQUEST['export_format']  : 'csv';
-
-$search_field    = isset($_REQUEST['searchField'])  ? $_REQUEST['searchField']  : false;
-$search_oper     = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   : false;
-$search_string   = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
-
-if ($_REQUEST['_search'] == 'true') {
+if ($search || $forceSearch) {
     $where_condition = ' 1 = 1 ';
     $where_condition_in_form = get_where_clause($search_field, $search_oper, $search_string);
 

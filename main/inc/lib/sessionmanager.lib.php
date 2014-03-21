@@ -223,7 +223,9 @@ class SessionManager
 
         $extraJoin = null;
 
-        if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
+        if (api_is_session_admin() &&
+            api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false'
+        ) {
             $where .= " AND (
                             s.session_admin_id = $user_id  OR
                             sru.id_user = '$user_id' AND
@@ -283,7 +285,7 @@ class SessionManager
                     INNER JOIN $tbl_user u ON s.id_coach = u.user_id
                     $courseCondition
                     $extraJoin
-                $where AND $where_condition  ) as session_table";
+                $where AND $where_condition ) as session_table";
 
         if (api_is_multiple_url_enabled()) {
 

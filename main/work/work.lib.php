@@ -120,6 +120,7 @@ function settingsForm($defaults)
     $form->addGroup($group, '', get_lang('StudentAllowedToDeleteOwnPublication'));
     $form->addElement('button', 'submit', get_lang('Save'));
     $form->setDefaults($defaults);
+
     return $form->return_form();
 }
 
@@ -214,7 +215,7 @@ function get_work_data_by_id($id)
 	$id = intval($id);
 	$course_id 	= api_get_course_int_id();
 	$work_table	= Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = "SELECT * FROM  $work_table WHERE id = $id AND c_id = $course_id";
+	$sql = "SELECT * FROM $work_table WHERE id = $id AND c_id = $course_id";
 	$result = Database::query($sql);
     $work = array();
 	if (Database::num_rows($result)) {
@@ -558,7 +559,8 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
             // form edit directory
             if (!empty($row['has_properties'])) {
-                $sql = Database::query('SELECT * FROM '.$work_assigment.' WHERE c_id = '.$course_id.' AND id = "'.$row['has_properties'].'" LIMIT 1');
+                $sql = Database::query('SELECT * FROM '.$work_assigment.'
+                WHERE c_id = '.$course_id.' AND id = "'.$row['has_properties'].'" LIMIT 1');
                 $homework = Database::fetch_array($sql);
             }
             // save original value for later
@@ -3023,20 +3025,37 @@ function getWorkDateValidationStatus($homework) {
 
 /**
  * @param FormValidator $form
- * @param bool $uploadFile
+ * @param int $uploadFormType
  */
-function setWorkUploadForm($form, $uploadFile = true)
+function setWorkUploadForm($form, $uploadFormType = 0)
 {
     $form->addElement('header', get_lang('UploadADocument'));
     $form->addElement('hidden', 'contains_file', 0, array('id'=>'contains_file_id'));
     $form->addElement('hidden', 'active', 1);
     $form->addElement('hidden', 'accepted', 1);
-    if ($uploadFile) {
-        $form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
-        $form->add_real_progress_bar('uploadWork', 'file');
-    }
     $form->addElement('text', 'title', get_lang('Title'), array('id' => 'file_upload', 'class' => 'span4'));
-    $form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
+    $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
+
+    switch ($uploadFormType) {
+        case 0:
+            // File and text.
+            $form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
+            $form->add_real_progress_bar('uploadWork', 'file');
+            $form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
+            break;
+        case 1:
+            // Only text.
+            $form->add_html_editor('description', get_lang('Description'), false, false, getWorkDescriptionToolbar());
+            $form->addRule('description', get_lang('ThisFieldIsRequired'), 'required');
+            break;
+        case 2:
+            // Only file.
+            $form->addElement('file', 'file', get_lang('UploadADocument'), 'size="40" onchange="updateDocumentTitle(this.value)"');
+            $form->add_real_progress_bar('uploadWork', 'file');
+            $form->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
+            break;
+    }
+
     $form->addElement('style_submit_button', 'submitWork', get_lang('Send'), array('class'=> 'upload', 'value' => "submitWork"));
 }
 
@@ -3673,7 +3692,10 @@ function getFormWork($form, $defaults = array())
    $form->addElement('html', '</div>');
 
    $form->addElement('checkbox', 'add_to_calendar', null, get_lang('AddToCalendar'));
-   $form->addElement('checkbox', 'allow_text_assignment', null, get_lang('AllowTextAssignments'));
+
+   //$form->addElement('checkbox', 'allow_text_assignment', null, get_lang('AllowTextAssignments'));
+    $form->addElement('select', 'allow_text_assignment', get_lang('DocumentType'), getUploadDocumentType());
+
    $form->addElement('html', '</div>');
 
    if ($defaults['enableExpiryDate'] && $defaults['enableEndDate']) {
@@ -3684,6 +3706,18 @@ function getFormWork($form, $defaults = array())
    }
 
    return $form;
+}
+
+/**
+ * @return array
+ */
+function getUploadDocumentType()
+{
+    return array(
+        0 => get_lang('AllowFileOrText'),
+        1 => get_lang('AllowOnlyText'),
+        2 => get_lang('AllowFiles')
+    );
 }
 
 /**

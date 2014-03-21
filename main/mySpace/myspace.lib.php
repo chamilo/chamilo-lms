@@ -415,6 +415,108 @@ class MySpace {
     }
     /**
      * Display a sortable table that contains an overview off all the progress of the user in a session
+     * @param   int $sessionId  The session ID
+     * @param   int $courseId   The course ID
+     * @param   int $exerciseId The quiz ID
+     * @param   int $answer Answer status (0 = incorrect, 1 = correct, 2 = both)
+     * @return  string  HTML array of results formatted for gridJS
+     * @author Francis Gonzales <francis.gonzales@beeznest.com>, Beeznest Team
+     */
+    static function display_tracking_grade_overview($sessionId = 0, $courseId = 0, $date_from, $date_to)
+    {
+        /**
+         * Column names
+         * The column order is important. Check $column variable in the main/inc/ajax/model.ajax.php file
+         */
+        $objExercise = new Exercise();
+        $exercises = $objExercise->getExercisesByCouseSession($courseId, $sessionId);
+
+        $cntExer = 3;
+        if (!empty($exercises)) {
+            $cntExer += count($exercises);
+        }
+
+        $column = array();
+        $column_model = array();
+        $i = 1;
+        //Get dynamic column names
+        foreach (range(1, $cntExer) as $cnt) {
+            switch ($cnt) {
+                case 1:
+                    $column[] = get_lang('Username');
+                    $column_model[] = array(
+                        'name' => 'username',
+                        'index' => 'username',
+                        'align' => 'center',
+                        'search' => 'true',
+                    );
+                    break;
+                case 2:
+                    $column[] = get_lang('FirstName');
+                    $column_model[] = array(
+                        'name' => 'name',
+                        'index' => 'name',
+                        'align' => 'left',
+                        'search' => 'true',
+                    );
+                    break;
+                case $cntExer:
+                    $column[] = get_lang('FinalScore');
+                    $column_model[] = array(
+                        'name' => 'finalscore',
+                        'index' => 'finalscore',
+                        'align' => 'center',
+                        'search' => 'true',
+                        'wrap_cell' => "true"
+                    );
+                    break;
+                default:
+                    $title = "";
+                    if (!empty($exercises[$cnt - 3]['title'])) {
+                        $title = ucwords(strtolower(trim($exercises[$cnt - 3]['title'])));
+                    }
+                    
+                    $column[] = $title;
+                    $column_model[] = array(
+                        'name' => 'exer' . $i,
+                        'index' => 'exer' . $i,
+                        'align' => 'center',
+                        'search' => 'true',
+                        'wrap_cell' => "true"
+                    );
+                    $i++;
+                    break;
+            }
+        }
+        //end get dynamic column names
+        // jqgrid will use this URL to do the selects
+        $url = api_get_path(WEB_AJAX_PATH) . 'model.ajax.php?a=get_exercise_grade&session_id=' . $sessionId . '&course_id=' . $courseId;
+
+        //Autowidth
+        $extra_params['autowidth'] = 'true';
+
+        //height auto
+        $extra_params['height'] = 'auto';
+
+        $tableId = 'exerciseGradeOverview';
+        $table = Display::grid_js($tableId, $url, $column, $column_model, $extra_params, array(), '', true);
+
+        $return = '<script>$(function() {' . $table .
+                'jQuery("#' . $tableId . '").jqGrid("navGrid","#' . $tableId . '_pager",{view:false, edit:false, add:false, del:false, search:false, excel:true});
+                jQuery("#' . $tableId . '").jqGrid("navButtonAdd","#' . $tableId . '_pager",{
+                       caption:"",
+                       title:"' . get_lang('ExportExcel') . '",
+                       onClickButton : function () {
+                           jQuery("#' . $tableId . '").jqGrid("excelExport",{"url":"' . $url . '&export_format=xls"});
+                       }
+                });
+            });</script>';
+        $return .= Display::grid_html($tableId);
+        return $return;
+    }
+
+    /**
+     * Display a sortable table that contains an overview off all the progress of the user in a session
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
     function display_survey_overview($sessionId = 0, $courseId = 0, $surveyId = 0, $date_from, $date_to) {

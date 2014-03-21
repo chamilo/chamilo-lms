@@ -834,14 +834,14 @@ class SessionManager
         $arrLesson = array(array());
         while ($row = Database::fetch_array($result))
         {
-            if (api_get_item_visibility(api_get_course_info($course['code']), 'learnpath', $row['id'], $row['session_id']))
-            {
+//            if (api_get_item_visibility(api_get_course_info($course['code']), 'learnpath', $row['id'], $row['session_id']))
+//            {
                 if (empty($arrLesson[$row['session_id']]['lessons_total'])) {
                     $arrLesson[$row['session_id']]['lessons_total'] = 1;
                 } else {
                     $arrLesson[$row['session_id']]['lessons_total']++;
                 }
-            }
+//            }
         }
 
         /**

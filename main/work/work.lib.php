@@ -3716,7 +3716,7 @@ function getUploadDocumentType()
     return array(
         0 => get_lang('AllowFileOrText'),
         1 => get_lang('AllowOnlyText'),
-        2 => get_lang('AllowFiles')
+        2 => get_lang('AllowOnlyFiles')
     );
 }
 

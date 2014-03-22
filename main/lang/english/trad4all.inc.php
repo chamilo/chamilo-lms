@@ -2,6 +2,10 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AllowOnlyFiles = "Allow only files";
+$AllowOnlyText = "Allow only text";
+$AllowFileOrText = "Allow files or online text";
+$DocumentType = "Document type";
 $SendOnlyAnEmailToMySelfToTest = "Send an email to myself for testing purposes.";
 $DeleteAllSelectedAttendances = "Delete all selected attendances";
 $AvailableClasses = "Available classes";

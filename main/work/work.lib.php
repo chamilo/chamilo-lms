@@ -1647,6 +1647,10 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
     $column         = !empty($column) ? Database::escape_string($column) : 'sent_date';
     $start          = intval($start);
     $limit          = intval($limit);
+    // check the following until $where_condition is fixed in model.ajax.php +108
+    if (!empty($where_condition) && substr($where_condition,0,3) != 'AND') {
+        $where_condition = 'AND '.$where_condition;
+    }
 
     // Get list from database
     if ($is_allowed_to_edit) {
@@ -1668,7 +1672,6 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
                     post_group_id = '".$group_id."'
                 ORDER BY $column $direction
                 LIMIT $start, $limit";
-
         $result = Database::query($sql);
 
         if ($getCount) {

@@ -53,7 +53,6 @@ $length 	= '36';
 // Database Table Definitions
 $tbl_courses			= Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_sessions			= Database::get_main_table(TABLE_MAIN_SESSION);
-
 $tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT);
 $tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -607,12 +606,11 @@ if ($display_form) {
 	if (empty($group_id)) {
 		echo '	<div class="control-group">
 					<label class="control-label">'.
-						Display::return_icon('group.png', get_lang('ModifyRecipientList'), array ('align' => 'absmiddle'),ICON_SIZE_SMALL).'<a href="#" onclick="toggle_sendto();">'.get_lang('SentTo').'</a>
+						Display::return_icon('group.png', get_lang('ModifyRecipientList'), array ('align' => 'absmiddle'),ICON_SIZE_SMALL).' '.get_lang('SentTo').'
 					</label>
 					<div class="controls">';
-		if (isset($_GET['id']) && is_array($to)) {
-			echo '<span id="recipient_overview">&nbsp;</span>';
-		} elseif (isset($_GET['remind_inactive'])) {
+
+		if (isset($_GET['remind_inactive'])) {
 			$email_ann = '1';
 			$_SESSION['select_groupusers']="show";
 			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'), api_get_setting('siteName'), 7);
@@ -642,7 +640,7 @@ if ($display_form) {
 				$content_to_modify = get_lang('YourAccountIsActiveYouCanLoginAndCheckYourCourses');
 			}
 		} else {
-			echo '<span id="recipient_overview">' . get_lang('Everybody') . '</span>';
+			//echo '<span id="recipient_overview">' . get_lang('Everybody') . '</span>';
 		}
 		AnnouncementManager::show_to_form($to);
 		echo '		</div>
@@ -741,7 +739,7 @@ if ($display_form) {
 	if (empty($group_id)) {
 		echo '<input type="hidden" name="submitAnnouncement" value="OK">';
 		echo '<input type="hidden" name="sec_token" value="'.$stok.'" />';
-		echo '<button class="btn save" type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[3],true)" >'.get_lang('ButtonPublishAnnouncement').'</button><br /><br />';
+		echo '<button class="btn save" type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[4],true)" >'.get_lang('ButtonPublishAnnouncement').'</button><br /><br />';
 	} else {
 		echo '<input type="hidden" name="submitAnnouncement" value="OK">';
 		echo '<input type="hidden" name="sec_token" value="'.$stok.'" />';

@@ -212,7 +212,7 @@ function prepare_user_sql_query($is_count) {
     }
 
     if (isset ($_GET['keyword'])) {
-        $keyword = Database::escape_string(trim($_GET['keyword']));
+        $keyword = Database::escape_sql_wildcards(Database::escape_string(trim($_GET['keyword'])));
         $sql .= " WHERE (".
                     "u.firstname LIKE '%". $keyword ."%' ".
                     "OR u.lastname LIKE '%". $keyword ."%' ".

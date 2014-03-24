@@ -204,15 +204,27 @@ function prepare_user_sql_query($is_count) {
         $sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
     }
 
-    if (isset($_GET['keyword_extra_data']) && !empty($_GET['keyword_extra_data'])) {
-        $keyword_extra_data = Database::escape_string($_GET['keyword_extra_data']);
+    foreach ($_GET as $key => $value) {
+        /* Because this query uses LIKE very liberally we need to escape
+         * LIKE wildcards, concretely "_" and "%". This is only relevant
+         * for *LIKE* statements.
+         *
+         * See: http://stackoverflow.com/a/3683868 */
+
+        // Remove buggy whitespaces and escape for both SQL and LIKE.
+        if ($key == "keyword_status")
+            $$key = Database::escape_string(trim($value));
+        else
+            $$key = Database::escape_sql_wildcards(Database::escape_string(trim($value)));
+    }
+
+    if (isset($keyword_extra_data) && !empty($keyword_extra_data)) {
         $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
         $field_id = $extra_info['id'];
         $sql.= " INNER JOIN user_field_values ufv ON u.user_id=ufv.user_id AND ufv.field_id=$field_id ";
     }
 
-    if (isset ($_GET['keyword'])) {
-        $keyword = Database::escape_sql_wildcards(Database::escape_string(trim($_GET['keyword'])));
+    if (isset($keyword)) {
         $sql .= " WHERE (".
                     "u.firstname LIKE '%". $keyword ."%' ".
                     "OR u.lastname LIKE '%". $keyword ."%' ".
@@ -221,16 +233,11 @@ function prepare_user_sql_query($is_count) {
                     "OR u.username LIKE '%". $keyword ."%' ".
                     "OR u.official_code LIKE '%". $keyword ."%' ".
                     "OR u.email LIKE '%". $keyword ."%')";
-    } elseif (isset ($_GET['keyword_firstname'])) {
-        $keyword_firstname = Database::escape_sql_wildcards(Database::escape_string($_GET['keyword_firstname']));
-        $keyword_lastname = Database::escape_sql_wildcards(Database::escape_string($_GET['keyword_lastname']));
-        $keyword_email = Database::escape_sql_wildcards(Database::escape_string($_GET['keyword_email']));
-        $keyword_officialcode = Database::escape_sql_wildcards(Database::escape_string($_GET['keyword_officialcode']));
-        $keyword_username = Database::escape_sql_wildcards(Database::escape_string($_GET['keyword_username']));
-        $keyword_status = Database::escape_string($_GET['keyword_status']);
-
+    } elseif (isset($keyword_firstname)) {
         $query_admin_table = '';
         $keyword_admin = '';
+
+        error_log("kw_status: $keyword_status");
         if ($keyword_status == SESSIONADMIN) {
            $keyword_status = '%';
            $query_admin_table = " , $admin_table a ";
@@ -239,16 +246,11 @@ function prepare_user_sql_query($is_count) {
 
         $keyword_extra_value = '';
 
-        if (isset($_GET['keyword_extra_data'])) {
-            if (!empty($_GET['keyword_extra_data'])
-                && !empty($_GET['keyword_extra_data_text'])) {
-                $keyword_extra_data_text = Database::escape_string($_GET['keyword_extra_data_text']);
-                $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
-            }
+        if (isset($keyword_extra_data) && !empty($keyword_extra_data) &&
+            !empty($keyword_extra_data_text)) {
+            $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
         }
 
-        $keyword_active = isset($_GET['keyword_active']);
-        $keyword_inactive = isset($_GET['keyword_inactive']);
         $sql .= " $query_admin_table ".
                 "WHERE (u.firstname LIKE '%". $keyword_firstname ."%' ".
                     "AND u.lastname LIKE '%". $keyword_lastname ."%' ".
@@ -258,9 +260,9 @@ function prepare_user_sql_query($is_count) {
                     "AND u.status LIKE '$keyword_status' ".
                     "$keyword_admin $keyword_extra_value";
 
-        if ($keyword_active && !$keyword_inactive) {
+        if (isset($keyword_active) && !isset($keyword_inactive)) {
             $sql .= " AND u.active='1'";
-        } elseif($keyword_inactive && !$keyword_active) {
+        } elseif(isset($keyword_inactive) && !isset($keyword_active)) {
             $sql .= " AND u.active='0'";
         }
         $sql .= " ) ";

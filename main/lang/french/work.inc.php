@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$WorkFileNotUploadedDirXDoesNotExist = "Le travail n'a pas pu être envoyé parce que le répertoire %s n'existe pas";
 $FolderDoesntExistsInFileSystem = "Le dossier de destination est introuvable sur le serveur.";
 $HandedOutDate = "Date de réception";
 $HandedOut = "Remis";

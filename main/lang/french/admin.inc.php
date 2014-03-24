@@ -3,6 +3,10 @@
 for more information: see languages.txt in the lang folder.
 */
 $SearchSessions = "Recherche de session.";
+$DeleteUsersNotInList = "Désinscrite les apprenants qui ne sont pas dans la liste importée";
+$IfSessionExistsUpdate = "Si une session existe, la mettre à jour";
+$SearchCourseBySession = "Recherche de cours par session";
+$GlobalLinkUseDoubleColumnPrivateToShowPrivately = "Utiliser ::private à la fin du lien pour l'afficher seulement aux utilisateurs identifiés";
 $CourseVisibilityHidden = "Invisible - Complètement invisible et inaccessible pour tous les utilisateurs excepté les administrateurs";
 $ApplyAllLanguages = "Appliquer ces modifications à toutes les langues disponibles";
 $CareerUpdated = "Carrière mise à jour";

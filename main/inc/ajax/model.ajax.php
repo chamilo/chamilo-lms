@@ -56,31 +56,32 @@ if (!in_array(
 
 // Search features
 
-$ops = array (
-    'eq' => '=',        //equal
-    'ne' => '<>',       //not equal
-    'lt' => '<',        //less than
-    'le' => '<=',       //less than or equal
-    'gt' => '>',        //greater than
-    'ge' => '>=',       //greater than or equal
-    'bw' => 'LIKE',     //begins with
-    'bn' => 'NOT LIKE', //doesn't begin with
-    'in' => 'LIKE',     //is in
-    'ni' => 'NOT LIKE', //is not in
-    'ew' => 'LIKE',     //ends with
-    'en' => 'NOT LIKE', //doesn't end with
-    'cn' => 'LIKE',     //contains
-    'nc' => 'NOT LIKE'  //doesn't contain
-);
-
 //@todo move this in the display_class or somewhere else
 
-function get_where_clause($col, $oper, $val)
+function getWhereClause($col, $oper, $val)
 {
-    global $ops;
+    $ops = array(
+        'eq' => '=',        //equal
+        'ne' => '<>',       //not equal
+        'lt' => '<',        //less than
+        'le' => '<=',       //less than or equal
+        'gt' => '>',        //greater than
+        'ge' => '>=',       //greater than or equal
+        'bw' => 'LIKE',     //begins with
+        'bn' => 'NOT LIKE', //doesn't begin with
+        'in' => 'LIKE',     //is in
+        'ni' => 'NOT LIKE', //is not in
+        'ew' => 'LIKE',     //ends with
+        'en' => 'NOT LIKE', //doesn't end with
+        'cn' => 'LIKE',     //contains
+        'nc' => 'NOT LIKE'  //doesn't contain
+    );
+
+
     if (empty($col)) {
         return '';
     }
+
     if ($oper == 'bw' || $oper == 'bn') {
         $val .= '%';
     }
@@ -91,40 +92,41 @@ function get_where_clause($col, $oper, $val)
         $val = '%'.$val.'%';
     }
     $val = Database::escape_string($val);
+
     return " $col {$ops[$oper]} '$val' ";
 }
 
-//if there is no search request sent by jqgrid, $where should be empty
-$where_condition = "";
+// If there is no search request sent by jqgrid, $where should be empty
+$whereCondition = null;
 $operation = isset($_REQUEST['oper'])  ? $_REQUEST['oper']  : false;
-$export_format = isset($_REQUEST['export_format'])  ? $_REQUEST['export_format']  : 'csv';
-$search_field = isset($_REQUEST['searchField'])  ? $_REQUEST['searchField']  : false;
-$search_oper = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   : false;
-$search_string = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
+$exportFormat = isset($_REQUEST['export_format'])  ? $_REQUEST['export_format']  : 'csv';
+$searchField = isset($_REQUEST['searchField'])  ? $_REQUEST['searchField']  : false;
+$searchOperator = isset($_REQUEST['searchOper'])   ? $_REQUEST['searchOper']   : false;
+$searchString = isset($_REQUEST['searchString']) ? $_REQUEST['searchString'] : false;
 $search = isset($_REQUEST['_search']) ? $_REQUEST['_search'] : false;
 $forceSearch = isset($_REQUEST['_force_search']) ? $_REQUEST['_force_search'] : false;
 
 if ($search || $forceSearch) {
-    $where_condition = ' 1 = 1 ';
-    $where_condition_in_form = get_where_clause($search_field, $search_oper, $search_string);
+    $whereConditionInForm = getWhereClause($searchField, $searchOperator, $searchString);
 
-    if (!empty($where_condition_in_form)) {
-        $where_condition .= ' AND '.$where_condition_in_form;
+    if (!empty($whereConditionInForm)) {
+        $whereCondition .= ' AND '.$whereConditionInForm;
     }
 
     $filters   = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
+
     if (!empty($filters)) {
-        $where_condition .= ' AND ( ';
+        $whereCondition .= ' AND ( ';
         $counter = 0;
         foreach ($filters->rules as $key => $rule) {
-            $where_condition .= get_where_clause($rule->field, $rule->op, $rule->data);
+            $whereCondition .= getWhereClause($rule->field, $rule->op, $rule->data);
 
             if ($counter < count($filters->rules) -1) {
-                $where_condition .= $filters->groupOp;
+                $whereCondition .= $filters->groupOp;
             }
             $counter++;
         }
-        $where_condition .= ' ) ';
+        $whereCondition .= ' ) ';
     }
 }
 
@@ -181,11 +183,11 @@ switch ($action) {
         break;
     case 'get_work_teacher':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
-        $count = getWorkListTeacher(0, $limit, $sidx, $sord, $where_condition, true);
+        $count = getWorkListTeacher(0, $limit, $sidx, $sord, $whereCondition, true);
         break;
     case 'get_work_student':
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
-        $count = getWorkListStudent(0, $limit, $sidx, $sord, $where_condition, true);
+        $count = getWorkListStudent(0, $limit, $sidx, $sord, $whereCondition, true);
 
         break;
     case 'get_work_user_list_all':
@@ -205,8 +207,8 @@ switch ($action) {
         $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
 
         if (empty($documents)) {
-            $where_condition .= " AND u.user_id = ".api_get_user_id();
-            $count = get_work_user_list(0, $limit, $sidx, $sord, $work_id, $where_condition, null, true);
+            $whereCondition .= " AND u.user_id = ".api_get_user_id();
+            $count = get_work_user_list(0, $limit, $sidx, $sord, $work_id, $whereCondition, null, true);
         } else {
             $count = get_work_user_list_from_documents(
                 0,
@@ -215,7 +217,7 @@ switch ($action) {
                 $sord,
                 $work_id,
                 api_get_user_id(),
-                $where_condition,
+                $whereCondition,
                 true
             );
         }
@@ -244,13 +246,9 @@ switch ($action) {
 
         if (isset($_GET['filter_by_user']) && !empty($_GET['filter_by_user'])) {
             $filter_user = intval($_GET['filter_by_user']);
-            if ($where_condition == "") {
-                $where_condition .= " te.exe_user_id  = '$filter_user'" ;
-            } else {
-                $where_condition .= " AND te.exe_user_id  = '$filter_user'";
-            }
+            $whereCondition .= " AND te.exe_user_id  = '$filter_user'";
         }
-        $count = get_count_exam_results($exercise_id, $where_condition);
+        $count = get_count_exam_results($exercise_id, $whereCondition);
         break;
     case 'get_hotpotatoes_exercise_results':
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
@@ -268,9 +266,9 @@ switch ($action) {
     case 'get_sessions':
         $courseId = isset($_GET['course_id']) && !empty($_GET['course_id']) ? intval($_GET['course_id']) : null;
         if (!empty($courseId)) {
-            $where_condition .= " c.id = $courseId";
+            $whereCondition .= " AND c.id = $courseId";
         }
-        $count = SessionManager::get_count_admin($where_condition);
+        $count = SessionManager::get_count_admin($whereCondition);
         break;
     case 'get_session_lp_progress':
     case 'get_session_progress':
@@ -378,7 +376,7 @@ $columns = array();
 switch ($action) {
     case 'get_course_exercise_medias':
         $columns = array('question');
-        $result = Question::get_course_medias($course_id, $start, $limit, $sidx, $sord, $where_condition);
+        $result = Question::get_course_medias($course_id, $start, $limit, $sidx, $sord, $whereCondition);
         break;
     case 'get_user_course_report_resumed':
         $columns = array(
@@ -471,7 +469,7 @@ switch ($action) {
         break;
 	case 'get_user_skill_ranking':
         $columns = array('photo', 'firstname', 'lastname', 'skills_acquired', 'currently_learning', 'rank');
-        $result = $skill->get_user_list_skill_ranking($start, $limit, $sidx, $sord, $where_condition);
+        $result = $skill->get_user_list_skill_ranking($start, $limit, $sidx, $sord, $whereCondition);
         $result = msort($result, 'skills_acquired', 'asc');
 
         $skills_in_course = array();
@@ -495,11 +493,11 @@ switch ($action) {
         break;
     case 'get_work_teacher':
         $columns = array('type', 'title', 'sent_date', 'expires_on', 'ends_on', 'actions');
-        $result = getWorkListTeacher($start, $limit, $sidx, $sord, $where_condition);
+        $result = getWorkListTeacher($start, $limit, $sidx, $sord, $whereCondition);
         break;
     case 'get_work_student':
         $columns = array('type', 'title', 'expires_on', 'others', 'actions');
-        $result = getWorkListStudent($start, $limit, $sidx, $sord, $where_condition);
+        $result = getWorkListStudent($start, $limit, $sidx, $sord, $whereCondition);
         break;
     case 'get_work_user_list_all':
         if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
@@ -509,7 +507,7 @@ switch ($action) {
         } else {
             $columns = array('type', 'firstname', 'lastname', 'title', 'sent_date', 'actions');
         }
-        $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
+        $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $whereCondition);
         break;
     case 'get_work_user_list_others':
         if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
@@ -519,8 +517,8 @@ switch ($action) {
         } else {
             $columns = array('type', 'firstname', 'lastname',  'title', 'sent_date', 'actions');
         }
-        $where_condition .= " AND u.user_id <> ".api_get_user_id();
-        $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
+        $whereCondition .= " AND u.user_id <> ".api_get_user_id();
+        $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $whereCondition);
         break;
     case 'get_work_user_list':
         if (isset($_GET['type'])  && $_GET['type'] == 'simple') {
@@ -534,8 +532,8 @@ switch ($action) {
         $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
 
         if (empty($documents)) {
-            $where_condition .= " AND u.user_id = ".api_get_user_id();
-            $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $where_condition);
+            $whereCondition .= " AND u.user_id = ".api_get_user_id();
+            $result = get_work_user_list($start, $limit, $sidx, $sord, $work_id, $whereCondition);
         } else {
             $result = get_work_user_list_from_documents(
                 $start,
@@ -544,7 +542,7 @@ switch ($action) {
                 $sord,
                 $work_id,
                 api_get_user_id(),
-                $where_condition
+                $whereCondition
             );
         }
         break;
@@ -557,7 +555,7 @@ switch ($action) {
                 'firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score', 'status', 'lp', 'actions'
             );
         }
-        $result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
+        $result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $whereCondition);
 		break;
     case 'get_work_student_list_overview':
         if (!api_is_allowed_to_edit()) {
@@ -587,7 +585,7 @@ switch ($action) {
         } else {
             $columns = array('exe_date',  'score', 'actions');
         }
-        $result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $where_condition);
+        $result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $whereCondition);
         break;
     case 'get_sessions_tracking':
         if (api_is_drh()) {
@@ -647,7 +645,7 @@ switch ($action) {
 
         $result = SessionManager::get_sessions_admin(
             array(
-                'where' => $where_condition,
+                'where' => $whereCondition,
                 'order' => "$sidx $sord",
                 'limit'=> "$start , $limit"
             )
@@ -679,7 +677,7 @@ switch ($action) {
 
         $result = SessionManager::get_exercise_progress($sessionId, $courseId, $exerciseId, $answer,
             array(
-                'where' => $where_condition,
+                'where' => $whereCondition,
                 'order' => "$sidx $sord",
                 'limit'=> "$start , $limit"
             )
@@ -687,8 +685,7 @@ switch ($action) {
         break;
     case 'get_session_lp_progress':
         $sessionId = 0;
-        if (!empty($_GET['session_id']) && !empty($_GET['course_id']))
-        {
+        if (!empty($_GET['session_id']) && !empty($_GET['course_id'])) {
             $sessionId = intval($_GET['session_id']);
             $courseId = intval($_GET['course_id']);
             $course = api_get_course_info_by_id($courseId);
@@ -712,7 +709,7 @@ switch ($action) {
 
         $result = SessionManager::get_session_lp_progress($sessionId, $courseId,
             array(
-                'where' => $where_condition,
+                'where' => $whereCondition,
                 'order' => "$sidx $sord",
                 'limit'=> "$start , $limit"
             )
@@ -720,8 +717,10 @@ switch ($action) {
         break;
     case 'get_survey_overview':
         $sessionId = 0;
-        if (!empty($_GET['session_id']) && !empty($_GET['course_id']) && !empty($_GET['survey_id']))
-        {
+        if (!empty($_GET['session_id']) &&
+            !empty($_GET['course_id']) &&
+            !empty($_GET['survey_id'])
+        ) {
             $sessionId = intval($_GET['session_id']);
             $courseId  = intval($_GET['course_id']);
             $surveyId  = intval($_GET['survey_id']);
@@ -745,7 +744,7 @@ switch ($action) {
 
         $result = SessionManager::get_survey_overview($sessionId, $courseId, $surveyId,
             array(
-                'where' => $where_condition,
+                'where' => $whereCondition,
                 'order' => "$sidx $sord",
                 'limit'=> "$start , $limit"
             )
@@ -800,14 +799,13 @@ switch ($action) {
             'surveys_progress' ,
             );
         $sessionId = 0;
-        if (!empty($_GET['course_id']) && !empty($_GET['session_id']))
-        {
+        if (!empty($_GET['course_id']) && !empty($_GET['session_id'])) {
             $sessionId = intval($_GET['session_id']);
             $courseId = intval($_GET['course_id']);
         }
         $result = SessionManager::get_session_progress($sessionId, $courseId,
             array(
-                'where' => $where_condition,
+                'where' => $whereCondition,
                 'order' => "$sidx $sord",
                 'limit'=> "$start , $limit"
             )
@@ -824,8 +822,7 @@ switch ($action) {
             'timeLoggedIn',
         );
         $sessionId = 0;
-        if (!empty($_GET['course_id']) && !empty($_GET['session_id']))
-        {
+        if (!empty($_GET['course_id']) && !empty($_GET['session_id'])) {
             $sessionId  = intval($_GET['session_id']);
             $courseId   = intval($_GET['course_id']);
             $studentId  = intval($_GET['student_id']);
@@ -834,9 +831,15 @@ switch ($action) {
             $date_to    = intval($_GET['date_to']);
         }
 
-        $result = SessionManager::get_user_data_access_tracking_overview(intval($sessionId), intval($courseId), intval($studentId), intval($profile), $date_to, $date_from,
+        $result = SessionManager::get_user_data_access_tracking_overview(
+            $sessionId,
+            $courseId,
+            $studentId,
+            $profile,
+            $date_to,
+            $date_from,
             array(
-                'where' => $where_condition,
+                'where' => $whereCondition,
                 'order' => "$sidx $sord",
                 'limit'=> "$start , $limit"
             )
@@ -852,7 +855,13 @@ switch ($action) {
         $result = Database::select(
             '*',
             $obj->table,
-            array('where' => array('parent_id = ? AND c_id = ?' => array('0', $course_id)), 'order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit")
+            array(
+                'where' => array(
+                    'parent_id = ? AND c_id = ?' => array('0', $course_id)
+                ),
+                'order'=>"$sidx $sord",
+                'LIMIT'=> "$start , $limit"
+            )
         );
         $new_result = array();
         foreach ($result as $item) {
@@ -873,7 +882,7 @@ switch ($action) {
         if (!in_array($sidx, $columns)) {
             $sidx = 'name';
         }
-        $result     = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
+        $result = Database::select('*', $obj->table, array('order'=>"$sidx $sord", 'LIMIT'=> "$start , $limit"));
         $new_result = array();
         foreach ($result as $item) {
             if ($item['parent_id'] != 0) {
@@ -1093,7 +1102,7 @@ if (in_array($action, $allowed_actions)) {
             }
             $j++;
         }
-        switch ($export_format) {
+        switch ($exportFormat) {
             case 'xls':
                 //TODO add date if exists
                 $file_name = (!empty($action)) ? $action : 'company_report';

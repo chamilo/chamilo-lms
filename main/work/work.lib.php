@@ -1647,10 +1647,6 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
     $column         = !empty($column) ? Database::escape_string($column) : 'sent_date';
     $start          = intval($start);
     $limit          = intval($limit);
-    // check the following until $where_condition is fixed in model.ajax.php +108
-    if (!empty($where_condition) && substr($where_condition,0,3) != 'AND') {
-        $where_condition = 'AND '.$where_condition;
-    }
 
     // Get list from database
     if ($is_allowed_to_edit) {
@@ -1667,9 +1663,9 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
                     w.c_id = $course_id
                     $condition_session AND
                     $active_condition AND
-                    (parent_id = 0)
-                    $where_condition AND
+                    (parent_id = 0) AND
                     post_group_id = '".$group_id."'
+                    $where_condition
                 ORDER BY $column $direction
                 LIMIT $start, $limit";
         $result = Database::query($sql);
@@ -1691,7 +1687,7 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
             }
             $work['title'] = Display::url($work['title'], $url.'&id='.$workId);
             $work['title'] .= ' '.Display::label(get_count_work($work['id']), 'success');
-            $work['sent_date'] = date_to_str_ago($work['sent_date']).' <br />'.api_get_local_time($work['sent_date']);
+            $work['sent_date'] = api_get_local_time($work['sent_date']);
 
             $editLink = Display::url(
                 Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
@@ -3685,30 +3681,30 @@ function getFormWork($form, $defaults = array())
 
     $form->addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');
 
-   if (isset($defaults['enableEndDate']) && $defaults['enableEndDate']) {
+    if (isset($defaults['enableEndDate']) && $defaults['enableEndDate']) {
        $form->addElement('html', '<div id="option3" style="display: block;">');
-   } else {
+    } else {
        $form->addElement('html', '<div id="option3" style="display: none;">');
-   }
+    }
 
-   $form->addGroup(create_group_date_select($form), 'ends', get_lang('EndsAt'));
-   $form->addElement('html', '</div>');
+    $form->addGroup(create_group_date_select($form), 'ends', get_lang('EndsAt'));
+    $form->addElement('html', '</div>');
 
-   $form->addElement('checkbox', 'add_to_calendar', null, get_lang('AddToCalendar'));
+    $form->addElement('checkbox', 'add_to_calendar', null, get_lang('AddToCalendar'));
 
-   //$form->addElement('checkbox', 'allow_text_assignment', null, get_lang('AllowTextAssignments'));
+    //$form->addElement('checkbox', 'allow_text_assignment', null, get_lang('AllowTextAssignments'));
     $form->addElement('select', 'allow_text_assignment', get_lang('DocumentType'), getUploadDocumentType());
 
-   $form->addElement('html', '</div>');
+    $form->addElement('html', '</div>');
 
-   if ($defaults['enableExpiryDate'] && $defaults['enableEndDate']) {
+    if (isset($defaults['enableExpiryDate']) && isset($defaults['enableEndDate'])) {
        $form->addRule(array('expires', 'ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
-   }
-   if (!empty($defaults)) {
+    }
+    if (!empty($defaults)) {
        $form->setDefaults($defaults);
-   }
+    }
 
-   return $form;
+    return $form;
 }
 
 /**

@@ -235,9 +235,9 @@ if (api_is_allowed_to_edit(false, true) OR
                 $event_start = (int) $_POST['fyear'].'-'.(int) $_POST['fmonth'].'-'.(int) $_POST['fday'].' '.(int) $_POST['fhour'].':'.(int) $_POST['fminute'].':00';
                 $event_stop = (int) $_POST['end_fyear'].'-'.(int) $_POST['end_fmonth'].'-'.(int) $_POST['end_fday'].' '.(int) $_POST['end_fhour'].':'.(int) $_POST['end_fminute'].':00';
                 $safe_title = Security::remove_XSS($_POST['title']);
-                $safe_file_comment = Security::remove_XSS($_POST['file_comment']);
+                $safe_file_comment = isset($_POST['file_comment']) ? Security::remove_XSS($_POST['file_comment']) : null;
 
-                if ($_POST['empty_end_date'] == 'on') {
+                if (isset($_POST['empty_end_date']) && $_POST['empty_end_date'] == 'on') {
                     $event_stop = '0000-00-00 00:00:00';
                 }
                 $agenda->type = 'course';

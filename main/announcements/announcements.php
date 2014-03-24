@@ -73,8 +73,8 @@ $course_id = api_get_course_int_id();
 event_access_tool(TOOL_ANNOUNCEMENT);
 
 /*	POST TO	*/
-$safe_emailTitle = $_POST['emailTitle'];
-$safe_newContent = $_POST['newContent'];
+$safe_emailTitle = isset($_POST['emailTitle']) ? $_POST['emailTitle'] : null;
+$safe_newContent = isset($_POST['newContent']) ? $_POST['newContent'] : null;
 
 $content_to_modify = $title_to_modify 	= '';
 
@@ -98,10 +98,10 @@ if (!empty($_POST['To'])) {
 */
 
 $setting_select_groupusers = true;
-if (empty($_POST['To']) and !$_SESSION['select_groupusers']) {
+if (empty($_POST['To']) and !isset($_SESSION['select_groupusers'])) {
 	$_SESSION['select_groupusers'] = "hide";
 }
-$select_groupusers_status=$_SESSION['select_groupusers'];
+$select_groupusers_status = isset($_SESSION['select_groupusers']) ? $_SESSION['select_groupusers']:null;
 if (!empty($_POST['To']) and ($select_groupusers_status=="hide")) {
 	$_SESSION['select_groupusers'] = "show";
 }
@@ -168,7 +168,7 @@ if (!empty($group_id)) {
 	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$group_id, "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
 }
 
-$announcement_id = intval($_GET['id']);
+$announcement_id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $message = null;
 
 if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
@@ -557,8 +557,10 @@ if (api_is_allowed_to_edit() && $announcement_number > 1) {
 	if (api_get_group_id() == 0 ) {
 		if (!$show_actions)
 			echo '<div class="actions">';
-			if (!in_array($_GET['action'], array('add', 'modify','view')))
-                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('delete_announce.png',get_lang('AnnouncementDeleteAll'),'',ICON_SIZE_MEDIUM)."</a>";
+			if (!isset($_GET['action'])) {
+                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".
+                    Display::return_icon('delete_announce.png',get_lang('AnnouncementDeleteAll'),'',ICON_SIZE_MEDIUM)."</a>";
+            }
     	}	// if announcementNumber > 1
 }
 

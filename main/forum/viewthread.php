@@ -29,10 +29,12 @@ $origin = '';
 if (isset($_GET['origin'])) {
     $origin =  Security::remove_XSS($_GET['origin']);
 }
+$my_search = null;
+$gradebook = null;
 
 /* MAIN DISPLAY SECTION */
 
-/* Retrieving forum and forum categorie information */
+/* Retrieving forum and forum category information */
 
 // We are getting all the information about the current forum and forum category.
 // Note pcool: I tried to use only one sql statement (and function) for this,
@@ -42,7 +44,7 @@ $current_thread	= get_thread_information($_GET['thread']);
 // Note: This has to be validated that it is an existing forum.
 $current_forum	= get_forum_information($current_thread['forum_id']);
 $current_forum_category	= get_forumcategory_information($current_forum['forum_category']);
-$whatsnew_post_info	= $_SESSION['whatsnew_post_info']; // This variable should be deprecated?
+$whatsnew_post_info	= isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null; // This variable should be deprecated?
 
 /* Header and Breadcrumbs */
 

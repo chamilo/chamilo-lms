@@ -109,9 +109,14 @@ if ($action == 'add' || $action == 'edit') {
         $form->addElement('button', 'submit', $text);
         $form->display();
     } elseif (api_get_multiple_access_url() && api_get_current_access_url_id() != 1) {
+        // If multiple URLs and not main URL, prevent edition and inform user
         Display::display_warning_message(get_lang('CourseCategoriesAreGlobal'));
     }
 } else {
+    // If multiple URLs and not main URL, prevent deletion and inform user
+    if ($action == 'delete' && api_get_multiple_access_url() && api_get_current_access_url_id() != 1) {
+        Display::display_warning_message(get_lang('CourseCategoriesAreGlobal'));
+    }
     echo '<div class="actions">';
     $link = null;
     if (!empty($parentInfo)) {

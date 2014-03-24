@@ -1526,18 +1526,18 @@ function get_threads($forum_id, $course_code = null)
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_users = Database :: get_main_table(TABLE_MAIN_USER);
 
-    $thread_list = array();
     // important note: 	it might seem a little bit awkward that we have 'thread.locked as locked' in the sql statement
-    //					because we also have thread.* in it. This is because thread has a field locked and post also has the same field
-    // 					since we are merging these we would have the post.locked value but in fact we want the thread.locked value
-    //					This is why it is added to the end of the field selection
+    // because we also have thread.* in it. This is because thread has a field locked and post also has the same field
+    // since we are merging these we would have the post.locked value but in fact we want the thread.locked value
+    // This is why it is added to the end of the field selection
 
-    $sql = "SELECT  thread.*,
-                    item_properties.*,
-                    users.firstname,
-                    users.lastname,
-                    users.user_id,
-                    thread.locked as locked
+    $sql = "SELECT
+                thread.*,
+                item_properties.*,
+                users.firstname,
+                users.lastname,
+                users.user_id,
+                thread.locked as locked
             FROM $table_threads thread
             INNER JOIN $table_item_property item_properties
                 ON  thread.thread_id=item_properties.ref AND
@@ -1553,15 +1553,16 @@ function get_threads($forum_id, $course_code = null)
 
     if (is_allowed_to_edit()) {
         // important note: 	it might seem a little bit awkward that we have 'thread.locked as locked' in the sql statement
-        //					because we also have thread.* in it. This is because thread has a field locked and post also has the same field
-        // 					since we are merging these we would have the post.locked value but in fact we want the thread.locked value
-        //					This is why it is added to the end of the field selection
-        $sql = "SELECT  thread.*,
-                        item_properties.*,
-                        users.firstname,
-                        users.lastname,
-                        users.user_id,
-                        thread.locked as locked
+        // because we also have thread.* in it. This is because thread has a field locked and post also has the same field
+        // since we are merging these we would have the post.locked value but in fact we want the thread.locked value
+        //This is why it is added to the end of the field selection
+        $sql = "SELECT
+                    thread.*,
+                    item_properties.*,
+                    users.firstname,
+                    users.lastname,
+                    users.user_id,
+                    thread.locked as locked
                 FROM $table_threads thread
                 INNER JOIN $table_item_property item_properties
                     ON  thread.thread_id=item_properties.ref AND
@@ -1576,6 +1577,7 @@ function get_threads($forum_id, $course_code = null)
                 ORDER BY thread.thread_sticky DESC, thread.thread_date DESC";
     }
     $result = Database::query($sql);
+    $thread_list = array();
     while ($row = Database::fetch_array($result, 'ASSOC')) {
         $thread_list[] = $row;
     }
@@ -2127,15 +2129,17 @@ function show_add_post_form($action = '', $id = '', $form_values = '')
     global $_user;
     global $origin;
 
-    $gradebook = Security::remove_XSS($_GET['gradebook']);
+    $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
+    $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
+
     // Setting the class and text of the form title and submit button.
-    if ($_GET['action'] == 'quote') {
+    if ($action == 'quote') {
         $class = 'save';
         $text = get_lang('QuoteMessage');
-    } elseif ($_GET['action'] == 'replythread') {
+    } elseif ($action == 'replythread') {
         $class = 'save';
         $text = get_lang('ReplyToThread');
-    } elseif ($_GET['action'] == 'replymessage') {
+    } elseif ($action == 'replymessage') {
         $class = 'save';
         $text = get_lang('ReplyToMessage');
     } else {
@@ -2146,10 +2150,13 @@ function show_add_post_form($action = '', $id = '', $form_values = '')
     // Initialize the object.
     $my_thread = isset($_GET['thread']) ? $_GET['thread'] : '';
     $my_forum = isset($_GET['forum']) ? $_GET['forum'] : '';
-    $my_action = isset($_GET['action']) ? $_GET['action'] : '';
     $my_post = isset($_GET['post']) ? $_GET['post'] : '';
     $my_gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : '';
-    $form = new FormValidator('thread', 'post', api_get_self().'?forum='.Security::remove_XSS($my_forum).'&gradebook='.$gradebook.'&thread='.Security::remove_XSS($my_thread).'&post='.Security::remove_XSS($my_post).'&action='.Security::remove_XSS($my_action).'&origin='.$origin);
+    $form = new FormValidator(
+        'thread',
+        'post',
+        api_get_self().'?forum='.Security::remove_XSS($my_forum).'&gradebook='.$gradebook.'&thread='.Security::remove_XSS($my_thread).'&post='.Security::remove_XSS($my_post).'&action='.$action.'&origin='.$origin
+    );
     $form->setConstants(array('forum' => '5'));
 
     $form->addElement('header', $text);

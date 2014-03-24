@@ -18,7 +18,7 @@ api_protect_admin_script(true);
 $htmlHeadXtra[] = api_get_jqgrid_js();
 // setting breadcrumbs
 $interbreadcrumb[] = array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-$action = $_GET['action'];
+$action = isset($_GET['action']) ? $_GET['action'] : null;
 if ($action == 'add') {
     $interbreadcrumb[] = array('url' => 'usergroups.php','name' => get_lang('Classes'));
     $interbreadcrumb[] = array('url' => '#','name' => get_lang('Add'));
@@ -30,7 +30,7 @@ if ($action == 'add') {
 }
 
 // The header.
-Display::display_header($tool_name);
+Display::display_header();
 
 // Tool name
 if (isset($_GET['action']) && $_GET['action'] == 'add') {

@@ -1955,27 +1955,40 @@ class Exercise {
      * @todo    reduce parameters of this function
      * @return  string  html code
      */
-    public function manage_answer($exeId, $questionId, $choice, $from = 'exercise_show', $exerciseResultCoordinates = array(), $saved_results = true, $from_database = false, $show_result = true, $propagate_neg = 0, $hotspot_delineation_result = array())
-    {
+    public function manage_answer(
+        $exeId,
+        $questionId,
+        $choice,
+        $from = 'exercise_show',
+        $exerciseResultCoordinates = array(),
+        $saved_results = true,
+        $from_database = false,
+        $show_result = true,
+        $propagate_neg = 0,
+        $hotspot_delineation_result = array()
+    ) {
         global $debug;
-        global $learnpath_id, $learnpath_item_id; //needed in order to use in the exercise_attempt() for the time
+        //needed in order to use in the exercise_attempt() for the time
+        global $learnpath_id, $learnpath_item_id;
+        require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
 
         $feedback_type = $this->selectFeedbackType();
         $results_disabled = $this->selectResultsDisabled();
 
-        require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
-
-        if ($debug) error_log("<------ manage_answer ------> ");
-        if ($debug) error_log('manage_answer called exe_id: '.$exeId);
-        if ($debug) error_log('manage_answer $from:  '.$from);
-        if ($debug) error_log('manage_answer $saved_results: '.$saved_results);
-        if ($debug) error_log('manage_answer $from_database: '.$from_database);
-        if ($debug) error_log('manage_answer $show_result: '.$show_result);
-        if ($debug) error_log('manage_answer $propagate_neg: '.$propagate_neg);
-        if ($debug) error_log('manage_answer $exerciseResultCoordinates: '.print_r($exerciseResultCoordinates, 1));
-        if ($debug) error_log('manage_answer $hotspot_delineation_result: '.print_r($hotspot_delineation_result, 1));
-        if ($debug) error_log('manage_answer $learnpath_id: '.$learnpath_id);
-        if ($debug) error_log('manage_answer $learnpath_item_id: '.$learnpath_item_id);
+        if ($debug) {
+            error_log("<------ manage_answer ------> ");
+            error_log('exe_id: '.$exeId);
+            error_log('$from:  '.$from);
+            error_log('$saved_results: '.intval($saved_results));
+            error_log('$from_database: '.intval($from_database));
+            error_log('$show_result: '.$show_result);
+            error_log('$propagate_neg: '.$propagate_neg);
+            error_log('$exerciseResultCoordinates: '.print_r($exerciseResultCoordinates, 1));
+            error_log('$hotspot_delineation_result: '.print_r($hotspot_delineation_result, 1));
+            error_log('$learnpath_id: '.$learnpath_id);
+            error_log('$learnpath_item_id: '.$learnpath_item_id);
+            error_log('$choice: '.print_r($choice, 1));
+        }
 
         $extra_data = array();
         $final_overlap = 0;
@@ -1993,8 +2006,8 @@ class Exercise {
 
         $questionId   = intval($questionId);
         $exeId        = intval($exeId);
-        $TBL_TRACK_ATTEMPT      = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $table_ans              = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $TBL_TRACK_ATTEMPT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         // Creates a temporary Question object
         $course_id              = api_get_course_int_id();
@@ -2012,28 +2025,30 @@ class Exercise {
 
         $next = 1; //not for now
 
-        //Extra information of the question
+        // Extra information of the question
         if (!empty($extra)) {
-            $extra          = explode(':', $extra);
+            $extra = explode(':', $extra);
             if ($debug) error_log(print_r($extra, 1));
-            //Fixes problems with negatives values using intval
-            $true_score     = intval($extra[0]);
-            $false_score    = intval($extra[1]);
-            $doubt_score    = intval($extra[2]);
+            // Fixes problems with negatives values using intval
+            $true_score     = floatval(trim($extra[0]));
+            $false_score    = floatval(trim($extra[1]));
+            $doubt_score    = floatval(trim($extra[2]));
         }
 
         $totalWeighting 		= 0;
         $totalScore				= 0;
 
         // Destruction of the Question object
-        unset ($objQuestionTmp);
+        unset($objQuestionTmp);
 
         // Construction of the Answer object
         $objAnswerTmp = new Answer($questionId);
         $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 
-        if ($debug) error_log('Count of answers: '.$nbrAnswers);
-        if ($debug) error_log('$answerType: '.$answerType);
+        if ($debug) {
+            error_log('Count of answers: '.$nbrAnswers);
+            error_log('$answerType: '.$answerType);
+        }
 
         if ($answerType == FREE_ANSWER || $answerType == ORAL_EXPRESSION) {
             $nbrAnswers = 1;
@@ -2065,7 +2080,8 @@ class Exercise {
         $user_answer = '';
 
         // Get answer list for matching
-        $sql_answer = 'SELECT id, answer FROM '.$table_ans.' WHERE c_id = '.$course_id.' AND question_id = "'.$questionId.'" ';
+        $sql_answer = 'SELECT id, answer FROM '.$table_ans.'
+                       WHERE c_id = '.$course_id.' AND question_id = "'.$questionId.'"';
         $res_answer = Database::query($sql_answer);
 
         $answer_matching =array();
@@ -2077,7 +2093,6 @@ class Exercise {
         $quiz_question_options = Question::readQuestionOption($questionId, $course_id);
 
         $organs_at_risk_hit = 0;
-
         $questionScore = 0;
 
         if ($debug) error_log('Start answer loop ');
@@ -2085,20 +2100,20 @@ class Exercise {
         $answer_correct_array = array();
 
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
-            $answer             = $objAnswerTmp->selectAnswer($answerId);
-            $answerComment      = $objAnswerTmp->selectComment($answerId);
-            $answerCorrect      = $objAnswerTmp->isCorrect($answerId);
-            $answerWeighting    = (float)$objAnswerTmp->selectWeighting($answerId);
-
-            $numAnswer          = $objAnswerTmp->selectAutoId($answerId);
-
+            $answer = $objAnswerTmp->selectAnswer($answerId);
+            $answerComment = $objAnswerTmp->selectComment($answerId);
+            $answerCorrect = $objAnswerTmp->isCorrect($answerId);
+            $answerWeighting = (float)$objAnswerTmp->selectWeighting($answerId);
+            $numAnswer = $objAnswerTmp->selectAutoId($answerId);
             $answer_correct_array[$answerId] = (bool)$answerCorrect;
 
-            if ($debug) error_log("answer auto id: $numAnswer ");
-            if ($debug) error_log("answer correct : $answerCorrect ");
+            if ($debug) {
+                error_log("answer auto id: $numAnswer ");
+                error_log("answer correct: $answerCorrect ");
+            }
 
-            //delineation
-            $delineation_cord   = $objAnswerTmp->selectHotspotCoordinates(1);
+            // Delineation
+            $delineation_cord = $objAnswerTmp->selectHotspotCoordinates(1);
             $answer_delineation_destination=$objAnswerTmp->selectDestination(1);
 
             switch ($answerType) {
@@ -2106,7 +2121,8 @@ class Exercise {
                 case UNIQUE_ANSWER :
                 case UNIQUE_ANSWER_NO_OPTION :
                     if ($from_database) {
-                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' and question_id= '".$questionId."'";
+                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
+                        WHERE exe_id = '".$exeId."' and question_id= '".$questionId."'";
                         $resultans = Database::query($queryans);
                         $choice = Database::result($resultans,0,"answer");
 
@@ -2116,7 +2132,7 @@ class Exercise {
                             $totalScore+=$answerWeighting;
                         }
                     } else {
-                        $studentChoice = ($choice == $numAnswer)?1:0;
+                        $studentChoice = ($choice == $numAnswer) ? 1 : 0;
                         if ($studentChoice) {
                             $questionScore+=$answerWeighting;
                             $totalScore+=$answerWeighting;
@@ -2127,32 +2143,33 @@ class Exercise {
                 case MULTIPLE_ANSWER_TRUE_FALSE:
                     if ($from_database) {
                         $choice = array();
-                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." where exe_id = ".$exeId." and question_id = ".$questionId;
-                        $resultans = Database::query($queryans);
+                        $sql = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
+                                WHERE
+                                    exe_id = ".$exeId." AND
+                                    question_id = ".$questionId;
+                        $resultans = Database::query($sql);
                         while ($row = Database::fetch_array($resultans)) {
-                            $ind          = $row['answer'];
-                            $result       = explode(':',$ind);
+                            $ind = $row['answer'];
+                            $result = explode(':', $ind);
                             $my_answer_id = $result[0];
-                            $option       = $result[1];
+                            $option = $result[1];
                             $choice[$my_answer_id] = $option;
                         }
-                        $studentChoice  =$choice[$numAnswer];
-                    } else {
-                        $studentChoice  =$choice[$numAnswer];
                     }
+                    $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
 
                     if (!empty($studentChoice)) {
-                        if ($studentChoice == $answerCorrect ) {
+                        if ($studentChoice == $answerCorrect) {
                             $questionScore  += $true_score;
                         } else {
                             if ($quiz_question_options[$studentChoice]['name'] != "Don't know") {
-                                $questionScore   +=  $false_score;
+                                $questionScore += $false_score;
                             } else {
-                                $questionScore  +=  $doubt_score;
+                                $questionScore += $doubt_score;
                             }
                         }
                     } else {
-                        //if no result then the user just hit don't know
+                        // If no result then the user just hit don't know
                         $studentChoice = 3;
                         $questionScore  +=  $doubt_score;
                     }
@@ -2161,7 +2178,8 @@ class Exercise {
                 case MULTIPLE_ANSWER: //2
                     if ($from_database) {
                         $choice = array();
-                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT." WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
+                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
+                                     WHERE exe_id = '".$exeId."' AND question_id= '".$questionId."'";
                         $resultans = Database::query($queryans);
                         while ($row = Database::fetch_array($resultans)) {
                             $ind = $row['answer'];
@@ -2182,7 +2200,7 @@ class Exercise {
                             $questionScore  += $answerWeighting;
                         }
                     }
-                    $totalScore     += $answerWeighting;
+                    $totalScore += $answerWeighting;
 
                     if ($debug) error_log("studentChoice: $studentChoice");
                     break;
@@ -2285,7 +2303,6 @@ class Exercise {
                     break;
                 // for fill in the blanks
                 case FILL_IN_BLANKS:
-
                     // the question is encoded like this
                     // [A] B [C] D [E] F::10,10,10@1
                     // number 1 before the "@" means that is a switchable fill in blank question

@@ -968,10 +968,6 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
     //@todo replace all this globals
     global $documentPath, $filter;
 
-    if (empty($extra_where_conditions)) {
-    	$extra_where_conditions = "1 = 1 ";
-    }
-
     $course_id = api_get_course_int_id();
     $course_code = api_get_course_id();
 
@@ -1106,12 +1102,13 @@ function get_exam_results_data($from, $number_of_items, $column, $direction, $ex
                 FROM $TBL_EXERCICES AS ce
                 INNER JOIN $sql_inner_join_tbl_track_exercices AS te ON (te.exe_exo_id = ce.id)
                 INNER JOIN $sql_inner_join_tbl_user  AS user ON (user.user_id = exe_user_id)
-                WHERE $extra_where_conditions AND
-                    te.status != 'incomplete'
-                    AND te.exe_cours_id='" . api_get_course_id() . "' $session_id_and
-                    AND ce.active <>-1
-                    AND ce.c_id=".api_get_course_int_id()."
-                    $exercise_where ";
+                WHERE
+                    te.status != 'incomplete' AND
+                    te.exe_cours_id='" . api_get_course_id() . "' $session_id_and AND
+                    ce.active <>-1 AND ce.c_id=".api_get_course_int_id()."
+                    $exercise_where
+                    $extra_where_conditions
+                ";
 
         // sql for hotpotatoes tests for teacher / tutor view
 

@@ -2739,6 +2739,7 @@ function is_repeated_event($id,$course=null)
     }
     return false;
 }
+
 /**
  * Adds x weeks to a UNIX timestamp
  * @param   int     The timestamp

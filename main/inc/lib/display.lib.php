@@ -108,7 +108,7 @@ class Display
 
     public static function display_no_header()
     {
-        global $tool_name;
+        global $tool_name, $show_learnpath;
         $disable_js_and_css_files = true;
         self::$global_template = new Template($tool_name, false, false, $show_learnpath);
         //echo self::$global_template->show_header_template();

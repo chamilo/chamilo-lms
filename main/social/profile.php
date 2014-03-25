@@ -448,10 +448,10 @@ if ($show_full_profile) {
                         }
                     } elseif ($field_type == UserManager::USER_FIELD_TYPE_SOCIAL_PROFILE) {
                         $icon_path = UserManager::get_favicon_from_url($data);
-                        $bottom = '0.3';
+                        $bottom = '0.2';
                         //quick hack for hi5
-                        $domain = parse_url($icon_path, PHP_URL_HOST); if ($domain == 'www.hi5.com' or $domain == 'hi5.com') { $bottom = '0.8'; }
-                        $data = '<a href="'.$data.'"><img src="'.$icon_path.'" alt="ico" style="margin-right:0.5em;margin-bottom:-'.$bottom.'em;" />'.ucfirst($field_display_text).'</a>';
+                        $domain = parse_url($icon_path, PHP_URL_HOST); if ($domain == 'www.hi5.com' or $domain == 'hi5.com') { $bottom = '-0.8'; }
+                        $data = '<a href="'.$data.'"><img src="'.$icon_path.'" alt="icon" style="margin-right:0.5em;margin-bottom:'.$bottom.'em;" />'.$field_display_text.'</a>';
                         $extra_information_value .= '<dd>'.$data.'</dd>';
                     } else {
                         if (!empty($data)) {

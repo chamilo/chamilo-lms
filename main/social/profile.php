@@ -426,7 +426,7 @@ if ($show_full_profile) {
                 if (is_array($data)) {
                     $extra_information_value .= '<dt>'.ucfirst($field_display_text).'</dt><dd> '.implode(',',$data).'</dd>';
                 } else {
-                    if ($field_type == USER_FIELD_TYPE_DOUBLE_SELECT) {
+                    if ($field_type == UserManager::USER_FIELD_TYPE_DOUBLE_SELECT) {
                         $id_options = explode(';',$data);
                         $value_options = array();
                         // get option display text from user_field_options table
@@ -437,7 +437,7 @@ if ($show_full_profile) {
                             $value_options[] = $row_options[0];
                         }
                         $extra_information_value .= '<dt>'.ucfirst($field_display_text).':</dt><dd>'.implode(' ',$value_options).'</dd>';
-                    } elseif($field_type == USER_FIELD_TYPE_TAG ) {
+                    } elseif ($field_type == UserManager::USER_FIELD_TYPE_TAG ) {
                         $user_tags = UserManager::get_user_tags($user_id, $field_id);
                         $tag_tmp = array();
                         foreach ($user_tags as $tags) {
@@ -446,7 +446,7 @@ if ($show_full_profile) {
                         if (is_array($user_tags) && count($user_tags)>0) {
                             $extra_information_value .= '<dt>'.ucfirst($field_display_text).':</dt><dd>'.implode('', $tag_tmp).'</dd>';
                         }
-                    } elseif ($field_type == USER_FIELD_TYPE_SOCIAL_PROFILE) {
+                    } elseif ($field_type == UserManager::USER_FIELD_TYPE_SOCIAL_PROFILE) {
                         $icon_path = UserManager::get_favicon_from_url($data);
                         $bottom = '0.3';
                         //quick hack for hi5

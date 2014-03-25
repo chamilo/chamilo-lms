@@ -2503,9 +2503,10 @@ class SessionManager
     {
 		$t_sfv = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
 		$table_field = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
-		$sql_session = "SELECT session_id FROM $table_field sf INNER JOIN $t_sfv sfv ON sfv.field_id=sf.id
-		                WHERE field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
-		$res_session = Database::query($sql_session);
+		$sql = "SELECT session_id
+                FROM $table_field sf INNER JOIN $t_sfv sfv ON sfv.field_id=sf.id
+                WHERE field_variable='$original_session_id_name' AND field_value='$original_session_id_value'";
+		$res_session = Database::query($sql);
 		$row = Database::fetch_object($res_session);
 		if ($row) {
 			return $row->session_id;
@@ -3065,7 +3066,7 @@ class SessionManager
                     $session_counter++;
                 } else {
                     $sessionId = null;
-                    if (isset($extraFields) && !empty($extraFields)) {
+                    if (isset($extraFields) && !empty($extraFields) && !empty($enreg['extra_'.$extraFieldId])) {
                         $sessionId = self::get_session_id_from_original_id($enreg['extra_'.$extraFieldId], $extraFieldId);
                         if (empty($sessionId)) {
                             $my_session_result = false;
@@ -3248,6 +3249,8 @@ class SessionManager
                         $removeAllTeachersFromCourse = true;
                     }
                 }
+
+                //var_dump($sessionWithCoursesModifier);
 
                 foreach ($courses as $course) {
                     $courseArray = bracketsToArray($course);

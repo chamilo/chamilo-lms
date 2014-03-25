@@ -2903,6 +2903,7 @@ class SessionManager
      * @param array $fieldsToAvoidUpdate
      * @param bool $deleteUsersNotInList
      * @param bool $updateCourseCoaches
+     * @param bool $sessionWithCoursesModifier
      * @return array
      */
     static function importCSV(
@@ -2983,7 +2984,7 @@ class SessionManager
 
                 if (isset($extraFields) && !empty($extraFields)) {
                     foreach ($extraFields as $original => $to) {
-                        $enreg[$to] = $enreg[$original];
+                        $enreg[$to] = isset($enreg[$original]) ? $enreg[$original] : null;
                     }
                 }
 
@@ -3308,31 +3309,33 @@ class SessionManager
                                     }
                                     $course_coaches = array_merge($course_coaches, $teachersToAdd);
                                 }
-
-                                $coachCounter = 0;
                                 $teacherToAdd = null;
 
-                                foreach ($course_coaches as $course_coach) {
-                                    $coach_id = UserManager::get_user_id_from_username($course_coach);
-                                    if ($coach_id !== false) {
+                                if ($onlyAddFirstCoachOrTeacher == false) {
+                                    foreach ($course_coaches as $course_coach) {
+                                        $coach_id = UserManager::get_user_id_from_username($course_coach);
+                                        if ($coach_id !== false) {
+                                            // Just insert new coaches
+                                            SessionManager::updateCoaches($session_id, $course_code, array($coach_id), false);
 
-                                        // Add only first coach teacher
-                                        if ($onlyAddFirstCoachOrTeacher && $coachCounter > 1) {
-                                            continue;
+                                            if ($debug) {
+                                                $logger->addInfo("Sessions - Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
+                                            }
+                                            $savedCoaches[] = $coach_id;
+                                        } else {
+                                            $error_message .= get_lang('UserDoesNotExist').' : '.$course_coach.$eol;
                                         }
-
-                                        // Just insert new coaches
-                                        SessionManager::updateCoaches($session_id, $course_code, array($coach_id), false);
-                                        $teacherToAdd = $coach_id;
-
-                                        $coachCounter++;
-
-                                        if ($debug) {
-                                            $logger->addInfo("Sessions - Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
+                                    }
+                                } else {
+                                    foreach ($course_coaches as $course_coach) {
+                                        $coach_id = UserManager::get_user_id_from_username($course_coach);
+                                        if ($coach_id !== false) {
+                                            $teacherToAdd = $coach_id;
+                                            break;
                                         }
-                                        $savedCoaches[] = $coach_id;
-                                    } else {
-                                        $error_message .= get_lang('UserDoesNotExist').' : '.$course_coach.$eol;
+                                    }
+                                    if (!empty($teacherToAdd)) {
+                                        SessionManager::updateCoaches($session_id, $course_code, array($teacherToAdd), true);
                                     }
                                 }
 
@@ -3348,6 +3351,7 @@ class SessionManager
                                 }
                             }
 
+                            // Continue default behaviour.
                             if ($onlyAddFirstCoachOrTeacher == false) {
                                 // Checking one more time see BT#6449#note-149
                                 $coaches = SessionManager::getCoachesByCourseSession($session_id, $course_code);

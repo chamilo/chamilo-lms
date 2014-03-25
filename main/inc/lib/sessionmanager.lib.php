@@ -370,8 +370,6 @@ class SessionManager
             $options['where']
         );
 
-
-
 		$today = api_get_utc_datetime();
         $today = api_strtotime($today, 'UTC');
         $today = date('Y-m-d', $today);
@@ -412,7 +410,7 @@ class SessionManager
         }
 
         if (!empty($options['where'])) {
-		   $where .= ' AND '.$options['where'];
+		   $where .= ' '.$options['where'];
 		}
 
         $order = null;

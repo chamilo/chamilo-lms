@@ -36,44 +36,15 @@ require_once 'HTML/QuickForm/Rule.php';
  */
 class HTML_QuickForm_Rule_CompareDate extends HTML_QuickForm_Rule
 {
-   /**
-    * Possible operators to use
-    * @var array
-    * @access private
-    */
-    /*var $_operators = array(
-        'eq'  => '==',
-        'neq' => '!=',
-        'gt'  => '>',
-        'gte' => '>=',
-        'lt'  => '<',
-        'lte' => '<='
-    );*/
-
-
-   /**
-    * Returns the operator to use for comparing the values
-    *
-    * @access private
-    * @param  string     operator name
-    * @return string     operator to use for validation
-    */
-    /*function _findOperator($name)
-    {
-        if (empty($name)) {
-            return '==';
-        } elseif (isset($this->_operators[$name])) {
-            return $this->_operators[$name];
-        } elseif (in_array($name, $this->_operators)) {
-            return $name;
-        } else {
-            return '==';
-        }
-    }*/
-
     function validate($values, $options)
     {
-        $compareFn = create_function('$a, $b', 'return mktime($a[\'H\'],$a[\'i\'],0,$a[\'M\'],$a[\'d\'],$a[\'Y\']) <=   mktime($b[\'H\'],$b[\'i\'],0,$b[\'M\'],$b[\'d\'],$b[\'Y\'] );');
-        return $compareFn($values[0], $values[1]);
+        if (!is_array($values[0]) && !is_array($values[1])) {
+            return api_strtotime($values[0]) < api_strtotime($values[1]);
+        } else {
+            $compareFn = create_function(
+                '$a, $b', 'return mktime($a[\'H\'],$a[\'i\'],0,$a[\'M\'],$a[\'d\'],$a[\'Y\']) <=   mktime($b[\'H\'],$b[\'i\'],0,$b[\'M\'],$b[\'d\'],$b[\'Y\'] );'
+            );
+            return $compareFn($values[0], $values[1]);
+        }
     }
 }

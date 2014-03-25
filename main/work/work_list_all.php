@@ -122,8 +122,16 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId)) {
             Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_MEDIUM).'</a>';
     }
     echo $display_output;
+
+
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/edit_work.php?'.api_get_cidreq().'&id='.$workId.'">';
+    echo Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 echo '</div>';
+
+if (!empty($my_folder_data['title'])) {
+    echo Display::page_subheader($my_folder_data['title']);
+}
 
 $error_message = Session::read('error_message');
 if (!empty($error_message)) {
@@ -151,14 +159,14 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
         get_lang('Actions')
     );
     $column_model   = array (
-        array('name'=>'type',           'index'=>'file',            'width'=>'10',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
+        array('name'=>'type',           'index'=>'file',            'width'=>'8',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => 'true'),
         array('name'=>'qualification',	'index'=>'qualification',	'width'=>'20',   'align'=>'left', 'search' => 'true'),
         array('name'=>'sent_date',      'index'=>'sent_date',       'width'=>'40',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
-        array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'30',   'align'=>'left', 'search' => 'true'),
-        array('name'=>'actions',        'index'=>'actions',         'width'=>'50',   'align'=>'left', 'search' => 'false', 'sortable'=>'false', )
+        array('name'=>'qualificator_id','index'=>'qualificator_id', 'width'=>'25',   'align'=>'left', 'search' => 'true'),
+        array('name'=>'actions',        'index'=>'actions',         'width'=>'30',   'align'=>'left', 'search' => 'false', 'sortable'=>'false', )
     );
 } else {
     $type = 'complex';
@@ -173,12 +181,12 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
     );
 
     $column_model   = array (
-        array('name'=>'type',           'index'=>'file',            'width'=>'10',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
+        array('name'=>'type',           'index'=>'file',            'width'=>'8',   'align'=>'left', 'search' => 'false', 'sortable' => 'false'),
         array('name'=>'firstname',      'index'=>'firstname',       'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'lastname',		'index'=>'lastname',        'width'=>'35',   'align'=>'left', 'search' => 'true'),
         array('name'=>'title',          'index'=>'title',           'width'=>'40',   'align'=>'left', 'search' => 'false', 'wrap_cell' => "true"),
         array('name'=>'sent_date',      'index'=>'sent_date',      'width'=>'45',   'align'=>'left', 'search' => 'true', 'wrap_cell' => 'true'),
-        array('name'=>'actions',        'index'=>'actions',         'width'=>'50',   'align'=>'left', 'search' => 'false', 'sortable'=>'false', 'wrap_cell' => 'true')
+        array('name'=>'actions',        'index'=>'actions',         'width'=>'40',   'align'=>'left', 'search' => 'false', 'sortable'=>'false', 'wrap_cell' => 'true')
     );
 }
 

@@ -208,7 +208,16 @@ switch ($action) {
 
         if (empty($documents)) {
             $whereCondition .= " AND u.user_id = ".api_get_user_id();
-            $count = get_work_user_list(0, $limit, $sidx, $sord, $work_id, $whereCondition, null, true);
+            $count = get_work_user_list(
+                0,
+                $limit,
+                $sidx,
+                $sord,
+                $work_id,
+                $whereCondition,
+                null,
+                true
+            );
         } else {
             $count = get_work_user_list_from_documents(
                 0,
@@ -235,8 +244,8 @@ switch ($action) {
             api_get_group_id(),
             0,
             $limit,
-            $sidx,
-            $sord,
+            null,
+            null,
             true
         );
         break;
@@ -492,7 +501,8 @@ switch ($action) {
         }
         break;
     case 'get_work_teacher':
-        $columns = array('type', 'title', 'sent_date', 'expires_on', 'ends_on', 'actions');
+        //$columns = array('type', 'title', 'sent_date', 'expires_on', 'ends_on', 'actions');
+        $columns = array('type', 'title', 'sent_date', 'expires_on', 'amount', 'actions');
         $result = getWorkListTeacher($start, $limit, $sidx, $sord, $whereCondition);
         break;
     case 'get_work_student':

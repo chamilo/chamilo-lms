@@ -5,39 +5,30 @@
 	padding: 0px;
 	font-size: small;
 	position: absolute;
-	background-color: white;/*
-	filter:alpha(opacity=50);
-	opacity: 0.50;
-	-moz-border-radius: 25px;
-	margin-right: 5%;
-	margin-left: 75%;
-	margin-top: 10px;
-*/
+	background-color: white;
 }
 .scormpage .menu .lp_nav {
 	height: 50px;
 	width: 160px;
 	padding-top: 4px;
 	padding-bottom:0px;
-	/*
+	/*	
 	margin-left: 10px;
 	margin-right: 10px;
 */
 	margin-top: 0px;
 }
 .lp_navigation_elem {
-	padding-top: 2px;
-	position: absolute;
-	left: 50%;
-	margin-left: -70px;
+	padding-left: 15px;
+	padding-top: 0px;
 }
+/*.scormpage .menu */
 .lp_navigation_elem .progresstext {
-	margin-top: -12px;
-	margin-left: 4em;
 	font-size: smaller;
 }
+/*.scormpage .menu */
 .lp_navigation_elem .buttons {
-	margin-left: 1em;
+	margin-left: 5px;
 	margin-right: 0em;
 	margin-top: 0.4em;
 }
@@ -80,8 +71,12 @@
 .scormpage .footer {
 	clear: both;
 }
-.preview_image {
-	text-align: right;
-	margin-right: 5px;
-	padding-left: 15px;
+#image_preview {
+	padding-left: 17px;
+}
+#author_name {
+	padding-left: 5px;
+	padding-top: 5px;
+	font-size: 11px;
+	color:#888;
 }

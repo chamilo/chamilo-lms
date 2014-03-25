@@ -119,15 +119,23 @@ The more frequent ones have been marked with *
     footer {
         margin-top: 0px;
     }
+    .course-tool {
+        width: 160px;
+    }
 }
 
 @media (min-width: 321px) and (max-width: 480px) {
     body {
-        padding-left: 5px;
-        padding-right: 5px;
+        padding-left: 0;
+        padding-right: 0;
     }
+    
     header #header_left {
         display: block;
+    }
+    .page-section{
+        padding-left: 1em;
+        padding-right: 1em;
     }
     header #header_center, header #header_right{
         display: none;
@@ -138,6 +146,20 @@ The more frequent ones have been marked with *
     }
     #top_main_content .span6 {
         width: 100%;
+    }
+    .well.form-inline {
+      clear: both;
+      display: inline-block;
+      margin-top: 22px;
+      width: 100%;
+    }
+    .nav.nav-pills {
+        background:#E9E9E9;
+    }
+    .new_actions .nav-tabs > li > a, .new_actions .nav-pills > li > a {
+        border: none;
+        padding-right: 7px;
+        padding-left: 7px;
     }
     legend {
         margin-bottom: 10px;
@@ -301,13 +323,13 @@ The more frequent ones have been marked with *
     /* only for the course tools */
     #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {
         float: left;
-        margin-left: 10px;
+        margin-left: 0;
     }
     /* Course- home - Show 2 icons instead of one */
     .course-tool {
         float: left;
         height: 150px;
-        width: 160px;
+        width: 150px;
     }
 
     .course-tool h4 {
@@ -390,7 +412,10 @@ The more frequent ones have been marked with *
     header{
         margin-top: 15px;
     }
-    
+    #wrapper{
+        padding-left: 0;
+        padding-right: 0;
+    }
     #top_main_content .menu-column {
         width: 97%;
     }
@@ -562,8 +587,13 @@ The more frequent ones have been marked with *
                 text-align: center;
     }
     .new_actions .nav > li {
-        float: none;
+        float: left;
     }
+    .well.form-inline {
+    display: inline-block;
+    margin-top: 15px;
+    width: 100%;
+}
     .new_actions .nav > li > a {
         border: 0;
     }
@@ -625,7 +655,7 @@ The more frequent ones have been marked with *
 
     #footer_left , #footer_right #admin_name, #footer_right #software_name {
         text-align: center !important;
-        width: 600px;
+        /*width: 600px;*/
         clear: both;
     }
 
@@ -662,10 +692,6 @@ The more frequent ones have been marked with *
         padding-top: 2em;
         padding-bottom: 2em;
     }
-    #wrapper{
-        padding-left: 1em;
-        padding-right: 1em;
-    }
     #top_main_content .span9 {
     width: 100%;
     clear: both;
@@ -673,9 +699,9 @@ The more frequent ones have been marked with *
     .section-mycampus #hot_courses .page-header {
     width: 565px;
     }
-    .course-tool {
+    /*.course-tool {
         width: 190px;
-    }
+    }*/
     .well_border .row .span2 .thumbnail {
       background-color: #FFFFFF;
       background-image: none;
@@ -703,14 +729,15 @@ The more frequent ones have been marked with *
     }
     #settings .form-search .span3 {
         float: left;
-        width: 76%;
+        width: 65%;
         height: 34px;
         margin-right: 5px;
     }
     #settings .row .span6 .well_border ul li{
-        font-size: 15px;
-        padding-top: 5px;
-        padding-bottom: 5px;
+        font-size: 13px;
+        padding-top: 3px;
+        padding-bottom: 3px;
+        line-height: 16px;
     }
     #course_tools .course-title-tools h3 {
         color: #0191C7;
@@ -841,5 +868,6 @@ The more frequent ones have been marked with *
         padding-left: 27px;
         padding-right:5px;
     }
+    
 }
 

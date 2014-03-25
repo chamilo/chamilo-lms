@@ -6862,7 +6862,6 @@ class learnpath
         $form->addElement('hidden', 'type', 'dokeos_' . $item_type);
         $form->addElement('hidden', 'post_time', time());
         $form->setDefaults($defaults);
-
         return $form->return_form();
     }
 
@@ -7647,7 +7646,7 @@ class learnpath
                                 s1.write("container");
                             </script>';
         }
-
+        
         $url = api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
 
         $return .= Display::url(
@@ -7848,6 +7847,7 @@ class learnpath
         $row    = Database::fetch_array($result);
 
         $preq_id = $row['prerequisite'];
+        
 
         //$return = $this->display_manipulate($item_id, TOOL_DOCUMENT);
         $return = '<legend>';
@@ -7917,6 +7917,7 @@ class learnpath
             $return .=  $arrLP[$i]['title'] . '</label>';
             $return .= '</td>';
 
+          
             if ($arrLP[$i]['item_type'] == TOOL_QUIZ) {
                 // lets update max_score Quiz information depending of the Quiz Advanced properties
                 require_once api_get_path(LIBRARY_PATH)."lp_item.lib.php";
@@ -7951,7 +7952,6 @@ class learnpath
         $return .= '<div style="padding-top:3px;">';
         $return .= '<button class="save" name="submit_button" type="submit">' . get_lang('ModifyPrerequisites') . '</button>';
         $return .= '</form>';
-
         return $return;
     }
 

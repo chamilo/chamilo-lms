@@ -41,7 +41,9 @@ legend {
 header #logo {
     padding: 0px 0px 15px 0px;
 }
-
+header #logo img{
+    margin-left: 30px;
+}
 .subnav .brand {
     display:none;
 }
@@ -180,6 +182,7 @@ header #logo {
 
 header {
     margin-bottom: 11px;
+    margin-top: 20px;
 }
 
 .breadcrumb {
@@ -557,11 +560,11 @@ a.tag {
 
 /* Admin index.php */
 #settings .span6 {
-    min-height: 260px;
+    min-height: 340px;
     width: 47%;
 }
 #settings .span6 .well_border{
-    min-height: 250px;
+    min-height: 265px;
 }
 #settings .form-search .span3 {
     float: left;

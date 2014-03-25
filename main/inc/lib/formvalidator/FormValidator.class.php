@@ -200,7 +200,7 @@ class FormValidator extends HTML_QuickForm
             $renderer->setElementTemplate($button_element_template_simple, 'submit_in_actions');
 
             //Display a gray div in the buttons + makes the button available when scrolling
-            $button_element_template_in_bottom = '<div class="form-actions bottom_actions">{label} {element}</div>';
+            $button_element_template_in_bottom = '<div class="form-actions bottom_actions bg-form">{label} {element}</div>';
             $renderer->setElementTemplate($button_element_template_in_bottom, 'submit_fixed_in_bottom');
 
             //When you want to group buttons use something like this

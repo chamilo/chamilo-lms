@@ -3328,8 +3328,8 @@ class SessionManager
                                 }
                             }
 
+                            // Custom courses/session coaches
                             $teacherToAdd = null;
-
                             if ($onlyAddFirstCoachOrTeacher == true) {
                                 foreach ($course_coaches as $course_coach) {
                                     $coach_id = UserManager::get_user_id_from_username($course_coach);
@@ -3341,17 +3341,17 @@ class SessionManager
                                 if (!empty($teacherToAdd)) {
                                     SessionManager::updateCoaches($session_id, $course_code, array($teacherToAdd), true);
                                 }
+                            }
 
-                                if ($removeAllTeachersFromCourse && !empty($teacherToAdd)) {
-                                    // Deleting all course teachers and adding the only coach as teacher.
-                                    $teacherList = CourseManager::get_teacher_list_from_course_code($course_code);
-                                    if (!empty($teacherList)) {
-                                        foreach ($teacherList as $teacher) {
-                                            CourseManager::unsubscribe_user($teacher['user_id'], $course_code);
-                                        }
+                            if ($removeAllTeachersFromCourse && !empty($teacherToAdd)) {
+                                // Deleting all course teachers and adding the only coach as teacher.
+                                $teacherList = CourseManager::get_teacher_list_from_course_code($course_code);
+                                if (!empty($teacherList)) {
+                                    foreach ($teacherList as $teacher) {
+                                        CourseManager::unsubscribe_user($teacher['user_id'], $course_code);
                                     }
-                                    CourseManager::subscribe_user($teacherToAdd, $course_code, COURSEMANAGER);
                                 }
+                                CourseManager::subscribe_user($teacherToAdd, $course_code, COURSEMANAGER);
                             }
 
                             // Continue default behaviour.

@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(LIBRARY_PATH) . 'pear/HTML/QuickForm.php';
-require_once api_get_path(LIBRARY_PATH) . 'pear/HTML/QuickForm/advmultiselect.php';
+require_once api_get_path(LIBRARY_PATH).'pear/HTML/QuickForm.php';
+require_once api_get_path(LIBRARY_PATH).'pear/HTML/QuickForm/advmultiselect.php';
 
 /**
  * Filter
@@ -125,6 +125,8 @@ class FormValidator extends HTML_QuickForm
         // Load some custom elements and rules
         $dir = api_get_path(LIBRARY_PATH) . 'formvalidator/';
         $this->registerElementType('html_editor', $dir . 'Element/html_editor.php', 'HTML_QuickForm_html_editor');
+
+        $this->registerElementType('datetimepicker', $dir . 'Element/DateTimePicker.php', 'DateTimePicker');
         $this->registerElementType('datepicker', $dir . 'Element/datepicker.php', 'HTML_QuickForm_datepicker');
         $this->registerElementType('datepickerdate', $dir . 'Element/datepickerdate.php', 'HTML_QuickForm_datepickerdate');
         $this->registerElementType('receivers', $dir . 'Element/receivers.php', 'HTML_QuickForm_receivers');
@@ -234,7 +236,7 @@ EOT;
     }
 
     /**
-     * Adds a textfield to the form.
+     * Adds a text field to the form.
      * A trim-filter is attached to the field.
      * @param string $label						The label for the form-element
      * @param string $name						The element name
@@ -433,7 +435,6 @@ EOT;
      */
     function add_real_progress_bar($upload_id, $element_after, $delay = 2, $wait_after_upload = false)
     {
-
         if (!function_exists('uploadprogress_get_info')) {
             $this->add_progress_bar($delay);
             return;

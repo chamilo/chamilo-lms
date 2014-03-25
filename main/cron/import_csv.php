@@ -666,7 +666,10 @@ class ImportCsv
             $this->daysCoachAccessBeforeBeginning,
             $this->daysCoachAccessAfterBeginning,
             $this->defaultSessionVisibility,
-            $avoid
+            $avoid,
+            false,
+            false,
+            true
         );
 
         if (!empty($result['error_message'])) {

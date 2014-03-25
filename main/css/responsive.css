@@ -119,6 +119,9 @@ The more frequent ones have been marked with *
     footer {
         margin-top: 0px;
     }
+    .course-tool {
+        width: 160px;
+    }
 }
 
 @media (min-width: 321px) and (max-width: 480px) {
@@ -326,7 +329,7 @@ The more frequent ones have been marked with *
     .course-tool {
         float: left;
         height: 150px;
-        width: 160px;
+        width: 150px;
     }
 
     .course-tool h4 {
@@ -698,9 +701,9 @@ The more frequent ones have been marked with *
     .section-mycampus #hot_courses .page-header {
     width: 565px;
     }
-    .course-tool {
+    /*.course-tool {
         width: 190px;
-    }
+    }*/
     .well_border .row .span2 .thumbnail {
       background-color: #FFFFFF;
       background-image: none;

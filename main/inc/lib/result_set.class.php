@@ -12,7 +12,7 @@ class ResultSet implements Countable, Iterator
     /**
      *
      * @param string $sql
-     * @return ResultSet 
+     * @return ResultSet
      */
     static function create($sql)
     {
@@ -36,7 +36,7 @@ class ResultSet implements Countable, Iterator
         $this->limit_count = $limit_count;
         $this->limit_offset = $limit_offset;
         $this->orderby_column = $orderby_column;
-        $this->orderby_direction = $direction;
+        $this->orderby_direction = $orderby_direction;
         $this->return_type = $return_type;
     }
 
@@ -107,7 +107,7 @@ class ResultSet implements Countable, Iterator
      *
      * @param int $count
      * @param int $from
-     * @return ResultSet 
+     * @return ResultSet
      */
     public function limit($count, $from = 0)
     {
@@ -121,7 +121,7 @@ class ResultSet implements Countable, Iterator
      *
      * @param int $column
      * @param int $dir
-     * @return ResultSet 
+     * @return ResultSet
      */
     public function orderby($column, $dir = 'ASC')
     {

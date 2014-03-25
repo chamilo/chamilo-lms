@@ -3278,12 +3278,20 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
 }
 
 /**
+ * Creates a new task (directory) in the assignment tool
  * @param array $params
  * @param int $user_id
  * @param array $courseInfo
  * @param int $group_id
  * @param int $session_id
  * @return bool|int
+ * @note $params can have the following elements, but should at least have the 2 first ones: (
+ *       'new_dir' => 'some-name',
+ *       'description' => 'some-desc',
+ *       'qualification' => someintvalue (e.g. 20),
+ *       'weight' => someintweight (percentage) to add to gradebook (e.g. 50),
+ *       'allow_text_assignment' => 0/1/2,
+ * @todo Rename createAssignment or createWork, or something like that
  */
 function addDir($params, $user_id, $courseInfo, $group_id, $session_id)
 {

@@ -403,10 +403,7 @@ class HTML_QuickForm_element extends HTML_Common
                 $this->setValue($arg);
         }
         return true;
-    } // end func onQuickFormEvent
-
-    // }}}
-    // {{{ accept()
+    }
 
    /**
     * Accepts a renderer
@@ -420,10 +417,7 @@ class HTML_QuickForm_element extends HTML_Common
     function accept(&$renderer, $required=false, $error=null)
     {
         $renderer->renderElement($this, $required, $error);
-    } // end func accept
-
-    // }}}
-    // {{{ _generateId()
+    }
 
    /**
     * Automatically generates and assigns an 'id' attribute for the element.
@@ -441,10 +435,7 @@ class HTML_QuickForm_element extends HTML_Common
         if (!$this->getAttribute('id')) {
             $this->updateAttributes(array('id' => 'qf_' . substr(md5(microtime() . $idx++), 0, 6)));
         }
-    } // end func _generateId
-
-    // }}}
-    // {{{ exportValue()
+    }
 
    /**
     * Returns a 'safe' element's value
@@ -495,7 +486,4 @@ class HTML_QuickForm_element extends HTML_Common
             }
         }
     }
-
-    // }}}
-} // end class HTML_QuickForm_element
-?>
+}

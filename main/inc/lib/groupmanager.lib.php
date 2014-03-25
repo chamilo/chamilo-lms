@@ -937,24 +937,51 @@ class GroupManager
      * @param int $start
      * @param int $limit
      * @param bool $getCount
+     * @param int $courseId
      * @return array list of user id
      */
-    public static function get_users($group_id, $load_extra_info = false, $start = null, $limit = null, $getCount = false)
-    {
+    public static function get_users(
+        $group_id,
+        $load_extra_info = false,
+        $start = null,
+        $limit = null,
+        $getCount = false,
+        $courseId = null,
+        $column = null,
+        $direction = null
+    ) {
         $group_user_table = Database :: get_course_table(TABLE_GROUP_USER);
+        $user_table = Database :: get_main_table(TABLE_MAIN_USER);
+
         $group_id = Database::escape_string($group_id);
-        $course_id = api_get_course_int_id();
-        $select = " SELECT user_id ";
-        if ($getCount) {
-            $select = " SELECT count(user_id) count";
+        if (empty($courseId)) {
+            $courseId = api_get_course_int_id();
+        } else {
+            $courseId = intval($courseId);
         }
-        $sql = "$select FROM $group_user_table
-                WHERE c_id = $course_id AND group_id = $group_id";
+
+        $select = " SELECT g.user_id, firstname, lastname ";
+        if ($getCount) {
+            $select = " SELECT count(u.user_id) count";
+        }
+        $sql = "$select
+                FROM $group_user_table g
+                INNER JOIN $user_table u
+                ON (u.user_id = g.user_id)
+                WHERE c_id = $courseId AND g.group_id = $group_id";
+
+        if (!empty($column) && !empty($direction)) {
+            $column = Database::escape_string($column);
+            $direction = Database::escape_string($direction);
+            $sql .= " ORDER BY $column $direction";
+        }
+
         if (!empty($start) && !empty($limit)) {
             $start = intval($start);
             $limit = intval($limit);
             $sql .= " LIMIT $start, $limit";
         }
+
         $res = Database::query($sql);
         $users = array();
         while ($obj = Database::fetch_object($res)) {

@@ -223,6 +223,18 @@ function get_work_data_by_id($id)
         if (empty($work['title'])) {
             $work['title'] = basename($work['url']);
         }
+        $work['download_url'] = api_get_path(WEB_CODE_PATH).'work/download.php?id='.$work['id'].'&'.api_get_cidreq();
+        $work['view_url'] = api_get_path(WEB_CODE_PATH).'work/view.php?id='.$work['id'].'&'.api_get_cidreq();
+        $work['show_url'] = api_get_path(WEB_CODE_PATH).'work/show_file.php?id='.$work['id'].'&'.api_get_cidreq();
+        if ($work['contains_file']) {
+            $fileInfo = pathinfo($work['title']);
+            if (is_array($fileInfo) &&
+                !empty($fileInfo['extension']) &&
+                in_array($fileInfo['extension'], array('jpg', 'png', 'gif'))
+            ) {
+                $work['show_content'] = '<img src="'.$work['show_url'].'"/>';
+            }
+        }
 	}
 	return $work;
 }
@@ -374,6 +386,34 @@ function getWorkPerUser($userId)
         }
     }
     return $result;
+}
+
+
+function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId)
+{
+    $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $user_table = Database::get_main_table(TABLE_MAIN_USER);
+    $course_id = intval($course_id);
+    $workId = intval($workId);
+    $sessionId = intval($sessionId);
+    $groupId = intval($groupId);
+
+    $sql = "SELECT count(DISTINCT u.user_id)
+            FROM $work_table w
+            INNER JOIN $user_table u
+                ON w.user_id = u.user_id
+            WHERE
+                w.c_id = $course_id AND
+                w.session_id = $sessionId AND
+                w.parent_id = ".$workId." AND
+                w.post_group_id = ".$groupId." AND
+                w.active IN (0, 1)
+            ";
+
+    $res_document = Database::query($sql);
+    $rowCount = Database::fetch_row($res_document);
+
+    return $rowCount[0];
 }
 
 /**
@@ -771,12 +811,12 @@ function showTeacherWorkGrid()
 {
     $columnModel = array(
         //array('name'=>'id', 'index'=>'id', 'width'=>'50', 'align'=>'left', 'hidden' => 'true'),
-        array('name'=>'type', 'index'=>'type', 'width'=>'50', 'align'=>'left', 'sortable' => 'false'),
-        array('name'=>'title', 'index'=>'title',  'width'=>'300',   'align'=>'left'),
-        array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'150',  'align'=>'left'),
-        array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'150',  'align'=>'left'),
-        array('name'=>'end_on', 'index'=>'end_on', 'width'=>'150',  'align'=>'left'),
-        array('name'=>'actions', 'index'=>'actions', 'width'=>'150', 'align'=>'left', 'sortable'=>'false')
+        array('name'=>'type', 'index'=>'type', 'width'=>'35', 'align'=>'left', 'sortable' => 'false'),
+        array('name'=>'title', 'index'=>'title',  'width'=>'300',   'align'=>'left', 'wrap_cell' => "true"),
+        array('name'=>'sent_date', 'index'=>'sent_date', 'width'=>'125',  'align'=>'left'),
+        array('name'=>'expires_on', 'index'=>'expires_on', 'width'=>'125',  'align'=>'left'),
+        array('name'=>'amount', 'index'=>'end_on', 'width'=>'110',  'align'=>'left'),
+        array('name'=>'actions', 'index'=>'actions', 'width'=>'110', 'align'=>'left', 'sortable'=>'false')
     );
     $token = null;
 
@@ -790,7 +830,7 @@ function showTeacherWorkGrid()
         get_lang('Title'),
         get_lang('SentDate'),
         get_lang('HandOutDateLimit'),
-        get_lang('HandedOut'),
+        get_lang('AmountSubmitted'),
         get_lang('Actions')
     );
 
@@ -1356,59 +1396,31 @@ function to_javascript_work()
 			    return Math.floor(d.getTime()/1000);
 			}
 
-			function validate() {
-				var expires_day = document.form1.expires_day.value;
-				var expires_month = document.form1.expires_month.value;
-				var expires_year = document.form1.expires_year.value;
-				var expires_hour = document.form1.expires_hour.value;
-				var expires_minute = document.form1.expires_minute.value;
-				var expires_date = mktime(expires_hour,expires_minute,0,expires_month,expires_day,expires_year)
+            function setFocus() {
+                $("#work_title").focus();
+            }
 
-				var ends_day = document.form1.ends_day.value;
-				var ends_month = document.form1.ends_month.value;
-				var ends_year = document.form1.ends_year.value;
-				var ends_hour = document.form1.ends_hour.value;
-				var ends_minute = document.form1.ends_minute.value;
-				var ends_date = mktime(ends_hour,ends_minute,0,ends_month,ends_day,ends_year);
+            $(document).ready(function () {
+                setFocus();
 
-				var new_dir = document.form1.new_dir.value;
+                $("#expiry_date").click(function() {
+                    var checked = $("#expiry_date").attr("checked");
+                    if (checked) {
+                        $("#option2").show();
+                        $("#option3").show();
+                        $("#end_date").attr("checked", true);
+                    } else {
+                        $("#option2").hide();
+                        $("#option3").hide();
+                        $("#end_date").attr("checked", false);
+                    }
+                });
 
-				msg_id1 = document.getElementById("msg_error1");
-				msg_id2 = document.getElementById("msg_error2");
-				msg_id3 = document.getElementById("msg_error3");
-				msg_id4 = document.getElementById("msg_error4");
-				msg_id5	= document.getElementById("msg_error_weight");
+                $("#end_date").click(function() {
+                    $("#option3").toggle();
+                });
 
-				if (new_dir=="") {
-					msg_id1.style.display ="block";
-					msg_id1.innerHTML="'.get_lang('FieldRequired', '').'";
-					msg_id2.innerHTML="";msg_id3.innerHTML="";msg_id4.innerHTML="";msg_id5.innerHTML="";
-				} else if(document.form1.enableExpiryDate.checked && document.form1.enableEndDate.checked && expires_date > ends_date) {
-						msg_id2.style.display ="block";
-						msg_id2.innerHTML="'.get_lang('EndDateCannotBeBeforeTheExpireDate', '').'";
-						msg_id1.innerHTML="";msg_id3.innerHTML="";msg_id4.innerHTML="";msg_id5.innerHTML="";
-				} else if (!checkDate(expires_month,expires_day,expires_year)) {
-					msg_id3.style.display ="block";
-					msg_id3.innerHTML="'.get_lang('InvalidDate', '').'";
-					msg_id1.innerHTML="";msg_id2.innerHTML="";msg_id4.innerHTML="";msg_id5.innerHTML="";
-				} else if (!checkDate(ends_month,ends_day,ends_year)) {
-					msg_id4.style.display ="block";
-					msg_id4.innerHTML="'.get_lang('InvalidDate', '').'";
-					msg_id1.innerHTML="";msg_id2.innerHTML="";msg_id3.innerHTML="";msg_id5.innerHTML="";
-				} else {
-					if (document.form1.make_calification.checked) {
-					 	var weight = document.form1.weight.value;
-						 	if(weight=="") {
-								msg_id5.style.display ="block";
-								msg_id5.innerHTML="'.get_lang('WeightNecessary', '').'";
-								msg_id1.innerHTML="";msg_id2.innerHTML="";msg_id3.innerHTML="";msg_id4.innerHTML="";
-							    return false;
-                        }
-				 	}
-					document.form1.action = "work.php?'.  api_get_cidreq().'&origin='.$origin.'&gradebook='.(empty($_GET['gradebook'])?'':'view').'";
-					document.form1.submit();
-				}
-			}
+            });
 			</script>';
     return $js;
 }
@@ -1542,8 +1554,8 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
  */
 function getWorkListStudent($start, $limit, $column, $direction, $where_condition, $getCount = false)
 {
-    $workTable         = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $workTableAssignment  = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+    $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+    $workTableAssignment = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
 
     $course_id          = api_get_course_int_id();
     $session_id         = api_get_session_id();
@@ -1587,7 +1599,10 @@ function getWorkListStudent($start, $limit, $column, $direction, $where_conditio
             ";
 
     $sql .= " ORDER BY $column $direction ";
-    $sql .= " LIMIT $start, $limit";
+
+    if (!empty($start) && !empty($limit)) {
+        $sql .= " LIMIT $start, $limit";
+    }
 
     $result = Database::query($sql);
 
@@ -1600,13 +1615,10 @@ function getWorkListStudent($start, $limit, $column, $direction, $where_conditio
     $url = api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq();
     $urlOthers = api_get_path(WEB_CODE_PATH).'work/work_list_others.php?'.api_get_cidreq().'&id=';
     while ($work = Database::fetch_array($result, 'ASSOC')) {
-
         $isSubscribed = userIsSubscribedToWork(api_get_user_id(), $work['id'], $course_id);
-
         if ($isSubscribed == false) {
             continue;
         }
-
         $work['type'] = Display::return_icon('work.png');
         $work['expires_on'] = $work['expires_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['expires_on']);
         if (empty($work['title'])) {
@@ -1644,9 +1656,9 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
         $direction = 'desc';
     }
 
-    $column         = !empty($column) ? Database::escape_string($column) : 'sent_date';
-    $start          = intval($start);
-    $limit          = intval($limit);
+    $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
+    $start = intval($start);
+    $limit = intval($limit);
 
     // Get list from database
     if ($is_allowed_to_edit) {
@@ -1680,7 +1692,23 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
             $workId = $work['id'];
             $work['type'] = Display::return_icon('work.png');
             $work['expires_on'] = $work['expires_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['expires_on']);
-            $work['ends_on'] = $work['ends_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['ends_on']);
+            //$work['ends_on'] = $work['ends_on']  == '0000-00-00 00:00:00' ? null : api_get_local_time($work['ends_on']);
+
+            $totalUsers = getStudentSubscribedToWork(
+                $workId,
+                $course_id,
+                $group_id,
+                $session_id,
+                true
+            );
+
+            $work['amount'] = Display::label(
+                getUniqueStudentAttemptsTotal($workId, $group_id, $course_id, $session_id).'/'.
+                $totalUsers,
+                'success'
+            );
+
+            //$work['amount'] =
 
             if (empty($work['title'])) {
                 $work['title'] = basename($work['url']);
@@ -1943,16 +1971,16 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
         $direction = 'desc';
     }
 
-    $work_data          = get_work_data_by_id($work_id);
+    $work_data = get_work_data_by_id($work_id);
     $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
     $condition_session  = api_get_session_condition($session_id);
     $locked = api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION);
 
-
     if (!empty($work_data)) {
 
         if (!empty($group_id)) {
-            $extra_conditions = " work.post_group_id = '".intval($group_id)."' "; // set to select only messages posted by the user's group
+            $extra_conditions = " work.post_group_id = '".intval($group_id)."' ";
+             // set to select only messages posted by the user's group
         } else {
             $extra_conditions = " work.post_group_id = '0' ";
         }
@@ -2005,8 +2033,11 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
         $sql = " $select
                 FROM $work_condition  $user_condition
                 WHERE $extra_conditions $where_condition $condition_session
-                ORDER BY $column $direction
-                LIMIT $start, $limit";
+                ORDER BY $column $direction";
+
+        if (!empty($start) && !empty($limit)) {
+            $sql .= "LIMIT $start, $limit";
+        }
 
         $result = Database::query($sql);
         $works = array();
@@ -2018,6 +2049,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
 
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $item_id = $work['id'];
+            //$workItem = get_work_data_by_id($item_id);
 
             // Get the author ID for that document from the item_property table
 			$is_author  = false;
@@ -2055,7 +2087,10 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 if ($work['qualification'] == '') {
                     $qualification_string = Display::label('-');
                 } else {
-                    $qualification_string = Display::label($work['qualification'], 'info');
+                    $qualification_string = Display::label(
+                        $work['qualification'].' / '.$work_data['qualification'],
+                        'info'
+                    );
                 }
             }
 
@@ -2068,8 +2103,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 $add_string = Display::label(get_lang('Expired'), 'important');
             }
 
-            if (
-                ($can_read && $work['accepted'] == '1') ||
+            if (($can_read && $work['accepted'] == '1') ||
                 ($is_author && in_array($work['accepted'], array('1', '0'))) ||
                 $is_allowed_to_edit
             ) {
@@ -2092,7 +2126,8 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 $link_to_download = null;
                 // If URL is present then there's a file to download keep BC.
                 if ($work['contains_file'] || !empty($work['url'])) {
-                    $link_to_download = '<a href="download.php?id='.$item_id.'">'.Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';
+                    $link_to_download = '<a href="download.php?id='.$item_id.'&'.api_get_cidreq().'">'.
+                        Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';
                 } else {
                    //$link_to_download = '<a href="view.php?id='.$item_id.'">'.Display::return_icon('save_na.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';
                 }
@@ -2652,15 +2687,30 @@ function getUserToWork($userId, $workId, $courseId)
 /**
  * @param int $workId
  * @param int $courseId
+ * @param bool $getCount
  * @return array
  */
-function getAllUserToWork($workId, $courseId)
+function getAllUserToWork($workId, $courseId, $getCount = false)
 {
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_REL_USER);
     $params = array(
         'work_id = ? and c_id = ?' => array($workId, $courseId)
     );
-    return Database::select('*', $table, array('where' => $params));
+    if ($getCount) {
+        $count = 0;
+        $result = Database::select(
+            'count(user_id) as count',
+            $table,
+            array('where' => $params),
+            'simple'
+        );
+        if (!empty($result)) {
+            $count = intval($result['count']);
+        }
+        return $count;
+    } else {
+        return Database::select('*', $table, array('where' => $params));
+    }
 }
 
 /**
@@ -2702,6 +2752,45 @@ function userIsSubscribedToWork($userId, $workId, $courseId)
         }
     }
     return false;
+}
+
+function getStudentSubscribedToWork($workId, $courseId, $groupId = null, $sessionId = null, $getCount = false)
+{
+    $usersInWork = null;
+    $usersInCourse = null;
+
+    if (empty($groupId)) {
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $usersInCourse = CourseManager::get_user_list_from_course_code(
+            $courseInfo['code'],
+            $sessionId,
+            null,
+            null,
+            null,
+            $getCount
+        );
+    } else {
+        $usersInCourse = GroupManager::get_users(
+            $groupId,
+            false,
+            null,
+            null,
+            $getCount,
+            $courseId
+        );
+    }
+
+    if (ADD_DOCUMENT_TO_WORK == true) {
+        $usersInWork = getAllUserToWork($workId, $courseId, $getCount);
+        if (empty($usersInWork)) {
+            return $usersInCourse;
+        } else {
+            return $usersInWork;
+        }
+    } else {
+        return $usersInCourse;
+    }
+
 }
 
 /**
@@ -2774,12 +2863,17 @@ function getAllDocumentsFromWorkToString($workId, $courseInfo)
 }
 
 /**
- * Returns fckeditor toolbar
+ * Returns fck editor toolbar
  * @return array
  */
 function getWorkDescriptionToolbar()
 {
-    return array('ToolbarSet' => 'Work', 'Width' => '100%', 'Height' => '400');
+    return array(
+        'ToolbarStartExpanded' => 'true',
+        'ToolbarSet' => 'Work',
+        'Width' => '100%',
+        'Height' => '400'
+    );
 }
 
 /**
@@ -3398,17 +3492,14 @@ function updateWork($workId, $params, $courseInfo)
  * @param int $workId
  * @param array $params
  * @param array $courseInfo
- * @param int $group_id
+ * @param int $groupId
  */
-function updatePublicationAssignment($workId, $params, $courseInfo, $group_id)
+function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
 {
-    $workId = intval($workId);
-
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-
+    $workId = intval($workId);
     $time = time();
-
     $course_id = $courseInfo['real_id'];
 
     // Insert into agenda
@@ -3422,7 +3513,7 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $group_id)
         $date = $end_date = $time;
 
         if (!empty($params['enableExpiryDate'])) {
-            $end_date = get_date_from_select('expires', $params);
+            $end_date = $params['expires_on'];
             $date	  = $end_date;
         }
 
@@ -3439,15 +3530,15 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $group_id)
         $agenda->type = 'course';
 
         if (empty($agendaId)) {
-            $agendaId = $agenda->add_event($date, $end_date, 'false', null, $title, $content, array('GROUP:'.$group_id));
+            $agendaId = $agenda->add_event($date, $end_date, 'false', null, $title, $content, array('GROUP:'.$groupId));
         } else {
             $agenda->edit_event($agendaId, $end_date, $end_date, 'false', null, $title, $content);
         }
     }
 
     $qualification = isset($params['qualification']) && !empty($params['qualification']) ? 1 : 0;
-    $expiryDate = (isset($params['enableExpiryDate']) && $params['enableExpiryDate'] == 1) ? api_get_utc_datetime(get_date_from_select('expires', $params)) : '0000-00-00 00:00:00';
-    $endDate = ((isset($params['enableEndDate']) && $params['enableEndDate']==1) ? api_get_utc_datetime(get_date_from_select('ends', $params)) : '0000-00-00 00:00:00');
+    $expiryDate = (isset($params['enableExpiryDate']) && $params['enableExpiryDate'] == 1) ? api_get_utc_datetime($params['expires_on']) : '0000-00-00 00:00:00';
+    $endDate = ((isset($params['enableEndDate']) && $params['enableEndDate']==1) ? api_get_utc_datetime($params['ends_on']) : '0000-00-00 00:00:00');
 
     $data = get_work_assignment_by_id($workId, $course_id);
 
@@ -3613,6 +3704,11 @@ function deleteWorkItem($item_id, $courseInfo)
  */
 function getFormWork($form, $defaults = array())
 {
+    if (!empty($defaults)) {
+        if (isset($defaults['submit'])) {
+            unset($defaults['submit']);
+        }
+    }
     // Create the form that asks for the directory name
     $form->addElement('text', 'new_dir', get_lang('AssignmentName'));
     $form->addRule('new_dir', get_lang('ThisFieldIsRequired'), 'required');
@@ -3626,7 +3722,8 @@ function getFormWork($form, $defaults = array())
                 get_lang('AdvancedParameters'),
                 array('style' => 'vertical-align:center')
             ).
-        ' '.get_lang('AdvancedParameters').'</span></a>'
+        ' '.get_lang('AdvancedParameters').
+        '</span></a>'
     );
 
     if (!empty($defaults) && (isset($defaults['enableEndDate']) || isset($defaults['enableExpiryDate']))) {
@@ -3666,28 +3763,29 @@ function getFormWork($form, $defaults = array())
     $form->addElement('text', 'weight', get_lang('WeightInTheGradebook'));
     $form->addElement('html', '</div>');
 
-    $form->addElement('checkbox', 'enableExpiryDate',null,get_lang('EnableExpiryDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option2\').style.display = \'block\';}else{document.getElementById(\'option2\').style.display = \'none\';}"');
-
+    $form->addElement('checkbox', 'enableExpiryDate', null, get_lang('EnableExpiryDate'), 'id="expiry_date"');
     if (isset($defaults['enableExpiryDate']) && $defaults['enableExpiryDate']) {
         $form->addElement('html', '<div id="option2" style="display: block;">');
     } else {
         $form->addElement('html', '<div id="option2" style="display: none;">');
     }
 
-    if (!isset($defaults['expires'])) {
-        $expires_date_array = convert_date_to_array(api_get_local_time(), 'expires');
-        $defaults = array_merge($defaults, $expires_date_array);
+    $currentDate = substr(api_get_local_time(), 0, 10);
+
+    if (!isset($defaults['expires_on'])) {
+        $date = substr($currentDate, 0, 10);
+        $defaults['expires_on'] = $date.' 23:59';
     }
 
-    if (!isset($defaults['ends'])) {
-        $expires_date_array = convert_date_to_array(api_get_local_time(), 'ends');
-        $defaults = array_merge($defaults, $expires_date_array);
+    if (!isset($defaults['ends_on'])) {
+        $date = substr($currentDate, 0, 10);
+        $defaults['ends_on'] = $date.' 23:59';
     }
 
-    $form->addGroup(create_group_date_select($form), 'expires', get_lang('ExpiresAt'));
+    $form->addElement('datetimepicker', 'expires_on', get_lang('ExpiresAt'));
     $form->addElement('html', '</div>');
 
-    $form->addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'onclick="javascript: if(this.checked){document.getElementById(\'option3\').style.display = \'block\';}else{document.getElementById(\'option3\').style.display = \'none\';}"');
+    $form->addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'id="end_date"');
 
     if (isset($defaults['enableEndDate']) && $defaults['enableEndDate']) {
        $form->addElement('html', '<div id="option3" style="display: block;">');
@@ -3695,18 +3793,16 @@ function getFormWork($form, $defaults = array())
        $form->addElement('html', '<div id="option3" style="display: none;">');
     }
 
-    $form->addGroup(create_group_date_select($form), 'ends', get_lang('EndsAt'));
+    $form->addElement('datetimepicker', 'ends_on', get_lang('EndsAt'));
     $form->addElement('html', '</div>');
 
     $form->addElement('checkbox', 'add_to_calendar', null, get_lang('AddToCalendar'));
-
-    //$form->addElement('checkbox', 'allow_text_assignment', null, get_lang('AllowTextAssignments'));
     $form->addElement('select', 'allow_text_assignment', get_lang('DocumentType'), getUploadDocumentType());
 
     $form->addElement('html', '</div>');
 
     if (isset($defaults['enableExpiryDate']) && isset($defaults['enableEndDate'])) {
-       $form->addRule(array('expires', 'ends'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
+       $form->addRule(array('expires_on', 'ends_on'), get_lang('DateExpiredNotBeLessDeadLine'), 'comparedate');
     }
     if (!empty($defaults)) {
        $form->setDefaults($defaults);
@@ -3849,10 +3945,13 @@ function showStudentList($workId)
         get_lang('Works')
     );
 
+    $order = api_is_western_name_order() ? 'firstname' : 'lastname';
     $params = array(
         'autowidth' => 'true',
         'height' => 'auto',
-        'rowNum' => 10
+        'rowNum' => 10,
+        'sortname' => $order,
+        'sortorder' => 'asc'
     );
 
     $html = '<script>
@@ -3878,7 +3977,7 @@ function showStudentList($workId)
  * @param int $groupId
  * @param int $start
  * @param int $limit
- * @param $sidx
+ * @param string $sidx
  * @param string $sord
  * @param $getCount
  * @return array|int
@@ -3886,16 +3985,39 @@ function showStudentList($workId)
 function getWorkUserList($courseCode, $sessionId, $groupId, $start, $limit, $sidx, $sord, $getCount = false)
 {
     if (!empty($groupId)) {
-        $userList = GroupManager::get_users($groupId, false, $start, $limit, $getCount);
+        $userList = GroupManager::get_users($groupId, false, $start, $limit, $getCount, null, $sidx, $sord);
     } else {
         $limitString = null;
         if (!empty($start) && !empty($limit)) {
             $limitString = " LIMIT $start, $limit";
         }
+
+        $orderBy = null;
+
+        if (!empty($sidx) && !empty($sord)) {
+            $sidx = Database::escape_string($sidx);
+            $sord = Database::escape_string($sord);
+            $orderBy = "ORDER BY $sidx $sord";
+        }
+
         if (empty($sessionId)) {
-            $userList = CourseManager::get_user_list_from_course_code($courseCode, $sessionId, $limitString, null, STUDENT, $getCount);
+            $userList = CourseManager::get_user_list_from_course_code(
+                $courseCode,
+                $sessionId,
+                $limitString,
+                $orderBy ,
+                STUDENT,
+                $getCount
+            );
         } else {
-            $userList = CourseManager::get_user_list_from_course_code($courseCode, $sessionId, $limitString, null, 0, $getCount);
+            $userList = CourseManager::get_user_list_from_course_code(
+                $courseCode,
+                $sessionId,
+                $limitString,
+                $orderBy,
+                0,
+                $getCount
+            );
         }
         if ($getCount == false) {
             $userList = array_keys($userList);
@@ -3951,4 +4073,243 @@ function getWorkUserListData($workId, $courseCode, $sessionId, $groupId, $start,
         }
     }
     return $results;
+}
+
+/**
+ * @param int $id
+ * @param array $course_info
+ * @param bool $download
+ * @return bool
+ */
+function getFile($id, $course_info, $download = true)
+{
+    $file = getFileContents($id, $course_info);
+    if (!empty($file) && is_array($file)) {
+        DocumentManager::file_send_for_download(
+            $file['path'],
+            $download,
+            $file['title']
+        );
+    }
+    return false;
+}
+
+/**
+ * @param int $id
+ * @param array $course_info
+ * @return bool
+ */
+function downloadFile($id, $course_info)
+{
+    return getFile($id, $course_info, true);
+}
+
+/**
+ * @param int $id
+ * @param array $course_info
+ * @return array|bool
+ */
+function getFileContents($id, $course_info)
+{
+    $id = intval($id);
+    if (empty($course_info) || empty($id)) {
+        return false;
+    }
+
+    $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
+
+    if (!empty($course_info['real_id'])) {
+        $sql = 'SELECT * FROM '.$tbl_student_publication.'
+                WHERE c_id = '.$course_info['real_id'].' AND id = "'.$id.'"';
+        $result = Database::query($sql);
+        if ($result && Database::num_rows($result)) {
+            $row = Database::fetch_array($result, 'ASSOC');
+            $full_file_name = api_get_path(SYS_COURSE_PATH).api_get_course_path().'/'.$row['url'];
+
+            $item_info = api_get_item_property_info(api_get_course_int_id(), 'work', $row['id']);
+            allowOnlySubscribedUser(api_get_user_id(), $row['parent_id'], $course_info['real_id']);
+
+            if (empty($item_info)) {
+                api_not_allowed();
+            }
+
+            /*
+            field show_score in table course :
+                0 => 	New documents are visible for all users
+                1 =>    New documents are only visible for the teacher(s)
+            field visibility in table item_property :
+                0 => eye closed, invisible for all students
+                1 => eye open
+            field accepted in table c_student_publication :
+                0 => eye closed, invisible for all students
+                1 => eye open
+            ( We should have visibility == accepted, otherwise there is an
+            inconsistency in the Database)
+            field value in table c_course_setting :
+                0 => Allow learners to delete their own publications = NO
+                1 => Allow learners to delete their own publications = YES
+
+            +------------------+-------------------------+------------------------+
+            |Can download work?| doc visible for all = 0 | doc visible for all = 1|
+            +------------------+-------------------------+------------------------+
+            |  visibility = 0  | editor only             | editor only            |
+            |                  |                         |                        |
+            +------------------+-------------------------+------------------------+
+            |  visibility = 1  | editor                  | editor                 |
+            |                  | + owner of the work     | + any student          |
+            +------------------+-------------------------+------------------------+
+            (editor = teacher + admin + anybody with right api_is_allowed_to_edit)
+            */
+
+            $work_is_visible = ($item_info['visibility'] == 1 && $row['accepted'] == 1);
+            $doc_visible_for_all = ($course_info['show_score'] == 1);
+
+            $is_editor = api_is_allowed_to_edit(true, true, true);
+            $student_is_owner_of_work = user_is_author($row['id'], $row['user_id']);
+
+            if ($is_editor ||
+                ($student_is_owner_of_work) ||
+                ($doc_visible_for_all && $work_is_visible)
+            ) {
+                $title = $row['title'];
+                if (array_key_exists('filename', $row) && !empty($row['filename'])) {
+                    $title = $row['filename'];
+                }
+                $title = str_replace(' ', '_', $title);
+                event_download($title);
+                if (Security::check_abs_path(
+                    $full_file_name,
+                    api_get_path(SYS_COURSE_PATH).api_get_course_path().'/')
+                ) {
+                    return array(
+                        'path' => $full_file_name,
+                        'title' => $title
+                    );
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+/**
+ * @param int $userId
+ * @param array $courseInfo
+ * @param string $format
+ * @return bool
+ */
+function exportAllWork($userId, $courseInfo, $format = 'pdf') {
+    $userInfo = api_get_user_info($userId);
+    if (empty($userInfo) || empty($courseInfo)) {
+        return false;
+    }
+
+    $workPerUser = getWorkPerUser($userId);
+
+    switch ($format) {
+        case 'pdf':
+            if (!empty($workPerUser)) {
+                require_once api_get_path(LIBRARY_PATH).'pdf.lib.php';
+                $pdf = new PDF();
+
+                $content = null;
+                foreach ($workPerUser as $work) {
+                    $work = $work['work'];
+                    foreach ($work->user_results as $userResult) {
+                        //var_dump($userResult);exit;
+                        $content .= $userResult['title'];
+                        $content .= $userResult['sent_date'];
+                        $content .= $userResult['qualification'];
+                        $content .= $userResult['description'];
+                        //$content .= getWorkComments($userResult);
+                    }
+                }
+
+                if (!empty($content)) {
+                    $pdf->content_to_pdf(
+                        $content,
+                        null,
+                        replace_dangerous_char($userInfo['complete_name']),
+                        $courseInfo['code']
+                    );
+                }
+            }
+            break;
+    }
+}
+
+/**
+ * @param int $userId
+ * @param array $courseInfo
+ * @return bool
+ */
+function downloadAllFilesPerUser($userId, $courseInfo)
+{
+    $userInfo = api_get_user_info($userId);
+
+    if (empty($userInfo) || empty($courseInfo)) {
+        return false;
+    }
+
+    require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
+    $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
+    $coursePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/work/';
+
+    $zip  = new PclZip($tempZipFile);
+
+    $workPerUser = getWorkPerUser($userId);
+
+    if (!empty($workPerUser)) {
+        $files = array();
+        foreach ($workPerUser as $work) {
+            $work = $work['work'];
+            foreach ($work->user_results as $userResult) {
+                if (empty($userResult['url']) || empty($userResult['contains_file'])) {
+                    continue;
+                }
+                $data = getFileContents($userResult['id'], $courseInfo);
+                if (!empty($data) && isset($data['path'])) {
+                    $files[basename($data['path'])] = array(
+                        'title' => $data['title'],
+                        'path' => $data['path']
+                    );
+                }
+            }
+        }
+
+        if (!empty($files)) {
+            Session::write('files', $files);
+            foreach ($files as $data) {
+                $zip->add(
+                    $data['path'],
+                    PCLZIP_OPT_REMOVE_PATH,
+                    $coursePath,
+                    PCLZIP_CB_PRE_ADD,
+                    'preAddAllWorkStudentCallback'
+                );
+            }
+        }
+
+        // Start download of created file
+        $name = basename(replace_dangerous_char($userInfo['complete_name'])).'.zip';
+        event_download($name.'.zip (folder)');
+        if (Security::check_abs_path($tempZipFile, api_get_path(SYS_ARCHIVE_PATH))) {
+            DocumentManager::file_send_for_download($tempZipFile, true, $name);
+            @unlink($tempZipFile);
+            exit;
+        }
+    }
+    exit;
+}
+
+
+function preAddAllWorkStudentCallback($p_event, &$p_header)
+{
+    $files = Session::read('files');
+    if (isset($files[basename($p_header['stored_filename'])])) {
+        $p_header['stored_filename'] = $files[basename($p_header['stored_filename'])]['title'];
+        return 1;
+    }
+    return 0;
 }

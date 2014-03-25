@@ -92,6 +92,7 @@ if ($current_forum['forum_of_group'] != 0) {
 }
 
 /* Breadcrumbs */
+$gradebook = null;
 if (isset($_SESSION['gradebook'])){
     $gradebook = Security::remove_XSS($_SESSION['gradebook']);
 }

@@ -6049,7 +6049,7 @@ function api_get_jquery_libraries_js($libraries) {
     }
 
     // jquery datepicker
-    if (in_array('datepicker',$libraries)) {
+    if (in_array('datepicker', $libraries)) {
         $languaje   = 'en-GB';
         $platform_isocode = strtolower(api_get_language_isocode());
 
@@ -6061,6 +6061,7 @@ function api_get_jquery_libraries_js($libraries) {
             $languaje = $platform_isocode;
         }
 
+        $js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
         $script = '<script>
         $(function(){
             $.datepicker.setDefaults($.datepicker.regional["'.$languaje.'"]);
@@ -6068,8 +6069,8 @@ function api_get_jquery_libraries_js($libraries) {
         });
         </script>
         ';
-        $js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
-        $js .= $script; //api_get_js('jquery-ui/ui/i18n/jquery.ui.datepicker-'.$languaje.'.js');
+        $js .= $script;
+
 
     }
     return $js;
@@ -6451,12 +6452,13 @@ function api_get_security_key() {
 }
 
 function api_get_datetime_picker_js($htmlHeadXtra) {
+
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript" language="javascript"></script>';
     $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
 
     $isocode = api_get_language_isocode();
     if ($isocode != 'en') {
-        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/localization/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript" language="javascript"></script>';
+        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/i18n/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript" language="javascript"></script>';
     }
     return $htmlHeadXtra;
 }
@@ -6872,6 +6874,7 @@ function api_remove_tags_with_space($in_html, $in_double_quote_replace = true) {
     // avoid text stuck together when tags are removed, adding a space after >
     $out_res = str_replace (">", "> ", $out_res);
     $out_res = strip_tags($out_res);
+
     return $out_res;
 }
 

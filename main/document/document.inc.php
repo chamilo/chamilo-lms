@@ -208,7 +208,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
     $copy_to_myfiles = $open_in_new_window_link = null;
 
     $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
-
+    $send_to = null;
     if (!$show_as_icon) {
         if ($filetype == 'folder') {
             if (api_is_allowed_to_edit() || api_is_platform_admin() || api_get_setting('students_download_folders') == 'true') {
@@ -232,7 +232,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
             if ($filetype == 'file') {
                 $copy_to_myfiles = '<a href="' . $copy_myfiles_link . '" style="float:right"' . $prevent_multiple_click . '>' . Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), array(), ICON_SIZE_SMALL) . '&nbsp;&nbsp;</a>';
             }
-            $send_to = '';
+
             if ($filetype == 'file') {
                 $send_to = Portfolio::share('document', $document_data['id'], array('style' => 'float:right;'));
             }

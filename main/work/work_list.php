@@ -70,6 +70,10 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId)) {
 }
 echo '</div>';
 
+if (!empty($my_folder_data['title'])) {
+    echo Display::page_subheader($my_folder_data['title']);
+}
+
 $error_message = Session::read('error_message');
 if (!empty($error_message)) {
     echo $error_message;

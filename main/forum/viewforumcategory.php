@@ -58,6 +58,7 @@ require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 /* Header and Breadcrumbs */
+$gradebook = null;
 if (isset($_SESSION['gradebook'])) {
     $gradebook=	$_SESSION['gradebook'];
 }
@@ -94,7 +95,7 @@ if ($origin=='learnpath') {
 }
 
 /* ACTIONS */
-$whatsnew_post_info = $_SESSION['whatsnew_post_info'];
+$whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
 
 /* Is the user allowed here? */
 

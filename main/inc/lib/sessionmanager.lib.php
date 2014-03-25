@@ -223,7 +223,9 @@ class SessionManager
 
         $extraJoin = null;
 
-        if (api_is_session_admin() && api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false') {
+        if (api_is_session_admin() &&
+            api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false'
+        ) {
             $where .= " AND (
                             s.session_admin_id = $user_id  OR
                             sru.id_user = '$user_id' AND
@@ -253,7 +255,7 @@ class SessionManager
                 $where_condition
             );
         } else {
-            $where_condition = "1 = 1";
+            $where_condition = " AND 1 = 1";
         }
 
         $courseCondition = null;
@@ -283,7 +285,7 @@ class SessionManager
                     INNER JOIN $tbl_user u ON s.id_coach = u.user_id
                     $courseCondition
                     $extraJoin
-                $where AND $where_condition  ) as session_table";
+                $where $where_condition ) as session_table";
 
         if (api_is_multiple_url_enabled()) {
 
@@ -309,13 +311,14 @@ class SessionManager
                     INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
                     $courseCondition
                     $extraJoin
-                 $where AND $where_condition) as session_table";
+                 $where $where_condition) as session_table";
             }
         }
 
         $result_rows = Database::query($sql);
         $row = Database::fetch_array($result_rows);
         $num = $row['total_rows'];
+
         return $num;
     }
 
@@ -523,16 +526,13 @@ class SessionManager
 
         $where = " WHERE a.course_code = '%s'";
         if (!empty($sessionId)) {
-            $where .= " AND a.session_id = %d
-                        AND q.id = %d";
-        } else
-        {
+            $where .= " AND a.session_id = %d AND q.id = %d";
+        } else {
             $where .= " AND q.title = '%s'";
         }
 
         //2 = show all questions (wrong and correct answered)
-        if ($answer != 2)
-        {
+        if ($answer != 2) {
             $where .= sprintf(' AND qa.correct = %d', $answer);
         }
 
@@ -542,7 +542,7 @@ class SessionManager
         }
 
         if (!empty($options['where'])) {
-           $where .= ' AND '.$options['where'];
+           $where .= ' '.$options['where'];
         }
 
         $order = null;
@@ -571,20 +571,18 @@ class SessionManager
         INNER JOIN $user u ON u.user_id = a.user_id
         $where $order $limit";
 
-        if (!empty($sessionId))
-        {
+        if (!empty($sessionId)) {
             $sql_query = sprintf($sql, $course['code'], $sessionId,  $exerciseId);
-        } else
-        {
+        } else {
             $sql_query = sprintf($sql, $course['code'], $exercise['title']);
         }
 
         $rs = Database::query($sql_query);
-        while ($row = Database::fetch_array($rs))
-        {
+        while ($row = Database::fetch_array($rs)) {
             $row['correct'] = ($row['correct'] == 1) ? get_lang('Yes') : get_lang('No');
             $data[] = $row;
         }
+
         return $data;
     }
     /**
@@ -622,7 +620,7 @@ class SessionManager
         }
 
         if (!empty($options['where'])) {
-           $where .= ' AND '.$options['where'];
+           $where .= ' '.$options['where'];
         }
 
         $order = null;
@@ -715,7 +713,7 @@ class SessionManager
         }
 
         if (!empty($options['where'])) {
-           $where .= ' AND '.$options['where'];
+           $where .= ' '.$options['where'];
         }
 
         $order = null;
@@ -773,6 +771,7 @@ class SessionManager
         }
         return $table;
     }
+
     /**
      * Gets the progress of the given session
      * @param int   session id
@@ -781,7 +780,6 @@ class SessionManager
      */
     public static function get_session_progress($sessionId, $courseId, $options)
     {
-
         //tables
         $session_course_user    = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $user                   = Database::get_main_table(TABLE_MAIN_USER);
@@ -815,7 +813,7 @@ class SessionManager
         }
 
         if (!empty($options['where'])) {
-           $where .= ' AND '.$options['where'];
+           $where .= ' '.$options['where'];
         }
 
         $order = null;
@@ -1045,6 +1043,7 @@ class SessionManager
         $track_e_course_access = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         return Database::count_rows($track_e_course_access);
     }
+
     /**
      * Get the ip, total of clicks, login date and time logged in for all user, in one session
      * @todo track_e_course_access table should have ip so we dont have to look for it in track_e_login
@@ -1052,8 +1051,8 @@ class SessionManager
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      * @version Chamilo 1.9.6
      */
-    function get_user_data_access_tracking_overview($sessionId, $courseId, $studentId = 0, $profile = '', $date_from = '', $date_to = '', $options) {
-        global $_configuration;
+    function get_user_data_access_tracking_overview($sessionId, $courseId, $studentId = 0, $profile = '', $date_from = '', $date_to = '', $options)
+    {
         // database table definition
         $user                   = Database :: get_main_table(TABLE_MAIN_USER);
         $course                 = Database :: get_main_table(TABLE_MAIN_COURSE);
@@ -1061,31 +1060,26 @@ class SessionManager
         $track_e_course_access  = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
         global $export_csv;
-        if ($export_csv)
-        {
+        if ($export_csv) {
             $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
         } else {
             $is_western_name_order = api_is_western_name_order();
         }
 
-        if (isset($sessionId) && !empty($sessionId))
-        {
+        if (isset($sessionId) && !empty($sessionId)) {
             $where = sprintf(" WHERE a.session_id = %d", intval($sessionId));
         }
-        if (isset($courseId) && !empty($courseId))
-        {
+        if (isset($courseId) && !empty($courseId)) {
             $where .= sprintf(" AND c.id = %d", intval($courseId)) ;
         }
-        if (isset($studentId) && !empty($studentId))
-        {
+        if (isset($studentId) && !empty($studentId)) {
             $where .= sprintf(" AND u.user_id = %d", intval($studentId));
         }
-        if (isset($profile) && !empty($profile))
-        {
+        if (isset($profile) && !empty($profile)) {
             $where .= sprintf(" AND u.status = %d", intval($profile));
         }
-        if (!empty($date_to) && !empty($date_from))
-        {
+
+        if (!empty($date_to) && !empty($date_from)) {
             //FIX THIS
             $to     = substr($date_to, 0, 4) .'-' . substr($date_to, 4, 2) . '-' . substr($date_to, 6, 2);
             $from   = substr($date_from, 0, 4) . '-' . substr($date_from, 4, 2) . '-' . substr($date_from, 6, 2);
@@ -1098,7 +1092,7 @@ class SessionManager
         }
 
         if (!empty($options['where'])) {
-           $where .= ' AND '.$options['where'];
+           $where .= ' '.$options['where'];
         }
 
         $order = null;
@@ -1117,7 +1111,6 @@ class SessionManager
                     u.lastname,
                     u.firstname,
                 ")."
-
                 a.logout_course_date,
                 c.title,
                 c.code,
@@ -1130,14 +1123,12 @@ class SessionManager
 
         $clicks = Tracking::get_total_clicks_by_session();
         $data = array ();
-        while ($user = Database::fetch_assoc($result))
-        {
+        while ($user = Database::fetch_assoc($result)) {
             $data[] = $user;
         }
 
-        //foreach
-        foreach ($data as $key => $info)
-        {
+        // Foreach
+        foreach ($data as $key => $info) {
             #building array to display
             $return[] = array(
                 'logindate' => $info['login_course_date'],
@@ -1149,9 +1140,9 @@ class SessionManager
                 'timeLoggedIn' => gmdate("H:i:s", strtotime($info['logout_course_date']) - strtotime($info['login_course_date'])),
             );
         }
+
         //Search for ip, we do less querys if we iterate the final array
-        foreach ($return as $key => $info)
-        {
+        foreach ($return as $key => $info) {
             $sql = sprintf("SELECT login_ip FROM $track_e_login WHERE ('%s' BETWEEN login_date AND logout_date)", $info['logindate']); //TODO add select by user too
             $result = Database::query($sql);
             $ip = Database::fetch_assoc($result);
@@ -3240,6 +3231,10 @@ class SessionManager
                 }
 
                 $courses = explode('|', $enreg['Courses']);
+                // See BT#6449
+                if (count($courses) >= 2) {
+                //
+                }
 
                 foreach ($courses as $course) {
                     $courseArray = bracketsToArray($course);

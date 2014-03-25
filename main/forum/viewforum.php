@@ -99,7 +99,7 @@ if (!empty($group_id)) {
 
 $my_search = isset($_GET['search']) ? $_GET['search'] : '';
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';
-
+$gradebook = null;
 if (isset($_SESSION['gradebook'])){
     $gradebook = $_SESSION['gradebook'];
 }
@@ -336,7 +336,7 @@ $counter = 0;
 if (is_array($threads)) {
     foreach ($threads as $row) {
         // Thread who have no replies yet and the only post is invisible should not be displayed to students.
-        if (api_is_allowed_to_edit(false, true) OR !($row['thread_replies'] == '0' AND $row['visible'] == '0')) {
+        if (api_is_allowed_to_edit(false, true) OR !($row['thread_replies'] == '0' AND $row['visibility'] == '0')) {
             if ($counter % 2 == 0) {
                  $class = 'row_odd';
             } else {
@@ -375,7 +375,7 @@ if (is_array($threads)) {
             if ($last_post_info) {
                 $poster_info = api_get_user_info($last_post_info['poster_id']);
                 $post_date = api_convert_and_format_date($last_post_info['post_date']);
-                $last_post = $post_date.' '.get_lang('By').' '.display_user_link($last_post_info['poster_id'], $poster_info['complete_name'], '', $poster_info['user_name']);
+                $last_post = $post_date.' '.get_lang('By').' '.display_user_link($last_post_info['poster_id'], $poster_info['complete_name'], '', $poster_info['username']);
             }
             /*
             if ($row['last_poster_user_id'] == '0') {
@@ -407,8 +407,11 @@ if (is_array($threads)) {
 
             echo '<td>'.$last_post.'</td>';
             echo '<td class="td_actions">';
+
             // Get attachment id.
-            $attachment_list = get_attachment($row['post_id']);
+            if (isset($row['post_id'])) {
+                $attachment_list = get_attachment($row['post_id']);
+            }
             $id_attach = !empty($attachment_list) ? $attachment_list['id'] : '';
 
             $sql_post_id = "SELECT post_id FROM $table_posts WHERE c_id = $course_id AND post_title='".Database::escape_string($row['thread_title'])."'";

@@ -1818,10 +1818,6 @@ class CourseManager
         return $result_array;
     }
 
-    /*
-        GROUP FUNCTIONS
-    */
-
     /**
      * Get the list of groups from the course
      * @param   string  Course code

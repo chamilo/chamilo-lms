@@ -3312,34 +3312,34 @@ class SessionManager
                                     }
                                     $course_coaches = array_merge($course_coaches, $teachersToAdd);
                                 }
-                                $teacherToAdd = null;
+                                foreach ($course_coaches as $course_coach) {
+                                    $coach_id = UserManager::get_user_id_from_username($course_coach);
+                                    if ($coach_id !== false) {
+                                        // Just insert new coaches
+                                        SessionManager::updateCoaches($session_id, $course_code, array($coach_id), false);
 
-                                if ($onlyAddFirstCoachOrTeacher == false) {
-                                    foreach ($course_coaches as $course_coach) {
-                                        $coach_id = UserManager::get_user_id_from_username($course_coach);
-                                        if ($coach_id !== false) {
-                                            // Just insert new coaches
-                                            SessionManager::updateCoaches($session_id, $course_code, array($coach_id), false);
+                                        if ($debug) {
+                                            $logger->addInfo("Sessions - Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
+                                        }
+                                        $savedCoaches[] = $coach_id;
+                                    } else {
+                                        $error_message .= get_lang('UserDoesNotExist').' : '.$course_coach.$eol;
+                                    }
+                                }
+                            }
 
-                                            if ($debug) {
-                                                $logger->addInfo("Sessions - Adding course coach: user #$coach_id ($course_coach) to course: '$course_code' and session #$session_id");
-                                            }
-                                            $savedCoaches[] = $coach_id;
-                                        } else {
-                                            $error_message .= get_lang('UserDoesNotExist').' : '.$course_coach.$eol;
-                                        }
+                            $teacherToAdd = null;
+
+                            if ($onlyAddFirstCoachOrTeacher == true) {
+                                foreach ($course_coaches as $course_coach) {
+                                    $coach_id = UserManager::get_user_id_from_username($course_coach);
+                                    if ($coach_id !== false) {
+                                        $teacherToAdd = $coach_id;
+                                        break;
                                     }
-                                } else {
-                                    foreach ($course_coaches as $course_coach) {
-                                        $coach_id = UserManager::get_user_id_from_username($course_coach);
-                                        if ($coach_id !== false) {
-                                            $teacherToAdd = $coach_id;
-                                            break;
-                                        }
-                                    }
-                                    if (!empty($teacherToAdd)) {
-                                        SessionManager::updateCoaches($session_id, $course_code, array($teacherToAdd), true);
-                                    }
+                                }
+                                if (!empty($teacherToAdd)) {
+                                    SessionManager::updateCoaches($session_id, $course_code, array($teacherToAdd), true);
                                 }
 
                                 if ($removeAllTeachersFromCourse && !empty($teacherToAdd)) {

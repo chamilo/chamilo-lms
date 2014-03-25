@@ -113,9 +113,9 @@ if ($search || $forceSearch) {
         $whereCondition .= ' AND '.$whereConditionInForm;
     }
 
-    $filters   = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
+    $filters = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
 
-    if (!empty($filters)) {
+    if (!empty($filters) && !empty($filters->rules)) {
         $whereCondition .= ' AND ( ';
         $counter = 0;
         foreach ($filters->rules as $key => $rule) {

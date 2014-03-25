@@ -1552,7 +1552,10 @@ class CourseManager
      *    This only returns the users that are registered in this actual course, not linked courses.
      *
      *    @param string $course_code
-     *    @param boolean $full list to true if we want sessions students too
+     *    @param boolean $with_session
+     *    @param integer $session_id
+     *    @param date $date_from
+     *    @param date $date_to
      *    @return array with user id
      */
     public static function get_student_list_from_course_code($course_code, $with_session = false, $session_id = 0, $date_from, $date_to) {
@@ -1594,7 +1597,7 @@ class CourseManager
             if ($session_id != 0) {
                 $sql_query .= ' AND scu.id_session = '.$session_id;
             }
-                
+
             $rs = Database::query($sql_query);
             while($student = Database::fetch_array($rs)) {
                 $students[$student['id_user']] = $student;

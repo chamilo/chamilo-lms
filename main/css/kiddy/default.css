@@ -1,197 +1,1017 @@
-/*
- * Special CSS styles for the chamilo_XXX themes
- */
+/*****************************************************
+ *  MAIN  - CHAMILO CSS
+ *****************************************************/
 
+/* Adding default style for the chamilo_X themes */
 @import url('../base_chamilo.css');
-@import url('../chamilo/default.css');
-@import url(http://fonts.googleapis.com/css?family=Chelsea+Market&subset=latin,latin-ext);
 
-* {
-    font-size: 1em; /* base was 12px, made relative */
-    font-family: 'Chelsea Market', Arial, Helvetica, sans-serif;
+/* the following for regular <a> elements */
+a {
+    text-decoration: none;
+    color :#6E6E6E;
 }
-
-.courseadminview table td a, .Authoringview table td a {
-    font-size:120%;
+a:visited {
+    text-decoration: none;    
 }
-
-.subnav input.logout {
-    padding: 2px 10px 0;
-    font-size: 110%;
-    font-family: 'Chelsea Market', Tahoma, Geneva, sans-serif;    
+a:hover {
+    text-decoration: none;
+    color: #FD6600;
 }
-
-.menucaption {
-    font-size: 100%;
+a:active {
+    text-decoration: none;
+    color : #3757f7;
 }
-.menusectioncaption {
-    font-size: 110%;
+.navbar .nav > li > a {
+    float: none;
+    line-height: 24px;
+    padding-bottom: 13px;
+    padding-right: 10px;
+    padding-top: 13px;
+    color: #FFFFFF;
 }
-
-#toolnavbox dl {
-    font-size: 100%;
-}
-
-#toolnavbox dt {
-    font-size: 100%;
-}
-
-.bottom-link {
-    font-size:100%;
-}
-.viewcaption {
-    font-size: 100%;
+.subnav .navbar-inner {
+    background: rgb(255,255,255); /* Old browsers */
+background: -moz-linear-gradient(top, rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(229,229,229,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* IE10+ */
+background: linear-gradient(to bottom, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
+border:none;
 }
 
-.dropbox_detail {
-    font-size: 70%
-}
-.dropbox_feedback {
-    font-size: 50%;
-}
-.data_table {
-    font-size: 100%;
-}
-.sectiontitle {
-    font-size: 120%;
-}
-.sectioncomment {
-    font-size: 90%;
-}
-.announcements_datum {
-    font-size: 100%;
-}
-.system_announcement_title {
-    font-size: 120%;
-}
-.forum_message_post_title {
-    font-size:180%;
-}
-.forum_description {
-    font-size: 90%;
-}
-.forum_description p{
-    font-size: 90%;
-}
-.forum_title {
-    font-size: 130%;
-}
-span.blog_title {
-    font-size: 180%;
-}
-span.blog_subttitle {
-    font-size: 100%;
-}
-td.blog_menu_title {
-    font-size: 90%;
-}
-span.blogpost_title {
-    font-size: 160%;
-}
-span.blogpost_date {
-    font-size: 100%;
-}
-span.blogpost_comment_title {
-    font-size: 120%;
-}
-span.blogpost_comment_date {
-    font-size: 80%;
-}
-span.blogpost_comment_info {
-    font-size: 80%;
-}
-.warn {
-    font-family: serif;
-}
-.small {
-    font-size: 90%;
-}
-.xsmall {
-    font-size: 80%;
-}
-.xxsmall {
-    font-size: 70%;
-}
-.count_down{
-  font-size: 200%;
-}
-.glossary-term-title {
-    font-size: 120%;
-}
-.glossary-term-edit-desc {
-    font-size: 120%;
-}
-.glossary-term-edit-title {
-    font-size: 120%;
-}
-.glossary-add-form {
-    font-size: 120%;
-}
-.glossary-msg-error {
-    font-size: 80%;
-}
-.notebook-title-list {
-    font-size: 120%;
-}
-.notebook-date-information {
-    font-size: 120%;
-}
-.actions-title {
-    font-size:120%;
-}
-#question_title {
-    font-size: 150%;
-}
-#question_score {
-    font-size:130%;
+.subnav .nav > li > a {
+    border:none;
+    color: #666;
+    font-weight: normal;
+    font-size: 13px;
 }
 
-button {
-    font-family: 'Chelsea Market', Tahoma, Geneva, sans-serif;    
-    font-size: 100%;
-}
-button.arrowr {
-    font-size: 100%;
-}
-/* button << */
-button.arrowl {
-    font-size: 100%;
-}
-input.arrowr {
-    font-size: 100%;
+
+.subnav .nav > #current > a,
+.subnav .nav > #current > a:hover {  
+    color: #fff;
+    background: rgb(244,25,113); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(244,25,113,1) 0%, rgba(183,19,93,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(244,25,113,1)), color-stop(100%,rgba(183,19,93,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, rgba(244,25,113,1) 0%,rgba(183,19,93,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, rgba(244,25,113,1) 0%,rgba(183,19,93,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, rgba(244,25,113,1) 0%,rgba(183,19,93,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom, rgba(244,25,113,1) 0%,rgba(183,19,93,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f41971', endColorstr='#b7135d',GradientType=0 ); /* IE6-9 */
+    border:none;
+
+.subnav li a {
+    color:#fff;
 }
 
-/* input << */
-input.arrowl {
-    font-size: 100%;
+/* Green hover */
+.subnav .navbar-inner li a:hover {
+    background: none repeat scroll 0 0 #FD6600;
+    color: #fff;
 }
-.actions-title {
-    font-size:120%;
+.well .nav-list > li > a:hover {
+  text-decoration: none;
+  background: none;
 }
-.session_box_title span {
-    font-size: 130%;
+.sidebar-nav h4{
+    color: #037FB2;
+    padding-bottom: 3px;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 3px;
 }
-.sub_session_box_title span {
-    font-size: 130%;
+
+/*****************************************************
+ *  STYLE THEME CHAMILO                              *
+ *****************************************************/
+.welcome-mascot{
+  background: url(images/chamilo-welcome.png) no-repeat right 0;
+  padding-right: 200px;
+  padding-bottom: 2em;
+  padding-top: 2em;
 }
-#session_category_title {
-    font-size: 140%;
+
+.nav-list > li > a {
+    font-size: 14px;
+    padding-bottom: 6px;
+   /* padding-left: 15px;
+    padding-right: 15px;*/
+    padding-top: 6px;
 }
-.userportal-catalog-item .catalog_box li span {
-    font-size:130%;
+.controls .btn{
+    background: #ff9900; /* Old browsers */
+    background: -moz-linear-gradient(top, #ff9900 0%, #fd6600 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff9900), color-stop(100%,#fd6600)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ff9900 0%,#fd6600 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ff9900 0%,#fd6600 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ff9900 0%,#fd6600 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ff9900 0%,#fd6600 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff9900', endColorstr='#fd6600',GradientType=0 ); /* IE6-9 */
+    border:1px solid rgba(0, 0, 0, 0.15);
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.17);
+    color: #FFFFFF;
+    padding: 5px 25px;
 }
-.forum_table .forum_head{
-    font-size:120%;
+.controls .btn:hover{
+    background: #ff7b00; /* Old browsers */
+    background: -moz-linear-gradient(top, #ff7b00 0%, #fd6600 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff7b00), color-stop(100%,#fd6600)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ff7b00 0%,#fd6600 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ff7b00 0%,#fd6600 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ff7b00 0%,#fd6600 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ff7b00 0%,#fd6600 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff7b00', endColorstr='#fd6600',GradientType=0 ); /* IE6-9 */
+    color: #FFFFFF;
+
 }
-.reset_font {
-    font-size: 120%;
+.btn{
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top, #ffffff 0%, #e5e5e5 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e5e5e5)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
+    border-radius: 4px;
+    border:1px solid rgba(0, 0, 0, 0.15);
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.17);
+    padding: 6px 25px;
+
 }
-.increase_font {
-    font-size: 180%;
+.btn:hover{
+    background: #f7f7f7; /* Old browsers */
+    background: -moz-linear-gradient(top, #f7f7f7 0%, #e5e5e5 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f7f7f7), color-stop(100%,#e5e5e5)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #f7f7f7 0%,#e5e5e5 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #f7f7f7 0%,#e5e5e5 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #f7f7f7 0%,#e5e5e5 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #f7f7f7 0%,#e5e5e5 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
+    text-decoration: none;
 }
-.decrease_font {
-    font-size: 70%;
+.btn-primary{
+    background: #ff7b00; /* Old browsers */
+    background: -moz-linear-gradient(top, #ff7b00 0%, #fd6600 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff7b00), color-stop(100%,#fd6600)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ff7b00 0%,#fd6600 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ff7b00 0%,#fd6600 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ff7b00 0%,#fd6600 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ff7b00 0%,#fd6600 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff7b00', endColorstr='#fd6600',GradientType=0 ); /* IE6-9 */
+    border-radius: 4px;
+    border:1px solid rgba(0, 0, 0, 0.15);
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.17);
 }
-.subnav {    
-    font-size: 120%;
+.btn-primary:hover{
+    background: #0167ba; /* Old browsers */
+    background: -moz-linear-gradient(top, #0167ba 0%, #0f466a 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#0167ba), color-stop(100%,#0f466a)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #0167ba 0%,#0f466a 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #0167ba 0%,#0f466a 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #0167ba 0%,#0f466a 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #0167ba 0%,#0f466a 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#0167ba', endColorstr='#0f466a',GradientType=0 ); /* IE6-9 */
+    color: #FFFFFF;
 }
+a.thumbnail:hover{
+  border: 1px solid #e5e5e5;
+  background: transparent;
+}
+.logout img{
+  padding-top: 7px;
+}
+.form-actions {
+  background:transparent;
+}
+.breadcrumb {
+  margin-bottom: 0;
+  background-color: #b1d6ec;
+  background-image: none;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border: 1px solid #B1D6EC;
+  box-shadow: none;
+  font-size: 12px;
+}
+.breadcrumb a{
+  color: #333;
+  font-size: 12px;
+  line-height: 30px;
+  text-transform: none;
+}
+
+.breadcrumb li{
+    
+    text-shadow: none;
+}
+.breadcrumb a.btn-mini{
+   
+    line-height: 17px;
+    text-transform: none;
+}
+.breadcrumb a.btn-success {
+  background-color: #FD6600;
+  background-image: none;
+  border: 1px solid #FD6600;
+  color: #FFFFFF;
+}
+/* styles for the star rater */
+.star-rating{
+    list-style:none;
+    margin: 0px;
+    padding:0px;
+    width: 125px;
+    height: 25px;
+    position: relative;
+    overflow:hidden;
+    background: url(images/start-level.png) top left repeat-x;
+}
+.star-rating li{
+    padding:0px;
+    margin:0px;
+    width:25px;
+    height:25px;
+    float: left;
+}
+.star-rating li a{
+    display:block;
+    width:25px;
+    height: 25px;
+    line-height:25px;
+    text-decoration: none;
+    text-indent: -9000px;
+    z-index: 20;
+    position: absolute;
+    padding: 0px;
+    overflow:hidden;
+}
+.star-rating li a:hover{
+    background: url(images/start-level.png) left bottom;
+    z-index: 2;
+    left: 0px;
+    border:none;
+}
+.star-rating a.one-star{
+    left: 0px;
+}
+.star-rating a.one-star:hover{
+    width:25px;
+}
+.star-rating a.two-stars{
+    left:25px;
+}
+.star-rating a.two-stars:hover{
+    width: 50px;
+}
+.star-rating a.three-stars{
+    left: 50px;
+}
+.star-rating a.three-stars:hover{
+    width: 75px;
+}
+.star-rating a.four-stars{
+    left: 75px;
+}
+.star-rating a.four-stars:hover{
+    width: 100px;
+}
+.star-rating a.five-stars{
+    left: 100px;
+}
+.star-rating a.five-stars:hover{
+    width: 125px;
+}
+.star-rating li.current-rating{
+    background: url(images/start-level.png) left center;
+    position: absolute;
+    height: 25px;
+    display: block;
+    text-indent: -9000px;
+    z-index: 1;
+}
+/*ICON INBOX*/
+.home-icon{
+  background:url(images/icon-chamilo.png) no-repeat 0 0;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.home-icon:hover,.messages-icon:hover, .invitations-icon:hover,.shared-profile-icon:hover,.friends-icon:hover,
+.browse-groups-icon:hover ,.search-icon:hover ,.myfiles-icon:hover {
+  opacity: 0.8;
+}
+.messages-icon{
+  background:url(images/icon-chamilo.png) no-repeat 0 -29px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.invitations-icon{
+  background:url(images/icon-chamilo.png) no-repeat 0 -61px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.shared-profile-icon{
+  background:url(images/icon-chamilo.png) no-repeat 0 -96px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+.friends-icon{
+  background:url(images/icon-chamilo.png) no-repeat 0 -130px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+
+.browse-groups-icon{
+  background:url(images/icon-chamilo.png) no-repeat 0 -163px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+
+.search-icon {
+  background:url(images/icon-chamilo.png) no-repeat 0 -198px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+
+.myfiles-icon {
+  background:url(images/icon-chamilo.png) no-repeat 0 -229px;
+  background-size: 24px auto;
+  padding-left: 30px;
+}
+
+/* END ICON INBOX */
+.nav-list > .active > a, .nav-list > .active > a:hover {
+  color: #333333;
+  background: none;
+  text-shadow:none;
+}
+.social-menu .well .thumbnail{
+  border: none;
+  border-radius: none;
+  box-shadow: none;
+}
+.invitation_confirm .thumbnail{
+    border: 1px solid rgba(96, 165, 209, 0.1);
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    display: block;
+    line-height: 1;
+    padding: 4px;
+    background-color: #EEF5FA;
+}
+.invitation_confirm a.thumbnail:hover{
+    border-color: rgba(96, 165, 209, 0.1);
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    background-color: #FFFFFF;
+}
+.social-menu .well .thumbnail img{
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  border: 2px solid #FFFFFF;
+}
+
+/*CSS SLIDER ANUNCIOS*/
+
+.pagerslide h2{
+    font-size: 18px;
+    background-color:  #0191C7;
+    color: #FFFFFF;
+    padding-left: 15px;
+    font-weight: normal;
+}
+
+#top_main_content #announcements .page-header{
+  display: none;
+  line-height: 1;
+}
+#top_main_content #announcements .span6 {
+  width: 800px;
+}
+
+/*CSS PARA CONTENIDO DE CURSO INTRODUCCION*/
+
+.page-course-intro{
+    padding: 2em;
+    border: 1px solid #DDDDDD;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    margin-bottom: 2em;
+}
+
+.page-course-intro ul{
+    list-style-image:url(images/vineta.png);
+    padding-top: 10px;
+}
+.page-course-intro a{
+    color: #FD6600;
+}
+.page-course-intro a:hover{
+    color: #FD6600;
+    text-decoration: underline;
+}
+
+
+/*FIN DE INTRODUCCION DEL CURSO*/
+.fc-header-title h2{
+    color: #0191C7;
+}
+.fc-first .fc-widget-header{
+    font-size: 14px;
+    font-weight: normal;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.well {
+  background-color: rgba(96,165,209, 0.1);
+  border: 1px solid rgba(96,165,209, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+  margin-bottom: 20px;
+  min-height: 20px;
+  padding: 20px 10px;
+}
+.sidebar-nav img{
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+#homepage .row .span9 h2{
+    font-size: 26px;
+    font-weight: bold;
+    color: #0191C7;
+    padding-bottom: 8px;
+}
+#homepage .row .span9 p,#homepage .row .span9 ol {
+    color: #6E6E6E;
+}
+#homepage .row .span9 a{
+    color: #0F466A;
+}
+#homepage .row .span9 a:hover{
+    color: #FD6600;
+}
+.page-header h2{
+    color: #0191C7;
+    font-weight: normal;
+    font-size: 20px;
+    padding-left: 10px;
+    width: 250px;
+}
+#course_tools .course-title-tools h3 {
+    margin-top: 10px;
+    color: #0191C7;
+    font-weight: normal;
+    
+    
+}
+.page-header {
+  border-bottom-color: #0191C7;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  box-shadow: none;
+  padding-bottom: 0px;
+}
+.well_border{
+  background-color: rgba(96,165,209, 0.1);
+  border: 1px solid rgba(96,165,209, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+  margin-bottom: 20px;
+  min-height: 20px;
+  padding: 19px;
+}
+.well_border .row .span2 {
+  width: 98px;
+}
+.well_border .row .span2 .thumbnail {
+  background-color: #FFFFFF;
+  background-image: none;
+}
+#hot_courses .row .span9 .well_border .row .span6{
+    width: auto;
+}
+.categories-course-description h3{
+    color: #0F466A;
+    font-weight: normal;
+}
+#course_tools .content a {
+  font-size: 12px;
+  font-weight: normal;
+}
+#main_content .course-box .row .span7{
+  width: 730px;
+}
+#main_content .course-box .row .span7 .row .span6 {
+    width: 615px;
+}
+#main_content .course-box .row .span7 .row .span6 h3{
+  font-size: 20px;
+}
+#course_category li, #hot_courses h5, .course_item h5, .categories-course-description h5, .course-box h5 {
+  font-weight: normal;
+}
+/*****************************************************
+ *  FOOTER STYLES                                    *
+ *****************************************************/
+footer {
+    height: 10em;    
+    background-color: #0191C7;
+    background-image: none;
+    background-repeat:repeat-x;    
+    color:#ffffff;
+    border-top: none;   
+}
+footer .container .row {
+  padding-top: 5px;
+}
+footer a:link, footer a:visited {
+  color: #F1D40D;
+}
+/*****************************************************
+ *  DISPLAY MESSAGES	                             *
+ *****************************************************/
+/*****************************************************
+ *  CSS CHAT                               *
+ *****************************************************/
+.chatboxmain {
+    bottom: 0;
+    display: block;
+    position: fixed;
+    right: 20px;
+    width: 225px;
+    z-index: 9000;
+}
+
+.chatboxheadmain {
+  padding:7px 7px 7px 0px;
+  color: #ffffff;
+  border-right:1px solid #222;
+  border-left:1px solid #222;
+  
+  background-color: #222; 
+  background-repeat: repeat-x;
+  background-image: -khtml-gradient(linear, left top, left bottom, from(#333333), to(#222222));
+  background-image: -moz-linear-gradient(top, #333333, #222222);
+  background-image: -ms-linear-gradient(top, #333333, #222222);
+  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #333333), color-stop(100%, #222222));
+  background-image: -webkit-linear-gradient(top, #333333, #222222);
+  background-image: -o-linear-gradient(top, #333333, #222222);
+  background-image: linear-gradient(top, #333333, #222222);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#333333', endColorstr='#222222', GradientType=0);
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    
+}
+#chatboxtitlemain {
+    cursor: pointer;
+    float: left;
+    font-size: 12px;
+    font-weight: normal;
+    width: 160px;
+}
+/*****************************************************
+ *  CSS CHAT END                             *
+ *****************************************************/
+.normal-message {
+    color: #00407F;
+    border: 1px solid #CDE6F5;
+    background: url("images/background_message.png") repeat-x scroll 0 0 #EAF8FE;
+}
+.warning-message {
+    border: 1px solid #FFB30F;
+    color: #000;
+	background: url("images/background_message.png") repeat-x scroll 0 0 #FFEFA7;
+}
+.confirmation-message {
+	border: 1px solid #1F8323;
+    color:#1F8323;
+	background: url("images/accept_data.png") no-repeat scroll 5px center #CAF0C7;
+  padding-left: 45px;
+}
+.error-message {
+    border: 1px solid #FA5858;
+    color: #000;
+    padding-top: 5px;
+	  background: url("images/error.png") no-repeat scroll 5px center #F6CECE;
+    padding-left: 45px;
+}
+.error-message strong{
+  font-weight: normal;
+}
+.social-menu-title {
+	background-color:#00AAE3;
+}
+
+#social-content-online {
+    background-color:#00AAE3;
+}
+		
+.admin_section li {
+    background-image:url(images/bullet.gif);
+}
+
+.system_announcements {
+    background: transparent url('images/systemenouvelles.jpg') no-repeat top  left;
+}
+
+.topa {
+    background:transparent url('images/logoa4.gif') no-repeat;
+}
+.topb {
+    background:transparent url('images/logob4.gif') no-repeat;
+}
+
+#bottomhellomindfactory {    
+    background:transparent url('images/textologo.jpg') no-repeat;
+}
+
+/*including "login" image*/
+button.login {
+    background-image:url(images/bg-button.gif);
+}
+
+button.login:hover {
+}
+
+/*including "save" image*/
+button.save {
+    background:url(images/accept.png) 0 center no-repeat #F0F0F0;
+}
+button.save:hover {
+    background:url(images/accept.png) 0 center no-repeat #ffffff;
+}
+/*including "add" image*/
+.controls .btn.add {
+    background:url(images/add.png) 0 center no-repeat #FD6600;
+    padding-left: 36px;
+}
+.controls .btn.add:hover {
+    background:url(images/add.png) 0 center no-repeat #FF9900;
+    padding-left: 36px;
+}
+/*including "cancel" image*/
+button.cancel {
+    background-image:url(images/button_delete.gif);
+}
+/*including "search" image*/
+button.search {
+    background:url(images/buttom.png) 0 center no-repeat #F0F0F0;
+}
+button.search:hover {
+    background:url(images/buttom.png) 0 center no-repeat #ffffff;
+}
+/*including "plus" image*/
+button.plus {
+    background-image:url(images/button_plus.gif);
+}
+/*including "minus" image*/
+button.minus {
+    background-image:url(images/button_minus.gif);
+}
+/*including "next" image*/
+button.next {
+    background:url(images/next.png) 0 center no-repeat #F0F0F0;
+}
+button.next:hover {
+    background:url(images/next.png) 0 center no-repeat #ffffff;
+}
+/*including "back" image*/
+button.back {
+    background:url(images/previus.png) 0 center no-repeat #F0F0F0;
+}
+button.back:hover {
+    background:url(images/previus.png) 0 center no-repeat #ffffff;
+}
+/*including "refresh" image*/
+button.refresh {
+    background-image:url(images/button_refresh.gif);
+}
+/*including "upload" image*/
+button.upload {
+    background-image:url(images/button_upload.gif);
+}
+
+button.arrowr, input.arrowr {
+	background-image:url(images/2rightarrow.gif);	
+}
+button.arrowl, input.arrowl {
+    background-image:url(images/2leftarrow.gif);	
+}
+.refresh {
+    background-image:url(images/refresh.png);
+}
+
+.portal {
+    background-image:url(images/portal.png);
+}
+/*+++++++++++++++++++++++++++++++++++++++++++
+INSTALL CHAMILO
++++++++++++++++++++++++++++++++++++++++++++*/
+.install-mascot{
+  background: url(images/install.png) no-repeat center 0;
+  padding-top: 20em;
+}
+.install-chamilo .navbar{
+  display: none;
+}
+.install-chamilo footer{
+  display: none;
+}
+.install-chamilo .page-header {
+  border-bottom: 2px solid #FD6600;
+}
+.install-chamilo .page-header h1 {
+    line-height: 1;
+    color: #FD6600;
+}
+.install-chamilo header{
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.install-chamilo .RequirementHeading h2{
+  color: #2E75A3;
+}
+.install-chamilo .page-header h2 {
+  color: #FD6600;
+  font-size: 20px;
+  font-weight: bold;
+  padding-left: 0;
+  width: 250px;
+}
+.well-install{
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top, #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#f6f6f6), color-stop(100%,#ededed)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+    padding: 3em;
+    border: 1px solid #E1E1E0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    margin-top: 3em;
+}
+button.next.disabled {
+  cursor: default;
+  opacity: 0.65;
+}
+button.next.disabled:hover {
+  cursor: default;
+  opacity: 0.65;
+  background-image: none;
+}
+.install-chamilo .btn-success.btn-install {
+  float: right;
+  background: #ff9900; /* Old browsers */
+    background: -moz-linear-gradient(top, #ff9900 0%, #fd6600 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff9900), color-stop(100%,#fd6600)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ff9900 0%,#fd6600 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ff9900 0%,#fd6600 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ff9900 0%,#fd6600 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ff9900 0%,#fd6600 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff9900', endColorstr='#fd6600',GradientType=0 ); /* IE6-9 */
+    border:1px solid rgba(0, 0, 0, 0.15);
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.17);
+    color: #FFFFFF;
+    padding: 5px 25px;
+}
+.install-chamilo .btn-success.btn-install:hover {
+    background: #ff7b00; /* Old browsers */
+    background: -moz-linear-gradient(top, #ff7b00 0%, #fd6600 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff7b00), color-stop(100%,#fd6600)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ff7b00 0%,#fd6600 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ff7b00 0%,#fd6600 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ff7b00 0%,#fd6600 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ff7b00 0%,#fd6600 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff7b00', endColorstr='#fd6600',GradientType=0 ); /* IE6-9 */
+    color: #FFFFFF;
+}
+/*+++++++++++++++++++++++++++++++++++++++++++
+END INSTALL CHAMILO
++++++++++++++++++++++++++++++++++++++++++++*/
+.bottom_actions_fixed{
+  background: #2bb8ef; /* Old browsers */
+  background: -moz-linear-gradient(top, #2bb8ef 0%, #0191c7 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2bb8ef), color-stop(100%,#0191c7)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #2bb8ef 0%,#0191c7 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2bb8ef', endColorstr='#0191c7',GradientType=0 ); /* IE6-9 */
+  border: 1px solid #E1E1E0;
+}
+.new_actions-fixed {
+  top: 50px;
+}
+
+/*CSS ICON BLOCK USER*/
+   .inbox-social{
+        background: url("images/icon-chamilo.png") no-repeat 0 -415px;
+        padding-left: 40px;
+    }
+    .inbox-social:hover,.new-message-social:hover,.invitations-social:hover,.profile-social:hover,.add-course:hover,
+    .order-course:hover,.history-course:hover, .list-course:hover{
+        opacity: 0.8;
+    }
+    .new-message-social{
+        background: url("images/icon-chamilo.png") no-repeat 0 -370px;
+        padding-left: 40px;
+    }
+    .invitations-social{
+        background: url("images/icon-chamilo.png") no-repeat 0 -455px;
+        padding-left: 40px;
+    }
+    .profile-social{
+        background: url("images/icon-chamilo.png") no-repeat 0 -496px;
+        padding-left: 40px;
+    }
+    .add-course{
+        background: url("images/icon-chamilo.png") no-repeat 0 -327px;
+        padding-left: 40px;
+    }
+    .order-course{
+        background: url("images/icon-chamilo.png") no-repeat 0 -536px;
+        padding-left: 40px;
+    }
+    .history-course{
+        background: url("images/icon-chamilo.png") no-repeat 0 -576px;
+        padding-left: 40px;
+    }
+    .list-course{
+        background: url("images/icon-chamilo.png") no-repeat 0 -618px;
+        padding-left: 40px;
+    }
+    .forum-btn{
+        background: url("images/icon-chamilo.png") no-repeat 0 -666px;
+        padding-left: 40px;
+    }
+
+/*+++++++++++++++++++++++++++++++++
+RESPONSIVE CSS
++++++++++++++++++++++++++++++++++*/
+
+.navbar .brand {
+  float: left;
+  font-size: 16px;
+  font-weight: 200;
+  line-height: 20px;
+  padding-bottom: 12px;
+  padding-top: 12px;
+  color: #FFFFFF;
+}
+.navbar-inner{
+  background: #2bb8ef; /* Old browsers */
+  background: -moz-linear-gradient(top, #2bb8ef 0%, #0191c7 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2bb8ef), color-stop(100%,#0191c7)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #2bb8ef 0%,#0191c7 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2bb8ef', endColorstr='#0191c7',GradientType=0 ); /* IE6-9 */
+}
+
+.dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
+  background-color: #FD6600;
+  color: #FFFFFF;
+}
+.navbar-search {
+  margin-bottom: 0;
+  margin-top: 11px;
+  position: relative;
+}
+.navbar-search .search-query {
+  background:#FFFFFF;
+  color: #666;
+  border: 1px solid #ffffff;
+}
+.navbar .nav .active > a, .navbar .nav .active > a:hover {
+  background:none;
+  color: #FFFFFF;
+}
+@media (min-width: 481px) and (max-width: 800px) {
+
+    .sidebar-nav h4 {
+        color: #037FB2;
+        font-size: 18px;
+        padding-bottom: 10px;
+        padding-left: 15px;
+        padding-right: 15px;
+        padding-top: 10px;
+    }
+    #profile_block .nav-list li, #course_block .nav-list li{
+        padding-bottom: 5px;
+        padding-top: 5px;
+    }
+    #top_main_content .menu-column #user_image_block{
+      box-shadow: none;
+    }
+
+}
+@media (max-width: 600px) {
+#main_content .course-box .row .span7 .row .span6 {
+  float: left;
+  /*width: 615px;*/
+  padding-left: 10px;
+}
+#main_content .course-box .row .span7 .row .span6 h3 {
+        font-size: 16px;
+        /*width: 500px;*/
+    }
+}
+
+@media (min-width: 801px){
+  .nav-list > li > a {
+  font-size: 13px;
+  padding-bottom: 8px;
+  padding-top: 8px;
+}
+
+/*CSS ICON BLOCK USER*/
+   .inbox-social{
+        background: url("images/icon-chamilo.png") no-repeat 0 -345px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    
+    .new-message-social{
+        background: url("images/icon-chamilo.png") no-repeat 0 -307px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    
+    .invitations-social{
+        background: url("images/icon-chamilo.png") no-repeat 0 -378px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    
+    .profile-social{
+        background: url("images/icon-chamilo.png") no-repeat 0 -414px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    
+    .add-course{
+        background: url("images/icon-chamilo.png") no-repeat 0 -274px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+   
+    .order-course{
+        background: url("images/icon-chamilo.png") no-repeat 0 -447px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    
+    .history-course{
+        background: url("images/icon-chamilo.png") no-repeat 0 -481px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    
+    .list-course{
+        background: url("images/icon-chamilo.png") no-repeat 0 -517px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    .forum-btn {
+      background: url("images/icon-chamilo.png") no-repeat scroll 0 -552px / 25px auto rgba(0, 0, 0, 0);
+      padding-left: 30px;
+}
+    
+}
+@media (min-width: 321px) and (max-width: 480px){
+footer {
+    height: 5em;
+  }
+.welcome-mascot{
+      background: none;
+      padding-right: 0px;
+      padding-bottom: 2em;
+      padding-top: 2em;
+    }
+#homepage .row .span9 h2 {
+  color: #0191C7;
+  font-size: 22px;
+  font-weight: bold;
+  padding-bottom: 8px;
+  line-height: 25px;
+}
+#announcements{
+  display: none;
+}
+}
+/*+++++++++++++++++++++++++++++++++
+END RESPONSIVE CSS
++++++++++++++++++++++++++++++++++*/

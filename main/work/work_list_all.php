@@ -52,12 +52,12 @@ if (!empty($group_id)) {
         api_not_allowed();
     }
 
-    $interbreadcrumb[] = array ('url' => '../group/group.php', 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
+    $interbreadcrumb[] = array('url' => '../group/group.php', 'name' => get_lang('Groups'));
+    $interbreadcrumb[] = array('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
 }
 
-$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
-$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId, 'name' =>  $my_folder_data['title']);
+$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
+$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId, 'name' =>  $my_folder_data['title']);
 
 $error_message = null;
 
@@ -118,7 +118,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId)) {
     Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'), '', ICON_SIZE_MEDIUM)."</a>";
     $count = get_count_work($workId);
     if ($count > 0) {
-        $display_output .= '<a href="downloadfolder.inc.php?id='.$workId.'">'.
+        $display_output .= '<a href="downloadfolder.inc.php?id='.$workId.'&'.api_get_cidreq().'">'.
             Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_MEDIUM).'</a>';
     }
     echo $display_output;

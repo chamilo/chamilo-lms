@@ -653,7 +653,8 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
 
             // Work name
             if ($cant_files > 0 ) {
-                $zip = '<a href="downloadfolder.inc.php?id='.$work_data['id'].'">'.Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_SMALL).'</a>';
+                $zip = '<a href="downloadfolder.inc.php?id='.$work_data['id'].'&'.api_get_cidreq().'">'.
+                    Display::return_icon('save_pack.png', get_lang('Save'), array('style' => 'float:right;'), ICON_SIZE_SMALL).'</a>';
             }
 
             $link = 'work_list.php';
@@ -689,7 +690,7 @@ function display_student_publications_list($id, $my_folder_data, $work_parents, 
                         $action .= Display::return_icon('delete_na.png', get_lang('Delete'), array(), ICON_SIZE_SMALL);
                     } else {
                         $action .= '<a href="'.api_get_path(WEB_CODE_PATH).'work/edit_work.php?cidReq='.api_get_course_id().'&origin='.$origin.'&gradebook='.$gradebook.'&id='.$workId.'">'.
-                                    Display::return_icon('edit.png', get_lang('Modify'), array(), ICON_SIZE_SMALL).'</a>';
+                            Display::return_icon('edit.png', get_lang('Modify'), array(), ICON_SIZE_SMALL).'</a>';
                         $action .= ' <a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'&origin='.$origin.'&gradebook='.$gradebook.'&delete_dir='.$workId.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('DirDelete').'"  >'.
                             Display::return_icon('delete.png',get_lang('DirDelete'),'',ICON_SIZE_SMALL).'</a>';
                     }

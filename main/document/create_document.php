@@ -272,15 +272,19 @@ if (!$is_certificate_mode) {
 			api_not_allowed(true);
 		}
 	}
-	$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($dir).$req_gid, "name" => get_lang('Documents'));
+	$interbreadcrumb[] = array("url" => "./document.php?curdirpath=".urlencode($dir).$req_gid, "name" => get_lang('Documents'));
 } else {
-	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
+	$interbreadcrumb[]= array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 }
 
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
 }
-if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder($_user['user_id'], Security::remove_XSS($dir),api_get_session_id()))) {
+
+if (!($is_allowed_to_edit ||
+    $_SESSION['group_member_with_upload_rights'] ||
+    is_my_shared_folder($_user['user_id'], $dir, api_get_session_id()))
+) {
 	api_not_allowed(true);
 }
 
@@ -289,27 +293,34 @@ if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_
 event_access_tool(TOOL_DOCUMENT);
 
 $display_dir = $dir;
-if (isset ($group_properties)) {
+if (isset($group_properties)) {
 	$display_dir = explode('/', $dir);
-	unset ($display_dir[0]);
-	unset ($display_dir[1]);
+	unset($display_dir[0]);
+	unset($display_dir[1]);
 	$display_dir = implode('/', $display_dir);
 }
 
 $select_cat = isset($_GET['selectcat']) ? intval($_GET['selectcat']) : null;
 
 // Create a new form
-$form = new FormValidator('create_document','post',api_get_self().'?'.api_get_cidreq().'&dir='.Security::remove_XSS(urlencode($dir)).'&selectcat='.$select_cat, null, array('class' =>'form-vertical'));
+$form = new FormValidator(
+    'create_document',
+    'post',
+    api_get_self().'?'.api_get_cidreq().'&dir='.Security::remove_XSS(urlencode($dir)).'&selectcat='.$select_cat,
+    null,
+    array('class' =>'form-vertical')
+);
 
 // form title
 $form->addElement('header', $nameTools);
 
 if ($is_certificate_mode) {//added condition for certicate in gradebook
 	$form->addElement('hidden','certificate','true',array('id'=>'certificate'));
-	if (isset($_GET['selectcat']))
+	if (isset($_GET['selectcat'])) {
 		$form->addElement('hidden','selectcat', $select_cat);
-
+    }
 }
+
 // Hidden element with current directory
 $form->addElement('hidden', 'id');
 $defaults = array();

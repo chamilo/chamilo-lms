@@ -2394,6 +2394,7 @@ class UserManager
         // Database Table Definitions
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 
         $user_id = intval($user_id);
         $session_id = intval($session_id);
@@ -2412,16 +2413,22 @@ class UserManager
         $personal_course_list = array();
         $courses = array();
 
-        // This query is very similar to the above query, but it will check the session_rel_course_user table if there are courses registered to our user or not
-        $personal_course_list_sql = "SELECT DISTINCT scu.course_code as code
-                                    FROM $tbl_session_course_user as scu $join_access_url
-                                    WHERE scu.id_user = $user_id AND scu.id_session = $session_id $where_access_url
-                                    ORDER BY code";
+        /* This query is very similar to the above query,but it will check the
+        session_rel_course_user table if there are courses registered
+        to our user or not*/
 
-        $course_list_sql_result = Database::query($personal_course_list_sql);
+        $sql = "SELECT DISTINCT scu.course_code as code
+                FROM $tbl_session_course_user as scu
+                INNER JOIN $tbl_session_course sc
+                ON (scu.id_session = sc.id_session AND scu.course_code = sc.course_code)
+                $join_access_url
+                WHERE scu.id_user = $user_id AND scu.id_session = $session_id $where_access_url
+                ORDER BY code";
 
-        if (Database::num_rows($course_list_sql_result) > 0) {
-            while ($result_row = Database::fetch_array($course_list_sql_result)) {
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result) > 0) {
+            while ($result_row = Database::fetch_array($result)) {
                 $result_row['status'] = 5;
                 if (!in_array($result_row['code'], $courses)) {
                     $personal_course_list[] = $result_row;
@@ -2432,14 +2439,24 @@ class UserManager
 
         if (api_is_allowed_to_create_course()) {
             $sql = "SELECT DISTINCT scu.course_code as code
-                    FROM $tbl_session_course_user as scu, $tbl_session as s $join_access_url
-                    WHERE s.id = $session_id AND scu.id_session = s.id AND ((scu.id_user=$user_id AND scu.status=2) OR s.id_coach = $user_id)
+                    FROM $tbl_session_course_user as scu
+                    INNER JOIN $tbl_session as s
+                    ON (scu.id_session = s.id)
+                    INNER JOIN $tbl_session_course sc
+                    ON (scu.id_session = sc.id_session AND scu.course_code = sc.course_code)
+                    $join_access_url
+                    WHERE
+                      s.id = $session_id AND
+                      (
+                        (scu.id_user=$user_id AND scu.status=2) OR
+                        s.id_coach = $user_id
+                      )
                     $where_access_url
                     ORDER BY code";
-            $course_list_sql_result = Database::query($sql);
+            $result = Database::query($sql);
 
-            if (Database::num_rows($course_list_sql_result) > 0) {
-                while ($result_row = Database::fetch_array($course_list_sql_result)) {
+            if (Database::num_rows($result) > 0) {
+                while ($result_row = Database::fetch_array($result)) {
                     $result_row['status'] = 2;
                     if (!in_array($result_row['code'], $courses)) {
                         $personal_course_list[] = $result_row;

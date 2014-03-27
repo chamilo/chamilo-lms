@@ -1558,7 +1558,7 @@ class CourseManager
      *    @param date $date_to
      *    @return array with user id
      */
-    public static function get_student_list_from_course_code($course_code, $with_session = false, $session_id = 0, $date_from, $date_to) {
+    public static function get_student_list_from_course_code($course_code, $with_session = false, $session_id = 0, $date_from = null, $date_to = null) {
         $session_id = intval($session_id);
         $course_code = Database::escape_string($course_code);
         

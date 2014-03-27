@@ -73,7 +73,7 @@ while ($obj = Database::fetch_object($res)) {
         $teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
     }
 
-    if ($course['tutor_name'] == $course_teachers[$obj->user_id]) {
+    if (isset($course_teachers[$obj->user_id]) && $course['tutor_name'] == $course_teachers[$obj->user_id]) {
         $course['tutor_name'] = $obj->user_id;
     }
     // We add in the array platform teachers

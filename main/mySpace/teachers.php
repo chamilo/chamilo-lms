@@ -1,280 +1,315 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Teachers report
+ * Teacher report
  * @package chamilo.reporting
  */
 /**
  * Code
  */
-ob_start();
-
-// names of the language file that needs to be included.
-$language_file = array('registration', 'index', 'trad4all', 'tracking', 'admin');
+// name of the language file that needs to be included
+$language_file = array ('registration', 'index', 'tracking', 'admin');
 $cidReset = true;
+
 require_once '../inc/global.inc.php';
-require_once 'myspace.lib.php';
+require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
-$userId = api_get_user_id();
-$this_section = SECTION_TRACKING;
-
-$nameTools = get_lang('Teachers');
-
-api_block_anonymous_users();
-$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
-
-Display :: display_header($nameTools);
-
-$sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
+$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
 $active = isset($_GET['active']) ? intval($_GET['active']) : 1;
 
-$formateurs = array();
-if (api_is_drh() || api_is_platform_admin()) {
+api_block_anonymous_users();
 
-    // Followed teachers by drh
-    /*if (api_drh_can_access_all_session_content()) {
-        $sessions = SessionManager::get_sessions_followed_by_drh($userId);
-        if (!empty($sessions)) {
-            $formateurs = array();
-            foreach ($sessions as $session) {
-                $coursesFromSession = SessionManager::get_course_list_by_session_id($session['id']);
-                foreach ($coursesFromSession as $course) {
-                    $teachers = CourseManager::get_teacher_list_from_course_code($course['code']);
-                    foreach ($teachers as $teacher) {
-                        if (isset($formateurs[$teacher['user_id']])) {
-                            continue;
-                        }
-                        $formateurs[$teacher['user_id']] = $teacher;
-                    }
-                }
-            }
-        }
-    } else {
-        $formateurs = UserManager::get_users_followed_by_drh($userId, COURSEMANAGER);
-    }*/
+$this_section = SECTION_TRACKING;
+
+$interbreadcrumb[] = array ("url" => "index.php", "name" => get_lang('MySpace'));
+
+if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
+    $interbreadcrumb[] = array ("url" => "teachers.php", "name" => get_lang('Teachers'));
+}
+
+if (isset($_GET["user_id"]) && $_GET["user_id"]!="" && isset($_GET["type"]) && $_GET["type"] == "coach") {
+    $interbreadcrumb[] = array ("url" => "coaches.php", "name" => get_lang('Tutors'));
+}
+
+function get_count_users()
+{
+    $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
+    $active = isset($_GET['active']) ? intval($_GET['active']) : 1;
+    $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
 
     $lastConnectionDate = null;
     if (!empty($sleepingDays)) {
         $lastConnectionDate = api_get_utc_datetime(strtotime($sleepingDays.' days ago'));
     }
-    $formateurs = SessionManager::getTeacherTracking($userId, $active, $lastConnectionDate);
 
-    $menu_items = array(
-        Display::url(Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH)."auth/my_progress.php" ),
-        Display::url(Display::return_icon('user.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM), "index.php?view=drh_students&amp;display=yourstudents"),
-        Display::url(Display::return_icon('teacher_na.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM), '#'),
-        Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM), 'course.php'),
-        Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM), 'session.php')
+    return SessionManager::getCountUserTracking(
+        $keyword,
+        $active,
+        $lastConnectionDate,
+        null,
+        null,
+        COURSEMANAGER
     );
+}
 
-    echo '<div class="actions">';
-    $nb_menu_items = count($menu_items);
-    if ($nb_menu_items > 1) {
-        foreach ($menu_items as $key => $item) {
-            echo $item;
+function get_users($from, $number_of_items, $column, $direction)
+{
+    $active = isset($_GET['active']) ? $_GET['active'] : 1;
+    $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
+    $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
+
+    $lastConnectionDate = null;
+    if (!empty($sleepingDays)) {
+        $lastConnectionDate = api_get_utc_datetime(strtotime($sleepingDays.' days ago'));
+    }
+
+    $is_western_name_order = api_is_western_name_order();
+    $coach_id = api_get_user_id();
+    $column = 'u.user_id';
+
+    if (api_is_drh()) {
+        if (api_drh_can_access_all_session_content()) {
+            $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
+                'drh_all',
+                api_get_user_id(),
+                false,
+                $from,
+                $number_of_items,
+                $column,
+                $direction,
+                $keyword,
+                $active,
+                $lastConnectionDate,
+                null,
+                null,
+                COURSEMANAGER
+            );
+        } else {
+            $students = UserManager::get_users_followed_by_drh(
+                api_get_user_id(),
+                null,
+                false,
+                false,
+                false,
+                $from,
+                $number_of_items,
+                $column,
+                $direction,
+                $active,
+                $lastConnectionDate,
+                null,
+                null,
+                COURSEMANAGER
+            );
+        }
+    } else {
+        if (api_is_platform_admin()) {
+            $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
+                'admin',
+                api_get_user_id(),
+                false,
+                $from,
+                $number_of_items,
+                $column,
+                $direction,
+                $keyword,
+                $active,
+                $lastConnectionDate,
+                null,
+                null,
+                COURSEMANAGER
+            );
+        } else {
+            $students = UserManager::get_users_followed_by_drh(
+                api_get_user_id(),
+                null,
+                false,
+                false,
+                false,
+                $from,
+                $number_of_items,
+                $column,
+                $direction,
+                $active,
+                $lastConnectionDate,
+                null,
+                null,
+                COURSEMANAGER
+            );
         }
     }
-    if (count($formateurs) > 0) {
-        echo '<span style="float:right">';
-        echo Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
-        echo Display::url(Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM), api_get_self().'?export=xls');
-        echo '</span>';
-    }
-    echo '</div>';
-	echo Display::page_subheader(get_lang('YourTeachers'));
 
-    if (!empty($lastConnectionDate)) {
-        echo Display::page_subheader2(get_lang('SleepingTeachers').' '.api_get_local_time($lastConnectionDate));
+    $all_datas = array();
+
+    foreach ($students as $student_data) {
+        $student_id = $student_data['user_id'];
+        if (isset($_GET['id_session'])) {
+            $courses = Tracking :: get_course_list_in_session_from_student($student_id, $_GET['id_session']);
+        }
+
+        $avg_time_spent = $avg_student_score = $avg_student_progress = $total_assignments = $total_messages = 0;
+        $nb_courses_student = 0;
+        if (!empty($courses)) {
+            foreach ($courses as $course_code) {
+                if (CourseManager :: is_user_subscribed_in_course($student_id, $course_code, true)) {
+                    $avg_time_spent 	+= Tracking :: get_time_spent_on_the_course($student_id, $course_code, $_GET['id_session']);
+                    $my_average 		 = Tracking :: get_avg_student_score($student_id, $course_code);
+                    if (is_numeric($my_average)) {
+                        $avg_student_score += $my_average;
+                    }
+                    $avg_student_progress += Tracking :: get_avg_student_progress($student_id, $course_code);
+                    $total_assignments += Tracking :: count_student_assignments($student_id, $course_code);
+                    $total_messages += Tracking :: count_student_messages($student_id, $course_code);
+                    $nb_courses_student++;
+                }
+            }
+        }
+
+        if ($nb_courses_student > 0) {
+            $avg_time_spent = $avg_time_spent / $nb_courses_student;
+            $avg_student_score = $avg_student_score / $nb_courses_student;
+            $avg_student_progress = $avg_student_progress / $nb_courses_student;
+        } else {
+            $avg_time_spent = null;
+            $avg_student_score = null;
+            $avg_student_progress = null;
+        }
+
+        $row = array();
+        if ($is_western_name_order) {
+            $row[] = $student_data['firstname'];
+            $row[] = $student_data['lastname'];
+        } else {
+            $row[] = $student_data['lastname'];
+            $row[] = $student_data['firstname'];
+        }
+        $string_date = Tracking :: get_last_connection_date($student_id, true);
+        $first_date = Tracking :: get_first_connection_date($student_id);
+        $row[] = $first_date;
+        $row[] = $string_date;
+
+        if (isset($_GET['id_coach']) && intval($_GET['id_coach']) != 0) {
+            $detailsLink = '<a href="myStudents.php?student='.$student_id.'&id_coach='.$coach_id.'&id_session='.$_GET['id_session'].'">
+				          <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+        } else {
+            $detailsLink =  '<a href="myStudents.php?student='.$student_id.'">
+				             <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>';
+        }
+        $row[] = $detailsLink;
+        $all_datas[] = $row;
     }
+    return $all_datas;
 }
 
-if (!api_is_drh()) {
-    api_display_tool_title($nameTools);
-}
-
-/** MAIN PART */
-
-if (isset($_POST['export'])) {
+if ($export_csv) {
     $is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
 } else {
     $is_western_name_order = api_is_western_name_order();
 }
+
 $sort_by_first_name = api_sort_by_first_name();
+$actions .= '<div class="actions">';
 
-if (!api_is_drh() && !api_is_platform_admin()) {
-    $order_clause = $sort_by_first_name ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-    if (isset($_GET["teacher_id"]) && $_GET["teacher_id"] != 0) {
-        $teacher_id = intval($_GET["teacher_id"]);
-        $sql_formateurs = "SELECT user_id,lastname,firstname,email
-            FROM $tbl_user
-            WHERE user_id='$teacher_id'".$order_clause;
+if (api_is_drh()) {
+    $menu_items = array(
+        Display::url(Display::return_icon('stats.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH)."auth/my_progress.php" ),
+        Display::url(Display::return_icon('user.png', get_lang('Students'), array(), ICON_SIZE_MEDIUM), 'student.php'),
+        Display::url(Display::return_icon('teacher_na.png', get_lang('Trainers'), array(), ICON_SIZE_MEDIUM), 'teachers.php'),
+        Display::url(Display::return_icon('course.png', get_lang('Courses'), array(), ICON_SIZE_MEDIUM), 'course.php'),
+        Display::url(Display::return_icon('session.png', get_lang('Sessions'), array(), ICON_SIZE_MEDIUM), 'session.php')
+    );
+
+    $nb_menu_items = count($menu_items);
+    if ($nb_menu_items > 1) {
+        foreach ($menu_items as $key => $item) {
+            $actions .= $item;
+        }
+    }
+}
+
+$actions .= '<span style="float:right">';
+$actions .= Display::url(Display::return_icon('printer.png', get_lang('Print'), array(), ICON_SIZE_MEDIUM), 'javascript: void(0);', array('onclick'=>'javascript: window.print();'));
+$actions .= Display::url(Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), array(), ICON_SIZE_MEDIUM), api_get_self().'?export=csv&keyword='.$keyword);
+$actions .= '</span>';
+$actions .= '</div>';
+
+$table = new SortableTable(
+    'tracking_teachers',
+    'get_count_users',
+    'get_users',
+    ($is_western_name_order xor $sort_by_first_name) ? 1 : 0,
+    10
+);
+
+$params = array(
+    'keyword' => $keyword,
+    'active' => $active
+);
+$table->set_additional_parameters($params);
+
+if ($is_western_name_order) {
+    $table->set_header(0, get_lang('FirstName'), false);
+    $table->set_header(1, get_lang('LastName'), false);
+} else {
+    $table->set_header(0, get_lang('LastName'), false);
+    $table->set_header(1, get_lang('FirstName'), false);
+}
+
+$table->set_header(2, get_lang('FirstLogin'), false);
+$table->set_header(3, get_lang('LastConnexion'), false);
+$table->set_header(4, get_lang('Details'), false);
+
+if ($export_csv) {
+    if ($is_western_name_order) {
+        $csv_header[] = array (
+            get_lang('FirstName', ''),
+            get_lang('LastName', ''),
+            get_lang('FirstLogin', ''),
+            get_lang('LastConnexion', '')
+        );
     } else {
-        $sql_formateurs = "SELECT user_id,lastname,firstname,email
-            FROM $tbl_user
-            WHERE status = 1".$order_clause;
-    }
-
-    $result_formateurs = Database::query($sql_formateurs);
-    if (Database::num_rows($result_formateurs) > 0) {
-        while ($row_formateurs = Database::fetch_array($result_formateurs)) {
-            $formateurs[] = $row_formateurs;
-        }
+        $csv_header[] = array (
+            get_lang('LastName', ''),
+            get_lang('FirstName', ''),
+            get_lang('FirstLogin', ''),
+            get_lang('LastConnexion', '')
+        );
     }
 }
 
-$time_filter = 'last_7_days';
-$time_label = sprintf(get_lang('TimeSpentLastXDays'), 7);
-$form = new FormValidator('time_filter');
-$form->addElement('datepickerdate', 'start_date', get_lang('StartDate'), array('form_name'=>'exercise_admin'));
-$form->addElement('datepickerdate', 'end_date', get_lang('EndDate'), array('form_name'=>'exercise_admin'));
-$form->addRule('start_date', get_lang('InvalidDate'), 'date');
-$form->addRule('end_date', get_lang('InvalidDate'), 'date');
-$form->addRule(array ('start_date', 'end_date'), get_lang('StartDateShouldBeBeforeEndDate'), 'date_compare', 'lte');
+$form = new FormValidator('search_user', 'get', api_get_path(WEB_CODE_PATH).'mySpace/teachers.php');
+$form->addElement('text', 'keyword', get_lang('Keyword'));
+$form->addElement('select', 'active', get_lang('Status'), array(1 => get_lang('Active'), 0 => get_lang('Inactive')));
+//$form->addElement('select', 'sleeping_days', get_lang('InactiveDays'), array('', 1 => 1, 5 => 5, 15 => 15, 30 => 30, 60 => 60, 90 => 90, 120 => 120));
+$form->addElement('button', 'submit', get_lang('Search'));
+$form->setDefaults($params);
 
-$defaults = array();
-$defaults['start_date'] =  date('Y-m-d 12:00:00', strtotime("-7 days"));
-$defaults['end_date']   = date('Y-m-d 12:00:00', time());
-$start_date = $end_date = null;
-
-if ($form->validate()) {
-    $values = $form->exportValues();
-    $start_date = $defaults['start_date'] = $values['start_date'];
-    $end_date = $defaults['end_date'] = $values['end_date'];
-    $time_filter = 'custom';
-    $time_label = sprintf(get_lang('TimeSpentBetweenXAndY'), $start_date, $end_date);
-}
-$form->setDefaults($defaults);
-$form->addelement('style_submit_button', 'submit', get_lang('Filter'));
-$form->display();
-
-if ($is_western_name_order) {
-	echo '<table class="data_table">
-	<tr>
-	<th>'.get_lang('FirstName').'</th>
-	<th>'.get_lang('LastName').'</th>
-	<th>'.$time_label.'</th>
-	<th>'.get_lang('Email').'</th>
-	<th>'.get_lang('LastConnexion').'</th>
-	<th>'.get_lang('AdminCourses').'</th>
-	<th>'.get_lang('Students').'</th>
-	</tr>';
-} else {
-	echo '<table class="data_table">
-	<tr>
-	    <th>'.get_lang('LastName').'</th>
-	    <th>'.get_lang('FirstName').'</th>
-	    <th>'.$time_label.'</th>
-	    <th>'.get_lang('Email').'</th>
-	    <th>'.get_lang('LastConnexion').'</th>
-	    <th>'.get_lang('AdminCourses').'</th>
-	    <th>'.get_lang('Students').'</th>
-	    </tr>';
-}
-
-if ($is_western_name_order) {
-    $header[] = get_lang('FirstName');
-    $header[] = get_lang('LastName');
-} else {
-    $header[] = get_lang('LastName');
-    $header[] = get_lang('FirstName');
-}
-
-$header[] = $time_label;
-$header[] = get_lang('Email');
-
-$data = array();
-
-if (!empty($formateurs) && count($formateurs) > 0) {
-    $i = 1;
-    foreach ($formateurs as $formateur) {
-        $user_id = $formateur["user_id"];
-        $lastname = $formateur["lastname"];
-        $firstname = $formateur["firstname"];
-        $email = $formateur["email"];
-
-        if ($i % 2 == 0) {
-            $css_class = "row_odd";
-            if ($i % 20 == 0 && $i != 0) {
-                if ($is_western_name_order) {
-                    echo '<tr>
-                            <th>'.get_lang('FirstName').'</th>
-                            <th>'.get_lang('LastName').'</th>
-                            <th>'.get_lang('Email').'</th>
-                            <th>'.get_lang('LastConnexion').'</th>
-                            <th>'.get_lang('AdminCourses').'</th>
-                            <th>'.get_lang('Students').'</th>
-                        </tr>';
-                } else {
-                    echo '<tr>
-                            <th>'.get_lang('LastName').'</th>
-                            <th>'.get_lang('FirstName').'</th>
-                            <th>'.get_lang('Email').'</th>
-                            <th>'.get_lang('LastConnexion').'</th>
-                            <th>'.get_lang('AdminCourses').'</th>
-                            <th>'.get_lang('Students').'</th>
-                        </tr>';
-                }
-            }
-        } else {
-            $css_class = "row_even";
-        }
-        $i++;
-
-        if ($is_western_name_order) {
-            $data[$user_id]["firstname"] = $firstname;
-            $data[$user_id]["lastname"] = $lastname;
-        } else {
-            $data[$user_id]["lastname"] = $lastname;
-            $data[$user_id]["firstname"] = $firstname;
-        }
-
-        $time_on_platform = api_time_to_hms(Tracking :: get_time_spent_on_the_platform($user_id, $time_filter, $start_date, $end_date));
-        $data[$user_id]["timespentlastweek"] = $time_on_platform;
-        $data[$user_id]["email"] = $email;
-
-        $timestamp = Tracking::get_last_connection_date($user_id, false, true);
-
-        $lastConnection = api_get_local_time($timestamp);
-
-        if ($is_western_name_order) {
-            echo '<tr class="'.$css_class.'">
-                    <td>'.$firstname.'</td>
-                    <td>'.$lastname.'</td>
-                    <td align="right">'.$time_on_platform.'</td>
-                    <td align="right"><a href="mailto:'.$email.'">'.$email.'</a></td>
-                    <td align="right">'.$lastConnection.'</td>
-                    <td align="right">
-                        <a href="course.php?user_id='.$user_id.'"><img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
-                        </td>
-                    <td align="right">
-                        <a href="student.php?user_id='.$user_id.'&amp;display=yourstudents">
-                        <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
-                    </td>
-                    </tr>';
-        } else {
-            echo '<tr class="'.$css_class.'"><td>'.$lastname.'</td>
-                    <td>'.$firstname.'</td><td align="right">'.$time_on_platform.'</td>
-                    <td align="right"><a href="mailto:'.$email.'">'.$email.'</a></td>
-                    <td align="right"><a href="course.php?user_id='.$user_id.'">
-                        <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
-                    </td>
-                    <td align="right"><a href="student.php?user_id='.$user_id.'&amp;display=yourstudents">
-                        <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" /></a>
-                    </td>
-                </tr>';
-        }
+if ($export_csv) {
+    // send the csv file if asked
+    $content = $table->return_table();
+    foreach ($content as &$row) {
+        unset($row[4]);
     }
+    $csv_content = array_merge($csv_header, $content);
+    ob_end_clean();
+    Export :: export_table_csv($csv_content, 'reporting_teacher_list');
+    exit;
 } else {
-    // No results
-    echo '<tr><td colspan="6">'.get_lang("NoResults").'</td></tr>';
+    Display::display_header($nameTools);
+    echo $actions;
+    $page_title = get_lang('Teachers');
+    echo Display::page_subheader($page_title);
+    if (isset($active)) {
+        if ($active) {
+            $activeLabel = get_lang('ActiveUsers');
+        } else {
+            $activeLabel = get_lang('InactiveUsers');
+        }
+        echo Display::page_subheader2($activeLabel);
+    }
+    $form->display();
+    $table->display();
 }
-echo '</table>';
 
-if (isset($_POST['export']) || (api_is_drh() && isset($_GET['export']))) {
-    MySpace::export_csv($header, $data, 'teachers.csv');
-}
-
-if (!api_is_drh()) {
-	echo "<form method='post' action='teachers.php'><input type='submit' name='export' value='".get_lang('exportExcel')."'/><form>";
-}
-Display::display_footer();
+Display :: display_footer();

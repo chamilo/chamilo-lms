@@ -87,7 +87,6 @@ function get_users($from, $number_of_items, $column, $direction)
                 $active,
                 $lastConnectionDate
             );
-
         }
     } else {
         if (api_is_platform_admin()) {

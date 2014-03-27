@@ -413,16 +413,19 @@ class MySpace {
         $return .= Display::grid_html($tableId);
         return $return;
     }
+
     /**
      * Display a sortable table that contains an overview off all the progress of the user in a session
-     * @param   int $sessionId  The session ID
-     * @param   int $courseId   The course ID
-     * @param   int $exerciseId The quiz ID
-     * @param   int $answer Answer status (0 = incorrect, 1 = correct, 2 = both)
+     * @param   int $sessionId The session ID
+     * @param   int $courseId The course ID
+     * @param null $date_from
+     * @param null $date_to
+     * @internal param int $exerciseId The quiz ID
+     * @internal param int $answer Answer status (0 = incorrect, 1 = correct, 2 = both)
      * @return  string  HTML array of results formatted for gridJS
      * @author Francis Gonzales <francis.gonzales@beeznest.com>, Beeznest Team
      */
-    static function display_tracking_grade_overview($sessionId = 0, $courseId = 0, $date_from, $date_to)
+    static function display_tracking_grade_overview($sessionId = 0, $courseId = 0, $date_from = null, $date_to = null)
     {
         /**
          * Column names

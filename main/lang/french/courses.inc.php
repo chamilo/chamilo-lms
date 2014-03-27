@@ -20,7 +20,6 @@ $Unsubscribe = "Désinscription";
 $lang_back_to_my_home_page = "Retour à ma page d'accueil";
 $lang_back_to_my_personnal_course_list = "Retour à ma liste personnelle de cours";
 $langTitular = "Responsable";
-$langBackToListOfThisUser = "Retour à sa liste de cours";
 $langAdministrationTools = "Outils d'administration";
 $lang_back_to_parent_category = "Retour à la catégorie supérieure";
 $lang_back_to_course_selection = "Retour à la sélection d'un nouveau cours";

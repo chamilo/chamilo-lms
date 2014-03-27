@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  *	@author jmontoya
- *  
+ *
  *	@package chamilo.document
  */
 /**
@@ -28,7 +28,7 @@ if (empty($course_info)) {
     api_not_allowed(true);
 }
 
-//Generate path 
+//Generate path
 if (!$document_id) {
     $document_id = DocumentManager::get_document_id($course_info, $header_file);
 }
@@ -63,21 +63,25 @@ if (is_dir($file_url_sys)) {
 }
 
 //fix the screen when you try to access a protected course through the url
-$is_allowed_in_course = $_SESSION ['is_allowed_in_course'];
+$is_allowed_in_course = $_SESSION['is_allowed_in_course'];
 
 if ($is_allowed_in_course == false) {
     api_not_allowed(true);
 }
 
-
-
 //Check user visibility
 //$is_visible = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
-$is_visible = DocumentManager::check_visibility_tree($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id());
+$is_visible = DocumentManager::check_visibility_tree(
+    $document_id,
+    api_get_course_id(),
+    api_get_session_id(),
+    api_get_user_id(),
+    api_get_group_id()
+);
+
 if (!api_is_allowed_to_edit() && !$is_visible) {
     api_not_allowed(true);
 }
-
 
 //TODO:clean all code
 

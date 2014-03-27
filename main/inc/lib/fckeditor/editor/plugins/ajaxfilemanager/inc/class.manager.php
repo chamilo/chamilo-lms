@@ -96,8 +96,8 @@ class manager
             if (sizeof($folderInfo)) {
                 //for Chamilo in a name folder, replace num user by user names
                 if (preg_match('/sf_user_/', basename($this->getCurrentFolderPath()))) {
-                    $userinfo = Database::get_user_info_from_id(substr(basename($this->getCurrentFolderPath()), 8));
-                    $this->currentFolderInfo['name'] = api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+                    $userinfo = api_get_user_info(substr(basename($this->getCurrentFolderPath()), 8));
+                    $this->currentFolderInfo['name'] = $userinfo['complete_name'];
                 } else {
                     $this->currentFolderInfo['name'] = str_replace('_', ' ', basename($this->getCurrentFolderPath())); //for Chamilo. Prevent long directory name
                 }
@@ -155,11 +155,15 @@ class manager
      * get the list of files and folders under this current fold
      * 	@return array
      */
-    function getFileList() {
+    function getFileList()
+    {
         $outputs = array();
         $files = array();
         $folders = array();
         $tem = array();
+
+        $to_group_id = api_get_group_id();
+        global $is_user_in_group;
 
         $dirHandler = @opendir($this->getCurrentFolderPath());
         if ($dirHandler) {

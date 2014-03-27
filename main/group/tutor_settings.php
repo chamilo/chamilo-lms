@@ -104,18 +104,19 @@ $form->addElement('hidden', 'action');
 
 // Group tutors
 $group_tutor_list = GroupManager :: get_subscribed_tutors($current_group['id']);
-$selected_users = array();
 $selected_tutors = array();
 foreach ($group_tutor_list as $index => $user) {
     $selected_tutors[] = $user['user_id'];
 }
 
 $complete_user_list = GroupManager :: fill_groups_list($current_group['id']);
-usort($complete_user_list, 'sort_users');
-
 $possible_users = array();
-foreach ($complete_user_list as $index => $user) {
-    $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+if (!empty($complete_user_list)) {
+    usort($complete_user_list, 'sort_users');
+
+    foreach ($complete_user_list as $index => $user) {
+        $possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')';
+    }
 }
 
 $group_tutors_element = $form->addElement('advmultiselect', 'group_tutors', get_lang('GroupTutors'), $possible_users, 'style="width: 280px;"');

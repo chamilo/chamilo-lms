@@ -38,8 +38,7 @@ require_once 'HTML/Common.php';
  *      HTML_QuickForm::isTypeRegistered()
  * @global array $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES']
  */
-$GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] =
-array(
+$GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] = array(
     'group'             => array('HTML/QuickForm/group.php','HTML_QuickForm_group'),
     'hidden'            => array('HTML/QuickForm/hidden.php','HTML_QuickForm_hidden'),
     'reset'             => array('HTML/QuickForm/reset.php','HTML_QuickForm_reset'),
@@ -132,7 +131,7 @@ define('QUICKFORM_INVALID_DATASOURCE',     -9);
  */
 class HTML_QuickForm extends HTML_Common
 {
-    // {{{ properties
+    private $dateTimePickerLibraryAdded;
 
     /**
      * Array containing the form fields
@@ -294,10 +293,7 @@ class HTML_QuickForm extends HTML_Common
     {
         HTML_Common::HTML_Common($attributes);
         $method = (strtoupper($method) == 'GET') ? 'get' : 'post';
-        // Modified by Chamilo team, 16-MAR-2010
-        //$action = ($action == '') ? $_SERVER['PHP_SELF'] : $action;
         $action = ($action == '') ? api_get_self() : $action;
-        //
         $target = empty($target) ? array() : array('target' => $target);
         $form_id = $formName;
         if (isset($attributes['id']) && !empty($attributes['id'])) {
@@ -665,16 +661,30 @@ class HTML_QuickForm extends HTML_Common
             }
         }
         $elementName = $elementObject->getName();
+        $type = $elementObject->getType();
+
+        if ($type == 'datetimepicker' && $this->dateTimePickerLibraryAdded == false) {
+            $elementObject->addLibrary = true;
+            $this->dateTimePickerLibraryAdded = true;
+        } else {
+            $elementObject->addLibrary = false;
+        }
 
         // Add the element if it is not an incompatible duplicate
         if (!empty($elementName) && isset($this->_elementIndex[$elementName])) {
-            if ($this->_elements[$this->_elementIndex[$elementName]]->getType() ==
-                $elementObject->getType()) {
+            if ($this->_elements[$this->_elementIndex[$elementName]]->getType() == $elementObject->getType()) {
                 $this->_elements[] =& $elementObject;
                 $elKeys = array_keys($this->_elements);
                 $this->_duplicateIndex[$elementName][] = end($elKeys);
             } else {
-                $error = PEAR::raiseError(null, QUICKFORM_INVALID_ELEMENT_NAME, null, E_USER_WARNING, "Element '$elementName' already exists in HTML_QuickForm::addElement()", 'HTML_QuickForm_Error', true);
+                $error = PEAR::raiseError(
+                    null,
+                    QUICKFORM_INVALID_ELEMENT_NAME,
+                    null,
+                    E_USER_WARNING,
+                    "Element '$elementName' already exists in HTML_QuickForm::addElement()", 'HTML_QuickForm_Error',
+                    true
+                );
                 return $error;
             }
         } else {
@@ -682,6 +692,7 @@ class HTML_QuickForm extends HTML_Common
             $elKeys = array_keys($this->_elements);
             $this->_elementIndex[$elementName] = end($elKeys);
         }
+
         if ($this->_freezeAll) {
             $elementObject->freeze();
         }

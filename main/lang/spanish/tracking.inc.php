@@ -2,6 +2,10 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SleepingStudents = "Alumnos inactivos desde unos días";
+$SleepingTeachers = "Docentes inactivos desde algunos días";
+$InactiveUsers = "Usuarios desactivados";
+$ActiveUsers = "Usuarios activados";
 $SurveysProgress = "Progreso de encuestas";
 $SurveysLeft = "Encuestas incompletas";
 $SurveysDone = "Encuestas completadas";

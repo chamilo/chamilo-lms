@@ -74,7 +74,7 @@ switch ($action) {
         $agenda->move_event($id, $day_delta, $minute_delta);
         break;
     case 'get_events':
-        $user_id = $_REQUEST['user_id'];
+        $user_id = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
         if (substr($user_id, 0, 1) == 'G') {
             $length = strlen($user_id);
             $group_id = substr($user_id, 2, $length-1);

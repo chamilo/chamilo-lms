@@ -121,10 +121,12 @@ if (is_int($global_error_code) && $global_error_code > 0) {
 			}
 			$read_installation_guide = substr($InstallationDescription, $pos + 2);
 			$InstallationDescription = '<form action="'.$root_rel.'main/install/index.php" method="get">
+										<div class="install-mascot">
                                         <p class="download-info">
                                             <button class="btn btn-primary btn-large" type="submit" value="INSTALL Chamilo" >INSTALL Chamilo</button>
                                             <a class="btn btn-large" href="'.$installation_guide_url.'" target="_blank">'.$read_installation_guide.'</a>
                                         </p>
+                                        </div>
 										</form>';
 			$global_error_message['description'] = $InstallationDescription;
 			break;

@@ -37,9 +37,9 @@ if ($form->validate()) {
             }
             //checking url
             if (substr($url, strlen($url)-1, strlen($url)) == '/') {
-                UrlManager::udpate($url_id, $url, $description, $active);
+                UrlManager::update($url_id, $url, $description, $active);
             } else {
-                UrlManager::udpate($url_id, $url.'/', $description, $active);
+                UrlManager::update($url_id, $url.'/', $description, $active);
             }
             // URL Images
             $url_images_dir = api_get_path(SYS_PATH).'custompages/url-images/';

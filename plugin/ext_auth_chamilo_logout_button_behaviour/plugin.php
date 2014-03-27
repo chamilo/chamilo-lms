@@ -9,7 +9,6 @@
  * Plugin details (must be present)
  */
 
-
 //the plugin title
 $plugin_info['title']      = 'Enable or disable logout button';
 

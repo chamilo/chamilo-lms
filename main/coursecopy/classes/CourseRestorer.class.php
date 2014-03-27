@@ -108,7 +108,7 @@ class CourseRestorer
 	 * Set the file-option
 	 * @param constant $options What to do with files with same name (FILE_SKIP, FILE_RENAME or FILE_OVERWRITE)
 	 */
-    function set_file_option($option=FILE_OVERWRITE)
+    function set_file_option($option = FILE_OVERWRITE)
     {
 		$this->file_option = $option;
 	}
@@ -2108,22 +2108,88 @@ class CourseRestorer
 
                 // check resources inside html from fckeditor tool and copy correct urls into recipient course
                 $obj->params['description'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($obj->params['description'], $this->course->code, $this->course->destination_path, $this->course->backup_path, $this->course->info['path']);
+                $id_work = $obj->params['id'];
                 $obj->params['id'] = null;
                 $obj->params['c_id'] = $this->destination_course_id;
 
-                $last_id = Database::insert($table_work, $obj->params);
                 // re-create dir
                 // @todo check security against injection of dir in crafted course backup here!
                 $path = $obj->params['url'];
                 $path = '/'.str_replace('/','',substr($path,1));
                 $destination_path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/work'.$path;
-                $r = @mkdir($destination_path, $perm);
-                if ($r === false) {
-                    error_log('Failed creating directory '.$destination_path.' in course restore for work tool');
-                }
+                if (!file_exists($destination_path) && is_dir($destination_path)) {
+                    $r = @mkdir($destination_path, $perm);
+                    if ($r === false) {
+                        error_log('Failed creating directory '.$destination_path.' in course restore for work tool');
+                    }
 
-                if (is_numeric($last_id)) {
-                    api_item_property_update($this->destination_course_info, 'work', $last_id,"DirectoryCreated", api_get_user_id());
+                    $last_id = Database::insert($table_work, $obj->params);
+                    if (is_numeric($last_id)) {
+                        $sql = 'SELECT *
+                                FROM '.$table_work_assignment.'
+                                WHERE  c_id = '.$this->course_origin_id.' AND
+                                       publication_id = '.$id_work;
+
+                        $result = Database::query($sql);
+                        $cant = Database::num_rows($result);
+                        if ($cant > 0) {
+                            $row = Database::fetch_assoc($result);
+                            $expires_date = $row['expires_on'];
+                            $end_date = $row['ends_on'];
+                            $add_to_calendar = $row['add_to_calendar'];
+                            $enable_calification = $row['enable_calification'];
+                            $sql_add_homework = "INSERT INTO $table_work_assignment SET
+                                                        c_id                 = $this->destination_course_id ,
+                                                        expires_on       		= '$expires_date',
+                                                        ends_on        	 	 = '$end_date',
+                                                        add_to_calendar  		= '$add_to_calendar',
+                                                        enable_qualification = '$enable_calification',
+                                                        publication_id 			= '$last_id'";
+                            Database::query($sql_add_homework);
+                        }
+                        api_item_property_update($this->destination_course_info, 'work', $last_id,"DirectoryCreated", api_get_user_id());
+                    }
+                } elseif ($this->file_option == FILE_RENAME) {
+                    $i = 1;
+                    $new_path = $destination_path.'_'.$i;
+                    $folder_exists = file_exists($new_path);
+                    while ($folder_exists) {
+                        $i ++;
+                        $new_path = $destination_path.'_'.$i;
+                        $folder_exists = file_exists($path.$new_path);
+                    }
+                    $r = @mkdir($new_path, $perm);
+                    if ($r === false) {
+                        error_log('Failed creating directory '.$new_path.' in course restore for work tool');
+                    }
+                    $obj->params['url'] .= '_'.$i;
+                    $obj->params['title'] .= '_'.$i;
+                    $last_id = Database::insert($table_work, $obj->params);
+                    if (is_numeric($last_id)) {
+                        $sql = 'SELECT *
+                            FROM '.$table_work_assignment.'
+                            WHERE  c_id = '.$this->course_origin_id.' AND
+                                   publication_id = '.$id_work;
+
+                        $result = Database::query($sql);
+                        $cant = Database::num_rows($result);
+                        if ($cant > 0) {
+                            $row = Database::fetch_assoc($result);
+                            $expires_date = $row['expires_on'];
+                            $end_date = $row['ends_on'];
+                            $add_to_calendar = $row['add_to_calendar'];
+                            $enable_calification = $row['enable_calification'];
+                            $sql_add_homework = "INSERT INTO $table_work_assignment SET
+                                                    c_id                 = $this->destination_course_id ,
+                                                    expires_on       		= '$expires_date',
+                                                    ends_on        	 	 = '$end_date',
+                                                    add_to_calendar  		= '$add_to_calendar',
+                                                    enable_qualification = '$enable_calification',
+                                                    publication_id 			= '$last_id'";
+                            Database::query($sql_add_homework);
+                        }
+                        api_item_property_update($this->destination_course_info, 'work', $last_id,"DirectoryCreated", api_get_user_id());
+                    }
                 }
             }
         }

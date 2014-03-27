@@ -430,24 +430,13 @@ class Template
         //Base CSS
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
 
-        //Default theme CSS
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
+        //Default CSS responsive design
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css');
-        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
+        
 
         //Extra CSS files
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chosen/chosen.css';
-
-        if ($this->show_learnpath) {
-            $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/learnpath.css';
-            $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/scorm.css';
-        }
-
-        // if we have a scorm file in theme dont use default_scorm.css file
-        if (!is_file(api_get_path(SYS_CSS_PATH) . $this->theme . '/scorm.css')) {
-            $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'/default_scorm.css');
-        }
 
         if (api_is_global_chat_enabled()) {
             $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/chat/css/chat.css';
@@ -455,6 +444,20 @@ class Template
 
         $css[] = api_get_path(WEB_CSS_PATH).'font_awesome/css/font-awesome.css';
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/mediaelementplayer.css';
+        //THEME CSS STYLE
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'responsive.css');
+        $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/default.css');
+
+        if ($this->show_learnpath) {
+            $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/learnpath.css';
+
+            // if we have a SCORM file in theme, don't use default_scorm.css file
+            if (is_file(api_get_path(SYS_CSS_PATH).$this->theme.'/scorm.css')) {
+                $css[] = api_get_path(WEB_CSS_PATH).$this->theme.'/scorm.css';
+            } else {
+                $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'default_scorm.css');
+            }
+        }
 
         $css_file_to_string = null;
         foreach ($css as $file) {
@@ -586,7 +589,7 @@ class Template
     private function set_header_parameters()
     {
         global $httpHeadXtra, $_course, $interbreadcrumb, $language_file, $noPHP_SELF, $_configuration, $this_section;
-        $help                  = $this->help;
+        $help = $this->help;
         $nameTools             = $this->title;
         $navigation            = return_navigation_array();
         $this->menu_navigation = $navigation['menu_navigation'];
@@ -599,8 +602,8 @@ class Template
             }
         }
 
-        $this->assign('online_button', Security::remove_XSS(Display::return_icon('online.png')));
-        $this->assign('offline_button', Security::remove_XSS(Display::return_icon('offline.png')));
+        $this->assign('online_button', Display::return_icon('online.png'));
+        $this->assign('offline_button',Display::return_icon('offline.png'));
 
         // Get language iso-code for this page - ignore errors
         $this->assign('document_language', api_get_language_isocode());

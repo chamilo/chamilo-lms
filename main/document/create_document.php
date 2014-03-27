@@ -46,11 +46,6 @@ $(document).ready(function() {
 });
 
 function InnerDialogLoaded() {
-	/*
-	var B=new window.frames[0].FCKToolbarButton(\'Templates\',window.frames[0].FCKLang.Templates);
-	return B.ClickFrame();
-	*/
-
 	var isIE  = (navigator.appVersion.indexOf(\'MSIE\') != -1) ? true : false ;
 	var EditorFrame = null ;
 
@@ -100,15 +95,13 @@ function InnerDialogLoaded() {
 			var bestandsnaamNieuw = "";
 			var bestandsnaamOud = "";
 
-			// The are two diffent ways to get the text (without HTML markups).
+			// The are two different ways to get the text (without HTML markups).
 			// It is browser specific.
-
-			if( document.all )		// If Internet Explorer.
-			{
+            // If Internet Explorer.
+			if( document.all ) {
 				contentText = oDOM.body.innerText ;
-			}
-			else					// If Gecko.
-			{
+			} else  {
+			    // If Gecko.
 				var r = oDOM.createRange() ;
 				r.selectNodeContents( oDOM.body ) ;
 				contentText = r.toString() ;
@@ -120,14 +113,10 @@ function InnerDialogLoaded() {
 			// Compose title if there is none
 			contentTextArray = contentText.split(\' \') ;
 			var x=0;
-			for(x=0; (x<5 && x<contentTextArray.length); x++)
-			{
-				if(x < 4)
-				{
+			for(x=0; (x<5 && x<contentTextArray.length); x++) {
+				if(x < 4) {
 					bestandsnaamNieuw += contentTextArray[x] + \' \';
-				}
-				else
-				{
+				} else {
 					bestandsnaamNieuw += contentTextArray[x];
 				}
 			}
@@ -191,6 +180,7 @@ if (empty($document_data)) {
     $folder_id = $document_data['id'];
     $dir       = $document_data['path'];
 }
+
 
 /*	MAIN CODE */
 
@@ -282,15 +272,19 @@ if (!$is_certificate_mode) {
 			api_not_allowed(true);
 		}
 	}
-	$interbreadcrumb[] = array ("url" => "./document.php?curdirpath=".urlencode($dir).$req_gid, "name" => get_lang('Documents'));
+	$interbreadcrumb[] = array("url" => "./document.php?curdirpath=".urlencode($dir).$req_gid, "name" => get_lang('Documents'));
 } else {
-	$interbreadcrumb[]= array (	'url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
+	$interbreadcrumb[]= array('url' => '../gradebook/'.$_SESSION['gradebook_dest'], 'name' => get_lang('Gradebook'));
 }
 
 if (!$is_allowed_in_course) {
 	api_not_allowed(true);
 }
-if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_my_shared_folder($_user['user_id'], Security::remove_XSS($dir),api_get_session_id()))) {
+
+if (!($is_allowed_to_edit ||
+    $_SESSION['group_member_with_upload_rights'] ||
+    is_my_shared_folder($_user['user_id'], $dir, api_get_session_id()))
+) {
 	api_not_allowed(true);
 }
 
@@ -299,27 +293,34 @@ if (!($is_allowed_to_edit || $_SESSION['group_member_with_upload_rights'] || is_
 event_access_tool(TOOL_DOCUMENT);
 
 $display_dir = $dir;
-if (isset ($group_properties)) {
+if (isset($group_properties)) {
 	$display_dir = explode('/', $dir);
-	unset ($display_dir[0]);
-	unset ($display_dir[1]);
+	unset($display_dir[0]);
+	unset($display_dir[1]);
 	$display_dir = implode('/', $display_dir);
 }
 
 $select_cat = isset($_GET['selectcat']) ? intval($_GET['selectcat']) : null;
 
 // Create a new form
-$form = new FormValidator('create_document','post',api_get_self().'?'.api_get_cidreq().'&dir='.Security::remove_XSS(urlencode($dir)).'&selectcat='.$select_cat, null, array('class' =>'form-vertical'));
+$form = new FormValidator(
+    'create_document',
+    'post',
+    api_get_self().'?'.api_get_cidreq().'&dir='.Security::remove_XSS(urlencode($dir)).'&selectcat='.$select_cat,
+    null,
+    array('class' =>'form-vertical')
+);
 
 // form title
 $form->addElement('header', $nameTools);
 
 if ($is_certificate_mode) {//added condition for certicate in gradebook
 	$form->addElement('hidden','certificate','true',array('id'=>'certificate'));
-	if (isset($_GET['selectcat']))
+	if (isset($_GET['selectcat'])) {
 		$form->addElement('hidden','selectcat', $select_cat);
-
+    }
 }
+
 // Hidden element with current directory
 $form->addElement('hidden', 'id');
 $defaults = array();
@@ -469,18 +470,17 @@ $form->setDefaults($defaults);
 if ($form->validate()) {
 	$values = $form->exportValues();
 	$readonly = isset($values['readonly']) ? 1 : 0;
-
 	$values['title'] = trim($values['title']);
 
-	if (!empty($values['curdirpath'])) {
+	/*if (!empty($values['curdirpath'])) {
 		$dir = $values['curdirpath'];
-	}
+	}*/
 
-	if ($dir[strlen($dir) - 1] != '/') {
+    if ($dir[strlen($dir) - 1] != '/') {
 		$dir .= '/';
 	}
 
-    //Setting the filename
+    // Setting the filename
 	$filename = $values['title'];
 	$filename = addslashes(trim($filename));
 	$filename = Security::remove_XSS($filename);
@@ -495,8 +495,8 @@ if ($form->validate()) {
 
 	$content = Security::remove_XSS($values['content'], COURSEMANAGERLOWSECURITY);
 
-	if (strpos($content, '/css/frames.css') === false) {
-		$content = str_replace('</head>', '<style> body{margin:10px;}</style><link rel="stylesheet" href="./css/frames.css" type="text/css" /></head>', $content);
+	if (strpos($content, '/css/frames.css') == false) {
+		$content = str_replace('</head>', '<link rel="stylesheet" href="./css/frames.css" type="text/css" /><style> body{margin:50px;}</style></head>', $content);
 	}
 	if ($fp = @fopen($filepath.$filename.'.'.$extension, 'w')) {
 		$content = str_replace(api_get_path(WEB_COURSE_PATH), $_configuration['url_append'].'/courses/', $content);
@@ -530,8 +530,20 @@ if ($form->validate()) {
 		$save_file_path = $dir.$filename.'.'.$extension;
 
 		$document_id = add_document($_course, $save_file_path, 'file', $file_size, $title, null, $readonly);
+
 		if ($document_id) {
-			api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'DocumentAdded', $_user['user_id'], $to_group_id, null, null, null, $current_session_id);
+			api_item_property_update(
+                $_course,
+                TOOL_DOCUMENT,
+                $document_id,
+                'DocumentAdded',
+                $_user['user_id'],
+                $to_group_id,
+                null,
+                null,
+                null,
+                $current_session_id
+            );
 			// Update parent folders
 			item_property_update_on_folder($_course, $dir, $_user['user_id']);
 			$new_comment = isset($_POST['comment']) ? trim($_POST['comment']) : '';

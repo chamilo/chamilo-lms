@@ -73,7 +73,7 @@ while ($obj = Database::fetch_object($res)) {
         $teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
     }
 
-    if ($course['tutor_name'] == $course_teachers[$obj->user_id]) {
+    if (isset($course_teachers[$obj->user_id]) && $course['tutor_name'] == $course_teachers[$obj->user_id]) {
         $course['tutor_name'] = $obj->user_id;
     }
     // We add in the array platform teachers
@@ -375,9 +375,8 @@ if ($form->validate()) {
     }
 
 	$course_id = $course_info['real_id'];
-	$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE);
-
-	$sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."' WHERE c_id = $course_id ";
+	/*$forum_config_table = Database::get_course_table(TOOL_FORUM_CONFIG_TABLE);
+	$sql = "UPDATE ".$forum_config_table." SET default_lang='".Database::escape_string($course_language)."' WHERE c_id = $course_id ";*/
 	if ($visual_code_is_used) {
 	    header('Location: course_list.php?action=show_msg&warn='.urlencode($warn));
 	} else {

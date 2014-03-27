@@ -1570,7 +1570,7 @@ class CourseManager
         $rs = Database::query('SELECT id_user FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).
                 ' WHERE id_session="'.$session_id.'" AND course_code="'.$course_code.'" AND status = 2');
         while ($user = Database::fetch_array($rs)) {
-            $user_info = Database::get_user_info_from_id($user['id_user']);
+            $user_info = api_get_user_info($user['id_user']);
             $user_info['status'] = $user['status'];
             $user_info['role'] = $user['role'];
             $user_info['tutor_id'] = $user['tutor_id'];
@@ -1581,7 +1581,7 @@ class CourseManager
         // We get the session coach.
         $rs = Database::query('SELECT id_coach FROM '.Database::get_main_table(TABLE_MAIN_SESSION).' WHERE id="'.$session_id.'"');
         $session_id_coach = Database::result($rs, 0, 'id_coach');
-        $user_info = Database::get_user_info_from_id($session_id_coach);
+        $user_info = api_get_user_info($session_id_coach);
         $user_info['status'] = $user['status'];
         $user_info['role'] = $user['role'];
         $user_info['tutor_id'] = $user['tutor_id'];
@@ -1817,10 +1817,6 @@ class CourseManager
         }
         return $result_array;
     }
-
-    /*
-        GROUP FUNCTIONS
-    */
 
     /**
      * Get the list of groups from the course

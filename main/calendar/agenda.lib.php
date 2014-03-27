@@ -67,7 +67,8 @@ class Agenda
         $title,
         $content,
         $users_to_send = array(),
-        $add_as_announcement = false
+        $add_as_announcement = false,
+        $parentEventId = null
     ) {
         $start = api_get_utc_datetime($start);
         $end = api_get_utc_datetime($end);
@@ -93,6 +94,10 @@ class Agenda
                 $attributes['all_day'] = $all_day;
                 $attributes['session_id'] = api_get_session_id();
                 $attributes['c_id'] = $this->course['real_id'];
+
+                if (!empty($parentEventId)) {
+                    $attributes['parent_event_id'] = $parentEventId;
+                }
 
                 //simple course event
                 $id = Database::insert($this->tbl_course_agenda, $attributes);
@@ -142,6 +147,158 @@ class Agenda
     }
 
     /**
+     * @param int $eventId
+     * @param string $type
+     * @param string $end date time
+     * @param array $sentTo
+     * @return bool
+     */
+    public function addRepeatedItem($eventId, $type, $end, $sentTo = array())
+    {
+        $t_agenda = Database::get_course_table(TABLE_AGENDA);
+        $t_agenda_r = Database::get_course_table(TABLE_AGENDA_REPEAT);
+        $course_id = $this->course['real_id'];
+
+        $sql = 'SELECT title, content, start_date as sd, end_date as ed
+                FROM '.$t_agenda.'
+                WHERE c_id = '.$course_id.' AND id ="'.intval($eventId).'" ';
+        $res = Database::query($sql);
+
+        if (Database::num_rows($res) !== 1) {
+            return false;
+        }
+
+        $row = Database::fetch_array($res);
+        $orig_start = api_strtotime(api_get_local_time($row['sd']));
+        $orig_end = api_strtotime(api_get_local_time($row['ed']));
+
+        $diff = $orig_end - $orig_start;
+        $orig_title = $row['title'];
+        $orig_content = $row['content'];
+        $now = time();
+        $type = Database::escape_string($type);
+        $end = intval($end);
+
+        if (1 <= $end && $end <= 500) {
+            //we assume that, with this type of value, the user actually gives a count of repetitions
+            //and that he wants us to calculate the end date with that (particularly in case of imports from ical)
+            switch ($type) {
+                case 'daily':
+                    $end = $orig_start + (86400 * $end);
+                    break;
+                case 'weekly':
+                    $end = self::add_week($orig_start, $end);
+                    break;
+                case 'monthlyByDate':
+                    $end = self::add_month($orig_start, $end);
+                    break;
+                case 'monthlyByDay':
+                    //TODO
+                    break;
+                case 'monthlyByDayR':
+                    //TODO
+                    break;
+                case 'yearly':
+                    $end = self::add_year($orig_start, $end);
+                    break;
+            }
+        }
+
+        $typeList = array('daily', 'weekly', 'monthlyByDate', 'monthlyByDay', 'monthlyByDayR', 'yearly');
+        if ($end > $now && in_array($type, $typeList)) {
+            $sql = "INSERT INTO $t_agenda_r (c_id, cal_id, cal_type, cal_end)
+                    VALUES ($course_id, '$eventId', '$type', '$end')";
+            Database::query($sql);
+
+            switch ($type) {
+                case 'daily':
+                    for ($i = $orig_start + 86400; ($i <= $end); $i += 86400) {
+                        $start = date('Y-m-d H:i:s', $i);
+                        $end = date('Y-m-d H:i:s', $i + $diff);
+                        self::add_event(
+                            $start,
+                            $end,
+                            false,
+                            null,
+                            $orig_title,
+                            $orig_content,
+                            $sentTo,
+                            false,
+                            $eventId
+                        );
+                    }
+                    break;
+                case 'weekly':
+                    for ($i = $orig_start + 604800; ($i <= $end); $i += 604800) {
+                        //agenda_add_item($this->course, $orig_title, $orig_content, date('Y-m-d H:i:s', $i), date('Y-m-d H:i:s', $i + $diff), $orig_dest, $orig_id, $file_comment);
+                        $start = date('Y-m-d H:i:s', $i);
+                        $end = date('Y-m-d H:i:s', $i + $diff);
+                        self::add_event(
+                            $start,
+                            $end,
+                            false,
+                            null,
+                            $orig_title,
+                            $orig_content,
+                            $sentTo,
+                            false,
+                            $eventId
+                        );
+                    }
+                    break;
+                case 'monthlyByDate':
+                    $next_start = add_month($orig_start);
+                    while ($next_start <= $end) {
+                        $start = date('Y-m-d H:i:s', $next_start);
+                        $end = date('Y-m-d H:i:s', $next_start + $diff);
+                        self::add_event(
+                            $start,
+                            $end,
+                            false,
+                            null,
+                            $orig_title,
+                            $orig_content,
+                            $sentTo,
+                            false,
+                            $eventId
+                        );
+
+                        //agenda_add_item($this->course, $orig_title, $orig_content, date('Y-m-d H:i:s', $next_start), date('Y-m-d H:i:s', $next_start + $diff), $orig_dest, $orig_id, $file_comment);
+                        $next_start = self::add_month($next_start);
+                    }
+                    break;
+                case 'monthlyByDay':
+                    //not yet implemented
+                    break;
+                case 'monthlyByDayR':
+                    //not yet implemented
+                    break;
+                case 'yearly':
+                    $next_start = add_year($orig_start);
+                    while ($next_start <= $end) {
+                        $start = date('Y-m-d H:i:s', $next_start);
+                        $end = date('Y-m-d H:i:s', $next_start + $diff);
+                        self::add_event(
+                            $start,
+                            $end,
+                            false,
+                            null,
+                            $orig_title,
+                            $orig_content,
+                            $sentTo,
+                            false,
+                            $eventId
+                        );
+                        //agenda_add_item($this->course, $orig_title, $orig_content, date('Y-m-d H:i:s', $next_start), date('Y-m-d H:i:s', $next_start + $diff), $orig_dest, $orig_id, $file_comment);
+                        $next_start = self::add_year($next_start);
+                    }
+                    break;
+            }
+        }
+        return true;
+    }
+
+    /**
      * @param int $item_id
      * @param array $sent_to
      * @return int
@@ -151,22 +308,28 @@ class Agenda
         $table_agenda = Database::get_course_table(TABLE_AGENDA);
         $course_id = api_get_course_int_id();
 
-        //check params
+        // Check params
         if (empty($item_id) or $item_id != strval(intval($item_id))) {
             return -1;
         }
-        //get the agenda item
 
+        // Get the agenda item.
         $item_id = Database::escape_string($item_id);
         $sql = "SELECT * FROM $table_agenda WHERE c_id = $course_id AND id = ".$item_id;
         $res = Database::query($sql);
 
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res, 'ASSOC');
-
-            //Sending announcement
+            // Sending announcement
             if (!empty($sent_to)) {
-                $id = AnnouncementManager::add_announcement($row['title'], $row['content'], $sent_to, null, null, $row['end_date']);
+                $id = AnnouncementManager::add_announcement(
+                    $row['title'],
+                    $row['content'],
+                    $sent_to,
+                    null,
+                    null,
+                    $row['end_date']
+                );
                 AnnouncementManager::send_email($id);
             }
             return $id;
@@ -591,9 +754,12 @@ class Agenda
                             ip.id_session = $session_id
                     ";
         }
-
+        $dateCondition = null;
         if (!empty($start)  && !empty($end)) {
-            $dateCondition = "((agenda.start_date >= '".$start."' OR agenda.start_date IS NULL) AND (agenda.end_date <= '".$end."' OR agenda.end_date IS NULL))";
+            $dateCondition = "AND (
+                (agenda.start_date >= '".$start."' OR agenda.start_date IS NULL) AND
+                (agenda.end_date <= '".$end."' OR agenda.end_date IS NULL)
+            )";
         }
 
         $result = Database::query($sql);
@@ -606,7 +772,7 @@ class Agenda
                     WHERE   ip.tool         = '".TOOL_CALENDAR_EVENT."' AND
                             ref             = {$row['ref']} AND
                             ip.visibility   = '1' AND
-                            ip.c_id         = $course_id AND
+                            ip.c_id         = $course_id
                             $dateCondition";
                 $sent_to_result = Database::query($sql);
                 $user_to_array = array();
@@ -621,7 +787,6 @@ class Agenda
                 }
 
                 $event = array();
-
                 $event['id'] = 'course_'.$row['id'];
 
                 // To avoid doubles
@@ -630,9 +795,7 @@ class Agenda
                 }
 
                 $events_added[] = $row['id'];
-
                 $attachment = get_attachment($row['id'], $course_id);
-
                 $has_attachment = '';
 
                 if (!empty($attachment)) {
@@ -1021,5 +1184,49 @@ class Agenda
         } else {
             api_item_property_update($courseInfo, TOOL_CALENDAR_EVENT, $id, "visible", $userId);
         }
+    }
+
+
+    /**
+     * Adds x weeks to a UNIX timestamp
+     * @param   int     The timestamp
+     * @param   int     The number of weeks to add
+     * @return  int     The new timestamp
+     */
+    function add_week($timestamp,$num=1)
+    {
+        return $timestamp + $num*604800;
+    }
+
+    /**
+     * Adds x months to a UNIX timestamp
+     * @param   int     The timestamp
+     * @param   int     The number of years to add
+     * @return  int     The new timestamp
+     */
+    function add_month($timestamp,$num=1)
+    {
+        list($y, $m, $d, $h, $n, $s) = split('/',date('Y/m/d/h/i/s',$timestamp));
+        if($m+$num>12)
+        {
+            $y += floor($num/12);
+            $m += $num%12;
+        }
+        else
+        {
+            $m += $num;
+        }
+        return mktime($h, $n, $s, $m, $d, $y);
+    }
+    /**
+     * Adds x years to a UNIX timestamp
+     * @param   int     The timestamp
+     * @param   int     The number of years to add
+     * @return  int     The new timestamp
+     */
+    function add_year($timestamp,$num=1)
+    {
+        list($y, $m, $d, $h, $n, $s) = split('/',date('Y/m/d/h/i/s',$timestamp));
+        return mktime($h, $n, $s, $m, $d, $y+$num);
     }
 }

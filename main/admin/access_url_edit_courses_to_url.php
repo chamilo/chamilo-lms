@@ -92,7 +92,7 @@ $errorMsg='';
 $UserList=$SessionList=array();
 $users=$sessions=array();
 
-if($_POST['form_sent']) {
+if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 	$form_sent=$_POST['form_sent'];
 	$course_list=$_POST['course_list'];
 
@@ -119,7 +119,7 @@ echo '</div>';
 
 api_display_tool_title($tool_name);
 
-if ($_GET['action'] == 'show_message')
+if (isset($_GET['action']) && $_GET['action'] == 'show_message')
 	Display :: display_normal_message(Security::remove_XSS(stripslashes($_GET['message'])));
 
 $no_course_list = $course_list = array();

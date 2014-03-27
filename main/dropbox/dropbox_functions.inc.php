@@ -1034,8 +1034,8 @@ function store_feedback()
 }
 
 /**
-* This function downloads all the files of the inputarray into one zip
-* @param $array an array containing all the ids of the files that have to be downloaded.
+* This function downloads all the files of the input array into one zip
+* @param array $fileList containing all the ids of the files that have to be downloaded.
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @todo consider removing the check if the user has received or sent this file (zip download of a folder already sufficiently checks for this).
 * @todo integrate some cleanup function that removes zip files that are older than 2 days
@@ -1044,34 +1044,52 @@ function store_feedback()
 * @author Julio Montoya  Addin c_id support
 * @version march 2006
 */
-function zip_download($array) {
+function zip_download($fileList)
+{
 	$_course = api_get_course_info();
     $dropbox_cnf = getDropboxConf();
-
     $course_id = api_get_course_int_id();
-	$array = array_map('intval', $array);
+    $fileList = array_map('intval', $fileList);
 
 	// note: we also have to add the check if the user has received or sent this file.
 	$sql = "SELECT DISTINCT file.filename, file.title, file.author, file.description
-			FROM ".$dropbox_cnf['tbl_file']." file INNER JOIN ".$dropbox_cnf['tbl_person']." person
+			FROM ".$dropbox_cnf['tbl_file']." file
+			INNER JOIN ".$dropbox_cnf['tbl_person']." person
             ON (person.file_id=file.id AND file.c_id = $course_id AND person.c_id = $course_id)
             INNER JOIN ".$dropbox_cnf['tbl_post']." post
             ON (post.file_id = file.id AND post.c_id = $course_id AND file.c_id = $course_id)
-			WHERE   file.id IN (".implode(', ',$array).") AND
-                    file.id = person.file_id AND
-                    (person.user_id = '".api_get_user_id()."' OR post.dest_user_id = '".api_get_user_id()."' ) ";
+			WHERE
+			    file.id IN (".implode(', ', $fileList).") AND
+                file.id = person.file_id AND
+                (
+                    person.user_id = '".api_get_user_id()."' OR
+                    post.dest_user_id = '".api_get_user_id()."'
+                ) ";
 	$result = Database::query($sql);
+
 	$files = array();
 	while ($row = Database::fetch_array($result)) {
-		$files[$row['filename']] = array('filename' => $row['filename'],'title' => $row['title'], 'author' => $row['author'], 'description' => $row['description']);
+		$files[$row['filename']] = array(
+            'filename' => $row['filename'],
+            'title' => $row['title'],
+            'author' => $row['author'],
+            'description' => $row['description']
+        );
 	}
 
 	// Step 3: create the zip file and add all the files to it
 	$temp_zip_file = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
-	$zip_folder = new PclZip($temp_zip_file);
+    Session::write('dropbox_files_to_download', $files);
+	$zip = new PclZip($temp_zip_file);
 	foreach ($files as $value) {
-		$zip_folder->add(api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$value['filename'], PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_CB_PRE_ADD, 'my_pre_add_callback');
+        $zip->add(
+            api_get_path(SYS_COURSE_PATH).$_course['path'].'/dropbox/'.$value['filename'],
+            PCLZIP_OPT_REMOVE_ALL_PATH,
+            PCLZIP_CB_PRE_ADD,
+            'my_pre_add_callback'
+        );
 	}
+    Session::erase('dropbox_files_to_download');
 	$name = 'dropbox-'.api_get_utc_datetime().'.zip';
 	DocumentManager::file_send_for_download($temp_zip_file, true, $name);
 	@unlink($temp_zip_file);
@@ -1080,18 +1098,18 @@ function zip_download($array) {
 
 /**
 * This is a callback function to decrypt the files in the zip file to their normal filename (as stored in the database)
-* @param $p_event a variable of PCLZip
-* @param $p_header a variable of PCLZip
+* @param array $p_event a variable of PCLZip
+* @param array $p_header a variable of PCLZip
 *
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 * @version march 2006
 */
-function my_pre_add_callback($p_event, &$p_header) {
-	global $files;
+function my_pre_add_callback($p_event, &$p_header)
+{
+    $files = Session::read('dropbox_files_to_download');
 	$p_header['stored_filename'] = $files[$p_header['stored_filename']]['title'];
 	return 1;
 }
-
 
 /**
  * @desc Generates the contents of a html file that gives an overview of all the files in the zip file.

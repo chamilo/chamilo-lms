@@ -87,36 +87,40 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 }
 
-// get vars from GET
-if ( empty ( $exerciseId ) ) {
-    $exerciseId = intval($_GET['exerciseId']);
-}
-if ( empty ( $newQuestion ) ) {
-    $newQuestion = $_GET['newQuestion'];
-}
-if ( empty ( $modifyAnswers ) ) {
-    $modifyAnswers = $_GET['modifyAnswers'];
-}
-if ( empty ( $editQuestion ) ) {
-    $editQuestion = $_GET['editQuestion'];
-}
-if ( empty ( $modifyQuestion ) ) {
-    $modifyQuestion = $_GET['modifyQuestion'];
-}
-if ( empty ( $deleteQuestion ) ) {
-    $deleteQuestion = $_GET['deleteQuestion'];
-}
-if ( empty ($clone_question) ) {
-	$clone_question = $_GET['clone_question'];
-}
-if ( empty ( $questionId ) ) {
-    $questionId = $_SESSION['questionId'];
-}
-if ( empty ( $modifyExercise ) ) {
-    $modifyExercise = $_GET['modifyExercise'];
+if (empty($exerciseId)) {
+    $exerciseId = isset($_GET['exerciseId']) ? intval($_GET['exerciseId']):'0';
 }
 
-//Cleaning all incomplete attempts of the admin/teacher to avoid weird problems when changing the exercise settings, number of questions, etc
+if (empty($newQuestion)) {
+    $newQuestion = isset($_GET['newQuestion']) ? $_GET['newQuestion'] : 0;
+}
+if (empty($modifyAnswers)) {
+    $modifyAnswers = isset($_GET['modifyAnswers']) ? $_GET['modifyAnswers'] : 0;
+}
+if (empty($editQuestion)) {
+    $editQuestion = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : 0;
+}
+if (empty($modifyQuestion)) {
+    $modifyQuestion = isset($_GET['modifyQuestion']) ? $_GET['modifyQuestion'] : 0;
+}
+if (empty($deleteQuestion)) {
+    $deleteQuestion = isset($_GET['deleteQuestion']) ? $_GET['deleteQuestion'] : 0;
+}
+$clone_question = isset($_REQUEST['clone_question']) ? $_REQUEST['clone_question'] : 0;
+if (empty($questionId)) {
+    $questionId = isset($_SESSION['questionId']) ? $_SESSION['questionId'] : 0;
+}
+if (empty($modifyExercise)) {
+    $modifyExercise = isset($_GET['modifyExercise']) ? $_GET['modifyExercise'] : null;
+}
+
+$fromExercise = isset($fromExercise) ? $fromExercise : null;
+$cancelExercise = isset($cancelExercise) ? $cancelExercise : null;
+$cancelAnswers = isset($cancelAnswers) ? $cancelAnswers : null;
+$modifyIn = isset($modifyIn) ? $modifyIn : null;
+$cancelQuestion = isset($cancelQuestion) ? $cancelQuestion : null;
+
+// Cleaning all incomplete attempts of the admin/teacher to avoid weird problems when changing the exercise settings, number of questions, etc
 
 delete_all_incomplete_attempts(api_get_user_id(), $exerciseId, api_get_course_id(), api_get_session_id());
 
@@ -139,7 +143,7 @@ $aType = array(get_lang('UniqueSelect'),get_lang('MultipleSelect'),get_lang('Fil
 
 // tables used in the exercise tool
 
-if ($_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
+if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
 	require_once 'export/qti2/qti2_export.php';
 	$export = export_question($_GET['questionId'],true);
 	$qid = (int)$_GET['questionId'];
@@ -176,9 +180,9 @@ if (!is_object($objExercise)) {
 }
 
 // doesn't select the exercise ID if we come from the question pool
-if(!$fromExercise) {
+if (!$fromExercise) {
 	// gets the right exercise ID, and if 0 creates a new exercise
-	if(!$exerciseId = $objExercise->selectId()) {
+	if (!$exerciseId = $objExercise->selectId()) {
 		$modifyExercise='yes';
 	}
 }
@@ -234,7 +238,7 @@ if ($cancelQuestion) {
 	}
 }
 
-if (isset($clone_question) && !empty($objExercise->id)) {
+if (!empty($clone_question) && !empty($objExercise->id)) {
 	$old_question_obj = Question::read($clone_question);
 	$old_question_obj->question = $old_question_obj->question.' - '.get_lang('Copy');
 

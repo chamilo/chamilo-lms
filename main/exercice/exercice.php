@@ -290,23 +290,33 @@ if ($is_allowedToEdit) {
 
     if (!empty($hpchoice)) {
         switch ($hpchoice) {
-            case 'delete' : // deletes an exercise
+            case 'delete' :
+                // deletes an exercise
                 $imgparams = array();
                 $imgcount = 0;
                 GetImgParams($file, $documentPath, $imgparams, $imgcount);
                 $fld = GetFolderName($file);
+
                 for ($i = 0; $i < $imgcount; $i++) {
                     my_delete($documentPath.$uploadPath."/".$fld."/".$imgparams[$i]);
                     update_db_info("delete", $uploadPath."/".$fld."/".$imgparams[$i]);
                 }
 
-                if (my_delete($documentPath.$file)) {
+                if (!is_dir($documentPath.$uploadPath."/".$fld."/")) {
+                    my_delete($documentPath.$file);
                     update_db_info("delete", $file);
+                } else {
+                    if (my_delete($documentPath.$file)) {
+                        update_db_info("delete", $file);
+                    }
                 }
+
                 // hotpotatoes folder may contains several tests so don't delete folder if not empty : http://support.chamilo.org/issues/2165
+
                 if (!(strstr($uploadPath, DIR_HOTPOTATOES) && !folder_is_empty($documentPath.$uploadPath."/".$fld."/"))) {
                     my_delete($documentPath.$uploadPath."/".$fld."/");
-                } break;
+                }
+                break;
             case 'enable' : // enables an exercise
                 $newVisibilityStatus = "1"; //"visible"
                 $query = "SELECT id FROM $TBL_DOCUMENT WHERE c_id = $course_id AND path='".Database :: escape_string($file)."'";
@@ -410,7 +420,16 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     echo '<a href="qti2.php?'.api_get_cidreq().'">'.Display :: return_icon('import_qti2.png', get_lang('ImportQtiQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="aiken.php?'.api_get_cidreq().'">'.Display :: return_icon('import_aiken.png', get_lang('ImportAikenQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="upload_exercise.php?'.api_get_cidreq().'">'.Display :: return_icon('import_excel.png', get_lang('ImportExcelQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo Display::url(Display::return_icon('clean_all.png', get_lang('CleanAllStudentsResultsForAllTests'), '', ICON_SIZE_MEDIUM), '', array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToEmptyAllTestResults'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token));
+    echo Display::url(
+        Display::return_icon(
+            'clean_all.png',
+            get_lang('CleanAllStudentsResultsForAllTests'), '', ICON_SIZE_MEDIUM),
+            '',
+            array(
+                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToEmptyAllTestResults'), ENT_QUOTES, $charset))."')) return false;",
+                'href' => 'exercice.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token
+            )
+    );
 }
 
 if ($is_allowedToEdit) {

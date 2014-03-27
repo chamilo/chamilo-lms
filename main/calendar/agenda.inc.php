@@ -1518,8 +1518,11 @@ function load_edit_users($tool, $id)
     $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $course_id = api_get_course_int_id();
 
-    $sql = "SELECT * FROM $TABLE_ITEM_PROPERTY WHERE c_id = $course_id AND tool='$tool' AND ref='$id'";
-    $result = Database::query($sql) or die(Database::error());
+    $sql = "SELECT * FROM $TABLE_ITEM_PROPERTY
+            WHERE c_id = $course_id AND tool='$tool' AND ref='$id'";
+    $result = Database::query($sql);
+
+    $to = array();
     while ($row = Database::fetch_array($result)) {
         $to_group = $row['to_group_id'];
         switch ($to_group) {
@@ -1710,33 +1713,6 @@ function store_edited_agenda_item($event_id, $id_attach, $file_comment)
     } else {
         edit_agenda_attachment_file($file_comment, $id, $id_attach);
     }
-
-    // step 2: editing the item_property table (=delete all and add the new destination users/groups)
-    /*if ($edit_result = true) {
-        // 2.a. delete everything for the users
-        $sql_delete = "DELETE FROM ".$TABLE_ITEM_PROPERTY." WHERE c_id = $course_id AND ref='$id' AND tool='".TOOL_CALENDAR_EVENT."'";
-
-        $result = Database::query($sql_delete) or die(Database::error());
-        // 2.b. storing the new users/groups
-        if (!is_null($to)) { // !is_null($to): when no user is selected we send it to everyone
-            $send_to = separate_users_groups($to);
-            // storing the selected groups
-            if (is_array($send_to['groups'])) {
-                foreach ($send_to['groups'] as $group) {
-                    api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id, "AgendaModified", api_get_user_id(), $group, '', $start_date, $end_date);
-                }
-            }
-            // storing the selected users
-            if (is_array($send_to['users'])) {
-                foreach ($send_to['users'] as $user) {
-                    api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id, "AgendaModified", api_get_user_id(), '', $user, $start_date, $end_date);
-                }
-            }
-        } else {
-            // the message is sent to everyone, so we set the group to 0
-            api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id, "AgendaModified", api_get_user_id(), '', '', $start_date, $end_date);
-        }
-    }*/
     // step 3: update the attachments (=delete all and add those in the session
     update_added_resources("Agenda", $id);
 
@@ -1797,11 +1773,9 @@ function delete_agenda_item($id)
                     }
                 }
                 $sql_del = "DELETE FROM $t_agenda_r WHERE cal_id = $id";
-                $res_del = Database::query($sql_del);
+                Database::query($sql_del);
             }
-            //$sql = "DELETE FROM ".$TABLEAGENDA." WHERE id='$id'";
-            //$sql= "UPDATE ".$TABLE_ITEM_PROPERTY." SET visibility='2' WHERE tool='Agenda' and ref='$id'";
-            //$result = Database::query($sql) or die (Database::error());
+
             api_item_property_update($_course, TOOL_CALENDAR_EVENT, $id, 'delete', api_get_user_id());
 
             // delete the resources that were added to this agenda item
@@ -1813,8 +1787,8 @@ function delete_agenda_item($id)
 
             // displaying the result message in the yellow box
             Display::display_confirmation_message(get_lang("AgendaDeleteSuccess"));
-        }   // if (isset($id)&&$id&&isset($action)&&$action=="delete")
-    } // if ($is_allowed_to_edit)
+        }
+    }
 }
 
 /**
@@ -2249,7 +2223,7 @@ function show_add_form($id = '', $type = null)
     global $MonthsLong;
     $htmlHeadXtra[] = to_javascript();
     // the default values for the forms
-    if ($_GET['originalresource'] !== 'no') {
+    if (!isset($_GET['originalresource'])) {
         $day = date('d');
         $month = date('m');
         $year = date('Y');
@@ -2262,12 +2236,15 @@ function show_add_form($id = '', $type = null)
         $end_hours = 17;
         $end_minutes = '00';
         $repeat = false;
+        $content = null;
+        $title = null;
+
     } else {
         // we are coming from the resource linker so there might already have been some information in the form.
         // When we clicked on the button to add resources we stored every form information into a session and now we
         // are doing the opposite thing: getting the information out of the session and putting it into variables to
         // display it in the forms.
-        $form_elements = $_SESSION['formelements'];
+        $form_elements = isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null;
         $day = $form_elements['day'];
         $month = $form_elements['month'];
         $year = $form_elements['year'];
@@ -2281,7 +2258,6 @@ function show_add_form($id = '', $type = null)
         $title = $form_elements['title'];
         $content = $form_elements['content'];
         $id = $form_elements['id'];
-
         $to = $form_elements['to'];
         $repeat = $form_elements['repeat'];
     }
@@ -2306,13 +2282,13 @@ function show_add_form($id = '', $type = null)
         $repeat = !empty($_POST['repeat']) ? true : false;
     }
 
-    $default_no_empty_end_date = 0;
     $course_info = null;
+
+    $agendaObj = new Agenda();
 
     // if the id is set then we are editing an agenda item
     if (!empty($id)) {
         $course_info = api_get_course_info();
-        $agendaObj = new Agenda();
         if (!empty($course_info)) {
             $agendaObj->set_course($course_info);
             $agendaObj->type = 'course';
@@ -2755,8 +2731,8 @@ function show_add_form($id = '', $type = null)
                 </div>
                 <label class="control-label">'.
                     get_lang('Comment').'
-                </label>  
-                <div class="controls">  
+                </label>
+                <div class="controls">
                     <textarea name="file_comment" type="textarea"></textarea>
                 </div>
              </div>';
@@ -4102,9 +4078,9 @@ function show_add_form($id = '', $type = null)
         $sql = "INSERT INTO ".$t_agenda." (c_id, title,content, start_date, end_date".(!empty($parent_id) ? ',parent_event_id' : '').", session_id)
             VALUES($course_id, '".$title."','".$content."', '".$start_date."','".$end_date."'".(!empty($parent_id) ? ','.((int) $parent_id) : '').", '".$id_session."')";
 
-        $result = Database::query($sql);
+        Database::query($sql);
         $last_id = Database::insert_id();
-        
+
         // add a attachment file in agenda
 
         add_agenda_attachment_file($file_comment, $last_id);

@@ -18,8 +18,8 @@ api_protect_admin_script(true);
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
-$action = $_REQUEST['action'];
-$idChecked = $_REQUEST['idChecked'];
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
+$idChecked = isset($_REQUEST['idChecked']) ? $_REQUEST['idChecked'] : null;
 
 if ($action == 'delete') {
 	SessionManager::delete_session($idChecked);
@@ -78,27 +78,37 @@ if (!empty($courseId)) {
 
 if (isset($_REQUEST['keyword'])) {
     //Begin with see the searchOper param
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=name&searchString='.Security::remove_XSS($_REQUEST['keyword']).'&searchOper=bw';
+    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=s.name&searchString='.Security::remove_XSS($_REQUEST['keyword']).'&searchOper=bw';
 }
 
 if (isset($_REQUEST['id_category'])) {
     $sessionCategory = SessionManager::get_session_category($_REQUEST['id_category']);
     if (!empty($sessionCategory)) {
         //Begin with see the searchOper param
-        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=category_name&searchString='.Security::remove_XSS($sessionCategory['name']).'&searchOper=bw';
+        $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters=&searchField=sc.name&searchString='.Security::remove_XSS($sessionCategory['name']).'&searchOper=bw';
     }
 }
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = array(get_lang('Name'), get_lang('NumberOfCourses'), get_lang('NumberOfUsers'), get_lang('SessionCategoryName'),
-                 get_lang('StartDate'), get_lang('EndDate'), get_lang('Coach'),  get_lang('Status'), get_lang('Visibility'), get_lang('Actions'));
+$columns = array(
+    get_lang('Name'),
+    get_lang('NumberOfCourses'),
+    get_lang('NumberOfUsers'),
+    get_lang('SessionCategoryName'),
+    get_lang('StartDate'),
+    get_lang('EndDate'),
+    get_lang('Coach'),
+    get_lang('Status'),
+    get_lang('Visibility'),
+    get_lang('Actions')
+);
 
 //Column config
 $column_model   = array(
     array('name'=>'name',           'index'=>'s.name',        'width'=>'160',  'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
     array('name'=>'nbr_courses',    'index'=>'nbr_courses',   'width'=>'30',   'align'=>'left', 'search' => 'true'),
     array('name'=>'nbr_users',      'index'=>'nbr_users',     'width'=>'30',   'align'=>'left', 'search' => 'true'),
-    array('name'=>'category_name',  'index'=>'category_name', 'width'=>'70',   'align'=>'left', 'search' => 'true'),
+    array('name'=>'category_name',  'index'=>'sc.name', 'width'=>'70',   'align'=>'left', 'search' => 'true'),
     array('name'=>'date_start',     'index'=>'s.date_start',    'width'=>'40',   'align'=>'left', 'search' => 'true'),
     array('name'=>'date_end',       'index'=>'s.date_end',      'width'=>'40',   'align'=>'left', 'search' => 'true'),
     array('name'=>'coach_name',     'index'=>'coach_name',    'width'=>'80',   'align'=>'left', 'search' => 'false'),
@@ -187,8 +197,7 @@ $(function() {
     },buttonicon:'ui-icon-document'})
     */
 
-
-    //Adding search options
+    // Adding search options
     var options = {
         'stringResult': true,
         'autosearch' : true,

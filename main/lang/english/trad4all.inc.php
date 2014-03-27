@@ -2,6 +2,21 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$RemoveOldRelationships = "Remove previous relationships";
+$ImportSessionDrhList = "Import list of HR directors into sessions";
+$FollowedStudents = "Followed students";
+$FollowedTeachers = "Followed teachers";
+$AllowOnlyFiles = "Allow only files";
+$AllowOnlyText = "Allow only text";
+$AllowFileOrText = "Allow files or online text";
+$DocumentType = "Document type";
+$SendOnlyAnEmailToMySelfToTest = "Send an email to myself for testing purposes.";
+$DeleteAllSelectedAttendances = "Delete all selected attendances";
+$AvailableClasses = "Available classes";
+$RegisteredClasses = "Registered classes";
+$DeleteItemsNotInFile = "Delete items not in file";
+$ImportGroups = "Import groups";
+$HereIsYourFeedback = "Here is your feedback";
 $ShowSystemFolders = "Show system folders.";
 $LoginToGoToThisCourse = "Please login to go to this course";
 $LoginDate = "Login date";
@@ -44,7 +59,7 @@ $ExerciseAutoLaunch = "Auto-launch for exercises";
 $AllowFastExerciseEdition = "Enable exercise fast edition mode";
 $Username = "Username";
 $SignIn = "Sign in";
-$YouAreReg = "Your are registered to";
+$YouAreReg = "You are registered to";
 $ManageQuestionCategories = "Manage global questions categories";
 $ManageCourseFields = "Manage extra fields for courses";
 $ManageQuestionFields = "Manage extra fields for questions";
@@ -81,6 +96,7 @@ $UserIsNotATeacher = "User is not a teacher";
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "This item is invisible for learner but you have access as teacher.";
 $DeleteAllAttendances = "Delete all created attendances";
 $Unsubscribe = "Unsubscribe";
+$SendToAllUsers = "Send to all users";
 $SelectACategory = "Select a category";
 $AdvancedEdit = "Advanced edit";
 $SearchXapianModuleNotInstalled = "The Xapian search module is not installed";

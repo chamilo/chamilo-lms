@@ -9,8 +9,6 @@
  * Plugin details (must be present)
  */
 
-
-
 //the plugin title
 $plugin_info['title']      = 'Hide/Unhide the Login/Password default form';
 

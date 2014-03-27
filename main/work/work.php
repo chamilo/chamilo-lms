@@ -35,14 +35,6 @@ $my_folder_data = get_work_data_by_id($work_id);
 $curdirpath = '';
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $htmlHeadXtra[] = to_javascript_work();
-$htmlHeadXtra[] = '<script>
-function setFocus() {
-    $("#work_title").focus();
-}
-$(document).ready(function () {
-    setFocus();
-});
-</script>';
 
 $_course = api_get_course_info();
 
@@ -60,12 +52,9 @@ $submitGroupWorkUrl     = isset($_REQUEST['submitGroupWorkUrl']) ? Security::rem
 $title 			        = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
 $description 	        = isset($_REQUEST['description']) ? $_REQUEST['description'] : '';
 $uploadvisibledisabled  = isset($_REQUEST['uploadvisibledisabled']) ? Database::escape_string($_REQUEST['uploadvisibledisabled']) : $course_info['show_score'];
-
 $course_dir 		= api_get_path(SYS_COURSE_PATH).$_course['path'];
 $base_work_dir 		= $course_dir . '/work';
-
 $link_target_parameter = ""; // e.g. "target=\"_blank\"";
-
 $display_list_users_without_publication = isset($_GET['list']) && Security::remove_XSS($_GET['list']) == 'without' ? true : false;
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
@@ -112,7 +101,9 @@ if (!empty($group_id)) {
     $interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
     $interbreadcrumb[] = array ('url' =>'work.php?gidReq='.$group_id,'name' => get_lang('StudentPublications'));
     $url_dir = 'work.php?&id=' . $work_id;
-    $interbreadcrumb[] = array ('url' => $url_dir, 'name' =>  $my_folder_data['title']);
+    if (!empty($my_folder_data)) {
+        $interbreadcrumb[] = array ('url' => $url_dir, 'name' =>  $my_folder_data['title']);
+    }
 
     if ($action == 'upload_form') {
         $interbreadcrumb[] = array ('url' => 'work.php','name' => get_lang('UploadADocument'));
@@ -188,10 +179,12 @@ switch ($action) {
         $form = new FormValidator('form1', 'post', api_get_path(WEB_CODE_PATH).'work/work.php?action=create_dir&'. api_get_cidreq());
         $form->addElement('header', get_lang('CreateAssignment'));
         $form->addElement('hidden', 'action', 'add');
-        $form = getFormWork($form, array());
+        $defaults = isset($_POST) ? $_POST : array();
+        $form = getFormWork($form, $defaults);
         $form->addElement('style_submit_button', 'submit', get_lang('CreateDirectory'));
 
         if ($form->validate()) {
+
             $result = addDir($_POST, $user_id, $_course, $group_id, $id_session);
             if ($result) {
                 $message = Display::return_message(get_lang('DirectoryCreated'), 'success');
@@ -264,24 +257,14 @@ switch ($action) {
                 get_lang('Description').':</strong><p>'.Security::remove_XSS($my_folder_data['description'], STUDENT).
                 '</p></div></p>';
         }
-
-        $my_folder_data = get_work_data_by_id($work_id);
-
-        $work_parents = array();
-        if (empty($my_folder_data)) {
-            $work_parents = getWorkList($work_id, $my_folder_data, null);
-        }
-
         if (api_is_allowed_to_edit()) {
-            $userList = getWorkUserList($course_code, $session_id);
-
             // Work list
             $content .= '<div class="row">';
             $content .= '<div class="span9">';
             $content .= showTeacherWorkGrid();
             $content .= '</div>';
             $content .= '<div class="span3">';
-            $content .= showStudentList($userList, $work_parents, $group_id, $course_id, $session_id);
+            $content .= showStudentList($work_id);
             $content .= '</div>';
         } else {
             $content .= showStudentWorkGrid();

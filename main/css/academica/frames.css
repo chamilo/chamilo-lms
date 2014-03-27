@@ -20,7 +20,7 @@ img {
 }
 /* End hide from IE5-mac */
 
-/*****************************************************
+/***************************************************** 
  *  HEADER STYLES                                    *
  *****************************************************/
 #header {
@@ -55,97 +55,17 @@ img {
 	float: right;
 	font-weight: bold;
 }
-/* Header 2: Containing My Courses, My Profile,... */
-#header2 {
-	font-size: 12px;
-	padding: 4px;
-	background-color: #4271B5;
-	color: #fff;
-	border-bottom: 1px solid white;
-}
-#header2 .banner_links {
-	margin: 0;
-}
-#header2 a {
-	text-decoration: none;
-	color: #fff;
-	background: transparent;
-	font-weight:normal;
-	font-size: 12px;
-}
-#header2 input.logout {
-	/* makes an input appear like a link in this header */
-	margin: 0;
-	padding: 0;
-	background-color: transparent;
-	border: none;
-	color: #fff;
-	font-size: 12px;
-	font-weight:normal;
-	font-family: verdana, arial, helvetica, sans-serif;
-}
-#header2 a:hover, #header2 input.logout:hover {
-	border-bottom: 1px solid #fff;
-}
 #logout {
 	float: right;
 	width:20%;
 	text-align:right;
 }
-/* Header 3: Containing breadcrumbs, online users, student/teacher view, help */
-#header3 {
-	position: relative; /* to avoid the IE peekabo bug*/
-	font-size: 12px;
-	font-weight: normal;
-	padding: 4px;
-	background-color: #90AFDD;
-	color: #fff;
-	border-bottom: 1px solid white;
-}
-#header3 a {
-	color: #ffffff;
-	text-decoration: none;
-	font-weight:normal;
-}
-#header3 a:hover {
-	text-decoration: underline;
-}
-/* Header3Right: online users, student/teacher view, help */
-#Header3Right ul {
-	position: relative; /* to avoid the IE peekabo bug*/
-	float: right;
-	width: 50%;
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-	text-align: right;
-}
-#Header3Right ul li {
-	display: inline;
-}
-#Header3Right ul li a {
-	padding: 4px 6px 4px 4px;
-	color:#fff;
-}
-/* Header 4: not used */
-#header4 {
-	background-color: #fff;
-	color: #009;
-	padding: 4px;
-	margin-bottom: 2px;
-}
-#header4 a {
-	color: #4171b5;
-}
-#header4 a:hover {
-	text-decoration: none;
-	color: #f00;
-}
+
 /* The tool shortcuts */
 #toolshortcuts {
 	text-align: right;
 }
-/*****************************************************
+/***************************************************** 
  *  FOOTER STYLES                                    *
  *****************************************************/
 #footer {
@@ -157,7 +77,7 @@ img {
 #footer .copyright {
 	float: right;
 }
-/*****************************************************
+/***************************************************** 
  *  MAIN STYLES                                      *
  *****************************************************/
 #main {
@@ -233,7 +153,7 @@ img {
 	font-size: 12px;
 	color: #f00;
 }
-/*** layout divs for course and tool pages (being tested in some pages) ****/
+/*** layout divs for course and tool pages (being tested in some pages) ****/  
 #contentfloatholder {/* also makes the right "sliding" tab  */
 	/*background: url(../pics/sidebar-r.gif) repeat-y 100% 0;
 background: url(../pics/bg_fountain.jpg) no-repeat 100% 0; */
@@ -252,11 +172,11 @@ content: ".";
 #centerwrap {
 	float: left;
 	width: 100%;
-	margin-right: -95%;/* this needs to be less than 100% for Moz/Mac which thinks
-         it's empty otherwise. The difference is made up by putting a
+	margin-right: -95%;/* this needs to be less than 100% for Moz/Mac which thinks 
+         it's empty otherwise. The difference is made up by putting a 
          negative left margin on the left float:
-	   Note IE/Mac doesn't like this method ~ it wants the 100% so it can
-	   be fed in using IE only CSS below becasue IE/Win also works with the 100% method.
+	   Note IE/Mac doesn't like this method ~ it wants the 100% so it can 
+	   be fed in using IE only CSS below becasue IE/Win also works with the 100% method.  
 	*/
 }
 #center {
@@ -325,10 +245,10 @@ content: ".";
 	color:#4171B5;
 	display: block;
 }
-/* --- end of left side definition list menu section  --- */
+/* --- end of left side definition list menu section  --- */ 
 
 
-
+ 
 /* various sections in course-home.php file  */
 #toolremove {
 	width: 40%;
@@ -426,7 +346,7 @@ content: ".";
 	border: 1px solid #fff;
 	border-collapse: collapse;
 }
-/*The caption of the calendar (displays the month and the << and >> links*/
+/*The caption of the calendar (displays the month and the << and >> links*/ 
 #agenda_list #title {
 	background-color: #4171B5;
 	font-weight: bold;
@@ -463,7 +383,7 @@ content: ".";
 	border: 1px solid #264269;
 	border-collapse: collapse;
 }
-/* The cells for the days (1->31) */
+/* The cells for the days (1->31) */ 
 #agenda_list .days_week {
 	height: 40px;
 	width: 12%;
@@ -518,7 +438,7 @@ content: ".";
 	border: 0px solid #4171B5;
 	border-collapse: collapse;
 }
-/*text in the cells: display of agenda items (invisible)*/
+/*text in the cells: display of agenda items (invisible)*/   
 #agenda_list .data_hidden {
 	background-color: #eee;
 	text-align: left;
@@ -546,7 +466,7 @@ content: ".";
 	border-collapse: collapse;
 	color: #999999;
 }
-/*text in the cells: display of agenda items (highlighted)*/
+/*text in the cells: display of agenda items (highlighted)*/    
 #agenda_list .datanow {
 	background-color: #FFCC00;
 	text-align: left;
@@ -573,7 +493,7 @@ content: ".";
 }
 /* ---------------------------------------------------
 	styles for the mini agenda
------------------------------------------------------*/
+-----------------------------------------------------*/ 
 #smallcalendar {
 	width: 100%;
 	margin: 0 auto;
@@ -905,7 +825,7 @@ padding-top: 0px;	padding-right: 0px;	padding-bottom: 0px;	padding-left: 0px;}
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 9px
 }
-/*****************************************************
+/***************************************************** 
  *  DATA TABLE STYLES                                *
  *****************************************************/
 .cell_header {

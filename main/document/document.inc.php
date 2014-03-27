@@ -186,8 +186,8 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
     } elseif (strstr($path, 'shared_folder_session_')) {
         $tooltip_title_alt = get_lang('UserFolders') . ' (' . api_get_session_name(api_get_session_id()) . ')';
     } elseif (strstr($tooltip_title, 'sf_user_')) {
-        $userinfo = Database::get_user_info_from_id(substr($tooltip_title, 8));
-        $tooltip_title_alt = get_lang('UserFolder') . ' ' . api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+        $userinfo = api_get_user_info(substr($tooltip_title, 8));
+        $tooltip_title_alt = get_lang('UserFolder') . ' ' . $userinfo['complete_name'];
     } elseif ($path == '/chat_files') {
         $tooltip_title_alt = get_lang('ChatFiles');
     } elseif ($path == '/learning_path') {
@@ -208,7 +208,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
     $copy_to_myfiles = $open_in_new_window_link = null;
 
     $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
-
+    $send_to = null;
     if (!$show_as_icon) {
         if ($filetype == 'folder') {
             if (api_is_allowed_to_edit() || api_is_platform_admin() || api_get_setting('students_download_folders') == 'true') {
@@ -232,7 +232,7 @@ function create_document_link($document_data, $show_as_icon = false, $counter = 
             if ($filetype == 'file') {
                 $copy_to_myfiles = '<a href="' . $copy_myfiles_link . '" style="float:right"' . $prevent_multiple_click . '>' . Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), array(), ICON_SIZE_SMALL) . '&nbsp;&nbsp;</a>';
             }
-            $send_to = '';
+
             if ($filetype == 'file') {
                 $send_to = Portfolio::share('document', $document_data['id'], array('style' => 'float:right;'));
             }
@@ -379,7 +379,7 @@ function build_document_icon_tag($type, $path) {
                 $basename = get_lang('UserFolders');
             }
         } elseif (strstr($basename, 'sf_user_')) {
-            $userinfo = Database::get_user_info_from_id(substr($basename, 8));
+            $userinfo = api_get_user_info(substr($basename, 8));
             $image_path = UserManager::get_user_picture_path_by_id(substr($basename, 8), 'web', false, true);
 
             if ($image_path['file'] == 'unknown.jpg') {
@@ -390,7 +390,7 @@ function build_document_icon_tag($type, $path) {
                 $icon = $image_path['dir'] . $image_path['file'];
             }
 
-            $basename = get_lang('UserFolder') . ' ' . api_get_person_name($userinfo['firstname'], $userinfo['lastname']);
+            $basename = get_lang('UserFolder') . ' ' . $userinfo['complete_name'];
         } elseif (strstr($path, 'shared_folder_session_')) {
             if ($is_allowed_to_edit) {
                 $basename = '***(' . api_get_session_name($current_session_id) . ')*** ' . get_lang('HelpUsersFolder');

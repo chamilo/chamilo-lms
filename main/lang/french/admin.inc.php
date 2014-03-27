@@ -2,6 +2,11 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SearchSessions = "Recherche de session.";
+$DeleteUsersNotInList = "Désinscrite les apprenants qui ne sont pas dans la liste importée";
+$IfSessionExistsUpdate = "Si une session existe, la mettre à jour";
+$SearchCourseBySession = "Recherche de cours par session";
+$GlobalLinkUseDoubleColumnPrivateToShowPrivately = "Utiliser ::private à la fin du lien pour l'afficher seulement aux utilisateurs identifiés";
 $CourseVisibilityHidden = "Invisible - Complètement invisible et inaccessible pour tous les utilisateurs excepté les administrateurs";
 $ApplyAllLanguages = "Appliquer ces modifications à toutes les langues disponibles";
 $CareerUpdated = "Carrière mise à jour";
@@ -1412,9 +1417,9 @@ $FirstLetterSessions = "Première lettre de session";
 $SessionsInPromotion = "Sessions inscrites à cette promotion";
 $SubscribeSessionsToPromotion = "Inscrire les sessions à la promotion";
 $NoEndTime = "Pas de date de fin";
-$SubscribeUsersToClass = "Inscrire utilisateurs au groupe";
-$SubscribeClassToCourses = "Inscrire cours au groupe";
-$SubscribeClassToSessions = "Inscrire sessions au groupe";
+$SubscribeUsersToClass = "Inscrire des utilisateurs dans la classe";
+$SubscribeClassToCourses = "Inscrire des cours à la classe";
+$SubscribeClassToSessions = "Inscrire des sessions à la classe";
 $SessionsInGroup = "Sessions du groupe";
 $CoursesInGroup = "Cours du groupe";
 $UsersInGroup = "Utilisateurs du groupe";

@@ -46,7 +46,7 @@ function get_count_users($keyword = null, $active = null)
 
 function get_users($from, $number_of_items, $column, $direction)
 {
-    $active = isset($_GET['active']) ? $_GET['active'] : null;
+    $active = isset($_GET['active']) ? $_GET['active'] : 1;
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
     $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
 
@@ -74,15 +74,16 @@ function get_users($from, $number_of_items, $column, $direction)
                 $lastConnectionDate
             );
         } else {
-            $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'drh',
+            $students = UserManager::get_users_followed_by_drh(
                 api_get_user_id(),
+                null,
+                false,
+                false,
                 false,
                 $from,
                 $number_of_items,
                 $column,
                 $direction,
-                $keyword,
                 $active,
                 $lastConnectionDate
             );
@@ -102,15 +103,16 @@ function get_users($from, $number_of_items, $column, $direction)
                 $lastConnectionDate
             );
         } else {
-            $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'teacher',
+            $students = UserManager::get_users_followed_by_drh(
                 api_get_user_id(),
+                null,
+                false,
+                false,
                 false,
                 $from,
                 $number_of_items,
                 $column,
                 $direction,
-                $keyword,
                 $active,
                 $lastConnectionDate
             );

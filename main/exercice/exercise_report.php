@@ -43,6 +43,9 @@ require_once api_get_path(LIBRARY_PATH).'statsUtils.lib.inc.php';
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
+$origin = isset($origin) ? $origin : null;
+$gradebook = isset($gradebook) ? $gradebook : null;
+$path = isset($_GET['path']) ? Security::remove_XSS($_GET['path']) : null;
 
 /* 	Constants and variables */
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_drh();
@@ -102,7 +105,9 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 }
 
 //Send student email @todo move this code in a class, library
-if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_GET['exeid'] == strval(intval($_GET['exeid']))) {
+if (isset($_REQUEST['comments']) &&
+    $_REQUEST['comments'] == 'update' &&
+    ($is_allowedToEdit || $is_tutor) && $_GET['exeid'] == strval(intval($_GET['exeid']))) {
     $id = intval($_GET['exeid']); //filtered by post-condition
     $track_exercise_info = get_exercise_track_exercise_info($id);
     if (empty($track_exercise_info)) {
@@ -213,18 +218,20 @@ if ($_REQUEST['comments'] == 'update' && ($is_allowedToEdit || $is_tutor) && $_G
     }
 }
 
-
+$actions = null;
 if ($is_allowedToEdit && $origin != 'learnpath') {
     // the form
     if (api_is_platform_admin() || api_is_course_admin() || api_is_course_tutor() || api_is_course_coach()) {
         $actions .= '<a href="admin.php?exerciseId='.intval($_GET['exerciseId']).'">'.Display :: return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .='<a href="live_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon('activity_monitor.png', get_lang('LiveResults'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .='<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.Display :: return_icon('statistics.png', get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
-        $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&hotpotato_name='.Security::remove_XSS($_GET['path']).'&exerciseId='.intval($_GET['exerciseId']).'" >'.
+        $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&hotpotato_name='.$path.'&exerciseId='.intval($_GET['exerciseId']).'" >'.
         Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         // clean result before a selected date icon
         $actions .= Display::url(
-            Display::return_icon('clean_before_date.png', get_lang('CleanStudentsResultsBeforeDate'), '', ICON_SIZE_MEDIUM), '', array('onclick' => "javascript:display_date_picker()", 'href' => '#')
+            Display::return_icon('clean_before_date.png', get_lang('CleanStudentsResultsBeforeDate'), '', ICON_SIZE_MEDIUM),
+            '#',
+            array('onclick' => "javascript:display_date_picker()")
         );
         // clean result before a selected date datepicker popup
         $actions .= Display::span(
@@ -241,7 +248,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 }
 
 //Deleting an attempt
-if (($is_allowedToEdit || $is_tutor || api_is_coach()) && $_GET['delete'] == 'delete' && !empty($_GET['did']) && $locked == false) {
+if (($is_allowedToEdit || $is_tutor || api_is_coach()) && isset($_GET['delete']) && $_GET['delete'] == 'delete' && !empty($_GET['did']) && $locked == false) {
     $exe_id = intval($_GET['did']);
     if (!empty($exe_id)) {
         $sql = 'DELETE FROM '.$TBL_TRACK_EXERCICES.' WHERE exe_id = '.$exe_id;
@@ -272,7 +279,6 @@ if ($is_allowedToEdit || $is_tutor) {
 Display :: display_header($nameTools);
 
 // Clean all results for this test before the selected date
-$datepicker_language = get_datepicker_langage_code();
 if (($is_allowedToEdit || $is_tutor || api_is_coach()) && isset($_GET['delete_before_date']) && $locked == false) {
     // ask for the date
     $check = Security::check_token('get');
@@ -548,14 +554,10 @@ $extra_params['height'] = 'auto';
             if (datapickerInputModified) {
                 var dateTypeVar = $('#datepicker_start').datepicker('getDate');
                 var dateForBDD = $.datepicker.formatDate('yy-mm-dd', dateTypeVar);
-                // format the date for confirm box
-                var selectedDate = $.datepicker.formatDate( "DD, MM d, yy", dateTypeVar, {
-                    dayNamesShort: $.datepicker.regional[ "<?php echo $datepicker_language; ?>" ].dayNamesShort,
-                    dayNames: $.datepicker.regional[ "<?php echo $datepicker_language; ?>" ].dayNames,
-                    monthNamesShort: $.datepicker.regional[ "<?php echo $datepicker_language; ?>" ].monthNamesShort,
-                    monthNames: $.datepicker.regional[ "<?php echo $datepicker_language; ?>" ].monthNames
-                });
-                if (confirm("<?php echo convert_double_quote_to_single(get_lang('AreYouSureDeleteTestResultBeforeDateD')) ?>"+" "+selectedDate)) {
+                // Format the date for confirm box
+                var dateFormat = $( "#datepicker_start" ).datepicker( "option", "dateFormat" );
+                var selectedDate = $.datepicker.formatDate(dateFormat, dateTypeVar);
+                if (confirm("<?php echo convert_double_quote_to_single(get_lang('AreYouSureDeleteTestResultBeforeDateD')); ?>" + selectedDate)) {
                     self.location.href = "exercise_report.php?<?php echo api_get_cidreq(); ?>&exerciseId=<?php echo $exercise_id; ?>&delete_before_date="+dateForBDD+"&sec_token=<?php echo $token; ?>";
                 }
             }
@@ -564,12 +566,14 @@ $extra_params['height'] = 'auto';
         /**
         * initiate datepicker
         */
-        $(function(){
+        $(function() {
+
             $( "#datepicker_start" ).datepicker({
                 defaultDate: "",
                 changeMonth: false,
                 numberOfMonths: 1
             });
+
         });
 
 </script>

@@ -28,9 +28,7 @@ require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
 /*	MAIN CODE */
 
 $group_id = api_get_group_id();
-
 $user_id = api_get_user_id();
-
 $current_group = GroupManager :: get_group_properties($group_id);
 
 if (empty($current_group)) {
@@ -54,9 +52,16 @@ if (is_array($forums_of_groups)) {
 	}
 }
 
-if ($current_group['doc_state'] != 1 && $current_group['calendar_state'] != 1 && $current_group['work_state'] != 1 && $current_group['announcements_state'] != 1 && $current_group['wiki_state'] != 1 && $current_group['chat_state'] != 1 && $forum_state_public != 1) {
-	if (!api_is_allowed_to_edit(null,true) && !GroupManager :: is_user_in_group($_user['user_id'], $current_group['id'])) {
-		echo api_not_allowed($print_headers);
+if ($current_group['doc_state'] != 1 &&
+    $current_group['calendar_state'] != 1 &&
+    $current_group['work_state'] != 1 &&
+    $current_group['announcements_state'] != 1 &&
+    $current_group['wiki_state'] != 1 &&
+    $current_group['chat_state'] != 1 &&
+    $forum_state_public != 1
+) {
+	if (!api_is_allowed_to_edit(null,true) && !GroupManager::is_user_in_group($user_id, $group_id)) {
+		api_not_allowed($print_headers);
 	}
 }
 
@@ -115,12 +120,11 @@ if (isset($_GET['action'])) {
 
 /*	Main Display Area */
 
-$course_code = $_course['sysCode'];
+$course_code = api_get_course_id();
 $is_course_member = CourseManager :: is_user_subscribed_in_real_or_linked_course(api_get_user_id(), $course_code);
 
- /*
- * Edit the group
- */
+// Edit the group.
+
 $edit_url = '';
 if (api_is_allowed_to_edit(false, true) or GroupManager :: is_tutor_of_group(api_get_user_id(), api_get_group_id())) {
     $my_origin = isset($origin) ? $origin : '';
@@ -233,7 +237,7 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_
 	if ($current_group['doc_state'] == GroupManager::TOOL_PUBLIC) {
 		// Link to the documents area of this group
         $actions_array[] = array(
-            'url' => '../document/document.php?cidReq='.api_get_course_id().'&amp;origin='.$origin,
+            'url' => '../document/document.php?'.api_get_cidreq().'&amp;origin='.$origin,
             'content' => Display::return_icon('folder.png', get_lang('GroupDocument'), array(), ICON_SIZE_MEDIUM)
         );
 	}
@@ -297,7 +301,7 @@ if (count($tutors) == 0) {
 	isset($origin) ? $my_origin = $origin:$my_origin='';
     $tutor_info .= '<ul class="thumbnails">';
 	foreach ($tutors as $index => $tutor) {
-	    $tab_user_info = Database::get_user_info_from_id($tutor['user_id']);
+	    $tab_user_info = api_get_user_info($tutor['user_id']);
 	    $username = api_htmlentities(sprintf(get_lang('LoginX'), $tab_user_info['username']), ENT_QUOTES);
 		$image_path = UserManager::get_user_picture_path_by_id($tutor['user_id'], 'web', false, true);
 		$image_repository = $image_path['dir'];
@@ -473,11 +477,11 @@ function email_filter($email) {
  */
 function user_icon_filter($user_id) {
 	global $origin;
-	$userinfo = Database::get_user_info_from_id($user_id);
+	$userinfo = api_get_user_info($user_id);
 	$image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
 	$image_repository = $image_path['dir'];
 	$existing_image = $image_path['file'];
-	$photo = '<center><img src="'.$image_repository.$existing_image.'" alt="'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'"  width="22" height="22" title="'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'" /></center>';
+	$photo = '<center><img src="'.$image_repository.$existing_image.'" alt="'.$userinfo['complete_name'].'"  width="22" height="22" title="'.$userinfo['complete_name'].'" /></center>';
 	return '<a href="../user/userInfo.php?origin='.$origin.'&amp;uInfo='.$user_id.'">'.$photo;
 }
 
@@ -492,7 +496,7 @@ function user_icon_filter($user_id) {
  * @return  string  HTML link
  */
 function user_name_filter($name, $url_params, $row) {
-    $tab_user_info = Database::get_user_info_from_id($row[0]);
+    $tab_user_info = api_get_user_info($row[0]);
     $username = api_htmlentities(sprintf(get_lang('LoginX'), $tab_user_info['username']), ENT_QUOTES);
     return '<a href="../user/userInfo.php?uInfo='.$row[0].'&amp;'.$url_params.'" title="'.$username.'">'.$name.'</a>';
 }

@@ -14,4 +14,8 @@ $lang_update_link = "existing link information updated";
 $lang_new_link = "new link added";
 $lang_new_forum_topic = "new topic added";
 $lang_new_groupforum_topic = "new topic added to group forum";
+$LearnpathAdded = "コースを追加しました";
+$DocumentInvisible = "ドキュメントを非表示にしました";
+$DocumentVisible = "ドキュメントを表示しました";
+$CourseDescriptionAdded = "コースの説明を追加しました";
 ?>

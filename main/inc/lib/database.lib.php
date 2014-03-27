@@ -236,6 +236,7 @@ class Database {
      * @author Patrick Cool <patrick.cool@UGent.be>, expanded to get info for any user
      * @author Roan Embrechts, first version + converted to Database API
      * @version 30 September 2004
+     * @deprecated use api_get_user_info();
      * @desc find all the information about a specified user. Without parameter this is the current user.
      * @todo shouldn't this be in the user.lib.php script?
      */

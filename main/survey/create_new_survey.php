@@ -118,7 +118,7 @@ $form = new FormValidator('survey', 'post', api_get_self().'?action='.Security::
 
 $form->addElement('header', '', $tool_name);
 
-// Settting the form elements
+// Setting the form elements
 if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     $form->addElement('hidden', 'survey_id');
 }

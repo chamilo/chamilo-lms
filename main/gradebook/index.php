@@ -763,20 +763,23 @@ if (api_is_allowed_to_edit(null, true)) {
 if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 	echo '<meta http-equiv="refresh" content="0;url='.api_get_self().'?cidReq='.$course_code.'" />';
 } else {
-    $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
+    $cats = Category::load(null, null, $course_code, null, null, $session_id, false);
 
 	if (!empty($cats)) {
+        if ((api_get_setting('gradebook_enable_grade_model') == 'true') &&
+             (api_is_platform_admin() || (api_is_allowed_to_edit(null, true) &&
+             api_get_setting('teachers_can_change_grade_model_settings') == 'true'))
+        ) {
 
-        if ( (api_get_setting('gradebook_enable_grade_model') == 'true') &&
-             (api_is_platform_admin() || (api_is_allowed_to_edit(null, true) && api_get_setting('teachers_can_change_grade_model_settings') == 'true'))) {
-
-            //Getting grade models
+            // Getting grade models.
             $obj = new GradeModel();
             $grade_models = $obj->get_all();
             $grade_model_id = $cats[0]->get_grade_model_id();
 
-            //No children
-            if ( (count($cats) == 1 && empty($grade_model_id)) || (count($cats) == 1 && $grade_model_id != -1) ) {
+            // No children.
+            if ((count($cats) == 1 && empty($grade_model_id)) ||
+                (count($cats) == 1 && $grade_model_id != -1)
+            ) {
                 if (!empty($grade_models)) {
                     $form_grade = new FormValidator('grade_model_settings');
                     $obj->fill_grade_model_select_in_form($form_grade, 'grade_model_id', $grade_model_id);
@@ -817,20 +820,33 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
         }
 
 		$i = 0;
-
-		foreach ($cats as $cat) {
+        /** @var Category $cat **/
+        foreach ($cats as $cat) {
 			$allcat  = $cat->get_subcategories($stud_id, $course_code, $session_id);
 			$alleval = $cat->get_evaluations($stud_id);
-			$alllink = $cat->get_links($stud_id,true);
+			$alllink = $cat->get_links($stud_id);
 
-			if ($cat->get_parent_id() != 0 ) {
+			if ($cat->get_parent_id() != 0) {
 				$i++;
 			} else {
-				//This is the father
-				//Create gradebook/add gradebook links
-                DisplayGradebook::display_header_gradebook($cat, 0, $cat->get_id(), $is_course_admin, $is_platform_admin, $simple_search_form, false, true);
 
-				if (api_is_allowed_to_edit(null,true) && api_get_setting('gradebook_enable_grade_model') == 'true') {
+				// This is the father
+				// Create gradebook/add gradebook links.
+
+                DisplayGradebook::display_header_gradebook(
+                    $cat,
+                    0,
+                    $cat->get_id(),
+                    $is_course_admin,
+                    $is_platform_admin,
+                    $simple_search_form,
+                    false,
+                    true
+                );
+
+				if (api_is_allowed_to_edit(null,true) &&
+                    api_get_setting('gradebook_enable_grade_model') == 'true'
+                ) {
 					//Showing the grading system
 					if (!empty($grade_models[$grade_model_id])) {
                         Display::display_normal_message(get_lang('GradeModel').': '.$grade_models[$grade_model_id]['name']);

@@ -23,6 +23,80 @@ require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
 class Tracking
 {
     /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    public static function getStats($userId)
+    {
+        if (api_is_drh() && api_drh_can_access_all_session_content()) {
+            $studentList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
+                'drh_all',
+                $userId,
+                false,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                array(),
+                array(),
+                STUDENT
+            );
+            $students = array();
+            foreach ($studentList as $studentData) {
+                $students[] = $studentData['user_id'];
+            }
+
+            $teacherList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
+                'drh_all',
+                $userId,
+                false,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                array(),
+                array(),
+                COURSEMANAGER
+            );
+            $teachers = array();
+            foreach ($teacherList as $teacherData) {
+                $teachers[] = $teacherData['user_id'];
+            }
+
+            $platformCourses = SessionManager::getAllCoursesFromAllSessionFromDrh($userId);
+            $courses = array();
+            foreach ($platformCourses as $course) {
+                $courses[$course] = $course;
+            }
+            $sessions = SessionManager::get_sessions_followed_by_drh($userId);
+        } else {
+            $students = array_keys(UserManager::get_users_followed_by_drh($userId, STUDENT));
+            $teachers = array_keys(UserManager::get_users_followed_by_drh($userId, COURSEMANAGER));
+
+            $platformCourses = CourseManager::get_courses_followed_by_drh($userId);
+            foreach ($platformCourses as $course) {
+                $courses[$course['code']] = $course['code'];
+            }
+
+            $sessions = SessionManager::get_sessions_followed_by_drh($userId);
+        }
+
+        return array(
+            'teachers' => $teachers,
+            'students' => $students,
+            'courses' => $courses,
+            'sessions' => $sessions
+        );
+    }
+
+    /**
      * Calculates the time spent on the platform by a user
      * @param   int|array User id
      * @param   string type of time filter: 'last_week' or 'custom'
@@ -828,7 +902,6 @@ class Tracking
                             if ($debug) echo '<h3>Item Type: ' .$row_max_score['item_type'].'</h3>';
 
                             if ($row_max_score['item_type'] == 'sco') {
-                                //var_dump($row_max_score);
                                 // Check if it is sco (easier to get max_score)
                                 //when there's no max score, we assume 100 as the max score, as the SCORM 1.2 says that the value should always be between 0 and 100.
                                 if ($max_score == 0 || is_null($max_score) || $max_score == '') {
@@ -910,7 +983,6 @@ class Tracking
                         if ($debug) echo '<h3>$count_items '.$count_items.'</h3>';
                         if ($debug) echo '<h3>$score_of_scorm_calculate '.$score_of_scorm_calculate.'</h3>';
 
-                        // var_dump($score_of_scorm_calculate);
                         $global_result += $score_of_scorm_calculate;
                         if ($debug) echo '<h3>$global_result '.$global_result.'</h3>';
                     } // end while
@@ -978,9 +1050,6 @@ class Tracking
         $lp_ids = array(),
         $session_id = null
     ) {
-        $tbl_stats_exercices        = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-        $tbl_stats_attempts         = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
         if (empty($student_id)) {
             return 0;
         }
@@ -989,8 +1058,8 @@ class Tracking
 
         if (!empty($course_code)) {
             $course = api_get_course_info($course_code);
-            $course_id = $course['real_id'];
-            $conditions[] = " c_id =  {$course['real_id']}";
+            $courseId = $course['real_id'];
+            $conditions[] = " c_id = $courseId";
         }
 
         // get course tables names
@@ -1020,22 +1089,26 @@ class Tracking
         }
 
         $conditionsToString = implode('AND ', $conditions);
-        //lp_iv.max_score as max_score_item_view,
         $sql = "SELECT  SUM(lp_iv.score) sum_score,
                         SUM(lp_i.max_score) sum_max_score,
                         count(*) as count
-                FROM $lp_item_view_table as lp_iv
+                FROM $lp_table as lp
                 INNER JOIN $lp_item_table as lp_i
-                ON lp_i.id = lp_iv.lp_item_id
-                INNER JOIN $lp_table as lp
-                ON lp.id = lp_i.lp_id
+                ON lp.id = lp_id AND lp.c_id = lp_i.c_id
                 INNER JOIN $lp_view_table as lp_view
-                ON (lp_view.lp_id = lp.id)
+                ON lp_view.lp_id = lp_i.lp_id AND lp_view.c_id = lp_i.c_id
+                INNER JOIN $lp_item_view_table as lp_iv
+                ON lp_i.id = lp_iv.lp_item_id AND lp_view.c_id = lp_iv.c_id AND lp_iv.lp_view_id = lp_view.id
                 WHERE (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."') AND
                 $conditionsToString
                 ";
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
+
+        if (empty($row['sum_max_score'])) {
+            return 0;
+        }
+
         return ($row['sum_score'] / $row['sum_max_score'])*100;
 
     }
@@ -2553,7 +2626,6 @@ class Tracking
                         $my_results_final[]                     = $my_results[$key];
                         $final_all_exercise_graph_list[] 		= $all_exercise_graph_list[$key];
                     }
-                    //var_dump($final_all_exercise_graph_name_list, $final_all_user_results, $final_all_exercise_graph_list);
                     $main_session_graph = self::generate_session_exercise_graph($final_all_exercise_graph_name_list, $my_results_final, $final_all_exercise_graph_list);
                 }
             //}
@@ -3087,8 +3159,6 @@ class Tracking
             $my_exercise_result = $my_exercise_result_array[0] *100;
         }
 
-        //var_dump($exercise_result, $my_exercise_result);
-
         $max     = 100;
         $pieces  = 5 ;
         $part    = round($max / $pieces);
@@ -3123,19 +3193,13 @@ class Tracking
             }
         }
 
-        //var_dump($my_final_array, $final_array); exit;
-
         //Fix to remove the data of the user with my data
-
         for($i = 0; $i<=count($my_final_array); $i++) {
             if (!empty($my_final_array[$i])) {
                 $my_final_array[$i] =  $final_array[$i] + 1; //Add my result
                 $final_array[$i] = 0;
             }
         }
-        //var_dump($my_final_array, $final_array); echo '<br />';
-
-        //echo '<pre>'; var_dump($my_exercise_result, $exercise_result,$x_axis);
 
         $cache = new pCache();
 
@@ -3217,8 +3281,6 @@ class Tracking
         if (isset($my_exercise_result_array[0])) {
             $my_exercise_result = $my_exercise_result_array[0] *100;
         }
-
-        //var_dump($exercise_result, $my_exercise_result);
 
         $max = 100;
         $pieces = 5 ;

@@ -548,17 +548,17 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 
 	foreach ($a_course_users as $user_id => $o_course_user) {
 		if ((
-                isset($_GET['keyword']) &&
-                searchUserKeyword(
-                    $o_course_user['firstname'],
-                    $o_course_user['lastname'],
-                    $o_course_user['username'],
-                    $o_course_user['official_code'],
-                    $_GET['keyword'])
+            isset($_GET['keyword']) &&
+            searchUserKeyword(
+                $o_course_user['firstname'],
+                $o_course_user['lastname'],
+                $o_course_user['username'],
+                $o_course_user['official_code'],
+                $_GET['keyword'])
             ) || !isset($_GET['keyword']) || empty($_GET['keyword'])
         ) {
 
-			$groups_name = GroupManager :: get_user_group_name($user_id);
+			$groups_name = GroupManager::getAllGroupPerUserSubscription($user_id);
 			$temp = array();
 			if (api_is_allowed_to_edit(null, true)) {
                 $temp[] = $user_id;
@@ -621,7 +621,8 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				}
 				$temp[] = $o_course_user['username'];
 				$temp[] = $o_course_user['role'];
-				$temp[] = implode(', ', $groups_name);//Group
+                // Group.
+				$temp[] = implode(', ', $groups_name);
 
                 if ($course_info['unsubscribe'] == 1) {
                     //User id for actions

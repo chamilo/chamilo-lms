@@ -123,7 +123,7 @@ class Timeline extends Model
     {
 
         $form = new FormValidator('item_form', 'post', $url);
-        // Settting the form elements
+        // Setting the form elements
         $header = get_lang('Add');
         if ($action == 'edit') {
             $header = get_lang('Modify');

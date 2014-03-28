@@ -5633,7 +5633,7 @@ class learnpath
                 // The first regexp deals with :// urls.
                 $content = preg_replace("|(flashvars=\"file=)([^:/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $_course['path'] . '/document/', $content);
                 // The second regexp deals with audio/ urls.
-                $content = preg_replace("|(flashvars=\"file=)([^/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $_course['path'] . '/document/$2/', $content);
+                $content = preg_replace("|(flashvars=\"file=)([^:/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $_course['path'] . '/document/$2/', $content);
                 fputs($fp, $content);
                 fclose($fp);
 

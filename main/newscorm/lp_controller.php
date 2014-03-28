@@ -212,12 +212,13 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
             $_REQUEST['action'] = 'list';
         }
     }
+    $_SESSION['studentview'] = "studentview";
 } else {
     if ($is_allowed_to_edit) {
         if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'view' && !isset($_REQUEST['exeId'])) {
             $_REQUEST['action'] = 'build';
         }
-        $_SESSION['studentview'] = null;
+        $_SESSION['studentview'] = "teacherview";
     }
 }
 

@@ -395,7 +395,7 @@ class FlatViewDataGenerator
                     if (!isset($this->params['only_total_category']) || (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)) {
                         if (!$show_all) {
                             if (in_array($item->get_type() , array(LINK_EXERCISE, LINK_DROPBOX, LINK_STUDENTPUBLICATION, 
-                                                                   LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE,LINK_SURVEY))) {
+                                                                   LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE, LINK_SURVEY, LINK_HOTPOTATOES))) {
                                 if (!empty($score[0])) {
                                    $row[] = $temp_score.' ';
                                 } else {

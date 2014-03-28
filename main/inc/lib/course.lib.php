@@ -4102,12 +4102,12 @@ class CourseManager
         //WHERE login_course_date <= '$today' AND login_course_date >= '$today_diff'
 
         //$table_course_access table uses the now() and interval ...
-
+       $now = api_get_utc_datetime(time());
        $sql = "SELECT COUNT(course_access_id) course_count, a.course_code, visibility ".
               "FROM $table_course c INNER JOIN $table_course_access a ".
               "  ON (c.code = a.course_code) INNER JOIN $table_course_url u ON u.course_code = a.course_code ".
               "  WHERE   u.access_url_id = ".$_configuration['access_url']." AND".
-              "          login_course_date <= now() AND ".
+              "          login_course_date <= '$now' AND ".
               "          login_course_date > DATE_SUB(now(), INTERVAL $days DAY) AND".
               "          visibility <> '".COURSE_VISIBILITY_CLOSED."' AND visibility <> '".COURSE_VISIBILITY_HIDDEN."'".
               "  GROUP BY course_code".
@@ -4130,6 +4130,8 @@ class CourseManager
 
         foreach ($courses as &$my_course) {
             $course_info = api_get_course_info($my_course['course_code']);
+            $courseCode = $my_course['course_code'];
+            $categoryCode = $my_course['categoryCode'];
             $my_course['extra_info'] = $course_info;
             $my_course['extra_info']['go_to_course_button'] = '';
             $my_course['extra_info']['register_button'] = '';
@@ -4142,6 +4144,10 @@ class CourseManager
 
             if ($access_link && in_array('enter', $access_link)) {
                 $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php', array('class' => 'btn btn-primary'));
+            }
+            
+            if ($access_link && in_array('unsubscribe', $access_link)) {
+                $my_course['extra_info']['unsubscribe_button'] = Display::url(get_lang('Unsubscribe'), api_get_path(WEB_CODE_PATH).'auth/courses.php?action=unsubscribe&amp;unsubscribe='.$courseCode.'&amp;sec_token='.$stok.'&amp;category_code='.$categoryCode, array('class' => 'btn btn-primary'));
             }
 
             //Description
@@ -4244,7 +4250,6 @@ class CourseManager
         $options = array();
         // Register button
         if (!api_is_anonymous($uid) &&
-            !$is_admin &&
             (
                 ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
                 //$course['visibility'] == COURSE_VISIBILITY_REGISTERED && $course['subscribe'] == SUBSCRIBE_ALLOWED
@@ -4263,7 +4268,19 @@ class CourseManager
         ) {
             $options[]=  'enter';
         }
-
+        
+        if ($is_admin ||
+            $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD && empty($course['registration_code']) ||
+            (api_user_is_login($uid) && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && empty($course['registration_code']) ) ||
+            (in_array($course['real_id'], $user_courses) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
+        ) {
+            $options[]=  'enter';
+        }
+        
+         if ($course['visibility'] != HIDDEN && empty($course['registration_code']) && $course['unsubscribe'] == UNSUBSCRIBE_ALLOWED && api_user_is_login($uid) && (in_array($course['real_id'], $user_courses))) {
+            $options[]=  'unsubscribe';
+        }
+        
         return $options;
     }
 

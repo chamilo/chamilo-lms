@@ -510,11 +510,13 @@ function testDatabaseConnect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleD
             echo '<div class="warning-message">'.translate('ADatabaseWithTheSameNameAlreadyExists').'</div>';
         }
         $database = new Database($conn);
+
         return $connect;
     } catch (Exception $e) {
         /*echo '<div class="error-message">';
         echo $e->getMessage();
         echo '</div>';*/
+
         return -1;
     }
 
@@ -584,7 +586,6 @@ function parse_sql_queries($sql_text)
         }
     }
 }
-
 
 /**
  * Function copied and adapted from phpMyAdmin 2.6.0 PMA_splitSqlFile (also GNU GPL)
@@ -904,6 +905,7 @@ function display_language_selection()
 function translate($variable)
 {
     global $app;
+
     return $app['translator']->trans($variable);
 }
 
@@ -1110,6 +1112,7 @@ function drawOptions($translator)
                     </td>
                   </tr>';
     }
+
     return $html;
 }
 
@@ -1285,12 +1288,13 @@ function drawPermissionsSettings($app)
             $html .= '<li>'.$value.'</li>';
         }
         $html .= '</ul>';
-    }  elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
+    } elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
         // Check wether a Chamilo configuration file already exists.
         $html .= '<div class="warning-message"><h4><center>';
         $html .= translate('WarningExistingDokeosInstallationDetected');
         $html .= '</center></h4></div>';
     }
+
     return $html;
 }
 
@@ -1341,7 +1345,7 @@ function display_license_agreement()
                         ); ?></button>
                         <input type="hidden" name="is_executable" id="is_executable" value="-"/>
                         <button type="submit" class="btn next" name="step3"
-                                onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo translate(
+                                onclick="javascript: if (!document.getElementById('accept_licence').checked) { alert('<?php echo translate(
                                     'YouMustAcceptLicence'
                                 )?>');return false;}" value="<?php echo translate('Next'); ?> &gt;"><?php echo translate(
                             'Next'
@@ -1888,7 +1892,6 @@ function display_configuration_settings_form(
     }
     echo "</tr>\n";
 
-
     //Second parameter: Chamilo URL
     echo "<tr>";
     echo '<td>'.translate('ChamiloURL').' (<font color="red">'.translate(
@@ -1904,7 +1907,6 @@ function display_configuration_settings_form(
         ).'" />'."</td>";
     }
     echo "</tr>";
-
 
     //Parameter 9: campus name
     display_configuration_parameter($installType, translate('CampusName'), 'campusForm', $campusForm);
@@ -1996,7 +1998,6 @@ function display_configuration_settings_form(
         </div>
     </td>
     <?php endif; ?>
-
 </tr>
 <tr>
     <td>
@@ -2282,8 +2283,8 @@ function update_dir_and_files_permissions()
 function compare_setting_values($current_value, $wanted_value)
 {
     $current_value_string = $current_value;
-    $current_value = (float)$current_value;
-    $wanted_value = (float)$wanted_value;
+    $current_value = (float) $current_value;
+    $wanted_value = (float) $wanted_value;
 
     if ($current_value >= $wanted_value) {
         return Display::label($current_value_string, 'success');
@@ -2293,7 +2294,8 @@ function compare_setting_values($current_value, $wanted_value)
 }
 
 
-function check_course_script_interpretation($course_dir, $course_attempt_name, $file = 'test.php'){
+function check_course_script_interpretation($course_dir, $course_attempt_name, $file = 'test.php')
+{
     $output = false;
     //Write in file
     $file_name = $course_dir.'/'.$file;
@@ -2330,7 +2332,7 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
 
                     fwrite($fp, $out);
                     while (!feof($fp)) {
-                        $result = str_replace("\r\n", '',fgets($fp, 128));
+                        $result = str_replace("\r\n", '', fgets($fp, 128));
                         if (!empty($result) && $result == '123') {
                             $output = true;
                         }
@@ -2353,7 +2355,7 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
                     curl_setopt($ch, CURLOPT_URL, $url);
                     //curl_setopt($ch, CURLOPT_TIMEOUT, 30);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    $result = curl_exec ($ch);
+                    $result = curl_exec($ch);
                     if (!empty($result) && $result == '123') {
                         $output = true;
                     }
@@ -2366,7 +2368,6 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
 
     return $output;
 }
-
 
 /* Executed only before create_course_tables() */
 function drop_course_tables()

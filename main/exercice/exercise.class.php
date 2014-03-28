@@ -1621,6 +1621,7 @@ class Exercise {
         $new_array = array();
         if (Database::num_rows($result) > 0 ) {
             $new_array = Database::fetch_array($result, 'ASSOC');
+            $new_array['num_exe'] = Database::num_rows($result);
         }
         return $new_array;
     }

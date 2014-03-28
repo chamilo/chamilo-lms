@@ -447,6 +447,18 @@ function browseCourseCategories()
             $categories[$row['parent_id']][$row['tree_pos']] = $row;
         }
     }
+    $count_courses = countCoursesInCategory();
+    $categories[0][count($categories[0])+1] = array(
+        'id' =>0,
+        'name' => get_lang('None'),
+        'code' => 'NONE',
+        'parent_id' => null,
+        'tree_pos' => $row['tree_pos']+1,
+        'children_count' => 0,
+        'auth_course_child' => true,
+        'auth_cat_child' => true,
+        'count_courses' => $count_courses
+    );
     return $categories;
 }
 
@@ -454,7 +466,7 @@ function browseCourseCategories()
  * @param string $category_code
  * @return int
  */
-function countCoursesInCategory($category_code)
+function countCoursesInCategory($category_code='')
 {
     $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $TABLE_COURSE_FIELD = Database :: get_main_table(TABLE_MAIN_COURSE_FIELD);
@@ -480,7 +492,7 @@ function countCoursesInCategory($category_code)
     }
 
     $sql = "SELECT * FROM $tbl_course
-            WHERE category_code" . (empty($category_code) ? " IS NULL" : "='" . $category_code . "'") . $without_special_courses;
+            WHERE category_code" . "='" . $category_code . "'" . $without_special_courses;
     // Showing only the courses of the current portal access_url_id.
 
     if (api_is_multiple_url_enabled()) {
@@ -491,7 +503,7 @@ function countCoursesInCategory($category_code)
                     INNER JOIN $tbl_url_rel_course as url_rel_course
                     ON (url_rel_course.course_code=course.code)
                     WHERE
-                        access_url_id = $url_access_id AND category_code" . (empty($category_code) ? " IS NULL" : "='" . $category_code . "'").$without_special_courses;
+                        access_url_id = $url_access_id AND category_code" . "='" . $category_code . "'" . $without_special_courses;
         }
     }
     return Database::num_rows(Database::query($sql));
@@ -572,6 +584,9 @@ function browseCoursesInCategory($category_code, $random_value = null)
         if (empty($category_code)) {
             $sql = "SELECT * FROM $tbl_course WHERE 1=1 $without_special_courses ORDER BY title ";
         } else {
+            if ($category_code == 'NONE') {
+                $category_code = '';
+            }
             $sql = "SELECT * FROM $tbl_course WHERE category_code='$category_code' $without_special_courses ORDER BY title ";
         }
 

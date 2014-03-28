@@ -561,7 +561,6 @@ $js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins/chamilo/jplayer.blue.monday.css" type="text/css">';
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.min.js"></script>';
 $mediaplayer_path = api_get_path(WEB_LIBRARY_PATH).'mediaplayer/player.swf';
-
 $docs_and_folders = DocumentManager::get_all_document_data(
     $_course,
     $curdirpath,
@@ -632,8 +631,7 @@ if (!empty($_SESSION['_gid'])) {
 
 /* 	MOVE FILE OR DIRECTORY */
 //Only teacher and all users into their group and each user into his/her shared folder
-if (
-    $is_allowed_to_edit ||
+if ($is_allowed_to_edit ||
     $group_member_with_upload_rights ||
     is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id) ||
     is_my_shared_folder(api_get_user_id(), $moveTo, $session_id)

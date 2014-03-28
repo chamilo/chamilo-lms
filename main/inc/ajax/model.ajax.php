@@ -565,8 +565,18 @@ switch ($action) {
                 'firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score', 'status', 'lp', 'actions'
             );
         }
-        $result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $whereCondition);
-		break;
+        $result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
+        break;
+    case 'get_hotpotatoes_exercise_results':
+        $course = api_get_course_info();
+        $documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
+        if (api_is_allowed_to_edit()) {
+            $columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_date',  'score', 'actions');    
+        } else {
+            $columns = array('exe_date',  'score', 'actions');    
+        }
+        $result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $where_condition); //get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
+        break;
     case 'get_work_student_list_overview':
         if (!api_is_allowed_to_edit()) {
             return array();

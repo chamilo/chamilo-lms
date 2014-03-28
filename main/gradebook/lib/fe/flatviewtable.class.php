@@ -298,7 +298,7 @@ class FlatViewTable extends SortableTable
                                 $Test->setFixedScale(0, $max);    
                             }
                             
-                            $Test->drawScale($DataSet->GetData(),$DataSet->GetDataDescription(), SCALE_ADDALLSTART0, 150,150,150, TRUE, 0, 0, FALSE);
+                            $Test->drawScale($DataSet->GetData(),$DataSet->GetDataDescription(), SCALE_ADDALLSTART0, 150,150,150, TRUE, 0, 1, FALSE);
 
                             //background grid
                             $Test->drawGrid(4, TRUE,230,230,230,50);

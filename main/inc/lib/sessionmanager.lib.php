@@ -3540,7 +3540,12 @@ class SessionManager
             case 'drh':
                 // Classic DRH
                 if (empty($studentIdList)) {
-                    $studentListSql = UserManager::get_users_followed_by_drh($userId, $filterByStatus, true, false);
+                    $studentListSql = UserManager::get_users_followed_by_drh(
+                        $userId,
+                        $filterByStatus,
+                        true,
+                        false
+                    );
                     $studentIdList = array_keys($studentListSql);
                     $studentListSql = "'".implode("','", $studentIdList)."'";
                 } else {
@@ -3595,7 +3600,7 @@ class SessionManager
 
         if (!empty($lastConnectionDate)) {
             $loginTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-            $sql .= " INNER JOIN $loginTable l ON (l.login_user_id = u.user_id) ";
+            //$sql .= " INNER JOIN $loginTable l ON (l.login_user_id = u.user_id) ";
         }
 
         $where = " WHERE access_url_id = $urlId
@@ -3609,7 +3614,7 @@ class SessionManager
 
         if (!empty($lastConnectionDate)) {
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
-            $where .=  " AND l.login_date <= '$lastConnectionDate' ";
+            //$where .=  " AND l.login_date <= '$lastConnectionDate' ";
         }
 
         $sql .= $where;
@@ -3640,7 +3645,6 @@ class SessionManager
         }
 
         $sql .= $limitCondition;
-
         $result = Database::query($sql);
         $result = Database::store_result($result);
 
@@ -3797,6 +3801,7 @@ class SessionManager
      * @param string $lastConnectionDate
      * @param array $sessionIdList
      * @param array $studentIdList
+     * @param int $userStatus STUDENT|COURSEMANAGER constants
      * @return array|int
      */
     public static function getCountUserTracking(
@@ -3811,7 +3816,6 @@ class SessionManager
 
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
-
                 $count = self::getAllUsersFromCoursesFromAllSessionFromStatus(
                     'drh_all',
                     $userId,
@@ -3844,7 +3848,6 @@ class SessionManager
                     array(),
                     array(),
                     $userStatus
-
                 );
             }
         } else {
@@ -3893,6 +3896,7 @@ class SessionManager
                         $sessionIdList[] = $session['id'];
                     }
                 }
+
                 $sessionIdList = array_map('intval', $sessionIdList);
                 $sessionToString = implode("', '",  $sessionIdList);
 
@@ -3901,7 +3905,7 @@ class SessionManager
                 $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 
                 // Select the teachers.
-                $sql = "SELECT cu.user_id FROM $course c
+                $sql = "SELECT DISTINCT(cu.user_id) FROM $course c
                         INNER JOIN $sessionCourse src ON c.code = src.course_code
                         INNER JOIN $courseUser cu ON (cu.course_code = c.code)
 		                WHERE src.id_session IN ('$sessionToString') AND cu.status = 1";
@@ -3919,7 +3923,7 @@ class SessionManager
             }
         }
 
-        if (!empty($teacherResult)) {
+        if (!empty($teacherListId)) {
             $tableUser = Database::get_main_table(TABLE_MAIN_USER);
 
             $select = "SELECT DISTINCT u.* ";
@@ -3931,7 +3935,7 @@ class SessionManager
 
             if (!empty($lastConnectionDate)) {
                 $tableLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-                $sql .= " INNER JOIN $tableLogin l ON (l.login_user_id = u.user_id) ";
+                //$sql .= " INNER JOIN $tableLogin l ON (l.login_user_id = u.user_id) ";
             }
             $active = intval($active);
             $teacherListId = implode("','", $teacherListId);
@@ -3939,7 +3943,7 @@ class SessionManager
 
             if (!empty($lastConnectionDate)) {
                 $lastConnectionDate = Database::escape_string($lastConnectionDate);
-                $where .= " AND l.login_date <= '$lastConnectionDate' ";
+                //$where .= " AND l.login_date <= '$lastConnectionDate' ";
             }
 
             $sql .= $where;

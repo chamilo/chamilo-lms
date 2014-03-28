@@ -117,16 +117,17 @@ class ExerciseLink extends AbstractLink
                     $attribute['visibility'][] = $row['visibility'];
                     $attribute['comment'][] = $row['comment'];
                     $attribute['id'] = $row['id'];
-        		}
-                if (isset($attribute['path']) && is_array($attribute['path'])) {
-                    $hotpotatoes_exist = true;
-                    while (list($key, $path) = each($attribute['path'])) {
-                        $item = '';
-                        $title = GetQuizName($path, $documentPath);
-                        if ($title == '') {
-                            $title = basename($path);
+        		
+                    if (isset($attribute['path']) && is_array($attribute['path'])) {
+                        $hotpotatoes_exist = true;
+                        while (list($key, $path) = each($attribute['path'])) {
+                            $item = '';
+                            $title = GetQuizName($path, $documentPath);
+                            if ($title == '') {
+                                $title = basename($path);
+                            }
+                            $cats[] = array ($attribute['id'], $title.'(HP)');
                         }
-                        $cats[] = array ($attribute['id'], $title.'(HP)');
                     }
                 }
             }
@@ -151,65 +152,74 @@ class ExerciseLink extends AbstractLink
     }
 
     /**
-	 * Get the score of this exercise. Only the first attempts are taken into account.
-	 * @param $stud_id student id (default: all students who have results - then the average is returned)
-	 * @return	array (score, max) if student is given
-	 * 			array (sum of scores, number of scores) otherwise
-	 * 			or null if no scores available
-	 */
+     * Get the score of this exercise. Only the first attempts are taken into account.
+     * @param $stud_id student id (default: all students who have results - then the average is returned)
+     * @return	array (score, max) if student is given
+     * 			array (sum of scores, number of scores) otherwise
+     * 			or null if no scores available
+     */
     public function calc_score($stud_id = null)
     {
-    	$tbl_stats = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-    	//$tbl_stats_e_attempt_recording = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
+        $tblStats = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $tblHp = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
+        $tblDoc = Database::get_course_table(TABLE_DOCUMENT);
+                                        
         //the following query should be similar (in conditions) to the one used in exercice/exercice.php, look for note-query-exe-results marker
         $session_id = api_get_session_id();
-		$sql = "SELECT * FROM $tbl_stats
-                WHERE   exe_exo_id      = ".intval($this->get_ref_id())." AND
-                        orig_lp_id      = 0 AND
-                        orig_lp_item_id = 0 AND
-                        status      <> 'incomplete' AND
-                        session_id = $session_id
-                ";
+        if (!$this->is_hp) {
+            $sql = "SELECT * FROM $tblStats
+                WHERE   exe_exo_id      = ".intval($this->get_ref_id())." AND 
+                          orig_lp_id      = 0 AND 
+                          orig_lp_item_id = 0 AND 
+                          status      <> 'incomplete' AND
+                          session_id = $session_id";
 
-		if (isset($stud_id)) {
-    		$course_code_exe = $this->get_course_code();
-    		$sql .= " AND exe_cours_id = '$course_code_exe' AND
-                      exe_user_id = '$stud_id' ";
-    	}
-		$sql .= ' ORDER BY exe_id DESC';
+    	    if (isset($stud_id)) {
+                $course_code_exe = $this->get_course_code();
+                $sql .= " AND exe_cours_id = '$course_code_exe' AND exe_user_id = '$stud_id' ";
+            }
+            $sql .= ' ORDER BY exe_id DESC';
+
+        } else {
+             $course_code_exe = $this->get_course_code();         
+             $sql = "SELECT * FROM $tblHp hp, $tblDoc doc
+                 WHERE   hp.exe_cours_id = '$course_code_exe' AND
+                         hp.exe_user_id = '$stud_id'  AND
+                         hp.exe_name = doc.path AND
+                         doc.id = ".intval($this->get_ref_id())."";
+        }
+        
         $scores = Database::query($sql);
 
-    	if (isset($stud_id)) {
-    		// for 1 student
-    		if ($data = Database::fetch_array($scores)) {
-    			return array ($data['exe_result'], $data['exe_weighting']);
-       		} else {
+        if (isset($stud_id)) {
+        // for 1 student
+            if ($data = Database::fetch_array($scores)) {
+                return array ($data['exe_result'], $data['exe_weighting']);
+            } else {
                 return null;
-       		}
-    	} else {
-            /// all students -> get average
-    		// normal way of getting the info
-
-    		$students = array();  // user list, needed to make sure we only
-    							// take first attempts into account
-			$student_count = 0;
-			$sum = 0;
-			while ($data = Database::fetch_array($scores, 'ASSOC')) {
-				if (!in_array($data['exe_user_id'], $students)) {
-					if ($data['exe_weighting'] != 0) {
-						$students[] = $data['exe_user_id'];
-						$student_count++;
-						$sum += $data['exe_result'] / $data['exe_weighting'];
-					}
-				}
-			}
-
-			if ($student_count == 0) {
-				return null;
-			} else {
-				return array ($sum , $student_count);
-			}
-    	}
+       	    }
+        } else {
+            // all students -> get average
+      	    // normal way of getting the info
+            $students = array();  // user list, needed to make sure we only
+                                  // take first attempts into account
+            $student_count = 0;
+            $sum = 0;
+            while ($data = Database::fetch_array($scores, 'ASSOC')) {
+                if (!in_array($data['exe_user_id'], $students)) {
+                    if ($data['exe_weighting'] != 0) {
+                        $students[] = $data['exe_user_id'];
+                        $student_count++;
+                        $sum += $data['exe_result'] / $data['exe_weighting'];
+                    }
+                }
+            }
+            if ($student_count == 0) {
+                return null;
+            } else {
+                return array ($sum , $student_count);
+            }
+        }
     }
 
     /**
@@ -217,19 +227,19 @@ class ExerciseLink extends AbstractLink
      * First we go to exercise_jump.php and then to the result page.
      * Check this php file for more info.
      */
-	public function get_link()
+    public function get_link()
     {
-		//status student
-		$user_id = api_get_user_id();
-		$course_code = $this->get_course_code();
-		$status_user=api_get_status_of_user_in_course ($user_id, $course_code);
+        //status student
+        $user_id = api_get_user_id();
+        $course_code = $this->get_course_code();
+        $status_user=api_get_status_of_user_in_course ($user_id, $course_code);
         $session_id =api_get_session_id();
-		$url = api_get_path(WEB_PATH).'main/gradebook/exercise_jump.php?session_id='.$session_id.'&cidReq='.$this->get_course_code().'&gradebook=view&exerciseId='.$this->get_ref_id();
-		if ((!api_is_allowed_to_edit() && $this->calc_score(api_get_user_id()) == null) || $status_user!=1) {
-			$url .= '&amp;doexercise='.$this->get_ref_id();
+        $url = api_get_path(WEB_PATH).'main/gradebook/exercise_jump.php?session_id='.$session_id.'&cidReq='.$this->get_course_code().'&gradebook=view&exerciseId='.$this->get_ref_id();
+        if ((!api_is_allowed_to_edit() && $this->calc_score(api_get_user_id()) == null) || $status_user!=1) {
+            $url .= '&amp;doexercise='.$this->get_ref_id();
         }
-		return $url;
-	}
+        return $url;
+    }
 
     /**
      * Get name to display: same as exercise title
@@ -332,10 +342,10 @@ class ExerciseLink extends AbstractLink
     	} elseif (!isset($this->exercise_data)) {
             if ($this->is_hp == 1) {
                 $ref_id = intval($this->get_ref_id());
-                $sql = "SELECT * FROM $tbl_exercise ex, $TBL_ITEM_PROPERTY ip
-                        WHERE ip.ref = ex.id AND ip.c_id = $this->course_id AND ex.c_id = $this->course_id AND ip.tool = '".TOOL_DOCUMENT."' AND (ex.path LIKE '%htm%')AND (ex.path LIKE '%HotPotatoes_files%') AND ip.visibility = 1";
-            } else {
-                $sql = 'SELECT * FROM '.$tbl_exercise.'
+                $sql = "SELECT * FROM $tbl_exercise ex, $TBL_ITEM_PROPERTY ip 
+                        WHERE ip.ref = ex.id AND ip.c_id = $this->course_id AND ip.ref = $ref_id AND ex.c_id = $this->course_id AND ip.tool = '".TOOL_DOCUMENT."' AND (ex.path LIKE '%htm%')AND (ex.path LIKE '%HotPotatoes_files%') AND ip.visibility = 1";    	       
+            } else {    	       
+                $sql = 'SELECT * FROM '.$tbl_exercise.' 
                         WHERE c_id = '.$this->course_id.' AND id = '.(int)$this->get_ref_id().' ';
             }
 			$result = Database::query($sql);

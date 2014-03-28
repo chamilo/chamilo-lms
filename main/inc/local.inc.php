@@ -326,28 +326,28 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
 
                                 if ($my_user_is_admin === false) {
 
-                                    if (is_array($my_url_list) && count($my_url_list)>0 ) {
-                                        // the user have the permissions to enter at this site
-                                        if (in_array($current_access_url_id, $my_url_list)) {
-                                            ConditionalLogin::check_conditions($uData);
+                                    // the user have the permissions to enter at this site
+                                    if (is_array($my_url_list) && in_array($current_access_url_id, $my_url_list)) {
+                                        ConditionalLogin::check_conditions($uData);
 
-                                            $_user['user_id'] = $uData['user_id'];
-                                            $_user['status']  = $uData['status'];
-                                            Session::write('_user', $_user);
-                                            event_login();
-                                            $logging_in = true;
-                                        } else {
-                                            $loginFailed = true;
-                                            Session::write('loginFailed', '1');
-                                            Session::erase('_uid');
-                                            header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
-                                            exit;
-                                        }
+                                        $_user['user_id'] = $uData['user_id'];
+                                        $_user['status']  = $uData['status'];
+                                        Session::write('_user', $_user);
+                                        event_login();
+                                        $logging_in = true;
                                     } else {
                                         $loginFailed = true;
                                         Session::erase('_uid');
                                         Session::write('loginFailed', '1');
-                                        header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
+
+                                        // Fix cas redirection loop
+                                        // https://support.chamilo.org/issues/6124
+                                        $location = api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive';
+                                        if ($cas_login) {
+                                            cas_logout(null, $location);
+                                        } else {
+                                            header('Location: '.$location);
+                                        }
                                         exit;
                                     }
                                 } else { //Only admins of the "main" (first) Chamilo portal can login wherever they want

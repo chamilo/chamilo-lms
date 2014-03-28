@@ -395,7 +395,7 @@ class FlatViewDataGenerator
                     if (!isset($this->params['only_total_category']) || (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)) {
                         if (!$show_all) {
                             if (in_array($item->get_type() , array(LINK_EXERCISE, LINK_DROPBOX, LINK_STUDENTPUBLICATION, 
-                                                                   LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE,LINK_SURVEY))) {
+                                                                   LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE, LINK_SURVEY, LINK_HOTPOTATOES))) {
                                 if (!empty($score[0])) {
                                    $row[] = $temp_score.' ';
                                 } else {
@@ -418,7 +418,7 @@ class FlatViewDataGenerator
                 if ($export_to_pdf) {
                     $row['total'] = $scoredisplay->display_score($total_score);
                 } else {
-                    $row[] = $scoredisplay->display_score($total_score);
+                   $row[] = $scoredisplay->display_score($total_score);
                 }
             } else {
                 if ($export_to_pdf) {
@@ -541,24 +541,63 @@ class FlatViewDataGenerator
         foreach ($selected_users as $user) {
             $row = array ();
             $row[] = $user[0];    // user id
-            $item_value=0;
-            $item_total=0;
+            $item_value = 0;
+            $item_total = 0;
+            $final_score = 0;
+            
+            $item_value_total = 0;
+            
 
-            for ($count=0;$count < count($this->evals_links); $count++) {
-                $item = $this->evals_links [$count];
-                $score = $item->calc_score($user[0]);
-                $divide=( ($score[1])==0 ) ? 1 : $score[1];
-                $item_value+= $score[0]/$divide*$item->get_weight();
-                $item_total+=$item->get_weight();
-                $score_denom=($score[1]==0) ? 1 : $score[1];
-                $score_final = ($score[0] / $score_denom) * 100;
-                $row[] = array ($score_final, trim($scoredisplay->display_score($score, SCORE_CUSTOM,null, true)));
+            $convert_using_the_global_weight = true;
+
+            $course_code     = api_get_course_id();
+            $session_id        = api_get_session_id();
+            $allcat         = $this->category->get_subcategories(null, $course_code, $session_id, 'ORDER BY id');
+            
+            if ($parent_id == 0 && !empty($allcat)) {
+
+                foreach ($allcat as $sub_cat) {
+                    $score             = $sub_cat->calc_score($user[0]);
+                    $real_score     = $score;
+                    $main_weight  = $this->category->get_weight();
+                    $divide            = ( ($score[1])==0 ) ? 1 : $score[1];
+
+                    $sub_cat_percentage = $sum_categories_weight_array[$sub_cat->get_id()];
+                    $item_value     = $score[0]/$divide*$main_weight;
+                    $item_total        += $sub_cat->get_weight();
+                    
+                    $row[] = array ($item_value, trim($scoredisplay->display_score($real_score, SCORE_CUSTOM,null, true)));
+
+                    
+                    $item_value_total += $item_value;
+                    $final_score += $score[0];
+                    //$final_score = ($final_score / $item_total) * 100;
+                   
+                }
+                $total_score = array($final_score, $item_total);
+                $row[] = array ($final_score, trim($scoredisplay->display_score($total_score, SCORE_CUSTOM, null, true)));
+               
+
+            } else {
+
+                for ($count=0;$count < count($this->evals_links); $count++) {
+                    $item = $this->evals_links [$count];
+                    $score = $item->calc_score($user[0]);
+                    $divide=( ($score[1])==0 ) ? 1 : $score[1];
+                    $item_value+= $score[0]/$divide*$item->get_weight();
+                    $item_total+=$item->get_weight();
+                    $score_denom=($score[1]==0) ? 1 : $score[1];
+                    $score_final = ($score[0] / $score_denom) * 100;
+                    $row[] = array ($score_final, trim($scoredisplay->display_score($score, SCORE_CUSTOM,null, true)));
+    
+                }
+                $total_score=array($item_value,$item_total);
+                $score_final = ($item_value / $item_total) * 100;
+                Display::display_warning_message( Display::display_warning_message($total_score[1]));
+                $row[] =array ($score_final, trim($scoredisplay->display_score($total_score, SCORE_CUSTOM, null, true)));
 
             }
-            $total_score=array($item_value,$item_total);
-            $score_final = ($item_value / $item_total) * 100;
-            $row[] =array ($score_final, trim($scoredisplay->display_score($total_score, SCORE_CUSTOM, null, true)));
-
+            
             $data[] = $row;
         }
         return $data;

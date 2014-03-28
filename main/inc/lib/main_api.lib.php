@@ -896,7 +896,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     	switch ($course_info['visibility']) {
     		default:
     		case COURSE_VISIBILITY_CLOSED: //Completely closed: the course is only accessible to the teachers. - 0
-    			if (api_get_user_id() && !api_is_anonymous() && (api_is_allowed_to_edit())) {
+    			if (api_get_user_id() && !api_is_anonymous() && $is_allowed_in_course) {
     				$is_visible = true;
     			}
     			break;
@@ -5098,12 +5098,8 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
 function replace_dangerous_char($filename, $strict = 'loose')
 {
     // Safe replacements for some non-letter characters.
-    static $search  = array(
-        ',', "\0", ' ', "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%'
-    );
-    static $replace = array(
-        '_', '',   '_', '_',  '_',  '_',  '_', '-', '-',  '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'
-    );
+    static $search  = array(',', "\0", ' ', "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');
+    static $replace = array('_', '', '_', '_', '_', '_', '_', '-', '-', '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
 
     // Encoding detection.
     $encoding = api_detect_encoding($filename);
@@ -7012,7 +7008,7 @@ function api_elog($string, $dump = 0)
 /**
  * Set the cookie to go directly to the course code $in_firstpage
  * after login
- * @param in_firstpage is the course code of the course to go
+ * @param string $in_firstpage is the course code of the course to go
  */
 function api_set_firstpage_parameter($in_firstpage)
 {

@@ -120,7 +120,7 @@ $filter_warning_msg = true;
 
 ///direct access to one evaluation
 $catsResult = array();
-if ( api_get_session_id() != 0) {
+if (api_get_session_id() != 0) {
     $session_id = api_get_session_id();
     $cats = Category :: load_session_categories(null, $session_id); //already init
     $catsResult = $cats;
@@ -130,8 +130,8 @@ if ( api_get_session_id() != 0) {
 $first_time = null;
 
 if (empty($cats)) {
-	$cats = Category :: load(0, null, $course_code, null, null, $session_id, false);//first time
-  $first_time = 1;
+    $cats = Category :: load(0, null, $course_code, null, null, $session_id, false);//first time
+    $first_time = 1;
 }
 $_GET['selectcat'] = $cats[0]->get_id();
 
@@ -141,7 +141,7 @@ if (isset($_GET['isStudentView'])) {
 	}
 }
 
-if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
+if ((isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview')) {
 	Display :: display_header();
 
 	//Introduction tool: student view

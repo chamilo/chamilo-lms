@@ -381,7 +381,7 @@ $action = (!empty($_REQUEST['action']) ? $_REQUEST['action'] : '');
 // format title to be displayed correctly if QUIZ
 $post_title = "";
 if (isset($_POST['title'])) {
-    $post_title = $_POST['title'];
+    $post_title = Security::remove_XSS($_POST['title']);
     if (isset($_POST['type']) && isset($_POST['title']) && $_POST['type'] == TOOL_QUIZ && !empty($_POST['title'])) {
         $post_title = Exercise::format_title_variable($_POST['title']);
     }

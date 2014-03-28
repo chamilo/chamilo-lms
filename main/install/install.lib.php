@@ -510,11 +510,13 @@ function testDatabaseConnect($dbHostForm, $dbUsernameForm, $dbPassForm, $singleD
             echo '<div class="warning-message">'.translate('ADatabaseWithTheSameNameAlreadyExists').'</div>';
         }
         $database = new Database($conn);
+
         return $connect;
     } catch (Exception $e) {
         /*echo '<div class="error-message">';
         echo $e->getMessage();
         echo '</div>';*/
+
         return -1;
     }
 
@@ -584,7 +586,6 @@ function parse_sql_queries($sql_text)
         }
     }
 }
-
 
 /**
  * Function copied and adapted from phpMyAdmin 2.6.0 PMA_splitSqlFile (also GNU GPL)
@@ -904,6 +905,7 @@ function display_language_selection()
 function translate($variable)
 {
     global $app;
+
     return $app['translator']->trans($variable);
 }
 
@@ -1110,6 +1112,7 @@ function drawOptions($translator)
                     </td>
                   </tr>';
     }
+
     return $html;
 }
 
@@ -1285,12 +1288,13 @@ function drawPermissionsSettings($app)
             $html .= '<li>'.$value.'</li>';
         }
         $html .= '</ul>';
-    }  elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
+    } elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
         // Check wether a Chamilo configuration file already exists.
         $html .= '<div class="warning-message"><h4><center>';
         $html .= translate('WarningExistingDokeosInstallationDetected');
         $html .= '</center></h4></div>';
     }
+
     return $html;
 }
 
@@ -1341,7 +1345,7 @@ function display_license_agreement()
                         ); ?></button>
                         <input type="hidden" name="is_executable" id="is_executable" value="-"/>
                         <button type="submit" class="btn next" name="step3"
-                                onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo translate(
+                                onclick="javascript: if (!document.getElementById('accept_licence').checked) { alert('<?php echo translate(
                                     'YouMustAcceptLicence'
                                 )?>');return false;}" value="<?php echo translate('Next'); ?> &gt;"><?php echo translate(
                             'Next'
@@ -1403,21 +1407,21 @@ function get_contact_registration_form()
             <div class="controls">
                     <select name="company_activity" id="company_activity" >
                             <option value="">--- '.translate('SelectOne').' ---</option>
-                            <Option value="Advertising/Marketing/PR">Advertising/Marketing/PR</Option><Option value="Agriculture/Forestry">Agriculture/Forestry</Option>
-                            <Option value="Architecture">Architecture</Option><Option value="Banking/Finance">Banking/Finance</Option>
-                            <Option value="Biotech/Pharmaceuticals">Biotech/Pharmaceuticals</Option><Option value="Business Equipment">Business Equipment</Option>
-                            <Option value="Business Services">Business Services</Option><Option value="Construction">Construction</Option>
-                            <Option value="Consulting/Research">Consulting/Research</Option><Option value="Education">Education</Option>
-                            <Option value="Engineering">Engineering</Option><Option value="Environmental">Environmental</Option>
-                            <Option value="Government">Government</Option><Option value="Healthcare">Health Care</Option>
-                            <Option value="Hospitality/Lodging/Travel">Hospitality/Lodging/Travel</Option><Option value="Insurance">Insurance</Option>
-                            <Option value="Legal">Legal</Option><Option value="Manufacturing">Manufacturing</Option>
-                            <Option value="Media/Entertainment">Media/Entertainment</Option><Option value="Mortgage">Mortgage</Option>
-                            <Option value="Non-Profit">Non-Profit</Option><Option value="Real Estate">Real Estate</Option>
-                            <Option value="Restaurant">Restaurant</Option><Option value="Retail">Retail</Option>
-                            <Option value="Shipping/Transportation">Shipping/Transportation</Option>
-                            <Option value="Technology">Technology</Option><Option value="Telecommunications">Telecommunications</Option>
-                            <Option value="Other">Other</Option>
+                            <option value="Advertising/Marketing/PR">Advertising/Marketing/PR</option><option value="Agriculture/Forestry">Agriculture/Forestry</option>
+                            <option value="Architecture">Architecture</option><option value="Banking/Finance">Banking/Finance</option>
+                            <option value="Biotech/Pharmaceuticals">Biotech/Pharmaceuticals</option><option value="Business Equipment">Business Equipment</option>
+                            <option value="Business Services">Business Services</option><option value="Construction">Construction</option>
+                            <option value="Consulting/Research">Consulting/Research</option><option value="Education">Education</option>
+                            <option value="Engineering">Engineering</option><option value="Environmental">Environmental</option>
+                            <option value="Government">Government</option><option value="Healthcare">Health Care</option>
+                            <option value="Hospitality/Lodging/Travel">Hospitality/Lodging/Travel</option><option value="Insurance">Insurance</option>
+                            <option value="Legal">Legal</option><option value="Manufacturing">Manufacturing</option>
+                            <option value="Media/Entertainment">Media/Entertainment</option><option value="Mortgage">Mortgage</option>
+                            <option value="Non-Profit">Non-Profit</option><option value="Real Estate">Real Estate</option>
+                            <option value="Restaurant">Restaurant</option><option value="Retail">Retail</option>
+                            <option value="Shipping/Transportation">Shipping/Transportation</option>
+                            <option value="Technology">Technology</option><option value="Telecommunications">Telecommunications</option>
+                            <option value="Other">Other</option>
                     </select>
             </div>
     </div>
@@ -1427,17 +1431,17 @@ function get_contact_registration_form()
             <div class="controls">
                     <select name="person_role" id="person_role" >
                             <option value="">--- '.translate('SelectOne').' ---</option>
-                            <Option value="Administration">Administration</Option><Option value="CEO/President/ Owner">CEO/President/ Owner</Option>
-                            <Option value="CFO">CFO</Option><Option value="CIO/CTO">CIO/CTO</Option>
-                            <Option value="Consultant">Consultant</Option><Option value="Customer Service">Customer Service</Option>
-                            <Option value="Engineer/Programmer">Engineer/Programmer</Option><Option value="Facilities/Operations">Facilities/Operations</Option>
-                            <Option value="Finance/ Accounting Manager">Finance/ Accounting Manager</Option><Option value="Finance/ Accounting Staff">Finance/ Accounting Staff</Option>
-                            <Option value="General Manager">General Manager</Option><Option value="Human Resources">Human Resources</Option>
-                            <Option value="IS/IT Management">IS/IT Management</Option><Option value="IS/ IT Staff">IS/ IT Staff</Option>
-                            <Option value="Marketing Manager">Marketing Manager</Option><Option value="Marketing Staff">Marketing Staff</Option>
-                            <Option value="Partner/Principal">Partner/Principal</Option><Option value="Purchasing Manager">Purchasing Manager</Option>
-                            <Option value="Sales/ Business Dev. Manager">Sales/ Business Dev. Manager</Option><Option value="Sales/ Business Dev.">Sales/ Business Dev.</Option>
-                            <Option value="Vice President/Senior Manager">Vice President/Senior Manager</Option><Option value="Other">Other</Option>
+                            <option value="Administration">Administration</option><option value="CEO/President/ Owner">CEO/President/ Owner</option>
+                            <option value="CFO">CFO</option><option value="CIO/CTO">CIO/CTO</option>
+                            <option value="Consultant">Consultant</option><option value="Customer Service">Customer Service</option>
+                            <option value="Engineer/Programmer">Engineer/Programmer</option><option value="Facilities/Operations">Facilities/Operations</option>
+                            <option value="Finance/ Accounting Manager">Finance/ Accounting Manager</option><option value="Finance/ Accounting Staff">Finance/ Accounting Staff</option>
+                            <option value="General Manager">General Manager</option><option value="Human Resources">Human Resources</option>
+                            <option value="IS/IT Management">IS/IT Management</option><option value="IS/ IT Staff">IS/ IT Staff</option>
+                            <option value="Marketing Manager">Marketing Manager</option><option value="Marketing Staff">Marketing Staff</option>
+                            <option value="Partner/Principal">Partner/Principal</option><option value="Purchasing Manager">Purchasing Manager</option>
+                            <option value="Sales/ Business Dev. Manager">Sales/ Business Dev. Manager</option><option value="Sales/ Business Dev.">Sales/ Business Dev.</option>
+                            <option value="Vice President/Senior Manager">Vice President/Senior Manager</option><option value="Other">Other</option>
                     </select>
             </div>
     </div>
@@ -1888,7 +1892,6 @@ function display_configuration_settings_form(
     }
     echo "</tr>\n";
 
-
     //Second parameter: Chamilo URL
     echo "<tr>";
     echo '<td>'.translate('ChamiloURL').' (<font color="red">'.translate(
@@ -1904,7 +1907,6 @@ function display_configuration_settings_form(
         ).'" />'."</td>";
     }
     echo "</tr>";
-
 
     //Parameter 9: campus name
     display_configuration_parameter($installType, translate('CampusName'), 'campusForm', $campusForm);
@@ -1996,7 +1998,6 @@ function display_configuration_settings_form(
         </div>
     </td>
     <?php endif; ?>
-
 </tr>
 <tr>
     <td>
@@ -2282,8 +2283,8 @@ function update_dir_and_files_permissions()
 function compare_setting_values($current_value, $wanted_value)
 {
     $current_value_string = $current_value;
-    $current_value = (float)$current_value;
-    $wanted_value = (float)$wanted_value;
+    $current_value = (float) $current_value;
+    $wanted_value = (float) $wanted_value;
 
     if ($current_value >= $wanted_value) {
         return Display::label($current_value_string, 'success');
@@ -2293,7 +2294,8 @@ function compare_setting_values($current_value, $wanted_value)
 }
 
 
-function check_course_script_interpretation($course_dir, $course_attempt_name, $file = 'test.php'){
+function check_course_script_interpretation($course_dir, $course_attempt_name, $file = 'test.php')
+{
     $output = false;
     //Write in file
     $file_name = $course_dir.'/'.$file;
@@ -2330,7 +2332,7 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
 
                     fwrite($fp, $out);
                     while (!feof($fp)) {
-                        $result = str_replace("\r\n", '',fgets($fp, 128));
+                        $result = str_replace("\r\n", '', fgets($fp, 128));
                         if (!empty($result) && $result == '123') {
                             $output = true;
                         }
@@ -2353,7 +2355,7 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
                     curl_setopt($ch, CURLOPT_URL, $url);
                     //curl_setopt($ch, CURLOPT_TIMEOUT, 30);
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    $result = curl_exec ($ch);
+                    $result = curl_exec($ch);
                     if (!empty($result) && $result == '123') {
                         $output = true;
                     }
@@ -2366,7 +2368,6 @@ function check_course_script_interpretation($course_dir, $course_attempt_name, $
 
     return $output;
 }
-
 
 /* Executed only before create_course_tables() */
 function drop_course_tables()

@@ -768,7 +768,8 @@ class Agenda
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 // to gather sent_tos
                 $sql = "SELECT to_user_id, to_group_id
-                    FROM ".$tlb_course_agenda." agenda, ".$tbl_property." ip
+                    FROM ".$tbl_property." ip INNER JOIN ".$tlb_course_agenda." agenda
+                    ON      ip.ref          = agenda.id
                     WHERE   ip.tool         = '".TOOL_CALENDAR_EVENT."' AND
                             ref             = {$row['ref']} AND
                             ip.visibility   = '1' AND

@@ -1248,39 +1248,12 @@ function export_exercise($item_id) {
           <td>
           <table width='100%' cellpadding='4' cellspacing='2' border='0'>";
 
-    $exerciseType = 1; // So to list all questions in one page.
     $test .= $s;
 
     $i = 0;
 
     foreach ($questionList as $questionId) {
         $i ++;
-
-        // For sequential exercises.
-        if ($exerciseType == 2) {
-            // If it is not the right question, goes to the next loop iteration.
-            if ($questionNum != $i) {
-                continue;
-            } else {
-                // if the user has already answered this question:
-                if (isset ($exerciseResult[$questionId])) {
-                    // Construction of the Question object.
-                    $objQuestionTmp = new Question();
-
-                    // Reads question informations.
-                    $objQuestionTmp->read($questionId);
-
-                    $questionName = $objQuestionTmp->selectTitle();
-
-                    // Destruction of the Question object.
-                    unset ($objQuestionTmp);
-
-                    $test .= '<tr><td>'.get_lang('AlreadyAnswered').' &quot;'.$questionName.'&quot;</td></tr>';
-
-                    break;
-                }
-            }
-        }
 
         echo $s = "<tr bgcolor='#e6e6e6'><td valign='top' colspan='2'>".get_lang('Question')." ";
         // Call the showQuestion() function from exercise.lib.php. This basically displays the question in a table.

@@ -2599,12 +2599,12 @@ class DocumentManager
     }
 
     /**
-     *  Here we count 1 kilobyte = 1000 byte, 12 megabyte = 1000 kilobyte.
+     *  Here we count 1 Kilobyte = 1024 Bytes, 1 Megabyte = 1048576 Bytes
      */
     static function display_quota($course_quota, $already_consumed_space)
     {
-        $course_quota_m = round($course_quota / 1000000);
-        $already_consumed_space_m = round($already_consumed_space / 1000000);
+        $course_quota_m = round($course_quota / 1048576);
+        $already_consumed_space_m = round($already_consumed_space / 1048576);
 
         $message = get_lang('MaximumAllowedQuota') . ' <strong>' . $course_quota_m . ' megabyte</strong>.<br />';
         $message .= get_lang('CourseCurrentlyUses') . ' <strong>' . $already_consumed_space_m . ' megabyte</strong>.<br />';
@@ -2648,12 +2648,12 @@ class DocumentManager
     /**
      * Display the document quota in a simple way
      *
-     *  Here we count 1 kilobyte = 1000 byte, 12 megabyte = 1000 kilobyte.
+     *  Here we count 1 Kilobyte = 1024 Bytes, 1 Megabyte = 1048576 Bytes
      */
     static function display_simple_quota($course_quota, $already_consumed_space)
     {
-        $course_quota_m = round($course_quota / 1000000);
-        $already_consumed_space_m = round($already_consumed_space / 1000000, 2);
+        $course_quota_m = round($course_quota / 1048576);
+        $already_consumed_space_m = round($already_consumed_space / 1048576, 2);
         $percentage = $already_consumed_space / $course_quota * 100;
         $percentage = round($percentage, 1);
         $message = get_lang('YouAreCurrentlyUsingXOfYourX');

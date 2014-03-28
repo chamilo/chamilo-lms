@@ -12,10 +12,6 @@
     Output info:
     <br />
     <br />
-    <pre>
-    {% autoescape false %}
-        {{ output }}
-    {% endautoescape %}
-    </pre>
+    <pre>{% autoescape false %}{{ output }}{% endautoescape %}</pre>
 {% endblock %}
 

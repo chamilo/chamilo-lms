@@ -43,7 +43,7 @@ var left_width_mini = 20;  // (relative) hide_bar position
 
 $(document).ready(function() {
 
-    var left_width = $('learning_path_left_zone').width();
+    var left_width = $('#learning_path_left_zone').width();
 
    //Adding div to hide panel
     $('#learning_path_right_zone').before('<div id="hide_bar" style="float: left; width: 10px; height: 1000px;">' +
@@ -77,7 +77,7 @@ $(document).ready(function() {
     function() {
         // Show navigation left zone
         $('#learning_path_left_zone').show(50);
-        $('#learning_path_right_zone').css('marginLeft', left_width + 10 + 'px');
+        $('#learning_path_right_zone').css('marginLeft', left_width + 25 + 'px');
         $('#hide_bar table').css('backgroundImage','url(../img/hide0.png)').css('backgroundColor','#EEEEEE');
         $('#learning_path_main  #control').remove();
         $('#content_id').css({ height: original});

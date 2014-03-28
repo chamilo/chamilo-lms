@@ -1311,15 +1311,15 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
                 <td class="requirements-value">'.$file_perm.' </td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/home/</td>
+                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'home/</td>
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'home/').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/main/css/</td>
+                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'css/</td>
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'css/', true).' ('.get_lang('SuggestionOnlyToEnableCSSUploadFeature').')</td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/main/lang/</td>
+                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'lang/</td>
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'lang/', true).' ('.get_lang('SuggestionOnlyToEnableSubLanguageFeature').')</td>
             </tr>'.
             //'<tr>

@@ -16,6 +16,7 @@ require '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(LIBRARY_PATH).'classmanager.lib.php';
+require_once api_get_path(LIBRARY_PATH).'usergroup.lib.php';
 require_once api_get_path(LIBRARY_PATH).'import.lib.php';
 
 // Set this option to true to enforce strict purification for usenames.
@@ -65,10 +66,14 @@ function validate_data($users)
             $errors[] = $user;
         }
         // 4. Check classname
+        $usergroup = new UserGroup();
         if (!empty($user['ClassName'])) {
-            if (!ClassManager :: class_name_exists($user['ClassName'])) {
-                $user['error'] = get_lang('ClassNameNotAvailable');
-                $errors[] = $user;
+            $className = explode('|', trim($user['ClassName']));
+            foreach ($className as $class) {
+                if (!$usergroup->usergroup_exists($class)) {
+                    $user['error'] = get_lang('ClassNameNotAvailable');
+                    $errors[] = $user;
+                }
             }
         }
         // 5. Check authentication source
@@ -171,11 +176,16 @@ function save_data($users)
                     }
                 }
             }
-
+            $usergroup = new UserGroup();
             if (!empty($user['ClassName'])) {
-                $class_id = ClassManager :: get_class_id($user['ClassName']);
-                ClassManager :: add_user($user_id, $class_id);
+                $className = explode('|', trim($user['ClassName']));
+                foreach ($className as $class) {
+                    $classId = $usergroup->get_id_by_name($class);
+                    $usergroup->addUser($user_id, $classId);
+                }
+                
             }
+
 
             // Saving extra fields.
             global $extra_fields;

@@ -257,17 +257,18 @@ function handle_uploaded_document(
 			$file_size = $uploaded_file['size'];
 
 			$files_perm = api_get_permissions_for_new_files();
-
-			// What to do if the target file exists
+                       $doc_path = '/'.$clean_name;
+                       $docId = DocumentManager :: get_document_id($_course, $doc_path, $current_session_id);
+      		        // What to do if the target file exists
 			switch ($what_if_file_exists) {
 				// Overwrite the file if it exists
 				case 'overwrite':
-					// Check if the target file exists, so we can give another message
+                                       // Check if the target file exists, so we can give another message
 					$file_exists = file_exists($store_path);
 					if (moveUploadedFile($uploaded_file, $store_path)) {
 						chmod($store_path, $files_perm);
 
-						if ($file_exists) {
+						if ($file_exists && $docId) {
 							// UPDATE DATABASE
 							$document_id = DocumentManager::get_document_id($_course, $file_path);
 
@@ -327,7 +328,11 @@ function handle_uploaded_document(
 
 				// Rename the file if it exists
 				case 'rename':
+                                  if ($docId) {
 					$new_name = unique_name($where_to_save, $clean_name);
+                                  } else {
+                                      $new_name = $clean_name;
+                                  }
 					$store_path = $where_to_save.$new_name;
 					$new_file_path = $upload_path.$new_name;
 
@@ -361,13 +366,13 @@ function handle_uploaded_document(
 					break;
 				default:
                     // Only save the file if it doesn't exist or warn user if it does exist
-					if (file_exists($store_path)) {
+					if (file_exists($store_path) && $docId) {
 					    if ($output) {
 						  Display::display_error_message($clean_name.' '.get_lang('UplAlreadyExists'));
 						}
 					} else {
-						if (moveUploadedFile($uploaded_file, $store_path)) {
-							chmod($store_path, $files_perm);
+						if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path)) {
+						    chmod($store_path, $files_perm);
 
 							// Put the document data in the database
 							$document_id = add_document($_course, $file_path, 'file', $file_size, $document_name, null, 0, true);

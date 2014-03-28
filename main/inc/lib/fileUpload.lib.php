@@ -371,7 +371,7 @@ function handle_uploaded_document(
 						  Display::display_error_message($clean_name.' '.get_lang('UplAlreadyExists'));
 						}
 					} else {
-						if (@move_uploaded_file($uploaded_file['tmp_name'], $store_path)) {
+						if (moveUploadedFile($uploaded_file, $store_path)) {
 						    chmod($store_path, $files_perm);
 
 							// Put the document data in the database

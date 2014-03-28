@@ -39,7 +39,7 @@ $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
 $app->register(new Silex\Provider\DoctrineServiceProvider());
 $app->register(new Silex\Provider\TranslationServiceProvider());
-$app['translator'] = $app->share($app->extend('translator', function($translator, $app) {
+$app['translator'] = $app->share($app->extend('translator', function ($translator, $app) {
 
     /*$translator->addLoader('pofile', new PoFileLoader());
     $file = 'main/locale/'.$locale.'.po';
@@ -49,6 +49,7 @@ $app['translator'] = $app->share($app->extend('translator', function($translator
     $translator->addResource('yaml', __DIR__.'/lang/fr.yml', 'fr');
     $translator->addResource('yaml', __DIR__.'/lang/en.yml', 'en');
     $translator->addResource('yaml', __DIR__.'/lang/es.yml', 'es');*/
+
     return $translator;
 }));
 
@@ -120,7 +121,7 @@ foreach ($helpers as $name => $helper) {
     $helperSet->set($helper, $name);
 }
 
-$blockInstallation = function() use($app) {
+$blockInstallation = function () use ($app) {
 
     if (file_exists($app['root_sys'].'config/configuration.php') ||
         file_exists($app['root_sys'].'config/configuration.yml')
@@ -149,7 +150,7 @@ $blockInstallation = function() use($app) {
 
 // Controllers
 
-$app->match('/', function() use($app) {
+$app->match('/', function () use ($app) {
     // in order to get a list of countries
     //var_dump(Symfony\Component\Intl\Intl::getRegionBundle()->getCountryNames());
     $languages = array(
@@ -167,17 +168,18 @@ $app->match('/', function() use($app) {
         ->add('continue', 'submit', array('attr' => array('class' => 'btn')))
         ->getForm();
 
-     if ('POST' == $request->getMethod()) {
-         $url = $app['url_generator']->generate('requirements');
-         return $app->redirect($url);
-     }
+    if ('POST' == $request->getMethod()) {
+        $url = $app['url_generator']->generate('requirements');
+
+        return $app->redirect($url);
+    }
 
     return $app['twig']->render('index.tpl', array('form' => $form->createView()));
 })
 ->bind('welcome')
 ->before($blockInstallation);
 
-$app->match('/requirements', function() use($app) {
+$app->match('/requirements', function () use ($app) {
 
     $allowedToContinue = checkRequiredSettings();
 
@@ -202,6 +204,7 @@ $app->match('/requirements', function() use($app) {
 
     if ('POST' == $request->getMethod()) {
          $url = $app['url_generator']->generate('check-database');
+
          return $app->redirect($url);
     }
 
@@ -226,7 +229,7 @@ $app->match('/requirements', function() use($app) {
 
 })->bind('requirements');
 
-$app->match('/check-database', function() use($app) {
+$app->match('/check-database', function () use ($app) {
     /** @var Request $request */
     $request = $app['request'];
 
@@ -276,6 +279,7 @@ $app->match('/check-database', function() use($app) {
                 $app['session']->getFlashBag()->add('success', 'Connection ok!');
                 $app['session']->set('database_settings', $parameters);
                 $url = $app['url_generator']->generate('portal-settings');
+
                 return $app->redirect($url);
             } catch (Exception $e) {
                 $app['session']->getFlashBag()->add('success', 'Connection error !'.$e->getMessage());
@@ -287,7 +291,7 @@ $app->match('/check-database', function() use($app) {
 
 })->bind('check-database');
 
-$app->match('/portal-settings', function() use($app) {
+$app->match('/portal-settings', function () use ($app) {
     /** @var Request $request */
     $request = $app['request'];
 
@@ -323,15 +327,17 @@ $app->match('/portal-settings', function() use($app) {
             $data = $form->getData();
             $app['session']->set('portal_settings', $data);
             $url = $app['url_generator']->generate('admin-settings');
+
             return $app->redirect($url);
         }
     }
+
     return $app['twig']->render('settings.tpl', array('form' => $form->createView()));
 
 })->bind('portal-settings');
 
 // Admin settings.
-$app->match('/admin-settings', function() use($app) {
+$app->match('/admin-settings', function () use ($app) {
     $request = $app['request'];
 
     /** @var Chash\Command\Installation\InstallCommand $command */
@@ -353,16 +359,18 @@ $app->match('/admin-settings', function() use($app) {
             $data = $form->getData();
             $app['session']->set('admin_settings', $data);
             $url = $app['url_generator']->generate('resume');
+
             return $app->redirect($url);
         }
     }
+
     return $app['twig']->render('settings.tpl', array('form' => $form->createView()));
 
 })->bind('admin-settings');
 
 // Resume before installing.
 
-$app->match('/resume', function() use($app) {
+$app->match('/resume', function () use ($app) {
     $request = $app['request'];
     $data = array();
     $portalSettings = $app['session']->get('portal_settings');
@@ -377,6 +385,7 @@ $app->match('/resume', function() use($app) {
 
         if ('POST' == $request->getMethod()) {
              $url = $app['url_generator']->generate('installing');
+
              return $app->redirect($url);
         }
 
@@ -392,13 +401,14 @@ $app->match('/resume', function() use($app) {
     } else {
 
         $url = $app['url_generator']->generate('check-database');
+
         return $app->redirect($url);
     }
 })->bind('resume');
 
 // Installation process.
 
-$app->match('/installing', function() use($app) {
+$app->match('/installing', function () use ($app) {
 
     $portalSettings = $app['session']->get('portal_settings');
     $adminSettings = $app['session']->get('admin_settings');
@@ -429,18 +439,20 @@ $app->match('/installing', function() use($app) {
         $app['session']->getFlashBag()->add('success', 'Installation finished');
         $app['session']->set('output', $output);
         $url = $app['url_generator']->generate('finish');
+
         return $app->redirect($url);
     } else {
         $app['session']->getFlashBag()->add('error', 'There was an error during installation, please check your settings.');
         $app['session']->getFlashBag()->add('error', $output->lastMessage);
 
         $url = $app['url_generator']->generate('check-database');
+
         return $app->redirect($url);
     }
 })->bind('installing');
 
 // Finish installation.
-$app->get('/finish', function() use($app) {
+$app->get('/finish', function () use ($app) {
     $output = $app['session']->get('output');
     $message = $app['translator']->trans(
         'To protect your site, make the whole %s directory read-only (chmod 0555 on Unix/Linux)',
@@ -453,6 +465,7 @@ $app->get('/finish', function() use($app) {
         array('%s' => $app['root_sys'].'install')
     );
     $app['session']->getFlashBag()->add('warning', $message);
+
     return $app['twig']->render('finish.tpl', array('output' => $output));
 })->bind('finish');
 

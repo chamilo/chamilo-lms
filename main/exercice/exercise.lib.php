@@ -1543,22 +1543,32 @@ function get_exercise_by_id($exerciseId = 0) {
  * @return  array   array with exercise data
  * modified by Hubert Borderiou
  */
-function get_all_exercises_for_course_id($course_info = null, $session_id = 0, $course_id=0, $only_active_exercices = true) {
-    $sql_active_exercices = "";
-    if (!$only_active_exercices) {
-        $sql_active_exercices = " OR active != 1 ";
+function get_all_exercises_for_course_id($course_info = null, $session_id = 0, $course_id=0, $only_active_exercises = true) {
+    $TBL_EXERCISES = Database :: get_course_table(TABLE_QUIZ_TEST);
+    $tab_select_param = array();
+
+    if (!$only_active_exercises) {
+        $sql_active_exercises = "";
+    } else {
+        $sql_active_exercises = "active = ? AND";
+        $tab_select_param[] = '1';
     }
-   	$TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
+
+    $tab_select_param[] = $session_id;
+    $tab_select_param[] = $course_id;
+
     if ($session_id == -1) {
     	$session_id  = 0;
     }
+
     if ($session_id == 0) {
-    	$conditions = array('where'=>array("(active = ? $sql_active_exercices) AND session_id = ? AND c_id = ?" => array('1', $session_id, $course_id)), 'order'=>'title');
+    	$conditions = array('where'=>array("$sql_active_exercises session_id = ? AND c_id = ?" => $tab_select_param), 'order'=>'title');
     } else {
         //All exercises
-    	$conditions = array('where'=>array("(active = ? $sql_active_exercices) AND (session_id = 0 OR session_id = ? ) AND c_id=?" => array('1', $session_id, $course_id)), 'order'=>'title');
+    	$conditions = array('where'=>array("$sql_active_exercises (session_id = 0 OR session_id = ? ) AND c_id=?" => $tab_select_param), 'order'=>'title');
     }
-    return Database::select('*',$TBL_EXERCICES, $conditions);
+
+    return Database::select('*',$TBL_EXERCISES, $conditions);
 }
 
 /**

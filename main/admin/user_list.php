@@ -170,6 +170,114 @@ if ($action == 'login_as') {
 api_protect_admin_script(true);
 
 /**
+ * Prepares the shared SQL query for the user table.
+ * See get_user_data() and get_number_of_users().
+ *
+ * @param boolean Whether to count, or get data
+ * @return string SQL query
+ */
+function prepare_user_sql_query($is_count) {
+    $sql = "";
+    $user_table = Database::get_main_table(TABLE_MAIN_USER);
+    $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
+
+    if ($is_count) {
+        $sql .= "SELECT COUNT(u.user_id) AS total_number_of_items FROM $user_table u";
+    } else {
+        $sql .= "SELECT u.user_id AS col0, u.official_code AS col2, ";
+
+        if (api_is_western_name_order())
+            $sql .= "u.firstname AS col3, u.lastname AS col4, ";
+        else
+            $sql .= "u.lastname AS col3, u.firstname AS col4, ";
+
+        $sql .= "u.username AS col5, u.email AS col6, ".
+                    "u.status AS col7, u.active AS col8, ".
+                    "u.user_id AS col9, u.registration_date AS col10, ".
+                    "u.expiration_date AS exp, u.password ".
+                    "FROM $user_table u";
+    }
+
+    // adding the filter to see the user's only of the current access_url
+    if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
+        $access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
+    }
+
+    foreach ($_GET as $key => $value) {
+        /* Because this query uses LIKE very liberally we need to escape
+         * LIKE wildcards, concretely "_" and "%". This is only relevant
+         * for *LIKE* statements.
+         *
+         * See: http://stackoverflow.com/a/3683868 */
+
+        // Remove buggy whitespaces and escape for both SQL and LIKE.
+        if ($key == "keyword_status")
+            $$key = Database::escape_string(trim($value));
+        else
+            $$key = Database::escape_sql_wildcards(Database::escape_string(trim($value)));
+    }
+
+    if (isset($keyword_extra_data) && !empty($keyword_extra_data)) {
+        $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
+        $field_id = $extra_info['id'];
+        $sql.= " INNER JOIN user_field_values ufv ON u.user_id=ufv.user_id AND ufv.field_id=$field_id ";
+    }
+
+    if (isset($keyword)) {
+        $sql .= " WHERE (".
+                    "u.firstname LIKE '%". $keyword ."%' ".
+                    "OR u.lastname LIKE '%". $keyword ."%' ".
+                    "OR concat(u.firstname,' ',u.lastname) LIKE '%". $keyword ."%' ".
+                    "OR concat(u.lastname,' ',u.firstname) LIKE '%". $keyword ."%' ".
+                    "OR u.username LIKE '%". $keyword ."%' ".
+                    "OR u.official_code LIKE '%". $keyword ."%' ".
+                    "OR u.email LIKE '%". $keyword ."%')";
+    } elseif (isset($keyword_firstname)) {
+        $query_admin_table = '';
+        $keyword_admin = '';
+
+        error_log("kw_status: $keyword_status");
+        if ($keyword_status == SESSIONADMIN) {
+           $keyword_status = '%';
+           $query_admin_table = " , $admin_table a ";
+           $keyword_admin = ' AND a.user_id = u.user_id ';
+        }
+
+        $keyword_extra_value = '';
+
+        if (isset($keyword_extra_data) && !empty($keyword_extra_data) &&
+            !empty($keyword_extra_data_text)) {
+            $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
+        }
+
+        $sql .= " $query_admin_table ".
+                "WHERE (u.firstname LIKE '%". $keyword_firstname ."%' ".
+                    "AND u.lastname LIKE '%". $keyword_lastname ."%' ".
+                    "AND u.username LIKE '%". $keyword_username ."%' ".
+                    "AND u.email LIKE '%". $keyword_email ."%' ".
+                    "AND u.official_code LIKE '%". $keyword_officialcode ."%' ".
+                    "AND u.status LIKE '$keyword_status' ".
+                    "$keyword_admin $keyword_extra_value";
+
+        if (isset($keyword_active) && !isset($keyword_inactive)) {
+            $sql .= " AND u.active='1'";
+        } elseif(isset($keyword_inactive) && !isset($keyword_active)) {
+            $sql .= " AND u.active='0'";
+        }
+        $sql .= " ) ";
+    }
+
+    // adding the filter to see the user's only of the current access_url
+    if ((api_is_platform_admin() || api_is_session_admin())
+        && api_get_multiple_access_url()) {
+        $sql .= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
+    }
+
+    return $sql;
+}
+
+/**
 *	Make sure this function is protected because it does NOT check password!
 *
 *	This function defines globals.
@@ -274,82 +382,17 @@ function login_user($user_id) {
 		}
 	}
 }
+
 /**
  * Get the total number of users on the platform
  * @see SortableTable#get_total_number_of_items()
  */
 function get_number_of_users() {
-	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-	$sql = "SELECT COUNT(u.user_id) AS total_number_of_items FROM $user_table u";
+    $sql = prepare_user_sql_query (true);
 
-	// adding the filter to see the user's only of the current access_url
-    if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
-    	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
-    }
-
-    if (isset($_GET['keyword_extra_data'])) {
-        $keyword_extra_data = Database::escape_string($_GET['keyword_extra_data']);
-        if (!empty($keyword_extra_data)) {
-            $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
-            $field_id = $extra_info['id'];
-            $sql.= " INNER JOIN user_field_values ufv ON u.user_id=ufv.user_id AND ufv.field_id=$field_id ";
-        }
-    }
-
-	if ( isset ($_GET['keyword'])) {
-		$keyword = Database::escape_string(trim($_GET['keyword']));
-		$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%'  OR concat(u.firstname,' ',u.lastname) LIKE '%".$keyword."%'  OR concat(u.lastname,' ',u.firstname) LIKE '%".$keyword."%' OR u.username LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%') ";
-	} elseif (isset ($_GET['keyword_firstname'])) {
-		$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
-		$keyword_firstname = Database::escape_string($_GET['keyword_firstname']);
-		$keyword_lastname = Database::escape_string($_GET['keyword_lastname']);
-		$keyword_email = Database::escape_string($_GET['keyword_email']);
-		$keyword_officialcode = Database::escape_string($_GET['keyword_officialcode']);
-		$keyword_username = Database::escape_string($_GET['keyword_username']);
-		$keyword_status = Database::escape_string($_GET['keyword_status']);
-		$query_admin_table = '';
-		$keyword_admin = '';
-		if ($keyword_status == SESSIONADMIN) {
-			$keyword_status = '%';
-			$query_admin_table = " , $admin_table a ";
-			$keyword_admin = ' AND a.user_id = u.user_id ';
-		}
-
-        $keyword_extra_value = '';
-        if (isset($_GET['keyword_extra_data'])) {
-            if (!empty($_GET['keyword_extra_data']) && !empty($_GET['keyword_extra_data_text'])) {
-                $keyword_extra_data_text = Database::escape_string($_GET['keyword_extra_data_text']);
-                $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
-            }
-        }
-
-		$keyword_active = isset($_GET['keyword_active']);
-		$keyword_inactive = isset($_GET['keyword_inactive']);
-		$sql .= $query_admin_table .
-				" WHERE (u.firstname LIKE '%".$keyword_firstname."%' " .
-				"AND u.lastname LIKE '%".$keyword_lastname."%' " .
-				"AND u.username LIKE '%".$keyword_username."%'  " .
-				"AND u.email LIKE '%".$keyword_email."%'   " .
-				"AND u.official_code LIKE '%".$keyword_officialcode."%'" .
-				"AND u.status LIKE '".$keyword_status."'" .
-				$keyword_admin.$keyword_extra_value;
-		if($keyword_active && !$keyword_inactive) {
-			$sql .= " AND u.active='1'";
-		} elseif($keyword_inactive && !$keyword_active) {
-			$sql .= " AND u.active='0'";
-		}
-		$sql .= " ) ";
-	}
-
-    // adding the filter to see the user's only of the current access_url
-	if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
-    		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
-    }
-
-	$res = Database::query($sql);
-	$obj = Database::fetch_object($res);
-	return $obj->total_number_of_items;
+    $res = Database::query($sql);
+    $obj = Database::fetch_object($res);
+    return $obj->total_number_of_items;
 }
 
 /**
@@ -361,94 +404,7 @@ function get_number_of_users() {
  * @see SortableTable#get_table_data($from)
  */
 function get_user_data($from, $number_of_items, $column, $direction) {
-	global $origin;
-
-	$user_table = Database :: get_main_table(TABLE_MAIN_USER);
-	$admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
-	$sql = "SELECT
-                 u.user_id				AS col0,
-                 u.official_code		AS col2,
-				 ".(api_is_western_name_order()
-                 ? "u.firstname 			AS col3,
-                 u.lastname 			AS col4,"
-                 : "u.lastname 			AS col3,
-                 u.firstname 			AS col4,")."
-                 u.username				AS col5,
-                 u.email				AS col6,
-                 u.status				AS col7,
-                 u.active				AS col8,
-                 u.user_id				AS col9,
-                 u.registration_date    AS col10,
-                 u.expiration_date      AS exp,
-                 u.password ".
-            " FROM $user_table u ";
-
-    // adding the filter to see the user's only of the current access_url
-    if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
-    	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-    	$sql.= " INNER JOIN $access_url_rel_user_table url_rel_user ON (u.user_id=url_rel_user.user_id)";
-    }
-
-    if (isset($_GET['keyword_extra_data'])) {
-        $keyword_extra_data = Database::escape_string($_GET['keyword_extra_data']);
-        if (!empty($keyword_extra_data)) {
-            $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
-            $field_id = $extra_info['id'];
-            $sql.= " INNER JOIN user_field_values ufv ON u.user_id=ufv.user_id AND ufv.field_id=$field_id ";
-        }
-    }
-
-	if (isset ($_GET['keyword'])) {
-		$keyword = Database::escape_string(trim($_GET['keyword']));
-		$sql .= " WHERE (u.firstname LIKE '%".$keyword."%' OR u.lastname LIKE '%".$keyword."%' OR concat(u.firstname,' ',u.lastname) LIKE '%".$keyword."%' OR concat(u.lastname,' ',u.firstname) LIKE '%".$keyword."%' OR u.username LIKE '%".$keyword."%'  OR u.official_code LIKE '%".$keyword."%' OR u.email LIKE '%".$keyword."%' )";
-	} elseif (isset ($_GET['keyword_firstname'])) {
-		$keyword_firstname = Database::escape_sql_wildcards(Database::escape_string($_GET['keyword_firstname']));
-		$keyword_lastname = Database::escape_sql_wildcards(Database::escape_string($_GET['keyword_lastname']));
-		$keyword_email = Database::escape_sql_wildcards(Database::escape_string($_GET['keyword_email']));
-		$keyword_officialcode = Database::escape_sql_wildcards(Database::escape_string($_GET['keyword_officialcode']));
-		$keyword_username = Database::escape_sql_wildcards(Database::escape_string($_GET['keyword_username']));
-		$keyword_status = Database::escape_string($_GET['keyword_status']);
-
-		$query_admin_table = '';
-		$keyword_admin = '';
-
-		if ($keyword_status == SESSIONADMIN) {
-			$keyword_status = '%';
-			$query_admin_table = " , $admin_table a ";
-			$keyword_admin = ' AND a.user_id = u.user_id ';
-		}
-
-		$keyword_extra_value = '';
-
-        if (isset($_GET['keyword_extra_data'])) {
-        	if (!empty($_GET['keyword_extra_data']) && !empty($_GET['keyword_extra_data_text'])) {
-            	$keyword_extra_data_text = Database::escape_string($_GET['keyword_extra_data_text']);
-                $keyword_extra_value = " AND ufv.field_value LIKE '%".trim($keyword_extra_data_text)."%' ";
-			}
-		}
-
-		$keyword_active = isset($_GET['keyword_active']);
-		$keyword_inactive = isset($_GET['keyword_inactive']);
-		$sql .= $query_admin_table." WHERE (u.firstname LIKE '%".$keyword_firstname."%' " .
-				"AND u.lastname LIKE '%".$keyword_lastname."%' " .
-				"AND u.username LIKE '%".$keyword_username."%'  " .
-				"AND u.email LIKE '%".$keyword_email."%'   " .
-				"AND u.official_code LIKE '%".$keyword_officialcode."%'    " .
-				"AND u.status LIKE '".$keyword_status."'" .
-				$keyword_admin.$keyword_extra_value;
-
-		if ($keyword_active && !$keyword_inactive) {
-			$sql .= " AND u.active='1'";
-		} elseif($keyword_inactive && !$keyword_active) {
-			$sql .= " AND u.active='0'";
-		}
-		$sql .= " ) ";
-	}
-
-    // adding the filter to see the user's only of the current access_url
-	if ((api_is_platform_admin() || api_is_session_admin()) && api_get_multiple_access_url()) {
-		$sql.= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
-    }
+    $sql = prepare_user_sql_query (false);
 
     $checkPassStrength = isset($_GET['check_easy_passwords']) && $_GET['check_easy_passwords'] == 1 ? true : false;
 

@@ -654,16 +654,16 @@ if (!empty($action)) {
                 break;
 			case 'show_message' :
                 if (!empty($_GET['message'])) {
-                    $message = Display :: return_message(stripslashes($_GET['message']), 'confirmation');
-                }
-
-                if (!empty($_GET['warn'])) {
-                	// to prevent too long messages
-                	if ($_GET['warn'] == 'session_message'){
-                        $_GET['warn'] = $_SESSION['session_message_import_users'];
-                	}
-                	$message = Display::return_message(urldecode($_GET['warn']),'warning', false);
-                }
+                    $message = Display::return_message(stripslashes($_GET['message']), 'confirmation');
+                } else {
+                    if (!empty($_GET['warn'])) {
+                        // to prevent too long messages
+                    	if ($_GET['warn'] == 'session_message'){
+                            $_GET['warn'] = $_SESSION['session_message_import_users'];
+                    	}
+                    	$message = Display::return_message(Security::remove_XSS($_GET['warn']), 'warning', false);
+                    }
+               }
 
 				break;
 			case 'delete_user' :

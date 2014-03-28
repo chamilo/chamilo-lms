@@ -799,18 +799,17 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d6f9ff', end
  *  FOOTER STYLES                                    *
  *****************************************************/
 footer {
-    height: 10em;   
-    background-color: #0191C7;
-    background-image: url(images/footer-bg.png);
-    background-repeat:repeat-x;    
-    color:#ffffff;
-    border-top: none;   
+    height: 16em;   
+    background: url(images/footer.jpg) center 0 repeat-x #6CB1DB; 
+    color:#147FB8;
+    border-top: none; 
+    padding-top: 0; 
 }
 footer .container .row {
-  padding-top: 5px;
+  padding-top: 0;
 }
 footer a:link, footer a:visited {
-  color: #F1D40D;
+  color: #FD6600;
 }
 /*****************************************************
  *  DISPLAY MESSAGES	                             *
@@ -1214,6 +1213,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#296eaa', end
     #top_main_content .menu-column #user_image_block{
       box-shadow: none;
     }
+    footer #footer_left a, footer #footer_center a, footer #footer_right a{
+      color: #FD6600;
+    }
 
 }
 @media (max-width: 600px) {
@@ -1294,8 +1296,12 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#296eaa', end
 }
 @media (min-width: 321px) and (max-width: 480px){
 footer {
-    height: 5em;
+    height: 15em;
+
   }
+footer #footer_left a, footer #footer_center a, footer #footer_right a {
+  color: #FD6600;
+}
 .welcome-mascot{
       background: none;
       padding-right: 0px;
@@ -1315,7 +1321,8 @@ footer {
 }
 @media (min-width: 1201px) {
 .page-section{
-  background: url(images/camaleon.jpg) repeat-x 80px -100px;
+  background: url(images/camaleon.jpg) repeat-x 341px -34px;
+  background-size: 72% auto;
   margin-top: -10px;
 }
 }

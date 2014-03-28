@@ -707,7 +707,7 @@ class IndexManager {
                 $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'));
                 $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');
 
-                $form->addRule('captcha', 'What you entered didn\'t match the picture', 'CAPTCHA', $captcha_question);
+                $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
             }
         }
 

@@ -162,7 +162,7 @@ if ($user_already_registered_show_terms == false) {
         $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'), array('size' => 40));
         $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');
 
-        $form->addRule('captcha', 'What you entered didn\'t match the picture', 'CAPTCHA', $captcha_question);
+        $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
     }
 
     //	EXTENDED FIELDS

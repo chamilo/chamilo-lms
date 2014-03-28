@@ -33,7 +33,12 @@ if ($link->is_locked() && !api_is_platform_admin()) {
 $linkcat  = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']):'';
 $linkedit = isset($_GET['editlink']) ? Security::remove_XSS($_GET['editlink']):'';
 
-$cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
+$session_id = api_get_session_id();
+if ($session_id == 0) {
+    $cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
+} else {
+    $cats = Category :: load_session_categories(null, $session_id);
+}
 
 $form = new LinkAddEditForm(LinkAddEditForm :: TYPE_EDIT, $cats, null, $link, 'edit_link_form', api_get_self() . '?selectcat=' . $linkcat. '&editlink=' . $linkedit);
 if ($form->validate()) {

@@ -1318,8 +1318,8 @@ footer #footer_left a, footer #footer_center a, footer #footer_right a {
 }
 @media (min-width: 1201px) {
 .page-section{
-  background: url(images/camaleon.jpg) repeat-x 341px -34px;
-  background-size: 72% auto;
+  background: url(images/camaleon.jpg) repeat-x center -100px;
+  background-size: auto auto;
   margin-top: -10px;
 }
 }

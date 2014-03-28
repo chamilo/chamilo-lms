@@ -7012,7 +7012,7 @@ function api_elog($string, $dump = 0)
 /**
  * Set the cookie to go directly to the course code $in_firstpage
  * after login
- * @param in_firstpage is the course code of the course to go
+ * @param string $in_firstpage is the course code of the course to go
  */
 function api_set_firstpage_parameter($in_firstpage)
 {

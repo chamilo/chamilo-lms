@@ -1,11 +1,12 @@
 <?php
-/* For licensing terms, see /license.txt */
-
 /**
- * Author : hubert.borderiou@grenet.fr
- * Allow the user to login to a course after reaching a course URL like
- * http://chamilo.chamilo.org/courses/MYCOURSE/?id_session=0
+ * For licensing terms, see /license.txt
+ *
+ * Allow the user to login to a course after reaching a course URL (e.g. http://chamilo.chamilo.org/courses/MYCOURSE/?id_session=0 )
  * See https://support.chamilo.org/issues/6768
+ *
+ * Author : hubert.borderiou@grenet.fr
+ *
  */
 
 require('../inc/global.inc.php');

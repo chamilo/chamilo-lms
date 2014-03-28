@@ -237,7 +237,6 @@ function prepare_user_sql_query($is_count) {
         $query_admin_table = '';
         $keyword_admin = '';
 
-        error_log("kw_status: $keyword_status");
         if ($keyword_status == SESSIONADMIN) {
            $keyword_status = '%';
            $query_admin_table = " , $admin_table a ";

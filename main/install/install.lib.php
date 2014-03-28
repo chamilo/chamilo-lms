@@ -1311,8 +1311,8 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
                 <td class="requirements-value">'.$file_perm.' </td>
             </tr>
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'home/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'home/').'</td>
+                <td class="requirements-item">'.api_get_path(SYS_PATH).'home/</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_PATH).'home/').'</td>
             </tr>
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'css/</td>

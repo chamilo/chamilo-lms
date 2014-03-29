@@ -33,7 +33,7 @@ switch($action) {
                 $file['name'],
                 null,
                 0,
-                'overwrite',
+                null,
                 false,
                 false
             );

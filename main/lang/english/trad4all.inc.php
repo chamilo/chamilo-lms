@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$InactiveDays = "Inactive days";
 $FollowedHumanResources = "Followed HR directors";
 $TheTextYouEnteredDoesNotMatchThePicture = "The text you entered doesn't match the picture.";
 $RemoveOldRelationships = "Remove previous relationships";

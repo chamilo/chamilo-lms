@@ -3,7 +3,7 @@
     Options +FollowSymLinks
 
     RewriteEngine On
-    RewriteBase /
+    RewriteBase {BASE_URL}
 
     # Courses home
     RewriteCond %{QUERY_STRING} ^id_session=0
@@ -16,7 +16,7 @@
     RewriteRule ^courses/(.*)/$ web/courses/$1? [R,L]
 
     # PHP Main files are redirected to the "web/main" zone
-    RewriteCond %{REQUEST_URI} !main/newscorm/scorm_api.php
+
     RewriteRule ^main/(.*)\.php web/main/$1.php [R,L]
 
     # Courses documents
@@ -31,11 +31,6 @@
     # Redirection: certificates/index.php?id=123 -> web/certificates/123
     RewriteCond %{QUERY_STRING} ^id=([0-9]*)
     RewriteRule ^certificates/(.*)$ web/certificates/%1? [R,L]
-
-    # User profile
-    # Redirection: user.php?jmontoya -> web/user/jmontoya
-    RewriteCond %{QUERY_STRING} ^([a-z0-9A-z]*)
-    RewriteRule ^user.php?$ web/user/%1? [R,L]
 
     # Portal news
     # news_list.php?id=5 --> web/news/5

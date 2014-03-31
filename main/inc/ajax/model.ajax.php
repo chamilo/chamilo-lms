@@ -1015,6 +1015,7 @@ switch ($action) {
         
         $course = api_get_course_info_by_id($_GET['course_id']);
         $listUserSess = CourseManager::get_student_list_from_course_code($course['code'], true, $_GET['session_id']);
+        
         $usersId = array_keys($listUserSess);
 
         $users = UserManager::get_user_list_by_ids($usersId, null, "lastname, firstname",  "$start , $limit");

@@ -17,10 +17,9 @@ $current_course_tool  = TOOL_GROUP;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
-
 /*	Create the groups */
 
-if (isset ($_POST['action'])) {
+if (isset($_POST['action'])) {
     switch ($_POST['action']) {
         case 'create_groups':
             $groups = array();
@@ -45,7 +44,7 @@ if (isset ($_POST['action'])) {
                 } elseif ($_POST['same_category']) {
                     $group['category'] = $_POST['group_0_category'];
                 }
-                GroupManager :: create_group($group['name'], $group['category'], $group['tutor'], $group['places']);
+                GroupManager::create_group($group['name'], $group['category'], $group['tutor'], $group['places']);
             }
             $msg = urlencode(count($groups).' '.get_lang('GroupsAdded'));
             header('Location: group.php?action=show_msg&msg='.$msg);
@@ -126,7 +125,7 @@ elseif (isset($_POST['number_of_groups'])) {
     </script>
     <?php
 		}
-		$group_categories = GroupManager :: get_categories();
+		$group_categories = GroupManager::get_categories();
 		$group_id = GroupManager :: get_number_of_groups() + 1;
 		foreach ($group_categories as $index => $category) {
 			// Don't allow new groups in the virtual course category!

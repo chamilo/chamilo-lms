@@ -1,12 +1,13 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 require_once '../inc/global.inc.php';
 api_protect_admin_script();
-exit;
+
 if (isset($_configuration['save_user_last_login'])) {
     $tableUser = Database::get_main_table(TABLE_MAIN_USER);
     $userInfo = api_get_user_info(api_get_user_id());
-    if (!empty($userInfo['last_login'])) {
+    if (isset($userInfo['last_login'])) {
         $sql = "SELECT login_user_id, MAX(login_date) login_date from track_e_login group by login_user_id";
         echo "Executing: <br />$sql<br /> Updating <br />";
         $result = Database::query($sql);

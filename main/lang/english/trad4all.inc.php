@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$FollowedHumanResources = "Followed HR directors";
+$TheTextYouEnteredDoesNotMatchThePicture = "The text you entered doesn't match the picture.";
 $RemoveOldRelationships = "Remove previous relationships";
 $ImportSessionDrhList = "Import list of HR directors into sessions";
 $FollowedStudents = "Followed students";

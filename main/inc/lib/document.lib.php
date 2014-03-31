@@ -800,7 +800,7 @@ class DocumentManager
      *
      * @param array  $_course
      * @param int    $user_id id of the current user
-     * @param string $file path stored in the database
+     * @param string $file path stored in the database (if not defined, $documentId must be used)
      * @param int    $document_id in case you dont have the file path ,insert the id of the file here and leave $file in blank ''
      * @param bool $to_delete
      * @param int $sessionId
@@ -809,10 +809,11 @@ class DocumentManager
     public static function check_readonly(
         $_course,
         $user_id,
-        $file,
+        $file = null,
         $document_id = '',
         $to_delete = false,
-        $sessionId = null
+        $sessionId = null,
+        $documentId = null
     ) {
 
         if (empty($sessionId)) {
@@ -978,7 +979,7 @@ class DocumentManager
      *
      * @param array $_course
      * @param string $path, path stored in the database
-     * @param string $base_work_dir, path to the documents folder
+     * @param string $base_work_dir, path to the documents folder (if not defined, $documentId must be used)
      * @param int   $sessionId The ID of the session, if any
      * @param int   $documentId The document id, if available
      * @return boolean true/false

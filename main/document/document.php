@@ -770,17 +770,19 @@ if ($is_allowed_to_edit ||
         }
     }
 
-    if (isset($_POST['action']) && isset($_POST['path'])) {
-        $files = $_POST['path'];
-
-        foreach ($files as $path) {
+    if (isset($_POST['action']) && isset($_POST['ids'])) {
+        $files = $_POST['ids'];
+        $readonlyAlreadyChecked = false;
+        foreach ($files as $documentId) {
             $items = array('/audio', '/flash', '/images', '/shared_folder', '/video', '/chat_files', '/certificates');
-            if (in_array($path, $items)) {
+            $data = DocumentManager::get_document_data_by_id($documentId, $_course['code']);
+            if (in_array($data['path'], $items)) {
+                // exclude system directories (do not allow deletion)
                 continue;
             } else {
 
-                $documentId = DocumentManager::get_document_id($_course, $path, $session_id);
-                $data = DocumentManager::get_document_data_by_id($documentId, $_course['code'], false, $session_id);
+                //$documentId = DocumentManager::get_document_id($_course, $path, $session_id);
+                //$data = DocumentManager::get_document_data_by_id($documentId, $_course['code'], false, $session_id);
 
                 switch ($_POST['action']) {
                     case 'set_invisible':
@@ -822,24 +824,35 @@ if ($is_allowed_to_edit ||
                         }
                         break;
                     case 'delete':
-                        foreach ($files as $checkPath) {
-                            if (!$is_allowed_to_edit) {
-                                if (DocumentManager::check_readonly(
-                                    $_course,
-                                    api_get_user_id(),
-                                    $checkPath,
-                                    null,
-                                    false,
-                                    $session_id
-                                )
-                                ) {
-                                    Display::display_error_message(get_lang('CantDeleteReadonlyFiles'));
-                                    break 2;
+                        // Check all documents scheduled for deletion
+                        // If one of them is read-only, abandon deletion
+                        // Note: this is only executed once
+                        if (!$readonlyAlreadyChecked) {
+                            foreach ($files as $id) {
+                                if (!$is_allowed_to_edit) {
+                                    if (DocumentManager::check_readonly(
+                                        $_course,
+                                        api_get_user_id(),
+                                        null,
+                                        $id,
+                                        false,
+                                        $session_id
+                                    )
+                                    ) {
+                                        Display::display_error_message(get_lang('CantDeleteReadonlyFiles'));
+                                        break 2;
+                                    }
                                 }
                             }
+                            $readonlyAlreadyChecked = true;
                         }
-
-                        $deleteDocument = DocumentManager::delete_document($_course, $path, $base_work_dir, $session_id);
+                        $deleteDocument = DocumentManager::delete_document(
+                            $_course,
+                            null,
+                            $base_work_dir,
+                            $session_id,
+                            $documentId
+                        );
 
                         if (!empty($deleteDocument)) {
                             Display::display_confirmation_message(get_lang('DocDeleted').': '.$data['path']);
@@ -1221,7 +1234,7 @@ if (isset($docs_and_folders) && is_array($docs_and_folders)) {
             $row['name'] = $document_name;
             // Data for checkbox
             if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($docs_and_folders) > 1) {
-                $row[] = $document_data['path'];
+                $row[] = $document_data['id'];
             }
 
             if (DocumentManager::is_folder_to_avoid($document_data['path'], $is_certificate_mode)) {
@@ -1398,7 +1411,7 @@ if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_fold
 }
 
 // Actions on multiple selected documents
-// TODO: Currently only delete action -> take only DELETE right into account
+// TODO: Currently only delete action -> take only DELETE permission into account
 
 if (count($docs_and_folders) > 1) {
     if ($is_allowed_to_edit || $group_member_with_upload_rights) {
@@ -1411,7 +1424,7 @@ if (count($docs_and_folders) > 1) {
         foreach ($portfolio_actions as $action) {
             $form_action[$action->get_name()] = $action->get_title();
         }
-        $table->set_form_actions($form_action, 'path');
+        $table->set_form_actions($form_action, 'ids');
     }
 }
 $table->display();

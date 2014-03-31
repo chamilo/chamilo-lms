@@ -965,7 +965,6 @@ switch ($action) {
         }
         break;
     case 'get_exercise_grade':
-        //@TODO replace this for a more efficient function (not retrieving the whole data)
         $objExercise = new Exercise();
         $exercises = $objExercise->getExercisesByCouseSession($_GET['course_id'], $_GET['session_id']);
         $cntExer = 3;
@@ -976,19 +975,32 @@ switch ($action) {
         $columns = array();
         //Get dynamic column names
         $i = 1;
+        $column_names = array();
         foreach (range(1, $cntExer) as $cnt) {
             switch ($cnt) {
                 case 1:
-                    $columns[] = 'username';
+                    $columns[] = 'session';
+                    $column_names[] = get_lang('Section');
                     break;
                 case 2:
+                    $columns[] = 'username';
+                    $column_names[] = get_lang('Username');
+                    break;
+                case 3:
                     $columns[] = 'name';
+                    $column_names[] = get_lang('Name');
                     break;
                 case $cntExer:
                     $columns[] = 'finalScore';
+                    $column_names[] = get_lang('FinalScore');
                     break;
                 default:
+                    $title = "";
+                    if (!empty($exercises[$cnt - 4]['title'])) {
+                        $title = ucwords(strtolower(trim($exercises[$cnt - 4]['title'])));
+                    }
                     $columns[] = 'exer' . $i;
+                    $column_names[] = $title;
                     $i++;
                     break;
             }
@@ -1003,19 +1015,22 @@ switch ($action) {
         
         $course = api_get_course_info_by_id($_GET['course_id']);
         $listUserSess = CourseManager::get_student_list_from_course_code($course['code'], true, $_GET['session_id']);
+        
         $usersId = array_keys($listUserSess);
 
         $users = UserManager::get_user_list_by_ids($usersId, null, "lastname, firstname",  "$start , $limit");
         $exeResults = $objExercise->getExerciseAndResult($_GET['course_id'], $_GET['session_id'], $quizIds);
         
         $arrGrade = array();
-        foreach($exeResults as $exeResult) {
+        foreach ($exeResults as $exeResult) {
             $arrGrade[$exeResult['exe_user_id']][$exeResult['exe_exo_id']] = $exeResult['exe_result'];
         }
 
         $result = array();
         $i = 0;
-        foreach($users as $user) {
+        foreach ($users as $user) {
+            $sessionInfo = SessionManager::fetch($listUserSess[$user['user_id']]['id_session']);
+            $result[$i]['session'] = $sessionInfo['name'];
             $result[$i]['username'] = $user['user_id'];
             $result[$i]['name'] = $user['lastname'] . " " . $user['firstname'];
             $j = 1;
@@ -1037,7 +1052,7 @@ switch ($action) {
             
             $i++;
         }
-        //$cnt = count($users);
+        //$count = count($users);
         break;
     case 'get_extra_field_options':
         $obj = new ExtraFieldOption($type);

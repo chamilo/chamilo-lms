@@ -446,6 +446,15 @@ class MySpace {
         foreach (range(1, $cntExer) as $cnt) {
             switch ($cnt) {
                 case 1:
+                    $column[] = get_lang('Section');
+                    $column_model[] = array(
+                        'name' => 'session',
+                        'index' => 'session',
+                        'align' => 'center',
+                        'search' => 'true',
+                    );
+                    break;
+                case 2:
                     $column[] = get_lang('Username');
                     $column_model[] = array(
                         'name' => 'username',
@@ -454,7 +463,7 @@ class MySpace {
                         'search' => 'true',
                     );
                     break;
-                case 2:
+                case 3:
                     $column[] = get_lang('FirstName');
                     $column_model[] = array(
                         'name' => 'name',
@@ -475,8 +484,8 @@ class MySpace {
                     break;
                 default:
                     $title = "";
-                    if (!empty($exercises[$cnt - 3]['title'])) {
-                        $title = ucwords(strtolower(trim($exercises[$cnt - 3]['title'])));
+                    if (!empty($exercises[$cnt - 4]['title'])) {
+                        $title = ucwords(strtolower(trim($exercises[$cnt - 4]['title'])));
                     }
                     
                     $column[] = $title;

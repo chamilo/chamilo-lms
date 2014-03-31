@@ -898,8 +898,15 @@ class UserManager
     {
         return (strlen($username) > USERNAME_MAX_LENGTH);
     }
-
-    public static function get_user_list_by_ids($ids = array(), $active = null, $order = null)
+    /**
+    * Get the users by ID
+    * @param array $ids student ids
+    * @param string $active
+    * @param string $order
+    * @param string $limit
+    * @return array $result student information
+    */
+    public static function get_user_list_by_ids($ids = array(), $active = null, $order = null, $limit = null)
     {
         if (empty($ids)) {
             return array();
@@ -917,6 +924,10 @@ class UserManager
 
         if (!is_null($order)) {
             $sql .= ' ORDER BY ' . $order;
+        }
+
+        if (!is_null($limit)) {
+            $sql .= ' LIMIT ' . $limit;
         }
         
         $rs = Database::query($sql);

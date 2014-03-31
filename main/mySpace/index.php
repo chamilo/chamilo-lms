@@ -120,7 +120,7 @@ if ($is_session_admin) {
 
 // Get views
 $views = array('admin', 'teacher', 'coach', 'drh');
-$view  = 'teacher';
+$view  = '';
 if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
     $view = $_GET['view'];
 }
@@ -135,8 +135,13 @@ if ($is_platform_admin) {
         $menu_items[] = Display::url(Display::return_icon('star_na.png', get_lang('AdminInterface'), array(), ICON_SIZE_MEDIUM), api_get_self().'?view=admin');
         $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
         $menu_items[] = Display::url(Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php');
-    } else {
+    } elseif ($view == 'teacher') {
         $menu_items[] = Display::url(Display::return_icon('teacher_na.png', get_lang('TeacherInterface'), array(), ICON_SIZE_MEDIUM), '');
+        $menu_items[] = Display::url(Display::return_icon('star.png', get_lang('AdminInterface'), array(), ICON_SIZE_MEDIUM), api_get_self().'?view=admin');
+        $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
+        $menu_items[] = Display::url(Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php');
+    } else {
+        $menu_items[] = Display::url(Display::return_icon('teacher.png', get_lang('TeacherInterface'), array(), ICON_SIZE_MEDIUM), api_get_self().'?view=teacher');
         $menu_items[] = Display::url(Display::return_icon('star.png', get_lang('AdminInterface'), array(), ICON_SIZE_MEDIUM), api_get_self().'?view=admin');
         $menu_items[] = Display::url(Display::return_icon('quiz.png', get_lang('ExamTracking'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'tracking/exams.php');
         $menu_items[] = Display::url(Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), array(), ICON_SIZE_MEDIUM), api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php');
@@ -198,7 +203,7 @@ if (empty($session_id) || in_array($display, array('accessoverview','lpprogresso
 
 echo '</div>';
 
-if (empty($session_id)) {
+if (!empty($view) && empty($session_id)) {
 
 	// Getting courses followed by a coach (No session courses)
     $courses  = CourseManager::get_course_list_as_coach($user_id, false);
@@ -303,7 +308,7 @@ if (empty($session_id)) {
         }
     }
 
-    if ($nb_students > 0 && $view != 'admin') {
+    if (!empty($view) && $nb_students > 0 && $view != 'admin') {
 
         // average progress
         $avg_total_progress = $avg_total_progress / $nb_students;
@@ -594,7 +599,6 @@ if ((api_is_allowed_to_create_course() || api_is_drh()) && in_array($view, array
 }
 
 if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourstudents') {
-
     echo '<a href="' . api_get_self() . '?view=admin&amp;display=coaches">' . get_lang('DisplayCoaches') . '</a> | ';
     echo '<a href="' . api_get_self() . '?view=admin&amp;display=useroverview">' . get_lang('DisplayUserOverview') . '</a>';
     if ($display == 'useroverview') {
@@ -763,7 +767,6 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 $studentList[] = array('id' => $studentInfo['user_id'], 'text' => $studentInfo['username'] . ' (' . $studentInfo['firstname'] . ' ' . $studentInfo['lastname'] . ')');
             }
 
-            $sessionFilter->addElement('select_ajax', 'student_name', get_lang('SearchStudent'), null, array('placeholder' => 'Todos', 'url' => $url, 'defaults' => $studentList, 'width' => '400px', 'class' => 'pull-right', 'minimumInputLength' => $minimumInputLength));
             $options = array(
                 ''              => get_lang('Select'),
                 STUDENT         => get_lang('Student'),
@@ -771,6 +774,8 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
                 DRH             => get_lang('Drh'),
                 );
             $sessionFilter->addElement('select', 'profile', get_lang('Profile'),$options, array('id' => 'profile', 'class' => 'pull-left'));
+
+            $sessionFilter->addElement('select_ajax', 'student_name', get_lang('SearchUser'), null, array('placeholder' => 'Todos', 'url' => $url, 'defaults' => $studentList, 'width' => '400px', 'class' => 'pull-right', 'minimumInputLength' => $minimumInputLength));
 
             $script = '
                 $("#student_name").on("change", function() {
@@ -806,7 +811,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }
 
         //date filter
-        if (!in_array($display, array('surveyoverview', 'progressoverview', 'lpgradereport'))) {
+        if (!in_array($display, array('surveyoverview', 'progressoverview', 'exerciseprogress', 'lpgradereport'))) {
             $sessionFilter->addElement('text', 'from', get_lang('From'), array('id' => 'date_from', 'value' => (!empty($_GET['date_from']) ? $_GET['date_from'] : ''), 'style' => 'width:75px' ));
             $sessionFilter->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to', 'value' => (!empty($_GET['date_to']) ? $_GET['date_to'] : ''), 'style' => 'width:75px' ));
        }
@@ -1075,7 +1080,7 @@ if ($is_platform_admin && in_array($view, array('admin')) && $display != 'yourst
         }
 	} else if($display == 'courseoverview') {
 		MySpace::display_tracking_course_overview();
-	} else {
+	} else if(!empty($display)) {
 		if ($export_csv) {
 			$is_western_name_order = api_is_western_name_order(PERSON_NAME_DATA_EXPORT);
 		} else {

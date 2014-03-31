@@ -287,7 +287,8 @@ switch ($action) {
     case 'get_exercise_grade':
         //@TODO replace this for a more efficient function (not retrieving the whole data)
         $course = api_get_course_info_by_id($_GET['course_id']);
-        $users = CourseManager::get_student_list_from_course_code($course['code'], true, $_GET['session_id'], $_GET['date_from'], $_GET['date_to']);
+        $users = CourseManager::get_student_list_from_course_code($course['code'], true, $_GET['session_id']);
+
         $count = count($users);
         break;
     /*case 'get_extra_fields':
@@ -1014,10 +1015,9 @@ switch ($action) {
         
         $course = api_get_course_info_by_id($_GET['course_id']);
         $listUserSess = CourseManager::get_student_list_from_course_code($course['code'], true, $_GET['session_id']);
-        
         $usersId = array_keys($listUserSess);
-        
-        $users = UserManager::get_user_list_by_ids($usersId, null, "lastname, firstname");
+
+        $users = UserManager::get_user_list_by_ids($usersId, null, "lastname, firstname",  "$start , $limit");
         $exeResults = $objExercise->getExerciseAndResult($_GET['course_id'], $_GET['session_id'], $quizIds);
         
         $arrGrade = array();
@@ -1051,7 +1051,6 @@ switch ($action) {
             
             $i++;
         }
-        //$count = count($users);
         break;
     case 'get_extra_field_options':
         $obj = new ExtraFieldOption($type);

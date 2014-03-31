@@ -1119,24 +1119,31 @@ function _api_format_user($user, $add_password = false) {
     $result['theme']            = $user['theme'];
     $result['language']         = $user['language'];
 
-    if (!isset($user['lastLogin']) && !isset($user['last_login'])) {
-        require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
-        $timestamp = Tracking::get_last_connection_date($result['user_id'], false, true);
-        // Convert the timestamp back into a datetime
-        // NOTE: this timestamp has ALREADY been converted to the local timezone in the get_last_connection_date function
-        $last_login = date('Y-m-d H:i:s', $timestamp);
+    if (isset($_configuration['save_user_last_login']) &&
+        $_configuration['save_user_last_login']
+    ) {
+        $last_login = $user['last_login'];
     } else {
-        if (isset($user['lastLogin'])) {
-            $last_login = $user['lastLogin'];
+        if (!isset($user['lastLogin']) && !isset($user['last_login'])) {
+            require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
+            $timestamp = Tracking::get_last_connection_date($result['user_id'], false, true);
+            // Convert the timestamp back into a datetime
+            // NOTE: this timestamp has ALREADY been converted to the local timezone in the get_last_connection_date function
+            $last_login = date('Y-m-d H:i:s', $timestamp);
         } else {
-            $last_login = $user['last_login'];
+            if (isset($user['lastLogin'])) {
+                $last_login = $user['lastLogin'];
+            } else {
+                $last_login = $user['last_login'];
+            }
         }
     }
+
     $result['last_login'] = $last_login;
     // Kept for historical reasons
     $result['lastLogin'] = $last_login;
 
-    //Getting user avatar
+    // Getting user avatar.
 
 	$picture_filename   = trim($user['picture_uri']);
 	$avatar             = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
@@ -1175,7 +1182,7 @@ function _api_format_user($user, $add_password = false) {
 
     $result['creator_id'] = $user['creator_id'];
     $result['registration_date'] = $user['registration_date'];
-    $result['last_login'] = isset($user['last_login']) ? $user['last_login'] : null;
+
     return $result;
 }
 

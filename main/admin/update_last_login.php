@@ -4,7 +4,9 @@
 require_once '../inc/global.inc.php';
 api_protect_admin_script();
 
-if (isset($_configuration['save_user_last_login'])) {
+if (isset($_configuration['save_user_last_login']) &&
+    $_configuration['save_user_last_login']
+) {
     $tableUser = Database::get_main_table(TABLE_MAIN_USER);
     $userInfo = api_get_user_info(api_get_user_id());
     if (isset($userInfo['last_login'])) {
@@ -20,7 +22,7 @@ if (isset($_configuration['save_user_last_login'])) {
         }
     } else {
         $sql = "ALTER TABLE $tableUser ADD COLUMN last_login DATETIME";
-        $result = Database::query($sql);
+        Database::query($sql);
         echo "last_login does not exits creating with: <br/> $sql";
     }
 }

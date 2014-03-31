@@ -3598,11 +3598,6 @@ class SessionManager
                     INNER JOIN $tbl_user u ON (u.user_id = su.id_user AND s.id = id_session)
                     INNER JOIN $tbl_session_rel_access_url url ON (url.session_id = s.id)";
 
-        if (!empty($lastConnectionDate)) {
-            $loginTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-            //$sql .= " INNER JOIN $loginTable l ON (l.login_user_id = u.user_id) ";
-        }
-
         $where = " WHERE access_url_id = $urlId
                       $statusConditions
                       $activeCondition
@@ -3614,7 +3609,7 @@ class SessionManager
 
         if (!empty($lastConnectionDate)) {
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
-            //$where .=  " AND l.login_date <= '$lastConnectionDate' ";
+            $where .=  " AND u.last_login <= '$lastConnectionDate' ";
         }
 
         $sql .= $where;

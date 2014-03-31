@@ -104,40 +104,22 @@ function get_users($from, $number_of_items, $column, $direction)
             );
         }
     } else {
-        if (api_is_platform_admin()) {
-            $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'admin',
-                api_get_user_id(),
-                false,
-                $from,
-                $number_of_items,
-                $column,
-                $direction,
-                $keyword,
-                $active,
-                $lastConnectionDate,
-                null,
-                null,
-                COURSEMANAGER
-            );
-        } else {
-            $students = UserManager::get_users_followed_by_drh(
-                api_get_user_id(),
-                null,
-                false,
-                false,
-                false,
-                $from,
-                $number_of_items,
-                $column,
-                $direction,
-                $active,
-                $lastConnectionDate,
-                null,
-                null,
-                COURSEMANAGER
-            );
-        }
+        $students = UserManager::get_users_followed_by_drh(
+            api_get_user_id(),
+            null,
+            false,
+            false,
+            false,
+            $from,
+            $number_of_items,
+            $column,
+            $direction,
+            $active,
+            $lastConnectionDate,
+            null,
+            null,
+            COURSEMANAGER
+        );
     }
 
     $all_datas = array();
@@ -244,7 +226,8 @@ $table = new SortableTable(
 
 $params = array(
     'keyword' => $keyword,
-    'active' => $active
+    'active' => $active,
+    'sleeping_days' => $sleepingDays
 );
 $table->set_additional_parameters($params);
 
@@ -262,18 +245,18 @@ $table->set_header(4, get_lang('Details'), false);
 
 if ($export_csv) {
     if ($is_western_name_order) {
-        $csv_header[] = array (
-            get_lang('FirstName', ''),
-            get_lang('LastName', ''),
-            get_lang('FirstLogin', ''),
-            get_lang('LastConnexion', '')
+        $csv_header[] = array(
+            get_lang('FirstName'),
+            get_lang('LastName'),
+            get_lang('FirstLogin'),
+            get_lang('LastConnexion')
         );
     } else {
-        $csv_header[] = array (
-            get_lang('LastName', ''),
-            get_lang('FirstName', ''),
-            get_lang('FirstLogin', ''),
-            get_lang('LastConnexion', '')
+        $csv_header[] = array(
+            get_lang('LastName'),
+            get_lang('FirstName'),
+            get_lang('FirstLogin'),
+            get_lang('LastConnexion')
         );
     }
 }
@@ -281,7 +264,16 @@ if ($export_csv) {
 $form = new FormValidator('search_user', 'get', api_get_path(WEB_CODE_PATH).'mySpace/teachers.php');
 $form->addElement('text', 'keyword', get_lang('Keyword'));
 $form->addElement('select', 'active', get_lang('Status'), array(1 => get_lang('Active'), 0 => get_lang('Inactive')));
-//$form->addElement('select', 'sleeping_days', get_lang('InactiveDays'), array('', 1 => 1, 5 => 5, 15 => 15, 30 => 30, 60 => 60, 90 => 90, 120 => 120));
+if (isset($_configuration['save_user_last_login']) &&
+    $_configuration['save_user_last_login']
+) {
+    $form->addElement(
+        'select',
+        'sleeping_days',
+        get_lang('InactiveDays'),
+        array('', 1 => 1, 5 => 5, 15 => 15, 30 => 30, 60 => 60, 90 => 90, 120 => 120)
+    );
+}
 $form->addElement('button', 'submit', get_lang('Search'));
 $form->setDefaults($params);
 

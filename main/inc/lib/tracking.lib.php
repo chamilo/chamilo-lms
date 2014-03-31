@@ -70,6 +70,27 @@ class Tracking
                 $teachers[] = $teacherData['user_id'];
             }
 
+            $humanResources = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
+                'drh_all',
+                $userId,
+                false,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                array(),
+                array(),
+                DRH
+            );
+
+            $humanResourcesList = array();
+            foreach ($humanResources as $item) {
+                $humanResourcesList[] = $item['user_id'];
+            }
+
             $platformCourses = SessionManager::getAllCoursesFromAllSessionFromDrh($userId);
             $courses = array();
             foreach ($platformCourses as $course) {
@@ -79,6 +100,7 @@ class Tracking
         } else {
             $students = array_keys(UserManager::get_users_followed_by_drh($userId, STUDENT));
             $teachers = array_keys(UserManager::get_users_followed_by_drh($userId, COURSEMANAGER));
+            $humanResourcesList = array_keys(UserManager::get_users_followed_by_drh($userId, DRH));
 
             $platformCourses = CourseManager::get_courses_followed_by_drh($userId);
             foreach ($platformCourses as $course) {
@@ -89,6 +111,7 @@ class Tracking
         }
 
         return array(
+            'drh' => $humanResourcesList,
             'teachers' => $teachers,
             'students' => $students,
             'courses' => $courses,

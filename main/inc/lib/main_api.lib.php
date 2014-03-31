@@ -1175,7 +1175,7 @@ function _api_format_user($user, $add_password = false) {
 
     $result['creator_id'] = $user['creator_id'];
     $result['registration_date'] = $user['registration_date'];
-
+    $result['last_login'] = isset($user['last_login']) ? $user['last_login'] : null;
     return $result;
 }
 

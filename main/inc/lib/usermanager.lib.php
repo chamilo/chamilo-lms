@@ -3527,11 +3527,6 @@ class UserManager
         }
 
         $join = null;
-        if (!empty($lastConnectionDate)) {
-            $loginTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-            $join .= " INNER JOIN $loginTable l ON (l.login_user_id = u.user_id) ";
-        }
-
         $sql = " $select FROM $tbl_user u
                 INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.user_id)
                 LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.user_id)
@@ -3550,7 +3545,7 @@ class UserManager
 
         if (!empty($lastConnectionDate)) {
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
-            $sql .=  " AND l.login_date <= '$lastConnectionDate' ";
+            $sql .=  " AND u.last_login <= '$lastConnectionDate' ";
         }
 
         if ($getSql) {

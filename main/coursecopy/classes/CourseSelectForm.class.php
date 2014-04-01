@@ -302,13 +302,22 @@ class CourseSelectForm
 			}
 		}
 
+        $recycleOption = isset($_POST['recycle_option']) ? true : false;
+
 		if (empty($element_count)) {
 		    Display::display_warning_message(get_lang('NoDataAvailable'));
 		} else {
     		if (!empty($hidden_fields['destination_session'])) {
-    			echo '<br /><button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES, $charset))."'".')) return false;" >'.get_lang('Ok').'</button>';
+    			echo '<br /><button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"),ENT_QUOTES, $charset))."'".')) return false;" >'.
+                    get_lang('Ok').'</button>';
     		} else {
-    			echo '<br /><button class="save" type="submit" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.get_lang('Ok').'</button>';
+                if ($recycleOption) {
+                    echo '<br /><button class="save" type="submit">'.
+                        get_lang('Ok').'</button>';
+                } else {
+    			    echo '<br /><button class="save" type="submit" onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.
+                    get_lang('Ok').'</button>';
+                }
     		}
 		}
 

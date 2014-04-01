@@ -280,14 +280,15 @@ while ($row = Database :: fetch_array($rs)) {
 if (api_is_drh() && !api_is_platform_admin()) {
     if (!empty($student_id)) {
         if (api_drh_can_access_all_session_content()) {
-            $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
+            //@todo securize drh with student id
+            /*$users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
             $userList = array();
             foreach ($users as $user) {
                 $userList[] = $user['user_id'];
             }
             if (!in_array($student_id, $userList)) {
                 api_not_allowed(true);
-            }
+            }*/
         } else {
             if (api_is_drh() && !UserManager::is_user_followed_by_drh($student_id, api_get_user_id())) {
                 api_not_allowed(true);

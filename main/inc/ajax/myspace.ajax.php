@@ -45,6 +45,7 @@ switch ($action) {
         $end_date = isset($_REQUEST['endDate']) ? $_REQUEST['endDate'] : "";
         $user_id = isset($_REQUEST['student']) ? $_REQUEST['student'] : "";
         $course_code = isset($_REQUEST['course']) ? $_REQUEST['course'] : "";
+        $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : "";
 
         $sql_result = get_connections_to_course_by_date(
             $user_id,
@@ -61,7 +62,7 @@ switch ($action) {
             $foo_stats .= '<strong>' . get_lang('Average') . ': </strong>' . $rst['avg'] . '<br />';
             $foo_stats .= '<strong>' . get_lang('Quantity') . ' : </strong>' . $rst['times'] . '<br />';
             $db['stats'] = $foo_stats;
-            $db['graph_result'] = grapher($sql_result, $start_date, $end_date);
+            $db['graph_result'] = grapher($sql_result, $start_date, $end_date, $type);
         } else {
             $db['result'] = Display::return_message(
                 get_lang('NoDataAvailable'),
@@ -77,7 +78,7 @@ switch ($action) {
             );
         }
         header('Cache-Control: no-cache');
-        echo json_encode($db); // requires: PHP >= 5.2.0, PECL json >= 1.2.0
+        echo json_encode($db);
         break;
 }
 exit;

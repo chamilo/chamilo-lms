@@ -3733,7 +3733,6 @@ class UserManager
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
             //var_dump($sql);
-            //var_dump($row);
             return $row['count'];
         }
 
@@ -3756,7 +3755,7 @@ class UserManager
         $result = Database::query($sql);
         $users = array();
         if (Database::num_rows($result) > 0) {
-            //var_dump($sql);
+
             while ($row = Database::fetch_array($result)) {
                 $users[$row['user_id']] = $row;
             }

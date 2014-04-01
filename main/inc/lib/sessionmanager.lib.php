@@ -2547,16 +2547,23 @@ class SessionManager
 
     /**
      * Gets the list of courses by session filtered by access_url
-     * @param int session id
-     * @return array list of courses
+     *
+     * @param $userId
+     * @param $sessionId
+     * @param null $from
+     * @param null $limit
+     * @param null $column
+     * @param null $direction
+     * @param bool $getCount
+     * @return array
      */
     public static function getAllCoursesFollowedByUser(
         $userId,
         $sessionId,
-        $from,
-        $limit,
-        $column,
-        $direction,
+        $from = null,
+        $limit = null,
+        $column = null,
+        $direction = null,
         $getCount = false
     ) {
         if (empty($sessionId)) {

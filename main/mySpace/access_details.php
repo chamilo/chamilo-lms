@@ -10,7 +10,7 @@
 * @param string $course_code the course code
 * @author Julio Montoya <gugli100@gmail.com>
 * @author Jorge Frisancho Jibaja - select between dates
-* 
+*
 */
 /**
  * Code
@@ -41,24 +41,24 @@ $quote_simple = "'";
 
 $htmlHeadXtra[] = '<script src="slider.js" type="text/javascript"></script>';
 $htmlHeadXtra[] = '<link rel="stylesheet" href="slider.css" />';
-
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 $(function() {
     var dates = $( "#date_from, #date_to" ).datepicker({
         dateFormat: '.$quote_simple.'yy-mm-dd'.$quote_simple.',
         changeMonth: true,
-    changeYear: true,
-        onSelect: function( selectedDate ) {
+        changeYear: true,
+        onSelect: function(selectedDate) {
             var foo = areBothFilled();
             var option = this.id == "date_from" ? "minDate" : "maxDate",
                 instance = $( this ).data( "datepicker" );
                 date = $.datepicker.parseDate(
                     instance.settings.dateFormat ||
                     $.datepicker._defaults.dateFormat,
-                    selectedDate, instance.settings );
+                    selectedDate, instance.settings
+                );
             dates.not( this ).datepicker( "option", option, date );
-            
-            if (foo){
+
+            if (foo) {
                 var start_date  = document.getElementById("date_from").value;
                 var end_date    = document.getElementById("date_to").value;
                 changeHREF(start_date,end_date);
@@ -69,8 +69,10 @@ $(function() {
                 if (foo_slider_state == "open"){
                     sliderAction();
                 }
-                $.post("'.api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail_by_date", {startDate: start_date, endDate: end_date, course: foo_course, student: foo_student, type: graph_type}, function(db)
-                {
+                $.post(
+                "'.api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail_by_date",
+                {startDate: start_date, endDate: end_date, course: foo_course, student: foo_student, type: graph_type},
+                function(db) {
                     if (!db.is_empty){
                         // Display confirmation message to the user
                         $("#messages").html(db.result).stop().css("opacity", 1).fadeIn(30);
@@ -79,8 +81,7 @@ $(function() {
                         $( "#ui-tabs-2" ).empty();
                         $( "#ui-tabs-1" ).html(db.graph_result);
                         $( "#ui-tabs-2" ).html(db.graph_result);
-                    }
-                    else{
+                    } else {
                         $("#messages").text("'.get_lang('NoDataAvailable').'");
                         $("#messages").addClass("warning-message");
                         $("#cev_cont_stats").html(db.stats);
@@ -90,27 +91,25 @@ $(function() {
                     }
                     var foo_height = sliderGetHeight("#messages");
                     sliderSetHeight(".slider",foo_height);
-                    controlSliderMenu(foo_height);                    
+                    controlSliderMenu(foo_height);
                     // Hide confirmation message and enable stars for "Rate this" control, after 2 sec...
                     /*setTimeout(function(){
                             $("#messages").fadeOut(1000, function(){ui.enable()})
                     }, 2000);*/
                 }, "json");
-                
+
                 $( "#cev_slider" ).empty();
                 // Create element to use for confirmation messages
                 $('.$quote_simple .'<div id="messages"/>'.$quote_simple .').appendTo("#cev_slider");
-                
             }
         }
-     });
-    if (areBothFilled()){
-        runEffect();        
+    });
+
+    if (areBothFilled()) {
+        runEffect();
     }
 });
-
 </script>';
-
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 
@@ -127,7 +126,7 @@ function changeHREF(sd,ed) {
     })
 }
 
-function runEffect(){
+function runEffect() {
     //most effect types need no options passed by default
     var options = {};
      //run the effect
@@ -135,25 +134,25 @@ function runEffect(){
 }
 
 //callback function to bring a hidden box back
-function cev_effect(){
-    setTimeout(function(){
+function cev_effect() {
+    setTimeout(function() {
         $("#cev_button:visible").removeAttr('.$quote_simple .'style'.$quote_simple .').hide().fadeOut();
     }, 1000);
 }
 
 function areBothFilled() {
-        var returnValue = false;
-        if ((document.getElementById("date_from").value != "") && (document.getElementById("date_to").value != "")){
-            returnValue = true;
-        }
-        return returnValue;
+    var returnValue = false;
+    if ((document.getElementById("date_from").value != "") && (document.getElementById("date_to").value != "")){
+        returnValue = true;
+    }
+    return returnValue;
 }
 </script>';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(function() {
-        $("#cev_button").hide();
-        $("#container-9").tabs({remote: true});
+    $("#cev_button").hide();
+    $("#container-9").tabs({remote: true});
 });
 </script>';
 
@@ -163,31 +162,30 @@ $interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('AccessDetails'));
 Display :: display_header('');
 $main_user_info = api_get_user_info($user_id);
 $result_to_print = '';
-
-$sql_result      = MySpace::get_connections_to_course($user_id, $course_code);
+$sql_result = MySpace::get_connections_to_course($user_id, $course_code);
 $result_to_print = convert_to_string($sql_result);
 
 echo Display::page_header(get_lang('DetailsStudentInCourse'));
-echo Display::page_subheader(get_lang('User').': '.api_get_person_name($main_user_info['firstName'], $main_user_info['lastName']).' - '.get_lang('Course').': '.$course_code);
+echo Display::page_subheader(
+    get_lang('User').': '.api_get_person_name($main_user_info['firstName'], $main_user_info['lastName']).' - '.get_lang('Course').': '.$course_code
+);
 
 $form = new FormValidator('myform', 'post', "javascript:get(document.getElementById('myform'));", null, array('id' => 'myform'));
 $form->addElement('text', 'from', get_lang('From'), array('id' => 'date_from'));
 $form->addElement('text', 'to', get_lang('Until'), array('id' => 'date_to'));
-
 $form->addElement('style_submit_button', 'reset', get_lang('Reset'), array('onclick' => "javascript:window.location='access_details.php?course=".$course_code."&student=".$user_id."&cidReq=".$course_code."';"));
 $form->display();
 ?>
 <div id="cev_results_header" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
-
 <div id="cev_results" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
     <div class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"><?php echo get_lang('Statistics'); ?></div><br />
     <div id="cev_cont_stats">
         <?php
         if ($result_to_print != "")  {
-            $rst                = get_stats($user_id, $course_code);            
+            $rst                = get_stats($user_id, $course_code);
             $foo_stats           = '<strong>'.get_lang('Total').': </strong>'.$rst['total'].'<br />';
             $foo_stats          .= '<strong>'.get_lang('Average').': </strong>'.$rst['avg'].'<br />';
-            $foo_stats          .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';            
+            $foo_stats          .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';
             echo $foo_stats;
         } else {
             echo Display::display_warning_message(get_lang('NoDataAvailable'));
@@ -198,13 +196,24 @@ $form->display();
 
 <div id="container-9">
     <ul>
-        <li><a href="<?php echo api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail&type=day&course='.$course_code.'&student='.$user_id?>"><span> <?php echo api_ucfirst(get_lang('Day')); ?></span></a></li>
-        <li><a href="<?php echo api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail&type=month&course='.$course_code.'&student='.$user_id?>"><span> <?php echo api_ucfirst(get_lang('MinMonth')); ?></span></a></li>        
+        <li>
+            <a href="<?php echo api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail&type=day&course='.$course_code.'&student='.$user_id?>">
+                <span> <?php echo api_ucfirst(get_lang('Day')); ?>
+                </span>
+            </a>
+        </li>
+        <li>
+            <a href="<?php echo api_get_path(WEB_AJAX_PATH).'myspace.ajax.php?a=access_detail&type=month&course='.$course_code.'&student='.$user_id?>">
+                <span> <?php echo api_ucfirst(get_lang('MinMonth')); ?></span>
+            </a>
+        </li>
     </ul>
 </div>
 
 <div id="cev_results" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
-    <div class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all"><?php echo get_lang('DateAndTimeOfAccess'),' - ', get_lang('Duration') ?></div><br />
+    <div class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+        <?php echo get_lang('DateAndTimeOfAccess'),' - ', get_lang('Duration') ?>
+    </div><br />
     <div id="cev_cont_results" >
     <div id="cev_slider" class="slider">
         <?php
@@ -212,13 +221,14 @@ $form->display();
             echo $result_to_print;
         } else {
             Display::display_warning_message(get_lang('NoDataAvailable'));
-        }        
+        }
         ?>
     </div>
     <?php
     if ($result_to_print != "")  {
-        echo '<br /><div class="slider_menu">
-        <a href="#" onclick="return sliderAction();"><img src="../img/icons/22/zoom_in.png"></a>
+        echo '<br />
+        <div class="slider_menu">
+            <a href="#" onclick="return sliderAction();"><img src="../img/icons/22/zoom_in.png"></a>
         </div>';
     }?>
     </div>

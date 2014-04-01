@@ -560,7 +560,7 @@ class IndexManager
                     $courses_list_string .= "<li>";
                     if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
                         || ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-                        || ($user_identified && key_exists($course['code'], $courses_of_user)
+                        || ($user_identified && array_key_exists($course['code'], $courses_of_user)
                             && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
                         || $courses_of_user[$course['code']]['status'] == '1'
                         || api_is_platform_admin()) {
@@ -569,7 +569,7 @@ class IndexManager
                     $courses_list_string .= $course['title'];
                     if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
                         || ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-                        || ($user_identified && key_exists($course['code'], $courses_of_user)
+                        || ($user_identified && array_key_exists($course['code'], $courses_of_user)
                             && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
                             || $courses_of_user[$course['code']]['status'] == '1'
                         || api_is_platform_admin()) {

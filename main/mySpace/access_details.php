@@ -91,7 +91,6 @@ function loadGraph() {
                 $('#messages').addClass('warning-message');
                 $('#cev_cont_stats').html('');
                 $('#graph').empty();
-                $('#messages').empty();
             }
         }
     });

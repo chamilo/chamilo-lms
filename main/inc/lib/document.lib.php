@@ -2579,7 +2579,7 @@ class DocumentManager
             $session_condition = " AND props.id_session='" . $session_id . "' ";
         }
 
-        $sql = "SELECT coalesce(docs.size, 0), docs.path FROM  " . $TABLE_ITEMPROPERTY . "  AS props, " . $TABLE_DOCUMENT . "  AS docs
+        $sql = "SELECT coalesce(docs.size, 0), docs.path, docs.filetype FROM  " . $TABLE_ITEMPROPERTY . "  AS props, " . $TABLE_DOCUMENT . "  AS docs
 		        WHERE 	props.c_id 	= $course_id AND
 		        		docs.c_id 	= $course_id AND
 		        		docs.id 	= props.ref AND
@@ -2596,7 +2596,11 @@ class DocumentManager
         $docsSize = array();
         while ($row = Database::fetch_row($result)) {
             $md5Key = md5($row[1]);
-            $docsSize[$md5Key] = $row[0];
+            if (!empty($row[2]) && $row[2] == 'folder') {
+                $docsSize[$md5Key] = 4096;
+            } else {
+                $docsSize[$md5Key] = $row[0];
+            }
         }
         return array_sum($docsSize);
     }

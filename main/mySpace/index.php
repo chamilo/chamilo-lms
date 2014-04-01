@@ -205,7 +205,6 @@ if (!empty($teachers)) {
     $numberTeachers = count($teachers);
 }
 
-
 // Inactive students
 //$countInactiveUsers = Tracking::getInactiveUsers($studentIds, $daysAgo);
 $totalTimeSpent = Tracking::get_time_spent_on_the_platform($studentIds);
@@ -273,7 +272,7 @@ echo '<div class="report_section">
                 api_get_path(WEB_CODE_PATH).'mySpace/users.php'
             ).
             '</td>
-                <td align="right">'.($nb_students+$numberTeachers).$linkAddUser.'</td>
+                <td align="right">'.($nb_students + $numberTeachers + $countHumanResourcesUsers).$linkAddUser.'</td>
             </tr>
             <tr>
                 <td>'.Display::url(
@@ -310,8 +309,6 @@ if ($export_csv) {
 } else {
     $lastConnectionDate = api_get_utc_datetime(strtotime('15 days ago'));
     $countActiveUsers = SessionManager::getCountUserTracking(null, 1, null, array(), array());
-
-    ///$countInactiveUsers = SessionManager::getCountUserTracking(null, 0, null, $sessionIdList, $studentIds);
     $countSleepingTeachers = SessionManager::getTeacherTracking(
         api_get_user_id(),
         1,
@@ -332,29 +329,6 @@ if ($export_csv) {
     $form->addElement('text', 'keyword', get_lang('User'));
     $form->addElement('button', 'submit', get_lang('Search'));
     $form->display();
-
-    /*
-
-    <tr>
-                    <td>'.Display::url(
-                        get_lang('ActiveUsers'),
-                        api_get_path(WEB_CODE_PATH).'mySpace/users.php?active=1').'</td>
-                    <td align="right">'.intval($countActiveUsers).'</td>
-                </tr>
-                <tr>
-                    <td>'.Display::url(get_lang('InactiveUsers'), api_get_path(WEB_CODE_PATH).'mySpace/users.php?active=0').'</td>
-                    <td align="right">'.$countInactiveUsers.'</td>
-                </tr>
-                <tr>
-                    <td>'.Display::url(get_lang('SleepingTeachers'), api_get_path(WEB_CODE_PATH).'mySpace/teachers.php?sleeping_days=15').'</td>
-                    <td align="right">'.$countSleepingTeachers.'</td>
-                </tr>
-                <tr>
-                    <td>'.Display::url(get_lang('SleepingStudents'), api_get_path(WEB_CODE_PATH).'mySpace/student.php?sleeping_days=15').'</td>
-                    <td align="right">'.$countSleepingStudents.'</td>
-                </tr>
-
-    */
 
     // html part
     echo '<div class="report_section">

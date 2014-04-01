@@ -339,9 +339,11 @@ class CourseManager
         $course_id = $course_info['real_id'];
 
         // Unsubscribe user from all groups in the course.
-        $sql = "DELETE FROM ".Database::get_course_table(TABLE_GROUP_USER)."  WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
+        $sql = "DELETE FROM ".Database::get_course_table(TABLE_GROUP_USER)."
+                WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
         Database::query($sql);
-        $sql = "DELETE FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)." WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
+        $sql = "DELETE FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)."
+                WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
         Database::query($sql);
 
         // Erase user student publications (works) in the course - by André Boivin
@@ -2970,50 +2972,112 @@ class CourseManager
                 }
             }
         }
-        return $affected_rows;
 
+        return $affected_rows;
     }
 
     /**
      * get courses followed by human resources manager
-     * @param int         human resources manager id
+     * @param int $user_id
+     * @param int $from
+     * @param int $limit
+     * @param string $column
+     * @param string $direction
      * @return array    courses
      */
-    public static function get_courses_followed_by_drh($user_id)
-    {
+    public static function get_courses_followed_by_drh(
+        $user_id,
+        $from = null,
+        $limit = null,
+        $column = null,
+        $direction = null,
+        $getCount = false
+    ) {
+        return self::getCoursesFollowedByUser(
+            $user_id,
+            $from,
+            $limit,
+            $column,
+            $direction,
+            $getCount
+        );
+    }
+
+    /**
+     * get courses followed by user
+     * @param int $user_id
+     * @param int $from
+     * @param int $limit
+     * @param string $column
+     * @param string $direction
+     * @return array    courses
+     */
+    public static function getCoursesFollowedByUser(
+        $user_id,
+        $status = null,
+        $from = null,
+        $limit = null,
+        $column = null,
+        $direction = null,
+        $getCount = false
+    ) {
         // Database Table Definitions
-        $tbl_course             =     Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_course_rel_user     =     Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_course_rel_access_url =   Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
         $user_id = intval($user_id);
-        $assigned_courses_to_hrm = array();
+        $select  = "SELECT DISTINCT *, id as real_id ";
 
-        if (api_get_multiple_access_url()) {
-           $sql = "SELECT *, id as real_id FROM $tbl_course c
-                        INNER JOIN $tbl_course_rel_user cru ON (cru.course_code = c.code)
-                        LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
-                    WHERE
-                        cru.user_id = '$user_id' AND
-                        status = ".DRH." AND
-                        relation_type = '".COURSE_RELATION_TYPE_RRHH."' AND
-                        access_url_id = ".api_get_current_access_url_id()."";
-        } else {
-            $sql = "SELECT *, id as real_id FROM $tbl_course c
-                    INNER JOIN $tbl_course_rel_user cru
-                    ON
-                        cru.course_code = c.code AND
-                        cru.user_id = '$user_id' AND
-                        status = ".DRH." AND
-                        relation_type = '".COURSE_RELATION_TYPE_RRHH."' ";
+        if ($getCount) {
+            $select = "SELECT COUNT(DISTINCT id) as count";
         }
-        $rs_assigned_courses = Database::query($sql);
-        if (Database::num_rows($rs_assigned_courses) > 0) {
-            while ($row_assigned_courses = Database::fetch_array($rs_assigned_courses))    {
-                $assigned_courses_to_hrm[$row_assigned_courses['code']] = $row_assigned_courses;
+
+        $whereConditions = null;
+        switch ($status) {
+            case COURSEMANAGER:
+                $whereConditions .= " AND
+                    cru.user_id = '$user_id' AND
+                    status = ".COURSEMANAGER."
+                ";
+                break;
+            case DRH:
+                $whereConditions .= " AND
+                    cru.user_id = '$user_id' AND
+                    status = ".DRH." AND
+                    relation_type = '".COURSE_RELATION_TYPE_RRHH."'
+                ";
+                break;
+        }
+
+        $sql = "$select
+                FROM $tbl_course c
+                    INNER JOIN $tbl_course_rel_user cru ON (cru.course_code = c.code)
+                    INNER JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
+                WHERE
+                    access_url_id = ".api_get_current_access_url_id()."
+                    $whereConditions
+                ";
+        if (isset($from) && isset($limit)) {
+            $from = intval($from);
+            $limit = intval($limit);
+            $sql .= " LIMIT $from, $limit";
+        }
+
+        $result = Database::query($sql);
+
+        if ($getCount) {
+            $row = Database::fetch_array($result);
+            return $row['count'];
+        }
+
+        $courses = array();
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_array($result))    {
+                $courses[$row['code']] = $row;
             }
         }
-        return $assigned_courses_to_hrm;
+        return $courses;
     }
 
     /**
@@ -4145,7 +4209,7 @@ class CourseManager
             if ($access_link && in_array('enter', $access_link)) {
                 $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php', array('class' => 'btn btn-primary'));
             }
-            
+
             if ($access_link && in_array('unsubscribe', $access_link)) {
                 $my_course['extra_info']['unsubscribe_button'] = Display::url(get_lang('Unsubscribe'), api_get_path(WEB_CODE_PATH).'auth/courses.php?action=unsubscribe&amp;unsubscribe='.$courseCode.'&amp;sec_token='.$stok.'&amp;category_code='.$categoryCode, array('class' => 'btn btn-primary'));
             }
@@ -4268,7 +4332,7 @@ class CourseManager
         ) {
             $options[]=  'enter';
         }
-        
+
         if ($is_admin ||
             $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD && empty($course['registration_code']) ||
             (api_user_is_login($uid) && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && empty($course['registration_code']) ) ||
@@ -4276,11 +4340,11 @@ class CourseManager
         ) {
             $options[]=  'enter';
         }
-        
+
          if ($course['visibility'] != HIDDEN && empty($course['registration_code']) && $course['unsubscribe'] == UNSUBSCRIBE_ALLOWED && api_user_is_login($uid) && (in_array($course['real_id'], $user_courses))) {
             $options[]=  'unsubscribe';
         }
-        
+
         return $options;
     }
 

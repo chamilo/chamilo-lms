@@ -43,7 +43,7 @@ function get_count_users()
         $lastConnectionDate = api_get_utc_datetime(strtotime($sleepingDays.' days ago'));
     }
 
-    return SessionManager::getCountUserTracking(
+    $count = SessionManager::getCountUserTracking(
         $keyword,
         $active,
         $lastConnectionDate,
@@ -51,9 +51,11 @@ function get_count_users()
         null,
         COURSEMANAGER
     );
+
+    return $count;
 }
 
-function get_users($from, $number_of_items, $column, $direction)
+function get_users($from, $limit, $column, $direction)
 {
     $active = isset($_GET['active']) ? $_GET['active'] : 1;
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
@@ -66,8 +68,8 @@ function get_users($from, $number_of_items, $column, $direction)
 
     $is_western_name_order = api_is_western_name_order();
     $coach_id = api_get_user_id();
-    $column = 'u.user_id';
 
+    $drhLoaded = false;
     if (api_is_drh()) {
         if (api_drh_can_access_all_session_content()) {
             $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
@@ -75,7 +77,7 @@ function get_users($from, $number_of_items, $column, $direction)
                 api_get_user_id(),
                 false,
                 $from,
-                $number_of_items,
+                $limit,
                 $column,
                 $direction,
                 $keyword,
@@ -85,39 +87,23 @@ function get_users($from, $number_of_items, $column, $direction)
                 null,
                 COURSEMANAGER
             );
-        } else {
-            $students = UserManager::get_users_followed_by_drh(
-                api_get_user_id(),
-                null,
-                false,
-                false,
-                false,
-                $from,
-                $number_of_items,
-                $column,
-                $direction,
-                $active,
-                $lastConnectionDate,
-                null,
-                null,
-                COURSEMANAGER
-            );
+            $drhLoaded = true;
         }
-    } else {
-        $students = UserManager::get_users_followed_by_drh(
+    }
+
+    if ($drhLoaded == false) {
+        $students = UserManager::getUsersFollowedByUser(
             api_get_user_id(),
-            null,
+            COURSEMANAGER,
             false,
             false,
             false,
             $from,
-            $number_of_items,
+            $limit,
             $column,
             $direction,
             $active,
             $lastConnectionDate,
-            null,
-            null,
             COURSEMANAGER
         );
     }

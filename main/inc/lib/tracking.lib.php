@@ -91,23 +91,95 @@ class Tracking
                 $humanResourcesList[] = $item['user_id'];
             }
 
-            $platformCourses = SessionManager::getAllCoursesFromAllSessionFromDrh($userId);
+            $platformCourses = SessionManager::getAllCoursesFollowedByUser(
+                $userId,
+                null,
+                null,
+                null,
+                null,
+                null
+            );
+
+            //$platformCourses = SessionManager::getAllCoursesFromAllSessionFromDrh($userId);
             $courses = array();
             foreach ($platformCourses as $course) {
-                $courses[$course] = $course;
+                $courses[$course['code']] = $course['code'];
             }
             $sessions = SessionManager::get_sessions_followed_by_drh($userId);
         } else {
-            $students = array_keys(UserManager::get_users_followed_by_drh($userId, STUDENT));
-            $teachers = array_keys(UserManager::get_users_followed_by_drh($userId, COURSEMANAGER));
-            $humanResourcesList = array_keys(UserManager::get_users_followed_by_drh($userId, DRH));
 
-            $platformCourses = CourseManager::get_courses_followed_by_drh($userId);
+            $studentList = UserManager::getUsersFollowedByUser(
+                $userId,
+                STUDENT,
+                false,
+                false,
+                false,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                COURSEMANAGER
+            );
+
+            $students = array();
+            foreach ($studentList as $studentData) {
+                $students[] = $studentData['user_id'];
+            }
+
+            $teacherList = UserManager::getUsersFollowedByUser(
+                $userId,
+                COURSEMANAGER,
+                false,
+                false,
+                false,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                COURSEMANAGER
+            );
+
+            $teachers = array();
+            foreach ($teacherList as $teacherData) {
+                $teachers[] = $teacherData['user_id'];
+            }
+
+            $humanResources = UserManager::getUsersFollowedByUser(
+                $userId,
+                DRH,
+                false,
+                false,
+                false,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                COURSEMANAGER
+            );
+
+            $humanResourcesList = array();
+            foreach ($humanResources as $item) {
+                $humanResourcesList[] = $item['user_id'];
+            }
+
+            $platformCourses = CourseManager::getCoursesFollowedByUser(
+                $userId,
+                COURSEMANAGER
+            );
             foreach ($platformCourses as $course) {
                 $courses[$course['code']] = $course['code'];
             }
 
-            $sessions = SessionManager::get_sessions_followed_by_drh($userId);
+            $sessions = SessionManager::getSessionsFollowedByUser(
+                $userId,
+                COURSEMANAGER
+            );
         }
 
         return array(

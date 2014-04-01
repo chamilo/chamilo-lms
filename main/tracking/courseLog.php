@@ -51,9 +51,9 @@ if (api_is_drh()) {
     // Blocking course for drh
     if (api_drh_can_access_all_session_content()) {
         // If the drh has been configured to be allowed to see all session content, give him access to the session courses
-        $coursesFromSession = SessionManager::getAllCoursesFromAllSessionFromDrh(api_get_user_id());
+        $coursesFromSession = SessionManager::getAllCoursesFollowedByUser(api_get_user_id(), null);
         if (!empty($coursesFromSession)) {
-            $coursesFromSession = array_values($coursesFromSession);
+            $coursesFromSession = array_keys($coursesFromSession);
         }
 
         $coursesFollowedList = CourseManager::get_courses_followed_by_drh(api_get_user_id());

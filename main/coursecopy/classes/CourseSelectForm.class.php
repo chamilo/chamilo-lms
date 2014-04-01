@@ -146,7 +146,11 @@ class CourseSelectForm
 		echo '<form method="post" id="upload_form" name="course_select_form" onsubmit="javascript: myUpload.start(\'dynamic_div\',\''.api_get_path(WEB_CODE_PATH).'img/progress_bar.gif\',\''.get_lang('PleaseStandBy', '').'\',\'upload_form\')">';
 		echo '<input type="hidden" name="action" value="course_select_form"/>';
 
-		if (!empty($hidden_fields['destination_course']) && !empty($hidden_fields['origin_course']) && !empty($hidden_fields['destination_session']) && !empty($hidden_fields['origin_session']) ) {
+		if (!empty($hidden_fields['destination_course']) &&
+            !empty($hidden_fields['origin_course']) &&
+            !empty($hidden_fields['destination_session']) &&
+            !empty($hidden_fields['origin_session'])
+        ) {
 			echo '<input type="hidden" name="destination_course" 	value="'.$hidden_fields['destination_course'].'"/>';
 			echo '<input type="hidden" name="origin_course" 		value="'.$hidden_fields['origin_course'].'"/>';
 			echo '<input type="hidden" name="destination_session" 	value="'.$hidden_fields['destination_session'].'"/>';
@@ -314,8 +318,11 @@ class CourseSelectForm
 		echo '<div id="dynamic_div" style="display:block;margin-left:40%;margin-top:10px;height:50px;"></div>';
 	}
 
-
-    static function display_hidden_quiz_questions($course) {
+    /**
+     * @param $course
+     */
+    static function display_hidden_quiz_questions($course)
+    {
 		if(is_array($course->resources)){
 			foreach ($course->resources as $type => $resources) {
 				if (count($resources) > 0) {
@@ -331,7 +338,11 @@ class CourseSelectForm
 		}
 	}
 
-	static function display_hidden_scorm_directories($course) {
+    /**
+     * @param $course
+     */
+    static function display_hidden_scorm_directories($course)
+    {
         if (is_array($course->resources)){
 			foreach ($course->resources as $type => $resources) {
 				if (count($resources) > 0) {
@@ -521,7 +532,8 @@ class CourseSelectForm
 	 * @param array $hidden_fiels Hidden fields to add to the form.
 	 * @param boolean the document array will be serialize. This is used in the course_copy.php file
 	 */
-	 function display_form_session_export($list_course, $hidden_fields = null, $avoid_serialize=false) {
+	 function display_form_session_export($list_course, $hidden_fields = null, $avoid_serialize=false)
+     {
 ?>
 		<script>
 			function exp(item) {

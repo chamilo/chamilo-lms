@@ -1052,7 +1052,6 @@ switch ($action) {
             
             $i++;
         }
-        //$count = count($users);
         break;
     case 'get_extra_field_options':
         $obj = new ExtraFieldOption($type);

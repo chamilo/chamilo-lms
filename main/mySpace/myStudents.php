@@ -180,20 +180,18 @@ if (empty($session_id)) {
 
 $student_id = intval($_GET['student']);
 
-$token = Security::get_token();
-
 // Action behaviour
 $check = Security::check_token('get');
 
 if ($check) {
 	switch ($_GET['action']) {
 		case 'reset_lp' :
-			$course		= isset($_GET['course']) ? $_GET['course']:"";
-			$lp_id		= isset($_GET['lp_id'])	 ? intval($_GET['lp_id']):"";
+			$course	 = isset($_GET['course']) ? $_GET['course'] : "";
+			$lp_id	 = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : "";
 
 			if (api_is_allowed_to_edit() && !empty($course) && !empty($lp_id) && !empty($student_id)) {
 				$course_info 	= api_get_course_info($course);
-                delete_student_lp_events($student_id, $lp_id, $course_info, $session_id);
+                                delete_student_lp_events($student_id, $lp_id, $course_info, $session_id);
 
 				//@todo delete the stats.track_e_exercices records. First implement this http://support.chamilo.org/issues/1334
 				$message = Display::return_message(get_lang('LPWasReset'),'success');
@@ -204,8 +202,8 @@ if ($check) {
 	}
 	Security::clear_token();
 }
-
-
+//Generate a new token
+$token = Security::get_token();
 // user info
 $user_info = api_get_user_info($student_id);
 

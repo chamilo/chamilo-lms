@@ -76,7 +76,6 @@ function loadGraph() {
     var startDate = $('#date_from').val();
     var endDate = $('#date_to').val();
     var type = $('#type option:selected').val();
-    console.log(type);
     $.ajax({
         url: '".$url."&startDate='+startDate+'&endDate='+endDate+'&type='+type,
         dataType: 'json',

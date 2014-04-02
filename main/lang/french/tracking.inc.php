@@ -2,6 +2,26 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SleepingStudents = "Apprenants sans activité durant les derniers jours";
+$SleepingTeachers = "Enseignants sans activité durant les derniers jours";
+$InactiveUsers = "Utilisateurs au compte désactivé";
+$ActiveUsers = "Utilisateurs actifs";
+$SurveysProgress = "Progrès dans les enquêtes";
+$SurveysLeft = "Enquêtes non répondues";
+$SurveysDone = "Enquêtes répondues";
+$SurveysTotal = "Enquêtes totales";
+$WikiProgress = "Progrès de lecture des pages de wiki";
+$WikiUnread = "Pages de wiki non lues";
+$WikiRead = "Pages de wiki lues";
+$WikiRevisions = "Révisions des pages de wiki";
+$WikiTotal = "Nombre total de pages de wiki";
+$AssignmentsProgress = "Progrès dans les tâches";
+$AssignmentsLeft = "Tâches non remises";
+$AssignmentsDone = "Tâches remises";
+$AssignmentsTotal = "Tâches totales";
+$ForumsProgress = "Progrès dans les forums";
+$ForumsLeft = "Forums non lus";
+$ForumsDone = "Forums lus";
 $ForumsTotal = "Total des forums";
 $ExercisesProgress = "Progrès des exercices";
 $ExercisesLeft = "Exercices incomplètes";

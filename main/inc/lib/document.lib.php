@@ -548,7 +548,6 @@ class DocumentManager
 
         if ($result !== false && Database::num_rows($result) != 0) {
             while ($row = Database::fetch_array($result, 'ASSOC')) {
-
                 if (api_is_coach()) {
                     // Looking for course items that are invisible to hide it in the session
                     if (in_array($row['id'], array_keys($doc_list))) {
@@ -644,6 +643,7 @@ class DocumentManager
             } else {
                 $final_document_data = $document_data;
             }
+
             return $final_document_data;
         } else {
             return false;
@@ -658,8 +658,11 @@ class DocumentManager
      * @param boolean $can_see_invisible
      * @return array with paths
      */
-    public static function get_all_document_folders($_course, $to_group_id = '0', $can_see_invisible = false)
-    {
+    public static function get_all_document_folders(
+        $_course,
+        $to_group_id = '0',
+        $can_see_invisible = false
+    ) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 
@@ -800,7 +803,7 @@ class DocumentManager
      *
      * @param array  $_course
      * @param int    $user_id id of the current user
-     * @param string $file path stored in the database
+     * @param string $file path stored in the database (if not defined, $documentId must be used)
      * @param int    $document_id in case you dont have the file path ,insert the id of the file here and leave $file in blank ''
      * @param bool $to_delete
      * @param int $sessionId
@@ -809,10 +812,11 @@ class DocumentManager
     public static function check_readonly(
         $_course,
         $user_id,
-        $file,
+        $file = null,
         $document_id = '',
         $to_delete = false,
-        $sessionId = null
+        $sessionId = null,
+        $documentId = null
     ) {
 
         if (empty($sessionId)) {
@@ -978,7 +982,7 @@ class DocumentManager
      *
      * @param array $_course
      * @param string $path, path stored in the database
-     * @param string $base_work_dir, path to the documents folder
+     * @param string $base_work_dir, path to the documents folder (if not defined, $documentId must be used)
      * @param int   $sessionId The ID of the session, if any
      * @param int   $documentId The document id, if available
      * @return boolean true/false
@@ -988,7 +992,7 @@ class DocumentManager
     {
         $TABLE_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
         // @todo We should be able to get rid of this later when using only documentId (check further usage)
-        if (empty ($documentId)) {
+        if (empty($documentId)) {
             if (empty($path) || empty($base_work_dir)) {
                 return false;
             }
@@ -1024,7 +1028,6 @@ class DocumentManager
         }
 
         $document_exists_in_disk = file_exists($base_work_dir.$path);
-
         $new_path = $path.'_DELETED_'.$document_id;
 
         $file_deleted_from_db = false;
@@ -1660,7 +1663,7 @@ class DocumentManager
 
     /**
      * Remove default certificate
-     * @param string The course id
+     * @param string The course code
      * @param int The document id of the default certificate
      * @return void()
      */
@@ -1683,14 +1686,16 @@ class DocumentManager
             }
 
             $sql = 'UPDATE ' . $tbl_category . ' SET document_id=null
-                  WHERE course_code="' . Database::escape_string($course_id) . '" AND document_id="' . $default_certificate_id . '" ' . $sql_session;
+                    WHERE
+                        course_code = "' . Database::escape_string($course_id) . '" AND
+                        document_id="' . $default_certificate_id . '" ' . $sql_session;
             Database::query($sql);
         }
     }
 
     /**
      * Create directory certificate
-     * @param string The course id
+     * @param string The course code
      * @return void()
      */
     public static function create_directory_certificate_in_course($course_id)
@@ -2627,12 +2632,12 @@ class DocumentManager
     }
 
     /**
-     *  Here we count 1 kilobyte = 1000 byte, 12 megabyte = 1000 kilobyte.
+     *  Here we count 1 Kilobyte = 1024 Bytes, 1 Megabyte = 1048576 Bytes
      */
     static function display_quota($course_quota, $already_consumed_space)
     {
-        $course_quota_m = round($course_quota / 1000000);
-        $already_consumed_space_m = round($already_consumed_space / 1000000);
+        $course_quota_m = round($course_quota / 1048576);
+        $already_consumed_space_m = round($already_consumed_space / 1048576);
 
         $message = get_lang('MaximumAllowedQuota') . ' <strong>' . $course_quota_m . ' megabyte</strong>.<br />';
         $message .= get_lang('CourseCurrentlyUses') . ' <strong>' . $already_consumed_space_m . ' megabyte</strong>.<br />';
@@ -2676,12 +2681,12 @@ class DocumentManager
     /**
      * Display the document quota in a simple way
      *
-     *  Here we count 1 kilobyte = 1000 byte, 12 megabyte = 1000 kilobyte.
+     *  Here we count 1 Kilobyte = 1024 Bytes, 1 Megabyte = 1048576 Bytes
      */
     static function display_simple_quota($course_quota, $already_consumed_space)
     {
-        $course_quota_m = round($course_quota / 1000000);
-        $already_consumed_space_m = round($already_consumed_space / 1000000, 2);
+        $course_quota_m = round($course_quota / 1048576);
+        $already_consumed_space_m = round($already_consumed_space / 1048576, 2);
         $percentage = $already_consumed_space / $course_quota * 100;
         $percentage = round($percentage, 1);
         $message = get_lang('YouAreCurrentlyUsingXOfYourX');

@@ -137,6 +137,34 @@ if ($user_already_registered_show_terms == false) {
         $form->addElement('radio', 'status', null, get_lang('RegAdmin'), COURSEMANAGER);
     }
 
+    $allowCaptcha = isset($_configuration['allow_captcha']) ? $_configuration['allow_captcha'] : false;
+
+    if ($allowCaptcha) {
+
+        $ajax = api_get_path(WEB_AJAX_PATH).'form.ajax.php?a=get_captcha';
+
+        $options = array(
+                'width'        => 220,
+                'height'       => 90,
+                'callback'     => $ajax.'&var='.basename(__FILE__, '.php'),
+                'sessionVar'   => basename(__FILE__, '.php'),
+                'imageOptions' => array(
+                    'font_size' => 20,
+                    'font_path' => api_get_path(LIBRARY_PATH).'pchart/fonts/',
+                    'font_file' => 'tahoma.ttf',
+                        //'output' => 'gif'
+                )
+        );
+
+        $captcha_question =  $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
+        $form->addElement('static', null, null, get_lang('ClickOnTheImageForANewOne'));
+
+        $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'), array('size' => 40));
+        $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');
+
+        $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
+    }
+
     //	EXTENDED FIELDS
     if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true') {
         $form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'register', 'Width' => '100%', 'Height' => '130'));

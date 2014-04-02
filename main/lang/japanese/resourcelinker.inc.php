@@ -3,7 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $ResourceAdded = "Resource added. You can now go back to the path or add more resources.";
-$LearningPath = "Learning Path";
+$LearningPath = "学習パス";
 $LevelUp = "level up";
 $AddIt = "Add it";
 $MainCategory = "main category";
@@ -17,9 +17,16 @@ $ExternalResources = "External resources";
 $CourseResources = "Course resources";
 $ExternalLink = "External link";
 $DropboxAdd = "Add the dropbox page to this chapter.";
-$AddAssignmentPage = "Add the upload assignment page to this chapter.";
+$AddAssignmentPage = "課題ツールをコースに追加";
 $Exercise = "Test";
 $Link = "Link";
 $AdValvas = "Ad Valvas";
 $Document = "Document";
+$CourseDescription = "コースの説明";
+$Users = "ユーザー";
+$LinkTarget = "リンク先";
+$Modify = "編集";
+$AgendaAdd = "イベントを追加";
+$ItemTitle = "イベント名";
+$AddCalendarItem = "イベントを予定表に追加";
 ?>

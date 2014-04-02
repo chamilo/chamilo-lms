@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+use ChamiloSession as Session;
 
 $language_file = array('exercice', 'work', 'document', 'admin', 'gradebook');
 
@@ -10,7 +11,6 @@ $lib_path = api_get_path(LIBRARY_PATH);
 require_once $lib_path.'fileManage.lib.php';
 require_once 'work.lib.php';
 
-
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
 
@@ -19,6 +19,7 @@ if (!api_is_allowed_to_edit()) {
 }
 
 $courseInfo = api_get_course_info();
+$groupId = api_get_group_id();
 $workId = isset($_GET['id']) ? intval($_GET['id']) : null;
 $workData = get_work_data_by_id($workId);
 $homework = get_work_assignment_by_id($workId);
@@ -31,8 +32,6 @@ if (api_is_platform_admin() == false && $locked == true) {
 $htmlHeadXtra[] = to_javascript_work();
 $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Edit'));
-
-Display::display_header();
 
 $form = new FormValidator('edit_dir', 'post', api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'. api_get_cidreq());
 $form->addElement('header', get_lang('Edit'));
@@ -60,9 +59,7 @@ if ($homework['expires_on'] != '0000-00-00 00:00:00') {
     $there_is_a_expire_date = true;
     $defaults['enableExpiryDate'] = true;
 } else {
-    $homework['expires_on'] = api_get_local_time();
-    $expires_date_array = convert_date_to_array(api_get_local_time(), 'expires');
-    $defaults 			= array_merge($defaults, $expires_date_array);
+    $homework['expires_on'] = null;
     $there_is_a_expire_date = false;
 }
 
@@ -70,22 +67,17 @@ if ($homework['ends_on'] != '0000-00-00 00:00:00') {
     $homework['ends_on'] = api_get_local_time($homework['ends_on']);
     $there_is_a_end_date = true;
     $defaults['enableEndDate'] = true;
-
 } else {
-    $homework['ends_on'] = api_get_local_time();
-    $expires_date_array = convert_date_to_array(api_get_local_time(), 'ends');
-    $defaults 			= array_merge($defaults, $expires_date_array);
+    $homework['ends_on'] = null;
     $there_is_a_end_date = false;
 }
 
 if ($there_is_a_end_date) {
-    $end_date_array = convert_date_to_array($homework['ends_on'], 'ends');
-    $defaults = array_merge($defaults, $end_date_array);
+    $defaults['ends_on'] = $homework['ends_on'];
 }
 
 if ($there_is_a_expire_date) {
-    $expires_date_array = convert_date_to_array($homework['expires_on'], 'expires');
-    $defaults = array_merge($defaults, $expires_date_array);
+    $defaults['expires_on'] = $homework['expires_on'];
 }
 
 $defaults['add_to_calendar'] = isset($homework['add_to_calendar']) ? $homework['add_to_calendar'] : null;
@@ -93,30 +85,38 @@ $form = getFormWork($form, $defaults);
 $form->addElement('hidden', 'work_id', $workId);
 $form->addElement('style_submit_button', 'submit', get_lang('ModifyDirectory'), 'class="save"');
 
-$display_edit_form = true;
-
 if ($form->validate()) {
     $params = $form->exportValues();
     $workId = $params['work_id'];
-    $edit_check = false;
+    $editCheck = false;
     $workData = get_work_data_by_id($workId);
 
     if (!empty($workData)) {
-        $edit_check = true;
+        $editCheck = true;
     } else {
-        $edit_check = true;
+        $editCheck = true;
     }
 
-    if ($edit_check) {
+    if ($editCheck) {
         updateWork($workId, $params, $courseInfo);
-        updatePublicationAssignment($workId, $params, $courseInfo, $group_id);
+        updatePublicationAssignment($workId, $params, $courseInfo, $groupId);
         updateDirName($workData, $params['new_dir']);
 
-        Display::display_confirmation_message(get_lang('FolderEdited'));
+        $currentUrl = api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq();
+        Session::write('message', Display::return_message(get_lang('FolderEdited'), 'success'));
+        header('Location: '.$currentUrl);
+        exit;
+
     } else {
-        Display::display_warning_message(get_lang('FileExists'));
+        Session::write('message', Display::return_message(get_lang('FileExists'), 'warning'));
     }
 }
+
+Display::display_header();
+
+$message = Session::read('message');
+echo $message;
+Session::erase('message');
 
 $form->display();
 

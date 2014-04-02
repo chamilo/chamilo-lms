@@ -2617,7 +2617,7 @@ class SurveyUtil {
 			foreach ($questions as $key => & $question) {
 				// If the question type is a scoring then we have to format the answers differently
 				if ($question['type'] == 'score') {
-					if (is_array($second_parameter) && is_array($question) && is_array($all_answers)) {
+					if (is_array($question) && is_array($all_answers)) {
 						foreach ($all_answers[$question['question_id']] as $key => & $answer_array) {
 							$second_parameter[$answer_array['option_id']] = $answer_array['value'];
 						}

@@ -53,7 +53,6 @@ $length 	= '36';
 // Database Table Definitions
 $tbl_courses			= Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_sessions			= Database::get_main_table(TABLE_MAIN_SESSION);
-
 $tbl_announcement		= Database::get_course_table(TABLE_ANNOUNCEMENT);
 $tbl_item_property  	= Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -73,8 +72,8 @@ $course_id = api_get_course_int_id();
 event_access_tool(TOOL_ANNOUNCEMENT);
 
 /*	POST TO	*/
-$safe_emailTitle = $_POST['emailTitle'];
-$safe_newContent = $_POST['newContent'];
+$safe_emailTitle = isset($_POST['emailTitle']) ? $_POST['emailTitle'] : null;
+$safe_newContent = isset($_POST['newContent']) ? $_POST['newContent'] : null;
 
 $content_to_modify = $title_to_modify 	= '';
 
@@ -98,10 +97,10 @@ if (!empty($_POST['To'])) {
 */
 
 $setting_select_groupusers = true;
-if (empty($_POST['To']) and !$_SESSION['select_groupusers']) {
+if (empty($_POST['To']) and !isset($_SESSION['select_groupusers'])) {
 	$_SESSION['select_groupusers'] = "hide";
 }
-$select_groupusers_status=$_SESSION['select_groupusers'];
+$select_groupusers_status = isset($_SESSION['select_groupusers']) ? $_SESSION['select_groupusers']:null;
 if (!empty($_POST['To']) and ($select_groupusers_status=="hide")) {
 	$_SESSION['select_groupusers'] = "show";
 }
@@ -168,7 +167,7 @@ if (!empty($group_id)) {
 	$interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$group_id, "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
 }
 
-$announcement_id = intval($_GET['id']);
+$announcement_id = isset($_GET['id']) ? intval($_GET['id']) : null;
 $message = null;
 
 if (empty($_GET['origin']) or $_GET['origin'] !== 'learnpath') {
@@ -557,8 +556,10 @@ if (api_is_allowed_to_edit() && $announcement_number > 1) {
 	if (api_get_group_id() == 0 ) {
 		if (!$show_actions)
 			echo '<div class="actions">';
-			if (!in_array($_GET['action'], array('add', 'modify','view')))
-                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".Display::return_icon('delete_announce.png',get_lang('AnnouncementDeleteAll'),'',ICON_SIZE_MEDIUM)."</a>";
+			if (!isset($_GET['action'])) {
+                echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".
+                    Display::return_icon('delete_announce.png',get_lang('AnnouncementDeleteAll'),'',ICON_SIZE_MEDIUM)."</a>";
+            }
     	}	// if announcementNumber > 1
 }
 
@@ -605,12 +606,11 @@ if ($display_form) {
 	if (empty($group_id)) {
 		echo '	<div class="control-group">
 					<label class="control-label">'.
-						Display::return_icon('group.png', get_lang('ModifyRecipientList'), array ('align' => 'absmiddle'),ICON_SIZE_SMALL).'<a href="#" onclick="toggle_sendto();">'.get_lang('SentTo').'</a>
+						Display::return_icon('group.png', get_lang('ModifyRecipientList'), array ('align' => 'absmiddle'),ICON_SIZE_SMALL).' '.get_lang('SentTo').'
 					</label>
 					<div class="controls">';
-		if (isset($_GET['id']) && is_array($to)) {
-			echo '<span id="recipient_overview">&nbsp;</span>';
-		} elseif (isset($_GET['remind_inactive'])) {
+
+		if (isset($_GET['remind_inactive'])) {
 			$email_ann = '1';
 			$_SESSION['select_groupusers']="show";
 			$content_to_modify = sprintf(get_lang('RemindInactiveLearnersMailContent'), api_get_setting('siteName'), 7);
@@ -640,7 +640,7 @@ if ($display_form) {
 				$content_to_modify = get_lang('YourAccountIsActiveYouCanLoginAndCheckYourCourses');
 			}
 		} else {
-			echo '<span id="recipient_overview">' . get_lang('Everybody') . '</span>';
+			//echo '<span id="recipient_overview">' . get_lang('Everybody') . '</span>';
 		}
 		AnnouncementManager::show_to_form($to);
 		echo '		</div>
@@ -739,7 +739,7 @@ if ($display_form) {
 	if (empty($group_id)) {
 		echo '<input type="hidden" name="submitAnnouncement" value="OK">';
 		echo '<input type="hidden" name="sec_token" value="'.$stok.'" />';
-		echo '<button class="btn save" type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[3],true)" >'.get_lang('ButtonPublishAnnouncement').'</button><br /><br />';
+		echo '<button class="btn save" type="button"  value="'.'  '.get_lang('Send').'  '.'" onclick="selectAll(this.form.elements[4],true)" >'.get_lang('ButtonPublishAnnouncement').'</button><br /><br />';
 	} else {
 		echo '<input type="hidden" name="submitAnnouncement" value="OK">';
 		echo '<input type="hidden" name="sec_token" value="'.$stok.'" />';

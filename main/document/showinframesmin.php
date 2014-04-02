@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  *	@author Juan Carlos Raña Trabado (herodoto@telefonica.net)
- *  
+ *
  *	@package chamilo.document
  */
 /**
@@ -24,13 +24,13 @@ $header_file = Security::remove_XSS($_GET['file']);
 $document_id = intval($_GET['id']);
 
 $course_info = api_get_course_info();
-$course_code = api_get_course_id(); 
+$course_code = api_get_course_id();
 
 if (empty($course_info)) {
     api_not_allowed(true);
 }
 
-//Generate path 
+//Generate path
 if (!$document_id) {
     $document_id = DocumentManager::get_document_id($course_info, $header_file);
 }
@@ -70,7 +70,14 @@ if ($is_allowed_in_course == false) {
 
 //Check user visibility
 //$is_visible = DocumentManager::is_visible_by_id($document_id, $course_info, api_get_session_id(), api_get_user_id());
-$is_visible = DocumentManager::check_visibility_tree($document_id, api_get_course_id(), api_get_session_id(), api_get_user_id());
+$is_visible = DocumentManager::check_visibility_tree(
+    $document_id,
+    api_get_course_id(),
+    api_get_session_id(),
+    api_get_user_id(),
+    api_get_group_id()
+);
+
 if (!api_is_allowed_to_edit() && !$is_visible) {
     api_not_allowed(true);
 }
@@ -130,12 +137,12 @@ $htmlHeadXtra[] = '
         //document.getElementById("mainFrame").style.height = ((docHeight-(parseInt(HeaderHeight)+parseInt(FooterHeight)))+60)+"px";
         my_iframe           = document.getElementById("mainFrame");
         new_height          = my_iframe.contentWindow.document.body.scrollHeight;
-        my_iframe.height    = my_iframe.contentWindow.document.body.scrollHeight + "px";        
+        my_iframe.height    = my_iframe.contentWindow.document.body.scrollHeight + "px";
     };
 
     // Fixes the content height of the frame
     window.onload = function() {
-         updateContentHeight();    
+         updateContentHeight();
         '.$js_glossary_in_documents.'
     }
 -->
@@ -158,6 +165,6 @@ if ($pathinfo['extension']=='wav' && preg_match('/_chnano_.wav/i', $file_url_web
 	echo '</div>';
 } else {
 	if ($pathinfo['extension']=='swf'){ $width='83%'; $height='83%';} else {$width='100%'; $height='';}
-	
+
 	echo '<iframe border="0" frameborder="0" scrolling="no" style="width:'.$width.'; height:'.$height.';background-color:#ffffff;" id="mainFrame" name="mainFrame" src="'.$file_url_web.'&amp;rand='.mt_rand(1, 10000).'"></iframe>';
 }

@@ -1795,18 +1795,18 @@ class learnpath
         if ($this->mode == 'fullscreen') {
             $navbar = '
                   <div class="buttons">
-                    <a href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onClick="window.parent.API.save_asset();return true;" target="content_name_blank" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="' . get_lang('Reporting') . '"></a>
-                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="' . get_lang('ScormPrevious') . '"></a>
-                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="' . get_lang('ScormNext') . '"></a>.
+                    <a href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onClick="window.parent.API.save_asset();return true;" target="content_name_blank" title="stats" id="stats_link"><img border="0" src="../img/btn_stats.png" title="' . get_lang('Reporting') . '"></a>
+                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/btn_previus.png" title="' . get_lang('ScormPrevious') . '"></a>
+                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/btn_next.png" title="' . get_lang('ScormNext') . '"></a>.
                     <a href="lp_controller.php?action=mode&mode=embedded" target="_top" title="embedded mode"><img border="0" src="../img/view_choose.gif" title="'.get_lang('ScormExitFullScreen').'"></a>
                   </div>';
 
         } else {
             $navbar = '
                   <div class="buttons">
-                    <a href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onClick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link"><img border="0" src="../img/lp_stats.gif" title="' . get_lang('Reporting') . '"></a>
-                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/lp_leftarrow.gif" title="' . get_lang('ScormPrevious') . '"></a>
-                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/lp_rightarrow.gif" title="' . get_lang('ScormNext') . '"></a>
+                    <a href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onClick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link"><img border="0" src="../img/btn_stats.png" title="' . get_lang('Reporting') . '"></a>
+                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/btn_previus.png" title="' . get_lang('ScormPrevious') . '"></a>
+                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/btn_next.png" title="' . get_lang('ScormNext') . '"></a>
                   </div>';
         }
         return $navbar;
@@ -2918,6 +2918,18 @@ class learnpath
                 'browsed'       => '../img/completed.png',
             );
 
+            // Style Status
+
+            $class_name = array (
+                'not attempted' => 'scrom_not_attempted',
+                'incomplete'    => 'scrom_incomplete',
+                'failed'        => 'scrom_failed',
+                'completed'     => 'scrom_completed',
+                'passed'        => 'scrom_passed',
+                'succeeded'     => 'scrom_succeeded',
+                'browsed'       => 'scrom_completed',
+            );
+
             $style = 'scorm_item';
             $scorm_color_background = 'scorm_item';
             $style_item = 'scorm_item';
@@ -2933,12 +2945,12 @@ class learnpath
                     $scorm_color_background = 'scorm_item_2';
                 }
                 if ($item['type'] == 'dokeos_module' || $item['type'] == 'dokeos_chapter') {
-                	$scorm_color_background =' scorm_item_section ';
+                    $scorm_color_background =' scorm_item_section ';
                 }
             }
 
             if ($scorm_color_background != '') {
-                $html .= '<div id="toc_' . $item['id'] . '" class="' . $scorm_color_background . '">';
+                $html .= '<div id="toc_' . $item['id'] . '" class="' . $scorm_color_background . ' '.$class_name[$item['status']].' ">';
             }
 
             // Learning path title
@@ -2979,7 +2991,8 @@ class learnpath
                             status <> 'incomplete'";
             $result = Database::query($sql);
             $count = Database :: num_rows($result);*/
-            if ($item['type'] == 'quiz') {
+            
+            /*if ($item['type'] == 'quiz') {
                 if ($item['status'] == 'completed') {
                     $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name[$item['status']] . "' alt='" . substr($item['status'], 0, 1) . "' width='14' />";
                 } else {
@@ -2990,6 +3003,7 @@ class learnpath
                     $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name[$item['status']] . "' alt='" . substr($item['status'], 0, 1) . "' width='14' />";
                 }
             }
+            */
 
             $html .= "</div>";
 
@@ -3002,7 +3016,6 @@ class learnpath
         $html .= "</div>";
         return $html;
     }
-
     /**
      * Gets the learnpath maker name - generally the editor's name
      * @return	string	Learnpath maker name
@@ -5008,8 +5021,7 @@ class learnpath
     }
 
     /**
-     * Function that creates a table structure with a learning path his modules, chapters and documents.
-     * Also the actions for the modules, chapters and documents are in this table.
+     * Function that creates a html list of learning path items so that we can add audio files to them
      * @author Kevin Van Den Haute
      * @param int $lp_id
      * @return string
@@ -5620,7 +5632,7 @@ class learnpath
                 // The first regexp deals with :// urls.
                 $content = preg_replace("|(flashvars=\"file=)([^:/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $_course['path'] . '/document/', $content);
                 // The second regexp deals with audio/ urls.
-                $content = preg_replace("|(flashvars=\"file=)([^/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $_course['path'] . '/document/$2/', $content);
+                $content = preg_replace("|(flashvars=\"file=)([^:/]+)/|", "$1" . api_get_path(REL_COURSE_PATH) . $_course['path'] . '/document/$2/', $content);
                 fputs($fp, $content);
                 fclose($fp);
 
@@ -6849,7 +6861,6 @@ class learnpath
         $form->addElement('hidden', 'type', 'dokeos_' . $item_type);
         $form->addElement('hidden', 'post_time', time());
         $form->setDefaults($defaults);
-
         return $form->return_form();
     }
 
@@ -7634,7 +7645,7 @@ class learnpath
                                 s1.write("container");
                             </script>';
         }
-
+        
         $url = api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
 
         $return .= Display::url(
@@ -7835,6 +7846,7 @@ class learnpath
         $row    = Database::fetch_array($result);
 
         $preq_id = $row['prerequisite'];
+        
 
         //$return = $this->display_manipulate($item_id, TOOL_DOCUMENT);
         $return = '<legend>';
@@ -7904,6 +7916,7 @@ class learnpath
             $return .=  $arrLP[$i]['title'] . '</label>';
             $return .= '</td>';
 
+          
             if ($arrLP[$i]['item_type'] == TOOL_QUIZ) {
                 // lets update max_score Quiz information depending of the Quiz Advanced properties
                 require_once api_get_path(LIBRARY_PATH)."lp_item.lib.php";
@@ -7938,7 +7951,6 @@ class learnpath
         $return .= '<div style="padding-top:3px;">';
         $return .= '<button class="save" name="submit_button" type="submit">' . get_lang('ModifyPrerequisites') . '</button>';
         $return .= '</form>';
-
         return $return;
     }
 

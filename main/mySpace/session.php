@@ -25,42 +25,12 @@ if (isset($_GET['export']) && $_GET['export'] == 'csv') {
     $export_csv = true;
 }
 
-/*
-	FUNCTION
-*/
-
-function count_sessions_coached()
-{
-    global $nb_sessions;
-    return $nb_sessions;
-}
-
-function sort_sessions($a, $b)
-{
-    global $tracking_column;
-    if ($a[$tracking_column] > $b[$tracking_column]) {
-        return 1;
-    } else {
-        return -1;
-    }
-}
-
-function rsort_sessions($a, $b)
-{
-    global $tracking_column;
-    if ($b[$tracking_column] > $a[$tracking_column]) {
-        return 1;
-    } else {
-        return -1;
-    }
-}
-
 /*	MAIN CODE */
 
 if (isset($_GET['id_coach']) && $_GET['id_coach'] != '') {
     $id_coach = intval($_GET['id_coach']);
 } else {
-    $id_coach = $_user['user_id'];
+    $id_coach = api_get_user_id();
 }
 
 if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
@@ -114,12 +84,21 @@ if (api_is_drh() || api_is_session_admin() || api_is_platform_admin()) {
     echo Display::page_header(get_lang('YourSessionsList'));
 
 } else {
-    $a_sessions = Tracking :: get_sessions_coached_by_user($id_coach);
+    $a_sessions = Tracking::get_sessions_coached_by_user($id_coach);
 }
 
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions_tracking';
+$form = new FormValidator('search_course', 'get', api_get_path(WEB_CODE_PATH).'mySpace/session.php');
+$form->addElement('text', 'keyword', get_lang('Keyword'));
+$form->addElement('button', 'submit', get_lang('Search'));
+$form->addElement('hidden', 'session_id', $sessionId);
+$keyword = null;
+if ($form->validate()) {
+    $keyword = $form->getSubmitValue('keyword');
+}
+$form->setDefaults(array('keyword' => $keyword));
 
-//The order is important you need to check the the $column variable in the model.ajax.php file
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions_tracking&keyword='.Security::remove_XSS($keyword);
+
 $columns = array(
     get_lang('Title'),
     get_lang('Date'),
@@ -129,12 +108,12 @@ $columns = array(
 );
 
 // Column config
-$columnModel   = array(
-    array('name'=>'name',                'index'=>'name',        'width'=>'255',   'align'=>'left'),
-    array('name'=>'date',                'index'=>'date', 'width'=>'150',  'align'=>'left','sortable'=>'false'),
-    array('name'=>'course_per_session',  'index'=>'course_per_session',     'width'=>'150','sortable'=>'false'),
-    array('name'=>'student_per_session', 'index'=>'student_per_session',     'width'=>'100','sortable'=>'false'),
-    array('name'=>'details',             'index'=>'details',     'width'=>'100','sortable'=>'false'),
+$columnModel = array(
+    array('name'=>'name', 'index'=>'name', 'width'=>'255', 'align'=>'left'),
+    array('name'=>'date', 'index'=>'date', 'width'=>'150', 'align'=>'left','sortable'=>'false'),
+    array('name'=>'course_per_session', 'index'=>'course_per_session', 'width'=>'150','sortable'=>'false'),
+    array('name'=>'student_per_session', 'index'=>'student_per_session', 'width'=>'100','sortable'=>'false'),
+    array('name'=>'details', 'index'=>'details', 'width'=>'100','sortable'=>'false')
 );
 
 $extraParams = array(
@@ -143,12 +122,23 @@ $extraParams = array(
 );
 
 $js = '<script>
-        $(function() {
-            '.Display::grid_js('session_tracking', $url, $columns, $columnModel, $extraParams, array(), null, true).'
-        });
-        </script>';
+    $(function() {
+        '.Display::grid_js(
+        'session_tracking',
+        $url,
+        $columns,
+        $columnModel,
+        $extraParams,
+        array(),
+        null,
+        true
+    ).'
+    });
+</script>';
 
 echo $js;
+$form->display();
+
 echo Display::grid_html('session_tracking');
 
 Display::display_footer();

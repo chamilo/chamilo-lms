@@ -4,7 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $langSelectOptionForBackup = "Please select a backup-option";
 $langLetMeSelectItems = "Let me select learning objects";
-$langCreateFullBackup = "Create a complete backup of this training";
+$langCreateFullBackup = "Create a complete backup of this course";
 $langCreateBackup = "Create a backup";
 $langBackupCreated = "The backup has been created. The download of this file will start in a few moments. If your download does not start, click the following link";
 $langSelectBackupFile = "Select a backup file";
@@ -22,7 +22,7 @@ $langCopyFinished = "Copying is finished";
 $langFullRecycle = "Delete everything";
 $langRecycleCourse = "Empty this course";
 $langRecycleFinished = "Recycle is finished";
-$langRecycleWarning = "Warning: using this tool, you will delete learning objects in your training. There is no UNDO possible. We advise you to create a <a href=\"create_backup.php\">backup</a> before.";
+$langRecycleWarning = "Warning: using this tool, you will delete learning objects in your course. There is no UNDO possible. We advise you to create a <a href=\"create_backup.php\">backup</a> before.";
 $langSameFilename = "What should be done with imported files with the same file name as existing files?";
 $langSameFilenameSkip = "Skip same file name";
 $langSameFilenameRename = "Rename file (eg file.pdf becomes file_1.pdf)";

@@ -119,23 +119,133 @@ The more frequent ones have been marked with *
     footer {
         margin-top: 0px;
     }
+    .course-tool {
+        width: 160px;
+    }
 }
 
 @media (min-width: 321px) and (max-width: 480px) {
-    header #header_center, header #header_right, header #header_left {
-        display:none;
+    body {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    
+    header #header_left {
+        display: block;
+    }
+    .page-section{
+        padding-left: 1em;
+        padding-right: 1em;
+    }
+    header #header_center, header #header_right{
+        display: none;
+        visibility: hidden;
+    }
+    #header_right #notifications {
+      padding:0;
+    }
+    #top_main_content .span6 {
+        width: 100%;
+    }
+    .well.form-inline {
+      clear: both;
+      display: inline-block;
+      margin-top: 22px;
+      width: 100%;
+    }
+    .nav.nav-pills {
+        background:#E9E9E9;
+    }
+    .new_actions .nav-tabs > li > a, .new_actions .nav-pills > li > a {
+        border: none;
+        padding-right: 7px;
+        padding-left: 7px;
+    }
+    legend {
+        margin-bottom: 10px;
+        color:#0191C7;
+        border-bottom:  1px solid #0191C7;
+    }
+    #login_block #formLogin, #login_block #lang_form, #notice_block .homepage_notice {
+      color: #777777;
+      font-size: 14px;        
+    }
+    #main_content .course-box .row .span7 .row .span6 h3 {
+        font-size: 14px;
+        font-weight: normal;
+        width: 35%;
+        line-height: 19px;
+    }
+    footer #footer_left, footer #footer_center{
+        display: none;
+    }
+    footer #footer_right {
+        display: block;
+        float: left;
+        text-align: center;
+        width: 100%;
+    }
+    .welcome-home-top-temp img{
+        height: 100%;
+        max-width: 100%;
+    }                
+
+    #top_main_content .menu-column #reservation_block, #top_main_content .menu-column #notice_block, #top_main_content .menu-column #help_block {
+      clear: both;
+      display: block;
+      width: auto;
+    }
+    #profile_block .nav-list li, #course_block .nav-list li {
+        padding-bottom: 3px;
+        padding-top: 3px;
+    }
+    .well_border .row .span2 .thumbnail {
+    background-color: #FFFFFF;
+    background-image: none;
+    display: none;
+    visibility: hidden;
     }
     .navbar {
       margin-top: 0em;
     }
+    header{
+        margin-top: 15px;
+    }
+    .subnav .dropdown-menu li a {
+    color: #FFFFFF;
+    font-weight: normal;
+    }
+
     .subnav .navbar-inner .in{
         margin-top: 45px;
     }
-
+    .section-mycampus #hot_courses {
+        display: none;
+        visibility: hidden;
+    }
     /* No chat in mobiles */
     #chatmain {
         display:none;
     }
+    #top_main_content .menu-column #profile_block{
+        float: none;
+        clear: both;
+        width: 250px;
+        margin-left: 10px;
+        background: none;
+        border:none;
+        box-shadow: none;
+     }
+     #top_main_content .menu-column #course_block{
+        float: none;
+        clear: both;
+        width: 250px;
+        margin-left: 10px;
+        background: none;
+        border:none;
+        box-shadow: none;
+     }
+
 
     /* No topbar */
     #topbar {
@@ -170,7 +280,7 @@ The more frequent ones have been marked with *
     }
 
     footer #footer_left a, footer #footer_center a, footer #footer_right a {
-        color : #999;
+        color : #F1D40D;
     }
 
     #footer_left , #footer_right #admin_name, #footer_right #software_name {
@@ -184,6 +294,17 @@ The more frequent ones have been marked with *
     /* No resize font */
     .resize_font {
         display:none;
+    }
+    .fc-header {
+        margin-top: 36px;
+    }
+    .fc-header-title h2 {
+        font-size: 19px;
+        font-weight: normal;
+        left: 20px;
+        position: absolute;
+        text-transform: uppercase;
+        top: 179px;
     }
 
     h3 {
@@ -202,13 +323,13 @@ The more frequent ones have been marked with *
     /* only for the course tools */
     #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {
         float: left;
-        margin-left: 10px;
+        margin-left: 0;
     }
     /* Course- home - Show 2 icons instead of one */
     .course-tool {
         float: left;
         height: 150px;
-        width: 160px;
+        width: 150px;
     }
 
     .course-tool h4 {
@@ -253,17 +374,18 @@ The more frequent ones have been marked with *
         display: none;
     }
     .section-mycampus #homepage {
-        width: 400px;
+        width: auto;
     }
     .section-mycampus #hot_courses {
         width: 400px;
     }
     .section-mycourses #top_main_content {
-        margin-right: 15px;
+        margin-right: 0px;
     }
     .section-mycourses #main_content {
         margin-right: 15px;
-        width: 400px;
+        width: 100%
+        ;
     }
     .section-mycourses .course-box .course-box-actions {
         display: none;
@@ -276,15 +398,110 @@ The more frequent ones have been marked with *
     }
 }
 
+
 @media (min-width: 481px) and (max-width: 800px) {
     /* No topbar */
     #topbar {
         display:none;
     }
+    
+    .subnav .dropdown-menu li a {
+    color: #FFFFFF;
+    font-weight: normal;
+    }
+    header{
+        margin-top: 15px;
+    }
+    #wrapper{
+        padding-left: 0;
+        padding-right: 0;
+    }
+    #top_main_content .menu-column {
+        width: 97%;
+    }
+    #top_main_content .menu-column .block_user_info{
+        width: 445px;
+        clear: both;
+        float: left;
+        
+    }
+     #top_main_content .menu-column .block_tools_info{
+        width: 225px;
+        float: left;
+        
+     }
+     #top_main_content .menu-column .block_tools_info #help_block{
+       display: none;
+       visibility: hidden;
+        
+     }
+    #top_main_content .menu-column #user_image_block{
+        float: left;
+        width: 100px;
+        background: none;
+        border:none;
+    }
+    #top_main_content .menu-column #course_block{
+        float: left;
+        background: none;
+        border:none;
+        box-shadow: none;
+    }
+    #top_main_content .menu-column #user_image_block img{
+        border: 3px solid #FFFFFF;
+        -webkit-box-shadow: 1px 0px 5px 0px rgba(50, 50, 50, 0.71);
+        -moz-box-shadow:    1px 0px 5px 0px rgba(50, 50, 50, 0.71);
+            box-shadow:         1px 0px 5px 0px rgba(50, 50, 50, 0.71);
+    }
+     #top_main_content .menu-column #profile_block{
+        float: left;
+        width: 250px;
+        margin-left: 10px;
+        background: none;
+        border:none;
+        box-shadow: none;
+     }
 
+     input.span2, textarea.span2, .uneditable-input.span2 {
+        height: 45px;
+        width: 97%;
+    }
+
+    #top_main_content .menu-column #reservation_block, #top_main_content .menu-column #notice_block, #top_main_content .menu-column #help_block {
+        clear: both;
+        display: block;
+        width: auto;
+    }
+    #top_main_content .menu-column .well{
+        padding: 15px;
+    }
+     .nav-list > li > a {
+      padding-bottom: 10px;
+      padding-left: 15px;
+      padding-right: 15px;
+      padding-top: 10px;
+      font-size: 16px;
+    }
+    
+    .bx-prev,.bx-next{
+    display: none;
+    }
+    .pagerslide h2 {
+    display: none;
+    visibility: hidden;
+    }
+    #login_block #formLogin, #login_block #lang_form, #notice_block .homepage_notice {
+      color: #666666;
+      font-size: 14px;
+      padding-bottom: 3px;
+      padding-left: 15px;
+      padding-right: 15px;
+      padding-top: 3px;
+    }
     /* only for the course tools */
     #course_tools .row > [class*="span"], #course_tools  .row-fluid > [class*="span"] {
         float: left;
+
     }
     .course-tool {
         width: 210px;
@@ -318,7 +535,7 @@ The more frequent ones have been marked with *
 
     /* Remove any padding from the body */
     body {
-        padding-top: 0;
+        padding: 0;
     }
 
     #topbar_push {
@@ -327,7 +544,7 @@ The more frequent ones have been marked with *
 
     /* Subnav */
     .subnav {
-        border:1px solid #fff;
+        border:none;
         position: static;
         top: auto;
         z-index: auto;
@@ -344,17 +561,15 @@ The more frequent ones have been marked with *
         border: 0;
     }
     .subnav .nav > li + li > a {
-        border-top: 1px solid #e5e5e5;
+        border-top: none;
     }
     .subnav .nav > li:first-child > a,
     .subnav .nav > li:first-child > a:hover {
-        -webkit-border-radius: 4px 4px 0 0;
-            -moz-border-radius: 4px 4px 0 0;
-                border-radius: 4px 4px 0 0;
+        border-radius: none;
+        
     }
 
     .subnav .navbar-inner li a:hover {
-        background-color: #666;
         color: #fff;
     }
 
@@ -372,8 +587,13 @@ The more frequent ones have been marked with *
                 text-align: center;
     }
     .new_actions .nav > li {
-        float: none;
+        float: left;
     }
+    .well.form-inline {
+    display: inline-block;
+    margin-top: 15px;
+    width: 100%;
+}
     .new_actions .nav > li > a {
         border: 0;
     }
@@ -392,11 +612,12 @@ The more frequent ones have been marked with *
     }
     /* Some fixes for w~720px */
     .section-mycampus #top_main_content .content-column {
-        float: none;
+        float: left;
+        width: 720px;
     }
     .section-mycampus #homepage {
         float: left;
-        width: 450px;
+        width: 720px;
     }
     .section-mycampus #hot_courses {
         float: left;
@@ -409,9 +630,16 @@ The more frequent ones have been marked with *
         display: none;
     }
     .section-mycampus .hot-course-box, .section-mycourses .course-box {
-        width: 660px;
+        width: 95%;
     }
-
+     #top_main_content .span9 {
+        float: left;
+        width: 720px;
+    }
+    #top_main_content .span3 {
+        clear: both;
+        width: 97%;
+    }
     /* Footer fixes */
 
     footer {
@@ -422,15 +650,104 @@ The more frequent ones have been marked with *
     }
 
     footer #footer_left a, footer #footer_center a, footer #footer_right a {
-        color : #999;
+        color : #F1D40D;
     }
 
     #footer_left , #footer_right #admin_name, #footer_right #software_name {
         text-align: center !important;
+        /*width: 600px;*/
+        clear: both;
     }
 
     footer .container .row {
         padding-top: 15px;
+    }
+    .social-menu .social-background-content .thumbnail{
+        border:none;
+        box-shadow: none;
+    }
+    .thumbnail > img{
+        -webkit-border-radius: 10px;
+        -moz-border-radius: 10px;
+        border-radius: 10px;
+        border: 3px solid #FFFFFF;
+        box-shadow: none;
+    }
+}
+
+@media (max-width: 600px) {
+
+    #top_main_content .span3 {
+        clear: both;
+        width: 100%;
+    }
+    #top_main_content .menu-column #user_image_block {
+        display: none;
+        visibility: hidden;
+    }
+    #top_main_content .menu-column #reservation_block, #top_main_content .menu-column #notice_block, #top_main_content .menu-column #help_block {
+      /*width: 94%;*/
+    }
+    footer {
+        padding-top: 2em;
+        padding-bottom: 2em;
+    }
+    #top_main_content .span9 {
+    width: 100%;
+    clear: both;
+    }
+    .section-mycampus #hot_courses .page-header {
+    width: 565px;
+    }
+    /*.course-tool {
+        width: 190px;
+    }*/
+    .well_border .row .span2 .thumbnail {
+      background-color: #FFFFFF;
+      background-image: none;
+      float: left;
+      margin-right: 10px;
+      border: none;
+      box-shadow: none;
+    }
+    #top_main_content .menu-column .block_user_info {
+        float: left;
+        width: 280px;
+    }
+    .section-mycampus .hot-course-box, .section-mycourses .course-box {
+        width: auto;
+    }
+    .course-box-thumbnail-box{
+        float: left;
+    }
+    #announcements{
+        clear: both;
+    }
+    #settings .span6 {
+      min-height: 260px;
+      width: 100%;
+    }
+    #settings .form-search .span3 {
+        float: left;
+        width: 65%;
+        height: 34px;
+        margin-right: 5px;
+    }
+    #settings .row .span6 .well_border ul li{
+        font-size: 13px;
+        padding-top: 3px;
+        padding-bottom: 3px;
+        line-height: 16px;
+    }
+    #course_tools .course-title-tools h3 {
+        color: #0191C7;
+        background:none;
+    }
+    .page-header {
+        width: 560px;
+    }
+    #course_tools .row .home-course-intro{
+        width: 100%;
     }
 }
 
@@ -438,6 +755,17 @@ The more frequent ones have been marked with *
     /* No topbar */
     #topbar {
         display:none;
+    }
+    header{
+        margin-top: 15px;
+    }
+    
+    #homepage .row .span9{
+         width: 610px;
+    }
+    .subnav .dropdown-menu li a {
+    color: #FFFFFF;
+    font-weight: normal;
     }
 
     /* fixes tabs */
@@ -499,6 +827,19 @@ The more frequent ones have been marked with *
     .section-social .span5 {
         width: 350px;
     }
+    
+}
+@media (min-width: 980px) and (max-width: 1024px) {
+
+    .bx-next {
+        display: none;
+        visibility: hidden;
+    }
+    .bx-prev {
+        display: none;
+        visibility: hidden;
+    }
+    
 }
 
 /* LARGE DESKTOP SCREENS */
@@ -527,5 +868,6 @@ The more frequent ones have been marked with *
         padding-left: 27px;
         padding-right:5px;
     }
+    
 }
 

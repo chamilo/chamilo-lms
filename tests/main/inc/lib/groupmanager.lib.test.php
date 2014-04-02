@@ -80,25 +80,41 @@ class TestGroupManager extends UnitTestCase {
 		//var_dump($res);
 	}
 
-	public function testSetGroupProperties(){
-		$group= array('group_id'=>'01',
-					  'name'=>'1',
-					  'description'=>'',
-					  'maximum_number_of_students'=>'2',
- 					  'doc_state' =>'',
-                      'work_state' =>'',
-					  'calendar_state' =>'',
-					  'announcements_state'=>'',
-					  'forum_state'=>'',
-					  'wiki_state'=>'',
-					  'chat_state' =>'',
-					  'self_registration_allowed'=>'',
-					  'self_unregistration_allowed'=>'');
-		$res = GroupManager::set_group_properties($group['group_id'], $group['name'], $group['description'],
-													  $group['maximum_number_of_students'], $group['doc_state'],
-													  $group['work_state'], $group['calendar_state'], $group['announcements_state'],
-													  $group['forum_state'],$group['wiki_state'],$group['chat_state'], $group['self_registration_allowed'],
-													  $group['self_unregistration_allowed']);
+	public function testSetGroupProperties()
+    {
+		$group = array(
+            'group_id'=>'01',
+            'name'=>'1',
+            'description'=>'',
+            'maximum_number_of_students'=>'2',
+            'doc_state' =>'',
+            'work_state' =>'',
+            'calendar_state' =>'',
+            'announcements_state'=>'',
+            'forum_state'=>'',
+            'wiki_state'=>'',
+            'chat_state' =>'',
+            'self_registration_allowed'=>'',
+            'self_unregistration_allowed'=>'',
+            'category_id' => null
+        );
+
+		$res = GroupManager::set_group_properties(
+            $group['group_id'],
+            $group['name'],
+            $group['description'],
+            $group['maximum_number_of_students'],
+            $group['doc_state'],
+            $group['work_state'],
+            $group['calendar_state'],
+            $group['announcements_state'],
+            $group['forum_state'],
+            $group['wiki_state'],
+            $group['chat_state'],
+            $group['self_registration_allowed'],
+            $group['self_unregistration_allowed'],
+            $group['category_id']
+        );
 		$this->assertTrue(is_bool($res));
 		//var_dump($res);
 	}

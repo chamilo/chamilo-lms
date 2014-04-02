@@ -285,7 +285,7 @@ if (api_is_allowed_to_edit(null, true)) {
 if (api_is_allowed_to_edit(null, true)) {
 	// Unregister user from course
 	if ($_REQUEST['unregister']) {
-		if (isset($_GET['user_id']) && is_numeric($_GET['user_id']) && $_GET['user_id'] != $_user['user_id']) {
+		if (isset($_GET['user_id']) && is_numeric($_GET['user_id']) && ($_GET['user_id'] != $_user['user_id'] || api_is_platform_admin())) {
 			$user_id					= Database::escape_string($_GET['user_id']);
 			$tbl_user					= Database::get_main_table(TABLE_MAIN_USER);
 			$tbl_session_rel_course		= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -692,7 +692,7 @@ function modify_filter($user_id) {
         $result .= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;editMainUserInfo='.$user_id.'" title="'.get_lang('Edit').'" >'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
         if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
             // unregister
-            if ($user_id != $current_user_id) {
+            if ($user_id != $current_user_id || api_is_platform_admin()) {
                 $result .= '<a class="btn btn-small btn-danger" href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.get_lang('Unreg').'</a>&nbsp;';
             } else {
                 //$result .= Display::return_icon('unsubscribe_course_na.png', get_lang('Unreg'),'',ICON_SIZE_SMALL).'</a>&nbsp;';

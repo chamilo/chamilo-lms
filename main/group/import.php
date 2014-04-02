@@ -39,15 +39,23 @@ if ($form->validate()) {
         $groupData = Import::csv_reader($_FILES['file']['tmp_name']);
         $deleteNotInArray = $form->getSubmitValue('delete_not_in_file') == 1 ? true : false;
 
-        $result = GroupManager::importCategoriesAndGroupsFromArray($groupData, $deleteNotInArray);
+        $result = GroupManager::importCategoriesAndGroupsFromArray(
+            $groupData,
+            $deleteNotInArray
+        );
+
         if (!empty($result)) {
             $html = null;
+
             foreach ($result as $status => $data) {
-                if (empty($data['category']) && empty($data['group'])) {
-                    continue;
+                if ($status != 'error') {
+                    if (empty($data['category']) && empty($data['group'])) {
+                        continue;
+                    }
                 }
 
                 $html .= " <h3>".get_lang(ucfirst($status)).' </h3>';
+
                 if (!empty($data['category'])) {
                     $html .= "<h4> ".get_lang('Categories').':</h4>';
                     foreach ($data['category'] as $category) {
@@ -61,7 +69,18 @@ if ($form->validate()) {
                         $html .= "<div>".$group['group']."</div>";
                     }
                 }
+
+                if ($status == 'error') {
+                    if (!empty($data)) {
+                        foreach ($data as $message) {
+                            if (!empty($message)) {
+                                $html .= "<div>".$message."</div>";
+                            }
+                        }
+                    }
+                }
             }
+
             echo $html;
         }
     }

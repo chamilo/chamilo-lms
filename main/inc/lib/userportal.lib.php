@@ -237,28 +237,30 @@ class IndexManager
                 $user_selected_language = api_get_setting('platformLanguage');
             }
 
-            if (!file_exists($this->home.'home_news_'.$user_selected_language.'.html')) {
-                if (file_exists($this->home.'home_top.html')) {
-                    $home_top_temp = file($this->home.'home_top.html');
-                } else {
-                    $home_top_temp = file($this->default_home.'home_top.html');
-                }
-                $home_top_temp = implode('', $home_top_temp);
-            } else {
-                if (file_exists($this->home.'home_top_'.$user_selected_language.'.html')) {
-                    $home_top_temp = file_get_contents($this->home.'home_top_'.$user_selected_language.'.html');
-                } else {
-                    $home_top_temp = file_get_contents($this->home.'home_top.html');
-                }
-            }
-            if (trim($home_top_temp) == '' && api_is_platform_admin()) {
-                $home_top_temp = get_lang('PortalHomepageDefaultIntroduction');
-            }
-            $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
-            $html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
-        }
-        return $html;
-    }
+			if (!file_exists($this->home.'home_news_'.$user_selected_language.'.html')) {
+				if (file_exists($this->home.'home_top.html')) {
+					$home_top_temp = file($this->home.'home_top.html');
+				} else {
+					$home_top_temp = file($this->default_home.'home_top.html');
+				}
+				$home_top_temp = implode('', $home_top_temp);
+			} else {
+				if (file_exists($this->home.'home_top_'.$user_selected_language.'.html')) {
+					$home_top_temp = file_get_contents($this->home.'home_top_'.$user_selected_language.'.html');
+				} else {
+					$home_top_temp = file_get_contents($this->home.'home_top.html');
+				}
+			}
+			if (trim($home_top_temp) == '' && api_is_platform_admin()) {
+				$home_top_temp = '<div class="welcome-mascot">' . get_lang('PortalHomepageDefaultIntroduction') . '</div>';
+			} else {
+				$home_top_temp = '<div class="welcome-home-top-temp">' . $home_top_temp . '</div>';
+			}
+			$open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
+			$html = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
+		}
+		return $html;
+	}
 
     function return_notice() {
         $sys_path               = api_get_path(SYS_PATH);
@@ -558,7 +560,7 @@ class IndexManager
                     $courses_list_string .= "<li>";
                     if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
                         || ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-                        || ($user_identified && key_exists($course['code'], $courses_of_user)
+                        || ($user_identified && array_key_exists($course['code'], $courses_of_user)
                             && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
                         || $courses_of_user[$course['code']]['status'] == '1'
                         || api_is_platform_admin()) {
@@ -567,7 +569,7 @@ class IndexManager
                     $courses_list_string .= $course['title'];
                     if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
                         || ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-                        || ($user_identified && key_exists($course['code'], $courses_of_user)
+                        || ($user_identified && array_key_exists($course['code'], $courses_of_user)
                             && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
                             || $courses_of_user[$course['code']]['status'] == '1'
                         || api_is_platform_admin()) {
@@ -712,7 +714,7 @@ class IndexManager
                 $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'));
                 $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');
 
-                $form->addRule('captcha', 'What you entered didn\'t match the picture', 'CAPTCHA', $captcha_question);
+                $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
             }
         }
 
@@ -827,19 +829,19 @@ class IndexManager
             if (api_get_setting('allow_social_tool') == 'true') {
                 $link = '?f=social';
             }
-            $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'">'.get_lang('Inbox').$cant_msg.' </a></li>';
-            $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'">'.get_lang('Compose').' </a></li>';
+            $profile_content .= '<li class="inbox-social"><a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php'.$link.'">'.get_lang('Inbox').$cant_msg.' </a></li>';
+            $profile_content .= '<li class="new-message-social"><a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php'.$link.'">'.get_lang('Compose').' </a></li>';
 
             if (api_get_setting('allow_social_tool') == 'true') {
                 $total_invitations = Display::badge($total_invitations);
-                $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('PendingInvitations').$total_invitations.'</a></li>';
+                $profile_content .= '<li class="invitations-social"><a href="'.api_get_path(WEB_PATH).'main/social/invitations.php">'.get_lang('PendingInvitations').$total_invitations.'</a></li>';
             }
 
             if (isset($_configuration['allow_my_files_link_in_homepage']) && $_configuration['allow_my_files_link_in_homepage']) {
-                $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.get_lang('MyFiles').'</a></li>';
+                $profile_content .= '<li class="myfiles-social"><a href="'.api_get_path(WEB_PATH).'main/social/myfiles.php">'.get_lang('MyFiles').'</a></li>';
             }
         }
-        $profile_content .= '<li><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></li>';
+        $profile_content .= '<li class="profile-social"><a href="'.api_get_path(WEB_PATH).'main/auth/profile.php">'.get_lang('EditProfile').'</a></li>';
         $profile_content .= '</ul>';
         $html = self::show_right_block(get_lang('Profile'), $profile_content, 'profile_block');
         return $html;
@@ -898,7 +900,7 @@ class IndexManager
         $my_account_content = '<ul class="nav nav-list">';
 
         if ($show_create_link) {
-            $my_account_content .= '<li><a href="main/create_course/add_course.php" class="add course">';
+            $my_account_content .= '<li class="add-course"><a href="main/create_course/add_course.php">';
             if (api_get_setting('course_validation') == 'true' && !api_is_platform_admin()) {
                 $my_account_content .= get_lang('CreateCourseRequest');
             } else {
@@ -909,19 +911,20 @@ class IndexManager
 
         //Sort courses
         $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
-        $my_account_content .= '<li>'.Display::url(get_lang('SortMyCourses'), $url, array('class' => 'sort course')).'</li>';
+        $my_account_content .= '<li class="order-course">'.Display::url(get_lang('SortMyCourses'), $url, array('class' => 'sort course')).'</li>';
 
         // Session history
         if (isset($_GET['history']) && intval($_GET['history']) == 1) {
             $my_account_content .= '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
         } else {
-            $my_account_content .= '<li><a href="user_portal.php?history=1"  class="history course">'.get_lang('HistoryTrainingSessions').'</a></li>';
+            $my_account_content .= '<li class="history-course"><a href="user_portal.php?history=1" >'.get_lang('HistoryTrainingSessions').'</a></li>';
         }
 
         // Course catalog
+
         if ($show_course_link) {
             if (!api_is_drh()) {
-                $my_account_content .= '<li><a href="main/auth/courses.php" class="list course">'.get_lang('CourseCatalog').'</a></li>';
+                $my_account_content .= '<li class="list-course"><a href="main/auth/courses.php" >'.get_lang('CourseCatalog').'</a></li>';
             } else {
                 $my_account_content .= '<li><a href="main/dashboard/index.php">'.get_lang('Dashboard').'</a></li>';
             }

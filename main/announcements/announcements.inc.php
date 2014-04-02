@@ -572,20 +572,27 @@ class AnnouncementManager
             $to_already_selected = array();
         }
 
-        echo "<table id=\"recipient_list\" style=\"display: none;\">";
+        echo "<table id=\"recipient_list\" >";
         echo '<tr>';
+        echo '<td>';
+        echo '<label><input type="checkbox" id="send_to_all_users">'.get_lang('SendToAllUsers') . "</label>";
+        echo "</td>";
+        echo '</tr>';
+        echo '<tr>';
+
 
         // the form containing all the groups and all the users of the course
         echo '<td>';
         echo "<strong>" . get_lang('Users') . "</strong><br />";
+
         self::construct_not_selected_select_form($group_list, $user_list, $to_already_selected);
         echo "</td>";
 
         // the buttons for adding or removing groups/users
         echo '<td valign="middle">';
-        echo '<button class="arrowr" type="button" onClick="javascript: move(this.form.elements[0], this.form.elements[3])" onClick="javascript: move(this.form.elements[0], this.form.elements[3])"></button>';
+        echo '<button class="arrowr" type="button" onClick="javascript: move(this.form.elements[1], this.form.elements[4])" onClick="javascript: move(this.form.elements[1], this.form.elements[4])"></button>';
         echo '<br /> <br />';
-        echo '<button class="arrowl" type="button" onClick="javascript: move(this.form.elements[3], this.form.elements[0])" onClick="javascript: move(this.form.elements[3], this.form.elements[0])"></button>';
+        echo '<button class="arrowl" type="button" onClick="javascript: move(this.form.elements[4], this.form.elements[1])" onClick="javascript: move(this.form.elements[4], this.form.elements[1])"></button>';
         echo "</td>";
 
         echo "<td>";
@@ -603,10 +610,10 @@ class AnnouncementManager
      */
     public static function show_to_form_group($group_id)
     {
-        echo "<table id=\"recipient_list\" style=\"display: none;\">";
+        echo "<table id=\"recipient_list\" >";
         echo "<tr>";
         echo "<td>";
-        echo "<select name=\"not_selected_form[]\" size=5 style=\"width:200px\" multiple>";
+        echo "<select id=\"not_selected_form\" name=\"not_selected_form[]\" size=5 style=\"width:200px\" multiple>";
         $group_users = GroupManager::getStudentsAndTutors($group_id);
         foreach ($group_users as $user) {
             echo '<option value="' . $user['user_id'] . '" title="' . sprintf(get_lang('LoginX'), $user['username']) . '" >' .
@@ -637,7 +644,7 @@ class AnnouncementManager
      */
     public static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected)
     {
-        echo '<select name="not_selected_form[]" size="7" class="span4" multiple>';
+        echo '<select id="not_selected_form" name="not_selected_form[]" size="7" class="span4" multiple>';
         // adding the groups to the select form
         if ($group_list) {
             foreach ($group_list as $this_group) {
@@ -658,7 +665,8 @@ class AnnouncementManager
         if ($user_list) {
             foreach ($user_list as $this_user) {
                 if (is_array($to_already_selected)) {
-                    if (!in_array("USER:" . $this_user['user_id'], $to_already_selected)) { // $to_already_selected is the array containing the users (and groups) that are already selected
+                    if (!in_array("USER:" . $this_user['user_id'], $to_already_selected)) {
+                        // $to_already_selected is the array containing the users (and groups) that are already selected
                         echo "<option value=\"USER:" . $this_user['user_id'] . "\" title='" . sprintf(get_lang('LoginX'), $this_user['username']) . "'>",
                         "", api_get_person_name($this_user['firstname'], $this_user['lastname']),
                         "</option>";

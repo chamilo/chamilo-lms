@@ -76,7 +76,7 @@ if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, tr
 	}
     $my_list = CourseHome::get_tools_category(TOOL_AUTHORING);
 	$items = CourseHome::show_tools_category($my_list);
-    $content .= return_block(get_lang('Authoring'),  $items);
+    $content .= return_block(get_lang('Authoring'),  $items, 'course-tools-author');
 
     $my_list = CourseHome::get_tools_category(TOOL_INTERACTION);
 
@@ -85,12 +85,12 @@ if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, tr
     $my_list = array_merge($my_list,$list2);
     $items =  CourseHome::show_tools_category($my_list);
 
-    $content .= return_block(get_lang('Interaction'),  $items);
+    $content .= return_block(get_lang('Interaction'),  $items, 'course-tools-interaction');
 
     $my_list = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
     $items = CourseHome::show_tools_category($my_list);
 
-    $content .= return_block(get_lang('Administration'),  $items);
+    $content .= return_block(get_lang('Administration'),  $items , 'course-tools-administration');
 
 } elseif (api_is_coach()) {
 	if (api_get_setting('show_session_data') == 'true' && $session_id > 0) {
@@ -117,7 +117,7 @@ if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, tr
 	}
 }
 
-function return_block($title, $content) {
-    $html = '<div class="row"><div class="span12"><div class="page-header"><h3>'.$title.'</h3></div></div></div><div class="row">'.$content.'</div>';
+function return_block($title, $content, $class) {
+    $html = '<div class="row course-title-tools"><div class="span12"><div class="page-header"><h3>'.$title.'</h3></div></div></div><div class="row '.$class.'">'.$content.'</div>';
     return $html;
 }

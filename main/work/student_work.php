@@ -39,15 +39,25 @@ if (!empty($group_id)) {
         $show_work = true;
     } else {
         // you are not a teacher
-        $show_work = GroupManager::user_has_access($user_id, $group_id, GroupManager::GROUP_TOOL_WORK);
+        $show_work = GroupManager::user_has_access(
+            $user_id,
+            $group_id,
+            GroupManager::GROUP_TOOL_WORK
+        );
     }
 
     if (!$show_work) {
         api_not_allowed();
     }
 
-    $interbreadcrumb[] = array ('url' => '../group/group.php', 'name' => get_lang('Groups'));
-    $interbreadcrumb[] = array ('url' => '../group/group_space.php?gidReq='.$group_id, 'name' => get_lang('GroupSpace').' '.$group_properties['name']);
+    $interbreadcrumb[] = array(
+        'url' => '../group/group.php',
+        'name' => get_lang('Groups')
+    );
+    $interbreadcrumb[] = array(
+        'url' => '../group/group_space.php?gidReq='.$group_id,
+        'name' => get_lang('GroupSpace').' '.$group_properties['name']
+    );
 } else {
     if (!api_is_allowed_to_edit(false, true)) {
         api_not_allowed(true);
@@ -57,6 +67,15 @@ if (!empty($group_id)) {
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 switch ($action) {
+    case 'export_to_pdf':
+        exportAllWork($studentId, $courseInfo, 'pdf');
+        break;
+    exit;
+    case 'download':
+        if (api_is_allowed_to_edit()) {
+            downloadAllFilesPerUser($studentId, $courseInfo);
+        }
+        break;
     case 'delete_all':
         if (api_is_allowed_to_edit()) {
             $deletedItems = deleteAllWorkPerUser($studentId, $courseInfo);
@@ -74,10 +93,18 @@ switch ($action) {
         break;
 }
 
-$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(), 'name' => get_lang('StudentPublications'));
-$interbreadcrumb[] = array ('url' => '#', 'name' => $userInfo['complete_name']);
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
+    'name' => get_lang('StudentPublications')
+);
+$interbreadcrumb[] = array(
+    'url' => '#',
+    'name' => $userInfo['complete_name']
+);
 
 Display :: display_header(null);
+
+$workPerUser = getWorkPerUser($studentId);
 
 echo Session::read('message');
 Session::erase('message');
@@ -85,7 +112,14 @@ Session::erase('message');
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).'</a>';
+
 if (api_is_allowed_to_edit()) {
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/student_work.php?action=export_to_pdf&studentId='.$studentId.'&'.api_get_cidreq().'">'.
+        Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/student_work.php?action=download&studentId='.$studentId.'&'.api_get_cidreq().'">'.
+        Display::return_icon('save.png', get_lang('Download'), '', ICON_SIZE_MEDIUM).'</a>';
+
     echo '<a
             onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;"
             href="'.api_get_path(WEB_CODE_PATH).'work/student_work.php?action=delete_all&studentId='.$studentId.'&'.api_get_cidreq().'">'.
@@ -94,13 +128,15 @@ if (api_is_allowed_to_edit()) {
 
 echo '</div>';
 
-$workPerUser = getWorkPerUser($studentId);
-
 $table = new HTML_Table(array('class' => 'data_table'));
 $column = 0;
 $row = 0;
 $headers = array(
-    get_lang('Title'), get_lang('HandedOutDate'), get_lang('HandOutDateLimit'), get_lang('Score'), get_lang('Actions')
+    get_lang('Title'),
+    get_lang('HandedOutDate'),
+    get_lang('HandOutDateLimit'),
+    get_lang('Score'),
+    get_lang('Actions')
 );
 foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);

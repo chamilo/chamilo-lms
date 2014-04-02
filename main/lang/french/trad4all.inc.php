@@ -2,6 +2,14 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AllowOnlyFiles = "Seulement fichiers";
+$AllowOnlyText = "Seulement texte en ligne";
+$AllowFileOrText = "Autoriser fichier ou texte en ligne";
+$DocumentType = "Type de document";
+$SendOnlyAnEmailToMySelfToTest = "M'envoyer un e-mail à des fins de test";
+$DeleteAllSelectedAttendances = "Éliminer toutes les présences sélectionnées";
+$AvailableClasses = "Classes disponibles";
+$RegisteredClasses = "Classes inscrites";
 $DeleteItemsNotInFile = "Supprimer les éléments qui ne sont pas dans le fichier";
 $ImportGroups = "Importer groupes";
 $HereIsYourFeedback = "Voici vos commentaires";

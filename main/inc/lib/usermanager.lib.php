@@ -90,14 +90,20 @@ class UserManager
             $access_url_id = api_get_current_access_url_id();
         }
 
-        if (is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_users']) && $_configuration[$access_url_id]['hosting_limit_users'] > 0) {
+        if (is_array($_configuration[$access_url_id]) &&
+            isset($_configuration[$access_url_id]['hosting_limit_users']) &&
+            $_configuration[$access_url_id]['hosting_limit_users'] > 0) {
             $num = self::get_number_of_users();
             if ($num >= $_configuration[$access_url_id]['hosting_limit_users']) {
                 return api_set_failure('portal users limit reached');
             }
         }
 
-        if ($status === 1 && is_array($_configuration[$access_url_id]) && isset($_configuration[$access_url_id]['hosting_limit_teachers']) && $_configuration[$access_url_id]['hosting_limit_teachers'] > 0) {
+        if ($status === 1 &&
+            is_array($_configuration[$access_url_id]) &&
+            isset($_configuration[$access_url_id]['hosting_limit_teachers']) &&
+            $_configuration[$access_url_id]['hosting_limit_teachers'] > 0
+        ) {
             $num = self::get_number_of_users(1);
             if ($num >= $_configuration[$access_url_id]['hosting_limit_teachers']) {
                 return api_set_failure('portal teachers limit reached');
@@ -236,7 +242,9 @@ class UserManager
     public static function can_delete_user($user_id)
     {
         global $_configuration;
-        if (isset($_configuration['deny_delete_users']) && $_configuration['deny_delete_users'] == true) {
+        if (isset($_configuration['deny_delete_users']) &&
+            $_configuration['deny_delete_users'] == true
+        ) {
             return false;
         }
         $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -244,10 +252,12 @@ class UserManager
             return false;
         if ($user_id === false)
             return false;
-        $sql = "SELECT * FROM $table_course_user WHERE status = '1' AND user_id = '".$user_id."'";
+        $sql = "SELECT * FROM $table_course_user
+                WHERE status = '1' AND user_id = '".$user_id."'";
         $res = Database::query($sql);
         while ($course = Database::fetch_object($res)) {
-            $sql = "SELECT user_id FROM $table_course_user WHERE status='1' AND course_code ='".Database::escape_string($course->course_code)."'";
+            $sql = "SELECT user_id FROM $table_course_user
+                    WHERE status='1' AND course_code ='".Database::escape_string($course->course_code)."'";
             $res2 = Database::query($sql);
             if (Database::num_rows($res2) == 1) {
                 return false;
@@ -293,10 +303,14 @@ class UserManager
 
         // Unsubscribe the user from all groups in all his courses
         $sql = "SELECT c.id FROM $table_course c, $table_course_user cu
-                WHERE cu.user_id = '".$user_id."' AND relation_type<>".COURSE_RELATION_TYPE_RRHH." AND c.code = cu.course_code";
+                WHERE
+                    cu.user_id = '".$user_id."' AND
+                    relation_type<>".COURSE_RELATION_TYPE_RRHH." AND
+                    c.code = cu.course_code";
         $res = Database::query($sql);
         while ($course = Database::fetch_object($res)) {
-            $sql = "DELETE FROM $table_group WHERE c_id = {$course->id} AND user_id = $user_id";
+            $sql = "DELETE FROM $table_group
+                    WHERE c_id = {$course->id} AND user_id = $user_id";
             Database::query($sql);
         }
 
@@ -330,7 +344,8 @@ class UserManager
         Database::query($sql);
 
         // Delete user picture
-        // TODO: Logic about api_get_setting('split_users_upload_directory') === 'true' , a user has 4 differnt sized photos to be deleted.
+        /* TODO: Logic about api_get_setting('split_users_upload_directory') == 'true'
+        a user has 4 differnt sized photos to be deleted. */
         $user_info = api_get_user_info($user_id);
         if (strlen($user_info['picture_uri']) > 0) {
             $img_path = api_get_path(SYS_CODE_PATH).'upload/users/'.$user_id.'/'.$user_info['picture_uri'];
@@ -524,7 +539,7 @@ class UserManager
      * @param string The user's picture URL (internal to the Chamilo directory)
      * @param int The user ID of the person who registered this user (optional, defaults to null)
      * @param int The department of HR in which the user is registered (optional, defaults to 0)
-     * @param    array    A series of additional fields to add to this user as extra fields (optional, defaults to null)
+     * @param array A series of additional fields to add to this user as extra fields (optional, defaults to null)
      * @return boolean true if the user information was updated
      * @assert (false, false, false, false, false, false, false, false, false, false, false, false, false) === false
      */
@@ -726,7 +741,13 @@ class UserManager
     {
         $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
         $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
-        $sql = "SELECT user_id    FROM $t_uf uf INNER JOIN $t_ufv ufv ON ufv.field_id=uf.id WHERE field_variable='$original_user_id_name' AND field_value='$original_user_id_value';";
+        $sql = "SELECT user_id
+                FROM $t_uf uf
+                INNER JOIN $t_ufv ufv
+                ON ufv.field_id=uf.id
+                WHERE
+                    field_variable='$original_user_id_name' AND
+                    field_value='$original_user_id_value';";
         $res = Database::query($sql);
         $row = Database::fetch_object($res);
         if ($row) {
@@ -749,18 +770,19 @@ class UserManager
             return false;
         }
         $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT username FROM $table_user WHERE username = '".Database::escape_string($username)."'";
+        $sql = "SELECT username FROM $table_user
+                WHERE username = '".Database::escape_string($username)."'";
         $res = Database::query($sql);
         return Database::num_rows($res) == 0;
     }
 
     /**
      * Creates a username using person's names, i.e. creates jmontoya from Julio Montoya.
-     * @param string $firstname                The first name of the user.
-     * @param string $lastname                The last name of the user.
+     * @param string $firstname The first name of the user.
+     * @param string $lastname The last name of the user.
      * @param string $language (optional)    The language in which comparison is to be made. If language is omitted, interface language is assumed then.
      * @param string $encoding (optional)    The character encoding for the input names. If it is omitted, the platform character set will be used by default.
-     * @return string                        Suggests a username that contains only ASCII-letters and digits, without check for uniqueness within the system.
+     * @return string Suggests a username that contains only ASCII-letters and digits, without check for uniqueness within the system.
      * @author Julio Montoya Armas
      * @author Ivan Tcholakov, 2009 - rework about internationalization.
      * @assert ('','') === false
@@ -869,9 +891,9 @@ class UserManager
     /**
      * Checks whether a given username matches to the specification strictly. The empty username is assumed here as invalid.
      * Mostly this function is to be used in the user interface built-in validation routines for providing feedback while usernames are enterd manually.
-     * @param string $username                The input username.
-     * @param string $encoding (optional)    The character encoding for the input names. If it is omitted, the platform character set will be used by default.
-     * @return bool                            Returns TRUE if the username is valid, FALSE otherwise.
+     * @param string $username The input username.
+     * @param string $encoding (optional) The character encoding for the input names. If it is omitted, the platform character set will be used by default.
+     * @return bool Returns TRUE if the username is valid, FALSE otherwise.
      */
     public static function is_username_valid($username, $encoding = null)
     {
@@ -881,8 +903,8 @@ class UserManager
     /**
      * Checks whether a username is empty. If the username contains whitespace characters, such as spaces, tabulators, newlines, etc.,
      * it is assumed as empty too. This function is safe for validation unpurified data (during importing).
-     * @param string $username                The given username.
-     * @return bool                            Returns TRUE if length of the username exceeds the limit, FALSE otherwise.
+     * @param string $username The given username.
+     * @return bool  Returns TRUE if length of the username exceeds the limit, FALSE otherwise.
      */
     public static function is_username_empty($username)
     {
@@ -891,14 +913,19 @@ class UserManager
 
     /**
      * Checks whether a username is too long or not.
-     * @param string $username                The given username, it should contain only ASCII-letters and digits.
-     * @return bool                            Returns TRUE if length of the username exceeds the limit, FALSE otherwise.
+     * @param string $username The given username, it should contain only ASCII-letters and digits.
+     * @return bool Returns TRUE if length of the username exceeds the limit, FALSE otherwise.
      */
     public static function is_username_too_long($username)
     {
         return (strlen($username) > USERNAME_MAX_LENGTH);
     }
 
+    /**
+     * @param array $ids
+     * @param null $active
+     * @return array
+     */
     public static function get_user_list_by_ids($ids = array(), $active = null)
     {
         if (empty($ids)) {
@@ -1051,7 +1078,8 @@ class UserManager
         return false;
     }
 
-    /** Get the teacher list
+    /**
+     * Get the teacher list
      * @param int the course ID
      * @param array Content the list ID of user_id selected
      */
@@ -1062,8 +1090,9 @@ class UserManager
         $user_course_table = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $course_id = Database::escape_string($course_id);
-        $sql_query = "SELECT * FROM $user_table a, $user_course_table b where a.user_id=b.user_id AND b.status=1 AND b.course_code='$course_id'";
-        $sql_result = Database::query($sql_query);
+        $sql = "SELECT * FROM $user_table a, $user_course_table b
+                WHERE a.user_id=b.user_id AND b.status=1 AND b.course_code='$course_id'";
+        $sql_result = Database::query($sql);
         echo "<select name=\"author\">";
         while ($result = Database::fetch_array($sql_result)) {
             if ($sel_teacher == $result['user_id'])
@@ -1087,7 +1116,6 @@ class UserManager
      */
     public static function get_user_picture_path_by_id($id, $type = 'none', $preview = false, $anonymous = false)
     {
-
         switch ($type) {
             case 'system': // Base: absolute system path.
                 $base = api_get_path(SYS_CODE_PATH);
@@ -1243,7 +1271,6 @@ class UserManager
     {
         return self::update_user_picture($user_id);
     }
-    /* PRODUCTIONS FUNCTIONS */
 
     /**
      * Returns an XHTML formatted list of productions for a user, or FALSE if he
@@ -1261,7 +1288,6 @@ class UserManager
      */
     public static function build_production_list($user_id, $force = false, $showdelete = false)
     {
-
         if (!$force && !empty($_POST['remove_production'])) {
             return true; // postpone reading from the filesystem
         }
@@ -1351,7 +1377,17 @@ class UserManager
         $t_uf = Database::get_main_table(TABLE_MAIN_USER_FIELD);
         $fid = Database::escape_string($fid);
         $sqluf = "UPDATE $t_uf SET ";
-        $known_fields = array('id', 'field_variable', 'field_type', 'field_display_text', 'field_default_value', 'field_order', 'field_visible', 'field_changeable', 'field_filter');
+        $known_fields = array(
+            'id',
+            'field_variable',
+            'field_type',
+            'field_display_text',
+            'field_default_value',
+            'field_order',
+            'field_visible',
+            'field_changeable',
+            'field_filter'
+        );
         $safecolumns = array();
         foreach ($columns as $index => $newval) {
             if (in_array($index, $known_fields)) {
@@ -1362,6 +1398,7 @@ class UserManager
         $time = time();
         $sqluf .= " tms = FROM_UNIXTIME($time) WHERE id='$fid'";
         $resuf = Database::query($sqluf);
+
         return $resuf;
     }
 
@@ -1379,10 +1416,12 @@ class UserManager
         $t_ufo = Database::get_main_table(TABLE_MAIN_USER_FIELD_OPTIONS);
         $t_ufv = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
         $fname = Database::escape_string($fname);
+
         if ($user_id != strval(intval($user_id)))
             return false;
         if ($user_id === false)
             return false;
+
         $fvalues = '';
 
         //echo '<pre>'; print_r($fvalue);
@@ -1396,7 +1435,7 @@ class UserManager
         } else {
             $fvalues = Database::escape_string($fvalue);
         }
-         $sqluf = "SELECT * FROM $t_uf WHERE field_variable='$fname'";
+        $sqluf = "SELECT * FROM $t_uf WHERE field_variable='$fname'";
         $resuf = Database::query($sqluf);
         if (Database::num_rows($resuf) == 1) {
             //ok, the field exists
@@ -2394,6 +2433,7 @@ class UserManager
         // Database Table Definitions
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_session_course = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE);
 
         $user_id = intval($user_id);
         $session_id = intval($session_id);
@@ -2412,16 +2452,22 @@ class UserManager
         $personal_course_list = array();
         $courses = array();
 
-        // This query is very similar to the above query, but it will check the session_rel_course_user table if there are courses registered to our user or not
-        $personal_course_list_sql = "SELECT DISTINCT scu.course_code as code
-                                    FROM $tbl_session_course_user as scu $join_access_url
-                                    WHERE scu.id_user = $user_id AND scu.id_session = $session_id $where_access_url
-                                    ORDER BY code";
+        /* This query is very similar to the above query,but it will check the
+        session_rel_course_user table if there are courses registered
+        to our user or not*/
 
-        $course_list_sql_result = Database::query($personal_course_list_sql);
+        $sql = "SELECT DISTINCT scu.course_code as code
+                FROM $tbl_session_course_user as scu
+                INNER JOIN $tbl_session_course sc
+                ON (scu.id_session = sc.id_session AND scu.course_code = sc.course_code)
+                $join_access_url
+                WHERE scu.id_user = $user_id AND scu.id_session = $session_id $where_access_url
+                ORDER BY code";
 
-        if (Database::num_rows($course_list_sql_result) > 0) {
-            while ($result_row = Database::fetch_array($course_list_sql_result)) {
+        $result = Database::query($sql);
+
+        if (Database::num_rows($result) > 0) {
+            while ($result_row = Database::fetch_array($result)) {
                 $result_row['status'] = 5;
                 if (!in_array($result_row['code'], $courses)) {
                     $personal_course_list[] = $result_row;
@@ -2432,14 +2478,24 @@ class UserManager
 
         if (api_is_allowed_to_create_course()) {
             $sql = "SELECT DISTINCT scu.course_code as code
-                    FROM $tbl_session_course_user as scu, $tbl_session as s $join_access_url
-                    WHERE s.id = $session_id AND scu.id_session = s.id AND ((scu.id_user=$user_id AND scu.status=2) OR s.id_coach = $user_id)
+                    FROM $tbl_session_course_user as scu
+                    INNER JOIN $tbl_session as s
+                    ON (scu.id_session = s.id)
+                    INNER JOIN $tbl_session_course sc
+                    ON (scu.id_session = sc.id_session AND scu.course_code = sc.course_code)
+                    $join_access_url
+                    WHERE
+                      s.id = $session_id AND
+                      (
+                        (scu.id_user=$user_id AND scu.status=2) OR
+                        s.id_coach = $user_id
+                      )
                     $where_access_url
                     ORDER BY code";
-            $course_list_sql_result = Database::query($sql);
+            $result = Database::query($sql);
 
-            if (Database::num_rows($course_list_sql_result) > 0) {
-                while ($result_row = Database::fetch_array($course_list_sql_result)) {
+            if (Database::num_rows($result) > 0) {
+                while ($result_row = Database::fetch_array($result)) {
                     $result_row['status'] = 2;
                     if (!in_array($result_row['code'], $courses)) {
                         $personal_course_list[] = $result_row;
@@ -3461,15 +3517,22 @@ class UserManager
 
     /**
      * get users followed by human resource manager
-     * @param int hr_dept id
-     * @param int  user status (optional)
+     * @param int $userId
+     * @param int $userStatus (STUDENT, COURSEMANAGER, etc)
      * @param bool $getOnlyUserId
      * @param bool $getSql
+     * @param bool $getCount
+     * @param int $from
+     * @param int $numberItems
+     * @param int $column
+     * @param string $direction
+     * @param int $active
+     * @param string $lastConnectionDate
      * @return array     users
      */
     public static function get_users_followed_by_drh(
-        $hr_dept_id,
-        $user_status = 0,
+        $userId,
+        $userStatus = 0,
         $getOnlyUserId = false,
         $getSql = false,
         $getCount = false,
@@ -3480,14 +3543,70 @@ class UserManager
         $active = null,
         $lastConnectionDate = null
     ) {
+        return self::getUsersFollowedByUser(
+            $userId,
+            $userStatus,
+            $getOnlyUserId,
+            $getSql,
+            $getCount,
+            $from,
+            $numberItems,
+            $column,
+            $direction,
+            $active,
+            $lastConnectionDate,
+            DRH
+        );
+    }
+
+    /**
+    * Get users followed by human resource manager
+    * @param int $userId
+    * @param int  $userStatus Filter users by status (STUDENT, COURSEMANAGER, etc)
+    * @param bool $getOnlyUserId
+    * @param bool $getSql
+    * @param bool $getCount
+    * @param int $from
+    * @param int $numberItems
+    * @param int $column
+    * @param string $direction
+    * @param int $active
+    * @param string $lastConnectionDate
+    * @param int $status the function is called by who? COURSEMANAGER, DRH?
+    * @return array     users
+    */
+    public static function getUsersFollowedByUser(
+        $userId,
+        $userStatus = null,
+        $getOnlyUserId = false,
+        $getSql = false,
+        $getCount = false,
+        $from = null,
+        $numberItems = null,
+        $column = null,
+        $direction = null,
+        $active = null,
+        $lastConnectionDate = null,
+        $status = null
+    ) {
         // Database Table Definitions
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_user_rel_user = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-        $hr_dept_id = intval($hr_dept_id);
+        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
+        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+
+        $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $tbl_session_rel_user 	= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+
+        $userId = intval($userId);
 
         $limitCondition = null;
+
         if (isset($from) && isset($numberItems)) {
             $from = intval($from);
             $numberItems = intval($numberItems);
@@ -3497,44 +3616,114 @@ class UserManager
         $column = Database::escape_string($column);
         $direction = in_array(strtolower($direction), array('asc', 'desc')) ? $direction : null;
 
-        $condition_status = '';
-        if (!empty($user_status)) {
-            $condition_status = ' AND u.status = '.$user_status;
+        $userConditions = '';
+        if (!empty($userStatus)) {
+            $userConditions .= ' AND u.status = '.$userStatus;
         }
-        $select = " SELECT u.user_id, u.username, u.lastname, u.firstname, u.email ";
+
+        $select = " SELECT DISTINCT u.user_id, u.username, u.lastname, u.firstname, u.email ";
         if ($getOnlyUserId) {
-            $select = " SELECT u.user_id";
+            $select = " SELECT DISTINCT u.user_id";
         }
+
+        $masterSelect = "SELECT DISTINCT * FROM ";
+
         if ($getCount) {
-            $select = " SELECT COUNT(DISTINCT(u.user_id)) as count ";
+            $masterSelect = "SELECT COUNT(DISTINCT(user_id)) as count FROM ";
+            $select = " SELECT DISTINCT(u.user_id) ";
         }
-
-        $join = null;
-        if (!empty($lastConnectionDate)) {
-            $loginTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-            $join .= " INNER JOIN $loginTable l ON (l.login_user_id = u.user_id) ";
-        }
-
-        $sql = " $select FROM $tbl_user u
-                INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.user_id)
-                LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.user_id)
-                $join
-                WHERE
-                    friend_user_id = '$hr_dept_id' AND
-                    relation_type = '".USER_RELATION_TYPE_RRHH."'
-                    $condition_status AND
-                    access_url_id = ".api_get_current_access_url_id()."
-                ";
 
         if (!is_null($active)) {
             $active = intval($active);
-            $sql.= " AND active = $active";
+            $userConditions .= " AND u.active = $active ";
         }
 
         if (!empty($lastConnectionDate)) {
             $lastConnectionDate = Database::escape_string($lastConnectionDate);
-            $sql .=  " AND l.login_date <= '$lastConnectionDate' ";
+            $userConditions .=  " AND u.last_login <= '$lastConnectionDate' ";
         }
+
+        $courseConditions = null;
+        $sessionConditionsCoach = null;
+        $sessionConditionsTeacher = null;
+        $drhConditions = null;
+        $teacherSelect = null;
+
+        switch($status) {
+            case DRH:
+                $drhConditions .= " AND
+                    friend_user_id = '$userId' AND
+                    relation_type = '".USER_RELATION_TYPE_RRHH."'
+                ";
+                break;
+            case COURSEMANAGER:
+                $drhConditions .= " AND
+                    friend_user_id = '$userId' AND
+                    relation_type = '".USER_RELATION_TYPE_RRHH."'
+                ";
+
+                $sessionConditionsCoach .= " AND
+                    (s.id_coach = '$userId')
+                ";
+
+                $sessionConditionsTeacher .= " AND
+                    (scu.status = 2 AND scu.id_user = '$userId')
+                ";
+
+                $teacherSelect =
+                "UNION ALL (
+                        $select
+                        FROM $tbl_user u
+                        INNER JOIN $tbl_session_rel_user sru ON (sru.id_user = u.user_id)
+                        WHERE
+                            sru.id_session IN (
+                                SELECT DISTINCT(s.id) FROM $tbl_session s INNER JOIN
+                                $tbl_session_rel_access_url
+                                WHERE access_url_id = ".api_get_current_access_url_id()."
+                                $sessionConditionsCoach
+                                UNION (
+                                    SELECT DISTINCT(s.id) FROM $tbl_session s
+                                    INNER JOIN $tbl_session_rel_access_url url
+                                    ON (url.session_id = s.id)
+                                    INNER JOIN $tbl_session_rel_course_rel_user scu
+                                    ON (scu.id_session = s.id)
+                                    WHERE access_url_id = ".api_get_current_access_url_id()."
+                                    $sessionConditionsTeacher
+                                )
+                            )
+                            $userConditions
+                    )
+                    UNION ALL(
+                        $select
+                        FROM $tbl_user u
+                        INNER JOIN $tbl_course_user cu ON (cu.user_id = u.user_id)
+                        WHERE cu.course_code IN (
+                            SELECT DISTINCT(course_code) FROM $tbl_course_user
+                            WHERE user_id = $userId AND status = ".COURSEMANAGER."
+                        )
+                        $userConditions
+                    )"
+                ;
+                break;
+        }
+
+        $join = null;
+        $sql = " $masterSelect
+                (
+                    (
+                        $select
+                        FROM $tbl_user u
+                        INNER JOIN $tbl_user_rel_user uru ON (uru.user_id = u.user_id)
+                        LEFT JOIN $tbl_user_rel_access_url a ON (a.user_id = u.user_id)
+                        $join
+                        WHERE
+                            access_url_id = ".api_get_current_access_url_id()."
+                            $drhConditions
+                            $userConditions
+                    )
+                    $teacherSelect
+
+                ) as t1";
 
         if ($getSql) {
             return $sql;
@@ -3543,28 +3732,35 @@ class UserManager
         if ($getCount) {
             $result = Database::query($sql);
             $row = Database::fetch_array($result);
+            //var_dump($sql);
             return $row['count'];
         }
 
         $orderBy = null;
         if (api_is_western_name_order()) {
-            $orderBy .= " ORDER BY u.firstname, u.lastname ";
+            $orderBy .= " ORDER BY firstname, lastname ";
         } else {
-            $orderBy .= " ORDER BY u.lastname, u.firstname ";
+            $orderBy .= " ORDER BY lastname, firstname ";
         }
 
         if (!empty($column) && !empty($direction)) {
+            // Fixing order due the UNIONs
+            $column = str_replace('u.', '', $column);
             $orderBy = " ORDER BY $column $direction ";
         }
+
         $sql .= $orderBy;
         $sql .= $limitCondition;
+
         $result = Database::query($sql);
         $users = array();
         if (Database::num_rows($result) > 0) {
+
             while ($row = Database::fetch_array($result)) {
                 $users[$row['user_id']] = $row;
             }
         }
+
         return $users;
     }
 
@@ -3577,7 +3773,6 @@ class UserManager
     public static function suscribe_users_to_hr_manager($hr_dept_id, $users_id)
     {
         // Database Table Definitions
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_user_rel_user = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
         $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
@@ -3586,28 +3781,38 @@ class UserManager
 
         if (api_get_multiple_access_url()) {
             //Deleting assigned users to hrm_id
-            $sql = "SELECT s.user_id FROM $tbl_user_rel_user s INNER JOIN $tbl_user_rel_access_url a ON (a.user_id = s.user_id)
-                    WHERE friend_user_id = $hr_dept_id AND relation_type = '".USER_RELATION_TYPE_RRHH."'  AND access_url_id = ".api_get_current_access_url_id()."";
+            $sql = "SELECT s.user_id FROM $tbl_user_rel_user s
+                    INNER JOIN $tbl_user_rel_access_url a
+                    ON (a.user_id = s.user_id)
+                    WHERE
+                        friend_user_id = $hr_dept_id AND
+                        relation_type = '".USER_RELATION_TYPE_RRHH."' AND
+                        access_url_id = ".api_get_current_access_url_id()."";
         } else {
             $sql = "SELECT user_id FROM $tbl_user_rel_user
-                    WHERE friend_user_id = $hr_dept_id AND relation_type = '".USER_RELATION_TYPE_RRHH."' ";
+                    WHERE
+                        friend_user_id = $hr_dept_id AND
+                        relation_type = '".USER_RELATION_TYPE_RRHH."' ";
         }
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             while ($row = Database::fetch_array($result)) {
                 $sql = "DELETE FROM $tbl_user_rel_user
-                        WHERE user_id = '{$row['user_id']}' AND friend_user_id = $hr_dept_id AND relation_type = '".USER_RELATION_TYPE_RRHH."' ";
+                        WHERE
+                            user_id = '{$row['user_id']}' AND
+                            friend_user_id = $hr_dept_id AND
+                            relation_type = '".USER_RELATION_TYPE_RRHH."' ";
                 Database::query($sql);
             }
         }
 
-        // inserting new user list
+        // Inserting new user list
         if (is_array($users_id)) {
             foreach ($users_id as $user_id) {
                 $user_id = intval($user_id);
-                $insert_sql = "INSERT IGNORE INTO $tbl_user_rel_user(user_id, friend_user_id, relation_type)
+                $sql = "INSERT IGNORE INTO $tbl_user_rel_user(user_id, friend_user_id, relation_type)
                                VALUES ('$user_id', $hr_dept_id, '".USER_RELATION_TYPE_RRHH."')";
-                Database::query($insert_sql);
+                Database::query($sql);
                 $affected_rows = Database::affected_rows();
             }
         }
@@ -3628,7 +3833,11 @@ class UserManager
         $hr_dept_id = intval($hr_dept_id);
         $result = false;
 
-        $sql = "SELECT user_id FROM $tbl_user_rel_user WHERE user_id='$user_id' AND friend_user_id='$hr_dept_id' AND relation_type = ".USER_RELATION_TYPE_RRHH." ";
+        $sql = "SELECT user_id FROM $tbl_user_rel_user
+                WHERE
+                    user_id='$user_id' AND
+                    friend_user_id='$hr_dept_id' AND
+                    relation_type = ".USER_RELATION_TYPE_RRHH;
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             $result = true;
@@ -3650,7 +3859,9 @@ class UserManager
         if ($session == 0 || is_null($session)) {
             $sql = 'SELECT u.user_id FROM '.$table_user.' u
                     INNER JOIN '.$table_course_user.' ru ON ru.user_id=u.user_id
-                    WHERE ru.status=1 AND ru.course_code="'.Database::escape_string($course_id).'" ';
+                    WHERE
+                        ru.status = 1 AND
+                        ru.course_code = "'.Database::escape_string($course_id).'" ';
             $rs = Database::query($sql);
             $num_rows = Database::num_rows($rs);
             if ($num_rows == 1) {
@@ -3663,8 +3874,11 @@ class UserManager
             }
         } elseif ($session > 0) {
             $sql = 'SELECT u.user_id FROM '.$table_user.' u
-                INNER JOIN '.$table_session_course_user.' sru
-                ON sru.id_user=u.user_id WHERE sru.course_code="'.Database::escape_string($course_id).'" AND sru.status=2';
+                    INNER JOIN '.$table_session_course_user.' sru
+                    ON sru.id_user=u.user_id
+                    WHERE
+                        sru.course_code="'.Database::escape_string($course_id).'" AND
+                        sru.status=2';
             $rs = Database::query($sql);
             $row = Database::fetch_array($rs);
 
@@ -3682,7 +3896,9 @@ class UserManager
     {
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $sql = 'SELECT path_certificate FROM '.$table_certificate.'
-                WHERE cat_id="'.Database::escape_string($cat_id).'" AND user_id="'.Database::escape_string($user_id).'"';
+                WHERE
+                    cat_id="'.Database::escape_string($cat_id).'" AND
+                    user_id="'.Database::escape_string($user_id).'"';
         $rs = Database::query($sql);
         $row = Database::fetch_array($rs);
         if ($row['path_certificate'] == '' || is_null($row['path_certificate'])) {
@@ -3709,7 +3925,8 @@ class UserManager
         } else {
             $session_condition = " AND session_id = $session_id";
         }
-        //Getting gradebook score
+
+        // Getting gradebook score.
         require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be.inc.php';
         require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/scoredisplay.class.php';
 
@@ -3725,7 +3942,6 @@ class UserManager
             $category_id = $row['cat_id'];
             $cat = Category::load($category_id);
             $displayscore = ScoreDisplay::instance();
-            $grade = '';
             if (isset($cat) && $displayscore->is_custom()) {
                 $grade = $displayscore->display_score(array($score, $cat[0]->get_weight()), SCORE_DIV_PERCENT_WITH_CUSTOM);
             } else {
@@ -3787,7 +4003,11 @@ class UserManager
         $result = false;
 
         $sql = "SELECT id_session FROM $tbl_session_course_rel_user
-                WHERE id_session=$session_id AND course_code='$course_code' AND id_user = $user_id AND status=2 ";
+                WHERE
+                  id_session=$session_id AND
+                  course_code='$course_code' AND
+                  id_user = $user_id AND
+                  status = 2 ";
         $res = Database::query($sql);
 
         if (Database::num_rows($res) > 0) {
@@ -3901,7 +4121,13 @@ class UserManager
                     }
                     break;
                 case self::USER_FIELD_TYPE_TEXTAREA:
-                    $form->add_html_editor('extra_'.$field_details[1], $field_details[3], false, false, array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130'));
+                    $form->add_html_editor(
+                        'extra_'.$field_details[1],
+                        $field_details[3],
+                        false,
+                        false,
+                        array('ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130')
+                    );
                     //$form->addElement('textarea', 'extra_'.$field_details[1], $field_details[3], array('size' => 80));
                     $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
                     $form->applyFilter('extra_'.$field_details[1], 'trim');
@@ -3914,7 +4140,13 @@ class UserManager
                     $group = array();
                     foreach ($field_details[9] as $option_id => $option_details) {
                         $options[$option_details[1]] = $option_details[2];
-                        $group[] = & HTML_QuickForm::createElement('radio', 'extra_'.$field_details[1], $option_details[1], $option_details[2].'<br />', $option_details[1]);
+                        $group[] = & HTML_QuickForm::createElement(
+                            'radio',
+                            'extra_'.$field_details[1],
+                            $option_details[1],
+                            $option_details[2].'<br />',
+                            $option_details[1]
+                        );
                     }
                     $form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '');
                     if (!$admin_permissions) {
@@ -3940,7 +4172,14 @@ class UserManager
                         $field_details[3] = get_lang($field_details[3]);
                     }
 
-                    $form->addElement('select', 'extra_'.$field_details[1], $field_details[3], $options, array('class' => 'chzn-select', 'id' => 'extra_'.$field_details[1]));
+                    $form->addElement(
+                        'select',
+                        'extra_'.$field_details[1],
+                        $field_details[3],
+                        $options,
+                        array('class' => 'chzn-select', 'id' => 'extra_'.$field_details[1])
+                    );
+
                     if (!$admin_permissions) {
                         if ($field_details[7] == 0)
                             $form->freeze('extra_'.$field_details[1]);
@@ -3998,15 +4237,17 @@ class UserManager
                             $form->freeze('extra_'.$field_details[1]);
                     }
 
-                    // recoding the selected values for double : if the user has selected certain values, we have to assign them to the correct select form
-                    if (key_exists('extra_'.$field_details[1], $extra_data)) {
+                    /* Recoding the selected values for double : if the user has
+                    selected certain values, we have to assign them to the
+                    correct select form */
+                    if (array_key_exists('extra_'.$field_details[1], $extra_data)) {
                         // exploding all the selected values (of both select forms)
                         $selected_values = explode(';', $extra_data['extra_'.$field_details[1]]);
                         $extra_data['extra_'.$field_details[1]] = array();
 
                         // looping through the selected values and assigning the selected values to either the first or second select form
                         foreach ($selected_values as $key => $selected_value) {
-                            if (key_exists($selected_value, $values[0])) {
+                            if (array_key_exists($selected_value, $values[0])) {
                                 $extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
                             } else {
                                 $extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
@@ -4069,7 +4310,15 @@ EOF;
                         $top = '0';
                     }
                     // print the input field
-                    $form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 60, 'style' => 'background-image: url(\''.$icon_path.'\'); background-repeat: no-repeat; background-position: 0.4em '.$top.'em; padding-left: '.$leftpad.'em; '));
+                    $form->addElement(
+                        'text',
+                        'extra_'.$field_details[1],
+                        $field_details[3],
+                        array(
+                            'size' => 60,
+                            'style' => 'background-image: url(\''.$icon_path.'\'); background-repeat: no-repeat; background-position: 0.4em '.$top.'em; padding-left: '.$leftpad.'em; '
+                        )
+                    );
                     $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
                     $form->applyFilter('extra_'.$field_details[1], 'trim');
                     if ($field_details[7] == 0)
@@ -4142,7 +4391,8 @@ EOF;
         $to = Database::escape_string($to);
 
         if (!empty($to) && !empty($from)) {
-            $sql = "UPDATE $table_user SET language = '$to' WHERE language = '$from'";
+            $sql = "UPDATE $table_user SET language = '$to'
+                    WHERE language = '$from'";
             Database::query($sql);
         }
     }

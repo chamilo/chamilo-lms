@@ -896,7 +896,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
     	switch ($course_info['visibility']) {
     		default:
     		case COURSE_VISIBILITY_CLOSED: //Completely closed: the course is only accessible to the teachers. - 0
-    			if (api_get_user_id() && !api_is_anonymous() && (api_is_allowed_to_edit())) {
+    			if (api_get_user_id() && !api_is_anonymous() && $is_allowed_in_course) {
     				$is_visible = true;
     			}
     			break;
@@ -1119,24 +1119,31 @@ function _api_format_user($user, $add_password = false) {
     $result['theme']            = $user['theme'];
     $result['language']         = $user['language'];
 
-    if (!isset($user['lastLogin']) && !isset($user['last_login'])) {
-        require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
-        $timestamp = Tracking::get_last_connection_date($result['user_id'], false, true);
-        // Convert the timestamp back into a datetime
-        // NOTE: this timestamp has ALREADY been converted to the local timezone in the get_last_connection_date function
-        $last_login = date('Y-m-d H:i:s', $timestamp);
+    if (isset($_configuration['save_user_last_login']) &&
+        $_configuration['save_user_last_login']
+    ) {
+        $last_login = $user['last_login'];
     } else {
-        if (isset($user['lastLogin'])) {
-            $last_login = $user['lastLogin'];
+        if (!isset($user['lastLogin']) && !isset($user['last_login'])) {
+            require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
+            $timestamp = Tracking::get_last_connection_date($result['user_id'], false, true);
+            // Convert the timestamp back into a datetime
+            // NOTE: this timestamp has ALREADY been converted to the local timezone in the get_last_connection_date function
+            $last_login = date('Y-m-d H:i:s', $timestamp);
         } else {
-            $last_login = $user['last_login'];
+            if (isset($user['lastLogin'])) {
+                $last_login = $user['lastLogin'];
+            } else {
+                $last_login = $user['last_login'];
+            }
         }
     }
+
     $result['last_login'] = $last_login;
     // Kept for historical reasons
     $result['lastLogin'] = $last_login;
 
-    //Getting user avatar
+    // Getting user avatar.
 
 	$picture_filename   = trim($user['picture_uri']);
 	$avatar             = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
@@ -5098,12 +5105,8 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
 function replace_dangerous_char($filename, $strict = 'loose')
 {
     // Safe replacements for some non-letter characters.
-    static $search  = array(
-        ',', "\0", ' ', "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%'
-    );
-    static $replace = array(
-        '_', '',   '_', '_',  '_',  '_',  '_', '-', '-',  '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'
-    );
+    static $search  = array(',', "\0", ' ', "\t", "\n", "\r", "\x0B", '/', "\\", '"', "'", '?', '*', '>', '<', '|', ':', '$', '(', ')', '^', '[', ']', '#', '+', '&', '%');
+    static $replace = array('_', '', '_', '_', '_', '_', '_', '-', '-', '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
 
     // Encoding detection.
     $encoding = api_detect_encoding($filename);
@@ -6049,7 +6052,7 @@ function api_get_jquery_libraries_js($libraries) {
     }
 
     // jquery datepicker
-    if (in_array('datepicker',$libraries)) {
+    if (in_array('datepicker', $libraries)) {
         $languaje   = 'en-GB';
         $platform_isocode = strtolower(api_get_language_isocode());
 
@@ -6061,6 +6064,7 @@ function api_get_jquery_libraries_js($libraries) {
             $languaje = $platform_isocode;
         }
 
+        $js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
         $script = '<script>
         $(function(){
             $.datepicker.setDefaults($.datepicker.regional["'.$languaje.'"]);
@@ -6068,8 +6072,8 @@ function api_get_jquery_libraries_js($libraries) {
         });
         </script>
         ';
-        $js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
-        $js .= $script; //api_get_js('jquery-ui/ui/i18n/jquery.ui.datepicker-'.$languaje.'.js');
+        $js .= $script;
+
 
     }
     return $js;
@@ -6451,12 +6455,13 @@ function api_get_security_key() {
 }
 
 function api_get_datetime_picker_js($htmlHeadXtra) {
+
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript" language="javascript"></script>';
     $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
 
     $isocode = api_get_language_isocode();
     if ($isocode != 'en') {
-        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/localization/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript" language="javascript"></script>';
+        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/i18n/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript" language="javascript"></script>';
     }
     return $htmlHeadXtra;
 }
@@ -6872,6 +6877,7 @@ function api_remove_tags_with_space($in_html, $in_double_quote_replace = true) {
     // avoid text stuck together when tags are removed, adding a space after >
     $out_res = str_replace (">", "> ", $out_res);
     $out_res = strip_tags($out_res);
+
     return $out_res;
 }
 
@@ -7009,7 +7015,7 @@ function api_elog($string, $dump = 0)
 /**
  * Set the cookie to go directly to the course code $in_firstpage
  * after login
- * @param in_firstpage is the course code of the course to go
+ * @param string $in_firstpage is the course code of the course to go
  */
 function api_set_firstpage_parameter($in_firstpage)
 {

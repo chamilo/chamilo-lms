@@ -8,6 +8,35 @@ $(function() {
     $('.resizable-vertical').resizable({
         handles: "n, s"
     });
+
+    $('#send_to_all_users').click(function() {
+        var checked = $(this).attr('checked');
+
+        if (!checked) {
+            $('#selectedform option').each(function() {
+                var val = $(this).val();
+                var text = $(this).text();
+                if (val.substr(0 , 4) == 'USER') {
+                    $('#selectedform').find('[value="'+val+'"]').remove();
+                    $('#not_selected_form').append(new Option(text, val));
+                }
+            });
+        }
+
+        $('#not_selected_form option').each(function() {
+            var val = $(this).val();
+            var text = $(this).text();
+            if (val.substr(0 , 4) == 'USER') {
+                if (checked) {
+                    // Add
+                    $('#selectedform').append(new Option(text, val));
+                    $('#not_selected_form').find('[value="'+val+'"]').remove();
+                }
+            }
+        });
+
+
+    });
 });
 
 var Announcement = {};
@@ -66,7 +95,7 @@ function move_selected_option(from, to){
 }
 
 function update_hidden_field(name){
-    
+
     var select = $('#' + name + '_selected');
     var options = $("option", select)
     //update hidden field
@@ -77,7 +106,7 @@ function update_hidden_field(name){
         keys.push(option.val());
     });
     keys = keys.join(',');
-    
+
     var hidden = $('#' + name);
     hidden.val(keys);
 }
@@ -96,9 +125,9 @@ function toggle_list_selector(name)
         list.hide();
         overview.show();
     }
-    
+
     var select = $('#' + name + '_selected');
-    
+
     //update overview
     var content = [];
     var options = $("option", select)
@@ -107,16 +136,17 @@ function toggle_list_selector(name)
         option = $(option);
         content.push(option.text());
     });
-    
+
     content = content.join(', ');
     content = (content == '') ? lang.Everybody : content;
     overview.text(content);
 }
 
 
+
 function toggle_sendto()
 {
-    var list = $('#recipient_list');
+    /*var list = $('#recipient_list');
     var overview = $('#recipient_overview');
     if(list.css('display') == 'none'){
         list.show();
@@ -127,11 +157,11 @@ function toggle_sendto()
         list.hide();
         overview.show();
     }
-    
+
     var selected = $('#selectedform');
     var content = list_box_content(selected[0])
     content = (content == '') ? lang.Everybody : content;
-    overview.text(content);
+    overview.text(content);*/
 }
 
 function list_box_content(box)
@@ -158,7 +188,7 @@ function move(fbox, tbox) {
     var arrFboxIsDisabled = []; // if this from checkbox after move is disabled or not
     var arrTboxIsDisabled = []; // if this to checkbox after move is disabled or not
     var key_value = "";         // key for arrays arrFboxIsDisabled and arrTboxIsDisabled, use associative array key_value is the value of the array element (eg : GROUP:1 or USER:24)
-    
+
     var i;
     for (i = 0; i < tbox.options.length; i++) {
         arrLookup[tbox.options[i].text] = tbox.options[i].value;
@@ -178,8 +208,8 @@ function move(fbox, tbox) {
         {
             arrTbox[tLength] = fbox.options[i].text;
             tLength++;
-        } 
-        else 
+        }
+        else
         {
             arrFbox[fLength] = fbox.options[i].text;
             key_value = fbox.options[i].value;
@@ -187,14 +217,14 @@ function move(fbox, tbox) {
             fLength++;
         }
     }
-    
+
     arrFbox.sort();
     arrTbox.sort();
-    
+
     var arrFboxGroup = [];
     var arrFboxUser = [];
     var prefix_x;
-    
+
     var x;
     for (x = 0; x < arrFbox.length; x++) {
         prefix_x = arrFbox[x].substring(0, 2);
@@ -204,15 +234,15 @@ function move(fbox, tbox) {
             arrFboxUser.push(arrFbox[x]);
         }
     }
-    
+
     arrFboxGroup.sort();
     arrFboxUser.sort();
     arrFbox = arrFboxGroup.concat(arrFboxUser);
-    
+
     var arrTboxGroup = [];
     var arrTboxUser = [];
     var prefix_y;
-    
+
     var y;
     for (y = 0; y < arrTbox.length; y++) {
         prefix_y = arrTbox[y].substring(0, 2);
@@ -222,16 +252,16 @@ function move(fbox, tbox) {
             arrTboxUser.push(arrTbox[y]);
         }
     }
-    
+
     arrTboxGroup.sort();
     arrTboxUser.sort();
     arrTbox = arrTboxGroup.concat(arrTboxUser);
-    
+
     fbox.length = 0;
     tbox.length = 0;
-    
+
     var c;
-    for (c = 0; c < arrFbox.length; c++) 
+    for (c = 0; c < arrFbox.length; c++)
     {
         var no = new Option();
         no.value = arrLookup[arrFbox[c]];
@@ -242,7 +272,7 @@ function move(fbox, tbox) {
         }
         fbox[c] = no;
     }
-    for (c = 0; c < arrTbox.length; c++) 
+    for (c = 0; c < arrTbox.length; c++)
     {
         var no = new Option();
         no.value = arrLookup[arrTbox[c]];
@@ -250,12 +280,12 @@ function move(fbox, tbox) {
         key_value = no.value;
         if (arrTboxIsDisabled[key_value]) {
             no.disabled = "disabled";
-        }        
+        }
         tbox[c] = no;
     }
 }
 
-function validate() 
+function validate()
 {
     "use strict";
     var f = document.new_calendar_item;
@@ -266,7 +296,7 @@ function validate()
 
 function selectAll(cbList, bSelect, showwarning) {
     "use strict";
-    
+
     if (document.getElementById('emailTitle').value == '') {
         document.getElementById('msg_error').innerHTML = lang.FieldRequired;
         document.getElementById('msg_error').style.display = 'block';
@@ -286,11 +316,11 @@ function selectAll(cbList, bSelect, showwarning) {
     }
 }
 
-function reverseAll(cbList) 
+function reverseAll(cbList)
 {
     "use strict";
     var i;
-    for (i = 0; i < cbList.length; i++) 
+    for (i = 0; i < cbList.length; i++)
     {
         cbList[i].checked = !(cbList[i].checked);
         cbList[i].selected = !(cbList[i].selected);

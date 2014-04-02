@@ -16,7 +16,8 @@ require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
-$active = isset($_GET['active']) ? intval($_GET['active']) : null;
+$active = isset($_GET['active']) ? intval($_GET['active']) : 1;
+$sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
 
 api_block_anonymous_users();
 
@@ -32,19 +33,28 @@ if (isset($_GET["user_id"]) && $_GET["user_id"]!="" && isset($_GET["type"]) && $
     $interbreadcrumb[] = array ("url" => "coaches.php", "name" => get_lang('Tutors'));
 }
 
-function get_count_users($keyword = null, $active = null)
+function get_count_users()
 {
+    $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
+    $active = isset($_GET['active']) ? intval($_GET['active']) : 1;
     $sleepingDays = isset($_GET['sleeping_days']) ? intval($_GET['sleeping_days']) : null;
 
     $lastConnectionDate = null;
     if (!empty($sleepingDays)) {
         $lastConnectionDate = api_get_utc_datetime(strtotime($sleepingDays.' days ago'));
     }
-
-    return SessionManager::getCountUserTracking($keyword, $active, $lastConnectionDate);
+    $count = SessionManager::getCountUserTracking(
+        $keyword,
+        $active,
+        $lastConnectionDate,
+        null,
+        null,
+        STUDENT
+    );
+    return $count;
 }
 
-function get_users($from, $number_of_items, $column, $direction)
+function get_users($from, $limit, $column, $direction)
 {
     $active = isset($_GET['active']) ? $_GET['active'] : 1;
     $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
@@ -54,69 +64,49 @@ function get_users($from, $number_of_items, $column, $direction)
     if (!empty($sleepingDays)) {
         $lastConnectionDate = api_get_utc_datetime(strtotime($sleepingDays.' days ago'));
     }
-
     $is_western_name_order = api_is_western_name_order();
     $coach_id = api_get_user_id();
-    $column = 'u.user_id';
+
+    $drhLoaded = false;
 
     if (api_is_drh()) {
+        $column = 'u.user_id';
         if (api_drh_can_access_all_session_content()) {
+
             $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
                 'drh_all',
                 api_get_user_id(),
                 false,
                 $from,
-                $number_of_items,
+                $limit,
                 $column,
                 $direction,
                 $keyword,
                 $active,
-                $lastConnectionDate
-            );
-        } else {
-            $students = UserManager::get_users_followed_by_drh(
-                api_get_user_id(),
+                $lastConnectionDate,
                 null,
-                false,
-                false,
-                false,
-                $from,
-                $number_of_items,
-                $column,
-                $direction,
-                $active,
-                $lastConnectionDate
-            );
-        }
-    } else {
-        if (api_is_platform_admin()) {
-            $students = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
-                'admin',
-                api_get_user_id(),
-                false,
-                $from,
-                $number_of_items,
-                $column,
-                $direction,
-                $keyword,
-                $active,
-                $lastConnectionDate
-            );
-        } else {
-            $students = UserManager::get_users_followed_by_drh(
-                api_get_user_id(),
                 null,
-                false,
-                false,
-                false,
-                $from,
-                $number_of_items,
-                $column,
-                $direction,
-                $active,
-                $lastConnectionDate
+                STUDENT
             );
+            $drhLoaded = true;
         }
+    }
+
+    if ($drhLoaded == false) {
+        $students = UserManager::getUsersFollowedByUser(
+            api_get_user_id(),
+            STUDENT,
+            false,
+            false,
+            false,
+            $from,
+            $limit,
+            $column,
+            $direction,
+            $active,
+            $lastConnectionDate,
+            COURSEMANAGER
+        );
     }
 
     $all_datas = array();
@@ -223,7 +213,8 @@ $table = new SortableTable(
 
 $params = array(
     'keyword' => $keyword,
-    'active' => $active
+    'active' => $active,
+    'sleeping_days' => $sleepingDays
 );
 $table->set_additional_parameters($params);
 
@@ -241,31 +232,42 @@ $table->set_header(4, get_lang('Details'), false);
 
 if ($export_csv) {
     if ($is_western_name_order) {
-        $csv_header[] = array (
-            get_lang('FirstName', ''),
-            get_lang('LastName', ''),
-            get_lang('FirstLogin', ''),
-            get_lang('LastConnexion', '')
+        $csv_header[] = array(
+            get_lang('FirstName'),
+            get_lang('LastName'),
+            get_lang('FirstLogin'),
+            get_lang('LastConnexion')
         );
     } else {
-        $csv_header[] = array (
-            get_lang('LastName', ''),
-            get_lang('FirstName', ''),
-            get_lang('FirstLogin', ''),
-            get_lang('LastConnexion', '')
+        $csv_header[] = array(
+            get_lang('LastName'),
+            get_lang('FirstName'),
+            get_lang('FirstLogin'),
+            get_lang('LastConnexion')
         );
     }
 }
 
 $form = new FormValidator('search_user', 'get', api_get_path(WEB_CODE_PATH).'mySpace/student.php');
-$form->addElement('text', 'keyword', get_lang('User'));
+$form->addElement('text', 'keyword', get_lang('Keyword'));
+$form->addElement('select', 'active', get_lang('Status'), array(1 => get_lang('Active'), 0 => get_lang('Inactive')));
+if (isset($_configuration['save_user_last_login']) &&
+    $_configuration['save_user_last_login']
+) {
+    $form->addElement(
+        'select',
+        'sleeping_days',
+        get_lang('InactiveDays'),
+        array('', 1 => 1, 5 => 5, 15 => 15, 30 => 30, 60 => 60, 90 => 90, 120 => 120)
+    );
+}
 $form->addElement('button', 'submit', get_lang('Search'));
 $form->setDefaults($params);
 
-// send the csv file if asked
-$content = $table->get_table_data();
-
 if ($export_csv) {
+    // send the csv file if asked
+    $content = $table->get_table_data();
+
     foreach ($content as &$row) {
         unset($row[4]);
     }

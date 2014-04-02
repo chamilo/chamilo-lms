@@ -1343,10 +1343,14 @@ class GroupManager
         $group_id = Database::escape_string($group_id);
         $user_id = Database::escape_string($user_id);
         $course_id = api_get_course_int_id();
-        $sql = 'SELECT 1 FROM '.$table_group_user.' WHERE c_id = '.$course_id.' AND group_id = '.$group_id.' AND user_id = '.$user_id;
-        $db_result = Database::query($sql);
+        $sql = 'SELECT 1 FROM '.$table_group_user.'
+                WHERE
+                    c_id = '.$course_id.' AND
+                    group_id = '.$group_id.' AND
+                    user_id = '.$user_id;
+        $result = Database::query($sql);
 
-        return Database::num_rows($db_result) > 0;
+        return Database::num_rows($result) > 0;
     }
 
     /**

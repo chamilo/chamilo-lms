@@ -366,6 +366,7 @@ class MySpace {
             get_lang('Time'),
             get_lang('QuestionId'),
             get_lang('QuestionTitle'),
+            get_lang('langWorkDescription'),
             get_lang('Answer'),
             get_lang('Correct'),
         );
@@ -374,17 +375,18 @@ class MySpace {
          * Column config
          */
         $column_model   = array(
-            array('name'=>'session',        'index'=>'session',       'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
-            array('name'=>'exercise_id',    'index'=>'exercise_id',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'quiz_title',     'index'=>'quiz_title',    'align'=>'left', 'search' => 'true'),
-            array('name'=>'username',       'index'=>'username',      'align'=>'left', 'search' => 'true'),
-            array('name'=>'lastname',       'index'=>'lastname',      'align'=>'left', 'search' => 'true'),
-            array('name'=>'firstname',      'index'=>'firstname',     'align'=>'left', 'search' => 'true'),
-            array('name'=>'time',           'index'=>'time',          'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
-            array('name'=>'question_id',    'index'=>'question_id',   'align'=>'left', 'search' => 'true'),
-            array('name'=>'question',       'index'=>'question',      'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
-            array('name'=>'answer',         'index'=>'answer',        'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
-            array('name'=>'correct',         'index'=>'correct',        'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
+            array('name'=>'session', 'index'=>'session', 'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
+            array('name'=>'exercise_id', 'index'=>'exercise_id', 'align'=>'left', 'search' => 'true'),
+            array('name'=>'quiz_title', 'index'=>'quiz_title', 'align'=>'left', 'search' => 'true'),
+            array('name'=>'username', 'index'=>'username', 'align'=>'left', 'search' => 'true'),
+            array('name'=>'lastname', 'index'=>'lastname', 'align'=>'left', 'search' => 'true'),
+            array('name'=>'firstname', 'index'=>'firstname', 'align'=>'left', 'search' => 'true'),
+            array('name'=>'time', 'index'=>'time', 'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
+            array('name'=>'question_id', 'index'=>'question_id', 'align'=>'left', 'search' => 'true'),
+            array('name'=>'question', 'index'=>'question', 'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
+            array('name'=>'description', 'index'=>'description', 'align'=>'left', 'width' => '550', 'search' => 'true', 'wrap_cell' => "true"),
+            array('name'=>'answer', 'index'=>'answer', 'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
+            array('name'=>'correct', 'index'=>'correct', 'align'=>'left', 'search' => 'true', 'wrap_cell' => "true"),
         );
         //get dynamic column names
 

@@ -643,6 +643,7 @@ switch ($action) {
             'time',
             'question_id',
             'question',
+            'description',
             'answer',
             'correct',
         );

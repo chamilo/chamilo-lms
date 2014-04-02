@@ -3490,13 +3490,14 @@ class Tracking
          * query made it take ages. The logic of query division is described below
          */
         // Get tables names
-        $tuser                   = Database::get_main_table(TABLE_MAIN_USER);
-        $tquiz                   = Database::get_course_table(TABLE_QUIZ_TEST);
-        $tquiz_answer            = Database::get_course_table(TABLE_QUIZ_ANSWER);
-        $tquiz_question          = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $tuser = Database::get_main_table(TABLE_MAIN_USER);
+        $tquiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        $tquiz_answer = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $tquiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $tquiz_rel_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $ttrack_exercises  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $ttrack_attempt    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-
+ 
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
         
         $sessions = array();
@@ -3597,10 +3598,17 @@ class Tracking
                 te.exe_exo_id as quiz_id,
                 CONCAT ('c', q.c_id, '_e', q.id) as exercise_id,
                 q.title as quiz_title,
-                q.description
-                FROM $ttrack_exercises te, $ttrack_attempt ta, $tquiz q
+                qq.description as description
+                FROM $ttrack_exercises te
+                INNER JOIN $ttrack_attempt ta ON ta.exe_id = te.exe_id
+                INNER JOIN $tquiz q ON q.id = te.exe_exo_id
+                INNER JOIN $tquiz_rel_question rq ON rq.exercice_id = q.id AND rq.c_id = q.c_id
+                INNER JOIN $tquiz_question qq ON qq.id = rq.question_id 
+                                                AND qq.c_id = rq.c_id 
+                                                AND qq.position = rq.question_order 
+                                                AND ta.question_id = rq.question_id
                 WHERE te.exe_cours_id = '$whereCourseCode' ".(empty($whereSessionParams)?'':"AND te.session_id IN ($whereSessionParams)")."
-                  AND ta.exe_id = te.exe_id AND q.c_id = $courseIdx AND q.id = te.exe_exo_id
+                AND q.c_id = $courseIdx
                   $where $order $limit";
             $sql_query = vsprintf($sql, $whereParams);
             
@@ -3661,6 +3669,7 @@ class Tracking
                 $data[$id]['correct'] = ($answer[$rowQuestId][$rowAnsId]['correct'] == 0 ? get_lang('No') : get_lang('Yes'));
                 $data[$id]['question'] = $question[$rowQuestId]['question'];
                 $data[$id]['question_id'] = $rowQuestId;
+                $data[$id]['description'] = $row['description'];
             }
             /*
             The minimum expected array structure at the end is:

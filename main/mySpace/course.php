@@ -136,6 +136,7 @@ function get_count_courses()
 {
     $userId = api_get_user_id();
     $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
+    $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : null;
     $drhLoaded = false;
 
     if (api_is_drh()) {
@@ -148,19 +149,14 @@ function get_count_courses()
                     null,
                     null,
                     null,
-                    true
+                    true,
+                    $keyword
                 );
-                /*$count = SessionManager::getAllCoursesFromAllSessionFromDrh(
-                    $userId,
-                    DRH,
-                    null,
-                    null,
-                    null,
-                    null,
-                    true
-                );*/
             } else {
-                $count = SessionManager::getCourseCountBySessionId($sessionId);
+                $count = SessionManager::getCourseCountBySessionId(
+                    $sessionId,
+                    $keyword
+                );
             }
             $drhLoaded = true;
         }
@@ -174,7 +170,8 @@ function get_count_courses()
             null,
             null,
             null,
-            true
+            true,
+            $keyword
         );
     }
 
@@ -185,6 +182,7 @@ function get_courses($from, $limit, $column, $direction)
 {
     $userId = api_get_user_id();
     $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
+    $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : null;
 
     $drhLoaded = false;
     if (api_is_drh()) {
@@ -196,7 +194,8 @@ function get_courses($from, $limit, $column, $direction)
                 $limit,
                 $column,
                 $direction,
-                false
+                false,
+                $keyword
             );
             $drhLoaded = true;
         }
@@ -209,7 +208,9 @@ function get_courses($from, $limit, $column, $direction)
             $from,
             $limit,
             $column,
-            $direction
+            $direction,
+            false,
+            $keyword
         );
     }
 
@@ -271,6 +272,7 @@ function get_courses($from, $limit, $column, $direction)
             );
         }
     }
+
     return $courseList;
 }
 
@@ -283,10 +285,7 @@ $table = new SortableTable(
     10
 );
 
-$params = array(
-    'session_id' => $sessionId
-);
-$table->set_additional_parameters($params);
+
 
 $table->set_header(0, get_lang('CourseTitle'), false);
 $table->set_header(1, get_lang('NbStudents'), false);
@@ -297,6 +296,22 @@ $table->set_header(5, get_lang('AvgCourseScore').Display :: return_icon('info3.g
 $table->set_header(6, get_lang('AvgMessages'), false);
 $table->set_header(7, get_lang('AvgAssignments'), false);
 $table->set_header(8, get_lang('Details'), false);
+
+$form = new FormValidator('search_course', 'get', api_get_path(WEB_CODE_PATH).'mySpace/course.php');
+$form->addElement('text', 'keyword', get_lang('Keyword'));
+$form->addElement('button', 'submit', get_lang('Search'));
+$form->addElement('hidden', 'session_id', $sessionId);
+
+$keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
+
+$params = array(
+    'session_id' => $sessionId,
+    'keyword' => $keyword
+);
+$table->set_additional_parameters($params);
+
+$form->setDefaults($params);
+$form->display();
 $table->display();
 
 Display :: display_footer();

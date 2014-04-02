@@ -3019,7 +3019,8 @@ class CourseManager
         $limit = null,
         $column = null,
         $direction = null,
-        $getCount = false
+        $getCount = false,
+        $keyword = null
     ) {
         // Database Table Definitions
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -3050,6 +3051,13 @@ class CourseManager
                 break;
         }
 
+        $keywordCondition = null;
+        if (!empty($keyword)) {
+            $keyword = Database::escape_string($keyword);
+            $keywordCondition = " AND (c.code LIKE '%$keyword%' OR c.title LIKE '%$keyword%' ) ";
+        }
+
+        $whereConditions .= $keywordCondition;
         $sql = "$select
                 FROM $tbl_course c
                     INNER JOIN $tbl_course_rel_user cru ON (cru.course_code = c.code)

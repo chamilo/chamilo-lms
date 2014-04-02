@@ -1598,19 +1598,26 @@ class Tracking
 
     /**
      * Get sessions coached by user
-     * @param    int        Coach id
-     * @return    array    Sessions list
+     * @param $coach_id
+     * @param int $start
+     * @param int $limit
+     * @param bool $getCount
+     * @param null $keyword
+     * @return mixed
      */
-    public static function get_sessions_coached_by_user($coach_id, $start = 0, $limit = 0, $getCount = false)
-    {
+    public static function get_sessions_coached_by_user(
+        $coach_id,
+        $start = 0,
+        $limit = 0,
+        $getCount = false,
+        $keyword = null
+    ) {
         // table definition
         $tbl_session = Database :: get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-
         $coach_id = intval($coach_id);
 
         $select = " SELECT * FROM ";
-
         if ($getCount) {
             $select = " SELECT count(DISTINCT id) as count FROM ";
         }
@@ -1620,49 +1627,34 @@ class Tracking
             $limitCondition = " LIMIT ".intval($start).", ".intval($limit);
         }
 
-        // session where we are general coach
-        $sql = " $select
-
-                (
-                    SELECT DISTINCT id, name, date_start, date_end
-                    FROM $tbl_session
-                    WHERE id_coach = $coach_id
-                UNION
-                    SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
-                    FROM $tbl_session as session
-                    INNER JOIN $tbl_session_course_user as session_course_user
-                        ON session.id = session_course_user.id_session AND
-                        session_course_user.id_user= $coach_id AND
-                        session_course_user.status=2
-                )
-                as sessions $limitCondition
-                ";
-
-        if (api_is_multiple_url_enabled()) {
-            $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-            $access_url_id = api_get_current_access_url_id();
-            if ($access_url_id != -1){
-                $sql = "
-                    $select
-                    (
-                        SELECT DISTINCT id, name, date_start, date_end
-                        FROM $tbl_session session INNER JOIN $tbl_session_rel_access_url session_rel_url
-                        ON (session.id = session_rel_url.session_id)
-                        WHERE id_coach = $coach_id AND access_url_id = $access_url_id
-                    UNION
-                        SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
-                        FROM $tbl_session as session
-                        INNER JOIN $tbl_session_course_user as session_course_user
-                            ON session.id = session_course_user.id_session AND
-                            session_course_user.id_user= $coach_id AND
-                            session_course_user.status=2
-                        INNER JOIN $tbl_session_rel_access_url session_rel_url
-                        ON (session.id = session_rel_url.session_id)
-                        WHERE access_url_id = $access_url_id
-                    ) as sessions $limitCondition
-                    ";
-            }
+        $keywordCondition = null;
+        if (!empty($keyword)) {
+            $keyword = Database::escape_string($keyword);
+            $keywordCondition = " AND (name LIKE '%$keyword%' ) ";
         }
+
+        $tbl_session_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $access_url_id = api_get_current_access_url_id();
+
+        $sql = "
+            $select
+            (
+                SELECT DISTINCT id, name, date_start, date_end
+                FROM $tbl_session session INNER JOIN $tbl_session_rel_access_url session_rel_url
+                ON (session.id = session_rel_url.session_id)
+                WHERE id_coach = $coach_id AND access_url_id = $access_url_id $keywordCondition
+            UNION
+                SELECT DISTINCT session.id, session.name, session.date_start, session.date_end
+                FROM $tbl_session as session
+                INNER JOIN $tbl_session_course_user as session_course_user
+                    ON session.id = session_course_user.id_session AND
+                    session_course_user.id_user= $coach_id AND
+                    session_course_user.status=2
+                INNER JOIN $tbl_session_rel_access_url session_rel_url
+                ON (session.id = session_rel_url.session_id)
+                WHERE access_url_id = $access_url_id $keywordCondition
+            ) as sessions $limitCondition
+            ";
 
         $rs = Database::query($sql);
         if ($getCount) {

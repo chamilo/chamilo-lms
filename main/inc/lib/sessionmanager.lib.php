@@ -2392,7 +2392,8 @@ class SessionManager
         $getCount = false,
         $getOnlySessionId = false,
         $getSql = false,
-        $orderCondition = null
+        $orderCondition = null,
+        $keyword = null
     ) {
         return self::getSessionsFollowedByUser(
             $userId,
@@ -2402,7 +2403,8 @@ class SessionManager
             $getCount,
             $getOnlySessionId,
             $getSql,
-            $orderCondition
+            $orderCondition,
+            $keyword
         );
 	}
 
@@ -2415,6 +2417,7 @@ class SessionManager
      * @param bool $getOnlySessionId
      * @param bool $getSql
      * @param string $orderCondition
+     * @param string $keyword
      * @return array sessions
      */
     public static function getSessionsFollowedByUser(
@@ -2425,7 +2428,8 @@ class SessionManager
         $getCount = false,
         $getOnlySessionId = false,
         $getSql = false,
-        $orderCondition = null
+        $orderCondition = null,
+        $keyword = null
     ) {
         // Database Table Definitions
         $tbl_session 			= Database::get_main_table(TABLE_MAIN_SESSION);
@@ -2454,6 +2458,7 @@ class SessionManager
             $orderCondition = " ORDER BY s.name ";
         }
 
+
         $whereConditions = null;
         $sessionCourseConditions = null;
         $sessionConditions = null;
@@ -2476,9 +2481,16 @@ class SessionManager
                     WHERE (scu.status = 2 AND scu.id_user = $userId)";
 
                 $whereConditions = " OR (s.id_coach = $userId) ";
-
                 break;
         }
+
+        $keywordCondition = null;
+        if (!empty($keyword)) {
+            $keyword = Database::escape_string($keyword);
+            $keywordCondition = " AND (s.name LIKE '%$keyword%' ) ";
+        }
+        $whereConditions .= $keywordCondition;
+
         $subQuery = $sessionQuery.$courseSessionQuery;
 
         $sql = " $select FROM $tbl_session s
@@ -2564,7 +2576,8 @@ class SessionManager
         $limit = null,
         $column = null,
         $direction = null,
-        $getCount = false
+        $getCount = false,
+        $keyword = null
     ) {
         if (empty($sessionId)) {
             $sessionsSQL = SessionManager::get_sessions_followed_by_drh(
@@ -2588,12 +2601,20 @@ class SessionManager
             $select = "SELECT DISTINCT c.* ";
         }
 
+        $keywordCondition = null;
+        if (!empty($keyword)) {
+            $keyword = Database::escape_string($keyword);
+            $keywordCondition = " AND (c.code LIKE '%$keyword%' OR c.title LIKE '%$keyword%' ) ";
+        }
+
         // Select the courses
         $sql = "$select
                 FROM $tbl_course c
                 INNER JOIN $tbl_session_rel_course src
                 ON c.code = src.course_code
-		        WHERE src.id_session IN ($sessionsSQL)
+		        WHERE
+		            src.id_session IN ($sessionsSQL)
+		            $keywordCondition
 		        ";
         if ($getCount) {
             $result = Database::query($sql);
@@ -2625,16 +2646,24 @@ class SessionManager
      * @param int session id
      * @return array list of courses
      */
-    public static function getCourseCountBySessionId($session_id)
+    public static function getCourseCountBySessionId($session_id, $keyword = null)
     {
         $tbl_course				= Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course	= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
         // select the courses
-        $sql = "SELECT COUNT(c.code) count FROM $tbl_course c
+        $sql = "SELECT COUNT(c.code) count
+                FROM $tbl_course c
                 INNER JOIN $tbl_session_rel_course src
                 ON c.code = src.course_code
-		        WHERE src.id_session = '$session_id'";
+		        WHERE src.id_session = '$session_id' ";
+
+        $keywordCondition = null;
+        if (!empty($keyword)) {
+            $keyword = Database::escape_string($keyword);
+            $keywordCondition = " AND (c.code LIKE '%$keyword%' OR c.title LIKE '%$keyword%' ) ";
+        }
+        $sql .= $keywordCondition;
 
         $result = Database::query($sql);
         $num_rows = Database::num_rows($result);
@@ -3796,7 +3825,6 @@ class SessionManager
         }
 
         $sql .= $limitCondition;
-
         $result = Database::query($sql);
         $result = Database::store_result($result);
 

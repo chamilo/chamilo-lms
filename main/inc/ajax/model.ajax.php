@@ -287,11 +287,27 @@ switch ($action) {
         $count = get_count_exam_hotpotatoes_results($hotpot_path);
         break;
     case 'get_sessions_tracking':
+        $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : null;
         if (api_is_drh()) {
-            $count = SessionManager::get_sessions_followed_by_drh(api_get_user_id(), null, null, true);
+            $count = SessionManager::get_sessions_followed_by_drh(
+                api_get_user_id(),
+                null,
+                null,
+                true,
+                false,
+                false,
+                null,
+                $keyword
+            );
         } else {
             // Sessions for the coach
-            $count = Tracking::get_sessions_coached_by_user(api_get_user_id(), null, null, true);
+            $count = Tracking::get_sessions_coached_by_user(
+                api_get_user_id(),
+                null,
+                null,
+                true,
+                $keyword
+            );
         }
         break;
     case 'get_sessions':
@@ -631,10 +647,25 @@ switch ($action) {
         break;
     case 'get_sessions_tracking':
         if (api_is_drh()) {
-            $sessions = SessionManager::get_sessions_followed_by_drh(api_get_user_id(), $start, $limit);
+            $sessions = SessionManager::get_sessions_followed_by_drh(
+                api_get_user_id(),
+                $start,
+                $limit,
+                false,
+                false,
+                false,
+                null,
+                $keyword
+            );
         } else {
             // Sessions for the coach
-            $sessions = Tracking::get_sessions_coached_by_user(api_get_user_id(), $start, $limit);
+            $sessions = Tracking::get_sessions_coached_by_user(
+                api_get_user_id(),
+                $start,
+                $limit,
+                false,
+                $keyword
+            );
         }
 
         $columns =  array(

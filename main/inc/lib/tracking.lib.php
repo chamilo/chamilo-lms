@@ -3596,13 +3596,14 @@ class Tracking
                 ta.tms as time,
                 te.exe_exo_id as quiz_id,
                 CONCAT ('c', q.c_id, '_e', q.id) as exercise_id,
-                q.title as quiz_title
+                q.title as quiz_title,
+                q.description
                 FROM $ttrack_exercises te, $ttrack_attempt ta, $tquiz q
                 WHERE te.exe_cours_id = '$whereCourseCode' ".(empty($whereSessionParams)?'':"AND te.session_id IN ($whereSessionParams)")."
                   AND ta.exe_id = te.exe_id AND q.c_id = $courseIdx AND q.id = te.exe_exo_id
                   $where $order $limit";
             $sql_query = vsprintf($sql, $whereParams);
-
+            
             // Now browse through the results and get the data
             $rs = Database::query($sql_query);
             $userIds = array();

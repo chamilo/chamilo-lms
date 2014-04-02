@@ -5041,28 +5041,35 @@ class learnpath
         if ($update_audio == 'true') {
             $return .= '<form action="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;updateaudio=' . Security :: remove_XSS($_GET['updateaudio']) .'&amp;action=' . Security :: remove_XSS($_GET['action']) . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" method="post" enctype="multipart/form-data" name="updatemp3" id="updatemp3">';
         }
-        $return .= '<div id="message"></div>';
+	$return .= '<div id="message"></div>';
+	if(count($this->items) == 0)
+	{
+		$return .= Display::display_normal_message(get_lang('YouShouldAddItemsBeforeAttachAudio'));
+	}
+	else
+	{
 
-        $return_audio = '<table class="data_table">';
-        $return_audio .= '<tr>';
-        $return_audio .= '<th width="60%">' . get_lang('Title') . '</th>';
-        $return_audio .= '<th>' . get_lang('Audio') . '</th>';
-   		$return_audio .= '</tr>';
+		$return_audio = '<table class="data_table">';
+		$return_audio .= '<tr>';
+		$return_audio .= '<th width="60%">' . get_lang('Title') . '</th>';
+		$return_audio .= '<th>' . get_lang('Audio') . '</th>';
+		$return_audio .= '</tr>';
 
-        if ($update_audio != 'true') {
-        	$return .= '<div class="span12">';
-            $return .= self::return_new_tree($update_audio);
-        	$return .='</div>';
-        	$return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'btn')), array('style'=>'float:left; margin-top:15px;width:100%'));
-        } else {
-            $return_audio .= self::return_new_tree($update_audio);
-        	$return .= $return_audio.'</table>';
-        }
+		if ($update_audio != 'true') {
+			$return .= '<div class="span12">';
+			$return .= self::return_new_tree($update_audio);
+			$return .='</div>';
+			$return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'btn')), array('style'=>'float:left; margin-top:15px;width:100%'));
+		} else {
+			$return_audio .= self::return_new_tree($update_audio);
+			$return .= $return_audio.'</table>';
+		}
 
-        // We need to close the form when we are updating the mp3 files.
-        if ($update_audio == 'true') {
-            $return .= '<div style="margin:40px 0; float:right;"><button class="save" type="submit" name="save_audio" id="save_audio">' . get_lang('SaveAudioAndOrganization') . '</button></div>'; // TODO: What kind of language variable is this?
-        }
+		// We need to close the form when we are updating the mp3 files.
+		if ($update_audio == 'true') {
+			$return .= '<div style="margin:40px 0; float:right;"><button class="save" type="submit" name="save_audio" id="save_audio">' . get_lang('SaveAudioAndOrganization') . '</button></div>'; // TODO: What kind of language variable is this?
+		}
+	}
 
         // We need to close the form when we are updating the mp3 files.
         if ($update_audio == 'true' && count($arrLP) != 0) {

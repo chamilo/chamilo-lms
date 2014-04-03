@@ -1466,7 +1466,7 @@ function event_course_login($course_code, $user_id, $session_id) {
     global $course_tracking_table;
 
     //@todo use api_get_utc_datetime
-    $time		 = api_get_datetime();
+    $time		 = api_get_utc_datetime();
 
     $course_code = Database::escape_string($course_code);
     $user_id	 = Database::escape_string($user_id);
@@ -1479,7 +1479,7 @@ function event_course_login($course_code, $user_id, $session_id) {
                             WHERE   user_id     = $user_id AND
                                     course_code = '$course_code' AND
                                     session_id  = $session_id AND
-                                    login_course_date > now() - INTERVAL $session_lifetime SECOND
+                                    login_course_date > '$time' - INTERVAL $session_lifetime SECOND
                         ORDER BY login_course_date DESC LIMIT 0,1";
     $result = Database::query($sql);
     //error_log(preg_replace('/\s+/',' ',$sql));

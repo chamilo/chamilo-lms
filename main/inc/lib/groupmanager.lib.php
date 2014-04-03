@@ -1943,21 +1943,19 @@ class GroupManager
         $table_group = Database::get_course_table(TABLE_GROUP);
         $user_id = intval($user_id);
         $course_id = api_get_course_int_id();
-        $sql = "SELECT DISTINCT name FROM $table_group g
-               INNER JOIN $table_group_user gu
-               ON (gu.group_id = g.id)
-               INNER JOIN $table_tutor_user tu
-               ON (tu.group_id = g.id)
+        $sql = "SELECT DISTINCT name
+               FROM $table_group g
+               LEFT JOIN $table_group_user gu
+               ON (gu.group_id = g.id AND g.c_id = gu.c_id)
+               LEFT JOIN $table_tutor_user tu
+               ON (tu.group_id = g.id AND g.c_id = tu.c_id)
                WHERE
-                  tu.c_id= $course_id AND
-                  gu.c_id= $course_id AND
-                  g.c_id= $course_id AND
+                  g.c_id = $course_id AND
                   (gu.user_id = $user_id OR tu.user_id = $user_id) ";
-
         $res = Database::query($sql);
         $groups = array();
         while ($group = Database::fetch_array($res)) {
-            $groups[] .= $group['name'];
+            $groups[] = $group['name'];
         }
         return $groups;
     }

@@ -755,8 +755,8 @@ if ($groupId != 0) { // Add group name after for group documents
 
 /* Introduction section (editable by course admins) */
 
-if (!empty($_SESSION['_gid'])) {
-    Display::display_introduction_section(TOOL_DOCUMENT.$_SESSION['_gid']);
+if (!empty($groupId)) {
+    Display::display_introduction_section(TOOL_DOCUMENT.$groupId);
 } else {
     Display::display_introduction_section(TOOL_DOCUMENT);
 }
@@ -951,16 +951,19 @@ if ($is_allowed_to_edit ||
 
         // Check whether the document is in the database.
         if (!empty($documentInfo)) {
-            if (DocumentManager::delete_document(
+            $deleteDocument = DocumentManager::delete_document(
                 $courseInfo,
                 null,
                 $base_work_dir,
                 api_get_session_id(),
-                $_GET['deleteid'])
-            ) {
+                $_GET['deleteid'],
+                $groupId
+            );
+
+            if ($deleteDocument) {
                 $certificateId = isset($_GET['delete_certificate_id']) ? $_GET['delete_certificate_id'] : null;
                 DocumentManager::remove_attach_certificate(api_get_course_id(), $certificateId);
-                Display::display_confirmation_message(get_lang('DocDeleted'));
+                Display::display_confirmation_message(get_lang('DocDeleted').': '.$documentInfo['path']);
             } else {
                 Display::display_warning_message(get_lang('DocDeleteError'));
             }
@@ -972,6 +975,7 @@ if ($is_allowed_to_edit ||
     if (isset($_POST['action']) && isset($_POST['ids'])) {
         $files = $_POST['ids'];
         $readonlyAlreadyChecked = false;
+
         foreach ($files as $documentId) {
             $items = array('/audio', '/flash', '/images', '/shared_folder', '/video', '/chat_files', '/certificates');
             $data = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);
@@ -1051,9 +1055,9 @@ if ($is_allowed_to_edit ||
                             null,
                             $base_work_dir,
                             $session_id,
-                            $documentId
+                            $documentId,
+                            $groupId
                         );
-
                         if (!empty($deleteDocument)) {
                             Display::display_confirmation_message(get_lang('DocDeleted').': '.$data['path']);
                         }
@@ -1282,7 +1286,11 @@ if ($is_allowed_to_edit ||
 
 // END ACTION MENU
 // Attach certificate in the gradebook
-if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && isset($_GET['set_certificate']) && $_GET['set_certificate'] == strval(intval($_GET['set_certificate']))) {
+if (isset($_GET['curdirpath']) &&
+    $_GET['curdirpath'] == '/certificates' &&
+    isset($_GET['set_certificate']) &&
+    $_GET['set_certificate'] == strval(intval($_GET['set_certificate']))
+) {
     if (isset($_GET['cidReq'])) {
         $course_id = Security::remove_XSS($_GET['cidReq']); // course id
         $document_id = Security::remove_XSS($_GET['set_certificate']); // document id
@@ -1342,10 +1350,13 @@ echo '<div class="actions">';
 if (!$is_certificate_mode) {
     /* BUILD SEARCH FORM */
     echo '<span style="display:inline-block;">';
-    $form = new FormValidator('search_document', 'get', '', '', null, false);
+    $form = new FormValidator('search_document', 'get', api_get_self().'?'.api_get_cidreq());
     $renderer = & $form->defaultRenderer();
     $renderer->setElementTemplate('<span>{element}</span> ');
     $form->add_textfield('keyword', '', false, array('class' => 'span2'));
+    $form->addElement('hidden', 'cidReq', api_get_course_id());
+    $form->addElement('hidden', 'id_session', api_get_session_id());
+    $form->addElement('hidden', 'gidReq', $groupId);
     $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
     $form->display();
     echo '</span>';
@@ -1574,7 +1585,10 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
                 $countedPaths[$document_data['path']] = true;
             }
 
-            if ((isset($_GET['keyword']) && search_keyword($document_name, $_GET['keyword'])) || !isset($_GET['keyword']) || empty($_GET['keyword'])) {
+            if ((isset($_GET['keyword']) &&
+                search_keyword($document_name, $_GET['keyword'])) ||
+                !isset($_GET['keyword']) || empty($_GET['keyword'])
+            ) {
                 $sortable_data[] = $row;
             }
         }

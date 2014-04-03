@@ -436,7 +436,7 @@ class MySpace {
         $objExercise = new Exercise();
         $exercises = $objExercise->getExercisesByCouseSession($courseId, $sessionId);
 
-        $cntExer = 3;
+        $cntExer = 4;
         if (!empty($exercises)) {
             $cntExer += count($exercises);
         }
@@ -502,6 +502,7 @@ class MySpace {
                     break;
             }
         }
+
         //end get dynamic column names
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH) . 'model.ajax.php?a=get_exercise_grade&session_id=' . $sessionId . '&course_id=' . $courseId;

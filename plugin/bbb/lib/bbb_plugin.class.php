@@ -22,7 +22,7 @@ class BBBPlugin extends Plugin
     }
 
     protected function __construct() {
-        parent::__construct('2.0', 'Julio Montoya, Yannick Warnier', array('tool_enable' => 'boolean', 'host' =>'text', 'salt' => 'text'));
+        parent::__construct('2.1', 'Julio Montoya, Yannick Warnier', array('tool_enable' => 'boolean', 'host' =>'text', 'salt' => 'text'));
     }
 
     function install() {
@@ -38,7 +38,8 @@ class BBBPlugin extends Plugin
                 created_at VARCHAR(255) NOT NULL,
                 closed_at VARCHAR(255) NOT NULL,
                 calendar_id INT DEFAULT 0,
-                welcome_msg VARCHAR(255) NOT NULL DEFAULT '')";
+                welcome_msg VARCHAR(255) NOT NULL DEFAULT '',
+                session_id INT unsigned DEFAULT 0)";
         Database::query($sql);
 
         //Installing course settings
@@ -77,6 +78,6 @@ class BBBPlugin extends Plugin
         Database::query($sql);
 
         //Deleting course settings
-        $this->uninstall_course_fields_in_all_courses();
+        $this->uninstall_course_fields_in_all_courses($this->course_settings);
     }
 }

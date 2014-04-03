@@ -86,6 +86,6 @@ class OpenMeetingsPlugin extends Plugin
         Database::query($sql);
 
         //Deleting course settings
-        $this->uninstall_course_fields_in_all_courses();
+        $this->uninstall_course_fields_in_all_courses($this->course_settings);
     }
 }

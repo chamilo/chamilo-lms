@@ -332,7 +332,8 @@ class Plugin
                     $sql = "SELECT value FROM $t_course WHERE c_id = $course_id AND variable = '$variable' ";
                     $result = Database::query($sql);
                     if (!Database::num_rows($result)) {
-                        $sql_course = "INSERT INTO $t_course (c_id, variable, value, category, subkey, type) VALUES ($course_id, '$variable','$value', 'plugins', '$plugin_name', '$type')";
+                        $sql_course = "INSERT INTO $t_course (c_id, variable, value, category, subkey, type)
+                            VALUES ($course_id, '$variable','$value', 'plugins', '$plugin_name', '$type')";
                         $r = Database::query($sql_course);
                     }
                 }
@@ -361,9 +362,10 @@ class Plugin
      * Delete the fields added to the course settings page and the link to the
      * tool on the course's homepage
      * @param int The integer course ID
+     * @param arrat The list of settings to delete
      * @return void
      */
-    public function uninstall_course_fields($course_id)
+    public function uninstall_course_fields($course_id, $settings = null)
     {
         $course_id = intval($course_id);
         if (empty($course_id)) {
@@ -374,8 +376,11 @@ class Plugin
         $t_course = Database::get_course_table(TABLE_COURSE_SETTING);
         $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
-        if (!empty($this->course_settings)) {
-            foreach ($this->course_settings as $setting) {
+        // The settings array has to be passed from the uninstall method in the
+        // plugin's class, otherwise it is too risky for other plugins: using
+        // $this->course_settings here seems to glob all settings from all plugins
+        if (!empty($settings)) {
+            foreach ($settings as $setting) {
                 $variable = Database::escape_string($setting['name']);
                 if (!empty($setting['group'])) {
                     $variable = Database::escape_string($setting['group']);
@@ -408,16 +413,17 @@ class Plugin
 
     /**
      * Uninstall the plugin settings fields from all courses
+     * @param   array   The list of all settings that have to be deleted
      * @return void
      */
-    public function uninstall_course_fields_in_all_courses()
+    public function uninstall_course_fields_in_all_courses($settings = array())
     {
         // Update existing courses to add conference settings
         $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = "SELECT id, code FROM $t_courses ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
-            $this->uninstall_course_fields($row['id']);
+            $this->uninstall_course_fields($row['id'], $settings);
         }
     }
 

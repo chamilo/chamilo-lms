@@ -997,9 +997,15 @@ class DocumentManager
         $path = null,
         $base_work_dir,
         $sessionId = null,
-        $documentId = null
+        $documentId = null,
+        $groupId = null
     ) {
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+        if (empty($groupId)) {
+            $groupId = api_get_group_id();
+        } else {
+            $groupId = intval($groupId);
+        }
 
         if (empty($sessionId)) {
             $sessionId = api_get_session_id();
@@ -1051,10 +1057,16 @@ class DocumentManager
             return false;
         }
 
+        // File was already deleted.
         if ($itemInfo['lastedit_type'] == 'DocumentDeleted' ||
             $itemInfo['lastedit_type'] == 'delete' ||
             $itemInfo['visibility'] == 2
         ) {
+            return false;
+        }
+
+        // Filtering by group.
+        if ($itemInfo['to_group_id'] != $groupId) {
             return false;
         }
 

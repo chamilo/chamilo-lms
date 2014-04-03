@@ -956,7 +956,8 @@ if ($is_allowed_to_edit ||
                 null,
                 $base_work_dir,
                 api_get_session_id(),
-                $_GET['deleteid']
+                $_GET['deleteid'],
+                $groupId
             );
 
             if ($deleteDocument) {
@@ -1054,7 +1055,8 @@ if ($is_allowed_to_edit ||
                             null,
                             $base_work_dir,
                             $session_id,
-                            $documentId
+                            $documentId,
+                            $groupId
                         );
                         if (!empty($deleteDocument)) {
                             Display::display_confirmation_message(get_lang('DocDeleted').': '.$data['path']);

@@ -222,7 +222,11 @@ class Plugin
     public function get_settings()
     {
         if (is_null($this->settings)) {
-            $settings = api_get_settings_params(array("subkey = ? AND category = ? AND type = ? " => array($this->get_name(), 'Plugins', 'setting')));
+            $settings = api_get_settings_params(
+                array(
+                    "subkey = ? AND category = ? AND type = ? " => array($this->get_name(), 'Plugins', 'setting')
+                )
+            );
             $this->settings = $settings;
         }
 
@@ -419,6 +423,27 @@ class Plugin
         while ($row = Database::fetch_assoc($res)) {
             $this->uninstall_course_fields($row['id']);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getCourseSettings()
+    {
+        $settings = array();
+        if (is_array($this->course_settings)) {
+            foreach ($this->course_settings as $item) {
+                if (isset($item['group'])) {
+                    if (!in_array($item['group'], $settings)) {
+                        $settings[] = $item['group'];
+                    }
+                } else {
+                    $settings[] = $item['name'];
+                }
+            }
+        }
+
+        return $settings;
     }
 
     /**

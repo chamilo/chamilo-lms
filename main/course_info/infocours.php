@@ -357,8 +357,8 @@ if (api_get_setting('allow_public_certificates')=='true') {
 
 // Plugin course settings
 
-$app_plugin = new AppPlugin();
-$app_plugin->add_course_settings_form($form);
+$appPlugin = new AppPlugin();
+$appPlugin->add_course_settings_form($form);
 
 // Get all the course information
 $all_course_information = CourseManager::get_course_information($_course['sysCode']);
@@ -380,19 +380,21 @@ $values['course_registration_password'] = $all_course_information['registration_
 $values['legal']                        = $all_course_information['legal'];
 $values['activate_legal']               = $all_course_information['activate_legal'];
 
-$courseSettings = CourseManager::getCourseSettingVariables();
+$courseSettings = CourseManager::getCourseSettingVariables($appPlugin);
 foreach ($courseSettings as $setting) {
-    $values[$setting] = api_get_course_setting($setting);
+    $result = api_get_course_setting($setting);
+    if ($result != '-1') {
+        $values[$setting] = $result;
+    }
 }
-$app_plugin->set_course_settings_defaults($values);
 
 $form->setDefaults($values);
 
 // Validate form
 if ($form->validate() && is_settings_editable()) {
-    $update_values = $form->exportValues();
+    $updateValues = $form->exportValues();
 
-    $pdf_export_watermark_path = isset($_FILES['pdf_export_watermark_path']) ? $_FILES['pdf_export_watermark_path'] : null
+    $pdf_export_watermark_path = isset($_FILES['pdf_export_watermark_path']) ? $_FILES['pdf_export_watermark_path'] : null;
 
     if (!empty($pdf_export_watermark_path['name'])) {
         $pdf_export_watermark_path_result = PDF::upload_watermark(
@@ -400,7 +402,7 @@ if ($form->validate() && is_settings_editable()) {
             $pdf_export_watermark_path['tmp_name'],
             $course_code
         );
-        unset($update_values['pdf_export_watermark_path']);
+        unset($updateValues['pdf_export_watermark_path']);
     }
 
     //Variables that will be saved in the TABLE_MAIN_COURSE table
@@ -418,39 +420,38 @@ if ($form->validate() && is_settings_editable()) {
         'legal',
         'activate_legal'
     );
-
-    foreach ($update_values as $index =>$value) {
-        $update_values[$index] = Database::escape_string($value);
+    foreach ($updateValues as $index =>$value) {
+        $updateValues[$index] = Database::escape_string($value);
     }
 
     $table_course = Database :: get_main_table(TABLE_MAIN_COURSE);
     $sql = "UPDATE $table_course SET
-        title 				    = '".$update_values['title']."',
-        course_language 	    = '".$update_values['course_language']."',
-        category_code 		    = '".$update_values['category_code']."',
-        department_name  	    = '".$update_values['department_name']."',
-        department_url  	    = '".$update_values['department_url']."',
-        visibility  		    = '".$update_values['visibility']."',
-        subscribe  			    = '".$update_values['subscribe']."',
-        unsubscribe  		    = '".$update_values['unsubscribe']."',
-        legal                   = '".$update_values['legal']."',
-        activate_legal          = '".$update_values['activate_legal']."',
-        registration_code 	    = '".$update_values['course_registration_password']."'
+        title 				    = '".$updateValues['title']."',
+        course_language 	    = '".$updateValues['course_language']."',
+        category_code 		    = '".$updateValues['category_code']."',
+        department_name  	    = '".$updateValues['department_name']."',
+        department_url  	    = '".$updateValues['department_url']."',
+        visibility  		    = '".$updateValues['visibility']."',
+        subscribe  			    = '".$updateValues['subscribe']."',
+        unsubscribe  		    = '".$updateValues['unsubscribe']."',
+        legal                   = '".$updateValues['legal']."',
+        activate_legal          = '".$updateValues['activate_legal']."',
+        registration_code 	    = '".$updateValues['course_registration_password']."'
         WHERE code = '".$course_code."'";
     Database::query($sql);
 
     // Insert/Updates course_settings table
     foreach ($courseSettings as $setting) {
-        if (isset($update_values[$setting])) {
-            CourseManager::saveCourseConfigurationSetting(
-                $setting,
-                $update_values[$setting],
-                api_get_course_int_id()
-            );
-        }
+        $value = isset($updateValues[$setting]) ? $updateValues[$setting] : null;
+        CourseManager::saveCourseConfigurationSetting(
+            $appPlugin,
+            $setting,
+            $value,
+            api_get_course_int_id()
+        );
     }
 
-    $app_plugin->save_course_settings($update_values);
+    $appPlugin->saveCourseSettingsHook($update_values);
     $cidReset = true;
     $cidReq = $course_code;
     require '../inc/local.inc.php';

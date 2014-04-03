@@ -1499,11 +1499,11 @@ function event_course_login($course_code, $user_id, $session_id) {
     global $course_tracking_table;
 
     //@todo use api_get_utc_datetime
-    $time		 = api_get_datetime();
+    $time = api_get_utc_datetime();
 
     $course_code = Database::escape_string($course_code);
-    $user_id	 = Database::escape_string($user_id);
-    $session_id  = Database::escape_string($session_id);
+    $user_id	 = intval($user_id);
+    $session_id  = intval($session_id);
 
     $sql	= "INSERT INTO $course_tracking_table(course_code, user_id, login_course_date, logout_course_date, counter, session_id)
         	  VALUES('".$course_code."', '".$user_id."', '$time', '$time', '1', '".$session_id."')";

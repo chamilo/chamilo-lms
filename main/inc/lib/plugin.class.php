@@ -200,7 +200,7 @@ class Plugin
 
     /**
      * Returns the value of a given plugin global setting
-     * @param string Name of the plugin
+     * @param string name of the plugin
      *
      * @return string Value of the plugin
      */
@@ -212,6 +212,7 @@ class Plugin
                 return $setting['selected_value'];
             }
         }
+
         return false;
     }
 
@@ -330,14 +331,14 @@ class Plugin
                     $result = Database::query($sql);
                     if (!Database::num_rows($result)) {
                         $sql_course = "INSERT INTO $t_course (c_id, variable, subkey, value, category, type) VALUES ($course_id, '$group', '$variable', '$value', 'plugins', '$type')";
-                        $r = Database::query($sql_course);
+                        Database::query($sql_course);
                     }
                 } else {
                     $sql = "SELECT value FROM $t_course WHERE c_id = $course_id AND variable = '$variable' ";
                     $result = Database::query($sql);
                     if (!Database::num_rows($result)) {
                         $sql_course = "INSERT INTO $t_course (c_id, variable, value, category, subkey, type) VALUES ($course_id, '$variable','$value', 'plugins', '$plugin_name', '$type')";
-                        $r = Database::query($sql_course);
+                        Database::query($sql_course);
                     }
                 }
             }
@@ -384,13 +385,18 @@ class Plugin
                 if (!empty($setting['group'])) {
                     $variable = Database::escape_string($setting['group']);
                 }
-                $sql_course = "DELETE FROM $t_course WHERE c_id = $course_id AND variable = '$variable'";
-                Database::query($sql_course);
+                if (empty($variable)) {
+                    continue;
+                }
+                $sql = "DELETE FROM $t_course
+                        WHERE c_id = $course_id AND variable = '$variable'";
+                Database::query($sql);
             }
         }
 
-        $sql_course = "DELETE FROM $t_tool WHERE c_id = $course_id AND name = '$plugin_name'";
-        Database::query($sql_course);
+        $plugin_name = Database::escape_string($plugin_name);
+        $sql = "DELETE FROM $t_tool WHERE c_id = $course_id AND name = '$plugin_name'";
+        Database::query($sql);
     }
 
     /**
@@ -403,7 +409,7 @@ class Plugin
     {
         // Update existing courses to add conference settings
         $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id, code FROM $t_courses ORDER BY id";
+        $sql = "SELECT id FROM $t_courses ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
             $this->install_course_fields($row['id'], $add_tool_link);
@@ -418,7 +424,7 @@ class Plugin
     {
         // Update existing courses to add conference settings
         $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id, code FROM $t_courses ORDER BY id";
+        $sql = "SELECT id FROM $t_courses ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
             $this->uninstall_course_fields($row['id']);

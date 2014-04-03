@@ -3264,7 +3264,7 @@ function api_item_property_update(
         $condition_session = " AND id_session = '$session_id' ";
     }
 
-    $course_id	 = $_course['real_id'];
+    $course_id = $_course['real_id'];
     $filter = " c_id = $course_id AND tool='$tool' AND ref='$item_id' $condition_session ";
 
     if ($item_id == '*') {

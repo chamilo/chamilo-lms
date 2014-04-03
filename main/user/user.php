@@ -52,6 +52,7 @@ $is_western_name_order 	= api_is_western_name_order();
 $sort_by_first_name 	= api_sort_by_first_name();
 $course_info            = api_get_course_info();
 $user_id                = api_get_user_id();
+$courseCode = api_get_course_id();
 
 //Can't auto unregister from a session
 if (!empty($session_id)) {
@@ -65,9 +66,9 @@ if (api_is_allowed_to_edit(null, true)) {
             case 'unsubscribe':
                 // Make sure we don't unsubscribe current user from the course
                 if (is_array($_POST['user'])) {
-                    $user_ids = array_diff($_POST['user'], array($_user['user_id']));
+                    $user_ids = array_diff($_POST['user'], array($user_id));
                     if (count($user_ids) > 0) {
-                        CourseManager::unsubscribe_user($user_ids, $_SESSION['_course']['sysCode']);
+                        CourseManager::unsubscribe_user($user_ids, $courseCode);
                         $message = get_lang('UsersUnsubscribed');
                     }
                 }
@@ -558,7 +559,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
             ) || !isset($_GET['keyword']) || empty($_GET['keyword'])
         ) {
 
-			$groups_name = GroupManager::getAllGroupPerUserSubscription($user_id);
+			$groupsNameList = GroupManager::getAllGroupPerUserSubscription($user_id);
 			$temp = array();
 			if (api_is_allowed_to_edit(null, true)) {
                 $temp[] = $user_id;
@@ -582,9 +583,10 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				}
 
                 $temp[] = $o_course_user['username'];
-				$temp[] = isset($o_course_user['role']) ? $o_course_user['role'] : null; //Description
-				$temp[] = implode(', ', $groups_name); //Group
-
+                // Description.
+				$temp[] = isset($o_course_user['role']) ? $o_course_user['role'] : null;
+                // Groups.
+				$temp[] = implode(', ', $groupsNameList);
 				// Status
                 $default_status = '-';
 				if ((isset($o_course_user['status_rel']) && $o_course_user['status_rel'] == 1) || (isset($o_course_user['status_session']) && $o_course_user['status_session'] == 2)) {
@@ -622,7 +624,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				$temp[] = $o_course_user['username'];
 				$temp[] = $o_course_user['role'];
                 // Group.
-				$temp[] = implode(', ', $groups_name);
+				$temp[] = implode(', ', $groupsNameList);
 
                 if ($course_info['unsubscribe'] == 1) {
                     //User id for actions

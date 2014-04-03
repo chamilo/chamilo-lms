@@ -68,11 +68,17 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
     $table_cu = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
     $user_info = api_get_user_info();
     $course_info = api_get_course_info();
-    $sql = 'SELECT * FROM '.$table_c.' c, '.$table_cu.' cu WHERE cu.course_code = c.code';
+    $sql = 'SELECT *
+            FROM '.$table_c.' c, '.$table_cu.' cu
+            WHERE cu.course_code = c.code';
     if (!api_is_platform_admin()) {
         $sql .= ' AND cu.status=1 ';
     }
-    $sql .= ' AND target_course_code IS NULL AND cu.user_id = '.$user_info['user_id'].' AND c.code != '."'".$course_info['sysCode']."'".' ORDER BY title ASC';
+    $sql .= ' AND
+        target_course_code IS NULL AND
+        cu.user_id = '.$user_info['user_id'].' AND
+        c.code != '."'".$course_info['sysCode']."'".'
+    ORDER BY title ASC';
     $res = Database::query($sql);
     if (Database::num_rows($res) == 0) {
         Display::display_normal_message(get_lang('NoDestinationCoursesAvailable'));
@@ -83,7 +89,6 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
         }
 
         $form = new FormValidator('copy_course', 'post', 'copy_course.php?'.api_get_cidreq());
-        $form->addElement('header', '');
         $form->addElement('select', 'destination_course', get_lang('SelectDestinationCourse'), $options);
 
         $group = array();
@@ -96,6 +101,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
         $group[] = $form->createElement('radio', 'same_file_name_option', null, get_lang('SameFilenameRename'), FILE_RENAME);
         $group[] = $form->createElement('radio', 'same_file_name_option', null, get_lang('SameFilenameOverwrite'), FILE_OVERWRITE);
         $form->addGroup($group, '', get_lang('SameFilename'));
+        $form->add_progress_bar();
         $form->addElement('style_submit_button', 'submit', get_lang('CopyCourse'), 'class="save"');
         $form->setDefaults(array('copy_option' =>'select_items','same_file_name_option' => FILE_OVERWRITE));
         $form->display();

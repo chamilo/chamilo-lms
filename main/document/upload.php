@@ -202,10 +202,10 @@ if (!empty($_FILES)) {
 echo '<div class="actions">';
 // Link back to the documents overview
 if ($is_certificate_mode) {
-    echo '<a href="document.php?id='.$document_id.'&selectcat=' . $selectcat.'">'.
+    echo '<a href="document.php?id='.$document_id.'&selectcat=' . $selectcat.'&'.api_get_cidreq().'">'.
             Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('CertificateOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 } else {
-    echo '<a href="document.php?id='.$document_id.'">'.
+    echo '<a href="document.php?id='.$document_id.'&'.api_get_cidreq().'">'.
             Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 }
 

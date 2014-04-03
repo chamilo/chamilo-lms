@@ -4450,11 +4450,13 @@ class CourseManager
 
     /**
      * Course available settings variables see c_course_setting table
+     * @param AppPlugin $appPlugin
      * @return array
      */
-    public static function getCourseSettingVariables()
+    public static function getCourseSettingVariables(AppPlugin $appPlugin)
     {
-        return array(
+        $pluginCourseSettings = $appPlugin->getAllPluginCourseSettings();
+        $courseSettings = array(
             // Get allow_learning_path_theme from table
             'allow_learning_path_theme',
             // Get allow_open_chat_window from table
@@ -4486,17 +4488,26 @@ class CourseManager
             'pdf_export_watermark_text',
             'show_system_folders'
         );
+        if (!empty($pluginCourseSettings)) {
+            $courseSettings = array_merge(
+                $courseSettings,
+                $pluginCourseSettings
+            );
+        }
+        return $courseSettings;
     }
 
     /**
+     * @param AppPlugin $appPlugin
      * @param string $variable
      * @param string $value
      * @param int $courseId
      * @return bool
      */
-    public static function saveCourseConfigurationSetting($variable, $value, $courseId)
+    public static function saveCourseConfigurationSetting(AppPlugin $appPlugin, $variable, $value, $courseId)
     {
-        $settingList = self::getCourseSettingVariables();
+        $settingList = self::getCourseSettingVariables($appPlugin);
+
         if (!in_array($variable, $settingList)) {
             return false;
         }

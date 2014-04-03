@@ -497,16 +497,16 @@ function store_regions()
 */
 function store_plugins()
 {
-    $plugin_obj = new AppPlugin();
+    $appPlugin = new AppPlugin();
 
     // Get a list of all current 'Plugins' settings
-    $plugin_list = $plugin_obj->read_plugins_from_path();
+    $plugin_list = $appPlugin->read_plugins_from_path();
 
     $installed_plugins = array();
 
     foreach ($plugin_list as $plugin) {
         if (isset($_POST['plugin_'.$plugin])) {
-            $plugin_obj->install($plugin);
+            $appPlugin->install($plugin);
             $installed_plugins[] = $plugin;
         }
     }
@@ -516,8 +516,9 @@ function store_plugins()
     } else {
         $remove_plugins = $plugin_list;
     }
+
     foreach ($remove_plugins as $plugin) {
-        $plugin_obj->uninstall($plugin);
+        $appPlugin->uninstall($plugin);
     }
 }
 

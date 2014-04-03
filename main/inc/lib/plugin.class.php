@@ -212,6 +212,7 @@ class Plugin
                 return $setting['selected_value'];
             }
         }
+
         return false;
     }
 
@@ -222,7 +223,11 @@ class Plugin
     public function get_settings()
     {
         if (is_null($this->settings)) {
-            $settings = api_get_settings_params(array("subkey = ? AND category = ? AND type = ? " => array($this->get_name(), 'Plugins', 'setting')));
+            $settings = api_get_settings_params(
+                array(
+                    "subkey = ? AND category = ? AND type = ? " => array($this->get_name(), 'Plugins', 'setting')
+                )
+            );
             $this->settings = $settings;
         }
 
@@ -326,15 +331,14 @@ class Plugin
                     $result = Database::query($sql);
                     if (!Database::num_rows($result)) {
                         $sql_course = "INSERT INTO $t_course (c_id, variable, subkey, value, category, type) VALUES ($course_id, '$group', '$variable', '$value', 'plugins', '$type')";
-                        $r = Database::query($sql_course);
+                        Database::query($sql_course);
                     }
                 } else {
                     $sql = "SELECT value FROM $t_course WHERE c_id = $course_id AND variable = '$variable' ";
                     $result = Database::query($sql);
                     if (!Database::num_rows($result)) {
-                        $sql_course = "INSERT INTO $t_course (c_id, variable, value, category, subkey, type)
-                            VALUES ($course_id, '$variable','$value', 'plugins', '$plugin_name', '$type')";
-                        $r = Database::query($sql_course);
+                        $sql_course = "INSERT INTO $t_course (c_id, variable, value, category, subkey, type) VALUES ($course_id, '$variable','$value', 'plugins', '$plugin_name', '$type')";
+                        Database::query($sql_course);
                     }
                 }
             }
@@ -362,10 +366,9 @@ class Plugin
      * Delete the fields added to the course settings page and the link to the
      * tool on the course's homepage
      * @param int The integer course ID
-     * @param arrat The list of settings to delete
      * @return void
      */
-    public function uninstall_course_fields($course_id, $settings = null)
+    public function uninstall_course_fields($course_id)
     {
         $course_id = intval($course_id);
         if (empty($course_id)) {
@@ -376,22 +379,24 @@ class Plugin
         $t_course = Database::get_course_table(TABLE_COURSE_SETTING);
         $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
-        // The settings array has to be passed from the uninstall method in the
-        // plugin's class, otherwise it is too risky for other plugins: using
-        // $this->course_settings here seems to glob all settings from all plugins
-        if (!empty($settings)) {
-            foreach ($settings as $setting) {
+        if (!empty($this->course_settings)) {
+            foreach ($this->course_settings as $setting) {
                 $variable = Database::escape_string($setting['name']);
                 if (!empty($setting['group'])) {
                     $variable = Database::escape_string($setting['group']);
                 }
-                $sql_course = "DELETE FROM $t_course WHERE c_id = $course_id AND variable = '$variable'";
-                Database::query($sql_course);
+                if (empty($variable)) {
+                    continue;
+                }
+                $sql = "DELETE FROM $t_course
+                        WHERE c_id = $course_id AND variable = '$variable'";
+                Database::query($sql);
             }
         }
 
-        $sql_course = "DELETE FROM $t_tool WHERE c_id = $course_id AND name = '$plugin_name'";
-        Database::query($sql_course);
+        $plugin_name = Database::escape_string($plugin_name);
+        $sql = "DELETE FROM $t_tool WHERE c_id = $course_id AND name = '$plugin_name'";
+        Database::query($sql);
     }
 
     /**
@@ -404,7 +409,7 @@ class Plugin
     {
         // Update existing courses to add conference settings
         $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id, code FROM $t_courses ORDER BY id";
+        $sql = "SELECT id FROM $t_courses ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
             $this->install_course_fields($row['id'], $add_tool_link);
@@ -413,18 +418,38 @@ class Plugin
 
     /**
      * Uninstall the plugin settings fields from all courses
-     * @param   array   The list of all settings that have to be deleted
      * @return void
      */
-    public function uninstall_course_fields_in_all_courses($settings = array())
+    public function uninstall_course_fields_in_all_courses()
     {
         // Update existing courses to add conference settings
         $t_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT id, code FROM $t_courses ORDER BY id";
+        $sql = "SELECT id FROM $t_courses ORDER BY id";
         $res = Database::query($sql);
         while ($row = Database::fetch_assoc($res)) {
-            $this->uninstall_course_fields($row['id'], $settings);
+            $this->uninstall_course_fields($row['id']);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getCourseSettings()
+    {
+        $settings = array();
+        if (is_array($this->course_settings)) {
+            foreach ($this->course_settings as $item) {
+                if (isset($item['group'])) {
+                    if (!in_array($item['group'], $settings)) {
+                        $settings[] = $item['group'];
+                    }
+                } else {
+                    $settings[] = $item['name'];
+                }
+            }
+        }
+
+        return $settings;
     }
 
     /**

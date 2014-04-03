@@ -12,7 +12,6 @@
 /**
  * Code
  */
-if(!class_exists('Matching')):
 /**
  * Matching questions type class
  * @package chamilo.exercise
@@ -101,9 +100,9 @@ class Matching extends Question {
 							'.get_lang('Weighting').'
 						</th>
 					</tr>';
-        
+
 		$form -> addElement ('label', get_lang('MakeCorrespond').'<br /> <img src="../img/fill_field.png">', $html);
-		
+
 		if ($nb_matches < 1) {
 			$nb_matches = 1;
 			Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
@@ -125,13 +124,13 @@ class Matching extends Question {
 
 		$form -> addElement ('html', '</table></div></div>');
 		$group = array();
-		
+
 		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
 			$group[] = $form->createElement('submit', 'lessMatches', get_lang('DelElem'),'class="btn minus"');
 			$group[] = $form->createElement('submit', 'moreMatches', get_lang('AddElem'),'class="btn plus"');
 		} else {
             $group[] = $form->createElement('style_submit_button', 'moreMatches', get_lang('AddElem'),'class="btn plus"');
-			$group[] = $form->createElement('style_submit_button', 'lessMatches', get_lang('DelElem'),'class="btn minus"');			
+			$group[] = $form->createElement('style_submit_button', 'lessMatches', get_lang('DelElem'),'class="btn minus"');
 		}
 
 		$form -> addGroup($group);
@@ -171,18 +170,18 @@ class Matching extends Question {
 
 		if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
             // setting the save button here and not in the question class.php
-            $group[] = $form->createElement('submit','submitQuestion',$text, 'class="'.$class.'"');            
+            $group[] = $form->createElement('submit','submitQuestion',$text, 'class="'.$class.'"');
             $group[] = $form->createElement('submit', 'lessOptions', get_lang('DelElem'),'class="minus"');
-            $group[] = $form->createElement('submit', 'moreOptions',get_lang('AddElem'),'class="plus"');			
+            $group[] = $form->createElement('submit', 'moreOptions',get_lang('AddElem'),'class="plus"');
 		} else {
-            // setting the save button here and not in the question class.php            
+            // setting the save button here and not in the question class.php
             $group[] = $form->createElement('style_submit_button', 'lessOptions', get_lang('DelElem'),'class="minus"');
             $group[] = $form->createElement('style_submit_button', 'moreOptions',get_lang('AddElem'),' class="plus"');
             $group[] = $form->createElement('style_submit_button','submitQuestion',$text, 'class="'.$class.'"');
 		}
-		
+
 		$form -> addGroup($group);
-		
+
 		if (!empty($this -> id)) {
 			$form -> setDefaults($defaults);
 		} else {
@@ -190,7 +189,7 @@ class Matching extends Question {
 				$form -> setDefaults($defaults);
 			}
 		}
-		
+
 		$form->setConstants(array('nb_matches' => $nb_matches,'nb_options' => $nb_options));
 	}
 
@@ -227,10 +226,10 @@ class Matching extends Question {
 		$objAnswer->save();
 		$this->save();
 	}
-	
+
 	function return_header($feedback_type = null, $counter = null, $score = null) {
 	    $header = parent::return_header($feedback_type, $counter, $score);
-        $header .= '<table class="'.$this->question_table_class .'">';            
+        $header .= '<table class="'.$this->question_table_class .'">';
         $header .= '<tr>
                 <th>'.get_lang('ElementList').'</th>
                 <th>'.get_lang('CorrespondsTo').'</th>
@@ -238,4 +237,3 @@ class Matching extends Question {
         return $header;
 	}
 }
-endif;

@@ -52,12 +52,16 @@ echo Display::page_header($nameTools);
 
 /*	MAIN CODE */
 
-if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (isset($_POST['import_option']) && $_POST['import_option'] == 'full_backup' )) {
+if ((isset($_POST['action']) &&
+    $_POST['action'] == 'course_select_form') ||
+    (isset($_POST['import_option']) &&
+    $_POST['import_option'] == 'full_backup')
+) {
 	$error = false;
 	if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
 		// Partial backup here we recover the documents posted
 		$course = CourseSelectForm::get_posted_course();
-        
+
 	} else {
 		if ($_POST['backup_type'] == 'server') {
 			$filename = $_POST['backup_server'];
@@ -74,7 +78,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (i
 				$error = true;
 			}
 		}
-    
+
         if (!$error) {
 		  // Full backup
 		  $course = CourseArchiver::read_course($filename, $delete_file);
@@ -96,7 +100,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (i
             echo '<a class="btn" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
         } else {
             if ($filename == '') {
-               Display::display_error_message(get_lang('SelectBackupFile')); 
+               Display::display_error_message(get_lang('SelectBackupFile'));
                echo '<a class="btn" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
             } else {
     			Display::display_error_message(get_lang('UploadError'));
@@ -105,6 +109,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (i
 		}
 	}
 	CourseArchiver::clean_backup_dir();
+
 } elseif (isset($_POST['import_option']) && $_POST['import_option'] == 'select_items') {
 	if ($_POST['backup_type'] == 'server') {
 		$filename = $_POST['backup_server'];
@@ -114,7 +119,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (i
 		$delete_file = true;
 	}
 	$course = CourseArchiver::read_course($filename, $delete_file);
-  
+
 	if ($course->has_resources() && ($filename !== false)) {
 		CourseSelectForm::display_form($course, array('same_file_name_option' => $_POST['same_file_name_option']));
 	} elseif ($filename === false) {
@@ -129,7 +134,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (i
 	$backups = CourseArchiver::get_available_backups($is_platformAdmin ?null:$user['user_id']);
 	$backups_available = count($backups) > 0;
 
-	$form = new FormValidator('import_backup_form', 'post', 'import_backup.php', '', 'multipart/form-data');
+	$form = new FormValidator('import_backup_form', 'post', api_get_path(WEB_CODE_PATH).'coursecopy/import_backup.php?'.api_get_cidreq(), '', 'multipart/form-data');
     $form->addElement('header', get_lang('SelectBackupFile'));
 	$renderer = $form->defaultRenderer();
 	$renderer->setElementTemplate('<div>{element}</div> ');
@@ -175,10 +180,15 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form' ) || (i
 
 	$form->add_progress_bar();
 	// When progress bar appears we have to hide the title "Select backup file".
-	$form->updateAttributes(array('onsubmit' => str_replace('javascript: ', 'javascript: page_title = getElementById(\'page_title\'); if (page_title) { setTimeout(\'page_title.style.display = \\\'none\\\';\', 2000); } ', $form->getAttribute('onsubmit'))));
+	$form->updateAttributes(array(
+        'onsubmit' => str_replace(
+            'javascript: ',
+            'javascript: page_title = getElementById(\'page_title\'); if (page_title) { setTimeout(\'page_title.style.display = \\\'none\\\';\', 2000); } ',
+            $form->getAttribute('onsubmit')
+        )
+    ));
 
 	$form->display();
 }
 
-/*	FOOTER */
 Display::display_footer();

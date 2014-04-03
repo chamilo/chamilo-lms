@@ -19,7 +19,7 @@ if ($bbb->plugin_enabled) {
         if (isset($_GET['launch']) && $_GET['launch'] == 1) {
 
             $meeting_params = array();
-            $meeting_params['meeting_name'] = api_get_course_id();
+            $meeting_params['meeting_name'] = api_get_course_id().'-'.api_get_session_id();
 
             if ($bbb->meeting_exists($meeting_params['meeting_name'])) {
                 $url = $bbb->join_meeting($meeting_params['meeting_name']);
@@ -37,13 +37,13 @@ if ($bbb->plugin_enabled) {
                     header('location: '.$url);
                     exit;
                 } else {
-                    $url = 'listing.php';
+                    $url = 'listing.php?'.api_get_cidreq();
                     header('location: '.$url);
                     exit;
                 }
             }
         } else {
-            $url = 'listing.php';
+            $url = 'listing.php?'.api_get_cidreq();
             header('location: '.$url);
             exit;
         }

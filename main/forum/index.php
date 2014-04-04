@@ -305,9 +305,6 @@ if (is_array($forumCategories)) {
                         $mywhatsnew_post_info = isset($whatsnew_post_info[$forum['forum_id']]) ? $whatsnew_post_info[$forum['forum_id']] : null;
 
                         $forum_image = '';
-
-                        echo '<td width="20px">';
-
                         // Showing the image
                         if (!empty($forum['forum_image'])) {
 
@@ -319,13 +316,21 @@ if (is_array($forumCategories)) {
                                 if ($image_size['width'] > 100 || $image_size['height'] > 100) {
                                     //limit display width and height to 100px
                                     $img_attributes = ' style="width:100px" width="100px" height="100px"';
+									$td_width = 100;
                                 }
-                                $forum_image =  "<img src=\"$image_path\" $img_attributes>";
+								else
+								{
+									$td_width = $image_size['width'];
+								}
+                                $forum_image =  "<img src=\"$image_path\" $img_attributes>";								
                             } else {
                                 $forum_image = '';
+								$td_width = 20;
                             }
+							echo '<td width="'.$td_width.'px">';
                             echo $forum_image;
                         } else {
+							echo '<td width="20px">';
                             if ($forum['forum_of_group'] !== '0') {
                                 if (is_array($mywhatsnew_post_info) && !empty($mywhatsnew_post_info)) {
                                     echo Display::return_icon('forumgroupnew.gif');

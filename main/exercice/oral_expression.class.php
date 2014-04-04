@@ -11,7 +11,6 @@
 /**
  * Code
  */
-if(!class_exists('OralExpression')):
 /**
  * @package chamilo.exercise
  */
@@ -55,7 +54,7 @@ class OralExpression extends Question {
 		$this->weighting = $form -> getSubmitValue('weighting');
 		$this->save();
 	}
-	
+
 	function return_header($feedback_type = null, $counter = null, $score = null) {
 	    $header = parent::return_header($feedback_type, $counter, $score);
 	    $header .= '<table class="'.$this->question_table_class.'">
@@ -67,8 +66,7 @@ class OralExpression extends Question {
 			</tr>
 			<tr>
                 <th>&nbsp;</th>
-			</tr>';				
-        return $header;	  
-	}	
+			</tr>';
+        return $header;
+	}
 }
-endif;

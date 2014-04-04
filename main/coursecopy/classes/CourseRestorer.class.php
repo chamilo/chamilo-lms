@@ -1368,11 +1368,17 @@ class CourseRestorer
         // question source_id => category source_id
         if ($this->course->has_resources(RESOURCE_QUIZQUESTION)) {
             // check the category number of each question restored
-            foreach ($resources[RESOURCE_QUIZQUESTION] as $id => $CourseCopyQuestion) {
-                $new_quiz_question_id = $resources[RESOURCE_QUIZQUESTION][$id]->destination_id;
-                $question_category = $CourseCopyQuestion->question_category;
-                if ($question_category > 0) {
-                    Testcategory::add_category_for_question_id($tab_test_category_id_old_new[$question_category], $new_quiz_question_id, $course_id);
+            if (!empty($resources[RESOURCE_QUIZQUESTION])) {
+                foreach ($resources[RESOURCE_QUIZQUESTION] as $id => $CourseCopyQuestion) {
+                    $new_quiz_question_id = $resources[RESOURCE_QUIZQUESTION][$id]->destination_id;
+                    $question_category = $CourseCopyQuestion->question_category;
+                    if ($question_category > 0) {
+                        Testcategory::add_category_for_question_id(
+                            $tab_test_category_id_old_new[$question_category],
+                            $new_quiz_question_id,
+                            $course_id
+                        );
+                    }
                 }
             }
         }

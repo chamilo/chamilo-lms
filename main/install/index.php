@@ -450,10 +450,10 @@ if ($encryptPassForm == '1') {
     </script>
 	<meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
 </head>
-<body dir="<?php echo api_get_text_direction(); ?>">
+<body dir="<?php echo api_get_text_direction(); ?>" class="install-chamilo">
 
 <div id="wrapper">
-<div id="main" class="container">
+<div id="main" class="container well-install">
     <header>
 		<div class="row">
             <div id="header_left" class="span4">

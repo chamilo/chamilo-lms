@@ -52,6 +52,7 @@ $is_western_name_order 	= api_is_western_name_order();
 $sort_by_first_name 	= api_sort_by_first_name();
 $course_info            = api_get_course_info();
 $user_id                = api_get_user_id();
+$courseCode = api_get_course_id();
 
 //Can't auto unregister from a session
 if (!empty($session_id)) {
@@ -65,9 +66,9 @@ if (api_is_allowed_to_edit(null, true)) {
             case 'unsubscribe':
                 // Make sure we don't unsubscribe current user from the course
                 if (is_array($_POST['user'])) {
-                    $user_ids = array_diff($_POST['user'], array($_user['user_id']));
+                    $user_ids = array_diff($_POST['user'], array($user_id));
                     if (count($user_ids) > 0) {
-                        CourseManager::unsubscribe_user($user_ids, $_SESSION['_course']['sysCode']);
+                        CourseManager::unsubscribe_user($user_ids, $courseCode);
                         $message = get_lang('UsersUnsubscribed');
                     }
                 }
@@ -285,7 +286,7 @@ if (api_is_allowed_to_edit(null, true)) {
 if (api_is_allowed_to_edit(null, true)) {
 	// Unregister user from course
 	if ($_REQUEST['unregister']) {
-		if (isset($_GET['user_id']) && is_numeric($_GET['user_id']) && $_GET['user_id'] != $_user['user_id']) {
+		if (isset($_GET['user_id']) && is_numeric($_GET['user_id']) && ($_GET['user_id'] != $_user['user_id'] || api_is_platform_admin())) {
 			$user_id					= Database::escape_string($_GET['user_id']);
 			$tbl_user					= Database::get_main_table(TABLE_MAIN_USER);
 			$tbl_session_rel_course		= Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -558,7 +559,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
             ) || !isset($_GET['keyword']) || empty($_GET['keyword'])
         ) {
 
-			$groups_name = GroupManager::getAllGroupPerUserSubscription($user_id);
+			$groupsNameList = GroupManager::getAllGroupPerUserSubscription($user_id);
 			$temp = array();
 			if (api_is_allowed_to_edit(null, true)) {
                 $temp[] = $user_id;
@@ -582,9 +583,10 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				}
 
                 $temp[] = $o_course_user['username'];
-				$temp[] = isset($o_course_user['role']) ? $o_course_user['role'] : null; //Description
-				$temp[] = implode(', ', $groups_name); //Group
-
+                // Description.
+				$temp[] = isset($o_course_user['role']) ? $o_course_user['role'] : null;
+                // Groups.
+				$temp[] = implode(', ', $groupsNameList);
 				// Status
                 $default_status = '-';
 				if ((isset($o_course_user['status_rel']) && $o_course_user['status_rel'] == 1) || (isset($o_course_user['status_session']) && $o_course_user['status_session'] == 2)) {
@@ -622,7 +624,7 @@ function get_user_data($from, $number_of_items, $column, $direction) {
 				$temp[] = $o_course_user['username'];
 				$temp[] = $o_course_user['role'];
                 // Group.
-				$temp[] = implode(', ', $groups_name);
+				$temp[] = implode(', ', $groupsNameList);
 
                 if ($course_info['unsubscribe'] == 1) {
                     //User id for actions
@@ -692,7 +694,7 @@ function modify_filter($user_id) {
         $result .= '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&amp;editMainUserInfo='.$user_id.'" title="'.get_lang('Edit').'" >'.Display::return_icon('edit.png', get_lang('Edit'),'',ICON_SIZE_SMALL).'</a>&nbsp;';
         if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
             // unregister
-            if ($user_id != $current_user_id) {
+            if ($user_id != $current_user_id || api_is_platform_admin()) {
                 $result .= '<a class="btn btn-small btn-danger" href="'.api_get_self().'?'.api_get_cidreq().'&unregister=yes&amp;user_id='.$user_id.'" title="'.get_lang('Unreg').' " onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset)).'\')) return false;">'.get_lang('Unreg').'</a>&nbsp;';
             } else {
                 //$result .= Display::return_icon('unsubscribe_course_na.png', get_lang('Unreg'),'',ICON_SIZE_SMALL).'</a>&nbsp;';

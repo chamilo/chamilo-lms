@@ -22,19 +22,22 @@
 		{% if _u.logged  == 0 %}
 			{% include "default/layout/login_form.tpl" %}
 		{% endif %}
-
+        <div class="block_user_info">
 		{# User picture #}
         {{ user_image_block }}
+        
 
         {# User Profile links #}
 		{{ profile_block }}
-
+        </div>
+        <div class="block_tools_info">
         {# Course block - admin #}
 		{{ course_block }}
 
         {# Course block - teacher #}
 		{{ teacher_block }}
-
+        </div>
+        <div class="user_notification">
 		{# Notice #}
 		{{ notice_block }}
 
@@ -49,13 +52,13 @@
 
 		{# Search (xapian) #}
 		{{ search_block }}
-
+        </div>
 		{# Classes #}
 		{{ classes_block }}
 
 		{# Skills #}
 		{{ skills_block }}
-
+        
 		{# Plugin courses sidebar #}
         {# Plugins for footer section #}
 

@@ -1404,6 +1404,7 @@ class MessageManager
         }
         $success = get_lang('SelectedMessagesDeleted').'&nbsp</b><br /><a href="outbox.php?'.$social_link.'">'.get_lang('BackToOutbox').'</a>';
 
+        $html = null;
         if (isset($_REQUEST['action'])) {
             switch ($_REQUEST['action']) {
                 case 'delete' :

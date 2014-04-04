@@ -33,7 +33,7 @@ class bbb {
 
         //$course_code = api_get_course_id();
 
-        $this->logout_url = api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php';
+        $this->logout_url = api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.api_get_cidreq();
         $this->table = Database::get_main_table('plugin_bbb_meeting');
 
         if ($bbb_plugin == true) {
@@ -97,6 +97,7 @@ class bbb {
     function create_meeting($params) {
         $params['c_id'] = api_get_course_int_id();
         $course_code = api_get_course_id();
+        $params['session_id'] = api_get_session_id();
 
         $attende_password = $params['attendee_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : api_get_course_id();
         $moderator_password = $params['moderator_pw'] = isset($params['moderator_pw']) ? $params['moderator_pw'] : $this->get_mod_meeting_password();
@@ -157,7 +158,8 @@ class bbb {
     function meeting_exists($meeting_name) {
         if (empty($meeting_name)) { return false; }
         $course_id = api_get_course_int_id();
-        $meeting_data = Database::select('*', $this->table, array('where' => array('c_id = ? AND meeting_name = ? AND status = 1 ' => array($course_id, $meeting_name))), 'first');
+        $session_id = api_get_session_id();
+        $meeting_data = Database::select('*', $this->table, array('where' => array('c_id = ? AND session_id = ? AND meeting_name = ? AND status = 1 ' => array($course_id, $session_id, $meeting_name))), 'first');
         if ($this->debug) error_log("meeting_exists ".print_r($meeting_data,1));
         if (empty($meeting_data)) {
             return false;
@@ -238,7 +240,7 @@ class bbb {
      */
     function get_course_meetings() {
         $pass = $this->get_user_meeting_password();
-        $meeting_list = Database::select('*', $this->table, array('where' => array('c_id = ? ' => api_get_course_int_id())));
+        $meeting_list = Database::select('*', $this->table, array('where' => array('c_id = ? AND session_id = ? ' => array(api_get_course_int_id(), api_get_session_id()))));
         $new_meeting_list = array();
 
         $item = array();
@@ -315,6 +317,7 @@ class bbb {
 
             $item['created_at'] = api_convert_and_format_date($meeting_db['created_at']);
             //created_at
+            $meeting_db['created_at'] = $item['created_at']; //avoid overwrite in array_merge() below
 
             $item['publish_url'] = api_get_self().'?'.api_get_cidreq().'&action=publish&id='.$meeting_db['id'];
             $item['unpublish_url'] = api_get_self().'?'.api_get_cidreq().'&action=unpublish&id='.$meeting_db['id'];
@@ -390,7 +393,8 @@ class bbb {
      */
     function get_users_online_in_current_room() {
         $course_id = api_get_course_int_id();
-        $meeting_data = Database::select('*', $this->table, array('where' => array('c_id = ? AND status = 1 ' => $course_id)), 'first');
+        $session_id = api_get_session_id();
+        $meeting_data = Database::select('*', $this->table, array('where' => array('c_id = ? AND session_id = ? AND status = 1 ' => array($course_id, $session_id))), 'first');
         if (empty($meeting_data)) {
             return 0;
         }
@@ -405,7 +409,7 @@ class bbb {
     }
     /**
      * Deletes a previous recording of a meeting
-     * @param int intergal ID of the recording
+     * @param int integral ID of the recording
      * @return array ?
      * @assert () === false
      * @todo Also delete links and agenda items created from this recording

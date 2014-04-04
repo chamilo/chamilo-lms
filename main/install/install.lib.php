@@ -1311,15 +1311,15 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
                 <td class="requirements-value">'.$file_perm.' </td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/home/</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'home/').'</td>
+                <td class="requirements-item">'.api_get_path(SYS_PATH).'home/</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_PATH).'home/').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/main/css/</td>
+                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'css/</td>
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'css/', true).' ('.get_lang('SuggestionOnlyToEnableCSSUploadFeature').')</td>
             </tr>
             <tr>
-                <td class="requirements-item">chamilo/main/lang/</td>
+                <td class="requirements-item">'.api_get_path(SYS_CODE_PATH).'lang/</td>
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_CODE_PATH).'lang/', true).' ('.get_lang('SuggestionOnlyToEnableSubLanguageFeature').')</td>
             </tr>'.
             //'<tr>
@@ -1424,17 +1424,15 @@ function display_requirements($installType, $badUpdatePath, $updatePath = '', $u
         if (count($notwritable) > 0) {
             $error = true;
             echo '<div class="error-message">';
-	            echo '<center><h3>'.get_lang('Warning').'</h3></center>';
-	            printf(get_lang('NoWritePermissionPleaseReadInstallGuide'), '</font>
-	            <a href="../../documentation/installation_guide.html" target="blank">', '</a> <font color="red">');
-			echo '</div>';
-
+                echo '<center><h3>'.get_lang('Warning').'</h3></center>';
+                printf(get_lang('NoWritePermissionPleaseReadInstallGuide'), '</font>
+                <a href="../../documentation/installation_guide.html" target="blank">', '</a> <font color="red">');
+            echo '</div>';
             echo '<ul>';
             foreach ($notwritable as $value) {
                 echo '<li>'.$value.'</li>';
             }
             echo '</ul>';
-
         }
 
         // Check wether a Chamilo configuration file already exists.
@@ -1479,52 +1477,51 @@ function display_license_agreement() {
     echo '</div>';
     ?>
     <table>
-		<tr><td>
-            <p style="font-size:90%">
-            <textarea cols="90" rows="7" class="span6">
-            	<?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?>
-            </textarea></p>
+        <tr><td>
+            <pre style="overflow: auto; height: 150px; margin-top: 5px;" class="span7"><?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?></pre>
         </td>
         </tr>
         <tr><td>
-              <label class="checkbox">
-                <input type="checkbox" name="accept" id="accept_licence" value="1" />
-                <?php echo get_lang('IAccept'); ?>
-              </label>
+            <p>
+                <label class="checkbox">
+                    <input type="checkbox" name="accept" id="accept_licence" value="1" />
+                    <?php echo get_lang('IAccept'); ?>
+                </label>
+            </p>
             </td>
-		</tr>
+        </tr>
         <tr><td><p style="color:#666"><br /><?php echo get_lang('DokeosArtLicense'); ?></p></td></tr>
         <tr>
-        	<td>
+            <td>
             <table width="100%">
-            	<tr>
-                	<td></td>
-                	<td align="center">
-                    	<button type="submit" class="btn back" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button>
-                    	<input type="hidden" name="is_executable" id="is_executable" value="-" />
-                    	<button type="submit" class="btn next" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('YouMustAcceptLicence')?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" ><?php echo get_lang('Next'); ?></button>
-                	</td>
-            	</tr>
+                <tr>
+                    <td></td>
+                    <td align="center">
+                        <button type="submit" class="btn back" name="step1" value="&lt; <?php echo get_lang('Previous'); ?>" ><?php echo get_lang('Previous'); ?></button>
+                        <input type="hidden" name="is_executable" id="is_executable" value="-" />
+                        <button type="submit" class="btn next" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('YouMustAcceptLicence')?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" ><?php echo get_lang('Next'); ?></button>
+                    </td>
+                </tr>
             </table>
             </td>
-		</tr>
-	</table>
+        </tr>
+    </table>
 
     <!-- Contact information form -->
-	<div>
+    <div>
 
-        	<a href="javascript://" class = "advanced_parameters" >
-            	<span id="img_plus_and_minus">&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" />&nbsp;<?php echo get_lang('ContactInformation') ?></span>
-           	</a>
+            <a href="javascript://" class = "advanced_parameters" >
+                <span id="img_plus_and_minus">&nbsp;<img src="<?php echo api_get_path(WEB_IMG_PATH) ?>div_hide.gif" alt="<?php echo get_lang('Hide') ?>" title="<?php echo get_lang('Hide')?>" style ="vertical-align:middle" />&nbsp;<?php echo get_lang('ContactInformation') ?></span>
+               </a>
 
-	</div>
+    </div>
 
     <div id="id_contact_form" style="display:block">
-    	<div class="normal-message"><?php echo get_lang('ContactInformationDescription') ?></div>
+        <div class="normal-message"><?php echo get_lang('ContactInformationDescription') ?></div>
         <div id="contact_registration">
-        	<p><?php echo get_contact_registration_form() ?></p><br />
-    	</div>
-	</div>
+            <p><?php echo get_contact_registration_form() ?></p><br />
+        </div>
+    </div>
     <?php
 }
 
@@ -1692,31 +1689,31 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
         global $_configuration, $update_from_version_6;
 
         if (in_array($_POST['old_version'], $update_from_version_6)) {
-            $dbHostForm     	= get_config_param('dbHost');
+            $dbHostForm         = get_config_param('dbHost');
 
-            $dbUsernameForm 	= get_config_param('dbLogin');
-            $dbPassForm     	= get_config_param('dbPass');
-            $dbPrefixForm   	= get_config_param('dbNamePrefix');
+            $dbUsernameForm     = get_config_param('dbLogin');
+            $dbPassForm         = get_config_param('dbPass');
+            $dbPrefixForm       = get_config_param('dbNamePrefix');
             $enableTrackingForm = get_config_param('is_trackingEnabled');
-            $singleDbForm   	= get_config_param('singleDbEnabled');
-            $dbHostForm     	= get_config_param('mainDbName');
+            $singleDbForm       = get_config_param('singleDbEnabled');
+            $dbHostForm         = get_config_param('mainDbName');
 
-            $dbStatsForm    	= get_config_param('statsDbName');
-            $dbScormForm    	= get_config_param('scormDbName');
-            $dbUserForm     	= get_config_param('user_personal_database');
-            $dbScormExists  	= true;
+            $dbStatsForm        = get_config_param('statsDbName');
+            $dbScormForm        = get_config_param('scormDbName');
+            $dbUserForm         = get_config_param('user_personal_database');
+            $dbScormExists      = true;
         } else {
-            $dbHostForm     	= $_configuration['db_host'];
-            $dbUsernameForm 	= $_configuration['db_user'];
-            $dbPassForm     	= $_configuration['db_password'];
-            $dbPrefixForm   	= $_configuration['db_prefix'];
+            $dbHostForm         = $_configuration['db_host'];
+            $dbUsernameForm     = $_configuration['db_user'];
+            $dbPassForm         = $_configuration['db_password'];
+            $dbPrefixForm       = $_configuration['db_prefix'];
             $enableTrackingForm = $_configuration['tracking_enabled'];
-            $singleDbForm   	= $_configuration['single_database'];
-            $dbNameForm     	= $_configuration['main_database'];
-            $dbStatsForm    	= $_configuration['statistics_database'];
-            $dbScormForm    	= $_configuration['scorm_database'];
-            $dbUserForm     	= $_configuration['user_personal_database'];
-            $dbScormExists  	= true;
+            $singleDbForm       = $_configuration['single_database'];
+            $dbNameForm         = $_configuration['main_database'];
+            $dbStatsForm        = $_configuration['statistics_database'];
+            $dbScormForm        = $_configuration['scorm_database'];
+            $dbUserForm         = $_configuration['user_personal_database'];
+            $dbScormExists      = true;
         }
 
         if (empty($dbScormForm)) {
@@ -1787,11 +1784,11 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
 
     //Only for updates we show this options
     if ($installType == INSTALL_TYPE_UPDATE) {
-    	display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" '.$style);
-	    if ($installType == INSTALL_TYPE_UPDATE && in_array($_POST['old_version'], $update_from_version_6)) {
-        	display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;', null, 'id="optional_param3" '.$style);
-    	}
-    	display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;', null, 'id="optional_param4" '.$style);
+        display_database_parameter($installType, get_lang('StatDB'), 'dbStatsForm', $dbStatsForm, '&nbsp;', null, 'id="optional_param2" '.$style);
+        if ($installType == INSTALL_TYPE_UPDATE && in_array($_POST['old_version'], $update_from_version_6)) {
+            display_database_parameter($installType, get_lang('ScormDB'), 'dbScormForm', $dbScormForm, '&nbsp;', null, 'id="optional_param3" '.$style);
+        }
+        display_database_parameter($installType, get_lang('UserDB'), 'dbUserForm', $dbUserForm, '&nbsp;', null, 'id="optional_param4" '.$style);
     }
     ?>
     <tr>
@@ -1850,9 +1847,8 @@ function display_database_settings_form($installType, $dbHostForm, $dbUsernameFo
             <div id="db_status" style="float:left;" class="error-message">
                 <div style="float:left;">
                     <strong><?php echo get_lang('FailedConectionDatabase'); ?></strong><br />
-	                <strong>Database error: <?php echo Database::errno(); ?></strong><br />
-	                <?php echo Database::error().'<br />'; ?>
-
+                    <strong>Database error: <?php echo Database::errno(); ?></strong><br />
+                    <?php echo Database::error().'<br />'; ?>
                 </div>
             </div>
         </td>
@@ -1984,18 +1980,17 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
       <?php } else { ?>
       <td>
           <div class="control-group">
-              <label class="checkbox inline">
-                <input class="checkbox" type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" <?php echo ($encryptPassForm == 'sha1') ? 'checked="checked" ': ''; ?>/><?php echo 'sha1'; ?>
+              <label class="radio inline">
+                  <input  type="radio" name="encryptPassForm" value="sha1" id="encryptPass1" <?php echo ($encryptPassForm == 'sha1') ? 'checked="checked" ': ''; ?>/><?php echo 'sha1'; ?>
               </label>
 
-              <label class="checkbox inline">
-                <input class="checkbox" type="radio" name="encryptPassForm" value="md5" id="encryptPass0" <?php echo $encryptPassForm == 1 ? 'checked="checked" ' : ''; ?>/><?php echo 'md5'; ?>
+              <label class="radio inline">
+                  <input type="radio" name="encryptPassForm" value="md5" id="encryptPass0" <?php echo $encryptPassForm == 1 ? 'checked="checked" ' : ''; ?>/><?php echo 'md5'; ?>
               </label>
 
-                <label class="checkbox inline">
-                    <input class="checkbox" type="radio" name="encryptPassForm" value="none" id="encryptPass2" <?php echo $encryptPassForm === '0' or $encryptPassForm === 0 ? 'checked="checked" ':''; ?>/><?php echo get_lang('None'); ?>
-                </label>
-
+              <label class="radio inline">
+                  <input type="radio" name="encryptPassForm" value="none" id="encryptPass2" <?php echo $encryptPassForm === '0' or $encryptPassForm === 0 ? 'checked="checked" ':''; ?>/><?php echo get_lang('None'); ?>
+              </label>
           </div>
           </td>
       <?php } ?>
@@ -2008,11 +2003,11 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
       <?php else: ?>
       <td>
           <div class="control-group">
-            <label class="checkbox inline">
-                <input class="checkbox" type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" <?php echo $allowSelfReg ? 'checked="checked" ' : ''; ?>/> <?php echo get_lang('Yes'); ?>
+            <label class="radio inline">
+                <input type="radio" name="allowSelfReg" value="1" id="allowSelfReg1" <?php echo $allowSelfReg ? 'checked="checked" ' : ''; ?>/> <?php echo get_lang('Yes'); ?>
             </label>
-            <label class="checkbox inline">
-                <input class="checkbox" type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" <?php echo $allowSelfReg ? '' : 'checked="checked" '; ?>/><?php echo get_lang('No'); ?>
+            <label class="radio inline">
+                <input type="radio" name="allowSelfReg" value="0" id="allowSelfReg0" <?php echo $allowSelfReg ? '' : 'checked="checked" '; ?>/><?php echo get_lang('No'); ?>
             </label>
           </div>
       </td>
@@ -2027,12 +2022,12 @@ function display_configuration_settings_form($installType, $urlForm, $languageFo
       <?php else: ?>
       <td>
           <div class="control-group">
-            <label class="checkbox inline">
-                <input class="checkbox" type="radio" name="allowSelfRegProf" value="1" id="allowSelfRegProf1" <?php echo $allowSelfRegProf ? 'checked="checked" ' : ''; ?>/>
+            <label class="radio inline">
+                <input type="radio" name="allowSelfRegProf" value="1" id="allowSelfRegProf1" <?php echo $allowSelfRegProf ? 'checked="checked" ' : ''; ?>/>
             <?php echo get_lang('Yes'); ?>
             </label>
-            <label class="checkbox inline">
-                <input class="checkbox" type="radio" name="allowSelfRegProf" value="0" id="allowSelfRegProf0" <?php echo $allowSelfRegProf ? '' : 'checked="checked" '; ?>/>
+            <label class="radio inline">
+                <input type="radio" name="allowSelfRegProf" value="0" id="allowSelfRegProf0" <?php echo $allowSelfRegProf ? '' : 'checked="checked" '; ?>/>
             <?php echo get_lang('No'); ?>
             </label>
           </div>

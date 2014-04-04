@@ -16,7 +16,8 @@ $language_file = array('admin', 'tracking', 'scorm', 'exercice');
 require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
 
-$course_info = api_get_course_info(api_get_course_id());
+$courseInfo = api_get_course_info(api_get_course_id());
+$courseCode = api_get_course_id();
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 
@@ -50,11 +51,17 @@ if (api_is_drh()) {
     // Blocking course for drh
     if (api_drh_can_access_all_session_content()) {
         // If the drh has been configured to be allowed to see all session content, give him access to the session courses
-        $coursesFromSession = SessionManager::getAllCoursesFromAllSessionFromDrh(api_get_user_id());
+        $coursesFromSession = SessionManager::getAllCoursesFollowedByUser(api_get_user_id(), null);
+        if (!empty($coursesFromSession)) {
+            $coursesFromSession = array_keys($coursesFromSession);
+        }
+
         $coursesFollowedList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
-        $coursesFollowedList = array_keys($coursesFollowedList);
-        if (!in_array(api_get_course_id(), $coursesFollowedList)) {
-            if (!in_array(api_get_course_id(), $coursesFromSession)) {
+        if (!empty($coursesFollowedList)) {
+            $coursesFollowedList = array_keys($coursesFollowedList);
+        }
+        if (!in_array($courseCode, $coursesFollowedList)) {
+            if (!in_array($courseCode, $coursesFromSession)) {
                 api_not_allowed();
             }
         }
@@ -88,6 +95,7 @@ if ($export_csv) {
     }
     ob_start();
 }
+
 $csv_content = array();
 // Scripts for reporting array hide/show columns
 $js = "<script>
@@ -159,7 +167,7 @@ if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
     $interbreadcrumb[] = array('url' => '../admin/resume_session.php?id_session='.api_get_session_id(), 'name' => get_lang('SessionOverview'));
 }
 
-$view = (isset($_REQUEST['view']) ? $_REQUEST['view'] : '');
+$view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
 $nameTools = get_lang('Tracking');
 
 // Display the header.
@@ -261,7 +269,7 @@ if (count($a_students) > 0) {
     $form->addElement('hidden', 'action', 'add');
     $form->addElement('hidden', 'remindallinactives', 'true');
 
-    $course_name = get_lang('Course').' '.$course_info['name'];
+    $course_name = get_lang('Course').' '.$courseInfo['name'];
 
     if ($session_id) {
         echo Display::page_subheader(
@@ -270,7 +278,7 @@ if (count($a_students) > 0) {
         );
     } else {
         echo Display::page_subheader(
-            Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_info['name']
+            Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$courseInfo['name']
         );
     }
 

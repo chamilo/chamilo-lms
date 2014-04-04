@@ -26,7 +26,10 @@ if (!api_is_allowed_to_edit()) {
 $this_section = SECTION_COURSES;
 
 // Breadcrumbs
-$interbreadcrumb[] = array('url' => '../course_info/maintenance.php', 'name' => get_lang('Maintenance'));
+$interbreadcrumb[] = array(
+    'url' => api_get_path(WEB_CODE_PATH).'course_info/maintenance.php',
+    'name' => get_lang('Maintenance')
+);
 
 // Displaying the header
 $nameTools = get_lang('RecycleCourse');
@@ -43,27 +46,30 @@ echo Display::page_header($nameTools);
 
 /*		MAIN CODE	*/
 
-if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (isset($_POST['recycle_option']) && $_POST['recycle_option'] == 'full_backup')) {
+if ((isset($_POST['action']) &&
+    $_POST['action'] == 'course_select_form') ||
+    (isset($_POST['recycle_option']) &&
+    $_POST['recycle_option'] == 'full_backup')
+) {
 	if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
 		$course = CourseSelectForm::get_posted_course();
 	} else {
 		$cb = new CourseBuilder();
 		$course = $cb->build();
-	}    
+	}
 	$recycle_type = "";
 	if (isset($_POST['recycle_option']) && $_POST['recycle_option'] == 'full_backup') {
 	    $recycle_type = 'full_backup';
-	}
-	else if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
+	} else if (isset($_POST['action']) && $_POST['action'] == 'course_select_form') {
 	    $recycle_type = 'select_items';
 	}
 	$cr = new CourseRecycler($course);
 	$cr->recycle($recycle_type);
-	
+
 	Display::display_confirmation_message(get_lang('RecycleFinished'));
 } elseif (isset($_POST['recycle_option']) && $_POST['recycle_option'] == 'select_items') {
 	$cb = new CourseBuilder();
-	$course = $cb->build();    
+	$course = $cb->build();
 	CourseSelectForm::display_form($course);
 } else {
 	$cb = new CourseBuilder();
@@ -72,12 +78,10 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 		echo get_lang('NoResourcesToRecycle');
 	} else {
 		Display::display_warning_message(get_lang('RecycleWarning'), false);
-        $form = new FormValidator('recycle_course', 'post', 'recycle_course.php?'.api_get_cidreq());
+        $form = new FormValidator('recycle_course', 'post', api_get_self().'?'.api_get_cidreq());
 		$form->addElement('header', get_lang('SelectOptionForBackup'));
-		
 		$form->addElement('radio', 'recycle_option', null, get_lang('FullRecycle'), 'full_backup');
         $form->addElement('radio', 'recycle_option', null, get_lang('LetMeSelectItems'), 'select_items');
-        
         $form->addElement('style_submit_button', 'submit', get_lang('RecycleCourse'), 'class="save"');
         $form->setDefaults(array('recycle_option' => 'select_items'));
         $form->display();

@@ -451,7 +451,7 @@ $inATest = isset($exerciseId) && $exerciseId > 0;
 if ($inATest) {
     echo '<div class="actions">';
     if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid']))
-        echo '<a href="admin.php?exerciseId='.$exerciseId.'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidReq().'">'.Display::return_icon('back.png', get_lang('GoBackToQuestionList'),'',ICON_SIZE_MEDIUM).'</a>';
 
     if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['myid']) &&  !isset($_GET['editQuestion'])) {
         echo '<a href="exercice.php?'.api_get_cidReq().'">'.Display::return_icon('back.png', get_lang('BackToExercisesList'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -499,6 +499,11 @@ if ($newQuestion || $editQuestion) {
 	// statement management
 	$type = Security::remove_XSS($_REQUEST['answerType']);
 	echo '<input type="hidden" name="Type" value="'.$type.'" />';
+
+        if ($newQuestion == 'yes') {
+            $objExercise->edit_exercise_in_lp = true;
+        }
+
 	require 'question_admin.inc.php';
 }
 

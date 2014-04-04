@@ -113,9 +113,9 @@ if ($search || $forceSearch) {
         $whereCondition .= ' AND '.$whereConditionInForm;
     }
 
-    $filters   = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
+    $filters = isset($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
 
-    if (!empty($filters)) {
+    if (!empty($filters) && !empty($filters->rules)) {
         $whereCondition .= ' AND ( ';
         $counter = 0;
         foreach ($filters->rules as $key => $rule) {
@@ -142,20 +142,42 @@ if (!$sidx) {
 switch ($action) {
     case 'get_user_course_report':
     case 'get_user_course_report_resumed':
-
         if (!(api_is_platform_admin(false, true))) {
-            exit;
+            //exit;
         }
         $courseCodeList = array();
         $userIdList  = array();
         if (api_is_drh()) {
-            $userList = UserManager::get_users_followed_by_drh(api_get_user_id());
-            if (!empty($userList)) {
-                $userIdList = array_keys($userList);
-            }
-            $courseList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
-            if (!empty($courseList)) {
-                $courseCodeList = array_keys($courseList);
+            if (api_drh_can_access_all_session_content()) {
+                $userList = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus(
+                    'drh_all',
+                    api_get_user_id()
+                );
+
+                if (!empty($userList)) {
+                    foreach ($userList as $user) {
+                        $userIdList[] = $user['user_id'];
+                    }
+                }
+
+                $courseList = SessionManager::getAllCoursesFollowedByUser(
+                    api_get_user_id(),
+                    null
+                );
+                if (!empty($courseList)) {
+                    foreach ($courseList as $course) {
+                        $courseCodeList[] = $course['code'];
+                    }
+                }
+            } else {
+                $userList = UserManager::get_users_followed_by_drh(api_get_user_id());
+                if (!empty($userList)) {
+                    $userIdList = array_keys($userList);
+                }
+                $courseList = CourseManager::get_courses_followed_by_drh(api_get_user_id());
+                if (!empty($courseList)) {
+                    $courseCodeList = array_keys($courseList);
+                }
             }
 
             if (empty($userIdList) || empty($courseCodeList)) {
@@ -208,7 +230,16 @@ switch ($action) {
 
         if (empty($documents)) {
             $whereCondition .= " AND u.user_id = ".api_get_user_id();
-            $count = get_work_user_list(0, $limit, $sidx, $sord, $work_id, $whereCondition, null, true);
+            $count = get_work_user_list(
+                0,
+                $limit,
+                $sidx,
+                $sord,
+                $work_id,
+                $whereCondition,
+                null,
+                true
+            );
         } else {
             $count = get_work_user_list_from_documents(
                 0,
@@ -235,8 +266,8 @@ switch ($action) {
             api_get_group_id(),
             0,
             $limit,
-            $sidx,
-            $sord,
+            null,
+            null,
             true
         );
         break;
@@ -256,11 +287,27 @@ switch ($action) {
         $count = get_count_exam_hotpotatoes_results($hotpot_path);
         break;
     case 'get_sessions_tracking':
+        $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : null;
         if (api_is_drh()) {
-            $count = SessionManager::get_sessions_followed_by_drh(api_get_user_id(), null, null, true);
+            $count = SessionManager::get_sessions_followed_by_drh(
+                api_get_user_id(),
+                null,
+                null,
+                true,
+                false,
+                false,
+                null,
+                $keyword
+            );
         } else {
             // Sessions for the coach
-            $count = Tracking::get_sessions_coached_by_user(api_get_user_id(), null, null, true);
+            $count = Tracking::get_sessions_coached_by_user(
+                api_get_user_id(),
+                null,
+                null,
+                true,
+                $keyword
+            );
         }
         break;
     case 'get_sessions':
@@ -492,7 +539,8 @@ switch ($action) {
         }
         break;
     case 'get_work_teacher':
-        $columns = array('type', 'title', 'sent_date', 'expires_on', 'ends_on', 'actions');
+        //$columns = array('type', 'title', 'sent_date', 'expires_on', 'ends_on', 'actions');
+        $columns = array('type', 'title', 'sent_date', 'expires_on', 'amount', 'actions');
         $result = getWorkListTeacher($start, $limit, $sidx, $sord, $whereCondition);
         break;
     case 'get_work_student':
@@ -555,8 +603,18 @@ switch ($action) {
                 'firstname', 'lastname', 'username', 'group_name', 'exe_duration', 'start_date', 'exe_date', 'score', 'status', 'lp', 'actions'
             );
         }
-        $result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $whereCondition);
-		break;
+        $result = get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
+        break;
+    case 'get_hotpotatoes_exercise_results':
+        $course = api_get_course_info();
+        $documentPath = api_get_path(SYS_COURSE_PATH) . $course['path'] . "/document";
+        if (api_is_allowed_to_edit()) {
+            $columns = array('firstname', 'lastname', 'username', 'group_name', 'exe_date',  'score', 'actions');
+        } else {
+            $columns = array('exe_date',  'score', 'actions');
+        }
+        $result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $where_condition); //get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
+        break;
     case 'get_work_student_list_overview':
         if (!api_is_allowed_to_edit()) {
             return array();
@@ -589,10 +647,25 @@ switch ($action) {
         break;
     case 'get_sessions_tracking':
         if (api_is_drh()) {
-            $sessions = SessionManager::get_sessions_followed_by_drh(api_get_user_id(), $start, $limit);
+            $sessions = SessionManager::get_sessions_followed_by_drh(
+                api_get_user_id(),
+                $start,
+                $limit,
+                false,
+                false,
+                false,
+                null,
+                $keyword
+            );
         } else {
             // Sessions for the coach
-            $sessions = Tracking::get_sessions_coached_by_user(api_get_user_id(), $start, $limit);
+            $sessions = Tracking::get_sessions_coached_by_user(
+                api_get_user_id(),
+                $start,
+                $limit,
+                false,
+                $keyword
+            );
         }
 
         $columns =  array(

@@ -870,6 +870,7 @@ function get_attempt_count_not_finished($user_id, $exerciseId, $lp_id, $lp_item_
 }
 
 /**
+ * Deletes a learning path view for a student
  * @param int $user_id
  * @param int $lp_id
  * @param array $course

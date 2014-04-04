@@ -29,8 +29,12 @@ $tbl_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 $session_id = api_get_session_id();
 $typeSelected = isset($_GET['typeselected']) ? intval($_GET['typeselected']) : null;
-$all_categories = Category :: load(null, null, api_get_course_id(), null, null, $session_id);
 
+if ($session_id == 0) {
+    $all_categories = Category :: load(null, null, api_get_course_id(), null, null, $session_id);
+} else {
+    $all_categories = Category :: load_session_categories(null, $session_id);
+}
 $category = Category :: load($_GET['selectcat']);
 $url = api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&newtypeselected='.$typeSelected.'&course_code='.api_get_course_id();
 $typeform = new LinkForm(LinkForm :: TYPE_CREATE, $category[0], null, 'create_link', null, $url, $typeSelected);

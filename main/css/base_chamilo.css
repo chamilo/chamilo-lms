@@ -1568,32 +1568,35 @@ a.read {
 .reset_font {
     font-size: 1.2em;
     color: gray;
-    border: 1px solid white;
+    border: none;
     padding: 2px;
 }
 .reset_font:hover {
-    border: 1px solid black;
+    border: none;
     cursor: pointer;
+    background: #e5e5e5;
 }
 .increase_font {
     font-size: 1.8em;
     color: gray;
-    border: 1px solid white;
+    border: none;
     padding: 2px;
 }
 .increase_font:hover {
-    border: 1px solid black;
+    border: none;
     cursor: pointer;
+    background: #e5e5e5;
 }
 .decrease_font {
     font-size: 0.6em;
     color: gray;
-    border: 1px solid white;
+    border: none;
     padding: 2px;
 }
 .decrease_font:hover {
-    border: 1px solid black;
+    border: none;
     cursor: pointer;
+    background: #e5e5e5;
 }
 
 /* tips Abbr-plugin for FCKeditor */

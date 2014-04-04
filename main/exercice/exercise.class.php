@@ -1621,6 +1621,7 @@ class Exercise {
         $new_array = array();
         if (Database::num_rows($result) > 0 ) {
             $new_array = Database::fetch_array($result, 'ASSOC');
+            $new_array['num_exe'] = Database::num_rows($result);
         }
         return $new_array;
     }
@@ -3350,6 +3351,72 @@ class Exercise {
         );
         return $return_array;
     }
+    /**
+     * Sends a notification when a user ends an examn
+     *
+     */
+    function send_mail_notification_for_exam($question_list_answers, $origin, $exe_id) {
+        if (api_get_course_setting('email_alert_manager_on_new_quiz') != 1 ) {
+            return null;
+        }
+        // Email configuration settings
+        $courseCode     = api_get_course_id();
+        $courseInfo    = api_get_course_info($courseCode);
+
+        $url_email = api_get_path(WEB_CODE_PATH).'exercice/exercise_show.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&id='.$exe_id.'&action=qualify';
+        $user_info = UserManager::get_user_info_by_id(api_get_user_id());
+
+        $msg = '<p>'.get_lang('ExerciseAttempted').' :</p>
+                    <p>'.get_lang('AttemptDetails').' : </p>
+                    <table class="data_table">
+                        <tr>
+                            <td><h3>'.get_lang('CourseName').'</h3></td>
+                            <td><h3>#course#</h3></td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('TestAttempted').'</span></td>
+                            <td>#exercise#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentName').'</td>
+                            <td>#firstName# #lastName#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentEmail').'</td>
+                            <td>#email#</td>
+                        </tr>
+                    </table>';
+        $open_question_list = null;
+
+        $msg    = str_replace("#email#",       $user_info['email'],$msg);
+        $msg1   = str_replace("#exercise#",    $this->exercise, $msg);
+        $msg    = str_replace("#firstName#",   $user_info['firstname'],$msg1);
+        $msg1   = str_replace("#lastName#",    $user_info['lastname'],$msg);
+
+        $msg    = str_replace("#course#",      $courseInfo['name'],$msg1);
+
+        if ($origin != 'learnpath') {
+            $msg.= get_lang('ClickToCommentAndGiveFeedback').', <br />
+                        <a href="#url#">#url#</a>';
+        }
+        $msg1 = str_replace("#url#", $url_email, $msg);
+        $mail_content = $msg1;
+        $subject = get_lang('ExerciseAttempted');
+
+        $teachers = array();
+        if (api_get_session_id()) {
+            $teachers = CourseManager::get_coach_list_from_course_code($coursecode, api_get_session_id());
+        } else {
+            $teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
+        }
+
+        if (!empty($teachers)) {
+            foreach ($teachers as $user_id => $teacher_data) {
+                MessageManager::send_message_simple($user_id, $subject, $mail_content);
+            }
+        }
+
+    }
 
     /**
      * Sends a notification when a user ends an examn
@@ -3405,10 +3472,10 @@ class Exercise {
         }
 
         if (!empty($open_question_list)) {
-            $msg .=  '<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
+            $msg .= '<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>
                     <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
             $msg .= $open_question_list;
-            $msg.='</table><br />';
+            $msg .= '</table><br />';
 
 
             $msg1   = str_replace("#exercise#",    $this->exercise, $msg);
@@ -3418,7 +3485,7 @@ class Exercise {
             $msg    = str_replace("#course#",      $course_info['name'],$msg1);
 
             if ($origin != 'learnpath') {
-                $msg.= get_lang('ClickToCommentAndGiveFeedback').', <br />
+                $msg .= get_lang('ClickToCommentAndGiveFeedback').', <br />
                             <a href="#url#">#url#</a>';
             }
             $msg1 = str_replace("#url#", $url_email, $msg);
@@ -3561,22 +3628,35 @@ class Exercise {
      * @todo this was function was added due the import exercise via CSV
      * @return    int New exercise ID
      */
-    function create_quiz ($title, $expired_time = 0, $type = 2, $random = 0, $active = 1, $results_disabled = 0, $max_attempt = 0, $feedback = 3) {
+    public function createExercise(
+        $title,
+        $expired_time = 0,
+        $type = 2,
+        $random = 0,
+        $active = 1,
+        $results_disabled = 0,
+        $max_attempt = 0,
+        $feedback = 3,
+        $propagateNegative = 0
+    ) {
         $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
-        $expired_time = filter_var($expired_time,FILTER_SANITIZE_NUMBER_INT);
-        $type = filter_var($type,FILTER_SANITIZE_NUMBER_INT);
-        $random = filter_var($random,FILTER_SANITIZE_NUMBER_INT);
-        $active = filter_var($active,FILTER_SANITIZE_NUMBER_INT);
-        $results_disabled = filter_var($results_disabled,FILTER_SANITIZE_NUMBER_INT);
-        $max_attempt = filter_var($max_attempt,FILTER_SANITIZE_NUMBER_INT);
-        $feedback = filter_var($feedback,FILTER_SANITIZE_NUMBER_INT);
-        $sid = api_get_session_id();
+        $type = intval($type);
+        $random = intval($random);
+        $active = intval($active);
+        $results_disabled = intval($results_disabled);
+        $max_attempt = intval($max_attempt);
+        $feedback = intval($feedback);
+        $expired_time = intval($expired_time);
+        $title = Database::escape_string($title);
+        $propagateNegative = intval($propagateNegative);
+        $sessionId = api_get_session_id();
         $course_id = api_get_course_int_id();
         // Save a new quiz
-        $sql = "INSERT INTO $tbl_quiz (c_id, title,type,random,active,results_disabled, max_attempt,start_time,end_time,feedback_type,expired_time, session_id) ".
-            " VALUES('$course_id', '".Database::escape_string($title)."',$type,$random,$active, $results_disabled,$max_attempt,'','',$feedback,$expired_time,$sid)";
-        $rs = Database::query($sql);
-        $quiz_id = Database::get_last_insert_id();
+        $sql = "INSERT INTO $tbl_quiz (c_id, title, type, random, active, results_disabled, max_attempt, start_time,end_time,feedback_type,expired_time, session_id, propagate_neg) ".
+            " VALUES('$course_id', '".$title."', $type, $random, $active, $results_disabled, $max_attempt,'','', $feedback, $expired_time, $sessionId, $propagateNegative)";
+        Database::query($sql);
+        $quiz_id = Database::insert_id();
+
         return $quiz_id;
     }
 
@@ -3593,15 +3673,26 @@ class Exercise {
     public function get_exercise_result($exe_id) {
         $result = array();
         $track_exercise_info = get_exercise_track_exercise_info($exe_id);
+
         if (!empty($track_exercise_info)) {
+            $totalScore = 0;
             $objExercise = new Exercise();
             $objExercise->read($track_exercise_info['exe_exo_id']);
             if (!empty($track_exercise_info['data_tracking'])) {
                 $question_list = explode(',', $track_exercise_info['data_tracking']);
             }
             foreach ($question_list as $questionId) {
-                $question_result = $objExercise->manage_answer($exe_id, $questionId, '','exercise_show', array(), false, true, false, $objExercise->selectPropagateNeg());
-                $questionScore   = $question_result['score'];
+                $question_result = $objExercise->manage_answer(
+                    $exe_id,
+                    $questionId,
+                    '',
+                    'exercise_show',
+                    array(),
+                    false,
+                    true,
+                    false,
+                    $objExercise->selectPropagateNeg()
+                );
                 $totalScore      += $question_result['score'];
             }
 

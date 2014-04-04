@@ -246,28 +246,38 @@ if ($form->validate()) {
 }
 
 $htmlHeadXtra[] = to_javascript_work();
-Display :: display_header(null);
 
+$tpl = new Template();
+$content = null;
 if (!empty($work_id)) {
     if ($is_allowed_to_edit) {
         if (api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION)) {
             echo Display::display_warning_message(get_lang('ResourceLockedByGradebook'));
         } else {
-            $form->display();
+
+            $comments = getWorkComments($my_folder_data);
+
+            $template = $tpl->get_template('work/comments.tpl');
+            $tpl->assign('work_comment_enabled', ALLOW_USER_COMMENTS);
+            $tpl->assign('comments', $comments);
+
+            $content .= $form->return_form();
+            $content  .= $tpl->fetch($template);
         }
     } elseif ($is_author) {
         if (empty($work_item['qualificator_id']) || $work_item['qualificator_id'] == 0) {
-            $form->display();
+            $content .= $form->return_form();
         } else {
-            Display::display_error_message(get_lang('ActionNotAllowed'));
+            $content .= Display::return_message(get_lang('ActionNotAllowed'), 'error');
         }
     } elseif ($student_can_edit_in_session && $has_ended == false) {
-        $form->display();
+        $content .= $form->return_form();
     } else {
-        Display::display_error_message(get_lang('ActionNotAllowed'));
+        $content .= Display::return_message(get_lang('ActionNotAllowed'), 'error');
     }
 } else {
-    Display::display_error_message(get_lang('ActionNotAllowed'));
+    $content .= Display::return_message(get_lang('ActionNotAllowed'), 'error');
 }
 
-Display :: display_footer();
+$tpl->assign('content', $content);
+$tpl->display_one_col_template();

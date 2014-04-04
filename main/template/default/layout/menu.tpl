@@ -18,7 +18,7 @@
                 <ul class="nav pull-right">
 
                     {% if user_notifications is not null %}
-                    <li>
+                    <li class="notification-marker">
                         <a href="{{ message_url }}">{{ user_notifications }}</a>
                     </li>
                     {% endif %}

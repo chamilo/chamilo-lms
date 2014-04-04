@@ -497,16 +497,16 @@ function store_regions()
 */
 function store_plugins()
 {
-    $plugin_obj = new AppPlugin();
+    $appPlugin = new AppPlugin();
 
     // Get a list of all current 'Plugins' settings
-    $plugin_list = $plugin_obj->read_plugins_from_path();
+    $plugin_list = $appPlugin->read_plugins_from_path();
 
     $installed_plugins = array();
 
     foreach ($plugin_list as $plugin) {
         if (isset($_POST['plugin_'.$plugin])) {
-            $plugin_obj->install($plugin);
+            $appPlugin->install($plugin);
             $installed_plugins[] = $plugin;
         }
     }
@@ -516,8 +516,9 @@ function store_plugins()
     } else {
         $remove_plugins = $plugin_list;
     }
+
     foreach ($remove_plugins as $plugin) {
-        $plugin_obj->uninstall($plugin);
+        $appPlugin->uninstall($plugin);
     }
 }
 
@@ -720,22 +721,25 @@ function handle_search()
  * @since Dokeos 1.8.6
  */
 function handle_templates() {
-    if ($_GET['action'] != 'add') {
+    /* Drive-by fix to avoid undefined var warnings, without repeating
+     * isset() combos all over the place. */
+    $action = isset($_GET['action']) ? $_GET['action'] : "invalid";
+
+    if ($action != 'add') {
         echo '<div class="actions" style="margin-left: 1px;">';
         echo '<a href="settings.php?category=Templates&amp;action=add">'.Display::return_icon('new_template.png', get_lang('AddTemplate'),'',ICON_SIZE_MEDIUM).'</a>';
         echo '</div>';
     }
 
-    if ($_GET['action'] == 'add' || ($_GET['action'] == 'edit' && is_numeric($_GET['id']))) {
+    if ($action == 'add' || ($action == 'edit' && is_numeric($_GET['id']))) {
         add_edit_template();
 
         // Add event to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
         event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
-
     } else {
-        if ($_GET['action'] == 'delete' && is_numeric($_GET['id'])) {
+        if ($action == 'delete' && is_numeric($_GET['id'])) {
             delete_template($_GET['id']);
 
             // Add event to the system log
@@ -743,6 +747,7 @@ function handle_templates() {
             $category = $_GET['category'];
             event_system(LOG_CONFIGURATION_SETTINGS_CHANGE, LOG_CONFIGURATION_SETTINGS_CATEGORY, $category, api_get_utc_datetime(), $user_id);
         }
+
         display_templates();
     }
 }
@@ -861,7 +866,8 @@ function image_filter($image) {
  */
 function add_edit_template() {
     // Initialize the object.
-    $form = new FormValidator('template', 'post', 'settings.php?category=Templates&action='.Security::remove_XSS($_GET['action']).'&id='.Security::remove_XSS($_GET['id']));
+    $id = isset($_GET['id']) ? '&id='.Security::remove_XSS($_GET['id']) : '';
+    $form = new FormValidator('template', 'post', 'settings.php?category=Templates&action='.Security::remove_XSS($_GET['action']).$id);
 
     // Setting the form elements: the header.
     if ($_GET['action'] == 'add') {

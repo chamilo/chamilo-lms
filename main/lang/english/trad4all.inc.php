@@ -2,6 +2,17 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$IncorrectScore = "Incorrect score";
+$CorrectScore = "Correct score";
+$UseCustomScoreForAllQuestions = "Use custom score for all questions";
+$YouShouldAddItemsBeforeAttachAudio = "You should add some items to your learning path, otherwise you won't be able to attach audio files to them";
+$InactiveDays = "Inactive days";
+$FollowedHumanResources = "Followed HR directors";
+$TheTextYouEnteredDoesNotMatchThePicture = "The text you entered doesn't match the picture.";
+$RemoveOldRelationships = "Remove previous relationships";
+$ImportSessionDrhList = "Import list of HR directors into sessions";
+$FollowedStudents = "Followed students";
+$FollowedTeachers = "Followed teachers";
 $AllowOnlyFiles = "Allow only files";
 $AllowOnlyText = "Allow only text";
 $AllowFileOrText = "Allow files or online text";
@@ -92,6 +103,7 @@ $UserIsNotATeacher = "User is not a teacher";
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "This item is invisible for learner but you have access as teacher.";
 $DeleteAllAttendances = "Delete all created attendances";
 $Unsubscribe = "Unsubscribe";
+$SendToAllUsers = "Send to all users";
 $SelectACategory = "Select a category";
 $AdvancedEdit = "Advanced edit";
 $SearchXapianModuleNotInstalled = "The Xapian search module is not installed";

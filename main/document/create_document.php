@@ -301,7 +301,7 @@ if (isset($group_properties)) {
 }
 
 $select_cat = isset($_GET['selectcat']) ? intval($_GET['selectcat']) : null;
-
+$curDirPath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
 // Create a new form
 $form = new FormValidator(
     'create_document',
@@ -569,8 +569,9 @@ if ($form->validate()) {
                 if (!isset($df)) {
                     DocumentManager::attach_gradebook_certificate ($_course['code'],$document_id);
 				}
-				$certificate_condition = '&certificate=true';
+				$certificate_condition = '&certificate=true&curdirpath=/certificates';
 			}
+
 			header('Location: document.php?'.api_get_cidreq().'&id='.$folder_id.$selectcat.$certificate_condition);
 			exit();
 		} else {

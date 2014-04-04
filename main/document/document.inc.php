@@ -476,9 +476,7 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
         $req_gid = '';
     }
     $document_id = $document_data['id'];
-
     $type = $document_data['filetype'];
-
     $is_read_only = $document_data['readonly'];
     $path = $document_data['path'];
     $parent_id = DocumentManager::get_document_id(api_get_course_info(), dirname($path));
@@ -582,7 +580,8 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
                 } else {
                     $tip_visibility = get_lang('Hide');
                 }
-                $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;id=' . $parent_id . '&amp;' . $visibility_command . '=' . $id . $req_gid . '&amp;' . $sort_params . '">' . Display::return_icon($visibility_icon . '.png', $tip_visibility, '', ICON_SIZE_SMALL) . '</a>';
+                $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;id=' . $parent_id . '&amp;' . $visibility_command . '=' . $id . $req_gid . '&amp;' . $sort_params . '">' .
+                    Display::return_icon($visibility_icon . '.png', $tip_visibility, '', ICON_SIZE_SMALL) . '</a>';
             }
         }
 
@@ -591,19 +590,23 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
             $modify_icons .= '&nbsp;' . Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'), array(), ICON_SIZE_SMALL);
         } else {
             if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' && DocumentManager::get_default_certificate_id(api_get_course_id()) == $id) {
-                $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&amp;deleteid=' . $document_id . $req_gid . '&amp;' . $sort_params . 'delete_certificate_id=' . $id . '" onclick="return confirmation(\'' . basename($path) . '\');">' . Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
+                $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&action=delete_item&id='.$parent_id.'&deleteid='.$document_id.$req_gid.'&amp;' . $sort_params . 'delete_certificate_id=' . $id . '" onclick="return confirmation(\'' . basename($path) . '\');">' .
+                    Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
             } else {
                 if ($is_certificate_mode) {
-                    $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&amp;deleteid=' . $document_id . $req_gid . '&amp;' . $sort_params . '" onclick="return confirmation(\'' . basename($path) . '\');">' . Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
+                    $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&action=delete_item&id='.$parent_id.'&deleteid=' . $document_id . $req_gid . '&amp;' . $sort_params . '" onclick="return confirmation(\'' . basename($path) . '\');">' .
+                        Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
                 } else {
                     if (api_get_session_id()) {
                         if ($document_data['session_id'] == api_get_session_id()) {
-                            $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&amp;deleteid=' . $document_id . $req_gid . '&amp;' . $sort_params . '" onclick="return confirmation(\'' . basename($path) . '\');">' . Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
+                            $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&action=delete_item&id='.$parent_id.'&deleteid='.$document_id . $req_gid . '&amp;' . $sort_params . '" onclick="return confirmation(\'' . basename($path) . '\');">'.
+                                Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
                         } else {
                             $modify_icons .= '&nbsp;' . Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'), array(), ICON_SIZE_SMALL);
                         }
                     } else {
-                        $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&amp;deleteid=' . $document_id . $req_gid . '&amp;' . $sort_params . '" onclick="return confirmation(\'' . basename($path) . '\');">' . Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
+                        $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&action=delete_item&id='.$parent_id.'&deleteid='.$document_id . $req_gid . '&amp;' . $sort_params . '" onclick="return confirmation(\'' . basename($path) . '\');">' .
+                            Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL) . '</a>';
                     }
                 }
             }
@@ -613,7 +616,8 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
     if ($type == 'file' && ($extension == 'html' || $extension == 'htm')) {
         if ($is_template == 0) {
             if ((isset($_GET['curdirpath']) && $_GET['curdirpath'] != '/certificates') || !isset($_GET['curdirpath'])) {
-                $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&amp;add_as_template=' . $id . $req_gid . '&amp;' . $sort_params . '">' . Display::return_icon('wizard.png', get_lang('AddAsTemplate'), array(), ICON_SIZE_SMALL) . '</a>';
+                $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&amp;add_as_template=' . $id . $req_gid . '&amp;' . $sort_params . '">' .
+                    Display::return_icon('wizard.png', get_lang('AddAsTemplate'), array(), ICON_SIZE_SMALL) . '</a>';
             }
             if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates') {//allow attach certificate to course
                 $visibility_icon_certificate = 'nocertificate';
@@ -627,7 +631,8 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
                     $certificate = get_lang('NoDefaultCertificate');
                 }
                 if (isset($_GET['selectcat'])) {
-                    $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&amp;selectcat=' . Security::remove_XSS($_GET['selectcat']) . '&amp;set_certificate=' . $id . $req_gid . '&amp;' . $sort_params . '"><img src="../img/' . $visibility_icon_certificate . '.png" border="0" title="' . $certificate . '" alt="" /></a>';
+                    $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&amp;selectcat=' . Security::remove_XSS($_GET['selectcat']) . '&amp;set_certificate=' . $id . $req_gid . '&amp;' . $sort_params . '">
+                    <img src="../img/' . $visibility_icon_certificate . '.png" border="0" title="' . $certificate . '" alt="" /></a>';
                     if ($is_preview) {
                         $modify_icons .= '&nbsp;<a target="_blank"  href="' . api_get_self() . '?' . api_get_cidreq() . '&amp;curdirpath=' . $curdirpath . '&amp;set_preview=' . $id . $req_gid . '&amp;' . $sort_params . '" >' .
                                 Display::return_icon('preview_view.png', $preview, '', ICON_SIZE_SMALL) . '</a>';
@@ -638,7 +643,8 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
             $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&curdirpath=' . $curdirpath . '&amp;remove_as_template=' . $id . $req_gid . '&amp;' . $sort_params . '">' .
                     Display::return_icon('wizard_na.png', get_lang('RemoveAsTemplate'), '', ICON_SIZE_SMALL) . '</a>';
         }
-        $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&action=export_to_pdf&id=' . $id . '">' . Display::return_icon('pdf.png', get_lang('Export2PDF'), array(), ICON_SIZE_SMALL) . '</a>';
+        $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?' . api_get_cidreq() . '&action=export_to_pdf&id=' . $id . '">' .
+            Display::return_icon('pdf.png', get_lang('Export2PDF'), array(), ICON_SIZE_SMALL) . '</a>';
     }
     return $modify_icons;
 }
@@ -771,7 +777,6 @@ function display_user_link_document($user_id, $name) {
  */
 function create_dir_form($current_dir_id) {
     global $document_id;
-
     $form = new FormValidator('create_dir_form', 'post', api_get_self().'?'.api_get_cidreq(), '', null, false);
     $form->addElement('hidden', 'create_dir', 1);
     $form->addElement('hidden', 'dir_id', intval($document_id));

@@ -28,6 +28,7 @@
 /**
  * Code
  */
+use \ChamiloSession as Session;
 // Language files that need to be included
 $language_file = array('document', 'slideshow', 'gradebook', 'create_course');
 require_once '../inc/global.inc.php';
@@ -35,6 +36,7 @@ $current_course_tool = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
 $to_user_id = null;
 $parent_id = null;
+$message = null;
 
 require_once 'document.inc.php';
 $lib_path = api_get_path(LIBRARY_PATH);
@@ -93,7 +95,8 @@ if (empty($courseInfo)) {
     api_not_allowed(true);
 }
 
-$dbl_click_id = 0; // Used for avoiding double-click
+// Used for avoiding double-click.
+$dbl_click_id = 0;
 
 $selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
 $moveTo = isset($_POST['move_to']) ? Security::remove_XSS($_POST['move_to']) : null;
@@ -164,13 +167,77 @@ if (!empty($groupId)) {
 
 $document_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-$message = '';
+
+$currentUrl = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
 
 if (Portfolio::controller()->accept()) {
     Portfolio::controller()->run();
 }
 
 switch ($action) {
+    case 'delete_item':
+        if ($is_allowed_to_edit ||
+            $group_member_with_upload_rights ||
+            is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id) ||
+            is_my_shared_folder(api_get_user_id(), $moveTo, $session_id)
+        ) {
+            if (isset($_GET['deleteid'])) {
+                if (!$is_allowed_to_edit) {
+                    if (api_is_coach()) {
+                        if (!DocumentManager::is_visible_by_id(
+                            $_GET['deleteid'],
+                            $courseInfo,
+                            $session_id,
+                            api_get_user_id())
+                        ) {
+                            api_not_allowed();
+                        }
+                    }
+
+                    if (DocumentManager::check_readonly(
+                        $courseInfo,
+                        api_get_user_id(),
+                        '',
+                        $_GET['deleteid'],
+                        true)
+                    ) {
+                        api_not_allowed();
+                    }
+                }
+
+                $documentInfo = DocumentManager::get_document_data_by_id(
+                    $_GET['deleteid'],
+                    $courseInfo['code'],
+                    false,
+                    $session_id
+                );
+
+                // Check whether the document is in the database.
+                if (!empty($documentInfo)) {
+                    $deleteDocument = DocumentManager::delete_document(
+                        $courseInfo,
+                        null,
+                        $base_work_dir,
+                        api_get_session_id(),
+                        $_GET['deleteid'],
+                        $groupId
+                    );
+
+                    if ($deleteDocument) {
+                        $certificateId = isset($_GET['delete_certificate_id']) ? $_GET['delete_certificate_id'] : null;
+                        DocumentManager::remove_attach_certificate(api_get_course_id(), $certificateId);
+                        $message = Display::return_message(get_lang('DocDeleted').': '.$documentInfo['path'], 'success');
+                    } else {
+                        $message = Display::return_message(get_lang('DocDeleteError'), 'warning');
+                    }
+                } else {
+                    $message = Display::return_message(get_lang('FileNotFound'), 'warning');
+                }
+                Session::write('message', $message);
+                header("Location: $currentUrl");
+                exit;
+            }
+        }
     case 'download':
         // Get the document data from the ID
         $document_data = DocumentManager::get_document_data_by_id(
@@ -230,7 +297,7 @@ switch ($action) {
                 );
             }
 
-            //filter when I am into shared folder, I can donwload only my shared folder
+            //filter when I am into shared folder, I can download only my shared folder
             if (is_any_user_shared_folder($document_data['path'], $session_id)) {
                 if (is_my_shared_folder(api_get_user_id(), $document_data['path'], $session_id)
                     || api_is_allowed_to_edit()
@@ -338,6 +405,7 @@ switch ($action) {
                     $message = Display::return_message(get_lang('CopyMade').' '.$file_link, 'confirmation', false);
                 }
             }
+            Session::write('message', $message);
         }
         break;
 }
@@ -712,7 +780,9 @@ if (!empty($documentAndFolders)) {
                     $session_id
                 );
                 if ($session_id != 0 && !$document_data) {
-                    // If there is a session defined and asking for the document *from the session* didn't work, try it from the course (out of a session context)
+                    /* If there is a session defined and asking for the document
+                     * from the session* didn't work, try it from the
+                     course (out of a session context) */
                     $document_data = DocumentManager::get_document_data_by_id(
                         $file['id'],
                         api_get_course_id(),
@@ -743,7 +813,7 @@ $(document).ready( function() {
 });
 </script>';
 
-Display::display_header('', 'Doc');
+
 
 // Lib for event log, stats & tracking & record of the access
 event_access_tool(TOOL_DOCUMENT);
@@ -753,15 +823,7 @@ if ($groupId != 0) { // Add group name after for group documents
     $add_group_to_title = ' ('.$group_properties['name'].')';
 }
 
-/* Introduction section (editable by course admins) */
-
-if (!empty($groupId)) {
-    Display::display_introduction_section(TOOL_DOCUMENT.$groupId);
-} else {
-    Display::display_introduction_section(TOOL_DOCUMENT);
-}
-
-// ACTION MENU
+$moveForm = null;
 
 /* 	MOVE FILE OR DIRECTORY */
 //Only teacher and all users into their group and each user into his/her shared folder
@@ -770,19 +832,18 @@ if ($is_allowed_to_edit ||
     is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id) ||
     is_my_shared_folder(api_get_user_id(), $moveTo, $session_id)
 ) {
-
     if (isset($_GET['move']) && $_GET['move'] != '') {
         $my_get_move = intval($_REQUEST['move']);
 
         if (api_is_coach()) {
             if (!DocumentManager::is_visible_by_id($my_get_move, $courseInfo, $session_id, api_get_user_id())) {
-                api_not_allowed();
+                api_not_allowed(true);
             }
         }
 
         if (!$is_allowed_to_edit) {
             if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), $my_get_move)) {
-                api_not_allowed();
+                api_not_allowed(true);
             }
         }
         // Get the document data from the ID
@@ -812,17 +873,16 @@ if ($is_allowed_to_edit ||
                         $user_shared_folders[] = $fold;
                     }
                 }
-                echo '<legend>'.get_lang('Move').'</legend>';
-                echo build_move_to_selector(
+                $moveForm .= '<legend>'.get_lang('Move').'</legend>';
+                $moveForm .= build_move_to_selector(
                     $user_shared_folders,
                     $move_path,
                     $my_get_move,
                     $group_properties['directory']
                 );
             } else {
-
-                echo '<legend>'.get_lang('Move').'</legend>';
-                echo build_move_to_selector($folders, $move_path, $my_get_move, $group_properties['directory']);
+                $moveForm .= '<legend>'.get_lang('Move').'</legend>';
+                $moveForm .= build_move_to_selector($folders, $move_path, $my_get_move, $group_properties['directory']);
             }
         }
     }
@@ -831,15 +891,16 @@ if ($is_allowed_to_edit ||
 
         if (!$is_allowed_to_edit) {
             if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), $_POST['move_file'])) {
-                api_not_allowed();
+                api_not_allowed(true);
             }
         }
 
         if (api_is_coach()) {
             if (!DocumentManager::is_visible_by_id($_POST['move_file'], $courseInfo, $session_id, api_get_user_id())) {
-                api_not_allowed();
+                api_not_allowed(true);
             }
         }
+
         // Get the document data from the ID
         $document_to_move = DocumentManager::get_document_data_by_id(
             $_POST['move_file'],
@@ -875,7 +936,7 @@ if ($is_allowed_to_edit ||
                         null,
                         $session_id
                     );
-                    Display::display_confirmation_message(get_lang('DirMv'));
+                    $message = Display::return_message(get_lang('DirMv'), 'confirmation');
                 } elseif (is_file($real_path_target)) {
                     api_item_property_update(
                         $courseInfo,
@@ -889,7 +950,7 @@ if ($is_allowed_to_edit ||
                         null,
                         $session_id
                     );
-                    Display::display_confirmation_message(get_lang('DocMv'));
+                    $message = Display::return_message(get_lang('DocMv'), 'confirmation');
                 }
 
                 // Set the current path
@@ -898,17 +959,18 @@ if ($is_allowed_to_edit ||
             } else {
                 if ($fileExist) {
                     if (is_dir($real_path_target)) {
-                        Display::display_error_message(get_lang('DirExists'));
+                        $message = Display::return_message(get_lang('DirExists'), 'error');
                     } elseif (is_file($real_path_target)) {
-                        Display::display_error_message(get_lang('FileExists'));
+                        $message = Display::return_message(get_lang('FileExists'), 'v');
                     }
                 } else {
-                    Display::display_error_message(get_lang('Impossible'));
+                    $message = Display::return_message(get_lang('Impossible'), 'error');
                 }
             }
         } else {
-            Display::display_error_message(get_lang('Impossible'));
+            $message = Display::return_message(get_lang('Impossible'), 'error');
         }
+        Session::write('message', $message);
     }
 }
 
@@ -918,64 +980,10 @@ if ($is_allowed_to_edit ||
     $group_member_with_upload_rights ||
     is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)
 ) {
-    if (isset($_GET['deleteid'])) {
-        if (!$is_allowed_to_edit) {
-            if (api_is_coach()) {
-                if (!DocumentManager::is_visible_by_id(
-                    $_GET['deleteid'],
-                    $courseInfo,
-                    $session_id,
-                    api_get_user_id())
-                ) {
-                    api_not_allowed();
-                }
-            }
-
-            if (DocumentManager::check_readonly(
-                $courseInfo,
-                api_get_user_id(),
-                '',
-                $_GET['deleteid'],
-                true)
-            ) {
-                api_not_allowed();
-            }
-        }
-
-        $documentInfo = DocumentManager::get_document_data_by_id(
-            $_GET['deleteid'],
-            $courseInfo['code'],
-            false,
-            $session_id
-        );
-
-        // Check whether the document is in the database.
-        if (!empty($documentInfo)) {
-            $deleteDocument = DocumentManager::delete_document(
-                $courseInfo,
-                null,
-                $base_work_dir,
-                api_get_session_id(),
-                $_GET['deleteid'],
-                $groupId
-            );
-
-            if ($deleteDocument) {
-                $certificateId = isset($_GET['delete_certificate_id']) ? $_GET['delete_certificate_id'] : null;
-                DocumentManager::remove_attach_certificate(api_get_course_id(), $certificateId);
-                Display::display_confirmation_message(get_lang('DocDeleted').': '.$documentInfo['path']);
-            } else {
-                Display::display_warning_message(get_lang('DocDeleteError'));
-            }
-        } else {
-            Display::display_warning_message(get_lang('FileNotFound'));
-        }
-    }
-
     if (isset($_POST['action']) && isset($_POST['ids'])) {
         $files = $_POST['ids'];
         $readonlyAlreadyChecked = false;
-
+        $messages = null;
         foreach ($files as $documentId) {
             $items = array('/audio', '/flash', '/images', '/shared_folder', '/video', '/chat_files', '/certificates');
             $data = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);
@@ -983,10 +991,6 @@ if ($is_allowed_to_edit ||
                 // exclude system directories (do not allow deletion)
                 continue;
             } else {
-
-                //$documentId = DocumentManager::get_document_id($courseInfo, $path, $session_id);
-                //$data = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code'], false, $session_id);
-
                 switch ($_POST['action']) {
                     case 'set_invisible':
                         $visibilityCommand = 'invisible';
@@ -1002,9 +1006,9 @@ if ($is_allowed_to_edit ||
                             null,
                             $session_id
                         )) {
-                            Display::display_confirmation_message(get_lang('VisibilityChanged').': '.$data['path']);
+                            $messages .= Display::return_message(get_lang('VisibilityChanged').': '.$data['path'], 'confirmation');
                         } else {
-                            Display::display_error_message(get_lang('ViModProb'));
+                            $messages .= Display::return_message(get_lang('ViModProb'), 'error');
                         }
                         break;
                     case 'set_visible':
@@ -1021,9 +1025,9 @@ if ($is_allowed_to_edit ||
                             null,
                             $session_id
                         )) {
-                            Display::display_confirmation_message(get_lang('VisibilityChanged').': '.$data['path']);
+                            $messages .= Display::return_message(get_lang('VisibilityChanged').': '.$data['path'], 'confirmation');
                         } else {
-                            Display::display_error_message(get_lang('ViModProb'));
+                            $messages .= Display::return_message(get_lang('ViModProb'), 'error');
                         }
                         break;
                     case 'delete':
@@ -1042,7 +1046,7 @@ if ($is_allowed_to_edit ||
                                         $session_id
                                     )
                                     ) {
-                                        Display::display_error_message(get_lang('CantDeleteReadonlyFiles'));
+                                        $messages .= Display::return_message(get_lang('CantDeleteReadonlyFiles'), 'error');
                                         break 2;
                                     }
                                 }
@@ -1059,14 +1063,19 @@ if ($is_allowed_to_edit ||
                             $groupId
                         );
                         if (!empty($deleteDocument)) {
-                            Display::display_confirmation_message(get_lang('DocDeleted').': '.$data['path']);
+                            $messages .= Display::return_message(get_lang('DocDeleted').': '.$data['path'], 'confirmation');
                         }
                         break;
                 }
             }
-        }
+        } // endforeach
+
+        Session::write('message', $messages);
     }
 }
+
+$dirForm = null;
+
 
 /* 	CREATE DIRECTORY */
 //Only teacher and all users into their group and any user into his/her shared folder
@@ -1080,7 +1089,7 @@ if ($is_allowed_to_edit ||
         $post_dir_name = $_POST['dirname'];
 
         if ($post_dir_name == '../' || $post_dir_name == '.' || $post_dir_name == '..') {
-            Display::display_error_message(get_lang('CannotCreateDir'));
+            $message = Display::return_message(get_lang('CannotCreateDir'), 'error');
         } else {
             if (!empty($_POST['dir_id'])) {
                 // Get the document data from the ID
@@ -1124,19 +1133,20 @@ if ($is_allowed_to_edit ||
                 );
 
                 if ($created_dir) {
-                    Display::display_confirmation_message('<span title="'.$created_dir.'">'.get_lang('DirCr').'</span>', false);
+                    $message = Display::return_message(get_lang('DirCr').' '.$created_dir, 'confirmation');
                 } else {
-                    Display::display_error_message(get_lang('CannotCreateDir'));
+                    $message = Display::return_message(get_lang('CannotCreateDir'), 'error');
                 }
             } else {
-                Display::display_error_message(get_lang('CannotCreateDir'));
+                $message = Display::return_message(get_lang('CannotCreateDir'), 'error');
             }
         }
+        Session::write('message', $message);
     }
 
     // Show them the form for the directory name
     if (isset($_GET['createdir'])) {
-        echo create_dir_form($document_id);
+        $dirForm = create_dir_form($document_id);
     }
 }
 
@@ -1158,11 +1168,11 @@ if ($is_allowed_to_edit) {
         if (!$is_allowed_to_edit) {
             if (api_is_coach()) {
                 if (!DocumentManager::is_visible_by_id($update_id, $courseInfo, $session_id, api_get_user_id())) {
-                    api_not_allowed();
+                    api_not_allowed(true);
                 }
             }
             if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), '', $update_id)) {
-                api_not_allowed();
+                api_not_allowed(true);
             }
         }
 
@@ -1180,12 +1190,14 @@ if ($is_allowed_to_edit) {
             $session_id)
         ) {
             //don't use ViMod because firt is load ViMdod (Gradebook). VisibilityChanged (trad4all)
-            Display::display_confirmation_message(get_lang('VisibilityChanged'));
+            $message = Display::return_message(get_lang('VisibilityChanged'), 'confirmation');
         } else {
-            Display::display_error_message(get_lang('ViModProb'));
+            $message = Display::return_message(get_lang('ViModProb'), 'error');
         }
+        Session::write('message', $message);
     }
 }
+$templateForm = null;
 
 /* 	TEMPLATE ACTION */
 //Only teacher and all users into their group
@@ -1198,20 +1210,18 @@ if ($is_allowed_to_edit ||
         $document_id_for_template = intval($_GET['add_as_template']);
 
         // Create the form that asks for the directory name
-        $template_text = '<form name="set_document_as_new_template" enctype="multipart/form-data" action="'.api_get_self().'?add_as_template='.$document_id_for_template.'" method="post">';
-        $template_text .= '<input type="hidden" name="curdirpath" value="'.$curdirpath.'" />';
-        $template_text .= '<table><tr><td>';
-        $template_text .= get_lang('TemplateName').' : </td>';
-        $template_text .= '<td><input type="text" name="template_title" /></td></tr>';
-        //$template_text .= '<tr><td>'.get_lang('TemplateDescription').' : </td>';
-        //$template_text .= '<td><textarea name="template_description"></textarea></td></tr>';
-        $template_text .= '<tr><td>'.get_lang('TemplateImage').' : </td>';
-        $template_text .= '<td><input type="file" name="template_image" id="template_image" /></td></tr>';
-        $template_text .= '</table>';
-        $template_text .= '<button type="submit" class="add" name="create_template">'.get_lang('CreateTemplate').'</button>';
-        $template_text .= '</form>';
-        // Show the form
-        Display::display_normal_message($template_text, false);
+        $templateForm .= '<form name="set_document_as_new_template" enctype="multipart/form-data" action="'.api_get_self().'?add_as_template='.$document_id_for_template.'" method="post">';
+        $templateForm .= '<input type="hidden" name="curdirpath" value="'.$curdirpath.'" />';
+        $templateForm .= '<table><tr><td>';
+        $templateForm .= get_lang('TemplateName').' : </td>';
+        $templateForm .= '<td><input type="text" name="template_title" /></td></tr>';
+        //$templateForm .= '<tr><td>'.get_lang('TemplateDescription').' : </td>';
+        //$templateForm .= '<td><textarea name="template_description"></textarea></td></tr>';
+        $templateForm .= '<tr><td>'.get_lang('TemplateImage').' : </td>';
+        $templateForm .= '<td><input type="file" name="template_image" id="template_image" /></td></tr>';
+        $templateForm .= '</table>';
+        $templateForm .= '<button type="submit" class="add" name="create_template">'.get_lang('CreateTemplate').'</button>';
+        $templateForm .= '</form>';
     } elseif (isset($_GET['add_as_template']) && isset($_POST['create_template'])) {
 
         $document_id_for_template = intval(Database::escape_string($_GET['add_as_template']));
@@ -1227,9 +1237,9 @@ if ($is_allowed_to_edit ||
                 api_get_permissions_for_new_directories()
             );
         }
+
         // Upload the file
         if (!empty($_FILES['template_image']['name'])) {
-
             require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
             $upload_ok = process_uploaded_file($_FILES['template_image']);
 
@@ -1269,7 +1279,8 @@ if ($is_allowed_to_edit ||
             $user_id,
             $new_file_name
         );
-        Display::display_confirmation_message(get_lang('DocumentSetAsTemplate'));
+        $message = Display::return_message(get_lang('DocumentSetAsTemplate'), 'confirmation');
+        Session::write('message', $message);
     }
 
     if (isset($_GET['remove_as_template'])) {
@@ -1280,8 +1291,10 @@ if ($is_allowed_to_edit ||
             $course_code,
             $user_id
         );
-        Display::display_confirmation_message(get_lang('DocumentUnsetAsTemplate'));
+        $message = Display::return_message(get_lang('DocumentUnsetAsTemplate'), 'confirmation');
+        Session::write('message', $message);
     }
+
 }
 
 // END ACTION MENU
@@ -1295,7 +1308,8 @@ if (isset($_GET['curdirpath']) &&
         $course_id = Security::remove_XSS($_GET['cidReq']); // course id
         $document_id = Security::remove_XSS($_GET['set_certificate']); // document id
         DocumentManager::attach_gradebook_certificate($course_id, $document_id);
-        Display::display_normal_message(get_lang('IsDefaultCertificate'));
+        $message = Display::return_message(get_lang('IsDefaultCertificate'), 'normal');
+        Session::write('message', $message);
     }
 }
 
@@ -1345,11 +1359,11 @@ if (!isset($folders) || $folders === false) {
     $folders = array();
 }
 
-echo '<div id="appletplace"></div>';
-echo '<div class="actions">';
+//echo '<div id="appletplace"></div>';
+$actions = '<div class="actions">';
 if (!$is_certificate_mode) {
     /* BUILD SEARCH FORM */
-    echo '<span style="display:inline-block;">';
+    $actions .= '<span style="display:inline-block;">';
     $form = new FormValidator('search_document', 'get', api_get_self().'?'.api_get_cidreq());
     $renderer = & $form->defaultRenderer();
     $renderer->setElementTemplate('<span>{element}</span> ');
@@ -1358,22 +1372,22 @@ if (!$is_certificate_mode) {
     $form->addElement('hidden', 'id_session', api_get_session_id());
     $form->addElement('hidden', 'gidReq', $groupId);
     $form->addElement('style_submit_button', 'submit', get_lang('Search'), 'class="search"');
-    $form->display();
-    echo '</span>';
+    $actions .= $form->return_form();
+    $actions .= '</span>';
 }
 
 /* GO TO PARENT DIRECTORY */
 if ($curdirpath != '/' && $curdirpath != $group_properties['directory'] && !$is_certificate_mode) {
-    echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$parent_id.'">';
-    echo Display::display_icon('folder_up.png', get_lang('Up'), '', ICON_SIZE_MEDIUM);
-    echo '</a>';
+    $actions .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$parent_id.'">';
+    $actions .= Display::return_icon('folder_up.png', get_lang('Up'), '', ICON_SIZE_MEDIUM);
+    $actions .= '</a>';
 }
 
 if ($is_certificate_mode && $curdirpath != '/certificates') {
-    ?>
-    <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq(); ?>&amp;curdirpath=<?php echo urlencode((dirname($curdirpath) == '\\') ? '/' : dirname($curdirpath)); ?>">
-    <?php Display::display_icon('folder_up.png', get_lang('Up'), '', ICON_SIZE_MEDIUM); ?></a>
-    <?php
+    $actions .= Display::url(
+        Display::return_icon('folder_up.png', get_lang('Up'), '', ICON_SIZE_MEDIUM),
+        api_get_self().'?'.api_get_cidreq().'&curdirpath='.$curdirpath
+    );
 }
 
 $column_show = array();
@@ -1382,86 +1396,90 @@ if ($is_allowed_to_edit ||
     $group_member_with_upload_rights ||
     is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)
 ) {
-
     // TODO:check enable more options for shared folders
     /* CREATE NEW DOCUMENT OR NEW DIRECTORY / GO TO UPLOAD / DOWNLOAD ZIPPED FOLDER */
 
     // Create new document
 
     if (!$is_certificate_mode) {
-        ?>
-        <a href="create_document.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id; ?>">
-        <?php Display::display_icon('new_document.png', get_lang('CreateDoc'), '', ICON_SIZE_MEDIUM); ?></a>
-        <?php
+        $actions .= Display::url(
+            Display::return_icon('new_document.png', get_lang('CreateDoc'), '', ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'document/create_document.php?'.api_get_cidreq().'&id='.$document_id
+        );
+
         // Create new draw
         if (api_get_setting('enabled_support_svg') == 'true') {
             if (api_browser_support('svg')) {
-                ?>
-                <a href="create_draw.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id; ?>">
-                <?php Display::display_icon('new_draw.png', get_lang('Draw'), '', ICON_SIZE_MEDIUM); ?></a>&nbsp;
-                <?php
+                $actions .= Display::url(
+                    Display::return_icon('new_draw.png', get_lang('Draw'), '', ICON_SIZE_MEDIUM),
+                    api_get_path(WEB_CODE_PATH).'document/create_draw.php?'.api_get_cidreq().'&id='.$document_id
+                );
             } else {
-                Display::display_icon('new_draw_na.png', get_lang('BrowserDontSupportsSVG'), '', ICON_SIZE_MEDIUM);
+                $actions .= Display::return_icon('new_draw_na.png', get_lang('BrowserDontSupportsSVG'), '', ICON_SIZE_MEDIUM);
             }
         }
 
         // Create new paint
         if (api_get_setting('enabled_support_pixlr') == 'true') {
-            ?>
-            <a href="create_paint.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id; ?>">
-            <?php Display::display_icon('new_paint.png', get_lang('PhotoRetouching'), '', ICON_SIZE_MEDIUM); ?></a>
-            <?php
+            $actions .= Display::url(
+                Display::return_icon('new_paint.png', get_lang('PhotoRetouching'), '', ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH).'document/create_paint.php?'.api_get_cidreq().'&id='.$document_id
+            );
         }
 
         // Record an image clip from my webcam
         if (api_get_setting('enable_webcam_clip') == 'true') {
-            ?>
-            <a href="webcam_clip.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id; ?>">
-            <?php Display::display_icon('webcam.png', get_lang('WebCamClip'), '', ICON_SIZE_MEDIUM); ?></a>
-            <?php
+            $actions .= Display::url(
+                Display::return_icon('webcam.png', get_lang('WebCamClip'), '', ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH).'document/webcam_clip.php?'.api_get_cidreq().'&id='.$document_id
+            );
         }
 
         // Record audio (nanogong)
         if (api_get_setting('enable_nanogong') == 'true') {
-            ?>
-            <a href="record_audio.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id; ?>">
-            <?php Display::display_icon('new_recording.png', get_lang('RecordMyVoice'), '', ICON_SIZE_MEDIUM); ?></a>
-            <?php
+            $actions .= Display::url(
+                Display::return_icon('new_recording.png', get_lang('RecordMyVoice'), '', ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH).'document/record_audio.php?'.api_get_cidreq().'&id='.$document_id
+            );
         }
 
         // Record  audio (wami record)
         if (api_get_setting('enable_wami_record') == 'true') {
-            ?>
-            <a href="record_audio_wami.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id; ?>">
-            <?php Display::display_icon('new_recording.png', get_lang('RecordMyVoice'), '', ICON_SIZE_MEDIUM); ?></a>
-            <?php
+            $actions .= Display::url(
+                Display::return_icon('new_recording.png', get_lang('RecordMyVoice'), '', ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH).'document/record_audio_wami.php?'.api_get_cidreq().'&id='.$document_id
+            );
         }
 
         // Create new audio from text
         if (api_get_setting('enabled_text2audio') == 'true') {
             $dt2a = 'google';
             $req_dt2a = '&amp;dt2a='.$dt2a;
-            ?>
-            <a href="create_audio.php?<?php echo api_get_cidreq(); ?>&amp;id=<?php echo $document_id.$req_dt2a; ?>">
-            <?php Display::display_icon('new_sound.png', get_lang('CreateAudio'), '', ICON_SIZE_MEDIUM); ?></a>
-            <?php
+            $actions .= Display::url(
+                Display::return_icon('new_sound.png', get_lang('CreateAudio'), '', ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH).'document/create_audio.php?'.api_get_cidreq().'&id='.$document_id.$req_dt2a
+            );
         }
     }
 
     // Create new certificate
     if ($is_certificate_mode) {
-        ?>
-        <a href="create_document.php?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id; ?>&certificate=true&selectcat=<?php echo $selectcat; ?>">
-        <?php Display::display_icon('new_certificate.png', get_lang('CreateCertificate'), '', ICON_SIZE_MEDIUM); ?></a>
-        <?php
+        $actions .= Display::url(
+            Display::return_icon('new_certificate.png', get_lang('CreateCertificate'), '', ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'document/create_document.php?'.api_get_cidreq().'&id='.$document_id.'&certificate=true&selectcat='.$selectcat
+        );
     }
     // File upload link
     if ($is_certificate_mode) {
-        echo '<a href="upload.php?'.api_get_cidreq().'&id='.$current_folder_id.'">';
-        echo Display::display_icon('upload_certificate.png', get_lang('UploadCertificate'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actions .= Display::url(
+            Display::return_icon('upload_certificate.png', get_lang('UploadCertificate'), '', ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'document/upload.php?'.api_get_cidreq().'&id='.$current_folder_id
+        );
     } else {
-        echo '<a href="upload.php?'.api_get_cidreq().'&id='.$current_folder_id.'">';
-        echo Display::display_icon('upload_file.png', get_lang('UplUploadDocument'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actions .= Display::url(
+            Display::return_icon('upload_file.png', get_lang('UplUploadDocument'), '', ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'document/upload.php?'.api_get_cidreq().'&id='.$current_folder_id
+        );
     }
 
     /*echo '<a href="#" id="jcapture">';
@@ -1469,10 +1487,10 @@ if ($is_allowed_to_edit ||
 
     // Create directory
     if (!$is_certificate_mode) {
-        ?>
-        <a href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq(); ?>&id=<?php echo $document_id; ?>&createdir=1">
-        <?php Display::display_icon('new_folder.png', get_lang('CreateDir'), '', ICON_SIZE_MEDIUM); ?></a>
-        <?php
+        $actions .= Display::url(
+            Display::return_icon('new_folder.png', get_lang('CreateDir'), '', ICON_SIZE_MEDIUM),
+            api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id='.$document_id.'&createdir=1'
+        );
     }
 }
 
@@ -1603,21 +1621,20 @@ if (!is_null($documentAndFolders)) {
     global $total_size;
     if (!$is_certificate_mode && $total_size != 0
         && (api_get_setting('students_download_folders') == 'true'
-            || api_is_allowed_to_edit()
-            || api_is_platform_admin()
+        || api_is_allowed_to_edit()
+        || api_is_platform_admin()
         )
     ) {
-
         //for student does not show icon into other shared folder, and does not show into main path (root)
         if (is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)
             && $curdirpath != '/'
             || api_is_allowed_to_edit()
             || api_is_platform_admin()
         ) {
-            echo '<a href="'.api_get_self().'?'.api_get_cidreq().
-                '&amp;action=downloadfolder&amp;id='.$document_id.'">'.
-                Display::return_icon('save_pack.png', get_lang('Save').' (ZIP)', '', ICON_SIZE_MEDIUM).
-                '</a>';
+            $actions .= Display::url(
+                Display::return_icon('save_pack.png', get_lang('Save').' (ZIP)', '', ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&action=downloadfolder&id='.$document_id
+            );
         }
     }
 }
@@ -1625,23 +1642,20 @@ if (!is_null($documentAndFolders)) {
 // Slideshow by Patrick Cool, May 2004
 require 'document_slideshow.inc.php';
 if ($image_present && !isset($_GET['keyword'])) {
-    echo '<a href="slideshow.php?'.
-        api_get_cidreq().
-        '&amp;curdirpath='.$curdirpathurl.'">'.
-        Display::return_icon('slideshow.png', get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM).'</a>';
+    $actions .= Display::url(
+        Display::return_icon('slideshow.png', get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'document/slideshow.php?'.api_get_cidreq().'&curdirpath='.$curdirpathurl
+    );
 }
 
 if (api_is_allowed_to_edit(null, true)) {
-    echo '<a href="document_quota.php?'.api_get_cidreq().'">'.
-        Display::return_icon('percentage.png', get_lang('DocumentQuota'), '', ICON_SIZE_MEDIUM).
-        '</a>';
+    $actions .= Display::url(
+        Display::return_icon('percentage.png', get_lang('DocumentQuota'), '', ICON_SIZE_MEDIUM),
+        api_get_path(WEB_CODE_PATH).'document/document_quota.php?'.api_get_cidreq()
+    );
 }
-echo '</div>'; //end actions
+$actions .= '</div>';
 
-
-if (isset($message)) {
-    echo $message;
-}
 if (!empty($moveTo)) {
     $document_id = DocumentManager::get_document_id($courseInfo, $moveTo);
 }
@@ -1650,8 +1664,10 @@ if (isset($_GET['createdir']) && isset($_POST['dirname']) && $_POST['dirname'] !
     $post_dir_name = $_POST['dirname'];
     $document_id = DocumentManager::get_document_id($courseInfo, $_POST['dirname']);
 }
+$selector = null;
+
 if (!$is_certificate_mode) {
-    echo build_directory_selector(
+    $selector = build_directory_selector(
         $folders,
         $document_id,
         (isset($group_properties['directory']) ? $group_properties['directory'] : array()),
@@ -1749,6 +1765,31 @@ if (count($documentAndFolders) > 1) {
         $table->set_form_actions($form_action, 'ids');
     }
 }
+
+Display::display_header('', 'Doc');
+
+/* Introduction section (editable by course admins) */
+
+if (!empty($groupId)) {
+    Display::display_introduction_section(TOOL_DOCUMENT.$groupId);
+} else {
+    Display::display_introduction_section(TOOL_DOCUMENT);
+}
+
+$message = Session::read('message');
+
+if (!empty($message)) {
+    echo $message;
+}
+
+Session::erase('message');
+
+echo $actions;
+echo $templateForm;
+echo $moveForm;
+echo $dirForm;
+echo $selector;
+
 $table->display();
 
 if (count($documentAndFolders) > 1) {

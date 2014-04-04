@@ -1032,7 +1032,7 @@ switch ($action) {
         foreach ($users as $user) {
             $sessionInfo = SessionManager::fetch($listUserSess[$user['user_id']]['id_session']);
             $result[$i]['session'] = $sessionInfo['name'];
-            $result[$i]['username'] = $user['user_id'];
+            $result[$i]['username'] = $user['username'];
             $result[$i]['name'] = $user['lastname'] . " " . $user['firstname'];
             $j = 1;
             $finalScore = 0;

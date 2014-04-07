@@ -1827,9 +1827,15 @@ class CourseManager
      * @param   boolean get empty groups (optional)
      * @return  array   List of groups info
      */
-    public static function get_group_list_of_course($course_code, $session_id = 0, $in_get_empty_group = 0) {
+    public static function get_group_list_of_course($course_code, $session_id = 0, $in_get_empty_group = 0)
+    {
         $course_info = Database::get_course_info($course_code);
         $course_id = $course_info['real_id'];
+
+        if (empty($course_id)) {
+            return array();
+        }
+
         $group_list = array();
         $session_id != 0 ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
 

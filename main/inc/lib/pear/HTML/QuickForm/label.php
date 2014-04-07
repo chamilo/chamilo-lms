@@ -29,7 +29,7 @@ class HTML_QuickForm_label extends HTML_QuickForm_static
     * @access public
     * @return void
     */
-    function HTML_QuickForm_label($label = null, $text = null) {        
+    function HTML_QuickForm_label($label = null, $text = null) {
         $this->HTML_QuickForm_static(null, $label, $text);
         $this->_type = 'html';
     }
@@ -48,9 +48,10 @@ class HTML_QuickForm_label extends HTML_QuickForm_static
         $renderer->renderHtml($this);
     }
     
-    function toHtml() {        
+    function toHtml() {
+         $for = $this->getLabelFor();
          return '<div class="control-group ">
-                    <label class="control-label">'.$this->getLabel().'</label>
+                    <label class="control-label"'.(empty($for)?'':' for="'.$for.'"').'>'.$this->getLabel().'</label>
                     <div class="controls">
                     '.HTML_QuickForm_static::toHtml().'
                         </div>

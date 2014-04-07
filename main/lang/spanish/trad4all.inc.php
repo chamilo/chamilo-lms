@@ -2,6 +2,10 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$IncorrectScore = "Puntuación incorrecta";
+$CorrectScore = "Puntuación correcta";
+$UseCustomScoreForAllQuestions = "Usar puntuación personalizable para todas las preguntas.";
+$DocumentType = "Tipo de documento";
 $SendOnlyAnEmailToMySelfToTest = "Enviar correo electrónico solamente a mi mismo para pruebas.";
 $DeleteAllSelectedAttendances = "Eliminar todas las hojas de asistencia seleccionadas";
 $AvailableClasses = "Clases disponibles";
@@ -88,6 +92,7 @@ $UserIsNotATeacher = "El usuario no es un profesor.";
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Este item no es visible para un estudiante pero podrá acceder a él como profesor";
 $DeleteAllAttendances = "Eliminar todas las asistencias creadas";
 $Unsubscribe = "Dar de baja";
+$SendToAllUsers = "Enviar a todos los usuarios";
 $SelectACategory = "Seleccione una categoría";
 $AdvancedEdit = "Edición avanzada";
 $SearchXapianModuleNotInstalled = "El modulo Xapian de PHP no está configurado en su servidor, póngase en contacto con su administrador";

@@ -1827,9 +1827,15 @@ class CourseManager
      * @param   boolean get empty groups (optional)
      * @return  array   List of groups info
      */
-    public static function get_group_list_of_course($course_code, $session_id = 0, $in_get_empty_group = 0) {
+    public static function get_group_list_of_course($course_code, $session_id = 0, $in_get_empty_group = 0)
+    {
         $course_info = Database::get_course_info($course_code);
         $course_id = $course_info['real_id'];
+
+        if (empty($course_id)) {
+            return array();
+        }
+
         $group_list = array();
         $session_id != 0 ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
 
@@ -4450,11 +4456,13 @@ class CourseManager
 
     /**
      * Course available settings variables see c_course_setting table
+     * @param AppPlugin $appPlugin
      * @return array
      */
-    public static function getCourseSettingVariables()
+    public static function getCourseSettingVariables(AppPlugin $appPlugin)
     {
-        return array(
+        $pluginCourseSettings = $appPlugin->getAllPluginCourseSettings();
+        $courseSettings = array(
             // Get allow_learning_path_theme from table
             'allow_learning_path_theme',
             // Get allow_open_chat_window from table
@@ -4486,17 +4494,26 @@ class CourseManager
             'pdf_export_watermark_text',
             'show_system_folders'
         );
+        if (!empty($pluginCourseSettings)) {
+            $courseSettings = array_merge(
+                $courseSettings,
+                $pluginCourseSettings
+            );
+        }
+        return $courseSettings;
     }
 
     /**
+     * @param AppPlugin $appPlugin
      * @param string $variable
      * @param string $value
      * @param int $courseId
      * @return bool
      */
-    public static function saveCourseConfigurationSetting($variable, $value, $courseId)
+    public static function saveCourseConfigurationSetting(AppPlugin $appPlugin, $variable, $value, $courseId)
     {
-        $settingList = self::getCourseSettingVariables();
+        $settingList = self::getCourseSettingVariables($appPlugin);
+
         if (!in_array($variable, $settingList)) {
             return false;
         }

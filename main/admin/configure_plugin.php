@@ -16,7 +16,7 @@ api_protect_admin_script();
 $plugin_name = $_GET['name'];
 
 $plugin_obj = new AppPlugin();
-$plugin_info = $plugin_obj->get_plugin_info($plugin_name, true);
+$plugin_info = $plugin_obj->getPluginInfo($plugin_name, true);
 
 if (empty($plugin_info)) {
     api_not_allowed();
@@ -33,7 +33,7 @@ global $_configuration;
 $content = null;
 
 if (isset($plugin_info['settings_form'])) {
-    $form = $plugin_info['settings_form'];    
+    $form = $plugin_info['settings_form'];
     if (isset($form)) {
         //We override the form attributes
         $attributes = array('action'=>api_get_self().'?name='.$plugin_name, 'method'=>'POST');
@@ -48,7 +48,7 @@ if (isset($plugin_info['settings_form'])) {
 if (isset($form)) {
     if ($form->validate()) {
         $values = $form->exportValues();
-        
+
         //api_delete_category_settings_by_subkey($plugin_name);
         $access_url_id = api_get_current_access_url_id();
         api_delete_settings_params(array('category = ? AND access_url = ? AND subkey = ? AND type = ? and variable <> ?' =>
@@ -56,7 +56,7 @@ if (isset($form)) {
         foreach ($values as $key => $value) {
             $key = Database::escape_string($plugin_name.'_'.$key);
             api_add_setting($value, $key, $plugin_name, 'setting', 'Plugins', $plugin_name, null, null, null, $_configuration['access_url'], 1);
-            
+
         }
         $message = Display::return_message(get_lang('Updated'), 'success');
     }

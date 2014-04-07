@@ -92,6 +92,7 @@ class FillBlanks extends Question
                 if (firstTime) {
                     field = document.getElementById("answer");
                     var answer = field.value;
+                    
                 } else {
                     var oEditor = FCKeditorAPI.GetInstance(\'answer\');
                     answer =  oEditor.GetXHTML( true ) ;
@@ -99,15 +100,16 @@ class FillBlanks extends Question
 
                 var blanks = answer.match(/\[[^\]]*\]/g);
                 var fields = "<div class=\"control-group\"><label class=\"control-label\">'.get_lang('Weighting').'</label><div class=\"controls\"><table>";
-
+                //alert(blanks);
                 if (blanks!=null) {
                     for (i=0 ; i<blanks.length ; i++){
                         if (document.getElementById("weighting["+i+"]"))
                             value = document.getElementById("weighting["+i+"]").value;
+                           // blanks[i] =\"hola\";
                         else
                             value = "10";
-                        fields += "<tr><td>"+blanks[i]+"</td><td><input style=\"margin-left: 0em;\" size=\"5\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td></tr>";
-
+                        fields += "<tr><td><label>"+blanks[i]+"</label></td><td><input style=\"margin-left: 0em;\" size=\"5\" value=\""+value+"\" type=\"text\" id=\"weighting["+i+"]\" name=\"weighting["+i+"]\" /></td></tr>";
+                        //alert(blanks[i]);
                     }
                 }
                 document.getElementById("blanks_weighting").innerHTML = fields + "</table></div></div>";
@@ -172,8 +174,13 @@ class FillBlanks extends Question
 		}
 
 		if ($nb>0) {
-			$answer .= '::';
+		  	$answer .= '::';
 			for($i=0 ; $i<$nb ; ++$i) {
+			    $blankItem = $blanks[0][$i];
+                $replace = array("[", "]");
+                $newBlankItem = str_replace($replace, "", $blankItem);
+                $newBlankItem = "[".trim($newBlankItem)."]";
+                $answer = str_replace($blankItem, $newBlankItem, $answer);
 				$answer .= $form->getSubmitValue('weighting['.$i.']').',';
 				$this -> weighting += $form->getSubmitValue('weighting['.$i.']');
 			}

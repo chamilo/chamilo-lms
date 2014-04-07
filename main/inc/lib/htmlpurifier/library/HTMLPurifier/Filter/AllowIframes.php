@@ -46,8 +46,7 @@ class HTMLPurifier_Filter_AllowIframes extends HTMLPurifier_Filter
     protected function postFilterCallback($matches)
     {
         // Domain Whitelist
-
-        $youTubeMatch       = preg_match('#src="https?://www.youtube(-nocookie)?.com/#i', $matches[1]);
+        $youTubeMatch       = preg_match('#src="(https)?://www.youtube(-nocookie)?.com/#i', $matches[1]);
         $vimeoMatch         = preg_match('#src="http://player.vimeo.com/#i', $matches[1]);
         $googleMapsMatch    = preg_match('#src="https://maps.google.com/#i', $matches[1]);
 

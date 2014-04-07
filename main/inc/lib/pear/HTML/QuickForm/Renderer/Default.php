@@ -251,10 +251,10 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
         
         if (isset($this->_templates[$name])) {
             $html = str_replace('{label}', $nameLabel, $this->_templates[$name]);
-            $html = str_replace('{label-for}', $labelFor, $this->_templates[$name]);
+            $html = str_replace('{label-for}', $labelFor, $html);
         } else {
             $html = str_replace('{label}', $nameLabel, $this->_elementTemplate);
-            $html = str_replace('{label-for}', $labelFor, $this->_elementTemplate);
+            $html = str_replace('{label-for}', $labelFor, $html);
         }
         if ($required) {
             $html = str_replace('<!-- BEGIN required -->', '', $html);

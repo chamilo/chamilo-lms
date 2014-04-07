@@ -173,11 +173,11 @@ class FillBlanks extends Question
 		if ($nb>0) {
 		  	$answer .= '::';
 			for($i=0 ; $i<$nb ; ++$i) {
-			         $blankItem = $blanks[0][$i];
-                                $replace = array("[", "]");
-                                $newBlankItem = str_replace($replace, "", $blankItem);
-                                $newBlankItem = "[".trim($newBlankItem)."]";
-                                $answer = str_replace($blankItem, $newBlankItem, $answer);
+			        $blankItem = $blanks[0][$i];
+                               $replace = array("[", "]");
+                               $newBlankItem = str_replace($replace, "", $blankItem);
+                               $newBlankItem = "[".trim($newBlankItem)."]";
+                               $answer = str_replace($blankItem, $newBlankItem, $answer);
 				$answer .= $form->getSubmitValue('weighting['.$i.']').',';
 				$this -> weighting += $form->getSubmitValue('weighting['.$i.']');
 			}

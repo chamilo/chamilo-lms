@@ -46,14 +46,13 @@ class HTMLPurifier_Filter_AllowIframes extends HTMLPurifier_Filter
     protected function postFilterCallback($matches)
     {
         // Domain Whitelist
-        $youTubeNewMatch    = preg_match('#src="//www.youtube(-nocookie)?.com/#i', $matches[1]);
-        $youTubeMatch       = preg_match('#src="https?://www.youtube(-nocookie)?.com/#i', $matches[1]);
+        $youTubeMatch       = preg_match('#src="(https)?://www.youtube(-nocookie)?.com/#i', $matches[1]);
         $vimeoMatch         = preg_match('#src="http://player.vimeo.com/#i', $matches[1]);
         $googleMapsMatch    = preg_match('#src="https://maps.google.com/#i', $matches[1]);
 
-        if ($youTubeMatch || $vimeoMatch || $googleMapsMatch || $youTubeNewMatch) {
+        if ($youTubeMatch || $vimeoMatch || $googleMapsMatch) {
             $extra = ' frameborder="0"';
-            if ($youTubeMatch || $youTubeNewMatch) {
+            if ($youTubeMatch) {
                 $extra .= ' allowfullscreen';
             } elseif ($vimeoMatch) {
                 $extra .= ' webkitAllowFullScreen mozallowfullscreen allowFullScreen';

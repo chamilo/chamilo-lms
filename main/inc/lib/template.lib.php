@@ -432,7 +432,7 @@ class Template
 
         //Default CSS responsive design
         $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'bootstrap-responsive.css');
-        
+
 
         //Extra CSS files
         $css[] = api_get_path(WEB_LIBRARY_PATH).'javascript/thickbox.css';
@@ -608,7 +608,7 @@ class Template
         // Get language iso-code for this page - ignore errors
         $this->assign('document_language', api_get_language_isocode());
 
-        $course_title = $_course['name'];
+        $course_title = isset($_course['name']) ? $_course['name'] : null;
 
         $title_list = array();
 

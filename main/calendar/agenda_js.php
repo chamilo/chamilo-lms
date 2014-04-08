@@ -223,7 +223,6 @@ if ((api_is_allowed_to_edit() || $is_group_tutor) && $course_code != '-1' && $ty
                 $user_list = array();
             }
         }
-
     }
 
     $select = $agenda->construct_not_selected_select_form(

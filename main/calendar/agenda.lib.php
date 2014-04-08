@@ -124,7 +124,7 @@ class Agenda
                 $id = Database::insert($this->tbl_course_agenda, $attributes);
 
                 if ($id) {
-                    $group_id = api_get_group_id();
+                    $groupId = api_get_group_id();
 
                     if (!empty($usersToSend)) {
                         $sendTo = $this->parseSendToArray($usersToSend);
@@ -136,7 +136,7 @@ class Agenda
                                 $id,
                                 "AgendaAdded",
                                 api_get_user_id(),
-                                $group_id,
+                                $groupId,
                                 '',
                                 $start,
                                 $end
@@ -147,7 +147,7 @@ class Agenda
                                 $id,
                                 "visible",
                                 api_get_user_id(),
-                                $group_id,
+                                $groupId,
                                 '',
                                 $start,
                                 $end
@@ -191,7 +191,7 @@ class Agenda
                                         $id,
                                         "AgendaAdded",
                                         api_get_user_id(),
-                                        $group_id,
+                                        $groupId,
                                         $userId,
                                         $start,
                                         $end
@@ -203,7 +203,7 @@ class Agenda
                                         $id,
                                         "visible",
                                         api_get_user_id(),
-                                        $group_id,
+                                        $groupId,
                                         $userId,
                                         $start,
                                         $end
@@ -299,8 +299,8 @@ class Agenda
         $orig_end = api_strtotime($row['ed']);
 
         $diff = $orig_end - $orig_start;
-        $orig_title = $row['title'];
-        $orig_content = $row['content'];
+        $title = $row['title'];
+        $content = $row['content'];
         $allDay = $row['all_day'];
         $now = time();
         $type = Database::escape_string($type);
@@ -348,8 +348,8 @@ class Agenda
                             $start,
                             $repeatEnd,
                             $allDay,
-                            $orig_title,
-                            $orig_content,
+                            $title,
+                            $content,
                             $sentTo,
                             false,
                             $eventId
@@ -364,8 +364,8 @@ class Agenda
                             $start,
                             $repeatEnd,
                             $allDay,
-                            $orig_title,
-                            $orig_content,
+                            $title,
+                            $content,
                             $sentTo,
                             false,
                             $eventId
@@ -381,8 +381,8 @@ class Agenda
                             $start,
                             $repeatEnd,
                             $allDay,
-                            $orig_title,
-                            $orig_content,
+                            $title,
+                            $content,
                             $sentTo,
                             false,
                             $eventId
@@ -405,8 +405,8 @@ class Agenda
                             $start,
                             $repeatEnd,
                             $allDay,
-                            $orig_title,
-                            $orig_content,
+                            $title,
+                            $content,
                             $sentTo,
                             false,
                             $eventId
@@ -515,7 +515,7 @@ class Agenda
                     return false;
                 }
 
-                $group_id = api_get_group_id();
+                $groupId = api_get_group_id();
                 $course_id = api_get_course_int_id();
 
                 if (empty($course_id)) {
@@ -581,7 +581,7 @@ class Agenda
                                         $id,
                                         "delete",
                                         api_get_user_id(),
-                                        $group_id,
+                                        $groupId,
                                         $userId,
                                         $start,
                                         $end,
@@ -597,7 +597,7 @@ class Agenda
                                 $id,
                                 "visible",
                                 api_get_user_id(),
-                                $group_id,
+                                $groupId,
                                 '',
                                 $start,
                                 $end,
@@ -648,7 +648,7 @@ class Agenda
                                         $id,
                                         "visible",
                                         api_get_user_id(),
-                                        $group_id,
+                                        $groupId,
                                         $userId,
                                         $start,
                                         $end,
@@ -665,7 +665,7 @@ class Agenda
                                         $id,
                                         "delete",
                                         api_get_user_id(),
-                                        $group_id,
+                                        $groupId,
                                         $userId,
                                         $start,
                                         $end,
@@ -798,12 +798,12 @@ class Agenda
      * @param int $start
      * @param int $end
      * @param int $course_id
-     * @param int $group_id
+     * @param int $groupId
      * @param int $user_id
      * @param string $format
      * @return array|string
      */
-    public function get_events($start, $end, $course_id = null, $group_id = null, $user_id = 0, $format = 'json')
+    public function get_events($start, $end, $course_id = null, $groupId = null, $user_id = 0, $format = 'json')
     {
         switch ($this->type) {
             case 'admin':
@@ -816,7 +816,7 @@ class Agenda
                     $start,
                     $end,
                     $courseInfo,
-                    $group_id,
+                    $groupId,
                     $session_id,
                     $user_id
                 );
@@ -1134,12 +1134,12 @@ class Agenda
      * @param int $start
      * @param int $end
      * @param array $courseInfo
-     * @param int $group_id
+     * @param int $groupId
      * @param int $session_id
      * @param int $user_id
      * @return array
      */
-    public function get_course_events($start, $end, $courseInfo, $group_id = 0, $session_id = 0, $user_id = 0)
+    public function get_course_events($start, $end, $courseInfo, $groupId = 0, $session_id = 0, $user_id = 0)
     {
         $start = isset($start) && !empty($start) ? api_get_utc_datetime(intval($start)) : null;
         $end = isset($end) && !empty($end) ? api_get_utc_datetime(intval($end)) : null;
@@ -1169,15 +1169,15 @@ class Agenda
         $tlb_course_agenda = Database::get_course_table(TABLE_AGENDA);
         $tbl_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-        if (!empty($group_id)) {
-            $group_memberships = array($group_id);
+        if (!empty($groupId)) {
+            $group_memberships = array($groupId);
         }
 
         $session_id = intval($session_id);
 
         if (is_array($group_memberships) && count($group_memberships) > 0) {
             if (api_is_allowed_to_edit()) {
-                if (!empty($group_id)) {
+                if (!empty($groupId)) {
                     $where_condition = "( ip.to_group_id IN (0, ".implode(", ", $group_memberships).") ) ";
                 } else {
                     if (!empty($user_id)) {
@@ -1418,7 +1418,7 @@ class Agenda
     /**
      * this function shows the form with the user that were not selected
      * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     * @return html code
+     * @return string code
      */
     public static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected = array())
     {
@@ -1591,7 +1591,7 @@ class Agenda
         );
 
         $idAttach = isset($params['id_attach']) ? intval($params['id_attach']) : null;
-        $group_id = api_get_group_id();
+        $groupId = api_get_group_id();
 
         if ($id) {
             $form_title = get_lang('ModifyCalendarItem');
@@ -1607,8 +1607,8 @@ class Agenda
         $form->addElement('hidden', 'id_attach', $idAttach);
         $form->addElement('text', 'title', get_lang('ItemTitle'));
 
-        if (isset($group_id) && !empty($group_id)) {
-            $form->addElement('hidden', 'selected_form[0]', "GROUP:'.$group_id.'");
+        if (isset($groupId) && !empty($groupId)) {
+            $form->addElement('hidden', 'selected_form[0]', "GROUP:'.$groupId.'");
             $form->addElement('hidden', 'to', 'true');
         } else {
             $sendTo = isset($params['send_to']) ? $params['send_to'] : null;
@@ -1930,7 +1930,6 @@ class Agenda
         }
     }
 
-
     /**
      * Adds x weeks to a UNIX timestamp
      * @param   int     The timestamp
@@ -2069,6 +2068,9 @@ class Agenda
         return $actions;
     }
 
+    /**
+     * @return FormValidator
+     */
     public function getImportCalendarForm()
     {
         $form = new FormValidator(
@@ -2081,12 +2083,12 @@ class Agenda
         $form->addElement('file', 'ical_import', get_lang('ICalFileImport'));
         $form->addRule('ical_import', get_lang('ThisFieldIsRequired'), 'required');
         $form->addElement('button', 'ical_submit', get_lang('Import'));
-*
+
         return $form;
     }
 
     /**
-     * @param $courseInfo
+     * @param array $courseInfo
      * @param $file
      * @return array|bool|string
      */

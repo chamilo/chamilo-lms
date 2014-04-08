@@ -5,6 +5,7 @@
  * 	@author: Patrick Cool, patrick.cool@UGent.be
  * 	@todo this code should be clean as well as the myagenda.inc.php - jmontoya
  * @package chamilo.calendar
+ * @deprecated use agenda.lib.php
  */
 /**
  * Code
@@ -194,33 +195,6 @@ function get_calendar_items($select_month, $select_year, $select_day = false)
                         AND ( ip.visibility='0' OR ip.visibility='1')
                         $session_condition
                         GROUP BY ip.ref";
-
-                    /*
-                      if (is_array($group_memberships) && count($group_memberships)>0)
-                      {
-                      echo $sql="SELECT
-                      agenda.*, toolitemproperties.*
-                      FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-                      WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
-                      AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-                      AND toolitemproperties.visibility='1' AND toolitemproperties.to_group_id IN (0, ".implode(", ", $group_memberships).")
-                      $session_condition
-                      GROUP BY toolitemproperties.ref
-                      ORDER BY start_date ".$sort;
-                      }
-                      else
-                      {
-                      $sql="SELECT
-                      agenda.*, toolitemproperties.*
-                      FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." toolitemproperties
-                      WHERE agenda.id = toolitemproperties.ref  ".$show_all_current."
-                      AND toolitemproperties.tool='".TOOL_CALENDAR_EVENT."'
-                      AND toolitemproperties.visibility='1' AND toolitemproperties.to_group_id='0'
-                      $session_condition
-                      GROUP BY toolitemproperties.ref
-                      ORDER BY start_date ".$sort;
-                      }
-                     */
                 }
             }
         }
@@ -573,7 +547,7 @@ function display_monthcalendar($month, $year, $agenda_items)
  */
 function to_javascript()
 {
-    return "<script type=\"text/javascript\" language=\"javascript\">
+    return "<script>
 $(function() {
     //js used when generating images on the fly see function Tracking::show_course_detail()
     $(\".dialog\").dialog(\"destroy\");
@@ -591,6 +565,12 @@ $(function() {
         $( big_image ).dialog(\"open\");
         return false;
     });
+
+    var checked = $('input[name=repeat]').attr('checked');
+    if (checked) {
+        $('#options2').show();
+    }
+
 });
 
 <!-- Begin javascript menu swapper
@@ -830,31 +810,29 @@ function reverseAll(cbList)
 }
 
 function plus_attachment() {
-				if (document.getElementById('options').style.display == 'none') {
-					document.getElementById('options').style.display = 'block';
-					document.getElementById('plus').innerHTML='&nbsp;<img style=\"vertical-align:middle;\" src=\"../img/div_hide.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
-				} else {
-				document.getElementById('options').style.display = 'none';
-				document.getElementById('plus').innerHTML='&nbsp;<img style=\"vertical-align:middle;\" src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
-				}
+    if (document.getElementById('options').style.display == 'none') {
+        document.getElementById('options').style.display = 'block';
+        document.getElementById('plus').innerHTML='&nbsp;<img style=\"vertical-align:middle;\" src=\"../img/div_hide.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
+    } else {
+        document.getElementById('options').style.display = 'none';
+        document.getElementById('plus').innerHTML='&nbsp;<img style=\"vertical-align:middle;\" src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang('AddAnAttachment')."';
+    }
 }
 
 function plus_repeated_event() {
-				if (document.getElementById('options2').style.display == 'none') {
-					document.getElementById('options2').style.display = 'block';
-					document.getElementById('plus2').innerHTML='&nbsp;<img style=\"vertical-align:middle;\" src=\"../img/div_hide.gif\" alt=\"\" />&nbsp;".get_lang('RepeatEvent')."';
-				} else {
-				document.getElementById('options2').style.display = 'none';
-				document.getElementById('plus2').innerHTML='&nbsp;<img style=\"vertical-align:middle;\" src=\"../img/div_show.gif\" alt=\"\" />&nbsp;".get_lang('RepeatEvent')."';
-				}
+    if (document.getElementById('options2').style.display == 'none') {
+        document.getElementById('options2').style.display = 'block';
+    } else {
+        document.getElementById('options2').style.display = 'none';
+    }
 }
 
 /*
 function plus_ical() {
-				if (document.getElementById('icalform').style.display == 'none') {
-					document.getElementById('icalform').style.display = 'block';
-					document.getElementById('plusical').innerHTML='';
-				}
+    if (document.getElementById('icalform').style.display == 'none') {
+        document.getElementById('icalform').style.display = 'block';
+        document.getElementById('plusical').innerHTML='';
+    }
 }
 */
 
@@ -953,55 +931,9 @@ function show_to_form($to_already_selected)
 
     $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id(), null, $order);
     $group_list = CourseManager::get_group_list_of_course(api_get_course_id(), api_get_session_id());
-    construct_not_selected_select_form($group_list, $user_list, $to_already_selected);
+    return construct_not_selected_select_form($group_list, $user_list, $to_already_selected);
 }
 
-/**
- * this function shows the form with the user that were not selected
- * @author: Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @return html code
- */
-function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected = array())
-{
-    echo '<select data-placeholder="'.get_lang('Select').'" style="width:150px;" class="chzn-select" id="selected_form_id_search" name="selected_form[]" multiple="multiple">';
-
-    // Adding the groups to the select form
-    if (isset($to_already_selected) && $to_already_selected === 'everyone') {
-        echo '<option selected="selected" value="everyone">'.get_lang('Everyone').'</option>';
-    //} else {
-    } else {
-        echo '<option value="everyone">'.get_lang('Everyone').'</option>';
-    }
-
-    if (is_array($group_list)) {
-        echo '<optgroup label="'.get_lang('Groups').'">';
-        foreach ($group_list as $this_group) {
-            //api_display_normal_message("group " . $thisGroup[id] . $thisGroup[name]);
-            if (!is_array($to_already_selected) || !in_array("GROUP:".$this_group['id'], $to_already_selected)) {
-                // $to_already_selected is the array containing the groups (and users) that are already selected
-                echo "<option value=\"GROUP:".$this_group['id']."\">",
-                "G: ", $this_group['name'], " &ndash; ".$this_group['userNb']." ".get_lang('Users').
-                "</option>";
-            }
-        }
-        // a divider
-    }
-    echo "</optgroup>";
-    // adding the individual users to the select form
-    if (!empty($user_list)) {
-        echo '<optgroup label="'.get_lang('Users').'">';
-        foreach ($user_list as $this_user) {
-            // $to_already_selected is the array containing the users (and groups) that are already selected
-            if (!is_array($to_already_selected) || !in_array("USER:".$this_user['user_id'], $to_already_selected)) {
-                $username = api_htmlentities(sprintf(get_lang('LoginX'), $this_user['username']), ENT_QUOTES);
-                $user_info = api_get_person_name($this_user['firstname'], $this_user['lastname']).' ('.$this_user['username'].')';
-                echo "<option title='$username' value='USER:".$this_user['user_id']."'>$user_info</option>";
-            }
-        }
-        echo "</optgroup>";
-    }
-    echo "</select>";
-}
 
 function show_to($filter = 0, $id = null)
 {
@@ -1126,7 +1058,7 @@ function construct_selected_select_form($group_list = null, $user_list = null, $
  */
 function store_new_agenda_item()
 {
-    global $_course;
+    $_course = api_get_course_info();
     $TABLEAGENDA = Database::get_course_table(TABLE_AGENDA);
     $t_agenda_repeat = Database::get_course_Table(TABLE_AGENDA_REPEAT);
 
@@ -1548,7 +1480,7 @@ function load_edit_users($tool, $id)
  */
 function change_visibility($tool, $id, $visibility)
 {
-    global $_course;
+    $_course = api_get_course_info();
     $TABLE_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $tool = Database::escape_string($tool);
     $id = Database::escape_string($id);
@@ -1565,6 +1497,7 @@ function change_visibility($tool, $id, $visibility)
 /**
  * The links that allows the course administrator to add a new agenda item, to filter on groups or users
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @deprecated
  */
 function display_courseadmin_links($filter = 0)
 {
@@ -1597,7 +1530,6 @@ function display_courseadmin_links($filter = 0)
  */
 function display_student_links()
 {
-    global $show;
     $month = isset($_GET['month']) ? intval($_GET['month']) : null;
     $year = isset($_GET['year']) ? intval($_GET['year']) : null;
 
@@ -1617,10 +1549,12 @@ function display_student_links()
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @param integer the id of the agenda item we are getting all the information of
  * @return array an associative array that contains all the information of the agenda item. The keys are the database fields
+ * @deprecated
  */
 function get_agenda_item($id)
 {
     global $TABLEAGENDA;
+
     $t_agenda_repeat = Database::get_course_table(TABLE_AGENDA_REPEAT);
     $id = Database::escape_string($id);
     $item = array();
@@ -1706,7 +1640,14 @@ function store_edited_agenda_item($event_id, $id_attach, $file_comment)
 
     $all_day = isset($_REQUEST['all_day']) && !empty($_REQUEST['all_day']) ? 1 : 0;
 
-    $agendaObj->edit_event($id, $start_date, $end_date, $all_day, null, $title, $content);
+    $agendaObj->edit_event(
+        $id,
+        $start_date,
+        $end_date,
+        $all_day,
+        $title,
+        $content
+    );
 
     if (empty($id_attach)) {
         add_agenda_attachment_file($file_comment, $id);
@@ -1755,13 +1696,12 @@ function save_edit_agenda_item($id, $title, $content, $start_date, $end_date)
  */
 function delete_agenda_item($id)
 {
-    global $_course;
+    $_course = api_get_course_info();
     $id = Database::escape_string($id);
     if (api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())) {
         if (!empty($_GET['id']) && isset($_GET['action']) && $_GET['action'] == "delete") {
             $t_agenda = Database::get_course_table(TABLE_AGENDA);
             $t_agenda_r = Database::get_course_table(TABLE_AGENDA_REPEAT);
-            $id = intval($_GET['id']);
             $sql = "SELECT * FROM $t_agenda_r WHERE cal_id = $id";
             $res = Database::query($sql);
             if (Database::num_rows($res) > 0) {
@@ -1786,7 +1726,7 @@ function delete_agenda_item($id)
             $id = null;
 
             // displaying the result message in the yellow box
-            Display::display_confirmation_message(get_lang("AgendaDeleteSuccess"));
+            return Display::return_message(get_lang("AgendaDeleteSuccess"), 'confirmation');
         }
     }
 }
@@ -1806,11 +1746,11 @@ function showhide_agenda_item($id)
     // change visibility -> studentview -> course manager view
     if ((api_is_allowed_to_edit(false, true) OR (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous())) and $_GET['isStudentView'] <> "false") {
         if (isset($_GET['id']) && isset($_GET['action']) && $_GET['action'] == "showhide") {
-            $id = (int) addslashes($_GET['id']);
+            $id = intval($_GET['id']);
             if (isset($_GET['next_action']) && $_GET['next_action'] == strval(intval($_GET['next_action']))) {
                 $visibility = $_GET['next_action'];
                 change_visibility($nameTools, $id, $visibility);
-                Display::display_confirmation_message(get_lang("VisibilityChanged"));
+                return Display::return_message(get_lang("VisibilityChanged"), 'confirmation');
             }
         }
     }
@@ -2023,194 +1963,6 @@ function get_attachment($agenda_id, $course_id = null)
 }
 
 /**
- * Displays only 1 agenda item. This is used when an agenda item is added to the learning path.
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- */
-function display_one_agenda_item($agenda_id)
-{
-    global $TABLEAGENDA;
-    global $TABLE_ITEM_PROPERTY;
-    global $select_month, $select_year;
-    global $DaysShort, $DaysLong, $MonthsLong;
-    global $is_courseAdmin;
-    global $dateFormatLong, $timeNoSecFormat, $charset;
-
-    // getting the name of the groups
-    $group_names = get_course_groups();
-
-    $agenda_id = intval($agenda_id);
-    if (!(api_is_allowed_to_edit(false, true) || (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()))) {
-        $visibility_condition = " AND ip.visibility='1' ";
-    }
-
-    $sql = "SELECT agenda.*, ip.visibility, ip.to_group_id, ip.insert_user_id, ip.ref
-			FROM ".$TABLEAGENDA." agenda, ".$TABLE_ITEM_PROPERTY." ip
-			WHERE agenda.id = ip.ref
-			AND ip.tool='".TOOL_CALENDAR_EVENT."'
-			$visibility_condition
-			AND agenda.id='$agenda_id'";
-
-    $result = Database::query($sql);
-    $number_items = Database::num_rows($result);
-    $myrow = Database::fetch_array($result, 'ASSOC'); // there should be only one item so no need for a while loop
-
-    $sql_rep = "SELECT * FROM $TABLEAGENDA WHERE id = $agenda_id AND parent_event_id IS NOT NULL AND parent_event_id !=0";
-    $res_rep = Database::query($sql_rep);
-    $repeat = false;
-    $repeat_id = 0;
-    if (Database::num_rows($res_rep) > 0) {
-        $repeat = true;
-        $row_rep = Database::fetch_array($res_rep);
-        $repeat_id = $row_rep['parent_event_id'];
-    }
-
-    // DISPLAY: NO ITEMS
-    if ($number_items == 0) {
-        Display::display_warning_message(get_lang("NoAgendaItems"));
-        return false;
-    }
-
-    // DISPLAY: THE ITEMS
-    echo "<table id=\"data_table\" class=\"data_table\">";
-
-    // DISPLAY : the icon, title, destinees of the item
-    $myrow["start_date"] = api_get_local_time($myrow["start_date"]);
-
-    // highlight: if a date in the small calendar is clicked we highlight the relevant items
-    $db_date = (int) api_format_date($myrow["start_date"], "%d").intval(api_format_date($myrow["start_date"], "%m")).api_format_date($myrow["start_date"], "%Y");
-    if ($_GET["day"].$_GET["month"].$_GET["year"] <> $db_date) {
-        if ($myrow['visibility'] == '0') {
-            $style = "data_hidden";
-            $stylenotbold = "datanotbold_hidden";
-            $text_style = "text_hidden";
-        } else {
-            $style = "data";
-            $stylenotbold = "datanotbold";
-            $text_style = "text";
-        }
-    } else {
-        $style = "datanow";
-        $stylenotbold = "datanotboldnow";
-        $text_style = "textnow";
-    }
-    echo Display::tag('h2', $myrow['title']);
-    echo "<tr>";
-
-    if (api_is_allowed_to_edit(false, true)) {
-        if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $myrow['id']))) {
-
-            // a coach can only delete an element belonging to his session
-            // DISPLAY: edit delete button (course admin only)
-            $export_icon = '../img/export.png';
-            $export_icon_low = '../img/export_low_fade.png';
-            $export_icon_high = '../img/export_high_fade.png';
-
-            echo '<th style="text-align:right">';
-            if (!$repeat && api_is_allowed_to_edit(false, true)) {
-                // edit
-                $mylink = api_get_self()."?".api_get_cidreq()."&origin=".Security::remove_XSS($_GET['origin'])."&id=".$myrow['id'];
-                if (!empty($_GET['agenda_id'])) {
-                    // rather ugly hack because the id parameter is already set above but below we set it again
-                    $mylink .= '&agenda_id='.Security::remove_XSS($_GET['agenda_id']).'&id='.Security::remove_XSS($_GET['agenda_id']);
-                }
-                if ($myrow['visibility'] == 1) {
-                    $image_visibility = "visible";
-                    $next_action = 0;
-                } else {
-                    $image_visibility = "invisible";
-                    $next_action = 1;
-                }
-
-                echo '<a href="'.$mylink.'&action=showhide&next_action='.$next_action.'">'.Display::return_icon($image_visibility.'.png', get_lang('Visible'), '', ICON_SIZE_SMALL).'</a>';
-
-                echo "<a href=\"".$mylink."&action=edit\">",
-                Display::return_icon('edit.png', get_lang('ModifyCalendarItem'), '', ICON_SIZE_SMALL), "</a>",
-                "<a href=\"".$mylink."&action=delete\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."')) return false;\">",
-                Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL), "</a>";
-            }
-            $mylink = 'ical_export.php?'.api_get_cidreq().'&type=course&id='.$myrow['id'];
-            //echo '<a class="ical_export" href="'.$mylink.'&class=confidential" title="'.get_lang('ExportiCalConfidential').'">'.Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')).'</a> ';
-            //echo '<a class="ical_export" href="'.$mylink.'&class=private" title="'.get_lang('ExportiCalPrivate').'">'.Display::return_icon($export_icon_low, get_lang('ExportiCalPrivate')).'</a> ';
-            //echo '<a class="ical_export" href="'.$mylink.'&class=public" title="'.get_lang('ExportiCalPublic').'">'.Display::return_icon($export_icon, get_lang('ExportiCalPublic')).'</a> ';
-            echo '<a href="javascript: void(0);" onclick="javascript:win_print=window.open(\'print.php?id='.$myrow['id'].'\',\'popup\',\'left=100,top=100,width=700,height=500,scrollbars=1,resizable=0\'); win_print.focus(); return false;">'.Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
-            echo "</th>";
-        }
-    }
-
-    // title
-    echo "<tr class='row_odd'>";
-    echo '<td colspan="2">'.get_lang("StartTime").": ";
-    echo api_format_date($myrow['start_date']);
-    echo "</td>";
-    echo "</td>";
-    echo "<tr class='row_odd'>";
-    echo '<td colspan="2">'.get_lang("EndTime").": ";
-    echo api_convert_and_format_date($myrow['end_date']);
-    echo "</td>";
-
-
-
-    // Content
-    $content = $myrow['content'];
-    $content = make_clickable($content);
-
-    echo '<tr class="row_even">';
-    echo '<td '.(api_is_allowed_to_edit() ? 'colspan="3"' : 'colspan="2"').'>';
-    echo $content;
-    echo '</td></tr>';
-
-    //Attachments
-    $attachment_list = get_attachment($agenda_id);
-
-    if (!empty($attachment_list)) {
-        echo '<tr class="row_even"><td colspan="2">';
-        $realname = $attachment_list['path'];
-        $user_filename = $attachment_list['filename'];
-        $full_file_name = 'download.php?file='.$realname;
-        echo Display::return_icon('attachment.gif', get_lang('Attachment'));
-        echo '<a href="'.$full_file_name.'"> '.$user_filename.'</a>';
-        if (api_is_allowed_to_edit()) {
-            echo '&nbsp;&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&origin='.Security::remove_XSS($_GET['origin']).'&action=delete_attach&id_attach='.$attachment_list['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)).'\')) return false;">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a><br />';
-        }
-        echo '<br /><span class="forum_attach_comment" >'.$attachment_list['comment'].'</span>';
-        echo '</td></tr>';
-    }
-
-    // the message has been sent to
-    echo '<tr>';
-    echo "<td class='announcements_datum'>".get_lang("SentTo").": ";
-    $sent_to = sent_to(TOOL_CALENDAR_EVENT, $myrow["ref"]);
-    $sent_to_form = sent_to_form($sent_to);
-    echo $sent_to_form;
-    echo "</td></tr>";
-
-    if ($repeat) {
-        echo '<tr>';
-        echo '<td colspan="2">';
-        echo get_lang('RepeatedEvent').' <a href="', api_get_self(), '?', api_get_cidreq(), '&agenda_id=', $repeat_id, '" alt="', get_lang('RepeatedEventViewOriginalEvent'), '">', get_lang('RepeatedEventViewOriginalEvent'), '</a>';
-        echo '</td>';
-        echo '</tr>';
-    }
-
-
-    /* Added resources */
-    if (check_added_resources("Agenda", $myrow["id"])) {
-        echo "<tr><td colspan='3'>";
-        echo "<i>".get_lang("AddedResources")."</i><br/>";
-        if ($myrow['visibility'] == 0) {
-            $addedresource_style = "invisible";
-        }
-        display_added_resources("Agenda", $myrow["id"], $addedresource_style);
-        echo "</td></tr>";
-    }
-
-    // closing the layout table
-    echo "</td>",
-    "</tr>",
-    "</table>";
-}
-
-/**
  * Show the form for adding a new agenda item. This is the same function that is used whenever we are editing an
  * agenda item. When the id parameter is empty (default behaviour), then we show an empty form, else we are editing and
  * we have to retrieve the information that is in the database and use this information in the forms.
@@ -2220,70 +1972,8 @@ function display_one_agenda_item($agenda_id)
  */
 function show_add_form($id = '', $type = null)
 {
-    global $MonthsLong;
     $htmlHeadXtra[] = to_javascript();
-    // the default values for the forms
-    if (!isset($_GET['originalresource'])) {
-        $day = date('d');
-        $month = date('m');
-        $year = date('Y');
-        $hours = 9;
-        $minutes = '00';
-
-        $end_day = date('d');
-        $end_month = date('m');
-        $end_year = date('Y');
-        $end_hours = 17;
-        $end_minutes = '00';
-        $repeat = false;
-        $content = null;
-        $title = null;
-
-    } else {
-        // we are coming from the resource linker so there might already have been some information in the form.
-        // When we clicked on the button to add resources we stored every form information into a session and now we
-        // are doing the opposite thing: getting the information out of the session and putting it into variables to
-        // display it in the forms.
-        $form_elements = isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null;
-        $day = $form_elements['day'];
-        $month = $form_elements['month'];
-        $year = $form_elements['year'];
-        $hours = $form_elements['hour'];
-        $minutes = $form_elements['minutes'];
-        $end_day = $form_elements['end_day'];
-        $end_month = $form_elements['end_month'];
-        $end_year = $form_elements['end_year'];
-        $end_hours = $form_elements['end_hours'];
-        $end_minutes = $form_elements['end_minutes'];
-        $title = $form_elements['title'];
-        $content = $form_elements['content'];
-        $id = $form_elements['id'];
-        $to = $form_elements['to'];
-        $repeat = $form_elements['repeat'];
-    }
-
-    //	switching the send to all/send to groups/send to users
-    if (isset($_POST['To']) && $_POST['To']) {
-        $day = $_POST['fday'];
-        $month = $_POST['fmonth'];
-        $year = $_POST['fyear'];
-        $hours = $_POST['fhour'];
-        $minutes = $_POST['fminute'];
-        $end_day = $_POST['end_fday'];
-        $end_month = $_POST['end_fmonth'];
-        $end_year = $_POST['end_fyear'];
-        $end_hours = $_POST['end_fhour'];
-        $end_minutes = $_POST['end_fminute'];
-        $title = $_POST['title'];
-        $content = $_POST['content'];
-        // the invisible fields
-        $action = $_POST['action'];
-        $id = $_POST['id'];
-        $repeat = !empty($_POST['repeat']) ? true : false;
-    }
-
     $course_info = null;
-
     $agendaObj = new Agenda();
 
     // if the id is set then we are editing an agenda item
@@ -2335,8 +2025,6 @@ function show_add_form($id = '', $type = null)
     } else {
         $to = load_edit_users(TOOL_CALENDAR_EVENT, $id);
     }
-    $content = stripslashes($content);
-    $title = stripslashes($title);
 
     // we start a completely new item, we do not come from the resource linker
     if (isset($_GET['originalresource']) && $_GET['originalresource'] !== "no" and $_GET['action'] == "add") {
@@ -2344,580 +2032,90 @@ function show_add_form($id = '', $type = null)
         unset_session_resources();
     }
     $origin = isset($_GET['origin']) ? Security::remove_XSS($_GET['origin']) : null;
+    $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
+    $idAttach = isset($_GET['id_attach']) ? Security::remove_XSS($_GET['id_attach']) : null;
     $course_url = empty($course_info) ? null : api_get_cidreq();
-    ?>
+    $id = isset($id) ? intval($id) : null;
 
-    <!-- START OF THE FORM  -->
+    $url = api_get_self().'?type='.Security::remove_XSS($type).'&origin='.$origin.'&'.$course_url.'&sort=asc&toolgroup='.api_get_group_id().'&action='.Security::remove_XSS($_GET['action']);
+    $form = new FormValidator('new_calendar_item', 'post', $url, null, array('enctype' => 'multipart/form-data'));
+    $form->addElement('hidden', 'id', $id);
+    $form->addElement('hidden', 'action', $action);
+    $form->addElement('hidden', 'id_attach', $idAttach);
+    $form->addElement('hidden', 'sort', 'asc');
+    $form->addElement('hidden', 'submit_event', 'ok');
 
-    <form class="form-horizontal" enctype="multipart/form-data"  action="<?php echo api_get_self().'?type='.Security::remove_XSS($type).'&origin='.$origin.'&'.$course_url."&sort=asc&toolgroup=".api_get_group_id().'&action='.Security::remove_XSS($_GET['action']); ?>" method="post" name="new_calendar_item">
-        <input type="hidden" name="id" value="<?php if (isset($id)) echo $id; ?>" />
-        <input type="hidden" name="action" value="<?php if (isset($_GET['action'])) echo $_GET['action']; ?>" />
-        <input type="hidden" name="id_attach" value="<?php echo isset($_REQUEST['id_attach']) ? intval($_REQUEST['id_attach']) : null; ?>" />
-        <input type="hidden" name="sort" value="asc" />
-        <input type="hidden" name="submit_event" value="ok" />
-    <?php
     // The form title
     if (isset($id) AND $id <> '') {
         $form_title = get_lang('ModifyCalendarItem');
     } else {
         $form_title = get_lang('AddCalendarItem');
     }
-    echo '<legend>'.$form_title.'</legend>';
 
-    // the title of the agenda item
-    echo '<div class="control-group">
-            <label class="control-label">
-                <span class="form_required">*</span>'.get_lang('ItemTitle').'
-            </label>
-            <div class="controls">
-                <div id="err_title" style="display:none;color:red"></div>
-                <input type="text" id="agenda_title" class="span5" name="title" value="';
-    if (isset($title))
-        echo $title;
-    echo '" />
-			</div>
-			</div>';
+    $form->addElement('header', $form_title);
+    $form->addElement('text', 'title', get_lang('ItemTitle'));
 
     // selecting the users / groups
     $group_id = api_get_group_id();
     if (empty($id)) {
         if (isset($group_id) && !empty($group_id)) {
-            echo '<input type="hidden" name="selected_form[0]" value="GROUP:'.$group_id.'"/>';
-            echo '<input type="hidden" name="To" value="true"/>';
+            $form->addElement('hidden', 'selected_form[0]', "GROUP:'.$group_id.'");
+            $form->addElement('hidden', 'To', 'true');
+            //$form .= '<input type="hidden" name="selected_form[0]" value="GROUP:'.$group_id.'"/>';
+            //$form .= '<input type="hidden" name="To" value="true"/>';
         } else {
-            echo '<div class="control-group">
-                        <label class="control-label">
-                            '.Display::return_icon('group.png', get_lang('To'), array('align' => 'absmiddle'), ICON_SIZE_SMALL).' '.get_lang('To').'</a>
-                        </label>
-                        <div class="controls">';
-            show_to_form($to);
-            echo '</div>
-                    </div>';
+            $agendaObj->show_to_form($form, $to);
         }
     }
 
     // start date and time
-    echo '<div class="control-group">';
-    echo '<label class="control-label">'.get_lang('StartDate').'</label>
-				<div class="controls">
-					<div id="err_date" style="display:none;color:red"></div>
-					<div id="err_start_date" style="display:none;color:red"></div>';
-    ?>
-        <select name="fday" onchange="javascript:document.new_calendar_item.end_fday.value=this.value;">
-        <?php
-        // small loop for filling all the dates
-        // 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
 
-        foreach (range(1, 31) as $i) {
-            // values have to have double digits
-            $value = ($i <= 9 ? '0'.$i : $i );
-            // the current day is indicated with [] around the date
-            if ($value == $day) {
-                echo "<option value=\"".$value."\" selected> ".$i." </option>";
-            } else {
-                echo "<option value=\"$value\">$i</option>";
-            }
-        }
-        ?>
-        </select>
-        <select name="fmonth" onchange="javascript:document.new_calendar_item.end_fmonth.value=this.value;">
-        <?php
-        for ($i = 1; $i <= 12; $i++) {
-            // values have to have double digits
-            if ($i <= 9) {
-                $value = "0".$i;
-            } else {
-                $value = $i;
-            }
-            if ($value == $month) {
-                echo "<option value=\"".$value."\" selected>".$MonthsLong[$i - 1]."</option>";
-            } else {
-                echo "<option value=\"".$value."\">".$MonthsLong[$i - 1]."</option>";
-            }
-        }
-        ?>
-        </select>
-        <select name="fyear" onchange="javascript:document.new_calendar_item.end_fyear.value=this.value;">
-            <option value="<?php echo ($year - 1); ?>"><?php echo ($year - 1); ?></option>
-            <option value="<?php echo $year; ?>" selected="selected"><?php echo $year; ?></option>
-            <?php
-            for ($i = 1; $i <= 5; $i++) {
-                $value = $year + $i;
-                echo "<option value=\"$value\">$value</option>";
-            }
-            ?>
-        </select>
+    $form->addElement('text', 'start_date', get_lang('StartDate'));
+    $form->addElement('text', 'end_date', get_lang('EndDate'));
 
-        <a href="javascript:openCalendar('new_calendar_item', 'f')">
-            <?php Display::display_icon('calendar_select.gif', get_lang('Select'), array('style' => 'vertical-align: middle;')); ?>
-        </a>
-
-        &nbsp;<?php echo get_lang('StartTime').": "; ?>&nbsp;
-        <select name="fhour" onchange="javascript:document.new_calendar_item.end_fhour.value=this.value;">
-            <!-- <option value="--">--</option> -->
-            <?php
-            foreach (range(0, 23) as $i) {
-                // values have to have double digits
-                $value = ($i <= 9 ? '0'.$i : $i );
-                // the current hour is indicated with [] around the hour
-                if ($hours == $value) {
-                    echo "<option value=\"".$value."\" selected> ".$value." </option>";
-                } else {
-                    echo "<option value=\"$value\">$value</option>";
-                }
-            }
-            ?>
-        </select>
-        <select name="fminute" onchange="javascript:document.new_calendar_item.end_fminute.value=this.value;">
-            <!-- <option value="<?php echo $minutes ?>"><?php echo $minutes; ?></option> -->
-    <?php
-    foreach (range(0, 59) as $i) {
-        // values have to have double digits
-        $value = ($i <= 9 ? '0'.$i : $i );
-        if ($minutes == $value) {
-            echo "<option value=\"".$value."\" selected> ".$value." </option>";
-        } else {
-            echo "<option value=\"$value\">$value</option>";
-        }
-    }
-    ?>
-        </select>
-            <?php
-            echo '	</div>
-			</div>';
-
-            echo '<script>
-				$(function() {
-					$("#empty_end_date").click(function(){
-						if ($("#empty_end_date").is(":checked")) {
-							$("#end_date_span").hide();
-						} else {
-							$("#end_date_span").show();
-						}
-					});';
-            if (isset($item_2_edit['end_date']) && $item_2_edit['end_date'] == '0000-00-00 00:00:00') {
-                echo '$("#end_date_span").hide();';
-            } echo '
-		});
-		</script>';
-
-            // end date and time
-            echo '<span id="end_date_span">';
-            echo '<div class="control-group">
-				<label class="control-label">
-					'.get_lang('EndDate').'
-				</label>
-				<div class="controls">
-					<div id="err_end_date" style="display:none;color:red"></div>';
-            ?>
-
-        <select id="end_fday" name="end_fday">
-        <?php
-        // small loop for filling all the dates
-        // 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
-
-        foreach (range(1, 31) as $i) {
-            // values have to have double digits
-            $value = ($i <= 9 ? '0'.$i : $i );
-            // the current day is indicated with [] around the date
-            if ($value == $end_day) {
-                echo "<option value=\"".$value."\" selected> ".$i." </option>";
-            } else {
-                echo "<option value=\"".$value."\">".$i."</option>";
-            }
-        }
-        ?>
-        </select>
-        <!-- month: january -> december -->
-        <select id="end_fmonth" name="end_fmonth">
-        <?php
-        foreach (range(1, 12) as $i) {
-            // values have to have double digits
-            $value = ($i <= 9 ? '0'.$i : $i );
-            if ($value == $end_month) {
-                echo "<option value=\"".$value."\" selected>".$MonthsLong[$i - 1]."</option>";
-            } else {
-                echo "<option value=\"".$value."\">".$MonthsLong[$i - 1]."</option>";
-            }
-        }
-        ?>
-        </select>
-        <select  id="end_fyear" name="end_fyear">
-            <option value="<?php echo ($end_year - 2) ?>"><?php echo ($end_year - 2) ?></option>
-            <option value="<?php echo ($end_year - 1) ?>"><?php echo ($end_year - 1) ?></option>
-            <option value="<?php echo $end_year ?>" selected> <?php echo $end_year ?> </option>
-            <?php
-            for ($i = 1; $i <= 5; $i++) {
-                $value = $end_year + $i;
-                echo "<option value=\"$value\">$value</option>";
-            }
-            ?>
-        </select>
-        <a href="javascript:openCalendar('new_calendar_item', 'end_f')">
-            <?php echo Display::span(Display::return_icon('calendar_select.gif', get_lang('Select'), array('style' => 'vertical-align: middle;')), array('id' => 'end_date_calendar_icon')); ?>
-        </a>
-        &nbsp;<?php echo get_lang('EndTime').": "; ?>&nbsp;
-        <select id="end_fhour" name="end_fhour">
-            <!-- <option value="--">--</option> -->
-    <?php
-    foreach (range(0, 23) as $i) {
-        // values have to have double digits
-        $value = ($i <= 9 ? '0'.$i : $i );
-        // the current hour is indicated with [] around the hour
-        if ($end_hours == $value) {
-            echo "<option value=\"".$value."\" selected> ".$value." </option>";
-        } else {
-            echo "<option value=\"".$value."\"> ".$value." </option>";
-        }
-    }
-    ?>
-        </select>
-
-        <select id="end_fminute" name="end_fminute">
-            <!-- <option value="<?php echo $end_minutes; ?>"><?php echo $end_minutes; ?></option> -->
-            <!-- <option value="--">--</option> -->
-            <?php
-            foreach (range(0, 59) as $i) {
-                // values have to have double digits
-                //$value = ($i <= 9 ? '0'.$i : $i );
-                $value = ($i <= 9 ? '0'.$i : $i );
-                if ($end_minutes == $value) {
-                    echo "<option value=\"".$value."\" selected> ".$value." </option>";
-                } else {
-                    echo "<option value=\"$value\">$value</option>";
-                }
-            }
-            ?>
-        </select>
-            <?php
-            echo '	</div>
-			</div>	</span>';
-
-            // Repeating the calendar item
-            if (empty($id)) {
-                //only show repeat fields when adding, not for editing an calendar item
-                echo '<div class="control-group">
-					<label class="control-label"></label>
-					<div class="controls">
-					<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2">
-	                       <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('RepeatEvent').'</span>
-	                    </a>';
-                ?>
-            <table id="options2" style="display: none;">
-                <tr>
-                    <td>
-                        <label for="repeat_id">
-                            <input id="repeat_id" type="checkbox" name="repeat" <?php echo ($repeat ? 'checked="checked"' : ''); ?>/>
-            <?php echo get_lang('RepeatEvent'); ?>
-
-                        </label></td>
-                    <td>
-                    </td>
-                </tr>
-                <tr>
-                    <td><label><?php echo get_lang('RepeatType'); ?></label></td>
-                    <td>
-                        <select name="repeat_type">
-                            <option value="daily"><?php echo get_lang('RepeatDaily'); ?></option>
-                            <option value="weekly"><?php echo get_lang('RepeatWeekly'); ?></option>
-                            <option value="monthlyByDate"><?php echo get_lang('RepeatMonthlyByDate'); ?></option>
-                            <!--option value="monthlyByDay"><?php echo get_lang('RepeatMonthlyByDay'); ?></option>
-                            <option value="monthlyByDayR"><?php echo get_lang('RepeatMonthlyByDayR'); ?></option-->
-                            <option value="yearly"><?php echo get_lang('RepeatYearly'); ?></option>
-                        </select>
-                    </td>
-                </tr>
-                <tr>
-                    <td><label><?php echo get_lang('RepeatEnd'); ?></label></td>
-                    <td>
-                        <select name="repeat_end_day">
-                        <?php
-                        // small loop for filling all the dates
-                        // 2do: the available dates should be those of the selected month => february is from 1 to 28 (or 29) and not to 31
-
-                        foreach (range(1, 31) as $i) {
-                            // values have to have double digits
-                            $value = ($i <= 9 ? '0'.$i : $i );
-                            // the current day is indicated with [] around the date
-                            if ($value == $end_day) {
-                                echo "<option value=\"".$value."\" selected> ".$i." </option>";
-                            } else {
-                                echo "<option value=\"".$value."\">".$i."</option>";
-                            }
-                        }
-                        ?>
-                        </select>
-                        <!-- month: january -> december -->
-                        <select name="repeat_end_month">
-                            <?php
-                            foreach (range(1, 12) as $i) {
-                                // values have to have double digits
-                                $value = ($i <= 9 ? '0'.$i : $i );
-                                if ($value == $end_month + 1) {
-                                    echo '<option value="', $value, '" selected="selected">', $MonthsLong[$i - 1], "</option>";
-                                } else {
-                                    echo '<option value="', $value, '">', $MonthsLong[$i - 1], "</option>";
-                                }
-                            }
-                            ?>
-                        </select>
-                        <select name="repeat_end_year">
-                            <option value="<?php echo ($end_year - 1) ?>"><?php echo ($end_year - 1) ?></option>
-                            <option value="<?php echo $end_year ?>" selected> <?php echo $end_year ?> </option>
-                            <?php
-                            for ($i = 1; $i <= 5; $i++) {
-                                $value = $end_year + $i;
-                                echo "<option value=\"$value\">$value</option>";
-                            }
-                            ?>
-                        </select>
-                        <a href="javascript:openCalendar('new_calendar_item', 'repeat_end_')">
-                        <?php Display::display_icon('calendar_select.gif', get_lang('Select'), array('style' => 'vertical-align: middle;')); ?>
-                        </a>
-                    </td>
-                </tr>
-            </table>
-                <?php
-                echo '		</div>
-				</div>';
-                        }
-            if (isset($agendaItem['all_day'])) {
-                $checked = null;
-                if ($agendaItem['all_day']) {
-                    $checked = 'checked';
-                }
-                echo '	<div class="control-group">
-				<label class="control-label"></label>
-				<div class="controls">
-                    <input type="checkbox" '.$checked.' name="all_day"/>  '.get_lang('AllDay').'
-                </div>
-             </div>';
-            }
-                //only show repeat fields if adding, not if editing
-                // the main area of the agenda item: the wysiwyg editor
-                echo '	<div class="control-group">
-				<label class="control-label">
-					<span class="form_required">*</span>'.get_lang('Description').'
-				</label>
-				<div class="controls">';
-                        require_once api_get_path(LIBRARY_PATH)."/fckeditor/fckeditor.php";
-                        $oFCKeditor = new FCKeditor('content');
-                        $oFCKeditor->Width = '100%';
-                        $oFCKeditor->Height = '200';
-                        if (!api_is_allowed_to_edit(null, true)) {
-                            $oFCKeditor->ToolbarSet = 'AgendaStudent';
-                        } else {
-                            $oFCKeditor->ToolbarSet = 'Agenda';
-                        }
-                        $oFCKeditor->Value = $content;
-                        $return = $oFCKeditor->CreateHtml();
-                        echo $return;
-                        echo '</div>
-                <div class = "controls">
-                    <label>
-                    <input id="add_announcement" type="checkbox" name="add_announcement" checked="checked"/>
-                    '.get_lang('AddAnnouncement').'&nbsp('.get_lang('SendMail').')
-                    </label>
-                </div>
-			</div>';
-
-            if ($agendaObj->type == 'course') {
-                        // File attachment
-                        echo '	<div class="control-group">
-				<label class="control-label">
-                    '.get_lang('AddAnAttachment').'&nbsp;</label>
-				<div class="controls">
-                    <input type="file" name="user_upload"/>
-                </div>
-                <label class="control-label">'.
-                    get_lang('Comment').'
-                </label>
-                <div class="controls">
-                    <textarea name="file_comment" type="textarea"></textarea>
-                </div>
-             </div>';
-            }
-                        // the submit button for storing the calendar item
-                    echo '		<div class="control-group">
-					<label class="control-label">
-                    </label>
-					<div class="controls">';
-                        if (isset($_GET['id'])) {
-                            $class = 'save';
-                            $text = get_lang('ModifyEvent');
-                        } else {
-                            $class = 'add';
-                            $text = get_lang('AgendaAdd');
-                        }
-                        echo '<button class="'.$class.'" type="button" name="name" onclick="selectAll(document.getElementById(\'selected_form\'),true)">'.$text.'</button>';
-                        echo '			</div>
-				</div>';
-                        ?>
-    </form>
-        <?php
+    // Repeating the calendar item
+    if (empty($id)) {
+        $form->addElement(
+            'label',
+            null,
+            '<a href="javascript://" onclick="return plus_repeated_event();"><span id="plus2">
+             <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('RepeatEvent').'</span>
+            </a>'
+        );
+        $form->addElement('html', '<div id="options2" style="display: none;">');
+        $form->addElement('checkbox', 'repeat', get_lang('RepeatEvent'));
+        $form->addElement('select', 'repeat_type', get_lang('RepeatType'), $agendaObj->getRepeatTypes());
+        $form->addElement('text', 'repeat_end_day', get_lang('RepeatEnd'));
+        $form->addElement('html', '</div>');
     }
 
-    function get_agendaitems($month, $year)
-    {
-        $items = array();
-        $month = Database::escape_string($month);
-        $year = Database::escape_string($year);
 
-        //databases of the courses
-        $TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA);
-        $TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-        $course_info = api_get_course_info();
-        $group_memberships = GroupManager :: get_group_ids($course_info['real_id'], api_get_user_id());
-        // if the user is administrator of that course we show all the agenda items
-        if (api_is_allowed_to_edit(false, true)) {
-            //echo "course admin";
-
-            $sqlquery = "SELECT
-						DISTINCT agenda.*, item_property.*
-						FROM ".$TABLEAGENDA." agenda,
-							 ".$TABLE_ITEMPROPERTY." item_property
-						WHERE agenda.id = item_property.ref
-						AND MONTH(agenda.start_date)='".$month."'
-						AND YEAR(agenda.start_date)='".$year."'
-						AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-						AND item_property.visibility='1'
-						GROUP BY agenda.id
-						ORDER BY start_date ";
+    if (isset($agendaItem['all_day'])) {
+        $checked = null;
+        if ($agendaItem['all_day']) {
+            $checked = 'checked';
         }
-        // if the user is not an administrator of that course
-        else {
-            //echo "GEEN course admin";
-            if (is_array($group_memberships) && count($group_memberships) > 0) {
-                $sqlquery = "SELECT
-							agenda.*, item_property.*
-							FROM ".$TABLEAGENDA." agenda,
-								".$TABLE_ITEMPROPERTY." item_property
-							WHERE agenda.id = item_property.ref
-							AND MONTH(agenda.start_date)='".$month."'
-							AND YEAR(agenda.start_date)='".$year."'
-							AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-							AND	( item_property.to_user_id='".api_get_user_id()."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-							AND item_property.visibility='1'
-							ORDER BY start_date ";
-            } else {
-                $sqlquery = "SELECT
-							agenda.*, item_property.*
-							FROM ".$TABLEAGENDA." agenda,
-							".$TABLE_ITEMPROPERTY." item_property
-							WHERE agenda.id = item_property.ref
-							AND MONTH(agenda.start_date)='".$month."'
-							AND YEAR(agenda.start_date)='".$year."'
-							AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-							AND ( item_property.to_user_id='".api_get_user_id()."' OR item_property.to_group_id='0')
-							AND item_property.visibility='1'
-							ORDER BY start_date ";
-            }
-        }
-
-        $mycourse = api_get_course_info();
-        $result = Database::query($sqlquery);
-
-        while ($item = Database::fetch_array($result)) {
-            $agendaday_string = api_convert_and_format_date($item['start_date'], "%d", date_default_timezone_get());
-            $agendaday = intval($agendaday_string);
-            $time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT);
-            $URL = api_get_path(WEB_CODE_PATH).'calendar/agenda.php?cidReq='.$mycourse['id']."&day=$agendaday&month=$month&year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
-            $items[$agendaday][$item['start_time']] .= '<i>'.$time.'</i> <a href="'.$URL.'" title="'.$mycourse['name'].'">'.$mycourse['official_code'].'</a> '.$item['title'].'<br />';
-        }
-
-        // sorting by hour for every day
-        $agendaitems = array();
-        while (list ($agendaday, $tmpitems) = each($items)) {
-            sort($tmpitems);
-            while (list ($key, $val) = each($tmpitems)) {
-                $agendaitems[$agendaday] .= $val;
-            }
-        }
-        return $agendaitems;
+        $form->addElement('checkbox', 'all_day', get_lang('AllDay'));
     }
 
-    function display_upcoming_events()
-    {
+    $form->addElement('html_editor', 'content', get_lang('Description'));
+    $form->addElement('checkbox', 'add_announcement', get_lang('AddAnnouncement').'&nbsp('.get_lang('SendMail').')');
 
-        $number_of_items_to_show = (int) api_get_setting('number_of_upcoming_events');
-
-        //databases of the courses
-        $TABLEAGENDA = Database :: get_course_table(TABLE_AGENDA);
-        $TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-        $mycourse = api_get_course_info();
-        $myuser = api_get_user_info();
-        $session_id = api_get_session_id();
-
-        $course_id = $mycourse['real_id'];
-
-
-        $group_memberships = GroupManager :: get_group_ids($mycourse['real_id'], $myuser['user_id']);
-        // if the user is administrator of that course we show all the agenda items
-        if (api_is_allowed_to_edit(false, true)) {
-            //echo "course admin";
-            $sqlquery = "SELECT
-						DISTINCT agenda.*, item_property.*
-						FROM ".$TABLEAGENDA." agenda,
-							 ".$TABLE_ITEMPROPERTY." item_property
-						WHERE
-						agenda.c_id = $course_id AND
-                        item_property.c_id = $course_id AND
-                        agenda.id = item_property.ref
-						AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-						AND item_property.visibility='1'
-						AND agenda.start_date > NOW()
-						AND session_id = '".$session_id."'
-						GROUP BY agenda.id
-						ORDER BY start_date ";
-        }
-        // if the user is not an administrator of that course
-        else {
-            //echo "GEEN course admin";
-            if (is_array($group_memberships) and count($group_memberships) > 0) {
-                $sqlquery = "SELECT
-							agenda.*, item_property.*
-							FROM ".$TABLEAGENDA." agenda,
-								".$TABLE_ITEMPROPERTY." item_property
-							WHERE
-							agenda.c_id = $course_id AND
-                            item_property.c_id = $course_id AND
-							agenda.id = item_property.ref
-							AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-							AND	( item_property.to_user_id='".$myuser['user_id']."' OR item_property.to_group_id IN (0, ".implode(", ", $group_memberships).") )
-							AND item_property.visibility='1'
-							AND agenda.start_date > NOW()
-							AND session_id = '".$session_id."'
-							ORDER BY start_date ";
-            } else {
-                $sqlquery = "SELECT
-							agenda.*, item_property.*
-							FROM ".$TABLEAGENDA." agenda,
-							".$TABLE_ITEMPROPERTY." item_property
-							WHERE
-							agenda.c_id = $course_id AND
-							item_property.c_id = $course_id AND
-							agenda.id = item_property.ref
-							AND item_property.tool='".TOOL_CALENDAR_EVENT."'
-							AND ( item_property.to_user_id='".$myuser['user_id']."' OR item_property.to_group_id='0')
-							AND item_property.visibility='1'
-							AND agenda.start_date > NOW()
-							AND session_id = '".$session_id."'
-							ORDER BY start_date ";
-            }
-        }
-        $result = Database::query($sqlquery);
-        $counter = 0;
-
-        if (Database::num_rows($result) > 0) {
-            echo '<h4>'.get_lang('UpcomingEvent').'</h4><br />';
-            while ($item = Database::fetch_array($result, 'ASSOC')) {
-                if ($counter < $number_of_items_to_show) {
-                    echo api_get_local_time($item['start_date']), ' - ', $item['title'], '<br />';
-                    $counter++;
-                }
-            }
-        }
+    if ($agendaObj->type == 'course') {
+        // File attachment
+        $form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
+        $form->addElement('textarea', 'file_comment', get_lang('Comment'));
+        $form->add_progress_bar();
     }
+
+    if (isset($_GET['id'])) {
+        $text = get_lang('ModifyEvent');
+    } else {
+        $text = get_lang('AgendaAdd');
+    }
+    $form->addElement('button', 'submit', $text);
+    return $form->return_form();
+}
 
     /**
      * This function calculates the startdate of the week (monday)
@@ -2956,6 +2154,7 @@ function show_add_form($id = '', $type = null)
 
     /**
      * Show the mini calendar of the given month
+     * @deprecated
      */
     function display_daycalendar($agendaitems, $day, $month, $year, $weekdaynames, $monthName)
     {
@@ -3046,6 +2245,7 @@ function show_add_form($id = '', $type = null)
 
     /**
      * 	Display the weekly view of the calendar
+     * @deprecated
      */
     function display_weekcalendar($agendaitems, $month, $year, $weekdaynames, $monthName)
     {
@@ -3138,6 +2338,7 @@ function show_add_form($id = '', $type = null)
 
     /**
      * Show the monthcalender of the given month
+     * @deprecated
      */
     function get_day_agendaitems($courses_dbs, $month, $year, $day)
     {
@@ -3247,6 +2448,7 @@ function show_add_form($id = '', $type = null)
 
     /**
      * Return agenda items of the week
+     * @deprecated
      */
     function get_week_agendaitems($courses_dbs, $month, $year, $week = '')
     {
@@ -3322,11 +2524,6 @@ function show_add_form($id = '', $type = null)
 									ORDER BY a.start_date";
                 }
             }
-            //echo "<pre>".$sqlquery."</pre>";
-            // $sqlquery = "SELECT * FROM $agendadb WHERE (DAYOFMONTH(day)>='$start_day' AND DAYOFMONTH(day)<='$end_day')
-            //				AND (MONTH(day)>='$start_month' AND MONTH(day)<='$end_month')
-            //				AND (YEAR(day)>='$start_year' AND YEAR(day)<='$end_year')";
-            //var_dump($sqlquery);
             $result = Database::query($sqlquery);
             while ($item = Database::fetch_array($result)) {
                 $agendaday_string = api_convert_and_format_date($item['start_date'], "%d", date_default_timezone_get());
@@ -4128,11 +3325,10 @@ function show_add_form($id = '', $type = null)
 
         $sql = "DELETE FROM $agenda_table_attachment WHERE id = ".$id_attach;
         $result = Database::query($sql);
-        $last_id_file = Database::insert_id();
         // update item_property
         api_item_property_update($_course, 'calendar_event_attachment', $id_attach, 'AgendaAttachmentDeleted', api_get_user_id());
         if (!empty($result)) {
-            Display::display_confirmation_message(get_lang("AttachmentFileDeleteSuccess"));
+            return Display::return_message(get_lang("AttachmentFileDeleteSuccess"), 'confirmation');
         }
     }
 
@@ -4338,6 +3534,7 @@ function show_add_form($id = '', $type = null)
      * Import an iCal file into the database
      * @param   array   Course info
      * @return  boolean True on success, false otherwise
+     * @deprecated
      */
     function agenda_import_ical($course_info, $file)
     {
@@ -4396,7 +3593,6 @@ function show_add_form($id = '', $type = null)
           $attendee 	 = $ve->getProperty('attendee');
           $course_name = $ve->getProperty('location');
           //insert the event in our database
-          //var_dump($title,$desc,$start_date,$end_date);
           $id = agenda_add_item($course_info,$title,$desc,$start_date_string,$end_date_string,$_POST['selectedform']);
 
 
@@ -4490,9 +3686,14 @@ function show_add_form($id = '', $type = null)
             if ($start_date_string == $date->format('Y-m-d h:i:s')) {
                 $all_day = 'true';
             }
-
-            //var_dump($start_date_string, $end_date_string, $all_day);
-            $id = $agenda_obj->add_event($start_date_string, $end_date_string, $all_day, null, $title, $desc, array('everyone'));
+            $id = $agenda_obj->add_event(
+                $start_date_string,
+                $end_date_string,
+                $all_day,
+                $title,
+                $desc,
+                array('everyone')
+            );
 
             $message[] = " $title - ".$start_date_string." - ".$end_date_string;
 
@@ -4653,5 +3854,5 @@ function show_add_form($id = '', $type = null)
         $form->addElement('file', 'ical_import', get_lang('ICalFileImport'));
         $form->addRule('ical_import', get_lang('ThisFieldIsRequired'), 'required');
         $form->addElement('button', 'ical_submit', get_lang('Import'));
-        $form->display();
+        return $form->return_form();
     }

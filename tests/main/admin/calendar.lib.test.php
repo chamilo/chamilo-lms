@@ -354,18 +354,6 @@ class TestCalendar extends UnitTestCase {
  		$this->assertTrue(is_null($res));
  	}
 
- 	public function testGetAgendaitems(){
- 		global $_user;
-		global $_configuration;
- 		$month=01;
- 		$year=2010;
- 		$res = get_agendaitems($month, $year);
- 		if(is_array($res)) {
- 			$this->assertTrue(is_array($res));
- 		}
-
- 	}
-
  	public function testDisplayUpcomingEvents(){
  		 ob_start();
 		 $res = display_upcoming_events();
@@ -376,6 +364,4 @@ class TestCalendar extends UnitTestCase {
  	public function testIsRepeatedEvent() {
 	//This is deprecated or not used
  	}
-
 }
-?>

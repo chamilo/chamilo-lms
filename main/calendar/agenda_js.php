@@ -6,6 +6,8 @@
 /**
  * INIT SECTION
  */
+use \ChamiloSession as Session;
+
 // name of the language file that needs to be included
 $language_file = array('agenda', 'group', 'announcements');
 
@@ -13,7 +15,7 @@ $language_file = array('agenda', 'group', 'announcements');
 $use_anonymous = true;
 
 // Calendar type
-$type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ? $_REQUEST['type'] : 'personal';
+$type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin', 'platform')) ? $_REQUEST['type'] : 'personal';
 
 if ($type == 'personal') {
     $cidReset = true; // fixes #5162
@@ -24,7 +26,6 @@ require_once 'agenda.lib.php';
 require_once 'agenda.inc.php';
 
 $current_course_tool = TOOL_CALENDAR_EVENT;
-
 $this_section = SECTION_MYAGENDA;
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(array('jquery-ui', 'jquery-ui-i18n'));
@@ -34,7 +35,7 @@ $htmlHeadXtra[] = api_get_js('fullcalendar/gcal.js');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/fullcalendar/fullcalendar.css');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/qtip2/jquery.qtip.min.css');
 
-if (api_is_platform_admin() && $type == 'admin') {
+if (api_is_platform_admin() && ($type == 'admin' || $type == 'platform')) {
     $type = 'admin';
 }
 
@@ -42,19 +43,27 @@ if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {
     $type = 'course';
 }
 
+$agenda = new Agenda();
+$agenda->type = $type;
+
 $is_group_tutor = false;
 $session_id = api_get_session_id();
 $group_id = api_get_group_id();
 
 if (!empty($group_id)) {
     $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
-    $group_properties = GroupManager :: get_group_properties($group_id);
-    $interbreadcrumb[] = array("url" => "../group/group.php", "name" => get_lang('Groups'));
-    $interbreadcrumb[] = array("url" => "../group/group_space.php?gidReq=".$group_id, "name" => get_lang('GroupSpace').' '.$group_properties['name']);
+    $group_properties = GroupManager::get_group_properties($group_id);
+    $interbreadcrumb[] = array(
+        "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
+        "name" => get_lang('Groups')
+    );
+    $interbreadcrumb[] = array(
+        "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
+        "name" => get_lang('GroupSpace').' '.$group_properties['name']
+    );
 }
 
 $tpl = new Template(get_lang('Agenda'));
-
 $tpl->assign('use_google_calendar', 0);
 
 $can_add_events = 0;
@@ -68,7 +77,7 @@ switch ($type) {
         }
         break;
     case 'course':
-        api_protect_course_script();
+        api_protect_course_script(true);
         $this_section = SECTION_COURSES;
         if (api_is_allowed_to_edit()) {
             $can_add_events = 1;
@@ -126,31 +135,17 @@ if ($region_value == 'en') {
 }
 $tpl->assign('region_value', $region_value);
 
-$export_icon = '../img/export.png';
-$export_icon_low = '../img/export_low_fade.png';
-$export_icon_high = '../img/export_high_fade.png';
+$export_icon = api_get_path(WEB_IMG_PATH).'img/export.png';
+$export_icon_low = api_get_path(WEB_IMG_PATH).'img/export_low_fade.png';
+$export_icon_high = api_get_path(WEB_IMG_PATH).'img/export_high_fade.png';
 
-$tpl->assign('export_ical_confidential_icon', Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential')));
+$tpl->assign(
+    'export_ical_confidential_icon',
+    Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential'))
+);
 
-$actions = null;
 $filter = null;
-
-if (api_is_allowed_to_edit(false, true) OR
-    (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) &&
-    api_is_allowed_to_session_edit(false, true) OR
-    $is_group_tutor
-) {
-    if ($type == 'course') {
-        if (isset($_GET['user_id'])) {
-            $filter = $_GET['user_id'];
-        }
-        $actions = display_courseadmin_links($filter);
-    }
-} else {
-    if ($type == 'course') {
-        $actions = "<a href='agenda_list.php?type=course&".api_get_cidreq()."'>".Display::return_icon('week.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";
-    }
-}
+$actions = $agenda->displayActions('calendar', $filter);
 
 $tpl->assign('actions', $actions);
 
@@ -170,7 +165,7 @@ if (empty($defaultView)) {
     $defaultView = 'month';
 }
 
-/* month, basicWeek,agendaWeek,agendaDay */
+/* month, basicWeek, agendaWeek, agendaDay */
 
 $tpl->assign('default_view', $defaultView);
 
@@ -182,7 +177,7 @@ if ($type == 'course' && !empty($session_id)) {
 $tpl->assign('type_label', $type_label);
 $tpl->assign('type_event_class', $type_event_class);
 
-//Current user can add event?
+// Current user can add event?
 $tpl->assign('can_add_events', $can_add_events);
 
 //Setting AJAX caller
@@ -209,14 +204,42 @@ if ((api_is_allowed_to_edit() || $is_group_tutor) && $course_code != '-1' && $ty
         $group_list = CourseManager::get_group_list_of_course(api_get_course_id(), api_get_session_id());
     }
 
-    $agenda = new Agenda();
-    //This will fill the select called #users_to_send_id
-    $select = $agenda->construct_not_selected_select_form($group_list, $user_list, array());
+    // This will fill the select called #users_to_send_id.
+
+    if (isset($_REQUEST['user_id'])) {
+        if (in_array($_REQUEST['user_id'], array_keys($user_list))) {
+            $userInfo = api_get_user_info($_REQUEST['user_id']);
+            if (!empty($userInfo)) {
+                $user_list = array($userInfo['user_id'] => $userInfo);
+                $group_list = array();
+            }
+        }
+
+        $param = explode(':', $_REQUEST['user_id']);
+        if (isset($param[1]) && in_array($param[1], array_keys($group_list))) {
+            $groupInfo = GroupManager::get_group_properties($param[1]);
+            if ($groupInfo) {
+                $group_list = array($groupInfo['id'] => $groupInfo);
+                $user_list = array();
+            }
+        }
+
+    }
+
+    $select = $agenda->construct_not_selected_select_form(
+        $group_list,
+        $user_list,
+        array()
+    );
     $tpl->assign('visible_to', $select);
 }
 
-// Loading Agenda template
+// Loading Agenda template.
 $content = $tpl->fetch('default/agenda/month.tpl');
+
+$message = Session::read('message');
+$tpl->assign('message', $message);
+Session::erase('message');
 
 $tpl->assign('content', $content);
 

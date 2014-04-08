@@ -126,7 +126,10 @@ class FormValidator extends HTML_QuickForm
         $dir = api_get_path(LIBRARY_PATH) . 'formvalidator/';
         $this->registerElementType('html_editor', $dir . 'Element/html_editor.php', 'HTML_QuickForm_html_editor');
 
-        $this->registerElementType('datetimepicker', $dir . 'Element/DateTimePicker.php', 'DateTimePicker');
+        $this->registerElementType('date_range_picker', $dir . 'Element/DateRangePicker.php', 'DateRangePicker');
+        $this->registerElementType('date_time_picker', $dir . 'Element/DateTimePicker.php', 'DateTimePicker');
+        $this->registerElementType('date_picker', $dir . 'Element/DatePicker.php', 'DatePicker');
+
         $this->registerElementType('datepicker', $dir . 'Element/datepicker.php', 'HTML_QuickForm_datepicker');
         $this->registerElementType('datepickerdate', $dir . 'Element/datepickerdate.php', 'HTML_QuickForm_datepickerdate');
         $this->registerElementType('receivers', $dir . 'Element/receivers.php', 'HTML_QuickForm_receivers');
@@ -251,6 +254,18 @@ EOT;
             $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
         }
     }
+
+    public function addDateRangePicker($name, $label, $required = true, $attributes = array())
+    {
+        $this->addElement('date_range_picker', $name, $label, $attributes);
+        $this->addElement('hidden', $name.'_start');
+        $this->addElement('hidden', $name.'_end');
+
+        if ($required) {
+            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+        }
+    }
+
 
     function add_hidden($name, $value)
     {
@@ -542,6 +557,8 @@ EOT;
         }
         return $return_value;
     }
+
+
 
 }
 

@@ -3290,7 +3290,8 @@ function api_item_property_update(
         }
     }
 
-    //$filter .= $to_filter;
+    // Adding filter if set.
+    $filter .= $to_filter;
 
     // Update if possible
     $set_type = '';
@@ -3396,7 +3397,7 @@ function api_item_property_update(
         default : // The item will be added or updated.
             $set_type = ", lastedit_type='$lastedit_type' ";
             $visibility = '1';
-             $filter .= $to_filter;
+            //$filter .= $to_filter; already added
             $sql = "UPDATE $TABLE_ITEMPROPERTY
                     SET
                       lastedit_date = '$time',
@@ -3719,7 +3720,7 @@ function api_get_language_from_type($lang_type){
                 $toreturn = ($_SESSION['user_language_choice']);
             break;
         case 'course_lang' :
-            if ($_course['language'] && !empty($_course['language']) )
+            if (isset($_course['language']) && !empty($_course['language']) )
                 $toreturn = $_course['language'];
             break;
         default :

@@ -237,18 +237,23 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     * @param    mixed       Element label (if using an array of labels, you should set the appropriate template)
     * @param    bool        Whether an element is required
     * @param    string      Error message associated with the element
+    * @param    string      Label for ID
     * @access   private
     * @see      renderElement()
     * @return   string      Html for element
     */
-    function _prepareTemplate($name, $label, $required, $error, $labelFor = '')
+    function _prepareTemplate($name, $label, $required, $error, $labelForId = '')
     {
         if (is_array($label)) {
             $nameLabel = array_shift($label);
         } else {
             $nameLabel = $label;
         }
-        
+        if (!empty($labelForId)) {
+            $labelFor = 'for="' . $labelForId . '"';
+        } else {
+            $labelFor = '';
+        }
         if (isset($this->_templates[$name])) {
             $html = str_replace('{label}', $nameLabel, $this->_templates[$name]);
             $html = str_replace('{label-for}', $labelFor, $html);

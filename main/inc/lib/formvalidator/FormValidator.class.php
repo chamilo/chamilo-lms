@@ -173,7 +173,7 @@ class FormValidator extends HTML_QuickForm
         } else {
             $element_template = '
             <div class="control-group {error_class}">
-                <label class="control-label" for="{label-for}">
+                <label class="control-label" {label-for}>
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
                 </label>

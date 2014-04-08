@@ -540,13 +540,45 @@ EOT;
     function return_form()
     {
         $error = false;
+        $addDateLibraries = false;
+        /** @var HTML_QuickForm_element $element */
         foreach ($this->_elements as $element) {
+            if (in_array(
+                $element->getType(),
+                array('date_range_picker', 'date_time_picker', 'date_picker', 'datepicker', 'datetimepicker'))
+            ) {
+            $addDateLibraries = true;
+            }
             if (!is_null(parent::getElementError($element->getName()))) {
                 $error = true;
                 break;
             }
         }
         $return_value = '';
+
+        $js = null;
+        if ($addDateLibraries) {
+            $js = api_get_js('jquery-ui/jquery-ui-i18n.min.js');
+            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript"></script>';
+            $js .= '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
+            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/moment.min.js" type="text/javascript"></script>';
+            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/daterangepicker.js" type="text/javascript"></script>';
+            $js .= '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/daterangepicker-bs2.css" rel="stylesheet" type="text/css" />';
+
+            $isocode = api_get_language_isocode();
+            if ($isocode != 'en') {
+                $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/i18n/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript"></script>';
+                $js .= '<script>
+                $(function(){
+                    $.datepicker.setDefaults($.datepicker.regional["'.$isocode.'"]);
+                     moment.lang("'.$isocode.'");
+                });
+                </script>';
+            }
+        }
+
+        $return_value .= $js;
+
         if ($error) {
             $return_value = Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'warning');
         }

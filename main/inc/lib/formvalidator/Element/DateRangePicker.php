@@ -7,7 +7,6 @@ require_once 'HTML/QuickForm/date.php';
  */
 class DateRangePicker extends HTML_QuickForm_text
 {
-    public $addLibrary = false;
 	/**
 	 * Constructor
 	 */
@@ -47,22 +46,6 @@ class DateRangePicker extends HTML_QuickForm_text
 	{
         $js = null;
 
-        if ($this->addLibrary == true) {
-            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/moment.min.js" type="text/javascript"></script>';
-            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/daterangepicker.js" type="text/javascript"></script>';
-            $js .='<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/daterangepicker-bs2.css" rel="stylesheet" type="text/css" />';
-
-            $isocode = api_get_language_isocode();
-            if ($isocode != 'en') {
-                $js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
-                $js .= '<script>
-                $(function(){
-                    moment.lang("'.$isocode.'");
-                });
-                </script>';
-            }
-        }
-
         $id = $this->getAttribute('id');
         //timeFormat: 'hh:mm'
         $js .= "<script>
@@ -73,18 +56,18 @@ class DateRangePicker extends HTML_QuickForm_text
                     timePickerIncrement: 30,
                     timePicker12Hour: false,
                     ranges: {
-                         '".get_lang('Today')."': [moment(), moment()],
-                         '".get_lang('ThisWeek')."': [moment().weekday(1), moment().weekday(5)],
-                         '".get_lang('NextWeek')."': [moment().weekday(8), moment().weekday(12)]
+                         '".addslashes(get_lang('Today'))."': [moment(), moment()],
+                         '".addslashes(get_lang('ThisWeek'))."': [moment().weekday(1), moment().weekday(5)],
+                         '".addslashes(get_lang('NextWeek'))."': [moment().weekday(8), moment().weekday(12)]
                     },
                     //showDropdowns : true,
                     separator: ' / ',
                     locale: {
-                        applyLabel: '".get_lang('Apply')."',
-                        cancelLabel: '".get_lang('Cancel')."',
-                        fromLabel: '".get_lang('From')."',
-                        toLabel: '".get_lang('To')."',
-                        customRangeLabel: '".get_lang('CustomRange')."',
+                        applyLabel: '".addslashes(get_lang('Ok'))."',
+                        cancelLabel: '".addslashes(get_lang('Cancel'))."',
+                        fromLabel: '".addslashes(get_lang('From'))."',
+                        toLabel: '".addslashes(get_lang('Until'))."',
+                        customRangeLabel: '".addslashes(get_lang('CustomRange'))."',
                     }
                 });
             });

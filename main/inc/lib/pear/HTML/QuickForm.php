@@ -661,14 +661,6 @@ class HTML_QuickForm extends HTML_Common
             }
         }
         $elementName = $elementObject->getName();
-        $type = $elementObject->getType();
-
-        if (in_array($type, array('date_time_picker', 'date_picker', 'date_range_picker')) && $this->dateTimePickerLibraryAdded == false) {
-            $elementObject->addLibrary = true;
-            $this->dateTimePickerLibraryAdded = true;
-        } else {
-            $elementObject->addLibrary = false;
-        }
 
         // Add the element if it is not an incompatible duplicate
         if (!empty($elementName) && isset($this->_elementIndex[$elementName])) {

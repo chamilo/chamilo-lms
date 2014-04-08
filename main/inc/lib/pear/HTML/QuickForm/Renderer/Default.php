@@ -237,22 +237,29 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     * @param    mixed       Element label (if using an array of labels, you should set the appropriate template)
     * @param    bool        Whether an element is required
     * @param    string      Error message associated with the element
+    * @param    string      Label for ID
     * @access   private
     * @see      renderElement()
     * @return   string      Html for element
     */
-    function _prepareTemplate($name, $label, $required, $error)
+    function _prepareTemplate($name, $label, $required, $error, $labelForId = '')
     {
         if (is_array($label)) {
             $nameLabel = array_shift($label);
         } else {
             $nameLabel = $label;
         }
-        
+        if (!empty($labelForId)) {
+            $labelFor = 'for="' . $labelForId . '"';
+        } else {
+            $labelFor = '';
+        }
         if (isset($this->_templates[$name])) {
             $html = str_replace('{label}', $nameLabel, $this->_templates[$name]);
+            $html = str_replace('{label-for}', $labelFor, $html);
         } else {
             $html = str_replace('{label}', $nameLabel, $this->_elementTemplate);
+            $html = str_replace('{label-for}', $labelFor, $html);
         }
         if ($required) {
             $html = str_replace('<!-- BEGIN required -->', '', $html);
@@ -295,10 +302,11 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
     */
     function renderElement(&$element, $required, $error) {
         if (!$this->_inGroup) {
-            $html = $this->_prepareTemplate($element->getName(), $element->getLabel(), $required, $error);            
+            $html = $this->_prepareTemplate($element->getName(), $element->getLabel(), $required, $error, $element->getLabelFor());
             $this->_html .= str_replace('{element}', $element->toHtml(), $html);
         } elseif (!empty($this->_groupElementTemplate)) {
             $html = str_replace('{label}', $element->getLabel(), $this->_groupElementTemplate);
+            $html = str_replace('{label-for}', $element->getLabelFor(), $this->_groupElementTemplate);
             if ($required) {
                 $html = str_replace('<!-- BEGIN required -->', '', $html);
                 $html = str_replace('<!-- END required -->', '', $html);

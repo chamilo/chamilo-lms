@@ -3626,6 +3626,7 @@ function api_display_language_form($hide_if_no_choice = false) {
     </script>';
 
     $html .= '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';
+    $html .= '<label style="display: none;" for="language_list">' . get_lang('Language') . '</label>';
     $html .=  '<select id="language_list" class="chzn-select" name="language_list" onchange="javascript: jumpMenu(\'parent\',this,0);">';
     foreach ($original_languages as $key => $value) {
         if ($folder[$key] == $user_selected_language) {
@@ -6864,7 +6865,7 @@ function api_get_user_blocked_by_captcha($username)
         return false;
     }
     $data = UserManager::get_extra_user_data_by_field($userInfo['user_id'], 'captcha_blocked_until_date');
-    if (isset($data)) {
+    if (isset($data) && isset($data['captcha_blocked_until_date'])) {
         return $data['captcha_blocked_until_date'];
     }
     return false;

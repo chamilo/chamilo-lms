@@ -667,6 +667,9 @@ a.thumbnail:hover{
 .categories-course-description h3{
     color: #0F466A;
 }
+.categories-course-description .text-h3{
+    color: #0F466A;
+}
 #course_tools .content a {
   font-size: 12px;
   font-weight: normal;

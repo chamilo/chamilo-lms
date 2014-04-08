@@ -6841,7 +6841,7 @@ function api_get_user_blocked_by_captcha($username)
         return false;
     }
     $data = UserManager::get_extra_user_data_by_field($userInfo['user_id'], 'captcha_blocked_until_date');
-    if (isset($data)) {
+    if (isset($data) && isset($data['captcha_blocked_until_date'])) {
         return $data['captcha_blocked_until_date'];
     }
     return false;

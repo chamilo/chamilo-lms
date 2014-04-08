@@ -103,7 +103,17 @@ class HTML_QuickForm_element extends HTML_Common
             $this->setName($elementName);
         }
         if (isset($elementLabel)) {
-            $this->setLabel($elementLabel, $elementName);
+            
+            $labelFor = "";
+            //Default Inputs generate this
+            if (!empty($attributes['id'])) {
+                $labelFor = $attributes['id'];
+            }
+            //Default Labels generate this
+            if (!empty($attributes['for'])) {
+                $labelFor = $attributes['for'];
+            }
+            $this->setLabel($elementLabel, $labelFor);
         }
     } //end constructor
 

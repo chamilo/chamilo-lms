@@ -22,14 +22,14 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
-$_configuration['add_document_to_work'] = true;
+//$_configuration['add_document_to_work'] = true;
 if (isset($_configuration['add_document_to_work'])) {
     define('ADD_DOCUMENT_TO_WORK', $_configuration['add_document_to_work']);
 } else {
     define('ADD_DOCUMENT_TO_WORK', false);
 }
 
-$_configuration['work_user_comments'] = true;
+//$_configuration['work_user_comments'] = true;
 if (isset($_configuration['work_user_comments'])) {
     define('ALLOW_USER_COMMENTS', $_configuration['work_user_comments']);
 } else {

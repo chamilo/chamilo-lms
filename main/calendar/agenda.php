@@ -46,6 +46,14 @@ $eventId = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $type = $event_type = isset($_GET['type']) ? $_GET['type'] : null;
 
 $htmlHeadXtra[] = "<script>
+
+function plus_repeated_event() {
+    if (document.getElementById('options2').style.display == 'none') {
+        document.getElementById('options2').style.display = 'block';
+    } else {
+        document.getElementById('options2').style.display = 'none';
+    }
+}
     $(function() {
         var checked = $('input[name=repeat]').attr('checked');
         if (checked) {

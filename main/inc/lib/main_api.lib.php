@@ -3602,6 +3602,7 @@ function api_display_language_form($hide_if_no_choice = false) {
     </script>';
 
     $html .= '<form id="lang_form" name="lang_form" method="post" action="'.api_get_self().'">';
+    $html .= '<label style="display: none;" for="language_list">' . get_lang('Language') . '</label>';
     $html .=  '<select id="language_list" class="chzn-select" name="language_list" onchange="javascript: jumpMenu(\'parent\',this,0);">';
     foreach ($original_languages as $key => $value) {
         if ($folder[$key] == $user_selected_language) {

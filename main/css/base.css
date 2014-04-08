@@ -4746,3 +4746,24 @@ i.size-32.icon-new-work{
 .jqgrid_whitespace {
     white-space: normal !important;
 }
+
+.text-h1 {
+    font-size: 24px;
+}
+
+.text-h2 {
+    font-size: 21px;
+}
+
+.text-h3 {
+    font-size: 18px;
+}
+
+.text-h4 {
+    font-size: 15px;
+}
+
+.text-h5 {
+    font-size: 12px;
+    font-weight: normal;
+}

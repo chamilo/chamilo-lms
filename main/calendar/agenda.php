@@ -168,7 +168,7 @@ if (api_is_allowed_to_edit(false, true) OR
                 $allDay = isset($values['all_day']) ? 'true' : 'false';
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
-                $repeatType = isset($values['edit_repeat_type']) ? $values['edit_repeat_type'] : null;
+                //$repeatType = isset($values['edit_repeat_type']) ? $values['edit_repeat_type'] : null;
                 $sendAttachment = isset($_FILES['user_upload']) ? true : false;
                 $attachment = $sendAttachment ? $_FILES['user_upload'] : null;
                 $attachmentComment = isset($values['file_comment']) ? $values['file_comment'] : null;
@@ -207,7 +207,6 @@ if (api_is_allowed_to_edit(false, true) OR
                     $values['title'],
                     $values['content'],
                     $values['users_to_send'],
-                    $repeatType,
                     $attachment,
                     $attachmentComment
                 );
@@ -229,15 +228,6 @@ if (api_is_allowed_to_edit(false, true) OR
                     $agenda->deleteAttachmentFile(
                         $event['attachment']['id'],
                         $agenda->course
-                    );
-                }
-
-                if (!empty($values['repeat']) && !empty($eventId)) {
-                    $agenda->addRepeatedItem(
-                        $eventId,
-                        $values['repeat_type'],
-                        $values['repeat_end_day'],
-                        $values['users_to_send']
                     );
                 }
 

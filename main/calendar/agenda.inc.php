@@ -1969,6 +1969,7 @@ function get_attachment($agenda_id, $course_id = null)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @param integer id, the id of the agenda item we are editing. By default this is empty which means that we are adding an
  * 		 agenda item.
+ * @deprecated
  */
 function show_add_form($id = '', $type = null)
 {

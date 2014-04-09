@@ -91,11 +91,11 @@ switch ($action) {
         $agenda->move_event($id, $day_delta, $minute_delta);
         break;
     case 'get_events':
-        $user_id = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
-        if (substr($user_id, 0, 1) == 'G') {
-            $length = strlen($user_id);
-            $group_id = substr($user_id, 2, $length-1);
-        }
+        $filter = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
+        $result = $agenda->parseAgendaFilter($filter);
+        $groupId = current($result['groups']);
+        $userId = current($result['users']);
+
         $start = isset($_REQUEST['start']) ? $_REQUEST['start'] : null;
         $end = isset($_REQUEST['end']) ? $_REQUEST['end'] : null;
 
@@ -103,8 +103,8 @@ switch ($action) {
             $start,
             $end,
             api_get_course_int_id(),
-            $group_id,
-            $user_id
+            $groupId,
+            $userId
         );
         echo $events;
         break;

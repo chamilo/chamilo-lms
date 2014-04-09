@@ -273,7 +273,7 @@ class Agenda
     /**
     * @param int $eventId
     * @param string $type
-    * @param string $end date time
+    * @param string $end in local time
     * @param array $sentTo
     *
     * @return bool
@@ -282,10 +282,15 @@ class Agenda
     {
         $t_agenda = Database::get_course_table(TABLE_AGENDA);
         $t_agenda_r = Database::get_course_table(TABLE_AGENDA_REPEAT);
+
+        if (empty($this->course)) {
+            return false;
+        }
+
         $course_id = $this->course['real_id'];
         $eventId = intval($eventId);
 
-        $sql = "SELECT title, content, start_date as sd, end_date as ed, all_day
+        $sql = "SELECT title, content, start_date, end_date, all_day
                 FROM $t_agenda
                 WHERE c_id = $course_id AND id = $eventId";
         $res = Database::query($sql);
@@ -295,13 +300,14 @@ class Agenda
         }
 
         $row = Database::fetch_array($res);
-        $orig_start = api_strtotime($row['sd']);
-        $orig_end = api_strtotime($row['ed']);
+        $origStartDate = api_strtotime($row['start_date'], 'UTC');
+        $origEndDate = api_strtotime($row['end_date'], 'UTC');
+        $diff = $origEndDate - $origStartDate;
 
-        $diff = $orig_end - $orig_start;
         $title = $row['title'];
         $content = $row['content'];
         $allDay = $row['all_day'];
+
         $now = time();
         $type = Database::escape_string($type);
         $end = api_strtotime($end);
@@ -311,13 +317,13 @@ class Agenda
             //and that he wants us to calculate the end date with that (particularly in case of imports from ical)
             switch ($type) {
                 case 'daily':
-                    $end = $orig_start + (86400 * $end);
+                    $end = $origStartDate + (86400 * $end);
                     break;
                 case 'weekly':
-                    $end = $this->addWeek($orig_start, $end);
+                    $end = $this->addWeek($origStartDate, $end);
                     break;
                 case 'monthlyByDate':
-                    $end = $this->addMonth($orig_start, $end);
+                    $end = $this->addMonth($origStartDate, $end);
                     break;
                 case 'monthlyByDay':
                     //TODO
@@ -326,7 +332,7 @@ class Agenda
                     //TODO
                     break;
                 case 'yearly':
-                    $end = $this->addYear($orig_start, $end);
+                    $end = $this->addYear($origStartDate, $end);
                     break;
             }
         }
@@ -341,7 +347,7 @@ class Agenda
             switch ($type) {
                 // @todo improve loop.
                 case 'daily':
-                    for ($i = $orig_start + 86400; $i <= $end; $i += 86400) {
+                    for ($i = $origStartDate + 86400; $i <= $end; $i += 86400) {
                         $start = date('Y-m-d H:i:s', $i);
                         $repeatEnd = date('Y-m-d H:i:s', $i + $diff);
                         $this->add_event(
@@ -357,7 +363,7 @@ class Agenda
                     }
                     break;
                 case 'weekly':
-                    for ($i = $orig_start + 604800; $i <= $end; $i += 604800) {
+                    for ($i = $origStartDate + 604800; $i <= $end; $i += 604800) {
                         $start = date('Y-m-d H:i:s', $i);
                         $repeatEnd = date('Y-m-d H:i:s', $i + $diff);
                         $this->add_event(
@@ -373,7 +379,7 @@ class Agenda
                     }
                     break;
                 case 'monthlyByDate':
-                    $next_start = $this->addMonth($orig_start);
+                    $next_start = $this->addMonth($origStartDate);
                     while ($next_start <= $end) {
                         $start = date('Y-m-d H:i:s', $next_start);
                         $repeatEnd = date('Y-m-d H:i:s', $next_start + $diff);
@@ -397,7 +403,7 @@ class Agenda
                     //not yet implemented
                     break;
                 case 'yearly':
-                    $next_start = $this->addYear($orig_start);
+                    $next_start = $this->addYear($origStartDate);
                     while ($next_start <= $end) {
                         $start = date('Y-m-d H:i:s', $next_start);
                         $repeatEnd = date('Y-m-d H:i:s', $next_start + $diff);
@@ -416,6 +422,7 @@ class Agenda
                     break;
             }
         }
+
         return true;
     }
 
@@ -482,7 +489,6 @@ class Agenda
         $title,
         $content,
         $usersToSend = array(),
-        $editRepeatType = 1,
         $attachmentArray = array(),
         $attachmentComment = null
     ) {
@@ -680,9 +686,6 @@ class Agenda
                     /*if (isset($addAsAnnouncement) && !empty($addAsAnnouncement)) {
                         $this->store_agenda_item_as_announcement($id);
                     }*/
-
-                    // Repeat
-                    //$editRepeatType = null;
 
                     // Add attachment.
                     if (isset($attachmentArray) && !empty($attachmentArray)) {
@@ -1144,6 +1147,9 @@ class Agenda
         $start = isset($start) && !empty($start) ? api_get_utc_datetime(intval($start)) : null;
         $end = isset($end) && !empty($end) ? api_get_utc_datetime(intval($end)) : null;
 
+        if (empty($courseInfo)) {
+            return array();
+        }
         $course_id = $courseInfo['real_id'];
         if (empty($course_id)) {
             return array();
@@ -1466,13 +1472,17 @@ class Agenda
      * @param FormValidator $form
      * @param array $groupList
      * @param array $userList
-     * @param array $sendTo array('users' => [1, 2], 'groups' => [3, 4]
+     * @param array $sendTo array('users' => [1, 2], 'groups' => [3, 4])
+     * @param array $attributes
+     * @param bool $addOnlyItemsInSendTo
      */
-    public static function construct_not_selected_select_form_validator(
+    public function setSendToSelect(
         $form,
         $groupList = null,
         $userList = null,
-        $sendTo = array()
+        $sendTo = array(),
+        $attributes = array(),
+        $addOnlyItemsInSendTo = false
     ) {
         $params = array(
             'id' => 'users_to_send_id',
@@ -1482,8 +1492,16 @@ class Agenda
             'class' => 'chzn-select'
         );
 
+        if (!empty($attributes)) {
+            $params = array_merge($params, $attributes);
+            if (empty($params['multiple'])) {
+                unset($params['multiple']);
+            }
+        }
+
         $sendToGroups = isset($sendTo['groups']) ? $sendTo['groups'] : array();
         $sendToUsers = isset($sendTo['users']) ? $sendTo['users'] : array();
+
         /** @var HTML_QuickForm_select $select */
         $select = $form->addElement('select', 'users_to_send', get_lang('To'), null, $params);
 
@@ -1507,7 +1525,14 @@ class Agenda
                 if ($selected) {
                     $option['selected'] = 'selected';
                 }
-                $options[] = $option;
+
+                if ($addOnlyItemsInSendTo) {
+                    if ($selected) {
+                        $options[] = $option;
+                    }
+                } else {
+                    $options[] = $option;
+                }
             }
             $select->addOptGroup($options, get_lang('Groups'));
         }
@@ -1520,11 +1545,18 @@ class Agenda
                     'text' => api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].')',
                     'value' => "USER:".$user['user_id']
                 );
+
                 $selected = in_array($user['user_id'], $sendToUsers) ? true : false;
                 if ($selected) {
                     $option['selected'] = 'selected';
                 }
-                $options[] = $option;
+                if ($addOnlyItemsInSendTo) {
+                    if ($selected) {
+                        $options[] = $option;
+                    }
+                } else {
+                    $options[] = $option;
+                }
             }
             $select->addOptGroup($options, get_lang('Users'));
         }
@@ -1582,6 +1614,7 @@ class Agenda
         } else {
             $url = api_get_self().'?action='.$action.'&id='.$id.'&type='.$this->type;
         }
+
         $form = new FormValidator(
             'add_event',
             'post',
@@ -1605,6 +1638,32 @@ class Agenda
         $form->addElement('hidden', 'id', $id);
         $form->addElement('hidden', 'action', $action);
         $form->addElement('hidden', 'id_attach', $idAttach);
+
+        $isSubEventEdition = false;
+        $isParentFromSerie = false;
+        $showAttachmentForm = true;
+
+        if ($this->type == 'course') {
+            // Edition mode.
+            if (!empty($id)) {
+                $showAttachmentForm = false;
+                if (isset($params['parent_event_id']) && !empty($params['parent_event_id'])) {
+                    $isSubEventEdition = true;
+                }
+                if (!empty($params['repeat_info'])) {
+                    $isParentFromSerie = true;
+                }
+            }
+        }
+
+        if ($isSubEventEdition) {
+            $form->addElement(
+                'label',
+                null,
+                Display::return_message(get_lang('EditingThisEventWillRemoveItFromTheSerie'), 'warning')
+            );
+        }
+
         $form->addElement('text', 'title', get_lang('ItemTitle'));
 
         if (isset($groupId) && !empty($groupId)) {
@@ -1613,18 +1672,12 @@ class Agenda
         } else {
             $sendTo = isset($params['send_to']) ? $params['send_to'] : null;
             if ($this->type == 'course') {
-                self::show_to_form($form, $sendTo);
+                $this->showToForm($form, $sendTo);
             }
         }
 
-        //$form->addElement('date_time_picker', 'start_date', get_lang('StartDate'), array('id' => 'start_date_form'));
-        //$form->addElement('date_time_picker', 'end_date', get_lang('EndDate'), array('id' => 'end_date_form'));
-
         $form->addDateRangePicker('date_range', get_lang('StartDate'), false, array('id' => 'date_range'));
         $form->addElement('checkbox', 'all_day', null, get_lang('AllDay'));
-
-        $showRepeatWarning = false;
-        $showAttachmentForm = true;
 
         if ($this->type == 'course') {
             $repeat = $form->addElement('checkbox', 'repeat', null, get_lang('RepeatEvent'), array('onclick' => 'return plus_repeated_event();'));
@@ -1632,24 +1685,20 @@ class Agenda
             $form->addElement('select', 'repeat_type', get_lang('RepeatType'), self::getRepeatTypes());
             $form->addElement('date_picker', 'repeat_end_day', get_lang('RepeatEnd'), array('id' => 'repeat_end_date_form'));
 
-            if (!empty($id)) {
-                if (isset($params['parent_event_id']) && !empty($params['parent_event_id'])) {
+            if ($isSubEventEdition || $isParentFromSerie) {
+                if ($isSubEventEdition) {
                     $parentEvent = $params['parent_info'];
                     $repeatInfo = $parentEvent['repeat_info'];
-                    $params['repeat'] = 1;
-                    $params['repeat_type'] = $repeatInfo['cal_type'];
-                    $params['repeat_end_day'] = substr(api_get_local_time($repeatInfo['cal_end']), 0, 10);
-                    /*$group = array(
-                        $form->createElement('radio', 'edit_repeat_type', null, get_lang('EditThisEvent'), 1),
-                        $form->createElement('radio', 'edit_repeat_type', null, get_lang('RemoveThisEventAndCreateANewOne'), 2),
-                    );
-                    $params['edit_repeat_type'] = 1;
-                    $form->addGroup($group);*/
-                    $form->freeze(array('repeat_type', 'repeat_end_day'));
-                    $repeat->_attributes['disabled'] = 'disabled';
-                    $showRepeatWarning = true;
-                    $showAttachmentForm = false;
+                } else {
+                    $repeatInfo = $params['repeat_info'];
                 }
+                $params['repeat'] = 1;
+                $params['repeat_type'] = $repeatInfo['cal_type'];
+                $params['repeat_end_day'] = substr(api_get_local_time($repeatInfo['cal_end']), 0, 10);
+
+                $form->freeze(array('repeat_type', 'repeat_end_day'));
+                $repeat->_attributes['disabled'] = 'disabled';
+
             }
 
             $form->addElement('html', '</div>');
@@ -1709,13 +1758,6 @@ class Agenda
             );
         }
 
-        if ($showRepeatWarning) {
-            $form->addElement(
-                'label',
-                null,
-                Display::return_message(get_lang('EditingThisEventWillRemoveItFromTheSerie'))
-            );
-        }
         $form->addElement('button', 'submit', $button);
         $form->setDefaults($params);
 
@@ -1727,10 +1769,16 @@ class Agenda
 
     /**
      * @param FormValidator $form
-     * @param array $sendTo
+     * @param array $sendTo array('users' => [1, 2], 'groups' => [3, 4])
+     * @param array $attributes
+     * @param bool $addOnlyItemsInSendTo
+     * @return bool
      */
-    static function show_to_form($form, $sendTo = array())
+    public function showToForm($form, $sendTo = array(), $attributes = array(), $addOnlyItemsInSendTo = false)
     {
+        if ($this->type != 'course') {
+            return false;
+        }
         $order = 'lastname';
         if (api_is_western_name_order()) {
             $order = 'firstname';
@@ -1747,12 +1795,16 @@ class Agenda
             api_get_session_id()
         );
 
-        self::construct_not_selected_select_form_validator(
+        $this->setSendToSelect(
             $form,
             $groupList,
             $userList,
-            $sendTo
+            $sendTo,
+            $attributes,
+            $addOnlyItemsInSendTo
         );
+        return true;
+
     }
 
     /**
@@ -2031,31 +2083,30 @@ class Agenda
      */
     public function displayActions($view, $filter = 0)
     {
-        if ($view == 'calendar') {
-            $actions = "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_list.php?type={$this->type}&".api_get_cidreq()."'>".
-                Display::return_icon('week.png', get_lang('AgendaList'), '', ICON_SIZE_MEDIUM)."</a>";
-        } else {
-            $actions = "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type={$this->type}'>".
-                Display::return_icon('calendar.png', get_lang('Calendar'), '', ICON_SIZE_MEDIUM)."</a>";
-        }
+        $actions = "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type={$this->type}'>".
+            Display::return_icon('calendar.png', get_lang('Calendar'), '', ICON_SIZE_MEDIUM)."</a>";
+
+        $actions .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_list.php?type={$this->type}&".api_get_cidreq()."'>".
+            Display::return_icon('week.png', get_lang('AgendaList'), '', ICON_SIZE_MEDIUM)."</a>";
 
         if (api_is_allowed_to_edit(false, true) OR
             (api_get_course_setting('allow_user_edit_agenda') && !api_is_anonymous()) && api_is_allowed_to_session_edit(false, true) OR
             GroupManager::user_has_access(api_get_user_id(), api_get_group_id(), GroupManager::GROUP_TOOL_CALENDAR) &&
             GroupManager::is_tutor_of_group(api_get_user_id(), api_get_group_id())
         ) {
-
             if ($this->type == 'course') {
                 $form = null;
                 if (!isset($_GET['action'])) {
-                    $form = show_to($filter, 'select_form_id_search');
-                    /*$actions .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type=course&".api_get_cidreq()."'>".
-                        Display::return_icon('calendar_na.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";*/
-                } else {
-                 /*   $actions .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type=course&".api_get_cidreq()."'>".
-                        Display::return_icon('calendar.png', get_lang('Agenda'), '', ICON_SIZE_MEDIUM)."</a>";*/
-                }
+                    $form = new FormValidator('form-search');
+                    $attributes = array(
+                        'multiple' => false,
+                        'id' => 'select_form_id_search'
+                    );
+                    $selectedValues = $this->parseAgendaFilter($filter);
+                    $this->showToForm($form, $selectedValues, $attributes);
+                    $form = $form->return_form();
 
+                }
                 $actions .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=add&type=course'>".
                     Display::return_icon('new_event.png', get_lang('AgendaAdd'), '', ICON_SIZE_MEDIUM)."</a>";
                 $actions .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=importical&type=course'>".
@@ -2193,6 +2244,37 @@ class Agenda
         }
 
         return $messages;
+    }
+
+    /**
+     * Parse filter turns USER:12 to ['users' => [12])] or G:1 ['groups' => [1]]
+     * @param $filter
+     * @return array
+     */
+    public function parseAgendaFilter($filter)
+    {
+        $everyone = false;
+        $groupId = null;
+        $userId = null;
+
+        if ($filter == 'everyone') {
+            $everyone = true;
+        } else {
+            if (substr($filter, 0, 1) == 'G') {
+                $groupId = str_replace('GROUP:', '', $filter);
+            } else {
+                $userId = str_replace('USER:', '', $filter);
+            }
+        }
+        if (empty($userId) && empty($groupId)) {
+            $everyone = true;
+        }
+
+        return array(
+            'everyone' => $everyone,
+            'users' => array($userId),
+            'groups' => array($groupId)
+        );
     }
 
 

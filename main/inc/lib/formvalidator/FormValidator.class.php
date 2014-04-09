@@ -255,6 +255,14 @@ EOT;
         }
     }
 
+    /**
+     * date_range_picker element creates 2 hidden fields
+     * elementName + "_start" elementName "_end"
+     * @param string $name
+     * @param string $label
+     * @param bool $required
+     * @param array $attributes
+     */
     public function addDateRangePicker($name, $label, $required = true, $attributes = array())
     {
         $this->addElement('date_range_picker', $name, $label, $attributes);
@@ -266,7 +274,10 @@ EOT;
         }
     }
 
-
+    /**
+     * @param string $name
+     * @param string $value
+     */
     function add_hidden($name, $value)
     {
         $this->addElement('hidden', $name, $value);

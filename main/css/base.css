@@ -2257,7 +2257,7 @@ div.admin_section h4 {
 }
 
 .actions span {
-    margin-right:0px;
+    /* margin-right:0px; */
 }
 
 #courseintro_empty {
@@ -2411,7 +2411,7 @@ div.admin_section h4 {
 
 /* chosen javascript checkbox select width fix */
 .chzn-select {
-    min-width: 173px;
+    /*min-width: 173px; */
 }
 
 .lp_tree {
@@ -4766,4 +4766,12 @@ i.size-32.icon-new-work{
 .text-h5 {
     font-size: 12px;
     font-weight: normal;
+}
+
+.chosen-container {
+    min-width: 250px;
+}
+
+.chzn-container-single .chzn-search {
+    z-index: 1010;
 }

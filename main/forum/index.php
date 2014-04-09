@@ -147,7 +147,8 @@ event_access_tool(TOOL_FORUM);
 $forumCategories = get_forum_categories();
 
 // Step 2: We find all the forums (only the visible ones if it is a student).
-$forum_list	= get_forums();
+// display group forum in general forum tool depending to configuration option
+$forum_list	= get_forums('', '', api_get_display_groups_forum_in_general_tool());
 $user_id = api_get_user_id();
 
 /* RETRIEVING ALL GROUPS AND THOSE OF THE USER */
@@ -227,7 +228,7 @@ if (is_array($forumCategories)) {
         }
 
         if (empty($forumCategory['cat_title'])) {
-            $forumCategory['cat_title'] = get_lang('NoCategory');
+            $forumCategory['cat_title'] = get_lang('WithoutCategory');
         }
 
         echo '<table class="forum_table">';

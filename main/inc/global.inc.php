@@ -588,6 +588,14 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         $now = api_get_utc_datetime(time());
         $s_sql_update_logout_date = "UPDATE $tbl_track_login SET logout_date='$now' WHERE login_id='$i_id_last_connection'";
         Database::query($s_sql_update_logout_date);
+        // Saves the last login in the user table see BT#7297
+        if (isset($_configuration['save_user_last_login']) &&
+            $_configuration['save_user_last_login']
+        ) {
+            $tableUser = Database::get_main_table(TABLE_MAIN_USER);
+            $sql = "UPDATE $tableUser SET last_login ='$now' WHERE user_id = ".$_user["user_id"];
+            Database::query($sql);
+        }
     }
 }
 // Add language_measure_frequency to your main/inc/conf/configuration.php in

@@ -20,7 +20,8 @@ $language_file = 'group';
 
 require_once '../inc/global.inc.php';
 
-$is_allowed_in_course = api_is_allowed_to_edit(false, true);
+$is_allowed_in_course = api_is_allowed_in_course();
+$userId = api_get_user_id();
 
 $this_section = SECTION_COURSES;
 $current_course_tool  = TOOL_GROUP;
@@ -64,34 +65,34 @@ Display::display_introduction_section(TOOL_GROUP);
  * Self-registration and un-registration
  */
 $my_group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
-$my_msg	  = isset($_GET['msg']) ? Security::remove_XSS($_GET['msg']) : null;
-$my_group    = isset($_REQUEST['group']) ? Security::remove_XSS($_REQUEST['group']) : null;
-$my_get_id1  = isset($_GET['id1']) ? Security::remove_XSS($_GET['id1']) : null;
-$my_get_id2  = isset($_GET['id2']) ? Security::remove_XSS($_GET['id2']) : null;
-$my_get_id   = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
+$my_msg	= isset($_GET['msg']) ? Security::remove_XSS($_GET['msg']) : null;
+$my_group = isset($_REQUEST['group']) ? Security::remove_XSS($_REQUEST['group']) : null;
+$my_get_id1 = isset($_GET['id1']) ? Security::remove_XSS($_GET['id1']) : null;
+$my_get_id2 = isset($_GET['id2']) ? Security::remove_XSS($_GET['id2']) : null;
+$my_get_id  = isset($_GET['id']) ? Security::remove_XSS($_GET['id']) : null;
 
 if (isset($_GET['action']) && $is_allowed_in_course) {
     switch ($_GET['action']) {
         case 'self_reg':
-            if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $my_group_id)) {
-                GroupManager :: subscribe_users($_SESSION['_user']['user_id'], $my_group_id);
+            if (GroupManager::is_self_registration_allowed($userId, $my_group_id)) {
+                GroupManager::subscribe_users($userId, $my_group_id);
                 Display :: display_confirmation_message(get_lang('GroupNowMember'));
             }
             break;
         case 'self_unreg':
-            if (GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $my_group_id)) {
-                GroupManager :: unsubscribe_users($_SESSION['_user']['user_id'], $my_group_id);
+            if (GroupManager::is_self_unregistration_allowed($userId, $my_group_id)) {
+                GroupManager::unsubscribe_users($userId, $my_group_id);
                 Display :: display_confirmation_message(get_lang('StudentDeletesHimself'));
             }
             break;
         case 'show_msg':
-            Display :: display_confirmation_message($my_msg);
+            Display::display_confirmation_message($my_msg);
             break;
         case 'warning_message':
-            Display :: display_warning_message($my_msg);
+            Display::display_warning_message($my_msg);
             break;
         case 'success_message':
-            Display :: display_confirmation_message($my_msg);
+            Display::display_confirmation_message($my_msg);
             break;
     }
 }
@@ -107,7 +108,7 @@ if (api_is_allowed_to_edit(false, true)) {
         switch ($_POST['action']) {
             case 'delete_selected':
                 if (is_array($_POST['group'])) {
-                    GroupManager :: delete_groups($my_group);
+                    GroupManager::delete_groups($my_group);
                     Display :: display_confirmation_message(get_lang('SelectedGroupsDeleted'));
                 }
                 break;

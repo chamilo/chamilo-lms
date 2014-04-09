@@ -3598,6 +3598,8 @@ function display_forum_search_results($search_term)
     $table_forums = Database :: get_course_table(TABLE_FORUM);
     $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+    $session_id = api_get_session_id();
 
     $gradebook = Security::remove_XSS($_GET['gradebook']);
 
@@ -3616,8 +3618,16 @@ function display_forum_search_results($search_term)
                                     OR posts.post_text LIKE '%".Database::escape_string(trim($value))."%')";
     }
 
-    $sql = "SELECT * FROM $table_posts posts
-                WHERE c_id = $course_id AND ".implode(' AND ', $search_restriction)."
+    $sql = "SELECT posts.* FROM $table_posts posts, $table_threads threads, $table_item_property item_property
+                WHERE posts.c_id = $course_id
+                AND item_property.c_id = $course_id
+                AND posts.thread_id = threads.thread_id
+                AND item_property.ref = threads.thread_id
+                AND item_property.visibility = 1
+                AND item_property.id_session = $session_id
+                AND posts.visible = 1
+                AND item_property.tool = '".TOOL_FORUM_THREAD."'
+                AND ".implode(' AND ', $search_restriction)."
                 GROUP BY posts.post_id";
 
     // Getting all the information of the forum categories.

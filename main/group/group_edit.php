@@ -286,8 +286,8 @@ if ($form->validate()) {
 
     GroupManager::set_group_properties(
         $current_group['id'],
-        strip_tags($values['name']),
-        strip_tags($values['description']),
+        $values['name'],
+        $values['description'],
         $max_member,
         $values['doc_state'],
         $values['work_state'],

@@ -15,7 +15,12 @@ $current_course_tool  = TOOL_GROUP;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 
-if (!api_is_allowed_to_edit(false,true) || !(isset ($_GET['id']) || isset ($_POST['id']) || isset ($_GET['action']) || isset ($_POST['action']))) {
+if (!api_is_allowed_to_edit(false,true) ||
+    !(isset ($_GET['id']) ||
+    isset ($_POST['id']) ||
+    isset ($_GET['action']) ||
+    isset ($_POST['action']))
+) {
 	api_not_allowed();
 }
 
@@ -141,20 +146,17 @@ if (api_get_setting('allow_group_categories') == 'true') {
 }
 
 $form->addElement('header', get_lang('DefaultSettingsForNewGroups'));
-// Action
 $form->addElement('hidden', 'action');
-
-
 $form->addElement('html', '<div class="span6">');
 
 // Self registration
 $group = array(
-    $form->createElement('checkbox', 'self_registration_allowed', get_lang('GroupSelfRegistration'), get_lang('GroupAllowStudentRegistration'), 1),
-    $form->createElement('checkbox', 'self_unregistration_allowed', null, get_lang('GroupAllowStudentUnregistration'), 1)
+    $form->createElement('checkbox', 'self_reg_allowed', get_lang('GroupSelfRegistration'), get_lang('GroupAllowStudentRegistration'), 1),
+    $form->createElement('checkbox', 'self_unreg_allowed', null, get_lang('GroupAllowStudentUnregistration'), 1)
 );
 $form->addGroup($group, '', Display::return_icon('user.png', get_lang('GroupSelfRegistration'), array(), ICON_SIZE_SMALL).' '.get_lang('GroupSelfRegistration'), '', false);
 
-// Documents settings
+// Documents settings.
 $group = array(
     $form->createElement('radio', 'doc_state', get_lang('GroupDocument'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'doc_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
@@ -162,7 +164,7 @@ $group = array(
 );
 $form->addGroup($group, '', Display::return_icon('folder.png', get_lang('GroupDocument'), array(), ICON_SIZE_SMALL).' '.get_lang('GroupDocument'), '', false);
 
-// Work settings
+// Work settings.
 $group = array(
     $form->createElement('radio', 'work_state', get_lang('GroupWork'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'work_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
@@ -170,8 +172,7 @@ $group = array(
 );
 $form->addGroup($group, '', Display::return_icon('work.png', get_lang('GroupWork'), array(), ICON_SIZE_SMALL).' '.get_lang('GroupWork'), '', false);
 
-
-// Calendar settings
+// Calendar settings.
 $group = array(
     $form->createElement('radio', 'calendar_state', get_lang('GroupCalendar'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'calendar_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
@@ -179,11 +180,10 @@ $group = array(
 );
 $form->addGroup($group, '', Display::return_icon('agenda.png', get_lang('GroupCalendar'), array(), ICON_SIZE_SMALL).' '.get_lang('GroupCalendar'), '', false);
 
-
 $form->addElement('html', '</div>');
 $form->addElement('html', '<div class="span6">');
 
-// Announcements settings
+// Announcements settings.
 $group = array(
     $form->createElement('radio', 'announcements_state', get_lang('GroupAnnouncements'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'announcements_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
@@ -191,7 +191,7 @@ $group = array(
 );
 $form->addGroup($group, '', Display::return_icon('announce.png', get_lang('GroupAnnouncements'), array(), ICON_SIZE_SMALL).' '.get_lang('GroupAnnouncements'), '', false);
 
-// Forum settings
+// Forum settings.
 $group = array(
     $form->createElement('radio', 'forum_state', get_lang('GroupForum'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'forum_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
@@ -199,7 +199,7 @@ $group = array(
 );
 $form->addGroup($group, '', Display::return_icon('forum.png', get_lang('GroupForum'), array(), ICON_SIZE_SMALL).' '.get_lang('GroupForum'), '', false);
 
-// Wiki settings
+// Wiki settings.
 $group = array(
     $form->createElement('radio', 'wiki_state', get_lang('GroupWiki'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'wiki_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
@@ -207,7 +207,7 @@ $group = array(
 );
 $form->addGroup($group, '', Display::return_icon('wiki.png', get_lang('GroupWiki'), array(), ICON_SIZE_SMALL).' '.get_lang('GroupWiki'), '', false);
 
-// Chat settings
+// Chat settings.
 $group = array(
     $form->createElement('radio', 'chat_state', get_lang('Chat'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
     $form->createElement('radio', 'chat_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
@@ -215,9 +215,7 @@ $group = array(
 );
 $form->addGroup($group, '', Display::return_icon('chat.png', get_lang('Chat'), array(), ICON_SIZE_SMALL).' '.get_lang('Chat'), '', false);
 
-
 $form->addElement('html', '</div>');
-
 $form->addElement('html', '<div class="span12">');
 
 // Submit
@@ -231,8 +229,10 @@ if ($form->validate()) {
 	} else {
 		$max_member = $values['max_member'];
 	}
+
 	$self_reg_allowed = isset($values['self_reg_allowed']) ? $values['self_reg_allowed'] : 0;
 	$self_unreg_allowed = isset($values['self_unreg_allowed']) ? $values['self_unreg_allowed'] : 0;
+
 	switch ($values['action']) {
 		case 'update_settings':
 			GroupManager::update_category(
@@ -255,7 +255,21 @@ if ($form->validate()) {
 			header('Location: group.php?action=show_msg&msg='.$msg.'&category='.$values['id']);
 			break;
 		case 'add_category':
-			GroupManager :: create_category($values['title'], $values['description'], $values['doc_state'], $values['work_state'], $values['calendar_state'], $values['announcements_state'], $values['forum_state'], $values['wiki_state'], $values['chat_state'], $self_reg_allowed, $self_unreg_allowed, $max_member, $values['groups_per_user']);
+			GroupManager :: create_category(
+                $values['title'],
+                $values['description'],
+                $values['doc_state'],
+                $values['work_state'],
+                $values['calendar_state'],
+                $values['announcements_state'],
+                $values['forum_state'],
+                $values['wiki_state'],
+                $values['chat_state'],
+                $self_reg_allowed,
+                $self_unreg_allowed,
+                $max_member,
+                $values['groups_per_user']
+            );
 			$msg = urlencode(get_lang('CategoryCreated'));
 			header('Location: group.php?action=show_msg&msg='.$msg);
 			break;

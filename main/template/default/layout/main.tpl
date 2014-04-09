@@ -1,5 +1,5 @@
 {% block header %}
-    {% include "default/layout/main_header.tpl" %}
+{% include "default/layout/main_header.tpl" %}
 {% endblock %}
 
 {% block body %}
@@ -11,7 +11,7 @@
 {% block footer %}
     {#  Footer  #}
     {% if show_footer == true %}
-        
+
         </div> <!-- end of #row" -->
         </div> <!-- end of #main" -->
         <div class="push"></div>

@@ -5,19 +5,20 @@
                 <div class="row">
                     <div class="span2">
                         <div class="thumbnail">
-                            <img src="{{ hot_course.extra_info.course_image }}" alt="" /> 
+                            <img src="{{ hot_course.extra_info.course_image }}" alt="" />
                         </div>
                     </div>
                     <div class="span6">
                         <div class="categories-course-description">
-                            <h3>{{ hot_course.extra_info.title}}</h3>
-                            <h5>{{ hot_course.extra_info.teachers }}</h5>
+                            <div class="text-h3">{{ hot_course.extra_info.title}}</div>
+                            <div class="text-h5">{{ hot_course.extra_info.teachers }}</div>
                             {{ hot_course.extra_info.rating_html }}
                         </div>
                         <p>                                                            
                             {{ hot_course.extra_info.description_button }}
                             {{ hot_course.extra_info.go_to_course_button }}
                             {{ hot_course.extra_info.register_button }}
+                            {{ hot_course.extra_info.unsubscribe_button }}
                         </p>
                     </div>
                 </div>

@@ -11,7 +11,7 @@ a {
     color :#6E6E6E;
 }
 a:visited {
-    text-decoration: none;    
+    text-decoration: none;
 }
 a:hover {
     text-decoration: none;
@@ -46,10 +46,10 @@ a:active {
 
 
 .subnav .nav > #current > a,
-.subnav .nav > #current > a:hover {  
+.subnav .nav > #current > a:hover {
     color: #fff;
     background-color: #0f466a;
-    border-right-color: #0f466a;  
+    border-right-color: #0f466a;
 }
 
 .subnav li a {
@@ -108,7 +108,7 @@ a.thumbnail:hover{
 }
 
 .breadcrumb li{
-    
+
     text-shadow: none;
 }
 .breadcrumb a.btn-mini{
@@ -368,8 +368,8 @@ a.thumbnail:hover{
     margin-top: 10px;
     color: #0191C7;
     font-weight: normal;
-    
-    
+
+
 }
 .page-header {
   border-bottom-color: #0191C7;
@@ -455,13 +455,13 @@ a.thumbnail:hover{
   box-shadow: none;
 }
 .breadcrumb a{
-  
+
   line-height: 30px;
   text-transform: none;
 }
 
 .breadcrumb li{
-    
+
     text-shadow: none;
 }
 
@@ -639,8 +639,8 @@ a.thumbnail:hover{
     margin-top: 10px;
     color: #0191C7;
     font-weight: normal;
-    
-    
+
+
 }
 .page-header {
   border:none;
@@ -667,6 +667,9 @@ a.thumbnail:hover{
 .categories-course-description h3{
     color: #0F466A;
 }
+.categories-course-description .text-h3{
+    color: #0F466A;
+}
 #course_tools .content a {
   font-size: 12px;
   font-weight: normal;
@@ -687,12 +690,12 @@ a.thumbnail:hover{
  *  FOOTER STYLES                                    *
  *****************************************************/
 footer {
-    height: 10em;    
+    height: 10em;
     background-color: #0191C7;
     background-image: none;
-    background-repeat:repeat-x;    
+    background-repeat:repeat-x;
     color:#ffffff;
-    border-top: none;   
+    border-top: none;
 }
 footer .container .row {
   padding-top: 5px;
@@ -720,8 +723,8 @@ footer a:link, footer a:visited {
   color: #ffffff;
   border-right:1px solid #222;
   border-left:1px solid #222;
-  
-  background-color: #222; 
+
+  background-color: #222;
   background-repeat: repeat-x;
   background-image: -khtml-gradient(linear, left top, left bottom, from(#333333), to(#222222));
   background-image: -moz-linear-gradient(top, #333333, #222222);
@@ -734,7 +737,7 @@ footer a:link, footer a:visited {
   -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-    
+
 }
 #chatboxtitlemain {
     cursor: pointer;
@@ -749,12 +752,10 @@ footer a:link, footer a:visited {
 .normal-message {
     color: #00407F;
     border: 1px solid #CDE6F5;
-    background: url("images/background_message.png") repeat-x scroll 0 0 #EAF8FE;
 }
 .warning-message {
     border: 1px solid #FFB30F;
     color: #000;
-	background: url("images/background_message.png") repeat-x scroll 0 0 #FFEFA7;
 }
 .confirmation-message {
 	border: 1px solid #1F8323;
@@ -779,7 +780,7 @@ footer a:link, footer a:visited {
 #social-content-online {
     background-color:#00AAE3;
 }
-		
+
 .admin_section li {
     background-image:url(images/bullet.gif);
 }
@@ -795,7 +796,7 @@ footer a:link, footer a:visited {
     background:transparent url('images/logob4.gif') no-repeat;
 }
 
-#bottomhellomindfactory {    
+#bottomhellomindfactory {
     background:transparent url('images/textologo.jpg') no-repeat;
 }
 
@@ -874,10 +875,10 @@ button.upload {
 }
 
 button.arrowr, input.arrowr {
-	background-image:url(images/2rightarrow.gif);	
+	background-image:url(images/2rightarrow.gif);
 }
 button.arrowl, input.arrowl {
-    background-image:url(images/2leftarrow.gif);	
+    background-image:url(images/2leftarrow.gif);
 }
 .refresh {
     background-image:url(images/refresh.png);
@@ -888,7 +889,7 @@ button.arrowl, input.arrowl {
 }
 
 /*+++++++++++++++++++++++++++++++++++++++++++
- + CHAMILO INSTALL 
+ + CHAMILO INSTALL
  ++++++++++++++++++++++++++++++++++++++++++++*/
 .install-mascot{
   background: url(images/install.png) no-repeat center 0;
@@ -1118,43 +1119,43 @@ RESPONSIVE CSS
         padding-left: 30px;
         background-size: 25px auto;
     }
-    
+
     .new-message-social{
         background: url("images/icon-chamilo.png") no-repeat 0 -307px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    
+
     .invitations-social{
         background: url("images/icon-chamilo.png") no-repeat 0 -378px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    
+
     .profile-social{
         background: url("images/icon-chamilo.png") no-repeat 0 -414px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    
+
     .add-course{
         background: url("images/icon-chamilo.png") no-repeat 0 -274px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-   
+
     .order-course{
         background: url("images/icon-chamilo.png") no-repeat 0 -447px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    
+
     .history-course{
         background: url("images/icon-chamilo.png") no-repeat 0 -481px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    
+
     .list-course{
         background: url("images/icon-chamilo.png") no-repeat 0 -517px;
         padding-left: 30px;
@@ -1164,7 +1165,7 @@ RESPONSIVE CSS
       background: url("images/icon-chamilo.png") no-repeat scroll 0 -552px / 25px auto rgba(0, 0, 0, 0);
       padding-left: 30px;
 }
-    
+
 }
 @media (min-width: 321px) and (max-width: 480px){
 footer {

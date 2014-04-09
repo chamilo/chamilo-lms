@@ -88,6 +88,7 @@ class HTML_QuickForm_datepicker extends HTML_QuickForm_date
 		$result[$this->getName()]= $datetime;
 		return $result;
 	}
+
     /**
 	 * Sets an option to a value
 	 */

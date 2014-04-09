@@ -661,14 +661,6 @@ class HTML_QuickForm extends HTML_Common
             }
         }
         $elementName = $elementObject->getName();
-        $type = $elementObject->getType();
-
-        if ($type == 'datetimepicker' && $this->dateTimePickerLibraryAdded == false) {
-            $elementObject->addLibrary = true;
-            $this->dateTimePickerLibraryAdded = true;
-        } else {
-            $elementObject->addLibrary = false;
-        }
 
         // Add the element if it is not an incompatible duplicate
         if (!empty($elementName) && isset($this->_elementIndex[$elementName])) {
@@ -924,11 +916,23 @@ class HTML_QuickForm extends HTML_Common
                 }
             }
         }
-        return $value;
-    } // end func getSubmitValue
 
-    // }}}
-    // {{{ _reindexFiles()
+        if ($this->getElementType($elementName) == 'date_range_picker') {
+            /** @var DateRangePicker $element */
+            $element = $this->getElement($elementName);
+            $parsedDates = $element->parseDateRange($value);
+
+            if (!$element->validateDates($parsedDates)) {
+                $this->_errors[$elementName] = get_lang('CheckDates');
+            }
+
+            $this->_submitValues[$elementName.'_start'] = $parsedDates['start'];
+            $this->_submitValues[$elementName.'_end'] = $parsedDates['end'];
+
+        }
+
+        return $value;
+    }
 
    /**
     * A helper function to change the indexes in $_FILES array

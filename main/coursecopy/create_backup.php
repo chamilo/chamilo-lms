@@ -53,14 +53,18 @@ echo Display::page_header($nameTools);
 
 /*	MAIN CODE */
 
-if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (isset($_POST['backup_option']) && $_POST['backup_option'] == 'full_backup')) {
+if ((isset($_POST['action']) &&
+    $_POST['action'] == 'course_select_form') ||
+    (isset($_POST['backup_option']) &&
+    $_POST['backup_option'] == 'full_backup')
+) {
 	if (isset ($_POST['action']) && $_POST['action'] == 'course_select_form') {
-		$course = CourseSelectForm::get_posted_course();        
+		$course = CourseSelectForm::get_posted_course();
 	} else {
 		$cb = new CourseBuilder();
 		$course = $cb->build();
 	}
-	$zip_file = CourseArchiver::write_course($course); 
+	$zip_file = CourseArchiver::write_course($course);
 	Display::display_confirmation_message(get_lang('BackupCreated'));
 	echo '<br /><a class="btn btn-primary btn-large" href="../course_info/download.php?archive='.$zip_file.'">'.get_lang('Download').'</a>';
 
@@ -73,25 +77,25 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
 	$course = $cb->build();
 	if (!$course->has_resources()) {
 		echo get_lang('NoResourcesToBackup');
-	} else {		
-		
-		$form = new FormValidator('create_backup_form', 'post');
+	} else {
+		$form = new FormValidator('create_backup_form', 'post', api_get_self().'?'.api_get_cidreq());
 		$form->addElement('header',get_lang('SelectOptionForBackup'));
-		
 		$form->addElement('radio', 'backup_option', '', get_lang('CreateFullBackup'), 'full_backup');
 		$form->addElement('radio', 'backup_option', '',  get_lang('LetMeSelectItems'), 'select_items');
-		
 		$form->addElement('style_submit_button', null, get_lang('CreateBackup'), 'class="save"');
-
 		$form->add_progress_bar();
 		// When progress bar appears we have to hide the title "Please select a backup-option".
-		$form->updateAttributes(array('onsubmit' => str_replace('javascript: ', 'javascript: page_title = getElementById(\'page_title\'); if (page_title) { setTimeout(\'page_title.style.display = \\\'none\\\';\', 2000); } ', $form->getAttribute('onsubmit'))));
-
+		$form->updateAttributes(
+            array('onsubmit' => str_replace(
+                'javascript: ',
+                'javascript: page_title = getElementById(\'page_title\'); if (page_title) { setTimeout(\'page_title.style.display = \\\'none\\\';\', 2000); } ',
+                $form->getAttribute('onsubmit')
+            ))
+        );
 		$values['backup_option'] = 'full_backup';
 		$form->setDefaults($values);
 		$form->display();
 	}
 }
 
-/*	FOOTER */
 Display::display_footer();

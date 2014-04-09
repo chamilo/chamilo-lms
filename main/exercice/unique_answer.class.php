@@ -10,8 +10,6 @@
  * Code
  */
 
-if(!class_exists('UniqueAnswer')):
-
 /**
 	CLASS UNIQUE_ANSWER
  *
@@ -23,15 +21,16 @@ if(!class_exists('UniqueAnswer')):
  *	@package chamilo.exercise
  **/
 
-class UniqueAnswer extends Question {
-
+class UniqueAnswer extends Question
+{
 	static $typePicture = 'mcua.gif';
 	static $explanationLangVar = 'UniqueSelect';
 
 	/**
 	 * Constructor
 	 */
-	function UniqueAnswer() {
+	function UniqueAnswer()
+    {
 		//this is highly important
 		parent::question();
 		$this -> type = UNIQUE_ANSWER;
@@ -39,11 +38,12 @@ class UniqueAnswer extends Question {
 	}
 
 	/**
-	 * function which redifines Question::createAnswersForm
+	 * function which redefines Question::createAnswersForm
 	 * @param the formvalidator instance
 	 * @param the answers number to display
 	 */
-	function createAnswersForm ($form) {
+	function createAnswersForm ($form)
+    {
 		// Getting the exercise list
 		$obj_ex = $_SESSION['objExercise'];
 
@@ -89,11 +89,11 @@ class UniqueAnswer extends Question {
                         '.$feedback_title.'
                     <th width="50px">
                         '.get_lang('Weighting').'
-                    </th>        
+                    </th>
                 </tr>';
 
         $form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
-		
+
 		$defaults = array();
 		$correct = 0;
 		if(!empty($this -> id)) {
@@ -110,7 +110,7 @@ class UniqueAnswer extends Question {
 		$select_question=array();
 		$select_question[0] = get_lang('SelectTargetQuestion');
 
-		require_once '../newscorm/learnpathList.class.php';        
+		require_once '../newscorm/learnpathList.class.php';
 		if (is_array($question_list)) {
 			foreach ($question_list as $key=>$questionid) {
 				//To avoid warning messages
@@ -133,14 +133,14 @@ class UniqueAnswer extends Question {
 		}
 
 		$temp_scenario = array();
-        
+
         if ($nb_answers < 1) {
             $nb_answers = 1;
             Display::display_normal_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
-        }                        
+        }
 
         for ($i = 1 ; $i <= $nb_answers ; ++$i) {
-            $form -> addElement ('html', '<tr>');                
+            $form -> addElement ('html', '<tr>');
             if (isset($answer) && is_object($answer)) {
                 if ($answer -> correct[$i]) {
                     $correct = $i;
@@ -183,67 +183,67 @@ class UniqueAnswer extends Question {
             $defaults['scenario'] = $temp_scenario;
 
             $renderer = $form->defaultRenderer();
-            
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct');  
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');  
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');  
+
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'correct');
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'counter['.$i.']');
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'answer['.$i.']');
             $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'comment['.$i.']');
-            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']');        
-            
+            $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>', 'weighting['.$i.']');
+
             $answer_number = $form->addElement('text', 'counter['.$i.']',null,' value = "'.$i.'"');
             $answer_number->freeze();
 
             $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox" style="margin-left: 0em;"');
             $form->addElement('html_editor', 'answer['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
-            
+
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
             if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
                 $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
                 // Direct feedback
-          
+
                 //Adding extra feedback fields
                 $group = array();
                 $group['try'.$i] = $form->createElement('checkbox', 'try'.$i, null , get_lang('TryAgain'));
                 $group['lp'.$i]  = $form->createElement('select', 'lp'.$i, get_lang('SeeTheory').': ', $select_lp_id);
                 $group['destination'.$i]= $form->createElement('select', 'destination'.$i, get_lang('GoToQuestion').': ' , $select_question);
                 $group['url'.$i] = $form->createElement('text', 'url'.$i, get_lang('Other').': ', array('class'=>'span2', 'placeholder' => get_lang('Other')));
-                $form->addGroup($group, 'scenario');                
-                
-                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}', 'scenario');            
-                
+                $form->addGroup($group, 'scenario');
+
+                $renderer->setElementTemplate('<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}', 'scenario');
+
             }
             else {
                 $form->addElement('html_editor', 'comment['.$i.']', null, 'style="vertical-align:middle"', $editor_config);
             }
-            $form->addElement('text', 'weighting['.$i.']', null, array('class' => "span1", 'value' => '0'));                    
-            $form->addElement ('html', '</tr>');                
+            $form->addElement('text', 'weighting['.$i.']', null, array('class' => "span1", 'value' => '0'));
+            $form->addElement ('html', '</tr>');
         }
 
 		$form -> addElement ('html', '</table>');
-		$form -> addElement ('html', '<br />');        
-        
+		$form -> addElement ('html', '<br />');
+
 		$navigator_info = api_get_navigator();
 
 		global $text, $class;
-        
+
 		//ie6 fix
 		if ($obj_ex->edit_exercise_in_lp == true) {
-			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {                
+			if ($navigator_info['name']=='Internet Explorer' &&  $navigator_info['version']=='6') {
                 $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
-                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"'); 
+                $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');
                 $form->addElement('submit','submitQuestion',$text, 'class="'.$class.'"');
 			} else {
-                //setting the save button here and not in the question class.php                
+                //setting the save button here and not in the question class.php
                 $form->addElement('style_submit_button', 'lessAnswers', get_lang('LessAnswer'),'class="btn minus"');
-                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');                
-                $form->addElement('style_submit_button', 'submitQuestion',$text, 'class="'.$class.'"');				
+                $form->addElement('style_submit_button', 'moreAnswers', get_lang('PlusAnswer'),'class="btn plus"');
+                $form->addElement('style_submit_button', 'submitQuestion',$text, 'class="'.$class.'"');
 			}
 		}
 		$renderer->setElementTemplate('{element}&nbsp;','submitQuestion');
 		$renderer->setElementTemplate('{element}&nbsp;','lessAnswers');
 		$renderer->setElementTemplate('{element}&nbsp;','moreAnswers');
-        
+
         $form->addElement('html', '</div></div>');
 
 		//We check the first radio button to be sure a radio button will be check
@@ -265,13 +265,13 @@ class UniqueAnswer extends Question {
 
 	/**
 	 * abstract function which creates the form to create / edit the answers of the question
-	 * @param the formvalidator instance
+	 * @param FormValidator $form
 	 * @param the answers number to display
 	 */
-	function processAnswersCreation($form) {
-
+	function processAnswersCreation($form)
+    {
 		$questionWeighting = $nbrGoodAnswers = 0;
-		$correct = $form -> getSubmitValue('correct');
+		$correct = $form->getSubmitValue('correct');
 		$objAnswer = new Answer($this->id);
 		$nb_answers = $form->getSubmitValue('nb_answers');
 
@@ -281,11 +281,11 @@ class UniqueAnswer extends Question {
             $weighting = trim($form -> getSubmitValue('weighting['.$i.']'));
 
             $scenario = $form -> getSubmitValue('scenario');
-            
+
            	//$list_destination = $form -> getSubmitValue('destination'.$i);
            	//$destination_str = $form -> getSubmitValue('destination'.$i);
 
- 		    $try = $scenario['try'.$i];            
+ 		    $try = $scenario['try'.$i];
             $lp = $scenario['lp'.$i];
  			$destination = $scenario['destination'.$i];
  			$url = trim($scenario['url'.$i]);
@@ -302,7 +302,7 @@ class UniqueAnswer extends Question {
 			lp_id = id of a learning path (0 if dont select)
 			selected_questions= ids of questions
 			url= an url
-	
+
  			$destination_str='';
  			foreach ($list_destination as $destination_id)
  			{
@@ -330,16 +330,16 @@ class UniqueAnswer extends Question {
  			if (empty($destination)) {
  				$destination=0;
  			}
-            
+
  			if ($url=='') {
  				$url=0;
  			}
 
  			//1@@1;2;@@2;4;4;@@http://www.chamilo.org
-			$dest = $try.'@@'.$lp.'@@'.$destination.'@@'.$url;            
+			$dest = $try.'@@'.$lp.'@@'.$destination.'@@'.$url;
         	$objAnswer->createAnswer($answer, $goodAnswer, $comment, $weighting, $i, null, null, $dest);
         }
-        
+
     	// saves the answers into the data base
         $objAnswer->save();
 
@@ -347,45 +347,57 @@ class UniqueAnswer extends Question {
         $this->updateWeighting($questionWeighting);
         $this->save();
 	}
-	
-	function return_header($feedback_type = null, $counter = null, $score = null) {
+
+	function return_header($feedback_type = null, $counter = null, $score = null)
+    {
 	    $header = parent::return_header($feedback_type, $counter, $score);
-	    $header .= '<table class="'.$this->question_table_class .'">			
+	    $header .= '<table class="'.$this->question_table_class .'">
 			<tr>
 				<th>'.get_lang("Choice").'</th>
 				<th>'. get_lang("ExpectedChoice").'</th>
-				<th>'. get_lang("Answer").'</th>';        
+				<th>'. get_lang("Answer").'</th>';
         $header .= '<th>'.get_lang("Comment").'</th>';
         $header .= '</tr>';
-        return $header;	
+
+        return $header;
     }
-    
-  function create_answer($id, $question_id, $answer_title, $comment, $score = 0, $correct = 0) {
-    $tbl_quiz_answer = Database::get_course_table(TABLE_QUIZ_ANSWER);
-    $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
-    $course_id = api_get_course_int_id();
-    $position = 1;
-    $question_id = filter_var($question_id,FILTER_SANITIZE_NUMBER_INT);
-    $score = filter_var($score,FILTER_SANITIZE_NUMBER_FLOAT);
-    $correct = filter_var($correct,FILTER_SANITIZE_NUMBER_INT);
-    // Get the max position
-    $sql = "SELECT max(position) as max_position FROM $tbl_quiz_answer "
-          ." WHERE c_id = $course_id AND question_id = $question_id";
-    $rs_max  = Database::query($sql);
-    $row_max = Database::fetch_object($rs_max);
-    $position = $row_max->max_position + 1;
-    // Insert a new answer
-    $sql = "INSERT INTO $tbl_quiz_answer "
-    ."(c_id, id, question_id,answer,correct,comment,ponderation,position,destination)"
-    ."VALUES ($course_id, $id,$question_id,'".Database::escape_string($answer_title)."',"
-    ."$correct,'".Database::escape_string($comment)."',$score,$position, "
-    ." '0@@0@@0@@0')";
-    $rs = Database::query($sql);
-    if ($correct) {
-        $sql = "UPDATE $tbl_quiz_question "
-        ." SET ponderation = (ponderation + $score) WHERE c_id = $course_id AND id = ".$question_id;
-        $rs = Database::query($sql);
+
+    /**
+     * @param int $id
+     * @param int $question_id
+     * @param string $title
+     * @param string $comment
+     * @param float $score
+     * @param int $correct
+     */
+    function addAnswer($id, $question_id, $title, $comment, $score = 0, $correct = 0)
+    {
+        $tbl_quiz_answer = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $tbl_quiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $course_id = api_get_course_int_id();
+        $question_id = intval($question_id);
+        $score = floatval($score);
+        $correct = intval($correct);
+        $title = Database::escape_string($title);
+        $comment = Database::escape_string($comment);
+        // Get the max position.
+        $sql = "SELECT max(position) as max_position
+                FROM $tbl_quiz_answer
+                WHERE
+                  c_id = $course_id AND
+                  question_id = $question_id";
+        $rs_max  = Database::query($sql);
+        $row_max = Database::fetch_object($rs_max);
+        $position = $row_max->max_position + 1;
+        // Insert a new answer
+        $sql = "INSERT INTO $tbl_quiz_answer (c_id, id, question_id,answer,correct,comment,ponderation,position,destination)
+                VALUES ($course_id, $id, $question_id, '".$title."', $correct, '".$comment."', '$score', $position, '0@@0@@0@@0')";
+        Database::query($sql);
+        if ($correct) {
+            $sql = "UPDATE $tbl_quiz_question
+                    SET ponderation = (ponderation + $score)
+                    WHERE c_id = $course_id AND id = ".$question_id;
+            Database::query($sql);
+        }
     }
-  }
 }
-endif;

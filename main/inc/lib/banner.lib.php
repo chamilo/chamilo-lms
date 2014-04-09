@@ -36,7 +36,7 @@ function get_tabs() {
     }
     $navigation['mycourses']['title'] = get_lang('MyCourses');
     $navigation['mycourses']['key'] = 'my-course';
-	
+
     // My Profile
 	$navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
 	$navigation['myprofile']['title'] = get_lang('ModifyProfile');
@@ -115,7 +115,7 @@ function get_tabs() {
 			$navigation['custom_tab_'.$i]['url'] = api_get_setting('custom_tab_'.$i.'_url');
 			$navigation['custom_tab_'.$i]['title'] = api_get_setting('custom_tab_'.$i.'_name');
             $navigation['custom_tab_'.$i]['key'] = 'custom_tab_'.$i;
-           
+
 		}
 
 	// Platform administration
@@ -301,10 +301,10 @@ function return_navigation_array() {
         // Dashboard
         if (api_get_setting('show_tabs', 'dashboard') == 'true') {
             if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
-                $navigation['dashboard'] = $possible_tabs['dashboard'];
+                $navigation['dashboard'] = isset($possible_tabs['dashboard']) ? $possible_tabs['dashboard'] : null;
             }
         } else{
-            $menu_navigation['dashboard'] = $possible_tabs['dashboard'];
+            $menu_navigation['dashboard'] = isset($possible_tabs['dashboard']) ? $possible_tabs['dashboard'] : null;
         }
 
         // Administration

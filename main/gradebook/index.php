@@ -119,11 +119,19 @@ $filter_confirm_msg = true;
 $filter_warning_msg = true;
 
 ///direct access to one evaluation
-$cats = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
+$catsResult = array();
+if (api_get_session_id() != 0) {
+    $session_id = api_get_session_id();
+    $cats = Category :: load_session_categories(null, $session_id); //already init
+    $catsResult = $cats;
+} else {
+    $cats = Category :: load(null, null, $course_code, null, null, null, false);
+}
 $first_time = null;
+
 if (empty($cats)) {
-	$cats = Category :: load(0, null, $course_code, null, null, $session_id, false);//first time
-	$first_time=1;
+    $cats = Category :: load(0, null, $course_code, null, null, $session_id, false);//first time
+    $first_time = 1;
 }
 $_GET['selectcat'] = $cats[0]->get_id();
 
@@ -133,7 +141,7 @@ if (isset($_GET['isStudentView'])) {
 	}
 }
 
-if ( (isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview') ) {
+if ((isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview')) {
 	Display :: display_header();
 
 	//Introduction tool: student view
@@ -819,20 +827,28 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
             }
         }
 
-		$i = 0;
-        /** @var Category $cat **/
+        $i = 0;
+        $allcat = array();
         foreach ($cats as $cat) {
-			$allcat  = $cat->get_subcategories($stud_id, $course_code, $session_id);
-			$alleval = $cat->get_evaluations($stud_id);
-			$alllink = $cat->get_links($stud_id);
+            if ($session_id != 0) {
+                $allcatSession = $catsResult;
+                foreach ($allcatSession as $catSession) {
+                    if ($catSession->get_parent_id() == 0) {
+                        continue;    
+                    }
+                    $allcat[] = $catSession;
+                }
+            } else {
+                $allcat  = $cat->get_subcategories($stud_id, $course_code, $session_id);
+            }
+            $alleval = $cat->get_evaluations($stud_id);
+            $alllink = $cat->get_links($stud_id,true);
 
-			if ($cat->get_parent_id() != 0) {
-				$i++;
-			} else {
-
-				// This is the father
-				// Create gradebook/add gradebook links.
-
+            if ($cat->get_parent_id() != 0) {
+                $i++;
+            } else {
+                // This is the father
+                // Create gradebook/add gradebook links.
                 DisplayGradebook::display_header_gradebook(
                     $cat,
                     0,

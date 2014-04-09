@@ -339,9 +339,11 @@ class CourseManager
         $course_id = $course_info['real_id'];
 
         // Unsubscribe user from all groups in the course.
-        $sql = "DELETE FROM ".Database::get_course_table(TABLE_GROUP_USER)."  WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
+        $sql = "DELETE FROM ".Database::get_course_table(TABLE_GROUP_USER)."
+                WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
         Database::query($sql);
-        $sql = "DELETE FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)." WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
+        $sql = "DELETE FROM ".Database::get_course_table(TABLE_GROUP_TUTOR)."
+                WHERE c_id = $course_id AND user_id IN (".$user_ids.")";
         Database::query($sql);
 
         // Erase user student publications (works) in the course - by André Boivin
@@ -1825,9 +1827,19 @@ class CourseManager
      * @param   boolean get empty groups (optional)
      * @return  array   List of groups info
      */
-    public static function get_group_list_of_course($course_code, $session_id = 0, $in_get_empty_group = 0) {
-        $course_info = Database::get_course_info($course_code);
+    public static function get_group_list_of_course($course_code, $session_id = 0, $in_get_empty_group = 0)
+    {
+        $course_info = api_get_course_info($course_code);
+
+        if (empty($course_info)) {
+            return array();
+        }
         $course_id = $course_info['real_id'];
+
+        if (empty($course_id)) {
+            return array();
+        }
+
         $group_list = array();
         $session_id != 0 ? $session_condition = ' WHERE g.session_id IN(1,'.intval($session_id).')' : $session_condition = ' WHERE g.session_id = 0';
 
@@ -2970,50 +2982,120 @@ class CourseManager
                 }
             }
         }
-        return $affected_rows;
 
+        return $affected_rows;
     }
 
     /**
      * get courses followed by human resources manager
-     * @param int         human resources manager id
+     * @param int $user_id
+     * @param int $from
+     * @param int $limit
+     * @param string $column
+     * @param string $direction
      * @return array    courses
      */
-    public static function get_courses_followed_by_drh($user_id)
-    {
+    public static function get_courses_followed_by_drh(
+        $user_id,
+        $from = null,
+        $limit = null,
+        $column = null,
+        $direction = null,
+        $getCount = false
+    ) {
+        return self::getCoursesFollowedByUser(
+            $user_id,
+            $from,
+            $limit,
+            $column,
+            $direction,
+            $getCount
+        );
+    }
+
+    /**
+     * get courses followed by user
+     * @param int $user_id
+     * @param int $from
+     * @param int $limit
+     * @param string $column
+     * @param string $direction
+     * @return array    courses
+     */
+    public static function getCoursesFollowedByUser(
+        $user_id,
+        $status = null,
+        $from = null,
+        $limit = null,
+        $column = null,
+        $direction = null,
+        $getCount = false,
+        $keyword = null
+    ) {
         // Database Table Definitions
-        $tbl_course             =     Database::get_main_table(TABLE_MAIN_COURSE);
-        $tbl_course_rel_user     =     Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_course_rel_access_url =   Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
         $user_id = intval($user_id);
-        $assigned_courses_to_hrm = array();
+        $select  = "SELECT DISTINCT *, id as real_id ";
 
-        if (api_get_multiple_access_url()) {
-           $sql = "SELECT *, id as real_id FROM $tbl_course c
-                        INNER JOIN $tbl_course_rel_user cru ON (cru.course_code = c.code)
-                        LEFT JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
-                    WHERE
-                        cru.user_id = '$user_id' AND
-                        status = ".DRH." AND
-                        relation_type = '".COURSE_RELATION_TYPE_RRHH."' AND
-                        access_url_id = ".api_get_current_access_url_id()."";
-        } else {
-            $sql = "SELECT *, id as real_id FROM $tbl_course c
-                    INNER JOIN $tbl_course_rel_user cru
-                    ON
-                        cru.course_code = c.code AND
-                        cru.user_id = '$user_id' AND
-                        status = ".DRH." AND
-                        relation_type = '".COURSE_RELATION_TYPE_RRHH."' ";
+        if ($getCount) {
+            $select = "SELECT COUNT(DISTINCT id) as count";
         }
-        $rs_assigned_courses = Database::query($sql);
-        if (Database::num_rows($rs_assigned_courses) > 0) {
-            while ($row_assigned_courses = Database::fetch_array($rs_assigned_courses))    {
-                $assigned_courses_to_hrm[$row_assigned_courses['code']] = $row_assigned_courses;
+
+        $whereConditions = null;
+        switch ($status) {
+            case COURSEMANAGER:
+                $whereConditions .= " AND
+                    cru.user_id = '$user_id' AND
+                    status = ".COURSEMANAGER."
+                ";
+                break;
+            case DRH:
+                $whereConditions .= " AND
+                    cru.user_id = '$user_id' AND
+                    status = ".DRH." AND
+                    relation_type = '".COURSE_RELATION_TYPE_RRHH."'
+                ";
+                break;
+        }
+
+        $keywordCondition = null;
+        if (!empty($keyword)) {
+            $keyword = Database::escape_string($keyword);
+            $keywordCondition = " AND (c.code LIKE '%$keyword%' OR c.title LIKE '%$keyword%' ) ";
+        }
+
+        $whereConditions .= $keywordCondition;
+        $sql = "$select
+                FROM $tbl_course c
+                    INNER JOIN $tbl_course_rel_user cru ON (cru.course_code = c.code)
+                    INNER JOIN $tbl_course_rel_access_url a ON (a.course_code = c.code)
+                WHERE
+                    access_url_id = ".api_get_current_access_url_id()."
+                    $whereConditions
+                ";
+        if (isset($from) && isset($limit)) {
+            $from = intval($from);
+            $limit = intval($limit);
+            $sql .= " LIMIT $from, $limit";
+        }
+
+        $result = Database::query($sql);
+
+        if ($getCount) {
+            $row = Database::fetch_array($result);
+            return $row['count'];
+        }
+
+        $courses = array();
+        if (Database::num_rows($result) > 0) {
+            while ($row = Database::fetch_array($result))    {
+                $courses[$row['code']] = $row;
             }
         }
-        return $assigned_courses_to_hrm;
+        return $courses;
     }
 
     /**
@@ -4102,12 +4184,12 @@ class CourseManager
         //WHERE login_course_date <= '$today' AND login_course_date >= '$today_diff'
 
         //$table_course_access table uses the now() and interval ...
-
+       $now = api_get_utc_datetime(time());
        $sql = "SELECT COUNT(course_access_id) course_count, a.course_code, visibility ".
               "FROM $table_course c INNER JOIN $table_course_access a ".
               "  ON (c.code = a.course_code) INNER JOIN $table_course_url u ON u.course_code = a.course_code ".
               "  WHERE   u.access_url_id = ".$_configuration['access_url']." AND".
-              "          login_course_date <= now() AND ".
+              "          login_course_date <= '$now' AND ".
               "          login_course_date > DATE_SUB(now(), INTERVAL $days DAY) AND".
               "          visibility <> '".COURSE_VISIBILITY_CLOSED."' AND visibility <> '".COURSE_VISIBILITY_HIDDEN."'".
               "  GROUP BY course_code".
@@ -4130,6 +4212,8 @@ class CourseManager
 
         foreach ($courses as &$my_course) {
             $course_info = api_get_course_info($my_course['course_code']);
+            $courseCode = $my_course['course_code'];
+            $categoryCode = $my_course['categoryCode'];
             $my_course['extra_info'] = $course_info;
             $my_course['extra_info']['go_to_course_button'] = '';
             $my_course['extra_info']['register_button'] = '';
@@ -4142,6 +4226,10 @@ class CourseManager
 
             if ($access_link && in_array('enter', $access_link)) {
                 $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php', array('class' => 'btn btn-primary'));
+            }
+
+            if ($access_link && in_array('unsubscribe', $access_link)) {
+                $my_course['extra_info']['unsubscribe_button'] = Display::url(get_lang('Unsubscribe'), api_get_path(WEB_CODE_PATH).'auth/courses.php?action=unsubscribe&amp;unsubscribe='.$courseCode.'&amp;sec_token='.$stok.'&amp;category_code='.$categoryCode, array('class' => 'btn btn-primary'));
             }
 
             //Description
@@ -4244,7 +4332,6 @@ class CourseManager
         $options = array();
         // Register button
         if (!api_is_anonymous($uid) &&
-            !$is_admin &&
             (
                 ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD || $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
                 //$course['visibility'] == COURSE_VISIBILITY_REGISTERED && $course['subscribe'] == SUBSCRIBE_ALLOWED
@@ -4262,6 +4349,18 @@ class CourseManager
             (in_array($course['real_id'], $user_courses) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
         ) {
             $options[]=  'enter';
+        }
+
+        if ($is_admin ||
+            $course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD && empty($course['registration_code']) ||
+            (api_user_is_login($uid) && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM && empty($course['registration_code']) ) ||
+            (in_array($course['real_id'], $user_courses) && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
+        ) {
+            $options[]=  'enter';
+        }
+
+         if ($course['visibility'] != HIDDEN && empty($course['registration_code']) && $course['unsubscribe'] == UNSUBSCRIBE_ALLOWED && api_user_is_login($uid) && (in_array($course['real_id'], $user_courses))) {
+            $options[]=  'unsubscribe';
         }
 
         return $options;
@@ -4361,11 +4460,13 @@ class CourseManager
 
     /**
      * Course available settings variables see c_course_setting table
+     * @param AppPlugin $appPlugin
      * @return array
      */
-    public static function getCourseSettingVariables()
+    public static function getCourseSettingVariables(AppPlugin $appPlugin)
     {
-        return array(
+        $pluginCourseSettings = $appPlugin->getAllPluginCourseSettings();
+        $courseSettings = array(
             // Get allow_learning_path_theme from table
             'allow_learning_path_theme',
             // Get allow_open_chat_window from table
@@ -4397,17 +4498,26 @@ class CourseManager
             'pdf_export_watermark_text',
             'show_system_folders'
         );
+        if (!empty($pluginCourseSettings)) {
+            $courseSettings = array_merge(
+                $courseSettings,
+                $pluginCourseSettings
+            );
+        }
+        return $courseSettings;
     }
 
     /**
+     * @param AppPlugin $appPlugin
      * @param string $variable
      * @param string $value
      * @param int $courseId
      * @return bool
      */
-    public static function saveCourseConfigurationSetting($variable, $value, $courseId)
+    public static function saveCourseConfigurationSetting(AppPlugin $appPlugin, $variable, $value, $courseId)
     {
-        $settingList = self::getCourseSettingVariables();
+        $settingList = self::getCourseSettingVariables($appPlugin);
+
         if (!in_array($variable, $settingList)) {
             return false;
         }

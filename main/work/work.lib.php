@@ -22,14 +22,14 @@ require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
-$_configuration['add_document_to_work'] = true;
+//$_configuration['add_document_to_work'] = true;
 if (isset($_configuration['add_document_to_work'])) {
     define('ADD_DOCUMENT_TO_WORK', $_configuration['add_document_to_work']);
 } else {
     define('ADD_DOCUMENT_TO_WORK', false);
 }
 
-$_configuration['work_user_comments'] = true;
+//$_configuration['work_user_comments'] = true;
 if (isset($_configuration['work_user_comments'])) {
     define('ALLOW_USER_COMMENTS', $_configuration['work_user_comments']);
 } else {
@@ -3531,9 +3531,23 @@ function updatePublicationAssignment($workId, $params, $courseInfo, $groupId)
         $agenda->type = 'course';
 
         if (empty($agendaId)) {
-            $agendaId = $agenda->add_event($date, $end_date, 'false', null, $title, $content, array('GROUP:'.$groupId));
+            $agendaId = $agenda->add_event(
+                $date,
+                $end_date,
+                'false',
+                $title,
+                $content,
+                array('GROUP:'.$groupId)
+            );
         } else {
-            $agenda->edit_event($agendaId, $end_date, $end_date, 'false', null, $title, $content);
+            $agenda->edit_event(
+                $agendaId,
+                $end_date,
+                $end_date,
+                'false',
+                $title,
+                $content
+            );
         }
     }
 
@@ -3783,7 +3797,7 @@ function getFormWork($form, $defaults = array())
         $defaults['ends_on'] = $date.' 23:59';
     }
 
-    $form->addElement('datetimepicker', 'expires_on', get_lang('ExpiresAt'));
+    $form->addElement('date_time_picker', 'expires_on', get_lang('ExpiresAt'));
     $form->addElement('html', '</div>');
 
     $form->addElement('checkbox', 'enableEndDate', null, get_lang('EnableEndDate'), 'id="end_date"');
@@ -3794,7 +3808,7 @@ function getFormWork($form, $defaults = array())
        $form->addElement('html', '<div id="option3" style="display: none;">');
     }
 
-    $form->addElement('datetimepicker', 'ends_on', get_lang('EndsAt'));
+    $form->addElement('date_time_picker', 'ends_on', get_lang('EndsAt'));
     $form->addElement('html', '</div>');
 
     $form->addElement('checkbox', 'add_to_calendar', null, get_lang('AddToCalendar'));

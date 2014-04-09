@@ -560,7 +560,7 @@ class IndexManager
                     $courses_list_string .= "<li>";
                     if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
                         || ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-                        || ($user_identified && key_exists($course['code'], $courses_of_user)
+                        || ($user_identified && array_key_exists($course['code'], $courses_of_user)
                             && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
                         || $courses_of_user[$course['code']]['status'] == '1'
                         || api_is_platform_admin()) {
@@ -569,7 +569,7 @@ class IndexManager
                     $courses_list_string .= $course['title'];
                     if ($course['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
                         || ($user_identified && $course['visibility'] == COURSE_VISIBILITY_OPEN_PLATFORM)
-                        || ($user_identified && key_exists($course['code'], $courses_of_user)
+                        || ($user_identified && array_key_exists($course['code'], $courses_of_user)
                             && $course['visibility'] != COURSE_VISIBILITY_CLOSED)
                             || $courses_of_user[$course['code']]['status'] == '1'
                         || api_is_platform_admin()) {
@@ -677,8 +677,8 @@ class IndexManager
     function display_login_form()
     {
         $form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-vertical'));
-        $form->addElement('text', 'login', get_lang('UserName'), array('class' => 'span2 autocapitalize_off', 'autofocus' => 'autofocus'));
-        $form->addElement('password', 'password', get_lang('Pass'), array('class' => 'span2'));
+        $form->addElement('text', 'login', get_lang('UserName'), array('id' => 'login', 'class' => 'span2 autocapitalize_off', 'autofocus' => 'autofocus'));
+        $form->addElement('password', 'password', get_lang('Pass'), array('id' => 'password', 'class' => 'span2'));
         global $_configuration;
 
         // Captcha
@@ -714,7 +714,7 @@ class IndexManager
                 $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'));
                 $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');
 
-                $form->addRule('captcha', 'What you entered didn\'t match the picture', 'CAPTCHA', $captcha_question);
+                $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
             }
         }
 

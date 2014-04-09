@@ -2,6 +2,13 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$IncorrectScore = "Incorrect score";
+$CorrectScore = "Correct score";
+$UseCustomScoreForAllQuestions = "Use custom score for all questions";
+$YouShouldAddItemsBeforeAttachAudio = "You should add some items to your learning path, otherwise you won't be able to attach audio files to them";
+$InactiveDays = "Inactive days";
+$FollowedHumanResources = "Followed HR directors";
+$TheTextYouEnteredDoesNotMatchThePicture = "The text you entered doesn't match the picture.";
 $RemoveOldRelationships = "Remove previous relationships";
 $ImportSessionDrhList = "Import list of HR directors into sessions";
 $FollowedStudents = "Followed students";

@@ -159,6 +159,7 @@ $stats = Tracking::getStats($userId);
 
 $students = $stats['students'];
 $teachers = $stats['teachers'];
+$humanResourcesUsers = $stats['drh'];
 $courses = $stats['courses'];
 $sessions = $stats['sessions'];
 
@@ -184,12 +185,15 @@ $nb_posts = $nb_assignments = 0;
 $inactiveTime = time() - (3600 * 24 * 7);
 $nb_students = 0;
 $numberTeachers = 0;
+$countHumanResourcesUsers = 0;
 
 $daysAgo = 7;
 if (!empty($students)) {
     // Students
     $nb_students = count($students);
     $studentIds = array_values($students);
+    $countHumanResourcesUsers = count($humanResourcesUsers);
+
     // average progress
     $avg_total_progress = $progress / $nb_students;
     // average assignments
@@ -200,7 +204,6 @@ if (!empty($students)) {
 if (!empty($teachers)) {
     $numberTeachers = count($teachers);
 }
-
 
 // Inactive students
 //$countInactiveUsers = Tracking::getInactiveUsers($studentIds, $daysAgo);
@@ -256,17 +259,25 @@ echo '<div class="report_section">
                 <td align="right">'.$numberTeachers.'</td>
             </tr>
             <tr>
+                <td>'.Display::url(
+                get_lang('FollowedHumanResources'),
+                api_get_path(WEB_CODE_PATH).'mySpace/users.php?status='.DRH
+            ).
+            '</td>
+            <td align="right">'.$countHumanResourcesUsers.'</td>
+            </tr>
+            <tr>
              <td>'.Display::url(
                 get_lang('FollowedUsers'),
                 api_get_path(WEB_CODE_PATH).'mySpace/users.php'
             ).
             '</td>
-                <td align="right">'.($nb_students+$numberTeachers).$linkAddUser.'</td>
+                <td align="right">'.($nb_students + $numberTeachers + $countHumanResourcesUsers).$linkAddUser.'</td>
             </tr>
             <tr>
                 <td>'.Display::url(
                     get_lang('FollowedCourses'),
-                    api_get_path(WEB_CODE_PATH).'mySpace/courses.php'
+                    api_get_path(WEB_CODE_PATH).'mySpace/course.php'
                 ).
                 '</td>
                 <td align="right">'.$count_courses.$linkAddCourse.'</td>
@@ -298,8 +309,6 @@ if ($export_csv) {
 } else {
     $lastConnectionDate = api_get_utc_datetime(strtotime('15 days ago'));
     $countActiveUsers = SessionManager::getCountUserTracking(null, 1, null, array(), array());
-
-    ///$countInactiveUsers = SessionManager::getCountUserTracking(null, 0, null, $sessionIdList, $studentIds);
     $countSleepingTeachers = SessionManager::getTeacherTracking(
         api_get_user_id(),
         1,
@@ -321,33 +330,9 @@ if ($export_csv) {
     $form->addElement('button', 'submit', get_lang('Search'));
     $form->display();
 
-    /*
-
-    <tr>
-                    <td>'.Display::url(
-                        get_lang('ActiveUsers'),
-                        api_get_path(WEB_CODE_PATH).'mySpace/users.php?active=1').'</td>
-                    <td align="right">'.intval($countActiveUsers).'</td>
-                </tr>
-                <tr>
-                    <td>'.Display::url(get_lang('InactiveUsers'), api_get_path(WEB_CODE_PATH).'mySpace/users.php?active=0').'</td>
-                    <td align="right">'.$countInactiveUsers.'</td>
-                </tr>
-                <tr>
-                    <td>'.Display::url(get_lang('SleepingTeachers'), api_get_path(WEB_CODE_PATH).'mySpace/teachers.php?sleeping_days=15').'</td>
-                    <td align="right">'.$countSleepingTeachers.'</td>
-                </tr>
-                <tr>
-                    <td>'.Display::url(get_lang('SleepingStudents'), api_get_path(WEB_CODE_PATH).'mySpace/student.php?sleeping_days=15').'</td>
-                    <td align="right">'.$countSleepingStudents.'</td>
-                </tr>
-
-    */
-
     // html part
     echo '<div class="report_section">
             <table class="table table-bordered">
-
                 <tr>
                     <td>'.get_lang('AverageCoursePerStudent').'</td>
                     <td align="right">'.(is_null($avg_courses_per_student) ? '' : round($avg_courses_per_student, 2)).'</td>
@@ -377,10 +362,7 @@ if ($export_csv) {
                     <td align="right">'.(is_null($nb_assignments) ? '' : round($nb_assignments, 2)).'</td>
                 </tr>
             </table>
-            <a class="btn" href="'.api_get_path(WEB_CODE_PATH).'mySpace/student.php">
-            '.get_lang('SeeStudentList').'
-            </a>
-         </div><br />';
+         </div>';
 }
 
 

@@ -280,14 +280,15 @@ while ($row = Database :: fetch_array($rs)) {
 if (api_is_drh() && !api_is_platform_admin()) {
     if (!empty($student_id)) {
         if (api_drh_can_access_all_session_content()) {
-            $users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
+            //@todo securize drh with student id
+            /*$users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
             $userList = array();
             foreach ($users as $user) {
                 $userList[] = $user['user_id'];
             }
             if (!in_array($student_id, $userList)) {
                 api_not_allowed(true);
-            }
+            }*/
         } else {
             if (api_is_drh() && !UserManager::is_user_followed_by_drh($student_id, api_get_user_id())) {
                 api_not_allowed(true);
@@ -304,7 +305,7 @@ if (isset($message)) {
 
 $token = Security::get_token();
 if (!empty($student_id)) {
-    
+
 	// Actions bar
 	echo '<div class="actions">';
     echo '<a href="javascript: window.back();" ">'.Display::return_icon('back.png', get_lang('Back'),'',ICON_SIZE_MEDIUM).'</a>';
@@ -317,8 +318,11 @@ if (!empty($student_id)) {
 		$send_mail = Display :: return_icon('mail_send_na.png', get_lang('SendMail'),'',ICON_SIZE_MEDIUM);
 	}
 	echo $send_mail;
-	if (!empty($student_id) && !empty ($_GET['course'])) { //only show link to connection details if course and student were defined in the URL
-		echo '<a href="access_details.php?student=' . $student_id . '&course=' . Security :: remove_XSS($_GET['course']) . '&amp;origin=' . Security :: remove_XSS($_GET['origin']) . '&amp;cidReq='.Security::remove_XSS($_GET['course']).'&amp;id_session='.$session_id.'">' . Display :: return_icon('statistics.png', get_lang('AccessDetails'),'',ICON_SIZE_MEDIUM).'</a>';
+	if (!empty($student_id) && !empty($_GET['course'])) {
+	    //only show link to connection details if course and student were defined in the URL
+
+		echo '<a href="access_details.php?student=' . $student_id . '&course=' . Security :: remove_XSS($_GET['course']) . '&amp;origin=' . Security :: remove_XSS($_GET['origin']) . '&amp;cidReq='.Security::remove_XSS($_GET['course']).'&amp;id_session='.$session_id.'">'.
+            Display :: return_icon('statistics.png', get_lang('AccessDetails'),'',ICON_SIZE_MEDIUM).'</a>';
 	}
     if (api_can_login_as($student_id)) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$student_id.'&amp;sec_token='.$token.'">'.

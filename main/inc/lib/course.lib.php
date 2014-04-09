@@ -1829,7 +1829,11 @@ class CourseManager
      */
     public static function get_group_list_of_course($course_code, $session_id = 0, $in_get_empty_group = 0)
     {
-        $course_info = Database::get_course_info($course_code);
+        $course_info = api_get_course_info($course_code);
+
+        if (empty($course_info)) {
+            return array();
+        }
         $course_id = $course_info['real_id'];
 
         if (empty($course_id)) {

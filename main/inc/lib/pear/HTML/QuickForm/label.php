@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  * HTML class for static data
  * @example  $form->addElement('label', 'My label', 'Content');
@@ -29,8 +29,8 @@ class HTML_QuickForm_label extends HTML_QuickForm_static
     * @access public
     * @return void
     */
-    function HTML_QuickForm_label($label = null, $text = null) {
-        $this->HTML_QuickForm_static(null, $label, $text);
+    function HTML_QuickForm_label($label = null, $text = null, $attributes = null) {
+        $this->HTML_QuickForm_static(null, $label, $text, $attributes);
         $this->_type = 'html';
     }
 

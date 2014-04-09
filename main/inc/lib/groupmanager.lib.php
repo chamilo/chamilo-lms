@@ -85,22 +85,15 @@ class GroupManager
     public static function get_group_list($category = null, $course_code = null)
     {
         $my_user_id = api_get_user_id();
+        $course_info = api_get_course_info($course_code);
 
-        $course_info         = api_get_course_info($course_code);
-        $course_id             = $course_info['real_id'];
-        $table_group_user     = Database :: get_course_table(TABLE_GROUP_USER);
-        $table_group         = Database :: get_course_table(TABLE_GROUP);
+        $course_id = $course_info['real_id'];
+        $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
+        $table_group = Database :: get_course_table(TABLE_GROUP);
 
         //condition for the session
         $session_id = api_get_session_id();
         $my_status_of_user_in_course = CourseManager::get_user_in_course_status($my_user_id, $course_info['code']);
-
-        $is_student_in_session = false;
-        if (is_null($my_status_of_user_in_course) || $my_status_of_user_in_course=='') {
-            if ($session_id>0) {
-                $is_student_in_session=true;
-            }
-        }
 
         // COURSEMANAGER or STUDENT
         if ($my_status_of_user_in_course == COURSEMANAGER || api_is_allowed_to_edit(null, true) || api_is_drh()) {
@@ -118,8 +111,9 @@ class GroupManager
                     FROM $table_group g
                     LEFT JOIN $table_group_user ug
                     ON (ug.group_id = g.id AND ug.user_id = '".api_get_user_id()."' AND ug.c_id = $course_id AND g.c_id = $course_id)";
-        } elseif ($my_status_of_user_in_course==STUDENT || $is_student_in_session === true || $_SESSION['studentview'] == 'studentview') {
+        } elseif ($my_status_of_user_in_course == STUDENT || $_SESSION['studentview'] == 'studentview') {
             $can_see_groups = 1;
+
             $sql = "SELECT g.id,
                         g.name,
                         g.description,
@@ -133,6 +127,8 @@ class GroupManager
                     FROM $table_group g
                     LEFT JOIN $table_group_user ug
                     ON (ug.group_id = g.id AND ug.user_id = '".api_get_user_id()."' AND ug.c_id = $course_id AND g.c_id = $course_id)";
+        } else {
+            return array();
         }
 
         $sql .= " WHERE 1=1 ";
@@ -168,12 +164,13 @@ class GroupManager
                 $sql = 'SELECT name FROM '.Database::get_main_table(TABLE_MAIN_SESSION).'
                         WHERE id='.$thisGroup['session_id'];
                 $rs_session = Database::query($sql);
-                if (Database::num_rows($rs_session)>0) {
+                if (Database::num_rows($rs_session) > 0) {
                     $thisGroup['session_name'] = Database::result($rs_session, 0, 0);
                 }
             }
             $groups[] = $thisGroup;
         }
+
         return $groups;
     }
 

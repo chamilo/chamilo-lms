@@ -18,19 +18,19 @@
     {% for event in agenda_events %}
         <tr>
             <td style="width:20%">
-                {{ event.start |date("m/d/Y h:i:s") }}
+                {{ event.start_date_localtime }}
             </td>
             <td style="width:20%">
                 {% if event.allDay %}
                     {{ 'AllDay' | get_lang }}
                 {% else %}
-                    {{ event.end |date("m/d/Y h:i:s") }}
+                    {{ event.end_date_localtime }}
                 {% endif %}
             </td>
             <td style="width:50%">
                 {{ event.title }}
                 <p>{{ event.description}}</p>
-
+                {{ event.attachment }}
             </td>
 
             {% if is_allowed_to_edit %}

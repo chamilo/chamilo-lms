@@ -294,8 +294,14 @@ class AnnouncementManager
      * @param string    Comment describing the attachment
      * @return int      false on failure, ID of the announcement on success
      */
-    public static function add_announcement($emailTitle, $newContent, $sent_to, $file = array(), $file_comment = null, $end_date = null)
-    {
+    public static function add_announcement(
+        $emailTitle,
+        $newContent,
+        $sentTo,
+        $file = array(),
+        $file_comment = null,
+        $end_date = null
+    ) {
         $_course = api_get_course_info();
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 
@@ -333,11 +339,12 @@ class AnnouncementManager
             }
 
             // store in item_property (first the groups, then the users
-            if (empty($sent_to) || !empty($sent_to) && isset($sent_to[0]) && $sent_to[0] == 'everyone') {
+
+            if (empty($sentTo) || !empty($sentTo) && isset($sentTo[0]) && $sentTo[0] == 'everyone') {
                 // The message is sent to EVERYONE, so we set the group to 0
                 api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '0');
             } else {
-                $send_to = self::separate_users_groups($sent_to);
+                $send_to = self::separate_users_groups($sentTo);
 
                 // Storing the selected groups
                 if (is_array($send_to['groups'])) {

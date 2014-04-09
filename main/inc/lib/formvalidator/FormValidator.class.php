@@ -126,7 +126,10 @@ class FormValidator extends HTML_QuickForm
         $dir = api_get_path(LIBRARY_PATH) . 'formvalidator/';
         $this->registerElementType('html_editor', $dir . 'Element/html_editor.php', 'HTML_QuickForm_html_editor');
 
-        $this->registerElementType('datetimepicker', $dir . 'Element/DateTimePicker.php', 'DateTimePicker');
+        $this->registerElementType('date_range_picker', $dir . 'Element/DateRangePicker.php', 'DateRangePicker');
+        $this->registerElementType('date_time_picker', $dir . 'Element/DateTimePicker.php', 'DateTimePicker');
+        $this->registerElementType('date_picker', $dir . 'Element/DatePicker.php', 'DatePicker');
+
         $this->registerElementType('datepicker', $dir . 'Element/datepicker.php', 'HTML_QuickForm_datepicker');
         $this->registerElementType('datepickerdate', $dir . 'Element/datepickerdate.php', 'HTML_QuickForm_datepickerdate');
         $this->registerElementType('receivers', $dir . 'Element/receivers.php', 'HTML_QuickForm_receivers');
@@ -173,7 +176,7 @@ class FormValidator extends HTML_QuickForm
         } else {
             $element_template = '
             <div class="control-group {error_class}">
-                <label class="control-label" for="{label-for}">
+                <label class="control-label" {label-for}>
                     <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
                     {label}
                 </label>
@@ -252,6 +255,29 @@ EOT;
         }
     }
 
+    /**
+     * date_range_picker element creates 2 hidden fields
+     * elementName + "_start" elementName "_end"
+     * @param string $name
+     * @param string $label
+     * @param bool $required
+     * @param array $attributes
+     */
+    public function addDateRangePicker($name, $label, $required = true, $attributes = array())
+    {
+        $this->addElement('date_range_picker', $name, $label, $attributes);
+        $this->addElement('hidden', $name.'_start');
+        $this->addElement('hidden', $name.'_end');
+
+        if ($required) {
+            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+        }
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     */
     function add_hidden($name, $value)
     {
         $this->addElement('hidden', $name, $value);
@@ -525,13 +551,45 @@ EOT;
     function return_form()
     {
         $error = false;
+        $addDateLibraries = false;
+        /** @var HTML_QuickForm_element $element */
         foreach ($this->_elements as $element) {
+            if (in_array(
+                $element->getType(),
+                array('date_range_picker', 'date_time_picker', 'date_picker', 'datepicker', 'datetimepicker'))
+            ) {
+            $addDateLibraries = true;
+            }
             if (!is_null(parent::getElementError($element->getName()))) {
                 $error = true;
                 break;
             }
         }
         $return_value = '';
+
+        $js = null;
+        if ($addDateLibraries) {
+            $js = api_get_js('jquery-ui/jquery-ui-i18n.min.js');
+            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript"></script>';
+            $js .= '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
+            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/moment.min.js" type="text/javascript"></script>';
+            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/daterangepicker.js" type="text/javascript"></script>';
+            $js .= '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/daterangepicker-bs2.css" rel="stylesheet" type="text/css" />';
+
+            $isocode = api_get_language_isocode();
+            if ($isocode != 'en') {
+                $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/i18n/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript"></script>';
+                $js .= '<script>
+                $(function(){
+                    $.datepicker.setDefaults($.datepicker.regional["'.$isocode.'"]);
+                     moment.lang("'.$isocode.'");
+                });
+                </script>';
+            }
+        }
+
+        $return_value .= $js;
+
         if ($error) {
             $return_value = Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'warning');
         }
@@ -542,6 +600,8 @@ EOT;
         }
         return $return_value;
     }
+
+
 
 }
 

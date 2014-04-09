@@ -1129,7 +1129,8 @@ class Database {
      * Experimental useful database insert
      * @todo lot of stuff to do here
      */
-    public static function insert($table_name, $attributes, $show_query = false) {
+    public static function insert($table_name, $attributes, $show_query = false)
+    {
         if (empty($attributes) || empty($table_name)) {
             return false;
         }
@@ -1137,15 +1138,16 @@ class Database {
         foreach($attributes as $key => $value) {
             $filtred_attributes[$key] = "'".self::escape_string($value)."'";
         }
-        $params = array_keys($filtred_attributes); //@todo check if the field exists in the table we should use a describe of that table
+        //@todo check if the field exists in the table we should use a describe of that table
+        $params = array_keys($filtred_attributes);
         $values = array_values($filtred_attributes);
         if (!empty($params) && !empty($values)) {
             $sql    = 'INSERT INTO '.$table_name.' ('.implode(',',$params).') VALUES ('.implode(',',$values).')';
-            $result = self::query($sql);
+            self::query($sql);
             if ($show_query) {
             	var_dump($sql);
             }
-            return  self::get_last_insert_id();
+            return self::insert_id();
         }
         return false;
     }

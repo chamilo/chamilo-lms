@@ -18,27 +18,28 @@
     },
     "require-dev": {
         "phpunit/phpunit": "~3.7.0",
-        "mlehner/gelf-php": "1.0.*",
-        "raven/raven": "0.5.*",
+        "graylog2/gelf-php": "~1.0",
+        "raven/raven": "~0.5",
         "ruflin/elastica": "0.90.*",
-        "doctrine/couchdb": "dev-master",
-        "aws/aws-sdk-php": "~2.4.8"
+        "doctrine/couchdb": "~1.0@dev",
+        "aws/aws-sdk-php": "~2.4, >2.4.8"
     },
     "suggest": {
-        "mlehner/gelf-php": "Allow sending log messages to a GrayLog2 server",
+        "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
         "raven/raven": "Allow sending log messages to a Sentry server",
         "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
         "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
         "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
         "ext-mongo": "Allow sending log messages to a MongoDB server",
-        "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB"
+        "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
+        "rollbar/rollbar": "Allow sending log messages to Rollbar"
     },
     "autoload": {
-        "psr-0": {"Monolog": "src/"}
+        "psr-4": {"Monolog\\": "src/Monolog"}
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.7.x-dev"
+            "dev-master": "1.8.x-dev"
         }
     }
 }

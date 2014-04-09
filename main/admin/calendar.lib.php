@@ -1108,7 +1108,6 @@ function show_user_filter_form()
 
 /** @todo this select missing to implement */
 
-//$user_list=get_course_users();
 echo "<select name=\"select\" onchange=\"MM_jumpMenu('parent',this,0)\">";
 echo "<option value=\"agenda.php?user=none\">show all users</option>";
 /*foreach($user_list as $this_user)
@@ -1141,7 +1140,6 @@ function show_user_group_filter_form()
 
 	// Users
 	echo "<optgroup label=\"".get_lang("Users")."\">";
-	//$user_list=get_course_users();
 /*	foreach($user_list as $this_user)
 		{
 		// echo "<option value=\"agenda.php?isStudentView=true&amp;user=".$this_user['uid']."\">".$this_user['lastName']." ".$this_user['firstName']."</option>";
@@ -1544,92 +1542,6 @@ function show_add_form($id = '') {
 </table>
 </form>
 <?php
-}
-
-function get_agendaitems($month, $year)
-{
-	global $_user;
-	global $_configuration;
-	$month=Database::escape_string($month);
-	$year=Database::escape_string($year);
-
-	$items = array ();
-
-	//databases of the courses
-	$TABLEAGENDA = Database :: get_main_table(TABLE_MAIN_SYSTEM_CALENDAR);
-	//$TABLE_ITEMPROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
-
-	//$group_memberships = GroupManager :: get_group_ids(Database::get_current_course_database(), $_user['user_id']);
-	// if the user is administrator of that course we show all the agenda items
-	//if (api_is_allowed_to_edit())
-	//{
-		//echo "course admin";
-	$sqlquery = "SELECT
-						DISTINCT *
-						FROM ".$TABLEAGENDA."
-						WHERE
-						MONTH(start_date)='".$month."'
-						AND YEAR(start_date)='".$year."'
-						GROUP BY id
-						ORDER BY start_date ";
-	//}
-	// if the user is not an administrator of that course
-/*	else
-	{
-		//echo "GEEN course admin";
-		if (is_array($group_memberships) && count($group_memberships)>0)
-		{
-			$sqlquery = "SELECT
-							agenda.*
-							FROM ".$TABLEAGENDA."
-							WHERE
-							MONTH(agenda.start_date)='".$month."'
-							AND YEAR(agenda.start_date)='".$year."'
-							ORDER BY start_date ";
-		}
-		else
-		{
-			$sqlquery = "SELECT
-							agenda.*, item_property.*
-							FROM ".$TABLEAGENDA."
-							WHERE
-							MONTH(agenda.start_date)='".$month."'
-							AND YEAR(agenda.start_date)='".$year."'
-							ORDER BY start_date ";
-		}
-	}*/
-
-	//$mycourse = api_get_course_info();
-	$portal_url = $_configuration['root_web'];
-	if ($_configuration['multiple_access_urls']) {
-		$access_url_id = api_get_current_access_url_id();
-		if ($access_url_id != -1 ){
-			$url = api_get_access_url($access_url_id);
-			$portal_url = $url['url'];
-		}
-	}
-
-    $result = Database::query($sqlquery);
-	while ($item = Database::fetch_array($result))
-	{
-		$agendaday_string = api_convert_and_format_date($item['start_date'], "%d", date_default_timezone_get());
-		$agendaday = intval($agendaday_string);
-		$time = api_convert_and_format_date($item['start_date'], TIME_NO_SEC_FORMAT, date_default_timezone_get());
-		$URL = $portal_url.'main/admin/agenda.php?day='.$agendaday."&amp;month=".$month."&amp;year=".$year; // RH  //Patrick Cool: to highlight the relevant agenda item
-		$items[$agendaday][$item['start_time']] .= '<i>'.$time.'</i> <a href="'.$URL.'" title="'.$item['title'].'<br />';
-	}
-
-	// sorting by hour for every day
-	$agendaitems = array ();
-	while (list ($agendaday, $tmpitems) = each($items))
-	{
-		sort($tmpitems);
-		while (list ($key, $val) = each($tmpitems))
-		{
-			$agendaitems[$agendaday] .= $val;
-		}
-	}
-	return $agendaitems;
 }
 
 function display_upcoming_events() {

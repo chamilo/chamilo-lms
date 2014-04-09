@@ -174,6 +174,27 @@ If you prefer using <a href="http://php.net/manual/en/book.apc.php">APC</a>, you
      ...
 </pre>
 <p>It is also worth noting that the Université de Genève, Switzerland, observed that the calculation of the total size used by course documents is one of the heaviest queries in Chamilo, so you might want to cache the results of this one as well, using the same technique.</p>
+<p>Finally, if your portal is highly public *and* you are showing the popular courses on the homepage, you might want to also reduce the amount of queries this generates, using the same technique as above, but for the main/inc/lib/auth.lib.php library, looking for the "Tracking::get_course_connections_count()" call:</p>
+<pre>
+        while ($row = Database::fetch_array($result)) {
+            $row['registration_code'] = !empty($row['registration_code']);
+            $count_users = CourseManager::get_users_count_in_course($row['code']);
+            $xc = function_exists('apc_exists');
+            if ($xc) {
+                $apc = apc_cache_info(null, true);
+                $apx_end = $apc['start_time']+$apx['ttl'];
+                if (apc_exists('my_campus_course_visits_'.$row['code']) AND (time() < $apc_end) AND apc_fetch('my_campus_course_visits_'.$row['code']) > 0) {
+                    $count_connections_last_month = apc_fetch('my_campus_course_visits_'.$row['code']);
+                } else {
+                    $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
+                    apc_store('my_campus_course_visits_'.$row['code'], $count_connections_last_month, $apc['ttl']);
+                }
+            } else {
+                $count_connections_last_month = Tracking::get_course_connections_count($row['code'], 0, api_get_utc_datetime(time() - (30 * 86400)));
+            }
+            ...
+        }
+</pre>
 <hr />
 <h2><a name="2.Slow-queries"></a>2. Slow queries</h2>
 Enable slow_queries in /etc/mysqld/my.cnf, restart MySQL then follow using sudo tail -f /var/log/mysql/mysql-slow.log

@@ -5,12 +5,12 @@ require_once 'HTML/QuickForm/date.php';
 /**
  * Form element to select a date and hour (with popup datepicker)
  */
-class DateTimePicker extends HTML_QuickForm_text
+class DatePicker extends HTML_QuickForm_text
 {
 	/**
 	 * Constructor
 	 */
-	public function DateTimePicker($elementName = null, $elementLabel = null, $attributes = null)
+	public function DatePicker($elementName = null, $elementLabel = null, $attributes = null)
 	{
         if (!isset($attributes['id'])) {
             $attributes['id'] = $elementName;
@@ -18,7 +18,7 @@ class DateTimePicker extends HTML_QuickForm_text
 
 		HTML_QuickForm_element::HTML_QuickForm_element($elementName, $elementLabel, $attributes);
 		$this->_appendName = true;
-		$this->_type = 'date_time_picker';
+		$this->_type = 'date_picker';
 	}
 
 	/**
@@ -30,15 +30,12 @@ class DateTimePicker extends HTML_QuickForm_text
 		return $js.parent::toHtml();
 	}
 
-    /**
-     * @param string $value
-     */
     function setValue($value)
     {
         $value = substr($value, 0, 16);
         $this->updateAttributes(
             array(
-                'value'=>$value
+                'value' => $value
             )
         );
     }
@@ -50,12 +47,11 @@ class DateTimePicker extends HTML_QuickForm_text
 	{
         $js = null;
         $id = $this->getAttribute('id');
-        //timeFormat: 'hh:mm'
+
         $js .= "<script>
             $(function() {
-                $('#$id').datetimepicker({
-                    dateFormat: 'yy-mm-dd',
-                    timeFormat: 'HH:mm'
+                $('#$id').datepicker({
+                    dateFormat: 'yy-mm-dd'
                 });
             });
         </script>";

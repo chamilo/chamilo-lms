@@ -211,7 +211,14 @@ function handle_uploaded_document(
 
 	// If the want to unzip, check if the file has a .zip (or ZIP,Zip,ZiP,...) extension
 	if ($unzip == 1 && preg_match('/.zip$/', strtolower($uploaded_file['name']))) {
-		return unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $max_filled_space, $output, $to_group_id);
+		return unzip_uploaded_document(
+            $uploaded_file,
+            $upload_path,
+            $base_work_dir,
+            $max_filled_space,
+            $output,
+            $to_group_id
+        );
 		//display_message('Unzipping file');
 	} elseif ($unzip == 1 && !preg_match('/.zip$/', strtolower($uploaded_file['name']))) { // We can only unzip ZIP files (no gz, tar,...)
 	    if ($output) {
@@ -751,7 +758,14 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
  *
  * @return boolean true if it succeeds false otherwise
  */
-function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $max_filled_space, $output = true, $to_group_id = 0) {
+function unzip_uploaded_document(
+    $uploaded_file,
+    $upload_path,
+    $base_work_dir,
+    $max_filled_space,
+    $output = true,
+    $to_group_id = 0
+) {
 	global $_course;
 	global $_user;
 	global $to_user_id;
@@ -760,11 +774,10 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 	$zip_file = new PclZip($uploaded_file['tmp_name']);
 
 	// Check the zip content (real size and file extension)
-
 	$zip_content_array = (array)$zip_file->listContent();
 
     $real_filesize = 0;
-	foreach($zip_content_array as & $this_content) {
+	foreach ($zip_content_array as & $this_content) {
 		$real_filesize += $this_content['size'];
 	}
 
@@ -782,12 +795,13 @@ function unzip_uploaded_document($uploaded_file, $upload_path, $base_work_dir, $
 
 	// Get into the right directory
 	$save_dir = getcwd();
+
 	chdir($base_work_dir.$upload_path);
 	// We extract using a callback function that "cleans" the path
 	$unzipping_state = $zip_file->extract(PCLZIP_CB_PRE_EXTRACT, 'clean_up_files_in_zip', PCLZIP_OPT_REPLACE_NEWER);
 	// Add all documents in the unzipped folder to the database
 	add_all_documents_in_folder_to_database($_course, $_user['user_id'], $base_work_dir ,$upload_path == '/' ? '' : $upload_path, $to_group_id);
-	//Display::display_normal_message(get_lang('UplZipExtractSuccess'));
+
 	return true;
 }
 

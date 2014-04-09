@@ -31,35 +31,39 @@ function tempdir($dir, $prefix = 'tmp', $mode = 0777) {
 }
 
 /**
- * @return the path of the temporary directory where the exercise was uploaded and unzipped
+ * the path of the temporary directory where the exercise was uploaded and unzipped
+ * @param string
+ * @param string
+ * @return bool
  */
 
-function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath) {
-	global $_course, $_user;
+function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
+{
+    $_course = api_get_course_info();
+    $_user = api_get_user_info();
+
 	//Check if the file is valid (not to big and exists)
-	if (!isset ($_FILES['userFile']) || !is_uploaded_file($_FILES['userFile']['tmp_name'])) {
+	if (!isset($_FILES['userFile']) || !is_uploaded_file($_FILES['userFile']['tmp_name'])) {
 		// upload failed
 		return false;
-	}	
-	if (preg_match('/.zip$/i', $_FILES['userFile']['name']) && handle_uploaded_document($_course, $_FILES['userFile'], $baseWorkDir, $uploadPath, $_user['user_id'], 0, null, 1)) {
-		if (!function_exists('gzopen')) {			
-			//claro_delete_file($uploadPath);
-			return false;
-		}
-		// upload successfull
-		return true;
-	} else {
-		//claro_delete_file($uploadPath);
-		return false;
 	}
+
+	if (preg_match('/.zip$/i', $_FILES['userFile']['name']) &&
+        handle_uploaded_document($_course, $_FILES['userFile'], $baseWorkDir, $uploadPath, $_user['user_id'], 0, null, 1)
+    ) {
+		return true;
+	}
+    return false;
 }
+
 /**
  * main function to import an exercise,
- *
+ * @param array $file
  * @return an array as a backlog of what was really imported, and error or debug messages to display
  */
 
-function import_exercise($file) {
+function import_exercise($file)
+{
 	global $exercise_info;
 	global $element_pile;
 	global $non_HTML_tag_to_avoid;
@@ -99,15 +103,17 @@ function import_exercise($file) {
 	}
 
 	// find the different manifests for each question and parse them.
+
 	$exerciseHandle = opendir($baseWorkDir);
 	//$question_number = 0;
 	$file_found = false;
 	$operation = false;
     $result = false;
+
 	// parse every subdirectory to search xml question files
 	while (false !== ($file = readdir($exerciseHandle))) {
 		if (is_dir($baseWorkDir . '/' . $file) && $file != "." && $file != "..") {
-			//find each manifest for each question repository found
+			// Find each manifest for each question repository found
 			$questionHandle = opendir($baseWorkDir . '/' . $file);
 			while (false !== ($questionFile = readdir($questionHandle))) {
 				if (preg_match('/.xml$/i', $questionFile)) {
@@ -120,11 +126,12 @@ function import_exercise($file) {
 			$file_found = true;
 		} // else ignore file
 	}
+
 	if (!$file_found) {
-		Display :: display_error_message(get_lang('No XML file found in the zip'));        
+		Display :: display_error_message(get_lang('No XML file found in the zip'));
 		return false;
 	}
-    if ($result == false ) {        
+    if ($result == false ) {
         return false;
     }
 
@@ -133,7 +140,7 @@ function import_exercise($file) {
 	//1.create exercise
 	$exercise = new Exercise();
 	$exercise->exercise = $exercise_info['name'];
-    
+
 	$exercise->save();
 	$last_exercise_id = $exercise->selectId();
 	if (!empty($last_exercise_id)) {
@@ -170,11 +177,12 @@ function import_exercise($file) {
 		// delete the temp dir where the exercise was unzipped
 		my_delete($baseWorkDir . $uploadPath);
 		$operation = true;
-	}    
+	}
 	return $operation;
 }
 
-function parse_file($exercisePath, $file, $questionFile) {
+function parse_file($exercisePath, $file, $questionFile)
+{
 	global $exercise_info;
 	global $element_pile;
 	global $non_HTML_tag_to_avoid;
@@ -183,8 +191,7 @@ function parse_file($exercisePath, $file, $questionFile) {
 
 	$questionTempDir = $exercisePath . '/' . $file . '/';
 	$questionFilePath = $questionTempDir . $questionFile;
-
-	if (!($fp = @ fopen($questionFilePath, 'r'))) {
+	if (!($fp = fopen($questionFilePath, 'r'))) {
 		Display :: display_error_message(get_lang('Error opening question\'s XML file'));
 		return false;
 	} else {
@@ -193,7 +200,7 @@ function parse_file($exercisePath, $file, $questionFile) {
 
 	//parse XML question file
 	$data = str_replace(array('<p>', '</p>','<front>','</front>'), '', $data);
-	
+
 	//used global variable start values declaration :
 
 	$record_item_body = false;
@@ -412,12 +419,12 @@ function startElement($parser, $name, $attributes) {
 			//retrieve answers id for MCUA and MCMA questions
 
 		case 'SIMPLECHOICE' :
-			
+
             $current_answer_id = $attributes['IDENTIFIER'];
             if (!isset($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id])) {
                 $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id] = array ();
             }
-			
+
 			break;
 
 		case 'MAPENTRY' :
@@ -524,15 +531,15 @@ function elementData($parser, $data) {
 	if ($record_item_body && (!in_array($current_element, $non_HTML_tag_to_avoid))) {
 		$current_question_item_body .= $data;
 	}
-    
+
 	switch ($current_element) {
 		case 'SIMPLECHOICE' :
-			
+
 				if (!isset ($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'])) {
 					$exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] = trim($data);
 				} else {
 					$exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] .= ''.trim($data);
-				}    		
+				}
 			break;
 
 		case 'FEEDBACKINLINE' :

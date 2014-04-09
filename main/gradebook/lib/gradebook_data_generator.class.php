@@ -33,9 +33,29 @@ class GradebookDataGenerator
 		$allcats = (isset($cats) ? $cats : array());
 		$allevals = (isset($evals) ? $evals : array());
 		$alllinks = (isset($links) ? $links : array());
-		// merge categories, evaluations and links
-		$this->items = array_merge($allcats, $allevals, $alllinks);        
-		$this->evals_links = array_merge($allevals, $alllinks);
+
+        // if we are in the root category and if there are sub categories
+        // display only links depending of the root category and not link that belongs
+        // to a sub category https://support.chamilo.org/issues/6602
+        $tabLinkToDisplay = $alllinks;
+        if (count($allcats) > 0) {
+            // get sub categories id
+            $tabCategories = array();
+            for ($i=0; $i < count($allcats); $i++) {
+                $tabCategories[] = $allcats[$i]->get_id();
+            }
+            // dont display links that belongs to a sub category
+            $tabLinkToDisplay = array();
+            for ($i=0; $i < count($alllinks); $i++) {
+                if (!in_array($alllinks[$i]->get_category_id(), $tabCategories)) {
+                    $tabLinkToDisplay[] = $alllinks[$i];
+                }
+            }
+        }
+
+        // merge categories, evaluations and links
+        $this->items = array_merge($allcats, $allevals, $tabLinkToDisplay);
+        $this->evals_links = array_merge($allevals, $tabLinkToDisplay);
     }
 
 	/**

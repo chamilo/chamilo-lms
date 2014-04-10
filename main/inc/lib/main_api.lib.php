@@ -5838,7 +5838,6 @@ function api_get_template($path_type = 'rel') {
 function api_browser_support($format="") {
     require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
     $browser = new Browser();
-    //print_r($browser);
     $current_browser = $browser->getBrowser();
     $a_versiontemp = explode('.', $browser->getVersion());
     $current_majorver= $a_versiontemp[0];

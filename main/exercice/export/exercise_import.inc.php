@@ -161,10 +161,13 @@ function import_exercise($file)
 			foreach ($question_array['answer'] as $key => $answers) {
 				$split = explode('_', $key);
 				$i = $split[1];
-				$answer->new_answer[$i] = $answers['value']; // answer ...
-				$answer->new_comment[$i] = $answers['feedback']; // comment ...
-				$answer->new_position[$i] = $i; // position ...
-				// correct answers ...
+                // Answer
+				$answer->new_answer[$i] = $answers['value'];
+                // Comment
+				$answer->new_comment[$i] = isset($answers['feedback']) ? $answers['feedback'] : null;
+                // Position
+				$answer->new_position[$i] = $i;
+				// Correct answers
 				if (in_array($key, $question_array['correct_answers'])) {
 					$answer->new_correct[$i] = 1;
 				} else {

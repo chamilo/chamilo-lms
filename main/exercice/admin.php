@@ -497,12 +497,12 @@ if (isset($_GET['message'])) {
 
 if ($newQuestion || $editQuestion) {
 	// statement management
-	$type = Security::remove_XSS($_REQUEST['answerType']);
+	$type = isset($_REQUEST['answerType']) ? Security::remove_XSS($_REQUEST['answerType']) : null;
 	echo '<input type="hidden" name="Type" value="'.$type.'" />';
 
-        if ($newQuestion == 'yes') {
-            $objExercise->edit_exercise_in_lp = true;
-        }
+    if ($newQuestion == 'yes') {
+        $objExercise->edit_exercise_in_lp = true;
+    }
 
 	require 'question_admin.inc.php';
 }

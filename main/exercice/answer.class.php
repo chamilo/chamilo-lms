@@ -73,7 +73,8 @@ class Answer
 
         // fills arrays
         $objExercise = new Exercise($this->course_id);
-        $objExercise->read($_REQUEST['exerciseId']);
+        $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
+        $objExercise->read($exerciseId);
         if ($objExercise->random_answers == '1') {
             $this->readOrderedBy('rand()', '');// randomize answers
         } else {
@@ -533,7 +534,8 @@ class Answer
 			    $sql.="($c_id, '$i','$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
             } else {
                 // https://support.chamilo.org/issues/6558
-                // function updateAnswers already escape_string, error if we do it twice. Feed function updateAnswers with none escaped strings
+                // function updateAnswers already escape_string, error if we do it twice.
+                // Feed function updateAnswers with none escaped strings
                 $this->updateAnswers(
                     $this->new_answer[$i],
                     $this->new_comment[$i],

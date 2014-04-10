@@ -1203,7 +1203,7 @@ abstract class Question
 
 		// Question type
         $answerType = isset($_REQUEST['answerType']) ? intval($_REQUEST['answerType']) : null;
-		$form->addElement('hidden','answerType', $_REQUEST['answerType']);
+		$form->addElement('hidden','answerType', $answerType);
 
 		// html editor
 		$editor_config = array('ToolbarSet' => 'TestQuestionDescription', 'Width' => '100%', 'Height' => '150');

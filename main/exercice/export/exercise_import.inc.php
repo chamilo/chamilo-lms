@@ -135,18 +135,16 @@ function import_exercise($file)
         return false;
     }
 
-	//add exercise in tool
-
-	//1.create exercise
+	// 1. Create exercise.
 	$exercise = new Exercise();
 	$exercise->exercise = $exercise_info['name'];
 
 	$exercise->save();
 	$last_exercise_id = $exercise->selectId();
 	if (!empty($last_exercise_id)) {
-		//For each question found...
+		// For each question found...
 		foreach ($exercise_info['question'] as $key => $question_array) {
-			//2.create question
+			//2. Create question
 			$question = new Ims2Question();
 			$question->type = $question_array['type'];
 			$question->setAnswer();
@@ -155,9 +153,10 @@ function import_exercise($file)
 			$question->type = constant($type); // type ...
 			$question->save($last_exercise_id); // save computed grade
 			$last_question_id = $question->selectId();
-			//3.create answer
+			//3. Create answer
 			$answer = new Answer($last_question_id);
 			$answer->new_nbrAnswers = count($question_array['answer']);
+            $totalCorrectWeight = 0;
 			foreach ($question_array['answer'] as $key => $answers) {
 				$split = explode('_', $key);
 				$i = $split[1];
@@ -174,9 +173,15 @@ function import_exercise($file)
 					$answer->new_correct[$i] = 0;
 				}
 				$answer->new_weighting[$i] = $question_array['weighting'][$key];
+                if ($answer->new_correct[$i]) {
+                    $totalCorrectWeight = $answer->new_weighting[$i];
+                }
 			}
+            $question->updateWeighting($totalCorrectWeight);
+            $question->save($last_exercise_id);
 			$answer->save();
 		}
+
 		// delete the temp dir where the exercise was unzipped
 		my_delete($baseWorkDir . $uploadPath);
 		$operation = true;

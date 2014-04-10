@@ -770,7 +770,7 @@ function api_is_facebook_auth_activated() {
  * @return bool
  * @todo : in 1.10 replace this with a platform parameter in the database
  */
-function api_get_display_groups_forum_in_general_tool() {
+function apiGetDisplayGroupsForumInGeneralTool() {
     global $_configuration;
 
     if (isset($_configuration['display_groups_forum_in_general_tool'])) {

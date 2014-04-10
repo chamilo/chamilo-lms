@@ -60,7 +60,12 @@ class Display
      */
     public static function display_header($tool_name ='', $help = null, $page_header = null)
     {
-        self::$global_template = new Template($tool_name);
+        $origin = api_get_origin();
+        $showHeader = true;
+        if (isset($origin) && $origin == 'learnpath') {
+            $showHeader = false;
+        }
+        self::$global_template = new Template($tool_name, $showHeader, $showHeader);
 
         // Fixing tools with any help it takes xxx part of main/xxx/index.php
         if (empty($help)) {

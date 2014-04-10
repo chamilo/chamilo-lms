@@ -1327,18 +1327,22 @@ function api_get_anonymous_id() {
  * @see Uri.course_params
  */
 function api_get_cidreq($add_session_id = true, $add_group_id = true) {
-     $url = empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']);
-     if ($add_session_id) {
-         if (!empty($url)) {
+    $url = empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']);
+    $origin = api_get_origin();
+    if ($add_session_id) {
+        if (!empty($url)) {
             $url .= api_get_session_id() == 0 ? '&id_session=0' : '&id_session='.api_get_session_id();
-         }
-     }
-     if ($add_group_id) {
-         if (!empty($url)) {
+        }
+    }
+    if ($add_group_id) {
+        if (!empty($url)) {
             $url .= api_get_group_id() == 0 ? '&gidReq=0' : '&gidReq='.api_get_group_id();
-         }
-     }
-     return $url;
+        }
+    }
+
+    $url .= '&origin='.$origin;
+
+    return $url;
 }
 
 /**
@@ -7092,17 +7096,37 @@ function api_get_protocol()
 
 /**
  * Return a string where " are replaced with 2 '
- * It is usefull when you pass a PHP variable in a Javascript browser dialog
+ * It is useful when you pass a PHP variable in a Javascript browser dialog
  * e.g. : alert("<?php get_lang('message') ?>");
  * and message contains character "
- * @param $in_text
+ *
+ * @param string $in_text
+ * @return string
  */
 function convert_double_quote_to_single($in_text) {
     return api_preg_replace('/"/', "''", $in_text);
 }
 
-
+/**
+ * Is unoconv installed
+ * @return bool
+ */
 function api_is_unoconv_installed()
 {
     return false;
+}
+
+/**
+ * Get origin
+ *
+ * @param string
+ * @return string
+ **/
+function api_get_origin()
+{
+    if (isset($_REQUEST['origin'])) {
+        return $_REQUEST['origin'] == 'learnpath' ? 'learnpath' : null;
+    }
+
+    return null;
 }

@@ -2959,13 +2959,13 @@ class learnpath
             // Style Status
 
             $class_name = array (
-                'not attempted' => 'scrom_not_attempted',
-                'incomplete'    => 'scrom_incomplete',
-                'failed'        => 'scrom_failed',
-                'completed'     => 'scrom_completed',
-                'passed'        => 'scrom_passed',
-                'succeeded'     => 'scrom_succeeded',
-                'browsed'       => 'scrom_completed',
+                'not attempted' => 'scorm_not_attempted',
+                'incomplete'    => 'scorm_incomplete',
+                'failed'        => 'scorm_failed',
+                'completed'     => 'scorm_completed',
+                'passed'        => 'scorm_passed',
+                'succeeded'     => 'scorm_succeeded',
+                'browsed'       => 'scorm_completed',
             );
 
             $style = 'scorm_item';

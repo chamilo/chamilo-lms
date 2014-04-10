@@ -775,6 +775,21 @@ function api_is_facebook_auth_activated() {
 
 
 /**
+ * Return the $_configuration of displaying group forum in the general forum tool of a course or not
+ * is true by default
+ * @return bool
+ * @todo : in 1.10 replace this with a platform parameter in the database
+ */
+function apiGetDisplayGroupsForumInGeneralTool() {
+    global $_configuration;
+
+    if (isset($_configuration['display_groups_forum_in_general_tool'])) {
+        return $_configuration['display_groups_forum_in_general_tool'];
+    }
+    return true;
+}
+
+/**
  * This function checks whether a given path points inside the system.
  * @param string $path      The path to be tesed. It should be full path, web-absolute (WEB), semi-absolute (REL) or system-absolyte (SYS).
  * @return bool             Returns true when the given path is inside the system, false otherwise.

@@ -1219,7 +1219,7 @@ function get_forums_in_category($cat_id)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function get_forums($id = '', $course_code = '')
+function get_forums($id = '', $course_code = '', $includeGroupsForum = true)
 {
     $course_info = api_get_course_info($course_code);
 
@@ -1237,6 +1237,11 @@ function get_forums($id = '', $course_code = '')
 
     $forum_list = array();
 
+    $includeGroupsForumSelect = "";
+    if (!$includeGroupsForum) {
+        $includeGroupsForumSelect = " AND forum_of_group = 0 ";
+    }
+
     if ($id == '') {
         // Student
         // Select all the forum information of all forums (that are visible to students).
@@ -1248,6 +1253,7 @@ function get_forums($id = '', $course_code = '')
                     $condition_session AND
                     forum.c_id = $course_id AND
                     item_properties.c_id = $course_id
+                    $includeGroupsForumSelect
                 ORDER BY forum.forum_order ASC";
 
         // Select the number of threads of the forums (only the threads that are visible).
@@ -1286,6 +1292,7 @@ function get_forums($id = '', $course_code = '')
                         $condition_session AND
                         forum.c_id = $course_id AND
                         item_properties.c_id = $course_id
+                        $includeGroupsForumSelect
                     ORDER BY forum_order ASC";
 
             // Select the number of threads of the forums (only the threads that are not deleted).

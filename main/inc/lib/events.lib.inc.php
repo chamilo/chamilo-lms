@@ -543,9 +543,10 @@ function exercise_attempt_hotspot($exe_id, $question_id, $answer_id, $correct, $
  * @param	string	Timestamp (defaults to null)
  * @param	integer	User ID (defaults to null)
  * @param	string	Course code (defaults to null)
+ * @param	integer	Session ID (defaults to null - only stored from 1.10 onwards)
  * @assert ('','','') === false
  */
-function event_system($event_type, $event_value_type, $event_value, $datetime = null, $user_id = null, $course_code = null)
+function event_system($event_type, $event_value_type, $event_value, $datetime = null, $user_id = null, $course_code = null, $session_id = null)
 {
     global $TABLETRACK_DEFAULT;
     if (empty($event_type)) {
@@ -927,6 +928,7 @@ function delete_student_lp_events($user_id, $lp_id, $course, $session_id) {
         $sql_delete = "DELETE FROM $recording_table     WHERE exe_id IN (".implode(',',$exe_list).")";
         Database::query($sql_delete);
     }
+    event_system(LOG_LP_ATTEMPT_DELETE, LOG_LP_ID, $lp_id, null, null, $course['code'], $session_id);
 }
 
 /**
@@ -948,6 +950,7 @@ function delete_all_incomplete_attempts($user_id, $exercise_id, $course_code, $s
         $sql = "DELETE FROM $track_e_exercises  WHERE exe_user_id = $user_id AND exe_exo_id = $exercise_id AND exe_cours_id = '$course_code' AND session_id = $session_id AND status = 'incomplete' ";
         Database::query($sql);
     }
+    event_system(LOG_EXERCISE_RESULT_DELETE, LOG_EXERCISE_AND_USER_ID, $exercise_id.'-'.$user_id, null, null, $course_code, $session_id);
 }
 
 /**
@@ -1436,6 +1439,7 @@ function delete_attempt($exe_id, $user_id, $course_code, $session_id, $question_
     $sql = "DELETE FROM $table_track_attempt
             WHERE exe_id = $exe_id AND user_id = $user_id AND course_code = '$course_code' AND session_id = $session_id AND question_id = $question_id ";
     Database::query($sql);
+    event_system(LOG_QUESTION_RESULT_DELETE, LOG_EXERCISE_ATTEMPT_QUESTION_ID, $exe_id.'-'.$question_id, null, null, $course_code, $session_id);
 }
 
 /**
@@ -1443,19 +1447,21 @@ function delete_attempt($exe_id, $user_id, $course_code, $session_id, $question_
  * @param int $user_id
  * @param string $course_code
  * @param int $question_id
+ * @todo add session_id for 1.10
  */
-function delete_attempt_hotspot($exe_id, $user_id, $course_code, $question_id) {
+function delete_attempt_hotspot($exe_id, $user_id, $course_code, $session_id = 0, $question_id) {
     $table_track_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
 
     $exe_id          = intval($exe_id);
     $user_id         = intval($user_id);
     $course_code     = Database::escape_string($course_code);
-    //$session_id      = intval($session_id);
+    $session_id      = intval($session_id);
     $question_id     = intval($question_id);
 
     $sql = "DELETE FROM $table_track_attempt
             WHERE hotspot_exe_id = $exe_id AND hotspot_user_id = $user_id AND hotspot_course_code = '$course_code' AND hotspot_question_id = $question_id ";
     Database::query($sql);
+    event_system(LOG_QUESTION_RESULT_DELETE, LOG_EXERCISE_ATTEMPT_QUESTION_ID, $exe_id.'-'.$question_id, null, null, $course_code, $session_id);
 }
 
 /**

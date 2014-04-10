@@ -359,7 +359,7 @@ switch ($action) {
                     }
                     delete_attempt($exe_id, api_get_user_id(), $course_code, $session_id, $my_question_id);
                     if ($objQuestionTmp->type  == HOT_SPOT) {
-                        delete_attempt_hotspot($exe_id, api_get_user_id(), $course_code, $my_question_id);
+                        delete_attempt_hotspot($exe_id, api_get_user_id(), $course_code, $session_id, $my_question_id);
                     }
 
                     if (isset($attempt_list[$my_question_id]) && isset($attempt_list[$my_question_id]['marks'])) {

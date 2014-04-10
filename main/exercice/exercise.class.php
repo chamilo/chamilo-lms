@@ -1534,6 +1534,7 @@ class Exercise {
                 $sql_where
                 AND session_id = ".api_get_session_id()."";
         Database::query($sql);
+        event_system(LOG_EXERCISE_RESULT_DELETE, LOG_EXERCISE_ID, $this->id);
 
         return $i;
     }

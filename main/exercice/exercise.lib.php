@@ -2383,6 +2383,8 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     if ($show_all_but_expected_answer) {
         $exercise_content .= "<div class='normal-message'>".get_lang("ExerciseWithFeedbackWithoutCorrectionComment")."</div>";
     }
+    // Remove audio autoplay from questions on results page - refs BT#7939
+    $exercise_content = preg_replace('/autoplay[\=\".+\"]+/','',$exercise_content);
 
     echo $total_score_text;
     echo $exercise_content;

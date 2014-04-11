@@ -175,10 +175,10 @@ define('LOG_USER_FIELD_CREATE',			        'user_field_created');
 define('LOG_USER_FIELD_DELETE',			        'user_field_deleted');
 define('LOG_SESSION_CREATE',                    'session_created');
 define('LOG_SESSION_DELETE',                    'session_deleted');
-define('LOG_SESSION_CATEGORY_CREATE',           'session_category_created');
-define('LOG_SESSION_CATEGORY_DELETE',           'session_category_deleted');
+define('LOG_SESSION_CATEGORY_CREATE',           'session_cat_created'); //changed in 1.9.8
+define('LOG_SESSION_CATEGORY_DELETE',           'session_cat_deleted'); //changed in 1.9.8
 define('LOG_CONFIGURATION_SETTINGS_CHANGE',     'settings_changed');
-define('LOG_PLATFORM_LANGUAGE_CHANGE',          'platform_language_changed');
+define('LOG_PLATFORM_LANGUAGE_CHANGE',          'platform_lng_changed'); //changed in 1.9.8
 define('LOG_SUBSCRIBE_USER_TO_COURSE',          'user_subscribed');
 define('LOG_UNSUBSCRIBE_USER_FROM_COURSE',      'user_unsubscribed');
 define('LOG_ATTEMPTED_FORCED_LOGIN',            'attempted_forced_login');

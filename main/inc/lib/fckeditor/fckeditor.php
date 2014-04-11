@@ -49,7 +49,6 @@ function FCKeditor_IsCompatibleBrowser()
             $sAgent = $HTTP_USER_AGENT ;
         }
     }
-error_log($sAgent);
     if ( strpos($sAgent, 'MSIE') !== false && strpos($sAgent, 'mac') === false && strpos($sAgent, 'Opera') === false ) {
         $iVersion = (float)substr($sAgent, strpos($sAgent, 'MSIE') + 5, 3) ;
         return ($iVersion >= 5.5) ;

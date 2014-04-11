@@ -552,13 +552,11 @@ EOT;
     {
         $error = false;
         $addDateLibraries = false;
+        $dateElementTypes = array('date_range_picker', 'date_time_picker', 'date_picker', 'datepicker', 'datetimepicker');
         /** @var HTML_QuickForm_element $element */
         foreach ($this->_elements as $element) {
-            if (in_array(
-                $element->getType(),
-                array('date_range_picker', 'date_time_picker', 'date_picker', 'datepicker', 'datetimepicker'))
-            ) {
-            $addDateLibraries = true;
+            if (in_array($element->getType(),$dateElementTypes)) {
+                $addDateLibraries = true;
             }
             if (!is_null(parent::getElementError($element->getName()))) {
                 $error = true;
@@ -566,7 +564,6 @@ EOT;
             }
         }
         $return_value = '';
-
         $js = null;
         if ($addDateLibraries) {
             $js = api_get_js('jquery-ui/jquery-ui-i18n.min.js');
@@ -588,11 +585,11 @@ EOT;
             }
         }
 
-        $return_value .= $js;
-
         if ($error) {
             $return_value = Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'warning');
         }
+
+        $return_value .= $js;
         $return_value .= parent::toHtml();
         // Add div-element which is to hold the progress bar
         if (isset($this->with_progress_bar) && $this->with_progress_bar) {
@@ -600,9 +597,6 @@ EOT;
         }
         return $return_value;
     }
-
-
-
 }
 
 /**

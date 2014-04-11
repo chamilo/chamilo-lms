@@ -1526,15 +1526,15 @@ class Exercise {
                 $i++;
             }
         }
-
+        $session_id = api_get_session_id();
         // delete TRACK_E_EXERCICES table
         $sql = "DELETE FROM $table_track_e_exercises
                 WHERE exe_cours_id = '".api_get_course_id()."'
                 AND exe_exo_id = ".$this->id."
                 $sql_where
-                AND session_id = ".api_get_session_id()."";
+                AND session_id = ".$session_id."";
         Database::query($sql);
-        event_system(LOG_EXERCISE_RESULT_DELETE, LOG_EXERCISE_ID, $this->id);
+        event_system(LOG_EXERCISE_RESULT_DELETE, LOG_EXERCISE_ID, $this->id, null, null, api_get_course_id(), $session_id);
 
         return $i;
     }

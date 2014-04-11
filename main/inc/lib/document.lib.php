@@ -1833,7 +1833,6 @@ class DocumentManager
         $attributes = array();
         $wanted_attributes = array('src', 'url', '@import', 'href', 'value', 'flashvars');
         $explode_attributes = array('flashvars' => 'file');
-
         $abs_path = '';
 
         if ($recursivity > $max) {
@@ -1868,6 +1867,8 @@ class DocumentManager
                 return false;
             }
         }
+
+        $files_list = array();
 
         switch ($type) {
             case TOOL_DOCUMENT :

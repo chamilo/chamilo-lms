@@ -851,9 +851,22 @@ class UserGroup extends Model
         $userId  = intval($userId);
         $classId = intval($classId);
         $sql = "INSERT INTO $table_rel_user SET user_id = '".$userId."', usergroup_id='".$classId."'";
-	 Database::query($sql);
+	    Database::query($sql);
     }
-    
-       
+
+    /**
+     * Return true if usergroup with id=$inId existes in the database
+     * @param int $inId
+     * @return bool
+     */
+    public static function usergroupIdExists($inId)
+    {
+        $row = Database::select('count(*) as count', Database::get_main_table(TABLE_USERGROUP), array('where' => array("id = ?" => $inId)), 'first');
+
+        return ($row['count'] > 0);
+    }
+
+
+
 }
 /* CREATE TABLE IF NOT EXISTS access_url_rel_usergroup (access_url_id int unsigned NOT NULL, usergroup_id int unsigned NOT NULL, PRIMARY KEY (access_url_id, usergroup_id));*/

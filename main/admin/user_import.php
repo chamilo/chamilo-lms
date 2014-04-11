@@ -65,12 +65,12 @@ function validate_data($users)
             $user['error'] = get_lang('WrongStatus');
             $errors[] = $user;
         }
-        // 4. Check classname
+        // 4. Check classid
         $usergroup = new UserGroup();
-        if (!empty($user['ClassName'])) {
-            $className = explode('|', trim($user['ClassName']));
-            foreach ($className as $class) {
-                if (!$usergroup->usergroup_exists($class)) {
+        if (!empty($user['ClassId'])) {
+            $classId = explode('|', trim($user['ClassId']));
+            foreach ($classId as $id) {
+                if (!UserGroup::usergroupIdExists($id)) {
                     $user['error'] = get_lang('ClassNameNotAvailable');
                     $errors[] = $user;
                 }
@@ -177,15 +177,13 @@ function save_data($users)
                 }
             }
             $usergroup = new UserGroup();
-            if (!empty($user['ClassName'])) {
-                $className = explode('|', trim($user['ClassName']));
-                foreach ($className as $class) {
-                    $classId = $usergroup->get_id_by_name($class);
-                    $usergroup->addUser($user_id, $classId);
+            if (!empty($user['ClassId'])) {
+                $classId = explode('|', trim($user['ClassId']));
+                foreach ($classId as $id) {
+                    $usergroup->addUser($user_id, $id);
                 }
                 
             }
-
 
             // Saving extra fields.
             global $extra_fields;

@@ -193,9 +193,9 @@ define('LOG_CAREER_DELETE',                     'career_deleted');
 define('LOG_USER_PERSONAL_DOC_DELETED',         'user_doc_deleted');
 define('LOG_WIKI_ACCESS',                       'wiki_page_view');
 
-define('LOG_EXERCISE_RESULT_DELETE',           'exercise_result_deleted');
+define('LOG_EXERCISE_RESULT_DELETE',           'exe_result_deleted');
 define('LOG_LP_ATTEMPT_DELETE',                'lp_attempt_deleted');
-define('LOG_QUESTION_RESULT_DELETE',           'question_attempt_deleted');
+define('LOG_QUESTION_RESULT_DELETE',           'qst_attempt_deleted');
 
 // event logs data types (max 20 chars)
 define('LOG_COURSE_CODE',                       'course_code');

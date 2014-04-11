@@ -425,6 +425,8 @@ if ($is_allowed_to_edit) {
         var hauteurAuthorImg = document.getElementById('author_image').offsetHeight;
         var hauteurAuthorName = document.getElementById('author_name').offsetHeight;
         var heightBreadcrumb = document.getElementById('learning_path_breadcrumb_zone').offsetHeight;
+        var control = document.getElementById('control');
+        var heightControl = (control)? control.offsetHeight : 0;
 
         var hauteurMedia = 0;
         if ($("#lp_media_file").length != 0) {
@@ -441,7 +443,7 @@ if ($is_allowed_to_edit) {
         <?php if (!empty($_SESSION['oLP']->scorm_debug)) echo 'debugsize = 150;' ?>
         document.getElementById('inner_lp_toc').style.height = innerHauteur - hauteurHaut - 40 - debugsize + "px";
         if (document.getElementById('content_id')) {
-            document.getElementById('content_id').style.height = innerHauteur - debugsize - heightBreadcrumb + "px";
+            document.getElementById('content_id').style.height = innerHauteur - debugsize - heightBreadcrumb - heightControl + "px";
         }
 
     // Loads the glossary library.

@@ -1,4 +1,4 @@
-<?php // $Id: $
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * @author Claro Team <cvs@claroline.net>
@@ -8,14 +8,6 @@
 /**
  * Code
  */
-if ( count( get_included_files() ) == 1 ) die( '---' );
-
-if (!function_exists('mime_content_type')) {
-	require_once api_get_path(LIBRARY_PATH).'document.lib.php';
-	function mime_content_type($filename) {
-		return DocumentManager::file_get_mime_type((string)$filename);
-	}
-}
 
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/answer.class.php');
 require_once(api_get_path(SYS_CODE_PATH).'/exercice/exercise.class.php');
@@ -39,32 +31,40 @@ class Ims2Question extends Question
 {
     /**
      * Include the correct answer class and create answer
+     * @return Answer
      */
-    function setAnswer()
+    public function setAnswer()
     {
         switch($this->type) {
-            case MCUA :
+            case MCUA:
                 $answer = new ImsAnswerMultipleChoice($this->id);
+
                 return $answer;
-            case MCMA :
+            case MCMA:
                 $answer = new ImsAnswerMultipleChoice($this->id);
+
                 return $answer;
             case TF :
                 $answer = new ImsAnswerMultipleChoice($this->id);
+
                 return $answer;
-            case FIB :
+            case FIB:
                 $answer = new ImsAnswerFillInBlanks($this->id);
+
                 return $answer;
-            case MATCHING :
+            case MATCHING:
                 $answer = new ImsAnswerMatching($this->id);
+
                 return $answer;
-            case FREE_ANSWER :
+            case FREE_ANSWER:
                 $answer = new ImsAnswerFree($this->id);
+
                 return $answer;
-            case HOT_SPOT :
+            case HOT_SPOT:
                 $answer = new ImsAnswerHotspot($this->id);
+
                 return $answer;
-            default :
+            default:
                 $answer = null;
                 break;
         }
@@ -92,21 +92,26 @@ class ImsAnswerMultipleChoice extends Answer
      * Return the XML flow for the possible answers.
      *
      */
-    function imsExportResponses($questionIdent, $questionStatment)
+    public function imsExportResponses($questionIdent, $questionStatment)
     {
+        // @todo getAnswersList() converts the answers using api_html_entity_decode()
 		$this->answerList = $this->getAnswersList(true);
         $out  = '    <choiceInteraction responseIdentifier="' . $questionIdent . '" >' . "\n";
-        $out .= '      <prompt> ' . $questionStatment . ' </prompt>'. "\n";
+        $out .= '      <prompt><![CDATA['.formatExerciseQtiTitle($questionStatment) . ']]></prompt>'. "\n";
 		if (is_array($this->answerList)) {
 	        foreach ($this->answerList as $current_answer) {
-	            $out .= '      <simpleChoice identifier="answer_' . $current_answer['id'] . '" fixed="false">' . $current_answer['answer'];
+	            $out .= '<simpleChoice identifier="answer_' . $current_answer['id'] . '" fixed="false">
+                         <![CDATA['.formatExerciseQtiTitle($current_answer['answer']).']]>';
 	            if (isset($current_answer['comment']) && $current_answer['comment'] != '') {
-	                $out .= '<feedbackInline identifier="answer_' . $current_answer['id'] . '">' . $current_answer['comment'] . '</feedbackInline>';
+	                $out .= '<feedbackInline identifier="answer_' . $current_answer['id'] . '">
+	                         <![CDATA['.formatExerciseQtiTitle($current_answer['comment']).']]>
+	                         </feedbackInline>';
 	            }
 	            $out .= '</simpleChoice>'. "\n";
 	        }
 		}
         $out .= '    </choiceInteraction>'. "\n";
+
         return $out;
     }
 
@@ -114,7 +119,7 @@ class ImsAnswerMultipleChoice extends Answer
      * Return the XML flow of answer ResponsesDeclaration
      *
      */
-    function imsExportResponsesDeclaration($questionIdent)
+    public function imsExportResponsesDeclaration($questionIdent)
     {
 		$this->answerList = $this->getAnswersList(true);
 		$type = $this->getQuestionType();
@@ -122,7 +127,7 @@ class ImsAnswerMultipleChoice extends Answer
 
         $out = '  <responseDeclaration identifier="' . $questionIdent . '" cardinality="' . $cardinality . '" baseType="identifier">' . "\n";
 
-        //Match the correct answers
+        // Match the correct answers.
 
         $out .= '    <correctResponse>'. "\n";
 		if (is_array($this->answerList)) {
@@ -162,70 +167,20 @@ class ImsAnswerFillInBlanks extends Answer
      *
      *
      */
-    function imsExportResponses($questionIdent, $questionStatment)
+    public function imsExportResponses($questionIdent, $questionStatment)
     {
-        global $charset;
 		$this->answerList = $this->getAnswersList(true);
-
-        //switch ($this->type)
-        //{
-        //    case TEXTFIELD_FILL :
-        //    {
-        		$text = '';
-                $text .= $this->answerText;
-				if (is_array($this->answerList)) {
-	                foreach ($this->answerList as $key=>$answer) {
-	                	$key = $answer['id'];
-	                	$answer = $answer['answer'];
-	                	$len = api_strlen($answer);
-	                    $text = str_replace('['.$answer.']','<textEntryInteraction responseIdentifier="fill_'.$key.'" expectedLength="'.api_strlen($answer).'"/>', $text);
-	                }
-				}
-                $out = $text;
-        //    }
-        //    break;
-
-            /*
-            case LISTBOX_FILL :
-            {
-                $text = $this->answerText;
-
-                foreach ($this->answerList as $answerKey=>$answer)
-                {
-
-                    //build inlinechoice list
-
-                    $inlineChoiceList = '';
-
-                    //1-start interaction tag
-
-                    $inlineChoiceList .= '<inlineChoiceInteraction responseIdentifier="fill_'.$answerKey.'" >'. "\n";
-
-                    //2- add wrong answer array
-
-                    foreach ($this->wrongAnswerList as $choiceKey=>$wrongAnswer)
-                    {
-                        $inlineChoiceList .= '  <inlineChoice identifier="choice_w_'.$answerKey.'_'.$choiceKey.'">'.$wrongAnswer.'</inlineChoice>'. "\n";
-                    }
-
-                    //3- add correct answers array
-                    foreach ($this->answerList as $choiceKey=>$correctAnswer)
-                    {
-                        $inlineChoiceList .= '  <inlineChoice identifier="choice_c_'.$answerKey.'_'.$choiceKey.'">'.$correctAnswer.'</inlineChoice>'. "\n";
-                    }
-
-                    //4- finish interaction tag
-
-                    $inlineChoiceList .= '</inlineChoiceInteraction>';
-
-                    $text = str_replace('['.$answer.']',$inlineChoiceList, $text);
-                }
-                $out = $text;
-
+        $text = '';
+        $text .= $this->answerText;
+        if (is_array($this->answerList)) {
+            foreach ($this->answerList as $key=>$answer) {
+                $key = $answer['id'];
+                $answer = $answer['answer'];
+                $len = api_strlen($answer);
+                $text = str_replace('['.$answer.']','<textEntryInteraction responseIdentifier="fill_'.$key.'" expectedLength="'.api_strlen($answer).'"/>', $text);
             }
-            break;
-            */
-        //}
+        }
+        $out = $text;
 
         return $out;
     }
@@ -233,39 +188,19 @@ class ImsAnswerFillInBlanks extends Answer
     /**
      *
      */
-    function imsExportResponsesDeclaration($questionIdent)
+    public function imsExportResponsesDeclaration($questionIdent)
     {
 		$this->answerList = $this->getAnswersList(true);
 		$this->gradeList = $this->getGradesList();
         $out = '';
 		if (is_array($this->answerList)) {
-	        foreach ($this->answerList as $answerKey=>$answer) {
-
+	        foreach ($this->answerList as $answer) {
 	        	$answerKey = $answer['id'];
 	        	$answer = $answer['answer'];
 	            $out .= '  <responseDeclaration identifier="fill_' . $answerKey . '" cardinality="single" baseType="identifier">' . "\n";
 	            $out .= '    <correctResponse>'. "\n";
-
-	            //if ($this->type==TEXTFIELD_FILL)
-	            //{
-	                $out .= '      <value>'.$answer.'</value>'. "\n";
-	            //}
-	            /*
-	            else
-	            {
-	                //find correct answer key to apply in manifest and output it
-
-	                foreach ($this->answerList as $choiceKey=>$correctAnswer)
-	                {
-	                    if ($correctAnswer==$answer)
-	                    {
-	                        $out .= '      <value>choice_c_'.$answerKey.'_'.$choiceKey.'</value>'. "\n";
-	                    }
-	                }
-	            }
-	            */
+                $out .= '      <value><![CDATA['.formatExerciseQtiTitle($answer).']]></value>'. "\n";
 	            $out .= '    </correctResponse>'. "\n";
-
 	            if (isset($this->gradeList[$answerKey])) {
 	                $out .= '    <mapping>'. "\n";
 	                $out .= '      <mapEntry mapKey="'.$answer.'" mappedValue="'.$this->gradeList[$answerKey].'"/>'. "\n";
@@ -289,7 +224,7 @@ class ImsAnswerMatching extends Answer
     /**
      * Export the question part as a matrix-choice, with only one possible answer per line.
      */
-    function imsExportResponses($questionIdent, $questionStatment)
+    public function imsExportResponses($questionIdent, $questionStatment)
     {
 		$this->answerList = $this->getAnswersList(true);
 		$maxAssociation = max(count($this->leftList), count($this->rightList));
@@ -304,7 +239,10 @@ class ImsAnswerMatching extends Answer
         $out .= '  <simpleMatchSet>'. "\n";
 		if (is_array($this->leftList)) {
 	        foreach ($this->leftList as $leftKey=>$leftElement) {
-	            $out .= '    <simpleAssociableChoice identifier="left_'.$leftKey.'" >'. $leftElement['answer'] .'</simpleAssociableChoice>'. "\n";
+	            $out .= '
+	            <simpleAssociableChoice identifier="left_'.$leftKey.'" >
+	                <![CDATA['.formatExerciseQtiTitle($leftElement['answer']).']]>
+	            </simpleAssociableChoice>'. "\n";
 	        }
     	}
 
@@ -318,7 +256,9 @@ class ImsAnswerMatching extends Answer
 
 		if (is_array($this->rightList)) {
 	        foreach($this->rightList as $rightKey=>$rightElement) {
-	            $out .= '    <simpleAssociableChoice identifier="right_'.$i.'" >'. $rightElement['answer'] .'</simpleAssociableChoice>'. "\n";
+	            $out .= '<simpleAssociableChoice identifier="right_'.$i.'" >
+	                    <![CDATA['.formatExerciseQtiTitle($rightElement['answer']).']]>
+	                    </simpleAssociableChoice>'. "\n";
 	            $i++;
 	        }
 		}
@@ -331,7 +271,7 @@ class ImsAnswerMatching extends Answer
     /**
      *
      */
-    function imsExportResponsesDeclaration($questionIdent)
+    public function imsExportResponsesDeclaration($questionIdent)
     {
 		$this->answerList = $this->getAnswersList(true);
         $out =  '  <responseDeclaration identifier="' . $questionIdent . '" cardinality="single" baseType="identifier">' . "\n";
@@ -363,7 +303,6 @@ class ImsAnswerMatching extends Answer
 
         return $out;
     }
-
 }
 
 /**
@@ -373,12 +312,11 @@ class ImsAnswerMatching extends Answer
 class ImsAnswerHotspot extends Answer
 {
     /**
-     * TODO update this to match hotspots instead of copying matching
+     * TODO update this to match hot spots instead of copying matching
      * Export the question part as a matrix-choice, with only one possible answer per line.
      */
-   	function imsExportResponses($questionIdent, $questionStatment, $questionDesc='', $questionMedia='')
+    public function imsExportResponses($questionIdent, $questionStatment, $questionDesc='', $questionMedia='')
     {
-        global $charset;
 		$this->answerList = $this->getAnswersList(true);
 		$questionMedia = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/'.$questionMedia;
 		$mimetype = mime_content_type($questionMedia);
@@ -427,13 +365,12 @@ class ImsAnswerHotspot extends Answer
         $out = $text;
 
         return $out;
-
     }
 
     /**
      *
      */
-    function imsExportResponsesDeclaration($questionIdent)
+    public function imsExportResponsesDeclaration($questionIdent)
     {
 		$this->answerList = $this->getAnswersList(true);
 		$this->gradeList = $this->getGradesList();
@@ -445,7 +382,7 @@ class ImsAnswerHotspot extends Answer
 	        foreach ($this->answerList as $answerKey=>$answer)  {
 	        	$answerKey = $answer['id'];
 	        	$answer = $answer['answer'];
-	            $out .= '      <value>'.$answerKey.'</value>'. "\n";
+	            $out .= '<value><![CDATA['.formatExerciseQtiTitle($answerKey).']]></value>';
 	        }
 		}
         $out .= '    </correctResponse>'. "\n";
@@ -465,14 +402,14 @@ class ImsAnswerFree extends Answer
      * TODO implement
      * Export the question part as a matrix-choice, with only one possible answer per line.
      */
-   	function imsExportResponses($questionIdent, $questionStatment, $questionDesc='', $questionMedia='')
+    public function imsExportResponses($questionIdent, $questionStatment, $questionDesc='', $questionMedia='')
 	{
 		return '';
 	}
     /**
      *
      */
-    function imsExportResponsesDeclaration($questionIdent)
+    public function imsExportResponsesDeclaration($questionIdent)
     {
     	return '';
     }

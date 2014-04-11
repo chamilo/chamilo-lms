@@ -866,7 +866,5 @@ class UserGroup extends Model
         return ($row['count'] > 0);
     }
 
-
-
 }
 /* CREATE TABLE IF NOT EXISTS access_url_rel_usergroup (access_url_id int unsigned NOT NULL, usergroup_id int unsigned NOT NULL, PRIMARY KEY (access_url_id, usergroup_id));*/

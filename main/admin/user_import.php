@@ -71,7 +71,7 @@ function validate_data($users)
             $classId = explode('|', trim($user['ClassId']));
             foreach ($classId as $id) {
                 if (!UserGroup::usergroupIdExists($id)) {
-                    $user['error'] = get_lang('ClassNameNotAvailable');
+                    $user['error'] = sprintf(get_lang('ClassIdDoesntExists'), $id);
                     $errors[] = $user;
                 }
             }

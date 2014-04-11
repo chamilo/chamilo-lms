@@ -1449,6 +1449,9 @@ class UserManager
                     UserManager::process_tags(explode(';', $fvalues), $user_id, $rowuf['id']);
                     return true;
                     break;
+                case self::USER_FIELD_TYPE_SELECT_MULTIPLE :
+                    // check code from UserManager::update_user_picture() to use something similar here
+                    break;
                 case self::USER_FIELD_TYPE_RADIO:
                 case self::USER_FIELD_TYPE_SELECT:
                 case self::USER_FIELD_TYPE_SELECT_MULTIPLE:
@@ -4326,9 +4329,15 @@ EOF;
                         $form->freeze('extra_'.$field_details[1]);
                     break;
                 case self::USER_FIELD_TYPE_FILE:
+                    if (!empty($field_details[3])) {
+                        $uPaths = UserManager::get_user_picture_path_by_id($user_id);
+                        $path = '<a href="'.$uPaths['dir'].$field_details[3]."'>".$field_details[3].'</a>';
+                        $form->addElement('html', 'extra_'.$field_details[1].'_link', $path, null, '');
+                    }
                     $form->addElement('file', 'extra_'.$field_details[1], $field_details[3], null, '');
-                    if ($field_details[7] == 0)
+                    if ($field_details[7] == 0) {
                         $form->freeze('extra_'.$field_details[1]);
+                    }
                     break;
             }
         }

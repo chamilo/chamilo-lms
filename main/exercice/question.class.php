@@ -82,7 +82,7 @@ abstract class Question
 	/**
 	 * constructor of the class
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 */
 	public function Question()
     {
@@ -110,11 +110,12 @@ abstract class Question
 	}
 
 	/**
-	 * Reads question informations from the data base
+	 * Reads question information from the data base
 	 *
-	 * @author - Olivier Brouckaert
-	 * @param - integer $id - question ID
-	 * @return - boolean - true if question exists, otherwise false
+	 * @author Olivier Brouckaert
+	 * @param integer $id - question ID
+     *
+	 * @return Question
 	 */
 	static function read($id, $course_id = null) {
         $id = intval($id);
@@ -176,7 +177,7 @@ abstract class Question
 	/**
 	 * returns the question ID
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 * @return - integer - question ID
 	 */
 	function selectId() {
@@ -186,7 +187,7 @@ abstract class Question
 	/**
 	 * returns the question title
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 * @return - string - question title
 	 */
 	function selectTitle() {
@@ -196,7 +197,7 @@ abstract class Question
 	/**
 	 * returns the question description
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 * @return - string - question description
 	 */
 	function selectDescription() {
@@ -207,7 +208,7 @@ abstract class Question
 	/**
 	 * returns the question weighting
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 * @return - integer - question weighting
 	 */
 	function selectWeighting()
@@ -218,7 +219,7 @@ abstract class Question
 	/**
 	 * returns the question position
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 * @return - integer - question position
 	 */
 	function selectPosition() {
@@ -228,7 +229,7 @@ abstract class Question
 	/**
 	 * returns the answer type
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 * @return - integer - answer type
 	 */
 	function selectType() {
@@ -238,7 +239,7 @@ abstract class Question
 	/**
 	 * returns the level of the question
 	 *
-	 * @author - Nicolas Raynaud
+	 * @author Nicolas Raynaud
 	 * @return - integer - level of the question, 0 by default.
 	 */
 	function selectLevel() {
@@ -248,7 +249,7 @@ abstract class Question
 	/**
 	 * returns the picture name
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 * @return - string - picture name
 	 */
 	function selectPicture() {
@@ -265,7 +266,7 @@ abstract class Question
 	/**
 	 * returns the array with the exercise ID list
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 * @return - array - list of exercise ID which the question is in
 	 */
 	function selectExerciseList() {
@@ -275,7 +276,7 @@ abstract class Question
 	/**
 	 * returns the number of exercises which this question is in
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 * @return - integer - number of exercises
 	 */
 	function selectNbrExercises() {
@@ -285,8 +286,8 @@ abstract class Question
 	/**
 	 * changes the question title
 	 *
-	 * @author - Olivier Brouckaert
-	 * @param - string $title - question title
+	 * @author Olivier Brouckaert
+	 * @param string $title - question title
 	 */
 	function updateTitle($title) {
 		$this->question=$title;
@@ -299,8 +300,8 @@ abstract class Question
 	/**
 	 * changes the question description
 	 *
-	 * @author - Olivier Brouckaert
-	 * @param - string $description - question description
+	 * @author Olivier Brouckaert
+	 * @param string $description - question description
 	 */
 	function updateDescription($description) {
 		$this->description=$description;
@@ -309,32 +310,32 @@ abstract class Question
 	/**
 	 * changes the question weighting
 	 *
-	 * @author - Olivier Brouckaert
-	 * @param - integer $weighting - question weighting
+	 * @author Olivier Brouckaert
+	 * @param integer $weighting - question weighting
 	 */
 	function updateWeighting($weighting) {
 		$this->weighting=$weighting;
 	}
 
 	/**
-	 * @author - Hubert Borderiou 12-10-2011
-	 * @param - array of category $in_category
+	 * @author Hubert Borderiou 12-10-2011
+	 * @param array of category $in_category
 	 */
 	function updateCategory($in_category) {
 		$this->category=$in_category;
 	}
 
 	/**
-	 * @author - Hubert Borderiou 12-10-2011
-	 * @param - interger $in_positive
+	 * @author Hubert Borderiou 12-10-2011
+	 * @param interger $in_positive
 	 */
 	function updateScoreAlwaysPositive($in_positive) {
 		$this->scoreAlwaysPositive=$in_positive;
 	}
 
 	/**
-	 * @author - Hubert Borderiou 12-10-2011
-	 * @param - interger $in_positive
+	 * @author Hubert Borderiou 12-10-2011
+	 * @param interger $in_positive
 	 */
 	function updateUncheckedMayScore($in_positive) {
 		$this->uncheckedMayScore=$in_positive;
@@ -347,7 +348,7 @@ abstract class Question
 	 * if category is empty, then question has no category then delete the category entry
      *
      * @param  - int $in_positive
-     * @author - Julio Montoya - Adding multiple cat support
+     * @author Julio Montoya - Adding multiple cat support
 	 */
 	function saveCategories($category_list) {
 
@@ -375,8 +376,8 @@ abstract class Question
 	}
 
 	/**
-	 * @author - Hubert Borderiou 12-10-2011
-	 * @param - interger $in_positive
+	 * @author Hubert Borderiou 12-10-2011
+	 * @param interger $in_positive
 	 * in this version, a question can only have 1 category
 	 * if category is 0, then question has no category then delete the category entry
 	 */
@@ -418,8 +419,8 @@ abstract class Question
 	/**
 	 * changes the question position
 	 *
-	 * @author - Olivier Brouckaert
-	 * @param - integer $position - question position
+	 * @author Olivier Brouckaert
+	 * @param integer $position - question position
 	 */
 	function updatePosition($position) {
 		$this->position=$position;
@@ -428,8 +429,8 @@ abstract class Question
 	/**
 	 * changes the question level
 	 *
-	 * @author - Nicolas Raynaud
-	 * @param - integer $level - question level
+	 * @author Nicolas Raynaud
+	 * @param integer $level - question level
 	 */
 	function updateLevel($level) {
 		$this->level=$level;
@@ -439,8 +440,8 @@ abstract class Question
 	 * changes the answer type. If the user changes the type from "unique answer" to "multiple answers"
 	 * (or conversely) answers are not deleted, otherwise yes
 	 *
-	 * @author - Olivier Brouckaert
-	 * @param - integer $type - answer type
+	 * @author Olivier Brouckaert
+	 * @param integer $type - answer type
 	 */
 	function updateType($type) {
 		$TBL_REPONSES           = Database::get_course_table(TABLE_QUIZ_ANSWER);
@@ -465,9 +466,9 @@ abstract class Question
 	/**
 	 * adds a picture to the question
 	 *
-	 * @author - Olivier Brouckaert
-	 * @param - string $Picture - temporary path of the picture to upload
-	 * @param - string $PictureName - Name of the picture
+	 * @author Olivier Brouckaert
+	 * @param string $Picture - temporary path of the picture to upload
+	 * @param string $PictureName - Name of the picture
 	 * @return - boolean - true if uploaded, otherwise false
 	 */
 	function uploadPicture($Picture, $PictureName, $picturePath = null) {
@@ -503,9 +504,9 @@ abstract class Question
 	/**
 	 * Resizes a picture || Warning!: can only be called after uploadPicture, or if picture is already available in object.
 	 *
-	 * @author - Toon Keppens
-	 * @param - string $Dimension - Resizing happens proportional according to given dimension: height|width|any
-	 * @param - integer $Max - Maximum size
+	 * @author Toon Keppens
+	 * @param string $Dimension - Resizing happens proportional according to given dimension: height|width|any
+	 * @param integer $Max - Maximum size
 	 * @return - boolean - true if success, false if failed
 	 */
 	function resizePicture($Dimension, $Max) {
@@ -571,7 +572,7 @@ abstract class Question
 	/**
 	 * deletes the picture
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 * @return - boolean - true if removed, otherwise false
 	 */
 	function removePicture() {
@@ -591,8 +592,8 @@ abstract class Question
 	/**
 	 * Exports a picture to another question
 	 *
-	 * @author - Olivier Brouckaert
-	 * @param - integer $questionId - ID of the target question
+	 * @author Olivier Brouckaert
+	 * @param integer $questionId - ID of the target question
 	 * @return - boolean - true if copied, otherwise false
 	 */
 	function exportPicture($questionId, $course_info) {
@@ -628,9 +629,9 @@ abstract class Question
 	 * Temporary pictures are used when we don't want to save a picture right after a form submission.
 	 * For example, if we first show a confirmation box.
 	 *
-	 * @author - Olivier Brouckaert
-	 * @param - string $Picture - temporary path of the picture to move
-	 * @param - string $PictureName - Name of the picture
+	 * @author Olivier Brouckaert
+	 * @param string $Picture - temporary path of the picture to move
+	 * @param string $PictureName - Name of the picture
 	 */
 	function setTmpPicture($Picture,$PictureName) {
 		global $picturePath;
@@ -660,7 +661,7 @@ abstract class Question
 	 * Temporary pictures are used when we don't want to save a picture right after a form submission.
 	 * For example, if we first show a confirmation box.
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 * @return - boolean - true if moved, otherwise false
 	 */
 	function getTmpPicture() {
@@ -685,8 +686,8 @@ abstract class Question
 	 * updates the question in the data base
 	 * if an exercise ID is provided, we add that exercise ID into the exercise list
 	 *
-	 * @author - Olivier Brouckaert
-	 * @param - integer $exerciseId - exercise ID if saving in an exercise
+	 * @author Olivier Brouckaert
+	 * @param integer $exerciseId - exercise ID if saving in an exercise
 	 */
 	function save($exerciseId=0) {
 		$TBL_EXERCICE_QUESTION	= Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -910,9 +911,9 @@ abstract class Question
 	/**
 	 * adds an exercise into the exercise list
 	 *
-	 * @author - Olivier Brouckaert
-     * @param - integer $exerciseId - exercise ID
-     * @param - boolean $fromSave - comming from $this->save() or not
+	 * @author Olivier Brouckaert
+     * @param integer $exerciseId - exercise ID
+     * @param boolean $fromSave - comming from $this->save() or not
 	 */
 	function addToList($exerciseId, $fromSave = false) {
 		$TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
@@ -938,8 +939,8 @@ abstract class Question
 	/**
 	 * removes an exercise from the exercise list
 	 *
-	 * @author - Olivier Brouckaert
-	 * @param - integer $exerciseId - exercise ID
+	 * @author Olivier Brouckaert
+	 * @param integer $exerciseId - exercise ID
 	 * @return - boolean - true if removed, otherwise false
 	 */
 	function removeFromList($exerciseId) {
@@ -982,8 +983,8 @@ abstract class Question
 	 * the parameter tells if the question is removed from all exercises (value = 0),
 	 * or just from one exercise (value = exercise ID)
 	 *
-	 * @author - Olivier Brouckaert
-	 * @param - integer $deleteFromEx - exercise ID if the question is only removed from one exercise
+	 * @author Olivier Brouckaert
+	 * @param integer $deleteFromEx - exercise ID if the question is only removed from one exercise
 	 */
 	function delete($deleteFromEx = 0) {
         $course_id = api_get_course_int_id();
@@ -1432,9 +1433,9 @@ abstract class Question
     /**
      * Shows question title an description
      *
-     * @param type $feedback_type
-     * @param type $counter
-     * @param type $score
+     * @param string $feedback_type
+     * @param int $counter
+     * @param float $score
      */
 	function return_header($feedback_type = null, $counter = null, $score = null)
     {
@@ -1505,7 +1506,7 @@ abstract class Question
         $sql = "INSERT INTO $tbl_quiz_question (c_id, question, description, ponderation, position, type, level)
                 VALUES ($course_id, '".Database::escape_string($question_name)."', '".Database::escape_string($question_description)."', '$max_score', $max_position, $type, $level)";
 
-        $rs = Database::query($sql);
+        Database::query($sql);
         // Get the question ID
         $question_id = Database::get_last_insert_id();
 
@@ -1519,13 +1520,12 @@ abstract class Question
         $sql = "INSERT INTO $tbl_quiz_rel_question "
             ."(c_id, question_id,exercice_id,question_order)"
             ." VALUES($course_id, $question_id, $quiz_id, $max_order)";
-        $rs = Database::query($sql);
+        Database::query($sql);
         return $question_id;
     }
 
     /**
-     * return the image filename of the question type
-     *
+     * @return array the image filename of the question type
     */
     public function get_type_icon_html() {
     	$type            = $this->selectType();
@@ -1549,13 +1549,16 @@ abstract class Question
             array(
                 'limit' => " $start, $limit",
                 'where' => $default_where,
-                'order' => "$sidx $sord"));
+                'order' => "$sidx $sord")
+        );
         return $result;
     }
 
     /**
      * Get count course medias
      * @param int course id
+     *
+     * @return int
      */
     static function get_count_course_medias($course_id) {
         $table_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -1567,6 +1570,10 @@ abstract class Question
         return 0;
     }
 
+    /**
+     * @param int $course_id
+     * @return array
+     */
     static function prepare_course_media_select($course_id) {
         $medias = self::get_course_medias($course_id);
         $media_list = array();
@@ -1580,7 +1587,11 @@ abstract class Question
         return $media_list;
     }
 
-    static function get_default_levels() {
+    /**
+     * @return array
+     */
+    static function get_default_levels()
+    {
         $select_level = array(
                 1=>1,
                 2=>2,
@@ -1591,7 +1602,11 @@ abstract class Question
         return $select_level;
     }
 
-    function show_media_content() {
+    /**
+     * @return null|string
+     */
+    function show_media_content()
+    {
         $html = null;
         if ($this->parent_id != 0) {
             $parent_question = Question::read($this->parent_id);

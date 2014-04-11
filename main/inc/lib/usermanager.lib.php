@@ -29,6 +29,7 @@ class UserManager
     const USER_FIELD_TYPE_TAG = 10;
     const USER_FIELD_TYPE_TIMEZONE = 11;
     const USER_FIELD_TYPE_SOCIAL_PROFILE = 12;
+    const USER_FIELD_TYPE_FILE = 13;
 
     /**
      * The default constructor only instanciates an empty user object
@@ -1479,7 +1480,7 @@ class UserManager
             $resufv = Database::query($sqlufv);
             $n = Database::num_rows($resufv);
             if ($n > 1) {
-                //problem, we already have to values for this field and user combination - keep last one
+                //problem, we already have two values for this field and user combination - keep last one
                 while ($rowufv = Database::fetch_array($resufv)) {
                     if ($n > 1) {
                         $sqld = "DELETE FROM $t_ufv WHERE id = ".$rowufv['id'];
@@ -4324,6 +4325,11 @@ EOF;
                     if ($field_details[7] == 0)
                         $form->freeze('extra_'.$field_details[1]);
                     break;
+                case self::USER_FIELD_TYPE_FILE:
+                    $form->addElement('file', 'extra_'.$field_details[1], $field_details[3], null, '');
+                    if ($field_details[7] == 0)
+                        $form->freeze('extra_'.$field_details[1]);
+                    break;
             }
         }
         $return = array();
@@ -4349,6 +4355,7 @@ EOF;
         $types[self::USER_FIELD_TYPE_TAG] = get_lang('FieldTypeTag');
         $types[self::USER_FIELD_TYPE_TIMEZONE] = get_lang('FieldTypeTimezone');
         $types[self::USER_FIELD_TYPE_SOCIAL_PROFILE] = get_lang('FieldTypeSocialProfile');
+        $types[self::USER_FIELD_TYPE_FILE] = get_lang('FieldTypeFile');
 
         return $types;
     }

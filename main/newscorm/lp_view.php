@@ -487,8 +487,8 @@ if ($is_allowed_to_edit) {
             updateContentHeight();
         });
     });
-    //window.onload = updateContentHeight;
-    //window.onresize = updateContentHeight;
+    window.onload = updateContentHeight();
+    window.onresize = updateContentHeight();
 </script>
 <?php
 // Restore a global setting.

@@ -3,14 +3,14 @@
 
 /* Tables names constants */
 define('PLUGIN_NAME', 'ticket');
-define('TABLE_SUPPORT_ASSIGNED_LOG', 'tck_assigned_log');
-define('TABLE_SUPPORT_CATEGORY', 'tck_category');
-define('TABLE_SUPPORT_MESSAGE', 'tck_message');
-define('TABLE_SUPPORT_PRIORITY', 'tck_priority');
-define('TABLE_SUPPORT_PROJECT', 'tck_project');
-define('TABLE_SUPPORT_STATUS', 'tck_status');
-define('TABLE_SUPPORT_TICKET', 'tck_ticket');
-define('TABLE_SUPPORT_MESSAGE_ATTACHMENTS', 'tck_message_attachments');
+define('TABLE_SUPPORT_ASSIGNED_LOG', 'plugin_ticket_assigned_log');
+define('TABLE_SUPPORT_CATEGORY', 'plugin_ticket_category');
+define('TABLE_SUPPORT_MESSAGE', 'plugin_ticket_message');
+define('TABLE_SUPPORT_PRIORITY', 'plugin_ticket_priority');
+define('TABLE_SUPPORT_PROJECT', 'plugin_ticket_project');
+define('TABLE_SUPPORT_STATUS', 'plugin_ticket_status');
+define('TABLE_SUPPORT_TICKET', 'plugin_ticket_ticket');
+define('TABLE_SUPPORT_MESSAGE_ATTACHMENTS', 'plugin_ticket_message_attachments');
 
 /* Ticket status constants */
 define('NEWTCK', 'NAT'); // New ticket unassigned responsible
@@ -38,7 +38,7 @@ require_once __DIR__.'/../../main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'plugin.class.php';
 require_once api_get_path(LIBRARY_PATH).'course.lib.php';
 require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-include_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 require_once api_get_path(PLUGIN_PATH).PLUGIN_NAME.'/lib/ticket.class.php';
 require_once api_get_path(PLUGIN_PATH).PLUGIN_NAME.'/lib/ticket_plugin.class.php';

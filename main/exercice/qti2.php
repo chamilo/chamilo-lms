@@ -57,7 +57,6 @@ function ch_qti2_display_form()
     $formValidator->addElement('file', 'userFile', get_lang('DownloadFile'));
     $formValidator->addElement('style_submit_button', 'submit', get_lang('Send'), 'class="upload"');
     $form .= $formValidator->return_form();
-
 	echo $form;
 }
 
@@ -95,7 +94,7 @@ function ch_qti2_import_file($array_file)
 	}
 }
 
-// display header
+// Display header
 Display::display_header(get_lang('ImportQtiQuiz'), 'Exercises');
 
 // import file

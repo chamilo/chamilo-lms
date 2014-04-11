@@ -188,7 +188,7 @@ abstract class Question
 	 * returns the question title
 	 *
 	 * @author Olivier Brouckaert
-	 * @return - string - question title
+	 * @return string - question title
 	 */
 	function selectTitle() {
 		return $this->question;
@@ -198,7 +198,7 @@ abstract class Question
 	 * returns the question description
 	 *
 	 * @author Olivier Brouckaert
-	 * @return - string - question description
+	 * @return string - question description
 	 */
 	function selectDescription() {
 		$this->description=text_filter($this->description);
@@ -209,7 +209,7 @@ abstract class Question
 	 * returns the question weighting
 	 *
 	 * @author Olivier Brouckaert
-	 * @return - integer - question weighting
+	 * @return integer - question weighting
 	 */
 	function selectWeighting()
 	{
@@ -220,7 +220,7 @@ abstract class Question
 	 * returns the question position
 	 *
 	 * @author Olivier Brouckaert
-	 * @return - integer - question position
+	 * @return integer - question position
 	 */
 	function selectPosition() {
 		return $this->position;
@@ -230,7 +230,7 @@ abstract class Question
 	 * returns the answer type
 	 *
 	 * @author Olivier Brouckaert
-	 * @return - integer - answer type
+	 * @return integer - answer type
 	 */
 	function selectType() {
 		return $this->type;
@@ -240,7 +240,7 @@ abstract class Question
 	 * returns the level of the question
 	 *
 	 * @author Nicolas Raynaud
-	 * @return - integer - level of the question, 0 by default.
+	 * @return integer - level of the question, 0 by default.
 	 */
 	function selectLevel() {
 		return $this->level;
@@ -250,7 +250,7 @@ abstract class Question
 	 * returns the picture name
 	 *
 	 * @author Olivier Brouckaert
-	 * @return - string - picture name
+	 * @return string - picture name
 	 */
 	function selectPicture() {
 		return $this->picture;
@@ -267,7 +267,7 @@ abstract class Question
 	 * returns the array with the exercise ID list
 	 *
 	 * @author Olivier Brouckaert
-	 * @return - array - list of exercise ID which the question is in
+	 * @return array - list of exercise ID which the question is in
 	 */
 	function selectExerciseList() {
 		return $this->exerciseList;
@@ -277,7 +277,7 @@ abstract class Question
 	 * returns the number of exercises which this question is in
 	 *
 	 * @author Olivier Brouckaert
-	 * @return - integer - number of exercises
+	 * @return integer - number of exercises
 	 */
 	function selectNbrExercises() {
 		return sizeof($this->exerciseList);
@@ -327,7 +327,7 @@ abstract class Question
 
 	/**
 	 * @author Hubert Borderiou 12-10-2011
-	 * @param interger $in_positive
+	 * @param int $in_positive
 	 */
 	function updateScoreAlwaysPositive($in_positive) {
 		$this->scoreAlwaysPositive=$in_positive;
@@ -335,7 +335,7 @@ abstract class Question
 
 	/**
 	 * @author Hubert Borderiou 12-10-2011
-	 * @param interger $in_positive
+	 * @param int $in_positive
 	 */
 	function updateUncheckedMayScore($in_positive) {
 		$this->uncheckedMayScore=$in_positive;
@@ -377,7 +377,7 @@ abstract class Question
 
 	/**
 	 * @author Hubert Borderiou 12-10-2011
-	 * @param interger $in_positive
+	 * @param int $in_positive
 	 * in this version, a question can only have 1 category
 	 * if category is 0, then question has no category then delete the category entry
 	 */
@@ -469,7 +469,7 @@ abstract class Question
 	 * @author Olivier Brouckaert
 	 * @param string $Picture - temporary path of the picture to upload
 	 * @param string $PictureName - Name of the picture
-	 * @return - boolean - true if uploaded, otherwise false
+	 * @return boolean - true if uploaded, otherwise false
 	 */
 	function uploadPicture($Picture, $PictureName, $picturePath = null) {
         if (empty($picturePath)) {
@@ -507,7 +507,7 @@ abstract class Question
 	 * @author Toon Keppens
 	 * @param string $Dimension - Resizing happens proportional according to given dimension: height|width|any
 	 * @param integer $Max - Maximum size
-	 * @return - boolean - true if success, false if failed
+	 * @return boolean - true if success, false if failed
 	 */
 	function resizePicture($Dimension, $Max) {
 		global $picturePath;
@@ -573,7 +573,7 @@ abstract class Question
 	 * deletes the picture
 	 *
 	 * @author Olivier Brouckaert
-	 * @return - boolean - true if removed, otherwise false
+	 * @return boolean - true if removed, otherwise false
 	 */
 	function removePicture() {
 		global $picturePath;
@@ -594,7 +594,7 @@ abstract class Question
 	 *
 	 * @author Olivier Brouckaert
 	 * @param integer $questionId - ID of the target question
-	 * @return - boolean - true if copied, otherwise false
+	 * @return boolean - true if copied, otherwise false
 	 */
 	function exportPicture($questionId, $course_info) {
 		$course_id          = $course_info['real_id'];
@@ -662,7 +662,7 @@ abstract class Question
 	 * For example, if we first show a confirmation box.
 	 *
 	 * @author Olivier Brouckaert
-	 * @return - boolean - true if moved, otherwise false
+	 * @return boolean - true if moved, otherwise false
 	 */
 	function getTmpPicture() {
 		global $picturePath;
@@ -941,7 +941,7 @@ abstract class Question
 	 *
 	 * @author Olivier Brouckaert
 	 * @param integer $exerciseId - exercise ID
-	 * @return - boolean - true if removed, otherwise false
+	 * @return boolean - true if removed, otherwise false
 	 */
 	function removeFromList($exerciseId) {
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);

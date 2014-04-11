@@ -190,14 +190,20 @@ function create_group_date_select($form, $prefix = '')
 
 /**
  * @param string $path
+ * @param int $courseId
  * @return array
  */
-function get_work_data_by_path($path)
+function get_work_data_by_path($path, $courseId = null)
 {
 	$path = Database::escape_string($path);
-    $course_id 	= api_get_course_int_id();
+    if (empty($courseId)) {
+        $courseId 	= api_get_course_int_id();
+    } else {
+        $courseId 	= intval($courseId);
+    }
+
 	$work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-	$sql = "SELECT *  FROM  ".$work_table." WHERE url = '$path' AND c_id = $course_id ";
+	$sql = "SELECT *  FROM  ".$work_table." WHERE url = '$path' AND c_id = $courseId ";
 	$result = Database::query($sql);
 	$return = array();
 	if (Database::num_rows($result)) {
@@ -1053,14 +1059,13 @@ function deleteDirWork($id)
 	$check = Security::check_abs_path($work_data_url.'/', $base_work_dir.'/');
 
 	$table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $TSTDPUBASG = Database :: get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
+    $TSTDPUBASG = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $t_agenda   = Database::get_course_table(TABLE_AGENDA);
 
 	$course_id = api_get_course_int_id();
 
 	if (!empty($work_data['url'])) {
         if ($check) {
-
             // Deleting all contents inside the folder
             $sql = "UPDATE $table SET active = 2 WHERE c_id = $course_id AND filetype = 'folder' AND id = $id";
             Database::query($sql);
@@ -1071,7 +1076,7 @@ function deleteDirWork($id)
             require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
     		$new_dir = $work_data_url.'_DELETED_'.$id;
 
-    		if (api_get_setting('permanently_remove_deleted_files') == 'true'){
+    		if (api_get_setting('permanently_remove_deleted_files') == 'true') {
     			my_delete($work_data_url);
     		} else {
     			if (file_exists($work_data_url)) {
@@ -1093,7 +1098,7 @@ function deleteDirWork($id)
             $sql = "DELETE FROM $TSTDPUBASG WHERE c_id = $course_id AND publication_id = $id";
             Database::query($sql);
 
-            $link_info = is_resource_in_course_gradebook(api_get_course_id(), 3 , $id, api_get_session_id());
+            $link_info = is_resource_in_course_gradebook(api_get_course_id(), 3, $id, api_get_session_id());
             $link_id = $link_info['id'];
             if ($link_info !== false) {
                 remove_resource_from_course_gradebook($link_id);
@@ -4317,7 +4322,6 @@ function downloadAllFilesPerUser($userId, $courseInfo)
     }
     exit;
 }
-
 
 function preAddAllWorkStudentCallback($p_event, &$p_header)
 {

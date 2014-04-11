@@ -49,7 +49,7 @@ function FCKeditor_IsCompatibleBrowser()
             $sAgent = $HTTP_USER_AGENT ;
         }
     }
-
+error_log($sAgent);
     if ( strpos($sAgent, 'MSIE') !== false && strpos($sAgent, 'mac') === false && strpos($sAgent, 'Opera') === false ) {
         $iVersion = (float)substr($sAgent, strpos($sAgent, 'MSIE') + 5, 3) ;
         return ($iVersion >= 5.5) ;
@@ -62,16 +62,16 @@ function FCKeditor_IsCompatibleBrowser()
         $iVersion = (int)$iVersion;
         //return ($iVersion >= 20030210) ;
         return true;
-    } else if ( strpos($sAgent, 'Gecko') !== false ) {
-        // Internet Explorer 11 - goes with a X-UA-Compatible IE=EmulateIE9 header
-        $iVersion = (int)substr($sAgent, strpos($sAgent, 'rv:') + 3, 2) ;
-        return ($iVersion >= 11);
     } else if ( strpos($sAgent, 'Opera/') !== false ) {
         $fVersion = (float)substr($sAgent, strpos($sAgent, 'Opera/') + 6, 4) ;
         return ($fVersion >= 9.5) ;
     } else if ( preg_match( "|AppleWebKit/(\d+)|i", $sAgent, $matches ) ) {
         $iVersion = $matches[1] ;
         return ( $matches[1] >= 522 ) ;
+    } else if ( strpos($sAgent, 'Gecko') !== false && strpos($sAgent, 'rv:') !== false ) {
+        // Internet Explorer 11 - goes with a X-UA-Compatible IE=EmulateIE9 header
+        $iVersion = (int)substr($sAgent, strpos($sAgent, 'rv:') + 3, 2) ;
+        return ($iVersion >= 11);
     } else {
         return false ;
     }

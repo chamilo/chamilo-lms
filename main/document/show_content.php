@@ -17,7 +17,7 @@ require_once '../inc/global.inc.php';
 api_protect_course_script();
 
 $noPHP_SELF = true;
-$header_file = Security::remove_XSS($_GET['file']);
+$header_file = isset($_GET['file']) ? Security::remove_XSS($_GET['file']) : null;
 $document_id = intval($_GET['id']);
 
 $course_info = api_get_course_info();
@@ -28,7 +28,7 @@ if (empty($course_info)) {
     api_not_allowed(true);
 }
 
-//Generate path
+// Generate path
 if (!$document_id) {
     $document_id = DocumentManager::get_document_id($course_info, $header_file);
 }
@@ -92,9 +92,7 @@ header('Last-Modified: Wed, 01 Jan 2100 00:00:00 GMT');
 header('Cache-Control: no-cache, must-revalidate');
 header('Pragma: no-cache');
 $browser_display_title = 'Documents - '.Security::remove_XSS($_GET['cidReq']).' - '.$file;
-
 $file_url_web = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$header_file.'?'.api_get_cidreq();
-
 $pathinfo = pathinfo($header_file);
 
 if ($pathinfo['extension']=='wav' && preg_match('/_chnano_.wav/i', $file_url_web) && api_get_setting('enable_nanogong') == 'true'){

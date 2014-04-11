@@ -2483,7 +2483,7 @@ class DocumentManager
      * @param string $title
      * @param string $comment
      * @param int $unzip unzip or not the file
-     * @param int $if_exists if_exists overwrite, rename or warn if exists (default)
+     * @param string $if_exists overwrite, rename or warn (default)
      * @param bool $index_document index document (search xapian module)
      * @param bool $show_output print html messages
      * @return array|bool
@@ -2533,7 +2533,7 @@ class DocumentManager
                         if (!empty($title)) {
                             $params['title'] = get_document_title($title);
                         } else {
-                            if (isset($if_exists) && $if_exists == 'rename') {
+                            if ($if_exists == 'rename') {
                                 $new_path = basename($new_path);
                                 $params['title'] = get_document_title($new_path);
                             } else {

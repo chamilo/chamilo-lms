@@ -36,7 +36,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'exit_slideshow') {
 // We check if there are images in this folder by searching the extensions for .jpg, .gif, .png
 // grabbing the list of all the documents of this folder
 //$all_files = $fileList['name'];
-$array_to_search = is_array($docs_and_folders) ? $docs_and_folders : array();
+$array_to_search = !empty($docs_and_folders) && is_array($docs_and_folders) ? $docs_and_folders : array();
 
 if (count($array_to_search) > 0) {
 	while (list($key) = each($array_to_search)) {

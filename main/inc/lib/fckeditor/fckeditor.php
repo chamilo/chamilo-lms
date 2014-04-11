@@ -49,14 +49,11 @@ function FCKeditor_IsCompatibleBrowser()
             $sAgent = $HTTP_USER_AGENT ;
         }
     }
-
-    if ( strpos($sAgent, 'MSIE') !== false && strpos($sAgent, 'mac') === false && strpos($sAgent, 'Opera') === false )
-    {
+error_log($sAgent);
+    if ( strpos($sAgent, 'MSIE') !== false && strpos($sAgent, 'mac') === false && strpos($sAgent, 'Opera') === false ) {
         $iVersion = (float)substr($sAgent, strpos($sAgent, 'MSIE') + 5, 3) ;
         return ($iVersion >= 5.5) ;
-    }
-    else if ( strpos($sAgent, 'Gecko/') !== false )
-    {
+    } else if ( strpos($sAgent, 'Gecko/') !== false ) {
         $iVersion = substr($sAgent, strpos($sAgent, 'Gecko/') + 6, 8) ;
         // Special fix for Firefox 17 and followers - see #5752
         if ( preg_match('/^\d{2,3}\.\d{1,4}\s/', $iVersion) ) {
@@ -65,19 +62,19 @@ function FCKeditor_IsCompatibleBrowser()
         $iVersion = (int)$iVersion;
         //return ($iVersion >= 20030210) ;
         return true;
-    }
-    else if ( strpos($sAgent, 'Opera/') !== false )
-    {
+    } else if ( strpos($sAgent, 'Opera/') !== false ) {
         $fVersion = (float)substr($sAgent, strpos($sAgent, 'Opera/') + 6, 4) ;
         return ($fVersion >= 9.5) ;
-    }
-    else if ( preg_match( "|AppleWebKit/(\d+)|i", $sAgent, $matches ) )
-    {
+    } else if ( preg_match( "|AppleWebKit/(\d+)|i", $sAgent, $matches ) ) {
         $iVersion = $matches[1] ;
         return ( $matches[1] >= 522 ) ;
-    }
-    else
+    } else if ( strpos($sAgent, 'Gecko') !== false && strpos($sAgent, 'rv:') !== false ) {
+        // Internet Explorer 11 - goes with a X-UA-Compatible IE=EmulateIE9 header
+        $iVersion = (int)substr($sAgent, strpos($sAgent, 'rv:') + 3, 2) ;
+        return ($iVersion >= 11);
+    } else {
         return false ;
+    }
 }
 
 class FCKeditor

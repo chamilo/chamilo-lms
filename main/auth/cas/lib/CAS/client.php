@@ -883,16 +883,16 @@ class CASClient
 	function checkAuthentication()
 		{
 		phpCAS::traceBegin();
-		
 		if ( $this->isAuthenticated() ) {
-			phpCAS::trace('user is authenticated');
+            phpCAS::trace('user is authenticated');
 			$res = TRUE;
 		} else if (isset($_SESSION['phpCAS']['auth_checked'])) {
-			// the previous request has redirected the client to the CAS server with gateway=true
-			unset($_SESSION['phpCAS']['auth_checked']);
-			$res = FALSE;
+            // the previous request has redirected the client to the CAS server with gateway=true
+            // comment line bellow to
+//			unset($_SESSION['phpCAS']['auth_checked']);
+            $res = FALSE;
 		} else {
-			//        $_SESSION['phpCAS']['auth_checked'] = true;
+//        $_SESSION['phpCAS']['auth_checked'] = true;
 			//	    $this->redirectToCas(TRUE/* gateway */);	
 			//	    // never reached
 			//	    $res = FALSE;

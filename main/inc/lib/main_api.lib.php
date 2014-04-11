@@ -193,8 +193,13 @@ define('LOG_CAREER_DELETE',                     'career_deleted');
 define('LOG_USER_PERSONAL_DOC_DELETED',         'user_doc_deleted');
 define('LOG_WIKI_ACCESS',                       'wiki_page_view');
 
-// event logs data types
+define('LOG_EXERCISE_RESULT_DELETE',           'exercise_result_deleted');
+define('LOG_LP_ATTEMPT_DELETE',                'lp_attempt_deleted');
+define('LOG_QUESTION_RESULT_DELETE',           'question_attempt_deleted');
+
+// event logs data types (max 20 chars)
 define('LOG_COURSE_CODE',                       'course_code');
+define('LOG_COURSE_ID',                         'course_id');
 define('LOG_USER_ID',                           'user_id');
 define('LOG_USER_OBJECT',                       'user_object');
 define('LOG_USER_FIELD_VARIABLE',		        'user_field_variable');
@@ -211,6 +216,11 @@ define('LOG_GRADEBOOK_UNLOCKED',                 'gradebook_unlocked');
 define('LOG_GRADEBOOK_ID',                       'gradebook_id');
 
 define('LOG_WIKI_PAGE_ID',                       'wiki_page_id');
+
+define('LOG_EXERCISE_ID',                        'exercise_id');
+define('LOG_EXERCISE_AND_USER_ID',               'exercise_and_user_id');
+define('LOG_LP_ID',                              'lp_id');
+define('LOG_EXERCISE_ATTEMPT_QUESTION_ID',       'exercise_a_q_id');
 
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 
@@ -763,6 +773,21 @@ function api_is_facebook_auth_activated() {
     return (isset($_configuration['facebook_auth']) && $_configuration['facebook_auth'] == 1);
 }
 
+
+/**
+ * Return the $_configuration of displaying group forum in the general forum tool of a course or not
+ * is true by default
+ * @return bool
+ * @todo : in 1.10 replace this with a platform parameter in the database
+ */
+function apiGetDisplayGroupsForumInGeneralTool() {
+    global $_configuration;
+
+    if (isset($_configuration['display_groups_forum_in_general_tool'])) {
+        return $_configuration['display_groups_forum_in_general_tool'];
+    }
+    return true;
+}
 
 /**
  * This function checks whether a given path points inside the system.
@@ -5828,7 +5853,6 @@ function api_get_template($path_type = 'rel') {
 function api_browser_support($format="") {
     require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
     $browser = new Browser();
-    //print_r($browser);
     $current_browser = $browser->getBrowser();
     $a_versiontemp = explode('.', $browser->getVersion());
     $current_majorver= $a_versiontemp[0];

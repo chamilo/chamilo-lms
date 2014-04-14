@@ -8,7 +8,7 @@
  * @param $course_code
  * @return array|bool
  */
-function inicializarReporte($course_code)
+function initializeReport($course_code)
 {
 	$course_info = api_get_course_info($course_code);
 	$table_reporte_semanas = Database::get_main_table('rp_reporte_semanas');
@@ -58,7 +58,7 @@ function inicializarReporte($course_code)
 		IN (SELECT DISTINCT CONCAT(f.poster_id,',',rs.id)
 		FROM $table_post f  JOIN $table_reporte_semanas rs ON f.thread_id = rs.forum_id)");
 
-		return mostrarResultados($course_info,$weeksCount,$page);
+		return showResults($course_info,$weeksCount,$page);
 	}
 	
 }
@@ -69,7 +69,7 @@ function inicializarReporte($course_code)
  * @param $page
  * @return array
  */
-function mostrarResultados($courseInfo,$weeksCount, $page)
+function showResults($courseInfo,$weeksCount, $page)
 {
     $course_code = $courseInfo['code'];
     $tableWeeklyReport = Database::get_main_table('rp_reporte_semanas');
@@ -106,21 +106,21 @@ function mostrarResultados($courseInfo,$weeksCount, $page)
         if ($rowe['week_id'] > (($page-1)*7) &&  $rowe['week_id'] <= (7*$page)){
             $ids[$rowe['week_id']] = $rowe['id'];
             $line.='<th>
-                <a href="#" onClick="mostrarContenido('."'tarea".$rowe['week_id']."'".');">Work'.$rowe['week_id'].'
+                <a href="#" onClick="showContent('."'tarea".$rowe['week_id']."'".');">Work'.$rowe['week_id'].'
                         <div class="blackboard_hide" id="tarea'.$rowe['week_id'].'">'.$rowe['work_title'].'</div>
                 </a></th>';
             $line.= '<th>
-                <a href="#" onClick="mostrarContenido('."'foro".$rowe['week_id']."'".');">Forum'.$rowe['week_id'].'
+                <a href="#" onClick="showContent('."'foro".$rowe['week_id']."'".');">Forum'.$rowe['week_id'].'
                         <div class="blackboard_hide" id="foro'.$rowe['week_id'].'">'.$rowe['thread_title'].'</div>
                 </a>
                 </th>';
             /*$fila.= '<th>
-                <a href="#" onClick="mostrarContenido('."'eval".$rowe['week_id']."'".');">Eval'.$rowe['week_id'].'
+                <a href="#" onClick="showContent('."'eval".$rowe['week_id']."'".');">Eval'.$rowe['week_id'].'
                     <div class="blackboard_hide" id="eval'.$rowe['week_id'].'">'.$rowe['eval_title'].'</div>
                 </a>
                 </th>';
             $fila.= '<th>
-                <a href="#" onClick="mostrarContenido('."'pc".$rowe['week_id']."'".');">PC'.$rowe['week_id'].'
+                <a href="#" onClick="showContent('."'pc".$rowe['week_id']."'".');">PC'.$rowe['week_id'].'
                     <div class="blackboard_hide" id="pc'.$rowe['week_id'].'">'.$rowe['pc_title'].'</div>
                 </a>
                 </th>';*/
@@ -150,7 +150,7 @@ function mostrarResultados($courseInfo,$weeksCount, $page)
     $html .= '<tr>
             <th ></th>';
     for ($i=(7*$page-6); $i <= $page*7;$i++) {
-        $html .= '<th colspan="2">Semana '.$i.'<a href="assign_tickets.php?id='.$ids[$i].'" class="ajax">'.Display::return_icon('edit.png', get_lang('Edit'),  array('width'=>'16','height'=>'16'), 22).'</a></th>';
+        $html .= '<th colspan="2">Week '.$i.'<a href="assign_tickets.php?id='.$ids[$i].'" class="ajax">'.Display::return_icon('edit.png', get_lang('Edit'),  array('width'=>'16','height'=>'16'), 22).'</a></th>';
     }
     $html .=  '</tr>';
     $html .= $line;
@@ -167,17 +167,17 @@ function mostrarResultados($courseInfo,$weeksCount, $page)
         if ($row['week_id'] > (($page-1)*7) &&  $row['week_id'] <= (7*$page) ) {
             $results[$row['username']][$row['week_id']] = $row;
             if (count($results[$row['username']]) == 7 ) {
-                $html.= mostrarResultadoAlumno($results[$row['username']],$page);
+                $html.= showStudentResult($results[$row['username']],$page);
             }
         }
         if (count($resultadose[$row['username']]) == $weeksCount ) {
-                $tableExport[] = mostrarResultadoAlumnoExportar($resultadose[$row['username']],$weeksCount);
+                $tableExport[] = showStudentResultExport($resultadose[$row['username']],$weeksCount);
         }
     }
     $html .= '
           </table>';
 
-    return array('mostrar'=>$html,'exportar'=>$tableExport);
+    return array('show'=>$html,'export'=>$tableExport);
 }
 
 /**
@@ -185,7 +185,7 @@ function mostrarResultados($courseInfo,$weeksCount, $page)
  * @param $pagina
  * @return string
  */
-function mostrarResultadoAlumno($datos,$pagina)
+function showStudentResult($datos,$pagina)
 {
     $inicio = (7*$pagina-6);
     $fila = '<tr>';
@@ -204,7 +204,7 @@ function mostrarResultadoAlumno($datos,$pagina)
  * @param $numero_semanas
  * @return array
  */
-function mostrarResultadoAlumnoExportar($data ,$numero_semanas)
+function showStudentResultExport($data ,$numero_semanas)
 {
     $fila = array();
     $fila[] = utf8_decode($data[1]['username']);

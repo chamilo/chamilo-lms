@@ -39,7 +39,7 @@ $(document).ready(function (){
 });	
 		
 		
-function mostrarContenido(div){
+function showContent(div){
 	if($("div#"+div).attr("class")=="blackboard_hide"){
 		$("div#"+div).attr("class","blackboard_show");
 		$("div#"+div).attr("style","");
@@ -57,12 +57,12 @@ function save() {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {
-		$("div#confirmation").html("<img src=\'../../../main/inc/lib/javascript/indicator.gif\' />"); },
+		$("div#confirmation").html("<img src=\"'.api_get_path(WEB_LIBRARY_PATH).'javascript/indicator.gif\" />"); },
 		type: "POST",
 		url: "update_report.php",
 		data: "work_id="+work_id+"&forum_id="+forum_id+"&rs_id="+rs_id,
-		success: function(datos) {
-			$("div#confirmation").html(datos);
+		success: function(data) {
+			$("div#confirmation").html(data);
 			 location.reload();
 		}
 	});
@@ -94,16 +94,16 @@ function save() {
 </style>';
 
 $course_code = api_get_course_id();
-$resultado = inicializarReporte($course_code);
+$results = initializeReport($course_code);
 if(isset($_GET['action'])){
-	Export::export_table_xls($resultado['exportar'],"REPORTE ALUMNOS CURSO".$course_code);
+	Export::export_table_xls($results['export'],"COURSE_USER_REPORT".$course_code);
 }else{
 	Display::display_header();
 	api_protect_course_script();
 	if (!api_is_allowed_to_edit()){
 		api_not_allowed();
 	}
-	echo $resultado['mostrar'];
+	echo $results['show'];
 	Display::display_footer();
 }
 ?>

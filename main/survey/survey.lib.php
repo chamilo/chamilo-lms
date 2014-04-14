@@ -3105,7 +3105,7 @@ class SurveyUtil {
 				echo '<th>'.$user.'</th>'; // the user column
 			}
 		} else {
-			echo '<th>-</th>';
+			echo '<th>' . get_lang('Anonymous') . '</th>';
 		}
 
 		if ($display_extra_user_fields) {

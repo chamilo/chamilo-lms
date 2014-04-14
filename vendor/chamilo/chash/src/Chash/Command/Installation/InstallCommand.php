@@ -379,6 +379,7 @@ class InstallCommand extends CommonCommand
 
                     // Generating config files (auth, profile, etc)
                     $this->generateConfFiles($output);
+                    $this->writeHtaccess($path);
 
                     $output->writeln("<comment>Chamilo was successfully installed here: ".$this->getRootSys()." </comment>");
                     return 1;

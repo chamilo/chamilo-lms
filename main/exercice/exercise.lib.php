@@ -45,6 +45,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
     $answerType    = $objQuestionTmp->selectType();
     $pictureName   = $objQuestionTmp->selectPicture();
+    $s = '';
 
     if ($answerType != HOT_SPOT && $answerType != HOT_SPOT_DELINEATION) {
     	// Question is not a hotspot
@@ -65,9 +66,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         }
 
         echo '<div class="question_options">';
-
-    	$s = '';
-
     	// construction of the Answer object (also gets all answers details)
     	$objAnswerTmp = new Answer($questionId);
 
@@ -195,7 +193,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     $header .= Display::tag('th', get_lang('Feedback'));
                 }
                 $s .= '<table class="data_table">';
-                $s.= Display::tag('tr',$header, array('style'=>'text-align:left;'));
+                $s .= Display::tag('tr',$header, array('style'=>'text-align:left;'));
             }
         }
 
@@ -353,16 +351,16 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 $answer_input .= '</label>';
 
                 if ($show_comment) {
-                    $s.= '<tr>';
+                    $s .= '<tr>';
                     $s .= '<td>';
-                    $s.= $answer_input;
+                    $s .= $answer_input;
                     $s .= '</td>';
                     $s .= '<td>';
                     $s .= $comment;
                     $s .= '</td>';
-                    $s.= '</tr>';
+                    $s .= '</tr>';
                 } else {
-                    $s.= $answer_input;
+                    $s .= $answer_input;
                 }
 
             } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
@@ -400,7 +398,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     $s .= $comment;
                     $s .= '</td>';
                 }
-            	$s.='</tr>';
+            	$s .='</tr>';
 
     		} elseif ($answerType == FILL_IN_BLANKS) {
                 /*
@@ -529,7 +527,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     				}  // end foreach()
 
     				$s .= '</select></td>';
-    				$s.='<td width="45%" valign="top" >';
+    				$s .='<td width="45%" valign="top" >';
     				if (isset($select_items[$lines_count])) {
     					$s.='<span style="float:left; width:5%;"><b>'.$select_items[$lines_count]['letter'].'.</b></span>'.
     						 '<span style="float:left; width:95%;">'.$select_items[$lines_count]['answer'].'</span>';
@@ -547,8 +545,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     						$s .= '<tr>
     							  <td colspan="2"></td>
     							  <td valign="top">';
-    						$s.='<b>'.$select_items[$lines_count]['letter'].'.</b> '.$select_items[$lines_count]['answer'];
-    						$s.="</td>
+    						$s .='<b>'.$select_items[$lines_count]['letter'].'.</b> '.$select_items[$lines_count]['answer'];
+    						$s .="</td>
     						</tr>";
     						$lines_count++;
     					}	// end while()
@@ -566,8 +564,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 $s .= '</table>';
             }
         }
-
-
 
     	$s .= '</div>';
 
@@ -648,6 +644,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     		echo $questionDescription;
     		echo '</td></tr>';
     	}
+
     	$canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
 
     	$s .= '<script type="text/javascript" src="../plugin/hotspot/JavaScriptFlashGateway.js"></script>
@@ -788,6 +785,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     	echo $s;
         echo '</table>';
     }
+
     return $nbrAnswers;
 }
 

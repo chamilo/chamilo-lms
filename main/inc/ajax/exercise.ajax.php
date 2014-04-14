@@ -77,29 +77,41 @@ switch ($action) {
             $start = 0;
         }
 
-        $sql = "SELECT  exe_id,
-                        exe_user_id,
-                        firstname,
-                        lastname,
-                        aa.status,
-                        start_date,
-                        exe_result,
-                        exe_weighting,
-                        exe_result/exe_weighting as score,
-                        exe_duration,
-                        questions_to_check,
-                        orig_lp_id
+        $sql = "SELECT
+                    exe_id,
+                    exe_user_id,
+                    firstname,
+                    lastname,
+                    aa.status,
+                    start_date,
+                    exe_result,
+                    exe_weighting,
+                    exe_result/exe_weighting as score,
+                    exe_duration,
+                    questions_to_check,
+                    orig_lp_id
                 FROM $user_table u
                 INNER JOIN (
-                    SELECT  t.exe_id, t.exe_user_id, status,
-                    start_date, exe_result, exe_weighting, exe_result/exe_weighting as score, exe_duration, questions_to_check, orig_lp_id
-                    FROM  $track_exercise  t LEFT JOIN $track_attempt a ON (a.exe_id = t.exe_id AND  t.exe_user_id = a.user_id )
-                    WHERE t.status = 'incomplete' AND
-                          $where_condition
+                    SELECT
+                    t.exe_id,
+                    t.exe_user_id,
+                    status,
+                    start_date,
+                    exe_result,
+                    exe_weighting,
+                    exe_result/exe_weighting as score,
+                    exe_duration,
+                    questions_to_check,
+                    orig_lp_id
+                    FROM  $track_exercise  t
+                    LEFT JOIN $track_attempt a
+                    ON (a.exe_id = t.exe_id AND t.exe_user_id = a.user_id )
+                    WHERE t.status = 'incomplete' AND $where_condition
                     GROUP BY exe_user_id
                 ) as aa
                 ON aa.exe_user_id = user_id
-                ORDER BY $sidx $sord LIMIT $start, $limit";
+                ORDER BY $sidx $sord
+                LIMIT $start, $limit";
 
         $result = Database::query($sql);
         $results = array();
@@ -118,9 +130,13 @@ switch ($action) {
 
         if (!empty($results)) {
             foreach ($results as $row) {
-                $sql = "SELECT SUM(count_question_id) as count_question_id FROM (
-                            SELECT 1 as count_question_id FROM  $track_attempt a
-                            WHERE user_id = {$row['exe_user_id']} and exe_id = {$row['exe_id']}
+                $sql = "SELECT SUM(count_question_id) as count_question_id
+                        FROM (
+                            SELECT 1 as count_question_id
+                            FROM $track_attempt a
+                            WHERE
+                              user_id = {$row['exe_user_id']} AND
+                              exe_id = {$row['exe_id']}
                             GROUP by question_id
                         ) as count_table";
                 $result_count = Database::query($sql);
@@ -156,7 +172,15 @@ switch ($action) {
             Database::query("DELETE FROM $table WHERE session_id = $session_id AND c_id = $course_id");
             //Insert all
             foreach ($new_list as $new_order_id) {
-                Database::insert($table, array('exercise_order' => $counter, 'session_id' => $session_id, 'exercise_id' => intval($new_order_id), 'c_id' => $course_id));
+                Database::insert(
+                    $table,
+                    array(
+                        'exercise_order' => $counter,
+                        'session_id' => $session_id,
+                        'exercise_id' => intval($new_order_id),
+                        'c_id' => $course_id
+                    )
+                );
                 $counter++;
             }
             Display::display_confirmation_message(get_lang('Saved'));
@@ -165,7 +189,6 @@ switch ($action) {
     case 'update_question_order':
         $course_info = api_get_course_info($course_code);
         $course_id = $course_info['real_id'];
-
         $exercise_id = isset($_REQUEST['exercise_id']) ? $_REQUEST['exercise_id'] : null;
 
         if (empty($exercise_id)) {
@@ -176,19 +199,28 @@ switch ($action) {
             $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
             $counter = 1;
             foreach ($new_question_list as $new_order_id) {
-                Database::update($TBL_QUESTIONS, array('question_order' => $counter), array('question_id = ? AND c_id = ? AND exercice_id = ? '=>array(intval($new_order_id), $course_id, $exercise_id)));
+                Database::update(
+                    $TBL_QUESTIONS,
+                    array('question_order' => $counter),
+                    array('question_id = ? AND c_id = ? AND exercice_id = ? ' => array(intval($new_order_id), $course_id, $exercise_id)))
+                ;
                 $counter++;
             }
             Display::display_confirmation_message(get_lang('Saved'));
         }
         break;
     case 'add_question_to_reminder':
+        /** @var Exercise $objExercise */
         $objExercise  = $_SESSION['objExercise'];
         if (empty($objExercise)) {
             echo 0;
             exit;
         } else {
-            $objExercise->edit_question_to_remind($_REQUEST['exe_id'], $_REQUEST['question_id'], $_REQUEST['action']);
+            $objExercise->edit_question_to_remind(
+                $_REQUEST['exe_id'],
+                $_REQUEST['question_id'],
+                $_REQUEST['action']
+            );
         }
         break;
     case 'save_exercise_by_now':
@@ -226,6 +258,7 @@ switch ($action) {
             }
 
             // Exercise information.
+            /** @var Exercise $objExercise */
             $objExercise = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;
 
             // Question info.
@@ -346,7 +379,17 @@ switch ($action) {
 
                 if ($type == 'simple') {
                     // Getting old attempt in order to decrees the total score.
-                    $old_result = $objExercise->manage_answer($exe_id, $my_question_id, null, 'exercise_show', array(), false, true, false, $objExercise->selectPropagateNeg());
+                    $old_result = $objExercise->manage_answer(
+                        $exe_id,
+                        $my_question_id,
+                        null,
+                        'exercise_show',
+                        array(),
+                        false,
+                        true,
+                        false,
+                        $objExercise->selectPropagateNeg()
+                    );
 
                     // Removing old score.
                     $total_score = $total_score - $old_result['score'];
@@ -368,7 +411,19 @@ switch ($action) {
                 }
 
                 // We're inside *one* question. Go through each possible answer for this question
-                $result = $objExercise->manage_answer($exe_id, $my_question_id, $my_choice, 'exercise_result', $hot_spot_coordinates, true, false, false, $objExercise->selectPropagateNeg(), $hotspot_delineation_result, true);
+                $result = $objExercise->manage_answer(
+                    $exe_id,
+                    $my_question_id,
+                    $my_choice,
+                    'exercise_result',
+                    $hot_spot_coordinates,
+                    true,
+                    false,
+                    false,
+                    $objExercise->selectPropagateNeg(),
+                    $hotspot_delineation_result,
+                    true
+                );
 
                 //  Adding the new score.
                 $total_score += $result['score'];

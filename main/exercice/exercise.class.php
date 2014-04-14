@@ -2574,9 +2574,14 @@ class Exercise {
                     if ($from_database) {
                         if ($show_result) {
                             $TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-                            $query = "SELECT hotspot_correct FROM ".$TBL_TRACK_HOTSPOT." WHERE hotspot_exe_id = '".$exeId."' and hotspot_question_id= '".$questionId."' AND hotspot_answer_id='".Database::escape_string($answerId)."'";
-                            $resq = Database::query($query);
-                            $studentChoice = Database::result($resq,0,"hotspot_correct");
+                            $sql = "SELECT hotspot_correct
+                                    FROM $TBL_TRACK_HOTSPOT
+                                    WHERE
+                                        hotspot_exe_id = '".$exeId."' AND
+                                        hotspot_question_id= '".$questionId."' AND
+                                        hotspot_answer_id = '".Database::escape_string($answerId)."'";
+                            $result = Database::query($sql);
+                            $studentChoice = Database::result($result, 0, "hotspot_correct");
 
                             if ($studentChoice) {
                                 $questionScore  += $answerWeighting;
@@ -2608,7 +2613,13 @@ class Exercise {
                     if ($from_database) {
                         // getting the user answer
                         $TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-                        $query   = "SELECT hotspot_correct, hotspot_coordinate from ".$TBL_TRACK_HOTSPOT." where hotspot_exe_id = '".$exeId."' and hotspot_question_id= '".$questionId."' AND hotspot_answer_id='1'"; //by default we take 1 because it's a delineation
+                        $query   = "SELECT hotspot_correct, hotspot_coordinate
+                                    FROM $TBL_TRACK_HOTSPOT
+                                    WHERE
+                                        hotspot_exe_id = '".$exeId."' AND
+                                        hotspot_question_id= '".$questionId."' AND
+                                        hotspot_answer_id='1'";
+                        //by default we take 1 because it's a delineation
                         $resq    = Database::query($query);
                         $row     = Database::fetch_array($resq,'ASSOC');
 

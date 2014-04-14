@@ -2572,23 +2572,21 @@ class Exercise {
                     }
                 case HOT_SPOT :
                     if ($from_database) {
-                        if ($show_result) {
-                            $TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
-                            $sql = "SELECT hotspot_correct
-                                    FROM $TBL_TRACK_HOTSPOT
-                                    WHERE
-                                        hotspot_exe_id = '".$exeId."' AND
-                                        hotspot_question_id= '".$questionId."' AND
-                                        hotspot_answer_id = '".Database::escape_string($answerId)."'";
-                            $result = Database::query($sql);
-                            $studentChoice = Database::result($result, 0, "hotspot_correct");
+                        $TBL_TRACK_HOTSPOT = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
+                        $sql = "SELECT hotspot_correct
+                                FROM $TBL_TRACK_HOTSPOT
+                                WHERE
+                                    hotspot_exe_id = '".$exeId."' AND
+                                    hotspot_question_id= '".$questionId."' AND
+                                    hotspot_answer_id = '".Database::escape_string($answerId)."'";
+                        $result = Database::query($sql);
+                        $studentChoice = Database::result($result, 0, "hotspot_correct");
 
-                            if ($studentChoice) {
-                                $questionScore  += $answerWeighting;
-                                $totalScore     += $answerWeighting;
-                            }
+                        if ($studentChoice) {
+                            $questionScore  += $answerWeighting;
+                            $totalScore     += $answerWeighting;
                         }
-                    }  else {
+                    } else {
                         $studentChoice = $choice[$answerId];
                         if ($studentChoice) {
                             $questionScore  += $answerWeighting;

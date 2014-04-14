@@ -42,4 +42,4 @@ require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 
 require_once api_get_path(PLUGIN_PATH).PLUGIN_NAME.'/lib/ticket.class.php';
 require_once api_get_path(PLUGIN_PATH).PLUGIN_NAME.'/lib/ticket_plugin.class.php';
-require_once api_get_path(PLUGIN_PATH).PLUGIN_NAME.'/s/ticket.class.php';
+require_once api_get_path(PLUGIN_PATH).PLUGIN_NAME.'/src/ticket.class.php';

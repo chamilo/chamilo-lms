@@ -1508,6 +1508,7 @@ class Agenda
         $selectedEveryoneOptions = array();
         if (isset($sendTo['everyone']) && $sendTo['everyone']) {
             $selectedEveryoneOptions = array('selected');
+            $sendToUsers = array();
         }
 
         $select->addOption(get_lang('Everyone'), 'everyone', $selectedEveryoneOptions);
@@ -1698,9 +1699,7 @@ class Agenda
 
                 $form->freeze(array('repeat_type', 'repeat_end_day'));
                 $repeat->_attributes['disabled'] = 'disabled';
-
             }
-
             $form->addElement('html', '</div>');
         }
 
@@ -1769,7 +1768,7 @@ class Agenda
 
     /**
      * @param FormValidator $form
-     * @param array $sendTo array('users' => [1, 2], 'groups' => [3, 4])
+     * @param array $sendTo array('everyone' => false, 'users' => [1, 2], 'groups' => [3, 4])
      * @param array $attributes
      * @param bool $addOnlyItemsInSendTo
      * @return bool

@@ -21,7 +21,7 @@ $config->setProxyNamespace('Proxies');
 
 $courseList = CourseManager::get_real_course_list();
 
-$app['chamilo.log'] = $app['sys_log_path'].'/chamilo-cli.log';
+$app['chamilo.log'] = $app['sys_log_path'].'chamilo-cli.log';
 
 // Loading db connections
 

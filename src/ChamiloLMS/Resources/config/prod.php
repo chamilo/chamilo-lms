@@ -107,7 +107,7 @@ if ($app['assetic.enabled']) {
 }
 
 // Monolog log file
-$app['chamilo.log'] = $app['sys_log_path'].'/chamilo.log';
+$app['chamilo.log'] = $app['sys_log_path'].'chamilo.log';
 
 // If the chamilo.lig is not writable try to delete it
 if (is_file($app['chamilo.log']) && !is_writable($app['chamilo.log'])) {

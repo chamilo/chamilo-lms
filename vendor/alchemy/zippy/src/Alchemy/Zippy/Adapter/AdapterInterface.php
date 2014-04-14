@@ -81,13 +81,6 @@ Interface AdapterInterface
     public function add(ResourceInterface $resource, $files, $recursive = true);
 
     /**
-     * Returns the adapter name
-     *
-     * @return String
-     */
-    public static function getName();
-
-    /**
      * Removes a member of the archive
      *
      * @param ResourceInterface         $resource The path to the archive
@@ -128,4 +121,11 @@ Interface AdapterInterface
      * @throws InvalidArgumentException In case no members could be removed or provide extract target directory is not valid
      */
     public function extractMembers(ResourceInterface $resource, $members, $to = null);
+
+    /**
+     * Returns the adapter name
+     *
+     * @return String
+     */
+    public static function getName();
 }

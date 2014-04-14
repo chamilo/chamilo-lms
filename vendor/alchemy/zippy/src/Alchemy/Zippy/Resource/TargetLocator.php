@@ -120,7 +120,7 @@ class TargetLocator
     /**
      * Checks whether the path belong to the context
      *
-     * @param String $path A resource path
+     * @param String $path    A resource path
      * @param String $context
      *
      * @return Boolean

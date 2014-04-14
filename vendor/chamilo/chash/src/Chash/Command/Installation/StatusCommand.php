@@ -2,70 +2,52 @@
 
 namespace Chash\Command\Installation;
 
+use Chash\Command\Database\CommonDatabaseCommand;
 use Doctrine\DBAL\Migrations\Tools\Console\Command\AbstractCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console;
+
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class StatusCommand
  * @package Chash\Command\Installation
  */
-class StatusCommand extends CommonCommand
+class StatusCommand extends CommonDatabaseCommand
 {
     protected function configure()
     {
+        parent::configure();
         $this
             ->setName('chamilo:status')
             ->setDescription('Show the information of the current Chamilo installation')
-            ->addOption('path', null, InputOption::VALUE_OPTIONAL, 'The path to the Chamilo folder');
+        ;
     }
 
     /**
      * Executes a command via CLI
      *
-     * @param Console\Input\InputInterface $input
-     * @param Console\Output\OutputInterface $output
+     * @param InputInterface $input
+     * @param OutputInterface $output
      *
      * @return int|null|void
      */
-    protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $path = $input->getOption('path');
-
-        $_configuration = $this->getConfigurationHelper()->getConfiguration($path);
-
-        if (empty($_configuration)) {
-            $output->writeln("<comment>Chamilo is not installed here! You may add a path as an option:</comment>");
-            $output->writeln("<comment>For example: </comment><info>chamilo:status --path=/var/www/chamilo</info>");
-            return 0;
-        }
-
-        $databaseSettings = array(
-            'driver' => 'pdo_mysql',
-            'host' => $_configuration['db_host'],
-            'dbname' => $_configuration['main_database'],
-            'user' => $_configuration['db_user'],
-            'password' => $_configuration['db_password']
-        );
-
-        // single_database
-
-        $this->setDatabaseSettings($databaseSettings);
-        $this->setDoctrineSettings();
-
-        /** @var \Doctrine\DBAL\Connection $conn */
-        $conn = $this->getHelper('db')->getConnection();
+        parent::execute($input, $output);
+        $connection = $this->getConnection();
+        $_configuration = $this->getConfigurationArray();
 
         $query = "SELECT selected_value FROM settings_current WHERE variable = 'chamilo_database_version'";
-        $data = $conn->executeQuery($query);
+        $data = $connection->executeQuery($query);
         $data = $data->fetch();
         $chamiloVersion = $data['selected_value'];
         $databaseSetting = 'chamilo_database_version';
 
         if (empty($chamiloVersion)) {
             $query = "SELECT selected_value FROM settings_current WHERE variable = 'dokeos_database_version'";
-            $data = $conn->executeQuery($query);
+            $data = $connection->executeQuery($query);
             $data = $data->fetch();
             $chamiloVersion = $data['selected_value'];
             $databaseSetting = 'dokeos_database_version';
@@ -121,7 +103,6 @@ class StatusCommand extends CommonCommand
             /*$output->writeln("<error>Please check carefully your Chamilo installation. </error>");
             $output->writeln("<comment>The configuration.php file and the 'chamilo_database_version' setting are not synced.</comment>");*/
         }
-
     }
 
 }

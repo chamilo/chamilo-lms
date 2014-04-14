@@ -45,7 +45,7 @@ class SetLanguageCommand extends CommonChamiloUserCommand
     {
         parent::execute($input, $output);
         $_configuration = $this->getHelper('configuration')->getConfiguration();
-        $dbh = $this->getHelper('configuration')->getConnection();
+        $connection = $this->getConnection();
         $lang = mysql_real_escape_string($input->getArgument('language'));
         if (empty($lang)) {
             $ls = "SELECT DISTINCT language, count(*) as num FROM user GROUP BY 1 ORDER BY language";

@@ -32,15 +32,21 @@ class RequestMapper
      */
     public function map($context, array $resources)
     {
-        $collection = new ResourceCollection($context);
+        $data = array();
 
         foreach ($resources as $location => $resource) {
             if (is_int($location)) {
-                $collection->add(new Resource($resource, $this->locator->locate($context, $resource)));
+                $data[] = new Resource($resource, $this->locator->locate($context, $resource));
             } else {
-                $collection->add(new Resource($resource, ltrim($location, '/')));
+                $data[] = new Resource($resource, ltrim($location, '/'));
             }
         }
+
+        if (count($data) === 1) {
+            $context = $data[0]->getOriginal();
+        }
+
+        $collection = new ResourceCollection($context, $data, false);
 
         return $collection;
     }

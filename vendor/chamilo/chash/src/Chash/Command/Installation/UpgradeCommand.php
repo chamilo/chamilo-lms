@@ -24,7 +24,7 @@ class UpgradeCommand extends CommonCommand
 
     /**
      * Get connection
-     * @return\Doctrine\DBAL\Connection
+     * @return \Doctrine\DBAL\Connection
      */
     private function getConnection()
     {
@@ -276,8 +276,7 @@ class UpgradeCommand extends CommonCommand
                 $output,
                 '<question>Are you sure you want to upgrade the Chamilo located here?</question> <info>'.$_configuration['root_sys'].'</info> (y/N)',
                 false
-            )
-            ) {
+            )) {
                 return;
             }
 
@@ -286,8 +285,7 @@ class UpgradeCommand extends CommonCommand
                 $output,
                 '<question>Are you sure you want to upgrade from version</question> <info>'.$_configuration['system_version'].'</info> <comment>to version</comment> <info>'.$version.'</info> (y/N)',
                 false
-            )
-            ) {
+            )) {
                 return;
             }
         }
@@ -442,6 +440,7 @@ class UpgradeCommand extends CommonCommand
 
         try {
             // Doctrine migrations:
+            $this->setDoctrineSettings();
 
             $output->writeln('');
             $output->writeln("<comment>You have to select 'yes' for the 'Chamilo Migrations'<comment>");
@@ -454,7 +453,9 @@ class UpgradeCommand extends CommonCommand
                 '--dry-run' => $dryRun
             );
 
-            $output->writeln("<comment>Executing migrations:migrate ".$versionInfo['hook_to_doctrine_version']." --configuration=".$this->getMigrationConfigurationFile()."<comment>");
+            $output->writeln(
+                "<comment>Executing migrations:migrate ".$versionInfo['hook_to_doctrine_version']." --configuration=".$this->getMigrationConfigurationFile()."<comment>"
+            );
             $input = new ArrayInput($arguments);
 
             if ($this->commandLine == false) {
@@ -464,7 +465,6 @@ class UpgradeCommand extends CommonCommand
             }
 
             $command->run($input, $output);
-
             $output->writeln("<comment>Migration ended successfully</comment>");
 
         } catch (\Exception $e) {

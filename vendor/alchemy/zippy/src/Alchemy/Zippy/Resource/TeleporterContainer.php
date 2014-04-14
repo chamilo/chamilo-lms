@@ -64,13 +64,13 @@ class TeleporterContainer extends \Pimple
     {
         $container = new static();
 
-        $container['stream-teleporter'] = $container->share(function(){
+        $container['stream-teleporter'] = $container->share(function () {
             return StreamTeleporter::create();
         });
-        $container['local-teleporter'] = $container->share(function(){
+        $container['local-teleporter'] = $container->share(function () {
             return LocalTeleporter::create();
         });
-        $container['guzzle-teleporter'] = $container->share(function(){
+        $container['guzzle-teleporter'] = $container->share(function () {
             return GuzzleTeleporter::create();
         });
 

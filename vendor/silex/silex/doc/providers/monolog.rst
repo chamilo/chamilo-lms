@@ -19,6 +19,10 @@ Parameters
   everything, ``INFO`` will log everything except ``DEBUG``,
   etc.
 
+  In addition to the ``Logger::`` constants, it is also possible to supply the
+  level in string form, for example: ``"DEBUG"``, ``"INFO"``, ``"WARNING"``,
+  ``"ERROR"``.
+
 * **monolog.name** (optional): Name of the monolog channel,
   defaults to ``myapp``.
 
@@ -30,6 +34,8 @@ Services
   Example usage::
 
     $app['monolog']->addDebug('Testing the Monolog logging.');
+
+* **monolog.listener**: An event listener to log requests, responses and errors.
 
 Registering
 -----------
@@ -49,7 +55,7 @@ Registering
     .. code-block:: json
 
         "require": {
-            "monolog/monolog": ">=1.0.0",
+            "monolog/monolog": ">=1.0.0"
         }
 
 Usage
@@ -80,6 +86,10 @@ it by extending the ``monolog`` service::
 
         return $monolog;
     }));
+
+By default, all requests, responses and errors are logged by an event listener
+registered as a service called `monolog.listener`. You can replace or remove
+this service if you want to modify or disable the informations logged.
 
 Traits
 ------

@@ -61,7 +61,7 @@ class GuzzleTeleporter extends AbstractTeleporter
     {
         $client = new Client();
 
-        $client->getEventDispatcher()->addListener('request.error', function(Event $event) {
+        $client->getEventDispatcher()->addListener('request.error', function (Event $event) {
             // override guzzle default behavior of throwing exceptions
             // when 4xx & 5xx responses are encountered
             $event->stopPropagation();

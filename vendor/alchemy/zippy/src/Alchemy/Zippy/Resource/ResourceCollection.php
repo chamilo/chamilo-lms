@@ -11,22 +11,30 @@
 
 namespace Alchemy\Zippy\Resource;
 
+use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class ResourceCollection extends ArrayCollection
 {
     private $context;
-    private $temporary = false;
+    private $temporary;
 
     /**
      * Constructor
      *
-     * @param String $context
-     * @param array  $elements An array of Resource
+     * @param String     $context
+     * @param Resource[] $elements An array of Resource
      */
-    public function __construct($context, array $elements = array())
+    public function __construct($context, array $elements, $temporary)
     {
+        array_walk($elements, function ($element) {
+            if (!$element instanceof Resource) {
+                throw new InvalidArgumentException('ResourceCollection only accept Resource elements');
+            }
+        });
+
         $this->context = $context;
+        $this->temporary = (Boolean) $temporary;
         parent::__construct($elements);
     }
 
@@ -38,20 +46,6 @@ class ResourceCollection extends ArrayCollection
     public function getContext()
     {
         return $this->context;
-    }
-
-    /**
-     * Sets the context of the current collection
-     *
-     * @param type $context
-     *
-     * @return ResourceCollection
-     */
-    public function setContext($context)
-    {
-        $this->context = $context;
-
-        return $this;
     }
 
     /**
@@ -68,26 +62,19 @@ class ResourceCollection extends ArrayCollection
     }
 
     /**
-     * Sets the collection temporary
-     *
-     * @param Boolean $temporary
-     *
-     * @return ResourceCollection
-     */
-    public function setTemporary($temporary)
-    {
-        $this->temporary = (Boolean) $temporary;
-
-        return $this;
-    }
-
-    /**
      * Returns true if all resources can be processed in place, false otherwise
      *
      * @return Boolean
      */
     public function canBeProcessedInPlace()
     {
+        if (count($this) === 1) {
+            if (null !== $context = $this->first()->getContextForProcessInSinglePlace()) {
+                $this->context = $context;
+                return true;
+            }
+        }
+
         foreach ($this as $resource) {
             if (!$resource->canBeProcessedInPlace($this->context)) {
                 return false;

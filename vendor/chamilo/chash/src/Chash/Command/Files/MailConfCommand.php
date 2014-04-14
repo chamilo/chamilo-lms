@@ -2,7 +2,7 @@
 
 namespace Chash\Command\Files;
 
-use Chash\Command\Database\CommonChamiloDatabaseCommand;
+use Chash\Command\Database\CommonDatabaseCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Returns the current mail configuration
  * @package Chash\Command\Files
  */
-class MailConfCommand extends CommonChamiloDatabaseCommand
+class MailConfCommand extends CommonDatabaseCommand
 {
     /**
      *
@@ -52,6 +52,7 @@ class MailConfCommand extends CommonChamiloDatabaseCommand
                     }
                 }
             }
+            // @todo $platform_email is not set
             $output->writeln('Host:     '.$platform_email['SMTP_HOST']);
             $output->writeln('Port:     '.$platform_email['SMTP_PORT']);
             $output->writeln('Mailer:   '.$platform_email['SMTP_MAILER']);

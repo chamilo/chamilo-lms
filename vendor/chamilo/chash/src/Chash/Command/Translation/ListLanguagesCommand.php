@@ -9,7 +9,7 @@
  */
 namespace Chash\Command\Translation;
 
-use Chash\Command\Database\CommonChamiloDatabaseCommand;
+use Chash\Command\Database\CommonDatabaseCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -21,7 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Definition of the translation:list command
  * @package Chash\Command\Translation
  */
-class ListLanguagesCommand extends CommonChamiloDatabaseCommand
+class ListLanguagesCommand extends CommonDatabaseCommand
 {
     protected function configure()
     {
@@ -46,7 +46,7 @@ class ListLanguagesCommand extends CommonChamiloDatabaseCommand
     {
         parent::execute($input, $output);
         $_configuration = $this->getHelper('configuration')->getConfiguration();
-        $dbh = $this->getHelper('configuration')->getConnection();
+        $connection = $this->getConnection();
         $av = mysql_real_escape_string($input->getArgument('availability'));
         $current = 'english';
         $ls = "SELECT selected_value FROM settings_current WHERE variable='platformLanguage'";

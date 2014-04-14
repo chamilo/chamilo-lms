@@ -32,6 +32,14 @@ class IcuRegionBundle extends RegionBundle
     /**
      * {@inheritdoc}
      */
+    public function getLocales()
+    {
+        return $this->readEntry('misc', array('Locales'));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getCountryName($country, $locale = null)
     {
         if ('ZZ' === $country || ctype_digit((string) $country)) {

@@ -43,52 +43,6 @@ class IcuLanguageBundleTest extends IcuTestCase
         $this->bundle = new IcuLanguageBundle($this->reader);
     }
 
-    public function testGetLanguageName()
-    {
-        $languages = array(
-            'de' => 'German',
-            'en' => 'English',
-        );
-
-        $this->reader->expects($this->once())
-            ->method('readEntry')
-            ->with($this->resDir, 'en', array('Languages'))
-            ->will($this->returnValue($languages));
-
-        $this->assertSame('German', $this->bundle->getLanguageName('de', null, 'en'));
-    }
-
-    public function testGetLanguageNameWithRegion()
-    {
-        $languages = array(
-            'de' => 'German',
-            'en' => 'English',
-            'en_GB' => 'British English',
-        );
-
-        $this->reader->expects($this->once())
-            ->method('readEntry')
-            ->with($this->resDir, 'en', array('Languages'))
-            ->will($this->returnValue($languages));
-
-        $this->assertSame('British English', $this->bundle->getLanguageName('en', 'GB', 'en'));
-    }
-
-    public function testGetLanguageNameWithUntranslatedRegion()
-    {
-        $languages = array(
-            'de' => 'German',
-            'en' => 'English',
-        );
-
-        $this->reader->expects($this->once())
-            ->method('readEntry')
-            ->with($this->resDir, 'en', array('Languages'))
-            ->will($this->returnValue($languages));
-
-        $this->assertSame('English', $this->bundle->getLanguageName('en', 'US', 'en'));
-    }
-
     public function testGetLanguageNameForMultipleLanguages()
     {
         $this->reader->expects($this->never())
@@ -97,7 +51,7 @@ class IcuLanguageBundleTest extends IcuTestCase
         $this->assertNull($this->bundle->getLanguageName('mul', 'en'));
     }
 
-    public function testGetLanguageNames()
+    public function testGetLanguageNamesRemovesMultipleLanguages()
     {
         $languages = array(
             'mul' => 'Multiple Languages',

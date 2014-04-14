@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class ShowConnInfoCommand
  * @package Chash\Command\Database
  */
-class ShowConnInfoCommand extends CommonChamiloDatabaseCommand
+class ShowConnInfoCommand extends CommonDatabaseCommand
 {
     /**
      *

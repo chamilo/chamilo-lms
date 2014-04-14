@@ -14,7 +14,7 @@
  */
 namespace Chash\Command\Translation;
 
-use Chash\Command\Database\CommonChamiloDatabaseCommand;
+use Chash\Command\Database\CommonDatabaseCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,7 +25,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class ExportLanguageCommand
  * @package Chash\Command\Translation
  */
-class TermsPackageCommand extends CommonChamiloDatabaseCommand
+class TermsPackageCommand extends CommonDatabaseCommand
 {
     /**
      * Set the input variables and what will be shown in command helper

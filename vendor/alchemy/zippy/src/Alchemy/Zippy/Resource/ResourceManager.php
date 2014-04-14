@@ -12,8 +12,6 @@
 namespace Alchemy\Zippy\Resource;
 
 use Alchemy\Zippy\Exception\IOException;
-use Alchemy\Zippy\Resource\RequestMapper;
-use Alchemy\Zippy\Resource\ResourceTeleporter;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOException as SfIOException;
 
@@ -65,13 +63,11 @@ class ResourceManager
                 throw new IOException(sprintf('Could not create temporary folder %s', $context), $e->getCode(), $e);
             }
 
-            $collection->setContext($context);
-
             foreach ($collection as $resource) {
                 $this->teleporter->teleport($context, $resource);
             }
 
-            $collection->setTemporary(true);
+            $collection = new ResourceCollection($context, $collection->toArray(), true);
         }
 
         return $collection;

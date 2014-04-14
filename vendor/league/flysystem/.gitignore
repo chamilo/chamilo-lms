@@ -1,0 +1,5 @@
+vendor
+composer.lock
+index.php
+coverage
+tests/files/*

@@ -151,7 +151,7 @@ class Crawler extends \SplObjectStorage
      */
     public function addHtmlContent($content, $charset = 'UTF-8')
     {
-        $current = libxml_use_internal_errors(true);
+        $internalErrors = libxml_use_internal_errors(true);
         $disableEntities = libxml_disable_entity_loader(true);
 
         $dom = new \DOMDocument('1.0', $charset);
@@ -171,9 +171,11 @@ class Crawler extends \SplObjectStorage
             }
         }
 
-        @$dom->loadHTML($content);
+        if ('' !== trim($content)) {
+            @$dom->loadHTML($content);
+        }
 
-        libxml_use_internal_errors($current);
+        libxml_use_internal_errors($internalErrors);
         libxml_disable_entity_loader($disableEntities);
 
         $this->addDocument($dom);
@@ -215,14 +217,17 @@ class Crawler extends \SplObjectStorage
             $content = str_replace('xmlns', 'ns', $content);
         }
 
-        $current = libxml_use_internal_errors(true);
+        $internalErrors = libxml_use_internal_errors(true);
         $disableEntities = libxml_disable_entity_loader(true);
 
         $dom = new \DOMDocument('1.0', $charset);
         $dom->validateOnParse = true;
-        @$dom->loadXML($content, LIBXML_NONET);
 
-        libxml_use_internal_errors($current);
+        if ('' !== trim($content)) {
+            @$dom->loadXML($content, LIBXML_NONET);
+        }
+
+        libxml_use_internal_errors($internalErrors);
         libxml_disable_entity_loader($disableEntities);
 
         $this->addDocument($dom);
@@ -454,7 +459,7 @@ class Crawler extends \SplObjectStorage
         $nodes = array();
 
         while ($node = $node->parentNode) {
-            if (1 === $node->nodeType) {
+            if (1 === $node->nodeType && '_root' !== $node->nodeName) {
                 $nodes[] = $node;
             }
         }
@@ -599,14 +604,16 @@ class Crawler extends \SplObjectStorage
      */
     public function filterXPath($xpath)
     {
-        $crawler = new static(null, $this->uri);
-        $prefixes = $this->findNamespacePrefixes($xpath);
+        $document = new \DOMDocument('1.0', 'UTF-8');
+        $root = $document->appendChild($document->createElement('_root'));
         foreach ($this as $node) {
-            $domxpath = $this->createDOMXPath($node->ownerDocument, $prefixes);
-            $crawler->add($domxpath->query($xpath, $node));
+            $root->appendChild($document->importNode($node, true));
         }
 
-        return $crawler;
+        $prefixes = $this->findNamespacePrefixes($xpath);
+        $domxpath = $this->createDOMXPath($document, $prefixes);
+
+        return new static($domxpath->query($xpath), $this->uri);
     }
 
     /**

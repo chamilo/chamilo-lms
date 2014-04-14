@@ -12,7 +12,7 @@ class ResourceCollectionTest extends TestCase
      */
     public function testConstructWithoutElements()
     {
-        $collection = new ResourceCollection('supa-context');
+        $collection = new ResourceCollection('supa-context', array(), false);
         $this->assertEquals('supa-context', $collection->getContext());
         $this->assertEquals(array(), $collection->toArray());
     }
@@ -22,36 +22,17 @@ class ResourceCollectionTest extends TestCase
      */
     public function testConstructWithElements()
     {
-        $data = array('one', 'two' => 'three');
-        $collection = new ResourceCollection('supa-context', $data);
+        $data = array($this->createResourceMock(), 'two' => $this->createResourceMock());
+        $collection = new ResourceCollection('supa-context', $data, false);
         $this->assertEquals('supa-context', $collection->getContext());
         $this->assertEquals($data, $collection->toArray());
     }
 
-    /**
-     * @covers Alchemy\Zippy\Resource\ResourceCollection::getContext
-     * @covers Alchemy\Zippy\Resource\ResourceCollection::setContext
-     */
-    public function testGetSetContext()
+    private function createResourceMock()
     {
-        $collection = new ResourceCollection('supa-context');
-        $this->assertEquals('supa-context', $collection->getContext());
-        $collection->setContext('cool context');
-        $this->assertEquals('cool context', $collection->getContext());
-    }
-
-    /**
-     * @covers Alchemy\Zippy\Resource\ResourceCollection::isTemporary
-     * @covers Alchemy\Zippy\Resource\ResourceCollection::setTemporary
-     */
-    public function testSetIsTemporary()
-    {
-        $collection = new ResourceCollection('supa-context');
-        $this->assertFalse($collection->isTemporary());
-        $collection->setTemporary(true);
-        $this->assertTrue($collection->isTemporary());
-        $collection->setTemporary(false);
-        $this->assertFalse($collection->isTemporary());
+        return $this->getMockBuilder('Alchemy\Zippy\Resource\Resource')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
@@ -64,7 +45,7 @@ class ResourceCollectionTest extends TestCase
             $this->getInPlaceResource($first),
             $this->getInPlaceResource($second),
             $this->getInPlaceResource($third),
-        ));
+        ), false);
 
         $this->assertInternalType('boolean', $collection->canBeProcessedInPlace());
         $this->assertEquals($expected, $collection->canBeProcessedInPlace());

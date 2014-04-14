@@ -24,7 +24,51 @@ $update = function ($_configuration, $mainConnection, $courseList, $dryRun, $out
 
     try {
 
-        $sql = "SELECT selected_value FROM settings_current WHERE variable='use_session_mode' ";
+        // Checking if option "students_download_folders" exists see BT#7678&
+        $output->writeln("Checking option 'students_download_folders'");
+        $sql = "SELECT selected_value FROM settings_current
+                WHERE variable = 'students_download_folders' ";
+        $result = $mainConnection->executeQuery($sql);
+        $output->writeln($sql);
+        $result = $result->fetch();
+
+        if (empty($result)) {
+            $params = array(
+                'variable' => 'students_download_folders',
+                'subkey' => '',
+                'type' => 'radio',
+                'category' => 'Tools',
+                'selected_value' => 'true',
+                'title' => 'AllowStudentsDownloadFoldersTitle',
+                'comment' => 'AllowStudentsDownloadFoldersComment',
+                'scope' => '',
+                'subkeytext' => '',
+                'access_url_changeable' => '0'
+            );
+            $mainConnection->insert('settings_current', $params);
+
+            // Adding options
+            $params = array(
+                'variable' => 'students_download_folders',
+                'value' => 'false',
+                'display_text' => 'No'
+            );
+            $mainConnection->insert('settings_options', $params);
+
+            $params = array(
+                'variable' => 'students_download_folders',
+                'value' => 'true',
+                'display_text' => 'Yes'
+            );
+            $mainConnection->insert('settings_options', $params);
+
+            $output->writeln("Option 'students_download_folders' was fixed");
+        }
+
+        // Session mode
+
+        $sql = "SELECT selected_value FROM settings_current
+                WHERE variable='use_session_mode' ";
         $result = $mainConnection->executeQuery($sql);
         $output->writeln($sql);
 
@@ -34,7 +78,8 @@ $update = function ($_configuration, $mainConnection, $courseList, $dryRun, $out
 
         if ($session_mode == 'true') {
 
-            $sql = "UPDATE settings_current SET selected_value = 'true' WHERE variable='use_session_mode' ";
+            $sql = "UPDATE settings_current SET selected_value = 'true'
+                    WHERE variable='use_session_mode' ";
             $mainConnection->executeQuery($sql);
 
             $sql = "SELECT * FROM class";
@@ -197,7 +242,8 @@ $update = function ($_configuration, $mainConnection, $courseList, $dryRun, $out
         $row = $result->fetch();
         $has_user_id = !empty($row);
 
-        $sql = "SELECT * FROM access_url_rel_user WHERE user_id = 1 AND access_url_id = 1";
+        $sql = "SELECT * FROM access_url_rel_user
+                WHERE user_id = 1 AND access_url_id = 1";
         $result = $mainConnection->executeQuery($sql);
         $row = $result->fetch();
         $has_entry = !empty($row);
@@ -460,12 +506,13 @@ $update = function ($_configuration, $mainConnection, $courseList, $dryRun, $out
                     $courseId = $course['id']; //int id
 
                     //1. Searching for works with no parents
-                    $sql 	= "SELECT * FROM $work_table WHERE parent_id = 0 AND filetype ='file' AND c_id = $courseId ";
+                    $sql = "SELECT * FROM $work_table
+                            WHERE parent_id = 0 AND filetype ='file' AND c_id = $courseId ";
                     $result = $mainConnection->executeQuery($sql);
                     $work_list = $result->fetchAll();
 
-                    $course_dir 		= $sysCoursePath.'/'.$course['directory'];
-                    $base_work_dir 		= $course_dir.'/work';
+                    $course_dir = $sysCoursePath.'/'.$course['directory'];
+                    $base_work_dir = $course_dir.'/work';
 
                     $output->writeln("<comment>Using 'base_work_dir': $base_work_dir.</comment>");
 

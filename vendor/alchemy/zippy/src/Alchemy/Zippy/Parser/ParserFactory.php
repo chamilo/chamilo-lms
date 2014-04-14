@@ -12,10 +12,6 @@
 namespace Alchemy\Zippy\Parser;
 
 use Alchemy\Zippy\Exception\InvalidArgumentException;
-use Alchemy\Zippy\Parser\BSDTarOutputParser;
-use Alchemy\Zippy\Parser\GNUTarOutputParser;
-use Alchemy\Zippy\Parser\ParserInterface;
-use Alchemy\Zippy\Parser\ZipOutputParser;
 
 class ParserFactory
 {

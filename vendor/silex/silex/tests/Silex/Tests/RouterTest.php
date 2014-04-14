@@ -12,7 +12,6 @@
 namespace Silex\Tests;
 
 use Silex\Application;
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -131,6 +130,10 @@ class RouterTest extends \PHPUnit_Framework_TestCase
             return 'put resource';
         });
 
+        $app->patch('/resource', function () {
+            return 'patch resource';
+        });
+
         $app->delete('/resource', function () {
             return 'delete resource';
         });
@@ -141,6 +144,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->checkRouteResponse($app, '/resource', 'get resource');
         $this->checkRouteResponse($app, '/resource', 'post resource', 'post');
         $this->checkRouteResponse($app, '/resource', 'put resource', 'put');
+        $this->checkRouteResponse($app, '/resource', 'patch resource', 'patch');
         $this->checkRouteResponse($app, '/resource', 'delete resource', 'delete');
     }
 
@@ -180,10 +184,6 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
     public function testHostSpecification()
     {
-        if (!method_exists('Symfony\Component\Routing\Route', 'setHost')) {
-            $this->markTestSkipped('host() is only supported in the Symfony Routing 2.2+');
-        }
-
         $route = new \Silex\Route();
 
         $this->assertSame($route, $route->host('{locale}.example.com'));
@@ -250,7 +250,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->checkRouteResponse($app, '/bar', 'bar');
     }
 
-    protected function checkRouteResponse($app, $path, $expectedContent, $method = 'get', $message = null)
+    protected function checkRouteResponse(Application $app, $path, $expectedContent, $method = 'get', $message = null)
     {
         $request = Request::create($path, $method);
         $response = $app->handle($request);

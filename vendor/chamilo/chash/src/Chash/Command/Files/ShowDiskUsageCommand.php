@@ -2,19 +2,21 @@
 
 namespace Chash\Command\Files;
 
-use Chash\Command\Database\CommonChamiloDatabaseCommand;
+use Chash\Command\Database\CommonDatabaseCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputOption;
+
+use Symfony\Component\Console\Helper\TableHelper;
 
 /**
  * Class ShowDiskUsageCommand
  * Show the total disk usage per course compared to the maximum space allowed for the corresponding courses
  * @package Chash\Command\Files
  */
-class ShowDiskUsageCommand extends CommonChamiloDatabaseCommand
+class ShowDiskUsageCommand extends CommonDatabaseCommand
 {
     /**
      *
@@ -44,6 +46,19 @@ class ShowDiskUsageCommand extends CommonChamiloDatabaseCommand
                 InputOption::VALUE_NONE,
                 'Show results in KB instead of MB'
             )
+            ->addOption(
+                'documents-only',
+                null,
+                InputOption::VALUE_NONE,
+                'Show results only from the document directory'
+            )
+            ->addOption(
+                'precision',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Precision to show results',
+                '1'
+            )
         ;
     }
 
@@ -55,39 +70,39 @@ class ShowDiskUsageCommand extends CommonChamiloDatabaseCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         parent::execute($input, $output);
+
         $kb = $input->getOption('KB'); //1 if the option was set
         $div = 1024*1024;
         $div2 = 1024;
         $unit = 'MB';
+
         if ($kb) {
             // Show results in KB instead of MB
             $div = 1024;
             $div2 = 1;
             $unit = 'KB';
         }
+
         $csv = $input->getOption('csv'); //1 if the option was set
 
         if (!$csv) {
             $this->writeCommandHeader($output, 'Checking courses dir...');
-
-            $dialog = $this->getHelperSet()->get('dialog');
-
-            if (!$dialog->askConfirmation(
-                $output,
-                '<question>This operation can take several hours on large volumes. Continue? (y/N)</question>',
-                false
-            )
-            ) {
-                return;
-            }
-        } else {
-            $output->writeln(';'.getcwd().';;;;');
         }
 
-        // Get database and path information
-        $coursesPath = $this->getConfigurationHelper()->getSysPath();
-        $this->getConfigurationHelper()->getConnection();
+        $dialog = $this->getHelperSet()->get('dialog');
+
+        if (!$csv && !$dialog->askConfirmation(
+            $output,
+            '<question>This operation can take several hours on large volumes. Continue? (y/N)</question>',
+            false
+        )
+        ) {
+            return;
+        }
+
         $_configuration = $this->getConfigurationHelper()->getConfiguration();
+        $connection = $this->getConnection();
+
         // Check whether we want to use multi-url
         $portals = array(1 => 'http://localhost/');
         $multi = $input->getOption('multi-url'); //1 if the option was set
@@ -95,67 +110,98 @@ class ShowDiskUsageCommand extends CommonChamiloDatabaseCommand
             if (!$csv) {
                 $output->writeln('Using multi-url mode');
             }
-            $urlTable = $_configuration['main_database'].'.access_url';
-            $sql = "SELECT id, url FROM $urlTable ORDER BY url";
-            $res = mysql_query($sql);
-            if ($res != false) {
-                while ($row = mysql_fetch_assoc($res)) {
-                    $portals[$row['id']] = $row['url'];
-                }
+            $sql = "SELECT id, url FROM access_url ORDER BY url";
+            $stmt = $connection->query($sql);
+            while ($row = $stmt->fetch()) {
+                $portals[$row['id']] = $row['url'];
             }
         }
 
-        $courseTable = $_configuration['main_database'].'.course';
-        $courseTableUrl = $_configuration['main_database'].'.access_url_rel_course';
         $globalCourses = array();
-        $sql = "SELECT c.id as cid, c.code as ccode, c.directory as cdir, c.disk_quota as cquota
-                FROM $courseTable c";
-        $res = mysql_query($sql);
-        if ($res && mysql_num_rows($res) > 0) {
-            while ($row = mysql_fetch_assoc($res)) {
-                $globalCourses[$row['cdir']] = array('code' => $row['ccode'], 'quota' => $row['cquota']);
-            }
+        $sql = "SELECT id, code, directory, disk_quota FROM course";
+        $stmt = $connection->query($sql);
+        while ($row = $stmt->fetch()) {
+            $globalCourses[$row['directory']] = array(
+                'code' => $row['code'],
+                'quota' => $row['disk_quota']
+            );
         }
 
-        $totalSize = 0; //size for all portals combined
+        // Size for all portals combined
+        $totalSize = 0;
         $finalList = array();
-        $finalListOrder = array();
         $orphanList = array();
-        $dirs = $this->getConfigurationHelper()->getDataFolders(1);
+        $dirs = $this->getConfigurationHelper()->getDataFolders();
+
+        $isDocumentOnly = $input->getOption('documents-only');
+        $dirDoc = "";
+        $docsOnly = "";
+        if ($isDocumentOnly) {
+            $dirDoc = "/document";
+            $docsOnly = " DocsOnly";
+        }
+        $precision = $input->getOption('precision');
+
+        if (version_compare('1.10.0', $_configuration['system_version'], '>=')) {
+            $sql = " SELECT access_url_id, c.id as course_id, c.code, directory, disk_quota
+                FROM course c JOIN access_url_rel_course u
+                ON u.c_id = c.id
+                WHERE u.access_url_id = ? ";
+        } else {
+            $sql = " SELECT access_url_id, c.id as course_id, c.code, directory, disk_quota
+                FROM course c JOIN access_url_rel_course u
+                ON u.course_code = c.code
+                WHERE u.access_url_id = ? ";
+        }
+
+        /** @var TableHelper $table */
+        $table = $this->getHelperSet()->get('table');
+        $table->setHeaders(array('Code', 'Size', $docsOnly. '(' . $unit . ')', 'Quota(' . $unit . ')', 'UsedRatio'));
+
         // browse all the portals
         foreach ($portals as $portalId => $portalName) {
-            if (empty($portalId)) { continue; }
-            // for CSV output, there must be 4 ";" on each line
-            $sql = "SELECT u.access_url_id as uid, c.id as cid, c.code as ccode, c.directory as cdir, c.disk_quota as cquota
-                FROM $courseTable c JOIN $courseTableUrl u ON u.course_code = c.code
-                WHERE u.access_url_id = $portalId";
-            $res = mysql_query($sql);
+            if (empty($portalId)) {
+                continue;
+            }
+            $stmt = $connection->prepare($sql);
+            $stmt->bindParam(1, $portalId);
+            $stmt->execute();
+
             $localCourses = array();
-            if ($res && mysql_num_rows($res) > 0) {
-                while ($row = mysql_fetch_assoc($res)) {
-                    if (!empty($row['cdir'])) {
-                        $localCourses[$row['cdir']] = array('code' => $row['ccode'], 'quota' => $row['cquota']);
-                    }
+            while ($row = $stmt->fetch()) {
+                if (!empty($row['directory'])) {
+                    $localCourses[$row['directory']] = array(
+                        'code' => $row['code'],
+                        'quota' => $row['disk_quota']
+                    );
                 }
             }
+
             $localSize = 0;
             if (count($dirs) > 0) {
-                $output->writeln(';CCC Code;Size('.$unit.');Quota('.$unit.');UsedRatio');
                 foreach ($dirs as $dir) {
                     $file = $dir->getFileName();
-                    if (isset($localCourses[$file]['code']) && isset($globalCourses[$file]['code']) && isset($finalList[$globalCourses[$file]['code']])) {
+
+                    if (isset($localCourses[$file]['code']) &&
+                        isset($globalCourses[$file]['code']) &&
+                        isset($finalList[$globalCourses[$file]['code']])
+                    ) {
                         // if this course has already been analysed, recover existing information
                         $size = $finalList[$globalCourses[$file]['code']]['size'];
-                        $output->writeln($portalName.
-                            ';'.$globalCourses[$file]['code'].
-                            ';'.$size.
-                            ';'.$finalList[$globalCourses[$file]['code']]['quota'].
-                            ';'.$finalList[$globalCourses[$file]['code']]['rate']);
+                        $table->addRow(
+                            array(
+                                $portalName,
+                                $globalCourses[$file]['code'],
+                                round($size/$div2, $precision),
+                                $finalList[$globalCourses[$file]['code']]['quota'],
+                                $finalList[$globalCourses[$file]['code']]['rate']
+                            )
+                        );
                         $localSize += $size;
                     } else {
-                        $res = exec('du -s '.$dir->getRealPath());
+                        $res = exec('du -s ' . $dir->getRealPath() . $dirDoc);
                         $res = preg_split('/\s/',$res);
-                        $size = round($res[0]/$div2,1);
+                        $size = $res[0];
 
                         if (isset($localCourses[$file]['code'])) {
                             $localSize += $size; //always add size to local portal (but only add to total size if new)
@@ -163,7 +209,7 @@ class ShowDiskUsageCommand extends CommonChamiloDatabaseCommand
                             $quota = round($localCourses[$file]['quota']/$div, 0);
                             $rate = '-';
                             if ($quota > 0) {
-                                $rate = round(($size/$quota)*100, 0);
+                                $rate = round((round($size/$div2, 2)/$quota)*100, 0);
                             }
                             $finalList[$code] = array(
                                 'code'  => $code,
@@ -175,7 +221,16 @@ class ShowDiskUsageCommand extends CommonChamiloDatabaseCommand
                             //$finalListOrder[$code] = $size;
                             $totalSize += $size; //only add to total if new course
 
-                            $output->writeln($portalName . '; ' . $code . ';' . $size . ';' . $finalList[$code]['quota'] . ';' . $rate);
+                            $table->addRow(
+                                array(
+                                    $portalName,
+                                    $code,
+                                    round($size/$div2, $precision),
+                                    $finalList[$code]['quota'],
+                                    $rate
+                                )
+                            );
+
                         } elseif (!isset($globalCourses[$file]['code']) && !isset($orphanList[$file])) {
                             // only add to orphans if not in global list from db
                             $orphanList[$file] = array('size' => $size);
@@ -183,16 +238,53 @@ class ShowDiskUsageCommand extends CommonChamiloDatabaseCommand
                     }
                 }
             }
-            $output->writeln($portalName . ';SSS Subtotal;' . $localSize . ';;;');
-            $output->writeln(';;;;;');
+            //$output->writeln($portalName . ';Subtotal;' . round($localSize/$div2, $precision) . ';;;');
+            $table->addRow(
+                array(
+                    $portalName,
+                    'Subtotal',
+                    round($localSize/$div2, $precision)
+                )
+            );
         }
+
         if (count($orphanList) > 0) {
-            $output->writeln('CCC Code;Size('.$unit.');Quota('.$unit.');UsedRatio');
+            $table->addRow(array());
+            $table->addRow(array('Code', 'Size', $docsOnly . '(' . $unit . ')', 'Quota(' . $unit . ')', 'UsedRatio'));
+            //$output->writeln('CCC Code;Size' . $docsOnly . '(' . $unit . ');Quota(' . $unit . ');UsedRatio');
             foreach($orphanList as $key => $orphan) {
-                $output->writeln($portalName . ';ORPHAN-DIR: '.$key.';'.$size.';;;');
+                $size = $orphan['size'];
+                $sizeToShow = !empty($orphan['size']) ? round($orphan['size']/$div2, $precision) : 0;
+                //$output->writeln($portalName . ';ORPHAN-DIR: ' . $key . ';' . $sizeToShow . ';;;');
+                $table->addRow(array(
+                    $portalName,
+                    'ORPHAN-DIR: ' . $key,
+                    $sizeToShow
+                ));
                 $totalSize += $size;
             }
         }
-        $output->writeln($portalName . ';TTT Total size;' . $totalSize . ';;;');
+        //$output->writeln($portalName . ';Total size;' . round($totalSize/$div2, $precision) . ';;;');
+        $table->addRow(
+            array(
+                $portalName,
+                'Total size',
+                round($totalSize/$div2, $precision)
+            )
+        );
+
+        if ($csv) {
+            $table
+                ->setPaddingChar(' ')
+                ->setHorizontalBorderChar('')
+                ->setVerticalBorderChar(' ')
+                //->setCrossingChar('')
+                //->setCellHeaderFormat(';')
+                //->setCellRowFormat(' ')
+                //->setCellRowContentFormat(' ')
+                ->setBorderFormat(';')
+                ->setPadType(STR_PAD_RIGHT);
+        }
+        $table->render($output);
     }
 }

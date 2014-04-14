@@ -2,7 +2,7 @@
 
 namespace Chash\Command\Files;
 
-use Chash\Command\Database\CommonChamiloDatabaseCommand;
+use Chash\Command\Database\CommonDatabaseCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,7 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class CleanTempFolderCommand
  * @package Chash\Command\Files
  */
-class CleanTempFolderCommand extends CommonChamiloDatabaseCommand
+class CleanTempFolderCommand extends CommonDatabaseCommand
 {
     /**
      *
@@ -39,13 +39,15 @@ class CleanTempFolderCommand extends CommonChamiloDatabaseCommand
         $dialog = $this->getHelperSet()->get('dialog');
 
         if (PHP_SAPI == 'cli') {
-            if (!$dialog->askConfirmation(
-                $output,
-                '<question>Are you sure you want to clean the Chamilo temp files? (y/N)</question>',
-                false
-            )
-            ) {
-                return;
+            if ($input->isInteractive()) {
+                if (!$dialog->askConfirmation(
+                    $output,
+                    '<question>Are you sure you want to clean the Chamilo temp files? (y/N)</question>',
+                    false
+                )
+                ) {
+                    return;
+                }
             }
         }
 

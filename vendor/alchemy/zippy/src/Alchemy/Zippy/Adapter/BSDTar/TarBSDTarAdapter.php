@@ -3,6 +3,10 @@
 namespace Alchemy\Zippy\Adapter\BSDTar;
 
 use Alchemy\Zippy\Adapter\AbstractTarAdapter;
+use Alchemy\Zippy\Adapter\VersionProbe\BSDTarVersionProbe;
+use Alchemy\Zippy\Parser\ParserInterface;
+use Alchemy\Zippy\Resource\ResourceManager;
+use Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface;
 
 /**
  * BSDTAR allows you to create and extract files from archives using BSD tar
@@ -11,6 +15,12 @@ use Alchemy\Zippy\Adapter\AbstractTarAdapter;
  */
 class TarBSDTarAdapter extends AbstractTarAdapter
 {
+    public function __construct(ParserInterface $parser, ResourceManager $manager, ProcessBuilderFactoryInterface $inflator, ProcessBuilderFactoryInterface $deflator)
+    {
+        parent::__construct($parser, $manager, $inflator, $deflator);
+        $this->probe = new BSDTarVersionProbe($inflator, $deflator);
+    }
+
     /**
      * @inheritdoc
      */
@@ -41,16 +51,6 @@ class TarBSDTarAdapter extends AbstractTarAdapter
     public static function getDefaultInflatorBinaryName()
     {
         return array('bsdtar', 'tar');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function isProperImplementation($versionOutput)
-    {
-        $lines = explode("\n", $versionOutput, 2);
-
-        return false !== stripos($lines[0], 'bsdtar');
     }
 
     /**

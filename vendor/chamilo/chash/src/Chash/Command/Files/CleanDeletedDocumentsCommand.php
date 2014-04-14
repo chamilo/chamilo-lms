@@ -2,7 +2,7 @@
 
 namespace Chash\Command\Files;
 
-use Chash\Command\Database\CommonChamiloDatabaseCommand;
+use Chash\Command\Database\CommonDatabaseCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Clean the courses/[CODE]/documents/ directory, removing all documents and folders marked DELETED
  * @package Chash\Command\Files
  */
-class CleanDeletedDocumentsCommand extends CommonChamiloDatabaseCommand
+class CleanDeletedDocumentsCommand extends CommonDatabaseCommand
 {
     /**
      *

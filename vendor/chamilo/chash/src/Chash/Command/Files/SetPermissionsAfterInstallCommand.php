@@ -2,7 +2,7 @@
 
 namespace Chash\Command\Files;
 
-use Chash\Command\Database\CommonChamiloDatabaseCommand;
+use Chash\Command\Database\CommonDatabaseCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\Filesystem\Filesystem;
  * Class SetPermissionsAfterInstallCommand
  * @package Chash\Command\Files
  */
-class SetPermissionsAfterInstallCommand extends CommonChamiloDatabaseCommand
+class SetPermissionsAfterInstallCommand extends CommonDatabaseCommand
 {
     /**
      *
@@ -73,8 +73,14 @@ class SetPermissionsAfterInstallCommand extends CommonChamiloDatabaseCommand
      * @param bool $listFiles
      * @return int
      */
-    public function setPermissions(\Symfony\Component\Console\Output\OutputInterface $output, $files, $permission, $user, $group, $listFiles = true)
-    {
+    public function setPermissions(
+        OutputInterface $output,
+        $files,
+        $permission,
+        $user,
+        $group,
+        $listFiles = true
+    ) {
         $dryRun = $this->getConfigurationHelper()->getDryRun();
 
         if (empty($files)) {

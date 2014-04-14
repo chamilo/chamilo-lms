@@ -21,6 +21,7 @@
     },
     "require-dev": {
         "ext-zip"              : "*",
+        "phpunit/phpunit"      : "~3.7",
         "symfony/finder"       : "~2.0",
         "sami/sami"            : "dev-master@dev"
     },
@@ -34,7 +35,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.1.x-dev"
+            "dev-master": "0.2.x-dev"
         }
     }
 }

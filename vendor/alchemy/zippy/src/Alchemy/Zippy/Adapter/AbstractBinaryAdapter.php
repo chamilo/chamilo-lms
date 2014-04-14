@@ -55,7 +55,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      * @param ProcessBuilderFactoryInterface      $inflator A process builder factory for the inflator binary
      * @param ProcessBuilderFactoryInterface|null $deflator A process builder factory for the deflator binary
      */
-    public function __construct(ParserInterface $parser, ResourceManager $manager, ProcessBuilderFactoryInterface $inflator, ProcessBuilderFactoryInterface $deflator = null)
+    public function __construct(ParserInterface $parser, ResourceManager $manager, ProcessBuilderFactoryInterface $inflator, ProcessBuilderFactoryInterface $deflator)
     {
         $this->parser = $parser;
         $this->manager = $manager;
@@ -115,6 +115,26 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getInflatorVersion()
+    {
+        $this->requireSupport();
+
+        return $this->doGetInflatorVersion();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDeflatorVersion()
+    {
+        $this->requireSupport();
+
+        return $this->doGetDeflatorVersion();
+    }
+
+    /**
      * Returns a new instance of the invoked adapter
      *
      * @params String|null $inflatorBinaryName The inflator binary name to use
@@ -124,12 +144,10 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
      *
      * @throws RuntimeException In case object could not be instanciated
      */
-    public static function newInstance(ResourceManager $manager, $inflatorBinaryName = null, $deflatorBinaryName = null)
+    public static function newInstance(ExecutableFinder $finder, ResourceManager $manager, $inflatorBinaryName = null, $deflatorBinaryName = null)
     {
-        $finder = new ExecutableFinder();
-
-        $inflator = self::findABinary($inflatorBinaryName, static::getDefaultInflatorBinaryName(), $finder);
-        $deflator = self::findABinary($deflatorBinaryName, static::getDefaultDeflatorBinaryName(), $finder);
+        $inflator = $inflatorBinaryName instanceof ProcessBuilderFactoryInterface ? $inflatorBinaryName : self::findABinary($inflatorBinaryName, static::getDefaultInflatorBinaryName(), $finder);
+        $deflator = $deflatorBinaryName instanceof ProcessBuilderFactoryInterface ? $deflatorBinaryName : self::findABinary($deflatorBinaryName, static::getDefaultDeflatorBinaryName(), $finder);
 
         try {
             $outputParser = ParserFactory::create(static::getName());
@@ -138,6 +156,14 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
                 'Failed to get a new instance of %s',
                 get_called_class()), $e->getCode(), $e
             );
+        }
+
+        if (null === $inflator) {
+            throw new RuntimeException(sprintf('Unable to create the inflator'));
+        }
+
+        if (null === $deflator) {
+            throw new RuntimeException(sprintf('Unable to create the deflator'));
         }
 
         return new static($outputParser, $manager, $inflator, $deflator);
@@ -156,12 +182,6 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
             }
         }
 
-        if (!$binary) {
-            throw new RuntimeException(sprintf(
-                'Failed to get a valid binary for %s', get_called_class()
-            ));
-        }
-
         return $binary;
     }
 
@@ -177,7 +197,7 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     {
         $iterations = 0;
 
-        array_walk($files, function($file) use ($builder, &$iterations) {
+        array_walk($files, function ($file) use ($builder, &$iterations) {
             $builder->add(
                 $file instanceof \SplFileInfo ?
                 $file->getRealpath() :
@@ -194,4 +214,18 @@ abstract class AbstractBinaryAdapter extends AbstractAdapter implements BinaryAd
     {
         return new FileResource($path);
     }
+
+    /**
+     * Fetch the inflator version after having check that the current adapter is supported
+     *
+     * @return string
+     */
+    abstract protected function doGetInflatorVersion();
+
+    /**
+     * Fetch the Deflator version after having check that the current adapter is supported
+     *
+     * @return string
+     */
+    abstract protected function doGetDeflatorVersion();
 }

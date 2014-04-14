@@ -48,8 +48,11 @@ class BSDTarOutputParserTest extends TestCase
         $this->assertEquals('practice/records', $memberFile['location']);
         $this->assertEquals(10240, $memberFile['size']);
         $date = $memberFile['mtime'];
+
+        $currentDate = new \DateTime();
+        $expected = \DateTime::createFromFormat('d-m-Y H:i:s', '22-01-'.$currentDate->format('Y').' 13:31:00');
         $this->assertTrue($date instanceof \DateTime);
-        $this->assertEquals('1358861460', $date->format("U"));
+        $this->assertEquals($expected->format('U'), $date->format("U"));
 
         ini_set('date.timezone', $current_timezone);
     }

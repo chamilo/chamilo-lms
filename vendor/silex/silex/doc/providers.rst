@@ -65,6 +65,7 @@ the ``Silex\Provider`` namespace:
 * :doc:`HttpCacheServiceProvider <providers/http_cache>`
 * :doc:`FormServiceProvider <providers/form>`
 * :doc:`SecurityServiceProvider <providers/security>`
+* :doc:`RememberMeServiceProvider <providers/remember_me>`
 * :doc:`ServiceControllerServiceProvider <providers/service_controller>`
 
 Third party providers
@@ -72,7 +73,7 @@ Third party providers
 
 Some service providers are developed by the community. Those third-party
 providers are listed on `Silex' repository wiki
-<https://github.com/fabpot/Silex/wiki/Third-Party-ServiceProviders>`_.
+<https://github.com/silexphp/Silex/wiki/Third-Party-ServiceProviders>`_.
 
 You are encouraged to share yours.
 
@@ -139,8 +140,10 @@ You can now use this provider as follows::
 In this example we are getting the ``name`` parameter from the query string,
 so the request path would have to be ``/hello?name=Fabien``.
 
-Controllers providers
----------------------
+.. _controller-providers:
+
+Controller Providers
+--------------------
 
 Loading providers
 ~~~~~~~~~~~~~~~~~

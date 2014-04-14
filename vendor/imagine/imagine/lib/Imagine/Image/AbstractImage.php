@@ -12,9 +12,15 @@
 namespace Imagine\Image;
 
 use Imagine\Exception\InvalidArgumentException;
+use Imagine\Image\Metadata\MetadataBag;
 
 abstract class AbstractImage implements ImageInterface
 {
+    /**
+     * @var MetadataBag
+     */
+    protected $metadata;
+
     /**
      * {@inheritdoc}
      */
@@ -73,4 +79,40 @@ abstract class AbstractImage implements ImageInterface
 
         return $thumbnail;
     }
+
+    /**
+     * Updates a given array of save options for backward compatibility with legacy names
+     *
+     * @param array $options
+     *
+     * @return array
+     */
+    protected function updateSaveOptions(array $options)
+    {
+        // Preserve BC until version 1.0
+        if (isset($options['quality']) && !isset($options['jpeg_quality'])) {
+            $options['jpeg_quality'] = $options['quality'];
+        }
+
+        return $options;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function metadata()
+    {
+        return $this->metadata;
+    }
+
+    /**
+     * Assures the metadata instance will be cloned, too
+     */
+    public function __clone()
+    {
+        if ($this->metadata !== null) {
+            $this->metadata = clone $this->metadata;
+        }
+    }
+
 }

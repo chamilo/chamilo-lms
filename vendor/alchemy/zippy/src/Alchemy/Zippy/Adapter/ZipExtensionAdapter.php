@@ -17,6 +17,7 @@ use Alchemy\Zippy\Exception\NotSupportedException;
 use Alchemy\Zippy\Archive\Member;
 use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Alchemy\Zippy\Adapter\Resource\ZipArchiveResource;
+use Alchemy\Zippy\Adapter\VersionProbe\ZipExtensionVersionProbe;
 use Alchemy\Zippy\Archive\Archive;
 use Alchemy\Zippy\Resource\ResourceManager;
 use Alchemy\Zippy\Resource\Resource;
@@ -43,25 +44,14 @@ class ZipExtensionAdapter extends AbstractAdapter
 
     public function __construct(ResourceManager $manager)
     {
-        if (!$this->isSupported()) {
-            throw new RuntimeException("Zip Extension is not available");
-        }
-
         parent::__construct($manager);
+        $this->probe = new ZipExtensionVersionProbe();
     }
 
     /**
      * @inheritdoc
      */
-    public function isSupported()
-    {
-        return class_exists('\ZipArchive');
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function listMembers(ResourceInterface $resource)
+    protected function doListMembers(ResourceInterface $resource)
     {
         $members = array();
         for ($i = 0; $i < $resource->getResource()->numFiles; $i++) {
@@ -90,7 +80,7 @@ class ZipExtensionAdapter extends AbstractAdapter
     /**
      * @inheritdoc
      */
-    public function extract(ResourceInterface $resource, $to = null)
+    protected function doExtract(ResourceInterface $resource, $to)
     {
         return $this->extractMembers($resource, null, $to);
     }
@@ -98,7 +88,7 @@ class ZipExtensionAdapter extends AbstractAdapter
     /**
      * @inheritdoc
      */
-    public function extractMembers(ResourceInterface $resource, $members, $to = null)
+    protected function doExtractMembers(ResourceInterface $resource, $members, $to)
     {
         if (null === $to) {
             // if no destination is given, will extract to zip current folder
@@ -146,7 +136,7 @@ class ZipExtensionAdapter extends AbstractAdapter
     /**
      * @inheritdoc
      */
-    public function remove(ResourceInterface $resource, $files)
+    protected function doRemove(ResourceInterface $resource, $files)
     {
         $files = (array) $files;
 
@@ -177,7 +167,7 @@ class ZipExtensionAdapter extends AbstractAdapter
     /**
      * @inheritdoc
      */
-    public function add(ResourceInterface $resource, $files, $recursive = true)
+    protected function doAdd(ResourceInterface $resource, $files, $recursive)
     {
         $files = (array) $files;
         if (empty($files)) {
@@ -192,7 +182,7 @@ class ZipExtensionAdapter extends AbstractAdapter
     /**
      * @inheritdoc
      */
-    public function create($path, $files = null, $recursive = true)
+    protected function doCreate($path, $files, $recursive)
     {
         $files = (array) $files;
 

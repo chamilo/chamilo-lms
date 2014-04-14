@@ -44,7 +44,7 @@ class ResetLoginCommand extends CommonChamiloUserCommand
     {
         parent::execute($input, $output);
         $_configuration = $this->getHelper('configuration')->getConfiguration();
-        $dbh = $this->getHelper('configuration')->getConnection();
+        $connection = $this->getConnection();
         $username = $input->getArgument('username');
         $us = "SELECT * FROM user WHERE username = '".mysql_real_escape_string($username)."'";
         $uq = mysql_query($us);

@@ -29,7 +29,7 @@ Which brings support to file types
 use Alchemy\Zippy\Zippy;
 
 $zippy = Zippy::load();
-$zippy->create('archive.zip');
+$zippy->create('archive.zip', '/path/to/folder');
 
 $archive = $zippy->open('build.tar');
 

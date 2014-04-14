@@ -12,87 +12,67 @@
 namespace Alchemy\Zippy\Adapter;
 
 use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
-use Alchemy\Zippy\Adapter\AbstractBinaryAdapter;
 use Alchemy\Zippy\Archive\Archive;
 use Alchemy\Zippy\Exception\InvalidArgumentException;
 use Alchemy\Zippy\Exception\RuntimeException;
 use Alchemy\Zippy\Resource\Resource;
 use Alchemy\Zippy\Archive\Member;
+use Symfony\Component\Process\Exception\ExceptionInterface as ProcessException;
 
 abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 {
     /**
      * @inheritdoc
      */
-    public function create($path, $files = null, $recursive = true)
+    protected function doCreate($path, $files, $recursive)
     {
-        return $this->doCreate($this->getLocalOptions(), $path, $files, $recursive);
+        return $this->doTarCreate($this->getLocalOptions(), $path, $files, $recursive);
     }
 
     /**
      * @inheritdoc
      */
-    public function listMembers(ResourceInterface $resource)
+    protected function doListMembers(ResourceInterface $resource)
     {
-        return $this->doListMembers($this->getLocalOptions(), $resource);
+        return $this->doTarListMembers($this->getLocalOptions(), $resource);
     }
 
     /**
      * @inheritdoc
      */
-    public function add(ResourceInterface $resource, $files, $recursive = true)
+    protected function doAdd(ResourceInterface $resource, $files, $recursive)
     {
-        return $this->doAdd($this->getLocalOptions(), $resource, $files, $recursive);
+        return $this->doTarAdd($this->getLocalOptions(), $resource, $files, $recursive);
     }
 
     /**
      * @inheritdoc
      */
-    public function remove(ResourceInterface $resource, $files)
+    protected function doRemove(ResourceInterface $resource, $files)
     {
-        return $this->doRemove($this->getLocalOptions(), $resource, $files);
+        return $this->doTarRemove($this->getLocalOptions(), $resource, $files);
     }
 
     /**
      * @inheritdoc
      */
-    public function extractMembers(ResourceInterface $resource, $members, $to = null)
+    protected function doExtractMembers(ResourceInterface $resource, $members, $to)
     {
-        return $this->doExtractMembers($this->getLocalOptions(), $resource, $members, $to);
+        return $this->doTarExtractMembers($this->getLocalOptions(), $resource, $members, $to);
     }
 
     /**
      * @inheritdoc
      */
-    public function extract(ResourceInterface $resource, $to = null)
+    protected function doExtract(ResourceInterface $resource, $to)
     {
-        return $this->doExtract($this->getLocalOptions(), $resource, $to);
+        return $this->doTarExtract($this->getLocalOptions(), $resource, $to);
     }
 
     /**
      * @inheritdoc
      */
-    public function isSupported()
-    {
-        $process = $this
-            ->inflator
-            ->create()
-            ->add('--version')
-            ->getProcess();
-
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            return false;
-        }
-
-        return $this->isProperImplementation($process->getOutput());
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getInflatorVersion()
+    protected function doGetInflatorVersion()
     {
         $process = $this
             ->inflator
@@ -115,12 +95,12 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
     /**
      * @inheritdoc
      */
-    public function getDeflatorVersion()
+    protected function doGetDeflatorVersion()
     {
         return $this->getInflatorVersion();
     }
 
-    protected function doCreate($options, $path, $files = null, $recursive = true)
+    protected function doTarCreate($options, $path, $files = null, $recursive = true)
     {
         $files = (array) $files;
 
@@ -156,31 +136,24 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
                 $builder->add('--no-recursion');
             }
 
-            $error = null;
-            $cwd = getcwd();
-            $collection = $this->manager->handle($cwd, $files);
+            $collection = $this->manager->handle(getcwd(), $files);
 
-            $this->chdir($collection->getContext());
             $builder->setWorkingDirectory($collection->getContext());
 
+            $collection->forAll(function ($i, Resource $resource) use ($builder) {
+                return $builder->add($resource->getTarget());
+            });
+
+            $process = $builder->getProcess();
+
             try {
-                $collection->forAll(function ($i, Resource $resource) use ($builder) {
-                    return $builder->add($resource->getTarget());
-                });
-
-                $process = $builder->getProcess();
                 $process->run();
-
+            } catch (ProcessException $e) {
                 $this->manager->cleanup($collection);
-            } catch (\Exception $e) {
-                $error = $e;
+                throw $e;
             }
 
-            $this->chdir($cwd);
-
-            if ($error) {
-                throw $error;
-            }
+            $this->manager->cleanup($collection);
         }
 
         if (!$process->isSuccessful()) {
@@ -194,7 +167,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         return new Archive($this->createResource($path), $this, $this->manager);
     }
 
-    protected function doListMembers($options, ResourceInterface $resource)
+    protected function doTarListMembers($options, ResourceInterface $resource)
     {
         $builder = $this
             ->inflator
@@ -240,7 +213,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         return $members;
     }
 
-    protected function doAdd($options, ResourceInterface $resource, $files, $recursive = true)
+    protected function doTarAdd($options, ResourceInterface $resource, $files, $recursive = true)
     {
         $files = (array) $files;
 
@@ -253,7 +226,6 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         }
 
         $builder
-            ->add('--delete')
             ->add('--append')
             ->add(sprintf('--file=%s', $resource->getResource()));
 
@@ -263,29 +235,24 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
 
         // there will be an issue if the file starts with a dash
         // see --add-file=FILE
-        $error = null;
-        $cwd = getcwd();
-        $collection = $this->manager->handle($cwd, $files);
+        $collection = $this->manager->handle(getcwd(), $files);
 
-        $this->chdir($collection->getContext());
+        $builder->setWorkingDirectory($collection->getContext());
+
+        $collection->forAll(function ($i, Resource $resource) use ($builder) {
+            return $builder->add($resource->getTarget());
+        });
+
+        $process = $builder->getProcess();
+
         try {
-            $collection->forAll(function ($i, Resource $resource) use ($builder) {
-                return $builder->add($resource->getTarget());
-            });
-
-            $process = $builder->getProcess();
             $process->run();
-
+        } catch (ProcessException $e) {
             $this->manager->cleanup($collection);
-        } catch (\Exception $e) {
-            $error = $e;
+            throw $e;
         }
 
-        $this->chdir($cwd);
-
-        if ($error) {
-            throw $error;
-        }
+        $this->manager->cleanup($collection);
 
         if (!$process->isSuccessful()) {
             throw new RuntimeException(sprintf(
@@ -298,7 +265,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         return $files;
     }
 
-    protected function doRemove($options, ResourceInterface $resource, $files)
+    protected function doTarRemove($options, ResourceInterface $resource, $files)
     {
         $files = (array) $files;
 
@@ -333,7 +300,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         return $files;
     }
 
-    protected function doExtract($options, ResourceInterface $resource, $to = null)
+    protected function doTarExtract($options, ResourceInterface $resource, $to = null)
     {
         if (null !== $to && !is_dir($to)) {
             throw new InvalidArgumentException(sprintf("%s is not a directory", $to));
@@ -377,7 +344,7 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
         return new \SplFileInfo($to ? : $resource->getResource());
     }
 
-    protected function doExtractMembers($options, ResourceInterface $resource, $members, $to = null)
+    protected function doTarExtractMembers($options, ResourceInterface $resource, $members, $to = null)
     {
         if (null !== $to && !is_dir($to)) {
             throw new InvalidArgumentException(sprintf("%s is not a directory", $to));
@@ -454,14 +421,4 @@ abstract class AbstractTarAdapter extends AbstractBinaryAdapter
      * @return Array
      */
     abstract protected function getLocalOptions();
-
-    /**
-     * Tells whether the current TAR binary comes from a specific implementation
-     * (GNU, BSD or Solaris etc ...)
-     *
-     * @param string $versionOutput The output from --version command
-     *
-     * @return Boolean
-     */
-    abstract protected function isProperImplementation($versionOutput);
 }

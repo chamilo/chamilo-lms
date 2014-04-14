@@ -2,6 +2,7 @@
 
   * Added `DoctrineODMPhpcrAdapter`
   * Added endpoint to `SolariumAdapter`
+  * Added $useOutputWalkers mode into the DoctrineORM adapter
 
 ### 1.0.1 (2013-09-23)
 

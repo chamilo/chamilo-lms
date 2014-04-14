@@ -15,6 +15,7 @@ use Imagine\Exception\OutOfBoundsException;
 use Imagine\Exception\InvalidArgumentException;
 use Imagine\Exception\RuntimeException;
 use Imagine\Image\AbstractImage;
+use Imagine\Image\Metadata\MetadataBag;
 use Imagine\Image\Palette\PaletteInterface;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Box;
@@ -45,18 +46,20 @@ final class Image extends AbstractImage
     private $palette;
 
     private static $colorspaceMapping = array(
-        PaletteInterface::PALETTE_CMYK      => \Gmagick::COLORSPACE_CMYK,
-        PaletteInterface::PALETTE_RGB       => \Gmagick::COLORSPACE_RGB,
+        PaletteInterface::PALETTE_CMYK => \Gmagick::COLORSPACE_CMYK,
+        PaletteInterface::PALETTE_RGB  => \Gmagick::COLORSPACE_RGB,
     );
 
     /**
-     * Constructs Image with Gmagick and Imagine instances
+     * Constructs a new Image instance
      *
      * @param \Gmagick         $gmagick
      * @param PaletteInterface $palette
+     * @param MetadataBag      $metadata
      */
-    public function __construct(\Gmagick $gmagick, PaletteInterface $palette)
+    public function __construct(\Gmagick $gmagick, PaletteInterface $palette, MetadataBag $metadata)
     {
+        $this->metadata = $metadata;
         $this->gmagick = $gmagick;
         $this->setColorspace($palette);
         $this->layers = new Layers($this, $this->palette, $this->gmagick);
@@ -88,7 +91,7 @@ final class Image extends AbstractImage
      */
     public function copy()
     {
-        return new self(clone $this->gmagick, $this->palette);
+        return new self(clone $this->gmagick, $this->palette, clone $this->metadata);
     }
 
     /**
@@ -276,14 +279,51 @@ final class Image extends AbstractImage
      *
      * @param \Gmagick $image
      * @param array    $options
+     * @param string   $path
      */
-    private function applyImageOptions(\Gmagick $image, array $options)
+    private function applyImageOptions(\Gmagick $image, array $options, $path)
     {
-        if (isset($options['quality'])) {
-            $image->setCompressionQuality($options['quality']);
+        if (isset($options['format'])) {
+            $format = $options['format'];
+        } elseif ('' !== $extension = pathinfo($path, \PATHINFO_EXTENSION)) {
+            $format = $extension;
+        } else {
+            $format = pathinfo($image->getImageFilename(), \PATHINFO_EXTENSION);
         }
 
-        if(isset($options['resolution-units']) && isset($options['resolution-x'])
+        $format = strtolower($format);
+
+        $options = $this->updateSaveOptions($options);
+
+        if (isset($options['jpeg_quality']) && in_array($format, array('jpeg', 'jpg', 'pjpeg'))) {
+            $image->setCompressionQuality($options['jpeg_quality']);
+        }
+
+        if ((isset($options['png_compression_level']) || isset($options['png_compression_filter'])) && $format === 'png') {
+            // first digit: compression level (default: 7)
+            if (isset($options['png_compression_level'])) {
+                if ($options['png_compression_level'] < 0 || $options['png_compression_level'] > 9) {
+                    throw new InvalidArgumentException('png_compression_level option should be an integer from 0 to 9');
+                }
+                $compression = $options['png_compression_level'] * 10;
+            } else {
+                $compression = 70;
+            }
+
+            // second digit: compression filter (default: 5)
+            if (isset($options['png_compression_filter'])) {
+                if ($options['png_compression_filter'] < 0 || $options['png_compression_filter'] > 9) {
+                    throw new InvalidArgumentException('png_compression_filter option should be an integer from 0 to 9');
+                }
+                $compression += $options['png_compression_filter'];
+            } else {
+                $compression += 5;
+            }
+
+            $image->setCompressionQuality($compression);
+        }
+
+        if (isset($options['resolution-units']) && isset($options['resolution-x'])
           && isset($options['resolution-y'])) {
 
             if ($options['resolution-units'] == ImageInterface::RESOLUTION_PIXELSPERCENTIMETER) {
@@ -291,7 +331,7 @@ final class Image extends AbstractImage
             } elseif ($options['resolution-units'] == ImageInterface::RESOLUTION_PIXELSPERINCH) {
                 $image->setimageunits(\Gmagick::RESOLUTION_PIXELSPERINCH);
             } else {
-                throw new RuntimeException('Unsupported image unit format');
+                throw new InvalidArgumentException('Unsupported image unit format');
             }
 
             $image->setimageresolution($options['resolution-x'], $options['resolution-y']);
@@ -312,7 +352,7 @@ final class Image extends AbstractImage
         }
 
         try {
-            $this->prepareOutput($options);
+            $this->prepareOutput($options, $path);
             $allFrames = !isset($options['animated']) || false === $options['animated'];
             $this->gmagick->writeimage($path, $allFrames);
         } catch (\GmagickException $e) {
@@ -341,7 +381,7 @@ final class Image extends AbstractImage
     public function get($format, array $options = array())
     {
         try {
-            $options["format"] = $format;
+            $options['format'] = $format;
             $this->prepareOutput($options);
         } catch (\GmagickException $e) {
             throw new RuntimeException(
@@ -353,9 +393,10 @@ final class Image extends AbstractImage
     }
 
     /**
-     * @param array $options
+     * @param array  $options
+     * @param string $path
      */
-    private function prepareOutput(array $options)
+    private function prepareOutput(array $options, $path = null)
     {
         if (isset($options['format'])) {
             $this->gmagick->setimageformat($options['format']);
@@ -364,7 +405,7 @@ final class Image extends AbstractImage
         if (isset($options['animated']) && true === $options['animated']) {
 
             $format = isset($options['format']) ? $options['format'] : 'gif';
-            $delay = isset($options['animated.delay']) ? $options['animated.delay'] : 800;
+            $delay = isset($options['animated.delay']) ? $options['animated.delay'] : null;
             $loops = isset($options['animated.loops']) ? $options['animated.loops'] : 0;
 
             $options['flatten'] = false;
@@ -373,7 +414,7 @@ final class Image extends AbstractImage
         } else {
             $this->layers->merge();
         }
-        $this->applyImageOptions($this->gmagick, $options);
+        $this->applyImageOptions($this->gmagick, $options, $path);
 
         // flatten only if image has multiple layers
         if ((!isset($options['flatten']) || $options['flatten'] === true)
@@ -453,7 +494,7 @@ final class Image extends AbstractImage
                 \Gmagick::COMPOSITE_DEFAULT,
                 0, 0
             );
-        } catch (\Exception $e) {
+        } catch (\GmagickException $e) {
             throw new RuntimeException(
                 'Apply mask operation failed', $e->getCode(), $e
             );
@@ -528,7 +569,7 @@ final class Image extends AbstractImage
         $image = $this;
 
         return array_map(
-            function(\GmagickPixel $pixel) use ($image) {
+            function (\GmagickPixel $pixel) use ($image) {
                 return $image->pixelToColor($pixel);
             },
             $pixels
@@ -541,7 +582,7 @@ final class Image extends AbstractImage
     public function getColorAt(PointInterface $point)
     {
         if (!$point->in($this->getSize())) {
-            throw new RuntimeException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Error getting color at point [%s,%s]. The point must be inside the image of size [%s,%s]',
                 $point->getX(), $point->getY(), $this->getSize()->getWidth(), $this->getSize()->getHeight()
             ));
@@ -767,7 +808,7 @@ final class Image extends AbstractImage
         );
 
         if (!isset($mimeTypes[$format])) {
-            throw new RuntimeException(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'Unsupported format given. Only %s are supported, %s given',
                 implode(", ", array_keys($mimeTypes)), $format
             ));

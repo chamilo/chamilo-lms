@@ -2,7 +2,7 @@
 
 namespace Chash\Command\Files;
 
-use Chash\Command\Database\CommonChamiloDatabaseCommand;
+use Chash\Command\Database\CommonDatabaseCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * continue working progressively.
  * @package Chash\Command\Files
  */
-class UpdateDirectoryMaxSizeCommand extends CommonChamiloDatabaseCommand
+class UpdateDirectoryMaxSizeCommand extends CommonDatabaseCommand
 {
     /**
      *
@@ -28,7 +28,7 @@ class UpdateDirectoryMaxSizeCommand extends CommonChamiloDatabaseCommand
         $this
             ->setName('files:update_directory_max_size')
             ->setAliases(array('fudms'))
-            ->setDescription('Increases the max disk space for all the courses reaching a certain threshold. Max space needs to be of at least 1MB for each course first.')
+            ->setDescription('Increases the max disk space for all the courses reaching a certain threshold.')
             ->addOption(
                 'threshold',
                 null,
@@ -56,15 +56,22 @@ class UpdateDirectoryMaxSizeCommand extends CommonChamiloDatabaseCommand
         if (empty($add)) {
             $add = 100;
         }
-        $theshold = $input->getOption('threshold');
+
+        if ($add == 1) {
+            $this->writeCommandHeader($output, 'Max space needs to be of at least 1MB for each course first');
+            return;
+        }
+
+        $threshold = $input->getOption('threshold');
         if (empty($threshold)) {
             $threshold = 75;
         }
+        $this->writeCommandHeader($output, 'Using threshold: '.$threshold);
         $this->writeCommandHeader($output, 'Checking courses dir...');
 
         // Get database and path information
         $coursesPath = $this->getConfigurationHelper()->getSysPath();
-        $this->getConfigurationHelper()->getConnection();
+        $connection = $this->getConnection();
         $_configuration = $this->getConfigurationHelper()->getConfiguration();
 
         $courseTable = $_configuration['main_database'].'.course';
@@ -78,7 +85,7 @@ class UpdateDirectoryMaxSizeCommand extends CommonChamiloDatabaseCommand
             }
         }
 
-        $dirs = $this->getConfigurationHelper()->getDataFolders(1);
+        $dirs = $this->getConfigurationHelper()->getDataFolders();
         if (count($dirs) > 0) {
             foreach ($dirs as $dir) {
                 $file = $dir->getFileName();

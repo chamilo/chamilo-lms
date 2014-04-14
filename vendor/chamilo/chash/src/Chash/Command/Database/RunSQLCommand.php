@@ -14,7 +14,7 @@ use Symfony\Component\Console\Formatter\OutputFormatterStyle;
  * Connects to the MySQL client without the need to introduce a password
  * @return int Exit code returned by mysql command
  */
-class RunSQLCommand extends CommonChamiloDatabaseCommand
+class RunSQLCommand extends CommonDatabaseCommand
 {
     /**
      *

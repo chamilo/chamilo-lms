@@ -2,6 +2,7 @@
 
 namespace Alchemy\Zippy\Tests\Resource;
 
+use Alchemy\Zippy\Resource\ResourceCollection;
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Resource\ResourceManager;
 
@@ -21,23 +22,66 @@ class ResourceManagerTest extends TestCase
         );
 
         $context = '/path/to/current/directory';
-        $request = array('/path/to/a/file1', '/path/to/a/file2');
+        $request = array($this->createProcessableInPlaceResource(), $this->createProcessableInPlaceResource());
 
-        $expectedCollection = $this->getMockBuilder('Alchemy\Zippy\Resource\ResourceCollection')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $expectedCollection->expects($this->any())
-            ->method('getIterator')
-            ->will($this->returnValue(new \ArrayIterator(array())));
+        $expectedCollection = new ResourceCollection($context, $request, false);
 
         $mapper->expects($this->once())
-            ->method('map')
-            ->with($this->equalTo($context), $this->equalTo($request))
-            ->will($this->returnValue($expectedCollection));
+               ->method('map')
+               ->with($this->equalTo($context), $this->equalTo($request))
+               ->will($this->returnValue($expectedCollection));
 
         $collection = $manager->handle($context, $request);
         $this->assertEquals($expectedCollection, $collection);
+    }
+
+    public function testHandleNotProcessables()
+    {
+        $mapper = $this->getRequestMapperMock();
+
+        $manager = new ResourceManager(
+            $mapper,
+            $this->getResourceTeleporterMock(),
+            $this->getFilesystemMock()
+        );
+
+        $context = '/path/to/current/directory';
+        $request = array($this->createNotProcessableInPlaceResource(), $this->createNotProcessableInPlaceResource());
+
+        $expectedCollection = new ResourceCollection($context, $request, false);
+
+        $mapper->expects($this->once())
+               ->method('map')
+               ->with($this->equalTo($context), $this->equalTo($request))
+               ->will($this->returnValue($expectedCollection));
+
+        $collection = $manager->handle($context, $request);
+        $this->assertNotEquals($expectedCollection, $collection);
+        $this->assertTrue($collection->isTemporary());
+    }
+
+    private function createProcessableInPlaceResource()
+    {
+        $resource = $this->getMockBuilder('Alchemy\Zippy\Resource\Resource')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resource->expects($this->any())
+            ->method('canBeProcessedInPlace')
+            ->will($this->returnValue(true));
+
+        return $resource;
+    }
+
+    private function createNotProcessableInPlaceResource()
+    {
+        $resource = $this->getMockBuilder('Alchemy\Zippy\Resource\Resource')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resource->expects($this->any())
+            ->method('canBeProcessedInPlace')
+            ->will($this->returnValue(false));
+
+        return $resource;
     }
 
     /**

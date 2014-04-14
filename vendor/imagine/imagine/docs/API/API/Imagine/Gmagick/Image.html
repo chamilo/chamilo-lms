@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="robots" content="index, follow, all" />
-        <title>Imagine\Gmagick\Image | Imagine API</title>
+        <title>Imagine\Gmagick\Image | </title>
                     <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
                             </head>
         <body id="class">
@@ -12,18 +12,19 @@
             <li><a href="../../classes.html">Classes</a></li>
                             <li><a href="../../namespaces.html">Namespaces</a></li>
                         <li><a href="../../interfaces.html">Interfaces</a></li>
+            <li><a href="../../traits.html">Traits</a></li>
             <li><a href="../../doc-index.html">Index</a></li>
             
         </ul>
 
-        <div id="title">Imagine API</div>
+        <div id="title"></div>
 
             <div class="type">Class</div>
     <h1><a href="../../Imagine/Gmagick.html">Imagine\Gmagick</a>\Image</h1>
     </div>
         <div class="content">
-                <p>class    <strong>Image</strong>        implements
-        <a href="../../Imagine/Image/ImageInterface.html"><abbr title="Imagine\Image\ImageInterface">ImageInterface</abbr></a></p>
+                <p>    class
+    <strong>Image</strong>        extends <a href="../../Imagine/Image/AbstractImage.html"><abbr title="Imagine\Image\AbstractImage">AbstractImage</abbr></a></p>
 
             <div class="description">
             <p>Image implementation using the Gmagick PHP extension</p>
@@ -38,11 +39,41 @@
             <table>
                     <tr>
                 <td class="type">
+                    <a href="../../Imagine/Image/ManipulatorInterface.html"><abbr title="Imagine\Image\ManipulatorInterface">ManipulatorInterface</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_thumbnail">thumbnail</a>(<a href="../../Imagine/Image/BoxInterface.html"><abbr title="Imagine\Image\BoxInterface">BoxInterface</abbr></a> $size, string $mode = ImageInterface::THUMBNAIL_INSET, string $filter = ImageInterface::FILTER_UNDEFINED)
+                    <p>Generates a thumbnail from a current image Returns it as a new image, doesn't modify the current image</p>
+                </td>
+                <td><small>from&nbsp;<a href="../../Imagine/Image/AbstractImage.html#method_thumbnail"><abbr title="Imagine\Image\AbstractImage">AbstractImage</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <abbr title="Imagine\Image\Metadata\MetadataInterface">MetadataInterface</abbr>
+                </td>
+                <td class="last">
+                    <a href="#method_metadata">metadata</a>()
+                    <p>Returns the Image's meta data</p>
+                </td>
+                <td><small>from&nbsp;<a href="../../Imagine/Image/AbstractImage.html#method_metadata"><abbr title="Imagine\Image\AbstractImage">AbstractImage</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
                     
                 </td>
                 <td class="last">
-                    <a href="#method___construct">__construct</a>(<abbr title="Imagine\Gmagick\Gmagick">Gmagick</abbr> $gmagick, <a href="../../Imagine/Image/Palette/PaletteInterface.html"><abbr title="Imagine\Image\Palette\PaletteInterface">PaletteInterface</abbr></a> $palette)
-                    <p>Constructs Image with Gmagick and Imagine instances</p>
+                    <a href="#method___clone">__clone</a>()
+                    <p>Assures the metadata instance will be cloned, too</p>
+                </td>
+                <td><small>from&nbsp;<a href="../../Imagine/Image/AbstractImage.html#method___clone"><abbr title="Imagine\Image\AbstractImage">AbstractImage</abbr></a></small></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method___construct">__construct</a>(<abbr title="Imagine\Gmagick\Gmagick">Gmagick</abbr> $gmagick, <a href="../../Imagine/Image/Palette/PaletteInterface.html"><abbr title="Imagine\Image\Palette\PaletteInterface">PaletteInterface</abbr></a> $palette, <a href="../../Imagine/Image/Metadata/MetadataBag.html"><abbr title="Imagine\Image\Metadata\MetadataBag">MetadataBag</abbr></a> $metadata)
+                    <p>Constructs a new Image instance</p>
                 </td>
                 <td></td>
             </tr>
@@ -151,7 +182,7 @@
                     <a href="../../Imagine/Image/ManipulatorInterface.html"><abbr title="Imagine\Image\ManipulatorInterface">ManipulatorInterface</abbr></a>
                 </td>
                 <td class="last">
-                    <a href="#method_save">save</a>(string $path, array $options = array())
+                    <a href="#method_save">save</a>(string $path = null, array $options = array())
                     <p>Saves the image at a specified path, the target file extension is used to determine file format, only jpg, jpeg, gif, png, wbmp and xbm are supported</p>
                 </td>
                 <td></td>
@@ -183,16 +214,6 @@
                 <td class="last">
                     <a href="#method___toString">__toString</a>()
                     <p>Returns the image content as a PNG binary string</p>
-                </td>
-                <td></td>
-            </tr>
-                    <tr>
-                <td class="type">
-                    <a href="../../Imagine/Image/ManipulatorInterface.html"><abbr title="Imagine\Image\ManipulatorInterface">ManipulatorInterface</abbr></a>
-                </td>
-                <td class="last">
-                    <a href="#method_thumbnail">thumbnail</a>(<a href="../../Imagine/Image/BoxInterface.html"><abbr title="Imagine\Image\BoxInterface">BoxInterface</abbr></a> $size, string $mode = ImageInterface::THUMBNAIL_INSET)
-                    <p>Generates a thumbnail from a current image Returns it as a new image, doesn't modify the current image</p>
                 </td>
                 <td></td>
             </tr>
@@ -342,13 +363,113 @@
 
         <h2>Details</h2>
 
-                        <h3 id="method___construct">
-        <div class="location">at line 57</div>
-        <code>            public            
-    <strong>__construct</strong>(<abbr title="Imagine\Gmagick\Gmagick">Gmagick</abbr> $gmagick, <a href="../../Imagine/Image/Palette/PaletteInterface.html"><abbr title="Imagine\Image\Palette\PaletteInterface">PaletteInterface</abbr></a> $palette)</code>
+                        <h3 id="method_thumbnail">
+        <div class="location">in <a href="../../Imagine/Image/AbstractImage.html#method_thumbnail"><abbr title="Imagine\Image\AbstractImage">AbstractImage</abbr></a> at line 27</div>
+        <code>            public            <a href="../../Imagine/Image/ManipulatorInterface.html"><abbr title="Imagine\Image\ManipulatorInterface">ManipulatorInterface</abbr></a>
+    <strong>thumbnail</strong>(<a href="../../Imagine/Image/BoxInterface.html"><abbr title="Imagine\Image\BoxInterface">BoxInterface</abbr></a> $size, string $mode = ImageInterface::THUMBNAIL_INSET, string $filter = ImageInterface::FILTER_UNDEFINED)</code>
     </h3>
     <div class="details">
-        <p>Constructs Image with Gmagick and Imagine instances</p>
+        <p>Generates a thumbnail from a current image Returns it as a new image, doesn't modify the current image</p>
+        <p>
+</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="../../Imagine/Image/BoxInterface.html"><abbr title="Imagine\Image\BoxInterface">BoxInterface</abbr></a></td>
+                <td>$size</td>
+                <td>
+</td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$mode</td>
+                <td>
+</td>
+            </tr>
+                    <tr>
+                <td>string</td>
+                <td>$filter</td>
+                <td>The filter to use for resizing, one of ImageInterface::FILTER_*</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="../../Imagine/Image/ManipulatorInterface.html"><abbr title="Imagine\Image\ManipulatorInterface">ManipulatorInterface</abbr></a></td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td>
+</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method_metadata">
+        <div class="location">in <a href="../../Imagine/Image/AbstractImage.html#method_metadata"><abbr title="Imagine\Image\AbstractImage">AbstractImage</abbr></a> at line 103</div>
+        <code>            public            <abbr title="Imagine\Image\Metadata\MetadataInterface">MetadataInterface</abbr>
+    <strong>metadata</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Returns the Image's meta data</p>
+        <p>
+</p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><abbr title="Imagine\Image\Metadata\MetadataInterface">MetadataInterface</abbr></td>
+            <td>
+</td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method___clone">
+        <div class="location">in <a href="../../Imagine/Image/AbstractImage.html#method___clone"><abbr title="Imagine\Image\AbstractImage">AbstractImage</abbr></a> at line 111</div>
+        <code>            public            
+    <strong>__clone</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Assures the metadata instance will be cloned, too</p>
+        <p>
+</p>
+        <div class="tags">
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method___construct">
+        <div class="location">at line 60</div>
+        <code>            public            
+    <strong>__construct</strong>(<abbr title="Imagine\Gmagick\Gmagick">Gmagick</abbr> $gmagick, <a href="../../Imagine/Image/Palette/PaletteInterface.html"><abbr title="Imagine\Image\Palette\PaletteInterface">PaletteInterface</abbr></a> $palette, <a href="../../Imagine/Image/Metadata/MetadataBag.html"><abbr title="Imagine\Image\Metadata\MetadataBag">MetadataBag</abbr></a> $metadata)</code>
+    </h3>
+    <div class="details">
+        <p>Constructs a new Image instance</p>
         <p>
 </p>
         <div class="tags">
@@ -367,6 +488,12 @@
                 <td>
 </td>
             </tr>
+                    <tr>
+                <td><a href="../../Imagine/Image/Metadata/MetadataBag.html"><abbr title="Imagine\Image\Metadata\MetadataBag">MetadataBag</abbr></a></td>
+                <td>$metadata</td>
+                <td>
+</td>
+            </tr>
             </table>
 
             
@@ -376,7 +503,7 @@
     </div>
 
                 <h3 id="method___destruct">
-        <div class="location">at line 67</div>
+        <div class="location">at line 71</div>
         <code>            public            
     <strong>__destruct</strong>()</code>
     </h3>
@@ -392,7 +519,7 @@
     </div>
 
                 <h3 id="method_getGmagick">
-        <div class="location">at line 80</div>
+        <div class="location">at line 84</div>
         <code>            public            <abbr title="Imagine\Gmagick\Gmagick">Gmagick</abbr>
     <strong>getGmagick</strong>()</code>
     </h3>
@@ -418,7 +545,7 @@
     </div>
 
                 <h3 id="method_copy">
-        <div class="location">at line 88</div>
+        <div class="location">at line 92</div>
         <code>            public            <a href="../../Imagine/Image/ManipulatorInterface.html"><abbr title="Imagine\Image\ManipulatorInterface">ManipulatorInterface</abbr></a>
     <strong>copy</strong>()</code>
     </h3>
@@ -454,7 +581,7 @@
     </div>
 
                 <h3 id="method_crop">
-        <div class="location">at line 96</div>
+        <div class="location">at line 100</div>
         <code>            public            <a href="../../Imagine/Image/ManipulatorInterface.html"><abbr title="Imagine\Image\ManipulatorInterface">ManipulatorInterface</abbr></a>
     <strong>crop</strong>(<a href="../../Imagine/Image/PointInterface.html"><abbr title="Imagine\Image\PointInterface">PointInterface</abbr></a> $start, <a href="../../Imagine/Image/BoxInterface.html"><abbr title="Imagine\Image\BoxInterface">BoxInterface</abbr></a> $size)</code>
     </h3>
@@ -512,7 +639,7 @@
     </div>
 
                 <h3 id="method_flipHorizontally">
-        <div class="location">at line 125</div>
+        <div class="location">at line 129</div>
         <code>            public            <a href="../../Imagine/Image/ManipulatorInterface.html"><abbr title="Imagine\Image\ManipulatorInterface">ManipulatorInterface</abbr></a>
     <strong>flipHorizontally</strong>()</code>
     </h3>
@@ -548,7 +675,7 @@
     </div>
 
                 <h3 id="method_flipVertically">
-        <div class="location">at line 141</div>
+        <div class="location">at line 145</div>
         <code>            public            <a href="../../Imagine/Image/ManipulatorInterface.html"><abbr title="Imagine\Image\ManipulatorInterface">ManipulatorInterface</abbr></a>
     <strong>flipVertically</strong>()</code>
     </h3>
@@ -584,7 +711,7 @@
     </div>
 
                 <h3 id="method_strip">
-        <div class="location">at line 157</div>
+        <div class="location">at line 161</div>
         <code>            public            <a href="../../Imagine/Image/ManipulatorInterface.html"><abbr title="Imagine\Image\ManipulatorInterface">ManipulatorInterface</abbr></a>
     <strong>strip</strong>()</code>
     </h3>
@@ -620,7 +747,7 @@
     </div>
 
                 <h3 id="method_paste">
-        <div class="location">at line 174</div>
+        <div class="location">at line 178</div>
         <code>            public            <a href="../../Imagine/Image/ManipulatorInterface.html"><abbr title="Imagine\Image\ManipulatorInterface">ManipulatorInterface</abbr></a>
     <strong>paste</strong>(<a href="../../Imagine/Image/ImageInterface.html"><abbr title="Imagine\Image\ImageInterface">ImageInterface</abbr></a> $image, <a href="../../Imagine/Image/PointInterface.html"><abbr title="Imagine\Image\PointInterface">PointInterface</abbr></a> $start)</code>
     </h3>
@@ -682,7 +809,7 @@
     </div>
 
                 <h3 id="method_resize">
-        <div class="location">at line 209</div>
+        <div class="location">at line 213</div>
         <code>            public            <a href="../../Imagine/Image/ManipulatorInterface.html"><abbr title="Imagine\Image\ManipulatorInterface">ManipulatorInterface</abbr></a>
     <strong>resize</strong>(<a href="../../Imagine/Image/BoxInterface.html"><abbr title="Imagine\Image\BoxInterface">BoxInterface</abbr></a> $size, string $filter = ImageInterface::FILTER_UNDEFINED)</code>
     </h3>
@@ -735,7 +862,7 @@
     </div>
 
                 <h3 id="method_rotate">
-        <div class="location">at line 253</div>
+        <div class="location">at line 257</div>
         <code>            public            <a href="../../Imagine/Image/ManipulatorInterface.html"><abbr title="Imagine\Image\ManipulatorInterface">ManipulatorInterface</abbr></a>
     <strong>rotate</strong>(integer $angle, <a href="../../Imagine/Image/Palette/Color/ColorInterface.html"><abbr title="Imagine\Image\Palette\Color\ColorInterface">ColorInterface</abbr></a> $background = null)</code>
     </h3>
@@ -788,9 +915,9 @@ area of rotated image.</p>
     </div>
 
                 <h3 id="method_save">
-        <div class="location">at line 303</div>
+        <div class="location">at line 344</div>
         <code>            public            <a href="../../Imagine/Image/ManipulatorInterface.html"><abbr title="Imagine\Image\ManipulatorInterface">ManipulatorInterface</abbr></a>
-    <strong>save</strong>(string $path, array $options = array())</code>
+    <strong>save</strong>(string $path = null, array $options = array())</code>
     </h3>
     <div class="details">
         <p>Saves the image at a specified path, the target file extension is used to determine file format, only jpg, jpeg, gif, png, wbmp and xbm are supported</p>
@@ -841,7 +968,7 @@ area of rotated image.</p>
     </div>
 
                 <h3 id="method_show">
-        <div class="location">at line 321</div>
+        <div class="location">at line 370</div>
         <code>            public            <a href="../../Imagine/Image/ManipulatorInterface.html"><abbr title="Imagine\Image\ManipulatorInterface">ManipulatorInterface</abbr></a>
     <strong>show</strong>(string $format, array $options = array())</code>
     </h3>
@@ -894,7 +1021,7 @@ area of rotated image.</p>
     </div>
 
                 <h3 id="method_get">
-        <div class="location">at line 332</div>
+        <div class="location">at line 381</div>
         <code>            public            string
     <strong>get</strong>(string $format, array $options = array())</code>
     </h3>
@@ -946,7 +1073,7 @@ area of rotated image.</p>
     </div>
 
                 <h3 id="method___toString">
-        <div class="location">at line 379</div>
+        <div class="location">at line 429</div>
         <code>            public            string
     <strong>__toString</strong>()</code>
     </h3>
@@ -962,59 +1089,6 @@ area of rotated image.</p>
         <tr>
             <td>string</td>
             <td>binary</td>
-        </tr>
-    </table>
-
-            
-                            <h4>Exceptions</h4>
-
-                    <table>
-                    <tr>
-                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
-                <td>
-</td>
-            </tr>
-            </table>
-
-            
-                    </div>
-    </div>
-
-                <h3 id="method_thumbnail">
-        <div class="location">at line 387</div>
-        <code>            public            <a href="../../Imagine/Image/ManipulatorInterface.html"><abbr title="Imagine\Image\ManipulatorInterface">ManipulatorInterface</abbr></a>
-    <strong>thumbnail</strong>(<a href="../../Imagine/Image/BoxInterface.html"><abbr title="Imagine\Image\BoxInterface">BoxInterface</abbr></a> $size, string $mode = ImageInterface::THUMBNAIL_INSET)</code>
-    </h3>
-    <div class="details">
-        <p>Generates a thumbnail from a current image Returns it as a new image, doesn't modify the current image</p>
-        <p>
-</p>
-        <div class="tags">
-                            <h4>Parameters</h4>
-
-                    <table>
-                    <tr>
-                <td><a href="../../Imagine/Image/BoxInterface.html"><abbr title="Imagine\Image\BoxInterface">BoxInterface</abbr></a></td>
-                <td>$size</td>
-                <td>
-</td>
-            </tr>
-                    <tr>
-                <td>string</td>
-                <td>$mode</td>
-                <td>
-</td>
-            </tr>
-            </table>
-
-            
-                            <h4>Return Value</h4>
-
-                    <table>
-        <tr>
-            <td><a href="../../Imagine/Image/ManipulatorInterface.html"><abbr title="Imagine\Image\ManipulatorInterface">ManipulatorInterface</abbr></a></td>
-            <td>
-</td>
         </tr>
     </table>
 

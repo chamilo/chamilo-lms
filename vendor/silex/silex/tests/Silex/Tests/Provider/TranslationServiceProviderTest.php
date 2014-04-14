@@ -14,8 +14,6 @@ namespace Silex\Tests\Provider;
 use Silex\Application;
 use Silex\Provider\TranslationServiceProvider;
 
-use Symfony\Component\HttpFoundation\Request;
-
 /**
  * TranslationProvider test cases.
  *
@@ -50,6 +48,7 @@ class TranslationServiceProviderTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
+
         return $app;
     }
 
@@ -124,5 +123,16 @@ class TranslationServiceProviderTest extends \PHPUnit_Framework_TestCase
         // fallback to german
         $result = $app['translator']->trans('key1', array(), null, 'ru');
         $this->assertEquals('The german translation', $result);
+    }
+
+    public function testChangingLocale()
+    {
+        $app = $this->getPreparedApp();
+
+        $this->assertEquals('The translation', $app['translator']->trans('key1'));
+
+        $app['locale'] = 'de';
+
+        $this->assertEquals('The german translation', $app['translator']->trans('key1'));
     }
 }

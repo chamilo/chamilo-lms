@@ -95,6 +95,10 @@ abstract class AbstractImageTest extends ImagineTestCase
 
     public function testSaveWithoutFormatShouldSaveInOriginalFormat()
     {
+        if (!extension_loaded('exif')) {
+            $this->markTestSkipped('The EXIF extension is required for this test');
+        }
+
         $tmpFile = __DIR__ . '/tmpfile';
 
         $this
@@ -562,6 +566,59 @@ abstract class AbstractImageTest extends ImagineTestCase
         $this->assertEquals('#d07560', (string) $color);
     }
 
+    // Test whether a simple action such as resizing a GIF works
+    // Using the original animated GIF and a slightly more complex one as reference
+    // anima2.gif courtesy of Cyndi Norrie (http://cyndipop.tumblr.com/) via 15 Folds (http://15folds.com)
+    public function testResizeAnimatedGifResizeResult()
+    {
+        if (!$this->supportMultipleLayers()) {
+            $this->markTestSkipped('This driver does not support multiple layers');
+        }
+
+        $imagine = $this->getImagine();
+
+        $image = $imagine->open('tests/Imagine/Fixtures/anima.gif');
+
+        // Imagick requires the images to be coalesced first!
+        if ($image instanceof \Imagine\Imagick\Image) {
+            $image->layers()->coalesce();
+        }
+
+        foreach ($image->layers() as $frame) {
+            $frame->resize(new Box(121, 124));
+        }
+
+        $image->save('tests/Imagine/Fixtures/results/anima-half-size.gif', array('animated' => true));
+        @unlink('tests/Imagine/Fixtures/results/anima-half-size.gif');
+
+        $image = $imagine->open('tests/Imagine/Fixtures/anima2.gif');
+
+        // Imagick requires the images to be coalesced first!
+        if ($image instanceof \Imagine\Imagick\Image) {
+            $image->layers()->coalesce();
+        }
+
+        foreach ($image->layers() as $frame) {
+            $frame->resize(new Box(200, 144));
+        }
+
+        $image->save('tests/Imagine/Fixtures/results/anima2-half-size.gif', array('animated' => true));
+        @unlink('tests/Imagine/Fixtures/results/anima2-half-size.gif');
+    }
+
+    public function testMetadataReturnsMetadataInstance()
+    {
+        $this->assertInstanceOf('Imagine\Image\Metadata\MetadataBag', $this->getMonoLayeredImage()->metadata());
+    }
+
+    public function testCloningImageResultsInNewMetadataInstance()
+    {
+        $image = $this->getMonoLayeredImage();
+        $originalMetadata = $image->metadata();
+        $clone = clone $image;
+        $this->assertNotSame($originalMetadata, $clone->metadata(), 'The image\'s metadata is the same after cloning the image, but must be a new instance.');
+    }
+
     private function getMonoLayeredImage()
     {
         return $this->getImagine()->open('tests/Imagine/Fixtures/google.png');
@@ -583,10 +640,20 @@ abstract class AbstractImageTest extends ImagineTestCase
         $class = preg_replace('/\\\\/', "_", get_called_class());
         $image = $factory->open('tests/Imagine/Fixtures/'.$file.'.'.$in);
         $thumb = $image->thumbnail(new Box(50, 50), ImageInterface::THUMBNAIL_OUTBOUND);
+        if (!is_dir('tests/Imagine/Fixtures/results/in_out')) {
+            mkdir('tests/Imagine/Fixtures/results/in_out', 0777, true);
+        }
         $thumb->save("tests/Imagine/Fixtures/results/in_out/{$class}_{$file}_from_{$in}_to.{$out}");
 
     }
 
+    /**
+     * @return \Imagine\Image\ImagineInterface
+     */
     abstract protected function getImagine();
+
+    /**
+     * @return boolean
+     */
     abstract protected function supportMultipleLayers();
 }

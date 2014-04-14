@@ -2,7 +2,7 @@
 
 namespace Chash\Command\Files;
 
-use Chash\Command\Database\CommonChamiloDatabaseCommand;
+use Chash\Command\Database\CommonDatabaseCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,7 +13,7 @@ use Symfony\Component\Filesystem\Filesystem;
  * Class GenerateTempFileStructureCommand
  * @package Chash\Command\Files
  */
-class GenerateTempFileStructureCommand extends CommonChamiloDatabaseCommand
+class GenerateTempFileStructureCommand extends CommonDatabaseCommand
 {
     /**
      *

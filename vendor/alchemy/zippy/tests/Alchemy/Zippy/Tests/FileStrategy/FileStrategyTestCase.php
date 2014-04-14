@@ -16,7 +16,7 @@ abstract class FileStrategyTestCase extends TestCase
         $container
                 ->expects($this->any())
                 ->method('offsetGet')
-                ->will($this->returnCallback(function($offset) use ($that) {
+                ->will($this->returnCallback(function ($offset) use ($that) {
                     if (array_key_exists('Alchemy\Zippy\Adapter\AdapterInterface', class_implements($offset))) {
                         return $that->getMock('Alchemy\Zippy\Adapter\AdapterInterface');
                     }
@@ -38,7 +38,7 @@ abstract class FileStrategyTestCase extends TestCase
         $container
                 ->expects($this->any())
                 ->method('offsetGet')
-                ->will($this->returnCallback(function($offset) use ($that) {
+                ->will($this->returnCallback(function ($offset) use ($that) {
                     if (array_key_exists('Alchemy\Zippy\Adapter\AdapterInterface', class_implements($offset))) {
                         return $that->getMock('Alchemy\Zippy\Adapter\AdapterInterface');
                     }

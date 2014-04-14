@@ -1,6 +1,6 @@
 <?php
 
-namespace Alchemy\Zippy\Tests\Adapter;
+namespace Alchemy\Zippy\Tests\Adapter\Resource;
 
 use Alchemy\Zippy\Tests\TestCase;
 use Alchemy\Zippy\Adapter\Resource\FileResource;

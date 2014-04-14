@@ -51,7 +51,7 @@ class MiddlewareListener implements EventSubscriberInterface
         }
 
         foreach ((array) $route->getOption('_before_middlewares') as $callback) {
-            $ret = call_user_func($callback, $request, $this->app);
+            $ret = call_user_func($this->app['callback_resolver']->resolveCallback($callback), $request, $this->app);
             if ($ret instanceof Response) {
                 $event->setResponse($ret);
 
@@ -76,7 +76,7 @@ class MiddlewareListener implements EventSubscriberInterface
         }
 
         foreach ((array) $route->getOption('_after_middlewares') as $callback) {
-            $response = call_user_func($callback, $request, $event->getResponse(), $this->app);
+            $response = call_user_func($this->app['callback_resolver']->resolveCallback($callback), $request, $event->getResponse(), $this->app);
             if ($response instanceof Response) {
                 $event->setResponse($response);
             } elseif (null !== $response) {
@@ -88,7 +88,7 @@ class MiddlewareListener implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            // this must be executed after the late events defined with before() (and their priority is 512)
+            // this must be executed after the late events defined with before() (and their priority is -512)
             KernelEvents::REQUEST  => array('onKernelRequest', -1024),
             KernelEvents::RESPONSE => array('onKernelResponse', 128),
         );

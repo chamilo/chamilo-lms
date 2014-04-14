@@ -13,7 +13,6 @@ namespace Silex\Tests\Provider;
 
 use Silex\Application;
 use Silex\Provider\HttpCacheServiceProvider;
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -56,6 +55,19 @@ class HttpCacheServiceProviderTest extends \PHPUnit_Framework_TestCase
         $app['http_cache']->run($request);
 
         $this->assertTrue($finished);
+    }
+
+    public function testDebugDefaultsToThatOfApp()
+    {
+        $app = new Application();
+
+        $app->register(new HttpCacheServiceProvider(), array(
+            'http_cache.cache_dir' => sys_get_temp_dir().'/silex_http_cache_'.uniqid(),
+        ));
+
+        $app['debug'] = true;
+        $app['http_cache'];
+        $this->assertTrue($app['http_cache.options']['debug']);
     }
 }
 

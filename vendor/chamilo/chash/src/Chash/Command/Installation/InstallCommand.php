@@ -446,8 +446,6 @@ class InstallCommand extends CommonCommand
         $sqlFolder = $this->getInstallationPath($version);
         $databaseMap = $this->getDatabaseMap();
 
-
-
         if (isset($databaseMap[$version])) {
             $dbInfo = $databaseMap[$version];
             $sections = $dbInfo['section'];

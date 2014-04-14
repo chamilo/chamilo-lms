@@ -1,4 +1,4 @@
-Using multiple monolog loggers
+Using multiple Monolog Loggers
 ==============================
 
 Having separate instances of `Monolog` for different parts of your system is
@@ -44,7 +44,7 @@ on some conventions, such as checking for an array of handlers registered with
 the container with the channel name, defaulting to the bundled handler.
 
 .. code-block:: php
-    
+
     use Monolog\Handler\StreamHandler;
     use Monolog\Logger;
 

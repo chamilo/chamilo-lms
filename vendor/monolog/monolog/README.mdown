@@ -119,6 +119,7 @@ Handlers
 - _SwiftMailerHandler_: Sends emails using a [`Swift_Mailer`](http://swiftmailer.org/) instance.
 - _PushoverHandler_: Sends mobile notifications via the [Pushover](https://www.pushover.net/) API.
 - _HipChatHandler_: Logs records to a [HipChat](http://hipchat.com) chat room using its API.
+- _FlowdockHandler_: Logs records to a [Flowdock](https://www.flowdock.com/) account.
 
 ### Log specific servers and networked logging
 
@@ -133,6 +134,7 @@ Handlers
 - _ZendMonitorHandler_: Logs records to the Zend Monitor present in Zend Server.
 - _NewRelicHandler_: Logs records to a [NewRelic](http://newrelic.com/) application.
 - _LogglyHandler_: Logs records to a [Loggly](http://www.loggly.com/) account.
+- _RollbarHandler_: Logs records to a [Rollbar](https://rollbar.com/) account.
 - _SyslogUdpHandler_: Logs records to a remote [Syslogd](http://www.rsyslog.com/) server.
 
 ### Logging in development
@@ -141,6 +143,8 @@ Handlers
   inline `console` messages within [FireBug](http://getfirebug.com/).
 - _ChromePHPHandler_: Handler for [ChromePHP](http://www.chromephp.com/), providing
   inline `console` messages within Chrome.
+- _BrowserConsoleHandler_: Handler to send logs to browser's Javascript `console` with
+  no browser extension required. Most browsers supporting `console` API are supported.
 
 ### Log to databases
 
@@ -171,6 +175,8 @@ Handlers
   for every log record.
 - _GroupHandler_: This handler groups other handlers. Every record received is
   sent to all the handlers it is configured with.
+- _FilterHandler_: This handler only lets records of the given levels through
+   to the wrapped handler.
 - _TestHandler_: Used for testing, it records everything that is sent to it and
   has accessors to read out the information.
 
@@ -178,14 +184,17 @@ Formatters
 ----------
 
 - _LineFormatter_: Formats a log record into a one-line string.
+- _HtmlFormatter_: Used to format log records into a human readable html table, mainly suitable for emails.
 - _NormalizerFormatter_: Normalizes objects/resources down to strings so a record can easily be serialized/encoded.
 - _ScalarFormatter_: Used to format log records into an associative array of scalar values.
 - _JsonFormatter_: Encodes a log record into json.
 - _WildfireFormatter_: Used to format log records into the Wildfire/FirePHP protocol, only useful for the FirePHPHandler.
 - _ChromePHPFormatter_: Used to format log records into the ChromePHP format, only useful for the ChromePHPHandler.
-- _GelfFormatter_: Used to format log records into Gelf message instances, only useful for the GelfHandler.
+- _GelfMessageFormatter_: Used to format log records into Gelf message instances, only useful for the GelfHandler.
 - _LogstashFormatter_: Used to format log records into [logstash](http://logstash.net/) event json, useful for any handler listed under inputs [here](http://logstash.net/docs/1.1.5/).
 - _ElasticaFormatter_: Used to format log records into an Elastica\Document object, only useful for the ElasticSearchHandler.
+- _LogglyFormatter_: Used to format log records into Loggly messages, only useful for the LogglyHandler.
+- _FlowdockFormatter_: Used to format log records into Flowdock messages, only useful for the FlowdockHandler.
 
 Processors
 ----------
@@ -196,6 +205,7 @@ Processors
 - _MemoryPeakUsageProcessor_: Adds the peak memory usage to a log record.
 - _ProcessIdProcessor_: Adds the process id to a log record.
 - _UidProcessor_: Adds a unique identifier to a log record.
+- _GitProcessor_: Adds the current git branch and commit to a log record.
 
 Utilities
 ---------
@@ -233,6 +243,7 @@ Frameworks Integration
 - [CakePHP](http://cakephp.org/) is usable with Monolog via the [cakephp-monolog](https://github.com/jadb/cakephp-monolog) plugin.
 - [Slim](http://www.slimframework.com/) is usable with Monolog via the [Slim-Monolog](https://github.com/Flynsarmy/Slim-Monolog) log writer.
 - [XOOPS 2.6](http://xoops.org/) comes out of the box with Monolog.
+- [Aura.Web_Project](https://github.com/auraphp/Aura.Web_Project) comes out of the box with Monolog.
 
 Author
 ------

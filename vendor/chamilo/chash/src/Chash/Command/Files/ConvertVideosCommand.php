@@ -2,7 +2,7 @@
 
 namespace Chash\Command\Files;
 
-use Chash\Command\Database\CommonChamiloDatabaseCommand;
+use Chash\Command\Database\CommonDatabaseCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,7 +16,7 @@ use Symfony\Component\Filesystem\Filesystem;
  * Convert all videos found in the given directory (recursively) to the given format, using ffmpeg
  * @package Chash\Command\Files
  */
-class ConvertVideosCommand extends CommonChamiloDatabaseCommand
+class ConvertVideosCommand extends CommonDatabaseCommand
 {
     public $excluded = array();
     public $ext;
@@ -106,8 +106,7 @@ class ConvertVideosCommand extends CommonChamiloDatabaseCommand
 
             // Find the files we want to treat, using Finder selectors
             $finder = new Finder();
-            $filter = function (\SplFileInfo $file, $ext, $orig)
-            {
+            $filter = function (\SplFileInfo $file, $ext, $orig) {
                 $combinedExt = '.'.$orig.'.'.$ext;
                 $combinedExtLength = strlen($combinedExt);
                 $extLength = strlen('.' . $ext);
@@ -119,7 +118,10 @@ class ConvertVideosCommand extends CommonChamiloDatabaseCommand
                     return false;
                 }
             };
-            $finder->sortByName()->files()->in($dir)->name('*.'.$this->ext)->filter($filter, $this->ext, $this->origExt);
+
+            $finder->sortByName()->files()->in($dir)
+                ->name('*.'.$this->ext)
+                ->filter($filter, $this->ext, $this->origExt);
 
             // Print the list of matching files we found
             if (count($finder) > 0) {

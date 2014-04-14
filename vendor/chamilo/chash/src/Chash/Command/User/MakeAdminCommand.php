@@ -26,7 +26,7 @@ class MakeAdminCommand extends CommonChamiloUserCommand
             ->setName('user:make_admin')
             ->setDescription('Makes the given user admin on the main portal')
             ->addArgument(
-                'username', 
+                'username',
                 InputArgument::REQUIRED,
                 'Allows you to specify a username to make admin'
             );
@@ -36,7 +36,7 @@ class MakeAdminCommand extends CommonChamiloUserCommand
     {
         parent::execute($input, $output);
         $_configuration = $this->getHelper('configuration')->getConfiguration();
-        $dbh = $this->getHelper('configuration')->getConnection();
+        $connection = $this->getConnection();
         $username = $input->getArgument('username');
         $us = "SELECT * FROM user WHERE username = '".mysql_real_escape_string($username)."'";
         $uq = mysql_query($us);

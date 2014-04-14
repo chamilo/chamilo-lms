@@ -15,6 +15,7 @@ use Imagine\Image\AbstractImage;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Box;
 use Imagine\Image\BoxInterface;
+use Imagine\Image\Metadata\MetadataBag;
 use Imagine\Image\Palette\Color\ColorInterface;
 use Imagine\Image\Fill\FillInterface;
 use Imagine\Image\Point;
@@ -36,6 +37,10 @@ final class Image extends AbstractImage
      * @var resource
      */
     private $resource;
+
+    /**
+     * @var Layers|null
+     */
     private $layers;
 
     /**
@@ -45,24 +50,17 @@ final class Image extends AbstractImage
     private $palette;
 
     /**
-     * Path to original source file
-     *
-     * @var null|string
-     */
-    private $path;
-
-    /**
-     * Constructs a new Image instance using the result of
-     * imagecreatetruecolor()
+     * Constructs a new Image instance
      *
      * @param resource         $resource
      * @param PaletteInterface $palette
+     * @param MetadataBag      $metadata
      */
-    public function __construct($resource, PaletteInterface $palette, $path = null)
+    public function __construct($resource, PaletteInterface $palette, MetadataBag $metadata)
     {
+        $this->metadata = $metadata;
         $this->palette = $palette;
         $this->resource = $resource;
-        $this->path = $path;
     }
 
     /**
@@ -99,7 +97,7 @@ final class Image extends AbstractImage
             throw new RuntimeException('Image copy operation failed');
         }
 
-        return new Image($copy, $this->palette);
+        return new Image($copy, $this->palette, $this->metadata);
     }
 
     /**
@@ -224,7 +222,7 @@ final class Image extends AbstractImage
      */
     final public function save($path = null, array $options = array())
     {
-        $path = null === $path ? $this->path : $path;
+        $path = null === $path ? (isset($this->metadata['filepath']) ? $this->metadata['filepath'] : $path) : $path;
 
         if (null === $path) {
             throw new RuntimeException(
@@ -237,7 +235,8 @@ final class Image extends AbstractImage
         } elseif ('' !== $extension = pathinfo($path, \PATHINFO_EXTENSION)) {
             $format = $extension;
         } else {
-            $format = pathinfo($this->path, \PATHINFO_EXTENSION);
+            $originalPath = isset($this->metadata['filepath']) ? $this->metadata['filepath'] : null;
+            $format = pathinfo($originalPath, \PATHINFO_EXTENSION);
         }
 
         $this->saveOrOutput($format, $options, $path);
@@ -567,19 +566,36 @@ final class Image extends AbstractImage
         $save = 'image'.$format;
         $args = array(&$this->resource, $filename);
 
-        if (($format === 'jpeg' || $format === 'png') &&
-            isset($options['quality'])) {
-            // Png compression quality is 0-9, so here we get the value from percent.
-            // Beaware that compression level for png works the other way around.
-            // For PNG 0 means no compression and 9 means highest compression level.
-            if ($format === 'png') {
-                $options['quality'] = round((100 - $options['quality']) * 9 / 100);
-            }
-            $args[] = $options['quality'];
+        // Preserve BC until version 1.0
+        if (isset($options['quality']) && !isset($options['png_compression_level'])) {
+            $options['png_compression_level'] = round((100 - $options['quality']) * 9 / 100);
+        }
+        if (isset($options['filters']) && !isset($options['png_compression_filter'])) {
+            $options['png_compression_filter'] = $options['filters'];
         }
 
-        if ($format === 'png' && isset($options['filters'])) {
-            $args[] = $options['filters'];
+        $options = $this->updateSaveOptions($options);
+
+        if ($format === 'jpeg' && isset($options['jpeg_quality'])) {
+            $args[] = $options['jpeg_quality'];
+        }
+
+        if ($format === 'png') {
+            if (isset($options['png_compression_level'])) {
+                if ($options['png_compression_level'] < 0 || $options['png_compression_level'] > 9) {
+                    throw new InvalidArgumentException('png_compression_level option should be an integer from 0 to 9');
+                }
+                $args[] = $options['png_compression_level'];
+            } else {
+                $args[] = -1; // use default level
+            }
+
+            if (isset($options['png_compression_filter'])) {
+                if (~PNG_ALL_FILTERS & $options['png_compression_filter']) {
+                    throw new InvalidArgumentException('png_compression_filter option should be a combination of the PNG_FILTER_XXX constants');
+                }
+                $args[] = $options['png_compression_filter'];
+            }
         }
 
         if (($format === 'wbmp' || $format === 'xbm') &&
@@ -710,7 +726,7 @@ final class Image extends AbstractImage
 
     private function setExceptionHandler()
     {
-        set_error_handler(function($errno, $errstr, $errfile, $errline) {
+        set_error_handler(function ($errno, $errstr, $errfile, $errline) {
 
             if (0 === error_reporting()) {
                 return;

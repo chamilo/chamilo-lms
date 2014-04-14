@@ -140,7 +140,7 @@ instance each time you create or open an archive.
     $zipAdapter = $zippy->getAdapterFor('zip');
 
     foreach(array('archive.zip', 'archive2.zip', 'archive3.zip') as $path) {
-        $archive = zipAdapter->open(path);
+        $archive = $zipAdapter->open($path);
     }
 
 Also sometimes you will face the problem where Zippy will not be able to handle

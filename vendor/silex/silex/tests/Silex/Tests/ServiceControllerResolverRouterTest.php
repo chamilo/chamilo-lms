@@ -25,7 +25,7 @@ class ServiceControllerResolverRouterTest extends RouterTest
         $app = new Application();
 
         $app['service_name'] = function () {
-            return new MyController;
+            return new MyController();
         };
 
         $app->get('/bar', 'service_name:getBar');
@@ -33,7 +33,7 @@ class ServiceControllerResolverRouterTest extends RouterTest
         $this->checkRouteResponse($app, '/bar', 'bar');
     }
 
-    protected function checkRouteResponse($app, $path, $expectedContent, $method = 'get', $message = null)
+    protected function checkRouteResponse(Application $app, $path, $expectedContent, $method = 'get', $message = null)
     {
         $app->register(new ServiceControllerServiceProvider());
 

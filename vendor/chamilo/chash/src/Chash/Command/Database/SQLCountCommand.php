@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Count the number of rows in a specific table
  * @return mixed Integer number of rows, or null on error
  */
-class SQLCountCommand extends CommonChamiloDatabaseCommand
+class SQLCountCommand extends CommonDatabaseCommand
 {
     /**
      *
@@ -40,17 +40,16 @@ class SQLCountCommand extends CommonChamiloDatabaseCommand
     {
         parent::execute($input, $output);
         $table = $input->getArgument('table');
-
         $_configuration = $this->getConfigurationArray();
-        $connection = $this->getConfigurationHelper()->getConnection();
-
-        $t = mysql_real_escape_string($table);
-        $q = mysql_query('SELECT COUNT(*) FROM '.$t);
-        if ($q !== false) {
-            $r = mysql_fetch_row($q);
-            $n = $r[0];
+        $connection = $this->getConnection();
+        $tableExists = $connection->getSchemaManager()->tablesExist($table);
+        if ($tableExists) {
+            $sql = "SELECT COUNT(*) count FROM $table";
+            $stmt = $connection->query($sql);
+            $result = $stmt->fetch();
+            $count = $result['count'];
             $output->writeln(
-                '<comment>Database/table/number of rows: </comment><info>'.$_configuration['main_database'].'/'.$t.'/'.$n.'</info>'
+                '<comment>Database/table/number of rows: </comment><info>'.$_configuration['main_database'].'/'.$table.'/'.$count.'</info>'
             );
         } else {
             $output->writeln(

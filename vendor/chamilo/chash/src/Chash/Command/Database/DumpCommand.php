@@ -17,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Returns a dump of the database (caller should use an output redirect of some kind to store
  * to a file)
  */
-class DumpCommand extends CommonChamiloDatabaseCommand
+class DumpCommand extends CommonDatabaseCommand
 {
     /**
      *

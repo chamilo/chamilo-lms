@@ -3,10 +3,10 @@
 namespace Alchemy\Zippy\Tests\Adapter\GNUTar;
 
 use Alchemy\Zippy\Adapter\GNUTar\TarGNUTarAdapter;
-use Alchemy\Zippy\Tests\TestCase;
+use Alchemy\Zippy\Tests\Adapter\AdapterTestCase;
 use Alchemy\Zippy\Parser\ParserFactory;
 
-class TarGNUTarAdapterTest extends TestCase
+class TarGNUTarAdapterTest extends AdapterTestCase
 {
     protected static $tarFile;
 
@@ -33,6 +33,11 @@ class TarGNUTarAdapterTest extends TestCase
 
     public function setUp()
     {
+        $this->adapter = $this->provideSupportedAdapter();
+    }
+
+    private function provideAdapter()
+    {
         $inflator = $this->getMockBuilder('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactory')
                 ->disableOriginalConstructor()
                 ->setMethods(array('useBinary'))
@@ -42,20 +47,36 @@ class TarGNUTarAdapterTest extends TestCase
 
         $manager = $this->getResourceManagerMock(__DIR__);
 
-        $this->adapter = new TarGNUTarAdapter($outputParser, $manager, $inflator);
+        return new TarGNUTarAdapter($outputParser, $manager, $inflator, $inflator);
+    }
+
+    protected function provideSupportedAdapter()
+    {
+        $adapter = $this->provideAdapter();
+        $this->setProbeIsOk($adapter);
+
+        return $adapter;
+    }
+
+    protected function provideNotSupportedAdapter()
+    {
+        $adapter = $this->provideAdapter();
+        $this->setProbeIsNotOk($adapter);
+
+        return $adapter;
     }
 
     public function testCreateNoFiles()
     {
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--create'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo('-'))
@@ -63,63 +84,64 @@ class TarGNUTarAdapterTest extends TestCase
 
         $nullFile = defined('PHP_WINDOWS_VERSION_BUILD') ? 'NUL' : '/dev/null';
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo(sprintf('--files-from %s', $nullFile)))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(3))
             ->method('add')
-            ->with($this->equalTo(sprintf('> %s', self::$tarFile)))
+            ->with($this->equalTo(sprintf('> %s', $this->getExpectedAbsolutePathForTarget(self::$tarFile))))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->create(self::$tarFile, array());
     }
 
     public function testCreate()
     {
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--create'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(1))
             ->method('add')
-            ->with($this->equalTo(sprintf('--file=%s', self::$tarFile)))
+            ->with($this->equalTo(sprintf('--file=%s', $this->getExpectedAbsolutePathForTarget(self::$tarFile))))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(2))
             ->method('setWorkingDirectory')
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(3))
             ->method('add')
             ->with($this->equalTo('lalalalala'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
         $manager = $this->getResourceManagerMock(__DIR__, array('lalalalala'));
         $outputParser = ParserFactory::create(TarGNUTarAdapter::getName());
-        $this->adapter = new TarGNUTarAdapter($outputParser, $manager, $this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter = new TarGNUTarAdapter($outputParser, $manager, $this->getMockedProcessBuilderFactory($mockedProcessBuilder), $this->getMockedProcessBuilderFactory($mockedProcessBuilder, 0));
+        $this->setProbeIsOk($this->adapter);
 
         $this->adapter->create(self::$tarFile, array(__FILE__));
     }
@@ -136,38 +158,38 @@ class TarGNUTarAdapterTest extends TestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--utc'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo('--list'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo('-v'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(3))
             ->method('add')
             ->with($this->equalTo(sprintf('--file=%s', $resource->getResource())))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->listMembers($resource);
     }
@@ -176,52 +198,46 @@ class TarGNUTarAdapterTest extends TestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(0))
-            ->method('add')
-            ->with($this->equalTo('--delete'))
-            ->will($this->returnSelf());
-
-        $mockProcessBuilder
-            ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo('--append'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
-            ->expects($this->at(2))
+        $mockedProcessBuilder
+            ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo(sprintf('--file=%s', $resource->getResource())))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->add($resource, array(__DIR__ . '/../TestCase.php'));
     }
 
     public function testgetVersion()
     {
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--version'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->getInflatorVersion();
     }
@@ -230,38 +246,38 @@ class TarGNUTarAdapterTest extends TestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--extract'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo(sprintf('--file=%s', $resource->getResource())))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo('--overwrite-dir'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(3))
             ->method('add')
             ->with($this->equalTo('--overwrite'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $dir = $this->adapter->extract($resource);
         $pathinfo = pathinfo(self::$tarFile);
@@ -272,56 +288,56 @@ class TarGNUTarAdapterTest extends TestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--extract'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo('--file=' . $resource->getResource()))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo('--overwrite-dir'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(3))
             ->method('add')
             ->with($this->equalTo('--overwrite'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(4))
             ->method('add')
             ->with($this->equalTo('--directory'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(5))
             ->method('add')
             ->with($this->equalTo(__DIR__))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(6))
             ->method('add')
             ->with($this->equalTo(__FILE__))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->extractMembers($resource, array(__FILE__), __DIR__);
     }
@@ -330,33 +346,33 @@ class TarGNUTarAdapterTest extends TestCase
     {
         $resource = $this->getResource(self::$tarFile);
 
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
+        $mockedProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(0))
             ->method('add')
             ->with($this->equalTo('--delete'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(1))
             ->method('add')
             ->with($this->equalTo('--file=' . $resource->getResource()))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(2))
             ->method('add')
             ->with($this->equalTo(__DIR__ . '/../TestCase.php'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->at(3))
             ->method('add')
             ->with($this->equalTo('path-to-file'))
             ->will($this->returnSelf());
 
-        $mockProcessBuilder
+        $mockedProcessBuilder
             ->expects($this->once())
             ->method('getProcess')
             ->will($this->returnValue($this->getSuccessFullMockProcess()));
@@ -368,71 +384,12 @@ class TarGNUTarAdapterTest extends TestCase
             ->method('getLocation')
             ->will($this->returnValue('path-to-file'));
 
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
+        $this->adapter->setInflator($this->getMockedProcessBuilderFactory($mockedProcessBuilder));
 
         $this->adapter->remove($resource, array(
             __DIR__ . '/../TestCase.php',
             $archiveFileMock
         ));
-    }
-
-    public function testThatGnuTarIsMarkedAsSupported()
-    {
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
-
-        $mockProcessBuilder
-            ->expects($this->any())
-            ->method('add')
-            ->will($this->returnSelf());
-
-        $process = $this->getSuccessFullMockProcess();
-
-        $mockProcessBuilder
-            ->expects($this->once())
-            ->method('getProcess')
-            ->will($this->returnValue($process));
-
-        $process
-            ->expects($this->once())
-            ->method('getOutput')
-            ->will($this->returnValue('tar (GNU tar) 1.17
-Copyright (C) 2007 Free Software Foundation, Inc.
-License GPLv2+: GNU GPL version 2 or later <http://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-
-Modified to support extended attributes.
-Written by John Gilmore and Jay Fenlason.'));
-
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
-
-        $this->assertTrue($this->adapter->isSupported());
-    }
-
-    public function testThatBsdTarIsMarkedAsSupported()
-    {
-        $mockProcessBuilder = $this->getMock('Symfony\Component\Process\ProcessBuilder');
-
-        $mockProcessBuilder
-            ->expects($this->any())
-            ->method('add')
-            ->will($this->returnSelf());
-
-        $process = $this->getSuccessFullMockProcess();
-
-        $mockProcessBuilder
-            ->expects($this->once())
-            ->method('getProcess')
-            ->will($this->returnValue($process));
-
-        $process
-            ->expects($this->once())
-            ->method('getOutput')
-            ->will($this->returnValue('bsdtar 2.8.3 - libarchive 2.8.3'));
-
-        $this->adapter->setInflator($this->getZippyMockBuilder($mockProcessBuilder));
-
-        $this->assertFalse($this->adapter->isSupported());
     }
 
     public function testGetName()
@@ -448,36 +405,5 @@ Written by John Gilmore and Jay Fenlason.'));
     public function testGetDefaultDeflatorBinaryName()
     {
         $this->assertEquals(array('gnutar', 'tar'), TarGNUTarAdapter::getDefaultDeflatorBinaryName());
-    }
-
-    private function getSuccessFullMockProcess()
-    {
-        $mockProcess = $this
-            ->getMockBuilder('Symfony\Component\Process\Process')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mockProcess
-            ->expects($this->once())
-            ->method('run');
-
-        $mockProcess
-            ->expects($this->once())
-            ->method('isSuccessful')
-            ->will($this->returnValue(true));
-
-        return $mockProcess;
-    }
-
-    private function getZippyMockBuilder($mockedProcessBuilder)
-    {
-        $mockBuilder = $this->getMock('Alchemy\Zippy\ProcessBuilder\ProcessBuilderFactoryInterface');
-
-        $mockBuilder
-            ->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($mockedProcessBuilder));
-
-        return $mockBuilder;
     }
 }

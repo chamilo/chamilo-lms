@@ -70,6 +70,8 @@ $application->addCommands(
         new Chash\Command\Files\ShowDiskUsageCommand(),
         new Chash\Command\Files\UpdateDirectoryMaxSizeCommand(),
 
+        new Chash\Command\Info\WhichCommand(),
+
         new Chash\Command\Installation\InstallCommand(),
         new Chash\Command\Installation\WipeCommand(),
         new Chash\Command\Installation\StatusCommand(),
@@ -89,6 +91,7 @@ $application->addCommands(
         new Chash\Command\User\MakeAdminCommand(),
         new Chash\Command\User\ResetLoginCommand(),
         new Chash\Command\User\SetLanguageCommand(),
+        new Chash\Command\User\UsersPerUrlAccessCommand(),
     )
 );
 $application->run();

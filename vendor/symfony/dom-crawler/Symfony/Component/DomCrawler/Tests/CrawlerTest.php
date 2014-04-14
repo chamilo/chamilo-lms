@@ -130,7 +130,7 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddHtmlContentWithErrors()
     {
-        libxml_use_internal_errors(true);
+        $internalErrors = libxml_use_internal_errors(true);
 
         $crawler = new Crawler();
         $crawler->addHtmlContent(<<<EOF
@@ -150,7 +150,7 @@ EOF
         $this->assertEquals("Tag nav invalid\n", $errors[0]->message);
 
         libxml_clear_errors();
-        libxml_use_internal_errors(false);
+        libxml_use_internal_errors($internalErrors);
     }
 
     /**
@@ -180,7 +180,7 @@ EOF
      */
     public function testAddXmlContentWithErrors()
     {
-        libxml_use_internal_errors(true);
+        $internalErrors = libxml_use_internal_errors(true);
 
         $crawler = new Crawler();
         $crawler->addXmlContent(<<<EOF
@@ -198,7 +198,7 @@ EOF
         $this->assertTrue(count(libxml_get_errors()) > 1);
 
         libxml_clear_errors();
-        libxml_use_internal_errors(false);
+        libxml_use_internal_errors($internalErrors);
     }
 
     /**
@@ -390,10 +390,8 @@ EOF
         $this->assertInstanceOf('Symfony\\Component\\DomCrawler\\Crawler', $crawler, '->filterXPath() returns a new instance of a crawler');
 
         $crawler = $this->createTestCrawler()->filterXPath('//ul');
-        $this->assertCount(6, $crawler->filterXPath('//li'), '->filterXPath() filters the node list with the XPath expression');
 
-        $crawler = $this->createTestCrawler();
-        $this->assertCount(3, $crawler->filterXPath('//body')->filterXPath('//button')->parents(), '->filterXpath() preserves parents when chained');
+        $this->assertCount(6, $crawler->filterXPath('//li'), '->filterXPath() filters the node list with the XPath expression');
     }
 
     public function testFilterXPathWithDefaultNamespace()

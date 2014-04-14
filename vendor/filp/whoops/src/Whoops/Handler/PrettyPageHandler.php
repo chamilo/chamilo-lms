@@ -28,6 +28,13 @@ class PrettyPageHandler extends Handler
     private $resourceCache = array();
 
     /**
+     * The name of the custom css file.
+     *
+     * @var string
+     */
+    private $customCss = null;
+
+    /**
      * @var array[]
      */
     private $extraTables = array();
@@ -112,6 +119,10 @@ class PrettyPageHandler extends Handler
         $zeptoFile    = $this->getResource("js/zepto.min.js");
         $jsFile       = $this->getResource("js/whoops.base.js");
 
+        if ($this->customCss) {
+            $customCssFile = $this->getResource($this->customCss);
+        }
+
         $inspector = $this->getInspector();
         $frames    = $inspector->getFrames();
 
@@ -148,6 +159,10 @@ class PrettyPageHandler extends Handler
                 "Environment Variables" => $_ENV
             )
         );
+
+        if (isset($customCssFile)) {
+            $vars["stylesheet"] .= file_get_contents($customCssFile);
+        }
 
         // Add extra entries list of data tables:
         // @todo: Consolidate addDataTable and addDataTableCallback
@@ -208,7 +223,7 @@ class PrettyPageHandler extends Handler
      * Optionally accepts a 'label' parameter, to only return the data
      * table under that label.
      * @param string|null $label
-     * @return array[]
+     * @return array[]|callable
      */
     public function getDataTables($label = null)
     {
@@ -358,7 +373,18 @@ class PrettyPageHandler extends Handler
             );
         }
 
-        $this->searchPaths[] = $path;
+        array_unshift($this->searchPaths, $path);
+    }
+
+    /**
+     * Adds a custom css file to be loaded.
+     *
+     * @param  string $name
+     * @return void
+     */
+    public function addCustomCss($name)
+    {
+        $this->customCss = $name;
     }
 
     /**
@@ -388,10 +414,10 @@ class PrettyPageHandler extends Handler
             return $this->resourceCache[$resource];
         }
 
-        // Search through available search paths, in reverse order,
-        // until we find the resource we're after:
-        for($i = count($this->searchPaths) - 1; $i >= 0; $i--) {
-            $fullPath = $this->searchPaths[$i] . "/$resource";
+        // Search through available search paths, until we find the
+        // resource we're after:
+        foreach($this->searchPaths as $path) {
+            $fullPath = $path . "/$resource";
 
             if(is_file($fullPath)) {
                 // Cache the result:
@@ -416,8 +442,8 @@ class PrettyPageHandler extends Handler
     {
         $allPaths = $this->getResourcePaths();
 
-        // Compat: return only the first path
-        return reset($allPaths) ?: null;
+        // Compat: return only the first path added
+        return end($allPaths) ?: null;
     }
 
     /**

@@ -65,12 +65,42 @@ class Resource
             return false;
         }
 
-        $data = parse_url($this->original);
-
-        if (!isset($data['path'])) {
+        if (!$this->isLocal()) {
             return false;
         }
 
+        $data = parse_url($this->original);
+
         return sprintf('%s/%s', rtrim($context, '/'), $this->target) === $data['path'];
+    }
+
+    /**
+     * Returns a context for computing this resource in case it is possible.
+     *
+     * Useful to avoid teleporting.
+     *
+     * @return null|string
+     */
+    public function getContextForProcessInSinglePlace()
+    {
+        if (!$this->isLocal()) {
+            return null;
+        }
+
+        if (basename($this->original) === $this->target) {
+            return dirname($this->original);
+        }
+    }
+
+    /**
+     * Returns true if the resource is local.
+     *
+     * @return Boolean
+     */
+    private function isLocal()
+    {
+        $data = parse_url($this->original);
+
+        return isset($data['path']);
     }
 }

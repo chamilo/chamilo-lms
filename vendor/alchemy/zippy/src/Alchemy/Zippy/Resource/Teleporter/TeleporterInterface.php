@@ -21,7 +21,7 @@ interface TeleporterInterface
      * @param Resource $resource A Resource
      * @param string   $context  The current context
      *
-     * @throws IOException In case file could not be written on local
+     * @throws IOException              In case file could not be written on local
      * @throws InvalidArgumentException In case path to file is not valid
      */
     public function teleport(Resource $resource, $context);

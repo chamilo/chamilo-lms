@@ -17,6 +17,7 @@ use Imagine\Exception\RuntimeException;
 use Imagine\Image\AbstractImage;
 use Imagine\Image\Box;
 use Imagine\Image\BoxInterface;
+use Imagine\Image\Metadata\MetadataBag;
 use Imagine\Image\Palette\Color\ColorInterface;
 use Imagine\Image\Fill\FillInterface;
 use Imagine\Image\Fill\Gradient\Horizontal;
@@ -57,13 +58,15 @@ final class Image extends AbstractImage
     );
 
     /**
-     * Constructs Image with Imagick and Imagine instances
+     * Constructs a new Image instance
      *
      * @param \Imagick         $imagick
      * @param PaletteInterface $palette
+     * @param MetadataBag      $metadata
      */
-    public function __construct(\Imagick $imagick, PaletteInterface $palette)
+    public function __construct(\Imagick $imagick, PaletteInterface $palette, MetadataBag $metadata)
     {
+        $this->metadata = $metadata;
         $this->detectColorspaceConversionSupport();
         $this->imagick = $imagick;
         if (static::$supportsColorspaceConversion) {
@@ -85,7 +88,7 @@ final class Image extends AbstractImage
     }
 
     /**
-     * Returns imagick instance
+     * Returns the underlying \Imagick instance
      *
      * @return Imagick
      */
@@ -111,7 +114,7 @@ final class Image extends AbstractImage
             );
         }
 
-        return new self($clone, $this->palette);
+        return new self($clone, $this->palette, clone $this->metadata);
     }
 
     /**
@@ -308,7 +311,7 @@ final class Image extends AbstractImage
         }
 
         try {
-            $this->prepareOutput($options);
+            $this->prepareOutput($options, $path);
             $this->imagick->writeImages($path, true);
         } catch (\ImagickException $e) {
             throw new RuntimeException(
@@ -336,7 +339,7 @@ final class Image extends AbstractImage
     public function get($format, array $options = array())
     {
         try {
-            $options["format"] = $format;
+            $options['format'] = $format;
             $this->prepareOutput($options);
         } catch (\ImagickException $e) {
             throw new RuntimeException(
@@ -369,9 +372,10 @@ final class Image extends AbstractImage
     }
 
     /**
-     * @param array $options
+     * @param array  $options
+     * @param string $path
      */
-    private function prepareOutput(array $options)
+    private function prepareOutput(array $options, $path = null)
     {
         if (isset($options['format'])) {
             $this->imagick->setImageFormat($options['format']);
@@ -380,7 +384,7 @@ final class Image extends AbstractImage
         if (isset($options['animated']) && true === $options['animated']) {
 
             $format = isset($options['format']) ? $options['format'] : 'gif';
-            $delay = isset($options['animated.delay']) ? $options['animated.delay'] : 800;
+            $delay = isset($options['animated.delay']) ? $options['animated.delay'] : null;
             $loops = isset($options['animated.loops']) ? $options['animated.loops'] : 0;
 
             $options['flatten'] = false;
@@ -389,11 +393,10 @@ final class Image extends AbstractImage
         } else {
             $this->layers->merge();
         }
-        $this->applyImageOptions($this->imagick, $options);
+        $this->applyImageOptions($this->imagick, $options, $path);
 
         // flatten only if image has multiple layers
-        if ((!isset($options['flatten']) || $options['flatten'] === true)
-            && count($this->layers) > 1) {
+        if ((!isset($options['flatten']) || $options['flatten'] === true) && count($this->layers) > 1) {
             $this->flatten();
         }
     }
@@ -559,7 +562,7 @@ final class Image extends AbstractImage
         $image = $this;
 
         return array_map(
-            function(\ImagickPixel $pixel) use ($image) {
+            function (\ImagickPixel $pixel) use ($image) {
                 return $image->pixelToColor($pixel);
             },
             $pixels
@@ -723,14 +726,51 @@ final class Image extends AbstractImage
      *
      * @param \Imagick $image
      * @param array    $options
+     * @param string   $path
      */
-    private function applyImageOptions(\Imagick $image, array $options)
+    private function applyImageOptions(\Imagick $image, array $options, $path)
     {
-        if (isset($options['quality'])) {
-            $image->setImageCompressionQuality($options['quality']);
+        if (isset($options['format'])) {
+            $format = $options['format'];
+        } elseif ('' !== $extension = pathinfo($path, \PATHINFO_EXTENSION)) {
+            $format = $extension;
+        } else {
+            $format = pathinfo($image->getImageFilename(), \PATHINFO_EXTENSION);
         }
 
-        if(isset($options['resolution-units']) && isset($options['resolution-x'])
+        $format = strtolower($format);
+
+        $options = $this->updateSaveOptions($options);
+
+        if (isset($options['jpeg_quality']) && in_array($format, array('jpeg', 'jpg', 'pjpeg'))) {
+            $image->setImageCompressionQuality($options['jpeg_quality']);
+        }
+
+        if ((isset($options['png_compression_level']) || isset($options['png_compression_filter'])) && $format === 'png') {
+            // first digit: compression level (default: 7)
+            if (isset($options['png_compression_level'])) {
+                if ($options['png_compression_level'] < 0 || $options['png_compression_level'] > 9) {
+                    throw new InvalidArgumentException('png_compression_level option should be an integer from 0 to 9');
+                }
+                $compression = $options['png_compression_level'] * 10;
+            } else {
+                $compression = 70;
+            }
+
+            // second digit: compression filter (default: 5)
+            if (isset($options['png_compression_filter'])) {
+                if ($options['png_compression_filter'] < 0 || $options['png_compression_filter'] > 9) {
+                    throw new InvalidArgumentException('png_compression_filter option should be an integer from 0 to 9');
+                }
+                $compression += $options['png_compression_filter'];
+            } else {
+                $compression += 5;
+            }
+
+            $image->setImageCompressionQuality($compression);
+        }
+
+        if (isset($options['resolution-units']) && isset($options['resolution-x'])
           && isset($options['resolution-y'])) {
 
             if ($options['resolution-units'] == ImageInterface::RESOLUTION_PIXELSPERCENTIMETER) {

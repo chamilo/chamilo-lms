@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Class DropDatabaseCommand
  * @package Chash\Command\Database
  */
-class DropDatabaseCommand extends CommonChamiloDatabaseCommand
+class DropDatabaseCommand extends CommonDatabaseCommand
 {
     /**
      *
@@ -55,10 +55,7 @@ class DropDatabaseCommand extends CommonChamiloDatabaseCommand
         }
 
         $_configuration = $this->getConfigurationArray();
-
-        $connection = $this->getConfigurationHelper()->getConnection();
-        // $configurationFilePath = $this->getConfigurationHelper()->getConfigurationFilePath();
-        // $output->writeln("<comment>Reading configuration file:</comment> <info>$configurationFilePath</info>");
+        $connection = $this->getConnection();
 
         if ($connection) {
             $cmd  = 'mysql -h '.$_configuration['db_host'].' -u '.$_configuration['db_user'].' -p'.$_configuration['db_password'].' -e "DROP DATABASE %s"';

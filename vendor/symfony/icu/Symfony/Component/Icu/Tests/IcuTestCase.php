@@ -32,5 +32,7 @@ abstract class IcuTestCase extends \PHPUnit_Framework_TestCase
         if (IcuVersion::compare(Intl::getIcuVersion(), '4.4', '<', $precision = 1)) {
             $this->markTestSkipped('Please change your ICU version to 4.4 or higher');
         }
+        
+        \Locale::setDefault('en');
     }
 }

@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="robots" content="index, follow, all" />
-        <title>Imagine\Gd\Drawer | Imagine API</title>
+        <title>Imagine\Gd\Drawer | </title>
                     <link rel="stylesheet" type="text/css" href="../../stylesheet.css">
                             </head>
         <body id="class">
@@ -12,17 +12,19 @@
             <li><a href="../../classes.html">Classes</a></li>
                             <li><a href="../../namespaces.html">Namespaces</a></li>
                         <li><a href="../../interfaces.html">Interfaces</a></li>
+            <li><a href="../../traits.html">Traits</a></li>
             <li><a href="../../doc-index.html">Index</a></li>
             
         </ul>
 
-        <div id="title">Imagine API</div>
+        <div id="title"></div>
 
             <div class="type">Class</div>
     <h1><a href="../../Imagine/Gd.html">Imagine\Gd</a>\Drawer</h1>
     </div>
         <div class="content">
-                <p>class    <strong>Drawer</strong>        implements
+                <p>    class
+    <strong>Drawer</strong>        implements
         <a href="../../Imagine/Draw/DrawerInterface.html"><abbr title="Imagine\Draw\DrawerInterface">DrawerInterface</abbr></a></p>
 
             <div class="description">
@@ -41,7 +43,7 @@
                     
                 </td>
                 <td class="last">
-                    <a href="#method___construct">__construct</a>(<abbr title="Imagine\Gd\resource">resource</abbr> $resource)
+                    <a href="#method___construct">__construct</a>(resource $resource)
                     <p>Constructs Drawer with a given gd image resource</p>
                 </td>
                 <td></td>
@@ -121,7 +123,7 @@
                     <a href="../../Imagine/Draw/DrawerInterface.html"><abbr title="Imagine\Draw\DrawerInterface">DrawerInterface</abbr></a>
                 </td>
                 <td class="last">
-                    <a href="#method_text">text</a>(string $string, <a href="../../Imagine/Image/AbstractFont.html"><abbr title="Imagine\Image\AbstractFont">AbstractFont</abbr></a> $font, <a href="../../Imagine/Image/PointInterface.html"><abbr title="Imagine\Image\PointInterface">PointInterface</abbr></a> $position, integer $angle)
+                    <a href="#method_text">text</a>(string $string, <a href="../../Imagine/Image/AbstractFont.html"><abbr title="Imagine\Image\AbstractFont">AbstractFont</abbr></a> $font, <a href="../../Imagine/Image/PointInterface.html"><abbr title="Imagine\Image\PointInterface">PointInterface</abbr></a> $position, integer $angle, integer $width = null)
                     <p>Annotates image with specified text at a given position starting on the top left of the final text box</p>
                 </td>
                 <td></td>
@@ -134,7 +136,7 @@
                         <h3 id="method___construct">
         <div class="location">at line 43</div>
         <code>            public            
-    <strong>__construct</strong>(<abbr title="Imagine\Gd\resource">resource</abbr> $resource)</code>
+    <strong>__construct</strong>(resource $resource)</code>
     </h3>
     <div class="details">
         <p>Constructs Drawer with a given gd image resource</p>
@@ -145,7 +147,7 @@
 
                     <table>
                     <tr>
-                <td><abbr title="Imagine\Gd\resource">resource</abbr></td>
+                <td>resource</td>
                 <td>$resource</td>
                 <td>
 </td>
@@ -236,7 +238,7 @@
     </div>
 
                 <h3 id="method_chord">
-        <div class="location">at line 71</div>
+        <div class="location">at line 81</div>
         <code>            public            <a href="../../Imagine/Draw/DrawerInterface.html"><abbr title="Imagine\Draw\DrawerInterface">DrawerInterface</abbr></a>
     <strong>chord</strong>(<a href="../../Imagine/Image/PointInterface.html"><abbr title="Imagine\Image\PointInterface">PointInterface</abbr></a> $center, <a href="../../Imagine/Image/BoxInterface.html"><abbr title="Imagine\Image\BoxInterface">BoxInterface</abbr></a> $size, integer $start, integer $end, <a href="../../Imagine/Image/Palette/Color/ColorInterface.html"><abbr title="Imagine\Image\Palette\Color\ColorInterface">ColorInterface</abbr></a> $color, Boolean $fill = false, integer $thickness = 1)</code>
     </h3>
@@ -319,7 +321,7 @@
     </div>
 
                 <h3 id="method_ellipse">
-        <div class="location">at line 94</div>
+        <div class="location">at line 113</div>
         <code>            public            <a href="../../Imagine/Draw/DrawerInterface.html"><abbr title="Imagine\Draw\DrawerInterface">DrawerInterface</abbr></a>
     <strong>ellipse</strong>(<a href="../../Imagine/Image/PointInterface.html"><abbr title="Imagine\Image\PointInterface">PointInterface</abbr></a> $center, <a href="../../Imagine/Image/BoxInterface.html"><abbr title="Imagine\Image\BoxInterface">BoxInterface</abbr></a> $size, <a href="../../Imagine/Image/Palette/Color/ColorInterface.html"><abbr title="Imagine\Image\Palette\Color\ColorInterface">ColorInterface</abbr></a> $color, Boolean $fill = false, integer $thickness = 1)</code>
     </h3>
@@ -390,7 +392,7 @@
     </div>
 
                 <h3 id="method_line">
-        <div class="location">at line 116</div>
+        <div class="location">at line 144</div>
         <code>            public            <a href="../../Imagine/Draw/DrawerInterface.html"><abbr title="Imagine\Draw\DrawerInterface">DrawerInterface</abbr></a>
     <strong>line</strong>(<a href="../../Imagine/Image/PointInterface.html"><abbr title="Imagine\Image\PointInterface">PointInterface</abbr></a> $start, <a href="../../Imagine/Image/PointInterface.html"><abbr title="Imagine\Image\PointInterface">PointInterface</abbr></a> $end, <a href="../../Imagine/Image/Palette/Color/ColorInterface.html"><abbr title="Imagine\Image\Palette\Color\ColorInterface">ColorInterface</abbr></a> $color, integer $thickness = 1)</code>
     </h3>
@@ -445,7 +447,7 @@
     </div>
 
                 <h3 id="method_pieSlice">
-        <div class="location">at line 132</div>
+        <div class="location">at line 170</div>
         <code>            public            <a href="../../Imagine/Draw/DrawerInterface.html"><abbr title="Imagine\Draw\DrawerInterface">DrawerInterface</abbr></a>
     <strong>pieSlice</strong>(<a href="../../Imagine/Image/PointInterface.html"><abbr title="Imagine\Image\PointInterface">PointInterface</abbr></a> $center, <a href="../../Imagine/Image/BoxInterface.html"><abbr title="Imagine\Image\BoxInterface">BoxInterface</abbr></a> $size, integer $start, integer $end, <a href="../../Imagine/Image/Palette/Color/ColorInterface.html"><abbr title="Imagine\Image\Palette\Color\ColorInterface">ColorInterface</abbr></a> $color, Boolean $fill = false, integer $thickness = 1)</code>
     </h3>
@@ -528,7 +530,7 @@
     </div>
 
                 <h3 id="method_dot">
-        <div class="location">at line 155</div>
+        <div class="location">at line 202</div>
         <code>            public            <a href="../../Imagine/Draw/DrawerInterface.html"><abbr title="Imagine\Draw\DrawerInterface">DrawerInterface</abbr></a>
     <strong>dot</strong>(<a href="../../Imagine/Image/PointInterface.html"><abbr title="Imagine\Image\PointInterface">PointInterface</abbr></a> $position, <a href="../../Imagine/Image/Palette/Color/ColorInterface.html"><abbr title="Imagine\Image\Palette\Color\ColorInterface">ColorInterface</abbr></a> $color)</code>
     </h3>
@@ -581,7 +583,7 @@
     </div>
 
                 <h3 id="method_polygon">
-        <div class="location">at line 170</div>
+        <div class="location">at line 226</div>
         <code>            public            <a href="../../Imagine/Draw/DrawerInterface.html"><abbr title="Imagine\Draw\DrawerInterface">DrawerInterface</abbr></a>
     <strong>polygon</strong>(array $coordinates, <a href="../../Imagine/Image/Palette/Color/ColorInterface.html"><abbr title="Imagine\Image\Palette\Color\ColorInterface">ColorInterface</abbr></a> $color, Boolean $fill = false, integer $thickness = 1)</code>
     </h3>
@@ -646,9 +648,9 @@ three coordinates</p>
     </div>
 
                 <h3 id="method_text">
-        <div class="location">at line 203</div>
+        <div class="location">at line 265</div>
         <code>            public            <a href="../../Imagine/Draw/DrawerInterface.html"><abbr title="Imagine\Draw\DrawerInterface">DrawerInterface</abbr></a>
-    <strong>text</strong>(string $string, <a href="../../Imagine/Image/AbstractFont.html"><abbr title="Imagine\Image\AbstractFont">AbstractFont</abbr></a> $font, <a href="../../Imagine/Image/PointInterface.html"><abbr title="Imagine\Image\PointInterface">PointInterface</abbr></a> $position, integer $angle)</code>
+    <strong>text</strong>(string $string, <a href="../../Imagine/Image/AbstractFont.html"><abbr title="Imagine\Image\AbstractFont">AbstractFont</abbr></a> $font, <a href="../../Imagine/Image/PointInterface.html"><abbr title="Imagine\Image\PointInterface">PointInterface</abbr></a> $position, integer $angle, integer $width = null)</code>
     </h3>
     <div class="details">
         <p>Annotates image with specified text at a given position starting on the top left of the final text box</p>
@@ -678,6 +680,12 @@ three coordinates</p>
                     <tr>
                 <td>integer</td>
                 <td>$angle</td>
+                <td>
+</td>
+            </tr>
+                    <tr>
+                <td>integer</td>
+                <td>$width</td>
                 <td>
 </td>
             </tr>

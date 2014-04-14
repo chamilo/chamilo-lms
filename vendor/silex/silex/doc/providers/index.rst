@@ -14,6 +14,8 @@ Silex
     validator
     form
     http_cache
+    http_fragment
     security
+    remember_me
     serializer
     service_controller

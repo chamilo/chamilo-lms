@@ -10,10 +10,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\ArrayInput;
 
 /**
- * Make a full backup of the given/current install and put the results (files and db) into the given file. Store the temporary data into the /tmp/ directory
+ * Make a full backup of the given/current install and put the results
+ * (files and db) into the given file.
+ * Store the temporary data into the /tmp/ directory
  * @param array $params The params received
  */
-class FullBackupCommand extends CommonChamiloDatabaseCommand
+class FullBackupCommand extends CommonDatabaseCommand
 {
     /**
      *
@@ -57,7 +59,7 @@ class FullBackupCommand extends CommonChamiloDatabaseCommand
     {
         parent::execute($input, $output);
 
-        $_configuration = $this->getHelper('configuration')->getConfiguration();
+        $_configuration = $this->getConfigurationArray();
         $resultPath     = $input->getArgument('result');
         $tmpFolder      = $input->getOption('tmp');
 

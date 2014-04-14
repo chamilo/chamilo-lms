@@ -1539,6 +1539,7 @@ class Agenda
             $select->addOptGroup($options, get_lang('Groups'));
         }
 
+
         // adding the individual users to the select form
         if (is_array($userList)) {
             $options = array();
@@ -1549,9 +1550,11 @@ class Agenda
                 );
 
                 $selected = in_array($user['user_id'], $sendToUsers) ? true : false;
+
                 if ($selected) {
                     $option['selected'] = 'selected';
                 }
+
                 if ($addOnlyItemsInSendTo) {
                     if ($selected) {
                         $options[] = $option;
@@ -1560,6 +1563,7 @@ class Agenda
                     $options[] = $option;
                 }
             }
+
             $select->addOptGroup($options, get_lang('Users'));
         }
     }
@@ -1774,11 +1778,16 @@ class Agenda
      * @param bool $addOnlyItemsInSendTo
      * @return bool
      */
-    public function showToForm($form, $sendTo = array(), $attributes = array(), $addOnlyItemsInSendTo = false)
-    {
+    public function showToForm(
+        $form,
+        $sendTo = array(),
+        $attributes = array(),
+        $addOnlyItemsInSendTo = false
+    ) {
         if ($this->type != 'course') {
             return false;
         }
+
         $order = 'lastname';
         if (api_is_western_name_order()) {
             $order = 'firstname';
@@ -2276,6 +2285,4 @@ class Agenda
             'groups' => array($groupId)
         );
     }
-
-
 }

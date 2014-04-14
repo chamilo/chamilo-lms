@@ -41,7 +41,7 @@ $tool_name = get_lang('SubscribeUsersToSession');
 
 $add_type = 'unique';
 
-if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
+if (isset($_REQUEST['add_type']) && $_REQUEST['add_type']!='') {
 	$add_type = Security::remove_XSS($_REQUEST['add_type']);
 }
 
@@ -60,7 +60,8 @@ if (is_array($extra_field_list)) {
 	}
 }
 
-function search_users($needle, $type) {
+function search_users($needle, $type)
+{    
 	global $tbl_user,$tbl_session_rel_user,$id_session;
 	$xajax_response = new XajaxResponse();
 	$return = '';
@@ -82,22 +83,23 @@ function search_users($needle, $type) {
 		$cond_user_id = '';
 
         //Only for single & multiple
-        if (in_array($type, array('single','multiple')))
-		if (!empty($id_session)) {
-		    $id_session = intval($id_session);
-			// check id_user from session_rel_user table
-			$sql = 'SELECT id_user FROM '.$tbl_session_rel_user.' WHERE id_session ="'.$id_session.'" AND relation_type<>'.SESSION_RELATION_TYPE_RRHH.' ';
-			$res = Database::query($sql);
-			$user_ids = array();
-			if (Database::num_rows($res) > 0) {
-				while ($row = Database::fetch_row($res)) {
-					$user_ids[] = (int)$row[0];
-				}
-			}
-			if (count($user_ids) > 0) {
-				$cond_user_id = ' AND user.user_id NOT IN('.implode(",",$user_ids).')';
-			}
-		}
+        if (in_array($type, array('single','multiple'))) {
+    		if (!empty($id_session)) {
+    		    $id_session = intval($id_session);
+    			// check id_user from session_rel_user table
+    			$sql = 'SELECT id_user FROM '.$tbl_session_rel_user.' WHERE id_session ="'.$id_session.'" AND relation_type<>'.SESSION_RELATION_TYPE_RRHH.' ';
+    			$res = Database::query($sql);
+    			$user_ids = array();
+    			if (Database::num_rows($res) > 0) {
+    				while ($row = Database::fetch_row($res)) {
+    					$user_ids[] = (int)$row[0];
+    				}
+    			}
+    			if (count($user_ids) > 0) {
+    				$cond_user_id = ' AND user.user_id NOT IN('.implode(",",$user_ids).')';
+    			}
+    		}
+      }
 
 		switch($type) {
             case 'single':
@@ -124,7 +126,7 @@ function search_users($needle, $type) {
 			$tbl_user_rel_access_url= Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 			$access_url_id = api_get_current_access_url_id();
 			if ($access_url_id != -1) {
-                switch($type) {
+                switch ($type) {
                     case 'single':
                         $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
                         INNER JOIN '.$tbl_user_rel_access_url.' url_user ON (url_user.user_id=user.user_id)
@@ -531,7 +533,7 @@ if (!empty($errorMsg)) {
         <br />
         <br />
 		<?php
-		if(isset($_GET['add'])) {
+		if (isset($_GET['add'])) {
 			echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('FinishSessionCreation').'</button>';
         } else {
             //@todo see that the call to "valide()" doesn't duplicate the onsubmit of the form (necessary to avoid delete on "enter" key pressed)
@@ -560,10 +562,11 @@ if (!empty($errorMsg)) {
 </form>
 <script>
 <!--
-function moveItem(origin , destination){
+function moveItem(origin , destination)
+{
 
-	for(var i = 0 ; i<origin.options.length ; i++) {
-		if(origin.options[i].selected) {
+	for (var i = 0 ; i<origin.options.length ; i++) {
+		if (origin.options[i].selected) {
 			destination.options[destination.length] = new Option(origin.options[i].text,origin.options[i].value);
 			origin.options[i]=null;
 			i = i-1;
@@ -574,7 +577,8 @@ function moveItem(origin , destination){
 
 }
 
-function sortOptions(options) {
+function sortOptions(options)
+{
 
 	newOptions = new Array();
 	for (i = 0 ; i<options.length ; i++)
@@ -582,22 +586,24 @@ function sortOptions(options) {
 
 	newOptions = newOptions.sort(mysort);
 	options.length = 0;
-	for(i = 0 ; i < newOptions.length ; i++)
+	for (i = 0 ; i < newOptions.length ; i++)
 		options[i] = newOptions[i];
 
 }
 
-function mysort(a, b){
-	if(a.text.toLowerCase() > b.text.toLowerCase()){
+function mysort(a, b)
+{
+	if (a.text.toLowerCase() > b.text.toLowerCase()) {
 		return 1;
 	}
-	if(a.text.toLowerCase() < b.text.toLowerCase()){
+	if (a.text.toLowerCase() < b.text.toLowerCase()) {
 		return -1;
 	}
 	return 0;
 }
 
-function valide(){
+function valide()
+{
 	var options = document.getElementById('destination_users').options;
 	for (i = 0 ; i<options.length ; i++)
 		options[i].selected = true;
@@ -605,7 +611,8 @@ function valide(){
 }
 
 
-function loadUsersInSelect(select){
+function loadUsersInSelect(select)
+{
 
 	var xhr_object = null;
 
@@ -629,14 +636,15 @@ function loadUsersInSelect(select){
 	xhr_object.send("nosessionusers="+nosessionUsers+"&sessionusers="+sessionUsers+"&nosessionclasses="+nosessionClasses+"&sessionclasses="+sessionClasses);
 
 	xhr_object.onreadystatechange = function() {
-		if(xhr_object.readyState == 4) {
+		if (xhr_object.readyState == 4) {
 			document.getElementById('content_source').innerHTML = result = xhr_object.responseText;
 			//alert(xhr_object.responseText);
 		}
 	}
 }
 
-function makepost(select){
+function makepost(select)
+{
 
 	var options = select.options;
 	var ret = "";

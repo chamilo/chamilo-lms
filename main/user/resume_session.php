@@ -54,7 +54,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $url_id = api_get_current_access_url_id();
 
-switch($action) {
+switch ($action) {
     case 'add_user_to_url':
         $user_id = $_REQUEST['user_id'];
         $result = UrlManager::add_user_to_url($user_id, $url_id);
@@ -81,7 +81,7 @@ switch($action) {
             Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
         }
 
-        if(!empty($_GET['class'])){
+        if (!empty($_GET['class'])){
             Database::query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".Database::escape_string($_GET['class']));
             $nbr_affected_rows=Database::affected_rows();
             Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$id_session'");
@@ -132,8 +132,9 @@ echo Display::page_subheader(get_lang('GeneralProperties').$url);
 	<td><?php echo get_lang('Date'); ?> :</td>
 	<td>
 	<?php
-		if ($session['date_start'] == '00-00-0000' && $session['date_end']== '00-00-0000' )
-			echo get_lang('NoTimeLimits');
+		if ($session['date_start'] == '00-00-0000' && $session['date_end']== '00-00-0000' ) {
+		    echo get_lang('NoTimeLimits');
+        }
 		else {
             if ($session['date_start'] != '00-00-0000') {
             	//$session['date_start'] = Display::tag('i', get_lang('NoTimeLimits'));

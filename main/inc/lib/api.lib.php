@@ -6179,7 +6179,7 @@ function api_get_datetime_picker_js($htmlHeadXtra) {
 
     $isocode = api_get_language_isocode();
     if ($isocode != 'en') {
-        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'datetimepicker/localization/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript" language="javascript"></script>';
+        $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'datetimepicker/i18n/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript" language="javascript"></script>';
     }
     return $htmlHeadXtra;
 }

@@ -1,8 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
-set_time_limit(0);
-
 /**
  * Chamilo installation
  * This script could be loaded via browser using the URL: main/install/index.php
@@ -16,6 +13,8 @@ require_once 'install.lib.php';
 require_once '../inc/lib/api.lib.php';
 
 error_reporting(-1);
+ini_set('display_errors', '1');
+set_time_limit(0);
 
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +22,7 @@ use ChamiloLMS\Component\Console\Output\BufferedOutput;
 
 $app = new Silex\Application();
 
-// Setting Chamilo paths
+// Setting paths
 $app['root_sys'] = dirname(dirname(__DIR__)).'/';
 $app['sys_root'] = $app['root_sys'];
 $app['sys_data_path'] = isset($_configuration['sys_data_path']) ? $_configuration['sys_data_path'] : $app['root_sys'].'data/';
@@ -33,7 +32,7 @@ $app['sys_log_path'] = isset($_configuration['sys_log_path']) ? $_configuration[
 $app['sys_temp_path'] = isset($_configuration['sys_temp_path']) ? $_configuration['sys_temp_path'] : $app['sys_data_path'].'temp/';
 
 // Registering services
-$app['debug'] = false;
+$app['debug'] = true;
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Silex\Provider\FormServiceProvider());
 $app->register(new Silex\Provider\SessionServiceProvider());
@@ -258,7 +257,7 @@ $app->match('/check-database', function () use ($app) {
             $connection = $command->getUserAccessConnectionToHost();
 
             try {
-                $connect = $connection->connect();
+                //$connect = $connection->connect();
                 $sm = $connection->getSchemaManager();
                 $databases = $sm->listDatabases();
 
@@ -287,7 +286,10 @@ $app->match('/check-database', function () use ($app) {
         }
     }
 
-    return $app['twig']->render('check-database.tpl', array('form' => $form->createView()));
+    return $app['twig']->render(
+        'check-database.tpl',
+        array('form' => $form->createView())
+    );
 
 })->bind('check-database');
 
@@ -327,7 +329,7 @@ $app->match('/portal-settings', function () use ($app) {
             $data = $form->getData();
 
             /* Drive-by sanitizing of the site URL:
-             * Remove excesive trailing slashes that could break the
+             * Remove excessive trailing slashes that could break the
              * RewriteBase in .htaccess.
              *
              * See writeHtaccess() in
@@ -390,7 +392,14 @@ $app->match('/resume', function () use ($app) {
     if (!empty($portalSettings) && !empty($databaseSettings) && !empty($adminSettings)) {
 
         $form = $app['form.factory']->createBuilder('form', $data)
-            ->add('install', 'submit', array('label' => 'Install', 'attr' => array('class' => 'btn btn-success')))
+            ->add(
+                'install',
+                'submit',
+                array(
+                    'label' => 'Install',
+                    'attr' => array('class' => 'btn btn-success')
+                )
+            )
             ->getForm();
 
         if ('POST' == $request->getMethod()) {
@@ -452,7 +461,10 @@ $app->match('/installing', function () use ($app) {
 
         return $app->redirect($url);
     } else {
-        $app['session']->getFlashBag()->add('error', 'There was an error during installation, please check your settings.');
+        $app['session']->getFlashBag()->add(
+            'error',
+            'There was an error during installation, please check your settings.'
+        );
         $app['session']->getFlashBag()->add('error', $output->lastMessage);
 
         $url = $app['url_generator']->generate('check-database');
@@ -486,6 +498,7 @@ $app->before(
 );
 
 // Errors
+/*
 $app->error(function (\Exception $e, $code) use ($app) {
     switch ($code) {
         case 404:
@@ -500,7 +513,7 @@ $app->error(function (\Exception $e, $code) use ($app) {
 
     return $app['twig']->render('error.tpl');
 });
-
+*/
 if (PHP_SAPI == 'cli') {
     $console->run();
 } else {

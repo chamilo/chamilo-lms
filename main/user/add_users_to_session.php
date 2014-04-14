@@ -99,9 +99,9 @@ function search_users($needle, $type)
     				$cond_user_id = ' AND user.user_id NOT IN('.implode(",",$user_ids).')';
     			}
     		}
-      }
+        }
 
-		switch($type) {
+        switch ($type) {
             case 'single':
                 // search users where username or firstname or lastname begins likes $needle
                 $sql = 'SELECT user.user_id, username, lastname, firstname FROM '.$tbl_user.' user
@@ -235,11 +235,11 @@ function change_select(val) {
 </script>';
 
 
-$form_sent=0;
-$errorMsg=$firstLetterUser=$firstLetterSession='';
-$UserList=$SessionList=array();
-$sessions=array();
-$noPHP_SELF=true;
+$form_sent = 0;
+$errorMsg = $firstLetterUser = $firstLetterSession='';
+$UserList = $SessionList = array();
+$sessions = array();
+$noPHP_SELF = true;
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent             = $_POST['form_sent'];
@@ -268,7 +268,7 @@ $ajax_search = $add_type == 'unique' ? true : false;
 
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname, username' : ' ORDER BY lastname, firstname, username';
 if ($ajax_search) {
-    $sql="SELECT user_id, lastname, firstname, username, id_session
+    $sql = "SELECT user_id, lastname, firstname, username, id_session
             FROM $tbl_user u
             INNER JOIN $tbl_session_rel_user
                 ON $tbl_session_rel_user.id_user = u.user_id AND $tbl_session_rel_user.relation_type<>".SESSION_RELATION_TYPE_RRHH."
@@ -289,8 +289,8 @@ if ($ajax_search) {
                 $order_clause";
         }
     }
-    $result=Database::query($sql);
-    $users=Database::store_result($result);
+    $result = Database::query($sql);
+    $users = Database::store_result($result);
     foreach ($users as $user) {
         $sessionUsersList[$user['user_id']] = $user ;
     }
@@ -404,8 +404,8 @@ if ($ajax_search) {
                 $order_clause";
         }
     }
-    $result=Database::query($sql);
-    $users=Database::store_result($result,'ASSOC');
+    $result = Database::query($sql);
+    $users = Database::store_result($result,'ASSOC');
     foreach ($users as $uid => $user) {
         if ($user['id_session'] == $id_session) {
             $sessionUsersList[$user['user_id']] = $user;
@@ -433,7 +433,7 @@ if ($add_type == 'multiple') {
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?page=<?php echo $page; ?>&id_session=<?php echo $id_session; ?><?php if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;" <?php if($ajax_search){echo ' onsubmit="valide();"';}?>>
 <?php echo '<legend>'.$tool_name.' ('.$session_info['name'].') </legend>'; ?>
 <?php
-if ($add_type=='multiple') {
+if ($add_type == 'multiple') {
 	if (is_array($extra_field_list)) {
 		if (is_array($new_field_list) && count($new_field_list)>0 ) {
 			echo '<h3>'.get_lang('FilterUsers').'</h3>';
@@ -445,7 +445,7 @@ if ($add_type=='multiple') {
 				foreach	($new_field['data'] as $option) {
 					$checked='';
 					if (isset($_POST[$varname])) {
-						if ($_POST[$varname]==$option[1]) {
+						if ($_POST[$varname] == $option[1]) {
 							$checked = 'selected="true"';
 						}
 					}
@@ -474,7 +474,7 @@ if (!empty($errorMsg)) {
         <div class="multiple_select_header">
             <b><?php echo get_lang('UserListInPlatform') ?> :</b>
 
-        <?php if ($add_type=='multiple') { ?>
+        <?php if ($add_type == 'multiple') { ?>
             <?php echo get_lang('FirstLetterUser'); ?> :
                 <select id="first_letter_user" name="firstLetterUser" onchange = "change_select(this.value);" >
                 <option value = "%">--</option>
@@ -486,7 +486,7 @@ if (!empty($errorMsg)) {
         </div>
             <div id="content_source">
             <?php
-            if (!($add_type=='multiple')) {
+            if (!($add_type == 'multiple')) {
               ?>
               <input type="text" id="user_to_add" onkeyup="xajax_search_users(this.value,'single')" />
               <div id="ajax_list_users_single"></div>

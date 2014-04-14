@@ -1,8 +1,8 @@
 /*
  * jQuery UI Slider Access
  * By: Trent Richardson [http://trentrichardson.com]
- * Version 0.2
- * Last Modified: 12/02/2011
+ * Version 0.3
+ * Last Modified: 10/20/2012
  * 
  * Copyright 2011 Trent Richardson
  * Dual licensed under the MIT and GPL licenses.
@@ -17,8 +17,9 @@
 			options = options || {};
 			options.touchonly = options.touchonly !== undefined? options.touchonly : true; // by default only show it if touch device
 
-			if(options.touchonly === true && !("ontouchend" in document))
+			if(options.touchonly === true && !("ontouchend" in document)){
 				return $(this);
+			}
 				
 			return $(this).each(function(i,obj){
 						var $t = $(this),
@@ -31,11 +32,12 @@
 											upText: '+',
 											downText: '-',
 											buttonset: true,
-											buttonsetTag: 'span'
+											buttonsetTag: 'span',
+											isRTL: false
 										}, options),
 							$buttons = $('<'+ o.buttonsetTag +' class="ui-slider-access">'+
-											'<button data-icon="'+ o.downIcon +'" data-step="-'+ o.step +'">'+ o.downText +'</button>'+
-											'<button data-icon="'+ o.upIcon +'" data-step="'+ o.step +'">'+ o.upText +'</button>'+
+											'<button data-icon="'+ o.downIcon +'" data-step="'+ (o.isRTL? o.step : o.step*-1) +'">'+ o.downText +'</button>'+
+											'<button data-icon="'+ o.upIcon +'" data-step="'+ (o.isRTL? o.step*-1 : o.step) +'">'+ o.upText +'</button>'+
 										'</'+ o.buttonsetTag +'>');
 
 						$buttons.children('button').each(function(j, jobj){
@@ -49,16 +51,20 @@
 												curr = $t.slider('value'),
 												newval = curr += step*1,
 												minval = $t.slider('option','min'),
-												maxval = $t.slider('option','max');
+												maxval = $t.slider('option','max'),
+												slidee = $t.slider("option", "slide") || function(){},
+												stope = $t.slider("option", "stop") || function(){};
 
 											e.preventDefault();
 											
-											if(newval < minval || newval > maxval)
+											if(newval < minval || newval > maxval){
 												return;
+											}
 											
 											$t.slider('value', newval);
 
-											$t.slider("option", "slide").call($t, null, { value: newval });
+											slidee.call($t, null, { value: newval });
+											stope.call($t, null, { value: newval });
 										});
 						});
 						
@@ -73,8 +79,8 @@
 
 						// adjust the width so we don't break the original layout
 						var bOuterWidth = $buttons.css({
-									marginLeft: (o.where == 'after'? 10:0), 
-									marginRight: (o.where == 'before'? 10:0)
+									marginLeft: ((o.where === 'after' && !o.isRTL) || (o.where === 'before' && o.isRTL)? 10:0), 
+									marginRight: ((o.where === 'before' && !o.isRTL) || (o.where === 'after' && o.isRTL)? 10:0)
 								}).outerWidth(true) + 5;
 						var tOuterWidth = $t.outerWidth(true);
 						$t.css('display','inline-block').width(tOuterWidth-bOuterWidth);

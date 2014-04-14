@@ -1475,23 +1475,27 @@ class Exercise {
             Database::query($sql);
 
             // remove terms from db
-            require_once(api_get_path(LIBRARY_PATH) .'specific_fields_manager.lib.php');
+            require_once api_get_path(LIBRARY_PATH) .'specific_fields_manager.lib.php';
             delete_all_values_for_item($course_id, TOOL_QUIZ, $this->id);
         }
     }
-    function selectExpiredTime() {
+
+    function selectExpiredTime()
+    {
         return $this->expired_time;
     }
 
     /**
      * Cleans the student's results only for the Exercise tool (Not from the LP)
-     * The LP results are NOT deleted by default, otherwise put $clean_lp_tests = true
+     * The LP results are NOT deleted by default, otherwise put $cleanLpTests = true
      * Works with exercises in sessions
-     * @param bool $clean_lp_tests
-     * @param int $clean_result_before_date
+     * @param bool $cleanLpTests
+     * @param string $cleanResultBeforeDate
+     *
      * @return int quantity of user's exercises deleted
      */
-    function clean_results($clean_lp_tests = false, $clean_result_before_date = '0') {
+    public function clean_results($cleanLpTests = false, $cleanResultBeforeDate = null)
+    {
         $table_track_e_exercises = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $table_track_e_attempt   = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
@@ -1500,35 +1504,43 @@ class Exercise {
                         orig_lp_item_id = 0';
 
         // if we want to delete results from LP too
-        if ($clean_lp_tests) {
+        if ($cleanLpTests) {
             $sql_where = "";
         }
 
-        // if we want to delete attempts before date $clean_result_before_date
-        // $clean_result_before_date must be a valid UTC-0 date yyyy-mm-dd
-        if ($clean_result_before_date != '0') {
-            $sql_where .= "  AND exe_date <= '$clean_result_before_date' ";
+        // if we want to delete attempts before date $cleanResultBeforeDate
+        // $cleanResultBeforeDate must be a valid UTC-0 date yyyy-mm-dd
+        if (!empty($cleanResultBeforeDate)) {
+            $cleanResultBeforeDate = Database::escape_string($cleanResultBeforeDate);
+            if (api_is_valid_date($cleanResultBeforeDate)) {
+                $sql_where .= "  AND exe_date <= '$cleanResultBeforeDate' ";
+            } else {
+                return 0;
+            }
         }
 
-        $sql_select = "SELECT exe_id FROM $table_track_e_exercises
-					   WHERE 	exe_cours_id = '".api_get_course_id()."' AND
-								exe_exo_id = ".$this->id." AND
-								session_id = ".api_get_session_id()." ".
-                                $sql_where;
+        $sql = "SELECT exe_id
+                FROM $table_track_e_exercises
+                WHERE
+                    exe_cours_id = '".api_get_course_id()."' AND
+                    exe_exo_id = ".$this->id." AND
+                    session_id = ".api_get_session_id()." ".
+                    $sql_where;
 
-        $result   = Database::query($sql_select);
+        $result   = Database::query($sql);
         $exe_list = Database::store_result($result);
 
         // deleting TRACK_E_ATTEMPT table
         // check if exe in learning path or not
         $i = 0;
         if (is_array($exe_list) && count($exe_list) > 0) {
-            foreach($exe_list as $item) {
+            foreach ($exe_list as $item) {
                 $sql = "DELETE FROM $table_track_e_attempt WHERE exe_id = '".$item['exe_id']."'";
                 Database::query($sql);
                 $i++;
             }
         }
+
         $session_id = api_get_session_id();
         // delete TRACK_E_EXERCICES table
         $sql = "DELETE FROM $table_track_e_exercises
@@ -1537,7 +1549,16 @@ class Exercise {
                 $sql_where
                 AND session_id = ".$session_id."";
         Database::query($sql);
-        event_system(LOG_EXERCISE_RESULT_DELETE, LOG_EXERCISE_ID, $this->id, null, null, api_get_course_id(), $session_id);
+
+        event_system(
+            LOG_EXERCISE_RESULT_DELETE,
+            LOG_EXERCISE_ID,
+            $this->id,
+            null,
+            null,
+            api_get_course_id(),
+            $session_id
+        );
 
         return $i;
     }

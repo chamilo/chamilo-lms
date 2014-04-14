@@ -35,50 +35,8 @@ if(isset($_REQUEST['add_type']) && $_REQUEST['add_type']!=''){
 
 $htmlHeadXtra[] = '
 <script>
-function add_user_to_session (code, content) {
-
-    document.getElementById("user_to_add").value = "";
-    document.getElementById("ajax_list_users_single").innerHTML = "";
-
-    destination = document.getElementById("elements_in");
-
-    for (i=0;i<destination.length;i++) {
-        if(destination.options[i].text == content) {
-                return false;
-        }
-    }
-
-    destination.options[destination.length] = new Option(content,code);
-    destination.selectedIndex = -1;
-    sortOptions(destination.options);
-}
-function remove_item(origin) {
-    for(var i = 0 ; i<origin.options.length ; i++) {
-        if(origin.options[i].selected) {
-            origin.options[i]=null;
-            i = i-1;
-        }
-    }
-}
-
-function validate_filter() {
-        document.formulaire.add_type.value = \''.$add_type.'\';
-        document.formulaire.form_sent.value=0;
-        document.formulaire.submit();
-}
-
 function checked_in_no_group(checked) {
-    $("#first_letter_user")
-    .find("option")
-    .attr("selected", false);
-        document.formulaire.form_sent.value="2";
-    document.formulaire.submit();
-}
-
-function change_select(val) {
-    $("#user_with_any_group_id").attr("checked", false);
-    document.formulaire.form_sent.value="2";
-    document.formulaire.submit();
+    $("#add_users_to_usergroup").submit();
 }
 
 </script>';
@@ -101,7 +59,7 @@ if (is_array($extra_field_list)) {
 $usergroup = new UserGroup();
 $id = intval($_GET['id']);
 $first_letter_user = '';
-
+/*
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent              = $_POST['form_sent'];
     $elements_posted        = $_POST['elements_in_name'];
@@ -112,11 +70,11 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
     if ($form_sent == 1) {
         //added a parameter to send emails when registering a user
-        $usergroup->subscribe_users_to_usergroup($id, $elements_posted);
+        //$usergroup->subscribe_users_to_usergroup($id, $elements_posted);
         header('Location: usergroups.php');
         exit;
     }
-}
+}*/
 
 
 //Filter by Extra Fields
@@ -219,101 +177,40 @@ if ($add_type == 'multiple') {
 
 echo '<div class="actions">';
 echo '<a href="usergroups.php">'.Display::return_icon('back.png',get_lang('Back'), array(), ICON_SIZE_MEDIUM).'</a>';
-
 echo '<a href="usergroup_user_import.php">'.Display::return_icon('import_csv.png',get_lang('Import'), array(), ICON_SIZE_MEDIUM).'</a>';
-
 echo '</div>';
-?>
-<form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if(!empty($_GET['add'])) echo '&add=true' ; ?>" style="margin:0px;">
-<?php
-echo '<legend>'.$tool_name.': '.$data['name'].'</legend>';
 
-if ($add_type=='multiple') {
-    if (is_array($extra_field_list)) {
-        if (is_array($new_field_list) && count($new_field_list)>0 ) {
-            echo '<h3>'.get_lang('FilterUsers').'</h3>';
-            foreach ($new_field_list as $new_field) {
-                echo $new_field['name'];
-                $varname = 'field_'.$new_field['variable'];
-                echo '&nbsp;<select name="'.$varname.'">';
-                echo '<option value="0">--'.get_lang('Select').'--</option>';
-                foreach ($new_field['data'] as $option) {
-                    $checked='';
-                    if (isset($_POST[$varname])) {
-                        if ($_POST[$varname]==$option[1]) {
-                            $checked = 'selected="true"';
-                        }
-                    }
-                    echo '<option value="'.$option[1].'" '.$checked.'>'.$option[1].'</option>';
-                }
-                echo '</select>';
-                echo '&nbsp;&nbsp;';
-            }
-            echo '<input type="button" value="'.get_lang('Filter').'" onclick="validate_filter()" />';
-            echo '<br /><br />';
-        }
+$form = new FormValidator('add_users_to_usergroup', 'post', api_get_self().'?id='.$id);
+
+$form->addElement('hidden', 'id', $id);
+$form->addElement('hidden', 'form_sent', '1');
+$form->addElement('hidden', 'add_type', null);
+
+$userList = array();
+if (!empty($complete_user_list)) {
+    foreach ($complete_user_list as $user) {
+        $userList[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
     }
 }
 
-echo Display::input('hidden','id',$id);
-echo Display::input('hidden','form_sent','1');
-echo Display::input('hidden','add_type',null);
-if(!empty($errorMsg)) {
-    Display::display_normal_message($errorMsg);
+$form->addDoubleMultipleSelect('user_groups', get_lang('GroupTutors'), $userList);
+$form->addElement('checkbox', 'user_with_any_group', null, get_lang('UsersRegisteredInAnyGroup'), array('onchange' => 'checked_in_no_group(this.checked);'));
+
+$form->addElement('button', 'submit', get_lang('SubscribeUsersToClass'));
+
+$defaults = array(
+    'user_groups' => array_keys($elements_in)
+);
+
+$form->setDefaults($defaults);
+$form->display();
+
+if ($form->validate()) {
+    $values  = $form->getSubmitValues();
+    $users = $values['user_groups'];
+    $usergroup->subscribe_users_to_usergroup($id, $users);
+    header('Location: usergroups.php');
+    exit;
 }
 
-?>
-
-<div class="row">
-    <div class="span5">
-        <div class="multiple_select_header">
-        <b><?php echo get_lang('UsersInPlatform') ?> :</b>
-        <?php echo get_lang('FirstLetterUser'); ?> :
-        <select id="first_letter_user" name="firstLetterUser" onchange="change_select();">
-            <option value = "%">--</option>
-            <?php
-            echo Display :: get_alphabet_options($first_letter_user);
-            ?>
-        </select>
-        </div>
-
-    <?php echo Display::select('elements_not_in_name', $elements_not_in, '',array('class'=>'span5', 'multiple'=>'multiple','id'=>'elements_not_in','size'=>'15px'),false); ?>
-    <br />
-      <label class="control-label">
-          <input type="checkbox" <?php if ($user_with_any_group) echo 'checked="checked"';?> onchange="checked_in_no_group(this.checked);" name="user_with_any_group" id="user_with_any_group_id">
-          <?php echo get_lang('UsersRegisteredInAnyGroup'); ?>
-      </label>
-    </div>
-    <div class="span2">
-        <div style="padding-top:54px;width:auto;text-align: center;">
-        <button class="arrowr" type="button" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))" onclick="moveItem(document.getElementById('elements_not_in'), document.getElementById('elements_in'))"></button>
-        <br /><br />
-        <button class="arrowl" type="button" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))" onclick="moveItem(document.getElementById('elements_in'), document.getElementById('elements_not_in'))"></button>
-        </div>
-    </div>
-    <div class="span5">
-        <div class="multiple_select_header">
-
-            <b><?php echo get_lang('UsersInGroup') ?> :</b>
-        </div>
-    <?php
-        echo Display::select('elements_in_name[]', $elements_in, '', array('class'=>'span5', 'multiple'=>'multiple','id'=>'elements_in','size'=>'15px'),false );
-        unset($sessionUsersList);
-    ?>
-    </div>
-</div>
-
-<?php
-    echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToClass').'</button>';
-?>
-</form>
-<script>
-function valide(){
-    var options = document.getElementById('elements_in').options;
-    for (i = 0 ; i<options.length ; i++)
-        options[i].selected = true;
-    document.forms.formulaire.submit();
-}
-</script>
-<?php
 Display::display_footer();

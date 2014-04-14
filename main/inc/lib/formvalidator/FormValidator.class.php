@@ -467,22 +467,27 @@ EOT;
         return $return_value;
     }
 
-    public function addDoubleMultipleSelect($name, $label, $values, $attributes)
+    /**
+     * @param string $name
+     * @param string $label
+     * @param array $values
+     * @param array $attributes
+     */
+    public function addDoubleMultipleSelect($name, $label, $values, $attributes = array())
     {
         $group = $this->addElement('advmultiselect', $name, $label, $values, $attributes);
         $group->setElementTemplate('
-{javascript}
-<table{class}>
-<!-- BEGIN label_2 --><tr><th>{label_2}</th><!-- END label_2 -->
-<!-- BEGIN label_3 --><th>&nbsp;</th><th>{label_3}</th></tr><!-- END label_3 -->
-<tr>
-  <td valign="top">{unselected}</td>
-  <td align="center">{add}<br /><br />{remove}</td>
-  <td valign="top">{selected}</td>
-</tr>
-</table>
-');
-
+        {javascript}
+        <table{class}>
+        <!-- BEGIN label_2 --><tr><th>{label_2}</th><!-- END label_2 -->
+        <!-- BEGIN label_3 --><th>&nbsp;</th><th>{label_3}</th></tr><!-- END label_3 -->
+        <tr>
+          <td valign="top">{unselected}</td>
+          <td align="center">{add}<br /><br />{remove}</td>
+          <td valign="top">{selected}</td>
+        </tr>
+        </table>
+        ');
         $group->setButtonAttributes('add', array('class' => 'btn arrowr'));
         $group->setButtonAttributes('remove', array('class' => 'btn arrowl'));
     }

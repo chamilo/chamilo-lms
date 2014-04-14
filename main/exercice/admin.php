@@ -126,8 +126,8 @@ delete_all_incomplete_attempts(api_get_user_id(), $exerciseId, api_get_course_id
 
 // get from session
 $objExercise = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;
-$objQuestion = $_SESSION['objQuestion'];
-$objAnswer   = $_SESSION['objAnswer'];
+$objQuestion = isset($_SESSION['objQuestion']) ? $_SESSION['objQuestion'] : null;
+$objAnswer   = isset($_SESSION['objAnswer']) ? $_SESSION['objAnswer'] : null;
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';

@@ -2144,13 +2144,15 @@ class Exercise {
 
             switch ($answerType) {
                 // for unique answer
-                case UNIQUE_ANSWER :
-                case UNIQUE_ANSWER_NO_OPTION :
+                case UNIQUE_ANSWER:
+                case UNIQUE_ANSWER_NO_OPTION:
                     if ($from_database) {
-                        $queryans = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
-                        WHERE exe_id = '".$exeId."' and question_id= '".$questionId."'";
-                        $resultans = Database::query($queryans);
-                        $choice = Database::result($resultans,0,"answer");
+                        $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
+                                WHERE
+                                    exe_id = '".$exeId."' AND
+                                    question_id= '".$questionId."'";
+                        $result = Database::query($sql);
+                        $choice = Database::result($result,0,"answer");
 
                         $studentChoice = ($choice == $numAnswer)?1:0;
                         if ($studentChoice) {
@@ -2169,24 +2171,26 @@ class Exercise {
                 case MULTIPLE_ANSWER_TRUE_FALSE:
                     if ($from_database) {
                         $choice = array();
-                        $sql = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
+                        $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                 WHERE
-                                    exe_id = ".$exeId." AND
+                                    exe_id = $exeId AND
                                     question_id = ".$questionId;
-                        $resultans = Database::query($sql);
-                        while ($row = Database::fetch_array($resultans)) {
+
+                        $result = Database::query($sql);
+                        while ($row = Database::fetch_array($result)) {
                             $ind = $row['answer'];
-                            $result = explode(':', $ind);
-                            $my_answer_id = $result[0];
-                            $option = $result[1];
+                            $values = explode(':', $ind);
+                            $my_answer_id = $values[0];
+                            $option = $values[1];
                             $choice[$my_answer_id] = $option;
                         }
                     }
+
                     $studentChoice = isset($choice[$numAnswer]) ? $choice[$numAnswer] : null;
 
                     if (!empty($studentChoice)) {
                         if ($studentChoice == $answerCorrect) {
-                            $questionScore  += $true_score;
+                            $questionScore += $true_score;
                         } else {
                             if ($quiz_question_options[$studentChoice]['name'] != "Don't know") {
                                 $questionScore += $false_score;

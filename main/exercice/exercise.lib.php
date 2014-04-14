@@ -2275,14 +2275,25 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             ob_start();
 
             // We're inside *one* question. Go through each possible answer for this question
-            $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null, 'exercise_result', array(), $save_user_result, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);
+            $result = $objExercise->manage_answer(
+                $exercise_stat_info['exe_id'],
+                $questionId,
+                null,
+                'exercise_result',
+                array(),
+                $save_user_result,
+                true,
+                $show_results,
+                $objExercise->selectPropagateNeg(),
+                array()
+            );
 
             if (empty($result)) {
                 continue;
             }
 
-            $total_score     += $result['score'];
-            $total_weight    += $result['weight'];
+            $total_score += $result['score'];
+            $total_weight += $result['weight'];
 
             $question_list_answers[] = array(
                 'question' => $result['open_question'],
@@ -2293,8 +2304,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             $my_total_score  = $result['score'];
             $my_total_weight = $result['weight'];
 
-
-            //Category report
+            // Category report
             $category_was_added_for_this_test = false;
 
             if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
@@ -2311,8 +2321,15 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
                 }
             }
 
-            //No category for this question!
+            // No category for this question!
             if ($category_was_added_for_this_test == false) {
+                if (!isset($category_list['none']['score'])) {
+                    $category_list['none']['score'] = 0;
+                }
+                if (!isset($category_list['none']['total'])) {
+                    $category_list['none']['total'] = 0;
+                }
+
                 $category_list['none']['score'] += $my_total_score;
                 $category_list['none']['total'] += $my_total_weight;
             }
@@ -2390,7 +2407,6 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         echo $total_score_text;
     }
 
-
     if ($save_user_result) {
 
         // Tracking of results
@@ -2399,7 +2415,20 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
         if (api_is_allowed_to_session_edit()) {
-            update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration'], $question_list, '', array(), $end_date);
+            update_event_exercice(
+                $exercise_stat_info['exe_id'],
+                $objExercise->selectId(),
+                $total_score,
+                $total_weight,
+                api_get_session_id(),
+                $learnpath_id,
+                $learnpath_item_id,
+                $learnpath_item_view_id,
+                $exercise_stat_info['exe_duration'],
+                $question_list,
+                '',
+                array()
+            );
         }
 
         // Send notification ..

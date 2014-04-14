@@ -70,6 +70,7 @@ class MultipleAnswerTrueFalse extends Question {
         $form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
 
 		$correct = 0;
+        $answer = null;
 		if (!empty($this -> id)) {
 			$answer = new Answer($this -> id);
 			$answer->read();

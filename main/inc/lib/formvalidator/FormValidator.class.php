@@ -255,6 +255,14 @@ EOT;
         }
     }
 
+    /**
+     * date_range_picker element creates 2 hidden fields
+     * elementName + "_start" elementName "_end"
+     * @param string $name
+     * @param string $label
+     * @param bool $required
+     * @param array $attributes
+     */
     public function addDateRangePicker($name, $label, $required = true, $attributes = array())
     {
         $this->addElement('date_range_picker', $name, $label, $attributes);
@@ -266,7 +274,10 @@ EOT;
         }
     }
 
-
+    /**
+     * @param string $name
+     * @param string $value
+     */
     function add_hidden($name, $value)
     {
         $this->addElement('hidden', $name, $value);
@@ -540,16 +551,45 @@ EOT;
     function return_form()
     {
         $error = false;
+        $addDateLibraries = false;
+        $dateElementTypes = array('date_range_picker', 'date_time_picker', 'date_picker', 'datepicker', 'datetimepicker');
+        /** @var HTML_QuickForm_element $element */
         foreach ($this->_elements as $element) {
+            if (in_array($element->getType(),$dateElementTypes)) {
+                $addDateLibraries = true;
+            }
             if (!is_null(parent::getElementError($element->getName()))) {
                 $error = true;
                 break;
             }
         }
         $return_value = '';
+        $js = null;
+        if ($addDateLibraries) {
+            $js = api_get_js('jquery-ui/jquery-ui-i18n.min.js');
+            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript"></script>';
+            $js .= '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
+            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/moment.min.js" type="text/javascript"></script>';
+            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/daterangepicker.js" type="text/javascript"></script>';
+            $js .= '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/daterangepicker-bs2.css" rel="stylesheet" type="text/css" />';
+
+            $isocode = api_get_language_isocode();
+            if ($isocode != 'en') {
+                $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/i18n/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript"></script>';
+                $js .= '<script>
+                $(function(){
+                    $.datepicker.setDefaults($.datepicker.regional["'.$isocode.'"]);
+                     moment.lang("'.$isocode.'");
+                });
+                </script>';
+            }
+        }
+
         if ($error) {
             $return_value = Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'warning');
         }
+
+        $return_value .= $js;
         $return_value .= parent::toHtml();
         // Add div-element which is to hold the progress bar
         if (isset($this->with_progress_bar) && $this->with_progress_bar) {
@@ -557,9 +597,6 @@ EOT;
         }
         return $return_value;
     }
-
-
-
 }
 
 /**

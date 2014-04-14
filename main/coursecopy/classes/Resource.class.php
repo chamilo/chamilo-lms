@@ -42,41 +42,42 @@ define('RESOURCE_WORK', 'work');
  * @todo Use the gloabaly defined constants voor tools and remove the RESOURCE_*
  * constants
  */
-class Resource {
-
+class Resource
+{
     /**
      * The id from this resource in the source course
      */
-    var $source_id;
+    public $source_id;
 
     /**
      * The id from this resource in the destination course
      */
-    var $destination_id;
+    public $destination_id;
 
     /**
      * The type of this resource
      */
-    var $type;
+    public $type;
 
     /**
      * Linked resources
      */
-    var $linked_resources;
+    public $linked_resources;
 
     /**
      * The properties of this resource
      */
-    var $item_properties;
+    public $item_properties;
 
-    var $obj = null;
+    public $obj = null;
 
     /**
      * Create a new Resource
      * @param int $id The id of this resource in the source course.
      * @param constant $type The type of this resource.
      */
-    function Resource($id, $type) {
+    function Resource($id, $type)
+    {
         $this->source_id = $id;
         $this->type = $type;
         $this->destination_id = -1;
@@ -102,8 +103,14 @@ class Resource {
      * Checks if this resource links to a given resource
      */
     function links_to(& $resource) {
-        if (is_array($this->linked_resources[$resource->get_type()])) {
-            return in_array($resource->get_id(), $this->linked_resources[$resource->get_type()]);
+        $type = $resource->get_type();
+        if (isset($this->linked_resources[$type]) &&
+            is_array($this->linked_resources[$type])
+        ) {
+            return in_array(
+                $resource->get_id(),
+                $this->linked_resources[$type]
+            );
         }
         return false;
     }

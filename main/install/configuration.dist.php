@@ -186,3 +186,5 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['captcha_time_to_block'] = 5;//minutes
 // Allow DRH role to access all content and users from the sessions he follows
 //$_configuration['drh_can_access_all_session_content'] = true;
+// Display group's forum in general forum tool
+//$_configuration['display_groups_forum_in_general_tool'] = true;

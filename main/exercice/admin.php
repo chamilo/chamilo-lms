@@ -125,9 +125,9 @@ $cancelQuestion = isset($cancelQuestion) ? $cancelQuestion : null;
 delete_all_incomplete_attempts(api_get_user_id(), $exerciseId, api_get_course_id(), api_get_session_id());
 
 // get from session
-$objExercise = $_SESSION['objExercise'];
-$objQuestion = $_SESSION['objQuestion'];
-$objAnswer   = $_SESSION['objAnswer'];
+$objExercise = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;
+$objQuestion = isset($_SESSION['objQuestion']) ? $_SESSION['objQuestion'] : null;
+$objAnswer   = isset($_SESSION['objAnswer']) ? $_SESSION['objAnswer'] : null;
 
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
@@ -264,9 +264,9 @@ if ($cancelAnswers) {
 	$editQuestion=$modifyAnswers;
 	unset($modifyAnswers);
 }
-
+$nameTools = null;
 // modifies the query string that is used in the link of tool name
-if($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
+if ($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
 	$nameTools = get_lang('QuestionManagement');
 }
 
@@ -497,12 +497,12 @@ if (isset($_GET['message'])) {
 
 if ($newQuestion || $editQuestion) {
 	// statement management
-	$type = Security::remove_XSS($_REQUEST['answerType']);
+	$type = isset($_REQUEST['answerType']) ? Security::remove_XSS($_REQUEST['answerType']) : null;
 	echo '<input type="hidden" name="Type" value="'.$type.'" />';
 
-        if ($newQuestion == 'yes') {
-            $objExercise->edit_exercise_in_lp = true;
-        }
+    if ($newQuestion == 'yes') {
+        $objExercise->edit_exercise_in_lp = true;
+    }
 
 	require 'question_admin.inc.php';
 }
@@ -523,7 +523,7 @@ if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspot
 }
 
 // if we are in question authoring, display warning to user is feedback not shown at the end of the test -ref #6619
-// this test to displau only message in the question authoring page and not in the question list page too
+// this test to display only message in the question authoring page and not in the question list page too
 // if (is_object($objQuestion) && $objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM && ($newQuestion || $modifyQuestion || $editQuestion)) {
 if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM) {
     Display::display_normal_message(get_lang("TestFeedbackNotShown"));

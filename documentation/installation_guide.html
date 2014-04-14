@@ -74,7 +74,7 @@ optimal flexibility, remote control and scalability. <br />
 
 <br />
 
-Chamilo is mainly a LMS running <span style="font-weight: bold;">Apache (1.3, 2.0 or 2.2)</span>, <span style="font-weight: bold;">MySQL 5.1 (or MariaDB)</span> and <span style="font-weight: bold;">PHP 5.3 (or 5.4)</span> (the so called <span style="font-weight: bold;">AMP</span> trilogy). <br />
+Chamilo is mainly a LMS running <span style="font-weight: bold;">Apache (1.3, 2.0 or 2.2)</span>, <span style="font-weight: bold;">MySQL 5.1 or 5.5 (or MariaDB)</span> and <span style="font-weight: bold;">PHP 5.3, 5.4 or 5.5 (5.5 recommended for greater efficiency)</span> (the so called <span style="font-weight: bold;">AMP</span> trilogy). <br />
 
 
 <br />
@@ -104,10 +104,14 @@ For instance, on a Ubuntu server,&nbsp;use Shell or Synaptic following the
 <h3><span style="font-weight: bold;">MySQL or MariaDB database server</span></h3>
 
 You will need a login and password allowing to manage and create
-a database. Usually, the default configuration on local computers is to allow you to connect as root with an empty password. It is highly recommended to change the password and define a user with access to only a specific database. Please refer to the MySQL or MariaDB documentation in order to do this.<br />
-<span class="muted">Note that this has been greatly simplified since version 1.9, as it
-previously required to choose between multiple databases and a deprecated
-single-database mode.</span><br />
+a database. Usually, the default configuration on local computers is
+to allow you to connect as root with an empty password. It is HIGHLY
+RECOMMENDED to change the password and define a user with access to
+only a specific database. Please refer to the MySQL or MariaDB documentation
+in order to do this.<br />
+<span class="muted">Note that this has been greatly simplified since
+version 1.9, as it previously required to choose between multiple databases
+and a deprecated single-database mode.</span><br />
 
 <hr style="width: 100%; height: 2px;" />
 <h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation of Chamilo LMS</span></h2>
@@ -125,6 +129,12 @@ single-database mode.</span><br />
   <li>Follow the web installation process. You can accept all default
 values. Consider changing the admin password to remember it.&nbsp;</li>
 </ol>
+<br />
+<span class="muted">Note: if installing Chamilo locally using localhost or
+the IP address of your computer during the installation, you might get issues
+while accessing from another computer. To avoid this, you can
+<a href="http://beeznest.wordpress.com/2013/01/15/answering-to-different-addresses-with-chamilo/">apply a little
+change to your configuration file</a>.</span>
 <br />
 The following directories need to be readable, writeable and executable by your web server.
 <span class="muted">This usually requires no specific action on Windows servers, but will require a "chmod" under Linux and Mac. See instructions below.</span><br />Replace [chamilo] with the directory where your Chamilo installation is located):
@@ -217,7 +227,8 @@ it might be a bit more expensive now, but you'll be happy not to have to loose
 all of your data to a hacker who attacked your site.</li>
 
   <li><strong>Configure your Chamilo installation: </strong>
-in the administration section of Chamilo, you can use the Chamilo Configuration Settings to adjust the behavior of your installation.</li>
+in the administration section of Chamilo, you can use the Chamilo Configuration
+Settings to adjust the behavior of your installation.</li>
 
   <li><strong>Configure Chamilo mail: </strong>
 most of Chamilo uses the mail settings from the php.ini file. However,
@@ -246,9 +257,9 @@ To get the best out of Chamilo, you need to finetune your PHP settings. Consider
 </ul>
 
 <div class="code">
-      max_execution_time = 300; Maximum execution time of each script, in seconds<br />
-      max_input_time = 600; Maximum amount of time each script may spend parsing request data<br />
-      memory_limit = 256M; Maximum amount of memory a script may consume (128MB)<br />
+      max_execution_time = 300 ;Maximum execution time of each script, in seconds<br />
+      max_input_time = 600 ;Maximum amount of time each script may spend parsing request data<br />
+      memory_limit = 256M ;Maximum amount of memory a script may consume (128MB)<br />
       post_max_size = 100M<br />
       upload_max_filesize = 100M<br />
 </div>
@@ -323,7 +334,7 @@ a full backup of your system before you upgrade.</em>
 <div class="muted"> NOTE: This version of Chamilo can only be used to upgrade from
 smaller versions of Chamilo or Dok€os. For example, you cannot use the normal
 upgrade scripts from Chamilo 1.9 to upgrade from Dok€os 2.0. If you need this,
-please contact one of the Chamilo Association's official providers <providers@chamilo.org>)</div>
+please contact one of the Chamilo Association's official providers &lt;providers@chamilo.org&gt;)</div>
 
 <p></p>
 

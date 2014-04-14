@@ -175,10 +175,10 @@ define('LOG_USER_FIELD_CREATE',			        'user_field_created');
 define('LOG_USER_FIELD_DELETE',			        'user_field_deleted');
 define('LOG_SESSION_CREATE',                    'session_created');
 define('LOG_SESSION_DELETE',                    'session_deleted');
-define('LOG_SESSION_CATEGORY_CREATE',           'session_category_created');
-define('LOG_SESSION_CATEGORY_DELETE',           'session_category_deleted');
+define('LOG_SESSION_CATEGORY_CREATE',           'session_cat_created'); //changed in 1.9.8
+define('LOG_SESSION_CATEGORY_DELETE',           'session_cat_deleted'); //changed in 1.9.8
 define('LOG_CONFIGURATION_SETTINGS_CHANGE',     'settings_changed');
-define('LOG_PLATFORM_LANGUAGE_CHANGE',          'platform_language_changed');
+define('LOG_PLATFORM_LANGUAGE_CHANGE',          'platform_lng_changed'); //changed in 1.9.8
 define('LOG_SUBSCRIBE_USER_TO_COURSE',          'user_subscribed');
 define('LOG_UNSUBSCRIBE_USER_FROM_COURSE',      'user_unsubscribed');
 define('LOG_ATTEMPTED_FORCED_LOGIN',            'attempted_forced_login');
@@ -193,8 +193,13 @@ define('LOG_CAREER_DELETE',                     'career_deleted');
 define('LOG_USER_PERSONAL_DOC_DELETED',         'user_doc_deleted');
 define('LOG_WIKI_ACCESS',                       'wiki_page_view');
 
-// event logs data types
+define('LOG_EXERCISE_RESULT_DELETE',           'exe_result_deleted');
+define('LOG_LP_ATTEMPT_DELETE',                'lp_attempt_deleted');
+define('LOG_QUESTION_RESULT_DELETE',           'qst_attempt_deleted');
+
+// event logs data types (max 20 chars)
 define('LOG_COURSE_CODE',                       'course_code');
+define('LOG_COURSE_ID',                         'course_id');
 define('LOG_USER_ID',                           'user_id');
 define('LOG_USER_OBJECT',                       'user_object');
 define('LOG_USER_FIELD_VARIABLE',		        'user_field_variable');
@@ -211,6 +216,11 @@ define('LOG_GRADEBOOK_UNLOCKED',                 'gradebook_unlocked');
 define('LOG_GRADEBOOK_ID',                       'gradebook_id');
 
 define('LOG_WIKI_PAGE_ID',                       'wiki_page_id');
+
+define('LOG_EXERCISE_ID',                        'exercise_id');
+define('LOG_EXERCISE_AND_USER_ID',               'exercise_and_user_id');
+define('LOG_LP_ID',                              'lp_id');
+define('LOG_EXERCISE_ATTEMPT_QUESTION_ID',       'exercise_a_q_id');
 
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 
@@ -763,6 +773,21 @@ function api_is_facebook_auth_activated() {
     return (isset($_configuration['facebook_auth']) && $_configuration['facebook_auth'] == 1);
 }
 
+
+/**
+ * Return the $_configuration of displaying group forum in the general forum tool of a course or not
+ * is true by default
+ * @return bool
+ * @todo : in 1.10 replace this with a platform parameter in the database
+ */
+function apiGetDisplayGroupsForumInGeneralTool() {
+    global $_configuration;
+
+    if (isset($_configuration['display_groups_forum_in_general_tool'])) {
+        return $_configuration['display_groups_forum_in_general_tool'];
+    }
+    return true;
+}
 
 /**
  * This function checks whether a given path points inside the system.
@@ -1327,18 +1352,22 @@ function api_get_anonymous_id() {
  * @see Uri.course_params
  */
 function api_get_cidreq($add_session_id = true, $add_group_id = true) {
-     $url = empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']);
-     if ($add_session_id) {
-         if (!empty($url)) {
+    $url = empty($GLOBALS['_cid']) ? '' : 'cidReq='.htmlspecialchars($GLOBALS['_cid']);
+    $origin = api_get_origin();
+    if ($add_session_id) {
+        if (!empty($url)) {
             $url .= api_get_session_id() == 0 ? '&id_session=0' : '&id_session='.api_get_session_id();
-         }
-     }
-     if ($add_group_id) {
-         if (!empty($url)) {
+        }
+    }
+    if ($add_group_id) {
+        if (!empty($url)) {
             $url .= api_get_group_id() == 0 ? '&gidReq=0' : '&gidReq='.api_get_group_id();
-         }
-     }
-     return $url;
+        }
+    }
+
+    $url .= '&origin='.$origin;
+
+    return $url;
 }
 
 /**
@@ -5824,7 +5853,6 @@ function api_get_template($path_type = 'rel') {
 function api_browser_support($format="") {
     require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
     $browser = new Browser();
-    //print_r($browser);
     $current_browser = $browser->getBrowser();
     $a_versiontemp = explode('.', $browser->getVersion());
     $current_majorver= $a_versiontemp[0];
@@ -7092,17 +7120,37 @@ function api_get_protocol()
 
 /**
  * Return a string where " are replaced with 2 '
- * It is usefull when you pass a PHP variable in a Javascript browser dialog
+ * It is useful when you pass a PHP variable in a Javascript browser dialog
  * e.g. : alert("<?php get_lang('message') ?>");
  * and message contains character "
- * @param $in_text
+ *
+ * @param string $in_text
+ * @return string
  */
 function convert_double_quote_to_single($in_text) {
     return api_preg_replace('/"/', "''", $in_text);
 }
 
-
+/**
+ * Is unoconv installed
+ * @return bool
+ */
 function api_is_unoconv_installed()
 {
     return false;
+}
+
+/**
+ * Get origin
+ *
+ * @param string
+ * @return string
+ **/
+function api_get_origin()
+{
+    if (isset($_REQUEST['origin'])) {
+        return $_REQUEST['origin'] == 'learnpath' ? 'learnpath' : null;
+    }
+
+    return null;
 }

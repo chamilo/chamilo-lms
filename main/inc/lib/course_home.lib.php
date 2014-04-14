@@ -105,13 +105,10 @@ class CourseHome
 
         foreach ($all_tools as & $tool) {
             if ($tool['image'] == 'scormbuilder.gif') {
-                // display links to lp only for current session
-                /* if (api_get_session_id() != $tool['session_id']) {
-                  continue;
-                  } */
                 // check if the published learnpath is visible for student
                 $published_lp_id = self::get_published_lp_id_from_link($tool['link']);
-                if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($published_lp_id, api_get_user_id())) {
+                if (!api_is_allowed_to_edit(null, true) &&
+                    !learnpath::is_lp_visible_for_student($published_lp_id, api_get_user_id(), api_get_course_id(), api_get_session_id())) {
                     continue;
                 }
             }
@@ -293,7 +290,8 @@ class CourseHome
                     // check if the published learnpath is visible for student
                     $published_lp_id = self::get_published_lp_id_from_link($tool['link']);
 
-                    if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($published_lp_id, api_get_user_id())) {
+                    if (!api_is_allowed_to_edit(null, true) &&
+                        !learnpath::is_lp_visible_for_student($published_lp_id, api_get_user_id(), api_get_course_id(), api_get_session_id())) {
                         continue;
                     }
                 }
@@ -460,7 +458,7 @@ class CourseHome
         $check = false;
 
         foreach ($list as $line) {
-            //Admin can see all tools even if the course_hide_tools configuration is set
+            // Admin can see all tools even if the course_hide_tools configuration is set
             if ($is_platform_admin) {
                 continue;
             }
@@ -471,20 +469,38 @@ class CourseHome
         }
 
         while ($temp_row = Database::fetch_assoc($result)) {
+            $add = false;
             if ($check) {
                 if (!in_array($temp_row['name'], $hide_list)) {
-                    $all_tools_list[] = $temp_row;
+                    $add = true;
                 }
             } else {
+                $add = true;
+            }
+
+            if ($temp_row['image'] == 'scormbuilder.gif') {
+                $lp_id = self::get_published_lp_id_from_link($temp_row['link']);
+                $lp = new learnpath(api_get_course_id(), $lp_id, api_get_user_id());
+                $path = $lp->get_preview_image_path(64);
+                $add = $lp->is_lp_visible_for_student(
+                    $lp_id,
+                    api_get_user_id(),
+                    api_get_course_id(),
+                    api_get_session_id()
+                );
+                if ($path) {
+                    $temp_row['custom_image'] = $path;
+                }
+            }
+
+            if ($add) {
                 $all_tools_list[] = $temp_row;
             }
         }
 
-        $i = 0;
         // Grabbing all the links that have the property on_homepage set to 1
         $course_link_table = Database::get_course_table(TABLE_LINK);
         $course_item_property_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
 
         switch ($course_tool_category) {
             case TOOL_AUTHORING:
@@ -622,16 +638,13 @@ class CourseHome
                 $tool['original_link'] = $tool['link'];
 
                 if ($tool['image'] == 'scormbuilder.gif') {
-                    // display links to lp only for current session
-                    /* if ($session_id != $tool['session_id']) {
-                      continue;
-                      } */
                     // check if the published learnpath is visible for student
                     $published_lp_id = self::get_published_lp_id_from_link($tool['link']);
                     if (api_is_allowed_to_edit(null, true)) {
                         $studentview = true;
                     }
-                    if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($published_lp_id, api_get_user_id())) {
+                    if (!api_is_allowed_to_edit(null, true) &&
+                        !learnpath::is_lp_visible_for_student($published_lp_id, api_get_user_id(), api_get_course_id(), api_get_session_id())) {
                         continue;
                     }
                 }
@@ -741,7 +754,7 @@ class CourseHome
                 // Creating title and the link
 
                 if (isset($tool['category']) && $tool['category'] == 'plugin') {
-                    $plugin_info = $app_plugin->getPluginInfo($tool['name']);
+                    $plugin_info = $app_plugin->get_plugin_info($tool['name']);
                     if (isset($plugin_info) && isset($plugin_info['title'])) {
                         $tool_name = $plugin_info['title'];
                     }
@@ -770,7 +783,6 @@ class CourseHome
         }
 
         $i = 0;
-
         $html = '';
 
         if (!empty($items)) {
@@ -781,28 +793,27 @@ class CourseHome
                         $html .= '<div class="span4 course-tool">';
                         $image = (substr($item['tool']['image'], 0, strpos($item['tool']['image'], '.'))).'.png';
 
-                        $original_image = Display::return_icon($image, $item['name'], array('id' => 'toolimage_'.$item['tool']['id']), ICON_SIZE_BIG, false);
-
-                        switch ($image) {
-                            case 'scormbuilder.png':
-                                $image = $original_image;
-                                $lp_id = self::get_published_lp_id_from_link($item['link']);
-                                if ($lp_id) {
-                                    $lp = new learnpath(api_get_course_id(), $lp_id, api_get_user_id());
-                                    $path = $lp->get_preview_image_path(64);
-                                    if ($path) {
-                                        $image = '<img src="'.$path.'">';
-                                    }
-                                }
-                                break;
-                            default:
-                                $image = $original_image;
+                        if (isset($item['tool']['custom_image'])) {
+                            $original_image = Display::img(
+                                $item['tool']['custom_image'],
+                                $item['name'],
+                                array('id' => 'toolimage_'.$item['tool']['id'])
+                            );
+                        } else {
+                            $original_image = Display::return_icon(
+                                $image,
+                                $item['name'],
+                                array('id' => 'toolimage_'.$item['tool']['id']),
+                                ICON_SIZE_BIG,
+                                false
+                            );
                         }
 
-                        $data .= Display::url($image, $item['url_params']['href'], $item['url_params']);
+                        $data .= Display::url($original_image, $item['url_params']['href'], $item['url_params']);
                         $html .= Display::div($data, array('class' => 'big_icon')); //box-image reflection
                         $html .= Display::div('<h4>'.$item['visibility'].$item['extra'].$item['link'].'</h4>', array('class' => 'content'));
                         $html .= '</div>';
+
                         break;
                     case 'activity':
                         $html .= '<div class="offset2 span4 course-tool">';

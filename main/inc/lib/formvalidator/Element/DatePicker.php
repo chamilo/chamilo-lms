@@ -7,7 +7,6 @@ require_once 'HTML/QuickForm/date.php';
  */
 class DatePicker extends HTML_QuickForm_text
 {
-    public $addLibrary = false;
 	/**
 	 * Constructor
 	 */

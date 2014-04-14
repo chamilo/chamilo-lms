@@ -68,7 +68,7 @@ foreach ($rows as $post) {
         $post_image=Display::return_icon('forumpost.gif');
     }
     $thread_structure.= $post_image;
-    if ($_GET['post']==$post['post_id'] OR ($counter==1 AND !isset($_GET['post']))) {
+    if (isset($_GET['post']) && $_GET['post']==$post['post_id'] OR ($counter==1 AND !isset($_GET['post']))) {
         $thread_structure.='<strong>'.prepare4display($post['post_title']).'</strong></div>';
         $prev_next_array[]=$post['post_id'];
     } else {

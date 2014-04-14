@@ -2,7 +2,7 @@
 /**
  * Contains the SQL for the tickets management plugin database structure
  */
-$table = Database::get_main_table(TABLE_SUPPORT_ASSIGNED_LOG);
+$table = Database::get_main_table(TABLE_TICKET_ASSIGNED_LOG);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         iid int unsigned not null,
         ticket_id int UNSIGNED DEFAULT NULL,
@@ -13,7 +13,7 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         KEY FK_ticket_assigned_log (ticket_id))";
 Database::query($sql);
 
-$table = Database::get_main_table(TABLE_SUPPORT_CATEGORY);
+$table = Database::get_main_table(TABLE_TICKET_CATEGORY);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         iid int unsigned not null,
         category_id char(3) NOT NULL,
@@ -29,7 +29,7 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         PRIMARY KEY (iid))";
 Database::query($sql);
 
-$table = Database::get_main_table(TABLE_SUPPORT_MESSAGE);
+$table = Database::get_main_table(TABLE_TICKET_MESSAGE);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         message_id int UNSIGNED NOT NULL,
         ticket_id int UNSIGNED NOT NULL,
@@ -45,7 +45,7 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         KEY FK_tick_message (ticket_id) )";
 Database::query($sql);
 
-$table = Database::get_main_table(TABLE_SUPPORT_MESSAGE_ATTACHMENTS);
+$table = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         iid int unsigned not null,
         message_attch_id char(2) NOT NULL,
@@ -62,7 +62,7 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         KEY ticket_message_id_fk (message_id))";
 Database::query($sql);
 
-$table = Database::get_main_table(TABLE_SUPPORT_PRIORITY);
+$table = Database::get_main_table(TABLE_TICKET_PRIORITY);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         iid int unsigned not null,
         priority_id char(3) NOT NULL,
@@ -77,7 +77,7 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         PRIMARY KEY (iid))";
 Database::query($sql);
 
-$table = Database::get_main_table(TABLE_SUPPORT_PROJECT);
+$table = Database::get_main_table(TABLE_TICKET_PROJECT);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         iid int unsigned not null,
         project_id char(3) NOT NULL,
@@ -92,7 +92,7 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         PRIMARY KEY (iid))";
 Database::query($sql);
 
-$table = Database::get_main_table(TABLE_SUPPORT_STATUS);
+$table = Database::get_main_table(TABLE_TICKET_STATUS);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         iid int unsigned not null,
         status_id char(3) NOT NULL,
@@ -101,7 +101,7 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         PRIMARY KEY (iid))";
 Database::query($sql);
 
-$table = Database::get_main_table(TABLE_SUPPORT_TICKET);
+$table = Database::get_main_table(TABLE_TICKET_TICKET);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         ticket_id int UNSIGNED NOT NULL AUTO_INCREMENT,
         ticket_code char(12) DEFAULT NULL,

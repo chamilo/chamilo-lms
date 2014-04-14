@@ -2006,6 +2006,7 @@
            if ( is_numeric($Data[$Key][$ColName]) )
             {
              $Value = $Data[$Key][$ColName];
+             $ValueWidth = strlen("$Value") * 6;
              $YPos = $this->GArea_Y2 - (($Value-$this->VMin) * $this->DivisionRatio);
 
              /* Save point into the image map if option activated */
@@ -2017,6 +2018,7 @@
              if ( $Shadow && $Alpha == 100 )
               $this->drawRectangle($XPos+1,$YZero,$XPos+$SeriesWidth-1,$YPos,25,25,25,TRUE,$Alpha);
              $this->drawFilledRectangle($XPos+1,$YZero,$XPos+$SeriesWidth-1,$YPos,$this->Palette[$ColorID]["R"],$this->Palette[$ColorID]["G"],$this->Palette[$ColorID]["B"],TRUE,$Alpha);
+              imagettftext($this->Picture, $this->FontSize, 0, $XPos + ($SeriesWidth / 2) - ($ValueWidth / 2), $YPos - 2, $ColorID, $this->FontName, $Value);
             }
           }
          $XPos = $XPos + $this->DivisionWidth;

@@ -9,16 +9,19 @@
  */
 class TicketPlugin extends Plugin
 {
-    static function create() {
+    static function create()
+    {
         static $result = null;
         return $result ? $result : $result = new self();
     }
 
-    protected function __construct() {
-        parent::__construct('1.0', 'Kenny Rodas Chavez', array('tool_enable' => 'boolean'));
+    protected function __construct()
+    {
+        parent::__construct('1.0', 'Kenny Rodas Chavez, Genesis Lopez, Francis Gonzales, Yannick Warnier', array('tool_enable' => 'boolean'));
     }
 
-    function install() {
+    public function install()
+    {
         // Create database tables
         require_once api_get_path(SYS_PLUGIN_PATH).PLUGIN_NAME.'/database.php';
 
@@ -64,18 +67,19 @@ class TicketPlugin extends Plugin
 
     }
 
-    function uninstall() {
+    public function uninstall()
+    {
         $tblSettings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
         $t_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
         $t_tool = Database::get_course_table(TABLE_TOOL_LIST);
-        $tblTicketTicket = Database::get_main_table(TABLE_SUPPORT_TICKET);
-        $tblTicketStatus = Database::get_main_table(TABLE_SUPPORT_STATUS);
-        $tblTicketProject = Database::get_main_table(TABLE_SUPPORT_PROJECT);
-        $tblTicketPriority = Database::get_main_table(TABLE_SUPPORT_PRIORITY);
-        $tblTicketMesAttch = Database::get_main_table(TABLE_SUPPORT_MESSAGE_ATTACHMENTS);
-        $tblTicketMessage = Database::get_main_table(TABLE_SUPPORT_MESSAGE);
-        $tblTicketCategory = Database::get_main_table(TABLE_SUPPORT_CATEGORY);
-        $tblTicketAssgLog = Database::get_main_table(TABLE_SUPPORT_ASSIGNED_LOG);
+        $tblTicketTicket = Database::get_main_table(TABLE_TICKET_TICKET);
+        $tblTicketStatus = Database::get_main_table(TABLE_TICKET_STATUS);
+        $tblTicketProject = Database::get_main_table(TABLE_TICKET_PROJECT);
+        $tblTicketPriority = Database::get_main_table(TABLE_TICKET_PRIORITY);
+        $tblTicketMesAttch = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);
+        $tblTicketMessage = Database::get_main_table(TABLE_TICKET_MESSAGE);
+        $tblTicketCategory = Database::get_main_table(TABLE_TICKET_CATEGORY);
+        $tblTicketAssgLog = Database::get_main_table(TABLE_TICKET_ASSIGNED_LOG);
 
         //Delete settings
         $sql = "DELETE FROM $tblSettings WHERE variable = 'ticket_tool_enable'";

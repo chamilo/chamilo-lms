@@ -380,10 +380,10 @@ class Testcategory
         echo self::returnCategoryAndTitle($in_questionID, $in_display_category_name);
 	}
 
-
     public static function returnCategoryAndTitle($in_questionID, $in_display_category_name = 1) {
         $is_student = !(api_is_allowed_to_edit(null,true) || api_is_session_admin());
-        $objExercise = $_SESSION['objExercise'];
+        // @todo fix $_SESSION['objExercise']
+        $objExercise = isset($_SESSION['objExercise']) ? $_SESSION['objExercise'] : null;
         if (!empty($objExercise)) {
             $in_display_category_name = $objExercise->display_category_name;
         }

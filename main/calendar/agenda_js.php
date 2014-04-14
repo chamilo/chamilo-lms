@@ -16,6 +16,7 @@ $use_anonymous = true;
 
 // Calendar type
 $type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin', 'platform')) ? $_REQUEST['type'] : 'personal';
+$userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
 
 if ($type == 'personal') {
     $cidReset = true; // fixes #5162
@@ -144,8 +145,7 @@ $tpl->assign(
     Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential'))
 );
 
-$filter = null;
-$actions = $agenda->displayActions('calendar', $filter);
+$actions = $agenda->displayActions('calendar', $userId);
 
 $tpl->assign('actions', $actions);
 
@@ -180,58 +180,46 @@ $tpl->assign('type_event_class', $type_event_class);
 // Current user can add event?
 $tpl->assign('can_add_events', $can_add_events);
 
-//Setting AJAX caller
-if (isset($_GET['user_id'])) {
-    $user_id = $_GET['user_id'];
-    $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?user_id='.$user_id.'&type='.$type;
+// Setting AJAX caller
+if (!empty($userId)) {
+    $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?user_id='.$userId.'&type='.$type;
 } else {
     $agenda_ajax_url = api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?type='.$type;
 }
 $tpl->assign('web_agenda_ajax_url', $agenda_ajax_url);
 $course_code = api_get_course_id();
 
-if ((api_is_allowed_to_edit() || $is_group_tutor) && $course_code != '-1' && $type == 'course') {
-    $order = 'lastname';
-    if (api_is_western_name_order()) {
-        $order = 'firstname';
+//if ((api_is_allowed_to_edit() || $is_group_tutor) && $course_code != '-1' && $type == 'course') {
+
+    $form = new FormValidator('form', 'get', null, null, array('id' => 'add_event_form'));
+    $form->addElement('html', '<div id="visible_to_input">');
+
+    $sendTo = $agenda->parseAgendaFilter($userId);
+    $addOnlyItemsInSendTo = true;
+
+    if ($sendTo['everyone']) {
+        $addOnlyItemsInSendTo = false;
     }
 
-    if (!empty($group_id)) {
-        $group_list = array($group_id => $group_properties);
-        $user_list = GroupManager::get_subscribed_users($group_id);
-    } else {
-        $user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id(), null, $order);
-        $group_list = CourseManager::get_group_list_of_course(api_get_course_id(), api_get_session_id());
+    $agenda->showToForm($form, $sendTo, array(), $addOnlyItemsInSendTo);
+    $form->addElement('html', '</div>');
+
+    $form->addElement('html', '<div id="visible_to_read_only" style="display: none">');
+    $form->addElement('label', get_lang('To'), '<div id="visible_to_read_only_users"></div>');
+    $form->addElement('html', '</div>');
+
+    $form->addElement('label', get_lang('Agenda'), '<div id ="color_calendar"></div>');
+    $form->addElement('label', get_lang('Date'), '<span id="start_date"></span><span id="end_date"></span>');
+    $form->addElement('text', 'title', get_lang('Title'), array('id' => 'title'));
+    $form->addElement('textarea', 'content', get_lang('Description'), array('id' => 'content'));
+    if ($agenda->type == 'course') {
+        $form->addElement('html', '<div id="add_as_announcement_div" style="display: none">');
+        $form->addElement('checkbox', 'add_as_annonuncement', null, get_lang('AddAsAnnouncement'));
+        $form->addElement('html', '</div>');
     }
 
-    // This will fill the select called #users_to_send_id.
-
-    if (isset($_REQUEST['user_id'])) {
-        if (in_array($_REQUEST['user_id'], array_keys($user_list))) {
-            $userInfo = api_get_user_info($_REQUEST['user_id']);
-            if (!empty($userInfo)) {
-                $user_list = array($userInfo['user_id'] => $userInfo);
-                $group_list = array();
-            }
-        }
-
-        $param = explode(':', $_REQUEST['user_id']);
-        if (isset($param[1]) && in_array($param[1], array_keys($group_list))) {
-            $groupInfo = GroupManager::get_group_properties($param[1]);
-            if ($groupInfo) {
-                $group_list = array($groupInfo['id'] => $groupInfo);
-                $user_list = array();
-            }
-        }
-    }
-
-    $select = $agenda->construct_not_selected_select_form(
-        $group_list,
-        $user_list,
-        array()
-    );
-    $tpl->assign('visible_to', $select);
-}
+    $tpl->assign('form_add', $form->return_form());
+//}
 
 // Loading Agenda template.
 $content = $tpl->fetch('default/agenda/month.tpl');

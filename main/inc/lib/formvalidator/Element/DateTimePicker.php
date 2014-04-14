@@ -7,7 +7,6 @@ require_once 'HTML/QuickForm/date.php';
  */
 class DateTimePicker extends HTML_QuickForm_text
 {
-    public $addLibrary = false;
 	/**
 	 * Constructor
 	 */
@@ -31,6 +30,9 @@ class DateTimePicker extends HTML_QuickForm_text
 		return $js.parent::toHtml();
 	}
 
+    /**
+     * @param string $value
+     */
     function setValue($value)
     {
         $value = substr($value, 0, 16);
@@ -47,24 +49,6 @@ class DateTimePicker extends HTML_QuickForm_text
 	private function getElementJS()
 	{
         $js = null;
-
-        if ($this->addLibrary == true) {
-            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript"></script>';
-            $js .='<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
-
-            $isocode = api_get_language_isocode();
-            if ($isocode != 'en') {
-                $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/i18n/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript"></script>';
-
-                $js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
-                $js .= '<script>
-                $(function(){
-                    $.datepicker.setDefaults($.datepicker.regional["'.$isocode.'"]);
-                });
-                </script>';
-            }
-        }
-
         $id = $this->getAttribute('id');
         //timeFormat: 'hh:mm'
         $js .= "<script>
@@ -75,7 +59,7 @@ class DateTimePicker extends HTML_QuickForm_text
                 });
             });
         </script>";
+
 		return $js;
 	}
-
 }

@@ -283,14 +283,10 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) && isset($_GET['delete_be
     // ask for the date
     $check = Security::check_token('get');
     if ($check) {
-        // delete attempts before date $_GET['delete_before_date']
-        $dateUTC = api_get_utc_datetime($_GET['delete_before_date']);
-        if (api_is_valid_date($_GET['delete_before_date'])) {
-            $objExerciseTmp = new Exercise();
-            if ($objExerciseTmp->read($exercise_id)) {
-                $nb_del = $objExerciseTmp->clean_results(true, $_GET['delete_before_date']);
-                Display :: display_confirmation_message(sprintf(get_lang('XResultsCleaned'), $nb_del));
-            }
+        $objExerciseTmp = new Exercise();
+        if ($objExerciseTmp->read($exercise_id)) {
+            $count = $objExerciseTmp->clean_results(true, $_GET['delete_before_date'].' 23:59:59');
+            Display::display_confirmation_message(sprintf(get_lang('XResultsCleaned'), $count));
         }
     }
 }

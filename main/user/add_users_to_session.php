@@ -158,7 +158,7 @@ function search_users($needle, $type)
 
 		$rs = Database::query($sql);
         $i=0;
-		if ($type=='single') {
+		if ($type == 'single') {
 			while ($user = Database :: fetch_array($rs)) {
 	            $i++;
 	            if ($i<=10) {

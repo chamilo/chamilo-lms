@@ -1,5 +1,11 @@
 <?php
-/*    INIT SECTION   */
+/* For licensing terms, see /license.txt */
+/**
+ * @package chamilo.plugin.ticket
+ */
+/**
+ * INIT SECTION
+ */
 $language_file = array('messages','userInfo', 'admin');
 $cidReset = true;
 require_once '../config.php';
@@ -137,10 +143,20 @@ $htmlHeadXtra[] = '<script language="javascript">
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
+/**
+ * @param $s
+ * @return string
+ */
 function js_str($s) {
 	return '"'.addcslashes($s, "\0..\37\"\\").'"';
 }
 
+/**
+ * @param $array
+ * @param $name
+ * @param $key
+ * @return string
+ */
 function js_array($array,$name,$key) {
 	$temp=array();
 	$return = "new Array(); ";
@@ -150,6 +166,9 @@ function js_array($array,$name,$key) {
 	return $return;
 }
 
+/**
+ *
+ */
 function show_form_send_ticket(){
 	global $types, $plugin;
 	echo '<div class="divTicket">';
@@ -297,6 +316,10 @@ function show_form_send_ticket(){
 	</div>';
 	echo '</form></div>';
 }
+
+/**
+ *
+ */
 function save_ticket(){
 	global $plugin;
 	$category_id	= $_POST['category_id'];
@@ -405,9 +428,9 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
 
 
-	if(!isset($_POST['compose'])){
-		Display::display_header(get_lang('ComposeMessage'));
-		echo '
+if (!isset($_POST['compose'])) {
+    Display::display_header(get_lang('ComposeMessage'));
+    echo '
 <div class="actions">
   <span style="float: right;">&nbsp;</span>
   <form id="search_simple" name="search_simple" method="get" action="'.api_get_self().'" class="form-search">
@@ -418,30 +441,27 @@ function get_user_data($from, $number_of_items, $column, $direction)
     </fieldset>
   </form>
 </div>';
-		if (isset($_GET['keyword'])){
-			$table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
-			$table->set_header(0, '', false, 'width="18px"');
-			$table->set_header(0, get_lang('Photo'), false);
-			$table->set_header(1, get_lang('OfficialCode'));
-			if (api_is_western_name_order()) {
-				$table->set_header(2, get_lang('FirstName'));
-				$table->set_header(3, get_lang('LastName'));
-			} else {
-				$table->set_header(2, get_lang('LastName'));
-				$table->set_header(3, get_lang('FirstName'));
-			}
-			$table->set_header(4, get_lang('LoginName'));
-			$table->set_header(5, get_lang('Email'));
-			$table->set_header(6, get_lang('Action'));
-			$table->display();
-		}
-		//if(isset($_GET['user_request']))
-			show_form_send_ticket();	
-	}else{
-		save_ticket();
-	}
-
-
+    if (isset($_GET['keyword'])){
+        $table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
+        $table->set_header(0, '', false, 'width="18px"');
+        $table->set_header(0, get_lang('Photo'), false);
+        $table->set_header(1, get_lang('OfficialCode'));
+        if (api_is_western_name_order()) {
+            $table->set_header(2, get_lang('FirstName'));
+            $table->set_header(3, get_lang('LastName'));
+        } else {
+            $table->set_header(2, get_lang('LastName'));
+            $table->set_header(3, get_lang('FirstName'));
+        }
+        $table->set_header(4, get_lang('LoginName'));
+        $table->set_header(5, get_lang('Email'));
+        $table->set_header(6, get_lang('Action'));
+        $table->display();
+    }
+    //if(isset($_GET['user_request']))
+    show_form_send_ticket();
+}else{
+    save_ticket();
+}
 
 Display::display_footer();
-?>

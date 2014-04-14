@@ -1,16 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
-
+/**
+ * @package chamilo.plugin.ticket
+ */
 /* Tables names constants */
 define('PLUGIN_NAME', 'ticket');
-define('TABLE_SUPPORT_ASSIGNED_LOG', 'plugin_ticket_assigned_log');
-define('TABLE_SUPPORT_CATEGORY', 'plugin_ticket_category');
-define('TABLE_SUPPORT_MESSAGE', 'plugin_ticket_message');
-define('TABLE_SUPPORT_PRIORITY', 'plugin_ticket_priority');
-define('TABLE_SUPPORT_PROJECT', 'plugin_ticket_project');
-define('TABLE_SUPPORT_STATUS', 'plugin_ticket_status');
-define('TABLE_SUPPORT_TICKET', 'plugin_ticket_ticket');
-define('TABLE_SUPPORT_MESSAGE_ATTACHMENTS', 'plugin_ticket_message_attachments');
+define('TABLE_TICKET_ASSIGNED_LOG', 'plugin_ticket_assigned_log');
+define('TABLE_TICKET_CATEGORY', 'plugin_ticket_category');
+define('TABLE_TICKET_MESSAGE', 'plugin_ticket_message');
+define('TABLE_TICKET_PRIORITY', 'plugin_ticket_priority');
+define('TABLE_TICKET_PROJECT', 'plugin_ticket_project');
+define('TABLE_TICKET_STATUS', 'plugin_ticket_status');
+define('TABLE_TICKET_TICKET', 'plugin_ticket_ticket');
+define('TABLE_TICKET_MESSAGE_ATTACHMENTS', 'plugin_ticket_message_attachments');
 
 /* Ticket status constants */
 define('NEWTCK', 'NAT'); // New ticket unassigned responsible

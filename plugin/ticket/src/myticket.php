@@ -1,5 +1,12 @@
 <?php
-
+/* For licensing terms, see /license.txt */
+/**
+ * This script is the Tickets plugin main entry point
+ * @package chamilo.plugin.ticket
+ */
+/**
+ * Initialization
+ */
 $language_file = array('messages', 'userInfo', 'admin');
 $cidReset = true;
 
@@ -7,17 +14,20 @@ $course_plugin = 'ticket'; //needed in order to load the plugin lang variables
 require_once '../config.php';
 
 $plugin = TicketPlugin::create();
-$tool_name = $plugin->get_lang('DateLastEdition');
+$tool_name = $plugin->get_lang('LastEdit');
 
 api_block_anonymous_users();
-require_once api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php';
-require_once api_get_path(LIBRARY_PATH) . 'group_portal_manager.lib.php';
+
+$libPath = api_get_path(LIBRARY_PATH);
+$webLibPath = api_get_path(WEB_LIBRARY_PATH);
+require_once $libPath. 'formvalidator/FormValidator.class.php';
+require_once $libPath . 'group_portal_manager.lib.php';
 $htmlHeadXtra[] = '<script type="text/javascript">
 function load_history_ticket (div_course,ticket_id) {
     $.ajax({
         contentType: "application/x-www-form-urlencoded",
         beforeSend: function(object) {
-        $("div#"+div_course).html("<img src=\'../../../main/inc/lib/javascript/indicator.gif\' />"); },
+        $("div#"+div_course).html("<img src=\''.$webLibPath.'javascript/indicator.gif\' />"); },
         type: "POST",
         url: "ticket_assign_log.php",
         data: "ticket_id="+ticket_id,

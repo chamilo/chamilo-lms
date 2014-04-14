@@ -1,11 +1,19 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+ *
+ * @package chamilo.plugin.ticket
+ */
+/**
+ * Init section
+ */
 $language_file = array('registration');
 require_once '../config.php';
 $plugin = TicketPlugin::create();
 
-$user_id=intval($_GET['user_id']);
+$user_id = intval($_GET['user_id']);
 $user_info = api_get_user_info($user_id);
-$courses_list=CourseManager::get_courses_list_by_user_id($user_id,false,true);
+$courses_list = CourseManager::get_courses_list_by_user_id($user_id,false,true);
 ?>
 <div class="row">
 	<div class="label2"><?php echo get_lang('User')?>:</div>

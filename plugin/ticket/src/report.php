@@ -1,5 +1,11 @@
 <?php
-/* 		INIT SECTION	*/
+/* For licensing terms, see /license.txt */
+/**
+ * @package chamilo.plugin.ticket
+ */
+/**
+ * INIT SECTION
+ */
 $language_file= array('messages','userInfo', 'admin','trad4all');
 $cidReset	= true;
 require_once '../config.php';
@@ -216,74 +222,72 @@ function get_user_data($from, $number_of_items, $column, $direction)
 
 
 Display::display_header('Reportes');
-		echo '<div class="actions">
-		<form action="'.api_get_self().'" method="get" name="search_simple" id="search_simple">
-			<input name="user_id_request" id="user_id_request" type="hidden" value="">
-			<span><label for="keyword">B&uacute;squeda del usuario: </label><input size="25" name="keyword" type="text" id="keyword"></span>
-			<span><button class="search" name="submit" type="submit">Buscar</button></span>
-			<div class="clear">&nbsp;</div>
-		</form></div>';
-		if (isset($_GET['keyword'])){
-			$table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
-			$table->set_header(0, '', false, 'width="18px"');
-			$table->set_header(0, get_lang('Photo'), false);
-			$table->set_header(1, get_lang('OfficialCode'));
-			if (api_is_western_name_order()) {
-				$table->set_header(2, get_lang('FirstName'));
-				$table->set_header(3, get_lang('LastName'));
-			} else {
-				$table->set_header(2, get_lang('LastName'));
-				$table->set_header(3, get_lang('FirstName'));
-			}
-			$table->set_header(4, get_lang('LoginName'));
-			$table->set_header(5, get_lang('Email'));
-			$table->set_header(6, get_lang('Action'));
-			$table->display();
-		}
-		//if(isset($_GET['user_request']))
-				
-	if(isset($_POST['report'])){
-		$course_id = $_POST['course_id'];
-		$tool = $_POST['tool'];
-		$course_info = api_get_course_info_by_id($course_id);
-		$user_id =  $_POST['user_id_request'];
-		$sql ="SELECT  u.username , CONCAT(u.lastname, ' ', u.firstname) AS fullname, DATE_SUB(access.access_date,INTERVAL 5 HOUR) AS  access_date, c.title AS curso, access_tool AS herramienta 
-				FROM  ".Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS)." access 
-				LEFT JOIN  ".Database::get_main_table(TABLE_MAIN_USER)." u ON access.access_user_id = u.user_id 
-				LEFT JOIN  ".Database::get_main_table(TABLE_MAIN_COURSE)." c ON access.access_cours_code = c.CODE 
-				WHERE access.access_cours_code = '".$course_info['code']."' AND u.user_id = '$user_id' ";
-		if($tool!= '') $sql.="AND access.access_tool = '$tool' ";
-		$start_date = $_POST['keyword_start_date_start'];
-		$end_date 	= $_POST['keyword_start_date_end'];
-		if ($start_date != '' || $end_date != ''){
-			$sql .= " HAVING ";
-			if ($start_date != '') $sql .=  "  access_date >= '$start_date'   ";
-			if ($end_date != '') {
-				$sql = ($start_date == '')?$sql:($sql." AND ");
-				$sql .=  "  access_date <= '$end_date'   ";
-			}
-				
-		}
-		$result = Database::query($sql);
-		$table_result = new SortableTable();
-		$table_result->set_header(0, get_lang('User'), false);
-		$table_result->set_header(1, get_lang('Fullname'), false);
-		$table_result->set_header(2, get_lang('Fecha'), false);
-		$table_result->set_header(3, get_lang('curso'), false);
-		$table_result->set_header(4, get_lang('Herramienta'), false);
-		while ($row = Database::fetch_assoc($result)){
-			$row = array(0 =>$row['username'],1 =>$row['fullname'],2 => $row['access_date'],3 =>$row['curso'],4 =>get_lang($tools[$row['herramienta']]['name']));
-			$table_result->addRow($row);
-		}
-		$table_result->display();
-		
-		
-	}else{
-		show_form();
-	}
+echo '<div class="actions">
+    <form action="'.api_get_self().'" method="get" name="search_simple" id="search_simple">
+        <input name="user_id_request" id="user_id_request" type="hidden" value="">
+        <span><label for="keyword">B&uacute;squeda del usuario: </label><input size="25" name="keyword" type="text" id="keyword"></span>
+        <span><button class="search" name="submit" type="submit">Buscar</button></span>
+        <div class="clear">&nbsp;</div>
+    </form></div>';
+if (isset($_GET['keyword'])){
+    $table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
+    $table->set_header(0, '', false, 'width="18px"');
+    $table->set_header(0, get_lang('Photo'), false);
+    $table->set_header(1, get_lang('OfficialCode'));
+    if (api_is_western_name_order()) {
+        $table->set_header(2, get_lang('FirstName'));
+        $table->set_header(3, get_lang('LastName'));
+    } else {
+        $table->set_header(2, get_lang('LastName'));
+        $table->set_header(3, get_lang('FirstName'));
+    }
+    $table->set_header(4, get_lang('LoginName'));
+    $table->set_header(5, get_lang('Email'));
+    $table->set_header(6, get_lang('Action'));
+    $table->display();
+}
+//if(isset($_GET['user_request']))
+
+if (isset($_POST['report'])) {
+    $course_id = $_POST['course_id'];
+    $tool = $_POST['tool'];
+    $course_info = api_get_course_info_by_id($course_id);
+    $user_id =  $_POST['user_id_request'];
+    $sql ="SELECT  u.username , CONCAT(u.lastname, ' ', u.firstname) AS fullname, DATE_SUB(access.access_date,INTERVAL 5 HOUR) AS  access_date, c.title AS curso, access_tool AS herramienta
+            FROM  ".Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS)." access
+            LEFT JOIN  ".Database::get_main_table(TABLE_MAIN_USER)." u ON access.access_user_id = u.user_id
+            LEFT JOIN  ".Database::get_main_table(TABLE_MAIN_COURSE)." c ON access.access_cours_code = c.CODE
+            WHERE access.access_cours_code = '".$course_info['code']."' AND u.user_id = '$user_id' ";
+    if($tool!= '') $sql.="AND access.access_tool = '$tool' ";
+    $start_date = $_POST['keyword_start_date_start'];
+    $end_date 	= $_POST['keyword_start_date_end'];
+    if ($start_date != '' || $end_date != ''){
+        $sql .= " HAVING ";
+        if ($start_date != '') $sql .=  "  access_date >= '$start_date'   ";
+        if ($end_date != '') {
+            $sql = ($start_date == '')?$sql:($sql." AND ");
+            $sql .=  "  access_date <= '$end_date'   ";
+        }
+
+    }
+    $result = Database::query($sql);
+    $table_result = new SortableTable();
+    $table_result->set_header(0, get_lang('User'), false);
+    $table_result->set_header(1, get_lang('Fullname'), false);
+    $table_result->set_header(2, get_lang('Fecha'), false);
+    $table_result->set_header(3, get_lang('curso'), false);
+    $table_result->set_header(4, get_lang('Herramienta'), false);
+    while ($row = Database::fetch_assoc($result)){
+        $row = array(0 =>$row['username'],1 =>$row['fullname'],2 => $row['access_date'],3 =>$row['curso'],4 =>get_lang($tools[$row['herramienta']]['name']));
+        $table_result->addRow($row);
+    }
+    $table_result->display();
+
+
+}else{
+    show_form();
+}
 
 
 
 Display::display_footer();
-
-?>

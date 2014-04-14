@@ -1,4 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+ *
+ * @package chamilo.plugin.ticket
+ */
+/**
+ *
+ */
 $language_file= array('messages','userInfo', 'admin');
 $cidReset	= true;
 require_once '../config.php';
@@ -303,7 +311,7 @@ if(!isset($_POST['compose'])){
     $ticket_id	= $_POST['ticket_id'];
     $content	=	$_POST['content'];
     $subject	=	$_POST['subject'];
-    $mensajeconfirmacion = isset($_POST['confirmacion'])?true:false ; 
+    $mensajeconfirmacion = isset($_POST['confirmation'])?true:false ;
     $file_attachments   =	$_FILES;
     $user_id = api_get_user_id();
     TicketManager::insert_message($ticket_id, $subject, $content, $file_attachments, $user_id,'NOL',$mensajeconfirmacion);
@@ -348,7 +356,7 @@ function show_form_send_message(){
 		</div>';
 	echo '<div class="row">
 		<div class="label"></div>
-		<div class="formw">	<button class="save" name="compose" type="submit">Enviar mensaje</button>'.($isAdmin?'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="confirmacion"/>Solicitar confirmaci&oacute;n':"").
+		<div class="formw">	<button class="save" name="compose" type="submit">Enviar mensaje</button>'.($isAdmin?'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="confirmation"/>Solicitar confirmaci&oacute;n':"").
 		'</div>
 	</div>';
         echo '</form>';

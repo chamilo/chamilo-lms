@@ -1,4 +1,11 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+ * @package chamilo.plugin.ticket
+ */
+/**
+ *
+ */
 $language_file = array ('registration');
 require_once '../config.php';
 $plugin = TicketPlugin::create();

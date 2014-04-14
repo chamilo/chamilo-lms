@@ -1,4 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+ *
+ * @package chamilo.plugin.ticket
+ */
+/**
+ *
+ */
 require_once '../config.php';
 $plugin = TicketPlugin::create();
 
@@ -11,7 +19,7 @@ $(document).ready(function (){
             var url     = this.href;
             var dialog  = $("#dialog");
             if ($("#dialog").length == 0) {
-                    dialog  = $("<div id=\"dialog\" style=\"display:hidden\"></div>").appendTo("body");
+                    dialog  = $("'.'<div id="dialog" style="display:hidden"></div>'.'").appendTo("body");
             }
 
             // load remote content
@@ -49,12 +57,12 @@ function save() {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {
-		$("div#confirmacion").html("<img src=\'../../../main/inc/lib/javascript/indicator.gif\' />"); },
+		$("div#confirmation").html("<img src=\'../../../main/inc/lib/javascript/indicator.gif\' />"); },
 		type: "POST",
 		url: "update_report.php",
 		data: "work_id="+work_id+"&forum_id="+forum_id+"&rs_id="+rs_id,
 		success: function(datos) {
-			$("div#confirmacion").html(datos);
+			$("div#confirmation").html(datos);
 			 location.reload();
 		}
 	});

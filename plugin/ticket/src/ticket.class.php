@@ -1,6 +1,8 @@
 <?php
+/* For licensing terms, see /license.txt */
 /**
  * Declaration of TicketManager class
+ * @package chamilo.plugin.ticket
  */
 /**
  * Class TicketManager
@@ -22,10 +24,10 @@ class TicketManager
     public static function get_all_tickets_categories()
     {
         $table_support_category = Database::get_main_table(
-            TABLE_SUPPORT_CATEGORY
+            TABLE_TICKET_CATEGORY
         );
         $table_support_project = Database::get_main_table(
-            TABLE_SUPPORT_PROJECT
+            TABLE_TICKET_PROJECT
         );
         $sql = "SELECT category.*, project.other_area , project.email
             FROM " . $table_support_category . "  category," . $table_support_project . " project
@@ -39,9 +41,13 @@ class TicketManager
         return $types;
     }
 
+    /**
+     * Get all possible tickets statuses
+     * @return array
+     */
     public static function get_all_tickets_status()
     {
-        $table_support_status = Database::get_main_table(TABLE_SUPPORT_STATUS);
+        $table_support_status = Database::get_main_table(TABLE_TICKET_STATUS);
         $sql = "SELECT * FROM " . $table_support_status;
         $result = Database::query($sql);
         $types = array();
@@ -51,6 +57,24 @@ class TicketManager
         return $types;
     }
 
+    /**
+     * Inserts a new ticket in the corresponding tables
+     * @param $category_id
+     * @param $course_id
+     * @param $project_id
+     * @param $other_area
+     * @param $email
+     * @param $subject
+     * @param $content
+     * @param string $personalEmail
+     * @param $file_attachments
+     * @param string $source
+     * @param string $priority
+     * @param string $status
+     * @param string $request_user
+     * @param int $assigned_user
+     * @return bool
+     */
     public static function insert_new_ticket(
         $category_id,
         $course_id,
@@ -59,7 +83,7 @@ class TicketManager
         $email,
         $subject,
         $content,
-        $personalemail = "",
+        $personalEmail = "",
         $file_attachments,
         $source = 'VRT',
         $priority = 'NRM',
@@ -67,10 +91,18 @@ class TicketManager
         $request_user = '',
         $assigned_user = 0
     ) {
-        $table_support_tickets = Database::get_main_table(TABLE_SUPPORT_TICKET);
+        $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_category = Database::get_main_table(
-            TABLE_SUPPORT_CATEGORY
+            TABLE_TICKET_CATEGORY
         );
+        $course_id = intval($course_id);
+        $category_id = intval($category_id);
+        $project_id = intval($project_id);
+        $subject = Database::escape_string($subject);
+        $content = Database::escape_string($content);
+        $personalEmail = Database::escape_string($personalEmail);
+        $status = Database::escape_string($status);
+
         $now = api_get_utc_datetime();
         $user_id = api_get_user_id();
         if ($status == '') {
@@ -83,7 +115,6 @@ class TicketManager
         if ($request_user == '' && $source == 'VRT') {
             $request_user = $user_id;
         }
-        $course_id = intval($course_id);
         $sql_insert_ticket = "INSERT INTO $table_support_tickets
             (
             project_id,
@@ -105,7 +136,7 @@ class TicketManager
             '$priority',
             '$course_id',
             '$request_user',
-            '$personalemail',
+            '$personalEmail',
             '$status',
             '" . $now . "',
             $user_id,
@@ -133,40 +164,30 @@ class TicketManager
             $sql_update_total = "UPDATE $table_support_category
                 SET total_tickets = total_tickets +1 WHERE category_id = '$category_id';";
             Database::query($sql_update_total);
-            if (self::insert_message(
-                $ticket_id,
-                $subject,
-                $content,
-                $file_attachments,
-                $request_user
-            )
-            ) {
+            if (self::insert_message($ticket_id, $subject, $content, $file_attachments, $request_user)) {
                 global $data_files;
                 if ($other_area) {
                     $user = UserManager::get_user_info_by_id($request_user);
-                    $mensaje_helpdesk = '<table>
+                    $helpDeskMessage = '<table>
                                             <tr>
-                                                <td width="100px"><b>Cliente:</b></td>
+                                                <td width="100px"><b>'.get_lang('User').'</b></td>
                                                 <td width="400px">' . $user['firstname']
                                                     . ' ' . $user['lastname'] . '</td>
                                             </tr>
                                             <tr>
-                                                <td width="100px"><b>Usuario:</b></td>
+                                                <td width="100px"><b>'.get_lang('Username').'</b></td>
                                                 <td width="400px">' . $user['username'] . '</td>
                                             </tr>
                                             <tr>
-                                                <td width="100px"><b>Fecha:</b></td>
-                                                <td width="400px">' . api_convert_and_format_date(
-                            $now,
-                            DATE_TIME_FORMAT_LONG
-                        ) . '</td>
+                                                <td width="100px"><b>'.get_lang('Date').'</b></td>
+                                                <td width="400px">' . api_convert_and_format_date($now, DATE_TIME_FORMAT_LONG) . '</td>
                                             </tr>
                                             <tr>
-                                                <td width="100px"><b>Asunto:</b></td>
+                                                <td width="100px"><b>'.get_lang('Topic').'</b></td>
                                                 <td width="400px">' . $subject . '</td>
                                             </tr>
                                             <tr>
-                                                <td width="100px"><b>Descripci&oacute;n:</b></td>
+                                                <td width="100px"><b>'.get_lang('Description').'</b></td>
                                                 <td width="400px">' . $content . '</td>
                                             </tr>
                                         </table>';
@@ -174,18 +195,18 @@ class TicketManager
                         'Soporte virtual',
                         $email,
                         "[SOPORTE] Incidente Reenviado de Soporte Virtual",
-                        $mensaje_helpdesk,
+                        $helpDeskMessage,
                         $user['firstname'] . ' ' . $user['lastname'],
-                        $personalemail,
+                        $personalEmail,
                         array('cc' => 'soportevirtual@usil.edu.pe'),
                         $data_files
                     );
-                    $mensaje_alumno = '<p>Su consulta fue reenviada al area responsable : <a href="mailto:' . $email . '">' . $email . '</a></p>';
-                    $mensaje_alumno .= '<p>La respuesta a su consulta ser&aacute; enviada al correo  : <a href="#">' . $personalemail . '</a></p>';
+                    $studentMessage = '<p>Su consulta fue reenviada al area responsable : <a href="mailto:' . $email . '">' . $email . '</a></p>';
+                    $studentMessage .= '<p>La respuesta a su consulta ser&aacute; enviada al correo  : <a href="#">' . $personalEmail . '</a></p>';
                     self::insert_message(
                         $ticket_id,
-                        "Mensaje Reenviado",
-                        $mensaje_alumno,
+                        get_lang('MessageResent'),
+                        $studentMessage,
                         null,
                         1
                     );
@@ -202,15 +223,21 @@ class TicketManager
         }
     }
 
+    /**
+     * @param $ticket_id
+     * @param $user_id
+     */
     public static function assign_ticket_user($ticket_id, $user_id)
     {
-        $table_support_tickets = Database::get_main_table(TABLE_SUPPORT_TICKET);
-        $table_support_assigned_log = Database::get_main_table(
-            TABLE_SUPPORT_ASSIGNED_LOG
-        );
+        $ticket_id = intval($ticket_id);
+        $user_id = intval($user_id);
+        $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
+        $table_support_assigned_log = Database::get_main_table(TABLE_TICKET_ASSIGNED_LOG);
         $now = api_get_utc_datetime();
+
         $sql_update = "UPDATE $table_support_tickets
-            SET  assigned_last_user = '$user_id'  WHERE ticket_id = '$ticket_id' ";
+            SET assigned_last_user = '$user_id'
+            WHERE ticket_id = '$ticket_id'";
         Database::query($sql_update);
         if (Database::affected_rows() > 0) {
             $insert_id = api_get_user_id();
@@ -226,26 +253,37 @@ class TicketManager
                 '$insert_id'
             );";
             Database::query($sql);
+
             if ($insert_id != $user_id) {
                 $info = api_get_user_info($user_id);
-                $mensaje = '<p>Estimado(a):</p><p>' . $info['firstname'] . " " . $info['lastname'] . "</p>
+                $sender = api_get_user_info($insert_id);
+                $message = '<p>Estimado(a):</p><p>' . $info['firstname'] . " " . $info['lastname'] . "</p>
 							<p>Te asignaron el ticket $ticket_id " . '<a href="' . api_get_path(
                         WEB_PLUGIN_PATH
-                    ) . PLUGIN_NAME . '/s/ticket_details.php?ticket_id=' . $ticket_id . '">Ticket</a></p>
-							<p>Centro de Educaci&oacute;n Virtual</p>';
+                    ) . PLUGIN_NAME . '/src/ticket_details.php?ticket_id=' . $ticket_id . '">Ticket</a></p>';
                 api_mail_html(
                     $info['firstname'] . " " . $info['lastname'],
                     $info['mail'],
                     "[TICKETS] Asignacion de Ticket #$ticket_id ",
-                    $mensaje,
-                    'Plataforma Virtual',
-                    'plataformavirtual@usil.edu.pe',
-                    array('cc' => 'plataformavirtual@usil.edu.pe')
+                    $message,
+                    null, // sender name
+                    null, // sender e-mail
+                    array('cc' => $sender['email']) // should be support e-mail (platform admin) here
                 );
             }
         }
     }
 
+    /**
+     * @param $ticket_id
+     * @param $subject
+     * @param $content
+     * @param $file_attachments
+     * @param $user_id
+     * @param string $status
+     * @param bool $sendConfirmation
+     * @return bool
+     */
     public static function insert_message(
         $ticket_id,
         $subject,
@@ -253,37 +291,62 @@ class TicketManager
         $file_attachments,
         $user_id,
         $status = 'NOL',
-        $envioconfirmacion = false
-    ) {
+        $sendConfirmation = false
+    )
+    {
         global $data_files;
+        $ticket_id = intval($ticket_id);
+        $subject = Database::escape_string($subject);
+        $content = Database::escape_string($content);
+        $user_id = intval($user_id);
+        $status = Database::escape_string($status);
+
         $table_support_messages = Database::get_main_table(
-            TABLE_SUPPORT_MESSAGE
+            TABLE_TICKET_MESSAGE
         );
-        $table_support_tickets = Database::get_main_table(TABLE_SUPPORT_TICKET);
-        $table_support_message_attachments = Database::get_main_table(
-            TABLE_SUPPORT_MESSAGE_ATTACHMENTS
-        );
-        if ($envioconfirmacion) {
-            $formulario = '<form action="ticket_details.php?ticket_id=' . $ticket_id . '" id="confirmticket" method="POST" >
-							<p>Esta respuesta le result&oacute; satisfactoria</p>
-							<input id="respuestasi" type="submit" value="si" name="respuesta" />
-							<input id="respuestano" type="submit" value="no" name="respuesta" />
+        $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
+        $table_support_message_attachments = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);
+        if ($sendConfirmation) {
+            $form = '<form action="ticket_details.php?ticket_id=' . $ticket_id . '" id="confirmticket" method="POST" >
+							<p>'.get_lang('TicketWasThisAnswerSatisfying').'</p>
+							<input id="responseyes" type="submit" value="'.get_lang('Yes').'" name="response" />
+							<input id="responseno" type="submit" value="'.get_lang('No').'" name="response" />
 						   </form>';
-            $content .= $formulario;
+            $content .= $form;
             Database::query(
                 "UPDATE $table_support_tickets SET status_id='XCF' WHERE ticket_id = '$ticket_id'"
             );
         }
-        $sql_message_id = "SELECT COUNT(*) as total_messages FROM $table_support_messages
+        $sql_message_id = "SELECT COUNT(*) as total_messages
+            FROM $table_support_messages
             WHERE ticket_id ='$ticket_id'";
         $result = Database::query($sql_message_id);
         $obj = Database::fetch_object($result);
         $message_id = $obj->total_messages + 1;
         $now = api_get_utc_datetime();
+
         $sql_insert_message = "INSERT INTO $table_support_messages (
-            ticket_id,message_id,subject, message,ip_address,sys_insert_user_id,sys_insert_datetime,sys_lastedit_user_id,sys_lastedit_datetime,status
+            ticket_id,
+            message_id,
+            subject,
+            message,
+            ip_address,
+            sys_insert_user_id,
+            sys_insert_datetime,
+            sys_lastedit_user_id,
+            sys_lastedit_datetime,
+            status
         ) VALUES (
-            '$ticket_id','$message_id','$subject','$content','" . Database::escape_string($_SERVER['REMOTE_ADDR']) . "','$user_id','" . $now . "','$user_id','" . $now . "','$status'
+            '$ticket_id',
+            '$message_id',
+            '$subject',
+            '$content',
+            '" . Database::escape_string($_SERVER['REMOTE_ADDR']) . "',
+            '$user_id',
+            '" . $now . "',
+            '$user_id',
+            '" . $now . "',
+            '$status'
         )";
         Database::query($sql_insert_message);
         $sql_update_total_message = "UPDATE $table_support_tickets
@@ -295,11 +358,13 @@ class TicketManager
                       WHERE ticket_id ='$ticket_id'
                 ) WHERE ticket_id ='$ticket_id' ";
         Database::query($sql_update_total_message);
+
         $sql_message_att_id = "SELECT COUNT(*) as total_attach
             FROM $table_support_message_attachments
             WHERE ticket_id ='$ticket_id' AND message_id = '$message_id'";
         $result = Database::query($sql_message_att_id);
         $obj = Database::fetch_object($result);
+
         $message_attch_id = $obj->total_attach + 1;
         if (is_array($file_attachments)) {
             foreach ($file_attachments as $file_attach) {
@@ -318,24 +383,34 @@ class TicketManager
                 }
             }
         }
+
         return true;
     }
 
+    /**
+     * @param $file_attach
+     * @param $ticket_id
+     * @param $message_id
+     * @param $message_attch_id
+     * @return array
+     */
     public static function save_message_attachment_file(
         $file_attach,
         $ticket_id,
         $message_id,
         $message_attch_id
-    ) {
+    )
+    {
         $now = api_get_utc_datetime();
         $user_id = api_get_user_id();
+        $ticket_id = intval($ticket_id);
         $new_file_name = add_ext_on_mime(
             stripslashes($file_attach['name']),
             $file_attach['type']
         );
         $file_name = $file_attach['name'];
         $table_support_message_attachments = Database::get_main_table(
-            TABLE_SUPPORT_MESSAGE_ATTACHMENTS
+            TABLE_TICKET_MESSAGE_ATTACHMENTS
         );
         if (!filter_extension($new_file_name)) {
             Display :: display_error_message(
@@ -343,8 +418,8 @@ class TicketManager
             );
         } else {
             $new_file_name = uniqid('');
-            $path_attachment = api_get_path(SYS_PATH);
-            $path_message_attach = $path_attachment . 'tck_messageattch/';
+            $path_attachment = api_get_path(SYS_ARCHIVE_PATH);
+            $path_message_attach = $path_attachment . 'plugin_ticket_messageattch/';
             if (!file_exists($path_message_attach)) {
                 @mkdir(
                     $path_message_attach,
@@ -389,6 +464,14 @@ class TicketManager
         }
     }
 
+    /**
+     * @param $from
+     * @param $number_of_items
+     * @param $column
+     * @param $direction
+     * @param null $user_id
+     * @return array
+     */
     public static function get_tickets_by_user_id(
         $from,
         $number_of_items,
@@ -397,15 +480,15 @@ class TicketManager
         $user_id = null
     ) {
         $table_support_category = Database::get_main_table(
-            TABLE_SUPPORT_CATEGORY
+            TABLE_TICKET_CATEGORY
         );
-        $table_support_tickets = Database::get_main_table(TABLE_SUPPORT_TICKET);
+        $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_priority = Database::get_main_table(
-            TABLE_SUPPORT_PRIORITY
+            TABLE_TICKET_PRIORITY
         );
-        $table_support_status = Database::get_main_table(TABLE_SUPPORT_STATUS);
+        $table_support_status = Database::get_main_table(TABLE_TICKET_STATUS);
         $table_support_messages = Database::get_main_table(
-            TABLE_SUPPORT_MESSAGE
+            TABLE_TICKET_MESSAGE
         );
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_main_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
@@ -597,9 +680,9 @@ class TicketManager
                     ) . 'main/admin/user_information.php?user_id=' . $row['responsable']['user_id'] . '">' . $row['responsable']['firstname'] . ' ' . $row['responsable']['lastname'] . '</a>';
             } else {
                 if ($row['status_id'] != 'REE') {
-                    $row['responsable'] = '<span style="color:#ff0000;">Por Asignar</span>';
+                    $row['responsable'] = '<span style="color:#ff0000;">'.get_lang('ToBeAssigned').'</span>';
                 } else {
-                    $row['responsable'] = '<span style="color:#00ff00;">REENVIADO</span>';
+                    $row['responsable'] = '<span style="color:#00ff00;">'.get_lang('MessageResent').'</span>';
                 }
             }
             switch ($row['source']) {
@@ -624,7 +707,7 @@ class TicketManager
                         get_lang('Info')
                     ) . '</a>&nbsp;&nbsp;';
                 if ($row['priority_id'] == 'ALT' && $row['status_id'] != 'CLS') {
-                    $actions .= '<img src="../../../main/img/exclamation.png" border="0" />';
+                    $actions .= '<img src="'.api_get_path(WEB_CODE_PATH).'img/exclamation.png" border="0" />';
                 }
                 $row['col0'] = Display::return_icon(
                         $img_source,
@@ -668,7 +751,7 @@ class TicketManager
                     $actions .= '<a href="myticket.php?ticket_id=' . $row['ticket_id'] . '&amp;action=alert"><img src="../../../main/img/exclamation.png" border="0" /></a>';
                 }
                 if ($row['priority_id'] == 'ALT') {
-                    $actions .= '<img src="../../../main/img/admin_star.png" border="0" />';
+                    $actions .= '<img src="'.api_get_path(WEB_CODE_PATH).'img/admin_star.png" border="0" />';
                 }
                 $ticket = array(
                     $row['col0'],
@@ -694,21 +777,27 @@ class TicketManager
             }
             $tickets[] = $ticket;
         }
+
         return $tickets;
     }
 
+    /**
+     * @param null $user_id
+     * @return mixed
+     */
     public static function get_total_tickets_by_user_id($user_id = null)
     {
+        $user_id = intval($user_id);
         $table_support_category = Database::get_main_table(
-            TABLE_SUPPORT_CATEGORY
+            TABLE_TICKET_CATEGORY
         );
-        $table_support_tickets = Database::get_main_table(TABLE_SUPPORT_TICKET);
+        $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_priority = Database::get_main_table(
-            TABLE_SUPPORT_PRIORITY
+            TABLE_TICKET_PRIORITY
         );
-        $table_support_status = Database::get_main_table(TABLE_SUPPORT_STATUS);
+        $table_support_status = Database::get_main_table(TABLE_TICKET_STATUS);
         $table_support_messages = Database::get_main_table(
-            TABLE_SUPPORT_MESSAGE
+            TABLE_TICKET_MESSAGE
         );
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_main_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
@@ -809,24 +898,30 @@ class TicketManager
         }
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
+
         return $obj->total;
     }
 
+    /**
+     * @param $ticket_id
+     * @param $user_id
+     * @return array
+     */
     public static function get_ticket_detail_by_id($ticket_id, $user_id)
     {
         $table_support_category = Database::get_main_table(
-            TABLE_SUPPORT_CATEGORY
+            TABLE_TICKET_CATEGORY
         );
-        $table_support_tickets = Database::get_main_table(TABLE_SUPPORT_TICKET);
+        $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_priority = Database::get_main_table(
-            TABLE_SUPPORT_PRIORITY
+            TABLE_TICKET_PRIORITY
         );
-        $table_support_status = Database::get_main_table(TABLE_SUPPORT_STATUS);
+        $table_support_status = Database::get_main_table(TABLE_TICKET_STATUS);
         $table_support_messages = Database::get_main_table(
-            TABLE_SUPPORT_MESSAGE
+            TABLE_TICKET_MESSAGE
         );
         $table_support_message_attachments = Database::get_main_table(
-            TABLE_SUPPORT_MESSAGE_ATTACHMENTS
+            TABLE_TICKET_MESSAGE_ATTACHMENTS
         );
 
         $sql = "SELECT ticket.* ,cat.name , status.name as status, priority.priority FROM " . $table_support_tickets . " ticket, " . $table_support_category . " cat ," . $table_support_priority . " priority , " . $table_support_status . " status
@@ -891,7 +986,7 @@ class TicketManager
                 $message['user_created'] = '<a href="' . api_get_path(
                         WEB_PATH
                     ) . 'main/admin/user_information.php?user_id=' . $row['user_id'] . '">' . $row['firstname'] . ' ' . $row['lastname'] . '</a>';
-                $sql_atachment = "SELECT * FROM " . TABLE_SUPPORT_MESSAGE_ATTACHMENTS . " WHERE message_id = " . $row['message_id'] . " AND ticket_id= '$ticket_id'  ";
+                $sql_atachment = "SELECT * FROM " . TABLE_TICKET_MESSAGE_ATTACHMENTS . " WHERE message_id = " . $row['message_id'] . " AND ticket_id= '$ticket_id'  ";
                 $result_attach = Database::query($sql_atachment);
                 while ($row2 = Database::fetch_assoc($result_attach)) {
                     $archiveURL = $archiveURL = api_get_path(
@@ -903,13 +998,19 @@ class TicketManager
                 $ticket['messages'][] = $message;
             }
         }
+
         return $ticket;
     }
 
+    /**
+     * @param $ticket_id
+     * @param $user_id
+     * @return bool
+     */
     public static function update_message_status($ticket_id, $user_id)
     {
         $table_support_messages = Database::get_main_table(
-            TABLE_SUPPORT_MESSAGE
+            TABLE_TICKET_MESSAGE
         );
         $now = api_get_utc_datetime();
         $sql = "UPDATE " . $table_support_messages . " SET status = 'LEI' , sys_lastedit_user_id ='" . api_get_user_id(
@@ -924,7 +1025,7 @@ class TicketManager
         Database::query($sql);
         if (Database::affected_rows() > 0) {
             Database::query(
-                "UPDATE " . Database::get_main_table(TABLE_SUPPORT_TICKET) . " SET status_id = 'PND'  WHERE ticket_id ='$ticket_id' AND status_id = 'NAT'"
+                "UPDATE " . Database::get_main_table(TABLE_TICKET_TICKET) . " SET status_id = 'PND'  WHERE ticket_id ='$ticket_id' AND status_id = 'NAT'"
             );
             return true;
         } else {
@@ -932,14 +1033,20 @@ class TicketManager
         }
     }
 
+    /**
+     * @param $status_id
+     * @param $ticket_id
+     * @param $user_id
+     * @return bool
+     */
     public static function update_ticket_status(
         $status_id,
         $ticket_id,
         $user_id
     ) {
-        $table_support_tickets = Database::get_main_table(TABLE_SUPPORT_TICKET);
+        $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_messages = Database::get_main_table(
-            TABLE_SUPPORT_MESSAGE
+            TABLE_TICKET_MESSAGE
         );
         $now = api_get_utc_datetime();
         $sql = "UPDATE " . $table_support_tickets . " SET status_id = '$status_id' , sys_lastedit_user_id ='$user_id' ,sys_lastedit_datetime ='" . $now . "'  WHERE ticket_id ='$ticket_id'";
@@ -951,11 +1058,14 @@ class TicketManager
         }
     }
 
+    /**
+     * @return mixed
+     */
     public static function get_number_of_messages()
     {
-        $table_support_tickets = Database::get_main_table(TABLE_SUPPORT_TICKET);
+        $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_messages = Database::get_main_table(
-            TABLE_SUPPORT_MESSAGE
+            TABLE_TICKET_MESSAGE
         );
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_main_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
@@ -974,37 +1084,52 @@ class TicketManager
 
     }
 
+    /**
+     * @param $ticket_id
+     * @param $user_id
+     */
     public static function send_alert($ticket_id, $user_id)
     {
-        $table_support_tickets = Database::get_main_table(TABLE_SUPPORT_TICKET);
+        $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
         $sql = "UPDATE " . $table_support_tickets . " SET priority_id = 'ALT', sys_lastedit_user_id ='$user_id' ,sys_lastedit_datetime ='" . $now . "' WHERE ticket_id = '$ticket_id'";
         Database::query($sql);
     }
 
+    /**
+     * @param $ticket_id
+     * @param $user_id
+     */
     public static function close_ticket($ticket_id, $user_id)
     {
-        $table_support_tickets = Database::get_main_table(TABLE_SUPPORT_TICKET);
+        $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
         $sql = "UPDATE " . $table_support_tickets . " SET status_id = 'CLS' , sys_lastedit_user_id ='$user_id' ,sys_lastedit_datetime ='" . $now . "' ,end_date ='" . $now . "' WHERE ticket_id ='$ticket_id'";
         Database::query($sql);
     }
 
+    /**
+     *
+     */
     public static function close_old_tickets()
     {
-        $table_support_tickets = Database::get_main_table(TABLE_SUPPORT_TICKET);
+        $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
         $sql = "UPDATE " . $table_support_tickets . " SET status_id = 'CLS' , sys_lastedit_user_id ='" . api_get_user_id(
             ) . "' ,sys_lastedit_datetime ='" . $now . "',end_date ='" . $now . "' WHERE DATEDIFF('$now',sys_lastedit_datetime) > 7 AND status_id != 'CLS' AND status_id != 'NAT' AND status_id != 'REE'";
         Database::query($sql);
     }
 
+    /**
+     * @param $ticket_id
+     * @return array
+     */
     public static function get_assign_log($ticket_id)
     {
         $table_support_assigned_log = Database::get_main_table(
-            TABLE_SUPPORT_ASSIGNED_LOG
+            TABLE_TICKET_ASSIGNED_LOG
         );
-        $sql = "SELECT log.* FROM " . TABLE_SUPPORT_ASSIGNED_LOG . " log  WHERE log.ticket_id = '$ticket_id' ORDER BY log.assigned_date";
+        $sql = "SELECT log.* FROM " . TABLE_TICKET_ASSIGNED_LOG . " log  WHERE log.ticket_id = '$ticket_id' ORDER BY log.assigned_date";
         $result = Database::query($sql);
         $history = array();
         while ($row = Database::fetch_assoc($result)) {
@@ -1032,6 +1157,14 @@ class TicketManager
         return $history;
     }
 
+    /**
+     * @param $from
+     * @param $number_of_items
+     * @param $column
+     * @param $direction
+     * @param null $user_id
+     * @return array
+     */
     public static function export_tickets_by_user_id(
         $from,
         $number_of_items,
@@ -1040,15 +1173,15 @@ class TicketManager
         $user_id = null
     ) {
         $table_support_category = Database::get_main_table(
-            TABLE_SUPPORT_CATEGORY
+            TABLE_TICKET_CATEGORY
         );
-        $table_support_tickets = Database::get_main_table(TABLE_SUPPORT_TICKET);
+        $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_priority = Database::get_main_table(
-            TABLE_SUPPORT_PRIORITY
+            TABLE_TICKET_PRIORITY
         );
-        $table_support_status = Database::get_main_table(TABLE_SUPPORT_STATUS);
+        $table_support_status = Database::get_main_table(TABLE_TICKET_STATUS);
         $table_support_messages = Database::get_main_table(
-            TABLE_SUPPORT_MESSAGE
+            TABLE_TICKET_MESSAGE
         );
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
         if (is_null($direction)) {
@@ -1184,8 +1317,7 @@ class TicketManager
             $row['responsable'] = utf8_decode($row['responsable']);
             $tickets[] = $row;
         }
+
         return $tickets;
     }
 }
-
-?>

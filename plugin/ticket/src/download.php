@@ -1,4 +1,12 @@
 <?php
+/* For licensing terms, see /license.txt */
+/**
+ *
+ * @package chamilo.plugin.ticket
+ */
+/**
+ * Init section
+ */
 require_once '../config.php';
 $plugin = TicketPlugin::create();
 
@@ -13,11 +21,9 @@ if (!isset($_GET['file']) || !isset($_GET['title']) || !isset($_GET['ticket_id']
 }
 if (!api_is_platform_admin()) {
     $ticket_id = intval($_GET['ticket_id']);
-    $table_support_messages = Database::get_main_table(TABLE_SUPPORT_MESSAGE);
-    $table_support_tickets = Database::get_main_table(TABLE_SUPPORT_TICKET);
-    $table_support_message_attachments = Database::get_main_table(
-        TABLE_SUPPORT_MESSAGE_ATTACHMENTS
-    );
+    $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
+    $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
+    $table_support_message_attachments = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);
     $sql = "SELECT DISTINCT  ticket.request_user
           FROM  $table_support_tickets ticket,
                 $table_support_messages message,
@@ -32,14 +38,16 @@ if (!api_is_platform_admin()) {
         api_not_allowed();
     }
 }
+
+// @todo replace by Security::check_abs_path()?
 $file_url = $_GET['file'];
 $file_url = str_replace('///', '&', $file_url);
 $file_url = str_replace(' ', '+', $file_url);
 $file_url = str_replace('/..', '', $file_url);
 $file_url = Database::escape_string($file_url);
 $title = $_GET['title'];
-$path_attachment = api_get_path(SYS_PATH);
-$path_message_attach = $path_attachment . 'tck_messageattch/';
+$path_attachment = api_get_path(SYS_ARCHIVE_PATH);
+$path_message_attach = $path_attachment . 'plugin_ticket_messageattch/';
 $full_file_name = $path_message_attach . $file_url;
 if (Security::check_abs_path($full_file_name, $path_message_attach)) {
     DocumentManager::file_send_for_download($full_file_name, true, $title);

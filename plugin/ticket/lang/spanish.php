@@ -1,11 +1,14 @@
 <?php /* License: see /license.txt */
 //Needed in order to show the plugin title
-$strings['plugin_title']        = "TicketSupport";
-$strings['plugin_comment']      = "Plugin para el soporte de Tickets de atencion sobre Chamilo.";
+$strings['plugin_title']        = "Tickets de soporte";
+$strings['plugin_comment']      = "Plugin para el soporte de tickets de atención dentro de Chamilo.";
+$strings['tool_enable']         = "Activar plugin de tickets";
+$strings['tool_enable_help']    = "Activar la herramienta de tickets hará disponible una nueva pestaña en la barra principal horizontal. Esta pestaña aparecerá para todos los usuarios y los guiará al sistema de gestión de tickets donde podrán verificar el estado de sus tickets.";
+$strings['TabsTickets']         = "Pestaña de tickets";
+
 
 $strings['TicketNum']        = "Ticket #";
 $strings['Date']             = "Fecha";
-$strings['DateLastEdition']  = "Ultima Edici&oacute;n";
 $strings['Category']      = "Categoria";
 $strings['User']          = "Usuario";
 $strings['Program']       = "Programa";

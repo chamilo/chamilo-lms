@@ -44,8 +44,12 @@ $table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION)
 
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
-// We initialize test as private (not anonymous):
-$isAnonymous = false;
+// Check if user is anonymous or not
+if (api_is_anonymous($_user['user_id'], true)) {
+    $isAnonymous = true;
+} else {
+    $isAnonymous = false;
+}
 
 // getting all the course information
 if (isset($_GET['course'])) {
@@ -72,9 +76,7 @@ if ($surveyCode != "") {
     } 
 // If is anonymous and it is allowed to take the survey as anonymous, mark survey as anonymous:
 } else {
-    if (api_is_anonymous($_user['user_id'], true)) {
-        $isAnonymous = true;
-    }
+    //nothing to do
 } 
 
 // Header
@@ -134,7 +136,7 @@ if (Database::num_rows($result) < 1) {
 $survey_invitation = Database::fetch_array($result, 'ASSOC');
 
 // Now we check if the user already filled the survey
-if ($survey_invitation['answered'] == 1 && !isset($_GET['user_id'])) {
+if ($isAnonymous && isset($_SESSION['surveyuser']) || ($survey_invitation['answered'] == 1 && !isset($_GET['user_id']))) {
     Display :: display_error_message(get_lang('YouAlreadyFilledThisSurvey'), false);
     Display :: display_footer();
     exit;

@@ -367,6 +367,15 @@ class AppPlugin
     }
 
     /**
+     * @param $plugin_name
+     * @param bool $forced
+     * @deprecated
+     */
+    public function get_plugin_info($plugin_name, $forced = false) {
+        return $this->getPluginInfo($plugin_name, $forced);
+    }
+
+    /**
      * Loads plugin info
      * @staticvar array $plugin_data
      * @param string plugin name

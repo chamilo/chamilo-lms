@@ -73,7 +73,8 @@ class Answer
 
         // fills arrays
         $objExercise = new Exercise($this->course_id);
-        $objExercise->read($_REQUEST['exerciseId']);
+        $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
+        $objExercise->read($exerciseId);
         if ($objExercise->random_answers == '1') {
             $this->readOrderedBy('rand()', '');// randomize answers
         } else {
@@ -84,7 +85,7 @@ class Answer
     /**
      * Clears $new_* arrays
      *
-     * @author - Olivier Brouckaert
+     * @author Olivier Brouckaert
      */
     function cancel() {
         $this->new_answer				= array();
@@ -101,7 +102,7 @@ class Answer
     /**
      * Reads answer information from the database
      *
-     * @author - Olivier Brouckaert
+     * @author Olivier Brouckaert
      */
     public function read()
     {
@@ -137,8 +138,8 @@ class Answer
      /**
      * returns all answer ids from this question Id
      *
-     * @author - Yoselyn Castillo
-     * @return - array - $id (answer ids)
+     * @author Yoselyn Castillo
+     * @return array - $id (answer ids)
      */
     public function selectAnswerId()
     {
@@ -223,8 +224,8 @@ class Answer
 	/**
 	 * returns the autoincrement id identificator
 	 *
-	 * @author - Juan Carlos Ra�a
-	 * @return - integer - answer num
+	 * @author Juan Carlos Ra�a
+	 * @return integer - answer num
 	 */
 	function selectAutoId($id)
     {
@@ -234,8 +235,8 @@ class Answer
 	/**
 	 * returns the number of answers in this question
 	 *
-	 * @author - Olivier Brouckaert
-	 * @return - integer - number of answers
+	 * @author Olivier Brouckaert
+	 * @return integer - number of answers
 	 */
 	function selectNbrAnswers()
     {
@@ -245,8 +246,8 @@ class Answer
 	/**
 	 * returns the question ID which the answers belong to
 	 *
-	 * @author - Olivier Brouckaert
-	 * @return - integer - the question ID
+	 * @author Olivier Brouckaert
+	 * @return integer - the question ID
 	 */
 	function selectQuestionId()
     {
@@ -256,8 +257,8 @@ class Answer
 	/**
 	 * returns the question ID of the destination question
 	 *
-	 * @author - Julio Montoya
-	 * @return - integer - the question ID
+	 * @author Julio Montoya
+	 * @return integer - the question ID
 	 */
 	function selectDestination($id)
     {
@@ -267,9 +268,9 @@ class Answer
     /**
 	 * returns the answer title
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 * @param - integer $id - answer ID
-	 * @return - string - answer title
+	 * @return string - answer title
 	 */
 	function selectAnswer($id)
     {
@@ -296,9 +297,9 @@ class Answer
     /**
      * returns the answer title from an answer's position
      *
-     * @author - Yannick Warnier
+     * @author Yannick Warnier
      * @param - integer $id - answer ID
-     * @return - bool - answer title
+     * @return bool - answer title
      */
 	function selectAnswerIdByPosition($pos) {
 		foreach ($this->position as $k => $v) {
@@ -374,9 +375,9 @@ class Answer
 	/**
 	 * tells if answer is correct or not
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 * @param - integer $id - answer ID
-	 * @return - integer - 0 if bad answer, not 0 if good answer
+	 * @return integer - 0 if bad answer, not 0 if good answer
 	 */
 	function isCorrect($id)
 	{
@@ -386,9 +387,9 @@ class Answer
 	/**
 	 * returns answer comment
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 * @param - integer $id - answer ID
-	 * @return - string - answer comment
+	 * @return string - answer comment
 	 */
 	function selectComment($id)
 	{
@@ -398,9 +399,9 @@ class Answer
 	/**
 	 * returns answer weighting
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 * @param - integer $id - answer ID
-	 * @return - integer - answer weighting
+	 * @return integer - answer weighting
 	 */
 	function selectWeighting($id)
 	{
@@ -410,9 +411,9 @@ class Answer
 	/**
 	 * returns answer position
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 * @param - integer $id - answer ID
-	 * @return - integer - answer position
+	 * @return integer - answer position
 	 */
 	function selectPosition($id)
 	{
@@ -506,7 +507,7 @@ class Answer
 	/**
 	 * Records answers into the data base
 	 *
-	 * @author - Olivier Brouckaert
+	 * @author Olivier Brouckaert
 	 */
 	function save()
     {
@@ -533,7 +534,8 @@ class Answer
 			    $sql.="($c_id, '$i','$questionId','$answer','$correct','$comment','$weighting','$position','$hotspot_coordinates','$hotspot_type','$destination'),";
             } else {
                 // https://support.chamilo.org/issues/6558
-                // function updateAnswers already escape_string, error if we do it twice. Feed function updateAnswers with none escaped strings
+                // function updateAnswers already escape_string, error if we do it twice.
+                // Feed function updateAnswers with none escaped strings
                 $this->updateAnswers(
                     $this->new_answer[$i],
                     $this->new_comment[$i],

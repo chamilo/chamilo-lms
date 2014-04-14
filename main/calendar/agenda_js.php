@@ -193,13 +193,15 @@ $course_code = api_get_course_id();
 
     $form = new FormValidator('form', 'get', null, null, array('id' => 'add_event_form'));
     $form->addElement('html', '<div id="visible_to_input">');
+
     $sendTo = $agenda->parseAgendaFilter($userId);
-    $showAll = false;
-    if ($sendTo == 'everyone') {
-        $showAll = true;
+    $addOnlyItemsInSendTo = true;
+
+    if ($sendTo['everyone']) {
+        $addOnlyItemsInSendTo = false;
     }
 
-    $agenda->showToForm($form, $sendTo, array(), $showAll);
+    $agenda->showToForm($form, $sendTo, array(), $addOnlyItemsInSendTo);
     $form->addElement('html', '</div>');
 
     $form->addElement('html', '<div id="visible_to_read_only" style="display: none">');

@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 /**
  * 	Exercise list: This script shows the list of exercises for administrators and students.
@@ -122,30 +121,40 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 
 $nameTools = get_lang('Exercices');
-
+$errorXmlExport = null;
 if ($is_allowedToEdit && !empty($choice) && $choice == 'exportqti2') {
     require_once 'export/qti2/qti2_export.php';
+
     $export = export_exercise($exerciseId, true);
 
     require_once api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
     $archive_path = api_get_path(SYS_ARCHIVE_PATH);
     $temp_dir_short = api_get_unique_id();
-    $temp_zip_dir = $archive_path."/".$temp_dir_short;
-    if (!is_dir($temp_zip_dir))
+    $temp_zip_dir = $archive_path.$temp_dir_short;
+    if (!is_dir($temp_zip_dir)) {
         mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
+    }
     $temp_zip_file = $temp_zip_dir."/".api_get_unique_id().".zip";
     $temp_xml_file = $temp_zip_dir."/qti2export_".$exerciseId.'.xml';
     file_put_contents($temp_xml_file, $export);
-    $zip_folder = new PclZip($temp_zip_file);
-    $zip_folder->add($temp_xml_file, PCLZIP_OPT_REMOVE_ALL_PATH);
-    $name = 'qti2_export_'.$exerciseId.'.zip';
 
-    //DocumentManager::string_send_for_download($export,true,'qti2export_'.$exerciseId.'.xml');
-    DocumentManager :: file_send_for_download($temp_zip_file, true, $name);
-    unlink($temp_zip_file);
-    unlink($temp_xml_file);
-    rmdir($temp_zip_dir);
-    exit; //otherwise following clicks may become buggy
+    $xmlReader = new XMLReader();
+    $xmlReader->open($temp_xml_file);
+    $xmlReader->setParserProperty(XMLReader::VALIDATE, true);
+    $isValid = $xmlReader->isValid();
+
+    if ($isValid) {
+        $zip_folder = new PclZip($temp_zip_file);
+        $zip_folder->add($temp_xml_file, PCLZIP_OPT_REMOVE_ALL_PATH);
+        $name = 'qti2_export_'.$exerciseId.'.zip';
+        DocumentManager::file_send_for_download($temp_zip_file, true, $name);
+        unlink($temp_zip_file);
+        unlink($temp_xml_file);
+        rmdir($temp_zip_dir);
+        exit; //otherwise following clicks may become buggy
+    } else {
+        $errorXmlExport = Display :: return_message(get_lang('ErrorWritingXMLFile'), 'error');
+    }
 }
 
 $htmlHeadXtra[] = '<script>
@@ -195,14 +204,16 @@ event_access_tool(TOOL_QUIZ);
 // Tool introduction
 Display :: display_introduction_section(TOOL_QUIZ);
 
+if (!empty($errorXmlExport)) {
+    echo $errorXmlExport;
+}
+
 HotPotGCt($documentPath, 1, api_get_user_id());
 
 // only for administrator
 
 if ($is_allowedToEdit) {
-
     if (!empty($choice)) {
-
         // All test choice, clean all test's results
         if ($choice == 'clean_all_test') {
             $check = Security::check_token('get');
@@ -649,7 +660,7 @@ if (!empty($exercise_list)) {
                             }
                         }
                         // Export qti ...
-                        $actions .= Display::url(Display::return_icon('export_qti2.png', 'IMS/QTI', '', ICON_SIZE_SMALL), 'exercice.php?choice=exportqti2&exerciseId='.$row['id']);
+                        $actions .= Display::url(Display::return_icon('export_qti2.png', 'IMS/QTI', '', ICON_SIZE_SMALL), 'exercice.php?choice=exportqti2&exerciseId='.$row['id'].'&'.api_get_cidreq());
                     } else {
                         // not session
                         $actions = Display::return_icon('edit_na.png', get_lang('ExerciseEditionNotAvailableInSession'));

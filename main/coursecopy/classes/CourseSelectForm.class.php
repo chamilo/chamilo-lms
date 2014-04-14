@@ -1,6 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 require_once 'Course.class.php';
 
 /**
@@ -475,7 +474,7 @@ class CourseSelectForm
                         }
                         break;
                     case RESOURCE_LEARNPATH:
-                        $lps = $_POST['resource'][RESOURCE_LEARNPATH];
+                        $lps = isset($_POST['resource'][RESOURCE_LEARNPATH]) ? $_POST['resource'][RESOURCE_LEARNPATH] : null;
                         if (!empty($lps)) {
                             foreach ($lps as $id => $obj) {
                                 $lp_resource = $course->resources[RESOURCE_LEARNPATH][$id];
@@ -499,9 +498,12 @@ class CourseSelectForm
 						// but in which a document was selected.
 						$documents = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
 						if (!empty($resources) && is_array($resources))
-							foreach($resources as $id => $obj) {
-								if ($obj->file_type == 'folder' && ! isset($_POST['resource'][RESOURCE_DOCUMENT][$id]) && is_array($documents)) {
-									foreach($documents as $id_to_check => $post_value) {
+							foreach ($resources as $id => $obj) {
+								if (isset($obj->file_type) && $obj->file_type == 'folder' &&
+                                    !isset($_POST['resource'][RESOURCE_DOCUMENT][$id]) &&
+                                    is_array($documents)
+                                ) {
+									foreach ($documents as $id_to_check => $post_value) {
 										$obj_to_check = $resources[$id_to_check];
 										$shared_path_part = substr($obj_to_check->path,0,strlen($obj->path));
 										if ($id_to_check != $id && $obj->path == $shared_path_part) {

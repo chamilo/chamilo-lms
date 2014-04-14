@@ -89,8 +89,7 @@
         "sunra/php-simple-html-dom-parser": "1.5.0"
     },
     "require-dev": {
-        "knplabs/gaufrette": "0.2.*@dev",
-        "bt51/gaufrette-serviceprovider": "dev-master",
+        "league/flysystem": "0.3.3",
         "symfony/browser-kit": "~2.3",
         "symfony/web-profiler-bundle": "~2.3",
         "silex/web-profiler": "~1.0",

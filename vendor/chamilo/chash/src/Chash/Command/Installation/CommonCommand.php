@@ -11,6 +11,8 @@ use Symfony\Component\Filesystem\Exception\IOException;
 use Alchemy\Zippy\Zippy;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Finder\Finder;
+use Doctrine\DBAL\Connection;
 
 /**
  * Class CommonCommand
@@ -28,16 +30,16 @@ class CommonCommand extends AbstractCommand
     private $migrationConfigurationFile;
 
     /**
-    * @param array $configuration
-    */
+     * @param array $configuration
+     */
     public function setConfigurationArray(array $configuration)
     {
         $this->configuration = $configuration;
     }
 
     /**
-    * @return array
-    */
+     * @return array
+     */
     public function getConfigurationArray()
     {
         return $this->configuration;
@@ -114,8 +116,8 @@ class CommonCommand extends AbstractCommand
     }
 
     /**
-    * @param array $databaseSettings
-    */
+     * @param array $databaseSettings
+     */
     public function setExtraDatabaseSettings(array $databaseSettings)
     {
         $this->extraDatabaseSettings = $databaseSettings;
@@ -218,6 +220,7 @@ class CommonCommand extends AbstractCommand
             }
         }
         natsort($dirList);
+
         return $dirList;
     }
 
@@ -500,8 +503,8 @@ class CommonCommand extends AbstractCommand
                 'parent' => '1.9.0'
             ),
             '1.9.x' => array(
-              'require_update' => false,
-              'parent' => '1.9.0'
+                'require_update' => false,
+                'parent' => '1.9.0'
             ),
             '1.10.0'  => array(
                 'require_update' => true,
@@ -872,7 +875,10 @@ class CommonCommand extends AbstractCommand
         $config->setProxyDir(__DIR__ . '/Proxies');
         $config->setProxyNamespace('Proxies');
 
-        $em = \Doctrine\ORM\EntityManager::create($this->getDatabaseSettings(), $config);
+        $em = \Doctrine\ORM\EntityManager::create(
+            $this->getDatabaseSettings(),
+            $config
+        );
 
         // Fixes some errors
         $platform = $em->getConnection()->getDatabasePlatform();
@@ -881,8 +887,8 @@ class CommonCommand extends AbstractCommand
 
         $helpers = array(
             'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection()),
-            'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em),
-            'configuration' => new \Chash\Helpers\ConfigurationHelper()
+            'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em)
+            //'configuration' => new \Chash\Helpers\ConfigurationHelper()
         );
 
         foreach ($helpers as $name => $helper) {
@@ -938,6 +944,13 @@ class CommonCommand extends AbstractCommand
                         $em = \Doctrine\ORM\EntityManager::create($params, $config);
                     }
                 }
+
+                if (!empty($em)) {
+                    $platform = $em->getConnection()->getDatabasePlatform();
+                    $platform->registerDoctrineTypeMapping('enum', 'string');
+                    $platform->registerDoctrineTypeMapping('set', 'string');
+                }
+
                 $helper = new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection());
                 $this->getApplication()->getHelperSet()->set($helper, $dbInfo['database']);
             }
@@ -945,16 +958,17 @@ class CommonCommand extends AbstractCommand
     }
 
     /**
-     * @param \Symfony\Component\Finder\Finder $files
+     * @param Finder $files
      * @param OutputInterface $output
      * @return int
      */
-    public function removeFiles(\Symfony\Component\Finder\Finder $files, OutputInterface $output)
+    public function removeFiles(Finder $files, OutputInterface $output)
     {
         $dryRun = $this->getConfigurationHelper()->getDryRun();
 
         if (count($files) < 1) {
             $output->writeln('<comment>No files found.</comment>');
+
             return 0;
         }
 
@@ -976,6 +990,8 @@ class CommonCommand extends AbstractCommand
         } catch (IOException $e) {
             echo "\n An error occurred while removing the directory: ".$e->getMessage()."\n ";
         }
+
+        return 0;
     }
 
     /**
@@ -1007,8 +1023,8 @@ class CommonCommand extends AbstractCommand
         $fs = new Filesystem();
 
         // Download the chamilo package from from github:
+        $versionTag = str_replace('.', '_', $version);
         if (empty($updateInstallation)) {
-            $versionTag = str_replace('.', '_', $version);
             $updateInstallation = "https://github.com/chamilo/chamilo-lms/archive/CHAMILO_".$versionTag."_STABLE.zip";
 
             switch($version) {
@@ -1027,6 +1043,7 @@ class CommonCommand extends AbstractCommand
             // Check temp folder
             if (!is_writable($defaultTempFolder)) {
                 $output->writeln("<comment>We don't have permissions to write in the temp folder: $defaultTempFolder</comment>");
+
                 return 0;
             }
 
@@ -1034,6 +1051,7 @@ class CommonCommand extends AbstractCommand
             if (strpos($updateInstallation, 'http') === false) {
                 if (!file_exists($updateInstallation)) {
                     $output->writeln("<comment>File does not exists: $updateInstallation</comment>");
+
                     return 0;
                 }
             } else {
@@ -1060,6 +1078,7 @@ class CommonCommand extends AbstractCommand
                 if (!file_exists($updateInstallationLocalName)) {
                     $output->writeln("<error>Can't download the file!</error>");
                     $output->writeln("<comment>Check if you can download this file in your browser first:</comment> <info>$updateInstallation</info>");
+
                     return 0;
                 }
             }
@@ -1077,6 +1096,7 @@ class CommonCommand extends AbstractCommand
                     $chamiloPath = $folderPath.'/chamilo-lms-CHAMILO_'.$versionTag.'_STABLE/main/inc/global.inc.php';
                     if (file_exists($chamiloPath)) {
                         $output->writeln("<comment>Files have been already extracted here: </comment><info>".$folderPath.'/chamilo-lms-CHAMILO_'.$versionTag.'_STABLE/'."</info>");
+
                         return $folderPath.'/chamilo-lms-CHAMILO_'.$versionTag.'_STABLE/';
                     }
                 }
@@ -1105,9 +1125,9 @@ class CommonCommand extends AbstractCommand
 
                         unlink($updateInstallation);
                         $output->writeln("<comment>Removing file</comment>:<info>$updateInstallation</info>");
-
                         //$output->writeln("Error:");
                         //$output->writeln($e->getMessage());
+
                         return 0;
                     }
                 }
@@ -1116,15 +1136,19 @@ class CommonCommand extends AbstractCommand
 
                 if (empty($chamiloLocationPath)) {
                     $output->writeln("<error>Chamilo folder structure not found in package.</error>");
+
                     return 0;
                 }
 
                 return $chamiloLocationPath;
             } else {
                 $output->writeln("<comment>File doesn't exist.</comment>");
+
                 return 0;
             }
         }
+
+        return 0;
     }
 
     /**
@@ -1294,10 +1318,10 @@ class CommonCommand extends AbstractCommand
     }
 
     /**
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Doctrine\DBAL\Connection $connection
+     * @param OutputInterface $output
+     * @param Connection $connection
      */
-    public function setPortalSettingsInChamilo(OutputInterface $output, \Doctrine\DBAL\Connection $connection)
+    public function setPortalSettingsInChamilo(OutputInterface $output, Connection $connection)
     {
         $adminSettings = $this->getAdminSettings();
 
@@ -1319,10 +1343,10 @@ class CommonCommand extends AbstractCommand
     }
 
     /**
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param \Doctrine\DBAL\Connection $connection
+     * @param OutputInterface $output
+     * @param Connection $connection
      */
-    public function setAdminSettingsInChamilo(OutputInterface $output, \Doctrine\DBAL\Connection $connection)
+    public function setAdminSettingsInChamilo(OutputInterface $output, Connection $connection)
     {
         $settings = $this->getAdminSettings();
 

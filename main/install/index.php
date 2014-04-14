@@ -325,6 +325,16 @@ $app->match('/portal-settings', function () use ($app) {
 
         if ($form->isValid()) {
             $data = $form->getData();
+
+            /* Drive-by sanitizing of the site URL:
+             * Remove excesive trailing slashes that could break the
+             * RewriteBase in .htaccess.
+             *
+             * See writeHtaccess() in
+             * vendor/chamilo/chash/src/Chash/Command/Installation/CommonCommand.php
+             */
+            $data['institution_url'] = rtrim($data['institution_url'], '/').'/';
+
             $app['session']->set('portal_settings', $data);
             $url = $app['url_generator']->generate('admin-settings');
 

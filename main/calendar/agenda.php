@@ -26,7 +26,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 $origin = isset($_GET['origin']) ? $_GET['origin'] : null;
 
 $this_section = SECTION_COURSES;
-
+$url = null;
 if (empty($action)) {
     if (!empty($course_info)) {
         $url = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=course'.'&'.api_get_cidreq();
@@ -93,6 +93,7 @@ $agenda->type = $event_type;
 
 $message = null;
 $content = null;
+
 if (api_is_allowed_to_edit(false, true) OR
     (api_get_course_setting('allow_user_edit_agenda') &&
     !api_is_anonymous() &&
@@ -102,6 +103,7 @@ if (api_is_allowed_to_edit(false, true) OR
 ) {
     switch ($action) {
         case 'add':
+            $actionName = get_lang('Add');
             $form = $agenda->getForm(array('action' => 'add'));
 
             if ($form->validate()) {
@@ -152,7 +154,9 @@ if (api_is_allowed_to_edit(false, true) OR
             }
             break;
         case 'edit':
+            $actionName = get_lang('Edit');
             $event = $agenda->get_event($eventId);
+
             if (empty($event)) {
                 api_not_allowed(true);
             }
@@ -168,7 +172,7 @@ if (api_is_allowed_to_edit(false, true) OR
                 $allDay = isset($values['all_day']) ? 'true' : 'false';
                 $startDate = $values['date_range_start'];
                 $endDate = $values['date_range_end'];
-                //$repeatType = isset($values['edit_repeat_type']) ? $values['edit_repeat_type'] : null;
+
                 $sendAttachment = isset($_FILES['user_upload']) ? true : false;
                 $attachment = $sendAttachment ? $_FILES['user_upload'] : null;
                 $attachmentComment = isset($values['file_comment']) ? $values['file_comment'] : null;
@@ -240,21 +244,6 @@ if (api_is_allowed_to_edit(false, true) OR
 
             }
             break;
-        case "announce":
-            //copying the agenda item into an announcement
-            /*if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $eventId))) {
-                // a coach can only delete an element belonging to his session
-                $ann_id = store_agenda_item_as_announcement($eventId);
-                $tool_group_link = (isset($_SESSION['toolgroup']) ? '&toolgroup='.$_SESSION['toolgroup'] : '');
-                $message = Display::return_message(
-                    get_lang('CopiedAsAnnouncement').'&nbsp;<a href='.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?id='.$ann_id.$tool_group_link.'">'.
-                    get_lang('NewAnnouncement').'</a>',
-                    'normal',
-                    false
-                );
-                Session::write('message', $message);
-            }*/
-            break;
         case 'importical':
             $form = $agenda->getImportCalendarForm();
             $content = $form->return_form();
@@ -289,13 +278,6 @@ if (api_is_allowed_to_edit(false, true) OR
                 $content = $agenda->delete_event($eventId);
             }
             break;
-        case "showhide":
-            /*if (!(api_is_course_coach() && !api_is_element_in_the_session(TOOL_AGENDA, $eventId))) {
-                // a coach can only delete an element belonging to his session
-                $content = showhide_agenda_item($eventId);
-                $action = 'view';
-            }*/
-            break;
     }
 }
 
@@ -310,6 +292,12 @@ if (!empty($group_id)) {
         "name" => get_lang('GroupSpace').' '.$group_properties['name']
     );
 }
+if (!empty($actionName)) {
+    $interbreadcrumb[] = array(
+        "url" => $url,
+        "name" => get_lang('Agenda')
+    );
+}
 
 // Tool introduction
 $introduction = Display::return_introduction_section(TOOL_CALENDAR_EVENT);
@@ -317,7 +305,7 @@ $introduction = Display::return_introduction_section(TOOL_CALENDAR_EVENT);
 $message = Session::read('message');
 Session::erase('message');
 
-$tpl = new Template(get_lang('Agenda'));
+$tpl = new Template($actionName);
 $tpl->assign('content', $content);
 $tpl->assign('actions', $actions);
 

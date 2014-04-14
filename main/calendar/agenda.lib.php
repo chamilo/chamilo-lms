@@ -468,12 +468,12 @@ class Agenda
     /**
      * Edits an event
      *
-     * @param int       $id id
-     * @param string    $start datetime format: 2012-06-14 09:00:00
-     * @param string    $end datetime format: 2012-06-14 09:00:00
-     * @param int       $allDay is all day 'true' or 'false'
-     * @param string    $title
-     * @param string    $content
+     * @param int $id
+     * @param string $start datetime format: 2012-06-14 09:00:00
+     * @param string $end datetime format: 2012-06-14 09:00:00
+     * @param int $allDay is all day 'true' or 'false'
+     * @param string $title
+     * @param string $content
      * @param array $usersToSend
      * @param int $editRepeatType
      * @param array $attachmentArray
@@ -493,6 +493,7 @@ class Agenda
         $attachmentComment = null
     ) {
         $start = api_get_utc_datetime($start);
+        $end = api_get_utc_datetime($end);
         $allDay = isset($allDay) && $allDay == 'true' ? 1 : 0;
 
         switch ($this->type) {

@@ -471,6 +471,7 @@ if ($form->validate()) {
     $_user['language'] 	= $values['language'];
     $_user['user_id']	= $user_id;
     $is_allowedCreateCourse = $values['status'] == 1;
+    $usersCanCreateCourse = (api_get_setting('allow_users_to_create_courses') == 'true');
 
     Session::write('_user', $_user);
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
@@ -498,7 +499,9 @@ if ($form->validate()) {
         }
 
         if ($is_allowedCreateCourse) {
-            $form_data['message'] = '<p>'. get_lang('NowGoCreateYourCourse',null,$_user['language']). "</p>";
+            if ($usersCanCreateCourse) {
+                $form_data['message'] = '<p>'. get_lang('NowGoCreateYourCourse',null,$_user['language']). "</p>";
+            }
             $form_data['action']  = '../create_course/add_course.php';
 
             if (api_get_setting('course_validation') == 'true') {
@@ -561,8 +564,11 @@ if ($form->validate()) {
     if (!empty($form_data['message'])) {
         $form_register->addElement('html', $form_data['message'].'<br /><br />');
     }
-    $form_register->addElement('html', $form_data['button']);
-    $form_register->addElement('html', $form_data['go_button']);
+    if ($usersCanCreateCourse) {
+        $form_register->addElement('html', $form_data['button']);
+    } else {
+        $form_register->addElement('html', $form_data['go_button']);
+    }
     $text_after_registration .= $form_register->return_form();
 
     //Just in case

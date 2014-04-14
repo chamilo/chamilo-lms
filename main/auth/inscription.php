@@ -505,6 +505,7 @@ if ($form->validate()) {
                 $form_data['button'] = Display::button('next', get_lang('CreateCourseRequest', null, $_user['language']), array('class' => 'btn btn-primary btn-large'));
             } else {
                 $form_data['button'] = Display::button('next', get_lang('CourseCreate', null, $_user['language']), array('class' => 'btn btn-primary btn-large'));
+                $form_data['go_button'] = '&nbsp;&nbsp;<a href="'.api_get_path(WEB_PATH).'index.php'.'">'.Display::span(get_lang('Next', null, $_user['language']), array('class' => 'btn btn-primary btn-large')).'</a>';
             }
         } else {
             if (api_get_setting('allow_students_to_browse_courses') == 'true') {
@@ -561,6 +562,7 @@ if ($form->validate()) {
         $form_register->addElement('html', $form_data['message'].'<br /><br />');
     }
     $form_register->addElement('html', $form_data['button']);
+    $form_register->addElement('html', $form_data['go_button']);
     $text_after_registration .= $form_register->return_form();
 
     //Just in case

@@ -2760,6 +2760,15 @@ function userIsSubscribedToWork($userId, $workId, $courseId)
     return false;
 }
 
+/**
+ * Get the list of students that have to submit their work
+ * @param integer $workId The internal ID of the assignment
+ * @param integer $courseId The course ID
+ * @param integer $groupId The group ID, if any
+ * @param integer $sessionId The session ID, if any
+ * @param bool $getCount Whether we want just the amount or the full result
+ * @return array|int An integer (if we just asked for the count) or an array of users
+ */
 function getStudentSubscribedToWork($workId, $courseId, $groupId = null, $sessionId = null, $getCount = false)
 {
     $usersInWork = null;
@@ -2772,7 +2781,7 @@ function getStudentSubscribedToWork($workId, $courseId, $groupId = null, $sessio
             $sessionId,
             null,
             null,
-            null,
+            STUDENT,
             $getCount
         );
     } else {

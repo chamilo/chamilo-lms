@@ -4213,7 +4213,7 @@ class CourseManager
         foreach ($courses as &$my_course) {
             $course_info = api_get_course_info($my_course['course_code']);
             $courseCode = $my_course['course_code'];
-            $categoryCode = $my_course['categoryCode'];
+            $categoryCode = !empty($my_course['categoryCode']) ? $my_course['categoryCode'] : "";
             $my_course['extra_info'] = $course_info;
             $my_course['extra_info']['go_to_course_button'] = '';
             $my_course['extra_info']['register_button'] = '';

@@ -2,8 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Symfony\Component\HttpFoundation\Request;
-
 use \ChamiloSession as Session;
+use ChamiloLMS\Provider\ReflectionControllerProvider;
 
 // Check if users is logged in
 $userIsLoggedIn = function (Request $request) use ($app) {
@@ -741,7 +741,7 @@ if ($alreadyInstalled) {
     );
 
     foreach ($controllers as $route => $controller) {
-        $app->mount($route, new ChamiloLMS\Provider\ReflectionControllerProvider($controller));
+        $app->mount($route, new ReflectionControllerProvider($controller));
     }
 }
 

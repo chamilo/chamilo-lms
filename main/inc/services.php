@@ -7,7 +7,6 @@
  * @package chamilo.services
  */
 
-// Needed to use the "entity" option in symfony forms
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 use Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator;
@@ -270,6 +269,7 @@ $app->register(new Silex\Provider\FormServiceProvider(), array(
 // URL generator provider.
 //$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
+// Needed to use the "entity" option in symfony forms
 class ManagerRegistry extends AbstractManagerRegistry
 {
     protected $container;
@@ -642,7 +642,6 @@ class ChamiloServiceProvider implements ServiceProviderInterface
         // Paths
         $app['paths'] = $app->share(function () use ($app) {
             return array(
-                //'root_web' => $app['root_web'],
                 'root_sys' => $app['root_sys'],
                 'sys_root' => $app['root_sys'], // just an alias
                 'sys_data_path' => $app['sys_data_path'],
@@ -687,7 +686,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 
         // Chamilo data filesystem.
         $app['chamilo.filesystem'] = $app->share(function () use ($app) {
-                $mediaConverter = null;
+            $mediaConverter = null;
             if (isset($app['configuration']['services']['media-alchemyst'])) {
                 $mediaConverter = $app['media-alchemyst'];
             }

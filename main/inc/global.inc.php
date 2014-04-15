@@ -25,9 +25,16 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Translation\Translator;
+use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Translation\Loader\PoFileLoader;
-use Symfony\Component\Translation\Loader\MoFileLoader;
-use Symfony\Component\Finder\Finder;
+//use Symfony\Component\Translation\Loader\MoFileLoader;
+use Symfony\Component\Translation\Dumper\MoFileDumper;
+use Symfony\Component\Translation\Loader\XliffFileLoader;
+use Symfony\Component\Translation\MessageCatalogue;
+
+use ChamiloLMS\Component\DataFilesystem\DataFilesystem;
+use ChamiloLMS\Entity\User;
 
 // Determine the directory path for this file.
 $includePath = dirname(__FILE__);
@@ -297,7 +304,6 @@ $cidReset = null;
  * before the controller is executed. */
 
 $app->before(
-
     function () use ($app) {
          /** @var Request $request */
         $request = $app['request'];
@@ -339,7 +345,7 @@ $app->before(
 
         UserManager::setEntityManager($app['orm.em']);
 
-        /** @var ChamiloLMS\Component\DataFilesystem\DataFilesystem $filesystem */
+        /** @var DataFilesystem $filesystem */
         $filesystem = $app['chamilo.filesystem'];
 
         if ($app['debug']) {
@@ -436,7 +442,7 @@ $app->before(
         $user = null;
 
         /** Security component. */
-        /** @var Symfony\Component\Security\Core\SecurityContext $security */
+        /** @var SecurityContext $security */
         $security = $app['security'];
 
         if ($security->isGranted('IS_AUTHENTICATED_FULLY')) {
@@ -444,7 +450,7 @@ $app->before(
             // Checking token in order to get the current user.
             $token = $security->getToken();
             if (null !== $token) {
-                /** @var \ChamiloLMS\Entity\User $user */
+                /** @var User $user */
                 $user = $token->getUser();
             }
 
@@ -477,7 +483,7 @@ $app->before(
         $language = api_get_setting('platformLanguage');
         $iso = api_get_language_isocode($language);
 
-        /** @var Symfony\Component\Translation\Translator $translator */
+        /** @var Translator $translator */
         $translator = $app['translator'];
         $translator->setLocale($iso);
 
@@ -508,11 +514,11 @@ $app->before(
         $app['translator'] = $app->share($app->extend('translator', function ($translator, $app) {
             $locale = $translator->getLocale();
 
-            /** @var Symfony\Component\Translation\Translator $translator  */
+            /** @var Translator $translator  */
             if ($app['translator.cache.enabled']) {
                 //$phpFileDumper = new Symfony\Component\Translation\Dumper\PhpFileDumper();
-                $dumper = new Symfony\Component\Translation\Dumper\MoFileDumper();
-                $catalogue = new Symfony\Component\Translation\MessageCatalogue($locale);
+                $dumper = new MoFileDumper();
+                $catalogue = new MessageCatalogue($locale);
                 $catalogue->add(array('foo' => 'bar'));
                 $dumper->dump($catalogue, array('path' => $app['sys_temp_path']));
             } else {
@@ -530,7 +536,7 @@ $app->before(
 
                 // Validators
                 $file = $app['root_sys'].'vendor/symfony/validator/Symfony/Component/Validator/Resources/translations/validators.'.$locale.'.xlf';
-                $translator->addLoader('xlf', new Symfony\Component\Translation\Loader\XliffFileLoader());
+                $translator->addLoader('xlf', new XliffFileLoader());
                 if (file_exists($file)) {
                     $translator->addResource('xlf', $file, $locale, 'validators');
                 }

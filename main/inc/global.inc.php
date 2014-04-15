@@ -452,6 +452,7 @@ $app->before(
             if (null !== $token) {
                 /** @var User $user */
                 $user = $token->getUser();
+                $filesystem->createMyFilesFolder($user);
             }
 
             // For backward compatibility.

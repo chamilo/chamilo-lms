@@ -9,6 +9,7 @@ use Symfony\Component\Console;
 use Sunra\PhpSimple\HtmlDomParser;
 use ChamiloLMS\Component\Editor\Connector;
 use ChamiloLMS\Component\Editor\Driver\CourseDriver;
+use ChamiloLMS\Entity\User;
 use MediaAlchemyst\Alchemyst;
 use Unoconv\Unoconv;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,15 +22,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class DataFilesystem
 {
-    /** @var array chamilo paths */
+    /** @var array Chamilo paths */
     private $paths;
 
-    /** @var \Symfony\Component\Filesystem\Filesystem  */
+    /** @var Filesystem  */
     private $fs;
-
-    /** @var Alchemyst  */
-    private $converter;
     private $connector;
+    private $converter;
 
     /**
      * @param array $paths
@@ -37,8 +36,12 @@ class DataFilesystem
      * @param Connector $connector
      * @param Alchemyst $converter
      */
-    public function __construct($paths, Filesystem $filesystem, Connector $connector, $converter = null)
-    {
+    public function __construct(
+        $paths,
+        Filesystem $filesystem,
+        Connector $connector,
+        $converter = null
+    ) {
         $this->paths = $paths;
         $this->fs = $filesystem;
         $this->converter = $converter;
@@ -109,8 +112,11 @@ class DataFilesystem
      * @param OutputInterface $output
      * @param string permissions
      */
-    public function createFolders(array $folderList, OutputInterface $output = null, $folderPermissions = null)
-    {
+    public function createFolders(
+        array $folderList,
+        OutputInterface $output = null,
+        $folderPermissions = null
+    ) {
         if (empty($folderPermissions)) {
             $folderPermissions = api_get_permissions_for_new_directories();
         }
@@ -190,7 +196,6 @@ class DataFilesystem
         $courseDriver = $this->connector->getDriver('CourseDriver');
 
         $dom = HtmlDomParser::str_get_html($content);
-        //var_dump($this->connector->getDrivers());
         /** @var \simple_html_dom_node $image */
         foreach ($dom->find('img') as $image) {
             $image->src = str_replace(
@@ -247,6 +252,20 @@ class DataFilesystem
             }
         }
         return false;
+    }
+
+    /**
+     * Creates the users/upload/X/my_files folder
+     * @param User $user
+     */
+    public function createMyFilesFolder(User $user)
+    {
+        $userId = $user->getUserId();
+        $path = \UserManager::get_user_picture_path_by_id($userId, 'system');
+
+        if (!$this->fs->exists($path['dir'].'my_files')) {
+            $this->createFolders(array($path['dir'].'my_files'));
+        }
     }
 
 }

@@ -39,9 +39,6 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
         /** @var User $user */
         $user = $token->getUser();
         $userId = $user->getUserId();
-
-        //$path = UserManager::get_user_picture_path_by_id($userId, 'system', true);
-
         $session = $request->getSession();
 
         \ChamiloSession::setSession($session);

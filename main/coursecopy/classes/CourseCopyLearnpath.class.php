@@ -9,82 +9,81 @@ class CourseCopyLearnpath extends Resource {
 	/**
 	 * Type of learnpath (can be dokeos (1), scorm (2), aicc (3))
 	 */
-	var $lp_type;
+	public $lp_type;
 	/**
 	 * The name
 	 */
-	var $name;
+	public $name;
 	/**
 	 * The reference
 	 */
-	var $ref;
+	public $ref;
 	/**
 	 * The description
 	 */
-	var $description;
+	public $description;
 	/**
 	 * Path to the learning path files
 	 */
-	var $path;
+	public $path;
 	/**
 	 * Whether additional commits should be forced or not
 	 */
-	var $force_commit;
+	public $force_commit;
 	/**
 	 * View mode by default ('embedded' or 'fullscreen')
 	 */
-	var $default_view_mod;
+	public $default_view_mod;
 	/**
 	 * Default character encoding
 	 */
-	var $default_encoding;
+	public $default_encoding;
 	/**
 	 * Display order
 	 */
-	var $display_order;
+	public $display_order;
 	/**
 	 * Content editor/publisher
 	 */
-	var $content_maker;
+	public $content_maker;
 	/**
 	 * Location of the content (local or remote)
 	 */
-	var $content_local;
+	public $content_local;
 	/**
 	 * License of the content
 	 */
-	var $content_license;
+	public $content_license;
 	/**
 	 * Whether to prevent reinitialisation or not
 	 */
-	var $prevent_reinit;
+	public $prevent_reinit;
 	/**
 	 * JavaScript library used
 	 */
-	var $js_lib;
+	public $js_lib;
 	/**
 	 * Debug level for this lp
 	 */
-	var $debug;
+	public $debug;
 	/**
 	 * The items
 	 */
-	var $items;
+	public $items;
 	/**
 	 * The learnpath visibility on the homepage
 	 */
-	var $visibility;
-	
+	public $visibility;
+
 	/**
 	 * Author info
 	 */
-	var $author;
-	
+	public $author;
+
 	/**
 	 * Author's image
 	 */
-	var $preview_image;
-								
+	public $preview_image;
 
 	/**
 	 * Create a new learnpath
@@ -127,18 +126,18 @@ class CourseCopyLearnpath extends Resource {
 		$this->content_license = $content_license;
 		$this->debug = $debug;
 		$this->visibility=$visibility;
-		
+
 		$this->use_max_score=$use_max_score;
 		$this->autolunch=$autolunch;
 		$this->created_on=$created_on;
 		$this->modified_on=$modified_on;
 		$this->publicated_on=$publicated_on;
 		$this->expired_on=$expired_on;
-		$this->session_id=$session_id;	
-		
+		$this->session_id=$session_id;
+
 		$this->author= $author;
 		$this->preview_image= $preview_image;
-		
+
 		$this->items = $items;
 	}
 	/**
@@ -153,8 +152,10 @@ class CourseCopyLearnpath extends Resource {
 	 */
 	function has_item($resource)
 	{
-		foreach($this->items as $index => $item) {
-			if( $item['id'] == $resource->get_id() && $item['type'] == $resource->get_type()) {
+		foreach ($this->items as $item) {
+			if ($item['id'] == $resource->get_id() &&
+                isset($item['type']) && $item['type'] == $resource->get_type()
+            ) {
 				return true;
 			}
 		}

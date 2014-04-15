@@ -487,7 +487,7 @@ if (!empty($valid_languages)) {
     if (!empty($language_priority1) && api_get_language_from_type($language_priority1) !== false ) {
         $language_interface =  api_get_language_from_type($language_priority1);
     } else {
-        if ($_course['language']) {
+        if (isset($_course['language'])) {
             $language_interface = $_course['language'];
         }
     }

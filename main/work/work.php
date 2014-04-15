@@ -58,7 +58,6 @@ $link_target_parameter = ""; // e.g. "target=\"_blank\"";
 $display_list_users_without_publication = isset($_GET['list']) && Security::remove_XSS($_GET['list']) == 'without' ? true : false;
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
-
 //Download folder
 if ($action == 'downloadfolder') {
     require 'downloadfolder.inc.php';
@@ -113,7 +112,7 @@ if (!empty($group_id)) {
         $interbreadcrumb[] = array ('url' => 'work.php','name' => get_lang('CreateAssignment'));
     }
 } else {
-    if (isset($origin) && $origin != 'learnpath') {
+    if ($origin != 'learnpath') {
 
         if (isset($_GET['id']) && !empty($_GET['id']) || $display_upload_form || $action == 'settings' || $action == 'create_dir') {
             $interbreadcrumb[] = array ('url' => 'work.php', 'name' => get_lang('StudentPublications'));
@@ -272,13 +271,7 @@ switch ($action) {
     break;
 }
 
-if (isset($origin) && $origin != 'learnpath') {
-    Display :: display_header(null);
-} else {
-    // We are in the learnpath tool
-    Display::display_reduced_header();
-}
-
+Display :: display_header(null);
 Display::display_introduction_section(TOOL_STUDENTPUBLICATION);
 
 if ($origin == 'learnpath') {
@@ -290,10 +283,6 @@ display_action_links($work_id, $curdirpath, $action);
 $message = Session::read('message');
 echo $message;
 Session::erase('message');
-
 echo $content;
 
-if ($origin != 'learnpath') {
-    //we are not in the learning path tool
-    Display :: display_footer();
-}
+Display::display_footer();

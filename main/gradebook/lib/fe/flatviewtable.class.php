@@ -308,6 +308,7 @@ class FlatViewTable extends SortableTable
                             //$Test->drawTreshold(0,143,55,72,TRUE,TRUE);
 
                             // Draw the bar graph
+                            $Test->setFontProperties(api_get_path(LIBRARY_PATH)."pchart/fonts/tahoma.ttf",11);
                             $Test->drawBarGraph($DataSet->GetData(),$DataSet->GetDataDescription(),TRUE);
 
                             //Set legend properties: width, height and text color and font

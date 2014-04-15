@@ -727,7 +727,7 @@ switch ($action) {
             $_SESSION['refresh'] = 1;
             // Remove lp from homepage if it is there.
             //$_SESSION['oLP']->toggle_visibility((int)$_GET['lp_id'],'i');
-            $_SESSION['oLP']->delete(null,(int)$_GET['lp_id'],'remove');
+            $_SESSION['oLP']->delete(null, $_GET['lp_id'], 'remove');
             Session::erase('oLP');
             require 'lp_list.php';
         }
@@ -752,7 +752,7 @@ switch ($action) {
         if ($debug > 0) error_log('New LP - publish action triggered', 0);
         if (!$lp_found) { error_log('New LP - No learnpath given for publish', 0); require 'lp_list.php'; }
         else {
-            learnpath::toggle_publish($_REQUEST['lp_id'],$_REQUEST['new_status']);
+            learnpath::toggle_publish($_REQUEST['lp_id'], $_REQUEST['new_status']);
             require 'lp_list.php';
         }
         break;

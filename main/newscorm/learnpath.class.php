@@ -919,27 +919,28 @@ class learnpath
         }
 
         $lp             = Database :: get_course_table(TABLE_LP_MAIN);
-        $lp_item        = Database :: get_course_table(TABLE_LP_ITEM); // Proposed by Christophe (clefevre), see below.
+        $lp_item        = Database :: get_course_table(TABLE_LP_ITEM);
         $lp_view        = Database :: get_course_table(TABLE_LP_VIEW);
         $lp_item_view   = Database :: get_course_table(TABLE_LP_ITEM_VIEW);
-
 
         //if ($this->debug > 0) { error_log('New LP - In learnpath::delete()', 0); }
         // Delete lp item id.
         foreach ($this->items as $id => $dummy) {
             //$this->items[$id]->delete();
-            $sql_del_view = "DELETE FROM $lp_item_view WHERE c_id = $course_id AND lp_item_id = '" . $id . "'";
-            $res_del_item_view = Database::query($sql_del_view);
+            $sql = "DELETE FROM $lp_item_view WHERE c_id = $course_id AND lp_item_id = '" . $id . "'";
+            Database::query($sql);
         }
 
-        // Proposed by Christophe (nickname: clefevre), see http://www.dokeos.com/forum/viewtopic.php?t=29673
-        $sql_del_item = "DELETE FROM $lp_item WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
-        $res_del_item = Database::query($sql_del_item);
+        // Proposed by Christophe (nickname: clefevre)
+        $sql = "DELETE FROM $lp_item WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
+        Database::query($sql);
 
-        $sql_del_view = "DELETE FROM $lp_view WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
+        $sql = "DELETE FROM $lp_view WHERE c_id = ".$course_id." AND lp_id = " . $this->lp_id;
         //if ($this->debug > 2) { error_log('New LP - Deleting views bound to lp '.$this->lp_id.': '.$sql_del_view, 0); }
-        $res_del_view = Database::query($sql_del_view);
+        Database::query($sql);
+
         self::toggle_publish($this->lp_id, 'i');
+
         //if ($this->debug > 2) { error_log('New LP - Deleting lp '.$this->lp_id.' of type '.$this->type, 0); }
         if ($this->type == 2 || $this->type == 3) {
             // This is a scorm learning path, delete the files as well.
@@ -972,11 +973,25 @@ class learnpath
                 }
             }
         }
-        $sql_del_lp = "DELETE FROM $lp WHERE c_id = ".$course_id." AND id = " . $this->lp_id;
+
+        $tbl_tool = Database :: get_course_table(TABLE_TOOL_LIST);
+        $link = 'newscorm/lp_controller.php?action=view&lp_id='.$this->lp_id;
+        // Delete tools
+        $sql = "DELETE FROM $tbl_tool WHERE c_id = ".$course_id." AND (link LIKE '$link%' AND image='scormbuilder.gif')";
+        Database::query($sql);
+
+        $sql = "DELETE FROM $lp WHERE c_id = ".$course_id." AND id = " . $this->lp_id;
         //if ($this->debug > 2) { error_log('New LP - Deleting lp '.$this->lp_id.': '.$sql_del_lp, 0); }
-        Database::query($sql_del_lp);
+        Database::query($sql);
         $this->update_display_order(); // Updates the display order of all lps.
-        api_item_property_update(api_get_course_info(), TOOL_LEARNPATH, $this->lp_id, 'delete', api_get_user_id());
+
+        api_item_property_update(
+            api_get_course_info(),
+            TOOL_LEARNPATH,
+            $this->lp_id,
+            'delete',
+            api_get_user_id()
+        );
 
         require_once '../gradebook/lib/be.inc.php';
 
@@ -1796,7 +1811,7 @@ class learnpath
             $navbar = '
                   <div class="buttons">
                     <a href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onClick="window.parent.API.save_asset();return true;" target="content_name_blank" title="stats" id="stats_link"><img border="0" src="../img/btn_stats.png" title="' . get_lang('Reporting') . '"></a>
-                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/btn_previus.png" title="' . get_lang('ScormPrevious') . '"></a>
+                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/btn_previous.png" title="' . get_lang('ScormPrevious') . '"></a>
                     <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/btn_next.png" title="' . get_lang('ScormNext') . '"></a>.
                     <a href="lp_controller.php?action=mode&mode=embedded" target="_top" title="embedded mode"><img border="0" src="../img/view_choose.gif" title="'.get_lang('ScormExitFullScreen').'"></a>
                   </div>';
@@ -1805,7 +1820,7 @@ class learnpath
             $navbar = '
                   <div class="buttons">
                     <a href="lp_controller.php?action=stats&'.api_get_cidreq(true).'&lp_id='.$lp_id.'" onClick="window.parent.API.save_asset();return true;" target="content_name" title="stats" id="stats_link"><img border="0" src="../img/btn_stats.png" title="' . get_lang('Reporting') . '"></a>
-                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/btn_previus.png" title="' . get_lang('ScormPrevious') . '"></a>
+                    <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'previous\');return false;" title="previous"><img border="0" src="../img/btn_previous.png" title="' . get_lang('ScormPrevious') . '"></a>
                     <a href="" onClick="switch_item(' . $mycurrentitemid . ',\'next\');return false;" title="next"  ><img border="0" src="../img/btn_next.png" title="' . get_lang('ScormNext') . '"></a>
                   </div>';
         }
@@ -2152,27 +2167,48 @@ class learnpath
 
 
     /**
-     * This function checks if the learnpath is visible for student after the progress of its prerequisite is completed, and considering time availability
-     * @param	int		Learnpath id
-     * @param	int		Student id
-     * @param   string  Course code (optional)
-     * @return	bool	True if
+     * Checks if the learning path is visible for student after the progress
+     * of its prerequisite is completed, considering the time availability and
+     * the LP visibility.
+     * @param int		Learnpath id
+     * @param int		Student id
+     * @param string Course code (optional)
+     * @param int $sessionId
+     * @return	bool
      */
-    public static function is_lp_visible_for_student($lp_id, $student_id, $courseCode = null) {
+    public static function is_lp_visible_for_student(
+        $lp_id,
+        $student_id,
+        $courseCode = null,
+        $sessionId = null
+    ) {
         $lp_id = (int)$lp_id;
         $course = api_get_course_info($courseCode);
+        $sessionId = intval($sessionId);
+
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
+        }
+
         $tbl_learnpath = Database::get_course_table(TABLE_LP_MAIN);
         // Get current prerequisite
         $sql = "SELECT id, prerequisite, publicated_on, expired_on
                 FROM $tbl_learnpath
                 WHERE c_id = ".$course['real_id']." AND id = $lp_id";
+
+        $itemInfo = api_get_item_property_info($course['real_id'], TOOL_LEARNPATH, $lp_id, $sessionId);
+
+        // If the item was deleted.
+        if ($itemInfo['visibility'] == 2) {
+            return false;
+        }
+
         $rs  = Database::query($sql);
         $now = time();
         if (Database::num_rows($rs)>0) {
             $row = Database::fetch_array($rs, 'ASSOC');
             $prerequisite = $row['prerequisite'];
             $is_visible = true;
-            $progress = 0;
 
             if (!empty($prerequisite)) {
                 $progress = self::get_db_progress(
@@ -2181,7 +2217,7 @@ class learnpath
                     '%',
                     $courseCode,
                     false,
-                    api_get_session_id()
+                    $sessionId
                 );
                 $progress = intval($progress);
                 if ($progress < 100) {
@@ -2200,7 +2236,7 @@ class learnpath
 	            	}
 	            }
 
-	            //Blocking empty start times see BT#2800
+	            // Blocking empty start times see BT#2800
 	            global $_custom;
 	            if (isset($_custom['lps_hidden_when_no_start_date']) && $_custom['lps_hidden_when_no_start_date']) {
 		            if (empty($row['publicated_on']) || $row['publicated_on'] == '0000-00-00 00:00:00') {
@@ -2218,8 +2254,10 @@ class learnpath
             }
             return $is_visible;
         }
+
         return false;
     }
+
     /**
      * Gets a progress bar for the learnpath by counting the number of items in it and the number of items
      * completed so far.
@@ -2921,13 +2959,13 @@ class learnpath
             // Style Status
 
             $class_name = array (
-                'not attempted' => 'scrom_not_attempted',
-                'incomplete'    => 'scrom_incomplete',
-                'failed'        => 'scrom_failed',
-                'completed'     => 'scrom_completed',
-                'passed'        => 'scrom_passed',
-                'succeeded'     => 'scrom_succeeded',
-                'browsed'       => 'scrom_completed',
+                'not attempted' => 'scorm_not_attempted',
+                'incomplete'    => 'scorm_incomplete',
+                'failed'        => 'scorm_failed',
+                'completed'     => 'scorm_completed',
+                'passed'        => 'scorm_passed',
+                'succeeded'     => 'scorm_succeeded',
+                'browsed'       => 'scorm_completed',
             );
 
             $style = 'scorm_item';
@@ -2991,7 +3029,7 @@ class learnpath
                             status <> 'incomplete'";
             $result = Database::query($sql);
             $count = Database :: num_rows($result);*/
-            
+
             /*if ($item['type'] == 'quiz') {
                 if ($item['status'] == 'completed') {
                     $html .= "&nbsp;<img id='toc_img_" . $item['id'] . "' src='" . $icon_name[$item['status']] . "' alt='" . substr($item['status'], 0, 1) . "' width='14' />";
@@ -3809,7 +3847,13 @@ class learnpath
         if ($set_visibility != 1) {
             $action = 'invisible';
         }
-        return api_item_property_update(api_get_course_info(), TOOL_LEARNPATH, $lp_id, $action, api_get_user_id());
+        return api_item_property_update(
+            api_get_course_info(),
+            TOOL_LEARNPATH,
+            $lp_id,
+            $action,
+            api_get_user_id()
+        );
     }
 
     /**
@@ -5041,28 +5085,35 @@ class learnpath
         if ($update_audio == 'true') {
             $return .= '<form action="' . api_get_self() . '?cidReq=' . Security :: remove_XSS($_GET['cidReq']) . '&amp;updateaudio=' . Security :: remove_XSS($_GET['updateaudio']) .'&amp;action=' . Security :: remove_XSS($_GET['action']) . '&amp;lp_id=' . $_SESSION['oLP']->lp_id . '" method="post" enctype="multipart/form-data" name="updatemp3" id="updatemp3">';
         }
-        $return .= '<div id="message"></div>';
+	$return .= '<div id="message"></div>';
+	if(count($this->items) == 0)
+	{
+		$return .= Display::display_normal_message(get_lang('YouShouldAddItemsBeforeAttachAudio'));
+	}
+	else
+	{
 
-        $return_audio = '<table class="data_table">';
-        $return_audio .= '<tr>';
-        $return_audio .= '<th width="60%">' . get_lang('Title') . '</th>';
-        $return_audio .= '<th>' . get_lang('Audio') . '</th>';
-   		$return_audio .= '</tr>';
+		$return_audio = '<table class="data_table">';
+		$return_audio .= '<tr>';
+		$return_audio .= '<th width="60%">' . get_lang('Title') . '</th>';
+		$return_audio .= '<th>' . get_lang('Audio') . '</th>';
+		$return_audio .= '</tr>';
 
-        if ($update_audio != 'true') {
-        	$return .= '<div class="span12">';
-            $return .= self::return_new_tree($update_audio);
-        	$return .='</div>';
-        	$return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'btn')), array('style'=>'float:left; margin-top:15px;width:100%'));
-        } else {
-            $return_audio .= self::return_new_tree($update_audio);
-        	$return .= $return_audio.'</table>';
-        }
+		if ($update_audio != 'true') {
+			$return .= '<div class="span12">';
+			$return .= self::return_new_tree($update_audio);
+			$return .='</div>';
+			$return .= Display::div(Display::url(get_lang('Save'), '#', array('id'=>'listSubmit', 'class'=>'btn')), array('style'=>'float:left; margin-top:15px;width:100%'));
+		} else {
+			$return_audio .= self::return_new_tree($update_audio);
+			$return .= $return_audio.'</table>';
+		}
 
-        // We need to close the form when we are updating the mp3 files.
-        if ($update_audio == 'true') {
-            $return .= '<div style="margin:40px 0; float:right;"><button class="save" type="submit" name="save_audio" id="save_audio">' . get_lang('SaveAudioAndOrganization') . '</button></div>'; // TODO: What kind of language variable is this?
-        }
+		// We need to close the form when we are updating the mp3 files.
+		if ($update_audio == 'true') {
+			$return .= '<div style="margin:40px 0; float:right;"><button class="save" type="submit" name="save_audio" id="save_audio">' . get_lang('SaveAudioAndOrganization') . '</button></div>'; // TODO: What kind of language variable is this?
+		}
+	}
 
         // We need to close the form when we are updating the mp3 files.
         if ($update_audio == 'true' && count($arrLP) != 0) {
@@ -7645,7 +7696,7 @@ class learnpath
                                 s1.write("container");
                             </script>';
         }
-        
+
         $url = api_get_self().'?cidReq='.Security::remove_XSS($_GET['cidReq']).'&view=build&id='.$item_id .'&lp_id='.$this->lp_id;
 
         $return .= Display::url(
@@ -7846,7 +7897,7 @@ class learnpath
         $row    = Database::fetch_array($result);
 
         $preq_id = $row['prerequisite'];
-        
+
 
         //$return = $this->display_manipulate($item_id, TOOL_DOCUMENT);
         $return = '<legend>';
@@ -7916,7 +7967,7 @@ class learnpath
             $return .=  $arrLP[$i]['title'] . '</label>';
             $return .= '</td>';
 
-          
+
             if ($arrLP[$i]['item_type'] == TOOL_QUIZ) {
                 // lets update max_score Quiz information depending of the Quiz Advanced properties
                 require_once api_get_path(LIBRARY_PATH)."lp_item.lib.php";

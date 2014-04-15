@@ -1219,7 +1219,7 @@ function get_forums_in_category($cat_id)
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
  */
-function get_forums($id = '', $course_code = '')
+function get_forums($id = '', $course_code = '', $includeGroupsForum = true)
 {
     $course_info = api_get_course_info($course_code);
 
@@ -1237,6 +1237,11 @@ function get_forums($id = '', $course_code = '')
 
     $forum_list = array();
 
+    $includeGroupsForumSelect = "";
+    if (!$includeGroupsForum) {
+        $includeGroupsForumSelect = " AND forum_of_group = 0 ";
+    }
+
     if ($id == '') {
         // Student
         // Select all the forum information of all forums (that are visible to students).
@@ -1248,6 +1253,7 @@ function get_forums($id = '', $course_code = '')
                     $condition_session AND
                     forum.c_id = $course_id AND
                     item_properties.c_id = $course_id
+                    $includeGroupsForumSelect
                 ORDER BY forum.forum_order ASC";
 
         // Select the number of threads of the forums (only the threads that are visible).
@@ -1286,6 +1292,7 @@ function get_forums($id = '', $course_code = '')
                         $condition_session AND
                         forum.c_id = $course_id AND
                         item_properties.c_id = $course_id
+                        $includeGroupsForumSelect
                     ORDER BY forum_order ASC";
 
             // Select the number of threads of the forums (only the threads that are not deleted).
@@ -3958,6 +3965,8 @@ function get_forums_of_group($group_id)
     // Handling all the forum information.
 
     $result = Database::query($sql);
+    $forum_list = array();
+
     while ($row = Database::fetch_array($result, 'ASSOC')) {
         $forum_list[$row['forum_id']] = $row;
     }
@@ -3976,14 +3985,15 @@ function get_forums_of_group($group_id)
     $result3 = Database::query($sql3);
     while ($row3 = Database::fetch_array($result3, 'ASSOC')) {
         if (is_array($forum_list)) {
-            if (array_key_exists($row3['forum_id'], $forum_list)) { // This is needed because sql3 takes also the deleted forums into account.
+            if (array_key_exists($row3['forum_id'], $forum_list)) {
+                // This is needed because sql3 takes also the deleted forums into account.
                 $forum_list[$row3['forum_id']]['number_of_posts'] = $row3['number_of_posts'];
             }
         }
     }
 
     // Finding the last post information (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname).
-    if (is_array($forum_list)) {
+    if (!empty($forum_list)) {
         foreach ($forum_list as $key => $value) {
             $last_post_info_of_forum = get_last_post_information($key, is_allowed_to_edit());
             $forum_list[$key]['last_post_id'] = $last_post_info_of_forum['last_post_id'];

@@ -15,7 +15,7 @@ require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
 $workId = isset($_GET['id']) ? intval($_GET['id']) : null;
-$origin = isset($origin) ? Security::remove_XSS($origin) : null;
+$origin = isset($_REQUEST['origin']) ? Security::remove_XSS($_REQUEST['origin']) : '';
 
 if (empty($workId)) {
     api_not_allowed(true);

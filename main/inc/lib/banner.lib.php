@@ -20,12 +20,12 @@ function get_tabs() {
 
     $navigation = array();
 
-	// Campus Homepage
-	$navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PATH).'index.php';
-	$navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
+    // Campus Homepage
+    $navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PATH).'index.php';
+    $navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
     $navigation[SECTION_CAMPUS]['key'] = 'homepage';
 
-	// My Courses
+    // My Courses
 
     if(api_is_allowed_to_create_course()) {
         // Link to my courses for teachers
@@ -38,32 +38,32 @@ function get_tabs() {
     $navigation['mycourses']['key'] = 'my-course';
 
     // My Profile
-	$navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
-	$navigation['myprofile']['title'] = get_lang('ModifyProfile');
+    $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
+    $navigation['myprofile']['title'] = get_lang('ModifyProfile');
     $navigation['myprofile']['key'] = 'profile';
 	// Link to my agenda
-	$navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=personal';
-	$navigation['myagenda']['title'] = get_lang('MyAgenda');
+    $navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=personal';
+    $navigation['myagenda']['title'] = get_lang('MyAgenda');
     $navigation['myagenda']['key'] = 'agenda';
 
 	// Gradebook
 	if (api_get_setting('gradebook_enable') == 'true') {
-		$navigation['mygradebook']['url'] = api_get_path(WEB_CODE_PATH).'gradebook/gradebook.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
-		$navigation['mygradebook']['title'] = get_lang('MyGradebook');
-        $navigation['mygradebook']['key'] = 'gradebook';
+            $navigation['mygradebook']['url'] = api_get_path(WEB_CODE_PATH).'gradebook/gradebook.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '' );
+            $navigation['mygradebook']['title'] = get_lang('MyGradebook');
+            $navigation['mygradebook']['key'] = 'gradebook';
 	}
 
 	// Reporting
 	if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
-		// Link to my space
-		$navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/'.(api_is_drh()?'session.php':'');
-		$navigation['session_my_space']['title'] = get_lang('MySpace');
-        $navigation['session_my_space']['key'] = 'my-space';
+            // Link to my space
+            $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/'.(api_is_drh()?'session.php':'');
+            $navigation['session_my_space']['title'] = get_lang('MySpace');
+            $navigation['session_my_space']['key'] = 'my-space';
 	} else {
-		// Link to my progress
-		$navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH).'auth/my_progress.php';
-		$navigation['session_my_progress']['title'] = get_lang('MyProgress');
-        $navigation['session_my_progress']['key'] = 'my-progress';
+            // Link to my progress
+            $navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH).'auth/my_progress.php';
+            $navigation['session_my_progress']['title'] = get_lang('MyProgress');
+            $navigation['session_my_progress']['key'] = 'my-progress';
 	}
 
 
@@ -90,16 +90,16 @@ function get_tabs() {
 
 	// Social
 	if (api_get_setting('allow_social_tool')=='true') {
-		$navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
-		$navigation['social']['title'] = get_lang('SocialNetwork');
-        $navigation['social']['key'] = 'social-network';
+            $navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
+            $navigation['social']['title'] = get_lang('SocialNetwork');
+            $navigation['social']['key'] = 'social-network';
 	}
 
 	// Dashboard
 	if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
-		$navigation['dashboard']['url'] = api_get_path(WEB_CODE_PATH).'dashboard/index.php';
-		$navigation['dashboard']['title'] = get_lang('Dashboard');
-        $navigation['dashboard']['key'] = 'dashboard';
+            $navigation['dashboard']['url'] = api_get_path(WEB_CODE_PATH).'dashboard/index.php';
+            $navigation['dashboard']['title'] = get_lang('Dashboard');
+            $navigation['dashboard']['key'] = 'dashboard';
 	}
 
 	// Reports
@@ -112,17 +112,16 @@ function get_tabs() {
 	// Custom tabs
 	for ($i = 1; $i<=3; $i++)
 		if (api_get_setting('custom_tab_'.$i.'_name') && api_get_setting('custom_tab_'.$i.'_url')) {
-			$navigation['custom_tab_'.$i]['url'] = api_get_setting('custom_tab_'.$i.'_url');
-			$navigation['custom_tab_'.$i]['title'] = api_get_setting('custom_tab_'.$i.'_name');
-            $navigation['custom_tab_'.$i]['key'] = 'custom_tab_'.$i;
-
+                    $navigation['custom_tab_'.$i]['url'] = api_get_setting('custom_tab_'.$i.'_url');
+                    $navigation['custom_tab_'.$i]['title'] = api_get_setting('custom_tab_'.$i.'_name');
+                    $navigation['custom_tab_'.$i]['key'] = 'custom_tab_'.$i;
 		}
 
 	// Platform administration
 	if (api_is_platform_admin(true)) {
-		$navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/';
-		$navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
-        $navigation['platform_admin']['key'] = 'admin';
+            $navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/';
+            $navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
+            $navigation['platform_admin']['key'] = 'admin';
 	}
 	return $navigation;
 }
@@ -390,7 +389,7 @@ function return_menu() {
     } else {
         //$errorMsg = get_lang('HomePageFilesNotReadable');
     }
-
+    
     $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
 
     $open = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top);
@@ -637,7 +636,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
         }
 
         if (!empty($lis)) {
-            $html .= Display::tag('ul', $lis, array('class'=>'breadcrumb'));
+            $html .= Display::tag('ul', $lis, array('class'=>'breadcrumb','style'=>'margin-top: 0'));
         }
     }
     return $html ;

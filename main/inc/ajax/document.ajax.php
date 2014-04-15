@@ -24,6 +24,8 @@ switch($action) {
             exit;
         }
 
+        $ifExists = isset($_POST['if_exists']) ? $_POST['if_exists'] : null;
+
         if (!empty($_FILES)) {
             require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php';
             $file = $_FILES['file'];
@@ -33,7 +35,7 @@ switch($action) {
                 $file['name'],
                 null,
                 0,
-                $_POST['if_exists'],
+                $ifExists,
                 false,
                 false
             );

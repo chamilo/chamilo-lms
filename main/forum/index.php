@@ -147,7 +147,8 @@ event_access_tool(TOOL_FORUM);
 $forumCategories = get_forum_categories();
 
 // Step 2: We find all the forums (only the visible ones if it is a student).
-$forum_list	= get_forums();
+// display group forum in general forum tool depending to configuration option
+$forum_list	= get_forums('', '', apiGetDisplayGroupsForumInGeneralTool());
 $user_id = api_get_user_id();
 
 /* RETRIEVING ALL GROUPS AND THOSE OF THE USER */
@@ -227,7 +228,7 @@ if (is_array($forumCategories)) {
         }
 
         if (empty($forumCategory['cat_title'])) {
-            $forumCategory['cat_title'] = get_lang('NoCategory');
+            $forumCategory['cat_title'] = get_lang('WithoutCategory');
         }
 
         echo '<table class="forum_table">';
@@ -283,7 +284,7 @@ if (is_array($forumCategories)) {
                 }
 
                 // Note: This can be speeded up if we transform the $forum_list to an array that uses the forum_category as the key.
-                if ($forum['forum_category'] == $forumCategory['cat_id']) {
+                if (isset($forum['forum_category']) && $forum['forum_category'] == $forumCategory['cat_id']) {
                     $show_forum = false;
 
                     // SHOULD WE SHOW THIS PARTICULAR FORUM
@@ -322,7 +323,7 @@ if (is_array($forumCategories)) {
 								{
 									$td_width = $image_size['width'];
 								}
-                                $forum_image =  "<img src=\"$image_path\" $img_attributes>";								
+                                $forum_image =  "<img src=\"$image_path\" $img_attributes>";
                             } else {
                                 $forum_image = '';
 								$td_width = 20;

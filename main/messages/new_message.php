@@ -213,7 +213,7 @@ function manage_form($default, $select_from_user_list = null, $sent_to = null) {
 
 		//adding reply mail
 		$user_reply_info = UserManager::get_user_info_by_id($message_reply_info['user_sender_id']);
-		$default['content'] = '<br />'.sprintf(get_lang('XWroteY'), api_get_person_name($user_reply_info['firstname'], $user_reply_info['lastname']), Security::filter_terms($message_reply_info['content']));
+		$default['content'] = '<p><br/></p>'.sprintf(get_lang('XWroteY'), api_get_person_name($user_reply_info['firstname'], $user_reply_info['lastname']), Security::filter_terms($message_reply_info['content']));
 	}
 
 	if (empty($group_id)) {

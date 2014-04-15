@@ -468,12 +468,12 @@ class Agenda
     /**
      * Edits an event
      *
-     * @param int       $id id
-     * @param string    $start datetime format: 2012-06-14 09:00:00
-     * @param string    $end datetime format: 2012-06-14 09:00:00
-     * @param int       $allDay is all day 'true' or 'false'
-     * @param string    $title
-     * @param string    $content
+     * @param int $id
+     * @param string $start datetime format: 2012-06-14 09:00:00
+     * @param string $end datetime format: 2012-06-14 09:00:00
+     * @param int $allDay is all day 'true' or 'false'
+     * @param string $title
+     * @param string $content
      * @param array $usersToSend
      * @param int $editRepeatType
      * @param array $attachmentArray
@@ -493,6 +493,7 @@ class Agenda
         $attachmentComment = null
     ) {
         $start = api_get_utc_datetime($start);
+        $end = api_get_utc_datetime($end);
         $allDay = isset($allDay) && $allDay == 'true' ? 1 : 0;
 
         switch ($this->type) {
@@ -1508,6 +1509,7 @@ class Agenda
         $selectedEveryoneOptions = array();
         if (isset($sendTo['everyone']) && $sendTo['everyone']) {
             $selectedEveryoneOptions = array('selected');
+            $sendToUsers = array();
         }
 
         $select->addOption(get_lang('Everyone'), 'everyone', $selectedEveryoneOptions);
@@ -1537,6 +1539,7 @@ class Agenda
             $select->addOptGroup($options, get_lang('Groups'));
         }
 
+
         // adding the individual users to the select form
         if (is_array($userList)) {
             $options = array();
@@ -1547,9 +1550,11 @@ class Agenda
                 );
 
                 $selected = in_array($user['user_id'], $sendToUsers) ? true : false;
+
                 if ($selected) {
                     $option['selected'] = 'selected';
                 }
+
                 if ($addOnlyItemsInSendTo) {
                     if ($selected) {
                         $options[] = $option;
@@ -1558,6 +1563,7 @@ class Agenda
                     $options[] = $option;
                 }
             }
+
             $select->addOptGroup($options, get_lang('Users'));
         }
     }
@@ -1698,9 +1704,7 @@ class Agenda
 
                 $form->freeze(array('repeat_type', 'repeat_end_day'));
                 $repeat->_attributes['disabled'] = 'disabled';
-
             }
-
             $form->addElement('html', '</div>');
         }
 
@@ -1769,16 +1773,21 @@ class Agenda
 
     /**
      * @param FormValidator $form
-     * @param array $sendTo array('users' => [1, 2], 'groups' => [3, 4])
+     * @param array $sendTo array('everyone' => false, 'users' => [1, 2], 'groups' => [3, 4])
      * @param array $attributes
      * @param bool $addOnlyItemsInSendTo
      * @return bool
      */
-    public function showToForm($form, $sendTo = array(), $attributes = array(), $addOnlyItemsInSendTo = false)
-    {
+    public function showToForm(
+        $form,
+        $sendTo = array(),
+        $attributes = array(),
+        $addOnlyItemsInSendTo = false
+    ) {
         if ($this->type != 'course') {
             return false;
         }
+
         $order = 'lastname';
         if (api_is_western_name_order()) {
             $order = 'firstname';
@@ -2276,6 +2285,4 @@ class Agenda
             'groups' => array($groupId)
         );
     }
-
-
 }

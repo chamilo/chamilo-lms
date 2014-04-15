@@ -155,12 +155,9 @@ class survey_manager
     public static function store_survey($values)
     {
         $_user = api_get_user_info();
-
-		// Table defnitions
+        $course_id = api_get_course_int_id();
 		$table_survey 	= Database :: get_course_table(TABLE_SURVEY);
 		$shared_survey_id = 0;
-
-        $course_id = api_get_course_int_id();
 
 		if (!$values['survey_id'] || !is_numeric($values['survey_id'])) {
 			// Check if the code doesn't soon exists in this language

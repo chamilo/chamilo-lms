@@ -151,8 +151,8 @@ $form->addElement('html_editor', 'survey_subtitle', get_lang('SurveySubTitle'), 
 
 // Pass the language of the survey in the form
 $form->addElement('hidden', 'survey_language');
-$form->addElement('datepickerdate', 'start_date', get_lang('StartDate'), array('form_name' => 'survey'));
-$form->addElement('datepickerdate', 'end_date', get_lang('EndDate'), array('form_name' => 'survey'));
+$form->addElement('date_picker', 'start_date', get_lang('StartDate'));
+$form->addElement('date_picker', 'end_date', get_lang('EndDate'));
 
 //$group = '';
 //$group[] =& HTML_QuickForm::createElement('radio', 'survey_share', null, get_lang('Yes'), $form_share_value);

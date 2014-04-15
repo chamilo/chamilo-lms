@@ -1,4 +1,9 @@
 <?php
+/** @deprecated */
+exit;
+
+
+
 /* For licensing terms, see /license.txt */
 /**
  *

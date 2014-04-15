@@ -384,6 +384,7 @@ EOT;
      * A rule is added to check if the date is a valid one
      * @param string $label						The label for the form-element
      * @param string $name						The element name
+     * @deprecated
      */
     function add_datepicker($name, $label)
     {
@@ -397,6 +398,7 @@ EOT;
      * A rule is added to check if the date is a valid one
      * @param string $label						The label for the form-element
      * @param string $name						The element name
+     * @deprecated
      */
     function add_datepickerdate($name, $label)
     {
@@ -411,6 +413,7 @@ EOT;
      * before the second one.
      * @param string $label						The label for the form-element
      * @param string $name						The element name
+     * @deprecated
      */
     function add_timewindow($name_1, $name_2, $label_1, $label_2)
     {
@@ -421,6 +424,7 @@ EOT;
 
     /**
      * Adds a button to the form to add resources.
+     * @deprecated
      */
     function add_resource_button()
     {

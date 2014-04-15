@@ -397,6 +397,8 @@ Display :: display_header($tool_name);
 
 // The action images.
 $action_images['platform'] = 'platform.png';
+$action_images['admin'] = 'teacher.png';
+$action_images['registration'] = 'lock.png';
 $action_images['course'] = 'course.png';
 $action_images['session'] = 'session.png';
 $action_images['tools'] = 'tools.png';
@@ -418,15 +420,16 @@ $action_images['search'] = 'search.png';
 $action_images['stylesheets'] = 'stylesheets.png';
 $action_images['templates'] = 'template.png';
 $action_images['plugins'] = 'plugins.png';
-$action_images['shibboleth'] = 'shibboleth.png';
-$action_images['facebook'] = 'facebook.png';
-// @todo Use a different image.
-$action_images['logtransactions'] = 'tuning.png';
+//$action_images['shibboleth'] = 'shibboleth.png';
+//$action_images['facebook'] = 'facebook.png';
+//$action_images['logtransactions'] = 'tuning.png';
 
 $action_array = array();
 $resultcategories = array();
 
 $resultcategories[] = array('category' => 'Platform');
+$resultcategories[] = array('category' => 'Admin');
+$resultcategories[] = array('category' => 'Registration');
 $resultcategories[] = array('category' => 'Course');
 $resultcategories[] = array('category' => 'Session');
 $resultcategories[] = array('category' => 'Languages');
@@ -442,11 +445,11 @@ $resultcategories[] = array('category' => 'Search');
 $resultcategories[] = array('category' => 'Stylesheets');
 $resultcategories[] = array('category' => 'Templates');
 $resultcategories[] = array('category' => 'Plugins');
-$resultcategories[] = array('category' => 'LDAP');
-$resultcategories[] = array('category' => 'CAS');
-$resultcategories[] = array('category' => 'Shibboleth');
-$resultcategories[] = array('category' => 'Facebook');
-$resultcategories[] = array('category' => 'LogTransactions');
+//$resultcategories[] = array('category' => 'LDAP');
+//$resultcategories[] = array('category' => 'CAS');
+//$resultcategories[] = array('category' => 'Shibboleth');
+//$resultcategories[] = array('category' => 'Facebook');
+//$resultcategories[] = array('category' => 'LogTransactions');
 
 
 foreach ($resultcategories as $row) {

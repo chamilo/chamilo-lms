@@ -340,6 +340,7 @@ class GroupManager
     /**
      * Create a group for every class subscribed to the current course
      * @param int $category_id The category in which the groups should be created
+     * @return array
      */
     public static function create_class_groups($category_id)
     {

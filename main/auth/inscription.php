@@ -544,13 +544,13 @@ if ($form->validate()) {
                     $form_data['button'] = Display::button('next', get_lang('GoToCourse', null, $_user['language']), array('class' => 'btn btn-primary btn-large'));
 
                     $exercise_redirect = intval(Session::read('exercise_redirect'));
-
-                    if (!empty($exercise_redirect)) {
+                    $objExercise = new Exercise();
+                    $result = $objExercise->read($exercise_id);
+                    if (!empty($exercise_redirect) && !empty($result)) {
                         $form_data['action'] = api_get_path(WEB_CODE_PATH).'exercice/overview.php?exerciseId='.intval($exercise_redirect).'&cidReq='.$course_info['code'];
                         $form_data['message'] .= '<br />'.get_lang('YouCanAccessTheExercise');
                         $form_data['button'] = Display::button('next', get_lang('Go', null, $_user['language']), array('class' => 'btn btn-primary btn-large'));
                     }
-
                     if (!empty($form_data['action'])) {
                         header('Location: '.$form_data['action']);
                         exit;

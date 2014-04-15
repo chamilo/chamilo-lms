@@ -2177,7 +2177,7 @@ class UserManager
               FROM $tbl_session as session
                   LEFT JOIN $tbl_session_category session_category
                   ON (session_category_id = session_category.id)
-                  INNER JOIN $tbl_session_course_user as session_rel_course_user
+                  LEFT JOIN $tbl_session_course_user as session_rel_course_user
                   ON (session_rel_course_user.id_session = session.id)
               WHERE (
                         session_rel_course_user.id_user = $user_id OR

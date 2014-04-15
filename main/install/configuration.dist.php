@@ -163,3 +163,6 @@ $_configuration['deny_delete_users'] = false;
 // Version settings
 $_configuration['system_version']    = '{NEW_VERSION}';
 $_configuration['system_stable']     = NEW_VERSION_STABLE;
+
+// Allow course tutors in sessions to add existing students to their session
+$_configuration['allow_tutors_to_assign_students_to_session'] = 'false'; 

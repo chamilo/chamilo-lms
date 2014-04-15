@@ -65,19 +65,14 @@ if (!api_is_allowed_to_edit()) {
 }
 
 // Getting the survey information
-$survey_id = Security::remove_XSS($_GET['survey_id']);
+$survey_id = isset($_GET['survey_id']) ? intval($_GET['survey_id']) : null;
 $survey_data = survey_manager::get_survey($survey_id);
 
 // Additional information
 $course_id = api_get_course_id();
 $session_id = api_get_session_id();
 $gradebook_link_type = 8;
-
-/* $urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
-  if (api_strlen(strip_tags($survey_data['title'])) > 40) {
-  $urlname .= '...';
-  } */
-$urlname = $survey_data['title'];
+$urlname = isset($survey_data['title']) ? strip_tags($survey_data['title']) : null;
 
 // Breadcrumbs
 if ($_GET['action'] == 'add') {
@@ -201,14 +196,13 @@ if ($_GET['action'] == 'add') {
     $defaults['parent_id'] = 0;
 }
 
-if ($survey_data['survey_type'] == 1 || $_GET['action'] == 'add') {
+if (isset($survey_data['survey_type']) && $survey_data['survey_type'] == 1 || $_GET['action'] == 'add') {
     $form->addElement('checkbox', 'one_question_per_page', null, get_lang('OneQuestionPerPage'));
     $form->addElement('checkbox', 'shuffle', null, get_lang('ActivateShuffle'));
 }
-
+$input_name_list = null;
 if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id)) {
     if ($survey_data['anonymous'] == 0) {
-
         $form->addElement('checkbox', 'show_form_profile', null, get_lang('ShowFormProfile'), 'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
 
         if ($survey_data['show_form_profile'] == 1) {
@@ -226,7 +220,8 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id))
                     $input_name_list.= 'profile_'.$key.',';
                 }
             }
-            // Necesary to know the fields
+
+            // Necessary to know the fields
             $form->addElement('hidden', 'input_name_list', $input_name_list);
 
             // Set defaults form fields
@@ -323,7 +318,7 @@ if ($form->validate()) {
         Display::display_confirmation_message($return['message'], false);
     } else {
         // Redirecting to the survey page (whilst showing the return message)
-        header('location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$return['id'].'&message='.$return['message'].'&'.api);
+        header('location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$return['id'].'&message='.$return['message'].'&'.api_get_cidreq());
         exit;
     }
 } else {

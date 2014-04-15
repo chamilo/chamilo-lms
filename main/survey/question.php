@@ -33,7 +33,7 @@ if (!api_is_allowed_to_edit(false, true)) {
 }
 
 // Is valid request
-$is_valid_request = $_REQUEST['is_executable'];
+$is_valid_request = isset($_REQUEST['is_executable']) ? $_REQUEST['is_executable'] : null;
 if ($request_index != $is_valid_request) {
 	if ($request_index == 'save_question') {
 		unset($_POST[$request_index]);

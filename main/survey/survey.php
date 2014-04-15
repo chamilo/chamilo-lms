@@ -69,10 +69,12 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 	$tool_name .= '...';
 }
 
-if ($is_survey_type_1 && $_GET['action'] == 'addgroup' || $_GET['action'] == 'deletegroup') {
+if ($is_survey_type_1 &&
+    isset($_GET['action']) &&
+    ($_GET['action'] == 'addgroup' || $_GET['action'] == 'deletegroup')
+) {
 	$_POST['name'] = trim($_POST['name']);
-
-	if (($_GET['action'] == 'addgroup')) {
+	if ($_GET['action'] == 'addgroup') {
 		if (!empty($_POST['group_id'])) {
 			Database::query('UPDATE '.$table_survey_question_group.' SET description = \''.Database::escape_string($_POST['description']).'\'
 			                 WHERE c_id = '.$course_id.' AND id = \''.Database::escape_string($_POST['group_id']).'\'');
@@ -98,10 +100,10 @@ if ($is_survey_type_1 && $_GET['action'] == 'addgroup' || $_GET['action'] == 'de
 Display::display_header($tool_name, 'Survey');
 
 // Action handling
-$my_action_survey		= Security::remove_XSS($_GET['action']);
-$my_question_id_survey  = Security::remove_XSS($_GET['question_id']);
+$my_action_survey		= isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
+$my_question_id_survey  = isset($_GET['question_id']) ? Security::remove_XSS($_GET['question_id']) : null;
 $my_survey_id_survey    = Security::remove_XSS($_GET['survey_id']);
-$message_information    = Security::remove_XSS($_GET['message']);
+$message_information    = isset($_GET['message']) ? Security::remove_XSS($_GET['message']) : null;
 
 if (isset($_GET['action'])) {
 	if (($_GET['action'] == 'moveup' || $_GET['action'] == 'movedown') && isset($_GET['question_id'])) {

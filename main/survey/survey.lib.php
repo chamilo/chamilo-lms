@@ -281,7 +281,7 @@ class survey_manager
 						'".Database::escape_string($values['survey_thanks'])."',
 						'".date('Y-m-d H:i:s')."',
 						'".Database::escape_string($values['anonymous'])."'".$additional['values'].",
-						".intval($_SESSION['id_session'])."
+						".api_get_session_id()."
 						)";
 			Database::query($sql);
 			$survey_id = Database::insert_id();
@@ -1401,15 +1401,20 @@ class survey_question
 	 */
 	function create_form($form_content)
     {
+        $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
+        $questionId = isset($_GET['question_id']) ? Security::remove_XSS($_GET['question_id']) : null;
 
 		global $survey_data;
+		$tool_name = Display::return_icon(
+            survey_manager::icon_question(Security::remove_XSS($_GET['type'])),
+            get_lang(ucfirst(Security::remove_XSS($_GET['type']))),
+            array('align' => 'middle', 'height' => '22px')
+        ).' ';
 
-		//$tool_name = '<img src="../img/'.survey_manager::icon_question($_GET['type']).'" alt="'.get_lang(ucfirst($_GET['type'])).'" title="'.get_lang(ucfirst($_GET['type'])).'" />';
-		$tool_name = Display::return_icon(survey_manager::icon_question(Security::remove_XSS($_GET['type'])), get_lang(ucfirst(Security::remove_XSS($_GET['type']))), array('align' => 'middle', 'height' => '22px')).' ';
-		if ($_GET['action'] == 'add') {
+		if ($action == 'add') {
 			$tool_name .= get_lang('AddQuestion');
 		}
-		if ($_GET['action'] == 'edit') {
+		if ($action == 'edit') {
 			$tool_name .= get_lang('EditQuestion');
 		}
 
@@ -1421,10 +1426,12 @@ class survey_question
 			$tool_name .= ': '.get_lang(api_ucfirst(Security::remove_XSS($_GET['type'])));
 		}
 
-		$this->html .= '<form class="form-horizontal" id="question_form" name="question_form" method="post" action="'.api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&type='.Security::remove_XSS($_GET['type']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&question_id='.Security::remove_XSS($_GET['question_id']).'">';
+        $url = api_get_self().'?action='.$action.'&type='.Security::remove_XSS($_GET['type']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&question_id='.$questionId;
+
+		$this->html .= '<form class="form-horizontal" id="question_form" name="question_form" method="post" action="'.$url.'">';
         $this->html .= '<legend>'.$tool_name.'</legend>';
 		$this->html .= '		<input type="hidden" name="survey_id" id="survey_id" value="'.Security::remove_XSS($_GET['survey_id']).'"/>';
-		$this->html .= '		<input type="hidden" name="question_id" id="question_id" value="'.Security::remove_XSS($_GET['question_id']).'"/>';
+		$this->html .= '		<input type="hidden" name="question_id" id="question_id" value="'.$questionId.'"/>';
 		$this->html .= '		<input type="hidden" name="shared_question_id" id="shared_question_id" value="'.Security::remove_XSS($form_content['shared_question_id']).'"/>';
 		$this->html .= '		<input type="hidden" name="type" id="type" value="'.Security::remove_XSS($_GET['type']).'"/>';
 
@@ -2457,7 +2464,7 @@ class SurveyUtil
 		}
 
 		// User report
-		if ($_GET['action'] == 'userreport') {
+		if (isset($_GET['action']) && $_GET['action'] == 'userreport') {
 			global $people_filled;
 			if ($survey_data['anonymous'] == 0) {
 				$people_filled_full_data = true;
@@ -2479,7 +2486,7 @@ class SurveyUtil
 		}
 
 		// Question report
-		if ($_GET['action'] == 'questionreport') {
+		if (isset($_GET['action']) && $_GET['action'] == 'questionreport') {
 			if (isset($_GET['question']) && !is_numeric($_GET['question'])) {
 				$error = get_lang('UnknowQuestion');
 			}
@@ -2502,7 +2509,10 @@ class SurveyUtil
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	static function handle_reporting_actions() {
+	static function handle_reporting_actions()
+    {
+        $action = isset($_GET['action']) ? $_GET['action'] : null;
+
 		// Getting the number of question
 		$temp_questions_data = survey_manager::get_questions($_GET['survey_id']);
 
@@ -2517,19 +2527,19 @@ class SurveyUtil
 		// Counting the number of questions that are relevant for the reporting
 		$survey_data['number_of_questions'] = count($questions_data);
 
-		if ($_GET['action'] == 'questionreport') {
+		if ($action == 'questionreport') {
 			SurveyUtil::display_question_report($survey_data);
 		}
-		if ($_GET['action'] == 'userreport') {
+		if ($action == 'userreport') {
 			SurveyUtil::display_user_report();
 		}
-		if ($_GET['action'] == 'comparativereport') {
+		if ($action == 'comparativereport') {
 			SurveyUtil::display_comparative_report();
 		}
-		if ($_GET['action'] == 'completereport') {
+		if ($action == 'completereport') {
 			SurveyUtil::display_complete_report();
 		}
-		if ($_GET['action'] == 'deleteuserreport') {
+		if ($action == 'deleteuserreport') {
 			SurveyUtil::delete_user_report($_GET['survey_id'], $_GET['user']);
 			//SurveyUtil::display_user_report(); //Could work but looks a bit clunky
 		}
@@ -4542,16 +4552,18 @@ class SurveyUtil
 
 		$sql = "SELECT
 					survey.survey_id AS col0,
-					CONCAT('<a href=\"survey.php?survey_id=',survey.survey_id,'\">',survey.title,'</a>') AS col1,
+					survey.title AS col1,
 					survey.code AS col2,
 					count(survey_question.question_id) AS col3,
 					".(api_is_western_name_order() ? "CONCAT(user.firstname, ' ', user.lastname)" : "CONCAT(user.lastname, ' ', user.firstname)")."	AS col4,
 					survey.avail_from AS col5,
 					survey.avail_till AS col6,
-					CONCAT('<a href=\"survey_invitation.php?view=answered&amp;survey_id=',survey.survey_id,'\">',survey.answered,'</a> / <a href=\"survey_invitation.php?view=invited&amp;survey_id=',survey.survey_id,'\">',survey.invited, '</a>')	AS col7,
+					survey.invited AS col7,
 					survey.anonymous AS col8,
 					survey.survey_id AS col9,
-					survey.session_id AS session_id
+					survey.session_id AS session_id,
+					survey.answered,
+					survey.invited
 				 FROM $table_survey survey
                     LEFT JOIN $table_survey_question survey_question
                     ON (survey.survey_id = survey_question.survey_id AND survey_question.c_id = $course_id)
@@ -4568,8 +4580,12 @@ class SurveyUtil
 		$surveys = array();
 		$array = array();
 		while ($survey = Database::fetch_array($res)) {
+
 			$array[0] = $survey[0];
-			$array[1] = $survey[1];
+			$array[1] = Display::url(
+                $survey[1],
+                api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey[0].'&'.api_get_cidreq()
+            );
 
 			// Validation when belonging to a session
 			$session_img = api_get_session_image($survey['session_id'], $_user['status']);
@@ -4578,7 +4594,16 @@ class SurveyUtil
 			$array[4] = $survey[4];
 			$array[5] = $survey[5];
 			$array[6] = $survey[6];
-			$array[7] = $survey[7];
+			$array[7] =
+                Display::url(
+                    $survey['answered'],
+                    api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey[0].'&'.api_get_cidreq()
+                ).' / '.
+                Display::url(
+                    $survey['invited'],
+                    api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey[0].'&'.api_get_cidreq()
+                );
+
 			$array[8] = $survey[8];
 			$array[9] = $survey[9];
 			//$array[10] = $survey[10];
@@ -4587,7 +4612,8 @@ class SurveyUtil
 		return $surveys;
 	}
 
-	static function get_survey_data_for_coach($from, $number_of_items, $column, $direction) {
+	static function get_survey_data_for_coach($from, $number_of_items, $column, $direction)
+    {
 		require_once api_get_path(LIBRARY_PATH).'surveymanager.lib.php';
 		$survey_tree = new SurveyTree();
 		$last_version_surveys = $survey_tree->get_last_children_from_branch($survey_tree->surveylist);

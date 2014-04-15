@@ -112,6 +112,8 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 		exit;
 	}
 
+    $questions = array();
+
 	if (isset($_GET['show'])) {
 		// Getting all the questions for this page and add them to a multidimensional array where the first index is the page.
 		// as long as there is no pagebreak fount we keep adding questions to the page
@@ -178,6 +180,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 			}
 		}
 	}
+
 	// Selecting the maximum number of pages
 	$sql = "SELECT * FROM $table_survey_question
 	        WHERE
@@ -192,6 +195,7 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 	} else {
 		$show = 0;
 	}
+
 	echo '<form id="question" name="question" method="post" action="'.api_get_self().'?survey_id='.Security::remove_XSS($survey_id).'&show='.$show.'">';
 
 	if (is_array($questions) && count($questions) > 0) {

@@ -81,15 +81,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['survey
 
     $return = survey_manager :: delete_survey($_GET['survey_id']);
     if ($return) {
-        Display :: display_confirmation_message(get_lang('SurveyDeleted'), false);
+        Display::display_confirmation_message(get_lang('SurveyDeleted'), false);
     } else {
-        Display :: display_error_message(get_lang('ErrorOccurred'), false);
+        Display::display_error_message(get_lang('ErrorOccurred'), false);
     }
 }
 
 if (isset($_GET['action']) && $_GET['action'] == 'empty') {
     $mysession = api_get_session_id();
-    if ( $mysession != 0 ) {
+    if ($mysession != 0) {
         if (!((api_is_course_coach() || api_is_platform_admin()) &&
             api_is_element_in_the_session(TOOL_SURVEY, $_GET['survey_id']))) {
             // The coach can't empty a survey not belonging to his session

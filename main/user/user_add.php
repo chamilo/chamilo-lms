@@ -163,8 +163,7 @@ if($register) {
        MAIL NOTIFICATION TO NEW USER
       ----------------------------*/
 
-    if ($platformRegSucceed)
-    {
+    if ($platformRegSucceed) {
 
         $emailto       = "$lastname_form $firstname_form <$email_form>";
         $emailfromaddr = $administratorEmail;
@@ -181,7 +180,7 @@ if($register) {
         $sender_name = api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'), null, PERSON_NAME_EMAIL_ADDRESS);
         $email_admin = api_get_setting('emailAdministrator');
 
-        $portal_url = $_configuration['root_web'];
+        $portal_url = api_get_path(WEB_PUBLIC_PATH);
         if ($_configuration['multiple_access_urls']) {
             $access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1 ){

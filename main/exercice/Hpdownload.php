@@ -137,7 +137,7 @@ if ($content_type == 'text/html') {
     $newcontent = str_replace($mit, $js_content, $content);
 
     $prehref = "javascript:void(0);";
-    $posthref = $_configuration['root_web']."main/exercice/Hpdownload.php?doc_url=".$doc_url."&cid=".$cid."&uid=".$uid;
+    $posthref = api_get_path(WEB_CODE_PATH)."exercice/Hpdownload.php?doc_url=".$doc_url."&cid=".$cid."&uid=".$uid;
     $newcontent = str_replace($prehref, $posthref, $newcontent);
 
 

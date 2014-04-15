@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
  * Set of unit tests for the web services
- * 
+ *
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
  * @package chamilo.tests
  */
@@ -19,20 +19,20 @@ require_once(dirname(__FILE__).'/simpletest/autorun.php');
  */
 class TestSoapWebService extends UnitTestCase {
 	protected $_secret_key;
-	
+
 	protected $_encrypt_method;
-	
+
 	protected $_client;
-	
+
 	public function __construct() {
 		$configuration = $GLOBALS['_configuration'];
 		$security_key = $configuration['security_key'];
 		$ip_address = '::1';
 		$this->_secret_key = sha1($ip_address.$security_key);
 		$this->_encrypt_method = $configuration['password_encryption'];
-		$this->_client = new SoapClient($configuration['root_web'].'main/webservices/soap.php?wsdl');
+		$this->_client = new SoapClient(api_get_path(WEB_CODE_PATH).'webservices/soap.php?wsdl');
 	}
-	
+
 	protected function getUserArray() {
 		$user = array(
 			'firstname' => 'Guillaume',
@@ -51,7 +51,7 @@ class TestSoapWebService extends UnitTestCase {
 			'extras' => array());
 		return $user;
 	}
-	
+
 	protected function getCourseArray() {
 		$course = array(
 			'title' => 'My test course',
@@ -66,7 +66,7 @@ class TestSoapWebService extends UnitTestCase {
 			'extras' => array());
 		return $course;
 	}
-	
+
 	protected function getSessionArray() {
 		$end_date = date('Y') + 1;
 		$end_date .= '-'.date('m-d');
@@ -80,33 +80,33 @@ class TestSoapWebService extends UnitTestCase {
 			'visibility' => 1,
 			'user_id_field_name' => 'chamilo_user_id',
 			'user_id_value' => '1',
-			'session_id_field_name' => 'chamilo_session_id', 
+			'session_id_field_name' => 'chamilo_session_id',
 			'session_id_value' => '',
 			'extras' => array());
 		return $session;
 	}
-	
+
 	protected function soapCall($method, $arguments) {
 		return $this->_client->__soapCall($method, $arguments);
 	}
-	
+
 	protected function createUser() {
 		$user = $this->getUserArray();
 		$result = $this->soapCall('WSUser.CreateUser', array_merge(array('secret_key' => $this->_secret_key), $user));
 		return $result;
 	}
-	
+
 	protected function createCourse() {
 		$course = $this->getCourseArray();
 		$result = $this->soapCall('WSCourse.CreateCourse', array_merge(array('secret_key' => $this->_secret_key), $course));
 		return $result;
 	}
-	
+
 	public function testTest() {
 		$result = $this->soapCall('WS.test', array());
 		$this->assertEqual($result, "success");
 	}
-	
+
 	public function testInvalidKey() {
 		$secret_key = 'invalid';
 		try {
@@ -116,7 +116,7 @@ class TestSoapWebService extends UnitTestCase {
 			$this->pass();
 		}
 	}
-	
+
 	public function testCreateUser() {
 		$user = $this->getUserArray();
 		$result = $this->soapCall('WSUser.CreateUser', array_merge(array('secret_key' => $this->_secret_key), $user));
@@ -124,7 +124,7 @@ class TestSoapWebService extends UnitTestCase {
 		//Delete user created
 		$this->soapCall('WSUser.DeleteUser', array('secret_key' => $this->_secret_key, 'user_id_field_name' => 'chamilo_user_id', 'user_id_value' => $result));
 	}
-	
+
 	public function testCreateUserEncrypted() {
 		$user = $this->getUserArray();
 		$user['encrypt_method'] = $this->_encrypt_method;
@@ -139,7 +139,7 @@ class TestSoapWebService extends UnitTestCase {
 		//Delete user created
 		$this->soapCall('WSUser.DeleteUser', array('secret_key' => $this->_secret_key, 'user_id_field_name' => 'chamilo_user_id', 'user_id_value' => $result));
 	}
-	
+
 	public function testCourseCreation() {
 		$course = $this->getCourseArray();
 		$result = $this->soapCall('WSCourse.CreateCourse', array_merge(array('secret_key' => $this->_secret_key), $course));
@@ -147,7 +147,7 @@ class TestSoapWebService extends UnitTestCase {
 		// Delete course created
 		$this->soapCall('WSCourse.DeleteCourse', array('secret_key' => $this->_secret_key, 'course_id_field_name' => 'chamilo_course_id', 'course_id_value' => $result));
 	}
-	
+
 	/*public function testCourseSubscriptionAndUnsubscription() {
 		//$course_id = $this->createCourse();
 		//$user_id = $this->createUser();
@@ -155,7 +155,7 @@ class TestSoapWebService extends UnitTestCase {
 		//$this->soapCall('WSCourse.SubscribeUserToCourse', array('secret_key' => $this->_secret_key, 'course_id_field_name' => 'chamilo_course_id', 'course_id_value' => 8, 'user_id_field_name' => 'chamilo_user_id', 'user_id_value' => 38, 'status' => 1));
 		//$this->soapCall('WSCourse.UnsubscribeUserFromCourse', array('secret_key' => $this->_secret_key, 'course_id_field_name' => 'chamilo_course_id', 'course_id_value' => 8, 'user_id_field_name' => 'chamilo_user_id', 'user_id_value' => 38));
 	}*/
-	
+
 	/*public function testCourseDescriptions() {
 		//$this->soapCall('WSCourse.EditCourseDescription', array('secret_key' => $this->_secret_key, 'course_id_field_name' => 'chamilo_course_id', 'course_id_value' => 8, 'course_desc_id' => 1, 'course_desc_title' => 'My description', 'course_desc_content' => 'This is my new description'));
 		//$result = $this->soapCall('WSCourse.GetCourseDescriptions', array('secret_key' => $this->_secret_key, 'course_id_field_name' => 'chamilo_course_id', 'course_id_value' => 8));
@@ -163,20 +163,20 @@ class TestSoapWebService extends UnitTestCase {
 		$result = $this->soapCall('WSCourse.ListCourses', array('secret_key' => $this->_secret_key, 'course_id_field_name' => 'chamilo_course_id'));
 		var_dump($result);
 	}*/
-	
+
 	public function testSessionCreation() {
 		$session = $this->getSessionArray();
 		$result = $this->soapCall('WSSession.CreateSession', array_merge(array('secret_key' => $this->_secret_key), $session));
 		$this->assertIsA($result, 'int');
 		$this->soapCall('WSSession.DeleteSession', array('secret_key' => $this->_secret_key, 'session_id_field_name' => 'chamilo_session_id', 'session_id_value' => $result));
 	}
-	
+
 	/*public function testUserSessionSubscriptionAndUnsubscription() {
 		$this->soapCall('WSSession.UnsubscribeCourseFromSession', array('secret_key' => $this->_secret_key, 'course_id_field_name' => 'chamilo_course_id', 'course_id_value' => 8, 'session_id_field_name' => 'chamilo_session_id', 'session_id_value' => 3));
 		//$this->soapCall('WSSession.UnsubscribeUserFromSession', array('secret_key' => $this->_secret_key, 'user_id_field_name' => 'chamilo_user_id', 'user_id_value' => 38, 'session_id_field_name' => 'chamilo_session_id', 'session_id_value' => 3));
 	}*/
-	
-	
+
+
 }
 
 

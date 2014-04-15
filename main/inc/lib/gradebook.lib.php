@@ -3,33 +3,20 @@
 /**
  *   This class provides methods for the notebook management.
  *   Include/require it in your code to use its features.
- * @package chamilo.library
+ *   @package chamilo.library
  */
 /**
  * Code
  */
-
 class Gradebook extends Model
 {
-
-    public $columns = array(
-        'id',
-        'name',
-        'description',
-        'course_code',
-        'parent_id',
-        'grade_model_id',
-        'session_id',
-        'weight',
-        'user_id'
-    );
-
+    public $columns = array('id', 'name', 'description', 'course_code', 'parent_id', 'grade_model_id', 'session_id', 'weight', 'user_id');
 
     public function __construct()
     {
-        $this->table                     = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $this->table_skill               = Database::get_main_table(TABLE_MAIN_SKILL);
-        $this->table_skill_rel_gradebook = Database::get_main_table(TABLE_MAIN_SKILL_REL_GRADEBOOK);
+        $this->table                        = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $this->table_skill                  = Database::get_main_table(TABLE_MAIN_SKILL);
+        $this->table_skill_rel_gradebook    = Database::get_main_table(TABLE_MAIN_SKILL_REL_GRADEBOOK);
     }
 
     /**
@@ -41,24 +28,28 @@ class Gradebook extends Model
      */
     public static function is_active($c_id = null)
     {
-        $name     = 'gradebook';
-        $table    = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-        $sql      = "SELECT * from $table WHERE variable='course_hide_tools' AND subkey='$name'";
-        $setting  = ResultSet::create($sql)->first();
-        $setting  = $setting ? $setting : array();
+        $name = 'gradebook';
+        $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+        $sql = "SELECT * from $table WHERE variable='course_hide_tools' AND subkey='$name' LIMIT 1";
+        $result = Database::query($sql);
+        $setting = Database::store_result($result);
+        $setting = isset($setting[0]) ? $setting[0] : null;
+        $setting = $setting ? $setting : array();
         $inactive = isset($setting['selected_value']) && $setting['selected_value'] == 'true';
 
         if ($inactive) {
             return false;
         }
-        $c_id  = $c_id ? intval($c_id) : api_get_course_int_id();
-        $table = Database::get_course_table(TABLE_TOOL_LIST);
-        $sql   = "SELECT * from $table WHERE c_id = $c_id and name='$name'";
-        $item  = ResultSet::create($sql)->first();
+
+        $c_id = $c_id ? intval($c_id) : api_get_course_int_id();
+        $table  = Database::get_course_table(TABLE_TOOL_LIST);
+        $sql = "SELECT * from $table WHERE c_id = $c_id and name='$name' LIMIT 1";
+        $result = Database::query($sql);
+        $item = Database::store_result($result, 'ASSOC');
+        $item = isset($item[0]) ? $item[0] : null;
         if (empty($item)) {
             return true;
         }
-
         return $item['visibility'] == '1';
     }
 
@@ -69,8 +60,8 @@ class Gradebook extends Model
             if (empty($gradebook['name'])) {
                 $gradebook['name'] = $gradebook['course_code'];
             }
+            //$gradebook['name'] = $gradebook['course_code'] .' > '.$gradebook['name'];
         }
-
         return $gradebooks;
     }
 
@@ -85,16 +76,14 @@ class Gradebook extends Model
         if (!empty($skill_list)) {
 
             //Cleaning skills
-            $skill_list              = array_map('intval', $skill_list);
-            $skill_list              = array_filter($skill_list);
-            $skill_gradebook         = new SkillRelGradebook();
-            $skill_gradebooks_source = $skill_gradebook->get_all(
-                array('where' => array('gradebook_id = ?' => $gradebook_id))
-            );
-            $clean_gradebook         = array();
+            $skill_list = array_map('intval', $skill_list);
+            $skill_list = array_filter($skill_list);
+            $skill_gradebook = new SkillRelGradebook();
+            $skill_gradebooks_source = $skill_gradebook->get_all(array('where'=>array('gradebook_id = ?' =>$gradebook_id)));
+            $clean_gradebook = array();
             if (!empty($skill_gradebooks_source)) {
-                foreach ($skill_gradebooks_source as $source) {
-                    $clean_gradebook[] = $source['skill_id'];
+                foreach($skill_gradebooks_source as $source) {
+                    $clean_gradebook[]= $source['skill_id'];
                 }
             }
             if (!empty($clean_gradebook)) {
@@ -102,7 +91,7 @@ class Gradebook extends Model
             }
 
             foreach ($skill_list as $skill_id) {
-                $params                 = array();
+                $params = array();
                 $params['gradebook_id'] = $gradebook_id;
                 $params['skill_id']     = $skill_id;
                 if (!$skill_gradebook->exists_gradebook_skill($gradebook_id, $skill_id)) {
@@ -111,15 +100,13 @@ class Gradebook extends Model
             }
 
             if (!empty($skill_to_remove)) {
-                foreach ($skill_to_remove as $remove) {
+                foreach($skill_to_remove as $remove) {
                     $skill_item = $skill_gradebook->get_skill_info($remove, $gradebook_id);
                     $skill_gradebook->delete($skill_item['id']);
                 }
             }
-
             return true;
         }
-
         return false;
     }
 
@@ -132,9 +119,8 @@ class Gradebook extends Model
      */
     public function show_skill_form($gradebook_id, $url, $header = null)
     {
-
         $form = new FormValidator('gradebook_add_skill', 'POST', $url);
-        // Settting the form elements
+        // Setting the form elements
         if (!isset($header)) {
             $header = get_lang('Add');
         }
@@ -142,44 +128,40 @@ class Gradebook extends Model
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
         $form->addElement('hidden', 'id', $id);
 
-        $skill            = new Skill();
-        $skills           = $skill->get_all();
+        $skill = new Skill();
+        $skills = $skill->get_all();
         $clean_skill_list = array();
         foreach ($skills as $skill) {
             $clean_skill_list[$skill['id']] = $skill['name'];
         }
-        $form->addElement(
-            'select',
-            'skill',
-            get_lang('Skills'),
-            $clean_skill_list,
-            array('width' => '450px', 'class' => 'chzn-select', 'multiple' => 'multiple')
-        );
+        $form->addElement('select', 'skill', get_lang('Skills'), $clean_skill_list, array('width'=>'450px', 'class'=>'chzn-select','multiple' => 'multiple'));
 
-        $selected_skills       = self::get_skills_by_gradebook($gradebook_id);
+        $selected_skills = self::get_skills_by_gradebook($gradebook_id);
         $clean_selected_skills = array();
         if (!empty($selected_skills)) {
-            foreach ($selected_skills as $skill) {
+            foreach($selected_skills as $skill) {
                 $clean_selected_skills[] = $skill['id'];
             }
         }
 
         $form->addElement('style_submit_button', 'submit', get_lang('Add'), 'class="save"');
 
-        $form->setDefaults(array('skill' => $clean_selected_skills));
-
+        $form->setDefaults(array('skill'=>$clean_selected_skills));
         return $form;
     }
 
+    /**
+     * @param int $gradebook_id
+     * @return array|resource
+     */
     function get_skills_by_gradebook($gradebook_id)
     {
         $gradebook_id = intval($gradebook_id);
-        $sql          = "SELECT skill.id, skill.name FROM {$this->table_skill} skill INNER JOIN {$this->table_skill_rel_gradebook} skill_rel_gradebook
+        $sql = "SELECT skill.id, skill.name FROM {$this->table_skill} skill INNER JOIN {$this->table_skill_rel_gradebook} skill_rel_gradebook
                     ON skill.id = skill_rel_gradebook.skill_id
                  WHERE skill_rel_gradebook.gradebook_id = $gradebook_id";
-        $result       = Database::query($sql);
-        $result       = Database::store_result($result, 'ASSOC');
-
+        $result = Database::query($sql);
+        $result = Database::store_result($result,'ASSOC');
         return $result;
     }
 

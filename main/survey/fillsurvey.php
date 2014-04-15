@@ -43,7 +43,6 @@ $table_survey_answer = Database :: get_course_table(TABLE_SURVEY_ANSWER);
 $table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
 $table_survey_question_option = Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 $table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
-
 $table_user = Database :: get_main_table(TABLE_MAIN_USER);
 
 // Check if user is anonymous or not

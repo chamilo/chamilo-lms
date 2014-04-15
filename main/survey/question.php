@@ -161,7 +161,10 @@ if (empty($_POST['save_question']) && in_array($_GET['type'], $possible_types)) 
 	// An action has been performed (for instance adding a possible answer, moving an answer, ...)
 	if ($_POST) {
 		$form_content = $_POST;
-		$form_content = $form->handle_action($form_content);
+		$form_content = $form->handle_action(
+            $survey_data,
+            $form_content
+        );
 	}
 
 	if ($error_message != '') {
@@ -176,12 +179,12 @@ if (empty($_POST['save_question']) && in_array($_GET['type'], $possible_types)) 
 		unset($_SESSION['temp_horizontalvertical']);
 	}
 
-	$form->create_form($form_content);
+	$form->create_form($survey_data, $form_content);
 	$form->render_form();
 } else {
 	$form_content = $_POST;
 	$form = new survey_question();
-	$form->handle_action($form_content);
+	$form->handle_action($survey_data, $form_content);
 }
 
 // Footer

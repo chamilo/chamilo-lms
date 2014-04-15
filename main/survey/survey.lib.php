@@ -766,10 +766,8 @@ class survey_manager
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-    public function save_question($form_content)
+    public function save_question($survey_data, $form_content)
     {
-		global $survey_data;
-
 		if (strlen($form_content['question']) > 1) { // Checks lenght of the question
 			$empty_answer = false;
 
@@ -1399,12 +1397,10 @@ class survey_question
 	 * @todo the form_text has to become a wysiwyg editor or adding a question_comment field
 	 * @todo consider adding a question_comment form element
 	 */
-	function create_form($form_content)
+	function create_form($survey_data, $form_content)
     {
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
         $questionId = isset($_GET['question_id']) ? Security::remove_XSS($_GET['question_id']) : null;
-
-		global $survey_data;
 		$tool_name = Display::return_icon(
             survey_manager::icon_question(Security::remove_XSS($_GET['type'])),
             get_lang(ucfirst(Security::remove_XSS($_GET['type']))),
@@ -1526,7 +1522,7 @@ class survey_question
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function handle_action($form_content)
+	function handle_action($survey_data, $form_content)
     {
 	    $course_id = api_get_course_int_id();
 		global $config;
@@ -1568,7 +1564,10 @@ class survey_question
 
 		// Saving a question
 		if (isset($_POST['save_question'])) {
-			$message = survey_manager::save_question($form_content);
+			$message = survey_manager::save_question(
+                $survey_data,
+                $form_content
+            );
 
 			if ($message == 'QuestionAdded' || $message == 'QuestionUpdated' ) {
 				$sql='SELECT COUNT(*) FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION).' WHERE c_id = '.$course_id.' AND survey_id = '.intval($_GET['survey_id']);
@@ -1661,9 +1660,9 @@ class ch_yesno extends survey_question
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function create_form($form_content)
+	function create_form($survey_data, $form_content)
     {
-		$this->html = parent::create_form($form_content);
+		$this->html = parent::create_form($survey_data, $form_content);
 		// Horizontal or vertical
 		$this->html .= '	<div class="control-group">';
 		$this->html .= '		<label class="control-label">';
@@ -1758,10 +1757,9 @@ class ch_multiplechoice extends survey_question
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function create_form($form_content)
+	function create_form($survey_data, $form_content)
     {
-
-		$this->html = parent::create_form($form_content);
+		$this->html = parent::create_form($survey_data, $form_content);
 		// Horizontal or vertical
 		$this->html .= '	<div class="row">';
 		$this->html .= '		<label class="control-label">';
@@ -1843,9 +1841,9 @@ class ch_personality extends survey_question
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function create_form($form_content)
+	function create_form($survey_data, $form_content)
     {
-		$this->html = parent::create_form($form_content);
+		$this->html = parent::create_form($survey_data, $form_content);
 		$this->html .= '	<tr>';
 		$this->html .= '		<td colspan="2"><strong>'.get_lang('DisplayAnswersHorVert').'</strong></td>';
 		$this->html .= '	</tr>';
@@ -1940,9 +1938,9 @@ class ch_multipleresponse extends survey_question
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function create_form($form_content) {
+	function create_form($survey_data, $form_content) {
 
-		$this->html = parent::create_form($form_content);
+		$this->html = parent::create_form($survey_data, $form_content);
 		// Horizontal or vertical
 		$this->html .= '	<div class="row">';
 		$this->html .= '		<label class="control-label">';
@@ -2047,9 +2045,9 @@ class ch_dropdown extends survey_question
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version January 2007
 	 */
-	function create_form($form_content)
+	function create_form($survey_data, $form_content)
     {
-		$this->html = parent::create_form($form_content);
+		$this->html = parent::create_form($survey_data, $form_content);
 		// The answers
 		$this->html .= '	<div class="row">';
 		$this->html .= '		<label class="control-label">';
@@ -2129,9 +2127,9 @@ class ch_open extends survey_question
 	 * @todo add a limit for the number of characters that can be type
 	 * @todo add a checkbox weither the answer is a textarea or a wysiwyg editor
 	 */
-	function create_form($form_content)
+	function create_form($survey_data, $form_content)
     {
-		$this->html = parent::create_form($form_content);
+		$this->html = parent::create_form($survey_data, $form_content);
 	}
 
 	/**
@@ -2172,9 +2170,9 @@ class ch_comment extends survey_question
 	 *
 	 * @param array $form_content
 	 */
-	function create_form($form_content)
+	function create_form($survey_data, $form_content)
     {
-		$this->html = parent::create_form($form_content);
+		$this->html = parent::create_form($survey_data, $form_content);
 	}
 
 	/**
@@ -2205,19 +2203,18 @@ class ch_pagebreak extends survey_question
 	 *
 	 * @param array $form_content
 	 */
-	function create_form($form_content)
+	function create_form($survey_data, $form_content)
     {
-		$this->html = parent::create_form($form_content);
+		$this->html = parent::create_form($survey_data, $form_content);
 	}
 }
 
 
 class ch_percentage extends survey_question
 {
-
-	function create_form($form_content)
+	function create_form($survey_data, $form_content)
     {
-		$this->html = parent::create_form($form_content);
+		$this->html = parent::create_form($survey_data, $form_content);
 	}
 
 	function render_question($form_content, $answers = array()) {
@@ -2242,13 +2239,11 @@ class ch_percentage extends survey_question
 	}
 }
 
-
 class ch_score extends survey_question
 {
-
-	function create_form($form_content)
+	function create_form($survey_data, $form_content)
     {
-		$this->html = parent::create_form($form_content);
+		$this->html = parent::create_form($survey_data, $form_content);
 		// The maximum score that can be given
 		$this->html .= '	<div class="control-group">';
 		$this->html .= '		<label class="control-label">';
@@ -2446,7 +2441,8 @@ class SurveyUtil
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	static function check_parameters() {
+	static function check_parameters($people_filled)
+    {
 		$error = false;
 
 		// Getting the survey data
@@ -2465,13 +2461,6 @@ class SurveyUtil
 
 		// User report
 		if (isset($_GET['action']) && $_GET['action'] == 'userreport') {
-			global $people_filled;
-			if ($survey_data['anonymous'] == 0) {
-				$people_filled_full_data = true;
-			} else {
-				$people_filled_full_data = false;
-			}
-			$people_filled = survey_manager::get_people_who_filled_survey($_GET['survey_id'], $people_filled_full_data);
 			if ($survey_data['anonymous'] == 0) {
 				foreach ($people_filled as $key => & $value) {
 					$people_filled_userids[] = $value['invited_user'];
@@ -2509,7 +2498,7 @@ class SurveyUtil
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	static function handle_reporting_actions()
+	static function handle_reporting_actions($people_filled)
     {
         $action = isset($_GET['action']) ? $_GET['action'] : null;
 
@@ -2531,13 +2520,13 @@ class SurveyUtil
 			SurveyUtil::display_question_report($survey_data);
 		}
 		if ($action == 'userreport') {
-			SurveyUtil::display_user_report();
+			SurveyUtil::display_user_report($people_filled, $survey_data);
 		}
 		if ($action == 'comparativereport') {
 			SurveyUtil::display_comparative_report();
 		}
 		if ($action == 'completereport') {
-			SurveyUtil::display_complete_report();
+			SurveyUtil::display_complete_report($survey_data);
 		}
 		if ($action == 'deleteuserreport') {
 			SurveyUtil::delete_user_report($_GET['survey_id'], $_GET['user']);
@@ -2585,11 +2574,8 @@ class SurveyUtil
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007 - Updated March 2008
 	 */
-	static function display_user_report()
+	static function display_user_report($people_filled, $survey_data)
     {
-
-		global $people_filled, $survey_data;
-
 		// Database table definitions
 		$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
 		$table_survey_question_option 	= Database :: get_course_table(TABLE_SURVEY_QUESTION_OPTION);
@@ -2979,7 +2965,7 @@ class SurveyUtil
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	static function display_complete_report()
+	static function display_complete_report($survey_data)
     {
 		// Database table definitions
 		$table_survey_question 			= Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -3148,7 +3134,7 @@ class SurveyUtil
 		$result = Database::query($sql);
 		while ($row = Database::fetch_array($result)) {
 			if ($old_user != $row['user'] && $old_user != '') {
-				SurveyUtil::display_complete_report_row($possible_answers, $answers_of_user, $old_user, $questions, $display_extra_user_fields);
+				SurveyUtil::display_complete_report_row($survey_data, $possible_answers, $answers_of_user, $old_user, $questions, $display_extra_user_fields);
 				$answers_of_user=array();
 			}
 			if ($questions[$row['question_id']]['type'] != 'open') {
@@ -3158,7 +3144,7 @@ class SurveyUtil
 			}
 			$old_user = $row['user'];
 		}
-		SurveyUtil::display_complete_report_row($possible_answers, $answers_of_user, $old_user, $questions, $display_extra_user_fields);
+		SurveyUtil::display_complete_report_row($survey_data, $possible_answers, $answers_of_user, $old_user, $questions, $display_extra_user_fields);
 		// This is to display the last user
 		echo '</table>';
 		echo '</form>';
@@ -3167,6 +3153,7 @@ class SurveyUtil
 	/**
 	 * This function displays a row (= a user and his/her answers) in the table of the complete report.
 	 *
+     * @param array $survey_data
 	 * @param 	array	Possible options
 	 * @param 	array 	User answers
 	 * @param	mixed	User ID or user details string
@@ -3174,8 +3161,8 @@ class SurveyUtil
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007 - Updated March 2008
 	 */
-	static function display_complete_report_row($possible_options, $answers_of_user, $user, $questions, $display_extra_user_fields = false) {
-		global $survey_data;
+	static function display_complete_report_row($survey_data, $possible_options, $answers_of_user, $user, $questions, $display_extra_user_fields = false)
+    {
         $user = Security::remove_XSS($user);
 		echo '<tr>';
 		if ($survey_data['anonymous'] == 0) {
@@ -3244,7 +3231,7 @@ class SurveyUtil
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	static function export_complete_report($user_id = 0)
+	static function export_complete_report($survey_data, $user_id = 0)
     {
 
 		// Database table definitions
@@ -3349,7 +3336,7 @@ class SurveyUtil
 		$result = Database::query($sql);
 		while ($row = Database::fetch_array($result)) {
 			if ($old_user != $row['user'] && $old_user != '') {
-				$return .= SurveyUtil::export_complete_report_row($possible_answers, $answers_of_user, $old_user, true);
+				$return .= SurveyUtil::export_complete_report_row($survey_data, $possible_answers, $answers_of_user, $old_user, true);
 				$answers_of_user=array();
 			}
 			if($possible_answers_type[$row['question_id']] == 'open') {
@@ -3361,7 +3348,7 @@ class SurveyUtil
 			}
 			$old_user = $row['user'];
 		}
-		$return .= SurveyUtil::export_complete_report_row($possible_answers, $answers_of_user, $old_user, true); // This is to display the last user
+		$return .= SurveyUtil::export_complete_report_row($survey_data, $possible_answers, $answers_of_user, $old_user, true); // This is to display the last user
 		return $return;
 	}
 
@@ -3376,8 +3363,8 @@ class SurveyUtil
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	static function export_complete_report_row($possible_options, $answers_of_user, $user, $display_extra_user_fields = false) {
-		global $survey_data;
+	static function export_complete_report_row($survey_data, $possible_options, $answers_of_user, $user, $display_extra_user_fields = false)
+    {
 		$return = '';
 		if ($survey_data['anonymous'] == 0) {
 			if (intval($user) !== 0) {
@@ -3437,9 +3424,8 @@ class SurveyUtil
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version February 2007
 	 */
-	static function export_complete_report_xls($filename, $user_id = 0)
+	static function export_complete_report_xls($survey_data, $filename, $user_id = 0)
     {
-
 		require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.php';
 		$workbook = new Spreadsheet_Excel_Writer();
 		$workbook ->setTempDir(api_get_path(SYS_ARCHIVE_PATH));
@@ -3554,7 +3540,7 @@ class SurveyUtil
 		$result = Database::query($sql);
 		while ($row = Database::fetch_array($result)) {
 			if ($old_user != $row['user'] && $old_user != '') {
-				$return = SurveyUtil::export_complete_report_row_xls($possible_answers, $answers_of_user, $old_user, true);
+				$return = SurveyUtil::export_complete_report_row_xls($survey_data, $possible_answers, $answers_of_user, $old_user, true);
 				foreach ($return as $elem) {
 					$worksheet->write($line, $column, $elem);
 					$column++;
@@ -3572,7 +3558,7 @@ class SurveyUtil
 			}
 			$old_user = $row['user'];
 		}
-		$return = SurveyUtil::export_complete_report_row_xls($possible_answers, $answers_of_user, $old_user, true); // this is to display the last user
+		$return = SurveyUtil::export_complete_report_row_xls($survey_data, $possible_answers, $answers_of_user, $old_user, true); // this is to display the last user
 		foreach ($return as $elem) {
 			$worksheet->write($line, $column, $elem);
 			$column++;
@@ -3590,11 +3576,9 @@ class SurveyUtil
 	 * @param	boolean	Whether to display user fields or not
 	 * @return	string	One line of the csv file
 	 */
-	static function export_complete_report_row_xls($possible_options, $answers_of_user, $user, $display_extra_user_fields = false)
+	static function export_complete_report_row_xls($survey_data, $possible_options, $answers_of_user, $user, $display_extra_user_fields = false)
     {
-
 		$return = array();
-		global $survey_data;
 		if ($survey_data['anonymous'] == 0) {
 			if (intval($user) !== 0) {
 				$sql = 'SELECT firstname, lastname FROM '.Database::get_main_table(TABLE_MAIN_USER).' WHERE user_id='.intval($user);
@@ -4065,24 +4049,14 @@ class SurveyUtil
 	/**
 	 * Send the invitation by mail.
 	 *
-	 * @param	invitedUser - the userId (course user) or emailaddress of additional user
-	 * $param	   $invitation_code - the unique invitation code for the URL
+	 * @param int invitedUser - the userId (course user) or emailaddress of additional user
+	 * $param string $invitation_code - the unique invitation code for the URL
 	 * @return	void
 	 */
 	static function send_invitation_mail($invitedUser, $invitation_code, $invitation_title, $invitation_text)
     {
-		global $_configuration;
         $_user = api_get_user_info();
         $_course = api_get_course_info();
-
-		$portal_url = api_get_path(WEB_CODE_PATH);
-		if ($_configuration['multiple_access_urls']) {
-			$access_url_id = api_get_current_access_url_id();
-			if ($access_url_id != -1) {
-				$url = api_get_access_url($access_url_id);
-				$portal_url = $url['url'];
-			}
-		}
 
 		// Replacing the **link** part with a valid link for the user
 		$survey_link = api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?course='.$_course['code'].'&invitationcode='.$invitation_code;
@@ -4480,7 +4454,7 @@ class SurveyUtil
 	 */
 	static function get_number_of_surveys()
     {
-		global $table_survey;
+        $table_survey = Database :: get_course_table(TABLE_SURVEY);
         $course_id = api_get_course_int_id();
 
 		$search_restriction = SurveyUtil::survey_search_restriction();
@@ -4498,17 +4472,6 @@ class SurveyUtil
 
 	static function get_number_of_surveys_for_coach()
     {
-		/*global $table_survey;
-		$search_restriction = SurveyUtil::survey_search_restriction();
-		if ($search_restriction) {
-			$search_restriction = 'WHERE '.$search_restriction;
-		}
-		$sql = "SELECT count(survey_id) AS total_number_of_items FROM ".$table_survey.' '.$search_restriction;
-		$res = Database::query($sql);
-		$obj = Database::fetch_object($res);
-		return $obj->total_number_of_items;
-		*/
-
 		// Ugly fix
 		require_once api_get_path(LIBRARY_PATH).'surveymanager.lib.php';
 		$survey_tree = new SurveyTree();
@@ -4530,7 +4493,9 @@ class SurveyUtil
 	 */
 	static function get_survey_data($from, $number_of_items, $column, $direction)
     {
-		global $table_survey, $table_user, $table_survey_question;
+        $table_survey = Database :: get_course_table(TABLE_SURVEY);
+        $table_user = Database :: get_main_table(TABLE_MAIN_USER);
+        $table_survey_question = Database :: get_course_table(TABLE_SURVEY_QUESTION);
         $_user = api_get_user_info();
 
 		// Searching
@@ -4676,8 +4641,9 @@ class SurveyUtil
 	 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
 	 * @version April 2007
 	 */
-	function survey_list_user($user_id) {
-		global $_course;
+	function survey_list_user($user_id)
+    {
+        $_course = api_get_course_info();
         $course_id = api_get_course_int_id();
 
 		// Database table definitions
@@ -4685,20 +4651,23 @@ class SurveyUtil
 		$table_survey_invitation = Database :: get_course_table(TABLE_SURVEY_INVITATION);
 		$table_survey_answer     = Database :: get_course_table(TABLE_SURVEY_ANSWER);
 		$table_survey 			 = Database :: get_course_table(TABLE_SURVEY);
-		$table_user 			 = Database :: get_main_table(TABLE_MAIN_USER);
 		$all_question_id = array();
 
-		$sql = 'SELECT question_id from '.$table_survey_question." WHERE c_id = $course_id";
+		$sql = 'SELECT question_id FROM '.$table_survey_question." WHERE c_id = $course_id";
 		$result = Database::query($sql);
 
-		while($row=Database::fetch_array($result, 'ASSOC')) {
+		while($row = Database::fetch_array($result, 'ASSOC')) {
 			$all_question_id[] = $row;
 		}
 
 		$count = 0;
 		for ($i = 0; $i < count($all_question_id); $i++) {
-			$sql = 'SELECT COUNT(*) as count FROM '.$table_survey_answer.'
-					WHERE c_id = '.$course_id.' AND question_id='.Database::escape_string($all_question_id[$i]['question_id']).' AND user='.api_get_user_id();
+			$sql = 'SELECT COUNT(*) as count
+			        FROM '.$table_survey_answer.'
+					WHERE
+					    c_id = '.$course_id.' AND
+					    question_id='.Database::escape_string($all_question_id[$i]['question_id']).' AND
+					    user = '.api_get_user_id();
 			$result = Database::query($sql);
 			while ($row = Database::fetch_array($result, 'ASSOC')) {
 				if ($row['count'] == 0) {

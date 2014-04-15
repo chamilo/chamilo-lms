@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  *
@@ -19,7 +20,7 @@ $(document).ready(function (){
             var url     = this.href;
             var dialog  = $("#dialog");
             if ($("#dialog").length == 0) {
-                    dialog  = $("'.'<div id="dialog" style="display:hidden"></div>'.'").appendTo("body");
+                    dialog  = $("' . '<div id="dialog" style="display:hidden"></div>' . '").appendTo("body");
             }
 
             // load remote content
@@ -57,7 +58,7 @@ function save() {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {
-		$("div#confirmation").html("<img src=\"'.api_get_path(WEB_LIBRARY_PATH).'javascript/indicator.gif\" />"); },
+		$("div#confirmation").html("<img src=\"' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/indicator.gif\" />"); },
 		type: "POST",
 		url: "update_report.php",
 		data: "work_id="+work_id+"&forum_id="+forum_id+"&rs_id="+rs_id,
@@ -95,15 +96,15 @@ function save() {
 
 $course_code = api_get_course_id();
 $results = initializeReport($course_code);
-if(isset($_GET['action'])){
-	Export::export_table_xls($results['export'],"COURSE_USER_REPORT".$course_code);
-}else{
-	Display::display_header();
-	api_protect_course_script();
-	if (!api_is_allowed_to_edit()){
-		api_not_allowed();
-	}
-	echo $results['show'];
-	Display::display_footer();
+if (isset($_GET['action'])) {
+    Export::export_table_xls($results['export'], "COURSE_USER_REPORT" . $course_code);
+} else {
+    Display::display_header();
+    api_protect_course_script();
+    if (!api_is_allowed_to_edit()) {
+        api_not_allowed();
+    }
+    echo $results['show'];
+    Display::display_footer();
 }
 ?>

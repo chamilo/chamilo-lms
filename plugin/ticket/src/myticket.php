@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * This script is the Tickets plugin main entry point
@@ -20,14 +21,14 @@ api_block_anonymous_users();
 
 $libPath = api_get_path(LIBRARY_PATH);
 $webLibPath = api_get_path(WEB_LIBRARY_PATH);
-require_once $libPath. 'formvalidator/FormValidator.class.php';
+require_once $libPath . 'formvalidator/FormValidator.class.php';
 require_once $libPath . 'group_portal_manager.lib.php';
 $htmlHeadXtra[] = '<script type="text/javascript">
 function load_history_ticket (div_course,ticket_id) {
     $.ajax({
         contentType: "application/x-www-form-urlencoded",
         beforeSend: function(object) {
-        $("div#"+div_course).html("<img src=\''.$webLibPath.'javascript/indicator.gif\' />"); },
+        $("div#"+div_course).html("<img src=\'' . $webLibPath . 'javascript/indicator.gif\' />"); },
         type: "POST",
         url: "ticket_assign_log.php",
         data: "ticket_id="+ticket_id,
@@ -90,8 +91,7 @@ div.row div.formw2 {
 $this_section = 'tickets';
 unset($_SESSION['this_section']);
 
-$table = new SortableTable('Tickets', array('TicketManager', 'get_total_tickets_by_user_id'), 
-            array('TicketManager', 'get_tickets_by_user_id'), 2, 20, 'DESC');
+$table = new SortableTable('Tickets', array('TicketManager', 'get_total_tickets_by_user_id'), array('TicketManager', 'get_tickets_by_user_id'), 2, 20, 'DESC');
 if ($table->per_page == 0) {
     $table->per_page = 20;
 }
@@ -198,11 +198,11 @@ if ($isAdmin) {
           '<a href="'.api_get_self().'?action=close_tickets">'.Display::return_icon('warning.png',$plugin->get_lang('TckClose'),'','32').'</a>'.
           '</span>'; */
         echo '<span style="float:right;">' .
-        '<a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '">' . 
+        '<a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '">' .
         Display::return_icon('import_excel.png', get_lang('Export'), '', '32') . '</a>' .
         '</span>';
         echo '<span style="float:right;">' .
-        '<a href="' . api_get_path(WEB_PLUGIN_PATH) . 'ticket/s/new_ticket.php">' . 
+        '<a href="' . api_get_path(WEB_PLUGIN_PATH) . 'ticket/s/new_ticket.php">' .
         Display::return_icon('add.png', $plugin->get_lang('TckNew'), '', '32') . '</a>' .
         '</span>';
         echo '<span style="float:right;">' .

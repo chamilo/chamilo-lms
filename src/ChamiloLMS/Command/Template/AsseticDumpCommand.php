@@ -7,6 +7,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Class AsseticDumpCommand
@@ -26,11 +28,11 @@ class AsseticDumpCommand extends Command
     }
 
     /**
-     * @param Console\Input\InputInterface $input
-     * @param Console\Output\OutputInterface $output
+     * @param InputInterface $input
+     * @param OutputInterface $output
      * @return integer|null|boolean|void
      */
-    protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var \Silex\Application $app */
         $app = $this->getApplication()->getSilexApplication();

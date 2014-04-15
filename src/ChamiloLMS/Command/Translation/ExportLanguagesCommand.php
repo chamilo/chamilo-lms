@@ -9,6 +9,8 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * Class ExportLanguagesCommand
@@ -27,11 +29,11 @@ class ExportLanguagesCommand extends Command
     }
 
     /**
-     * @param Console\Input\InputInterface $input
-     * @param Console\Output\OutputInterface $output
+     * @param InputInterface $input
+     * @param OutputInterface $output
      * @return int|null|void
      */
-    protected function execute(Console\Input\InputInterface $input, Console\Output\OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         $languageList = array('english','spanish','french');
         /** @var \Silex\Application $app */
@@ -52,9 +54,9 @@ class ExportLanguagesCommand extends Command
 
     /**
      * @param string $destinationLanguage Chamilo language 'spanish', 'french', etc
-     * @param $output
+     * @param OutputInterface $output
      */
-    private function convertLanguageToGettext($destinationLanguage, Console\Output\OutputInterface $output)
+    private function convertLanguageToGettext($destinationLanguage, OutputInterface $output)
     {
         /** @var \Silex\Application $app */
         $app = $this->getApplication()->getSilexApplication();
@@ -159,9 +161,9 @@ class ExportLanguagesCommand extends Command
     /**
      * Converts the classic chamilo lang into folders example: locale/trad4all/en.po, locale/trad4all/es.po, etc
      * @param string $destinationLanguage Chamilo language 'spanish', 'french', etc
-     * @param $output
+     * @param OutputInterface $output
      */
-    private function convertLanguageToGettextDivideInFolders($destinationLanguage, Console\Output\OutputInterface $output)
+    private function convertLanguageToGettextDivideInFolders($destinationLanguage, OutputInterface $output)
     {
         /** @var \Silex\Application $app */
         $app = $this->getApplication()->getSilexApplication();

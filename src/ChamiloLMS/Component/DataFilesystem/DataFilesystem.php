@@ -11,6 +11,7 @@ use ChamiloLMS\Component\Editor\Connector;
 use ChamiloLMS\Component\Editor\Driver\CourseDriver;
 use MediaAlchemyst\Alchemyst;
 use Unoconv\Unoconv;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * @todo use Gaufrette to manage course files (some day)
@@ -105,10 +106,10 @@ class DataFilesystem
     /**
      * Create folders
      * @param array $folderList
-     * @param Console\Output\OutputInterface  $output
+     * @param OutputInterface $output
      * @param string permissions
      */
-    public function createFolders(array $folderList, Console\Output\OutputInterface $output = null, $folderPermissions = null)
+    public function createFolders(array $folderList, OutputInterface $output = null, $folderPermissions = null)
     {
         if (empty($folderPermissions)) {
             $folderPermissions = api_get_permissions_for_new_directories();
@@ -128,9 +129,9 @@ class DataFilesystem
 
     /**
      * @param array $folderList
-     * @param Console\Output\OutputInterface  $output
+     * @param OutputInterface $output
      */
-    public function copyFolders(array $folderList, Console\Output\OutputInterface $output = null)
+    public function copyFolders(array $folderList, OutputInterface $output = null)
     {
         if (!empty($folderList)) {
             foreach ($folderList as $folderSource => $folderDestination) {

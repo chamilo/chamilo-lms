@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 /**
@@ -27,24 +26,25 @@ require_once 'survey.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
-$htmlHeadXtra[] = '<script type="text/javascript">
-		function advanced_parameters() {
-			if(document.getElementById(\'options\').style.display == \'none\') {
-					document.getElementById(\'options\').style.display = \'block\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-			} else {
-					document.getElementById(\'options\').style.display = \'none\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-			}
-		}
+$htmlHeadXtra[] = '<script>
+    function advanced_parameters() {
+        if (document.getElementById(\'options\').style.display == \'none\') {
+            document.getElementById(\'options\').style.display = \'block\';
+            document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+        } else {
+            document.getElementById(\'options\').style.display = \'none\';
+            document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+        }
+    }
 
-		function setFocus(){
-		  $("#surveycode_title").focus();
-		}
-		$(document).ready(function () {
-		  setFocus();
-		});
-	</script>';
+    function setFocus(){
+        $("#surveycode_title").focus();
+    }
+
+    $(document).ready(function () {
+      setFocus();
+    });
+</script>';
 
 // Database table definitions
 $table_survey = Database :: get_course_table(TABLE_SURVEY);
@@ -55,7 +55,10 @@ $table_gradebook_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code) */
 // If user is not teacher or if he's a coach trying to access an element out of his session
 if (!api_is_allowed_to_edit()) {
-    if (!api_is_course_coach() || (!empty($_GET['survey_id']) && !api_is_element_in_the_session(TOOL_SURVEY, intval($_GET['survey_id'])))) {
+    if (!api_is_course_coach() ||
+        (!empty($_GET['survey_id']) &&
+        !api_is_element_in_the_session(TOOL_SURVEY, $_GET['survey_id']))
+    ) {
         api_not_allowed(true);
         exit;
     }
@@ -68,7 +71,7 @@ $survey_data = survey_manager::get_survey($survey_id);
 // Additional information
 $course_id = api_get_course_id();
 $session_id = api_get_session_id();
-$gradebook_link_type = 8; // LINK_SURVEY
+$gradebook_link_type = 8;
 
 /* $urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
   if (api_strlen(strip_tags($survey_data['title'])) > 40) {
@@ -76,15 +79,23 @@ $gradebook_link_type = 8; // LINK_SURVEY
   } */
 $urlname = $survey_data['title'];
 
-
 // Breadcrumbs
 if ($_GET['action'] == 'add') {
-    $interbreadcrumb[] = array('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
+        'name' => get_lang('SurveyList')
+    );
     $tool_name = get_lang('CreateNewSurvey');
 }
 if ($_GET['action'] == 'edit' && is_numeric($survey_id)) {
-    $interbreadcrumb[] = array('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
-    $interbreadcrumb[] = array('url' => 'survey.php?survey_id='.$survey_id, 'name' => strip_tags($urlname));
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
+        'name' => get_lang('SurveyList')
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
+        'name' => Security::remove_XSS($urlname)
+    );
     $tool_name = get_lang('EditSurvey');
 }
 
@@ -124,7 +135,6 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 }
 
 $survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '20', 'maxlength' => '20', 'id' => 'surveycode_title'));
-//$form->applyFilter('survey_code', 'html_filter');
 
 if ($_GET['action'] == 'edit') {
     $survey_code->freeze();
@@ -159,8 +169,12 @@ $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduc
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 
 // Aditional Parameters
-$form->addElement('advanced_settings', '<a href="javascript: void(0);" onclick="javascript: advanced_parameters();" >
-        <span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif', null, array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>');
+$form->addElement(
+    'advanced_settings',
+    '<a href="javascript: void(0);" onclick="javascript: advanced_parameters();">
+        <span id="plus_minus">&nbsp;'.
+        Display::return_icon('div_show.gif', null, array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>'
+);
 
 $form->addElement('html', '<div id="options" style="display: none;">');
 
@@ -309,7 +323,7 @@ if ($form->validate()) {
         Display::display_confirmation_message($return['message'], false);
     } else {
         // Redirecting to the survey page (whilst showing the return message)
-        header('location:survey.php?survey_id='.$return['id'].'&message='.$return['message']);
+        header('location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$return['id'].'&message='.$return['message'].'&'.api);
         exit;
     }
 } else {

@@ -17,12 +17,12 @@ require_once '../inc/global.inc.php';
 // Including additional libraries
 require_once 'survey.lib.php';
 
-$htmlHeadXtra[] = '<script type="text/javascript">
-						$(document).ready( function() {
-							$("button").click(function() {
-								$("#is_executable").attr("value",$(this).attr("name"));
-							});
-		 				} ); </script>';
+$htmlHeadXtra[] = '<script>
+$(document).ready( function() {
+    $("button").click(function() {
+        $("#is_executable").attr("value",$(this).attr("name"));
+    });
+} ); </script>';
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false, true)) {
@@ -70,17 +70,20 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 }
 
 if ($survey_data['survey_type'] == 1) {
-	$sql = 'SELECT id FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP).' WHERE c_id = '.$course_id.' AND survey_id = '.(int)$_GET['survey_id'].' LIMIT 1';
+	$sql = 'SELECT id FROM '.Database :: get_course_table(TABLE_SURVEY_QUESTION_GROUP).'
+	        WHERE
+                c_id = '.$course_id.' AND
+                survey_id = '.(int)$_GET['survey_id'].' LIMIT 1';
 	$rs = Database::query($sql);
 	if(Database::num_rows($rs)===0) {
-		header('Location: survey.php?survey_id='.(int)$_GET['survey_id'].'&message='.'YouNeedToCreateGroups');
+		header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.(int)$_GET['survey_id'].'&message='.'YouNeedToCreateGroups');
 		exit;
 	}
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array ('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
-$interbreadcrumb[] = array ('url' => 'survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']), 'name' => strip_tags($urlname));
+$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
+$interbreadcrumb[] = array ('url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']), 'name' => strip_tags($urlname));
 
 // Tool name
 if ($_GET['action'] == 'add') {
@@ -95,7 +98,7 @@ $possible_types = array('personality', 'yesno', 'multiplechoice', 'multiplerespo
 
 // Actions
 $actions = '<div class="actions">';
-$actions .= '<a href="survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png', get_lang('BackToSurvey'),'',ICON_SIZE_MEDIUM).'</a>';
+$actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.Security::remove_XSS($_GET['survey_id']).'">'.Display::return_icon('back.png', get_lang('BackToSurvey'),'',ICON_SIZE_MEDIUM).'</a>';
 $actions .= '</div>';
 // Checking if it is a valid type
 if (!in_array($_GET['type'], $possible_types)) {
@@ -116,7 +119,11 @@ if (empty($_POST['save_question']) && in_array($_GET['type'], $possible_types)) 
 		if (isset($_SESSION['temp_sys_message'])) {
 			$error_message=$_SESSION['temp_sys_message'];
 			unset($_SESSION['temp_sys_message']);
-			if ($error_message == 'PleaseEnterAQuestion' || $error_message == 'PleasFillAllAnswer'|| $error_message == 'PleaseChooseACondition'|| $error_message == 'ChooseDifferentCategories') {
+			if ($error_message == 'PleaseEnterAQuestion' ||
+                $error_message == 'PleasFillAllAnswer'||
+                $error_message == 'PleaseChooseACondition'||
+                $error_message == 'ChooseDifferentCategories'
+            ) {
 				Display::display_error_message(get_lang($error_message), true);
 			}
 		}

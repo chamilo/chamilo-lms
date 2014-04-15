@@ -185,12 +185,14 @@ $(document).ready( function() {
     * */
 
     $(".advanced_options").on("click", function() {
-        event.preventDefault();
+
         var id = $(this).attr('id') + '_options';
         var button = $(this);
         $("#"+id).toggle(function() {
             button.toggleClass('active');
         });
+        //event.preventDefault();
+        return false;
     });
 
     /**

@@ -3445,7 +3445,7 @@ class Exercise {
         if (api_get_session_id()) {
             $teachers = CourseManager::get_coach_list_from_course_code($coursecode, api_get_session_id());
         } else {
-            $teachers = CourseManager::get_teacher_list_from_course_code($coursecode);
+            $teachers = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
         }
 
         if (!empty($teachers)) {

@@ -7,8 +7,9 @@ use ChamiloLMS\Controller\CommonController;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
-use Entity;
+use ChamiloLMS\Entity;
 use ChamiloLMS\Form\RoleType;
+use ChamiloLMS\Entity\Role;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -87,7 +88,7 @@ class RoleController extends CommonController
      */
     protected function getRepository()
     {
-        return $this->get('orm.em')->getRepository('Entity\Role');
+        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\Role');
     }
 
     /**
@@ -95,7 +96,7 @@ class RoleController extends CommonController
      */
     protected function getNewEntity()
     {
-        return new Entity\Role();
+        return new Role();
     }
 
     /**

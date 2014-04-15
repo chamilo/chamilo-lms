@@ -338,11 +338,11 @@ class UserManager
 
 
             // Adding user
-            /** @var Entity\User $user */
+            /** @var ChamiloLMS\Entity\User $user */
             $em = self::$em;
 
-            $user = $em->getRepository('Entity\User')->find($return);
-            $role = $em->getRepository('Entity\Role')->find($status);
+            $user = $em->getRepository('ChamiloLMS\Entity\User')->find($return);
+            $role = $em->getRepository('ChamiloLMS\Entity\Role')->find($status);
 
             $user->getRolesObj()->add($role);
             $em->persist($user);
@@ -793,10 +793,10 @@ class UserManager
 
         global $app;
         // Adding user
-        /** @var Entity\User $user */
+        /** @var ChamiloLMS\Entity\User $user */
         $em = $app['orm.ems']['db_write'];
-        $user = $em->getRepository('Entity\User')->find($user_id);
-        $role = $em->getRepository('Entity\Role')->find($status);
+        $user = $em->getRepository('ChamiloLMS\Entity\User')->find($user_id);
+        $role = $em->getRepository('ChamiloLMS\Entity\Role')->find($status);
 
         $user->getRolesObj()->remove(0);
         $user->getRolesObj()->add($role);

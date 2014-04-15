@@ -129,7 +129,7 @@ class Testcategory
         if ($data['nb'] <= 0) {
             // @todo inject the app in the class
             global $app;
-            $category = new \Entity\CQuizCategory();
+            $category = new ChamiloLMS\Entity\CQuizCategory();
             $category->setTitle($this->name);
             $category->setDescription($this->description);
 
@@ -221,7 +221,7 @@ class Testcategory
             return false;
         }
 
-        $repo = $app['orm.ems']['db_write']->getRepository('Entity\CQuizCategory');
+        $repo = $app['orm.ems']['db_write']->getRepository('ChamiloLMS\Entity\CQuizCategory');
         $repo->removeFromTree($category);
         // clear cached nodes
         $app['orm.ems']['db_write']->clear();
@@ -957,7 +957,7 @@ class Testcategory
             unset($category_list['total']);
         }
         $em = $app['orm.em'];
-        $repo = $em->getRepository('Entity\CQuizCategory');
+        $repo = $em->getRepository('ChamiloLMS\Entity\CQuizCategory');
 
         $redefineCategoryList = array();
 
@@ -965,7 +965,7 @@ class Testcategory
             $globalCategoryScore = array();
 
             foreach ($category_list as $category_id => $category_item) {
-                $cat = $em->find('Entity\CQuizCategory', $category_id);
+                $cat = $em->find('ChamiloLMS\Entity\CQuizCategory', $category_id);
                 $path = $repo->getPath($cat);
 
                 $categoryName = $category_name_list[$category_id];

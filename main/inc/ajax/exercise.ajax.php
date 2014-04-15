@@ -109,19 +109,19 @@ switch ($action) {
         $courseId = api_get_course_int_id();
 
         $em = $this->get('orm.em');
-        $repo = $em->getRepository('Entity\CQuizCategory');
+        $repo = $em->getRepository('ChamiloLMS\Entity\CQuizCategory');
 
         $json_items = array();
         if (!empty($items)) {
             foreach ($items as $item) {
                 if ($item['c_id'] == 0) {
                     if ($filterByGlobal) {
-                        $cat = $em->find('Entity\CQuizCategory', $item['iid']);
+                        $cat = $em->find('ChamiloLMS\Entity\CQuizCategory', $item['iid']);
                         $idList = array();
                         if ($cat) {
                             $path = $repo->getPath($cat);
                             if (!empty($path)) {
-                                /** @var Entity\CQuizCategory $cat */
+                                /** @var \ChamiloLMS\Entity\CQuizCategory $cat */
                                 foreach ($path as $cat) {
                                     $idList[] = $cat->getIid();
                                 }

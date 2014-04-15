@@ -10,6 +10,7 @@
  * Class managing the values in extra fields for any datatype
  * @package chamilo.library.extrafields
  */
+
 class ExtraFieldValue extends Model
 {
     public $type = null;
@@ -35,25 +36,25 @@ class ExtraFieldValue extends Model
                 $this->table = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
                 $this->author_id = 'user_id';
-                $this->entityName = 'Entity\CourseFieldValues';
+                $this->entityName = 'ChamiloLMS\Entity\CourseFieldValues';
                 break;
             case 'user':
                 $this->table = Database::get_main_table(TABLE_MAIN_USER_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_USER_FIELD);
                 $this->author_id = 'author_id';
-                $this->entityName = 'Entity\UserFieldValues';
+                $this->entityName = 'ChamiloLMS\Entity\UserFieldValues';
                 break;
             case 'session':
                 $this->table = Database::get_main_table(TABLE_MAIN_SESSION_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_SESSION_FIELD);
                 $this->author_id = 'user_id';
-                $this->entityName = 'Entity\SessionFieldValues';
+                $this->entityName = 'ChamiloLMS\Entity\SessionFieldValues';
                 break;
             case 'question':
                 $this->table = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD_VALUES);
                 $this->table_handler_field = Database::get_main_table(TABLE_MAIN_QUESTION_FIELD);
                 $this->author_id = 'user_id';
-                $this->entityName = 'Entity\QuestionFieldValues';
+                $this->entityName = 'ChamiloLMS\Entity\QuestionFieldValues';
                 break;
             default:
                 //unmanaged datatype, return false to let the caller know it
@@ -190,22 +191,22 @@ class ExtraFieldValue extends Model
                     global $app;
                     switch($this->type) {
                         case 'question':
-                            $extraFieldValue = new Entity\QuestionFieldValues();
+                            $extraFieldValue = new ChamiloLMS\Entity\QuestionFieldValues();
                             $extraFieldValue->setUserId(api_get_user_id());
                             $extraFieldValue->setQuestionId($params[$this->handler_id]);
                             break;
                         case 'course':
-                            $extraFieldValue = new Entity\CourseFieldValues();
+                            $extraFieldValue = new ChamiloLMS\Entity\CourseFieldValues();
                             $extraFieldValue->setUserId(api_get_user_id());
                             $extraFieldValue->setQuestionId($params[$this->handler_id]);
                             break;
                         case 'user':
-                            $extraFieldValue = new Entity\UserFieldValues();
+                            $extraFieldValue = new ChamiloLMS\Entity\UserFieldValues();
                             $extraFieldValue->setUserId($params[$this->handler_id]);
                             $extraFieldValue->setAuthorId(api_get_user_id());
                             break;
                         case 'session':
-                            $extraFieldValue = new Entity\SessionFieldValues();
+                            $extraFieldValue = new ChamiloLMS\Entity\SessionFieldValues();
                             $extraFieldValue->setUserId(api_get_user_id());
                             $extraFieldValue->setSessionId($params[$this->handler_id]);
                             break;
@@ -232,22 +233,22 @@ class ExtraFieldValue extends Model
                     global $app;
                     switch($this->type) {
                         case 'question':
-                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('Entity\QuestionFieldValues')->find($field_values['id']);
+                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('ChamiloLMS\Entity\QuestionFieldValues')->find($field_values['id']);
                             $extraFieldValue->setUserId(api_get_user_id());
                             $extraFieldValue->setQuestionId($params[$this->handler_id]);
                             break;
                         case 'course':
-                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('Entity\CourseFieldValues')->find($field_values['id']);
+                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('ChamiloLMS\Entity\CourseFieldValues')->find($field_values['id']);
                             $extraFieldValue->setUserId(api_get_user_id());
                             $extraFieldValue->setCourseCode($params[$this->handler_id]);
                             break;
                         case 'user':
-                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('Entity\UserFieldValues')->find($field_values['id']);
+                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('ChamiloLMS\Entity\UserFieldValues')->find($field_values['id']);
                             $extraFieldValue->setUserId(api_get_user_id());
                             $extraFieldValue->setAuthorId(api_get_user_id());
                             break;
                         case 'session':
-                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('Entity\SessionFieldValues')->find($field_values['id']);
+                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('ChamiloLMS\Entity\SessionFieldValues')->find($field_values['id']);
                             $extraFieldValue->setUserId(api_get_user_id());
                             $extraFieldValue->setSessionId($params[$this->handler_id]);
                             break;

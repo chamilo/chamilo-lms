@@ -44,7 +44,7 @@ class PagesController {
 
     function editAction(Application $app, $id) {
         $request = $app['request'];
-        $page = $app['orm.em']->find('Entity\Pages', $id);
+        $page = $app['orm.em']->find('ChamiloLMS\Entity\Pages', $id);
 
         if (empty($page)) {
             $app->abort(404, "Page $id does not exist.");
@@ -66,7 +66,7 @@ class PagesController {
     }
 
     function showAction(Application $app, $id) {
-        $page = $app['orm.em']->find('Entity\Pages', $id);
+        $page = $app['orm.em']->find('ChamiloLMS\Entity\Pages', $id);
         $actions = Display::url(Display::return_icon('list.png', get_lang('Listing'), array(), ICON_SIZE_MEDIUM), $app['url_generator']->generate('index'));
         return $app['template']->render_template('pages/show.tpl', array(
             'page' => $page,
@@ -76,7 +76,7 @@ class PagesController {
 
     function deleteAction(Application $app, $id) {
         $em = $app['orm.em'];
-        $page = $em->find('Entity\Pages', $id);
+        $page = $em->find('ChamiloLMS\Entity\Pages', $id);
         $em->remove($page);
         $em->flush();
         return $app->redirect($app['url_generator']->generate('index'), 201);
@@ -84,7 +84,7 @@ class PagesController {
 
     function listAction(Application $app, $page = 1) {
         /*
-        $source = new Entity('Entity\Pages');
+        $source = new Entity('ChamiloLMS\Entity\Pages');
         $grid = new Grid();
 
         // Attach the source to the grid
@@ -95,12 +95,12 @@ class PagesController {
         */
 
         $em = $app['orm.em'];
-        $dql = 'SELECT a FROM Entity\Pages a';
+        $dql = 'SELECT a FROM ChamiloLMS\Entity\Pages a';
         $query = $em->createQuery($dql)->setFirstResult(0)->setMaxResults(100);
 
         //or using the repository
         //
-        //$query = $em->getRepository('Entity\Pages')->getLatestPages();
+        //$query = $em->getRepository('ChamiloLMS\Entity\Pages')->getLatestPages();
 
         $adapter = new DoctrineORMAdapter($query);
         $pagerfanta = new Pagerfanta($adapter);
@@ -133,7 +133,7 @@ class PagesController {
 
     function getForm(Application $app, $entity = null) {
         if (empty($entity)) {
-            $entity = new Entity\Pages();
+            $entity = new ChamiloLMS\Entity\Pages();
         }
         $form = $app['form.factory']->createBuilder('form', $entity);
         $form->add('title', 'text', array(

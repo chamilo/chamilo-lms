@@ -12,6 +12,8 @@ use ChamiloLMS\Form\JuryType;
 use ChamiloLMS\Form\JuryUserType;
 use ChamiloLMS\Form\JuryMembersType;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use ChamiloLMS\Entity\JuryMembers;
+use ChamiloLMS\Entity\Jury;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -85,7 +87,7 @@ class JuryController extends CommonController
     */
     public function removeMemberAction($id)
     {
-        $juryMembers = $this->getManager()->getRepository('Entity\JuryMembers')->find($id);
+        $juryMembers = $this->getManager()->getRepository('ChamiloLMS\Entity\JuryMembers')->find($id);
         if ($juryMembers) {
             $em = $this->getManager();
             $em->remove($juryMembers);
@@ -107,8 +109,8 @@ class JuryController extends CommonController
         $keyword = $request->get('tag');
 
         $role = $request->get('role');
-        /** @var Entity\Repository\UserRepository $repo */
-        $repo = $this->getManager()->getRepository('Entity\User');
+        /** @var \ChamiloLMS\Entity\Repository\UserRepository $repo */
+        $repo = $this->getManager()->getRepository('ChamiloLMS\Entity\User');
 
         if (empty($role)) {
             $entities = $repo->searchUserByKeyword($keyword);
@@ -118,7 +120,7 @@ class JuryController extends CommonController
 
         $data = array();
         if ($entities) {
-            /** @var \Entity\User $entity */
+            /** @var \ChamiloLMS\Entity\User $entity */
             foreach ($entities as $entity) {
                 $data[] = array(
                     'key' => (string) $entity->getUserId(),
@@ -136,19 +138,19 @@ class JuryController extends CommonController
     public function addMembersAction(Application $app, $id)
     {
         $juryUserType = new JuryMembersType();
-        $juryMember =  new Entity\JuryMembers();
+        $juryMember =  new JuryMembers();
         $juryMember->setJuryId($id);
         $form = $this->createForm($juryUserType, $juryMember);
         $request = $this->getRequest();
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
             if ($form->isValid()) {
-                /** @var Entity\JuryMembers $item */
+                /** @var JuryMembers $item */
                 $item = $form->getData();
 
                 $userIdList = $item->getUserId();
                 $userId = ($userIdList[0]);
-                $user = $this->getManager()->getRepository('Entity\User')->find($userId);
+                $user = $this->getManager()->getRepository('ChamiloLMS\Entity\User')->find($userId);
                 if (!$user) {
                     throw new \Exception('Unable to found User');
                 }
@@ -204,7 +206,7 @@ class JuryController extends CommonController
      */
     protected function getRepository()
     {
-        return $this->get('orm.em')->getRepository('Entity\Jury');
+        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\Jury');
     }
 
     /**
@@ -212,7 +214,7 @@ class JuryController extends CommonController
      */
     protected function getNewEntity()
     {
-        return new Entity\Jury();
+        return new Jury();
     }
 
     /**

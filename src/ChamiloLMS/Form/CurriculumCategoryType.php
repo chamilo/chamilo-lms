@@ -5,13 +5,13 @@ namespace ChamiloLMS\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Entity;
+use ChamiloLMS\Entity\CurriculumCategory;
 
 class CurriculumCategoryType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /** @var Entity\CurriculumCategory $entity */
+        /** @var CurriculumCategory $entity */
         $entity = $builder->getData();
 
         $builder->add('title', 'text');

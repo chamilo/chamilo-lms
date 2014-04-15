@@ -12,8 +12,8 @@ namespace Link;
 
 /**
  * Model for Link/Urls
- * 
- * 
+ *
+ *
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Genevas
  * @license /license.txt
  */
@@ -21,11 +21,11 @@ class Link
 {
 
     /**
-     * @return \Entity\Repository\LinkRepository
+     * @return \ChamiloLMS\Entity\Repository\LinkRepository
      */
     public static function repository()
     {
-        return \Entity\Repository\LinkRepository::instance();
+        return \ChamiloLMS\Entity\Repository\LinkRepository::instance();
     }
 
     /**
@@ -134,7 +134,7 @@ class Link
     /**
      * Get c_id
      *
-     * @return integer 
+     * @return integer
      */
     public function get_c_id()
     {
@@ -156,7 +156,7 @@ class Link
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function get_id()
     {
@@ -178,7 +178,7 @@ class Link
     /**
      * Get url
      *
-     * @return text 
+     * @return text
      */
     public function get_url()
     {
@@ -200,7 +200,7 @@ class Link
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function get_title()
     {
@@ -222,7 +222,7 @@ class Link
     /**
      * Get description
      *
-     * @return text 
+     * @return text
      */
     public function get_description()
     {
@@ -244,7 +244,7 @@ class Link
     /**
      * Get category_id
      *
-     * @return integer 
+     * @return integer
      */
     public function get_category_id()
     {
@@ -266,7 +266,7 @@ class Link
     /**
      * Get display_order
      *
-     * @return integer 
+     * @return integer
      */
     public function get_display_order()
     {
@@ -288,7 +288,7 @@ class Link
     /**
      * Get on_homepage
      *
-     * @return string 
+     * @return string
      */
     public function get_on_homepage()
     {
@@ -310,7 +310,7 @@ class Link
     /**
      * Get target
      *
-     * @return string 
+     * @return string
      */
     public function get_target()
     {
@@ -332,7 +332,7 @@ class Link
     /**
      * Get session_id
      *
-     * @return integer 
+     * @return integer
      */
     public function get_session_id()
     {
@@ -369,10 +369,10 @@ class Link
         if (!in_array('curl', get_loaded_extensions())) {
             true;
         }
-        
+
         $defaults = array(
             CURLOPT_URL => $url,
-            CURLOPT_FOLLOWLOCATION => true,                 
+            CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HEADER => 0,
             CURLOPT_NOBODY => true,
             CURLOPT_TIMEOUT => 4,

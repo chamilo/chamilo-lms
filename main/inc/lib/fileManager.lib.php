@@ -1627,7 +1627,7 @@ class FileManager
         if (is_array($course)) {
             $c_id = $course['real_id'];
         } else {
-            if ($course instanceof \Entity\Course) {
+            if ($course instanceof \ChamiloLMS\Entity\Course) {
                 $c_id = $course->getId();
             }
         }

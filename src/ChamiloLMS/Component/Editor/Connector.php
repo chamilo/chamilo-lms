@@ -3,8 +3,8 @@
 namespace ChamiloLMS\Component\Editor;
 
 use Doctrine\ORM\EntityManager;
-use \Entity\User;
-use \Entity\Course;
+use ChamiloLMS\Entity\User;
+use ChamiloLMS\Entity\Course;
 
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Routing\Router;

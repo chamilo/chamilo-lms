@@ -9,17 +9,28 @@
 
 // Needed to use the "entity" option in symfony forms
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
+use Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator;
+use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
+use Symfony\Component\Security\Core\Authorization\AccessDecisionManager;
 use FranMoreno\Silex\Provider\PagerfantaServiceProvider;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
-use Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder;
-use Symfony\Component\Security\Core\Authorization\AccessDecisionManager;
+use Silex\Provider\SecurityServiceProvider;
 use MediaAlchemyst\Alchemyst;
 use MediaAlchemyst\MediaAlchemystServiceProvider;
 use MediaVorus\MediaVorusServiceProvider;
 use FFMpeg\FFMpegServiceProvider;
 use PHPExiftool\PHPExiftoolServiceProvider;
+use Knp\Provider\ConsoleServiceProvider;
+
+use ChamiloLMS\Component\Auth\LoginSuccessHandler;
+use ChamiloLMS\Component\Auth\LogoutSuccessHandler;
+use ChamiloLMS\Component\Auth\LoginListener;
 use ChamiloLMS\Component\Editor\Connector;
+use ChamiloLMS\Component\Validator\ConstraintValidatorFactory;
+use ChamiloLMS\Component\Mail\MailGenerator;
+use ChamiloLMS\Component\DataFilesystem\DataFilesystem;
 
 // Flint
 $app->register(new Flint\Provider\ConfigServiceProvider());
@@ -66,8 +77,6 @@ if (isset($app['configuration']['services']['media-alchemyst'])) {
     ));
 }
 
-use Knp\Provider\ConsoleServiceProvider;
-
 $app->register(new ConsoleServiceProvider(), array(
     'console.name'              => 'Chamilo',
     'console.version'           => '1.0.0',
@@ -100,14 +109,6 @@ $app->register(new Silex\Provider\HttpCacheServiceProvider(), array(
     'http_cache.cache_dir' => $app['http_cache.cache_dir'].'/',
 ));*/
 
-class SecurityServiceProvider extends \Silex\Provider\SecurityServiceProvider
-{
-    public function addFakeRoute($method, $pattern, $name)
-    {
-        // Dont do anything otherwise the closures will be dumped and that leads to fatal errors.
-    }
-}
-
 $app->register(new SecurityServiceProvider, array(
     'security.firewalls' => array(
         'login' => array(
@@ -128,7 +129,7 @@ $app->register(new SecurityServiceProvider, array(
                 'target' => '/'
             ),
             'users' => $app->share(function() use ($app) {
-                return $app['orm.em']->getRepository('Entity\User');
+                return $app['orm.em']->getRepository('ChamiloLMS\Entity\User');
             }),
             'switch_user' => true,
             'anonymous' => true
@@ -141,22 +142,26 @@ $app['security.encoder.digest'] = $app->share(function($app) {
     // use the sha1 algorithm
     // don't base64 encode the password
     // use only 1 iteration
-    return new MessageDigestPasswordEncoder($app['configuration']['password_encryption'], false, 1);
+    return new MessageDigestPasswordEncoder(
+        $app['configuration']['password_encryption'],
+        false,
+        1
+    );
 });
 
 // What to do when login success?
 $app['security.authentication.success_handler.secured'] = $app->share(function($app) {
-    return new ChamiloLMS\Component\Auth\LoginSuccessHandler($app['url_generator'], $app['security']);
+    return new LoginSuccessHandler($app['url_generator'], $app['security']);
 });
 
 // What to do when logout?
 $app['security.authentication.logout_handler.secured'] = $app->share(function($app) {
-    return new ChamiloLMS\Component\Auth\LogoutSuccessHandler($app['url_generator'], $app['security']);
+    return new LogoutSuccessHandler($app['url_generator'], $app['security']);
 });
 
 // What to do when switch user?
 $app['security.authentication_listener.switch_user.secured'] = $app->share(function($app) {
-    return new ChamiloLMS\Component\Auth\LoginListener();
+    return new LoginListener();
 });
 
 // Role hierarchy
@@ -297,21 +302,28 @@ class ManagerRegistry extends AbstractManagerRegistry
 
 // Setting up the Manager registry in order to use entity in forms.
 $app['manager_registry'] = $app->share(function() use ($app) {
-    $managerRegistry = new ManagerRegistry(null, array('db'), array('orm.em'), null, null, $app['orm.proxies_namespace']);
+    $managerRegistry = new ManagerRegistry(
+        null,
+        array('db'),
+        array('orm.em'),
+        null,
+        null,
+        $app['orm.proxies_namespace']
+    );
     $managerRegistry->setContainer($app);
     return $managerRegistry;
 });
 
 // Needed to use the "entity" option in Symfony forms.
 $app['form.extensions'] = $app->share($app->extend('form.extensions', function ($extensions, $app) {
-    $extensions[] = new \Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension($app['manager_registry']);
+    $extensions[] = new DoctrineOrmExtension($app['manager_registry']);
     return $extensions;
 }));
 
 // Needed to use the "UniqueEntity" validator.
 $app['validator.validator_factory'] = $app->share(function ($app) {
-    $uniqueValidator = new Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator($app['manager_registry']);
-    $factory = new ChamiloLMS\Component\Validator\ConstraintValidatorFactory();
+    $uniqueValidator = new UniqueEntityValidator($app['manager_registry']);
+    $factory = new ConstraintValidatorFactory();
     $factory->addInstance('doctrine.orm.validator.unique', $uniqueValidator);
     return $factory;
 });
@@ -376,8 +388,8 @@ if (isset($app['configuration']['main_database'])) {
             (Example: use Doctrine\ORM\Mapping AS ORM, @ORM\Entity)*/
             'use_simple_annotation_reader' => false,
             'type' => 'annotation',
-            'namespace' => 'Entity',
-            'path' => api_get_path(INCLUDE_PATH).'Entity',
+            'namespace' => 'ChamiloLMS\Entity',
+            'path' => api_get_path(SYS_PATH).'src/ChamiloLMS/Entity',
             // 'orm.default_cache' =>
         ),
         array(
@@ -499,32 +511,6 @@ define('IMAGE_PROCESSOR', 'gd'); // imagick or gd strings
 $app->register(new Grom\Silex\ImagineServiceProvider(), array(
     'imagine.factory' => 'Gd'
 ));
-
-// Prompts Doctrine SQL queries using Monolog.
-
-/*$app['dbal_logger'] = $app->share(function() {
-    return new Doctrine\DBAL\Logging\DebugStack();
-});*/
-
-if ($app['debug']) {
-    /*$logger = new Doctrine\DBAL\Logging\DebugStack();
-    $app['db.config']->setSQLLogger($logger);
-    $app->after(function() use ($app, $logger) {
-        // Log all queries as DEBUG.
-        $app['monolog']->addDebug('---- Doctrine SQL queries ----');
-        foreach ($logger->queries as $query) {
-            $app['monolog']->addDebug(
-                $query['sql'],
-                array(
-                    'params' => $query['params'],
-                    'types'  => $query['types'],
-                    'executionMS' => $query['executionMS']
-                )
-            );
-        }
-        $app['monolog']->addDebug('---- End Doctrine SQL queries ----');
-    });*/
-}
 
 // Email service provider.
 $app->register(new Silex\Provider\SwiftmailerServiceProvider(), array(
@@ -677,7 +663,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 
             if (!empty($courseCode)) {
                 // Converting /courses/XXX/ to a Entity/Course object.
-                return $app['orm.em']->getRepository('Entity\Course')->findOneByCode($courseCode);
+                return $app['orm.em']->getRepository('ChamiloLMS\Entity\Course')->findOneByCode($courseCode);
                 //$app['template']->assign('course', $course);
                 return $course;
             }
@@ -692,7 +678,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface
                 $sessionId = $session->get('id_session');
             }
             if (!empty($sessionId)) {
-                return $app['orm.em']->getRepository('Entity\Session')->findOneById($sessionId);
+                return $app['orm.em']->getRepository('ChamiloLMS\Entity\Session')->findOneById($sessionId);
 //                $app['template']->assign('course_session', $courseSession);
                 return $courseSession;
             }
@@ -705,7 +691,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface
             if (isset($app['configuration']['services']['media-alchemyst'])) {
                 $mediaConverter = $app['media-alchemyst'];
             }
-            $filesystem = new ChamiloLMS\Component\DataFilesystem\DataFilesystem(
+            $filesystem = new DataFilesystem(
                 $app['paths'],
                 $app['filesystem'],
                 $app['editor_connector'],
@@ -722,7 +708,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 
         // Mail template generator.
         $app['mail_generator'] = $app->share(function () use ($app) {
-            $mailGenerator = new ChamiloLMS\Component\Mail\MailGenerator($app['twig'], $app['mailer']);
+            $mailGenerator = new MailGenerator($app['twig'], $app['mailer']);
             return $mailGenerator;
         });
 

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 namespace ChamiloLMS\Component\Editor\Driver;
 
-use Entity\CDropboxFile;
+use ChamiloLMS\Entity\CDropboxFile;
 use ChamiloLMS\Component\Editor\Connector;
 
 /**
@@ -68,8 +68,8 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements InterfaceDriver
     {
         if ($this->connector->security->isGranted('IS_AUTHENTICATED_FULLY')) {
 
-            /** @var \Entity\Repository\UserRepository $repository */
-            /*$repository = $this->connector->entityManager->getRepository('Entity\User');
+            /** @var \ChamiloLMS\Entity\Repository\UserRepository $repository */
+            /*$repository = $this->connector->entityManager->getRepository('ChamiloLMS\Entity\User');
             $courses = $repository->getCourses($this->connector->user);*/
 
             //if (!empty($courses)) {
@@ -205,7 +205,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements InterfaceDriver
             return $this->returnDirectory();
         }
 
-        $file = $this->connector->entityManager->getRepository('Entity\CDropboxFile')->findOneBy($criteria);
+        $file = $this->connector->entityManager->getRepository('ChamiloLMS\Entity\CDropboxFile')->findOneBy($criteria);
 
         if ($file) {
             $stat = $this->transformFileInStat($file);

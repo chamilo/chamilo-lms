@@ -24,7 +24,7 @@ class IndexController extends CommonController
     {
         $template = $this->getTemplate();
 
-        /*$user = $this->getManager()->getRepository('Entity\User')->find(1);
+        /*$user = $this->getManager()->getRepository('ChamiloLMS\Entity\User')->find(1);
         foreach($user->getPortals() as $portal) {
             var_dump($portal->getUrl());
         }*/
@@ -54,10 +54,10 @@ class IndexController extends CommonController
         if ($app['security']->isGranted('ROLE_ADMIN')) {
         }*/
 
-        /** @var \Entity\User $user */
+        /** @var \ChamiloLMS\Entity\User $user */
         /*$em = $app['orm.ems']['db_write'];
-        $user = $em->getRepository('Entity\User')->find(6);
-        $role = $em->getRepository('Entity\Role')->findOneByRole('ROLE_STUDENT');
+        $user = $em->getRepository('ChamiloLMS\Entity\User')->find(6);
+        $role = $em->getRepository('ChamiloLMS\Entity\Role')->findOneByRole('ROLE_STUDENT');
         $user->getRolesObj()->add($role);
         $em->persist($user);
         $em->flush();*/

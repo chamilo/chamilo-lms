@@ -3,7 +3,7 @@
 
 namespace ChamiloLMS\Controller\Tool\Introduction;
 
-use Entity\CToolIntro;
+use ChamiloLMS\Entity\CToolIntro;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use ChamiloLMS\Controller\CommonController;
@@ -140,7 +140,7 @@ class IntroductionController extends CommonController
      */
     protected function getRepository()
     {
-        return $this->get('orm.em')->getRepository('Entity\CToolIntro');
+        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\CToolIntro');
     }
 
     /**

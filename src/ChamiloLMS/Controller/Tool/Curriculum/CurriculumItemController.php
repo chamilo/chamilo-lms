@@ -7,7 +7,8 @@ use ChamiloLMS\Controller\CommonController;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
-use Entity;
+use ChamiloLMS\Entity\CurriculumItem;
+use ChamiloLMS\Entity\CurriculumCategory;
 use ChamiloLMS\Form\CurriculumItemType;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -107,9 +108,9 @@ class CurriculumItemController extends CommonController
         $request = $this->getRequest();
         $formType = $this->getFormType();
 
-        $entity = new Entity\CurriculumItem();
+        $entity = new CurriculumItem();
 
-        $category = $this->get('orm.em')->getRepository('Entity\CurriculumCategory')->find($id);
+        $category = $this->get('orm.em')->getRepository('ChamiloLMS\Entity\CurriculumCategory')->find($id);
         $entity->setCategory($category);
 
         $form = $this->get('form.factory')->create($formType, $entity);
@@ -117,7 +118,7 @@ class CurriculumItemController extends CommonController
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
             if ($form->isValid()) {
-                /** @var Entity\CurriculumCategory $item */
+                /** @var CurriculumCategory $item */
                 $item = $form->getData();
                 $em = $this->getManager();
                 $em->persist($item);
@@ -208,7 +209,7 @@ class CurriculumItemController extends CommonController
      */
     protected function getRepository()
     {
-        return $this->get('orm.em')->getRepository('Entity\CurriculumItem');
+        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\CurriculumItem');
     }
 
     /**
@@ -216,7 +217,7 @@ class CurriculumItemController extends CommonController
      */
     protected function getNewEntity()
     {
-        return new Entity\CurriculumItem();
+        return new CurriculumItem();
     }
 
     /**

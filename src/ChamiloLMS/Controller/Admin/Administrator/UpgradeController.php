@@ -194,7 +194,7 @@ class UpgradeController extends CommonController
     }
 
     /**
-     * @return \Entity\Repository\BranchSyncRepository
+     * @return \ChamiloLMS\Entity\Repository\BranchSyncRepository
      */
     protected function getRepository()
     {

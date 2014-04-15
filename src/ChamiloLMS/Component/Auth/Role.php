@@ -6,7 +6,7 @@ namespace ChamiloLMS\Component\Auth;
 use Symfony\Component\Security\Core\Role\RoleInterface;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Entity\CourseRelUser;
+use ChamiloLMS\Entity\CourseRelUser;
 
 /**
  * Class Role

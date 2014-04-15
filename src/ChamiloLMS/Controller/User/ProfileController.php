@@ -43,16 +43,22 @@ class ProfileController extends CommonController
         if ($this->getUser()->getUsername() != $username) {
             return $this->abort(401);
         }
+
         $userId = \UserManager::get_user_id_from_username($username);
         $userInfo = api_get_user_info($userId);
 
         $this->getTemplate()->assign('driver_list', 'PersonalDriver,DropBoxDriver');
-        $editor = $this->getTemplate()->renderTemplate($this->getHtmlEditor()->getEditorStandAloneTemplate());
+
+        $editor = $this->getTemplate()->renderTemplate(
+            $this->getHtmlEditor()->getEditorStandAloneTemplate()
+        );
 
         $this->getTemplate()->assign('user', $userInfo);
         $this->getTemplate()->assign('editor', $editor);
 
-        $response = $this->getTemplate()->renderTemplate($this->getTemplatePath().'files.tpl');
+        $response = $this->getTemplate()->renderTemplate(
+            $this->getTemplatePath().'files.tpl'
+        );
         return new Response($response, 200, array());
     }
 

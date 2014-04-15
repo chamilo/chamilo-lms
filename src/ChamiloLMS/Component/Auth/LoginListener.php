@@ -13,7 +13,7 @@ class LoginListener
      */
     public function onSecuritySwitchUser(SwitchUserEvent $event)
     {
-        /** @var \Entity\User $user */
+        /** @var \ChamiloLMS\Entity\User $user */
         $user = $event->getTargetUser();
         /*var_dump($user );
         var_dump($event->getRequest()->getUser());

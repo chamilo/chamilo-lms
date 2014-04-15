@@ -965,7 +965,7 @@ class Exercise
         if (!empty($questions_by_category)) {
             global $app;
             $em = $app['orm.em'];
-            $repo = $em->getRepository('Entity\CQuizCategory');
+            $repo = $em->getRepository('ChamiloLMS\Entity\CQuizCategory');
 
             $newCategoryList = array();
 
@@ -980,7 +980,7 @@ class Exercise
 
                 if (!empty($cat['parent_id'])) {
                     if (!isset($parentsLoaded[$cat['parent_id']])) {
-                        $categoryEntity = $em->find('Entity\CQuizCategory', $cat['parent_id']);
+                        $categoryEntity = $em->find('ChamiloLMS\Entity\CQuizCategory', $cat['parent_id']);
                         $parentsLoaded[$cat['parent_id']] = $categoryEntity;
                     } else {
                         $categoryEntity = $parentsLoaded[$cat['parent_id']];
@@ -990,7 +990,7 @@ class Exercise
                     if ($this->categoryMinusOne) {
                         //$index = 1;
                     }
-                    /** @var Entity\CQuizCategory $categoryParent*/
+                    /** @var \ChamiloLMS\Entity\CQuizCategory $categoryParent*/
 
                     foreach ($path as $categoryParent) {
                         $visibility = $categoryParent->getVisibility();
@@ -1754,7 +1754,7 @@ class Exercise
 
         global $app;
         $em = $app['orm.em'];
-        $types = $em->getRepository('Entity\QuestionScore')->findAll();
+        $types = $em->getRepository('ChamiloLMS\Entity\QuestionScore')->findAll();
         $options = array(
             '0' => get_lang('SelectAnOption')
         );

@@ -634,13 +634,13 @@ class ExtraField extends Model
                         $addOptions = array();
 
                         global $app;
-                        $optionsExists = $app['orm.em']->getRepository('Entity\ExtraFieldOptionRelFieldOption')->
+                        $optionsExists = $app['orm.em']->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')->
                             findOneBy(array('fieldId' => $field_details['id']));
 
                         if ($optionsExists) {
                             if (isset($userInfo['status']) && !empty($userInfo['status'])) {
 
-                                $fieldWorkFlow = $app['orm.em']->getRepository('Entity\ExtraFieldOptionRelFieldOption')
+                                $fieldWorkFlow = $app['orm.em']->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')
                                 ->findBy(
                                     array(
                                         'fieldId' => $field_details['id'],

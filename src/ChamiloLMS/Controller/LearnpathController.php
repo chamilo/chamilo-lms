@@ -58,14 +58,14 @@ class LearnpathController
         $sessionId = api_get_session_id();
         $session = null;
         if (!empty($sessionId)) {
-            $session = $app['orm.em']->getRepository('Entity\Session')->find($sessionId);
+            $session = $app['orm.em']->getRepository('ChamiloLMS\Entity\Session')->find($sessionId);
         }
 
         // Find course.
-        $course = $app['orm.em']->getRepository('Entity\Course')->find($courseId);
+        $course = $app['orm.em']->getRepository('ChamiloLMS\Entity\Course')->find($courseId);
 
         // Getting subscribe users to the course.
-        $subscribedUsers = $app['orm.em']->getRepository('Entity\Course')->getSubscribedStudents($course);
+        $subscribedUsers = $app['orm.em']->getRepository('ChamiloLMS\Entity\Course')->getSubscribedStudents($course);
         $subscribedUsers = $subscribedUsers->getQuery();
         $subscribedUsers = $subscribedUsers->execute();
 
@@ -76,7 +76,7 @@ class LearnpathController
         }
 
         // Getting subscribed users to a LP.
-        $subscribedUsersInLp = $app['orm.em']->getRepository('Entity\CItemProperty')->getUsersSubscribedToItem(
+        $subscribedUsersInLp = $app['orm.em']->getRepository('ChamiloLMS\Entity\CItemProperty')->getUsersSubscribedToItem(
             'learnpath',
             $lpId,
             $course,
@@ -122,7 +122,7 @@ class LearnpathController
         }
 
         //Subscribed groups to a LP
-        $subscribedGroupsInLp = $app['orm.em']->getRepository('Entity\CItemProperty')->getGroupsSubscribedToItem(
+        $subscribedGroupsInLp = $app['orm.em']->getRepository('ChamiloLMS\Entity\CItemProperty')->getGroupsSubscribedToItem(
             'learnpath',
             $lpId,
             $course,
@@ -149,7 +149,7 @@ class LearnpathController
                 'expanded' => false,
                 //'class' => 'Entity\Course',
                 //'property' => 'complete_name',
-                //'query_builder' => function(\Entity\Repository\CourseRepository $repo) use ($course) {
+                //'query_builder' => function(ChamiloLMS\Entity\Repository\CourseRepository $repo) use ($course) {
                     $repo =  $repo->getSubscribedStudents($course);
                     return $repo;
                 },
@@ -162,7 +162,7 @@ class LearnpathController
                 'required' => false,
                 //'class' => 'Entity\Course',
                 //'property' => 'complete_name',
-                //'query_builder' => function(\Entity\Repository\CourseRepository $repo) use ($course) {
+                //'query_builder' => function(ChamiloLMS\Entity\Repository\CourseRepository $repo) use ($course) {
                   //  return $repo->getSubscribedStudents($course);
                 //},
                 'choices' => $selectedChoices
@@ -181,7 +181,7 @@ class LearnpathController
             $users = $request->get('users');
             $userForm = $request->get('user_form');
             if (!empty($userForm)) {
-                $app['orm.em']->getRepository('Entity\CItemProperty')->subscribeUsersToItem(
+                $app['orm.em']->getRepository('ChamiloLMS\Entity\CItemProperty')->subscribeUsersToItem(
                     'learnpath',
                     $course,
                     $session,
@@ -195,7 +195,7 @@ class LearnpathController
             $groupForm = $request->get('group_form');
 
             if (!empty($groupForm)) {
-                $app['orm.em']->getRepository('Entity\CItemProperty')->subscribeGroupsToItem(
+                $app['orm.em']->getRepository('ChamiloLMS\Entity\CItemProperty')->subscribeGroupsToItem(
                     'learnpath',
                     $course,
                     $session,

@@ -278,14 +278,14 @@ function display_categories($type = 'simple') {
     );
 
     // @todo put this in a function
-    $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
+    $repo = $app['orm.em']->getRepository('ChamiloLMS\Entity\CQuizCategory');
 
     $query = null;
     if ($type == 'global') {
         $query = $app['orm.em']
             ->createQueryBuilder()
             ->select('node')
-            ->from('Entity\CQuizCategory', 'node')
+            ->from('ChamiloLMS\Entity\CQuizCategory', 'node')
             ->where('node.cId = 0')
             ->orderBy('node.root, node.lft', 'ASC')
             ->getQuery();
@@ -293,7 +293,7 @@ function display_categories($type = 'simple') {
         $query = $app['orm.em']
             ->createQueryBuilder()
             ->select('node')
-            ->from('Entity\CQuizCategory', 'node')
+            ->from('ChamiloLMS\Entity\CQuizCategory', 'node')
             ->where('node.cId = :courseId')
             //->add('orderBy', 'node.title ASC')
             ->orderBy('node.root, node.lft', 'ASC')

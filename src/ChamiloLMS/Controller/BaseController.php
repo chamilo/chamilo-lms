@@ -78,7 +78,7 @@ abstract class BaseController extends FlintController
     }
 
     /**
-     * @return \Entity\Course
+     * @return \ChamiloLMS\Entity\Course
      */
     protected function getCourse()
     {
@@ -89,7 +89,7 @@ abstract class BaseController extends FlintController
     }
 
     /**
-     * @return \Entity\Session
+     * @return \ChamiloLMS\Entity\Session
      */
     protected function getSession()
     {
@@ -132,7 +132,7 @@ abstract class BaseController extends FlintController
     }
 
     /**
-     * @return \Entity\User
+     * @return \ChamiloLMS\Entity\User
      */
     public function getUser()
     {

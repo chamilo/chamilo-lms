@@ -5,12 +5,15 @@ namespace ChamiloLMS\Controller\Admin\JuryMember;
 
 use ChamiloLMS\Controller\CommonController;
 use ChamiloLMS\Form\JuryType;
-use Entity;
+use ChamiloLMS\Entity\TrackExercise;
+use ChamiloLMS\Entity\Jury;
+use ChamiloLMS\Entity\TrackExerciseAttemptJury;
+use ChamiloLMS\Entity\JuryMembers;
+use ChamiloLMS\Entity;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\Criteria;
-
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -40,9 +43,7 @@ class JuryMemberController extends CommonController
     public function listUsersAction()
     {
         $userId = $this->getUser()->getUserId();
-
-        /** @var Entity\Jury $jury */
-
+        /** @var Jury $jury */
         $jury = $this->getRepository()->getJuryByUserId($userId);
 
         if (!$jury) {
@@ -54,7 +55,7 @@ class JuryMemberController extends CommonController
         $attempts = $jury->getExerciseAttempts();
 
         // @todo move logic in a repository
-        /** @var Entity\TrackExercise $attempt */
+        /** @var TrackExercise $attempt */
         $relations = array();
         $myStudentStatus = array();
         foreach ($attempts as $attempt) {
@@ -62,7 +63,7 @@ class JuryMemberController extends CommonController
             $user = $attempt->getUser();
             $juryAttempts = $attempt->getJuryAttempts();
 
-            /** @var Entity\TrackExerciseAttemptJury $juryAttempt */
+            /** @var TrackExerciseAttemptJury $juryAttempt */
             $tempAttempt = array();
             foreach ($juryAttempts as $juryAttempt) {
                 if (!isset($tempAttempt[$juryAttempt->getJuryUserId()])) {
@@ -85,8 +86,7 @@ class JuryMemberController extends CommonController
         }
 
         $members = $jury->getMembers();
-
-        /** @var Entity\JuryMembers $member */
+        /** @var JuryMembers $member */
         $studentsByMember = array();
         foreach ($members as $member) {
             $students = $member->getStudents();
@@ -122,7 +122,7 @@ class JuryMemberController extends CommonController
             $this->createNotFoundException();
         }
 
-        /** @var \Entity\Jury $jury */
+        /** @var \ChamiloLMS\Entity\Jury $jury */
         $jury = $this->getRepository()->find($juryId);
 
         if (empty($jury)) {
@@ -139,7 +139,7 @@ class JuryMemberController extends CommonController
             ->where(Criteria::expr()->eq("userId", $userId))
             ->setFirstResult(0)
             ->setMaxResults(1);
-        /** @var Entity\JuryMembers $member */
+        /** @var JuryMembers $member */
         $member = $members->matching($criteria)->first();
 
         if (empty($member)) {
@@ -152,7 +152,7 @@ class JuryMemberController extends CommonController
             ->where(Criteria::expr()->eq("userId", $trackExercise['exe_user_id']))
             ->setFirstResult(0)
             ->setMaxResults(1);
-        /** @var Entity\JuryMembers $member */
+        /** @var JuryMembers $member */
         $student = $students->matching($criteria)->first();
 
         if (empty($student)) {
@@ -165,7 +165,7 @@ class JuryMemberController extends CommonController
         if ($security->isGranted('ROLE_JURY_PRESIDENT')) {
             // Relating user with president
             if ($member) {
-                $this->getManager()->getRepository('Entity\JuryMembers')->assignUserToJuryMember(
+                $this->getManager()->getRepository('ChamiloLMS\Entity\JuryMembers')->assignUserToJuryMember(
                     $trackExercise['exe_user_id'],
                     $member->getId()
                 );
@@ -179,11 +179,11 @@ class JuryMemberController extends CommonController
             'juryUserId' => $userId
         );
 
-        $trackJury = $this->getManager()->getRepository('Entity\TrackExerciseAttemptJury')->findBy($criteria);
+        $trackJury = $this->getManager()->getRepository('ChamiloLMS\Entity\TrackExerciseAttemptJury')->findBy($criteria);
 
         if ($trackJury) {
             $this->get('session')->getFlashBag()->add('info', "You already review this exercise attempt.");
-            /** @var Entity\TrackExerciseAttemptJury $track */
+            /** @var TrackExerciseAttemptJury $track */
             foreach ($trackJury as $track) {
                 $questionScoreTypeModel[$track->getQuestionId()] = $track->getQuestionScoreNameId();
             }
@@ -207,11 +207,11 @@ class JuryMemberController extends CommonController
         $options = array();
 
         if ($modelType) {
-            /** @var \Entity\QuestionScore $questionScoreName */
-            $questionScore = $this->get('orm.em')->getRepository('Entity\QuestionScore')->find($modelType);
+            /** @var \ChamiloLMS\Entity\QuestionScore $questionScoreName */
+            $questionScore = $this->get('orm.em')->getRepository('ChamiloLMS\Entity\QuestionScore')->find($modelType);
             if ($questionScore) {
                 $items = $questionScore->getItems();
-                /** @var \Entity\QuestionScoreName  $score */
+                /** @var \ChamiloLMS\Entity\QuestionScoreName  $score */
                 foreach ($items as $score) {
                     $options[$score->getId().':'.$score->getScore()] = $score;
                 }
@@ -324,8 +324,8 @@ class JuryMemberController extends CommonController
     public function saveScoreAction($exeId, $juryId)
     {
         $questionsAndScore = $this->getRequest()->get('options');
-        /** @var \Entity\TrackExercise $attempt */
-        $attempt = $this->getManager()->getRepository('Entity\TrackExercise')->find($exeId);
+        /** @var \ChamiloLMS\Entity\TrackExercise $attempt */
+        $attempt = $this->getManager()->getRepository('ChamiloLMS\Entity\TrackExercise')->find($exeId);
 
         $totalScore = 0;
 
@@ -347,12 +347,12 @@ class JuryMemberController extends CommonController
 
                     $totalScore += $score;
 
-                    $obj = $this->getManager()->getRepository('Entity\TrackExerciseAttemptJury')->findOneBy($criteria);
+                    $obj = $this->getManager()->getRepository('ChamiloLMS\Entity\TrackExerciseAttemptJury')->findOneBy($criteria);
                     if ($obj) {
                         $obj->setQuestionScoreNameId($questionScoreNameId);
                         $obj->setScore($score);
                     } else {
-                        $obj = new Entity\TrackExerciseAttemptJury();
+                        $obj = new TrackExerciseAttemptJury();
                         $obj->setJuryUserId($userId);
                         $obj->setAttempt($attempt);
                         $obj->setQuestionScoreNameId($questionScoreNameId);
@@ -393,11 +393,11 @@ class JuryMemberController extends CommonController
     }
 
     /**
-     * @return \Entity\Repository\JuryRepository
+     * @return \ChamiloLMS\Entity\Repository\JuryRepository
      */
     protected function getRepository()
     {
-        return $this->get('orm.em')->getRepository('Entity\Jury');
+        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\Jury');
     }
 
     /**
@@ -405,7 +405,7 @@ class JuryMemberController extends CommonController
      */
     protected function getNewEntity()
     {
-        return new Entity\Jury();
+        return new Jury();
     }
 
     /**

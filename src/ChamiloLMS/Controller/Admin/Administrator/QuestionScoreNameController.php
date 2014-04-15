@@ -9,8 +9,9 @@ use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Entity;
+use ChamiloLMS\Entity;
 use ChamiloLMS\Form\QuestionScoreNameType;
+use ChamiloLMS\Entity\QuestionScoreName;
 
 /**
  * Class QuestionScoreController
@@ -78,7 +79,7 @@ class QuestionScoreNameController extends CommonController
      */
     protected function getRepository()
     {
-        return $this->get('orm.em')->getRepository('Entity\QuestionScoreName');
+        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\QuestionScoreName');
     }
 
      /**
@@ -86,7 +87,7 @@ class QuestionScoreNameController extends CommonController
      */
     protected function getNewEntity()
     {
-        return new Entity\QuestionScoreName();
+        return new QuestionScoreName();
     }
 
     /**

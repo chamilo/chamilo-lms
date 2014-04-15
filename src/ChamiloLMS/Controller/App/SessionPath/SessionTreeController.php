@@ -10,8 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
-use Entity\SessionPath;
-
+use ChamiloLMS\Entity\SessionPath;
 use ChamiloLMS\Form\SessionTreeType;
 
 /**
@@ -56,7 +55,7 @@ class SessionTreeController extends CommonController
      */
     protected function getRepository()
     {
-        return $this->get('orm.em')->getRepository('Entity\SessionTree');
+        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\SessionTree');
     }
 
     /**

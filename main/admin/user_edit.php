@@ -301,7 +301,7 @@ if ($expiration_date == '0000-00-00 00:00:00') {
     $user_data['expiration_date']['i'] = substr($expiration_date, 14, 2);
 }
 
-$user = $app['orm.em']->getRepository('Entity\User')->find($user_data['user_id']);
+$user = $app['orm.em']->getRepository('ChamiloLMS\Entity\User')->find($user_data['user_id']);
 
 $roles = $user->getRoles();
 

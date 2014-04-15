@@ -6,7 +6,11 @@ namespace ChamiloLMS\Controller\Admin\JuryPresident;
 use ChamiloLMS\Controller\CommonController;
 use ChamiloLMS\Form\JuryType;
 use ChamiloLMS\Form\JuryUserType;
-use Entity;
+use ChamiloLMS\Entity\Jury;
+use ChamiloLMS\Entity\JuryMembers;
+use ChamiloLMS\Entity\TrackExerciseAttemptJury;
+use ChamiloLMS\Entity\TrackExercise;
+
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,7 +51,7 @@ class JuryPresidentController extends CommonController
         // @todo where is get this value?
         $juryId = null;
 
-        /** @var Entity\Jury $jury */
+        /** @var Jury $jury */
 
         $jury = $this->getEntity($juryId);
         $jury->setOpeningDate(new \DateTime());
@@ -71,7 +75,7 @@ class JuryPresidentController extends CommonController
         // @todo where is get this value?
         $juryId = null;
 
-        /** @var Entity\Jury $jury */
+        /** @var Jury $jury */
         $jury = $this->getEntity($juryId);
         $jury->setClosureDate(new \DateTime());
         $jury->setClosureUserId($user->getUserId());
@@ -93,7 +97,7 @@ class JuryPresidentController extends CommonController
         // @todo where is get this value?
         $juryId = null;
 
-        /** @var Entity\Jury $jury */
+        /** @var Jury $jury */
         $jury = $this->getEntity($juryId);
 
         // @todo ???
@@ -110,7 +114,7 @@ class JuryPresidentController extends CommonController
     */
     public function assignUserToJuryMemberAction($userId, $juryMemberId)
     {
-        return $this->getManager()->getRepository('Entity\JuryMembers')->assignUserToJuryMember($userId, $juryMemberId);
+        return $this->getManager()->getRepository('ChamiloLMS\Entity\JuryMembers')->assignUserToJuryMember($userId, $juryMemberId);
     }
 
     /**
@@ -119,7 +123,7 @@ class JuryPresidentController extends CommonController
     */
     public function removeUserToJuryMemberAction($userId, $juryMemberId)
     {
-        return $this->getManager()->getRepository('Entity\JuryMembers')->removeUserToJuryMember($userId, $juryMemberId);
+        return $this->getManager()->getRepository('ChamiloLMS\Entity\JuryMembers')->removeUserToJuryMember($userId, $juryMemberId);
     }
 
     /**
@@ -130,7 +134,7 @@ class JuryPresidentController extends CommonController
     {
         $userId = $this->getUser()->getUserId();
 
-        /** @var \Entity\Jury $jury */
+        /** @var Jury $jury */
         $jury = $this->getRepository()->find($juryId);
 
         if (empty($jury)) {
@@ -144,7 +148,7 @@ class JuryPresidentController extends CommonController
             ->setFirstResult(0)
             ->setMaxResults(1);
 
-        /** @var Entity\JuryMembers $member */
+        /** @var JuryMembers $member */
         $member = $members->matching($criteria)->first();
 
         if (empty($member)) {
@@ -158,7 +162,7 @@ class JuryPresidentController extends CommonController
         // Nothing was saved and no assignation exists
         if (empty($trackJuryAttempts) && $hasStudents == false) {
             $userList = array();
-            /** @var Entity\TrackExercise $attempt  */
+            /** @var TrackExercise $attempt  */
             foreach ($exerciseAttempt as $attempt) {
                 $studentId = $attempt->getExeUserId();
                 if (!in_array($studentId, $userList)) {
@@ -177,7 +181,7 @@ class JuryPresidentController extends CommonController
                 $randomMembers = array_rand($members, $maxCount);
                 foreach ($randomMembers as $randomMember) {
                     $member = $members[$randomMember];
-                    $this->getManager()->getRepository('Entity\JuryMembers')->assignUserToJuryMember($userId, $member->getId());
+                    $this->getManager()->getRepository('ChamiloLMS\Entity\JuryMembers')->assignUserToJuryMember($userId, $member->getId());
                 }
             }
             $this->get('session')->getFlashBag()->add('success', "Los usuarios fueron asignados al azar");
@@ -196,7 +200,7 @@ class JuryPresidentController extends CommonController
         $user = $this->getUser();
         $userId = $user->getUserId();
 
-        /** @var Entity\Jury $jury */
+        /** @var Jury $jury */
 
         $jury = $this->getRepository()->getJuryByUserId($userId);
 
@@ -209,7 +213,7 @@ class JuryPresidentController extends CommonController
         $attempts = $jury->getExerciseAttempts();
 
         // @todo move logic in a repository
-        /** @var Entity\TrackExercise $attempt */
+        /** @var TrackExercise $attempt */
         $relations = array();
         $globalStudentStatus = array();
         $myStudentStatus = array();
@@ -217,7 +221,7 @@ class JuryPresidentController extends CommonController
             $user = $attempt->getUser();
             $juryAttempts = $attempt->getJuryAttempts();
 
-            /** @var Entity\TrackExerciseAttemptJury $juryAttempt */
+            /** @var TrackExerciseAttemptJury $juryAttempt */
             $tempAttempt = array();
             foreach ($juryAttempts as $juryAttempt) {
                 if (!isset($tempAttempt[$juryAttempt->getJuryUserId()])) {
@@ -246,7 +250,7 @@ class JuryPresidentController extends CommonController
         }
 
         $members = $jury->getMembers();
-        /** @var Entity\JuryMembers $member */
+        /** @var JuryMembers $member */
         $studentsByMember = array();
         foreach ($members as $member) {
             $students = $member->getStudents();
@@ -298,11 +302,11 @@ class JuryPresidentController extends CommonController
     }
 
     /**
-     * @return \Entity\Repository\JuryRepository
+     * @return \ChamiloLMS\Entity\Repository\JuryRepository
      */
     protected function getRepository()
     {
-        return $this->get('orm.em')->getRepository('Entity\Jury');
+        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\Jury');
     }
 
     /**
@@ -310,7 +314,7 @@ class JuryPresidentController extends CommonController
      */
     protected function getNewEntity()
     {
-        return new Entity\Jury();
+        return new Jury();
     }
 
     /**

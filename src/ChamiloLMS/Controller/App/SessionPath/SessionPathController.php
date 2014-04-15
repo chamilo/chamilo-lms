@@ -10,10 +10,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
-use Entity\SessionPath;
-
+use ChamiloLMS\Entity\SessionPath;
 use ChamiloLMS\Form\SessionPathType;
-
 
 /**
  * @package ChamiloLMS.Controller
@@ -56,12 +54,12 @@ class SessionPathController extends CommonController
         );
 
         // @todo put this in a function
-        $repo = $this->get('orm.em')->getRepository('Entity\SessionTree');
+        $repo = $this->get('orm.em')->getRepository('ChamiloLMS\Entity\SessionTree');
 
         $query = $this->getManager()
             ->createQueryBuilder()
             ->select('node')
-            ->from('Entity\SessionTree', 'node')
+            ->from('ChamiloLMS\Entity\SessionTree', 'node')
             //->where('node.cId = 0')
             ->orderBy('node.root, node.lft', 'ASC')
             ->getQuery();
@@ -96,7 +94,7 @@ class SessionPathController extends CommonController
      */
     protected function getRepository()
     {
-        return $this->get('orm.em')->getRepository('Entity\SessionPath');
+        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\SessionPath');
     }
 
     /**

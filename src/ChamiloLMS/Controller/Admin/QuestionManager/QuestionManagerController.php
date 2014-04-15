@@ -99,7 +99,7 @@ class QuestionManagerController
     public function getCategoriesAction(Application $app, $id)
     {
         // Getting CQuizCategory repo.
-        $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
+        $repo = $app['orm.em']->getRepository('ChamiloLMS\Entity\CQuizCategory');
 
         $options  = array(
             'decorate'      => true,
@@ -136,9 +136,9 @@ class QuestionManagerController
         // Getting CQuizCategory repo.
         /** @var \Doctrine\ORM\EntityManager $em */
         $em   = $app['orm.em'];
-        $repo = $em->getRepository('Entity\CQuizCategory');
+        $repo = $em->getRepository('ChamiloLMS\Entity\CQuizCategory');
 
-        /** @var \Entity\CQuizCategory $category */
+        /** @var \ChamiloLMS\Entity\CQuizCategory $category */
         $category = $repo->find($categoryId);
 
         $questionColumns = \Question::getQuestionColumns();
@@ -210,7 +210,7 @@ class QuestionManagerController
 
         // Getting CQuizCategory repo.
         /** @var \Gedmo\Tree\Entity\Repository\NestedTreeRepository $repo */
-        $repo = $app['orm.em']->getRepository('Entity\CQuizCategory');
+        $repo = $app['orm.em']->getRepository('ChamiloLMS\Entity\CQuizCategory');
 
         $categoryId = $app['request']->get('categoryId');
         $subtree    = null;
@@ -259,7 +259,7 @@ class QuestionManagerController
         /** @var \Doctrine\ORM\QueryBuilder $qb */
         $qb = $app['orm.em']->createQueryBuilder()
             ->select('node')
-            ->from('Entity\CQuizCategory', 'node')
+            ->from('ChamiloLMS\Entity\CQuizCategory', 'node')
             ->where('node.cId <> 0 AND node.lvl = 0')
             ->orderBy('node.root, node.lft', 'ASC');
 
@@ -275,7 +275,7 @@ class QuestionManagerController
         $query = $app['orm.em']
             ->createQueryBuilder()
             ->select('node')
-            ->from('Entity\CQuizCategory', 'node')
+            ->from('ChamiloLMS\Entity\CQuizCategory', 'node')
             ->where('node.cId = 0 AND node.lvl = 0')
             ->orderBy('node.root, node.lft', 'ASC')
             ->getQuery();
@@ -375,7 +375,7 @@ class QuestionManagerController
      */
     public function deleteCategoryAction(Application $app, $id)
     {
-        $repo     = $app['orm.ems']['db_write']->getRepository('Entity\CQuizCategory');
+        $repo     = $app['orm.ems']['db_write']->getRepository('ChamiloLMS\Entity\CQuizCategory');
         $category = $repo->find($id);
         if (empty($category)) {
             $app->abort(404);

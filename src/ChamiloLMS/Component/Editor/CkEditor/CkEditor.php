@@ -72,7 +72,7 @@ class CkEditor extends Editor
         if (empty($templates)) {
             return null;
         }
-        /** @var \Entity\SystemTemplate $template */
+        /** @var \ChamiloLMS\Entity\SystemTemplate $template */
         $templateList = array();
 
         $search = array('{CSS}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}');

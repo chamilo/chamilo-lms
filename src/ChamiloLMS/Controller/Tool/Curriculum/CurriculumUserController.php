@@ -7,7 +7,9 @@ use ChamiloLMS\Controller\CommonController;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
-use Entity;
+use ChamiloLMS\Entity\CurriculumItemRelUser;
+use ChamiloLMS\Entity\CurriculumItem;
+use ChamiloLMS\Entity\Repository\CurriculumItemRelUserRepository;
 use ChamiloLMS\Form\CurriculumItemRelUserCollectionType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -56,7 +58,7 @@ class CurriculumUserController extends CommonController
         $qb = $this->getManager()
             ->createQueryBuilder()
             ->select('node, i, u')
-            ->from('Entity\CurriculumCategory', 'node')
+            ->from('ChamiloLMS\Entity\CurriculumCategory', 'node')
             ->innerJoin('node.course', 'c')
             ->leftJoin('node.items', 'i')
             ->leftJoin('i.userItems', 'u', 'WITH', 'u.userId = :userId OR u.userId IS NULL')
@@ -70,12 +72,10 @@ class CurriculumUserController extends CommonController
         $categories = $query->getResult();
 
         $formList = array();
-        /** @var \Entity\CurriculumCategory $category */
-
+        /** @var \ChamiloLMS\Entity\CurriculumCategory $category */
         foreach ($categories as $category) {
 
-            /** @var \Entity\CurriculumItem $item */
-
+            /** @var \ChamiloLMS\Entity\CurriculumItem $item */
             foreach ($category->getItems() as $item) {
 
                 $formType = new CurriculumItemRelUserCollectionType($item->getId());
@@ -84,7 +84,7 @@ class CurriculumUserController extends CommonController
 
                 // If there are no items for the user, then create a new one!
                 if ($count == 0) {
-                    $userItem = new Entity\CurriculumItemRelUser();
+                    $userItem = new CurriculumItemRelUser();
                     $userItem->setItemId($item->getId());
                     $userItemList = array(
                         $userItem
@@ -125,10 +125,10 @@ class CurriculumUserController extends CommonController
             $form->bind($request);
             // @todo move this in a repo!
             if ($form->isValid()) {
-                /** @var Entity\CurriculumItem $item */
+                /** @var CurriculumItem $item */
                 $postedItem = $form->getData();
 
-                /** @var Entity\CurriculumItemRelUser $curriculumItemRelUser  */
+                /** @var CurriculumItemRelUser $curriculumItemRelUser  */
                 $postedItemId = null;
                 foreach ($postedItem->getUserItems() as $curriculumItemRelUser) {
                     $postedItemId = $curriculumItemRelUser->getItemId();
@@ -144,7 +144,7 @@ class CurriculumUserController extends CommonController
                 $query = $this->getManager()
                     ->createQueryBuilder()
                     ->select('node, i, u')
-                    ->from('Entity\CurriculumCategory', 'node')
+                    ->from('ChamiloLMS\Entity\CurriculumCategory', 'node')
                     ->innerJoin('node.items', 'i')
                     ->innerJoin('i.userItems', 'u')
                     ->orderBy('node.root, node.lft', 'ASC')
@@ -155,14 +155,14 @@ class CurriculumUserController extends CommonController
 
                 $categories = $query->getResult();
 
-                /** @var \Entity\CurriculumCategory $category */
+                /** @var \ChamiloLMS\Entity\CurriculumCategory $category */
                 $alreadyAdded = array();
 
                 foreach ($categories as $category) {
                     foreach ($category->getItems() as $item) {
                         if ($item->getId() == $postedItemId) {
                             // Now we can do stuff
-                            /** @var Entity\CurriculumItemRelUser $userItem */
+                            /** @var CurriculumItemRelUser $userItem */
                             foreach ($item->getUserItems() as $userItem) {
                                 $alreadyAdded[md5($userItem->getDescription())] = $userItem;
                             }
@@ -171,15 +171,15 @@ class CurriculumUserController extends CommonController
                 }
 
                 // @todo check this
-                $user = $this->get('orm.em')->getRepository('Entity\User')->find($user->getUserId());
+                $user = $this->get('orm.em')->getRepository('ChamiloLMS\Entity\User')->find($user->getUserId());
 
                 $counter = 1;
                 $parsed = array();
 
-                /** @var Entity\CurriculumItem $newItem */
+                /** @var CurriculumItem $newItem */
                 $newItem = $this->getCurriculumItemRepository()->find($postedItemId);
 
-                /** @var Entity\CurriculumItemRelUser $curriculumItemRelUser */
+                /** @var CurriculumItemRelUser $curriculumItemRelUser */
                 foreach ($postedItem->getUserItems() as $curriculumItemRelUser) {
                     $curriculumItemRelUser->setUser($user);
 
@@ -278,7 +278,7 @@ class CurriculumUserController extends CommonController
         $qb = $this->getManager()
             ->createQueryBuilder()
             ->select('node, i, u')
-            ->from('Entity\CurriculumCategory', 'node')
+            ->from('ChamiloLMS\Entity\CurriculumCategory', 'node')
             ->innerJoin('node.course', 'c')
             ->leftJoin('node.items', 'i')
             ->leftJoin('i.userItems', 'u', 'WITH', 'u.userId = :userId OR u.userId IS NULL')
@@ -286,11 +286,9 @@ class CurriculumUserController extends CommonController
             ->orderBy('node.root, node.lft, node.title', 'ASC');
         $this->setCourseParameters($qb, 'node');
         $query = $qb->getQuery();
-
         $categories = $query->getResult();
-
         foreach ($categories as $category) {
-            /** @var \Entity\CurriculumItem $item */
+            /** @var \ChamiloLMS\Entity\CurriculumItem $item */
             $score = 0;
             foreach ($category->getItems() as $item) {
 
@@ -315,7 +313,7 @@ class CurriculumUserController extends CommonController
     }
 
     /**
-     * @param Entity\CurriculumItemRelUser $object
+     * @param CurriculumItemRelUser $object
      * @return JsonResponse
      * @throws \Exception
      */
@@ -324,7 +322,7 @@ class CurriculumUserController extends CommonController
         if (false === $object) {
             throw new \Exception('Unable to create the entity');
         }
-        /** @var Entity\Repository\CurriculumItemRelUserRepository $repo */
+        /** @var CurriculumItemRelUserRepository $repo */
         $repo = $this->getRepository();
         if ($repo->isAllowToInsert($object->getItem(), $object->getUser())) {
             $this->createAction($object);
@@ -396,17 +394,17 @@ class CurriculumUserController extends CommonController
      */
     protected function getRepository()
     {
-        return $this->get('orm.em')->getRepository('Entity\CurriculumItemRelUser');
+        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\CurriculumItemRelUser');
     }
 
     private function getCurriculumCategoryRepository()
     {
-        return $this->get('orm.em')->getRepository('Entity\CurriculumCategory');
+        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\CurriculumCategory');
     }
 
     private function getCurriculumItemRepository()
     {
-        return $this->get('orm.em')->getRepository('Entity\CurriculumItem');
+        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\CurriculumItem');
     }
 
     /**
@@ -414,7 +412,7 @@ class CurriculumUserController extends CommonController
      */
     protected function getNewEntity()
     {
-        return new Entity\CurriculumItemRelUser();
+        return new CurriculumItemRelUser();
     }
 
     /**

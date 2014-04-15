@@ -960,7 +960,7 @@ class DocumentManager
         if (is_array($_course)) {
             $course_id = $_course['real_id'];
         } else {
-            if ($_course instanceof \Entity\Course) {
+            if ($_course instanceof \ChamiloLMS\Entity\Course) {
                 $course_id = $_course->getId();
                 $_course = api_get_course_info_by_id($course_id);
             }

@@ -11,13 +11,14 @@
  *
  * @package chamilo.library
  */
-
+use ChamiloLMS\Entity\User;
+use ChamiloLMS\Entity\Role;
 /**
  * @author Sebastien Piraux <piraux_seb@hotmail.com> old code
  * @author Julio Montoya 2013
  * @desc Record information for login event when an user identifies himself with username & password
  */
-function event_login(\Entity\User $user)
+function event_login(User $user)
 {
     $userId =  $user->getUserId();
 
@@ -37,7 +38,7 @@ function event_login(\Entity\User $user)
 
     // auto subscribe
 
-    /** @var \Entity\Role $role  */
+    /** @var Role $role */
     foreach ($roles as $role) {
         $role = $role->getRole();
         $userStatusParsed = 'student';

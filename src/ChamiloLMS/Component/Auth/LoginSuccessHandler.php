@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Router;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use ChamiloLMS\Entity\User;
 
 /**
  * Class LoginSuccessHandler
@@ -35,9 +36,11 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
-        /** @var \Entity\User $user */
+        /** @var User $user */
         $user = $token->getUser();
         $userId = $user->getUserId();
+
+        //$path = UserManager::get_user_picture_path_by_id($userId, 'system', true);
 
         $session = $request->getSession();
 

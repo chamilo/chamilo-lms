@@ -444,7 +444,7 @@ $app->before(
             // Checking token in order to get the current user.
             $token = $security->getToken();
             if (null !== $token) {
-                /** @var Entity\User $user */
+                /** @var \ChamiloLMS\Entity\User $user */
                 $user = $token->getUser();
             }
 

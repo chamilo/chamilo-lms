@@ -7,7 +7,7 @@ use ChamiloLMS\Controller\CommonController;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
-use Entity;
+use ChamiloLMS\Entity\CurriculumCategory;
 use ChamiloLMS\Form\CurriculumCategoryType;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -86,7 +86,7 @@ class CurriculumCategoryController extends CommonController
         $qb = $this->getManager()
             ->createQueryBuilder()
             ->select('node, i')
-            ->from('Entity\CurriculumCategory', 'node')
+            ->from('ChamiloLMS\Entity\CurriculumCategory', 'node')
             ->leftJoin('node.items', 'i')
             ->innerJoin('node.course', 'c')
             ->orderBy('node.root, node.lft', 'ASC');
@@ -190,7 +190,7 @@ class CurriculumCategoryController extends CommonController
         $request = $this->getRequest();
         $formType = $this->getFormType();
 
-        $entity = new Entity\CurriculumCategory();
+        $entity = new CurriculumCategory();
         $parentEntity = $this->getEntity($id);
         $entity->setParent($parentEntity);
         $entity->setCourse($this->getCourse());
@@ -204,7 +204,7 @@ class CurriculumCategoryController extends CommonController
         if ($request->getMethod() == 'POST') {
             $form->bind($request);
             if ($form->isValid()) {
-                /** @var Entity\CurriculumCategory $item */
+                /** @var CurriculumCategory $item */
                 $item = $form->getData();
                 $em = $this->getManager();
                 $em->persist($item);
@@ -325,7 +325,7 @@ class CurriculumCategoryController extends CommonController
         $qb = $this->getManager()
             ->createQueryBuilder()
             ->select('node.id, u.userId, SUM(i.score) as score')
-            ->from('Entity\CurriculumCategory', 'node')
+            ->from('ChamiloLMS\Entity\CurriculumCategory', 'node')
             ->innerJoin('node.course', 'c')
             ->innerJoin('node.items', 'i')
             ->innerJoin('i.userItems', 'u')
@@ -388,7 +388,7 @@ class CurriculumCategoryController extends CommonController
      */
     protected function getRepository()
     {
-        return $this->get('orm.em')->getRepository('Entity\CurriculumCategory');
+        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\CurriculumCategory');
     }
 
     /**
@@ -396,7 +396,7 @@ class CurriculumCategoryController extends CommonController
      */
     protected function getNewEntity()
     {
-        return new Entity\CurriculumCategory();
+        return new CurriculumCategory();
     }
 
     /**

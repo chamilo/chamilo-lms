@@ -6,13 +6,15 @@ namespace ChamiloLMS\Controller\Admin\Director;
 use ChamiloLMS\Controller\CommonController;
 use ChamiloLMS\Form\BranchType;
 use ChamiloLMS\Form\DirectorJuryUserType;
-
 use ChamiloLMS\Form\JuryType;
-use Entity;
+use ChamiloLMS\Entity;
+use ChamiloLMS\Entity\BranchSync;
+use ChamiloLMS\Entity\Jury;
+use ChamiloLMS\Entity\User;
+use ChamiloLMS\Entity\JuryMembers;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
-
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -39,10 +41,10 @@ class BranchDirectorController extends CommonController
             'childOpen' => '<li>',
             'childClose' => '</li>',
             'nodeDecorator' => function ($row) {
-                /**  @var Entity\BranchSync $branch */
-                $branch = $this->getManager()->getRepository('Entity\BranchSync')->find($row['id']);
+                /**  @var BranchSync $branch */
+                $branch = $this->getManager()->getRepository('ChamiloLMS\Entity\BranchSync')->find($row['id']);
                 $juries = $branch->getJuries();
-                /** @var Entity\Jury $jury */
+                /** @var Jury $jury */
                 $juryList = null;
                 foreach ($juries as $jury) {
                     $juryId = $jury->getId();
@@ -70,7 +72,7 @@ class BranchDirectorController extends CommonController
         $query = $this->getManager()
             ->createQueryBuilder()
             ->select('node')
-            ->from('Entity\BranchSync', 'node')
+            ->from('ChamiloLMS\Entity\BranchSync', 'node')
             ->innerJoin('node.users', 'u')
             ->where('u.userId = :userId')
             ->setParameter('userId', $userId)
@@ -134,14 +136,13 @@ class BranchDirectorController extends CommonController
         $request = $this->getRequest();
 
         $type = new DirectorJuryUserType();
-
-        $user = new Entity\User();
+        $user = new User();
         $form = $this->createForm($type, $user);
 
         $form->handleRequest($request);
         if ($form->isValid()) {
 
-            $jury = $this->getManager()->getRepository('Entity\Jury')->find($juryId);
+            $jury = $this->getManager()->getRepository('ChamiloLMS\Entity\Jury')->find($juryId);
 
             $factory = $this->get('security.encoder_factory');
             $encoder = $factory->getEncoder($user);
@@ -160,7 +161,7 @@ class BranchDirectorController extends CommonController
             $user->getUserId();
             $role = current($user->getRoles());
 
-            $juryMember = new Entity\JuryMembers();
+            $juryMember = new JuryMembers();
             $juryMember->setJury($jury);
             $juryMember->setRole($role);
             $juryMember->setUser($user);
@@ -203,11 +204,11 @@ class BranchDirectorController extends CommonController
     }
 
     /**
-     * @return \Entity\Repository\BranchSyncRepository
+     * @return \ChamiloLMS\Entity\Repository\BranchSyncRepository
      */
     protected function getRepository()
     {
-        return $this->get('orm.em')->getRepository('Entity\BranchSync');
+        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\BranchSync');
     }
 
     /**
@@ -215,6 +216,6 @@ class BranchDirectorController extends CommonController
      */
     protected function getNewEntity()
     {
-        return new Entity\BranchSync();
+        return new BranchSync();
     }
 }

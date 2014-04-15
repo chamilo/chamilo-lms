@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Entity;
 use ChamiloLMS\Form\BranchType;
 use ChamiloLMS\Form\BranchUsersType;
+use ChamiloLMS\Entity\BranchUsers;
+use ChamiloLMS\Entity\BranchSync;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -53,7 +55,7 @@ class BranchController extends CommonController
         $query = $this->getManager()
             ->createQueryBuilder()
             ->select('node')
-            ->from('Entity\BranchSync', 'node')
+            ->from('ChamiloLMS\Entity\BranchSync', 'node')
             //->where('node.cId = 0')
             ->orderBy('node.root, node.lft', 'ASC')
             ->getQuery();
@@ -73,7 +75,7 @@ class BranchController extends CommonController
     public function addDirectorAction($id)
     {
         $type = new BranchUsersType();
-        $branchUsers =  new Entity\BranchUsers();
+        $branchUsers = new BranchUsers();
 
         $form = $this->createForm($type, $branchUsers);
         $request = $this->getRequest();
@@ -84,7 +86,7 @@ class BranchController extends CommonController
 
                 $userIdList = $item->getUserId();
                 $userId = ($userIdList[0]);
-                $user = $this->getManager()->getRepository('Entity\User')->find($userId);
+                $user = $this->getManager()->getRepository('ChamiloLMS\Entity\User')->find($userId);
                 if (!$user) {
                     throw new \Exception('Unable to found User');
                 }
@@ -127,7 +129,7 @@ class BranchController extends CommonController
             'branchId' => $id,
             'userId' => $userId
         );
-        $branchUser = $this->getManager()->getRepository('Entity\BranchUsers')->findOneBy($criteria);
+        $branchUser = $this->getManager()->getRepository('ChamiloLMS\Entity\BranchUsers')->findOneBy($criteria);
 
         if (!$branchUser) {
             $this->createNotFoundException();
@@ -150,7 +152,7 @@ class BranchController extends CommonController
         $template = $this->get('template');
         $template->assign('links', $this->generateLinks());
 
-        /** @var \Entity\Repository\BranchSyncRepository $repo */
+        /** @var \ChamiloLMS\Entity\Repository\BranchSyncRepository $repo */
         $repo = $this->getRepository();
         $item = $this->getEntity($id);
 
@@ -179,7 +181,7 @@ class BranchController extends CommonController
         $request = $this->getRequest();
         $formType = $this->getFormType();
 
-        $branch = new Entity\BranchSync();
+        $branch = new BranchSync();
         $branch->setParentId($id);
 
         $form = $this->get('form.factory')->create($formType, $branch);
@@ -254,7 +256,7 @@ class BranchController extends CommonController
         $entities = $repo->searchByKeyword($keyword);
         $data = array();
         if ($entities) {
-            /** Entity\BranchSync $entity */
+            /** @var BranchSync $entity */
             foreach ($entities as $entity) {
                 $data[] = array(
                     'key' => (string) $entity->getId(),
@@ -304,11 +306,11 @@ class BranchController extends CommonController
     }
 
     /**
-     * @return \Entity\Repository\BranchSyncRepository
+     * @return \ChamiloLMS\Entity\Repository\BranchSyncRepository
      */
     protected function getRepository()
     {
-        return $this->get('orm.em')->getRepository('Entity\BranchSync');
+        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\BranchSync');
     }
 
     /**
@@ -316,7 +318,7 @@ class BranchController extends CommonController
      */
     protected function getNewEntity()
     {
-        return new Entity\BranchSync();
+        return new BranchSync();
     }
 
     /**

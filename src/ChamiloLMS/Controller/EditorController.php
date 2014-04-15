@@ -47,7 +47,7 @@ class EditorController extends CommonController
      */
     public function getTemplatesAction()
     {
-        $templates = $this->getManager()->getRepository('Entity\SystemTemplate')->findAll();
+        $templates = $this->getManager()->getRepository('ChamiloLMS\Entity\SystemTemplate')->findAll();
         $templates = $this->getHtmlEditor()->formatTemplates($templates);
         $this->getTemplate()->assign('templates', $templates);
         $response = $this->getTemplate()->renderTemplate('javascript/editor/ckeditor/templates.tpl');
@@ -63,7 +63,6 @@ class EditorController extends CommonController
     {
         error_reporting(-1);
         $connector = $this->getEditorConnector();
-
         $driverList = $this->getRequest()->get('driver_list');
 
         if (!empty($driverList)) {

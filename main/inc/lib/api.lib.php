@@ -3137,7 +3137,7 @@ function api_item_property_update(
     if (is_array($_course)) {
         $course_id	 = $_course['real_id'];
     } else {
-        if ($_course instanceof \Entity\Course) {
+        if ($_course instanceof \ChamiloLMS\Entity\Course) {
             $course_id = $_course->getId();
         }
     }
@@ -6133,7 +6133,7 @@ function api_set_default_visibility($course, $item_id, $tool_id, $group_id = nul
     if (is_array($course)) {
         $courseId = $course['real_id'];
     } else {
-        if ($course instanceof \Entity\Course) {
+        if ($course instanceof \ChamiloLMS\Entity\Course) {
             $courseId = $course->getId();
         }
     }
@@ -6819,7 +6819,7 @@ function api_get_user_roles()
 {
     global $app;
     $em = $app['orm.ems']['db_read'];
-    $roles = $em->getRepository('Entity\Role')->findBy(array(), array('name'=>'asc'));
+    $roles = $em->getRepository('ChamiloLMS\Entity\Role')->findBy(array(), array('name'=>'asc'));
     $userRoles = array();
     foreach ($roles as $role) {
         $userRoles[$role->getId()] = $role->getName();

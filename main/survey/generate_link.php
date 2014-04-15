@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 $language_file = 'survey';
@@ -17,8 +16,8 @@ if (empty($survey_id)) {
 
 $survey_data = survey_manager::get_survey($survey_id);
 
-$interbreadcrumb[] = array('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
-$interbreadcrumb[] = array('url' => 'survey.php?survey_id='.$survey_id, 'name' => strip_tags($survey_data['title']));
+$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
+$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id, 'name' => strip_tags($survey_data['title']));
 
 Display::display_header(get_lang('Survey'), 'Survey');
 

@@ -14,7 +14,8 @@
 *	@author Isaac Flores, code cleaning and improvements
 *	@package chamilo.group
 */
-$is_allowed_in_course = api_is_allowed_to_edit(false, true);
+$is_allowed_in_course = api_is_allowed_in_course();
+$userId = api_get_user_id();
 
 $this_section = SECTION_COURSES;
 $current_course_tool  = TOOL_GROUP;
@@ -42,23 +43,13 @@ if (api_get_setting('allow_group_categories') == 'false') {
     $res = Database::query($sql);
     $num = Database::num_rows($res);
     if ($num == 0) {
-        $sql = "INSERT INTO ".$cat_table."
-        (c_id, id, title, description, forum_state, wiki_state, max_student, self_reg_allowed, self_unreg_allowed, groups_per_user, display_order)
+        $sql = "INSERT INTO $cat_table (c_id, id , title , description , forum_state, wiki_state, max_student, self_reg_allowed, self_unreg_allowed, groups_per_user, display_order)
         VALUES ($course_id, '2', '".Database::escape_string(get_lang('DefaultGroupCategory'))."', '', '1', '1', '8', '0', '0', '0', '0');";
         Database::query($sql);
     }
 }
 
 /*	Header */
-
-if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
-    // So we are not in learnpath tool
-    event_access_tool(TOOL_GROUP);
-    if (!$is_allowed_in_course) {
-        api_not_allowed(true);
-    }
-}
-
 Display::display_header(get_lang('Groups'));
 
 // Tool introduction
@@ -77,14 +68,14 @@ Display::display_introduction_section(TOOL_GROUP);
 if (isset($_GET['action']) && $is_allowed_in_course) {
     switch ($_GET['action']) {
         case 'self_reg':
-            if (GroupManager :: is_self_registration_allowed($_SESSION['_user']['user_id'], $my_group_id)) {
-                GroupManager :: subscribe_users($_SESSION['_user']['user_id'], $my_group_id);
+            if (GroupManager::is_self_registration_allowed($userId, $my_group_id)) {
+                GroupManager::subscribe_users($userId, $my_group_id);
                 Display :: display_confirmation_message(get_lang('GroupNowMember'));
             }
             break;
         case 'self_unreg':
-            if (GroupManager :: is_self_unregistration_allowed($_SESSION['_user']['user_id'], $my_group_id)) {
-                GroupManager :: unsubscribe_users($_SESSION['_user']['user_id'], $my_group_id);
+            if (GroupManager::is_self_unregistration_allowed($userId, $my_group_id)) {
+                GroupManager::unsubscribe_users($userId, $my_group_id);
                 Display :: display_confirmation_message(get_lang('StudentDeletesHimself'));
             }
             break;

@@ -127,6 +127,7 @@ if (!empty($complete_user_list)) {
 
 // Group members
 $group_member_list = GroupManager :: get_subscribed_users($current_group['id']);
+
 $selected_users = array();
 if (!empty($group_member_list)) {
     foreach ($group_member_list as $index => $user) {

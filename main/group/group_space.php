@@ -60,9 +60,11 @@ if ($current_group['doc_state'] != 1 &&
     $current_group['chat_state'] != 1 &&
     $forum_state_public != 1
 ) {
-	if (!api_is_allowed_to_edit(null,true) && !GroupManager::is_user_in_group($user_id, $group_id)) {
-		api_not_allowed($print_headers);
-	}
+    if (!api_is_allowed_to_edit(null,true) &&
+        !GroupManager::is_user_in_group($user_id, $group_id)
+    ) {
+        api_not_allowed($print_headers);
+    }
 }
 
 
@@ -137,7 +139,9 @@ if (!empty($current_group['description'])) {
  * Group Tools
  */
 // If the user is subscribed to the group or the user is a tutor of the group then
-if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_get_user_id(), $current_group['id'])) {
+if (api_is_allowed_to_edit(false, true) OR
+    GroupManager::is_user_in_group(api_get_user_id(), $current_group['id'])
+) {
     $actions_array = array();
     // Link to the forum of this group
     $forums_of_groups = get_forums_of_group($current_group['id']);
@@ -145,7 +149,12 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_
 	if (is_array($forums_of_groups)) {
 		if ($current_group['forum_state'] != GroupManager::TOOL_NOT_AVAILABLE ) {
 			foreach ($forums_of_groups as $key => $value) {
-				if ($value['forum_group_public_private'] == 'public' || (/*!empty($user_subscribe_to_current_group) && */ $value['forum_group_public_private'] == 'private') || !empty($user_is_tutor) || api_is_allowed_to_edit(false, true)) {
+                //*!empty($user_subscribe_to_current_group) && */
+				if ($value['forum_group_public_private'] == 'public' ||
+                    ($value['forum_group_public_private'] == 'private') ||
+                    !empty($user_is_tutor) ||
+                    api_is_allowed_to_edit(false, true)
+                ) {
                     $actions_array[] = array(
                         'url' => '../forum/viewforum.php?forum='.$value['forum_id'].'&gidReq='.Security::remove_XSS($current_group['id']).'&amp;origin=group',
                         'content' => Display::return_icon('forum.png', get_lang('Forum').': '.$value['forum_title'] , array(), 32)
@@ -215,6 +224,7 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_
 
 	// Link to the forum of this group
 	$forums_of_groups = get_forums_of_group($current_group['id']);
+
 	if (is_array($forums_of_groups)) {
 		if ( $current_group['forum_state'] == GroupManager::TOOL_PUBLIC ) {
 			foreach ($forums_of_groups as $key => $value) {
@@ -227,6 +237,7 @@ if (api_is_allowed_to_edit(false, true) OR GroupManager :: is_user_in_group(api_
 			}
 		}
 	}
+
 	if ($current_group['doc_state'] == GroupManager::TOOL_PUBLIC) {
 		// Link to the documents area of this group
         $actions_array[] = array(
@@ -470,11 +481,11 @@ function email_filter($email) {
  */
 function user_icon_filter($user_id) {
 	global $origin;
-	$userinfo = Database::get_user_info_from_id($user_id);
+	$userinfo = api_get_user_info($user_id);
 	$image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
 	$image_repository = $image_path['dir'];
 	$existing_image = $image_path['file'];
-	$photo = '<center><img src="'.$image_repository.$existing_image.'" alt="'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'"  width="22" height="22" title="'.api_get_person_name($userinfo['firstname'], $userinfo['lastname']).'" /></center>';
+	$photo = '<center><img src="'.$image_repository.$existing_image.'" alt="'.$userinfo['complete_name'].'"  width="22" height="22" title="'.$userinfo['complete_name'].'" /></center>';
 	return '<a href="../user/userInfo.php?origin='.$origin.'&amp;uInfo='.$user_id.'">'.$photo;
 }
 
@@ -489,7 +500,7 @@ function user_icon_filter($user_id) {
  * @return  string  HTML link
  */
 function user_name_filter($name, $url_params, $row) {
-    $tab_user_info = Database::get_user_info_from_id($row[0]);
+    $tab_user_info = api_get_user_info($row[0]);
     $username = api_htmlentities(sprintf(get_lang('LoginX'), $tab_user_info['username']), ENT_QUOTES);
     return '<a href="../user/userInfo.php?uInfo='.$row[0].'&amp;'.$url_params.'" title="'.$username.'">'.$name.'</a>';
 }

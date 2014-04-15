@@ -14,9 +14,6 @@
 /*	INIT SECTION */
 
 // Name of the language file that needs to be included
-$language_file = 'group';
-
-require_once '../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $current_course_tool  = TOOL_GROUP;
 
@@ -38,12 +35,21 @@ if (!api_is_allowed_to_edit(false, true) && !$is_group_member) {
 // Build form
 $form = new FormValidator('group_edit', 'post', api_get_self().'?'.api_get_cidreq());
 $form->addElement('hidden', 'action');
+$form->addElement('html', '<div class="span6">');
+
 
 // Group name
 $form->addElement('text', 'name', get_lang('GroupName'));
 
-// Description
-$form->addElement('textarea', 'description', get_lang('Description'), array ('class' => 'span6', 'rows' => 6));
+if (api_get_setting('allow_group_categories') == 'true') {
+    $groupCategories = GroupManager::get_categories();
+    $categoryList = array();
+    //$categoryList[] = null;
+    foreach ($groupCategories as $category) {
+        $categoryList[$category['id']] = $category['title'];
+    }
+    $form->addElement('select', 'category_id', get_lang('Category'), $categoryList);
+}
 
 // Members per group
 $group = array(
@@ -54,6 +60,17 @@ $group = array(
 );
 $form->addGroup($group, 'max_member_group', get_lang('GroupLimit'), '', false);
 $form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');
+
+$form->addElement('html', '</div>');
+
+$form->addElement('html', '<div class="span6">');
+// Description
+$form->addElement('textarea', 'description', get_lang('Description'), array ('class' => 'span6', 'rows' => 6));
+$form->addElement('html', '</div>');
+
+$form->addElement('html', '<div class="span12">');
+$form->addElement('header', get_lang('DefaultSettingsForNewGroups'));
+$form->addElement('html', '</div>');
 
 $form->addElement('html', '<div class="span6">');
 
@@ -138,11 +155,12 @@ if ($form->validate()) {
     }
     $self_registration_allowed   = isset($values['self_registration_allowed']) ? 1 : 0;
     $self_unregistration_allowed = isset($values['self_unregistration_allowed']) ? 1 : 0;
+    $categoryId = isset($values['category_id']) ? $values['category_id'] : null;
 
     GroupManager::set_group_properties(
         $current_group['id'],
-        strip_tags($values['name']),
-        strip_tags($values['description']),
+        $values['name'],
+        $values['description'],
         $max_member,
         $values['doc_state'],
         $values['work_state'],
@@ -152,7 +170,8 @@ if ($form->validate()) {
         $values['wiki_state'],
         $values['chat_state'],
         $self_registration_allowed,
-        $self_unregistration_allowed
+        $self_unregistration_allowed,
+        $categoryId
     );
     if (isset($_POST['group_members']) && count($_POST['group_members']) > $max_member && $max_member != GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {
         header('Location: group.php?'.api_get_cidreq(true, false).'&action=warning_message&msg='.get_lang('GroupTooMuchMembers'));
@@ -163,6 +182,11 @@ if ($form->validate()) {
 }
 
 $defaults = $current_group;
+$category = GroupManager::get_category_from_group($group_id);
+if (!empty($category)) {
+    $defaults['category_id'] = $category['id'];
+}
+
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 $defaults['action'] = $action;
 if ($defaults['maximum_number_of_students'] == GroupManager::MEMBER_PER_GROUP_NO_LIMIT) {

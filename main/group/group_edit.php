@@ -393,10 +393,11 @@ if ($form->validate()) {
     }
     $self_registration_allowed = isset($values['self_registration_allowed']) ? 1 : 0;
     $self_unregistration_allowed = isset($values['self_unregistration_allowed']) ? 1 : 0;
+
     GroupManager :: set_group_properties(
         $current_group['id'],
-        strip_tags($values['name']),
-        strip_tags($values['description']),
+        $values['name'],
+        $values['description'],
         $max_member,
         $values['doc_state'],
         $values['work_state'],
@@ -453,7 +454,6 @@ if ($defaults['maximum_number_of_students'] == GroupManager::MEMBER_PER_GROUP_NO
     $defaults['max_member_no_limit'] = 1;
     $defaults['max_member'] = $defaults['maximum_number_of_students'];
 }
-
 
 if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     $keyword_name = Security::remove_XSS($_GET['keyword']);

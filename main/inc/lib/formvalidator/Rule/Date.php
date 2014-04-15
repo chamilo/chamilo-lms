@@ -1,19 +1,23 @@
 <?php
 /* For licensing terms, see /license.txt */
-require_once ('HTML/QuickForm/Rule.php');
+/** @author Bart Mollet, Julio Montoya */
+require_once 'HTML/QuickForm/Rule.php';
+
 /**
- * QuickForm rule to check a date
+ * Class HTML_QuickForm_Rule_Date
  */
 class HTML_QuickForm_Rule_Date extends HTML_QuickForm_Rule
 {
-	/**
-	 * Function to check a date
-	 * @see HTML_QuickForm_Rule
-	 * @param array $date An array with keys F (month), d (day) and Y (year)
-	 * @return boolean True if date is valid
-	 */
-	function validate($date, $options)
+        /**
+        * Check a date
+        * @see HTML_QuickForm_Rule
+        * @param string $date example 2014-04-30
+        * @param array $options
+        *
+        * @return boolean True if date is valid
+        */
+	public function validate($date, $options)
 	{
-		return checkdate($date['F'], $date['d'], $date['Y']);
+            return api_is_valid_date($date, 'Y-m-d');
 	}
 }

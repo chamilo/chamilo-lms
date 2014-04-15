@@ -111,9 +111,9 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     }
 } else {
     $defaults['survey_language'] = $_course['language'];
-    $defaults['start_date'] = date('d-F-Y H:i');
+    $defaults['start_date'] = date('Y-m-d', api_strtotime(api_get_local_time()));
     $startdateandxdays = time() + 864000; // today + 10 days
-    $defaults['end_date'] = date('d-F-Y H:i', $startdateandxdays);
+    $defaults['end_date'] = date('Y-m-d', $startdateandxdays);
     //$defaults['survey_share']['survey_share'] = 0;
     //$form_share_value = 1;
     $defaults['anonymous'] = 0;

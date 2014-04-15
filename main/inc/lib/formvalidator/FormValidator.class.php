@@ -50,12 +50,18 @@ class FormValidator extends HTML_QuickForm
         // Load some custom elements and rules
         $dir = api_get_path(LIBRARY_PATH).'formvalidator/';
         $this->registerElementType('html_editor', $dir . 'Element/html_editor.php', 'HTML_QuickForm_html_editor');
+        $this->registerElementType('date_range_picker', $dir . 'Element/DateRangePicker.php', 'DateRangePicker');
+        $this->registerElementType('date_time_picker', $dir . 'Element/DateTimePicker.php', 'DateTimePicker');
+        $this->registerElementType('date_picker', $dir . 'Element/DatePicker.php', 'DatePicker');
+
         $this->registerElementType('datepicker', $dir . 'Element/datepicker.php', 'HTML_QuickForm_datepicker');
         $this->registerElementType('datepickerdate', $dir . 'Element/datepickerdate.php', 'HTML_QuickForm_datepickerdate');
         $this->registerElementType('receivers', $dir . 'Element/receivers.php', 'HTML_QuickForm_receivers');
         $this->registerElementType('select_language', $dir . 'Element/select_language.php', 'HTML_QuickForm_Select_Language');
+        $this->registerElementType('select_ajax', $dir . 'Element/select_ajax.php', 'HTML_QuickForm_Select_Ajax');
         $this->registerElementType('select_theme', $dir . 'Element/select_theme.php', 'HTML_QuickForm_Select_Theme');
         $this->registerElementType('style_submit_button', $dir . 'Element/style_submit_button.php', 'HTML_QuickForm_stylesubmitbutton');
+        $this->registerElementType('style_reset_button', $dir . 'Element/style_reset_button.php', 'HTML_QuickForm_styleresetbutton');
         $this->registerElementType('button', $dir . 'Element/style_submit_button.php', 'HTML_QuickForm_stylesubmitbutton');
         $this->registerElementType('captcha', 'HTML/QuickForm/CAPTCHA.php', 'HTML_QuickForm_CAPTCHA');
         $this->registerElementType('CAPTCHA_Image', 'HTML/QuickForm/CAPTCHA/Image.php', 'HTML_QuickForm_CAPTCHA_Image');
@@ -212,7 +218,30 @@ EOT;
         }
     }
 
-    public function add_hidden($name, $value)
+    /**
+     * date_range_picker element creates 2 hidden fields
+     * elementName + "_start" elementName "_end"
+     * @param string $name
+     * @param string $label
+     * @param bool $required
+     * @param array $attributes
+     */
+    public function addDateRangePicker($name, $label, $required = true, $attributes = array())
+    {
+        $this->addElement('date_range_picker', $name, $label, $attributes);
+        $this->addElement('hidden', $name.'_start');
+        $this->addElement('hidden', $name.'_end');
+
+        if ($required) {
+            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+        }
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     */
+    function add_hidden($name, $value)
     {
         $this->addElement('hidden', $name, $value);
     }
@@ -309,6 +338,7 @@ EOT;
      * A rule is added to check if the date is a valid one
      * @param string $label						The label for the form-element
      * @param string $name						The element name
+     * @deprecated
      */
     public function add_datepickerdate($name, $label)
     {
@@ -323,6 +353,7 @@ EOT;
      * before the second one.
      * @param string $label						The label for the form-element
      * @param string $name						The element name
+     * @deprecated
      */
     public function add_timewindow($name_1, $name_2, $label_1, $label_2)
     {

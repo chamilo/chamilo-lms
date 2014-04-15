@@ -4255,9 +4255,9 @@ class CourseManager
 
     /**
      * @deprecated seems not to be used
-     * @return ResultSet
      */
-    static function list_inactive_courses($ceiling, $visibility_level = COURSE_VISIBILITY_REGISTERED) {
+    static function list_inactive_courses($ceiling, $visibility_level = COURSE_VISIBILITY_REGISTERED)
+    {
         $ceiling = is_numeric($ceiling) ? (int) $ceiling : strtotime($ceiling);
         $ceiling = date('Y-m-d H:i:s', $ceiling);
         $visibility_level = $visibility_level ? $visibility_level : '0';

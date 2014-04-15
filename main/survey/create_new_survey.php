@@ -93,7 +93,7 @@ if ($_GET['action'] == 'edit' && is_numeric($survey_id)) {
     );
     $tool_name = get_lang('EditSurvey');
 }
-
+$gradebook_link_id = null;
 // Getting the default values
 if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     $defaults = $survey_data;

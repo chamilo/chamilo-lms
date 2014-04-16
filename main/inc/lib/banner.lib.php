@@ -389,7 +389,7 @@ function return_menu() {
     } else {
         //$errorMsg = get_lang('HomePageFilesNotReadable');
     }
-    
+
     $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
 
     $open = str_replace('{rel_path}',api_get_path(REL_PATH), $home_top);
@@ -455,14 +455,13 @@ function return_menu() {
     return $menu;
 }
 
-function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
-    global $cidReset;
+function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
+{
     $session_id     = api_get_session_id();
     $session_name   = api_get_session_name($session_id);
     $_course        = api_get_course_info();
     $user_id        = api_get_user_id();
     $course_id      = api_get_course_id();
-
 
     /*  Plugins for banner section */
     $web_course_path = api_get_path(WEB_COURSE_PATH);
@@ -507,7 +506,9 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools) {
         $navigation[] = $navigation_item;
     }
 
-    // part 2: Interbreadcrumbs. If there is an array $interbreadcrumb defined then these have to appear before the last breadcrumb (which is the tool itself)
+    /* part 2: Interbreadcrumbs. If there is an array $interbreadcrumb
+    defined then these have to appear before the last breadcrumb
+    (which is the tool itself)*/
     if (isset($interbreadcrumb) && is_array($interbreadcrumb)) {
         foreach ($interbreadcrumb as $breadcrumb_step) {
             if (isset($breadcrumb_step['type']) && $breadcrumb_step['type'] == 'right') {

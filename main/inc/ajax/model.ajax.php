@@ -257,6 +257,7 @@ switch ($action) {
         break;
     case 'get_sessions':
         $courseId = isset($_GET['course_id']) && !empty($_GET['course_id']) ? intval($_GET['course_id']) : null;
+        $where_condition = str_replace('category_name', 'sc.name', $where_condition);
         if (!empty($courseId)) {
             $where_condition .= " c.id = $courseId";
         }
@@ -617,7 +618,10 @@ switch ($action) {
         $columns = array(
             'name', 'nbr_courses', 'nbr_users', 'category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility'
         );
-
+        
+        //Rename Category_name
+        $where_condition = str_replace('category_name', 'sc.name', $where_condition);
+        
         $result = SessionManager::get_sessions_admin(
             array(
                 'where' => $where_condition,

@@ -184,9 +184,9 @@ class FlatViewTable extends SortableTable
 
             if (is_array($customdisplays) && count(($customdisplays))) {
 
-                $user_results = $this->datagen->get_data_to_graph2();
+                $user_results = $this->datagen->get_data_to_graph2(false);
                 $pre_result = $new_result = array();
-                $DataSet = new pData();
+                $DataSet = new pData();                
                 //filling the Dataset
                 foreach ($user_results as $result) {
                     //print_r($result);
@@ -266,7 +266,7 @@ class FlatViewTable extends SortableTable
                     // the graph id
                     $gradebook_id = intval($_GET['selectcat']);
                     $graph_id = api_get_user_id() . 'ByResource' . $gradebook_id . api_get_course_id() . api_get_session_id();
-
+                  
                     if ($show_draw) {
                         //if ($Cache->IsInCache($graph_id, $DataSet->GetData())) {
                         if (0) {
@@ -283,12 +283,12 @@ class FlatViewTable extends SortableTable
 
                             // Adding the color schemma
                             $Test->loadColorPalette(api_get_path(LIBRARY_PATH) . "pchart/palette/pastel.txt");
-
+                            
                             // set font of the axes
                             $Test->setFontProperties(api_get_path(LIBRARY_PATH) . "pchart/fonts/tahoma.ttf", 8);
                             $area_graph_w = $chart_size_w - 130;
                             $Test->setGraphArea(50, 30, $area_graph_w, $chart_size_h - 50);
-
+                            
                             $Test->drawFilledRoundedRectangle(5, 5, $chart_size_w - 1, $chart_size_h - 20, 5, 240, 240, 240);
                             //$Test->drawRoundedRectangle(5,5,790,330,5,230,230,230);
                             //background color area & stripe or not
@@ -296,9 +296,13 @@ class FlatViewTable extends SortableTable
 
                             //Setting max height by default see #3296
                             if (!empty($max)) {
-                                $Test->setFixedScale(0, $max);
+                                if (is_int($max)) {
+                                    $Test->setFixedScale(0, $max + 1, $max + 1);
+                                } else {
+                                    $Test->setFixedScale(0, $max);
+                                }
                             }
-
+                            
                             $Test->drawScale($DataSet->GetData(), $DataSet->GetDataDescription(), SCALE_ADDALLSTART0, 150, 150, 150, TRUE, 0, 1, FALSE);
 
                             //background grid

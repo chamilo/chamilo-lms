@@ -66,6 +66,7 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 $is_allowedToEdit = api_is_allowed_to_edit(null,true);
+$sessionId = api_get_session_id();
 
 if (!$is_allowedToEdit) {
 	api_not_allowed(true);
@@ -166,7 +167,7 @@ if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['
 	exit; //otherwise following clicks may become buggy
 }
 
-// intializes the Exercise object
+// Exercise object creation.
 if (!is_object($objExercise)) {
 	// construction of the Exercise object
 	$objExercise = new Exercise();
@@ -176,7 +177,14 @@ if (!is_object($objExercise)) {
 	    $objExercise->read($exerciseId);
 	}
 	// saves the object into the session
-	Session::write('objExercise',$objExercise);
+	Session::write('objExercise', $objExercise);
+}
+
+// Exercise can be edited in their course.
+if ($objExercise->sessionId != $sessionId) {
+    api_not_allowed(true);
+    /*header('Location: '.api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq());
+    exit;*/
 }
 
 // doesn't select the exercise ID if we come from the question pool
@@ -189,7 +197,7 @@ if (!$fromExercise) {
 
 $nbrQuestions = $objExercise->selectNbrQuestions();
 
-// intializes the Question object
+// Question object creation.
 if ($editQuestion || $newQuestion || $modifyQuestion || $modifyAnswers) {
 	if ($editQuestion || $newQuestion) {
 
@@ -219,7 +227,7 @@ if ($cancelExercise) {
 	} else {
         // new exercise
 		// goes back to the exercise list
-		header('Location: exercice.php');
+		header('Location: '.api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq());
 		exit();
 	}
 }

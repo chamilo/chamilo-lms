@@ -1663,6 +1663,7 @@ class DocumentManager
 
         $date_certificate = $info_grade_certificate['created_at'];
         $date_long_certificate = '';
+        $date_no_time = "";
         if (!empty($date_certificate)) {
             $date_long_certificate = api_convert_and_format_date($date_certificate);
             $date_no_time = api_convert_and_format_date($date_certificate, DATE_FORMAT_LONG_NO_DAY);

@@ -145,7 +145,7 @@ class EvalForm extends FormValidator
             $renderer->setHeaderTemplate(
                     '<tr>
     		       <th>' . get_lang('OfficialCode') . '</th>		
-    		      <th>' . get_lang('UserName') . '</th>
+    		      <th>' . get_lang('UserName') . '</th> 
     		      <th>' . get_lang('FirstName') . '</th>
     		      <th>' . get_lang('LastName') . '</th>		
     		      <th>' . get_lang('Qualify') . '</th>
@@ -389,6 +389,7 @@ class EvalForm extends FormValidator
     protected function build_editing_form()
     {
         $parent_cat = Category :: load($this->evaluation_object->get_category_id());
+        //@TODO $weight_mask is replaced?
         if ($parent_cat[0]->get_parent_id() == 0) {
             $weight_mask = $this->evaluation_object->get_weight();
         } else {
@@ -396,7 +397,7 @@ class EvalForm extends FormValidator
             $global_weight = $cat[0]->get_weight();
             $weight_mask = $global_weight * $this->evaluation_object->get_weight() / $parent_cat[0]->get_weight();
         }
-        $weight_mask = $this->evaluation_object->get_weight();
+        $weight = $weight_mask = $this->evaluation_object->get_weight();
 
         $this->setDefaults(array('hid_id' => $this->evaluation_object->get_id(),
             'name' => $this->evaluation_object->get_name(),
@@ -422,7 +423,7 @@ class EvalForm extends FormValidator
     {
         $form_title = get_lang('NewEvaluation');
 
-        if ($_GET['editeval'] == 1) {
+        if (!empty($_GET['editeval']) && $_GET['editeval'] == 1) {
             $form_title = get_lang('EditEvaluation');
         }
 

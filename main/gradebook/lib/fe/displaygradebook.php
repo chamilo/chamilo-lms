@@ -63,7 +63,7 @@ class DisplayGradebook
         $scoredisplay = ScoreDisplay :: instance();
 
         $student_score = '';
-
+        $average = "";
         if (($evalobj->has_results())) { // TODO this check needed ?
             $score = $evalobj->calc_score();
 
@@ -73,7 +73,7 @@ class DisplayGradebook
                 $student_score = Display::tag('h3', get_lang('Score') . ': ' . $scoredisplay->display_score($student_score, SCORE_DIV_PERCENT));
             }
         }
-
+        $description = "";
         if (!$evalobj->get_description() == '') {
             $description = get_lang('Description') . ' :<b> ' . $evalobj->get_description() . '</b><br>';
         }

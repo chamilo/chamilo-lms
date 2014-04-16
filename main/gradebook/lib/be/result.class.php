@@ -91,6 +91,7 @@ class Result
      */
     public static function load($id = null, $user_id = null, $evaluation_id = null)
     {
+        $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
         $tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $tbl_course_rel_course = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_session_rel_course_user = Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -132,10 +133,12 @@ class Result
             }
         }
 
-        $sql = 'SELECT id,user_id,evaluation_id,created_at,score FROM ' . $tbl_grade_results;
+        $sql = "SELECT gr.id, gr.user_id, gr.evaluation_id, gr.created_at, gr.score 
+                FROM $tbl_grade_results gr
+                LEFT JOIN $tbl_user u ON gr.user_id = u.user_id ";
         $paramcount = 0;
         if (!empty($id)) {
-            $sql.= ' WHERE id = ' . Database::escape_string($id);
+            $sql.= ' WHERE gr.id = ' . Database::escape_string($id);
             $paramcount ++;
         }
         if (!empty($user_id)) {
@@ -143,7 +146,7 @@ class Result
                 $sql .= ' AND';
             else
                 $sql .= ' WHERE';
-            $sql .= ' user_id = ' . Database::escape_string($user_id);
+            $sql .= ' gr.user_id = ' . Database::escape_string($user_id);
             $paramcount ++;
         }
         if (!empty($evaluation_id)) {
@@ -152,10 +155,10 @@ class Result
             } else {
                 $sql .= ' WHERE';
             }
-            $sql .= ' evaluation_id = ' . Database::escape_string($evaluation_id);
+            $sql .= ' gr.evaluation_id = ' . Database::escape_string($evaluation_id);
             $paramcount ++;
         }
-
+        $sql .= ' ORDER BY u.lastname, u.firstname';
         $result = Database::query($sql);
         $allres = array();
         while ($data = Database::fetch_array($result)) {

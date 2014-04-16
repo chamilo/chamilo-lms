@@ -17,7 +17,6 @@ $language_file = 'survey';
 require_once '../inc/global.inc.php';
 require_once 'survey.lib.php';
 $this_section = SECTION_COURSES;
-
 $survey_id = intval($_GET['survey_id']);
 
 // Export
@@ -25,17 +24,17 @@ $survey_id = intval($_GET['survey_id']);
  * @todo use export_table_csv($data, $filename = 'export')
  */
 if (isset($_POST['export_report']) && $_POST['export_report']) {
-	switch($_POST['export_format']) {
+	switch ($_POST['export_format']) {
 		case 'xls':
 			$survey_data = survey_manager::get_survey($survey_id);
 			$filename = 'survey_results_'.$survey_id.'.xls';
-			$data = SurveyUtil::export_complete_report_xls($filename, $_GET['user_id']);
+			$data = SurveyUtil::export_complete_report_xls($survey_data, $filename, $_GET['user_id']);
 			exit;
 			break;
 		case 'csv':
 		default:
 			$survey_data = survey_manager::get_survey($survey_id);
-			$data = SurveyUtil::export_complete_report($_GET['user_id']);
+			$data = SurveyUtil::export_complete_report($survey_data, $_GET['user_id']);
 
 			//$filename = 'fileexport.csv';
 			$filename = 'survey_results_'.$survey_id.'.csv';
@@ -61,8 +60,19 @@ if (isset($_POST['export_report']) && $_POST['export_report']) {
 	}
 }
 
+if ($survey_data['anonymous'] == 0) {
+    $people_filled_full_data = true;
+} else {
+    $people_filled_full_data = false;
+}
+$people_filled = survey_manager::get_people_who_filled_survey(
+    $_GET['survey_id'],
+    $people_filled_full_data
+);
+
 // Checking the parameters
-SurveyUtil::check_parameters();
+SurveyUtil::check_parameters($people_filled);
+
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code)*/
 if (!api_is_allowed_to_edit(false, true)) {
@@ -92,12 +102,15 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
-$interbreadcrumb[] = array('url' => 'survey.php?survey_id='.$survey_id, 'name' => $urlname);
+$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
+$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id, 'name' => $urlname);
 if (!$_GET['action'] OR $_GET['action'] == 'overview') {
 	$tool_name = get_lang('Reporting');
 } else {
-	$interbreadcrumb[] = array('url' => 'reporting.php?survey_id='.$survey_id, 'name' => get_lang('Reporting'));
+	$interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$survey_id,
+        'name' => get_lang('Reporting')
+    );
 	switch ($_GET['action']) {
 		case 'questionreport':
 			$tool_name = get_lang('DetailedReportByQuestion');
@@ -118,19 +131,20 @@ if (!$_GET['action'] OR $_GET['action'] == 'overview') {
 Display::display_header($tool_name, 'Survey');
 
 // Action handling
-SurveyUtil::handle_reporting_actions();
+SurveyUtil::handle_reporting_actions($people_filled);
 
 // Actions bar
 echo '<div class="actions">';
-echo '<a href="survey.php?survey_id='.$survey_id.'">'.Display::return_icon('back.png', get_lang('BackToSurvey'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'">'.
+    Display::return_icon('back.png', get_lang('BackToSurvey'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 // Content
 if (!$_GET['action'] || $_GET['action'] == 'overview') {
 	$myweb_survey_id = $survey_id;
-	echo '<div class="sectiontitle"><a href="reporting.php?action=questionreport&amp;survey_id='.$myweb_survey_id.'">'.Display::return_icon('survey_reporting_question.gif',get_lang('DetailedReportByQuestion')).' '.get_lang('DetailedReportByQuestion').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByQuestionDetail').' </div>';
-	echo '<div class="sectiontitle"><a href="reporting.php?action=userreport&amp;survey_id='.$myweb_survey_id.'">'.Display::return_icon('survey_reporting_user.gif',get_lang('DetailedReportByUser')).' '.get_lang('DetailedReportByUser').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByUserDetail').'.</div>';
-	echo '<div class="sectiontitle"><a href="reporting.php?action=comparativereport&amp;survey_id='.$myweb_survey_id.'">'.Display::return_icon('survey_reporting_comparative.gif',get_lang('ComparativeReport')).' '.get_lang('ComparativeReport').'</a></div><div class="sectioncomment">'.get_lang('ComparativeReportDetail').'.</div>';
+	echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=questionreport&amp;survey_id='.$myweb_survey_id.'">'.Display::return_icon('survey_reporting_question.gif',get_lang('DetailedReportByQuestion')).' '.get_lang('DetailedReportByQuestion').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByQuestionDetail').' </div>';
+	echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&amp;survey_id='.$myweb_survey_id.'">'.Display::return_icon('survey_reporting_user.gif',get_lang('DetailedReportByUser')).' '.get_lang('DetailedReportByUser').'</a></div><div class="sectioncomment">'.get_lang('DetailedReportByUserDetail').'.</div>';
+	echo '<div class="sectiontitle"><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=comparativereport&amp;survey_id='.$myweb_survey_id.'">'.Display::return_icon('survey_reporting_comparative.gif',get_lang('ComparativeReport')).' '.get_lang('ComparativeReport').'</a></div><div class="sectioncomment">'.get_lang('ComparativeReportDetail').'.</div>';
 	echo '<div class="sectiontitle"><a href="reporting.php?action=completereport&amp;survey_id='.$myweb_survey_id.'">'.Display::return_icon('survey_reporting_complete.gif',get_lang('CompleteReport')).' '.get_lang('CompleteReport').'</a></div><div class="sectioncomment">'.get_lang('CompleteReportDetail').'</div>';
 }
 

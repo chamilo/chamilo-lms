@@ -2199,7 +2199,7 @@ class learnpath
         $itemInfo = api_get_item_property_info($course['real_id'], TOOL_LEARNPATH, $lp_id, $sessionId);
 
         // If the item was deleted.
-        if ($itemInfo['visibility'] == 2) {
+        if (isset($itemInfo['visibility']) && $itemInfo['visibility'] == 2) {
             return false;
         }
 

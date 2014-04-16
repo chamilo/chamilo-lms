@@ -8,6 +8,7 @@ class HTML_QuickForm_datepickerdate extends HTML_QuickForm_date
 {
 	/**
 	 * Constructor
+     * @deprecated use class DatePicker
 	 */
 	public function HTML_QuickForm_datepickerdate($elementName = null, $elementLabel = null, $attributes = null)
     {

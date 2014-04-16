@@ -416,7 +416,7 @@ if ($form->validate()) {
 
     $wrong_current_password = false;
 //    $user_data = $form->exportValues();
-    $user_data = $form->getSubmitValues();
+    $user_data = $form->getSubmitValues(1);
 
     // set password if a new one was provided
     if (!empty($user_data['password0'])) {
@@ -565,6 +565,9 @@ if ($form->validate()) {
             } else {
                 $extras[$new_key] = $value;
             }
+        } elseif (strpos($key, 'remove_extra_') !== false) {
+            // To remove from user_field_value table and user folder
+            UserManager::update_extra_field_value($user_id, substr($key,13), key($value));
         } else {
             if (in_array($key, $available_values_to_modify)) {
                 $sql .= " $key = '".Database::escape_string($value)."',";
@@ -623,7 +626,11 @@ if ($form->validate()) {
     if (is_array($extras) && count($extras)> 0) {
         foreach ($extras as $key => $value) {
             //3. Tags are process in the UserManager::update_extra_field_value by the UserManager::process_tags function
-            UserManager::update_extra_field_value(api_get_user_id(), $key, $value);
+            // For array $value -> if exists key 'tmp_name' then must not be empty
+            // This avoid delete from user field value table when doesn't upload a file
+            if (!is_array($value) || (!array_key_exists('tmp_name',$value) || !empty($value['tmp_name']))) {
+                UserManager::update_extra_field_value(api_get_user_id(), $key, $value);
+            }
         }
     }
 

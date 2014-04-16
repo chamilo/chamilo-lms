@@ -102,6 +102,7 @@ if ($is_allowedToEdit) {
 		}
 		$displayMessage = get_lang('ItemAdded');
 	}
+
 	// deletes a question from the database and all exercises
 	if ($delete) {
 		// Construction of the Question object
@@ -133,18 +134,15 @@ if ($is_allowedToEdit) {
 		Session::write('objExercise', $objExercise);
 //		header("Location: admin.php?".api_get_cidreq()."&exerciseId=$fromExercise");
 //		exit();
-	}
-	else if( isset($_POST['recup']) && is_array($_POST['recup']) && $fromExercise) {
-		$list_recup 		= $_POST['recup'];
+	} else if( isset($_POST['recup']) && is_array($_POST['recup']) && $fromExercise) {
+		$list_recup = $_POST['recup'];
 
 		foreach ($list_recup as $course_id => $question_data) {
-
 			$origin_course_id   = intval($course_id);
 			$origin_course_info = api_get_course_info_by_id($origin_course_id);
 			$current_course     = api_get_course_info();
 
 			foreach ($question_data as $old_question_id) {
-
 				//Reading the source question
 				$old_question_obj = Question::read($old_question_id, $origin_course_id);
 				if ($old_question_obj) {
@@ -272,7 +270,12 @@ foreach ($course_list as $item) {
 	$course_select_list[$item['id']] .= $item['title'];
 }
 
-$select_course_html =  Display::select('selected_course', $course_select_list, $selected_course, array('class'=>'chzn-select','onchange'=>'mark_course_id_changed(); submit_form(this);'));
+$select_course_html =  Display::select(
+    'selected_course',
+    $course_select_list,
+    $selected_course,
+    array('class'=>'chzn-select','onchange'=>'mark_course_id_changed(); submit_form(this);')
+);
 echo Display::form_row(get_lang('Course'), $select_course_html);
 
 if (empty($selected_course) || $selected_course == '-1') {
@@ -299,7 +302,13 @@ $TBL_COURSE_REL_CATEGORY	= Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CA
 
 // get category list for the course $selected_course
 $categoryList = Testcategory::getCategoriesIdAndName($selected_course);
-$selectCourseCategory = Display::select('courseCategoryId', $categoryList, $courseCategoryId, array('class'=>'chzn-select','onchange'=>'submit_form(this);'), false);
+$selectCourseCategory = Display::select(
+    'courseCategoryId',
+    $categoryList,
+    $courseCategoryId,
+    array('class'=>'chzn-select','onchange'=>'submit_form(this);'),
+    false
+);
 echo Display::form_row(get_lang("QuestionCategory"), $selectCourseCategory);
 
 // Get exercise list for this course
@@ -322,12 +331,24 @@ if (is_array($exercise_list)) {
 if ($exercice_id_changed == 1) {
 	reset_menu_lvl_type();
 }
-$select_exercise_html =  Display::select('exerciseId', $my_exercise_list, $exerciseId, array('class'=>'chzn-select','onchange'=>'mark_exercice_id_changed(); submit_form(this);'), false);
+$select_exercise_html =  Display::select(
+    'exerciseId',
+    $my_exercise_list,
+    $exerciseId,
+    array('class'=>'chzn-select','onchange'=>'mark_exercice_id_changed(); submit_form(this);'),
+    false
+);
 echo Display::form_row(get_lang('Exercise'), $select_exercise_html);
 
 // Difficulty list (only from 0 to 5)
 
-$select_difficulty_html = Display::select('exerciseLevel', array(-1 => get_lang('All'), 0=>0, 1=>1, 2=>2, 3=>3, 4=>4, 5=>5), $exerciseLevel, array('class'=>'chzn-select', 'onchange'=>'submit_form(this);'), false);
+$select_difficulty_html = Display::select(
+    'exerciseLevel',
+    array(-1 => get_lang('All'), 0=>0, 1=>1, 2=>2, 3=>3, 4=>4, 5=>5),
+    $exerciseLevel,
+    array('class'=>'chzn-select', 'onchange'=>'submit_form(this);'),
+    false
+);
 echo Display::form_row(get_lang('Difficulty'), $select_difficulty_html);
 
 
@@ -475,15 +496,17 @@ if ($exerciseId > 0) {
                             if (!empty($my_exercise->questionList)) {
                                 foreach ($my_exercise->questionList as $question_id) {
                                     $question_obj = Question::read($question_id, $course_item['id']);
-                                    if ($exerciseLevel != '-1')
+                                    if ($exerciseLevel != '-1') {
                                         if ($exerciseLevel != $question_obj->level) {
                                             continue;
                                         }
-                                    if ($answerType > 0)
+                                    }
+
+                                    if ($answerType > 0) {
                                         if ($answerType != $question_obj->type) {
                                             continue;
                                         }
-
+                                    }
                                     if ($courseCategoryId > 0 && Testcategory::getCategoryForQuestion($question_obj->id, $selected_course)) {
                                         continue;
                                     }
@@ -596,13 +619,33 @@ if (is_array($main_question_list)) {
         $row[] = $question_type;
         $row[] = get_question_categorie_for_question($selected_course, $tabQuestion['id']);
         $row[] = $tabQuestion['level'];
-        $row[] = get_action_icon_for_question($actionIcon1, $fromExercise, $tabQuestion['id'], $tabQuestion['type'],
-                    $tabQuestion['question'], $selected_course, $courseCategoryId, $exerciseLevel,
-                    $answerType, $session_id, $exerciseId).
+        $row[] = get_action_icon_for_question(
+                    $actionIcon1,
+                    $fromExercise,
+                    $tabQuestion['id'],
+                    $tabQuestion['type'],
+                    $tabQuestion['question'],
+                    $selected_course,
+                    $courseCategoryId,
+                    $exerciseLevel,
+                    $answerType,
+                    $session_id,
+                    $exerciseId
+                ).
                     "&nbsp;".
-                    get_action_icon_for_question($actionIcon2, $fromExercise, $tabQuestion['id'], $tabQuestion['type'],
-                    $tabQuestion['question'], $selected_course, $courseCategoryId, $exerciseLevel, $answerType,
-                    $session_id, $exerciseId);
+                get_action_icon_for_question(
+                    $actionIcon2,
+                    $fromExercise,
+                    $tabQuestion['id'],
+                    $tabQuestion['type'],
+                    $tabQuestion['question'],
+                    $selected_course,
+                    $courseCategoryId,
+                    $exerciseLevel,
+                    $answerType,
+                    $session_id,
+                    $exerciseId
+                );
         $data[] = $row;
     }
 }
@@ -677,7 +720,7 @@ $session_id, $exerciseId);
 */
 
 /*
-    Return the <a> html code for delete, add, clone, edit a question hubert.borderiou 13-10-2011
+    Return the <a> html code for delete, add, clone, edit a question
     in_action = the code of the action triggered by the button
     from_exercice = the id of the current exercice from which we click on question pool
     in_questionid = the id of the current question
@@ -690,26 +733,42 @@ $session_id, $exerciseId);
     in_session_id = the id of the session_id chosen in the FILTERING MENU
     in_exercice_id = the id of the exercice chosen in the FILTERING MENU
  */
-function get_action_icon_for_question($in_action, $from_exercice, $in_questionid, $in_questiontype, $in_questionname, $in_selected_course, $in_courseCategoryId, $in_exerciseLevel, $in_answerType, $in_session_id, $in_exercice_id)
-{
+function get_action_icon_for_question(
+    $in_action,
+    $from_exercice,
+    $in_questionid,
+    $in_questiontype,
+    $in_questionname,
+    $in_selected_course,
+    $in_courseCategoryId,
+    $in_exerciseLevel,
+    $in_answerType,
+    $in_session_id,
+    $in_exercice_id
+) {
 	$res = "";
 	$getParams = "&selected_course=$in_selected_course&courseCategoryId=$in_courseCategoryId&exerciseId=$in_exercice_id&exerciseLevel=$in_exerciseLevel&answerType=$in_answerType&session_id=$in_session_id";
-
 	switch ($in_action) {
 		case "delete" :
-			$res = "<a href='".api_get_self()."?".api_get_cidreq()."&delete=$in_questionid$getParams' onclick='return confirm_your_choice()'>";
+			$res = "<a href='".api_get_self()."?".api_get_cidreq().$getParams."&delete=$in_questionid' onclick='return confirm_your_choice()'>";
 			$res .= Display::return_icon("delete.png", get_lang('Delete'));
 			$res .= "</a>";
 			break;
 		case "edit" :
-			$res = get_a_tag_for_question(1, $from_exercice, $in_questionid, $in_questiontype, Display::return_icon("edit.png", get_lang('Modify')));
+			$res = get_a_tag_for_question(
+                1,
+                $from_exercice,
+                $in_questionid,
+                $in_questiontype,
+                Display::return_icon("edit.png", get_lang('Modify'))
+            );
 			break;
 		case "add":
 			// add if question is not already in test
 			$myObjEx = new Exercise();
 			$myObjEx->read($from_exercice);
 			if (!$myObjEx->isInList($in_questionid)) {
-				$res = "<a href='".api_get_self()."?".api_get_cidreq()."&recup=$in_questionid&fromExercise=$from_exercice$getParams'>";
+				$res = "<a href='".api_get_self()."?".api_get_cidreq().$getParams."&recup=$in_questionid&fromExercise=$from_exercice'>";
 				$res .= Display::return_icon("view_more_stats.gif", get_lang('InsertALinkToThisQuestionInTheExercise'));
 				$res .= "</a>";
             } else {
@@ -718,7 +777,7 @@ function get_action_icon_for_question($in_action, $from_exercice, $in_questionid
 			unset($myObjEx);
 			break;
 		case "clone":
-			$res = "<a href='".api_get_self()."?".api_get_cidreq()."&amp;copy_question=$in_questionid&course_id=$in_selected_course&fromExercise=$from_exercice$getParams'>";
+			$res = "<a href='".api_get_self()."?".api_get_cidreq().$getParams."&copy_question=$in_questionid&course_id=$in_selected_course&fromExercise=$from_exercice'>";
 			$res .= Display::return_icon('cd.gif', get_lang('ReUseACopyInCurrentTest'));
 			$res .= "</a>";
 			break;

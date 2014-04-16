@@ -143,6 +143,7 @@ class FormValidator extends HTML_QuickForm
         $this->registerElementType('CAPTCHA_Image', 'HTML/QuickForm/CAPTCHA/Image.php', 'HTML_QuickForm_CAPTCHA_Image');
 
         $this->registerRule('date', null, 'HTML_QuickForm_Rule_Date', $dir . 'Rule/Date.php');
+        $this->registerRule('datetime', null, 'DateTimeRule', $dir . 'Rule/DateTimeRule.php');
         $this->registerRule('date_compare', null, 'HTML_QuickForm_Rule_DateCompare', $dir . 'Rule/DateCompare.php');
         $this->registerRule('html', null, 'HTML_QuickForm_Rule_HTML', $dir . 'Rule/HTML.php');
         $this->registerRule('username_available', null, 'HTML_QuickForm_Rule_UsernameAvailable', $dir . 'Rule/UsernameAvailable.php');

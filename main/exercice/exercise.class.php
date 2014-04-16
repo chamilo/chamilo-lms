@@ -905,7 +905,8 @@ class Exercise {
      * Creates the form to create / edit an exercise
      * @param FormValidator $form
      */
-    function createForm ($form, $type='full') {
+    function createForm($form, $type='full')
+    {
         global $id;
 
         if (empty($type)){
@@ -924,11 +925,12 @@ class Exercise {
         // Title.
         $form->addElement('text', 'exerciseTitle', get_lang('ExerciseName'), array('class' => 'span6','id'=>'exercise_title'));
 
-        $form->addElement('advanced_settings','
-			<a href="javascript://" onclick=" return show_media()">
+        $form->addElement('advanced_settings',
+            '<a href="javascript://" onclick=" return show_media()">
 				<span id="media_icon">
-					<img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" /> '.addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'
-					</span>
+					<img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />'.
+                    addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'
+                </span>
 			</a>
 		');
 
@@ -1076,7 +1078,7 @@ class Exercise {
             else
                 $form->addElement('html','<div id="start_date_div" style="display:none;">');
 
-            $form->addElement('datepicker', 'start_time', '', array('form_name'=>'exercise_admin'), 5);
+            $form->addElement('date_time_picker', 'start_time');
 
             $form->addElement('html','</div>');
 
@@ -1087,7 +1089,7 @@ class Exercise {
             else
                 $form->addElement('html','<div id="end_date_div" style="display:none;">');
 
-            $form->addElement('datepicker', 'end_time', '', array('form_name'=>'exercise_admin'), 5);
+            $form->addElement('date_time_picker', 'end_time');
             $form->addElement('html','</div>');
 
             //$check_option=$this->selectType();
@@ -1157,8 +1159,8 @@ class Exercise {
         if ($type == 'full') {
             // rules
             $form->addRule('exerciseAttempts', get_lang('Numeric'), 'numeric');
-            $form->addRule('start_time', get_lang('InvalidDate'), 'date');
-            $form->addRule('end_time', get_lang('InvalidDate'), 'date');
+            $form->addRule('start_time', get_lang('InvalidDate'), 'datetime');
+            $form->addRule('end_time', get_lang('InvalidDate'), 'datetime');
         }
 
         // defaults
@@ -1271,23 +1273,14 @@ class Exercise {
 
         if ($form->getSubmitValue('activate_start_date_check') == 1) {
             $start_time = $form->getSubmitValue('start_time');
-            $start_time['F'] = sprintf('%02d', $start_time['F']);
-            $start_time['i'] = sprintf('%02d', $start_time['i']);
-            $start_time['d'] = sprintf('%02d', $start_time['d']);
-
-            $this->start_time = api_get_utc_datetime($start_time['Y'].'-'.$start_time['F'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00');
-
+            $this->start_time = api_get_utc_datetime($start_time);
         } else {
             $this->start_time = '0000-00-00 00:00:00';
         }
 
         if ($form->getSubmitValue('activate_end_date_check') == 1) {
             $end_time = $form->getSubmitValue('end_time');
-            $end_time['F'] = sprintf('%02d', $end_time['F']);
-            $end_time['i'] = sprintf('%02d', $end_time['i']);
-            $end_time['d'] = sprintf('%02d', $end_time['d']);
-
-            $this->end_time = api_get_utc_datetime($end_time['Y'].'-'.$end_time['F'].'-'.$end_time['d'].' '.$end_time['H'].':'.$end_time['i'].':00');
+            $this->end_time = api_get_utc_datetime($end_time);
         } else {
             $this->end_time   = '0000-00-00 00:00:00';
         }

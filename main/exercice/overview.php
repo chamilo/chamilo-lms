@@ -74,7 +74,7 @@ $message = '';
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null,true);
 $edit_link = '';
-if ($is_allowed_to_edit ) {
+if ($is_allowed_to_edit) {
 	$edit_link = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id);
 }
 

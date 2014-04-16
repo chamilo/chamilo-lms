@@ -27,7 +27,7 @@ $from = isset($_GET['from']) ? $_GET['from'] : null;
 
 if ($from == 'myspace') {
     $from_myspace = true;
-    $this_section = "session_my_space";    
+    $this_section = "session_my_space";
 } else {
     $this_section = SECTION_COURSES;
 }
@@ -35,8 +35,8 @@ if ($from == 'myspace') {
 // Access restrictions.
 $is_allowedToTrack = api_is_platform_admin() || api_is_allowed_to_create_course() || api_is_session_admin() || api_is_drh() || api_is_course_tutor();
 
-if (!$is_allowedToTrack) {    
-    api_not_allowed();    
+if (!$is_allowedToTrack) {
+    api_not_allowed();
     exit;
 }
 
@@ -58,17 +58,17 @@ $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $session_id = intval($_REQUEST['id_session']);
 
 if ($export_csv) {
-    if (!empty($session_id)) {
-        $_SESSION['id_session'] = $session_id;
-    }
     ob_start();
+}
+if (empty($session_id)) {
+    $session_id = api_get_session_id();
 }
 
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
-    $interbreadcrumb[] = array('url' => '../admin/index.php','name' => get_lang('PlatformAdmin'));
-    $interbreadcrumb[] = array('url' => '../admin/session_list.php','name' => get_lang('SessionList'));
-    $interbreadcrumb[] = array('url' => '../admin/resume_session.php?id_session='.api_get_session_id(), 'name' => get_lang('SessionOverview'));
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'admin/index.php','name' => get_lang('PlatformAdmin'));
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'admin/session_list.php','name' => get_lang('SessionList'));
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'admin/resume_session.php?id_session='.api_get_session_id(), 'name' => get_lang('SessionOverview'));
 }
 
 $nameTools = get_lang('Tracking');
@@ -79,11 +79,13 @@ Display::display_header($nameTools, 'Tracking');
 /* MAIN CODE */
 
 echo '<div class="actions">';
-echo Display::url(Display::return_icon('user.png', get_lang('StudentsTracking'), array(), 32), 'courseLog.php?'.api_get_cidreq());  
-echo Display::url(Display::return_icon('course.png', get_lang('CourseTracking'), array(), 32), 'course_log_tools.php?'.api_get_cidreq());
+echo Display::url(Display::return_icon('user.png', get_lang('StudentsTracking'), array(), 32), api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq());
+echo Display::url(Display::return_icon('course.png', get_lang('CourseTracking'), array(), 32), api_get_path(WEB_CODE_PATH).'tracking/course_log_tools.php?'.api_get_cidreq());
 echo Display::return_icon('tools_na.png', get_lang('ResourcesTracking'), array(), 32);
 echo '<span style="float:right; padding-top:0px;">';
-echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
+    Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).
+'</a>';
 
 $addional_param = '';
 if (isset($_GET['additional_profile_field'])) {
@@ -109,7 +111,14 @@ echo '<div class="actions">';
 $form->display();
 echo '</div>';
 
-$table = new SortableTable('resources', array('TrackingCourseLog', 'count_item_resources'), array('TrackingCourseLog', 'get_item_resources_data'), 5, 20, 'DESC');
+$table = new SortableTable(
+    'resources',
+    array('TrackingCourseLog', 'count_item_resources'),
+    array('TrackingCourseLog', 'get_item_resources_data'),
+    5,
+    20,
+    'DESC'
+);
 $parameters = array();
 
 if (isset($_GET['keyword'])) {

@@ -190,7 +190,12 @@ if ($isAdmin) {
     $renderer->setElementTemplate('<span>{element}</span> ');
     $form->addElement('text', 'keyword', get_lang('keyword'), 'size="25"');
     $form->addElement('style_submit_button', 'submit_simple', get_lang('Search'), 'class="search"');
-    $form->addElement('static', 'search_advanced_link', null, '<a href="javascript://" class = "advanced_parameters" onclick="display_advanced_search_form();"><span id="img_plus_and_minus">&nbsp;' . Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')) . ' ' . get_lang('AdvancedSearch') . '</span></a>');
+    $form->addElement('static', 'search_advanced_link', null, 
+            '<a href="javascript://" class = "advanced_parameters" onclick="display_advanced_search_form();">'
+            . '<span id="img_plus_and_minus">&nbsp;'
+            . Display::return_icon('div_show.gif', get_lang('Show'), 
+            array('style' => 'vertical-align:middle')) . ' '
+            . get_lang('AdvancedSearch') . '</span></a>');
 
     echo '<div class="actions" style="width:100%;">';
     if (api_is_platform_admin()) {

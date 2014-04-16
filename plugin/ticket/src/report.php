@@ -26,19 +26,19 @@ unset($_SESSION['this_section']);
 $htmlHeadXtra[] = '
 <script language="javascript">
 $(document).ready(function(){
-	 $( "#keyword_start_date_start" ).datepicker({ dateFormat: ' . "'yy-mm-dd'" . ' });
-   	$( "#keyword_start_date_end" ).datepicker({ dateFormat: ' . "'yy-mm-dd'" . ' });
+    $( "#keyword_start_date_start" ).datepicker({ dateFormat: ' . "'yy-mm-dd'" . ' });
+    $( "#keyword_start_date_end" ).datepicker({ dateFormat: ' . "'yy-mm-dd'" . ' });
 });
 function validate(){
-  if( $("#keyword_start_date_start").val() != "" &&  $("#keyword_start_date_end").val() != ""){
-   datestart = $("#keyword_start_date_start").val();
-   dateend = $("#keyword_start_date_end").val();
-   dif = $.datepicker.parseDate("dd/mm/yy", datestart) -  $.datepicker.parseDate("dd/mm/yy", dateend);
-   if(dif > 0){
-	alert("La fecha final no puede ser mayor a la fecha inicial");
-   			return false;
-   			}
-  }
+    if( $("#keyword_start_date_start").val() != "" &&  $("#keyword_start_date_end").val() != ""){
+        datestart = $("#keyword_start_date_start").val();
+        dateend = $("#keyword_start_date_end").val();
+        dif = $.datepicker.parseDate("dd/mm/yy", datestart) -  $.datepicker.parseDate("dd/mm/yy", dateend);
+        if(dif > 0){
+            alert("La fecha final no puede ser mayor a la fecha inicial");
+            return false;
+        }
+    }
 }
 function load_course_list (div_course,my_user_id) {
 	 $.ajax({
@@ -63,10 +63,10 @@ div.row div.formw2 {
     width:90%;
 	float:left
 }
-div.formulario {
+div.ticket-form {
     width: 70%;
-	float: center;
-	margin-left: 15%;
+    float: center;
+    margin-left: 15%;
 	
 }
 
@@ -91,17 +91,23 @@ $tools['quiz'] = array('id' => 'quiz', 'name' => get_lang('Quiz'));
 $tools['student_publication'] = array('id' => 'student_publication', 'name' => get_lang('Student_publication'));
 $tools['user'] = array('id' => 'user', 'name' => get_lang('User'));
 $tools['forum'] = array('id' => 'forum', 'name' => get_lang('Forum'));
-
+/**
+ * Returns the escaped string.
+ * @param string $s
+ * @return string
+ */
 function js_str($s)
 {
     return '"' . addcslashes($s, "\0..\37\"\\") . '"';
 }
-
+/**
+ * This function is to show the ticket form
+ * @global array $tools
+ */
 function show_form()
 {
-    global $types;
     global $tools;
-    echo '<div class="formulario">';
+    echo '<div class="ticket-form">';
     echo '<form enctype="multipart/form-data" action="' . api_get_self() . '" method="post" name="send_ticket" id="send_ticket"
  	onsubmit="return validate()" style="width:100%">';
 
@@ -111,10 +117,10 @@ function show_form()
     echo $select_course;
     //select status
     $select_tool = '<div class="row"  >
-	<div class="label2"  >Herramienta:</div>
+	<div class="label2"  >' . get_lang('Tool') .':</div>
 	<div class="formw2">';
     $select_tool .= '<select style="width: 95%; " name = "tool" id="tool" >';
-    $status = TicketManager::get_all_tickets_status();
+    
     foreach ($tools as $tool) {
         $select_tool .= "<option value = '" . $tool['id'] . "' selected >" . $tool['name'] . "</option>";
     }
@@ -122,19 +128,19 @@ function show_form()
     $select_tool .= '</div></div>';
     echo $select_tool;
     echo '<div class="row">
-			<div class="label2">Desde:</div>
-			<div class="formw2"><input id="keyword_start_date_start" name="keyword_start_date_start" type="text"></div>
-		  </div>
-			<div class="row">
-			<div class="label2">Hasta</div>
-			<div class="formw2"><input id="keyword_start_date_end" name="keyword_start_date_end" type="text"></div>
-			</div>';
+	      <div class="label2">' . get_lang('From') . ':</div>
+              <div class="formw2"><input id="keyword_start_date_start" name="keyword_start_date_start" type="text"></div>
+          </div>
+	  <div class="row">
+	      <div class="label2"> ' . get_lang('To') . '</div>
+	      <div class="formw2"><input id="keyword_start_date_end" name="keyword_start_date_end" type="text"></div>
+	  </div>';
     echo '</div>';
     echo '<div class="row">
 		<div class="label2">
 		</div>
 		<div class="formw2">	
-			<button class="save" name="report" type="submit" id="btnsubmit" disabled="disabled">Generar Reporte</button>
+			<button class="save" name="report" type="submit" id="btnsubmit" disabled="disabled">' . get_lang('CompleteReport') .'</button>
 		</div>
 	</div>';
 }
@@ -153,7 +159,13 @@ function get_number_of_users()
     }
     if (isset($_GET['keyword'])) {
         $keyword = Database::escape_string(trim($_GET['keyword']));
-        $sql .= " WHERE (u.firstname LIKE '%" . $keyword . "%' OR u.lastname LIKE '%" . $keyword . "%'  OR concat(u.firstname,' ',u.lastname) LIKE '%" . $keyword . "%'  OR concat(u.lastname,' ',u.firstname) LIKE '%" . $keyword . "%' OR u.username LIKE '%" . $keyword . "%' OR u.email LIKE '%" . $keyword . "%'  OR u.official_code LIKE '%" . $keyword . "%') ";
+        $sql .= " WHERE (u.firstname LIKE '%$keyword%' OR 
+                  u.lastname LIKE '%$keyword%'  OR 
+                  concat(u.firstname,' ',u.lastname) LIKE '%$keyword%' OR 
+                  concat(u.lastname,' ',u.firstname) LIKE '%$keyword%' OR 
+                  u.username LIKE '%$keyword%' OR 
+                  u.email LIKE '%$keyword %'  OR 
+                  u.official_code LIKE '%$keyword%') ";
     }
     $res = Database::query($sql);
     $obj = Database::fetch_object($res);
@@ -172,23 +184,36 @@ function get_user_data($from, $number_of_items, $column, $direction)
 {
     $user_table = Database :: get_main_table(TABLE_MAIN_USER);
     $admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
+    
+    if (api_is_western_name_order()) {
+        $col34 = "u.firstname AS col3,
+                  u.lastname AS col4,";
+    } else {
+        $col34 = "u.lastname AS col3,
+                  u.firstname AS col4,";
+    }
+    
     $sql = "SELECT
-                 u.user_id				AS col0,
-                 u.official_code		AS col2,
-				 " . (api_is_western_name_order() ? "u.firstname 			AS col3,
-                 u.lastname 			AS col4," : "u.lastname 			AS col3,
-                 u.firstname 			AS col4,") . "
-                 u.username				AS col5,
-                 u.email				AS col6,
-                 u.status				AS col7,
-                 u.active				AS col8,
-                 u.user_id				AS col9 " .
-            ", u.expiration_date      AS exp " .
-            " FROM $user_table u ";
+                 u.user_id AS col0, 
+                 u.official_code AS col2, 
+		 $col34 
+                 u.username AS col5, 
+                 u.email AS col6, 
+                 u.status AS col7, 
+                 u.active AS col8, 
+                 u.user_id AS col9, 
+              u.expiration_date AS exp 
+           FROM $user_table u ";
 
     if (isset($_GET['keyword'])) {
         $keyword = Database::escape_string(trim($_GET['keyword']));
-        $sql .= " WHERE (u.firstname LIKE '%" . $keyword . "%' OR u.lastname LIKE '%" . $keyword . "%' OR concat(u.firstname,' ',u.lastname) LIKE '%" . $keyword . "%' OR concat(u.lastname,' ',u.firstname) LIKE '%" . $keyword . "%' OR u.username LIKE '%" . $keyword . "%'  OR u.official_code LIKE '%" . $keyword . "%' OR u.email LIKE '%" . $keyword . "%' )";
+        $sql .= " WHERE (u.firstname LIKE '%$keyword%' OR
+                  u.lastname LIKE '%$keyword%' OR 
+                  concat(u.firstname,' ',u.lastname) LIKE '%$keyword%' OR 
+                  concat(u.lastname,' ',u.firstname) LIKE '%$keyword%' OR 
+                  u.username LIKE '%$keyword%'  OR 
+                  u.official_code LIKE '%$keyword%' 
+                  OR u.email LIKE '%$keyword%' )";
     }
     if (!in_array($direction, array('ASC', 'DESC'))) {
         $direction = 'ASC';
@@ -203,7 +228,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $res = Database::query($sql);
 
     $users = array();
-    $t = time();
     while ($user = Database::fetch_row($res)) {
         $image_path = UserManager::get_user_picture_path_by_id($user[0], 'web', false, true);
         $user_profile = UserManager::get_picture_user($user[0], $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
@@ -254,15 +278,21 @@ if (isset($_POST['report'])) {
     $tool = $_POST['tool'];
     $course_info = api_get_course_info_by_id($course_id);
     $user_id = $_POST['user_id_request'];
-    $sql = "SELECT  u.username , CONCAT(u.lastname, ' ', u.firstname) AS fullname, DATE_SUB(access.access_date,INTERVAL 5 HOUR) AS  access_date, c.title AS curso, access_tool AS herramienta
+    $sql = "SELECT  
+                u.username , CONCAT(u.lastname, ' ', u.firstname) AS fullname, 
+                DATE_SUB(access.access_date,INTERVAL 5 HOUR) AS  access_date, 
+                c.title AS course, access_tool AS tool
             FROM  " . Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS) . " access
             LEFT JOIN  " . Database::get_main_table(TABLE_MAIN_USER) . " u ON access.access_user_id = u.user_id
             LEFT JOIN  " . Database::get_main_table(TABLE_MAIN_COURSE) . " c ON access.access_cours_code = c.CODE
             WHERE access.access_cours_code = '" . $course_info['code'] . "' AND u.user_id = '$user_id' ";
-    if ($tool != '')
+    if ($tool != '') {
         $sql.="AND access.access_tool = '$tool' ";
+    }
+    
     $start_date = $_POST['keyword_start_date_start'];
     $end_date = $_POST['keyword_start_date_end'];
+    
     if ($start_date != '' || $end_date != '') {
         $sql .= " HAVING ";
         if ($start_date != '')
@@ -276,18 +306,22 @@ if (isset($_POST['report'])) {
     $table_result = new SortableTable();
     $table_result->set_header(0, get_lang('User'), false);
     $table_result->set_header(1, get_lang('Fullname'), false);
-    $table_result->set_header(2, get_lang('Fecha'), false);
-    $table_result->set_header(3, get_lang('curso'), false);
-    $table_result->set_header(4, get_lang('Herramienta'), false);
+    $table_result->set_header(2, get_lang('Date'), false);
+    $table_result->set_header(3, get_lang('Course'), false);
+    $table_result->set_header(4, get_lang('Tool'), false);
     while ($row = Database::fetch_assoc($result)) {
-        $row = array(0 => $row['username'], 1 => $row['fullname'], 2 => $row['access_date'], 3 => $row['curso'], 4 => get_lang($tools[$row['herramienta']]['name']));
+        $row = array(
+                $row['username'],
+                $row['fullname'],
+                $row['access_date'],
+                $row['course'],
+                get_lang($tools[$row['tool']]['name'])
+            );
         $table_result->addRow($row);
     }
     $table_result->display();
 } else {
     show_form();
 }
-
-
 
 Display::display_footer();

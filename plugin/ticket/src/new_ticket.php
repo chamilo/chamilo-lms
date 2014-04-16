@@ -108,7 +108,6 @@ function add_image_form() {
 	id_elem1 = "filepath_"+counter_image;
 	id_elem1 = "\'"+id_elem1+"\'";
 	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"' . api_get_path(WEB_CODE_PATH) . 'img/delete.gif\"></a>";
-	//document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<input type=\"text\" name=\"legend[]\" size=\"20\" />";
 	if (filepaths.childNodes.length == 6) {
 		var link_attach = document.getElementById("link-more-attach");
 		if (link_attach) {
@@ -329,8 +328,9 @@ function save_ticket()
     global $plugin;
     $category_id = $_POST['category_id'];
     $content = $_POST['content'];
-    if ($_POST['phone'] != "")
+    if ($_POST['phone'] != "") {
         $content.= '<p style="color:red">&nbsp;' . get_lang('Phone') . ': ' . $_POST['phone'] . '</p>';
+    }
     $course_id = $_POST['course_id'];
     $project_id = $_POST['project_id'];
     $subject = $_POST['subject'];
@@ -342,8 +342,13 @@ function save_ticket()
     $priority = $_POST['priority_id'];
     $status = $_POST['status_id'];
     $file_attachments = $_FILES;
-    if (TicketManager::insert_new_ticket($category_id, $course_id, $project_id, $other_area, $email, $subject, $content, $personal_email, $file_attachments, $source, $priority, $status, $user_id, api_get_user_id())) {
-        header('location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/s/myticket.php?message=success');
+    if (TicketManager::insert_new_ticket(
+            $category_id, $course_id, $project_id, 
+            $other_area, $email, $subject, $content, 
+            $personal_email, $file_attachments, 
+            $source, $priority, $status, $user_id, 
+            api_get_user_id())) {
+        header('location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php?message=success');
     } else {
         Display::display_header(get_lang('ComposeMessage'));
         Display::display_error_message($plugin->get_lang('ErrorRegisterMessage'));
@@ -364,7 +369,13 @@ function get_number_of_users()
     }
     if (isset($_GET['keyword'])) {
         $keyword = Database::escape_string(trim($_GET['keyword']));
-        $sql .= " WHERE (u.firstname LIKE '%" . $keyword . "%' OR u.lastname LIKE '%" . $keyword . "%'  OR concat(u.firstname,' ',u.lastname) LIKE '%" . $keyword . "%'  OR concat(u.lastname,' ',u.firstname) LIKE '%" . $keyword . "%' OR u.username LIKE '%" . $keyword . "%' OR u.email LIKE '%" . $keyword . "%'  OR u.official_code LIKE '%" . $keyword . "%') ";
+        $sql .= " WHERE (u.firstname LIKE '%$keyword%' OR 
+                  u.lastname LIKE '%$keyword%'  OR 
+                  concat(u.firstname,' ',u.lastname) LIKE '%$keyword%'  OR 
+                  concat(u.lastname,' ',u.firstname) LIKE '%$keyword%' OR 
+                  u.username LIKE '%$keyword%' OR 
+                  u.email LIKE '%$keyword%'  OR 
+                  u.official_code LIKE '%$keyword%') ";
     }
     $res = Database::query($sql);
     $obj = Database::fetch_object($res);
@@ -383,23 +394,36 @@ function get_user_data($from, $number_of_items, $column, $direction)
 {
     $user_table = Database :: get_main_table(TABLE_MAIN_USER);
     $admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
+    
+    if (api_is_western_name_order()) {
+        $col34 = "u.firstname AS col3,
+                  u.lastname AS col4,";
+    } else {
+        $col34 = "u.lastname AS col3,
+                  u.firstname AS col4,";
+    }
+    
     $sql = "SELECT
-                 u.user_id				AS col0,
-                 u.official_code		AS col2,
-				 " . (api_is_western_name_order() ? "u.firstname 			AS col3,
-                 u.lastname 			AS col4," : "u.lastname 			AS col3,
-                 u.firstname 			AS col4,") . "
-                 u.username				AS col5,
-                 u.email				AS col6,
-                 u.status				AS col7,
-                 u.active				AS col8,
-                 u.user_id				AS col9 " .
-            ", u.expiration_date      AS exp " .
-            " FROM $user_table u ";
+                u.user_id AS col0,
+                u.official_code AS col2,
+        	$col34
+                u.username AS col5,
+                u.email AS col6,
+                u.status AS col7,
+                u.active AS col8,
+                u.user_id AS col9 , 
+                u.expiration_date AS exp
+            FROM $user_table u ";
 
     if (isset($_GET['keyword'])) {
         $keyword = Database::escape_string(trim($_GET['keyword']));
-        $sql .= " WHERE (u.firstname LIKE '%" . $keyword . "%' OR u.lastname LIKE '%" . $keyword . "%' OR concat(u.firstname,' ',u.lastname) LIKE '%" . $keyword . "%' OR concat(u.lastname,' ',u.firstname) LIKE '%" . $keyword . "%' OR u.username LIKE '%" . $keyword . "%'  OR u.official_code LIKE '%" . $keyword . "%' OR u.email LIKE '%" . $keyword . "%' )";
+        $sql .= " WHERE (u.firstname LIKE '%$keyword%' OR 
+                  u.lastname LIKE '%$keyword%' OR 
+                  concat(u.firstname,' ',u.lastname) LIKE '%$keyword%' OR 
+                  concat(u.lastname,' ',u.firstname) LIKE '%$keyword%' OR  
+                  u.username LIKE '%$keyword%'  OR 
+                  u.official_code LIKE '%$keyword%' OR 
+                  u.email LIKE '%$keyword%' )";
     }
     if (!in_array($direction, array('ASC', 'DESC'))) {
         $direction = 'ASC';
@@ -426,8 +450,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
         $user_id = $user[0];
         $button = '<a href="' . api_get_self() . '?user_request=' . $user[0] . '">' . Display::return_icon('view_more_stats.gif', get_lang('Info')) . '</a>';
         $button = '<a  href="javascript:void(0)" onclick="load_course_list(\'div_' . $user_id . '\',' . $user_id . ')">
-					<img onclick="load_course_list(\'div_' . $user_id . '\',' . $user_id . ')"  src="../../../main/img/view_more_stats.gif" title="' . get_lang('Courses') . '" alt="' . get_lang('Courses') . '"/>
-					</a>&nbsp;&nbsp;';
+		       <img onclick="load_course_list(\'div_' . $user_id . '\',' . $user_id . ')"  src="../../../main/img/view_more_stats.gif" title="' . get_lang('Courses') . '" alt="' . get_lang('Courses') . '"/>
+                   </a>&nbsp;&nbsp;';
         $users[] = array($photo, $user[1], $user[2], $user[3], $user[4], $user[5], $button);
     }
     return $users;

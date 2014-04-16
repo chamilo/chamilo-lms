@@ -91,7 +91,6 @@ function add_image_form() {
 	id_elem1 = "filepath_"+counter_image;
 	id_elem1 = "\'"+id_elem1+"\'";
 	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"' . api_get_path(WEB_CODE_PATH) . 'img/delete.gif\"></a>";
-	//document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<input type=\"text\" name=\"legend[]\" size=\"20\" />";
 	if (filepaths.childNodes.length == 6) {
 		var link_attach = document.getElementById("link-more-attach");
 		if (link_attach) {
@@ -138,14 +137,26 @@ $htmlHeadXtra[] = '<script language="javascript">
 $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
+/**
+ * @todo Delete this function, it already exists in report.php
+ * @param string $s
+ * @return string
+ */
+
 function js_str($s)
 {
     return '"' . addcslashes($s, "\0..\37\"\\") . '"';
 }
 
+/**
+ * This is a javascript helper to generate and array
+ * @param array $array
+ * @param string $name
+ * @param integer $key
+ * @return string
+ */
 function js_array($array, $name, $key)
 {
-    $temp = array();
     $return = "new Array(); ";
     foreach ($array as $value) {
         $return .= $name . "['" . $value['category_id'] . "'] ='" . $value[$key] . "'; ";
@@ -153,6 +164,11 @@ function js_array($array, $name, $key)
     return $return;
 }
 
+/**
+ * 
+ * @global array $types
+ * @global object $plugin
+ */
 function show_form_send_ticket()
 {
     global $types, $plugin;
@@ -227,9 +243,12 @@ function show_form_send_ticket()
 	</div>';
     echo '</form></div>';
 }
-
+/**
+ * Save ticke function
+ */
 function save_ticket()
 {
+    global $plugin;
     $category_id = $_POST['category_id'];
     $content = $_POST['content'];
     if ($_POST['phone'] != "")
@@ -242,7 +261,7 @@ function save_ticket()
     $personal_email = $_POST['personal_email'];
     $file_attachments = $_FILES;
     if (TicketManager::insert_new_ticket($category_id, $course_id, $project_id, $other_area, $email, $subject, $content, $personal_email, $file_attachments)) {
-        header('location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/s/myticket.php?message=success');
+        header('location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php?message=success');
     } else {
         Display::display_header(get_lang('ComposeMessage'));
         Display::display_error_message($plugin->get_lang('ErrorRegisterMessage'));

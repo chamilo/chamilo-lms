@@ -3242,7 +3242,15 @@ function api_item_property_update(
     $end_visible = 0,
     $session_id = 0
 ) {
+    if (empty($_course)) {
+        return false;
+    }
 
+    $course_id = $_course['real_id'];
+
+    if (empty($course_id)) {
+        return false;
+    }
 
     // Definition of variables.
     $tool           = Database::escape_string($tool);

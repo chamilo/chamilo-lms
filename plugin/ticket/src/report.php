@@ -20,7 +20,7 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed();
 }
 //$nameTools = api_xml_http_response_encode(get_lang('Soporte Virtual'));
-$this_section = 'Reportes';
+$this_section = 'Reports';
 unset($_SESSION['this_section']);
 
 $htmlHeadXtra[] = '
@@ -246,7 +246,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
     return $users;
 }
 
-Display::display_header('Reportes');
+Display::display_header('Reports');
 echo '<div class="actions">
     <form action="' . api_get_self() . '" method="get" name="search_simple" id="search_simple">
         <input name="user_id_request" id="user_id_request" type="hidden" value="">

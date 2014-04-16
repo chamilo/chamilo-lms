@@ -24,7 +24,7 @@ function initializeReport($course_code)
     $resWeeks = Database::query($sqlWeeks);
     $weeks = Database::fetch_object($resWeeks);
     $obj = Database::fetch_object($res);
-    $weeksCount = (!isset($_POST['numerosemanas'])) ? (($weeks->semanas == 0) ? 7 : $weeks->semanas) : $_POST['numerosemanas'];
+    $weeksCount = (!isset($_POST['weeksNumber'])) ? (($weeks->semanas == 0) ? 7 : $weeks->semanas) : $_POST['weeksNumber'];
     Database::query("REPLACE INTO $table_semanas_curso (course_code , semanas) VALUES ('$course_code','$weeksCount')");
     if (intval($obj->cant) != $weeksCount) {
 
@@ -115,16 +115,6 @@ function showResults($courseInfo, $weeksCount, $page)
                         <div class="blackboard_hide" id="foro' . $rowe['week_id'] . '">' . $rowe['thread_title'] . '</div>
                 </a>
                 </th>';
-            /* $fila.= '<th>
-              <a href="#" onClick="showContent('."'eval".$rowe['week_id']."'".');">Eval'.$rowe['week_id'].'
-              <div class="blackboard_hide" id="eval'.$rowe['week_id'].'">'.$rowe['eval_title'].'</div>
-              </a>
-              </th>';
-              $fila.= '<th>
-              <a href="#" onClick="showContent('."'pc".$rowe['week_id']."'".');">PC'.$rowe['week_id'].'
-              <div class="blackboard_hide" id="pc'.$rowe['week_id'].'">'.$rowe['pc_title'].'</div>
-              </a>
-              </th>'; */
         }
     }
     $tableExport[] = $lineHeaderExport;
@@ -134,7 +124,7 @@ function showResults($courseInfo, $weeksCount, $page)
     $html = '<form action="tutor.php" name="semanas" id="semanas" method="POST">
             <div class="row">
             ' . get_lang('SelectWeeksSpan') . '
-            <select name="numerosemanas" id="numerosemanas" onChange="submit();">
+            <select name="weeksNumber" id="weeksNumber" onChange="submit();">
             <option value="7" ' . (($weeksCount == 7) ? 'selected="selected"' : "") . '>7 weeks</option>
             <option value="14" ' . (($weeksCount == 14) ? 'selected="selected"' : "") . '>14 weeks</option>
             </select>';
@@ -146,7 +136,7 @@ function showResults($courseInfo, $weeksCount, $page)
     $html .= '<span style="float:right;"><a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '">' . Display::return_icon('import_excel.png', get_lang('Export'), '', '32') . '</a></span>';
 
     $html .= '</form>';
-    $html .= '<table class="reportes">';
+    $html .= '<table class="reports">';
     $html .= '<tr>
             <th ></th>';
     for ($i = (7 * $page - 6); $i <= $page * 7; $i++) {

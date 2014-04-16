@@ -82,10 +82,10 @@ function save() {
 .blackboard_hide {
 	display: none;
 }
-.reportes{
+.reports{
 	border:1px ;	
 }
-.reportes th {
+.reports th {
     border-bottom: 1px solid #DDDDDD;
     line-height: normal;
     text-align: center;

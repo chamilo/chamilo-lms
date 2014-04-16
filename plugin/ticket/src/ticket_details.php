@@ -14,7 +14,7 @@ require_once '../config.php';
 $plugin = TicketPlugin::create();
 
 api_block_anonymous_users();
-$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => get_lang('MisTickets'));
+$interbreadcrumb[] = array('url' => 'myticket.php', 'name' => $plugin->get_lang('MyTickets'));
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('TicketDetail'));
 $htmlHeadXtra[] = '
 <script src="/pie/PIE_IE678.js"></script>
@@ -39,34 +39,32 @@ $(document).ready(function(){
 		$( "#dialog-form" ).dialog( "open" );
         
     	});
-		$("input#respuestasi").click(function () {
-			if(!confirm("Confirma que su respuesta es : SI ?. Si est\u00e1 seguro el ticket ser\u00e1 cerrado")){
-				return false;
-			}
-        
+        $("input#responseyes").click(function () {
+            if(!confirm("' . get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('Yes')) . '. Si est\u00e1 seguro el ticket ser\u00e1 cerrado")){
+                return false;
+            }
     	});
-		$("input#respuestano").click(function () {
-			if(!confirm("Confirma que su respuesta es : NO ?")){
-				return false;
-			}
-        
+	$("input#responseno").click(function () {
+            if(!confirm("' . get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('No')) . '")){
+		return false;
+            }
     	});
 	$("#unassign").click(function () {
-        if (!confirm("Estas seguro de Desasignarte")) {
+        if (!confirm("' . $plugin->get_lang('AreYouSureYouWantToUnassignTheTicket') . '")) {
             return false		
-		}
+        }
     });
 	$("#close").click(function () {
-        if (!confirm("Estas seguro de Cerrar el Ticket")) {
+        if (!confirm("' . $plugin->get_lang('AreYouSureYouWantToCloseTheTicket') . '")) {
 			return false		
-		}
+        }
     });
 });
 function validate() {	
 	fckEditor1val = FCKeditorAPI.__Instances["content"].GetHTML();	
 	document.getElementById("content").value= fckEditor1val;
-	if(fckEditor1val ==""){
-		alert("Debe escribir un mensaje");
+	if(fckEditor1val == ""){
+		alert("' . $plugin->get_lang('YouMustWriteAMessage') . '");
 		return false;
 	}
 }
@@ -152,14 +150,14 @@ if (!isset($ticket['ticket'])) {
 if (!isset($_GET['ticket_id'])) {
     header('location:myticket.php');
 }
-if (isset($_POST['respuesta'])) {
+if (isset($_POST['response'])) {
     if ($user_id == $ticket['ticket']['request_user']) {
-        $respuesta = ($_POST['respuesta'] == 'si') ? true : (($_POST['respuesta'] == 'no' ? false : null));
-        if ($respuesta && $ticket['ticket']['status_id'] == 'XCF') {
+        $response = ($_POST['response'] == 'si') ? true : ($_POST['response'] == 'no' ? false : null);
+        if ($response && $ticket['ticket']['status_id'] == 'XCF') {
             TicketManager::close_ticket($_GET['ticket_id'], $user_id);
             $ticket['ticket']['status_id'] = 'CLS';
             $ticket['ticket']['status'] = 'CERRADO';
-        } else if (!is_null($respuesta) && $ticket['ticket']['status_id'] == 'XCF') {
+        } else if (!is_null($response) && $ticket['ticket']['status_id'] == 'XCF') {
             TicketManager::update_ticket_status('PND', $_GET['ticket_id'], $user_id);
             $ticket['ticket']['status_id'] = 'PND';
             $ticket['ticket']['status'] = 'PENDIENTE';
@@ -196,12 +194,12 @@ if (!isset($_POST['compose'])) {
     }
     Display::display_header();
     $form_close_ticket = "";
-    if ($ticket['ticket']['status_id'] != 'REE' AND $ticket['ticket']['status_id'] != 'CLS' AND $isAdmin) {
+    if ($ticket['ticket']['status_id'] != 'REE' && $ticket['ticket']['status_id'] != 'CLS' && $isAdmin) {
         if (intval($ticket['ticket']['assigned_last_user']) == $user_id) {
             if ($ticket['ticket']['status_id'] != 'CLS') {
                 $form_close_ticket.= '<form enctype="multipart/form-data" action="' . api_get_self() . '?ticket_id=' . $ticket['ticket']['ticket_id'] . '" method="post" name="close_ticket" id="close_ticket" >';
                 $form_close_ticket.= '<input type="hidden" name="ticket_id" value="' . $ticket['ticket']['ticket_id'] . '"/>
-							<button class="minus" name="close" type="submit" id="close" >Cerrar</button>';
+                                        <button class="minus" name="close" type="submit" id="close" >' . get_lang('Close') . '</button>';
                 $form_close_ticket.= '</form>';
             }
         }
@@ -209,9 +207,11 @@ if (!isset($_POST['compose'])) {
     $titulo = '<center><h1>Ticket #' . $ticket['ticket']['ticket_code'] . '</h1></center>';
     if ($isAdmin && $ticket['ticket']['status_id'] != 'CLS' && $ticket['ticket']['status_id'] != 'REE') {
         if ($ticket['ticket']['assigned_last_user'] != 0 && $ticket['ticket']['assigned_last_user'] == $user_id) {
-            $img_assing = '<a href="' . api_get_self() . '?ticket_id=' . $ticket['ticket']['ticket_id'] . '&amp;action=unassign" id="unassign"><img src="../../../main/img/admin_star.png" border="0" title="Desasignarme" align="center"/></a>';
+            $img_assing = '<a href="' . api_get_self() . '?ticket_id=' . $ticket['ticket']['ticket_id'] . '&amp;action=unassign" id="unassign">
+                            <img src="../../../main/img/admin_star.png" border="0" title="Unassign" align="center"/>
+                           </a>';
         } else {
-            $img_assing .= '<a href="#" id="assign"><img src="../../../main/img/admin_star_na.png" border="0" title="Asignar" align="center"/></a>';
+            $img_assing .= '<a href="#" id="assign"><img src="../../../main/img/admin_star_na.png" border="0" title="Assign" align="center"/></a>';
         }
     }
     $negrita = ($ticket['ticket']['status_id'] == 'CLS') ? 'style = "font-weight: bold;"' : '';
@@ -224,26 +224,26 @@ if (!isset($_POST['compose'])) {
 	              <td>' . $form_close_ticket . '</td>
 	            </tr>
 	         	<tr>
-	              <td style="width:45%;" ><p>Enviado  : ' . $ticket['ticket']['start_date'] . '</p></td>
+	              <td style="width:45%;" ><p>' . get_lang('Sent') . ': ' . $ticket['ticket']['start_date'] . '</p></td>
 	              <td style="width:50px;"></td>
-	              <td style="width:45%;" ><p>Ultima Respuesta  : ' . $ticket['ticket']['sys_lastedit_datetime'] . '</p></td>
+	              <td style="width:45%;" ><p>' . $plugin->get_lang('LastResponse') . ': ' . $ticket['ticket']['sys_lastedit_datetime'] . '</p></td>
 	              <td colspan="2"></td>
 	            </tr>
 	            <tr>
-	               <td><p>Asunto  : ' . $ticket['messages'][0]['subject'] . '</p></td>
+	               <td><p>' . get_lang('Subject') . ': ' . $ticket['messages'][0]['subject'] . '</p></td>
 	               <td></td>
-	               <td><p ' . $negrita . '>Estado : ' . $ticket['ticket']['status'] . '</p></td>
+	               <td><p ' . $negrita . '>' . get_lang('Status') . ': ' . $ticket['ticket']['status'] . '</p></td>
 	               <td colspan="2"></td>
 	            </tr>
 	            <tr>
-	                <td><p>Categoria  : ' . $ticket['ticket']['name'] . '</p></td>
+	                <td><p>' . get_lang('Category') . ': ' . $ticket['ticket']['name'] . '</p></td>
 	                <td></td>
-	                <td ><p>Prioridad :' . $ticket['ticket']['priority'] . '<p></td>
+	                <td ><p>' . get_lang('Priority') . ':' . $ticket['ticket']['priority'] . '<p></td>
 	                <td colspan="2"></td>
 	            </tr>';
     if ($ticket['ticket']['course_url'] != null) {
         echo '<tr>
-				<td><p>Curso:</p></td>
+				<td><p>' . get_lang('Course') . ':</p></td>
 	            <td></td>
 			    <td>' . $ticket['ticket']['course_url'] . '</td>
 	            <td colspan="2"></td>
@@ -251,7 +251,7 @@ if (!isset($_POST['compose'])) {
     }
     if ($isAdmin) {
         echo '<tr>
-				<td><p>Usuario:</p></td>
+				<td><p>' . get_lang('User') . ':</p></td>
 	            <td></td>
 			    <td>' . $user_info = $ticket['ticket']['user_url'] . ' (' . $ticket['usuario']['username'] . ')</td>
 	            <td colspan="2"></td>
@@ -265,11 +265,11 @@ if (!isset($_POST['compose'])) {
         $select_admins.= "<option value = '" . $admin['user_id'] . "' " . (($user_id == $admin['user_id']) ? ("selected='selected'") : "") . ">" . $admin['lastname'] . " ," . $admin['firstname'] . "</option>";
     }
     $select_admins .= "</select>";
-    echo '<div id="dialog-form" title="Asignar Ticket" >';
+    echo '<div id="dialog-form" title="' . get_lang('AssignTicket') . '" >';
     echo '<form id="genesis" method="POST" action="ticket_details.php?ticket_id=' . $ticket['ticket']['ticket_id'] . '">
 			<input type="hidden" name ="action" id="action" value="assign"/>
 			<div  class="row">
-				<div class="label">Responsable:</div>
+				<div class="label">' . get_lang('Responsable') . ':</div>
 				<div class="formw">' . $select_admins . '</div>
 			</div>			
 		  </form>';
@@ -280,12 +280,13 @@ if (!isset($_POST['compose'])) {
         $class = "messageuser";
         if ($message['admin']) {
             $class = "messagesupport";
-            if ($isAdmin)
-                $message['message'].="<br/><b>Atendido por: " . $message['user_created'] . " - " . api_convert_and_format_date(api_get_local_time($message['sys_insert_datetime']), DATE_TIME_FORMAT_LONG, _api_get_timezone()) . "</b>";
+            if ($isAdmin) {
+                $message['message'].='<br/><b>' . get_lang('AttendedBy') . ': ' . $message['user_created'] . " - " . api_convert_and_format_date(api_get_local_time($message['sys_insert_datetime']), DATE_TIME_FORMAT_LONG, _api_get_timezone()) . "</b>";
+            }
         }else {
-            $message['message'].="<b>Enviado: " . api_convert_and_format_date(api_get_local_time($message['sys_insert_datetime']), DATE_TIME_FORMAT_LONG, _api_get_timezone()) . "</b>";
+            $message['message'].='<b>' . get_lang('Sent') . ': ' . api_convert_and_format_date(api_get_local_time($message['sys_insert_datetime']), DATE_TIME_FORMAT_LONG, _api_get_timezone()) . "</b>";
         }
-        echo '<div class="' . $class . '" ><b>Asunto: </b> ' . $message['subject'] . '<br/> <b> Mensaje:</b>' . $message['message'] . '<br/>';
+        echo '<div class="' . $class . '" ><b>' . get_lang('Subject') . ': </b> ' . $message['subject'] . '<br/> <b>' . get_lang('Message') . ':</b>' . $message['message'] . '<br/>';
         if (isset($message['atachments'])) {
             foreach ($message['atachments'] as $attach) {
                 echo $attach['attachment_link'];
@@ -327,7 +328,8 @@ function show_form_send_message()
        		<div class="formw"><input type = "text" id ="subject" name="subject" value="' . $asunto . '" required ="" style="width:60%"/></div>
 		  </div>';
     echo '<div class="row">
-		<div class="label2">mensaje
+		<div class="label2">
+                    ' . get_lang('Message') . '
 		</div>
 		<div class="formw2">
 			<input type="hidden" id="content" name="content" value="" style="display:none">
@@ -356,7 +358,9 @@ function show_form_send_message()
 		</div>';
     echo '<div class="row">
 		<div class="label"></div>
-		<div class="formw">	<button class="save" name="compose" type="submit">Enviar mensaje</button>' . ($isAdmin ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="confirmation"/>Solicitar confirmaci&oacute;n' : "") .
+		<div class="formw">
+                <button class="save" name="compose" type="submit">' . get_lang('SendMessage') . '</button>' . 
+            ($isAdmin ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="confirmation"/>Solicitar confirmaci&oacute;n' : "") .
     '</div>
 	</div>';
     echo '</form>';

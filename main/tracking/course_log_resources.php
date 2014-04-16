@@ -15,13 +15,7 @@ $language_file = array('admin', 'tracking', 'scorm', 'exercice');
 // Including the global initialization file
 require_once '../inc/global.inc.php';
 $current_course_tool = TOOL_TRACKING;
-
 $course_info = api_get_course_info(api_get_course_id());
-
-if (!empty($course_info)) {
-    //api_protect_course_script();
-}
-
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
 
@@ -60,6 +54,7 @@ $session_id = intval($_REQUEST['id_session']);
 if ($export_csv) {
     ob_start();
 }
+
 if (empty($session_id)) {
     $session_id = api_get_session_id();
 }
@@ -79,9 +74,17 @@ Display::display_header($nameTools, 'Tracking');
 /* MAIN CODE */
 
 echo '<div class="actions">';
-echo Display::url(Display::return_icon('user.png', get_lang('StudentsTracking'), array(), 32), api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq());
-echo Display::url(Display::return_icon('course.png', get_lang('CourseTracking'), array(), 32), api_get_path(WEB_CODE_PATH).'tracking/course_log_tools.php?'.api_get_cidreq());
-echo Display::return_icon('tools_na.png', get_lang('ResourcesTracking'), array(), 32);
+echo Display::url(
+    Display::return_icon('user.png', get_lang('StudentsTracking'), array(), ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?'.api_get_cidreq()
+);
+
+echo Display::url(
+    Display::return_icon('course.png', get_lang('CourseTracking'), array(), ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'tracking/course_log_tools.php?'.api_get_cidreq()
+);
+
+echo Display::return_icon('tools_na.png', get_lang('ResourcesTracking'), array(), ICON_SIZE_MEDIUM);
 echo '<span style="float:right; padding-top:0px;">';
 echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
     Display::return_icon('printer.png', get_lang('Print'),'',ICON_SIZE_MEDIUM).
@@ -91,10 +94,12 @@ $addional_param = '';
 if (isset($_GET['additional_profile_field'])) {
     $addional_param ='additional_profile_field='.intval($_GET['additional_profile_field']);
 }
+
 $users_tracking_per_page = '';
 if (isset($_GET['users_tracking_per_page'])) {
     $users_tracking_per_page= '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
 }
+
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.$users_tracking_per_page.'">
 '.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'),'',ICON_SIZE_MEDIUM).'</a>';
 
@@ -102,10 +107,19 @@ echo '</span>';
 echo '</div>';
 
 // Create a search-box.
-$form = new FormValidator('search_simple', 'GET', api_get_path(WEB_CODE_PATH).'tracking/course_log_resources.php?'.api_get_cidreq(), '', array('class' => 'form-search'), false);
+$form = new FormValidator(
+    'search_simple',
+    'GET',
+    api_get_path(WEB_CODE_PATH).'tracking/course_log_resources.php?'.api_get_cidreq().'&id_session'.$session_id,
+    '',
+    array('class' => 'form-search'),
+    false
+);
 $renderer = $form->defaultRenderer();
 $renderer->setElementTemplate('<span>{element}</span>');
 $form->addElement('text', 'keyword', get_lang('keyword'));
+$form->addElement('hidden', 'cidReq', api_get_course_id());
+$form->addElement('hidden', 'id_session', $session_id);
 $form->addElement('style_submit_button', 'submit', get_lang('SearchUsers'), 'class="search"');
 echo '<div class="actions">';
 $form->display();
@@ -119,11 +133,12 @@ $table = new SortableTable(
     20,
     'DESC'
 );
-$parameters = array();
 
-if (isset($_GET['keyword'])) {
-    $parameters['keyword'] = Security::remove_XSS($_GET['keyword']);
-}
+$parameters = array(
+    'keyword' => Security::remove_XSS($_GET['keyword']),
+    'id_session' => $session_id,
+    'cidReq' => api_get_course_id()
+);
 
 $table->set_additional_parameters($parameters);
 $table->set_header(0, get_lang('Tool'));

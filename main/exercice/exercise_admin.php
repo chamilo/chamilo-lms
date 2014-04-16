@@ -28,112 +28,100 @@ if (!api_is_allowed_to_edit(null,true)) {
 }
 
 $htmlHeadXtra[] = '<script>
-        function advanced_parameters() {
-            if(document.getElementById(\'options\').style.display == \'none\') {
-                document.getElementById(\'options\').style.display = \'block\';
-                document.getElementById(\'img_plus_and_minus\').innerHTML=\' <img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'\';
-            } else {
-                document.getElementById(\'options\').style.display = \'none\';
-                document.getElementById(\'img_plus_and_minus\').innerHTML=\' <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'\';
-            }
+    function advanced_parameters() {
+        if(document.getElementById(\'options\').style.display == \'none\') {
+            document.getElementById(\'options\').style.display = \'block\';
+            document.getElementById(\'img_plus_and_minus\').innerHTML=\' <img style="vertical-align:middle;" src="../img/div_hide.gif" alt="" /> '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'\';
+        } else {
+            document.getElementById(\'options\').style.display = \'none\';
+            document.getElementById(\'img_plus_and_minus\').innerHTML=\' <img style="vertical-align:middle;" src="../img/div_show.gif" alt="" /> '.addslashes(api_htmlentities(get_lang('AdvancedParameters'))).'\';
         }
+    }
 
-        function FCKeditor_OnComplete( editorInstance ) {
-               if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
-                  HideFCKEditorByInstanceName (editorInstance.Name);
-               }
+    function FCKeditor_OnComplete( editorInstance ) {
+       if (document.getElementById ( \'HiddenFCK\' + editorInstance.Name )) {
+          HideFCKEditorByInstanceName (editorInstance.Name);
+       }
+    }
+
+    function HideFCKEditorByInstanceName ( editorInstanceName ) {
+        if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" ) {
+              document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
         }
+    }
 
-        function HideFCKEditorByInstanceName ( editorInstanceName ) {
-            if (document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className == "HideFCKEditor" )
-            {
-                  document.getElementById ( \'HiddenFCK\' + editorInstanceName ).className = "media";
-            }
+    function show_media() {
+        var my_display = document.getElementById(\'HiddenFCKexerciseDescription\').style.display;
+        if(my_display== \'none\' || my_display == \'\') {
+            document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'block\';
+            document.getElementById(\'media_icon\').innerHTML=\' <img src="../img/looknfeelna.png" alt="" /> '.addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'\';
+        } else {
+            document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'none\';
+            document.getElementById(\'media_icon\').innerHTML=\' <img src="../img/looknfeel.png" alt="" /> '.addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'\';
         }
+    }
 
-        function show_media() {
-            var my_display = document.getElementById(\'HiddenFCKexerciseDescription\').style.display;
-                if(my_display== \'none\' || my_display == \'\') {
-                    document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'block\';
-                    document.getElementById(\'media_icon\').innerHTML=\' <img src="../img/looknfeelna.png" alt="" /> '.addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'\';
-                } else {
-                    document.getElementById(\'HiddenFCKexerciseDescription\').style.display = \'none\';
-                    document.getElementById(\'media_icon\').innerHTML=\' <img src="../img/looknfeel.png" alt="" /> '.addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'\';
-                }
+    function activate_start_date() {
+        if(document.getElementById(\'start_date_div\').style.display == \'none\') {
+            document.getElementById(\'start_date_div\').style.display = \'block\';
+        } else {
+            document.getElementById(\'start_date_div\').style.display = \'none\';
         }
+    }
 
-        function activate_start_date() {
-            if(document.getElementById(\'start_date_div\').style.display == \'none\') {
-                document.getElementById(\'start_date_div\').style.display = \'block\';
-            } else {
-                document.getElementById(\'start_date_div\').style.display = \'none\';
-            }
+    function activate_end_date() {
+        if(document.getElementById(\'end_date_div\').style.display == \'none\') {
+            document.getElementById(\'end_date_div\').style.display = \'block\';
+        } else {
+            document.getElementById(\'end_date_div\').style.display = \'none\';
         }
+    }
 
-        function activate_end_date() {
-            if(document.getElementById(\'end_date_div\').style.display == \'none\') {
-                document.getElementById(\'end_date_div\').style.display = \'block\';
-            } else {
-                document.getElementById(\'end_date_div\').style.display = \'none\';
-            }
+    function feedbackselection() {
+        var index = document.exercise_admin.exerciseFeedbackType.selectedIndex;
+
+        if (index == \'1\') {
+            document.exercise_admin.exerciseType[1].checked=true;
+            document.exercise_admin.exerciseType[0].disabled=true;
+        } else {
+            document.exercise_admin.exerciseType[0].disabled=false;
         }
+    }
 
-
-        function feedbackselection() {
-            var index = document.exercise_admin.exerciseFeedbackType.selectedIndex;
-
-            if (index == \'1\') {
-                document.exercise_admin.exerciseType[1].checked=true;
-                document.exercise_admin.exerciseType[0].disabled=true;
-            } else {
-                document.exercise_admin.exerciseType[0].disabled=false;
-            }
+    function option_time_expired() {
+        if(document.getElementById(\'timercontrol\').style.display == \'none\')
+        {
+          document.getElementById(\'timercontrol\').style.display = \'block\';
+        } else {
+          document.getElementById(\'timercontrol\').style.display = \'none\';
         }
+    }
 
-        function option_time_expired() {
-            if(document.getElementById(\'timercontrol\').style.display == \'none\')
-            {
-              document.getElementById(\'timercontrol\').style.display = \'block\';
-            } else {
-              document.getElementById(\'timercontrol\').style.display = \'none\';
-            }
+    function check_per_page_one() {
+         document.getElementById(\'exerciseType_0\').checked=true;
+    }
+
+    function check_per_page_all() {
+        if (document.getElementById(\'exerciseType_1\') && document.getElementById(\'exerciseType_1\').checked) {
+            document.getElementById(\'exerciseType_0\').checked = true;
         }
+    }
 
-         function check_per_page_one() {
-             /*if (document.getElementById(\'divtimecontrol\').style.display==\'none\') {
-                 document.getElementById(\'divtimecontrol\').style.display=\'block\';
-                 document.getElementById(\'divtimecontrol\').display=block;
-                 document.getElementById(\'timecontrol\').display=none;
-             }*/
-             document.getElementById(\'exerciseType_0\').checked=true;
-        }
-
-        function check_per_page_all() {
-            /*if (document.getElementById(\'divtimecontrol\').style.display==\'block\') {
-                document.getElementById(\'divtimecontrol\').style.display=\'none\';
-                document.getElementById(\'enabletimercontroltotalminutes\').value=\'\';
-            }*/
-
-            if (document.getElementById(\'exerciseType_1\') && document.getElementById(\'exerciseType_1\').checked) {
-                document.getElementById(\'exerciseType_0\').checked = true;
-            }
-        }
-
-        function check_feedback() {
-            if (document.getElementById(\'result_disabled_1\').checked == true) {
-                document.getElementById(\'result_disabled_0\').checked = true;
-            }
-        }
-
-        function check_direct_feedback() {
-            document.getElementById(\'option_page_one\').checked = true;
+    function check_feedback() {
+        if (document.getElementById(\'result_disabled_1\').checked == true) {
             document.getElementById(\'result_disabled_0\').checked = true;
         }
+    }
 
-        function check_results_disabled() {
-            document.getElementById(\'exerciseType_2\').checked = true;
-        }
-        </script>';
+    function check_direct_feedback() {
+        document.getElementById(\'option_page_one\').checked = true;
+        document.getElementById(\'result_disabled_0\').checked = true;
+    }
+
+    function check_results_disabled() {
+        document.getElementById(\'exerciseType_2\').checked = true;
+    }
+</script>';
 
 // to correct #4029 Random and number of attempt menu empty added window.onload=advanced_parameters;
 $htmlHeadXtra[] = '<script>

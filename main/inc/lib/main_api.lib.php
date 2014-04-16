@@ -21,7 +21,6 @@ define('REQUIRED_MIN_POST_MAX_SIZE',        '10');
 
 use \ChamiloSession as Session;
 
-
 // USER STATUS CONSTANTS
 /** global status of a user: student */
 define('STUDENT', 5);
@@ -45,14 +44,12 @@ define('COURSE_STUDENT', 14);   //student subscribed in a course
 define('SESSION_STUDENT', 15);  //student subscribed in a session course
 define('COURSE_TUTOR', 16); // student is tutor of a course (NOT in session)
 
-
 // Table of status
 $_status_list[COURSEMANAGER]    = 'teacher';        // 1
 $_status_list[SESSIONADMIN]     = 'session_admin';  // 3
 $_status_list[DRH]              = 'drh';            // 4
 $_status_list[STUDENT]          = 'user';           // 5
 $_status_list[ANONYMOUS]        = 'anonymous';      // 6
-
 
 // COURSE VISIBILITY CONSTANTS
 /** only visible for course admin */
@@ -71,7 +68,6 @@ define('SESSION_VISIBLE_READ_ONLY', 1);
 define('SESSION_VISIBLE', 2);
 define('SESSION_INVISIBLE', 3); // not available
 define('SESSION_AVAILABLE', 4);
-
 
 define('SUBSCRIBE_ALLOWED', 1);
 define('SUBSCRIBE_NOT_ALLOWED', 0);
@@ -210,13 +206,10 @@ define('LOG_CONFIGURATION_SETTINGS_VARIABLE',   'settings_variable');
 define('LOG_PLATFORM_LANGUAGE',                 'default_platform_language');
 define('LOG_CAREER_ID',                         'career_id');
 define('LOG_PROMOTION_ID',                      'promotion_id');
-
 define('LOG_GRADEBOOK_LOCKED',                   'gradebook_locked');
 define('LOG_GRADEBOOK_UNLOCKED',                 'gradebook_unlocked');
 define('LOG_GRADEBOOK_ID',                       'gradebook_id');
-
 define('LOG_WIKI_PAGE_ID',                       'wiki_page_id');
-
 define('LOG_EXERCISE_ID',                        'exercise_id');
 define('LOG_EXERCISE_AND_USER_ID',               'exercise_and_user_id');
 define('LOG_LP_ID',                              'lp_id');
@@ -343,8 +336,6 @@ define('ICON_SIZE_BIG',     64);
 define('ICON_SIZE_HUGE',    128);
 
 define('SHOW_TEXT_NEAR_ICONS', false);
-
-
 
 /**
  * Inclusion of internationalization libraries
@@ -3252,6 +3243,7 @@ function api_item_property_update(
     $session_id = 0
 ) {
 
+
     // Definition of variables.
     $tool           = Database::escape_string($tool);
     $item_id        = Database::escape_string($item_id);
@@ -3296,7 +3288,6 @@ function api_item_property_update(
         $condition_session = " AND id_session = '$session_id' ";
     }
 
-    $course_id = $_course['real_id'];
     $filter = " c_id = $course_id AND tool='$tool' AND ref='$item_id' $condition_session ";
 
     if ($item_id == '*') {
@@ -5131,7 +5122,8 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
             $table_tool = Database::get_course_table(TABLE_GROUP);
             $key_field = 'id';
             break;
-        default: return false;
+        default:
+            return false;
     }
     $course_id = api_get_course_int_id();
 

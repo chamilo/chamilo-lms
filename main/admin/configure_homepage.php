@@ -490,14 +490,10 @@ if (!empty($action)) {
                   foreach ($_languages['name'] as $key => $value) {
                       $lang_name = $_languages['folder'][$key];
                       if (isset($_POST[$lang_name])) {
-                          if (file_exists($homep.$menuf.'_'.$lang_name.$ext)) {
-                              if (is_writable($homep.$menuf.'_'.$lang_name.$ext)) {
-                                  $fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
-                                  fputs($fp, $home_menu);
-                                            home_tabs($homep.$menuf.'_'.$lang_name.$ext);
-                                  fclose($fp);
-                              }
-                          }
+                          $fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
+                          fputs($fp, $home_menu);
+                          home_tabs($homep.$menuf.'_'.$lang_name.$ext);
+                          fclose($fp);
                       }
                    }
               
@@ -522,13 +518,10 @@ if (!empty($action)) {
                 foreach ($_languages['name'] as $key => $value) {
                     $lang_name = $_languages['folder'][$key];
                     if (isset($_POST[$lang_name])) {
-                        if (file_exists($homep.$menuf.'_'.$lang_name.$ext)) {
-                            $fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
-                            fputs($fp, $home_menu);
-                                    home_tabs($homep.$menuf.'_'.$lang_name.$ext);
-                            fclose($fp);
-    
-                        }
+                        $fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
+                        fputs($fp, $home_menu);
+                                home_tabs($homep.$menuf.'_'.$lang_name.$ext);
+                        fclose($fp);
                     }
                 }  
           }
@@ -811,7 +804,7 @@ switch ($action) {
 	case 'edit_tabs':
 	case 'insert_link':
 	case 'edit_link':
-
+        $menuf = ($action == 'insert_tabs' || $action == 'edit_tabs')? $mtloggedin : $menuf;
 		if (!empty($errorMsg)) {
 			Display::display_normal_message($errorMsg);
 		}
@@ -883,16 +876,13 @@ switch ($action) {
       foreach ($_languages['name'] as $key => $value) {
          $i++;  
          $lang_name = $_languages['folder'][$key];
-         if (file_exists($homep.$topf.'_'.$lang_name.$ext)) {
-             $html_langs = '<td width="300">';
-             $html_langs .= '<label><input type="checkbox" id="lang" name="'.$lang_name.'" />&nbsp;'.$lang_name.'<label/>';
-             $html_langs .= '</td>';
-             if($i%5 == 0) {
-               $html_langs .= '</tr><tr>';
-             }
-             $form->addElement('html', $html_langs);
-             
+         $html_langs = '<td width="300">';
+         $html_langs .= '<label><input type="checkbox" id="lang" name="'.$lang_name.'" />&nbsp;'.$lang_name.'<label/>';
+         $html_langs .= '</td>';
+         if($i%5 == 0) {
+             $html_langs .= '</tr><tr>';
          }
+         $form->addElement('html', $html_langs);
       }
       $form->addElement('html','</tr></table><br/>');  
       		$form->addElement('style_submit_button', null, get_lang('Save'), 'class="save"');

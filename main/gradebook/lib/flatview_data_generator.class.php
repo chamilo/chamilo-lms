@@ -524,7 +524,12 @@ class FlatViewDataGenerator
         return $data;
     }
 
-    public function get_data_to_graph2 () {
+    /**
+     * This is a function to show the generated data
+     * @param type $displayWarning
+     * @return array
+     */
+    public function get_data_to_graph2 ($displayWarning = true) {
         // do some checks on users/items counts, redefine if invalid values
         $usertable = array ();
         foreach ($this->users as $user) {
@@ -593,7 +598,9 @@ class FlatViewDataGenerator
                 }
                 $total_score=array($item_value,$item_total);
                 $score_final = ($item_value / $item_total) * 100;
-                Display::display_warning_message( Display::display_warning_message($total_score[1]));
+                if ($displayWarning) {
+                    Display::display_warning_message( Display::display_warning_message($total_score[1]));
+                }
                 $row[] =array ($score_final, trim($scoredisplay->display_score($total_score, SCORE_CUSTOM, null, true)));
 
             }

@@ -732,6 +732,12 @@ switch ($action) {
                 $_SESSION['oLP']->delete_lp_image();
             }
 
+            $extraFieldValue = new ExtraFieldValue('lp');
+            $params = array(
+                'lp_id' => $_SESSION['oLP']->id
+            );
+            $extraFieldValue->save_field_values($_REQUEST);
+
             if ($_FILES['lp_preview_image']['size'] > 0)
                 $_SESSION['oLP']->upload_image($_FILES['lp_preview_image']);
 

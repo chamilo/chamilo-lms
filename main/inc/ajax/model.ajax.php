@@ -292,7 +292,7 @@ switch ($action) {
 
         $count = count($users);
         break;
-    /*case 'get_extra_fields':
+    case 'get_extra_fields':
         $type = $_REQUEST['type'];
         $obj = new ExtraField($type);
         $count = $obj->get_count();
@@ -302,7 +302,7 @@ switch ($action) {
         $field_id = $_REQUEST['field_id'];
         $obj = new ExtraFieldOption($type);
         $count = $obj->get_count_by_field_id($field_id);
-        break;*/
+        break;
     case 'get_timelines':
         require_once $libpath.'timeline.lib.php';
         $obj        = new Timeline();
@@ -618,10 +618,10 @@ switch ($action) {
         $columns = array(
             'name', 'nbr_courses', 'nbr_users', 'category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility'
         );
-        
+
         //Rename Category_name
         $where_condition = str_replace('category_name', 'sc.name', $where_condition);
-        
+
         $result = SessionManager::get_sessions_admin(
             array(
                 'where' => $where_condition,
@@ -636,7 +636,7 @@ switch ($action) {
         $exerciseId = intval($_GET['exercise_id']);
         $date_from  = $_GET['date_from'];
         $date_to    = $_GET['date_to'];
-        
+
         $columns = array(
             'session',
             'exercise_id',
@@ -785,7 +785,7 @@ switch ($action) {
             $date_from  = $_GET['date_from'];
             $date_to    = $_GET['date_to'];
         }
-        $result = SessionManager::get_session_progress($sessionId, $courseId, $date_from, $date_to, 
+        $result = SessionManager::get_session_progress($sessionId, $courseId, $date_from, $date_to,
             array(
                 'where' => $where_condition,
                 'order' => "$sidx $sord",
@@ -1010,27 +1010,27 @@ switch ($action) {
                     break;
             }
         }
-       
+
         $quizIds = array();
         if (!empty($exercises)) {
             foreach($exercises as $exercise) {
                 $quizIds[] = $exercise['id'];
             }
         }
-        
+
         $course = api_get_course_info_by_id($_GET['course_id']);
         $listUserSess = CourseManager::get_student_list_from_course_code($course['code'], true, $_GET['session_id']);
-      
+
         $usersId = array_keys($listUserSess);
 
         $users = UserManager::get_user_list_by_ids($usersId, null, "lastname, firstname",  "$start , $limit");
         $exeResults = $objExercise->getExerciseAndResult($_GET['course_id'], $_GET['session_id'], $quizIds);
-        
+
         $arrGrade = array();
         foreach ($exeResults as $exeResult) {
             $arrGrade[$exeResult['exe_user_id']][$exeResult['exe_exo_id']] = $exeResult['exe_result'];
         }
-        
+
         $result = array();
         $i = 0;
         foreach ($users as $user) {
@@ -1048,13 +1048,13 @@ switch ($action) {
                 $result[$i]['exer' . $j] = $grade;
                 $j++;
             }
-            
+
             if ($finalScore > 20) {
                 $finalScore = 20;
             }
-            
+
             $result[$i]['finalScore'] = number_format($finalScore, 2);
-            
+
             $i++;
         }
         break;
@@ -1128,8 +1128,8 @@ $allowed_actions = array(
     'get_grade_models',
     'get_event_email_template',
     'get_user_skill_ranking',
-    //'get_extra_fields',
-    //'get_extra_field_options',
+    'get_extra_fields',
+    'get_extra_field_options',
     //'get_course_exercise_medias',
     'get_user_course_report',
     'get_user_course_report_resumed',
@@ -1177,7 +1177,7 @@ if (in_array($action, $allowed_actions)) {
             case 'csv':
             default:
                 //TODO add date if exists
-                $file_name = (!empty($action)) ? $action : 'company_report'; 
+                $file_name = (!empty($action)) ? $action : 'company_report';
                 Export::export_table_csv($array, $file_name);
                 break;
         }

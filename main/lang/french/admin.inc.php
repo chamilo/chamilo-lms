@@ -608,6 +608,7 @@ $UserNameNotAvailable = "Ce nom d'utilisateur n'est pas disponible";
 $UserNameTooLong = "Ce nom d'utilisateur est trop long";
 $WrongStatus = "Ce statut n'existe pas";
 $ClassNameNotAvailable = "Ce nom de classe n'est pas disponible";
+$ClassIdDoesntExists = "La classe d'id %s n'existe pas. L'utilisateur ci-après n'a pas été inscrit à la plateforme.";
 $FileImported = "Fichier importé";
 $WhichSessionToExport = "Choisissez la session à exporter";
 $AllSessions = "Toutes les sessions";

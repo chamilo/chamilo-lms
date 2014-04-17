@@ -29,6 +29,7 @@ class UserManager
     const USER_FIELD_TYPE_TAG = 10;
     const USER_FIELD_TYPE_TIMEZONE = 11;
     const USER_FIELD_TYPE_SOCIAL_PROFILE = 12;
+    const USER_FIELD_TYPE_FILE = 13;
 
     /**
      * The default constructor only instanciates an empty user object
@@ -1448,6 +1449,9 @@ class UserManager
                     UserManager::process_tags(explode(';', $fvalues), $user_id, $rowuf['id']);
                     return true;
                     break;
+                case self::USER_FIELD_TYPE_SELECT_MULTIPLE :
+                    // check code from UserManager::update_user_picture() to use something similar here
+                    break;
                 case self::USER_FIELD_TYPE_RADIO:
                 case self::USER_FIELD_TYPE_SELECT:
                 case self::USER_FIELD_TYPE_SELECT_MULTIPLE:
@@ -1479,7 +1483,7 @@ class UserManager
             $resufv = Database::query($sqlufv);
             $n = Database::num_rows($resufv);
             if ($n > 1) {
-                //problem, we already have to values for this field and user combination - keep last one
+                //problem, we already have two values for this field and user combination - keep last one
                 while ($rowufv = Database::fetch_array($resufv)) {
                     if ($n > 1) {
                         $sqld = "DELETE FROM $t_ufv WHERE id = ".$rowufv['id'];
@@ -2173,7 +2177,7 @@ class UserManager
               FROM $tbl_session as session
                   LEFT JOIN $tbl_session_category session_category
                   ON (session_category_id = session_category.id)
-                  INNER JOIN $tbl_session_course_user as session_rel_course_user
+                  LEFT JOIN $tbl_session_course_user as session_rel_course_user
                   ON (session_rel_course_user.id_session = session.id)
               WHERE (
                         session_rel_course_user.id_user = $user_id OR
@@ -3639,8 +3643,12 @@ class UserManager
         }
 
         if (!empty($lastConnectionDate)) {
-            $lastConnectionDate = Database::escape_string($lastConnectionDate);
-            $userConditions .=  " AND u.last_login <= '$lastConnectionDate' ";
+            if (isset($_configuration['save_user_last_login']) &&
+                $_configuration['save_user_last_login']
+            ) {
+                $lastConnectionDate = Database::escape_string($lastConnectionDate);
+                $userConditions .=  " AND u.last_login <= '$lastConnectionDate' ";
+            }
         }
 
         $courseConditions = null;
@@ -4197,8 +4205,8 @@ class UserManager
                     }
                     break;
                 case self::USER_FIELD_TYPE_DATE:
-                    $form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3], array('form_name' => $form_name));
-                    $form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
+                    $form->addElement('date_picker', 'extra_'.$field_details[1], $field_details[3]);
+                    //$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
                     $defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
                     $form->setDefaults($defaults);
                     if (!$admin_permissions) {
@@ -4208,8 +4216,8 @@ class UserManager
                     $form->applyFilter('theme', 'trim');
                     break;
                 case self::USER_FIELD_TYPE_DATETIME:
-                    $form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3], array('form_name' => $form_name));
-                    $form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
+                    $form->addElement('date_time_picker', 'extra_'.$field_details[1], $field_details[3]);
+                    //$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
                     $defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
                     $form->setDefaults($defaults);
                     if (!$admin_permissions) {
@@ -4324,6 +4332,17 @@ EOF;
                     if ($field_details[7] == 0)
                         $form->freeze('extra_'.$field_details[1]);
                     break;
+                case self::USER_FIELD_TYPE_FILE:
+                    if (!empty($field_details[3])) {
+                        $uPaths = UserManager::get_user_picture_path_by_id($user_id);
+                        $path = '<a href="'.$uPaths['dir'].$field_details[3]."'>".$field_details[3].'</a>';
+                        $form->addElement('html', 'extra_'.$field_details[1].'_link', $path, null, '');
+                    }
+                    $form->addElement('file', 'extra_'.$field_details[1], $field_details[3], null, '');
+                    if ($field_details[7] == 0) {
+                        $form->freeze('extra_'.$field_details[1]);
+                    }
+                    break;
             }
         }
         $return = array();
@@ -4349,6 +4368,7 @@ EOF;
         $types[self::USER_FIELD_TYPE_TAG] = get_lang('FieldTypeTag');
         $types[self::USER_FIELD_TYPE_TIMEZONE] = get_lang('FieldTypeTimezone');
         $types[self::USER_FIELD_TYPE_SOCIAL_PROFILE] = get_lang('FieldTypeSocialProfile');
+        $types[self::USER_FIELD_TYPE_FILE] = get_lang('FieldTypeFile');
 
         return $types;
     }

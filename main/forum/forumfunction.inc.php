@@ -3965,6 +3965,8 @@ function get_forums_of_group($group_id)
     // Handling all the forum information.
 
     $result = Database::query($sql);
+    $forum_list = array();
+
     while ($row = Database::fetch_array($result, 'ASSOC')) {
         $forum_list[$row['forum_id']] = $row;
     }
@@ -3983,14 +3985,15 @@ function get_forums_of_group($group_id)
     $result3 = Database::query($sql3);
     while ($row3 = Database::fetch_array($result3, 'ASSOC')) {
         if (is_array($forum_list)) {
-            if (array_key_exists($row3['forum_id'], $forum_list)) { // This is needed because sql3 takes also the deleted forums into account.
+            if (array_key_exists($row3['forum_id'], $forum_list)) {
+                // This is needed because sql3 takes also the deleted forums into account.
                 $forum_list[$row3['forum_id']]['number_of_posts'] = $row3['number_of_posts'];
             }
         }
     }
 
     // Finding the last post information (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname).
-    if (is_array($forum_list)) {
+    if (!empty($forum_list)) {
         foreach ($forum_list as $key => $value) {
             $last_post_info_of_forum = get_last_post_information($key, is_allowed_to_edit());
             $forum_list[$key]['last_post_id'] = $last_post_info_of_forum['last_post_id'];

@@ -30,10 +30,14 @@ function validate_data($users)
 
     // 1. Check if mandatory fields are set.
     $mandatory_fields = array('LastName', 'FirstName');
+
     if (api_get_setting('registration', 'email') == 'true') {
         $mandatory_fields[] = 'Email';
     }
-    foreach ($users as $index => $user) {
+    $classExistList = array();
+    $usergroup = new UserGroup();
+
+    foreach ($users as $user) {
         foreach ($mandatory_fields as $field) {
             if (empty($user[$field])) {
                 $user['error'] = get_lang($field.'Mandatory');
@@ -65,17 +69,24 @@ function validate_data($users)
             $user['error'] = get_lang('WrongStatus');
             $errors[] = $user;
         }
-        // 4. Check classid
-        $usergroup = new UserGroup();
+
+        // 4. Check ClassId
         if (!empty($user['ClassId'])) {
             $classId = explode('|', trim($user['ClassId']));
             foreach ($classId as $id) {
-                if (!UserGroup::usergroupIdExists($id)) {
+                if (in_array($id, $classExistList)) {
+                    continue;
+                }
+                $info = $usergroup->get($id);
+                if (empty($info)) {
                     $user['error'] = sprintf(get_lang('ClassIdDoesntExists'), $id);
                     $errors[] = $user;
+                } else {
+                    $classExistList[] = $info['id'];
                 }
             }
         }
+
         // 5. Check authentication source
         if (!empty($user['AuthSource'])) {
             if (!in_array($user['AuthSource'], $defined_auth_sources)) {
@@ -84,6 +95,7 @@ function validate_data($users)
             }
         }
     }
+
     return $errors;
 }
 
@@ -128,6 +140,7 @@ function save_data($users)
         $inserted_in_course = array();
     }
     require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
+    $usergroup = new UserGroup();
     $send_mail = $_POST['sendMail'] ? true : false;
     if (is_array($users)) {
         foreach ($users as $user) {
@@ -176,13 +189,11 @@ function save_data($users)
                     }
                 }
             }
-            $usergroup = new UserGroup();
             if (!empty($user['ClassId'])) {
                 $classId = explode('|', trim($user['ClassId']));
                 foreach ($classId as $id) {
-                    $usergroup->addUser($user_id, $id);
+                    $usergroup->subscribe_users_to_usergroup($id, array($user_id), false);
                 }
-                
             }
 
             // Saving extra fields.
@@ -304,14 +315,14 @@ if (is_array($extAuthSource)) {
 }
 
 $tool_name = get_lang('ImportUserListXMLCSV');
-$interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 
 set_time_limit(0);
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
 $user_id_error = array();
 $error_message = '';
 
-if ($_POST['formSent'] and $_FILES['import_file']['size'] !== 0) {
+if (isset($_POST['formSent']) && $_POST['formSent'] AND $_FILES['import_file']['size'] !== 0) {
     $file_type = $_POST['file_type'];
     Security::clear_token();
     $tok = Security::get_token();
@@ -411,14 +422,14 @@ $group[] = $form->createElement(
     '',
     'CSV (<a href="example.csv" target="_blank">'.get_lang('ExampleCSVFile').'</a>)',
     'csv'
-    );
+);
 $group[] = $form->createElement(
     'radio',
     'file_type',
     null,
     'XML (<a href="example.xml" target="_blank">'.get_lang('ExampleXMLFile').'</a>)',
     'xml'
-    );
+);
 $form->addGroup($group, '', get_lang('FileType'), '<br/>');
 
 $group = array();
@@ -453,17 +464,14 @@ if ($count_fields > 0) {
 
 ?>
     <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
-
     <blockquote>
 <pre>
-<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;<span style="color:red;"><?php if (count($list) > 0) echo implode(';', $list).';'; ?></span>Courses;
-<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;<span style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></span>xxx1|xxx2|xxx3;<br />
+<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;<span style="color:red;"><?php if (count($list) > 0) echo implode(';', $list).';'; ?></span>Courses;ClassId;
+<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;<span style="color:red;"><?php if (count($list_reponse) > 0) echo implode(';', $list_reponse).';'; ?></span>xxx1|xxx2|xxx3;1;<br />
 </pre>
-    </blockquote>
-
-    <p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
-
-    <blockquote>
+</blockquote>
+<p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+<blockquote>
 <pre>
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;<?php echo api_refine_encoding_id(api_get_system_encoding()); ?>&quot;?&gt;
 &lt;Contacts&gt;
@@ -478,6 +486,7 @@ if ($count_fields > 0) {
         &lt;PhoneNumber&gt;xxx&lt;/PhoneNumber&gt;
         &lt;Status&gt;user/teacher/drh<?php if ($result_xml != '') { echo '<br /><span style="color:red;">', $result_xml; echo '</span>'; } ?>&lt;/Status&gt;
         &lt;Courses&gt;xxx1|xxx2|xxx3&lt;/Courses&gt;
+        &lt;ClassId&gt;1&lt;/ClassId&gt;
         &lt;/Contact&gt;
 &lt;/Contacts&gt;
 </pre>

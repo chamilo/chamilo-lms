@@ -21,7 +21,6 @@ define('REQUIRED_MIN_POST_MAX_SIZE',        '10');
 
 use \ChamiloSession as Session;
 
-
 // USER STATUS CONSTANTS
 /** global status of a user: student */
 define('STUDENT', 5);
@@ -45,14 +44,12 @@ define('COURSE_STUDENT', 14);   //student subscribed in a course
 define('SESSION_STUDENT', 15);  //student subscribed in a session course
 define('COURSE_TUTOR', 16); // student is tutor of a course (NOT in session)
 
-
 // Table of status
 $_status_list[COURSEMANAGER]    = 'teacher';        // 1
 $_status_list[SESSIONADMIN]     = 'session_admin';  // 3
 $_status_list[DRH]              = 'drh';            // 4
 $_status_list[STUDENT]          = 'user';           // 5
 $_status_list[ANONYMOUS]        = 'anonymous';      // 6
-
 
 // COURSE VISIBILITY CONSTANTS
 /** only visible for course admin */
@@ -71,7 +68,6 @@ define('SESSION_VISIBLE_READ_ONLY', 1);
 define('SESSION_VISIBLE', 2);
 define('SESSION_INVISIBLE', 3); // not available
 define('SESSION_AVAILABLE', 4);
-
 
 define('SUBSCRIBE_ALLOWED', 1);
 define('SUBSCRIBE_NOT_ALLOWED', 0);
@@ -175,10 +171,10 @@ define('LOG_USER_FIELD_CREATE',			        'user_field_created');
 define('LOG_USER_FIELD_DELETE',			        'user_field_deleted');
 define('LOG_SESSION_CREATE',                    'session_created');
 define('LOG_SESSION_DELETE',                    'session_deleted');
-define('LOG_SESSION_CATEGORY_CREATE',           'session_category_created');
-define('LOG_SESSION_CATEGORY_DELETE',           'session_category_deleted');
+define('LOG_SESSION_CATEGORY_CREATE',           'session_cat_created'); //changed in 1.9.8
+define('LOG_SESSION_CATEGORY_DELETE',           'session_cat_deleted'); //changed in 1.9.8
 define('LOG_CONFIGURATION_SETTINGS_CHANGE',     'settings_changed');
-define('LOG_PLATFORM_LANGUAGE_CHANGE',          'platform_language_changed');
+define('LOG_PLATFORM_LANGUAGE_CHANGE',          'platform_lng_changed'); //changed in 1.9.8
 define('LOG_SUBSCRIBE_USER_TO_COURSE',          'user_subscribed');
 define('LOG_UNSUBSCRIBE_USER_FROM_COURSE',      'user_unsubscribed');
 define('LOG_ATTEMPTED_FORCED_LOGIN',            'attempted_forced_login');
@@ -193,9 +189,9 @@ define('LOG_CAREER_DELETE',                     'career_deleted');
 define('LOG_USER_PERSONAL_DOC_DELETED',         'user_doc_deleted');
 define('LOG_WIKI_ACCESS',                       'wiki_page_view');
 
-define('LOG_EXERCISE_RESULT_DELETE',           'exercise_result_deleted');
+define('LOG_EXERCISE_RESULT_DELETE',           'exe_result_deleted');
 define('LOG_LP_ATTEMPT_DELETE',                'lp_attempt_deleted');
-define('LOG_QUESTION_RESULT_DELETE',           'question_attempt_deleted');
+define('LOG_QUESTION_RESULT_DELETE',           'qst_attempt_deleted');
 
 // event logs data types (max 20 chars)
 define('LOG_COURSE_CODE',                       'course_code');
@@ -210,13 +206,10 @@ define('LOG_CONFIGURATION_SETTINGS_VARIABLE',   'settings_variable');
 define('LOG_PLATFORM_LANGUAGE',                 'default_platform_language');
 define('LOG_CAREER_ID',                         'career_id');
 define('LOG_PROMOTION_ID',                      'promotion_id');
-
 define('LOG_GRADEBOOK_LOCKED',                   'gradebook_locked');
 define('LOG_GRADEBOOK_UNLOCKED',                 'gradebook_unlocked');
 define('LOG_GRADEBOOK_ID',                       'gradebook_id');
-
 define('LOG_WIKI_PAGE_ID',                       'wiki_page_id');
-
 define('LOG_EXERCISE_ID',                        'exercise_id');
 define('LOG_EXERCISE_AND_USER_ID',               'exercise_and_user_id');
 define('LOG_LP_ID',                              'lp_id');
@@ -343,8 +336,6 @@ define('ICON_SIZE_BIG',     64);
 define('ICON_SIZE_HUGE',    128);
 
 define('SHOW_TEXT_NEAR_ICONS', false);
-
-
 
 /**
  * Inclusion of internationalization libraries
@@ -3251,6 +3242,15 @@ function api_item_property_update(
     $end_visible = 0,
     $session_id = 0
 ) {
+    if (empty($_course)) {
+        return false;
+    }
+
+    $course_id = $_course['real_id'];
+
+    if (empty($course_id)) {
+        return false;
+    }
 
     // Definition of variables.
     $tool           = Database::escape_string($tool);
@@ -3296,7 +3296,6 @@ function api_item_property_update(
         $condition_session = " AND id_session = '$session_id' ";
     }
 
-    $course_id = $_course['real_id'];
     $filter = " c_id = $course_id AND tool='$tool' AND ref='$item_id' $condition_session ";
 
     if ($item_id == '*') {
@@ -5131,7 +5130,8 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
             $table_tool = Database::get_course_table(TABLE_GROUP);
             $key_field = 'id';
             break;
-        default: return false;
+        default:
+            return false;
     }
     $course_id = api_get_course_int_id();
 

@@ -109,7 +109,7 @@ function import_exercise($file)
 	$file_found = false;
 	$operation = false;
     $result = false;
-
+    $filePath = null;
 	// parse every subdirectory to search xml question files
 	while (false !== ($file = readdir($exerciseHandle))) {
 		if (is_dir($baseWorkDir . '/' . $file) && $file != "." && $file != "..") {
@@ -118,22 +118,31 @@ function import_exercise($file)
 			while (false !== ($questionFile = readdir($questionHandle))) {
 				if (preg_match('/.xml$/i', $questionFile)) {
 					$result = parse_file($baseWorkDir, $file, $questionFile);
+                    $filePath = $baseWorkDir.$file;
 					$file_found = true;
 				}
 			}
 		} elseif (preg_match('/.xml$/i', $file)) {
+            // Else ignore file
 			$result = parse_file($baseWorkDir, '', $file);
+            $filePath = $baseWorkDir.'/'.$file;
 			$file_found = true;
-		} // else ignore file
+		}
 	}
 
 	if (!$file_found) {
 		Display :: display_error_message(get_lang('No XML file found in the zip'));
 		return false;
 	}
-    if ($result == false ) {
+
+    if ($result == false) {
         return false;
     }
+
+
+    $doc = new DOMDocument();
+    $doc->load($filePath);
+    $encoding = $doc->encoding;
 
 	// 1. Create exercise.
 	$exercise = new Exercise();
@@ -143,15 +152,16 @@ function import_exercise($file)
 	$last_exercise_id = $exercise->selectId();
 	if (!empty($last_exercise_id)) {
 		// For each question found...
-		foreach ($exercise_info['question'] as $key => $question_array) {
+		foreach ($exercise_info['question'] as $question_array) {
 			//2. Create question
 			$question = new Ims2Question();
 			$question->type = $question_array['type'];
 			$question->setAnswer();
-			$question->updateTitle($question_array['title']); // question ...
+			$question->updateTitle(formatText($question_array['title']));
+            //$question->updateDescription($question_array['title']);
 			$type = $question->selectType();
-			$question->type = constant($type); // type ...
-			$question->save($last_exercise_id); // save computed grade
+			$question->type = constant($type);
+			$question->save($last_exercise_id);
 			$last_question_id = $question->selectId();
 			//3. Create answer
 			$answer = new Answer($last_question_id);
@@ -161,9 +171,9 @@ function import_exercise($file)
 				$split = explode('_', $key);
 				$i = $split[1];
                 // Answer
-				$answer->new_answer[$i] = $answers['value'];
+				$answer->new_answer[$i] = formatText($answers['value']);
                 // Comment
-				$answer->new_comment[$i] = isset($answers['feedback']) ? $answers['feedback'] : null;
+				$answer->new_comment[$i] = isset($answers['feedback']) ? formatText($answers['feedback']) : null;
                 // Position
 				$answer->new_position[$i] = $i;
 				// Correct answers
@@ -188,6 +198,13 @@ function import_exercise($file)
 	}
 	return $operation;
 }
+/**
+ * We assume the file charset is UTF8
+ **/
+function formatText($text)
+{
+    return api_html_entity_decode($text);
+}
 
 function parse_file($exercisePath, $file, $questionFile)
 {
@@ -199,6 +216,7 @@ function parse_file($exercisePath, $file, $questionFile)
 
 	$questionTempDir = $exercisePath . '/' . $file . '/';
 	$questionFilePath = $questionTempDir . $questionFile;
+
 	if (!($fp = fopen($questionFilePath, 'r'))) {
 		Display :: display_error_message(get_lang('Error opening question\'s XML file'));
 		return false;
@@ -245,15 +263,15 @@ function parse_file($exercisePath, $file, $questionFile)
 		"RESPONSECONDITION",
 		"RESPONSEIF"
 	);
-	$question_format_supported = true;
+
+    $question_format_supported = true;
 
 	$xml_parser = xml_parser_create();
 	xml_parser_set_option($xml_parser, XML_OPTION_SKIP_WHITE, false);
 	xml_set_element_handler($xml_parser, 'startElement', 'endElement');
 	xml_set_character_data_handler($xml_parser, 'elementData');
-
 	if (!xml_parse($xml_parser, $data, feof($fp))) {
-		// if reading of the xml file in not successfull :
+		// if reading of the xml file in not successful :
 		// set errorFound, set error msg, break while statement
 		Display :: display_error_message(get_lang('Error reading XML file'));
 		return false;
@@ -329,143 +347,89 @@ function startElement($parser, $name, $attributes) {
 				$current_question_item_body .= "<BR/>";
 			}
 		}
-
 	}
-
 	switch ($current_element) {
 		case 'ASSESSMENTITEM' :
-			{
-				//retrieve current question
-
-				$current_question_ident = $attributes['IDENTIFIER'];
-				$exercise_info['question'][$current_question_ident] = array ();
-				$exercise_info['question'][$current_question_ident]['answer'] = array ();
-				$exercise_info['question'][$current_question_ident]['correct_answers'] = array ();
-				$exercise_info['question'][$current_question_ident]['title'] = $attributes['TITLE'];
-				$exercise_info['question'][$current_question_ident]['tempdir'] = $questionTempDir;
-			}
+            //retrieve current question
+            $current_question_ident = $attributes['IDENTIFIER'];
+            $exercise_info['question'][$current_question_ident] = array ();
+            $exercise_info['question'][$current_question_ident]['answer'] = array ();
+            $exercise_info['question'][$current_question_ident]['correct_answers'] = array ();
+            $exercise_info['question'][$current_question_ident]['title'] = $attributes['TITLE'];
+            $exercise_info['question'][$current_question_ident]['tempdir'] = $questionTempDir;
+            break;
+		case 'SECTION':
+            //retrieve exercise name
+            $exercise_info['name'] = $attributes['TITLE'];
 			break;
-
-		case 'SECTION' :
-			{
-				//retrieve exercise name
-
-				$exercise_info['name'] = $attributes['TITLE'];
-
-			}
+		case 'RESPONSEDECLARATION':
+            // Retrieve question type
+            if ("multiple" == $attributes['CARDINALITY']) {
+                $exercise_info['question'][$current_question_ident]['type'] = 'MCMA';
+                $cardinality = 'multiple';
+            }
+            if ("single" == $attributes['CARDINALITY']) {
+                $exercise_info['question'][$current_question_ident]['type'] = 'MCUA';
+                $cardinality = 'single';
+            }
+            //needed for FIB
+            $current_answer_id = $attributes['IDENTIFIER'];
 			break;
-
-		case 'RESPONSEDECLARATION' :
-			{
-				//retrieve question type
-
-				if ("multiple" == $attributes['CARDINALITY']) {
-					$exercise_info['question'][$current_question_ident]['type'] = 'MCMA';
-					$cardinality = 'multiple';
-				}
-				if ("single" == $attributes['CARDINALITY']) {
-					$exercise_info['question'][$current_question_ident]['type'] = 'MCUA';
-					$cardinality = 'single';
-				}
-
-				//needed for FIB
-
-				$current_answer_id = $attributes['IDENTIFIER'];
-
-			}
-			break;
-
 		case 'INLINECHOICEINTERACTION' :
-			{
-				$exercise_info['question'][$current_question_ident]['type'] = 'FIB';
-				$exercise_info['question'][$current_question_ident]['subtype'] = 'LISTBOX_FILL';
-				$current_answer_id = $attributes['RESPONSEIDENTIFIER'];
-
-			}
+            $exercise_info['question'][$current_question_ident]['type'] = 'FIB';
+			$exercise_info['question'][$current_question_ident]['subtype'] = 'LISTBOX_FILL';
+			$current_answer_id = $attributes['RESPONSEIDENTIFIER'];
 			break;
-
 		case 'INLINECHOICE' :
-			{
-				$current_inlinechoice_id = $attributes['IDENTIFIER'];
-			}
+            $current_inlinechoice_id = $attributes['IDENTIFIER'];
 			break;
-
-		case 'TEXTENTRYINTERACTION' :
-			{
-				$exercise_info['question'][$current_question_ident]['type'] = 'FIB';
-				$exercise_info['question'][$current_question_ident]['subtype'] = 'TEXTFIELD_FILL';
-				$exercise_info['question'][$current_question_ident]['response_text'] = $current_question_item_body;
-
-				//replace claroline tags
-
-			}
+		case 'TEXTENTRYINTERACTION':
+            $exercise_info['question'][$current_question_ident]['type'] = 'FIB';
+            $exercise_info['question'][$current_question_ident]['subtype'] = 'TEXTFIELD_FILL';
+            $exercise_info['question'][$current_question_ident]['response_text'] = $current_question_item_body;
+            //replace claroline tags
 			break;
-
-		case 'MATCHINTERACTION' :
-			{
-				$exercise_info['question'][$current_question_ident]['type'] = 'MATCHING';
-			}
+		case 'MATCHINTERACTION':
+			$exercise_info['question'][$current_question_ident]['type'] = 'MATCHING';
 			break;
-
 		case 'SIMPLEMATCHSET' :
-			{
-				if (!isset ($current_match_set)) {
-					$current_match_set = 1;
-				} else {
-					$current_match_set++;
-				}
-				$exercise_info['question'][$current_question_ident]['answer'][$current_match_set] = array ();
-			}
+            if (!isset ($current_match_set)) {
+                $current_match_set = 1;
+            } else {
+                $current_match_set++;
+            }
+            $exercise_info['question'][$current_question_ident]['answer'][$current_match_set] = array ();
 			break;
-
-		case 'SIMPLEASSOCIABLECHOICE' :
-			{
-				$currentAssociableChoice = $attributes['IDENTIFIER'];
-			}
+		case 'SIMPLEASSOCIABLECHOICE':
+            $currentAssociableChoice = $attributes['IDENTIFIER'];
 			break;
-
 			//retrieve answers id for MCUA and MCMA questions
-
-		case 'SIMPLECHOICE' :
-
+		case 'SIMPLECHOICE':
             $current_answer_id = $attributes['IDENTIFIER'];
             if (!isset($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id])) {
                 $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id] = array ();
             }
-
 			break;
+		case 'MAPENTRY':
+            if ($parent_element == "MAPPING") {
+                $answer_id = $attributes['MAPKEY'];
 
-		case 'MAPENTRY' :
-			{
-				if ($parent_element == "MAPPING") {
-					$answer_id = $attributes['MAPKEY'];
-
-					if (!isset ($exercise_info['question'][$current_question_ident]['weighting'])) {
-						$exercise_info['question'][$current_question_ident]['weighting'] = array ();
-					}
-					$exercise_info['question'][$current_question_ident]['weighting'][$answer_id] = $attributes['MAPPEDVALUE'];
-				}
-			}
+                if (!isset ($exercise_info['question'][$current_question_ident]['weighting'])) {
+                    $exercise_info['question'][$current_question_ident]['weighting'] = array ();
+                }
+                $exercise_info['question'][$current_question_ident]['weighting'][$answer_id] = $attributes['MAPPEDVALUE'];
+            }
 			break;
-
-		case 'MAPPING' :
-			{
-				if (isset ($attributes['DEFAULTVALUE'])) {
-					$exercise_info['question'][$current_question_ident]['default_weighting'] = $attributes['DEFAULTVALUE'];
-				}
-			}
-
-		case 'ITEMBODY' :
-			{
-				$record_item_body = true;
-				$current_question_item_body = '';
-			}
+		case 'MAPPING':
+            if (isset ($attributes['DEFAULTVALUE'])) {
+                $exercise_info['question'][$current_question_ident]['default_weighting'] = $attributes['DEFAULTVALUE'];
+            }
+		case 'ITEMBODY':
+            $record_item_body = true;
+            $current_question_item_body = '';
 			break;
-
-		case 'IMG' :
-			{
-				$exercise_info['question'][$current_question_ident]['attached_file_url'] = $attributes['SRC'];
-			}
+		case 'IMG':
+            $exercise_info['question'][$current_question_ident]['attached_file_url'] = $attributes['SRC'];
 			break;
 	}
 }
@@ -495,15 +459,13 @@ function endElement($parser, $name) {
 	}
 
 	switch ($name) {
-		case 'ITEMBODY' :
-			{
-				$record_item_body = false;
-				if ($exercise_info['question'][$current_question_ident]['type'] == 'FIB') {
-					$exercise_info['question'][$current_question_ident]['response_text'] = $current_question_item_body;
-				} else {
-					$exercise_info['question'][$current_question_ident]['statement'] = $current_question_item_body;
-				}
-			}
+		case 'ITEMBODY':
+            $record_item_body = false;
+            if ($exercise_info['question'][$current_question_ident]['type'] == 'FIB') {
+                $exercise_info['question'][$current_question_ident]['response_text'] = $current_question_item_body;
+            } else {
+                $exercise_info['question'][$current_question_ident]['statement'] = $current_question_item_body;
+            }
 			break;
 	}
 	array_pop($element_pile);
@@ -541,68 +503,47 @@ function elementData($parser, $data) {
 	}
 
 	switch ($current_element) {
-		case 'SIMPLECHOICE' :
-
-				if (!isset ($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'])) {
-					$exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] = trim($data);
-				} else {
-					$exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] .= ''.trim($data);
-				}
+		case 'SIMPLECHOICE':
+            if (!isset ($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'])) {
+                $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] = trim($data);
+            } else {
+                $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['value'] .= ''.trim($data);
+            }
 			break;
-
 		case 'FEEDBACKINLINE' :
-			{
-				if (!isset ($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['feedback'])) {
-					$exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['feedback'] = trim($data);
-				} else {
-					$exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['feedback'] .= ' ' . trim($data);
-				}
-			}
+            if (!isset ($exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['feedback'])) {
+                $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['feedback'] = trim($data);
+            } else {
+                $exercise_info['question'][$current_question_ident]['answer'][$current_answer_id]['feedback'] .= ' ' . trim($data);
+            }
 			break;
-
-		case 'SIMPLEASSOCIABLECHOICE' :
-			{
-				$exercise_info['question'][$current_question_ident]['answer'][$current_match_set][$currentAssociableChoice] = trim($data);
-			}
+		case 'SIMPLEASSOCIABLECHOICE':
+			$exercise_info['question'][$current_question_ident]['answer'][$current_match_set][$currentAssociableChoice] = trim($data);
 			break;
-
 		case 'VALUE' :
-			{
-				if ($parent_element == "CORRECTRESPONSE") {
-					if ($cardinality == "single") {
-						$exercise_info['question'][$current_question_ident]['correct_answers'][$current_answer_id] = $data;
-					} else {
-						$exercise_info['question'][$current_question_ident]['correct_answers'][] = $data;
-					}
-				}
-			}
+            if ($parent_element == "CORRECTRESPONSE") {
+                if ($cardinality == "single") {
+                    $exercise_info['question'][$current_question_ident]['correct_answers'][$current_answer_id] = $data;
+                } else {
+                    $exercise_info['question'][$current_question_ident]['correct_answers'][] = $data;
+                }
+            }
 			break;
 
 		case 'ITEMBODY' :
-			{
-				$current_question_item_body .= $data;
-
-			}
+            $current_question_item_body .= $data;
 			break;
-
 		case 'INLINECHOICE' :
-			{
-
-				// if this is the right answer, then we must replace the claroline tags in the FIB text bye the answer between "[" and "]" :
-
-				$answer_identifier = $exercise_info['question'][$current_question_ident]['correct_answers'][$current_answer_id];
-
-				if ($current_inlinechoice_id == $answer_identifier) {
-
-					$current_question_item_body = str_replace("**claroline_start**" . $current_answer_id . "**claroline_end**", "[" . $data . "]", $current_question_item_body);
-				} else // save wrong answers in an array
-					{
-					if (!isset ($exercise_info['question'][$current_question_ident]['wrong_answers'])) {
-						$exercise_info['question'][$current_question_ident]['wrong_answers'] = array ();
-					}
-					$exercise_info['question'][$current_question_ident]['wrong_answers'][] = $data;
-				}
-			}
+            // if this is the right answer, then we must replace the claroline tags in the FIB text bye the answer between "[" and "]" :
+            $answer_identifier = $exercise_info['question'][$current_question_ident]['correct_answers'][$current_answer_id];
+            if ($current_inlinechoice_id == $answer_identifier) {
+                $current_question_item_body = str_replace("**claroline_start**" . $current_answer_id . "**claroline_end**", "[" . $data . "]", $current_question_item_body);
+            } else {
+                if (!isset ($exercise_info['question'][$current_question_ident]['wrong_answers'])) {
+                    $exercise_info['question'][$current_question_ident]['wrong_answers'] = array ();
+                }
+                $exercise_info['question'][$current_question_ident]['wrong_answers'][] = $data;
+            }
 			break;
 	}
 }

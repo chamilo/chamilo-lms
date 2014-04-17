@@ -30,7 +30,7 @@ $form->addElement('style_submit_button', 'submit', get_lang('Export'), 'class="s
 
 if ($form->validate()) {
     $user_group = new UserGroup;
-    $header = array(array('name', 'description'));
+    $header = array(array('id', 'name', 'description'));
     $data = $user_group->get_all_for_export();
     $data = array_merge($header, $data);
     $filename = 'export_classes_'.api_get_local_time();

@@ -27,7 +27,7 @@ $this_section = SECTION_COURSES;
 
 // Notice for unauthorized people.
 api_protect_course_script(true);
-
+$sessionId = api_get_session_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : 0;
 
 $objExercise = new Exercise();
@@ -72,14 +72,14 @@ if ($origin != 'learnpath') {
 $html = '';
 $message = '';
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null,true);
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $edit_link = '';
-if ($is_allowed_to_edit ) {
+if ($is_allowed_to_edit && $objExercise->sessionId == $sessionId) {
 	$edit_link = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), api_get_path(WEB_CODE_PATH).'exercice/admin.php?'.api_get_cidreq().'&id_session='.api_get_session_id().'&exerciseId='.$objExercise->id);
 }
 
 //Exercise name
-$html .= Display::page_header( $objExercise->name.' '.$edit_link);
+$html .= Display::page_header($objExercise->name.' '.$edit_link);
 
 //Exercise description
 if (!empty($objExercise->description)) {
@@ -98,7 +98,7 @@ if (isset($exercise_stat_info['exe_id'])) {
 }
 
 //1. Check if this is a new attempt or a previous
-$countNotFinished = $exercise_stat_info['num_exe'];
+$countNotFinished = isset($exercise_stat_info['num_exe']) ? $exercise_stat_info['num_exe'] : null;
 $label = get_lang('StartTest');
 if ($time_control && !empty($clock_expired_time) || !empty($attempt_list)) {
 	$label = get_lang('ContinueTest');

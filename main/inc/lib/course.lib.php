@@ -1970,7 +1970,7 @@ class CourseManager
     {
         $table_course                       = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_user                  = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $table_course_class                 = Database::get_main_table(TABLE_MAIN_COURSE_CLASS);
+        //$table_course_class                 = Database::get_main_table(TABLE_MAIN_COURSE_CLASS);
 
         $table_session_course               = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $table_session_course_user          = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -2015,8 +2015,8 @@ class CourseManager
             $virtual_courses = self::get_virtual_courses_linked_to_real_course($code);
             foreach ($virtual_courses as $index => $virtual_course) {
                 // Unsubscribe all classes from the virtual course
-                $sql = "DELETE FROM $table_course_class WHERE course_code='".$virtual_course['code']."'";
-                Database::query($sql);
+                /*$sql = "DELETE FROM $table_course_class WHERE course_code='".$virtual_course['code']."'";
+                Database::query($sql);*/
                 // Unsubscribe all users from the virtual course
                 $sql = "DELETE FROM $table_course_user WHERE course_code='".$virtual_course['code']."'";
                 Database::query($sql);
@@ -2028,10 +2028,10 @@ class CourseManager
                 // Delete the course from the survey tables
                 $sql = "DELETE FROM $table_course_survey WHERE course_code='".$virtual_course['code']."'";
                 Database::query($sql);
-                $sql = "DELETE FROM $table_course_survey_user WHERE db_name='".$virtual_course['db_name']."'";
+                /*$sql = "DELETE FROM $table_course_survey_user WHERE db_name='".$virtual_course['db_name']."'";
                 Database::query($sql);
                 $sql = "DELETE FROM $table_course_survey_reminder WHERE db_name='".$virtual_course['db_name']."'";
-                Database::query($sql);
+                Database::query($sql);*/
 
                 // Delete the course from the stats tables
 
@@ -2084,8 +2084,8 @@ class CourseManager
         }
 
         // Unsubscribe all classes from the course
-        $sql = "DELETE FROM $table_course_class WHERE course_code='".$code."'";
-        Database::query($sql);
+        /*$sql = "DELETE FROM $table_course_class WHERE course_code='".$code."'";
+        Database::query($sql);*/
         // Unsubscribe all users from the course
         $sql = "DELETE FROM $table_course_user WHERE course_code='".$code."'";
         Database::query($sql);
@@ -2110,7 +2110,6 @@ class CourseManager
             $sql = 'DELETE FROM '.$table_course_survey.' WHERE survey_id="'.$survey_id.'"';
             Database::query($sql);
         }
-
 
         // Delete the course from the stats tables
 
@@ -4255,9 +4254,9 @@ class CourseManager
 
     /**
      * @deprecated seems not to be used
-     * @return ResultSet
      */
-    static function list_inactive_courses($ceiling, $visibility_level = COURSE_VISIBILITY_REGISTERED) {
+    static function list_inactive_courses($ceiling, $visibility_level = COURSE_VISIBILITY_REGISTERED)
+    {
         $ceiling = is_numeric($ceiling) ? (int) $ceiling : strtotime($ceiling);
         $ceiling = date('Y-m-d H:i:s', $ceiling);
         $visibility_level = $visibility_level ? $visibility_level : '0';

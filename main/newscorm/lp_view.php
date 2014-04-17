@@ -321,8 +321,6 @@ if ($is_allowed_to_edit) {
     $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list&isStudentView=false', 'name' => get_lang('LearningPaths'));
     $interbreadcrumb[] = array('url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => $_SESSION['oLP']->get_name());
     $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Preview'));
-    //$interbreadcrumb[] = array('type' => 'right', 'url' => api_get_self()."?action=add_item&type=step&lp_id=".$_SESSION['oLP']->lp_id."&isStudentView=false", 'name' => get_lang('Edit'), 'class' => 'btn btn-mini btn-warning');
-
     echo return_breadcrumb($interbreadcrumb, null, null);
     echo '</div>';
 }
@@ -378,7 +376,7 @@ if ($is_allowed_to_edit) {
         <!-- end image preview Layout -->
 
         <div id="author_name">
-            <?php echo $_SESSION['oLP']->get_author(); ?> 
+            <?php echo $_SESSION['oLP']->get_author(); ?>
         </div>
 
         <!-- media player layout -->
@@ -424,6 +422,9 @@ if ($is_allowed_to_edit) {
         var hauteurHeader = document.getElementById('header').offsetHeight;
         var hauteurAuthorImg = document.getElementById('author_image').offsetHeight;
         var hauteurAuthorName = document.getElementById('author_name').offsetHeight;
+        var heightBreadcrumb = document.getElementById('learning_path_breadcrumb_zone').offsetHeight;
+        var control = document.getElementById('control');
+        var heightControl = (control)? control.offsetHeight : 0;
 
         var hauteurMedia = 0;
         if ($("#lp_media_file").length != 0) {
@@ -440,7 +441,7 @@ if ($is_allowed_to_edit) {
         <?php if (!empty($_SESSION['oLP']->scorm_debug)) echo 'debugsize = 150;' ?>
         document.getElementById('inner_lp_toc').style.height = innerHauteur - hauteurHaut - 40 - debugsize + "px";
         if (document.getElementById('content_id')) {
-            document.getElementById('content_id').style.height = innerHauteur + 'px';
+            document.getElementById('content_id').style.height = innerHauteur - debugsize - heightBreadcrumb - heightControl + "px";
         }
 
     // Loads the glossary library.
@@ -484,8 +485,8 @@ if ($is_allowed_to_edit) {
             updateContentHeight();
         });
     });
-    //window.onload = updateContentHeight;
-    //window.onresize = updateContentHeight;
+    window.onload = updateContentHeight();
+    window.onresize = updateContentHeight();
 </script>
 <?php
 // Restore a global setting.

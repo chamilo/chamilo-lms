@@ -284,7 +284,7 @@ if (is_array($forumCategories)) {
                 }
 
                 // Note: This can be speeded up if we transform the $forum_list to an array that uses the forum_category as the key.
-                if ($forum['forum_category'] == $forumCategory['cat_id']) {
+                if (isset($forum['forum_category']) && $forum['forum_category'] == $forumCategory['cat_id']) {
                     $show_forum = false;
 
                     // SHOULD WE SHOW THIS PARTICULAR FORUM
@@ -323,7 +323,7 @@ if (is_array($forumCategories)) {
 								{
 									$td_width = $image_size['width'];
 								}
-                                $forum_image =  "<img src=\"$image_path\" $img_attributes>";								
+                                $forum_image =  "<img src=\"$image_path\" $img_attributes>";
                             } else {
                                 $forum_image = '';
 								$td_width = 20;

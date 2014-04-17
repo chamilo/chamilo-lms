@@ -1,4 +1,4 @@
-<?php // $Id: $
+<?php
 /* For licensing terms, see /license.txt */
 /**
  * @author Claro Team <cvs@claroline.net>
@@ -8,7 +8,6 @@
 /**
  * Code
  */
-if ( count( get_included_files() ) == 1 ) die( '---' );
 require dirname(__FILE__) . '/qti2_classes.php';
 /**
  * Classes
@@ -26,19 +25,18 @@ require dirname(__FILE__) . '/qti2_classes.php';
  */
 class ImsAssessmentItem
 {
-    var $question;
-    var $question_ident;
-    var $answer;
+    public $question;
+    public $question_ident;
+    public $answer;
 
     /**
      * Constructor.
      *
-     * @param $question The Question object we want to export.
+     * @param $question Ims2Question object we want to export.
      */
      function ImsAssessmentItem($question)
      {
         $this->question = $question;
-        //$this->answer = new Answer($question->id);
         $this->answer = $this->question->setAnswer();
         $this->questionIdent = "QST_" . $question->id ;
      }
@@ -51,20 +49,13 @@ class ImsAssessmentItem
       */
       function start_item()
       {
-        /*
-        return '<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p0"
-                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p0 imsqti_v2p0.xsd"
-                    identifier="'.$this->questionIdent.'"
-                    title="'.htmlspecialchars($this->question->selectTitle()).'">'."\n";
-         */
         $string = '<assessmentItem xmlns="http://www.imsglobal.org/xsd/imsqti_v2p1"
                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                     xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p1 imsqti_v2p1.xsd"
                     identifier="'.$this->questionIdent.'"
-                    title="'.htmlspecialchars($this->question->selectTitle()).'">'."\n";
-        return $string;
+                    title="'.htmlspecialchars(formatExerciseQtiTitle($this->question->selectTitle())).'">'."\n";
 
+        return $string;
       }
 
       /**
@@ -101,10 +92,8 @@ class ImsAssessmentItem
 
       function add_response_processing()
       {
-          //return '  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p0/rptemplates/map_response"/>' . "\n";
           return '  <responseProcessing template="http://www.imsglobal.org/question/qti_v2p1/rptemplates/map_correct"/>' . "\n";
       }
-
 
      /**
       * Export the question as an IMS/QTI Item.
@@ -116,24 +105,31 @@ class ImsAssessmentItem
       */
      function export($standalone = false)
      {
-        global $charset;
         $head = $foot = "";
 
-        if( $standalone )
-        {
-            $head = '<?xml version="1.0" encoding="'.$charset.'" standalone="no"?>' . "\n";
+        if ($standalone) {
+            $head = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>' . "\n";
         }
-	//TODO understand why answer might be a non-object sometimes
-	if (!is_object($this->answer)) { return $head; }
+        //TODO understand why answer might be a non-object sometimes
+        if (!is_object($this->answer)) {
+            return $head;
+        }
+
         $res = $head
-               . $this->start_item()
-                 .$this->answer->imsExportResponsesDeclaration($this->questionIdent)
-                 . $this->start_item_body()
-                 . $this->answer->imsExportResponses($this->questionIdent, $this->question->question, $this->question->description, $this->question->picture)
-                 . $this->end_item_body()
-               . $this->add_response_processing()
-               . $this->end_item()
-             . $foot;
+            .$this->start_item()
+            .$this->answer->imsExportResponsesDeclaration($this->questionIdent)
+            .$this->start_item_body()
+            .$this->answer->imsExportResponses(
+                $this->questionIdent,
+                $this->question->question,
+                $this->question->description,
+                $this->question->picture
+            )
+            .$this->end_item_body()
+            .$this->add_response_processing()
+            .$this->end_item()
+            .$foot;
+
         return $res;
      }
 }
@@ -168,7 +164,7 @@ class ImsSection
 
     function start_section()
     {
-        $out = '<section ident="EXO_' . $this->exercise->selectId() . '" title="' . $this->exercise->selectTitle() . '">' . "\n";
+        $out = '<section ident="EXO_' . $this->exercise->selectId() . '" title="' .cleanAttribute(formatExerciseQtiDescription($this->exercise->selectTitle())) . '">' . "\n";
         return $out;
     }
 
@@ -185,9 +181,7 @@ class ImsSection
             $minutes = floor($max_time / 60);
             $seconds = $max_time % 60;
             return '<duration>PT' . $minutes . 'M' . $seconds . "S</duration>\n";
-        }
-        else
-        {
+        } else {
             return '';
         }
     }
@@ -199,7 +193,7 @@ class ImsSection
     function export_presentation()
     {
         $out = "<presentation_material><flow_mat><material>\n"
-             . "  <mattext><![CDATA[" . $this->exercise->selectDescription() . "]]></mattext>\n"
+             . "  <mattext><![CDATA[" . formatExerciseQtiDescription($this->exercise->selectDescription()) . "]]></mattext>\n"
              . "</material></flow_mat></presentation_material>\n";
         return $out;
     }
@@ -211,6 +205,7 @@ class ImsSection
      */
     function export_ordering()
     {
+
         $out = '';
         if ($n = $this->exercise->getShuffle()) {
             $out.= "<selection_ordering>"
@@ -219,9 +214,7 @@ class ImsSection
                  . "  </selection>\n"
                  . '  <order order_type="Random" />'
                  . "\n</selection_ordering>\n";
-        }
-        else
-        {
+        } else {
             $out.= '<selection_ordering sequence_type="Normal">' . "\n"
                  . "  <selection />\n"
                  . "</selection_ordering>\n";
@@ -237,8 +230,7 @@ class ImsSection
     function export_questions()
     {
         $out = "";
-        foreach ($this->exercise->selectQuestionList() as $q)
-        {
+        foreach ($this->exercise->selectQuestionList() as $q) {
         	$out .= export_question($q, false);
         }
         return $out;
@@ -253,11 +245,9 @@ class ImsSection
      */
     function export($standalone)
     {
-        global $charset;
-
         $head = $foot = "";
         if ($standalone) {
-            $head = '<?xml version = "1.0" encoding = "' . $charset . '" standalone = "no"?>' . "\n"
+            $head = '<?xml version = "1.0" encoding = "UTF-8" standalone = "no"?>' . "\n"
                   . '<!DOCTYPE questestinterop SYSTEM "ims_qtiasiv2p1.dtd">' . "\n"
                   . "<questestinterop>\n";
             $foot = "</questestinterop>\n";
@@ -289,6 +279,8 @@ class ImsSection
     Feedback identifier :: <Question identifier> + "_F_" + <Response Id from the DB>
 */
 /**
+ * Class ImsItem
+ *
  * An IMS/QTI item. It corresponds to a single question.
  * This class allows export from Claroline to IMS/QTI XML format.
  * It is not usable as-is, but must be subclassed, to support different kinds of questions.
@@ -297,13 +289,15 @@ class ImsSection
  *
  * warning: Attached files are NOT exported.
  * @author Amand Tihon <amand@alrj.org>
+ *
  * @package chamilo.exercise
  */
+
 class ImsItem
 {
-    var $question;
-    var $question_ident;
-    var $answer;
+    public $question;
+    public $question_ident;
+    public $answer;
 
     /**
      * Constructor.
@@ -327,7 +321,7 @@ class ImsItem
       */
       function start_item()
       {
-        return '<item title="' . htmlspecialchars($this->question->selectTitle()) . '" ident="' . $this->questionIdent . '">' . "\n";
+        return '<item title="' . cleanAttribute(formatExerciseQtiDescription($this->question->selectTitle())) . '" ident="' . $this->questionIdent . '">' . "\n";
       }
 
       /**
@@ -344,14 +338,14 @@ class ImsItem
       * Create the opening, with the question itself.
       *
       * This means it opens the <presentation> but doesn't close it, as this is the role of end_presentation().
-      * Inbetween, the export_responses from the subclass should have been called.
+      * In between, the export_responses from the subclass should have been called.
       *
       * @author Amand Tihon <amand@alrj.org>
       */
      function start_presentation()
      {
         return '<presentation label="' . $this->questionIdent . '"><flow>' . "\n"
-             . '<material><mattext><![CDATA[' . $this->question->selectDescription() . "]]></mattext></material>\n";
+             . '<material><mattext>' . formatExerciseQtiDescription($this->question->selectDescription()) . "</mattext></material>\n";
      }
 
      /**
@@ -384,7 +378,6 @@ class ImsItem
         return "</resprocessing>\n";
      }
 
-
      /**
       * Export the question as an IMS/QTI Item.
       *
@@ -399,8 +392,7 @@ class ImsItem
         global $charset;
         $head = $foot = "";
 
-        if( $standalone )
-        {
+        if ($standalone) {
             $head = '<?xml version = "1.0" encoding = "'.$charset.'" standalone = "no"?>' . "\n"
                   . '<!DOCTYPE questestinterop SYSTEM "ims_qtiasiv2p1.dtd">' . "\n"
                   . "<questestinterop>\n";
@@ -408,36 +400,30 @@ class ImsItem
         }
 
         return $head
-               . $this->start_item()
-                . $this->start_presentation()
-                    . $this->answer->imsExportResponses($this->questionIdent)
-                . $this->end_presentation()
-                . $this->start_processing()
-                    . $this->answer->imsExportProcessing($this->questionIdent)
-                . $this->end_processing()
-                . $this->answer->imsExportFeedback($this->questionIdent)
-               . $this->end_item()
-              . $foot;
+            . $this->start_item()
+            . $this->start_presentation()
+            . $this->answer->imsExportResponses($this->questionIdent)
+            . $this->end_presentation()
+            . $this->start_processing()
+            . $this->answer->imsExportProcessing($this->questionIdent)
+            . $this->end_processing()
+            . $this->answer->imsExportFeedback($this->questionIdent)
+            . $this->end_item()
+            . $foot;
      }
 }
-
-
-/*--------------------------------------------------------
-      Functions
-  --------------------------------------------------------*/
 
 /**
  * Send a complete exercise in IMS/QTI format, from its ID
  *
- * @param int $exerciseId The exercise to exporte
+ * @param int $exerciseId The exercise to export
  * @param boolean $standalone Wether it should include XML tag and DTD line.
  * @return The XML as a string, or an empty string if there's no exercise with given ID.
  */
-function export_exercise($exerciseId, $standalone=true)
+function export_exercise($exerciseId, $standalone = true)
 {
     $exercise = new Exercise();
-    if (! $exercise->read($exerciseId))
-    {
+    if (!$exercise->read($exerciseId)) {
         return '';
     }
     $ims = new ImsSection($exercise);
@@ -448,15 +434,14 @@ function export_exercise($exerciseId, $standalone=true)
 /**
  * Returns the XML flow corresponding to one question
  *
- * @param int The question ID
- * @param bool standalone (ie including XML tag, DTD declaration, etc)
+ * @param int $questionId
+ * @param bool $standalone (ie including XML tag, DTD declaration, etc)
  */
-function export_question($questionId, $standalone=true)
+function export_question($questionId, $standalone = true)
 {
     $question = new Ims2Question();
     $qst = $question->read($questionId);
-    if( !$qst or $qst->type == FREE_ANSWER)
-    {
+    if (!$qst or $qst->type == FREE_ANSWER) {
         return '';
     }
     $question->id = $qst->id;
@@ -469,4 +454,28 @@ function export_question($questionId, $standalone=true)
     $ims = new ImsAssessmentItem($question);
 
     return $ims->export($standalone);
+}
+
+/**
+ * Clean text like a description
+ **/
+function formatExerciseQtiDescription($text)
+{
+    $entities = api_html_entity_decode($text);
+    return htmlspecialchars($entities);
+}
+
+/**
+ * Clean titles
+ * @param $text
+ * @return string
+ */
+function formatExerciseQtiTitle($text)
+{
+    return htmlspecialchars($text);
+}
+
+function cleanAttribute($text)
+{
+    return $text;
 }

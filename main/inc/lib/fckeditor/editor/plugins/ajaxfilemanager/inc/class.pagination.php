@@ -122,9 +122,9 @@ class pagination
 	function setUrl($value="") {
 	    $protocol = "http://";
         if (isset($_SERVER['HTTPS'])) {
-            $protocol = "https://";    
+            $protocol = "https://";
         }
-        
+
 		if(empty($value))
 		{
 			if($this->friendlyUrl)
@@ -216,7 +216,7 @@ class pagination
 	/**
 	 * get the first item number
 	 *
-	 * @return interger the first item number displayed within current page
+	 * @return int the first item number displayed within current page
 	 */
 	function getFirstItem()
 	{
@@ -232,7 +232,7 @@ class pagination
 	/**
 	 * get the last item number displayed within current page
 	 *
-	 * @return interger the last item number
+	 * @return int the last item number
 	 */
 	function getLastItem()
 	{
@@ -532,8 +532,8 @@ class pagination
 		{
 			case "2":
 				//comment while integrating with Chamilo
-			
-				//$output .= "<span class=\"pagination_summany\">" . $this->getFirstItem() . " to " . $this->getLastItem() . " of " . $this->getTotal() . " results.</span> ";	
+
+				//$output .= "<span class=\"pagination_summany\">" . $this->getFirstItem() . " to " . $this->getLastItem() . " of " . $this->getTotal() . " results.</span> ";
 			//if($previousUrl = $this->getPreviousUrl())
 			//{
 			//	$output .= " " . $previousUrl;
@@ -542,7 +542,7 @@ class pagination
 			//if($nextUrl = $this->getNextUrl())
 			{
 			//	$output .= " " . $nextUrl;
-			}							
+			}
 				break;
 			case 1:
 				//get full summary pagination
@@ -575,13 +575,13 @@ class pagination
 			//{
 			//	$itemPerPage .= "<option value=\"" . $v . "\" " . ($v==$this->itemsPerPage?'selected="selected"':'') . ">" . $v . "</option>\n";
 			//}
-			//$itemPerPage .= "</select>\n"; 
-		
+			//$itemPerPage .= "</select>\n";
+
 		    $itemPerPage ="100000";//hack for Chamilo
 			//$output .= "<span class=\"pagination_items_per_page\">";
 			//$output .= sprintf(PAGINATION_ITEMS_PER_PAGE, $itemPerPage);
 			//$output .= "</span>";
-			
+
 			//end comment while integrating with Chamilo
 			$output .= "<span class=\"pagination_parent\"><a href=\"#\" onclick=\"goParentFolder();\" id=\"pagination_parent_link\" title=\"" . PAGINATION_GO_PARENT . "\">&nbsp;".PAGINATION_GO_PARENT."</a></span>";
 		}

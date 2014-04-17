@@ -21,6 +21,8 @@ require_once 'lib/fe/catform.class.php';
 api_block_anonymous_users();
 block_students();
 
+$edit_cat = isset($_REQUEST['editcat']) ? intval($_REQUEST['editcat']) : '';
+
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
@@ -38,18 +40,18 @@ $(document).ready(function () {
         filter_selected: true,
         newel: true
     });
-    
+
     $(".closebutton").click(function() {
-        var skill_id = ($(this).attr("id")).split("_")[1];        
-        if (skill_id) {            
-            $.ajax({ 
-                url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=remove_skill", 
+        var skill_id = ($(this).attr("id")).split("_")[1];
+        if (skill_id) {
+            $.ajax({
+                url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=remove_skill",
                 data: "gradebook_id='.$edit_cat.'&skill_id="+skill_id,
-                success: function(return_value) {                    
+                success: function(return_value) {
                     if (return_value == 1 ) {
                             $("#skill_"+skill_id).remove();
                     }
-                }        
+                }
             });
         }
     });
@@ -58,26 +60,26 @@ $(document).ready(function () {
 function check_skills() {
     //selecting only selected users
     $("#skills option:selected").each(function() {
-        var skill_id = $(this).val();        
-        if (skill_id != "" ) {            
-            $.ajax({ 
-                url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=skill_exists", 
+        var skill_id = $(this).val();
+        if (skill_id != "" ) {
+            $.ajax({
+                url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=skill_exists",
                 data: "skill_id="+skill_id,
-                success: function(return_value) {                    
+                success: function(return_value) {
                 if (return_value == 0 ) {
-                        alert("'.get_lang('SkillDoesNotExist').'");                                                
+                        alert("'.get_lang('SkillDoesNotExist').'");
                         //Deleting select option tag
-                        $("#skills option[value="+skill_id+"]").remove();                        
+                        $("#skills option[value="+skill_id+"]").remove();
                         //Deleting holder
                         $(".holder li").each(function () {
                             if ($(this).attr("rel") == skill_id) {
                                 $(this).remove();
                             }
-                        });                        
-                    }                    
-                },            
-            });                
-        }        
+                        });
+                    }
+                },
+            });
+        }
     });
 }
 </script>';
@@ -117,10 +119,10 @@ if ($form->validate()) {
 		$cat->set_course_code($values['course_code']);//?
 	}
 	//Always add the gradebook to the course
-	$cat->set_course_code(api_get_course_id());	
-    
+	$cat->set_course_code(api_get_course_id());
+
     $cat->set_skills($values['skills']);
-	
+
 	$cat->set_description($values['description']);
 	$cat->set_user_id($values['hid_user_id']);
 	$cat->set_parent_id($values['hid_parent_id']);
@@ -131,7 +133,7 @@ if ($form->validate()) {
 		$visible = 1;
 	}
 	$cat->set_visible($visible);
-	$result = $cat->add();	
+	$result = $cat->add();
 	header('Location: '.Security::remove_XSS($_SESSION['gradebook_dest']).'?addcat=&selectcat=' . $cat->get_parent_id());
 	exit;
 }
@@ -147,8 +149,8 @@ $display_form = true;
 /*if (!empty($grading_contents)) {
     $count_items = count($grading_contents['items']);
     $cats  = Category :: load(null, null, $course_code, null, null, $session_id, false); //already init
-    $cats_count = count($cats) - 1 ;         
-        
+    $cats_count = count($cats) - 1 ;
+
     if ($cats_count >= $count_items) {
         Display::display_warning_message(get_lang('CheckYourGradingModelValues'));
         $display_form = false;

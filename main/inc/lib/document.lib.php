@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 /**
@@ -1663,6 +1662,9 @@ class DocumentManager
 
         $date_certificate = $info_grade_certificate['created_at'];
         $date_long_certificate = '';
+
+        $date_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_LONG_NO_DAY);
+
         if (!empty($date_certificate)) {
             $date_long_certificate = api_convert_and_format_date($date_certificate);
             $date_no_time = api_convert_and_format_date($date_certificate, DATE_FORMAT_LONG_NO_DAY);

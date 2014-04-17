@@ -23,6 +23,6 @@ if (isset($_configuration['save_user_last_login']) &&
     } else {
         $sql = "ALTER TABLE $tableUser ADD COLUMN last_login DATETIME";
         Database::query($sql);
-        echo "last_login does not exits creating with: <br/> $sql";
+        echo "last_login does not exist, creating with: <br/> $sql";
     }
 }

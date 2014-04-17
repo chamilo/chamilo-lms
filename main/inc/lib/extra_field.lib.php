@@ -1199,19 +1199,21 @@ EOF;
             array('id' => 'field_options', 'class' => 'span6')
         );
 
+        $fieldWithOptions = array(
+            ExtraField::FIELD_TYPE_SELECT,
+            ExtraField::FIELD_TYPE_TAG,
+            ExtraField::FIELD_TYPE_DOUBLE_SELECT,
+        );
+
         if ($action == 'edit') {
-            if (in_array(
-                $defaults['field_type'],
-                array(ExtraField::FIELD_TYPE_SELECT, ExtraField::FIELD_TYPE_DOUBLE_SELECT)
-            )
-            ) {
+            if (in_array($defaults['field_type'], $fieldWithOptions)) {
                 $url = Display::url(
                     get_lang('EditExtraFieldOptions'),
                     'extra_field_options.php?type='.$this->type.'&field_id='.$id
                 );
                 $form->addElement('label', null, $url);
 
-                if ($defaults['field_type'] ==  ExtraField::FIELD_TYPE_SELECT) {
+                if ($defaults['field_type'] == ExtraField::FIELD_TYPE_SELECT) {
                     $urlWorkFlow = Display::url(
                         get_lang('EditExtraFieldWorkFlow'),
                         'extra_field_workflow.php?type='.$this->type.'&field_id='.$id

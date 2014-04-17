@@ -164,7 +164,6 @@ class Model
             $params['created_at'] = api_get_utc_datetime();
         }
 
-
         if (!empty($params)) {
             $id = Database::insert($this->table, $params, $show_query);
     		if (is_numeric($id)) {

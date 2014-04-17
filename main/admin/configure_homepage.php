@@ -520,7 +520,7 @@ if (!empty($action)) {
                     if (isset($_POST[$lang_name])) {
                         $fp = fopen($homep.$menuf.'_'.$lang_name.$ext, 'w');
                         fputs($fp, $home_menu);
-                                home_tabs($homep.$menuf.'_'.$lang_name.$ext);
+                        home_tabs($homep.$menuf.'_'.$lang_name.$ext);
                         fclose($fp);
                     }
                 }  
@@ -804,7 +804,7 @@ switch ($action) {
 	case 'edit_tabs':
 	case 'insert_link':
 	case 'edit_link':
-        $menuf = ($action == 'insert_tabs' || $action == 'edit_tabs')? $mtloggedin : $menuf;
+       $menuf = ($action == 'insert_tabs' || $action == 'edit_tabs') ? $mtloggedin : $menuf;
 		if (!empty($errorMsg)) {
 			Display::display_normal_message($errorMsg);
 		}
@@ -879,7 +879,7 @@ switch ($action) {
          $html_langs = '<td width="300">';
          $html_langs .= '<label><input type="checkbox" id="lang" name="'.$lang_name.'" />&nbsp;'.$lang_name.'<label/>';
          $html_langs .= '</td>';
-         if($i%5 == 0) {
+         if ($i%5 == 0) {
              $html_langs .= '</tr><tr>';
          }
          $form->addElement('html', $html_langs);

@@ -34,8 +34,9 @@ class TicketManager
                         TABLE_TICKET_PROJECT
         );
         $sql = "SELECT category.*, project.other_area , project.email
-            FROM " . $table_support_category . "  category," . $table_support_project . " project
-            WHERE project.project_id = category.project_id ORDER BY category.total_tickets DESC;";
+                FROM $table_support_category category, $table_support_project project
+                WHERE project.project_id = category.project_id 
+                ORDER BY category.total_tickets DESC;";
         $result = Database::query($sql);
         $types = array();
         while ($row = Database::fetch_assoc($result)) {

@@ -36,24 +36,24 @@ function load_course_list (div_course,my_user_id) {
 }
 function changeType() {
 var selected = document.getElementById("category_id").selectedIndex;
-var id = document.getElementById("category_id").options[selected].value  ;
-	document.getElementById("project_id").value= projects[id];
-	document.getElementById("other_area").value= other_area[id];
-	document.getElementById("email").value= email[id];
-	document.getElementById("divEmail").style.display="none";
+var id = document.getElementById("category_id").options[selected].value;
+	document.getElementById("project_id").value = projects[id];
+	document.getElementById("other_area").value = other_area[id];
+	document.getElementById("email").value = email[id];
+	document.getElementById("divEmail").style.display = "none";
 	if(parseInt(course_required[id]) == 0){
-		document.getElementById("divCourse").style.display="none";		
+		document.getElementById("divCourse").style.display = "none";		
 		if( id != "CUR"){
-			document.getElementById("divEmail").style.display="";
-			document.getElementById("personal_email").required="required";	
+			document.getElementById("divEmail").style.display = "";
+			document.getElementById("personal_email").required = "required";	
 		}			
-		document.getElementById("course_id").disabled=true;	
-		document.getElementById("course_id").value=0;			
+		document.getElementById("course_id").disabled = true;	
+		document.getElementById("course_id").value = 0;			
 	}else{	
 		document.getElementById("divCourse").style.display = "";
-		document.getElementById("course_id").disabled=false;
-		document.getElementById("course_id").value=0;
-		document.getElementById("personal_email").value="";
+		document.getElementById("course_id").disabled = false;
+		document.getElementById("course_id").value = 0;
+		document.getElementById("personal_email").value = "";
 	}
 }
 function handleClick2(myRadio) {
@@ -67,22 +67,22 @@ function validate() {
 	document.getElementById("content").value= fckEditor1val;
 	var selected = document.getElementById("category_id").selectedIndex;
 	var id = document.getElementById("category_id").options[selected].value;
-	if(document.getElementById("user_id_request").value == ""){
+	if (document.getElementById("user_id_request").value == "") {
 		alert("' . $plugin->get_lang("ValidUser") . '");
 		return false;
-	}else if( id == 0){
+	} else if( id == 0) {
 		alert("' . $plugin->get_lang("ValidType") . '");
 		return false;
-	}else if(document.getElementById("subject").value == ""){
+	} else if(document.getElementById("subject").value == "") {
 		alert("' . $plugin->get_lang("ValidSubject") . '");
 		return false;
-	}else if(parseInt(course_required[id]) == 1 && document.getElementById("course_id").value == 0){
+	} else if(parseInt(course_required[id]) == 1 && document.getElementById("course_id").value == 0) {
 		alert("' . $plugin->get_lang("ValidCourse") . '");
 		return false;
-	}else if(id !="CUR" && parseInt(course_required[id]) != 1  && !re.test(document.getElementById("personal_email").value)){
+	} else if(id !="CUR" && parseInt(course_required[id]) != 1  && !re.test(document.getElementById("personal_email").value)) {
 		alert("' . $plugin->get_lang("ValidEmail") . '");
 		return false;
-	}else if(fckEditor1val ==""){
+	} else if(fckEditor1val == "") {
 		alert("' . $plugin->get_lang("ValidMessage") . '");
 		return false;
 	}

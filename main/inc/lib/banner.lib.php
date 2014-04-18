@@ -16,7 +16,7 @@
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  */
 function get_tabs() {
-	global $_course;
+    global $_course;
 
     $navigation = array();
 
@@ -110,12 +110,14 @@ function get_tabs() {
 	}*/
 
 	// Custom tabs
-	for ($i = 1; $i<=3; $i++)
-		if (api_get_setting('custom_tab_'.$i.'_name') && api_get_setting('custom_tab_'.$i.'_url')) {
-                    $navigation['custom_tab_'.$i]['url'] = api_get_setting('custom_tab_'.$i.'_url');
-                    $navigation['custom_tab_'.$i]['title'] = api_get_setting('custom_tab_'.$i.'_name');
-                    $navigation['custom_tab_'.$i]['key'] = 'custom_tab_'.$i;
-		}
+	for ($i = 1; $i <= 3; $i++) {
+            if (api_get_setting('show_tabs', 'custom_tab_' . $i) == 'true') {
+                $setting = api_get_full_setting('show_tabs', 'custom_tab_' . $i);
+                $navigation['custom_tab_' . $i]['url'] = $setting[0]['comment'];
+                $navigation['custom_tab_' . $i]['title'] = $setting[0]['title'];
+                $navigation['custom_tab_' . $i]['key'] = 'custom_tab_' . $i;
+            }
+        }
 
 	// Platform administration
 	if (api_is_platform_admin(true)) {
@@ -231,10 +233,10 @@ function return_notification_menu() {
 
 function return_navigation_array() {
 
-    $navigation         = array();
-    $menu_navigation    = array();
-    $possible_tabs      = get_tabs();
-
+    $navigation = array();
+    $menu_navigation = array();
+    $possible_tabs = get_tabs();
+    
     // Campus Homepage
     if (api_get_setting('show_tabs', 'campus_homepage') == 'true') {
         $navigation[SECTION_CAMPUS] = $possible_tabs[SECTION_CAMPUS];
@@ -327,12 +329,12 @@ function return_navigation_array() {
         }
 
         // Custom tabs
-        for ($i=1;$i<=3;$i++) {
-            if (api_get_setting('show_tabs', 'custom_tab_'.$i) == 'true' && isset($possible_tabs['custom_tab_'.$i])) {
+        for ($i=1; $i <= 3; $i++) {
+            if (api_get_setting('show_tabs', 'custom_tab_' . $i) == 'true' && isset($possible_tabs['custom_tab_' . $i])) {
                 $navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
             } else {
                 if (isset($possible_tabs['custom_tab_'.$i])) {
-                    $menu_navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
+                    $menu_navigation['custom_tab_' . $i] = $possible_tabs['custom_tab_' . $i];
                 }
             }
         }

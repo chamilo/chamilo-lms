@@ -62,7 +62,6 @@ $langFormula = "Yours sincerely, your professor";
 $langProblem = "Sebarang kesulitan, sila hubungi.";
 $langIs = "ialah";
 $langAddress = "Alamat";
-$langSettings = "dengan maklumat seperti beriku:\nUsername:";
 $langYouAreReg = "Anda telah berdaftar pada";
 $langYourReg = "Pendaftaran anda pada";
 $langUserFree = "ID Pengguna telah wujud. Sila daftar dengan ID Pengguna yang lain.";

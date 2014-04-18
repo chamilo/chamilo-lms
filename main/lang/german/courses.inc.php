@@ -19,7 +19,6 @@ $Unsubscribe = "Abmelden";
 $lang_back_to_my_home_page = "Zurück zu meiner Homepage";
 $lang_back_to_my_personnal_course_list = "Zurück zur eigenen Kursliste";
 $langTitular = "Kursleiter";
-$langBackToListOfThisUser = "Zurück zur Kursliste";
 $langAdministrationTools = "Werkzeuge zur Verwaltung";
 $lang_back_to_parent_category = "Zurück zur übergeordneten Kategorie";
 $lang_back_to_course_selection = "Zurück zur Kursauswahl";

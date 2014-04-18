@@ -95,7 +95,6 @@ $UnsubscribeFromPlatformSuccess = "Vaš račun %s je bil popolnoma odstranjen s 
 $ToChangeYourEmailMustTypeYourPassword = "Za spremembo poštnega naslova morate vnesti vaše geslo";
 $Invitations = "Povabila";
 $MyGroups = "Moje skupine";
-$EditProfile = "Uredi profil";
 $Social = "Socialno";
 $Profile = "Profil";
 $MyFriends = "Moji prijatelji";

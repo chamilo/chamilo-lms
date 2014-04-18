@@ -2,6 +2,24 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$DeleteAllItems = "Supprimer tous les éléments";
+$DeleteThisItem = "Supprimer cet élément";
+$RecordYourVoice = "Enregistrez votre voix";
+$RecordIsNotAvailable = "Aucun enregistrement";
+$WorkNumberSubmitted = "Travaux reçus";
+$WithoutCategory = "Sans catégorie";
+$IncorrectScore = "Score réponse incorrecte";
+$CorrectScore = "Score réponse correcte";
+$UseCustomScoreForAllQuestions = "Utiliser le score sur mesure pour toutes les questions";
+$YouShouldAddItemsBeforeAttachAudio = "
+Vous devez ajouter des étapes à votre parcours avant de pouvoir leur affecter des fichiers audio";
+$InactiveDays = "Joours inactifs";
+$FollowedHumanResources = "DRH suivis";
+$TheTextYouEnteredDoesNotMatchThePicture = "Le texte introduit ne correspond pas à l'image.";
+$RemoveOldRelationships = "Supprimer les relations antérieures";
+$ImportSessionDrhList = "Importer liste de DRH dans sessions";
+$FollowedStudents = "Étudiants suivis";
+$FollowedTeachers = "Enseignants suivis";
 $AllowOnlyFiles = "Seulement fichiers";
 $AllowOnlyText = "Seulement texte en ligne";
 $AllowFileOrText = "Autoriser fichier ou texte en ligne";
@@ -92,6 +110,7 @@ $UserIsNotATeacher = "L'utilisateur n'est pas un enseignant";
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Cet élément est invisible pour les étudiants mais vous avez un accès enseignant.";
 $DeleteAllAttendances = "Supprimer toutes les présences créées";
 $Unsubscribe = "Désinscription";
+$SendToAllUsers = "Envoyer à tous";
 $SelectACategory = "Sélectionnez une catégorie";
 $AdvancedEdit = "Édition avancée";
 $SearchXapianModuleNotInstalled = "Le module de recherche Xapian n'est pas installé";
@@ -800,7 +819,7 @@ $Menu = "Menu";
 $BackToUserList = "Retour à la liste d'utilisateurs";
 $GraphicNotAvailable = "Graphique non disponible";
 $BackTo = "Retour à";
-$HistoryTrainingSessions = "Historique des sessions de cours";
+$HistoryTrainingSessions = "Historique de cours";
 $ConversionFailled = "La conversion a échoué";
 $AlreadyExists = "Existe déjà";
 $TheNewWordHasBeenAdded = "Le nouveau terme a été ajouté";
@@ -821,6 +840,7 @@ $Until = "Jusqu'au";
 $FirstPage = "Première page";
 $LastPage = "Dernière page";
 $Coachs = "Formateurs";
+$FieldTypeFile = "Envoi de fichier";
 $DragAndDropAnElementHere = "Glisser déposer un élément ici.";
 $ThereAreNoRegisteredDatetimeYet = "Il n'y a aucune date/heure enregistrée pour le moment";
 $CalendarList = "Liste calendrier des assistances";

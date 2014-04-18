@@ -20,7 +20,6 @@ $Unsubscribe = "Desubscribirse";
 $lang_back_to_my_home_page = "Voltar á miña páxina de inicio";
 $lang_back_to_my_personnal_course_list = "Voltar á miña lista persoal de cursos";
 $langTitular = "Titular";
-$langBackToListOfThisUser = "Volver ó lista de usuarios";
 $langAdministrationTools = "Ferramentas de administración";
 $lang_back_to_parent_category = "Volver á categoría superior";
 $lang_back_to_course_selection = "Volver ó selección do curso";
@@ -84,6 +83,7 @@ $Collapse = "Contraer";
 $CourseDetails = "Descrición do curso";
 $GroupPendingInvitations = "Invitacións de grupo pendentes";
 $Compose = "Redactar";
+$EmptyHeaderLine = "Existen liñas en branco ao principio do ficheiro seleccionado";
 $EnrollToCourseXSuccessful = "A súa inscrición no curso %s completouse.";
 $ThereAreNoCoursesInThisCategory = "Non existen cursos na categoria actual";
 ?>

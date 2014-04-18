@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$WorkFileNotUploadedDirXDoesNotExist = "Úlohu nemožno odoslať, pretože zložka %s neexistuje";
 $FolderDoesntExistsInFileSystem = "Cieľový priečinok na serveri neexistuje.";
 $HandedOutDate = "Čas prijímania";
 $HandedOut = "Rozdal";

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ClassIdDoesntExists = "La classe d'id %s n'existe pas. L'utilisateur ci-après n'a pas été inscrit à la plateforme.";
 $SearchSessions = "Recherche de session.";
 $DeleteUsersNotInList = "Désinscrite les apprenants qui ne sont pas dans la liste importée";
 $IfSessionExistsUpdate = "Si une session existe, la mettre à jour";

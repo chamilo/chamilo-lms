@@ -19,7 +19,6 @@ $Unsubscribe = "Thôi đăng ký";
 $lang_back_to_my_home_page = "Trở về trang chủ";
 $lang_back_to_my_personnal_course_list = "Trở về danh mục khoá học cá nhân";
 $langTitular = "Danh nghĩa";
-$langBackToListOfThisUser = "Trở về danh mục khoá học";
 $langAdministrationTools = "Các công cụ quản trị";
 $lang_back_to_main_category_list = "Trở về danh mục chính";
 $langAdded = "Đã thêm mới";

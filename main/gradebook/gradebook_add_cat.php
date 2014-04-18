@@ -42,12 +42,12 @@ $(document).ready(function () {
     });
 
     $(".closebutton").click(function() {
-        var skill_id = ($(this).attr("id")).split("_")[1];
-        if (skill_id) {
-            $.ajax({
-                url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=remove_skill",
-                data: "gradebook_id='.$edit_cat.'&skill_id="+skill_id,
-                success: function(return_value) {
+        var skill_id = ($(this).attr("id")).split("_")[1];        
+        if (skill_id) {            
+            $.ajax({ 
+                url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=remove_skill", 
+                data: "gradebook_id=' . $edit_cat . '&skill_id="+skill_id,
+                success: function(return_value) {                    
                     if (return_value == 1 ) {
                             $("#skill_"+skill_id).remove();
                     }

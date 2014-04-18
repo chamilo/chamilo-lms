@@ -2,6 +2,14 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SearchSessions = "Recerca de sessions";
+$DeleteUsersNotInList = "Dóna de baixa als alumnes que no estiguin a la llista importada";
+$IfSessionExistsUpdate = "Si la sessió existeix, actualitza-la";
+$SearchCourseBySession = "Cerca curs per sessió";
+$GlobalLinkUseDoubleColumnPrivateToShowPrivately = "Ús: privat al final del vincle a mostrar només als usuaris connectats";
+$CourseVisibilityHidden = "Invisible - Totalment invisible per a tots els usuaris excepte dels administradors";
+$ApplyAllLanguages = "Aplica el canvi a tots els idiomes habilitats";
+$CareerUpdated = "Carrera actualitzada satisfactòriament";
 $CasMainActivateComment = "Activar l'autenticació CAS permetrà als usuaris autenticar-se amb les seves credencials CAS.";
 $UsersRegisteredInAnyGroup = "Usuaris no registrats a cap curs";
 $ShowHotCoursesComment = "La llista de cursos amb més prestigi s'afegirà a la pàgina principal";
@@ -1071,6 +1079,7 @@ $EditTabs = "Editar Tabs";
 $YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill = "L'avaluació necessita tenir un certificat per poder relacionar-lo a una competència";
 $PlatformUnsubscribeTitle = "Permet donar-se de baixa de la plataforma";
 $PlatformUnsubscribeComment = "A l'activar aquesta opció, es permetrà que qualsevol usuari elimini definitivament el seu compte i totes les dades relacionades amb el mateix des de la plataforma. Això és una acció radical, però és necessari en els portals oberts al públic on els usuaris puguin registrar-se automàticament. Es publicarà una entrada addicional al perfil de l'usuari per donar-se de baixa després de la confirmació.";
+$PromotionUpdated = "Promoció actualitzada satisfactòriament";
 $BabyOrange = "Nens taronja";
 $BlueLagoon = "Llacuna blava";
 $CoolBlue = "Blau fresc";
@@ -1598,21 +1607,21 @@ Per configurar-ho a Chamilo
 
 <h5>editeu l'arxiu main/auth/shibboleth/config/aai.class.php</h5>
 
-Modifiqueu els valors de $result amb el nom dels atributs de Shibboleth
+Modifiqueu els valors de \$result amb el nom dels atributs de Shibboleth
 
 <ul>
-<li>$result->unique_id = 'mail';
-<li>$result->firstname = 'cn';
-<li>$result->lastname = 'uid';
-<li>$result->email = 'mail';
-<li>$result->language = '-';
-<li>$result->gender = '-';
-<li>$result->address = '-';
-<li>$result->staff_category = '-';
-<li>$result->home_organization_type = '-';
-<li>$result->home_organization = '-';
-<li>$result->affiliation = '-';
-<li>$result->persistent_id = '-';
+<li>\$result->unique_id = 'mail';
+<li>\$result->firstname = 'cn';
+<li>\$result->lastname = 'uid';
+<li>\$result->email = 'mail';
+<li>\$result->language = '-';
+<li>\$result->gender = '-';
+<li>\$result->address = '-';
+<li>\$result->staff_category = '-';
+<li>\$result->home_organization_type = '-';
+<li>\$result->home_organization = '-';
+<li>\$result->affiliation = '-';
+<li>\$result->persistent_id = '-';
 <li>...
 </ul>
 
@@ -1623,7 +1632,7 @@ $FacebookMainActivateComment = "En primer lloc, heu de crear una aplicació de F
 
 Llavors, 
 
-<h5>editeu el fitxer main/auth/external_login/facebook.conf.php</h5> i accediu a \"appId\" i \"secret\" els valors de $facebook_config.<br /> Aneu connectors per afegir un botó configurable \"Accediu amb Facebook\" per al campus de Chamilo.";
+<h5>editeu el fitxer main/auth/external_login/facebook.conf.php</h5> i accediu a \"appId\" i \"secret\" els valors de \$facebook_config.<br /> Aneu connectors per afegir un botó configurable \"Accediu amb Facebook\" per al campus de Chamilo.";
 $LanguagePriority1Title = "Prioritat d'idioma 1";
 $LanguagePriority2Title = "Prioritat de l'idioma 2";
 $LanguagePriority3Title = "Prioritat d'idioma 3";

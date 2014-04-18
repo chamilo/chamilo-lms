@@ -95,7 +95,6 @@ $UnsubscribeFromPlatformSuccess = "Zure %s kontua guztiz desagertu da atari hone
 $ToChangeYourEmailMustTypeYourPassword = "Posta elektonikoko helbidea aldatzeari begira, pasahitza idatzi beharko duzu berresteko.";
 $Invitations = "Gonbiteak";
 $MyGroups = "Taldeak";
-$EditProfile = "Editatu profila";
 $Social = "Gizartekoa";
 $Profile = "Profila";
 $MyFriends = "Lagunak";

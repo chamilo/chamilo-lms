@@ -62,7 +62,6 @@ $langFormula = "Yours sincerely";
 $langProblem = "Trong trường hợp có lỗi xảy ra, hãy liên hệ với chúng tôi";
 $langIs = "is";
 $langAddress = "địa chỉ của";
-$langSettings = "các thiếp lập";
 $langYouAreReg = "Bạn đã đăng kí";
 $langYourReg = "Your registration on";
 $langUserFree = "Tên đăng nhập đã có người sử dụng. Sử dụng nút quay lại của trình duyệt và chọn 1 kết quả khac";

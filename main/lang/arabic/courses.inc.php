@@ -20,7 +20,6 @@ $Unsubscribe = " إلغاء التسجيل";
 $lang_back_to_my_home_page = " الرجوع إلى الصفحة الرئيسية";
 $lang_back_to_my_personnal_course_list = " الرجوع إلى قائمة مقرراتي الخاصة";
 $langTitular = " المسؤول";
-$langBackToListOfThisUser = " الرجوع إلى قائمة المقررات";
 $langAdministrationTools = " أدوات الإدارة";
 $lang_back_to_parent_category = " الرجوع إلى التصنيف الرئيسي";
 $lang_back_to_course_selection = " الرجوع لتحديد المقررات";

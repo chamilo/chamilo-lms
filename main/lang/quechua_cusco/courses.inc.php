@@ -19,7 +19,6 @@ $Unsubscribe = "Horqoy wañuchiy hoq qelqachikuyta";
 $lang_back_to_my_home_page = "Kutiy raphi qallariyniyman";
 $lang_back_to_my_personnal_course_list = "Kutiy yachachinakunaq sinriyman";
 $langTitular = "Sutinchayniyuq";
-$langBackToListOfThisUser = "Kutiy haykuqmasikuna sinriman";
 $langAdministrationTools = "Kamachinaq llank'anakuna";
 $lang_back_to_parent_category = "Kutiy kuraq wichay mitaman";
 $lang_back_to_course_selection = "Kutiy yachachinaq ajllanaman";

@@ -76,7 +76,6 @@ $langFormula = " المخلص";
 $langProblem = "في حال حصول أي مشكلة , اتصل بنا";
 $langIs = "is";
 $langAddress = "عنوان الـ";
-$langSettings = "بالإعدادات التالية :  :اسم المستخدم";
 $langYouAreReg = "أنت مسجب في";
 $langYourReg = "تسجيلك في";
 $langUserFree = "اسم المستخدم هذا مستخدم من قبل شخص آخر. فضلا استخدم زر الرجوع في متصفحك للتراجع";

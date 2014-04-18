@@ -80,7 +80,6 @@ $langFormula = "S pozdravom";
 $langProblem = "V prípade problémov nás kontaktujte.";
 $langIs = "je";
 $langAddress = "Adresa";
-$langSettings = "s nasledujúcimi nastaveniami : \nMeno používateľa :";
 $langYouAreReg = "Ste zaregistrovaný na";
 $langYourReg = "Vaša registrácia na";
 $langUserFree = "Toto meno používateľa je už obsadené. Použite tlačidlo Späť a vyberte iné.";

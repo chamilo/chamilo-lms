@@ -2,6 +2,10 @@
 /**
  * Contains the SQL for the tickets management plugin database structure
  */
+
+
+$objPlugin = new TicketPlugin();
+
 $table = Database::get_main_table(TABLE_TICKET_ASSIGNED_LOG);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         iid int unsigned not null,
@@ -13,6 +17,7 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         KEY FK_ticket_assigned_log (ticket_id))";
 Database::query($sql);
 
+//Category
 $table = Database::get_main_table(TABLE_TICKET_CATEGORY);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         iid int unsigned not null,
@@ -29,6 +34,41 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         PRIMARY KEY (iid))";
 Database::query($sql);
 
+//Default Categories
+$categoRow = array(
+    $objPlugin->get_lang('Enrollment') => $objPlugin->get_lang('TicketsAboutEnrollment'),
+    $objPlugin->get_lang('GeneralInformation') => $objPlugin->get_lang('TicketsAboutGeneralInformation'),
+    $objPlugin->get_lang('RequestAndTramits') => $objPlugin->get_lang('TicketsAboutRequestAndTramits'),
+    $objPlugin->get_lang('AcademicIncidence') => $objPlugin->get_lang('TicketsAboutAcademicIncidence'),
+    $objPlugin->get_lang('VirtualCampus') => $objPlugin->get_lang('TicketsAboutVirtualCampus'),
+    $objPlugin->get_lang('OnlineEvaluation') => $objPlugin->get_lang('TicketsAboutOnlineEvaluation')
+);
+$i = 1;
+foreach ($categoRow as $category => $description) {
+    //Online evaluation requires a course
+    if ($i == 6) {
+        $attributes = array(
+            'iid' => $i, 
+            'category_id' => $i,
+            'name' => $category,
+            'description' => $description,
+            'project_id' => 1,
+            'course_required' => 1
+        );
+    } else {
+        $attributes = array(
+            'iid' => $i, 
+            'category_id' => $i,
+            'project_id' => 1,
+            'description' => $description,
+            'name' => $category
+        );
+    }
+    
+    Database::insert($table, $attributes);
+    $i++;
+}
+//END default categories
 $table = Database::get_main_table(TABLE_TICKET_MESSAGE);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         message_id int UNSIGNED NOT NULL,
@@ -91,6 +131,14 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         sys_lastedit_datetime datetime DEFAULT NULL,
         PRIMARY KEY (iid))";
 Database::query($sql);
+//Default Project Table Ticket
+$attributes = array(
+    'iid' => 1,
+    'project_id' => 1,
+    'name' => 'Ticket System'
+);
+Database::insert($table, $attributes);
+//END
 
 $table = Database::get_main_table(TABLE_TICKET_STATUS);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
@@ -129,9 +177,4 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
 Database::query($sql);
 
 // Menu main tabs
-//$table = Database::get_main_table('ticket_ticket');
-//$sql = "INSERT INTO settings_current
-//(variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable)
-//VALUES
-//('show_tabs', 'tickets', 'checkbox', 'Platform', 'true', 'ShowTabsTitle', 'ShowTabsComment', NULL, 'TabsTickets', 1)";
-//Database::query($sql);
+$objPlugin->addTab('Ticket', '/plugin/ticket/src/myticket.php');

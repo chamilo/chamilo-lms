@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "دسته بندی انجمن حذف شد";
 $ForumLocked = "انجمن مسدود شد";
 $Forum = "تالار گفتمان";
 $AddForumCategory = "افزودن دسته بندی انجمن";
-$AddForum = "ایجاد یک تالار جدید";
 $Topics = "تاپیک ها";
 $Posts = "ارسال ها";
 $LastPosts = "آخرین ارسال";

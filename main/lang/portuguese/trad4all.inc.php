@@ -2,6 +2,11 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ExportSettingsAsXLS = "Exportar definições como XLS";
+$DeleteAllItems = "Apagar todos os items";
+$DeleteThisItem = "Apagar este item";
+$RecordYourVoice = "Gravar a sua voz";
+$RecordIsNotAvailable = "Nenhuma gravação disponível";
 $LoginToGoToThisCourse = "Por favor, faça o login para ir para este curso";
 $LoginDate = "Data do login";
 $ChooseStartDateAndEndDate = "Escolha a data de começo e de final";
@@ -9,6 +14,7 @@ $WorkAdded = "Trabalho adicionado";
 $AllowMemberLeaveGroup = "Permitir que os membros deixem o grupo";
 $CreatedByXYOnZ = "Criado por %s em %s";
 $LoginWithExternalAccount = "Entrar sem uma conta institucional";
+$AddForum = "Acrescentar novo fórum";
 $Title = "Título";
 $By = "Por";
 $UsersOnline = "Utilizadores online";
@@ -754,6 +760,7 @@ $HumanAndTechnicalResourcesInformation = "Identifique e descreva as diferentes p
 $Assessment = "Avaliação";
 $AssessmentQuestions = "Como serão avaliados os alunos? Existem algumas estratégias a desenvolver afim de conseguirem dominar o tópico/tema?";
 $AssessmentInformation = "Critérios para a aquisição de competências.";
+$UploadADocument = "Enviar documento";
 $langNameOfLang['bosnian'] = "bósnio";
 $langNameOfLang['czech'] = "checo";
 $langNameOfLang['dari'] = "dari";
@@ -781,6 +788,12 @@ $langNameOfLang['yoruba'] = "ioruba";
 $New = "Novo";
 $YouMustToInstallTheExtensionLDAP = "Necessita de instalar a extensão LDAP";
 $AddAdditionalProfileField = "Adicionar campo de perfil de utilizador";
+$InvitationDenied = "Convite negado";
+$UserAdded = "O utilizador foi adicionado";
+$UpdatedIn = "Atualizado em";
 $TitleColumnGradebook = "Cabeçalho da coluna no Relatório de Competências";
 $QualifyWeight = "Peso no Relatório";
+$DownloadLink = "Link/ligação para download";
+$MaxWeightNeedToBeProvided = "Necessita indicar uma cotação máxima";
+$ContainsAfile = "Contém um ficheiro";
 ?>

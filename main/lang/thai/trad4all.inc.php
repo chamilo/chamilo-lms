@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddForum = "เพิ่มรายการอภิปรายใหม่";
 $By = "โดย";
 $UsersOnline = "สมาชิกที่กำลังใช้งาน";
 $Remove = "เอาออก";
@@ -335,4 +336,5 @@ $HumanAndTechnicalResourcesInformation = "Short description of the identitiy of 
 $Assessment = "การประเมิน";
 $AssessmentQuestions = "How will users be evaluated? Are there starategies to develop in order to master the topic?";
 $AssessmentInformation = "Example exam questions. Criteria of success. Tips and tricks.";
+$UploadADocument = "โอนย้ายไฟล์เอกสารขึ้นสู่ระบบ";
 ?>

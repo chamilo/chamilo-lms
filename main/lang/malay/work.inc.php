@@ -4,16 +4,16 @@ for more information: see languages.txt in the lang folder.
 */
 $Tools = "Alat Bantu";
 $SendWork = "Muatnaik Tugasan";
-$langTooBig = "Anda tidak memilih sebarang fail atau saiz fail terlalu besar";
-$langListDeleted = "Senarai pautan telah dipadam";
-$langDocModif = "Tajuk tugasan diubahsuai";
-$langDocAdd = "Tugasan ditambah";
-$langDocDel = "Tugasan dipadam";
-$langTitleWork = "Tajuk Tugasan";
-$langAuthors = "Disediakan Oleh";
-$langDelList = "Padam semua pautan";
-$langWorkDelete = "Padam";
-$langWorkModify = "Ubahsuai";
-$langWorkConfirmDelete = "Anda pasti untuk padam tugasan ini";
-$langAllFiles = "Semua fail";
+$TooBig = "Anda tidak memilih sebarang fail atau saiz fail terlalu besar";
+$ListDeleted = "Senarai pautan telah dipadam";
+$DocModif = "Tajuk tugasan diubahsuai";
+$DocAdd = "Tugasan ditambah";
+$DocDel = "Tugasan dipadam";
+$TitleWork = "Tajuk Tugasan";
+$Authors = "Disediakan Oleh";
+$DelList = "Padam semua pautan";
+$WorkDelete = "Padam";
+$WorkModify = "Ubahsuai";
+$WorkConfirmDelete = "Anda pasti untuk padam tugasan ini";
+$AllFiles = "Semua fail";
 ?>

@@ -5,6 +5,7 @@ for more information: see languages.txt in the lang folder.
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "متاح للمعلم فقط";
 $DeleteAllAttendances = "الغاء كل الحضور";
 $Unsubscribe = "الغاء التسجيل";
+$AddForum = "أضف منتدى جديد";
 $SelectACategory = " اختار الفئة";
 $AdvancedEdit = "تعديل متقدم";
 $Title = "العنوان";
@@ -508,6 +509,7 @@ $HumanAndTechnicalResourcesInformation = "نبذة مختصرة عن هوية م
 $Assessment = "الواجبات";
 $AssessmentQuestions = "كيف يمكن تقييم المستخدمين؟ هناك وضع استراتيجيات من أجل التحكم في الموضوع؟";
 $AssessmentInformation = "مثال اسئله الامتحان. معايير النجاح. النصائح والأفكار.";
+$UploadADocument = "تحميل مستند";
 $EditProfile = "تعديل الملف الشخصي";
 $ToolCourseDescription = "وصف المقرر";
 $ToolDocument = "المستندات";

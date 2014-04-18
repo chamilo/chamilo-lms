@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "Forumkategorien er slettet";
 $ForumLocked = "Forum er lukket";
 $Forum = "Diskussionsfora";
 $AddForumCategory = "Tilføj en ny forumkategori";
-$AddForum = "Tilføj et nyt diskussionsforum";
 $Topics = "Emner";
 $Posts = "Indlæg";
 $LastPosts = "Seneste indlæg";

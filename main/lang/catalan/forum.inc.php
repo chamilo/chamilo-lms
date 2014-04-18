@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "Categoria del fòrum esborrada";
 $ForumLocked = "Fòrum bloquejat";
 $Forum = "Fòrums";
 $AddForumCategory = "Afegir una nova categoria del fòrum";
-$AddForum = "Afegir un nou fòrum";
 $Topics = "Temes";
 $Posts = "Missatges";
 $LastPosts = "Últim missatge";

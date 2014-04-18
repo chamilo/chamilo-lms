@@ -42,12 +42,12 @@ $(document).ready(function () {
     });
 
     $(".closebutton").click(function() {
-        var skill_id = ($(this).attr("id")).split("_")[1];        
-        if (skill_id) {            
-            $.ajax({ 
-                url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=remove_skill", 
+        var skill_id = ($(this).attr("id")).split("_")[1];
+        if (skill_id) {
+            $.ajax({
+                url: "'.api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=remove_skill",
                 data: "gradebook_id=' . $edit_cat . '&skill_id="+skill_id,
-                success: function(return_value) {                    
+                success: function(return_value) {
                     if (return_value == 1 ) {
                             $("#skill_"+skill_id).remove();
                     }
@@ -100,7 +100,13 @@ if ($_in_course) {
 
 $catadd->set_course_code(api_get_course_id());
 
-$form = new CatForm(CatForm :: TYPE_ADD, $catadd, 'add_cat_form', null, api_get_self() . '?selectcat='.$get_select_cat);
+$form = new CatForm(
+    CatForm :: TYPE_ADD,
+    $catadd,
+    'add_cat_form',
+    null,
+    api_get_self() . '?selectcat='.$get_select_cat.'&'.api_get_cidreq()
+);
 
 if ($form->validate()) {
 	$values = $form->exportValues();
@@ -116,17 +122,18 @@ if ($form->validate()) {
 		}
 	} else {
 		$cat->set_name($values['name']);
-		$cat->set_course_code($values['course_code']);//?
+		$cat->set_course_code($values['course_code']);
 	}
+
+    $cat->set_session_id(api_get_session_id());
 	//Always add the gradebook to the course
 	$cat->set_course_code(api_get_course_id());
-
     $cat->set_skills($values['skills']);
-
 	$cat->set_description($values['description']);
 	$cat->set_user_id($values['hid_user_id']);
 	$cat->set_parent_id($values['hid_parent_id']);
 	$cat->set_weight($values['weight']);
+
 	if (empty ($values['visible'])) {
 		$visible = 0;
 	} else {
@@ -156,7 +163,8 @@ $display_form = true;
         $display_form = false;
     }
 }*/
-if ($display_form)
+if ($display_form) {
     $form->display();
+}
 
 Display :: display_footer();

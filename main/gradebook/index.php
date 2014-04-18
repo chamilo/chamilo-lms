@@ -312,13 +312,15 @@ if (isset ($_GET['visiblecat'])) {
 if (isset($_GET['deletecat'])) {
 	block_students();
 	$cats = Category :: load($_GET['deletecat']);
-	//delete all categories,subcategories and results
-	if ($cats[0] != null) {
-		if ($cats[0]->get_id() != 0) {
-			 // better don't try to delete the root...
-			 $cats[0]->delete_all();
-		}
-	}
+    if (isset($cats[0])) {
+        //delete all categories,subcategories and results
+        if ($cats[0] != null) {
+            if ($cats[0]->get_id() != 0) {
+                 // better don't try to delete the root...
+                 $cats[0]->delete_all();
+            }
+        }
+    }
 	$confirmation_message = get_lang('CategoryDeleted');
 	$filter_confirm_msg = false;
 }
@@ -834,7 +836,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
                 $allcatSession = $catsResult;
                 foreach ($allcatSession as $catSession) {
                     if ($catSession->get_parent_id() == 0) {
-                        continue;    
+                        continue;
                     }
                     $allcat[] = $catSession;
                 }

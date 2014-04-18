@@ -136,13 +136,15 @@ $form->addElement('button', 'submit', get_lang('Edit'));
 $courseInfo = api_get_course_info();
 $documentTree = DocumentManager::get_document_preview(
     $courseInfo,
-    null,
-    null,
-    0,
     false,
-    '/audio',
-    'lp_controller.php?action=add_audio&id='.$lp_item_id,
+    null,
+    api_get_session_id(),
+    false,
+    '',
+    urlencode('lp_controller.php?action=add_audio&lp_id='.$_SESSION['oLP']->get_id().'&id='.$lp_item_id),
+    false,
     true
+    //$folderId = false
 );
 
 $page .= $recordVoiceForm;

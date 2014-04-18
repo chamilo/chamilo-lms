@@ -150,6 +150,11 @@ abstract class AbstractLink implements GradebookItem
         $this->locked = $locked;
     }
 
+    public function getCourseId()
+    {
+        return $this->course_id;
+    }
+
     // CRUD FUNCTIONS
 
     /**

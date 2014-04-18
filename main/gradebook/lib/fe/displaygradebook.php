@@ -295,7 +295,7 @@ class DisplayGradebook
         if (api_is_allowed_to_edit(null, true)) {
             if ($selectcat == '0') {
                 if ($show_add_qualification === true) {
-                    
+
                 }
                 if ($show_add_link) {
                     //$header .= '<td><a href="gradebook_add_eval.php?'.api_get_cidreq().'"><img src="../img/filenew.gif" alt="' . get_lang('NewEvaluation') . '" /> ' . get_lang('NewEvaluation') . '</a>';
@@ -400,6 +400,8 @@ class DisplayGradebook
             $item_value = 0;
             $item_total = 0;
             $item_total_value = 0;
+            $item_value_total = 0;
+            $scoreinfo = null;
 
             for ($count = 0; $count < count($evals_links); $count++) {
                 $item = $evals_links[$count];
@@ -417,7 +419,7 @@ class DisplayGradebook
             $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
 
             if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search']))) {
-                $scoreinfo.= '<h2>' . get_lang('Total') . ' : ' . $scorecourse_display . '</h2>';
+                $scoreinfo .= '<h2>' . get_lang('Total') . ' : ' . $scorecourse_display . '</h2>';
             }
             Display :: display_normal_message($scoreinfo, false);
         }
@@ -488,7 +490,7 @@ class DisplayGradebook
 
             if ($selectcat == '0') {
                 if ($show_add_qualification === true) {
-                    
+
                 }
                 if ($show_add_link) {
                     //$header .= '<td><a href="gradebook_add_eval.php?'.api_get_cidreq().'"><img src="../img/filenew.gif" alt="' . get_lang('NewEvaluation') . '" /> ' . get_lang('NewEvaluation') . '</a>';

@@ -7154,3 +7154,29 @@ function api_get_origin()
 
     return null;
 }
+/**
+ * Get the entire setting row
+ * @param string $variable
+ * @param string $key
+ * @return array
+ */
+function api_get_full_setting($variable, $key = null) {
+    $variable = Database::escape_string($variable);
+    $sql = "SELECT *
+            FROM settings_current 
+            WHERE variable = '$variable' ";
+    
+    if (!empty($key)) {
+        $key = Database::escape_string($key);
+        $sql .= "AND subkey = '$key'";
+    }
+    
+    $result = Database::query($sql);
+    $setting = array();
+    
+    while ($row = Database::fetch_assoc($result)) {
+        $setting[] = $row;
+    }
+    
+    return $setting;
+}

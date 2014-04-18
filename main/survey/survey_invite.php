@@ -153,7 +153,7 @@ $form->addElement('style_submit_button', 'submit', get_lang('PublishSurvey'), 'c
     $form->addRule('mail_text', get_lang('ThisFieldIsRequired'), 'required');
 }*/
 $portal_url = api_get_path(WEB_PATH);
-if ($_configuration['multiple_access_urls']) {
+if (api_is_multiple_url_enabled()) {
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1) {
 		$url = api_get_access_url($access_url_id);
@@ -200,14 +200,23 @@ if ($form->validate()) {
 	for ($i = 0; $i < count($additional_users); $i++) {
 		$additional_users[$i] = trim($additional_users[$i]);
 	}
-	$counter_additional_users = SurveyUtil::save_invitations($additional_users, $values['mail_title'],
-    $values['mail_text'], $values['resend_to_all'], $values['send_mail'], $values['remindUnAnswered']);
+
+	$counter_additional_users = SurveyUtil::save_invitations(
+        $additional_users,
+        $values['mail_title'],
+        $values['mail_text'],
+        $values['resend_to_all'],
+        $values['send_mail'],
+        $values['remindUnAnswered']
+    );
+
 	// Updating the invited field in the survey table
 	SurveyUtil::update_count_invited($survey_data['code']);
 	$total_count = $count_course_users + $counter_additional_users;
-    $table_survey 				= Database :: get_course_table(TABLE_SURVEY);
+    $table_survey = Database :: get_course_table(TABLE_SURVEY);
 	// Counting the number of people that are invited
-	$sql = "SELECT * FROM $table_survey WHERE c_id = $course_id AND code = '".Database::escape_string($survey_data['code'])."'";
+	$sql = "SELECT * FROM $table_survey
+	        WHERE c_id = $course_id AND code = '".Database::escape_string($survey_data['code'])."'";
 	$result = Database::query($sql);
 	$row = Database::fetch_array($result);
 	$total_invited = $row['invited'];

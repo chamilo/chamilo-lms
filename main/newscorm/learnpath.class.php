@@ -5884,7 +5884,10 @@ class learnpath
         );
         echo Display::display_normal_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'));
         $chapter = $_SESSION['oLP']->display_item_form('chapter', get_lang('EnterDataNewChapter'), 'add_item');
-        echo Display::tabs($headers, array($documents, $exercises, $links, $works, $forums, $chapter), 'resource_tab');
+        echo Display::tabs(
+            $headers,
+            array($documents, $exercises, $links, $works, $forums, $chapter), 'resource_tab'
+        );
         return true;
     }
 
@@ -8057,8 +8060,10 @@ class learnpath
             true,
             null,
             null,
-            $showInvisibleFiles
+            $showInvisibleFiles,
+            true
         );
+
     	return $document_tree;
     }
 

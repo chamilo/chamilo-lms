@@ -71,6 +71,7 @@ foreach ($categoRow as $category => $description) {
 //END default categories
 $table = Database::get_main_table(TABLE_TICKET_MESSAGE);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
+        iid int UNSIGNED NOT NULL AUTO_INCREMENT,
         message_id int UNSIGNED NOT NULL,
         ticket_id int UNSIGNED NOT NULL,
         subject varchar(150) DEFAULT NULL,
@@ -81,13 +82,13 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         sys_insert_datetime datetime DEFAULT NULL,
         sys_lastedit_user_id int UNSIGNED DEFAULT NULL,
         sys_lastedit_datetime datetime DEFAULT NULL,
-        PRIMARY KEY (message_id),
+        PRIMARY KEY (iid),
         KEY FK_tick_message (ticket_id) )";
 Database::query($sql);
 
 $table = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
-        iid int unsigned not null,
+        iid int UNSIGNED NOT NULL AUTO_INCREMENT,
         message_attch_id char(2) NOT NULL,
         message_id char(2) NOT NULL,
         ticket_id int UNSIGNED NOT NULL,
@@ -102,9 +103,10 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         KEY ticket_message_id_fk (message_id))";
 Database::query($sql);
 
+//Priority
 $table = Database::get_main_table(TABLE_TICKET_PRIORITY);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
-        iid int unsigned not null,
+        iid int UNSIGNED NOT NULL AUTO_INCREMENT,
         priority_id char(3) NOT NULL,
         priority varchar(20) DEFAULT NULL,
         priority_desc varchar(250) DEFAULT NULL,
@@ -116,10 +118,27 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         sys_lastedit_datetime datetime DEFAULT NULL,
         PRIMARY KEY (iid))";
 Database::query($sql);
+//Default Priorities
+$defaultPriorities = array(
+    'NRM' => get_lang('Normal'),
+    'HGH' => get_lang('High'),
+    'LOW' => get_lang('Low')
+);
+$i = 1;
+foreach ($defaultPriorities as $pId => $priority) {
+    $attributes = array(
+        'iid' => $i,
+        'priority_id' => $pId,
+        'priority_desc' => $priority
+    );
+    Database::insert($table, $attributes);
+    $i++;
+}
+//End
 
 $table = Database::get_main_table(TABLE_TICKET_PROJECT);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
-        iid int unsigned not null,
+        iid int UNSIGNED NOT NULL AUTO_INCREMENT,
         project_id char(3) NOT NULL,
         name varchar(50) DEFAULT NULL,
         description varchar(250) DEFAULT NULL,
@@ -140,14 +159,35 @@ $attributes = array(
 Database::insert($table, $attributes);
 //END
 
+//STATUS
 $table = Database::get_main_table(TABLE_TICKET_STATUS);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
-        iid int unsigned not null,
+        iid int UNSIGNED NOT NULL AUTO_INCREMENT,
         status_id char(3) NOT NULL,
         name varchar(100) NOT NULL,
         description varchar(255) DEFAULT NULL,
         PRIMARY KEY (iid))";
 Database::query($sql);
+//Default status
+$defaultStatus = array(
+    'NAT' => get_lang('New'),
+    'PND' => $objPlugin->get_lang('Pending'),
+    'XCF' => $objPlugin->get_lang('Unconfirmed'),
+    'CLS' => get_lang('Close'),
+    'REE' => get_lang('Forwarded')
+);
+
+$i = 1;
+foreach ($defaultStatus as $abr => $status) {
+    $attributes = array(
+        'iid' => $i,
+        'status_id' => $abr,
+        'name' => $status
+    );
+    Database::insert($table, $attributes);
+    $i ++;
+}
+//END
 
 $table = Database::get_main_table(TABLE_TICKET_TICKET);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
@@ -178,3 +218,5 @@ Database::query($sql);
 
 // Menu main tabs
 $objPlugin->addTab('Ticket', '/plugin/ticket/src/myticket.php');
+
+$objPlugin->addExtraSettings('allow_add', '1');

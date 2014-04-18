@@ -143,9 +143,11 @@ class TicketManager
         )";
         Database::query($sql_insert_ticket);
         $ticket_id = Database::insert_id();
+        
         if ($assigned_user != 0) {
             self::assign_ticket_user($ticket_id, $assigned_user);
         }
+
         if ($ticket_id != 0) {
             $ticket_code = "A" . str_pad(
                             (int) $ticket_id, 11, "0", STR_PAD_LEFT
@@ -186,7 +188,9 @@ class TicketManager
                                             </tr>
                                         </table>';
                     api_mail_html(
-                            'Soporte virtual', $email, "[SOPORTE] Incidente Reenviado de Soporte Virtual", $helpDeskMessage, $user['firstname'] . ' ' . $user['lastname'], $personalEmail, array('cc' => 'soportevirtual@usil.edu.pe'), $data_files
+                            'Soporte virtual', $email, "[SOPORTE] Incidente Reenviado de Soporte Virtual", 
+                            $helpDeskMessage, $user['firstname'] . ' ' . $user['lastname'], $personalEmail, 
+                            array(), $data_files
                     );
                     $studentMessage = '<p>Su consulta fue reenviada al area responsable : <a href="mailto:' . $email . '">' . $email . '</a></p>';
                     $studentMessage .= '<p>La respuesta a su consulta ser&aacute; enviada al correo  : <a href="#">' . $personalEmail . '</a></p>';
@@ -264,7 +268,8 @@ class TicketManager
      * @return bool
      */
     public static function insert_message(
-    $ticket_id, $subject, $content, $file_attachments, $user_id, $status = 'NOL', $sendConfirmation = false
+        $ticket_id, $subject, $content, $file_attachments, 
+        $user_id, $status = 'NOL', $sendConfirmation = false
     )
     {
         global $data_files;
@@ -274,9 +279,7 @@ class TicketManager
         $user_id = intval($user_id);
         $status = Database::escape_string($status);
 
-        $table_support_messages = Database::get_main_table(
-                        TABLE_TICKET_MESSAGE
-        );
+        $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_message_attachments = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);
         if ($sendConfirmation) {
@@ -611,9 +614,11 @@ class TicketManager
         }
         $sql .= " ORDER BY col$column $direction";
         $sql .= " LIMIT $from,$number_of_items";
+       
         $result = Database::query($sql);
         $tickets = array();
-
+        $webPath = api_get_path(WEB_PATH);
+        $webCodePath = api_get_path(WEB_CODE_PATH);
         while ($row = Database::fetch_assoc($result)) {
             $sql_unread = "SELECT
                               COUNT(DISTINCT message.message_id) AS unread 
@@ -635,12 +640,12 @@ class TicketManager
             $result_unread = Database::query($sql_unread);
             $unread = Database::fetch_object($result_unread)->unread;
             $userInfo = UserManager::get_user_info_by_id($row['user_id']);
-            $hrefUser = api_get_path(WEB_PATH) . 'main/admin/user_information.php?user_id=' . $row['user_id'];
+            $hrefUser = $webPath . 'main/admin/user_information.php?user_id=' . $row['user_id'];
             $name = "<a href='$hrefUser'> {$userInfo['complete_name']} </a>";
             $actions = "";
             
             if ($row['responsable'] != 0) {
-                $hrefResp = api_get_path(WEB_PATH) . 'main/admin/user_information.php?user_id=' . $row['responsable']['user_id'];
+                $hrefResp = $webPath . 'main/admin/user_information.php?user_id=' . $row['responsable']['user_id'];
                 $completRespName = api_get_person_name($row['responsable']['firstname'], $row['responsable']['lastname']);
                 $row['responsable'] = api_get_user_info($row['responsable']);
                 $row['responsable'] = "<a href='$hrefResp'> {$completRespName} </a>";
@@ -653,16 +658,16 @@ class TicketManager
             }
             switch ($row['source']) {
                 case 'PRE':
-                    $img_source = '../img/icons/32/user.png';
+                    $img_source = 'icons/32/user.png';
                     break;
                 case 'MAI':
-                    $img_source = '../img/icons/32/mail.png';
+                    $img_source = 'icons/32/mail.png';
                     break;
                 case 'TEL':
-                    $img_source = '../img/icons/32/event.png';
+                    $img_source = 'icons/32/event.png';
                     break;
                 default:
-                    $img_source = '../img/icons/32/course_home.png';
+                    $img_source = 'icons/32/course_home.png';
                     break;
             }
             $row['col1'] = api_get_local_time($row['col1']);
@@ -671,8 +676,8 @@ class TicketManager
                 $actions .= '<a href="ticket_details.php?ticket_id=' . $row['col0'] . '">' . Display::return_icon(
                                 'synthese_view.gif', get_lang('Info')
                         ) . '</a>&nbsp;&nbsp;';
-                if ($row['priority_id'] == 'ALT' && $row['status_id'] != 'CLS') {
-                    $actions .= '<img src="' . api_get_path(WEB_CODE_PATH) . 'img/exclamation.png" border="0" />';
+                if ($row['priority_id'] == 'HGH' && $row['status_id'] != 'CLS') {
+                    $actions .= '<img src="' . $webCodePath . 'img/exclamation.png" border="0" />';
                 }
                 $row['col0'] = Display::return_icon(
                                 $img_source, get_lang('Info')
@@ -708,10 +713,10 @@ class TicketManager
                 $dif = $now - $last_edit_date;
 
                 if ($dif > 172800 && $row['priority_id'] == 'NRM' && $row['status_id'] != 'CLS') {
-                    $actions .= '<a href="myticket.php?ticket_id=' . $row['ticket_id'] . '&amp;action=alert"><img src="../../../main/img/exclamation.png" border="0" /></a>';
+                    $actions .= '<a href="myticket.php?ticket_id=' . $row['ticket_id'] . '&amp;action=alert"><img src="' . $webPath . 'main/img/exclamation.png" border="0" /></a>';
                 }
-                if ($row['priority_id'] == 'ALT') {
-                    $actions .= '<img src="' . api_get_path(WEB_CODE_PATH) . 'img/admin_star.png" border="0" />';
+                if ($row['priority_id'] == 'HGH') {
+                    $actions .= '<img src="' . $webCodePath . 'img/admin_star.png" border="0" />';
                 }
                 $ticket = array(
                     $row['col0'],
@@ -723,11 +728,13 @@ class TicketManager
                 );
             }
             if ($unread > 0) {
-                $ticket['0'] = $ticket['0'] . '&nbsp;&nbsp;(' . $unread . ')<a href="ticket_details.php?ticket_id=' . $row['ticket_id'] . '"><img src="../../../main/img/message_new.png" border="0" title="' . $unread . ' ' . get_lang('Messages') . '"/></a>';
+                $ticket['0'] = $ticket['0'] . '&nbsp;&nbsp;(' . $unread . ')<a href="ticket_details.php?ticket_id=' . $row['ticket_id'] . '">
+                                <img src="' . $webPath . 'main/img/message_new.png" border="0" title="' . $unread . ' ' . get_lang('Messages') . '"/>
+                                </a>';
             }
             if ($isAdmin) {
                 $ticket['0'] .= '&nbsp;&nbsp;<a  href="javascript:void(0)" onclick="load_history_ticket(\'div_' . $row['ticket_id'] . '\',' . $row['ticket_id'] . ')">
-					<img onclick="load_course_list(\'div_' . $row['ticket_id'] . '\',' . $row['ticket_id'] . ')" onmouseover="clear_course_list (\'div_' . $row['ticket_id'] . '\')" src="../../../main/img/history.gif" title="' . get_lang(
+					<img onclick="load_course_list(\'div_' . $row['ticket_id'] . '\',' . $row['ticket_id'] . ')" onmouseover="clear_course_list (\'div_' . $row['ticket_id'] . '\')" src="' . $webPath . 'main/img/history.gif" title="' . get_lang(
                                 'Historial'
                         ) . '" alt="' . get_lang('Historial') . '"/>
 					<div class="blackboard_hide" id="div_' . $row['ticket_id'] . '">&nbsp;&nbsp;</div>
@@ -977,10 +984,11 @@ class TicketManager
             $ticket['messages'] = array();
             $attach_icon = Display::return_icon('attachment.gif', '');
             $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
+            $webPath = api_get_path(WEB_PATH);
             while ($row = Database::fetch_assoc($result)) {
                 $message = $row;
                 $completeName = api_get_person_name($row['firstname'], $row['lastname']);
-                $href = api_get_path(WEB_PATH) . 'main/admin/user_information.php?user_id=' . $row['user_id'];
+                $href = $webPath . 'main/admin/user_information.php?user_id=' . $row['user_id'];
                 //Check if user is an admin
                 $sql_admin = "SELECT user_id FROM $admin_table
 		              WHERE user_id = '" . intval($message['user_id']) . "'
@@ -997,9 +1005,7 @@ class TicketManager
                                   AND ticket_id= '$ticket_id'  ";
                 $result_attach = Database::query($sql_atachment);
                 while ($row2 = Database::fetch_assoc($result_attach)) {
-                    $archiveURL = $archiveURL = api_get_path(
-                                    WEB_PLUGIN_PATH
-                            ) . PLUGIN_NAME . '/src/download.php?ticket_id=' . $ticket_id . '&file=';
+                    $archiveURL = $archiveURL = $webPath . PLUGIN_NAME . '/src/download.php?ticket_id=' . $ticket_id . '&file=';
                     $row2['attachment_link'] = $attach_icon . '&nbsp;<a href="' . $archiveURL . $row2['path'] . '&title=' . $row2['filename'] . '">' . $row2['filename'] . '</a>&nbsp;(' . $row2['size'] . ')';
                     $message['atachments'][] = $row2;
                 }
@@ -1114,7 +1120,7 @@ class TicketManager
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
         $sql = "UPDATE $table_support_tickets
-                SET priority_id = 'ALT', sys_lastedit_user_id ='$user_id',
+                SET priority_id = 'HGH', sys_lastedit_user_id ='$user_id',
                 sys_lastedit_datetime ='$now'
                 WHERE ticket_id = '$ticket_id'";
         Database::query($sql);

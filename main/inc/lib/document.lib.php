@@ -2943,6 +2943,8 @@ class DocumentManager
             return '';
         }
 
+        $overwrite_url = Security::remove_XSS($overwrite_url);
+
         $user_id = api_get_user_id();
         $user_in_course = false;
 
@@ -3002,7 +3004,7 @@ class DocumentManager
 
         $showOnlyFoldersCondition = null;
         if ($showOnlyFolders) {
-            $showOnlyFoldersCondition = " AND docs.filetype = 'folder' ";
+            //$showOnlyFoldersCondition = " AND docs.filetype = 'folder' ";
         }
 
         $folderCondition = " AND docs.path LIKE '" . $path . $added_slash . "%' ";
@@ -3011,13 +3013,18 @@ class DocumentManager
             $parentData = self::get_document_data_by_id($folderId, $course_info['code']);
             if (!empty($parentData)) {
                 $cleanedPath = Database::escape_string($parentData['path']);
-                $num = substr_count($cleanedPath, '/') + 1;
-                $repeat = str_repeat('/%', $num);
+                $num = substr_count($cleanedPath, '/');
+
+                $notLikeCondition = null;
+                for ($i = 1; $i <= $num; $i++) {
+                    $repeat = str_repeat('/%', $i+1);
+                    $notLikeCondition .= " AND docs.path NOT LIKE '".$cleanedPath.$repeat."' ";
+                }
 
                 $folderCondition = " AND
                     docs.id <> $folderId AND
-                    docs.path LIKE '".$cleanedPath."%' AND
-                    docs.path NOT LIKE '".$cleanedPath.$repeat."'
+                    docs.path LIKE '".$cleanedPath."/%'
+                    $notLikeCondition
                 ";
             } else {
                 $folderCondition = " AND
@@ -3116,13 +3123,9 @@ class DocumentManager
         );
 
         $return .= $write_result;
-
         $img_path = api_get_path(WEB_IMG_PATH);
-
         if ($lp_id == false) {
-
             $url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_documents&url='.$overwrite_url.'&lp_id='.$lp_id.'&cidReq='.$course_info['code'];
-
             $return .= "<script>
             $('.doc_folder').click(function() {
                 var realId = this.id;
@@ -3237,7 +3240,7 @@ class DocumentManager
         // Show the "image name" not the filename of the image.
         if ($lp_id) {
             //LP URL
-            $url = api_get_self() . '?'.api_get_cidreq().'&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $documentId . '&amp;lp_id=' . $lp_id;
+            $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $documentId . '&amp;lp_id=' . $lp_id;
             if (!empty($overwrite_url)) {
                 $url = $overwrite_url . '&cidReq=' . $course_info['code'] . '&id_session=' . $session_id . '&document_id=' . $documentId.'';
             }

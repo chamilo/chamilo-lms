@@ -1195,7 +1195,7 @@ function get_total_number_feedback($file_id = '') {
 */
 function check_number_feedback($key, $array) {
 	if (is_array($array)) {
-		if (key_exists($key, $array)) {
+		if (array_key_exists($key, $array)) {
 			return $array[$key];
 		} else {
 			return 0;

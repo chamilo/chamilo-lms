@@ -137,33 +137,33 @@ class EvalForm extends FormValidator
         // set new form template
         $form_template = '<form{attributes}>
                     <table class="data_table" border="0" cellpadding="5" cellspacing="5">{content}
-                    </table>		      
+                    </table>
                 </form>';
         $renderer->setFormTemplate($form_template);
 
         if (api_is_western_name_order()) {
             $renderer->setHeaderTemplate(
                     '<tr>
-    		       <th>' . get_lang('OfficialCode') . '</th>		
-    		      <th>' . get_lang('UserName') . '</th> 
+    		       <th>' . get_lang('OfficialCode') . '</th>
+    		      <th>' . get_lang('UserName') . '</th>
     		      <th>' . get_lang('FirstName') . '</th>
-    		      <th>' . get_lang('LastName') . '</th>		
+    		      <th>' . get_lang('LastName') . '</th>
     		      <th>' . get_lang('Qualify') . '</th>
     		   </tr>'
             );
         } else {
             $renderer->setHeaderTemplate(
                     '<tr>
-                   <th>' . get_lang('OfficialCode') . '</th>        
+                   <th>' . get_lang('OfficialCode') . '</th>
                   <th>' . get_lang('UserName') . '</th>
                   <th>' . get_lang('LastName') . '</th>
-                  <th>' . get_lang('FirstName') . '</th>     
+                  <th>' . get_lang('FirstName') . '</th>
                   <th>' . get_lang('Qualify') . '</th>
                </tr>'
             );
         }
         $template_submit = '<tr>
-			       <td colspan="4" ></td>			         
+			       <td colspan="4" ></td>
 			      <td >
 			       {element}
 			         <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
@@ -204,7 +204,7 @@ class EvalForm extends FormValidator
 
             $template = '<tr>
 		      <td align="left" >' . $user['official_code'] . '</td>
-		      <td align="left" >' . $user['username'] . '</td>		      
+		      <td align="left" >' . $user['username'] . '</td>
 		      ' . $user_info . '
 		       <td align="left">{element} / ' . $this->evaluation_object->get_max() . '
 		         <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
@@ -248,7 +248,7 @@ class EvalForm extends FormValidator
                 '<form{attributes}>
 		      <table class="data_table">
               {content}
-		      </table>		      
+		      </table>
 		   </form>'
         );
 
@@ -262,20 +262,20 @@ class EvalForm extends FormValidator
         if (api_is_western_name_order()) {
             $renderer->setHeaderTemplate(
                     '<tr>
-                   <th>' . get_lang('OfficialCode') . '</th>        
+                   <th>' . get_lang('OfficialCode') . '</th>
                   <th>' . get_lang('UserName') . '</th>
                   <th>' . get_lang('FirstName') . '</th>
-                  <th>' . get_lang('LastName') . '</th>     
+                  <th>' . get_lang('LastName') . '</th>
                   <th>' . get_lang('Qualify') . '</th>
                </tr>'
             );
         } else {
             $renderer->setHeaderTemplate(
                     '<tr>
-                   <th>' . get_lang('OfficialCode') . '</th>        
+                   <th>' . get_lang('OfficialCode') . '</th>
                   <th>' . get_lang('UserName') . '</th>
                   <th>' . get_lang('LastName') . '</th>
-                  <th>' . get_lang('FirstName') . '</th>     
+                  <th>' . get_lang('FirstName') . '</th>
                   <th>' . get_lang('Qualify') . '</th>
                </tr>'
             );
@@ -316,7 +316,7 @@ class EvalForm extends FormValidator
         $this->addElement('style_submit_button', 'submit', get_lang('AddResult'), 'class="save"');
 
         $template_submit = '<tr>
-                <td colspan="4" ></td>			         
+                <td colspan="4" ></td>
                 <td >
                 {element}
                     <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
@@ -475,7 +475,7 @@ class EvalForm extends FormValidator
             }
         }
 
-        $this->add_textfield('weight_mask', array(get_lang('Weight'), null, ' [0 .. ' . $all_categories[0]->get_weight() . '] '), true, array(
+        $this->add_textfield('weight_mask', array(get_lang('Weight'), null, ' [0 .. <span id="max_weight">' . $all_categories[0]->get_weight() . '</span>] '), true, array(
             'size' => '4',
             'maxlength' => '5',
             'class' => 'span1'

@@ -140,4 +140,13 @@ $BackToForum = "Regressar ao fórum";
 $BackToForumOverview = "Regressar à vista geral do fórum";
 $BackToThread = "Regressar ao tópico";
 $ForumcategoryLocked = "Categoría do fórum bloqueada";
+$PreviewImage = "Imagem Anterior";
+$UpdateImage = "Imagem Alterada";
+$EnableTimeLimits = "Activar limite de tempo";
+$RemoveSearchResults = "Limpar resultados da pesquisa";
+$InsertQualificationCorrespondingToMaxScore = "Insira qualificação correspondente a pontuação máxima";
+$ThreadMoved = "Tópico movido";
+$MigrateForum = "Migrar fórum";
+$YouWillBeNotified = "Será notificado";
+$ForumCategories = "Categorias do fórum";
 ?>

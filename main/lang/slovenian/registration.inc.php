@@ -76,7 +76,6 @@ $langFormula = "S spoštovanjem";
 $langProblem = "V primeru težav, stopite v kontakt z nami";
 $langIs = "je";
 $langAddress = "Naslov";
-$langSettings = "z naslednjimi nastavitvami :\n\nUporabniško ime :";
 $langYouAreReg = "Registrirani ste v skupnost";
 $langYourReg = "Vasa registracija v";
 $langUserFree = "To uporabniško ime je že v rabi. Uporabite brskalnikov gumb 'nazaj' in izberite drugega.";

@@ -93,7 +93,6 @@ $MyCertificates = "Моите сертификати";
 $ToChangeYourEmailMustTypeYourPassword = "За да промените своя e-mail адрес е необходимо да въведете своята парола.";
 $Invitations = "Покани";
 $MyGroups = "Моите групи";
-$EditProfile = "Редактиране на профила";
 $Social = "Социална мрежа";
 $Profile = "Профил";
 $MyFriends = "Моите приятели";

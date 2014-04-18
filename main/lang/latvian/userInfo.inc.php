@@ -95,7 +95,6 @@ $UnsubscribeFromPlatformSuccess = "Jūsu konts %s ir pilnībā izdzēsts no šī
 $ToChangeYourEmailMustTypeYourPassword = "Lai mainītu savu e-pasta adresi, jums ir nepieciešams to apstiprināt ar savu paroli.";
 $Invitations = "Ielūgumi";
 $MyGroups = "Manas grupas";
-$EditProfile = "<b>Mainīt</b> paroli, profila foto un citus datus";
 $Social = "Sociālais tīkls";
 $Profile = "Profils....";
 $MyFriends = "Mani draugi.";

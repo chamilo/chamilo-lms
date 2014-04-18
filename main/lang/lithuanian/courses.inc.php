@@ -19,7 +19,6 @@ $Unsubscribe = "Atsisakyti";
 $lang_back_to_my_home_page = "Atgal į pradinį puslapį";
 $lang_back_to_my_personnal_course_list = "Atgal į mano kursų sąrašą";
 $langTitular = "Vadovas";
-$langBackToListOfThisUser = "Atgal į kursų sąrašą";
 $langAdministrationTools = "Administravimo įrankiai";
 $lang_back_to_parent_category = "Atgal į tėvinę kategoriją";
 $lang_back_to_course_selection = "Atgal į kursų pasirinkimus";

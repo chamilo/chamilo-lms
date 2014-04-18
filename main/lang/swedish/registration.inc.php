@@ -76,7 +76,6 @@ $langFormula = "Med vänlig hälsning";
 $langProblem = "I händelse av problem, kontakta oss.";
 $langIs = "är";
 $langAddress = "Adressen till";
-$langSettings = "med följande inställningar:\nAnvändarnamn:";
 $langYouAreReg = "Du registrerades vid";
 $langYourReg = "Din registrering vid";
 $langUserFree = "Ditt anv�ndarnamn �r redan upptaget. Anv�nda webbl�saren tillbakaknapp och f�rs�k igen med ett annat.";

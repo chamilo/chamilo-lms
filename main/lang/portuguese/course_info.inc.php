@@ -113,4 +113,27 @@ $NewUserEmailAlert = "Notificar por e-mail o instrutor sobre uma incrição auto
 $NewUserEmailAlertEnable = "Activar a notificação por e-mail do instrutor sobre uma incrição automática de um novo utilizador";
 $NewUserEmailAlertToTeacharAndTutor = "Activar a notificação por e-mail para os instrutores e tutores sobre uma incrição automática de um novo utilizador";
 $NewUserEmailAlertDisable = "Desactivar o alerta por e-mail da incrição de um novo utilizador no curso";
+$AllowUserViewUserList = "Permitir que o utilizador veja a lista de utilizadores";
+$AllowUserViewUserListActivate = "Ativar lista de utilizadores";
+$AllowUserViewUserListDeactivate = "Desativar lista de utilizadores";
+$DoNotDisplayAnyAdvance = "Não mostrar o progresso";
+$RedirectToTheExerciseList = "Redirecionar para a lista de exercícios";
+$RedirectToExercise = "Redirecionar para o exercício selecionado";
+$ConfigExercise = "Configurar ferramenta de exercícios";
+$CourseSettingsRegisterDirectLink = "Se o seu curso é público ou aberto, pode usar o link direto abaixo para enviar um convite para novos utilizadores. Desta forma, após o registo, estes serão encaminhados diretamente para o curso. Para além disso, pode adicionar o parâmetro e = 1 para o endereço URL, substituindo \"1\" por um ID de exercício para enviá-lo diretamente para um exame específico. O ID de exercício pode ser encontrado no endereço URL ao clicar num dos exercícios para abri-lo. % s";
+$DirectLink = "Link Directo";
+$NewHomeworkEmailAlert = "Enviar email aos utilizadores quando for criada uma atividade";
+$NewHomeworkEmailAlertEnable = "Ativar o envio de um email aos utilizadores quando um trabalho for submetido";
+$NewHomeworkEmailAlertDisable = "Desativar o envio de um email aos utilizadores quando um trabalho for submetido";
+$DisplayAboutNextAdvanceNotDoneAndLastDoneAdvance = "Mostrar a última etapa realizada e a próxima inacabada";
+$AddPicture = "Adicionar uma imagem";
+$LPAutoLaunch = "Ativar o início automático do Percurso de Aprendizagem";
+$ConfigLearnpath = "Configuração do Percurso de Aprendizagem";
+$PDFWaterMarkHeader = "Marca d'água a mostrar no cabeçalho de ficheiros exportados em formato PDF";
+$RedirectToALearningPath = "Redirecionar para um Percurso de Aprendizagem selecionado";
+$RedirectToTheLearningPathList = "Redirecionar para a lista de Percursos de Aprendizagem";
+$ActivateLegal = "Ativar Termos Legais";
+$ShowALegalNoticeWhenEnteringTheCourse = "Mostrar os Termos Legais ao entrar num curso";
+$CourseLegalAgreement = "Termos Legais deste curso";
+$AcceptLegal = "Aceitar Termos Legais";
 ?>

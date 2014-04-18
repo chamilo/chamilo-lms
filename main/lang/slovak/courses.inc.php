@@ -20,7 +20,6 @@ $Unsubscribe = "Odhlásiť sa z kurzu";
 $lang_back_to_my_home_page = "Späť na moju domovskú stránku";
 $lang_back_to_my_personnal_course_list = "Späť na zoznam mojích kurzov";
 $langTitular = "Vedúci";
-$langBackToListOfThisUser = "Späť na zoznam kurzov";
 $langAdministrationTools = "Nástroje na administráciu";
 $lang_back_to_parent_category = "Späť na nadradenú kategóriu";
 $lang_back_to_course_selection = "Späť na výber kurzov";

@@ -95,7 +95,6 @@ $UnsubscribeFromPlatformSuccess = "El seu compte %s ha estat eliminat per comple
 $ToChangeYourEmailMustTypeYourPassword = "Per canviar el vostre correu electrònic heu d'escriure la vostra contrasenya";
 $Invitations = "Invitacions";
 $MyGroups = "Els meus grups";
-$EditProfile = "Edita perfil";
 $Social = "Social";
 $Profile = "Perfil";
 $MyFriends = "Els meus amics";

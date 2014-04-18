@@ -1608,7 +1608,6 @@ $TeachersCanChangeScoreSettingsComment = "Nota koadernoaren ezarpenak editatzen 
 $GradebookEnableLockingTitle = "Gaitu ebaluazioen blokeaketa irakasleen aldetik";
 $GradebookEnableLockingComment = "Behin gaitu eta gero, aukera honek edozein ebaluazio blokeatzeko baimena emango die ikastaro bateko irakasleei. Hala ere, horrela irakasleak edozein emaitza aldatzea oztopatuko da, ebaluazioan erabilitako baliabideei dagokienez: azterketak, ikaskuntza ibilbideak, egin beharreko lanak, etab. Ebaluazio blokeatu bat desblokeatzeko baimena duen rol bakarra kudeatzailea da. Desblokeatzen saiatzean, irakasleak informazioa jasoko du posibilitate horretaz. Nota koadernoen blokeaketa eta desblokeaketa erregistratu egingo da jarduera garrantzitsuen gaineko sistemaren txostenean.";
 $LdapDescriptionComment = "
-
    *LDAP autentifikazioa:
     Ikusi azpian I.a, LDAP konfiguratzeko
     Ikusi azpian II.a, LDAP autentifikazioa aktibatzeko
@@ -1657,20 +1656,20 @@ $ShibbolethMainActivateComment = "Lehehengo eta behin, Shibboleth konfiguratu be
 Chamilorako konfiguratzeko
 editatu  main/auth/shibboleth/config/aai.class.php  fitxategia.
 
-Aldatu $result objektuen balioak, zure Shibboleth atributuen izenarekin:
+Aldatu \$result objektuen balioak, zure Shibboleth atributuen izenarekin:
 
-    $result->unique_id = 'mail';
-    $result->firstname = 'cn';
-    $result->lastname = 'uid';
-    $result->email = 'mail';
-    $result->language = '-';
-    $result->gender = '-';
-    $result->address = '-';
-    $result->staff_category = '-';
-    $result->home_organization_type = '-';
-    $result->home_organization = '-';
-    $result->affiliation = '-';
-    $result->persistent_id = '-';
+    \$result->unique_id = 'mail';
+    \$result->firstname = 'cn';
+    \$result->lastname = 'uid';
+    \$result->email = 'mail';
+    \$result->language = '-';
+    \$result->gender = '-';
+    \$result->address = '-';
+    \$result->staff_category = '-';
+    \$result->home_organization_type = '-';
+    \$result->home_organization = '-';
+    \$result->affiliation = '-';
+    \$result->persistent_id = '-';
     ...
 
 
@@ -1682,7 +1681,7 @@ $FacebookMainActivateComment = "Lehenengo eta behin, Facebook aplikazioa sortu b
 Orduan,
 editatu   main/auth/external_login/facebook.conf.php  fitxategia
 
-eta sartu 'appId' eta 'secret' balioak $facebook_config  konfiguraziorako.
+eta sartu 'appId' eta 'secret' balioak \$facebook_config  konfiguraziorako.
 
 Joan Plugin-era, 'Facebook Login' botoi konfiguragarria gehitzeko zure Chamilo kanpuserako.";
 $LanguagePriority1Title = "Lehentasuna duen hizkuntza 1";

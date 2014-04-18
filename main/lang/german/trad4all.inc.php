@@ -1259,4 +1259,5 @@ $Auto = "Auto";
 $Stop = "Stop";
 $YouHaveSomeUnsavedChanges = "Ungesicherte Änderungen. Verwerfen?";
 $ActivateEvent = "Event aktivieren";
+$CourseCatalog = "Kursübersicht";
 ?>

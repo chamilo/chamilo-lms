@@ -2,6 +2,13 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ExportSettingsAsXLS = "Export settings as XLS";
+$DeleteAllItems = "Delete all items";
+$DeleteThisItem = "Delete this item";
+$RecordYourVoice = "Record your voice";
+$RecordIsNotAvailable = "No recording available";
+$WorkNumberSubmitted = "Works received";
+$WithoutCategory = "Without category";
 $IncorrectScore = "Incorrect score";
 $CorrectScore = "Correct score";
 $UseCustomScoreForAllQuestions = "Use custom score for all questions";
@@ -833,6 +840,7 @@ $Until = "Until";
 $FirstPage = "First page";
 $LastPage = "Last page";
 $Coachs = "Coachs";
+$FieldTypeFile = "File upload";
 $DragAndDropAnElementHere = "Drag and drop an element here";
 $ThereAreNoRegisteredDatetimeYet = "There is no date/time registered yet";
 $CalendarList = "Calendar list of attendances";

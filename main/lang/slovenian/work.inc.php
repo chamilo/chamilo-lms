@@ -2,6 +2,11 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$WorkFileNotUploadedDirXDoesNotExist = "Naloge ni moč naložiti ker ciljna mapa %s ne obstaja";
+$FolderDoesntExistsInFileSystem = "Ciljna mapa na strežniku ne obstaja";
+$HandedOutDate = "Prejeto";
+$HandedOut = "Oddano";
+$HandOutDateLimit = "Rok oddaje";
 $Tools = "Orodja";
 $SendWork = "Naloži dokument";
 $langTooBig = "Niste izbrali datoteke za prenos, ali pa je ta prevelika";

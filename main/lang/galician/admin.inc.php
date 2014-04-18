@@ -2,6 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CourseVisibilityHidden = "Invisible - Totalmente invisible para todos os usuarios excepto para os adminsitradores.";
+$ApplyAllLanguages = "Aplicar cambio a todas as linguaxes habilitadas.";
+$CareerUpdated = "Carreira actualizada satisfactoriamente.";
 $CasMainActivateComment = "Habilitar a autenticación CAS permitirá aos usuarios autenticarse coas súas credenciais CAS";
 $UsersRegisteredInAnyGroup = "Usuarios sen rexistrar en ningún grupo";
 $ShowHotCoursesComment = "A lista dos cursos con maior prestixio engadirase á páxina principal";
@@ -1071,6 +1074,7 @@ $EditTabs = "Editar tabuladores";
 $YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill = "A avaliación precisa ter un certificado para poder relacionalo a unha competencia";
 $PlatformUnsubscribeTitle = "Permitir darse de baixa da aula virtual";
 $PlatformUnsubscribeComment = "Ao activar esta opción, permitirase a calquer usuario eliminar definitivamente a súa propia conta e todos os datos relacionados coa mesma desde a plataforma. Isto é unha acción radical, pero é necesario nos portais abertos ao público donde os usuarios poden rexistrarse automáticamente. Unha entrada adicional publicarase no perfil do usuario para darse de baixa despois da confirmación.";
+$PromotionUpdated = "Promoción actualizada satisfactoriamente.";
 $BabyOrange = "Nenos laranxa";
 $BlueLagoon = "Lagoa azul";
 $CoolBlue = " \tAzul fresco";
@@ -1210,6 +1214,10 @@ $ServerPortInfo = "Porto do servidor";
 $ServerUserAgentInfo = "Como recibe o servidor o seu axente de usuario";
 $ServerSoftwareInfo = "Software executándose coma un servidor web";
 $UnameInfo = "Información do sistema sobre o que está funcionando o servidor";
+$AdminsCanChangeUsersPassComment = "Esta funcionalidade é útil para os casos de uso da funcionalidade multi-URL, para os cales existe unha diferencia entre o administrador global e os administradores normais. Neste caso, seleccionar \"Non\" impedirá aos administradores normais cambiar os contrasinais de outros usuarios, e permitiralles soamente requerir a xeneración de un novo contrasinal (automáticamente enviada ao usuario por correo), sen divulgación desta. O administrador global todavía pode cambiar o contrsinal de cualquer usuario.";
+$AdminsCanChangeUsersPassTitle = "Os administradores poden cambiar os contrasinais dos usuarios.";
+$AdminLoginAsAllowedComment = "Se está activada permite aos usuarios cos privilexios correscpondentes usar a funcionalidade \"Conectarse como...\" para así conectarse como outro usuario.Esta funcionalidade é especialmente util cando se usa a opción de multi-url, cando non é desexable que os administradores de portais  individuais podan usar esta funcionalidade. É importante saber que existe un parámetro maestro no arquivo de configuración que permite bloquear esta opción por completo.";
+$AdminLoginAsAllowedTitle = "Funcionalidad \"Conectarse como\"";
 $AssignSessionsToX = "Asignar sesións a %s";
 $AssignCoursesToSessionsAdministrator = "Asignar cursos ao administrador de sesións";
 $AssignCoursesToPlatformAdministrator = "Asignar cursos ao administrador da plataforma";

@@ -18,7 +18,7 @@ $showHotspots = "Rādīt / Slēpt \"karstos punktus\"";
 $labelPolyMenu = "Slēgt daudzstūri";
 $triesleft = "Mēģinājumi ir beigušies";
 $exeFinished = "Tagad, lai apstiprinātu Jūsu atbildes, nospiediet pogu apakšā";
-$nextAnswer = "Tagad ar klikšķi atbildi:";
+$nextAnswer = "Tagad ar klikšķi atbildi: &done=done";
 $delineation = "Uzmetums / plāns";
 $labelDelineationMenu = "Slēgt uzmetumu / plānu";
 $oar = "Riska laukums";

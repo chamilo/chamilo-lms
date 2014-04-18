@@ -2,9 +2,26 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$DeleteAllItems = "Borrar todos los elementos";
+$DeleteThisItem = "Borrar este elemento";
+$RecordYourVoice = "Grabe su voz";
+$RecordIsNotAvailable = "Ninguna grabación disponible";
+$WorkNumberSubmitted = "Tareas recibidas";
+$WithoutCategory = "Sin categoría";
 $IncorrectScore = "Puntuación incorrecta";
 $CorrectScore = "Puntuación correcta";
 $UseCustomScoreForAllQuestions = "Usar puntuación personalizable para todas las preguntas.";
+$YouShouldAddItemsBeforeAttachAudio = "Debería añadir algunos elementos a la lección, caso contrario no podrá adjuntarle archivos de audio";
+$InactiveDays = "Días inactivo";
+$FollowedHumanResources = "Directores RRHH seguidos";
+$TheTextYouEnteredDoesNotMatchThePicture = "El texto introducido no corresponde a la imagen.";
+$RemoveOldRelationships = "Eliminar relaciones previas";
+$ImportSessionDrhList = "Importar lista de directores RRHH en las sesiones";
+$FollowedStudents = "Estudiantes seguidos";
+$FollowedTeachers = "Profesores seguidos";
+$AllowOnlyFiles = "Solo archivos";
+$AllowOnlyText = "Solo respuesta online";
+$AllowFileOrText = "Permitir archivos y respuestas online";
 $DocumentType = "Tipo de documento";
 $SendOnlyAnEmailToMySelfToTest = "Enviar correo electrónico solamente a mi mismo para pruebas.";
 $DeleteAllSelectedAttendances = "Eliminar todas las hojas de asistencia seleccionadas";
@@ -822,6 +839,7 @@ $Until = "Hasta";
 $FirstPage = "Primera página";
 $LastPage = "Última página";
 $Coachs = "Tutores";
+$FieldTypeFile = "Subida de archivo";
 $DragAndDropAnElementHere = "Arrastrar y soltar un elemento aquí";
 $ThereAreNoRegisteredDatetimeYet = "Aún no hay registrada ninguna fecha/hora";
 $CalendarList = "Fechas de la lista de asistencia";

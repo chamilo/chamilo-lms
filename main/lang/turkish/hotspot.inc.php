@@ -18,7 +18,7 @@ $showHotspots = "Hotspotları göster/gizle";
 $labelPolyMenu = "Çokgeni kapat";
 $triesleft = "Kalan denemeler";
 $exeFinished = "Cevabınızın geçerli olması için aşağıdaki tuşu şimdi tıklayınız";
-$nextAnswer = "Şimdi yapıldıya tıklayınız";
+$nextAnswer = "Şimdi yapıldıya tıklayınız &done=done";
 $delineation = "Çizim";
 $labelDelineationMenu = "Çizimi kapat";
 $oar = "Riskli alan";

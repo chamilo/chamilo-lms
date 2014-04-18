@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SearchSessions = "Procura de sessões";
 $CasMainActivateComment = "Ativando a autenticação CAS permitirá aos usuários se autenticarem com as credenciais CAS deles. Pode ir à seção Plugin para adicionar um botão de \"Login CAS\" configurável no seu campus Chamilo.";
 $UsersRegisteredInAnyGroup = "Usuários cadastrados em qualquer grupo";
 $ShowHotCoursesComment = "A lista de cursos populares será adicionada na página índice";
@@ -1221,8 +1222,13 @@ $Action = "Atividade";
 $ISOCode = "ISO code";
 $TheSubLanguageForThisLanguageHasBeenAdded = "Um sub-idioma desta língua foi adicionado";
 $ReturnToLanguagesList = "Retornar à lista de idiomas";
-$ActivityCoach = "O tutor da sessão terá todos os direitos e privilégios nos cursos que pertencem à sessão.";
+$ActivityCoach = "O instrutor da sessão terá todos os direitos e privilégios nos cursos que pertencem à sessão.";
 $CategoriesNumber = "Categorias";
+$SkillImportNoID = "o ID de competências não foi definido";
+$PortalSessionsLimitReached = "Lamentamos, a instalação tem um limite de sessões, que foi agora atingido. Para aumentar o número de sessões permitido nesta instalação de Chamilo, por favor contate o seu serviço de alojamento/hospedagem ou, se possível, faça um upgrade para um serviço de alojamento/hospedagem superior.";
+$PortalCoursesLimitReached = "Lamentamos, a instalação tem um limite de cursos, que foi agora atingido. Para aumentar o número de cursos permitido nesta instalação de Chamilo, por favor contate o seu serviço de alojamento/hospedagem ou, se possível, faça um upgrade para um serviço de alojamento/hospedagem superior.";
+$PortalTeachersLimitReached = "Lamentamos, a instalação tem um limite de professores, que foi agora atingido. Para aumentar o número de professores permitido nesta instalação de Chamilo, por favor contate o seu serviço de alojamento/hospedagem ou, se possível, faça um upgrade para um serviço de alojamento/hospedagem superior.";
+$PortalUsersLimitReached = "Lamentamos, a instalação tem um limite de utilizadores, que foi agora atingido. Para aumentar o número de utilizadores permitido nesta instalação de Chamilo, por favor contate o seu serviço de alojamento/hospedagem ou, se possível, faça um upgrade para um serviço de alojamento/hospedagem superior.";
 $CourseProgress = "Progresso do curso";
 $ExportAllCoursesList = "Exportar todos os cursos";
 $ExportSelectedCoursesFromCoursesList = "Exportar cursos selecionados da lista a seguir";
@@ -1239,8 +1245,27 @@ $AllowUserCourseSubscriptionByCourseAdminTitle = "Permite a inscrição de usuá
 $AllowUserCourseSubscriptionByCourseAdminComment = "Ativar esta opção permitirá que o administrador do curso possa inscrever usuários no curso";
 $ConfigureDashboardPlugin = "Configurar Plugin do Painel";
 $EditBlocks = "Editar blocos";
-$SessionDisplayEndDateComment = "Data que será mostrada na sessão de informações como a data em que a sessão termina";
+$SessionFields = "Campos da sessão";
+$SessionCoachEndDateComment = "Data a partir da qual a sessão será encerrada para os instrutores. Um intervalo adicional de tempo será permitido de forma a que possam exportar conteúdos relevantes de acompanhamento da sessão.";
+$SessionCoachStartDateComment = "Data a partir da qual a sessão está disponível para os instrutores, de forma a que possam prepará-la antes dos alunos entrarem na sessão";
+$SessionEndDateComment = "Data de encerramento da sessão";
+$SessionStartDateComment = "Data a partir da qual a sessão está disponível para todos";
+$SessionDisplayEndDateComment = "Data que será mostrada na informação da sessão como a data em que a sessão termina";
 $SessionDisplayStartDateComment = "Data que será mostrada na sessão de informação como a data em que a sessão começa";
+$SessionCoachEndDate = "Data final de acesso para instrutores";
+$SessionCoachStartDate = "Data de início de acesso para instrutores";
+$SessionEndDate = "Data final de acesso";
+$SessionStartDate = "Data de início de acesso";
+$SessionDisplayEndDate = "Data de final a ser mostrada";
+$SessionDisplayStartDate = "Data de início a ser mostrada";
+$UserHasNoCourse = "O utilizador não está inscrito em qualquer curso";
+$SessionPageEnabledComment = "Com esta opção ativa, o título da sessão é um link para uma página especial da sessão. Quando desativada, é apenas um título de texto, sem reencaminhamento. A página da sessão com reencaminhamento pode ser confusa para alguns utilizadores, pelo que poderá querer esta opção desativada.";
+$SessionPageEnabledTitle = "Ativar link da sessão na lista de cursos";
+$ThisValueIsUsedInTheCourseURL = "Este dado é utilizado no URL do curso";
+$ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage = "Existem utilizadores que utilizam este idioma. Deseja desativar este idioma e definir para todos os utilizadores o idioma padrão do portal?";
+$SessionTutorsCanSeeExpiredSessionsResultsComment = "»»»»»»»»»»»»»»»»»»»»a
+AOs monitores da sessão podem ver relatórios das suas sessões depois de estas expirarem?";
+$SessionTutorsCanSeeExpiredSessionsResultsTitle = "Visibilidade de relatórios de sessões dos monitores";
 $TheXMLImportLetYouAddMoreInfoAndCreateResources = "A importação XML lhe permite adicionar mais informações e criar recursos (cursos, usuários...). A importação CSV somente criará sessões e lhe permitirá designar recursos existentes a elas.";
 $ShowLinkBugNotificationTitle = "Exibir link para reportar bugs";
 $ShowLinkBugNotificationComment = "Exibir um link no cabeçalho para relatar um erro dentro de nossa plataforma de suporte (http://support.chamilo.org). Quando clicar no link, o usuário é encaminhado a uma página wiki que descreve todo o processo para relatar um erro.";
@@ -1249,6 +1274,8 @@ $GradebookActivateScoreDisplayCustom = "Ativar o nível de competencia a fim de 
 $GradebookScoreDisplayCustomValues = "Personalização dos valores dos níveis de competência";
 $GradebookNumberDecimals = "Números decimais";
 $GradebookNumberDecimalsComment = "Permite que você ajuste o número de decimais permitidos em uma pontuação";
+$EditExtraFieldOptions = "Editar opções de campos extra";
+$ManageSessionFields = "Gerir campos da sessão";
 $EditSessionsToURL = "Editar sessões para uma URL";
 $AddSessionsToURL = "Adicionar sessão para uma URL";
 $SessionListIn = "Lista de sessões em";
@@ -1561,20 +1588,20 @@ $ShibbolethMainActivateComment = "Primeiro, precisa configurar Shibboleth no seu
 Para configurá-lo para Chamilo<br />
 <h5>edit file main/auth/shibboleth/config/aai.class.php</h5>
 
-Modifique os valores do objeto $result com o nome dos seus atributos Shibboleth<br />
+Modifique os valores do objeto \$result com o nome dos seus atributos Shibboleth<br />
 <ul>
-<li>$result->unique_id = 'mail';
-<li>$result->firstname = 'cn';
-<li>$result->lastname = 'uid';
-<li>$result->email = 'mail';
-<li>$result->language = '-';
-<li>$result->gender = '-';
-<li>$result->address = '-';
-<li>$result->staff_category = '-';
-<li>$result->home_organization_type = '-';
-<li>$result->home_organization = '-';
-<li>$result->affiliation = '-';
-<li>$result->persistent_id = '-';
+<li>\$result->unique_id = 'mail';
+<li>\$result->firstname = 'cn';
+<li>\$result->lastname = 'uid';
+<li>\$result->email = 'mail';
+<li>\$result->language = '-';
+<li>\$result->gender = '-';
+<li>\$result->address = '-';
+<li>\$result->staff_category = '-';
+<li>\$result->home_organization_type = '-';
+<li>\$result->home_organization = '-';
+<li>\$result->affiliation = '-';
+<li>\$result->persistent_id = '-';
 <li>...
 </ul>
 
@@ -1585,7 +1612,7 @@ $FacebookMainActivateComment = "Primeiro, deve criar uma aplicação Facebook (v
 
 Depois, 
 <h5>edite o arquivo main/auth/external_login/facebook.conf.php</h5>
-e insira os valores \"appId\" e \"secret\" para $facebook_config.<br /> Vá para Extensões para adicionar um botão \"Login Facebook\" configurável no seu campus Chamilo.";
+e insira os valores \"appId\" e \"secret\" para \$facebook_config.<br /> Vá para Extensões para adicionar um botão \"Login Facebook\" configurável no seu campus Chamilo.";
 $LanguagePriority1Title = "Prioridade de idioma 1";
 $LanguagePriority2Title = "Prioridade de idioma 2";
 $LanguagePriority3Title = "Prioridade de idioma 3";

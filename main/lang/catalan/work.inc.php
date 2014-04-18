@@ -2,6 +2,10 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$FolderDoesntExistsInFileSystem = "La carpeta de destinació no existeix al servidor";
+$HandedOutDate = "Data de recepció";
+$HandedOut = "Entregat";
+$HandOutDateLimit = "Data límit d'entrega";
 $Tools = "Eines";
 $SendWork = "Penja un document";
 $langTooBig = "No ha escollit cap arxiu a enviar, o és massa gran";

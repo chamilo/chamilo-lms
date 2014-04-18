@@ -20,7 +20,6 @@ $Unsubscribe = "Utzi bertan behera inskripzio bat";
 $lang_back_to_my_home_page = "Itzuli nire orri nagusira";
 $lang_back_to_my_personnal_course_list = "Itzuli neure ikastaro zerrendara";
 $langTitular = "Arduraduna";
-$langBackToListOfThisUser = "Itzuli erabiltzaileen zerrendara";
 $langAdministrationTools = "Administrazio tresnak";
 $lang_back_to_parent_category = "Itzuli kategoria nagusira";
 $lang_back_to_course_selection = "Itzuli ikastaro hautaketara";

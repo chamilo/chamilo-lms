@@ -76,7 +76,6 @@ $langFormula = "Cordialmente, o voso profesor";
 $langProblem = "En caso de tener algún problema, non dubide en contactarnos.";
 $langIs = "é";
 $langAddress = "O enderezo de";
-$langSettings = "cos parámetros seguintes:\nNome de usuario:";
 $langYouAreReg = "Vostede inscribíuse en";
 $langYourReg = "A súa inscrición en";
 $langUserFree = "O nome de usuario que elixiu xa existe.Use o botón de Volver do navegador e elixa un diferente.";

@@ -95,7 +95,6 @@ $UnsubscribeFromPlatformSuccess = "Your account %s has been completely removed f
 $ToChangeYourEmailMustTypeYourPassword = "Για να αλλάξετε το e-mail σας, πρέπει να επιβεβαιώσετε το συνθηματικό σας";
 $Invitations = "Προσκλήσεις";
 $MyGroups = "Οι ομάδες μου";
-$EditProfile = "Επεξεργασία προφίλ";
 $Social = "Οργάνωση Επαφών";
 $Profile = "Προφίλ";
 $MyFriends = "Οι φίλοι μου";

@@ -76,7 +76,6 @@ $langFormula = "Üdvözlettel";
 $langProblem = "Probléma esetén kérem lépjen velünk kapcsolatba.";
 $langIs = "elnevezésű portál az alábbi URL-en érhető el";
 $langAddress = "Az";
-$langSettings = "az alábbi beállításokkal:Felhasználói név:";
 $langYouAreReg = "Ön regisztrációra került az alábbi elnevezésű oktatási portálon:";
 $langYourReg = "A regisztációja";
 $langUserFree = "Már van ilyen felhasználói név. Használja a böngészője vissza gombját és próbálja újra.";

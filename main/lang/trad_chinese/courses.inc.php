@@ -19,7 +19,6 @@ $Unsubscribe = "取消註冊";
 $lang_back_to_my_home_page = "返回我的主頁";
 $lang_back_to_my_personnal_course_list = "返回我的個人課程清單";
 $langTitular = "領導";
-$langBackToListOfThisUser = "返回到課程清單";
 $langAdministrationTools = "管理工具";
 $lang_back_to_parent_category = "返回上級分類";
 $lang_back_to_course_selection = "返回課程選擇";

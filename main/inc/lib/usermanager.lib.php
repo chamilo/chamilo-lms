@@ -2177,7 +2177,7 @@ class UserManager
               FROM $tbl_session as session
                   LEFT JOIN $tbl_session_category session_category
                   ON (session_category_id = session_category.id)
-                  INNER JOIN $tbl_session_course_user as session_rel_course_user
+                  LEFT JOIN $tbl_session_course_user as session_rel_course_user
                   ON (session_rel_course_user.id_session = session.id)
               WHERE (
                         session_rel_course_user.id_user = $user_id OR
@@ -4205,8 +4205,8 @@ class UserManager
                     }
                     break;
                 case self::USER_FIELD_TYPE_DATE:
-                    $form->addElement('datepickerdate', 'extra_'.$field_details[1], $field_details[3], array('form_name' => $form_name));
-                    $form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
+                    $form->addElement('date_picker', 'extra_'.$field_details[1], $field_details[3]);
+                    //$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
                     $defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
                     $form->setDefaults($defaults);
                     if (!$admin_permissions) {
@@ -4216,8 +4216,8 @@ class UserManager
                     $form->applyFilter('theme', 'trim');
                     break;
                 case self::USER_FIELD_TYPE_DATETIME:
-                    $form->addElement('datepicker', 'extra_'.$field_details[1], $field_details[3], array('form_name' => $form_name));
-                    $form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
+                    $form->addElement('date_time_picker', 'extra_'.$field_details[1], $field_details[3]);
+                    //$form->_elements[$form->_elementIndex['extra_'.$field_details[1]]]->setLocalOption('minYear', 1900);
                     $defaults['extra_'.$field_details[1]] = date('Y-m-d 12:00:00');
                     $form->setDefaults($defaults);
                     if (!$admin_permissions) {

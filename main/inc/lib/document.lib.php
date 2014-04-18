@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 /**
@@ -1412,8 +1411,8 @@ class DocumentManager
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
 
         /*
-          When using hotpotatoes files, a new html files are generated in the hotpotatoes folder
-          to display the test.
+          When using hotpotatoes files, a new html files are generated
+          in the hotpotatoes folder to display the test.
           The genuine html file is copied to math4.htm(user_id).t.html
           Images files are not copied, and keep same name.
           To check the html file visibility, we don't have to check file math4.htm(user_id).t.html but file math4.htm
@@ -1451,7 +1450,15 @@ class DocumentManager
                 $is_visible = $_SESSION['is_allowed_in_course'] || api_is_platform_admin();
             }
         }
-        //improved protection of documents viewable directly through the url: incorporates the same protections of the course at the url of documents:	access allowed for the whole world Open, access allowed for users registered on the platform Private access, document accessible only to course members (see the Users list), Completely closed; the document is only accessible to the course admin and teaching assistants.
+
+        /* improved protection of documents viewable directly through the url:
+            incorporates the same protections of the course at the url of
+            documents:
+            access allowed for the whole world Open, access allowed for
+            users registered on the platform Private access, document accessible
+            only to course members (see the Users list), Completely closed;
+            the document is only accessible to the course admin and
+            teaching assistants.*/
         //return $_SESSION ['is_allowed_in_course'] || api_is_platform_admin();
         return $is_visible;
     }
@@ -1663,6 +1670,8 @@ class DocumentManager
 
         $date_certificate = $info_grade_certificate['created_at'];
         $date_long_certificate = '';
+
+        $date_no_time = api_convert_and_format_date(api_get_utc_datetime(), DATE_FORMAT_LONG_NO_DAY);
         if (!empty($date_certificate)) {
             $date_long_certificate = api_convert_and_format_date($date_certificate);
             $date_no_time = api_convert_and_format_date($date_certificate, DATE_FORMAT_LONG_NO_DAY);
@@ -2913,6 +2922,9 @@ class DocumentManager
      * @param string $filter_by_folder
      * @param string $overwrite_url
      * @param bool $showInvisibleFiles
+     * @param bool $showOnlyFolders
+     * @param int $folderId
+     *
      * @return string
      */
     public static function get_document_preview(
@@ -2923,11 +2935,16 @@ class DocumentManager
         $add_move_button = false,
         $filter_by_folder = null,
         $overwrite_url = null,
-        $showInvisibleFiles = false
+        $showInvisibleFiles = false,
+        $showOnlyFolders = false,
+        $folderId = false
     ) {
         if (empty($course_info['real_id']) || empty($course_info['code']) || !is_array($course_info)) {
             return '';
         }
+
+        $overwrite_url = Security::remove_XSS($overwrite_url);
+
         $user_id = api_get_user_id();
         $user_in_course = false;
 
@@ -2979,38 +2996,79 @@ class DocumentManager
         // If we are in LP display hidden folder https://support.chamilo.org/issues/6679
         $lp_visibility_condition = null;
         if ($lp_id) {
-            $lp_visibility_condition = " OR filetype='folder'";
+            // $lp_visibility_condition = " OR filetype='folder'";
             if ($showInvisibleFiles) {
                 $lp_visibility_condition .= ' OR last.visibility = 0';
             }
         }
 
+        $showOnlyFoldersCondition = null;
+        if ($showOnlyFolders) {
+            //$showOnlyFoldersCondition = " AND docs.filetype = 'folder' ";
+        }
+
+        $folderCondition = " AND docs.path LIKE '" . $path . $added_slash . "%' ";
+
+        if ($folderId !== false) {
+            $parentData = self::get_document_data_by_id($folderId, $course_info['code']);
+            if (!empty($parentData)) {
+                $cleanedPath = Database::escape_string($parentData['path']);
+                $num = substr_count($cleanedPath, '/');
+
+                $notLikeCondition = null;
+                for ($i = 1; $i <= $num; $i++) {
+                    $repeat = str_repeat('/%', $i+1);
+                    $notLikeCondition .= " AND docs.path NOT LIKE '".$cleanedPath.$repeat."' ";
+                }
+
+                $folderCondition = " AND
+                    docs.id <> $folderId AND
+                    docs.path LIKE '".$cleanedPath."/%'
+                    $notLikeCondition
+                ";
+            } else {
+                $folderCondition = " AND
+                docs.filetype = 'file' ";
+            }
+        }
+
+        $levelCondition = null;
+
+        if ($folderId === false) {
+            $levelCondition = " AND docs.path NOT LIKE'/%/%'";
+        }
+
         $sql = "SELECT last.visibility, docs.*
-                FROM  $tbl_item_prop AS last, $tbl_doc AS docs
+                FROM $tbl_item_prop AS last INNER JOIN $tbl_doc AS docs
+                ON (docs.id = last.ref AND docs.c_id = last.c_id)
                 WHERE
-                    docs.id = last.ref AND
-                    docs.path LIKE '" . $path . $added_slash . "%' AND
                     docs.path NOT LIKE '%_DELETED_%' AND
                     last.tool = '" . TOOL_DOCUMENT . "' $condition_session AND
                     (last.visibility = '1' $lp_visibility_condition) AND
+                    last.visibility <> 2 AND
                     docs.c_id = {$course_info['real_id']} AND
                     last.c_id = {$course_info['real_id']}
+                    $showOnlyFoldersCondition
+                    $folderCondition
+                    $levelCondition
                     $add_folder_filter
-                ORDER BY docs.title ASC";
+                ORDER BY docs.filetype DESC, docs.title ASC";
 
         $res_doc = Database::query($sql);
         $resources = Database::store_result($res_doc, 'ASSOC');
 
-        $resources_sorted = array();
         $return = '';
 
         if ($lp_id) {
-            $return .= '<div class="lp_resource_element">';
-            $return .= Display::return_icon('new_doc.gif', '', array(), ICON_SIZE_SMALL);
-            $return .= Display::url(
-                get_lang('NewDocument'), api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id
-            );
-            $return .= '</div>';
+            if ($folderId === false) {
+                $return .= '<div class="lp_resource_element">';
+                $return .= Display::return_icon('new_doc.gif', '', array(), ICON_SIZE_SMALL);
+                $return .= Display::url(
+                    get_lang('NewDocument'),
+                    api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_DOCUMENT.'&lp_id='.$_SESSION['oLP']->lp_id
+                );
+                $return .= '</div>';
+            }
         } else {
             $return .= Display::div(
                 Display::url(
@@ -3023,107 +3081,287 @@ class DocumentManager
         }
 
         // If you want to debug it, I advise you to do "echo" on the eval statements.
+        $newResources = array();
         if (!empty($resources) && $user_in_course) {
             foreach ($resources as $resource) {
-                $is_visible = self::is_visible_by_id($resource['id'], $course_info, $session_id, api_get_user_id());
+                $is_visible = self::is_visible_by_id(
+                    $resource['id'],
+                    $course_info,
+                    $session_id,
+                    api_get_user_id()
+                );
+
                 if (!$is_visible) {
                     continue;
                 }
-                $resource_paths = explode('/', $resource['path']);
-                array_shift($resource_paths);
-                $path_to_eval = $last_path = '';
-                $is_file = false;
-
-                if ($resource['filetype'] == 'file') {
-                    foreach ($resource_paths as $key => $resource_path) {
-                        if ($key != count($resource_paths) - 1) {
-                            // It's a folder.
-                            $path_to_eval .= "['$resource_path']['files']";
-                        }
-                        $is_file = true;
-                    }
-                } else {
-                    foreach ($resource_paths as $key => $resource_path) {
-                        if ($key != count($resource_paths) - 1) {
-                            // It's a folder.
-                            $path_to_eval .= "['$resource_path']['files']";
-                        }
-                    }
-                }
-                $last_path = $resource_path;
-
-                //$data = json_encode(array('title'=>$resource['title'], 'path'=>$last_path));
-                //@todo not sure if it's a good thing using base64_encode. I tried with json_encode but i received the same error
-                //Some testing is needed in order to prove the performance
-                //Also change the explode to value from "/" to "|@j@|" it fixes  #3780
-
-                $data = base64_encode($resource['title'].'|@j@|'.$last_path.'|@j@|'.$resource['visibility']);
-
-                if ($is_file) {
-                    //for backward compatibility
-                    if (empty($resource['title'])) {
-                        $resource['title'] = basename($resource['path']);
-                    }
-                    eval('$resources_sorted' . $path_to_eval . '[' . $resource['id'] . '] = "' . $data . '" ; ');
-                } else {
-                    eval('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["id"]=' . $resource['id'] . ';');
-                    eval('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["title"]= "' . api_htmlentities($resource['title']) . '";');
-                    eval('$resources_sorted' . $path_to_eval . '["' . $last_path . '"]["visible"]= "'.$resource['visibility'].'";'); // for LP display hidden folder in grey
-                }
+                $newResources[] = $resource;
             }
         }
 
         $label = get_lang('Documents');
+        if ($folderId === false) {
+            $documents[$label] = array(
+                'id' => 0,
+                'files' => $newResources
+            );
+        } else {
+            $documents[$parentData['title']] = array(
+                'id' => intval($folderId),
+                'files' => $newResources
+            );
+        }
 
-        $new_array[$label] = array('id' => 0, 'files' => $resources_sorted);
         $write_result = self::write_resources_tree(
             $course_info,
             $session_id,
-            $new_array,
-            0,
+            $documents,
             $lp_id,
             $target,
             $add_move_button,
-            $overwrite_url
+            $overwrite_url,
+            $folderId
         );
 
         $return .= $write_result;
-
         $img_path = api_get_path(WEB_IMG_PATH);
-
         if ($lp_id == false) {
+            $url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_documents&url='.$overwrite_url.'&lp_id='.$lp_id.'&cidReq='.$course_info['code'];
             $return .= "<script>
-    		    	$('.doc_folder').mouseover(function() {
-    					var my_id = this.id.split('_')[2];
-    					$('#res_'+my_id).show();
-    				});
+            $('.doc_folder').click(function() {
+                var realId = this.id;
+                var my_id = this.id.split('_')[2];
+                var tempId = 'temp_'+my_id;
+                $('#res_'+my_id).show();
 
-    				$('.close_div').click(function() {
-    					var course_id = this.id.split('_')[2];
-    					var session_id = this.id.split('_')[3];
-    					$('#document_result_'+course_id+'_'+session_id).hide();
-    					$('.lp_resource').remove();
-    				});
-    				</script>";
+                var tempDiv = $('#'+realId).find('#'+tempId);
+                if (tempDiv.length == 0) {
+                    $.ajax({
+                        async: false,
+                        type: 'GET',
+                        url:  '".$url."',
+                        data: 'folder_id='+my_id,
+                        success: function(data) {
+                            $('#'+realId).append('<div id='+tempId+'>'+data+'</div>');
+                        }
+                    });
+                }
+            });
+
+            $('.close_div').click(function() {
+                var course_id = this.id.split('_')[2];
+                var session_id = this.id.split('_')[3];
+                $('#document_result_'+course_id+'_'+session_id).hide();
+                $('.lp_resource').remove();
+                $('.document_preview_container').html('');
+            });
+
+            </script>";
         } else {
             //For LPs
+            $url = api_get_path(WEB_AJAX_PATH).'lp.ajax.php?a=get_documents&lp_id='.$lp_id.'&'.api_get_cidreq();
             $return .= "<script>
 
     		function testResources(id, img) {
-	    		if (document.getElementById(id).style.display=='block'){
-	    			document.getElementById(id).style.display='none';
-                    var id = id.split('_')[1];
-	    			document.getElementById('img_'+id).src='" . $img_path . "nolines_plus.gif';
-	    		} else {
-	    			document.getElementById(id).style.display='block';
-                    var id = id.split('_')[1];
-    				document.getElementById('img_'+id).src='" . $img_path . "nolines_minus.gif';
-    			}
-    		}
+    		    var numericId = id.split('_')[1];
+    		    var parentId = 'doc_id_'+numericId;
+    		    var tempId = 'temp_'+numericId;
+    		    var image = $('#'+img);
+
+    		    if (image.hasClass('open')) {
+    		        image.removeClass('open');
+    		        image.attr('src', '" . $img_path . "nolines_plus.gif');
+                    $('#'+id).show();
+	    			$('#'+tempId).hide();
+    		    } else {
+                    image.addClass('open');
+                    image.attr('src', '" . $img_path . "nolines_minus.gif');
+                    $('#'+id).hide();
+	    		    $('#'+tempId).show();
+
+                    var tempDiv = $('#'+parentId).find('#'+tempId);
+                    if (tempDiv.length == 0) {
+                        $.ajax({
+                            type: 'GET',
+                            async: false,
+                            url:  '".$url."',
+                            data: 'folder_id='+numericId,
+                            success: function(data) {
+                                tempDiv = $('#doc_id_'+numericId).append('<div id='+tempId+'>'+data+'</div>');
+                            }
+                        });
+                    }
+    		    }
+
+            }
     		</script>";
         }
+
         if (!$user_in_course) {
             $return = '';
+        }
+
+        return $return;
+    }
+
+    private static function parseFile(
+        $course_info,
+        $session_id,
+        $resource,
+        $lp_id,
+        $add_move_button,
+        $target,
+        $overwrite_url
+    ) {
+        $img_path = api_get_path(WEB_IMG_PATH);
+        $img_sys_path = api_get_path(SYS_CODE_PATH) . 'img/';
+        $web_code_path = api_get_path(WEB_CODE_PATH);
+
+        $documentId = $resource['id'];
+        $path = $resource['path'];
+
+        if (empty($path)) {
+            $num = 0;
+        } else {
+            $num = substr_count($path, '/') - 1;
+        }
+
+        // It's a file.
+        $icon = choose_image($path);
+        $position = strrpos($icon, '.');
+        $icon = substr($icon, 0, $position) . '_small.gif';
+        $my_file_title = $resource['title'];
+        $visibility = $resource['visibility'];
+
+        // If title is empty we try to use the path
+        if (empty($my_file_title)) {
+            $my_file_title = basename($path);
+        }
+
+        // Show the "image name" not the filename of the image.
+        if ($lp_id) {
+            //LP URL
+            $url = api_get_path(WEB_CODE_PATH).'newscorm/lp_controller.php?'.api_get_cidreq().'&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $documentId . '&amp;lp_id=' . $lp_id;
+            if (!empty($overwrite_url)) {
+                $url = $overwrite_url . '&cidReq=' . $course_info['code'] . '&id_session=' . $session_id . '&document_id=' . $documentId.'';
+            }
+        } else {
+            // Direct document URL
+            $url = $web_code_path . 'document/document.php?cidReq=' . $course_info['code'] . '&id_session=' . $session_id . '&id=' . $documentId;
+            if (!empty($overwrite_url)) {
+                $url = $overwrite_url . '&cidReq=' . $course_info['code'] . '&id_session=' . $session_id . '&document_id=' . $documentId;
+            }
+        }
+
+        $img = $img_path . $icon;
+        if (!file_exists($img_sys_path . $icon)) {
+            $img = $img_path . 'icons/16/default_small.gif';
+        }
+
+        $link = Display::url(
+            '<img alt="" src="' . $img . '" title="" />&nbsp;' . $my_file_title, $url,
+            array('target' => $target)
+        );
+
+        $visibilityClass = null;
+        if ($visibility == 0) {
+            $visibilityClass = ' invisible ';
+        }
+        $return = null;
+
+        if ($lp_id == false) {
+            $return .= '<li class="doc_resource '.$visibilityClass.' " data_id="' . $documentId . '" data_type="document" title="' . $my_file_title . '" >';
+        } else {
+            $return .= '<li class="doc_resource lp_resource_element '.$visibilityClass.' " data_id="' . $documentId . '" data_type="document" title="' . $my_file_title . '" >';
+        }
+
+        $return .= '<div class="item_data" style="margin-left:' . ($num  * 18) . 'px;margin-right:5px;">';
+
+        if ($add_move_button) {
+            $return .= '<a class="moved" href="#">';
+            $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
+            $return .= '</a> ';
+        }
+        $return .= $link;
+        $return .= '</div></li>';
+
+        return $return;
+    }
+
+    private static function parseFolder($folderId, $resource, $lp_id)
+    {
+        $title = isset($resource['title']) ? $resource['title'] : null;
+        $path = isset($resource['path']) ? $resource['path'] : null;
+
+        $img_path = api_get_path(WEB_IMG_PATH);
+
+        if (empty($path)) {
+            $num = 0;
+        } else {
+            $num = substr_count($path, '/');
+        }
+
+        // It's a folder.
+        //hide some folders
+        if (in_array($path,
+            array('shared_folder', 'chat_files', 'HotPotatoes_files', 'css', 'certificates'))) {
+            return null;
+        } elseif (preg_match('/_groupdocs/', $path)) {
+            return null;
+        } elseif (preg_match('/sf_user_/', $path)) {
+            return null;
+        } elseif (preg_match('/shared_folder_session_/', $path)) {
+            return null;
+        }
+
+        //trad some titles
+        /*
+        if ($key == 'images') {
+            $key = get_lang('Images');
+        } elseif ($key == 'gallery') {
+            $key = get_lang('Gallery');
+        } elseif ($key == 'flash') {
+            $key = get_lang('Flash');
+        } elseif ($key == 'audio') {
+            $key = get_lang('Audio');
+        } elseif ($key == 'video') {
+            $key = get_lang('Video');
+        }*/
+
+        $onclick = '';
+
+        // if in LP, hidden folder are displayed in grey
+        $folder_class_hidden = "";
+        if ($lp_id) {
+            if (isset($resource['visible']) && $resource['visible'] == 0) {
+                $folder_class_hidden = "doc_folder_hidden"; // in base.css
+            }
+            $onclick = 'onclick="javascript: testResources(\'res_' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')"';
+        }
+        $return = null;
+
+        if (empty($path)) {
+            $return = '<ul class="lp_resource">';
+        }
+
+        $return .= '<li class="doc_folder '.$folder_class_hidden.'" id="doc_id_' . $resource['id'] . '"  style="margin-left:' . ($num * 18) . 'px; ">';
+
+        $image = $img_path.'nolines_plus.gif';
+        if (empty($path)) {
+            $image = $img_path.'nolines_minus.gif';
+        }
+        $return .= '<img style="cursor: pointer;" src="'.$image.'" align="absmiddle" id="img_'.$resource['id'] . '" '.$onclick.'>';
+
+
+        $return .= '<img alt="" src="' . $img_path . 'lp_folder.gif" title="" align="absmiddle" />&nbsp;';
+        $return .= '<span '.$onclick.' style="cursor: pointer;" >'.$title.'</span>';
+        $return .= '</li>';
+
+        if (empty($path)) {
+            if ($folderId == false) {
+                $return .= '<div id="res_' . $resource['id'] . '" >';
+            } else {
+                $return .= '<div id="res_' . $resource['id'] . '" style="display: none;" >';
+            }
         }
 
         return $return;
@@ -3135,93 +3373,45 @@ class DocumentManager
      * when creating a learning path.
      * @param array $course_info
      * @param int $session_id
-     * @param array $resources_sorted
-     * @param int $num
+     * @param array $documents
      * @param bool $lp_id
      * @param string $target
      * @param bool $add_move_button
      * @param string $overwrite_url
+     * @param int $folderId
+     *
      * @return string
      */
     public static function write_resources_tree(
         $course_info,
         $session_id,
-        $resources_sorted,
-        $num = 0,
+        $documents,
         $lp_id = false,
         $target = '',
         $add_move_button = false,
-        $overwrite_url = null
+        $overwrite_url = null,
+        $folderId = false
     ) {
         require_once api_get_path(LIBRARY_PATH) . 'fileDisplay.lib.php';
-
-        $img_path = api_get_path(WEB_IMG_PATH);
-        $img_sys_path = api_get_path(SYS_CODE_PATH) . 'img/';
-        $web_code_path = api_get_path(WEB_CODE_PATH);
-
         $return = '';
-        if (count($resources_sorted) > 0) {
-            foreach ($resources_sorted as $key => $resource) {
-                $title = isset($resource['title']) ? $resource['title'] : null;
-                if (empty($title)) {
-                    $title = $key;
-                }
+
+        if (!empty($documents)) {
+            foreach ($documents as $key => $resource) {
                 if (isset($resource['id']) && is_int($resource['id'])) {
-                    // It's a folder.
-                    //hide some folders
-                    if (in_array($key, array('shared_folder', 'chat_files', 'HotPotatoes_files', 'css', 'certificates'))) {
-                        continue;
-                    } elseif (preg_match('/_groupdocs/', $key)) {
-                        continue;
-                    } elseif (preg_match('/sf_user_/', $key)) {
-                        continue;
-                    } elseif (preg_match('/shared_folder_session_/', $key)) {
-                        continue;
+                    $mainFolderResource = array(
+                        'id' => $resource['id'],
+                        'title' => $key,
+                    );
+
+                    if ($folderId === false) {
+                        $return .= self::parseFolder($folderId, $mainFolderResource, $lp_id);
                     }
 
-                    //trad some titles
-                    if ($key == 'images') {
-                        $key = get_lang('Images');
-                    } elseif ($key == 'gallery') {
-                        $key = get_lang('Gallery');
-                    } elseif ($key == 'flash') {
-                        $key = get_lang('Flash');
-                    } elseif ($key == 'audio') {
-                        $key = get_lang('Audio');
-                    } elseif ($key == 'video') {
-                        $key = get_lang('Video');
-                    }
-
-                    $onclick = '';
-
-                    // if in LP, hidden folder are displayed in grey
-                    $folder_class_hidden = "";
-                    if ($lp_id) {
-                        if (isset($resource['visible']) && $resource['visible'] == 0) {
-                            $folder_class_hidden = "doc_folder_hidden"; // in base.css
-                        }
-                        $onclick = 'onclick="javascript: testResources(\'res_' . $resource['id'] . '\',\'img_' . $resource['id'] . '\')"';
-                    }
-
-                    $return .= '<ul class="lp_resource">';
-                    $return .= '<li class="doc_folder '.$folder_class_hidden.'" id="doc_id_' . $resource['id'] . '"  style="margin-left:' . ($num * 18) . 'px; ">';
-
-                    if ($lp_id) {
-                        $return .= '<img style="cursor: pointer;" src="'.$img_path.'nolines_plus.gif" align="absmiddle" id="img_'.$resource['id'] . '" '.$onclick.'>';
-                    } else {
-                        $return .= '<span style="margin-left:16px">&nbsp;</span>';
-                    }
-                    $return .= '<img alt="" src="' . $img_path . 'lp_folder.gif" title="" align="absmiddle" />&nbsp;';
-                    $return .= '<span '.$onclick.' style="cursor: pointer;" >'.$title.'</span>';
-                    $return .= '</li>';
-
-                    $return .= '<div id="res_' . $resource['id'] . '" style="display: none;" >';
                     if (isset($resource['files'])) {
                         $return .= self::write_resources_tree(
                             $course_info,
                             $session_id,
                             $resource['files'],
-                            $num + 1,
                             $lp_id,
                             $target,
                             $add_move_button,
@@ -3231,62 +3421,20 @@ class DocumentManager
                     $return .= '</div>';
                     $return .= '</ul>';
                 } else {
-                    if (!is_array($resource)) {
-                        $resource = base64_decode($resource);
-                        // It's a file.
-                        $icon = choose_image($resource);
-                        $position = strrpos($icon, '.');
-                        $icon = substr($icon, 0, $position) . '_small.gif';
-                        $file_info = explode('|@j@|', $resource);
-                        $my_file_title = $file_info[0];
-                        $visibility = $file_info[2];
-
-                        // If title is empty we try to use the path
-                        if (empty($my_file_title)) {
-                            $my_file_title = $file_info[1];
-                        }
-
-                        // Show the "image name" not the filename of the image.
-                        if ($lp_id) {
-                            //LP URL
-                            $url = api_get_self() . '?'.api_get_cidreq().'&amp;action=add_item&amp;type=' . TOOL_DOCUMENT . '&amp;file=' . $key . '&amp;lp_id=' . $lp_id;
-                            if (!empty($overwrite_url)) {
-                                $url = $overwrite_url . '&document_id=' . $key;
-                            }
-                        } else {
-                            // Direct document URL
-                            $url = $web_code_path . 'document/document.php?cidReq=' . $course_info['code'] . '&id_session=' . $session_id . '&id=' . $key;
-                            if (!empty($overwrite_url)) {
-                                $url = $overwrite_url . '&document_id=' . $key;
-                            }
-                        }
-                        $img = $img_path . $icon;
-                        if (!file_exists($img_sys_path . $icon)) {
-                            $img = $img_path . 'icons/16/default_small.gif';
-                        }
-
-                        $link = Display::url('<img alt="" src="' . $img . '" title="" />&nbsp;' . $my_file_title, $url, array('target' => $target));
-                        $visibilityClass = null;
-                        if ($visibility == 0) {
-                            $visibilityClass = ' invisible ';
-                        }
-
-                        if ($lp_id == false) {
-                            $return .= '<li class="doc_resource '.$visibilityClass.' " data_id="' . $key . '" data_type="document" title="' . $my_file_title . '" >';
-                        } else {
-                            $return .= '<li class="doc_resource lp_resource_element '.$visibilityClass.' " data_id="' . $key . '" data_type="document" title="' . $my_file_title . '" >';
-                        }
-
-                        $return .= '<div class="item_data" style="margin-left:' . (($num + 1) * 18) . 'px;margin-right:5px;">';
-
-                        if ($add_move_button) {
-                            $return .= '<a class="moved" href="#">';
-                            $return .= Display::return_icon('move_everywhere.png', get_lang('Move'), array(), ICON_SIZE_TINY);
-                            $return .= '</a> ';
-                        }
-                        $return .= $link;
-                        $return .= '</div></li>';
+                    if ($resource['filetype'] == 'folder') {
+                        $return .= self::parseFolder($folderId, $resource, $lp_id);
+                    } else {
+                        $return .= self::parseFile(
+                            $course_info,
+                            $session_id,
+                            $resource,
+                            $lp_id,
+                            $add_move_button,
+                            $target,
+                            $overwrite_url
+                        );
                     }
+
                 }
             }
         }

@@ -20,7 +20,6 @@ $Unsubscribe = "ابطال ثبت نام";
 $lang_back_to_my_home_page = "بازگشت به صفحۀ آغازین من";
 $lang_back_to_my_personnal_course_list = "بازگشت به فهرست دروس من";
 $langTitular = "مسئول";
-$langBackToListOfThisUser = "بازگشت به فهرست دروس";
 $langAdministrationTools = "ابزارهای مدیریت";
 $lang_back_to_parent_category = "بازگشت به دسته مادر";
 $lang_back_to_course_selection = "بازگشت به انتخاب دروس";

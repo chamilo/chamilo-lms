@@ -19,7 +19,6 @@ $Unsubscribe = "Afmeld";
 $lang_back_to_my_home_page = "Tilbage til min kursusoversigt";
 $lang_back_to_my_personnal_course_list = "Tilbage til min kursusoversigt";
 $langTitular = "Koordinator";
-$langBackToListOfThisUser = "Tilbage til kursusoversigten";
 $langAdministrationTools = "Administrationsværktøjer";
 $lang_back_to_parent_category = "Tilbage til ovenstående kategori";
 $lang_back_to_course_selection = "Tilbage til valg af kursus";

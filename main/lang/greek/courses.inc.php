@@ -20,7 +20,6 @@ $Unsubscribe = "Ακύρωση εγγραφής";
 $lang_back_to_my_home_page = "Πίσω στην αρχική μου σελίδα";
 $lang_back_to_my_personnal_course_list = "Επιστροφή στην λίστα μαθημάτων μου";
 $langTitular = "Υπεύθυνος";
-$langBackToListOfThisUser = "Επιστροφή στη λίστα μαθημάτων";
 $langAdministrationTools = "Εργαλεία Διαχειριστή";
 $lang_back_to_parent_category = "Επιστροφή στην γονική κατηγορία";
 $lang_back_to_course_selection = "Επιστροφή στην επιλογή μαθήματος";

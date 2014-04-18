@@ -19,7 +19,6 @@ $Unsubscribe = "Peruuta";
 $lang_back_to_my_home_page = "Takaisin kotisivulle";
 $lang_back_to_my_personnal_course_list = "Takaisin kurssilistaani";
 $langTitular = "Opettaja";
-$langBackToListOfThisUser = "Takaisin kurssilistaan";
 $langAdministrationTools = "Ylläpitotyökalut";
 $lang_back_to_parent_category = "Takaisin edelliseen aihealueeseen";
 $lang_back_to_course_selection = "Takaisin kurssien valintaan";

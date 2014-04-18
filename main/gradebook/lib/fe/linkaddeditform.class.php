@@ -52,7 +52,7 @@ class LinkAddEditForm extends FormValidator
 			if ($link->needs_name_and_description()) {
 				$this->add_textfield('name', get_lang('Name'), true, array('size'=>'40', 'maxlength'=>'40'));
 			} else {
-				$select = $this->addElement('select', 'select_link', get_lang('ChooseItem'));				
+				$select = $this->addElement('select', 'select_link', get_lang('ChooseItem'));
 				foreach ($link->get_all_links() as $newlink) {
 					$select->addoption($newlink[1],$newlink[0]);
 				}
@@ -61,20 +61,20 @@ class LinkAddEditForm extends FormValidator
 			$this->addElement('label',get_lang('Name'),  '<span class="freeze">'.$link->get_name().' ['.$link->get_type_name().']</span>');
 			$this->addElement('hidden','name_link',$link->get_name(),array('id'=>'name_link'));
 		}
-        
+
         if (count($category_object) == 1) {
             $this->addElement('hidden', 'select_gradebook', $category_object[0]->get_id());
-        } else {         
-            $select_gradebook = $this->addElement('select', 'select_gradebook', get_lang('SelectGradebook'), array(), array('id' => 'hide_category_id'));            
+        } else {
+            $select_gradebook = $this->addElement('select', 'select_gradebook', get_lang('SelectGradebook'), array(), array('id' => 'hide_category_id'));
             $this->addRule('select_gradebook', get_lang('ThisFieldIsRequired'), 'nonzero');
 
             $default_weight = 0;
-            if (!empty($category_object)) {         
-                foreach ($category_object as $my_cat) {                
+            if (!empty($category_object)) {
+                foreach ($category_object as $my_cat) {
                     if ($my_cat->get_course_code() == api_get_course_id()) {
                         $grade_model_id = $my_cat->get_grade_model_id();
                         if (empty($grade_model_id)) {
-                        
+
                             if ($my_cat->get_parent_id() == 0 ) {
                                 $default_weight = $my_cat->get_weight();
                                 $select_gradebook->addoption(get_lang('Default'), $my_cat->get_id());
@@ -85,37 +85,42 @@ class LinkAddEditForm extends FormValidator
                             $select_gradebook->addoption(get_lang('Select'), 0);
                         }
                         if ($link->get_category_id() == $my_cat->get_id()) {
-                            $default_weight = $my_cat->get_weight();                        
+                            $default_weight = $my_cat->get_weight();
                         }
                     }
                 }
             }
         }
-        
-		$this->add_textfield('weight_mask', array(get_lang('Weight'), null, ' [0 .. '.$category_object[0]->get_weight().'] '), true, array (
-			'size' => '4',
-			'maxlength' => '5',
-            'class' => 'span1'
-		));
-        
-        $this->addElement('hidden', 'weight');        
-        
+
+		$this->add_textfield(
+            'weight_mask',
+            array(get_lang('Weight'), null, ' [0 .. <span id="max_weight">'.$category_object[0]->get_weight().'</span>] '),
+            true,
+            array(
+			    'size' => '4',
+			    'maxlength' => '5',
+                'class' => 'span1'
+		    )
+        );
+
+        $this->addElement('hidden', 'weight');
+
         /*
-        
+
 		// ELEMENT: weight
         $this->add_textfield('weight', array(get_lang('Weight'), null, '/ <span id="max_weight">'.$default_weight.'</span>'), true, array (
             'size' => '4',
             'maxlength' => '5',
             'class' => 'span1'
         ));*/
-        
+
 		$this->addRule('weight_mask',get_lang('OnlyNumbers'),'numeric');
 		$this->addRule(array ('weight_mask', 'zero'), get_lang('NegativeValue'), 'compare', '>=');
-		if ($form_type == self :: TYPE_EDIT) {            
+		if ($form_type == self :: TYPE_EDIT) {
             $parent_cat = Category :: load($link->get_category_id());
-            
+
             if ($parent_cat[0]->get_parent_id() == 0) {
-                $values['weight'] = $link->get_weight();                
+                $values['weight'] = $link->get_weight();
             } else {
                 $cat = Category :: load($parent_cat[0]->get_parent_id());
                 //$global_weight = $cat[0]->get_weight();
@@ -123,11 +128,11 @@ class LinkAddEditForm extends FormValidator
                 //var_dump($global_weight, $link->get_weight(), $parent_cat[0]->get_weight());
                 //$weight = $parent_cat[0]->get_weight()* $link->get_weight() / $global_weight;
                 //$values['weight'] = $weight;
-                $values['weight'] = $link->get_weight() ;                
-            }			
-            $defaults['weight_mask'] = $values['weight'] ;   
+                $values['weight'] = $link->get_weight() ;
+            }
+            $defaults['weight_mask'] = $values['weight'] ;
             $defaults['select_gradebook'] = $link->get_category_id();
-            
+
 		}
 		// ELEMENT: max
 		if ($link->needs_max()) {
@@ -161,7 +166,7 @@ class LinkAddEditForm extends FormValidator
 		if ($form_type == self :: TYPE_EDIT) {
 			$defaults['visible'] = $link->is_visible();
 		}
-		
+
 		// ELEMENT: add results
 		if ($form_type == self :: TYPE_ADD && $link->needs_results()) {
 			$this->addElement('checkbox', 'addresult', get_lang('AddResult'));
@@ -172,13 +177,13 @@ class LinkAddEditForm extends FormValidator
 		} else {
 			$this->addElement('style_submit_button', 'submit', get_lang('LinkMod'),'class="save"');
 		}
-        
+
         if ($form_type == self :: TYPE_ADD) {
-            $setting = api_get_setting('tool_visible_by_default_at_creation');   
+            $setting = api_get_setting('tool_visible_by_default_at_creation');
             $visibility_default = 1;
-            if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {            
+            if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {
                 $visibility_default = 0;
-            }            
+            }
             $defaults['visible']  = $visibility_default;
         }
 

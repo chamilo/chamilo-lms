@@ -2,6 +2,13 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$LoginToGoToThisCourse = "Por favor, faça o login para ir para este curso";
+$LoginDate = "Data do login";
+$ChooseStartDateAndEndDate = "Escolha a data de começo e de final";
+$WorkAdded = "Trabalho adicionado";
+$AllowMemberLeaveGroup = "Permitir que os membros deixem o grupo";
+$CreatedByXYOnZ = "Criado por %s em %s";
+$LoginWithExternalAccount = "Entrar sem uma conta institucional";
 $Title = "Título";
 $By = "Por";
 $UsersOnline = "Utilizadores online";
@@ -768,6 +775,7 @@ $langNameOfLang['serbian'] = "sérvio";
 $langNameOfLang['slovak'] = "eslovaco";
 $langNameOfLang['swahili'] = "suaíli";
 $langNameOfLang['trad_chinese'] = "chinês tradicional";
+$ChamiloInstallation = "Instalação do Chamilo";
 $langNameOfLang['ukrainian'] = "ucraniano";
 $langNameOfLang['yoruba'] = "ioruba";
 $New = "Novo";

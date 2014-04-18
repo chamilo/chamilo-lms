@@ -73,7 +73,6 @@ $langFormula = "Sinun opettajasi:";
 $langProblem = "Jos sinulla on ongelmia, ota yhteyttä.";
 $langIs = "on";
 $langAddress = "Osoite";
-$langSettings = "seuraavilla asetuksilla:\nKäyttäjänimi:";
 $langYouAreReg = "Olet rekisteröitynyt:";
 $langYourReg = "Rekisteröintisi:";
 $langUserFree = "Tämä käyttäjänimi on jo käytössä. Mene takaisin ja yritä uudestaan.";

@@ -48,4 +48,10 @@ $langSaveLink = "Guardar ligação";
 $langSaveCategory = "Guardar pasta/directório";
 $BackToLinksOverview = "Regressar à vista geral das ligações/links";
 $AddTargetOfLinkOnHomepage = "Seleccione o \"destino\" que a ligação/link na página inicial do curso irá apresentar";
+$Url = "Endereço URL";
+$LinkOpenSelf = "Abrir na mesma página";
+$LinkOpenBlank = "Abrir numa página diferente";
+$LinkOpenParent = "Abrir na janela de origem";
+$LinkOpenTop = "Abrir no topo";
+$LinkTarget = "Destino da ligação/link";
 ?>

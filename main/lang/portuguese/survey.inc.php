@@ -202,4 +202,8 @@ $BackToSurvey = "Regressar ao questionário";
 $UpdateInformation = "Actualizar informação";
 $PleaseFillSurvey = "Por favor, preencha o questionário";
 $ReportingOverview = "Vista geral do relatório";
+$Multipleresponse = "Respostas Multiplas";
+$Lastname = "Apelido";
+$Firstname = "Nome";
+$ErrorOccurred = "Ocorreu um erro";
 ?>

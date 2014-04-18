@@ -19,7 +19,6 @@ $Unsubscribe = "등록취소";
 $lang_back_to_my_home_page = "내 홈페이지로 돌아오기";
 $lang_back_to_my_personnal_course_list = "내 개인 과정 목록으로 돌아오기";
 $langTitular = "리더";
-$langBackToListOfThisUser = "과정 목로으로 돌아오기";
 $langAdministrationTools = "관리 도구";
 $lang_back_to_parent_category = "상위 카테고리로 돌아가기";
 $lang_back_to_course_selection = "과정 선택으로 돌아가기";

@@ -2199,7 +2199,7 @@ class learnpath
         $itemInfo = api_get_item_property_info($course['real_id'], TOOL_LEARNPATH, $lp_id, $sessionId);
 
         // If the item was deleted.
-        if ($itemInfo['visibility'] == 2) {
+        if (isset($itemInfo['visibility']) && $itemInfo['visibility'] == 2) {
             return false;
         }
 
@@ -5884,7 +5884,10 @@ class learnpath
         );
         echo Display::display_normal_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'));
         $chapter = $_SESSION['oLP']->display_item_form('chapter', get_lang('EnterDataNewChapter'), 'add_item');
-        echo Display::tabs($headers, array($documents, $exercises, $links, $works, $forums, $chapter), 'resource_tab');
+        echo Display::tabs(
+            $headers,
+            array($documents, $exercises, $links, $works, $forums, $chapter), 'resource_tab'
+        );
         return true;
     }
 
@@ -8057,8 +8060,10 @@ class learnpath
             true,
             null,
             null,
-            $showInvisibleFiles
+            $showInvisibleFiles,
+            true
         );
+
     	return $document_tree;
     }
 

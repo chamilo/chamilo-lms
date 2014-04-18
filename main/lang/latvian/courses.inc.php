@@ -20,7 +20,6 @@ $Unsubscribe = "Atteikties no kursa";
 $lang_back_to_my_home_page = "Atpakaļ uz manu mājas lapu";
 $lang_back_to_my_personnal_course_list = "Atpakaļ uz manu kursu sarakstu";
 $langTitular = "Līderis";
-$langBackToListOfThisUser = "Atpakaļ uz kursu sarakstu";
 $langAdministrationTools = "Administrēšanas instrumenti";
 $lang_back_to_parent_category = "Atpakaļ uz augstāku nodaļu";
 $lang_back_to_course_selection = "Atpakaļ uz kursu izvēlni";

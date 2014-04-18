@@ -191,4 +191,16 @@ $CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan = "É necessário uma pon
 $LinkMod = "Guardar";
 $EditLink = "Editar ligação/link";
 $CategoryDeleted = "A categoria foi eliminada.";
+$GenerateCertificates = "Gerar Certificados";
+$ExportAllCertificatesToPDF = "Exportar todos os certificados para PDF";
+$DeleteAllCertificates = "Apagar todos os certificados";
+$AreYouSureToLockedTheEvaluation = "Tem certeza de que deseja bloquear a avaliação?";
+$AreYouSureToUnLockedTheEvaluation = "Tem certeza de que deseja desbloquear a avaliação?";
+$EvaluationHasBeenUnLocked = "Avaliação foi desbloqueada";
+$EvaluationHasBeenLocked = "Avaliação foi bloqueada";
+$Over100 = "Acima de 100";
+$UnderMin = "Abaixo do minimo";
+$MoveWarning = "Aviso: mover elementos do livro de notas pode ser perigoso para os dados dentro do seu livro de notas.";
+$CategoryMoved = "O livro de notas foi movido.";
+$EvaluationMoved = "O componente de livro de notas foi movido.";
 ?>

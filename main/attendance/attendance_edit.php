@@ -7,7 +7,6 @@
 * @package chamilo.attendance
 */
 
-
 // protect a course script
 api_protect_course_script(true);
 
@@ -41,15 +40,15 @@ $form->add_html_editor('description', get_lang('Description'), false, false, arr
 if (Gradebook::is_active()) {
     if (!empty($attendance_qualify_title) || !empty($attendance_weight)) {
         $advanced = '<a href="javascript://" class="advanced_parameters"><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_hide.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a>';
-        $form->addElement('advanced_settings',$advanced);    
-    
-	$form->addElement('html','<div id="id_qualify" style="display:block">');    
+        $form->addElement('advanced_settings',$advanced);
+
+	$form->addElement('html','<div id="id_qualify" style="display:block">');
 	$form->addElement('checkbox', 'attendance_qualify_gradebook', '', get_lang('QualifyAttendanceGradebook'),array('checked'=>'true','onclick'=>'javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}'));
 	$form->addElement('html','<div id="options_field" style="display:block">');
     } else {
 	$advanced = '<a href="javascript://" class="advanced_parameters"><span id="img_plus_and_minus">&nbsp;'.Display::return_icon('div_show.gif',get_lang('Show'),array('style'=>'vertical-align:middle')).' '.get_lang('AdvancedParameters').'</span></a>';
         $form->addElement('advanced_settings',$advanced);
-	$form->addElement('html','<div id="id_qualify" style="display:none">');    
+	$form->addElement('html','<div id="id_qualify" style="display:none">');
 	$form->addElement('checkbox', 'attendance_qualify_gradebook', '', get_lang('QualifyAttendanceGradebook'),'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
 	$form->addElement('html','<div id="options_field" style="display:none">');
     }

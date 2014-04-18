@@ -19,7 +19,6 @@ $Unsubscribe = "Avregistrera";
 $lang_back_to_my_home_page = "Tillbaka till min hemsida";
 $lang_back_to_my_personnal_course_list = "Tillbaka till min personliga kurslista";
 $langTitular = "Ledare";
-$langBackToListOfThisUser = "Tillbaka till kurslistan";
 $langAdministrationTools = "Administratörsverktyg";
 $lang_back_to_parent_category = "Tillbaka till nuvarande kategori";
 $lang_back_to_course_selection = "Tillbaka till kursval";

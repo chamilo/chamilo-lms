@@ -207,7 +207,7 @@ if ($isAdmin) {
         Display::return_icon('import_excel.png', get_lang('Export'), '', '32') . '</a>' .
         '</span>';
         echo '<span style="float:right;">' .
-        '<a href="' . api_get_path(WEB_PLUGIN_PATH) . 'ticket/s/new_ticket.php">' .
+        '<a href="' . api_get_path(WEB_PLUGIN_PATH) . 'ticket/src/new_ticket.php">' .
         Display::return_icon('add.png', $plugin->get_lang('TckNew'), '', '32') . '</a>' .
         '</span>';
         echo '<span style="float:right;">' .

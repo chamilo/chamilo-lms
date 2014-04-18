@@ -38,19 +38,16 @@ require_once 'lib/fe/displaygradebook.php';
 require_once 'lib/fe/userform.class.php';
 require_once api_get_path(LIBRARY_PATH).'ezpdf/class.ezpdf.php';
 require_once api_get_path(LIBRARY_PATH).'gradebook.lib.php';
-
 /*
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/jqplot/jquery.jqplot.min.css');
 $htmlHeadXtra[] = api_get_js('jqplot/jquery.jqplot.min.js');
 $htmlHeadXtra[] = api_get_js('jqplot/plugins/jqplot.donutRenderer.min.js');*/
 
 $htmlHeadXtra[] = '<script>
-
 var show_icon = "../img/view_more_stats.gif";
 var hide_icon = "../img/view_less_stats.gif";
 
 $(document).ready(function() {
-
     $(".view_children").live("click", function() {
         var id = $(this).attr("data-cat-id");
         $(".hidden_"+id).removeClass("hidden");
@@ -66,10 +63,6 @@ $(document).ready(function() {
         $(this).addClass("view_children");
         $(this).find("img").attr("src", show_icon);
     });
-
-
-
-
 /*
   var s1 = [["a",25]];
   var s2 = [["a", 0], ["a", 10], ["a", 10], ["a", 5]];
@@ -118,21 +111,15 @@ $tbl_grade_links  = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 $filter_confirm_msg = true;
 $filter_warning_msg = true;
 
-///direct access to one evaluation
-$catsResult = array();
-if (api_get_session_id() != 0) {
-    $session_id = api_get_session_id();
-    $cats = Category :: load_session_categories(null, $session_id); //already init
-    $catsResult = $cats;
-} else {
-    $cats = Category :: load(null, null, $course_code, null, null, null, false);
-}
+$cats = Category :: load(null, null, $course_code, null, null, $session_id, false);
 $first_time = null;
 
 if (empty($cats)) {
-    $cats = Category :: load(0, null, $course_code, null, null, $session_id, false);//first time
+    //first time
+    $cats = Category :: load(0, null, $course_code, null, null, $session_id, false);
     $first_time = 1;
 }
+
 $_GET['selectcat'] = $cats[0]->get_id();
 
 if (isset($_GET['isStudentView'])) {
@@ -143,23 +130,20 @@ if (isset($_GET['isStudentView'])) {
 
 if ((isset($_GET['selectcat']) && $_GET['selectcat']>0) && (isset($_SESSION['studentview']) && $_SESSION['studentview']=='studentview')) {
 	Display :: display_header();
-
 	//Introduction tool: student view
 	Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'AssessmentsIntroduction'));
-
-	$category= $_GET['selectcat'];
-
+	$category = $_GET['selectcat'];
 	$cats = Category :: load ($category, null, null, null, null, null, false);
-	$allcat= $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
-	$alleval= $cats[0]->get_evaluations($stud_id);
-	$alllink= $cats[0]->get_links($stud_id);
-	$addparams=array();
+	$allcat = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
+	$alleval = $cats[0]->get_evaluations($stud_id);
+	$alllink = $cats[0]->get_links($stud_id);
+	$addparams = array();
 	$gradebooktable= new GradebookTable($cats[0], $allcat, $alleval,$alllink, $addparams);
 	$gradebooktable->display();
 	Display :: display_footer();
 	exit;
 } else {
-	if ( !isset($_GET['selectcat']) && ($_SESSION['studentview']=='studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true') ) {
+	if (!isset($_GET['selectcat']) && ($_SESSION['studentview']=='studentview') || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true') ) {
 		//	if ( !isset($_GET['selectcat']) && ($_SESSION['studentview']=='studentview') && ($status<>1 && !api_is_platform_admin()) || (isset($_GET['isStudentView']) && $_GET['isStudentView']=='true' && $status<>1 && !api_is_platform_admin()) ) {
 		Display :: display_header(get_lang('Gradebook'));
 
@@ -183,7 +167,6 @@ if (isset ($_GET['createallcategories'])) {
 	block_students();
 	$coursecat= Category :: get_not_created_course_categories($stud_id);
 	if (!count($coursecat) == 0) {
-
 		foreach ($coursecat as $row) {
 			$cat= new Category();
 			$cat->set_name($row[1]);
@@ -554,7 +537,6 @@ if (isset ($_POST['submit']) && isset ($_POST['keyword'])) {
 	exit;
 }
 
-
 // DISPLAY HEADERS AND MESSAGES
 if (!isset($_GET['exportpdf'])) {
 	if (isset ($_GET['studentoverview'])) {
@@ -831,20 +813,11 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 
         $i = 0;
         $allcat = array();
+        /** @var Category $cat */
         foreach ($cats as $cat) {
-            if ($session_id != 0) {
-                $allcatSession = $catsResult;
-                foreach ($allcatSession as $catSession) {
-                    if ($catSession->get_parent_id() == 0) {
-                        continue;
-                    }
-                    $allcat[] = $catSession;
-                }
-            } else {
-                $allcat  = $cat->get_subcategories($stud_id, $course_code, $session_id);
-            }
+            $allcat  = $cat->get_subcategories($stud_id, $course_code, $session_id);
             $alleval = $cat->get_evaluations($stud_id);
-            $alllink = $cat->get_links($stud_id,true);
+            $alllink = $cat->get_links($stud_id, true);
 
             if ($cat->get_parent_id() != 0) {
                 $i++;

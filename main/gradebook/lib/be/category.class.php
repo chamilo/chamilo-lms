@@ -210,9 +210,9 @@ class Category implements GradebookItem
                     if ($data_session['course_code'] == $courseCode) {
                         $cat = Category::load($parent_id);
                         $cats = Category::load(null,null,null,$parent_id,null,null,null);
-                        //$cat = array_merge($cat,$cats);
                     }
                 }
+
                 return array_merge($cat,$cats);
              }
          }
@@ -228,11 +228,18 @@ class Category implements GradebookItem
      * @param int      session id (in case we are in a session)
      * @param bool     Whether to show all "session" categories (true) or hide them (false) in case there is no session id
      */
-    public static function load($id = null, $user_id = null, $course_code = null, $parent_id = null, $visible = null, $session_id = null, $order_by = null)
-    {
+    public static function load(
+        $id = null,
+        $user_id = null,
+        $course_code = null,
+        $parent_id = null,
+        $visible = null,
+        $session_id = null,
+        $order_by = null
+    ) {
         //if the category given is explicitly 0 (not null), then create
         // a root category object (in memory)
-        if ( isset($id) && (int)$id === 0 ) {
+        if (isset($id) && (int)$id === 0 ) {
             $cats = array();
             $cats[] = Category::create_root_category();
             return $cats;
@@ -1233,21 +1240,23 @@ class Category implements GradebookItem
      * @param int      $stud_id student id (default: all students)
      * @param string   Course code (optional)
      * @param int      Session ID (optional)
-     * @return  array   Array of subcategories
+     *
+     * @return array   Array of subcategories
      */
     public function get_subcategories($stud_id = null, $course_code = null, $session_id = null, $order = null)
     {
-        if (!empty ($session_id)) {
-             $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-             $sql_session = 'SELECT id FROM '.$tbl_grade_categories. ' WHERE session_id = '.$session_id;
-             $result_session = Database::query($sql_session);
+        if (!empty($session_id)) {
+             /*$tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+             $sql = 'SELECT id FROM '.$tbl_grade_categories. ' WHERE session_id = '.$session_id;
+             $result_session = Database::query($sql);
              if (Database::num_rows($result_session) > 0) {
                  $data_session = Database::fetch_array($result_session);
                  $parent_id = $data_session['id'];
                  return Category::load(null, null, null, $parent_id, null, null, $order);
-             }
+             }*/
          }
-        // 1 student
+
+         // 1 student
          if (isset($stud_id)) {
             // special case: this is the root
             if ($this->id == 0) {

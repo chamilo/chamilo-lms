@@ -348,7 +348,10 @@ class GradebookTable extends SortableTable
                                 $label = null;
                                 $total = score_badges(array($total_weight.' / '.$category_weight, '100'));
                             } else {
-                                $label = Display::return_icon('warning.png', sprintf(get_lang('TotalWeightMustBeX'), $category_weight) );
+                                $label = Display::return_icon(
+                                    'warning.png',
+                                    sprintf(get_lang('TotalWeightMustBeX'), $category_weight)
+                                );
                                 $total = Display::badge($total_weight.' / '.$category_weight, 'warning');
                             }
                             $row = array(
@@ -386,9 +389,10 @@ class GradebookTable extends SortableTable
 
             if (isset($_GET['selectcat']) && $_GET['selectcat'] > 0 && $view <> 'presence') {
                 $id_cat = intval($_GET['selectcat']);
-                $category = Category :: load($id_cat);
+                $category = Category::load($id_cat);
 
                 $weight_category = intval($this->build_weight($category[0]));
+
                 $course_code = $this->build_course_code($category[0]);
                 $weight_total_links  = round($weight_total_links);
 
@@ -399,7 +403,7 @@ class GradebookTable extends SortableTable
                     $warning_message = sprintf(get_lang('TotalWeightMustBeX'), $weight_category);
                     $modify_icons  = '<a class="right_link" href="gradebook_edit_cat.php?editcat='.$id_cat.'&cidReq='.$course_code.'">'.Display::return_icon('edit.png', $warning_message, array(), ICON_SIZE_SMALL).'</a>';
                     $warning_message .= $modify_icons;
-                    Display::display_warning_message($warning_message,false);
+                    Display::display_warning_message($warning_message, false);
                 }
 
                 $content_html = DocumentManager::replace_user_info_into_html(api_get_user_id(), $course_code);

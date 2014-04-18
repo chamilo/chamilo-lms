@@ -18,10 +18,7 @@ require_once api_get_path(LIBRARY_PATH) . 'group_portal_manager.lib.php';
 
 $htmlHeadXtra[] = '
 <script>
-$(document).ready(function(){
-	document.getElementById("divEmail").style.display="none";
-});
-function load_course_list (div_course,my_user_id) {
+function load_course_list (div_course, my_user_id, user_email) {
 	 $.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		type: "GET",
@@ -30,62 +27,61 @@ function load_course_list (div_course,my_user_id) {
 		success: function(datos) {
 			$("div#user_request").html(datos);		
 			$("#user_id_request").val(my_user_id);
+                        $("#personal_email").val(user_email);
 			$("#btnsubmit").attr("disabled", false);
 		}
 	});
 }
 function changeType() {
-var selected = document.getElementById("category_id").selectedIndex;
-var id = document.getElementById("category_id").options[selected].value;
-	document.getElementById("project_id").value = projects[id];
-	document.getElementById("other_area").value = other_area[id];
-	document.getElementById("email").value = email[id];
-	document.getElementById("divEmail").style.display = "none";
+    var selected = document.getElementById("category_id").selectedIndex;
+    var id = $("#category_id").val();
+    $("#project_id").val(projects[id]);
+    $("#other_area").val(other_area[id]);
+    $("#email").val(email[id]);
 	if(parseInt(course_required[id]) == 0){
-		document.getElementById("divCourse").style.display = "none";		
-		if( id != "CUR"){
-			document.getElementById("divEmail").style.display = "";
-			document.getElementById("personal_email").required = "required";	
-		}			
-		document.getElementById("course_id").disabled = true;	
-		document.getElementById("course_id").value = 0;			
+            $("#divCourse").css("display", "none");		
+            if( id != "CUR"){
+                $("#divEmail").css("display", "block");
+                $("#personal_email").attr("required","required");
+            }			
+            $("#course_id").disabled = true;	
+            $("#course_id").value = 0;			
 	}else{	
-		document.getElementById("divCourse").style.display = "";
-		document.getElementById("course_id").disabled = false;
-		document.getElementById("course_id").value = 0;
-		document.getElementById("personal_email").value = "";
+            $("#divCourse").css("display", "block");
+            $("#course_id").prop("disabled", false);
+            $("#course_id").val(0);
 	}
 }
 function handleClick2(myRadio) {
-	var user_id = myRadio.value;
-	document.getElementById("user_id_request").value = user_id;
-	alert(document.getElementById("user_id_request").value);
+    var user_id = myRadio.value;
+    document.getElementById("user_id_request").value = user_id;
+    alert(document.getElementById("user_id_request").value);
 }
 function validate() {
-	var re  = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/; 
-	fckEditor1val = FCKeditorAPI.__Instances["content"].GetHTML();
-	document.getElementById("content").value= fckEditor1val;
-	var selected = document.getElementById("category_id").selectedIndex;
-	var id = document.getElementById("category_id").options[selected].value;
-	if (document.getElementById("user_id_request").value == "") {
-		alert("' . $plugin->get_lang("ValidUser") . '");
-		return false;
-	} else if( id == 0) {
-		alert("' . $plugin->get_lang("ValidType") . '");
-		return false;
-	} else if(document.getElementById("subject").value == "") {
-		alert("' . $plugin->get_lang("ValidSubject") . '");
-		return false;
-	} else if(parseInt(course_required[id]) == 1 && document.getElementById("course_id").value == 0) {
-		alert("' . $plugin->get_lang("ValidCourse") . '");
-		return false;
-	} else if(id !="CUR" && parseInt(course_required[id]) != 1  && !re.test(document.getElementById("personal_email").value)) {
-		alert("' . $plugin->get_lang("ValidEmail") . '");
-		return false;
-	} else if(fckEditor1val == "") {
-		alert("' . $plugin->get_lang("ValidMessage") . '");
-		return false;
-	}
+    var re  = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/; 
+    fckEditor1val = FCKeditorAPI.__Instances["content"].GetHTML();
+    document.getElementById("content").value= fckEditor1val;
+    var selected = document.getElementById("category_id").selectedIndex;
+    var id = document.getElementById("category_id").options[selected].value;
+    if (document.getElementById("user_id_request").value == "") {
+            alert("' . $plugin->get_lang("ValidUser") . '");
+            return false;
+    } else if(id == 0) {
+            alert("' . $plugin->get_lang("ValidType") . '");
+            return false;
+    } else if(document.getElementById("subject").value == "") {
+            alert("' . $plugin->get_lang("ValidSubject") . '");
+            return false;
+    } else if(parseInt(course_required[id]) == 1 && document.getElementById("course_id").value == 0) {
+            alert("' . $plugin->get_lang("ValidCourse") . '");
+            return false;
+    } else if(id != "CUR" && parseInt(course_required[id]) != 1  && !re.test(document.getElementById("personal_email").value)) {
+            alert("' . $plugin->get_lang("ValidEmail") . '");
+            return false;
+    } else if(fckEditor1val == "") {
+            alert("' . $plugin->get_lang("ValidMessage") . '");
+            return false;
+    }
 }
 
 var counter_image = 1;
@@ -269,7 +265,7 @@ function show_form_send_ticket()
 
     // Phone
     echo '<div class="row" ><div class ="label2">' . get_lang('Phone') . ' (' . $plugin->get_lang('Optional') . '):</div>
-       		<div class="formw2"><input type = "text" id ="phone" name="phone" value="" onkeyup="valid(this,' . "'allowspace'" . ')" onblur="valid(this,' . "'allowspace'" . ')" style="width:94%"/></div>
+       		<div class="formw2"><input type = "text" id ="phone" name="phone" value="" style="width:94%"/></div>
 		  </div>';
 
     // Priority
@@ -329,7 +325,7 @@ function save_ticket()
     $category_id = $_POST['category_id'];
     $content = $_POST['content'];
     if ($_POST['phone'] != "") {
-        $content.= '<p style="color:red">&nbsp;' . get_lang('Phone') . ': ' . $_POST['phone'] . '</p>';
+        $content .= '<p style="color:red">&nbsp;' . get_lang('Phone') . ': ' . $_POST['phone'] . '</p>';
     }
     $course_id = $_POST['course_id'];
     $project_id = $_POST['project_id'];
@@ -440,19 +436,18 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $users = array();
     $t = time();
     while ($user = Database::fetch_row($res)) {
-        $image_path = UserManager::get_user_picture_path_by_id($user[0], 'web', false, true);
-        $user_profile = UserManager::get_picture_user($user[0], $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
+        $user_id = $user[0];
+        $image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
+        $user_profile = UserManager::get_picture_user($user_id, $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
         if (!api_is_anonymous()) {
-            $photo = '<center><a href="' . api_get_path(WEB_PATH) . 'whoisonline.php?origin=user_list&id=' . $user[0] . '" title="' . get_lang('Info') . '"><img src="' . $user_profile['file'] . '" ' . $user_profile['style'] . ' alt="' . api_get_person_name($user[2], $user[3]) . '"  title="' . api_get_person_name($user[2], $user[3]) . '" /></a></center>';
+            $photo = '<center><a href="' . api_get_path(WEB_PATH) . 'whoisonline.php?origin=user_list&id=' . $user_id . '" title="' . get_lang('Info') . '"><img src="' . $user_profile['file'] . '" ' . $user_profile['style'] . ' alt="' . api_get_person_name($user[2], $user[3]) . '"  title="' . api_get_person_name($user[2], $user[3]) . '" /></a></center>';
         } else {
             $photo = '<center><img src="' . $user_profile['file'] . '" ' . $user_profile['style'] . ' alt="' . api_get_person_name($user[2], $user[3]) . '" title="' . api_get_person_name($user[2], $user[3]) . '" /></center>';
         }
-        $user_id = $user[0];
-        $button = '<a href="' . api_get_self() . '?user_request=' . $user[0] . '">' . Display::return_icon('view_more_stats.gif', get_lang('Info')) . '</a>';
-        $button = '<a  href="javascript:void(0)" onclick="load_course_list(\'div_' . $user_id . '\',' . $user_id . ')">
-		       <img onclick="load_course_list(\'div_' . $user_id . '\',' . $user_id . ')"  src="../../../main/img/view_more_stats.gif" title="' . get_lang('Courses') . '" alt="' . get_lang('Courses') . '"/>
-                   </a>&nbsp;&nbsp;';
-        $users[] = array($photo, $user[1], $user[2], $user[3], $user[4], $user[5], $button);
+        $button = '<a  href="javascript:void(0)" onclick="load_course_list(\'div_' . $user_id . '\',' . $user_id . ', \'' . $user[5] . '\')">'
+                    . Display::return_icon('view_more_stats.gif', get_lang('Info')) .
+                   '</a>&nbsp;&nbsp;';
+        $users[] = array($photo, $user_id, $user[2], $user[3], $user[4], $user[5], $button);
     }
     return $users;
 }

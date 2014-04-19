@@ -142,7 +142,7 @@ class UniqueAnswer extends Question
         for ($i = 1 ; $i <= $nb_answers ; ++$i) {
             $form -> addElement ('html', '<tr>');
             if (isset($answer) && is_object($answer)) {
-                if ($answer -> correct[$i]) {
+                if ($answer->correct[$i]) {
                     $correct = $i;
                 }
                 $defaults['answer['.$i.']']    = $answer->answer[$i];
@@ -264,9 +264,9 @@ class UniqueAnswer extends Question
 
 
 	/**
-	 * abstract function which creates the form to create / edit the answers of the question
+	 * Receives the unique answer question type creation form data and creates
+     * or updates the answers from that question
 	 * @param FormValidator $form
-	 * @param the answers number to display
 	 */
 	function processAnswersCreation($form)
     {
@@ -348,7 +348,14 @@ class UniqueAnswer extends Question
         $this->save();
 	}
 
-	function return_header($feedback_type = null, $counter = null, $score = null)
+    /**
+     * Helper function to print the column titles in the answers edition form
+     * @param null $feedback_type The type of feedback influences what columns are shown to the editor
+     * @param null $counter The number of answers to show, in case there should be pagination
+     * @param null $score The maximum score for the question
+     * @return string HTML string for a table header + a wrapper before it
+     */
+    function return_header($feedback_type = null, $counter = null, $score = null)
     {
 	    $header = parent::return_header($feedback_type, $counter, $score);
 	    $header .= '<table class="'.$this->question_table_class .'">
@@ -363,12 +370,13 @@ class UniqueAnswer extends Question
     }
 
     /**
-     * @param int $id
-     * @param int $question_id
-     * @param string $title
-     * @param string $comment
-     * @param float $score
-     * @param int $correct
+     * Saves one answer to the database
+     * @param int $id   The ID of the answer (has to be calculated for this course)
+     * @param int $question_id  The question ID (to which the answer is attached)
+     * @param string $title The text of the answer
+     * @param string $comment The feedback for the answer
+     * @param float $score  The score you get when picking this answer
+     * @param int $correct  Whether this answer is considered *the* correct one (this is the unique answer type)
      */
     function addAnswer($id, $question_id, $title, $comment, $score = 0, $correct = 0)
     {

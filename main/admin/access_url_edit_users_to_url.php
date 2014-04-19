@@ -159,6 +159,7 @@ api_display_tool_title($tool_name);
 
 if (isset($_GET['action']) && $_GET['action'] == 'show_message') {
     Display :: display_normal_message(Security::remove_XSS(stripslashes($_GET['message'])));
+}
 
 $nosessionUsersList = $sessionUsersList = array();
 $ajax_search = $add_type == 'unique' ? true : false;

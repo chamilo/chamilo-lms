@@ -29,7 +29,8 @@ class AnnouncementManager
             '((teacher_name))',
             '((teacher_email))',
             '((course_title))',
-            '((course_link))'
+            '((course_link))',
+            '((official_code))',
         );
     }
 
@@ -60,6 +61,7 @@ class AnnouncementManager
         $data['teacher_email'] = $teacher_email;
         $data['course_title'] = $courseInfo['name'];
         $data['course_link'] = Display::url($courseLink, $courseLink);
+        $data['official_code'] = $readerInfo['official_code'];
 
         $content = str_replace(self::get_tags(), $data, $content);
 

@@ -476,7 +476,7 @@ class TicketManager
                 ticket.total_messages AS col8,
                 msg.message AS col9,
                 ticket.request_user AS user_id,
-                ticket.assigned_last_user AS responsable
+                ticket.assigned_last_user AS responsible
             FROM $table_support_tickets ticket,
                 $table_support_category cat,
                 $table_support_priority priority,
@@ -641,19 +641,18 @@ class TicketManager
             $unread = Database::fetch_object($result_unread)->unread;
             $userInfo = UserManager::get_user_info_by_id($row['user_id']);
             $hrefUser = $webPath . 'main/admin/user_information.php?user_id=' . $row['user_id'];
-            $name = "<a href='$hrefUser'> {$userInfo['complete_name']} </a>";
+            $name = "<a href='$hrefUser'> {$userInfo['username']} </a>";
             $actions = "";
             
-            if ($row['responsable'] != 0) {
-                $hrefResp = $webPath . 'main/admin/user_information.php?user_id=' . $row['responsable']['user_id'];
-                $completRespName = api_get_person_name($row['responsable']['firstname'], $row['responsable']['lastname']);
-                $row['responsable'] = api_get_user_info($row['responsable']);
-                $row['responsable'] = "<a href='$hrefResp'> {$completRespName} </a>";
+            if ($row['responsible'] != 0) {
+                $hrefResp = $webPath . 'main/admin/user_information.php?user_id=' . $row['responsible']['user_id'];
+                $row['responsible'] = api_get_user_info($row['responsible']);
+                $row['responsible'] = "<a href='$hrefResp'> {$row['responsible']['username']} </a>";
             } else {
                 if ($row['status_id'] != 'REE') {
-                    $row['responsable'] = '<span style="color:#ff0000;">' . get_lang('ToBeAssigned') . '</span>';
+                    $row['responsible'] = '<span style="color:#ff0000;">' . get_lang('ToBeAssigned') . '</span>';
                 } else {
-                    $row['responsable'] = '<span style="color:#00ff00;">' . get_lang('MessageResent') . '</span>';
+                    $row['responsible'] = '<span style="color:#00ff00;">' . get_lang('MessageResent') . '</span>';
                 }
             }
             switch ($row['source']) {
@@ -692,7 +691,7 @@ class TicketManager
                     api_format_date($row['col2'], '%d/%m/%y - %I:%M:%S %p'),
                     $row['col3'],
                     $name,
-                    $row['responsable'],
+                    $row['responsible'],
                     $row['col7'],
                     $row['col8'],
                     $actions,

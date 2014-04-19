@@ -129,6 +129,7 @@ foreach ($defaultPriorities as $pId => $priority) {
     $attributes = array(
         'iid' => $i,
         'priority_id' => $pId,
+        'priority' => $priority,
         'priority_desc' => $priority
     );
     Database::insert($table, $attributes);
@@ -197,6 +198,7 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         category_id char(3) NOT NULL,
         priority_id char(3) NOT NULL,
         course_id int UNSIGNED NOT NULL,
+        session_id int UNSIGNED NOT NULL DEFAULT '0',
         request_user int UNSIGNED NOT NULL,
         personal_email varchar(150) DEFAULT NULL,
         assigned_last_user int UNSIGNED NOT NULL DEFAULT '0',
@@ -216,7 +218,10 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
         KEY FK_ticket_category (project_id,category_id))";
 Database::query($sql);
 
-// Menu main tabs
+//Menu main tabs
 $objPlugin->addTab('Ticket', '/plugin/ticket/src/myticket.php');
-
-$objPlugin->addExtraSettings('allow_add', '1');
+//Extra Settings
+$extraSettings = array(
+    'allow_add' => 'true'
+);
+$objPlugin->addExtraSettings($extraSettings);

@@ -31,6 +31,7 @@ define('LOW', 'LOW');
 define('SRC_EMAIL', 'MAI');
 define('SRC_PHONE', 'TEL');
 define('SRC_PRESC', 'PRE');
+define('SRC_PLATFORM', 'PLA');
 
 /* Ticket category constants */
 define('CAT_DOCU', 'DOC');

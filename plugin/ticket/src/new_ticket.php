@@ -12,6 +12,11 @@ $cidReset = true;
 require_once '../config.php';
 $plugin = TicketPlugin::create();
 
+if (!api_is_platform_admin() && $plugin->getExtraSettingValue('allow_add') != 'true') {
+    header('location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php');
+    exit;
+}
+
 api_block_anonymous_users();
 require_once api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH) . 'group_portal_manager.lib.php';
@@ -197,12 +202,16 @@ function show_form_send_ticket()
     // Status
     $status = array();
     $status[NEWTCK] = $plugin->get_lang('StsNew');
-    $status[PENDING] = $plugin->get_lang('StsPending');
-    $status[UNCONFIRMED] = $plugin->get_lang('StsUnconfirmed');
-    $status[CLOSE] = $plugin->get_lang('StsClose');
-    $status[REENVIADO] = $plugin->get_lang('StsReenviado');
+    $showStatus = "style='display: none;'";
+    if (api_is_platform_admin()) {
+        $showStatus = "";
+        $status[PENDING] = $plugin->get_lang('StsPending');
+        $status[UNCONFIRMED] = $plugin->get_lang('StsUnconfirmed');
+        $status[CLOSE] = $plugin->get_lang('StsClose');
+        $status[REENVIADO] = $plugin->get_lang('StsReenviado');
+    }
     $select_status = '
-	<div class="row"  >
+	<div class="row" ' . $showStatus . ' >
 		<div class="label2"  >' . get_lang('Status') . ': </div>
 		<div class="formw2">
 			<select style="width: 95%; " name = "status_id" id="status_id">';
@@ -222,11 +231,18 @@ function show_form_send_ticket()
 
     // Source
     $source = array();
-    $source[SRC_EMAIL] = $plugin->get_lang('SrcEmail');
-    $source[SRC_PHONE] = $plugin->get_lang('SrcPhone');
-    $source[SRC_PRESC] = $plugin->get_lang('SrcPresential');
+    if (api_is_platform_admin()) {
+        $showBlock = "";
+        $source[SRC_EMAIL] = $plugin->get_lang('SrcEmail');
+        $source[SRC_PHONE] = $plugin->get_lang('SrcPhone');
+        $source[SRC_PRESC] = $plugin->get_lang('SrcPresential');
+    } else {
+        $showBlock = "style='display: none;'";
+        $source[SRC_PLATFORM] = $plugin->get_lang('SrcPlatform');
+    }
+    
     $select_source = '
-	<div class="row">
+	<div class="row" ' . $showBlock . '>
 	<div class="label2">' . $plugin->get_lang('Source') . ':</div>
        <div class="formw2">
 			<select style="width: 95%; " name="source_id" id="source_id" >';
@@ -338,12 +354,13 @@ function save_ticket()
     $priority = $_POST['priority_id'];
     $status = $_POST['status_id'];
     $file_attachments = $_FILES;
+    $responsible = (api_is_platform_admin() ? api_get_user_id() : 0);
     if (TicketManager::insert_new_ticket(
             $category_id, $course_id, $project_id, 
             $other_area, $email, $subject, $content, 
             $personal_email, $file_attachments, 
             $source, $priority, $status, $user_id, 
-            api_get_user_id())) {
+            $responsible)) {
         header('location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php?message=success');
     } else {
         Display::display_header(get_lang('ComposeMessage'));
@@ -453,36 +470,47 @@ function get_user_data($from, $number_of_items, $column, $direction)
 }
 
 if (!isset($_POST['compose'])) {
-    Display::display_header(get_lang('ComposeMessage'));
-    echo '
-<div class="actions">
-  <span style="float: right;">&nbsp;</span>
-  <form id="search_simple" name="search_simple" method="get" action="' . api_get_self() . '" class="form-search">
-    <fieldset>
-    <span><label for="keyword">' . get_lang('langSearchAUser') . ': &nbsp;</label><input type="text" name="keyword" size="25"></span>
-    <span><button type="submit" name="submit" class="btn btn">' . get_lang('Search') . '</button></span>
-    <div class="clear"></div>
-    </fieldset>
-  </form>
-</div>';
-    if (isset($_GET['keyword'])) {
-        $table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
-        $table->set_header(0, '', false, 'width="18px"');
-        $table->set_header(0, get_lang('Photo'), false);
-        $table->set_header(1, get_lang('OfficialCode'));
-        if (api_is_western_name_order()) {
-            $table->set_header(2, get_lang('FirstName'));
-            $table->set_header(3, get_lang('LastName'));
-        } else {
-            $table->set_header(2, get_lang('LastName'));
-            $table->set_header(3, get_lang('FirstName'));
+     if (api_is_platform_admin()) {
+        Display::display_header(get_lang('ComposeMessage'));
+        echo '
+            <div class="actions">
+              <span style="float: right;">&nbsp;</span>
+              <form id="search_simple" name="search_simple" method="get" action="' . api_get_self() . '" class="form-search">
+                <fieldset>
+                <span><label for="keyword">' . get_lang('langSearchAUser') . ': &nbsp;</label><input type="text" name="keyword" size="25"></span>
+                <span><button type="submit" name="submit" class="btn btn">' . get_lang('Search') . '</button></span>
+                <div class="clear"></div>
+                </fieldset>
+              </form>
+            </div>';
+        if (isset($_GET['keyword'])) {
+            $table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
+            $table->set_header(0, '', false, 'width="18px"');
+            $table->set_header(0, get_lang('Photo'), false);
+            $table->set_header(1, get_lang('OfficialCode'));
+            if (api_is_western_name_order()) {
+                $table->set_header(2, get_lang('FirstName'));
+                $table->set_header(3, get_lang('LastName'));
+            } else {
+                $table->set_header(2, get_lang('LastName'));
+                $table->set_header(3, get_lang('FirstName'));
+            }
+            $table->set_header(4, get_lang('LoginName'));
+            $table->set_header(5, get_lang('Email'));
+            $table->set_header(6, get_lang('Action'));
+            $table->display();
         }
-        $table->set_header(4, get_lang('LoginName'));
-        $table->set_header(5, get_lang('Email'));
-        $table->set_header(6, get_lang('Action'));
-        $table->display();
-    }
-    //if(isset($_GET['user_request']))
+     } else {
+        $userInfo = api_get_user_info();
+        $htmlHeadXtra[] = "
+             <script>
+                $(document).ready(function(){
+                    load_course_list('div_{$userInfo['user_id']}', '{$userInfo['user_id']}', '{$userInfo['email']}');
+                });
+             </script>
+             ";
+        Display::display_header(get_lang('ComposeMessage'));
+     }
     show_form_send_ticket();
 } else {
     save_ticket();

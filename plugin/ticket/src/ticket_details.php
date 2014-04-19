@@ -156,11 +156,11 @@ if (isset($_POST['response'])) {
         if ($response && $ticket['ticket']['status_id'] == 'XCF') {
             TicketManager::close_ticket($_GET['ticket_id'], $user_id);
             $ticket['ticket']['status_id'] = 'CLS';
-            $ticket['ticket']['status'] = 'CERRADO';
+            $ticket['ticket']['status'] = $plugin->get_lang('Closed');
         } else if (!is_null($response) && $ticket['ticket']['status_id'] == 'XCF') {
             TicketManager::update_ticket_status('PND', $_GET['ticket_id'], $user_id);
             $ticket['ticket']['status_id'] = 'PND';
-            $ticket['ticket']['status'] = 'PENDIENTE';
+            $ticket['ticket']['status'] = $plugin->get_lang('Pending');
         }
     }
 }
@@ -186,7 +186,7 @@ if (!isset($_POST['compose'])) {
         $_GET['ticket_id'] = $_POST['ticket_id'];
         TicketManager::close_ticket($_GET['ticket_id'], $user_id);
         $ticket['ticket']['status_id'] = 'CLS';
-        $ticket['ticket']['status'] = 'CERRADO';
+        $ticket['ticket']['status'] = $plugin->get_lang('Closed');
     }
     $ticket['ticket']['request_user'] = intval($ticket['ticket']['request_user']);
     if ($ticket['ticket']['request_user'] == $user_id || intval($ticket['ticket']['assigned_last_user']) == $user_id) {
@@ -208,20 +208,19 @@ if (!isset($_POST['compose'])) {
     if ($isAdmin && $ticket['ticket']['status_id'] != 'CLS' && $ticket['ticket']['status_id'] != 'REE') {
         if ($ticket['ticket']['assigned_last_user'] != 0 && $ticket['ticket']['assigned_last_user'] == $user_id) {
             $img_assing = '<a href="' . api_get_self() . '?ticket_id=' . $ticket['ticket']['ticket_id'] . '&amp;action=unassign" id="unassign">
-                            <img src="../../../main/img/admin_star.png" border="0" title="Unassign" align="center"/>
+                            <img src="' . api_get_path(WEB_CODE_PATH) . 'img/admin_star.png"  style="height: 32px; width: 32px;" border="0" title="Unassign" align="center"/>
                            </a>';
         } else {
-            $img_assing .= '<a href="#" id="assign"><img src="../../../main/img/admin_star_na.png" border="0" title="Assign" align="center"/></a>';
+            $img_assing .= '<a href="#" id="assign"><img src="' . api_get_path(WEB_CODE_PATH) . 'img/admin_star_na.png" style="height: 32px; width: 32px;" title="Assign" align="center"/></a>';
         }
     }
-    $negrita = ($ticket['ticket']['status_id'] == 'CLS') ? 'style = "font-weight: bold;"' : '';
-    $cadena = ($ticket['ticket']['status_id'] != 'CLS') ? "sas" : "";
+    $bold = ($ticket['ticket']['status_id'] == 'CLS') ? 'style = "font-weight: bold;"' : '';
     echo '<div style="margin-left:20%;margin-right:20%;">
 			<table width="100%" >
 				<tr>
 	              <td colspan="3" style="width:65%">' . $titulo . '</td>
-	              <td >' . $img_assing . '</td>
-	              <td>' . $form_close_ticket . '</td>
+	              <td style="width: 15%">' . $img_assing . '</td>
+	              <td style="width: 15%">' . $form_close_ticket . '</td>
 	            </tr>
 	         	<tr>
 	              <td style="width:45%;" ><p>' . get_lang('Sent') . ': ' . $ticket['ticket']['start_date'] . '</p></td>
@@ -232,7 +231,7 @@ if (!isset($_POST['compose'])) {
 	            <tr>
 	               <td><p>' . get_lang('Subject') . ': ' . $ticket['messages'][0]['subject'] . '</p></td>
 	               <td></td>
-	               <td><p ' . $negrita . '>' . get_lang('Status') . ': ' . $ticket['ticket']['status'] . '</p></td>
+	               <td><p ' . $bold . '>' . get_lang('Status') . ': ' . $ticket['ticket']['status'] . '</p></td>
 	               <td colspan="2"></td>
 	            </tr>
 	            <tr>
@@ -251,11 +250,8 @@ if (!isset($_POST['compose'])) {
     }
     if ($isAdmin) {
         echo '<tr>
-				<td><p>' . get_lang('User') . ':</p></td>
-	            <td></td>
-			    <td>' . $user_info = $ticket['ticket']['user_url'] . ' (' . $ticket['usuario']['username'] . ')</td>
-	            <td colspan="2"></td>
-			 </tr>';
+		<td><p>' . get_lang('User') . ': &nbsp;' . $user_info = $ticket['ticket']['user_url'] . ' (' . $ticket['usuario']['username'] . ')</p></td>
+ 	      </tr>';
     }
     //select admins
     $select_admins .= '<select  class ="chzn-select" style="width: 350px; " name = "admins" id="admins" ">';
@@ -268,7 +264,7 @@ if (!isset($_POST['compose'])) {
     echo '<div id="dialog-form" title="' . get_lang('AssignTicket') . '" >';
     echo '<form id="genesis" method="POST" action="ticket_details.php?ticket_id=' . $ticket['ticket']['ticket_id'] . '">
 			<input type="hidden" name ="action" id="action" value="assign"/>
-			<div  class="row">
+			<div>
 				<div class="label">' . get_lang('Responsable') . ':</div>
 				<div class="formw">' . $select_admins . '</div>
 			</div>			

@@ -64,15 +64,26 @@ function display_advanced_search_form () {
 }
 </script>
 <style>
-div.row div.label2 {
+.label2 {
     float: left;
-    width: 35%;
     text-align: left;
+    width: 75px;
 }
-div.row div.formw2 {
-    width: 65%;
+
+.label3 {
+    margin-left: 20px;
     float: left;
+    text-align: left;
+    margin-top: 5px;
+    width: 50px;
 }
+
+.formw2 {
+    float: left;
+    margin-left: 4px;
+    margin-top: 5px;
+}
+
 .blackboard_show {
     float: left;
     position: absolute;
@@ -83,6 +94,7 @@ div.row div.formw2 {
     padding: 3px;
     display: inline;
 }
+
 .blackboard_hide {
     display: none;
 }
@@ -113,11 +125,33 @@ if (isset($_GET['action'])) {
                 TicketManager::send_alert($_GET['ticket_id'], $user_id);
             break;
         case 'export':
-            $data = array(array($plugin->get_lang('TicketNum'), $plugin->get_lang('Date'), $plugin->get_lang('DateLastEdition'), $plugin->get_lang('Category'), $plugin->get_lang('User'), $plugin->get_lang('Program'), $plugin->get_lang('Responsible'), $plugin->get_lang('Status'), $plugin->get_lang('Message'), $plugin->get_lang('Description')));
+            $data = array(
+                        array(
+                            $plugin->get_lang('TicketNum'), 
+                            $plugin->get_lang('Date'), 
+                            $plugin->get_lang('DateLastEdition'), 
+                            $plugin->get_lang('Category'), 
+                            $plugin->get_lang('User'), 
+                            $plugin->get_lang('Program'), 
+                            $plugin->get_lang('Responsible'), 
+                            $plugin->get_lang('Status'), 
+                            $plugin->get_lang('Description')
+                        )
+                    );
             $datos = $table->get_clean_html();
             foreach ($datos as $ticket) {
                 $ticket[0] = substr(strip_tags($ticket[0]), 0, 12);
-                $ticket_rem = array(utf8_decode(strip_tags($ticket[0])), utf8_decode(api_html_entity_decode($ticket[1])), utf8_decode(strip_tags($ticket[2])), utf8_decode(strip_tags($ticket[3])), utf8_decode(strip_tags($ticket[4])), utf8_decode(strip_tags($ticket[5])), utf8_decode(strip_tags($ticket[6])), utf8_decode(strip_tags($ticket[7])), utf8_decode(strip_tags($ticket[8])), utf8_decode(strip_tags($ticket[10])));
+                $ticket_rem = array(
+                    utf8_decode(strip_tags($ticket[0])), 
+                    utf8_decode(api_html_entity_decode($ticket[1])), 
+                    utf8_decode(strip_tags($ticket[2])), 
+                    utf8_decode(strip_tags($ticket[3])), 
+                    utf8_decode(strip_tags($ticket[4])), 
+                    utf8_decode(strip_tags($ticket[5])), 
+                    utf8_decode(strip_tags($ticket[6])), 
+                    utf8_decode(strip_tags($ticket[7])), 
+                    utf8_decode(strip_tags(str_replace('&nbsp;', ' ', $ticket[9])))
+                    );
                 $data[] = $ticket_rem;
             }
             Export::export_table_xls($data, $plugin->get_lang('Tickets'));
@@ -146,7 +180,7 @@ if ($isAdmin) {
         $get_parameter .= "&submit_simple=";
     }
     //select categories
-    $select_types .= '<select class="chzn-select" style="width: 200px; "  name = "keyword_category" id="keyword_category" ">';
+    $select_types .= '<select class="chzn-select" name = "keyword_category" id="keyword_category" ">';
     $select_types .= '<option value="">---' . get_lang('Select') . '---</option>';
     $types = TicketManager::get_all_tickets_categories();
     foreach ($types as $type) {
@@ -154,7 +188,7 @@ if ($isAdmin) {
     }
     $select_types .= "</select>";
     //select admins
-    $select_admins .= '<select  class ="chzn-select" style="width: 200px; " name = "keyword_admin" id="keyword_admin" ">';
+    $select_admins .= '<select  class ="chzn-select" name = "keyword_admin" id="keyword_admin" ">';
     $select_admins .= '<option value="">---' . get_lang('Select') . '---</option>';
     $select_admins .= '<option value = "0">' . $plugin->get_lang('Unassigned') . '</option>';
     $admins = UserManager::get_user_list_like(array("status" => "1"), array("username"), true);
@@ -163,7 +197,7 @@ if ($isAdmin) {
     }
     $select_admins .= "</select>";
     //select status
-    $select_status .= '<select  class ="chzn-select" style="width: 200px; " name = "keyword_status" id="keyword_status" >';
+    $select_status .= '<select  class ="chzn-select" name = "keyword_status" id="keyword_status" >';
     $select_status .= '<option value="">---' . get_lang('Select') . '---</option>';
     $status = TicketManager::get_all_tickets_status();
     foreach ($status as $stat) {
@@ -171,18 +205,18 @@ if ($isAdmin) {
     }
     $select_status .= "</select>";
     //select priority
-    $select_priority .= '<select  style="width: 200px; " name = "keyword_priority" id="keyword_priority" >';
+    $select_priority .= '<select  name = "keyword_priority" id="keyword_priority" >';
     $select_priority .= '<option value="">' . get_lang('All') . '</option>';
     $select_priority .= '<option value="NRM">' . get_lang('PriorityNormal') . '</option>';
-    $select_priority .= '<option value="ALT">' . get_lang('PriorityHigh') . '</option>';
+    $select_priority .= '<option value="HGH">' . get_lang('PriorityHigh') . '</option>';
     $select_priority .= '<option value="LOW">' . get_lang('PriorityLow') . '</option>';
     $select_priority .= "</select>";
 
     //select unread
-    $select_unread = '<select  style="width: 100px; " name = "keyword_unread" id="keyword_unread" >';
+    $select_unread = '<select  name = "keyword_unread" id="keyword_unread" >';
     $select_unread .= '<option value="">' . get_lang('All') . '</option>';
-    $select_unread .= '<option value="yes">' . get_lang('Read') . '</option>';
-    $select_unread .= '<option value="no">' . get_lang('Unread') . '</option>';
+    $select_unread .= '<option value="yes">' . get_lang('Unread') . '</option>';
+    $select_unread .= '<option value="no">' . get_lang('Read')  . '</option>';
     $select_unread .= "</select>";
     // Create a search-box
     $form = new FormValidator('search_simple', 'get', '', '', null, false);
@@ -197,14 +231,11 @@ if ($isAdmin) {
             array('style' => 'vertical-align:middle')) . ' '
             . get_lang('AdvancedSearch') . '</span></a>');
 
-    echo '<div class="actions" style="width:100%;">';
+    echo '<div class="actions" >';
     if (api_is_platform_admin()) {
-        /* echo '<span style="float:right;">'.
-          '<a href="'.api_get_self().'?action=close_tickets">'.Display::return_icon('warning.png',$plugin->get_lang('TckClose'),'','32').'</a>'.
-          '</span>'; */
         echo '<span style="float:right;">' .
         '<a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '">' .
-        Display::return_icon('import_excel.png', get_lang('Export'), '', '32') . '</a>' .
+            Display::return_icon('import_excel.png', get_lang('Export'), '', '32') . '</a>' .
         '</span>';
         echo '<span style="float:right;">' .
         '<a href="' . api_get_path(WEB_PLUGIN_PATH) . 'ticket/src/new_ticket.php">' .
@@ -217,75 +248,75 @@ if ($isAdmin) {
     echo '</div>';
     echo '<form action="' . api_get_self() . '" method="get" name="advanced_search" id="advanced_search" display:"none">
             <div id="advanced_search_form" style="display: block;">
-            <div class="row">
+            <div>
                <div class="form_header">' . get_lang('AdvancedSearch') . '</div>
             </div>
-            <table width="100%">
+            <table >
                <tbody>
                   <tr>
-                     <td width="30%">
-                        <div class="row">
-                           <div class="label2">' . get_lang('Category') . '</div>
-                           <div class="formw2">' . $select_types . '</div>
+                     <td>
+                        <div>
+                           <div class="label2">' . get_lang('Category') . ': </div>
+                           <div class="formw2" style="margin-top: -5px;">' . $select_types . '</div>
                         </div>
                      </td>
-                     <td width="25%">
-                        <div class="row">
-                           <div class="label2">' . get_lang('User') . '</div>
+                     <td>
+                        <div>
+                           <div class="label3">' . get_lang('User') . ': </div>
                            <div class="formw2"><input id="keyword_request_user" name="keyword_request_user" type="text"></div>
                         </div>
                      </td>
-                     <td width="25%">
-                        <div class="row">
-                           <div class="label2">' . $plugin->get_lang('RegisterDate') . ':</div>
+                     <td>
+                        <div>
+                           <div class="label3">' . $plugin->get_lang('RegisterDate') . ': </div>
                            <div class="formw2"><input id="keyword_start_date_start" name="keyword_start_date_start" type="text"></div>
                         </div>
                      </td>
-                     <td width="20%">
-                        <div class="row">
-                           <div class="label2"><input type="checkbox" name="keyword_dates" value="1">' . get_lang('Untill') . ':</div>
+                     <td>
+                        <div>
+                           <div class="label3"><input type="checkbox" name="keyword_dates" value="1">' . get_lang('Untill') . ':</div>
                            <div class="formw2"><input id="keyword_start_date_end" name="keyword_start_date_end" type="text"></div>
                         </div>
                      </td>
                   </tr>
                   <tr >
                      <td>
-                        <div class="row">
-                           <div class="label2">' . $plugin->get_lang('AssignedTo') . ':</div>
-                           <div class="formw2">' . $select_admins . '</div>
+                        <div>
+                           <div class="label2">' . $plugin->get_lang('AssignedTo') . ': </div>
+                           <div class="formw2" style="margin-top: -5px;">' . $select_admins . '</div>
                         </div>
                      </td>
                      <td>
-                        <div class="row">
-                           <div class="label2">' . get_lang('Status') . ':</div>
-                           <div class="formw2">' . $select_status . '</div>
+                        <div>
+                           <div class="label3">' . get_lang('Status') . ':</div>
+                           <div class="formw2"  style="margin-top: -5px;">' . $select_status . '</div>
                         </div>
                      </td>
                      <td>
-                        <div class="row">
-                        <div class="row">
-                           <div class="label2">' . $plugin->get_lang('Priority') . ':</div>
+                        <div>
+                        <div>
+                           <div class="label3">' . $plugin->get_lang('Priority') . ': </div>
                            <div class="formw2">' . $select_priority . '</div>
                         </div>
                      </td>
                      <td>
-                        <div class="row">
-                           <div class="row">
-                              <div class="label2">' . $plugin->get_lang('Priority') . ':</div>
+                        <div>
+                           <div>
+                              <div class="label3">' . $plugin->get_lang('MessageStatus') . ': </div>
                               <div class="formw2">' . $select_unread . '</div>
                            </div>
                      </td>
                   </tr>
                   <tr>
-                  <td width="30%">
-                  <div class="row" >
-                  <div class="label2">' . get_lang('Course') . '</div>
+                  <td>
+                  <div >
+                  <div class="label2">' . get_lang('Course') . ': </div>
                   <div class="formw2">
-                  <input id="keyword_course" name="keyword_course" type="text"></div>
+                  <input id="keyword_course" style="width: 170px;" name="keyword_course" type="text"></div>
                   </div>
                   </td>
                   <td colspan= "3">
-                  <div class="row">
+                  <div>
                   <button  name="submit_advanced" type="submit">' . get_lang('AdvancedSearch') . '</button>
                   </div>
                   </td>
@@ -296,6 +327,18 @@ if ($isAdmin) {
             <input name="_qf__advanced_search" type="hidden" value="">
             <div class="clear">&nbsp;</div>
          </form>';
+} else {
+    if ($plugin->getExtraSettingValue('allow_add') == 'true') {
+        echo '<div class="actions" >';
+        echo '<span style="float:right;">' .
+                '<a href="' . api_get_path(WEB_PLUGIN_PATH) . 'ticket/src/new_ticket.php">' .
+                    Display::return_icon('add.png', $plugin->get_lang('TckNew'), '', '32') . 
+                '</a>' .
+              '</span>';
+        echo '<span style="float:right;">' .
+        '</span>';
+        echo '</div>';
+    }
 }
 
 

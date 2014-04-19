@@ -76,5 +76,6 @@ class TicketPlugin extends Plugin
         Database::query($sql);
         
         $this->deleteTab($plugSetting['comment']);
+        $this->deleteExtraSettings();
     }
 }

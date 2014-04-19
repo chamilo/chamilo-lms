@@ -571,15 +571,17 @@ class Plugin
     public function addExtraSettings($settings) 
     {
         $pluginName = $this->get_name();
-
+        $resp = false;
         foreach ($settings as $setting => $value) {
             $attributes = array(
                 'variable' => 'plugin_settings_' . $pluginName,
                 'subkey' => $setting,
-                'selected_value' => $value
+                'selected_value' => $value,
+                'category' => 'PluginSettings'
             );
-            
-            $resp = Database::insert('settings_current', $attributes);
+            if (empty($this->getExtraSettingValue($setting))) {
+                $resp = Database::insert('settings_current', $attributes);
+            }
         }
         
         return $resp;
@@ -610,9 +612,11 @@ class Plugin
     {
         $pluginName = $this->get_name();
         $whereCond = array(
-            'where' => array('variable = "?"' => 'plugin_settings_' . $pluginName)
+            'variable = ?' => 'plugin_settings_' . $pluginName
         );
-        Database::delete('settings_current', $whereCond);
+        $resp = Database::delete('settings_current', $whereCond);
+        
+        return $resp;
     }
     
     /**

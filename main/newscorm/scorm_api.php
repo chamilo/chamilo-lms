@@ -235,7 +235,7 @@ if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type
 function LMSInitialize() {
     /* load info for this new item by calling the js_api_refresh command in
      * the message frame. The message frame will update the JS variables by
-     * itself, in JS, by doing things like top.lesson_status = 'not attempted'
+     * itself, in JS, by doing things like top.lescsson_status = 'not attempted'
      * and that kind of stuff, so when the content loads in the content frame
      * it will have all the correct variables set
      */
@@ -549,7 +549,7 @@ function LMSGetValue(param) {
     } else if(param == 'cmi.interactions._children'){
         // ---- cmi.interactions._children
         result = 'id,time,type,correct_responses,weighting,student_response,result,latency';
-    } else {
+    } else{
         // ---- anything else
         // Invalid argument error
         olms.G_LastError = G_InvalidArgumentError ;
@@ -1543,13 +1543,17 @@ function xajax_save_item(
  * @param   int     ID of the user
  * @param   int     ID of the view
  * @param   int     ID of the item
+ * @param   bool    1 if this call comes from a "LMSFinish()" call, 0 or nothing otherwise
  * @return void
  * @uses olms.updatable_vars_list
  * @uses lp_ajax_save_item.php through an AJAX call
  */
-function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id) {
+function xajax_save_item_scorm(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, finish) {
+    if (typeof(finish) == 'undefined') {
+        finish = 0;
+    }
     var is_interactions='false';
-    var params = 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id+'&iid='+lms_item_id;
+    var params = 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id+'&iid='+lms_item_id+'&finish='+finish;
     var my_scorm_values = new Array();
 
     my_scorm_values = process_scorm_values();

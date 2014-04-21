@@ -12,7 +12,7 @@ $cidReset = true;
 require_once '../config.php';
 $plugin = TicketPlugin::create();
 
-if (!api_is_platform_admin() && $plugin->getExtraSettingValue('allow_add') != 'true') {
+if (!api_is_platform_admin() && $plugin->getExtraSettingValue('allow_student_add') != 'true') {
     header('location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php');
     exit;
 }
@@ -208,7 +208,7 @@ function show_form_send_ticket()
         $status[PENDING] = $plugin->get_lang('StsPending');
         $status[UNCONFIRMED] = $plugin->get_lang('StsUnconfirmed');
         $status[CLOSE] = $plugin->get_lang('StsClose');
-        $status[REENVIADO] = $plugin->get_lang('StsReenviado');
+        $status[REENVIADO] = $plugin->get_lang('StsForwarded');
     }
     $select_status = '
 	<div class="row" ' . $showStatus . ' >
@@ -270,7 +270,7 @@ function show_form_send_ticket()
 
     // Message
     echo '<div class="row">
-		<div class="label2">' . get_lang('Message') . '</div>
+		<div class="label2">' . get_lang('Message') . ':</div>
 		<div class="formw2">
 			<input type="hidden" id="content" name="content" value="" style="display:none">
 		<input type="hidden" id="content___Config" value="ToolbarSet=Messages&amp;Width=95%25&amp;Height=250&amp;ToolbarSets={ %22Messages%22: [  [ %22Bold%22,%22Italic%22,%22-%22,%22InsertOrderedList%22,%22InsertUnorderedList%22,%22Link%22,%22RemoveLink%22 ] ], %22MessagesMaximized%22: [  ] }&amp;LoadPlugin=[%22customizations%22]&amp;EditorAreaStyles=body { background: #ffffff; }&amp;ToolbarStartExpanded=false&amp;CustomConfigurationsPath=/main/inc/lib/fckeditor/myconfig.js&amp;EditorAreaCSS=/main/css/chamilo/default.css&amp;ToolbarComboPreviewCSS=/main/css/chamilo/default.css&amp;DefaultLanguage=es&amp;ContentLangDirection=ltr&amp;AdvancedFileManager=true&amp;BaseHref=' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/s/&amp;&amp;UserIsCourseAdmin=true&amp;UserIsPlatformAdmin=true" style="display:none">
@@ -286,7 +286,7 @@ function show_form_send_ticket()
 
     // Priority
     $select_priority = '<div class="row"  >
-	<div class="label2"  >' . $plugin->get_lang('Priority') . ': </div>
+	<div class="label2"  >' . $plugin->get_lang('Priority') . ':</div>
 	<div class="formw2">';
 
     $priority = array();
@@ -308,7 +308,7 @@ function show_form_send_ticket()
 
     // Input file attach
     echo '<div class="row">
-		<div class="label2">' . get_lang('FilesAttachment') . '</div>
+		<div class="label2">' . get_lang('FilesAttachment') . ':</div>
 		<div class="formw2">
 				<span id="filepaths">
 				<div id="filepath_1">

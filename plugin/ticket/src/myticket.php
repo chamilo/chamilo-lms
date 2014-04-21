@@ -74,8 +74,8 @@ function display_advanced_search_form () {
     margin-left: 20px;
     float: left;
     text-align: left;
-    margin-top: 5px;
-    width: 50px;
+    margin-top: 10px;
+    width: 95px;
 }
 
 .formw2 {
@@ -97,6 +97,22 @@ function display_advanced_search_form () {
 
 .blackboard_hide {
     display: none;
+}
+
+.advanced-parameters {
+    margin-top: 5px;
+}
+
+.remove-margin-top {
+    margin-top: 0px;
+}
+
+.select-margin-top {
+    margin-top: -5px;
+}
+
+.input-width {
+    width: 170px;
 }
 </style>';
 
@@ -207,16 +223,16 @@ if ($isAdmin) {
     //select priority
     $select_priority .= '<select  name = "keyword_priority" id="keyword_priority" >';
     $select_priority .= '<option value="">' . get_lang('All') . '</option>';
-    $select_priority .= '<option value="NRM">' . get_lang('PriorityNormal') . '</option>';
-    $select_priority .= '<option value="HGH">' . get_lang('PriorityHigh') . '</option>';
-    $select_priority .= '<option value="LOW">' . get_lang('PriorityLow') . '</option>';
+    $select_priority .= '<option value="NRM">' . $plugin->get_lang('PriorityNormal') . '</option>';
+    $select_priority .= '<option value="HGH">' . $plugin->get_lang('PriorityHigh') . '</option>';
+    $select_priority .= '<option value="LOW">' . $plugin->get_lang('PriorityLow') . '</option>';
     $select_priority .= "</select>";
 
     //select unread
     $select_unread = '<select  name = "keyword_unread" id="keyword_unread" >';
     $select_unread .= '<option value="">' . get_lang('All') . '</option>';
-    $select_unread .= '<option value="yes">' . get_lang('Unread') . '</option>';
-    $select_unread .= '<option value="no">' . get_lang('Read')  . '</option>';
+    $select_unread .= '<option value="yes">' . $plugin->get_lang('Unread') . '</option>';
+    $select_unread .= '<option value="no">' . $plugin->get_lang('Read')  . '</option>';
     $select_unread .= "</select>";
     // Create a search-box
     $form = new FormValidator('search_simple', 'get', '', '', null, false);
@@ -225,10 +241,9 @@ if ($isAdmin) {
     $form->addElement('text', 'keyword', get_lang('keyword'), 'size="25"');
     $form->addElement('style_submit_button', 'submit_simple', get_lang('Search'), 'class="search"');
     $form->addElement('static', 'search_advanced_link', null, 
-            '<a href="javascript://" class = "advanced_parameters" onclick="display_advanced_search_form();">'
+            '<a href="javascript://" class = "advanced-parameters" onclick="display_advanced_search_form();">'
             . '<span id="img_plus_and_minus">&nbsp;'
-            . Display::return_icon('div_show.gif', get_lang('Show'), 
-            array('style' => 'vertical-align:middle')) . ' '
+            . Display::return_icon('div_show.gif', get_lang('Show')) . ' '
             . get_lang('AdvancedSearch') . '</span></a>');
 
     echo '<div class="actions" >';
@@ -263,19 +278,19 @@ if ($isAdmin) {
                      <td>
                         <div>
                            <div class="label3">' . get_lang('User') . ': </div>
-                           <div class="formw2"><input id="keyword_request_user" name="keyword_request_user" type="text"></div>
+                           <div class="formw2"><input class="input-width" id="keyword_request_user" name="keyword_request_user" type="text"></div>
                         </div>
                      </td>
                      <td>
                         <div>
                            <div class="label3">' . $plugin->get_lang('RegisterDate') . ': </div>
-                           <div class="formw2"><input id="keyword_start_date_start" name="keyword_start_date_start" type="text"></div>
+                           <div class="formw2"><input class="input-width" id="keyword_start_date_start" name="keyword_start_date_start" type="text"></div>
                         </div>
                      </td>
                      <td>
                         <div>
-                           <div class="label3"><input type="checkbox" name="keyword_dates" value="1">' . get_lang('Untill') . ':</div>
-                           <div class="formw2"><input id="keyword_start_date_end" name="keyword_start_date_end" type="text"></div>
+                           <div class="label3"><input type="checkbox" name="keyword_dates" value="1">' . $plugin->get_lang('Untill') . '</div>
+                           <div class="formw2"><input class="input-width" id="keyword_start_date_end" name="keyword_start_date_end" type="text"></div>
                         </div>
                      </td>
                   </tr>
@@ -283,13 +298,13 @@ if ($isAdmin) {
                      <td>
                         <div>
                            <div class="label2">' . $plugin->get_lang('AssignedTo') . ': </div>
-                           <div class="formw2" style="margin-top: -5px;">' . $select_admins . '</div>
+                           <div class="formw2 select-margin-top">' . $select_admins . '</div>
                         </div>
                      </td>
                      <td>
                         <div>
-                           <div class="label3">' . get_lang('Status') . ':</div>
-                           <div class="formw2"  style="margin-top: -5px;">' . $select_status . '</div>
+                           <div class="label3 remove-margin-top">' . get_lang('Status') . ':</div>
+                           <div class="formw2 select-margin-top">' . $select_status . '</div>
                         </div>
                      </td>
                      <td>
@@ -302,7 +317,7 @@ if ($isAdmin) {
                      <td>
                         <div>
                            <div>
-                              <div class="label3">' . $plugin->get_lang('MessageStatus') . ': </div>
+                              <div class="label3">' . get_lang('Status') . ': </div>
                               <div class="formw2">' . $select_unread . '</div>
                            </div>
                      </td>
@@ -328,7 +343,7 @@ if ($isAdmin) {
             <div class="clear">&nbsp;</div>
          </form>';
 } else {
-    if ($plugin->getExtraSettingValue('allow_add') == 'true') {
+    if ($plugin->getExtraSettingValue('allow_student_add') == 'true') {
         echo '<div class="actions" >';
         echo '<span style="float:right;">' .
                 '<a href="' . api_get_path(WEB_PLUGIN_PATH) . 'ticket/src/new_ticket.php">' .

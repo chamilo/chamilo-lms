@@ -18,4 +18,6 @@ $NextSlide = "Imagem seguinte";
 $ViewSlideshow = "Ver Apresentação de slides";
 $FirstSlide = "Primeiro slide/diapositivo";
 $LastSlide = "Último slide/diapositivo";
+$ResizingAuto = "AUTO REDIMENSIONAR (padrão)";
+$ResizingAutoComment = "O slideshow vai redimensionar-se automaticamente para o tamanho do seu ecrã. Esta é uma opção padrão.";
 ?>

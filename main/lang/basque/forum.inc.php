@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "Foro kategoria ezabatu da";
 $ForumLocked = "Foroa itxita";
 $Forum = "Foroa";
 $AddForumCategory = "Gehitu foro kategoria bat";
-$AddForum = "Gehitu foroa";
 $Topics = "Gaiak";
 $Posts = "Mezuak";
 $LastPosts = "Azken mezua";

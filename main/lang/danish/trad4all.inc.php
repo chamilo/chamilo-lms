@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddForum = "Tilføj et nyt diskussionsforum";
 $Title = "Titel";
 $By = "Af";
 $UsersOnline = "Brugere online";
@@ -493,4 +494,5 @@ $HumanAndTechnicalResourcesInformation = "Kort beskrivelse af identiteterne for 
 $Assessment = "Eksamen";
 $AssessmentQuestions = "Hvordan foregår eksamen?";
 $AssessmentInformation = "Eksempel spørgsmål. Kriterier for succes. Tips og tricks.";
+$UploadADocument = "Upload et dokument";
 ?>

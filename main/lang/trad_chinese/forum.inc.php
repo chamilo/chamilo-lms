@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "已移除討論區類別";
 $ForumLocked = "已封鎖討論區";
 $Forum = "討論區";
 $AddForumCategory = "新增討論區類別";
-$AddForum = "新增討論區";
 $Topics = "議題";
 $Posts = "帖子";
 $LastPosts = "最新帖子";

@@ -9,5 +9,5 @@
 require_once '../../main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'plugin.class.php';
 
-require_once 'lib/ticket.class.php';
-require_once 'lib/ticket_plugin.class.php';
+require_once 'src/ticket.class.php';
+require_once 'src/ticket_plugin.class.php';

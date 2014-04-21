@@ -322,4 +322,5 @@ $UserOnlineListSession = "Seznam studentů aktualně přihlášených - Výuka";
 $From = "Od";
 $To = "Komu";
 $NoUsersInCourse = "Žádný uživatelé v kurzu";
+$UploadADocument = "Uložit dokument na server";
 ?>

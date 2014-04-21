@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "Keskustelualue ryhmä poistettu";
 $ForumLocked = "Keskustelualue lukittu";
 $Forum = "Keskustelut";
 $AddForumCategory = "Lisää keskustelualue ryhmä";
-$AddForum = "Lisää uusi keskustelualue";
 $Topics = "Aiheet";
 $Posts = "Viestit";
 $LastPosts = "Viimeisin viesti";

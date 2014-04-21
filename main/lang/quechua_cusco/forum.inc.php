@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "K'itirimanaq mitayninkuna wañuchisqa";
 $ForumLocked = "K'itirimana wisqasqa";
 $Forum = "Rimarinakuykuna";
 $AddForumCategory = "Yapay hoq mita k'itirimanata";
-$AddForum = "Yapay hoq k'itirimanata";
 $Topics = "Rimanakuna";
 $Posts = "Willaykuna";
 $LastPosts = "Qepa willay";

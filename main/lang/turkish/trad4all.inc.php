@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddForum = "Forum ekle";
 $Title = "Başlık";
 $UsersOnline = "Online kullanıcılar";
 $Remove = "Kaldır";
@@ -355,4 +356,5 @@ $HumanAndTechnicalResourcesInformation = "Değişik bağlantı kurulabilecek ki�
 $Assessment = "Değerlendirme";
 $AssessmentQuestions = "Kullanıcılar nasıl değerlendirilecek? Ana başlıklar düzenini geliştirirken bir strateji varmı?";
 $AssessmentInformation = "Örnek sınav soruları. Başarı ölçütleri. İpuçları.";
+$UploadADocument = "Belge gönder";
 ?>

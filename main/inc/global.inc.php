@@ -143,24 +143,25 @@ if (!empty($_configuration['multiple_access_urls'])) {
     $pos = strpos($root_rel,'/');
     $root_rel = substr($root_rel,0,$pos);
     $protocol = ((!empty($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') ? 'https' : 'http').'://';
-    //urls with subdomains
-    $request_url_root_1 = $protocol.$_SERVER['SERVER_NAME'].'/';
-    $request_url_root_2 = $protocol.$_SERVER['HTTP_HOST'].'/';
+    //urls with subdomains (HTTP_HOST is preferred - see #6764)
+    $request_url_root = $protocol.$_SERVER['HTTP_HOST'].'/';
+    if (empty($request_url_root)) {
+        $request_url_root = $protocol.$_SERVER['SERVER_NAME'].'/';
+    }
     //urls with subdirs
-    $request_url_sub_1 = $request_url_root_1.$root_rel.'/';
-    $request_url_sub_2 = $request_url_root_2.$root_rel.'/';
+    $request_url_sub = $request_url_root.$root_rel.'/';
 
     // You can use subdirs as multi-urls, but in this case none of them can be
     // the root dir. The admin portal should be something like https://host/adm/
     // At this time, subdirs will still hold a share cookie, so not ideal yet
     // see #6510
     foreach ($access_urls as $details) {
-        if ($request_url_sub_1 == $details['url'] or $request_url_sub_2 == $details['url']) {
+        if ($request_url_sub == $details['url']) {
             $_configuration['access_url'] = $details['id'];
             break; //found one match with subdir, get out of foreach
         }
         // Didn't find any? Now try without subdirs
-        if ($request_url_root_1 == $details['url'] or $request_url_root_2 == $details['url']) {
+        if ($request_url_root == $details['url']) {
             $_configuration['access_url'] = $details['id'];
             break; //found one match, get out of foreach
         }

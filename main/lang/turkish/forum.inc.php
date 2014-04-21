@@ -6,7 +6,6 @@ $ForumDeleted = "Forum silindi";
 $ForumCategoryDeleted = "Forum kategorisi silindi";
 $Forum = "Forumlar";
 $AddForumCategory = "Forum kategorisi ekle";
-$AddForum = "Forum ekle";
 $Topics = "Konular";
 $Posts = "Mektuplar";
 $LastPosts = "En son mektup";

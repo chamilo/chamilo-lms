@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "Fórum kategória törölve";
 $ForumLocked = "Fórum blokkolva";
 $Forum = "Fórumok";
 $AddForumCategory = "Új fórum kategória hozzáadása";
-$AddForum = "Új fórum hozzáadása";
 $Topics = "Témák";
 $Posts = "Üzenetek";
 $LastPosts = "Utolsó Üzenet";

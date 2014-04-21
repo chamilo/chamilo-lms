@@ -463,10 +463,12 @@ class Plugin
 
     }
     
-    /**
-     * Add a tab to chamilo's platform
-     * @param type $tabName
-     */
+   /**
+    * Add a tab to platform
+    * @param strings $tabName
+    * @param string $url
+    * @return boolean
+    */
     public function addTab($tabName, $url)
     {
         $sql = "SELECT * 
@@ -514,7 +516,7 @@ class Plugin
     
     /**
      * Delete a tab to chamilo's platform
-     * @param type $key
+     * @param string $key
      */
     public function deleteTab($key)
     {
@@ -587,10 +589,12 @@ class Plugin
         return $resp;
     }
     
-    /**
-     * Edit aditional Plugin Settings
-     * @param array $settings
-     */
+   /**
+    * Edit Extra settings
+    * @param string $key
+    * @param array $attributes
+    * @return boolean
+    */
     public function editExtraSetting($key, $attributes)
     {
         $pluginName = $this->get_name();

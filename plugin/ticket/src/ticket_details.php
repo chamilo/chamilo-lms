@@ -14,10 +14,19 @@ require_once '../config.php';
 $plugin = TicketPlugin::create();
 
 api_block_anonymous_users();
+
+$user_id = api_get_user_id();
+$isAdmin = api_is_platform_admin();
 $interbreadcrumb[] = array('url' => 'myticket.php', 'name' => $plugin->get_lang('MyTickets'));
-$interbreadcrumb[] = array('url' => '#', 'name' => get_lang('TicketDetail'));
+$interbreadcrumb[] = array('url' => '#', 'name' => $plugin->get_lang('TicketDetail'));
+
+$disableReponseButtons = "";
+if ($isAdmin) {
+    $disableReponseButtons = "$('#responseyes').attr('disabled', 'disabled');
+                              $('#responseno').attr('disabled', 'disabled');";
+}
+
 $htmlHeadXtra[] = '
-<script src="/pie/PIE_IE678.js"></script>
 <script language="javascript">
 $(document).ready(function(){
 	$( "#dialog-form" ).dialog({
@@ -40,12 +49,12 @@ $(document).ready(function(){
         
     	});
         $("input#responseyes").click(function () {
-            if(!confirm("' . get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('Yes')) . '. Si est\u00e1 seguro el ticket ser\u00e1 cerrado")){
+            if(!confirm("' . $plugin->get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('Yes')) . '. ' . $plugin->get_lang('IfYouAreSureTheTicketWillBeClosed') . '")){
                 return false;
             }
     	});
 	$("input#responseno").click(function () {
-            if(!confirm("' . get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('No')) . '")){
+            if(!confirm("' . $plugin->get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('No')) . '")){
 		return false;
             }
     	});
@@ -53,12 +62,15 @@ $(document).ready(function(){
         if (!confirm("' . $plugin->get_lang('AreYouSureYouWantToUnassignTheTicket') . '")) {
             return false		
         }
-    });
-	$("#close").click(function () {
-        if (!confirm("' . $plugin->get_lang('AreYouSureYouWantToCloseTheTicket') . '")) {
+    }); 
+    
+    $("#close").click(function () {
+           if (!confirm("' . $plugin->get_lang('AreYouSureYouWantToCloseTheTicket') . '")) {
 			return false		
         }
     });
+   
+    ' . $disableReponseButtons . '
 });
 function validate() {	
 	fckEditor1val = FCKeditorAPI.__Instances["content"].GetHTML();	
@@ -140,8 +152,6 @@ div.row div.formw2 {
 
 </style>';
 
-$user_id = api_get_user_id();
-$isAdmin = api_is_platform_admin();
 $ticket_id = $_GET['ticket_id'];
 $ticket = TicketManager::get_ticket_detail_by_id($ticket_id, $user_id);
 if (!isset($ticket['ticket'])) {
@@ -160,7 +170,7 @@ if (isset($_POST['response'])) {
         } else if (!is_null($response) && $ticket['ticket']['status_id'] == 'XCF') {
             TicketManager::update_ticket_status('PND', $_GET['ticket_id'], $user_id);
             $ticket['ticket']['status_id'] = 'PND';
-            $ticket['ticket']['status'] = $plugin->get_lang('Pending');
+            $ticket['ticket']['status'] = $plugin->get_lang('StsPending');
         }
     }
 }
@@ -214,7 +224,17 @@ if (!isset($_POST['compose'])) {
             $img_assing .= '<a href="#" id="assign"><img src="' . api_get_path(WEB_CODE_PATH) . 'img/admin_star_na.png" style="height: 32px; width: 32px;" title="Assign" align="center"/></a>';
         }
     }
-    $bold = ($ticket['ticket']['status_id'] == 'CLS') ? 'style = "font-weight: bold;"' : '';
+    $bold = '';
+    
+    if ($ticket['ticket']['status_id'] == 'CLS') {
+        $bold = 'style = "font-weight: bold;"';
+        echo "<style>
+                #confirmticket {
+                    display: none;
+                }
+              </style>";
+    }
+    
     echo '<div style="margin-left:20%;margin-right:20%;">
 			<table width="100%" >
 				<tr>
@@ -237,7 +257,7 @@ if (!isset($_POST['compose'])) {
 	            <tr>
 	                <td><p>' . get_lang('Category') . ': ' . $ticket['ticket']['name'] . '</p></td>
 	                <td></td>
-	                <td ><p>' . get_lang('Priority') . ':' . $ticket['ticket']['priority'] . '<p></td>
+	                <td ><p>' . $plugin->get_lang('Priority') . ':' . $ticket['ticket']['priority'] . '<p></td>
 	                <td colspan="2"></td>
 	            </tr>';
     if ($ticket['ticket']['course_url'] != null) {
@@ -261,7 +281,7 @@ if (!isset($_POST['compose'])) {
         $select_admins.= "<option value = '" . $admin['user_id'] . "' " . (($user_id == $admin['user_id']) ? ("selected='selected'") : "") . ">" . $admin['lastname'] . " ," . $admin['firstname'] . "</option>";
     }
     $select_admins .= "</select>";
-    echo '<div id="dialog-form" title="' . get_lang('AssignTicket') . '" >';
+    echo '<div id="dialog-form" title="' . $plugin->get_lang('AssignTicket') . '" >';
     echo '<form id="genesis" method="POST" action="ticket_details.php?ticket_id=' . $ticket['ticket']['ticket_id'] . '">
 			<input type="hidden" name ="action" id="action" value="assign"/>
 			<div>
@@ -277,7 +297,7 @@ if (!isset($_POST['compose'])) {
         if ($message['admin']) {
             $class = "messagesupport";
             if ($isAdmin) {
-                $message['message'].='<br/><b>' . get_lang('AttendedBy') . ': ' . $message['user_created'] . " - " . api_convert_and_format_date(api_get_local_time($message['sys_insert_datetime']), DATE_TIME_FORMAT_LONG, _api_get_timezone()) . "</b>";
+                $message['message'].='<br/><b>' . $plugin->get_lang('AttendedBy') . ': ' . $message['user_created'] . " - " . api_convert_and_format_date(api_get_local_time($message['sys_insert_datetime']), DATE_TIME_FORMAT_LONG, _api_get_timezone()) . "</b>";
             }
         }else {
             $message['message'].='<b>' . get_lang('Sent') . ': ' . api_convert_and_format_date(api_get_local_time($message['sys_insert_datetime']), DATE_TIME_FORMAT_LONG, _api_get_timezone()) . "</b>";

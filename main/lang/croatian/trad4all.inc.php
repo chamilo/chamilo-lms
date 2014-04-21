@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddForum = "Dodaj novi forum";
 $Title = "Naslov";
 $By = "Od";
 $UsersOnline = "Aktivnih korisnika";
@@ -594,4 +595,5 @@ $HumanAndTechnicalResourcesInformation = "Kratki opis za identifikaciju različi
 $Assessment = "Ocjenjivanje";
 $AssessmentQuestions = "Kako će korisnici biti ocjenjivani? Postoje li određene tehnike za svladavanje pojedinih tema?";
 $AssessmentInformation = "Primjer ispitnog pitanja. Kriteriji uspješnosti. Savjeti i naputci.";
+$UploadADocument = "Učitaj dokument";
 ?>

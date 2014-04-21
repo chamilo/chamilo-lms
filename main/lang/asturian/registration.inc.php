@@ -76,7 +76,6 @@ $langFormula = "Un saludu, el profesor";
 $langProblem = "Si tien dalgún problema, contaute con nós.";
 $langIs = "ye";
 $langAddress = "La direición de";
-$langSettings = "colos parámetros siguientes: Nome d'usuariu:";
 $langYouAreReg = "Ta matriculáu en";
 $langYourReg = "La so matricula en";
 $langUserFree = "El nome d'usuariu qu'escoyó yá esiste. Use'l botón 'Atrás' del so navegador y escueya otru.";

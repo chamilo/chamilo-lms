@@ -2,6 +2,13 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SelectADateOnTheCalendar = "Vybrať dátum z kalendára";
+$AreYouSureDeleteTestResultBeforeDateD = "Ste si istí, že chcete vyčistiť výsledky v tomto teste pred zvoleným dátumom?";
+$CleanStudentsResultsBeforeDate = "Vyčistiť všetky výsledky pred vybraným dátumom";
+$AreYouSureToEmptyAllTestResults = "Odstrániť všetky výsledky študentov pre každé cvičenie?";
+$CleanAllStudentsResultsForAllTests = "Naozaj chcete odstrániť výsledky všetkých testov?";
+$TestFeedbackNotShown = "Tento test je nakonfigurovaný tak, aby nezobrazil spätnú väzbu študentom. Komentáre nebude vidieť na konci testu, ale môžu byť užitočné pre vás, ako učiteľa, pri preskúmaní podrobnosti otázky.";
+$FeedbackDisplayOptions = "Ako by sme mali ukázať spätnú väzbu/komentár pre každú otázku? Táto voľba určuje, ako bude ukázaná študentovi, keď pôjde na test. Odporúčame vám vyskúšať rôzne možnosti úpravou možnosti testovania pred tým, než si ju študenti vyberú.";
 $ImportAikenQuizExplanationExample = "Toto je text pre otázku 1 A. Odpoveď 1 B. Odpoveď 2 C. Odpoveď 3 ANSWER: B Toto je text pre otázku 2 A. Odpoveď 1 B. Odpoveď 2 C. Odpoveď 3 D. Odpoveď 4 ANSWER: D ANSWER_EXPLANATION: to je voliteľná komentár spätnej väzby, ktorý sa zobrazí vedľa správnej odpovede.";
 $ImportAikenQuizExplanation = "Formát Aiken je v jednoduchom textovom súbore (.txt), s niekoľkými blokmi otázok, z ktorých každý je oddelený prázdnym riadkom. Prvý riadok je otázka, riadky s odpoveďou je označený písmenom a bodkou, a správna odpoveď príde s ďalšou ODPOVEĎOU: predpona. Viď príklad nižšie.";
 $ExerciseAikenErrorNoAnswerOptionGiven = "Importovaný súbor má aspoň jednu otázku bez odpovede (alebo odpovede neobsahujú požadovanú predponu listu). Uistite sa, že každá otázka má aspoň jednu odpoveď, a že má predponu písmeno a bodkou alebo zátvorku, ako je tento: A. jednu odpoveď";

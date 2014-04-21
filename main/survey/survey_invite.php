@@ -17,7 +17,7 @@
 $language_file = 'survey';
 
 // Including the global initialization file
-require '../inc/global.inc.php';
+require_once '../inc/global.inc.php';
 
 // Including additional libraries
 require_once 'survey.lib.php';
@@ -57,11 +57,11 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
+$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
 if (api_is_course_admin()) {
-	$interbreadcrumb[] = array('url' => 'survey.php?survey_id='.$survey_id, 'name' => $urlname);
+	$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id, 'name' => $urlname);
 } else {
-	$interbreadcrumb[] = array('url' => 'survey_invite.php?survey_id='.$survey_id, 'name' => $urlname);
+	$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey_invite.php?survey_id='.$survey_id, 'name' => $urlname);
 }
 $tool_name = get_lang('SurveyPublication');
 
@@ -86,20 +86,24 @@ if (Database::num_rows($result) > 1) {
 
 // Invited / answered message
 if ($survey_data['invited'] > 0 && !isset($_POST['submit'])) {
-	$message  = '<a href="survey_invitation.php?view=answered&amp;survey_id='.$survey_data['survey_id'].'">'.$survey_data['answered'].'</a> ';
+	$message  = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&amp;survey_id='.$survey_data['survey_id'].'">'.$survey_data['answered'].'</a> ';
 	$message .= get_lang('HaveAnswered').' ';
-	$message .= '<a href="survey_invitation.php?view=invited&amp;survey_id='.$survey_data['survey_id'].'">'.$survey_data['invited'].'</a> ';
+	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&amp;survey_id='.$survey_data['survey_id'].'">'.$survey_data['invited'].'</a> ';
 	$message .= get_lang('WereInvited');
 	Display::display_normal_message($message, false);
 }
 
 // Building the form for publishing the survey
 $form = new FormValidator('publish_form', 'post', api_get_self().'?survey_id='.$survey_id.'&'.api_get_cidReq());
-
 $form->addElement('header', '', $tool_name);
 
 // Course users
-$complete_user_list = CourseManager::get_user_list_from_course_code(api_get_course_id(), api_get_session_id(), '', api_sort_by_first_name() ? 'ORDER BY firstname' : 'ORDER BY lastname');
+$complete_user_list = CourseManager::get_user_list_from_course_code(
+    api_get_course_id(),
+    api_get_session_id(),
+    '',
+    api_sort_by_first_name() ? 'ORDER BY firstname' : 'ORDER BY lastname'
+);
 $possible_users = array();
 foreach ($complete_user_list as & $user) {
 	$possible_users[$user['user_id']] = api_get_person_name($user['firstname'], $user['lastname']);
@@ -149,7 +153,7 @@ $form->addElement('style_submit_button', 'submit', get_lang('PublishSurvey'), 'c
     $form->addRule('mail_text', get_lang('ThisFieldIsRequired'), 'required');
 }*/
 $portal_url = api_get_path(WEB_PATH);
-if ($_configuration['multiple_access_urls']) {
+if (api_is_multiple_url_enabled()) {
 	$access_url_id = api_get_current_access_url_id();
 	if ($access_url_id != -1) {
 		$url = api_get_access_url($access_url_id);
@@ -196,21 +200,30 @@ if ($form->validate()) {
 	for ($i = 0; $i < count($additional_users); $i++) {
 		$additional_users[$i] = trim($additional_users[$i]);
 	}
-	$counter_additional_users = SurveyUtil::save_invitations($additional_users, $values['mail_title'],
-    $values['mail_text'], $values['resend_to_all'], $values['send_mail'], $values['remindUnAnswered']);
+
+	$counter_additional_users = SurveyUtil::save_invitations(
+        $additional_users,
+        $values['mail_title'],
+        $values['mail_text'],
+        $values['resend_to_all'],
+        $values['send_mail'],
+        $values['remindUnAnswered']
+    );
+
 	// Updating the invited field in the survey table
 	SurveyUtil::update_count_invited($survey_data['code']);
 	$total_count = $count_course_users + $counter_additional_users;
-    $table_survey 				= Database :: get_course_table(TABLE_SURVEY);
+    $table_survey = Database :: get_course_table(TABLE_SURVEY);
 	// Counting the number of people that are invited
-	$sql = "SELECT * FROM $table_survey WHERE c_id = $course_id AND code = '".Database::escape_string($survey_data['code'])."'";
+	$sql = "SELECT * FROM $table_survey
+	        WHERE c_id = $course_id AND code = '".Database::escape_string($survey_data['code'])."'";
 	$result = Database::query($sql);
 	$row = Database::fetch_array($result);
 	$total_invited = $row['invited'];
     if ($total_invited > 0) {
-    	$message  = '<a href="survey_invitation.php?view=answered&amp;survey_id='.$survey_data['survey_id'].'">'.$survey_data['answered'].'</a> ';
+    	$message  = '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&amp;survey_id='.$survey_data['survey_id'].'">'.$survey_data['answered'].'</a> ';
     	$message .= get_lang('HaveAnswered').' ';
-    	$message .= '<a href="survey_invitation.php?view=invited&amp;survey_id='.$survey_data['survey_id'].'">'.$total_invited.'</a> ';
+    	$message .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&amp;survey_id='.$survey_data['survey_id'].'">'.$total_invited.'</a> ';
     	$message .= get_lang('WereInvited');
     	Display::display_normal_message($message, false);
     	Display::display_confirmation_message($total_count.' '.get_lang('InvitationsSend'));

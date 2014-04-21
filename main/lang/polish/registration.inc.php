@@ -76,7 +76,6 @@ $langFormula = "Z poważaniem";
 $langProblem = "W przypadku wystąpienia trudności, skontaktuj się z nami.";
 $langIs = "jest";
 $langAddress = "Adres";
-$langSettings = "z następującymi ustawieniami: \nNazwa użytkownika:";
 $langYouAreReg = "Jesteś zarejestrowany na";
 $langYourReg = "Twoja rejestracja";
 $langUserFree = "Ta nazwa użytkownika jest już zajęta. Użyj przycisku Wstecz w przeglądarce i wybierz inną.";

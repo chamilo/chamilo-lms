@@ -76,7 +76,6 @@ $langFormula = "Srdacno vas";
 $langProblem = "U slučaju problema kontaktirajte nas.";
 $langIs = "je";
 $langAddress = "Adresa";
-$langSettings = "Sa sledećim podešavanjema:Korisničko ime:";
 $langYouAreReg = "Prijavljeni ste na";
 $langYourReg = "Vaša prijava na";
 $langUserFree = "Ovo korisničko ime je već zauzeto. Upotrebite dugme Back va�eg pretra�ivača i izaberite drugo.";

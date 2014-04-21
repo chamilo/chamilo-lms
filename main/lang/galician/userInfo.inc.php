@@ -95,7 +95,6 @@ $UnsubscribeFromPlatformSuccess = "A súa conta %s foi eliminada por completo de
 $ToChangeYourEmailMustTypeYourPassword = "Para cambiar a súa dirección de correo, é preciso que confirme a súa contrasinal.";
 $Invitations = "Invitacións";
 $MyGroups = "Os meus grupos";
-$EditProfile = "Editar perfil";
 $Social = "Social";
 $Profile = "Perfil";
 $MyFriends = "Os meus amigos";

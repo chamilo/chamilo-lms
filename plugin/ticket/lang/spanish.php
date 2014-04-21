@@ -65,7 +65,12 @@ $strings['SrcPhone']         = "Telefono";
 $strings['SrcPresential']    = "Presencial";
 
 //
+$strings['TicketAssignedMsg']    = "<p>Estimado(a) %s </p><p>Se le ha sido asignado el <a href=\"%s\">ticket %s</a></p><p>Mensaje enviado desde el sistema de ticket.</p>";
+$strings['TicketAssignX'] = "[TICKETS] Asignacion de Ticket #%s ";
+$strings['AreYouSureYouWantToCloseTheTicket'] = "¿Esta seguro que quiere cerrar el ticket?";
+$strings['AreYouSureYouWantToUnassignTheTicket'] = "¿Esta seguro que quiere desasignarse el ticket?";
+$strings['YouMustWriteAMessage'] = "Debe escribir un mensaje";
+$strings['LastResponse'] = "Ultima Respuesta";
 
-$strings['TckAssignedMsg']    = "<p>Estimado(a):</p><p> ? ? </p>
-								<p>Se le ha sido asignado el ticket ? <a href=\"?\">Ticket</a></p>
-							    <p>Mensaje enviado desde el sistema de ticket.</p>";
+$strings['AssignTicket'] = "Asignar Ticket";
+$strings['AttendedBy'] = "Atendido por";

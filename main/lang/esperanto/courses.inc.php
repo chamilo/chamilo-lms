@@ -19,7 +19,6 @@ $Unsubscribe = "Malaliĝu";
 $lang_back_to_my_home_page = "Reiri al mia hejmpaĝo";
 $lang_back_to_my_personnal_course_list = "Reiri al mia kurslisto";
 $langTitular = "Instruisto";
-$langBackToListOfThisUser = "Reiru al kurslisto";
 $langAdministrationTools = "Mastrumada ilaro XX";
 $lang_back_to_parent_category = "Reiri al antaŭa kategorio";
 $lang_back_to_course_selection = "Reiri al kurselekto";

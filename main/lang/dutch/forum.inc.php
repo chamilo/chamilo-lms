@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "Forumcategorie verwijderd";
 $ForumLocked = "Forum geblokkeerd";
 $Forum = "Forums";
 $AddForumCategory = "Nieuwe forumcategorie toevoegen";
-$AddForum = "Nieuw forum toevoegen";
 $Topics = "Discussies";
 $Posts = "Berichten";
 $LastPosts = "Laatste bericht";

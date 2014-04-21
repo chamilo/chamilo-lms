@@ -93,4 +93,8 @@ $GroupsFromClassesInfo = "Utilizando esta opção, pode criar grupos baseados na
 $Group = "Grupo";
 $ForumOfGroup = "Fórum do grupo:";
 $BackToGroupList = "Regressar à lista dos Grupos";
+$EditGroupCategory = "Editar categorias de grupos";
+$NoStudents = "Sem alunos";
+$NoData = "Sem dados disponíveis";
+$AllGroups = "Todos os Grupos";
 ?>

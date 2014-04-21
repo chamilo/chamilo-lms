@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AudioFile = "Avdio datoteka";
 $ViewModeImpress = "Trenuten način pogleda: Impress";
 $NewForumCreated = "Nov forum je bil ustvarjen";
 $NewThreadCreated = "Nova nit foruma je bila ustvarjena.";

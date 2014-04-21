@@ -20,7 +20,6 @@ $Unsubscribe = "Izpis";
 $lang_back_to_my_home_page = "Povratek na mojo domačo stran";
 $lang_back_to_my_personnal_course_list = "Povratek na seznam mojih tečajev";
 $langTitular = "Vodja";
-$langBackToListOfThisUser = "Povratek na seznam tečajev";
 $langAdministrationTools = "Orodja upravitelja";
 $lang_back_to_parent_category = "Povratek v nadrejeno kategorijo";
 $lang_back_to_course_selection = "Povratek na izbiro tečaja";
@@ -84,6 +83,7 @@ $Collapse = "Skrči";
 $CourseDetails = "Podrobnosti tečaja";
 $GroupPendingInvitations = "Čakajoča povabila skupine";
 $Compose = "Sestavi";
+$EmptyHeaderLine = "Obstaja prazna vrstica v zaglavlju izbrane datoteke";
 $EnrollToCourseXSuccessful = "Vpisan ste v tečaj: %s";
 $ThereAreNoCoursesInThisCategory = "Ni tečajev na tem nivoju kategorij";
 ?>

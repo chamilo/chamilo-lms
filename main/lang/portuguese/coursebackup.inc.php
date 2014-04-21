@@ -48,4 +48,6 @@ $DocumentsWillBeAddedToo = "Os documentos também serão adicionados";
 $ToExportLearnpathWithQuizYouHaveToSelectQuiz = "Se desejar exportar um curso juntamente com um teste/exercício, deverá certificar-se de que os testes/exercícios correspondentes estão incluídos na exportação, para isso deverá selecioná-los da lista de testes/exercícios.";
 $ArchivesDirectoryNotWriteableContactAdmin = "O directório de ficheiros utilizado por esta aplicação, não se encontra editável. Por favor, contacte o administrador da plataforma/sistema.";
 $DestinationCourse = "Curso destino";
+$IfYourLPsHaveAudioFilesIncludedYouShouldSelectThemFromTheDocuments = "Se os seus caminhos de aprendizagem tem arquivos de áudio incluído, você deve selecioná-los a partir dos documentos";
+$DontForgetToSelectTheMediaFilesIfYourResourceNeedIt = "Não se esqueça de selecionar os arquivos de mídia se o seu recurso precisar dele";
 ?>

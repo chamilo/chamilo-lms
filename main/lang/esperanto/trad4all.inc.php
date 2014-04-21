@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddForum = "Aldoni novan forumon";
 $Title = "Titolo";
 $UsersOnline = "Konektitaj uzuloj";
 $Remove = "Forigi";
@@ -347,4 +348,5 @@ $HumanAndTechnicalResourcesInformation = "Mallonga priskribo pri la diversaj kon
 $Assessment = "Pritakso";
 $AssessmentQuestions = "Kiel oni prijuĝos la uzulojn? Ĉu ekzistas utilaj strategioj por regi la studobjekton?";
 $AssessmentInformation = "Ekzemplaj ekzamenaj demandoj. Sukceskriterioj. Konsiletoj.";
+$UploadADocument = "alŝuti dokumenton";
 ?>

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddForum = "Добавить новый форум";
 $Title = "Заголовок";
 $By = "касательно";
 $UsersOnline = "Пользователи онлайн (на связи)";
@@ -495,4 +496,5 @@ $HumanAndTechnicalResourcesInformation = "Краткое описание осо
 $Assessment = "Процесс оценки";
 $AssessmentQuestions = "Как пользователи будут оцениваться? Есть ли стратегии развития для того, чтобы усвоить тему?";
 $AssessmentInformation = "Пример экзаменационных вопросов. Критерии успеха. Подсказки и трюки";
+$UploadADocument = "Загрузить документ";
 ?>

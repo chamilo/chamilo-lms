@@ -9,64 +9,33 @@
  */
 class TicketPlugin extends Plugin
 {
+    /**
+     * Set the result
+     * @staticvar null $result
+     * @return type
+     */
     static function create()
     {
         static $result = null;
         return $result ? $result : $result = new self();
     }
-
     protected function __construct()
     {
         parent::__construct('1.0', 'Kenny Rodas Chavez, Genesis Lopez, Francis Gonzales, Yannick Warnier', array('tool_enable' => 'boolean'));
     }
 
+    /**
+     * Install the ticket plugin
+     */
     public function install()
     {
-        // Create database tables
-        require_once api_get_path(SYS_PLUGIN_PATH).PLUGIN_NAME.'/database.php';
-
-        // Create link tab
-//        $homep = api_get_path(SYS_PATH).'home/'; //homep for Home Path
-//        $menutabs = 'home_tabs'; //menutabs for tabs Menu
-//        $menuf = $menutabs;
-//        $ext = '.html'; //ext for HTML Extension - when used frequently, variables are faster than hardcoded strings
-//        $lang = ''; //el for "Edit Language"
-//        if (!empty($_SESSION['user_language_choice'])) {
-//            $lang = $_SESSION['user_language_choice'];
-//        } elseif (!empty($_SESSION['_user']['language'])) {
-//            $lang = $_SESSION['_user']['language'];
-//        } else {
-//            $lang = api_get_setting('platformLanguage');
-//        }
-//        $link_url = api_get_path(WEB_PLUGIN_PATH).'ticket/s/myticket.php';
-//
-//        $home_menu = '<li class="show_menu"><a href="'.$link_url.'" target="_self"><span>Ticket</span></a></li>';
-//
-//        // Write
-//        if (file_exists($homep.$menuf.'_'.$lang.$ext)) {
-//            if (is_writable($homep.$menuf.'_'.$lang.$ext)) {
-//                $fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
-//                fputs($fp, $home_menu);
-//                fclose($fp);
-//                if (file_exists($homep.$menuf.$ext)) {
-//                    if (is_writable($homep.$menuf.$ext)) {
-//                        $fpo = fopen($homep.$menuf.$ext, 'w');
-//                        fputs($fpo, $home_menu);
-//                        fclose($fpo);
-//                    }
-//                }
-//            } else {
-//                $errorMsg = get_lang('HomePageFilesNotWritable');
-//            }
-//        } else {
-//            //File does not exist
-//            $fp = fopen($homep.$menuf.'_'.$lang.$ext, 'w');
-//            fputs($fp, $home_menu);
-//            fclose($fp);
-//        }
+        // Create database tables and insert a Tab
+        require_once api_get_path(SYS_PLUGIN_PATH) . PLUGIN_NAME . '/database.php';
 
     }
-
+    /**
+     * Uninstall the ticket plugin
+     */
     public function uninstall()
     {
         $tblSettings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
@@ -80,11 +49,12 @@ class TicketPlugin extends Plugin
         $tblTicketMessage = Database::get_main_table(TABLE_TICKET_MESSAGE);
         $tblTicketCategory = Database::get_main_table(TABLE_TICKET_CATEGORY);
         $tblTicketAssgLog = Database::get_main_table(TABLE_TICKET_ASSIGNED_LOG);
-
+        $settings = $this->get_settings();
+        $plugSetting = current($settings);
+        
         //Delete settings
         $sql = "DELETE FROM $tblSettings WHERE variable = 'ticket_tool_enable'";
         Database::query($sql);
-        
         
         $sql = "DROP TABLE IF EXISTS $tblTicketTicket";
         Database::query($sql);
@@ -104,5 +74,8 @@ class TicketPlugin extends Plugin
         Database::query($sql);
         $sql = "DROP TABLE IF EXISTS $tblTicketTicket";
         Database::query($sql);
+        
+        $this->deleteTab($plugSetting['comment']);
+        $this->deleteExtraSettings();
     }
 }

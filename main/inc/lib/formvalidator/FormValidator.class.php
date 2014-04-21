@@ -143,6 +143,7 @@ class FormValidator extends HTML_QuickForm
         $this->registerElementType('CAPTCHA_Image', 'HTML/QuickForm/CAPTCHA/Image.php', 'HTML_QuickForm_CAPTCHA_Image');
 
         $this->registerRule('date', null, 'HTML_QuickForm_Rule_Date', $dir . 'Rule/Date.php');
+        $this->registerRule('datetime', null, 'DateTimeRule', $dir . 'Rule/DateTimeRule.php');
         $this->registerRule('date_compare', null, 'HTML_QuickForm_Rule_DateCompare', $dir . 'Rule/DateCompare.php');
         $this->registerRule('html', null, 'HTML_QuickForm_Rule_HTML', $dir . 'Rule/HTML.php');
         $this->registerRule('username_available', null, 'HTML_QuickForm_Rule_UsernameAvailable', $dir . 'Rule/UsernameAvailable.php');
@@ -384,6 +385,7 @@ EOT;
      * A rule is added to check if the date is a valid one
      * @param string $label						The label for the form-element
      * @param string $name						The element name
+     * @deprecated
      */
     function add_datepicker($name, $label)
     {
@@ -397,6 +399,7 @@ EOT;
      * A rule is added to check if the date is a valid one
      * @param string $label						The label for the form-element
      * @param string $name						The element name
+     * @deprecated
      */
     function add_datepickerdate($name, $label)
     {
@@ -411,6 +414,7 @@ EOT;
      * before the second one.
      * @param string $label						The label for the form-element
      * @param string $name						The element name
+     * @deprecated
      */
     function add_timewindow($name_1, $name_2, $label_1, $label_2)
     {
@@ -421,6 +425,7 @@ EOT;
 
     /**
      * Adds a button to the form to add resources.
+     * @deprecated
      */
     function add_resource_button()
     {

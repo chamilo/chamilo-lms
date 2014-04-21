@@ -76,7 +76,6 @@ $langFormula = "Cordialmente";
 $langProblem = "In caso di problemi non esitate a prendere contatto con noi";
 $langIs = "è";
 $langAddress = "L'indirizzo di";
-$langSettings = "con i seguenti parametri:\nNome Utente:";
 $langYouAreReg = "Sei iscritta/o su";
 $langYourReg = "Iscrizione su";
 $langUserFree = "Il Nome Utente scelto è già occupato.";

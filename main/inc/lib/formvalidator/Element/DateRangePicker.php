@@ -98,7 +98,6 @@ class DateRangePicker extends HTML_QuickForm_text
      */
     function validateDates($dates)
     {
-
         if (empty($dates['start']) || empty($dates['end'])) {
             return false;
         }
@@ -115,7 +114,4 @@ class DateRangePicker extends HTML_QuickForm_text
 
         return true;
     }
-
-
-
 }

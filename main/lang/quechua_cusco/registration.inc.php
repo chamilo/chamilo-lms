@@ -76,7 +76,6 @@ $langFormula = "Atentamente";
 $langProblem = "Ima sasa tarispaqa, waqharillawayku tapuriwallaykupas.";
 $langIs = "es";
 $langAddress = "Piqpa maypi kaqnin";
-$langSettings = "kay imakunawan:Haykuqmasiq sutin:";
 $langYouAreReg = "Qan qelqachikunkiña kaypi";
 $langYourReg = "Qelqachikusqaykiqa kaypin";
 $langUserFree = "Hakuqmasiq sutin ajllasqaykiqa ña kasha q'apiy 'Qepa' nisqata wanpuqniykimanta chaymantaqa ajllay hoqta.";

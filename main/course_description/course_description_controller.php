@@ -25,32 +25,38 @@ class CourseDescriptionController { // extends Controller {
 		$this->view = new View($this->toolname);			
 	}
 
-	/**
-	 * It's used for listing course description,
-	 * render to listing view
-	 * @param boolean   	true for listing history (optional)
-	 * @param array 	message for showing by action['edit','add','destroy'] (optional) 
-	 */
-	public function listing($history=false, $messages=array()) {
-		$course_description = new CourseDescription();
-		$session_id = api_get_session_id();
-		$course_description->set_session_id($session_id);        
-		$data = array();		
+    /**
+     * It's used for listing course description,
+     * render to listing view
+     * @param boolean   	true for listing history (optional)
+     * @param array 	message for showing by action['edit','add','destroy'] (optional) 
+     */
+    public function listing($history=false, $messages=array()) {
+        $course_description = new CourseDescription();
+        $session_id = api_get_session_id();
+        $course_description->set_session_id($session_id);        
+        $data = array();		
 
-		$course_description_data = $course_description->get_description_data();	
+        $course_description_data = $course_description->get_description_data();	
         	
-		$data['descriptions'] = $course_description_data['descriptions'];
-		$data['default_description_titles'] = $course_description->get_default_description_title();
-		$data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
-		$data['default_description_icon'] = $course_description->get_default_description_icon();		
-		$data['messages'] = $messages;
-		
-		// render to the view
-		$this->view->set_data($data);
-		$this->view->set_layout('layout'); 
-		$this->view->set_template('listing');		       
-		$this->view->render();				
-	}
+        $data['descriptions'] = $course_description_data['descriptions'];
+        $data['default_description_titles'] = $course_description->get_default_description_title();
+        $data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
+        $data['default_description_icon'] = $course_description->get_default_description_icon();		
+        $data['messages'] = $messages;
+
+        // Fix for chrome XSS filter for videos in iframes - BT#7930
+        $browser = api_get_navigator();
+        if (strpos($data['descriptions'], '<iframe') !== false && $browser['name'] == 'Chrome') {
+            header('X-XSS-Protection: 0');
+        }
+        
+        // render to the view
+        $this->view->set_data($data);
+        $this->view->set_layout('layout'); 
+        $this->view->set_template('listing');		       
+        $this->view->render();				
+    }
 	
 	/**
 	 * It's used for editing a course description,

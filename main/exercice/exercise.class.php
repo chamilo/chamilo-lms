@@ -28,8 +28,8 @@ $debug = false; //All exercise scripts should depend in this debug variable
 
 require_once dirname(__FILE__).'/../inc/lib/exercise_show_functions.lib.php';
 
-class Exercise {
-
+class Exercise
+{
     public $id;
     public $name;
     public $title;
@@ -60,11 +60,12 @@ class Exercise {
     public $is_gradebook_locked = false;
     public $exercise_was_added_in_lp = false;
     public $force_edit_exercise_in_lp = false;
+    public $sessionId = 0;
 
     /**
      * Constructor of the class
      *
-     * @author - Olivier Brouckaert
+     * @author Olivier Brouckaert
      */
     public function Exercise($course_id = null)
     {
@@ -141,6 +142,7 @@ class Exercise {
             $this->text_when_finished       = $object->text_when_finished;
             $this->display_category_name    = $object->display_category_name;
             $this->pass_percentage          = $object->pass_percentage;
+            $this->sessionId = $object->session_id;
 
             $this->is_gradebook_locked      = api_resource_is_locked_by_gradebook($id, LINK_EXERCISE);
 
@@ -202,8 +204,8 @@ class Exercise {
     /**
      * returns the exercise ID
      *
-     * @author - Olivier Brouckaert
-     * @return - integer - exercise ID
+     * @author Olivier Brouckaert
+     * @return int - exercise ID
      */
     function selectId() {
         return $this->id;
@@ -222,7 +224,7 @@ class Exercise {
     /**
      * returns the number of attempts setted
      *
-     * @return numeric - exercise attempts
+     * @return int - exercise attempts
      */
     function selectAttempts() {
         return $this->attempts;
@@ -230,7 +232,7 @@ class Exercise {
 
     /** returns the number of FeedbackType  *
      *  0=>Feedback , 1=>DirectFeedback, 2=>NoFeedback
-     * @return numeric - exercise attempts
+     * @return int - exercise attempts
      */
     function selectFeedbackType() {
         return $this->feedback_type;
@@ -529,7 +531,7 @@ class Exercise {
     /**
      * changes the exercise max attempts
      *
-     * @param numeric $attempts - exercise max attempts
+     * @param int $attempts - exercise max attempts
      */
     function updateAttempts($attempts) {
         $this->attempts=$attempts;
@@ -539,9 +541,10 @@ class Exercise {
     /**
      * changes the exercise feedback type
      *
-     * @param numeric $attempts - exercise max attempts
+     * @param int $attempts - exercise max attempts
      */
-    function updateFeedbackType($feedback_type) {
+    function updateFeedbackType($feedback_type)
+    {
         $this->feedback_type=$feedback_type;
     }
 
@@ -551,7 +554,8 @@ class Exercise {
      * @author Olivier Brouckaert
      * @param string $description - exercise description
      */
-    function updateDescription($description) {
+    function updateDescription($description)
+    {
         $this->description=$description;
     }
 
@@ -561,19 +565,23 @@ class Exercise {
      * @author Isaac flores
      * @param int The expired time of the quiz
      */
-    function updateExpiredTime($expired_time) {
+    function updateExpiredTime($expired_time)
+    {
         $this->expired_time = $expired_time;
     }
 
-    function updatePropagateNegative($value) {
+    function updatePropagateNegative($value)
+    {
         $this->propagate_neg = $value;
     }
 
-    function updateReviewAnswers($value) {
+    function updateReviewAnswers($value)
+    {
         $this->review_answers = (isset($value) && $value) ? true : false;
     }
 
-    function updatePassPercentage($value) {
+    function updatePassPercentage($value)
+    {
         $this->pass_percentage = $value;
     }
 
@@ -584,7 +592,8 @@ class Exercise {
      * @param string $sound - exercise sound file
      * @param string $delete - ask to delete the file
      */
-    function updateSound($sound,$delete) {
+    function updateSound($sound,$delete)
+    {
         global $audioPath, $documentPath;
         $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 
@@ -615,7 +624,8 @@ class Exercise {
      * @author Olivier Brouckaert
      * @param integer $type - exercise type
      */
-    function updateType($type) {
+    function updateType($type)
+    {
         $this->type=$type;
     }
 
@@ -626,7 +636,8 @@ class Exercise {
      * @author Olivier Brouckaert
      * @param integer $random - 0 if not random, otherwise the draws
      */
-    function setRandom($random) {
+    function setRandom($random)
+    {
         /*if ($random == 'all') {
             $random = $this->selectNbrQuestions();
         }*/
@@ -640,7 +651,8 @@ class Exercise {
      * @author Juan Carlos Rana
      * @param integer $random_answers - random answers
      */
-    function updateRandomAnswers($random_answers) {
+    function updateRandomAnswers($random_answers)
+    {
         $this->random_answers = $random_answers;
     }
 
@@ -658,22 +670,25 @@ class Exercise {
      *
      * @author Olivier Brouckaert
      */
-    function disable() {
+    function disable()
+    {
         $this->active=0;
     }
 
-    function disable_results() {
+    function disable_results()
+    {
         $this->results_disabled = true;
     }
 
-    function enable_results() {
+    function enable_results()
+    {
         $this->results_disabled = false;
     }
 
-    function updateResultsDisabled($results_disabled) {
+    function updateResultsDisabled($results_disabled)
+    {
         $this->results_disabled = intval($results_disabled);
     }
-
 
     /**
      * updates the exercise in the data base
@@ -905,7 +920,8 @@ class Exercise {
      * Creates the form to create / edit an exercise
      * @param FormValidator $form
      */
-    function createForm ($form, $type='full') {
+    function createForm($form, $type='full')
+    {
         global $id;
 
         if (empty($type)){
@@ -924,11 +940,12 @@ class Exercise {
         // Title.
         $form->addElement('text', 'exerciseTitle', get_lang('ExerciseName'), array('class' => 'span6','id'=>'exercise_title'));
 
-        $form->addElement('advanced_settings','
-			<a href="javascript://" onclick=" return show_media()">
+        $form->addElement('advanced_settings',
+            '<a href="javascript://" onclick=" return show_media()">
 				<span id="media_icon">
-					<img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" /> '.addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'
-					</span>
+					<img style="vertical-align: middle;" src="../img/looknfeel.png" alt="" />'.
+                    addslashes(api_htmlentities(get_lang('ExerciseDescription'))).'
+                </span>
 			</a>
 		');
 
@@ -1076,7 +1093,7 @@ class Exercise {
             else
                 $form->addElement('html','<div id="start_date_div" style="display:none;">');
 
-            $form->addElement('datepicker', 'start_time', '', array('form_name'=>'exercise_admin'), 5);
+            $form->addElement('date_time_picker', 'start_time');
 
             $form->addElement('html','</div>');
 
@@ -1087,7 +1104,7 @@ class Exercise {
             else
                 $form->addElement('html','<div id="end_date_div" style="display:none;">');
 
-            $form->addElement('datepicker', 'end_time', '', array('form_name'=>'exercise_admin'), 5);
+            $form->addElement('date_time_picker', 'end_time');
             $form->addElement('html','</div>');
 
             //$check_option=$this->selectType();
@@ -1157,8 +1174,8 @@ class Exercise {
         if ($type == 'full') {
             // rules
             $form->addRule('exerciseAttempts', get_lang('Numeric'), 'numeric');
-            $form->addRule('start_time', get_lang('InvalidDate'), 'date');
-            $form->addRule('end_time', get_lang('InvalidDate'), 'date');
+            $form->addRule('start_time', get_lang('InvalidDate'), 'datetime');
+            $form->addRule('end_time', get_lang('InvalidDate'), 'datetime');
         }
 
         // defaults
@@ -1271,23 +1288,14 @@ class Exercise {
 
         if ($form->getSubmitValue('activate_start_date_check') == 1) {
             $start_time = $form->getSubmitValue('start_time');
-            $start_time['F'] = sprintf('%02d', $start_time['F']);
-            $start_time['i'] = sprintf('%02d', $start_time['i']);
-            $start_time['d'] = sprintf('%02d', $start_time['d']);
-
-            $this->start_time = api_get_utc_datetime($start_time['Y'].'-'.$start_time['F'].'-'.$start_time['d'].' '.$start_time['H'].':'.$start_time['i'].':00');
-
+            $this->start_time = api_get_utc_datetime($start_time);
         } else {
             $this->start_time = '0000-00-00 00:00:00';
         }
 
         if ($form->getSubmitValue('activate_end_date_check') == 1) {
             $end_time = $form->getSubmitValue('end_time');
-            $end_time['F'] = sprintf('%02d', $end_time['F']);
-            $end_time['i'] = sprintf('%02d', $end_time['i']);
-            $end_time['d'] = sprintf('%02d', $end_time['d']);
-
-            $this->end_time = api_get_utc_datetime($end_time['Y'].'-'.$end_time['F'].'-'.$end_time['d'].' '.$end_time['H'].':'.$end_time['i'].':00');
+            $this->end_time = api_get_utc_datetime($end_time);
         } else {
             $this->end_time   = '0000-00-00 00:00:00';
         }

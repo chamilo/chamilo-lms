@@ -2,9 +2,12 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$HereIsYourFeedback = "In onderstaande bijlage kan je feedback vinden.";
+$LoginToGoToThisCourse = "Gelieve in te loggen om het document te bekijken";
 $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Dit item is onzichtbaar voor cursisten, maar u hebt toegang als leerkracht.";
 $DeleteAllAttendances = "Verwijder alle gemaakte aanwezigheden";
 $Unsubscribe = "Uitschrijven";
+$AddForum = "Nieuw forum toevoegen";
 $SearchXapianModuleNotInstalled = "The Xapian zoekmodule is niet geïnstalleerd";
 $Title = "Titel";
 $By = "Door";
@@ -765,6 +768,7 @@ $HumanAndTechnicalResourcesInformation = "Een korte beschrijving van de identite
 $Assessment = "Beoordeling";
 $AssessmentQuestions = "Hoe zullen gebruikers geëvalueerd worden? Zijn er strategieën die ontwikkeld moeten worden om het onderwerp te beheersen?";
 $AssessmentInformation = "Voorbeeldexamenvragen. Succescriteria. Tips en hints.";
+$UploadADocument = "Een document uploaden";
 $langNameOfLang['bosnian'] = "Bosnisch";
 $langNameOfLang['czech'] = "Tsjechisch";
 $langNameOfLang['dari'] = "Dari";
@@ -818,6 +822,7 @@ $ThereAreNotExtrafieldsAvailable = "Er zijn geen extra velden beschikbaar";
 $StartToType = "Tik hier en klik vervolgens op deze balk om de tag te valideren";
 $InstallChamilo = "Installeer Chamilo";
 $ChamiloURL = "Chamilo URL";
+$DownloadLink = "Download link";
 $ToolCourseDescription = "Vakbeschrijving";
 $ToolDocument = "Documenten";
 $ToolLearnpath = "Leerpad";
@@ -851,6 +856,4 @@ $SeeInvitation = "Bekijk de uitnodiging";
 $YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX = "Je kreeg deze melding omdat je in je profiel aangaf dat je meldingen via e-mail wenst te ontvangen. Deze instelling kan je op volgende link aanpassen: %s";
 $UserList = "Gebruikerslijst";
 $CourseCatalog = "Cursuscatalogus";
-$LoginToGoToThisCourse = "Gelieve in te loggen om het document te bekijken";
-$HereIsYourFeedback = "In onderstaande bijlage kan je feedback vinden.";
 ?>

@@ -2,6 +2,14 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SearchSessions = "Iskanje po sejah";
+$DeleteUsersNotInList = "Izpiši uporabnike, ki niso na spisku uvoza";
+$IfSessionExistsUpdate = "Če seja obstaja, jo ažuriraj";
+$SearchCourseBySession = "Išči tečaje po sejah";
+$GlobalLinkUseDoubleColumnPrivateToShowPrivately = "Uporabi ::private na koncu povezave, da je povezava prikazana le prijavljenim uporabnikom";
+$CourseVisibilityHidden = "Neviden - Popolnoma neviden za se uporabnike razen za upravitelje";
+$ApplyAllLanguages = "Uveljavi spremembe za vse razpoložljive jezike";
+$CareerUpdated = "Kariere so bile uspešno ažurirane";
 $CasMainActivateComment = "Omogočanje CAS avtentifikacije omogoči uporabnikom avtentifikacijo z njihovimi obstoječimi CAS avtentifikacijskimi podatki.<br>
 Obiščite 
 <a href=\"settings.php?category=Plugins\">Vtičniki</a>
@@ -1074,6 +1082,7 @@ $EditTabs = "Uredi zavihke";
 $YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill = "Certifikat redovalnice je potreben, če želite redovalnico povezati s spretnostmi";
 $PlatformUnsubscribeTitle = "Dovoli izpis iz platforme";
 $PlatformUnsubscribeComment = "S to možnostjo dovolite poljubnemu uporabniku da odstrani svoj račun in vse podatke povezane z računom, ki jih platforma hrani. Tako dejanje je zelo radikalno, vendar potrebno pri portalih, odprtih javnosti, ki omogočajo samoregistracijo v portal. V profilu uporabnika se s to možnostjo doda opcija za izpis iz portala s potrditvijo izpisa.";
+$PromotionUpdated = "Promocije so bile uspešno ažurirane";
 $BabyOrange = "Otroško oranžna";
 $BlueLagoon = "Modra laguna";
 $CoolBlue = "Odlično modra";

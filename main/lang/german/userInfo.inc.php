@@ -95,7 +95,6 @@ $UnsubscribeFromPlatformSuccess = "Der Benutzeraccount %s wurde vollständig von
 $ToChangeYourEmailMustTypeYourPassword = "Um Ihre Email-Adresse zu ändern, müssen Sie Ihr Passwort eingeben.";
 $Invitations = "Einladungen";
 $MyGroups = "Meine Gruppen";
-$EditProfile = "Profil bearbeiten";
 $Social = "Soziales Netzwerk";
 $Profile = "Profil";
 $MyFriends = "Meine Freunde";

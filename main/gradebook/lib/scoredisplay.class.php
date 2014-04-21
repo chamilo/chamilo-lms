@@ -118,7 +118,10 @@ class ScoreDisplay
             if (!empty($displays)) {
                 foreach ($displays as $display) {
                     $data = explode('::', $display['selected_value']);
-                    $portal_displays[$data[0]] = array('score' => $data[0], 'display' =>$data[1]);
+                    if (empty($data[1])) {
+                        $data[1] = "";
+                    }
+                    $portal_displays[$data[0]] = array('score' => $data[0], 'display' => $data[1]);
                 }
                 sort($portal_displays);
             }

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddForum = "Yapay hoq k'itirimanata";
 $Title = "Sutinchaynin";
 $By = "Pi churarun";
 $UsersOnline = "Haykan kashanku";
@@ -690,6 +691,7 @@ $HumanAndTechnicalResourcesInformation = "Yanapaysinakuna hapinapaq técnicos ni
 $Assessment = "Chaninchana";
 $AssessmentQuestions = "Imaynatan yachaqekunapaq chaninchay kanqa ? Iman kashan paykuna yachachinata atinankupaq ?";
 $AssessmentInformation = "Tapukunamanta qhawarichina. Imakunamanta chaninchay. Ima yupipaykuna.";
+$UploadADocument = "Apachiy qelqa khiputa";
 $langNameOfLang['dutch_corporate'] = "holandés corporativo";
 $TitleColumnGradebook = "Patara chaninchanapaq sutinchaynin";
 $QualifyWeight = "Chaninchaymanta llasaynin";

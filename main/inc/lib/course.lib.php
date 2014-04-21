@@ -4224,7 +4224,7 @@ class CourseManager
                 $my_course['extra_info']['register_button'] = Display::url(get_lang('Subscribe'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?action=subscribe&amp;sec_token='.$stok, array('class' => 'btn btn-primary'));
             }
 
-            if ($access_link && in_array('enter', $access_link)) {
+            if ($access_link && in_array('enter', $access_link) || $course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD) {
                 $my_course['extra_info']['go_to_course_button'] = Display::url(get_lang('GoToCourse'), api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php', array('class' => 'btn btn-primary'));
             }
 

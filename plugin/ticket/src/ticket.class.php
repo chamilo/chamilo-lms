@@ -87,6 +87,7 @@ class TicketManager
         $request_user = '', $assigned_user = 0
     )
     {
+        global $plugin;
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_category = Database::get_main_table(
                         TABLE_TICKET_CATEGORY
@@ -188,12 +189,12 @@ class TicketManager
                                             </tr>
                                         </table>';
                     api_mail_html(
-                            'Soporte virtual', $email, "[SOPORTE] Incidente Reenviado de Soporte Virtual", 
+                            $plugin->get_lang('VirtualSupport'), $email, $plugin->get_lang('IncidentResentToVirtualSupport'), 
                             $helpDeskMessage, $user['firstname'] . ' ' . $user['lastname'], $personalEmail, 
                             array(), $data_files
                     );
-                    $studentMessage = '<p>Su consulta fue reenviada al area responsable : <a href="mailto:' . $email . '">' . $email . '</a></p>';
-                    $studentMessage .= '<p>La respuesta a su consulta ser&aacute; enviada al correo  : <a href="#">' . $personalEmail . '</a></p>';
+                    $studentMessage = sprintf($plugin->get_lang('YourQuestionWasSentToTheResponableAreaX'), $email, $email);
+                    $studentMessage .= sprintf($plugin->get_lang('YourAnswerToTheQuestionWillBeSentToX'), $personalEmail);
                     self::insert_message(
                             $ticket_id, get_lang('MessageResent'), $studentMessage, null, 1
                     );
@@ -211,6 +212,7 @@ class TicketManager
     }
 
     /**
+     * Assign ticket to admin
      * @param $ticket_id
      * @param $user_id
      */
@@ -258,6 +260,7 @@ class TicketManager
     }
 
     /**
+     * Insert message between Users and Admins
      * @param $ticket_id
      * @param $subject
      * @param $content
@@ -272,7 +275,7 @@ class TicketManager
         $user_id, $status = 'NOL', $sendConfirmation = false
     )
     {
-        global $data_files;
+        global $data_files, $plugin;
         $ticket_id = intval($ticket_id);
         $subject = Database::escape_string($subject);
         $content = Database::escape_string($content);
@@ -284,7 +287,7 @@ class TicketManager
         $table_support_message_attachments = Database::get_main_table(TABLE_TICKET_MESSAGE_ATTACHMENTS);
         if ($sendConfirmation) {
             $form = '<form action="ticket_details.php?ticket_id=' . $ticket_id . '" id="confirmticket" method="POST" >
-                         <p>' . get_lang('TicketWasThisAnswerSatisfying') . '</p>
+                         <p>' . $plugin->get_lang('TicketWasThisAnswerSatisfying') . '</p>
                          <input id="responseyes" type="submit" value="' . get_lang('Yes') . '" name="response" />
                          <input id="responseno" type="submit" value="' . get_lang('No') . '" name="response" />
                      </form>';
@@ -361,6 +364,7 @@ class TicketManager
     }
 
     /**
+     * Attachment files when a message is sent
      * @param $file_attach
      * @param $ticket_id
      * @param $message_id
@@ -432,6 +436,7 @@ class TicketManager
     }
 
     /**
+     * Get tickets by userId
      * @param $from
      * @param $number_of_items
      * @param $column
@@ -443,6 +448,7 @@ class TicketManager
     $from, $number_of_items, $column, $direction, $user_id = null
     )
     {
+        global $plugin;
         $table_support_category = Database::get_main_table(
                         TABLE_TICKET_CATEGORY
         );
@@ -650,7 +656,7 @@ class TicketManager
                 $row['responsible'] = "<a href='$hrefResp'> {$row['responsible']['username']} </a>";
             } else {
                 if ($row['status_id'] != 'REE') {
-                    $row['responsible'] = '<span style="color:#ff0000;">' . get_lang('ToBeAssigned') . '</span>';
+                    $row['responsible'] = '<span style="color:#ff0000;">' . $plugin->get_lang('ToBeAssigned') . '</span>';
                 } else {
                     $row['responsible'] = '<span style="color:#00ff00;">' . get_lang('MessageResent') . '</span>';
                 }
@@ -1004,7 +1010,7 @@ class TicketManager
                                   AND ticket_id= '$ticket_id'  ";
                 $result_attach = Database::query($sql_atachment);
                 while ($row2 = Database::fetch_assoc($result_attach)) {
-                    $archiveURL = $archiveURL = $webPath . PLUGIN_NAME . '/src/download.php?ticket_id=' . $ticket_id . '&file=';
+                    $archiveURL = $archiveURL = $webPath . "plugin/" . PLUGIN_NAME . '/src/download.php?ticket_id=' . $ticket_id . '&file=';
                     $row2['attachment_link'] = $attach_icon . '&nbsp;<a href="' . $archiveURL . $row2['path'] . '&title=' . $row2['filename'] . '">' . $row2['filename'] . '</a>&nbsp;(' . $row2['size'] . ')';
                     $message['atachments'][] = $row2;
                 }

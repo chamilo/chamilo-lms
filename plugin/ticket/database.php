@@ -38,7 +38,7 @@ Database::query($sql);
 $categoRow = array(
     $objPlugin->get_lang('Enrollment') => $objPlugin->get_lang('TicketsAboutEnrollment'),
     $objPlugin->get_lang('GeneralInformation') => $objPlugin->get_lang('TicketsAboutGeneralInformation'),
-    $objPlugin->get_lang('RequestAndTramits') => $objPlugin->get_lang('TicketsAboutRequestAndTramits'),
+    $objPlugin->get_lang('RequestAndPapework') => $objPlugin->get_lang('TicketsAboutRequestAndPapework'),
     $objPlugin->get_lang('AcademicIncidence') => $objPlugin->get_lang('TicketsAboutAcademicIncidence'),
     $objPlugin->get_lang('VirtualCampus') => $objPlugin->get_lang('TicketsAboutVirtualCampus'),
     $objPlugin->get_lang('OnlineEvaluation') => $objPlugin->get_lang('TicketsAboutOnlineEvaluation')
@@ -120,9 +120,9 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
 Database::query($sql);
 //Default Priorities
 $defaultPriorities = array(
-    'NRM' => get_lang('Normal'),
-    'HGH' => get_lang('High'),
-    'LOW' => get_lang('Low')
+    'NRM' => $objPlugin->get_lang('PriorityNormal'),
+    'HGH' => $objPlugin->get_lang('PriorityHigh'),
+    'LOW' => $objPlugin->get_lang('PriorityLow')
 );
 $i = 1;
 foreach ($defaultPriorities as $pId => $priority) {
@@ -171,11 +171,11 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
 Database::query($sql);
 //Default status
 $defaultStatus = array(
-    'NAT' => get_lang('New'),
-    'PND' => $objPlugin->get_lang('Pending'),
-    'XCF' => $objPlugin->get_lang('Unconfirmed'),
-    'CLS' => get_lang('Close'),
-    'REE' => get_lang('Forwarded')
+    'NAT' => $objPlugin->get_lang('StsNew'),
+    'PND' => $objPlugin->get_lang('StsPending'),
+    'XCF' => $objPlugin->get_lang('StsUnconfirmed'),
+    'CLS' => $objPlugin->get_lang('StsClose'),
+    'REE' => $objPlugin->get_lang('StsForwarded')
 );
 
 $i = 1;
@@ -222,6 +222,6 @@ Database::query($sql);
 $objPlugin->addTab('Ticket', '/plugin/ticket/src/myticket.php');
 //Extra Settings
 $extraSettings = array(
-    'allow_add' => 'true'
+    'allow_student_add' => 'true'
 );
 $objPlugin->addExtraSettings($extraSettings);

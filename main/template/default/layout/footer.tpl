@@ -56,6 +56,7 @@
     </div><!-- end of #container -->
 </footer>
 
+{# Extra footer configured in admin section, only shown to non-admins #}
 {{ footer_extra_content }}
 
 {% raw %}

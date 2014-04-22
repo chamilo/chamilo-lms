@@ -1,25 +1,23 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*   This class provides methods for the notebook management.
-*   Include/require it in your code to use its features.
-*   @package chamilo.library
-*/
+ *   This class provides methods for the notebook management.
+ *   Include/require it in your code to use its features.
+ *   @package chamilo.library
+ */
 /**
  * Code
  */
-
-class Gradebook extends Model {
-
+class Gradebook extends Model
+{
     public $columns = array('id', 'name', 'description', 'course_code', 'parent_id', 'grade_model_id', 'session_id', 'weight', 'user_id');
 
-
-    public function __construct() {
+    public function __construct()
+    {
         $this->table                        = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $this->table_skill                  = Database::get_main_table(TABLE_MAIN_SKILL);
         $this->table_skill_rel_gradebook    = Database::get_main_table(TABLE_MAIN_SKILL_REL_GRADEBOOK);
     }
-
 
     /**
      * Returns true if the gradebook is active and visible in a course, false
@@ -32,8 +30,10 @@ class Gradebook extends Model {
     {
         $name = 'gradebook';
         $table = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
-        $sql = "SELECT * from $table WHERE variable='course_hide_tools' AND subkey='$name'";
-        $setting = ResultSet::create($sql)->first();
+        $sql = "SELECT * from $table WHERE variable='course_hide_tools' AND subkey='$name' LIMIT 1";
+        $result = Database::query($sql);
+        $setting = Database::store_result($result);
+        $setting = isset($setting[0]) ? $setting[0] : null;
         $setting = $setting ? $setting : array();
         $inactive = isset($setting['selected_value']) && $setting['selected_value'] == 'true';
 
@@ -43,17 +43,20 @@ class Gradebook extends Model {
 
         $c_id = $c_id ? intval($c_id) : api_get_course_int_id();
         $table  = Database::get_course_table(TABLE_TOOL_LIST);
-        $sql = "SELECT * from $table WHERE c_id = $c_id and name='$name'";
-        $item = ResultSet::create($sql)->first();
+        $sql = "SELECT * from $table WHERE c_id = $c_id and name='$name' LIMIT 1";
+        $result = Database::query($sql);
+        $item = Database::store_result($result, 'ASSOC');
+        $item = isset($item[0]) ? $item[0] : null;
         if (empty($item)) {
             return true;
         }
         return $item['visibility'] == '1';
     }
 
-    public function get_all($options = array()) {
+    public function get_all($options = array())
+    {
         $gradebooks = parent::get_all($options);
-        foreach($gradebooks as &$gradebook) {
+        foreach ($gradebooks as &$gradebook) {
             if (empty($gradebook['name'])) {
                 $gradebook['name'] = $gradebook['course_code'];
             }
@@ -62,11 +65,13 @@ class Gradebook extends Model {
         return $gradebooks;
     }
 
-    public function update($params) {
+    public function update($params)
+    {
         return parent::update($params);
     }
 
-    public function update_skills_to_gradebook($gradebook_id, $skill_list) {
+    public function update_skills_to_gradebook($gradebook_id, $skill_list)
+    {
 
         if (!empty($skill_list)) {
 
@@ -112,8 +117,8 @@ class Gradebook extends Model {
      * @param   string  action add, edit
      * @return  obj     form validator obj
      */
-    public function show_skill_form($gradebook_id, $url, $header = null) {
-
+    public function show_skill_form($gradebook_id, $url, $header = null)
+    {
         $form = new FormValidator('gradebook_add_skill', 'POST', $url);
         // Setting the form elements
         if (!isset($header)) {
@@ -145,7 +150,12 @@ class Gradebook extends Model {
         return $form;
     }
 
-    function get_skills_by_gradebook($gradebook_id) {
+    /**
+     * @param int $gradebook_id
+     * @return array|resource
+     */
+    function get_skills_by_gradebook($gradebook_id)
+    {
         $gradebook_id = intval($gradebook_id);
         $sql = "SELECT skill.id, skill.name FROM {$this->table_skill} skill INNER JOIN {$this->table_skill_rel_gradebook} skill_rel_gradebook
                     ON skill.id = skill_rel_gradebook.skill_id
@@ -155,11 +165,11 @@ class Gradebook extends Model {
         return $result;
     }
 
-
     /**
      * Displays the title + grid
      */
-    public function display() {
+    public function display()
+    {
         // action links
         echo Display::grid_html('gradebooks');
     }

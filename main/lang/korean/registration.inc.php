@@ -61,7 +61,6 @@ $langFormula = "친애하는";
 $langProblem = "문제 발생시에는 연락을 주시기 바랍니다.";
 $langIs = "은";
 $langAddress = "주소";
-$langSettings = "다음 설정과 합께 : 유저명 :";
 $langYouAreReg = "등록 정보";
 $langYourReg = "등록정보";
 $langUserFree = "이 유저명은 이미 사용중입니다. 되돌아 가서 다른 것으로 선택해주십시오.";

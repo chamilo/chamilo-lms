@@ -4,7 +4,6 @@ for more information: see languages.txt in the lang folder.
 */
 $Forum = "Forumoj";
 $AddForumCategory = "Aldoni novan fforuman kategorion";
-$AddForum = "Aldoni novan forumon";
 $Topics = "Temoj";
 $Posts = "Mesaĝoj";
 $LastPosts = "Lasta mesaĝo";

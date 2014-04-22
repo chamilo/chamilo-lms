@@ -19,7 +19,6 @@ $Unsubscribe = "Renunta";
 $lang_back_to_my_home_page = "Inapoi la pagina mea de start";
 $lang_back_to_my_personnal_course_list = "Inapoi la lista mea de cursuri";
 $langTitular = "Conducator";
-$langBackToListOfThisUser = "Inapoi la lista de cursuri";
 $langAdministrationTools = "Unelte administrative";
 $lang_back_to_parent_category = "Inapoi la categoria superioara";
 $lang_back_to_course_selection = "Inapoi la selectarea cursului";

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddForum = "新增討論區";
 $Title = "標題";
 $UsersOnline = "線上使用者";
 $Remove = "移除";
@@ -388,4 +389,5 @@ $HumanAndTechnicalResources = "人力及科技資源";
 $Assessment = "評估程序";
 $AssessmentQuestions = "使用者如何被評估？有沒有策略以協助使用者掌握課題？";
 $AssessmentInformation = "考試問題範例、及格因素、提示及小技巧";
+$UploadADocument = "上載文件";
 ?>

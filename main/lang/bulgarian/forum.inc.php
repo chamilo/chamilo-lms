@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "Категорията е изтрита.";
 $ForumLocked = "Форумът е блокиран.";
 $Forum = "Форуми";
 $AddForumCategory = "Добавяне на категория";
-$AddForum = "Добавяне";
 $Topics = "Теми";
 $Posts = "Съобщения";
 $LastPosts = "Последно съобщение";

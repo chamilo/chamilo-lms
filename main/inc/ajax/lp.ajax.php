@@ -12,6 +12,29 @@ $course_id = api_get_course_int_id();
 $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
 
 switch ($action) {
+    case 'get_documents';
+        $courseInfo = api_get_course_info();
+        $folderId = isset($_GET['folder_id']) ? $_GET['folder_id'] : null;
+        if (empty($folderId)) {
+            exit;
+        }
+        $lpId = isset($_GET['lp_id']) ? $_GET['lp_id'] : null;
+        $url = isset($_GET['url']) ? $_GET['url'] : null;
+
+        echo DocumentManager::get_document_preview(
+            $courseInfo,
+            $lpId,
+            null,
+            api_get_session_id(),
+            true,
+            null,
+            $url,
+            true,
+            false,
+            $folderId
+        );
+
+        break;
     case 'add_lp_item':
         if (api_is_allowed_to_edit(null, true)) {
             if ($_SESSION['oLP']) {
@@ -144,6 +167,7 @@ exit;
 /*
  * Classes to create a special data structure to manipulate LP Items
  * used only in this file
+ * @todo move in a file
  */
 class LP_item_order_list {
     public $list = array();

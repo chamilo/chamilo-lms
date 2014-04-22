@@ -272,6 +272,11 @@ if ($intro_dispCommand) {
 			$introduction_section .=  "<a href=\"".api_get_self()."?intro_cmdDel=1\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES,$charset))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL)."</a>";
 		}
 		$introduction_section .=  "</div>";
+        // Fix for chrome XSS filter for videos in iframes - BT#7930
+        $browser = api_get_navigator();
+        if (strpos($introduction_section, '<iframe') !== false && $browser['name'] == 'Chrome') {
+            header('X-XSS-Protection: 0');
+        }
 	}
 }
 $introduction_section .=  '</div>';

@@ -202,4 +202,16 @@ $BackToSurvey = "Regressar ao questionário";
 $UpdateInformation = "Actualizar informação";
 $PleaseFillSurvey = "Por favor, preencha o questionário";
 $ReportingOverview = "Vista geral do relatório";
+$ThereAreNotQuestionsForthisSurvey = "Não existem perguntas para este questionário";
+$GenerateSurveyAccessLinkExplanation = "Ao copiar este link/ligação e copiálo para um e-mail ou website, permitirá que qualquer anónimo possa entrar e responder ao questionário. Pode testar esta possibilidade ao clicar no link/ligação acima e responder ao questionário. Isto é particularmente útil se deseja que qualquer pessoa num fórum possa responder ao questionário e não tenha o seu endereço de e-mail.";
+$GenerateSurveyAccessLink = "Criar link/ligação para o questionário";
+$Multipleresponse = "Respostas Multiplas";
+$ErrorSurveyTypeUnknown = "Tipo de questionário desconhecido";
+$SurveyUndetermined = "Questionário não definido";
+$QuestionComment = "Comentário à questão";
+$UnknowQuestion = "Questão desconhecida";
+$Lastname = "Apelido";
+$Firstname = "Nome";
+$DeleteSurveyGroup = "Apagar grupo de questionários";
+$ErrorOccurred = "Ocorreu um erro";
 ?>

@@ -3,6 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $DeleteAllAttendances = "Eliminar todas las asistencias creadas";
+$AddForum = "Agregar un nuevo foro";
 $Title = "Título";
 $UsersOnline = "Usuarios en línea";
 $Remove = "Eliminar";
@@ -395,5 +396,6 @@ $HumanAndTechnicalResourcesInformation = "Breve descripción de las personas de 
 $Assessment = "Asignaciones";
 $AssessmentQuestions = "¿ Cómo van a ser evaluados los estudiantes ? ¿ Cuáles son las estrategias para que éstos acaben dominando la materia ?";
 $AssessmentInformation = "Ejemplos de las preguntas de examen. Criterios de evaluación. Pistas y trucos.";
+$UploadADocument = "Subir un documento";
 $LowerCaseUser = "usuario";
 ?>

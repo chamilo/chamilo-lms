@@ -46,7 +46,12 @@
 
 <h1>Chamilo 1.9.8 - Mystery name, Mystery date, 2013</h1>
 <h3>Release notes - summary</h3>
-<p>Chamilo 1.9.8 is a minor stable version with a series of improvements on top of 1.9.6.</p>
+<p>Chamilo 1.9.8 is a minor stable version with a series of improvements on top of 1.9.6.<br />
+This version is the first Chamilo version to drop support for Internet Explorer
+7. We insist that you recommend your users to use modern browsers that respect
+web standards. If they *cannot* avoid Internet Explorer, make sure they use at
+least version 10, which respects a little bit more than half of the W3C
+standards (but still much less than Firefox, Chrome, Opera or even Safari)</p>
 <h3>Release name</h3>
 <p><a href="http://fr.wikipedia.org/wiki/">City name</a> is a city ... </p>
 <h3>Security</h3>
@@ -55,26 +60,234 @@
 </ul>
 <h3>New Features</h3>
 <ul>
-  <li></li>
+    <li>Plugins: added possibility to add menu tab entry for any plugin</li>
+    <li>(#5159) Added a way to hide course teacher, if there are too many</li>
+    <li>(#5491) Added OpenMeetings plugin for videoconference through Chamilo</li>
+    <li>(#5880) Allow student to check his/her test results if the date of the test is over</li>
+    <li>(#6165) Added option to prevent "login as" feature on enhanced-security portals</li>
+    <li>(#6213) Register "user disabling" action in important activities</li>
+    <li>(#6216) Make check_version() AJAX-based</li>
+    <li>(#6348 - ongoing) Added possibility to add individual tasks to learning paths</li>
+    <li>(#6373) Added CAPTCHA on registration page (requires manual configuration edition)</li>
+    <li>(#6416) Added "Sessions subscribed to" icon in users list</li>
+    <li>(#6513) Exercises: Added auto-evaluation mode with feedback but without correct answer hint</li>
+    <li>(#6599) Course copy: Included work/assignments copy in course copy</li>
+    <li>(#6715) Tickets: new support tickets system integrated as a plugin (requires activation by admin)</li>
+    <li>(#6725) Groups: Added possibility to increase the number of users in a group above the category limit</li>
+    <li>(#6853) Added X-SendFile support to boost files download (requires manual configuration edition and web server modules)</li>
+    <li>(#6883) Added individual mode for users assignments to HR director</li>
+    <li>(#6904) Added list of students in course export</li>
+    <li>(#6970) Exercises: Added possibility to clear all results before a specific date</li>
+    <li>(#7051) Plugins: Added support for sessions in BigBlueButton plugin (requires re-installation or manual DB update)</li>
+    <li>(#7056) Exercises: Added auditing of "clean results" action by teachers</li>
+    <li>(#7063) Added support for "for" attributes in &lt;label&gt; fields for WCAG/WAI AA compatibility</li>
+    <li>(#7072) Added user profile fields of type "File upload"</li>
 </ul>
-<h3>Improvements</h3>
+<h3>Improvements (minor features)</h3>
 <ul>
-  <li>Increased maximum lifetime of videoconference sessions - now 5h (#6261)</li>
-  <li></li>
+    <li>Increased maximum lifetime of videoconference sessions - now 5h (#6261)</li>
+    <li>(#6015) Improved procedure to add new friends in the social network</li>
+    <li>(#6064) Improved languages management in portal home edition screen</li>
+    <li>(#6312) Set default session status filter to "All"</li>
+    <li>(#6314) Multi-URL: Add message in course categories indicating that they are global and block local change</li>
+    <li>(#6316) Changed confusing terms in classes and promotions labels</li>
+    <li>(#6317) Changed confusing terms in sessions copy</li>
+    <li>(#6514) Added missing date.timezone setting detector at install time</li>
+    <li>(#6569) Drop-down selector (Chozen) now hides search if less than 10 items</li>
+    <li>(#6588) Gradebook: Reduced size of elements description in gradebook items</li>
+    <li>(#6621) Trim spaces in user profile fields (possible values)</li>
+    <li>(#6704) Added scrollbar for teachers list in courses list (when too many teachers)</li>
+    <li>(#6737) Documents: The "Learning paths" folder is now protected against deletion, move or rename by teachers</li>
+    <li>(#6743) Attendances: A default attendance sheet is now created if none exists when teacher opens the tool</li>
+    <li>(#6744) Attendances: Enable the gradebook box in options even if the gradebook tool is currently disabled</li>
+    <li>(#6745) French: Improved course progress tool naming</li>
+    <li>(#6746) Course progress: Added "+" button in dates list</li>
+    <li>(#6748) Tracking: Link to user profile from user-created "important activities"</li>
+    <li>(#6749) Social network: Added link decoration to social networks links</li>
+    <li>(#6751) Attendances: Changed colour</li>
+    <li>(#6752) Exercises: ASCIIMathML plugin in FCKEditor is now enabled in questions edition</li>
+    <li>(#6768) When using a direct link to the course, allow users to login and got to course without intermediates</li>
+    <li>(#6795) Finish session at 23:59:59 instead of 00:00:00 the next day</li>
+    <li>(#6814) Allow data uri scheme in security.lib.php (this enabled drag-n-drop of images into text-areas)</li>
+    <li>(#6836) Added select_ajax element to FormValidator (internal stuff)</li>
+    <li>(#6882) Courses catalog: Now showing courses that were not in any category</li>
+    <li>(#6889) Exercises: Group feedback and results options in exercises creation/edition form</li>
 </ul>
 <h3>Debugging</h3>
 <ul>
-  <li></li>
+    <li>(#398)  Learning paths: Fixed issue with SCORM Scenari courses which did not set status to completed when expected</li>
+    <li>(#4067) Groups: Student cannot see group documents on first access</li>
+    <li>(#4788) Documents: Nanogong files do not play in document tool</li>
+    <li>(#5751) Exercises: Quotes were forbidden/filtered in "question" field</li>
+    <li>(#5755) Documents: Audio creation with Pediaphon was broken</li>
+    <li>(#5878) Exercises: Validation bug for answers</li>
+    <li>(#5881) Exercises: Link when opened question was answered opened a blank page</li>
+    <li>(#5883) Gradebook: No access to gradebook_flatview.php page (only code page displayed)</li>
+    <li>(#5962) Gradebook: Impossible to add gradebook categories in sessions</li>
+    <li>(#5988) Administration: "Show course languages" option's explanation lacks detail</li>
+    <li>(#5994) Exercises: Issues with HotPotatoes</li>
+    <li>(#5997) Exercises: Exercises scoring issue</li>
+    <li>(#6033) Documents: Flash animations were cropped</li>
+    <li>(#6044) Learning path: AICC import -  "The package you are trying to upload has an unknown format."</li>
+    <li>(#6062) Grabebook main charts do not take subcategories hierarchy into account</li>
+    <li>(#6092) Wiki: Restore wiki page issue</li>
+    <li>(#6124) Multisite/CAS: redirection loop when user is not registered</li>
+    <li>(#6175) Surveys with neutral link should show who took it</li>
+    <li>(#6179) Courses: In add user list by CSV,  unsubscribing already-added-users remove all course teachers</li>
+    <li>(#6214) Course import through CSV doesn't import category setting</li>
+    <li>(#6215) Promotions copy doesn't copy course reference</li>
+    <li>(#6259) Exercises: Repassing HotPotatoes test failed in a learning path</li>
+    <li>(#6261) Plugins: Issue with time limit in BigBlueButton plugin</li>
+    <li>(#6270) Survey: Answer to score questions are not correctly displayed after 'comment' question</li>
+    <li>(#6304) Multi-url: assigning sessions to category</li>
+    <li>(#6305) Import users to course CSV</li>
+    <li>(#6306) Sessions can be created without tutor but then they don't appear in the list</li>
+    <li>(#6310) Hotspot not storing the first spot created</li>
+    <li>(#6311) Some active sessions do not appear when selecting "active" filter</li>
+    <li>(#6313) Forum score not registered in gradebook</li>
+    <li>(#6346) Admin can't access to the portal due the legal conditions.</li>
+    <li>(#6355) ASCIImathml.js can block jquery execution</li>
+    <li>(#6405) Automatic prerequisites assignation breaks on chapter items</li>
+    <li>(#6415) Download dropbox files as archive fails for file names with a comma</li>
+    <li>(#6490) RTL issues</li>
+    <li>(#6493) Questions bank: Creating new question from bank doesn't allow edition of properties</li>
+    <li>(#6495) Cannot create course event</li>
+    <li>(#6497) Scoring of forum activity (related to #6313)</li>
+    <li>(#6511) Hotspot fails - First area disappears (related to #6310)</li>
+    <li>(#6512) In multiple-answers questions (type 2), editing and removing first check doesn't work</li>
+    <li>(#6533) Fill-in blanks question description edition is not taken into account</li>
+    <li>(#6535) Terms and conditions on course popup if following link</li>
+    <li>(#6537) Gradebooks issues within sessions context</li>
+    <li>(#6558) On test answer field and comment, error with character ' and images</li>
+    <li>(#6586) When you create a new test, Start date and End Date are automatically modified</li>
+    <li>(#6589) Marked forum threads users are not listed in sessions</li>
+    <li>(#6598) Issues in platform announcements not maintaining format nor editor style</li>
+    <li>(#6602) Online activity is added twice in Assessment category folder and in Default</li>
+    <li>(#6604) Teacher/Learner view button doesn't work after a test done in a Learning Path</li>
+    <li>(#6619) In authoring mode, question feedback column disapeared  depending of test advanced configuration</li>
+    <li>(#6622) Editing a learning path item makes it loose its order</li>
+    <li>(#6623) Video view doesn't work as teacher in documents</li>
+    <li>(#6624) Random questions quizzes in learnpath prerequisites show with max score</li>
+    <li>(#6645) Need to click twice on the vertical bar to hide left panel in Learning Path view</li>
+    <li>(#6647) Abstract class Question instanciated in file /main/newscorm/learnpath_functions.inc.php</li>
+    <li>(#6654) Course catalogue: subscribe and goto buttons are gone</li>
+    <li>(#6663) Portal Chamilo 1.9.6 unable to send email - contact - Administration</li>
+    <li>(#6664) Deleting a session deletes also extra field session values</li>
+    <li>(#6679) We don't see documents created in LP in the Document LP tool</li>
+    <li>(#6680) Users insertion in Class though CSV didn't work anymore</li>
+    <li>(#6690) Issue with hotspot questions</li>
+    <li>(#6694) Tutor name in certificates is first student name, only in session context</li>
+    <li>(#6695) Cannot create a forum from Learning Path if no forum category exists</li>
+    <li>(#6696) Adding a document in Learning Path, not with the Dran and drop - Title of document is truncated if its title contains character</li>
+    <li>(#6702) Allow online assignments option in assignments should show a clearer interface change</li>
+    <li>(#6708) User cannot move to next question</li>
+    <li>(#6724) Group forum not added in forum tool if forum category doesn't exist</li>
+    <li>(#6728) YesNo survey icon show checkbox instead of radio</li>
+    <li>(#6735) Escape MySQL wildcards characters in admin > user list advanced search form</li>
+    <li>(#6741) Create course link in admin panel is removed when course suggestion enabled</li>
+    <li>(#6755) Search in session screen doesn't work</li>
+    <li>(#6761) Admin > Create new user > "Is admin" should be hidden by default</li>
+    <li>(#6764) Weird multi-url splitting condition bug when using multiple server_name in Nginx</li>
+    <li>(#6772) Hotspot: not registering first area (related to #6310)</li>
+    <li>(#6773) Long-standing sub-language bug: terms saving sometimes misses "</li>
+    <li>(#6778) Sessions with starting and ending dates not working as expected for teachers and students in 1.9.6 and 1.9.8</li>
+    <li>(#6785) Can create documents with character , (comma) in its name, may causes issues</li>
+    <li>(#6788) The logout action registers time in another timezone than login</li>
+    <li>(#6796) Order of headers in users list (tracking) incorrect</li>
+    <li>(#6803) In announcements, the ((user_name)) field takes the name of the teacher</li>
+    <li>(#6807) "Duplicate headers received from server" message in work tool (work/download.php)</li>
+    <li>(#6810) Student answer is Array in Fill_the_blank question if answer start with /</li>
+    <li>(#6811) Scoring issue in True/False/Don't know answers</li>
+    <li>(#6817) Embed code URLs  in LearningPath</li>
+    <li>(#6819) Test, In [Recycle existing questions - Add question to test] teacher don't see hidden tests</li>
+    <li>(#6823) IP Address not shown if user are registered in a session</li>
+    <li>(#6824) When deleting a user the "survey.author" field is not removed/updated</li>
+    <li>(#6825) phpCAS error on logout</li>
+    <li>(#6827) SQL error when backuping a course</li>
+    <li>(#6828) Question categories are not restored from course backup</li>
+    <li>(#6829) Anonymous Surveys doesn't work</li>
+    <li>(#6831) Copy & paste from Word gives some errors</li>
+    <li>(#6835) Constant TOOL_AGENDA does not exists</li>
+    <li>(#6842) Forum messages issues</li>
+    <li>(#6845) Problem submitting work to legacy deleted folders</li>
+    <li>(#6846) Online users</li>
+    <li>(#6863) Document tool - uploader bug(s)</li>
+    <li>(#6875) Survey access link with plugin CAS</li>
+    <li>(#6876) Gradeboook main charts  have two 0 in the Y axis</li>
+    <li>(#6877) Information missing in Assignment page comparing to previous version</li>
+    <li>(#6878) Number of assignments per student don't update if we delete one</li>
+    <li>(#6880) Incomprehensible behaviour when deleting an attendance</li>
+    <li>(#6884) Exercise time limits change when including it in learning path</li>
+    <li>(#6888) Whoisonline page extend button shows online users slightly misaligned</li>
+    <li>(#6893) Current CSS not shown in CSS config page</li>
+    <li>(#6902) When all attendances are hidden, it creates a new attendance</li>
+    <li>(#6907) Error in configure_homepage.php if file home_tabs_logged_in.html desn't exists</li>
+    <li>(#6909) No email sent at the end of exercise</li>
+    <li>(#6913) Teacher cannot use the Student View when working on Closed course</li>
+    <li>(#6914) Groups from classes option disappeared</li>
+    <li>(#6917) Error in file /main/inc/lib/course.lib.php Required parameter missing</li>
+    <li>(#6923) SQL Request error when edit limit of groups per student</li>
+    <li>(#6926) No "send as announcement" in agenda</li>
+    <li>(#6929) Export Glossary to PDF. Chamilo 1.9.x</li>
+    <li>(#6930) "Reset learning path" doesn't work</li>
+    <li>(#6932) Button to delete a folder in Assignments does not work.</li>
+    <li>(#6933) French accents encoding issues in exercises</li>
+    <li>(#6936) Problem with file main/inc/lib/template.lib.php : Twig fatal error</li>
+    <li>(#6937) Events visibility in agenda</li>
+    <li>(#6940) Nanogong audio recorder stopped working: security changes in browsers</li>
+    <li>(#6941) Nanogong audio recorder plugin doesn't appear in Linux</li>
+    <li>(#6942) Bug showing comment in agenda.php</li>
+    <li>(#6943) Deletion of course is incomplete in database</li>
+    <li>(#6948) Nothing happened if I click on the Add Audio icon in Learning Path Authoring</li>
+    <li>(#6950) In test page, clean result action dont work for tests in Learning Path</li>
+    <li>(#6951) Unnecessary button in work tool</li>
+    <li>(#6968) Allow admin account to unsubscribe from a course</li>
+    <li>(#6971) Button to apply to all languages appears in announcements edition page</li>
+    <li>(#6973) HTML editor does not appear when creating documents - IE11</li>
+    <li>(#6974) Assessments Categories works incorrectly</li>
+    <li>(#6975) Error in Learning Path padding</li>
+    <li>(#6976) scorm.css file missing for some themes</li>
+    <li>(#6977) Multiple URL slave admins can delete global courses completely</li>
+    <li>(#6981) jquery.lp_minipanel.js code error</li>
+    <li>(#6984) Agenda doesn't show the events correctly. 1.9.x</li>
+    <li>(#6985) Using < or > in a "fill blanks" answer does not work</li>
+    <li>(#6988) Script busy or not responding</li>
+    <li>(#6989) Forum - Subject title change when one title response is changed - Chamilo 1.9.4</li>
+    <li>(#6990) main/mySpace/index.php page takes a lot of time when a Human Resources user has a lot of sessions/courses</li>
+    <li>(#6996) Wiris bug, it shows double &lt;meta charset&gt;</li>
+    <li>(#6997) Agenda event  to "everyone" problems in mail and not showed in Announcements (1.9.x)</li>
+    <li>(#7005) Anonymous access to the open course</li>
+    <li>(#7010) Problem group forum : student can't reply on a message</li>
+    <li>(#7019) When exporting all group in csv format, there is no user data (with solution)</li>
+    <li>(#7020) Cpanel conflicts</li>
+    <li>(#7025) Missing strings in 1.9.x</li>
+    <li>(#7033) TOOL_FORUM_CONFIG_TABLE constant not found</li>
+    <li>(#7034) Search function in forum</li>
+    <li>(#7036) Update japanese language</li>
+    <li>(#7043) dataTable.css all rights reserved</li>
+    <li>(#7052) Nanogong voice recorder will record and play but not send recording to the database</li>
+    <li>(#7054) wiki css - styles breaks in Chamilo 198</li>
+    <li>(#7055) Rich text editing not available when using IE11 (IE strikes again)</li>
+    <li>(#7058) Hotspot doesn't work correctly</li>
+    <li>(#7061) Change title of button "Create course" in teacher registration if course creation disabled by admin</li>
+    <li>(#7071) Replying a message in social network</li>
+    <li>(#7073) Session coach does not see session</li>
+    <li>(#7076) Chozen languages bar too large in IE11 and Safari 7</li>
+    <li>(#7077) Learning path - Didn't show the bottom part of large documents</li>
 </ul>
 <h3>Stylesheets and theming</h3>
 <ul>
-  <li></li>
+    <li>(#6217) Updated logo to new Chamilo logo in config section</li>
+    <li>(#7007) Dropped support for IE7</li>
 </ul>
 <h3>Web services</h3>
 <ul>
-  <li></li>
+    <li></li>
 </ul>
-
+<h3>Removals</h3>
+<ul>
+  <li>Custom tabs can no longer be defined directly in the settings_current table. If you have custom_tabs in this table (select * from settings_current where variable='show_tabs' AND subkey like 'custom_tab_%'), please add them through the hompeage edition screen.</li>
+</ul>
 
 <h1>Chamilo 1.9.6 - Rochefort, 4th of June, 2013</h1>
 <h3>Release notes - summary</h3>

@@ -28,7 +28,7 @@ if (empty($course_info)) {
 
 $result = downloadFile($id, $course_info);
 if ($result == false) {
-    api_not_allowed();
+    api_not_allowed(true);
 }
 
 exit;

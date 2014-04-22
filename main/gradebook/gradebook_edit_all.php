@@ -97,7 +97,7 @@ $cat = new Category();
 $my_category   = $cat->shows_all_information_an_category($my_selectcat);
 
 $original_total = $my_category['weight'];
-$masked_total = $parent_cat[0]->get_weight(); //$my_category['weight'];
+$masked_total = $parent_cat[0]->get_weight();
 
 $sql = 'SELECT * FROM '.$table_link.' WHERE category_id = '.$my_selectcat;
 $result = Database::query($sql);
@@ -105,44 +105,44 @@ $result = Database::query($sql);
 while ($row = Database ::fetch_array($result)) {
     $item_weight = $row['weight'];
     //$item_weight = $masked_total*$item_weight/$original_total;
-    
+
     //update only if value changed
-    if (isset($_POST['link'][$row['id']])) {        
+    if (isset($_POST['link'][$row['id']])) {
         //$new_weight = trim($_POST['link'][$row['id']]*$original_total/$masked_total);
         $new_weight = trim($_POST['link'][$row['id']]);
-        
+
         AbstractLink::add_link_log($row['id']);
         Database::query('UPDATE '.$table_link.' SET weight = '."'".Database::escape_string($new_weight)."'".' WHERE id = '.$row['id']);
-        $item_weight = trim($_POST['link'][$row['id']]);        
+        $item_weight = trim($_POST['link'][$row['id']]);
 
         //Update weight for attendance
         $sql = 'SELECT ref_id FROM '.$table_link.' WHERE id = '.intval($row['id']).' AND type='.LINK_ATTENDANCE;
         $rs_attendance  = Database::query($sql);
         if (Database::num_rows($rs_attendance) > 0) {
             $row_attendance = Database::fetch_array($rs_attendance);
-            $upd_attendance = 'UPDATE '.$tbl_attendance.' SET attendance_weight ='.floatval($_POST['link'][$row['id']]).' 
+            $upd_attendance = 'UPDATE '.$tbl_attendance.' SET attendance_weight ='.floatval($_POST['link'][$row['id']]).'
                                 WHERE c_id = '.$course_id.' AND  id = '.intval($row_attendance['ref_id']);
             Database::query($upd_attendance);
         }
         //Update weight into forum thread
-        $sql_t = 'UPDATE '.$tbl_forum_thread.' SET thread_weight='.floatval($_POST['link'][$row['id']]).' 
+        $sql_t = 'UPDATE '.$tbl_forum_thread.' SET thread_weight='.floatval($_POST['link'][$row['id']]).'
                     WHERE c_id = '.$course_id.' AND thread_id = (SELECT ref_id FROM '.$table_link.' WHERE id='.intval($row['id']).' AND type='.LINK_FORUM_THREAD.' ) ';
         Database::query($sql_t);
         //Update weight into student publication(work)
-        $sql_t='UPDATE '.$tbl_work.' SET weight='.floatval($_POST['link'][$row['id']]).' 
+        $sql_t='UPDATE '.$tbl_work.' SET weight='.floatval($_POST['link'][$row['id']]).'
                 WHERE  c_id = '.$course_id.' AND id = (SELECT ref_id FROM '.$table_link.' WHERE id='.intval($row['id']).' AND type = '.LINK_STUDENTPUBLICATION.' ) ';
         Database::query($sql_t);
     }
 
     $tempsql = Database::query('SELECT * FROM '.get_table_type_course($row['type']).' WHERE c_id = '.$course_id.' AND '.$table_evaluated[$row['type']][2].' = '.$row['ref_id']);
     $resource_name = Database ::fetch_array($tempsql);
-    
+
     if (isset($resource_name['lp_type'])) {
         $resource_name = $resource_name[2];
     } else {
         $resource_name = $resource_name[1];
     }
-    
+
     $output.= '<tr><td>'.build_type_icon_tag($row['type']).'</td><td> '.$resource_name.' '.Display::label($table_evaluated[$row['type']][3],'info').' </td>';
     $output.= '<td><input type="hidden" name="link_'.$row['id'].'" value="'.$resource_name.'" /><input size="10" type="text" name="link['.$row['id'].']" value="'.$item_weight.'"/></td></tr>';
 }
@@ -151,18 +151,18 @@ $sql = Database::query('SELECT * FROM '.$table_evaluation.' WHERE category_id = 
 while ($row = Database ::fetch_array($sql)) {
     $item_weight = $row['weight'];
     //$item_weight = $masked_total*$item_weight/$original_total;
-    
+
     //update only if value changed
     if (isset($_POST['evaluation'][$row['id']])) {
         Evaluation::add_evaluation_log($row['id']);
         //$new_weight = trim($_POST['evaluation'][$row['id']]*$original_total/$masked_total);
         $new_weight = trim($_POST['evaluation'][$row['id']]);
-        $update_sql = 'UPDATE '.$table_evaluation.' SET weight = '."'".Database::escape_string($new_weight)."'".' WHERE id = '.$row['id'];        
+        $update_sql = 'UPDATE '.$table_evaluation.' SET weight = '."'".Database::escape_string($new_weight)."'".' WHERE id = '.$row['id'];
         Database::query($update_sql);
         $item_weight = trim($_POST['evaluation'][$row['id']]);
     }
     $type_evaluated = isset($row['type']) ? $table_evaluated[$type_evaluated][3] : null;
-    $output.= '<tr><td>'.build_type_icon_tag('evalnotempty').'</td><td>'.$row['name'].' '.Display::label(get_lang('Evaluation').$type_evaluated).'</td>';    
+    $output.= '<tr><td>'.build_type_icon_tag('evalnotempty').'</td><td>'.$row['name'].' '.Display::label(get_lang('Evaluation').$type_evaluated).'</td>';
     $output.= '<td><input type="hidden" name="eval_'.$row['id'].'" value="'.$row['name'].'" /><input type="text" size="10" name="evaluation['.$row['id'].']" value="'.$item_weight.'"/></td></tr>';
 }
 //by iflorespaz

@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "Η κατηγορία Forum έχει διαγραφεί
 $ForumLocked = "Το Forum μπλοκαρίστηκε";
 $Forum = "Forum";
 $AddForumCategory = "Προσθήκη κατηγορίας Forum";
-$AddForum = "Προσθήκη Forum";
 $Topics = "Θέματα";
 $Posts = "Μηνύματα που αναρτήθηκαν / Posts";
 $LastPosts = "Η πιο πρόσφατη ανάρτηση";

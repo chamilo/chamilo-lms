@@ -462,7 +462,7 @@ function display_monthcalendar($month, $year, $agenda_items)
                 $bgcolor = $ii < 5 ? 'class="row_odd"' : 'class="row_even"';
                 $dayheader = Display::div($curday, array('class' => 'agenda_day'));
 
-                if (key_exists($curday, $agenda_items)) {
+                if (array_key_exists($curday, $agenda_items)) {
                     $dayheader = Display::div($curday, array('class' => 'agenda_day'));
                     $events_in_day = msort($agenda_items[$curday], 'start_date_tms');
                     foreach ($events_in_day as $value) {

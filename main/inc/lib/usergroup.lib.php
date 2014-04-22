@@ -11,8 +11,7 @@
 require_once 'model.lib.php';
 
 /**
- * Class
- * @package chamilo.library
+ * Class UserGroup
  */
 class UserGroup extends Model
 {
@@ -103,7 +102,6 @@ class UserGroup extends Model
             }
 
             return 0;
-
         } else {
             $row = Database::select(
                 'count(*) as count',
@@ -285,9 +283,7 @@ class UserGroup extends Model
                     LEFT OUTER JOIN {$this->usergroup_rel_course_table} urc
                     ON (u.id = urc.usergroup_id AND course_id = $course_id)
             ";
-
         } else {
-
             $sql = "SELECT DISTINCT u.id, name
                     FROM {$this->table} u
                     LEFT OUTER JOIN {$this->usergroup_rel_course_table} urc
@@ -710,9 +706,9 @@ class UserGroup extends Model
             $urlId = api_get_current_access_url_id();
             $from = $this->table." u INNER JOIN {$this->access_url_rel_usergroup} a ON (u.id = a.usergroup_id)";
             $options = array('where' => array('access_url_id = ? ' => $urlId));
-            return Database::select('name, description', $from, $options);
+            return Database::select('a.id, name, description', $from, $options);
         } else {
-            return Database::select('name, description', $this->table, $options);
+            return Database::select('id, name, description', $this->table, $options);
         }
     }
 
@@ -765,7 +761,7 @@ class UserGroup extends Model
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return bool|void
      */
     public function delete($id)
@@ -794,8 +790,8 @@ class UserGroup extends Model
     }
 
     /**
-     * @param $id
-     * @param $urlId
+     * @param int $id
+     * @param int $urlId
      */
     public function unsubscribeToUrl($id, $urlId)
     {
@@ -836,24 +832,8 @@ class UserGroup extends Model
             }
         }
         $response->addAssign('ajax_list_courses','innerHTML', api_utf8_encode($return));
-        return $response;
 
+        return $response;
     }
-    /**
-    * Add a user to a class. If the class is subscribed to a course, the new
-    * user will also be subscribed to that course.
-    * @param int $user_id The user id
-    * @param int $class_id The class id
-    */
-    public function addUser($userId, $classId)
-    {   
-        $table_rel_user = Database::get_main_table(TABLE_USERGROUP_REL_USER);
-        $userId  = intval($userId);
-        $classId = intval($classId);
-        $sql = "INSERT INTO $table_rel_user SET user_id = '".$userId."', usergroup_id='".$classId."'";
-	 Database::query($sql);
-    }
-    
-       
 }
 /* CREATE TABLE IF NOT EXISTS access_url_rel_usergroup (access_url_id int unsigned NOT NULL, usergroup_id int unsigned NOT NULL, PRIMARY KEY (access_url_id, usergroup_id));*/

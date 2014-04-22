@@ -465,6 +465,7 @@ function dir_total_space($dir_path) {
 	chdir($dir_path) ;
 	$handle = opendir($dir_path);
     $sumSize = 0;
+    $dirList = array();
 	while ($element = readdir($handle)) {
 		if ( $element == '.' || $element == '..') {
 			continue; // Skip the current and parent directories

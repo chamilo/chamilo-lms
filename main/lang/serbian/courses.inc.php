@@ -19,7 +19,6 @@ $Unsubscribe = "Odjavi";
 $lang_back_to_my_home_page = "Nazad na moju početnu stranicu";
 $lang_back_to_my_personnal_course_list = "Nazad na moju listu kurseva";
 $langTitular = "Mentor";
-$langBackToListOfThisUser = "Nazad na listu kurseva";
 $langAdministrationTools = "Administrativni alati";
 $lang_back_to_parent_category = "Jedna kategorija gore";
 $lang_back_to_course_selection = "Nazad na selektovane kurseve";

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AdditionalMailWasSentToSelectedUsers = "Dodatno: novo obvestilo je bilo ustvarjeno in razposlano izranim uporabnikom";
 $AgendaAdd = "Dodaj dogodek";
 $ShowAllEvents = "Prikaži vse";
 $ShowCurrent = "Tekoči mesec";

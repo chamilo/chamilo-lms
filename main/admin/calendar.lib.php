@@ -349,7 +349,7 @@ function display_monthcalendar($month, $year) {
 				$bgcolor = $ii<5 ? "class=\"row_odd\"" : "class=\"row_even\"";
 
 				$dayheader = "$curday";
-				if (key_exists($curday,$data)) {
+				if (array_key_exists($curday,$data)) {
 					$dayheader="<a href='".api_get_self()."?".api_get_cidreq()."&amp;view=list&amp;origin=$origin&amp;month=$month&amp;year=$year&amp;day=$curday#$curday'>".$curday."</a>";
 					foreach ($data[$curday] as $key=>$agenda_item) {
 						foreach ($agenda_item as $key=>$value) {

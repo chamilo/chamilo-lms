@@ -1,18 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * CLASS MultipleAnswer
- *
- * This class allows to instantiate an object of type MULTIPLE_ANSWER
- * (MULTIPLE CHOICE, MULTIPLE ANSWER), extending the class question
- * @author Julio Montoya
- * @package chamilo.exercise
- **/
-/**
  * Code
  */
 /**
- * Class
+ * Class MultipleAnswerTrueFalse
+ * This class allows to instantiate an object of type MULTIPLE_ANSWER
+ * (MULTIPLE CHOICE, MULTIPLE ANSWER), extending the class question
+ * @author Julio Montoya
  * @package chamilo.exercise
  */
 class MultipleAnswerTrueFalse extends Question {

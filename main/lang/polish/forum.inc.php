@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "Kategoria forum usunięta";
 $ForumLocked = "Forum zablokowane";
 $Forum = "Fora";
 $AddForumCategory = "Dodaj nową kategorię forum";
-$AddForum = "Dodaj nowe forum";
 $Topics = "Tematy";
 $Posts = "Posty";
 $LastPosts = "Ostatni post";

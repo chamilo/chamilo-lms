@@ -312,4 +312,5 @@ $Methodology = "Metode";
 $CourseMaterial = "Kurs materiell";
 $HumanAndTechnicalResources = "Menneskelige og tekniske ressurser";
 $Assessment = "Eksamen";
+$UploadADocument = "Last opp ett dokument";
 ?>

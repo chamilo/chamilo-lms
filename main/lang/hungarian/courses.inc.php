@@ -19,7 +19,6 @@ $Unsubscribe = "Leiratkozás";
 $lang_back_to_my_home_page = "Vissza a főoldalra";
 $lang_back_to_my_personnal_course_list = "Vissza a személyes kurzuslistához";
 $langTitular = "Vezető";
-$langBackToListOfThisUser = "Vissza a kurzuslistához";
 $langAdministrationTools = "Adminisztratív Eszközök";
 $lang_back_to_parent_category = "Vissza a szülő kategóriához";
 $lang_back_to_course_selection = "Vissza a kurzusválasztáshoz";

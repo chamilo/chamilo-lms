@@ -1,4 +1,5 @@
 <?php
+
 /* For licensing terms, see /license.txt */
 /**
  * @package chamilo.plugin.ticket
@@ -23,25 +24,26 @@ define('REENVIADO', 'REE'); // @todo delete option. This is a location of USIL
 
 /* Ticket priority constants */
 define('NORMAL', 'NRM');
-define('HIGH', 'ALT');
+define('HIGH', 'HGH');
 define('LOW', 'LOW');
 
 /* Ticket source constants */
 define('SRC_EMAIL', 'MAI');
 define('SRC_PHONE', 'TEL');
 define('SRC_PRESC', 'PRE');
+define('SRC_PLATFORM', 'PLA');
 
 /* Ticket category constants */
 define('CAT_DOCU', 'DOC');
 define('CAT_FORO', 'FOR');
 define('CAT_ANNU', 'ANN');
 
-require_once __DIR__.'/../../main/inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH).'plugin.class.php';
-require_once api_get_path(LIBRARY_PATH).'course.lib.php';
-require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
+require_once __DIR__ . '/../../main/inc/global.inc.php';
+require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
+require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
+require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH) . 'export.lib.inc.php';
+require_once api_get_path(LIBRARY_PATH) . 'fileUpload.lib.php';
 
-require_once api_get_path(PLUGIN_PATH).PLUGIN_NAME.'/lib/ticket.class.php';
-require_once api_get_path(PLUGIN_PATH).PLUGIN_NAME.'/lib/ticket_plugin.class.php';
-require_once api_get_path(PLUGIN_PATH).PLUGIN_NAME.'/src/ticket.class.php';
+require_once api_get_path(PLUGIN_PATH) . PLUGIN_NAME . '/src/ticket_plugin.class.php';
+require_once api_get_path(PLUGIN_PATH) . PLUGIN_NAME . '/src/ticket.class.php';

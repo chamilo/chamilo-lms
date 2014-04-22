@@ -93,7 +93,7 @@ if ($_GET['action'] == 'edit' && is_numeric($survey_id)) {
     );
     $tool_name = get_lang('EditSurvey');
 }
-
+$gradebook_link_id = null;
 // Getting the default values
 if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     $defaults = $survey_data;
@@ -111,9 +111,9 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     }
 } else {
     $defaults['survey_language'] = $_course['language'];
-    $defaults['start_date'] = date('d-F-Y H:i');
+    $defaults['start_date'] = date('Y-m-d', api_strtotime(api_get_local_time()));
     $startdateandxdays = time() + 864000; // today + 10 days
-    $defaults['end_date'] = date('d-F-Y H:i', $startdateandxdays);
+    $defaults['end_date'] = date('Y-m-d', $startdateandxdays);
     //$defaults['survey_share']['survey_share'] = 0;
     //$form_share_value = 1;
     $defaults['anonymous'] = 0;
@@ -151,8 +151,8 @@ $form->addElement('html_editor', 'survey_subtitle', get_lang('SurveySubTitle'), 
 
 // Pass the language of the survey in the form
 $form->addElement('hidden', 'survey_language');
-$form->addElement('datepickerdate', 'start_date', get_lang('StartDate'), array('form_name' => 'survey'));
-$form->addElement('datepickerdate', 'end_date', get_lang('EndDate'), array('form_name' => 'survey'));
+$form->addElement('date_picker', 'start_date', get_lang('StartDate'));
+$form->addElement('date_picker', 'end_date', get_lang('EndDate'));
 
 //$group = '';
 //$group[] =& HTML_QuickForm::createElement('radio', 'survey_share', null, get_lang('Yes'), $form_share_value);
@@ -163,7 +163,7 @@ $form->addElement('checkbox', 'anonymous', null, get_lang('Anonymous'));
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 
-// Aditional Parameters
+// Additional Parameters
 $form->addElement(
     'advanced_settings',
     '<a href="javascript: void(0);" onclick="javascript: advanced_parameters();">

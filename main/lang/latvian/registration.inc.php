@@ -76,7 +76,6 @@ $langFormula = "Ar sveicieniem";
 $langProblem = "Problēmu gadījumā, sazinieties ar mums.";
 $langIs = "ir";
 $langAddress = "Interneta adrese, e-mācību videi";
-$langSettings = "ar sekojošiem iestatījumiem : Lietotājvārds :";
 $langYouAreReg = "Jūs esat reģistrēts e-mācību vidē";
 $langYourReg = "Jūsu reģistrācija e-mācību vidē";
 $langUserFree = "Šis lietotājvārds jau ir aizņemts. Noklikšķiniet pārlūkprogrammas \"Back\" pogu un izvēlieties citu.";

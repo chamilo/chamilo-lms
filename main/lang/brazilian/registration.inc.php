@@ -76,7 +76,6 @@ $langFormula = "Atenciosamente";
 $langProblem = "Em caso de problemas, entre em contato conosco.";
 $langIs = "é";
 $langAddress = "O endereço do";
-$langSettings = "com as seguintes configurações :\n\nCodinome :";
 $langYouAreReg = "Você está inscrito no";
 $langYourReg = "Sua inscrição no";
 $langUserFree = "Esse codinome já está sendo utilizado. Use o botão voltar do seu navegador e escolha outro.";

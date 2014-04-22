@@ -2093,9 +2093,16 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 if ($work['qualification'] == '') {
                     $qualification_string = Display::label('-');
                 } else {
+                    $label = 'info';
+                    $relativeScore = $work['qualification']/$work_data['qualification'];
+                    if ($relativeScore < 0.5) {
+                        $label = 'important';
+                    } elseif ($relativeScore < 0.75) {
+                        $label = 'warning';
+                    }
                     $qualification_string = Display::label(
                         $work['qualification'].' / '.$work_data['qualification'],
-                        'info'
+                        $label
                     );
                 }
             }
@@ -4119,6 +4126,7 @@ function getFile($id, $course_info, $download = true)
             $download,
             $file['title']
         );
+        return true;
     }
     return false;
 }

@@ -95,7 +95,6 @@ $UnsubscribeFromPlatformSuccess = "Twoje konto % s zostało całkowicie usunięt
 $ToChangeYourEmailMustTypeYourPassword = "Aby zmienić swój adres e-mail musisz potwierdzić hasło.";
 $Invitations = "Zaproszenia";
 $MyGroups = "Moje grupy";
-$EditProfile = "Edytuj profil";
 $Social = "Społeczny";
 $Profile = "Profil";
 $MyFriends = "Znajomi";

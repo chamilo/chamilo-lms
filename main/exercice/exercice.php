@@ -414,23 +414,25 @@ $total = $total_exercises + $hp_count;
 
 $token = Security::get_token();
 if ($is_allowedToEdit && $origin != 'learnpath') {
-    echo '<a href="exercise_admin.php?'.api_get_cidreq().'">'.Display :: return_icon('new_exercice.png', get_lang('NewEx'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="question_create.php?'.api_get_cidreq().'">'.Display :: return_icon('new_question.png', get_lang('AddQ'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/exercise_admin.php?'.api_get_cidreq().'">'.
+        Display :: return_icon('new_exercice.png', get_lang('NewEx'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/question_create.php?'.api_get_cidreq().'">'.
+        Display :: return_icon('new_question.png', get_lang('AddQ'), '', ICON_SIZE_MEDIUM).'</a>';
     // Question category
-    echo '<a href="tests_category.php">';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/tests_category.php?'.api_get_cidreq().'">';
     echo Display::return_icon('question_category_show.gif', get_lang('QuestionCategory'));
     echo '</a>';
-    echo '<a href="question_pool.php">';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/question_pool.php?'.api_get_cidreq().'">';
     echo Display::return_icon('database.png', get_lang('QuestionPool'), array('style' => 'width:32px'));
     echo '</a>';
 
     //echo Display::url(Display::return_icon('looknfeel.png', get_lang('Media')), 'media.php?' . api_get_cidreq());
     // end question category
-    echo '<a href="hotpotatoes.php?'.api_get_cidreq().'">'.Display :: return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/hotpotatoes.php?'.api_get_cidreq().'">'.Display :: return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     // link to import qti2 ...
-    echo '<a href="qti2.php?'.api_get_cidreq().'">'.Display :: return_icon('import_qti2.png', get_lang('ImportQtiQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="aiken.php?'.api_get_cidreq().'">'.Display :: return_icon('import_aiken.png', get_lang('ImportAikenQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
-    echo '<a href="upload_exercise.php?'.api_get_cidreq().'">'.Display :: return_icon('import_excel.png', get_lang('ImportExcelQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/qti2.php?'.api_get_cidreq().'">'.Display :: return_icon('import_qti2.png', get_lang('ImportQtiQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/aiken.php?'.api_get_cidreq().'">'.Display :: return_icon('import_aiken.png', get_lang('ImportAikenQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercice/upload_exercise.php?'.api_get_cidreq().'">'.Display :: return_icon('import_excel.png', get_lang('ImportExcelQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
     echo Display::url(
         Display::return_icon(
             'clean_all.png',
@@ -438,7 +440,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
             '',
             array(
                 'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToEmptyAllTestResults'), ENT_QUOTES, $charset))."')) return false;",
-                'href' => 'exercice.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token
+                'href' => api_get_path(WEB_CODE_PATH).'exercice/exercice.php?'.api_get_cidreq().'&choice=clean_all_test&sec_token='.$token
             )
     );
 }
@@ -597,249 +599,269 @@ if (!empty($exercise_list)) {
                 if ($is_allowedToEdit) {
                     $lp_blocked = null;
                 if ($exercise_obj->exercise_was_added_in_lp == true) {
-                        $lp_blocked = Display::div(get_lang('AddedToLPCannotBeAccessed'), array('class' => 'lp_content_type_label'));
-                    }
+                    $lp_blocked = Display::div(get_lang('AddedToLPCannotBeAccessed'), array('class' => 'lp_content_type_label'));
+                }
 
-                    $visibility = api_get_item_visibility($course_info, TOOL_QUIZ, $my_exercise_id);
+                $visibility = api_get_item_visibility($course_info, TOOL_QUIZ, $my_exercise_id);
 
-                    if ($row['active'] == 0 || $visibility == 0) {
-                        $title = Display::tag('font', $cut_title, array('style' => 'color:grey'));
-                    } else {
-                        $title = $cut_title;
-                    }
-
-                    $count_exercise_not_validated = intval(count_exercise_result_not_validated($my_exercise_id, $course_code, $session_id));
-
-                    $move = Display::return_icon('all_directions.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
-                    $move = null;
-
-                    $class_tip = '';
-
-                    if (!empty($count_exercise_not_validated)) {
-                        $results_text = $count_exercise_not_validated == 1 ? get_lang('ResultNotRevised') : get_lang('ResultsNotRevised');
-                        $title .= '<span class="exercise_tooltip" style="display: none;">'.$count_exercise_not_validated.' '.$results_text.' </span>';
-                        $class_tip = 'link_tooltip';
-                    }
-                    //$class_tip = 'exercise_link';
-                    $url = $move.'<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>';
-
-                    $item = Display::tag('td', $url.' '.$session_img.$lp_blocked);
-
-                    //Count number exercice - teacher
-                    $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND exercice_id = $my_exercise_id";
-                    $sqlresult = Database::query($sqlquery);
-                    $rowi = Database :: result($sqlresult, 0);
-
-                    if ($session_id == $row['session_id']) {
-                        //Settings
-                        $actions = Display::url(Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL), 'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']);
-
-                        //Exercise results
-                        $actions .='<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.Display :: return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
-
-                        //Export
-                        $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')), '', array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
-
-                        //Clean exercise
-                        if ($locked == false) {
-                            $actions .= Display::url(Display::return_icon('clean.png', get_lang('CleanStudentResults'), '', ICON_SIZE_SMALL), '', array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteResults'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=clean_results&sec_token='.$token.'&exerciseId='.$row['id']));
-                        } else {
-                            $actions .= Display::return_icon('clean_na.png', get_lang('ResourceLockedByGradebook'), '', ICON_SIZE_SMALL);
-                        }
-
-                        //Visible / invisible
-                        //Check if this exercise was added in a LP
-                    		if ($exercise_obj->exercise_was_added_in_lp == true) {
-                            $actions .= Display::return_icon('invisible.png', get_lang('AddedToLPCannotBeAccessed'), '', ICON_SIZE_SMALL);
-                        } else {
-                            if ($row['active'] == 0 || $visibility == 0) {
-                                $actions .= Display::url(Display::return_icon('invisible.png', get_lang('Activate'), '', ICON_SIZE_SMALL), 'exercice.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);
-                            } else {
-                                // else if not active
-                                $actions .= Display::url(Display::return_icon('visible.png', get_lang('Deactivate'), '', ICON_SIZE_SMALL), 'exercice.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);
-                            }
-                        }
-                        // Export qti ...
-                        $actions .= Display::url(Display::return_icon('export_qti2.png', 'IMS/QTI', '', ICON_SIZE_SMALL), 'exercice.php?choice=exportqti2&exerciseId='.$row['id'].'&'.api_get_cidreq());
-                    } else {
-                        // not session
-                        $actions = Display::return_icon('edit_na.png', get_lang('ExerciseEditionNotAvailableInSession'));
-                        $actions .='<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.Display :: return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
-                        $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')), '', array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
-                    }
-
-                    //Delete
-                    if ($session_id == $row['session_id']) {
-                        if ($locked == false) {
-                            $actions .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL), '', array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDelete'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id']));
-                        } else {
-                            $actions .= Display::return_icon('delete_na.png', get_lang('ResourceLockedByGradebook'), '', ICON_SIZE_SMALL);
-                        }
-                    }
-
-                    // Number of questions
-                    $random_label = null;
-                    if ($row['random'] > 0 || $row['random'] == -1) {
-                        // if random == -1 means use random questions with all questions
-                        $random_number_of_question = $row['random'];
-                        if ($random_number_of_question == -1) {
-                            $random_number_of_question = $rowi;
-                        }
-                        if ($row['random_by_category'] > 0) {
-                            $nbQuestionsTotal = Testcategory::getNumberOfQuestionRandomByCategory($my_exercise_id, $random_number_of_question);
-                            $number_of_questions = $nbQuestionsTotal." ";
-                            $number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang("QuestionsLowerCase") : get_lang("QuestionLowerCase");
-                            $number_of_questions .= " - ";
-                            $number_of_questions .= min(Testcategory::getNumberMaxQuestionByCat($my_exercise_id), $random_number_of_question).' '.get_lang('QuestionByCategory');
-                        } else {
-                            $random_label = ' ('.get_lang('Random').') ';
-                            $number_of_questions = $random_number_of_question.' '.$random_label;
-                            //Bug if we set a random value bigger than the real number of questions
-                            if ($random_number_of_question > $rowi) {
-                                $number_of_questions = $rowi.' '.$random_label;
-                            }
-                        }
-                    } else {
-                        $number_of_questions = $rowi;
-                    }
-
-                    //Attempts
-                    //$attempts = get_count_exam_results($row['id']).' '.get_lang('Attempts');
-                    //$item .=  Display::tag('td',$attempts);
-                    $item .= Display::tag('td', $number_of_questions);
+                if ($row['active'] == 0 || $visibility == 0) {
+                    $title = Display::tag('font', $cut_title, array('style' => 'color:grey'));
                 } else {
-                    // Student only
+                    $title = $cut_title;
+                }
 
-                    $visibility = api_get_item_visibility($course_info, TOOL_QUIZ, $my_exercise_id);
+                $count_exercise_not_validated = intval(count_exercise_result_not_validated($my_exercise_id, $course_code, $session_id));
 
-                    if ($visibility == 0) {
-                        continue;
-                    }
+                $move = Display::return_icon('all_directions.png',get_lang('Move'), array('class'=>'moved', 'style'=>'margin-bottom:-0.5em;'));
+                $move = null;
 
-                    $url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.$cut_title.'</a>';
+                $class_tip = '';
 
-                    //Link of the exercise
-                    $item = Display::tag('td', $url.' '.$session_img);
+                if (!empty($count_exercise_not_validated)) {
+                    $results_text = $count_exercise_not_validated == 1 ? get_lang('ResultNotRevised') : get_lang('ResultsNotRevised');
+                    $title .= '<span class="exercise_tooltip" style="display: none;">'.$count_exercise_not_validated.' '.$results_text.' </span>';
+                    $class_tip = 'link_tooltip';
+                }
+                //$class_tip = 'exercise_link';
+                $url = $move.'<a '.$alt_title.' class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'"><img src="../img/quiz.gif" /> '.$title.' </a>';
 
-                    //count number exercise questions
-                    $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND exercice_id = ".$row['id'];
-                    $sqlresult = Database::query($sqlquery);
-                    $rowi = Database::result($sqlresult, 0);
+                $item = Display::tag('td', $url.' '.$session_img.$lp_blocked);
 
-                    if ($row['random'] > 0) {
-                        $row['random'].' '.api_strtolower(get_lang(($row['random'] > 1 ? 'Questions' : 'Question')));
+                //Count number exercice - teacher
+                $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION
+                             WHERE c_id = $course_id AND exercice_id = $my_exercise_id";
+                $sqlresult = Database::query($sqlquery);
+                $rowi = Database :: result($sqlresult, 0);
+
+                if ($session_id == $row['session_id']) {
+                    //Settings
+                    $actions = Display::url(
+                        Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL),
+                        'admin.php?'.api_get_cidreq().'&exerciseId='.$row['id']
+                    );
+
+                    //Exercise results
+                    $actions .='<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
+                        Display :: return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+
+                    //Export
+                    $actions .= Display::url(
+                        Display::return_icon('cd.gif', get_lang('CopyExercise')),
+                        '',
+                        array(
+                            'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;",
+                            'href' => 'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']
+                        )
+                    );
+
+                    //Clean exercise
+                    if ($locked == false) {
+                        $actions .= Display::url(
+                            Display::return_icon('clean.png', get_lang('CleanStudentResults'), '', ICON_SIZE_SMALL),
+                            '',
+                            array(
+                                'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDeleteResults'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;",
+                                'href' => 'exercice.php?'.api_get_cidreq().'&choice=clean_results&sec_token='.$token.'&exerciseId='.$row['id']
+                            )
+                        );
                     } else {
-                        //show results student
-                        $rowi.' '.api_strtolower(get_lang(($rowi > 1 ? 'Questions' : 'Question')));
+                        $actions .= Display::return_icon('clean_na.png', get_lang('ResourceLockedByGradebook'), '', ICON_SIZE_SMALL);
                     }
 
-                    //This query might be improved later on by ordering by the new "tms" field rather than by exe_id
-                    //Don't remove this marker: note-query-exe-results
-                    $qry = "SELECT * FROM $TBL_TRACK_EXERCICES
-                        WHERE   exe_exo_id      = ".$row['id']." AND
-                                exe_user_id     = ".api_get_user_id()." AND
-                                exe_cours_id    = '".api_get_course_id()."' AND
-                                status          <> 'incomplete' AND
-                                orig_lp_id      = 0 AND
-                                orig_lp_item_id = 0 AND
-                                session_id      =  '".api_get_session_id()."'
-                        ORDER BY exe_id DESC";
-                    $qryres = Database::query($qry);
-                    $num = Database :: num_rows($qryres);
-
-                    //Hide the results
-                    $my_result_disabled = $row['results_disabled'];
-
-                    //Time limits are on
-                    if ($time_limits) {
-                        // Examn is ready to be taken
-                        if ($is_actived_time) {
-                            //Show results 	697 	$attempt_text = get_lang('LatestAttempt').' : ';
-                            if ($my_result_disabled == 0 || $my_result_disabled == 2) {
-                                //More than one attempt
-                                if ($num > 0) {
-                                    $row_track = Database :: fetch_array($qryres);
-                                    $attempt_text = get_lang('LatestAttempt').' : ';
-                                    $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
-                                } else {
-                                    //No attempts
-                                    $attempt_text = get_lang('NotAttempted');
-                                }
-                            } else {
-                                $attempt_text = get_lang('CantShowResults');
-                            }
+                    //Visible / invisible
+                    //Check if this exercise was added in a LP
+                    if ($exercise_obj->exercise_was_added_in_lp == true) {
+                        $actions .= Display::return_icon('invisible.png', get_lang('AddedToLPCannotBeAccessed'), '', ICON_SIZE_SMALL);
+                    } else {
+                        if ($row['active'] == 0 || $visibility == 0) {
+                            $actions .= Display::url(Display::return_icon('invisible.png', get_lang('Activate'), '', ICON_SIZE_SMALL), 'exercice.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);
                         } else {
-                            //Quiz not ready due to time limits 	700 	$attempt_text = get_lang('NotAttempted');
-                            //@todo use the is_visible function
-                            if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
-                                $today = time();
-                                $start_time = api_strtotime($row['start_time'], 'UTC');
-                                $end_time = api_strtotime($row['end_time'], 'UTC');
-                                if ($today < $start_time) {
-                                    $attempt_text = sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
-                                } else {
-                                    if ($today > $end_time) {
-                                        $attempt_text = sprintf(get_lang('ExerciseWasActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
-                                    }
-                                }
-
-                            } else {
-                                //$attempt_text = get_lang('ExamNotAvailableAtThisTime');
-                                if ($row['start_time'] != '0000-00-00 00:00:00') {
-                                    $attempt_text = sprintf(get_lang('ExerciseAvailableFromX'), api_convert_and_format_date($row['start_time']));
-                                }
-                                if ($row['end_time'] != '0000-00-00 00:00:00') {
-                                    $attempt_text = sprintf(get_lang('ExerciseAvailableUntilX'), api_convert_and_format_date($row['end_time']));
-                                }
-                            }
+                            // else if not active
+                            $actions .= Display::url(Display::return_icon('visible.png', get_lang('Deactivate'), '', ICON_SIZE_SMALL), 'exercice.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']);
                         }
+                    }
+                    // Export qti ...
+                    $actions .= Display::url(Display::return_icon('export_qti2.png', 'IMS/QTI', '', ICON_SIZE_SMALL), 'exercice.php?choice=exportqti2&exerciseId='.$row['id'].'&'.api_get_cidreq());
+                } else {
+                    // not session
+                    $actions = Display::return_icon('edit_na.png', get_lang('ExerciseEditionNotAvailableInSession'));
+                    $actions .='<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.Display :: return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
+                    $actions .= Display::url(Display::return_icon('cd.gif', get_lang('CopyExercise')), '', array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToCopy'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id']));
+                }
+
+                //Delete
+                if ($session_id == $row['session_id']) {
+                    if ($locked == false) {
+                        $actions .= Display::url(Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL), '', array('onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('AreYouSureToDelete'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;", 'href' => 'exercice.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id']));
                     } else {
-                        //Normal behaviour
-                        //Show results
+                        $actions .= Display::return_icon('delete_na.png', get_lang('ResourceLockedByGradebook'), '', ICON_SIZE_SMALL);
+                    }
+                }
+
+                // Number of questions
+                $random_label = null;
+                if ($row['random'] > 0 || $row['random'] == -1) {
+                    // if random == -1 means use random questions with all questions
+                    $random_number_of_question = $row['random'];
+                    if ($random_number_of_question == -1) {
+                        $random_number_of_question = $rowi;
+                    }
+                    if ($row['random_by_category'] > 0) {
+                        $nbQuestionsTotal = Testcategory::getNumberOfQuestionRandomByCategory($my_exercise_id, $random_number_of_question);
+                        $number_of_questions = $nbQuestionsTotal." ";
+                        $number_of_questions .= ($nbQuestionsTotal > 1) ? get_lang("QuestionsLowerCase") : get_lang("QuestionLowerCase");
+                        $number_of_questions .= " - ";
+                        $number_of_questions .= min(Testcategory::getNumberMaxQuestionByCat($my_exercise_id), $random_number_of_question).' '.get_lang('QuestionByCategory');
+                    } else {
+                        $random_label = ' ('.get_lang('Random').') ';
+                        $number_of_questions = $random_number_of_question.' '.$random_label;
+                        //Bug if we set a random value bigger than the real number of questions
+                        if ($random_number_of_question > $rowi) {
+                            $number_of_questions = $rowi.' '.$random_label;
+                        }
+                    }
+                } else {
+                    $number_of_questions = $rowi;
+                }
+
+                //Attempts
+                //$attempts = get_count_exam_results($row['id']).' '.get_lang('Attempts');
+                //$item .=  Display::tag('td',$attempts);
+                $item .= Display::tag('td', $number_of_questions);
+            } else {
+                // Student only
+
+                $visibility = api_get_item_visibility($course_info, TOOL_QUIZ, $my_exercise_id);
+
+                if ($visibility == 0) {
+                    continue;
+                }
+
+                $url = '<a '.$alt_title.'  href="overview.php?'.api_get_cidreq().$myorigin.$mylpid.$mylpitemid.'&exerciseId='.$row['id'].'">'.$cut_title.'</a>';
+
+                //Link of the exercise
+                $item = Display::tag('td', $url.' '.$session_img);
+
+                //count number exercise questions
+                $sqlquery = "SELECT count(*) FROM $TBL_EXERCICE_QUESTION WHERE c_id = $course_id AND exercice_id = ".$row['id'];
+                $sqlresult = Database::query($sqlquery);
+                $rowi = Database::result($sqlresult, 0);
+
+                if ($row['random'] > 0) {
+                    $row['random'].' '.api_strtolower(get_lang(($row['random'] > 1 ? 'Questions' : 'Question')));
+                } else {
+                    //show results student
+                    $rowi.' '.api_strtolower(get_lang(($rowi > 1 ? 'Questions' : 'Question')));
+                }
+
+                //This query might be improved later on by ordering by the new "tms" field rather than by exe_id
+                //Don't remove this marker: note-query-exe-results
+                $qry = "SELECT * FROM $TBL_TRACK_EXERCICES
+                        WHERE
+                            exe_exo_id      = ".$row['id']." AND
+                            exe_user_id     = ".api_get_user_id()." AND
+                            exe_cours_id    = '".api_get_course_id()."' AND
+                            status          <> 'incomplete' AND
+                            orig_lp_id      = 0 AND
+                            orig_lp_item_id = 0 AND
+                            session_id      =  '".api_get_session_id()."'
+                        ORDER BY exe_id DESC";
+                $qryres = Database::query($qry);
+                $num = Database :: num_rows($qryres);
+
+                //Hide the results
+                $my_result_disabled = $row['results_disabled'];
+
+                //Time limits are on
+                if ($time_limits) {
+                    // Examn is ready to be taken
+                    if ($is_actived_time) {
+                        //Show results 	697 	$attempt_text = get_lang('LatestAttempt').' : ';
                         if ($my_result_disabled == 0 || $my_result_disabled == 2) {
+                            //More than one attempt
                             if ($num > 0) {
                                 $row_track = Database :: fetch_array($qryres);
                                 $attempt_text = get_lang('LatestAttempt').' : ';
                                 $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
                             } else {
+                                //No attempts
                                 $attempt_text = get_lang('NotAttempted');
                             }
                         } else {
                             $attempt_text = get_lang('CantShowResults');
                         }
-                    }
-
-                    $class_tip = '';
-
-                    if (empty($num)) {
-                        $num = '';
                     } else {
-                        $class_tip = 'link_tooltip';
-                        //@todo use sprintf and show the results validated by the teacher
-                        if ($num == 1) {
-                            $num = $num.' '.get_lang('Result');
+                        //Quiz not ready due to time limits 	700 	$attempt_text = get_lang('NotAttempted');
+                        //@todo use the is_visible function
+                        if ($row['start_time'] != '0000-00-00 00:00:00' && $row['end_time'] != '0000-00-00 00:00:00') {
+                            $today = time();
+                            $start_time = api_strtotime($row['start_time'], 'UTC');
+                            $end_time = api_strtotime($row['end_time'], 'UTC');
+                            if ($today < $start_time) {
+                                $attempt_text = sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                            } else {
+                                if ($today > $end_time) {
+                                    $attempt_text = sprintf(get_lang('ExerciseWasActivatedFromXToY'), api_convert_and_format_date($row['start_time']), api_convert_and_format_date($row['end_time']));
+                                }
+                            }
+
                         } else {
-                            $num = $num.' '.get_lang('Results');
+                            //$attempt_text = get_lang('ExamNotAvailableAtThisTime');
+                            if ($row['start_time'] != '0000-00-00 00:00:00') {
+                                $attempt_text = sprintf(get_lang('ExerciseAvailableFromX'), api_convert_and_format_date($row['start_time']));
+                            }
+                            if ($row['end_time'] != '0000-00-00 00:00:00') {
+                                $attempt_text = sprintf(get_lang('ExerciseAvailableUntilX'), api_convert_and_format_date($row['end_time']));
+                            }
                         }
-                        $num = '<span class="tooltip" style="display: none;">'.$num.'</span>';
                     }
-                    $item .= Display::tag('td', $attempt_text);
-
-                    //See results
-                    //$actions = '<a class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="exercise_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.$num.Display::return_icon('test_results.png', get_lang('Results'),'',ICON_SIZE_SMALL).' </a>';
+                } else {
+                    //Normal behaviour
+                    //Show results
+                    if ($my_result_disabled == 0 || $my_result_disabled == 2) {
+                        if ($num > 0) {
+                            $row_track = Database :: fetch_array($qryres);
+                            $attempt_text = get_lang('LatestAttempt').' : ';
+                            $attempt_text .= show_score($row_track['exe_result'], $row_track['exe_weighting']);
+                        } else {
+                            $attempt_text = get_lang('NotAttempted');
+                        }
+                    } else {
+                        $attempt_text = get_lang('CantShowResults');
+                    }
                 }
-                $class = 'row_even';
-                if ($count % 2) {
-                    $class = 'row_odd';
-                }
 
-                if ($is_allowedToEdit) {
-                    $item .= Display::tag('td', $actions, array('class' => 'td_actions'));
-                }
-                echo Display::tag('tr', $item, array('id' => 'exercise_list_'.$my_exercise_id, 'class' => $class));
+                $class_tip = '';
 
-                $count++;
-            } // end foreach()
+                if (empty($num)) {
+                    $num = '';
+                } else {
+                    $class_tip = 'link_tooltip';
+                    //@todo use sprintf and show the results validated by the teacher
+                    if ($num == 1) {
+                        $num = $num.' '.get_lang('Result');
+                    } else {
+                        $num = $num.' '.get_lang('Results');
+                    }
+                    $num = '<span class="tooltip" style="display: none;">'.$num.'</span>';
+                }
+                $item .= Display::tag('td', $attempt_text);
+
+                //See results
+                //$actions = '<a class="'.$class_tip.'" id="tooltip_'.$row['id'].'" href="exercise_report.php?' . api_get_cidreq() . '&exerciseId='.$row['id'].'">'.$num.Display::return_icon('test_results.png', get_lang('Results'),'',ICON_SIZE_SMALL).' </a>';
+            }
+            $class = 'row_even';
+            if ($count % 2) {
+                $class = 'row_odd';
+            }
+
+            if ($is_allowedToEdit) {
+                $item .= Display::tag('td', $actions, array('class' => 'td_actions'));
+            }
+            echo Display::tag('tr', $item, array('id' => 'exercise_list_'.$my_exercise_id, 'class' => $class));
+
+            $count++;
+        } // end foreach()
     }
 }
 // end exercise list
@@ -849,20 +871,25 @@ $hotpotatoes_exist = false;
 if ($is_allowedToEdit) {
     $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
             FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
-            WHERE   d.c_id = $course_id AND
-                    ip.c_id = $course_id AND
-                    d.id = ip.ref AND
-                    ip.tool = '".TOOL_DOCUMENT."' AND
-                    (d.path LIKE '%htm%') AND
-                    d.path  LIKE '".Database :: escape_string($uploadPath)."/%/%'
-                    LIMIT ".$from.",".$limit; // only .htm or .html files listed
+            WHERE
+                d.c_id = $course_id AND
+                ip.c_id = $course_id AND
+                d.id = ip.ref AND
+                ip.tool = '".TOOL_DOCUMENT."' AND
+                (d.path LIKE '%htm%') AND
+                d.path  LIKE '".Database :: escape_string($uploadPath)."/%/%'
+            LIMIT ".$from.",".$limit; // only .htm or .html files listed
 } else {
     $sql = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility
             FROM $TBL_DOCUMENT d, $TBL_ITEM_PROPERTY ip
-            WHERE d.c_id = $course_id AND
-                    ip.c_id = $course_id AND
-            d.id = ip.ref AND ip.tool = '".TOOL_DOCUMENT."' AND (d.path LIKE '%htm%')
-            AND   d.path  LIKE '".Database :: escape_string($uploadPath)."/%/%' AND ip.visibility='1'
+            WHERE
+                d.c_id = $course_id AND
+                ip.c_id = $course_id AND
+                d.id = ip.ref AND
+                ip.tool = '".TOOL_DOCUMENT."' AND
+                (d.path LIKE '%htm%') AND
+                d.path  LIKE '".Database :: escape_string($uploadPath)."/%/%' AND
+                ip.visibility='1'
             LIMIT ".$from.",".$limit;
 }
 
@@ -897,7 +924,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
 
         // prof only
         if ($is_allowedToEdit) {
-            $item = Display::tag('td', '<img src="../img/hotpotatoes_s.png" alt="HotPotatoes" /> <a href="showinframes.php?file='.$path.'&cid='.api_get_course_id().'&uid='.api_get_user_id().'"'.(!$active ? 'class="invisible"' : '').'>'.$title.'</a> ');
+            $item = Display::tag('td', '<img src="../img/hotpotatoes_s.png" alt="HotPotatoes" /> <a href="showinframes.php?file='.$path.'&cid='.api_get_course_id().'&uid='.api_get_user_id().'" '.(!$active ? 'class="invisible"' : '').' >'.$title.'</a> ');
             $item .= Display::tag('td', '-');
 
             $actions = Display::url(Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL), 'adminhp.php?'.api_get_cidreq().'&hotpotatoesName='.$path);
@@ -918,7 +945,7 @@ if (isset($attribute['path']) && is_array($attribute['path'])) {
         } else { // student only
             if ($active == 1) {
                 $nbrActiveTests = $nbrActiveTests + 1;
-                $item .= Display::tag('td', '<a href="showinframes.php?'.api_get_cidreq().'&file='.$path.'&cid='.api_get_course_id().'&uid='.api_get_user_id().'"'.(!$active ? 'class="invisible"' : '').'">'.$title.'</a>');
+                $item .= Display::tag('td', '<a href="showinframes.php?'.api_get_cidreq().'&file='.$path.'&cid='.api_get_course_id().'&uid='.api_get_user_id().'" '.(!$active ? 'class="invisible"' : '').' >'.$title.'</a>');
                 //$item .= Display::tag('td', '');
                 $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'&filter_by_user='.api_get_user_id().'">'.Display :: return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
                 $item .= Display::tag('td', $actions);

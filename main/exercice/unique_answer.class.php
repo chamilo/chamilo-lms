@@ -1,11 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * File containing the UNIQUE_ANSWER class.
- * @package chamilo.exercise
- * @author Eric Marguin
- */
-/**
  * UNIQUE_ANSWER class
  *
  * This class allows to instantiate an object of type UNIQUE_ANSWER

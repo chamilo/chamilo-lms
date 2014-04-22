@@ -2507,6 +2507,7 @@ class CourseManager
 
     /**
      * Get course code(s) from visual code
+     * @deprecated
      * @param   string  Visual code
      * @return  array   List of codes for the given visual code
      */
@@ -2542,14 +2543,14 @@ class CourseManager
     }
 
     /**
-     * Get coachs' emails by session
+     * Get coaches emails by session
      * @param int session id
      * @param string course code
      * @return array  array(email => name_tutor)  by coach
      * @author Carlos Vargas <carlos.vargas@dokeos.com>
      */
-    public static function get_email_of_tutor_to_session($session_id, $course_code) {
-
+    public static function get_email_of_tutor_to_session($session_id, $course_code)
+    {
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
         $coachs_emails = array();
@@ -2557,7 +2558,8 @@ class CourseManager
         $course_code = Database::escape_string($course_code);
         $session_id = intval($session_id);
 
-        $sql = "SELECT id_user FROM $tbl_session_course_user WHERE id_session='$session_id' AND course_code='$course_code' AND status =2";
+        $sql = "SELECT id_user FROM $tbl_session_course_user
+                WHERE id_session='$session_id' AND course_code='$course_code' AND status = 2";
         $rs  = Database::query($sql);
 
         if (Database::num_rows($rs) > 0) {
@@ -2567,12 +2569,15 @@ class CourseManager
                 $user_ids[] = $row['id_user'];
             }
 
-            $sql = "SELECT firstname, lastname, email FROM $tbl_user WHERE user_id IN (".implode(",",$user_ids).")";
+            $sql = "SELECT firstname, lastname, email FROM $tbl_user
+                    WHERE user_id IN (".implode(",",$user_ids).")";
             $rs_user = Database::query($sql);
 
             while ($row_emails = Database::fetch_array($rs_user)) {
-                //$name_tutor = api_get_person_name($row_emails['firstname'], $row_emails['lastname'], null, PERSON_NAME_EMAIL_ADDRESS);
-                $mail_tutor = array('email' => $row_emails['email'], 'complete_name' => api_get_person_name($row_emails['firstname'], $row_emails['lastname']));
+                $mail_tutor = array(
+                    'email' => $row_emails['email'],
+                    'complete_name' => api_get_person_name($row_emails['firstname'], $row_emails['lastname'])
+                );
                 $coachs_emails[] = $mail_tutor;
             }
         }
@@ -2586,7 +2591,8 @@ class CourseManager
       * @param    string    Field's language var name
       * @return int     new extra field id
       */
-    public static function create_course_extra_field($fieldvarname, $fieldtype, $fieldtitle) {
+    public static function create_course_extra_field($fieldvarname, $fieldtype, $fieldtitle)
+    {
         // database table definition
         $t_cfv            = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
         $t_cf             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
@@ -2613,12 +2619,12 @@ class CourseManager
             $order = $row[0] + 1;
         }
 
-        $sql = "INSERT INTO $t_cf
-                                    SET field_type = '$fieldtype',
-                                    field_variable = '$fieldvarname',
-                                    field_display_text = '$fieldtitle',
-                                    field_order = '$order',
-                                    tms = FROM_UNIXTIME($time)";
+        $sql = "INSERT INTO $t_cf SET
+                field_type = '$fieldtype',
+                field_variable = '$fieldvarname',
+                field_display_text = '$fieldtitle',
+                field_order = '$order',
+                tms = FROM_UNIXTIME($time)";
         Database::query($sql);
 
         return Database::insert_id();
@@ -2632,7 +2638,8 @@ class CourseManager
      * @param string Attribute value
      * @return bool True if attribute was successfully updated, false if course was not found or attribute name is invalid
      */
-    public static function update_attribute($id, $name, $value) {
+    public static function update_attribute($id, $name, $value)
+    {
         $id = (int)$id;
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = "UPDATE $table SET $name = '".Database::escape_string($value)."' WHERE id = '$id';";
@@ -2646,7 +2653,8 @@ class CourseManager
      * @param array Associative array with field names as keys and field values as values
      * @return bool True if update was successful, false otherwise
      */
-    public static function update_attributes($id, $attributes) {
+    public static function update_attributes($id, $attributes)
+    {
         $id = (int)$id;
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = "UPDATE $table SET ";
@@ -2664,7 +2672,6 @@ class CourseManager
         return Database::query($sql);
     }
 
-
     /**
      * Update an extra field value for a given course
      * @param    integer    Course ID
@@ -2672,8 +2679,8 @@ class CourseManager
      * @param    string    Field value
      * @return    boolean    true if field updated, false otherwise
      */
-    public static function update_course_extra_field_value($course_code, $fname, $fvalue = '') {
-
+    public static function update_course_extra_field_value($course_code, $fname, $fvalue = '')
+    {
         $t_cfv            = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
         $t_cf             = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
         $fname = Database::escape_string($fname);
@@ -2698,7 +2705,9 @@ class CourseManager
             $rowcf = Database::fetch_array($rescf);
 
             $tms = time();
-            $sqlcfv = "SELECT * FROM $t_cfv WHERE course_code = '$course_code' AND field_id = '".$rowcf['id']."' ORDER BY id";
+            $sqlcfv = "SELECT * FROM $t_cfv
+                       WHERE course_code = '$course_code' AND field_id = '".$rowcf['id']."'
+                       ORDER BY id";
             $rescfv = Database::query($sqlcfv);
             $n = Database::num_rows($rescfv);
             if ($n > 1) {
@@ -2711,11 +2720,14 @@ class CourseManager
                     }
                     $rowcfv = Database::fetch_array($rescfv);
                     if ($rowcfv['field_value'] != $fvalues) {
-                        $sqlu = "UPDATE $t_cfv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms) WHERE id = ".$rowcfv['id'];
+                        $sqlu = "UPDATE $t_cfv SET field_value = '$fvalues', tms = FROM_UNIXTIME($tms)
+                                 WHERE id = ".$rowcfv['id'];
                         $resu = Database::query($sqlu);
                         return ($resu ? true : false);
                     }
-                    return true; // TODO: Sure exit from the function occures in this "while" cycle. Logic should checked. Maybe "if" instead of "while"? It is not clear...
+                    return true;
+                    /* TODO: Sure exit from the function occures in this "while" cycle.
+                    Logic should checked. Maybe "if" instead of "while"? It is not clear... */
                 }
             } elseif ($n == 1) {
                 //we need to update the current record
@@ -2741,15 +2753,18 @@ class CourseManager
 
     /**
      * Get the course id of an course by the database name
+     * @deprecated
      * @param string The database name
      * @return string The course id
      */
-    public static function get_course_id_by_database_name($db_name) {
+    public static function get_course_id_by_database_name($db_name)
+    {
         return Database::result(Database::query('SELECT code FROM '.Database::get_main_table(TABLE_MAIN_COURSE).
                 ' WHERE db_name="'.Database::escape_string($db_name).'"'), 0, 'code');
     }
 
-    public static function get_session_category_id_by_session_id($session_id) {
+    public static function get_session_category_id_by_session_id($session_id)
+    {
         return Database::result(Database::query('SELECT  sc.id session_category
                 FROM '.Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY).' sc
                 INNER JOIN '.Database::get_main_table(TABLE_MAIN_SESSION).' s
@@ -2762,7 +2777,8 @@ class CourseManager
      * @param string The database name
      * @return string The course id
      */
-    public static function get_course_extra_field_list($code) {
+    public static function get_course_extra_field_list($code)
+    {
         $tbl_course_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
         $tbl_course_field_value    = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
         $sql_field = "SELECT id, field_type, field_variable, field_display_text, field_default_value
@@ -2789,7 +2805,8 @@ class CourseManager
      * @param string Course code
      * @return string Value
      */
-    public static function get_course_extra_field_value($field_name, $code) {
+    public static function get_course_extra_field_value($field_name, $code)
+    {
         $tbl_course_field = Database::get_main_table(TABLE_MAIN_COURSE_FIELD);
         $tbl_course_field_value    = Database::get_main_table(TABLE_MAIN_COURSE_FIELD_VALUES);
         $sql = "SELECT id FROM $tbl_course_field WHERE field_visible = '1' AND field_variable = '$field_name';";
@@ -2809,13 +2826,14 @@ class CourseManager
         }
     }
 
-
     /**
      * Get the database name of a course by the code
+     * @deprecated
      * @param string The course code
      * @return string The database name
      */
-    public static function get_name_database_course($course_code) {
+    public static function get_name_database_course($course_code)
+    {
         return Database::result(Database::query('SELECT db_name FROM '.Database::get_main_table(TABLE_MAIN_COURSE).
                 ' WHERE code="'.Database::escape_string($course_code).'"'), 0, 'db_name');
     }
@@ -2868,12 +2886,6 @@ class CourseManager
         return Database::fetch_array(Database::query($sql));
     }
 
-    /*
-    ==============================================================================
-        DEPRECATED METHODS
-    ==============================================================================
-    */
-
     /**
      *    This code creates a select form element to let the user
      *    choose a real course to link to.
@@ -2888,7 +2900,7 @@ class CourseManager
      *    current user is course admin are displayed, false all real courses are shown.
      *    @param string $element_name the name of the select element
      *    @return a string containing html code for a form select element.
-     * @deprecated Function not in use
+     *    @deprecated Function not in use
      */
     public static function get_real_course_code_select_html($element_name, $has_size = true, $only_current_user_courses = true, $user_id) {
         if ($only_current_user_courses) {
@@ -2915,10 +2927,11 @@ class CourseManager
     }
 
     /**
-     *     Get count rows of a table inside a course database
+     *  Get count rows of a table inside a course database
      *  @param  string    The table of which the rows should be counted
      *  @param  int        optionally count rows by session id
      *  @return int     The number of rows in the given table.
+     *  @deprecated
      */
     public static function count_rows_course_table($table, $session_id = '', $course_id = null) {
         $condition_session = '';
@@ -2940,12 +2953,13 @@ class CourseManager
     }
 
     /**
-      * Subscribes courses to human resource manager (Dashboard feature)
-      *    @param    int         Human Resource Manager id
-      * @param    array        Courses code
-      * @param    int            Relation type
-      **/
-    public static function suscribe_courses_to_hr_manager($hr_manager_id,$courses_list) {
+    * Subscribes courses to human resource manager (Dashboard feature)
+    *    @param    int         Human Resource Manager id
+    * @param    array        Courses code
+    * @param    int            Relation type
+    **/
+    public static function suscribe_courses_to_hr_manager($hr_manager_id,$courses_list)
+    {
         global $_configuration;
 
         // Database Table Definitions
@@ -3126,8 +3140,8 @@ class CourseManager
      * @param   string  The full system name of the image from which course picture will be created.
      * @return  bool    Returns the resulting. In case of internal error or negative validation returns FALSE.
      */
-    public static function update_course_picture($course_code, $filename, $source_file = null) {
-
+    public static function update_course_picture($course_code, $filename, $source_file = null)
+    {
         $course_info          = api_get_course_info($course_code);
         $store_path           = api_get_path(SYS_COURSE_PATH).$course_info['path'];   // course path
         $course_image         = $store_path.'/course-pic.png';                      // image name for courses
@@ -3195,7 +3209,6 @@ class CourseManager
         return $html;
     }
 
-
     /**
      * Builds the course block in user_portal.php
      * @todo use Twig
@@ -3252,8 +3265,8 @@ class CourseManager
         return $html;
     }
 
-
-    public static function course_item_parent($main_content, $sub_content, $sub_sub_content = null) {
+    public static function course_item_parent($main_content, $sub_content, $sub_sub_content = null)
+    {
         return '<div class="well">'.$main_content.$sub_content.$sub_sub_content.'</div>';
     }
 
@@ -3266,7 +3279,8 @@ class CourseManager
      * @param bool      Whether to show the document quick-loader or not
      * @return void
      */
-    public static function display_special_courses($user_id, $load_dirs = false) {
+    public static function display_special_courses($user_id, $load_dirs = false)
+    {
         $user_id = intval($user_id);
         $tbl_course                 = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user            = Database::get_main_table(TABLE_MAIN_COURSE_USER);

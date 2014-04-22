@@ -288,8 +288,8 @@ class TicketManager
         if ($sendConfirmation) {
             $form = '<form action="ticket_details.php?ticket_id=' . $ticket_id . '" id="confirmticket" method="POST" >
                          <p>' . $plugin->get_lang('TicketWasThisAnswerSatisfying') . '</p>
-                         <input id="responseyes" type="submit" value="' . get_lang('Yes') . '" name="response" />
-                         <input id="responseno" type="submit" value="' . get_lang('No') . '" name="response" />
+                         <button name="response" id="responseyes" value="1">' . get_lang('Yes') . '</button>
+                         <button name="response" id="responseno" value="0">' . get_lang('No') . '</button>
                      </form>';
             $content .= $form;
             Database::query(

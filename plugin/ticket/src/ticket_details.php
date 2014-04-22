@@ -162,7 +162,7 @@ if (!isset($_GET['ticket_id'])) {
 }
 if (isset($_POST['response'])) {
     if ($user_id == $ticket['ticket']['request_user']) {
-        $response = ($_POST['response'] == get_lang('Yes')) ? true : ($_POST['response'] == get_lang('No') ? false : null);
+        $response = ($_POST['response'] == "1") ? true : ($_POST['response'] == "0" ? false : null);
         if ($response && $ticket['ticket']['status_id'] == 'XCF') {
             TicketManager::close_ticket($_GET['ticket_id'], $user_id);
             $ticket['ticket']['status_id'] = 'CLS';

@@ -149,6 +149,7 @@ class survey_manager
 			$return['shuffle']				= $return['shuffle'];
 			$return['parent_id']			= $return['parent_id'];
 			$return['survey_version']		= $return['survey_version'];
+			$return['anonymous']		        = $return['anonymous'];
         }
         return $return;
 	}

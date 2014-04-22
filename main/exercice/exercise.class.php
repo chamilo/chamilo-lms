@@ -1733,6 +1733,7 @@ class Exercise
                     $label = get_lang('NextQuestion');
                     $class = 'btn btn-primary';
                 }
+				$class .= ' question-validate-btn'; // used to select it with jquery
                 if ($this->type == ONE_PER_PAGE) {
                     if ($questionNum != 1) {
                         $prev_question = $questionNum - 2;
@@ -1757,6 +1758,7 @@ class Exercise
                         $all_label = get_lang('EndTest');
                         $class = 'btn btn-warning';
                     }
+					$class .= ' question-validate-btn'; // used to select it with jquery
                     $all_button = '&nbsp;<a href="javascript://" class="'.$class.'" onclick="validate_all(); ">'.$all_label.'</a>';
                     $all_button .= '&nbsp;<span id="save_all_reponse"></span>';
                     $html .= $all_button;

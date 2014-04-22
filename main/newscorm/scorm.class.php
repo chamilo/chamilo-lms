@@ -400,12 +400,13 @@ class scorm extends learnpath
 
                 $prereq = Database::escape_string($item['prerequisites']);
                 $item['datafromlms'] = Database::escape_string($item['datafromlms']);
+                $item['parameters'] = Database::escape_string($item['parameters']);
 
-                $sql_item = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order,launch_data, parameters)
+                $sql = "INSERT INTO $new_lp_item (c_id, lp_id,item_type,ref,title, path,min_score,max_score, $field_add parent_item_id,previous_item_id,next_item_id, prerequisite,display_order,launch_data, parameters)
                         VALUES ($course_id, $lp_id, '$type', '$identifier', '$title', '$path' , 0, $max_score, $value_add $parent, $previous, 0, '$prereq', ".$item['rel_order'] .", '".$item['datafromlms']."', '".$item['parameters']."' )";
 
-                Database::query($sql_item);
-                if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting item : '.$sql_item.' : '.Database::error(), 0); }
+                Database::query($sql);
+                if ($this->debug > 1) { error_log('New LP - In import_manifest(), inserting item : '.$sql.' : '.Database::error(), 0); }
                 $item_id = Database::insert_id();
                 // Now update previous item to change next_item_id.
                 $upd = "UPDATE $new_lp_item SET next_item_id = $item_id WHERE c_id = $course_id AND id = $previous";
@@ -529,10 +530,12 @@ class scorm extends learnpath
         $manifest_list = array();
 
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
+        $realFileSize = 0;
         foreach ($zipContentArray as $thisContent) {
             $thisContent['filename'];
             //error_log('Looking at  '.$thisContent['filename'], 0);
             if (preg_match('~.(php.*|phtml)$~i', $thisContent['filename'])) {
+                $file = $thisContent['filename'];
                 $this->set_error_msg("File $file contains a PHP script");
                 //return api_failure::set_failure('php_file_in_zip_file');
             } elseif (stristr($thisContent['filename'], 'imsmanifest.xml')) {

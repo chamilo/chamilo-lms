@@ -78,6 +78,13 @@ function display_advanced_search_form () {
     width: 95px;
 }
 
+.label4 {
+    float: left;
+    text-align: left;
+    margin-top: 10px;
+    width: 75px;
+}
+
 .formw2 {
     float: left;
     margin-left: 4px;
@@ -113,6 +120,10 @@ function display_advanced_search_form () {
 
 .input-width {
     width: 170px;
+}
+
+.fleft {
+    float: left;
 }
 </style>';
 
@@ -248,16 +259,12 @@ if ($isAdmin) {
 
     echo '<div class="actions" >';
     if (api_is_platform_admin()) {
-        echo '<span style="float:right;">' .
-        '<a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '">' .
-            Display::return_icon('import_excel.png', get_lang('Export'), '', '32') . '</a>' .
-        '</span>';
-        echo '<span style="float:right;">' .
-        '<a href="' . api_get_path(WEB_PLUGIN_PATH) . 'ticket/src/new_ticket.php">' .
-        Display::return_icon('add.png', $plugin->get_lang('TckNew'), '', '32') . '</a>' .
-        '</span>';
-        echo '<span style="float:right;">' .
-        '</span>';
+        echo '<span class="fleft">' .
+                '<a href="' . api_get_path(WEB_PLUGIN_PATH) . 'ticket/src/new_ticket.php">' .
+                    Display::return_icon('add.png', $plugin->get_lang('TckNew'), '', '32') . '</a>' .
+                '<a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '">' .    
+                    Display::return_icon('export_excel.png', get_lang('Export'), '', '32') . '</a>' .
+             '</span>';
     }
     $form->display();
     echo '</div>';
@@ -325,7 +332,7 @@ if ($isAdmin) {
                   <tr>
                   <td>
                   <div >
-                  <div class="label2">' . get_lang('Course') . ': </div>
+                  <div class="label4">' . get_lang('Course') . ': </div>
                   <div class="formw2">
                   <input id="keyword_course" style="width: 170px;" name="keyword_course" type="text"></div>
                   </div>

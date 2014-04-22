@@ -6,6 +6,11 @@
 @import url('../base_chamilo.css');
 
 /* the following for regular <a> elements */
+body {
+  
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
 a {
     text-decoration: none;
     color :#6E6E6E;
@@ -30,15 +35,20 @@ a:active {
     color: #FFFFFF;
 }
 .subnav .navbar-inner {
-    background-color: #0191C7; /* Old browsers */
-    background-repeat: repeat-x; /* Repeat the gradient */
-    background-image: none;
-    border: none;
+    background: #4fb2ea; /* Old browsers */
+background: -moz-linear-gradient(top, #4fb2ea 0%, #0191c7 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4fb2ea), color-stop(100%,#0191c7)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* IE10+ */
+background: linear-gradient(to bottom, #4fb2ea 0%,#0191c7 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4fb2ea', endColorstr='#0191c7',GradientType=0 ); /* IE6-9 */
+    border: 1px solid #178ACC;
 }
 
 .subnav .nav > li > a {
-    border-left: 1px solid #0191C7;
-    border-right: 1px solid #0191C7;
+    border-left: none;
+    border-right: none;
     color: white;
     font-weight: normal;
     font-size: 13px;
@@ -48,8 +58,8 @@ a:active {
 .subnav .nav > #current > a,
 .subnav .nav > #current > a:hover {
     color: #fff;
-    background-color: #0f466a;
-    border-right-color: #0f466a;
+    background-color: #178ACC;
+    border-right-color: #178ACC;
 }
 
 .subnav li a {
@@ -58,7 +68,7 @@ a:active {
 
 /* Green hover */
 .subnav .navbar-inner li a:hover {
-    background: none repeat scroll 0 0 #FD6600;
+    background: #178ACC;
     color: #fff;
 }
 .well .nav-list > li > a:hover {
@@ -684,12 +694,17 @@ a.thumbnail:hover{
  *  FOOTER STYLES                                    *
  *****************************************************/
 footer {
-    height: 10em;
-    background-color: #0191C7;
-    background-image: none;
-    background-repeat:repeat-x;
+    height: 7em;
+    background: #4fb2ea; /* Old browsers */
+    background: -moz-linear-gradient(top, #4fb2ea 0%, #0191c7 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4fb2ea), color-stop(100%,#0191c7)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #4fb2ea 0%,#0191c7 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4fb2ea', endColorstr='#0191c7',GradientType=0 ); /* IE6-9 */
     color:#ffffff;
-    border-top: none;
+    border-top: 1px solid #0191C7;
 }
 footer .container .row {
   padding-top: 5px;
@@ -744,25 +759,48 @@ footer a:link, footer a:visited {
  *  CSS CHAT END                             *
  *****************************************************/
 .normal-message {
-    color: #00407F;
-    border: 1px solid #CDE6F5;
+    background-color: #D9EDF7;
+    color: #3A87AD;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-top: 1px solid #BCE8F1;
+    border-left: 1px solid #BCE8F1;
+    border-right: 1px solid #BCE8F1;
+    border-bottom: 3px solid #BCE8F1;
+    border-radius: 10px;
 }
 .warning-message {
-    border: 1px solid #FFB30F;
-    color: #000;
+    background-color: #FCF8E3;
+    color: #C09853;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-top: 1px solid #FBEED5;
+    border-left: 1px solid #FBEED5;
+    border-right: 1px solid #FBEED5;
+    border-bottom: 3px solid #FBEED5;
+    border-radius: 10px;
 }
 .confirmation-message {
-	border: 1px solid #1F8323;
-  color:#1F8323;
-	background: url("images/accept_data.png") no-repeat scroll 5px center #CAF0C7;
-  padding-left: 45px;
+	background-color: #DFF0D8;
+  color: #468847;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-top: 1px solid #D6E9C6;
+  border-left: 1px solid #D6E9C6;
+  border-right: 1px solid #D6E9C6;
+  border-bottom: 3px solid #D6E9C6;
+  border-radius: 10px;
 }
 .error-message {
-    border: 1px solid #FA5858;
-    color: #000;
-    padding-top: 5px;
-	  background: url("images/error.png") no-repeat scroll 5px center #F6CECE;
-    padding-left: 45px;
+  background-color: #F2DEDE;
+  color: #B94A48;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-top: 1px solid #EED3D7;
+  border-left: 1px solid #EED3D7;
+  border-right: 1px solid #EED3D7;
+  border-bottom: 3px solid #EED3D7;
+  border-radius: 10px;
 }
 .error-message strong{
   font-weight: normal;
@@ -1022,10 +1060,7 @@ END INSTALL CHAMILO
         background: url("images/icon-chamilo.png") no-repeat 0 -618px;
         padding-left: 40px;
     }
-    .forum-btn{
-        background: url("images/icon-chamilo.png") no-repeat 0 -666px;
-        padding-left: 40px;
-    }
+    
 
 /*+++++++++++++++++++++++++++++++++
 RESPONSIVE CSS
@@ -1155,11 +1190,6 @@ RESPONSIVE CSS
         padding-left: 30px;
         background-size: 25px auto;
     }
-    .forum-btn {
-      background: url("images/icon-chamilo.png") no-repeat scroll 0 -552px / 25px auto rgba(0, 0, 0, 0);
-      padding-left: 30px;
-}
-
 }
 @media (min-width: 321px) and (max-width: 480px){
 footer {

@@ -260,6 +260,7 @@ function copyDirTo($orig_dir_path, $destination, $move = true) {
 	$save_dir = getcwd();
 	// Extract directory name - create it at destination - update destination trail
 	$dir_name = basename($orig_dir_path);
+    $dir_to_copy = array();
 	if (is_dir($orig_dir_path)) {
 		mkdir($destination.'/'.$dir_name, api_get_permissions_for_new_directories());
 		$destination_trail = $destination.'/'.$dir_name;

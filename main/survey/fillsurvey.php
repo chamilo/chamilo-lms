@@ -70,8 +70,8 @@ if ($surveyCode != "") {
     $resultAnonymous = Database::query($sql);
     $rowAnonymous = Database::fetch_array($resultAnonymous, 'ASSOC');
     // If is anonymous and is not allowed to take the survey to anonymous users, forbid access:
-    if (!isset($rowAnonymous['anonymous']) || ($rowAnonymous['anonymous'] == 0 && api_is_anonymous($_user['user_id'], true)) || count($rowAnonymous) == 0) {
-        api_not_allowed();
+    if (!isset($rowAnonymous['anonymous']) || ($rowAnonymous['anonymous'] == 0 && api_is_anonymous(), true)) || count($rowAnonymous) == 0) {
+        api_not_allowed(true);
     }
     // If is anonymous and it is allowed to take the survey as anonymous, mark survey as anonymous.
 }

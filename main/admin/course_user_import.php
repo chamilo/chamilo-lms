@@ -69,6 +69,7 @@ function save_data($users_courses)
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
     $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $csv_data = array();
+    $inserted_in_course = array();
 
     foreach ($users_courses as $user_course) {
         $csv_data[$user_course['UserName']][$user_course['CourseCode']] = $user_course['Status'];
@@ -82,7 +83,7 @@ function save_data($users_courses)
         $user_id = $obj->user_id;
         $sql = "SELECT * FROM $course_user_table cu
                 WHERE cu.user_id = $user_id AND cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH." ";
-        $res              = Database::query($sql);
+        $res = Database::query($sql);
         $db_subscriptions = array();
         while ($obj = Database::fetch_object($res)) {
             $db_subscriptions[$obj->course_code] = $obj->status;
@@ -91,33 +92,19 @@ function save_data($users_courses)
         $to_subscribe   = array_diff(array_keys($csv_subscriptions), array_keys($db_subscriptions));
         $to_unsubscribe = array_diff(array_keys($db_subscriptions), array_keys($csv_subscriptions));
 
-        global $inserted_in_course;
-        if (!isset($inserted_in_course)) {
-            $inserted_in_course = array();
-        }
-
         if ($_POST['subscribe']) {
             foreach ($to_subscribe as $course_code) {
                 if (CourseManager :: course_exists($course_code)) {
                     CourseManager::add_user_to_course($user_id, $course_code, $csv_subscriptions[$course_code]);
-                    $course_info                      = CourseManager::get_course_information($course_code);
+                    $course_info = CourseManager::get_course_information($course_code);
                     $inserted_in_course[$course_code] = $course_info['title'];
-                }
-                if (CourseManager :: course_exists($course_code, true)) {
-                    // Also subscribe to virtual courses through check on visual code.
-                    $list = CourseManager :: get_courses_info_from_visual_code($course_code);
-                    foreach ($list as $vcourse) {
-                        if ($vcourse['code'] == $course_code) {
-                            // Ignore, this has already been inserted.
-                        } else {
-                            CourseManager::add_user_to_course(
-                                $user_id,
-                                $vcourse['code'],
-                                $csv_subscriptions[$course_code]
-                            );
-                            $inserted_in_course[$vcourse['code']] = $vcourse['title'];
-                        }
-                    }
+
+                    CourseManager::add_user_to_course(
+                        $user_id,
+                        $course_code,
+                        $csv_subscriptions[$course_code]
+                    );
+                    $inserted_in_course[$course_info['code']] = $course_info['title'];
                 }
             }
         }
@@ -126,24 +113,15 @@ function save_data($users_courses)
             foreach ($to_unsubscribe as $course_code) {
                 if (CourseManager :: course_exists($course_code)) {
                     CourseManager::unsubscribe_user($user_id, $course_code);
-                    $course_info                      = CourseManager::get_course_information($course_code);
-                    $inserted_in_course[$course_code] = $course_info['title'];
-                }
-                if (CourseManager :: course_exists($course_code, true)) {
-                    // also subscribe to virtual courses through check on visual code
-                    $list = CourseManager :: get_courses_info_from_visual_code($course_code);
-                    foreach ($list as $vcourse) {
-                        if ($vcourse['code'] == $course_code) {
-                            // Ignore, this has already been inserted.
-                        } else {
-                            CourseManager::unsubscribe_user($user_id, $vcourse['code']);
-                            $inserted_in_course[$vcourse['code']] = $vcourse['title'];
-                        }
-                    }
+                    $course_info = CourseManager::get_course_information($course_code);
+                    CourseManager::unsubscribe_user($user_id, $course_code);
+                    $inserted_in_course[$course_info['code']] = $course_info['title'];
                 }
             }
         }
     }
+
+    return $inserted_in_course;
 }
 
 /**
@@ -193,24 +171,27 @@ if ($form->validate()) {
     $users_courses = parse_csv_data($_FILES['import_file']['tmp_name']);
     $errors = validate_data($users_courses);
     if (count($errors) == 0) {
-        $inserted_in_course = array();
-        save_data($users_courses);
+        $inserted_in_course = save_data($users_courses);
         // Build the alert message in case there were visual codes subscribed to.
         if ($_POST['subscribe']) {
             $warn = get_lang('UsersSubscribedToBecauseVisualCode').': ';
         } else {
             $warn = get_lang('UsersUnsubscribedFromBecauseVisualCode').': ';
         }
-        if (count($inserted_in_course) > 1) {
+
+        if (!empty($inserted_in_course)) {
+            $warn = $warn.' '.get_lang('FileImported');
             // The users have been inserted in more than one course.
             foreach ($inserted_in_course as $code => $info) {
-                $warn .= ' '.$info.' ('.$code.'),';
+                $warn .= ' '.$info.' ('.$code.') ';
             }
-            $warn = substr($warn, 0, -1);
+        } else {
+            $warn = get_lang('ErrorsWhenImportingFile');
         }
+
         Security::clear_token();
         $tok = Security::get_token();
-        header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('FileImported')).'&warn='.urlencode($warn).'&sec_token='.$tok);
+        header('Location: user_list.php?action=show_message&warn='.urlencode($warn).'&sec_token='.$tok);
         exit();
     }
 }

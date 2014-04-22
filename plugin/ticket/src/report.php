@@ -228,18 +228,20 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $res = Database::query($sql);
 
     $users = array();
+    $webPath = api_get_path(WEB_PATH);
+    $selfPath = api_get_self();
     while ($user = Database::fetch_row($res)) {
         $image_path = UserManager::get_user_picture_path_by_id($user[0], 'web', false, true);
         $user_profile = UserManager::get_picture_user($user[0], $image_path['file'], 22, USER_IMAGE_SIZE_SMALL, ' width="22" height="22" ');
         if (!api_is_anonymous()) {
-            $photo = '<center><a href="' . api_get_path(WEB_PATH) . 'whoisonline.php?origin=user_list&id=' . $user[0] . '" title="' . get_lang('Info') . '"><img src="' . $user_profile['file'] . '" ' . $user_profile['style'] . ' alt="' . api_get_person_name($user[2], $user[3]) . '"  title="' . api_get_person_name($user[2], $user[3]) . '" /></a></center>';
+            $photo = '<center><a href="' . $webPath . 'whoisonline.php?origin=user_list&id=' . $user[0] . '" title="' . get_lang('Info') . '"><img src="' . $user_profile['file'] . '" ' . $user_profile['style'] . ' alt="' . api_get_person_name($user[2], $user[3]) . '"  title="' . api_get_person_name($user[2], $user[3]) . '" /></a></center>';
         } else {
             $photo = '<center><img src="' . $user_profile['file'] . '" ' . $user_profile['style'] . ' alt="' . api_get_person_name($user[2], $user[3]) . '" title="' . api_get_person_name($user[2], $user[3]) . '" /></center>';
         }
         $user_id = $user[0];
-        $button = '<a href="' . api_get_self() . '?user_request=' . $user[0] . '">' . Display::return_icon('view_more_stats.gif', get_lang('Info')) . '</a>';
+        $button = '<a href="' . $selfPath . '?user_request=' . $user[0] . '">' . Display::return_icon('view_more_stats.gif', get_lang('Info')) . '</a>';
         $button = '<a  href="javascript:void(0)" onclick="load_course_list(\'div_' . $user_id . '\',' . $user_id . ')">
-					<img onclick="load_course_list(\'div_' . $user_id . '\',' . $user_id . ')"  src="../../../main/img/view_more_stats.gif" title="' . get_lang('Courses') . '" alt="' . get_lang('Courses') . '"/>
+					<img onclick="load_course_list(\'div_' . $user_id . '\',' . $user_id . ')"  src="' . $webPath . 'img/view_more_stats.gif" title="' . get_lang('Courses') . '" alt="' . get_lang('Courses') . '"/>
 					</a>&nbsp;&nbsp;';
         $users[] = array($photo, $user[1], $user[2], $user[3], $user[4], $user[5], $button);
     }

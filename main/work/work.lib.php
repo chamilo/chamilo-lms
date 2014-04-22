@@ -4126,6 +4126,7 @@ function getFile($id, $course_info, $download = true)
             $download,
             $file['title']
         );
+        return true;
     }
     return false;
 }

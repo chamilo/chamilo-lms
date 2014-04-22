@@ -163,7 +163,7 @@ $form->addElement('checkbox', 'anonymous', null, get_lang('Anonymous'));
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 
-// Aditional Parameters
+// Additional Parameters
 $form->addElement(
     'advanced_settings',
     '<a href="javascript: void(0);" onclick="javascript: advanced_parameters();">

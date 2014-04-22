@@ -84,3 +84,5 @@ $strings['Untill'] = "Hasta";
 $strings['TicketWasThisAnswerSatisfying'] = "¿Fué la respuesta al Ticket satisfactoria?";
 $strings['TicketDetail'] = "Detalle del Ticket";
 $strings['AreYouSure'] = "¿Está seguro?";
+
+$strings['allow_student_add'] = "Permitir al studiante generar Tickets";

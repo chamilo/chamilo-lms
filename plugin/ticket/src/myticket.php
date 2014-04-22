@@ -350,7 +350,7 @@ if ($isAdmin) {
             <div class="clear">&nbsp;</div>
          </form>';
 } else {
-    if ($plugin->getExtraSettingValue('allow_student_add') == 'true') {
+    if ($plugin->get('allow_student_add') == 'true') {
         echo '<div class="actions" >';
         echo '<span style="float:right;">' .
                 '<a href="' . api_get_path(WEB_PLUGIN_PATH) . 'ticket/src/new_ticket.php">' .

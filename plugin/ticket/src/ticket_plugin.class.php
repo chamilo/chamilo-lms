@@ -21,7 +21,11 @@ class TicketPlugin extends Plugin
     }
     protected function __construct()
     {
-        parent::__construct('1.0', 'Kenny Rodas Chavez, Genesis Lopez, Francis Gonzales, Yannick Warnier', array('tool_enable' => 'boolean'));
+        $settings = array(
+            'tool_enable' => 'boolean',
+            'allow_student_add' => 'boolean'
+        );
+        parent::__construct('1.0', 'Kenny Rodas Chavez, Genesis Lopez, Francis Gonzales, Yannick Warnier', $settings);
     }
 
     /**
@@ -31,7 +35,7 @@ class TicketPlugin extends Plugin
     {
         // Create database tables and insert a Tab
         require_once api_get_path(SYS_PLUGIN_PATH) . PLUGIN_NAME . '/database.php';
-
+        
     }
     /**
      * Uninstall the ticket plugin
@@ -75,7 +79,10 @@ class TicketPlugin extends Plugin
         $sql = "DROP TABLE IF EXISTS $tblTicketTicket";
         Database::query($sql);
         
-        $this->deleteTab($plugSetting['comment']);
-        $this->deleteExtraSettings();
+        $rsTab = $this->deleteTab($plugSetting['comment']);
+        
+        if ($rsTab) {
+            echo "<script>location.href = '" . $_SERVER['REQUEST_URI'] . "';</script>";
+        }
     }
 }

@@ -12,7 +12,7 @@ $cidReset = true;
 require_once '../config.php';
 $plugin = TicketPlugin::create();
 
-if (!api_is_platform_admin() && $plugin->getExtraSettingValue('allow_student_add') != 'true') {
+if (!api_is_platform_admin() && $plugin->get('allow_student_add') != 'true') {
     header('location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php');
     exit;
 }

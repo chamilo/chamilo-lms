@@ -531,7 +531,7 @@ class Plugin
             $whereCond = array(
                     'variable = ? AND subkey = ?' => array('show_tabs', $key)
             );
-            Database::delete('settings_current', $whereCond);
+            $resp = Database::delete('settings_current', $whereCond);
 
             //if there is more than one tab
             //reenumerate them
@@ -541,7 +541,7 @@ class Plugin
                     $attributes = array(
                         'subkey' => 'custom_tab_' . $i
                     );
-                    $resp = $this->updateTab($row['subkey'], $attributes);
+                    $this->updateTab($row['subkey'], $attributes);
                     $i++;
                 }
 
@@ -564,79 +564,5 @@ class Plugin
         );
         $resp = Database::update('settings_current', $attributes, $whereCond);
         return $resp;
-    }
-    
-    /**
-     * Add aditional plugin Settings
-     * @param array $settings
-     */
-    public function addExtraSettings($settings) 
-    {
-        $pluginName = $this->get_name();
-        $resp = false;
-        foreach ($settings as $setting => $value) {
-            $attributes = array(
-                'variable' => 'plugin_settings_' . $pluginName,
-                'subkey' => $setting,
-                'selected_value' => $value,
-                'category' => 'PluginSettings'
-            );
-            if (empty($this->getExtraSettingValue($setting))) {
-                $resp = Database::insert('settings_current', $attributes);
-            }
-        }
-        
-        return $resp;
-    }
-    
-   /**
-    * Edit Extra settings
-    * @param string $key
-    * @param array $attributes
-    * @return boolean
-    */
-    public function editExtraSetting($key, $attributes)
-    {
-        $pluginName = $this->get_name();
-        
-        $whereCond = array(
-            'variable = ? AND subkey = ?' => array('plugin_settings_' . $pluginName, $key)
-        );
-        
-        $resp = Database::update('settings_current', $attributes, $whereCond);
-         
-        return $resp;
-    }
-    
-    
-    /**
-     * Delete all aditional plugin settings
-     */
-    public function deleteExtraSettings() 
-    {
-        $pluginName = $this->get_name();
-        $whereCond = array(
-            'variable = ?' => 'plugin_settings_' . $pluginName
-        );
-        $resp = Database::delete('settings_current', $whereCond);
-        
-        return $resp;
-    }
-    
-    /**
-     * Give extra setting value
-     * @param string $settingName
-     */
-    public function getExtraSettingValue($settingName)
-    {
-        $pluginName = $this->get_name();
-        $fullSetting = api_get_full_setting('plugin_settings_' . $pluginName, $settingName);
-        
-        if (empty($fullSetting)) {
-            return false;
-        } else {
-            $setting = current($fullSetting);
-            return $setting['selected_value'];
-        }
     }
 }

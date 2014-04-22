@@ -162,8 +162,9 @@ class FillBlanks extends Question
 	{
 		global $charset;
 		$answer = $form->getSubmitValue('answer');
+		//echo $answer;exit;
 		//Due the fckeditor transform the elements to their HTML value
-		$answer = api_html_entity_decode($answer, ENT_QUOTES, $charset);
+		//$answer = api_html_entity_decode($answer, ENT_QUOTES, $charset);
 
 		//remove the :: eventually written by the user
 		$answer = str_replace('::','',$answer);

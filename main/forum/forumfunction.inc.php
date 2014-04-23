@@ -1119,7 +1119,7 @@ function get_forum_categories($id = '')
     $session_id = api_get_session_id();
     $course_id = api_get_course_int_id();
 
-    $condition_session = api_get_session_condition($session_id);
+    $condition_session = api_get_session_condition($session_id, true, true);
     $condition_session .= " AND forum_categories.c_id = $course_id AND item_properties.c_id = $course_id";
 
     if (empty($id)) {
@@ -1232,11 +1232,9 @@ function get_forums($id = '', $course_code = '', $includeGroupsForum = true)
     // GETTING ALL THE FORUMS
     // Condition for the session
     $session_id = api_get_session_id();
-    $condition_session = api_get_session_condition($session_id);
+    $condition_session = api_get_session_condition($session_id, true, true);
     $course_id = $course_info['real_id'];
-
     $forum_list = array();
-
     $includeGroupsForumSelect = "";
     if (!$includeGroupsForum) {
         $includeGroupsForumSelect = " AND forum_of_group = 0 ";
@@ -1386,7 +1384,8 @@ function get_forums($id = '', $course_code = '', $includeGroupsForum = true)
     $result3 = Database::query($sql3);
     while ($row3 = Database::fetch_array($result3)) {
         if ($id == '') {
-            if (array_key_exists($row3['forum_id'], $forum_list)) { // This is needed because sql3 takes also the deleted forums into account.
+            // This is needed because sql3 takes also the deleted forums into account.
+            if (array_key_exists($row3['forum_id'], $forum_list)) {
                 $forum_list[$row3['forum_id']]['number_of_posts'] = $row3['number_of_posts'];
             }
         } else {
@@ -1394,7 +1393,8 @@ function get_forums($id = '', $course_code = '', $includeGroupsForum = true)
         }
     }
 
-    // Finding the last post information (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname).
+    /* Finding the last post information
+    (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)*/
     if ($id == '') {
         if (is_array($forum_list)) {
             foreach ($forum_list as $key => $value) {
@@ -1603,17 +1603,25 @@ function get_posts($thread_id)
 {
     $table_users = Database :: get_main_table(TABLE_MAIN_USER);
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
+    //$tableItemProperty = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
     $course_id = api_get_course_int_id();
+    $sessionId = api_get_session_id();
 
     // note: change these SQL so that only the relevant fields of the user table are used
+    /*
+     * INNER JOIN $tableItemProperty i
+                ON i.ref = posts.post_id AND i.c_id = posts.c_id*
+     i.id_session = $sessionId
+     */
     if (api_is_allowed_to_edit(null, true)) {
         $sql = "SELECT * FROM $table_posts posts
-                LEFT JOIN  $table_users users
-                    ON posts.poster_id=users.user_id
+                LEFT JOIN $table_users users
+                    ON posts.poster_id = users.user_id
                 WHERE
-                c_id = $course_id AND
-                posts.thread_id='".Database::escape_string($thread_id)."'
+                    posts.c_id = $course_id AND
+                    posts.thread_id='".Database::escape_string($thread_id)."'
+
                 ORDER BY posts.post_id ASC";
     } else {
         // students can only se the posts that are approved (posts.visible='1')
@@ -1621,9 +1629,9 @@ function get_posts($thread_id)
                 LEFT JOIN  $table_users users
                     ON posts.poster_id=users.user_id
                 WHERE
-                c_id = $course_id AND
-                posts.thread_id='".Database::escape_string($thread_id)."'
-                AND posts.visible='1'
+                    posts.c_id = $course_id AND
+                    posts.thread_id = '".Database::escape_string($thread_id)."' AND
+                    posts.visible='1'
                 ORDER BY posts.post_id ASC";
     }
     $result = Database::query($sql);
@@ -2014,7 +2022,7 @@ function store_thread($values)
             "'".Database::escape_string($values['numeric_calification'])."',".
             "'".Database::escape_string($values['weight_calification'])."',".
             "'".api_get_session_id()."')";
-        $result = Database::query($sql);
+        Database::query($sql);
         $last_thread_id = Database::insert_id();
 
         // Add option gradebook qualify.
@@ -2028,7 +2036,18 @@ function store_thread($values)
             $maxqualify = $values['numeric_calification'];
             $weigthqualify = $values['weight_calification'];
             $resourcedescription = '';
-            add_resource_to_course_gradebook($values['category_id'], $coursecode, $resourcetype, $resourceid, $resourcename, $weigthqualify, $maxqualify, $resourcedescription, 0, api_get_session_id());
+            add_resource_to_course_gradebook(
+                $values['category_id'],
+                $coursecode,
+                $resourcetype,
+                $resourceid,
+                $resourcename,
+                $weigthqualify,
+                $maxqualify,
+                $resourcedescription,
+                0,
+                api_get_session_id()
+            );
         }
 
         if ($last_thread_id) {
@@ -2488,13 +2507,9 @@ function store_reply($values)
 {
     global $_course;
     global $current_forum;
-    global $origin;
 
-    $table_threads = Database :: get_course_table(TABLE_FORUM_THREAD);
     $forum_table_attachment = Database :: get_course_table(TABLE_FORUM_ATTACHMENT);
     $table_posts = Database :: get_course_table(TABLE_FORUM_POST);
-
-    $gradebook = Security::remove_XSS($_GET['gradebook']);
     $post_date = api_get_utc_datetime();
 
     if ($current_forum['approval_direct_post'] == '1' && !api_is_allowed_to_edit(null, true)) {
@@ -2554,7 +2569,7 @@ function store_reply($values)
                 if ($result) {
                     $sql = 'INSERT INTO '.$forum_table_attachment.'(c_id, filename,comment, path, post_id,size) '.
                         "VALUES (".api_get_course_int_id().", '".Database::escape_string($file_name)."', '".Database::escape_string($comment)."', '".Database::escape_string($new_file_name)."' , '".$new_post_id."', '".intval($_FILES['user_upload']['size'])."' )";
-                    $result = Database::query($sql);
+                    Database::query($sql);
                     $message .= ' / '.get_lang('FileUploadSucces');
                     $last_id = Database::insert_id();
                     api_item_property_update($_course, TOOL_FORUM_ATTACH, $last_id, 'ForumAttachmentAdded', api_get_user_id());

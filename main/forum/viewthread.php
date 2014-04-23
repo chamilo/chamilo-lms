@@ -97,9 +97,7 @@ if (!api_is_allowed_to_edit(false, true) AND ($current_forum['visibility'] == 0 
 }
 
 /* Actions */
-
 $group_id = api_get_group_id();
-
 $my_action = isset($_GET['action']) ? $_GET['action'] : '';
 if ($my_action == 'delete' AND isset($_GET['content']) AND isset($_GET['id']) AND (api_is_allowed_to_edit(false, true) OR GroupManager::is_tutor_of_group(api_get_user_id(), $group_id))) {
     $message = delete_post($_GET['id']); // Note: This has to be cleaned first.
@@ -148,12 +146,6 @@ if ($my_message != 'PostDeletedSpecial') {
             if ((api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $_SESSION['id_session'])) OR ($current_forum['allow_new_threads'] == 1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads'] == 1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous'] == 1)) {
                 if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
                     echo '&nbsp;&nbsp;';
-/*					if ( isset($_GET['gradebook']) && $_GET['gradebook'] != '') {
-                        $info_thread = get_thread_information($_GET['thread']);
-                        echo '<a href="newthread.php?'.api_get_cidreq().'&amp;forum='.$info_thread['forum_id'].'&amp;origin='.$origin.'&amp;gradebook='.Security::remove_XSS($_GET['gradebook']).'">'.Display::return_icon('new_thread.png', get_lang('NewTopic'), '', ICON_SIZE_MEDIUM).'</a>';
-                    } else {
-                        echo '<a href="newthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'">'.Display::return_icon('new_thread.png', get_lang('NewTopic'), '', ICON_SIZE_MEDIUM).'</a>';
-                    } */
                 } else {
                     echo get_lang('ForumLocked');
                 }

@@ -45,6 +45,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
     $answerType    = $objQuestionTmp->selectType();
     $pictureName   = $objQuestionTmp->selectPicture();
+    $s = '';
 
     if ($answerType != HOT_SPOT && $answerType != HOT_SPOT_DELINEATION) {
     	// Question is not a hotspot
@@ -65,9 +66,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
         }
 
         echo '<div class="question_options">';
-
-    	$s = '';
-
     	// construction of the Answer object (also gets all answers details)
     	$objAnswerTmp = new Answer($questionId);
 
@@ -195,7 +193,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     $header .= Display::tag('th', get_lang('Feedback'));
                 }
                 $s .= '<table class="data_table">';
-                $s.= Display::tag('tr',$header, array('style'=>'text-align:left;'));
+                $s .= Display::tag('tr',$header, array('style'=>'text-align:left;'));
             }
         }
 
@@ -353,16 +351,16 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 $answer_input .= '</label>';
 
                 if ($show_comment) {
-                    $s.= '<tr>';
+                    $s .= '<tr>';
                     $s .= '<td>';
-                    $s.= $answer_input;
+                    $s .= $answer_input;
                     $s .= '</td>';
                     $s .= '<td>';
                     $s .= $comment;
                     $s .= '</td>';
-                    $s.= '</tr>';
+                    $s .= '</tr>';
                 } else {
-                    $s.= $answer_input;
+                    $s .= $answer_input;
                 }
 
             } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
@@ -400,7 +398,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                     $s .= $comment;
                     $s .= '</td>';
                 }
-            	$s.='</tr>';
+            	$s .='</tr>';
 
     		} elseif ($answerType == FILL_IN_BLANKS) {
                 /*
@@ -529,7 +527,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     				}  // end foreach()
 
     				$s .= '</select></td>';
-    				$s.='<td width="45%" valign="top" >';
+    				$s .='<td width="45%" valign="top" >';
     				if (isset($select_items[$lines_count])) {
     					$s.='<span style="float:left; width:5%;"><b>'.$select_items[$lines_count]['letter'].'.</b></span>'.
     						 '<span style="float:left; width:95%;">'.$select_items[$lines_count]['answer'].'</span>';
@@ -547,8 +545,8 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     						$s .= '<tr>
     							  <td colspan="2"></td>
     							  <td valign="top">';
-    						$s.='<b>'.$select_items[$lines_count]['letter'].'.</b> '.$select_items[$lines_count]['answer'];
-    						$s.="</td>
+    						$s .='<b>'.$select_items[$lines_count]['letter'].'.</b> '.$select_items[$lines_count]['answer'];
+    						$s .="</td>
     						</tr>";
     						$lines_count++;
     					}	// end while()
@@ -566,8 +564,6 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
                 $s .= '</table>';
             }
         }
-
-
 
     	$s .= '</div>';
 
@@ -648,6 +644,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     		echo $questionDescription;
     		echo '</td></tr>';
     	}
+
     	$canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
 
     	$s .= '<script type="text/javascript" src="../plugin/hotspot/JavaScriptFlashGateway.js"></script>
@@ -788,6 +785,7 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
     	echo $s;
         echo '</table>';
     }
+
     return $nbrAnswers;
 }
 
@@ -2277,14 +2275,25 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             ob_start();
 
             // We're inside *one* question. Go through each possible answer for this question
-            $result = $objExercise->manage_answer($exercise_stat_info['exe_id'], $questionId, null, 'exercise_result', array(), $save_user_result, true, $show_results, $objExercise->selectPropagateNeg(), $hotspot_delineation_result);
+            $result = $objExercise->manage_answer(
+                $exercise_stat_info['exe_id'],
+                $questionId,
+                null,
+                'exercise_result',
+                array(),
+                $save_user_result,
+                true,
+                $show_results,
+                $objExercise->selectPropagateNeg(),
+                array()
+            );
 
             if (empty($result)) {
                 continue;
             }
 
-            $total_score     += $result['score'];
-            $total_weight    += $result['weight'];
+            $total_score += $result['score'];
+            $total_weight += $result['weight'];
 
             $question_list_answers[] = array(
                 'question' => $result['open_question'],
@@ -2295,8 +2304,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
             $my_total_score  = $result['score'];
             $my_total_weight = $result['weight'];
 
-
-            //Category report
+            // Category report
             $category_was_added_for_this_test = false;
 
             if (isset($objQuestionTmp->category) && !empty($objQuestionTmp->category)) {
@@ -2313,8 +2321,15 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
                 }
             }
 
-            //No category for this question!
+            // No category for this question!
             if ($category_was_added_for_this_test == false) {
+                if (!isset($category_list['none']['score'])) {
+                    $category_list['none']['score'] = 0;
+                }
+                if (!isset($category_list['none']['total'])) {
+                    $category_list['none']['total'] = 0;
+                }
+
                 $category_list['none']['score'] += $my_total_score;
                 $category_list['none']['total'] += $my_total_weight;
             }
@@ -2392,7 +2407,6 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         echo $total_score_text;
     }
 
-
     if ($save_user_result) {
 
         // Tracking of results
@@ -2401,7 +2415,20 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         $learnpath_item_view_id = $exercise_stat_info['orig_lp_item_view_id'];
 
         if (api_is_allowed_to_session_edit()) {
-            update_event_exercice($exercise_stat_info['exe_id'], $objExercise->selectId(), $total_score, $total_weight, api_get_session_id(), $learnpath_id, $learnpath_item_id, $learnpath_item_view_id, $exercise_stat_info['exe_duration'], $question_list, '', array(), $end_date);
+            update_event_exercice(
+                $exercise_stat_info['exe_id'],
+                $objExercise->selectId(),
+                $total_score,
+                $total_weight,
+                api_get_session_id(),
+                $learnpath_id,
+                $learnpath_item_id,
+                $learnpath_item_view_id,
+                $exercise_stat_info['exe_duration'],
+                $question_list,
+                '',
+                array()
+            );
         }
 
         // Send notification ..

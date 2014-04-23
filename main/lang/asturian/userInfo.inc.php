@@ -94,7 +94,6 @@ $MyCertificates = "Los mios certificaos";
 $ToChangeYourEmailMustTypeYourPassword = "Pa camudar el to corréu electrónicu tienes qu'escribir la to contraseña";
 $Invitations = "Invitaciones";
 $MyGroups = "Los mios grupos";
-$EditProfile = "Editar perfil";
 $Social = "Social";
 $Profile = "Perfil";
 $MyFriends = "Los mios collacios";

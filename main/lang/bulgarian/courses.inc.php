@@ -19,7 +19,6 @@ $Unsubscribe = "Отписване";
 $lang_back_to_my_home_page = "Обратно към моята страница";
 $lang_back_to_my_personnal_course_list = "Обратно към моя списък с курсове";
 $langTitular = "Титуляр";
-$langBackToListOfThisUser = "Обратно към списъка с курсове";
 $langAdministrationTools = "Инструменти за администриране";
 $lang_back_to_parent_category = "Обратно към родителската категория";
 $lang_back_to_course_selection = "Обратно към избора на курсове";

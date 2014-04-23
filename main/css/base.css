@@ -564,7 +564,7 @@ a.tag {
     width: 47%;
 }
 #settings .span6 .well_border{
-    min-height: 265px;
+    min-height: 300px;
 }
 #settings .form-search .span3 {
     float: left;
@@ -4769,7 +4769,7 @@ i.size-32.icon-new-work{
 }
 
 .chosen-container {
-    min-width: 250px;
+    min-width: 180px;
 }
 
 .chzn-container-single .chzn-search {

@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddForum = "Adaugati un forum nou";
 $Title = "Titlu";
 $By = "De";
 $UsersOnline = "Utilizatori online";
@@ -629,4 +630,5 @@ $HumanAndTechnicalResourcesInformation = "Scurta descriere a diferitelor persoan
 $Assessment = "Evaluare";
 $AssessmentQuestions = "Cum vor fi utilizatorii evaluati? Exista si alte strategii suplimentare pentru o intelegere cat mai buna a acestui subiect de discutie?";
 $AssessmentInformation = "Exemple de intrebari la examen. Crieteriu de succes. Indicatii si trucuri.";
+$UploadADocument = "Incarcati documentul";
 ?>

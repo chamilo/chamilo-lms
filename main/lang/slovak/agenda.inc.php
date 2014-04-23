@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AdditionalMailWasSentToSelectedUsers = "Navyše, nové oznámenie bolo vytvorené a odoslané vybraným používateľom";
 $AgendaAdd = "Pridať novú položku agendy";
 $ShowAllEvents = "Zobraziť všetky položky agendy";
 $ShowCurrent = "Zobraziť položky agendy z tohto mesiaca";
@@ -26,7 +27,7 @@ $month_default = "prednastavený mesiac";
 $langYear = "Rok";
 $year_default = "prednastavený rok";
 $langHour = "Hodina";
-$hour_default = "prednastavená minúta";
+$hour_default = "prednastavená hodina";
 $langMinute = "minúta";
 $langLasting = "trvalý";
 $langOldToNew = "starý novému";
@@ -47,9 +48,9 @@ $PeronalAgendaItemAdded = "Vaša súkromná položka agendy bola úspešne prida
 $PeronalAgendaItemEdited = "Vaša súkromná položka agendy bola úspešne upravená";
 $PeronalAgendaItemDeleted = "Vaša súkromná položka agendy bola úspešne zmazaná";
 $ViewPersonalItem = "Zobraziť osobné položky";
-$UserGroupFilter = "Filter na skupiny/užívateľov";
+$UserGroupFilter = "Filter na skupiny/používateľov";
 $ShowAll = "Zobraziť všetko";
-$Print = "Tlač";
+$Print = "Tlačiť";
 $MyTextHere = "môj text tu";
 $CopiedAsAnnouncement = "Skopírované ako oznam";
 $NewAnnouncement = "Nový oznam";
@@ -72,7 +73,15 @@ $ModifyEvent = "Editovať udalosť";
 $EndDateCannotBeBeforeTheStartDate = "Dátum ukončenia nemôže byť skôr ako dátum začiatku";
 $AgendaSortChronologicallyUp = "Zoradiť agendu chronologicky (vzostupne)";
 $AgendaSortChronologicallyDown = "Zoradiť agendu chronologicky (zostupne)";
+$ItemForUserSelection = "Vybraný zoznam používateľov";
+$IsNotiCalFormatFile = "Súbor nie je vo formáte iCal";
+$RepeatEvent = "Opakovať udalosť";
+$AllDay = "Celý deň";
+$SessionCalendar = "Kalendár stretnutí";
+$RepeatDate = "Opakovať dátum";
+$EndDateMustBeMoreThanStartDate = "Dátum ukončenia musí byť väčší ako dátum začiatku";
 $SelectACourse = "Vybrať kurz";
+$PleaseSelectACourseOrASessionInTheLeftColumn = "Vyberte si kurz alebo stretnutie v bočnom paneli.";
 $DisableEndDate = "Vypnúť dátum konca";
 $AllEvents = "Všetky udalosti";
 ?>

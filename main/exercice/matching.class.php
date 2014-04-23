@@ -1,20 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-	CLASS Matching
+ * Code
+ */
+/**
+ *
+ *  Class Matching
+ *  Matching questions type class
  *
  *	This class allows to instantiate an object of type MULTIPLE_ANSWER (MULTIPLE CHOICE, MULTIPLE ANSWER),
  *	extending the class question
  *
  *	@author Eric Marguin
  *	@package chamilo.exercise
- **/
-/**
- * Code
- */
-/**
- * Matching questions type class
- * @package chamilo.exercise
  */
 class Matching extends Question {
 	static $typePicture = 'matching.gif';

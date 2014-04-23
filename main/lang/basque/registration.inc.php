@@ -80,7 +80,6 @@ $langFormula = "Adeitasunez";
 $langProblem = "Arazorik izatekotan, ez eduki zalantzarik eta gurekin jarri harremanetan.";
 $langIs = "da";
 $langAddress = "Noren helbidea:";
-$langSettings = "hurrengo parametroekin: \nErabiltzailearen izena :";
 $langYouAreReg = "Inskribatuta zaude honetan:";
 $langYourReg = "Zure inskripzioa honetan:";
 $langUserFree = "Erabiltzailearen izen hau badago hartuta. Erabili nagitzailearen 'Atzera' joateko botoia eta aukeratu beste bat.";

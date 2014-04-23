@@ -95,7 +95,6 @@ $UnsubscribeFromPlatformSuccess = "Sua conta %s foi completamente eliminada dest
 $ToChangeYourEmailMustTypeYourPassword = "Para alterar seu email, você precisa confirmar sua senha";
 $Invitations = "Convites";
 $MyGroups = "Meus grupos";
-$EditProfile = "Editar perfil";
 $Social = "Social";
 $Profile = "Perfil";
 $MyFriends = "Meus amigos";

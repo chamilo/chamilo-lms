@@ -76,7 +76,6 @@ $langFormula = "Vriendelijke groeten,";
 $langProblem = "In geval van problemen kan u met ons contact opnemen.";
 $langIs = "is";
 $langAddress = "Het adres van";
-$langSettings = "met de volgende parameters:\nGebruikersnaam:";
 $langYouAreReg = "U bent geregistreerd voor";
 $langYourReg = "Uw registratie op";
 $langUserFree = "De ingevoerde gebruikersnaam is al in gebruik. Gebruik de terugknop van uw browser en probeer opnieuw.";

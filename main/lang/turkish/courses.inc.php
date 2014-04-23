@@ -19,7 +19,6 @@ $Unsubscribe = "Kayıt Sil";
 $lang_back_to_my_home_page = "AnaSayfa";
 $lang_back_to_my_personnal_course_list = "Ders listeme dön";
 $langTitular = "Sorumlu";
-$langBackToListOfThisUser = "Derslerin listesine dön";
 $langAdministrationTools = "Yönetim Araçları";
 $lang_back_to_parent_category = "Ana Kategoriye dön";
 $lang_back_to_course_selection = "Ders seçimine dön";

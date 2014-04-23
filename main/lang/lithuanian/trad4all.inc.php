@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddForum = "Sukurti naują forumą";
 $Title = "Antraštė";
 $By = "By";
 $UsersOnline = "Prisijungę vartotojai";
@@ -435,4 +436,5 @@ $HumanAndTechnicalResourcesInformation = "Trumpas kontaktinių asmenų ir techni
 $Assessment = "Įvertinimas";
 $AssessmentQuestions = "Kaip bus vertinami kurso vartotojų pasiekimai? Ar yra strategija tobulinti kurso temas, įvertinimo kriterijus?";
 $AssessmentInformation = "Egzaminų klausimų pavyzdžiai. Vertinimo kriterijai. Įvairios pastabos ir patarimai.";
+$UploadADocument = "Įkelti dokumentą";
 ?>

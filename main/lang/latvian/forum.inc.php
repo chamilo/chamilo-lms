@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "Foruma kategorija izdzēsta";
 $ForumLocked = "Forums bloķēts";
 $Forum = "Forums";
 $AddForumCategory = "Izveidot jaunu forumu kategoriju. Piemēram: Forumu kategorija būs - Baltijas valstis, kurā veidosiet  forumus - Latvija, Lietuva, Igaunija.";
-$AddForum = "Pievienot jaunu forumu";
 $Topics = "Tematu skaits forumā";
 $Posts = "Ierakstu skaits";
 $LastPosts = "Jaunākais ieraksts";

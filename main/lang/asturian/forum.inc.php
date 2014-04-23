@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "Categoría de foru esborrada";
 $ForumLocked = "Foru peslláu";
 $Forum = "Foros";
 $AddForumCategory = "Amestar una categoría de foros";
-$AddForum = "Amestar un foru";
 $Topics = "Temes";
 $Posts = "Mensaxes";
 $LastPosts = "Últimu mensaxe";

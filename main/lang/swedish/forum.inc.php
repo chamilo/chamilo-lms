@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "Tog bort forumkategorin";
 $ForumLocked = "Forumet stängt";
 $Forum = "Forum";
 $AddForumCategory = "Lägg till ny forumkategori";
-$AddForum = "Lägg till ett nytt forum";
 $Topics = "Trådar";
 $Posts = "Inlägg";
 $LastPosts = "Sista inlägget";

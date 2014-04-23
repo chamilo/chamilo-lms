@@ -4,7 +4,6 @@ for more information: see languages.txt in the lang folder.
 */
 $Forum = "การอภิปราย";
 $AddForumCategory = "เพิ่มหมวดหมู่การอภิปรายใหม่";
-$AddForum = "เพิ่มรายการอภิปรายใหม่";
 $Topics = "หัวข้อ";
 $Posts = "กระทู้";
 $LastPosts = "กระทู้ล่าสุด";

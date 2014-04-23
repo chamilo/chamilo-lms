@@ -3,6 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $Unsubscribe = "Avsluta prenumeration";
+$AddForum = "Lägg till ett nytt forum";
 $Title = "Titel";
 $By = "Av";
 $UsersOnline = "Inloggade användare";
@@ -529,6 +530,7 @@ $HumanAndTechnicalResourcesInformation = "Kort beskrivning av identiteterna av d
 $Assessment = "Bedömning";
 $AssessmentQuestions = "Hur kommer användaren att bedömas? Finns det en strategi hur man skall bemästra ämnet?";
 $AssessmentInformation = "Exempel på frågor. Kriterier för att lyckas. Tips och tricks.";
+$UploadADocument = "Ladda upp dokument";
 $EditProfile = "Redigera Profil";
 $Dashboard = "Instrumentpanel";
 $ToolCourseDescription = "Kursbeskrivning";

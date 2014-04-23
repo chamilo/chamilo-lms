@@ -1,4 +1,4 @@
-// JS interface enabling scrom content to use main/document/remote.php easily
+// JS interface enabling scorm content to use main/document/remote.php easily
 // CBlue SPRL, Arnaud Ligot <arnaud@cblue.be>
 
 

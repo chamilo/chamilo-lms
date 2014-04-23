@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddForum = "Dodaj novi forum";
 $Title = "Naslov";
 $UsersOnline = "Online korisnici";
 $Remove = "Ukloni";
@@ -348,6 +349,7 @@ $HumanAndTechnicalResourcesInformation = "Kratak opis identiteta osoba za kontak
 $Assessment = "Vrednost kursa";
 $AssessmentQuestions = "Kako će polazni biti ocenjivani? Treba li razviti strategije da bi se savladala tema?";
 $AssessmentInformation = "Primer ispitnih pitanja. Kriterijumi uspeha. Saveti i trikovi.";
+$UploadADocument = "Učitaj dokument";
 $langNameOfLang['bosnian'] = "bosanski";
 $langNameOfLang['czech'] = "&#269;eki";
 $langNameOfLang['dutch_corporate'] = "holandski korporativni";
@@ -369,4 +371,5 @@ $langNameOfLang['trad_chinese'] = "tradicionalni kineski";
 $langNameOfLang['ukrainian'] = "ukrajinski";
 $TitleColumnGradebook = "Zaglavlje kolone u izveštaju nadležnosti";
 $QualifyWeight = "Težina u izveštaju";
+$DownloadLink = "Download link";
 ?>

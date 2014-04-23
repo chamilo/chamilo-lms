@@ -4,7 +4,6 @@ for more information: see languages.txt in the lang folder.
 */
 $Forum = "Foro";
 $AddForumCategory = "Agregar una nueva categoría al foro";
-$AddForum = "Agregar un nuevo foro";
 $Topics = "Temas";
 $Posts = "Mensajes";
 $LastPosts = "Último mensaje";

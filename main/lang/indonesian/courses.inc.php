@@ -19,7 +19,6 @@ $Unsubscribe = "Batalkan pendaftaran";
 $lang_back_to_my_home_page = "Kembali ke home page-ku";
 $lang_back_to_my_personnal_course_list = "Kembali ke daftar mata kuliah-ku";
 $langTitular = "Pemilik";
-$langBackToListOfThisUser = "Kembali ke daftar mata kuliah";
 $langAdministrationTools = "Tool Administrasi";
 $lang_back_to_parent_category = "Kembali ke induk kategori";
 $lang_back_to_course_selection = "Kembali ke pemilihan mata kuliah";

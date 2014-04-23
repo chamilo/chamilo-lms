@@ -22,6 +22,7 @@ $delete_user_available = true;
 if (isset($_configuration['deny_delete_users']) &&  $_configuration['deny_delete_users']) {
 	$delete_user_available = false;
 }
+
 $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_user_courses';
 $urlSession = api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=get_user_sessions';
 
@@ -652,17 +653,16 @@ if (!empty($action)) {
                 }
                 break;
 			case 'show_message' :
-                if (!empty($_GET['message'])) {
-                    $message = Display::return_message(stripslashes($_GET['message']), 'confirmation');
-                } else {
-                    if (!empty($_GET['warn'])) {
-                        // to prevent too long messages
-                    	if ($_GET['warn'] == 'session_message'){
-                            $_GET['warn'] = $_SESSION['session_message_import_users'];
-                    	}
-                    	$message = Display::return_message(Security::remove_XSS($_GET['warn']), 'warning', false);
+                if (!empty($_GET['warn'])) {
+                    // to prevent too long messages
+                    if ($_GET['warn'] == 'session_message'){
+                        $_GET['warn'] = $_SESSION['session_message_import_users'];
                     }
-               }
+                    $message .= Display::return_message(Security::remove_XSS($_GET['warn']), 'warning', false);
+                }
+                if (!empty($_GET['message'])) {
+                    $message .= Display::return_message(stripslashes($_GET['message']), 'confirmation');
+                }
 
 				break;
 			case 'delete_user' :
@@ -862,14 +862,12 @@ $table->set_column_filter(10, 'modify_filter');
 
 // Only show empty actions bar if delete users has been blocked
 if (api_is_platform_admin() && !(isset($_configuration['deny_delete_users']) && $_configuration['deny_delete_users'])) {
-        $table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));
+    $table->set_form_actions(array ('delete' => get_lang('DeleteFromPlatform')));
 } else {
-        $table->set_form_actions(array ('none' => get_lang('NoActionAvailable')));
+    $table->set_form_actions(array ('none' => get_lang('NoActionAvailable')));
 }
 
-
 $table_result = $table->return_table();
-
 $extra_search_options = '';
 
 //Try to search the user everywhere

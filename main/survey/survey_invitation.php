@@ -63,8 +63,8 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 }
 
 // Breadcrumbs
-$interbreadcrumb[] = array('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
-$interbreadcrumb[] = array('url' => 'survey.php?survey_id='.$survey_id, 'name' => $urlname);
+$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
+$interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id, 'name' => $urlname);
 
 
 // Displaying the header
@@ -110,24 +110,24 @@ echo '	</tr>';
 
 $course_id = api_get_course_int_id();
 
-$sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email 
-            FROM $table_survey_invitation survey_invitation
-			LEFT JOIN $table_user user ON (survey_invitation.user = user.user_id AND survey_invitation.c_id = $course_id)
-			WHERE survey_invitation.survey_code = '".Database::escape_string($survey_data['code'])."' ";
+$sql = "SELECT survey_invitation.*, user.firstname, user.lastname, user.email
+        FROM $table_survey_invitation survey_invitation
+        LEFT JOIN $table_user user ON (survey_invitation.user = user.user_id AND survey_invitation.c_id = $course_id)
+        WHERE survey_invitation.survey_code = '".Database::escape_string($survey_data['code'])."' ";
 
 $res = Database::query($sql);
 while ($row = Database::fetch_assoc($res)) {
 	if (!$_GET['view'] || $_GET['view'] == 'invited' || ($_GET['view'] == 'answered' && in_array($row['user'], $answered_data)) || ($_GET['view'] == 'unanswered' && !in_array($row['user'], $answered_data))) {
 		echo '<tr>';
 		if (is_numeric($row['user'])) {
-			echo '			<td><a href="../user/userInfo.php?editMainUserInfo='.$row['user'].'">'.api_get_person_name($row['firstname'], $row['lastname']).'</a></td>';
+			echo '			<td><a href="'.api_get_path(WEB_CODE_PATH).'user/userInfo.php?editMainUserInfo='.$row['user'].'">'.api_get_person_name($row['firstname'], $row['lastname']).'</a></td>';
 		} else {
 				echo '	<td>'.$row['user'].'</td>';
 		}
 		echo '	<td>'.$row['invitation_date'].'</td>';
 		echo '	<td>';
 		if (in_array($row['user'], $answered_data)) {
-			echo '<a href="reporting.php?action=userreport&amp;survey_id='.$survey_id.'&amp;user='.$row['user'].'">'.get_lang('ViewAnswers').'</a>';
+			echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&amp;survey_id='.$survey_id.'&amp;user='.$row['user'].'">'.get_lang('ViewAnswers').'</a>';
 		} else {
 			echo '-';
 		}
@@ -141,17 +141,3 @@ echo '</table>';
 
 // Footer
 Display :: display_footer();
-
-/**
- * @todo add the additional parameters
- */
-/*
-$table = new SortableTable('survey_invitations', 'get_number_of_survey_invitations', 'get_survey_invitations_data',2);
-$table->set_additional_parameters($parameters);
-$table->set_header(0, get_lang('User'));
-$table->set_header(1, get_lang('InvitationCode'));
-$table->set_header(2, get_lang('InvitationDate'));
-$table->set_header(3, get_lang('Answered'));
-$table->set_column_filter(3, 'SurveyUtil::modify_filter');
-$table->display();
-*/

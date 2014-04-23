@@ -3795,22 +3795,19 @@ function setting_gettext() {
     textdomain($domain);
 }
 
-/**
- * Return true is $in_date is a valid date
- * date format yyyy-mm-dd hh:mm:ss
- * @param $in_date
- */
-function api_is_valid_date($in_date) {
-    if (preg_match('/^([0-9]{4})-([0-1][0-9])-([0-3][0-9])( ([0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?$/', $in_date, $tab_matches)) {
-        if (checkdate($tab_matches[2], $tab_matches[3], $tab_matches[1])
-            && (($tab_matches[5] <= 23 && $tab_matches[6] <= 59 && $tab_matches[7] <= 59)
-                || ($tab_matches[5] == 24 && $tab_matches[6] == '00' && $tab_matches[7] == '00'))) {
-            return true;
-        }
-    }
-    return false;
-}
 
+/**
+ * Return true a date is valid
+
+ * @param string $date example: 2014-06-30 13:05:05
+ * @param string $format example: "Y-m-d H:i:s"
+ *
+ * @return bool
+ */
+function api_is_valid_date($date, $format = 'Y-m-d H:i:s') {
+    $d = DateTime::createFromFormat($format, $date);
+    return $d && $d->format($format) == $date;
+}
 /**
  * Return the encoding country code for jquery datepicker
  * used for exemple in main/exercice/exercise_report.php

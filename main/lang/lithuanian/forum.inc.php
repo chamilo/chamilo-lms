@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "Forum category deleted";
 $ForumLocked = "Forum blocked";
 $Forum = "Forumai";
 $AddForumCategory = "Sukurti naują forumo kategoriją";
-$AddForum = "Sukurti naują forumą";
 $Topics = "Tema";
 $Posts = "Pranešimai";
 $LastPosts = "Paskutinis pranešimas";

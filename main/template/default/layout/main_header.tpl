@@ -16,7 +16,9 @@
             <li><a href="#content" accesskey="2">{{ "WCAGGoContent"|get_lang }}</a></li>
         </ul>
     </div>
+
     <div id="wrapper">
+    <div id="page" class="page-section"> <!-- page section -->
         {# Bug and help notifications #}
         <ul id="navigation" class="notification-panel">
             {{ help_content }}
@@ -25,8 +27,9 @@
             
         {# topbar #}
         {% include "default/layout/topbar.tpl" %}
-<div id="page" class="page-section"> <!-- page section -->
+
         <div id="main" class="container">
+
             <header>
                 <div class="row">
                     <div id="header_left" class="span4">

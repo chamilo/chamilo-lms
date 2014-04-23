@@ -264,13 +264,13 @@ function handle_uploaded_document(
 			$file_size = $uploaded_file['size'];
 
 			$files_perm = api_get_permissions_for_new_files();
-                       $doc_path = '/'.$clean_name;
-                       $docId = DocumentManager :: get_document_id($_course, $doc_path, $current_session_id);
-      		        // What to do if the target file exists
+            $doc_path = '/'.$clean_name;
+            $docId = DocumentManager :: get_document_id($_course, $doc_path, $current_session_id);
+            // What to do if the target file exists
 			switch ($what_if_file_exists) {
 				// Overwrite the file if it exists
 				case 'overwrite':
-                                       // Check if the target file exists, so we can give another message
+                    // Check if the target file exists, so we can give another message
 					$file_exists = file_exists($store_path);
 					if (moveUploadedFile($uploaded_file, $store_path)) {
 						chmod($store_path, $files_perm);
@@ -335,11 +335,11 @@ function handle_uploaded_document(
 
 				// Rename the file if it exists
 				case 'rename':
-                                  if ($docId) {
-					$new_name = unique_name($where_to_save, $clean_name);
-                                  } else {
-                                      $new_name = $clean_name;
-                                  }
+                    if ($docId) {
+                        $new_name = unique_name($where_to_save, $clean_name);
+                    } else {
+                        $new_name = $clean_name;
+                    }
 					$store_path = $where_to_save.$new_name;
 					$new_file_path = $upload_path.$new_name;
 
@@ -390,6 +390,7 @@ function handle_uploaded_document(
                                 // Redo visibility
                                 api_set_default_visibility(TOOL_DOCUMENT, $document_id);
 							}
+
 							// If the file is in a folder, we need to update all parent folders
 							item_property_update_on_folder($_course,$upload_path,$user_id);
 
@@ -399,7 +400,7 @@ function handle_uploaded_document(
 							}
 							return $file_path;
 						} else {
-						    if ($output){
+						    if ($output) {
                                 Display::display_error_message(get_lang('UplUnableToSaveFile'));
 							}
 							return false;
@@ -464,6 +465,7 @@ function dir_total_space($dir_path) {
 	chdir($dir_path) ;
 	$handle = opendir($dir_path);
     $sumSize = 0;
+    $dirList = array();
 	while ($element = readdir($handle)) {
 		if ( $element == '.' || $element == '..') {
 			continue; // Skip the current and parent directories

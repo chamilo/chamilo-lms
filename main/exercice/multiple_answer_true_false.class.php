@@ -1,18 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * CLASS MultipleAnswer
- *
- * This class allows to instantiate an object of type MULTIPLE_ANSWER
- * (MULTIPLE CHOICE, MULTIPLE ANSWER), extending the class question
- * @author Julio Montoya
- * @package chamilo.exercise
- **/
-/**
  * Code
  */
 /**
- * Class
+ * Class MultipleAnswerTrueFalse
+ * This class allows to instantiate an object of type MULTIPLE_ANSWER
+ * (MULTIPLE CHOICE, MULTIPLE ANSWER), extending the class question
+ * @author Julio Montoya
  * @package chamilo.exercise
  */
 class MultipleAnswerTrueFalse extends Question {
@@ -70,6 +65,7 @@ class MultipleAnswerTrueFalse extends Question {
         $form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
 
 		$correct = 0;
+        $answer = null;
 		if (!empty($this -> id)) {
 			$answer = new Answer($this -> id);
 			$answer->read();

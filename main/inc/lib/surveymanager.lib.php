@@ -12,7 +12,8 @@
  * Manage the "versioning" of a conditional survey
  * @package chamilo.survey
  * */
-class SurveyTree {
+class SurveyTree
+{
 	public $surveylist;
 	public $plainsurveylist;
 	public $numbersurveys;
@@ -20,7 +21,8 @@ class SurveyTree {
 	/**
 	 * Sets the surveylist and the plainsurveylist
 	 */
-	public function __construct() {
+	public function __construct()
+    {
         // Database table definitions
 		$table_survey 			= Database :: get_course_table(TABLE_SURVEY);
 		$table_survey_question 	= Database :: get_course_table(TABLE_SURVEY_QUESTION);
@@ -31,16 +33,15 @@ class SurveyTree {
 		if ($search_restriction) {
 			$search_restriction = ' AND '.$search_restriction;
 		}
-		
 		$course_id = api_get_course_int_id();
-		
-
-		$sql = "SELECT survey.survey_id , survey.parent_id, survey_version, survey.code as name
-				FROM $table_survey survey LEFT JOIN $table_survey_question  survey_question
+		$sql = "SELECT
+survey.survey_id , survey.parent_id, survey_version, survey.code as name
+				FROM $table_survey survey
+				LEFT JOIN $table_survey_question  survey_question
 				ON survey.survey_id = survey_question.survey_id , $table_user user
 				WHERE
-					survey.c_id 			=  $course_id AND 
-					survey_question.c_id 	=  $course_id AND 
+					survey.c_id 			=  $course_id AND
+					survey_question.c_id 	=  $course_id AND
 					survey.author 			= user.user_id
 				GROUP BY survey.survey_id";
 
@@ -48,11 +49,10 @@ class SurveyTree {
 		$surveys_parents = array ();
 		$refs = array();
 		$list = array();
-		$last=array();
+		$last = array();
 		$plain_array=array();
 
-		while ($survey = Database::fetch_array($res,'ASSOC'))
-		{
+		while ($survey = Database::fetch_array($res,'ASSOC')) {
 			$plain_array[$survey['survey_id']]=$survey;
 			$surveys_parents[]=$survey['survey_version'];
 			$thisref = &$refs[ $survey['survey_id'] ];
@@ -60,18 +60,16 @@ class SurveyTree {
 			$thisref['name'] = $survey['name'];
 			$thisref['id'] = $survey['survey_id'];
 			$thisref['survey_version'] = $survey['survey_version'];
-			if ($survey['parent_id'] == 0)
-			{
+			if ($survey['parent_id'] == 0) {
 				$list[ $survey['survey_id'] ] = &$thisref;
-			}
-			else
-			{
+			} else {
 				$refs[ $survey['parent_id'] ]['children'][ $survey['survey_id'] ] = &$thisref;
 			}
 		}
         $this->surveylist = $list;
         $this->plainsurveylist = $plain_array;
     }
+
 	/**
 	 * This function gets the parent id of a survey
 	 *
@@ -81,53 +79,49 @@ class SurveyTree {
 	 * @author Julio Montoya <gugli100@gmail.com>, Dokeos
 	 * @version September 2008
 	 */
-	public function getParentId ($id) {
+	public function getParentId($id)
+    {
 		$node = $this->plainsurveylist[$id];
-		if (is_array($node)&& !empty($node['parent_id']))
+		if (is_array($node)&& !empty($node['parent_id'])) {
 			return $node['parent_id'];
-		else
+        } else {
 			return -1;
+        }
 	}
+
 	/**
 	 * This function creates a list of all surveys id
 	 * @param  list of nodes
 	 * @return array with the structure survey_id => survey_name
-	 * @author Julio Montoya <gugli100@gmail.com>, Dokeos
+	 * @author Julio Montoya <gugli100@gmail.com>
 	 * @version September 2008
-	 *
 	 */
-	public function createList ($list) {
-		$result=array();
-		if(is_array($list)) {
+	public function createList ($list)
+    {
+		$result = array();
+		if (is_array($list)) {
 			foreach ($list as $key=>$node) {
-				if (is_array($node['children']))
-				{
+				if (isset($node['children']) && is_array($node['children'])) {
 					//echo $key; echo '--<br>';
 					//print_r($node);
 					//echo '<br>';
 					$result[$key]= $node['name'];
-					$re=self::createList($node['children']);
-					if (!empty($re))
-					{
-						if (is_array($re))
-							foreach ($re as $key=>$r)
-							{
-								$result[$key]=''.$r;
-							}
-						else
-						{
+					$re = self::createList($node['children']);
+					if (!empty($re)) {
+						if (is_array($re)) {
+							foreach ($re as $key=>$r) {
+                                $result[$key]=''.$r;
+                            }
+                        } else {
 							$result[]=$re;
 						}
-
 					}
-				}
-				else
-				{
-					//echo $key; echo '-<br>';
+				} else {
 					$result[$key]=$node['name'];
 				}
 			}
 		}
+
 		return $result;
 	}
 }

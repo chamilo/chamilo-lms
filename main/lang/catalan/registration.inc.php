@@ -76,7 +76,6 @@ $langFormula = "Atentament, el professor";
 $langProblem = "En cas de problemes, contacta'ns.";
 $langIs = "és";
 $langAddress = "L'adresa de";
-$langSettings = "amb els seguents detalls:\nNúmero de matrícula:";
 $langYouAreReg = "Estàs enregistrat/da a";
 $langYourReg = "El teu enregistrament a";
 $langUserFree = "Aquest número de matrícula ja es troba enregistrat. Utilitza el bot enrera del teu navegador i escull-ne un altre.";

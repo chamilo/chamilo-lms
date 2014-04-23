@@ -276,7 +276,6 @@ if ($form->validate()) {
     $content = $form->return_form();
 }
 
-$tpl->assign('actions', $actions);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);
 $template = $tpl->get_template('layout/layout_1_col.tpl');

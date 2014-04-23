@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "Kategória fóra zmazaná";
 $ForumLocked = "Fórum blokované";
 $Forum = "Fórum";
 $AddForumCategory = "Pridať novú kategóriu fóra";
-$AddForum = "Pridať nové fórum";
 $Topics = "Témy";
 $Posts = "Správy";
 $LastPosts = "Posledná správa";

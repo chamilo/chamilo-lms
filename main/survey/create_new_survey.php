@@ -1,5 +1,4 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 
 /**
@@ -27,24 +26,25 @@ require_once 'survey.lib.php';
 require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
 
-$htmlHeadXtra[] = '<script type="text/javascript">
-		function advanced_parameters() {
-			if(document.getElementById(\'options\').style.display == \'none\') {
-					document.getElementById(\'options\').style.display = \'block\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-			} else {
-					document.getElementById(\'options\').style.display = \'none\';
-					document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
-			}
-		}
+$htmlHeadXtra[] = '<script>
+    function advanced_parameters() {
+        if (document.getElementById(\'options\').style.display == \'none\') {
+            document.getElementById(\'options\').style.display = \'block\';
+            document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+        } else {
+            document.getElementById(\'options\').style.display = \'none\';
+            document.getElementById(\'plus_minus\').innerHTML=\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'\';
+        }
+    }
 
-		function setFocus(){
-		  $("#surveycode_title").focus();
-		}
-		$(document).ready(function () {
-		  setFocus();
-		});
-	</script>';
+    function setFocus(){
+        $("#surveycode_title").focus();
+    }
+
+    $(document).ready(function () {
+      setFocus();
+    });
+</script>';
 
 // Database table definitions
 $table_survey = Database :: get_course_table(TABLE_SURVEY);
@@ -55,39 +55,45 @@ $table_gradebook_link = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code) */
 // If user is not teacher or if he's a coach trying to access an element out of his session
 if (!api_is_allowed_to_edit()) {
-    if (!api_is_course_coach() || (!empty($_GET['survey_id']) && !api_is_element_in_the_session(TOOL_SURVEY, intval($_GET['survey_id'])))) {
+    if (!api_is_course_coach() ||
+        (!empty($_GET['survey_id']) &&
+        !api_is_element_in_the_session(TOOL_SURVEY, $_GET['survey_id']))
+    ) {
         api_not_allowed(true);
         exit;
     }
 }
 
 // Getting the survey information
-$survey_id = Security::remove_XSS($_GET['survey_id']);
+$survey_id = isset($_GET['survey_id']) ? intval($_GET['survey_id']) : null;
 $survey_data = survey_manager::get_survey($survey_id);
 
 // Additional information
 $course_id = api_get_course_id();
 $session_id = api_get_session_id();
-$gradebook_link_type = 8; // LINK_SURVEY
-
-/* $urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
-  if (api_strlen(strip_tags($survey_data['title'])) > 40) {
-  $urlname .= '...';
-  } */
-$urlname = $survey_data['title'];
-
+$gradebook_link_type = 8;
+$urlname = isset($survey_data['title']) ? strip_tags($survey_data['title']) : null;
 
 // Breadcrumbs
 if ($_GET['action'] == 'add') {
-    $interbreadcrumb[] = array('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
+        'name' => get_lang('SurveyList')
+    );
     $tool_name = get_lang('CreateNewSurvey');
 }
 if ($_GET['action'] == 'edit' && is_numeric($survey_id)) {
-    $interbreadcrumb[] = array('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
-    $interbreadcrumb[] = array('url' => 'survey.php?survey_id='.$survey_id, 'name' => strip_tags($urlname));
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
+        'name' => get_lang('SurveyList')
+    );
+    $interbreadcrumb[] = array(
+        'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
+        'name' => Security::remove_XSS($urlname)
+    );
     $tool_name = get_lang('EditSurvey');
 }
-
+$gradebook_link_id = null;
 // Getting the default values
 if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     $defaults = $survey_data;
@@ -105,9 +111,9 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
     }
 } else {
     $defaults['survey_language'] = $_course['language'];
-    $defaults['start_date'] = date('d-F-Y H:i');
+    $defaults['start_date'] = date('Y-m-d', api_strtotime(api_get_local_time()));
     $startdateandxdays = time() + 864000; // today + 10 days
-    $defaults['end_date'] = date('d-F-Y H:i', $startdateandxdays);
+    $defaults['end_date'] = date('Y-m-d', $startdateandxdays);
     //$defaults['survey_share']['survey_share'] = 0;
     //$form_share_value = 1;
     $defaults['anonymous'] = 0;
@@ -124,7 +130,6 @@ if ($_GET['action'] == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 }
 
 $survey_code = $form->addElement('text', 'survey_code', get_lang('SurveyCode'), array('size' => '20', 'maxlength' => '20', 'id' => 'surveycode_title'));
-//$form->applyFilter('survey_code', 'html_filter');
 
 if ($_GET['action'] == 'edit') {
     $survey_code->freeze();
@@ -146,8 +151,8 @@ $form->addElement('html_editor', 'survey_subtitle', get_lang('SurveySubTitle'), 
 
 // Pass the language of the survey in the form
 $form->addElement('hidden', 'survey_language');
-$form->addElement('datepickerdate', 'start_date', get_lang('StartDate'), array('form_name' => 'survey'));
-$form->addElement('datepickerdate', 'end_date', get_lang('EndDate'), array('form_name' => 'survey'));
+$form->addElement('date_picker', 'start_date', get_lang('StartDate'));
+$form->addElement('date_picker', 'end_date', get_lang('EndDate'));
 
 //$group = '';
 //$group[] =& HTML_QuickForm::createElement('radio', 'survey_share', null, get_lang('Yes'), $form_share_value);
@@ -158,9 +163,13 @@ $form->addElement('checkbox', 'anonymous', null, get_lang('Anonymous'));
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 
-// Aditional Parameters
-$form->addElement('advanced_settings', '<a href="javascript: void(0);" onclick="javascript: advanced_parameters();" >
-        <span id="plus_minus">&nbsp;'.Display::return_icon('div_show.gif', null, array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>');
+// Additional Parameters
+$form->addElement(
+    'advanced_settings',
+    '<a href="javascript: void(0);" onclick="javascript: advanced_parameters();">
+        <span id="plus_minus">&nbsp;'.
+        Display::return_icon('div_show.gif', null, array('style' => 'vertical-align:middle')).'&nbsp;'.get_lang('AdvancedParameters').'</span></a>'
+);
 
 $form->addElement('html', '<div id="options" style="display: none;">');
 
@@ -187,14 +196,13 @@ if ($_GET['action'] == 'add') {
     $defaults['parent_id'] = 0;
 }
 
-if ($survey_data['survey_type'] == 1 || $_GET['action'] == 'add') {
+if (isset($survey_data['survey_type']) && $survey_data['survey_type'] == 1 || $_GET['action'] == 'add') {
     $form->addElement('checkbox', 'one_question_per_page', null, get_lang('OneQuestionPerPage'));
     $form->addElement('checkbox', 'shuffle', null, get_lang('ActivateShuffle'));
 }
-
+$input_name_list = null;
 if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id)) {
     if ($survey_data['anonymous'] == 0) {
-
         $form->addElement('checkbox', 'show_form_profile', null, get_lang('ShowFormProfile'), 'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
 
         if ($survey_data['show_form_profile'] == 1) {
@@ -212,7 +220,8 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id))
                     $input_name_list.= 'profile_'.$key.',';
                 }
             }
-            // Necesary to know the fields
+
+            // Necessary to know the fields
             $form->addElement('hidden', 'input_name_list', $input_name_list);
 
             // Set defaults form fields
@@ -309,7 +318,7 @@ if ($form->validate()) {
         Display::display_confirmation_message($return['message'], false);
     } else {
         // Redirecting to the survey page (whilst showing the return message)
-        header('location:survey.php?survey_id='.$return['id'].'&message='.$return['message']);
+        header('location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$return['id'].'&message='.$return['message'].'&'.api_get_cidreq());
         exit;
     }
 } else {

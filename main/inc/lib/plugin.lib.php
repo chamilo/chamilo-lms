@@ -180,15 +180,17 @@ class AppPlugin
         } else {
             $urlId = intval($urlId);
         }
-        api_delete_settings_params(
-            array('category = ? AND access_url = ? AND subkey = ? ' => array('Plugins', $urlId, $pluginName))
-        );
+        // First call the custom uninstall to allow full access to global settings
         $pluginPath = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/uninstall.php';
         if (is_file($pluginPath) && is_readable($pluginPath)) {
             // Execute the uninstall procedure.
 
             require $pluginPath;
         }
+        // Second remove all remaining global settings
+        api_delete_settings_params(
+            array('category = ? AND access_url = ? AND subkey = ? ' => array('Plugins', $urlId, $pluginName))
+        );
     }
 
     /**
@@ -364,6 +366,15 @@ class AppPlugin
             }
         }
         return true;
+    }
+
+    /**
+     * @param $plugin_name
+     * @param bool $forced
+     * @deprecated
+     */
+    public function get_plugin_info($plugin_name, $forced = false) {
+        return $this->getPluginInfo($plugin_name, $forced);
     }
 
     /**

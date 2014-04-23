@@ -49,7 +49,7 @@ $table_user 			= Database :: get_main_table(TABLE_MAIN_USER);
 
 // Language variables
 if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
-    $interbreadcrumb[] = array('url' => 'survey_list.php', 'name' => get_lang('SurveyList'));
+    $interbreadcrumb[] = array('url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php', 'name' => get_lang('SurveyList'));
     $tool_name = get_lang('SearchASurvey');
 } else {
     $tool_name = get_lang('SurveyList');
@@ -81,16 +81,17 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['survey
 
     $return = survey_manager :: delete_survey($_GET['survey_id']);
     if ($return) {
-        Display :: display_confirmation_message(get_lang('SurveyDeleted'), false);
+        Display::display_confirmation_message(get_lang('SurveyDeleted'), false);
     } else {
-        Display :: display_error_message(get_lang('ErrorOccurred'), false);
+        Display::display_error_message(get_lang('ErrorOccurred'), false);
     }
 }
 
 if (isset($_GET['action']) && $_GET['action'] == 'empty') {
     $mysession = api_get_session_id();
-    if ( $mysession != 0 ) {
-        if (!((api_is_course_coach() || api_is_platform_admin()) && api_is_element_in_the_session(TOOL_SURVEY,intval($_GET['survey_id'])))) {
+    if ($mysession != 0) {
+        if (!((api_is_course_coach() || api_is_platform_admin()) &&
+            api_is_element_in_the_session(TOOL_SURVEY, $_GET['survey_id']))) {
             // The coach can't empty a survey not belonging to his session
             api_not_allowed();
             exit;
@@ -131,9 +132,8 @@ if (isset($_POST['action']) && $_POST['action']) {
 echo '<div class="actions">';
 if (!api_is_course_coach() || $extend_rights_for_coachs == 'true') {
 	// Action links
-	echo '<a href="create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.Display::return_icon('new_survey.png', get_lang('CreateNewSurvey'),'',ICON_SIZE_MEDIUM).'</a> ';
+	echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.Display::return_icon('new_survey.png', get_lang('CreateNewSurvey'),'',ICON_SIZE_MEDIUM).'</a> ';
 }
-//echo '<a href="survey_all_courses.php">'.get_lang('CreateExistingSurvey').'</a> ';
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.Display::return_icon('search.png', get_lang('Search'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 

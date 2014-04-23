@@ -161,6 +161,7 @@ if ($is_certificate_array[0] == 'certificates') {
 }
 
 // Title of the tool
+$add_group_to_title = null;
 if ($to_group_id != 0) { // Add group name after for group documents
     $add_group_to_title = ' ('.$group_properties['name'].')';
 }

@@ -19,7 +19,6 @@ $Unsubscribe = "Ispis";
 $lang_back_to_my_home_page = "Povratak na moju početnu stranicu";
 $lang_back_to_my_personnal_course_list = "Povratak na moj osobni popis kolegija";
 $langTitular = "Nosilac";
-$langBackToListOfThisUser = "Povratak na popis kolegija";
 $langAdministrationTools = "Nadzorni alati";
 $lang_back_to_parent_category = "Povratak u nadređenu kategoriju";
 $lang_back_to_course_selection = "Povratak u odabir kolegija";

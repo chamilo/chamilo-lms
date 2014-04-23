@@ -2,6 +2,26 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$SleepingStudents = "Alunos sem atividade nos últimos dias";
+$SleepingTeachers = "Instrutores sem atividade nos últimos dias";
+$InactiveUsers = "Utilizadores com conta desativada";
+$ActiveUsers = "Utilizadores com conta ativa";
+$SurveysProgress = "Progresso dos questionários";
+$SurveysLeft = "Questionários incompletos";
+$SurveysDone = "Questionários completos";
+$SurveysTotal = "Total de questionários";
+$WikiProgress = "Progresso de leituras de páginas Wiki";
+$WikiUnread = "Páginas Wiki sem qualquer leitura";
+$WikiRead = "Páginas Wiki lidas";
+$WikiRevisions = "Revisões de páginas Wiki";
+$WikiTotal = "Total de páginas Wiki";
+$AssignmentsProgress = "Progresso de trabalhos/tarefas";
+$AssignmentsLeft = "Trabalhos/tarefas em falta";
+$AssignmentsDone = "Entregues completos em";
+$AssignmentsTotal = "Total de trabalhos/tarefas";
+$ForumsProgress = "Progresso do fórum";
+$ForumsLeft = "Fórums sem qualquer leitura";
+$ForumsDone = "Fórums lidos";
 $langToolName = "Importar cursos do Blackboard";
 $TrackingDisabled = "Os relatórios foram desactivados pelo administrador do sistema.";
 $InactivesStudents = "Utilizadores inactivos";

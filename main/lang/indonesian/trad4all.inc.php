@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddForum = "Tambah sebuah forum baru";
 $Title = "Judul";
 $UsersOnline = "User Online";
 $Remove = "Hapus";
@@ -330,4 +331,5 @@ $HumanAndTechnicalResourcesInformation = "Deskripsi singkat identitas contact pe
 $Assessment = "Evaluasi";
 $AssessmentQuestions = "Bagaimana user akan divaluasi? Adakah strategi yang dikembangkan untuk menguasai topik tsb?";
 $AssessmentInformation = "Contoh pertanyaan ujian. Kreteria sukses. Tips dan trik.";
+$UploadADocument = "Upload dokumen";
 ?>

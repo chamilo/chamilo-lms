@@ -19,7 +19,6 @@ $Unsubscribe = "Anular matrícula";
 $lang_back_to_my_home_page = "Tornar a la mio páxina d'entamu";
 $lang_back_to_my_personnal_course_list = "Tornar al mio llistáu personal de cursos";
 $langTitular = "Titular";
-$langBackToListOfThisUser = "Tornar al llistáu d'usuarios";
 $langAdministrationTools = "Ferramientes d'alministración";
 $lang_back_to_parent_category = "Tornar a la categoría superior";
 $lang_back_to_course_selection = "Tornar a seleición de cursu";

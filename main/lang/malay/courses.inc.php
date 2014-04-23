@@ -19,7 +19,6 @@ $Unsubscribe = "Tidak dilanggan";
 $lang_back_to_my_home_page = "Kembali ke Laman Pengguna";
 $lang_back_to_my_personnal_course_list = "Kembali ke Senarai Subjek Pengguna";
 $langTitular = "Titular";
-$langBackToListOfThisUser = "Kembali ke Senarai Subjek";
 $langAdministrationTools = "Alat Bantu Pentadbiran";
 $lang_back_to_main_category_list = "Kembali ke Senarai Kategori Utama";
 $langAdded = "Tambahan";

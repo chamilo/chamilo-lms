@@ -186,8 +186,9 @@ abstract class XapianIndexer {
     /**
      * Replace all terms of a document in xapian db
      *
-     * @param   int     did     Xapian::docid
-     * @param   array   terms   New terms of the document
+     * @param   int     $did     Xapian::docid
+     * @param   array   $terms   New terms of the document
+     * @param   string  $prefix  Prefix used to categorize the doc (usually 'T' for title, 'A' for author)
      * @return  boolean false on error
      */
     function update_terms($did, $terms, $prefix) {

@@ -341,6 +341,7 @@ $HumanAndTechnicalResourcesInformation = "異なる連絡先と技術的な装�
 $Assessment = "評価";
 $AssessmentQuestions = "学生をどのように評価しますか? トピックを習得するための学習手順はありますか?";
 $AssessmentInformation = "スキルを取得するための条件です。";
+$UploadADocument = "文書をアップロードする。";
 $AddAdditionalProfileField = "ユーザー プロファイルのフィールドを追加";
 $Metadata = "メタデータ";
 $langAddMetadata = "メタデータを表示/編集";

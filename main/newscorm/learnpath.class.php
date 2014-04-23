@@ -3002,7 +3002,7 @@ class learnpath
             // build the LP tree
             // The anchor atoc_ will let us center the TOC on the currently viewed item &^D
             if ($item['type'] != 'dokeos_module' && $item['type'] != 'dokeos_chapter') {
-                $html .= '<div class="'.$style_item .' scorm_item_level_'.$item['level'].' scorm_type_'.learnpath::format_scorm_type_item($item['type']).'" title="'.$item['description'].'" >';
+                $html .= '<div class="'.$style_item.' scorm_item_level_'.$item['level'].' scorm_type_'.learnpath::format_scorm_type_item($item['type']).'" title="'.$item['description'].'" >';
                 $html .= '<a name="atoc_'.$item['id'].'" />';
             } else {
                 $html .= '<div class="'.$style_item.' scorm_section_level_'.$item['level'].'" title="'.$item['description'].'" >';

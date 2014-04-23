@@ -8,7 +8,7 @@
 
 .inner_lp_toc .scorm_item a {
     font-weight: bold;
-    font-size: 14px;
+    font-size: 13px;
     margin-right: 1px;
     padding-bottom: 2px;
     text-decoration: none;
@@ -139,25 +139,27 @@
 }
 
 .scorm_item_level_1 {
-    padding : 0 0.5em 0 1.5em;
+    padding : 0 1.5em 0 1.5em;
 }
 
 .scorm_item_level_2 {
-    padding : 0 0.5em 0 3em;
+    padding : 0 1.5em 0 3em;
 }
-
 .scorm_item_level_3 {
-    padding : 0 0.5em 0 4.5em;
+    padding : 0 1.5em 0 4.5em;
 }
 
 .scorm_item_level_4 {
-    padding : 0 0.5em 0 6em;
+    padding : 0 1.5em 0 6em;
 }
 
 .scorm_item_level_5 {
-    padding : 0 0.5em 0 7.5em;
+    padding : 0 1.5em 0 7.5em;
 }
 
+.scorm_item.scorm_item_level_2 > a, .scorm_item.scorm_item_level_3 > a, .scorm_item.scorm_item_level_4 > a, .scorm_item.scorm_item_level_5 > a{
+    font-weight: normal;
+}
 /* end of copy of default_scorm.css */
 
 
@@ -171,7 +173,6 @@
     padding: 0px;
     margin-top: 0px;
     padding-top: 0px;
-    font-size: small;
 }
 .lp_toc {
     background-color: white;
@@ -182,17 +183,15 @@
 
 .inner_lp_toc {
     overflow: auto;
-    background-color: white;
-    height: 210px;   
+    background-color: #E0DFD8;
+    height: 210px;
+    padding: 10px;
 }
 
 .inner_lp_toc .scorm_item a {
-    font-weight: normal;
-    font-size: 12px;
     margin-right: 1px;
     padding-bottom: 2px;
     text-decoration: none;
-    font-family: Helvetica,Arial,sans-serif;
     color: #2F3E46;    
 }
 
@@ -203,7 +202,6 @@
 .inner_lp_toc .scorm_item_highlight {   
     border:1px solid #00aad4;
     background:#00aad4;
-    font-weight:normal;
     background-image:none;
     margin-right: 0px;
     padding: 10px 0px 10px 0px;
@@ -214,7 +212,6 @@
     color:#fff;
     margin-right: 1px;
     text-decoration: none;
-    font-weight: normal;
 }
 
 .inner_lp_toc .scorm_item_section {
@@ -347,27 +344,38 @@
     padding-top: 4px;
 }
 
-
-
 #learning_path_breadcrumb_zone .breadcrumb{
-    background-image: none;
-    background-color: #2e75a3;
-    color: #fff;
-    text-transform: capitalize;
+   background: #ffffff; /* Old browsers */
+background: -moz-linear-gradient(top, #ffffff 0%, #e5e5e5 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(100%,#e5e5e5)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, #ffffff 0%,#e5e5e5 100%); /* IE10+ */
+background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
+    color: #666666;
+    border: none;
+    -webkit-border-radius: 1px;
+    -moz-border-radius: 1px;
+    border-radius: 1px;
 }
 #learning_path_breadcrumb_zone .breadcrumb a{
-    color: #FFF;
+    color: #666666;
 }
 #learning_path_breadcrumb_zone .breadcrumb a:hover{
-    text-decoration: underline;
+    text-decoration: none;
+    opacity: 0.8;
+}
+#learning_path_breadcrumb_zone .breadcrumb a.btn-success{
+    color: #ffffff;
 }
 #scorm_title {
     font-weight: bold;
     background:none;
     font-size: 20px;
     background-image: none;
-    color: #0088aa;
-    padding-top: 5px;
+    color: #666666;
+    padding-top: 15px;
     padding-bottom: 15px;
 }
 #learning_path_main #control {
@@ -377,11 +385,11 @@
 opacity: 0.7;
 }
 #author_image{
-    background-color: #d7eef4;
+    background-color: #E0DFD8;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
-    border: 1px solid  #b4cbff;
+    border: 1px solid  #D9D9CE;
     margin-top: 10px;
 }
 #author_icon img{
@@ -393,17 +401,17 @@ opacity: 0.7;
 }
 #author_image .progresstext{
     font-size: 20px;
-    color: #0088aa;
+    color: #666666;
     font-weight: bold;
 }
 #learning_path_left_zone #header {
-  font-size: 14px;
+  font-size: 18px;
   margin-top: 10px;
 }
 #learning_path_left_zone .no-border{
     background: none;
-    color: #2e75a3;
-    font-weight: normal;
+    color: #666666;
+    font-weight: bold;
 }
 .progress {
   height: 18px;
@@ -426,31 +434,21 @@ opacity: 0.7;
           box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 .progress-striped .bar {
-  background-color: #149BDF;
-  background-size: 40px 40px;
-  background-image: none;
+   background-color: #EC5923;
+  background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
 
 /*STYLES PROCESS LESSION*/
 .inner_lp_toc .scorm_completed {
-    
-    background-image: url("images/blue_arrow.png") !important;
-    background-position: 250px center !important;
+    background-image: url("images/blue_arrow.png")  !important;
+    background-position: 255px center !important;
     background-repeat: no-repeat;
 }
-
-.inner_lp_toc .scorm_item_highlight {
-    background-color: #00aad4;
-    background-image: url("images/white_arrow.png") !important;
-    background-position: 250px center !important;
-    background-repeat: no-repeat;
-    border: 1px solid #00aad4;
-}
-
 
 .inner_lp_toc .scorm_item_1 {
-  background-color: #d7eef4;
-  background-image: none;
+  background:none;
+  background-repeat: no-repeat;
   border-bottom-color: #CCCCCC;
   border-bottom-style: solid;
   border-bottom-width: 1px;
@@ -465,7 +463,8 @@ opacity: 0.7;
 }
 #learning_path_main #control {
   background-image: none;
-  background-color: #d7eef4;
+  background-color: #E0DFD8;
+  border-top: 3px solid #D9D9CE;
   bottom: 0;
   height: 34px;
   margin-bottom: auto;
@@ -479,4 +478,22 @@ opacity: 0.7;
   position: absolute;
   text-align: center;
   width: 100%;
+}
+.inner_lp_toc .scorm_item_highlight {
+    background-color: #EC5923;
+    background-image: url("images/white_arrow.png") !important;
+    background-position: 255px center !important;
+    background-repeat: no-repeat;
+    border: 1px solid #F26C58;
+    text-shadow:none;
+}
+#author_name {
+  color: #666666;
+  float: left;
+  font-size: 13px;
+  margin-top: 2px;
+  text-align: center;
+  width: 100%;
+  padding-top: 10px;
+  padding-bottom: 5px;
 }

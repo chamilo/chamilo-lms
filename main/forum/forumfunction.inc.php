@@ -2020,6 +2020,7 @@ function store_thread($current_forum, $values)
         $upload_ok = process_uploaded_file($_FILES['user_upload']);
         $has_attachment = true;
     }
+
     if ($upload_ok) {
 
         $post_date = api_get_utc_datetime();
@@ -2198,7 +2199,7 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
     $form = new FormValidator(
         'thread',
         'post',
-        api_get_self().'?forum='.Security::remove_XSS($my_forum).'&gradebook='.$gradebook.'&thread='.Security::remove_XSS($my_thread).'&post='.Security::remove_XSS($my_post).'&action='.$action.'&origin='.$origin
+        api_get_self().'?forum='.Security::remove_XSS($my_forum).'&gradebook='.$gradebook.'&thread='.Security::remove_XSS($my_thread).'&post='.Security::remove_XSS($my_post).'&action='.$action
     );
     $form->setConstants(array('forum' => '5'));
 
@@ -3158,7 +3159,7 @@ function get_unaproved_messages($forum_id)
  */
 function send_notification_mails($thread_id, $reply_info)
 {
-    $table_mailcue = Database::get_course_table(TABLE_FORUM_MAIL_QUEUE);
+    $table = Database::get_course_table(TABLE_FORUM_MAIL_QUEUE);
 
     // First we need to check if
     // 1. the forum category is visible
@@ -3195,7 +3196,7 @@ function send_notification_mails($thread_id, $reply_info)
         $result = Database::query($sql);
         $user_id = api_get_user_id();
         while ($row = Database::fetch_array($result)) {
-            $sql = "INSERT INTO $table_mailcue (c_id, thread_id, post_id, user_id)
+            $sql = "INSERT INTO $table (c_id, thread_id, post_id, user_id)
                     VALUES (".api_get_course_int_id().", '".Database::escape_string($thread_id)."', '".Database::escape_string($reply_info['new_post_id'])."', '$user_id' )";
             Database::query($sql);
         }
@@ -4157,7 +4158,7 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
     $_course = api_get_course_info();
 
     // The content of the mail
-    $thread_link = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&amp;forum='.$forum_id.'&amp;thread='.$thread_id;
+    $thread_link = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forum_id.'&thread='.$thread_id;
 
     // Users who subscribed to the forum
     if ($forum_id != 0) {
@@ -4179,9 +4180,11 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
     $users_to_be_notified = array_merge($users_to_be_notified_by_forum, $users_to_be_notified_by_thread);
     $sender_id = api_get_user_id();
 
+
     if (is_array($users_to_be_notified)) {
         foreach ($users_to_be_notified as $value) {
-            if ($value['email'] != $_user['email']) {
+             if ($value['email'] != $_user['email']) {
+
                 $user_info = api_get_user_info($value['user_id']);
                 $email_body = get_lang('Dear').' '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
                 $email_body .= get_lang('NewForumPost').": ".$current_forum['forum_title'].' - '.$current_thread['thread_title']." <br />\n";
@@ -4189,7 +4192,9 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
                 $email_body .= get_lang('YouWantedToStayInformed')."<br />\n";
                 $email_body .= get_lang('ThreadCanBeFoundHere').': <br /> <a href="'.$thread_link.'">'.$thread_link."</a>\n";
 
-                MessageManager::send_message($value['user_id'], $subject, $email_body, null, null, null, null, null, null, $sender_id);
+                MessageManager::send_message_simple(
+                    $value['user_id'], $subject, $email_body, $sender_id
+                );
             }
         }
     }

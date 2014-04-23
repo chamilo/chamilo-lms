@@ -85,7 +85,8 @@ foreach ($rows as $post) {
             $class='';
         }
         $count_loop=($count==0)?'&amp;id=1' : '';
-        $thread_structure.= "<a href=\"viewthread.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;post=".$post['post_id']."&amp;origin=$origin$count_loop\" $class>".prepare4display($post['post_title'])."</a></div>";
+        $thread_structure.= "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".$clean_forum_id."&thread=".$clean_thread_id."&post=".$post['post_id']."&amp;origin=$origin$count_loop\" $class>".
+            prepare4display($post['post_title'])."</a></div>";
         $prev_next_array[]=$post['post_id'];
     }
     $count++;

@@ -27,7 +27,7 @@ class MultipleAnswerTrueFalse extends Question {
 		parent::question();
 		$this->type = MULTIPLE_ANSWER_TRUE_FALSE;
 		$this->isContent = $this-> getIsContent();
-        $this->options = array(1 =>'True',2 =>'False', 3 =>'DoubtScore');
+        $this->options = array(1 =>'True', 2 =>'False', 3 =>'DoubtScore');
 	}
 
 	/**

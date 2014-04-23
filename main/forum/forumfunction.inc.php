@@ -4154,7 +4154,7 @@ function get_notifications($content, $id)
  */
 function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
 {
-    $_user = api_get_user_info();
+    //$_user = api_get_user_info();
     $_course = api_get_course_info();
 
     // The content of the mail
@@ -4183,7 +4183,7 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
 
     if (is_array($users_to_be_notified)) {
         foreach ($users_to_be_notified as $value) {
-             if ($value['email'] != $_user['email']) {
+             //if ($value['email'] != $_user['email']) {
 
                 $user_info = api_get_user_info($value['user_id']);
                 $email_body = get_lang('Dear').' '.api_get_person_name($user_info['firstname'], $user_info['lastname'], null, PERSON_NAME_EMAIL_ADDRESS).", <br />\n\r";
@@ -4195,7 +4195,7 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
                 MessageManager::send_message_simple(
                     $value['user_id'], $subject, $email_body, $sender_id
                 );
-            }
+            //}
         }
     }
 }

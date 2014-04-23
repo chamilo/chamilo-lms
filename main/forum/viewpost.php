@@ -84,10 +84,10 @@ if (!api_is_allowed_to_edit(false, true) AND ($current_forum['visibility'] == 0 
 /* Actions */
 
 if ($_GET['action'] == 'delete' && isset($_GET['content']) && isset($_GET['id']) && api_is_allowed_to_edit(false, true)) {
-    $message = delete_post($_GET['id']); // Note: This has to be cleaned first.
+    $message = delete_post($_GET['id']);
 }
 if (($_GET['action'] == 'invisible' || $_GET['action'] == 'visible') && isset($_GET['id']) && api_is_allowed_to_edit(false, true)) {
-    $message = approve_post($_GET['id'], $_GET['action']); // Note: This has to be cleaned first.
+    $message = approve_post($_GET['id'], $_GET['action']);
 }
 if ($_GET['action'] == 'move' && isset($_GET['post'])) {
     $message = move_post_form();

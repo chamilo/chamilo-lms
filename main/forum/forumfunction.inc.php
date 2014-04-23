@@ -78,7 +78,7 @@ function handle_forum_and_forumcategories($lp_id = null)
     // Adding a forum
     if ((($action_forum_cat == 'add' || $action_forum_cat == 'edit') && $get_content == 'forum') || $post_submit_forum) {
         if ($action_forum_cat == 'edit' && $get_id || $post_submit_forum) {
-            $inputvalues = get_forums(intval($get_id)); // Note: This has to be cleaned first.
+            $inputvalues = get_forums($get_id);
         } else {
             $inputvalues = array();
         }
@@ -91,7 +91,7 @@ function handle_forum_and_forumcategories($lp_id = null)
     }
     // Edit a forum category
     if (($action_forum_cat == 'edit' && $get_content == 'forumcategory') || (isset($_POST['SubmitEditForumCategory'])) ? true : false) {
-        $forum_category = get_forum_categories(strval(intval($get_id))); // Note: This has to be cleaned first.
+        $forum_category = get_forum_categories($get_id);
         show_edit_forumcategory_form($forum_category);
     }
     // Delete a forum category
@@ -112,17 +112,17 @@ function handle_forum_and_forumcategories($lp_id = null)
     }
     // Change visibility of a forum or a forum category.
     if ($action_forum_cat == 'invisible' || $action_forum_cat == 'visible') {
-        $return_message = change_visibility($get_content, $get_id, $action_forum_cat); // Note: This has to be cleaned first.
+        $return_message = change_visibility($get_content, $get_id, $action_forum_cat);
         Display::display_confirmation_message($return_message, false);
     }
     // Change lock status of a forum or a forum category.
     if ($action_forum_cat == 'lock' || $action_forum_cat == 'unlock') {
-        $return_message = change_lock_status($get_content, $get_id, $action_forum_cat); // Note: This has to be cleaned first.
+        $return_message = change_lock_status($get_content, $get_id, $action_forum_cat);
         Display::display_confirmation_message($return_message, false);
     }
     // Move a forum or a forum category.
     if ($action_forum_cat == 'move' && isset($_GET['direction'])) {
-        $return_message = move_up_down($get_content, $_GET['direction'], $get_id); // Note: This has to be cleaned first.
+        $return_message = move_up_down($get_content, $_GET['direction'], $get_id);
         Display::display_confirmation_message($return_message, false);
     }
 }
@@ -928,7 +928,8 @@ function change_visibility($content, $id, $target_visibility)
 {
     $_course = api_get_course_info();
     $constants = array('forumcategory' => TOOL_FORUM_CATEGORY, 'forum' => TOOL_FORUM, 'thread' => TOOL_FORUM_THREAD);
-    api_item_property_update($_course, $constants[$content], $id, $target_visibility, api_get_user_id()); // Note: Check if this returns true or false => returnmessage depends on it.
+    api_item_property_update($_course, $constants[$content], $id, $target_visibility, api_get_user_id());
+
     if ($target_visibility == 'visible') {
         handle_mail_cue($content, $id);
     }
@@ -997,8 +998,9 @@ function change_lock_status($content, $id, $action)
  * @param $content what is it that we want to make (in)visible: forum category, forum, thread, post
  * @param $direction do we want to move it up or down.
  * @param $id the id of the content we want to make invisible
- * @todo consider removing the table_item_property calls here but this can prevent unwanted side effects when a forum does not have an entry in
- * 		the item_property table but does have one in the forum table.
+ * @todo consider removing the table_item_property calls here but this can
+ * prevent unwanted side effects when a forum does not have an entry in
+ * the item_property table but does have one in the forum table.
  * @return string language variable
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -1111,7 +1113,8 @@ function class_visible_invisible($current_visibility_status)
  * Retrieve all the information off the forum categories (or one specific) for the current course.
  * The categories are sorted according to their sorting order (cat_order
  *
- * @param int $id default ''. When an id is passed we only find the information about that specific forum category. If no id is passed we get all the forum categories.
+ * @param int $id default ''. When an id is passed we only find the information
+ * about that specific forum category. If no id is passed we get all the forum categories.
  * @return array containing all the information about all the forum categories
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -1216,8 +1219,10 @@ function get_forums_in_category($cat_id)
 }
 
 /**
- * Retrieve all the forums (regardless of their category) or of only one. The forums are sorted according to the forum_order.
- * Since it does not take the forum category into account there probably will be two or more forums that have forum_order=1, ...
+ * Retrieve all the forums (regardless of their category) or of only one.
+ * The forums are sorted according to the forum_order.
+ * Since it does not take the forum category into account there probably
+ * will be two or more forums that have forum_order=1, ...
  * @param int forum id
  * @param string course db name
  * @return an array containing all the information about the forums (regardless of their category)
@@ -1325,10 +1330,13 @@ function get_forums($id = '', $course_code = '', $includeGroupsForum = true)
         }
     } else {
         // GETTING ONE SPECIFIC FORUM
-        // We could do the splitup into student and course admin also but we want to have as much as information about a certain forum as possible
-        // so we do not take too much information into account. This function (or this section of the function) is namely used to fill the forms
-        // when editing a forum (and for the moment it is the only place where we use this part of the function)
-        //
+        /* We could do the splitup into student and course admin also but we want
+        to have as much as information about a certain forum as possible
+        so we do not take too much information into account. This function
+         (or this section of the function) is namely used to fill the forms
+        when editing a forum (and for the moment it is the only place where
+        we use this part of the function) */
+
         // Select all the forum information of the given forum (that is not deleted).
         $sql = "SELECT * FROM $table_forums forum , ".$table_item_property." item_properties
                 WHERE
@@ -1428,6 +1436,13 @@ function get_forums($id = '', $course_code = '', $includeGroupsForum = true)
     return $forum_list;
 }
 
+/**
+ * @param int $course_id
+ * @param int $thread_id
+ * @param int $forum_id
+ * @param bool $show_visible
+ * @return array|bool
+ */
 function get_last_post_by_thread($course_id, $thread_id, $forum_id, $show_visible = true)
 {
     if (empty($thread_id) || empty($forum_id) || empty($course_id)) {
@@ -1461,7 +1476,8 @@ function get_last_post_by_thread($course_id, $thread_id, $forum_id, $show_visibl
  * @param int 	$forum_id the id of the forum we want to know the last post information of.
  * @param bool 	$show_invisibles
  * @param string course db name
- * @return array containing all the information about the last post (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)
+ * @return array containing all the information about the last post
+ * (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
@@ -1647,12 +1663,11 @@ function get_posts($thread_id)
     }
     return $post_list;
 }
-//                    NEW TOPIC FUNCTIONS
 
 /**
  * This function retrieves all the information of a post
  *
- * @param $forum_id integer that indicates the forum
+ * @param int $forum_id integer that indicates the forum
  * @return array returns
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -1834,8 +1849,7 @@ function get_thread_users_qualify($thread_id)
  * @param	string	Course DB name (optional)
  * @return	array Array of type ([user_id=>w,lastname=>x,firstname=>y,thread_id=>z],[])
  * @author   Jhon Hinojosa<jhon.hinojosa@dokeos.com>,
- * @todo     i'm a horrible function fix me
- * @version octubre 2008, dokeos 1.8
+ * @version oct 2008, dokeos 1.8
  */
 function get_thread_users_not_qualify($thread_id)
 {
@@ -1923,7 +1937,8 @@ function get_forum_information($forum_id)
 
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
-    $row['approval_direct_post'] = 0; // We can't anymore change this option, so it should always be activated.
+    $row['approval_direct_post'] = 0;
+    // We can't anymore change this option, so it should always be activated.
     return $row;
 }
 
@@ -1941,12 +1956,14 @@ function get_forumcategory_information($cat_id)
     $table_item_property = Database :: get_course_table(TABLE_ITEM_PROPERTY);
 
     $course_id = api_get_course_int_id();
-    $sql = "SELECT * FROM ".$table_categories." forumcategories, ".$table_item_property." item_properties
-            WHERE 	forumcategories.c_id = $course_id AND
-            		item_properties.c_id = $course_id AND
-            		item_properties.tool='".TOOL_FORUM_CATEGORY."' AND
-            		item_properties.ref='".Database::escape_string($cat_id)."' AND
-    				forumcategories.cat_id='".Database::escape_string($cat_id)."'";
+    $sql = "SELECT *
+            FROM ".$table_categories." forumcategories, ".$table_item_property." item_properties
+            WHERE
+                forumcategories.c_id = $course_id AND
+                item_properties.c_id = $course_id AND
+                item_properties.tool='".TOOL_FORUM_CATEGORY."' AND
+                item_properties.ref='".Database::escape_string($cat_id)."' AND
+                forumcategories.cat_id='".Database::escape_string($cat_id)."'";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     return $row;
@@ -1967,7 +1984,9 @@ function count_number_of_forums_in_category($cat_id)
 {
     $table_forums = Database :: get_course_table(TABLE_FORUM);
     $course_id = api_get_course_int_id();
-    $sql = "SELECT count(*) AS number_of_forums FROM ".$table_forums." WHERE c_id = $course_id AND forum_category='".Database::escape_string($cat_id)."'";
+    $sql = "SELECT count(*) AS number_of_forums
+            FROM ".$table_forums."
+            WHERE c_id = $course_id AND forum_category='".Database::escape_string($cat_id)."'";
     $result = Database::query($sql);
     $row = Database::fetch_array($result);
     return $row['number_of_forums'];
@@ -2016,17 +2035,17 @@ function store_thread($current_forum, $values)
         // We first store an entry in the forum_thread table because the thread_id is used in the forum_post table.
         $sql = "INSERT INTO $table_threads (c_id, thread_title, forum_id, thread_poster_id, thread_poster_name, thread_date, thread_sticky,thread_title_qualify,thread_qualify_max,thread_weight,session_id)
                 VALUES (
-                		".$course_id.",
-                		'".$clean_post_title."',
-                        '".Database::escape_string($values['forum_id'])."',
-                        '".Database::escape_string($_user['user_id'])."',
-                        '".Database::escape_string(stripslashes(isset($values['poster_name']) ? $values['poster_name'] : null))."',
-                        '".Database::escape_string($post_date)."',
-                        '".Database::escape_string(isset($values['thread_sticky']) ? $values['thread_sticky'] : null)."',".
-            "'".Database::escape_string(stripslashes($values['calification_notebook_title']))."',".
-            "'".Database::escape_string($values['numeric_calification'])."',".
-            "'".Database::escape_string($values['weight_calification'])."',".
-            "'".api_get_session_id()."')";
+                    ".$course_id.",
+                    '".$clean_post_title."',
+                    '".Database::escape_string($values['forum_id'])."',
+                    '".Database::escape_string($_user['user_id'])."',
+                    '".Database::escape_string(stripslashes(isset($values['poster_name']) ? $values['poster_name'] : null))."',
+                    '".Database::escape_string($post_date)."',
+                    '".Database::escape_string(isset($values['thread_sticky']) ? $values['thread_sticky'] : null)."',".
+                    "'".Database::escape_string(stripslashes($values['calification_notebook_title']))."',".
+                    "'".Database::escape_string($values['numeric_calification'])."',".
+                    "'".Database::escape_string($values['weight_calification'])."',".
+                    "'".api_get_session_id()."')";
         Database::query($sql);
         $last_thread_id = Database::insert_id();
 
@@ -2087,7 +2106,8 @@ function store_thread($current_forum, $values)
         $last_post_id = Database::insert_id();
 
         // Now we have to update the thread table to fill the thread_last_post field (so that we know when the thread has been updated for the last time).
-        $sql = "UPDATE $table_threads SET thread_last_post='".Database::escape_string($last_post_id)."'  WHERE c_id = $course_id AND thread_id='".Database::escape_string($last_thread_id)."'";
+        $sql = "UPDATE $table_threads SET thread_last_post='".Database::escape_string($last_post_id)."'
+                WHERE c_id = $course_id AND thread_id='".Database::escape_string($last_thread_id)."'";
         $result = Database::query($sql);
         $message = get_lang('NewThreadStored');
         // Storing the attachments if any.
@@ -2103,8 +2123,7 @@ function store_thread($current_forum, $values)
                 Display :: display_error_message(get_lang('UplUnableToSaveFileFilteredExtension'));
             } else {
                 if ($result) {
-                    $comment = Database::escape_string($comment);
-                    add_forum_attachment_file($comment, $last_post_id);
+                    add_forum_attachment_file($values['file_comment'], $last_post_id);
                 }
             }
         } else {
@@ -2266,9 +2285,9 @@ function show_add_post_form($current_forum, $forum_setting, $action = '', $id = 
 
     if (($action == 'quote' || $action == 'replymessage') && isset($my_post)) {
         // We also need to put the parent_id of the post in a hidden form when we are quoting or replying to a message (<> reply to a thread !!!)
-        $form->addElement('hidden', 'post_parent_id', intval($my_post)); // Note: This has to be cleaned first.
+        $form->addElement('hidden', 'post_parent_id', intval($my_post));
         // If we are replying or are quoting then we display a default title.
-        $values = get_post_information($my_post); // Note: This has to be cleaned first.
+        $values = get_post_information($my_post);
         $defaults['post_title'] = get_lang('ReplyShort').api_html_entity_decode($values['post_title'], ENT_QUOTES);
         // When we are quoting a message then we have to put that message into the wysiwyg editor.
         // Note: The style has to be hardcoded here because using class="quote" didn't work.
@@ -3139,7 +3158,7 @@ function get_unaproved_messages($forum_id)
  */
 function send_notification_mails($thread_id, $reply_info)
 {
-    $table_mailcue = Database :: get_course_table(TABLE_FORUM_MAIL_QUEUE);
+    $table_mailcue = Database::get_course_table(TABLE_FORUM_MAIL_QUEUE);
 
     // First we need to check if
     // 1. the forum category is visible
@@ -3150,7 +3169,11 @@ function send_notification_mails($thread_id, $reply_info)
     $current_forum = get_forum_information($current_thread['forum_id']);
     $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 
-    if ($current_thread['visibility'] == '1' && $current_forum['visibility'] == '1' && ($current_forum_category && $current_forum_category['visibility'] == '1') && $current_forum['approval_direct_post'] != '1') {
+    if ($current_thread['visibility'] == '1' &&
+        $current_forum['visibility'] == '1' &&
+        ($current_forum_category && $current_forum_category['visibility'] == '1') &&
+        $current_forum['approval_direct_post'] != '1'
+    ) {
         $send_mails = true;
     } else {
         $send_mails = false;
@@ -3161,14 +3184,20 @@ function send_notification_mails($thread_id, $reply_info)
         send_notifications($current_thread['forum_id'], $thread_id);
     } else {
         $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
-        $sql = "SELECT * FROM $table_notification WHERE c_id = ".api_get_course_int_id()." AND (forum_id = '".Database::escape_string($current_forum['forum_id'])."' OR thread_id = '".Database::escape_string($thread_id)."' ) ";
+        $sql = "SELECT * FROM $table_notification
+                WHERE
+                    c_id = ".api_get_course_int_id()." AND
+                    (
+                        forum_id = '".Database::escape_string($current_forum['forum_id'])."' OR
+                        thread_id = '".Database::escape_string($thread_id)."'
+                    ) ";
 
         $result = Database::query($sql);
         $user_id = api_get_user_id();
         while ($row = Database::fetch_array($result)) {
-            $sql_mailcue = "INSERT INTO $table_mailcue (c_id, thread_id, post_id, user_id)
-                            VALUES (".api_get_course_int_id().", '".Database::escape_string($thread_id)."', '".Database::escape_string($reply_info['new_post_id'])."', '$user_id' )";
-            Database::query($sql_mailcue);
+            $sql = "INSERT INTO $table_mailcue (c_id, thread_id, post_id, user_id)
+                    VALUES (".api_get_course_int_id().", '".Database::escape_string($thread_id)."', '".Database::escape_string($reply_info['new_post_id'])."', '$user_id' )";
+            Database::query($sql);
         }
     }
 }
@@ -3178,8 +3207,8 @@ function send_notification_mails($thread_id, $reply_info)
  * be new posts and the user might have indicated that (s)he wanted to be
  * informed about the new posts by mail.
  *
- * @param    string  Content type (post, thread, forum, forum_category)
- * @param    int     Item DB ID
+ * @param string  Content type (post, thread, forum, forum_category)
+ * @param int     Item DB ID
  * @return string language variable
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @version february 2006, dokeos 1.8
@@ -3194,7 +3223,8 @@ function handle_mail_cue($content, $id)
 
     $course_id = api_get_course_int_id();
 
-    // If the post is made visible we only have to send mails to the people who indicated that they wanted to be informed for that thread.
+    /* If the post is made visible we only have to send mails to the people
+     who indicated that they wanted to be informed for that thread.*/
     if ($content == 'post') {
         // Getting the information about the post (need the thread_id).
         $post_info = get_post_information($id);
@@ -3240,16 +3270,19 @@ function handle_mail_cue($content, $id)
         }
 
         // Deleting the relevant entries from the mailcue.
-        $sql_delete_mailcue = "DELETE FROM $table_mailcue WHERE c_id = $course_id AND thread_id='".Database::escape_string($id)."'";
-        Database::query($sql_delete_mailcue);
+        $sql = "DELETE FROM $table_mailcue
+                WHERE c_id = $course_id AND thread_id='".Database::escape_string($id)."'";
+        Database::query($sql);
     } elseif ($content == 'forum') {
-        $sql = "SELECT thread_id FROM $table_threads WHERE c_id = $course_id AND forum_id='".Database::escape_string($id)."'";
+        $sql = "SELECT thread_id FROM $table_threads
+                WHERE c_id = $course_id AND forum_id='".Database::escape_string($id)."'";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             handle_mail_cue('thread', $row['thread_id']);
         }
     } elseif ($content == 'forum_category') {
-        $sql = "SELECT forum_id FROM $table_forums WHERE c_id = $course_id AND forum_category ='".Database::escape_string($id)."'";
+        $sql = "SELECT forum_id FROM $table_forums
+                WHERE c_id = $course_id AND forum_category ='".Database::escape_string($id)."'";
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             handle_mail_cue('forum', $row['forum_id']);
@@ -3304,7 +3337,7 @@ function move_thread_form()
     // The header for the form
     $form->addElement('header', '', get_lang('MoveThread'));
     // Invisible form: the thread_id
-    $form->addElement('hidden', 'thread_id', intval($_GET['thread'])); // Note: This has to be cleaned first.
+    $form->addElement('hidden', 'thread_id', intval($_GET['thread']));
     // the fora
     $forum_categories = get_forum_categories();
     $forums = get_forums();
@@ -3360,9 +3393,9 @@ function move_post_form()
     $form->addElement('header', '', get_lang('MovePost'));
 
     // Invisible form: the post_id
-    $form->addElement('hidden', 'post_id', strval(intval($_GET['post']))); // Note: This has to be cleaned first.
+    $form->addElement('hidden', 'post_id', intval($_GET['post']));
     // Dropdown list: Threads of this forum
-    $threads = get_threads(strval(intval($_GET['forum']))); // Note: This has to be cleaned.
+    $threads = get_threads($_GET['forum']);
     //my_print_r($threads);
     $threads_list[0] = get_lang('ANewThread');
     foreach ($threads as $key => $value) {

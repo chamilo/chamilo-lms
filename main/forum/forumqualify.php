@@ -114,10 +114,10 @@ if (!api_is_allowed_to_edit(false,true) AND ($current_forum['visibility']==0 OR 
     Actions
 */
 if ($_GET['action']=='delete' && isset($_GET['content']) && isset($_GET['id']) && api_is_allowed_to_edit(false,true)) {
-    $message=delete_post($_GET['id']); // note: this has to be cleaned first
+    $message = delete_post($_GET['id']);
 }
 if (($_GET['action']=='invisible' || $_GET['action']=='visible') && isset($_GET['id']) && api_is_allowed_to_edit(false,true)) {
-    $message=approve_post($_GET['id'],$_GET['action']); // note: this has to be cleaned first
+    $message = approve_post($_GET['id'],$_GET['action']);
 }
 if ($_GET['action']=='move' and isset($_GET['post'])) {
     $message = move_post_form();
@@ -130,10 +130,10 @@ if (!empty($message)) {
     Display :: display_confirmation_message(get_lang($message));
 }
 
-if ($message<>'PostDeletedSpecial') {// in this case the first and only post of the thread is removed
+if ($message<>'PostDeletedSpecial') {
+    // in this case the first and only post of the thread is removed
     // this increases the number of times the thread has been viewed
     increase_thread_view($_GET['thread']);
-
     /*
         Action Links
     */

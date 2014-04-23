@@ -137,18 +137,18 @@ if ($origin == 'learnpath') {
 /* Actions */
 // Change visibility of a forum or a forum category.
 if (($my_action == 'invisible' OR $my_action=='visible') AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true)) {
-    $message = change_visibility($_GET['content'], $_GET['id'], $_GET['action']); // Note: This has to be cleaned first.
+    $message = change_visibility($_GET['content'], $_GET['id'], $_GET['action']);
 }
 // Locking and unlocking.
 if (($my_action == 'lock' OR $my_action == 'unlock') AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true)) {
-    $message = change_lock_status($_GET['content'], $_GET['id'], $my_action); // Note: This has to be cleaned first.
+    $message = change_lock_status($_GET['content'], $_GET['id'], $my_action);
 }
 // Deleting.
 if ($my_action == 'delete' AND isset($_GET['content']) AND isset($_GET['id']) AND api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true)) {
 
     $locked = api_resource_is_locked_by_gradebook($_GET['id'], LINK_FORUM_THREAD);
     if ($locked == false) {
-        $message = delete_forum_forumcategory_thread($_GET['content'], $_GET['id']); // Note: This has to be cleaned first.
+        $message = delete_forum_forumcategory_thread($_GET['content'], $_GET['id']);
         // Delete link
         require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.php';
         $link_info = is_resource_in_course_gradebook(api_get_course_id(), 5 , intval($_GET['id']), api_get_session_id());

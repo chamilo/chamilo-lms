@@ -213,7 +213,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f68a7a', end
   padding-bottom: 5px;
   border: 1px solid #E1E1E0;
   box-shadow: none;
-  font-size: 12px;
+  height: 25px;
 }
 .breadcrumb a{
   color: #333;

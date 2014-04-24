@@ -556,8 +556,8 @@ a.thumbnail:hover{
 
 .pagerslide h2{
     font-size: 18px;
-    background-color:  #0191C7;
-    color: #FFFFFF;
+    background-color:  #E6E6E6;
+    color: #666666;
     padding-left: 15px;
 }
 
@@ -633,7 +633,7 @@ a.thumbnail:hover{
     color: #9ABF00;
 }
 .page-header h2{
-    color: #77A300;
+    color: #666;
     font-weight: bold;
     font-size: 20px;
     padding-left: 10px;
@@ -644,7 +644,10 @@ a.thumbnail:hover{
     font-weight: normal;
 }
 .page-header {
-  border:none;
+  border:1px solid #cccccc;
+  background:#E6E6E6;
+  margin-top: 0px;
+  margin-bottom: 10px;
 }
 .well_border{
   background-color: rgba(199,199,199, 0.2);

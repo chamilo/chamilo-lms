@@ -662,12 +662,12 @@ class CourseHome
 
                     if (empty($session_id)) {
                         if ($tool['visibility'] == '1' && $tool['admin'] != '1') {
-                            $link['name'] = Display::return_icon('visible.gif', get_lang('Deactivate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
+                            $link['name'] = Display::return_icon('eyes-visible.png', get_lang('Deactivate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
                             $link['cmd'] = 'hide=yes';
                             $lnk[] = $link;
                         }
                         if ($tool['visibility'] == '0' && $tool['admin'] != '1') {
-                            $link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
+                            $link['name'] = Display::return_icon('eyes-invisible.png', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
                             $link['cmd'] = 'restore=yes';
                             $lnk[] = $link;
                         }

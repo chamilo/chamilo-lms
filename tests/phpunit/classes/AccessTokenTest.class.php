@@ -16,7 +16,7 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         require_once dirname(__FILE__).'/../../../main/inc/global.inc.php';
-        $this->object = new AccessToken;
+        $this->object = new AccessToken(1, 1, 1);
     }
 
     /**
@@ -25,6 +25,7 @@ class AccessTokenTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        unset($this->object);
     }
 
     /**

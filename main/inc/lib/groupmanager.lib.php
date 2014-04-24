@@ -1469,12 +1469,9 @@ class GroupManager
         $user_ids = is_array($user_ids) ? $user_ids : array($user_ids);
         $result = true;
         $course_id = api_get_course_int_id();
-        $category = self :: get_category_from_group($group_id);
-        //$result &= (self :: number_of_students($group_id) < self :: maximum_number_of_students($group_id));
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
         if (!empty($user_ids)) {
             foreach ($user_ids as $user_id) {
-                $groupCount = self::user_in_number_of_groups($user_id, $category['id']);
                 if (self::can_user_subscribe($user_id, $group_id)) {
                     $user_id = Database::escape_string($user_id);
                     $group_id = Database::escape_string($group_id);

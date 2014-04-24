@@ -1457,7 +1457,7 @@ class Display
         return 'data_table';
     }
 
-    public static function page_header($title, $second_title = null, $size = 'h1') {
+    public static function page_header($title, $second_title = null, $size = 'h2') {
         $title = Security::remove_XSS($title);
         if (!empty($second_title)) {
             $second_title = Security::remove_XSS($second_title);

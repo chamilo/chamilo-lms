@@ -35,15 +35,18 @@ a:active {
     color: #FFFFFF;
 }
 .subnav .navbar-inner {
-    background: #4fb2ea; /* Old browsers */
-background: -moz-linear-gradient(top, #4fb2ea 0%, #0191c7 100%); /* FF3.6+ */
-background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4fb2ea), color-stop(100%,#0191c7)); /* Chrome,Safari4+ */
-background: -webkit-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* Chrome10+,Safari5.1+ */
-background: -o-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* Opera 11.10+ */
-background: -ms-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* IE10+ */
-background: linear-gradient(to bottom, #4fb2ea 0%,#0191c7 100%); /* W3C */
-filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4fb2ea', endColorstr='#0191c7',GradientType=0 ); /* IE6-9 */
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
     border: 1px solid #178ACC;
+    background: #4fb2ea; /* Old browsers */
+    background: -moz-linear-gradient(top, #4fb2ea 0%, #0191c7 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#4fb2ea), color-stop(100%,#0191c7)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #4fb2ea 0%,#0191c7 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #4fb2ea 0%,#0191c7 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4fb2ea', endColorstr='#0191c7',GradientType=0 ); /* IE6-9 */    
 }
 
 .subnav .nav > li > a {

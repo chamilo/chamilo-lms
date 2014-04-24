@@ -29,15 +29,20 @@ a:active {
     padding-top: 13px;
 }
 .subnav .navbar-inner {
-    background-color: #133AAC; /* Old browsers */
-    background-repeat: repeat-x; /* Repeat the gradient */
-    background-image: none;
+    background: #175ae2; /* Old browsers */
+    background: -moz-linear-gradient(top, #175ae2 0%, #133aac 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#175ae2), color-stop(100%,#133aac)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #175ae2 0%,#133aac 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #175ae2 0%,#133aac 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #175ae2 0%,#133aac 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #175ae2 0%,#133aac 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#175ae2', endColorstr='#133aac',GradientType=0 ); /* IE6-9 */
     border: none;
 }
 
 .subnav .nav > li > a {
-    border-left: 1px solid #133AAC;
-    border-right: 1px solid #133AAC;
+    border-left: 1px solid #133CB0;
+    border-right: 1px solid #133CB0;
     color: white;
     font-weight: normal;
     font-size: 13px;
@@ -47,7 +52,14 @@ a:active {
 .subnav .nav > #current > a,
 .subnav .nav > #current > a:hover {  
     color: #fff;
-    background-color: #2B4181;
+    background: #2b4181; /* Old browsers */
+    background: -moz-linear-gradient(top, #2b4181 0%, #133aac 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2b4181), color-stop(100%,#133aac)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #2b4181 0%,#133aac 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #2b4181 0%,#133aac 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #2b4181 0%,#133aac 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #2b4181 0%,#133aac 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2b4181', endColorstr='#133aac',GradientType=0 ); /* IE6-9 */
     border-right-color: #2B4181;  
 }
 
@@ -57,7 +69,14 @@ a:active {
 
 /* Green hover */
 .subnav .navbar-inner li a:hover {
-    background: none repeat scroll 0 0 #476BD6;
+    background: #2b4181; /* Old browsers */
+    background: -moz-linear-gradient(top, #2b4181 0%, #133aac 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2b4181), color-stop(100%,#133aac)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #2b4181 0%,#133aac 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #2b4181 0%,#133aac 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #2b4181 0%,#133aac 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #2b4181 0%,#133aac 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2b4181', endColorstr='#133aac',GradientType=0 ); /* IE6-9 */
     color: #fff;
 }
 .well .nav-list > li > a:hover {
@@ -88,20 +107,6 @@ a:active {
    /* padding-left: 15px;
     padding-right: 15px;*/
     padding-top: 6px;
-}
-.controls .btn{
-    background:#2E75A3;
-    color: #FFFFFF;
-    border: 1px solid #2E75A3;
-    padding: 5px 25px;
-    font-size: 14px;
-    text-shadow: none;
-}
-.controls .btn:hover{
-    background:#90B1F3;
-    border: none;
-    color: #FFFFFF;
-
 }
 .form-actions {
   background:transparent;
@@ -136,40 +141,6 @@ a:active {
   background-image: none;
   border: 1px solid #FD6600;
   color: #FFFFFF;
-}
-.btn{
-  display: inline-block;
-  padding: 6px 12px;
-  margin-bottom: 0;
-  font-size: 14px;
-  font-weight: normal;
-  line-height: 1.428571429;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-       -o-user-select: none;
-          user-select: none;
-  background-image: none;
-  border: none;
-  border-radius: 4px;
-  border-color: #ccc;
-}
-.btn:hover{
-  color: #333;
-  text-decoration: none;
-}
-.btn-primary{
-    background-color:#133AAC;
-    background-image: none;
-    border:none;
-}
-.btn-primary:hover{
-    background-color:#2B4181;
-    color: #FFFFFF;
 }
 
 /* styles for the star rater */
@@ -338,13 +309,7 @@ a:active {
     color: #666666;
     padding-left: 15px;
 }
-.controls .btn{
-    background:#133AAC;
-    color: #FFFFFF;
-    border:none;
-    padding: 5px 25px;
-    text-shadow: none;
-}
+
 #top_main_content #announcements .page-header{
   display: none;
   line-height: 1;
@@ -416,25 +381,10 @@ a:active {
 #homepage .row .span9 a:hover{
     color: #476BD6;
 }
-.page-header h2{
-    color: #133AAC;
-    font-weight: bold;
-    font-size: 20px;
-    padding-left: 10px;
-}
 #course_tools .course-title-tools h3 {
     margin-top: 10px;
     color: #133AAC;
-    font-weight: normal;
-    
-    
-}
-.page-header {
-  border-bottom-color: #133AAC;
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  box-shadow: none;
-  padding-bottom: 0px;
+    font-weight: normal;    
 }
 .well_border{
   background-color: rgba(243,226,169, 0.1);
@@ -474,14 +424,22 @@ a:active {
 #course_category li, #hot_courses h5, .course_item h5, .categories-course-description h5, .course-box h5 {
   font-weight: normal;
 }
+.page-header h2{
+  color: #666666;
+}
 /*****************************************************
  *  FOOTER STYLES                                    *
  *****************************************************/
 footer {
     height: 10em;    
-    background-color: #133AAC;
-    background-image: none;
-    background-repeat:repeat-x;    
+    background: #133aac; /* Old browsers */
+    background: -moz-linear-gradient(top, #133aac 0%, #0119a0 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#133aac), color-stop(100%,#0119a0)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #133aac 0%,#0119a0 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #133aac 0%,#0119a0 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #133aac 0%,#0119a0 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #133aac 0%,#0119a0 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#133aac', endColorstr='#0119a0',GradientType=0 ); /* IE6-9 */
     color:#ffffff;
     border-top: none;   
 }

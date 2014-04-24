@@ -249,7 +249,6 @@ switch ($action) {
         }
         break;
     case 'list':
-
         /*	Display list of student publications */
         if (!empty($my_folder_data['description'])) {
             $content = '<p><div><strong>'.

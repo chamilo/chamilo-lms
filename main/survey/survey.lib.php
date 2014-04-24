@@ -4799,8 +4799,8 @@ class SurveyUtil
 	 * @return array[value_name][name]
 	 * 		   array[value_name][visibilty]
 	 */
-	static function make_field_list() {
-
+	static function make_field_list()
+    {
 		//	LAST NAME and FIRST NAME
 		$field_list_array = array();
 		$field_list_array['lastname']['name'] = get_lang('Lastname');
@@ -4834,19 +4834,6 @@ class SurveyUtil
 			$field_list_array['email']['visibility'] = 0;
 		}
 
-		// OPENID URL
-		//$field_list_array[] = 'openid_authentication';
-		/*
-		if (is_profile_editable() && api_get_setting('openid_authentication') == 'true') {
-			$form->addElement('text', 'openid', get_lang('OpenIDURL'), array('size' => 40));
-			if (api_get_setting('profile', 'openid') != 'true') {
-				$form->freeze('openid');
-			}
-			$form->applyFilter('openid', 'trim');
-			//if (api_get_setting('registration', 'openid') == 'true')
-			//	$form->addRule('openid', get_lang('ThisFieldIsRequired'), 'required');
-		}*/
-
 		// PHONE
 		$field_list_array['phone']['name'] = get_lang('Phone');
 		if (api_get_setting('profile', 'phone') != 'true') {
@@ -4864,7 +4851,7 @@ class SurveyUtil
 
 		// EXTRA FIELDS
 		$extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
-		$extra_data = UserManager::get_extra_user_data(api_get_user_id(), true);
+
 		foreach ($extra as $id => $field_details) {
 			if ($field_details[6] == 0) {
 				continue;
@@ -4897,7 +4884,17 @@ class SurveyUtil
 					break;
 
 				case UserManager::USER_FIELD_TYPE_SELECT:
-					$field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
+                    $get_lang_variables = false;
+                    if (in_array($field_details[1], array('mail_notify_message', 'mail_notify_invitation', 'mail_notify_group_message'))) {
+                        $get_lang_variables = true;
+                    }
+
+                    if ($get_lang_variables) {
+                        $field_list_array['extra_'.$field_details[1]]['name'] = get_lang($field_details[3]);
+                    } else {
+                        $field_list_array['extra_'.$field_details[1]]['name'] = $field_details[3];
+                    }
+
 					if ($field_details[7] == 0) {
 						$field_list_array['extra_'.$field_details[1]]['visibility'] = 0;
 					} else {
@@ -4939,36 +4936,6 @@ class SurveyUtil
 					} else {
 						$field_list_array['extra_'.$field_details[1]]['visibility']=1;
 					}
-					/*
-					foreach ($field_details[8] as $key => $element) {
-						if ($element[2][0] == '*') {
-							$values['*'][$element[0]] = str_replace('*','',$element[2]);
-						} else {
-							$values[0][$element[0]] = $element[2];
-						}
-					}
-
-					$group = '';
-					$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1], '', $values[0], '');
-					$group[] =& HTML_QuickForm::createElement('select', 'extra_'.$field_details[1].'*', '', $values['*'], '');
-					$form->addGroup($group, 'extra_'.$field_details[1], $field_details[3], '&nbsp;');
-					if ($field_details[7] == 0)	$form->freeze('extra_'.$field_details[1]);
-
-					// Recoding the selected values for double : if the user has selected certain values, we have to assign them to the correct select form
-					if (key_exists('extra_'.$field_details[1], $extra_data)) {
-						// Exploding all the selected values (of both select forms)
-						$selected_values = explode(';',$extra_data['extra_'.$field_details[1]]);
-						$extra_data['extra_'.$field_details[1]] = array();
-
-						// Looping through the selected values and assigning the selected values to either the first or second select form
-						foreach ($selected_values as $key => $selected_value) {
-							if (key_exists($selected_value, $values[0])) {
-								$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1]] = $selected_value;
-							} else {
-								$extra_data['extra_'.$field_details[1]]['extra_'.$field_details[1].'*'] = $selected_value;
-							}
-						}
-					}*/
 					break;
 				case UserManager::USER_FIELD_TYPE_DIVIDER:
 					//$form->addElement('static',$field_details[1], '<br /><strong>'.$field_details[3].'</strong>');

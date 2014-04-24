@@ -8,14 +8,14 @@
 /* the following for regular <a> elements */
 a {
     text-decoration: none;
-    color :#6E6E6E;
+    color :#666666;
 }
 a:visited {
-    text-decoration: none;    
+    text-decoration: none;
 }
 a:hover {
     text-decoration: none;
-    color: #93C80A;
+    color: #9ABF00;
 }
 a:active {
     text-decoration: none;
@@ -23,21 +23,30 @@ a:active {
 }
 .navbar .nav > li > a {
     float: none;
-    line-height: 20px;
+    line-height: 24px;
     padding-bottom: 13px;
     padding-right: 10px;
     padding-top: 13px;
+    color: #FFFFFF;
 }
 .subnav .navbar-inner {
-    background-color: #87BA0A; /* Old browsers */
-    background-repeat: repeat-x; /* Repeat the gradient */
-    background-image: none;
-    border: none;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    border: 1px solid #59B800;
+    background: #a0c400; /* Old browsers */
+    background: -moz-linear-gradient(top, #a0c400 0%, #73a000 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a0c400), color-stop(100%,#73a000)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #a0c400 0%,#73a000 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #a0c400 0%,#73a000 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #a0c400 0%,#73a000 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #a0c400 0%,#73a000 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a0c400', endColorstr='#73a000',GradientType=0 ); /* IE6-9 */
 }
 
 .subnav .nav > li > a {
-    border-left: 1px solid #87BA0A;
-    border-right: 1px solid #87BA0A;
+    border-left: none;
+    border-right: none;
     color: white;
     font-weight: normal;
     font-size: 13px;
@@ -45,10 +54,10 @@ a:active {
 
 
 .subnav .nav > #current > a,
-.subnav .nav > #current > a:hover {  
+.subnav .nav > #current > a:hover {
     color: #fff;
-    background-color: #4B8A08;
-    border-right-color: #4B8A08;  
+    background: #77A300;
+    border-right-color: #178ACC;
 }
 
 .subnav li a {
@@ -57,7 +66,7 @@ a:active {
 
 /* Green hover */
 .subnav .navbar-inner li a:hover {
-    background: none repeat scroll 0 0 #99CF0A;
+    background: #77A300;
     color: #fff;
 }
 .well .nav-list > li > a:hover {
@@ -73,7 +82,7 @@ a:active {
 }
 
 /*****************************************************
- *  STYLE THEME CHAMILO                              *
+ *  CHAMILO THEME STYLE                              *
  *****************************************************/
 .welcome-mascot{
   background: url(images/chamilo-welcome.png) no-repeat right 0;
@@ -89,89 +98,34 @@ a:active {
     padding-right: 15px;*/
     padding-top: 6px;
 }
-.controls .btn{
-    background:#2E75A3;
-    color: #FFFFFF;
-    border: 1px solid #2E75A3;
-    padding: 5px 25px;
-    font-size: 14px;
-    text-shadow: none;
-}
-.controls .btn:hover{
-    background:#4B8A08;
-    border: none;
-    color: #FFFFFF;
 
+a.thumbnail:hover{
+  border: 1px solid #e5e5e5;
+  background: transparent;
+}
+.logout img{
+  padding-top: 7px;
 }
 .form-actions {
   background:transparent;
 }
-.breadcrumb {
-  margin-bottom: 0;
-  background-color: #E6E6E6;
-  background-image: none;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border: 1px solid #E6E6E6;
-  box-shadow: none;
-}
+
 .breadcrumb a{
-  color: #333;
-  font-size: 13px;
   line-height: 30px;
   text-transform: none;
 }
 
 .breadcrumb li{
-    font-size: 14px;
+
     text-shadow: none;
 }
 .breadcrumb a.btn-mini{
-    font-size: 12px;
     line-height: 17px;
     text-transform: none;
 }
-.breadcrumb a.btn-success {
-  background-color: #FD6600;
-  background-image: none;
-  border: 1px solid #FD6600;
+.breadcrumb a.btn-mini > .btn-success{
   color: #FFFFFF;
 }
-.btn{
-  display: inline-block;
-  padding: 6px 12px;
-  margin-bottom: 0;
-  font-size: 14px;
-  font-weight: normal;
-  line-height: 1.428571429;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-       -o-user-select: none;
-          user-select: none;
-  background-image: none;
-  border: none;
-  border-radius: 4px;
-  border-color: #ccc;
-}
-.btn:hover{
-  color: #333;
-  text-decoration: none;
-}
-.btn-primary{
-    background-color:#87BA0A;
-    background-image: none;
-    border:none;
-}
-.btn-primary:hover{
-    background-color:#99CF0A;
-    color: #FFFFFF;
-}
-
 /* styles for the star rater */
 .star-rating{
     list-style:none;
@@ -329,22 +283,284 @@ a:active {
   border: 2px solid #FFFFFF;
 }
 
+/* ANNOUNCEMENTS SLIDER */
+
+.pagerslide h2{
+    font-size: 18px;
+    background-color:  #0191C7;
+    color: #FFFFFF;
+    padding-left: 15px;
+    font-weight: normal;
+}
+
+#top_main_content #announcements .page-header{
+  display: none;
+  line-height: 1;
+}
+#top_main_content #announcements .span6 {
+  width: 800px;
+}
+
+/* COURSE INTRO CONTENT */
+
+.page-course-intro{
+    padding: 2em;
+    border: 1px solid #DDDDDD;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    margin-bottom: 2em;
+}
+
+.page-course-intro ul{
+    list-style-image:url(images/vineta.png);
+    padding-top: 10px;
+}
+.page-course-intro a{
+    color: #FD6600;
+}
+.page-course-intro a:hover{
+    color: #FD6600;
+    text-decoration: underline;
+}
+
+
+/* END OF COURSE INTRO*/
+.fc-header-title h2{
+    color: #0191C7;
+}
+.fc-first .fc-widget-header{
+    font-size: 14px;
+    font-weight: normal;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.well {
+  background-color: rgba(96,165,209, 0.1);
+  border: 1px solid rgba(96,165,209, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+  margin-bottom: 20px;
+  min-height: 20px;
+  padding: 20px 10px;
+}
+.sidebar-nav img{
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+#homepage .row .span9 h2{
+    font-size: 26px;
+    font-weight: bold;
+    color: #0191C7;
+    padding-bottom: 8px;
+}
+#homepage .row .span9 p,#homepage .row .span9 ol {
+    color: #6E6E6E;
+}
+#homepage .row .span9 a{
+    color: #0F466A;
+}
+#homepage .row .span9 a:hover{
+    color: #FD6600;
+}
+.page-header h2{
+    color: #0191C7;
+    font-weight: normal;
+    font-size: 20px;
+    padding-left: 10px;
+    width: 250px;
+}
+#course_tools .course-title-tools h3 {
+    margin-top: 10px;
+    color: #0191C7;
+    font-weight: normal;
+
+
+}
+.page-header {
+  border-bottom-color: #0191C7;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  box-shadow: none;
+  padding-bottom: 0px;
+}
+.well_border{
+  background-color: rgba(96,165,209, 0.1);
+  border: 1px solid rgba(96,165,209, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
+  margin-bottom: 20px;
+  min-height: 20px;
+  padding: 19px;
+}
+.well_border .row .span2 {
+  width: 98px;
+}
+.well_border .row .span2 .thumbnail {
+  background-color: #FFFFFF;
+  background-image: none;
+}
+#hot_courses .row .span9 .well_border .row .span6{
+    width: auto;
+}
+.categories-course-description h3{
+    color: #0F466A;
+    font-weight: normal;
+}
+#course_tools .content a {
+  font-size: 12px;
+  font-weight: normal;
+}
+#main_content .course-box .row .span7{
+  width: 730px;
+}
+#main_content .course-box .row .span7 .row .span6 {
+    width: 615px;
+}
+#main_content .course-box .row .span7 .row .span6 h3{
+  font-size: 20px;
+}
+#course_category li, #hot_courses h5, .course_item h5, .categories-course-description h5, .course-box h5 {
+  font-weight: normal;
+}
+/*****************************************************
+ *  STYLE THEME CHAMILO                              *
+ *****************************************************/
+.welcome-mascot{
+  background: url(images/chamilo-welcome.png) no-repeat right 0;
+  padding-right: 200px;
+  padding-bottom: 2em;
+  padding-top: 2em;
+}
+
+.nav-list > li > a {
+    font-size: 14px;
+    padding-bottom: 6px;
+   /* padding-left: 15px;
+    padding-right: 15px;*/
+    padding-top: 6px;
+}
+
+#settings .span6 .well_border {
+  min-height: 300px;
+}
+.breadcrumb {
+  margin-bottom: 0;
+  background: #e0ff99; /* Old browsers */
+  background: -moz-linear-gradient(top, #e0ff99 0%, #b7df2d 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e0ff99), color-stop(100%,#b7df2d)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #e0ff99 0%,#b7df2d 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #e0ff99 0%,#b7df2d 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #e0ff99 0%,#b7df2d 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #e0ff99 0%,#b7df2d 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e0ff99', endColorstr='#b7df2d',GradientType=0 ); /* IE6-9 */
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-top: 5px;
+  border: 1px solid #BDE43E;
+  box-shadow: none;
+}
+.breadcrumb a{
+
+  line-height: 30px;
+  text-transform: none;
+}
+
+.breadcrumb li{
+
+    text-shadow: none;
+}
+
+/* styles for the star rater */
+.star-rating{
+    list-style:none;
+    margin: 0px;
+    padding:0px;
+    width: 125px;
+    height: 25px;
+    position: relative;
+    overflow:hidden;
+    background: url(images/start-level.png) top left repeat-x;
+}
+.star-rating li{
+    padding:0px;
+    margin:0px;
+    width:25px;
+    height:25px;
+    float: left;
+}
+.star-rating li a{
+    display:block;
+    width:25px;
+    height: 25px;
+    line-height:25px;
+    text-decoration: none;
+    text-indent: -9000px;
+    z-index: 20;
+    position: absolute;
+    padding: 0px;
+    overflow:hidden;
+}
+.star-rating li a:hover{
+    background: url(images/start-level.png) left bottom;
+    z-index: 2;
+    left: 0px;
+    border:none;
+}
+.star-rating a.one-star{
+    left: 0px;
+}
+.star-rating a.one-star:hover{
+    width:25px;
+}
+.star-rating a.two-stars{
+    left:25px;
+}
+.star-rating a.two-stars:hover{
+    width: 50px;
+}
+.star-rating a.three-stars{
+    left: 50px;
+}
+.star-rating a.three-stars:hover{
+    width: 75px;
+}
+.star-rating a.four-stars{
+    left: 75px;
+}
+.star-rating a.four-stars:hover{
+    width: 100px;
+}
+.star-rating a.five-stars{
+    left: 100px;
+}
+.star-rating a.five-stars:hover{
+    width: 125px;
+}
+.star-rating li.current-rating{
+    background: url(images/start-level.png) left center;
+    position: absolute;
+    height: 25px;
+    display: block;
+    text-indent: -9000px;
+    z-index: 1;
+}
+
+.nav-list > .active > a, .nav-list > .active > a:hover {
+  color: #333333;
+  background: none;
+}
 /*CSS SLIDER ANUNCIOS*/
 
 .pagerslide h2{
     font-size: 18px;
-    font-weight: normal;
-    background-color:  #D8D8D8;
-    color: #666666;
+    background-color:  #0191C7;
+    color: #FFFFFF;
     padding-left: 15px;
 }
-.controls .btn{
-    background:#87BA0A;
-    color: #FFFFFF;
-    border:none;
-    padding: 5px 25px;
-    text-shadow: none;
-}
+
 #top_main_content #announcements .page-header{
   display: none;
   line-height: 1;
@@ -379,7 +595,7 @@ a:active {
 
 /*FIN DE INTRODUCCION DEL CURSO*/
 .fc-header-title h2{
-    color: #4B8A08;
+    color: #77A300;
 }
 .fc-first .fc-widget-header{
     font-size: 14px;
@@ -387,10 +603,9 @@ a:active {
     padding-top: 5px;
     padding-bottom: 5px;
 }
-
 .well {
-  background-color: rgba(243,226,169, 0.1);
-  border: 1px solid rgba(243,226,169, 0.1);
+  background-color: rgba(199,199,199, 0.2);
+  border: 1px solid rgba(96,165,209, 0.2);
   border-radius: 8px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
   margin-bottom: 20px;
@@ -403,43 +618,37 @@ a:active {
     border-radius: 10px;
 }
 #homepage .row .span9 h2{
-    font-size: 26px;
+    
     font-weight: bold;
-    color: #666;
+    color: #77A300;
     padding-bottom: 8px;
 }
 #homepage .row .span9 p,#homepage .row .span9 ol {
-    color: #6E6E6E;
+    color: #666666;
 }
 #homepage .row .span9 a{
-    color: #87BA0A;
+    color: #666666;
 }
 #homepage .row .span9 a:hover{
-    color: #87BA0A;
+    color: #9ABF00;
 }
 .page-header h2{
-    color: #87BA0A;
+    color: #77A300;
     font-weight: bold;
     font-size: 20px;
     padding-left: 10px;
 }
 #course_tools .course-title-tools h3 {
     margin-top: 10px;
-    color: #87BA0A;
+    color: #0191C7;
     font-weight: normal;
-    
-    
 }
 .page-header {
-  border-bottom-color: #87BA0A;
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  box-shadow: none;
-  padding-bottom: 0px;
+  border:none;
 }
 .well_border{
-  background-color: rgba(243,226,169, 0.1);
-  border: 1px solid rgba(243,226,169, 0.1);
+  background-color: rgba(199,199,199, 0.2);
+  border: 1px solid rgba(96,165,209, 0.2);
   border-radius: 8px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05) inset;
   margin-bottom: 20px;
@@ -456,8 +665,11 @@ a:active {
 #hot_courses .row .span9 .well_border .row .span6{
     width: auto;
 }
-.categories-course-description h3{
-    color: #666;
+
+.categories-course-description .text-h3{
+    color: #75A200;
+    font-weight: bold;
+    padding-bottom: 5px;
 }
 #course_tools .content a {
   font-size: 12px;
@@ -479,12 +691,17 @@ a:active {
  *  FOOTER STYLES                                    *
  *****************************************************/
 footer {
-    height: 10em;    
-    background-color: #87BA0A;
-    background-image: none;
-    background-repeat:repeat-x;    
+    height: 7em;
+    background: #9bc000; /* Old browsers */
+    background: -moz-linear-gradient(top, #9bc000 0%, #74a100 68%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9bc000), color-stop(68%,#74a100)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #9bc000 0%,#74a100 68%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #9bc000 0%,#74a100 68%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #9bc000 0%,#74a100 68%); /* IE10+ */
+    background: linear-gradient(to bottom, #9bc000 0%,#74a100 68%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9bc000', endColorstr='#74a100',GradientType=0 ); /* IE6-9 */
     color:#ffffff;
-    border-top: none;   
+    border-top: 1px solid #74A100;
 }
 footer .container .row {
   padding-top: 5px;
@@ -493,7 +710,7 @@ footer a:link, footer a:visited {
   color: #F1D40D;
 }
 /*****************************************************
- *  DISPLAY MESSAGES	                             *
+ *  DISPLAY MESSAGES                               *
  *****************************************************/
 /*****************************************************
  *  CSS CHAT                               *
@@ -512,8 +729,8 @@ footer a:link, footer a:visited {
   color: #ffffff;
   border-right:1px solid #222;
   border-left:1px solid #222;
-  
-  background-color: #222; 
+
+  background-color: #222;
   background-repeat: repeat-x;
   background-image: -khtml-gradient(linear, left top, left bottom, from(#333333), to(#222222));
   background-image: -moz-linear-gradient(top, #333333, #222222);
@@ -526,7 +743,7 @@ footer a:link, footer a:visited {
   -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
-    
+
 }
 #chatboxtitlemain {
     cursor: pointer;
@@ -539,34 +756,60 @@ footer a:link, footer a:visited {
  *  CSS CHAT END                             *
  *****************************************************/
 .normal-message {
-    color: #00407F;
-    border: 1px solid #CDE6F5;
-    background: url("images/background_message.png") repeat-x scroll 0 0 #EAF8FE;
+    background-color: #D9EDF7;
+    color: #3A87AD;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-top: 1px solid #BCE8F1;
+    border-left: 1px solid #BCE8F1;
+    border-right: 1px solid #BCE8F1;
+    border-bottom: 3px solid #BCE8F1;
+    border-radius: 10px;
 }
 .warning-message {
-    border: 1px solid #FFB30F;
-    color: #000;
-	background: url("images/background_message.png") repeat-x scroll 0 0 #FFEFA7;
+    background-color: #FCF8E3;
+    color: #C09853;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-top: 1px solid #FBEED5;
+    border-left: 1px solid #FBEED5;
+    border-right: 1px solid #FBEED5;
+    border-bottom: 3px solid #FBEED5;
+    border-radius: 10px;
 }
 .confirmation-message {
-	border: 1px solid #1F8323;
-    color:#1F8323;
-	background: url("images/background_message.png") repeat-x scroll 0 0 #CAF0C7;
+  background-color: #DFF0D8;
+  color: #468847;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-top: 1px solid #D6E9C6;
+  border-left: 1px solid #D6E9C6;
+  border-right: 1px solid #D6E9C6;
+  border-bottom: 3px solid #D6E9C6;
+  border-radius: 10px;
 }
 .error-message {
-    border: 1px solid #FF0000;
-    color: #440000;
-	background: url("images/background_message.png") repeat-x scroll 0 0 #FFD1D1;
+  background-color: #F2DEDE;
+  color: #B94A48;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-top: 1px solid #EED3D7;
+  border-left: 1px solid #EED3D7;
+  border-right: 1px solid #EED3D7;
+  border-bottom: 3px solid #EED3D7;
+  border-radius: 10px;
 }
-
+.error-message strong{
+  font-weight: normal;
+}
 .social-menu-title {
-	background-color:#00AAE3;
+  background-color:#00AAE3;
 }
 
 #social-content-online {
     background-color:#00AAE3;
 }
-		
+
 .admin_section li {
     background-image:url(images/bullet.gif);
 }
@@ -582,7 +825,7 @@ footer a:link, footer a:visited {
     background:transparent url('images/logob4.gif') no-repeat;
 }
 
-#bottomhellomindfactory {    
+#bottomhellomindfactory {
     background:transparent url('images/textologo.jpg') no-repeat;
 }
 
@@ -596,11 +839,23 @@ button.login:hover {
 
 /*including "save" image*/
 button.save {
-    background-image:url(images/button_accept.gif);
+    background:url(images/accept.png) 0 center no-repeat #F0F0F0;
+    color: #666;
+    padding-left: 30px;
+}
+button.save:hover {
+    background:url(images/accept.png) 0 center no-repeat #ffffff;
+    color: #666;
+    padding-left: 30px;
 }
 /*including "add" image*/
-button.add {
-    background-image:url(images/button_add.gif);
+.controls .btn.add {
+    background:url(images/add.png) 0 center no-repeat;
+    padding-left: 36px;
+}
+.controls .btn.add:hover {
+    background:url(images/add.png) 0 center no-repeat;
+    padding-left: 36px;
 }
 /*including "cancel" image*/
 button.cancel {
@@ -608,7 +863,14 @@ button.cancel {
 }
 /*including "search" image*/
 button.search {
-    background-image:url(images/bg-button.gif);
+    background:url(images/buttom.png) 0 center no-repeat #F0F0F0;
+    color: #666;
+    padding-left: 30px;
+}
+button.search:hover {
+    background:url(images/buttom.png) 0 center no-repeat #ffffff;
+    color: #666;
+    padding-left: 30px;
 }
 /*including "plus" image*/
 button.plus {
@@ -620,11 +882,17 @@ button.minus {
 }
 /*including "next" image*/
 button.next {
-    background-image:url(images/button_next.gif) !important;
+    background:url(images/next.png) 0 center no-repeat #F0F0F0;
+}
+button.next:hover {
+    background:url(images/next.png) 0 center no-repeat #ffffff;
 }
 /*including "back" image*/
 button.back {
-    background-image:url(images/button_back.gif);
+    background:url(images/previus.png) 0 center no-repeat #F0F0F0;
+}
+button.back:hover {
+    background:url(images/previus.png) 0 center no-repeat #ffffff;
 }
 /*including "refresh" image*/
 button.refresh {
@@ -636,10 +904,10 @@ button.upload {
 }
 
 button.arrowr, input.arrowr {
-	background-image:url(images/2rightarrow.gif);	
+  background-image:url(images/2rightarrow.gif);
 }
 button.arrowl, input.arrowl {
-    background-image:url(images/2leftarrow.gif);	
+    background-image:url(images/2leftarrow.gif);
 }
 .refresh {
     background-image:url(images/refresh.png);
@@ -647,6 +915,109 @@ button.arrowl, input.arrowl {
 
 .portal {
     background-image:url(images/portal.png);
+}
+
+/*+++++++++++++++++++++++++++++++++++++++++++
+ + CHAMILO INSTALL
+ ++++++++++++++++++++++++++++++++++++++++++++*/
+.install-mascot{
+  background: url(images/install.png) no-repeat center 0;
+  padding-top: 20em;
+}
+.install-chamilo .navbar{
+  display: none;
+}
+.install-chamilo footer{
+  display: none;
+}
+.install-chamilo .page-header {
+  border-bottom: 2px solid #FD6600;
+}
+.install-chamilo .page-header h1 {
+    line-height: 1;
+    color: #FD6600;
+}
+.install-chamilo header{
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.install-chamilo .RequirementHeading h2{
+  color: #2E75A3;
+}
+.install-chamilo .page-header h2 {
+  color: #FD6600;
+  font-size: 20px;
+  font-weight: bold;
+  padding-left: 0;
+  width: 250px;
+}
+.well-install{
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(top, #ffffff 0%, #f6f6f6 47%, #ededed 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(47%,#f6f6f6), color-stop(100%,#ededed)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ffffff 0%,#f6f6f6 47%,#ededed 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+    padding: 3em;
+    border: 1px solid #E1E1E0;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    margin-top: 3em;
+}
+button.next.disabled {
+  cursor: default;
+  opacity: 0.65;
+}
+button.next.disabled:hover {
+  cursor: default;
+  opacity: 0.65;
+  background-image: none;
+}
+.install-chamilo .btn-success.btn-install {
+  float: right;
+  background: #ff9900; /* Old browsers */
+    background: -moz-linear-gradient(top, #ff9900 0%, #fd6600 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff9900), color-stop(100%,#fd6600)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ff9900 0%,#fd6600 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ff9900 0%,#fd6600 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ff9900 0%,#fd6600 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ff9900 0%,#fd6600 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff9900', endColorstr='#fd6600',GradientType=0 ); /* IE6-9 */
+    border:1px solid rgba(0, 0, 0, 0.15);
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.17);
+    color: #FFFFFF;
+    padding: 5px 25px;
+}
+.install-chamilo .btn-success.btn-install:hover {
+    background: #ff7b00; /* Old browsers */
+    background: -moz-linear-gradient(top, #ff7b00 0%, #fd6600 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ff7b00), color-stop(100%,#fd6600)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #ff7b00 0%,#fd6600 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #ff7b00 0%,#fd6600 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #ff7b00 0%,#fd6600 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #ff7b00 0%,#fd6600 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ff7b00', endColorstr='#fd6600',GradientType=0 ); /* IE6-9 */
+    color: #FFFFFF;
+}
+/*+++++++++++++++++++++++++++++++++++++++++++
+END INSTALL CHAMILO
++++++++++++++++++++++++++++++++++++++++++++*/
+.bottom_actions_fixed{
+  background: #2bb8ef; /* Old browsers */
+  background: -moz-linear-gradient(top, #2bb8ef 0%, #0191c7 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2bb8ef), color-stop(100%,#0191c7)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #2bb8ef 0%,#0191c7 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2bb8ef', endColorstr='#0191c7',GradientType=0 ); /* IE6-9 */
+  border: 1px solid #E1E1E0;
+}
+.new_actions-fixed {
+  top: 50px;
 }
 
 /*CSS ICON BLOCK USER*/
@@ -686,10 +1057,7 @@ button.arrowl, input.arrowl {
         background: url("images/icon-chamilo.png") no-repeat 0 -618px;
         padding-left: 40px;
     }
-    .forum-btn{
-        background: url("images/icon-chamilo.png") no-repeat 0 -666px;
-        padding-left: 40px;
-    }
+    
 
 /*+++++++++++++++++++++++++++++++++
 RESPONSIVE CSS
@@ -701,9 +1069,38 @@ RESPONSIVE CSS
   font-weight: 200;
   line-height: 20px;
   padding-bottom: 12px;
-  padding-top: 8px;
+  padding-top: 12px;
+  color: #FFFFFF;
+}
+.navbar-inner{
+  background: #2bb8ef; /* Old browsers */
+  background: -moz-linear-gradient(top, #2bb8ef 0%, #0191c7 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2bb8ef), color-stop(100%,#0191c7)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #2bb8ef 0%,#0191c7 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #2bb8ef 0%,#0191c7 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2bb8ef', endColorstr='#0191c7',GradientType=0 ); /* IE6-9 */
 }
 
+.dropdown-menu li > a:hover, .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
+  background-color: #FD6600;
+  color: #FFFFFF;
+}
+.navbar-search {
+  margin-bottom: 0;
+  margin-top: 11px;
+  position: relative;
+}
+.navbar-search .search-query {
+  background:#FFFFFF;
+  color: #666;
+  border: 1px solid #ffffff;
+}
+.navbar .nav .active > a, .navbar .nav .active > a:hover {
+  background:none;
+  color: #FFFFFF;
+}
 @media (min-width: 481px) and (max-width: 800px) {
 
     .sidebar-nav h4 {
@@ -748,58 +1145,69 @@ RESPONSIVE CSS
         padding-left: 30px;
         background-size: 25px auto;
     }
-    
+
     .new-message-social{
         background: url("images/icon-chamilo.png") no-repeat 0 -307px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    
+
     .invitations-social{
         background: url("images/icon-chamilo.png") no-repeat 0 -378px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    
+
     .profile-social{
         background: url("images/icon-chamilo.png") no-repeat 0 -414px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    
+
     .add-course{
         background: url("images/icon-chamilo.png") no-repeat 0 -274px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-   
+
     .order-course{
         background: url("images/icon-chamilo.png") no-repeat 0 -447px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    
+
     .history-course{
         background: url("images/icon-chamilo.png") no-repeat 0 -481px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    
+
     .list-course{
         background: url("images/icon-chamilo.png") no-repeat 0 -517px;
         padding-left: 30px;
         background-size: 25px auto;
     }
-    .forum-btn {
-      background: url("images/icon-chamilo.png") no-repeat scroll 0 -552px / 25px auto rgba(0, 0, 0, 0);
-      padding-left: 30px;
-}
-    
 }
 @media (min-width: 321px) and (max-width: 480px){
 footer {
     height: 5em;
   }
+.welcome-mascot{
+      background: none;
+      padding-right: 0px;
+      padding-bottom: 2em;
+      padding-top: 2em;
+    }
+#homepage .row .span9 h2 {
+  color: #0191C7;
+  font-size: 22px;
+  font-weight: bold;
+  padding-bottom: 8px;
+  line-height: 25px;
+}
+#announcements{
+  display: none;
+}
 }
 /*+++++++++++++++++++++++++++++++++
 END RESPONSIVE CSS

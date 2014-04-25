@@ -715,6 +715,9 @@ class UserManager
      */
     public static function disable($user_id)
     {
+        if (empty($user_id)) {
+            return false;
+        }
         self::change_active_state($user_id, 0);
     }
 
@@ -726,6 +729,9 @@ class UserManager
      */
     public static function enable($user_id)
     {
+        if (empty($user_id)) {
+            return false;
+        }
         self::change_active_state($user_id, 1);
     }
 
@@ -796,6 +802,9 @@ class UserManager
         }
         if (is_null($language)) {
             $language = api_get_interface_language();
+        }
+        if (empty($firstname) && empty($lastname)) {
+            return false;
         }
         $firstname = api_substr(preg_replace(USERNAME_PURIFIER, '', api_transliterate($firstname, '', $encoding)), 0, 1); // The first letter only.
         //Looking for a space in the lastname

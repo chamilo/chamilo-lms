@@ -1942,7 +1942,6 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
     }
 
     $now = time();
-
     if (!empty($session_id)) {
         $session_id = intval($session_id);
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -1975,9 +1974,10 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
 
                 //if date_end is set
                 if (!empty($row['date_end']) && $row['date_end'] != '0000-00-00') {
-                    $row['date_end'] = $row['date_end'].' 00:00:00';
-                    //only if date_start said that it was ok
+                    // End date finish at midnight.
+                    $row['date_end'] = $row['date_end'].' 23:59:59';
 
+                    // Only if date_start said that it was ok
                     if ($visibility == SESSION_AVAILABLE) {
                         $visibility = $row['visibility'];
 
@@ -1996,10 +1996,13 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
             $is_coach = api_is_coach($session_id, $course_code);
 
             if ($is_coach) {
-
-                //Test end date
-                if (isset($row['date_end']) && !empty($row['date_end']) && $row['date_end'] != '0000-00-00' && $row['nb_days_access_after_end'] != '0') {
-                    $end_date_for_coach = new DateTime($row['date_end']);
+                // Test end date.
+                if (isset($row['date_end']) &&
+                    !empty($row['date_end']) &&
+                    $row['date_end'] != '0000-00-00' &&
+                    $row['nb_days_access_after_end'] != '0'
+                ) {
+                    $end_date_for_coach = new DateTime($row['date_end'].' 23:59:59');
                     $number_of_days = "P".intval($row['nb_days_access_after_end']).'D';
                     $end_date_for_coach->add(new DateInterval($number_of_days));
 
@@ -2010,9 +2013,13 @@ function api_get_session_visibility($session_id, $course_code = null, $ignore_vi
                     }
                 }
 
-                //Test start date
-                if (isset($row['date_start']) && !empty($row['date_start']) && $row['date_start'] != '0000-00-00' && $row['nb_days_access_before_beginning'] != '0') {
-                    $start_date_for_coach = new DateTime($row['date_start']);
+                // Test start date.
+                if (isset($row['date_start']) &&
+                    !empty($row['date_start']) &&
+                    $row['date_start'] != '0000-00-00' &&
+                    $row['nb_days_access_before_beginning'] != '0'
+                ) {
+                    $start_date_for_coach = new DateTime($row['date_start'].' 00:00:00');
                     $number_of_days = "P".intval($row['nb_days_access_before_beginning']).'D';
                     $start_date_for_coach->sub(new DateInterval($number_of_days));
                     if ($start_date_for_coach->getTimestamp() < $now) {

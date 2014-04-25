@@ -2,6 +2,12 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CatchScreenCasts = "Capturar imagen o vídeo de la pantalla";
+$View = "Ver";
+$AmountSubmitted = "Cantidad enviada";
+$InstallWarningCouldNotInterpretPHP = "Advertencia: el instalador ha detectado un error mientras intentaba acceder al archivo de prueba %s. Parece que el script PHP no pudo ser interpretado. Esto podría ser una señal precursora de problemas al momento de la creación de nuevos cursos. Verifique el manual de instalación para mayor información sobre permisos. Si está instalando un sitio configurando una URL que todavía no existe, probablemente pueda ignorar este mensaje.";
+$BeforeX = "Antes de %s";
+$AfterX = "Después de %s";
 $ExportSettingsAsXLS = "Exportar parámetros en formato .xls";
 $DeleteAllItems = "Borrar todos los elementos";
 $DeleteThisItem = "Borrar este elemento";

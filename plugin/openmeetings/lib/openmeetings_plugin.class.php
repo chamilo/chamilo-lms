@@ -5,7 +5,7 @@
  */
 class OpenMeetingsPlugin extends Plugin
 {
-    public $is_course_plugin = true;
+    public $isCoursePlugin = true;
 
     //When creating a new course this settings are added to the course
     public $course_settings = array(array(

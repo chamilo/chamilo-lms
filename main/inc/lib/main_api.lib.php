@@ -341,7 +341,7 @@ define('SHOW_TEXT_NEAR_ICONS', false);
  * Inclusion of internationalization libraries
  */
 
-require_once dirname(__FILE__).'/internationalization.lib.php';
+require_once __DIR__.'/internationalization.lib.php';
 
 
 /* PATHS & FILES - ROUTINES */
@@ -526,7 +526,7 @@ function api_get_path($path_type, $path = null)
                     $server_name .= ":" . $_SERVER['SERVER_PORT'];
                 }
                 $root_web = $server_protocol.'://'.$server_name.$root_rel;
-                $root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../../')).'/';
+                $root_sys = str_replace('\\', '/', realpath(__DIR__.'/../../../')).'/';
                 $code_folder = 'main/';
                 $course_folder = 'courses/';
             }

@@ -521,16 +521,20 @@ class Plugin
     /**
      * Delete a tab to chamilo's platform
      * @param string $key
+     *
+     * @return int
      */
     public function deleteTab($key)
     {
-        $sql = "SELECT *
-                FROM settings_current
-                WHERE variable = 'show_tabs'
-                AND subkey <> '$key'";
-        $resp = $result = Database::query($sql);
-        $customTabsNum = Database::count_rows($result);
-
+        $sql = "SELECT * FROM settings_current
+                WHERE
+                  variable = 'show_tabs' AND
+                  subkey <> '$key'";
+        $result = Database::query($sql);
+        $tabs = Database::store_result($result);
+        $customTabsNum = count($tabs);
+        //$customTabsNum = Database::count_rows($result);
+        $resp = false;
         if (!empty($key)) {
             $whereCondition = array(
                 'variable = ? AND subkey = ?' => array('show_tabs', $key)
@@ -541,7 +545,7 @@ class Plugin
             //re enumerate them
             if ($customTabsNum > 0) {
                 $i = 1;
-                while ($row = Database::fetch_assoc($result)) {
+                foreach ($tabs as $row) {
                     $attributes = array(
                         'subkey' => 'custom_tab_' . $i
                     );
@@ -557,7 +561,8 @@ class Plugin
     /**
      * Update the tabs attributes
      * @param string $key
-     * @param array $attributes
+     * @param array  $attributes
+     *
      * @return boolean
      */
     public function updateTab($key, $attributes)
@@ -566,12 +571,14 @@ class Plugin
             'variable = ? AND subkey = ?' => array('show_tabs', $key)
         );
         $resp = Database::update('settings_current', $attributes, $whereCondition);
+
         return $resp;
     }
 
     /**
      * Add additional plugin Settings
      * @param array $settings
+     *
      * @return bool
      */
     public function addExtraSettings($settings)

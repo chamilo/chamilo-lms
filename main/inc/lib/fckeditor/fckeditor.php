@@ -68,6 +68,11 @@ function FCKeditor_IsCompatibleBrowser()
         $iVersion = $matches[1] ;
         return ( $matches[1] >= 522 ) ;
     } else if ( strpos($sAgent, 'Gecko') !== false && strpos($sAgent, 'rv:') !== false ) {
+        // General match for IE11
+        if (strpos($sAgent, 'Chrome') !== false) {
+            // Chrome 34 under Ubuntu might have a rv: of <11
+            return true;
+        }
         // Internet Explorer 11 - goes with a X-UA-Compatible IE=EmulateIE9 header
         $iVersion = (int)substr($sAgent, strpos($sAgent, 'rv:') + 3, 2) ;
         return ($iVersion >= 11);

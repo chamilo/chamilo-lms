@@ -66,13 +66,13 @@ $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$course_dir;
 $http_www = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
 $document_path = $base_work_dir;
-$plugin_jcapture = api_get_path(WEB_PLUGIN_PATH).'jcapture/lib/jcapture.jar';
+//$plugin_jcapture = api_get_path(WEB_PLUGIN_PATH).'jcapture/lib/jcapture.jar';
 
 //Removing sessions
 unset($_SESSION['draw_dir']);
 unset($_SESSION['paint_dir']);
 unset($_SESSION['temp_audio_nanogong']);
-
+/*
 $htmlHeadXtra[] = '<script>
 function startApplet() {
     appletsource = "<applet code=\"com.hammurapi.jcapture.JCaptureApplet.class\" archive=\"'.$plugin_jcapture.'\">";
@@ -86,7 +86,7 @@ $(function() {
         startApplet();
     });
 });
-</script>';
+</script>';*/
 
 // Create directory certificates
 DocumentManager::create_directory_certificate_in_course(api_get_course_id());

@@ -117,7 +117,7 @@ a.thumbnail:hover{
     text-shadow: none;
 }
 .breadcrumb a.btn-mini{
-    line-height: 17px;
+    line-height: 25px;
     text-transform: none;
 }
 .breadcrumb a.btn-mini > .btn-success{

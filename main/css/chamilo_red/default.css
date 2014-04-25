@@ -20,7 +20,7 @@ a:visited {
 }
 a:hover {
     text-decoration: none;
-    color: #FD6600;
+    color: #F20000;
 }
 a:active {
     text-decoration: none;
@@ -617,7 +617,7 @@ a.thumbnail:hover{
 
 /*FIN DE INTRODUCCION DEL CURSO*/
 .fc-header-title h2{
-    color: #0191C7;
+    color: #B00505;
 }
 .fc-first .fc-widget-header{
     font-size: 14px;

@@ -2,6 +2,17 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$BeforeX = "Pred %s";
+$AfterX = "Po %s";
+$DeleteAllItems = "Zmazať všetky položky";
+$DeleteThisItem = "Zmazať túto položku";
+$RecordYourVoice = "Nahrať svoj ​​hlas";
+$RecordIsNotAvailable = "Žiadny záznam k dispozícii";
+$WorkNumberSubmitted = "Prijaté práce";
+$WithoutCategory = "Bez kategórie";
+$CorrectScore = "Presne skóre";
+$InactiveDays = "Neaktívne dní";
+$TheTextYouEnteredDoesNotMatchThePicture = "Text, ktorý ste zadali, nezodpovedá obrázku.";
 $RemoveOldRelationships = "Odobrať predchádzajúce vzťahy";
 $ImportSessionDrhList = "Importovať zoznam ľudských zdrojov do stretnutia";
 $FollowedStudents = "Nasledovní študenti";
@@ -829,6 +840,7 @@ $Until = "Pokiaľ";
 $FirstPage = "Prvá stránka";
 $LastPage = "Posledná stránka";
 $Coachs = "Tútori";
+$FieldTypeFile = "Nahrať súbor";
 $DragAndDropAnElementHere = "Presuňte prvok tu";
 $ThereAreNoRegisteredDatetimeYet = "Neexistuje žiadny dátum / nie je registrovaný čas";
 $CalendarList = "Kalendárový zozznam návštevnosti";

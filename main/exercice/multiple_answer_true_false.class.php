@@ -22,7 +22,7 @@ class MultipleAnswerTrueFalse extends Question {
 		parent::question();
 		$this->type = MULTIPLE_ANSWER_TRUE_FALSE;
 		$this->isContent = $this-> getIsContent();
-        $this->options = array(1=>get_lang('True'),2 =>get_lang('False'), 3 =>get_lang('DoubtScore'));
+        $this->options = array(1 =>'True', 2 =>'False', 3 =>'DoubtScore');
 	}
 
 	/**

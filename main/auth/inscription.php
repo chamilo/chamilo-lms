@@ -575,26 +575,23 @@ if ($form->validate()) {
     Session::erase('course_redirect');
     Session::erase('exercise_redirect');
 
-    Display :: display_header($tool_name);
-    echo Display::page_header($tool_name);
-
-    echo $content;
-    echo $text_after_registration;
-
     if (CustomPages::enabled()) {
         CustomPages::display(CustomPages::REGISTRATION_FEEDBACK, array('info' => $text_after_registration));
+    } else {
+        Display :: display_header($tool_name);
+        echo Display::page_header($tool_name);
+
+        echo $content;
+        echo $text_after_registration;
     }
 } else {
-
-    Display :: display_header($tool_name);
-    echo Display::page_header($tool_name);
-
-    echo $content;
-
     // Custom pages
     if (CustomPages::enabled()) {
         CustomPages::display(CustomPages::REGISTRATION, array('form' => $form));
     } else {
+        Display :: display_header($tool_name);
+        echo Display::page_header($tool_name);
+        echo $content;
         $form->display();
     }
 }

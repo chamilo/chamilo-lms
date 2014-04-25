@@ -20,7 +20,7 @@ a:active {
     text-decoration: none;
 }
 .page-section{
-  background: url(images/home-bg.png) repeat-x 0 -15px;
+  background: url(images/home-bg.png) repeat-x 0 0;
   margin-top: -10px;
 }
 .navbar .nav > li > a {

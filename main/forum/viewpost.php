@@ -40,7 +40,7 @@ if (isset($_GET['origin'])) {
 
 // We are getting all the information about the current forum and forum category.
 // Note pcool: I tried to use only one sql statement (and function) for this,
-// but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
+// but the problem is that the visibility of the forum AND forum category are stored in the item_property table.
 $current_thread = get_thread_information($_GET['thread']); // Note: This has to be validated that it is an existing thread.
 $current_forum = get_forum_information($current_thread['forum_id']); // Note: This has to be validated that it is an existing forum.
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
@@ -84,10 +84,10 @@ if (!api_is_allowed_to_edit(false, true) AND ($current_forum['visibility'] == 0 
 /* Actions */
 
 if ($_GET['action'] == 'delete' && isset($_GET['content']) && isset($_GET['id']) && api_is_allowed_to_edit(false, true)) {
-    $message = delete_post($_GET['id']); // Note: This has to be cleaned first.
+    $message = delete_post($_GET['id']);
 }
 if (($_GET['action'] == 'invisible' || $_GET['action'] == 'visible') && isset($_GET['id']) && api_is_allowed_to_edit(false, true)) {
-    $message = approve_post($_GET['id'], $_GET['action']); // Note: This has to be cleaned first.
+    $message = approve_post($_GET['id'], $_GET['action']);
 }
 if ($_GET['action'] == 'move' && isset($_GET['post'])) {
     $message = move_post_form();

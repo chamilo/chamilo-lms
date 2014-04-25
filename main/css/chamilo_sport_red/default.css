@@ -409,7 +409,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
     color: #FD6600;
     text-decoration: underline;
 }
-
+..new_actions-fixed{
+  top: 50px;
+}
 
 /*FIN DE INTRODUCCION DEL CURSO*/
 .fc-header-title h2{

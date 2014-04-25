@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 namespace ChamiloLMS\Component\Editor\Driver;
 
 use ChamiloLMS\Entity\CDropboxFile;

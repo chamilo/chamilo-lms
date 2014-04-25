@@ -40,9 +40,12 @@ class LegacyController extends CommonController
 
         //$_REQUEST = $request->request->all();
         $mainPath = $app['paths']['sys_root'].'main/';
+
         $fileToLoad = $mainPath.$file;
 
-        if (is_file($fileToLoad) && \Security::check_abs_path($fileToLoad, $mainPath)) {
+        if (is_file($fileToLoad) &&
+            \Security::check_abs_path($fileToLoad, $mainPath)
+        ) {
 
             // Default values
             $_course = api_get_course_info();

@@ -1211,4 +1211,5 @@ class User implements AdvancedUserInterface, \Serializable, EquatableInterface
     {
         return $this->hrDeptId;
     }
+
 }

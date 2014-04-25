@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 namespace ChamiloLMS\Component\Editor\TinyMce;
 
 use ChamiloLMS\Component\Editor\Editor;

@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 namespace ChamiloLMS\Component\Console\Output;
 
 use Symfony\Component\Console\Output\Output;

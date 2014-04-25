@@ -79,7 +79,6 @@ class IndexController extends CommonController
             $extra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'keyboard/keyboard.css');
             $extra[] = api_get_js('keyboard/jquery.keyboard.js');
         }
-
         $app['template']->addResource(api_get_jqgrid_js(), 'string');
 
 

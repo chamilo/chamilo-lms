@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 namespace ChamiloLMS\Component\Editor\CkEditor;
 
 use ChamiloLMS\Component\Editor\Editor;

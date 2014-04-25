@@ -3196,7 +3196,6 @@ function setWorkUploadForm($form, $uploadFormType = 0)
  */
 function uploadWork($my_folder_data, $_course)
 {
-
     if (empty($_FILES['file']['size'])) {
         return array('error' => Display :: return_message(get_lang('UplUploadFailedSizeIsZero'), 'error'));
     }
@@ -3223,7 +3222,9 @@ function uploadWork($my_folder_data, $_course)
     $total_size = $filesize + $totalSpace;
 
     if ($total_size > $course_max_space) {
-        return array('error' => Display :: return_message(get_lang('NoSpace'), 'error'));
+        return array(
+            'error' => Display :: return_message(get_lang('NoSpace'), 'error')
+        );
     }
 
     // Compose a unique file name to avoid any conflict
@@ -3231,7 +3232,20 @@ function uploadWork($my_folder_data, $_course)
     $curdirpath = basename($my_folder_data['url']);
 
     // If we come from the group tools the groupid will be saved in $work_table
-    $result = move_uploaded_file($_FILES['file']['tmp_name'], $updir.$curdirpath.'/'.$new_file_name);
+    if (is_dir($updir.$curdirpath) || empty($curdirpath)) {
+        $result = move_uploaded_file(
+            $_FILES['file']['tmp_name'],
+            $updir.$curdirpath.'/'.$new_file_name
+        );
+    } else {
+        return array(
+            'error' => Display :: return_message(
+                get_lang('FolderDoesntExistsInFileSystem'),
+                'error'
+            )
+        );
+    }
+
     $url = null;
     if ($result) {
         $url = 'work/'.$curdirpath.'/'.$new_file_name;
@@ -3383,7 +3397,6 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
         $workId = Database::insert_id();
 
         if ($workId) {
-
             if (array_key_exists('filename', $workInfo) && !empty($filename)) {
                 $filename = Database::escape_string($filename);
                 $sql = "UPDATE $work_table SET filename = '$filename'
@@ -3403,7 +3416,9 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
             $message = Display::return_message(get_lang('DocAdd'));
         }
     } else {
-        $message = Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error');
+        if (empty($message)) {
+            $message = Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error');
+        }
     }
     return $message;
 }

@@ -80,11 +80,11 @@ a:active {
  *  STYLE THEME CHAMILO                              *
  *****************************************************/
 .page-section{
-  background:url(images/bg-header.png) repeat-x 0 -32px;
+  background:url(images/bg-header.png) repeat-x 0 0;
   margin-top: -5px;
 }
 .section-mycampus .page-section{
-  background:url(images/bg-header.png) repeat-x 0 -44px;
+  background:url(images/bg-header.png) repeat-x 0 0;
   margin-top: -5px;
 }
 .welcome-mascot{

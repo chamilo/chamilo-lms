@@ -17,7 +17,6 @@
  */
 class ExerciseShowFunctions
 {
-
 	/**
 	 * Shows the answer to a fill-in-the-blanks question, as HTML
 	 * @param string    Answer text
@@ -166,10 +165,7 @@ class ExerciseShowFunctions
 				<?php
                 if ($studentChoice) {
                     echo '<span style="font-weight: bold; color: #008000;">'.nl2br($answerComment).'</span>';
-                } else {
-                    //echo '<span style="font-weight: bold; color: #FF0000;">'.nl2br($answerComment).'</span>';
                 }
-
 				?>
 			</td>
 			<?php } else { ?>
@@ -178,7 +174,6 @@ class ExerciseShowFunctions
 		</tr>
 		<?php
 	}
-
 
 	/**
 	 * Display the answers to a multiple choice question
@@ -193,7 +188,18 @@ class ExerciseShowFunctions
 	 * @param boolean Whether to show the answer comment or not
 	 * @return void
 	 */
-	static function display_unique_or_multiple_answer($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans, $in_results_disabled) {
+	static function display_unique_or_multiple_answer(
+        $feedback_type,
+        $answerType,
+        $studentChoice,
+        $answer,
+        $answerComment,
+        $answerCorrect,
+        $id,
+        $questionId,
+        $ans,
+        $in_results_disabled
+    ) {
         $hide_expected_answer = false;
         if ($feedback_type == 0 && $in_results_disabled == 2) {
             $hide_expected_answer = true;
@@ -265,7 +271,18 @@ class ExerciseShowFunctions
      * @param boolean Whether to show the answer comment or not
      * @return void
      */
-    static function display_multiple_answer_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans, $in_results_disabled) {
+    static function display_multiple_answer_true_false(
+        $feedback_type,
+        $answerType,
+        $studentChoice,
+        $answer,
+        $answerComment,
+        $answerCorrect,
+        $id,
+        $questionId,
+        $ans,
+        $in_results_disabled
+    ) {
         $hide_expected_answer = false;
         if ($feedback_type == 0 && $in_results_disabled == 2) {
             $hide_expected_answer = true;
@@ -285,10 +302,12 @@ class ExerciseShowFunctions
         } else {
         	echo '-';
         }
+
         ?>
         </td>
         <td width="5%">
         <?php
+
 		//Expected choice
         if (!$hide_expected_answer) {
             if (isset($new_options[$answerCorrect])) {
@@ -296,8 +315,7 @@ class ExerciseShowFunctions
             } else {
                 echo '-';
             }
-        }
-        else {
+        } else {
             echo '-';
         }
         ?>
@@ -343,7 +361,18 @@ class ExerciseShowFunctions
      * @param boolean Whether to show the answer comment or not
      * @return void
      */
-    static function display_multiple_answer_combination_true_false($feedback_type, $answerType, $studentChoice, $answer, $answerComment, $answerCorrect, $id, $questionId, $ans, $in_results_disabled) {
+    static function display_multiple_answer_combination_true_false(
+        $feedback_type,
+        $answerType,
+        $studentChoice,
+        $answer,
+        $answerComment,
+        $answerCorrect,
+        $id,
+        $questionId,
+        $ans,
+        $in_results_disabled
+    ) {
         $hide_expected_answer = false;
         if ($feedback_type == 0 && $in_results_disabled == 2) {
             $hide_expected_answer = true;

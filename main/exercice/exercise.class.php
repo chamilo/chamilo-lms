@@ -2407,7 +2407,8 @@ class Exercise
                             //Needed to let characters ' and " to work as part of an answer
                             $choice[$j] = stripslashes($choice[$j]);
                         } else {
-                            $choice[$j] = trim($choice[$j]);
+							// This value is the user input, not escaped while correct answer is escaped by fckeditor
+							$choice[$j] = htmlentities(trim($choice[$j]));
                         }
 
                         //No idea why we api_strtolower user reponses

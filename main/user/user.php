@@ -383,7 +383,12 @@ if ( api_is_allowed_to_edit(null, true)) {
     if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' or api_is_platform_admin()) {
         $actions .= ' <a class="btn" href="class.php?'.api_get_cidreq().'">'.get_lang('Classes').'</a>';
     }
-
+    
+    if (api_is_allowed_to_edit() && $_configuration['allow_tutors_to_assign_students_to_session'] == 'true') {
+        $actions .= ' <a class="btn" href="session_list.php?'.api_get_cidreq().'">'.get_lang('Sessions').'</a>';
+    }
+    //$actions .= ' <a class="btn" href="social_groups.php?'.api_get_cidreq().'">'.get_lang('SocialGroups').'</a>';
+		
 	// Build search-form
 	$form = new FormValidator('search_user', 'get', '', '', null, false);
 	$renderer = $form->defaultRenderer();

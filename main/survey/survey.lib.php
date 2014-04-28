@@ -149,6 +149,7 @@ class survey_manager
 			$return['shuffle']				= $return['shuffle'];
 			$return['parent_id']			= $return['parent_id'];
 			$return['survey_version']		= $return['survey_version'];
+			$return['anonymous']		        = $return['anonymous'];
         }
         return $return;
 	}
@@ -2677,7 +2678,7 @@ class SurveyUtil
 					$name = $person['invited_user'];
 				}
 			} else {
-				$name  = $key + 1;
+				$name  = get_lang('Anonymous') . ' ' . ($key + 1);
 				$id = $person;
 			}
 			echo '<option value="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.Security::remove_XSS($_GET['action']).'&survey_id='.Security::remove_XSS($_GET['survey_id']).'&user='.Security::remove_XSS($id).'" ';
@@ -3198,9 +3199,15 @@ class SurveyUtil
 		$answers_of_user = array();
 		$sql = "SELECT * FROM $table_survey_answer WHERE c_id = $course_id AND survey_id='".Database::escape_string($_GET['survey_id'])."' ORDER BY user ASC";
 		$result = Database::query($sql);
+        $i = 1;
 		while ($row = Database::fetch_array($result)) {
 			if ($old_user != $row['user'] && $old_user != '') {
-				SurveyUtil::display_complete_report_row($survey_data, $possible_answers, $answers_of_user, $old_user, $questions, $display_extra_user_fields);
+                $userParam = $old_user;
+                if ($survey_data['anonymous'] != 0) {
+                    $userParam = $i;
+                    $i++;
+                }
+				SurveyUtil::display_complete_report_row($survey_data, $possible_answers, $answers_of_user, $userParam, $questions, $display_extra_user_fields);
 				$answers_of_user=array();
 			}
 			if ($questions[$row['question_id']]['type'] != 'open') {
@@ -3210,7 +3217,12 @@ class SurveyUtil
 			}
 			$old_user = $row['user'];
 		}
-		SurveyUtil::display_complete_report_row($survey_data, $possible_answers, $answers_of_user, $old_user, $questions, $display_extra_user_fields);
+        $userParam = $old_user;
+        if ($survey_data['anonymous'] != 0) {
+            $userParam = $i;
+            $i++;
+        }
+		SurveyUtil::display_complete_report_row($survey_data, $possible_answers, $answers_of_user, $userParam, $questions, $display_extra_user_fields);
 		// This is to display the last user
 		echo '</table>';
 		echo '</form>';
@@ -3245,7 +3257,7 @@ class SurveyUtil
 				echo '<th>'.$user.'</th>'; // the user column
 			}
 		} else {
-			echo '<th>' . get_lang('Anonymous') . '</th>';
+			echo '<th>' . get_lang('Anonymous') . ' ' . $user . '</th>';
 		}
 
 		if ($display_extra_user_fields) {

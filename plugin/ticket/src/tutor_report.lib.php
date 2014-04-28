@@ -133,7 +133,7 @@ function showResults($courseInfo, $weeksCount, $page)
     if ($weeksCount == 14) {
         $html .= '<span style="float:right;"><a href="tutor.php?page=' . (($page == 1) ? 2 : 1) . '">' . (($page == 1) ? "Siguiente" : "Anterior") . '</a></span>';
     }
-    $html .= '<span style="float:right;"><a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '">' . Display::return_icon('import_excel.png', get_lang('Export'), '', '32') . '</a></span>';
+    $html .= '<span style="float:right;"><a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '">' . Display::return_icon('export_excel.png', get_lang('Export'), '', '32') . '</a></span>';
 
     $html .= '</form>';
     $html .= '<table class="reports">';

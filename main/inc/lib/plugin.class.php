@@ -477,7 +477,7 @@ class Plugin
                 AND subkey like 'custom_tab_%'";
         $result = Database::query($sql);
         
-        $customTabsNum = Database::count_rows($result);
+        $customTabsNum = Database::num_rows($result);
         
         $tabNum = $customTabsNum + 1;
         
@@ -523,10 +523,12 @@ class Plugin
         $sql = "SELECT * 
                 FROM settings_current
                 WHERE variable = 'show_tabs'
-                AND subkey <> '$key'";
+                AND subkey <> '$key'
+                AND subkey like 'custom_tab_%'
+                ";
         $resp = $result = Database::query($sql);
-        $customTabsNum = Database::count_rows($result);
-        
+        $customTabsNum = Database::num_rows($result);
+     
         if (!empty($key)) {
             $whereCond = array(
                     'variable = ? AND subkey = ?' => array('show_tabs', $key)
@@ -535,7 +537,7 @@ class Plugin
 
             //if there is more than one tab
             //reenumerate them
-            if ($customTabsNum > 0) {
+            if (!empty($customTabsNum) && $customTabsNum > 0) {
                 $i = 1;
                 while ($row = Database::fetch_assoc($result)) {
                     $attributes = array(

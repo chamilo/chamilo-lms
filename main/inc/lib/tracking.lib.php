@@ -3501,6 +3501,7 @@ class Tracking
      */
     public static function setUserSearchForm($form)
     {
+        global $_configuration;
         $form->addElement('text', 'keyword', get_lang('Keyword'));
         $form->addElement('select', 'active', get_lang('Status'), array(1 => get_lang('Active'), 0 => get_lang('Inactive')));
         if (isset($_configuration['save_user_last_login']) &&

@@ -1264,14 +1264,18 @@ class UserManager
 
     /**
      * Update User extra field file type into {user_folder}/{$extra_field}
-     * @param $user_id          The user internal identification number
-     * @param $extra_field      The extra field name
-     * @param null $file        The filename
-     * @param null $source_file The temporal filename
-     * @return bool|null        return filename if success, but false
+     * @param $user_id              The user internal identification number
+     * @param string $extra_field   The $extra_field The extra field name
+     * @param null $file            The filename
+     * @param null $source_file     The temporal filename
+     * @return bool|null            return filename if success, but false
      */
     public static function update_user_extra_file($user_id, $extra_field = '', $file = null, $source_file = null)
     {
+        // Add Filter
+        $source_file = Security::filter_filename($source_file);
+        $file = Security::filter_filename($file);
+
         if (empty($user_id)) {
             return false;
         }
@@ -1292,7 +1296,11 @@ class UserManager
 
         if (filter_extension($file)) {
             if (@move_uploaded_file($source_file,$path.$file)) {
-                return $file;
+                if ($extra_field) {
+                    return $extra_field.'/'.$file;
+                } else {
+                    return $file;
+                }
             }
         }
         return false; // this should be returned if anything went wrong with the upload
@@ -1514,8 +1522,11 @@ class UserManager
                 case self::USER_FIELD_TYPE_FILE:
                     $is_extra_file = true;
                     if (isset($fvalue['tmp_name'])) {
+                        // Filter against dangerous filenames
+                        $fvalue['name'] = Security::filter_filename($fvalue['name']);
+                        $fvalue['tmp_name'] = Security::filter_filename($fvalue['tmp_name']);
                         // Update and recover the filename
-                        $fvalues = UserManager::update_user_extra_file($user_id, 'extra_' . $rowuf['field_variable'], $fvalue['name'], $fvalue['tmp_name']);
+                        $fvalues = UserManager::update_user_extra_file($user_id, $rowuf['field_variable'], $fvalue['name'], $fvalue['tmp_name']);
                     } else {
                         // Set empty string to $fvalues to delete it
                         $fvalues = '';
@@ -1552,7 +1563,7 @@ class UserManager
                 if ($rowufv['field_value'] != $fvalues) {
                     if ($is_extra_file) {
                         // To remove from user folder
-                        self::remove_user_extra_file($user_id, 'extra_' . $fname, $rowufv['field_value']);
+                        self::remove_user_extra_file($user_id, $fname, $rowufv['field_value']);
                     }
                     // If the new field is empty, delete it
                     if ($fvalues == '') {
@@ -1668,16 +1679,17 @@ class UserManager
         }
 
         $path_info = self::get_user_picture_path_by_id($user_id, 'web', true);
-        $path = $path_info['dir'].$extra_field.'/';
+        $path = $path_info['dir'];
         $del_image = api_get_path(WEB_CODE_PATH).'img/delete.gif';
         $del_text = get_lang('Delete');
         $extra_file_list = '';
         if (count($extra_files) > 0) {
             $extra_file_list = '<ul id="productions">';
             foreach ($extra_files as $file) {
-                $extra_file_list .= '<li><a href="'.$path.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
+                $filename = substr($file,strlen($extra_field)+1);
+                $extra_file_list .= '<li><a href="'.$path.$extra_field.'/'.urlencode($filename).'" target="_blank">'.htmlentities($filename).'</a>';
                 if ($showdelete) {
-                    $extra_file_list .= '<input style="width:16px;" type="image" name="remove_' . $extra_field . '['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="javascript: return confirmation(\''.htmlentities($file).'\');" /></li>';
+                    $extra_file_list .= '<input style="width:16px;" type="image" name="remove_extra_' . $extra_field . '['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($filename).'" onclick="javascript: return confirmation(\''.htmlentities($filename).'\');" /></li>';
                 }
             }
             $extra_file_list .= '</ul>';
@@ -1690,26 +1702,38 @@ class UserManager
      * Get valid filenames in $user_folder/{$extra_field}/
      * @param $user_id
      * @param $extra_field
+     * @param bool $full_path
      * @return array
      */
-    public static function get_user_extra_files($user_id, $extra_field)
+    public static function get_user_extra_files($user_id, $extra_field, $full_path = false)
     {
-        $path_info = self::get_user_picture_path_by_id($user_id, 'system', true);
-        $path = $path_info['dir'].$extra_field.'/';
-        $extra_files = array();
-
-        if (is_dir($path)) {
-            $handle = opendir($path);
-
-            while ($file = readdir($handle)) {
-                if ($file == '.' || $file == '..' || $file == '.htaccess' || is_dir($path.$file)) {
-                    continue; // skip current/parent directory and .htaccess
+        if (!$full_path) {
+            // Nothing to do
+        } else {
+            $path_info = self::get_user_picture_path_by_id($user_id, 'system', true);
+            $path = $path_info['dir'];
+        }
+        $extra_data = self::get_extra_user_data_by_field($user_id, $extra_field);
+        $extra_files = $extra_data[$extra_field];
+        if (is_array($extra_files)) {
+            var_dump($extra_files); exit;
+            foreach ($extra_files as $key => $value) {
+                if (!$full_path) {
+                    // Relative path from user folder
+                    $files[] = $value;
+                } else {
+                    $files[] = $path.$value;
                 }
-                $extra_files[] = $file;
+            }
+        } elseif (!empty($extra_files)) {
+            if (!$full_path) {
+                // Relative path from user folder
+                $files[] = $extra_files;
+            } else {
+                $files[] = $path.$extra_files;
             }
         }
-
-        return $extra_files; // can be an empty array
+        return $files; // can be an empty array
     }
 
     /**
@@ -1721,8 +1745,13 @@ class UserManager
      */
     public static function remove_user_extra_file($user_id, $extra_field, $extra_file)
     {
+        $extra_file = Security::filter_filename($extra_file);
         $path_info = self::get_user_picture_path_by_id($user_id, 'system', true);
-        $path_extra_file = $path_info['dir'].$extra_field.'/'.$extra_file;
+        if (strpos($extra_file, $extra_field) !== false) {
+            $path_extra_file = $path_info['dir'].$extra_file;
+        } else {
+            $path_extra_file = $path_info['dir'].$extra_field.'/'.$extra_file;
+        }
         if (is_file($path_extra_file)) {
             unlink($path_extra_file);
             return true;
@@ -4466,13 +4495,13 @@ EOF;
                         $form->freeze('extra_'.$field_details[1]);
                     break;
                 case self::USER_FIELD_TYPE_FILE:
-                    $extra_field = 'extra_' . $field_details[1];
+                    $extra_field = 'extra_'.$field_details[1];
                     $form->addElement('file', $extra_field, $field_details[3], null, '');
-                    if ($extra_file_list = UserManager::build_user_extra_file_list($user_id, $extra_field, '', true)) {
+                    if ($extra_file_list = UserManager::build_user_extra_file_list($user_id, $field_details[1], '', true)) {
                         $form->addElement('static', $extra_field . '_list', null, $extra_file_list);
                     }
                     if ($field_details[7] == 0) {
-                        $form->freeze('extra_'.$field_details[1]);
+                        $form->freeze($extra_field);
                     }
                     break;
             }

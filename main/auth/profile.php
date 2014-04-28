@@ -566,8 +566,9 @@ if ($form->validate()) {
                 $extras[$new_key] = $value;
             }
         } elseif (strpos($key, 'remove_extra_') !== false) {
-            // To remove from user_field_value table and user folder
-            UserManager::update_extra_field_value($user_id, substr($key,13), key($value));
+            $extra_value = Security::filter_filename(urldecode(key($value)));
+            // To remove from user_field_value and folder
+            UserManager::update_extra_field_value($user_id, substr($key,13), $extra_value);
         } else {
             if (in_array($key, $available_values_to_modify)) {
                 $sql .= " $key = '".Database::escape_string($value)."',";
@@ -628,8 +629,20 @@ if ($form->validate()) {
             //3. Tags are process in the UserManager::update_extra_field_value by the UserManager::process_tags function
             // For array $value -> if exists key 'tmp_name' then must not be empty
             // This avoid delete from user field value table when doesn't upload a file
-            if (!is_array($value) || (!array_key_exists('tmp_name',$value) || !empty($value['tmp_name']))) {
-                UserManager::update_extra_field_value(api_get_user_id(), $key, $value);
+            if (is_array($value)) {
+                if (array_key_exists('tmp_name', $value) && empty($value['tmp_name'])) {
+                    //Nothing to do
+                } else {
+                    if (array_key_exists('tmp_name', $value)) {
+                        $value['tmp_name'] = Security::filter_filename($value['tmp_name']);
+                    }
+                    if (array_key_exists('name', $value)) {
+                        $value['name'] = Security::filter_filename($value['name']);
+                    }
+                    UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
+                }
+            } else {
+                UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
             }
         }
     }

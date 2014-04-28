@@ -1472,11 +1472,13 @@ class GroupManager
         $table_group_user = Database :: get_course_table(TABLE_GROUP_USER);
         if (!empty($user_ids)) {
             foreach ($user_ids as $user_id) {
-                $user_id = Database::escape_string($user_id);
-                $group_id = Database::escape_string($group_id);
-                $sql = "INSERT INTO ".$table_group_user." (c_id, user_id, group_id)
-                        VALUES ('$course_id', '".$user_id."', '".$group_id."')";
-                $result &= Database::query($sql);
+                if (self::can_user_subscribe($user_id, $group_id)) {
+                    $user_id = Database::escape_string($user_id);
+                    $group_id = Database::escape_string($group_id);
+                    $sql = "INSERT INTO ".$table_group_user." (c_id, user_id, group_id)
+                            VALUES ('$course_id', '".$user_id."', '".$group_id."')";
+                    $result &= Database::query($sql);
+                }
             }
         }
         return $result;

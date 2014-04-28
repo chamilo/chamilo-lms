@@ -775,6 +775,12 @@ if (!empty($error)) {
                 });
 
                 $(".no_remind_highlight").hide();
+				
+				// if the users validates the form using return key, prevent form action and simulates click on validation button
+				$("#exercise_form").submit(function(){
+					$(".question-validate-btn").first().trigger("click");
+					return false;
+				});
     		});
 
 			function previous_question(question_num) {
@@ -1011,7 +1017,7 @@ if (!empty($error)) {
 
             //BUtton save and continue
             switch ($objExercise->type) {
-                case ONE_PER_PAGE:
+				case ONE_PER_PAGE:
                     $exercise_actions .= $objExercise->show_button($questionId, $current_question);
                     break;
                 case ALL_ON_ONE_PAGE :

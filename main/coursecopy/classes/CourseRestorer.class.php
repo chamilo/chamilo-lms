@@ -1876,7 +1876,6 @@ class CourseRestorer
                         $path = self::DBUTF8escapestring($item['path']);
                         $path = $this->get_new_id($item['item_type'], $path);
                     }
-                    //var_dump($item['item_type'], $path);exit;
 
 					$sql = "INSERT INTO ".$table_item." SET
 							c_id = ".$this->destination_course_id." ,
@@ -2110,27 +2109,32 @@ class CourseRestorer
 	 */
     public function get_new_id($tool, $ref)
     {
-        //transform $tool into one backup/restore constant
-        //just in case you copy the tool in the same course
-        //error_log($this->course_origin_id .' - '.$this->destination_course_id);
-        if ($this->course_origin_id == $this->destination_course_id) {
-            return $ref;
-        }
+        // Check if the value exist in the current array.
 
         if ($tool == 'hotpotatoes') {
             $tool = 'document';
         }
 
-        if (!empty($this->course->resources[$tool][$ref]->destination_id)) {
+        if (isset($this->course->resources[$tool][$ref]) &&
+            isset($this->course->resources[$tool][$ref]->destination_id) &&
+            !empty($this->course->resources[$tool][$ref]->destination_id)
+        ) {
             return $this->course->resources[$tool][$ref]->destination_id;
         }
+
+        // Check if the course is the same (last hope).
+        if ($this->course_origin_id == $this->destination_course_id) {
+            return $ref;
+        }
+
         return '';
 	}
 
 	/**
 	 * Restore glossary
 	 */
-    public function restore_glossary($session_id = 0) {
+    public function restore_glossary($session_id = 0)
+    {
 		if ($this->course->has_resources(RESOURCE_GLOSSARY)) {
 			$table_glossary = Database :: get_course_table(TABLE_GLOSSARY);
 			$t_item_propery = Database :: get_course_table(TABLE_ITEM_PROPERTY);

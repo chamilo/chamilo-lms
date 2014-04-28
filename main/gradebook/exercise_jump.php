@@ -30,7 +30,7 @@ $type = Security::remove_XSS($_GET['type']);
 
 $doExerciseUrl = api_get_path(WEB_CODE_PATH).'exercice/overview.php?session_id='.$session_id.'&cidReq='.$cidReq.'&gradebook='.$gradebook.'&origin=&learnpath_id=&learnpath_item_id=&exerciseId='.intval($_GET['doexercise']);
 
-// no support for hotpototes
+// no support for hot potatoes
 if ($type == LINK_HOTPOTATOES) {
     $doExerciseUrl = api_get_path(WEB_CODE_PATH).'exercice/exercice.php?session_id='.$session_id.'&cidReq='.Security::remove_XSS($cidReq);
 }
@@ -45,6 +45,6 @@ if (isset($_GET['doexercise'])) {
 	if (isset($_GET['gradebook'])) {
 		$add_url = '&gradebook=view&exerciseId='.intval($_GET['exerciseId']);
 	}
-	header('Location: '.api_get_path(WEB_CODE_PATH).'exercice/exercice.php?session_id='.$session_id.'&cidReq='.Security::remove_XSS($cidReq).'&show=result'.$add_url);
+	header('Location: '.api_get_path(WEB_CODE_PATH).'exercice/overview.php?session_id='.$session_id.'&cidReq='.Security::remove_XSS($cidReq).'&'.$add_url);
 	exit;
 }

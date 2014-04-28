@@ -28,6 +28,9 @@ class AppPlugin
     public $installedPluginListName = array();
     public $installedPluginListObject = array();
 
+    /**
+     *
+     */
     public function __construct()
     {
     }
@@ -136,7 +139,7 @@ class AppPlugin
 
     /**
      * @param string $pluginName
-     * @param int $urlId
+     * @param int    $urlId
      */
     public function install($pluginName, $urlId = null)
     {
@@ -170,9 +173,9 @@ class AppPlugin
     }
 
     /**
-     * @param string $pluginName
-     * @param int $urlId
-     */
+    * @param string $pluginName
+    * @param int    $urlId
+    */
     public function uninstall($pluginName, $urlId = null)
     {
         if (empty($urlId)) {
@@ -248,12 +251,12 @@ class AppPlugin
     }
 
     /**
-     * @param string $region
-     * @param string $template
-     * @param bool $forced
-     *
-     * @return null|string
-     */
+    * @param string $region
+    * @param string $template
+    * @param bool   $forced
+    *
+    * @return null|string
+    */
     public function load_region($region, $template, $forced = false)
     {
         if ($region == 'course_tool_plugin') {
@@ -270,8 +273,9 @@ class AppPlugin
     /**
      * Loads the translation files inside a plugin if exists. It loads by default english see the hello world plugin
      *
-     * @todo add caching
      * @param string $plugin_name
+     *
+     * @todo add caching
      */
     public function load_plugin_lang_variables($plugin_name)
     {
@@ -305,9 +309,12 @@ class AppPlugin
     }
 
     /**
+     * @param string    $region
+     * @param Template  $template
+     * @param bool      $forced
      *
-     * @param string $block
-     * @param Template $template
+     * @return bool
+     *
      * @todo improve this function
      */
     public function get_all_plugin_contents_by_region($region, $template, $forced = false)
@@ -369,21 +376,25 @@ class AppPlugin
     }
 
     /**
-     * @param $plugin_name
-     * @param bool $forced
+     * @param string    $plugin_name
+     * @param bool      $forced
+     *
      * @deprecated
      */
-    public function get_plugin_info($plugin_name, $forced = false) {
+    public function get_plugin_info($plugin_name, $forced = false)
+    {
         return $this->getPluginInfo($plugin_name, $forced);
     }
 
     /**
      * Loads plugin info
+     *
      * @staticvar array $plugin_data
-     * @param string plugin name
-     * @param bool load from DB or from the static array
-     * @todo filter setting_form
+     * @param string    $plugin_name
+     * @param bool      $forced load from DB or from the static array
+     *
      * @return array
+     * @todo filter setting_form
      */
     public function getPluginInfo($plugin_name, $forced = false)
     {
@@ -535,7 +546,7 @@ class AppPlugin
     /**
      * When saving the plugin values in the course settings, check whether
      * a callback method should be called and send it the updated settings
-     * @param array The new settings the user just saved
+     * @param array $values The new settings the user just saved
      * @return void
      */
     public function saveCourseSettingsHook($values)

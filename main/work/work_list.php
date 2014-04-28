@@ -89,9 +89,9 @@ $item_id = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
 
 switch ($action) {
     case 'delete':
-        $file_deleted = deleteWorkItem($item_id, $courseInfo);
+        $fileDeleted = deleteWorkItem($item_id, $courseInfo);
 
-        if (!$file_deleted) {
+        if (!$fileDeleted) {
             Display::display_error_message(get_lang('YouAreNotAllowedToDeleteThisDocument'));
         } else {
             Display::display_confirmation_message(get_lang('TheDocumentHasBeenDeleted'));

@@ -465,6 +465,7 @@ function dir_total_space($dir_path) {
 	chdir($dir_path) ;
 	$handle = opendir($dir_path);
     $sumSize = 0;
+    $dirList = array();
 	while ($element = readdir($handle)) {
 		if ( $element == '.' || $element == '..') {
 			continue; // Skip the current and parent directories
@@ -1194,7 +1195,18 @@ function create_unexisting_directory(
 				// Update document item_property
 				if ($visibility !== '') {
 					$visibilities = array(0 => 'invisible', 1 => 'visible', 2 => 'delete');
-					api_item_property_update($_course, TOOL_DOCUMENT, $document_id, $visibilities[$visibility], $user_id, $to_group_id, $to_user_id, null, null, $session_id);
+					api_item_property_update(
+                        $_course,
+                        TOOL_DOCUMENT,
+                        $document_id,
+                        $visibilities[$visibility],
+                        $user_id,
+                        $to_group_id,
+                        $to_user_id,
+                        null,
+                        null,
+                        $session_id
+                    );
 				} else {
 					api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'FolderCreated', $user_id, $to_group_id, $to_user_id, null, null, $session_id);
 				}

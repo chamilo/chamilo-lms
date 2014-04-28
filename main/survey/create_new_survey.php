@@ -3,12 +3,14 @@
 
 /**
  * 	@package chamilo.survey
- * 	@author unknown, the initial survey that did not make it in 1.8 because of bad code
- * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts (if not all) of the code
- * 	@author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code
+ * 	@author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup,
+ *  refactoring and rewriting large parts (if not all) of the code
+ * 	@author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality
+ * Test modification and rewriting large parts of the code
  * 	@version $Id: create_new_survey.php 22297 2009-07-22 22:08:30Z cfasanando $
  *
- * 	@todo only the available platform languages should be used => need an api get_languages and and api_get_available_languages (or a parameter)
+ * 	@todo only the available platform languages should be used => need an
+ *  api get_languages and and api_get_available_languages (or a parameter)
  */
 // Language file that needs to be included
 $language_file = 'survey';
@@ -42,7 +44,7 @@ $htmlHeadXtra[] = '<script>
     }
 
     $(document).ready(function () {
-      setFocus();
+        setFocus();
     });
 </script>';
 
@@ -163,7 +165,7 @@ $form->addElement('checkbox', 'anonymous', null, get_lang('Anonymous'));
 $form->addElement('html_editor', 'survey_introduction', get_lang('SurveyIntroduction'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 $form->addElement('html_editor', 'survey_thanks', get_lang('SurveyThanks'), null, array('ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false));
 
-// Aditional Parameters
+// Additional Parameters
 $form->addElement(
     'advanced_settings',
     '<a href="javascript: void(0);" onclick="javascript: advanced_parameters();">
@@ -201,7 +203,8 @@ if (isset($survey_data['survey_type']) && $survey_data['survey_type'] == 1 || $_
     $form->addElement('checkbox', 'shuffle', null, get_lang('ActivateShuffle'));
 }
 $input_name_list = null;
-if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id)) {
+
+if (isset($_GET['action']) && $_GET['action'] == 'edit' && !empty($survey_id)) {
     if ($survey_data['anonymous'] == 0) {
         $form->addElement('checkbox', 'show_form_profile', null, get_lang('ShowFormProfile'), 'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"');
 
@@ -212,6 +215,7 @@ if ((isset($_GET['action']) && $_GET['action'] == 'edit') && !empty($survey_id))
         }
 
         $field_list = SurveyUtil::make_field_list();
+
         if (is_array($field_list)) {
             // TODO hide and show the list in a fancy DIV
             foreach ($field_list as $key => & $field) {

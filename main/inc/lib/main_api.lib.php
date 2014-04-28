@@ -341,7 +341,7 @@ define('SHOW_TEXT_NEAR_ICONS', false);
  * Inclusion of internationalization libraries
  */
 
-require_once dirname(__FILE__).'/internationalization.lib.php';
+require_once __DIR__.'/internationalization.lib.php';
 
 
 /* PATHS & FILES - ROUTINES */
@@ -526,7 +526,7 @@ function api_get_path($path_type, $path = null)
                     $server_name .= ":" . $_SERVER['SERVER_PORT'];
                 }
                 $root_web = $server_protocol.'://'.$server_name.$root_rel;
-                $root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../../')).'/';
+                $root_sys = str_replace('\\', '/', realpath(__DIR__.'/../../../')).'/';
                 $code_folder = 'main/';
                 $course_folder = 'courses/';
             }
@@ -971,6 +971,20 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
 function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = false, $message = null) {
     if (!api_is_platform_admin($allow_sessions_admins, $allow_drh)) {
         api_not_allowed(true, $message);
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Function used to protect a teacher script.
+ * The function blocks access when the user has no teacher rights.
+ *
+ * @author Yoselyn Castillo
+ */
+function api_protect_teacher_script($allow_sessions_admins = false) {
+    if (!api_is_allowed_to_edit()) {
+        api_not_allowed(true);
         return false;
     }
     return true;

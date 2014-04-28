@@ -368,13 +368,14 @@ class CourseSelectForm
 
 	/**
 	 * Get the posted course
-	 * @param string who calls the function? It can be copy_course, create_backup, import_backup or recycle_course
-     * @param int
-     * @param string
+	 * @param string $from who calls the function?
+     * It can be copy_course, create_backup, import_backup or recycle_course
+     * @param int $session_id
+     * @param string $course_code
 	 * @return course The course-object with all resources selected by the user
 	 * in the form given by display_form(...)
 	 */
-	static function get_posted_course($from = '', $session_id = 0, $course_code = '')
+	public static function get_posted_course($from = '', $session_id = 0, $course_code = '')
     {
         $course = null;
 
@@ -384,9 +385,9 @@ class CourseSelectForm
             return false;
         }
 
-		//Create the resource DOCUMENT objects
-		//Loading the results from the checkboxes of ethe javascript
-		$resource       = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
+		// Create the resource DOCUMENT objects
+		// Loading the results from the checkboxes of ethe javascript
+		$resource = isset($_POST['resource'][RESOURCE_DOCUMENT]) ? $_POST['resource'][RESOURCE_DOCUMENT] : null;
 
 		$course_info 	= api_get_course_info($course_code);
 		$table_doc 		= Database::get_course_table(TABLE_DOCUMENT);
@@ -394,11 +395,13 @@ class CourseSelectForm
 
 		$course_id 		= $course_info['real_id'];
 
-		// Searching the documents resource that have been set to null because $avoid_serialize is true in the display_form() function
+		/* Searching the documents resource that have been set to null because
+        $avoid_serialize is true in the display_form() function*/
 
 		if ($from == 'copy_course') {
 			if (is_array($resource)) {
 				$resource = array_keys($resource);
+
 				foreach	($resource as $resource_item) {
 
 					$condition_session = '';
@@ -409,11 +412,12 @@ class CourseSelectForm
 
 					$sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
 							FROM '.$table_doc.' d, '.$table_prop.' p
-							WHERE 	d.c_id = '.$course_id.' AND
-									p.c_id = '.$course_id.' AND
-									tool 	= \''.TOOL_DOCUMENT.'\' AND
-									p.ref 	= d.id AND p.visibility != 2 AND
-									d.id 	= '.$resource_item.$condition_session.'
+							WHERE
+							    d.c_id = '.$course_id.' AND
+                                p.c_id = '.$course_id.' AND
+                                tool 	= \''.TOOL_DOCUMENT.'\' AND
+                                p.ref 	= d.id AND p.visibility != 2 AND
+                                d.id 	= '.$resource_item.$condition_session.'
 							ORDER BY path';
 					$db_result = Database::query($sql);
 					while ($obj = Database::fetch_object($db_result)) {
@@ -421,7 +425,11 @@ class CourseSelectForm
                         if ($doc) {
                             $course->add_resource($doc);
                             // adding item property
-                            $sql = "SELECT * FROM $table_prop WHERE c_id = $course_id AND tool = '".RESOURCE_DOCUMENT."' AND ref = $resource_item ";
+                            $sql = "SELECT * FROM $table_prop
+                                    WHERE
+                                        c_id = $course_id AND
+                                        tool = '".RESOURCE_DOCUMENT."' AND
+                                        ref = $resource_item ";
                             $res = Database::query($sql);
                             $all_properties = array ();
                             while ($item_property = Database::fetch_array($res,'ASSOC')) {
@@ -439,7 +447,10 @@ class CourseSelectForm
 				switch ($type) {
 					case RESOURCE_SURVEYQUESTION:
 						foreach($resources as $id => $obj) {
-						    if (is_array($_POST['resource'][RESOURCE_SURVEY]) && !in_array($obj->survey_id, array_keys($_POST['resource'][RESOURCE_SURVEY]))) {
+						    if (isset($_POST['resource'][RESOURCE_SURVEY]) &&
+                                is_array($_POST['resource'][RESOURCE_SURVEY]) &&
+                                !in_array($obj->survey_id, array_keys($_POST['resource'][RESOURCE_SURVEY]))
+                            ) {
 								unset($course->resources[$type][$id]);
 							}
 						}
@@ -475,9 +486,11 @@ class CourseSelectForm
                         break;
                     case RESOURCE_LEARNPATH:
                         $lps = isset($_POST['resource'][RESOURCE_LEARNPATH]) ? $_POST['resource'][RESOURCE_LEARNPATH] : null;
+
                         if (!empty($lps)) {
                             foreach ($lps as $id => $obj) {
                                 $lp_resource = $course->resources[RESOURCE_LEARNPATH][$id];
+
                                 if (isset($lp_resource) && !empty($lp_resource) && isset($lp_resource->items)) {
                                     foreach ($lp_resource->items as $item) {
                                         switch ($item['item_type']) {
@@ -520,9 +533,9 @@ class CourseSelectForm
                                 //var_dump($obj, $resource_is_used_elsewhere);
 								// check if document is in a quiz (audio/video)
 								if ($type == RESOURCE_DOCUMENT && $course->has_resources(RESOURCE_QUIZ)) {
-									foreach($course->resources[RESOURCE_QUIZ] as $qid => $quiz) {
+									foreach($course->resources[RESOURCE_QUIZ] as $quiz) {
                                         $quiz = $quiz->obj;
-										if ($quiz->media == $id) {
+										if (isset($quiz->media) && $quiz->media == $id) {
 											$resource_is_used_elsewhere = true;
 										}
 									}
@@ -535,6 +548,7 @@ class CourseSelectForm
 				}
 			}
 		}
+
 		return $course;
 	}
 

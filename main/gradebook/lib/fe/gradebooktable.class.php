@@ -169,6 +169,7 @@ class GradebookTable extends SortableTable
 
             // list of items inside the gradebook (exercises, lps, forums, etc)
             $row  = array();
+            /** @var AbstractLink $item */
             $item = $item_category = $data[0];
 
             //if the item is invisible, wrap it in a span with class invisible
@@ -199,7 +200,15 @@ class GradebookTable extends SortableTable
             $row[] = $invisibility_span_open.$data[2].$invisibility_span_close;
 
             // Weight.
-            $average = $scoredisplay->display_score(array($data['3'], $this->currentcat->get_weight()), SCORE_SIMPLE, SCORE_BOTH, true);
+            $average = $scoredisplay->display_score(
+                array(
+                    $data['3'],
+                    $this->currentcat->get_weight()
+                ),
+                SCORE_SIMPLE,
+                SCORE_BOTH,
+                true
+            );
 
             if (api_is_allowed_to_edit(null, true)) {
                 $row[] = $invisibility_span_open .Display::tag('h4', $average).$invisibility_span_close;
@@ -327,7 +336,8 @@ class GradebookTable extends SortableTable
                                 $value_data = isset($data[4]) ? $data[4] : null;
                                 if (!is_null($value_data)) {
                                     $score = $item->calc_score(api_get_user_id());
-                                    $new_score = $data[3]* $score[0] / $score[1];
+                                    $new_score = $data[3] * $score[0] / $score[1];
+                                    $new_score = floatval(number_format($new_score, api_get_setting('gradebook_number_decimals')));
                                     $row[] = Display::tip($new_score, $data[4]);
                                 }
                             }

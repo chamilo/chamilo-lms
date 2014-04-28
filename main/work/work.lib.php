@@ -1957,8 +1957,16 @@ function get_work_user_list_from_documents(
  * @param bool $getCount
  * @return array
  */
-function get_work_user_list($start, $limit, $column, $direction, $work_id, $where_condition, $studentId = null, $getCount = false)
-{
+function get_work_user_list(
+    $start,
+    $limit,
+    $column,
+    $direction,
+    $work_id,
+    $where_condition,
+    $studentId = null,
+    $getCount = false
+) {
     $work_table         = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $iprop_table        = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $user_table         = Database::get_main_table(TABLE_MAIN_USER);
@@ -2053,6 +2061,8 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
             return $work['count'];
         }
 
+        $url = api_get_path(WEB_CODE_PATH).'work/';
+
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $item_id = $work['id'];
             //$workItem = get_work_data_by_id($item_id);
@@ -2139,7 +2149,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 $link_to_download = null;
                 // If URL is present then there's a file to download keep BC.
                 if ($work['contains_file'] || !empty($work['url'])) {
-                    $link_to_download = '<a href="download.php?id='.$item_id.'&'.api_get_cidreq().'">'.
+                    $link_to_download = '<a href="'.$url.'download.php?id='.$item_id.'&'.api_get_cidreq().'">'.
                         Display::return_icon('save.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';
                 } else {
                    //$link_to_download = '<a href="view.php?id='.$item_id.'">'.Display::return_icon('save_na.png', get_lang('Save'),array(), ICON_SIZE_SMALL).'</a> ';
@@ -2154,7 +2164,7 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                 $work['sent_date'] = date_to_str_ago(api_get_local_time($work['sent_date'])).' '.$add_string.'<br />'.$work_date;
 
                 // Actions.
-                $url = api_get_path(WEB_CODE_PATH).'work/';
+
                 $action = '';
                 if ($is_allowed_to_edit) {
                     $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
@@ -2185,25 +2195,30 @@ function get_work_user_list($start, $limit, $column, $direction, $work_id, $wher
                     }
 
                     if ($work['accepted'] == '1') {
-                        $action .= '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=make_invisible&item_id='.$item_id.'" title="'.get_lang('Invisible').'" >'.Display::return_icon('visible.png', get_lang('Invisible'),array(), ICON_SIZE_SMALL).'</a>';
+                        $action .= '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=make_invisible&item_id='.$item_id.'" title="'.get_lang('Invisible').'" >'.
+                            Display::return_icon('visible.png', get_lang('Invisible'),array(), ICON_SIZE_SMALL).'</a>';
                     } else {
-                        $action .= '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=make_visible&item_id='.$item_id.'" title="'.get_lang('Visible').'" >'.Display::return_icon('invisible.png', get_lang('Visible'),array(), ICON_SIZE_SMALL).'</a> ';
+                        $action .= '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=make_visible&item_id='.$item_id.'" title="'.get_lang('Visible').'" >'.
+                            Display::return_icon('invisible.png', get_lang('Visible'),array(), ICON_SIZE_SMALL).'</a> ';
                     }
 
                     if ($locked) {
                         $action .= Display::return_icon('delete_na.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
                     } else {
-                        $action .= '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=delete&amp;item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'" >'.Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+                        $action .= '<a href="'.$url.'work_list_all.php?'.api_get_cidreq().'&id='.$work_id.'&action=delete&amp;item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'" >'.
+                            Display::return_icon('delete.png', get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
                     }
                 } elseif ($is_author && (empty($work['qualificator_id']) || $work['qualificator_id'] == 0)) {
-                    $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a>';
+                    $action .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang('View').'">'.
+                        Display::return_icon('default.png', get_lang('View'),array(), ICON_SIZE_SMALL).'</a>';
 
                     if (api_get_course_setting('student_delete_own_publication') == 1) {
                         if (api_is_allowed_to_session_edit(false, true)) {
                             $action .= '<a href="'.$url.'edit.php?'.api_get_cidreq().'&item_id='.$item_id.'&id='.$work['parent_id'].'" title="'.get_lang('Modify').'">'.
-                                Display::return_icon('edit.png', get_lang('Comment'),array(), ICON_SIZE_SMALL).'</a>';
+                                        Display::return_icon('edit.png', get_lang('Comment'),array(), ICON_SIZE_SMALL).'</a>';
                         }
-                        $action .= ' <a href="'.$url.'work.php?'.api_get_cidreq().'&action=delete&amp;item_id='.$item_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
+                        $action .= ' <a href="'.$url.'work_list.php?'.api_get_cidreq().'&action=delete&item_id='.$item_id.'&id='.$work['parent_id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'),ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'"  >'.
+                            Display::return_icon('delete.png',get_lang('Delete'),'',ICON_SIZE_SMALL).'</a>';
                     } else {
                         $action .= Display::return_icon('edit_na.png', get_lang('Modify'),array(), ICON_SIZE_SMALL);
                     }
@@ -3181,7 +3196,6 @@ function setWorkUploadForm($form, $uploadFormType = 0)
  */
 function uploadWork($my_folder_data, $_course)
 {
-
     if (empty($_FILES['file']['size'])) {
         return array('error' => Display :: return_message(get_lang('UplUploadFailedSizeIsZero'), 'error'));
     }
@@ -3208,7 +3222,9 @@ function uploadWork($my_folder_data, $_course)
     $total_size = $filesize + $totalSpace;
 
     if ($total_size > $course_max_space) {
-        return array('error' => Display :: return_message(get_lang('NoSpace'), 'error'));
+        return array(
+            'error' => Display :: return_message(get_lang('NoSpace'), 'error')
+        );
     }
 
     // Compose a unique file name to avoid any conflict
@@ -3216,7 +3232,20 @@ function uploadWork($my_folder_data, $_course)
     $curdirpath = basename($my_folder_data['url']);
 
     // If we come from the group tools the groupid will be saved in $work_table
-    $result = move_uploaded_file($_FILES['file']['tmp_name'], $updir.$curdirpath.'/'.$new_file_name);
+    if (is_dir($updir.$curdirpath) || empty($curdirpath)) {
+        $result = move_uploaded_file(
+            $_FILES['file']['tmp_name'],
+            $updir.$curdirpath.'/'.$new_file_name
+        );
+    } else {
+        return array(
+            'error' => Display :: return_message(
+                get_lang('FolderDoesntExistsInFileSystem'),
+                'error'
+            )
+        );
+    }
+
     $url = null;
     if ($result) {
         $url = 'work/'.$curdirpath.'/'.$new_file_name;
@@ -3368,7 +3397,6 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
         $workId = Database::insert_id();
 
         if ($workId) {
-
             if (array_key_exists('filename', $workInfo) && !empty($filename)) {
                 $filename = Database::escape_string($filename);
                 $sql = "UPDATE $work_table SET filename = '$filename'
@@ -3388,7 +3416,9 @@ function processWorkForm($workInfo, $values, $courseInfo, $sessionId, $groupId, 
             $message = Display::return_message(get_lang('DocAdd'));
         }
     } else {
-        $message = Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error');
+        if (empty($message)) {
+            $message = Display::return_message(get_lang('IsNotPosibleSaveTheDocument'), 'error');
+        }
     }
     return $message;
 }
@@ -4121,11 +4151,7 @@ function getFile($id, $course_info, $download = true)
 {
     $file = getFileContents($id, $course_info);
     if (!empty($file) && is_array($file)) {
-        DocumentManager::file_send_for_download(
-            $file['path'],
-            $download,
-            $file['title']
-        );
+        return DocumentManager::file_send_for_download($file['path'], $download, $file['title']);
     }
     return false;
 }

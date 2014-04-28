@@ -21,7 +21,7 @@ class CourseRecycler
      * @param course $course The course-object which contains the items to
      * delete
      */
-    function CourseRecycler($course)
+    public function CourseRecycler($course)
     {
         $this->course = $course;
         $this->course_info = api_get_course_info($this->course->code);
@@ -35,7 +35,7 @@ class CourseRecycler
      * @param string The type of recycling we want (full_backup or select_items)
      * @assert (null) === false
      */
-    function recycle($type)
+    public function recycle($type)
     {
         if (empty($type)) {
             return false;
@@ -88,7 +88,7 @@ class CourseRecycler
     /**
      * Delete documents
      */
-    function recycle_documents()
+    public function recycle_documents()
     {
         if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
             $table = Database :: get_course_table(TABLE_DOCUMENT);
@@ -104,7 +104,7 @@ class CourseRecycler
     /**
      * Delete wiki
      */
-    function recycle_wiki()
+    public function recycle_wiki()
     {
         if ($this->course->has_resources(RESOURCE_WIKI)) {
             $table_wiki 		= Database::get_course_table(TABLE_WIKI);
@@ -126,7 +126,7 @@ class CourseRecycler
     /**
      * Delete glossary
      */
-    function recycle_glossary()
+    public function recycle_glossary()
     {
         if ($this->course->has_resources(RESOURCE_GLOSSARY)) {
             $table_glossary	= Database::get_course_table(TABLE_GLOSSARY);
@@ -139,7 +139,7 @@ class CourseRecycler
     /**
      * Delete links
      */
-    function recycle_links()
+    public function recycle_links()
     {
         if ($this->course->has_resources(RESOURCE_LINK)) {
             $table = Database :: get_course_table(TABLE_LINK);
@@ -152,9 +152,8 @@ class CourseRecycler
     /**
      * Delete forums
      */
-    function recycle_forums()
+    public function recycle_forums()
     {
-
         $table_category = Database :: get_course_table(TABLE_FORUM_CATEGORY);
         $table_forum = Database :: get_course_table(TABLE_FORUM);
         $table_thread = Database :: get_course_table(TABLE_FORUM_THREAD);
@@ -265,7 +264,7 @@ class CourseRecycler
      * Delete forum-categories
      * Deletes all forum-categories from current course without forums
      */
-    function recycle_forum_categories()
+    public function recycle_forum_categories()
     {
         $table_forum = Database :: get_course_table(TABLE_FORUM);
         $table_forumcat = Database :: get_course_table(TABLE_FORUM_CATEGORY);
@@ -288,7 +287,7 @@ class CourseRecycler
      * Delete link-categories
      * Deletes all empty link-categories (=without links) from current course
      */
-    function recycle_link_categories()
+    public function recycle_link_categories()
     {
         $link_cat_table = Database :: get_course_table(TABLE_LINK_CATEGORY);
         $link_table = Database :: get_course_table(TABLE_LINK);
@@ -310,7 +309,7 @@ class CourseRecycler
     /**
      * Delete events
      */
-    function recycle_events() {
+    public function recycle_events() {
         if ($this->course->has_resources(RESOURCE_EVENT)) {
             $table = Database :: get_course_table(TABLE_AGENDA);
             $table_attachment = Database :: get_course_table(TABLE_AGENDA_ATTACHMENT);
@@ -325,10 +324,11 @@ class CourseRecycler
             Database::query($sql);
         }
     }
+
     /**
      * Delete announcements
      */
-    function recycle_announcements()
+    public function recycle_announcements()
     {
         if ($this->course->has_resources(RESOURCE_ANNOUNCEMENT)) {
             $table = Database :: get_course_table(TABLE_ANNOUNCEMENT);
@@ -346,9 +346,10 @@ class CourseRecycler
     }
 
     /**
-     * Recycle quizzes - doesn't remove the questions and their answers, as they might still be used later
+     * Recycle quizzes - doesn't remove the questions and their answers,
+     * as they might still be used later
      */
-    function recycle_quizzes()
+    public function recycle_quizzes()
     {
         if ($this->course->has_resources(RESOURCE_QUIZ)) {
             $table_qui_que = Database :: get_course_table(TABLE_QUIZ_QUESTION);
@@ -432,18 +433,20 @@ class CourseRecycler
     /**
      * Recycle tests categories
      */
-    function recycle_test_category()
+    public function recycle_test_category()
     {
-        foreach ($this->course->resources[RESOURCE_TEST_CATEGORY] as $tab_test_cat) {
-            $obj_cat = new Testcategory($tab_test_cat->source_id);
-            $obj_cat->removeCategory();
+        if (isset($this->course->resources[RESOURCE_TEST_CATEGORY])) {
+            foreach ($this->course->resources[RESOURCE_TEST_CATEGORY] as $tab_test_cat) {
+                $obj_cat = new Testcategory($tab_test_cat->source_id);
+                $obj_cat->removeCategory();
+            }
         }
     }
 
     /**
      * Recycle surveys - removes everything
      */
-    function recycle_surveys()
+    public function recycle_surveys()
     {
         if ($this->course->has_resources(RESOURCE_SURVEY)) {
             $table_survey = Database :: get_course_table(TABLE_SURVEY);
@@ -466,9 +469,9 @@ class CourseRecycler
     }
 
     /**
-     * Recycle learnpaths
+     * Recycle learning paths
      */
-    function recycle_learnpaths()
+    public function recycle_learnpaths()
     {
         if ($this->course->has_resources(RESOURCE_LEARNPATH)) {
             $table_main = Database :: get_course_table(TABLE_LP_MAIN);
@@ -531,7 +534,7 @@ class CourseRecycler
     /**
      * Delete course description
      */
-    function recycle_cours_description()
+    public function recycle_cours_description()
     {
         if ($this->course->has_resources(RESOURCE_COURSEDESCRIPTION)) {
             $table = Database :: get_course_table(TABLE_COURSE_DESCRIPTION);
@@ -544,7 +547,7 @@ class CourseRecycler
     /**
     * Recycle Thematics
     */
-    function recycle_thematic($session_id = 0)
+    public function recycle_thematic($session_id = 0)
     {
         if ($this->course->has_resources(RESOURCE_THEMATIC)) {
             $table_thematic         = Database :: get_course_table(TABLE_THEMATIC);
@@ -577,7 +580,7 @@ class CourseRecycler
     /**
     * Recycle Attendances
     */
-    function recycle_attendance($session_id = 0)
+    public function recycle_attendance($session_id = 0)
     {
         if ($this->course->has_resources(RESOURCE_ATTENDANCE)) {
             $table_attendance          = Database :: get_course_table(TABLE_ATTENDANCE);
@@ -601,7 +604,7 @@ class CourseRecycler
     /**
      * Recycle Works
      */
-    function recycle_work($session_id = 0)
+    public function recycle_work($session_id = 0)
     {
         if ($this->course->has_resources(RESOURCE_WORK)) {
             $table_work          = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);

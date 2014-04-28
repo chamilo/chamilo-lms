@@ -50,8 +50,12 @@ if (!in_array(
         'get_user_course_report',
         'get_sessions_tracking'
     )
-)) {
+) && !isset($_REQUEST['from_course_session'])) {
     api_protect_admin_script(true);
+} elseif (isset($_REQUEST['from_course_session']) &&
+    $_REQUEST['from_course_session'] == 1
+) {
+    api_protect_teacher_script(true);
 }
 
 // Search features

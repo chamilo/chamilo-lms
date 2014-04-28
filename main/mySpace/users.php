@@ -106,7 +106,8 @@ function get_users($from, $limit, $column, $direction)
             $direction,
             $active,
             $lastConnectionDate,
-            COURSEMANAGER
+            COURSEMANAGER,
+            $keyword
         );
     }
 
@@ -251,25 +252,14 @@ if ($export_csv) {
 }
 
 $form = new FormValidator('search_user', 'get', api_get_path(WEB_CODE_PATH).'mySpace/users.php');
-$form->addElement('text', 'keyword', get_lang('User'));
-$form->addElement('select', 'active', get_lang('Status'), array(1 => get_lang('Active'), 0 => get_lang('Inactive')));
+
 $form->addElement('select', 'status', get_lang('Status'), array(
-    '' => '',
-    STUDENT => get_lang('Student'),
-    COURSEMANAGER => get_lang('Teacher'),
-    DRH => get_lang('DRH'))
+        '' => '',
+        STUDENT => get_lang('Student'),
+        COURSEMANAGER => get_lang('Teacher'),
+        DRH => get_lang('DRH'))
 );
-if (isset($_configuration['save_user_last_login']) &&
-    $_configuration['save_user_last_login']
-) {
-    $form->addElement(
-        'select',
-        'sleeping_days',
-        get_lang('InactiveDays'),
-        array('', 1 => 1, 5 => 5, 15 => 15, 30 => 30, 60 => 60, 90 => 90, 120 => 120)
-    );
-}
-$form->addElement('button', 'submit', get_lang('Search'));
+$form = Tracking::setUserSearchForm($form);
 $form->setDefaults($params);
 
 // send the csv file if asked

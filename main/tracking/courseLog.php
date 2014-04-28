@@ -282,11 +282,40 @@ if (count($a_students) > 0) {
         );
     }
 
+    $teacherList = CourseManager::get_teacher_list_from_course_code_to_string(
+        $courseInfo['code'],
+        CourseManager::USER_SEPARATOR,
+        false
+    );
+
+    $coaches = null;
+    if (!empty($session_id)) {
+        $coaches = CourseManager::get_coachs_from_course_to_string(
+            $session_id,
+            $courseInfo['code'],
+            CourseManager::USER_SEPARATOR,
+            false
+        );
+    }
+
+    if (!empty($teacherList)) {
+        echo Display::page_subheader2(get_lang('Teachers'));
+        echo $teacherList;
+    }
+
+    if (!empty($coaches)) {
+        echo Display::page_subheader2(get_lang('Coaches'));
+        echo $coaches;
+    }
+
+    echo Display::page_subheader2(get_lang('StudentList'));
+
     $extra_field_select = TrackingCourseLog::display_additional_profile_fields();
 
     if (!empty($extra_field_select)) {
         echo $extra_field_select;
     }
+
     $form->display();
 
     // PERSON_NAME_DATA_EXPORT is buggy
@@ -391,6 +420,18 @@ if (count($a_students) > 0) {
     echo "<div id='reporting_table'>";
     $table->display();
     echo "</div>";
+
+    $sessionList = SessionManager::get_session_by_course($courseInfo['code']);
+    if (!empty($sessionList)) {
+        echo Display::page_subheader2(get_lang('SessionList'));
+        $sessionToShow = array();
+        foreach ($sessionList as $session) {
+            $url = api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='.$session['id'].'&cidReq='.$courseInfo['code'];
+            $sessionToShow[] = Display::url($session['name'], $url);
+        }
+        echo implode(',', $sessionToShow);
+    }
+
 
 } else {
     echo Display::display_warning_message(get_lang('NoUsersInCourse'));

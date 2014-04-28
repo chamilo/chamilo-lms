@@ -1,11 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * File containing the UNIQUE_ANSWER class.
- * @package chamilo.exercise
- * @author Eric Marguin
- */
-/**
  * UNIQUE_ANSWER class
  *
  * This class allows to instantiate an object of type UNIQUE_ANSWER
@@ -35,8 +30,7 @@ class UniqueAnswer extends Question
 
     /**
      * function which redefines Question::createAnswersForm
-     * @param the formvalidator instance
-     * @param the answers number to display
+     * @param FormValidator $form
      */
     public function createAnswersForm($form)
     {
@@ -62,18 +56,13 @@ class UniqueAnswer extends Question
          */
 
         $feedback_title = '';
-        $comment_title = '';
 
         if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
             //Scenario
             $editor_config['Width'] = '250';
             $editor_config['Height'] = '110';
-            $comment_title = '<th width="500px" >' . get_lang(
-                    'Comment'
-                ) . '</th>';
-            $feedback_title = '<th width="350px" >' . get_lang(
-                    'Scenario'
-                ) . '</th>';
+            $comment_title = '<th width="500px" >' . get_lang('Comment') . '</th>';
+            $feedback_title = '<th width="350px" >' . get_lang('Scenario') . '</th>';
         } else {
             $comment_title = '<th>' . get_lang('Comment') . '</th>';
         }
@@ -251,8 +240,7 @@ class UniqueAnswer extends Question
                 'required'
             );
 
-            if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT
-            ) {
+            if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
                 $form->addElement(
                     'html_editor',
                     'comment[' . $i . ']',
@@ -372,22 +360,26 @@ class UniqueAnswer extends Question
 
         $form->addElement('html', '</div></div>');
 
-        //We check the first radio button to be sure a radio button will be check
+        // We check the first radio button to be sure a radio button will be check
         if ($correct == 0) {
             $correct = 1;
         }
+
         $defaults['correct'] = $correct;
 
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {
             if ($this->isContent == 1) {
+                // Default sample content.
                 $form->setDefaults($defaults);
+            } else {
+                $form->setDefaults(array('correct' => 1));
             }
+
         }
         $form->setConstants(array('nb_answers' => $nb_answers));
     }
-
 
     /**
      * Receives the unique answer question type creation form data and creates

@@ -11,8 +11,12 @@ require_once '../../../../../inc/global.inc.php';
 api_protect_course_script();
 api_block_anonymous_users();
 
-$user_disk_path = api_get_path(SYS_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
-$user_web_path  = api_get_path(WEB_PATH).'main/upload/users/'.api_get_user_id().'/my_files/';
+$my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(), 'system');
+$user_disk_path = $my_path['dir'].'my_files/';
+
+$my_path = UserManager::get_user_picture_path_by_id(api_get_user_id(),'web');
+$user_web_path = $my_path['dir'].'my_files/';
+
 //get all files and folders
 $scan_files = scandir($user_disk_path);
 
@@ -48,19 +52,18 @@ if (!empty($png_svg_files)) {
 	echo '<h3>'.get_lang('SelectSVGEditImage').'</h3>';
 	echo '<ul>';
 	foreach($png_svg_files as $filename) {
-		$image=$user_disk_path.$filename;
-		
+		$image = $user_disk_path.$filename;
+
 		if (strpos($filename, "svg")){
 			$new_sizes['width'] = 60;
 			$new_sizes['height'] = 60;
-		}
-		else {
+		} else {
 			$new_sizes = api_resize_image($image, 60, 60);
 		}
-		
+
 			echo '<li style="display:inline; padding:8px;"><a href="'.$user_web_path.$filename.'" alt "'.$filename.'" title="'.$filename.'"><img src="'.$user_web_path.$filename.'" width="'.$new_sizes['width'].'" height="'.$new_sizes['height'].'" border="0"></a></li>';
 	}
-	echo '</ul>';	
+	echo '</ul>';
 } else {
 	Display::display_warning_message(get_lang('NoSVGImages'));
 }
@@ -69,8 +72,8 @@ if (!empty($png_svg_files)) {
 <script>
 $('a').click(function() {
 	var href = this.href;
-	
-	// Convert Non-SVG images to data URL first 
+
+	// Convert Non-SVG images to data URL first
 	// (this could also have been done server-side by the library)
 	if(this.href.indexOf('.svg') === -1) {
 
@@ -79,7 +82,7 @@ $('a').click(function() {
 			id: href
 		});
 		window.top.postMessage(meta_str, "*");
-	
+
 		var img = new Image();
 		img.onload = function() {
 			var canvas = document.createElement("canvas");
@@ -110,7 +113,7 @@ $('a').click(function() {
 			data = '|' + href + '|' + data;
 			// This is where the magic happens!
 			window.top.postMessage(data, "*");
-			
+
 		}, 'html'); // 'html' is necessary to keep returned data as a string
 	}
 	return false;

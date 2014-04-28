@@ -3748,7 +3748,9 @@ class UserManager
     * @param int $active
     * @param string $lastConnectionDate
     * @param int $status the function is called by who? COURSEMANAGER, DRH?
-    * @return array     users
+    * @param string $keyword
+     *
+    * @return array user list
     */
     public static function getUsersFollowedByUser(
         $userId,
@@ -3762,7 +3764,8 @@ class UserManager
         $direction = null,
         $active = null,
         $lastConnectionDate = null,
-        $status = null
+        $status = null,
+        $keyword = null
     ) {
         // Database Table Definitions
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -3770,13 +3773,11 @@ class UserManager
         $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $tbl_session_rel_user 	= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
         $userId = intval($userId);
 
@@ -3811,6 +3812,17 @@ class UserManager
         if (!is_null($active)) {
             $active = intval($active);
             $userConditions .= " AND u.active = $active ";
+        }
+
+        if (!empty($keyword)) {
+            $keyword = Database::escape_string($keyword);
+            $userConditions .= " AND (
+                u.username LIKE '%$keyword%' OR
+                u.firstname LIKE '%$keyword%' OR
+                u.lastname LIKE '%$keyword%' OR
+                u.official_code LIKE '%$keyword%' OR
+                u.email LIKE '%$keyword%'
+            )";
         }
 
         if (!empty($lastConnectionDate)) {

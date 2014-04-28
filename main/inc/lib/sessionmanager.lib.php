@@ -3995,7 +3995,7 @@ class SessionManager
      * @param array $sessionIdList
      * @param array $studentIdList
      * @param int $userStatus STUDENT|COURSEMANAGER constants
-
+     *
      * @return array|int
      */
     public static function getCountUserTracking(
@@ -4043,7 +4043,8 @@ class SessionManager
                 null,
                 $active,
                 $lastConnectionDate,
-                COURSEMANAGER
+                COURSEMANAGER,
+                $keyword
             );
         }
 

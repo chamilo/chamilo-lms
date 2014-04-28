@@ -481,8 +481,9 @@ class Plugin
                 WHERE variable = 'show_tabs'
                 AND subkey like 'custom_tab_%'";
         $result = Database::query($sql);
-        $customTabsNum = Database::count_rows($result);
-
+        
+        $customTabsNum = Database::num_rows($result);
+        
         $tabNum = $customTabsNum + 1;
 
         //Avoid Tab Name Spaces
@@ -524,15 +525,15 @@ class Plugin
      */
     public function deleteTab($key)
     {
-        $sql = "SELECT * FROM settings_current
-                WHERE
-                  variable = 'show_tabs' AND
-                  subkey <> '$key'";
-        $result = Database::query($sql);
-        $tabs = Database::store_result($result);
-        $customTabsNum = count($tabs);
-        //$customTabsNum = Database::count_rows($result);
-        $resp = false;
+        $sql = "SELECT * 
+                FROM settings_current
+                WHERE variable = 'show_tabs'
+                AND subkey <> '$key'
+                AND subkey like 'custom_tab_%'
+                ";
+        $resp = $result = Database::query($sql);
+        $customTabsNum = Database::num_rows($result);
+     
         if (!empty($key)) {
             $whereCondition = array(
                 'variable = ? AND subkey = ?' => array('show_tabs', $key)
@@ -540,8 +541,8 @@ class Plugin
             $resp = Database::delete('settings_current', $whereCondition);
 
             //if there is more than one tab
-            //re enumerate them
-            if ($customTabsNum > 0) {
+            //reenumerate them
+            if (!empty($customTabsNum) && $customTabsNum > 0) {
                 $i = 1;
                 foreach ($tabs as $row) {
                     $attributes = array(

@@ -242,6 +242,7 @@ class SessionManager
         $today = date('Y-m-d', $today);
 
         if (!empty($where_condition)) {
+            $where_condition = str_replace("(  session_active = ':'  )", '1=1', $where_condition);
 
             $where_condition = str_replace('category_name', 'sc.name', $where_condition);
             $where_condition = str_replace(
@@ -267,19 +268,17 @@ class SessionManager
                                 ";
         }
 
-        $sql = "SELECT count(id) as total_rows FROM (
-                SELECT
+        $sql = "SELECT COUNT(id) as total_rows FROM (
+                SELECT DISTINCT
                  IF (
 					(s.date_start <= '$today' AND '$today' <= s.date_end) OR
-                    (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start,'".$today."' ".") <= s.nb_days_access_before_beginning) OR
-                    (s.nb_days_access_after_end > 0 AND DATEDIFF('".$today."',s.date_end) <= s.nb_days_access_after_end) OR
+                    (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start, '$today') <= s.nb_days_access_before_beginning) OR
+                    (s.nb_days_access_after_end > 0 AND DATEDIFF('$today',s.date_end) <= s.nb_days_access_after_end) OR
                     (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
 					(s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
 					('$today' <= s.date_end AND '0000-00-00' = s.date_start)
-				, 1, 0)
-				as session_active,
-				s.id,
-                count(*) as total_rows
+				, 1, 0) as session_active,
+                s.id
                 FROM $tbl_session s
                     LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
                     INNER JOIN $tbl_user u ON s.id_coach = u.user_id
@@ -294,24 +293,24 @@ class SessionManager
 				$where.= " AND ar.access_url_id = $access_url_id ";
 
                 $sql = "SELECT count(id) as total_rows FROM (
-                SELECT
+                SELECT DISTINCT
                   IF (
 					(s.date_start <= '$today' AND '$today' <= s.date_end) OR
-                    (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start,'".$today."' ".") <= s.nb_days_access_before_beginning) OR
-                    (s.nb_days_access_after_end > 0 AND DATEDIFF('".$today."',s.date_end) <= s.nb_days_access_after_end) OR
+                    (s.nb_days_access_before_beginning > 0 AND DATEDIFF(s.date_start, '$today') <= s.nb_days_access_before_beginning) OR
+                    (s.nb_days_access_after_end > 0 AND DATEDIFF('$today',s.date_end) <= s.nb_days_access_after_end) OR
                     (s.date_start  = '0000-00-00' AND s.date_end  = '0000-00-00' ) OR
 					(s.date_start <= '$today' AND '0000-00-00' = s.date_end) OR
 					('$today' <= s.date_end AND '0000-00-00' = s.date_start)
 				, 1, 0)
 				as session_active,
 				s.id
-                 FROM $tbl_session s
+                FROM $tbl_session s
                     LEFT JOIN  $tbl_session_category sc ON s.session_category_id = sc.id
                     INNER JOIN $tbl_user u ON s.id_coach = u.user_id
                     INNER JOIN $table_access_url_rel_session ar ON ar.session_id = s.id
                     $courseCondition
                     $extraJoin
-                 $where $where_condition) as session_table";
+                $where $where_condition) as session_table";
             }
         }
 
@@ -351,10 +350,11 @@ class SessionManager
             $extraJoin = " INNER JOIN $tbl_session_rel_user sru
                             ON sru.id_session = s.id ";
 		}
-        
-    if (api_is_allowed_to_edit() && !api_is_platform_admin()) {
-        $where.=" AND s.id_coach = $user_id ";
-    }
+
+        if (api_is_allowed_to_edit() && !api_is_platform_admin()) {
+            $where.=" AND s.id_coach = $user_id ";
+        }
+
 		$coach_name = " CONCAT(u.lastname , ' ', u.firstname) as coach_name ";
 
 		if (api_is_western_name_order()) {
@@ -366,6 +366,8 @@ class SessionManager
             array(') GROUP BY s.name HAVING session_active = 1 ', " GROUP BY s.name HAVING session_active = 1 " )
             , $options['where']
         );
+
+        $options['where'] = str_replace("(  session_active = ':'  )", '1=1', $options['where']);
 
         $options['where'] = str_replace(
             array("AND session_active = '0'  )", " AND (  session_active = '0'  )"),
@@ -3035,7 +3037,7 @@ class SessionManager
             }
         }
     }
-    
+
     static function protect_teacher_session_edit($id) {
         if (!api_is_coach($id) && !api_is_platform_admin()) {
            api_not_allowed(true);

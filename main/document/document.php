@@ -761,6 +761,7 @@ $documentAndFolders = DocumentManager::get_all_document_data(
     $is_allowed_to_edit || $group_member_with_upload_rights,
     false
 );
+
 $count = 1;
 $jquery = null;
 
@@ -1725,7 +1726,8 @@ $table = new SortableTableFromArrayConfig(
     $tableName,
     $column_show,
     $column_order,
-    'ASC'
+    'ASC',
+    true
 );
 $query_vars = array();
 if (isset($_GET['keyword'])) {

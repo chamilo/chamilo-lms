@@ -421,29 +421,26 @@ if ($is_allowed_to_edit) {
     function updateContentHeight() {
         document.body.style.overflow = 'hidden';
         var IE = window.navigator.appName.match(/microsoft/i);
-        var hauteurHeader = document.getElementById('header').offsetHeight;
-        var hauteurAuthorImg = document.getElementById('author_image').offsetHeight;
-        var hauteurAuthorName = document.getElementById('author_name').offsetHeight;
-        var heightBreadcrumb = document.getElementById('learning_path_breadcrumb_zone').offsetHeight;
-        var control = document.getElementById('control');
-        var heightControl = (control)? control.offsetHeight : 0;
+        var heightHeader = ($('#header').height())? $('#header').height() : 0 ;
+        var heightAuthorImg = ($('#author_image').height())? $('#author_image').height() : 0 ;
+        var heightAuthorName = ($('#author_name').height())? $('#author_name').height() : 0 ;
+        var heightBreadcrumb = ($('#learning_path_breadcrumb_zone').height())? $('#learning_path_breadcrumb_zone').height() : 0 ;
+        var heightControl = ($('#control').is(':visible'))? $('#control').height() : 0 ;
+        var heightMedia = ($('#lp_media_file').length != 0)? $('#lp_media_file').height() : 0 ;
+        var heightTitle = ($('#scorm_title').height())? $('#scorm_title').height() : 0 ;
+        var heightAction = ($('#actions_lp').height())? $('#actions_lp').height() : 0 ;
 
-        var hauteurMedia = 0;
-        if ($("#lp_media_file").length != 0) {
-            hauteurMedia = document.getElementById('lp_media_file').offsetHeight;
-        }
-
-        var hauteurTitre = document.getElementById('scorm_title').offsetHeight;
-        var hauteurAction = 0;
-        if (document.getElementById('actions_lp')) hauteurAction = document.getElementById('actions_lp').offsetHeight;
-        var hauteurHaut = hauteurHeader+hauteurAuthorImg+hauteurAuthorName+hauteurMedia+hauteurTitre+hauteurAction;
-        var innerHauteur = (IE) ? document.body.clientHeight : window.innerHeight ;
-        var debugsize = 0;
+        var heightTop = heightHeader + heightAuthorImg + heightAuthorName + heightMedia + heightTitle + heightAction + 100;
+        heightTop = (heightTop < 230)? heightTop : 230;
+        var innerHeight = (IE) ? document.body.clientHeight : window.innerHeight ;
         // -40 is a static adjustement for margin, spaces on the page
-        <?php if (!empty($_SESSION['oLP']->scorm_debug)) echo 'debugsize = 150;' ?>
-        document.getElementById('inner_lp_toc').style.height = innerHauteur - hauteurHaut - 40 - debugsize + "px";
-        if (document.getElementById('content_id')) {
-            document.getElementById('content_id').style.height = innerHauteur - debugsize - heightBreadcrumb - heightControl + "px";
+
+        $('#inner_lp_toc').css('height', innerHeight - heightTop - heightBreadcrumb - heightControl + "px");
+        if ($('#content_id')) {
+            $('#content_id').css('height', innerHeight - heightBreadcrumb - heightControl + "px");
+        }
+        if ($('#hide_bar')) {
+            $('#hide_bar').css('height', innerHeight - heightBreadcrumb - heightControl + "px");
         }
 
     // Loads the glossary library.
@@ -483,6 +480,9 @@ if ($is_allowed_to_edit) {
   ?>}
     $(document).ready(function() {
         updateContentHeight();
+        $('#hide_bar').children().click(function(){
+            updateContentHeight();
+        });
         $(window).resize(function() {
             updateContentHeight();
         });

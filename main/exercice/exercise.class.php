@@ -1980,14 +1980,17 @@ class Exercise
 
     /**
      * This function was originally found in the exercise_show.php
-     * @param   int     exe id
-     * @param   int     question id
-     * @param   int     the choice the user selected
-     * @param   array   the hotspot coordinates $hotspot[$question_id] = coordinates
-     * @param   string  function is called from 'exercise_show' or 'exercise_result'
-     * @param   bool    save results in the DB or just show the reponse
-     * @param   bool    gets information from DB or from the current selection
-     * @param   bool    show results or not
+     * @param int       $exeId
+     * @param int       $questionId
+     * @param int       $choice the user selected
+     * @param string    $from  function is called from 'exercise_show' or 'exercise_result'
+     * @param array     $exerciseResultCoordinates the hotspot coordinates $hotspot[$question_id] = coordinates
+     * @param bool      $saved_results save results in the DB or just show the reponse
+     * @param bool      $from_database gets information from DB or from the current selection
+     * @param bool      $show_result show results or not
+     * @param int       $propagate_neg
+     * @param array     $hotspot_delineation_result
+     *
      * @todo    reduce parameters of this function
      * @return  string  html code
      */
@@ -2370,7 +2373,7 @@ class Exercise
                     $answer = '';
                     $j = 0;
                     //initialise answer tags
-                    $user_tags = $correct_tags = $real_text = array ();
+                    $user_tags = $correct_tags = $real_text = array();
                     // the loop will stop at the end of the text
                     while (1) {
                         // quits the loop if there are no more blanks (detect '[')
@@ -2394,20 +2397,26 @@ class Exercise
                         }
                         if ($from_database) {
                             $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
-                                          WHERE exe_id = '".$exeId."' AND question_id= '".Database::escape_string($questionId)."'";
+                                          WHERE
+                                            exe_id = '".$exeId."' AND
+                                            question_id= '".Database::escape_string($questionId)."'";
                             $resfill = Database::query($queryfill);
-                            $str = Database::result($resfill,0,'answer');
+                            $str = Database::result($resfill, 0, 'answer');
 
                             api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
                             $str = str_replace('\r\n', '', $str);
                             $choice = $arr[1];
 
-                            $tmp = api_strrpos($choice[$j],' / ');
-                            $choice[$j] = api_substr($choice[$j],0,$tmp);
-                            $choice[$j] = trim($choice[$j]);
+                            if (isset($choice[$j])) {
+                                $tmp = api_strrpos($choice[$j], ' / ');
+                                $choice[$j] = api_substr($choice[$j], 0, $tmp);
+                                $choice[$j] = trim($choice[$j]);
 
-                            //Needed to let characters ' and " to work as part of an answer
-                            $choice[$j] = stripslashes($choice[$j]);
+                                // Needed to let characters ' and " to work as part of an answer
+                                $choice[$j] = stripslashes($choice[$j]);
+                            } else {
+                                $choice[$j] = null;
+                            }
                         } else {
 							// This value is the user input, not escaped while correct answer is escaped by fckeditor
 							$choice[$j] = htmlentities(trim($choice[$j]));
@@ -2422,6 +2431,7 @@ class Exercise
                         $j++;
                         $temp = api_substr($temp, $pos +1);
                     }
+
                     $answer = '';
                     $real_correct_tags = $correct_tags;
                     $chosen_list = array();
@@ -2431,7 +2441,7 @@ class Exercise
                             $answer .= $real_text[0];
                         }
                         if (!$switchable_answer_set) {
-                            //needed to parse ' and " characters
+                            // Needed to parse ' and " characters
                             $user_tags[$i] = stripslashes($user_tags[$i]);
                             if ($correct_tags[$i] == $user_tags[$i]) {
                                 // gives the related weighting to the student
@@ -2440,7 +2450,7 @@ class Exercise
                                 $totalScore += $answerWeighting[$i];
                                 // adds the word in green at the end of the string
                                 $answer .= $correct_tags[$i];
-                            }  elseif (!empty ($user_tags[$i])) {
+                            } elseif (!empty($user_tags[$i])) {
                                 // else if the word entered by the student IS NOT the same as the one defined by the professor
                                 // adds the word in red at the end of the string, and strikes it
                                 $answer .= '<font color="red"><s>' . $user_tags[$i] . '</s></font>';
@@ -2460,8 +2470,7 @@ class Exercise
                                 $totalScore += $answerWeighting[$i];
                                 // adds the word in green at the end of the string
                                 $answer .= $user_tags[$i];
-                            }
-                            elseif (!empty ($user_tags[$i])) {
+                            } elseif (!empty ($user_tags[$i])) {
                                 // else if the word entered by the student IS NOT the same as the one defined by the professor
                                 // adds the word in red at the end of the string, and strikes it
                                 $answer .= '<font color="red"><s>' . $user_tags[$i] . '</s></font>';
@@ -2472,10 +2481,9 @@ class Exercise
                         }
                         // adds the correct word, followed by ] to close the blank
                         $answer .= ' / <font color="green"><b>' . $real_correct_tags[$i] . '</b></font>]';
-                        if (isset ($real_text[$i +1])) {
+                        if (isset($real_text[$i +1])) {
                             $answer .= $real_text[$i +1];
                         }
-
                     }
                     break;
                 // for free answer
@@ -3385,9 +3393,11 @@ class Exercise
 
         if ($saved_results) {
             $stat_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-            $sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . floatval($questionScore) . ' WHERE exe_id = ' . $exeId;
-            if ($debug) error_log($sql_update);
-            Database::query($sql_update);
+            $sql = 'UPDATE ' . $stat_table . ' SET
+                        exe_result = exe_result + ' . floatval($questionScore) . '
+                    WHERE exe_id = ' . $exeId;
+            if ($debug) error_log($sql);
+            Database::query($sql);
         }
 
         $return_array = array(

@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 /**
 *	Exercise result
-*	This script gets informations from the script "exercise_submit.php",
+*	This script gets information from the script "exercise_submit.php",
 *	through the session, and calculates the score of the student for
 *	that exercise.
 *	Then it shows the results on the screen.

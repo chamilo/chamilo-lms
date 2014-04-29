@@ -699,25 +699,26 @@ footer a:link, footer a:visited {
 .new_actions-fixed{
   top: 49px;
 }
-
+.user_login_icon{
+  background: url(images/user_icon.png) no-repeat 5px center;
+}
+.user_password_icon{
+  background: url(images/user_password.png) no-repeat 5px center;
+}
+.form-vertical .controls input.span2{
+  padding-left: 25px;
+}
+/*including "login" image*/
+button.login {
+    background-image:url(images/bg-button.gif);
+}
 /*including "save" image*/
 button.save {
-    background:url(images/accept.png) 0 center no-repeat #F0F0F0;
-    color: #666;
-    text-shadow:none;
-}
-button.save:hover {
-    background:url(images/accept.png) 0 center no-repeat #ffffff;
-    color: #666;
-    text-shadow:none;
+    background-image:url(images/button_accept.png)
 }
 /*including "add" image*/
 .controls .btn.add {
-    background:url(images/add.png) 0 center no-repeat #EC5923;
-    padding-left: 36px;
-}
-.controls .btn.add:hover {
-    background:url(images/add.png) 0 center no-repeat #EA4E15;
+    background-image:url(images/button_plus_green.png);
     padding-left: 36px;
 }
 /*including "cancel" image*/
@@ -726,22 +727,15 @@ button.cancel {
 }
 /*including "search" image*/
 button.search {
-    background:url(images/buttom.png) 0 center no-repeat #F0F0F0;
-    color: #666;
-    text-shadow:none;
-}
-button.search:hover {
-    background:url(images/buttom.png) 0 center no-repeat #ffffff;
-    color: #666;
-    text-shadow:none;
+    background-image:url(images/bg-button.png);
 }
 /*including "plus" image*/
 button.plus {
-    background-image:url(images/button_plus.gif);
+    background-image:url(images/button_plus_blue.png);
 }
 /*including "minus" image*/
 button.minus {
-    background-image:url(images/button_minus.gif);
+    background-image:url(images/button_minus.png);
 }
 /*including "next" image*/
 button.next {

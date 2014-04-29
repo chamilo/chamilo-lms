@@ -849,6 +849,7 @@ class MessageManager
 
         $title = Security::remove_XSS($row['title'], STUDENT, true);
         $content = Security::remove_XSS($row['content'], STUDENT, true);
+
         $from_user = UserManager::get_user_info_by_id($user_sender_id);
         $name = api_get_person_name($from_user['firstname'], $from_user['lastname']);
         $user_image = UserManager::get_picture_user($row['user_sender_id'], $from_user['picture_uri'], 80);

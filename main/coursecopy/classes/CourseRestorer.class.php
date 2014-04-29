@@ -267,23 +267,23 @@ class CourseRestorer
 	    CourseManager::update_attributes($origin_course_info['real_id'], $params);
 	}
 
-	/**
-	 * Restore documents
-     * @param  int session id
+    /**
+     * Restore documents
      *
-	 */
+     * @param int $session_id
+     * @param bool $respect_base_content
+     * @param string $destination_course_code
+     */
     public function restore_documents($session_id = 0, $respect_base_content = false, $destination_course_code = '')
     {
-		$perm = api_get_permissions_for_new_directories();
         $course_info = api_get_course_info($destination_course_code);
-        if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
 
+        if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
 			$table = Database :: get_course_table(TABLE_DOCUMENT);
 			$resources = $this->course->resources;
+            $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 
 			foreach ($resources[RESOURCE_DOCUMENT] as $id => $document) {
-				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
-				//$dirs = explode('/', dirname($document->path));
 
                 if (empty($document->item_properties[0]['id_session'])) {
                     $my_session_id = 0;
@@ -293,26 +293,67 @@ class CourseRestorer
 
 		    	if ($document->file_type == FOLDER) {
 		    		$visibility = $document->item_properties[0]['visibility'];
-		    		if (!empty($document->title))  {
+
+		    		/*if (!empty($document->title))  {
 		    		    $title  = $document->title;
 		    		} else {
 		    		    $title  = basename($document->path);
-		    		}
+		    		}*/
+
 		    		$new = substr($document->path, 8);
 
-		    		if (!is_dir($path.'document'.$new)) {
-						$created_dir = create_unexisting_directory(
-                            $course_info,
-                            api_get_user_id(),
-                            $my_session_id,
-                            0,
-                            0,
-                            $path.'document',
-                            $new,
-                            $title,
-                            $visibility
-                        );
-		    		}
+                    $folderList = explode('/', $new);
+                    $tempFolder = '';
+
+                    // Check if the parent path exists.
+                    foreach ($folderList as $folder) {
+                        $folderToCreate = $tempFolder.$folder;
+                        $sysFolderPath = $path.'document'.$folderToCreate;
+                        $tempFolder .= $folder.'/';
+
+                        if (empty($folderToCreate)) {
+                            continue;
+                        }
+
+                        $title = basename($sysFolderPath);
+                        // File doesn't exist in file system.
+                        if (!is_dir($sysFolderPath)) {
+                            // Creating directory
+                            create_unexisting_directory(
+                                $course_info,
+                                api_get_user_id(),
+                                $my_session_id,
+                                0,
+                                0,
+                                $path.'document',
+                                $folderToCreate,
+                                $title,
+                                $visibility
+                            );
+                        } else {
+                            // File exist in file system.
+                            $documentData = DocumentManager::get_document_id(
+                                $course_info,
+                                $folderToCreate,
+                                $my_session_id
+                            );
+
+                            if (empty($documentData)) {
+                                /* This means the folder exists in the
+                                filesystem but not in the DB, trying to fix it */
+                                add_document(
+                                    $course_info,
+                                    $folderToCreate,
+                                    'folder',
+                                    0,
+                                    $title,
+                                    null,
+                                    null,
+                                    false
+                                );
+                            }
+                        }
+                    }
 		    	} elseif ($document->file_type == DOCUMENT) {
                     //Checking if folder exists in the database otherwise we created it
                     $dir_to_create = dirname($document->path);
@@ -330,7 +371,17 @@ class CourseRestorer
                                 $title      = str_replace('/', '', $new);
 
                                 // This code fixes the possibility for a file without a directory entry to be
-                                $document_id = add_document($course_info, $new, 'folder', 0, $title, null, null, false);
+                                $document_id = add_document(
+                                    $course_info,
+                                    $new,
+                                    'folder',
+                                    0,
+                                    $title,
+                                    null,
+                                    null,
+                                    false
+                                );
+
                                 api_item_property_update(
                                     $course_info,
                                     TOOL_DOCUMENT,
@@ -348,7 +399,6 @@ class CourseRestorer
                     }
 
 					if (file_exists($path.$document->path)) {
-
 						switch ($this->file_option) {
 							case FILE_OVERWRITE :
                                 $origin_path = $this->course->backup_path.'/'.$document->path;
@@ -363,13 +413,13 @@ class CourseRestorer
                                     $count = Database::num_rows($res);
                                     if ($count == 0) {
                                         $sql = "INSERT INTO $table SET
-    												path 		= '/".self::DBUTF8escapestring(substr($document->path, 9))."',
-    												c_id 		= ".$this->destination_course_id.",
-    												comment 	= '".self::DBUTF8escapestring($document->comment)."',
-    												title 		= '".self::DBUTF8escapestring($document->title)."' ,
-    												filetype	='".$document->file_type."',
-    												size		= '".$document->size."',
-    												session_id 	= '$my_session_id'";
+                                                path 		= '/".self::DBUTF8escapestring(substr($document->path, 9))."',
+                                                c_id 		= ".$this->destination_course_id.",
+                                                comment 	= '".self::DBUTF8escapestring($document->comment)."',
+                                                title 		= '".self::DBUTF8escapestring($document->title)."' ,
+                                                filetype	='".$document->file_type."',
+                                                size		= '".$document->size."',
+                                                session_id 	= '$my_session_id'";
                                     	Database::query($sql);
     									$document_id = Database::insert_id();
                                         $this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $document_id;
@@ -396,7 +446,9 @@ class CourseRestorer
 											filetype	='".$document->file_type."',
 											size		= '".$document->size."',
 											session_id 	= '$my_session_id'
-                                            WHERE c_id = ".$this->destination_course_id." AND path = '/".self::DBUTF8escapestring(substr($document->path, 9))."'";
+                                            WHERE
+                                                c_id = ".$this->destination_course_id." AND
+                                                path = '/".self::DBUTF8escapestring(substr($document->path, 9))."'";
                                         Database::query($sql);
                                         $this->course->resources[RESOURCE_DOCUMENT][$id]->destination_id = $obj->id;
                                         api_item_property_update(
@@ -593,13 +645,13 @@ class CourseRestorer
                                         }
 
 										$sql = "INSERT INTO ".$table." SET
-														c_id 		= ".$this->destination_course_id.",
-														path 		= '/".self::DBUTF8escapestring(substr($new_file_name, 9))."',
-														comment 	= '".self::DBUTF8escapestring($document->comment)."',
-														title 		= '".self::DBUTF8escapestring($document->title)."' ,
-														filetype	='".$document->file_type."',
-														size		= '".$document->size."',
-														session_id 	= '$my_session_id'";
+                                                    c_id 		= ".$this->destination_course_id.",
+                                                    path 		= '/".self::DBUTF8escapestring(substr($new_file_name, 9))."',
+                                                    comment 	= '".self::DBUTF8escapestring($document->comment)."',
+                                                    title 		= '".self::DBUTF8escapestring($document->title)."' ,
+                                                    filetype	='".$document->file_type."',
+                                                    size		= '".$document->size."',
+                                                    session_id 	= '$my_session_id'";
 										Database::query($sql);
 
 										$document_id = Database::insert_id();
@@ -638,13 +690,13 @@ class CourseRestorer
                                         }
                                     }
 									$sql = "INSERT INTO ".$table." SET
-												c_id 		= ".$this->destination_course_id.",
-												path 		= '/".self::DBUTF8escapestring(substr($new_file_name, 9))."',
-												comment 	= '".self::DBUTF8escapestring($document->comment)."',
-												title 		= '".self::DBUTF8escapestring($document->title)."' ,
-												filetype	='".$document->file_type."',
-												size		= '".$document->size."',
-												session_id 	= '$my_session_id'";
+                                                c_id 		= ".$this->destination_course_id.",
+                                                path 		= '/".self::DBUTF8escapestring(substr($new_file_name, 9))."',
+                                                comment 	= '".self::DBUTF8escapestring($document->comment)."',
+                                                title 		= '".self::DBUTF8escapestring($document->title)."' ,
+                                                filetype	='".$document->file_type."',
+                                                size		= '".$document->size."',
+                                                session_id 	= '$my_session_id'";
 									Database::query($sql);
 
 									$document_id = Database::insert_id();
@@ -668,7 +720,11 @@ class CourseRestorer
 					} else {
 					    // end if file exists
 						//make sure the source file actually exists
-						if (is_file($this->course->backup_path.'/'.$document->path) && is_readable($this->course->backup_path.'/'.$document->path) && is_dir(dirname($path.$document->path)) && is_writeable(dirname($path.$document->path))) {
+						if (is_file($this->course->backup_path.'/'.$document->path) &&
+                            is_readable($this->course->backup_path.'/'.$document->path) &&
+                            is_dir(dirname($path.$document->path)) &&
+                            is_writeable(dirname($path.$document->path))
+                        ) {
 						    //echo 'Copying';
 							copy($this->course->backup_path.'/'.$document->path, $path.$document->path);
 
@@ -714,13 +770,13 @@ class CourseRestorer
                             );
 						} else {
 						    //echo 'not Copying';
-							if(is_file($this->course->backup_path.'/'.$document->path) && is_readable($this->course->backup_path.'/'.$document->path)) {
+							if (is_file($this->course->backup_path.'/'.$document->path) && is_readable($this->course->backup_path.'/'.$document->path)) {
 								error_log('Course copy generated an ignoreable error while trying to copy '.$this->course->backup_path.'/'.$document->path.': file not found');
 							}
-							if(!is_dir(dirname($path.$document->path))) {
+							if (!is_dir(dirname($path.$document->path))) {
 								error_log('Course copy generated an ignoreable error while trying to copy to '.dirname($path.$document->path).': directory not found');
 							}
-							if(!is_writeable(dirname($path.$document->path))) {
+							if (!is_writeable(dirname($path.$document->path))) {
 								error_log('Course copy generated an ignoreable error while trying to copy to '.dirname($path.$document->path).': directory not writeable');
 							}
 						}
@@ -746,7 +802,7 @@ class CourseRestorer
 		if ($this->course->has_resources(RESOURCE_SCORM)) {
 			$resources = $this->course->resources;
 
-			foreach ($resources[RESOURCE_SCORM] as $id => $document) {
+			foreach ($resources[RESOURCE_SCORM] as $document) {
 				$path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
 
 				@mkdir(dirname($path.$document->path), $perm, true);

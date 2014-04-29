@@ -773,7 +773,15 @@ footer a:link, footer a:visited {
 #bottomhellomindfactory {    
     background:transparent url('images/textologo.jpg') no-repeat;
 }
-
+.user_login_icon{
+  background: url(images/user_icon.png) no-repeat 5px center;
+}
+.user_password_icon{
+  background: url(images/user_password.png) no-repeat 5px center;
+}
+.form-vertical .controls input.span2{
+  padding-left: 25px;
+}
 /*including "login" image*/
 button.login {
     background-image:url(images/bg-button.gif);

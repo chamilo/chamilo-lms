@@ -468,12 +468,12 @@ class Plugin
     {
 
     }
-
-    /**
-     * Add a tab to chamilo's platform
-     * @param string $tabName
-     * @return int
-     */
+   /**
+    * Add a tab to platform
+    * @param strings $tabName
+    * @param string $url
+    * @return boolean
+    */
     public function addTab($tabName, $url)
     {
         $sql = "SELECT *
@@ -481,8 +481,9 @@ class Plugin
                 WHERE variable = 'show_tabs'
                 AND subkey like 'custom_tab_%'";
         $result = Database::query($sql);
-        $customTabsNum = Database::count_rows($result);
-
+        
+        $customTabsNum = Database::num_rows($result);
+        
         $tabNum = $customTabsNum + 1;
 
         //Avoid Tab Name Spaces
@@ -524,28 +525,30 @@ class Plugin
      */
     public function deleteTab($key)
     {
-        $sql = "SELECT *
+        $sql = "SELECT * 
                 FROM settings_current
                 WHERE variable = 'show_tabs'
-                AND subkey <> '$key'";
+                AND subkey <> '$key'
+                AND subkey like 'custom_tab_%'
+                ";
         $resp = $result = Database::query($sql);
-        $customTabsNum = Database::count_rows($result);
-
+        $customTabsNum = Database::num_rows($result);
+     
         if (!empty($key)) {
             $whereCondition = array(
                 'variable = ? AND subkey = ?' => array('show_tabs', $key)
             );
-            Database::delete('settings_current', $whereCondition);
+            $resp = Database::delete('settings_current', $whereCondition);
 
             //if there is more than one tab
-            //re enumerate them
-            if ($customTabsNum > 0) {
+            //reenumerate them
+            if (!empty($customTabsNum) && $customTabsNum > 0) {
                 $i = 1;
-                while ($row = Database::fetch_assoc($result)) {
+                foreach ($tabs as $row) {
                     $attributes = array(
                         'subkey' => 'custom_tab_' . $i
                     );
-                    $resp = $this->updateTab($row['subkey'], $attributes);
+                    $this->updateTab($row['subkey'], $attributes);
                     $i++;
                 }
             }
@@ -557,7 +560,8 @@ class Plugin
     /**
      * Update the tabs attributes
      * @param string $key
-     * @param array $attributes
+     * @param array  $attributes
+     *
      * @return boolean
      */
     public function updateTab($key, $attributes)
@@ -566,81 +570,7 @@ class Plugin
             'variable = ? AND subkey = ?' => array('show_tabs', $key)
         );
         $resp = Database::update('settings_current', $attributes, $whereCondition);
-        return $resp;
-    }
-
-    /**
-     * Add additional plugin Settings
-     * @param array $settings
-     * @return bool
-     */
-    public function addExtraSettings($settings)
-    {
-        $pluginName = $this->get_name();
-        $resp = false;
-        foreach ($settings as $setting => $value) {
-            $attributes = array(
-                'variable' => 'plugin_settings_' . $pluginName,
-                'subkey' => $setting,
-                'selected_value' => $value,
-                'category' => 'PluginSettings'
-            );
-            $valueSetting = $this->getExtraSettingValue($setting);
-            if (empty($valueSetting)) {
-                $resp = Database::insert('settings_current', $attributes);
-            }
-        }
 
         return $resp;
-    }
-
-    /**
-     * Edit additional Plugin Settings
-     * @param array $settings
-     * @return bool
-     */
-    public function editExtraSetting($key, $attributes)
-    {
-        $pluginName = $this->get_name();
-
-        $whereCondition = array(
-            'variable = ? AND subkey = ?' => array('plugin_settings_' . $pluginName, $key)
-        );
-
-        $resp = Database::update('settings_current', $attributes, $whereCondition);
-
-        return $resp;
-    }
-
-    /**
-     * Delete all additional plugin settings
-     */
-    public function deleteExtraSettings()
-    {
-        $pluginName = $this->get_name();
-        $whereCond = array(
-            'variable = ?' => 'plugin_settings_' . $pluginName
-        );
-        $resp = Database::delete('settings_current', $whereCond);
-
-        return $resp;
-    }
-
-    /**
-     * Give extra setting value
-     * @param string $settingName
-     * @return string
-     */
-    public function getExtraSettingValue($settingName)
-    {
-        $pluginName = $this->get_name();
-        $fullSetting = api_get_full_setting('plugin_settings_' . $pluginName, $settingName);
-
-        if (empty($fullSetting)) {
-            return false;
-        } else {
-            $setting = current($fullSetting);
-            return $setting['selected_value'];
-        }
     }
 }

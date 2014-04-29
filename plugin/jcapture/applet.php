@@ -61,16 +61,16 @@
             pageName = "<?php echo $pageName; ?>" \
             edid = "<?php echo $edid; ?>" \
             host ="<?php echo $hostName; ?>" ' +
-	    'scriptable=false ' +
+	    'scriptable=true ' +
 	    'pluginspage="http://java.sun.com/products/plugin/index.html#download"><xmp>');
 //--></script>
-<applet id="jCaptureApplet" CODE = "com.hammurapi.jcapture.JCaptureApplet.class" WIDTH="1" HEIGHT="1" ARCHIVE = "<?php echo DOKU_BASE; ?>lib/plugins/jcapture/lib/jcapture.jar" NAME = "jCapture"></xmp>
+<applet id="jCaptureApplet" CODE = "com.hammurapi.jcapture.JCaptureApplet.class" WIDTH="1" HEIGHT="1" ARCHIVE = "<?php echo DOKU_BASE; ?>/lib/plugins/jcapture/lib/jcapture.jar" NAME = "jCapture"></xmp>
     <PARAM NAME = CODE VALUE = "com.hammurapi.jcapture.JCaptureApplet.class" >
     <PARAM NAME = ARCHIVE VALUE = "<?php echo DOKU_BASE; ?>lib/plugins/jcapture/lib/jcapture.jar" >
     <PARAM NAME = NAME VALUE = "jCapture" >
-    <param name="type" value="application/x-java-applet;jpi-version=1.7.0">
-    <param name="scriptable" value="true">
-    <param name="mayscript" value="true">
+    <PARAM NAME="type" value="application/x-java-applet;jpi-version=1.7.0">
+    <PARAM NAME="scriptable" value="true">
+    <PARAM NAME="mayscript" value="true">
     <PARAM NAME = "dokuBase" VALUE="<?php echo bin2hex(DOKU_BASE); ?>">
     <PARAM NAME = "sectok" VALUE="<?php echo getSecurityToken(); ?>">
     <PARAM NAME = "cookies" VALUE="<?php echo $cookies; ?>">
@@ -87,7 +87,7 @@ Java 2 Standard Edition v 1.7 or above is required for this applet.<br/>
 </object>
 
 <!--
-<APPLET CODE = "com.hammurapi.jcapture.JCaptureApplet.class" ARCHIVE = "<?php echo DOKU_BASE; ?>lib/plugins/jcapture/lib/jcapture.jar" NAME = "jCapture">
+<APPLET CODE = "com.hammurapi.jcapture.JCaptureApplet.class" ARCHIVE = "<?php echo DOKU_BASE; ?>/lib/plugins/jcapture/lib/jcapture.jar" NAME = "jCapture">
 <PARAM NAME = "dokuBase" VALUE="<?php echo bin2hex(DOKU_BASE); ?>">
 <PARAM NAME = "sectok" VALUE="<?php echo getSecurityToken(); ?>">
 <PARAM NAME = "cookies" VALUE="<?php echo $cookies; ?>">

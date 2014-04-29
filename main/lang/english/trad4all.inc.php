@@ -2,6 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CatchScreenCasts = "Capture screenshot/screencast";
+$View = "View";
+$AmountSubmitted = "Number submitted";
 $InstallWarningCouldNotInterpretPHP = "Warning: the installer detected an error while trying to reach the test file at %s. It looks like the PHP script could not be interpreted. This could be a warning sign for future problems when creating courses. Please check the installation guide for more information about permissions. If you are installing a site with a URL that doesn't resolve yet, you can probably ignore this message.";
 $BeforeX = "Before %s";
 $AfterX = "After %s";

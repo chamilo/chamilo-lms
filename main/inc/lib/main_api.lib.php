@@ -977,6 +977,20 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
 }
 
 /**
+ * Function used to protect a teacher script.
+ * The function blocks access when the user has no teacher rights.
+ *
+ * @author Yoselyn Castillo
+ */
+function api_protect_teacher_script($allow_sessions_admins = false) {
+    if (!api_is_allowed_to_edit()) {
+        api_not_allowed(true);
+        return false;
+    }
+    return true;
+}
+
+/**
  * Function used to prevent anonymous users from accessing a script.
  *
  * @author Roan Embrechts

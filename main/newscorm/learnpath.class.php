@@ -3179,6 +3179,7 @@ class learnpath
                         require_once 'resourcelinker.inc.php';
                         $file = rl_get_resource_link_for_learnpath($course_id, $this->get_id(), $item_id);
 
+
                         if ($this->debug > 0) {
                             error_log('rl_get_resource_link_for_learnpath - file: ' . $file, 0);
                         }

@@ -1,13 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Include file with functions for the announcements module.
- * @package chamilo.announcements
- * @todo use OOP
+
  */
 
 /**
+ * Include file with functions for the announcements module.
  * @author jmontoya
+ * @package chamilo.announcements
+ * @todo use OOP
  *
  */
 class AnnouncementManager
@@ -35,8 +36,10 @@ class AnnouncementManager
     }
 
     /**
-     * @param string $content
-     * @param string $course_code
+     * @param int       $userId
+     * @param string    $content
+     * @param string    $course_code
+     *
      * @return mixed
      */
     public static function parse_content($userId, $content, $course_code)
@@ -53,6 +56,7 @@ class AnnouncementManager
                 break;
             }
         }
+
         $courseLink = api_get_course_url();
         $data['user_name'] = $readerInfo['username'];
         $data['user_firstname'] = $readerInfo['firstname'];
@@ -92,7 +96,6 @@ class AnnouncementManager
 				ORDER BY display_order DESC";
         $rs = Database::query($sql);
         $num_rows = Database::num_rows($rs);
-        $result = array();
         if ($num_rows > 0) {
             $list = array();
             while ($row = Database::fetch_array($rs)) {
@@ -119,13 +122,14 @@ class AnnouncementManager
         } else {
             api_item_property_update($_course, TOOL_ANNOUNCEMENT, $id, 'visible', api_get_user_id());
         }
+
         return true;
     }
 
     /**
      * Deletes an announcement
-     * @param array the course array
-     * @param int 	the announcement id
+     * @param array $_course the course array
+     * @param int 	$id the announcement id
      */
     public static function delete_announcement($_course, $id)
     {
@@ -134,7 +138,7 @@ class AnnouncementManager
 
     /**
      * Deletes all announcements by course
-     * @param array the course array
+     * @param array $_course the course array
      */
     public static function delete_all_announcements($_course)
     {
@@ -746,10 +750,6 @@ class AnnouncementManager
         echo "</select>";
     }
 
-    /*
-      DATA FUNCTIONS
-     */
-
     /**
      * Returns announcement info from its id
      *
@@ -782,7 +782,7 @@ class AnnouncementManager
     /**
      * this function gets all the users of the course,
      * including users from linked courses
-     * @todo deprecate this function, use CourseManager class
+     * @deprecate use CourseManager class
      */
     public static function get_course_users()
     {

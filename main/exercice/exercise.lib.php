@@ -176,8 +176,17 @@ function showQuestion($questionId, $only_questions = false, $origin = false, $cu
 
         if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE || $answerType ==  MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
             $header = Display::tag('th', get_lang('Options'));
-            foreach ($objQuestionTmp->options as $key=>$item) {
-                $header .= Display::tag('th', $item);
+            foreach ($objQuestionTmp->options as $item) {
+                if ($answerType == MULTIPLE_ANSWER_TRUE_FALSE) {
+                    if (in_array($item, $objQuestionTmp->options)) {
+                        $header .= Display::tag('th', get_lang($item));
+                    } else {
+                        $header .= Display::tag('th', $item);
+                    }
+                } else {
+                    $header .= Display::tag('th', $item);
+                }
+
             }
             if ($show_comment) {
                 $header .= Display::tag('th', get_lang('Feedback'));

@@ -77,10 +77,22 @@ public abstract class AbstractCaptureApplet extends JApplet {
 	private Collection<Closeable> closeables = new ArrayList<Closeable>();
 
 	public void showCaptureFrame() {
-		if (captureFrame==null) {
-			createCaptureFrame();
-		}
-		captureFrame.setVisible(true);
+		System.out.println("Showing capture frame");
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				try {
+					if (captureFrame==null) {
+						createCaptureFrame();
+					}
+					captureFrame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+			
+		});
 	}
 	
 	private ExecutorService backgroundProcessor;
@@ -105,6 +117,7 @@ public abstract class AbstractCaptureApplet extends JApplet {
 			public void run() {
 				createCaptureFrame();
 			}
+			
 		});
 		
 		try {

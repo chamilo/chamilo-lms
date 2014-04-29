@@ -326,8 +326,7 @@ if ($export_csv) {
     );
 
     $form = new FormValidator('search_user', 'get', api_get_path(WEB_CODE_PATH).'mySpace/student.php');
-    $form->addElement('text', 'keyword', get_lang('User'));
-    $form->addElement('button', 'submit', get_lang('Search'));
+    $form = Tracking::setUserSearchForm($form);
     $form->display();
 
     // html part

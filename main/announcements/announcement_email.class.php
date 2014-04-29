@@ -49,6 +49,7 @@ class AnnouncementEmail
      * Course info
      *
      * @param string $key
+     *
      * @return array
      */
     public function course($key = '')
@@ -176,6 +177,7 @@ class AnnouncementEmail
 
         //Clean users just in case
         $new_list_users = array();
+
         if (!empty($users)) {
             foreach ($users as $user) {
                 $new_list_users[$user['user_id']] = array('user_id' => $user['user_id']);
@@ -188,9 +190,11 @@ class AnnouncementEmail
      * Sender info
      *
      * @param string $key
+     *
      * @return array
      */
-    public function sender($key = '') {
+    public function sender($key = '')
+    {
         global $_user;
         return $key ? $_user[$key] : $_user;
     }
@@ -204,19 +208,19 @@ class AnnouncementEmail
     {
         $result = $this->course('title').' - '.$this->announcement('title');
         $result = stripslashes($result);
+
         return $result;
     }
 
     /**
      * Email message
      * @param int $receiverUserId
+     *
      * @return string
      */
     public function message($receiverUserId)
     {
-        $title = $this->announcement('title');
-        $title = stripslashes($title);
-
+        //$title = $this->announcement('title');
         $content = $this->announcement('content');
         $content = stripslashes($content);
         $content = AnnouncementManager::parse_content($receiverUserId, $content, $this->course('code'));
@@ -231,13 +235,17 @@ class AnnouncementEmail
         $attachment = $this->attachement();
         if (!empty($attachment)) {
             $result .= '<br />';
-            $result .= Display::url($attachment['filename'], api_get_path(WEB_CODE_PATH).'announcements/download.php?file='.basename($attachment['path']).'&'.$course_param).'<br />';
+            $result .= Display::url(
+                $attachment['filename'],
+                api_get_path(WEB_CODE_PATH).'announcements/download.php?file='.basename($attachment['path']).'&'.$course_param
+            ).'<br />';
         }
 
         $result .= '<hr />';
         $sender_name = api_get_person_name($this->sender('firstName'), $this->sender('lastName'), PERSON_NAME_EMAIL_ADDRESS);
         $result .= '<a href="mailto:'.$user_email.'">'.$sender_name.'</a><br/>';
         $result .= '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.$course_param.'">'.$course_name.'</a><br/>';
+
         return $result;
     }
 
@@ -262,6 +270,7 @@ class AnnouncementEmail
         }
 
         $result = $result ? reset($result) : array();
+
         return $result;
     }
 
@@ -297,7 +306,8 @@ class AnnouncementEmail
         $course_id = $this->course('id');
 
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
-        $sql = "UPDATE $tbl_announcement SET email_sent=1 WHERE c_id = $course_id AND id=$id AND session_id = {$this->session_id} ";
+        $sql = "UPDATE $tbl_announcement SET email_sent=1
+                WHERE c_id = $course_id AND id=$id AND session_id = {$this->session_id} ";
         Database::query($sql);
     }
 }

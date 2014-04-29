@@ -444,7 +444,7 @@ class SortableTable extends HTML_Table
      * @param array      options of visibility
      * @param bool       hide navigation optionally
      * @param int        content per page when show navigation (optional)
-     * @param bool         sort data optionally
+     * @param bool       sort data optionally
      * @return string    grid html
      */
     public function display_simple_grid($visibility_options, $hide_navigation = true, $per_page = 20, $sort_data = true, $grid_class = array())
@@ -986,8 +986,8 @@ class SortableTableFromArrayConfig extends SortableTable
         $default_column = 1,
         $default_items_per_page = 20,
         $tablename = 'tablename',
-        $column_show = null,
-        $column_order = null,
+        $column_show = array(),
+        $column_order = array(),
         $direction = 'ASC',
         $doc_filter = false
     ) {
@@ -1009,7 +1009,15 @@ class SortableTableFromArrayConfig extends SortableTable
         $direction = null,
         $sort = true
     ) {
-        $content = TableSort::sort_table_config($this->table_data, $this->column, $this->direction == 'ASC' ? SORT_ASC : SORT_DESC, $this->column_show, $this->column_order, SORT_REGULAR, $this->doc_filter);
+        $content = TableSort::sort_table_config(
+            $this->table_data,
+            $this->column,
+            $this->direction == 'ASC' ? SORT_ASC : SORT_DESC,
+            $this->column_show,
+            $this->column_order,
+            SORT_REGULAR,
+            $this->doc_filter
+        );
         return array_slice($content, $from, $this->per_page);
     }
 

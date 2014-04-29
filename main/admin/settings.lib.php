@@ -82,7 +82,7 @@ function handle_regions()
             echo '</td><td>';
             $selected_plugins = $plugin_obj->get_areas_by_plugin($plugin);
 
-            if ($plugin_info['is_course_plugin']) {
+            if (isset($plugin_info['is_course_plugin']) && $plugin_info['is_course_plugin']) {
                 $region_list = array('course_tool_plugin' => 'course_tool_plugin');
             } else {
                 $region_list = $plugin_region_list;

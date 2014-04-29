@@ -98,6 +98,7 @@ class TableSort
         if (!is_array($data) || empty($data)) {
             return array();
         }
+
         if ($column != strval(intval($column))) {
             // Probably an attack
             return $data;
@@ -125,7 +126,7 @@ class TableSort
             }
         }
 
-        //This fixs only works in the document tool when ordering by name
+        //This fixes only works in the document tool when ordering by name
         if ($doc_filter && in_array($type, array(SORT_STRING))) {
             $folder_to_sort = array();
             $new_data = array();
@@ -138,21 +139,23 @@ class TableSort
                     }
                     $new_data[$document['id']] = $document;
                 }
+
                 if ($direction == SORT_ASC) {
-                    if (!empty($docs_to_sort)) {
-                        api_natrsort($docs_to_sort);
-                    }
-                    if (!empty($folder_to_sort)) {
-                        api_natrsort($folder_to_sort);
-                    }
-                } else {
                     if (!empty($docs_to_sort)) {
                         api_natsort($docs_to_sort);
                     }
                     if (!empty($folder_to_sort)) {
                         api_natsort($folder_to_sort);
                     }
+                } else {
+                    if (!empty($docs_to_sort)) {
+                        api_natrsort($docs_to_sort);
+                    }
+                    if (!empty($folder_to_sort)) {
+                        api_natrsort($folder_to_sort);
+                    }
                 }
+
                 $new_data_order = array();
                 if (!empty($docs_to_sort)) {
                     foreach($docs_to_sort as $id => $document) {
@@ -161,6 +164,7 @@ class TableSort
                         }
                     }
                 }
+
                 if (!empty($folder_to_sort)) {
                     foreach($folder_to_sort as $id => $document) {
                         if (isset($new_data[$id])) {

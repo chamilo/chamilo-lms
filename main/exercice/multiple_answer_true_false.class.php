@@ -1,46 +1,43 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Code
- */
-/**
  * Class MultipleAnswerTrueFalse
  * This class allows to instantiate an object of type MULTIPLE_ANSWER
  * (MULTIPLE CHOICE, MULTIPLE ANSWER), extending the class question
- * @author Julio Montoya
+ * @author  Julio Montoya
+ *
  * @package chamilo.exercise
  */
-class MultipleAnswerTrueFalse extends Question {
-
+class MultipleAnswerTrueFalse extends Question
+{
 	static $typePicture = 'mcmao.gif';
 	static $explanationLangVar = 'MultipleAnswerTrueFalse';
-    var    $options;
+    public $options;
+
 	/**
 	 * Constructor
 	 */
-	function MultipleAnswerTrueFalse(){
+	public function MultipleAnswerTrueFalse()
+    {
 		parent::question();
 		$this->type = MULTIPLE_ANSWER_TRUE_FALSE;
 		$this->isContent = $this-> getIsContent();
-        $this->options = array(1=>get_lang('True'),2 =>get_lang('False'), 3 =>get_lang('DoubtScore'));
+        $this->options = array(1 => 'True', 2 => 'False', 3 => 'DoubtScore');
 	}
 
 	/**
-	 * function which redifines Question::createAnswersForm
-	 * @param the formvalidator instance
-	 * @param the answers number to display
+	 * function which redefines Question::createAnswersForm
+	 * @param FormValidator $form
 	 */
-	function createAnswersForm ($form) {
-
-		$nb_answers  = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;  // The previous default value was 2. See task #1759.
+    public function createAnswersForm($form)
+    {
+		$nb_answers  = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;
+		// The previous default value was 2. See task #1759.
 		$nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
         $course_id = api_get_course_int_id();
-
 		$obj_ex = $_SESSION['objExercise'];
-
         $renderer = & $form->defaultRenderer();
-
         $defaults = array();
 
 		$html = '<table class="data_table">
@@ -62,7 +59,7 @@ class MultipleAnswerTrueFalse extends Question {
             $html .='<th>'.get_lang('Comment').'</th>';
         }
         $html .= '</tr>';
-        $form -> addElement ('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
+        $form -> addElement('label', get_lang('Answers').'<br /> <img src="../img/fill_field.png">', $html);
 
 		$correct = 0;
         $answer = null;
@@ -101,18 +98,16 @@ class MultipleAnswerTrueFalse extends Question {
 				//$defaults['weighting['.$i.']']  = float_format($answer -> weighting[$i], 1);
 
                 $correct = $answer->correct[$i];
-
                 $defaults['correct['.$i.']']    = $correct;
 
                 $j = 1;
                 if (!empty($option_data)) {
-                    foreach ($option_data as $id=>$data) {
+                    foreach ($option_data as $id => $data) {
                         $form->addElement('radio', 'correct['.$i.']', null, null, $id);
                         $j++;
                         if ($j == 3) {
                         	break;
                         }
-
                     }
                 }
 			} else {
@@ -124,10 +119,7 @@ class MultipleAnswerTrueFalse extends Question {
                 $defaults['correct['.$i.']']    = '';
 			}
 
-            //$form->addElement('select', 'correct['.$i.']',null, $this->options, array('id'=>$i,'onchange'=>'multiple_answer_true_false_onchange(this)'));
-
 			$boxes_names[] = 'correct['.$i.']';
-
 			$form->addElement('html_editor', 'answer['.$i.']',null, 'style="vertical-align:middle"', array('ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100'));
 			$form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
@@ -170,8 +162,6 @@ class MultipleAnswerTrueFalse extends Question {
             }
         }
 
-		//$form -> add_multiple_required_rule ($boxes_names , get_lang('ChooseAtLeastOneCheckbox') , 'multiple_required');
-
 		$navigator_info = api_get_navigator();
 
 		global $text, $class;
@@ -206,13 +196,12 @@ class MultipleAnswerTrueFalse extends Question {
 		$form->setConstants(array('nb_answers' => $nb_answers));
 	}
 
-
 	/**
 	 * abstract function which creates the form to create / edit the answers of the question
-	 * @param the formvalidator instance
-	 * @param the answers number to display
+	 * @param FormValidator $form
 	 */
-	function processAnswersCreation($form) {
+    public function processAnswersCreation($form)
+    {
 		$questionWeighting = $nbrGoodAnswers = 0;
 		$objAnswer        = new Answer($this->id);
 		$nb_answers       = $form->getSubmitValue('nb_answers');
@@ -221,7 +210,6 @@ class MultipleAnswerTrueFalse extends Question {
 
         $correct = array();
         $options = Question::readQuestionOption($this->id, $course_id);
-
 
         if (!empty($options)) {
             foreach ($options as $option_data) {
@@ -236,7 +224,9 @@ class MultipleAnswerTrueFalse extends Question {
             }
         }
 
-        //Getting quiz_question_options (true, false, doubt) because it's possible that there are more options in the future
+        /* Getting quiz_question_options (true, false, doubt) because
+        it's possible that there are more options in the future */
+
         $new_options = Question::readQuestionOption($this->id, $course_id);
 
         $sorted_by_position = array();
@@ -244,7 +234,9 @@ class MultipleAnswerTrueFalse extends Question {
         	$sorted_by_position[$item['position']] = $item;
         }
 
-        //Saving quiz_question.extra values that has the correct scores of the true, false, doubt options registered in this format XX:YY:ZZZ where XX is a float score value
+        /* Saving quiz_question.extra values that has the correct scores of
+        the true, false, doubt options registered in this format
+        XX:YY:ZZZ where XX is a float score value.*/
         $extra_values = array();
         for ($i=1 ; $i <= 3 ; $i++) {
             $score = trim($form -> getSubmitValue('option['.$i.']'));
@@ -264,16 +256,22 @@ class MultipleAnswerTrueFalse extends Question {
         	$objAnswer->createAnswer($answer, $goodAnswer, $comment,'',$i);
         }
 
-
     	// saves the answers into the data base
-        $objAnswer -> save();
+        $objAnswer->save();
 
         // sets the total weighting of the question
-        $this -> updateWeighting($questionWeighting);
-        $this -> save();
+        $this->updateWeighting($questionWeighting);
+        $this->save();
 	}
 
-	function return_header($feedback_type = null, $counter = null, $score = null) {
+    /**
+     * @param int $feedback_type
+     * @param int $counter
+     * @param float $score
+     * @return null|string
+     */
+    function return_header($feedback_type = null, $counter = null, $score = null)
+    {
         $header = parent::return_header($feedback_type, $counter, $score);
   	    $header .= '<table class="'.$this->question_table_class .'">
 		<tr>

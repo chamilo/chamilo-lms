@@ -285,7 +285,7 @@ class GroupManager
         $course_id = api_get_course_int_id();
         $table_group = Database::get_course_table(TABLE_GROUP);
         $category_id = self::create_category(
-            'Subgroups',
+            get_lang('Subgroups'),
             '',
             self::TOOL_PRIVATE,
             self::TOOL_PRIVATE,
@@ -299,7 +299,7 @@ class GroupManager
 
         for ($group_nr = 1; $group_nr <= $number_of_groups; $group_nr ++) {
             $group_ids[] = self::create_group(
-                'SUBGROUP '.$group_nr,
+                get_lang('Subgroup').' '.$group_nr,
                 $category_id,
                 0,
                 0

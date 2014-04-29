@@ -349,7 +349,9 @@ class CourseRestorer
                                     $title,
                                     null,
                                     null,
-                                    false
+                                    false,
+                                    null,
+                                    $my_session_id
                                 );
                             }
                         }

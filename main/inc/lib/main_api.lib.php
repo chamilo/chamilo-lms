@@ -221,16 +221,6 @@ define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 define('USERNAME_PURIFIER_MAIL', '/[^0-9A-Za-z_\.@]/');
 define('USERNAME_PURIFIER_SHALLOW', '/\s/');
 
-// Constants for detection some important PHP5 subversions.
-$php_version = (float) PHP_VERSION;
-
-define('IS_PHP_52', !((float)$php_version < 5.2));
-define('IS_PHP_53', !((float)$php_version < 5.3));
-
-define('IS_PHP_SUP_OR_EQ_53', ($php_version >= 5.3));
-define('IS_PHP_SUP_OR_EQ_52', ($php_version >= 5.2 && !IS_PHP_53));
-define('IS_PHP_SUP_OR_EQ_51', ($php_version >= 5.1 && !IS_PHP_52 && !IS_PHP_53));
-
 // This constant is a result of Windows OS detection, it has a boolean value:
 // true whether the server runs on Windows OS, false otherwise.
 define('IS_WINDOWS_OS', api_is_windows_os());
@@ -7222,20 +7212,20 @@ function api_get_origin()
 function api_get_full_setting($variable, $key = null) {
     $variable = Database::escape_string($variable);
     $sql = "SELECT *
-            FROM settings_current 
+            FROM settings_current
             WHERE variable = '$variable' ";
-    
+
     if (!empty($key)) {
         $key = Database::escape_string($key);
         $sql .= "AND subkey = '$key'";
     }
-    
+
     $result = Database::query($sql);
     $setting = array();
-    
+
     while ($row = Database::fetch_assoc($result)) {
         $setting[] = $row;
     }
-    
+
     return $setting;
 }

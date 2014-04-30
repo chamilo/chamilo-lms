@@ -93,12 +93,8 @@ class GroupManager
 
         //condition for the session
         $session_id = api_get_session_id();
-        $my_status_of_user_in_course = CourseManager::get_user_in_course_status($my_user_id, $course_info['code']);
 
-        // COURSEMANAGER or STUDENT
-        if ($my_status_of_user_in_course == COURSEMANAGER || api_is_allowed_to_edit(null, true) || api_is_drh()) {
-            $can_see_groups = 1;
-            $sql = "SELECT g.id,
+        $sql = "SELECT g.id,
                         g.name,
                         g.description,
                         g.category_id,
@@ -110,26 +106,12 @@ class GroupManager
                         ug.user_id is_member
                     FROM $table_group g
                     LEFT JOIN $table_group_user ug
-                    ON (ug.group_id = g.id AND ug.user_id = '".api_get_user_id()."' AND ug.c_id = $course_id AND g.c_id = $course_id)";
-        } elseif ($my_status_of_user_in_course == STUDENT || $_SESSION['studentview'] == 'studentview') {
-            $can_see_groups = 1;
-
-            $sql = "SELECT g.id,
-                        g.name,
-                        g.description,
-                        g.category_id,
-                        g.max_student maximum_number_of_members,
-                        g.secret_directory,
-                        g.self_registration_allowed,
-                        g.self_unregistration_allowed,
-                        g.session_id,
-                        ug.user_id is_member
-                    FROM $table_group g
-                    LEFT JOIN $table_group_user ug
-                    ON (ug.group_id = g.id AND ug.user_id = '".api_get_user_id()."' AND ug.c_id = $course_id AND g.c_id = $course_id)";
-        } else {
-            return array();
-        }
+                    ON (
+                        ug.group_id = g.id AND
+                        ug.user_id = '".api_get_user_id()."' AND
+                        ug.c_id = $course_id AND
+                        g.c_id = $course_id
+                    )";
 
         $sql .= " WHERE 1=1 ";
 
@@ -150,17 +132,12 @@ class GroupManager
         }
         $sql .= " GROUP BY g.id ORDER BY UPPER(g.name)";
 
-        if ($can_see_groups == 1) {
-            $groupList = Database::query($sql);
-        } else {
-            return array();
-        }
+        $groupList = Database::query($sql);
 
         $groups = array();
         while ($thisGroup = Database::fetch_array($groupList)) {
             $thisGroup['number_of_members'] = count(self::get_subscribed_users($thisGroup['id']));
-
-            if ($thisGroup['session_id']!=0) {
+            if ($thisGroup['session_id'] != 0) {
                 $sql = 'SELECT name FROM '.Database::get_main_table(TABLE_MAIN_SESSION).'
                         WHERE id='.$thisGroup['session_id'];
                 $rs_session = Database::query($sql);
@@ -2116,7 +2093,6 @@ class GroupManager
                     self::user_has_access($user_id, $this_group['id'], self::GROUP_TOOL_WIKI))
                 && !(api_is_course_coach() && intval($this_group['session_id']) != $session_id)
             ) {
-
                 $group_name = '<a href="group_space.php?cidReq='.api_get_course_id().'&amp;origin='.$orig.'&amp;gidReq='.$this_group['id'].'">'.
                     Security::remove_XSS($this_group['name']).'</a> ';
                 if (!empty($user_id) && !empty($this_group['id_tutor']) && $user_id == $this_group['id_tutor']) {
@@ -2200,7 +2176,6 @@ class GroupManager
             }
             $group_data[] = $row;
         } // end loop
-
 
         $table = new SortableTableFromArrayConfig($group_data, 1, 20, 'group_category_'.$category_id);
         $table->set_additional_parameters(array('category' => $category_id));

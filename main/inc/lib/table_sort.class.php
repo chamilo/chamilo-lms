@@ -103,6 +103,7 @@ class TableSort
             // Probably an attack
             return $data;
         }
+
         if (!in_array($direction, array(SORT_ASC, SORT_DESC))) {
             // Probably an attack
             return $data;
@@ -197,7 +198,8 @@ class TableSort
             usort($data, create_function('$a, $b', $compare_function));
         }
 
-		if (is_array($column_show)) {
+		if (is_array($column_show) && !empty($column_show)) {
+
 			// We show only the columns data that were set up on the $column_show array
 			$new_order_data = array();
 			$count_data = count($data);
@@ -214,7 +216,6 @@ class TableSort
 			// Replace the multi-arrays
 			$data = $new_order_data;
 		}
-
 		return $data;
 	}
 

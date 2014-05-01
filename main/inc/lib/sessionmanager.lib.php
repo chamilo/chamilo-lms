@@ -628,6 +628,7 @@ class SessionManager
      * @param int   course id
      * @param int   survey id
      * @param array options order and limit keys
+     * @todo fix the query
      * @return array table with user name, lp name, progress
      */
     public static function get_survey_overview($sessionId = 0, $courseId = 0, $surveyId = 0, $date_from, $date_to, $options)
@@ -650,8 +651,7 @@ class SessionManager
 
         $course = api_get_course_info_by_id($courseId);
 
-        $where = " WHERE course_code = '%s'
-        AND s.status <> 2 and id_session = %s";
+        $where = " WHERE course_code = '%s' AND s.status <> 2 AND id_session = %s";
 
         $limit = null;
         if (!empty($options['limit'])) {
@@ -1112,9 +1112,14 @@ class SessionManager
      * @version Chamilo 1.9.6
      */
     static function get_user_data_access_tracking_overview(
-    $sessionId, $courseId, $studentId = 0, $profile = '', $date_from = '', $date_to = '', $options
-    )
-    {
+        $sessionId,
+        $courseId,
+        $studentId = 0,
+        $profile = '',
+        $date_from = '',
+        $date_to = '',
+        $options
+    ) {
         global $_configuration;
 
         //escaping variables
@@ -1152,8 +1157,12 @@ class SessionManager
             $where .= sprintf(" AND u.status = %d", $profile);
         }
         if (!empty($date_to) && !empty($date_from)) {
-            $where .= sprintf(" AND a.login_course_date >= '%s 00:00:00'
-                        AND a.login_course_date <= '%s 23:59:59'", $date_from, $date_to);
+            $where .= sprintf(
+                " AND a.login_course_date >= '%s 00:00:00'
+                 AND a.login_course_date <= '%s 23:59:59'",
+                $date_from,
+                $date_to
+            );
         }
 
         $limit = null;
@@ -2605,14 +2614,16 @@ class SessionManager
 
 	/**
 	 * Gets the list of courses by session filtered by access_url
-	 * @param int session id
-     * @param string course_name
+	 * @param int $session_id
+     * @param string $course_name
      * @return array list of courses
      */
     public static function get_course_list_by_session_id($session_id, $course_name = '')
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+
+        $session_id = intval($session_id);
 
 		// select the courses
 		$sql = "SELECT * FROM $tbl_course c

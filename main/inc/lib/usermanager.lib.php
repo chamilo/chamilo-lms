@@ -956,13 +956,15 @@ class UserManager
         }
 
         if (!is_null($order)) {
+            $order = Database::escape_string($order);
             $sql .= ' ORDER BY ' . $order;
         }
 
         if (!is_null($limit)) {
+            $limit = Database::escape_string($limit);
             $sql .= ' LIMIT ' . $limit;
         }
-        
+
         $rs = Database::query($sql);
         $result = array();
         while ($row = Database::fetch_array($rs)) {

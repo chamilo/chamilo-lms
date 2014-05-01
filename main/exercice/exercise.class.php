@@ -4213,38 +4213,41 @@ class Exercise
     {
         return api_htmlentities($in_title);
     }
-    
+
     /**
-     * @param int courseid
-     * @param int sessionid
+     * @param int $courseId
+     * @param int $sessionId
      * @return array exercises
      */
     public function getExercisesByCouseSession($courseId, $sessionId)
     {
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+
         $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
-        $sql = "SELECT * FROM $tbl_quiz cq "
-             . "WHERE "
-             . "cq.c_id = %s AND "
-             . "( cq.session_id = %s OR cq.session_id = 0 ) AND "
-             . "cq.active = 0 "
-             . "ORDER BY cq.id";
+        $sql = "SELECT * FROM $tbl_quiz cq
+                WHERE
+                    cq.c_id = %s AND
+                    (cq.session_id = %s OR cq.session_id = 0) AND
+                    cq.active = 0
+                ORDER BY cq.id";
         $sql = sprintf($sql, $courseId, $sessionId);
-        
+
         $result = Database::query($sql);
-        
+
         $rows = array();
-        while($row = Database::fetch_array($result, 'ASSOC')) {
-                $rows[] = $row;
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $rows[] = $row;
         }
-        
+
         return $rows;
     }
-    
-    
+
     /**
-     * @param int courseid
-     * @param int sessionid
-     * @param array quizId
+     *
+     * @param int $courseId
+     * @param int $sessionId
+     * @param array $quizId
      * @return array exercises
      */
     public function getExerciseAndResult($courseId, $sessionId, $quizId = array())
@@ -4253,14 +4256,12 @@ class Exercise
             return array();
         }
 
-        $ids = is_array($quizId) ? $quizId : array($quizId);
-        $ids = array_map('intval', $quizId);
-        $ids = implode(',', $quizId);
+        $sessionId = intval($sessionId);
 
-        $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        $ids = is_array($quizId) ? $quizId : array($quizId);
+        $ids = array_map('intval', $ids);
+        $ids = implode(',', $ids);
         $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-        
-        $whSession = "";
         if ($sessionId != 0) {
             $sql = "SELECT * FROM $track_exercises te "
               . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "
@@ -4270,9 +4271,8 @@ class Exercise
               . "te.session_id = %s AND "
               . "cq.id IN (%s) "
               . "ORDER BY cq.id ";
-       
+
             $sql = sprintf($sql, $courseId, $sessionId, $ids);
-            $whSession = "te.session_id = %s AND ";
         } else {
             $sql = "SELECT * FROM $track_exercises te "
               . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "
@@ -4283,16 +4283,12 @@ class Exercise
               . "ORDER BY cq.id ";
             $sql = sprintf($sql, $courseId, $ids);
         }
-       
-        $sql = sprintf($sql, $courseId, $sessionId, $ids);
-    
         $result = Database::query($sql);
-        
         $rows = array();
-        while($row = Database::fetch_array($result, 'ASSOC')) {
-                $rows[] = $row;
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $rows[] = $row;
         }
-        
+
         return $rows;
     }
 }

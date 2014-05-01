@@ -655,6 +655,7 @@ class DocumentManager
      * @param array $_course
      * @param int $to_group_id
      * @param boolean $can_see_invisible
+     *
      * @return array with paths
      */
     public static function get_all_document_folders(
@@ -664,8 +665,8 @@ class DocumentManager
     ) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-
         $to_group_id = intval($to_group_id);
+        $document_folders = array();
 
         if ($can_see_invisible) {
             //condition for the session
@@ -673,8 +674,9 @@ class DocumentManager
             $condition_session = api_get_session_condition($session_id);
             $show_users_condition = "";
             if (api_get_setting('show_users_folders') == 'false') {
-                $show_users_condition = "AND docs.path NOT LIKE '%shared_folder%'";
+                $show_users_condition = " AND docs.path NOT LIKE '%shared_folder%'";
             }
+
             if ($to_group_id <> 0) {
                $sql = "SELECT DISTINCT docs.id, path
                        FROM $TABLE_ITEMPROPERTY  AS last INNER JOIN $TABLE_DOCUMENT  AS docs
@@ -723,25 +725,28 @@ class DocumentManager
                 return false;
             }
         } else {
-            //no invisible folders
-            //condition for the session
+            // No invisible folders
+            // Condition for the session
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
             //get visible folders
-            $visible_sql = "SELECT DISTINCT docs.id, path
-                        FROM $TABLE_ITEMPROPERTY AS last,
-                        $TABLE_DOCUMENT AS docs
-                        WHERE docs.id = last.ref
-                        AND docs.filetype = 'folder'
-                        AND last.tool = '" . TOOL_DOCUMENT . "'
-                        AND last.to_group_id = " . $to_group_id . "
-                        AND last.visibility = 1 $condition_session AND
+            $sql = "SELECT DISTINCT docs.id, path
+                    FROM
+                        $TABLE_ITEMPROPERTY AS last, $TABLE_DOCUMENT AS docs
+                    WHERE
+                        docs.id = last.ref AND
+                        docs.filetype = 'folder' AND
+                        last.tool = '" . TOOL_DOCUMENT . "' AND
+                        last.to_group_id = " . $to_group_id . " AND
+                        last.visibility = 1 $condition_session AND
                         last.c_id = {$_course['real_id']}  AND
                         docs.c_id = {$_course['real_id']} ";
-            $visibleresult = Database::query($visible_sql);
-            while ($all_visible_folders = Database::fetch_array($visibleresult, 'ASSOC')) {
-                $visiblefolders[$all_visible_folders['id']] = $all_visible_folders['path'];
+            $result = Database::query($sql);
+            $visibleFolders = array();
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
+                $visibleFolders[$row['id']] = $row['path'];
             }
+
             //condition for the session
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
@@ -756,8 +761,9 @@ class DocumentManager
                         last.visibility = 0 $condition_session AND
                         last.c_id = {$_course['real_id']} AND
                         docs.c_id = {$_course['real_id']} ";
-            $invisibleresult = Database::query($sql);
-            while ($invisible_folders = Database::fetch_array($invisibleresult, 'ASSOC')) {
+            $result = Database::query($sql);
+            $invisibleFolders = array();
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
                 //condition for the session
                 $session_id = api_get_session_id();
                 $condition_session = api_get_session_condition($session_id);
@@ -766,29 +772,27 @@ class DocumentManager
                         FROM $TABLE_ITEMPROPERTY AS last, $TABLE_DOCUMENT AS docs
                         WHERE
                             docs.id = last.ref AND
-                            docs.path LIKE '" . Database::escape_string($invisible_folders['path']) . "/%' AND
+                            docs.path LIKE '" . Database::escape_string($row['path']) . "/%' AND
                             docs.filetype = 'folder' AND
                             last.tool = '" . TOOL_DOCUMENT . "' AND
                             last.to_group_id = " . $to_group_id . " AND
                             last.visibility = 1 $condition_session AND
-                            last.c_id = {$_course['real_id']}  AND
+                            last.c_id = {$_course['real_id']} AND
                             docs.c_id = {$_course['real_id']}  ";
                 $folder_in_invisible_result = Database::query($sql);
                 while ($folders_in_invisible_folder = Database::fetch_array($folder_in_invisible_result, 'ASSOC')) {
-                    $invisiblefolders[$folders_in_invisible_folder['id']] = $folders_in_invisible_folder['path'];
+                    $invisibleFolders[$folders_in_invisible_folder['id']] = $folders_in_invisible_folder['path'];
                 }
             }
 
             //if both results are arrays -> //calculate the difference between the 2 arrays -> only visible folders are left :)
-            if (is_array($visiblefolders) && is_array($invisiblefolders)) {
-                $document_folders = array_diff($visiblefolders, $invisiblefolders);
+            if (is_array($visibleFolders) && is_array($invisibleFolders)) {
+                $document_folders = array_diff($visibleFolders, $invisibleFolders);
                 natsort($document_folders);
                 return $document_folders;
-            } elseif (is_array($visiblefolders)) {
-                //only visible folders found
-                //sort($visiblefolders);
-                natsort($visiblefolders);
-                return $visiblefolders;
+            } elseif (is_array($visibleFolders)) {
+                natsort($visibleFolders);
+                return $visibleFolders;
             } else {
                 //no visible folders found
                 return false;
@@ -1784,7 +1788,16 @@ class DocumentManager
             $visibility_command = 'invisible';
 
             if (!is_dir($base_work_dir_test)) {
-                $created_dir = create_unexisting_directory($course_info, api_get_user_id(), api_get_session_id(), $to_group_id, $to_user_id, $base_work_dir, $dir_name, $post_dir_name);
+                $created_dir = create_unexisting_directory(
+                    $course_info,
+                    api_get_user_id(),
+                    api_get_session_id(),
+                    $to_group_id,
+                    $to_user_id,
+                    $base_work_dir,
+                    $dir_name,
+                    $post_dir_name
+                );
                 $update_id = self::get_document_id_of_directory_certificate();
                 api_item_property_update($course_info, TOOL_DOCUMENT, $update_id, $visibility_command, api_get_user_id());
             }
@@ -2244,9 +2257,7 @@ class DocumentManager
         $user_id = api_get_user_id();
 
         if (!empty($orig_source_html)) {
-
             foreach ($orig_source_html as $source) {
-
                 // get information about source url
                 $real_orig_url = $source[0]; // url
                 $scope_url = $source[1];   // scope (local, remote)
@@ -2254,8 +2265,8 @@ class DocumentManager
 
                 // Get path and query from origin url
                 $orig_parse_url = parse_url($real_orig_url);
-                $real_orig_path = $orig_parse_url['path'];
-                $real_orig_query = $orig_parse_url['query'];
+                $real_orig_path = isset($orig_parse_url['path']) ? $orig_parse_url['path'] : null;
+                $real_orig_query = isset($orig_parse_url['query']) ? $orig_parse_url['query'] : null;
 
                 // Replace origin course code by destination course code from origin url query
                 $dest_url_query = '';

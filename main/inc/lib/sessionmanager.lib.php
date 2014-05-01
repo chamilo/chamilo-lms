@@ -19,7 +19,7 @@ class SessionManager
 
     public function __construct()
     {
-        
+
     }
 
     /**
@@ -703,12 +703,12 @@ class SessionManager
             //Get questions by user
             $sql = "SELECT sa.question_id, sa.option_id, sqo.option_text, sq.type
             FROM $c_survey_answer sa
-            INNER JOIN $c_survey_question sq ON sq.question_id = sa.question_id 
-            LEFT JOIN $c_survey_question_option sqo ON sqo.c_id = sa.c_id 
-            AND sqo.question_id = sq.question_id 
-            AND sqo.question_option_id = sa.option_id 
-            AND sqo.survey_id = sq.survey_id 
-            WHERE sa.survey_id = %d AND sa.c_id = %d AND sa.user = %d 
+            INNER JOIN $c_survey_question sq ON sq.question_id = sa.question_id
+            LEFT JOIN $c_survey_question_option sqo ON sqo.c_id = sa.c_id
+            AND sqo.question_id = sq.question_id
+            AND sqo.question_option_id = sa.option_id
+            AND sqo.survey_id = sq.survey_id
+            WHERE sa.survey_id = %d AND sa.c_id = %d AND sa.user = %d
             "; //. $where_survey;
             $sql_query = sprintf($sql, $surveyId, $courseId, $user['user_id']);
 
@@ -793,13 +793,13 @@ class SessionManager
         if (!empty($sessionId)) {
             $where .= ' AND id_session = %s';
             $queryVariables[] = $sessionId;
-            $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, 
+            $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username,
                 u.email, s.course_code, s.id_session
                 FROM $session_course_user s
                 INNER JOIN $user u ON u.user_id = s.id_user
                 $where $order $limit";
         } else {
-            $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, 
+            $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username,
                 u.email, s.course_code, s.id_session
                 FROM $session_course_user s
                 INNER JOIN $user u ON u.user_id = s.id_user
@@ -1205,7 +1205,7 @@ class SessionManager
             $sql = "SELECT
                     name
                     FROM $sessionTable
-                    WHERE 
+                    WHERE
                     id = {$info['session_id']}";
             $result = Database::query($sql);
             $session = Database::fetch_assoc($result);
@@ -3611,9 +3611,6 @@ class SessionManager
                                         } else {
                                             $error_message .= get_lang('UserDoesNotExist').' : '.$course_coach.$eol;
                                         }
-                                        $savedCoaches[] = $coach_id;
-                                    } else {
-                                        $error_message .= get_lang('UserDoesNotExist') . ' : ' . $course_coach . $eol;
                                     }
                                 }
                             }
@@ -4308,7 +4305,7 @@ class SessionManager
      */
     public static function removeCourseDescription($sessionId, $courseId)
     {
-        
+
     }
 
     /**

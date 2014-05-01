@@ -302,7 +302,7 @@ class AnnouncementManager
         $sentTo,
         $file = array(),
         $file_comment = null,
-        $end_date = null, 
+        $end_date = null,
         $sendToUsersInSession = false
     ) {
         $_course = api_get_course_info();
@@ -362,9 +362,6 @@ class AnnouncementManager
                         api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '', $user);
                     }
                 }
-            } else {
-                // the message is sent to everyone, so we set the group to 0
-                api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '0');
             }
 
             if ($sendToUsersInSession) {

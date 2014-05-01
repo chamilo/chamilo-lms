@@ -374,7 +374,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                     }
                                 }
                             } else {
-                                //error_log('Loggedin');
                                 ConditionalLogin::check_conditions($uData);
                                 $_user['user_id'] = $uData['user_id'];
                                 $_user['status']  = $uData['status'];
@@ -822,7 +821,7 @@ if (isset($cidReset) && $cidReset) {
 
         // these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
         // Moreover, if we want to track a course with another session it can be usefull
-        if (!empty($_GET['id_session'])) {
+        if (!empty($_GET['id_session']) && is_numeric($_GET['id_session'])) {
             $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
             $sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_SESSION['id_session']). '"';
             $rs = Database::query($sql);
@@ -885,18 +884,15 @@ if (isset($cidReset) && $cidReset) {
                                     login_course_date > now() - INTERVAL $session_lifetime SECOND
                         ORDER BY login_course_date DESC LIMIT 0,1";
                     $result = Database::query($sql);
-
                     if (Database::num_rows($result) > 0) {
                         $i_course_access_id = Database::result($result,0,0);
                         //We update the course tracking table
                         $sql = "UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1
                                 WHERE course_access_id = ".intval($i_course_access_id)." AND session_id = ".api_get_session_id();
-                        //error_log($sql);
                         Database::query($sql);
                     } else {
                         $sql="INSERT INTO $course_tracking_table (course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
                             "VALUES('".$course_code."', '".$_user['user_id']."', '$time', '$time', '1','".api_get_session_id()."')";
-                        //error_log($sql);
                         Database::query($sql);
                     }
                 }

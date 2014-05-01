@@ -236,27 +236,26 @@ if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
 
 //    EXTENDED PROFILE  this make the page very slow!
 if (api_get_setting('extended_profile') == 'true') {
-    if (!isset($_GET['type']) || (isset($_GET['type']) && $_GET['type'] == 'extended')) {
-        $width_extended_profile = 500;
-        //$form->addElement('html', '<a href="javascript: void(0);" onclick="javascript: show_extend();"> show_extend_profile</a>');
-        //$form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');
-        //    MY COMPETENCES
-        $form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
-        //    MY DIPLOMAS
-        $form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
-        //    WHAT I AM ABLE TO TEACH
-        $form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
+    $width_extended_profile = 500;
+    //$form->addElement('html', '<a href="javascript: void(0);" onclick="javascript: show_extend();"> show_extend_profile</a>');
+    //$form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');
+    //    MY COMPETENCES
+    $form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
+    //    MY DIPLOMAS
+    $form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
+    //    WHAT I AM ABLE TO TEACH
+    $form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
 
-        //    MY PRODUCTIONS
-        $form->addElement('file', 'production', get_lang('MyProductions'));
-        if ($production_list = UserManager::build_production_list(api_get_user_id(), '', true)) {
-            $form->addElement('static', 'productions_list', null, $production_list);
-        }
-        //    MY PERSONAL OPEN AREA
-        $form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '350'));
-        $form->applyFilter(array('competences', 'diplomas', 'teach', 'openarea'), 'stripslashes');
-        $form->applyFilter(array('competences', 'diplomas', 'teach'), 'trim'); // openarea is untrimmed for maximum openness
+    //    MY PRODUCTIONS
+    $form->addElement('file', 'production', get_lang('MyProductions'));
+    if ($production_list = UserManager::build_production_list(api_get_user_id(), '', true)) {
+        $form->addElement('static', 'productions_list', null, $production_list);
     }
+    //    MY PERSONAL OPEN AREA
+    $form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '350'));
+    $form->applyFilter(array('competences', 'diplomas', 'teach', 'openarea'), 'stripslashes');
+    $form->applyFilter(array('competences', 'diplomas', 'teach'), 'trim'); // openarea is untrimmed for maximum openness
+
 }
 
 //    PASSWORD, if auth_source is platform
@@ -336,9 +335,8 @@ function is_profile_editable() {
  * @return    The filename of the new production or FALSE if the upload has failed
  */
 function upload_user_production($user_id) {
-    $image_path = UserManager::get_user_picture_path_by_id($user_id, 'system', true);
-
-    $production_repository = $image_path['dir'].$user_id.'/';
+    $image_path = UserManager::get_user_picture_path_by_id($user_id, 'system');
+    $production_repository = $image_path['dir'];
 
     if (!file_exists($production_repository)) {
         @mkdir($production_repository, api_get_permissions_for_new_directories(), true);

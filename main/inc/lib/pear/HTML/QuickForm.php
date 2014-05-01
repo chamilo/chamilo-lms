@@ -341,14 +341,14 @@ class HTML_QuickForm extends HTML_Common
             }
         }
 
-        $course_id = api_get_course_int_id();
-        //If I'm in a course replace the default max filesize with the course limits
-        if (!empty($course_id)) {
-            $free_course_quota = DocumentManager::get_course_quota() - DocumentManager::documents_total_space();
-            if (empty($this->_maxFileSize) || $free_course_quota <= $this->_maxFileSize) {
-                $this->_maxFileSize = intval($free_course_quota);
-            }
-        }
+//        $course_id = api_get_course_int_id();
+//        //If I'm in a course replace the default max filesize with the course limits
+//        if (!empty($course_id)) {
+//            $free_course_quota = DocumentManager::get_course_quota() - DocumentManager::documents_total_space();
+//            if (empty($this->_maxFileSize) || $free_course_quota <= $this->_maxFileSize) {
+//                $this->_maxFileSize = intval($free_course_quota);
+//            }
+//        }
     } // end constructor
 
     // }}}

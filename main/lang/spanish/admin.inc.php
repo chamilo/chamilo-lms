@@ -44,6 +44,7 @@ $ConfigureHomePage = "Configuración de la página principal";
 $CourseCreateActiveToolsTitle = "Módulos activos al crear un curso";
 $CourseCreateActiveToolsComment = "¿Qué herramientas serán activadas (visibles) por defecto al crear un curso?";
 $SearchUsers = "Búsqueda de usuarios";
+$SearchUser = "Buscar usuarios";
 $CreateUser = "Crear usuario";
 $ModifyInformation = "Modificar información";
 $ModifyUser = "Modificar usuario";

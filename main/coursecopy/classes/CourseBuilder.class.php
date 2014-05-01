@@ -26,6 +26,8 @@ require_once 'Thematic.class.php';
 require_once 'Attendance.class.php';
 require_once 'Work.class.php';
 
+require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
+
 /**
  * Class which can build a course-object from a Chamilo-course.
  * @author Bart Mollet <bart.mollet@hogent.be>
@@ -178,14 +180,18 @@ class CourseBuilder
 
     /**
      * Build the documents
+     * @param int $session_id
+     * @param string $course_code
+     * @param bool $with_base_content
+     * @param array $id_list
      */
     public function build_documents($session_id = 0, $course_code = '', $with_base_content = false, $id_list = array())
     {
-        $course_info     = api_get_course_info($course_code);
-        $course_id         = $course_info['real_id'];
+        $course_info = api_get_course_info($course_code);
+        $course_id = $course_info['real_id'];
 
-        $table_doc   = Database::get_course_table(TABLE_DOCUMENT);
-        $table_prop  = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        $table_doc = Database::get_course_table(TABLE_DOCUMENT);
+        $table_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
         //Remove chat_files and shared_folder files
         $avoid_paths = " path NOT LIKE '/shared_folder%' AND
@@ -200,14 +206,14 @@ class CourseBuilder
                 $session_condition = api_get_session_condition($session_id, true);
             }
 
-            if (!empty($this->course->type) && $this->course->type=='partial') {
+            if (!empty($this->course->type) && $this->course->type == 'partial') {
                 $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d, $table_prop p
+                        FROM $table_doc d INNER JOIN $table_prop p
+                        ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
                             d.c_id = $course_id AND
                             p.c_id = $course_id AND
                             tool = '".TOOL_DOCUMENT."' AND
-                            p.ref = d.id AND
                             p.visibility != 2 AND
                             path NOT LIKE '/images/gallery%' AND
                             $avoid_paths
@@ -215,17 +221,16 @@ class CourseBuilder
                         ORDER BY path";
             } else {
                 $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM $table_doc d, $table_prop p
+                        FROM $table_doc d INNER JOIN $table_prop p
+                        ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
                             d.c_id = $course_id AND
                             p.c_id = $course_id AND
                             tool = '".TOOL_DOCUMENT."' AND
                             $avoid_paths AND
-                            p.ref = d.id AND
                             p.visibility != 2 $session_condition
                         ORDER BY path";
             }
-
 
             $db_result = Database::query($sql);
             while ($obj = Database::fetch_object($db_result)) {
@@ -233,32 +238,33 @@ class CourseBuilder
                 $this->course->add_resource($doc);
             }
         } else {
-
-            if (!empty($this->course->type) && $this->course->type=='partial')
-                $sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM '.$table_doc.' d, '.$table_prop.' p
+            if (!empty($this->course->type) && $this->course->type=='partial') {
+                $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
+                        FROM $table_doc d INNER JOIN $table_prop p
+                        ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
-                            d.c_id = '.$course_id.' AND
-                            p.c_id = '.$course_id.' AND
-                            tool = \''.TOOL_DOCUMENT.'\' AND
-                            p.ref = d.id AND
+                            d.c_id = $course_id AND
+                            p.c_id = $course_id AND
+                            tool = '".TOOL_DOCUMENT."' AND
                             p.visibility != 2 AND
-                            path NOT LIKE \'/images/gallery%\' AND
-                            '.$avoid_paths.'AND
+                            path NOT LIKE '/images/gallery%' AND
+                            $avoid_paths AND
                             d.session_id = 0
-                        ORDER BY path';
-            else
-                $sql = 'SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
-                        FROM '.$table_doc.' d, '.$table_prop.' p
+                        ORDER BY path";
+                var_dump($sql);
+            } else {
+                $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
+                        FROM $table_doc d INNER JOIN $table_prop p
+                        ON (p.ref = d.id AND d.c_id = p.c_id)
                         WHERE
-                            d.c_id = '.$course_id.' AND
-                            p.c_id = '.$course_id.' AND
-                            tool = \''.TOOL_DOCUMENT.'\' AND
-                            p.ref = d.id AND
+                            d.c_id = $course_id AND
+                            p.c_id = $course_id AND
+                            tool = '".TOOL_DOCUMENT."' AND
                             p.visibility != 2 AND
-                            '.$avoid_paths.' AND
+                            $avoid_paths AND
                             d.session_id = 0
-                        ORDER BY path';
+                        ORDER BY path";
+            }
 
             $db_result = Database::query($sql);
             while ($obj = Database::fetch_object($db_result)) {

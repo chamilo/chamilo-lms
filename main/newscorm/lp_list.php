@@ -191,6 +191,7 @@ if (!empty($flat_list)) {
 
         $url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
         $name = Security::remove_XSS($details['lp_name']);
+        $extra = null;
         if ($is_allowed_to_edit) {
             $url_start_lp .= '&isStudentView=true';
             $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.(learnpath::is_lp_visible_for_student($id, api_get_user_id()) ? '' : ' - ('.get_lang('LPNotVisibleToStudent').')');
@@ -227,6 +228,12 @@ if (!empty($flat_list)) {
         $dsp_edit_close = '</td>';
 
         $token_parameter = "&sec_token=$token";
+        $dsp_edit_lp = null;
+        $dsp_publish = null;
+        $dsp_reinit = null;
+        $dsp_disk = null;
+        $copy = null;
+        $lp_auto_lunch_icon = null;
 
         if ($is_allowed_to_edit) {
 
@@ -355,7 +362,6 @@ if (!empty($flat_list)) {
             $copy = Display::url(Display::return_icon('cd_copy.png', get_lang('Copy'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=copy&lp_id=$id");
 
             /* Auto Lunch LP code */
-            $lp_auto_lunch_icon = '';
             if (api_get_course_setting('enable_lp_auto_launch') == 1) {
                 if ($details['autolaunch'] == 1 && $autolunch_exists == false) {
                     $autolunch_exists = true;

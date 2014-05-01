@@ -917,6 +917,11 @@ class Autoload
         $result['UserForm'] = '/main/gradebook/lib/fe/userform.class.php';
         $result['UserGroup'] = '/main/inc/lib/usergroup.lib.php';
         $result['UserManager'] = '/main/inc/lib/usermanager.lib.php';
+
+        $result['ExtraField'] = '/main/inc/lib/extra_field.lib.php';
+        $result['ExtraFieldOption'] = '/main/inc/lib/extra_field_option.lib.php';
+        $result['ExtraFieldValue'] = '/main/inc/lib/extra_field_value.lib.php';
+
         $result['UserTable'] = '/main/gradebook/lib/fe/usertable.class.php';
         $result['Utf8'] = '/main/inc/lib/system/text/utf8.class.php';
         $result['Utf8Decoder'] = '/main/inc/lib/system/text/utf8_decoder.class.php';

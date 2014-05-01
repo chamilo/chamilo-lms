@@ -1980,14 +1980,17 @@ class Exercise
 
     /**
      * This function was originally found in the exercise_show.php
-     * @param   int     exe id
-     * @param   int     question id
-     * @param   int     the choice the user selected
-     * @param   array   the hotspot coordinates $hotspot[$question_id] = coordinates
-     * @param   string  function is called from 'exercise_show' or 'exercise_result'
-     * @param   bool    save results in the DB or just show the reponse
-     * @param   bool    gets information from DB or from the current selection
-     * @param   bool    show results or not
+     * @param int       $exeId
+     * @param int       $questionId
+     * @param int       $choice the user selected
+     * @param string    $from  function is called from 'exercise_show' or 'exercise_result'
+     * @param array     $exerciseResultCoordinates the hotspot coordinates $hotspot[$question_id] = coordinates
+     * @param bool      $saved_results save results in the DB or just show the reponse
+     * @param bool      $from_database gets information from DB or from the current selection
+     * @param bool      $show_result show results or not
+     * @param int       $propagate_neg
+     * @param array     $hotspot_delineation_result
+     *
      * @todo    reduce parameters of this function
      * @return  string  html code
      */
@@ -2370,7 +2373,7 @@ class Exercise
                     $answer = '';
                     $j = 0;
                     //initialise answer tags
-                    $user_tags = $correct_tags = $real_text = array ();
+                    $user_tags = $correct_tags = $real_text = array();
                     // the loop will stop at the end of the text
                     while (1) {
                         // quits the loop if there are no more blanks (detect '[')
@@ -2394,20 +2397,26 @@ class Exercise
                         }
                         if ($from_database) {
                             $queryfill = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
-                                          WHERE exe_id = '".$exeId."' AND question_id= '".Database::escape_string($questionId)."'";
+                                          WHERE
+                                            exe_id = '".$exeId."' AND
+                                            question_id= '".Database::escape_string($questionId)."'";
                             $resfill = Database::query($queryfill);
-                            $str = Database::result($resfill,0,'answer');
+                            $str = Database::result($resfill, 0, 'answer');
 
                             api_preg_match_all('#\[([^[]*)\]#', $str, $arr);
                             $str = str_replace('\r\n', '', $str);
                             $choice = $arr[1];
 
-                            $tmp = api_strrpos($choice[$j],' / ');
-                            $choice[$j] = api_substr($choice[$j],0,$tmp);
-                            $choice[$j] = trim($choice[$j]);
+                            if (isset($choice[$j])) {
+                                $tmp = api_strrpos($choice[$j], ' / ');
+                                $choice[$j] = api_substr($choice[$j], 0, $tmp);
+                                $choice[$j] = trim($choice[$j]);
 
-                            //Needed to let characters ' and " to work as part of an answer
-                            $choice[$j] = stripslashes($choice[$j]);
+                                // Needed to let characters ' and " to work as part of an answer
+                                $choice[$j] = stripslashes($choice[$j]);
+                            } else {
+                                $choice[$j] = null;
+                            }
                         } else {
 							// This value is the user input, not escaped while correct answer is escaped by fckeditor
 							$choice[$j] = htmlentities(trim($choice[$j]));
@@ -2422,6 +2431,7 @@ class Exercise
                         $j++;
                         $temp = api_substr($temp, $pos +1);
                     }
+
                     $answer = '';
                     $real_correct_tags = $correct_tags;
                     $chosen_list = array();
@@ -2431,7 +2441,7 @@ class Exercise
                             $answer .= $real_text[0];
                         }
                         if (!$switchable_answer_set) {
-                            //needed to parse ' and " characters
+                            // Needed to parse ' and " characters
                             $user_tags[$i] = stripslashes($user_tags[$i]);
                             if ($correct_tags[$i] == $user_tags[$i]) {
                                 // gives the related weighting to the student
@@ -2440,7 +2450,7 @@ class Exercise
                                 $totalScore += $answerWeighting[$i];
                                 // adds the word in green at the end of the string
                                 $answer .= $correct_tags[$i];
-                            }  elseif (!empty ($user_tags[$i])) {
+                            } elseif (!empty($user_tags[$i])) {
                                 // else if the word entered by the student IS NOT the same as the one defined by the professor
                                 // adds the word in red at the end of the string, and strikes it
                                 $answer .= '<font color="red"><s>' . $user_tags[$i] . '</s></font>';
@@ -2460,8 +2470,7 @@ class Exercise
                                 $totalScore += $answerWeighting[$i];
                                 // adds the word in green at the end of the string
                                 $answer .= $user_tags[$i];
-                            }
-                            elseif (!empty ($user_tags[$i])) {
+                            } elseif (!empty ($user_tags[$i])) {
                                 // else if the word entered by the student IS NOT the same as the one defined by the professor
                                 // adds the word in red at the end of the string, and strikes it
                                 $answer .= '<font color="red"><s>' . $user_tags[$i] . '</s></font>';
@@ -2472,10 +2481,9 @@ class Exercise
                         }
                         // adds the correct word, followed by ] to close the blank
                         $answer .= ' / <font color="green"><b>' . $real_correct_tags[$i] . '</b></font>]';
-                        if (isset ($real_text[$i +1])) {
+                        if (isset($real_text[$i +1])) {
                             $answer .= $real_text[$i +1];
                         }
-
                     }
                     break;
                 // for free answer
@@ -3385,9 +3393,11 @@ class Exercise
 
         if ($saved_results) {
             $stat_table = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
-            $sql_update = 'UPDATE ' . $stat_table . ' SET exe_result = exe_result + ' . floatval($questionScore) . ' WHERE exe_id = ' . $exeId;
-            if ($debug) error_log($sql_update);
-            Database::query($sql_update);
+            $sql = 'UPDATE ' . $stat_table . ' SET
+                        exe_result = exe_result + ' . floatval($questionScore) . '
+                    WHERE exe_id = ' . $exeId;
+            if ($debug) error_log($sql);
+            Database::query($sql);
         }
 
         $return_array = array(
@@ -3400,6 +3410,7 @@ class Exercise
         );
         return $return_array;
     }
+
     /**
      * Sends a notification when a user ends an examn
      *
@@ -3901,13 +3912,13 @@ class Exercise
                 $isRandomByCategory = $this->selectRandomByCat();
                 // on tri les categories en fonction du terme entre [] en tete de la description de la categorie
                 /*
-                 * ex de catÃ©gories :
+                 * ex de catégories :
                  * [biologie] Maitriser les mecanismes de base de la genetique
                  * [biologie] Relier les moyens de depenses et les agents infectieux
                  * [biologie] Savoir ou est produite l'enrgie dans les cellules et sous quelle forme
                  * [chimie] Classer les molles suivant leur pouvoir oxydant ou reacteur
-                 * [chimie] ConnaÃ®tre la denition de la theoie acide/base selon BrÃ¶nsted
-                 * [chimie] ConnaÃ®tre les charges des particules
+                 * [chimie] Connaître la denition de la theoie acide/base selon Brönsted
+                 * [chimie] Connaître les charges des particules
                  * On veut dans l'ordre des groupes definis par le terme entre crochet au debut du titre de la categorie
                 */
                 // If test option is Grouped By Categories
@@ -4169,8 +4180,8 @@ class Exercise
     }
 
     /**
-     * @return string
-     */
+    * @return string
+    */
     public function get_formated_title()
     {
         return api_html_entity_decode($this->selectTitle());
@@ -4203,4 +4214,81 @@ class Exercise
         return api_htmlentities($in_title);
     }
 
+    /**
+     * @param int $courseId
+     * @param int $sessionId
+     * @return array exercises
+     */
+    public function getExercisesByCouseSession($courseId, $sessionId)
+    {
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+
+        $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        $sql = "SELECT * FROM $tbl_quiz cq
+                WHERE
+                    cq.c_id = %s AND
+                    (cq.session_id = %s OR cq.session_id = 0) AND
+                    cq.active = 0
+                ORDER BY cq.id";
+        $sql = sprintf($sql, $courseId, $sessionId);
+
+        $result = Database::query($sql);
+
+        $rows = array();
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
+
+    /**
+     *
+     * @param int $courseId
+     * @param int $sessionId
+     * @param array $quizId
+     * @return array exercises
+     */
+    public function getExerciseAndResult($courseId, $sessionId, $quizId = array())
+    {
+        if (empty($quizId)) {
+            return array();
+        }
+
+        $sessionId = intval($sessionId);
+
+        $ids = is_array($quizId) ? $quizId : array($quizId);
+        $ids = array_map('intval', $ids);
+        $ids = implode(',', $ids);
+        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        if ($sessionId != 0) {
+            $sql = "SELECT * FROM $track_exercises te "
+              . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "
+              . "INNER JOIN course c ON te.exe_cours_id = c.code AND c.id = cq.c_id "
+              . "WHERE "
+              . "c.id = %s AND "
+              . "te.session_id = %s AND "
+              . "cq.id IN (%s) "
+              . "ORDER BY cq.id ";
+
+            $sql = sprintf($sql, $courseId, $sessionId, $ids);
+        } else {
+            $sql = "SELECT * FROM $track_exercises te "
+              . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "
+              . "INNER JOIN course c ON te.exe_cours_id = c.code AND c.id = cq.c_id "
+              . "WHERE "
+              . "c.id = %s AND "
+              . "cq.id IN (%s) "
+              . "ORDER BY cq.id ";
+            $sql = sprintf($sql, $courseId, $ids);
+        }
+        $result = Database::query($sql);
+        $rows = array();
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
 }

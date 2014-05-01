@@ -215,15 +215,16 @@ if (api_get_setting('allow_group_categories') == 'true') {
         }
 
         echo Display::page_header($category['title'].' '. $label.' '.$actions);
-        echo '<p style="margin: 0px;margin-left: 50px;">'.$category['description'].'</p><p/>';
-        GroupManager ::process_groups($group_list, $category['id']);
+        echo $category['description'];
+        GroupManager::process_groups($group_list, $category['id']);
     }
 } else {
     $group_list = GroupManager::get_group_list();
     GroupManager::process_groups($group_list);
+
 }
 
-if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
+if (!isset($_GET['origin']) || $_GET['origin'] != 'learnpath') {
     Display::display_footer();
 }
 $_SESSION['_gid'] = 0;

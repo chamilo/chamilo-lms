@@ -183,8 +183,8 @@ olms.lms_item_lesson_mode = '<?php echo $oItem->get_lesson_mode();?>';
 olms.lms_item_launch_data = '<?php echo addslashes($oItem->get_launch_data());?>';
 olms.lms_item_core_exit = '<?php echo $oItem->get_core_exit();?>';
 olms.lms_course_id = '<?php echo $oLP->get_course_int_id(); ?>';
+olms.lms_session_id = '<?php echo api_get_session_id(); ?>';
 olms.lms_course_code = '<?php echo $oLP->getCourseCode(); ?>';
-
 <?php echo $oLP->get_items_details_as_js('olms.lms_item_types');?>
 
 olms.asset_timer = 0;
@@ -1498,13 +1498,31 @@ function switch_item(current_item, next_item){
  * @return  void
  * @uses lp_ajax_save_item.php through an AJAX call
  */
-function xajax_save_item(lms_lp_id, lms_user_id, lms_view_id, lms_item_id, score, max, min, lesson_status, session_time, suspend_data, lesson_location, interactions, lms_item_core_exit, item_type) {
+function xajax_save_item(
+        lms_lp_id,
+        lms_user_id,
+        lms_view_id,
+        lms_item_id,
+        score,
+        max,
+        min,
+        lesson_status,
+        session_time,
+        suspend_data,
+        lesson_location,
+        interactions,
+        lms_item_core_exit,
+        item_type,
+        session_id,
+        course_id) {
     var params = '';
     params += 'lid='+lms_lp_id+'&uid='+lms_user_id+'&vid='+lms_view_id;
     params += '&iid='+lms_item_id+'&s='+score+'&max='+max+'&min='+min;
     params += '&status='+lesson_status+'&t='+session_time;
     params += '&suspend='+suspend_data+'&loc='+lesson_location;
     params += '&core_exit='+lms_item_core_exit;
+    params += '&session_id='+session_id;
+    params += '&course_id='+course_id;
     //console.info(session_time);
     if (olms.lms_lp_type == 1 || item_type == 'document') {
         logit_lms('xajax_save_item with params:' + params,3);

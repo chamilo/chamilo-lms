@@ -37,123 +37,122 @@ class CourseDescriptionController { // extends Controller {
         $course_description->set_session_id($session_id);        
         $data = array();		
 
-        $course_description_data = $course_description->get_description_data();	
-        	
-        $data['descriptions'] = $course_description_data['descriptions'];
-        $data['default_description_titles'] = $course_description->get_default_description_title();
-        $data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
-        $data['default_description_icon'] = $course_description->get_default_description_icon();		
-        $data['messages'] = $messages;
-
-        // Fix for chrome XSS filter for videos in iframes - BT#7930
+	$course_description_data = $course_description->get_description_data();	
+            
+	$data['descriptions'] = $course_description_data['descriptions'];
+	$data['default_description_titles'] = $course_description->get_default_description_title();
+	$data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
+	$data['default_description_icon'] = $course_description->get_default_description_icon();		
+	$data['messages'] = $messages;
+            
         $browser = api_get_navigator();
+
         if (strpos($data['descriptions'], '<iframe') !== false && $browser['name'] == 'Chrome') {
-            header('X-XSS-Protection: 0');
+            header("X-XSS-Protection: 0");
         }
-        
-        // render to the view
-        $this->view->set_data($data);
-        $this->view->set_layout('layout'); 
-        $this->view->set_template('listing');		       
-        $this->view->render();				
+            
+	// render to the view
+	$this->view->set_data($data);
+	$this->view->set_layout('layout'); 
+	$this->view->set_template('listing');		       
+	$this->view->render();				
     }
 	
-	/**
-	 * It's used for editing a course description,
-	 * render to listing or edit view
-	 * @param int description type
-	 */
-	public function edit($id, $description_type) {
-		$course_description = new CourseDescription();
-		$session_id = api_get_session_id();
-		$course_description->set_session_id($session_id);		
-		$data = array();      
-        $data['id'] = $id;
-        if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {    	
-        	if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
-        		
-        		$check = Security::check_token();        		
-        		if ($check) {
-        			$title = $_POST['title'];
-		        	if (api_get_setting('wcag_anysurfer_public_pages')=='true') {
-						$content = WCAG_Rendering::prepareXHTML();
-					} else {
-						$content = $_POST['contentDescription'];
-					}        	
-		        	$description_type = $_POST['description_type'];
-                    $id         = $_POST['id'];
-		        	$progress   = $_POST['progress'];
-                    
-					$course_description->set_description_type($description_type);
-		    		$course_description->set_title($title);
-		    		$course_description->set_content($content);
-                    
-		    		$course_description->set_progress($progress);                   
-		           			        		
-		        	$thematic_advance = $course_description->get_data_by_id($id);			        		        		
-                    
-                    if (!empty($thematic_advance)) {		   		        			
-                        $course_description->set_id($id);
-                        $affected_rows = $course_description->update();	        			
-                    } else {
-                        $affected_rows = $course_description->insert();
+    /**
+     * It's used for editing a course description,
+     * render to listing or edit view
+     * @param int description type
+     */
+    public function edit($id, $description_type)
+        {
+            $course_description = new CourseDescription();
+            $session_id = api_get_session_id();
+            $course_description->set_session_id($session_id);
+            $data = array();
+            $data['id'] = $id;
+            if (strtoupper($_SERVER['REQUEST_METHOD']) == "POST") {
+                if (!empty($_POST['title']) && !empty($_POST['contentDescription'])) {
+
+                    $check = Security::check_token();
+                    if ($check) {
+                        $title = $_POST['title'];
+                        if (api_get_setting('wcag_anysurfer_public_pages') == 'true') {
+                            $content = WCAG_Rendering::prepareXHTML();
+                        } else {
+                            $content = $_POST['contentDescription'];
+                        }
+                        $description_type = $_POST['description_type'];
+                        $id = $_POST['id'];
+                        $progress = $_POST['progress'];
+                        $course_description->set_description_type($description_type);
+                        $course_description->set_title($title);
+                        $course_description->set_content($content);
+
+                        $course_description->set_progress($progress);
+
+                        $thematic_advance = $course_description->get_data_by_id($id);
+
+                        if (!empty($thematic_advance)) {
+                            $course_description->set_id($id);
+                            $affected_rows = $course_description->update();
+                        } else {
+                            $affected_rows = $course_description->insert();
+                        }
+                        Security::clear_token();
                     }
-		        	Security::clear_token();		        		        		
-        		}
-        		
-        		if ($affected_rows) {        			
-					$message['edit'] = true;        			
-				}
-				$this->listing(false,$message);		        		        		
-        		      		
-        	} else {
-        		$data['error'] = 1;
-        		$data['default_description_titles'] = $course_description->get_default_description_title();
-				$data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
-				$data['default_description_icon'] = $course_description->get_default_description_icon();
-				$data['question'] = $course_description->get_default_question();
-				$data['information'] = $course_description->get_default_information();
-        		$data['description_title'] = $_POST['title'];
-        		$data['description_content'] = $_POST['contentDescription'];
-        		$data['description_type'] = $_POST['description_type'];
-        		$data['progress'] = $_POST['progress'];
-        		$data['descriptions'] = $course_description->get_data_by_id($_POST['id']);
-        		// render to the view
-				$this->view->set_data($data);
-				$this->view->set_layout('layout');
-				$this->view->set_template('edit');			        
-				$this->view->render();        		
-        	}
-        } else {
-            
-            $data['default_description_titles'] = $course_description->get_default_description_title();
-            $data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
-            $data['default_description_icon'] = $course_description->get_default_description_icon();
-            $data['question'] = $course_description->get_default_question();
-            $data['information'] = $course_description->get_default_information();
-            
-            $data['description_type'] = $description_type;
-            
-			if (!empty($id)) {				
-				if (isset($_GET['id_session'])) {
-					$session_id = intval($_GET['id_session']);
-				}				
-        		$course_description_data        = $course_description->get_data_by_id($id, null, $session_id);        		        		
-                $data['description_type']       = $course_description_data['description_type'];
-				$data['description_title']      = $course_description_data['description_title'];
-        		$data['description_content']    = $course_description_data['description_content'];        		
-        		$data['progress']               = $course_description_data['progress'];        		
-        		$data['descriptions']           = $course_description->get_data_by_description_type($description_type, null, $session_id);
-        	}
-        	// render to the view        					
-			$this->view->set_data($data);
-			$this->view->set_layout('layout');
-			$this->view->set_template('edit');			        
-			$this->view->render();        	
+
+                    if ($affected_rows) {
+                        $message['edit'] = true;
+                    }
+                    $this->listing(false, $message);
+                } else {
+                    $data['error'] = 1;
+                    $data['default_description_titles'] = $course_description->get_default_description_title();
+                    $data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
+                    $data['default_description_icon'] = $course_description->get_default_description_icon();
+                    $data['question'] = $course_description->get_default_question();
+                    $data['information'] = $course_description->get_default_information();
+                    $data['description_title'] = $_POST['title'];
+                    $data['description_content'] = $_POST['contentDescription'];
+                    $data['description_type'] = $_POST['description_type'];
+                    $data['progress'] = $_POST['progress'];
+                    $data['descriptions'] = $course_description->get_data_by_id($_POST['id']);
+                    // render to the view
+                    $this->view->set_data($data);
+                    $this->view->set_layout('layout');
+                    $this->view->set_template('edit');
+                    $this->view->render();
+                }
+            } else {
+
+                $data['default_description_titles'] = $course_description->get_default_description_title();
+                $data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
+                $data['default_description_icon'] = $course_description->get_default_description_icon();
+                $data['question'] = $course_description->get_default_question();
+                $data['information'] = $course_description->get_default_information();
+
+                $data['description_type'] = $description_type;
+
+                if (!empty($id)) {
+                    if (isset($_GET['id_session'])) {
+                        $session_id = intval($_GET['id_session']);
+                    }
+                    $course_description_data = $course_description->get_data_by_id($id, null, $session_id);
+                    $data['description_type'] = $course_description_data['description_type'];
+                    $data['description_title'] = $course_description_data['description_title'];
+                    $data['description_content'] = $course_description_data['description_content'];
+                    $data['progress'] = $course_description_data['progress'];
+                    $data['descriptions'] = $course_description->get_data_by_description_type($description_type, null, $session_id);
+                }
+                // render to the view        					
+                $this->view->set_data($data);
+                $this->view->set_layout('layout');
+                $this->view->set_template('edit');
+                $this->view->render();
+            }
         }
-	}
-	
-	/**
+
+        /**
 	 * It's used for adding a course description,
 	 * render to listing or add view
 	 */

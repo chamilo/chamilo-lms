@@ -1,15 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
-
- */
 
 /**
  * Include file with functions for the announcements module.
  * @author jmontoya
  * @package chamilo.announcements
  * @todo use OOP
- *
  */
 class AnnouncementManager
 {
@@ -42,7 +38,7 @@ class AnnouncementManager
      *
      * @return mixed
      */
-    public static function parse_content($userId, $content, $course_code)
+    public static function parse_content($userId, $content, $course_code, $session_id = 0)
     {
         $readerInfo = api_get_user_info($userId);
         $courseInfo = api_get_course_info($course_code);
@@ -56,8 +52,8 @@ class AnnouncementManager
                 break;
             }
         }
+        $course_link = api_get_course_url($course_code, $session_id);
 
-        $courseLink = api_get_course_url();
         $data['user_name'] = $readerInfo['username'];
         $data['user_firstname'] = $readerInfo['firstname'];
         $data['user_lastname'] = $readerInfo['lastname'];
@@ -236,7 +232,7 @@ class AnnouncementManager
                 echo "<tr><th style='text-align:right'>$modify_icons</th></tr>";
             }
 
-            $content = self::parse_content($result['to_user_id'], $content, api_get_course_id());
+            $content = self::parse_content($result['to_user_id'], $content, api_get_course_id(), api_get_session_id());
 
             echo "<tr><td>$content</td></tr>";
 
@@ -366,12 +362,14 @@ class AnnouncementManager
                         api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '', $user);
                     }
                 }
+            } else {
+                // the message is sent to everyone, so we set the group to 0
+                api_item_property_update($_course, TOOL_ANNOUNCEMENT, $last_id, "AnnouncementAdded", api_get_user_id(), '0');
             }
 
             if ($sendToUsersInSession) {
                 self::addAnnouncementToAllUsersInSessions($last_id);
             }
-
 
             return $last_id;
         }
@@ -494,6 +492,11 @@ class AnnouncementManager
             self::addAnnouncementToAllUsersInSessions($id);
         }
 
+
+        if ($sendToUsersInSession) {
+            self::addAnnouncementToAllUsersInSessions($id);
+        }
+
         // store in item_property (first the groups, then the users
 
         if (!is_null($to)) {
@@ -552,7 +555,6 @@ class AnnouncementManager
                 }
             }
         }
-
     }
 
     /**
@@ -709,7 +711,7 @@ class AnnouncementManager
      */
     public static function construct_not_selected_select_form($group_list = null, $user_list = null, $to_already_selected)
     {
-        echo '<select id="not_selected_form" name="not_selected_form[]" size="7" class="span4" multiple>';
+        echo '<select name="not_selected_form[]" size="7" class="span4" multiple>';
         // adding the groups to the select form
         if ($group_list) {
             foreach ($group_list as $this_group) {
@@ -1208,12 +1210,9 @@ class AnnouncementManager
         Database::query($sql);
     }
 
-    /**
-     * @param int $id
-     */
-    public static function send_email($id)
+    public static function send_email($annoucement_id, $sendToUsersInSession = false)
     {
-        $email = AnnouncementEmail::create(null, $id);
-        $email->send();
+        $email = AnnouncementEmail::create(null, $annoucement_id);
+        $email->send($sendToUsersInSession);
     }
 }

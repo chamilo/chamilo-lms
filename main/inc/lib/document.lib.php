@@ -2695,7 +2695,7 @@ class DocumentManager
             $session_condition = " AND props.id_session='" . $session_id . "' ";
         }
 
-        $sql = "SELECT SUM(size) FROM  " . $TABLE_ITEMPROPERTY . "  AS props, " . $TABLE_DOCUMENT . "  AS docs
+        $sql = "SELECT coalesce(docs.size, 0), docs.path, docs.filetype FROM  " . $TABLE_ITEMPROPERTY . "  AS props, " . $TABLE_DOCUMENT . "  AS docs
 		        WHERE 	props.c_id 	= $course_id AND
 		        		docs.c_id 	= $course_id AND
 		        		docs.id 	= props.ref AND
@@ -2703,15 +2703,22 @@ class DocumentManager
                         props.visibility <> 2
                         $group_condition
                         $session_condition
+                        ORDER BY docs.id
                 ";
         $result = Database::query($sql);
-
-        if ($result && Database::num_rows($result) != 0) {
-            $row = Database::fetch_row($result);
-            return $row[0];
-        } else {
-            return 0;
+        
+        //Not count the same file more than once
+        //if there is more than once just take the last
+        $docsSize = array();
+        while ($row = Database::fetch_row($result)) {
+            $md5Key = md5($row[1]);
+            if (!empty($row[2]) && $row[2] == 'folder') {
+                $docsSize[$md5Key] = 4096;
+            } else {
+                $docsSize[$md5Key] = $row[0];
+            }
         }
+        return array_sum($docsSize);
     }
 
     /**

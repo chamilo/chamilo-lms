@@ -95,9 +95,6 @@ class Display
         if (!empty($page_header)) {
             self::$global_template->assign('header', $page_header);
         }
-
-        self::$global_template->assign('course_code', api_get_course_id());
-
         echo self::$global_template->show_header_template();
     }
 
@@ -935,15 +932,17 @@ class Display
      * This function need to be in the ready jquery function example --> $(function() { <?php echo Display::grid_js('grid' ...); ?> }
      * In order to work this function needs the Display::grid_html function with the same div id
      *
-     * @param   string  div id
-     * @param   string  url where the jqgrid will ask for data (if datatype = json)
-     * @param   array   Visible columns (you should use get_lang). An array in which we place the names of the columns.
+     * @param   string  $div_id div id
+     * @param   string  $url url where the jqgrid will ask for data (if datatype = json)
+     * @param   array   $column_names Visible columns (you should use get_lang). An array in which we place the names of the columns.
      * 					This is the text that appears in the head of the grid (Header layer).
      * 					Example: colname   {name:'date',     index:'date',   width:120, align:'right'},
-     * @param   array   the column model :  Array which describes the parameters of the columns.This is the most important part of the grid.
+     * @param   array   $column_model the column model :  Array which describes the parameters of the columns.This is the most important part of the grid.
      * 					For a full description of all valid values see colModel API. See the url above.
-     * @param   array   extra parameters
-     * @param   array   data that will be loaded
+     * @param   array   $extra_params extra parameters
+     * @param   array   $data data that will be loaded
+     * @param	string	$formatter A string that will be appended to the JSON returned
+     * @param	bool	$fixed_width not implemented yet
      * @return  string  the js code
      *
      */
@@ -955,7 +954,7 @@ class Display
         $extra_params,
         $data = array(),
         $formatter = '',
-        $width_fix = false
+        $fixed_width = false
     ) {
         $obj = new stdClass();
         $obj->first = 'first';
@@ -1022,7 +1021,10 @@ class Display
         // Adding extra params
         if (!empty($extra_params)) {
             foreach ($extra_params as $key => $element) {
-                $obj->$key = $element;
+                // the groupHeaders key gets a special treatment
+                if ($key != 'groupHeaders') {
+                    $obj->$key = $element;
+                }
             }
         }
 
@@ -1040,7 +1042,8 @@ class Display
         $json_encode = json_encode($obj);
 
         if (!empty($data)) {
-            //Converts the "data":"js_variable" to "data":js_variable othersiwe it will not work
+            //Converts the "data":"js_variable" to "data":js_variable, 
+            // otherwise it will not work
             $json_encode = str_replace('"data":"'.$data_var.'"', '"data":'.$data_var.'', $json_encode);
         }
 
@@ -1055,8 +1058,26 @@ class Display
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
         //$json .= $beforeSelectRow;
+
         $json .= $json_encode;
+
         $json .= '});';
+
+        //Grouping headers option
+        if (isset($extra_params['groupHeaders'])) {
+            $groups = '';
+            foreach ($extra_params['groupHeaders'] as $group) {
+                //{ "startColumnName" : "courses", "numberOfColumns" : 1, "titleText" : "Order Info" },
+                $groups .= '{ "startColumnName" : "' . $group['startColumnName'] . '", "numberOfColumns" : ' . $group['numberOfColumns'] . ', "titleText" : "' . $group['titleText']  . '" },';
+
+            }
+            $json .= '$("#'.$div_id.'").jqGrid("setGroupHeaders", {
+                "useColSpanStyle" : false,
+                "groupHeaders"    : [
+                    ' . $groups . '
+                ]
+            });';
+        }
 
         $all_text = addslashes(get_lang('All'));
         $json .= '$("'.$obj->pager.' option[value='.$all_value.']").text("'.$all_text.'");';

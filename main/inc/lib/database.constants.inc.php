@@ -62,6 +62,10 @@ define('TABLE_MAIN_USER_FIELD',         'user_field');
 define('TABLE_MAIN_USER_FIELD_OPTIONS', 'user_field_options');
 define('TABLE_MAIN_USER_FIELD_VALUES',  'user_field_values');
 
+define('TABLE_MAIN_LP_FIELD',         'lp_field');
+define('TABLE_MAIN_LP_FIELD_OPTIONS', 'lp_field_options');
+define('TABLE_MAIN_LP_FIELD_VALUES',  'lp_field_values');
+
 //User tags
 define('TABLE_MAIN_TAG',                'tag');
 define('TABLE_MAIN_USER_REL_TAG',       'user_rel_tag');

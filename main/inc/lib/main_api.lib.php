@@ -3223,7 +3223,7 @@ function api_get_datetime($time = null) {
  * @param int       The session ID (optional)
  * @return int      -1 on error, 0 if invisible, 1 if visible
  */
-function api_get_item_visibility($_course, $tool, $id, $session=0)
+function api_get_item_visibility($_course, $tool, $id, $session = 0)
 {
     if (!is_array($_course) || count($_course) == 0 || empty($tool) || empty($id)) {
         return -1;
@@ -3242,8 +3242,11 @@ function api_get_item_visibility($_course, $tool, $id, $session=0)
             LIMIT 1";
 
     $res = Database::query($sql);
-    if ($res === false || Database::num_rows($res) == 0) { return -1; }
+    if ($res === false || Database::num_rows($res) == 0) {
+        return -1;
+    }
     $row = Database::fetch_array($res);
+
     return $row['visibility'];
 }
 

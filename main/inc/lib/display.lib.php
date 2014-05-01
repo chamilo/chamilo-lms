@@ -1042,7 +1042,7 @@ class Display
         $json_encode = json_encode($obj);
 
         if (!empty($data)) {
-            //Converts the "data":"js_variable" to "data":js_variable, 
+            //Converts the "data":"js_variable" to "data":js_variable,
             // otherwise it will not work
             $json_encode = str_replace('"data":"'.$data_var.'"', '"data":'.$data_var.'', $json_encode);
         }
@@ -1063,7 +1063,7 @@ class Display
 
         $json .= '});';
 
-        //Grouping headers option
+        // Grouping headers option
         if (isset($extra_params['groupHeaders'])) {
             $groups = '';
             foreach ($extra_params['groupHeaders'] as $group) {

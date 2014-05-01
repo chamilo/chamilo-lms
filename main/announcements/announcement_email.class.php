@@ -220,11 +220,15 @@ class AnnouncementEmail
      */
     public function message($receiverUserId)
     {
-
         $content = $this->announcement('content');
-        $content = stripslashes($content);
-        $content = AnnouncementManager::parse_content($content, $this->course('code'), $session_id);
         $session_id = $this->session_id;
+
+        $content = AnnouncementManager::parse_content(
+            $receiverUserId,
+            $content,
+            $this->course('code'),
+            $session_id
+        );
 
         $user_email = $this->sender('mail');
         //$course_param = api_get_cidreq();
@@ -235,7 +239,7 @@ class AnnouncementEmail
         $result = "<div>$content</div>";
 
         // Adding attachment
-        $attachment = $this->attachement();
+        $attachment = $this->attachment();
         if (!empty($attachment)) {
             $result .= '<br />';
             $result .= Display::url(
@@ -245,7 +249,11 @@ class AnnouncementEmail
         }
 
         $result .= '<hr />';
-        $sender_name = api_get_person_name($this->sender('firstName'), $this->sender('lastName'), PERSON_NAME_EMAIL_ADDRESS);
+        $sender_name = api_get_person_name(
+            $this->sender('firstName'),
+            $this->sender('lastName'),
+            PERSON_NAME_EMAIL_ADDRESS
+        );
         $result .= '<a href="mailto:'.$user_email.'">'.$sender_name.'</a><br/>';
         $result .= '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.$course_param.'">'.$course_name.'</a><br/>';
 
@@ -257,7 +265,7 @@ class AnnouncementEmail
      *
      * @return array
      */
-    public function attachement()
+    public function attachment()
     {
         $result = array();
         $tbl_announcement_attachment = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);

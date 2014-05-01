@@ -564,15 +564,22 @@ class Tracking
      *                              1 for active <> -1
      *                              0 for active <> 0
      * @param int $into_lp  1 for all exercises
-     *                      0 for whitout LP
+     *                      0 for without LP
      * @internal param \Student $mixed id
      * @internal param \Course $string code
      * @internal param \Exercise $int id (optional), filtered by exercise
      * @internal param \Session $int id (optional), if param $session_id is null it'll return results including sessions, 0 = session is not filtered
      * @return   string    value (number %) Which represents a round integer about the score average.
      */
-    public static function get_avg_student_exercise_score($student_id, $course_code, $exercise_id = 0, $session_id = null)
-    {
+    public static function get_avg_student_exercise_score(
+        $student_id,
+        $course_code,
+        $exercise_id = 0,
+        $session_id = null,
+        $active_filter = 1,
+        $into_lp = 0
+    ) {
+        $course_code = Database::escape_string($course_code);
     	$course_info = api_get_course_info($course_code);
     	if (!empty($course_info)) {
     		// table definition
@@ -613,8 +620,10 @@ class Tracking
 
     		if (!empty($count_quiz[0]) && !empty($student_id)) {
     			if (is_array($student_id)) {
-    				$condition_user = " AND exe_user_id IN (".implode(',',$student_id).") ";
+                    $student_id = array_map('intval', $student_id);
+    				$condition_user = " AND exe_user_id IN (".implode(',', $student_id).") ";
     			} else {
+                    $student_id = intval($student_id);
     				$condition_user = " AND exe_user_id = '$student_id' ";
     			}
 
@@ -636,15 +645,18 @@ class Tracking
 
     			$count_quiz = Database::fetch_row(Database::query($sql));
 
-    			$sql = "SELECT SUM(exe_result/exe_weighting*100) as avg_score, COUNT(*) as num_attempts
+    			$sql = "SELECT
+    			        SUM(exe_result/exe_weighting*100) as avg_score,
+    			        COUNT(*) as num_attempts
     			        $select_lp_id
                         FROM $tbl_stats_exercise
-                        WHERE exe_exo_id IN ('".$exercise_id."')
-    			        $condition_user AND
-                        status = '' AND
-                        exe_cours_id = '$course_code'
-                        $condition_session
-                        $condition_into_lp
+                        WHERE
+                            exe_exo_id IN ('".$exercise_id."')
+                            $condition_user AND
+                            status = '' AND
+                            exe_cours_id = '$course_code'
+                            $condition_session
+                            $condition_into_lp
                         ORDER BY exe_date DESC";
 
     			$res = Database::query($sql);
@@ -667,12 +679,14 @@ class Tracking
                     if (!empty($row['lp_id'])) {
                         $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
                         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-                        $sql = "SELECT lp.name FROM $tbl_lp as lp, $tbl_course as c WHERE
-                            c.code = '$course_code' AND
-                            lp.id = ".$row['lp_id']." AND
-                            lp.c_id = c.id
-                            LIMIT 1;
-                            ";
+                        $sql = "SELECT lp.name
+                                FROM $tbl_lp as lp, $tbl_course as c
+                                WHERE
+                                    c.code = '$course_code' AND
+                                    lp.id = ".$row['lp_id']." AND
+                                    lp.c_id = c.id
+                                LIMIT 1;
+                        ";
                         $result = Database::query($sql);
                         $row_lp = Database::fetch_row($result);
                         $lp_name = $row_lp[0];
@@ -704,17 +718,22 @@ class Tracking
      * @internal param \Learning $int path item id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
      * @return  int     count of attempts
      */
-    public static function count_student_exercise_attempts($student_id, $course_code, $exercise_id, $lp_id = 0, $lp_item_id = 0, $session_id = 0, $find_all_lp = 0) {
+    public static function count_student_exercise_attempts(
+        $student_id,
+        $course_code,
+        $exercise_id,
+        $lp_id = 0,
+        $lp_item_id = 0,
+        $session_id = 0,
+        $find_all_lp = 0
+    ) {
     	$course_code = Database::escape_string($course_code);
     	$student_id  = intval($student_id);
     	$exercise_id = intval($exercise_id);
     	$session_id  = intval($session_id);
-    	$count_attempts = 0;
 
-    	if (!empty($lp_id)) $lp_id = intval($lp_id);
-    	if (!empty($lp_item_id)) $lp_id = intval($lp_item_id);
-
-
+    	$lp_id = intval($lp_id);
+        $lp_item_id = intval($lp_item_id);
     	$tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
     	$sql = "SELECT COUNT(ex.exe_id) as essais FROM $tbl_stats_exercices AS ex
@@ -811,14 +830,18 @@ class Tracking
     static function get_teachers_progress_by_course($courseId, $sessionId)
     {
         $course = api_get_course_info_by_id($courseId);
+        $sessionId = intval($sessionId);
+        $courseId = intval($courseId);
+
         //get teachers
         $sql = "SELECT scu.id_session, scu.id_user, s.name
                 FROM session_rel_course_rel_user scu, session s
-                WHERE scu.id_session = s.id
-                AND scu.status = 2
-                AND scu.visibility = 1
-                AND scu.course_code = '%s'
-               AND scu.id_session = %s";
+                WHERE
+                    scu.id_session = s.id
+                    AND scu.status = 2
+                    AND scu.visibility = 1
+                    AND scu.course_code = '%s'
+                    AND scu.id_session = %s";
         $query = sprintf($sql,$course['code'], $sessionId);
         $rs = Database::query($query);
         $teachers = array();
@@ -834,11 +857,11 @@ class Tracking
                     AND insert_user_id = %s
                     AND id_session = %s";
             $query = sprintf($sql,
-                        $courseId,
-                        $teacher['id_user'],
-                        $teacher['id_session']
-                       );
-   //error_log($query);
+                $courseId,
+                $teacher['id_user'],
+                $teacher['id_session']
+            );
+
             $rs = Database::query($query);
             $totalDocuments = 0;
             if ($rs) {
@@ -853,12 +876,12 @@ class Tracking
                     AND insert_user_id = %s
                     AND id_session = %s";
             $query = sprintf($sql,
-                        $courseId,
-                        $teacher['id_user'],
-                        $teacher['id_session']
-                       );
+                $courseId,
+                $teacher['id_user'],
+                $teacher['id_session']
+            );
             $rs = Database::query($query);
-            
+
             $totalLinks = 0;
             if ($rs) {
                 $row = Database::fetch_row($rs);
@@ -872,12 +895,12 @@ class Tracking
                     AND insert_user_id = %s
                     AND id_session = %s";
             $query = sprintf($sql,
-                        $courseId,
-                        $teacher['id_user'],
-                        $teacher['id_session']
-                       );
+                $courseId,
+                $teacher['id_user'],
+                $teacher['id_session']
+            );
             $rs = Database::query($query);
-            
+
             $totalForums = 0;
             if ($rs) {
                 $row = Database::fetch_row($rs);
@@ -891,12 +914,12 @@ class Tracking
                     AND insert_user_id = %s
                     AND id_session = %s";
             $query = sprintf($sql,
-                        $courseId,
-                        $teacher['id_user'],
-                        $teacher['id_session']
-                       );
+                $courseId,
+                $teacher['id_user'],
+                $teacher['id_session']
+            );
             $rs = Database::query($query);
-            
+
             $totalWikis = 0;
             if ($rs) {
                 $row = Database::fetch_row($rs);
@@ -911,12 +934,12 @@ class Tracking
                     AND insert_user_id = %s
                     AND id_session = %s";
             $query = sprintf($sql,
-                        $courseId,
-                        $teacher['id_user'],
-                        $teacher['id_session']
-                       );
+                $courseId,
+                $teacher['id_user'],
+                $teacher['id_session']
+            );
             $rs = Database::query($query);
-            
+
             $totalWorks = 0;
             if ($rs) {
                 $row = Database::fetch_row($rs);
@@ -930,12 +953,12 @@ class Tracking
                     AND insert_user_id = %s
                     AND id_session = %s";
             $query = sprintf($sql,
-                        $courseId,
-                        $teacher['id_user'],
-                        $teacher['id_session']
-                       );
+                $courseId,
+                $teacher['id_user'],
+                $teacher['id_session']
+            );
             $rs = Database::query($query);
-            
+
             $totalAnnouncements = 0;
             if ($rs) {
                 $row = Database::fetch_row($rs);
@@ -952,8 +975,9 @@ class Tracking
                 'works'         => $totalWorks,
                 'wikis'         => $totalWikis,
                 'announcements' => $totalAnnouncements,
-                );
+            );
         }
+
         return $data;
     }
 
@@ -971,6 +995,8 @@ class Tracking
     public static function get_avg_student_progress($student_id, $course_code = null, $lp_ids = array(), $session_id = null, $return_array = false)
     {
         $conditions = array();
+        $session_id = intval($session_id);
+
     	// Get the information of the course.
     	$course_info = api_get_course_info($course_code);
     	if (!empty($course_info)) {
@@ -1009,10 +1035,10 @@ class Tracking
                         AVG(progress) average,
                         SUM(progress) sum_progress,
                         count(progress) count_progress
-                      FROM $tbl_course_lp_view lp_view
-                      WHERE
+                    FROM $tbl_course_lp_view lp_view
+                    WHERE
                       $conditionToString
-                      GROUP BY lp_id";
+                    GROUP BY lp_id";
             $result = Database::query($sql);
             $row = Database::fetch_array($result, 'ASSOC');
             if (!$return_array) {
@@ -2578,7 +2604,7 @@ class Tracking
     }
     /**
      * Get total clicks
-     * THIS FUNCTION IS NOT BEEN USED, IT WAS MEANT TO BE USE WITH track_e_course_access.date_from and track_e_course_access.date_to, 
+     * THIS FUNCTION IS NOT BEEN USED, IT WAS MEANT TO BE USE WITH track_e_course_access.date_from and track_e_course_access.date_to,
      * BUT NO ROW MATCH THE CONDITION, IT SHOULD BE FINE TO USE IT WHEN YOU USE USER DEFINED DATES AND NO CHAMILO DATES
      * @param   int     User Id
      * @param   int     Course Id
@@ -2588,7 +2614,7 @@ class Tracking
      * @return  array   Data
      * @author  César Perales cesar.perales@beeznest.com 2014-01-16
      */
-    public static function get_total_clicks($userId, $courseId, $sessionId = 0, $date_from = '', $date_to = '') 
+    public static function get_total_clicks($userId, $courseId, $sessionId = 0, $date_from = '', $date_to = '')
     {
         $course = api_get_course_info_by_id($courseId);
         $tables = array(
@@ -2669,7 +2695,7 @@ class Tracking
             if (!empty($date_from) && !empty($date_to)) {
                 $fieldStartDate = $fields['start_date'];
                 if (!isset($fields['end_date'])) {
-                    $where .= sprintf(" AND ($fieldStartDate BETWEEN '%s' AND '%s' )", $date_from, $date_to) ;  
+                    $where .= sprintf(" AND ($fieldStartDate BETWEEN '%s' AND '%s' )", $date_from, $date_to) ;
                 } else {
                     $fieldEndDate = $fields['end_date'];
                     $where .= sprintf(" AND fieldStartDate >= '%s'
@@ -2685,9 +2711,9 @@ class Tracking
                 AND %s = %s
                 $where
                 GROUP BY %s";
-            $sql = sprintf($sql, 
+            $sql = sprintf($sql,
                 $fields['user'],    //user field
-                $tableName,         //FROM 
+                $tableName,         //FROM
                 $fields['course'],  //course condition
                 $course['code'],    //course condition
                 $fields['user'],    //user condition
@@ -3823,8 +3849,14 @@ class Tracking
      * @param   array   $options    An array of options you can pass to the query (limit, where and order)
      * @return array An array with the data of exercise(s) progress
      */
-    public static function get_exercise_progress($sessionId = 0, $courseId = 0, $exerciseId = 0, $date_from, $date_to, $options = array())
-    {
+    public static function get_exercise_progress(
+        $sessionId = 0,
+        $courseId = 0,
+        $exerciseId = 0,
+        $date_from = null,
+        $date_to = null,
+        $options = array()
+    ) {
         $sessionId  = intval($sessionId);
         $courseId   = intval($courseId);
         $exerciseId = intval($exerciseId);
@@ -3842,9 +3874,9 @@ class Tracking
         $tquiz_rel_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $ttrack_exercises  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
         $ttrack_attempt    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
- 
+
         require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
-        
+
         $sessions = array();
         $courses = array();
         // if session ID is defined but course ID is empty, get all the courses
@@ -3948,20 +3980,20 @@ class Tracking
                 INNER JOIN $ttrack_attempt ta ON ta.exe_id = te.exe_id
                 INNER JOIN $tquiz q ON q.id = te.exe_exo_id
                 INNER JOIN $tquiz_rel_question rq ON rq.exercice_id = q.id AND rq.c_id = q.c_id
-                INNER JOIN $tquiz_question qq ON qq.id = rq.question_id 
-                                                AND qq.c_id = rq.c_id 
-                                                AND qq.position = rq.question_order 
+                INNER JOIN $tquiz_question qq ON qq.id = rq.question_id
+                                                AND qq.c_id = rq.c_id
+                                                AND qq.position = rq.question_order
                                                 AND ta.question_id = rq.question_id
                 WHERE te.exe_cours_id = '$whereCourseCode' ".(empty($whereSessionParams)?'':"AND te.session_id IN ($whereSessionParams)")."
                 AND q.c_id = $courseIdx
                   $where $order $limit";
             $sql_query = vsprintf($sql, $whereParams);
-            
+
             // Now browse through the results and get the data
             $rs = Database::query($sql_query);
             $userIds = array();
             $questionIds = array();
-            $answerIds = array(); 
+            $answerIds = array();
             while ($row = Database::fetch_array($rs)) {
                 //only show if exercise is visible
                 if (api_get_item_visibility($courseData, 'quiz', $row['exercise_id'])) {
@@ -3973,11 +4005,14 @@ class Tracking
                 }
             }
             // Now fill questions data. Query all questions and answers for this test to avoid
-            $sqlQuestions = "SELECT tq.c_id, tq.id as question_id, tq.question, tqa.id_auto, 
-                                    tqa.answer, tqa.correct, tq.position, tqa.id_auto as answer_id
-                               FROM $tquiz_question tq, $tquiz_answer tqa
-                               WHERE tqa.question_id =tq.id and tqa.c_id = tq.c_id
-                                 AND tq.c_id = $courseIdx AND tq.id IN (".implode(',',$questionIds).")";
+            $sqlQuestions = "SELECT tq.c_id, tq.id as question_id, tq.question, tqa.id_auto,
+                            tqa.answer, tqa.correct, tq.position, tqa.id_auto as answer_id
+                            FROM $tquiz_question tq, $tquiz_answer tqa
+                            WHERE
+                                tqa.question_id = tq.id AND
+                                tqa.c_id = tq.c_id AND
+                                tq.c_id = $courseIdx AND
+                                tq.id IN (".implode(',', $questionIds).")";
 
             $resQuestions = Database::query($sqlQuestions);
             $answer = array();
@@ -3986,26 +4021,25 @@ class Tracking
                 $questionId = $rowQuestion['question_id'];
                 $answerId = $rowQuestion['answer_id'];
                 $answer[$questionId][$answerId] = array(
-                                                        'position' => $rowQuestion['position'],
-                                                        'question' => $rowQuestion['question'],
-                                                        'answer' => $rowQuestion['answer'],
-                                                        'correct' => $rowQuestion['correct']
-                                                       );
+                    'position' => $rowQuestion['position'],
+                    'question' => $rowQuestion['question'],
+                    'answer' => $rowQuestion['answer'],
+                    'correct' => $rowQuestion['correct']
+                );
                 $question[$questionId]['question'] = $rowQuestion['question'];
-                
             }
-            
+
             // Now fill users data
             $sqlUsers = "SELECT user_id, username, lastname, firstname FROM $tuser WHERE user_id IN (".implode(',',$userIds).")";
             $resUsers = Database::query($sqlUsers);
             while ($rowUser = Database::fetch_assoc($resUsers)) {
                 $users[$rowUser['user_id']] = $rowUser;
             }
-           
+
             foreach ($data as $id => $row) {
                 $rowQuestId = $row['question_id'];
                 $rowAnsId = $row['answer_id'];
-                
+
                 $data[$id]['session'] = $sessions[$row['session_id']]['name'];
                 $data[$id]['firstname'] = $users[$row['user_id']]['firstname'];
                 $data[$id]['lastname'] = $users[$row['user_id']]['lastname'];

@@ -14,7 +14,6 @@
  */
 class SessionManager
 {
-
     public static $_debug = false;
 
     public function __construct()
@@ -64,9 +63,23 @@ class SessionManager
      * @return mixed       Session ID on success, error message otherwise
      * */
     public static function create_session(
-    $sname, $syear_start, $smonth_start, $sday_start, $syear_end, $smonth_end, $sday_end, $snb_days_acess_before, $snb_days_acess_after, $nolimit, $coach_username, $id_session_category, $id_visibility, $start_limit = true, $end_limit = true, $fix_name = false
-    )
-    {
+        $sname,
+        $syear_start,
+        $smonth_start,
+        $sday_start,
+        $syear_end,
+        $smonth_end,
+        $sday_end,
+        $snb_days_acess_before,
+        $snb_days_acess_after,
+        $nolimit,
+        $coach_username,
+        $id_session_category,
+        $id_visibility,
+        $start_limit = true,
+        $end_limit = true,
+        $fix_name = false
+    ) {
         global $_configuration;
 
         //Check portal limits
@@ -563,7 +576,7 @@ class SessionManager
         INNER JOIN $user u ON u.user_id = s.id_user
         $where $order $limit";
 
-        $sql_query = sprintf($sql, $course['code'], $sessionId);
+        $sql_query = sprintf($sql, Database::escape_string($course['code']), $sessionId);
 
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs)) {
@@ -589,12 +602,16 @@ class SessionManager
 
             //Get lessons progress by user
             $sql = "SELECT v.lp_id as id, v.progress
-            FROM  $tbl_course_lp_view v
-            WHERE v.c_id = %d
-            AND v.user_id = %d
+                    FROM  $tbl_course_lp_view v
+                    WHERE v.c_id = %d
+                    AND v.user_id = %d
             $sessionCond";
 
-            $sql_query = sprintf($sql, $courseId, $user['user_id'], $sessionId);
+            $sql_query = sprintf($sql,
+                intval($courseId),
+                Database::escape_string($user['user_id']),
+                $sessionId
+            );
 
             $result = Database::query($sql_query);
 
@@ -674,11 +691,11 @@ class SessionManager
           } */
 
         $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username, u.email, s.course_code
-        FROM $session_course_user s
-        INNER JOIN $user u ON u.user_id = s.id_user
-        $where $order $limit";
+                FROM $session_course_user s
+                INNER JOIN $user u ON u.user_id = s.id_user
+                $where $order $limit";
 
-        $sql_query = sprintf($sql, $course['code'], $sessionId);
+        $sql_query = sprintf($sql, Database::escape_string($course['code']), $sessionId);
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs)) {
             $users[$user['user_id']] = $user;
@@ -702,13 +719,19 @@ class SessionManager
 
             //Get questions by user
             $sql = "SELECT sa.question_id, sa.option_id, sqo.option_text, sq.type
-            FROM $c_survey_answer sa
-            INNER JOIN $c_survey_question sq ON sq.question_id = sa.question_id
-            LEFT JOIN $c_survey_question_option sqo ON sqo.c_id = sa.c_id
-            AND sqo.question_id = sq.question_id
-            AND sqo.question_option_id = sa.option_id
-            AND sqo.survey_id = sq.survey_id
-            WHERE sa.survey_id = %d AND sa.c_id = %d AND sa.user = %d
+                    FROM $c_survey_answer sa
+                    INNER JOIN $c_survey_question sq
+                    ON sq.question_id = sa.question_id
+                    LEFT JOIN $c_survey_question_option sqo
+                    ON
+                      sqo.c_id = sa.c_id AND
+                      sqo.question_id = sq.question_id AND
+                      sqo.question_option_id = sa.option_id AND
+                      sqo.survey_id = sq.survey_id
+                    WHERE
+                      sa.survey_id = %d AND
+                      sa.c_id = %d AND
+                      sa.user = %d
             "; //. $where_survey;
             $sql_query = sprintf($sql, $surveyId, $courseId, $user['user_id']);
 
@@ -741,11 +764,14 @@ class SessionManager
      */
     public static function get_session_progress($sessionId, $courseId, $date_from, $date_to, $options)
     {
+        $sessionId = intval($sessionId);
+
         $getAllSessions = false;
         if (empty($sessionId)) {
             $sessionId = 0;
             $getAllSessions = true;
         }
+
         //tables
         $session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $user = Database::get_main_table(TABLE_MAIN_USER);
@@ -771,8 +797,7 @@ class SessionManager
           // Registered students in session.
           $users = CourseManager :: get_student_list_from_course_code($course_code, true, $sessionId);
           } */
-        $where = " WHERE course_code = '%s'
-        AND s.status <> 2 ";
+        $where = " WHERE course_code = '%s' AND s.status <> 2 ";
 
         $limit = null;
         if (!empty($options['limit'])) {
@@ -793,24 +818,23 @@ class SessionManager
         if (!empty($sessionId)) {
             $where .= ' AND id_session = %s';
             $queryVariables[] = $sessionId;
-            $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username,
-                u.email, s.course_code, s.id_session
-                FROM $session_course_user s
-                INNER JOIN $user u ON u.user_id = s.id_user
-                $where $order $limit";
+            $sql = "SELECT
+                      u.user_id, u.lastname, u.firstname, u.username,
+                      u.email, s.course_code, s.id_session
+                    FROM $session_course_user s
+                    INNER JOIN $user u
+                    ON u.user_id = s.id_user
+                    $where $order $limit";
         } else {
-            $sql = "SELECT u.user_id, u.lastname, u.firstname, u.username,
-                u.email, s.course_code, s.id_session
-                FROM $session_course_user s
-                INNER JOIN $user u ON u.user_id = s.id_user
-                $where $order $limit";
+            $sql = "SELECT
+                        u.user_id, u.lastname, u.firstname, u.username,
+                        u.email, s.course_code, s.id_session
+                    FROM $session_course_user s
+                    INNER JOIN $user u ON u.user_id = s.id_user
+                    $where $order $limit";
         }
 
         $sql_query = vsprintf($sql, $queryVariables);
-
-        if (self::$_debug) {
-            error_log(preg_replace('/\s+/', ' ', $sql_query));
-        }
         $rs = Database::query($sql_query);
         while ($user = Database::fetch_array($rs)) {
             $users[$user['user_id']] = $user;
@@ -819,12 +843,8 @@ class SessionManager
         /**
          *  Lessons
          */
-        $sql = "SELECT * FROM $tbl_course_lp
-        WHERE c_id = %s ";  //AND session_id = %s
+        $sql = "SELECT * FROM $tbl_course_lp WHERE c_id = %s ";  //AND session_id = %s
         $sql_query = sprintf($sql, $course['real_id']);
-        if (self::$_debug) {
-            error_log(preg_replace('/\s+/', ' ', $sql_query));
-        }
         $result = Database::query($sql_query);
         $arrLesson = array(array());
         while ($row = Database::fetch_array($result)) {
@@ -867,9 +887,6 @@ class SessionManager
         }
 
         $sql_query = sprintf($sql, $course['real_id'], $sessionId);
-        if (self::$_debug) {
-            error_log(preg_replace('/\s+/', ' ', $sql_query));
-        }
         $result = Database::query($sql_query);
         $row = Database::fetch_array($result);
         $assignments_total = $row['count'];
@@ -885,9 +902,6 @@ class SessionManager
                 WHERE c_id = %s and session_id = %s";
         }
         $sql_query = sprintf($sql, $course['real_id'], $sessionId);
-        if (self::$_debug) {
-            error_log(preg_replace('/\s+/', ' ', $sql_query));
-        }
         $result = Database::query($sql_query);
         $row = Database::fetch_array($result);
         $wiki_total = $row['count'];
@@ -920,13 +934,9 @@ class SessionManager
             where f.c_id = %s and f.session_id = %s";
         }
         $sql_query = sprintf($sql, $course['real_id'], $sessionId);
-        if (self::$_debug) {
-            error_log(preg_replace('/\s+/', ' ', $sql_query));
-        }
         $result = Database::query($sql_query);
         $row = Database::fetch_array($result);
         $forums_total = $row['count'];
-
 
         //process table info
         foreach ($users as $user) {
@@ -938,9 +948,7 @@ class SessionManager
             AND access_session_id = %s
             AND access_user_id = %s ";
             $sql_query = sprintf($sql, $course['code'], $user['id_session'], $user['user_id']);
-            if (self::$_debug) {
-                error_log(preg_replace('/\s+/', ' ', $sql_query));
-            }
+
             $result = Database::query($sql_query);
             $row = Database::fetch_array($result);
             $course_description_progress = ($row['count'] > 0) ? 100 : 0;
@@ -978,9 +986,6 @@ class SessionManager
             FROM $wiki
             where c_id = %s and session_id = %s and user_id = %s";
             $sql_query = sprintf($sql, $course['real_id'], $user['id_session'], $user['user_id']);
-            if (self::$_debug) {
-                error_log(preg_replace('/\s+/', ' ', $sql_query));
-            }
             $result = Database::query($sql_query);
             $row = Database::fetch_array($result);
             $wiki_revisions = $row['count'];
@@ -993,9 +998,6 @@ class SessionManager
             AND default_value_type = 'wiki_page_id'
             AND c_id = %s";
             $sql_query = sprintf($sql, $user['user_id'], $course['code'], $course['real_id']);
-            if (self::$_debug) {
-                error_log(preg_replace('/\s+/', ' ', $sql_query));
-            }
             $result = Database::query($sql_query);
             $row = Database::fetch_array($result);
 
@@ -1023,9 +1025,7 @@ class SessionManager
             INNER JOIN $forum f ON f.forum_id = p.forum_id
             WHERE p.poster_id = %s and f.session_id = %s and p.c_id = %s";
             $sql_query = sprintf($sql, $user['user_id'], $user['id_session'], $course['real_id']);
-            if (self::$_debug) {
-                error_log(preg_replace('/\s+/', ' ', $sql_query));
-            }
+
             $result = Database::query($sql_query);
             $row = Database::fetch_array($result);
 
@@ -2182,7 +2182,6 @@ class SessionManager
      */
     public static function get_sessions_list($conditions = array(), $order_by = array())
     {
-
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
         $session_category_table = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
@@ -2213,9 +2212,6 @@ class SessionManager
         }
         if (count($order_by) > 0) {
             $sql_query .= ' ORDER BY ' . Database::escape_string(implode(',', $order_by));
-        }
-        if (self::$_debug) {
-            error_log(preg_replace('/\s+/', ' ', $sql_query));
         }
         $sql_result = Database::query($sql_query);
         if (Database::num_rows($sql_result) > 0) {
@@ -2661,7 +2657,8 @@ class SessionManager
         $course_name = Database::escape_string($course_name);
 
         // select the courses
-        $sql = "SELECT * FROM $tbl_course c INNER JOIN $tbl_session_rel_course src ON c.code = src.course_code
+        $sql = "SELECT * FROM $tbl_course c INNER JOIN $tbl_session_rel_course src
+                ON c.code = src.course_code
 		        WHERE src.id_session LIKE '$session_id'";
         if (!empty($course_name)) {
             $sql .= " AND UPPER(c.title) LIKE UPPER('%$course_name%') ";

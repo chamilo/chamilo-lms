@@ -48,7 +48,7 @@ $course_id = $course_info['real_id'];
 if (isset($_GET['student_id'])) {
     $student_id = intval($_GET['student_id']);
 }
-$session_id = ($_GET['id_session'])? intval($_GET['id_session']) : api_get_session_id();
+$session_id = isset($_GET['id_session']) ? intval($_GET['id_session']) : api_get_session_id();
 $session_condition = api_get_session_condition($session_id);
 
 //When origin is not set that means that the lp_stats are viewed from the "man running" icon

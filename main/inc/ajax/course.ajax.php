@@ -131,7 +131,10 @@ switch ($action) {
                 $_GET['session_id'] = '%';
             }
 
-            $results = SessionManager::get_course_list_by_session_id_like($_GET['session_id'], $_GET['q']);
+            $results = SessionManager::get_course_list_by_session_id_like(
+                $_GET['session_id'],
+                $_GET['q']
+            );
             $results2 = array();
             if (!empty($results)) {
                 foreach ($results as $item) {

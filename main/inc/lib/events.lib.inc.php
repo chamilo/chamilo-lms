@@ -1495,7 +1495,8 @@ function delete_attempt_hotspot($exe_id, $user_id, $course_code, $session_id = 0
  * @param int $user_id
  * @param int $session_id
  */
-function event_course_login($course_code, $user_id, $session_id) {
+function event_course_login($course_code, $user_id, $session_id)
+{
     global $course_tracking_table;
 
     //@todo use api_get_utc_datetime
@@ -1506,16 +1507,16 @@ function event_course_login($course_code, $user_id, $session_id) {
     $session_id  = intval($session_id);
     $session_lifetime = 3600;
 
-
     //We select the last record for the current course in the course tracking table
-    $sql = "SELECT course_access_id FROM $course_tracking_table
-                            WHERE   user_id     = $user_id AND
-                                    course_code = '$course_code' AND
-                                    session_id  = $session_id AND
-                                    login_course_date > '$time' - INTERVAL $session_lifetime SECOND
-                        ORDER BY login_course_date DESC LIMIT 0,1";
+    $sql = "SELECT course_access_id
+            FROM $course_tracking_table
+            WHERE
+                user_id     = $user_id AND
+                course_code = '$course_code' AND
+                session_id  = $session_id AND
+                login_course_date > '$time' - INTERVAL $session_lifetime SECOND
+            ORDER BY login_course_date DESC LIMIT 0,1";
     $result = Database::query($sql);
-    //error_log(preg_replace('/\s+/',' ',$sql));
 
     if (Database::num_rows($result) > 0) {
         $i_course_access_id = Database::result($result,0,0);
@@ -1523,12 +1524,10 @@ function event_course_login($course_code, $user_id, $session_id) {
         $sql = "UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1
             WHERE course_access_id = ".intval($i_course_access_id)." AND session_id = ".$session_id;
         Database::query($sql);
-        //error_log(preg_replace('/\s+/',' ',$sql));
     } else {
         $sql="INSERT INTO $course_tracking_table (course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
             "VALUES('".$course_code."', '".$user_id."', '$time', '$time', '1','".$session_id."')";
         Database::query($sql);
-        //error_log(preg_replace('/\s+/',' ',$sql));
     }
     // Course catalog stats modifications see #4191
     CourseManager::update_course_ranking(null, null, null, null, true, false);

@@ -26,7 +26,10 @@ switch ($action) {
         break;
     case 'search_session':
         if (api_is_platform_admin()) {
-            $results = SessionManager::get_sessions_list(array('s.name LIKE' => "%".$_REQUEST['q']."%"));
+            //$results = SessionManager::get_sessions_list(array('s.name LIKE' => "%".$_REQUEST['q']."%"));
+            $results = SessionManager::get_sessions_list(
+                array('s.name LIKE' => "%".$_REQUEST['q']."%")
+            );
             $results2 = array();
             if (!empty($results)) {
                 foreach ($results as $item) {

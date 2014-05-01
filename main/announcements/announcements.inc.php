@@ -35,6 +35,7 @@ class AnnouncementManager
      * @param int       $userId
      * @param string    $content
      * @param string    $course_code
+     * @param int       $session_id
      *
      * @return mixed
      */
@@ -52,7 +53,8 @@ class AnnouncementManager
                 break;
             }
         }
-        $course_link = api_get_course_url($course_code, $session_id);
+
+        $courseLink = api_get_course_url($course_code, $session_id);
 
         $data['user_name'] = $readerInfo['username'];
         $data['user_firstname'] = $readerInfo['firstname'];

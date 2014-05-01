@@ -886,7 +886,7 @@ if (empty($_GET['details'])) {
 		if (Database :: num_rows($result_exercices) > 0) {
 			while ($exercices = Database :: fetch_array($result_exercices)) {
 				$exercise_id = intval($exercices['id']);
-                $lp_name = '';
+
 				$count_attempts   = Tracking::count_student_exercise_attempts($student_id, $course_code, $exercise_id, 0, 0, $session_id, 2);
 				$score_percentage = Tracking::get_avg_student_exercise_score($student_id, $course_code, $exercise_id, $session_id, 1, 0);
 
@@ -897,19 +897,20 @@ if (empty($_GET['details'])) {
                 } else {
                     $lp_name = '-';
                 }
-                $lp_name = (!empty($lp_name))? $lp_name: get_lang('NoLearnpath');
+                $lp_name = !empty($lp_name) ? $lp_name : get_lang('NoLearnpath');
 				$csv_content[] = array (
 					$exercices['title'],
 					$score_percentage . '%',
 					$count_attempts
-
 				);
 
-				if ($i % 2) $css_class = 'row_odd';
-				else $css_class = 'row_even';
+                if ($i % 2) {
+                    $css_class = 'row_odd';
+                } else {
+                    $css_class = 'row_even';
+                }
 
 				echo '<tr class="'.$css_class.'"><td>'.$exercices['title'].'</td>';
-
                 echo '<td>';
 
                 if (!empty($lp_name)) {
@@ -919,7 +920,6 @@ if (empty($_GET['details'])) {
                 }
 
                 echo '</td>';
-
                 echo '<td>';
 
 				if ($count_attempts > 0) {

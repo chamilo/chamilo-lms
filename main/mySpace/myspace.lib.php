@@ -1,19 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * MySpace class definition
- * @package chamilo.reporting
- */
-/**
- * Init
- */
+
 require_once api_get_path(LIBRARY_PATH).'export.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH).'tracking.lib.php';
-/**
- * MySpace class definition
- */
-class MySpace {
 
+/**
+ * Class MySpace
+ * @package chamilo.reporting
+ */
+class MySpace
+{
 	/**
 	 * This function serves exporting data in CSV format.
 	 * @param array $header			The header labels.
@@ -60,8 +56,8 @@ class MySpace {
 	 * @param	int		Session id (optional, default = 0)
 	 * @return 	array   Conections
 	 */
-	static function get_connections_to_course($user_id, $course_code, $session_id = 0) {
-
+	static function get_connections_to_course($user_id, $course_code, $session_id = 0)
+    {
 		// Database table definitions
 	    $tbl_track_course 	= Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
 
@@ -351,7 +347,15 @@ class MySpace {
      * @return  string  HTML array of results formatted for gridJS
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
-    static function display_tracking_exercise_progress_overview($sessionId = 0, $courseId = 0, $exerciseId = 0, $date_from, $date_to) {
+    static function display_tracking_exercise_progress_overview(
+        $sessionId = 0,
+        $courseId = 0,
+        $exerciseId = 0,
+        $date_from = null,
+        $date_to = null
+    ) {
+        $date_from = Security::remove_XSS($date_from);
+        $date_to = Security::remove_XSS($date_to);
         /**
          * Column names
          * The column order is important. Check $column variable in the main/inc/ajax/model.ajax.php file
@@ -393,10 +397,10 @@ class MySpace {
         // jqgrid will use this URL to do the selects
         $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_exercise_progress&session_id=' . $sessionId . '&course_id=' . $courseId  . '&exercise_id=' . $exerciseId . '&date_to=' . $date_to . '&date_from=' . $date_from;
 
-        //Autowidth
+        // Autowidth
         $extra_params['autowidth'] = 'true';
 
-        //height auto
+        // height auto
         $extra_params['height'] = 'auto';
 
         $tableId = 'exerciseProgressOverview';
@@ -489,7 +493,7 @@ class MySpace {
                     if (!empty($exercises[$cnt - 4]['title'])) {
                         $title = ucwords(strtolower(trim($exercises[$cnt - 4]['title'])));
                     }
-                    
+
                     $column[] = $title;
                     $column_model[] = array(
                         'name' => 'exer' . $i,
@@ -534,9 +538,8 @@ class MySpace {
      * Display a sortable table that contains an overview off all the progress of the user in a session
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
-    function display_survey_overview($sessionId = 0, $courseId = 0, $surveyId = 0, $date_from, $date_to) {
-
-        $course = api_get_course_info_by_id($courseId);
+    function display_survey_overview($sessionId = 0, $courseId = 0, $surveyId = 0, $date_from, $date_to)
+    {
         /**
          * Column name
          * The order is important you need to check the $column variable in the model.ajax.php file
@@ -549,8 +552,7 @@ class MySpace {
         //add lessons of course
         $questions = survey_manager::get_questions($surveyId, $courseId);
 
-        foreach ($questions as $question_id => $question)
-        {
+        foreach ($questions as $question) {
             $columns[] = $question['question'];
         }
 
@@ -563,9 +565,14 @@ class MySpace {
             array('name'=>'lastname',   'index'=>'lastname',    'align'=>'left', 'search' => 'true'),
         );
         //get dinamic column names
-        foreach ($questions as $question_id => $question)
-        {
-            $column_model[] = array('name'=> $question_id,   'index'=>$question_id,    'width'=>'70',   'align'=>'left', 'search' => 'true');
+        foreach ($questions as $question_id => $question) {
+            $column_model[] = array(
+                'name'=> $question_id,
+                'index'=>$question_id,
+                'width'=>'70',
+                'align'=>'left',
+                'search' => 'true'
+            );
         }
 
         $action_links = '';
@@ -595,14 +602,16 @@ class MySpace {
                 });
             });</script>';
         $return .= Display::grid_html($tableId);
+
         return $return;
     }
+
     /**
      * Display a sortable table that contains an overview off all the progress of the user in a session
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
-    static function display_tracking_progress_overview($sessionId = 0, $courseId = 0,  $date_from, $date_to) {
-
+    static function display_tracking_progress_overview($sessionId = 0, $courseId = 0,  $date_from, $date_to)
+    {
        //The order is important you need to check the the $column variable in the model.ajax.php file
         $columns = array(
             get_lang('LastName'),

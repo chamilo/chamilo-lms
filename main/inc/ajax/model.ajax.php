@@ -761,7 +761,12 @@ switch ($action) {
             'correct',
         );
 
-        $result = Tracking::get_exercise_progress($sessionId, $courseId, $exerciseId, $date_from, $date_to,
+        $result = Tracking::get_exercise_progress(
+            $sessionId,
+            $courseId,
+            $exerciseId,
+            $date_from,
+            $date_to,
             array(
                 'where' => $whereCondition,
                 'order' => "$sidx $sord",
@@ -788,8 +793,7 @@ switch ($action) {
         );
         require_once api_get_path(SYS_CODE_PATH).'newscorm/learnpathList.class.php';
         $lessons = LearnpathList::get_course_lessons($course['code'], $sessionId);
-        foreach ($lessons as $lesson_id => $lesson)
-        {
+        foreach ($lessons as $lesson_id => $lesson) {
             $columns[] = $lesson_id;
         }
         $columns[] = 'total';
@@ -854,8 +858,6 @@ switch ($action) {
             'wikis',
             'surveys',
             //exercises
-            'course_description_progress',
-            //exercises
             'lessons_total' ,
             'lessons_done' ,
             'lessons_left' ,
@@ -890,7 +892,7 @@ switch ($action) {
         $sessionId = 0;
         if (!empty($_GET['course_id']) && !empty($_GET['session_id'])) {
             $sessionId = intval($_GET['session_id']);
-            $courseId = intval($_GET['course_id']);         
+            $courseId = intval($_GET['course_id']);
         }
         $result = SessionManager::get_session_progress($sessionId, $courseId,
             array(

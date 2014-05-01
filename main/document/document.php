@@ -345,8 +345,7 @@ switch ($action) {
             $parent_id = $document_info['parent_id'];
             $my_path = UserManager::get_user_picture_path_by_id(
                 api_get_user_id(),
-                'system',
-                true
+                'system'
             );
             $user_folder = $my_path['dir'].'my_files/';
             $my_path = null;

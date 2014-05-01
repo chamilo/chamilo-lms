@@ -957,26 +957,13 @@ class SocialManager extends UserManager
     public static function display_productions($user_id)
     {
         $sysdir_array = UserManager::get_user_picture_path_by_id($user_id, 'system', true);
-        $sysdir = $sysdir_array['dir'].$user_id.'/';
+        $sysdir = $sysdir_array['dir'];
         $webdir_array = UserManager::get_user_picture_path_by_id($user_id, 'web', true);
-        $webdir = $webdir_array['dir'].$user_id.'/';
+        $webdir = $webdir_array['dir'];
         if (!is_dir($sysdir)) {
             mkdir($sysdir, api_get_permissions_for_new_directories(), true);
         }
-        /*
-          $handle = opendir($sysdir);
-          $productions = array();
-          while ($file = readdir($handle)) {
-          if ($file == '.' || $file == '..' || $file == '.htaccess') {
-          continue;                        // Skip current and parent directories
-          }
-          if (preg_match('/('.$user_id.'|[0-9a-f]{13}|saved)_.+\.(png|jpg|jpeg|gif)$/i', $file)) {
-          // User's photos should not be listed as productions.
-          continue;
-          }
-          $productions[] = $file;
-          }
-         */
+
         $productions = UserManager::get_user_productions($user_id);
 
         if (count($productions) > 0) {

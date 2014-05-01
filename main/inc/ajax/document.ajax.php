@@ -33,7 +33,7 @@ switch($action) {
                 $_FILES,
                 $_POST['curdirpath'],
                 $file['name'],
-                null,
+                'overwrite',
                 0,
                 $ifExists,
                 false,

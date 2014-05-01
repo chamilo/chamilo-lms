@@ -2657,46 +2657,22 @@ class SessionManager
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 
-        if ($getCount) {
-            $select = "SELECT COUNT(DISTINCT(c.code)) as count ";
-        } else {
-            $select = "SELECT DISTINCT c.* ";
-        }
+        $session_id = intval($session_id);
+        $course_name = Database::escape_string($course_name);
+
         // select the courses
         $sql = "SELECT * FROM $tbl_course c INNER JOIN $tbl_session_rel_course src ON c.code = src.course_code
-		        WHERE src.id_session like '$session_id'";
+		        WHERE src.id_session LIKE '$session_id'";
         if (!empty($course_name)) {
-            $course_name = Database::escape_string($course_name);
             $sql .= " AND UPPER(c.title) LIKE UPPER('%$course_name%') ";
         }
 
-        // Select the courses
-        $sql = "$select
-                FROM $tbl_course c
-                INNER JOIN $tbl_session_rel_course src
-                ON c.code = src.course_code
-		        WHERE
-		            src.id_session IN ($sessionsSQL)
-		            $keywordCondition
-		        ";
-        if ($getCount) {
-            $result = Database::query($sql);
-            $row = Database::fetch_array($result,'ASSOC');
-            return $row['count'];
-        }
-
-        if (isset($from) && isset($limit)) {
-            $from = intval($from);
-            $limit = intval($limit);
-            $sql .= " LIMIT $from, $limit";
-        }
-
+        $sql .= "ORDER BY title;";
         $result = Database::query($sql);
         $num_rows = Database::num_rows($result);
         $courses = array();
-
         if ($num_rows > 0) {
-            while ($row = Database::fetch_array($result,'ASSOC'))	{
+            while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $courses[$row['id']] = $row;
             }
         }

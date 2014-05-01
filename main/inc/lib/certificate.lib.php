@@ -1,36 +1,42 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * The certificates class is used to generate certificates from inside the
  * gradebook tool.
  * @package chamilo.library.certificates
  */
-class Certificate extends Model {
-    var $table;
-    var $columns = array('id','cat_id','score_certificate','created_at','path_certificate');
+class Certificate extends Model
+{
+    public $table;
+    public $columns = array('id','cat_id','score_certificate','created_at','path_certificate');
     /**
      * Certification data
      */
-    var $certificate_data = array();
+    public $certificate_data = array();
 
     /**
      * Student's certification path
      */
-    var $certification_user_path = null;
-    var $certification_web_user_path = null;
-    var $html_file     = null;
-    var $qr_file     = null;
-    var $user_id;
+    public $certification_user_path = null;
+    public $certification_web_user_path = null;
+    public $html_file     = null;
+    public $qr_file     = null;
+    public $user_id;
 
-    //If true every time we enter to the certificate URL we would generate a new certificate
-    // (good thing because we can edit the certificate and all users will have the latest certificate bad because we load the certificate everytime)
-    var $force_certificate_generation = true;  //default true
+    /* If true every time we enter to the certificate URL
+    we would generate a new certificate (good thing because we can edit the
+    certificate and all users will have the latest certificate bad because we
+    load the certificate everytime*/
+
+    public $force_certificate_generation = true;
 
     /**
      * Constructor
      * @param	int	ID of the certificate. If no ID given, take user_id and try to generate one
      */
-    public function __construct($certificate_id = null) {
+    public function __construct($certificate_id = null)
+    {
         $this->table             =  Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $this->certificate_data = null;
 
@@ -67,7 +73,6 @@ class Certificate extends Model {
         }
     }
 
-
     /**
      * Checks if the certificate user path directory is created
      */
@@ -97,9 +102,9 @@ class Certificate extends Model {
      * the teacher from the gradebook tool to re-generate the certificate because
      * the original version wa flawed.
      */
-    public function delete($force_delete = false) {
+    public function delete($force_delete = false)
+    {
         if (!empty($this->certificate_data)) {
-
             if (!is_null($this->html_file) || $this->html_file != '' || strlen($this->html_file)) {
                 //Deleting HTML file
                 if (is_file($this->html_file)) {
@@ -125,10 +130,10 @@ class Certificate extends Model {
     }
 
     /**
-     *     Generates an HTML Certificate and fills the path_certificate field in the DB
-     * */
-
-    public function generate($params = array()) {
+    *  Generates an HTML Certificate and fills the path_certificate field in the DB
+    **/
+    public function generate($params = array())
+    {
         //The user directory should be set
         if (empty($this->certification_user_path) && $this->force_certificate_generation == false) {
             return false;
@@ -216,7 +221,8 @@ class Certificate extends Model {
     * @param string the path name of the certificate
     * @return void()
     */
-    function update_user_info_about_certificate ($cat_id,$user_id,$path_certificate) {
+    public function update_user_info_about_certificate ($cat_id,$user_id,$path_certificate)
+    {
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         if (!UserManager::is_user_certified($cat_id,$user_id)) {
             $sql='UPDATE '.$table_certificate.' SET path_certificate="'.Database::escape_string($path_certificate).'"
@@ -231,7 +237,8 @@ class Certificate extends Model {
      *
      * @return boolean
      */
-    function html_file_is_generated() {
+    public function html_file_is_generated()
+    {
         if (empty($this->certification_user_path)) {
             return false;
         }
@@ -246,7 +253,8 @@ class Certificate extends Model {
      * @param    string    Text to be added in the QR code
      * @param    string    file path of the image
      * */
-    public function generate_qr($text, $path) {
+    public function generate_qr($text, $path)
+    {
         //Make sure HTML certificate is generated
         if (!empty($text) && !empty($path)) {
             require_once api_get_path(LIBRARY_PATH).'phpqrcode/qrlib.php';
@@ -262,7 +270,8 @@ class Certificate extends Model {
      * @param array Contains two array entris: first are the headers, second is an array of contents
      * @return string The translated string
      */
-    public function parse_certificate_variables($array) {
+    public function parse_certificate_variables($array)
+    {
         $text = '';
         $headers = $array[0];
         $content = $array[1];
@@ -312,7 +321,8 @@ class Certificate extends Model {
     * course* can be printed (for anonymous users). Connected users can always
     * print them.
     */
-    public function show() {
+    public function show()
+    {
         // Special rules for anonymous users
         $failed = false;
         if (api_is_anonymous()) {

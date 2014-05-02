@@ -30,10 +30,10 @@ switch ($action) {
             $requested_image   = ($tool_visibility == 0 ) ? $tool_image : $new_image;
             $requested_clase   = ($tool_visibility == 0 ) ? 'visible' : 'invisible';
             $requested_message = ($tool_visibility == 0 ) ? 'is_active' : 'is_inactive';
-            $requested_view    = ($tool_visibility == 0 ) ? 'visible.gif' : 'invisible.gif';
+            $requested_view    = ($tool_visibility == 0 ) ? 'visible.png' : 'invisible.png';
             $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
 
-            $requested_view    = ($tool_visibility == 0 ) ? 'visible.gif' : 'invisible.gif';
+            $requested_view    = ($tool_visibility == 0 ) ? 'visible.png' : 'invisible.png';
             $requested_visible = ($tool_visibility == 0 ) ? 1 : 0;
 			//HIDE AND REACTIVATE TOOL
             if ($_GET["id"] == strval(intval($_GET["id"]))) {

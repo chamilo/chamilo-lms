@@ -626,24 +626,48 @@ footer a:link, footer a:visited {
  *  CSS CHAT END                             *
  *****************************************************/
 .normal-message {
-    color: #00407F;
-    border: 1px solid #CDE6F5;
-    background: url("images/background_message.png") repeat-x scroll 0 0 #EAF8FE;
+    background-color: #D9EDF7;
+    color: #3A87AD;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-top: 1px solid #BCE8F1;
+    border-left: 1px solid #BCE8F1;
+    border-right: 1px solid #BCE8F1;
+    border-bottom: 3px solid #BCE8F1;
+    border-radius: 10px;
 }
 .warning-message {
-    border: 1px solid #FFB30F;
-    color: #000;
-	background: url("images/background_message.png") repeat-x scroll 0 0 #FFEFA7;
+    background-color: #FCF8E3;
+    color: #C09853;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-top: 1px solid #FBEED5;
+    border-left: 1px solid #FBEED5;
+    border-right: 1px solid #FBEED5;
+    border-bottom: 3px solid #FBEED5;
+    border-radius: 10px;
 }
 .confirmation-message {
-	border: 1px solid #1F8323;
-    color:#1F8323;
-	background: url("images/background_message.png") repeat-x scroll 0 0 #CAF0C7;
+  background-color: #DFF0D8;
+  color: #468847;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-top: 1px solid #D6E9C6;
+  border-left: 1px solid #D6E9C6;
+  border-right: 1px solid #D6E9C6;
+  border-bottom: 3px solid #D6E9C6;
+  border-radius: 10px;
 }
 .error-message {
-    border: 1px solid #FF0000;
-    color: #440000;
-	background: url("images/background_message.png") repeat-x scroll 0 0 #FFD1D1;
+  background-color: #F2DEDE;
+  color: #B94A48;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-top: 1px solid #EED3D7;
+  border-left: 1px solid #EED3D7;
+  border-right: 1px solid #EED3D7;
+  border-bottom: 3px solid #EED3D7;
+  border-radius: 10px;
 }
 
 .social-menu-title {
@@ -675,25 +699,26 @@ footer a:link, footer a:visited {
 .new_actions-fixed{
   top: 49px;
 }
-
+.user_login_icon{
+  background: url(images/user_icon.png) no-repeat 5px center;
+}
+.user_password_icon{
+  background: url(images/user_password.png) no-repeat 5px center;
+}
+.form-vertical .controls input.span2{
+  padding-left: 25px;
+}
+/*including "login" image*/
+button.login {
+    background-image:url(images/bg-button.gif);
+}
 /*including "save" image*/
 button.save {
-    background:url(images/accept.png) 0 center no-repeat #F0F0F0;
-    color: #666;
-    text-shadow:none;
-}
-button.save:hover {
-    background:url(images/accept.png) 0 center no-repeat #ffffff;
-    color: #666;
-    text-shadow:none;
+    background-image:url(images/button_accept.png)
 }
 /*including "add" image*/
 .controls .btn.add {
-    background:url(images/add.png) 0 center no-repeat #EC5923;
-    padding-left: 36px;
-}
-.controls .btn.add:hover {
-    background:url(images/add.png) 0 center no-repeat #EA4E15;
+    background-image:url(images/button_plus_green.png);
     padding-left: 36px;
 }
 /*including "cancel" image*/
@@ -702,22 +727,15 @@ button.cancel {
 }
 /*including "search" image*/
 button.search {
-    background:url(images/buttom.png) 0 center no-repeat #F0F0F0;
-    color: #666;
-    text-shadow:none;
-}
-button.search:hover {
-    background:url(images/buttom.png) 0 center no-repeat #ffffff;
-    color: #666;
-    text-shadow:none;
+    background-image:url(images/bg-button.png);
 }
 /*including "plus" image*/
 button.plus {
-    background-image:url(images/button_plus.gif);
+    background-image:url(images/button_plus_blue.png);
 }
 /*including "minus" image*/
 button.minus {
-    background-image:url(images/button_minus.gif);
+    background-image:url(images/button_minus.png);
 }
 /*including "next" image*/
 button.next {

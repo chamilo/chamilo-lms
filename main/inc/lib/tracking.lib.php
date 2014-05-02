@@ -556,14 +556,30 @@ class Tracking
     /**
      * Gets the score average from all tests in a course by student
      *
-     * @param    mixed		Student(s) id
-     * @param    string 	Course code
-     * @param    int    	Exercise id (optional), filtered by exercise
-     * @param    int    	Session id (optional), if param $session_id is null it'll return results including sessions, 0 = session is not filtered
-     * @return   string 	value (number %) Which represents a round integer about the score average.
+     * @param $student_id
+     * @param $course_code
+     * @param int $exercise_id
+     * @param null $session_id
+     * @param int $active_filter    2 for consider all tests
+     *                              1 for active <> -1
+     *                              0 for active <> 0
+     * @param int $into_lp  1 for all exercises
+     *                      0 for without LP
+     * @internal param \Student $mixed id
+     * @internal param \Course $string code
+     * @internal param \Exercise $int id (optional), filtered by exercise
+     * @internal param \Session $int id (optional), if param $session_id is null it'll return results including sessions, 0 = session is not filtered
+     * @return   string    value (number %) Which represents a round integer about the score average.
      */
-    public static function get_avg_student_exercise_score($student_id, $course_code, $exercise_id = 0, $session_id = null)
-    {
+    public static function get_avg_student_exercise_score(
+        $student_id,
+        $course_code,
+        $exercise_id = 0,
+        $session_id = null,
+        $active_filter = 1,
+        $into_lp = 0
+    ) {
+        $course_code = Database::escape_string($course_code);
     	$course_info = api_get_course_info($course_code);
     	if (!empty($course_info)) {
     		// table definition
@@ -583,20 +599,37 @@ class Tracking
     			$session_id = intval($session_id);
     			$condition_session = " AND session_id = $session_id ";
     		}
+            if ($active_filter == 1) {
+                $condition_active = 'AND active <> -1';
+            } elseif ($active_filter == 0) {
+                $condition_active = 'AND active <> 0';
+            } else {
+                $condition_active = '';
+            }
+            $condition_into_lp = '';
+            $select_lp_id = '';
+            if ($into_lp == 0) {
+                $condition_into_lp = 'AND orig_lp_id = 0 AND orig_lp_item_id = 0';
+            } else {
+                $select_lp_id = ', orig_lp_id as lp_id ';
+            }
+
     		$sql = "SELECT count(id) FROM $tbl_course_quiz
-    				WHERE c_id = {$course_info['real_id']} AND active <> -1 $condition_quiz ";
+    				WHERE c_id = {$course_info['real_id']} $condition_active $condition_quiz ";
     		$count_quiz = Database::fetch_row(Database::query($sql));
 
     		if (!empty($count_quiz[0]) && !empty($student_id)) {
     			if (is_array($student_id)) {
-    				$condition_user = " AND exe_user_id IN (".implode(',',$student_id).") ";
+                    $student_id = array_map('intval', $student_id);
+    				$condition_user = " AND exe_user_id IN (".implode(',', $student_id).") ";
     			} else {
+                    $student_id = intval($student_id);
     				$condition_user = " AND exe_user_id = '$student_id' ";
     			}
 
     			if (empty($exercise_id)) {
     				$sql = "SELECT id FROM $tbl_course_quiz
-    						WHERE c_id = {$course_info['real_id']} AND active <> -1 $condition_quiz";
+    						WHERE c_id = {$course_info['real_id']} $condition_active $condition_quiz";
                     $result = Database::query($sql);
                     $exercise_list = array();
     				$exercise_id = null;
@@ -612,19 +645,23 @@ class Tracking
 
     			$count_quiz = Database::fetch_row(Database::query($sql));
 
-    			$sql = "SELECT SUM(exe_result/exe_weighting*100) as avg_score, COUNT(*) as num_attempts
+    			$sql = "SELECT
+    			        SUM(exe_result/exe_weighting*100) as avg_score,
+    			        COUNT(*) as num_attempts
+    			        $select_lp_id
                         FROM $tbl_stats_exercise
-                        WHERE exe_exo_id IN ('".$exercise_id."')
-    			        $condition_user AND
-                        orig_lp_id = 0 AND
-                        status = '' AND
-                        exe_cours_id = '$course_code' AND
-                        orig_lp_item_id = 0 $condition_session
+                        WHERE
+                            exe_exo_id IN ('".$exercise_id."')
+                            $condition_user AND
+                            status = '' AND
+                            exe_cours_id = '$course_code'
+                            $condition_session
+                            $condition_into_lp
                         ORDER BY exe_date DESC";
 
     			$res = Database::query($sql);
     			$row = Database::fetch_array($res);
-    			$quiz_avg_score = 0;
+    			$quiz_avg_score = null;
 
     			if (!empty($row['avg_score'])) {
     				$quiz_avg_score = round($row['avg_score'],2);
@@ -636,7 +673,28 @@ class Tracking
     			if (is_array($student_id)) {
     				$quiz_avg_score = round($quiz_avg_score / count($student_id), 2);
     			}
-    			return $quiz_avg_score;
+                if ($into_lp == 0) {
+                    return $quiz_avg_score;
+                } else {
+                    if (!empty($row['lp_id'])) {
+                        $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
+                        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+                        $sql = "SELECT lp.name
+                                FROM $tbl_lp as lp, $tbl_course as c
+                                WHERE
+                                    c.code = '$course_code' AND
+                                    lp.id = ".$row['lp_id']." AND
+                                    lp.c_id = c.id
+                                LIMIT 1;
+                        ";
+                        $result = Database::query($sql);
+                        $row_lp = Database::fetch_row($result);
+                        $lp_name = $row_lp[0];
+                        return array($quiz_avg_score, $lp_name);
+                    } else {
+                        return array($quiz_avg_score, null);
+                    }
+                }
     		}
     	}
     	return null;
@@ -644,13 +702,21 @@ class Tracking
 
     /**
      * Get count student's exercise COMPLETED attempts
-     * @param int tudent id
-     * @param string Course code
-     * @param int Exercise id
-     * @param int Learning path id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
-     * @param int Learning path item id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
-     *
-     * @return int     count of attempts
+     * @param $student_id
+     * @param $course_code
+     * @param $exercise_id
+     * @param int $lp_id
+     * @param int $lp_item_id
+     * @param int $session_id
+     * @param int $find_all_lp  0 = just LP specified
+     *                          1 = LP specified or whitout LP,
+     *                          2 = all rows
+     * @internal param \Student $int id
+     * @internal param \Course $string code
+     * @internal param \Exercise $int id
+     * @internal param \Learning $int path id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
+     * @internal param \Learning $int path item id (optional), for showing attempts inside a learning path $lp_id and $lp_item_id params are required.
+     * @return  int     count of attempts
      */
     public static function count_student_exercise_attempts(
         $student_id,
@@ -658,26 +724,32 @@ class Tracking
         $exercise_id,
         $lp_id = 0,
         $lp_item_id = 0,
-        $session_id = 0
+        $session_id = 0,
+        $find_all_lp = 0
     ) {
     	$course_code = Database::escape_string($course_code);
     	$student_id  = intval($student_id);
     	$exercise_id = intval($exercise_id);
     	$session_id  = intval($session_id);
 
-    	if (!empty($lp_id)) $lp_id = intval($lp_id);
-    	if (!empty($lp_item_id)) $lp_id = intval($lp_item_id);
-
+    	$lp_id = intval($lp_id);
+        $lp_item_id = intval($lp_item_id);
     	$tbl_stats_exercices = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
     	$sql = "SELECT COUNT(ex.exe_id) as essais FROM $tbl_stats_exercices AS ex
                 WHERE  ex.exe_cours_id = '$course_code'
                 AND ex.exe_exo_id = $exercise_id
                 AND status = ''
-                AND orig_lp_id = $lp_id
-                AND orig_lp_item_id = $lp_item_id
                 AND exe_user_id= $student_id
                 AND session_id = $session_id ";
+
+        if ($find_all_lp == 1) {
+            $sql .= "AND (orig_lp_id = $lp_id OR orig_lp_id = 0)
+                AND (orig_lp_item_id = $lp_item_id OR orig_lp_item_id = 0)";
+        } elseif ($find_all_lp == 0) {
+            $sql .= "AND orig_lp_id = $lp_id
+                AND orig_lp_item_id = $lp_item_id";
+        }
 
     	$rs = Database::query($sql);
     	$row = Database::fetch_row($rs);
@@ -750,6 +822,167 @@ class Tracking
     }
 
     /**
+     * get teacher progress by course and session
+     * @param int course id
+     * @param int session id
+     * @return data array
+     */
+    static function get_teachers_progress_by_course($courseId, $sessionId)
+    {
+        $course = api_get_course_info_by_id($courseId);
+        $sessionId = intval($sessionId);
+        $courseId = intval($courseId);
+
+        //get teachers
+        $sql = "SELECT scu.id_session, scu.id_user, s.name
+                FROM session_rel_course_rel_user scu, session s
+                WHERE
+                    scu.id_session = s.id
+                    AND scu.status = 2
+                    AND scu.visibility = 1
+                    AND scu.course_code = '%s'
+                    AND scu.id_session = %s";
+        $query = sprintf($sql,$course['code'], $sessionId);
+        $rs = Database::query($query);
+        $teachers = array();
+        while ($teacher = Database::fetch_array($rs,'ASSOC')) {
+            $teachers[] = $teacher;
+        }
+        foreach ($teachers as $teacher) {
+            //total documents added
+            $sql = "SELECT count(*) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'DocumentAdded'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                $courseId,
+                $teacher['id_user'],
+                $teacher['id_session']
+            );
+
+            $rs = Database::query($query);
+            $totalDocuments = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalDocuments = $row[0];
+            }
+            //total links added
+            $sql = "SELECT count(*) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'LinkAdded'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                $courseId,
+                $teacher['id_user'],
+                $teacher['id_session']
+            );
+            $rs = Database::query($query);
+
+            $totalLinks = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalLinks = $row[0];
+            }
+            //total forums added
+            $sql = "SELECT count(*) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'ForumthreadVisible'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                $courseId,
+                $teacher['id_user'],
+                $teacher['id_session']
+            );
+            $rs = Database::query($query);
+
+            $totalForums = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalForums = $row[0];
+            }
+            //total wikis added
+            $sql = "SELECT COUNT(DISTINCT(ref)) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'WikiAdded'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                $courseId,
+                $teacher['id_user'],
+                $teacher['id_session']
+            );
+            $rs = Database::query($query);
+
+            $totalWikis = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalWikis = $row[0];
+            }
+            //total works added
+            $sql = "SELECT COUNT(*) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'DirectoryCreated'
+                    AND tool = 'work'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                $courseId,
+                $teacher['id_user'],
+                $teacher['id_session']
+            );
+            $rs = Database::query($query);
+
+            $totalWorks = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalWorks = $row[0];
+            }
+            //total announcements added
+            $sql = "SELECT COUNT(*) as total
+                    FROM c_item_property
+                    WHERE lastedit_type = 'AnnouncementAdded'
+                    AND c_id = %s
+                    AND insert_user_id = %s
+                    AND id_session = %s";
+            $query = sprintf($sql,
+                $courseId,
+                $teacher['id_user'],
+                $teacher['id_session']
+            );
+            $rs = Database::query($query);
+
+            $totalAnnouncements = 0;
+            if ($rs) {
+                $row = Database::fetch_row($rs);
+                $totalAnnouncements = $row[0];
+            }
+            $tutor = get_user_info_by_id($teacher['id_user']);
+            $data[] = array(
+                'course'        => $course['title'],
+                'session'       => $teacher['name'],
+                'tutor'         => $tutor['username'] . ' - ' . $tutor['lastname'] . ' ' . $tutor['firstname'],
+                'documents'     => $totalDocuments,
+                'links'         => $totalLinks,
+                'forums'        => $totalForums,
+                'works'         => $totalWorks,
+                'wikis'         => $totalWikis,
+                'announcements' => $totalAnnouncements,
+            );
+        }
+
+        return $data;
+    }
+
+
+    /**
      * Returns the average student progress in the learning paths of the given
      * course.
      * @param   int/array    Student id(s)
@@ -762,6 +995,8 @@ class Tracking
     public static function get_avg_student_progress($student_id, $course_code = null, $lp_ids = array(), $session_id = null, $return_array = false)
     {
         $conditions = array();
+        $session_id = intval($session_id);
+
     	// Get the information of the course.
     	$course_info = api_get_course_info($course_code);
     	if (!empty($course_info)) {
@@ -800,10 +1035,10 @@ class Tracking
                         AVG(progress) average,
                         SUM(progress) sum_progress,
                         count(progress) count_progress
-                      FROM $tbl_course_lp_view lp_view
-                      WHERE
+                    FROM $tbl_course_lp_view lp_view
+                    WHERE
                       $conditionToString
-                      GROUP BY lp_id";
+                    GROUP BY lp_id";
             $result = Database::query($sql);
             $row = Database::fetch_array($result, 'ASSOC');
             if (!$return_array) {
@@ -2368,46 +2603,132 @@ class Tracking
         return $data;
     }
     /**
-     * Get total clicks by session
-     * @param    int        Session id (optional), if param $session_id is null(default) it'll return results including sessions, 0 = session is not filtered
-     * @return    array     data
-     * @todo    implement total click by $course_id
+     * Get total clicks
+     * THIS FUNCTION IS NOT BEEN USED, IT WAS MEANT TO BE USE WITH track_e_course_access.date_from and track_e_course_access.date_to,
+     * BUT NO ROW MATCH THE CONDITION, IT SHOULD BE FINE TO USE IT WHEN YOU USE USER DEFINED DATES AND NO CHAMILO DATES
+     * @param   int     User Id
+     * @param   int     Course Id
+     * @param   int     Session Id (optional), if param $session_id is null(default) it'll return results including sessions, 0 = session is not filtered
+     * @param   string  Date from
+     * @param   string  Date to
+     * @return  array   Data
+     * @author  César Perales cesar.perales@beeznest.com 2014-01-16
      */
-    public static function get_total_clicks_by_session($session_id = null)
+    public static function get_total_clicks($userId, $courseId, $sessionId = 0, $date_from = '', $date_to = '')
     {
+        $course = api_get_course_info_by_id($courseId);
         $tables = array(
-            TABLE_STATISTIC_TRACK_E_LASTACCESS => array('access_session_id','access_user_id'),
-            TABLE_STATISTIC_TRACK_E_ACCESS => array('access_session_id', 'access_user_id'),
-            #TABLE_STATISTIC_TRACK_E_LOGIN,
-            TABLE_STATISTIC_TRACK_E_DOWNLOADS => array('down_session_id', 'down_user_id'),
-            TABLE_STATISTIC_TRACK_E_LINKS => array('links_session_id', 'links_user_id'),
-            TABLE_STATISTIC_TRACK_E_ONLINE => array('session_id', 'login_user_id'),
+            TABLE_STATISTIC_TRACK_E_LASTACCESS => array(
+                'course'    => 'access_cours_code',
+                'session'   => 'access_session_id',
+                'user'      => 'access_user_id',
+                'start_date'=> 'access_date',
+                ),
+            TABLE_STATISTIC_TRACK_E_ACCESS => array(
+                'course'    => 'access_cours_code',
+                'session'   => 'access_session_id',
+                'user'      => 'access_user_id',
+                'start_date'=> 'access_date',
+                ),
+            #TABLE_STATISTIC_TRACK_E_LOGIN, array(,, 'login_date', 'logout_date');
+            TABLE_STATISTIC_TRACK_E_DOWNLOADS => array(
+                'course'    => 'down_cours_id',
+                'session'   => 'down_session_id',
+                'user'      => 'down_user_id',
+                'start_date'=> 'down_date',
+                ),
+            TABLE_STATISTIC_TRACK_E_LINKS => array(
+                'course'    => 'links_cours_id',
+                'session'   => 'links_session_id',
+                'user'      => 'links_user_id',
+                'start_date'=> 'links_date',
+                ),
+            TABLE_STATISTIC_TRACK_E_ONLINE => array(
+                'course'    => 'course',
+                'session'   => 'session_id',
+                'user'      => 'login_user_id',
+                'start_date'=> 'login_date',
+                ),
             #TABLE_STATISTIC_TRACK_E_HOTPOTATOES,
-            TABLE_STATISTIC_TRACK_E_COURSE_ACCESS => array('session_id', 'user_id'),
-            TABLE_STATISTIC_TRACK_E_EXERCICES => array('session_id', 'exe_user_id'),
-            TABLE_STATISTIC_TRACK_E_ATTEMPT => array('session_id', 'user_id'),
+            /*TABLE_STATISTIC_TRACK_E_COURSE_ACCESS => array(
+                'course'    => 'course_code',
+                'session'   => 'session_id',
+                'user'      => 'user_id',
+                'start_date'=> 'login_course_date',
+                'end_date'  => 'logout_course_date',
+                ),*/
+            TABLE_STATISTIC_TRACK_E_EXERCICES => array(
+                'course'    => 'exe_cours_id',
+                'session'   => 'session_id',
+                'user'      => 'exe_user_id',
+                'start_date'=> 'exe_date',
+                ),
+            TABLE_STATISTIC_TRACK_E_ATTEMPT => array(
+                'course'    => 'course_code',
+                'session'   => 'session_id',
+                'user'      => 'user_id',
+                'start_date'=> 'tms',
+                ),
             #TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING,
             #TABLE_STATISTIC_TRACK_E_DEFAULT,
-            TABLE_STATISTIC_TRACK_E_UPLOADS => array('upload_session_id', 'upload_user_id'),
+            TABLE_STATISTIC_TRACK_E_UPLOADS => array(
+                'course'    => 'upload_cours_id',
+                'session'   => 'upload_session_id',
+                'user'      => 'upload_user_id',
+                'start_date'=> 'upload_date',
+                ),
             #TABLE_STATISTIC_TRACK_E_HOTSPOT,
             #TABLE_STATISTIC_TRACK_E_ITEM_PROPERTY,
             #TABLE_STATISTIC_TRACK_E_OPEN,
-        );
+            );
 
-        if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
-            $sessionId = intval($_GET['session_id']);
-        }
-
+        $error_sql = '';
         foreach ($tables as $tableName => $fields) {
-            $sql = sprintf('SELECT %s as user, count(*) as total FROM %s WHERE %s = %s GROUP BY %s', $fields[1], $tableName, $fields[0], $sessionId, $fields[1]);
+            //If session is defined, add it to query
+            $where = '';
+            if (isset($sessionId) && !empty($sessionId)) {
+                $sessionField = $fields['session'];
+                $where .= " AND $sessionField = $sessionId";
+            }
+
+            //filter by date
+            if (!empty($date_from) && !empty($date_to)) {
+                $fieldStartDate = $fields['start_date'];
+                if (!isset($fields['end_date'])) {
+                    $where .= sprintf(" AND ($fieldStartDate BETWEEN '%s' AND '%s' )", $date_from, $date_to) ;
+                } else {
+                    $fieldEndDate = $fields['end_date'];
+                    $where .= sprintf(" AND fieldStartDate >= '%s'
+                        AND $fieldEndDate <= '%s'", $date_from, $date_to);
+                }
+            }
+
+
+            //query
+            $sql = "SELECT %s as user, count(*) as total
+                FROM %s
+                WHERE %s = '%s'
+                AND %s = %s
+                $where
+                GROUP BY %s";
+            $sql = sprintf($sql,
+                $fields['user'],    //user field
+                $tableName,         //FROM
+                $fields['course'],  //course condition
+                $course['code'],    //course condition
+                $fields['user'],    //user condition
+                $userId,            //user condition
+                $fields['user']     //GROUP BY
+                );
             $rs = Database::query($sql);
+
+            //iterate query
             if (Database::num_rows($rs) > 0) {
                 while ($row = Database::fetch_array($rs)) {
                     $data[$row['user']] = (isset($data[$row['user']])) ?  $data[$row['user']] + $row[total]: $row['total'];
                 }
             }
         }
-
         return $data;
     }
 
@@ -3496,27 +3817,260 @@ class Tracking
     }
 
     /**
-     * @param FormValidator $form
-     * @return mixed
-     */
+    * @param FormValidator $form
+    * @return mixed
+    */
     public static function setUserSearchForm($form)
     {
-        global $_configuration;
-        $form->addElement('text', 'keyword', get_lang('Keyword'));
-        $form->addElement('select', 'active', get_lang('Status'), array(1 => get_lang('Active'), 0 => get_lang('Inactive')));
-        if (isset($_configuration['save_user_last_login']) &&
-            $_configuration['save_user_last_login']
-        ) {
-            $form->addElement(
-                'select',
-                'sleeping_days',
-                get_lang('InactiveDays'),
-                array('', 1 => 1, 5 => 5, 15 => 15, 30 => 30, 60 => 60, 90 => 90, 120 => 120)
-            );
-        }
-        $form->addElement('button', 'submit', get_lang('Search'));
+    global $_configuration;
+    $form->addElement('text', 'keyword', get_lang('Keyword'));
+    $form->addElement('select', 'active', get_lang('Status'), array(1 => get_lang('Active'), 0 => get_lang('Inactive')));
+    if (isset($_configuration['save_user_last_login']) &&
+        $_configuration['save_user_last_login']
+    ) {
+        $form->addElement(
+            'select',
+            'sleeping_days',
+            get_lang('InactiveDays'),
+            array('', 1 => 1, 5 => 5, 15 => 15, 30 => 30, 60 => 60, 90 => 90, 120 => 120)
+        );
+    }
+    $form->addElement('button', 'submit', get_lang('Search'));
 
-        return $form;
+    return $form;
+    }
+
+    /**
+     * Get the progress of a exercise
+     * @param   int $sessionId  The session ID (session.id)
+     * @param   int $courseId   The course ID (course.id)
+     * @param   int $exerciseId The quiz ID (c_quiz.id)
+     * @param   int $answer     The answer status (0 = incorrect, 1 = correct, 2 = both)
+     * @param   array   $options    An array of options you can pass to the query (limit, where and order)
+     * @return array An array with the data of exercise(s) progress
+     */
+    public static function get_exercise_progress(
+        $sessionId = 0,
+        $courseId = 0,
+        $exerciseId = 0,
+        $date_from = null,
+        $date_to = null,
+        $options = array()
+    ) {
+        $sessionId  = intval($sessionId);
+        $courseId   = intval($courseId);
+        $exerciseId = intval($exerciseId);
+        $date_from  = Database::escape_string($date_from);
+        $date_to    = Database::escape_string($date_to);
+        /*
+         * This method gets the data by blocks, as previous attempts at one single
+         * query made it take ages. The logic of query division is described below
+         */
+        // Get tables names
+        $tuser = Database::get_main_table(TABLE_MAIN_USER);
+        $tquiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        $tquiz_answer = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $tquiz_question = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $tquiz_rel_question = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $ttrack_exercises  = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        $ttrack_attempt    = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+
+        require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.lib.php';
+
+        $sessions = array();
+        $courses = array();
+        // if session ID is defined but course ID is empty, get all the courses
+        // from that session
+        if (!empty($sessionId) && empty($courseId)) {
+            // $courses is an array of course int id as index and course details hash as value
+            $courses = SessionManager::get_course_list_by_session_id($sessionId);
+            $sessions[$sessionId] = api_get_session_info($sessionId);
+        } elseif (empty($sessionId) && !empty($courseId)) {
+            // if, to the contrary, course is defined but not sessions, get the sessions that include this course
+            // $sessions is an array like: [0] => ('id' => 3, 'name' => 'Session 35'), [1] => () etc;
+            $course = api_get_course_info_by_id($courseId);
+            $sessionsTemp = SessionManager::get_session_by_course($course['code']);
+            $courses[$courseId] = $course;
+            foreach ($sessionsTemp as $sessionItem) {
+                $sessions[$sessionItem['id']] = $sessionItem;
+            }
+        } elseif (!empty($courseId) && !empty($sessionId)) {
+            //none is empty
+            $course = api_get_course_info_by_id($courseId);
+            $courses[$courseId] = array($course['code']);
+            $courses[$courseId]['code'] = $course['code'];
+            $sessions[$sessionId] = api_get_session_info($sessionId);
+        } else {
+            //both are empty, not enough data, return an empty array
+            return array();
+        }
+        // Now we have two arrays of courses and sessions with enough data to proceed
+        // If no course could be found, we shouldn't return anything. Sessions can be empty (then we only return the pure-course-context results)
+        if (count($courses) < 1) {
+            return array();
+        }
+
+        $data = array();
+        // The following loop is less expensive than what it seems:
+        // - if a course was defined, then we only loop through sessions
+        // - if a session was defined, then we only loop through courses
+        // - if a session and a course were defined, then we only loop once
+        foreach ($courses as $courseIdx => $courseData) {
+            $where = '';
+            $whereParams = array();
+            $whereCourseCode = $courseData['code'];
+            $whereSessionParams = '';
+            if (count($sessions > 0)) {
+                foreach ($sessions as $sessionIdx => $sessionData) {
+                    if (!empty($sessionIdx)) {
+                        $whereSessionParams .= $sessionIdx.',';
+                    }
+                }
+                $whereSessionParams = substr($whereSessionParams,0,-1);
+            }
+
+            if (!empty($exerciseId)) {
+                $exerciseId = intval($exerciseId);
+                $where .= ' AND q.id = %d ';
+                $whereParams[] = $exerciseId;
+            }
+
+            /*
+             * This feature has been disabled for now, to avoid having to
+             * join two very large tables
+            //2 = show all questions (wrong and correct answered)
+            if ($answer != 2) {
+                $answer = intval($answer);
+                //$where .= ' AND qa.correct = %d';
+                //$whereParams[] = $answer;
+            }
+            */
+
+            $limit = '';
+            if (!empty($options['limit'])) {
+                $limit = " LIMIT ".$options['limit'];
+            }
+
+            if (!empty($options['where'])) {
+                $where .= ' AND '.Database::escape_string($options['where']);
+            }
+
+            $order = '';
+            if (!empty($options['order'])) {
+                $order = " ORDER BY ".$options['order'];
+            }
+
+            if (!empty($date_to) && !empty($date_from)) {
+                $where .= sprintf(" AND (te.start_date BETWEEN '%s 00:00:00' AND '%s 23:59:59')", $date_from, $date_to);
+            }
+
+            $sql = "SELECT
+                te.session_id,
+                ta.id as attempt_id,
+                te.exe_user_id as user_id,
+                te.exe_id as exercise_attempt_id,
+                ta.question_id,
+                ta.answer as answer_id,
+                ta.tms as time,
+                te.exe_exo_id as quiz_id,
+                CONCAT ('c', q.c_id, '_e', q.id) as exercise_id,
+                q.title as quiz_title,
+                qq.description as description
+                FROM $ttrack_exercises te
+                INNER JOIN $ttrack_attempt ta ON ta.exe_id = te.exe_id
+                INNER JOIN $tquiz q ON q.id = te.exe_exo_id
+                INNER JOIN $tquiz_rel_question rq ON rq.exercice_id = q.id AND rq.c_id = q.c_id
+                INNER JOIN $tquiz_question qq
+                ON
+                    qq.id = rq.question_id AND
+                    qq.c_id = rq.c_id AND
+                    qq.position = rq.question_order AND
+                    ta.question_id = rq.question_id
+                WHERE
+                    te.exe_cours_id = '$whereCourseCode' ".(empty($whereSessionParams)?'':"AND te.session_id IN ($whereSessionParams)")."
+                    AND q.c_id = $courseIdx
+                    $where $order $limit";
+            $sql_query = vsprintf($sql, $whereParams);
+
+            // Now browse through the results and get the data
+            $rs = Database::query($sql_query);
+            $userIds = array();
+            $questionIds = array();
+            $answerIds = array();
+            while ($row = Database::fetch_array($rs)) {
+                //only show if exercise is visible
+                if (api_get_item_visibility($courseData, 'quiz', $row['exercise_id'])) {
+                    $userIds[$row['user_id']] = $row['user_id'];
+                    $questionIds[$row['question_id']] = $row['question_id'];
+                    $answerIds[$row['question_id']][$row['answer_id']] = $row['answer_id'];
+                    $row['session'] = $sessions[$row['session_id']];
+                    $data[] = $row;
+                }
+            }
+            // Now fill questions data. Query all questions and answers for this test to avoid
+            $sqlQuestions = "SELECT tq.c_id, tq.id as question_id, tq.question, tqa.id_auto,
+                            tqa.answer, tqa.correct, tq.position, tqa.id_auto as answer_id
+                            FROM $tquiz_question tq, $tquiz_answer tqa
+                            WHERE
+                                tqa.question_id = tq.id AND
+                                tqa.c_id = tq.c_id AND
+                                tq.c_id = $courseIdx AND
+                                tq.id IN (".implode(',', $questionIds).")";
+
+            $resQuestions = Database::query($sqlQuestions);
+            $answer = array();
+            $question = array();
+            while ($rowQuestion = Database::fetch_assoc($resQuestions)) {
+                $questionId = $rowQuestion['question_id'];
+                $answerId = $rowQuestion['answer_id'];
+                $answer[$questionId][$answerId] = array(
+                    'position' => $rowQuestion['position'],
+                    'question' => $rowQuestion['question'],
+                    'answer' => $rowQuestion['answer'],
+                    'correct' => $rowQuestion['correct']
+                );
+                $question[$questionId]['question'] = $rowQuestion['question'];
+            }
+
+            // Now fill users data
+            $sqlUsers = "SELECT user_id, username, lastname, firstname
+                         FROM $tuser
+                         WHERE user_id IN (".implode(',',$userIds).")";
+            $resUsers = Database::query($sqlUsers);
+            while ($rowUser = Database::fetch_assoc($resUsers)) {
+                $users[$rowUser['user_id']] = $rowUser;
+            }
+
+            foreach ($data as $id => $row) {
+                $rowQuestId = $row['question_id'];
+                $rowAnsId = $row['answer_id'];
+
+                $data[$id]['session'] = $sessions[$row['session_id']]['name'];
+                $data[$id]['firstname'] = $users[$row['user_id']]['firstname'];
+                $data[$id]['lastname'] = $users[$row['user_id']]['lastname'];
+                $data[$id]['username'] = $users[$row['user_id']]['username'];
+                $data[$id]['answer'] = $answer[$rowQuestId][$rowAnsId]['answer'];
+                $data[$id]['correct'] = ($answer[$rowQuestId][$rowAnsId]['correct'] == 0 ? get_lang('No') : get_lang('Yes'));
+                $data[$id]['question'] = $question[$rowQuestId]['question'];
+                $data[$id]['question_id'] = $rowQuestId;
+                $data[$id]['description'] = $row['description'];
+            }
+            /*
+            The minimum expected array structure at the end is:
+            attempt_id,
+            session name,
+            exercise_id,
+            quiz_title,
+            username,
+            lastname,
+            firstname,
+            time,
+            question_id,
+            question,
+            answer,
+            */
+        }
+        return $data;
     }
 }
 

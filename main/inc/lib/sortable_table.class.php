@@ -326,7 +326,7 @@ class SortableTable extends HTML_Table
                 $html .= '<td style="text-align:right;">';
                 $html .= $nav;
                 $html .= '</td>';
-            }else{
+            } else {
                 $html .= '<td> ';
                 $html .= '</td>';
             }
@@ -919,6 +919,7 @@ class SortableTableFromArray extends SortableTable
      */
     public function get_table_data($from = 1, $per_page = null, $column = null, $direction = null, $sort = true)
     {
+
         if ($sort) {
             $content = TableSort::sort_table($this->table_data, $this->column, $this->direction == 'ASC' ? SORT_ASC : SORT_DESC);
         } else {
@@ -981,7 +982,7 @@ class SortableTableFromArrayConfig extends SortableTable
      * @param string $direction
      * @param bool $doc_filter special modification to fix the document name order
      */
-    public function __construct (
+    public function __construct(
         $table_data,
         $default_column = 1,
         $default_items_per_page = 20,
@@ -1018,6 +1019,7 @@ class SortableTableFromArrayConfig extends SortableTable
             SORT_REGULAR,
             $this->doc_filter
         );
+
         return array_slice($content, $from, $this->per_page);
     }
 

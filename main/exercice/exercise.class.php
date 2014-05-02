@@ -3410,6 +3410,7 @@ class Exercise
         );
         return $return_array;
     }
+
     /**
      * Sends a notification when a user ends an examn
      *
@@ -3911,13 +3912,13 @@ class Exercise
                 $isRandomByCategory = $this->selectRandomByCat();
                 // on tri les categories en fonction du terme entre [] en tete de la description de la categorie
                 /*
-                 * ex de catÃ©gories :
+                 * ex de catégories :
                  * [biologie] Maitriser les mecanismes de base de la genetique
                  * [biologie] Relier les moyens de depenses et les agents infectieux
                  * [biologie] Savoir ou est produite l'enrgie dans les cellules et sous quelle forme
                  * [chimie] Classer les molles suivant leur pouvoir oxydant ou reacteur
-                 * [chimie] ConnaÃ®tre la denition de la theoie acide/base selon BrÃ¶nsted
-                 * [chimie] ConnaÃ®tre les charges des particules
+                 * [chimie] Connaître la denition de la theoie acide/base selon Brönsted
+                 * [chimie] Connaître les charges des particules
                  * On veut dans l'ordre des groupes definis par le terme entre crochet au debut du titre de la categorie
                 */
                 // If test option is Grouped By Categories
@@ -4179,8 +4180,8 @@ class Exercise
     }
 
     /**
-     * @return string
-     */
+    * @return string
+    */
     public function get_formated_title()
     {
         return api_html_entity_decode($this->selectTitle());
@@ -4213,4 +4214,81 @@ class Exercise
         return api_htmlentities($in_title);
     }
 
+    /**
+     * @param int $courseId
+     * @param int $sessionId
+     * @return array exercises
+     */
+    public function getExercisesByCouseSession($courseId, $sessionId)
+    {
+        $courseId = intval($courseId);
+        $sessionId = intval($sessionId);
+
+        $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
+        $sql = "SELECT * FROM $tbl_quiz cq
+                WHERE
+                    cq.c_id = %s AND
+                    (cq.session_id = %s OR cq.session_id = 0) AND
+                    cq.active = 0
+                ORDER BY cq.id";
+        $sql = sprintf($sql, $courseId, $sessionId);
+
+        $result = Database::query($sql);
+
+        $rows = array();
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
+
+    /**
+     *
+     * @param int $courseId
+     * @param int $sessionId
+     * @param array $quizId
+     * @return array exercises
+     */
+    public function getExerciseAndResult($courseId, $sessionId, $quizId = array())
+    {
+        if (empty($quizId)) {
+            return array();
+        }
+
+        $sessionId = intval($sessionId);
+
+        $ids = is_array($quizId) ? $quizId : array($quizId);
+        $ids = array_map('intval', $ids);
+        $ids = implode(',', $ids);
+        $track_exercises = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+        if ($sessionId != 0) {
+            $sql = "SELECT * FROM $track_exercises te "
+              . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "
+              . "INNER JOIN course c ON te.exe_cours_id = c.code AND c.id = cq.c_id "
+              . "WHERE "
+              . "c.id = %s AND "
+              . "te.session_id = %s AND "
+              . "cq.id IN (%s) "
+              . "ORDER BY cq.id ";
+
+            $sql = sprintf($sql, $courseId, $sessionId, $ids);
+        } else {
+            $sql = "SELECT * FROM $track_exercises te "
+              . "INNER JOIN c_quiz cq ON cq.id = te.exe_exo_id "
+              . "INNER JOIN course c ON te.exe_cours_id = c.code AND c.id = cq.c_id "
+              . "WHERE "
+              . "c.id = %s AND "
+              . "cq.id IN (%s) "
+              . "ORDER BY cq.id ";
+            $sql = sprintf($sql, $courseId, $ids);
+        }
+        $result = Database::query($sql);
+        $rows = array();
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
 }

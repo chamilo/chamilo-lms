@@ -280,3 +280,9 @@ if ($intro_dispCommand) {
 	}
 }
 $introduction_section .=  '</div>';
+
+$browser = api_get_navigator();
+
+if (strpos($introduction_section, '<iframe') !== false && $browser['name'] == 'Chrome') {
+    header("X-XSS-Protection: 0");
+}

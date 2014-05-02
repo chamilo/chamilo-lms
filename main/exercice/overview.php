@@ -237,7 +237,6 @@ if ($objExercise->selectAttempts()) {
     if ($visible_return['value'] == true) {
         $message .=   $attempt_message;
     }
-	//$options.= $attempt_message; //Display::div($attempt_message, array('class'=>"offset2 span2"));
 }
 
 if ($time_control) {

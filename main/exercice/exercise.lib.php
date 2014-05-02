@@ -1482,6 +1482,7 @@ function convert_score($score, $weight) {
  * @param   int     0 = only inactive exercises
  *                  1 = only active exercises,
  *                  2 = all exercises
+ *                  3 = active <> -1
  * @return  array   array with exercise data
  */
 function get_all_exercises($course_info = null, $session_id = 0, $check_publication_dates = false, $search_exercise = '', $search_all_sessions = false, $active = 2) {
@@ -1511,7 +1512,9 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
 
     //Show courses by active status
     $active_sql = '';
-    if ($active != 2) {
+    if ($active == 3) {
+        $active_sql = ' active <> -1 AND';
+    } else if ($active != 2) {
         $active_sql = sprintf(' active = %d AND', $active);
     }
 
@@ -1529,13 +1532,18 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
 }
 /**
  * Get exercise information by id
- * @param int Exercise Id
- * @return array Exercise info
+ * @param int $exerciseId Exercise Id
+ * @param int $courseId The course ID (necessary as c_quiz.id is not unique)
+ * @return array Exercise info 
  */
-function get_exercise_by_id($exerciseId = 0)
-{
+function get_exercise_by_id($exerciseId = 0, $courseId = null) {
     $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
-    $conditions  = array('where' => array('id = ?' => array($exerciseId)));
+    if (empty($courseId)) {
+        $courseId = api_get_course_int_id();
+    } else {
+        $courseId = intval($courseId);
+    }
+    $conditions  = array('where' => array('id = ?' => array($exerciseId), ' AND c_id = ? ' => $courseId));
     return Database::select('*', $TBL_EXERCICES, $conditions);
 }
 /**

@@ -23,9 +23,9 @@ if (isset($_SESSION['gradebook'])) {
 
 if (!empty($gradebook) && $gradebook == 'view') {
     $interbreadcrumb[] = array (
-            'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
-            'name' => get_lang('ToolGradebook')
-        );
+        'url' => '../gradebook/'.$_SESSION['gradebook_dest'],
+        'name' => get_lang('ToolGradebook')
+    );
 }
 $interbreadcrumb[] = array('url' => 'lp_controller.php?action=list', 'name' => get_lang('LearningPaths'));
 $interbreadcrumb[] = array('url' => api_get_self()."?action=build&lp_id=".$_SESSION['oLP']->get_id(), 'name' => $_SESSION['oLP']->get_name());
@@ -49,11 +49,6 @@ function activate_end_date() {
 }
 
 </script>';
-
-
-Display::display_header(get_lang('CourseSettings'), 'Path');
-
-echo $_SESSION['oLP']->build_action_menu();
 
 $gradebook = isset($_GET['gradebook']) ? Security::remove_XSS($_GET['gradebook']) : null;
 
@@ -198,6 +193,9 @@ if (api_is_platform_admin()) {
     $defaults['use_max_score'] = $_SESSION['oLP']->use_max_score;
 }
 
+$extraField = new ExtraField('lp');
+$extra = $extraField->addElements($form, $_SESSION['oLP']->get_id());
+
 //Submit button
 $form->addElement('style_submit_button', 'Submit',get_lang('SaveLPSettings'),'class="save"');
 
@@ -205,11 +203,23 @@ $form->addElement('style_submit_button', 'Submit',get_lang('SaveLPSettings'),'cl
 $form->addElement('hidden', 'action', 'update_lp');
 $form->addElement('hidden', 'lp_id', $_SESSION['oLP']->get_id());
 
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
+$htmlHeadXtra[] ='<script>
+$(function() {
+    '.$extra['jquery_ready_content'].'
+});
+</script>';
+
 
 $defaults['publicated_on']  = ($publicated_on!='0000-00-00 00:00:00' && !empty($publicated_on))? api_get_local_time($publicated_on) : date('Y-m-d 12:00:00');
 $defaults['expired_on']     = ($expired_on   !='0000-00-00 00:00:00' && !empty($expired_on) )? api_get_local_time($expired_on): date('Y-m-d 12:00:00',time()+84600);
 
 $form->setDefaults($defaults);
+
+Display::display_header(get_lang('CourseSettings'), 'Path');
+
+echo $_SESSION['oLP']->build_action_menu();
 
 echo '<div class="row">';
 

@@ -932,11 +932,14 @@ class UserManager
     }
 
     /**
-     * @param array $ids
-     * @param null $active
-     * @return array
-     */
-    public static function get_user_list_by_ids($ids = array(), $active = null)
+    * Get the users by ID
+    * @param array $ids student ids
+    * @param string $active
+    * @param string $order
+    * @param string $limit
+    * @return array $result student information
+    */
+    public static function get_user_list_by_ids($ids = array(), $active = null, $order = null, $limit = null)
     {
         if (empty($ids)) {
             return array();
@@ -950,6 +953,16 @@ class UserManager
         $sql = "SELECT * FROM $tbl_user WHERE user_id IN ($ids)";
         if (!is_null($active)) {
             $sql .= ' AND active='.($active ? '1' : '0');
+        }
+
+        if (!is_null($order)) {
+            $order = Database::escape_string($order);
+            $sql .= ' ORDER BY ' . $order;
+        }
+
+        if (!is_null($limit)) {
+            $limit = Database::escape_string($limit);
+            $sql .= ' LIMIT ' . $limit;
         }
 
         $rs = Database::query($sql);
@@ -1120,7 +1133,7 @@ class UserManager
      * the same directory.
      * @param    integer    User ID
      * @param    string    Type of path to return (can be 'none', 'system', 'rel', 'web')
-     * @param    bool    Whether we want to have the directory name returned 'as if' there was a file or not (in the case we want to know which directory to create - otherwise no file means no split subdir)
+     * @param    bool    deprecated see #7110
      * @param    bool    If we want that the function returns the /main/img/unknown.jpg image set it at true
      * @return    array     Array of 2 elements: 'dir' and 'file' which contain the dir and file as the name implies if image does not exist it will return the unknow image if anonymous parameter is true if not it returns an empty er's
      */
@@ -1159,11 +1172,12 @@ class UserManager
         $picture_filename = trim($user['picture_uri']);
 
         if (api_get_setting('split_users_upload_directory') === 'true') {
-            if (!empty($picture_filename) or $preview) {
+            /*if (!empty($picture_filename) or $preview) {
                 $dir = $base.'upload/users/'.substr((string) $user_id, 0, 1).'/'.$user_id.'/';
             } else {
                 $dir = $base.'upload/users/'.$user_id.'/';
-            }
+            }*/
+            $dir = $base.'upload/users/'.substr((string) $user_id, 0, 1).'/'.$user_id.'/';
         } else {
             $dir = $base.'upload/users/'.$user_id.'/';
         }
@@ -1352,8 +1366,8 @@ class UserManager
             return false;
         }
 
-        $production_path = self::get_user_picture_path_by_id($user_id, 'web', true);
-        $production_dir = $production_path['dir'].$user_id.'/';
+        $production_path = self::get_user_picture_path_by_id($user_id, 'web');
+        $production_dir = $production_path['dir'];
         $del_image = api_get_path(WEB_CODE_PATH).'img/delete.gif';
         $del_text = get_lang('Delete');
         $production_list = '';
@@ -1379,17 +1393,22 @@ class UserManager
      */
     public static function get_user_productions($user_id)
     {
-        $production_path = self::get_user_picture_path_by_id($user_id, 'system', true);
-        $production_repository = $production_path['dir'].$user_id.'/';
+        $production_path = self::get_user_picture_path_by_id($user_id, 'system');
+        $production_repository = $production_path['dir'];
         $productions = array();
 
         if (is_dir($production_repository)) {
             $handle = opendir($production_repository);
-
             while ($file = readdir($handle)) {
-                if ($file == '.' || $file == '..' || $file == '.htaccess' || is_dir($production_repository.$file)) {
-                    continue; // skip current/parent directory and .htaccess
+                if ($file == '.' ||
+                    $file == '..' ||
+                    $file == '.htaccess' ||
+                    is_dir($production_repository.$file)
+                ) {
+                    // skip current/parent directory and .htaccess
+                    continue;
                 }
+
                 if (preg_match('/('.$user_id.'|[0-9a-f]{13}|saved)_.+\.(png|jpg|jpeg|gif)$/i', $file)) {
                     // User's photos should not be listed as productions.
                     continue;
@@ -1398,7 +1417,7 @@ class UserManager
             }
         }
 
-        return $productions; // can be an empty array
+        return $productions;
     }
 
     /**
@@ -1409,8 +1428,8 @@ class UserManager
      */
     public static function remove_user_production($user_id, $production)
     {
-        $production_path = self::get_user_picture_path_by_id($user_id, 'system', true);
-        $production_file = $production_path['dir'].$user_id.'/'.$production;
+        $production_path = self::get_user_picture_path_by_id($user_id, 'system');
+        $production_file = $production_path['dir'].$production;
         if (is_file($production_file)) {
             unlink($production_file);
             return true;
@@ -1725,7 +1744,6 @@ class UserManager
         $extra_data = self::get_extra_user_data_by_field($user_id, $extra_field);
         $extra_files = $extra_data[$extra_field];
         if (is_array($extra_files)) {
-            var_dump($extra_files); exit;
             foreach ($extra_files as $key => $value) {
                 if (!$full_path) {
                     // Relative path from user folder

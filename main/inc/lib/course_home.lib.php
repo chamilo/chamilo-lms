@@ -662,20 +662,12 @@ class CourseHome
 
                     if (empty($session_id)) {
                         if ($tool['visibility'] == '1' && $tool['admin'] != '1') {
-<<<<<<< HEAD
-                            $link['name'] = Display::return_icon('eyes-visible.png', get_lang('Deactivate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
-=======
                             $link['name'] = Display::return_icon('visible.png', get_lang('Deactivate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
->>>>>>> f0f1c4e3e377055e5d7e2b58d6f9d271fd425135
                             $link['cmd'] = 'hide=yes';
                             $lnk[] = $link;
                         }
                         if ($tool['visibility'] == '0' && $tool['admin'] != '1') {
-<<<<<<< HEAD
-                            $link['name'] = Display::return_icon('eyes-invisible.png', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
-=======
                             $link['name'] = Display::return_icon('invisible.png', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
->>>>>>> f0f1c4e3e377055e5d7e2b58d6f9d271fd425135
                             $link['cmd'] = 'restore=yes';
                             $lnk[] = $link;
                         }

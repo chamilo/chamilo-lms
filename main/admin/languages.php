@@ -28,6 +28,7 @@ require_once 'sub_language.class.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
+$action = isset($_GET['action']) ? $_GET['action'] : null;
 
 //Ajax request
 if (isset($_POST['sent_http_request'])) {
@@ -49,7 +50,6 @@ if (isset($_POST['sent_http_request'])) {
     }
     exit;
 }
-
 
 $htmlHeadXtra[] = '<script>
  $(document).ready(function() {
@@ -128,24 +128,23 @@ $tbl_settings_current = Database :: get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
  */
 
 // we change the availability
-if ($_GET['action'] == 'makeunavailable') {
+if ($action == 'makeunavailable') {
     if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
         SubLanguageManager::make_unavailable_language($_GET['id']);
     }
 }
-if ($_GET['action'] == 'makeavailable') {
+if ($action == 'makeavailable') {
     if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
         SubLanguageManager::make_available_language($_GET['id']);
     }
 }
-if ($_GET['action'] == 'setplatformlanguage') {
+if ($action == 'setplatformlanguage') {
     if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
         SubLanguageManager::set_platform_language($_GET['id']);
     }
 }
 
-
-if ($_POST['Submit']) {
+if (isset($_POST['Submit']) && $_POST['Submit']) {
     // changing the name
     $sql_update = "UPDATE $tbl_admin_languages SET original_name='{$_POST['txt_name']}' WHERE id='{$_POST['edit_id']}'";
     $result = Database::query($sql_update);
@@ -195,7 +194,7 @@ $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdm
 // including the header file (which includes the banner itself)
 Display :: display_header($tool_name);
 
-if (isset($_GET['action']) && $_GET['action'] == 'make_unavailable_confirmed') {
+if ($action == 'make_unavailable_confirmed') {
     $language_info = SubLanguageManager::get_all_information_of_language($_GET['id']);
     if ($language_info['available'] == 1) {
         SubLanguageManager::make_unavailable_language($_GET['id']);
@@ -229,7 +228,7 @@ while ($row = Database::fetch_array($result_select)) {
     $row_td = array();
     $row_td[] = $row['id'];
     // the first column is the original name of the language OR a form containing the original name
-    if ($_GET['action'] == 'edit' and $row['id'] == $_GET['id']) {
+    if ($action == 'edit' and $row['id'] == $_GET['id']) {
         if ($row['english_name'] == api_get_setting('platformLanguage')) {
             $checked = ' checked="checked" ';
         }
@@ -252,8 +251,8 @@ while ($row = Database::fetch_array($result_select)) {
         $setplatformlanguage = "<a href=\"javascript:if (confirm('" . addslashes(get_lang('AreYouSureYouWantToSetThisLanguageAsThePortalDefault')) . "')) { location.href='" . api_get_self() . "?action=setplatformlanguage&id=" . $row['id'] . "'; }\">" . Display::return_icon('languages_na.png', get_lang('SetLanguageAsDefault'), '', ICON_SIZE_SMALL) . "</a>";
     }
 
+    $allow_delete_sub_language = null;
     if (api_get_setting('allow_use_sub_language') == 'true') {
-
         $verified_if_is_sub_language = SubLanguageManager::check_if_language_is_sub_language($row['id']);
 
         if ($verified_if_is_sub_language === false) {

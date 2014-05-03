@@ -3927,6 +3927,7 @@ function api_get_themes() {
  * @param int $width The width of the form element
  * @param string $attributes (optional) attributes for the form element
  * @param array $editor_config (optional) Configuration options for the html-editor
+ * @deprecated
  */
 function api_disp_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
     global $_configuration, $_course, $fck_attribute;
@@ -3951,6 +3952,7 @@ function api_disp_html_area($name, $content = '', $height = '', $width = '100%',
  * @param int $width The width of the form element
  * @param string $attributes (optional) attributes for the form element
  * @param array $editor_config (optional) Configuration options for the html-editor
+ * @deprecated
  */
 function api_return_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
     global $_configuration, $_course, $fck_attribute;

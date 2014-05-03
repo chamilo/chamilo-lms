@@ -196,7 +196,10 @@ class Exercise
         return false;
     }
 
-    function getCutTitle()
+    /**
+     * @return string
+     */
+    public function getCutTitle()
     {
         return cut($this->exercise, EXERCISE_MAX_NAME_SIZE);
     }
@@ -207,7 +210,8 @@ class Exercise
      * @author Olivier Brouckaert
      * @return int - exercise ID
      */
-    function selectId() {
+    public function selectId()
+    {
         return $this->id;
     }
 
@@ -217,7 +221,8 @@ class Exercise
      * @author Olivier Brouckaert
      * @return string - exercise title
      */
-    function selectTitle() {
+    public function selectTitle()
+    {
         return $this->exercise;
     }
 
@@ -226,7 +231,8 @@ class Exercise
      *
      * @return int - exercise attempts
      */
-    function selectAttempts() {
+    public function selectAttempts()
+    {
         return $this->attempts;
     }
 
@@ -234,7 +240,8 @@ class Exercise
      *  0=>Feedback , 1=>DirectFeedback, 2=>NoFeedback
      * @return int - exercise attempts
      */
-    function selectFeedbackType() {
+    public function selectFeedbackType()
+    {
         return $this->feedback_type;
     }
 
@@ -261,7 +268,8 @@ class Exercise
      * @author Olivier Brouckaert
      * @return string - exercise description
      */
-    function selectSound() {
+    public function selectSound()
+    {
         return $this->sound;
     }
 
@@ -271,7 +279,8 @@ class Exercise
      * @author Olivier Brouckaert
      * @return integer - exercise type
      */
-    function selectType() {
+    public function selectType()
+    {
         return $this->type;
     }
 
@@ -279,7 +288,8 @@ class Exercise
      * @author hubert borderiou 30-11-11
      * @return integer : do we display the question category name for students
      */
-    function selectDisplayCategoryName() {
+    public function selectDisplayCategoryName()
+    {
         return $this->display_category_name;
     }
 
@@ -353,14 +363,14 @@ class Exercise
         }
     }
 
-
     /**
-     * tells if questions are selected randomly, and if so returns the draws
+     * Tells if questions are selected randomly, and if so returns the draws
      *
      * @author Carlos Vargas
      * @return integer - results disabled exercise
      */
-    function selectResultsDisabled() {
+    public function selectResultsDisabled()
+    {
         return $this->results_disabled;
     }
 

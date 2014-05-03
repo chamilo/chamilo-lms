@@ -1050,6 +1050,10 @@ END INSTALL CHAMILO
         background: url("images/icon-chamilo.png") no-repeat 0 -618px;
         padding-left: 40px;
     }
+    .myfiles-social{
+        background: url("images/icon-chamilo.png") no-repeat 0 -287px;
+        padding-left: 40px;
+    }
     
 
 /*+++++++++++++++++++++++++++++++++
@@ -1177,6 +1181,11 @@ RESPONSIVE CSS
 
     .list-course{
         background: url("images/icon-chamilo.png") no-repeat 0 -517px;
+        padding-left: 30px;
+        background-size: 25px auto;
+    }
+    .myfiles-social{
+        background: url("images/icon-chamilo.png") no-repeat 0 -240px;
         padding-left: 30px;
         background-size: 25px auto;
     }

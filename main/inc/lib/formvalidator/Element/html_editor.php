@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'HTML/QuickForm/textarea.php';
-
 /**
  * A html editor field to use with QuickForm
  */

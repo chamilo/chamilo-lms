@@ -1,6 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-require_once 'HTML/QuickForm/date.php';
+
 /**
  * Form element to select a date and hour (with popup datepicker)
  */

@@ -25,7 +25,7 @@
 /**
  * Base class for <input /> form elements
  */
-require_once 'style_button.php';
+//require_once 'style_button.php';
 
 /**
  * HTML class for a submit type element

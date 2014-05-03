@@ -1,8 +1,5 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-
-require_once('HTML/QuickForm/Rule.php');
 
 /**
 * Required elements validation

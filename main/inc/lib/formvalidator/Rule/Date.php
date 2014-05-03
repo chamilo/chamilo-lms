@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /** @author Bart Mollet, Julio Montoya */
-require_once 'HTML/QuickForm/Rule.php';
 
 /**
  * Class HTML_QuickForm_Rule_Date
@@ -18,6 +18,6 @@ class HTML_QuickForm_Rule_Date extends HTML_QuickForm_Rule
         */
 	public function validate($date, $options)
 	{
-            return api_is_valid_date($date, 'Y-m-d');
+        return api_is_valid_date($date, 'Y-m-d');
 	}
 }

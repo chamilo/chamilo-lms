@@ -2,11 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Abstract base class for QuickForm validation rules
- */
-require_once 'HTML/QuickForm/Rule.php';
-
-/**
  * Validate urls
  *
  */

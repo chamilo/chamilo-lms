@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'HTML/QuickForm/Rule/Compare.php';
 /**
  * QuickForm rule to compare 2 dates
  */

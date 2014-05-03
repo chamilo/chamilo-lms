@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'HTML/QuickForm/group.php';
-require_once 'HTML/QuickForm/radio.php';
-require_once 'HTML/QuickForm/advmultiselect.php';
 /**
  * Form element to select receivers
  * This element contains 1 radio-buttons. One with label 'everybody' and one

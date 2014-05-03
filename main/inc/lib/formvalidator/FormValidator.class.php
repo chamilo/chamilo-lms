@@ -67,6 +67,7 @@ class FormValidator extends HTML_QuickForm
         $this->registerElementType('CAPTCHA_Image', 'HTML/QuickForm/CAPTCHA/Image.php', 'HTML_QuickForm_CAPTCHA_Image');
 
         $this->registerRule('date', null, 'HTML_QuickForm_Rule_Date', $dir . 'Rule/Date.php');
+        $this->registerRule('datetime', null, 'DateTimeRule', $dir . 'Rule/DateTimeRule.php');
         $this->registerRule('date_compare', null, 'HTML_QuickForm_Rule_DateCompare', $dir . 'Rule/DateCompare.php');
         $this->registerRule('html', null, 'HTML_QuickForm_Rule_HTML', $dir . 'Rule/HTML.php');
         $this->registerRule('username_available', null, 'HTML_QuickForm_Rule_UsernameAvailable', $dir . 'Rule/UsernameAvailable.php');
@@ -480,16 +481,47 @@ EOT;
     public function return_form()
     {
         $error = false;
+        $addDateLibraries = false;
+        $dateElementTypes = array('date_range_picker', 'date_time_picker', 'date_picker', 'datepicker', 'datetimepicker');
+
+        /** @var HTML_QuickForm_element $element */
         foreach ($this->_elements as $element) {
+            if (in_array($element->getType(), $dateElementTypes)) {
+                $addDateLibraries = true;
+            }
             if (!is_null(parent::getElementError($element->getName()))) {
                 $error = true;
                 break;
             }
         }
+
         $return_value = '';
+        $js = null;
+        if ($addDateLibraries) {
+            $js = api_get_js('jquery-ui/jquery-ui-i18n.min.js');
+            $js .= '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript"></script>';
+            $js .= '<link href="'.api_get_path(WEB_LIBRARY_JS_PATH).'datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
+            $js .= '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'daterange/moment.min.js" type="text/javascript"></script>';
+            $js .= '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'daterange/daterangepicker.js" type="text/javascript"></script>';
+            $js .= '<link href="'.api_get_path(WEB_LIBRARY_JS_PATH).'daterange/daterangepicker-bs2.css" rel="stylesheet" type="text/css" />';
+
+            $isocode = api_get_language_isocode();
+            if ($isocode != 'en') {
+                $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/i18n/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript"></script>';
+                $js .= '<script>
+                $(function(){
+                    $.datepicker.setDefaults($.datepicker.regional["'.$isocode.'"]);
+                     moment.lang("'.$isocode.'");
+                });
+                </script>';
+            }
+        }
+
         if ($error) {
             $return_value = Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'warning');
         }
+
+        $return_value .= $js;
         $return_value .= parent::toHtml();
         // Add div-element which is to hold the progress bar
         if (isset($this->with_progress_bar) && $this->with_progress_bar) {
@@ -640,7 +672,6 @@ EOT;
  */
 function html_filter($html, $mode = NO_HTML)
 {
-    require_once api_get_path(LIBRARY_PATH) . 'formvalidator/Rule/HTML.php';
     $allowed_tags = HTML_QuickForm_Rule_HTML::get_allowed_tags($mode);
     $cleaned_html = kses($html, $allowed_tags);
     return $cleaned_html;

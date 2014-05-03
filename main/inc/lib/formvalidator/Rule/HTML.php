@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once 'HTML/QuickForm/Rule.php';
-require_once api_get_path(SYS_PATH).'main/inc/lib/kses-0.2.2/kses.php';
+//require_once 'HTML/QuickForm/Rule.php';
+//require_once api_get_path(SYS_PATH).'main/inc/lib/kses-0.2.2/kses.php';
 
 /**
  * QuickForm rule to check a html
@@ -18,8 +18,9 @@ class HTML_QuickForm_Rule_HTML extends HTML_QuickForm_Rule
     function validate($html, $mode = NO_HTML)
     {
         $allowed_tags = self::get_allowed_tags ($mode, $fullpage);
-        $cleaned_html = kses($html, $allowed_tags);
-        return $html == $cleaned_html;
+        //$cleaned_html = kses($html, $allowed_tags);
+        //return $html == $cleaned_html;
+        return true;
     }
 
     /**

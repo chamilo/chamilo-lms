@@ -6,8 +6,6 @@
  * This file contains functions used by the install and upgrade scripts.
  */
 
-
-
 /**
  * Check if current system is allowed to install
  * @return bool
@@ -296,8 +294,6 @@ function compare_setting_values($current_value, $wanted_value)
     }
 }
 
-
-
 function drawPermissionsSettings($app)
 {
     $html  = null;
@@ -306,7 +302,7 @@ function drawPermissionsSettings($app)
     $html .= '<div class="RequirementContent">';
 
     $course_attempt_name = '__XxTestxX__';
-    $course_dir = api_get_path(SYS_COURSE_PATH).$course_attempt_name;
+    $course_dir = $app['sys_course_path'].$course_attempt_name;
 
     // Just in case.
     if (is_file($course_dir.'/test.txt')) {

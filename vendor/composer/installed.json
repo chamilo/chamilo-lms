@@ -3312,54 +3312,6 @@
         "homepage": "http://symfony.com"
     },
     {
-        "name": "chamilo/chash",
-        "version": "dev-master",
-        "version_normalized": "9999999-dev",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/chamilo/chash.git",
-            "reference": "aba27ef17cd839cf9b20e72b5e9e340fc583733b"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/chamilo/chash/zipball/aba27ef17cd839cf9b20e72b5e9e340fc583733b",
-            "reference": "aba27ef17cd839cf9b20e72b5e9e340fc583733b",
-            "shasum": ""
-        },
-        "require": {
-            "alchemy/zippy": "~0.1",
-            "composer/composer": "1.0.*@dev",
-            "doctrine/dbal": "~2.3",
-            "doctrine/migrations": "dev-master",
-            "doctrine/orm": "~2.3",
-            "php": ">=5.3.2",
-            "symfony/console": "~2.3",
-            "symfony/filesystem": "~2.3",
-            "symfony/finder": "~2.3",
-            "symfony/yaml": "~2.3",
-            "zendframework/zend-config": "~2.2",
-            "zendframework/zend-stdlib": "~2.2"
-        },
-        "require-dev": {
-            "mikey179/vfsstream": ">=1.2",
-            "phpunit/phpunit": "3.7.*"
-        },
-        "time": "2014-04-15 10:09:19",
-        "type": "library",
-        "installation-source": "source",
-        "autoload": {
-            "psr-0": {
-                "Chash": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-3.0"
-        ],
-        "description": "Chamilo Shell",
-        "homepage": "http://www.chamilo.org"
-    },
-    {
         "name": "flint/tacker",
         "version": "0.4.2",
         "version_normalized": "0.4.2.0",
@@ -6318,5 +6270,53 @@
             "assetic",
             "silex"
         ]
+    },
+    {
+        "name": "chamilo/chash",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/chamilo/chash.git",
+            "reference": "9ad5b2e1679d490c46bd3b49d1fe610811678f0c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/chamilo/chash/zipball/9ad5b2e1679d490c46bd3b49d1fe610811678f0c",
+            "reference": "9ad5b2e1679d490c46bd3b49d1fe610811678f0c",
+            "shasum": ""
+        },
+        "require": {
+            "alchemy/zippy": "~0.1",
+            "composer/composer": "1.0.*@dev",
+            "doctrine/dbal": "~2.3",
+            "doctrine/migrations": "dev-master",
+            "doctrine/orm": "~2.3",
+            "php": ">=5.3.2",
+            "symfony/console": "~2.3",
+            "symfony/filesystem": "~2.3",
+            "symfony/finder": "~2.3",
+            "symfony/yaml": "~2.3",
+            "zendframework/zend-config": "~2.2",
+            "zendframework/zend-stdlib": "~2.2"
+        },
+        "require-dev": {
+            "mikey179/vfsstream": ">=1.2",
+            "phpunit/phpunit": "3.7.*"
+        },
+        "time": "2014-05-03 12:04:27",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Chash": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-3.0"
+        ],
+        "description": "Chamilo Shell",
+        "homepage": "http://www.chamilo.org"
     }
 ]

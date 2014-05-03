@@ -30,7 +30,7 @@ $app['root_sys'] = dirname(dirname(__DIR__)).'/';
 $app['sys_root'] = $app['root_sys'];
 $app['sys_data_path'] = isset($_configuration['sys_data_path']) ? $_configuration['sys_data_path'] : $app['root_sys'].'data/';
 $app['sys_config_path'] = isset($_configuration['sys_config_path']) ? $_configuration['sys_config_path'] : $app['root_sys'].'config/';
-$app['sys_course_path'] = isset($_configuration['sys_course_path']) ? $_configuration['sys_course_path'] : $app['sys_data_path'].'/course';
+$app['sys_course_path'] = isset($_configuration['sys_course_path']) ? $_configuration['sys_course_path'] : $app['sys_data_path'].'/course/';
 $app['sys_log_path'] = isset($_configuration['sys_log_path']) ? $_configuration['sys_log_path'] : $app['root_sys'].'logs/';
 $app['sys_temp_path'] = isset($_configuration['sys_temp_path']) ? $_configuration['sys_temp_path'] : $app['sys_data_path'].'temp/';
 
@@ -176,9 +176,12 @@ $app->match('/', function () use ($app) {
         return $app->redirect($url);
     }
 
-    return $app['twig']->render('index.tpl', array('form' => $form->createView()));
+    return $app['twig']->render(
+        'index.tpl',
+        array('form' => $form->createView())
+    );
 })
-->bind('welcome')
+->bind('root') // need because api_get_path()
 ->before($blockInstallation);
 
 $app->match('/requirements', function () use ($app) {

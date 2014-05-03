@@ -9,8 +9,7 @@
  */
 
 use \ChamiloSession as Session;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Constants declaration
@@ -240,9 +239,7 @@ define('IS_WINDOWS_OS', api_is_windows_os());
 
 // Checks for installed optional php-extensions.
 define('INTL_INSTALLED', function_exists('intl_get_error_code'));   // intl extension (from PECL), it is installed by default as of PHP 5.3.0
-define('ICONV_INSTALLED', function_exists('iconv'));                // iconv extension, for PHP5 on Windows it is installed by default.
 define('MBSTRING_INSTALLED', function_exists('mb_strlen'));         // mbstring extension.
-define('DATE_TIME_INSTALLED', class_exists('DateTime'));            // datetime extension, it is moved to the core as of PHP 5.2, see http://www.php.net/datetime
 
 // Patterns for processing paths.                                   // Examples:
 define('REPEATED_SLASHES_PURIFIER', '/\/{2,}/');                    // $path = preg_replace(REPEATED_SLASHES_PURIFIER, '/', $path);
@@ -609,8 +606,6 @@ function api_get_path($path_type, $path = null) {
     static $is_this_function_initialized;
     static $server_base_web; // No trailing slash.
     static $server_base_sys; // No trailing slash.
-    static $root_web;
-    static $root_sys;
     static $root_rel;
     static $code_folder;
     static $course_folder;
@@ -620,14 +615,14 @@ function api_get_path($path_type, $path = null) {
 
     // Default $_configuration['root_web'] configuration
     //$root_web = isset($_configuration['root_web']) ? $_configuration['root_web'] : $app['url_generator'];
-    $root_web = $_configuration['root_web'];
+    $root_web = $app['url_generator']->generate('root'); //$_configuration['root_web'];
+    $root_web = str_replace('web/', '', $root_web);
 
     // Configuration data for already installed system.
     $root_sys = isset($_configuration['root_sys']) ? $_configuration['root_sys'] : $app['root_sys'];
 
     $load_new_config = false;
 
-    // To avoid that the api_get_access_url() function fails since global.inc.php also calls the api.lib.php
     if ($path_type == WEB_PATH) {
         $urlId = api_get_current_access_url_id();
         if (isset($urlId) &&  $urlId != 1) {
@@ -638,9 +633,8 @@ function api_get_path($path_type, $path = null) {
         }
     }
 
-
     if (!$is_this_function_initialized) {
-        $root_rel = $_configuration['url_append'];
+        //$root_rel = $_configuration['url_append'];
 
         $code_folder    = 'main/';
         //$course_folder  = isset($_configuration['course_folder']) ? $_configuration['course_folder'] : null;
@@ -649,13 +643,13 @@ function api_get_path($path_type, $path = null) {
         // Dealing with trailing slashes.
         $root_web       = api_add_trailing_slash($root_web);
         $root_sys       = api_add_trailing_slash($root_sys);
-        $root_rel       = api_add_trailing_slash($root_rel);
+        //$root_rel       = api_add_trailing_slash($root_rel);
         $code_folder    = api_add_trailing_slash($code_folder);
         $course_folder  = api_add_trailing_slash($course_folder);
 
         // Web server base and system server base.
-        $server_base_web = preg_replace('@'.$root_rel.'$@', '', $root_web); // No trailing slash.
-        $server_base_sys = preg_replace('@'.$root_rel.'$@', '', $root_sys); // No trailing slash.
+        //$server_base_web = preg_replace('@'.$root_rel.'$@', '', $root_web); // No trailing slash.
+        //$server_base_sys = preg_replace('@'.$root_rel.'$@', '', $root_sys); // No trailing slash.
 
         // Initialization of a table that contains common-purpose paths.
         $paths[WEB_PATH]                = $root_web;
@@ -673,8 +667,8 @@ function api_get_path($path_type, $path = null) {
         $paths[SYS_WEB_PATH]            = $root_sys.'web/';
 
         $paths[REL_PATH]                = $root_rel;
-        $paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
-        $paths[SYS_SERVER_ROOT_PATH]    = $server_base_sys.'/';
+        //$paths[WEB_SERVER_ROOT_PATH]    = $server_base_web.'/';
+        //$paths[SYS_SERVER_ROOT_PATH]    = $server_base_sys.'/';
 
         $paths[WEB_DATA_PATH]           = $paths[WEB_PUBLIC_PATH].'data/';
         $paths[WEB_COURSE_PATH]         = $root_web.$course_folder;
@@ -1696,35 +1690,10 @@ function api_generate_password($length = 8) {
  * 5. It should not contain 3 or more consequent (according to ASCII table) characters.
  */
 function api_check_password($password) {
-    $password_length = api_strlen($password);
-    if ($password_length < 5) {
-        return false;
-    }
-    $password = api_strtolower($password);
-    $letters = 0;
-    $digits = 0;
-    $consequent_characters = 0;
-    $previous_character_code = 0;
-    for ($i = 0; $i < $password_length; $i ++) {
-        $current_character_code = api_ord(api_substr($password, $i, 1));
-        if ($i && abs($current_character_code - $previous_character_code) <= 1) {
-            $consequent_characters ++;
-            if ($consequent_characters == 3) {
-                return false;
-            }
-        } else {
-            $consequent_characters = 1;
-        }
-        if ($current_character_code >= 97 && $current_character_code <= 122) {
-            $letters ++;
-        } elseif ($current_character_code >= 48 && $current_character_code <= 57) {
-            $digits ++;
-        } else {
-            return false;
-        }
-        $previous_character_code = $current_character_code;
-    }
-    return ($letters >= 3 && $digits >= 2);
+    global $app;
+    $constraints = ChamiloLMS\Entity\User::getPasswordConstraints();
+    $errors = $app['validator']->validateValue($password, $constraints);
+    return count($errors) > 0 ? false : true;
 }
 
 /**
@@ -2617,8 +2586,6 @@ function api_is_session_in_category($session_id, $category_name) {
         return false;
     }
 }
-
-/* DISPLAY OPTIONS */
 
 /**
  * Displays the title of a tool.
@@ -4955,6 +4922,7 @@ function api_replace_dangerous_char($filename, $strict = 'loose') {
 
     // Encoding detection.
     $encoding = api_detect_encoding($filename);
+
     // Converting html-entities into encoded characters.
     $filename = api_html_entity_decode($filename, ENT_QUOTES, $encoding);
     // Transliteration to ASCII letters, they are not dangerous for filesystems.
@@ -5512,7 +5480,6 @@ function api_get_template($path_type = 'rel') {
  */
 
 function api_browser_support($format="") {
-    require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
     $browser = new Browser();
     //print_r($browser);
     $current_browser = $browser->getBrowser();

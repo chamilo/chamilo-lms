@@ -282,9 +282,6 @@ define('TABLE_NOTEBOOK', 'notebook');
 define('TABLE_MESSAGE', 'message');
 define('TABLE_MESSAGE_ATTACHMENT', 'message_attachment');
 
-// Metadata
-define('TABLE_METADATA', 'metadata');
-
 // Attendance Sheet
 define('TABLE_ATTENDANCE',          'attendance');
 define('TABLE_ATTENDANCE_CALENDAR', 'attendance_calendar');

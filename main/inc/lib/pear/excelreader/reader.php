@@ -28,7 +28,7 @@
  * Code
  */
 //require_once 'PEAR.php';
-require_once 'OLERead.inc';
+//require_once 'OLERead.inc';
 //require_once 'OLE.php';
 
 define('SPREADSHEET_EXCEL_READER_BIFF8',             0x600);
@@ -112,7 +112,7 @@ class Spreadsheet_Excel_Reader
 
     /**
      * Array of format records found
-     * 
+     *
      * @var array
      * @access public
      */
@@ -256,7 +256,7 @@ class Spreadsheet_Excel_Reader
      * Constructor
      *
      * Some basic initialisation
-     */ 
+     */
     function Spreadsheet_Excel_Reader()
     {
         $this->_ole =& new OLERead();
@@ -466,7 +466,7 @@ class Spreadsheet_Excel_Reader
         $length = ord($this->data[$pos+2]) | ord($this->data[$pos+3])<<8;
 
         while ($code != SPREADSHEET_EXCEL_READER_TYPE_EOF) {
-            switch ($code) {  
+            switch ($code) {
                 case SPREADSHEET_EXCEL_READER_TYPE_SST:
                     //echo "Type_SST\n";
                      $spos = $pos + 4;
@@ -564,7 +564,7 @@ class Spreadsheet_Excel_Reader
                                                          }
                                                 }
                                                 //We check the string before send it check the _encodeUTF16
-                                                //$retstr = ($asciiEncoding) ? $retstr : $this->_encodeUTF16($retstr); 
+                                                //$retstr = ($asciiEncoding) ? $retstr : $this->_encodeUTF16($retstr);
                                                 $retstr = ($asciiEncoding) ? $this->_encodeUTF16($retstr, true) : $this->_encodeUTF16($retstr);
 //                                              echo "Str $i = $retstr\n";
                                         if ($richString){
@@ -963,13 +963,13 @@ class Spreadsheet_Excel_Reader
     /**
      * Convert the raw Excel date into a human readable format
      *
-     * Dates in Excel are stored as number of seconds from an epoch.  On 
+     * Dates in Excel are stored as number of seconds from an epoch.  On
      * Windows, the epoch is 30/12/1899 and on Mac it's 01/01/1904
      *
      * @access private
      * @param integer The raw Excel value to convert
      * @return array First element is the converted date, the second element is number a unix timestamp
-     */ 
+     */
     function createDate($numValue)
     {
         if ($numValue > 1) {
@@ -1053,16 +1053,16 @@ class Spreadsheet_Excel_Reader
         }
         return $value;
     }
-    
-    /* 
-     * Function modified by jmontoya in order to fix a problem with encoding in excels 
+
+    /*
+     * Function modified by jmontoya in order to fix a problem with encoding in excels
      * */
     function _encodeUTF16($string, $check = false) {
-        //var_dump($this->_defaultEncoding.' '.$this->_encoderFunction.' '.$from);        
+        //var_dump($this->_defaultEncoding.' '.$this->_encoderFunction.' '.$from);
         if ($check) {
             $from = api_detect_encoding($string);
             $string = api_convert_encoding($string, $this->_defaultEncoding, $from);
-            return $string;    
+            return $string;
         }
         $string =  api_convert_encoding($string, $this->_defaultEncoding, 'UTF-16LE');
         return $string;
@@ -1089,14 +1089,14 @@ class Spreadsheet_Excel_Reader
         }
         return $value;
     }
-    
+
     function _GetInt2d($data, $pos)
     {
         return ord($data[$pos]) | (ord($data[$pos + 1]) << 8);
     }
-        
 
-    
+
+
 
 
 }

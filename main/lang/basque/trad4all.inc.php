@@ -1079,6 +1079,7 @@ $QualifyInGradebook = "Kalifikatu ebaluazio tresnan";
 $SessionSpecificResource = "Saioaren baliabide espezifikoa";
 $EditionNotAvailableFromSession = "Saio batetik ezin da edizioa erabili, mesedez, editatu oinarrizko ikastarotik";
 $HandingOverOfTaskX = "%s zeregina entregatzea";
+$MyFiles = "Nire fitxategiak";
 $ProtectedDocument = "Babestutako dokumentua";
 $ConnectionsLastMonth = "Azken hilabeteko konexioak";
 $TotalStudents = "Ikasleak, guztira";

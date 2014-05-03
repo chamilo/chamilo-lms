@@ -193,7 +193,6 @@ $YouNeedToHaveFriendsInYourSocialNetwork = "Lagunak eduki behar dituzu zure giza
 $SeeAllMyGroups = "Ikusi nire talde guztiak";
 $YouAlreadyInviteAllYourContacts = "Zuk aurretik gonbidatu zenituen zure harreman guztiak";
 $YouShouldCreateAGroup = "Talde bat sortu beharko zenuke";
-$MyFiles = "Nire fitxategiak";
 $MySocialGroups = "Nire gizarte taldeak";
 $SocialGroups = "Gizarte taldeak";
 $CreateASocialGroup = "Sortu gizarte talde bat";

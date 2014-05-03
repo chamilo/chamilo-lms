@@ -193,7 +193,6 @@ $YouNeedToHaveFriendsInYourSocialNetwork = "Necessiteu tenir amics a la seva xar
 $SeeAllMyGroups = "Veure tots els meus grups";
 $YouAlreadyInviteAllYourContacts = "Ja heu convidat a tots els vostres contactes";
 $YouShouldCreateAGroup = "Hauríeu de crear un grup";
-$MyFiles = "Els meus arxius";
 $MySocialGroups = "Els meus grups";
 $SocialGroups = "Grups";
 $CreateASocialGroup = "Crea un grup social";

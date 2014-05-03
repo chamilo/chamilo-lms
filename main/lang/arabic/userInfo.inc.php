@@ -47,7 +47,6 @@ $Newest = "الاحدث";
 $Popular = "الاكثر متايعة";
 $YouNeedToHaveFriendsInYourSocialNetwork = "يجب ان يكون هناك اصدقاء في شبكة التواصل";
 $SeeAllMyGroups = "رؤية كل المجموعات";
-$MyFiles = "ملفاتي";
 $MySocialGroups = "مجموعاتي";
 $SocialGroups = "المجموعات";
 ?>

@@ -193,7 +193,6 @@ $YouNeedToHaveFriendsInYourSocialNetwork = "U hebt vrienden nodig in uw sociaal 
 $SeeAllMyGroups = "Toon al mijn groepen";
 $YouAlreadyInviteAllYourContacts = "U hebt reeds al uw contacten uitgenodigd";
 $YouShouldCreateAGroup = "U moet een groep aanmaken";
-$MyFiles = "Mijn bestanden";
 $MySocialGroups = "Mijn sociale groepen";
 $SocialGroups = "Sociale groepen";
 $CreateASocialGroup = "Sociale groep maken";

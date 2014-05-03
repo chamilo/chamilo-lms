@@ -550,6 +550,7 @@ $ToolSurvey = "Undersökning";
 $ToolNotebook = "Anteckningsbok";
 $ToolCourseProgress = "Kurs utveckling";
 $ContactInformation = "Kontaktuppgifter";
+$MyFiles = "Mina filer";
 $ConnectionsLastMonth = "Anslutningar senaste månaden";
 $ExamFail = "Underkänt";
 $Profile = "Profil";

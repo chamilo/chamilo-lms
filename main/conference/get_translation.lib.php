@@ -68,7 +68,6 @@ function get_language_file_as_xml($language='english')
 	*/
 
 	//---------
-	$non_utf8_encoding = api_get_non_utf8_encoding($language);
 	$list = file($file);
 	$xml = '';
 	foreach ( $list as $line ) {
@@ -78,7 +77,7 @@ function get_language_file_as_xml($language='english')
 			if($match) {
 				$string = $items[2];
 				if (!api_is_valid_utf8($string)) {
-					$string = api_html_entity_decode(api_utf8_encode($string, $non_utf8_encoding), ENT_QUOTES, 'UTF-8');
+					$string = api_html_entity_decode(api_utf8_encode($string), ENT_QUOTES, 'UTF-8');
 				}
 				$xml .= '<labelfield><labelid>'.$items[1].'</labelid><labelvalue>'.stripslashes($string).'</labelvalue></labelfield>'."\n";
 			}

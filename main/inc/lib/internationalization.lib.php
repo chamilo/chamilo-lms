@@ -63,23 +63,20 @@ function get_lang($variable)
 
 /**
  * Gets the current interface language.
- * @param bool $purified (optional)    When it is true, a purified (refined) language value will be returned, for example 'french' instead of 'french_unicode'.
- * @return string                    The current language of the interface.
+  * @return string  The current language of the interface.
  */
 function api_get_interface_language($purified = false, $check_sub_language = false)
 {
     global $app;
-    /*
-    $translator = $app['translator'];
-    return $translator->getLocale();*/
     return $app['language'];
 }
 
 /**
- * Validates the input language identificator in order always to return a language that is enabled in the system.
- * This function is to be used for data import when provided language identificators should be validated.
- * @param string $language        The language identificator to be validated.
- * @return string                Returns the input language identificator. If the input language is not enabled, platform language is returned then.
+ * Validates the input language (english, spanish, etc)
+ * in order always to return a language that is enabled in the system.
+ * This function is to be used for data import when provided language should be validated.
+ * @param string $language The language to be validated.
+ * @return string Returns the input language identificator. If the input language is not enabled, platform language is returned then.
  */
 function api_get_valid_language($language)
 {
@@ -131,10 +128,12 @@ function api_get_language_isocode($language = null, $default_code = 'en')
     }
 
     if (!isset($iso_code[$language])) {
-        $sql = "SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." WHERE dokeos_folder = '$language'";
-        $sql_result = Database::query($sql);
-        if (Database::num_rows($sql_result)) {
-            $result = Database::fetch_array($sql_result);
+        $sql = "SELECT isocode
+                FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)."
+                WHERE dokeos_folder = '$language'";
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            $result = Database::fetch_array($result);
             $iso_code[$language] = trim($result['isocode']);
         } else {
             $language_purified_id = api_purify_language_id($language);
@@ -150,16 +149,17 @@ function api_get_language_isocode($language = null, $default_code = 'en')
 
 
 /**
- * Gets language isocode column from the language table
+ * Gets language iso code column from the language table
  *
- * @return array    An array with the current isocodes
+ * @return array    An array with the current iso codes
  *
  * */
 function api_get_platform_isocodes()
 {
     $iso_code = array();
     $sql_result = Database::query(
-        "SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." ORDER BY isocode "
+        "SELECT isocode FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)."
+        ORDER BY isocode "
     );
     if (Database::num_rows($sql_result)) {
         while ($row = Database::fetch_array($sql_result)) {
@@ -202,6 +202,7 @@ function api_get_text_direction($language = null)
             )
         ) ? 'rtl' : 'ltr';
     }
+
     return $text_direction[$language];
 }
 
@@ -259,10 +260,12 @@ function _api_get_timezone()
 }
 
 /**
- * Returns the given date as a DATETIME in UTC timezone. This function should be used before entering any date in the DB.
+ * Returns the given date as a DATETIME in UTC timezone.
+ * This function should be used before entering any date in the DB.
  *
- * @param mixed The date to be converted (can be a string supported by date() or a timestamp)
- * @param bool if the date is not correct return null instead of the current date
+ * @param mixed $time The date to be converted (can be a string supported by date() or a timestamp)
+ * @param bool $return_null_if_invalid_date if the date is not correct return null instead of the current date
+ * @param bool $returnObj
  * @return string The DATETIME in UTC to be inserted in the DB, or null if the format of the argument is not supported
  *
  * @author Julio Montoya - Adding the 2nd parameter
@@ -303,7 +306,9 @@ function api_get_utc_datetime($time = null, $return_null_if_invalid_date = false
 /**
  * Returns a DATETIME string converted to the right timezone
  * @param mixed The time to be converted
- * @param string The timezone to be converted to. If null, the timezone will be determined based on user preference, or timezone chosen by the admin for the platform.
+ * @param string The timezone to be converted to.
+ * If null, the timezone will be determined based on user preference,
+ * or timezone chosen by the admin for the platform.
  * @param string The timezone to be converted from. If null, UTC will be assumed.
  * @return string The converted time formatted as Y-m-d H:i:s
  *
@@ -366,7 +371,7 @@ function api_strtotime($time, $timezone = null)
 }
 
 /**
- * Returns formated date/time, correspondent to a given language.
+ * Returns formatted date/time, correspondent to a given language.
  * The given date should be in the timezone chosen by the administrator and/or user. Use api_get_local_time to get it.
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -444,7 +449,6 @@ function api_format_date($time, $format = null, $language = null)
             default:
                 $datetype = IntlDateFormatter::FULL;
                 $timetype = IntlDateFormatter::SHORT;
-
         }
     }
 
@@ -615,7 +619,7 @@ function api_convert_and_format_date($time = null, $format = null, $from_timezon
  * @param string $language (optional)    Language indentificator. If it is omited, the current interface language is assumed.
  * @return string                        Returns an array of week days (short names).
  * Example: api_get_week_days_short('english') means array('Sun', 'Mon', ... 'Sat').
- * Note: For all languges returned days are in the English order.
+ * Note: For all languages returned days are in the English order.
  */
 function api_get_week_days_short($language = null)
 {
@@ -628,7 +632,7 @@ function api_get_week_days_short($language = null)
  * @param string $language (optional)    Language indentificator. If it is omited, the current interface language is assumed.
  * @return string                        Returns an array of week days.
  * Example: api_get_week_days_long('english') means array('Sunday, 'Monday', ... 'Saturday').
- * Note: For all languges returned days are in the English order.
+ * Note: For all languages returned days are in the English order.
  */
 function api_get_week_days_long($language = null)
 {
@@ -770,8 +774,8 @@ function api_is_western_name_order($format = null, $language = null)
 
 /**
  * Returns a directive for sorting person names depending on a given language and based on the options in the internationalization "database".
- * @param string $language (optional)    The input language. If it is omited, the current interface language is assumed.
- * @return bool                            Returns boolean value. TRUE means ORDER BY first_name, last_name; FALSE means ORDER BY last_name, first_name.
+ * @param string $language (optional) The input language. If it is omited, the current interface language is assumed.
+ * @return bool Returns boolean value. TRUE means ORDER BY first_name, last_name; FALSE means ORDER BY last_name, first_name.
  * Note: You may use this function:
  * 2. for constructing the ORDER clause of SQL queries, related to first_name and last_name;
  * 3. for adjusting php-implemented sorting in tables and reports.
@@ -938,34 +942,6 @@ function api_xml_http_response_encode($string, $from_encoding = null)
         }
     }
     return $string;
-}
-
-/**
- * This function converts a given string to the encoding that filesystem uses for representing file/folder names.
- * @param string $string                    The string being converted.
- * @param string $from_encoding (optional)    The encoding that $string is being converted from. If it is omited, the platform character set is assumed.
- * @return string                            Returns the converted string.
- */
-function api_file_system_encode($string, $from_encoding = null)
-{
-    if (empty($from_encoding)) {
-        $from_encoding = _api_mb_internal_encoding();
-    }
-    return api_convert_encoding($string, api_get_file_system_encoding(), $from_encoding);
-}
-
-/**
- * This function converts a given string from the encoding that filesystem uses for representing file/folder names.
- * @param string $string                    The string being converted.
- * @param string $from_encoding (optional)    The encoding that $string is being converted from. If it is omited, the platform character set is assumed.
- * @return string                            Returns the converted string.
- */
-function api_file_system_decode($string, $to_encoding = null)
-{
-    if (empty($to_encoding)) {
-        $to_encoding = _api_mb_internal_encoding();
-    }
-    return api_convert_encoding($string, $to_encoding, api_get_file_system_encoding());
 }
 
 function _api_mb_internal_encoding()
@@ -1249,11 +1225,6 @@ function api_preg_split($pattern, $subject, $limit = -1, $flags = 0, $encoding =
     return preg_split(api_is_utf8($encoding) ? $pattern.'u' : $pattern, $subject, $limit, $flags);
 }
 
-
-/**
- * Obsolete string operations using regular expressions, to be deprecated
- */
-
 /**
  * Note: Try to avoid using this function. Use api_preg_match() with Perl-compatible regular expression syntax.
  *
@@ -1266,7 +1237,7 @@ function api_preg_split($pattern, $subject, $limit = -1, $flags = 0, $encoding =
  * This function is aimed at replacing the functions ereg() and mb_ereg() for human-language strings.
  * @link http://php.net/manual/en/function.ereg
  * @link http://php.net/manual/en/function.mb-ereg
- * @deprecate
+ * @deprecated
  */
 function api_ereg($pattern, $string, & $regs = null)
 {
@@ -1582,245 +1553,6 @@ function api_natrsort(&$array, $language = null, $encoding = null)
 }
 
 /**
- * Sorts an array using natural order algorithm, case-insensitive.
- * @param array $array                    The input array.
- * @param string $language (optional)    The language in which comparison is to be made. If language is omitted, interface language is assumed then.
- * @param string $encoding (optional)    The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return bool                            Returns TRUE on success, FALSE on error.
- * This function is aimed at replacing the function natcasesort() for sorting human-language strings.
- * @link http://php.net/manual/en/function.natcasesort.php
- */
-function api_natcasesort(&$array, $language = null, $encoding = null)
-{
-    if (INTL_INSTALLED) {
-        if (empty($encoding)) {
-            $encoding = _api_mb_internal_encoding();
-        }
-        $collator = _api_get_alpha_numerical_collator($language);
-        if (is_object($collator)) {
-            global $_api_collator, $_api_encoding;
-            $_api_collator = $collator;
-            $_api_encoding = $encoding;
-            return uasort($array, '_api_casecmp');
-        }
-    }
-    return natcasesort($array);
-}
-
-/**
- * Sorts an array using natural order algorithm, case-insensitive, reverse order.
- * @param array $array                    The input array.
- * @param string $language (optional)    The language in which comparison is to be made. If language is omitted, interface language is assumed then.
- * @param string $encoding (optional)    The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return bool                            Returns TRUE on success, FALSE on error.
- */
-function api_natcasersort(&$array, $language = null, $encoding = null)
-{
-    if (INTL_INSTALLED) {
-        if (empty($encoding)) {
-            $encoding = _api_mb_internal_encoding();
-        }
-        $collator = _api_get_alpha_numerical_collator($language);
-        if (is_object($collator)) {
-            global $_api_collator, $_api_encoding;
-            $_api_collator = $collator;
-            $_api_encoding = $encoding;
-            return uasort($array, '_api_casercmp');
-        }
-    }
-    return uasort($array, '_api_strnatcasercmp');
-}
-
-/**
- * Sorts an array by keys, elements will be arranged from the lowest key to the highest key.
- * @param array $array                    The input array.
- * @param int $sort_flag (optional)        Shows how keys of the array to be compared.
- * @param string $language (optional)    The language in which comparison is to be made. If language is omitted, interface language is assumed then.
- * @param string $encoding (optional)    The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return bool                            Returns TRUE on success, FALSE on error.
- * Note: $sort_flag may have the following values:
- * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
- * SORT_NUMERIC - keys will be compared as numbers;
- * SORT_STRING - keys will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
- * SORT_LOCALE_STRING - keys will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
- * This function is aimed at replacing the function ksort() for sorting human-language key strings.
- * @link http://php.net/manual/en/function.ksort.php
- */
-function api_ksort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null)
-{
-    if (INTL_INSTALLED) {
-        if (empty($encoding)) {
-            $encoding = _api_mb_internal_encoding();
-        }
-        $collator = _api_get_collator($language);
-        if (is_object($collator)) {
-            if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
-                global $_api_collator, $_api_encoding;
-                $_api_collator = $collator;
-                $_api_encoding = $encoding;
-                return uksort($array, '_api_cmp');
-            }
-        }
-    }
-    return ksort($array, $sort_flag);
-}
-
-/**
- * Sorts an array by keys, elements will be arranged from the highest key to the lowest key (in reverse order).
- * @param array $array                    The input array.
- * @param int $sort_flag (optional)        Shows how keys of the array to be compared.
- * @param string $language (optional)    The language in which comparison is to be made. If language is omitted, interface language is assumed then.
- * @param string $encoding (optional)    The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return bool                            Returns TRUE on success, FALSE on error.
- * Note: $sort_flag may have the following values:
- * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
- * SORT_NUMERIC - keys will be compared as numbers;
- * SORT_STRING - keys will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
- * SORT_LOCALE_STRING - keys will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
- * This function is aimed at replacing the function krsort() for sorting human-language key strings.
- * @link http://php.net/manual/en/function.krsort.php
- */
-function api_krsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null)
-{
-    if (INTL_INSTALLED) {
-        if (empty($encoding)) {
-            $encoding = _api_mb_internal_encoding();
-        }
-        $collator = _api_get_collator($language);
-        if (is_object($collator)) {
-            if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
-                global $_api_collator, $_api_encoding;
-                $_api_collator = $collator;
-                $_api_encoding = $encoding;
-                return uksort($array, '_api_rcmp');
-            }
-        }
-    }
-    return krsort($array, $sort_flag);
-}
-
-/**
- * Sorts an array by keys using natural order algorithm.
- * @param array $array                    The input array.
- * @param string $language (optional)    The language in which comparison is to be made. If language is omitted, interface language is assumed then.
- * @param string $encoding (optional)    The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return bool                            Returns TRUE on success, FALSE on error.
- */
-function api_knatsort(&$array, $language = null, $encoding = null)
-{
-    if (INTL_INSTALLED) {
-        if (empty($encoding)) {
-            $encoding = _api_mb_internal_encoding();
-        }
-        $collator = _api_get_alpha_numerical_collator($language);
-        if (is_object($collator)) {
-            global $_api_collator, $_api_encoding;
-            $_api_collator = $collator;
-            $_api_encoding = $encoding;
-            return uksort($array, '_api_cmp');
-        }
-    }
-    return uksort($array, 'strnatcmp');
-}
-
-/**
- * Sorts an array by keys using natural order algorithm, case insensitive, reverse order.
- * @param array $array                    The input array.
- * @param string $language (optional)    The language in which comparison is to be made. If language is omitted, interface language is assumed then.
- * @param string $encoding (optional)    The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return bool                            Returns TRUE on success, FALSE on error.
- */
-function api_knatcasersort(&$array, $language = null, $encoding = null)
-{
-    if (INTL_INSTALLED) {
-        if (empty($encoding)) {
-            $encoding = _api_mb_internal_encoding();
-        }
-        $collator = _api_get_alpha_numerical_collator($language);
-        if (is_object($collator)) {
-            global $_api_collator, $_api_encoding;
-            $_api_collator = $collator;
-            $_api_encoding = $encoding;
-            return uksort($array, '_api_casercmp');
-        }
-    }
-    return uksort($array, '_api_strnatcasercmp');
-}
-
-/**
- * Sorts an array, elements will be arranged from the lowest to the highest.
- * @param array $array                    The input array.
- * @param int $sort_flag (optional)        Shows how elements of the array to be compared.
- * @param string $language (optional)    The language in which comparison is to be made. If language is omitted, interface language is assumed then.
- * @param string $encoding (optional)    The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return bool                            Returns TRUE on success, FALSE on error.
- * Note: $sort_flag may have the following values:
- * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
- * SORT_NUMERIC - items will be compared as numbers;
- * SORT_STRING - items will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
- * SORT_LOCALE_STRING - items will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
- * This function is aimed at replacing the function sort() for sorting human-language strings.
- * @link http://php.net/manual/en/function.sort.php
- * @link http://php.net/manual/en/collator.sort.php
- */
-function api_sort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null)
-{
-    if (INTL_INSTALLED) {
-        if (empty($encoding)) {
-            $encoding = _api_mb_internal_encoding();
-        }
-        $collator = _api_get_collator($language);
-        if (is_object($collator)) {
-            if (api_is_utf8($encoding)) {
-                $sort_flag = ($sort_flag == SORT_LOCALE_STRING) ? SORT_STRING : $sort_flag;
-                return collator_sort($collator, $array, _api_get_collator_sort_flag($sort_flag));
-            } elseif ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
-                global $_api_collator, $_api_encoding;
-                $_api_collator = $collator;
-                $_api_encoding = $encoding;
-                return usort($array, '_api_cmp');
-            }
-        }
-    }
-    return sort($array, $sort_flag);
-}
-
-/**
- * Sorts an array, elements will be arranged from the highest to the lowest (in reverse order).
- * @param array $array                    The input array.
- * @param int $sort_flag (optional)        Shows how elements of the array to be compared.
- * @param string $language (optional)    The language in which comparison is to be made. If language is omitted, interface language is assumed then.
- * @param string $encoding (optional)    The used internally by this function character encoding. If it is omitted, the platform character set will be used by default.
- * @return bool                            Returns TRUE on success, FALSE on error.
- * Note: $sort_flag may have the following values:
- * SORT_REGULAR - internal PHP-rules for comparison will be applied, without preliminary changing types;
- * SORT_NUMERIC - items will be compared as numbers;
- * SORT_STRING - items will be compared as strings. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale;
- * SORT_LOCALE_STRING - items will be compared as strings depending on the current POSIX locale. If intl extension is enabled, then comparison will be language-sensitive using internally a created ICU locale.
- * This function is aimed at replacing the function rsort() for sorting human-language strings.
- * @link http://php.net/manual/en/function.rsort.php
- */
-function api_rsort(&$array, $sort_flag = SORT_REGULAR, $language = null, $encoding = null)
-{
-    if (INTL_INSTALLED) {
-        if (empty($encoding)) {
-            $encoding = _api_mb_internal_encoding();
-        }
-        $collator = _api_get_collator($language);
-        if (is_object($collator)) {
-            if ($sort_flag == SORT_STRING || $sort_flag == SORT_LOCALE_STRING) {
-                global $_api_collator, $_api_encoding;
-                $_api_collator = $collator;
-                $_api_encoding = $encoding;
-                return usort($array, '_api_rcmp');
-            }
-        }
-    }
-    return rsort($array, $sort_flag);
-}
-
-
-/**
  * Common sting operations with arrays
  */
 
@@ -1872,42 +1604,6 @@ function api_get_system_encoding()
 }
 
 /**
- * This function returns the encoding, currently used by the file system.
- * @return string    The file system's encoding, it depends on the locale that OS currently uses.
- * @link http://php.net/manual/en/function.setlocale.php
- * Note: For Linux systems, to see all installed locales type in a terminal  locale -a
- */
-function api_get_file_system_encoding()
-{
-    static $file_system_encoding;
-    if (!isset($file_system_encoding)) {
-        $locale = setlocale(LC_CTYPE, '0');
-        $seek_pos = strpos($locale, '.');
-        if ($seek_pos !== false) {
-            $file_system_encoding = substr($locale, $seek_pos + 1);
-            if (IS_WINDOWS_OS) {
-                $file_system_encoding = 'CP'.$file_system_encoding;
-            }
-        }
-        // Dealing with some aliases.
-        $file_system_encoding = str_ireplace('utf8', 'UTF-8', $file_system_encoding);
-        $file_system_encoding = preg_replace('/^CP65001$/', 'UTF-8', $file_system_encoding);
-        $file_system_encoding = preg_replace('/^CP(125[0-9])$/', 'WINDOWS-\1', $file_system_encoding);
-        $file_system_encoding = str_replace('WINDOWS-1252', 'ISO-8859-15', $file_system_encoding);
-        if (empty($file_system_encoding)) {
-            if (IS_WINDOWS_OS) {
-                // Not expected for Windows, this assignment is here just in case.
-                $file_system_encoding = api_get_system_encoding();
-            } else {
-                // For Ububntu and other UTF-8 enabled Linux systems this fits with the default settings.
-                $file_system_encoding = 'UTF-8';
-            }
-        }
-    }
-    return $file_system_encoding;
-}
-
-/**
  * Checks whether a specified encoding is supported by this API.
  * @param string $encoding    The specified encoding.
  * @return bool                Returns TRUE when the specified encoding is supported, FALSE othewise.
@@ -1923,66 +1619,6 @@ function api_is_encoding_supported($encoding)
     return $supported[$encoding];
 }
 
-/**
- * Returns in an array the most-probably used non-UTF-8 encoding for the given language.
- * The first (leading) value is actually used by the system at the moment.
- * @param string $language (optional)    The specified language, the default value is the user intrface language.
- * @return string                        The correspondent encoding to the specified language.
- * Note: See the file chamilo/main/inc/lib/internationalization_database/non_utf8_encodings.php
- * if you wish to revise the leading non-UTF-8 encoding for your language.
- */
-function api_get_non_utf8_encoding($language = null)
-{
-    if (empty($language)) {
-        $language = api_get_interface_language(false, true);
-    }
-
-    $language = api_purify_language_id($language);
-    $encodings = & _api_non_utf8_encodings();
-    if (is_array($encodings[$language])) {
-        if (!empty($encodings[$language][0])) {
-            return $encodings[$language][0];
-        }
-        return null;
-    }
-    return null;
-}
-
-/**
- * Return a list of valid encodings for setting platform character set.
- * @return array    List of valid encodings, preferably IANA-registared.
- */
-function api_get_valid_encodings()
-{
-    $encodings = & _api_non_utf8_encodings();
-    if (!is_array($encodings)) {
-        $encodings = array('english', array('ISO-8859-15'));
-    }
-    $result1 = array();
-    $result2 = array();
-    $result3 = array();
-    foreach ($encodings as $value) {
-        if (isset($value[0])) {
-            $encoding = api_refine_encoding_id(trim($value[0]));
-            if (!empty($encoding)) {
-                if (strpos($encoding, 'ISO-') === 0) {
-                    $result1[] = $encoding;
-                } elseif (strpos($encoding, 'WINDOWS-') === 0) {
-                    $result2[] = $encoding;
-                } else {
-                    $result3[] = $encoding;
-                }
-            }
-        }
-    }
-    $result1 = array_unique($result1);
-    $result2 = array_unique($result2);
-    $result3 = array_unique($result3);
-    natsort($result1);
-    natsort($result2);
-    natsort($result3);
-    return array_merge(array('UTF-8'), $result1, $result2, $result3);
-}
 
 /**
  * Detects encoding of plain text.
@@ -1996,13 +1632,8 @@ function api_detect_encoding($string, $language = null)
 }
 
 /**
- * String validation functions concerning certain encodings
- */
-
-/**
  * Checks a string for UTF-8 validity.
  *
- * @deprecated Use Encoding::utf8()->is_valid() instead
  */
 function api_is_valid_utf8($string)
 {
@@ -2023,14 +1654,14 @@ function api_is_valid_date($date, $format = 'Y-m-d H:i:s')
     return $d && $d->format($format) == $date;
 }
 
-
 /**
  * Returns returns person name convention for a given language.
  * @param string $language	The input language.
  * @param string $type		The type of the requested convention. It may be 'format' for name order convention or 'sort_by' for name sorting convention.
  * @return mixed			Depending of the requested type, the returned result may be string or boolean; null is returned on error;
  */
-function _api_get_person_name_convention($language, $type) {
+function _api_get_person_name_convention($language, $type)
+{
     global $app;
     $conventions = $app['name_order_conventions'];
     $language = api_purify_language_id($language);
@@ -2049,8 +1680,12 @@ function _api_get_person_name_convention($language, $type) {
  * @param string $format	The input format to be verified.
  * @return bool				Returns the same format if is is valid, otherwise returns a valid English format.
  */
-function _api_validate_person_name_format($format) {
-    if (empty($format) || stripos($format, '%f') === false || stripos($format, '%l') === false) {
+function _api_validate_person_name_format($format)
+{
+    if (empty($format) ||
+        stripos($format, '%f') === false ||
+        stripos($format, '%l') === false
+    ) {
         return '%t %f %l';
     }
     return $format;
@@ -2062,16 +1697,22 @@ function _api_validate_person_name_format($format) {
  * @param string $person_name	The input person name.
  * @return string				Returns cleaned person name.
  */
-function _api_clean_person_name($person_name) {
-    return preg_replace(array('/\s+/', '/, ,/', '/,+/', '/^[ ,]/', '/[ ,]$/'), array(' ', ', ', ',', '', ''), $person_name);
+function _api_clean_person_name($person_name)
+{
+    return preg_replace(
+        array('/\s+/', '/, ,/', '/,+/', '/^[ ,]/', '/[ ,]$/'),
+        array(' ', ', ', ',', '', ''),
+        $person_name
+    );
 }
 
 /**
  * Returns an array of translated week days and months, short and normal names.
- * @param string $language (optional)	Language indentificator. If it is omited, the current interface language is assumed.
+ * @param string $language (optional)	If it is omitted, the current interface language is assumed.
  * @return array						Returns a multidimensional array with translated week days and months.
  */
-function &_api_get_day_month_names($language = null) {
+function &_api_get_day_month_names($language = null)
+{
     static $date_parts = array();
     if (empty($language)) {
         $language = api_get_interface_language();

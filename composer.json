@@ -35,6 +35,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/jmontoyaa/silex-pagerfanta-provider"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/jmontoyaa/XHProfServiceProvider"
         }
     ],
     "require": {
@@ -86,7 +90,13 @@
         "opauth/google": "0.2.2",
         "media-alchemyst/media-alchemyst": "0.4.4",
         "php-ffmpeg/php-ffmpeg": "0.4.4",
-        "sunra/php-simple-html-dom-parser": "1.5.0"
+        "sunra/php-simple-html-dom-parser": "1.5.0",
+        "zendframework/zend-config": "~2.3",
+        "zendframework/zend-feed": "~2.3",
+        "zendframework/zend-http": "~2.3",
+        "zendframework/zend-servicemanager": "~2.3",
+        "sabre/vobject" : "~3.1",
+        "patchwork/utf8": "1.1.*"
     },
     "require-dev": {
         "league/flysystem": "0.3.3",
@@ -96,7 +106,8 @@
         "natxet/CssMin": "dev-master",
         "leafo/lessphp": "dev-master",
         "mheap/silex-assetic": "1.0.*@dev",
-        "filp/whoops": "dev-master"
+        "filp/whoops": "dev-master",
+        "jmontoyaa/xhprof-service-provider": "dev-master"
     },
     "scripts": {
         "post-install-cmd": "ChamiloLMS\\Composer\\Tasks::postInstall",

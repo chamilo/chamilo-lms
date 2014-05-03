@@ -25,7 +25,7 @@
 /**
  * The class representing a page of a multipage form.
  */
-require_once 'HTML/QuickForm/Page.php';
+//require_once 'HTML/QuickForm/Page.php';
 
 /**
  * The class representing a Controller of MVC design pattern.
@@ -208,7 +208,6 @@ class HTML_QuickForm_Controller
             case 'submit':
             case 'display':
             case 'jump':
-                include_once 'HTML/QuickForm/Action/' . ucfirst($actionName) . '.php';
                 $className = 'HTML_QuickForm_Action_' . $actionName;
                 $this->_actions[$actionName] =& new $className();
                 return $this->_actions[$actionName]->perform($page, $actionName);

@@ -23,7 +23,7 @@
 /**
  * Code
  */
-require_once 'HTML/QuickForm/Rule.php';
+//require_once 'HTML/QuickForm/Rule.php';
 /**
  * Rule to compare two form fields
  *

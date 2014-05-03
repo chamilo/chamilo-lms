@@ -26,7 +26,7 @@
 /**
  * Base class for form elements
  */
-require_once 'HTML/QuickForm/element.php';
+//require_once 'HTML/QuickForm/element.php';
 
 /**
  * HTML class for a form element group
@@ -298,7 +298,6 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      */
     function toHtml()
     {
-        include_once('HTML/QuickForm/Renderer/Default.php');
         // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
         //$renderer =& new HTML_QuickForm_Renderer_Default();
         $renderer = new HTML_QuickForm_Renderer_Default();

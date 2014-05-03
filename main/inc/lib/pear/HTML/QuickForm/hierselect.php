@@ -26,11 +26,11 @@
 /**
  * Class for a group of form elements
  */
-require_once 'HTML/QuickForm/group.php';
+//require_once 'HTML/QuickForm/group.php';
 /**
  * Class for <select></select> elements
  */
-require_once 'HTML/QuickForm/select.php';
+//require_once 'HTML/QuickForm/select.php';
 
 /**
  * Hierarchical select element
@@ -461,7 +461,6 @@ JAVASCRIPT;
             $this->_js .= "_hs_defaults['" . $this->_escapeString($this->getName()) . "'] = " .
                           $this->_convertArrayToJavascript($values, false) . ";\n";
         }
-        include_once('HTML/QuickForm/Renderer/Default.php');
         $renderer =& new HTML_QuickForm_Renderer_Default();
         $renderer->setElementTemplate('{element}');
         parent::accept($renderer);

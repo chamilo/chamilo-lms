@@ -24,7 +24,7 @@
 /**
  * Class for <select></select> elements
  */
-require_once 'HTML/QuickForm/select.php';
+//require_once 'HTML/QuickForm/select.php';
 
 /**
  * Hidden select pseudo-element

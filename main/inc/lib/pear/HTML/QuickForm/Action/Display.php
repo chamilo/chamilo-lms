@@ -24,7 +24,7 @@
 /**
  * Class representing an action to perform on HTTP request.
  */
-require_once 'HTML/QuickForm/Action.php';
+//require_once 'HTML/QuickForm/Action.php';
 
 /**
  * This action handles output of the form.

@@ -24,8 +24,8 @@
 /**
  * Required packages
  */
-require_once 'HTML/QuickForm/CAPTCHA.php';
-require_once 'Text/CAPTCHA/Driver/Figlet.php';
+/*require_once 'HTML/QuickForm/CAPTCHA.php';
+require_once 'Text/CAPTCHA/Driver/Figlet.php';*/
 
 /**
  * Element for HTML_QuickForm to display a CAPTCHA figlet

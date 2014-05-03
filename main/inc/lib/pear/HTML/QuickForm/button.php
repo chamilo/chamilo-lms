@@ -25,7 +25,7 @@
 /**
  * Base class for <input /> form elements
  */
-require_once 'HTML/QuickForm/input.php';
+//require_once 'HTML/QuickForm/input.php';
 
 /**
  * HTML class for an <input type="button" /> elements
@@ -54,7 +54,7 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
      */
     function HTML_QuickForm_button($elementName=null, $value=null, $attributes = null) {
         HTML_QuickForm_input::HTML_QuickForm_input($elementName, null, $attributes);
-        $this->_persistantFreeze = false;        
+        $this->_persistantFreeze = false;
         $this->setValue($value);
         $this->setType('button');
     } //end constructor

@@ -24,8 +24,8 @@
 /**
  * Required packages
  */
-require_once 'HTML/QuickForm/CAPTCHA.php';
-require_once 'Text/CAPTCHA/Driver/Equation.php';
+/*require_once 'HTML/QuickForm/CAPTCHA.php';
+require_once 'Text/CAPTCHA/Driver/Equation.php';*/
 
 /**
  * Element for HTML_QuickForm to display a CAPTCHA equation question

@@ -26,11 +26,11 @@
 /**
  * PEAR and PEAR_Error classes, for error handling
  */
-require_once 'PEAR.php';
+//require_once 'PEAR.php';
 /**
  * Base class for all HTML classes
  */
-require_once 'HTML/Common.php';
+//require_once 'HTML/Common.php';
 
 /**
  * Element types known to HTML_QuickForm
@@ -76,23 +76,23 @@ $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'] = array(
  * @global array $GLOBALS['_HTML_QuickForm_registered_rules']
  */
 $GLOBALS['_HTML_QuickForm_registered_rules'] = array(
-    'required'      => array('html_quickform_rule_required', 'HTML/QuickForm/Rule/Required.php'),
-    'maxlength'     => array('html_quickform_rule_range',    'HTML/QuickForm/Rule/Range.php'),
-    'minlength'     => array('html_quickform_rule_range',    'HTML/QuickForm/Rule/Range.php'),
-    'rangelength'   => array('html_quickform_rule_range',    'HTML/QuickForm/Rule/Range.php'),
-    'email'         => array('html_quickform_rule_email',    'HTML/QuickForm/Rule/Email.php'),
-    'regex'         => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
-    'lettersonly'   => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
-    'alphanumeric'  => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
-    'numeric'       => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
-    'nopunctuation' => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
-    'nonzero'       => array('html_quickform_rule_regex',    'HTML/QuickForm/Rule/Regex.php'),
-    'callback'      => array('html_quickform_rule_callback', 'HTML/QuickForm/Rule/Callback.php'),
+    'required'      => array('HTML_QuickForm_Rule_Required', 'HTML/QuickForm/Rule/Required.php'),
+    'maxlength'     => array('HTML_QuickForm_Rule_Range',    'HTML/QuickForm/Rule/Range.php'),
+    'minlength'     => array('HTML_QuickForm_Rule_Range',    'HTML/QuickForm/Rule/Range.php'),
+    'rangelength'   => array('HTML_QuickForm_Rule_Range',    'HTML/QuickForm/Rule/Range.php'),
+    'email'         => array('HTML_QuickForm_Rule_Email',    'HTML/QuickForm/Rule/Email.php'),
+    'regex'         => array('HTML_QuickForm_Rule_Regex',    'HTML/QuickForm/Rule/Regex.php'),
+    'lettersonly'   => array('HTML_QuickForm_Rule_Regex',    'HTML/QuickForm/Rule/Regex.php'),
+    'alphanumeric'  => array('HTML_QuickForm_Rule_Regex',    'HTML/QuickForm/Rule/Regex.php'),
+    'numeric'       => array('HTML_QuickForm_Rule_Regex',    'HTML/QuickForm/Rule/Regex.php'),
+    'nopunctuation' => array('HTML_QuickForm_Rule_Regex',    'HTML/QuickForm/Rule/Regex.php'),
+    'nonzero'       => array('HTML_QuickForm_Rule_Regex',    'HTML/QuickForm/Rule/Regex.php'),
+    'callback'      => array('HTML_QuickForm_Rule_Callback', 'HTML/QuickForm/Rule/Callback.php'),
     // Added by Chamilo team, 16-MAR-2010
     //'compare'       => array('html_quickform_rule_compare',  'HTML/QuickForm/Rule/Compare.php')
-    'compare'       => array('html_quickform_rule_compare',  'HTML/QuickForm/Rule/Compare.php'),
-    'comparedate'   => array('html_quickform_rule_comparedate',  'HTML/QuickForm/Rule/CompareDate.php'),
-    'errordate'  	=> array('html_quickform_rule_date',  'HTML/QuickForm/Rule/Date.php'),
+    'compare'       => array('HTML_QuickForm_Rule_Compare',  'HTML/QuickForm/Rule/Compare.php'),
+    'comparedate'   => array('HTML_QuickForm_Rule_CompareDate',  'HTML/QuickForm/Rule/CompareDate.php'),
+    'errordate'  	=> array('HTML_QuickForm_Rule_Date',  'HTML/QuickForm/Rule/Date.php'),
     'captcha'  	    => array('HTML_QuickForm_Rule_CAPTCHA',  'HTML/QuickForm/Rule/CAPTCHA.php')
     //
 );
@@ -419,9 +419,8 @@ class HTML_QuickForm extends HTML_Common
      * @access    public
      * @return    void
      */
-    function registerRule($ruleName, $type, $data1, $data2 = null)
+    static function registerRule($ruleName, $type, $data1, $data2 = null)
     {
-        include_once('HTML/QuickForm/RuleRegistry.php');
         $registry =& HTML_QuickForm_RuleRegistry::singleton();
         $registry->registerRule($ruleName, $type, $data1, $data2);
     } // end func registerRule
@@ -637,7 +636,7 @@ class HTML_QuickForm extends HTML_Common
         $className = $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'][$type][1];
         $includeFile = $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'][$type][0];
 
-        include_once $includeFile;
+        //include_once $includeFile;
         // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
         //$elementObject =& new $className();
 
@@ -1423,16 +1422,14 @@ class HTML_QuickForm extends HTML_Common
         } elseif (!$autoRegister) {
             return false;
         }
-        // automatically register the rule if requested
-        include_once 'HTML/QuickForm/RuleRegistry.php';
         $ruleName = false;
         if (is_object($name) && is_a($name, 'html_quickform_rule')) {
-            $ruleName = !empty($name->name)? $name->name: strtolower(get_class($name));
+            $ruleName = !empty($name->name)? $name->name: get_class($name);
         } elseif (is_string($name) && class_exists($name)) {
-            $parent = strtolower($name);
+            $parent = $name;
             do {
                 if ('html_quickform_rule' == strtolower($parent)) {
-                    $ruleName = strtolower($name);
+                    $ruleName = $name;
                     break;
                 }
             } while ($parent = get_parent_class($parent));
@@ -1562,7 +1559,6 @@ class HTML_QuickForm extends HTML_Common
             return false;
         }
 
-        include_once('HTML/QuickForm/RuleRegistry.php');
         $registry =& HTML_QuickForm_RuleRegistry::singleton();
 
         foreach ($this->_rules as $target => $rules) {
@@ -1758,7 +1754,7 @@ class HTML_QuickForm extends HTML_Common
     */
     function &defaultRenderer() {
         if (!isset($GLOBALS['_HTML_QuickForm_default_renderer'])) {
-            include_once 'HTML/QuickForm/Renderer/Default.php';
+            //include_once 'HTML/QuickForm/Renderer/Default.php';
             // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
             //$GLOBALS['_HTML_QuickForm_default_renderer'] =& new HTML_QuickForm_Renderer_Default();
             $GLOBALS['_HTML_QuickForm_default_renderer'] = new HTML_QuickForm_Renderer_Default();
@@ -1804,7 +1800,6 @@ class HTML_QuickForm extends HTML_Common
             return '';
         }
 
-        include_once('HTML/QuickForm/RuleRegistry.php');
         $registry =& HTML_QuickForm_RuleRegistry::singleton();
         $test = array();
         $js_escape = array(
@@ -1916,7 +1911,6 @@ class HTML_QuickForm extends HTML_Common
      */
     function toArray($collectHidden = false)
     {
-        include_once 'HTML/QuickForm/Renderer/Array.php';
         // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
         //$renderer =& new HTML_QuickForm_Renderer_Array($collectHidden);
         $renderer = new HTML_QuickForm_Renderer_Array($collectHidden);

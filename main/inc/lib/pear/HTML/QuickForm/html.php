@@ -24,7 +24,7 @@
 /**
  * HTML class for static data
  */
-require_once 'HTML/QuickForm/static.php';
+///require_once 'HTML/QuickForm/static.php';
 
 /**
  * A pseudo-element used for adding raw HTML to form
@@ -65,19 +65,19 @@ class HTML_QuickForm_html extends HTML_QuickForm_static
     * @param HTML_QuickForm_Renderer    renderer object (only works with Default renderer!)
     * @access public
     * @return void
-    */    
+    */
     function accept(&$renderer, $required = false, $error = null)
     {
         $renderer->renderHtml($this);
     } // end func accept
-    
-    
+
+
     function toHtml()
     {
          return HTML_QuickForm_static::toHtml();
     } //end func toHtml
 
-    
+
 
     // }}}
 } //end class HTML_QuickForm_html

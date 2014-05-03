@@ -24,7 +24,7 @@
 /**
  * HTML class for static data
  */
-require_once 'HTML/QuickForm/static.php';
+//require_once 'HTML/QuickForm/static.php';
 
 /**
  * A pseudo-element used for adding headers to form
@@ -50,7 +50,7 @@ class HTML_QuickForm_header extends HTML_QuickForm_static
     function HTML_QuickForm_header($elementName = null, $text = null) {
         if (!empty($elementName)) {
             $text = $elementName;
-        }        
+        }
         $this->HTML_QuickForm_static($elementName, null, $text);
         $this->_type = 'header';
     }

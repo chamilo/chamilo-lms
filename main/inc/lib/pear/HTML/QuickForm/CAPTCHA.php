@@ -54,8 +54,8 @@
 /**
  * Required packages
  */
-require_once 'HTML/QuickForm/input.php';
-require_once 'Text/CAPTCHA.php';
+/*require_once 'HTML/QuickForm/input.php';
+require_once 'Text/CAPTCHA.php';*/
 
 /**
  * Common class for HTML_QuickForm elements to display a CAPTCHA
@@ -263,6 +263,6 @@ class HTML_QuickForm_CAPTCHA extends HTML_QuickForm_input
 /**
  * Register the rule with QuickForm
  */
-require_once 'HTML/QuickForm/Rule/CAPTCHA.php';
+//require_once 'HTML/QuickForm/Rule/CAPTCHA.php';
 
 ?>

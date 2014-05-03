@@ -102,11 +102,11 @@ class HTML_QuickForm_RuleRegistry
         } elseif (is_object($data1)) {
             // An instance of HTML_QuickForm_Rule
             $this->_rules[strtolower(get_class($data1))] = $data1;
-            $GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = array(strtolower(get_class($data1)), null);
+            $GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = array(get_class($data1), null);
 
         } else {
             // Rule class name
-            $GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = array(strtolower($data1), $data2);
+            $GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName] = array($data1, $data2);
         }
     } // end func registerRule
 
@@ -120,15 +120,10 @@ class HTML_QuickForm_RuleRegistry
     function &getRule($ruleName)
     {
         list($class, $path) = $GLOBALS['_HTML_QuickForm_registered_rules'][$ruleName];
-
         if (!isset($this->_rules[$class])) {
-            if (!empty($path)) {
-                include_once($path);
-            }
             // Modified by Ivan Tcholakov, 16-MAR-2010. Suppressing a deprecation warning on PHP 5.3
             //$this->_rules[$class] =& new $class();
             $this->_rules[$class] = new $class();
-            //
         }
         $this->_rules[$class]->setName($ruleName);
         return $this->_rules[$class];

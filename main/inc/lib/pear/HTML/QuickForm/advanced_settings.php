@@ -3,7 +3,7 @@
  * HTML class for static data
  * @example  $form->addElement('advanced_settings', '<a href="#">advanced settings</a>');
  */
-require_once 'HTML/QuickForm/static.php';
+//require_once 'HTML/QuickForm/static.php';
 
 /**
  * A pseudo-element used for adding raw HTML to form

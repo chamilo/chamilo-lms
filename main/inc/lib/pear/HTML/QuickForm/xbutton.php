@@ -24,7 +24,7 @@
 /**
  * Base class for form elements
  */
-require_once 'HTML/QuickForm/element.php';
+//require_once 'HTML/QuickForm/element.php';
 
 /**
  * Class for HTML 4.0 <button> element

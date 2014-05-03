@@ -314,6 +314,30 @@ class User implements AdvancedUserInterface, \Serializable, EquatableInterface
         return $this->courses;
     }
 
+    public static function getPasswordConstraints()
+    {
+        return
+            array(
+                new Assert\Length(array('min' => 5)),
+                // Alpha numeric + "_" or "-"
+                new Assert\Regex(array(
+                        'pattern' => '/^[a-z\-_0-9]+$/i',
+                        'htmlPattern' => '/^[a-z\-_0-9]+$/i')
+                ),
+                // Min 3 letters - not needed
+                /*new Assert\Regex(array(
+                    'pattern' => '/[a-z]{3}/i',
+                    'htmlPattern' => '/[a-z]{3}/i')
+                ),*/
+                // Min 2 numbers
+                new Assert\Regex(array(
+                        'pattern' => '/[0-9]{2}/',
+                        'htmlPattern' => '/[0-9]{2}/')
+                )
+            )
+        ;
+    }
+
     /**
      * @param ClassMetadata $metadata
      */
@@ -323,17 +347,24 @@ class User implements AdvancedUserInterface, \Serializable, EquatableInterface
         $metadata->addPropertyConstraint('lastname', new Assert\NotBlank());
         $metadata->addPropertyConstraint('email', new Assert\Email());
 
+        $metadata->addPropertyConstraint('password',
+            new Assert\Collection(self::getPasswordConstraints())
+        );
+
         $metadata->addConstraint(new UniqueEntity(array(
             'fields'  => 'username',
             'message' => 'This value is already used.',
         )));
 
-        $metadata->addPropertyConstraint('username', new Assert\Length(array(
-            'min'        => 2,
-            'max'        => 50,
-            'minMessage' => 'This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.',
-            'maxMessage' => 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.',
-        )));
+        $metadata->addPropertyConstraint(
+            'username',
+            new Assert\Length(array(
+                'min'        => 2,
+                'max'        => 50,
+                'minMessage' => 'This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.',
+                'maxMessage' => 'This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.',
+            ))
+        );
     }
 
     /**

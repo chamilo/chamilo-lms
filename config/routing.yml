@@ -6,12 +6,13 @@ secured_logout:
 
 logout:
     pattern:   /secured/logout
+
 home:
-    path:      /home
+    path:      /
     defaults:  { _controller: index.controller:indexAction, culture: en }
 
 homepage:
-    path:      /homepage
+    path:      /
     defaults:  { _controller: index.controller:indexAction, culture: en }
 
 example:

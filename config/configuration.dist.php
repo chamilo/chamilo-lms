@@ -25,6 +25,8 @@
 /**
  * Database settings
  */
+$_configuration = array();
+
 // Host.
 $_configuration['db_host']     = '{DATABASE_HOST}';
 // Port.
@@ -39,9 +41,6 @@ $_configuration['db_driver']   = '{DATABASE_DRIVER}';
 $_configuration['main_database'] = '{DATABASE_MAIN}';
 
 /** Directory settings */
-// URL to the root of your Chamilo installation, e.g.: http://www.mychamilo.com/
-// Comment this line if you want to enable multiple URLs
-$_configuration['root_web']    = '{ROOT_WEB}';
 
 /** Chamilo will automatically manage the following paths */
 
@@ -159,3 +158,5 @@ $_configuration['platform_charset']  = 'utf-8';
 // Show a useful toolbar with memory used, loaded time, request, session, logs information.
 $_configuration['show_profiler']     = false;
 $_configuration['name_order_conventions'] = array();
+
+return $_configuration;

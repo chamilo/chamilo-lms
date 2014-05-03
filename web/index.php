@@ -12,7 +12,7 @@ require_once __DIR__.'/../vendor/autoload.php';
 /**
  * Inclusion of main setup script
  */
-$app = require_once '../main/inc/global.inc.php';
+$app = require_once __DIR__.'/../src/ChamiloLMS/app.php';
 
 /**
  * In order to execute Chamilo, you need to call the $app->run() method.

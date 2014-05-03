@@ -1,7 +1,5 @@
 <?php
 
-require_once '../global.inc.php';
-
 $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $event_name = isset($_REQUEST['eventName']) ? $_REQUEST['eventName'] : null;

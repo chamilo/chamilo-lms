@@ -13,6 +13,7 @@
  */
 use ChamiloLMS\Entity\User;
 use ChamiloLMS\Entity\Role;
+
 /**
  * @author Sebastien Piraux <piraux_seb@hotmail.com> old code
  * @author Julio Montoya 2013
@@ -139,7 +140,7 @@ function event_access_tool($tool, $id_session = 0)
 
     $pos = isset($_SERVER['HTTP_REFERER']) ? strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower(api_get_path(WEB_COURSE_PATH).$_course['path'])) : false;
     // added for "what's new" notification
-    $pos2 = isset($_SERVER['HTTP_REFERER']) ? strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower($_configuration['root_web']."index")) : false;
+    $pos2 = isset($_SERVER['HTTP_REFERER']) ? strpos(strtolower($_SERVER['HTTP_REFERER']), strtolower(api_get_path(WEB_PATH)."index")) : false;
     // end "what's new" notification
     if ($pos !== false || $pos2 !== false) {
         $sql = "INSERT INTO ".$TABLETRACK_ACCESS."

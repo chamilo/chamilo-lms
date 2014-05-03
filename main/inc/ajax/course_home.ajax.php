@@ -9,7 +9,6 @@ $now    = time();
 
 switch ($action) {
     case 'set_visibility':
-        require_once '../global.inc.php';
         $course_id = api_get_course_int_id();
         $courseInfo = api_get_course_info();
 
@@ -78,7 +77,6 @@ switch ($action) {
         break;
     case 'show_course_information':
         $language_file = array('course_description');
-        require_once '../global.inc.php';
 
         // Get the name of the database course.
         $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
@@ -109,8 +107,6 @@ switch ($action) {
      * @todo this functions need to belong to a class or a special wrapper to process the AJAX petitions from the jqgrid
      */
     case 'session_courses_lp_default':
-
-        require_once '../global.inc.php';
 
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows
@@ -226,11 +222,7 @@ switch ($action) {
         $response->records = $count;
         echo json_encode($response);
         break;
-
     case 'session_courses_lp_by_week':
-
-        require_once '../global.inc.php';
-
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows
         $sidx  = $_REQUEST['sidx'];    //index to filter
@@ -350,12 +342,7 @@ switch ($action) {
         $response->records = $count;
         echo json_encode($response);
         break;
-
-
     case 'session_courses_lp_by_course':
-
-        require_once '../global.inc.php';
-
         $page  = intval($_REQUEST['page']);     //page
         $limit = intval($_REQUEST['rows']);     // quantity of rows
         $sidx  = $_REQUEST['sidx'];    //index to filter

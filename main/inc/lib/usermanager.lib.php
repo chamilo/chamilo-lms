@@ -3287,8 +3287,12 @@ class UserManager
         $user_id = intval($user_id);
 
         // all the information of the field
-        $sql = "SELECT ut.id, tag,count FROM $table_user_tag ut INNER JOIN $table_user_tag_values uv ON (uv.tag_id=ut.ID)
-                WHERE field_id = $field_id AND user_id = $user_id ORDER BY tag";
+        $sql = "SELECT ut.id, tag, count
+                FROM $table_user_tag ut
+                INNER JOIN $table_user_tag_values uv
+                ON (uv.tag_id=ut.ID)
+                WHERE field_id = $field_id AND user_id = $user_id
+                ORDER BY tag";
         $result = Database::query($sql);
         $return = array();
         if (Database::num_rows($result)> 0) {

@@ -5,10 +5,7 @@
  */
 
 $language_file[] = 'admin';
-require_once '../global.inc.php';
-
 $action = $_REQUEST['a'];
-
 $user_id = api_get_user_id();
 
 switch ($action) {

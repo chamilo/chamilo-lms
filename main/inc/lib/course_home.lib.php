@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+/**
+ * Class CourseHome
+ */
 class CourseHome
 {
     /**

@@ -4,8 +4,6 @@
  * Responses to AJAX calls
  */
 
-require_once '../global.inc.php';
-
 api_protect_admin_script();
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;

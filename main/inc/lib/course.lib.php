@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt*/
+
 /**
+ * Class CourseManager
+ *
  * This is the course library for Chamilo.
  *
  * All main course functions should be placed here.
@@ -11,10 +14,6 @@
  * There are probably some places left with the wrong code.
  *
  * @package chamilo.library
- */
-/**
- *    CourseManager Class
- *    @package chamilo.library
  */
 class CourseManager
 {

@@ -248,7 +248,7 @@ class survey_manager
 							$row['survey_version'] = $row['survey_version'] + 1;
 							$additional['values'] .= ",'".$row['survey_version']."'";
 						} else {
-							$getlast = api_split('\.', $row['survey_version']);
+							$getlast = explode('\.', $row['survey_version']);
 							$lastversion = array_pop($getlast);
 							$lastversion = $lastversion + 1;
 							$add = implode('.', $getlast);

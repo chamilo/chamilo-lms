@@ -233,6 +233,7 @@ class GradeBookResult
 		echo $data;
 		return true;
 	}
+
 	/**
 	 * Exports the complete report as an XLS file
 	 * @return	boolean		False on error
@@ -275,6 +276,7 @@ class GradeBookResult
 	/**
 	 * Exports the complete report as a DOCX file
 	 * @return	boolean		False on error
+     * @todo use unoconv
 	 */
 	public function exportCompleteReportDOC($data) {
         $_course = api_get_course_info();

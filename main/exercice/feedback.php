@@ -56,7 +56,7 @@ Display::display_header($nameTools, "Exercise");
 
         $form = new FormValidator('feedbackform', 'post', api_get_self()."?".api_get_cidreq(
         )."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion);
-        $obj_registration_form = new HTML_QuickForm('frmRegistration', 'POST');
+        $obj_registration_form = new FormValidator('frmRegistration', 'POST');
         $renderer =& $obj_registration_form->defaultRenderer();
         $renderer->setElementTemplate(
             '<tr>

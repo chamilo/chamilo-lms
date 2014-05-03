@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace ChamiloLMS\Provider;
 
@@ -15,6 +16,10 @@ use Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader;
 use Doctrine\Common\Annotations\AnnotationReader;
 use ChamiloLMS\Middleware\CourseMiddleware;
 
+/**
+ * Class ReflectionControllerProvider
+ * @package ChamiloLMS\Provider
+ */
 class ReflectionControllerProvider implements ControllerProviderInterface
 {
     private $controllerName;

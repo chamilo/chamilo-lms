@@ -1,23 +1,23 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * Controller for pages presentation in general
- * @package chamilo.page.controller
- * @author Julio Montoya <gugli100@gmail.com>
- */
-
-/**
- * Page controller
- */
+namespace ChamiloLMS\Framework;
 
 use Silex\Application;
 use Pagerfanta\Adapter\FixedAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\View\TwitterBootstrapView;
+use SystemAnnouncementManager;
+use UserManager;
+use CourseManager;
 
 /**
  * Class PageController
+ * Controller for pages presentation in general
+ * @package chamilo.page.controller
+ * @author Julio Montoya <gugli100@gmail.com>
+ *
+ * @todo move functions in the Template class, remove this class.
  */
 class PageController
 {
@@ -323,33 +323,6 @@ class PageController
         $app['template']->assign($id, $block_menu);
     }
 
-    /**
-     * Adds a form to let users login
-     * @return string An HTML string with the user login form
-     * @assert () != ''
-     * @version 1.1
-     */
-    public function displayLoginForm()
-    {
-        $form = new FormValidator('formLogin', 'POST', null, null, array('class' => 'form-vertical'));
-        // 'placeholder'=>get_lang('UserName')
-        //'autocomplete'=>"off",
-        $form->addElement(
-            'text',
-            'login',
-            get_lang('UserName'),
-            array('class' => 'span2 autocapitalize_off', 'autofocus' => 'autofocus', 'icon' => 'fa fa-key fa-fw')
-        );
-        $form->addElement('password', 'password', get_lang('Pass'), array('class' => 'span2'));
-        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn'));
-        $html = $form->return_form();
-        if (api_get_setting('openid_authentication') == 'true') {
-            include_once 'main/auth/openid/login.php';
-            $html .= '<div>'.openid_form().'</div>';
-        }
-
-        return $html;
-    }
 
     /**
      * Returns a content search form in an HTML <div>, pointing at the

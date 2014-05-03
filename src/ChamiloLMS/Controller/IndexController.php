@@ -81,7 +81,6 @@ class IndexController extends CommonController
         }
         $app['template']->addResource(api_get_jqgrid_js(), 'string');
 
-
         $app['this_section'] = SECTION_CAMPUS;
         $request = $app['request'];
 
@@ -227,8 +226,6 @@ class IndexController extends CommonController
             array('class'=> 'form-signin-block')
         );
 
-        $renderer =& $form->defaultRenderer();
-        $renderer->setElementTemplate('{element}');
         $form->addElement(
             'text',
             'username',
@@ -240,6 +237,7 @@ class IndexController extends CommonController
                 'icon' => 'fa fa-user fa-fw'
             )
         );
+
         $form->addElement(
             'password',
             'password',

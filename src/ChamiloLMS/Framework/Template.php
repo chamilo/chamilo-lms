@@ -1,18 +1,29 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @author Julio Montoya <gugli100@gmail.com>
- * @todo better organization of the class, methods and variables
- *
- * */
+namespace ChamiloLMS\Framework;
+
 use \ChamiloSession as Session;
 use Silex\Application;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Routing\Router;
 use ChamiloLMS\Component\Editor\Editor;
+use Database;
+use Online;
+use Text;
+use MessageManager;
+use SocialManager;
+use Security;
+use Display;
 
+/**
+ * Class Template
+ * @author Julio Montoya <gugli100@gmail.com>
+ * @todo better organization of the class, methods and variables
+ *
+ * @package ChamiloLMS\Framework
+ */
 class Template
 {
     private $app;
@@ -63,6 +74,7 @@ class Template
         $this->security = $security;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
+
         //$this->htmlEditor = $htmlEditor;
 
         $this->app['classic_layout'] = true;
@@ -360,8 +372,9 @@ class Template
         $version = $this->app['configuration']['system_version'];
 
         // Setting app paths/URLs.
+        // @todo fix this
         $_p = array(
-            'web' => api_get_path(WEB_PATH),
+            'web' => $this->urlGenerator->generate('root'),
             'web_course' => api_get_path(WEB_COURSE_PATH),
             'web_course_path' => api_get_path(WEB_COURSE_PATH),
             'web_code_path' => api_get_path(WEB_CODE_PATH),
@@ -377,7 +390,7 @@ class Template
             'web_lib' => api_get_path(WEB_LIBRARY_PATH),
             'web_library_path' => api_get_path(WEB_LIBRARY_PATH),
             'web_library_js_path' => api_get_path(WEB_LIBRARY_JS_PATH),
-            'web_public' => api_get_path(WEB_PUBLIC_PATH)
+            'web_public' => $this->urlGenerator->generate('root')
         );
 
         $this->assign('_p', $_p);
@@ -409,18 +422,18 @@ class Template
         $this->app['theme'] = $this->theme;
 
         $cssPath = api_get_path(WEB_CSS_PATH);
+        $webLibraryPath = api_get_path(WEB_LIBRARY_JS_PATH);
 
         // Loads only 1 css file
         if ($this->app['assetic.enabled']) {
-            $css[] = api_get_path(WEB_CSS_PATH).'themes/'.$this->theme.'/style.css';
+            $css[] = $cssPath.'themes/'.$this->theme.'/style.css';
         } else {
             // Bootstrap
-            $css[] = api_get_cdn_path(api_get_path(WEB_LIBRARY_JS_PATH).'bootstrap/css/bootstrap.css');
-
-            //$css[] = api_get_cdn_path(api_get_path(WEB_LIBRARY_JS_PATH).'bootstrap/css/bootstrap-theme.css');
+            //api_get_path(WEB_LIBRARY_JS_PATH).
+            $css[] = $webLibraryPath.'bootstrap/css/bootstrap.css';
 
             // Base CSS.
-            $css[] = api_get_cdn_path($cssPath.'base.css');
+            $css[] = $cssPath.'base.css';
 
             // Extra CSS files.
             if ($this->show_learnpath) {
@@ -429,17 +442,17 @@ class Template
             }
 
             if (api_is_global_chat_enabled()) {
-                $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'chat/css/chat.css';
+                $css[] = $webLibraryPath.'chat/css/chat.css';
             }
 
-            $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'jquery-ui/css/'.$this->jquery_ui_theme.'/jquery-ui-custom.css';
+            $css[] = $webLibraryPath.'jquery-ui/css/'.$this->jquery_ui_theme.'/jquery-ui-custom.css';
         }
 
-        $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'font-awesome/css/font-awesome.css';
-        $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'thickbox.css';
-        $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'pace/pace.css';
-        $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'chosen/chosen.css';
-        $css[] = api_get_path(WEB_LIBRARY_JS_PATH).'tag/style.css';
+        $css[] = $webLibraryPath.'font-awesome/css/font-awesome.css';
+        $css[] = $webLibraryPath.'thickbox.css';
+        $css[] = $webLibraryPath.'pace/pace.css';
+        $css[] = $webLibraryPath.'chosen/chosen.css';
+        $css[] = $webLibraryPath.'tag/style.css';
 
         // Default theme CSS.
         $css[] = api_get_cdn_path($cssPath.'themes/'.$this->theme.'/default.css');
@@ -672,20 +685,20 @@ class Template
 
         $profile_link = null;
         if (api_get_setting('allow_social_tool') == 'true') {
-            $profile_link = api_get_path(WEB_CODE_PATH).'social/home.php';
+            $profile_link = $this->urlGenerator->generate('root').'social/home.php';
         } else {
             if (api_is_profile_readable()) {
-                $profile_link = api_get_path(WEB_CODE_PATH).'auth/profile.php';
+                $profile_link = $this->urlGenerator->generate('root').'auth/profile.php';
             }
         }
         $this->assign('profile_link', $profile_link);
 
-        $this->assign('settings_link', api_get_path(WEB_CODE_PATH).'auth/profile.php');
+        $this->assign('settings_link', $this->urlGenerator->generate('root').'auth/profile.php');
 
         // Message link.
         $messageUrl = null;
         if (api_get_setting('allow_message_tool') == 'true') {
-            $messageUrl = api_get_path(WEB_CODE_PATH).'messages/inbox.php';
+            $messageUrl = $this->urlGenerator->generate('root').'messages/inbox.php';
         }
         $this->assign('message_link', $messageUrl);
 
@@ -707,7 +720,7 @@ class Template
         // Extra content
         $extra_header = null;
         if (!api_is_platform_admin()) {
-            $extra_header = trim(api_get_setting('header_extra_content'));
+            //$extra_header = trim(api_get_setting('header_extra_content'));
         }
         $this->assign('header_extra_content', $extra_header);
     }
@@ -743,7 +756,7 @@ class Template
 
         //Loading footer extra content
         if (!api_is_platform_admin()) {
-            $extra_footer = trim(api_get_setting('footer_extra_content'));
+            //$extra_footer = trim(api_get_setting('footer_extra_content'));
             if (!empty($extra_footer)) {
                 $this->assign('footer_extra_content', $extra_footer);
             }
@@ -865,14 +878,14 @@ class Template
                 $clean_url = api_replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
-                $homep = api_get_path(SYS_DATA_PATH).'home/'.$clean_url; //homep for Home Path
+                $homep = $this->app['sys_data_path'].'home/'.$clean_url; //homep for Home Path
                 //we create the new dir for the new sites
                 if (!is_dir($homep)) {
                     mkdir($homep, api_get_permissions_for_new_directories());
                 }
             }
         } else {
-            $homep = api_get_path(SYS_PATH).'home/';
+            $homep = $this->app['sys_data_path'].'home/';
         }
 
         $ext = '.html';
@@ -886,7 +899,7 @@ class Template
         }
         $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
 
-        $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top);
+        $open = str_replace('{rel_path}', $this->app['sys_data_path'], $home_top);
         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 
         $lis = '';
@@ -995,21 +1008,23 @@ class Template
         $navigation = array();
 
         // Campus Homepage
-        $navigation[SECTION_CAMPUS]['url'] = api_get_path(WEB_PUBLIC_PATH).'index';
+        $navigation[SECTION_CAMPUS]['url'] = $this->urlGenerator->generate('index');
         $navigation[SECTION_CAMPUS]['title'] = get_lang('CampusHomepage');
 
         // My Courses
-        $navigation['mycourses']['url'] = api_get_path(WEB_PUBLIC_PATH).'userportal';
+        $navigation['mycourses']['url'] = $this->urlGenerator->generate('userportal');
         $navigation['mycourses']['title'] = get_lang('MyCourses');
+
+        $webCodePath = $this->urlGenerator->generate('root').'/main/';
 
         // My Profile
         if (api_is_profile_readable()) {
-            $navigation['myprofile']['url'] = api_get_path(WEB_CODE_PATH).'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');
+            $navigation['myprofile']['url'] = $webCodePath.'auth/profile.php'.(!empty($_course['path']) ? '?coursePath='.$_course['path'].'&amp;courseCode='.$_course['official_code'] : '');
             $navigation['myprofile']['title'] = get_lang('ModifyProfile');
         }
 
         // Link to my agenda
-        $navigation['myagenda']['url'] = api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=personal';
+        $navigation['myagenda']['url'] = $webCodePath.'calendar/agenda_js.php?type=personal';
         $navigation['myagenda']['title'] = get_lang('MyAgenda');
 
         // Gradebook
@@ -1023,23 +1038,23 @@ class Template
         // Reporting
         if (api_is_allowed_to_create_course() || api_is_drh() || api_is_session_admin()) {
             // Link to my space
-            $navigation['session_my_space']['url'] = api_get_path(WEB_CODE_PATH).'mySpace/index.php';
+            $navigation['session_my_space']['url'] = $webCodePath.'mySpace/index.php';
             $navigation['session_my_space']['title'] = get_lang('MySpace');
         } else {
             // Link to my progress
-            $navigation['session_my_progress']['url'] = api_get_path(WEB_CODE_PATH).'auth/my_progress.php';
+            $navigation['session_my_progress']['url'] = $webCodePath.'auth/my_progress.php';
             $navigation['session_my_progress']['title'] = get_lang('MyProgress');
         }
 
         // Social
         if (api_get_setting('allow_social_tool') == 'true') {
-            $navigation['social']['url'] = api_get_path(WEB_CODE_PATH).'social/home.php';
+            $navigation['social']['url'] = $webCodePath.'social/home.php';
             $navigation['social']['title'] = get_lang('SocialNetwork');
         }
 
         // Dashboard
         if (api_is_platform_admin() || api_is_drh() || api_is_session_admin()) {
-            $navigation['dashboard']['url'] = api_get_path(WEB_CODE_PATH).'dashboard/index.php';
+            $navigation['dashboard']['url'] = $webCodePath.'dashboard/index.php';
             $navigation['dashboard']['title'] = get_lang('Dashboard');
         }
 
@@ -1355,7 +1370,7 @@ class Template
         $_course = api_get_course_info();
 
         /*  Plugins for banner section */
-        $web_course_path = api_get_path(WEB_COURSE_PATH);
+        $web_course_path = $this->app['sys_data_path'];
 
         /* If the user is a coach he can see the users who are logged in its session */
         $navigation = array();

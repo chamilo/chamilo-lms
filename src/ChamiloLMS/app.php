@@ -1,11 +1,10 @@
 <?php
-
-/** For licensing terms, see /license.txt */
+/* For licensing terms, see /license.txt */
 
 /**
  * This is a bootstrap file that loads all Chamilo dependencies including:
  *
- * - Chamilo settings config/configuration.yml or config/configuration.php (in this order, using what if finds first)
+ * - Chamilo settings config/configuration.yml or config/configuration.php
  * - Database (Using Doctrine DBAL/ORM)
  * - Templates (Using Twig)
  * - Loading language files (Using Symfony component)
@@ -36,36 +35,50 @@ use Symfony\Component\Translation\MessageCatalogue;
 use ChamiloLMS\Component\DataFilesystem\DataFilesystem;
 use ChamiloLMS\Entity\User;
 
+/*
+* Setup Patchwork UTF-8 Handling
+*
+* The Patchwork library provides solid handling of UTF-8 strings as well
+* as provides replacements for all mb_* and iconv type functions that
+* are not available by default in PHP. We'll setup this stuff here.
+*
+*/
+
+//Patchwork\Utf8\Bootup::initMbstring();
+Patchwork\Utf8\Bootup::initAll();
+
 // Determine the directory path for this file.
-$includePath = dirname(__FILE__);
+$rootPath = realpath(__DIR__.'/../../').'/';
 
 // Start Silex.
 $app = new Application();
 // @todo add a helper to read the configuration file once!
 
-// Include the main Chamilo platform configuration file.
-// @todo use a service provider to load configuration files:
-/*
-    $app->register(new Igorw\Silex\ConfigServiceProvider($settingsFile));
-*/
-
 /** Reading configuration files */
 // Reading configuration file from main/inc/conf/configuration.php or app/config/configuration.yml
-$configurationFilePath = $includePath.'/conf/configuration.php';
-$configurationYMLFile = $includePath.'/../../config/configuration.yml';
-$configurationFileAppPath = $includePath.'/../../config/configuration.php';
+//$configurationFilePath = $includePath.'/conf/configuration.php';
+$configurationFilePath = null;
+$configurationYMLFile = $rootPath.'/config/configuration.yml';
+$configurationFileAppPath = $rootPath.'/config/configuration.php';
 
 $alreadyInstalled = false;
 $_configuration = array();
 
-if (file_exists($configurationFilePath) || file_exists($configurationYMLFile)  || file_exists($configurationFileAppPath)) {
+if (//file_exists($configurationFilePath) ||
+    file_exists($configurationYMLFile)  ||
+    file_exists($configurationFileAppPath)
+) {
     if (file_exists($configurationFilePath)) {
-        require_once $configurationFilePath;
+        $_configuration = require_once $configurationFilePath;
     }
 
     if (file_exists($configurationFileAppPath)) {
         $configurationFilePath = $configurationFileAppPath;
-        require_once $configurationFileAppPath;
+        $_configuration = require_once $configurationFileAppPath;
+        $config = new Zend\Config\Config($_configuration);
+
+
+        //$app->register(new Igorw\Silex\ConfigServiceProvider($configurationFileAppPath));
     }
     $alreadyInstalled = true;
 }
@@ -85,8 +98,9 @@ if (file_exists($configurationYMLFile)) {
 
 /** Setting Chamilo paths */
 
-$app['root_sys'] = isset($_configuration['root_sys']) ? $_configuration['root_sys'] : dirname(dirname(__DIR__)).'/';
+$app['root_sys'] = isset($_configuration['root_sys']) ? $_configuration['root_sys'] : $rootPath;
 $app['sys_root'] = $app['root_sys'];
+$_configuration['root_web'] = null;
 $app['sys_data_path'] = isset($_configuration['sys_data_path']) ? $_configuration['sys_data_path'] : $app['root_sys'].'data/';
 $app['sys_config_path'] = isset($_configuration['sys_config_path']) ? $_configuration['sys_config_path'] : $app['root_sys'].'config/';
 $app['sys_course_path'] = isset($_configuration['sys_course_path']) ? $_configuration['sys_course_path'] : $app['sys_data_path'].'courses/';
@@ -135,28 +149,29 @@ if ($alreadyInstalled) {
 /** End loading config files */
 
 /** Including legacy libs */
-require_once $includePath.'/lib/api.lib.php';
+require_once $rootPath . '/main/inc/lib/api.lib.php';
 
 // Setting $_configuration['url_append']
+/*
 $urlInfo = isset($_configuration['root_web']) ? parse_url($_configuration['root_web']) : null;
 $_configuration['url_append'] = null;
 if (isset($urlInfo['path'])) {
     $_configuration['url_append'] = '/'.basename($urlInfo['path']);
-}
+}*/
 
-$libPath = $includePath.'/lib/';
+$libPath = $rootPath.'/main/inc/lib/';
 
 // Database constants
-require_once $libPath.'database.constants.inc.php';
+require_once $libPath . 'database.constants.inc.php';
 
 // @todo Rewrite the events.lib.inc.php in a class
-require_once $libPath.'events.lib.inc.php';
+require_once $libPath . 'events.lib.inc.php';
 
 // Load allowed tag definitions for kses and/or HTMLPurifier.
-require_once $libPath.'formvalidator/Rule/allowed_tags.inc.php';
+require_once $libPath . 'formvalidator/Rule/allowed_tags.inc.php';
 
 // Add the path to the pear packages to the include path
-ini_set('include_path', api_create_include_path_setting($includePath));
+//ini_set('include_path', api_create_include_path_setting($rootPath.'/main/inc'));
 
 $app['configuration_file'] = $configurationFilePath;
 $app['configuration_yml_file'] = $configurationYMLFile;
@@ -179,9 +194,9 @@ $app['assetic.auto_dump_assets'] = false;
 
 // Loading $app settings depending of the debug option
 if ($app['debug']) {
-    require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/dev.php';
+    require_once $rootPath.'src/ChamiloLMS/Resources/config/dev.php';
 } else {
-    require_once __DIR__.'/../../src/ChamiloLMS/Resources/config/prod.php';
+    require_once $rootPath.'src/ChamiloLMS/Resources/config/prod.php';
 }
 
 // Classic way of render pages or the Controller approach
@@ -217,9 +232,7 @@ $app['template.load_plugins'] = true;
 $app['configuration'] = $_configuration;
 
 // Inclusion of internationalization libraries
-require_once $libPath.'internationalization.lib.php';
-// Functions for internal use behind this API
-require_once $libPath.'internationalization_internal.lib.php';
+require_once $libPath . 'internationalization.lib.php';
 
 $_plugins = array();
 if ($alreadyInstalled) {
@@ -234,6 +247,7 @@ $charset_initial_value = $charset;
 
 // Section (tabs in the main Chamilo menu)
 $app['this_section'] = SECTION_GLOBAL;
+$app['language'] = 'english';
 
 // Manage Chamilo error messages
 $app->error(
@@ -333,7 +347,7 @@ $app->before(
 
         // Check if root_web exists
         if (!isset($configuration['root_web'])) {
-            $app->abort(500, '$configuration[root_web] must be set in the configuration.php file.');
+            //$app->abort(500, '$configuration[root_web] must be set in the configuration.php file.');
         }
 
         // Starting the session for more info see: http://silex.sensiolabs.org/doc/providers/session.html
@@ -481,36 +495,37 @@ $app->before(
         /** Translator component. */
         $app['translator.cache.enabled'] = false;
 
+        // Platform language.
         $language = api_get_setting('platformLanguage');
-        $iso = api_get_language_isocode($language);
 
-        /** @var Translator $translator */
-        $translator = $app['translator'];
-        $translator->setLocale($iso);
-
-        // From the login page
-        $language = $request->get('language');
-
-        if (!empty($language)) {
-            $iso = api_get_language_isocode($language);
-            $translator->setLocale($iso);
+        // From the login page.
+        $requestLanguage = $request->get('language');
+        if (!empty($requestLanguage)) {
+            $language = $requestLanguage;
         }
 
-        // From the user
+        // From user.
         if ($user && $userInfo) {
             // @todo check why this does not works
             //$language = $user->getLanguage();
             $language = $userInfo['language'];
+        }
+
+        // From the course.
+        $courseInfo = api_get_course_info();
+        if ($courseInfo && !empty($courseInfo)) {
+            $language = $courseInfo['language'];
+        }
+
+        // Setting language.
+        if (!empty($language)) {
             $iso = api_get_language_isocode($language);
+            /** @var Translator $translator */
+            $translator = $app['translator'];
             $translator->setLocale($iso);
         }
 
-        // From the course
-        $courseInfo = api_get_course_info();
-        if ($courseInfo && !empty($courseInfo)) {
-            $iso = api_get_language_isocode($courseInfo['language']);
-            $translator->setLocale($iso);
-        }
+        $app['language'] = $language;
 
         $app['translator'] = $app->share($app->extend('translator', function ($translator, $app) {
             $locale = $translator->getLocale();
@@ -575,8 +590,7 @@ $app->before(
 
 /** An after application middleware allows you to tweak the Response before it is sent to the client */
 $app->after(
-    function (Request $request, Response $response) {
-
+    function (Request $request, Response $response) use ($app) {
     }
 );
 

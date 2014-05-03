@@ -31,6 +31,9 @@ use ChamiloLMS\Component\Validator\ConstraintValidatorFactory;
 use ChamiloLMS\Component\Mail\MailGenerator;
 use ChamiloLMS\Component\DataFilesystem\DataFilesystem;
 
+use ChamiloLMS\Framework\PageController;
+use ChamiloLMS\Framework\Template;
+
 // Flint
 $app->register(new Flint\Provider\ConfigServiceProvider());
 $app['root_dir'] = $app['root_sys'];
@@ -389,14 +392,14 @@ if (isset($app['configuration']['main_database'])) {
             'use_simple_annotation_reader' => false,
             'type' => 'annotation',
             'namespace' => 'ChamiloLMS\Entity',
-            'path' => api_get_path(SYS_PATH).'src/ChamiloLMS/Entity',
+            'path' => $app['root_sys'].'src/ChamiloLMS/Entity',
             // 'orm.default_cache' =>
         ),
         array(
             'use_simple_annotation_reader' => false,
             'type' => 'annotation',
             'namespace' => 'Gedmo',
-            'path' => api_get_path(SYS_PATH).'vendors/gedmo/doctrine-extensions/lib/Gedmo',
+            'path' => $app['root_sys'].'vendors/gedmo/doctrine-extensions/lib/Gedmo',
         )
     );
 
@@ -427,16 +430,21 @@ if (isset($app['configuration']['main_database'])) {
     );
 }
 
+$app['view_path'] = $app['sys_root'].'src/ChamiloLMS/Resources/views/';
+
 // Setting Twig as a service provider.
 $app->register(
     new Silex\Provider\TwigServiceProvider(),
     array(
         'twig.path' => array(
-            $app['sys_root'].'src/ChamiloLMS/Resources/views', //template folder
+            $app['view_path'],
             $app['sys_root'].'plugin' //plugin folder
         ),
         // twitter bootstrap form twig templates
-        'twig.form.templates' => array('form_div_layout.html.twig', 'default/form/form_custom_template.tpl'),
+        'twig.form.templates' => array(
+            'form_div_layout.html.twig',
+            'default/form/form_custom_template.tpl'
+        ),
         'twig.options' => array(
             'debug' => $app['debug'],
             'charset' => 'utf-8',
@@ -449,21 +457,18 @@ $app->register(
 );
 
 // Setting Twig options.
-$app['twig'] = $app->share(
-    $app->extend('twig', function ($twig) {
-        $twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
-        $twig->addFilter('get_path', new Twig_Filter_Function('api_get_path'));
-        $twig->addFilter('get_setting', new Twig_Filter_Function('api_get_setting'));
-        $twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
-        $twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
-        $twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
-        $twig->addFilter('display_page_subheader', new Twig_Filter_Function('Display::page_subheader_and_translate'));
-        $twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
-        $twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
-
-        return $twig;
-    })
-);
+$app['twig'] = $app->share($app->extend('twig', function (\Twig_Environment $twig) {
+    $twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
+    $twig->addFilter('get_path', new Twig_Filter_Function('api_get_path'));
+    $twig->addFilter('get_setting', new Twig_Filter_Function('api_get_setting'));
+    $twig->addFilter('var_dump', new Twig_Filter_Function('var_dump'));
+    $twig->addFilter('return_message', new Twig_Filter_Function('Display::return_message_and_translate'));
+    $twig->addFilter('display_page_header', new Twig_Filter_Function('Display::page_header_and_translate'));
+    $twig->addFilter('display_page_subheader', new Twig_Filter_Function('Display::page_subheader_and_translate'));
+    $twig->addFilter('icon', new Twig_Filter_Function('Template::get_icon_path'));
+    $twig->addFilter('format_date', new Twig_Filter_Function('Template::format_date'));
+    return $twig;
+}));
 
 // Developer tools.
 
@@ -478,8 +483,12 @@ if (is_writable($app['sys_temp_path'])) {
         );
         $app->mount('/_profiler', $p);
 
-        // PHP errors for cool kids
-        //$app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
+        // Better PHP errors
+        $app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
+
+        /*$app['xhprof.location'] = '/var/www/xhprof';
+        $app['xhprof.host'] = 'http://localhost/xhprof/xhprof_html/index.php';
+        $app->register(new \Oziks\Provider\XHProfServiceProvider());*/
     }
 }
 
@@ -598,6 +607,20 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 
         $database = $app['database'];
 
+        // Template class
+        $app['template'] = $app->share(function () use ($app) {
+            $template = new Template(
+                $app,
+                $app['database'],
+                $app['security'],
+                $app['translator'],
+                $app['url_generator']
+            );
+            return $template;
+        });
+
+        Display::setUrlGenerator($app['url_generator']);
+
         $app['html_editor'] = $app->share(function($app) {
             $editor = new ChamiloLMS\Component\Editor\CkEditor\CkEditor(
                 $app['translator'],
@@ -606,6 +629,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface
                 $app['course']
             );
             $editor->setJavascriptToInclude();
+
             return $editor;
             /*return new ChamiloLMS\Component\Editor\TinyMce\TinyMce(
                 $app['translator'], $app['url_generator']
@@ -627,17 +651,6 @@ class ChamiloServiceProvider implements ServiceProviderInterface
             );
         });
 
-        // Template class
-        $app['template'] = $app->share(function () use ($app) {
-            $template = new Template(
-                $app,
-                $app['database'],
-                $app['security'],
-                $app['translator'],
-                $app['url_generator']
-            );
-            return $template;
-        });
 
         // Paths
         $app['paths'] = $app->share(function () use ($app) {

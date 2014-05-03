@@ -5,7 +5,8 @@ namespace ChamiloLMS\Component\Editor;
 
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Routing\Router;
-use \Entity\Course;
+use ChamiloLMS\Entity\Course;
+use ChamiloLMS\Framework\Template;
 
 /**
  * Class Editor
@@ -52,13 +53,13 @@ class Editor
     /**
      * @param Translator $translator
      * @param Router $urlGenerator
-     * @param \Template $template
+     * @param Template $template
      * @param Course $course
      */
     public function __construct(
         Translator $translator,
         Router $urlGenerator,
-        \Template $template,
+        Template $template,
         $course
     ) {
         $this->toolbarSet = 'Basic';

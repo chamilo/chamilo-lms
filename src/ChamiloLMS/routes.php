@@ -174,14 +174,15 @@ $settingCourseConditions = function (Request $request) use ($cidReset, $app) {
         }
     }
 
-    if (!isset($_SESSION['login_as'])) {
+    /*if (!isset($_SESSION['login_as'])) {
         $userId = api_get_user_id();
 
         // Course login
         if (isset($userId)) {
-            event_course_login(api_get_course_int_id(), $userId, api_get_session_id());
+            //@todo move to
+            //event_course_login(api_get_course_int_id(), $userId, api_get_session_id());
         }
-    }
+    }*/
 };
 
 /** Only course admin has access. */
@@ -481,7 +482,9 @@ $removeCidResetDependingOfSection = function (Request $request) use ($app, $remo
 $app->match('/', 'index.controller:indexAction', 'GET')
     ->assert('type', '.+') //allowing slash "/"
     ->before($removeCidReset)
-    ->after($afterLogin);
+    ->after($afterLogin)
+    ->bind('root')
+;
 
 $app->match('/index', 'index.controller:indexAction', 'GET')
     ->before($removeCidReset)

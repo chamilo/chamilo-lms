@@ -10,8 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use ChamiloLMS\Entity\CTool;
 use ChamiloLMS\Form\CourseHomeToolType;
-use \Display;
 use Doctrine\Common\Collections\Criteria;
+use Display;
 
 /**
  * Class CourseHomeController

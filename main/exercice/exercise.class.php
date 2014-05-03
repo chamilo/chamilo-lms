@@ -105,6 +105,7 @@ class Exercise
     public $onFailedMessage = null;
     public $emailAlert;
     public $notifyUserByEmail = 0;
+    public $sessionId = 0;
 
     /**
      * Constructor of the class
@@ -275,10 +276,9 @@ class Exercise
     }
 
     /**
-     * Returns the exercise ID
+     * returns the exercise ID
      *
-     * @author - Olivier Brouckaert
-     *
+     * @author Olivier Brouckaert
      * @return int - exercise ID
      */
     public function selectId()
@@ -289,8 +289,7 @@ class Exercise
     /**
      * returns the exercise title
      *
-     * @author - Olivier Brouckaert
-     *
+     * @author Olivier Brouckaert
      * @return string - exercise title
      */
     public function selectTitle()
@@ -301,7 +300,7 @@ class Exercise
     /**
      * returns the number of attempts setted
      *
-     * @return numeric - exercise attempts
+     * @return int - exercise attempts
      */
     public function selectAttempts()
     {
@@ -310,8 +309,7 @@ class Exercise
 
     /** returns the number of FeedbackType  *
      *  0=>Feedback , 1=>DirectFeedback, 2=>NoFeedback
-     *
-     * @return int exercise attempts
+     * @return int - exercise attempts
      */
     public function selectFeedbackType()
     {
@@ -321,25 +319,22 @@ class Exercise
     /**
      * returns the time limit
      */
-    public function selectTimeLimit()
-    {
+    function selectTimeLimit() {
         return $this->timeLimit;
     }
 
     /**
      * returns the exercise description
      *
-     * @author - Olivier Brouckaert
-     *
+     * @author Olivier Brouckaert
      * @return string - exercise description
      */
-    public function selectDescription()
-    {
+    function selectDescription() {
         return $this->description;
     }
 
     /**
-     * Returns the exercise sound file
+     * returns the exercise sound file
      *
      * @author Olivier Brouckaert
      * @return string - exercise description
@@ -350,9 +345,9 @@ class Exercise
     }
 
     /**
-     * Returns the exercise type
+     * returns the exercise type
      *
-     * @author - Olivier Brouckaert
+     * @author Olivier Brouckaert
      * @return integer - exercise type
      */
     public function selectType()
@@ -361,7 +356,7 @@ class Exercise
     }
 
     /**
-     * @author - hubert borderiou 30-11-11
+     * @author hubert borderiou 30-11-11
      * @return integer : do we display the question category name for students
      */
     public function selectDisplayCategoryName()
@@ -514,9 +509,8 @@ class Exercise
     /**
      * Tells if questions are selected randomly, and if so returns the draws
      *
-     * @author - Carlos Vargas
-     *
-     * @return int results disabled exercise
+     * @author Carlos Vargas
+     * @return integer - results disabled exercise
      */
     public function selectResultsDisabled()
     {
@@ -2096,7 +2090,7 @@ class Exercise
             } else {
                 $form->addElement('html', '<div id="start_date_div" style="display:none;">');
             }
-            $form->addElement('datepicker', 'start_time', '', array('form_name' => 'exercise_admin'), 5);
+            $form->addElement('date_time_picker', 'start_time', '', array('form_name' => 'exercise_admin'), 5);
             $form->addElement('html', '</div>');
 
             // End time.
@@ -2113,7 +2107,7 @@ class Exercise
             } else {
                 $form->addElement('html', '<div id="end_date_div" style="display:none;">');
             }
-            $form->addElement('datepicker', 'end_time', '', array('form_name' => 'exercise_admin'), 5);
+            $form->addElement('date_time_picker', 'end_time', '', array('form_name' => 'exercise_admin'), 5);
             $form->addElement('html', '</div>');
 
             // Propagate negative values.

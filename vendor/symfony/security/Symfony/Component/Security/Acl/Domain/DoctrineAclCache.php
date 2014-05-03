@@ -51,7 +51,7 @@ class DoctrineAclCache implements AclCacheInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function clearCache()
     {
@@ -59,7 +59,7 @@ class DoctrineAclCache implements AclCacheInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function evictFromCacheById($aclId)
     {
@@ -77,7 +77,7 @@ class DoctrineAclCache implements AclCacheInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function evictFromCacheByIdentity(ObjectIdentityInterface $oid)
     {
@@ -90,40 +90,40 @@ class DoctrineAclCache implements AclCacheInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getFromCacheById($aclId)
     {
         $lookupKey = $this->getAliasKeyForIdentity($aclId);
         if (!$this->cache->contains($lookupKey)) {
-            return null;
+            return;
         }
 
         $key = $this->cache->fetch($lookupKey);
         if (!$this->cache->contains($key)) {
             $this->cache->delete($lookupKey);
 
-            return null;
+            return;
         }
 
         return $this->unserializeAcl($this->cache->fetch($key));
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getFromCacheByIdentity(ObjectIdentityInterface $oid)
     {
         $key = $this->getDataKeyByIdentity($oid);
         if (!$this->cache->contains($key)) {
-            return null;
+            return;
         }
 
         return $this->unserializeAcl($this->cache->fetch($key));
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function putInCache(AclInterface $acl)
     {
@@ -154,7 +154,7 @@ class DoctrineAclCache implements AclCacheInterface
             $parentAcl = $this->getFromCacheById($parentId);
 
             if (null === $parentAcl) {
-                return null;
+                return;
             }
 
             $acl->setParentAcl($parentAcl);

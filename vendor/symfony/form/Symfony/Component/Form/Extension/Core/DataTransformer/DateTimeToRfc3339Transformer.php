@@ -19,7 +19,7 @@ use Symfony\Component\Form\Exception\TransformationFailedException;
 class DateTimeToRfc3339Transformer extends BaseDateTimeTransformer
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function transform($dateTime)
     {
@@ -40,7 +40,7 @@ class DateTimeToRfc3339Transformer extends BaseDateTimeTransformer
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function reverseTransform($rfc3339)
     {
@@ -49,7 +49,7 @@ class DateTimeToRfc3339Transformer extends BaseDateTimeTransformer
         }
 
         if ('' === $rfc3339) {
-            return null;
+            return;
         }
 
         try {

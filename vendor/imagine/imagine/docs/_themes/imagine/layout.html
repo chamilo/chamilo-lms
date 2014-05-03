@@ -15,7 +15,6 @@
 {%- set render_sidebar = (not embedded) and (not theme_nosidebar|tobool) and
                          (sidebars != []) %}
 {%- set url_root = pathto('', 1) %}
-{# XXX necessary? #}
 {%- if url_root == '#' %}{% set url_root = '' %}{% endif %}
 {%- if not embedded and docstitle %}
   {%- set titlesuffix = " &mdash; "|safe + docstitle|e %}
@@ -163,6 +162,9 @@
               </li>
               <li {% if pagename == "usage/introduction" %}class="active"{% endif %}>
                   <a href="{{ pathto('usage/introduction') }}">Introduction</a>
+              </li>
+              <li {% if pagename == "usage/metadata" %}class="active"{% endif %}>
+                <a href="{{ pathto('usage/metadata') }}">Metadata</a>
               </li>
               <li {% if pagename == "usage/coordinates" %}class="active"{% endif %}>
                   <a href="{{ pathto('usage/coordinates') }}">Coordinates</a>

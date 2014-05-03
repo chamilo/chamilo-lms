@@ -64,8 +64,6 @@ class MappingRule
         if ($propertyPath === (string) $this->propertyPath) {
             return $this->getTarget();
         }
-
-        return null;
     }
 
     /**
@@ -73,7 +71,7 @@ class MappingRule
      *
      * @param string $propertyPath The property path to match against the rule.
      *
-     * @return Boolean Whether the property path is a prefix of the rule or not.
+     * @return bool    Whether the property path is a prefix of the rule or not.
      */
     public function isPrefix($propertyPath)
     {

@@ -26,12 +26,12 @@ class PropertyAccessor implements PropertyAccessorInterface
     const IS_REF = 1;
 
     /**
-     * @var Boolean
+     * @var bool
      */
     private $magicCall;
 
     /**
-     * @var Boolean
+     * @var bool
      */
     private $throwExceptionOnInvalidIndex;
 
@@ -110,7 +110,7 @@ class PropertyAccessor implements PropertyAccessorInterface
      *
      * @param object|array          $objectOrArray The object or array to read from
      * @param PropertyPathInterface $propertyPath  The property path to read
-     * @param integer               $lastIndex     The index up to which should be read
+     * @param int                   $lastIndex     The index up to which should be read
      *
      * @return array The values read in the path.
      *
@@ -155,7 +155,7 @@ class PropertyAccessor implements PropertyAccessorInterface
      * Reads a key from an array-like structure.
      *
      * @param \ArrayAccess|array $array The array or \ArrayAccess object to read from
-     * @param string|integer     $index The key to read
+     * @param string|int         $index The key to read
      *
      * @return mixed The value of the key
      *
@@ -267,7 +267,7 @@ class PropertyAccessor implements PropertyAccessorInterface
      * Sets the value of the property at the given index in the path
      *
      * @param \ArrayAccess|array $array An array or \ArrayAccess object to write to
-     * @param string|integer     $index The index to write at
+     * @param string|int         $index The index to write at
      * @param mixed              $value The value to write
      *
      * @throws NoSuchPropertyException If the array does not implement \ArrayAccess or it is not an array
@@ -428,8 +428,6 @@ class PropertyAccessor implements PropertyAccessorInterface
                 ));
             }
         }
-
-        return null;
     }
 
     /**
@@ -437,9 +435,9 @@ class PropertyAccessor implements PropertyAccessorInterface
      *
      * @param  \ReflectionClass $class      The class of the method
      * @param  string           $methodName The method name
-     * @param  integer          $parameters The number of parameters
+     * @param  int              $parameters The number of parameters
      *
-     * @return Boolean Whether the method is public and has $parameters
+     * @return bool    Whether the method is public and has $parameters
      *                                      required parameters
      */
     private function isAccessible(\ReflectionClass $class, $methodName, $parameters)

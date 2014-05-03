@@ -23,22 +23,22 @@ class MergeCollectionListener implements EventSubscriberInterface
 {
     /**
      * Whether elements may be added to the collection
-     * @var Boolean
+     * @var bool
      */
     private $allowAdd;
 
     /**
      * Whether elements may be removed from the collection
-     * @var Boolean
+     * @var bool
      */
     private $allowDelete;
 
     /**
      * Creates a new listener.
      *
-     * @param Boolean $allowAdd Whether values might be added to the
+     * @param bool    $allowAdd Whether values might be added to the
      *                                collection.
-     * @param Boolean $allowDelete Whether values might be removed from the
+     * @param bool    $allowDelete Whether values might be removed from the
      *                                collection.
      */
     public function __construct($allowAdd = false, $allowDelete = false)

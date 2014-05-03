@@ -22,12 +22,12 @@ use Symfony\Component\Finder\SplFileInfo;
 class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
 {
     /**
-     * @var boolean
+     * @var bool
      */
     private $ignoreUnreadableDirs;
 
     /**
-     * @var Boolean
+     * @var bool
      */
     private $rewindable;
 
@@ -36,7 +36,7 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
      *
      * @param string  $path
      * @param int     $flags
-     * @param boolean $ignoreUnreadableDirs
+     * @param bool    $ignoreUnreadableDirs
      *
      * @throws \RuntimeException
      */
@@ -68,7 +68,14 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
     public function getChildren()
     {
         try {
-            return parent::getChildren();
+            $children = parent::getChildren();
+
+            if ($children instanceof self) {
+                // parent method will call the constructor with default arguments, so unreadable dirs won't be ignored anymore
+                $children->ignoreUnreadableDirs = $this->ignoreUnreadableDirs;
+            }
+
+            return $children;
         } catch (\UnexpectedValueException $e) {
             if ($this->ignoreUnreadableDirs) {
                 // If directory is unreadable and finder is set to ignore it, a fake empty content is returned.
@@ -97,7 +104,7 @@ class RecursiveDirectoryIterator extends \RecursiveDirectoryIterator
     /**
      * Checks if the stream is rewindable.
      *
-     * @return Boolean true when the stream is rewindable, false otherwise
+     * @return bool    true when the stream is rewindable, false otherwise
      */
     public function isRewindable()
     {

@@ -27,7 +27,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class TokenBasedRememberMeServices extends AbstractRememberMeServices
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function processAutoLoginCookie(array $cookieParts, Request $request)
     {
@@ -73,7 +73,7 @@ class TokenBasedRememberMeServices extends AbstractRememberMeServices
      * @param string $hash1 The first hash
      * @param string $hash2 The second hash
      *
-     * @return Boolean true if the two hashes are the same, false otherwise
+     * @return bool    true if the two hashes are the same, false otherwise
      */
     private function compareHashes($hash1, $hash2)
     {
@@ -90,7 +90,7 @@ class TokenBasedRememberMeServices extends AbstractRememberMeServices
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function onLoginSuccess(Request $request, Response $response, TokenInterface $token)
     {
@@ -116,7 +116,7 @@ class TokenBasedRememberMeServices extends AbstractRememberMeServices
      *
      * @param string  $class
      * @param string  $username The username
-     * @param integer $expires  The Unix timestamp when the cookie expires
+     * @param int     $expires  The Unix timestamp when the cookie expires
      * @param string  $password The encoded password
      *
      * @throws \RuntimeException if username contains invalid chars
@@ -138,7 +138,7 @@ class TokenBasedRememberMeServices extends AbstractRememberMeServices
      *
      * @param string  $class
      * @param string  $username The username
-     * @param integer $expires  The Unix timestamp when the cookie expires
+     * @param int     $expires  The Unix timestamp when the cookie expires
      * @param string  $password The encoded password
      *
      * @throws \RuntimeException when the private key is empty

@@ -1,5 +1,4 @@
 <?php
-namespace Imagine\Image\Metadata;
 
 /*
  * This file is part of the Imagine package.
@@ -10,42 +9,34 @@ namespace Imagine\Image\Metadata;
  * file that was distributed with this source code.
  */
 
-use Imagine\Exception\InvalidArgumentException;
+namespace Imagine\Image\Metadata;
 
 /**
  * Default metadata reader
  */
-class DefaultMetadataReader implements MetadataReaderInterface
+class DefaultMetadataReader extends AbstractMetadataReader
 {
     /**
      * {@inheritdoc}
      */
-    public function readFile($file)
+    protected function extractFromFile($file)
     {
-        if (!is_file($file)) {
-            throw new InvalidArgumentException(sprintf('File %s does not exist.', $file));
-        }
-
-        return new MetadataBag(array('filepath' => realpath($file)));
+        return array();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function readData($data)
+    protected function extractFromData($data)
     {
-        return new MetadataBag();
+        return array();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function readStream($resource)
+    protected function extractFromStream($resource)
     {
-        if (!is_resource($resource)) {
-            throw new InvalidArgumentException('Invalid resource provided.');
-        }
-
-        return new MetadataBag();
+        return array();
     }
 }

@@ -30,16 +30,16 @@ class CommonCommand extends AbstractCommand
     private $migrationConfigurationFile;
 
     /**
-     * @param array $configuration
-     */
+    * @param array $configuration
+    */
     public function setConfigurationArray(array $configuration)
     {
         $this->configuration = $configuration;
     }
 
     /**
-     * @return array
-     */
+    * @return array
+    */
     public function getConfigurationArray()
     {
         return $this->configuration;
@@ -116,8 +116,8 @@ class CommonCommand extends AbstractCommand
     }
 
     /**
-     * @param array $databaseSettings
-     */
+    * @param array $databaseSettings
+    */
     public function setExtraDatabaseSettings(array $databaseSettings)
     {
         $this->extraDatabaseSettings = $databaseSettings;
@@ -503,8 +503,8 @@ class CommonCommand extends AbstractCommand
                 'parent' => '1.9.0'
             ),
             '1.9.x' => array(
-                'require_update' => false,
-                'parent' => '1.9.0'
+              'require_update' => false,
+              'parent' => '1.9.0'
             ),
             '1.10.0'  => array(
                 'require_update' => true,

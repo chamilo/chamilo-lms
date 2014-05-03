@@ -41,7 +41,7 @@ class ViolationPath implements \IteratorAggregate, PropertyPathInterface
     private $pathAsString = '';
 
     /**
-     * @var integer
+     * @var int
      */
     private $length = 0;
 
@@ -127,7 +127,7 @@ class ViolationPath implements \IteratorAggregate, PropertyPathInterface
     public function getParent()
     {
         if ($this->length <= 1) {
-            return null;
+            return;
         }
 
         $parent = clone $this;
@@ -198,9 +198,9 @@ class ViolationPath implements \IteratorAggregate, PropertyPathInterface
      * In this example, "address" and "office" map to forms, while
      * "street does not.
      *
-     * @param  integer $index The element index.
+     * @param  int     $index The element index.
      *
-     * @return Boolean Whether the element maps to a form.
+     * @return bool    Whether the element maps to a form.
      *
      * @throws OutOfBoundsException If the offset is invalid.
      */

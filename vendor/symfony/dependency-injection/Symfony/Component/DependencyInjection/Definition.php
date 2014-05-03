@@ -231,7 +231,7 @@ class Definition
     /**
      * Sets a specific argument
      *
-     * @param integer $index
+     * @param int     $index
      * @param mixed   $argument
      *
      * @return Definition The current instance
@@ -266,7 +266,7 @@ class Definition
     /**
      * Gets an argument to pass to the service constructor/factory method.
      *
-     * @param integer $index
+     * @param int     $index
      *
      * @return mixed The argument value
      *
@@ -350,7 +350,7 @@ class Definition
      *
      * @param string $method The method name to search for
      *
-     * @return Boolean
+     * @return bool
      *
      * @api
      */
@@ -441,7 +441,7 @@ class Definition
      *
      * @param string $name
      *
-     * @return Boolean
+     * @return bool
      *
      * @api
      */
@@ -539,7 +539,7 @@ class Definition
     /**
      * Sets the visibility of this service.
      *
-     * @param Boolean $boolean
+     * @param bool    $boolean
      *
      * @return Definition The current instance
      *
@@ -547,7 +547,7 @@ class Definition
      */
     public function setPublic($boolean)
     {
-        $this->public = (Boolean) $boolean;
+        $this->public = (bool) $boolean;
 
         return $this;
     }
@@ -555,7 +555,7 @@ class Definition
     /**
      * Whether this service is public facing
      *
-     * @return Boolean
+     * @return bool
      *
      * @api
      */
@@ -567,7 +567,7 @@ class Definition
     /**
      * Sets the synchronized flag of this service.
      *
-     * @param Boolean $boolean
+     * @param bool    $boolean
      *
      * @return Definition The current instance
      *
@@ -575,7 +575,7 @@ class Definition
      */
     public function setSynchronized($boolean)
     {
-        $this->synchronized = (Boolean) $boolean;
+        $this->synchronized = (bool) $boolean;
 
         return $this;
     }
@@ -583,7 +583,7 @@ class Definition
     /**
      * Whether this service is synchronized.
      *
-     * @return Boolean
+     * @return bool
      *
      * @api
      */
@@ -595,13 +595,13 @@ class Definition
     /**
      * Sets the lazy flag of this service.
      *
-     * @param Boolean $lazy
+     * @param bool    $lazy
      *
      * @return Definition The current instance
      */
     public function setLazy($lazy)
     {
-        $this->lazy = (Boolean) $lazy;
+        $this->lazy = (bool) $lazy;
 
         return $this;
     }
@@ -609,7 +609,7 @@ class Definition
     /**
      * Whether this service is lazy.
      *
-     * @return Boolean
+     * @return bool
      */
     public function isLazy()
     {
@@ -620,7 +620,7 @@ class Definition
      * Sets whether this definition is synthetic, that is not constructed by the
      * container, but dynamically injected.
      *
-     * @param Boolean $boolean
+     * @param bool    $boolean
      *
      * @return Definition the current instance
      *
@@ -628,7 +628,7 @@ class Definition
      */
     public function setSynthetic($boolean)
     {
-        $this->synthetic = (Boolean) $boolean;
+        $this->synthetic = (bool) $boolean;
 
         return $this;
     }
@@ -637,7 +637,7 @@ class Definition
      * Whether this definition is synthetic, that is not constructed by the
      * container, but dynamically injected.
      *
-     * @return Boolean
+     * @return bool
      *
      * @api
      */
@@ -650,7 +650,7 @@ class Definition
      * Whether this definition is abstract, that means it merely serves as a
      * template for other definitions.
      *
-     * @param Boolean $boolean
+     * @param bool    $boolean
      *
      * @return Definition the current instance
      *
@@ -658,7 +658,7 @@ class Definition
      */
     public function setAbstract($boolean)
     {
-        $this->abstract = (Boolean) $boolean;
+        $this->abstract = (bool) $boolean;
 
         return $this;
     }
@@ -667,7 +667,7 @@ class Definition
      * Whether this definition is abstract, that means it merely serves as a
      * template for other definitions.
      *
-     * @return Boolean
+     * @return bool
      *
      * @api
      */

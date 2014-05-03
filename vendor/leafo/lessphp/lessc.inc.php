@@ -346,9 +346,9 @@ class lessc {
 		$other = array_merge($other, $stack);
 
 		if ($split) {
-			return array(array_merge($vars, $imports), $other);
+			return array(array_merge($imports, $vars), $other);
 		} else {
-			return array_merge($vars, $imports, $other);
+			return array_merge($imports, $vars, $other);
 		}
 	}
 
@@ -819,7 +819,7 @@ class lessc {
 	 * The input is expected to be reduced. This function will not work on
 	 * things like expressions and variables.
 	 */
-	protected function compileValue($value) {
+	public function compileValue($value) {
 		switch ($value[0]) {
 		case 'list':
 			// [1] - delimiter

@@ -12,6 +12,7 @@
 namespace Imagine\Gmagick;
 
 use Imagine\Image\AbstractImagine;
+use Imagine\Exception\NotSupportedException;
 use Imagine\Image\BoxInterface;
 use Imagine\Image\Metadata\MetadataBag;
 use Imagine\Image\Palette\Color\ColorInterface;
@@ -42,21 +43,19 @@ class Imagine extends AbstractImagine
      */
     public function open($path)
     {
-        if (!is_file($path)) {
+        $handle = @fopen($path, 'r');
+
+        if (false === $handle) {
             throw new InvalidArgumentException(sprintf('File %s doesn\'t exist', $path));
         }
-        if (!is_readable($path)) {
-            throw new InvalidArgumentException(sprintf('File %s is not readable', $path));
-        }
+
+        fclose($handle);
 
         try {
             $gmagick = new \Gmagick($path);
-
             $image = new Image($gmagick, $this->createPalette($gmagick), $this->getMetadataReader()->readFile($path));
         } catch (\GmagickException $e) {
-            throw new RuntimeException(
-                sprintf('Could not open image %s', $path), $e->getCode(), $e
-            );
+            throw new RuntimeException(sprintf('Could not open image %s', $path), $e->getCode(), $e);
         }
 
         return $image;
@@ -75,7 +74,6 @@ class Imagine extends AbstractImagine
 
         try {
             $gmagick = new \Gmagick();
-
             // Gmagick does not support creation of CMYK GmagickPixel
             // see https://bugs.php.net/bug.php?id=64466
             if ($color instanceof CMYKColor) {
@@ -87,14 +85,12 @@ class Imagine extends AbstractImagine
                 $pixel   = new \GmagickPixel((string) $color);
             }
 
-            if ($color->getAlpha() > 0) {
-                // TODO: implement support for transparent background
-                throw new RuntimeException('alpha transparency not implemented');
+            if ($color->getPalette()->supportsAlpha() && $color->getAlpha() < 100) {
+                throw new NotSupportedException('alpha transparency is not supported');
             }
 
             $gmagick->newimage($width, $height, $pixel->getcolor(false));
             $gmagick->setimagecolorspace(\Gmagick::COLORSPACE_TRANSPARENT);
-            // this is needed to propagate transparency
             $gmagick->setimagebackgroundcolor($pixel);
 
             $image = new Image($gmagick, $palette, new MetadataBag());
@@ -105,9 +101,7 @@ class Imagine extends AbstractImagine
 
             return $image;
         } catch (\GmagickException $e) {
-            throw new RuntimeException(
-                'Could not create empty image', $e->getCode(), $e
-            );
+            throw new RuntimeException('Could not create empty image', $e->getCode(), $e);
         }
     }
 
@@ -116,16 +110,7 @@ class Imagine extends AbstractImagine
      */
     public function load($string)
     {
-        try {
-            $gmagick = new \Gmagick();
-            $gmagick->readimageblob($string);
-        } catch (\GmagickException $e) {
-            throw new RuntimeException(
-                'Could not load image from string', $e->getCode(), $e
-            );
-        }
-
-        return new Image($gmagick, $this->createPalette($gmagick), $this->getMetadataReader()->readData($string));
+        return $this->doLoad($string, $this->getMetadataReader()->readData($string));
     }
 
     /**
@@ -143,7 +128,7 @@ class Imagine extends AbstractImagine
             throw new InvalidArgumentException('Couldn\'t read given resource');
         }
 
-        return $this->load($content);
+        return $this->doLoad($content, $this->getMetadataReader()->readStream($resource));
     }
 
     /**
@@ -152,7 +137,6 @@ class Imagine extends AbstractImagine
     public function font($file, $size, ColorInterface $color)
     {
         $gmagick = new \Gmagick();
-
         $gmagick->newimage(1, 1, 'transparent');
 
         return new Font($gmagick, $file, $size, $color);
@@ -164,18 +148,26 @@ class Imagine extends AbstractImagine
             case \Gmagick::COLORSPACE_SRGB:
             case \Gmagick::COLORSPACE_RGB:
                 return new RGB();
-                break;
             case \Gmagick::COLORSPACE_CMYK:
                 return new CMYK();
-                break;
             case \Gmagick::COLORSPACE_GRAY:
                 return new Grayscale();
-                break;
             default:
-                throw new RuntimeException(
-                    'Only RGB and CMYK colorspace are curently supported'
-                );
-                break;
+                throw new NotSupportedException('Only RGB and CMYK colorspace are curently supported');
         }
+    }
+
+    private function doLoad($content, MetadataBag $metadata)
+    {
+        try {
+            $gmagick = new \Gmagick();
+            $gmagick->readimageblob($content);
+        } catch (\GmagickException $e) {
+            throw new RuntimeException(
+                'Could not load image from string', $e->getCode(), $e
+            );
+        }
+
+        return new Image($gmagick, $this->createPalette($gmagick), $metadata);
     }
 }

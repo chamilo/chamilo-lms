@@ -42,7 +42,7 @@ class PropertyPath implements \IteratorAggregate, PropertyPathInterface
 
     /**
      * The number of elements in the property path
-     * @var integer
+     * @var int
      */
     private $length;
 
@@ -155,7 +155,7 @@ class PropertyPath implements \IteratorAggregate, PropertyPathInterface
     public function getParent()
     {
         if ($this->length <= 1) {
-            return null;
+            return;
         }
 
         $parent = clone $this;

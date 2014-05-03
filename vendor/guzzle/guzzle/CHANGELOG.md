@@ -1,7 +1,26 @@
 CHANGELOG
 =========
 
-3.8.1 (2013-01-28)
+3.9.0 (2014-04-23)
+------------------
+
+* `null`, `false`, and `"_guzzle_blank_"` all now serialize as an empty value
+  with no trailing "=". See dc1d824277.
+* No longer performing an MD5 check on the cacert each time the phar is used,
+  but rather copying the cacert to the temp directory.
+* `"0"` can now be added as a URL path
+* Deleting cookies that are set to empty
+* If-Modified-Since is no longer unnecessarily added to the CachePlugin
+* Cookie path matching now follows RFC 6265 s5.1.4
+* Updated service descriptions are now added to a service client's composite
+  factory.
+* MockPlugin now throws an exception if the queue is empty.
+* Properly parsing URLs that start with "http" but are not absolute
+* Added the ability to configure the curl_multi_select timeout setting
+* OAuth parameters are now sorted using lexicographical byte value ordering
+* Fixing invalid usage of an out of range PHP feature in the ErrorResponsePlugin
+
+3.8.1 (2014-01-28)
 ------------------
 
 * Bug: Always using GET requests when redirecting from a 303 response

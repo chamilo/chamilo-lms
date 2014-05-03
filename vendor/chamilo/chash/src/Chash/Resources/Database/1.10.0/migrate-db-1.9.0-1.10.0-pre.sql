@@ -221,5 +221,37 @@ INSERT INTO branch_transaction_status VALUES (1, 'To be executed'), (2, 'Execute
 
 UPDATE course_field SET field_type = 3 WHERE field_variable = 'special_course';
 
+UPDATE settings_current SET category = 'Admin' WHERE variable = 'emailAdministrator';
+UPDATE settings_current SET category = 'Admin' WHERE variable = 'administratorSurname';
+UPDATE settings_current SET category = 'Admin' WHERE variable = 'administratorName';
+UPDATE settings_current SET category = 'Admin' WHERE variable = 'show_administrator_data';
+UPDATE settings_current SET category = 'Admin' WHERE variable = 'administratorTelephone';
+
+UPDATE settings_current SET category = 'Registration' WHERE variable = 'allow_registration';
+UPDATE settings_current SET category = 'Registration' WHERE variable = 'allow_registration_as_teacher';
+UPDATE settings_current SET category = 'Registration' WHERE variable = 'allow_lostpassword';
+UPDATE settings_current SET category = 'Registration' WHERE variable = 'page_after_login';
+UPDATE settings_current SET category = 'Registration' WHERE variable = 'allow_terms_conditions';
+UPDATE settings_current SET category = 'Registration' WHERE variable = 'student_page_after_login';
+UPDATE settings_current SET category = 'Registration' WHERE variable = 'teacher_page_after_login';
+UPDATE settings_current SET category = 'Registration' WHERE variable = 'drh_page_after_login';
+UPDATE settings_current SET category = 'Registration' WHERE variable = 'student_autosubscribe';
+UPDATE settings_current SET category = 'Registration' WHERE variable = 'teacher_autosubscribe';
+UPDATE settings_current SET category = 'Registration' WHERE variable = 'drh_autosubscribe';
+UPDATE settings_current SET category = 'Registration' WHERE variable = 'platform_unsubscribe_allowed';
+UPDATE settings_current SET category = 'Registration' WHERE variable = 'teacher_page_after_login';
+UPDATE settings_current SET category = 'Registration' WHERE variable = 'registration';
+UPDATE settings_current SET category = 'Registration' WHERE variable = 'extendedprofile_registration';
+UPDATE settings_current SET category = 'Registration' WHERE variable = 'extendedprofile_registrationrequired';
+UPDATE settings_current SET category = 'Registration' WHERE variable = 'login_is_email';
+
+UPDATE settings_current SET category = 'Course' WHERE variable = 'display_coursecode_in_courselist';
+UPDATE settings_current SET category = 'Course' WHERE variable = 'display_teacher_in_courselist';
+UPDATE settings_current SET category = 'Course' WHERE variable = 'student_view_enabled';
+UPDATE settings_current SET category = 'Course' WHERE variable = 'course_validation';
+
+UPDATE settings_current SET category = 'User' WHERE variable = 'user_selected_theme';
+
+
 -- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.061' WHERE variable = 'chamilo_database_version';
+UPDATE settings_current SET selected_value = '1.10.0.062' WHERE variable = 'chamilo_database_version';

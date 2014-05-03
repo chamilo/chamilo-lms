@@ -99,7 +99,7 @@ class Application
      * @param InputInterface  $input  An Input instance
      * @param OutputInterface $output An Output instance
      *
-     * @return integer 0 if everything went fine, or an error code
+     * @return int     0 if everything went fine, or an error code
      *
      * @throws \Exception When doRun returns Exception
      *
@@ -159,7 +159,7 @@ class Application
      * @param InputInterface  $input  An Input instance
      * @param OutputInterface $output An Output instance
      *
-     * @return integer 0 if everything went fine, or an error code
+     * @return int     0 if everything went fine, or an error code
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
@@ -270,25 +270,25 @@ class Application
     /**
      * Sets whether to catch exceptions or not during commands execution.
      *
-     * @param Boolean $boolean Whether to catch exceptions or not during commands execution
+     * @param bool    $boolean Whether to catch exceptions or not during commands execution
      *
      * @api
      */
     public function setCatchExceptions($boolean)
     {
-        $this->catchExceptions = (Boolean) $boolean;
+        $this->catchExceptions = (bool) $boolean;
     }
 
     /**
      * Sets whether to automatically exit after a command execution or not.
      *
-     * @param Boolean $boolean Whether to automatically exit after a command execution or not
+     * @param bool    $boolean Whether to automatically exit after a command execution or not
      *
      * @api
      */
     public function setAutoExit($boolean)
     {
-        $this->autoExit = (Boolean) $boolean;
+        $this->autoExit = (bool) $boolean;
     }
 
     /**
@@ -453,7 +453,7 @@ class Application
      *
      * @param string $name The command name or alias
      *
-     * @return Boolean true if the command exists, false otherwise
+     * @return bool    true if the command exists, false otherwise
      *
      * @api
      */
@@ -633,7 +633,7 @@ class Application
      * Returns a text representation of the Application.
      *
      * @param string  $namespace An optional namespace name
-     * @param boolean $raw       Whether to return raw command list
+     * @param bool    $raw       Whether to return raw command list
      *
      * @return string A string representing the Application
      *
@@ -652,7 +652,7 @@ class Application
      * Returns an XML representation of the Application.
      *
      * @param string  $namespace An optional namespace name
-     * @param Boolean $asDom     Whether to return a DOM or an XML string
+     * @param bool    $asDom     Whether to return a DOM or an XML string
      *
      * @return string|\DOMDocument An XML string representing the Application
      *
@@ -695,8 +695,11 @@ class Application
         do {
             $title = sprintf('  [%s]  ', get_class($e));
             $len = $strlen($title);
+            $width = $this->getTerminalWidth() ? $this->getTerminalWidth() - 1 : PHP_INT_MAX;
             // HHVM only accepts 32 bits integer in str_split, even when PHP_INT_MAX is a 64 bit integer: https://github.com/facebook/hhvm/issues/1327
-            $width = $this->getTerminalWidth() ? $this->getTerminalWidth() - 1 : (defined('HHVM_VERSION') ? 1 << 31 : PHP_INT_MAX);
+            if (defined('HHVM_VERSION') && $width > 1 << 31) {
+                $width = 1 << 31;
+            }
             $formatter = $output->getFormatter();
             $lines = array();
             foreach (preg_split('/\r?\n/', $e->getMessage()) as $line) {
@@ -820,8 +823,8 @@ class Application
      *
      * Can be useful to force terminal dimensions for functional tests.
      *
-     * @param integer $width  The width
-     * @param integer $height The height
+     * @param int     $width  The width
+     * @param int     $height The height
      *
      * @return Application The current application
      */
@@ -878,7 +881,7 @@ class Application
      * @param InputInterface  $input   An Input instance
      * @param OutputInterface $output  An Output instance
      *
-     * @return integer 0 if everything went fine, or an error code
+     * @return int     0 if everything went fine, or an error code
      */
     protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output)
     {

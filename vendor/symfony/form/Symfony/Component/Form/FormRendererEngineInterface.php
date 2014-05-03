@@ -78,7 +78,7 @@ interface FormRendererEngineInterface
      *                                              its parent etc.
      * @param array             $blockNameHierarchy The block name hierarchy, with
      *                                              the root block at the beginning.
-     * @param integer           $hierarchyLevel     The level in the hierarchy at
+     * @param int               $hierarchyLevel     The level in the hierarchy at
      *                                              which to start looking. Level 0
      *                                              indicates the root block, i.e.
      *                                              the first element of
@@ -122,13 +122,13 @@ interface FormRendererEngineInterface
      *                                              its parent etc.
      * @param array             $blockNameHierarchy The block name hierarchy, with
      *                                              the root block at the beginning.
-     * @param integer           $hierarchyLevel     The level in the hierarchy at
+     * @param int               $hierarchyLevel     The level in the hierarchy at
      *                                              which to start looking. Level 0
      *                                              indicates the root block, i.e.
      *                                              the first element of
      *                                              $blockNameHierarchy.
      *
-     * @return integer|Boolean The hierarchy level or false, if no resource was found.
+     * @return int|bool        The hierarchy level or false, if no resource was found.
      */
     public function getResourceHierarchyLevel(FormView $view, array $blockNameHierarchy, $hierarchyLevel);
 

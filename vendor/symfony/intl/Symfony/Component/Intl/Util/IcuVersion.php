@@ -46,10 +46,10 @@ class IcuVersion
      * @param string       $version1  A version string.
      * @param string       $version2  A version string to compare.
      * @param string       $operator  The comparison operator.
-     * @param integer|null $precision The number of components to compare. Pass
+     * @param int|null     $precision The number of components to compare. Pass
      *                                NULL to compare the versions unchanged.
      *
-     * @return Boolean Whether the comparison succeeded.
+     * @return bool    Whether the comparison succeeded.
      *
      * @see normalize()
      */
@@ -81,7 +81,7 @@ class IcuVersion
      *     // => '12.3'
      *
      * @param string       $version   An ICU version string.
-     * @param integer|null $precision The number of components to include. Pass
+     * @param int|null     $precision The number of components to include. Pass
      *                                NULL to return the version unchanged.
      *
      * @return string|null The normalized ICU version or NULL if it couldn't be

@@ -90,17 +90,17 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      * If you are not using the loaders and therefore don't want
      * to depend on the Config component, set this flag to false.
      *
-     * @param Boolean $track true if you want to track resources, false otherwise
+     * @param bool    $track true if you want to track resources, false otherwise
      */
     public function setResourceTracking($track)
     {
-        $this->trackResources = (Boolean) $track;
+        $this->trackResources = (bool) $track;
     }
 
     /**
      * Checks if resources are tracked.
      *
-     * @return Boolean true if resources are tracked, false otherwise
+     * @return bool    true if resources are tracked, false otherwise
      */
     public function isTrackingResources()
     {
@@ -174,7 +174,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      *
      * @param string $name The name of the extension
      *
-     * @return Boolean If the extension exists
+     * @return bool    If the extension exists
      *
      * @api
      */
@@ -428,7 +428,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      *
      * @param string $id The service identifier
      *
-     * @return Boolean true if the service is defined, false otherwise
+     * @return bool    true if the service is defined, false otherwise
      *
      * @api
      */
@@ -443,7 +443,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      * Gets a service.
      *
      * @param string  $id              The service identifier
-     * @param integer $invalidBehavior The behavior when the service does not exist
+     * @param int     $invalidBehavior The behavior when the service does not exist
      *
      * @return object The associated service
      *
@@ -464,7 +464,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
             return parent::get($id, ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE);
         } catch (InactiveScopeException $e) {
             if (ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE !== $invalidBehavior) {
-                return null;
+                return;
             }
 
             throw $e;
@@ -481,7 +481,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
                 $definition = $this->getDefinition($id);
             } catch (InvalidArgumentException $e) {
                 if (ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE !== $invalidBehavior) {
-                    return null;
+                    return;
                 }
 
                 throw $e;
@@ -495,7 +495,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
                 unset($this->loading[$id]);
 
                 if ($e instanceof InactiveScopeException && self::EXCEPTION_ON_INVALID_REFERENCE !== $invalidBehavior) {
-                    return null;
+                    return;
                 }
 
                 throw $e;
@@ -715,7 +715,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      *
      * @param string $id The service identifier
      *
-     * @return Boolean true if the alias exists, false otherwise
+     * @return bool    true if the alias exists, false otherwise
      *
      * @api
      */
@@ -845,7 +845,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      *
      * @param string $id The service identifier
      *
-     * @return Boolean true if the service definition exists, false otherwise
+     * @return bool    true if the service definition exists, false otherwise
      *
      * @api
      */
@@ -903,7 +903,7 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
      *
      * @param Definition $definition A service definition instance
      * @param string     $id         The service identifier
-     * @param Boolean    $tryProxy   Whether to try proxying the service with a lazy proxy
+     * @param bool       $tryProxy   Whether to try proxying the service with a lazy proxy
      *
      * @return object The service described by the service definition
      *

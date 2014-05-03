@@ -36,7 +36,7 @@ class InputOption
      *
      * @param string       $name        The option name
      * @param string|array $shortcut    The shortcuts, can be null, a string of shortcuts delimited by | or an array of shortcuts
-     * @param integer      $mode        The option mode: One of the VALUE_* constants
+     * @param int          $mode        The option mode: One of the VALUE_* constants
      * @param string       $description A description text
      * @param mixed        $default     The default value (must be null for self::VALUE_REQUIRED or self::VALUE_NONE)
      *
@@ -112,7 +112,7 @@ class InputOption
     /**
      * Returns true if the option accepts a value.
      *
-     * @return Boolean true if value mode is not self::VALUE_NONE, false otherwise
+     * @return bool    true if value mode is not self::VALUE_NONE, false otherwise
      */
     public function acceptValue()
     {
@@ -122,7 +122,7 @@ class InputOption
     /**
      * Returns true if the option requires a value.
      *
-     * @return Boolean true if value mode is self::VALUE_REQUIRED, false otherwise
+     * @return bool    true if value mode is self::VALUE_REQUIRED, false otherwise
      */
     public function isValueRequired()
     {
@@ -132,7 +132,7 @@ class InputOption
     /**
      * Returns true if the option takes an optional value.
      *
-     * @return Boolean true if value mode is self::VALUE_OPTIONAL, false otherwise
+     * @return bool    true if value mode is self::VALUE_OPTIONAL, false otherwise
      */
     public function isValueOptional()
     {
@@ -142,7 +142,7 @@ class InputOption
     /**
      * Returns true if the option can take multiple values.
      *
-     * @return Boolean true if mode is self::VALUE_IS_ARRAY, false otherwise
+     * @return bool    true if mode is self::VALUE_IS_ARRAY, false otherwise
      */
     public function isArray()
     {
@@ -197,7 +197,7 @@ class InputOption
      * Checks whether the given option equals this one
      *
      * @param InputOption $option option to compare
-     * @return Boolean
+     * @return bool
      */
     public function equals(InputOption $option)
     {

@@ -32,6 +32,9 @@ class PhpEngine implements EngineInterface, \ArrayAccess
 {
     protected $loader;
     protected $current;
+    /**
+     * @var HelperInterface[]
+     */
     protected $helpers = array();
     protected $parents = array();
     protected $stack = array();
@@ -198,7 +201,7 @@ class PhpEngine implements EngineInterface, \ArrayAccess
      *
      * @param string $name The helper name
      *
-     * @return Boolean true if the helper is defined, false otherwise
+     * @return bool    true if the helper is defined, false otherwise
      *
      * @api
      */
@@ -284,7 +287,7 @@ class PhpEngine implements EngineInterface, \ArrayAccess
      *
      * @param string $name The helper name
      *
-     * @return Boolean true if the helper is defined, false otherwise
+     * @return bool    true if the helper is defined, false otherwise
      *
      * @api
      */
@@ -364,6 +367,10 @@ class PhpEngine implements EngineInterface, \ArrayAccess
     public function setCharset($charset)
     {
         $this->charset = $charset;
+
+        foreach ($this->helpers as $helper) {
+            $helper->setCharset($this->charset);
+        }
     }
 
     /**

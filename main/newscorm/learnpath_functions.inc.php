@@ -2072,7 +2072,7 @@ function createimsmanifest($circle1_files, $learnpath_id)
     $tbl_learnpath_item = Database :: get_course_table(TABLE_LEARNPATH_ITEM);
     $tbl_learnpath_chapter = Database :: get_course_table(TABLE_LEARNPATH_CHAPTER);
 
-    include_once '../metadata/md_funcs.php'; // RH: export metadata
+    //include_once '../metadata/md_funcs.php'; // RH: export metadata
 
     // Header
     // Charset should be dependent on content.
@@ -2181,12 +2181,12 @@ function createimsmanifest($circle1_files, $learnpath_id)
             $org .= '    '.xmltagwrite('item', 'close');
         }
 
-        $mds = new mdstore(true); // RH: export metadata; if no table, create it
+        /*$mds = new mdstore(true); // RH: export metadata; if no table, create it
         if (($mdt = $mds->mds_get($row['item_type'].'.'.$row['item_id']))) {
             if (($mdo = api_strpos($mdt, '<metadata>')) && ($mdc = api_strpos($mdt, '</metadata>'))) {
                 $org .= '    '.api_substr($mdt, $mdo, $mdc - $mdo + 11)."\n";
             }
-        }
+        }*/
 
         $org .= '    '.xmltagwrite('item', 'close');
         $i++;

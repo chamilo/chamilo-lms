@@ -451,12 +451,12 @@ if ($owner_id == api_get_user_id() || api_is_platform_admin(
     }
 
     if (!$group_document && !is_my_shared_folder(api_get_user_id(), $my_cur_dir_path, $current_session_id)) {
-        $metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Document.'.$document_data['id']).'">'.get_lang('AddMetadata').'</a>';
+        //$metadata_link = '<a href="../metadata/index.php?eid='.urlencode('Document.'.$document_data['id']).'">'.get_lang('AddMetadata').'</a>';
 
         // Updated on field
         $last_edit_date = api_get_local_time($last_edit_date);
         $display_date = date_to_str_ago($last_edit_date).' <span class="dropbox_date">'.api_format_date($last_edit_date).'</span>';
-        $form->addElement('label', get_lang('Metadata'), $metadata_link);
+        //$form->addElement('label', get_lang('Metadata'), $metadata_link);
         $form->addElement('label', get_lang('UpdatedOn'), $display_date);
     }
 

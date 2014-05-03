@@ -59,7 +59,8 @@ class ConfigurationHelper extends Helper
             '1.9.4',
             '1.9.6',
             '1.9.8',
-            '1.10.0'
+            '10.0.0',
+            '11.0.0'
         );
 
         return $versionList;
@@ -197,12 +198,12 @@ class ConfigurationHelper extends Helper
         $configurationPath = dirname($configurationFile);
 
         // New structure
-        if (file_exists($configurationPath.'/../main/inc/global.inc.php')) {
+        if (file_exists($configurationPath.'/../main/install/index.php')) {
             return realpath($configurationPath.'/../').'/';
         }
 
         // Old structure
-        if (file_exists($configurationPath.'/../../inc/global.inc.php')) {
+        if (file_exists($configurationPath.'/../../install/index.php')) {
             return realpath($configurationPath.'/../../../').'/';
         }
 
@@ -225,7 +226,13 @@ class ConfigurationHelper extends Helper
                 $confInfo = pathinfo($configurationFile);
                 switch ($confInfo['extension']) {
                     case 'php':
-                        require $configurationFile;
+                        $temp = require $configurationFile;
+
+                        // The file return the array?
+                        if (!empty($temp)) {
+                            $_configuration = $temp;
+                        }
+
                         if (isset($_configuration)) {
                             if (isset($userPasswordCrypted)) {
                                 $_configuration['password_encryption'] = $userPasswordCrypted;
@@ -316,7 +323,7 @@ class ConfigurationHelper extends Helper
     }
 
 
-     /**
+    /**
      * @return array
      */
     public function getCoursesFiles()
@@ -543,25 +550,25 @@ class ConfigurationHelper extends Helper
         $dbs[] = $_configuration['main_database'];
 
         if (isset($_configuration['statistics_database']) && !in_array(
-            $_configuration['statistics_database'],
-            $dbs
-        ) && !empty($_configuration['statistics_database'])
+                $_configuration['statistics_database'],
+                $dbs
+            ) && !empty($_configuration['statistics_database'])
         ) {
             $dbs[] = $_configuration['statistics_database'];
         }
 
         if (isset($_configuration['scorm_database']) && !in_array(
-            $_configuration['scorm_database'],
-            $dbs
-        ) && !empty($_configuration['scorm_database'])
+                $_configuration['scorm_database'],
+                $dbs
+            ) && !empty($_configuration['scorm_database'])
         ) {
             $dbs[] = $_configuration['scorm_database'];
         }
 
         if (isset($_configuration['user_personal_database']) && !in_array(
-            $_configuration['user_personal_database'],
-            $dbs
-        ) && !empty($_configuration['user_personal_database'])
+                $_configuration['user_personal_database'],
+                $dbs
+            ) && !empty($_configuration['user_personal_database'])
         ) {
             $dbs[] = $_configuration['user_personal_database'];
         }
@@ -593,6 +600,7 @@ class ConfigurationHelper extends Helper
     {
         return 'configuration';
     }
+
     /**
      * Gets the current install's major version. Requires getConfiguration() to be called first
      * @return  string  The major version (two-parts version number, e.g. "1.9")

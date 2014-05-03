@@ -13,7 +13,6 @@ $update = function($_configuration, \Doctrine\DBAL\Connection $mainConnection, $
     $course_table = "$dbNameForm.course";
     $courseRelUserTable = "$dbNameForm.course_rel_user";
 
-    $accessUrlRelUserTable = "$dbNameForm.access_url_rel_user";
     $accessUrlRelCourseTable = "$dbNameForm.access_url_rel_course";
     $accessUrlRelSessionTable = "$dbNameForm.access_url_rel_session";
 

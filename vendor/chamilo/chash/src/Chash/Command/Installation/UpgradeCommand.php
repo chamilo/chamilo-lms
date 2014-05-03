@@ -353,7 +353,7 @@ class UpgradeCommand extends CommonCommand
         // Update chamilo files.
         if ($dryRun == false) {
             $this->copyPackageIntoSystem($output, $chamiloLocationPath, null);
-            if ($version == '1.10.0') {
+            if ($version == '10') {
                 $this->removeUnUsedFiles($output, $path);
                 $this->copyConfigFilesToNewLocation($output);
             }

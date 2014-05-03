@@ -401,7 +401,7 @@ class CommonCommand extends AbstractCommand
      */
     public function getLatestVersion()
     {
-        return '1.10.0';
+        return '10';
     }
 
     /**
@@ -506,15 +506,15 @@ class CommonCommand extends AbstractCommand
               'require_update' => false,
               'parent' => '1.9.0'
             ),
-            '1.10.0'  => array(
+            '10'  => array(
                 'require_update' => true,
-                'pre' => 'migrate-db-1.9.0-1.10.0-pre.sql',
-                'post' => 'migrate-db-1.9.0-1.10.0-post.sql',
-                'update_db' => 'update-db-1.9.0-1.10.0.inc.php',
+                'pre' => 'pre.sql',
+                'post' => 'post.sql',
+                'update_db' => 'update.php',
                 'update_files' => null,
                 'hook_to_doctrine_version' => '10'
             ),
-            '1.11.0'  => array(
+            '11'  => array(
                 'require_update' => true,
                 /*'pre' => 'pre.sql',
                 'post' => 'post.sql',
@@ -524,9 +524,9 @@ class CommonCommand extends AbstractCommand
             ),
             'master'  => array(
                 'require_update' => true,
-                'pre' => 'migrate-db-1.9.0-1.10.0-pre.sql',
-                'post' => 'migrate-db-1.9.0-1.10.0-post.sql',
-                'update_db' => 'update-db-1.9.0-1.10.0.inc.php',
+                'pre' => 'pre.sql',
+                'post' => 'post.sql',
+                'update_db' => 'update.php',
                 'update_files' => null,
                 'hook_to_doctrine_version' => '10'
             )
@@ -770,7 +770,6 @@ class CommonCommand extends AbstractCommand
      */
     public function getDatabaseMap()
     {
-
         $defaultCourseData = array(
             array(
                 'name' => 'course1',
@@ -832,14 +831,14 @@ class CommonCommand extends AbstractCommand
                     ),
                 )
             ),
-            '1.10.0' => array(
+            '10' => array(
                 'section' => array(
                     'main' => array(
                         array(
                             'name' => 'chamilo',
                             'sql' => array(
-                                'db_course.sql',
-                                'db_main.sql'
+                                'course.sql',
+                                'main.sql'
                             ),
                         ),
                     ),
@@ -851,8 +850,8 @@ class CommonCommand extends AbstractCommand
                         array(
                             'name' => 'chamilo',
                             'sql' => array(
-                                'db_course.sql',
-                                'db_main.sql'
+                                'course.sql',
+                                'main.sql'
                             ),
                         ),
                     ),
@@ -922,7 +921,7 @@ class CommonCommand extends AbstractCommand
                     $em = \Doctrine\ORM\EntityManager::create($params, $config);
                 } else {
                     if ($section == 'course') {
-                        if (version_compare($version, '1.10.0', '<=')) {
+                        if (version_compare($version, '10', '<=')) {
                             if (strpos($dbInfo['database'], '_chamilo_course_') === false) {
                                 //$params['dbname'] = $params['dbname'];
                             } else {
@@ -965,15 +964,15 @@ class CommonCommand extends AbstractCommand
     public function removeFiles(Finder $files, OutputInterface $output)
     {
         $dryRun = $this->getConfigurationHelper()->getDryRun();
-
-        if (count($files) < 1) {
-            $output->writeln('<comment>No files found.</comment>');
-
-            return 0;
-        }
-
-        $fs = new Filesystem();
         try {
+            $fs = new Filesystem();
+
+            if (isset($files) && count($files) < 1) {
+               $output->writeln('<comment>No files found.</comment>');
+
+               return 0;
+            }
+
             if ($dryRun) {
                 $output->writeln('<comment>Files to be removed (--dry-run is on).</comment>');
                 foreach ($files as $file) {

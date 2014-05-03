@@ -969,7 +969,7 @@ VALUES
 ('documents_default_visibility_defined_in_course', NULL,'checkbox','Tools','false','DocumentsDefaultVisibilityDefinedInCourseTitle','DocumentsDefaultVisibilityDefinedInCourseComment',NULL, NULL, 1),
 ('allow_personal_user_files', NULL,'radio','Tools','false','AllowPersonalUserFilesTitle','AllowPersonalUserFilesComment', NULL, NULL, 1),
 ('bug_report_link', NULL, 'textfield','Platform', '','BugReportLinkTitle','BugReportLinkComment', NULL, NULL, 1),
-('chamilo_database_version', NULL, 'textfield', NULL, '1.10.0.001', 'DatabaseVersion', '', NULL, NULL, 0); -- base value, updated at end of file. Don't change here
+('chamilo_database_version', NULL, 'textfield', NULL, '10.001', 'DatabaseVersion', '', NULL, NULL, 0); -- base value, updated at end of file. Don't change here
 
 UNLOCK TABLES;
 /*!40000 ALTER TABLE settings_current ENABLE KEYS */;
@@ -3643,5 +3643,3 @@ CREATE TABLE user_session_path (
     percentage int unsigned
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- Do not move this
-UPDATE settings_current SET selected_value = '1.10.0.062' WHERE variable = 'chamilo_database_version';

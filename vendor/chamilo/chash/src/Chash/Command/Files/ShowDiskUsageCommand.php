@@ -142,7 +142,7 @@ class ShowDiskUsageCommand extends CommonDatabaseCommand
         }
         $precision = $input->getOption('precision');
 
-        if (version_compare('1.10.0', $_configuration['system_version'], '>=')) {
+        if (version_compare('10.0', $_configuration['system_version'], '>=')) {
             $sql = " SELECT access_url_id, c.id as course_id, c.code, directory, disk_quota
                 FROM course c JOIN access_url_rel_course u
                 ON u.c_id = c.id

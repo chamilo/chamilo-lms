@@ -87,7 +87,10 @@ class CommonDatabaseCommand extends CommonCommand
 
         $this->setConfigurationArray($configuration);
         $this->getConfigurationHelper()->setConfiguration($configuration);
+
         $sysPath = $this->getConfigurationHelper()->getSysPathFromConfigurationFile($configurationFile);
+
+
         $this->getConfigurationHelper()->setSysPath($sysPath);
 
         $databaseSettings = array(

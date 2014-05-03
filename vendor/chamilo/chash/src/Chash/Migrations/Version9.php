@@ -11,19 +11,23 @@ use Doctrine\DBAL\Migrations\AbstractMigration,
  */
 class Version9 extends AbstractMigration
 {
+    /**
+     * @param Schema $schema
+     */
     public function up(Schema $schema)
     {
-        $this->addSql('
-            UPDATE settings_current SET selected_value = "1.9.0.18715"
-            WHERE variable = "chamilo_database_version"'
-        );
+        $sql = 'UPDATE settings_current SET selected_value = "1.9.0.18715"
+                WHERE variable = "chamilo_database_version"';
+        $this->addSql($sql);
     }
 
+    /**
+     * @param Schema $schema
+     */
     public function down(Schema $schema)
     {
-        $this->addSql('
-            UPDATE settings_current SET selected_value = "1.8.8.14911"
-            WHERE variable = "chamilo_database_version"'
-        );
+        $sql = 'UPDATE settings_current SET selected_value = "1.8.8.14911"
+                WHERE variable = "chamilo_database_version"';
+        $this->addSql($sql);
     }
 }

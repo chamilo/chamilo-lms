@@ -238,14 +238,14 @@ if (api_is_allowed_to_edit(null, true) && isset($_GET['action'])) {
 						<input type="text" name="title" class="span6" value="' . Security::remove_XSS($title) . '" />
 					</div>
 				</div>';
-		echo '	<div class="control-group metadata">
+		/*echo '	<div class="control-group metadata">
 					<label class="control-label">
 						'.get_lang('Metadata').'
 					</label>
 					<div class="controls">
 						<a href="../metadata/index.php?eid='.urlencode('Link.'.$clean_link_id).'">'.get_lang('AddMetadata').'</a>
 					</div>
-				</div>';
+				</div>';*/
 		echo '	<div class="control-group description">
 					<label class="control-label">
 						'.get_lang('Description').'

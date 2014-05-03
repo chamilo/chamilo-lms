@@ -4185,7 +4185,7 @@ class CourseManager
         $tables[]= 'thematic';
         $tables[]= 'thematic_plan';
         $tables[]= 'thematic_advance';
-        $tables[]= 'metadata';
+        //$tables[]= 'metadata';
         return $tables;
     }
 

@@ -43,7 +43,7 @@ class FileManager
             $result = Database::query("SELECT id FROM $dbTable ".$to_delete);
 
             if (Database::num_rows($result)) {
-                require_once api_get_path(INCLUDE_PATH).'../metadata/md_funcs.php';
+                /*require_once api_get_path(INCLUDE_PATH).'../metadata/md_funcs.php';
                 $mdStore = new mdstore(true); // create if needed
 
                 $md_type = (substr($dbTable, -13) == 'scormdocument') ? 'Scorm' : 'Document';
@@ -52,7 +52,7 @@ class FileManager
                     $eid = $md_type.'.'.$row['id'];
                     $mdStore->mds_delete($eid);
                     $mdStore->mds_delete_offspring($eid);
-                }
+                }*/
             }
         }
 

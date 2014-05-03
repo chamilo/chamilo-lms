@@ -930,13 +930,13 @@ class DocumentManager
     public static function delete_document_metadata($document_id)
     {
         //needed to deleted medadata
-        require_once api_get_path(SYS_CODE_PATH).'metadata/md_funcs.php';
+        /*require_once api_get_path(SYS_CODE_PATH).'metadata/md_funcs.php';
         $mdStore = new mdstore(true);
 
         //delete metadata
         $eid = 'Document'.'.'.$document_id;
         $mdStore->mds_delete($eid);
-        $mdStore->mds_delete_offspring($eid);
+        $mdStore->mds_delete_offspring($eid);*/
     }
 
     /**

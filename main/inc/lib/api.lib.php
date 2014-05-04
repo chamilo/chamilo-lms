@@ -611,7 +611,7 @@ function api_get_path($path_type, $path = null) {
     static $course_folder;
 
     // Always load root_web modifications for multiple url features.
-    global $_configuration;
+    $_configuration = $app->getConfiguration();
 
     // Default $_configuration['root_web'] configuration
     //$root_web = isset($_configuration['root_web']) ? $_configuration['root_web'] : $app['url_generator'];
@@ -619,7 +619,7 @@ function api_get_path($path_type, $path = null) {
     $root_web = str_replace('web/', '', $root_web);
 
     // Configuration data for already installed system.
-    $root_sys = isset($_configuration['root_sys']) ? $_configuration['root_sys'] : $app['root_sys'];
+    $root_sys = $app['path.base'];
 
     $load_new_config = false;
 
@@ -657,10 +657,10 @@ function api_get_path($path_type, $path = null) {
         $paths[SYS_PATH]                = $root_sys;
 
         // Update data path to get it from config file if defined
-        $paths[SYS_DATA_PATH]           = $app['sys_data_path'];
-        $paths[SYS_LOG_PATH]            = $app['sys_log_path'];
-        $paths[SYS_CONFIG_PATH]         = $app['sys_config_path'];
-        $paths[SYS_COURSE_PATH]         = $app['sys_course_path'];
+        $paths[SYS_DATA_PATH]           = $app['path.data'];
+        $paths[SYS_LOG_PATH]            = $app['path.log'];
+        $paths[SYS_CONFIG_PATH]         = $app['path.config'];
+        $paths[SYS_COURSE_PATH]         = $app['path.courses'];
 
         $paths[SYS_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[SYS_DATA_PATH].'default_course_document/';
 
@@ -687,7 +687,7 @@ function api_get_path($path_type, $path = null) {
         // Now we can switch into api_get_path() "terminology".
         $paths[SYS_LANG_PATH]           = $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
         $paths[SYS_PLUGIN_PATH]         = $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
-        $paths[SYS_ARCHIVE_PATH]        = $app['sys_temp_path'];
+        $paths[SYS_ARCHIVE_PATH]        = $app['path.temp'];
         $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
         $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
         $paths[SYS_CSS_PATH]            = $paths[SYS_PATH].$paths[SYS_CSS_PATH];
@@ -6665,7 +6665,7 @@ function api_mail_html(
 function api_set_login_language($lang) {
     global $app;
     $valid_languages = array();
-    if ($app['installed']) {
+    if ($app->isInstalled()) {
         $valid_languages = api_get_languages();
     }
     if (isset($lang) && isset($valid_languages)) {

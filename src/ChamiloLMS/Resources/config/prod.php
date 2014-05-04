@@ -5,15 +5,15 @@ $app['app.title'] = '';
 $app['jquery_ui_theme'] = 'smoothness';
 
 // Main temp folder.
-$app['temp.path'] = $app['sys_temp_path'];
+$app['temp.path'] = $app['path.temp'];
 
 // temp.paths obj
 $app['temp.paths'] = new stdClass();
 
-$app['temp.paths']->folders[] = $app['sys_data_path'];
+$app['temp.paths']->folders[] = $app['path.data'];
 
 // Monolog.
-$app['temp.paths']->folders[] = $app['sys_log_path'];
+$app['temp.paths']->folders[] = $app['path.log'];
 
 // Twig cache.
 $app['temp.paths']->folders[] = $app['twig.cache.path'] = $app['temp.path'].'twig';
@@ -107,7 +107,7 @@ if ($app['assetic.enabled']) {
 }
 
 // Monolog log file
-$app['chamilo.log'] = $app['sys_log_path'].'chamilo.log';
+$app['chamilo.log'] = $app['path.log'].'chamilo.log';
 
 // If the chamilo.lig is not writable try to delete it
 if (is_file($app['chamilo.log']) && !is_writable($app['chamilo.log'])) {

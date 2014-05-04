@@ -36,20 +36,20 @@ use ChamiloLMS\Framework\Template;
 
 // Flint
 $app->register(new Flint\Provider\ConfigServiceProvider());
-$app['root_dir'] = $app['root_sys'];
+$app['root_dir'] = $app['path.base'];
 
 $app->register(new Flint\Provider\RoutingServiceProvider(), array(
-    'routing.resource' => $app['sys_config_path'].'routing.yml',
+    'routing.resource' => $app['path.config'].'routing.yml',
     'routing.options' => array(
-        //'cache_dir' => $app['debug'] == true ? null : $app['sys_temp_path']
-        //'cache_dir' => $app['sys_temp_path']
+        //'cache_dir' => $app['debug'] == true ? null : $app['path.temp']
+        //'cache_dir' => $app['path.temp']
     ),
 ));
 
-if (isset($app['configuration']['services']['media-alchemyst'])) {
+if (isset($app->getConfiguration()->services->mediaalchemyst)) {
     $unoconv = null;
-    if (isset($app['configuration']['services']['unoconv']['unoconv.binaries'])) {
-        $unoconv = $app['configuration']['services']['unoconv']['unoconv.binaries'];
+    if (isset($app->getConfiguration()['services']['unoconv']['unoconv.binaries'])) {
+        $unoconv = $app->getConfiguration()['services']['unoconv']['unoconv.binaries'];
     }
     $app->register(new MediaAlchemystServiceProvider());
     $app->register(new PHPExiftoolServiceProvider());
@@ -86,7 +86,7 @@ $app->register(new ConsoleServiceProvider(), array(
 ));
 
 // Monolog.
-if (is_writable($app['sys_temp_path'])) {
+if (is_writable($app['path.temp'])) {
     /**
      *  Adding Monolog service provider.
      *  Examples:
@@ -145,7 +145,7 @@ $app['security.encoder.digest'] = $app->share(function($app) {
     // don't base64 encode the password
     // use only 1 iteration
     return new MessageDigestPasswordEncoder(
-        $app['configuration']['password_encryption'],
+        $app->getConfiguration()->password_encryption,
         false,
         1
     );
@@ -332,20 +332,20 @@ $app['validator.validator_factory'] = $app->share(function ($app) {
 });
 
 // Setting Doctrine service provider (DBAL).
-if (isset($app['configuration']['main_database'])) {
+if (isset($app->getConfiguration()->main_database)) {
 
     /* The database connection can be overwritten if you set $_configuration['db.options']
        in configuration.php like this : */
-    $dbPort = isset($app['configuration']['db_port']) ? $app['configuration']['db_port'] : 3306;
-    $dbDriver = isset($app['configuration']['db_driver']) ? $app['configuration']['db_driver'] : 'pdo_mysql';
-    $host = $app['configuration']['db_host'];
+    $dbPort = isset($app->getConfiguration()->db_port) ? $app->getConfiguration()->db_port : 3306;
+    $dbDriver = isset($app->getConfiguration()->db_driver) ? $app->getConfiguration()->db_driver : 'pdo_mysql';
+    $host = $app->getConfiguration()->db_host;
 
     // Accepts that db_host can have a port part like: localhost:6666;
 
-    $hostParts = explode(':', $app['configuration']['db_host']);
+    $hostParts = explode(':', $app->getConfiguration()->db_host);
     if (isset($hostParts[1]) && !empty($hostParts[1])) {
         $dbPort = $hostParts[1];
-        $host = str_replace(':'.$dbPort, '', $app['configuration']['db_host']);
+        $host = str_replace(':'.$dbPort, '', $app->getConfiguration()->db_host);
     }
 
     $defaultDatabaseOptions = array(
@@ -353,9 +353,9 @@ if (isset($app['configuration']['main_database'])) {
             'driver' => $dbDriver,
             'host' => $host,
             'port' => $dbPort,
-            'dbname' => $app['configuration']['main_database'],
-            'user' => $app['configuration']['db_user'],
-            'password' => $app['configuration']['db_password'],
+            'dbname' => $app->getConfiguration()->main_database,
+            'user' => $app->getConfiguration()->db_user,
+            'password' => $app->getConfiguration()->db_password,
             'charset'   => 'utf8',
             //'priority' => '1'
         ),
@@ -363,17 +363,17 @@ if (isset($app['configuration']['main_database'])) {
             'driver' => $dbDriver,
             'host' => $host,
             'port' => $dbPort,
-            'dbname' => $app['configuration']['main_database'],
-            'user' => $app['configuration']['db_user'],
-            'password' => $app['configuration']['db_password'],
+            'dbname' => $app->getConfiguration()->main_database,
+            'user' => $app->getConfiguration()->db_user,
+            'password' => $app->getConfiguration()->db_password,
             'charset'   => 'utf8',
             //'priority' => '2'
         ),
     );
 
     // Could be set in the $_configuration array
-    if (isset($app['configuration']['db.options'])) {
-        $defaultDatabaseOptions = $app['configuration']['db.options'];
+    if (isset($app->getConfiguration()->db)) {
+        $defaultDatabaseOptions = $app->getConfiguration()->get('db.options');
     }
 
     // Doctrine service provider.
@@ -392,14 +392,14 @@ if (isset($app['configuration']['main_database'])) {
             'use_simple_annotation_reader' => false,
             'type' => 'annotation',
             'namespace' => 'ChamiloLMS\Entity',
-            'path' => $app['root_sys'].'src/ChamiloLMS/Entity',
+            'path' => $app['path.base'].'src/ChamiloLMS/Entity',
             // 'orm.default_cache' =>
         ),
         array(
             'use_simple_annotation_reader' => false,
             'type' => 'annotation',
             'namespace' => 'Gedmo',
-            'path' => $app['root_sys'].'vendors/gedmo/doctrine-extensions/lib/Gedmo',
+            'path' => $app['path.base'].'vendors/gedmo/doctrine-extensions/lib/Gedmo',
         )
     );
 
@@ -430,7 +430,7 @@ if (isset($app['configuration']['main_database'])) {
     );
 }
 
-$app['view_path'] = $app['sys_root'].'src/ChamiloLMS/Resources/views/';
+$app['view_path'] = $app['path.base'].'src/ChamiloLMS/Resources/views/';
 
 // Setting Twig as a service provider.
 $app->register(
@@ -438,7 +438,7 @@ $app->register(
     array(
         'twig.path' => array(
             $app['view_path'],
-            $app['sys_root'].'plugin' //plugin folder
+            $app['path.base'].'plugin' //plugin folder
         ),
         // twitter bootstrap form twig templates
         'twig.form.templates' => array(
@@ -472,7 +472,7 @@ $app['twig'] = $app->share($app->extend('twig', function (\Twig_Environment $twi
 
 // Developer tools.
 
-if (is_writable($app['sys_temp_path'])) {
+if (is_writable($app['path.temp'])) {
     if ($app['show_profiler']) {
         // Adding Symfony2 web profiler (memory, time, logs, etc)
         $app->register(
@@ -651,16 +651,16 @@ class ChamiloServiceProvider implements ServiceProviderInterface
             );
         });
 
-
         // Paths
+        // @todo
         $app['paths'] = $app->share(function () use ($app) {
             return array(
-                'root_sys' => $app['root_sys'],
-                'sys_root' => $app['root_sys'], // just an alias
-                'sys_data_path' => $app['sys_data_path'],
-                'sys_config_path' => $app['sys_config_path'],
-                'sys_temp_path' => $app['sys_temp_path'],
-                'sys_log_path' => $app['sys_log_path']
+                'root_sys' => $app['path.base'],
+                'sys_root' => $app['path.base'], // just an alias
+                'sys_data_path' => $app['path.data'],
+                'sys_config_path' => $app['path.config'],
+                'path.temp' => $app['path.temp'],
+                'sys_log_path' => $app['path.log']
             );
         });
 
@@ -700,7 +700,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface
         // Chamilo data filesystem.
         $app['chamilo.filesystem'] = $app->share(function () use ($app) {
             $mediaConverter = null;
-            if (isset($app['configuration']['services']['media-alchemyst'])) {
+            if (isset($app->getConfiguration()->services->mediaalchemyst)) {
                 $mediaConverter = $app['media-alchemyst'];
             }
             $filesystem = new DataFilesystem(
@@ -725,7 +725,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface
         });
 
         // Setting up name conventions
-        $conventions = require_once $app['sys_root'].'main/inc/lib/internationalization_database/name_order_conventions.php';
+        $conventions = require_once $app['path.base'].'main/inc/lib/internationalization_database/name_order_conventions.php';
         if (isset($configuration['name_order_conventions']) && !empty($configuration['name_order_conventions'])) {
             $conventions = array_merge($conventions, $configuration['name_order_conventions']);
         }

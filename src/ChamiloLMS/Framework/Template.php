@@ -4,7 +4,7 @@
 namespace ChamiloLMS\Framework;
 
 use \ChamiloSession as Session;
-use Silex\Application;
+use ChamiloLMS\Framework\Application;
 use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Translation\Translator;
 use Symfony\Component\Routing\Router;
@@ -369,7 +369,7 @@ class Template
      */
     private function setSystemParameters()
     {
-        $version = $this->app['configuration']['system_version'];
+        $version = $this->app->getConfiguration()->system_version;
 
         // Setting app paths/URLs.
         // @todo fix this
@@ -589,7 +589,7 @@ class Template
     private function setHeaderParameters()
     {
         $_course = api_get_course_info();
-        $_configuration = $this->app['configuration'];
+        $_configuration = $this->app->getConfiguration();
         $this_section = $this->app['this_section'];
 
         $nameTools = $this->title;
@@ -878,14 +878,14 @@ class Template
                 $clean_url = api_replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
-                $homep = $this->app['sys_data_path'].'home/'.$clean_url; //homep for Home Path
+                $homep = $this->app['path.data'].'home/'.$clean_url; //homep for Home Path
                 //we create the new dir for the new sites
                 if (!is_dir($homep)) {
                     mkdir($homep, api_get_permissions_for_new_directories());
                 }
             }
         } else {
-            $homep = $this->app['sys_data_path'].'home/';
+            $homep = $this->app['path.data'].'home/';
         }
 
         $ext = '.html';
@@ -899,7 +899,7 @@ class Template
         }
         $home_top = api_to_system_encoding($home_top, api_detect_encoding(strip_tags($home_top)));
 
-        $open = str_replace('{rel_path}', $this->app['sys_data_path'], $home_top);
+        $open = str_replace('{rel_path}', $this->app['path.data'], $home_top);
         $open = api_to_system_encoding($open, api_detect_encoding(strip_tags($open)));
 
         $lis = '';
@@ -1370,7 +1370,7 @@ class Template
         $_course = api_get_course_info();
 
         /*  Plugins for banner section */
-        $web_course_path = $this->app['sys_data_path'];
+        $web_course_path = $this->app['path.data'];
 
         /* If the user is a coach he can see the users who are logged in its session */
         $navigation = array();

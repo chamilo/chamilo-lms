@@ -60,7 +60,7 @@ class ExportLanguagesCommand extends Command
     {
         /** @var \Silex\Application $app */
         $app = $this->getApplication()->getSilexApplication();
-        //$tempPath = $app['paths']['sys_temp_path'].'langs';
+        //$tempPath = $app['paths']['path.temp'].'langs';
 
         $tempPath = $app['paths']['sys_root'].'main/locale';
 
@@ -167,7 +167,7 @@ class ExportLanguagesCommand extends Command
     {
         /** @var \Silex\Application $app */
         $app = $this->getApplication()->getSilexApplication();
-        //$tempPath = $app['paths']['sys_temp_path'].'langs';
+        //$tempPath = $app['paths']['path.temp'].'langs';
 
         $tempPath = $app['paths']['sys_root'].'main/locale';
 

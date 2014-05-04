@@ -44,45 +44,17 @@ $_configuration['main_database'] = '{DATABASE_MAIN}';
 
 /** Chamilo will automatically manage the following paths */
 
-// Path to the webroot of system, example: /var/www/chamilo
-//$_configuration['root_sys'] = '{ROOT_SYS}';
-
 // Path to the data folder, example /var/www/chamilo/data
-//$_configuration['sys_data_path'] = null;
+//$_configuration['path.data'] = null;
 
-// Path to the config folder, example /var/www/chamilo/config
-//$_configuration['sys_config_path'] = null;
+// Path to the temp folder, example /var/www/chamilo/data/temp
+//$_configuration['path.temp'] = null;
 
-// Path to the temp folder, example /var/www/chamilo/temp
-//$_configuration['sys_temp_path'] = null;
+// Path to the logs folder, example /var/www/chamilo/data/courses
+//$_configuration['path.courses'] = null;
 
 // Path to the logs folder, example /var/www/chamilo/logs
-//$_configuration['sys_log_path'] = null;
-
-// URL to your phpMyAdmin installation.
-// If not empty, a link will be available in the Platform Administration
-$_configuration['db_admin_path']  = '';
-
-/** Login modules settings */
-// CAS IMPLEMENTATION
-// -> Go to your portal Chamilo > Administration > CAS to activate CAS
-// You can leave these lines uncommented even if you don't use CAS authentification
-//$extAuthSource["cas"]["login"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/login.php";
-//$extAuthSource["cas"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/cas/newUser.php";
-//
-// NEW LDAP IMPLEMENTATION BASED ON external_login info
-// -> Uncomment the two lines bellow to activate LDAP AND edit main/auth/external_login/ldap.conf.php for configuration
-// $extAuthSource["extldap"]["login"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/login.ldap.php";
-// $extAuthSource["extldap"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/newUser.ldap.php";
-//
-// FACEBOOK IMPLEMENTATION BASED ON external_login info
-// -> Uncomment the line bellow to activate Facebook Auth AND edit main/auth/external_login/ldap.conf.php for configuration
-// $_configuration['facebook_auth'] = 1;
-//
-// OTHER EXTERNAL LOGIN INFORMATION
-// To fetch external login information, uncomment those 2 lines and modify  files auth/external_login/newUser.php and auth/external_login/updateUser.php files
-// $extAuthSource["external_login"]["newUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/newUser.php";
-// $extAuthSource["external_login"]["updateUser"] = $_configuration['root_sys'].$_configuration['code_append']."auth/external_login/updateUser.php";
+//$_configuration['path.log'] = null;
 
 /**
  *

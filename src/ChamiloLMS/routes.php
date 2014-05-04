@@ -506,11 +506,6 @@ $app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexActi
     ->value('page', '1')
     ->bind('userportal');
 
-/** get javascript file */
-$app->match('/main/inc/lib/javascript/{file}', 'legacy.controller:getJavascript', 'GET')
-    ->assert('file', '.+')
-    ->bind('legacy.controller:getJavascript');
-
 /** Legacy wrapper */
 $app->match('/main/{file}', 'legacy.controller:classicAction', 'GET|POST')
     ->before($removeCidResetDependingOfSection)

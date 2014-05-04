@@ -214,7 +214,11 @@ if (api_is_course_admin() || (api_is_course_admin() && $_GET['isStudentView'] ==
 	}
 
 	if (($show < $numberofpages) || (!$_GET['show'] && count($questions) > 0)) {
-		echo '<br /><button type="submit" name="next_survey_page" class="next">'.get_lang('NextQuestion').'   </button>';
+        if ($show == 0) {
+            echo '<br /><button type="submit" name="next_survey_page" class="next">'.get_lang('StartSurvey').'   </button>';    
+        } else {
+		    echo '<br /><button type="submit" name="next_survey_page" class="next">'.get_lang('NextQuestion').'   </button>';
+        }
 	}
 	if ($show >= $numberofpages && $_GET['show'] || (isset($_GET['show']) && count($questions) == 0)) {
 		if ($questions_exists == false) {

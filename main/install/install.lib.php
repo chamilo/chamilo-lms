@@ -302,7 +302,7 @@ function drawPermissionsSettings($app)
     $html .= '<div class="RequirementContent">';
 
     $course_attempt_name = '__XxTestxX__';
-    $course_dir = $app['sys_course_path'].$course_attempt_name;
+    $course_dir = $app['path.courses'].$course_attempt_name;
 
     // Just in case.
     if (is_file($course_dir.'/test.txt')) {

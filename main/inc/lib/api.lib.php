@@ -658,7 +658,7 @@ function api_get_path($path_type, $path = null) {
 
         // Update data path to get it from config file if defined
         $paths[SYS_DATA_PATH]           = $app['path.data'];
-        $paths[SYS_LOG_PATH]            = $app['path.log'];
+        $paths[SYS_LOG_PATH]            = $app['path.logs'];
         $paths[SYS_CONFIG_PATH]         = $app['path.config'];
         $paths[SYS_COURSE_PATH]         = $app['path.courses'];
 

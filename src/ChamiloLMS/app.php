@@ -202,7 +202,7 @@ $app->error(
 // Checking if we have a valid language. If not we set it to the platform language.
 $cidReset = null;
 
-require_once $basePath . 'src/ChamiloLMS/filters.php';
+require_once $app['path.app'].'filters.php';
 
 // The global variable $charset has been defined in a language file too (trad4all.inc.php), this is legacy situation.
 // So, we have to reassign this variable again in order to keep its value right.
@@ -216,57 +216,9 @@ $text_dir = api_get_text_direction();
 $app['is_admin'] = false;
 
 /** Including routes */
-require_once 'routes.php';
+require_once $app['path.app'].'routes.php';
 
 // Setting doctrine2 extensions
-
-if (isset($app->getConfiguration()->main_database) && isset($app['db.event_manager'])) {
-
-    // @todo improvement do not create every time this objects
-    $sortableGroup = new Gedmo\Mapping\Annotation\SortableGroup(array());
-    $sortablePosition = new Gedmo\Mapping\Annotation\SortablePosition(array());
-    $tree = new Gedmo\Mapping\Annotation\Tree(array());
-    $tree = new Gedmo\Mapping\Annotation\TreeParent(array());
-    $tree = new Gedmo\Mapping\Annotation\TreeLeft(array());
-    $tree = new Gedmo\Mapping\Annotation\TreeRight(array());
-    $tree = new Gedmo\Mapping\Annotation\TreeRoot(array());
-    $tree = new Gedmo\Mapping\Annotation\TreeLevel(array());
-    $tree = new Gedmo\Mapping\Annotation\Versioned(array());
-    $tree = new Gedmo\Mapping\Annotation\Loggable(array());
-    $tree = new Gedmo\Loggable\Entity\LogEntry();
-
-    // Setting Doctrine2 extensions
-    $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
-    // $app['db.event_manager']->addEventSubscriber($timestampableListener);
-    $app['dbs.event_manager']['db_read']->addEventSubscriber($timestampableListener);
-    $app['dbs.event_manager']['db_write']->addEventSubscriber($timestampableListener);
-
-    $sluggableListener = new \Gedmo\Sluggable\SluggableListener();
-    // $app['db.event_manager']->addEventSubscriber($sluggableListener);
-    $app['dbs.event_manager']['db_read']->addEventSubscriber($sluggableListener);
-    $app['dbs.event_manager']['db_write']->addEventSubscriber($sluggableListener);
-
-    $sortableListener = new Gedmo\Sortable\SortableListener();
-    // $app['db.event_manager']->addEventSubscriber($sortableListener);
-    $app['dbs.event_manager']['db_read']->addEventSubscriber($sortableListener);
-    $app['dbs.event_manager']['db_write']->addEventSubscriber($sortableListener);
-
-    $treeListener = new \Gedmo\Tree\TreeListener();
-    //$treeListener->setAnnotationReader($cachedAnnotationReader);
-    // $app['db.event_manager']->addEventSubscriber($treeListener);
-    $app['dbs.event_manager']['db_read']->addEventSubscriber($treeListener);
-    $app['dbs.event_manager']['db_write']->addEventSubscriber($treeListener);
-
-    $loggableListener = new \Gedmo\Loggable\LoggableListener();
-    if (PHP_SAPI != 'cli') {
-        //$userInfo = api_get_user_info();
-
-        if (isset($userInfo) && !empty($userInfo['username'])) {
-            //$loggableListener->setUsername($userInfo['username']);
-        }
-    }
-    $app['dbs.event_manager']['db_read']->addEventSubscriber($loggableListener);
-    $app['dbs.event_manager']['db_write']->addEventSubscriber($loggableListener);
-}
+$app->setupDoctrineExtensions();
 
 return $app;

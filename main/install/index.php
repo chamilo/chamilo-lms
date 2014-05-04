@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Chamilo installation
  * This script could be loaded via browser using the URL: main/install/index.php
@@ -20,19 +21,25 @@ set_time_limit(0);
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\HttpFoundation\Request;
 use ChamiloLMS\Component\Console\Output\BufferedOutput;
+use ChamiloLMS\Framework\Application;
 use Chash\Command\Installation\InstallCommand;
 use Chash\Command\Installation\UpgradeCommand;
 
-$app = new Silex\Application();
+$app = new Application();
 
 // Setting paths
-$app['root_sys'] = dirname(dirname(__DIR__)).'/';
-$app['sys_root'] = $app['root_sys'];
-$app['sys_data_path'] = isset($_configuration['sys_data_path']) ? $_configuration['sys_data_path'] : $app['root_sys'].'data/';
-$app['sys_config_path'] = isset($_configuration['sys_config_path']) ? $_configuration['sys_config_path'] : $app['root_sys'].'config/';
-$app['sys_course_path'] = isset($_configuration['sys_course_path']) ? $_configuration['sys_course_path'] : $app['sys_data_path'].'/course/';
-$app['sys_log_path'] = isset($_configuration['sys_log_path']) ? $_configuration['sys_log_path'] : $app['root_sys'].'logs/';
-$app['sys_temp_path'] = isset($_configuration['sys_temp_path']) ? $_configuration['sys_temp_path'] : $app['sys_data_path'].'temp/';
+$app['path.base'] = dirname(dirname(__DIR__)).'/';
+$app['path.app'] = $app['path.base'].'src/ChamiloLMS/';
+$app['path.config'] = $app['path.base'].'config/';
+
+$app->bindInstallPaths(require $app['path.app'].'paths.php');
+$app->readConfigurationFiles();
+
+$app['path.data'] = isset($_configuration['path.data']) ? $_configuration['path.data'] : $app['path.data'];
+$app['path.courses'] = isset($_configuration['path.courses']) ? $_configuration['path.courses'] : $app['path.courses'];
+$app['path.logs'] = isset($_configuration['path.logs']) ? $_configuration['path.logs'] : $app['path.logs'];
+$app['path.temp'] = isset($_configuration['path.temp']) ? $_configuration['path.temp'] : $app['path.temp'];
+
 
 // Registering services
 $app['debug'] = true;
@@ -124,10 +131,7 @@ foreach ($helpers as $name => $helper) {
 }
 
 $blockInstallation = function () use ($app) {
-
-    if (file_exists($app['root_sys'].'config/configuration.php') ||
-        file_exists($app['root_sys'].'config/configuration.yml')
-    ) {
+    if (file_exists($app['path.config'].'configuration.php')) {
         return $app->abort(500, "A Chamilo installation was found. You can't reinstall.");
     }
 
@@ -485,13 +489,13 @@ $app->get('/finish', function () use ($app) {
     $output = $app['session']->get('output');
     $message = $app['translator']->trans(
         'To protect your site, make the whole %s directory read-only (chmod 0555 on Unix/Linux)',
-        array('%s' => $app['root_sys'].'config')
+        array('%s' => $app['path.config'])
     );
     $app['session']->getFlashBag()->add('warning', $message);
 
     $message = $app['translator']->trans(
         'Delete the %s directory.',
-        array('%s' => $app['root_sys'].'install')
+        array('%s' => $app['path.base'].'install')
     );
     $app['session']->getFlashBag()->add('warning', $message);
 

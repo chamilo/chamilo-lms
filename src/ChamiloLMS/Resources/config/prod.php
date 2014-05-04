@@ -13,7 +13,7 @@ $app['temp.paths'] = new stdClass();
 $app['temp.paths']->folders[] = $app['path.data'];
 
 // Monolog.
-$app['temp.paths']->folders[] = $app['path.log'];
+$app['temp.paths']->folders[] = $app['path.logs'];
 
 // Twig cache.
 $app['temp.paths']->folders[] = $app['twig.cache.path'] = $app['temp.path'].'twig';
@@ -101,13 +101,13 @@ if ($app['assetic.enabled']) {
         $app['temp.paths']->folders[] = $app['assetic.path_to_web'].'/js';
 
         $app['temp.paths']->copyFolders = array(
-            $app['root_sys'].'main/css/'.$app['app.theme'] => $app['assetic.path_to_web'].'/css/'.$app['app.theme']
+            $app['path.base'].'main/css/'.$app['app.theme'] => $app['assetic.path_to_web'].'/css/'.$app['app.theme']
         );
     //}
 }
 
 // Monolog log file
-$app['chamilo.log'] = $app['path.log'].'chamilo.log';
+$app['chamilo.log'] = $app['path.logs'].'chamilo.log';
 
 // If the chamilo.lig is not writable try to delete it
 if (is_file($app['chamilo.log']) && !is_writable($app['chamilo.log'])) {

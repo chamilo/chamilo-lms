@@ -68,7 +68,7 @@ class AsseticDumpCommand extends Command
         }
 
         foreach ($themes as $theme) {
-            if (is_dir($app['root_sys'].'main/css/'.$theme) && file_exists($app['root_sys'].'main/css/'.$theme.'/default.css')) {
+            if (is_dir($app['path.base'].'main/css/'.$theme) && file_exists($app['path.base'].'main/css/'.$theme.'/default.css')) {
                 $output->writeln("<info>Dumping theme: $theme</info>");
 
                 /** @var \SilexAssetic\Assetic\Dumper $dumper */
@@ -77,7 +77,7 @@ class AsseticDumpCommand extends Command
                 $app['assetic.output.path_to_css'] = 'css/'.$theme.'/style.css';
 
                 $params = array(
-                    $app['root_sys'].'main/css/'.$theme => $app['assetic.input.path_to_assets'].'/css/'.$theme
+                    $app['path.base'].'main/css/'.$theme => $app['assetic.input.path_to_assets'].'/css/'.$theme
                 );
 
                 $app['chamilo.filesystem']->copyFolders($params, $output);

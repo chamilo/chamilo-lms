@@ -3,7 +3,7 @@
 
 namespace ChamiloLMS\Framework;
 
-use Zend\Config;
+use Zend\Config\Config;
 
 /**
  * Class Application
@@ -41,6 +41,9 @@ class Application extends \Silex\Application
         return $this->configurationArray;
     }
 
+    /**
+     * @return Config
+     */
     public function getConfiguration()
     {
         return $this->configuration;
@@ -64,7 +67,7 @@ class Application extends \Silex\Application
         $this->configuration = $this->getConfigurationArrayFromFile();
 
         if (!empty($this->configuration)) {
-            $config = new \Zend\Config\Config($this->configuration, true);
+            $config = new Config($this->configuration, true);
             $this->installed = true;
 
             /** Overwriting paths */
@@ -72,7 +75,7 @@ class Application extends \Silex\Application
             $this['path.data'] = empty($config->get('path.data')) ? $this['path.data'] : $config->get('path.data');
             $this['path.course'] = empty($config->get('path.courses')) ? $this['path.courses'] : $config->get('path.courses');
             $this['path.temp'] = empty($config->get('path.temp')) ? $this['path.temp'] : $config->get('path.temp');
-            $this['path.log'] = empty($config->get('path.log')) ? $this['path.log'] : $config->get('path.log');
+            $this['path.logs'] = empty($config->get('path.logs')) ? $this['path.logs'] : $config->get('path.logs');
 
             $configPath = $this['path.config'];
 
@@ -111,5 +114,57 @@ class Application extends \Silex\Application
             $this->configurationArray = $this->configuration;
             $this->configuration = $config;
         }
+    }
+
+    public function setupDoctrineExtensions()
+    {
+        if (isset($this->getConfiguration()->main_database) && isset($this['db.event_manager'])) {
+
+            // @todo improvement do not create every time this objects
+            $sortableGroup = new \Gedmo\Mapping\Annotation\SortableGroup(array());
+            $sortablePosition = new \Gedmo\Mapping\Annotation\SortablePosition(array());
+            $tree = new \Gedmo\Mapping\Annotation\Tree(array());
+            $tree = new \Gedmo\Mapping\Annotation\TreeParent(array());
+            $tree = new \Gedmo\Mapping\Annotation\TreeLeft(array());
+            $tree = new \Gedmo\Mapping\Annotation\TreeRight(array());
+            $tree = new \Gedmo\Mapping\Annotation\TreeRoot(array());
+            $tree = new \Gedmo\Mapping\Annotation\TreeLevel(array());
+            $tree = new \Gedmo\Mapping\Annotation\Versioned(array());
+            $tree = new \Gedmo\Mapping\Annotation\Loggable(array());
+            $tree = new \Gedmo\Loggable\Entity\LogEntry();
+
+            // Setting Doctrine2 extensions
+            $timestampableListener = new \Gedmo\Timestampable\TimestampableListener();
+            // $app['db.event_manager']->addEventSubscriber($timestampableListener);
+            $this['dbs.event_manager']['db_read']->addEventSubscriber($timestampableListener);
+            $this['dbs.event_manager']['db_write']->addEventSubscriber($timestampableListener);
+
+            $sluggableListener = new \Gedmo\Sluggable\SluggableListener();
+            // $this['db.event_manager']->addEventSubscriber($sluggableListener);
+            $this['dbs.event_manager']['db_read']->addEventSubscriber($sluggableListener);
+            $this['dbs.event_manager']['db_write']->addEventSubscriber($sluggableListener);
+
+            $sortableListener = new \Gedmo\Sortable\SortableListener();
+            // $this['db.event_manager']->addEventSubscriber($sortableListener);
+            $this['dbs.event_manager']['db_read']->addEventSubscriber($sortableListener);
+            $this['dbs.event_manager']['db_write']->addEventSubscriber($sortableListener);
+
+            $treeListener = new \Gedmo\Tree\TreeListener();
+            //$treeListener->setAnnotationReader($cachedAnnotationReader);
+            // $this['db.event_manager']->addEventSubscriber($treeListener);
+            $this['dbs.event_manager']['db_read']->addEventSubscriber($treeListener);
+            $this['dbs.event_manager']['db_write']->addEventSubscriber($treeListener);
+
+            $loggableListener = new \Gedmo\Loggable\LoggableListener();
+            if (PHP_SAPI != 'cli') {
+                //$userInfo = api_get_user_info();
+                if (isset($userInfo) && !empty($userInfo['username'])) {
+                    //$loggableListener->setUsername($userInfo['username']);
+                }
+            }
+            $this['dbs.event_manager']['db_read']->addEventSubscriber($loggableListener);
+            $this['dbs.event_manager']['db_write']->addEventSubscriber($loggableListener);
+        }
+
     }
 }

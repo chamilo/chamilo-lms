@@ -660,7 +660,7 @@ class ChamiloServiceProvider implements ServiceProviderInterface
                 'sys_data_path' => $app['path.data'],
                 'sys_config_path' => $app['path.config'],
                 'path.temp' => $app['path.temp'],
-                'sys_log_path' => $app['path.log']
+                'sys_log_path' => $app['path.logs']
             );
         });
 

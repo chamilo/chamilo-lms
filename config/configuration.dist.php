@@ -54,7 +54,7 @@ $_configuration['main_database'] = '{DATABASE_MAIN}';
 //$_configuration['path.courses'] = null;
 
 // Path to the logs folder, example /var/www/chamilo/logs
-//$_configuration['path.log'] = null;
+//$_configuration['path.logs'] = null;
 
 /**
  *

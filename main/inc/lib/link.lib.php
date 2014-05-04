@@ -44,6 +44,16 @@ class Link extends Model
    		}
    		return $id;
     }
+    
+    function updateLink($linkId, $linkUrl)
+    {   
+        $tblLink = Database :: get_course_table(TABLE_LINK);
+        $linkUrl = Database::escape_string($linkUrl);
+        $linkId = intval($linkId);
+        $courseId = api_get_course_int_id();
+        $query = "UPDATE $tblLink SET url= '$linkUrl' WHERE id=$linkId AND c_id=$courseId";
+        $resLink = Database::query($query);
+    }
 }
 
 

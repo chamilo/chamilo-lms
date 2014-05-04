@@ -1,0 +1,5 @@
+"category";"group";"description";"announcements_state";"calendar_state";"chat_state";"doc_state";"forum_state";"work_state";"wiki_state";"max_student";"self_reg_allowed";"self_unreg_allowed";"groups_per_user";
+"Category 1";"";"This is a category";"2";"2";"2";"2";"2";"2";"2";"0";"0";"0";"0";
+"";"Group 1";"This is a group with no category";"2";"2";"2";"2";"2";"2";"2";"0";"0";"0"
+"Category 1";"Group 2";"This is a group in a category 1";"2";"2";"2";"2";"2";"2";"2";"0";"0";"0"
+

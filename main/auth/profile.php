@@ -639,10 +639,10 @@ if ($form->validate()) {
                     if (array_key_exists('name', $value)) {
                         $value['name'] = Security::filter_filename($value['name']);
                     }
-                    UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
+                    UserManager::update_extra_field_value($user_id, $key, $value);
                 }
             } else {
-                UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
+                UserManager::update_extra_field_value($user_id, $key, $value);
             }
         }
     }

@@ -32,14 +32,14 @@ var id = document.getElementById("category_id").options[selected].value  ;
 	document.getElementById("email").value= email[id];
 	document.getElementById("divEmail").style.display="none";
 	if(parseInt(course_required[id]) == 0){
-		document.getElementById("divCourse").style.display="none";		
+		document.getElementById("divCourse").style.display="none";
 		if( id != "CUR"){
 			document.getElementById("divEmail").style.display="";
-			document.getElementById("personal_email").required="required";	
-		}			
-		document.getElementById("course_id").disabled=true;	
-		document.getElementById("course_id").value=0;			
-	}else{	
+			document.getElementById("personal_email").required="required";
+		}
+		document.getElementById("course_id").disabled=true;
+		document.getElementById("course_id").value=0;
+	}else{
 		document.getElementById("divCourse").style.display = "";
 		document.getElementById("course_id").disabled=false;
 		document.getElementById("course_id").value=0;
@@ -48,7 +48,7 @@ var id = document.getElementById("category_id").options[selected].value  ;
 }
 
 function validate() {
-	var re  = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/; 
+	var re  = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
 	fckEditor1val = FCKeditorAPI.__Instances["content"].GetHTML();
 	document.getElementById("content").value= fckEditor1val;
 	var selected = document.getElementById("category_id").selectedIndex;
@@ -101,12 +101,12 @@ function add_image_form() {
 function show_question(questionid){
 	if(document.getElementById("C"+questionid)){
 		if(document.getElementById("A"+questionid).style.display == "none"){
-			document.getElementById("A"+questionid).style.display = ""; 
+			document.getElementById("A"+questionid).style.display = "";
 		}
 		else if(document.getElementById("A"+questionid).style.display == ""){
-			document.getElementById("A"+questionid).style.display = "none"; 
+			document.getElementById("A"+questionid).style.display = "none";
 		}
-	}	
+	}
 }
 </script>
 
@@ -123,7 +123,7 @@ div.divTicket {
     width: 70%;
 	float: center;
 	margin-left: 15%;
-	
+
 }
 </style>';
 $types = TicketManager::get_all_tickets_categories();
@@ -132,7 +132,7 @@ $htmlHeadXtra[] = '<script language="javascript">
 		var course_required = ' . js_array($types, 'course_required', 'course_required') . '
 		var other_area = ' . js_array($types, 'other_area', 'other_area') . '
 		var email = ' . js_array($types, 'email', 'email') . '
-		document.getElementById("divCourse").style.display="none";	
+		document.getElementById("divCourse").style.display="none";
 		 </script>';
 $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
@@ -165,7 +165,7 @@ function js_array($array, $name, $key)
 }
 
 /**
- * 
+ *
  * @global array $types
  * @global object $plugin
  */
@@ -211,8 +211,8 @@ function show_form_send_ticket()
 		<div class="label2">' . get_lang('Message') . '</div>
 		<div class="formw2">
 			<input type="hidden" id="content" name="content" value="" style="display:none">
-		<input type="hidden" id="content___Config" value="ToolbarSet=Messages&amp;Width=95%25&amp;Height=250&amp;ToolbarSets={ %22Messages%22: [  [ %22Bold%22,%22Italic%22,%22-%22,%22InsertOrderedList%22,%22InsertUnorderedList%22,%22Link%22,%22RemoveLink%22 ] ], %22MessagesMaximized%22: [  ] }&amp;LoadPlugin=[%22customizations%22]&amp;EditorAreaStyles=body { background: #ffffff; }&amp;ToolbarStartExpanded=false&amp;CustomConfigurationsPath=/main/inc/lib/fckeditor/myconfig.js&amp;EditorAreaCSS=/main/css/chamilo/default.css&amp;ToolbarComboPreviewCSS=/main/css/chamilo/default.css&amp;DefaultLanguage=es&amp;ContentLangDirection=ltr&amp;AdvancedFileManager=true&amp;BaseHref=' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/s/&amp;&amp;UserIsCourseAdmin=true&amp;UserIsPlatformAdmin=true" style="display:none">
-		<iframe id="content___Frame" src="/main/inc/lib/fckeditor/editor/fckeditor.html?InstanceName=content&amp;Toolbar=Messages" width="95%" height="250" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; width: 95%; height: 250px;">
+		<input type="hidden" id="content___Config" value="ToolbarSet=Messages&amp;Width=95%25&amp;Height=250&amp;ToolbarSets={ %22Messages%22: [  [ %22Bold%22,%22Italic%22,%22-%22,%22InsertOrderedList%22,%22InsertUnorderedList%22,%22Link%22,%22RemoveLink%22 ] ], %22MessagesMaximized%22: [  ] }&amp;LoadPlugin=[%22customizations%22]&amp;EditorAreaStyles=body { background: #ffffff; }&amp;ToolbarStartExpanded=false&amp;CustomConfigurationsPath='.api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/myconfig.js&amp;EditorAreaCSS=/main/css/chamilo/default.css&amp;ToolbarComboPreviewCSS='.api_get_path(WEB_CODE_PATH).'css/chamilo/default.css&amp;DefaultLanguage=es&amp;ContentLangDirection=ltr&amp;AdvancedFileManager=true&amp;BaseHref=' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/s/&amp;&amp;UserIsCourseAdmin=true&amp;UserIsPlatformAdmin=true" style="display:none">
+		<iframe id="content___Frame" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/fckeditor.html?InstanceName=content&amp;Toolbar=Messages" width="95%" height="250" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; width: 95%; height: 250px;">
 		</iframe>
 		</div>
 	</div>';

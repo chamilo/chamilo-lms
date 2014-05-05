@@ -42,11 +42,11 @@ $(document).ready(function(){
                     $( this ).dialog( "close" );
              }
 		}
-		
+
 	});
     	$("a#assign").click(function () {
 		$( "#dialog-form" ).dialog( "open" );
-        
+
     	});
         $("input#responseyes").click(function () {
             if(!confirm("' . $plugin->get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('Yes')) . '. ' . $plugin->get_lang('IfYouAreSureTheTicketWillBeClosed') . '")){
@@ -60,20 +60,20 @@ $(document).ready(function(){
     	});
 	$("#unassign").click(function () {
         if (!confirm("' . $plugin->get_lang('AreYouSureYouWantToUnassignTheTicket') . '")) {
-            return false		
-        }
-    }); 
-    
-    $("#close").click(function () {
-           if (!confirm("' . $plugin->get_lang('AreYouSureYouWantToCloseTheTicket') . '")) {
-			return false		
+            return false
         }
     });
-   
+
+    $("#close").click(function () {
+           if (!confirm("' . $plugin->get_lang('AreYouSureYouWantToCloseTheTicket') . '")) {
+			return false
+        }
+    });
+
     ' . $disableReponseButtons . '
 });
-function validate() {	
-	fckEditor1val = FCKeditorAPI.__Instances["content"].GetHTML();	
+function validate() {
+	fckEditor1val = FCKeditorAPI.__Instances["content"].GetHTML();
 	document.getElementById("content").value= fckEditor1val;
 	if(fckEditor1val == ""){
 		alert("' . $plugin->get_lang('YouMustWriteAMessage') . '");
@@ -117,8 +117,8 @@ div.row div.label2 {
 	width:22%;
 }
 div.row div.formw2 {
-    width:50%;	
-	margin-left: 2%;	
+    width:50%;
+	margin-left: 2%;
 	margin-right: 16%;
 	float:left;
 }
@@ -128,14 +128,14 @@ div.row div.formw2 {
     padding:15px 10px 15px 50px;
     background-repeat: no-repeat;
     background-position: 10px center;
-    width:50%;	
+    width:50%;
 	behavior: url(/pie/PIE.htc);
 }
 .messageuser {
     color: #00529B;
     -moz-border-radius: 15px 15px 15px 15px;
     -webkit-border-radius: 15px 15px 15px 15px;
-    background-color: #BDE5F8;    
+    background-color: #BDE5F8;
     margin-left:20%;
     border-radius:15px;
     float: left;
@@ -225,7 +225,7 @@ if (!isset($_POST['compose'])) {
         }
     }
     $bold = '';
-    
+
     if ($ticket['ticket']['status_id'] == 'CLS') {
         $bold = 'style = "font-weight: bold;"';
         echo "<style>
@@ -234,7 +234,7 @@ if (!isset($_POST['compose'])) {
                 }
               </style>";
     }
-    
+
     echo '<div style="margin-left:20%;margin-right:20%;">
 			<table width="100%" >
 				<tr>
@@ -287,7 +287,7 @@ if (!isset($_POST['compose'])) {
 			<div>
 				<div class="label">' . get_lang('Responsable') . ':</div>
 				<div class="formw">' . $select_admins . '</div>
-			</div>			
+			</div>
 		  </form>';
     echo '</div>';
     echo '</table></div>';
@@ -349,8 +349,8 @@ function show_form_send_message()
 		</div>
 		<div class="formw2">
 			<input type="hidden" id="content" name="content" value="" style="display:none">
-		<input type="hidden" id="content___Config" value="ToolbarSet=Messages&amp;Width=95%25&amp;Height=250&amp;ToolbarSets={ %22Messages%22: [  [ %22Bold%22,%22Italic%22,%22-%22,%22InsertOrderedList%22,%22InsertUnorderedList%22,%22Link%22,%22RemoveLink%22 ] ], %22MessagesMaximized%22: [  ] }&amp;LoadPlugin=[%22customizations%22]&amp;EditorAreaStyles=body { background: #ffffff; }&amp;ToolbarStartExpanded=false&amp;CustomConfigurationsPath=/main/inc/lib/fckeditor/myconfig.js&amp;EditorAreaCSS=/main/css/chamilo/default.css&amp;ToolbarComboPreviewCSS=/main/css/chamilo/default.css&amp;DefaultLanguage=es&amp;ContentLangDirection=ltr&amp;AdvancedFileManager=true&amp;BaseHref=' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/s/&amp;&amp;UserIsCourseAdmin=true&amp;UserIsPlatformAdmin=true" style="display:none">
-		<iframe id="content___Frame" src="/main/inc/lib/fckeditor/editor/fckeditor.html?InstanceName=content&amp;Toolbar=Messages" width="95%" height="250" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; width: 95%; height: 250px;">
+		<input type="hidden" id="content___Config" value="ToolbarSet=Messages&amp;Width=95%25&amp;Height=250&amp;ToolbarSets={ %22Messages%22: [  [ %22Bold%22,%22Italic%22,%22-%22,%22InsertOrderedList%22,%22InsertUnorderedList%22,%22Link%22,%22RemoveLink%22 ] ], %22MessagesMaximized%22: [  ] }&amp;LoadPlugin=[%22customizations%22]&amp;EditorAreaStyles=body { background: #ffffff; }&amp;ToolbarStartExpanded=false&amp;CustomConfigurationsPath='.api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/myconfig.js&amp;EditorAreaCSS=/main/css/chamilo/default.css&amp;ToolbarComboPreviewCSS=/main/css/chamilo/default.css&amp;DefaultLanguage=es&amp;ContentLangDirection=ltr&amp;AdvancedFileManager=true&amp;BaseHref=' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/s/&amp;&amp;UserIsCourseAdmin=true&amp;UserIsPlatformAdmin=true" style="display:none">
+		<iframe id="content___Frame" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/fckeditor.html?InstanceName=content&amp;Toolbar=Messages" width="95%" height="250" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; width: 95%; height: 250px;">
 		</iframe>
 		</div>
 	</div>
@@ -375,7 +375,7 @@ function show_form_send_message()
     echo '<div class="row">
 		<div class="label"></div>
 		<div class="formw">
-                <button class="save" name="compose" type="submit">' . get_lang('SendMessage') . '</button>' . 
+                <button class="save" name="compose" type="submit">' . get_lang('SendMessage') . '</button>' .
             ($isAdmin ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="confirmation"/>Solicitar confirmaci&oacute;n' : "") .
     '</div>
 	</div>';

@@ -30,7 +30,7 @@ function load_course_list (div_course, my_user_id, user_email) {
 		url: "course_user_list.php",
 		data: "user_id="+my_user_id,
 		success: function(datos) {
-			$("div#user_request").html(datos);		
+			$("div#user_request").html(datos);
 			$("#user_id_request").val(my_user_id);
                         $("#personal_email").val(user_email);
 			$("#btnsubmit").attr("disabled", false);
@@ -44,14 +44,14 @@ function changeType() {
     $("#other_area").val(other_area[id]);
     $("#email").val(email[id]);
 	if(parseInt(course_required[id]) == 0){
-            $("#divCourse").css("display", "none");		
+            $("#divCourse").css("display", "none");
             if( id != "CUR"){
                 $("#divEmail").css("display", "block");
                 $("#personal_email").attr("required","required");
-            }			
-            $("#course_id").disabled = true;	
-            $("#course_id").value = 0;			
-	}else{	
+            }
+            $("#course_id").disabled = true;
+            $("#course_id").value = 0;
+	}else{
             $("#divCourse").css("display", "block");
             $("#course_id").prop("disabled", false);
             $("#course_id").val(0);
@@ -63,7 +63,7 @@ function handleClick2(myRadio) {
     alert(document.getElementById("user_id_request").value);
 }
 function validate() {
-    var re  = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/; 
+    var re  = /^([a-zA-Z0-9_.-])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
     fckEditor1val = FCKeditorAPI.__Instances["content"].GetHTML();
     document.getElementById("content").value= fckEditor1val;
     var selected = document.getElementById("category_id").selectedIndex;
@@ -131,7 +131,7 @@ div.divTicket {
     width: 70%;
 	float: center;
 	margin-left: 15%;
-	
+
 }
 </style>';
 $types = TicketManager::get_all_tickets_categories();
@@ -240,7 +240,7 @@ function show_form_send_ticket()
         $showBlock = "style='display: none;'";
         $source[SRC_PLATFORM] = $plugin->get_lang('SrcPlatform');
     }
-    
+
     $select_source = '
 	<div class="row" ' . $showBlock . '>
 	<div class="label2">' . $plugin->get_lang('Source') . ':</div>
@@ -273,8 +273,8 @@ function show_form_send_ticket()
 		<div class="label2">' . get_lang('Message') . ':</div>
 		<div class="formw2">
 			<input type="hidden" id="content" name="content" value="" style="display:none">
-		<input type="hidden" id="content___Config" value="ToolbarSet=Messages&amp;Width=95%25&amp;Height=250&amp;ToolbarSets={ %22Messages%22: [  [ %22Bold%22,%22Italic%22,%22-%22,%22InsertOrderedList%22,%22InsertUnorderedList%22,%22Link%22,%22RemoveLink%22 ] ], %22MessagesMaximized%22: [  ] }&amp;LoadPlugin=[%22customizations%22]&amp;EditorAreaStyles=body { background: #ffffff; }&amp;ToolbarStartExpanded=false&amp;CustomConfigurationsPath=/main/inc/lib/fckeditor/myconfig.js&amp;EditorAreaCSS=/main/css/chamilo/default.css&amp;ToolbarComboPreviewCSS=/main/css/chamilo/default.css&amp;DefaultLanguage=es&amp;ContentLangDirection=ltr&amp;AdvancedFileManager=true&amp;BaseHref=' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/s/&amp;&amp;UserIsCourseAdmin=true&amp;UserIsPlatformAdmin=true" style="display:none">
-		<iframe id="content___Frame" src="/main/inc/lib/fckeditor/editor/fckeditor.html?InstanceName=content&amp;Toolbar=Messages" width="95%" height="250" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; width: 95%; height: 250px;">
+		<input type="hidden" id="content___Config" value="&amp;Width=95%25&amp;Height=250&amp;ToolbarSets={ %22Messages%22: [  [ %22Bold%22,%22Italic%22,%22-%22,%22InsertOrderedList%22,%22InsertUnorderedList%22,%22Link%22,%22RemoveLink%22 ] ], %22MessagesMaximized%22: [  ] }&amp;LoadPlugin=[%22customizations%22]&amp;EditorAreaStyles=body { background: #ffffff; }&amp;ToolbarStartExpanded=false&amp;CustomConfigurationsPath='.api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/myconfig.js&amp;EditorAreaCSS=/main/css/chamilo/default.css&amp;ToolbarComboPreviewCSS='.api_get_path(WEB_CODE_PATH).'main/css/chamilo/default.css&amp;DefaultLanguage=es&amp;ContentLangDirection=ltr&amp;AdvancedFileManager=true&amp;BaseHref=' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/s/&amp;&amp;UserIsCourseAdmin=true&amp;UserIsPlatformAdmin=true" style="display:none">
+		<iframe id="content___Frame" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/fckeditor.html?InstanceName=content&amp;Toolbar=Messages" width="95%" height="250" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; width: 95%; height: 250px;">
 		</iframe>
 		</div>
 	</div>';
@@ -356,10 +356,10 @@ function save_ticket()
     $file_attachments = $_FILES;
     $responsible = (api_is_platform_admin() ? api_get_user_id() : 0);
     if (TicketManager::insert_new_ticket(
-            $category_id, $course_id, $project_id, 
-            $other_area, $email, $subject, $content, 
-            $personal_email, $file_attachments, 
-            $source, $priority, $status, $user_id, 
+            $category_id, $course_id, $project_id,
+            $other_area, $email, $subject, $content,
+            $personal_email, $file_attachments,
+            $source, $priority, $status, $user_id,
             $responsible)) {
         header('location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php?message=success');
     } else {
@@ -382,12 +382,12 @@ function get_number_of_users()
     }
     if (isset($_GET['keyword'])) {
         $keyword = Database::escape_string(trim($_GET['keyword']));
-        $sql .= " WHERE (u.firstname LIKE '%$keyword%' OR 
-                  u.lastname LIKE '%$keyword%'  OR 
-                  concat(u.firstname,' ',u.lastname) LIKE '%$keyword%'  OR 
-                  concat(u.lastname,' ',u.firstname) LIKE '%$keyword%' OR 
-                  u.username LIKE '%$keyword%' OR 
-                  u.email LIKE '%$keyword%'  OR 
+        $sql .= " WHERE (u.firstname LIKE '%$keyword%' OR
+                  u.lastname LIKE '%$keyword%'  OR
+                  concat(u.firstname,' ',u.lastname) LIKE '%$keyword%'  OR
+                  concat(u.lastname,' ',u.firstname) LIKE '%$keyword%' OR
+                  u.username LIKE '%$keyword%' OR
+                  u.email LIKE '%$keyword%'  OR
                   u.official_code LIKE '%$keyword%') ";
     }
     $res = Database::query($sql);
@@ -407,7 +407,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
 {
     $user_table = Database :: get_main_table(TABLE_MAIN_USER);
     $admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
-    
+
     if (api_is_western_name_order()) {
         $col34 = "u.firstname AS col3,
                   u.lastname AS col4,";
@@ -415,7 +415,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
         $col34 = "u.lastname AS col3,
                   u.firstname AS col4,";
     }
-    
+
     $sql = "SELECT
                 u.user_id AS col0,
                 u.official_code AS col2,
@@ -424,18 +424,18 @@ function get_user_data($from, $number_of_items, $column, $direction)
                 u.email AS col6,
                 u.status AS col7,
                 u.active AS col8,
-                u.user_id AS col9 , 
+                u.user_id AS col9 ,
                 u.expiration_date AS exp
             FROM $user_table u ";
 
     if (isset($_GET['keyword'])) {
         $keyword = Database::escape_string(trim($_GET['keyword']));
-        $sql .= " WHERE (u.firstname LIKE '%$keyword%' OR 
-                  u.lastname LIKE '%$keyword%' OR 
-                  concat(u.firstname,' ',u.lastname) LIKE '%$keyword%' OR 
-                  concat(u.lastname,' ',u.firstname) LIKE '%$keyword%' OR  
-                  u.username LIKE '%$keyword%'  OR 
-                  u.official_code LIKE '%$keyword%' OR 
+        $sql .= " WHERE (u.firstname LIKE '%$keyword%' OR
+                  u.lastname LIKE '%$keyword%' OR
+                  concat(u.firstname,' ',u.lastname) LIKE '%$keyword%' OR
+                  concat(u.lastname,' ',u.firstname) LIKE '%$keyword%' OR
+                  u.username LIKE '%$keyword%'  OR
+                  u.official_code LIKE '%$keyword%' OR
                   u.email LIKE '%$keyword%' )";
     }
     if (!in_array($direction, array('ASC', 'DESC'))) {

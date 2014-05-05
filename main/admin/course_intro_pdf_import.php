@@ -41,7 +41,6 @@ if ($_POST['formSent']) {
         } else {
             $errors = import_pdfs($courses, $subDir);
             if (count($errors) == 0) {
-            //    save_data($courses);
                 error_log('Course intros imported successfully in '.__FILE__.', line '.__LINE__); 
             }
         }
@@ -153,7 +152,6 @@ function import_pdfs($file, $subDir = '/') {
             error_log($parts[0].' is not a course, apparently');
             $errors[] = array('Line' => 0, 'Code' => $parts[0], 'Title' => $parts[0].' - '.get_lang('CodeDoesNotExists'));
         }
-        error_log($parts[0]);
         $i++; //found at least one entry that is not a dir or a .
     }
     if ($i == 0) {

@@ -1136,18 +1136,29 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
     }
 
     if (!$is_platformAdmin) {
-        if (!$is_courseMember && isset($_course['registration_code']) && !empty($_course['registration_code'])) {
-            $is_courseMember    = false;
-            $is_courseAdmin     = false;
-            $is_courseTutor     = false;
-            $is_courseCoach     = false;
-            $is_sessionAdmin    = false;
-            $is_allowed_in_course = false;
+        if (!$is_courseMember && 
+            isset($_course['registration_code']) && 
+            !empty($_course['registration_code']) && 
+            !Session::read('course_password_'.$_course['real_id'], false)
+        ) {
+            // if we are here we try to access to a course requiring password
+            if ($is_allowed_in_course) {
+                // the course visibility allows to access the course 
+                // with a password
+                $url = api_get_path(WEB_CODE_PATH).'auth/set_temp_password.php?course_id='.$_course['real_id'].'&session_id='.$session_id;
+                header('Location: '.$url);
+                exit;
+            } else {
+                $is_courseMember = false;
+                $is_courseAdmin = false;
+                $is_courseTutor = false;
+                $is_courseCoach = false;
+                $is_sessionAdmin = false;
+                $is_allowed_in_course = false;
+            }
         }
-    }
+    } // check the session visibility
 
-
-    // check the session visibility
     if ($is_allowed_in_course == true) {
 
         //if I'm in a session

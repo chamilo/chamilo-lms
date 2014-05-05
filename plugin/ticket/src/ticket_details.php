@@ -38,21 +38,20 @@ $(document).ready(function(){
 			Asignar: function(){
 				$("#genesis").submit()
 				},
-			 Close: function() {
-                    $( this ).dialog( "close" );
-             }
-		}
-
-	});
-    	$("a#assign").click(function () {
-		$( "#dialog-form" ).dialog( "open" );
-
-    	});
-        $("input#responseyes").click(function () {
-            if(!confirm("' . $plugin->get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('Yes')) . '. ' . $plugin->get_lang('IfYouAreSureTheTicketWillBeClosed') . '")){
-                return false;
+            Close: function() {
+                $( this ).dialog( "close" );
             }
-    	});
+		}
+	});
+    $("a#assign").click(function () {
+    $( "#dialog-form" ).dialog( "open" );
+
+    });
+    $("input#responseyes").click(function () {
+        if(!confirm("' . $plugin->get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('Yes')) . '. ' . $plugin->get_lang('IfYouAreSureTheTicketWillBeClosed') . '")){
+            return false;
+        }
+    });
 	$("input#responseno").click(function () {
             if(!confirm("' . $plugin->get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('No')) . '")){
 		return false;
@@ -383,4 +382,3 @@ function show_form_send_message()
 }
 
 Display::display_footer();
-?>

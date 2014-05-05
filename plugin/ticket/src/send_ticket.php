@@ -262,6 +262,7 @@ function save_ticket()
     $file_attachments = $_FILES;
     if (TicketManager::insert_new_ticket($category_id, $course_id, $project_id, $other_area, $email, $subject, $content, $personal_email, $file_attachments)) {
         header('location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php?message=success');
+        exit;
     } else {
         Display::display_header(get_lang('ComposeMessage'));
         Display::display_error_message($plugin->get_lang('ErrorRegisterMessage'));

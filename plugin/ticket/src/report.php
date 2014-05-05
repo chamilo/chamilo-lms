@@ -110,8 +110,6 @@ function show_form()
     echo '<div class="ticket-form">';
     echo '<form enctype="multipart/form-data" action="' . api_get_self() . '" method="post" name="send_ticket" id="send_ticket"
  	onsubmit="return validate()" style="width:100%">';
-
-    $courses_list = CourseManager::get_courses_list_by_user_id($user_id, false, true);
     $select_course = '<div id="user_request" >
 	 </div>';
     echo $select_course;

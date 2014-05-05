@@ -80,7 +80,7 @@ class TicketManager
         global $plugin;
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_category = Database::get_main_table(
-                        TABLE_TICKET_CATEGORY
+            TABLE_TICKET_CATEGORY
         );
         $course_id = intval($course_id);
         $category_id = intval($category_id);
@@ -141,7 +141,7 @@ class TicketManager
 
         if ($ticket_id != 0) {
             $ticket_code = "A" . str_pad(
-                            (int) $ticket_id, 11, "0", STR_PAD_LEFT
+                (int) $ticket_id, 11, "0", STR_PAD_LEFT
             );
             $sql_update_code = "UPDATE $table_support_tickets
                                 SET ticket_code = '$ticket_code'
@@ -186,7 +186,7 @@ class TicketManager
                     $studentMessage = sprintf($plugin->get_lang('YourQuestionWasSentToTheResponableAreaX'), $email, $email);
                     $studentMessage .= sprintf($plugin->get_lang('YourAnswerToTheQuestionWillBeSentToX'), $personalEmail);
                     self::insert_message(
-                            $ticket_id, get_lang('MessageResent'), $studentMessage, null, 1
+                        $ticket_id, get_lang('MessageResent'), $studentMessage, null, 1
                     );
                 }
 
@@ -241,9 +241,15 @@ class TicketManager
                 $message = sprintf($plugin->get_lang('TicketAssignedMsg'), $info['complete_name'], $href, $ticket_id);
                 $mailTitle = sprintf($plugin->get_lang('TicketAssignX'), $ticket_id);
                 api_mail_html(
-                        $info['complete_name'], $info['mail'], $mailTitle, $message, null, // sender name
-                        null, // sender e-mail
-                        array('cc' => $sender['email']) // should be support e-mail (platform admin) here
+                    $info['complete_name'],
+                    $info['mail'],
+                    $mailTitle,
+                    $message,
+                    null, // sender name
+                    null, // sender e-mail
+                    array(
+                        'cc' => $sender['email']
+                    ) // should be support e-mail (platform admin) here
                 );
             }
         }
@@ -283,7 +289,7 @@ class TicketManager
                      </form>';
             $content .= $form;
             Database::query(
-                    "UPDATE $table_support_tickets SET status_id='XCF' WHERE ticket_id = '$ticket_id'"
+                "UPDATE $table_support_tickets SET status_id='XCF' WHERE ticket_id = '$ticket_id'"
             );
         }
         $sql_message_id = "SELECT COUNT(*) as total_messages
@@ -415,7 +421,7 @@ class TicketManager
                     '$user_id',
                     '$now'
                 )";
-            $result = Database::query($sql);
+            Database::query($sql);
             return array(
                 'path' => $path_message_attach . $safe_new_file_name,
                 'filename' => $safe_file_name
@@ -433,20 +439,23 @@ class TicketManager
      * @return array
      */
     public static function get_tickets_by_user_id(
-    $from, $number_of_items, $column, $direction, $user_id = null
-    )
-    {
+        $from,
+        $number_of_items,
+        $column,
+        $direction,
+        $user_id = null
+    ) {
         global $plugin;
         $table_support_category = Database::get_main_table(
-                        TABLE_TICKET_CATEGORY
+            TABLE_TICKET_CATEGORY
         );
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_priority = Database::get_main_table(
-                        TABLE_TICKET_PRIORITY
+            TABLE_TICKET_PRIORITY
         );
         $table_support_status = Database::get_main_table(TABLE_TICKET_STATUS);
         $table_support_messages = Database::get_main_table(
-                        TABLE_TICKET_MESSAGE
+            TABLE_TICKET_MESSAGE
         );
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_main_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
@@ -477,28 +486,30 @@ class TicketManager
                 $table_support_status status,
                 $table_main_user user,
                 $table_support_messages msg
-            WHERE cat.category_id = ticket.category_id
+            WHERE
+                cat.category_id = ticket.category_id
                 AND ticket.priority_id = priority.priority_id
                 AND ticket.status_id = status.status_id
                 AND user.user_id = ticket.request_user
-                AND ticket.ticket_id= msg.ticket_id AND message_id=1 ";
+                AND ticket.ticket_id= msg.ticket_id
+                AND message_id=1 ";
         if (!$isAdmin) {
             $sql .= " AND request_user = '$user_id' ";
         }
         $keyword_unread = Database::escape_string(
-                        trim($_GET['keyword_unread'])
+            trim($_GET['keyword_unread'])
         );
         //Search simple
         if (isset($_GET['submit_simple'])) {
             if ($_GET['keyword'] != '') {
                 $keyword = Database::escape_string(trim($_GET['keyword']));
                 $sql .= " AND (ticket.ticket_code = '$keyword'
-                                OR ticket.ticket_id = '$keyword'
-                                OR user.firstname LIKE '%$keyword%'
-                                OR user.lastname LIKE '%$keyword%'
-                                OR concat(user.firstname,' ',user.lastname) LIKE '%$keyword%'
-                                OR concat(user.lastname,' ',user.firstname) LIKE '%$keyword%'
-                                OR user.username LIKE '%$keyword%')";
+                            OR ticket.ticket_id = '$keyword'
+                            OR user.firstname LIKE '%$keyword%'
+                            OR user.lastname LIKE '%$keyword%'
+                            OR concat(user.firstname,' ',user.lastname) LIKE '%$keyword%'
+                            OR concat(user.lastname,' ',user.firstname) LIKE '%$keyword%'
+                            OR user.username LIKE '%$keyword%')";
             }
         }
         //Search advanced
@@ -704,7 +715,8 @@ class TicketManager
                 $dif = $now - $last_edit_date;
 
                 if ($dif > 172800 && $row['priority_id'] == 'NRM' && $row['status_id'] != 'CLS') {
-                    $actions .= '<a href="myticket.php?ticket_id=' . $row['ticket_id'] . '&amp;action=alert"><img src="' . $webPath . 'main/img/exclamation.png" border="0" /></a>';
+                    $actions .= '<a href="myticket.php?ticket_id=' . $row['ticket_id'] . '&amp;action=alert">
+                                 <img src="' . $webPath . 'main/img/exclamation.png" border="0" /></a>';
                 }
                 if ($row['priority_id'] == 'HGH') {
                     $actions .= '<img src="' . $webCodePath . 'img/admin_star.png" border="0" />';
@@ -745,15 +757,15 @@ class TicketManager
     {
         $user_id = intval($user_id);
         $table_support_category = Database::get_main_table(
-                        TABLE_TICKET_CATEGORY
+            TABLE_TICKET_CATEGORY
         );
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_priority = Database::get_main_table(
-                        TABLE_TICKET_PRIORITY
+            TABLE_TICKET_PRIORITY
         );
         $table_support_status = Database::get_main_table(TABLE_TICKET_STATUS);
         $table_support_messages = Database::get_main_table(
-                        TABLE_TICKET_MESSAGE
+            TABLE_TICKET_MESSAGE
         );
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_main_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
@@ -924,16 +936,17 @@ class TicketManager
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
 
         $sql = "SELECT
-                 ticket.* ,cat.name ,
-                 status.name as status, priority.priority
-                 FROM $table_support_tickets ticket,
-                 $table_support_category cat ,
-                 $table_support_priority priority ,
-                 $table_support_status status
-		WHERE ticket.ticket_id = '$ticket_id'
-                AND cat.category_id = ticket.category_id
-                AND priority.priority_id = ticket.priority_id
-                AND status.status_id = ticket.status_id ";
+                    ticket.* ,cat.name ,
+                    status.name as status, priority.priority
+                    FROM $table_support_tickets ticket,
+                    $table_support_category cat ,
+                    $table_support_priority priority ,
+                    $table_support_status status
+		        WHERE
+                    ticket.ticket_id = '$ticket_id'
+                    AND cat.category_id = ticket.category_id
+                    AND priority.priority_id = ticket.priority_id
+                    AND status.status_id = ticket.status_id ";
         if (!UserManager::is_admin($user_id)) {
             $sql .= "AND ticket.request_user = '$user_id'";
         }

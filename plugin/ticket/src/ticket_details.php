@@ -158,6 +158,7 @@ if (!isset($ticket['ticket'])) {
 }
 if (!isset($_GET['ticket_id'])) {
     header('location:myticket.php');
+    exit;
 }
 if (isset($_POST['response'])) {
     if ($user_id == $ticket['ticket']['request_user']) {

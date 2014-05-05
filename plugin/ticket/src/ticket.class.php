@@ -919,6 +919,9 @@ class TicketManager
      */
     public static function get_ticket_detail_by_id($ticket_id, $user_id)
     {
+        $ticket_id = intval($ticket_id);
+        $user_id = intval($user_id);
+
         $table_support_category = Database::get_main_table(
             TABLE_TICKET_CATEGORY
         );
@@ -967,16 +970,11 @@ class TicketManager
                 $row['course_url'] = null;
                 if ($row['course_id'] != 0) {
                     $course = api_get_course_info_by_id($row['course_id']);
-                    $row['course_url'] = '<a href="' . api_get_path(
-                                    WEB_COURSE_PATH
-                            ) . $course['path'] . '">' . $course['name'] . '</a>';
+                    $row['course_url'] = '<a href="' . api_get_path(WEB_COURSE_PATH) . $course['path'] . '">' . $course['name'] . '</a>';
                 }
                 $userInfo = api_get_user_info($row['request_user']);
-                $row['user_url'] = '<a href="' . api_get_path(
-                                WEB_PATH
-                        ) . 'main/admin/user_information.php?user_id=' . $row['request_user'] . '">' . api_get_person_name(
-                                $userInfo['firstname'], $userInfo['lastname']
-                        ) . '</a>';
+                $row['user_url'] = '<a href="' . api_get_path(WEB_PATH) . 'main/admin/user_information.php?user_id=' . $row['request_user'] . '">
+                ' . api_get_person_name($userInfo['firstname'], $userInfo['lastname']) . '</a>';
                 $ticket['usuario'] = $userInfo;
                 $ticket['ticket'] = $row;
             }
@@ -1021,14 +1019,16 @@ class TicketManager
     }
 
     /**
-     * @param $ticket_id
-     * @param $user_id
+     * @param int $ticket_id
+     * @param int $user_id
      * @return bool
      */
     public static function update_message_status($ticket_id, $user_id)
     {
+        $ticket_id = intval($ticket_id);
+        $user_id = intval($user_id);
         $table_support_messages = Database::get_main_table(
-                        TABLE_TICKET_MESSAGE
+            TABLE_TICKET_MESSAGE
         );
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
@@ -1068,9 +1068,14 @@ class TicketManager
     ) {
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
 
+        $ticket_id = intval($ticket_id);
+        $status_id = intval($status_id);
+        $user_id = intval($user_id);
+
         $now = api_get_utc_datetime();
-        $sql = "UPDATE " . $table_support_tickets . "
-                SET status_id = '$status_id', sys_lastedit_user_id ='$user_id',
+        $sql = "UPDATE " . $table_support_tickets . " SET
+                status_id = '$status_id',
+                sys_lastedit_user_id ='$user_id',
                 sys_lastedit_datetime ='" . $now . "'
                 WHERE ticket_id ='$ticket_id'";
         Database::query($sql);
@@ -1088,7 +1093,7 @@ class TicketManager
     {
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $table_support_messages = Database::get_main_table(
-                        TABLE_TICKET_MESSAGE
+            TABLE_TICKET_MESSAGE
         );
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
         $table_main_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
@@ -1115,16 +1120,21 @@ class TicketManager
     }
 
     /**
-     * @param $ticket_id
-     * @param $user_id
+     * @param int $ticket_id
+     * @param int $user_id
      */
     public static function send_alert($ticket_id, $user_id)
     {
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
-        $sql = "UPDATE $table_support_tickets
-                SET priority_id = 'HGH', sys_lastedit_user_id ='$user_id',
-                sys_lastedit_datetime ='$now'
+
+        $ticket_id = intval($ticket_id);
+        $user_id = intval($user_id);
+
+        $sql = "UPDATE $table_support_tickets SET
+                  priority_id = 'HGH',
+                  sys_lastedit_user_id ='$user_id',
+                  sys_lastedit_datetime ='$now'
                 WHERE ticket_id = '$ticket_id'";
         Database::query($sql);
     }
@@ -1135,11 +1145,16 @@ class TicketManager
      */
     public static function close_ticket($ticket_id, $user_id)
     {
+        $ticket_id = intval($ticket_id);
+        $user_id = intval($user_id);
+
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
-        $sql = "UPDATE $table_support_tickets
-                SET status_id = 'CLS', sys_lastedit_user_id ='$user_id',
-                sys_lastedit_datetime ='" . $now . "', end_date ='$now'
+        $sql = "UPDATE $table_support_tickets SET
+                    status_id = 'CLS',
+                    sys_lastedit_user_id ='$user_id',
+                    sys_lastedit_datetime ='" . $now . "',
+                    end_date ='$now'
                 WHERE ticket_id ='$ticket_id'";
         Database::query($sql);
     }
@@ -1152,10 +1167,12 @@ class TicketManager
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
         $now = api_get_utc_datetime();
         $userId = api_get_user_id();
-        $sql = "UPDATE $table_support_tickets
-                SET status_id = 'CLS', sys_lastedit_user_id ='$userId',
-                sys_lastedit_datetime ='$now', end_date ='$now'
-                WHERE DATEDIFF('$now',sys_lastedit_datetime) > 7
+        $sql = "UPDATE $table_support_tickets  SET
+                    status_id = 'CLS',
+                    sys_lastedit_user_id ='$userId',
+                    sys_lastedit_datetime ='$now',
+                    end_date ='$now'
+                WHERE DATEDIFF('$now', sys_lastedit_datetime) > 7
                 AND status_id != 'CLS' AND status_id != 'NAT'
                 AND status_id != 'REE'";
         Database::query($sql);
@@ -1168,6 +1185,8 @@ class TicketManager
     public static function get_assign_log($ticket_id)
     {
         $table_support_assigned_log = Database::get_main_table(TABLE_TICKET_ASSIGNED_LOG);
+        $ticket_id = intval($ticket_id);
+
         $sql = "SELECT log.* FROM $table_support_assigned_log log
                 WHERE log.ticket_id = '$ticket_id'
                 ORDER BY log.assigned_date";
@@ -1182,11 +1201,9 @@ class TicketManager
             }
             $insertuser = api_get_user_info($row['sys_insert_user_id']);
             $row['assigned_date'] = api_convert_and_format_date(
-                    api_get_local_time($row['assigned_date']), '%d/%m/%y-%H:%M:%S', _api_get_timezone()
+                api_get_local_time($row['assigned_date']), '%d/%m/%y-%H:%M:%S', _api_get_timezone()
             );
-            $row['assignuser'] = ($row['user_id'] != 0) ? ('<a href="' . $webpath . 'main/admin/user_information.php?user_id=' . $row['user_id'] . '"  target="_blank">' . $assignuser['username'] . '</a>') : get_lang(
-                            'Unassign'
-            );
+            $row['assignuser'] = ($row['user_id'] != 0) ? ('<a href="' . $webpath . 'main/admin/user_information.php?user_id=' . $row['user_id'] . '"  target="_blank">' . $assignuser['username'] . '</a>') : get_lang('Unassign');
             $row['insertuser'] = '<a href="' . $webpath . 'main/admin/user_information.php?user_id=' . $row['sys_insert_user_id'] . '"  target="_blank">' . $insertuser['username'] . '</a>';
             $history[] = $row;
         }
@@ -1208,6 +1225,8 @@ class TicketManager
         $direction,
         $user_id = null
     ) {
+        $from = intval($from);
+        $number_of_items = intval($number_of_items);
         $table_support_category = Database::get_main_table(
             TABLE_TICKET_CATEGORY
         );
@@ -1220,6 +1239,7 @@ class TicketManager
             TABLE_TICKET_MESSAGE
         );
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
+
         if (is_null($direction)) {
             $direction = "DESC";
         }
@@ -1237,10 +1257,11 @@ class TicketManager
                 $table_support_priority priority,
                 $table_support_status status ,
                 $table_main_user user
-                WHERE cat.category_id = ticket.category_id
-                AND ticket.priority_id = priority.priority_id
-                AND ticket.status_id = status.status_id
-                AND user.user_id = ticket.request_user ";
+                WHERE
+                    cat.category_id = ticket.category_id
+                    AND ticket.priority_id = priority.priority_id
+                    AND ticket.status_id = status.status_id
+                    AND user.user_id = ticket.request_user ";
         //Search simple
         if (isset($_GET['submit_simple'])) {
             if ($_GET['keyword'] != '') {
@@ -1359,7 +1380,6 @@ class TicketManager
                 }
             }
         }
-
 
         //$sql .= " ORDER BY col$column $direction";
         $sql .= " LIMIT $from,$number_of_items";

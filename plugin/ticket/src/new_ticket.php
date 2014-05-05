@@ -193,8 +193,6 @@ function show_form_send_ticket()
     $select_types .= '</div></div>';
     echo $select_types;
 
-    // Course
-    $courses_list = CourseManager::get_courses_list_by_user_id($user_id, false, true);
     $select_course = '<div id="user_request" >
 	 </div>';
     echo $select_course;
@@ -341,7 +339,7 @@ function save_ticket()
     $category_id = $_POST['category_id'];
     $content = $_POST['content'];
     if ($_POST['phone'] != "") {
-        $content .= '<p style="color:red">&nbsp;' . get_lang('Phone') . ': ' . $_POST['phone'] . '</p>';
+        $content .= '<p style="color:red">&nbsp;' . get_lang('Phone') . ': ' . Security::remove_XSS($_POST['phone']). '</p>';
     }
     $course_id = $_POST['course_id'];
     $project_id = $_POST['project_id'];
@@ -356,11 +354,22 @@ function save_ticket()
     $file_attachments = $_FILES;
     $responsible = (api_is_platform_admin() ? api_get_user_id() : 0);
     if (TicketManager::insert_new_ticket(
-            $category_id, $course_id, $project_id,
-            $other_area, $email, $subject, $content,
-            $personal_email, $file_attachments,
-            $source, $priority, $status, $user_id,
-            $responsible)) {
+        $category_id,
+        $course_id,
+        $project_id,
+        $other_area,
+        $email,
+        $subject,
+        $content,
+        $personal_email,
+        $file_attachments,
+        $source,
+        $priority,
+        $status,
+        $user_id,
+        $responsible
+    )
+    ) {
         header('location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php?message=success');
         exit;
     } else {

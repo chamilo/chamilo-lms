@@ -1,6 +1,6 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * This script is the Tickets plugin main entry point
  * @package chamilo.plugin.ticket
@@ -10,8 +10,8 @@
  */
 $language_file = array('messages', 'userInfo', 'admin');
 $cidReset = true;
-
-$course_plugin = 'ticket'; //needed in order to load the plugin lang variables
+//needed in order to load the plugin lang variables
+$course_plugin = 'ticket';
 require_once '../config.php';
 
 $plugin = TicketPlugin::create();
@@ -205,9 +205,9 @@ $isAdmin = api_is_platform_admin();
 
 Display::display_header($plugin->get_lang('MyTickets'));
 if ($isAdmin) {
-    $get_parameter = '&keyword=' . $_GET['keyword'] . '&keyword_status=' . $_GET['keyword_status'] . '&keyword_category=' . $_GET['keyword_category'] . '&keyword_request_user=' . $_GET['keyword_request_user'];
-    $get_parameter .= '&keyword_admin=' . $_GET['keyword_admin'] . '&keyword_start_date=' . $_GET['keyword_start_date'] . '&keyword_unread=' . $_GET['keyword_unread'];
-    $get_parameter2 = '&Tickets_per_page=' . $_GET['Tickets_per_page'] . '&Tickets_column=' . $_GET['Tickets_column'];
+    $get_parameter = '&keyword=' . Security::remove_XSS($_GET['keyword']) . '&keyword_status=' . Security::remove_XSS($_GET['keyword_status']) . '&keyword_category=' .Security::remove_XSS($_GET['keyword_category']). '&keyword_request_user=' . Security::remove_XSS($_GET['keyword_request_user']);
+    $get_parameter .= '&keyword_admin=' . Security::remove_XSS($_GET['keyword_admin']) . '&keyword_start_date=' . Security::remove_XSS($_GET['keyword_start_date']) . '&keyword_unread=' . Security::remove_XSS($_GET['keyword_unread']);
+    $get_parameter2 = '&Tickets_per_page=' . Security::remove_XSS($_GET['Tickets_per_page']) . '&Tickets_column=' . Security::remove_XSS($_GET['Tickets_column']);
     if (isset($_GET['submit_advanced'])) {
         $get_parameter .= "&submit_advanced=";
     }

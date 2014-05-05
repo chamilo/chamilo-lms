@@ -252,7 +252,7 @@ function save_ticket()
     $category_id = $_POST['category_id'];
     $content = $_POST['content'];
     if ($_POST['phone'] != "")
-        $content.= '<p style="color:red">&nbsp;' . get_lang('Phone') . ': ' . $_POST['phone'] . '</p>';
+        $content.= '<p style="color:red">&nbsp;' . get_lang('Phone') . ': ' . Security::remove_XSS($_POST['phone']). '</p>';
     $course_id = $_POST['course_id'];
     $project_id = $_POST['project_id'];
     $subject = $_POST['subject'];
@@ -260,7 +260,19 @@ function save_ticket()
     $email = $_POST['email'];
     $personal_email = $_POST['personal_email'];
     $file_attachments = $_FILES;
-    if (TicketManager::insert_new_ticket($category_id, $course_id, $project_id, $other_area, $email, $subject, $content, $personal_email, $file_attachments)) {
+
+    if (TicketManager::insert_new_ticket(
+        $category_id,
+        $course_id,
+        $project_id,
+        $other_area,
+        $email,
+        $subject,
+        $content,
+        $personal_email,
+        $file_attachments
+    )
+    ) {
         header('location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php?message=success');
         exit;
     } else {

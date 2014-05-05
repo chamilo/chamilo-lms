@@ -67,7 +67,7 @@ div.ticket-form {
     width: 70%;
     float: center;
     margin-left: 15%;
-	
+
 }
 
 </style>';
@@ -120,7 +120,7 @@ function show_form()
 	<div class="label2"  >' . get_lang('Tool') .':</div>
 	<div class="formw2">';
     $select_tool .= '<select style="width: 95%; " name = "tool" id="tool" >';
-    
+
     foreach ($tools as $tool) {
         $select_tool .= "<option value = '" . $tool['id'] . "' selected >" . $tool['name'] . "</option>";
     }
@@ -139,7 +139,7 @@ function show_form()
     echo '<div class="row">
 		<div class="label2">
 		</div>
-		<div class="formw2">	
+		<div class="formw2">
 			<button class="save" name="report" type="submit" id="btnsubmit" disabled="disabled">' . get_lang('CompleteReport') .'</button>
 		</div>
 	</div>';
@@ -159,12 +159,12 @@ function get_number_of_users()
     }
     if (isset($_GET['keyword'])) {
         $keyword = Database::escape_string(trim($_GET['keyword']));
-        $sql .= " WHERE (u.firstname LIKE '%$keyword%' OR 
-                  u.lastname LIKE '%$keyword%'  OR 
-                  concat(u.firstname,' ',u.lastname) LIKE '%$keyword%' OR 
-                  concat(u.lastname,' ',u.firstname) LIKE '%$keyword%' OR 
-                  u.username LIKE '%$keyword%' OR 
-                  u.email LIKE '%$keyword %'  OR 
+        $sql .= " WHERE (u.firstname LIKE '%$keyword%' OR
+                  u.lastname LIKE '%$keyword%'  OR
+                  concat(u.firstname,' ',u.lastname) LIKE '%$keyword%' OR
+                  concat(u.lastname,' ',u.firstname) LIKE '%$keyword%' OR
+                  u.username LIKE '%$keyword%' OR
+                  u.email LIKE '%$keyword %'  OR
                   u.official_code LIKE '%$keyword%') ";
     }
     $res = Database::query($sql);
@@ -183,8 +183,7 @@ function get_number_of_users()
 function get_user_data($from, $number_of_items, $column, $direction)
 {
     $user_table = Database :: get_main_table(TABLE_MAIN_USER);
-    $admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
-    
+
     if (api_is_western_name_order()) {
         $col34 = "u.firstname AS col3,
                   u.lastname AS col4,";
@@ -192,27 +191,27 @@ function get_user_data($from, $number_of_items, $column, $direction)
         $col34 = "u.lastname AS col3,
                   u.firstname AS col4,";
     }
-    
+
     $sql = "SELECT
-                 u.user_id AS col0, 
-                 u.official_code AS col2, 
-		 $col34 
-                 u.username AS col5, 
-                 u.email AS col6, 
-                 u.status AS col7, 
-                 u.active AS col8, 
-                 u.user_id AS col9, 
-              u.expiration_date AS exp 
+                 u.user_id AS col0,
+                 u.official_code AS col2,
+		 $col34
+                 u.username AS col5,
+                 u.email AS col6,
+                 u.status AS col7,
+                 u.active AS col8,
+                 u.user_id AS col9,
+              u.expiration_date AS exp
            FROM $user_table u ";
 
     if (isset($_GET['keyword'])) {
         $keyword = Database::escape_string(trim($_GET['keyword']));
         $sql .= " WHERE (u.firstname LIKE '%$keyword%' OR
-                  u.lastname LIKE '%$keyword%' OR 
-                  concat(u.firstname,' ',u.lastname) LIKE '%$keyword%' OR 
-                  concat(u.lastname,' ',u.firstname) LIKE '%$keyword%' OR 
-                  u.username LIKE '%$keyword%'  OR 
-                  u.official_code LIKE '%$keyword%' 
+                  u.lastname LIKE '%$keyword%' OR
+                  concat(u.firstname,' ',u.lastname) LIKE '%$keyword%' OR
+                  concat(u.lastname,' ',u.firstname) LIKE '%$keyword%' OR
+                  u.username LIKE '%$keyword%'  OR
+                  u.official_code LIKE '%$keyword%'
                   OR u.email LIKE '%$keyword%' )";
     }
     if (!in_array($direction, array('ASC', 'DESC'))) {
@@ -280,9 +279,9 @@ if (isset($_POST['report'])) {
     $tool = $_POST['tool'];
     $course_info = api_get_course_info_by_id($course_id);
     $user_id = $_POST['user_id_request'];
-    $sql = "SELECT  
-                u.username , CONCAT(u.lastname, ' ', u.firstname) AS fullname, 
-                DATE_SUB(access.access_date,INTERVAL 5 HOUR) AS  access_date, 
+    $sql = "SELECT
+                u.username , CONCAT(u.lastname, ' ', u.firstname) AS fullname,
+                DATE_SUB(access.access_date,INTERVAL 5 HOUR) AS  access_date,
                 c.title AS course, access_tool AS tool
             FROM  " . Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS) . " access
             LEFT JOIN  " . Database::get_main_table(TABLE_MAIN_USER) . " u ON access.access_user_id = u.user_id
@@ -291,10 +290,10 @@ if (isset($_POST['report'])) {
     if ($tool != '') {
         $sql.="AND access.access_tool = '$tool' ";
     }
-    
+
     $start_date = $_POST['keyword_start_date_start'];
     $end_date = $_POST['keyword_start_date_end'];
-    
+
     if ($start_date != '' || $end_date != '') {
         $sql .= " HAVING ";
         if ($start_date != '')

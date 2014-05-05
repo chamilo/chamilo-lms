@@ -161,11 +161,11 @@ function js_str($s)
  */
 function js_array($array, $name, $key)
 {
-    $temp = array();
     $return = "new Array(); ";
     foreach ($array as $value) {
         $return .= $name . "['" . $value['category_id'] . "'] ='" . $value[$key] . "'; ";
     }
+
     return $return;
 }
 
@@ -362,6 +362,7 @@ function save_ticket()
             $source, $priority, $status, $user_id,
             $responsible)) {
         header('location:' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/src/myticket.php?message=success');
+        exit;
     } else {
         Display::display_header(get_lang('ComposeMessage'));
         Display::display_error_message($plugin->get_lang('ErrorRegisterMessage'));
@@ -406,7 +407,6 @@ function get_number_of_users()
 function get_user_data($from, $number_of_items, $column, $direction)
 {
     $user_table = Database :: get_main_table(TABLE_MAIN_USER);
-    $admin_table = Database :: get_main_table(TABLE_MAIN_ADMIN);
 
     if (api_is_western_name_order()) {
         $col34 = "u.firstname AS col3,
@@ -451,7 +451,6 @@ function get_user_data($from, $number_of_items, $column, $direction)
     $res = Database::query($sql);
 
     $users = array();
-    $t = time();
     while ($user = Database::fetch_row($res)) {
         $user_id = $user[0];
         $image_path = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);

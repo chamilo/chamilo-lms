@@ -419,7 +419,7 @@ class SocialManager extends UserManager
                         break;
                     }
                     $res .= '<h3><a href="'.$item['link'].'">'.$item['title'].'</a></h3>';
-                    $res .= '<div class="social-rss-item-date">'.api_get_datetime($item['date_timestamp']).'</div>';
+                    $res .= '<div class="social-rss-item-date">'.api_get_local_time($item['date_timestamp']).'</div>';
                     $res .= '<div class="social-rss-item-content">'.$item['description'].'</div><br />';
                     $i++;
                 }

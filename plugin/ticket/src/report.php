@@ -272,13 +272,13 @@ if (isset($_GET['keyword'])) {
     $table->set_header(6, get_lang('Action'));
     $table->display();
 }
-//if(isset($_GET['user_request']))
 
 if (isset($_POST['report'])) {
-    $course_id = $_POST['course_id'];
-    $tool = $_POST['tool'];
     $course_info = api_get_course_info_by_id($course_id);
-    $user_id = $_POST['user_id_request'];
+    $course_id = Database::escape_string($_POST['course_id']);
+    $tool = Database::escape_string($_POST['tool']);
+    $user_id = intval($_POST['user_id_request']);
+
     $sql = "SELECT
                 u.username , CONCAT(u.lastname, ' ', u.firstname) AS fullname,
                 DATE_SUB(access.access_date,INTERVAL 5 HOUR) AS  access_date,
@@ -291,8 +291,8 @@ if (isset($_POST['report'])) {
         $sql.="AND access.access_tool = '$tool' ";
     }
 
-    $start_date = $_POST['keyword_start_date_start'];
-    $end_date = $_POST['keyword_start_date_end'];
+    $start_date = Database::escape_string($_POST['keyword_start_date_start']);
+    $end_date = Database::escape_string($_POST['keyword_start_date_end']);
 
     if ($start_date != '' || $end_date != '') {
         $sql .= " HAVING ";

@@ -484,6 +484,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     if (!empty($_course) && !isset($_GET['hide_course_breadcrumb'])) {
 
         $navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');
+        $_course['name'] = api_htmlentities($_course['name']);
         $course_title = cut($_course['name'], MAX_LENGTH_BREADCRUMB);
 
         switch (api_get_setting('breadcrumbs_course_homepage')) {

@@ -617,3 +617,6 @@ if (empty($default_quota)) {
     $default_quota = 100000000;
 }
 define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
+
+// Sets the ascii_math plugin see #7134
+$_SESSION['ascii_math_loaded'] = false;

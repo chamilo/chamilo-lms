@@ -979,6 +979,7 @@ $QualifyInGradebook = "Valuta nel Registro";
 $SessionSpecificResource = "Risorsa specifica della sessione";
 $EditionNotAvailableFromSession = "Non è possibile modificare questa risorsa nel corso di una sessione: puoi farlo nel corso di origine";
 $HandingOverOfTaskX = "Compito realizzato al %s";
+$MyFiles = "I miei documenti";
 $ProtectedDocument = "Documento protetto";
 $ConnectionsLastMonth = "Accessi ultimo mese";
 $TotalStudents = "Totale Corsisti";

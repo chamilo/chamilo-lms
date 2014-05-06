@@ -401,7 +401,8 @@ class Plugin
         }
 
         $plugin_name = Database::escape_string($plugin_name);
-        $sql = "DELETE FROM $t_tool WHERE c_id = $courseId AND name = '$plugin_name'";
+        $sql = "DELETE FROM $t_tool
+                WHERE c_id = $courseId AND name = '$plugin_name'";
         Database::query($sql);
     }
 
@@ -462,28 +463,31 @@ class Plugin
      * Method to be extended when changing the setting in the course
      * configuration should trigger the use of a callback method
      * @param array $values sent back from the course configuration script
+     *
      * @return void
      */
     public function course_settings_updated($values = array())
     {
 
     }
+
    /**
     * Add a tab to platform
-    * @param strings $tabName
-    * @param string $url
+    * @param string   $tabName
+    * @param string   $url
+    *
     * @return boolean
     */
     public function addTab($tabName, $url)
     {
-        $sql = "SELECT *
-                FROM settings_current
-                WHERE variable = 'show_tabs'
-                AND subkey like 'custom_tab_%'";
+        $sql = "SELECT * FROM settings_current
+                WHERE
+                    variable = 'show_tabs' AND
+                    subkey like 'custom_tab_%'";
         $result = Database::query($sql);
-        
+
         $customTabsNum = Database::num_rows($result);
-        
+
         $tabNum = $customTabsNum + 1;
 
         //Avoid Tab Name Spaces
@@ -525,7 +529,7 @@ class Plugin
      */
     public function deleteTab($key)
     {
-        $sql = "SELECT * 
+        $sql = "SELECT *
                 FROM settings_current
                 WHERE variable = 'show_tabs'
                 AND subkey <> '$key'
@@ -533,7 +537,7 @@ class Plugin
                 ";
         $resp = $result = Database::query($sql);
         $customTabsNum = Database::num_rows($result);
-     
+
         if (!empty($key)) {
             $whereCondition = array(
                 'variable = ? AND subkey = ?' => array('show_tabs', $key)
@@ -541,8 +545,9 @@ class Plugin
             $resp = Database::delete('settings_current', $whereCondition);
 
             //if there is more than one tab
-            //reenumerate them
+            //re enumerate them
             if (!empty($customTabsNum) && $customTabsNum > 0) {
+                $tabs = Database::store_result($result, 'ASSOC');
                 $i = 1;
                 foreach ($tabs as $row) {
                     $attributes = array(

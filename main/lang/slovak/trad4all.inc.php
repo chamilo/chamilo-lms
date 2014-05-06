@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $BeforeX = "Pred %s";
 $AfterX = "Po %s";
+$ExportSettingsAsXLS = "Exportovať nastavenia ako XLS";
 $DeleteAllItems = "Zmazať všetky položky";
 $DeleteThisItem = "Zmazať túto položku";
 $RecordYourVoice = "Nahrať svoj ​​hlas";
@@ -1175,6 +1176,7 @@ $QualifyInGradebook = "Stupeň v nástroji hodnotenia";
 $SessionSpecificResource = "Stretnutie-špecifické zdroje";
 $EditionNotAvailableFromSession = "Vydanie nie je k dispozícii zo stretnutia, prosím upravte zo základného kurzu.";
 $HandingOverOfTaskX = "Odovzdanie úlohy %s";
+$MyFiles = "Moje súbory";
 $ProtectedDocument = "Chránený dokument";
 $ConnectionsLastMonth = "Pripojenia posledný mesiac";
 $TotalStudents = "Študentov celkom";

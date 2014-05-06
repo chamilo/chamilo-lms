@@ -398,5 +398,4 @@ $AssessmentQuestions = "¿ Cómo van a ser evaluados los estudiantes ? ¿ Cuále
 $AssessmentInformation = "Ejemplos de las preguntas de examen. Criterios de evaluación. Pistas y trucos.";
 $UploadADocument = "Subir un documento";
 $LowerCaseUser = "usuario";
-$ChooseEvaluation = "Seleccione la Evaluación";
 ?>

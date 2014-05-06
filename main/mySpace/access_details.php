@@ -84,7 +84,7 @@ function loadGraph() {
                 // Display confirmation message to the user
                 $('#messages').html(db.result).stop().css('opacity', 1).fadeIn(30);
                 $('#cev_cont_stats').html(db.stats);
-                $( '#graph' ).html(db.graph_result);
+                $('#graph' ).html(db.graph_result);
             } else {
                 $('#messages').text('".get_lang('NoDataAvailable')."');
                 $('#messages').addClass('warning-message');
@@ -129,7 +129,6 @@ echo Display::page_subheader(
 $form->setDefaults(array('from' => $from, 'to' => $to));
 $form->display();
 ?>
-<div id="cev_results_header" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
 <div id="cev_results" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
     <div class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
         <?php echo get_lang('Statistics'); ?>

@@ -49,7 +49,16 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
 	}
 
 	if (preg_match('/.zip$/i', $_FILES['userFile']['name']) &&
-        handle_uploaded_document($_course, $_FILES['userFile'], $baseWorkDir, $uploadPath, $_user['user_id'], 0, null, 1)
+        handle_uploaded_document(
+            $_course,
+            $_FILES['userFile'],
+            $baseWorkDir,
+            $uploadPath,
+            $_user['user_id'],
+            0,
+            null,
+            1
+        )
     ) {
 		return true;
 	}
@@ -57,7 +66,7 @@ function get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)
 }
 
 /**
- * main function to import an exercise,
+ * Imports an exercise,
  * @param array $file
  * @return an array as a backlog of what was really imported, and error or debug messages to display
  */
@@ -91,6 +100,7 @@ function import_exercise($file)
 	//$module_info = array (); //array to store the info we need
 
 	// if file is not a .zip, then we cancel all
+
 	if (!preg_match('/.zip$/i', $file)) {
 		Display :: display_error_message(get_lang('You must upload a zip file'));
 		return false;
@@ -110,8 +120,10 @@ function import_exercise($file)
 	$operation = false;
     $result = false;
     $filePath = null;
+
 	// parse every subdirectory to search xml question files
 	while (false !== ($file = readdir($exerciseHandle))) {
+
 		if (is_dir($baseWorkDir . '/' . $file) && $file != "." && $file != "..") {
 			// Find each manifest for each question repository found
 			$questionHandle = opendir($baseWorkDir . '/' . $file);
@@ -123,6 +135,7 @@ function import_exercise($file)
 				}
 			}
 		} elseif (preg_match('/.xml$/i', $file)) {
+
             // Else ignore file
 			$result = parse_file($baseWorkDir, '', $file);
             $filePath = $baseWorkDir.'/'.$file;

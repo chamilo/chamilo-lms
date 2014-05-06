@@ -193,7 +193,6 @@ $YouNeedToHaveFriendsInYourSocialNetwork = "شما باید در شبکه اجت
 $SeeAllMyGroups = "نمایش تمامی گروه های من";
 $YouAlreadyInviteAllYourContacts = "شما قبلا همه مخاطبین خود را دعوت کردید";
 $YouShouldCreateAGroup = "شما باید یک گروه بسازید";
-$MyFiles = "فایل های من";
 $MySocialGroups = "گروه های اجتماعی من";
 $SocialGroups = "گروه های اجتماعی";
 $CreateASocialGroup = "ساخت یک گروه اجتماعی";

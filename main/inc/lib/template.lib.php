@@ -640,7 +640,7 @@ class Template
         $this->set_js_files();
         //$this->set_js_files_post();
 
-        $browser = api_browser_support('check_browser'); 
+        $browser = api_browser_support('check_browser');
         if ($browser[0] == 'Internet Explorer' && $browser[1] >= '11') {
             $browser_head = '<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9" />';
             $this->assign('browser_specific_head', $browser_head);

@@ -971,6 +971,7 @@ $QualifyInGradebook = "In Bewertungsmappe qualifizieren (bewerten)";
 $SessionSpecificResource = "Session-Kurs spezifisches Element";
 $EditionNotAvailableFromSession = "Ausgabe nicht in Session-Kurs verfügbar, bitte in Basis-Kurs bearbeiten.";
 $HandingOverOfTaskX = "Übergabe von Aufgabe %s";
+$MyFiles = "Meine Dateien";
 $ProtectedDocument = "Geschütztes Dokument";
 $ConnectionsLastMonth = "Verbindungen letzter Monat";
 $TotalStudents = "Teilnehmer gesamt";

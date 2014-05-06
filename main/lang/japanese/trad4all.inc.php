@@ -433,6 +433,7 @@ $DateUnLock = "日付をロック解除";
 $DateLock = "日付をロック";
 $GoToStudentDetails = "学生の詳細へ移動";
 $RepeatDate = "日付を繰り返す";
+$MyFiles = "ファイル";
 $ConnectionsLastMonth = "過去 1 か月の接続";
 $TotalStudents = "学生の合計";
 $FilteringWithScoreX = "得点でフィルター: %s";

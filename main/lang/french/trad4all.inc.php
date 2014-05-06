@@ -1181,6 +1181,7 @@ $QualifyInGradebook = "Évaluer dans le cahier de notes";
 $SessionSpecificResource = "Ressource de session";
 $EditionNotAvailableFromSession = "Cette ressource ne peut pas être éditée dans le contexte d'une session";
 $HandingOverOfTaskX = "Remise du travail %s";
+$MyFiles = "Mes fichiers";
 $ProtectedDocument = "Document protégé";
 $ConnectionsLastMonth = "Connexions le mois dernier";
 $TotalStudents = "Apprenants totaux";

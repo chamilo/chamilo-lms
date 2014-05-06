@@ -1085,6 +1085,7 @@ $QualifyInGradebook = "Ocena w narzędziach oceny";
 $SessionSpecificResource = "Sesja - określony zasób";
 $EditionNotAvailableFromSession = "Edycja nie jest dostępna w sesji, możesz edytować na poziomie podstawowym kursu.";
 $HandingOverOfTaskX = "Przekazanie zadania %s";
+$MyFiles = "Moje pliki";
 $ProtectedDocument = "Zabezpieczony dokument";
 $ConnectionsLastMonth = "Połączenia z ostatniego miesiąca";
 $TotalStudents = "Liczba studentów";

@@ -193,7 +193,6 @@ $YouNeedToHaveFriendsInYourSocialNetwork = "Jums ir jābūt kādam draugam jūsu
 $SeeAllMyGroups = "Skatīt visas manas grupas";
 $YouAlreadyInviteAllYourContacts = "Visi Jūsu kontakti jau ir uzaicināti";
 $YouShouldCreateAGroup = "Jums vajadzētu izveidot grupu";
-$MyFiles = "Mani faili";
 $MySocialGroups = "Manas sociālās grupas";
 $SocialGroups = "Sociālās grupas";
 $CreateASocialGroup = "Izveidot sociālo grupu";

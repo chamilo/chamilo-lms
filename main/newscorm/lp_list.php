@@ -110,11 +110,11 @@ if (!empty($flat_list)) {
     echo '<tr>';
 
     if ($is_allowed_to_edit) {
-        echo '<th width="40%">'.get_lang('Title').'</th>';
+        echo '<th width="35%">'.get_lang('Title').'</th>';
         echo '<th>'.get_lang('PublicationDate').'</th>';
         echo '<th>'.get_lang('ExpirationDate').'</th>';
         echo '<th>'.get_lang('Progress')."</th>";
-        echo '<th width="260px">'.get_lang('AuthoringOptions')."</th>";
+        echo '<th width="300px">'.get_lang('AuthoringOptions')."</th>";
     } else {
         echo '<th width="50%">'.get_lang('Title').'</th>';
         echo '<th>'.get_lang('Progress')."</th>";
@@ -199,12 +199,14 @@ if (!empty($flat_list)) {
         }
 
         $my_title = $name;
+        $icon_learnpath = Display::return_icon('learnpath.png', get_lang('LPName'), '', ICON_SIZE_SMALL);
         if ($details['lp_visibility'] == 0) {
-            $my_title = Display::tag('font', $name, array('style' => 'color:grey'));
+            $my_title = Display::tag('font', $name, array('class' => 'invisible'));
+            $icon_learnpath = Display::return_icon('learnpath_na.png', get_lang('LPName'), '', ICON_SIZE_SMALL);
         }
 
         $dsp_line = '<tr align="center" class="'.$oddclass.'">'.
-            '<td align="left" valign="top">'.Display::return_icon('learnpath.png', get_lang('LPName'), '', ICON_SIZE_SMALL).'
+                    '<td align="left" valign="top">'.$icon_learnpath.'
                      <a href="'.$url_start_lp.'">'.$my_title.'</a>'.$session_img.$extra."</td>";
 
         $dsp_desc = '';
@@ -219,7 +221,7 @@ if (!empty($flat_list)) {
         $progress = learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id());
 
         if ($is_allowed_to_edit) {
-            $dsp_progress = '<td>'.$progress.'</td>';
+            $dsp_progress = '<td><center>'.$progress.'</center></td>';
         } else {
             $dsp_progress = '<td>'.learnpath::get_progress_bar('%', learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id())).'</td>';
         }
@@ -397,10 +399,9 @@ if (!empty($flat_list)) {
             if ($current_session == 0) {
                 if ($details['lp_display_order'] == 1 && $max != 1) {
                     $dsp_order .= '<a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">
-                         '.Display::return_icon('down.png', get_lang('MoveDown'), '', ICON_SIZE_SMALL).'</a>
-						<img src="../img/blanco.png" border="0" alt="" title="" />';
+                         '.Display::return_icon('down.png', get_lang('MoveDown'), '', ICON_SIZE_SMALL).'</a>';
                 } elseif ($current == $max - 1 && $max != 1) {
-                    $dsp_order .= '<img src="../img/blanco.png" border="0" alt="" title="" /><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_up&lp_id='.$id.'">
+                    $dsp_order .= '<a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_up&lp_id='.$id.'">
 					'.Display::return_icon('up.png', get_lang('MoveUp'), '', ICON_SIZE_SMALL).'</a>';
                 } elseif ($max == 1) {
                     $dsp_order = '';

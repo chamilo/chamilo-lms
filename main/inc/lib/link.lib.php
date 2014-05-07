@@ -51,8 +51,13 @@ class Link extends Model
         $linkUrl = Database::escape_string($linkUrl);
         $linkId = intval($linkId);
         $courseId = api_get_course_int_id();
-        $query = "UPDATE $tblLink SET url= '$linkUrl' WHERE id=$linkId AND c_id=$courseId";
-        $resLink = Database::query($query);
+        $session_id = api_get_session_id();
+        if ($linkUrl != '') {
+            $query = "UPDATE $tblLink SET url= '$linkUrl' WHERE id=$linkId AND c_id=$courseId AND session_id=$session_id";
+            $resLink = Database::query($query);
+        } else {
+            return false;
+        }
     }
 }
 

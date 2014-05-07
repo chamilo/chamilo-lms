@@ -13,7 +13,7 @@ body {
 }
 a {
     text-decoration: none;
-    color :#0B4C5F;
+    color :#666666;
 }
 a:visited {
     text-decoration: none;
@@ -812,7 +812,6 @@ footer a:link, footer a:visited {
 #social-content-online {
     background-color:#00AAE3;
 }
-
 .admin_section li {
     background-image:url(images/bullet.gif);
 }

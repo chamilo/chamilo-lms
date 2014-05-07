@@ -1368,18 +1368,19 @@ class UserManager
 
         $production_path = self::get_user_picture_path_by_id($user_id, 'web');
         $production_dir = $production_path['dir'];
-        $del_image = api_get_path(WEB_CODE_PATH).'img/delete.gif';
+        $del_image = api_get_path(WEB_CODE_PATH).'img/delete.png';
+        $add_image = api_get_path(WEB_CODE_PATH).'img/archive.png';
         $del_text = get_lang('Delete');
         $production_list = '';
         if (count($productions) > 0) {
-            $production_list = '<ul id="productions">';
+            $production_list = '<div class="files-production"> <ul id="productions">';
             foreach ($productions as $file) {
-                $production_list .= '<li><a href="'.$production_dir.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
+                $production_list .= '<li><img src="'.$add_image.'" /><a href="'.$production_dir.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
                 if ($showdelete) {
-                    $production_list .= '<input style="width:16px;" type="image" name="remove_production['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="javascript: return confirmation(\''.htmlentities($file).'\');" /></li>';
+                    $production_list .= '&nbsp;&nbsp;<input style="width:16px;" type="image" name="remove_production['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="javascript: return confirmation(\''.htmlentities($file).'\');" /></li>';
                 }
             }
-            $production_list .= '</ul>';
+            $production_list .= '</ul></div>';
         }
 
         return $production_list;

@@ -110,11 +110,11 @@ if (!empty($flat_list)) {
     echo '<tr>';
 
     if ($is_allowed_to_edit) {
-        echo '<th width="50%">'.get_lang('Title').'</th>';
+        echo '<th width="40%">'.get_lang('Title').'</th>';
         echo '<th>'.get_lang('PublicationDate').'</th>';
         echo '<th>'.get_lang('ExpirationDate').'</th>';
         echo '<th>'.get_lang('Progress')."</th>";
-        echo '<th width="240px">'.get_lang('AuthoringOptions')."</th>";
+        echo '<th width="260px">'.get_lang('AuthoringOptions')."</th>";
     } else {
         echo '<th width="50%">'.get_lang('Title').'</th>';
         echo '<th>'.get_lang('Progress')."</th>";

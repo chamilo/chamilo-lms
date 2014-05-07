@@ -3372,7 +3372,7 @@ class CourseManager
                         $course['status'] = STUDENT;
                     }
 
-                    $params['icon'] = Display::return_icon('blackboard.png', $course_info['title'], array(), ICON_SIZE_LARGE);
+                    $params['icon'] = Display::return_icon('blackboard.png', api_htmlentities($course_info['title']), array(), ICON_SIZE_LARGE);
 
                     $params['right_actions'] = '';
                     if (api_is_platform_admin()) {
@@ -3448,7 +3448,7 @@ class CourseManager
         while ($row = Database::fetch_array($result)) {
             // We simply display the title of the category.
             $params = array(
-               'icon' => Display::return_icon('folder_yellow.png', $row['title'], array(), ICON_SIZE_LARGE),
+               'icon' => Display::return_icon('folder_yellow.png', api_htmlentities($row['title']), array(), ICON_SIZE_LARGE),
                'title' => $row['title'],
                'class' => 'table_user_course_category'
             );
@@ -3542,7 +3542,7 @@ class CourseManager
             $show_notification = Display::show_notification($course_info);
 
             // New code displaying the user's status in respect to this course.
-            $status_icon = Display::return_icon('blackboard.png', $course_info['title'], array(), ICON_SIZE_LARGE);
+            $status_icon = Display::return_icon('blackboard.png', api_htmlentities($course_info['title']), array(), ICON_SIZE_LARGE);
 
             $params = array();
             $params['right_actions'] = '';
@@ -3741,7 +3741,7 @@ class CourseManager
         }
 
         $params = array();
-        $params['icon'] = Display::return_icon('blackboard_blue.png', $course_info['name'], array(), ICON_SIZE_LARGE);
+        $params['icon'] = Display::return_icon('blackboard_blue.png', api_htmlentities($course_info['name']), array(), ICON_SIZE_LARGE);
         $params['link'] = $session_url;
         $params['title'] = $session_title;
 

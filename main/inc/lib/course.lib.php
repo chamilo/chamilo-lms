@@ -4359,6 +4359,23 @@ class CourseManager
         $row = Database::fetch_row($res);
         return $row[0];
     }
+    
+    /**
+     * Get available courses count
+     * @param int Access URL ID (optional)
+     * @return int Number of courses
+     */
+    public static function countAvailableCourses($accessUrlId = null) {
+        $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tableCourseRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $sql = "SELECT count(id) FROM $tableCourse c";
+        if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
+            $sql .= ", $tableCourseRelAccessUrl u WHERE c.code = u.course_code AND u.access_url_id = $accessUrlId AND visibility != 0 AND visibility != 4";
+        }
+        $res = Database::query($sql);
+        $row = Database::fetch_row($res);
+        return $row[0];
+    }
 
     /**
      * Return a link to go to the course, validating the visibility of the

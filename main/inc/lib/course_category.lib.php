@@ -441,7 +441,8 @@ function browseCourseCategories()
     if (api_is_multiple_url_enabled()) {
         $url_access_id = api_get_current_access_url_id();
     }
-    $countCourses = CourseManager :: count_courses($url_access_id);
+    $countCourses = CourseManager :: countAvailableCourses($url_access_id);
+    
     $categories = array();
     $categories[0][0] = array(
         'id' => 0,
@@ -598,7 +599,8 @@ function browseCoursesInCategory($category_code, $random_value = null)
     } else {
         $category_code = Database::escape_string($category_code);
         if (empty($category_code) || $category_code == "ALL") {
-            $sql = "SELECT * FROM $tbl_course WHERE 1=1 $without_special_courses ORDER BY title ";
+            //$sql = "SELECT * FROM $tbl_course WHERE 1=1 $without_special_courses ORDER BY title ";
+            $sql = "SELECT * FROM $tbl_course ORDER BY title ";
         } else {
             if ($category_code == 'NONE') {
                 $category_code = '';
@@ -654,7 +656,7 @@ function browseCoursesInCategory($category_code, $random_value = null)
             'count_connections' => $count_connections_last_month
         );
     }
-    return $courses;
+    return $courses;      
 }
 
 /**

@@ -4323,6 +4323,7 @@ class UserManager
                     $form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
                     $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
                     $form->applyFilter('extra_'.$field_details[1], 'trim');
+                    $form->applyFilter('extra_'.$field_details[1], 'html_filter');
 
                     if (!$admin_permissions) {
                         if ($field_details[7] == 0)

@@ -850,7 +850,7 @@ button.login:hover {
 
 /*including "save" image*/
 button.save {
-    background-image:url(images/button_accept.png)
+    background-image:url(images/button_accept.png);
 }
 /*including "add" image*/
 .controls .btn.add {

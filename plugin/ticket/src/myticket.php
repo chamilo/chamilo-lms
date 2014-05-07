@@ -1,6 +1,6 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * This script is the Tickets plugin main entry point
  * @package chamilo.plugin.ticket
@@ -10,8 +10,8 @@
  */
 $language_file = array('messages', 'userInfo', 'admin');
 $cidReset = true;
-
-$course_plugin = 'ticket'; //needed in order to load the plugin lang variables
+//needed in order to load the plugin lang variables
+$course_plugin = 'ticket';
 require_once '../config.php';
 
 $plugin = TicketPlugin::create();
@@ -43,12 +43,12 @@ function clear_course_list (div_course) {
     $("div#"+div_course).html("&nbsp;");
     $("div#"+div_course).hide("");
 }
-		
+
 $(function() {
     $( "#keyword_start_date_start" ).datepicker({ dateFormat: ' . "'dd/mm/yy'" . ' });
     $( "#keyword_start_date_end" ).datepicker({ dateFormat: ' . "'dd/mm/yy'" . ' });
 });
-  	
+
 $(document).ready(function() {
         $("#advanced_search_form").css("display","none");
 });
@@ -97,7 +97,7 @@ function display_advanced_search_form () {
     border: 1px solid black;
     width: 350px;
     background-color: white;
-    z-index: 99; 
+    z-index: 99;
     padding: 3px;
     display: inline;
 }
@@ -130,7 +130,15 @@ function display_advanced_search_form () {
 $this_section = 'tickets';
 unset($_SESSION['this_section']);
 
-$table = new SortableTable('Tickets', array('TicketManager', 'get_total_tickets_by_user_id'), array('TicketManager', 'get_tickets_by_user_id'), 2, 20, 'DESC');
+$table = new SortableTable(
+    'Tickets',
+    array('TicketManager', 'get_total_tickets_by_user_id'),
+    array('TicketManager', 'get_tickets_by_user_id'),
+    2,
+    20,
+    'DESC'
+);
+
 if ($table->per_page == 0) {
     $table->per_page = 20;
 }
@@ -153,32 +161,32 @@ if (isset($_GET['action'])) {
             break;
         case 'export':
             $data = array(
-                        array(
-                            $plugin->get_lang('TicketNum'), 
-                            $plugin->get_lang('Date'), 
-                            $plugin->get_lang('DateLastEdition'), 
-                            $plugin->get_lang('Category'), 
-                            $plugin->get_lang('User'), 
-                            $plugin->get_lang('Program'), 
-                            $plugin->get_lang('Responsible'), 
-                            $plugin->get_lang('Status'), 
-                            $plugin->get_lang('Description')
-                        )
-                    );
+                array(
+                    $plugin->get_lang('TicketNum'),
+                    $plugin->get_lang('Date'),
+                    $plugin->get_lang('DateLastEdition'),
+                    $plugin->get_lang('Category'),
+                    $plugin->get_lang('User'),
+                    $plugin->get_lang('Program'),
+                    $plugin->get_lang('Responsible'),
+                    $plugin->get_lang('Status'),
+                    $plugin->get_lang('Description')
+                )
+            );
             $datos = $table->get_clean_html();
             foreach ($datos as $ticket) {
                 $ticket[0] = substr(strip_tags($ticket[0]), 0, 12);
                 $ticket_rem = array(
-                    utf8_decode(strip_tags($ticket[0])), 
-                    utf8_decode(api_html_entity_decode($ticket[1])), 
-                    utf8_decode(strip_tags($ticket[2])), 
-                    utf8_decode(strip_tags($ticket[3])), 
-                    utf8_decode(strip_tags($ticket[4])), 
-                    utf8_decode(strip_tags($ticket[5])), 
-                    utf8_decode(strip_tags($ticket[6])), 
-                    utf8_decode(strip_tags($ticket[7])), 
+                    utf8_decode(strip_tags($ticket[0])),
+                    utf8_decode(api_html_entity_decode($ticket[1])),
+                    utf8_decode(strip_tags($ticket[2])),
+                    utf8_decode(strip_tags($ticket[3])),
+                    utf8_decode(strip_tags($ticket[4])),
+                    utf8_decode(strip_tags($ticket[5])),
+                    utf8_decode(strip_tags($ticket[6])),
+                    utf8_decode(strip_tags($ticket[7])),
                     utf8_decode(strip_tags(str_replace('&nbsp;', ' ', $ticket[9])))
-                    );
+                );
                 $data[] = $ticket_rem;
             }
             Export::export_table_xls($data, $plugin->get_lang('Tickets'));
@@ -197,9 +205,9 @@ $isAdmin = api_is_platform_admin();
 
 Display::display_header($plugin->get_lang('MyTickets'));
 if ($isAdmin) {
-    $get_parameter = '&keyword=' . $_GET['keyword'] . '&keyword_status=' . $_GET['keyword_status'] . '&keyword_category=' . $_GET['keyword_category'] . '&keyword_request_user=' . $_GET['keyword_request_user'];
-    $get_parameter .= '&keyword_admin=' . $_GET['keyword_admin'] . '&keyword_start_date=' . $_GET['keyword_start_date'] . '&keyword_unread=' . $_GET['keyword_unread'];
-    $get_parameter2 = '&Tickets_per_page=' . $_GET['Tickets_per_page'] . '&Tickets_column=' . $_GET['Tickets_column'];
+    $get_parameter = '&keyword=' . Security::remove_XSS($_GET['keyword']) . '&keyword_status=' . Security::remove_XSS($_GET['keyword_status']) . '&keyword_category=' .Security::remove_XSS($_GET['keyword_category']). '&keyword_request_user=' . Security::remove_XSS($_GET['keyword_request_user']);
+    $get_parameter .= '&keyword_admin=' . Security::remove_XSS($_GET['keyword_admin']) . '&keyword_start_date=' . Security::remove_XSS($_GET['keyword_start_date']) . '&keyword_unread=' . Security::remove_XSS($_GET['keyword_unread']);
+    $get_parameter2 = '&Tickets_per_page=' . Security::remove_XSS($_GET['Tickets_per_page']) . '&Tickets_column=' . Security::remove_XSS($_GET['Tickets_column']);
     if (isset($_GET['submit_advanced'])) {
         $get_parameter .= "&submit_advanced=";
     }
@@ -251,7 +259,7 @@ if ($isAdmin) {
     $renderer->setElementTemplate('<span>{element}</span> ');
     $form->addElement('text', 'keyword', get_lang('keyword'), 'size="25"');
     $form->addElement('style_submit_button', 'submit_simple', get_lang('Search'), 'class="search"');
-    $form->addElement('static', 'search_advanced_link', null, 
+    $form->addElement('static', 'search_advanced_link', null,
             '<a href="javascript://" class = "advanced-parameters" onclick="display_advanced_search_form();">'
             . '<span id="img_plus_and_minus">&nbsp;'
             . Display::return_icon('div_show.gif', get_lang('Show')) . ' '
@@ -262,7 +270,7 @@ if ($isAdmin) {
         echo '<span class="fleft">' .
                 '<a href="' . api_get_path(WEB_PLUGIN_PATH) . 'ticket/src/new_ticket.php">' .
                     Display::return_icon('add.png', $plugin->get_lang('TckNew'), '', '32') . '</a>' .
-                '<a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '">' .    
+                '<a href="' . api_get_self() . '?action=export' . $get_parameter . $get_parameter2 . '">' .
                     Display::return_icon('export_excel.png', get_lang('Export'), '', '32') . '</a>' .
              '</span>';
     }
@@ -354,7 +362,7 @@ if ($isAdmin) {
         echo '<div class="actions" >';
         echo '<span style="float:right;">' .
                 '<a href="' . api_get_path(WEB_PLUGIN_PATH) . 'ticket/src/new_ticket.php">' .
-                    Display::return_icon('add.png', $plugin->get_lang('TckNew'), '', '32') . 
+                    Display::return_icon('add.png', $plugin->get_lang('TckNew'), '', '32') .
                 '</a>' .
               '</span>';
         echo '<span style="float:right;">' .

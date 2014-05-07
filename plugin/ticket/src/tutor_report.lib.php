@@ -19,12 +19,14 @@ function initializeReport($course_code)
     $table_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $table_post = Database::get_course_table(TABLE_FORUM_POST, $course_info['dbName']);
     $table_work = Database::get_course_table(TABLE_STUDENT_PUBLICATION, $course_info['dbName']);
+    $course_code = Database::escape_string($course_code);
     $res = Database::query("SELECT COUNT(*) as cant FROM $table_reporte_semanas WHERE course_code = '" . $course_code . "'");
     $sqlWeeks = "SELECT semanas FROM $table_semanas_curso WHERE course_code = '$course_code'";
     $resWeeks = Database::query($sqlWeeks);
     $weeks = Database::fetch_object($resWeeks);
     $obj = Database::fetch_object($res);
     $weeksCount = (!isset($_POST['weeksNumber'])) ? (($weeks->semanas == 0) ? 7 : $weeks->semanas) : $_POST['weeksNumber'];
+    $weeksCount = Database::escape_string($weeksCount);
     Database::query("REPLACE INTO $table_semanas_curso (course_code , semanas) VALUES ('$course_code','$weeksCount')");
     if (intval($obj->cant) != $weeksCount) {
 
@@ -51,6 +53,7 @@ function initializeReport($course_code)
         return false;
     } else {
         $page = (!isset($_GET['page'])) ? 1 : $_GET['page'];
+
         Database::query("UPDATE $table_students_report sr SET sr.work_ok = 1
 		WHERE CONCAT (sr.user_id,',',sr.week_report_id)
 		IN (SELECT DISTINCT CONCAT(w.user_id,',',rs.id)
@@ -73,21 +76,24 @@ function initializeReport($course_code)
 function showResults($courseInfo, $weeksCount, $page)
 {
     $course_code = $courseInfo['code'];
+    $page = intval($page);
+    $weeksCount = intval($weeksCount);
+
     $tableWeeklyReport = Database::get_main_table('rp_reporte_semanas');
     $tableStudentsReport = Database::get_main_table('rp_students_report');
     //$table_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-    $tableThread = Database::get_course_table(TABLE_FORUM_THREAD, $courseInfo['dbName']);
-    $tableWork = Database::get_course_table(TABLE_STUDENT_PUBLICATION, $courseInfo['dbName']);
+    $tableThread = Database::get_course_table(TABLE_FORUM_THREAD);
+    $tableWork = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
     $results = array();
     $tableExport = array();
     $sqlHeader = "SELECT rs.id as id,rs.week_id, w.title AS work_title,  t.thread_title ,'EVALUATION' as eval_title ,'QUIZ' as pc_title
-                        FROM $tableWeeklyReport rs
-                        LEFT JOIN $tableThread t ON t.thread_id =  rs.forum_id
-                        LEFT JOIN $tableWork w ON w.id = rs.work_id
-                        WHERE rs.course_code = '$course_code'
-                        ORDER BY rs.week_id";
+                    FROM $tableWeeklyReport rs
+                    LEFT JOIN $tableThread t ON t.thread_id =  rs.forum_id
+                    LEFT JOIN $tableWork w ON w.id = rs.work_id
+                    WHERE rs.course_code = '$course_code'
+                    ORDER BY rs.week_id";
     $resultHeader = Database::query($sqlHeader);
     $ids = array();
     $line = '<tr>

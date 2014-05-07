@@ -3002,7 +3002,7 @@ class learnpath
             // build the LP tree
             // The anchor atoc_ will let us center the TOC on the currently viewed item &^D
             if ($item['type'] != 'dokeos_module' && $item['type'] != 'dokeos_chapter') {
-                $html .= '<div class="'.$style_item .' scorm_item_level_'.$item['level'].' scorm_type_'.learnpath::format_scorm_type_item($item['type']).'" title="'.$item['description'].'" >';
+                $html .= '<div class="'.$style_item.' scorm_item_level_'.$item['level'].' scorm_type_'.learnpath::format_scorm_type_item($item['type']).'" title="'.$item['description'].'" >';
                 $html .= '<a name="atoc_'.$item['id'].'" />';
             } else {
                 $html .= '<div class="'.$style_item.' scorm_section_level_'.$item['level'].'" title="'.$item['description'].'" >';
@@ -3849,12 +3849,14 @@ class learnpath
      * @param	integer	Learnpath ID
      * @param	string	New visibility
      */
-    public function toggle_visibility($lp_id, $set_visibility = 1) {
-        //if ($this->debug > 0) { error_log('New LP - In learnpath::toggle_visibility()', 0); }
+    public function toggle_visibility($lp_id, $set_visibility = 1)
+    {
         $action = 'visible';
         if ($set_visibility != 1) {
             $action = 'invisible';
+            self::toggle_publish($lp_id, 'i');
         }
+
         return api_item_property_update(
             api_get_course_info(),
             TOOL_LEARNPATH,
@@ -3869,7 +3871,7 @@ class learnpath
      * on the course homepage
      * Can be used as abstract
      * @param	integer	$lp_id Learnpath id
-     * @param	string	$set_visibility New visibility (v/s - visible/invisible)
+     * @param	string	$set_visibility New visibility (v/i - visible/invisible)
      * @return bool
      */
     public static function toggle_publish($lp_id, $set_visibility = 'v')
@@ -9316,7 +9318,7 @@ EOD;
     	return $row_max->previous;
     }
 
-    function copy()
+    public function copy()
     {
         $main_path = api_get_path(SYS_CODE_PATH);
         require_once $main_path.'coursecopy/classes/CourseBuilder.class.php';

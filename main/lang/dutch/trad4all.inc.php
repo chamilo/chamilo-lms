@@ -847,6 +847,7 @@ $ToolTracking = "Statistieken";
 $ToolCourseSetting = "Cursus instellingen";
 $ToolCourseMaintenance = "Cursusback-up";
 $ToolCourseProgress = "Voortgang";
+$MyFiles = "Mijn bestanden";
 $ToolVideoconference = "Videoconferentie";
 $AddedToALP = "Toegevoegd aan leerpad";
 $YouHaveANewInvitationFromX = "Je hebt een nieuwe uitnodiging van %s";

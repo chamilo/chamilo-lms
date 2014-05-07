@@ -80,8 +80,9 @@ function handle_multiple_actions()
     }
 
     // STEP 3C: moving
+
     if (strstr($_POST['action'], 'move_')) {
-            // check move_received_n or move_sent_n command
+        // check move_received_n or move_sent_n command
         if (strstr($_POST['action'], 'received')) {
               $part = 'received';
               $to_cat_id = str_replace('move_received_', '', $_POST['action']);
@@ -90,9 +91,10 @@ function handle_multiple_actions()
               $to_cat_id = str_replace('move_sent_', '', $_POST['action']);
         }
 
-        foreach ($checked_file_ids as $key => $value) {
+        foreach ($checked_file_ids as $value) {
             store_move($value, $to_cat_id, $part);
         }
+
         return get_lang('FilesMoved');
     }
 

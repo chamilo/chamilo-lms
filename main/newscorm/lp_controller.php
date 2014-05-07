@@ -8,6 +8,7 @@
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 use \ChamiloSession as Session;
+
 $debug = 0;
 if ($debug > 0) error_log('New LP -+- Entered lp_controller.php -+- (action: '.$_REQUEST['action'].')', 0);
 
@@ -278,7 +279,12 @@ if (isset($_SESSION['lpobject'])) {
     $oLP = unserialize($_SESSION['lpobject']);
     if (isset($oLP) && is_object($oLP)) {
         if ($debug > 0) error_log('New LP - oLP is object', 0);
-        if ($myrefresh == 1 OR empty($oLP->cc) OR $oLP->cc != api_get_course_id() OR $oLP->lp_view_session_id != $session_id OR $oLP->scorm_debug == '1') {
+        if ($myrefresh == 1 OR
+            empty($oLP->cc) OR
+            $oLP->cc != api_get_course_id() OR
+            $oLP->lp_view_session_id != $session_id OR
+            $oLP->scorm_debug == '1'
+        ) {
             if ($debug > 0) error_log('New LP - Course has changed, discard lp object', 0);
             if ($myrefresh == 1) { $myrefresh_id = $oLP->get_id(); }
             $oLP = null;
@@ -520,9 +526,7 @@ switch ($action) {
         } else {
             require 'lp_add.php';
         }
-
         break;
-
     case 'admin_view':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
@@ -624,13 +628,11 @@ switch ($action) {
             }
         }
         break;
-
     case 'move_item':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
         if ($debug > 0) error_log('New LP - move item action triggered', 0);
-
         if (!$lp_found) { error_log('New LP - No learnpath given for move item', 0); require 'lp_list.php'; }
         else {
             $_SESSION['refresh'] = 1;
@@ -678,7 +680,6 @@ switch ($action) {
         chdir($cwdir);
         require 'lp_list.php';
         break;
-
     case 'copy':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
@@ -703,7 +704,6 @@ switch ($action) {
         }
         break;
     case 'export_to_pdf':
-
         if (!learnpath::is_lp_visible_for_student($_SESSION['oLP']->lp_id, api_get_user_id())) {
             api_not_allowed();
         }
@@ -725,15 +725,13 @@ switch ($action) {
         if (!$lp_found) { error_log('New LP - No learnpath given for delete', 0); require 'lp_list.php'; }
         else {
             $_SESSION['refresh'] = 1;
-            // Remove lp from homepage if it is there.
-            //$_SESSION['oLP']->toggle_visibility((int)$_GET['lp_id'],'i');
             $_SESSION['oLP']->delete(null, $_GET['lp_id'], 'remove');
             Session::erase('oLP');
             require 'lp_list.php';
         }
         break;
-
-    case 'toggle_visible': // Change lp visibility (inside lp tool).
+    case 'toggle_visible':
+        // Change lp visibility (inside lp tool).
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
@@ -744,8 +742,8 @@ switch ($action) {
             require 'lp_list.php';
         }
         break;
-
-    case 'toggle_publish': // Change lp published status (visibility on homepage).
+    case 'toggle_publish':
+        // Change lp published status (visibility on homepage).
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
@@ -756,8 +754,8 @@ switch ($action) {
             require 'lp_list.php';
         }
         break;
-
-    case 'move_lp_up': // Change lp published status (visibility on homepage)
+    case 'move_lp_up':
+        // Change lp published status (visibility on homepage)
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
@@ -770,8 +768,8 @@ switch ($action) {
             require 'lp_list.php';
         }
         break;
-
-    case 'move_lp_down': //change lp published status (visibility on homepage)
+    case 'move_lp_down':
+        // Change lp published status (visibility on homepage)
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
         }
@@ -784,7 +782,6 @@ switch ($action) {
             require 'lp_list.php';
         }
         break;
-
     case 'edit':
         if (!$is_allowed_to_edit) {
             api_not_allowed(true);
@@ -838,7 +835,6 @@ switch ($action) {
                 $hide_toc_frame = null;
             }
             $_SESSION['oLP']->set_hide_toc_frame($hide_toc_frame);
-
             $_SESSION['oLP']->set_prerequisite($_REQUEST['prerequisites']);
             $_SESSION['oLP']->set_use_max_score($_REQUEST['use_max_score']);
 
@@ -946,7 +942,6 @@ switch ($action) {
             require 'lp_admin_view.php';
         }
         break;
-
     case 'restart':
         if ($debug > 0) error_log('New LP - restart action triggered', 0);
         if (!$lp_found) { error_log('New LP - No learnpath given for restart', 0); require 'lp_list.php'; }
@@ -955,7 +950,6 @@ switch ($action) {
             require 'lp_view.php';
         }
         break;
-
     case 'last':
         if ($debug > 0) error_log('New LP - last action triggered', 0);
         if (!$lp_found) { error_log('New LP - No learnpath given for last', 0); require 'lp_list.php'; }
@@ -964,7 +958,6 @@ switch ($action) {
             require 'lp_view.php';
         }
         break;
-
     case 'first':
         if ($debug > 0) error_log('New LP - first action triggered', 0);
         if (!$lp_found) { error_log('New LP - No learnpath given for first', 0); require 'lp_list.php'; }
@@ -973,7 +966,6 @@ switch ($action) {
             require 'lp_view.php';
         }
         break;
-
     case 'next':
         if ($debug > 0) error_log('New LP - next action triggered', 0);
         if (!$lp_found) { error_log('New LP - No learnpath given for next', 0); require 'lp_list.php'; }
@@ -1094,7 +1086,6 @@ switch ($action) {
 		$_SESSION['oLP']->switch_attempt_mode();
         require 'lp_list.php';
         break;
-
     case 'switch_scorm_debug':
         if ($debug > 0) error_log('New LP - switch_scorm_debug action triggered', 0);
         if (!$lp_found) { error_log('New LP - No learnpath given for switch', 0); require 'lp_list.php'; }
@@ -1102,12 +1093,10 @@ switch ($action) {
         $_SESSION['oLP']->update_scorm_debug();
         require 'lp_list.php';
         break;
-
     case 'intro_cmdAdd':
         if ($debug > 0) error_log('New LP - intro_cmdAdd action triggered', 0);
         // Add introduction section page.
         break;
-
     case 'js_api_refresh':
         if ($debug > 0) error_log('New LP - js_api_refresh action triggered', 0);
         if (!$lp_found) { error_log('New LP - No learnpath given for js_api_refresh', 0); require 'lp_message.php'; }

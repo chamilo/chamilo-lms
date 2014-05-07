@@ -83,7 +83,7 @@ if (!empty($meetings)) {
 }
 $users_online   = $bbb->get_users_online_in_current_room();
 $status         = $bbb->is_server_running();
-$meeting_exists = $bbb->meeting_exists(api_get_course_id());
+$meeting_exists = $bbb->meeting_exists(api_get_course_id().'-'.api_get_session_id());
 $show_join_button = false;
 if ($meeting_exists || $teacher) {
     $show_join_button = true;

@@ -50,7 +50,7 @@ $TechnicalIssuesDescription = 'This portal is currently experiencing technical i
 
 if (is_int($global_error_code) && $global_error_code > 0) {
 
-	$theme = 'chamilo_red_utp/';
+	$theme = 'chamilo/';
 	$css_path = 'main/css/';
     $css_file              = $css_path.$theme.'default.css';
     $bootstrap_file        = $css_path.'bootstrap.css';

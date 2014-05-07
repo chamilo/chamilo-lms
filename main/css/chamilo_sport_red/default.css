@@ -79,12 +79,13 @@ a:active {
 /*****************************************************
  *  STYLE THEME CHAMILO                              *
  *****************************************************/
+
 .page-section{
-  background:url(images/bg-header.png) repeat-x 0 -32px;
+  background:url(images/bg-header.png) repeat-x 0 -10px;
   margin-top: -5px;
 }
 .section-mycampus .page-section{
-  background:url(images/bg-header.png) repeat-x 0 -44px;
+  background:url(images/bg-header.png) repeat-x 0 -30px;
   margin-top: -5px;
 }
 .welcome-mascot{
@@ -105,19 +106,6 @@ a:active {
    /* padding-left: 15px;
     padding-right: 15px;*/
     padding-top: 6px;
-}
-.controls .btn{
-    background:#2E75A3;
-    color: #FFFFFF;
-    border: 1px solid #2E75A3;
-    padding: 5px 25px;
-    font-size: 14px;
-    text-shadow: none;
-}
-.controls .btn:hover{
-    background:#000;
-    border: none;
-    color: #FFFFFF;
 }
 .subnav .dropdown-menu li a {
     color: #333333;
@@ -163,43 +151,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
   border: 1px solid #FD6600;
   color: #FFFFFF;
 }
-.btn{
-  display: inline-block;
-  padding: 6px 12px;
-  margin-bottom: 0;
-  font-size: 14px;
-  font-weight: normal;
-  line-height: 1.428571429;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  cursor: pointer;
-  -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-       -o-user-select: none;
-          user-select: none;
-  background-image: none;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  border-color: #ccc;
-}
-.btn:hover{
-  color: #333;
-  text-decoration: none;
-}
-.btn-primary{
-    background-color:#2E75A3;
-    background-image: none;
-    border-color: #2E75A3;
-    border: 1px solid transparent;
-    border-radius: 4px;
-}
-.btn-primary:hover{
-    background-color:#0F466A;
-    color: #FFFFFF;
-}
-
 /* styles for the star rater */
 .star-rating{
     list-style:none;
@@ -372,13 +323,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
     color: #666;
     padding-left: 15px;
 }
-.controls .btn{
-    background:#FF0000;
-    color: #FFFFFF;
-    border:none;
-    padding: 5px 25px;
-    text-shadow: none;
-}
+
 #top_main_content #announcements .page-header{
   display: none;
   line-height: 1;
@@ -409,8 +354,19 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
     color: #FD6600;
     text-decoration: underline;
 }
-
-
+.new_actions-fixed{
+  top: 50px;
+}
+.bottom_actions_fixed{
+  background: #fc0000; /* Old browsers */
+  background: -moz-linear-gradient(top, #fc0000 0%, #560000 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fc0000), color-stop(100%,#560000)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #fc0000 0%,#560000 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #fc0000 0%,#560000 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #fc0000 0%,#560000 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #fc0000 0%,#560000 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fc0000', endColorstr='#560000',GradientType=0 ); /* IE6-9 */
+}
 /*FIN DE INTRODUCCION DEL CURSO*/
 .fc-header-title h2{
     color: #666;

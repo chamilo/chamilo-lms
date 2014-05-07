@@ -2,6 +2,17 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AvailableClasses = "Classes disponibles";
+$RegisteredClasses = "Classes subscrites";
+$DeleteItemsNotInFile = "Elimina elements que no es trobin a l'arxiu";
+$ImportGroups = "Importa grups";
+$HereIsYourFeedback = "Reposta del professor:";
+$ShowSystemFolders = "Mostra els directoris del sistema";
+$LoginToGoToThisCourse = "Connecteu-vos per accedir a aquest curs";
+$LoginDate = "Data d'accés";
+$ChooseStartDateAndEndDate = "Esculli les dates d'inici i final";
+$WorkAdded = "Tasca afegida";
+$AllowMemberLeaveGroup = "Permet als membres deixar el grup";
 $CreatedByXYOnZ = "Creat per %s el %s";
 $LoginWithExternalAccount = "Accedeix amb un compte extern";
 $NumberOfGroupsToCreate = "Quantitat de grups a crear";
@@ -1140,6 +1151,7 @@ $QualifyInGradebook = "Qualifica a l'eina avaluació";
 $SessionSpecificResource = "Recurs específic a la sessió";
 $EditionNotAvailableFromSession = "No és possible editar aquest recurs de curs des d'una sessió";
 $HandingOverOfTaskX = "Entrega de tasques %s";
+$MyFiles = "Els meus arxius";
 $ProtectedDocument = "Document protegit";
 $ConnectionsLastMonth = "Connexions durant el mes anterior";
 $TotalStudents = "Estudiants";

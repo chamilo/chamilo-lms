@@ -143,6 +143,7 @@ if (api_get_setting('profile', 'name') !== 'true') {
 }
 $form->applyFilter(array('lastname', 'firstname'), 'stripslashes');
 $form->applyFilter(array('lastname', 'firstname'), 'trim');
+$form->applyFilter(array('lastname', 'firstname'), 'html_filter');
 $form->addRule('lastname' , get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 
@@ -165,6 +166,7 @@ if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
     }
     $form->applyFilter('official_code', 'stripslashes');
     $form->applyFilter('official_code', 'trim');
+    $form->applyFilter('official_code', 'html_filter');
     if (api_get_setting('registration', 'officialcode') == 'true' && api_get_setting('profile', 'officialcode') == 'true') {
         $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
     }
@@ -202,6 +204,7 @@ if (api_get_setting('profile', 'phone') !== 'true') {
 }
 $form->applyFilter('phone', 'stripslashes');
 $form->applyFilter('phone', 'trim');
+$form->applyFilter('phone', 'html_filter');
 /*if (api_get_setting('registration', 'phone') == 'true') {
     $form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
 }
@@ -639,10 +642,10 @@ if ($form->validate()) {
                     if (array_key_exists('name', $value)) {
                         $value['name'] = Security::filter_filename($value['name']);
                     }
-                    UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
+                    UserManager::update_extra_field_value($user_id, $key, $value);
                 }
             } else {
-                UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
+                UserManager::update_extra_field_value($user_id, $key, $value);
             }
         }
     }

@@ -20,7 +20,7 @@ a:active {
     text-decoration: none;
 }
 .page-section{
-  background: url(images/home-bg.png) repeat-x 0 -15px;
+  background: url(images/home-bg.png) repeat-x 0 0;
   margin-top: -10px;
 }
 .navbar .nav > li > a {
@@ -194,7 +194,7 @@ a:active {
 }
 .breadcrumb a.btn-mini{
     font-size: 12px;
-    line-height: 17px;
+    line-height: 22px;
     text-transform: none;
     color: #FFFFFF;
 }
@@ -532,6 +532,9 @@ input.span3, textarea.span3, .uneditable-input.span3 {
 .well_border .row .span2 {
   width: 98px;
 }
+.course-box-thumbnail-box .thumbnail:hover{
+  border: none;
+}
 .well_border .row .span2 .thumbnail {
   background-color: #FFFFFF;
   background-image: none;
@@ -623,26 +626,49 @@ footer a:link, footer a:visited {
  *  CSS CHAT END                             *
  *****************************************************/
 .normal-message {
-    color: #00407F;
-    border: 1px solid #CDE6F5;
-    background: url("images/background_message.png") repeat-x scroll 0 0 #EAF8FE;
+    background-color: #D9EDF7;
+    color: #3A87AD;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-top: 1px solid #BCE8F1;
+    border-left: 1px solid #BCE8F1;
+    border-right: 1px solid #BCE8F1;
+    border-bottom: 3px solid #BCE8F1;
+    border-radius: 10px;
 }
 .warning-message {
-    border: 1px solid #FFB30F;
-    color: #000;
-	background: url("images/background_message.png") repeat-x scroll 0 0 #FFEFA7;
+    background-color: #FCF8E3;
+    color: #C09853;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-top: 1px solid #FBEED5;
+    border-left: 1px solid #FBEED5;
+    border-right: 1px solid #FBEED5;
+    border-bottom: 3px solid #FBEED5;
+    border-radius: 10px;
 }
 .confirmation-message {
-	border: 1px solid #1F8323;
-    color:#1F8323;
-	background: url("images/background_message.png") repeat-x scroll 0 0 #CAF0C7;
+  background-color: #DFF0D8;
+  color: #468847;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-top: 1px solid #D6E9C6;
+  border-left: 1px solid #D6E9C6;
+  border-right: 1px solid #D6E9C6;
+  border-bottom: 3px solid #D6E9C6;
+  border-radius: 10px;
 }
 .error-message {
-    border: 1px solid #FF0000;
-    color: #440000;
-	background: url("images/background_message.png") repeat-x scroll 0 0 #FFD1D1;
+  background-color: #F2DEDE;
+  color: #B94A48;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-top: 1px solid #EED3D7;
+  border-left: 1px solid #EED3D7;
+  border-right: 1px solid #EED3D7;
+  border-bottom: 3px solid #EED3D7;
+  border-radius: 10px;
 }
-
 .social-menu-title {
 	background-color:#00AAE3;
 }

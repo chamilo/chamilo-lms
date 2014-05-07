@@ -956,6 +956,7 @@ $PageExecutionTimeWas = "زمان بارگذاری صفحه";
 $MemoryUsage = "استفاده از حافظه";
 $MemoryUsagePeak = "کداکثر استفاده از حافظه";
 $Seconds = "ثانیه ها";
+$MyFiles = "فایل های من";
 $ProtectedDocument = "اسناد محافظت شده";
 $ConnectionsLastMonth = "ارتباطات ماه قبل";
 $TotalStudents = "کلیه دانشجویان";

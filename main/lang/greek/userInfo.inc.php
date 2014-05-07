@@ -193,7 +193,6 @@ $YouNeedToHaveFriendsInYourSocialNetwork = "Πρέπει να έχετε φίλ�
 $SeeAllMyGroups = "Εμφάνιση όλων των ομάδων μου";
 $YouAlreadyInviteAllYourContacts = "Έχετε ήδη προσκαλέσει όλες τις επαφές σας";
 $YouShouldCreateAGroup = "Πρέπει να δημιουργήσετε μία ομάδα";
-$MyFiles = "Τα αρχεία μου";
 $MySocialGroups = "Κοινωνικές Ομάδες";
 $SocialGroups = "Κοινωνικές Ομάδες";
 $CreateASocialGroup = "Δημιουργία Κοινωνικής Ομάδας";

@@ -2,6 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$EnterTheLettersYouSee = "Enter the letters you see.";
+$ClickOnTheImageForANewOne = "Click on the image to load a new one.";
+$AccountBlockedByCaptcha = "Account blocked by captcha.";
 $CatchScreenCasts = "Capture screenshot/screencast";
 $View = "View";
 $AmountSubmitted = "Number submitted";
@@ -826,7 +829,7 @@ $Menu = "Menu";
 $BackToUserList = "Back to user list";
 $GraphicNotAvailable = "Graphic not available";
 $BackTo = "Back to";
-$HistoryTrainingSessions = "Courses sessions history";
+$HistoryTrainingSessions = "Courses history";
 $ConversionFailled = "Conversion failled";
 $AlreadyExists = "Already exists";
 $TheNewWordHasBeenAdded = "The new word has been added";
@@ -1182,6 +1185,7 @@ $QualifyInGradebook = "Grade in the assessment tool";
 $SessionSpecificResource = "Session-specific resource";
 $EditionNotAvailableFromSession = "Edition not available from the session, please edit from the basic course.";
 $HandingOverOfTaskX = "Handing over of task %s";
+$MyFiles = "My files";
 $ProtectedDocument = "Protected Document";
 $ConnectionsLastMonth = "Connections last month";
 $TotalStudents = "Total learners";

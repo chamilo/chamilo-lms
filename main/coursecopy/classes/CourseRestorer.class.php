@@ -1786,7 +1786,7 @@ class CourseRestorer
 	}
 
 	/**
-	 * Restore learnpaths
+	 * Restoring learning paths
 	 */
     public function restore_learnpaths($session_id = 0, $respect_base_content = false)
     {
@@ -1872,13 +1872,14 @@ class CourseRestorer
 
 				Database::query($sql);
 				$new_lp_id = Database::insert_id();
+
 				if ($lp->visibility) {
 					$sql = "INSERT INTO $table_tool SET
 					            c_id = ".$this->destination_course_id.",
 					            name = '".self::DBUTF8escapestring($lp->name)."',
 					            link = 'newscorm/lp_controller.php?action=view&lp_id=$new_lp_id&id_session=$session_id',
 					            image = 'scormbuilder.gif',
-					            visibility = '1',
+					            visibility = '0',
 					            admin = '0',
 					            address = 'squaregrey.gif',
 					            session_id = $session_id
@@ -1887,6 +1888,7 @@ class CourseRestorer
 				}
 
                 if ($new_lp_id) {
+
                     api_item_property_update(
                         $this->destination_course_info,
                         TOOL_LEARNPATH,
@@ -1899,7 +1901,8 @@ class CourseRestorer
                         0,
                         $session_id
                     );
-                    //Set the new LP to visible
+
+                    // Set the new LP to visible
                     api_item_property_update(
                         $this->destination_course_info,
                         TOOL_LEARNPATH,
@@ -1988,7 +1991,7 @@ class CourseRestorer
 					$prerequisite_ids[$new_item_id] = $item['prerequisite'];
 				}
 
-				// updating prerequisites
+				// Updating prerequisites
 				foreach ($old_prerequisite  as $key=>$my_old_prerequisite) {
 					if($my_old_prerequisite != ''){
 						$sql = "UPDATE ".$table_item." SET prerequisite = '".$my_old_prerequisite."'
@@ -1997,7 +2000,7 @@ class CourseRestorer
 					}
 				}
 
-				//updating refs
+				// Updating refs
 				foreach ($old_refs  as $key=>$my_old_ref) {
 					if ($my_old_ref != '') {
 						$sql = "UPDATE ".$table_item." SET ref = '".$my_old_ref."'

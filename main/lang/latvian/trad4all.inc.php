@@ -980,6 +980,7 @@ $QualifyInGradebook = "Kvalificēties ieskaitēs";
 $SessionSpecificResource = "Specifisks Sesijas resurss";
 $EditionNotAvailableFromSession = "Redakcija nav pieejama no sesijas, lūdzu, labojiet no pamata kursa.";
 $HandingOverOfTaskX = "Uzdevuma %s nodošana";
+$MyFiles = "Mani faili";
 $ProtectedDocument = "Aizsargāts dokuments";
 $ConnectionsLastMonth = "Pieslēgšanās pēdējā mēneša laikā";
 $TotalStudents = "Kopējais kursantu skaits";

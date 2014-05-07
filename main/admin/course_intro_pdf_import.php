@@ -41,7 +41,7 @@ if ($_POST['formSent']) {
         } else {
             $errors = import_pdfs($courses, $subDir);
             if (count($errors) == 0) {
-                save_data($courses);
+                error_log('Course intros imported successfully in '.__FILE__.', line '.__LINE__); 
             }
         }
     }
@@ -54,6 +54,8 @@ if (count($errors) != 0) {
     }
     $error_message .= '</ul>';
     Display :: display_normal_message($error_message, false);
+} elseif ($_POST['formSent']) {
+    Display :: display_confirmation_message('CourseIntroductionsAllImportesSuccessfully', false);
 }
 ?>
 <form method="post" action="<?php echo api_get_self(); ?>" enctype="multipart/form-data" style="margin: 0px;">
@@ -108,6 +110,7 @@ function import_pdfs($file, $subDir = '/') {
     require_once api_get_path(LIBRARY_PATH).'app_view.php';
     require_once '../course_description/course_description_controller.php';
     $list = scandir($baseDir.$uploadPath);
+    $i = 0;
     foreach ($list as $file) {
         if (substr($file,0,1) == '.' or !is_file($baseDir.$uploadPath.$file)) {
             continue;
@@ -149,6 +152,10 @@ function import_pdfs($file, $subDir = '/') {
             error_log($parts[0].' is not a course, apparently');
             $errors[] = array('Line' => 0, 'Code' => $parts[0], 'Title' => $parts[0].' - '.get_lang('CodeDoesNotExists'));
         }
+        $i++; //found at least one entry that is not a dir or a .
+    }
+    if ($i == 0) {
+        $errors[] = array('Line' => 0, 'Code' => '.', 'Title' => get_lang('NoPDFFoundAtRoot'));
     }
     return $errors;
 }

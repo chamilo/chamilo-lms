@@ -121,6 +121,5 @@ $Popular = "Populär";
 $Member = "Medlem";
 $Open = "Öppen";
 $AcceptInvitation = "Acceptera Inbjudan";
-$MyFiles = "Mina filer";
 $SocialGroups = "Sociala grupper";
 ?>

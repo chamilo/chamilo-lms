@@ -19,7 +19,6 @@ $Unsubscribe = "ถอนการสมัคร";
 $lang_back_to_my_home_page = "กลับไปโฮมเพจของเรา";
 $lang_back_to_my_personnal_course_list = "กลับไปที่รายวิชาของเรา";
 $langTitular = "หัวหน้า";
-$langBackToListOfThisUser = "กลับไปที่บัญชีรายชื่อวิชา";
 $langAdministrationTools = "เครื่องมือการบริหารจัดการระบบ";
 $lang_back_to_parent_category = "กลับไปที่กลุ่มประเภทวิชา";
 $lang_back_to_course_selection = "ไปรายวิชาที่เลือก";

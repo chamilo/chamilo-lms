@@ -74,7 +74,6 @@ $langFormula = "Afablajn salutojn, via instruisto";
 $langProblem = "Kaze de problemoj vi povas kontaktiĝi kun ni.";
 $langIs = "estas";
 $langAddress = "La adreso de";
-$langSettings = "kun jenaj parametroj:Uzulnomo:";
 $langYouAreReg = "Vi registrigxis por";
 $langYourReg = "Via registriĝo je";
 $langUserFree = "La enigita uzulnomo estas jam uzata. Uzu la retroiran butonon de via foliumilo ka provu denove.";

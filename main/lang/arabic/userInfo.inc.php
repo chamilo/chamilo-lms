@@ -39,7 +39,6 @@ $NoFriendsInYourContactList = "لا يوجد اصدقاء في قائمة الا
 $TryAndFindSomeFriends = "حاول ايجاد بعض الاصدقاء";
 $Invitations = "الدعوات";
 $MyGroups = "مجموعاتي";
-$EditProfile = "تعديل الملف الشخصي";
 $Profile = "الملف الشخصي";
 $Messages = "الرسائل";
 $UsersGroups = "المستخدمين. المجموعات";
@@ -48,7 +47,6 @@ $Newest = "الاحدث";
 $Popular = "الاكثر متايعة";
 $YouNeedToHaveFriendsInYourSocialNetwork = "يجب ان يكون هناك اصدقاء في شبكة التواصل";
 $SeeAllMyGroups = "رؤية كل المجموعات";
-$MyFiles = "ملفاتي";
 $MySocialGroups = "مجموعاتي";
 $SocialGroups = "المجموعات";
 ?>

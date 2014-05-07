@@ -20,7 +20,6 @@ $Unsubscribe = "Uitschrijven";
 $lang_back_to_my_home_page = "Terug naar mijn thuispagina";
 $lang_back_to_my_personnal_course_list = "Terug naar mijn cursuslijst";
 $langTitular = "Lesgever";
-$langBackToListOfThisUser = "Terug naar cursuslijst";
 $langAdministrationTools = "Administratietools";
 $lang_back_to_parent_category = "Terug naar vorige categorie";
 $lang_back_to_course_selection = "Terug naar cursusselectie";

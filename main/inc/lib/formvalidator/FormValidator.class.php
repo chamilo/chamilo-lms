@@ -284,22 +284,22 @@ EOT;
         $this->addElement('hidden', $name, $value);
     }
 
-    function add_textarea($name, $label, $attributes = array())
+    public function add_textarea($name, $label, $attributes = array())
     {
         $this->addElement('textarea', $name, $label, $attributes);
     }
 
-    function add_button($name, $label, $attributes = array())
+    public function add_button($name, $label, $attributes = array())
     {
         $this->addElement('button', $name, $label, $attributes);
     }
 
-    function add_checkbox($name, $label, $trailer = '', $attributes = array())
+    public function add_checkbox($name, $label, $trailer = '', $attributes = array())
     {
         $this->addElement('checkbox', $name, $label, $trailer, $attributes);
     }
 
-    function add_radio($name, $label, $options = '')
+    public function add_radio($name, $label, $options = '')
     {
         $group = array();
         foreach ($options as $key => $value) {
@@ -308,27 +308,27 @@ EOT;
         $this->addGroup($group, $name, $label);
     }
 
-    function add_select($name, $label, $options = '', $attributes = array())
+    public function add_select($name, $label, $options = '', $attributes = array())
     {
         $this->addElement('select', $name, $label, $options, $attributes);
     }
 
-    function add_label($label, $text)
+    public function add_label($label, $text)
     {
         $this->addElement('label', $label, $text);
     }
 
-    function add_header($text)
+    public function add_header($text)
     {
         $this->addElement('header', $text);
     }
 
-    function add_file($name, $label, $attributes = array())
+    public function add_file($name, $label, $attributes = array())
     {
         $this->addElement('file', $name, $label, $attributes);
     }
 
-    function add_html($snippet)
+    public function add_html($snippet)
     {
         $this->addElement('html', $snippet);
     }
@@ -338,6 +338,7 @@ EOT;
      * A trim-filter is attached to the field.
      * A HTML-filter is attached to the field (cleans HTML)
      * A rule is attached to check for unwanted HTML
+     * @param string $name
      * @param string $label						The label for the form-element
      * @param string $name						The element name
      * @param boolean $required	(optional)		Is the form-element required (default=true)
@@ -395,13 +396,13 @@ EOT;
     }
 
     /**
-     * Adds a datepickerdate element to the form
+     * Adds a date picker date element to the form
      * A rule is added to check if the date is a valid one
      * @param string $label						The label for the form-element
      * @param string $name						The element name
      * @deprecated
      */
-    function add_datepickerdate($name, $label)
+    public function add_datepickerdate($name, $label)
     {
         $this->addElement('datepickerdate', $name, $label, array('form_name' => $this->getAttribute('name')));
         $this->_elements[$this->_elementIndex[$name]]->setLocalOption('minYear', 1900); // TODO: Now - 9 years
@@ -416,7 +417,7 @@ EOT;
      * @param string $name						The element name
      * @deprecated
      */
-    function add_timewindow($name_1, $name_2, $label_1, $label_2)
+    public function add_timewindow($name_1, $name_2, $label_1, $label_2)
     {
         $this->add_datepicker($name_1, $label_1);
         $this->add_datepicker($name_2, $label_2);
@@ -446,7 +447,7 @@ EOT;
      * @param string $label (optional)			Custom label to be shown
      * submits the form and the start of the progress bar.
      */
-    function add_progress_bar($delay = 2, $label = '')
+    public function add_progress_bar($delay = 2, $label = '')
     {
         if (empty($label)) {
             $label = get_lang('PleaseStandBy');
@@ -464,7 +465,7 @@ EOT;
      * @param int $delay (optional)						The frequency of the xajax call
      * @param bool $wait_after_upload (optional)
      */
-    function add_real_progress_bar($upload_id, $element_after, $delay = 2, $wait_after_upload = false)
+    public function add_real_progress_bar($upload_id, $element_after, $delay = 2, $wait_after_upload = false)
     {
         if (!function_exists('uploadprogress_get_info')) {
             $this->add_progress_bar($delay);
@@ -553,14 +554,14 @@ EOT;
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, august 2006
      */
-    function return_form()
+    public function return_form()
     {
         $error = false;
         $addDateLibraries = false;
         $dateElementTypes = array('date_range_picker', 'date_time_picker', 'date_picker', 'datepicker', 'datetimepicker');
         /** @var HTML_QuickForm_element $element */
         foreach ($this->_elements as $element) {
-            if (in_array($element->getType(),$dateElementTypes)) {
+            if (in_array($element->getType(), $dateElementTypes)) {
                 $addDateLibraries = true;
             }
             if (!is_null(parent::getElementError($element->getName()))) {

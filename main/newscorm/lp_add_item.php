@@ -258,7 +258,7 @@ if ($type == 'document' && !isset($_GET['file'])) {
 
 echo '</div>';
 
-//hide bar div
+// hide bar div
 if ($action == 'add_item' && $type == 'document' && !isset($_GET['file'])) {
     echo '<div id="hide_bar_template"></div>';
 }
@@ -271,6 +271,7 @@ if (in_array($message, array('ItemUpdated'))) {
 }
 
 if (isset($new_item_id) && is_numeric($new_item_id)) {
+
     switch ($type) {
         case 'chapter':
             echo $_SESSION['oLP']->display_manipulate($new_item_id, $_POST['type']);
@@ -347,5 +348,4 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
 echo '</div>';
 echo '</div>';
 
-/* FOOTER */
 Display::display_footer();

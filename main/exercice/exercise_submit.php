@@ -311,12 +311,16 @@ if ($time_control) {
 
 			// First we update the attempt to today
 			// How the expired time is changed into "track_e_exercices" table,then the last attempt for this student should be changed too,so
-	        $sql_track_e_exe = "UPDATE $exercice_attemp_table SET tms = '".api_get_utc_datetime()."' WHERE exe_id = '".$exercise_stat_info['exe_id']."' AND tms = '".$last_attempt_date."' ";
+	        $sql = "UPDATE $exercice_attemp_table SET
+	                tms = '".api_get_utc_datetime()."'
+	                WHERE
+	                    exe_id = '".$exercise_stat_info['exe_id']."' AND
+	                    tms = '".$last_attempt_date."' ";
 	        if ($debug) {error_log('7.10. $sql_track_e_exe2: '.$sql_track_e_exe); }
-	        Database::query($sql_track_e_exe);
+	        Database::query($sql);
 
 	        //Sessions  that contain the expired time
-	        $_SESSION['expired_time'][$current_expired_time_key] 		= $clock_expired_time;
+	        $_SESSION['expired_time'][$current_expired_time_key] = $clock_expired_time;
 	        if ($debug) {error_log('7.11. Setting the $_SESSION[expired_time]: '.$_SESSION['expired_time'][$current_expired_time_key] ); };
         }
     } else {
@@ -411,7 +415,17 @@ if ($formSent && isset($_POST)) {
                     if (isset($exe_id)) {
                     	//Manage the question and answer attempts
                         if ($debug) { error_log('8.3. manage_answer exe_id: '.$exe_id.' - $questionId: '.$questionId.' Choice'.print_r($choice,1)); }
-                    	$objExercise->manage_answer($exe_id, $questionId, $choice,'exercise_show',$exerciseResultCoordinates, true, false,false, $objExercise->propagate_neg);
+                    	$objExercise->manage_answer(
+                            $exe_id,
+                            $questionId,
+                            $choice,
+                            'exercise_show',
+                            $exerciseResultCoordinates,
+                            true,
+                            false,
+                            false,
+                            $objExercise->propagate_neg
+                        );
                     }
                     //END of saving and qualifying
                 }
@@ -429,7 +443,7 @@ if ($formSent && isset($_POST)) {
 
     // if all questions on one page OR if it is the last question (only for an exercise with one question per page)
 
-    if (($objExercise->type == ALL_ON_ONE_PAGE || $current_question >= $question_count)) {
+    if ($objExercise->type == ALL_ON_ONE_PAGE || $current_question >= $question_count) {
         if (api_is_allowed_to_session_edit()) {
             // goes to the script that will show the result of the exercise
             if ($objExercise->type == ALL_ON_ONE_PAGE) {
@@ -437,9 +451,18 @@ if ($formSent && isset($_POST)) {
 
                 //We check if the user attempts before sending to the exercise_result.php
                 if ($objExercise->selectAttempts() > 0) {
-                    $attempt_count = get_attempt_count(api_get_user_id(), $exerciseId, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
+                    $attempt_count = get_attempt_count(
+                        api_get_user_id(),
+                        $exerciseId,
+                        $learnpath_id,
+                        $learnpath_item_id,
+                        $learnpath_item_view_id
+                    );
                     if ($attempt_count >= $objExercise->selectAttempts()) {
-                        Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), false);
+                        Display :: display_warning_message(
+                            sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
+                            false
+                        );
                         if ($origin != 'learnpath') {
                             //so we are not in learnpath tool
                             echo '</div>'; //End glossary div
@@ -497,10 +520,18 @@ if ($question_count != 0) {
 
 	            //We check if the user attempts before sending to the exercise_result.php
 	            if ($objExercise->selectAttempts() > 0) {
-
-	                $attempt_count = get_attempt_count(api_get_user_id(), $exerciseId, $learnpath_id, $learnpath_item_id, $learnpath_item_view_id);
+	                $attempt_count = get_attempt_count(
+                        api_get_user_id(),
+                        $exerciseId,
+                        $learnpath_id,
+                        $learnpath_item_id,
+                        $learnpath_item_view_id
+                    );
 	                if ($attempt_count >= $objExercise->selectAttempts()) {
-	                    Display :: display_warning_message(sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()), false);
+	                    Display :: display_warning_message(
+                            sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
+                            false
+                        );
 	                    if ($origin != 'learnpath') {
 	                        //so we are not in learnpath tool
 	                        echo '</div>'; //End glossary div
@@ -775,6 +806,12 @@ if (!empty($error)) {
                 });
 
                 $(".no_remind_highlight").hide();
+
+				// if the users validates the form using return key, prevent form action and simulates click on validation button
+				$("#exercise_form").submit(function(){
+					$(".question-validate-btn").first().trigger("click");
+					return false;
+				});
     		});
 
 			function previous_question(question_num) {
@@ -1011,7 +1048,7 @@ if (!empty($error)) {
 
             //BUtton save and continue
             switch ($objExercise->type) {
-                case ONE_PER_PAGE:
+				case ONE_PER_PAGE:
                     $exercise_actions .= $objExercise->show_button($questionId, $current_question);
                     break;
                 case ALL_ON_ONE_PAGE :

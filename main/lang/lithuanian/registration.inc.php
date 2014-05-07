@@ -74,7 +74,6 @@ $langFormula = "Pagarbiai";
 $langProblem = "Iškilus problemoms, susisiekite su mumis.";
 $langIs = "yra";
 $langAddress = "The address of";
-$langSettings = "with the following settings :Username :";
 $langYouAreReg = "Jūs užregistruotas";
 $langYourReg = "Jūs užregistruotas";
 $langUserFree = "Šis vartotojo vardas jau naudojamas. Spauskite naršyklės \"Atgal\" mygtuką ir bandykite dar kartą.";

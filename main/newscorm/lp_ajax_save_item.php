@@ -44,7 +44,7 @@ require_once 'aiccItem.class.php';
  * @param   array   Interactions array
  * @param   string  Core exit SCORM string
  */
-function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1, $min = -1, $status = '', $time = 0, $suspend = '', $location = '', $interactions = array(), $core_exit = 'none')
+function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1, $min = -1, $status = '', $time = 0, $suspend = '', $location = '', $interactions = array(), $core_exit = 'none', $sessionId = null, $courseId = null)
 {
     global $debug;
     $return = null;
@@ -58,6 +58,9 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
 
     $mylp = null;
     $lpobject = Session::read('lpobject');
+    if (!is_object($lpobject) && isset($sessionId) && isset($courseId)) {
+        $lpobject = new learnpathItem($lp_id, $user_id, $courseId);
+    }
     if (isset($lpobject)) {
         $oLP = unserialize($lpobject);
         if ($debug) error_log("lpobject was set");
@@ -98,10 +101,17 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
     // This functions sets the $this->db_item_view_id variable needed in get_status() see BT#5069
     $mylpi->set_lp_view($view_id);
 
-    if ($prereq_check === true) {
-        if ($debug > 1) { error_log('Prereq are check'); }
+    // Launch the prerequisites check and set error if needed
+    if ($prereq_check !== true) {
+        // If prerequisites were not matched, don't update any item info
+        if ($debug) {
+            error_log("prereq_check: ".intval($prereq_check));
+        }
 
-        // Launch the prerequisites check and set error if needed
+        return $return;
+    } else {
+        if ($debug > 1) { error_log('Prerequisites are OK'); }
+
         if (isset($max) && $max != -1) {
             $mylpi->max_score = $max;
             $mylpi->set_max_score($max);
@@ -117,7 +127,9 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         if (isset($score) && $score != -1) {
             if ($debug > 1) { error_log('Calling set_score('.$score.')', 0); }
             if ($debug > 1) { error_log('set_score changes the status to failed/passed if mastery score is provided', 0); }
+
             $mylpi->set_score($score);
+
             if ($debug > 1) { error_log('Done calling set_score '.$mylpi->get_score(), 0); }
         } else {
             if ($debug > 1) { error_log("Score not updated"); }
@@ -125,7 +137,9 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
             // Default behaviour
             if (isset($status) && $status != '' && $status != 'undefined') {
                 if ($debug > 1) { error_log('Calling set_status('.$status.')', 0); }
+
                 $mylpi->set_status($status);
+
                 if ($debug > 1) { error_log('Done calling set_status: checking from memory: '.$mylpi->get_status(false), 0); }
             } else {
                 if ($debug > 1) { error_log("Status not updated"); }
@@ -192,11 +206,6 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
             $mylpi->set_core_exit($core_exit);
         }
         $mylp->save_item($item_id, false);
-    } else {
-        if ($debug) {
-            error_log("prereq_check: ".intval($prereq_check));
-        }
-        return $return;
     }
 
     $mystatus_in_db = $mylpi->get_status(true);
@@ -278,7 +287,7 @@ $interactions = array();
 if (isset($_REQUEST['interact'])) {
     if (is_array($_REQUEST['interact'])) {
         foreach ($_REQUEST['interact'] as $idx => $interac) {
-            $interactions[$idx] = split(',', substr($interac, 1, -1));
+            $interactions[$idx] = preg_split('/,/', substr($interac, 1, -1));
             if (!isset($interactions[$idx][7])) { // Make sure there are 7 elements.
                 $interactions[$idx][7] = '';
             }
@@ -299,5 +308,8 @@ echo save_item(
     (!empty($_REQUEST['suspend'])?$_REQUEST['suspend']:null),
     (!empty($_REQUEST['loc'])?$_REQUEST['loc']:null),
     $interactions,
-    (!empty($_REQUEST['core_exit'])?$_REQUEST['core_exit']:'')
+    (!empty($_REQUEST['core_exit'])?$_REQUEST['core_exit']:''),
+    '',
+    (!empty($_REQUEST['session_id'])?$_REQUEST['session_id']:''),
+    (!empty($_REQUEST['course_id'])?$_REQUEST['course_id']:'')
 );

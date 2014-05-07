@@ -181,7 +181,7 @@ function get_count_courses()
 function get_courses($from, $limit, $column, $direction)
 {
     $userId = api_get_user_id();
-    $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : null;
+    $sessionId = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
     $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : null;
 
     $drhLoaded = false;
@@ -218,6 +218,7 @@ function get_courses($from, $limit, $column, $direction)
     if (!empty($courses)) {
         foreach ($courses as $data) {
             $courseCode = $data['code'];
+            $courseInfo = api_get_course_info($courseCode);
             $userList = CourseManager::get_user_list_from_course_code($data['code'], $sessionId);
             $userIdList = array();
             if (!empty($userList)) {
@@ -258,9 +259,12 @@ function get_courses($from, $limit, $column, $direction)
             $courseIcon = '<a href="'.api_get_path(WEB_CODE_PATH).'tracking/courseLog.php?cidReq='.$courseCode.'&id_session='.$sessionId.'">
                         <img src="'.api_get_path(WEB_IMG_PATH).'2rightarrow.gif" border="0" />
                       </a>';
-
-            $courseList[] = array(
+            $title = Display::url(
                 $data['title'],
+                $courseInfo['course_public_url'].'?id_session='.$sessionId
+            );
+            $courseList[] = array(
+                $title,
                 $countStudents,
                 is_null($avgTimeSpentInCourse) ? '-' : $avgTimeSpentInCourse,
                 $tematicAdvanceProgress,
@@ -284,8 +288,6 @@ $table = new SortableTable(
     1,
     10
 );
-
-
 
 $table->set_header(0, get_lang('CourseTitle'), false);
 $table->set_header(1, get_lang('NbStudents'), false);

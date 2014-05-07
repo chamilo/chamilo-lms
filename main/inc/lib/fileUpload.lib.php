@@ -249,12 +249,14 @@ function handle_uploaded_document(
 			$where_to_save = $base_work_dir.$upload_path;
 
 			// At least if the directory doesn't exist, tell so
-			if (!is_dir($where_to_save)) {
-			    if ($output){
-				    Display::display_error_message(get_lang('DestDirectoryDoesntExist').' ('.$upload_path.')');
-				}
-				return false;
-			}
+            if (!is_dir($where_to_save)) {
+                if (!mkdir($where_to_save, api_get_permissions_for_new_directories())) {
+                    if ($output) {
+                        Display::display_error_message(get_lang('DestDirectoryDoesntExist').' ('.$upload_path.')');
+                    }
+                    return false;
+                }
+            }
 			// Full path of the destination
 			$store_path = $where_to_save.$clean_name;
 
@@ -441,14 +443,20 @@ function moveUploadedFile($file, $storePath)
  *
  * @see    - enough_size() uses  dir_total_space() function
  */
-function enough_size($file_size, $dir, $max_dir_space) {
-	if ($max_dir_space) {
-		$already_filled_space = dir_total_space($dir);
-		if (($file_size + $already_filled_space) > $max_dir_space) {
-			return false;
-		}
-	}
-	return true;
+function enough_size($file_size, $dir, $max_dir_space)
+{
+    // If the directory is the archive directory, safely ignore the size limit
+    if (api_get_path(SYS_ARCHIVE_PATH) == $dir) { 
+        return true; 
+    }
+
+    if ($max_dir_space) {
+        $already_filled_space = dir_total_space($dir);
+        if (($file_size + $already_filled_space) > $max_dir_space) {
+            return false;
+        }
+    }
+    return true;
 }
 
 
@@ -465,6 +473,7 @@ function dir_total_space($dir_path) {
 	chdir($dir_path) ;
 	$handle = opendir($dir_path);
     $sumSize = 0;
+    $dirList = array();
 	while ($element = readdir($handle)) {
 		if ( $element == '.' || $element == '..') {
 			continue; // Skip the current and parent directories
@@ -1194,7 +1203,18 @@ function create_unexisting_directory(
 				// Update document item_property
 				if ($visibility !== '') {
 					$visibilities = array(0 => 'invisible', 1 => 'visible', 2 => 'delete');
-					api_item_property_update($_course, TOOL_DOCUMENT, $document_id, $visibilities[$visibility], $user_id, $to_group_id, $to_user_id, null, null, $session_id);
+					api_item_property_update(
+                        $_course,
+                        TOOL_DOCUMENT,
+                        $document_id,
+                        $visibilities[$visibility],
+                        $user_id,
+                        $to_group_id,
+                        $to_user_id,
+                        null,
+                        null,
+                        $session_id
+                    );
 				} else {
 					api_item_property_update($_course, TOOL_DOCUMENT, $document_id, 'FolderCreated', $user_id, $to_group_id, $to_user_id, null, null, $session_id);
 				}

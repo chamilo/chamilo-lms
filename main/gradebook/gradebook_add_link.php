@@ -7,7 +7,7 @@
 /**
  * Init
  */
-$language_file = 'gradebook';
+$language_file = array('gradebook', 'exercice');
 //$cidReset = true;
 require_once '../inc/global.inc.php';
 require_once 'lib/be.inc.php';

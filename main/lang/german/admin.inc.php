@@ -1546,6 +1546,66 @@ $TeachersCanChangeScoreSettingsTitle = "Kursleiter können Kriterien der Bewertu
 $TeachersCanChangeScoreSettingsComment = "Kursleiter können so individuell Einstellungen an der Bewertungsmappe vornehmen";
 $GradebookEnableLockingTitle = "Kursleitern das Sperren von Bewertungen erlauben";
 $GradebookEnableLockingComment = "Wenn diese Funktion aktiviert wird, können Kursleiter keinerlei Änderungen an Bewertungen mehr vornehmen (Übungen, Lernpfade, Aufgaben, etc.). Diese Sperre kann nur durch einen Administrator aufgehoben werden. Der Kursleiter wird explizit darauf hingewiesen, und eine Eintragung im Systemprotokoll verzeichnet";
+$LdapDescriptionComment = "<div class='normal-message'>
+<br />
+<ul>
+<li>
+LDAP Authentifizierung:
+<br />
+Unter I. wie LDAP konfiguriert wird
+<br />
+Unter II. wie LDAP aktiviert wird
+</li>
+<br />
+<br />
+<li>
+Update user attributes, with LDAP data, after CAS authentication(see <a href='settings.php?category=CAS'>CAS configuration </a>) :
+<br />
+See I. below to configure LDAP
+<br />
+CAS manage user authentication, LDAP activation isn't required.
+</li>
+<br />
+</ul>
+</div>
+<br />
+<h4>I. LDAP configuration</h4>
+<h5>Edit file main/inc/conf/auth.conf.php </h5>
+-&gt; Edit values of array <code>&#36;extldap_config</code>
+<br />
+<br />
+Parameter:
+<br />
+<ul>
+<li>base domain string (z.B. 'base_dn' =&gt; 'DC=example,DC=org')</li>
+<li>Admin distinguished name (z.B. 'admin_dn' =&gt;'CN=admin,dc=cblue,dc=be')</li>
+<li>Admin Kennwort (z.B. 'admin_password' =&gt; '123456')</li>
+<li>LDAP Server (z.B. 'host' =&gt; array('1.2.3.4', '2.3.4.5', '3.4.5.6'))</li>
+<li>Filter (z.B. 'filter' =&gt; '')</li>
+<li>Port (z.B. 'port' =&gt; 389)</li>
+<li>Protokoll-Version (2 oder 3) (z.B. 'protocol_version' =&gt; 3)</li>
+<li>user_search (z.B. 'user_search' =&gt; 'sAMAccountName=%username%')</li>
+<li>Zeichensatz (z.B. 'encoding' =&gt; 'UTF-8')</li>
+<li>update_userinfo (z.B. 'update_userinfo' =&gt; true)</li>
+</ul>-&gt; Um die Verkn&uuml;pfung zwischen Usern und LDAP-Attributen herzustellen, bitte das Array <code>&#36;extldap_user_correspondance</code> verwenden.
+<br />
+Array-Werte sind &lt;chamilo_field&gt; =&gt; &gt;ldap_field&gt;
+<br />
+Die Array-Struktur wird in Datei main/auth/external_login/ldap.conf.php erkl&auml;rt.
+<br />
+<br />
+<br />
+<h4>II. LDAP-Authentifizierung aktivieren</h4>
+<h5>In der Datei main/inc/conf/configuration.php</h5>-&gt; folgende Zeilen auskommentieren
+<br />
+&#36;extAuthSource[&quot;extldap&quot;][&quot;login&quot;] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].&quot;auth/external_login/login.ldap.php&quot;;
+<br />
+&#36;extAuthSource[&quot;extldap&quot;][&quot;newUser&quot;] =&#36;_configuration['root_sys'].&#36;_configuration['code_append'].&quot;auth/external_login/newUser.ldap.php&quot;;
+<br />
+<br />
+N.B. : LDAP users use same fields than platform users to login.
+<br />
+N.B. : LDAP activation adds a menu External authentication [LDAP] in &quot;add or modify&quot; user pages.";
 $ShibbolethMainActivateTitle = "Authentifizierung über Shibboleth";
 $ShibbolethMainActivateComment = "Zuerst muß Shibboleth für die Nutzung mit Ihrem Webserver konfiguriert sein.
 <br />
@@ -1553,21 +1613,21 @@ Anschließend muß für die Nutzung mit Chamilo die Datei:
 <br /><br />
 <strong>main/auth/shibboleth/config/aai.class.php</strong>
 <br /><br />
-geändert werden. Hierzu werden die folgenden Werte für object $result mit den eigenen Werten ergänzt.
+geändert werden. Hierzu werden die folgenden Werte für object \$result mit den eigenen Werten ergänzt.
 <br />
 <ul>
-<li>$result->unique_id = 'mail';</li>
-<li>$result->firstname = 'cn';</li>
-<li>$result->lastname = 'uid';</li>
-<li>$result->email = 'mail';</li>
-<li>$result->language = '-';</li>
-<li>$result->gender = '-';</li>
-<li>$result->address = '-';</li>
-<li>$result->staff_category = '-';</li>
-<li>$result->home_organization_type = '-';</li>
-<li>$result->home_organization = '-';</li>
-<li>$result->affiliation = '-';</li>
-<li>$result->persistent_id = '-';</li>
+<li>\$result->unique_id = 'mail';</li>
+<li>\$result->firstname = 'cn';</li>
+<li>\$result->lastname = 'uid';</li>
+<li>\$result->email = 'mail';</li>
+<li>\$result->language = '-';</li>
+<li>\$result->gender = '-';</li>
+<li>\$result->address = '-';</li>
+<li>\$result->staff_category = '-';</li>
+<li>\$result->home_organization_type = '-';</li>
+<li>\$result->home_organization = '-';</li>
+<li>\$result->affiliation = '-';</li>
+<li>\$result->persistent_id = '-';</li>
 <li>...</li>
 </ul>
 
@@ -1580,7 +1640,7 @@ Danach die Datei
 <br /><br />
 <strong>main/auth/external_login/facebook.conf.php</strong>
 <br /><br />
-öffnen und 'appId' und 'secret' für $facebook_config aus der FB-Anwendung einfügen.
+öffnen und 'appId' und 'secret' für \$facebook_config aus der FB-Anwendung einfügen.
 Anschließend zu den <a href=\"/settings.php?category=Facebook\">Plugins</a> wechseln und 'Facebook Login' Button für die Plattform aktivieren.";
 $LanguagePriority1Title = "Priorität der Sprachwahl";
 $LanguagePriority2Title = "Sprachpriorität 2";
@@ -1635,5 +1695,12 @@ $TeacherPageAfterLoginTitle = "Seite für Kursleiter nach Anmeldung";
 $TeacherPageAfterLoginComment = "Diese Seite wird Kursleitern nach dem Anmelden angezeigt";
 $DRHPageAfterLoginTitle = "Seite für HR-Manager nach Anmeldung";
 $DRHPageAfterLoginComment = "Diese Seite wird dem HR-Manager nach dem Anmelden angezeigt";
+$StudentAutosubscribeTitle = "Automatisches Abonnement";
+$StudentAutosubscribeComment = "Automatisches Abonnement - noch nicht verfügbar";
+$TeacherAutosubscribeTitle = "Automatische Zuweisung von Kursleitern";
+$TeacherAutosubscribeComment = "Automatische Zuweisung von Kursleitern - noch nicht verfügbar";
+$DRHAutosubscribeTitle = "Automatische Zuweisung von HR-Managern";
+$DRHAutosubscribeComment = "Automatische Zuweisung von HR-Managern - noch nicht verfügbar";
 $ScormCumulativeSessionTimeTitle = "Session-Timer bei SCORM-Kursen kumulieren";
+$ScormCumulativeSessionTimeComment = "Bei Aktivierung wird die Sessionzeit in SCORM-Lernpfaden kummuliert, ansonsten wird vom zuletzt verfügbaren Zeitstempel ausgegangen.";
 ?>

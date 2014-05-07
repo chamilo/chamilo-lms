@@ -564,7 +564,7 @@ a.tag {
     width: 47%;
 }
 #settings .span6 .well_border{
-    min-height: 265px;
+    min-height: 300px;
 }
 #settings .form-search .span3 {
     float: left;
@@ -4031,7 +4031,7 @@ footer {
 
 #learning_path_left_zone {
     float:left;
-    width:280px;
+    width:315px;
     height:100%;
     padding-left: 8px;
     padding-right: 4px;

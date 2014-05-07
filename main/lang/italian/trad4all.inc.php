@@ -3,6 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $DeleteAllAttendances = "Elimina tutte le presenze registrate";
+$AddForum = "Aggiungi un forum";
 $SearchXapianModuleNotInstalled = "Il modulo Xapian non è installato";
 $Title = "Titolo";
 $By = "Da";
@@ -760,6 +761,7 @@ $HumanAndTechnicalResourcesInformation = "Breve descrizione del gruppo docente (
 $Assessment = "Verifica";
 $AssessmentQuestions = "Come avverrà la valutazione? Quali saranno le strategie di verifica approntate perché il corsista possa identificare le eventuali carenze prima della sessione d'esame?";
 $AssessmentInformation = "Dettagli dei metodi di verifica (testi di esami scritti, orali, progetti, compiti da consegnare...). Momenti di verifica formativa previsti. Criteri di successo, Suggerimenti.";
+$UploadADocument = "Carica un documento";
 $langNameOfLang['bosnian'] = "Bosniaco";
 $langNameOfLang['czech'] = "Ceco";
 $langNameOfLang['dari'] = "Dari (Farsi)";
@@ -815,6 +817,7 @@ $InstallChamilo = "Installa Chamilo";
 $ChamiloURL = "URL Chamilo";
 $TitleColumnGradebook = "Intestazione di colonna del registro";
 $QualifyWeight = "Peso della valutazione";
+$DownloadLink = "Collegamento di download";
 $ThematicAdvance = "Avanzamento degli argomenti";
 $EditProfile = "Modifica il profilo";
 $TabsDashboard = "Pannello di controllo";
@@ -976,6 +979,7 @@ $QualifyInGradebook = "Valuta nel Registro";
 $SessionSpecificResource = "Risorsa specifica della sessione";
 $EditionNotAvailableFromSession = "Non è possibile modificare questa risorsa nel corso di una sessione: puoi farlo nel corso di origine";
 $HandingOverOfTaskX = "Compito realizzato al %s";
+$MyFiles = "I miei documenti";
 $ProtectedDocument = "Documento protetto";
 $ConnectionsLastMonth = "Accessi ultimo mese";
 $TotalStudents = "Totale Corsisti";

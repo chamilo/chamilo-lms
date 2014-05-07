@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddForum = "Új fórum hozzáadása";
 $Title = "Cím";
 $By = "Szerző";
 $UsersOnline = "Jelenlévő felhasználó";
@@ -651,4 +652,5 @@ $HumanAndTechnicalResourcesInformation = "A különböző kapcsolattartó szemé
 $Assessment = "Értékelés";
 $AssessmentQuestions = "Hogyan lesznek értékelve a résztvevők?";
 $AssessmentInformation = "Példa teszt kérdések. A sikeres teljesítés feltétele. Tippek és trükkök.";
+$UploadADocument = "Dokumentum feltöltése";
 ?>

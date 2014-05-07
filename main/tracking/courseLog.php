@@ -245,7 +245,58 @@ $form_search->addElement('style_submit_button', 'submit', get_lang('SearchUsers'
 $form_search->display();
 echo '</div>';
 
-// BEGIN : form to remind inactive users
+$course_name = get_lang('Course').' '.$courseInfo['name'];
+
+if ($session_id) {
+    echo Display::page_subheader(
+        Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.api_get_session_name($session_id).' '.
+        Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_name
+    );
+} else {
+    echo Display::page_subheader(
+        Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$courseInfo['name']
+    );
+}
+
+$teacherList = CourseManager::get_teacher_list_from_course_code_to_string(
+    $courseInfo['code'],
+    ',',
+    false
+);
+
+$coaches = null;
+if (!empty($session_id)) {
+    $coaches = CourseManager::get_coachs_from_course_to_string(
+        $session_id,
+        $courseInfo['code'],
+        ',',
+        false
+    );
+}
+
+if (!empty($teacherList)) {
+    echo Display::page_subheader2(get_lang('Teachers'));
+    echo $teacherList;
+}
+
+if (!empty($coaches)) {
+    echo Display::page_subheader2(get_lang('Coaches'));
+    echo $coaches;
+}
+
+
+$sessionList = SessionManager::get_session_by_course($courseInfo['code']);
+if (!empty($sessionList)) {
+    echo Display::page_subheader2(get_lang('SessionList'));
+    $sessionToShow = array();
+    foreach ($sessionList as $session) {
+        $url = api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='.$session['id'].'&cidReq='.$courseInfo['code'];
+        $sessionToShow[] = Display::url($session['name'], $url);
+    }
+    echo implode(', ', $sessionToShow);
+}
+
+echo Display::page_subheader2(get_lang('StudentList'));
 
 if (count($a_students) > 0) {
     $form = new FormValidator('reminder_form', 'get', api_get_path(REL_CODE_PATH).'announcements/announcements.php');
@@ -269,24 +320,12 @@ if (count($a_students) > 0) {
     $form->addElement('hidden', 'action', 'add');
     $form->addElement('hidden', 'remindallinactives', 'true');
 
-    $course_name = get_lang('Course').' '.$courseInfo['name'];
-
-    if ($session_id) {
-        echo Display::page_subheader(
-            Display::return_icon('session.png', get_lang('Session'), array(), ICON_SIZE_SMALL).' '.api_get_session_name($session_id).' '.
-            Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$course_name
-        );
-    } else {
-        echo Display::page_subheader(
-            Display::return_icon('course.png', get_lang('Course'), array(), ICON_SIZE_SMALL).' '.$courseInfo['name']
-        );
-    }
-
     $extra_field_select = TrackingCourseLog::display_additional_profile_fields();
 
     if (!empty($extra_field_select)) {
         echo $extra_field_select;
     }
+
     $form->display();
 
     // PERSON_NAME_DATA_EXPORT is buggy
@@ -391,7 +430,6 @@ if (count($a_students) > 0) {
     echo "<div id='reporting_table'>";
     $table->display();
     echo "</div>";
-
 } else {
     echo Display::display_warning_message(get_lang('NoUsersInCourse'));
 }

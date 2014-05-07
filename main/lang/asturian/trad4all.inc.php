@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddForum = "Amestar un foru";
 $Title = "Títulu";
 $By = "Espublizáu por";
 $UsersOnline = "Usuarios coneutaos";
@@ -747,6 +748,7 @@ $HumanAndTechnicalResourcesInformation = "Descripción breve de les persones col
 $Assessment = "Evaluación";
 $AssessmentQuestions = "¿ Cómo se va evaluar a los estudiantes ? ¿ Qué estratexes se van desendolcar pa qu'estos acaben dominando la materia ?";
 $AssessmentInformation = "Exemplos d'entrugues d'esame. Criterios d'evaluación. Pistes y trucos.";
+$UploadADocument = "Unviar un documentu";
 $langNameOfLang['bosnian'] = "bosniu";
 $langNameOfLang['czech'] = "checu";
 $langNameOfLang['dari'] = "dari";
@@ -793,4 +795,5 @@ $Installation = "Instalación";
 $ReadTheInstallationGuide = "Lleer la guía d'instalación";
 $TitleColumnGradebook = "Títulu nel cuadernu de notes";
 $QualifyWeight = "Porcentaxe d'esta nota na nota final";
+$DownloadLink = "Enllaz de baxada";
 ?>

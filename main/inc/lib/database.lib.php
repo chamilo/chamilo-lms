@@ -342,6 +342,7 @@ class Database {
      * Counts the number of rows in a table
      * @param string $table The table of which the rows should be counted
      * @return int The number of rows in the given table.
+     * @deprecated
      */
     public static function count_rows($table) {
         $obj = self::fetch_object(self::query("SELECT COUNT(*) AS n FROM $table"));   //

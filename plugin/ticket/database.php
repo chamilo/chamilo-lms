@@ -48,7 +48,7 @@ foreach ($categoRow as $category => $description) {
     //Online evaluation requires a course
     if ($i == 6) {
         $attributes = array(
-            'id' => $i, 
+            'id' => $i,
             'category_id' => $i,
             'name' => $category,
             'description' => $description,
@@ -57,14 +57,14 @@ foreach ($categoRow as $category => $description) {
         );
     } else {
         $attributes = array(
-            'id' => $i, 
+            'id' => $i,
             'category_id' => $i,
             'project_id' => 1,
             'description' => $description,
             'name' => $category
         );
     }
-    
+
     Database::insert($table, $attributes);
     $i++;
 }
@@ -219,7 +219,7 @@ $sql = "CREATE TABLE IF NOT EXISTS ".$table." (
 Database::query($sql);
 
 //Menu main tabs
-$rsTab = $objPlugin->addTab('Ticket', '/plugin/ticket/src/myticket.php');
+$rsTab = $objPlugin->addTab('Ticket', 'plugin/ticket/src/myticket.php');
 
 if ($rsTab) {
     echo "<script>location.href = '" . $_SERVER['REQUEST_URI'] . "';</script>";

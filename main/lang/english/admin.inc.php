@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ClassIdDoesntExists = "Class ID does not exist";
 $SearchSessions = "Session Search";
 $DeleteUsersNotInList = "Unsubscribe students which are not in the imported list";
 $IfSessionExistsUpdate = "If a session exists, update it";
@@ -47,6 +48,7 @@ $ConfigureHomePage = "Edit portal homepage";
 $CourseCreateActiveToolsTitle = "Modules active upon course creation";
 $CourseCreateActiveToolsComment = "Which tools have to be enabled (visible) by default when a new course is created?";
 $SearchUsers = "Search users";
+$SearchUser = "Search users";
 $CreateUser = "Create user";
 $ModifyInformation = "Edit information";
 $ModifyUser = "Edit user";

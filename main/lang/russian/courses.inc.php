@@ -19,7 +19,6 @@ $Unsubscribe = "Отказаться от подписки";
 $lang_back_to_my_home_page = "Вернуться на мою домашнюю страницу";
 $lang_back_to_my_personnal_course_list = "Вернуться к моему личному списку курсов";
 $langTitular = "Ответственный";
-$langBackToListOfThisUser = "Вкрнуться к списку курсов";
 $langAdministrationTools = "Инструменты управления";
 $lang_back_to_parent_category = "Вернуться к основному (начальному) разделу";
 $lang_back_to_course_selection = "Вернуться к выбору курса";

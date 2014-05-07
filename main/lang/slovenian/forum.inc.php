@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "Kategorija foruma je odstranjena";
 $ForumLocked = "Forum je zaklenjen";
 $Forum = "Forumi";
 $AddForumCategory = "Dodaj novo kategorijo foruma";
-$AddForum = "Dodaj nov forum";
 $Topics = "Teme";
 $Posts = "Objave";
 $LastPosts = "Zadnja objava";

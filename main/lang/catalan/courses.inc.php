@@ -20,7 +20,6 @@ $Unsubscribe = "Anul·lar una inscripció";
 $lang_back_to_my_home_page = "Tornar a la meva pàgina inicial";
 $lang_back_to_my_personnal_course_list = "Tornar a la meva llista personal de cursos";
 $langTitular = "Responsable";
-$langBackToListOfThisUser = "Tornar a la llista de cursos";
 $langAdministrationTools = "Eines d'administració";
 $lang_back_to_parent_category = "Tornar a la categoria superior";
 $lang_back_to_course_selection = "Tornar a la selecció del curs";
@@ -84,6 +83,7 @@ $Collapse = "Contreure";
 $CourseDetails = "Detalls del curs";
 $GroupPendingInvitations = "Invitacions pendents de grup";
 $Compose = "Redacta";
+$EmptyHeaderLine = "Existeixen línies en blanc a l'inici del fitxer seleccionat";
 $EnrollToCourseXSuccessful = "La seva inscripció al curs %s s'ha completat";
 $ThereAreNoCoursesInThisCategory = "No existeixen cursos en la categoria actual";
 ?>

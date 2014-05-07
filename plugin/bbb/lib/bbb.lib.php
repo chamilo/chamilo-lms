@@ -115,7 +115,7 @@ class bbb {
         if ($id) {
             if ($this->debug) error_log("create_meeting: $id ");
 
-            $meeting_name       = isset($params['meeting_name']) ? $params['meeting_name'] : api_get_course_id();
+            $meeting_name       = isset($params['meeting_name']) ? $params['meeting_name'] : api_get_course_id().'-'.api_get_session_id();
             $welcome_msg        = isset($params['welcome_msg']) ? $params['welcome_msg'] : null;
             $record             = isset($params['record']) && $params['record'] ? 'true' : 'false';
             $duration           = isset($params['duration']) ? intval($params['duration']) : 0;

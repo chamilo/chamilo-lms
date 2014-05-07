@@ -221,16 +221,6 @@ define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 define('USERNAME_PURIFIER_MAIL', '/[^0-9A-Za-z_\.@]/');
 define('USERNAME_PURIFIER_SHALLOW', '/\s/');
 
-// Constants for detection some important PHP5 subversions.
-$php_version = (float) PHP_VERSION;
-
-define('IS_PHP_52', !((float)$php_version < 5.2));
-define('IS_PHP_53', !((float)$php_version < 5.3));
-
-define('IS_PHP_SUP_OR_EQ_53', ($php_version >= 5.3));
-define('IS_PHP_SUP_OR_EQ_52', ($php_version >= 5.2 && !IS_PHP_53));
-define('IS_PHP_SUP_OR_EQ_51', ($php_version >= 5.1 && !IS_PHP_52 && !IS_PHP_53));
-
 // This constant is a result of Windows OS detection, it has a boolean value:
 // true whether the server runs on Windows OS, false otherwise.
 define('IS_WINDOWS_OS', api_is_windows_os());
@@ -341,7 +331,7 @@ define('SHOW_TEXT_NEAR_ICONS', false);
  * Inclusion of internationalization libraries
  */
 
-require_once dirname(__FILE__).'/internationalization.lib.php';
+require_once __DIR__.'/internationalization.lib.php';
 
 
 /* PATHS & FILES - ROUTINES */
@@ -526,7 +516,7 @@ function api_get_path($path_type, $path = null)
                     $server_name .= ":" . $_SERVER['SERVER_PORT'];
                 }
                 $root_web = $server_protocol.'://'.$server_name.$root_rel;
-                $root_sys = str_replace('\\', '/', realpath(dirname(__FILE__).'/../../../')).'/';
+                $root_sys = str_replace('\\', '/', realpath(__DIR__.'/../../../')).'/';
                 $code_folder = 'main/';
                 $course_folder = 'courses/';
             }
@@ -782,7 +772,7 @@ function apiGetDisplayGroupsForumInGeneralTool() {
 
 /**
  * This function checks whether a given path points inside the system.
- * @param string $path      The path to be tesed. It should be full path, web-absolute (WEB), semi-absolute (REL) or system-absolyte (SYS).
+ * @param string $path      The path to be tested. It should be full path, web-absolute (WEB), semi-absolute (REL) or system-absolyte (SYS).
  * @return bool             Returns true when the given path is inside the system, false otherwise.
  */
 function api_is_internal_path($path) {
@@ -977,6 +967,20 @@ function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = f
 }
 
 /**
+ * Function used to protect a teacher script.
+ * The function blocks access when the user has no teacher rights.
+ *
+ * @author Yoselyn Castillo
+ */
+function api_protect_teacher_script($allow_sessions_admins = false) {
+    if (!api_is_allowed_to_edit()) {
+        api_not_allowed(true);
+        return false;
+    }
+    return true;
+}
+
+/**
  * Function used to prevent anonymous users from accessing a script.
  *
  * @author Roan Embrechts
@@ -1059,20 +1063,26 @@ function api_get_user_id() {
  * @return array    Array of courses in the form [0]=>('code'=>xxx,'db'=>xxx,'dir'=>xxx,'status'=>d)
  */
 function api_get_user_courses($userid, $fetch_session = true) {
-    if ($userid != strval(intval($userid))) { return array(); } //get out if not integer
+    if ($userid != strval(intval($userid))) {
+        return array();
+    } //get out if not integer
     $t_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $t_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
     $t_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
     $t_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-    $sql_select_courses = "SELECT cc.code code, cc.db_name db, cc.directory dir, cu.status status
-                                    FROM    $t_course       cc,
-                                            $t_course_user   cu
-                                    WHERE cc.code = cu.course_code
-                                    AND   cu.user_id = '".$userid."' AND cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
-    $result = Database::query($sql_select_courses);
-    if ($result === false) { return array(); }
+    $sql = "SELECT cc.code code, cc.db_name db, cc.directory dir, cu.status status
+            FROM    $t_course       cc,
+                    $t_course_user   cu
+            WHERE
+                cc.code = cu.course_code AND
+                cu.user_id = '".$userid."' AND
+                cu.relation_type<>".COURSE_RELATION_TYPE_RRHH." ";
+    $result = Database::query($sql);
+    if ($result === false) {
+        return array();
+    }
     while ($row = Database::fetch_array($result)) {
         // we only need the database name of the course
         $courses[] = $row;
@@ -1090,6 +1100,8 @@ function api_get_user_courses($userid, $fetch_session = true) {
 function _api_format_user($user, $add_password = false) {
     $result = array();
 
+    $firstname = null;
+    $lastname = null;
     if (isset($user['firstname']) && isset($user['lastname'])) {
         $firstname = $user['firstname'];
         $lastname = $user['lastname'];
@@ -1099,7 +1111,7 @@ function _api_format_user($user, $add_password = false) {
     }
     $result['phone'] = $user['phone'];
 
-    $result['complete_name'] 	= api_get_person_name($firstname, $lastname);
+    $result['complete_name'] = api_get_person_name($firstname, $lastname);
 
     $result['complete_name_with_username'] = $result['complete_name'];
     if (!empty($user['username'])) {
@@ -1203,10 +1215,12 @@ function _api_format_user($user, $add_password = false) {
 }
 
 /**
- * Finds all the information about a user. If no paramater is passed you find all the information about the current user.
- * @param $user_id (integer): the id of the user
- * @return $user_info (array): user_id, lastname, firstname, username, email, ...
+ * Finds all the information about a user.
+ * If no parameter is passed you find all the information about the current user.
+ * @param int $user_id
+ * @return array $user_info user_id, lastname, firstname, username, email, etc
  * @author Patrick Cool <patrick.cool@UGent.be>
+ * @author Julio Montoya
  * @version 21 September 2004
  */
 function api_get_user_info($user_id = '', $check_if_user_is_online = false, $show_password = false) {
@@ -1240,13 +1254,17 @@ function api_get_user_info($user_id = '', $check_if_user_is_online = false, $sho
 
 /**
  * Finds all the information about a user from username instead of user id
- * @param $username (string): the username
- * @return $user_info (array): user_id, lastname, firstname, username, email, ...
+ * @param string $username
+ * @return array $user_info array user_id, lastname, firstname, username, email
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-function api_get_user_info_from_username($username = '') {
-    if (empty($username)) { return false; }
-    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE username='".Database::escape_string($username)."'";
+function api_get_user_info_from_username($username = '')
+{
+    if (empty($username)) {
+        return false;
+    }
+    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
+            WHERE username='".Database::escape_string($username)."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
@@ -1304,7 +1322,8 @@ function api_get_course_setting($setting_name, $course_code = null)
 	$table 		 = Database::get_course_table(TABLE_COURSE_SETTING);
     $setting_name = Database::escape_string($setting_name);
     if (!empty($course_info['real_id']) && !empty($setting_name)) {
-        $sql = "SELECT value FROM $table WHERE c_id = {$course_info['real_id']} AND variable = '$setting_name'";
+        $sql = "SELECT value FROM $table
+                WHERE c_id = {$course_info['real_id']} AND variable = '$setting_name'";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
@@ -2270,7 +2289,8 @@ function api_get_self() {
  * false otherwise.
  * @see usermanager::is_admin(user_id) for a user-id specific function
  */
-function api_is_platform_admin($allow_sessions_admins = false, $allow_drh = false) {
+function api_is_platform_admin($allow_sessions_admins = false, $allow_drh = false)
+{
     if ($_SESSION['is_platformAdmin']) {
         return true;
     }
@@ -2394,7 +2414,6 @@ function api_get_user_platform_status($user_id = false) {
 
 	//Session
 	if ($session_id && $course_id) {
-        $session_status = array();
         $session_status = array('id' => $session_id, 'course_id' => $course_id);
         $session_user_status = SessionManager::get_user_status_in_course_session($user_id, $course_code, $session_id);
         switch ($session_user_status) {
@@ -2440,8 +2459,14 @@ function api_get_user_platform_status($user_id = false) {
     return $status;
 }
 
-
-function api_is_course_session_coach($user_id, $course_code, $session_id) {
+/**
+ * @param int $user_id
+ * @param string $course_code
+ * @param int $session_id
+ * @return bool
+ */
+function api_is_course_session_coach($user_id, $course_code, $session_id)
+{
     $session_table 						= Database::get_main_table(TABLE_MAIN_SESSION);
     $session_rel_course_rel_user_table  = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
@@ -2750,6 +2775,7 @@ function api_display_debug_info($debug_info) {
  *
  * @author Roan Embrechts
  * @author Patrick Cool
+ * @author Julio Montoya
  * @version 1.1, February 2004
  * @return boolean, true: the user has the rights to edit, false: he does not
  */
@@ -2772,17 +2798,20 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
 
     $is_courseAdmin = api_is_course_admin();
 
-    if (!$is_courseAdmin && $tutor) {   // If we also want to check if the user is a tutor...
+    if (!$is_courseAdmin && $tutor) {
+        // If we also want to check if the user is a tutor...
         $is_courseAdmin = $is_courseAdmin || api_is_course_tutor();
     }
 
-    if (!$is_courseAdmin && $coach) {   // If we also want to check if the user is a coach...';
+    if (!$is_courseAdmin && $coach) {
+        // If we also want to check if the user is a coach...';
         // Check if session visibility is read only for coaches.
         if ($session_visibility == SESSION_VISIBLE_READ_ONLY) {
             $is_allowed_coach_to_edit = false;
         }
 
-        if (api_get_setting('allow_coach_to_edit_course_session') == 'true') { // Check if coach is allowed to edit a course.
+        if (api_get_setting('allow_coach_to_edit_course_session') == 'true') {
+            // Check if coach is allowed to edit a course.
             $is_courseAdmin = $is_courseAdmin || $is_allowed_coach_to_edit;
         } else {
             $is_courseAdmin = $is_courseAdmin;
@@ -2800,7 +2829,8 @@ function api_is_allowed_to_edit($tutor = false, $coach = false, $session_coach =
             if ($session_visibility == SESSION_VISIBLE_READ_ONLY) {
                 $is_allowed_coach_to_edit = false;
             }
-            if (api_get_setting('allow_coach_to_edit_course_session') == 'true') { // Check if coach is allowed to edit a course.
+            if (api_get_setting('allow_coach_to_edit_course_session') == 'true') {
+                // Check if coach is allowed to edit a course.
                 $is_allowed = $is_allowed_coach_to_edit;
             } else {
                 $is_allowed = false;
@@ -2841,7 +2871,8 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false) {
             $session_id = api_get_session_id();
 
             // Get the session visibility
-            $session_visibility = api_get_session_visibility($session_id);  // if 5 the session is still available
+            $session_visibility = api_get_session_visibility($session_id);
+            // if 5 the session is still available
 
             //@todo We could load the session_rel_course_rel_user permission to increase the level of detail.
             //echo api_get_user_id();
@@ -2867,6 +2898,7 @@ function api_is_allowed_to_session_edit($tutor = false, $coach = false) {
 * @param $tool the tool we are checking if the user has a certain permission
 * @param $action the action we are checking (add, edit, delete, move, visibility)
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+* @author Julio Montoya
 * @version 1.0
 */
 function api_is_allowed($tool, $action, $task_id = 0) {
@@ -3046,7 +3078,12 @@ function api_not_allowed($print_headers = false, $message = null)
         exit;
     }
 
-    if (!empty($_SERVER['REQUEST_URI']) && (!empty($_GET['cidReq']) || $this_section == SECTION_MYPROFILE || $this_section == SECTION_PLATFORM_ADMIN)) {
+    if (!empty($_SERVER['REQUEST_URI']) &&
+        (!empty($_GET['cidReq']) ||
+            $this_section == SECTION_MYPROFILE ||
+            $this_section == SECTION_PLATFORM_ADMIN
+        )
+    ) {
 
         //only display form and return to the previous URL if there was a course ID included
         if ($user_id != 0 && !api_is_anonymous()) {
@@ -3186,25 +3223,30 @@ function api_get_datetime($time = null) {
  * @param int       The session ID (optional)
  * @return int      -1 on error, 0 if invisible, 1 if visible
  */
-function api_get_item_visibility($_course, $tool, $id, $session=0)
+function api_get_item_visibility($_course, $tool, $id, $session = 0)
 {
     if (!is_array($_course) || count($_course) == 0 || empty($tool) || empty($id)) {
         return -1;
     }
     $tool = Database::escape_string($tool);
-    $id = Database::escape_string($id);
+    $id = intval($id);
     $session = (int) $session;
     $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $course_id	 = $_course['real_id'];
+    $course_id	 = intval($_course['real_id']);
     $sql = "SELECT visibility FROM $TABLE_ITEMPROPERTY
     		WHERE 	c_id = $course_id AND
     				tool = '$tool' AND
     				ref = $id AND
     				(id_session = $session OR id_session = 0)
-    		ORDER BY id_session DESC, lastedit_date DESC LIMIT 1";
+    		ORDER BY id_session DESC, lastedit_date DESC
+            LIMIT 1";
+
     $res = Database::query($sql);
-    if ($res === false || Database::num_rows($res) == 0) { return -1; }
+    if ($res === false || Database::num_rows($res) == 0) {
+        return -1;
+    }
     $row = Database::fetch_array($res);
+
     return $row['visibility'];
 }
 
@@ -3579,9 +3621,10 @@ function api_get_item_property_info($course_id, $tool, $ref, $session_id = 0)
 }
 
 /**
- * Displays a combobox so the user can select his/her preferred language.
+ * Displays a combo box so the user can select his/her preferred language.
  * @param string The desired name= value for the select
- * @param bool Whether we use the JQuery Chozen library or not (in some cases, like the indexing language picker, it can alter the presentation)
+ * @param bool Whether we use the JQuery Chozen library or not
+ * (in some cases, like the indexing language picker, it can alter the presentation)
  * @return string
  */
 
@@ -3721,6 +3764,7 @@ function api_get_language_id($language) {
     $row = Database::fetch_array($result);
     return $row['id'];
 }
+
 /**
  * Gets language of the requested type for the current user. Types are :
  * user_profil_lang : profile language of current user
@@ -3730,7 +3774,8 @@ function api_get_language_id($language) {
  * @param string lang_type
  * @param return language of the requested type or false if the language is not available
  **/
-function api_get_language_from_type($lang_type){
+function api_get_language_from_type($lang_type)
+{
     global $_user;
     global $_course;
     $toreturn = false;
@@ -3779,7 +3824,8 @@ function api_get_visual_theme() {
     static $visual_theme;
     if (!isset($visual_theme)) {
 
-        $platform_theme = api_get_setting('stylesheets');   // Plataform's theme.
+        $platform_theme = api_get_setting('stylesheets');
+        // Plataform's theme.
         $visual_theme = $platform_theme;
 
         if (api_get_setting('user_selected_theme') == 'true') {
@@ -3788,7 +3834,8 @@ function api_get_visual_theme() {
                 $user_theme = $user_info['theme'];
 
                 if (!empty($user_theme)) {
-                    $visual_theme = $user_theme;                // User's theme.
+                    $visual_theme = $user_theme;
+                    // User's theme.
                 }
             }
         }
@@ -3800,16 +3847,19 @@ function api_get_visual_theme() {
 
                 if (!empty($course_theme) && $course_theme != -1) {
                     if (!empty($course_theme)) {
-                        $visual_theme = $course_theme;      // Course's theme.
+                        $visual_theme = $course_theme;
+                        // Course's theme.
                     }
                 }
 
                 $allow_lp_theme = api_get_course_setting('allow_learning_path_theme');
                 if ($allow_lp_theme == 1) {
-                    global $lp_theme_css, $lp_theme_config; // These variables come from the file lp_controller.php.
+                    global $lp_theme_css, $lp_theme_config;
+                    // These variables come from the file lp_controller.php.
                     if (!$lp_theme_config) {
                         if (!empty($lp_theme_css)) {
-                            $visual_theme = $lp_theme_css;  // LP's theme.
+                            $visual_theme = $lp_theme_css;
+                            // LP's theme.
                         }
                     }
                 }
@@ -3877,6 +3927,7 @@ function api_get_themes() {
  * @param int $width The width of the form element
  * @param string $attributes (optional) attributes for the form element
  * @param array $editor_config (optional) Configuration options for the html-editor
+ * @deprecated
  */
 function api_disp_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
     global $_configuration, $_course, $fck_attribute;
@@ -3901,6 +3952,7 @@ function api_disp_html_area($name, $content = '', $height = '', $width = '100%',
  * @param int $width The width of the form element
  * @param string $attributes (optional) attributes for the form element
  * @param array $editor_config (optional) Configuration options for the html-editor
+ * @deprecated
  */
 function api_return_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
     global $_configuration, $_course, $fck_attribute;
@@ -3996,7 +4048,9 @@ function api_plugin($location) {
 function api_is_plugin_installed($plugin_list, $plugin_name) {
     if (is_array($plugin_list)) {
         foreach ($plugin_list as $plugin_location) {
-            if (array_search($plugin_name, $plugin_location) !== false) { return true; }
+            if (array_search($plugin_name, $plugin_location) !== false) {
+                return true;
+            }
         }
     }
     return false;
@@ -4035,13 +4089,13 @@ function api_time_to_hms($seconds) {
     return "$hours:$min:$sec";
 }
 
-
 /* FILE SYSTEM RELATED FUNCTIONS */
 
 /**
  * Returns the permissions to be assigned to every newly created directory by the web-server.
- * The return value is based on the platform administrator's setting "Administration > Configuration settings > Security > Permissions for new directories".
- * @return int      Returns the permissions in the format "Owner-Group-Others, Read-Write-Execute", as an integer value.
+ * The return value is based on the platform administrator's setting
+ * "Administration > Configuration settings > Security > Permissions for new directories".
+ * @return int  Returns the permissions in the format "Owner-Group-Others, Read-Write-Execute", as an integer value.
  */
 function api_get_permissions_for_new_directories() {
     static $permissions;
@@ -4055,8 +4109,10 @@ function api_get_permissions_for_new_directories() {
 
 /**
  * Returns the permissions to be assigned to every newly created directory by the web-server.
- * The returnd value is based on the platform administrator's setting "Administration > Configuration settings > Security > Permissions for new files".
- * @return int      Returns the permissions in the format "Owner-Group-Others, Read-Write-Execute", as an integer value.
+ * The return value is based on the platform administrator's setting
+ * "Administration > Configuration settings > Security > Permissions for new files".
+ * @return int Returns the permissions in the format
+ * "Owner-Group-Others, Read-Write-Execute", as an integer value.
  */
 function api_get_permissions_for_new_files() {
     static $permissions;
@@ -4478,7 +4534,6 @@ function api_get_status_langvars() {
     );
 }
 
-
 /**
 * The function that retrieves all the possible settings for a certain config setting
 * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
@@ -4559,7 +4614,7 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
         // Found item for this access_url.
         $row = Database::fetch_array($res);
         $update = "UPDATE $t_settings SET selected_value = '$value' WHERE id = ".$row['id'] ;
-        $res = Database::query($update);
+        Database::query($update);
     } else {
         // Item not found for this access_url, we have to check if it exist with access_url = 1
         $select = "SELECT * FROM $t_settings WHERE variable = '$var' AND access_url = 1 ";
@@ -4587,7 +4642,7 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
                         "'$value','".$row['title']."'," .
                         "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".(!empty($row['scope']) ? "'".$row['scope']."'" : "NULL")."," .
                         "".(!empty($row['subkeytext'])?"'".$row['subkeytext']."'":"NULL").",$access_url)";
-                $res = Database::query($insert);
+                Database::query($insert);
             } else { // Such a setting does not exist.
                 error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all', 0);
             }
@@ -4618,7 +4673,7 @@ function api_set_setting($var, $value, $subvar = null, $cat = null, $access_url 
                             "".(!empty($row['comment']) ? "'".$row['comment']."'" : "NULL").",".
                             (!empty($row['scope']) ? "'".$row['scope']."'" : "NULL")."," .
                             "".(!empty($row['subkeytext']) ? "'".$row['subkeytext']."'" : "NULL").",$access_url,".$row['access_url_changeable'].")";
-                    $res = Database::query($insert);
+                    Database::query($insert);
                 }
             } else { // Such a setting does not exist.
                 error_log(__FILE__.':'.__LINE__.': Attempting to update setting '.$var.' ('.$subvar.') which does not exist at all. The access_url is: '.$access_url.' ',0);
@@ -4695,11 +4750,13 @@ function api_get_access_urls($from = 0, $to = 1000000, $order = 'url', $directio
 
 /**
  * Gets the access url info in an array
- * @param id of the access url
- * @return array Array with all the info (url, description, active, created_by, tms) from the access_url table
- * @author Julio Montoya Armas
+ * @param int $id Id of the access url
+ * @return array All the info (url, description, active, created_by, tms)
+ * from the access_url table
+ * @author Julio Montoya
  */
-function api_get_access_url($id) {
+function api_get_access_url($id)
+{
     global $_configuration;
     $id = Database::escape_string(intval($id));
     // Calling the Database:: library dont work this is handmade.
@@ -5138,7 +5195,8 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null) {
     $sql = "SELECT session_id FROM $table_tool WHERE c_id = $course_id AND $key_field =  ".intval($element_id);
     $rs = Database::query($sql);
     if ($element_session_id = Database::result($rs, 0, 0)) {
-        if ($element_session_id == intval($session_id)) { // The element belongs to the session.
+        if ($element_session_id == intval($session_id)) {
+            // The element belongs to the session.
             return true;
         }
     }
@@ -5281,8 +5339,8 @@ function api_get_access_url_from_user($user_id) {
 
 /**
  * Gets the status of a user in a course
- * @param int       user_id
- * @param string    course_code
+ * @param int       $user_id
+ * @param string    $course_code
  * @return int      user status
  */
 function api_get_status_of_user_in_course ($user_id, $course_code) {
@@ -5846,7 +5904,6 @@ function api_get_template($path_type = 'rel') {
  * @param string $format
  *
  * @return bool, or return text array if $format=check_browser
- *
  * @author Juan Carlos Raña Trabado
  */
 
@@ -6126,8 +6183,6 @@ function api_get_jquery_libraries_js($libraries) {
         </script>
         ';
         $js .= $script;
-
-
     }
     return $js;
 }
@@ -6519,7 +6574,6 @@ function api_get_datetime_picker_js($htmlHeadXtra) {
     return $htmlHeadXtra;
 }
 
-
 function api_detect_user_roles($user_id, $course_code, $session_id = 0) {
     $user_roles = array();
     /*$user_info = api_get_user_info($user_id);
@@ -6783,14 +6837,15 @@ function api_get_bytes_memory_limit($mem){
 
 /**
  * Finds all the information about a user from username instead of user id
- * @param $username (string): the username
- * @return $user_info (array): user_id, lastname, firstname, username, email, ...
+ * @param string $username
+ * @return array $user_info user_id, lastname, firstname, username, email, ...
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 function api_get_user_info_from_official_code($official_code = '')
 {
     if (empty($official_code)) { return false; }
-    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)." WHERE official_code ='".Database::escape_string($official_code)."'";
+    $sql = "SELECT * FROM ".Database :: get_main_table(TABLE_MAIN_USER)."
+            WHERE official_code ='".Database::escape_string($official_code)."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
@@ -7033,7 +7088,8 @@ function api_is_allowed_in_course()
 
 /**
  * Show a string in
- * @param string $string Some string to dump, removing tabs, spaces, newlines, etc (usually most useful for SQL queries)
+ * @param string $string Some string to dump, removing tabs, spaces,
+ * newlines, etc (usually most useful for SQL queries)
  * @param int $dump Set to 1 to use print_r()
  */
 function api_error_log($string, $dump = 0)
@@ -7056,14 +7112,14 @@ function api_error_log($string, $dump = 0)
 
 /**
  * Show a string in the default error_log. Alias for api_error_log().
- * @param string $string Some string to dump, removing tabs, spaces, newlines, etc (usually most useful for SQL queries)
+ * @param string $string Some string to dump, removing tabs, spaces,
+ * newlines, etc (usually most useful for SQL queries)
  * @param int $dump Set to 1 to use print_r()
  */
 function api_elog($string, $dump = 0)
 {
     return api_error_log($string, $dump);
 }
-
 
 /**
  * Set the cookie to go directly to the course code $in_firstpage
@@ -7163,20 +7219,20 @@ function api_get_origin()
 function api_get_full_setting($variable, $key = null) {
     $variable = Database::escape_string($variable);
     $sql = "SELECT *
-            FROM settings_current 
+            FROM settings_current
             WHERE variable = '$variable' ";
-    
+
     if (!empty($key)) {
         $key = Database::escape_string($key);
         $sql .= "AND subkey = '$key'";
     }
-    
+
     $result = Database::query($sql);
     $setting = array();
-    
+
     while ($row = Database::fetch_assoc($result)) {
         $setting[] = $row;
     }
-    
+
     return $setting;
 }

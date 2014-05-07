@@ -335,7 +335,8 @@ $form->addElement('button', 'submit', get_lang('RegisterUser'), array('class' =>
 
 if ($form->validate()) {
 
-    $values = $form->exportValues();
+    //$values = $form->exportValues();
+    $values = $form->getSubmitValues(1);
     $values['username'] = api_substr($values['username'], 0, USERNAME_MAX_LENGTH); //make *sure* the login isn't too long
 
     if (api_get_setting('allow_registration_as_teacher') == 'false') {
@@ -363,6 +364,10 @@ if ($form->validate()) {
         foreach ($values as $key => $value) {
             if (substr($key, 0, 6) == 'extra_') { //an extra field
                 $extras[substr($key,6)] = $value;
+            } elseif (strpos($key, 'remove_extra_') !== false) {
+                $extra_value = Security::filter_filename(urldecode(key($value)));
+                // To remove from user_field_value and folder
+                UserManager::update_extra_field_value($user_id, substr($key,13), $extra_value);
             }
         }
 
@@ -370,7 +375,23 @@ if ($form->validate()) {
         $count_extra_field = count($extras);
         if ($count_extra_field > 0) {
             foreach ($extras as $key => $value) {
-                UserManager::update_extra_field_value($user_id, $key, $value);
+                // For array $value -> if exists key 'tmp_name' then must not be empty
+                // This avoid delete from user field value table when doesn't upload a file
+                if (is_array($value)) {
+                    if (array_key_exists('tmp_name', $value) && empty($value['tmp_name'])) {
+                        //Nothing to do
+                    } else {
+                        if (array_key_exists('tmp_name', $value)) {
+                            $value['tmp_name'] = Security::filter_filename($value['tmp_name']);
+                        }
+                        if (array_key_exists('name', $value)) {
+                            $value['name'] = Security::filter_filename($value['name']);
+                        }
+                        UserManager::update_extra_field_value($user_id, $key, $value);
+                    }
+                } else {
+                    UserManager::update_extra_field_value($user_id, $key, $value);
+                }
             }
         }
 
@@ -575,27 +596,25 @@ if ($form->validate()) {
     Session::erase('course_redirect');
     Session::erase('exercise_redirect');
 
-    Display :: display_header($tool_name);
-    echo Display::page_header($tool_name);
-
-    echo $content;
-    echo $text_after_registration;
-
     if (CustomPages::enabled()) {
         CustomPages::display(CustomPages::REGISTRATION_FEEDBACK, array('info' => $text_after_registration));
+    } else {
+        Display :: display_header($tool_name);
+        echo Display::page_header($tool_name);
+
+        echo $content;
+        echo $text_after_registration;
     }
 } else {
-
-    Display :: display_header($tool_name);
-    echo Display::page_header($tool_name);
-
-    echo $content;
-
     // Custom pages
     if (CustomPages::enabled()) {
         CustomPages::display(CustomPages::REGISTRATION, array('form' => $form));
     } else {
+        Display :: display_header($tool_name);
+        echo Display::page_header($tool_name);
+        echo $content;
         $form->display();
     }
 }
 Display :: display_footer();
+

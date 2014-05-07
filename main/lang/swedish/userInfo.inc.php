@@ -93,7 +93,6 @@ $MyCertificates = "Mina certifikat";
 $ToChangeYourEmailMustTypeYourPassword = "För att ändra din e-postadress, måste du bekräfta ditt lösenord";
 $Invitations = "Inbjudningar";
 $MyGroups = "Mina grupper";
-$EditProfile = "Redigera Profil";
 $Profile = "Profil";
 $MyFriends = "Mina vänner";
 $Messages = "Meddelande";
@@ -122,6 +121,5 @@ $Popular = "Populär";
 $Member = "Medlem";
 $Open = "Öppen";
 $AcceptInvitation = "Acceptera Inbjudan";
-$MyFiles = "Mina filer";
 $SocialGroups = "Sociala grupper";
 ?>

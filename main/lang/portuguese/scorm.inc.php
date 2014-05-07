@@ -53,4 +53,9 @@ $UnknownPackageFormat = "Não é possível reconhecer o formato deste pacote. Po
 $Attempt = "Tentativa";
 $MoveTheCurrentForum = "Mover este fórum";
 $WarningWhenEditingScorm = "Atenção !<br /> Quando edita o conteúdo de um objecto de aprendizagem, a informação do curso poderá ser alterada ou até danificar o objecto de aprendizagem.";
+$AdditionalProfileField = "Adicionar campo de perfil de utilizador";
+$ScormUnknownPackageFormat = "O arquivo que está a tentar enviar tem um formato desconhecido. Por favor verifique se é um formato suportado.";
+$ScormNotEnoughSpaceInCourseToInstallPackage = "Não existe espaço suficiente no curso para comprimir o arquivo atual.";
+$ScormPackageFormatNotScorm = "O arquivo que está a tentar enviar não parece estar no formato SCORM. Verifique se o imsmanifest.xml está dentro do arquivo ZIP que está a tentar enviar.";
+$HideTocFrame = "Ocultar o frame de índice de conteúdos";
 ?>

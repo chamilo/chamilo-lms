@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AdditionalMailWasSentToSelectedUsers = "Adicionalmente um novo aviso foi criado e enviado para os usuários selecionados";
 $AgendaAdd = "Adicionar um evento";
 $ShowAllEvents = "Todos os eventos";
 $ShowCurrent = "Mês actual/corrente";
@@ -75,4 +76,12 @@ $AgendaSortChronologicallyDown = "Descendente";
 $ItemForUserSelection = "Lista de selecção de utilizadores";
 $IsNotiCalFormatFile = "Este ficheiro não está em formato iCal";
 $RepeatEvent = "Repetir evento";
+$AllDay = "Todos os dias";
+$SessionCalendar = "Calendário das sessões";
+$RepeatDate = "Repetir a data";
+$EndDateMustBeMoreThanStartDate = "Data final dever ser posterior a data de início";
+$SelectACourse = "Selecione um curso";
+$PleaseSelectACourseOrASessionInTheLeftColumn = "Por favor, selecione um curso ou uma sessão na barra lateral.";
+$DisableEndDate = "Desactivar data final";
+$AllEvents = "Todos os eventos";
 ?>

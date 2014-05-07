@@ -4,7 +4,6 @@ for more information: see languages.txt in the lang folder.
 */
 $Forum = "论坛";
 $AddForumCategory = "增加新的论坛分类";
-$AddForum = "添加新论坛";
 $Topics = "主题";
 $Posts = "回复";
 $LastPosts = "最新回复";

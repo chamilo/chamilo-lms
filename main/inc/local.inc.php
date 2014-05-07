@@ -374,7 +374,6 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                                     }
                                 }
                             } else {
-                                //error_log('Loggedin');
                                 ConditionalLogin::check_conditions($uData);
                                 $_user['user_id'] = $uData['user_id'];
                                 $_user['status']  = $uData['status'];
@@ -822,7 +821,7 @@ if (isset($cidReset) && $cidReset) {
 
         // these lines are usefull for tracking. Indeed we can have lost the id_session and not the cid.
         // Moreover, if we want to track a course with another session it can be usefull
-        if (!empty($_GET['id_session'])) {
+        if (!empty($_GET['id_session']) && is_numeric($_GET['id_session'])) {
             $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
             $sql = 'SELECT name FROM '.$tbl_session . ' WHERE id="'.intval($_SESSION['id_session']). '"';
             $rs = Database::query($sql);
@@ -872,7 +871,7 @@ if (isset($cidReset) && $cidReset) {
                 $session_lifetime    = 3600; // 1 hour
 
                 $course_code = $_course['sysCode'];
-                $time = api_get_datetime();
+                $time = api_get_utc_datetime();
 
                 if (isset($_user['user_id']) && !empty($_user['user_id'])) {
 
@@ -885,18 +884,15 @@ if (isset($cidReset) && $cidReset) {
                                     login_course_date > now() - INTERVAL $session_lifetime SECOND
                         ORDER BY login_course_date DESC LIMIT 0,1";
                     $result = Database::query($sql);
-
                     if (Database::num_rows($result) > 0) {
                         $i_course_access_id = Database::result($result,0,0);
                         //We update the course tracking table
                         $sql = "UPDATE $course_tracking_table  SET logout_course_date = '$time', counter = counter+1
                                 WHERE course_access_id = ".intval($i_course_access_id)." AND session_id = ".api_get_session_id();
-                        //error_log($sql);
                         Database::query($sql);
                     } else {
                         $sql="INSERT INTO $course_tracking_table (course_code, user_id, login_course_date, logout_course_date, counter, session_id)" .
                             "VALUES('".$course_code."', '".$_user['user_id']."', '$time', '$time', '1','".api_get_session_id()."')";
-                        //error_log($sql);
                         Database::query($sql);
                     }
                 }
@@ -1140,18 +1136,29 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
     }
 
     if (!$is_platformAdmin) {
-        if (!$is_courseMember && isset($_course['registration_code']) && !empty($_course['registration_code'])) {
-            $is_courseMember    = false;
-            $is_courseAdmin     = false;
-            $is_courseTutor     = false;
-            $is_courseCoach     = false;
-            $is_sessionAdmin    = false;
-            $is_allowed_in_course = false;
+        if (!$is_courseMember && 
+            isset($_course['registration_code']) && 
+            !empty($_course['registration_code']) && 
+            !Session::read('course_password_'.$_course['real_id'], false)
+        ) {
+            // if we are here we try to access to a course requiring password
+            if ($is_allowed_in_course) {
+                // the course visibility allows to access the course 
+                // with a password
+                $url = api_get_path(WEB_CODE_PATH).'auth/set_temp_password.php?course_id='.$_course['real_id'].'&session_id='.$session_id;
+                header('Location: '.$url);
+                exit;
+            } else {
+                $is_courseMember = false;
+                $is_courseAdmin = false;
+                $is_courseTutor = false;
+                $is_courseCoach = false;
+                $is_sessionAdmin = false;
+                $is_allowed_in_course = false;
+            }
         }
-    }
+    } // check the session visibility
 
-
-    // check the session visibility
     if ($is_allowed_in_course == true) {
 
         //if I'm in a session

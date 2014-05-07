@@ -76,7 +76,6 @@ $langFormula = "Merhaba, Ders Yetkilisi";
 $langProblem = "Herhangi bir problem durumunda irtibata geçeceğiniz kişi:";
 $langIs = "dır";
 $langAddress = "Adres";
-$langSettings = "Kayıt bilgileriniz şunlardır:\nUsername:";
 $langYouAreReg = "Kaydolduğunuz ders:";
 $langYourReg = "Kaydınız";
 $langUserFree = "Bu kullan�c� ad� daha �nce al�nm��t�r. Geri d�n�p ba�ka bir ad yaz�n�z.";

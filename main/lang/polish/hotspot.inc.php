@@ -18,7 +18,7 @@ $showHotspots = "Pokaż/Ukryj hotspot'y";
 $labelPolyMenu = "Zamknij wielokąt";
 $triesleft = "Próby pozostawione";
 $exeFinished = "Kliknij na poniższy przycisk, aby potwierdzić swoje odpowiedzi.";
-$nextAnswer = "Teraz kliknij na: &zrobione=zrobione";
+$nextAnswer = "Teraz kliknij na: &done=done";
 $delineation = "Szkic";
 $labelDelineationMenu = "Zamknij szkic";
 $oar = "Zagrożony obszar";

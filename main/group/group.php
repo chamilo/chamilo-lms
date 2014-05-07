@@ -2,18 +2,18 @@
 /* For licensing terms, see /license.txt */
 
 /**
-*	Main page for the group module.
-*	This script displays the general group settings,
-*	and a list of groups with buttons to view, edit...
-*
-*	@author Thomas Depraetere, Hugues Peeters, Christophe Gesche: initial versions
-*	@author Bert Vanderkimpen, improved self-unsubscribe for cvs
-*	@author Patrick Cool, show group comment under the group name
-*	@author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
-*	@author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
-*	@author Isaac Flores, code cleaning and improvements
-*	@package chamilo.group
-*/
+ *	Main page for the group module.
+ *	This script displays the general group settings,
+ *	and a list of groups with buttons to view, edit...
+ *
+ *	@author Thomas Depraetere, Hugues Peeters, Christophe Gesche: initial versions
+ *	@author Bert Vanderkimpen, improved self-unsubscribe for cvs
+ *	@author Patrick Cool, show group comment under the group name
+ *	@author Roan Embrechts, initial self-unsubscribe code, code cleaning, virtual course support
+ *	@author Bart Mollet, code cleaning, use of Display-library, list of courseAdmin-tools, use of GroupManager
+ *	@author Isaac Flores, code cleaning and improvements
+ *	@package chamilo.group
+ */
 /*		INIT SECTION	*/
 // Name of the language file that needs to be included
 $language_file = 'group';
@@ -167,14 +167,17 @@ if (api_is_allowed_to_edit(false, true)) {
     echo  '<a href="import.php?'.api_get_cidreq().'&action=import">'.
         Display::return_icon('import_csv.png', get_lang('Import'), '', ICON_SIZE_MEDIUM).'</a>';
 
-    echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=csv">'.
-        Display::return_icon('export_csv.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
+    echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=csv">'.
+        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
 
     echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export&type=xls">'.
         Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
 
     echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export_pdf">'.
         Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+
+    echo  '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=xls">'.
+        Display::return_icon('export_excel.png', get_lang('ExportSettingsAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
 
     echo '<a href="group_overview.php?'.api_get_cidreq().'">'.
         Display::return_icon('group_summary.png', get_lang('GroupOverview'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -212,15 +215,16 @@ if (api_get_setting('allow_group_categories') == 'true') {
         }
 
         echo Display::page_header($category['title'].' '. $label.' '.$actions);
-        echo '<p style="margin: 0px;margin-left: 50px;">'.$category['description'].'</p><p/>';
-        GroupManager ::process_groups($group_list, $category['id']);
+        echo $category['description'];
+        GroupManager::process_groups($group_list, $category['id']);
     }
 } else {
     $group_list = GroupManager::get_group_list();
     GroupManager::process_groups($group_list);
+
 }
 
-if (!isset ($_GET['origin']) || $_GET['origin'] != 'learnpath') {
+if (!isset($_GET['origin']) || $_GET['origin'] != 'learnpath') {
     Display::display_footer();
 }
 $_SESSION['_gid'] = 0;

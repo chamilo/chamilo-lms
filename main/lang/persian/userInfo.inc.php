@@ -95,7 +95,6 @@ $UnsubscribeFromPlatformSuccess = "اکانت شما %s بطور کامل از �
 $ToChangeYourEmailMustTypeYourPassword = "جهت تغییر پست الکترونیک خود، شما باید کلمه عبور شما مورد نیاز هست";
 $Invitations = "دعوتنامه ها";
 $MyGroups = "گروه های من";
-$EditProfile = "ویرایش مشخصات";
 $Social = "اجتماعی";
 $Profile = "مشخصات";
 $MyFriends = "دوستان من";
@@ -194,7 +193,6 @@ $YouNeedToHaveFriendsInYourSocialNetwork = "شما باید در شبکه اجت
 $SeeAllMyGroups = "نمایش تمامی گروه های من";
 $YouAlreadyInviteAllYourContacts = "شما قبلا همه مخاطبین خود را دعوت کردید";
 $YouShouldCreateAGroup = "شما باید یک گروه بسازید";
-$MyFiles = "فایل های من";
 $MySocialGroups = "گروه های اجتماعی من";
 $SocialGroups = "گروه های اجتماعی";
 $CreateASocialGroup = "ساخت یک گروه اجتماعی";

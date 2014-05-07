@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "Categorie in forum stearsa";
 $ForumLocked = "Forum blocat";
 $Forum = "Forumuri";
 $AddForumCategory = "Adaugati o noua categorie de forum";
-$AddForum = "Adaugati un forum nou";
 $Topics = "Topicuri";
 $Posts = "Mesaje";
 $LastPosts = "Ultimul mesaj";

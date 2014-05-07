@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ClassIdDoesntExists = "ID de clase no existe";
 $SearchSessions = "Búsqueda de sesiones";
 $DeleteUsersNotInList = "Desinscribir los alumnos que no están en una sesión en la lista importada";
 $IfSessionExistsUpdate = "Si la sesión existe, actualizarla con los datos del archivo";
@@ -43,6 +44,7 @@ $ConfigureHomePage = "Configuración de la página principal";
 $CourseCreateActiveToolsTitle = "Módulos activos al crear un curso";
 $CourseCreateActiveToolsComment = "¿Qué herramientas serán activadas (visibles) por defecto al crear un curso?";
 $SearchUsers = "Búsqueda de usuarios";
+$SearchUser = "Buscar usuarios";
 $CreateUser = "Crear usuario";
 $ModifyInformation = "Modificar información";
 $ModifyUser = "Modificar usuario";

@@ -11,8 +11,8 @@ class OLPC_Peru_FilterPlugin extends Plugin
     public $blacklist_enabled_file = '/var/sqg/blacklists';
     public $blacklists_dir = '/var/squidGuard/blacklists';
 
-    public $is_course_plugin = true;
-    
+    public $isCoursePlugin = true;
+
     //When creating a new course, these settings are added to the course
     public $course_settings = array(
 //                    array('name' => 'big_blue_button_welcome_message',  'type' => 'text'),
@@ -28,7 +28,7 @@ class OLPC_Peru_FilterPlugin extends Plugin
 
     protected function __construct() {
         parent::__construct('0.1', 'Yannick Warnier, Aliosh Neira', array('tool_enable' => 'boolean'));
-        
+
         $this->course_settings = array();
         $list = $this->get_blacklist_options();
         foreach ($list as $k => $v) {
@@ -49,7 +49,7 @@ class OLPC_Peru_FilterPlugin extends Plugin
         $this->install_course_fields_in_all_courses(false);
     }
 
-    function uninstall() {        
+    function uninstall() {
         //Deleting course settings
         $this->uninstall_course_fields_in_all_courses($this->course_settings);
     }
@@ -76,13 +76,13 @@ class OLPC_Peru_FilterPlugin extends Plugin
      */
     function get_blacklist_options() {
         $categories = $blacklists = array();
-        if (!is_dir($this->blacklists_dir)) { 
+        if (!is_dir($this->blacklists_dir)) {
             $this->error = 'Could not find blacklists dir '.$this->blacklists_dir;
-            return $blacklists; 
+            return $blacklists;
         }
-        if (!is_file($this->blacklist_enabled_file)) { 
+        if (!is_file($this->blacklist_enabled_file)) {
             $this->error = 'Could not find blacklists dir '.$this->blacklists_dir;
-            return $blacklists; 
+            return $blacklists;
         }
         $list = scandir($this->blacklists_dir);
         foreach ($list as $file) {

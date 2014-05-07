@@ -913,7 +913,7 @@ function WSCreateUserPasswordCrypted($params) {
     $loginName              = $params['loginname'];
     $official_code          = $params['official_code'];
     $language               = '';
-    $phone                  = '';
+    $phone                  = $params['phone'];
     $picture_uri            = '';
     $auth_source            = PLATFORM_AUTH_SOURCE;
     $expiration_date        = '0000-00-00 00:00:00'; $active = 1; $hr_dept_id = 0; $extra = null;
@@ -5291,6 +5291,57 @@ function WSListSessions($params) {
         );
     }
     return $return_list;
+}
+
+/* Register WSUserSubscribedInCourse function */
+// Register the data structures used by the service
+
+//prepare input params
+
+// Input params for editing users
+$server->wsdl->addComplexType(
+    'UserSubscribedInCourse',
+    'complexType',
+    'struct',
+    'all',
+    '',
+    array(
+        'course'       => array('name' => 'course',     'type' => 'xsd:string'), //Course string code
+        'user_id'      => array('name' => 'user_id',    'type' => 'xsd:string'), //Chamilo user_id
+        'secret_key'   => array('name' => 'secret_key', 'type' => 'xsd:string')
+    )
+);
+
+// Register the method to expose
+$server->register('WSUserSubscribedInCourse',                            // method name
+    array('UserSubscribedInCourse' => 'tns:UserSubscribedInCourse'),    // input parameters
+    array('return' => 'xsd:string'),                                        // output parameters
+    'urn:WSRegistration',                                                    // namespace
+    'urn:WSRegistration#WSUserSubscribedInCourse',                       // soapaction
+    'rpc',                                                                    // style
+    'encoded',                                                                // use
+    'This service checks if user assigned to course'    // documentation
+);
+
+/**
+ * Web service to tell if a given user is subscribed to the course
+ * @param array $params Array of parameters (course and user_id)
+ * @return bool|null|soap_fault A simple boolean (true if user is subscribed, false otherwise)
+ */
+function WSUserSubscribedInCourse ($params)
+{
+    global $debug;
+
+    if ($debug) error_log('WSUserSubscribedInCourse');
+    if ($debug) error_log('Params '. print_r($params, 1));
+    if (!WSHelperVerifyKey($params)) {
+
+        return return_error(WS_ERROR_SECRET_KEY);
+    }
+    $courseCode  = $params['course']; //Course code
+    $userId      = $params['user_id']; //chamilo user id
+
+    return (CourseManager::is_user_subscribed_in_course($userId,$courseCode));
 }
 
 // Use the request to (try to) invoke the service

@@ -354,17 +354,18 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 		$error_message = get_lang('TitleIsRequired');
 		$content_to_modify = $newContent;
 	} else if ($submitAnnouncement) {
+        $sendToUsersInSession = isset($_POST['send_to_users_in_session']) ? true : false;
 
 		if (isset($id) && $id) {
 			// there is an Id => the announcement already exists => update mode
 			if ($ctok == $_POST['sec_token']) {
 				$file_comment = $_POST['file_comment'];
 				$file = $_FILES['user_upload'];
-				AnnouncementManager::edit_announcement($id,	$emailTitle, $newContent, $_POST['selectedform'], $file, $file_comment);
+				AnnouncementManager::edit_announcement($id,	$emailTitle, $newContent, $_POST['selectedform'], $file, $file_comment, $sendToUsersInSession);
 
                 /*		MAIL FUNCTION	*/
                 if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
-                    AnnouncementManager::send_email($id);
+                    AnnouncementManager::send_email($id, $sendToUsersInSession);
                 }
 				$message = get_lang('AnnouncementModified');
 			}
@@ -374,9 +375,9 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
                 $file = $_FILES['user_upload'];
                 $file_comment = $_POST['file_comment'];
                 if (!empty($group_id)) {
-                    $insert_id = AnnouncementManager::add_group_announcement($safe_emailTitle, $safe_newContent, array('GROUP:'.$group_id), $_POST['selectedform'], $file, $file_comment);
+                    $insert_id = AnnouncementManager::add_group_announcement($safe_emailTitle, $safe_newContent, array('GROUP:'.$group_id), $_POST['selectedform'], $file, $file_comment, $sendToUsersInSession);
                 } else {
-                    $insert_id = AnnouncementManager::add_announcement($safe_emailTitle, $safe_newContent, $_POST['selectedform'], $file, $file_comment);
+                    $insert_id = AnnouncementManager::add_announcement($safe_emailTitle, $safe_newContent, $_POST['selectedform'], $file, $file_comment, $sendToUsersInSession);
                 }
                 //store_resources($_SESSION['source_type'],$insert_id);
                 $_SESSION['select_groupusers']="hide";
@@ -384,7 +385,7 @@ if (api_is_allowed_to_edit(false,true) OR (api_get_course_setting('allow_user_ed
 
                 /*		MAIL FUNCTION	*/
                 if ($_POST['email_ann'] && empty($_POST['onlyThoseMails'])) {
-                    AnnouncementManager::send_email($insert_id);
+                    AnnouncementManager::send_email($insert_id, $sendToUsersInSession);
                 }
 
 			} // end condition token
@@ -646,6 +647,12 @@ if ($display_form) {
 		echo '		</div>
 					</div>';
 
+        if (api_get_session_id() == 0) {
+            echo '<div class="control-group"><div class="controls">';
+            echo '<label class="checkbox" ><input name="send_to_users_in_session" type="checkbox" />'.get_lang('SendToUsersInSessions').'</label>';
+            echo '</div></div>';
+        }
+
 		if (!isset($announcement_to_modify) ) $announcement_to_modify ='';
 
         ($email_ann=='1')?$checked='checked':$checked='';
@@ -711,7 +718,7 @@ if ($display_form) {
 	echo $oFCKeditor->CreateHtml();
 	echo '</div></div>';
 
-	//File attachment
+    //File attachment
 	echo '	<div class="control-group">
 				<div class="controls">
 				    <a href="javascript://" onclick="return plus_attachment();"><span id="plus"><img style="vertical-align:middle;" src="../img/div_show.gif" alt="" />&nbsp;'.get_lang('AddAnAttachment').'</span></a>

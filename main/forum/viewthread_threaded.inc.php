@@ -22,12 +22,13 @@
  */
 
 require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+$forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
 
-$rows = get_posts($_GET['thread']); // Note: This has to be cleaned first.
+$rows = get_posts($_GET['thread']);
 $rows = calculate_children($rows);
 
 if (isset($_GET['post']) && $_GET['post']) {
-    $display_post_id = intval($_GET['post']); // note: this has to be cleaned first
+    $display_post_id = intval($_GET['post']);
 } else {
     // we need to display the first post
     reset($rows);
@@ -43,7 +44,7 @@ if(isset($_GET['origin'])) {
 
 // Delete attachment file.
 if ((isset($_GET['action']) && $_GET['action']=='delete_attach') && isset($_GET['id_attach'])) {
-    delete_attachment(0,$_GET['id_attach']);
+    delete_attachment(0, $_GET['id_attach']);
 }
 
 // 		Displaying the thread (structure)
@@ -62,15 +63,21 @@ foreach ($rows as $post) {
     $indent=$post['indent_cnt']*'20';
     $thread_structure.= "<div style=\"margin-left: ".$indent."px;\">";
 
-    if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]) and !empty($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]) and !empty($whatsnew_post_info[$_GET['forum']][$post['thread_id']])) {
-        $post_image=Display::return_icon('forumpostnew.gif');
+    if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]) AND
+        !empty($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$post['post_id']]) AND
+        !empty($whatsnew_post_info[$_GET['forum']][$post['thread_id']])
+    ) {
+        $post_image = Display::return_icon('forumpostnew.gif');
     } else {
-        $post_image=Display::return_icon('forumpost.gif');
+        $post_image = Display::return_icon('forumpost.gif');
     }
     $thread_structure.= $post_image;
-    if (isset($_GET['post']) && $_GET['post']==$post['post_id'] OR ($counter==1 AND !isset($_GET['post']))) {
-        $thread_structure.='<strong>'.prepare4display($post['post_title']).'</strong></div>';
-        $prev_next_array[]=$post['post_id'];
+    if (isset($_GET['post']) &&
+        $_GET['post'] == $post['post_id'] OR
+        ($counter==1 AND !isset($_GET['post']))
+    ) {
+        $thread_structure .= '<strong>'.prepare4display($post['post_title']).'</strong></div>';
+        $prev_next_array[]= $post['post_id'];
     } else {
         if ($post['visible']=='0') {
             $class=' class="invisible"';
@@ -78,7 +85,8 @@ foreach ($rows as $post) {
             $class='';
         }
         $count_loop=($count==0)?'&amp;id=1' : '';
-        $thread_structure.= "<a href=\"viewthread.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;post=".$post['post_id']."&amp;origin=$origin$count_loop\" $class>".prepare4display($post['post_title'])."</a></div>";
+        $thread_structure.= "<a href=\"viewthread.php?".api_get_cidreq()."&forum=".$clean_forum_id."&thread=".$clean_thread_id."&post=".$post['post_id']."&amp;origin=$origin$count_loop\" $class>".
+            prepare4display($post['post_title'])."</a></div>";
         $prev_next_array[]=$post['post_id'];
     }
     $count++;
@@ -88,10 +96,10 @@ $locked = api_resource_is_locked_by_gradebook($clean_thread_id, LINK_FORUM_THREA
 
 /* NAVIGATION CONTROLS */
 
-$current_id=array_search($display_post_id,$prev_next_array);
-$max=count($prev_next_array);
-$next_id=$current_id+1;
-$prev_id=$current_id-1;
+$current_id = array_search($display_post_id, $prev_next_array);
+$max = count($prev_next_array);
+$next_id = $current_id + 1;
+$prev_id = $current_id - 1;
 
 // text
 $first_message = get_lang('FirstMessage');
@@ -100,16 +108,32 @@ $next_message = get_lang('NextMessage');
 $prev_message = get_lang('PrevMessage');
 
 // images
-$first_img 	= Display::return_icon('action_first.png',get_lang('FirstMessage'), array('style' => 'vertical-align: middle;'));
-$last_img 	= Display::return_icon('action_last.png',get_lang('LastMessage'), array('style' => 'vertical-align: middle;'));
-$prev_img 	= Display::return_icon('action_prev.png',get_lang('PrevMessage'), array('style' => 'vertical-align: middle;'));
-$next_img 	= Display::return_icon('action_next.png',get_lang('NextMessage'), array('style' => 'vertical-align: middle;'));
+$first_img = Display::return_icon(
+    'action_first.png',
+    get_lang('FirstMessage'),
+    array('style' => 'vertical-align: middle;')
+);
+$last_img = Display::return_icon(
+    'action_last.png',
+    get_lang('LastMessage'),
+    array('style' => 'vertical-align: middle;')
+);
+$prev_img = Display::return_icon(
+    'action_prev.png',
+    get_lang('PrevMessage'),
+    array('style' => 'vertical-align: middle;')
+);
+$next_img = Display::return_icon(
+    'action_next.png',
+    get_lang('NextMessage'),
+    array('style' => 'vertical-align: middle;')
+);
 
 // links
-$first_href = 'viewthread.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;id=1&amp;post='.$prev_next_array[0];
-$last_href 	= 'viewthread.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;post='.$prev_next_array[$max-1];
-$prev_href	= 'viewthread.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;post='.$prev_next_array[$prev_id];
-$next_href	= 'viewthread.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;gradebook='.$gradebook.'&amp;origin='.$origin.'&amp;post='.$prev_next_array[$next_id];
+$first_href = $forumUrl.'viewthread.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;gradebook='.$gradebook.'&id=1&amp;post='.$prev_next_array[0];
+$last_href 	= $forumUrl.'viewthread.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;gradebook='.$gradebook.'&post='.$prev_next_array[$max-1];
+$prev_href	= $forumUrl.'viewthread.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;gradebook='.$gradebook.'&post='.$prev_next_array[$prev_id];
+$next_href	= $forumUrl.'viewthread.php?'.api_get_cidreq().'&amp;forum='.$clean_forum_id.'&amp;thread='.$clean_thread_id.'&amp;gradebook='.$gradebook.'&post='.$prev_next_array[$next_id];
 
 echo '<center style="margin-top: 10px; margin-bottom: 10px;">';
 //go to: first and previous
@@ -122,7 +146,7 @@ if ((int)$current_id > 0) {
 }
 
 //  current counter
-echo  ' [ '.($current_id+1).' / '.$max.' ] ';
+echo ' [ '.($current_id+1).' / '.$max.' ] ';
 
 // go to: next and last
 if (($current_id+1) < $max) {
@@ -135,14 +159,14 @@ if (($current_id+1) < $max) {
 echo '</center>';
 
 // the style depends on the status of the message: approved or not
-if ($rows[$display_post_id]['visible']=='0') {
-    $titleclass='forum_message_post_title_2_be_approved';
-    $messageclass='forum_message_post_text_2_be_approved';
-    $leftclass='forum_message_left_2_be_approved';
+if ($rows[$display_post_id]['visible'] == '0') {
+    $titleclass = 'forum_message_post_title_2_be_approved';
+    $messageclass = 'forum_message_post_text_2_be_approved';
+    $leftclass = 'forum_message_left_2_be_approved';
 } else {
-    $titleclass='forum_message_post_title';
-    $messageclass='forum_message_post_text';
-    $leftclass='forum_message_left';
+    $titleclass = 'forum_message_post_title';
+    $messageclass = 'forum_message_post_text';
+    $leftclass = 'forum_message_left';
 }
 
 // 		Displaying the message
@@ -171,15 +195,19 @@ $id_attach = !empty($attachment_list)?$attachment_list['id']:'';
 
 // The user who posted it can edit his thread only if the course admin allowed this in the properties of the forum
 // The course admin him/herself can do this off course always
-if (GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) OR  ($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))) {
+if (GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) OR ($current_forum['allow_edit']==1 AND $row['user_id']==$_user['user_id']) or (api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session']))) {
     if ($locked == false) {
-        echo "<a href=\"editpost.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;origin=".$origin."&amp;post=".$rows[$display_post_id]['post_id']."&amp;id_attach=".$id_attach."\">".Display::return_icon('edit.png',get_lang('Edit'), array(), ICON_SIZE_SMALL)."</a>";
+        echo "<a href=\"editpost.php?".api_get_cidreq()."&forum=".$clean_forum_id."&thread=".$clean_thread_id."&post=".$rows[$display_post_id]['post_id']."&amp;id_attach=".$id_attach."\">".
+            Display::return_icon('edit.png',get_lang('Edit'), array(), ICON_SIZE_SMALL).'</a>';
     }
 }
 
-if (GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) OR api_is_allowed_to_edit(false,true)  && !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])) {
+if (GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) OR
+    api_is_allowed_to_edit(false,true) &&
+    !(api_is_course_coach() && $current_forum['session_id']!=$_SESSION['id_session'])
+) {
     if ($locked == false) {
-        echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=delete&amp;content=post&amp;id=".$rows[$display_post_id]['post_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL)."</a>";
+        echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=delete&amp;content=post&amp;id=".$rows[$display_post_id]['post_id']."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('DeletePost'), ENT_QUOTES))."')) return false;\">".Display::return_icon('delete.png',get_lang('Delete'), array(), ICON_SIZE_SMALL)."</a>";
     }
     display_visible_invisible_icon('post', $rows[$display_post_id]['post_id'], $rows[$display_post_id]['visible'],array('forum'=>$clean_forum_id,'thread'=>$clean_thread_id, 'post'=>Security::remove_XSS($_GET['post']) ));
     echo "";
@@ -200,17 +228,18 @@ if (GroupManager::is_tutor_of_group(api_get_user_id(), $group_id) OR api_is_allo
         echo "<a href=\"viewthread.php?".api_get_cidreq()."&amp;gidReq=".Security::remove_XSS($_GET['gidReq'])."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;origin=".$origin."&amp;action=move&amp;post=".$rows[$display_post_id]['post_id']."\">".Display::return_icon('move.png',get_lang('MovePost'), array(), ICON_SIZE_SMALL)."</a>";
     }
 }
-$userinf=api_get_user_info($rows[$display_post_id]['user_id']);
-$user_status=api_get_status_of_user_in_course($rows[$display_post_id]['user_id'],api_get_course_id());
+$userinf = api_get_user_info($rows[$display_post_id]['user_id']);
+$user_status = api_get_status_of_user_in_course(
+    $rows[$display_post_id]['user_id'],
+    api_get_course_id()
+);
 if (api_is_allowed_to_edit(null,true)) {
-    if ($post_id > $post_minor ) {
-        //if ($user_status!=1) {
-            $current_qualify_thread=show_qualify('1', $rows[$display_post_id]['user_id'],$_GET['thread']);
+    if ($post_id > $post_minor) {
+        $current_qualify_thread=show_qualify('1', $rows[$display_post_id]['user_id'],$_GET['thread']);
 
-            if ($locked == false) {
-                echo "<a href=\"forumqualify.php?".api_get_cidreq()."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=list&amp;post=".$rows[$display_post_id]['post_id']."&amp;user=".$rows[$display_post_id]['user_id']."&amp;user_id=".$rows[$display_post_id]['user_id']."&amp;origin=".$origin."&amp;idtextqualify=".$current_qualify_thread."\" >".Display::return_icon('new_test_small.gif',get_lang('Qualify'))."</a>";
-            }
-        //}
+        if ($locked == false) {
+            echo "<a href=\"forumqualify.php?".api_get_cidreq()."&amp;forum=".$clean_forum_id."&amp;thread=".$clean_thread_id."&amp;action=list&amp;post=".$rows[$display_post_id]['post_id']."&amp;user=".$rows[$display_post_id]['user_id']."&amp;user_id=".$rows[$display_post_id]['user_id']."&amp;origin=".$origin."&amp;idtextqualify=".$current_qualify_thread."\" >".Display::return_icon('new_test_small.gif',get_lang('Qualify'))."</a>";
+        }
     }
 }
 if (($current_forum_category && $current_forum_category['locked']==0) AND $current_forum['locked']==0 AND $current_thread['locked']==0 OR api_is_allowed_to_edit(false,true)) {
@@ -233,7 +262,10 @@ if (($current_forum_category && $current_forum_category['locked']==0) AND $curre
 }
 echo "</td>";
 // note: this can be removed here because it will be displayed in the tree
-if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$rows[$display_post_id]['post_id']]) and !empty($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$rows[$display_post_id]['post_id']]) and !empty($whatsnew_post_info[$_GET['forum']][$rows[$display_post_id]['thread_id']])) {
+if (isset($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$rows[$display_post_id]['post_id']]) AND
+    !empty($whatsnew_post_info[$current_forum['forum_id']][$current_thread['thread_id']][$rows[$display_post_id]['post_id']]) AND
+    !empty($whatsnew_post_info[$_GET['forum']][$rows[$display_post_id]['thread_id']])
+) {
     $post_image=Display::return_icon('forumpostnew.gif');
 } else {
     $post_image=Display::return_icon('forumpost.gif');
@@ -255,8 +287,8 @@ $attachment_list = get_attachment($display_post_id);
 
 if (!empty($attachment_list)) {
     echo '<tr><td height="50%">';
-    $realname=$attachment_list['path'];
-    $user_filename=$attachment_list['filename'];
+    $realname = $attachment_list['path'];
+    $user_filename = $attachment_list['filename'];
 
     echo Display::return_icon('attachment.gif',get_lang('Attachment'));
     echo '<a href="download.php?file=';

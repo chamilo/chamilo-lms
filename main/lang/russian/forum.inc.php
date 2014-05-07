@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "Раздел форума удален";
 $ForumLocked = "Форум блокирован";
 $Forum = "Форумы";
 $AddForumCategory = "Добавить новый раздел форума";
-$AddForum = "Добавить новый форум";
 $Topics = "Темы";
 $Posts = "Почта";
 $LastPosts = "Последнее почтовое сообщение";

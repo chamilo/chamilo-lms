@@ -7,7 +7,6 @@ $ForumCategoryDeleted = "فئة المنتدى محذوفه";
 $ForumLocked = "حظر المنتدى";
 $Forum = " المنتديات";
 $AddForumCategory = "أضف تصنيف منتدى جديد";
-$AddForum = "أضف منتدى جديد";
 $Topics = "المواضيع";
 $Posts = "مشاركات";
 $LastPosts = "أخر مشاركة";

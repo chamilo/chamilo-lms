@@ -66,27 +66,27 @@ $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$course_dir;
 $http_www = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
 $document_path = $base_work_dir;
-$plugin_jcapture = api_get_path(WEB_PLUGIN_PATH).'jcapture/lib/jcapture.jar';
 
 //Removing sessions
 unset($_SESSION['draw_dir']);
 unset($_SESSION['paint_dir']);
 unset($_SESSION['temp_audio_nanogong']);
+$plugin = new AppPlugin();
+$pluginList = $plugin->get_installed_plugins();
+$capturePluginInstalled = in_array('jcapture', $pluginList);
 
-$htmlHeadXtra[] = '<script>
-function startApplet() {
-    appletsource = "<applet code=\"com.hammurapi.jcapture.JCaptureApplet.class\" archive=\"'.$plugin_jcapture.'\">";
-    appletsource += "<param name=\"outputDir\" value=\"'.$base_work_dir.'\">";
-    appletsource += "</applet>";
-    document.getElementById("appletplace").innerHTML=appletsource;
-   // alert(appletsource);
-}
-$(function() {
-    $("#jcapture").click(function(){
-        startApplet();
+if ($capturePluginInstalled) {
+    $jcapturePath = api_get_path(WEB_PLUGIN_PATH).'jcapture/plugin_applet.php';
+    $htmlHeadXtra[] = '<script>
+    $(function() {
+        function insertAtCarret() {
+        }
+        $("#jcapture").click(function(){
+            $("#appletplace").load("'.$jcapturePath.'");
+        });
     });
-});
-</script>';
+    </script>';
+}
 
 // Create directory certificates
 DocumentManager::create_directory_certificate_in_course(api_get_course_id());
@@ -345,8 +345,7 @@ switch ($action) {
             $parent_id = $document_info['parent_id'];
             $my_path = UserManager::get_user_picture_path_by_id(
                 api_get_user_id(),
-                'system',
-                true
+                'system'
             );
             $user_folder = $my_path['dir'].'my_files/';
             $my_path = null;
@@ -761,6 +760,7 @@ $documentAndFolders = DocumentManager::get_all_document_data(
     $is_allowed_to_edit || $group_member_with_upload_rights,
     false
 );
+
 $count = 1;
 $jquery = null;
 
@@ -1359,7 +1359,6 @@ if (!isset($folders) || $folders === false) {
     $folders = array();
 }
 
-//echo '<div id="appletplace"></div>';
 $actions = '<div class="actions">';
 if (!$is_certificate_mode) {
     /* BUILD SEARCH FORM */
@@ -1485,6 +1484,15 @@ if ($is_allowed_to_edit ||
     /*echo '<a href="#" id="jcapture">';
     echo Display::display_icon('capture.png', get_lang('CatchScreenCasts'), '', ICON_SIZE_MEDIUM).'</a>';*/
 
+    if ($capturePluginInstalled) {
+        $actions .= '<span id="appletplace"></span>';
+        $actions .= Display::url(
+            Display::return_icon('capture.png', get_lang('CatchScreenCasts'), '', ICON_SIZE_MEDIUM),
+            '#',
+            array('id' => 'jcapture')
+        );
+    }
+
     // Create directory
     if (!$is_certificate_mode) {
         $actions .= Display::url(
@@ -1502,11 +1510,13 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
     if ($groupId == 0 || GroupManager::user_has_access($userId, $groupId, GroupManager::GROUP_TOOL_DOCUMENTS)) {
         $count = 1;
         $countedPaths = array();
+        $countedPaths = array();
+
         foreach ($documentAndFolders as $key => $document_data) {
             $row = array();
             $row['id'] = $document_data['id'];
             $row['type'] = $document_data['filetype'];
-
+            
             // If the item is invisible, wrap it in a span with class invisible.
             $is_visible = DocumentManager::is_visible_by_id(
                 $document_data['id'],
@@ -1598,6 +1608,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
             $row[] = $size;
             $row[] = $document_name;
 
+            $total_size = $total_size + $size;
             if (!isset($countedPaths[$document_data['path']])) {
                 $total_size = $total_size + $size;
                 $countedPaths[$document_data['path']] = true;
@@ -1717,7 +1728,8 @@ $table = new SortableTableFromArrayConfig(
     $tableName,
     $column_show,
     $column_order,
-    'ASC'
+    'ASC',
+    true
 );
 $query_vars = array();
 if (isset($_GET['keyword'])) {

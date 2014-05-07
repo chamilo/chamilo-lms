@@ -142,7 +142,9 @@ $is_speacialcourse = CourseManager::is_special_course($course_code);
 if ($is_speacialcourse) {
     $autoreg = Security::remove_XSS($_GET['autoreg']);
     if ($autoreg == 1) {
-        CourseManager::subscribe_user($user_id, $course_code, $status = STUDENT);
+        if (CourseManager::subscribe_user($user_id, $course_code, $status = STUDENT)) {
+            Session::write('is_allowed_in_course', true);
+        }
     }
 }
 if (isset($_GET['action']) && $_GET['action'] == 'subscribe') {

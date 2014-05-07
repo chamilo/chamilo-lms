@@ -370,4 +370,5 @@ $(function() {
     });*/
 });
 </script>
+{# Extra header configured in admin section, only shown to non-admins #}
 {{ header_extra_content }}

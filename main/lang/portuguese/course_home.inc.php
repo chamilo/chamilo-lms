@@ -29,4 +29,7 @@ $SessionIdentifier = "Identificador da sessão";
 $SessionName = "Nome da sessão";
 $SessionCategory = "Categorias das sessões";
 $SessionData = "Dados da sessão";
+$TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise = "A opção de início automático do exercício está ativa. Os alunos serão automaticamente redirecionados para o exercício selecionado";
+$TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP = "Configura o auto-iniciar do Percurso de Aprendizagem para ON . Quando os estudantes acederem um curso, eles serão automaticamente redireccionados para o Percurso de Aprendizagem marcada como inicialização automática.";
+$ToolSearch = "Procurar";
 ?>

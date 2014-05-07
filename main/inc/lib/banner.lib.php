@@ -236,7 +236,7 @@ function return_navigation_array() {
     $navigation = array();
     $menu_navigation = array();
     $possible_tabs = get_tabs();
-    
+
     // Campus Homepage
     if (api_get_setting('show_tabs', 'campus_homepage') == 'true') {
         $navigation[SECTION_CAMPUS] = $possible_tabs[SECTION_CAMPUS];
@@ -330,16 +330,21 @@ function return_navigation_array() {
 
         // Custom tabs
         for ($i=1; $i <= 3; $i++) {
-            if (api_get_setting('show_tabs', 'custom_tab_' . $i) == 'true' && isset($possible_tabs['custom_tab_' . $i])) {
+            if (api_get_setting('show_tabs', 'custom_tab_' . $i) == 'true' &&
+                isset($possible_tabs['custom_tab_' . $i])
+            ) {
+
+                $possible_tabs['custom_tab_'.$i]['url'] = api_get_path(WEB_PATH).$possible_tabs['custom_tab_'.$i]['url'];
                 $navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
             } else {
                 if (isset($possible_tabs['custom_tab_'.$i])) {
+                    $possible_tabs['custom_tab_'.$i]['url'] = api_get_path(WEB_PATH).$possible_tabs['custom_tab_' . $i]['url'];
                     $menu_navigation['custom_tab_' . $i] = $possible_tabs['custom_tab_' . $i];
                 }
             }
         }
-
     }
+
     return array('menu_navigation' => $menu_navigation, 'navigation' => $navigation, 'possible_tabs' => $possible_tabs);
 }
 
@@ -479,6 +484,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
     if (!empty($_course) && !isset($_GET['hide_course_breadcrumb'])) {
 
         $navigation_item['url'] = $web_course_path . $_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');
+        $_course['name'] = api_htmlentities($_course['name']);
         $course_title = cut($_course['name'], MAX_LENGTH_BREADCRUMB);
 
         switch (api_get_setting('breadcrumbs_course_homepage')) {

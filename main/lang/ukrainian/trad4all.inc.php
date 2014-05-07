@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AddForum = "Додати новий форум";
 $Title = "Заголовок";
 $UsersOnline = "Користувачі онлайн";
 $Remove = "Видалити";
@@ -247,4 +248,5 @@ $DateFormatLongWithoutDay = "%d. %B. %Y";
 $InvalidDirectoryPleaseCreateAnImagesFolder = "Невірний каталог. Будь ласка, створіть каталог в інструментарії Документи для того, аби завантажувати туди зображення";
 $UsersConnectedToMySessions = "Показати всіх користувачів, підключених до моїх сесій";
 $Category = "Категорія";
+$UploadADocument = "Завантажити документ";
 ?>

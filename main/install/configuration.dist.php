@@ -188,3 +188,7 @@ $_configuration['system_stable']     = NEW_VERSION_STABLE;
 //$_configuration['drh_can_access_all_session_content'] = true;
 // Display group's forum in general forum tool
 //$_configuration['display_groups_forum_in_general_tool'] = true;
+// Boost query on last connection time
+//$_configuration['save_user_last_login'] = true;
+// Allow course tutors in sessions to add existing students to their session
+//$_configuration['allow_tutors_to_assign_students_to_session'] = 'false'; 

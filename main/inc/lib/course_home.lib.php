@@ -6,7 +6,6 @@ define('SHORTCUTS_VERTICAL', 1);
 
 class CourseHome
 {
-
     /**
      * Gets the html content to show in the 3 column view
      */

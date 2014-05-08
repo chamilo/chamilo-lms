@@ -37,7 +37,7 @@ require_once 'scorm.class.php';
 $file   = (empty($_SESSION['file'])?'':$_SESSION['file']);
 /** @var Learnpath $oLP */
 $oLP    = unserialize($_SESSION['lpobject']);
-$oItem 	= $oLP->items[$oLP->current];
+$oItem 	= isset($oLP->items[$oLP->current]) ? $oLP->items[$oLP->current] : null;
 
 if (!is_object($oItem)) {
     error_log('New LP - scorm_api - Could not load oItem item',0);
@@ -417,7 +417,7 @@ function LMSGetValue(param) {
     } else if(param == 'cmi.core.student_name'){
         // ---- cmi.core.student_name
         <?php
-          $who = addslashes(api_get_person_name($_user['firstName'], $_user['lastName']));
+          $who = addslashes($_user['complete_name']);
           echo "result='$who';";
         ?>
     } else if(param == 'cmi.core.lesson_location'){

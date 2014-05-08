@@ -337,7 +337,7 @@ class DocumentManager
                 header('Cache-Control: public'); // IE cannot download from sessions without a cache
             }
             header('Content-Description: ' . $filename);
-            header('Content-transfer-encoding: binary');
+            header('Content-Transfer-Encoding: binary');
 
             $res = fopen($full_file_name, 'r');
             fpassthru($res);
@@ -464,6 +464,28 @@ class DocumentManager
     }
 
     /**
+     * Session folder filters
+     * @param string $path
+     * @param int $sessionId
+     * @return null|string
+     */
+    public static function getSessionFolderFilters($path, $sessionId)
+    {
+        $sessionId = intval($sessionId);
+        $condition = null;
+
+        if (!empty($sessionId)) {
+            // Chat folder filter
+            if ($path == '/chat_files') {
+                $condition .= " AND (id_session = '$sessionId') ";
+            }
+            // share_folder filter
+            $condition .= " AND docs.path != '/shared_folder' ";
+        }
+        return $condition;
+    }
+
+    /**
      * Fetches all document data for the given user/group
      *
      * @param array $_course
@@ -494,8 +516,8 @@ class DocumentManager
         }
 
         // Escape underscores in the path so they don't act as a wildcard
+        $originalPath = $path;
         $path = Database::escape_string(str_replace('_', '\_', $path));
-        $to_user_id = Database::escape_string($to_user_id);
         $to_value = Database::escape_string($to_value);
 
         $visibility_bit = ' <> 2';
@@ -508,7 +530,7 @@ class DocumentManager
         $current_session_id = api_get_session_id();
         $condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0') )";
 
-        // Condition for search (get ALL folders and documents)
+        $condition_session .= self::getSessionFolderFilters($originalPath, $current_session_id);
 
         $sql = "SELECT
                     docs.id,
@@ -538,7 +560,6 @@ class DocumentManager
                     $visibility_bit
                     $condition_session
                 ";
-
         $result = Database::query($sql);
 
         $doc_list = array();

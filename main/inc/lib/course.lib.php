@@ -4421,7 +4421,7 @@ class CourseManager
             $options[]=  'enter';
         }
 
-         if ($course['visibility'] != HIDDEN && empty($course['registration_code']) && $course['unsubscribe'] == UNSUBSCRIBE_ALLOWED && api_user_is_login($uid) && (in_array($course['real_id'], $user_courses))) {
+         if ($course['visibility'] != COURSE_VISIBILITY_HIDDEN && empty($course['registration_code']) && $course['unsubscribe'] == UNSUBSCRIBE_ALLOWED && api_user_is_login($uid) && (in_array($course['real_id'], $user_courses))) {
             $options[]=  'unsubscribe';
         }
 

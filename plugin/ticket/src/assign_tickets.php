@@ -1,11 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  *
  * @package chamilo.plugin.ticket
- */
-/**
- * Init section
  */
 require_once '../config.php';
 $plugin = TicketPlugin::create();

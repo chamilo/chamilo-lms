@@ -77,22 +77,6 @@ class learnpath
     public $course_info = array();
 
     /**
-     * Get the depth level of LP item
-     * @param $in_tab_items
-     * @param $in_current_item_id
-     * @return int
-     */
-    private static function get_level_for_item($in_tab_items, $in_current_item_id)
-    {
-        $parent_item_id = $in_tab_items[$in_current_item_id]->parent;
-        if ($parent_item_id == 0) {
-            return 0;
-        } else {
-            return learnpath::get_level_for_item($in_tab_items, $parent_item_id) + 1;
-        }
-    }
-
-    /**
     * Class constructor. Needs a database handler, a course code and a learnpath id from the database.
     * Also builds the list of items into $this->items.
     * @param	string		Course code
@@ -102,7 +86,7 @@ class learnpath
     */
     public function __construct($course, $lp_id, $user_id)
     {
-        $this->encoding = api_get_system_encoding(); // Chamilo 1.8.8: We intend always to use the system encoding.
+        $this->encoding = api_get_system_encoding();
         if ($this->debug > 0) { error_log('New LP - In learnpath::__construct('.$course.','.$lp_id.','.$user_id.')', 0); }
         if (empty($course)) {
             $this->error = 'Course code is empty';
@@ -188,6 +172,7 @@ class learnpath
                 return false;
             }
         }
+
         // End of variables checking.
 
         $session_id = api_get_session_id();
@@ -404,6 +389,24 @@ class learnpath
     {
         return $this->course_int_id = intval($course_id);
     }
+
+
+    /**
+     * Get the depth level of LP item
+     * @param $in_tab_items
+     * @param $in_current_item_id
+     * @return int
+     */
+    private static function get_level_for_item($in_tab_items, $in_current_item_id)
+    {
+        $parent_item_id = $in_tab_items[$in_current_item_id]->parent;
+        if ($parent_item_id == 0) {
+            return 0;
+        } else {
+            return learnpath::get_level_for_item($in_tab_items, $parent_item_id) + 1;
+        }
+    }
+
 
     /**
      * Function rewritten based on old_add_item() from Yannick Warnier.
@@ -2672,7 +2675,7 @@ class learnpath
 
         $sql = "SELECT count(*) FROM $table WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id";
         $res = Database::query($sql);
-        $res = 0;
+        $num = 0;
         if (Database::num_rows($res)) {
             $row = Database::fetch_array($res);
             $num = $row[0];
@@ -2735,7 +2738,7 @@ class learnpath
         $sql = "SELECT count(*) FROM $table WHERE c_id = $course_id AND lp_iv_id = $lp_iv_id";
         //@todo seems that this always returns 0
         $res = Database::query($sql);
-        $res = 0;
+        $num = 0;
         if (Database::num_rows($res)) {
             $row = Database :: fetch_array($res);
             $num = $row[0];

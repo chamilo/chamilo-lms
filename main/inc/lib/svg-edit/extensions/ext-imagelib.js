@@ -23,16 +23,30 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 		}
 	});
 
-	var img_libs = [{
-			name: 'Demo library (local)',
-			url: svgEditor.curConfig.extPath + 'imagelib/index.html',
-			description: 'Demonstration library for SVG-edit on this server'
-		},
-		{
-			name: 'IAN Symbol Libraries',
-			url: 'http://ian.umces.edu/symbols/catalog/svgedit/album_chooser.php',
-			description: 'Free library of illustrations'
-		}
+	var img_libs = [
+        {
+            name: 'Local library (local)',
+            url: 'extensions/imagelib/index.php',
+            //description: 'Demonstration library for SVG-edit on this server'// Chamilo change this line by below
+            description: 'Course gallery'
+        },
+        {
+            name: 'Local library',
+            url: 'extensions/imagelib/groups.php',
+            //description: 'Demonstration library for SVG-edit on this server'// Chamilo change this line by below
+            description: 'Group gallery'
+        },
+        {
+            name: 'Local library',
+            url: 'extensions/imagelib/users.php',
+            //description: 'Demonstration library for SVG-edit on this server'// Chamilo change this line by below
+            description: 'Personal gallery'
+        },
+        {
+            name: 'IAN Symbol Libraries',
+            url: 'http://ian.umces.edu/symbols/catalog/svgedit/album_chooser.php',
+            description: 'Free library of illustrations'
+        }
 	];
 
 	function closeBrowser() {
@@ -66,7 +80,7 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 	window.addEventListener("message", function(evt) {
 		// Receive postMessage data
 		var response = evt.data;
-		
+
 		if (!response || typeof response !== "string") { // Todo: Should namespace postMessage API for this extension and filter out here
 			// Do nothing
 			return;
@@ -78,25 +92,25 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 			}
 		}
 		catch (e) {}
-		
+
 		var char1 = response.charAt(0);
 		var id;
 		var svg_str;
 		var img_str;
-		
+
 		if (char1 != "{" && tranfer_stopped) {
 			tranfer_stopped = false;
 			return;
 		}
-		
+
 		if (char1 == '|') {
 			var secondpos = response.indexOf('|', 1);
 			id = response.substr(1, secondpos-1);
 			response = response.substr(secondpos+1);
 			char1 = response.charAt(0);
 		}
-		
-		
+
+
 		// Hide possible transfer dialog box
 		$('#dialog_box').hide();
 		var entry, cur_meta;
@@ -105,18 +119,18 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 				// Metadata
 				tranfer_stopped = false;
 				cur_meta = JSON.parse(response);
-				
+
 				pending[cur_meta.id] = cur_meta;
-				
+
 				var name = (cur_meta.name || 'file');
-				
+
 				var message = uiStrings.notification.retrieving.replace('%s', name);
-				
+
 				if (mode != 'm') {
 					$.process_cancel(message, function() {
 						tranfer_stopped = true;
 						// Should a message be sent back to the frame?
-						
+
 						$('#dialog_box').hide();
 					});
 				} else {
@@ -124,7 +138,7 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 					preview.append(entry);
 					cur_meta.entry = entry;
 				}
-				
+
 				return;
 			case '<':
 				svg_str = true;
@@ -144,10 +158,10 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 			default:
 				// TODO: See if there's a way to base64 encode the binary data stream
 //				var str = 'data:;base64,' + svgedit.utilities.encode64(response, true);
-			
+
 				// Assume it's raw image data
 //				importImage(str);
-			
+
 				// Don't give warning as postMessage may have been used by something else
 				if (mode !== 'm') {
 					closeBrowser();
@@ -163,7 +177,7 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 //				});
 				return;
 		}
-		
+
 		switch (mode) {
 			case 's':
 				// Import one
@@ -211,7 +225,7 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 					} else {
 						entry = '<img src="' + response + '">';
 					}
-				
+
 					if (cur_meta) {
 						preview.children().each(function() {
 							if ($(this).data('id') == id) {
@@ -241,7 +255,7 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 	}, true);
 
 	function toggleMulti(show) {
-	
+
 		$('#lib_framewrap, #imglib_opts').css({right: (show ? 200 : 10)});
 		if (!preview) {
 			preview = $('<div id=imglib_preview>').css({
@@ -253,7 +267,7 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 				background: '#fff',
 				overflow: 'auto'
 			}).insertAfter('#lib_framewrap');
-			
+
 			submit = $('<button disabled>Import selected</button>')
 				.appendTo('#imgbrowse')
 				.on("click touchend", function() {
@@ -277,7 +291,7 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 			});
 
 		}
-		
+
 		preview.toggle(show);
 		submit.toggle(show);
 	}
@@ -294,14 +308,14 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 
 			var lib_opts = $('<ul id=imglib_opts>').appendTo(browser);
 			var frame = $('<iframe/>').prependTo(browser).hide().wrap('<div id=lib_framewrap>');
-			
+
 			var header = $('<h1>').prependTo(browser).text(all_libs).css({
 				position: 'absolute',
 				top: 0,
 				left: 0,
 				width: '100%'
 			});
-			
+
 			var cancel = $('<button>' + uiStrings.common.cancel + '</button>')
 				.appendTo(browser)
 				.on("click touchend", function() {
@@ -311,9 +325,9 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 				top: 5,
 				right: -10
 			});
-			
+
 			var leftBlock = $('<span>').css({position:'absolute',top:5,left:10}).appendTo(browser);
-			
+
 			var back = $('<button hidden>' + uiStrings.imagelib.show_list + '</button>')
 				.appendTo(leftBlock)
 				.on("click touchend", function() {
@@ -324,8 +338,8 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 			}).css({
 				'margin-right': 5
 			}).hide();
-			
-			var type = $('<select><option value=s>' + 
+
+			var type = $('<select><option value=s>' +
 			uiStrings.imagelib.import_single + '</option><option value=m>' +
 			uiStrings.imagelib.import_multi + '</option><option value=o>' +
 			uiStrings.imagelib.open + '</option></select>').appendTo(leftBlock).change(function() {
@@ -335,7 +349,7 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 					case 'o':
 						toggleMulti(false);
 						break;
-					
+
 					case 'm':
 						// Import multiple
 						toggleMulti(true);
@@ -344,10 +358,10 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 			}).css({
 				'margin-top': 10
 			});
-			
+
 			cancel.prepend($.getSvgIcon('cancel', true));
 			back.prepend($.getSvgIcon('tool_imagelib', true));
-			
+
 			$.each(img_libs, function(i, opts) {
 				$('<li>')
 					.appendTo(lib_opts)
@@ -359,12 +373,12 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 					back.show();
 				}).append('<span>' + opts.description + '</span>');
 			});
-			
+
 		} else {
 			$('#imgbrowse_holder').show();
 		}
 	}
-	
+
 	return {
 		svgicons: svgEditor.curConfig.extPath + "ext-imagelib.xml",
 		buttons: [{
@@ -377,7 +391,7 @@ svgEditor.addExtension("imagelib", function() {'use strict';
 			}
 		}],
 		callback: function() {
-		
+
 			$('<style>').text('\
 				#imgbrowse_holder {\
 					position: absolute;\

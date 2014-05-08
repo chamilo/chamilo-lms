@@ -8,7 +8,7 @@
  * Copyright(c) 2010 Alexis Deveria
  *
  */
-
+exit;
 function encodeRFC5987ValueChars ($str) {
 	// See http://tools.ietf.org/html/rfc5987#section-3.2.1
 	// For better readability within headers, add back the characters escaped by rawurlencode but still allowable
@@ -21,7 +21,7 @@ function encodeRFC5987ValueChars ($str) {
 require('allowedMimeTypes.php');
 
 $mime = !isset($_POST['mime']) || !in_array($_POST['mime'], $allowedMimeTypesBySuffix) ? 'image/svg+xml;charset=UTF-8' : $_POST['mime'];
- 
+
 if (!isset($_POST['output_svg']) && !isset($_POST['output_img'])) {
 	die('post fail');
 }
@@ -56,5 +56,5 @@ header("Content-Type: " .  $mime);
 header("Content-Transfer-Encoding: binary");
 
 echo $contents;
- 
+
 ?>

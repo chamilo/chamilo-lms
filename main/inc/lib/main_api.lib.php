@@ -1062,15 +1062,13 @@ function api_get_user_id() {
  * @param boolean   Whether to get session courses or not - NOT YET IMPLEMENTED
  * @return array    Array of courses in the form [0]=>('code'=>xxx,'db'=>xxx,'dir'=>xxx,'status'=>d)
  */
-function api_get_user_courses($userid, $fetch_session = true) {
+function api_get_user_courses($userid, $fetch_session = true)
+{
     if ($userid != strval(intval($userid))) {
         return array();
     } //get out if not integer
     $t_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $t_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $t_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-    $t_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
     $sql = "SELECT cc.code code, cc.db_name db, cc.directory dir, cu.status status
             FROM    $t_course       cc,
@@ -1097,23 +1095,24 @@ function api_get_user_courses($userid, $fetch_session = true) {
  * @param array Non-standard user array
  * @return array Standard user array
  */
-function _api_format_user($user, $add_password = false) {
+function _api_format_user($user, $add_password = false)
+{
     $result = array();
 
     $firstname = null;
     $lastname = null;
+
     if (isset($user['firstname']) && isset($user['lastname'])) {
         $firstname = $user['firstname'];
         $lastname = $user['lastname'];
     } elseif (isset($user['firstName']) && isset($user['lastName'])) {
-        $firstname = $user['firstName'];
-        $lastname = $user['lastName'];
+        $firstname = isset($user['firstName']) ? $user['firstName'] : null;
+        $lastname = isset($user['lastName']) ? $user['lastName'] : null;
     }
-    $result['phone'] = $user['phone'];
 
     $result['complete_name'] = api_get_person_name($firstname, $lastname);
-
     $result['complete_name_with_username'] = $result['complete_name'];
+
     if (!empty($user['username'])) {
         $result['complete_name_with_username'] 	= $result['complete_name'].' ('.$user['username'].')';
     }
@@ -1125,27 +1124,33 @@ function _api_format_user($user, $add_password = false) {
     $result['firstName'] 		= $firstname;
     $result['lastName'] 		= $lastname;
 
+    $attributes = array(
+        'phone',
+        'picture_uri',
+        'official_code',
+        'status',
+        'active',
+        'auth_source',
+        'username',
+        'theme',
+        'language',
+        'creator_id',
+        'registration_date'
+    );
+
+    foreach ($attributes as $attribute) {
+        $result[$attribute] = isset($user[$attribute]) ? $user[$attribute] : null;
+    }
+
     if (isset($user['email'])) {
-        $result['mail']          = $user['email'];
-        $result['email']         = $user['email'];
+        $result['mail'] = isset($user['email']) ? $user['email'] : null;
+        $result['email'] = isset($user['email'])? $user['email'] : null;
     } else {
-        $result['mail']          = $user['mail'];
-        $result['email']         = $user['mail'];
+        $result['mail'] = isset($user['mail']) ? $user['mail'] : null;
+        $result['email'] = isset($user['mail'])? $user['mail'] : null;
     }
-    $user_id                    = intval($user['user_id']);
-    $result['picture_uri']      = $user['picture_uri'];
-    $result['user_id']          = $user_id;
-    $result['official_code']    = $user['official_code'];
-    $result['status']           = $user['status'];
-    $result['active']           = $user['active'];
-    $result['auth_source']      = $user['auth_source'];
-
-    if (isset($user['username'])) {
-        $result['username']         = $user['username'];
-    }
-
-    $result['theme']            = $user['theme'];
-    $result['language']         = $user['language'];
+    $user_id = intval($user['user_id']);
+    $result['user_id'] = $user_id;
 
     if (isset($_configuration['save_user_last_login']) &&
         $_configuration['save_user_last_login']
@@ -1173,7 +1178,7 @@ function _api_format_user($user, $add_password = false) {
 
     // Getting user avatar.
 
-	$picture_filename   = trim($user['picture_uri']);
+	$picture_filename   = trim($result['picture_uri']);
 	$avatar             = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
 	$avatar_small       = api_get_path(WEB_CODE_PATH).'img/unknown_22.jpg';
     $avatar_sys_path    = api_get_path(SYS_CODE_PATH).'img/unknown.jpg';
@@ -1207,9 +1212,6 @@ function _api_format_user($user, $add_password = false) {
     if ($add_password) {
         $result['password'] = $user['password'];
     }
-
-    $result['creator_id'] = $user['creator_id'];
-    $result['registration_date'] = $user['registration_date'];
 
     return $result;
 }

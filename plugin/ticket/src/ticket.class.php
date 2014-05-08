@@ -7,13 +7,11 @@
  */
 class TicketManager
 {
-
     /**
      * Constructor
      */
-    function __construct()
+    public function __construct()
     {
-
     }
 
     /**
@@ -72,10 +70,20 @@ class TicketManager
      * @return bool
      */
     public static function insert_new_ticket(
-        $category_id, $course_id, $project_id, $other_area, $email,
-        $subject, $content, $personalEmail = "", $file_attachments,
-        $source = 'VRT', $priority = 'NRM', $status = '',
-        $request_user = '', $assigned_user = 0
+        $category_id,
+        $course_id,
+        $project_id,
+        $other_area,
+        $email,
+        $subject,
+        $content,
+        $personalEmail = "",
+        $file_attachments,
+        $source = 'VRT',
+        $priority = 'NRM',
+        $status = '',
+        $request_user = '',
+        $assigned_user = 0
     ) {
         global $plugin;
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
@@ -1417,5 +1425,4 @@ class TicketManager
 
         return $tickets;
     }
-
 }

@@ -1,6 +1,6 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * Helper library for weekly reports
  * @package chamilo.plugin.ticket

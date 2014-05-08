@@ -1135,7 +1135,7 @@ class learnpath
      * @param   array   The array resulting of the $_FILES[mp3] element
      * @return	boolean	True on success, false on error
      */
-    public function edit_item($id, $parent, $previous, $title, $description, $prerequisites = 0, $audio = null, $max_time_allowed = 0)
+    public function edit_item($id, $parent, $previous, $title, $description, $prerequisites = 0, $audio = null, $max_time_allowed = 0, $url = '')
     {
         $course_id = api_get_course_int_id();
         if ($this->debug > 0) {
@@ -1344,6 +1344,13 @@ class learnpath
                                    display_order >= " . $new_order;
 
             Database::query($sql_update_order);
+        }
+        
+        if ($row_select['item_type'] == 'link') {
+            require_once api_get_path(LIBRARY_PATH).'link.lib.php';
+            $link = new Link();
+            $linkId = $row_select['path'];
+            $link->updateLink($linkId, $url);
         }
     }
 

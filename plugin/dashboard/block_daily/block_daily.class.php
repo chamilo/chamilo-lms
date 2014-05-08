@@ -11,7 +11,6 @@
  * required files for getting data
  */
 
-require_once api_get_path(LIBRARY_PATH) . 'thematic.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'attendance.lib.php';
 require_once api_get_path(SYS_CODE_PATH) . 'gradebook/lib/be.inc.php';
 

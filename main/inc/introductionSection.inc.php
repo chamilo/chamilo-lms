@@ -22,8 +22,6 @@
  *	@package chamilo.include
  */
 
-require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
-
 /*	Constants and variables */
 
 $TBL_INTRODUCTION = Database::get_course_table(TABLE_TOOL_INTRO);
@@ -237,7 +235,7 @@ $introduction_section .=  '</div>';
 
 $introduction_section .=  '<div class="home-course-intro span12"><div class="page-course">';
 if ($intro_dispDefault) {
-	
+
 	$intro_content = $intro_content;
 
 	if (!empty($intro_content))	{

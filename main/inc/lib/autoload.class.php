@@ -97,6 +97,7 @@ class Autoload
         $result['AssetWikiRenderer'] = '/main/inc/lib/system/media/renderer/lab/asset_wiki_renderer.class.php';
         $result['AttendanceLink'] = '/main/gradebook/lib/be/attendancelink.class.php';
         $result['Auth'] = '/main/inc/lib/auth.lib.php';
+        $result['Thematic'] = '/main/inc/lib/thematic.lib.php';
         $result['Block'] = '/main/dashboard/block.class.php';
         $result['Blog'] = '/main/inc/lib/blog.lib.php';
         $result['Cache'] = '/main/inc/lib/cache.class.php';

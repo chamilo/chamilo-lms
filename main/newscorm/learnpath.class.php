@@ -3790,7 +3790,7 @@ class learnpath
         if (empty($item)) {
             $item = $this->current;
         }
-        if (is_object($this->items[$item])) {
+        if (isset($this->items[$item]) && is_object($this->items[$item])) {
 
             if ($this->type == 2) {
                 //Getting prereq from scorm
@@ -3995,8 +3995,9 @@ class learnpath
         if ($this->debug > 2) {
             error_log('' . print_r($this->items, true), 0);
         }
-        if (is_object($this->items[$this->current])) {
-            //$res = $this->items[$this->current]->save(false);
+        if (isset($this->items[$this->current]) &&
+            is_object($this->items[$this->current])
+        ) {
             $res = $this->items[$this->current]->save(false, $this->prerequisites_match($this->current));
             $this->autocomplete_parents($this->current);
             $status = $this->items[$this->current]->get_status();

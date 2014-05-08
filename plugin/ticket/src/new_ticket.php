@@ -21,6 +21,13 @@ api_block_anonymous_users();
 require_once api_get_path(LIBRARY_PATH) . 'formvalidator/FormValidator.class.php';
 require_once api_get_path(LIBRARY_PATH) . 'group_portal_manager.lib.php';
 
+$scrollTop = '';
+if (api_is_platform_admin()) {
+    $scrollTol = '$("html, body").animate({ 
+                    scrollTop: $(".divTicket").offset().top - 20
+                  }, "slow");';
+}
+
 $htmlHeadXtra[] = '
 <script>
 function load_course_list (div_course, my_user_id, user_email) {
@@ -34,6 +41,7 @@ function load_course_list (div_course, my_user_id, user_email) {
 			$("#user_id_request").val(my_user_id);
                         $("#personal_email").val(user_email);
 			$("#btnsubmit").attr("disabled", false);
+                        ' . $scrollTol . '
 		}
 	});
 }
@@ -129,9 +137,9 @@ div.row div.formw2 {
 }
 div.divTicket {
     width: 70%;
-	float: center;
-	margin-left: 15%;
-
+    float: center;
+    margin-left: 15%;
+    padding-top: 100px;
 }
 </style>';
 $types = TicketManager::get_all_tickets_categories();
@@ -271,8 +279,8 @@ function show_form_send_ticket()
 		<div class="label2">' . get_lang('Message') . ':</div>
 		<div class="formw2">
 			<input type="hidden" id="content" name="content" value="" style="display:none">
-		<input type="hidden" id="content___Config" value="&amp;Width=95%25&amp;Height=250&amp;ToolbarSets={ %22Messages%22: [  [ %22Bold%22,%22Italic%22,%22-%22,%22InsertOrderedList%22,%22InsertUnorderedList%22,%22Link%22,%22RemoveLink%22 ] ], %22MessagesMaximized%22: [  ] }&amp;LoadPlugin=[%22customizations%22]&amp;EditorAreaStyles=body { background: #ffffff; }&amp;ToolbarStartExpanded=false&amp;CustomConfigurationsPath='.api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/myconfig.js&amp;EditorAreaCSS=/main/css/chamilo/default.css&amp;ToolbarComboPreviewCSS='.api_get_path(WEB_CODE_PATH).'main/css/chamilo/default.css&amp;DefaultLanguage=es&amp;ContentLangDirection=ltr&amp;AdvancedFileManager=true&amp;BaseHref=' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/s/&amp;&amp;UserIsCourseAdmin=true&amp;UserIsPlatformAdmin=true" style="display:none">
-		<iframe id="content___Frame" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/fckeditor.html?InstanceName=content&amp;Toolbar=Messages" width="95%" height="250" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; width: 95%; height: 250px;">
+		<input type="hidden" id="content___Config" value="&amp;Width=95%25&amp;Height=250&amp;ToolbarSets={ %22Messages%22: [  [ %22Bold%22,%22Italic%22,%22-%22,%22InsertOrderedList%22,%22InsertUnorderedList%22,%22Link%22,%22RemoveLink%22 ] ], %22MessagesMaximized%22: [  ] }&amp;LoadPlugin=[%22customizations%22]&amp;EditorAreaStyles=body { background: #ffffff; }&amp;ToolbarStartExpanded=false&amp;CustomConfigurationsPath='.api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/myconfig.js&amp;EditorAreaCSS='.api_get_path(WEB_PATH).'main/css/chamilo/default.css&amp;ToolbarComboPreviewCSS='.api_get_path(WEB_CODE_PATH).'main/css/chamilo/default.css&amp;DefaultLanguage=es&amp;ContentLangDirection=ltr&amp;AdvancedFileManager=true&amp;BaseHref=' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/s/&amp;&amp;UserIsCourseAdmin=true&amp;UserIsPlatformAdmin=true" style="display:none">
+		<iframe id="content___Frame" src="' . api_get_path(WEB_CODE_PATH) . 'inc/lib/fckeditor/editor/fckeditor.html?InstanceName=content&amp;Toolbar=Messages" width="95%" height="250" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; width: 95%; height: 250px;">
 		</iframe>
 		</div>
 	</div>';
@@ -480,6 +488,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
 if (!isset($_POST['compose'])) {
      if (api_is_platform_admin()) {
         Display::display_header(get_lang('ComposeMessage'));
+        $message = $plugin->get_lang('PleaseBeforeRegisterATicketSelectOneUser');
+        Display::display_warning_message($message);
         echo '
             <div class="actions">
               <span style="float: right;">&nbsp;</span>
@@ -491,8 +501,12 @@ if (!isset($_POST['compose'])) {
                 </fieldset>
               </form>
             </div>';
-        if (isset($_GET['keyword'])) {
-            $table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
+        echo '<div class="users-list">';
+            $order = (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2;
+            $table = new SortableTable(
+                        'users', 'get_number_of_users', 
+                        'get_user_data', $order, 10
+                     );
             $table->set_header(0, '', false, 'width="18px"');
             $table->set_header(0, get_lang('Photo'), false);
             $table->set_header(1, get_lang('OfficialCode'));
@@ -507,7 +521,7 @@ if (!isset($_POST['compose'])) {
             $table->set_header(5, get_lang('Email'));
             $table->set_header(6, get_lang('Action'));
             $table->display();
-        }
+        echo '</div>';
      } else {
         $userInfo = api_get_user_info();
         $htmlHeadXtra[] = "

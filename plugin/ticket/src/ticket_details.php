@@ -99,7 +99,6 @@ function add_image_form() {
 	id_elem1 = "filepath_"+counter_image;
 	id_elem1 = "\'"+id_elem1+"\'";
 	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\"  />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"' . api_get_path(WEB_CODE_PATH) . 'img/delete.gif\"></a>";
-	//document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<input type=\"text\" name=\"legend[]\" size=\"20\" />";
 	if (filepaths.childNodes.length == 6) {
 		var link_attach = document.getElementById("link-more-attach");
 		if (link_attach) {
@@ -292,10 +291,12 @@ if (!isset($_POST['compose'])) {
     echo '</div>';
     echo '</table></div>';
     $messages = $ticket['messages'];
+    echo "<div class='row'>";
+    echo "<div class='span8 offset2'>";
     foreach ($messages as $message) {
-        $class = "messageuser";
+        $class = "alert alert-info";
         if ($message['admin']) {
-            $class = "messagesupport";
+            $class = "alert alert-success";
             if ($isAdmin) {
                 $message['message'].='<br/><b>' . $plugin->get_lang('AttendedBy') . ': ' . $message['user_created'] . " - " . api_convert_and_format_date(api_get_local_time($message['sys_insert_datetime']), DATE_TIME_FORMAT_LONG, _api_get_timezone()) . "</b>";
             }
@@ -310,6 +311,8 @@ if (!isset($_POST['compose'])) {
         }
         echo '</div>';
     }
+    echo "</div>";
+    echo "</div>";
     $asunto = "RE: " . $message['subject'];
     $user_admin = api_is_platform_admin();
     if ($ticket['ticket']['status_id'] != 'REE' AND $ticket['ticket']['status_id'] != 'CLS') {
@@ -338,48 +341,72 @@ function show_form_send_message()
     global $isAdmin;
     global $ticket;
     global $asunto;
-    echo '<form enctype="multipart/form-data" action="' . api_get_self() . '?ticket_id=' . $ticket['ticket']['ticket_id'] . '" method="post" name="send_ticket" id="send_ticket"
- 	onsubmit="return validate()" style="width:100%">';
-    echo '<div class="row" ><div class ="label">Asunto:</div>
-       		<div class="formw"><input type = "text" id ="subject" name="subject" value="' . $asunto . '" required ="" style="width:60%"/></div>
-		  </div>';
+    global $plugin;
     echo '<div class="row">
-		<div class="label2">
-                    ' . get_lang('Message') . '
-		</div>
-		<div class="formw2">
+          <div class="span8 offset2">
+        <form enctype="multipart/form-data" 
+        action="' . api_get_self() . '?ticket_id=' . $ticket['ticket']['ticket_id'] . '" 
+        method="post" name="send_ticket" id="send_ticket"
+ 	onsubmit="return validate()" class="form-horizontal">';
+    echo '<div class="control-group">
+                <label for="subject" class="control-label">
+                    ' . get_lang('Subject') . ': 
+		</label>
+       		<div class="controls">
+                    <input type = "text" id ="subject" name="subject" value="' . $asunto . '" required ="" style="width:60%"/>
+                </div>
+          </div>';
+    echo '<div class="control-group">
+		<label class="control-label">
+                    ' . get_lang('Message') . ': 
+		</label>
+		<div class="controls">
 			<input type="hidden" id="content" name="content" value="" style="display:none">
-		<input type="hidden" id="content___Config" value="ToolbarSet=Messages&amp;Width=95%25&amp;Height=250&amp;ToolbarSets={ %22Messages%22: [  [ %22Bold%22,%22Italic%22,%22-%22,%22InsertOrderedList%22,%22InsertUnorderedList%22,%22Link%22,%22RemoveLink%22 ] ], %22MessagesMaximized%22: [  ] }&amp;LoadPlugin=[%22customizations%22]&amp;EditorAreaStyles=body { background: #ffffff; }&amp;ToolbarStartExpanded=false&amp;CustomConfigurationsPath='.api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/myconfig.js&amp;EditorAreaCSS=/main/css/chamilo/default.css&amp;ToolbarComboPreviewCSS=/main/css/chamilo/default.css&amp;DefaultLanguage=es&amp;ContentLangDirection=ltr&amp;AdvancedFileManager=true&amp;BaseHref=' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/s/&amp;&amp;UserIsCourseAdmin=true&amp;UserIsPlatformAdmin=true" style="display:none">
+                        <input type="hidden" id="content___Config" value="ToolbarSet=Messages&amp;Width=95%25&amp;Height=250&amp;ToolbarSets={ %22Messages%22: [  [ %22Bold%22,%22Italic%22,%22-%22,%22InsertOrderedList%22,%22InsertUnorderedList%22,%22Link%22,%22RemoveLink%22 ] ], %22MessagesMaximized%22: [  ] }&amp;LoadPlugin=[%22customizations%22]&amp;EditorAreaStyles=body { background: #ffffff; }&amp;ToolbarStartExpanded=false&amp;CustomConfigurationsPath='.api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/myconfig.js&amp;EditorAreaCSS='.api_get_path(WEB_PATH).'main/css/chamilo/default.css&amp;ToolbarComboPreviewCSS='.api_get_path(WEB_PATH).'main/css/chamilo/default.css&amp;DefaultLanguage=es&amp;ContentLangDirection=ltr&amp;AdvancedFileManager=true&amp;BaseHref=' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/s/&amp;&amp;UserIsCourseAdmin=true&amp;UserIsPlatformAdmin=true" style="display:none">
 		<iframe id="content___Frame" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/fckeditor.html?InstanceName=content&amp;Toolbar=Messages" width="95%" height="250" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; width: 95%; height: 250px;">
 		</iframe>
 		</div>
 	</div>
 ';
     echo '<input type="hidden" id="ticket_id" name="ticket_id" value="' . $_GET['ticket_id'] . '">';
-    echo '<div class="row">
-		<div class="label">' . get_lang('FilesAttachment') . '</div>
-		<div class="formw">
-				<span id="filepaths">
-				<div id="filepath_1">
-					<input type="file" name="attach_1" id="attach_1"  size="20" style="width:59%;"/>
-				</div></span>
+    echo '<div class="control-group">
+		<label for="attach_1" class="control-label">
+                    ' . get_lang('FilesAttachment') . ': 
+                </label>
+		<div class="controls">
+                        <span id="filepaths">
+                            <div id="filepath_1">
+                                <input type="file" name="attach_1" id="attach_1"  size="20" style="width:59%;"/>
+                            </div>
+                        </span>
+		</div>
+                <div class="controls">
+                    <span id="link-more-attach">
+                	<a href="javascript://" onclick="return add_image_form()">' . get_lang('AddOneMoreFile') . '
+                        </a>
+                    </span>
+                    
+                    
+                    (' . sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))) . ')
 		</div>
 	</div>';
-    echo '<div class="row">
-		<div class="formw">
-			<span id="link-more-attach">
-				<a href="javascript://" onclick="return add_image_form()">' . get_lang('AddOneMoreFile') . '</a></span>&nbsp;
-					(' . sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))) . ')
-			</div>
-		</div>';
-    echo '<div class="row">
-		<div class="label"></div>
-		<div class="formw">
-                <button class="save" name="compose" type="submit">' . get_lang('SendMessage') . '</button>' .
-            ($isAdmin ? '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="confirmation"/>Solicitar confirmaci&oacute;n' : "") .
-    '</div>
-	</div>';
-    echo '</form>';
+    if ($isAdmin) {
+        echo '<div class="control-group">
+                    <label for="confirmation" class="control-label">
+                        ' . $plugin->get_lang('RequestConfirmation') . ': 
+                    </label>
+                    <div class="controls">
+                        <input type="checkbox" id="confirmation" name="confirmation"/>
+                    </div>
+              </div>';
+    }
+     
+    echo '<div class="formw">
+                  <button class="save" name="compose" type="submit">' . get_lang('SendMessage') . '</button>
+         </div>';
+    echo '</div>
+        </div>
+        </form>';
 }
 
 Display::display_footer();

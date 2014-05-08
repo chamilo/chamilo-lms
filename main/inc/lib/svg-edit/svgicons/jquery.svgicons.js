@@ -6,7 +6,7 @@
  * Copyright (c) 2009 Alexis Deveria
  * http://a.deveria.com
  *
- * Apache 2 License
+ * MIT License
 
 How to use:
 
@@ -172,7 +172,7 @@ $(function() {
 							});
 						} else {
 							if(err.responseText) {
- 								svgdoc = parser.parseFromString(err.responseText, "text/xml");
+								svgdoc = parser.parseFromString(err.responseText, "text/xml");
 
 								if(!svgdoc.childNodes.length) {
 									$(useFallback);									

@@ -1009,6 +1009,8 @@ class IndexManager
 
                         // Loop course content
                         $html_courses_session = '';
+                        $atLeastOneCourseIsVisible = false;
+
                         foreach ($session['courses'] as $course) {
                             $is_coach_course = api_is_coach($session_id, $course['code']);
                             $allowed_time = 0;
@@ -1032,6 +1034,8 @@ class IndexManager
                             if ($session_now > $allowed_time && $days_access_after_end > $dif_time_after - 1) {
                                 // Read only and accessible.
 
+                                $atLeastOneCourseIsVisible = true;
+
                                 if (api_get_setting('hide_courses_in_sessions') == 'false') {
                                     $c = CourseManager::get_logged_user_course_html(
                                         $course,
@@ -1046,9 +1050,11 @@ class IndexManager
                             }
                         }
 
-                        // No courses to show
-                        if (empty($html_courses_session)) {
-                            continue;
+                        // No courses to show.
+                        if ($atLeastOneCourseIsVisible == false) {
+                            if (empty($html_courses_session)) {
+                                continue;
+                            }
                         }
 
                         if ($count_courses_session > 0) {
@@ -1208,13 +1214,17 @@ class IndexManager
                 }
             }
         }
-        return $sessions_with_category.$sessions_with_no_category.$courses_html.$special_courses;
+
+        return $sessions_with_category.
+               $sessions_with_no_category.
+               $courses_html.$special_courses;
     }
 
     /**
      * Shows a welcome message when the user doesn't have any content in the course list
      */
-    function return_welcome_to_course_block() {
+    function return_welcome_to_course_block()
+    {
         $count_courses = CourseManager::count_courses();
         $tpl = $this->tpl->get_template('layout/welcome_to_course.tpl');
 
@@ -1230,7 +1240,8 @@ class IndexManager
         return $this->tpl->fetch($tpl);
     }
 
-    function return_hot_courses() {
+    function return_hot_courses()
+    {
         return CourseManager::return_hot_courses();
     }
 }

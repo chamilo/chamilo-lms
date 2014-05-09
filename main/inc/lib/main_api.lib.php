@@ -1062,15 +1062,13 @@ function api_get_user_id() {
  * @param boolean   Whether to get session courses or not - NOT YET IMPLEMENTED
  * @return array    Array of courses in the form [0]=>('code'=>xxx,'db'=>xxx,'dir'=>xxx,'status'=>d)
  */
-function api_get_user_courses($userid, $fetch_session = true) {
+function api_get_user_courses($userid, $fetch_session = true)
+{
     if ($userid != strval(intval($userid))) {
         return array();
     } //get out if not integer
     $t_course = Database::get_main_table(TABLE_MAIN_COURSE);
     $t_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-    $t_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
-    $t_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-    $t_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
     $sql = "SELECT cc.code code, cc.db_name db, cc.directory dir, cu.status status
             FROM    $t_course       cc,
@@ -1097,23 +1095,24 @@ function api_get_user_courses($userid, $fetch_session = true) {
  * @param array Non-standard user array
  * @return array Standard user array
  */
-function _api_format_user($user, $add_password = false) {
+function _api_format_user($user, $add_password = false)
+{
     $result = array();
 
     $firstname = null;
     $lastname = null;
+
     if (isset($user['firstname']) && isset($user['lastname'])) {
         $firstname = $user['firstname'];
         $lastname = $user['lastname'];
     } elseif (isset($user['firstName']) && isset($user['lastName'])) {
-        $firstname = $user['firstName'];
-        $lastname = $user['lastName'];
+        $firstname = isset($user['firstName']) ? $user['firstName'] : null;
+        $lastname = isset($user['lastName']) ? $user['lastName'] : null;
     }
-    $result['phone'] = $user['phone'];
 
     $result['complete_name'] = api_get_person_name($firstname, $lastname);
-
     $result['complete_name_with_username'] = $result['complete_name'];
+
     if (!empty($user['username'])) {
         $result['complete_name_with_username'] 	= $result['complete_name'].' ('.$user['username'].')';
     }
@@ -1125,27 +1124,33 @@ function _api_format_user($user, $add_password = false) {
     $result['firstName'] 		= $firstname;
     $result['lastName'] 		= $lastname;
 
+    $attributes = array(
+        'phone',
+        'picture_uri',
+        'official_code',
+        'status',
+        'active',
+        'auth_source',
+        'username',
+        'theme',
+        'language',
+        'creator_id',
+        'registration_date'
+    );
+
+    foreach ($attributes as $attribute) {
+        $result[$attribute] = isset($user[$attribute]) ? $user[$attribute] : null;
+    }
+
     if (isset($user['email'])) {
-        $result['mail']          = $user['email'];
-        $result['email']         = $user['email'];
+        $result['mail'] = isset($user['email']) ? $user['email'] : null;
+        $result['email'] = isset($user['email'])? $user['email'] : null;
     } else {
-        $result['mail']          = $user['mail'];
-        $result['email']         = $user['mail'];
+        $result['mail'] = isset($user['mail']) ? $user['mail'] : null;
+        $result['email'] = isset($user['mail'])? $user['mail'] : null;
     }
-    $user_id                    = intval($user['user_id']);
-    $result['picture_uri']      = $user['picture_uri'];
-    $result['user_id']          = $user_id;
-    $result['official_code']    = $user['official_code'];
-    $result['status']           = $user['status'];
-    $result['active']           = $user['active'];
-    $result['auth_source']      = $user['auth_source'];
-
-    if (isset($user['username'])) {
-        $result['username']         = $user['username'];
-    }
-
-    $result['theme']            = $user['theme'];
-    $result['language']         = $user['language'];
+    $user_id = intval($user['user_id']);
+    $result['user_id'] = $user_id;
 
     if (isset($_configuration['save_user_last_login']) &&
         $_configuration['save_user_last_login']
@@ -1173,7 +1178,7 @@ function _api_format_user($user, $add_password = false) {
 
     // Getting user avatar.
 
-	$picture_filename   = trim($user['picture_uri']);
+	$picture_filename   = trim($result['picture_uri']);
 	$avatar             = api_get_path(WEB_CODE_PATH).'img/unknown.jpg';
 	$avatar_small       = api_get_path(WEB_CODE_PATH).'img/unknown_22.jpg';
     $avatar_sys_path    = api_get_path(SYS_CODE_PATH).'img/unknown.jpg';
@@ -1207,9 +1212,6 @@ function _api_format_user($user, $add_password = false) {
     if ($add_password) {
         $result['password'] = $user['password'];
     }
-
-    $result['creator_id'] = $user['creator_id'];
-    $result['registration_date'] = $user['registration_date'];
 
     return $result;
 }
@@ -5875,7 +5877,7 @@ function api_protect_global_admin_script() {
 }
 
 /**
- * Get actived template
+ * Get active template
  * @param string    theme type (optional: default)
  * @param string    path absolute(abs) or relative(rel) (optional:rel)
  * @return string   actived template path
@@ -5900,136 +5902,158 @@ function api_get_template($path_type = 'rel') {
 
 /**
  * Check browser support for type files
- ** This function check if the users browser support a file format or return the current browser and major ver when $format=check_browser
+ * This function check if the users browser support a file format or
+ * return the current browser and major ver when $format=check_browser
  * @param string $format
  *
  * @return bool, or return text array if $format=check_browser
  * @author Juan Carlos Raña Trabado
  */
 
-function api_browser_support($format="") {
-    require_once api_get_path(LIBRARY_PATH).'browser/Browser.php';
+function api_browser_support($format = "")
+{
+    require_once api_get_path(LIBRARY_PATH) . 'browser/Browser.php';
     $browser = new Browser();
     $current_browser = $browser->getBrowser();
     $a_versiontemp = explode('.', $browser->getVersion());
-    $current_majorver= $a_versiontemp[0];
+    $current_majorver = $a_versiontemp[0];
 
-	//native svg support
-	if ($format=='svg'){
-		if (($current_browser == 'Internet Explorer' && $current_majorver >= 9) || ($current_browser == 'Firefox' && $current_majorver > 1) || ($current_browser == 'Safari' && $current_majorver >= 4) || ($current_browser == 'Chrome' && $current_majorver >= 1) || ($current_browser == 'Opera' && $current_majorver >= 9)) {
-			return true;
-		} else {
-			return false;
-		}
-	} elseif($format=='pdf') {
-		//native pdf support
-		if($current_browser == 'Chrome' && $current_majorver >= 6){
-			return true;
-		} else {
-			return false;
-		}
-	} elseif($format=='tif' || $format=='tiff'){
-		//native tif support
-		if($current_browser == 'Safari' && $current_majorver >= 5){
-			return true;
-		} else {
-			return false;
-		}
-	} elseif($format=='ogg' || $format=='ogx'|| $format=='ogv' || $format=='oga'){
-	//native ogg, ogv,oga support
-		if (($current_browser == 'Firefox' && $current_majorver >= 3)  || ($current_browser == 'Chrome' && $current_majorver >= 3) || ($current_browser == 'Opera' && $current_majorver >= 9)) {
-			return true;
-		} else {
-			return false;
-		}
-	} elseif($format=='mpg' || $format=='mpeg'){
-		//native mpg support
-		if(($current_browser == 'Safari' && $current_majorver >= 5)){
-			return true;
-		} else {
-			return false;
-		}
-	} elseif($format=='mp4') {
-		//native mp4 support (TODO: Android, iPhone)
-		if($current_browser == 'Android' || $current_browser == 'iPhone') {
-			return true;
-		} else {
-			return false;
-		}
-	} elseif($format=='mov') {
-		//native mov support( TODO:check iPhone)
-		if($current_browser == 'Safari' && $current_majorver >= 5 || $current_browser == 'iPhone'){
-			return true;
-		} else {
-			return false;
-		}
-	} elseif($format=='avi') {
-		//native avi support
-		if($current_browser == 'Safari' && $current_majorver >= 5){
-			return true;
-		}
-		else{
-			return false;
-		}
-	} elseif($format=='wmv') {
-		//native wmv support
-		if ($current_browser == 'Firefox' && $current_majorver >= 4){
-			return true;
-		} else {
-			return false;
-		}
-	} elseif($format=='webm') {
-		//native webm support (TODO:check IE9, Chrome9, Android)
-		if(($current_browser == 'Firefox' && $current_majorver >= 4) || ($current_browser == 'Opera' && $current_majorver >= 9) || ($current_browser == 'Internet Explorer' && $current_majorver >= 9)|| ($current_browser == 'Chrome' && $current_majorver >=9)|| $current_browser == 'Android'){
-			return true;
-		}
-		else{
-			return false;
-		}
-	} elseif($format=='wav') {
-		//native wav support (only some codecs !)
-		if (($current_browser == 'Firefox' && $current_majorver >= 4) || ($current_browser == 'Safari' && $current_majorver >= 5) || ($current_browser == 'Opera' && $current_majorver >= 9) || ($current_browser == 'Internet Explorer' && $current_majorver >= 9)|| ($current_browser == 'Chrome' && $current_majorver > 9)|| $current_browser == 'Android' || $current_browser == 'iPhone'){
-			return true;
-		}
-		else{
-			return false;
-		}
-	} elseif($format=='mid' || $format=='kar') {
-		//native midi support (TODO:check Android)
-		if($current_browser == 'Opera'&& $current_majorver >= 9 || $current_browser == 'Android'){
-			return true;
-		} else {
-			return false;
-		}
-	} elseif($format=='wma') {
-		//native wma support
-		if($current_browser == 'Firefox' && $current_majorver >= 4){
-			return true;
-		}
-		else{
-			return false;
-		}
-	} elseif($format=='au') {
-		//native au support
-		if($current_browser == 'Safari' && $current_majorver >= 5){
-			return true;
-		}
-		else{
-			return false;
-		}
-	} elseif($format=='mp3') {
-		//native mp3 support (TODO:check Android, iPhone)
-		if(($current_browser == 'Safari' && $current_majorver >= 5) || ($current_browser == 'Chrome' && $current_majorver >=6)|| ($current_browser == 'Internet Explorer' && $current_majorver >= 9)|| $current_browser == 'Android' || $current_browser == 'iPhone'){
-			return true;
-		} else {
-			return false;
-		}
-	} elseif($format=="check_browser") {
-		$array_check_browser=array($current_browser, $current_majorver);
-		return $array_check_browser;
-	} else {
-		return false;
-	}
+    // Native svg support
+    if ($format == 'svg') {
+
+        if (($current_browser == 'Internet Explorer' && $current_majorver >= 9) ||
+            ($current_browser == 'Firefox' && $current_majorver > 1) ||
+            ($current_browser == 'Safari' && $current_majorver >= 4) ||
+            ($current_browser == 'Chrome' && $current_majorver >= 1) ||
+            ($current_browser == 'Opera' && $current_majorver >= 9)
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    } elseif ($format == 'pdf') {
+        //native pdf support
+        if ($current_browser == 'Chrome' && $current_majorver >= 6) {
+            return true;
+        } else {
+            return false;
+        }
+    } elseif ($format == 'tif' || $format == 'tiff') {
+        //native tif support
+        if ($current_browser == 'Safari' && $current_majorver >= 5) {
+            return true;
+        } else {
+            return false;
+        }
+    } elseif ($format == 'ogg' || $format == 'ogx' || $format == 'ogv' || $format == 'oga') {
+        //native ogg, ogv,oga support
+        if (($current_browser == 'Firefox' && $current_majorver >= 3) ||
+            ($current_browser == 'Chrome' && $current_majorver >= 3) ||
+            ($current_browser == 'Opera' && $current_majorver >= 9)) {
+            return true;
+        } else {
+            return false;
+        }
+    } elseif ($format == 'mpg' || $format == 'mpeg') {
+        //native mpg support
+        if (($current_browser == 'Safari' && $current_majorver >= 5)) {
+            return true;
+        } else {
+            return false;
+        }
+    } elseif ($format == 'mp4') {
+        //native mp4 support (TODO: Android, iPhone)
+        if ($current_browser == 'Android' || $current_browser == 'iPhone') {
+            return true;
+        } else {
+            return false;
+        }
+    } elseif ($format == 'mov') {
+        //native mov support( TODO:check iPhone)
+        if ($current_browser == 'Safari' && $current_majorver >= 5 || $current_browser == 'iPhone') {
+            return true;
+        } else {
+            return false;
+        }
+    } elseif ($format == 'avi') {
+        //native avi support
+        if ($current_browser == 'Safari' && $current_majorver >= 5) {
+            return true;
+        } else {
+            return false;
+        }
+    } elseif ($format == 'wmv') {
+        //native wmv support
+        if ($current_browser == 'Firefox' && $current_majorver >= 4) {
+            return true;
+        } else {
+            return false;
+        }
+    } elseif ($format == 'webm') {
+        //native webm support (TODO:check IE9, Chrome9, Android)
+        if (($current_browser == 'Firefox' && $current_majorver >= 4) ||
+            ($current_browser == 'Opera' && $current_majorver >= 9) ||
+            ($current_browser == 'Internet Explorer' && $current_majorver >= 9) ||
+            ($current_browser == 'Chrome' && $current_majorver >= 9) ||
+            $current_browser == 'Android'
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    } elseif ($format == 'wav') {
+        //native wav support (only some codecs !)
+        if (($current_browser == 'Firefox' && $current_majorver >= 4) ||
+            ($current_browser == 'Safari' && $current_majorver >= 5) ||
+            ($current_browser == 'Opera' && $current_majorver >= 9) ||
+            ($current_browser == 'Internet Explorer' && $current_majorver >= 9) ||
+            ($current_browser == 'Chrome' && $current_majorver > 9) ||
+            $current_browser == 'Android' ||
+            $current_browser == 'iPhone'
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    } elseif ($format == 'mid' || $format == 'kar') {
+        //native midi support (TODO:check Android)
+        if ($current_browser == 'Opera' && $current_majorver >= 9 || $current_browser == 'Android') {
+            return true;
+        } else {
+            return false;
+        }
+    } elseif ($format == 'wma') {
+        //native wma support
+        if ($current_browser == 'Firefox' && $current_majorver >= 4) {
+            return true;
+        } else {
+            return false;
+        }
+    } elseif ($format == 'au') {
+        //native au support
+        if ($current_browser == 'Safari' && $current_majorver >= 5) {
+            return true;
+        } else {
+            return false;
+        }
+    } elseif ($format == 'mp3') {
+        //native mp3 support (TODO:check Android, iPhone)
+        if (($current_browser == 'Safari' && $current_majorver >= 5) ||
+            ($current_browser == 'Chrome' && $current_majorver >= 6) ||
+            ($current_browser == 'Internet Explorer' && $current_majorver >= 9) ||
+            $current_browser == 'Android' ||
+            $current_browser == 'iPhone'
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    } elseif ($format == "check_browser") {
+        $array_check_browser = array($current_browser, $current_majorver);
+        return $array_check_browser;
+    } else {
+        return false;
+    }
 }
 
 /**

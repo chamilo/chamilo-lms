@@ -1,7 +1,9 @@
+/*globals svgEditor, svgedit, svgCanvas, canvg, $*/
+/*jslint eqeq: true*/
 /*
  * ext-server_opensave.js
  *
- * Licensed under the Apache License, Version 2
+ * Licensed under the MIT License
  *
  * Copyright(c) 2010 Alexis Deveria
  *
@@ -9,48 +11,72 @@
 
 svgEditor.addExtension("server_opensave", {
 	callback: function() {
-
-		var save_svg_action = 'extensions/filesave.php';
-		var save_png_action = 'extensions/filesave.php';
+		'use strict';
+		function getFileNameFromTitle () {
+			var title = svgCanvas.getDocumentTitle();
+			// We convert (to underscore) only those disallowed Win7 file name characters
+			return $.trim(title).replace(/[\/\\:*?"<>|]/g, '_');
+		}
+		function xhtmlEscape(str) {
+			return str.replace(/&(?!amp;)/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); // < is actually disallowed above anyways
+		}
+		function clientDownloadSupport (filename, suffix, uri) {
+			var a,
+				support = $('<a>')[0].download === '';
+			if (support) {
+				a = $('<a>hidden</a>').attr({download: (filename || 'image') + suffix, href: uri}).css('display', 'none').appendTo('body');
+				a[0].click();
+				return true;
+			}
+		}
+		var open_svg_action, import_svg_action, import_img_action,
+			open_svg_form, import_svg_form, import_img_form,
+			save_svg_action = svgEditor.curConfig.extPath + 'filesave.php',
+			save_img_action = svgEditor.curConfig.extPath + 'filesave.php',
+			// Create upload target (hidden iframe)
+			cancelled = false;
 	
-		// Create upload target (hidden iframe)
-		var target = $('<iframe name="output_frame" src="#"/>').hide().appendTo('body');
-	
+		$('<iframe name="output_frame" src="#"/>').hide().appendTo('body');
 		svgEditor.setCustomHandlers({
 			save: function(win, data) {
-				var svg = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n" + data; // Chamilo add encoding="UTF-8"
+				var svg = '<?xml version="1.0" encoding="UTF-8"?>\n' + data, // Firefox doesn't seem to know it is UTF-8 (no matter whether we use or skip the clientDownload code) despite the Content-Disposition header containing UTF-8, but adding the encoding works
+					filename = getFileNameFromTitle();
 
-				var title = svgCanvas.getDocumentTitle();
-				//var filename = title.replace(/[^a-z0-9\.\_\-]+/gi, '_');//Chamilo replace by below  
-				var filename =title;//Chamilo TODO:check if the filter through filesave.php is enough				
-				var form = $('<form>').attr({
+				if (clientDownloadSupport(filename, '.svg', 'data:image/svg+xml;charset=UTF-8;base64,' + svgedit.utilities.encode64(svg))) {
+					return;
+				}
+
+				$('<form>').attr({
 					method: 'post',
 					action: save_svg_action,
 					target: 'output_frame'
-				})	.append('<input type="hidden" name="output_svg" value="' + encodeURI(svg) + '">')
-					.append('<input type="hidden" name="filename" value="' + filename + '">')
+				}).append('<input type="hidden" name="output_svg" value="' + xhtmlEscape(svg) + '">')
+					.append('<input type="hidden" name="filename" value="' + xhtmlEscape(filename) + '">')
 					.appendTo('body')
 					.submit().remove();
 			},
-			pngsave: function(win, data) {
-				var issues = data.issues;
+			exportImage: function(win, data) {
+				var c,
+					issues = data.issues,
+					mimeType = data.mimeType,
+					quality = data.quality;
 				
 				if(!$('#export_canvas').length) {
 					$('<canvas>', {id: 'export_canvas'}).hide().appendTo('body');
 				}
-				var c = $('#export_canvas')[0];
+				c = $('#export_canvas')[0];
 				
 				c.width = svgCanvas.contentW;
 				c.height = svgCanvas.contentH;
 				canvg(c, data.svg, {renderCallback: function() {
-					var datauri = c.toDataURL('image/png');
+					var pre, filename, suffix,
+						datauri = quality ? c.toDataURL(mimeType, quality) : c.toDataURL(mimeType),
+						// uiStrings = svgEditor.uiStrings,
+						note = '';
 					
-					var uiStrings = svgEditor.uiStrings;
-					var note = '';
-					
-					// Check if there's issues
-					if(issues.length) {
-						var pre = "\n \u2022 ";
+					// Check if there are issues
+					if (issues.length) {
+						pre = "\n \u2022 ";
 						note += ("\n\n" + pre + issues.join(pre));
 					} 
 					
@@ -58,16 +84,20 @@ svgEditor.addExtension("server_opensave", {
 						alert(note);
 					}
 					
-					var title = svgCanvas.getDocumentTitle();
-					//var filename = title.replace(/[^a-z0-9\.\_\-]+/gi, '_');//Chamilo replace by below 
-					var filename =title;//Chamilo TODO:check if the filter through filesave.php is enough
+					filename = getFileNameFromTitle();
+					suffix = '.' + data.type.toLowerCase();
 					
-					var form = $('<form>').attr({
+					if (clientDownloadSupport(filename, suffix, datauri)) {
+						return;
+					}
+
+					$('<form>').attr({
 						method: 'post',
-						action: save_png_action,
+						action: save_img_action,
 						target: 'output_frame'
-					})	.append('<input type="hidden" name="output_png" value="' + datauri + '">')
-						.append('<input type="hidden" name="filename" value="' + filename + '">')
+					}).append('<input type="hidden" name="output_img" value="' + datauri + '">')
+						.append('<input type="hidden" name="mime" value="' + mimeType + '">')
+						.append('<input type="hidden" name="filename" value="' + xhtmlEscape(filename) + '">')
 						.appendTo('body')
 						.submit().remove();
 				}});
@@ -75,31 +105,30 @@ svgEditor.addExtension("server_opensave", {
 				
 			}
 		});
-	
+
 		// Do nothing if client support is found
-		if(window.FileReader) return;
+		if (window.FileReader) {return;}
 		
-		var cancelled = false;
-	
 		// Change these to appropriate script file
-		var open_svg_action = 'extensions/fileopen.php?type=load_svg';
-		var import_svg_action = 'extensions/fileopen.php?type=import_svg';
-		var import_img_action = 'extensions/fileopen.php?type=import_img';
+		open_svg_action = svgEditor.curConfig.extPath + 'fileopen.php?type=load_svg';
+		import_svg_action = svgEditor.curConfig.extPath + 'fileopen.php?type=import_svg';
+		import_img_action = svgEditor.curConfig.extPath + 'fileopen.php?type=import_img';
 		
 		// Set up function for PHP uploader to use
 		svgEditor.processFile = function(str64, type) {
-			if(cancelled) {
+			var xmlstr;
+			if (cancelled) {
 				cancelled = false;
 				return;
 			}
 		
 			$('#dialog_box').hide();
-		
-			if(type != 'import_img') {
-				var xmlstr = svgCanvas.Utils.decode64(str64);
+
+			if (type !== 'import_img') {
+				xmlstr = svgedit.utilities.decode64(str64);
 			}
 			
-			switch ( type ) {
+			switch (type) {
 				case 'load_svg':
 					svgCanvas.clear();
 					svgCanvas.setSvgString(xmlstr);
@@ -113,10 +142,10 @@ svgEditor.addExtension("server_opensave", {
 					svgCanvas.setGoodImage(str64);
 					break;
 			}
-		}
+		};
 	
 		// Create upload form
-		var open_svg_form = $('<form>');
+		open_svg_form = $('<form>');
 		open_svg_form.attr({
 			enctype: 'multipart/form-data',
 			method: 'post',
@@ -125,12 +154,12 @@ svgEditor.addExtension("server_opensave", {
 		});
 		
 		// Create import form
-		var import_svg_form = open_svg_form.clone().attr('action', import_svg_action);
-		
+		import_svg_form = open_svg_form.clone().attr('action', import_svg_action);
+
 		// Create image form
-		var import_img_form = open_svg_form.clone().attr('action', import_img_action);
+		import_img_form = open_svg_form.clone().attr('action', import_img_action);
 		
-		// It appears necessory to rebuild this input every time a file is 
+		// It appears necessary to rebuild this input every time a file is 
 		// selected so the same file can be picked and the change event can fire.
 		function rebuildInput(form) {
 			form.empty();
@@ -138,7 +167,7 @@ svgEditor.addExtension("server_opensave", {
 			
 			
 			function submit() {
-				// This submits the form, which returns the file data using svgEditor.uploadSVG
+				// This submits the form, which returns the file data using svgEditor.processFile()
 				form.submit();
 				
 				rebuildInput(form);
@@ -161,7 +190,7 @@ svgEditor.addExtension("server_opensave", {
 				});
 			} else {
 				inp.change(function() {
-					// This submits the form, which returns the file data using svgEditor.uploadSVG
+					// This submits the form, which returns the file data using svgEditor.processFile()
 					submit();
 				});
 			}

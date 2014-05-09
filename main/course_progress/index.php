@@ -15,7 +15,6 @@ $language_file = array ('course_description', 'userInfo', 'admin');
 // including files
 require_once '../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'attendance.lib.php';
-require_once api_get_path(LIBRARY_PATH).'thematic.lib.php';
 require_once api_get_path(LIBRARY_PATH).'app_view.php';
 require_once 'thematic_controller.php';
 
@@ -80,19 +79,19 @@ if (!empty($thematic_id)) {
 // get default thematic plan title
 $default_thematic_plan_title = $thematic->get_default_thematic_plan_title();
 
-// Only when I see the 3 columns. Avoids double or triple click binding for onclick event 
- 
+// Only when I see the 3 columns. Avoids double or triple click binding for onclick event
+
 $htmlHeadXtra[] = '<script type="text/javascript">
-	
+
 $(document).ready(function() {
 
-	//Second col	
+	//Second col
      /*
     $("#thematic_plan_add").live("submit", function() {
-   
+
 		var serialize_form_content = $(this).serialize();
 
-		//Getting FCK content								
+		//Getting FCK content
 		var oEditor = FCKeditorAPI.GetInstance("description[1]");
 		content_1=  oEditor.GetXHTML(true) ;
 		var oEditor = FCKeditorAPI.GetInstance("description[2]");
@@ -104,93 +103,93 @@ $(document).ready(function() {
 		var oEditor = FCKeditorAPI.GetInstance("description[5]");
 		content_5=  oEditor.GetXHTML(true) ;
 		var oEditor = FCKeditorAPI.GetInstance("description[6]");
-		content_6=  oEditor.GetXHTML(true) ;	
-		
+		content_6=  oEditor.GetXHTML(true) ;
+
 		$.ajax({
 			type: "POST",
 			url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=save_thematic_plan",
 			data: "desc[1]="+content_1+"&"+"desc[2]="+content_2+"&"+"desc[3]="+content_3+"&"+"desc[4]="+content_4+"&"+"desc[5]="+content_5+"&"+"desc[6]="+content_6+"&"+serialize_form_content,
-			success: function(data) {										
+			success: function(data) {
 				var thematic_id = $("input[name=\"thematic_id\"]").val();
-				$("#thematic_plan_"+thematic_id).html(data);				
-				$("#thematic_plan_add").html("<div class=\"confirmation-message\">'.addslashes(get_lang('Saved')).'</div>");																	
-                //location.reload(true);					
+				$("#thematic_plan_"+thematic_id).html(data);
+				$("#thematic_plan_add").html("<div class=\"confirmation-message\">'.addslashes(get_lang('Saved')).'</div>");
+                //location.reload(true);
 			}
 		});
 		//prevent the browser to follow the link
-        return false;				
+        return false;
 	});*/
-    
+
    // Third col
    /*
 	$("#thematic_advance").live("submit", function() {
-	   	var url = this.href;        
+	   	var url = this.href;
         var my_id = this.id;
 		var serialize_form_content = $(this).serialize();
-		
-		//Getting FCK content								
+
+		//Getting FCK content
 		var oEditor = FCKeditorAPI.GetInstance("content");
-		content =  oEditor.GetXHTML(true) ;							
+		content =  oEditor.GetXHTML(true) ;
 		$.ajax({
 				type: "POST",
 				url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=save_thematic_advance",
 				data: "real_content=" + content + "&" +serialize_form_content,
-				success: function(data) {										
+				success: function(data) {
 					var thematic_advance_id = $("input[name=\"thematic_advance_id\"]").val();
-					$("#thematic_advance_"+thematic_advance_id).html(data);					
-					$("#thematic_advance").html("<div class=\"confirmation-message\">'.addslashes(get_lang('Saved')).'</div>");																	
-					
+					$("#thematic_advance_"+thematic_advance_id).html(data);
+					$("#thematic_advance").html("<div class=\"confirmation-message\">'.addslashes(get_lang('Saved')).'</div>");
+
 					//Only refresh if the parent is to add
 					if (my_id == "add_button") {
 						//location.reload(true);
 					}
 				}
-		});								
+		});
 		//prevent the browser to follow the link
-        return false;	
+        return false;
 	});*/
-    
 
-    $(".thematic_advance_actions, .thematic_tools ").hide();	
-	
+
+    $(".thematic_advance_actions, .thematic_tools ").hide();
+
 	$(".thematic_content").mouseover(function() {
 		var id = parseInt(this.id.split("_")[3]);
 		$("#thematic_id_content_"+id ).show();
 	});
-	
+
 	$(".thematic_content").mouseleave(function() {
 		var id = parseInt(this.id.split("_")[3]);
 		$("#thematic_id_content_"+id ).hide();
-	});	
-	
+	});
+
 	$(".thematic_advance_content").mouseover(function() {
 		var id = parseInt(this.id.split("_")[4]);
 		$("#thematic_advance_tools_"+id ).show();
 	});
-	
+
 	$(".thematic_advance_content").mouseleave(function() {
 		var id = parseInt(this.id.split("_")[4]);
 		$("#thematic_advance_tools_"+id ).hide();
-	});    
+	});
     /*
-    $("#custom_date").live("click", function() {         
+    $("#custom_date").live("click", function() {
         $("#div_custom_datetime").css("display", "none");
-        $("#div_datetime_by_attendance").hide();		
+        $("#div_datetime_by_attendance").hide();
     });
-    
-    $("#from_attendance").live("click", function() {         
+
+    $("#from_attendance").live("click", function() {
         $("#div_custom_datetime").css("display", "block");
         $("#div_custom_datetime").show();
-        $("#div_datetime_by_attendance").show();		
+        $("#div_datetime_by_attendance").show();
     });*/
-});   	
+});
 </script>';
 
- 
+
 $htmlHeadXtra[] = '<script type="text/javascript">
 
 function datetime_by_attendance(attendance_id, thematic_advance_id) {
-    
+
 	$.ajax({
 		contentType: "application/x-www-form-urlencoded",
 		beforeSend: function(objeto) {},
@@ -198,10 +197,10 @@ function datetime_by_attendance(attendance_id, thematic_advance_id) {
 		url: "'.api_get_path(WEB_AJAX_PATH).'thematic.ajax.php?a=get_datetime_by_attendance",
 		data: "attendance_id="+attendance_id+"&thematic_advance_id="+thematic_advance_id,
 		success: function(data) {
-			$("#div_datetime_attendance").html(data);            
+			$("#div_datetime_attendance").html(data);
             if (thematic_advance_id == 0) {
                 $("#start_date_select_calendar").val($("#start_date_select_calendar option:first").val());
-            }            
+            }
 		}
 	});
 }
@@ -219,9 +218,9 @@ function update_done_thematic_advance(selected_value) {
 	});
 
 	// clean all radios
-	
+
 	for (var i=0; i< $(".done_thematic").length;i++) {
-		var id_radio_thematic = $(".done_thematic").get(i).id;		
+		var id_radio_thematic = $(".done_thematic").get(i).id;
 		$("#td_"+id_radio_thematic).css({"background-color":"#FFF"});
 	}
 
@@ -237,21 +236,21 @@ function update_done_thematic_advance(selected_value) {
 
 function check_per_attendance(obj) {
 	if (obj.checked) {
-        $("#div_datetime_by_attendance").show();        
+        $("#div_datetime_by_attendance").show();
         $("#div_custom_datetime").hide();
 	} else {
         $("#div_datetime_by_attendance").hide();
-        $("#div_custom_datetime").show();        
+        $("#div_custom_datetime").show();
 	}
 }
 
 function check_per_custom_date(obj) {
 	if (obj.checked) {
         $("#div_custom_datetime").show();
-        $("#div_datetime_by_attendance").hide();		        
+        $("#div_datetime_by_attendance").hide();
 	} else {
         $("#div_custom_datetime").hide();
-        $("#div_datetime_by_attendance").show();		
+        $("#div_datetime_by_attendance").show();
 	}
 }
 
@@ -273,7 +272,7 @@ if ($action == 'thematic_details') {
 }
 if ($action == 'thematic_plan_list' || $action == 'thematic_plan_delete') {
 	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
-	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicPlan').' ('.$thematic_data['title'].') ');	
+	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicPlan').' ('.$thematic_data['title'].') ');
 }
 if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
 	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
@@ -287,7 +286,7 @@ if ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
 if ($action == 'thematic_advance_list' || $action == 'thematic_advance_delete') {
 	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
 	$interbreadcrumb[] = array ('url' => '#', 'name' => get_lang('ThematicAdvance').' ('.$thematic_data['title'].')');
-	
+
 }
 if ($action == 'thematic_advance_add' || $action == 'thematic_advance_edit') {
 	$interbreadcrumb[] = array ('url' => 'index.php?'.api_get_cidreq().'&action='.$_SESSION['thematic_control'], 'name' => get_lang('ThematicControl'));
@@ -305,32 +304,32 @@ switch ($action) {
     case 'thematic_import_select'   :
     case 'thematic_import'          :
 	case 'moveup'					:
-	case 'movedown'					:    
+	case 'movedown'					:
         if (!api_is_allowed_to_edit(null,true)) {
         	api_not_allowed();
         }
 	case 'thematic_list'			:
     case 'thematic_export'          :
     case 'thematic_export_pdf'      :
-    case 'thematic_details'         :	
+    case 'thematic_details'         :
         $thematic_controller->thematic($action);
-		break;	
+		break;
 	case 'thematic_plan_add'		:
 	case 'thematic_plan_edit'		:
-	case 'thematic_plan_delete'		:	
+	case 'thematic_plan_delete'		:
         if (!api_is_allowed_to_edit(null,true)) {
             api_not_allowed();
-        }	
+        }
     case 'thematic_plan_list'       :
         $thematic_controller->thematic_plan($action);
-        break;	
+        break;
 	case 'thematic_advance_add'		:
 	case 'thematic_advance_edit'	:
 	case 'thematic_advance_delete'	:
         if (!api_is_allowed_to_edit(null,true)) {
-            api_not_allowed();            
+            api_not_allowed();
         }
-    case 'thematic_advance_list'    : 
+    case 'thematic_advance_list'    :
         $thematic_controller->thematic_advance($action);
         break;
 }

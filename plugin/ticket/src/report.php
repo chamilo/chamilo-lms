@@ -1,11 +1,8 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.plugin.ticket
- */
-/**
- * INIT SECTION
  */
 $language_file = array('messages', 'userInfo', 'admin', 'trad4all');
 $cidReset = true;

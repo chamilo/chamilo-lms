@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Redirects to "myticket.php"
  * @package chamilo.plugin.ticket

@@ -26,10 +26,11 @@ if (empty($document_data)) {
 }
 
 //a student should not be able to download a root shared directory
-if (($path == '/shared_folder' || $path=='/shared_folder_session_'.api_get_session_id()) && (!api_is_allowed_to_edit() || !api_is_platform_admin())){
-	echo '<div align="center">';
-	Display::display_error_message(get_lang('NotAllowedClickBack'));
-	echo '</div>';
+if (($path == '/shared_folder' ||
+    $path == '/shared_folder_session_' . api_get_session_id()) &&
+    (!api_is_allowed_to_edit() || !api_is_platform_admin())
+) {
+	api_not_allowed();
 	exit;
 }
 
@@ -39,12 +40,12 @@ require api_get_path(LIBRARY_PATH).'pclzip/pclzip.lib.php';
 //Creating a ZIP file
 $temp_zip_file = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
 
-$zip_folder     = new PclZip($temp_zip_file);
-$doc_table      = Database::get_course_table(TABLE_DOCUMENT);
-$prop_table     = Database::get_course_table(TABLE_ITEM_PROPERTY);
+$zip_folder = new PclZip($temp_zip_file);
+$doc_table = Database::get_course_table(TABLE_DOCUMENT);
+$prop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-$course_id      = api_get_course_int_id();
-$session_id     = api_get_session_id();
+$course_id = api_get_course_int_id();
+$session_id = api_get_session_id();
 $groupId = api_get_group_id();
 
 // We need this path to clean it out of the zip file
@@ -65,7 +66,7 @@ if (api_is_allowed_to_edit()) {
 	}
 	$querypath = Database::escape_string($querypath);
 	// Search for all files that are not deleted => visibility != 2
-	$sql = "SELECT path
+	$sql = "SELECT path, id_session
 	        FROM $doc_table AS docs, $prop_table AS props
 			WHERE
 			    props.tool          ='".TOOL_DOCUMENT."' AND
@@ -76,9 +77,21 @@ if (api_is_allowed_to_edit()) {
                 props.c_id          = ".$course_id." AND
                 props.id_session    IN ('0', '$session_id') AND
                 docs.c_id 			= ".$course_id." ";
+
+    $sql.= DocumentManager::getSessionFolderFilters($querypath, $session_id);
 	$query = Database::query($sql);
 	// Add tem to the zip file
 	while ($not_deleted_file = Database::fetch_assoc($query)) {
+        // Filtering folders and
+        if (strpos($not_deleted_file['path'], 'chat_files') > 0 ||
+            strpos($not_deleted_file['path'], 'shared_folder') > 0
+        ) {
+            if (!empty($session_id)) {
+               if ($not_deleted_file['id_session'] != $session_id) {
+                   continue;
+               }
+            }
+        }
 		$zip_folder->add(
             $sys_course_path.$_course['path'].'/document'.$not_deleted_file['path'],
             PCLZIP_OPT_REMOVE_PATH,
@@ -97,7 +110,7 @@ if (api_is_allowed_to_edit()) {
 	// So... I do it in a couple of steps:
 	// 1st: Get all files that are visible in the given path
 	$querypath = Database::escape_string($querypath);
-    $sql = "SELECT path
+    $sql = "SELECT path, id_session
             FROM $doc_table AS docs, $prop_table AS props
             WHERE
                 docs.c_id               = $course_id AND
@@ -109,9 +122,21 @@ if (api_is_allowed_to_edit()) {
                 docs.filetype           = 'file' AND
                 props.id_session        IN ('0', '$session_id') AND
                 props.to_group_id       = ".$groupId;
-	$query = Database::query($sql);
+
+    $sql.= DocumentManager::getSessionFolderFilters($querypath, $session_id);
+
+    $query = Database::query($sql);
 	// Add them to an array
 	while ($all_visible_files = Database::fetch_assoc($query)) {
+        if (strpos($all_visible_files['path'], 'chat_files') > 0 ||
+            strpos($all_visible_files['path'], 'shared_folder') > 0
+        ) {
+            if (!empty($session_id)) {
+                if ($all_visible_files['id_session'] != $session_id) {
+                    continue;
+                }
+            }
+        }
 		$all_visible_files_path[] = $all_visible_files['path'];
 	}
 

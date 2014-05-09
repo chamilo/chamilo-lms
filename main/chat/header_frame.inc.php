@@ -48,6 +48,28 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
     <meta charset="<?php echo api_get_system_encoding(); ?>" />
     <title>Chat</title>
     <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH); ?>chat.css">
+    <?php echo api_get_js('jquery.min.js'); ?>
+    <?php echo api_get_js('jquery.tinyscrollbar.js'); ?>
+    <script type="text/javascript">
+        $(document).ready(function() {
+        var posicion = $("#clear-chat").offset();
+        var margenSuperior = 15;
+         $(window).scroll(function() {
+             if ($(window).scrollTop() > posicion.top) {
+                 $("#clear-chat").stop().animate({
+                     marginTop: $(window).scrollTop() - posicion.top + margenSuperior
+                 });
+             } else {
+                 $("#clear-chat").stop().animate({
+                     marginTop: 0
+                 });
+             };
+         });
+        });
+         $(document).ready(function(){
+                $('#user-online-scroll').tinyscrollbar();
+            });
+    </script>
     <style>
         a {
             font-size: 12px;

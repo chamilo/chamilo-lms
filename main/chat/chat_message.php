@@ -212,7 +212,7 @@ if (!empty($course) && !empty($_user['user_id'])) {
 				$fp = fopen($chat_path.$basename_chat.'.log.html', 'a');
 					// view user picture
 					$user_image = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
-					$user_photo = $user_image['dir'].$user_image['file'];
+					$user_photo = $user_image['dir'].'medium_'.$user_image['file'];
 					$file_photo = '<img class="chat-image" src="'.$user_photo.'"/>';
 
 				if ($isMaster) {
@@ -241,11 +241,11 @@ if (!empty($course) && !empty($_user['user_id'])) {
 	<table border="0" cellpadding="5" cellspacing="0" width="100%">
 	<tr>
         <td width="320" valign="middle">
-		<?php $talkboxsize=(api_get_course_setting('allow_open_chat_window')) ? 'width: 350px; height: 35px' : 'width: 450px; height: 35px'; ?>
-        <textarea name="message" style=" <?php echo $talkboxsize; ?>" onkeydown="send_message(event);" onclick="javascript: insert_smile(this);"></textarea>
+		<?php $talkboxsize=(api_get_course_setting('allow_open_chat_window')) ? 'width: 350px; height: 80px' : 'width: 450px; height: 35px'; ?>
+        <textarea class="message-text" name="message" style=" <?php echo $talkboxsize; ?>" onkeydown="send_message(event);" onclick="javascript: insert_smile(this);"></textarea>
         </td>
         <td>
-            <button type="submit" value="<?php echo get_lang('Send'); ?>" class="btn"><?php echo get_lang('Send'); ?></button>
+            <button type="submit" value="<?php echo get_lang('Send'); ?>" class="btn-enviar"><?php echo get_lang('Send'); ?></button>
         </td>
 	</tr>
     <tr>

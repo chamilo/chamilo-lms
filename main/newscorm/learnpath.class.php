@@ -2979,27 +2979,23 @@ class learnpath
             );
 
             $style = 'scorm_item';
-            $scorm_color_background = 'scorm_item';
+            $scorm_color_background = 'scorm_item_2';
             $style_item = 'scorm_item';
             $current = false;
 
+            if ($color_counter % 2 == 0) {
+                $scorm_color_background = 'scorm_item_1';
+            }
+            if ($item['type'] == 'dokeos_module' || $item['type'] == 'dokeos_chapter') {
+                $scorm_color_background =' scorm_item_section ';
+            }
             if ($item['id'] == $this->current) {
                 $style = 'scorm_item_highlight';
-                $scorm_color_background = 'scorm_item_highlight';
-            } else {
-                if ($color_counter % 2 == 0) {
-                    $scorm_color_background = 'scorm_item_1';
-                } else {
-                    $scorm_color_background = 'scorm_item_2';
-                }
-                if ($item['type'] == 'dokeos_module' || $item['type'] == 'dokeos_chapter') {
-                    $scorm_color_background =' scorm_item_section ';
-                }
+                $scorm_color_background .= ' scorm_item_highlight';
             }
 
-            if ($scorm_color_background != '') {
-                $html .= '<div id="toc_' . $item['id'] . '" class="' . $scorm_color_background . ' '.$class_name[$item['status']].' ">';
-            }
+            $html .= '<div id="toc_' . $item['id'] . '" class="' . $scorm_color_background . ' '.$class_name[$item['status']].' ">';
+
 
             // Learning path title
             $title = $item['title'];

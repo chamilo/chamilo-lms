@@ -2,6 +2,17 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AgendaList = "Agenda list";
+$Calendar = "Calendar";
+$CustomRange = "Custom range";
+$ThisWeek = "This week";
+$SendToUsersInSessions = "Send to users in all sessions of this course";
+$ParametersNotFound = "Parameters not found";
+$UsersToAdd = "Users to add";
+$DocumentsAdded = "Documents added";
+$NoUsersToAdd = "No users to add";
+$Subgroup = "Subgroup";
+$Subgroups = "Subgroups";
 $EnterTheLettersYouSee = "Enter the letters you see.";
 $ClickOnTheImageForANewOne = "Click on the image to load a new one.";
 $AccountBlockedByCaptcha = "Account blocked by captcha.";
@@ -851,6 +862,7 @@ $FirstPage = "First page";
 $LastPage = "Last page";
 $Coachs = "Coachs";
 $FieldTypeFile = "File upload";
+$NextWeek = "Next Week";
 $DragAndDropAnElementHere = "Drag and drop an element here";
 $ThereAreNoRegisteredDatetimeYet = "There is no date/time registered yet";
 $CalendarList = "Calendar list of attendances";

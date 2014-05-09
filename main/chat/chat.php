@@ -74,10 +74,9 @@ if (!empty($groupId)) {
 if (empty($open_chat_window)) {
     Display::display_header($tool_name, 'Chat');
 }
-
-echo '<iframe src="chat_whoisonline.php?cidReq='.$cidreq.'" name="chat_whoisonline" scrolling="auto" style="height:320px; width:19%; border: 0px none; float:left"></iframe>';
-echo '<iframe src="chat_chat.php?origin='.$origin.'&target='.$target.'&amp;cidReq='.$cidreq.'" name="chat_chat" scrolling="auto" height="240" style="width:80%; border: 0px none; float:right"></iframe>';
-echo '<iframe src="chat_message.php?cidReq='.$cidreq.'" name="chat_message" scrolling="no" height="80" style="width:80%; border: 0px none; float:right"></iframe>';
+echo '<iframe src="chat_whoisonline.php?cidReq='.$cidreq.'" name="chat_whoisonline" scrolling="auto" style="height:320px; width:20%; border: 0px none; float:left"></iframe>';
+echo '<iframe src="chat_chat.php?origin='.$origin.'&target='.$target.'&amp;cidReq='.$cidreq.'" name="chat_chat" scrolling="auto" height="300" style="width:80%; border: 0px none; float:right"></iframe>';
+echo '<iframe src="chat_message.php?cidReq='.$cidreq.'" name="chat_message" scrolling="no" height="100" style="width:80%; border: 0px none; float:right"></iframe>';
 echo '<iframe src="chat_hidden.php?cidReq='.$cidreq.'" name="chat_hidden" height="0" style="border: 0px none"></iframe>';
 
 if (empty($open_chat_window)) {

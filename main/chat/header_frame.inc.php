@@ -47,7 +47,7 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
 <head>
     <meta charset="<?php echo api_get_system_encoding(); ?>" />
     <title>Chat</title>
-    <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH).$my_style; ?>/default.css">
+    <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH); ?>chat.css">
     <style>
         a {
             font-size: 12px;

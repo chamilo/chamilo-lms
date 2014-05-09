@@ -107,34 +107,31 @@ if (!empty($course)) {
 	require 'header_frame.inc.php';
 
 	?>
-	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="data_table">
-	<tr><th colspan="2"><?php echo get_lang('Connected'); ?></th></tr>
-	<?php
-	foreach ($users as & $user) {
-		if (empty($session_id)) {
-			$status = $user['status'];
-		} else {
-			$status = CourseManager::is_course_teacher($user['user_id'], $_SESSION['_course']['id']) ? 1 : 5;
-		}
-		$user_image = UserManager::get_user_picture_path_by_id($user['user_id'], 'web', false, true);
-		$file_url = $user_image['dir'].$user_image['file'];
-	?>
-    <tr>
-	  <td width="1%" valign="top"><img src="<?php echo $file_url;?>" border="0" width="22" alt="" /></td>
-	  <td width="99%"><?php if ($status == 1) echo Display::return_icon('teachers.gif', get_lang('Teacher'), array('height' => '11')).' '; else echo Display::return_icon('students.gif', get_lang('Student'), array('height' => '11')); ?><a <?php if ($status == 1) echo 'class="master"'; ?> name="user_<?php echo $user['user_id']; ?>" href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq(); ?>&showPic=<?php if ($showPic == $user['user_id']) echo '0'; else echo $user['user_id']; ?>#user_<?php echo $user['user_id']; ?>"><?php echo api_get_person_name($user['firstname'], $user['lastname']); ?></a></td>
-	</tr>
-	<?php
-
-		if ($showPic == $user['user_id']) { ?>
-	<tr>
-	  <td colspan="2" align="center"><img src="<?php echo $file_url; ?>" border="0" width="100" alt="" /></td>
-	</tr>
-	<?php
-		}
-	}
-	unset($users);
-	?>
-	</table>
+	<div class="user-online">
+		<div class="title"><?php echo get_lang('Connected'); ?></div>
+		<ul class="perfil">
+			<?php
+				foreach ($users as & $user) {
+					if (empty($session_id)) {
+						$status = $user['status'];
+					} else {
+						$status = CourseManager::is_course_teacher($user['user_id'], $_SESSION['_course']['id']) ? 1 : 5;
+					}
+					$user_image = UserManager::get_user_picture_path_by_id($user['user_id'], 'web', false, true);
+					$file_url = $user_image['dir'].$user_image['file'];
+			?>
+			<li>
+				<!-- <img src="<?php echo $file_url;?>" border="0" width="22" alt="" /> -->
+				<?php if ($status == 1) echo Display::return_icon('teachers.gif', get_lang('Teacher'), array('height' => '18')).' '; else echo Display::return_icon('students.gif', get_lang('Student'), array('height' => '18')); ?>
+				<a <?php if ($status == 1) echo 'class="master"'; ?> name="user_<?php echo $user['user_id']; ?>" href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq(); ?>&showPic=<?php if ($showPic == $user['user_id']) echo '0'; else echo $user['user_id']; ?>#user_<?php echo $user['user_id']; ?>"><?php echo api_get_person_name($user['firstname'], $user['lastname']); ?></a>
+				<?php if ($showPic == $user['user_id']) { ?>
+				<div>
+				<img src="<?php echo $file_url; ?>" border="0" width="100" alt="" />
+				</div>
+			</li>
+			<?php } } unset($users); ?>
+		</ul>
+	</div>
 	<?php
 }
 require 'footer_frame.inc.php';

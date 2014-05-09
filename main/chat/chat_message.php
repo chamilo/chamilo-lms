@@ -5,6 +5,7 @@
  *	Allows to type the messages that will be displayed on chat_chat.php
  *
  *	@author Olivier Brouckaert
+ * 	Modified by Alex Aragón (BeezNest)
  *	@package chamilo.chat
  */
 /**
@@ -71,7 +72,7 @@ if (!empty($course) && !empty($_user['user_id'])) {
 
     /*	MAIN CODE */
 
-    $query = "SELECT lastname, firstname, username FROM $tbl_user WHERE user_id='".intval($_user['user_id'])."'";
+    $query = "SELECT user_id, lastname, firstname, username, picture_uri FROM $tbl_user WHERE user_id='".intval($_user['user_id'])."'";
     $result = Database::query($query);
 
     list($pseudo_user) = Database::fetch_row($result);
@@ -79,8 +80,10 @@ if (!empty($course) && !empty($_user['user_id'])) {
     $isAllowed = !(empty($pseudo_user) || !$_cid);
     $isMaster = (bool)$is_courseAdmin;
 
+    $user_id = Database::result($result, 0, 'user_id');
     $firstname = Database::result($result, 0, 'firstname');
     $lastname  = Database::result($result, 0, 'lastname');
+    $picture  = Database::result($result, 0, 'picture_uri');
 
     $date_now = date('Y-m-d');
 
@@ -207,13 +210,20 @@ if (!empty($course) && !empty($_user['user_id'])) {
 				}
 
 				$fp = fopen($chat_path.$basename_chat.'.log.html', 'a');
+					// view user picture
+					$user_image = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
+					$user_photo = $user_image['dir'].$user_image['file'];
+					$file_photo = '<img class="chat-image" src="'.$user_photo.'"/>';
 
 				if ($isMaster) {
-					$photo = '<img src="'.api_get_path(WEB_IMG_PATH).'teachers.gif" alt="'.get_lang('Teacher').'"  width="11" height="11" align="top"  title="'.get_lang('Teacher').'"  />';
-					fputs($fp, '<span style="color:#999; font-size: smaller;">['.$timeNow.']</span>'.$photo.' <span id="chat_login_name"><b>'.api_get_person_name($firstname, $lastname).'</b></span> : <i>'.$message.'</i><br />'."\n");
+
+					// $photo = '<img src="'.api_get_path(WEB_IMG_PATH).'teachers.gif" alt="'.get_lang('Teacher').'"  width="11" height="11" align="top"  title="'.get_lang('Teacher').'"  />';
+					fputs($fp, '<div class="message-teacher"><div class="content-message"><div>'.$message.'</div><div class="message-date">'.$timeNow.'</div></div><div class="icon-message"></div>'.$file_photo.'</div>'."\n");
+					//fputs($fp, '<span style="color:#999; font-size: smaller;">['.$timeNow.']</span>'.$file_photo.' <span id="chat_login_name"><b>'.api_get_person_name($firstname, $lastname).'</b></span> : <i>'.$message.'</i><br />'."\n");
 				} else {
-					$photo = '<img src="'.api_get_path(WEB_IMG_PATH).'students.gif" alt="'.get_lang('Student').'"  width="11" height="11" align="top"  title="'.get_lang('Student').'"  />';
-					fputs($fp, '<span style="color:#999; font-size: smaller;">['.$timeNow.']</span>'.$photo.' <b>'.api_get_person_name($firstname, $lastname).'</b> : <i>'.$message.'</i><br />'."\n");
+					// $photo = '<img src="'.api_get_path(WEB_IMG_PATH).'students.gif" alt="'.get_lang('Student').'"  width="11" height="11" align="top"  title="'.get_lang('Student').'"  />';
+					//fputs($fp, '<span style="color:#999; font-size: smaller;">['.$timeNow.']</span>'.$file_photo.' <b>'.api_get_person_name($firstname, $lastname).'</b> : <i>'.$message.'</i><br />'."\n");
+					fputs($fp, '<div class="message-student">'.$file_photo.'<div class="icon-message"></div><div class="content-message"><div>'.$message.'</div><div class="message-date">'.$timeNow.'</div></div></div>'."\n");
 				}
 
 				fclose($fp);

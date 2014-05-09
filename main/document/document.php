@@ -345,8 +345,7 @@ switch ($action) {
             $parent_id = $document_info['parent_id'];
             $my_path = UserManager::get_user_picture_path_by_id(
                 api_get_user_id(),
-                'system',
-                true
+                'system'
             );
             $user_folder = $my_path['dir'].'my_files/';
             $my_path = null;
@@ -761,6 +760,7 @@ $documentAndFolders = DocumentManager::get_all_document_data(
     $is_allowed_to_edit || $group_member_with_upload_rights,
     false
 );
+
 $count = 1;
 $jquery = null;
 
@@ -1510,11 +1510,13 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
     if ($groupId == 0 || GroupManager::user_has_access($userId, $groupId, GroupManager::GROUP_TOOL_DOCUMENTS)) {
         $count = 1;
         $countedPaths = array();
+        $countedPaths = array();
+
         foreach ($documentAndFolders as $key => $document_data) {
             $row = array();
             $row['id'] = $document_data['id'];
             $row['type'] = $document_data['filetype'];
-
+            
             // If the item is invisible, wrap it in a span with class invisible.
             $is_visible = DocumentManager::is_visible_by_id(
                 $document_data['id'],
@@ -1606,6 +1608,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
             $row[] = $size;
             $row[] = $document_name;
 
+            $total_size = $total_size + $size;
             if (!isset($countedPaths[$document_data['path']])) {
                 $total_size = $total_size + $size;
                 $countedPaths[$document_data['path']] = true;
@@ -1725,7 +1728,8 @@ $table = new SortableTableFromArrayConfig(
     $tableName,
     $column_show,
     $column_order,
-    'ASC'
+    'ASC',
+    true
 );
 $query_vars = array();
 if (isset($_GET['keyword'])) {

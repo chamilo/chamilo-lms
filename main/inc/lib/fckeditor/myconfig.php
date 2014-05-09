@@ -204,7 +204,7 @@ if ((api_get_setting('enabled_asciisvg') == 'true')) {
 if (api_get_setting('include_asciimathml_script') == 'true') {
     // The automatic content parsing should be disabled on this case, otherwise content would be damaged.
     // The editor does the necessary parsing within its separate iframe.
-    echo '<script type="text/javascript">var translateOnLoad = false ;</script>';
+    $config['LoadAsciiMath'] = '<script type="text/javascript">var translateOnLoad = false;</script>';
 }
 
 // WIRIS: plugin for inserting mathematical formulas

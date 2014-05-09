@@ -170,7 +170,7 @@ class learnpathList {
      *  @param int  Id of session
      *  @return array List of lessons with lessons id as keys
      */
-    function get_course_lessons($course_code, $session_id) {
+    static function  get_course_lessons($course_code, $session_id) {
         $tbl_course_lp          = Database::get_course_table(TABLE_LP_MAIN);
 
         $course = api_get_course_info($course_code);

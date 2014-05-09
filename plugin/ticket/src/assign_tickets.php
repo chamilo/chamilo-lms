@@ -23,21 +23,23 @@ $id = intval($_GET['id']);
 $tblWeeklyReport = Database::get_main_table('rp_reporte_semanas');
 $sql ="SELECT * FROM $tblWeeklyReport WHERE id = '$id'";
 $sql_tasks = "SELECT id AS colid, title as coltitle
-    FROM ".Database::get_course_table(TABLE_STUDENT_PUBLICATION , $course_info['dbName'])."
+    FROM ".Database::get_course_table(TABLE_STUDENT_PUBLICATION)."
     WHERE parent_id = 0
         AND id NOT IN (
             SELECT work_id
             FROM $tblWeeklyReport
-            WHERE course_code = '$course_code'
-                AND id != '$id'
+            WHERE
+                course_code = '$course_code' AND
+                id != '$id'
         )";
 $sql_forum = "SELECT thread_id AS colid, thread_title AS coltitle
-    FROM ".Database::get_course_table(TABLE_FORUM_THREAD, $course_info['dbName'])."
+    FROM ".Database::get_course_table(TABLE_FORUM_THREAD)."
     WHERE thread_id NOT IN (
         SELECT forum_id
             FROM $tblWeeklyReport
-            WHERE course_code = '$course_code'
-                AND id != '$id'
+            WHERE
+                course_code = '$course_code' AND
+                id != '$id'
     )";
 $rs = Database::fetch_object(Database::query($sql));
 $result_tareas = Database::query($sql_tasks);
@@ -63,6 +65,8 @@ while ($row = Database::fetch_assoc($result_forum)) {
 }
 echo '</select></div><div>';
 echo '<div class="row">
-        <div class="formw"><button class="save" name="edit" type="button" value="' . get_lang('Edit') . '" onClick="save(' . "$id" . ');">' . get_lang('Edit') . '</button></div>
+        <div class="formw">
+        <button class="save" name="edit" type="button" value="' . get_lang('Edit') . '" onClick="save(' . "$id" . ');">' . get_lang('Edit') . '</button>
+        </div>
     </div>';
 echo '</form>';

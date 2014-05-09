@@ -17,6 +17,8 @@ $language_file = array('registration', 'messages', 'userInfo');
 $cidReset = true;
 require_once '../inc/global.inc.php';
 
+require_once api_get_path(LIBRARY_PATH).'usermanager.lib.php';
+
 if (api_get_setting('allow_social_tool') == 'true') {
     $this_section = SECTION_SOCIAL;
 } else {
@@ -141,6 +143,7 @@ if (api_get_setting('profile', 'name') !== 'true') {
 }
 $form->applyFilter(array('lastname', 'firstname'), 'stripslashes');
 $form->applyFilter(array('lastname', 'firstname'), 'trim');
+$form->applyFilter(array('lastname', 'firstname'), 'html_filter');
 $form->addRule('lastname' , get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
 
@@ -163,6 +166,7 @@ if (CONFVAL_ASK_FOR_OFFICIAL_CODE) {
     }
     $form->applyFilter('official_code', 'stripslashes');
     $form->applyFilter('official_code', 'trim');
+    $form->applyFilter('official_code', 'html_filter');
     if (api_get_setting('registration', 'officialcode') == 'true' && api_get_setting('profile', 'officialcode') == 'true') {
         $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
     }
@@ -200,6 +204,7 @@ if (api_get_setting('profile', 'phone') !== 'true') {
 }
 $form->applyFilter('phone', 'stripslashes');
 $form->applyFilter('phone', 'trim');
+$form->applyFilter('phone', 'html_filter');
 /*if (api_get_setting('registration', 'phone') == 'true') {
     $form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
 }
@@ -234,27 +239,26 @@ if (is_profile_editable() && api_get_setting('user_selected_theme') == 'true') {
 
 //    EXTENDED PROFILE  this make the page very slow!
 if (api_get_setting('extended_profile') == 'true') {
-    if (!isset($_GET['type']) || (isset($_GET['type']) && $_GET['type'] == 'extended')) {
-        $width_extended_profile = 500;
-        //$form->addElement('html', '<a href="javascript: void(0);" onclick="javascript: show_extend();"> show_extend_profile</a>');
-        //$form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');
-        //    MY COMPETENCES
-        $form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
-        //    MY DIPLOMAS
-        $form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
-        //    WHAT I AM ABLE TO TEACH
-        $form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
+    $width_extended_profile = 500;
+    //$form->addElement('html', '<a href="javascript: void(0);" onclick="javascript: show_extend();"> show_extend_profile</a>');
+    //$form->addElement('static', null, '<em>'.get_lang('OptionalTextFields').'</em>');
+    //    MY COMPETENCES
+    $form->add_html_editor('competences', get_lang('MyCompetences'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
+    //    MY DIPLOMAS
+    $form->add_html_editor('diplomas', get_lang('MyDiplomas'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
+    //    WHAT I AM ABLE TO TEACH
+    $form->add_html_editor('teach', get_lang('MyTeach'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '130'));
 
-        //    MY PRODUCTIONS
-        $form->addElement('file', 'production', get_lang('MyProductions'));
-        if ($production_list = UserManager::build_production_list(api_get_user_id(), '', true)) {
-            $form->addElement('static', 'productions_list', null, $production_list);
-        }
-        //    MY PERSONAL OPEN AREA
-        $form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '350'));
-        $form->applyFilter(array('competences', 'diplomas', 'teach', 'openarea'), 'stripslashes');
-        $form->applyFilter(array('competences', 'diplomas', 'teach'), 'trim'); // openarea is untrimmed for maximum openness
+    //    MY PRODUCTIONS
+    $form->addElement('file', 'production', get_lang('MyProductions'));
+    if ($production_list = UserManager::build_production_list(api_get_user_id(), '', true)) {
+        $form->addElement('static', 'productions_list', null, $production_list);
     }
+    //    MY PERSONAL OPEN AREA
+    $form->add_html_editor('openarea', get_lang('MyPersonalOpenArea'), false, false, array('ToolbarSet' => 'Profile', 'Width' => $width_extended_profile, 'Height' => '350'));
+    $form->applyFilter(array('competences', 'diplomas', 'teach', 'openarea'), 'stripslashes');
+    $form->applyFilter(array('competences', 'diplomas', 'teach'), 'trim'); // openarea is untrimmed for maximum openness
+
 }
 
 //    PASSWORD, if auth_source is platform
@@ -334,9 +338,8 @@ function is_profile_editable() {
  * @return    The filename of the new production or FALSE if the upload has failed
  */
 function upload_user_production($user_id) {
-    $image_path = UserManager::get_user_picture_path_by_id($user_id, 'system', true);
-
-    $production_repository = $image_path['dir'].$user_id.'/';
+    $image_path = UserManager::get_user_picture_path_by_id($user_id, 'system');
+    $production_repository = $image_path['dir'];
 
     if (!file_exists($production_repository)) {
         @mkdir($production_repository, api_get_permissions_for_new_directories(), true);
@@ -416,7 +419,7 @@ if ($form->validate()) {
 
     $wrong_current_password = false;
 //    $user_data = $form->exportValues();
-    $user_data = $form->getSubmitValues();
+    $user_data = $form->getSubmitValues(1);
 
     // set password if a new one was provided
     if (!empty($user_data['password0'])) {
@@ -565,6 +568,10 @@ if ($form->validate()) {
             } else {
                 $extras[$new_key] = $value;
             }
+        } elseif (strpos($key, 'remove_extra_') !== false) {
+            $extra_value = Security::filter_filename(urldecode(key($value)));
+            // To remove from user_field_value and folder
+            UserManager::update_extra_field_value($user_id, substr($key,13), $extra_value);
         } else {
             if (in_array($key, $available_values_to_modify)) {
                 $sql .= " $key = '".Database::escape_string($value)."',";
@@ -623,7 +630,23 @@ if ($form->validate()) {
     if (is_array($extras) && count($extras)> 0) {
         foreach ($extras as $key => $value) {
             //3. Tags are process in the UserManager::update_extra_field_value by the UserManager::process_tags function
-            UserManager::update_extra_field_value(api_get_user_id(), $key, $value);
+            // For array $value -> if exists key 'tmp_name' then must not be empty
+            // This avoid delete from user field value table when doesn't upload a file
+            if (is_array($value)) {
+                if (array_key_exists('tmp_name', $value) && empty($value['tmp_name'])) {
+                    //Nothing to do
+                } else {
+                    if (array_key_exists('tmp_name', $value)) {
+                        $value['tmp_name'] = Security::filter_filename($value['tmp_name']);
+                    }
+                    if (array_key_exists('name', $value)) {
+                        $value['name'] = Security::filter_filename($value['name']);
+                    }
+                    UserManager::update_extra_field_value($user_id, $key, $value);
+                }
+            } else {
+                UserManager::update_extra_field_value($user_id, $key, $value);
+            }
         }
     }
 

@@ -34,7 +34,6 @@ $Open = "公開";
 $GroupMembers = "グループ メンバー";
 $Me = "自分";
 $Topics = "トピック";
-$MyFiles = "ファイル";
 $SocialGroups = "ソーシャル グループ";
 $CreateASocialGroup = "ソーシャル グループを作成";
 ?>

@@ -64,6 +64,14 @@ function show_image(image,width,height) {
 	height = parseInt(height) + 20;
 	window_x = window.open(image,\'windowX\',\'width=\'+ width + \', height=\'+ height + \' , resizable=0\');
 }
+
+function confirmation(name) {
+    if (confirm("'.get_lang('AreYouSureToDelete', '').' " + name + " ?")) {
+            document.forms["profile"].submit();
+    } else {
+        return false;
+    }
+}
 //-->
 </script>';
 
@@ -311,8 +319,7 @@ $form->setDefaults($user_data);
 $error_drh = false;
 // Validate form
 if ($form->validate()) {
-
-	$user = $form->getSubmitValues();
+	$user = $form->getSubmitValues(1);
 	$is_user_subscribed_in_course = CourseManager::is_user_subscribed_in_course($user['user_id']);
 
 	if ($user['status'] == DRH && $is_user_subscribed_in_course) {
@@ -387,8 +394,28 @@ if ($form->validate()) {
                         $value = date('Y-m-d',$time);
                     }
                 }
-				UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
-			}
+                // For array $value -> if exists key 'tmp_name' then must not be empty
+                // This avoid delete from user field value table when doesn't upload a file
+                if (is_array($value)) {
+                    if (array_key_exists('tmp_name', $value) && empty($value['tmp_name'])) {
+                        //Nothing to do
+                    } else {
+                        if (array_key_exists('tmp_name', $value)) {
+                            $value['tmp_name'] = Security::filter_filename($value['tmp_name']);
+                        }
+                        if (array_key_exists('name', $value)) {
+                            $value['name'] = Security::filter_filename($value['name']);
+                        }
+                        UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
+                    }
+                } else {
+                    UserManager::update_extra_field_value($user_id, substr($key, 6), $value);
+                }
+            } elseif (strpos($key,'remove_extra') !== false) {
+                $extra_value = Security::filter_filename(urldecode(key($value)));
+                // To remove from user_field_value and folder
+                UserManager::update_extra_field_value($user_id, substr($key,13), $extra_value);
+            }
 		}
 		$tok = Security::get_token();
 		header('Location: user_list.php?action=show_message&message='.urlencode(get_lang('UserUpdated')).'&sec_token='.$tok);

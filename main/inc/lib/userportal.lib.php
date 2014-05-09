@@ -678,8 +678,8 @@ class IndexManager
     function display_login_form()
     {
         $form = new FormValidator('formLogin', 'POST', null,  null, array('class'=>'form-vertical'));
-        $form->addElement('text', 'login', get_lang('UserName'), array('id' => 'login', 'class' => 'span2 autocapitalize_off', 'autofocus' => 'autofocus'));
-        $form->addElement('password', 'password', get_lang('Pass'), array('id' => 'password', 'class' => 'span2'));
+        $form->addElement('text', 'login', get_lang('UserName'), array('id' => 'login', 'class' => 'span2 user_login_icon autocapitalize_off', 'autofocus' => 'autofocus'));
+        $form->addElement('password', 'password', get_lang('Pass'), array('id' => 'password', 'class' => 'span2 user_password_icon'));
         global $_configuration;
 
         // Captcha
@@ -916,7 +916,7 @@ class IndexManager
 
         // Session history
         if (isset($_GET['history']) && intval($_GET['history']) == 1) {
-            $my_account_content .= '<li><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
+            $my_account_content .= '<li class="history-course"><a href="user_portal.php">'.get_lang('DisplayTrainingList').'</a></li>';
         } else {
             $my_account_content .= '<li class="history-course"><a href="user_portal.php?history=1" >'.get_lang('HistoryTrainingSessions').'</a></li>';
         }

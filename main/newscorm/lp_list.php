@@ -110,11 +110,11 @@ if (!empty($flat_list)) {
     echo '<tr>';
 
     if ($is_allowed_to_edit) {
-        echo '<th width="50%">'.get_lang('Title').'</th>';
+        echo '<th width="35%">'.get_lang('Title').'</th>';
         echo '<th>'.get_lang('PublicationDate').'</th>';
         echo '<th>'.get_lang('ExpirationDate').'</th>';
         echo '<th>'.get_lang('Progress')."</th>";
-        echo '<th width="240px">'.get_lang('AuthoringOptions')."</th>";
+        echo '<th width="300px">'.get_lang('AuthoringOptions')."</th>";
     } else {
         echo '<th width="50%">'.get_lang('Title').'</th>';
         echo '<th>'.get_lang('Progress')."</th>";
@@ -191,6 +191,7 @@ if (!empty($flat_list)) {
 
         $url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
         $name = Security::remove_XSS($details['lp_name']);
+        $extra = null;
         if ($is_allowed_to_edit) {
             $url_start_lp .= '&isStudentView=true';
             $dsp_desc = '<em>'.$details['lp_maker'].'</em>   '.(learnpath::is_lp_visible_for_student($id, api_get_user_id()) ? '' : ' - ('.get_lang('LPNotVisibleToStudent').')');
@@ -198,12 +199,14 @@ if (!empty($flat_list)) {
         }
 
         $my_title = $name;
+        $icon_learnpath = Display::return_icon('learnpath.png', get_lang('LPName'), '', ICON_SIZE_SMALL);
         if ($details['lp_visibility'] == 0) {
-            $my_title = Display::tag('font', $name, array('style' => 'color:grey'));
+            $my_title = Display::tag('font', $name, array('class' => 'invisible'));
+            $icon_learnpath = Display::return_icon('learnpath_na.png', get_lang('LPName'), '', ICON_SIZE_SMALL);
         }
 
         $dsp_line = '<tr align="center" class="'.$oddclass.'">'.
-            '<td align="left" valign="top">'.Display::return_icon('learnpath.png', get_lang('LPName'), '', ICON_SIZE_SMALL).'
+                    '<td align="left" valign="top">'.$icon_learnpath.'
                      <a href="'.$url_start_lp.'">'.$my_title.'</a>'.$session_img.$extra."</td>";
 
         $dsp_desc = '';
@@ -218,7 +221,7 @@ if (!empty($flat_list)) {
         $progress = learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id());
 
         if ($is_allowed_to_edit) {
-            $dsp_progress = '<td>'.$progress.'</td>';
+            $dsp_progress = '<td><center>'.$progress.'</center></td>';
         } else {
             $dsp_progress = '<td>'.learnpath::get_progress_bar('%', learnpath::get_db_progress($id, api_get_user_id(), '%', '', false, api_get_session_id())).'</td>';
         }
@@ -227,6 +230,12 @@ if (!empty($flat_list)) {
         $dsp_edit_close = '</td>';
 
         $token_parameter = "&sec_token=$token";
+        $dsp_edit_lp = null;
+        $dsp_publish = null;
+        $dsp_reinit = null;
+        $dsp_disk = null;
+        $copy = null;
+        $lp_auto_lunch_icon = null;
 
         if ($is_allowed_to_edit) {
 
@@ -355,7 +364,6 @@ if (!empty($flat_list)) {
             $copy = Display::url(Display::return_icon('cd_copy.png', get_lang('Copy'), array(), ICON_SIZE_SMALL), api_get_self()."?".api_get_cidreq()."&action=copy&lp_id=$id");
 
             /* Auto Lunch LP code */
-            $lp_auto_lunch_icon = '';
             if (api_get_course_setting('enable_lp_auto_launch') == 1) {
                 if ($details['autolaunch'] == 1 && $autolunch_exists == false) {
                     $autolunch_exists = true;
@@ -391,10 +399,9 @@ if (!empty($flat_list)) {
             if ($current_session == 0) {
                 if ($details['lp_display_order'] == 1 && $max != 1) {
                     $dsp_order .= '<a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_down&lp_id='.$id.'">
-                         '.Display::return_icon('down.png', get_lang('MoveDown'), '', ICON_SIZE_SMALL).'</a>
-						<img src="../img/blanco.png" border="0" alt="" title="" />';
+                         '.Display::return_icon('down.png', get_lang('MoveDown'), '', ICON_SIZE_SMALL).'</a>';
                 } elseif ($current == $max - 1 && $max != 1) {
-                    $dsp_order .= '<img src="../img/blanco.png" border="0" alt="" title="" /><a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_up&lp_id='.$id.'">
+                    $dsp_order .= '<a href="lp_controller.php?'.api_get_cidreq().'&action=move_lp_up&lp_id='.$id.'">
 					'.Display::return_icon('up.png', get_lang('MoveUp'), '', ICON_SIZE_SMALL).'</a>';
                 } elseif ($max == 1) {
                     $dsp_order = '';

@@ -193,7 +193,6 @@ $YouNeedToHaveFriendsInYourSocialNetwork = "Musíte mať priateľov vo vašej so
 $SeeAllMyGroups = "Zobraziť všetky moje skupiny";
 $YouAlreadyInviteAllYourContacts = "Už ste pozvali všetky svoje kontakty";
 $YouShouldCreateAGroup = "Mali by ste vytvoriť skupinu";
-$MyFiles = "Moje súbory";
 $MySocialGroups = "Moje sociálne skupiny";
 $SocialGroups = "Sociálne skupiny";
 $CreateASocialGroup = "Vytvoriť sociálnu skupinu";

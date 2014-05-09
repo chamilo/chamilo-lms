@@ -119,7 +119,16 @@ if (!empty($course_list)) {
             true
         );
         $lp_list        = $list->get_flat_list();
-        $lp_count       = count($lp_list);
+        
+        $lp_count = 0;
+        
+        if(!empty($lp_list)) {
+            foreach ($lp_list as $valLp) {
+                if($valLp['lp_visibility']) {
+                    $lp_count++;
+                }
+            }
+        }
         $course_info    = api_get_course_info($course_data['code']);
         $exercise_count = count(get_all_exercises($course_info, $session_id, true));
 

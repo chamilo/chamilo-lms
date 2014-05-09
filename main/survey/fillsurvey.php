@@ -70,8 +70,8 @@ if ($surveyCode != "") {
     $resultAnonymous = Database::query($sql);
     $rowAnonymous = Database::fetch_array($resultAnonymous, 'ASSOC');
     // If is anonymous and is not allowed to take the survey to anonymous users, forbid access:
-    if (!isset($rowAnonymous['anonymous']) || ($rowAnonymous['anonymous'] == 0 && api_is_anonymous($_user['user_id'], true)) || count($rowAnonymous) == 0) {
-        api_not_allowed();
+    if (!isset($rowAnonymous['anonymous']) || ($rowAnonymous['anonymous'] == 0 && api_is_anonymous()) || count($rowAnonymous) == 0) {
+        api_not_allowed(true);
     }
     // If is anonymous and it is allowed to take the survey as anonymous, mark survey as anonymous.
 }
@@ -1127,9 +1127,12 @@ if ($survey_data['survey_type'] === '0') {
     if ($survey_data['show_form_profile'] == 0) {
         // The normal survey as always
         if (($show < $numberofpages) || !$_GET['show']) { //$show = $_GET['show'] + 1
-            echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('NextQuestion').'</button>';
+            if ($show == 0) {
+                echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('StartSurvey').'</button>';    
+            } else {                   
+                echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
+            }
         }
-
         if ($show >= $numberofpages && $_GET['show']) {
             echo '<button type="submit" name="finish_survey" class="next">'.get_lang('FinishSurvey').'</button>';
         }
@@ -1138,7 +1141,11 @@ if ($survey_data['survey_type'] === '0') {
         if (isset($_GET['show'])) {
             $numberofpages = count($paged_questions);
             if (($show < $numberofpages) || !$_GET['show']) { //$show = $_GET['show'] + 1
-                echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
+                if ($show == 0) {
+                    echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('StartSurvey').'</button>';    
+                } else {                   
+                    echo '<button type="submit" name="next_survey_page" class="next">'.get_lang('Next').'</button>';
+                }
             }
 
             if ($show >= $numberofpages && $_GET['show']) {

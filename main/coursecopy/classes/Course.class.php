@@ -34,11 +34,11 @@ class Course
     /**
      * Check if a resource links to the given resource
      */
-    function is_linked_resource(& $resource_to_check)
+    public function is_linked_resource(& $resource_to_check)
     {
         foreach ($this->resources as $type => $resources) {
             if (is_array($resources)) {
-                foreach ($resources as $id => $resource) {
+                foreach ($resources as $resource) {
                     if ($resource->links_to($resource_to_check) ) {
                         return true;
                     }
@@ -56,18 +56,18 @@ class Course
     /**
      * Add a resource from a given type to this course
      */
-    function add_resource(& $resource)
+    public function add_resource(& $resource)
     {
         $this->resources[$resource->get_type()][$resource->get_id()] = $resource;
     }
 
     /**
      * Does this course has resources?
-     * @param const $resource_type Check if this course has resources of the
+     * @param int $resource_type Check if this course has resources of the
      * given type. If no type is given, check if course has resources of any
      * type.
      */
-    function has_resources($resource_type = null)
+    public function has_resources($resource_type = null)
     {
         if( $resource_type != null) {
             return isset($this->resources[$resource_type]) && is_array($this->resources[$resource_type]) && (count(
@@ -80,7 +80,7 @@ class Course
     /**
      * Show this course resources
      */
-    function show()
+    public function show()
     { /*
         echo '<pre>';
         print_r($this);
@@ -220,50 +220,42 @@ class Course
 
         foreach ($this->resources as $type => & $resources) {
             if (count($resources) > 0) {
-                foreach ($resources as $id => & $resource) {
+                foreach ($resources as & $resource) {
                     switch ($type) {
                         case RESOURCE_ANNOUNCEMENT:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);
                             $resource->content = api_to_system_encoding($resource->content, $this->encoding);
                             break;
-
                         case RESOURCE_DOCUMENT:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);
                             $resource->comment = api_to_system_encoding($resource->comment, $this->encoding);
                             break;
-
                         case RESOURCE_EVENT:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);
                             $resource->content = api_to_system_encoding($resource->content, $this->encoding);
                             break;
-
                         case RESOURCE_FORUM:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);
                             $resource->description = api_to_system_encoding($resource->description, $this->encoding);
                             break;
-
                         case RESOURCE_FORUMCATEGORY:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);
                             $resource->description = api_to_system_encoding($resource->description, $this->encoding);
                             break;
-
                         case RESOURCE_FORUMPOST:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);
                             $resource->text = api_to_system_encoding($resource->text, $this->encoding);
                             $resource->poster_name = api_to_system_encoding($resource->poster_name, $this->encoding);
                             break;
-
                         case RESOURCE_FORUMTOPIC:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);
                             $resource->topic_poster_name = api_to_system_encoding($resource->topic_poster_name, $this->encoding);
                             $resource->title_qualify = api_to_system_encoding($resource->title_qualify, $this->encoding);
                             break;
-
                         case RESOURCE_GLOSSARY:
                             $resource->name = api_to_system_encoding($resource->name, $this->encoding);
                             $resource->description = api_to_system_encoding($resource->description, $this->encoding);
                             break;
-
                         case RESOURCE_LEARNPATH:
                             $resource->name = api_to_system_encoding($resource->name, $this->encoding);
                             $resource->description = api_to_system_encoding($resource->description, $this->encoding);
@@ -271,22 +263,18 @@ class Course
                             $resource->content_license = api_to_system_encoding($resource->content_license, $this->encoding);
                             //$resource->author = api_to_system_encoding($resource->author, $this->encoding);  // Needs implamantation.
                             break;
-
                         case RESOURCE_LINK:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);
                             $resource->description = api_to_system_encoding($resource->description, $this->encoding);
                             break;
-
                         case RESOURCE_LINKCATEGORY:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);
                             $resource->description = api_to_system_encoding($resource->description, $this->encoding);
                             break;
-
                         case RESOURCE_QUIZ:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);
                             $resource->description = api_to_system_encoding($resource->description, $this->encoding);
                             break;
-
                         case RESOURCE_QUIZQUESTION:
                             $resource->question = api_to_system_encoding($resource->question, $this->encoding);
                             $resource->description = api_to_system_encoding($resource->description, $this->encoding);
@@ -297,7 +285,6 @@ class Course
                                 }
                             }
                             break;
-
                         case RESOURCE_TEST_CATEGORY:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);
                             $resource->description = api_to_system_encoding($resource->description, $this->encoding);
@@ -305,7 +292,6 @@ class Course
                         case RESOURCE_SCORM:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);
                             break;
-
                         case RESOURCE_SURVEY:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);
                             $resource->subtitle = api_to_system_encoding($resource->subtitle, $this->encoding);
@@ -313,16 +299,13 @@ class Course
                             $resource->intro = api_to_system_encoding($resource->intro, $this->encoding);
                             $resource->surveythanks = api_to_system_encoding($resource->surveythanks, $this->encoding);
                             break;
-
                         case RESOURCE_SURVEYQUESTION:
                             $resource->survey_question = api_to_system_encoding($resource->survey_question, $this->encoding);
                             $resource->survey_question_comment = api_to_system_encoding($resource->survey_question_comment, $this->encoding);
                             break;
-
                         case RESOURCE_TOOL_INTRO:
                             $resource->intro_text = api_to_system_encoding($resource->intro_text, $this->encoding);
                             break;
-
                         case RESOURCE_WIKI:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);
                             $resource->content = api_to_system_encoding($resource->content, $this->encoding);

@@ -1067,6 +1067,7 @@ $QualifyInGradebook = "Cualificación no libro de cualificacións";
 $SessionSpecificResource = "Recurso específico da sesión";
 $EditionNotAvailableFromSession = "Edición non dispoñible dende a sesión, por favor edite dende o propio curso.";
 $HandingOverOfTaskX = "Porcentaxe completada da tarefa %s";
+$MyFiles = "Os meus arquivos";
 $ProtectedDocument = "Documento protexido";
 $ConnectionsLastMonth = "Conexións o mes pasado";
 $TotalStudents = "Alumnos totais";

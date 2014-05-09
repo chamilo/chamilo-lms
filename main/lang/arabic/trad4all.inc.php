@@ -534,6 +534,7 @@ $ToolTracking = "التقارير";
 $ToolCourseSetting = "الاعدادات";
 $ToolCourseProgress = "مدي التقدم التقدم في المقرر";
 $ContactInformation = "معلومات المستخدم";
+$MyFiles = "ملفاتي";
 $ConnectionsLastMonth = "مشاركات الشهر الماضي";
 $ToolVideoconference = "مؤتمرات الفيديو";
 $OpenInANewWindow = "فتح في نافذة جديدة";

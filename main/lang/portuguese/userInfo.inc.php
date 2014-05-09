@@ -193,7 +193,6 @@ $YouNeedToHaveFriendsInYourSocialNetwork = "Tem de ter amigos na sua rede social
 $SeeAllMyGroups = "Ver todos os meus grupos";
 $YouAlreadyInviteAllYourContacts = "Já convidou todos os seus contatos";
 $YouShouldCreateAGroup = "Deve criar um grupo";
-$MyFiles = "Os meus arquivos";
 $MySocialGroups = "Os meus grupos sociais";
 $SocialGroups = "Grupos sociais";
 $CreateASocialGroup = "Criar um grupo social";

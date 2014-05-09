@@ -1,11 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Class TicketPlugin definition file
- * @package chamilo.plugin.ticket
- */
-/**
  * Class TicketPlugin
+ *
+ * @package chamilo.plugin.ticket
+ *
  */
 class TicketPlugin extends Plugin
 {
@@ -19,9 +18,14 @@ class TicketPlugin extends Plugin
         static $result = null;
         return $result ? $result : $result = new self();
     }
+
     protected function __construct()
     {
-        parent::__construct('1.0', 'Kenny Rodas Chavez, Genesis Lopez, Francis Gonzales, Yannick Warnier', array('tool_enable' => 'boolean'));
+        $settings = array(
+            'tool_enable' => 'boolean',
+            'allow_student_add' => 'boolean'
+        );
+        parent::__construct('1.0', 'Kenny Rodas Chavez, Genesis Lopez, Francis Gonzales, Yannick Warnier', $settings);
     }
 
     /**
@@ -33,6 +37,7 @@ class TicketPlugin extends Plugin
         require_once api_get_path(SYS_PLUGIN_PATH) . PLUGIN_NAME . '/database.php';
 
     }
+
     /**
      * Uninstall the ticket plugin
      */
@@ -51,11 +56,11 @@ class TicketPlugin extends Plugin
         $tblTicketAssgLog = Database::get_main_table(TABLE_TICKET_ASSIGNED_LOG);
         $settings = $this->get_settings();
         $plugSetting = current($settings);
-        
+
         //Delete settings
         $sql = "DELETE FROM $tblSettings WHERE variable = 'ticket_tool_enable'";
         Database::query($sql);
-        
+
         $sql = "DROP TABLE IF EXISTS $tblTicketTicket";
         Database::query($sql);
         $sql = "DROP TABLE IF EXISTS $tblTicketStatus";
@@ -74,8 +79,11 @@ class TicketPlugin extends Plugin
         Database::query($sql);
         $sql = "DROP TABLE IF EXISTS $tblTicketTicket";
         Database::query($sql);
-        
-        $this->deleteTab($plugSetting['comment']);
-        $this->deleteExtraSettings();
+
+        $rsTab = $this->deleteTab($plugSetting['comment']);
+
+        if ($rsTab) {
+            echo "<script>location.href = '" . $_SERVER['REQUEST_URI'] . "';</script>";
+        }
     }
 }

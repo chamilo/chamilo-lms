@@ -32,7 +32,10 @@ class CourseRecycler
      * Delete all items from the course.
      * This deletes all items in the course-object from the current Chamilo-
      * course
-     * @param string The type of recycling we want (full_backup or select_items)
+     * @param string $type 'full_backup' or 'select_items'
+     *
+     * @return bool
+     *
      * @assert (null) === false
      */
     public function recycle($type)
@@ -40,6 +43,7 @@ class CourseRecycler
         if (empty($type)) {
             return false;
         }
+
         $this->type = $type;
 
         $table_tool_intro 		= Database::get_course_table(TABLE_TOOL_INTRO);
@@ -90,14 +94,32 @@ class CourseRecycler
      */
     public function recycle_documents()
     {
-        if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
-            $table = Database :: get_course_table(TABLE_DOCUMENT);
-            foreach ($this->course->resources[RESOURCE_DOCUMENT] as $id => $document) {
-                rmdirr($this->course->backup_path.'/'.$document->path);
-            }
-            $ids = implode(',', (array_keys($this->course->resources[RESOURCE_DOCUMENT])));
-            $sql = "DELETE FROM ".$table." WHERE c_id = ".$this->course_id." AND id IN(".$ids.")";
+        $table = Database :: get_course_table(TABLE_DOCUMENT);
+        $tableItemProperty = Database :: get_course_table(TABLE_ITEM_PROPERTY);
+
+        if ($this->type == 'full_backup') {
+            $sql = "DELETE FROM $tableItemProperty
+                        WHERE
+                            c_id = ".$this->course_id." AND
+                            tool = '".TOOL_DOCUMENT."'";
             Database::query($sql);
+
+            $sql = "DELETE FROM $table WHERE c_id = ".$this->course_id;
+            Database::query($sql);
+
+            // Delete all content in the documents.
+            rmdirr($this->course->backup_path.'/document', true);
+        } else {
+
+            if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
+                foreach ($this->course->resources[RESOURCE_DOCUMENT] as $document) {
+                    rmdirr($this->course->backup_path.'/'.$document->path);
+                }
+
+                $ids = implode(',', (array_keys($this->course->resources[RESOURCE_DOCUMENT])));
+                $sql = "DELETE FROM $table WHERE c_id = ".$this->course_id." AND id IN(".$ids.")";
+                Database::query($sql);
+            }
         }
     }
 

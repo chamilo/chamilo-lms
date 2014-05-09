@@ -221,16 +221,6 @@ define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 define('USERNAME_PURIFIER_MAIL', '/[^0-9A-Za-z_\.@]/');
 define('USERNAME_PURIFIER_SHALLOW', '/\s/');
 
-// Constants for detection some important PHP5 subversions.
-$php_version = (float) PHP_VERSION;
-
-define('IS_PHP_52', !((float)$php_version < 5.2));
-define('IS_PHP_53', !((float)$php_version < 5.3));
-
-define('IS_PHP_SUP_OR_EQ_53', ($php_version >= 5.3));
-define('IS_PHP_SUP_OR_EQ_52', ($php_version >= 5.2 && !IS_PHP_53));
-define('IS_PHP_SUP_OR_EQ_51', ($php_version >= 5.1 && !IS_PHP_52 && !IS_PHP_53));
-
 // This constant is a result of Windows OS detection, it has a boolean value:
 // true whether the server runs on Windows OS, false otherwise.
 define('IS_WINDOWS_OS', api_is_windows_os());
@@ -971,6 +961,20 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
 function api_protect_admin_script($allow_sessions_admins = false, $allow_drh = false, $message = null) {
     if (!api_is_platform_admin($allow_sessions_admins, $allow_drh)) {
         api_not_allowed(true, $message);
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Function used to protect a teacher script.
+ * The function blocks access when the user has no teacher rights.
+ *
+ * @author Yoselyn Castillo
+ */
+function api_protect_teacher_script($allow_sessions_admins = false) {
+    if (!api_is_allowed_to_edit()) {
+        api_not_allowed(true);
         return false;
     }
     return true;
@@ -3219,25 +3223,30 @@ function api_get_datetime($time = null) {
  * @param int       The session ID (optional)
  * @return int      -1 on error, 0 if invisible, 1 if visible
  */
-function api_get_item_visibility($_course, $tool, $id, $session=0)
+function api_get_item_visibility($_course, $tool, $id, $session = 0)
 {
     if (!is_array($_course) || count($_course) == 0 || empty($tool) || empty($id)) {
         return -1;
     }
     $tool = Database::escape_string($tool);
-    $id = Database::escape_string($id);
+    $id = intval($id);
     $session = (int) $session;
     $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-    $course_id	 = $_course['real_id'];
+    $course_id	 = intval($_course['real_id']);
     $sql = "SELECT visibility FROM $TABLE_ITEMPROPERTY
     		WHERE 	c_id = $course_id AND
     				tool = '$tool' AND
     				ref = $id AND
     				(id_session = $session OR id_session = 0)
-    		ORDER BY id_session DESC, lastedit_date DESC LIMIT 1";
+    		ORDER BY id_session DESC, lastedit_date DESC
+            LIMIT 1";
+
     $res = Database::query($sql);
-    if ($res === false || Database::num_rows($res) == 0) { return -1; }
+    if ($res === false || Database::num_rows($res) == 0) {
+        return -1;
+    }
     $row = Database::fetch_array($res);
+
     return $row['visibility'];
 }
 
@@ -3918,6 +3927,7 @@ function api_get_themes() {
  * @param int $width The width of the form element
  * @param string $attributes (optional) attributes for the form element
  * @param array $editor_config (optional) Configuration options for the html-editor
+ * @deprecated
  */
 function api_disp_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
     global $_configuration, $_course, $fck_attribute;
@@ -3942,6 +3952,7 @@ function api_disp_html_area($name, $content = '', $height = '', $width = '100%',
  * @param int $width The width of the form element
  * @param string $attributes (optional) attributes for the form element
  * @param array $editor_config (optional) Configuration options for the html-editor
+ * @deprecated
  */
 function api_return_html_area($name, $content = '', $height = '', $width = '100%', $attributes = null, $editor_config = null) {
     global $_configuration, $_course, $fck_attribute;
@@ -7208,20 +7219,20 @@ function api_get_origin()
 function api_get_full_setting($variable, $key = null) {
     $variable = Database::escape_string($variable);
     $sql = "SELECT *
-            FROM settings_current 
+            FROM settings_current
             WHERE variable = '$variable' ";
-    
+
     if (!empty($key)) {
         $key = Database::escape_string($key);
         $sql .= "AND subkey = '$key'";
     }
-    
+
     $result = Database::query($sql);
     $setting = array();
-    
+
     while ($row = Database::fetch_assoc($result)) {
         $setting[] = $row;
     }
-    
+
     return $setting;
 }

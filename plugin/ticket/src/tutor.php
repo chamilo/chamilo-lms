@@ -1,13 +1,10 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
- *
  * @package chamilo.plugin.ticket
  */
-/**
- *
- */
+
 require_once '../config.php';
 $plugin = TicketPlugin::create();
 
@@ -25,21 +22,21 @@ $(document).ready(function (){
 
             // load remote content
             dialog.load(
-                            url,                    
+                            url,
                             {},
                             function(responseText, textStatus, XMLHttpRequest) {
                                     dialog.dialog({
-                                            modal	: true, 
-                                            width	: 540, 
-                                            height	: 400        
-                                    });	                    
+                                            modal	: true,
+                                            width	: 540,
+                                            height	: 400
+                                    });
             });
             //prevent the browser to follow the link
             return false;
     });
-});	
-		
-		
+});
+
+
 function showContent(div){
 	if($("div#"+div).attr("class")=="blackboard_hide"){
 		$("div#"+div).attr("class","blackboard_show");
@@ -48,9 +45,9 @@ function showContent(div){
 		$("div#"+div).attr("class","blackboard_hide");
 		$("div#"+div).attr("style","");
 	}
-		
+
 }
-		
+
 function save() {
 	work_id = $("#work_id").val();
 	forum_id = $("#forum_id").val();
@@ -83,14 +80,14 @@ function save() {
 	display: none;
 }
 .reports{
-	border:1px ;	
+	border:1px ;
 }
 .reports th {
     border-bottom: 1px solid #DDDDDD;
     line-height: normal;
     text-align: center;
     vertical-align: middle;
-    background-color: #F2F2F2; 
+    background-color: #F2F2F2;
 }
 </style>';
 
@@ -107,4 +104,3 @@ if (isset($_GET['action'])) {
     echo $results['show'];
     Display::display_footer();
 }
-?>

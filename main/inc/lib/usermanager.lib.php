@@ -932,11 +932,14 @@ class UserManager
     }
 
     /**
-     * @param array $ids
-     * @param null $active
-     * @return array
-     */
-    public static function get_user_list_by_ids($ids = array(), $active = null)
+    * Get the users by ID
+    * @param array $ids student ids
+    * @param string $active
+    * @param string $order
+    * @param string $limit
+    * @return array $result student information
+    */
+    public static function get_user_list_by_ids($ids = array(), $active = null, $order = null, $limit = null)
     {
         if (empty($ids)) {
             return array();
@@ -950,6 +953,16 @@ class UserManager
         $sql = "SELECT * FROM $tbl_user WHERE user_id IN ($ids)";
         if (!is_null($active)) {
             $sql .= ' AND active='.($active ? '1' : '0');
+        }
+
+        if (!is_null($order)) {
+            $order = Database::escape_string($order);
+            $sql .= ' ORDER BY ' . $order;
+        }
+
+        if (!is_null($limit)) {
+            $limit = Database::escape_string($limit);
+            $sql .= ' LIMIT ' . $limit;
         }
 
         $rs = Database::query($sql);
@@ -1120,7 +1133,7 @@ class UserManager
      * the same directory.
      * @param    integer    User ID
      * @param    string    Type of path to return (can be 'none', 'system', 'rel', 'web')
-     * @param    bool    Whether we want to have the directory name returned 'as if' there was a file or not (in the case we want to know which directory to create - otherwise no file means no split subdir)
+     * @param    bool    deprecated see #7110
      * @param    bool    If we want that the function returns the /main/img/unknown.jpg image set it at true
      * @return    array     Array of 2 elements: 'dir' and 'file' which contain the dir and file as the name implies if image does not exist it will return the unknow image if anonymous parameter is true if not it returns an empty er's
      */
@@ -1159,11 +1172,12 @@ class UserManager
         $picture_filename = trim($user['picture_uri']);
 
         if (api_get_setting('split_users_upload_directory') === 'true') {
-            if (!empty($picture_filename) or $preview) {
+            /*if (!empty($picture_filename) or $preview) {
                 $dir = $base.'upload/users/'.substr((string) $user_id, 0, 1).'/'.$user_id.'/';
             } else {
                 $dir = $base.'upload/users/'.$user_id.'/';
-            }
+            }*/
+            $dir = $base.'upload/users/'.substr((string) $user_id, 0, 1).'/'.$user_id.'/';
         } else {
             $dir = $base.'upload/users/'.$user_id.'/';
         }
@@ -1272,6 +1286,51 @@ class UserManager
     }
 
     /**
+     * Update User extra field file type into {user_folder}/{$extra_field}
+     * @param $user_id              The user internal identification number
+     * @param string $extra_field   The $extra_field The extra field name
+     * @param null $file            The filename
+     * @param null $source_file     The temporal filename
+     * @return bool|null            return filename if success, but false
+     */
+    public static function update_user_extra_file($user_id, $extra_field = '', $file = null, $source_file = null)
+    {
+        // Add Filter
+        $source_file = Security::filter_filename($source_file);
+        $file = Security::filter_filename($file);
+
+        if (empty($user_id)) {
+            return false;
+        }
+        if (empty($source_file)) {
+            $source_file = $file;
+        }
+
+        // User-reserved directory where extra file have to be placed.
+        $path_info = self::get_user_picture_path_by_id($user_id, 'system', true);
+        $path = $path_info['dir'];
+        if (!empty($extra_field)) {
+            $path .= $extra_field . '/';
+        }
+        // If this directory does not exist - we create it.
+        if (!file_exists($path)) {
+            @mkdir($path, api_get_permissions_for_new_directories(), true);
+        }
+
+        if (filter_extension($file)) {
+            if (@move_uploaded_file($source_file,$path.$file)) {
+                if ($extra_field) {
+                    return $extra_field.'/'.$file;
+                } else {
+                    return $file;
+                }
+            }
+        }
+        return false; // this should be returned if anything went wrong with the upload
+    }
+
+
+    /**
      * Deletes user photos.
      * Note: This method relies on configuration setting from main/inc/conf/profile.conf.php
      * @param int $user_id            The user internal identitfication number.
@@ -1307,20 +1366,21 @@ class UserManager
             return false;
         }
 
-        $production_path = self::get_user_picture_path_by_id($user_id, 'web', true);
-        $production_dir = $production_path['dir'].$user_id.'/';
-        $del_image = api_get_path(WEB_CODE_PATH).'img/delete.gif';
+        $production_path = self::get_user_picture_path_by_id($user_id, 'web');
+        $production_dir = $production_path['dir'];
+        $del_image = api_get_path(WEB_CODE_PATH).'img/delete.png';
+        $add_image = api_get_path(WEB_CODE_PATH).'img/archive.png';
         $del_text = get_lang('Delete');
         $production_list = '';
         if (count($productions) > 0) {
-            $production_list = '<ul id="productions">';
+            $production_list = '<div class="files-production"> <ul id="productions">';
             foreach ($productions as $file) {
-                $production_list .= '<li><a href="'.$production_dir.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
+                $production_list .= '<li><img src="'.$add_image.'" /><a href="'.$production_dir.urlencode($file).'" target="_blank">'.htmlentities($file).'</a>';
                 if ($showdelete) {
-                    $production_list .= '<input type="image" name="remove_production['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="javascript: return confirmation(\''.htmlentities($file).'\');" /></li>';
+                    $production_list .= '&nbsp;&nbsp;<input style="width:16px;" type="image" name="remove_production['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($file).'" onclick="javascript: return confirmation(\''.htmlentities($file).'\');" /></li>';
                 }
             }
-            $production_list .= '</ul>';
+            $production_list .= '</ul></div>';
         }
 
         return $production_list;
@@ -1334,17 +1394,22 @@ class UserManager
      */
     public static function get_user_productions($user_id)
     {
-        $production_path = self::get_user_picture_path_by_id($user_id, 'system', true);
-        $production_repository = $production_path['dir'].$user_id.'/';
+        $production_path = self::get_user_picture_path_by_id($user_id, 'system');
+        $production_repository = $production_path['dir'];
         $productions = array();
 
         if (is_dir($production_repository)) {
             $handle = opendir($production_repository);
-
             while ($file = readdir($handle)) {
-                if ($file == '.' || $file == '..' || $file == '.htaccess' || is_dir($production_repository.$file)) {
-                    continue; // skip current/parent directory and .htaccess
+                if ($file == '.' ||
+                    $file == '..' ||
+                    $file == '.htaccess' ||
+                    is_dir($production_repository.$file)
+                ) {
+                    // skip current/parent directory and .htaccess
+                    continue;
                 }
+
                 if (preg_match('/('.$user_id.'|[0-9a-f]{13}|saved)_.+\.(png|jpg|jpeg|gif)$/i', $file)) {
                     // User's photos should not be listed as productions.
                     continue;
@@ -1353,7 +1418,7 @@ class UserManager
             }
         }
 
-        return $productions; // can be an empty array
+        return $productions;
     }
 
     /**
@@ -1364,8 +1429,8 @@ class UserManager
      */
     public static function remove_user_production($user_id, $production)
     {
-        $production_path = self::get_user_picture_path_by_id($user_id, 'system', true);
-        $production_file = $production_path['dir'].$user_id.'/'.$production;
+        $production_path = self::get_user_picture_path_by_id($user_id, 'system');
+        $production_file = $production_path['dir'].$production;
         if (is_file($production_file)) {
             unlink($production_file);
             return true;
@@ -1447,6 +1512,7 @@ class UserManager
         }
         $sqluf = "SELECT * FROM $t_uf WHERE field_variable='$fname'";
         $resuf = Database::query($sqluf);
+        $is_extra_file = false;
         if (Database::num_rows($resuf) == 1) {
             //ok, the field exists
             // Check if enumerated field, if the option is available
@@ -1482,6 +1548,19 @@ class UserManager
                         return false; //enumerated type but no option found
                     }
                     break;
+                case self::USER_FIELD_TYPE_FILE:
+                    $is_extra_file = true;
+                    if (isset($fvalue['tmp_name'])) {
+                        // Filter against dangerous filenames
+                        $fvalue['name'] = Security::filter_filename($fvalue['name']);
+                        $fvalue['tmp_name'] = Security::filter_filename($fvalue['tmp_name']);
+                        // Update and recover the filename
+                        $fvalues = UserManager::update_user_extra_file($user_id, $rowuf['field_variable'], $fvalue['name'], $fvalue['tmp_name']);
+                    } else {
+                        // Set empty string to $fvalues to delete it
+                        $fvalues = '';
+                    }
+                    break;
                 case 1:
                 case 2:
                 default:
@@ -1511,6 +1590,10 @@ class UserManager
                 //we need to update the current record
                 $rowufv = Database::fetch_array($resufv);
                 if ($rowufv['field_value'] != $fvalues) {
+                    if ($is_extra_file) {
+                        // To remove from user folder
+                        self::remove_user_extra_file($user_id, $fname, $rowufv['field_value']);
+                    }
                     // If the new field is empty, delete it
                     if ($fvalues == '') {
                         $sql_query = "DELETE FROM $t_ufv WHERE id = ".$rowufv['id'].";";
@@ -1604,6 +1687,104 @@ class UserManager
         }
 
         return $fields;
+    }
+
+    /**
+     * Build a list of extra file already uploaded in $user_folder/{$extra_field}/
+     * @param $user_id
+     * @param $extra_field
+     * @param bool $force
+     * @param bool $showdelete
+     * @return bool|string
+     */
+    public static function build_user_extra_file_list($user_id, $extra_field, $force = false, $showdelete = false)
+    {
+        if (!$force && !empty($_POST['remove_'.$extra_field])) {
+            return true; // postpone reading from the filesystem
+        }
+        $extra_files = self::get_user_extra_files($user_id, $extra_field);
+        if (empty($extra_files)) {
+            return false;
+        }
+
+        $path_info = self::get_user_picture_path_by_id($user_id, 'web', true);
+        $path = $path_info['dir'];
+        $del_image = api_get_path(WEB_CODE_PATH).'img/delete.gif';
+        $del_text = get_lang('Delete');
+        $extra_file_list = '';
+        if (count($extra_files) > 0) {
+            $extra_file_list = '<ul id="productions">';
+            foreach ($extra_files as $file) {
+                $filename = substr($file,strlen($extra_field)+1);
+                $extra_file_list .= '<li><a href="'.$path.$extra_field.'/'.urlencode($filename).'" target="_blank">'.htmlentities($filename).'</a>';
+                if ($showdelete) {
+                    $extra_file_list .= '<input style="width:16px;" type="image" name="remove_extra_' . $extra_field . '['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($filename).'" onclick="javascript: return confirmation(\''.htmlentities($filename).'\');" /></li>';
+                }
+            }
+            $extra_file_list .= '</ul>';
+        }
+
+        return $extra_file_list;
+    }
+
+    /**
+     * Get valid filenames in $user_folder/{$extra_field}/
+     * @param $user_id
+     * @param $extra_field
+     * @param bool $full_path
+     * @return array
+     */
+    public static function get_user_extra_files($user_id, $extra_field, $full_path = false)
+    {
+        if (!$full_path) {
+            // Nothing to do
+        } else {
+            $path_info = self::get_user_picture_path_by_id($user_id, 'system', true);
+            $path = $path_info['dir'];
+        }
+        $extra_data = self::get_extra_user_data_by_field($user_id, $extra_field);
+        $extra_files = $extra_data[$extra_field];
+        if (is_array($extra_files)) {
+            foreach ($extra_files as $key => $value) {
+                if (!$full_path) {
+                    // Relative path from user folder
+                    $files[] = $value;
+                } else {
+                    $files[] = $path.$value;
+                }
+            }
+        } elseif (!empty($extra_files)) {
+            if (!$full_path) {
+                // Relative path from user folder
+                $files[] = $extra_files;
+            } else {
+                $files[] = $path.$extra_files;
+            }
+        }
+        return $files; // can be an empty array
+    }
+
+    /**
+     * Remove an {$extra_file} from the user folder $user_folder/{$extra_field}/
+     * @param $user_id
+     * @param $extra_field
+     * @param $extra_file
+     * @return bool
+     */
+    public static function remove_user_extra_file($user_id, $extra_field, $extra_file)
+    {
+        $extra_file = Security::filter_filename($extra_file);
+        $path_info = self::get_user_picture_path_by_id($user_id, 'system', true);
+        if (strpos($extra_file, $extra_field) !== false) {
+            $path_extra_file = $path_info['dir'].$extra_file;
+        } else {
+            $path_extra_file = $path_info['dir'].$extra_field.'/'.$extra_file;
+        }
+        if (is_file($path_extra_file)) {
+            unlink($path_extra_file);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -3586,7 +3767,9 @@ class UserManager
     * @param int $active
     * @param string $lastConnectionDate
     * @param int $status the function is called by who? COURSEMANAGER, DRH?
-    * @return array     users
+    * @param string $keyword
+     *
+    * @return array user list
     */
     public static function getUsersFollowedByUser(
         $userId,
@@ -3600,7 +3783,8 @@ class UserManager
         $direction = null,
         $active = null,
         $lastConnectionDate = null,
-        $status = null
+        $status = null,
+        $keyword = null
     ) {
         // Database Table Definitions
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -3608,13 +3792,11 @@ class UserManager
         $tbl_user_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-        $tbl_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $tbl_session_rel_user 	= Database::get_main_table(TABLE_MAIN_SESSION_USER);
+        $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
         $userId = intval($userId);
 
@@ -3649,6 +3831,17 @@ class UserManager
         if (!is_null($active)) {
             $active = intval($active);
             $userConditions .= " AND u.active = $active ";
+        }
+
+        if (!empty($keyword)) {
+            $keyword = Database::escape_string($keyword);
+            $userConditions .= " AND (
+                u.username LIKE '%$keyword%' OR
+                u.firstname LIKE '%$keyword%' OR
+                u.lastname LIKE '%$keyword%' OR
+                u.official_code LIKE '%$keyword%' OR
+                u.email LIKE '%$keyword%'
+            )";
         }
 
         if (!empty($lastConnectionDate)) {
@@ -4131,6 +4324,7 @@ class UserManager
                     $form->addElement('text', 'extra_'.$field_details[1], $field_details[3], array('size' => 40));
                     $form->applyFilter('extra_'.$field_details[1], 'stripslashes');
                     $form->applyFilter('extra_'.$field_details[1], 'trim');
+                    $form->applyFilter('extra_'.$field_details[1], 'html_filter');
 
                     if (!$admin_permissions) {
                         if ($field_details[7] == 0)
@@ -4342,14 +4536,13 @@ EOF;
                         $form->freeze('extra_'.$field_details[1]);
                     break;
                 case self::USER_FIELD_TYPE_FILE:
-                    if (!empty($field_details[3])) {
-                        $uPaths = UserManager::get_user_picture_path_by_id($user_id);
-                        $path = '<a href="'.$uPaths['dir'].$field_details[3]."'>".$field_details[3].'</a>';
-                        $form->addElement('html', 'extra_'.$field_details[1].'_link', $path, null, '');
+                    $extra_field = 'extra_'.$field_details[1];
+                    $form->addElement('file', $extra_field, $field_details[3], null, '');
+                    if ($extra_file_list = UserManager::build_user_extra_file_list($user_id, $field_details[1], '', true)) {
+                        $form->addElement('static', $extra_field . '_list', null, $extra_file_list);
                     }
-                    $form->addElement('file', 'extra_'.$field_details[1], $field_details[3], null, '');
                     if ($field_details[7] == 0) {
-                        $form->freeze('extra_'.$field_details[1]);
+                        $form->freeze($extra_field);
                     }
                     break;
             }

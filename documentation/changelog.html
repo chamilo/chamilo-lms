@@ -20,23 +20,23 @@
             <ul class="nav">
                 <li><a href="index.html">Home</a></li>
                 <li ><a href="readme.html">About</a></li>
-                <li ><a href="license.html">License</a></li>            
-                <li><a href="credits.html">Credits</a></li>            
-                <li><a href="dependencies.html">Dependencies</a></li>            
+                <li ><a href="license.html">License</a></li>
+                <li><a href="credits.html">Credits</a></li>
+                <li><a href="dependencies.html">Dependencies</a></li>
                 <li class="active"><a href="changelog.html">Changelog</a></li>
-            </ul>        
+            </ul>
             </div><!--/.nav-collapse -->
         </div>
     </div>
-</div>    
+</div>
 
 <div class="container">
-    
+
 <ul class="breadcrumb">
     <li>
         <a href="index.html">Documentation</a>
         <span class="divider">/</span>
-    </li>    
+    </li>
     <li>Changelog</li>
 </ul>
 <h1>Chamilo&nbsp;Changelog</h1>
@@ -286,7 +286,8 @@ standards (but still much less than Firefox, Chrome, Opera or even Safari)</p>
 </ul>
 <h3>Removals</h3>
 <ul>
-  <li>Custom tabs can no longer be defined directly in the settings_current table. If you have custom_tabs in this table (select * from settings_current where variable='show_tabs' AND subkey like 'custom_tab_%'), please add them through the hompeage edition screen.</li>
+  <li>Custom tabs can no longer be defined directly in the settings_current table.
+      If you have custom_tabs in this table (select * from settings_current where variable='show_tabs' AND subkey like 'custom_tab_%'), please add them through the homepage edition screen.</li>
 </ul>
 
 <h1>Chamilo 1.9.6 - Rochefort, 4th of June, 2013</h1>
@@ -433,7 +434,7 @@ standards (but still much less than Firefox, Chrome, Opera or even Safari)</p>
 <p>Chamilo 1.9.4 is a minor stable version with a series of improvements on top of 1.9.2.</p>
 
 <h3>Release name</h3>
-<p><a href="http://es.wikipedia.org/wiki/Puebla">Puebla</a> is a large city very close to México D.F. and is considered an "extension" of the capital city in many ways. Puebla has very nice blend of precolombine and spaniard architecture. All in all, we felt like Puebla, in tremendous growth, was a close image to Chamilo 1.9 on its way to 1.10. 
+<p><a href="http://es.wikipedia.org/wiki/Puebla">Puebla</a> is a large city very close to México D.F. and is considered an "extension" of the capital city in many ways. Puebla has very nice blend of precolombine and spaniard architecture. All in all, we felt like Puebla, in tremendous growth, was a close image to Chamilo 1.9 on its way to 1.10.
 
 <h3>New Features</h3>
 <ul>
@@ -524,7 +525,7 @@ standards (but still much less than Firefox, Chrome, Opera or even Safari)</p>
   <li>Web services: Added examples for users registration web services (commit:21137)</li>
   <li>Plugins: Improved translation of BigBlueButton plugin (BT#5272)</li>
   <li>Web services: Added check on emptiness of firstname/lastname in WSUserEdit* services (BT#5743)</li>
-  <li>Admin: Avoid not sending mails if notification extra fields do not exist (BT#5739)</li>  
+  <li>Admin: Avoid not sending mails if notification extra fields do not exist (BT#5739)</li>
 </ul>
 <h3>Debugging</h3>
 <ul>
@@ -696,7 +697,7 @@ standards (but still much less than Firefox, Chrome, Opera or even Safari)</p>
   <li>Added session-box-text and session-item elements to improve styling</li>
   <li>Modified #main_content to #top_main_content to avoid double #main_content id on the same page</li>
 </ul>
-  
+
 
 
 <h1>Chamilo 1.9.2 - Hanga Roa, 27th of September, 2012</h1>
@@ -876,7 +877,7 @@ This version of Chamilo includes a few new features.
   <li>Admin: The new "System" block was added in administration</li>
   <li>Admin: A new option was added to delete files in /archive (only for the super administrator can access it)</li>
   <li>Admin: When disabling the gradebook tool, no more reference appear to the gradebook in other tools (#5034)</li>
-  <li>Admin: The hide tool options now blocks the access to the tool. See BT#4138</li>            
+  <li>Admin: The hide tool options now blocks the access to the tool. See BT#4138</li>
   <li>Admin: Removed $_configuration['tracking_enabled'] (#2808)</li>
   <li>Agenda: Invalid dates were removed in time selector (#1197)</li>
   <li>Agenda: The personal agenda is now enabled by default (#3828)</li>
@@ -938,7 +939,7 @@ This version of Chamilo includes a few new features.
 <ul>
   <li>Admin: Fixed bug by which a session could be added in two distinct URLs at the same time (#3733)</li>
   <li>Admin: Data filler: several fixes added (developers only)</li>
-  <li>Admin: The setting "Hide course tools" was changed: Check the tools you want to hide from teachers. This will prohibit access to the tool instead of just hiding the tools.</li>            
+  <li>Admin: The setting "Hide course tools" was changed: Check the tools you want to hide from teachers. This will prohibit access to the tool instead of just hiding the tools.</li>
   <li>Admin: if the forums tool is hidden  on the course, should not be displayed in the social network, also in a blog (#1959)</li>
   <li>Admin: Settings: Registration Page (#3681)</li>
   <li>Admin: Warn about failure to create backup (#3729)</li>
@@ -1283,7 +1284,7 @@ Due to the move to HTML5, it is very likely that any older stylesheet will have 
 
 <h3>Third-Party Libraries additions/updates</h3>
 <ul>
-    <li>Fullcalendar js library version 1.5.2</li>   
+    <li>Fullcalendar js library version 1.5.2</li>
     <li>Twig Template system added</li>
     <li>Twitter Bootstrap CSS Framework</li>
     <li>More libraries were added but haven't been properly registered at this time...</li>
@@ -1332,13 +1333,13 @@ This version of Chamilo only includes a few minor new features:
   <li>Certificates: QR code generation for certifications #3631</li>
   <li>New landing page for every exercise created, now we show the student's results see BT#2804 </li>
   <li>Attendances and Course Progress added in the backup/copy course Chamilo creation</li>
-  
+
 </ul>
 <h3>Debugging</h3>
 <ul>
     <li>
         Agenda
-        <ul>            
+        <ul>
             <li>Improving UI + fixes in previews</li>
             <li>Import ICS with multiple events #3622</li>
             <li>Now we can create an event with only a start date</li>
@@ -1348,7 +1349,7 @@ This version of Chamilo only includes a few minor new features:
     </li>
     <li>
         Announcements
-        <ul>            
+        <ul>
             <li>Fixing announcements listing BT#2751 </li>
             <li>New slider added in the index.php see #3785</li>
         </ul>
@@ -1358,15 +1359,15 @@ This version of Chamilo only includes a few minor new features:
       <ul>
         <li>Made assignments editable/removable by students only until they have been reviewed and scored (&#062; 0) by the teacher (changeset bc1b8e1e603d)</li>
         <li>Teachers can changed the score even if the assignment is already passed.</li>
-        <li>Fixed wrong date convertions </li>        
+        <li>Fixed wrong date convertions </li>
       </ul>
     </li>
     <li>
         Attendances
-        <ul>            
+        <ul>
             <li>Improving UI</li>
             <li>Fixed bug when clicking in the "Today" filter. Filter is set to "All"  by default BT#2663</li>
-            <li>Adding shortcuts in order to edit or create Attendances plans</li>            
+            <li>Adding shortcuts in order to edit or create Attendances plans</li>
         </ul>
     </li>
     <li>Documents
@@ -1374,11 +1375,11 @@ This version of Chamilo only includes a few minor new features:
 ﻿  ﻿      <li>"Document preview" bug fixed when using a course in Dutch (yoxview bad translate file) (changeset e205fe6d94fe)</li>
 ﻿  ﻿      <li>Bug fixed when using glossary terms in a document #3620</li>
 ﻿  ﻿      <li>Bug fixed when reading MP3 files using the jplayer plugin #3593</li>
-﻿  ﻿      <li>Bug fixed when hiding a course document in a session </li>  
+﻿  ﻿      <li>Bug fixed when hiding a course document in a session </li>
 ﻿  ﻿      <li>Bug fixed when using the simple upload form</li>
 ﻿  ﻿      <li>Improved documents visibility now we check the parents visibility</li>
         </ul>
-    </li>    
+    </li>
 ﻿  <li>Exercises
         <ul>
 ﻿         <li>Fixed question matching when using French/Spanish accents </li>
@@ -1391,9 +1392,9 @@ This version of Chamilo only includes a few minor new features:
     <li>Gradebook
         <ul>
             <li>Several fixes including, better session integration and some warning messages added when total score is not correct </li>
-            <li>Adding 2 new tags in the certification: course title and gradebook result </li>                  
+            <li>Adding 2 new tags in the certification: course title and gradebook result </li>
         </ul>
-    </li>    
+    </li>
     <li>Glossary
         <ul>
             <li>Order arrows are removed #3123 </li>
@@ -1402,7 +1403,7 @@ This version of Chamilo only includes a few minor new features:
             <li>Fixed wrong date convertions </li>
         </ul>
     </li>
-        
+
     <li>Learning path
         <ul>
         <li>Drag and drop to order LP items! #3741</li>
@@ -1410,21 +1411,21 @@ This version of Chamilo only includes a few minor new features:
         <li>Fatal error fixed when editing item prerequisites when the videoconference is enabled #3658 </li>
         <li>When creating documents inside the LP tool, a new folder with the LP name is created inside the Learning Path folder</li>
         </ul>
-    </li>          
+    </li>
     <li>Links
         <ul>
         <li>URL fixed when adding the link in the course homepage  BT#2751</li>
-        <li>Token support added #2477</li>        
+        <li>Token support added #2477</li>
         </ul>
-    </li>  
-    
+    </li>
+
     <li>Migration
       <ul>
         <li>Fixed fatal error in upgrade from 1.8.5 by requiring image.lib.php - BT#2777</li>
         <li>Fixed fatal error in upgrade from 1.8.6.2 by checking the availability of the DateTimeZone library in PHP - BT#2777</li>
       </ul>
     </li>
-     
+
     <li>Portal administration
         <ul>
             <li>System information fixed #3552</li>
@@ -1434,15 +1435,15 @@ This version of Chamilo only includes a few minor new features:
             <li>New way to generate usernames when importing users using CSV or XML file </li>
             <li>Activities stats date fixed</li>
             <li>When uploading users using a CSV/XML file, the username is generated using the first letter of the first name and the lastname #3686 </li>
-            <li>Now we can clean the chamilo/archive folder from the Portal Administration to make free space #3748</li>          
-            <li>Catalan and Dutch translations updated</li>  
+            <li>Now we can clean the chamilo/archive folder from the Portal Administration to make free space #3748</li>
+            <li>Catalan and Dutch translations updated</li>
         </ul>
     </li>
     <li>User portal/ My courses
-        <ul>            
+        <ul>
             <li>Improving Course Catalog load time </li>
             <li>Course catalog view is random by default</li>
-            <li>Courses order feature (creation of categories of courses by user) was moved from the Course Catalog to an independent window</li>      
+            <li>Courses order feature (creation of categories of courses by user) was moved from the Course Catalog to an independent window</li>
         </ul>
     </li>
     <li>Sessions
@@ -1450,7 +1451,7 @@ This version of Chamilo only includes a few minor new features:
             <li>A Session doesn't exist in 2 URLs at the same time #3733 </li>
             <li>New session page UI fixes</li>
         </ul>
-    </li>    
+    </li>
     <li>Social Network / Groups
         <ul>
             <li>Reply counter fixed in group topics and improving UI</li>
@@ -1462,19 +1463,19 @@ This version of Chamilo only includes a few minor new features:
             <li>Adding user extra fields in CSV/XLS exports #1647</li>
         </ul>
     </li>
-    
+
     <li>System
         <ul>
             <li>Fixed possible bug with magic_quotes_gpc #2970</li>
         </ul>
     </li>
-        
+
     <li>Style changes
         <ul>
-            <li>Fixed who is online user images (changeset 61945685bcff)</li>                
+            <li>Fixed who is online user images (changeset 61945685bcff)</li>
             <li>CSS styles: fix.css and fix_chamilo.css were deleted, there are only base.css and base_chamilo.css calls are added directly in the CSS file</li>
-            <li>All CSS were reduced and improved in order to use the base.css and base_chamilo.css styles</li>            
-            <li>New breadcrumb added to old styles (blue, academic, etc)</li>            
+            <li>All CSS were reduced and improved in order to use the base.css and base_chamilo.css styles</li>
+            <li>New breadcrumb added to old styles (blue, academic, etc)</li>
         </ul>
     </li>
 </ul>
@@ -1491,11 +1492,11 @@ This version of Chamilo only includes a few minor new features:
 </ul>
 
 <h3>Third-Party Libraries updates</h3>
-<ul>    
+<ul>
     <li>Chozen library added (select tag improved) #3740</li>
     <li>Jquery updated to version 1.6.2</li>
     <li>Jquery-ui updated from version 1.8.7 to 1.8.16</li>
-    <li>bxslider library added to view Announcements</li>    
+    <li>bxslider library added to view Announcements</li>
 </ul>
 
 <h1>Chamilo 1.8.8.2 - Bellavista, May 2011</h1>
@@ -1531,10 +1532,10 @@ This version of Chamilo only includes a few minor new features:
 </ul>
 <h3>Known issues</h3>
 <ul>
-  <li>Groups (admin only): When a user is subscribed in a Course through a Group and he's also subscribed in the same Course (tradional way), when removing the user from the Group, the user will be also removed from the Course in both levels.</li>
+  <li>Groups (admin only): When a user is subscribed in a Course through a Group and he's also subscribed in the same Course (traditional way), when removing the user from the Group, the user will be also removed from the Course in both levels.</li>
   <li>Changed "givenname" for "cn" in LDAP queries. This might break some of the previous implementations of this plugin</li>
   <li>If you used split users directories before v1.8.8 in combination with the "My files" feature (if it existed at all at that point), you will probably have a problem now, as the code in the previous version was wrong and was saving the personal portfolio file in another directory than the user's. Sorry about that. If you need professional assistance, see the http://www.chamilo.org/ website under support -> professional support for official providers who could help you. And don't forget to keep a backup. If you don't understand a thing about what I'm talking about, you are probable not concerned by this bug, so don't worry too much.</li>
-  <li>Document tool: when moving an HTML file using the "move" funcionality, images, videos and any incrusted file in that HTML will not be moved automatically see #1278 </li>
+  <li>Document tool: when moving an HTML file using the "move" functionality, images, videos and any incrusted file in that HTML will not be moved automatically see #1278 </li>
 </ul>
 
 <h3>Deprecated features</h3>
@@ -1559,7 +1560,7 @@ This version of Chamilo only includes a few minor new features:
 <h1>Chamilo 1.8.8 - Miraflores, May 2011</h1>
 
 <h3>Release notes - summary</h3>
-<p>Chamilo 1.8.8 is a major stable version. Altough it doesn't come with a strong redesign, it provides a large number of small improvements to the teacher's toolset and the user's using pleasure. Audio recording, schema drawing, certification generating, better administration features, plugin for videoconference with BigBlueButton and e-commerce with PrestaShop are only a few of the improvements that you will find in this version.</p>
+<p>Chamilo 1.8.8 is a major stable version. Although it doesn't come with a strong redesign, it provides a large number of small improvements to the teacher's toolset and the user's using pleasure. Audio recording, schema drawing, certification generating, better administration features, plugin for videoconference with BigBlueButton and e-commerce with PrestaShop are only a few of the improvements that you will find in this version.</p>
 
 <h3>New Features</h3>
 <ul>
@@ -1591,7 +1592,7 @@ This version of Chamilo only includes a few minor new features:
    <li>Increased control by platform administrator on the visibility of the folders in the documents tool (Feature #2164,#2484)</li>
    <li>Added admin feature to hide tools from all courses - BT#1942</li>
    <li>Added jqgrid library for better data tables interactivity (Feature #340)</li>
-   <li>Added careers and promotions funcionality (see #2706)</li>
+   <li>Added careers and promotions functionality (see #2706)</li>
    <li>Session start and end date can be left blank (see BT#1911)</li>
    <li>Exercises: Questions list improved through new drag and drop behaviour</li>
    <li>New Session page added when clicking the session name in the Course list</li>
@@ -1606,9 +1607,9 @@ This version of Chamilo only includes a few minor new features:
    <li>Exercises: Hotspot Delineation and Hotspot Direct Feedback option added see #2974</li>
    <li>Documents: Added multiple uploads and drag&drop upload features #2784 </li>
    <li>Webservices: Added new functions in order to sell Chamilo courses using a Prestashop plugin see BT#2325 </li>
-   <li>Learning path: Adding a toogle button in order to hide the navigation menu see #3116 added by Alberto Torreblanca</li>
+   <li>Learning path: Adding a toggle button in order to hide the navigation menu see #3116 added by Alberto Torreblanca</li>
    <li>Document: Export an html file into a PDF document #1909</li>
-   <li>Access details: Now we can filter the access details of a user by date 3258# First version developved by Jorge Frisancho Jibaja - USIL</li>   
+   <li>Access details: Now we can filter the access details of a user by date 3258# First version developved by Jorge Frisancho Jibaja - USIL</li>
    <li>Integrated Nanogong voice recording tool. Teachers, students (into his/her user folder) and groups can record their voice and send to document tool(Feature #3257)</li>
    <li>Added text-justify icon in online editor (#2928)</li>
    <li>Upgraded to HTMPurifier 4.2.0 for better security protection (#2972)</li>
@@ -1631,11 +1632,11 @@ This version of Chamilo only includes a few minor new features:
   <li>Announcements: UI improvements</li>
   <li>Attendance: Adding sticky header for the attendance sheet</li>
   <li>Exercises: UI improvements</li>
-  <li>Exercises: Now we show the firstname and lastname of the students in different columns see BT#1263</li>
+  <li>Exercises: Now we show the first name and last name of the students in different columns see BT#1263</li>
   <li>Exercises: Support UTC dates for time control and Exercise time limits see #2075</li>
   <li>Exercises: Allowing duplication of exercise within a session BT#1647</li>
   <li>Exercises: Improving pagination when browsing exercise results (private task BT#1901)</li>
-  <li>Exercises: Question Pool improvements: now we can copy a question from other courses see BT#1917</li>    
+  <li>Exercises: Question Pool improvements: now we can copy a question from other courses see BT#1917</li>
   <li>Learning Path: New mini floating panel, left-closing panel and other minor UI improvements</li>
   <li>Profile: UI improvements</li>
   <li>Installation: Tracking is always enabled from now on #2066</li>
@@ -1656,7 +1657,7 @@ This version of Chamilo only includes a few minor new features:
   <li>Improve group homepage (#2077)</li>
   <li>Added support for global announcement by URL (#1763)</li>
 </li>
-  
+
 </ul>
 <h3>Debugging</h3>
 <ul>
@@ -1712,7 +1713,7 @@ This version of Chamilo only includes a few minor new features:
   <li>Thickbox does not work well in the Social Tool  #1995</li>
   <li>Fixed Chamilo social-content-right #2010</li>
   <li>Fixed screen when you try to access a protected course through the url #2026</li>
-  <li>Fixed bug deleting course teacher in admin edition #2109</li>  
+  <li>Fixed bug deleting course teacher in admin edition #2109</li>
   <li>Gradebook: Hiding print icon in Certificates BT#1650</li>
   <li>Link Tool: IE icons replaced</li>
   <li>Wiki: Fixed sessions #1659</li>
@@ -1735,7 +1736,7 @@ This version of Chamilo only includes a few minor new features:
   <li>Fixed bug with split user directories and personal files (Bug #2239)</li>
   <li>Fixed bug in link to course from courses list when code != from category</li>
   <li>Fixed bug with unregistered directories in documents when copying course to other course (Bug #3059)</li>
-  <li>Fixed positionning on last element of subsection in learnpath building (BT#2333)</li>
+  <li>Fixed positioning on last element of subsection in learnpath building (BT#2333)</li>
   <li>Fixed bug by which tracking in courses could only be exported up to 50 rows at a time as for the HTML page limit (BT#2342)</li>
   <li>Reviewed coding conventions and applied fixed to undefined variables to avoid notice-level messages</li>
   <li>Removed a series of "File not found" errors caused by mistaken references</li>
@@ -1772,8 +1773,8 @@ This version of Chamilo only includes a few minor new features:
   <li>Groups (admin only): When a user is subscribed in a Course through a Group and he's also subscribed in the same Course (tradional way), when removing the user from the Group, the user will be also removed from the Course in both levels.</li>
   <li>Changed "givenname" for "cn" in LDAP queries. This might break some of the previous implementations of this plugin</li>
   <li>If you used split users directories before v1.8.8 in combination with the "My files" feature (if it existed at all at that point), you will probably have a problem now, as the code in the previous version was wrong and was saving the personal portfolio file in another directory than the user's. Sorry about that. If you need professional assistance, see the http://www.chamilo.org/ website under support -> professional support for official providers who could help you. And don't forget to keep a backup. If you don't understand a thing about what I'm talking about, you are probable not concerned by this bug, so don't worry too much.</li>
-  <li>For some reason, we have been reported unsuccessful migrations from 1.8.7 to 1.8.7.1 whereby the course_rel_user table was not integrally copied. We recommend keeping your database backup until you're sure every student/course relationship was copied (comparing the lines in the table before and after migration might help you)</li>     
-  <li>Document tool: when moving an HTML file using the "move" funcionality, images, videos and any incrusted file in that HTML will not be moved automatically see #1278 </li>
+  <li>For some reason, we have been reported unsuccessful migrations from 1.8.7 to 1.8.7.1 whereby the course_rel_user table was not integrally copied. We recommend keeping your database backup until you're sure every student/course relationship was copied (comparing the lines in the table before and after migration might help you)</li>
+  <li>Document tool: when moving an HTML file using the "move" functionality, images, videos and any incrusted file in that HTML will not be moved automatically see #1278 </li>
   <li>Hotpotatoes: When taking a Hotpotato exam added to Chamilo there is a javascript error, this bug can be only reproduced using Google Chrome see #3332</li>
 
 </ul>
@@ -1789,7 +1790,7 @@ If you feel like a feature listed here is of major importance to you, you can
 either take the maintenance of this feature officially in charge by contacting
 us at info@chamilo.org or you can hire the services of one of our official
 providers (see our website, <i>Support</i> tab).
-</p>  
+</p>
 <ul>
   <li>Legacy classes - There is now new code to combine classes with the
   sessions feature or with the courses in a cleaner, more efficient way. We
@@ -1808,7 +1809,7 @@ providers (see our website, <i>Support</i> tab).
 </ul>
 
 <h3>CSS changes</h3>
-<ul>  
+<ul>
   <li>CSS factorization - putting all common CSS to main/css/base.css see #3163</li>
   <li>CSS factorization - putting all common CSS classic styles into main/css/base_classic.css see #3163</li>
   <li>CSS factorization - putting all common CSS chamilo_XXX styles into main/css/base_chamilo.css see #3163</li>
@@ -1816,11 +1817,7 @@ providers (see our website, <i>Support</i> tab).
   <li>Thickbox UI was changed to improved usability</li>
 </ul>
 
-
-
 <h1>Chamilo 1.8.7.1 - Palmas</h1>
-
-
 <h3>New Features</h3>
 <ul>
   <li>Ajax File Manager updated to  1.0 RC5 (Feature #247)</li>
@@ -1843,7 +1840,7 @@ providers (see our website, <i>Support</i> tab).
   <li>General visual improvements in gradebook tool (Feature #1740)</li>
   <li>General code improvements in gradebook (Feature #1742)</li>
   <li>Now displaying images uploaded by users in courses inside their social profile (Feature #1750)</li>
-  <li>Added simple social network link featurei (LinkedIn, Twitter, Facebook, ...) (Feature #1764)</li>
+  <li>Added simple social network link feature (LinkedIn, Twitter, Facebook, ...) (Feature #1764)</li>
   <li>Enabled PDF export for HTML documents in documents tool (Feature #1768)</li>
   <li>Changed Mr. Chamilo picture in course introduction for the Chamilo logo (more professional) (Feature #1778)</li>
 </ul>
@@ -2001,7 +1998,7 @@ providers (see our website, <i>Support</i> tab).
   <li>When installing the platform will be active by default the following options: Allow edit tutors in the courses of the sessions, social network and sending messages</li>
   <li>When you add an answer in Multiple choice or Multiple answers the score default is zero </li>
   <li>Portal news UI improvements</li>
-  <li>User portal page UI improvements</li>  
+  <li>User portal page UI improvements</li>
 </ul>
 <h3>Known issues</h3>
 <ul>

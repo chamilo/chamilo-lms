@@ -1,13 +1,11 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  *
  * @package chamilo.plugin.ticket
  */
-/**
- * Init section
- */
+
 require_once '../config.php';
 $plugin = TicketPlugin::create();
 
@@ -20,6 +18,7 @@ $user_id = api_get_user_id();
 if (!isset($_GET['file']) || !isset($_GET['title']) || !isset($_GET['ticket_id'])) {
     api_not_allowed();
 }
+
 if (!api_is_platform_admin()) {
     $ticket_id = intval($_GET['ticket_id']);
     $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);

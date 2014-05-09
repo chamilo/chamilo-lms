@@ -837,8 +837,6 @@ function exercise_time_control_is_valid($exercise_id, $lp_id = 0 , $lp_item_id =
             $current_time = time();
     		$expired_time = api_strtotime($_SESSION['expired_time'][$current_expired_time_key], 'UTC');
     		$total_time_allowed = $expired_time + 30;
-    		//error_log('expired time converted + 30: '.$total_time_allowed);
-    		//error_log('$current_time: '.$current_time);
             if ($total_time_allowed < $current_time) {
             	return false;
             }
@@ -1484,6 +1482,7 @@ function convert_score($score, $weight) {
  * @param   int     0 = only inactive exercises
  *                  1 = only active exercises,
  *                  2 = all exercises
+ *                  3 = active <> -1
  * @return  array   array with exercise data
  */
 function get_all_exercises($course_info = null, $session_id = 0, $check_publication_dates = false, $search_exercise = '', $search_all_sessions = false, $active = 2) {
@@ -1513,36 +1512,45 @@ function get_all_exercises($course_info = null, $session_id = 0, $check_publicat
 
     //Show courses by active status
     $active_sql = '';
-    if ($active != 2) {
+    if ($active == 3) {
+        $active_sql = ' active <> -1 AND';
+    } else if ($active != 2) {
         $active_sql = sprintf(' active = %d AND', $active);
     }
 
-
-    if ($search_all_sessions == true)
-    {
+    if ($search_all_sessions == true) {
         $conditions = array('where'=>array($active_sql . ' c_id = ? '. $needle_where . $time_conditions => array($course_id, $needle)), 'order'=>'title');
-    } else
-    {
+    } else {
         if ($session_id == 0) {
             $conditions = array('where'=>array($active_sql . ' session_id = ? AND c_id = ? '. $needle_where . $time_conditions => array($session_id, $course_id, $needle)), 'order'=>'title');
         } else {
             $conditions = array('where'=>array($active_sql . ' (session_id = 0 OR session_id = ? ) AND c_id = ? ' . $needle_where . $time_conditions => array($session_id, $course_id, $needle)), 'order'=>'title');
         }
     }
+
     return Database::select('*',$TBL_EXERCICES, $conditions);
 }
 /**
  * Get exercise information by id
- * @param int Exercise Id
- * @return array Exercise info
+ * @param int $exerciseId Exercise Id
+ * @param int $courseId The course ID (necessary as c_quiz.id is not unique)
+ * @return array Exercise info 
  */
-function get_exercise_by_id($exerciseId = 0) {
+function get_exercise_by_id($exerciseId = 0, $courseId = null) {
     $TBL_EXERCICES = Database :: get_course_table(TABLE_QUIZ_TEST);
-    $conditions  = array('where' => array('id = ?' => array($exerciseId)));
+    if (empty($courseId)) {
+        $courseId = api_get_course_int_id();
+    } else {
+        $courseId = intval($courseId);
+    }
+    $conditions  = array('where' => array('id = ?' => array($exerciseId), ' AND c_id = ? ' => $courseId));
     return Database::select('*', $TBL_EXERCICES, $conditions);
 }
 /**
- * Getting all exercises (active only or all) from a course from a session (if a session_id is provided we will show all the exercises in the course + all exercises in the session)
+ * Getting all exercises (active only or all)
+ * from a course from a session
+ * (if a session_id is provided we will show all the exercises in the
+ * course + all exercises in the session)
  * @param   array   course data
  * @param   int     session id
  * @param	int		course c_id
@@ -1550,7 +1558,8 @@ function get_exercise_by_id($exerciseId = 0) {
  * @return  array   array with exercise data
  * modified by Hubert Borderiou
  */
-function get_all_exercises_for_course_id($course_info = null, $session_id = 0, $course_id=0, $only_active_exercises = true) {
+function get_all_exercises_for_course_id($course_info = null, $session_id = 0, $course_id=0, $only_active_exercises = true)
+{
     $TBL_EXERCISES = Database :: get_course_table(TABLE_QUIZ_TEST);
     $tab_select_param = array();
 
@@ -2208,11 +2217,12 @@ function delete_chat_exercise_session($exe_id) {
 
 /**
  * Display the exercise results
- * @param obj   exercise obj
- * @param int   attempt id (exe_id)
- * @param bool  save users results (true) or just show the results (false)
+ * @param Exercise $objExercise
+ * @param int $exe_id
+ * @param bool $save_user_result save users results (true) or just show the results (false)
  */
-function display_question_list_by_attempt($objExercise, $exe_id, $save_user_result = false) {
+function display_question_list_by_attempt($objExercise, $exe_id, $save_user_result = false)
+{
     global $origin, $debug;
 
     //Getting attempt info
@@ -2227,7 +2237,7 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
         if ($save_user_result == false) {
             $question_list = $objExercise->get_validated_question_list();
         }
-        error_log("Data tracking is empty! exe_id: $exe_id");
+        //error_log("Data tracking is empty! exe_id: $exe_id");
     }
 
     $counter = 1;
@@ -2249,7 +2259,9 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
 
     // Not display expected answer, but score, and feedback
     $show_all_but_expected_answer = false;
-    if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY && $objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END) {
+    if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&
+        $objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END
+    ) {
         $show_all_but_expected_answer = true;
         $show_results = true;
         $show_only_score = false;
@@ -2258,7 +2270,11 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
     if ($show_results || $show_only_score) {
         $user_info   = api_get_user_info($exercise_stat_info['exe_user_id']);
         //Shows exercise header
-        echo $objExercise->show_exercise_result_header($user_info['complete_name'], api_convert_and_format_date($exercise_stat_info['start_date'], DATE_TIME_FORMAT_LONG), $exercise_stat_info['duration']);
+        echo $objExercise->show_exercise_result_header(
+            $user_info['complete_name'],
+            api_convert_and_format_date($exercise_stat_info['start_date'], DATE_TIME_FORMAT_LONG),
+            $exercise_stat_info['duration']
+        );
     }
 
     // Display text when test is finished #4074 and for LP #4227
@@ -2274,13 +2290,12 @@ function display_question_list_by_attempt($objExercise, $exe_id, $save_user_resu
 
     // Loop over all question to show results for each of them, one by one
     if (!empty($question_list)) {
-        if ($debug) { error_log('Looping question_list '.print_r($question_list,1));}
         foreach ($question_list as $questionId) {
 
             // creates a temporary Question object
             $objQuestionTmp = Question::read($questionId);
 
-            //this variable commes from exercise_submit_modal.php
+            // This variable came from exercise_submit_modal.php
             ob_start();
 
             // We're inside *one* question. Go through each possible answer for this question

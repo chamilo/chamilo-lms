@@ -17,7 +17,6 @@ $view = isset($_GET['view']) ? Security::remove_XSS($_GET['view']) : null;
 $viewReceivedCategory = isset($_GET['view_received_category']) ? Security::remove_XSS($_GET['view_received_category']) : null;
 $viewSentCategory = isset($_GET['view_sent_category']) ? Security::remove_XSS($_GET['view_sent_category']) : null;
 
-
 // Do the tracking
 event_access_tool(TOOL_DROPBOX);
 
@@ -151,10 +150,14 @@ if (($action == 'deletereceivedcategory' OR $action == 'deletesentcategory') AND
 // only the download has is handled separately in dropbox_init_inc.php because this has to be done before the headers are sent
 // (which also happens in dropbox_init.inc.php
 
-if (!isset($_POST['feedback']) && (strstr($postAction, 'move_received') OR
-    $postAction == 'delete_received' OR $postAction == 'download_received' OR
-    $postAction == 'delete_sent' OR $postAction == 'download_sent')) {
-
+if (!isset($_POST['feedback']) && (
+    strstr($postAction, 'move_received') OR
+    strstr($postAction, 'move_sent') OR
+    $postAction == 'delete_received' OR
+    $postAction == 'download_received' OR
+    $postAction == 'delete_sent' OR
+    $postAction == 'download_sent')
+) {
 	$display_message = handle_multiple_actions();
 	Display :: display_normal_message($display_message);
 }
@@ -269,19 +272,15 @@ if ($action != 'add') {
 			}
 		}
 	}
-
 	/*	THE MENU TABS */
-
 	if ($dropbox_cnf['sent_received_tabs']) {
 ?>
-
 <ul class="nav nav-tabs">
     <li <?php if (!$view OR $view == 'sent') { echo 'class="active"'; } ?> >
         <a href="index.php?<?php echo api_get_cidreq(); ?>&view=sent" ><?php echo get_lang('SentFiles'); ?></a></li>
     <li <?php if ($view == 'received') { echo 'class="active"'; } ?> >
         <a href="index.php?<?php echo api_get_cidreq(); ?>&view=received"  ><?php echo get_lang('ReceivedFiles'); ?></a></li>
 </ul>
-
 <?php
 	}
 
@@ -345,7 +344,6 @@ if ($action != 'add') {
 		$column_order[3] = 8;
 		$column_order[5] = 7;
 
-
 		// The content of the sortable table = the received files
 		foreach ($dropbox_person -> receivedWork as $dropbox_file) {
 			$dropbox_file_data = array();
@@ -400,11 +398,15 @@ if ($action != 'add') {
 
 		// The content of the sortable table = the categories (if we are not in the root)
 		if ($view_dropbox_category_received == 0) {
-			foreach ($dropbox_categories as $category) { // Note: This can probably be shortened since the categories for the received files are already in the $dropbox_received_category array;
+			foreach ($dropbox_categories as $category) {
+			    /*  Note: This can probably be shortened since the categories
+			    for the received files are already in the
+			    $dropbox_received_category array;*/
 				$dropbox_category_data = array();
 				if ($category['received'] == '1') {
 					$movelist[$category['cat_id']] = $category['cat_name'];
-					$dropbox_category_data[] = $category['cat_id']; // This is where the checkbox icon for the files appear
+                    // This is where the checkbox icon for the files appear
+					$dropbox_category_data[] = $category['cat_id'];
 					// The icon of the category
 					$link_open = '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$category['cat_id'].'&amp;view_sent_category='.$viewSentCategory.'&amp;view='.$view.'">';
 					$dropbox_category_data[] = $link_open.build_document_icon_tag('folder', $category['cat_name']).'</a>';
@@ -420,9 +422,14 @@ if ($action != 'add') {
 				}
 			}
 		}
+
 		// Displaying the table
 		$additional_get_parameters = array('view' => $view, 'view_received_category' => $viewReceivedCategory, 'view_sent_category' => $viewSentCategory);
-		$selectlist = array('delete_received' => get_lang('Delete'), 'download_received' => get_lang('Download'));
+        $selectlist = array(
+            'delete_received' => get_lang('Delete'),
+            'download_received' => get_lang('Download')
+        );
+
 		if (is_array($movelist)) {
 			foreach ($movelist as $catid => $catname){
 				$selectlist['move_received_'.$catid] = get_lang('Move') . '->'. Security::remove_XSS($catname);
@@ -433,7 +440,17 @@ if ($action != 'add') {
 			$selectlist = array();
 		}
 
-		Display::display_sortable_config_table('dropbox', $column_header, $dropbox_data_recieved, $sorting_options, $paging_options, $additional_get_parameters, $column_show, $column_order, $selectlist);
+        Display::display_sortable_config_table(
+            'dropbox',
+            $column_header,
+            $dropbox_data_recieved,
+            $sorting_options,
+            $paging_options,
+            $additional_get_parameters,
+            $column_show,
+            $column_order,
+            $selectlist
+        );
 	}
 
 	/*	SENT FILES */
@@ -500,7 +517,7 @@ if ($action != 'add') {
 		$column_order[5] = 7;
 
 		// The content of the sortable table = the received files
-		foreach ($dropbox_person -> sentWork as $dropbox_file) {
+		foreach ($dropbox_person->sentWork as $dropbox_file) {
 			$dropbox_file_data = array();
 
 			if ($view_dropbox_category_sent == $dropbox_file->category) {
@@ -541,11 +558,16 @@ if ($action != 'add') {
 			}
 		}
 
+        $moveList = array();
 		// The content of the sortable table = the categories (if we are not in the root)
 		if ($view_dropbox_category_sent == 0) {
 			foreach ($dropbox_categories as $category) {
 				$dropbox_category_data = array();
+
 				if ($category['sent'] == '1') {
+
+                    $moveList[$category['cat_id']] = $category['cat_name'];
+
 					$dropbox_category_data[] = $category['cat_id']; // This is where the checkbox icon for the files appear.
 					$link_open = '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&amp;view_sent_category='.$category['cat_id'].'&amp;view='.$view.'">';
 					$dropbox_category_data[] = $link_open.build_document_icon_tag('folder', Security::remove_XSS($category['cat_name'])).'</a>';
@@ -565,13 +587,39 @@ if ($action != 'add') {
 				}
 			}
 		}
+
 		// Displaying the table
-		$additional_get_parameters = array('view' => $view, 'view_received_category' => $viewReceivedCategory, 'view_sent_category' => $viewSentCategory);
-		$selectlist = array('delete_received' => get_lang('Delete'), 'download_received' => get_lang('Download'));
+		$additional_get_parameters = array(
+            'view' => $view,
+            'view_received_category' => $viewReceivedCategory,
+            'view_sent_category' => $viewSentCategory
+        );
+
+		$selectlist = array(
+            'delete_received' => get_lang('Delete'),
+            'download_received' => get_lang('Download')
+        );
+
+        if (!empty($moveList)) {
+            foreach ($moveList as $catid => $catname) {
+                $selectlist['move_sent_'.$catid] = get_lang('Move') . '->'. Security::remove_XSS($catname);
+            }
+        }
+
 		if (api_get_session_id() != 0 && !api_is_allowed_to_session_edit(false, true)) {
 			$selectlist = array('download_received' => get_lang('Download'));
 		}
-		Display::display_sortable_config_table('dropbox', $column_header, $dropbox_data_sent, $sorting_options, $paging_options, $additional_get_parameters, $column_show, $column_order, $selectlist);
+		Display::display_sortable_config_table(
+            'dropbox',
+            $column_header,
+            $dropbox_data_sent,
+            $sorting_options,
+            $paging_options,
+            $additional_get_parameters,
+            $column_show,
+            $column_order,
+            $selectlist
+        );
 	}
 }
 

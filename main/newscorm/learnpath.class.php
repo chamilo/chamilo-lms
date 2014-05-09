@@ -3179,6 +3179,7 @@ class learnpath
                         require_once 'resourcelinker.inc.php';
                         $file = rl_get_resource_link_for_learnpath($course_id, $this->get_id(), $item_id);
 
+
                         if ($this->debug > 0) {
                             error_log('rl_get_resource_link_for_learnpath - file: ' . $file, 0);
                         }
@@ -3389,7 +3390,8 @@ class learnpath
      * @param	integer	Optional attempt number. If none given, takes the highest from the lp_view table
      * @return	integer	DB lp_view id
      */
-    public function get_view($attempt_num = 0) {
+    public function get_view($attempt_num = 0)
+    {
         if ($this->debug > 0) {
             error_log('New LP - In learnpath::get_view()', 0);
         }
@@ -3402,19 +3404,25 @@ class learnpath
         $lp_view_table = Database :: get_course_table(TABLE_LP_VIEW);
 
         $course_id = api_get_course_int_id();
+        $sessionId = api_get_session_id();
 
         $sql = "SELECT id, view_count FROM $lp_view_table
-        		WHERE c_id = ".$course_id." AND lp_id = " . $this->get_id() ." AND user_id = " . $this->get_user_id() . " " .$search .
-        		" ORDER BY view_count DESC";
+        		WHERE
+        		    c_id = " . $course_id . " AND
+        		    lp_id = " . $this->get_id() . " AND
+        		    user_id = " . $this->get_user_id() . " AND
+        		    session_id = $sessionId
+        		    $search
+                ORDER BY view_count DESC";
         $res = Database::query($sql);
         if (Database :: num_rows($res) > 0) {
             $row = Database :: fetch_array($res);
             $this->lp_view_id = $row['id'];
         } else {
             // There is no database record, create one.
-            $sql = "INSERT INTO $lp_view_table (c_id, lp_id,user_id,view_count) VALUES
-            		($course_id, " . $this->get_id() . "," . $this->get_user_id() . ",1)";
-            $res = Database::query($sql);
+            $sql = "INSERT INTO $lp_view_table (c_id, lp_id,user_id, view_count, session_id) VALUES
+            		($course_id, " . $this->get_id() . "," . $this->get_user_id() . ", 1, $sessionId)";
+            Database::query($sql);
             $id = Database :: insert_id();
             $this->lp_view_id = $id;
         }
@@ -3841,12 +3849,14 @@ class learnpath
      * @param	integer	Learnpath ID
      * @param	string	New visibility
      */
-    public function toggle_visibility($lp_id, $set_visibility = 1) {
-        //if ($this->debug > 0) { error_log('New LP - In learnpath::toggle_visibility()', 0); }
+    public function toggle_visibility($lp_id, $set_visibility = 1)
+    {
         $action = 'visible';
         if ($set_visibility != 1) {
             $action = 'invisible';
+            self::toggle_publish($lp_id, 'i');
         }
+
         return api_item_property_update(
             api_get_course_info(),
             TOOL_LEARNPATH,
@@ -3861,7 +3871,7 @@ class learnpath
      * on the course homepage
      * Can be used as abstract
      * @param	integer	$lp_id Learnpath id
-     * @param	string	$set_visibility New visibility (v/s - visible/invisible)
+     * @param	string	$set_visibility New visibility (v/i - visible/invisible)
      * @return bool
      */
     public static function toggle_publish($lp_id, $set_visibility = 'v')
@@ -9308,7 +9318,7 @@ EOD;
     	return $row_max->previous;
     }
 
-    function copy()
+    public function copy()
     {
         $main_path = api_get_path(SYS_CODE_PATH);
         require_once $main_path.'coursecopy/classes/CourseBuilder.class.php';

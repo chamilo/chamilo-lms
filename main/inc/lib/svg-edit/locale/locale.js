@@ -1,7 +1,9 @@
+/*globals jQuery*/
+/*jslint vars: true, eqeq: true, forin: true*/
 /*
  * Localizing script for SVG-edit UI
  *
- * Licensed under the Apache License, Version 2
+ * Licensed under the MIT License
  *
  * Copyright(c) 2010 Narendra Sisodya
  * Copyright(c) 2010 Alexis Deveria
@@ -13,27 +15,27 @@
 // 2) svgcanvas.js
 // 3) svg-editor.js
 
-var svgEditor = (function($, Editor) {
+var svgEditor = (function($, editor) {'use strict';
 
 	var lang_param;
 	
 	function setStrings(type, obj, ids) {
 		// Root element to look for element from
-		var parent = $('#svg_editor').parent();
-		for(var sel in obj) {
-			var val = obj[sel];
-			if(!val) console.log(sel);
+		var i, sel, val, $elem, elem, node, parent = $('#svg_editor').parent();
+		for (sel in obj) {
+			val = obj[sel];
+			if (!val) {console.log(sel);}
 			
-			if(ids) sel = '#' + sel;
-			var $elem = parent.find(sel);
-			if($elem.length) {
-				var elem = parent.find(sel)[0];
+			if (ids) {sel = '#' + sel;}
+			$elem = parent.find(sel);
+			if ($elem.length) {
+				elem = parent.find(sel)[0];
 				
 				switch ( type ) {
 					case 'content':
-						for(var i = 0; i < elem.childNodes.length; i++) {
-							var node = elem.childNodes[i];
-							if(node.nodeType === 3 && node.textContent.replace(/\s/g,'')) {
+						for (i = 0; i < elem.childNodes.length; i++) {
+							node = elem.childNodes[i];
+							if (node.nodeType === 3 && node.textContent.replace(/\s/g,'')) {
 								node.textContent = val;
 								break;
 							}
@@ -52,17 +54,17 @@ var svgEditor = (function($, Editor) {
 		}
 	}
 
-	Editor.readLang = function(langData) {
-		var more = Editor.canvas.runExtensions("addlangData", lang_param, true);
+	editor.readLang = function(langData) {
+		var more = editor.canvas.runExtensions("addlangData", lang_param, true);
 		$.each(more, function(i, m) {
-			if(m.data) {
+			if (m.data) {
 				langData = $.merge(langData, m.data);
 			}
 		});
 		
 		// Old locale file, do nothing for now.
-		if(!langData.tools) return;
-		
+		if (!langData.tools) {return;}
+
 		var tools = langData.tools,
 			misc = langData.misc,
 			properties = langData.properties,
@@ -72,7 +74,7 @@ var svgEditor = (function($, Editor) {
 			ui = langData.ui;
 		
 		setStrings('content', {
-			copyrightLabel: misc.powered_by,
+			// copyrightLabel: misc.powered_by, // Currently commented out in svg-editor.html
 			curve_segments: properties.curve_segments,
 			fitToContent: tools.fitToContent,
 			fit_to_all: tools.fit_to_all,
@@ -125,7 +127,7 @@ var svgEditor = (function($, Editor) {
 
 			tool_clear: tools.new_doc,
 			tool_docprops: tools.docprops,
-			tool_export: tools.export_png,
+			tool_export: tools.export_img,
 			tool_import: tools.import_doc,
 			tool_imagelib: tools.imagelib,
 			tool_open: tools.open_doc,
@@ -137,12 +139,13 @@ var svgEditor = (function($, Editor) {
 			
 			svginfo_grid_settings: config.grid,
 			svginfo_snap_onoff: config.snapping_onoff,
-			svginfo_snap_step: config.snapping_stepsize
+			svginfo_snap_step: config.snapping_stepsize,
+			svginfo_grid_color: config.grid_color
 		}, true);
 		
 		// Shape categories
-		var cats = {};
-		for (var o in langData.shape_cats) {
+		var o, cats = {};
+		for (o in langData.shape_cats) {
 			cats['#shape_cats [data-cat="' + o + '"]'] = langData.shape_cats[o];
 		}
 		
@@ -237,7 +240,7 @@ var svgEditor = (function($, Editor) {
 			tool_fhpath: tools.mode_fhpath,
 			tool_fhrect: tools.mode_fhrect,
 			tool_font_size: properties.font_size,
-			tool_group: tools.group,
+			tool_group_elements: tools.group_elements,
 			tool_make_link: tools.make_link,
 			tool_link_url: tools.set_link_url,
 			tool_image: tools.mode_image,
@@ -267,46 +270,52 @@ var svgEditor = (function($, Editor) {
 			tool_zoom: tools.mode_zoom,
 			url_notice: tools.no_embed
 
-			}
-		, true);
+		}, true);
 		
-		Editor.setLang(lang_param, langData);
-	}
+		editor.setLang(lang_param, langData);
+	};
 
-	Editor.putLocale = function(given_param, good_langs){
+	editor.putLocale = function (given_param, good_langs) {
 	
-		if(given_param) {
+		if (given_param) {
 			lang_param = given_param;
-		} else {
+		}
+		else {
 			lang_param = $.pref('lang');
-			if(!lang_param) {
-				if (navigator.userLanguage) // Explorer
+			if (!lang_param) {
+				if (navigator.userLanguage) { // Explorer
 					lang_param = navigator.userLanguage;
-				else if (navigator.language) // FF, Opera, ...
+				}
+				else if (navigator.language) { // FF, Opera, ...
 					lang_param = navigator.language;
-				if (lang_param == "")
+				}
+				if (lang_param == null) { // Todo: Would cause problems if uiStrings removed; remove this?
 					return;
+				}
 			}
 			
 			console.log('Lang: ' + lang_param);
 			
 			// Set to English if language is not in list of good langs
-			if($.inArray(lang_param, good_langs) == -1 && lang_param !== 'test') {
+			if ($.inArray(lang_param, good_langs) === -1 && lang_param !== 'test') {
 				lang_param = "en";
 			}
 	
 			// don't bother on first run if language is English		
-			if(lang_param.indexOf("en") == 0) return;
+			// The following line prevents setLang from running
+			//    extensions which depend on updated uiStrings,
+			//    so commenting it out.
+			// if (lang_param.indexOf("en") === 0) {return;}
 
 		}
 		
-		var conf = Editor.curConfig;
+		var conf = editor.curConfig;
 		
 		var url = conf.langPath + "lang." + lang_param + ".js";
 		
 		$.getScript(url, function(d) {
 			// Fails locally in Chrome 5+
-			if(!d) {
+			if (!d) {
 				var s = document.createElement('script');
 				s.src = url;
 				document.querySelector('head').appendChild(s);
@@ -315,6 +324,5 @@ var svgEditor = (function($, Editor) {
 		
 	};
 	
-	return Editor;
+	return editor;
 }(jQuery, svgEditor));
-

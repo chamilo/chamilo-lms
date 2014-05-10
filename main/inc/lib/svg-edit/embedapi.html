@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Embed API</title>
+    <script src="jquery.js"></script>
+    <script src="embedapi.js"></script>
+    <script>
+    /*globals $, EmbeddedSVGEdit*/
+	var initEmbed;
+    $(function () {'use strict';
+        
+        var svgCanvas = null;
+
+        initEmbed = function () {
+            var doc, mainButton,
+                frame = document.getElementById('svgedit');
+            svgCanvas = new EmbeddedSVGEdit(frame);
+            // Hide main button, as we will be controlling new, load, save, etc. from the host document
+            doc = frame.contentDocument || frame.contentWindow.document;
+            mainButton = doc.getElementById('main_button');
+            mainButton.style.display = 'none';
+        };
+
+        function handleSvgData(data, error) {
+            if (error) {
+                alert('error ' + error);
+            } else {
+                alert('Congratulations. Your SVG string is back in the host page, do with it what you will\n\n' + data);
+            }
+        }
+
+        function loadSvg() {
+            var svgexample = '<svg width="640" height="480" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g><title>Layer 1<\/title><rect stroke-width="5" stroke="#000000" fill="#FF0000" id="svg_1" height="35" width="51" y="35" x="32"/><ellipse ry="15" rx="24" stroke-width="5" stroke="#000000" fill="#0000ff" id="svg_2" cy="60" cx="66"/><\/g><\/svg>';
+            svgCanvas.setSvgString(svgexample);
+        }
+
+        function saveSvg() {
+            svgCanvas.getSvgString()(handleSvgData);
+        }
+        
+        // Add event handlers
+        $('#load').click(loadSvg);
+        $('#save').click(saveSvg);
+		$('body').append(
+			$('<iframe src="svg-editor.html?extensions=ext-xdomain-messaging.js' +
+				window.location.href.replace(/\?(.*)$/, '&$1') + // Append arguments to this file onto the iframe
+				'" width="900px" height="600px" id="svgedit" onload="initEmbed();"></iframe>'
+			)
+		);
+	});
+    </script>
+</head>
+<body>
+    <button id="load">Load example</button>
+    <button id="save">Save data</button>
+    <br/>
+</body>
+</html>

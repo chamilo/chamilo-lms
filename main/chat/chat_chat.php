@@ -141,22 +141,22 @@ if (!empty($course)) {
 		$result = Database::query($sql);
 	}
 
-	echo '<div style="margin-left: 5px;">';
+	echo '<div id="content-chat">';
 	foreach ($content as & $this_line) {
-		echo strip_tags(api_html_entity_decode($this_line), '<br> <span> <b> <i> <img> <font>');
+		echo strip_tags(api_html_entity_decode($this_line), '<div> <br> <span> <b> <i> <img> <font>');
 	}
 	echo '</div>';
 	echo '<a name="bottom" style="text-decoration:none;">&nbsp;</a>';
 	if ($isMaster || $is_courseCoach) {
 		$rand = mt_rand(1, 1000);
-		echo '<div style="margin-left: 5px;">';
+		echo '<div id="clear-chat">';
 		echo '<a href="'.api_get_self().'?rand='.$rand.'&reset=1&'.api_get_cidreq().'#bottom" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmReset'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('ClearList')).' '.get_lang('ClearList').'</a>';
 		echo '</div>';
 	}
 } else {
+	echo '</div>';
 	require 'header_frame.inc.php';
 	$message = get_lang('CloseOtherSession');
 	Display :: display_error_message($message);
 }
-
 require 'footer_frame.inc.php';

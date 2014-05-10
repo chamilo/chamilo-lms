@@ -1,11 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * This script initiates a ticket management system session
  * @package chamilo.plugin.ticket
- */
-/**
- * Initialization
  */
 $course_plugin = 'ticket'; //needed in order to load the plugin lang variables
 require_once dirname(__FILE__).'/config.php';

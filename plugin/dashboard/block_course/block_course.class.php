@@ -5,12 +5,6 @@
  * @package chamilo.dashboard
  * @author Christian Fasanando
  */
-
-/**
- * required files for getting data
- */
-require_once api_get_path(LIBRARY_PATH) . 'thematic.lib.php';
-
 /**
  * This class is used like controller for this course block plugin,
  * the class name must be registered inside path.info file (e.g: controller = "BlockCourse"), so dashboard controller will be instantiate it

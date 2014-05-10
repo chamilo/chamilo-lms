@@ -1,17 +1,18 @@
+/*globals $, svgEditor, svgedit, svgCanvas, DOMParser*/
+/*jslint vars: true, eqeq: true, es5: true, todo: true */
 /*
  * ext-imagelib.js
  *
- * Licensed under the Apache License, Version 2
+ * Licensed under the MIT License
  *
  * Copyright(c) 2010 Alexis Deveria
  *
  */
 
-svgEditor.addExtension("imagelib", function() {
-	//Chamilo change library title and index.html by index.php
-	
+svgEditor.addExtension("imagelib", function() {'use strict';
+
 	var uiStrings = svgEditor.uiStrings;
-	
+
 	$.extend(uiStrings, {
 		imagelib: {
 			select_lib: 'Select an image library',
@@ -22,37 +23,36 @@ svgEditor.addExtension("imagelib", function() {
 		}
 	});
 
-	var img_libs = [{
-			name: 'Local library (local)',
-			url: 'extensions/imagelib/index.php',
-			//description: 'Demonstration library for SVG-edit on this server'// Chamilo change this line by below
-			description: 'Course gallery'
-		},
-		{
-			name: 'Local library',
-			url: 'extensions/imagelib/groups.php',
-			//description: 'Demonstration library for SVG-edit on this server'// Chamilo change this line by below
-			description: 'Group gallery'
-		},
-		{
-			name: 'Local library',
-			url: 'extensions/imagelib/users.php',
-			//description: 'Demonstration library for SVG-edit on this server'// Chamilo change this line by below
-			description: 'Personal gallery'
-		},		
-		{
-			name: 'IAN Symbol Libraries',
-			url: 'http://ian.umces.edu/symbols/catalog/svgedit/album_chooser.php',
-			description: 'Free library of illustrations'
-		}
+	var img_libs = [
+        {
+            name: 'Local library (local)',
+            url: 'extensions/imagelib/index.php',
+            //description: 'Demonstration library for SVG-edit on this server'// Chamilo change this line by below
+            description: 'Course gallery'
+        },
+        {
+            name: 'Local library',
+            url: 'extensions/imagelib/groups.php',
+            //description: 'Demonstration library for SVG-edit on this server'// Chamilo change this line by below
+            description: 'Group gallery'
+        },
+        {
+            name: 'Local library',
+            url: 'extensions/imagelib/users.php',
+            //description: 'Demonstration library for SVG-edit on this server'// Chamilo change this line by below
+            description: 'Personal gallery'
+        },
+        {
+            name: 'IAN Symbol Libraries',
+            url: 'http://ian.umces.edu/symbols/catalog/svgedit/album_chooser.php',
+            description: 'Free library of illustrations'
+        }
 	];
-	
-	var xlinkns = "http://www.w3.org/1999/xlink";
 
 	function closeBrowser() {
 		$('#imgbrowse_holder').hide();
 	}
-	
+
 	function importImage(url) {
 		var newImage = svgCanvas.addSvgElementFromJson({
 			"element": "image",
@@ -75,110 +75,115 @@ svgEditor.addExtension("imagelib", function() {
 	var cur_meta;
 	var tranfer_stopped = false;
 	var pending = {};
-	
-	//Juan Carlos Raña Trabado hack for Chamilo add window.top. on the bottom line to run into a frame
-	window.top.window.addEventListener("message", function(evt) {							 
-												 
+	var preview, submit;
+
+	window.addEventListener("message", function(evt) {
 		// Receive postMessage data
 		var response = evt.data;
-		
-		if(!response) {
+
+		if (!response || typeof response !== "string") { // Todo: Should namespace postMessage API for this extension and filter out here
 			// Do nothing
 			return;
 		}
-		
+		try { // This block can be removed if embedAPI moves away from a string to an object (if IE9 support not needed)
+			var res = JSON.parse(response);
+			if (res.namespace) { // Part of embedAPI communications
+				return;
+			}
+		}
+		catch (e) {}
+
 		var char1 = response.charAt(0);
-		
+		var id;
 		var svg_str;
 		var img_str;
-		
-		if(char1 != "{" && tranfer_stopped) {
+
+		if (char1 != "{" && tranfer_stopped) {
 			tranfer_stopped = false;
 			return;
 		}
-		
-		if(char1 == '|') {
+
+		if (char1 == '|') {
 			var secondpos = response.indexOf('|', 1);
-			var id = response.substr(1, secondpos-1);
+			id = response.substr(1, secondpos-1);
 			response = response.substr(secondpos+1);
 			char1 = response.charAt(0);
-
 		}
-		
-		
+
+
 		// Hide possible transfer dialog box
 		$('#dialog_box').hide();
-		
+		var entry, cur_meta;
 		switch (char1) {
 			case '{':
 				// Metadata
 				tranfer_stopped = false;
-				var cur_meta = JSON.parse(response);
-				
+				cur_meta = JSON.parse(response);
+
 				pending[cur_meta.id] = cur_meta;
-				
+
 				var name = (cur_meta.name || 'file');
-				
+
 				var message = uiStrings.notification.retrieving.replace('%s', name);
-				
-				if(mode != 'm') {
+
+				if (mode != 'm') {
 					$.process_cancel(message, function() {
 						tranfer_stopped = true;
 						// Should a message be sent back to the frame?
-						
+
 						$('#dialog_box').hide();
 					});
 				} else {
-					var entry = $('<div>' + message + '</div>').data('id', cur_meta.id);
+					entry = $('<div>' + message + '</div>').data('id', cur_meta.id);
 					preview.append(entry);
 					cur_meta.entry = entry;
 				}
-				
+
 				return;
 			case '<':
 				svg_str = true;
 				break;
 			case 'd':
-				if(response.indexOf('data:image/svg+xml') === 0) {
+				if (response.indexOf('data:image/svg+xml') === 0) {
 					var pre = 'data:image/svg+xml;base64,';
 					var src = response.substring(pre.length);
-					response = svgCanvas.Utils.decode64(src);
+					response = svgedit.utilities.decode64(src);
 					svg_str = true;
 					break;
-				} else if(response.indexOf('data:image/') === 0) {
+				} else if (response.indexOf('data:image/') === 0) {
 					img_str = true;
 					break;
 				}
 				// Else fall through
 			default:
 				// TODO: See if there's a way to base64 encode the binary data stream
-// 				var str = 'data:;base64,' + svgCanvas.Utils.encode64(response, true);
-			
+//				var str = 'data:;base64,' + svgedit.utilities.encode64(response, true);
+
 				// Assume it's raw image data
-// 				importImage(str);
-			
+//				importImage(str);
+
 				// Don't give warning as postMessage may have been used by something else
-				if(mode !== 'm') {
+				if (mode !== 'm') {
 					closeBrowser();
 				} else {
 					pending[id].entry.remove();
 				}
-// 				$.alert('Unexpected data was returned: ' + response, function() {
-// 					if(mode !== 'm') {
-// 						closeBrowser();
-// 					} else {
-// 						pending[id].entry.remove();
-// 					}
-// 				});
+//				$.alert('Unexpected data was returned: ' + response, function() {
+//					if (mode !== 'm') {
+//						closeBrowser();
+//					} else {
+//						pending[id].entry.remove();
+//					}
+//				});
 				return;
 		}
-		
+
 		switch (mode) {
 			case 's':
 				// Import one
-				if(svg_str) {
+				if (svg_str) {
 					svgCanvas.importSvgString(response);
-				} else if(img_str) {
+				} else if (img_str) {
 					importImage(response);
 				}
 				closeBrowser();
@@ -186,19 +191,20 @@ svgEditor.addExtension("imagelib", function() {
 			case 'm':
 				// Import multiple
 				multi_arr.push([(svg_str ? 'svg' : 'img'), response]);
-				var cur_meta = pending[id];
-				if(svg_str) {
-					if(cur_meta && cur_meta.name) {
-						var title = cur_meta.name;
-					}  else {
+				var title;
+				cur_meta = pending[id];
+				if (svg_str) {
+					if (cur_meta && cur_meta.name) {
+						title = cur_meta.name;
+					} else {
 						// Try to find a title
 						var xml = new DOMParser().parseFromString(response, 'text/xml').documentElement;
-						var title = $(xml).children('title').first().text() || '(SVG #' + response.length + ')';
+						title = $(xml).children('title').first().text() || '(SVG #' + response.length + ')';
 					}
-					if(cur_meta) {
+					if (cur_meta) {
 						preview.children().each(function() {
-							if($(this).data('id') == id) {
-								if(cur_meta.preview_url) {
+							if ($(this).data('id') == id) {
+								if (cur_meta.preview_url) {
 									$(this).html('<img src="' + cur_meta.preview_url + '">' + title);
 								} else {
 									$(this).text(title);
@@ -211,18 +217,18 @@ svgEditor.addExtension("imagelib", function() {
 						submit.removeAttr('disabled');
 					}
 				} else {
-					if(cur_meta && cur_meta.preview_url) {
-						var title = cur_meta.name || '';
+					if (cur_meta && cur_meta.preview_url) {
+						title = cur_meta.name || '';
 					}
-					if(cur_meta && cur_meta.preview_url) {
-						var entry = '<img src="' + cur_meta.preview_url + '">' + title;
+					if (cur_meta && cur_meta.preview_url) {
+						entry = '<img src="' + cur_meta.preview_url + '">' + title;
 					} else {
-						var entry = '<img src="' + response + '">';
+						entry = '<img src="' + response + '">';
 					}
-				
-					if(cur_meta) {
+
+					if (cur_meta) {
 						preview.children().each(function() {
-							if($(this).data('id') == id) {
+							if ($(this).data('id') == id) {
 								$(this).html(entry);
 								submit.removeAttr('disabled');
 							}
@@ -236,9 +242,9 @@ svgEditor.addExtension("imagelib", function() {
 				break;
 			case 'o':
 				// Open
-				if(!svg_str) break;
+				if (!svg_str) {break;}
 				svgEditor.openPrep(function(ok) {
-					if(!ok) return;
+					if (!ok) {return;}
 					svgCanvas.clear();
 					svgCanvas.setSvgString(response);
 					// updateCanvas();
@@ -247,13 +253,11 @@ svgEditor.addExtension("imagelib", function() {
 				break;
 		}
 	}, true);
-	
-	var preview, submit;
 
 	function toggleMulti(show) {
-	
+
 		$('#lib_framewrap, #imglib_opts').css({right: (show ? 200 : 10)});
-		if(!preview) {
+		if (!preview) {
 			preview = $('<div id=imglib_preview>').css({
 				position: 'absolute',
 				top: 45,
@@ -263,12 +267,14 @@ svgEditor.addExtension("imagelib", function() {
 				background: '#fff',
 				overflow: 'auto'
 			}).insertAfter('#lib_framewrap');
-			
-			submit = $('<button disabled>Import selected</button>').appendTo('#imgbrowse').click(function() {
+
+			submit = $('<button disabled>Import selected</button>')
+				.appendTo('#imgbrowse')
+				.on("click touchend", function() {
 				$.each(multi_arr, function(i) {
 					var type = this[0];
 					var data = this[1];
-					if(type == 'svg') {
+					if (type == 'svg') {
 						svgCanvas.importSvgString(data);
 					} else {
 						importImage(data);
@@ -285,7 +291,7 @@ svgEditor.addExtension("imagelib", function() {
 			});
 
 		}
-		
+
 		preview.toggle(show);
 		submit.toggle(show);
 	}
@@ -293,7 +299,7 @@ svgEditor.addExtension("imagelib", function() {
 	function showBrowser() {
 
 		var browser = $('#imgbrowse');
-		if(!browser.length) {
+		if (!browser.length) {
 			$('<div id=imgbrowse_holder><div id=imgbrowse class=toolbar_button>\
 			</div></div>').insertAfter('#svg_docprops');
 			browser = $('#imgbrowse');
@@ -302,25 +308,29 @@ svgEditor.addExtension("imagelib", function() {
 
 			var lib_opts = $('<ul id=imglib_opts>').appendTo(browser);
 			var frame = $('<iframe/>').prependTo(browser).hide().wrap('<div id=lib_framewrap>');
-			
+
 			var header = $('<h1>').prependTo(browser).text(all_libs).css({
 				position: 'absolute',
 				top: 0,
 				left: 0,
 				width: '100%'
 			});
-			
-			var cancel = $('<button>' + uiStrings.common.cancel + '</button>').appendTo(browser).click(function() {
+
+			var cancel = $('<button>' + uiStrings.common.cancel + '</button>')
+				.appendTo(browser)
+				.on("click touchend", function() {
 				$('#imgbrowse_holder').hide();
 			}).css({
 				position: 'absolute',
 				top: 5,
 				right: -10
 			});
-			
+
 			var leftBlock = $('<span>').css({position:'absolute',top:5,left:10}).appendTo(browser);
-			
-			var back = $('<button hidden>' + uiStrings.imagelib.show_list + '</button>').appendTo(leftBlock).click(function() {
+
+			var back = $('<button hidden>' + uiStrings.imagelib.show_list + '</button>')
+				.appendTo(leftBlock)
+				.on("click touchend", function() {
 				frame.attr('src', 'about:blank').hide();
 				lib_opts.show();
 				header.text(all_libs);
@@ -328,8 +338,8 @@ svgEditor.addExtension("imagelib", function() {
 			}).css({
 				'margin-right': 5
 			}).hide();
-			
-			var type = $('<select><option value=s>' + 
+
+			var type = $('<select><option value=s>' +
 			uiStrings.imagelib.import_single + '</option><option value=m>' +
 			uiStrings.imagelib.import_multi + '</option><option value=o>' +
 			uiStrings.imagelib.open + '</option></select>').appendTo(leftBlock).change(function() {
@@ -339,34 +349,38 @@ svgEditor.addExtension("imagelib", function() {
 					case 'o':
 						toggleMulti(false);
 						break;
-					
+
 					case 'm':
 						// Import multiple
 						toggleMulti(true);
+						break;
 				}
 			}).css({
 				'margin-top': 10
 			});
-			
+
 			cancel.prepend($.getSvgIcon('cancel', true));
 			back.prepend($.getSvgIcon('tool_imagelib', true));
-			
+
 			$.each(img_libs, function(i, opts) {
-				$('<li>').appendTo(lib_opts).text(opts.name).click(function() {
+				$('<li>')
+					.appendTo(lib_opts)
+					.text(opts.name)
+					.on("click touchend", function() {
 					frame.attr('src', opts.url).show();
 					header.text(opts.name);
 					lib_opts.hide();
 					back.show();
 				}).append('<span>' + opts.description + '</span>');
 			});
-			
+
 		} else {
 			$('#imgbrowse_holder').show();
 		}
 	}
-	
+
 	return {
-		svgicons: "extensions/ext-imagelib.xml",
+		svgicons: svgEditor.curConfig.extPath + "ext-imagelib.xml",
 		buttons: [{
 			id: "tool_imagelib",
 			type: "app_menu", // _flyout
@@ -377,7 +391,7 @@ svgEditor.addExtension("imagelib", function() {
 			}
 		}],
 		callback: function() {
-		
+
 			$('<style>').text('\
 				#imgbrowse_holder {\
 					position: absolute;\
@@ -455,6 +469,6 @@ svgEditor.addExtension("imagelib", function() {
 				}\
 			').appendTo('head');
 		}
-	}
+	};
 });
 

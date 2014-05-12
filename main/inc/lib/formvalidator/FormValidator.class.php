@@ -124,13 +124,12 @@ class FormValidator extends HTML_QuickForm
 
         // Load some custom elements and rules
         $dir = api_get_path(LIBRARY_PATH) . 'formvalidator/';
-        $this->registerElementType('html_editor', $dir . 'Element/html_editor.php', 'HTML_QuickForm_html_editor');
 
+        $this->registerElementType('html_editor', $dir . 'Element/html_editor.php', 'HTML_QuickForm_html_editor');
         $this->registerElementType('date_range_picker', $dir . 'Element/DateRangePicker.php', 'DateRangePicker');
         $this->registerElementType('date_time_picker', $dir . 'Element/DateTimePicker.php', 'DateTimePicker');
         $this->registerElementType('date_picker', $dir . 'Element/DatePicker.php', 'DatePicker');
-
-        $this->registerElementType('datepicker', $dir . 'Element/datepicker.php', 'HTML_QuickForm_datepicker');
+        $this->registerElementType('datepicker', $dir . 'Element/datepicker_old.php', 'HTML_QuickForm_datepicker');
         $this->registerElementType('datepickerdate', $dir . 'Element/datepickerdate.php', 'HTML_QuickForm_datepickerdate');
         $this->registerElementType('receivers', $dir . 'Element/receivers.php', 'HTML_QuickForm_receivers');
         $this->registerElementType('select_language', $dir . 'Element/select_language.php', 'HTML_QuickForm_Select_Language');

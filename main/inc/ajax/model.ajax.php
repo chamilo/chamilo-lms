@@ -316,7 +316,7 @@ switch ($action) {
         break;
     case 'get_sessions':
         $courseId = isset($_GET['course_id']) && !empty($_GET['course_id']) ? intval($_GET['course_id']) : null;
-        $where_condition = str_replace('category_name', 'sc.name', $where_condition);
+        $whereCondition = str_replace('category_name', 'sc.name', $whereCondition);
         if (!empty($courseId)) {
             $whereCondition .= " AND c.id = $courseId";
         }
@@ -625,7 +625,7 @@ switch ($action) {
         } else {
             $columns = array('exe_date',  'score', 'actions');
         }
-        $result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $whereCondition); //get_exam_results_data($start, $limit, $sidx, $sord, $exercise_id, $where_condition);
+        $result = get_exam_results_hotpotatoes_data($start, $limit, $sidx, $sord, $hotpot_path, $whereCondition);
         break;
     case 'get_work_student_list_overview':
         if (!api_is_allowed_to_edit()) {
@@ -728,8 +728,8 @@ switch ($action) {
             'name', 'nbr_courses', 'nbr_users', 'category_name', 'date_start','date_end', 'coach_name', 'session_active', 'visibility'
         );
 
-        //Rename Category_name
-        $where_condition = str_replace('category_name', 'sc.name', $where_condition);
+        // Rename Category_name
+        $whereCondition = str_replace('category_name', 'sc.name', $whereCondition);
 
         $result = SessionManager::get_sessions_admin(
             array(

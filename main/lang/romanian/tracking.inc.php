@@ -88,7 +88,6 @@ $langPeriodMonth = "Luna";
 $langPeriodYear = "An";
 $langNextDay = "Urmatoarea zi";
 $langPreviousDay = "Ziua precedenta";
-$langNextWeek = "Saptamana viitoare";
 $langPreviousWeek = "Saptamana anterioara";
 $langNextMonth = "Luna urmatoare";
 $langPreviousMonth = "Luna anterioara";

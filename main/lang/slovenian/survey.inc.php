@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$StartSurvey = "Prični z vprašalnikom";
 $PublishSurvey = "Objavi vprašalnik";
 $CompareQuestions = "Primerjaj vprašanja";
 $InformationUpdated = "Informacije so bile ažurirane";

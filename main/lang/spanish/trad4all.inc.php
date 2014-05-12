@@ -2,6 +2,15 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ParametersNotFound = "Parámetros no encontrados";
+$UsersToAdd = "Usuarios por añadir";
+$DocumentsAdded = "Documentos añadidos";
+$NoUsersToAdd = "Ningun usuario por añadir";
+$Subgroup = "Subgrupo";
+$Subgroups = "Subgrupos";
+$EnterTheLettersYouSee = "Introducir las letras que ve.";
+$ClickOnTheImageForANewOne = "Dar clic en la imagen para cargar otra.";
+$AccountBlockedByCaptcha = "Cuenta bloqueada por CAPTCHA.";
 $CatchScreenCasts = "Capturar imagen o vídeo de la pantalla";
 $View = "Ver";
 $AmountSubmitted = "Cantidad enviada";
@@ -848,6 +857,7 @@ $FirstPage = "Primera página";
 $LastPage = "Última página";
 $Coachs = "Tutores";
 $FieldTypeFile = "Subida de archivo";
+$NextWeek = "Semana siguiente";
 $DragAndDropAnElementHere = "Arrastrar y soltar un elemento aquí";
 $ThereAreNoRegisteredDatetimeYet = "Aún no hay registrada ninguna fecha/hora";
 $CalendarList = "Fechas de la lista de asistencia";

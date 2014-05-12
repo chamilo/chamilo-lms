@@ -735,6 +735,7 @@ $Until = "Līdz";
 $FirstPage = "Pirmā lapa";
 $LastPage = "Pēdējā lapa";
 $Coachs = "Mācību spēki";
+$NextWeek = "Nākošā nedēļa";
 $DragAndDropAnElementHere = "Vilkt un nomest elementu šeit";
 $ThereAreNoRegisteredDatetimeYet = "Šeit vēl nav datuma / laika reģistra";
 $CalendarList = "Plānoto Klātienes nodarbību diena un laiks";

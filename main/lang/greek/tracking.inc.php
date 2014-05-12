@@ -89,7 +89,6 @@ $langPeriodMonth = "Μήνας";
 $langPeriodYear = "Έτος";
 $langNextDay = "Επόμενη μέρα";
 $langPreviousDay = "Προηγούμενη μέρα";
-$langNextWeek = "Επόμενη εβδομάδα";
 $langPreviousWeek = "Προηγούμενη εβδομάδα";
 $langNextMonth = "Επόμενος μήνας";
 $langPreviousMonth = "Προηγούμενος Μήνας";

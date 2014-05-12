@@ -574,6 +574,7 @@ $BackToPreviousPage = "Povratak na prethodnu stranicu";
 $ListView = "Prikaži kao listu";
 $NoOfficialCode = "Nema službene šifre";
 $Owner = "Vlasnik";
+$NextWeek = "Sljedeći tjedan";
 $GeneralDescription = "Opći opis";
 $GeneralDescriptionQuestions = "Koje mjesto kolegij ima u programu? Postoje li kakvi preduvjeti? Kako je kolegij povezan s drugim kolegijima?";
 $GeneralDescriptionInformation = "Opišite kolegij (broj sati, službena šifra, prostorija...) i predavača (prezime, ime, ured, broj telefona, elektronička pošta...).";

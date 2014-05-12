@@ -88,7 +88,6 @@ $langPeriodMonth = "Måned";
 $langPeriodYear = "År";
 $langNextDay = "Neste dag";
 $langPreviousDay = "Foregående dag";
-$langNextWeek = "Neste uke";
 $langPreviousWeek = "Foregående uke";
 $langNextMonth = "Neste måned";
 $langPreviousMonth = "Foregående måned";

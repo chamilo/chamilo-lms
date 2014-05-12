@@ -88,7 +88,6 @@ $langPeriodMonth = "Mėnuo";
 $langPeriodYear = "Metai";
 $langNextDay = "Kita diena";
 $langPreviousDay = "Ankstesnė diena";
-$langNextWeek = "Kita savaitė";
 $langPreviousWeek = "Ankstesnė savaitė";
 $langNextMonth = "Kitas mėnuo";
 $langPreviousMonth = "Ankstesnis mėnuo";

@@ -509,6 +509,7 @@ $SocialNetwork = "Socialt nätverk";
 $Subject = "Ämne";
 $CourseName = "Kursnamn";
 $HistoryTrainingSessions = "Kurshistorik";
+$NextWeek = "Nästa vecka";
 $GeneralDescription = "Generell beskrivning";
 $GeneralDescriptionQuestions = "Vilken plats har kursen i programmet? Krävs det förkunskaper?  Hur är kurserna kopplade till varandra?";
 $GeneralDescriptionInformation = "Beskriv kursen (antal timmar, officiell kod, i vilket rum det sker...) och lärare (namn, förnamn, kontor, telefonnummer, e-post...).";

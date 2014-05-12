@@ -744,6 +744,7 @@ $Until = "Noiz arte";
 $FirstPage = "Lehen orria";
 $LastPage = "Azken orria";
 $Coachs = "Arduradunak";
+$NextWeek = "Hurrengo astea";
 $DragAndDropAnElementHere = "Arrastatu eta jaregin elementu bat hemen";
 $ThereAreNoRegisteredDatetimeYet = "Oraindik ez dago data/ordurik erregistratuta";
 $CalendarList = "Parte hartzeen zerrenda-egutegia";

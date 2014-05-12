@@ -816,6 +816,7 @@ $Until = "Fins";
 $FirstPage = "Primera pàgina";
 $LastPage = "Última pàgina";
 $Coachs = "Tutors";
+$NextWeek = "Pròxima setmana";
 $DragAndDropAnElementHere = "Arrossegueu i deixeu anar un element aquí";
 $ThereAreNoRegisteredDatetimeYet = "Encara no hi ha registrada cap data/hora";
 $CalendarList = "Dates de la llista d'assistència";

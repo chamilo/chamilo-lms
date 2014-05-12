@@ -9,6 +9,9 @@
  */
 use \ChamiloSession as Session;
 
+// Flag to allow for anonymous user - needs to be set before global.inc.php.
+$use_anonymous = true;
+
 $debug = 0;
 if ($debug > 0) error_log('New LP -+- Entered lp_controller.php -+- (action: '.$_REQUEST['action'].')', 0);
 
@@ -224,10 +227,6 @@ $htmlHeadXtra[] = '
     });
 </script>
 ';
-
-
-// Flag to allow for anonymous user - needs to be set before global.inc.php.
-$use_anonymous = true;
 
 // Include class definitions before session_start() to ensure availability when touching
 // session vars containing learning paths.

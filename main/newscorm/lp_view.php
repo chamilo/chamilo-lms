@@ -18,6 +18,8 @@
 
 use \ChamiloSession as Session;
 
+$use_anonymous = true;
+
 $_SESSION['whereami'] = 'lp/view';
 $this_section = SECTION_COURSES;
 

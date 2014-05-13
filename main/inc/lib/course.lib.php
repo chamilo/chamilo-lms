@@ -4365,7 +4365,8 @@ class CourseManager
      * @param int Access URL ID (optional)
      * @return int Number of courses
      */
-    public static function countAvailableCourses($accessUrlId = null) {
+    public static function countAvailableCourses($accessUrlId = null)
+    {
         $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $tableCourseRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $specialCourseList = self::get_special_course_list();

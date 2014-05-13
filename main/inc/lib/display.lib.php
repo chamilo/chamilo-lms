@@ -418,7 +418,7 @@ class Display
      * @param   bool    Whether to XSS-filter or not
      * @return  string  Message wrapped into an HTML div
      */
-    public static function return_message($message, $type='normal', $filter = true)
+    public static function return_message($message, $type = 'normal', $filter = true)
     {
         if ($filter) {
         	$message = api_htmlentities($message, ENT_QUOTES, api_is_xml_http_request() ? 'UTF-8' : api_get_system_encoding());
@@ -712,9 +712,9 @@ class Display
     /**
      * Returns the htmlcode for a tag (h3, h1, div, a, button), etc
      *
-     * @param string $image the filename of the file (in the main/img/ folder
-     * @param string $alt_text the alt text (probably a language variable)
-     * @param array additional attributes (for instance height, width, onclick, ...)
+     * @param string $tag the tag name
+     * @param string $content the tag's content
+     * @param array $additional_attributes (for instance height, width, onclick, ...)
      * @author Julio Montoya 2010
      */
     public static function tag($tag, $content, $additional_attributes = array()) {

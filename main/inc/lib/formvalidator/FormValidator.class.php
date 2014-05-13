@@ -340,7 +340,6 @@ EOT;
      * A rule is attached to check for unwanted HTML
      * @param string $name
      * @param string $label						The label for the form-element
-     * @param string $name						The element name
      * @param boolean $required	(optional)		Is the form-element required (default=true)
      * @param boolean $full_page (optional)		When it is true, the editor loads completed html code for a full page.
      * @param array $editor_config (optional)	Configuration settings for the online editor.

@@ -4361,16 +4361,22 @@ class CourseManager
     }
     
     /**
-     * Get available courses count
+     * Get availab le courses count
      * @param int Access URL ID (optional)
      * @return int Number of courses
      */
     public static function countAvailableCourses($accessUrlId = null) {
         $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
         $tableCourseRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "SELECT count(id) FROM $tableCourse c";
+        $specialCourseList = self::get_special_course_list();
+
+        $withoutSpecialCourses = '';
+        if (!empty($specialCourseList)) {
+            $withoutSpecialCourses = ' AND c.code NOT IN ("'.implode('","',$specialCourseList).'")';
+        }
+        
         if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
-            $sql .= ", $tableCourseRelAccessUrl u WHERE c.code = u.course_code AND u.access_url_id = $accessUrlId AND visibility != 0 AND visibility != 4";
+            $sql = "SELECT count(id) FROM $tableCourse c, $tableCourseRelAccessUrl u WHERE c.code = u.course_code AND u.access_url_id = $accessUrlId AND c.visibility != 0 AND c.visibility != 4 $withoutSpecialCourses";
         }
         $res = Database::query($sql);
         $row = Database::fetch_row($res);

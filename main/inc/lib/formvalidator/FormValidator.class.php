@@ -539,7 +539,7 @@ EOT;
      * If an element in the form didn't validate, an error message is showed
      * asking the user to complete the form.
      */
-    function display()
+    public function display()
     {
         echo $this->return_form();
     }
@@ -571,20 +571,22 @@ EOT;
         $return_value = '';
         $js = null;
         if ($addDateLibraries) {
-            $js = api_get_js('jquery-ui/jquery-ui-i18n.min.js');
+
+            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/moment.min.js" type="text/javascript"></script>';
             $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript"></script>';
             $js .= '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
-            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/moment.min.js" type="text/javascript"></script>';
             $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/daterangepicker.js" type="text/javascript"></script>';
             $js .= '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/daterangepicker-bs2.css" rel="stylesheet" type="text/css" />';
 
-            $isocode = api_get_language_isocode();
-            if ($isocode != 'en') {
-                $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/i18n/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript"></script>';
+            $isoCode = api_get_language_isocode();
+
+            if ($isoCode != 'en') {
+                $js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
+                $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/i18n/jquery-ui-timepicker-'.$isoCode.'.js" type="text/javascript"></script>';
                 $js .= '<script>
                 $(function(){
-                    $.datepicker.setDefaults($.datepicker.regional["'.$isocode.'"]);
-                     moment.lang("'.$isocode.'");
+                    moment.lang("'.$isoCode.'");
+                    $.datepicker.setDefaults($.datepicker.regional["'.$isoCode.'"]);
                 });
                 </script>';
             }

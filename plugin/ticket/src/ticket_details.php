@@ -29,84 +29,114 @@ if ($isAdmin) {
 $htmlHeadXtra[] = '
 <script language="javascript">
 $(document).ready(function(){
-	$( "#dialog-form" ).dialog({
+	$("#dialog-form").dialog({
 		autoOpen: false,
 		height: 450,
 		width: 600,
 		modal: true,
 		buttons: {
-			Asignar: function(){
-				$("#genesis").submit()
-				},
-            Close: function() {
-                $( this ).dialog( "close" );
+                    Asignar: function(){
+                        $("#genesis").submit()
+                    },
+                    Close: function() {
+                        $(this).dialog("close");
+                    }
+                }
+        });
+        
+        $("a#assign").click(function () {
+            $( "#dialog-form" ).dialog( "open" );
+        });
+        
+        $("input#responseyes").click(function () {
+            if(!confirm("' . $plugin->get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('Yes')) . '. ' . $plugin->get_lang('IfYouAreSureTheTicketWillBeClosed') . '")){
+                return false;
             }
-		}
-	});
-    $("a#assign").click(function () {
-    $( "#dialog-form" ).dialog( "open" );
+        });
 
-    });
-    $("input#responseyes").click(function () {
-        if(!confirm("' . $plugin->get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('Yes')) . '. ' . $plugin->get_lang('IfYouAreSureTheTicketWillBeClosed') . '")){
-            return false;
-        }
-    });
-	$("input#responseno").click(function () {
+        $("input#responseno").click(function () {
             if(!confirm("' . $plugin->get_lang('AreYouSure') . ' : ' . strtoupper(get_lang('No')) . '")){
-		return false;
+                return false;
             }
-    	});
-	$("#unassign").click(function () {
-        if (!confirm("' . $plugin->get_lang('AreYouSureYouWantToUnassignTheTicket') . '")) {
-            return false
-        }
-    });
+        });
 
-    $("#close").click(function () {
-           if (!confirm("' . $plugin->get_lang('AreYouSureYouWantToCloseTheTicket') . '")) {
-			return false
-        }
-    });
+        $("#unassign").click(function () {
+            if (!confirm("' . $plugin->get_lang('AreYouSureYouWantToUnassignTheTicket') . '")) {
+                return false;
+            }
+        });
+
+        $("#close").click(function () {
+            if (!confirm("' . $plugin->get_lang('AreYouSureYouWantToCloseTheTicket') . '")) {
+                return false;
+            }
+        });
 
     ' . $disableReponseButtons . '
 });
+
 function validate() {
-	fckEditor1val = FCKeditorAPI.__Instances["content"].GetHTML();
-	document.getElementById("content").value= fckEditor1val;
-	if(fckEditor1val == ""){
-		alert("' . $plugin->get_lang('YouMustWriteAMessage') . '");
-		return false;
-	}
+    fckEditor1val = FCKeditorAPI.__Instances["content"].GetHTML();
+    document.getElementById("content").value= fckEditor1val;
+    if(fckEditor1val == ""){
+        alert("' . $plugin->get_lang('YouMustWriteAMessage') . '");
+        return false;
+    }
 }
+
 var counter_image = 1;
-function remove_image_form(id_elem1) {
-	var elem1 = document.getElementById(id_elem1);
-	elem1.parentNode.removeChild(elem1);
-	counter_image = counter_image - 1;
+
+function remove_image_form(element_id) {
+    $("#" + element_id).remove();
+    counter_image = counter_image - 1;
+    $("#link-more-attach").css("display", "block");
 }
+
 function add_image_form() {
-	// Multiple filepaths for image form
-	var filepaths = document.getElementById("filepaths");
-	if (document.getElementById("filepath_"+counter_image)) {
-		counter_image = counter_image + 1;
-	}  else {
-		counter_image = counter_image;
-	}
-	var elem1 = document.createElement("div");
-	elem1.setAttribute("id","filepath_"+counter_image);
-	filepaths.appendChild(elem1);
-	id_elem1 = "filepath_"+counter_image;
-	id_elem1 = "\'"+id_elem1+"\'";
-	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\"  />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"' . api_get_path(WEB_CODE_PATH) . 'img/delete.gif\"></a>";
-	if (filepaths.childNodes.length == 6) {
-		var link_attach = document.getElementById("link-more-attach");
-		if (link_attach) {
-			link_attach.innerHTML="";
-		}
-	}
+    // Multiple filepaths for image form
+    var filepaths = $("#filepaths");
+    var new_elem, input_file, link_remove, img_remove, new_filepath_id;
+
+    if ($("#filepath_"+counter_image)) {
+        counter_image = counter_image + 1;
+    }  else {
+        counter_image = counter_image;
+    }
+
+    new_elem = "filepath_"+counter_image;
+
+    $("<div/>", {
+        id: new_elem,
+        class: "controls"
+    }).appendTo(filepaths);
+    
+    input_file = $("<input/>", {
+        type: "file",
+        name: "attach_" + counter_image,
+        size: 20
+    });
+
+    link_remove = $("<a/>", {
+        onclick: "remove_image_form(\'" + new_elem + "\')",
+        style: "cursor: pointer"
+    });
+
+    img_remove = $("<img/>", {
+        src: "' . api_get_path(WEB_CODE_PATH) . 'img/delete.gif"
+    });
+
+    new_filepath_id = $("#filepath_" + counter_image);
+    new_filepath_id.append(input_file, link_remove.append(img_remove));
+    
+    if (counter_image === 6) {
+        var link_attach = $("#link-more-attach");
+        if (link_attach) {
+            $(link_attach).css("display", "none");
+        }
+    }
 }
 </script>';
+
 $htmlHeadXtra[] = '
 <style>
 div.row div.label2 {
@@ -147,7 +177,14 @@ div.row div.formw2 {
     float: right;
     border-radius:15px;
 }
-
+.attachment-link {
+    margin: 12px;
+}
+#link-more-attach {
+    color: white;
+    cursor: pointer;
+    width: 120px;
+}
 </style>';
 
 $ticket_id = $_GET['ticket_id'];
@@ -190,6 +227,7 @@ if (isset($_REQUEST['action'])) {
             break;
     }
 }
+
 if (!isset($_POST['compose'])) {
     if (isset($_POST['close'])) {
         $_GET['ticket_id'] = $_POST['ticket_id'];
@@ -294,26 +332,35 @@ if (!isset($_POST['compose'])) {
     echo "<div class='row'>";
     echo "<div class='span8 offset2'>";
     foreach ($messages as $message) {
-        $class = "alert alert-info";
+        $type = "success";
+        
         if ($message['admin']) {
-            $class = "alert alert-success";
+            $type = "normal";
             if ($isAdmin) {
                 $message['message'].='<br/><b>' . $plugin->get_lang('AttendedBy') . ': ' . $message['user_created'] . " - " . api_convert_and_format_date(api_get_local_time($message['sys_insert_datetime']), DATE_TIME_FORMAT_LONG, _api_get_timezone()) . "</b>";
             }
         }else {
             $message['message'].='<b>' . get_lang('Sent') . ': ' . api_convert_and_format_date(api_get_local_time($message['sys_insert_datetime']), DATE_TIME_FORMAT_LONG, _api_get_timezone()) . "</b>";
         }
-        echo '<div class="' . $class . '" ><b>' . get_lang('Subject') . ': </b> ' . $message['subject'] . '<br/> <b>' . get_lang('Message') . ':</b>' . $message['message'] . '<br/>';
+        
+        $receivedMessage = '<b>' . get_lang('Subject') . ': </b> ' . $message['subject'] . '<br/> <b>' . get_lang('Message') . ':</b>' . $message['message'] . '<br/>';
+        $attachementLinks = "";
+        
         if (isset($message['atachments'])) {
+            $attributeClass = array(
+                'class' => 'attachment-link'
+            );
             foreach ($message['atachments'] as $attach) {
-                echo $attach['attachment_link'];
+                $attachementLinks .= Display::tag('div', $attach['attachment_link'], $attributeClass);
             }
         }
-        echo '</div>';
+        
+        $entireMessage = $receivedMessage . $attachementLinks;
+        echo Display::return_message($entireMessage, $type, false);
     }
     echo "</div>";
     echo "</div>";
-    $asunto = "RE: " . $message['subject'];
+    $subject = "RE: " . $message['subject'];
     $user_admin = api_is_platform_admin();
     if ($ticket['ticket']['status_id'] != 'REE' AND $ticket['ticket']['status_id'] != 'CLS') {
         if (!$isAdmin && $ticket['ticket']['status_id'] != 'XCF') {
@@ -340,73 +387,80 @@ function show_form_send_message()
 {
     global $isAdmin;
     global $ticket;
-    global $asunto;
+    global $subject;
     global $plugin;
-    echo '<div class="row">
-          <div class="span8 offset2">
-        <form enctype="multipart/form-data" 
-        action="' . api_get_self() . '?ticket_id=' . $ticket['ticket']['ticket_id'] . '" 
-        method="post" name="send_ticket" id="send_ticket"
- 	onsubmit="return validate()" class="form-horizontal">';
-    echo '<div class="control-group">
-                <label for="subject" class="control-label">
-                    ' . get_lang('Subject') . ': 
-		</label>
-       		<div class="controls">
-                    <input type = "text" id ="subject" name="subject" value="' . $asunto . '" required ="" style="width:60%"/>
-                </div>
-          </div>';
-    echo '<div class="control-group">
-		<label class="control-label">
-                    ' . get_lang('Message') . ': 
-		</label>
-		<div class="controls">
-			<input type="hidden" id="content" name="content" value="" style="display:none">
-                        <input type="hidden" id="content___Config" value="ToolbarSet=Messages&amp;Width=95%25&amp;Height=250&amp;ToolbarSets={ %22Messages%22: [  [ %22Bold%22,%22Italic%22,%22-%22,%22InsertOrderedList%22,%22InsertUnorderedList%22,%22Link%22,%22RemoveLink%22 ] ], %22MessagesMaximized%22: [  ] }&amp;LoadPlugin=[%22customizations%22]&amp;EditorAreaStyles=body { background: #ffffff; }&amp;ToolbarStartExpanded=false&amp;CustomConfigurationsPath='.api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/myconfig.js&amp;EditorAreaCSS='.api_get_path(WEB_PATH).'main/css/chamilo/default.css&amp;ToolbarComboPreviewCSS='.api_get_path(WEB_PATH).'main/css/chamilo/default.css&amp;DefaultLanguage=es&amp;ContentLangDirection=ltr&amp;AdvancedFileManager=true&amp;BaseHref=' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/s/&amp;&amp;UserIsCourseAdmin=true&amp;UserIsPlatformAdmin=true" style="display:none">
-		<iframe id="content___Frame" src="'.api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/editor/fckeditor.html?InstanceName=content&amp;Toolbar=Messages" width="95%" height="250" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; width: 95%; height: 250px;">
-		</iframe>
-		</div>
-	</div>
-';
-    echo '<input type="hidden" id="ticket_id" name="ticket_id" value="' . $_GET['ticket_id'] . '">';
-    echo '<div class="control-group">
-		<label for="attach_1" class="control-label">
-                    ' . get_lang('FilesAttachment') . ': 
-                </label>
-		<div class="controls">
-                        <span id="filepaths">
-                            <div id="filepath_1">
-                                <input type="file" name="attach_1" id="attach_1"  size="20" style="width:59%;"/>
-                            </div>
-                        </span>
-		</div>
-                <div class="controls">
-                    <span id="link-more-attach">
-                	<a href="javascript://" onclick="return add_image_form()">' . get_lang('AddOneMoreFile') . '
-                        </a>
-                    </span>
-                    
-                    
-                    (' . sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))) . ')
-		</div>
-	</div>';
+    
+    Display::div('', array('span2'));
+    
+    $form = new FormValidator(
+        'send_ticket', 
+        'POST',
+        api_get_self() . '?ticket_id=' . $ticket['ticket']['ticket_id'],
+        "",
+        array(
+            'enctype' => 'multipart/form-data',
+            'onsubmit' => 'return validate()',
+            'class' => 'span9 offset1 form-horizontal'
+        )
+    );
+    
+    $form->addElement(
+        'text', 
+        'subject', 
+        get_lang('Subject'), 
+        array(
+            'for' => 'subject', 
+            'value' => $subject,
+            'style' => 'width: 540px;'
+        )
+    );
+    
+    $form->addElement('hidden', 'ticket_id', $_GET['ticket_id']);
+    
+    $form->add_html_editor(
+        'content', 
+        get_lang('Message'),
+        false, 
+        false, 
+        array(
+            'ToolbarSet' => 'Profile', 
+            'Width' => '550', 
+            'Height' => '250'
+        )
+    );
+    
     if ($isAdmin) {
-        echo '<div class="control-group">
-                    <label for="confirmation" class="control-label">
-                        ' . $plugin->get_lang('RequestConfirmation') . ': 
-                    </label>
-                    <div class="controls">
-                        <input type="checkbox" id="confirmation" name="confirmation"/>
-                    </div>
-              </div>';
+        $form->addElement(
+            'checkbox',
+            'confirmation',
+             null,
+            $plugin->get_lang('RequestConfirmation')
+        );
     }
-     
-    echo '<div class="formw">
-                  <button class="save" name="compose" type="submit">' . get_lang('SendMessage') . '</button>
-         </div>';
-    echo '</div>
-        </div>
-        </form>';
+    
+    $form->addElement('html', '<span id="filepaths">');
+    $form->addElement('html', '<div id="filepath_1">');
+    $form->addElement('file', 'attach_1', get_lang('FilesAttachment'));
+    $form->addElement('html', '</div>');
+    $form->addElement('html', '</span>');
+    
+    $form->addElement('html', '<div class="controls">');
+    $form->addElement('html', '<span id="link-more-attach" >');
+    $form->addElement('html', '<span class="label label-info" onclick="return add_image_form()">' . get_lang('AddOneMoreFile') . '</span>');
+    $form->addElement('html', '</span>');
+    $form->addElement('html', '(' . sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))) . ')');
+    
+    $form->addElement('html', '<br/>');
+    $form->addElement(
+        'button', 
+        'compose', 
+        get_lang('SendMessage'), 
+        array(
+            'class' => 'save'
+        )
+    );
+    
+    $form->display();
 }
 
 Display::display_footer();

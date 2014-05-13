@@ -31,19 +31,19 @@ if (api_is_platform_admin()) {
 $htmlHeadXtra[] = '
 <script>
 function load_course_list (div_course, my_user_id, user_email) {
-	 $.ajax({
-		contentType: "application/x-www-form-urlencoded",
-		type: "GET",
-		url: "course_user_list.php",
-		data: "user_id="+my_user_id,
-		success: function(datos) {
-			$("div#user_request").html(datos);
-			$("#user_id_request").val(my_user_id);
-                        $("#personal_email").val(user_email);
-			$("#btnsubmit").attr("disabled", false);
-                        ' . $scrollTol . '
-		}
-	});
+    $.ajax({
+            contentType: "application/x-www-form-urlencoded",
+            type: "GET",
+            url: "course_user_list.php",
+            data: "user_id="+my_user_id,
+            success: function(datos) {
+                $("#user_request").html(datos);
+                $("#user_id_request").val(my_user_id);
+                $("#personal_email").val(user_email);
+                $("#btnsubmit").attr("disabled", false);
+                ' . $scrollTol . '
+            }
+    });
 }
 function changeType() {
     var selected = document.getElementById("category_id").selectedIndex;
@@ -98,31 +98,55 @@ function validate() {
 }
 
 var counter_image = 1;
-function remove_image_form(id_elem1) {
-	var elem1 = document.getElementById(id_elem1);
-	elem1.parentNode.removeChild(elem1);
-	counter_image = counter_image - 1;
+
+function remove_image_form(element_id) {
+    $("#" + element_id).remove();
+    counter_image = counter_image - 1;
+    $("#link-more-attach").css("display", "block");
 }
+
 function add_image_form() {
-	// Multiple filepaths for image form
-	var filepaths = document.getElementById("filepaths");
-	if (document.getElementById("filepath_"+counter_image)) {
-		counter_image = counter_image + 1;
-	}  else {
-		counter_image = counter_image;
-	}
-	var elem1 = document.createElement("div");
-	elem1.setAttribute("id","filepath_"+counter_image);
-	filepaths.appendChild(elem1);
-	id_elem1 = "filepath_"+counter_image;
-	id_elem1 = "\'"+id_elem1+"\'";
-	document.getElementById("filepath_"+counter_image).innerHTML = "<input type=\"file\" name=\"attach_"+counter_image+"\"  size=\"20\" />&nbsp;<a href=\"javascript:remove_image_form("+id_elem1+")\"><img src=\"' . api_get_path(WEB_CODE_PATH) . 'img/delete.gif\"></a>";
-	if (filepaths.childNodes.length == 6) {
-		var link_attach = document.getElementById("link-more-attach");
-		if (link_attach) {
-			link_attach.innerHTML="";
-		}
-	}
+    // Multiple filepaths for image form
+    var filepaths = $("#filepaths");
+    var new_elem, input_file, link_remove, img_remove, new_filepath_id;
+
+    if ($("#filepath_"+counter_image)) {
+        counter_image = counter_image + 1;
+    }  else {
+        counter_image = counter_image;
+    }
+
+    new_elem = "filepath_"+counter_image;
+
+    $("<div/>", {
+        id: new_elem,
+        class: "controls"
+    }).appendTo(filepaths);
+    
+    input_file = $("<input/>", {
+        type: "file",
+        name: "attach_" + counter_image,
+        size: 20
+    });
+
+    link_remove = $("<a/>", {
+        onclick: "remove_image_form(\'" + new_elem + "\')",
+        style: "cursor: pointer"
+    });
+
+    img_remove = $("<img/>", {
+        src: "' . api_get_path(WEB_CODE_PATH) . 'img/delete.gif"
+    });
+
+    new_filepath_id = $("#filepath_" + counter_image);
+    new_filepath_id.append(input_file, link_remove.append(img_remove));
+    
+    if (counter_image === 6) {
+        var link_attach = $("#link-more-attach");
+        if (link_attach) {
+            $(link_attach).css("display", "none");
+        }
+    }
 }
 </script>
 
@@ -136,19 +160,16 @@ div.row div.formw2 {
 	float:left
 }
 div.divTicket {
-    width: 70%;
-    float: center;
-    margin-left: 15%;
     padding-top: 100px;
 }
 </style>';
 $types = TicketManager::get_all_tickets_categories();
 $htmlHeadXtra[] = '<script language="javascript">
-		var projects = ' . js_array($types, 'projects', 'project_id') . '
-		var course_required = ' . js_array($types, 'course_required', 'course_required') . '
-		var other_area = ' . js_array($types, 'other_area', 'other_area') . '
-		var email = ' . js_array($types, 'email', 'email') . '
-		 </script>';
+                        var projects = ' . js_array($types, 'projects', 'project_id') . '
+                        var course_required = ' . js_array($types, 'course_required', 'course_required') . '
+                        var other_area = ' . js_array($types, 'other_area', 'other_area') . '
+                        var email = ' . js_array($types, 'email', 'email') . '
+		   </script>';
 $htmlHeadXtra[] = '<script src="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
 $htmlHeadXtra[] = '<link  href="' . api_get_path(WEB_LIBRARY_PATH) . 'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
@@ -184,158 +205,225 @@ function show_form_send_ticket()
 {
     global $types, $plugin;
     echo '<div class="divTicket">';
-    echo '<form enctype="multipart/form-data" action="' . api_get_self() . '" method="post" name="send_ticket" id="send_ticket"
- 	onsubmit="return validate()" style="width:100%">';
-    echo '<input name="user_id_request" id="user_id_request" type="hidden" value="">';
-
-    // Category
-    $select_types = '<div class="row">
-	<div class="label2">' . get_lang('Category') . ': </div>
-       <div class="formw2">';
-    $select_types .= '<select style="width: 95%; "   name = "category_id" id="category_id" onChange="changeType();">';
-    $select_types .= '<option value="0">---' . get_lang('Select') . '---</option>';
+    
+    //Category List
+    $categoryList = array();
     foreach ($types as $type) {
-        $select_types.= "<option value = '" . $type['category_id'] . "'>" . $type['name'] . ":  <br/>" . $type['description'] . "</option>";
+        $categoryList[$type['category_id']] = $type['name'] . ": " . $type['description'];
     }
-    $select_types .= "</select>";
-    $select_types .= '</div></div>';
-    echo $select_types;
-
-    $select_course = '<div id="user_request" >
-	 </div>';
-    echo $select_course;
-
-    // Status
-    $status = array();
-    $status[NEWTCK] = $plugin->get_lang('StsNew');
-    $showStatus = "style='display: none;'";
+    //End Category List
+    
+    //Status List
+    $statusList = array();
+    $statusAttributes = array(
+        'style' => 'display: none;',
+        'id' => 'status_id',
+        'for' => 'status_id'
+    );
+    $statusList[NEWTCK] = $plugin->get_lang('StsNew');
     if (api_is_platform_admin()) {
-        $showStatus = "";
-        $status[PENDING] = $plugin->get_lang('StsPending');
-        $status[UNCONFIRMED] = $plugin->get_lang('StsUnconfirmed');
-        $status[CLOSE] = $plugin->get_lang('StsClose');
-        $status[REENVIADO] = $plugin->get_lang('StsForwarded');
+        $statusAttributes = array(
+            'id' => 'status_id',
+            'for' => 'status_id',
+            'style' => 'width: 562px;'
+        );
+        $statusList[PENDING] = $plugin->get_lang('StsPending');
+        $statusList[UNCONFIRMED] = $plugin->get_lang('StsUnconfirmed');
+        $statusList[CLOSE] = $plugin->get_lang('StsClose');
+        $statusList[REENVIADO] = $plugin->get_lang('StsForwarded');
     }
-    $select_status = '
-	<div class="row" ' . $showStatus . ' >
-		<div class="label2"  >' . get_lang('Status') . ': </div>
-		<div class="formw2">
-			<select style="width: 95%; " name = "status_id" id="status_id">';
-    //$status = TicketManager::get_all_tickets_status();
-    foreach ($status as $sts_key => $sts_name) {
-        if ($sts_key == 'PND') {
-            $select_status .= "<option value = '" . $sts_key . "' selected >" . $sts_name . "</option>";
-        } else {
-            $select_status.= "<option value = '" . $sts_key . "'>" . $sts_name . "</option>";
-        }
-    }
-    $select_status .= '
-			</select>
-		</div>
-	</div>';
-    echo $select_status;
-
-    // Source
-    $source = array();
+    //End Status List
+    
+    //Source List
+    $sourceList = array();
+    $sourceAttributes = array(
+        'style' => 'display: none;',
+        'id' => 'source_id',
+        'for' => 'source_id'
+    );
+    $sourceList[SRC_PLATFORM] = $plugin->get_lang('SrcPlatform');
     if (api_is_platform_admin()) {
-        $showBlock = "";
-        $source[SRC_EMAIL] = $plugin->get_lang('SrcEmail');
-        $source[SRC_PHONE] = $plugin->get_lang('SrcPhone');
-        $source[SRC_PRESC] = $plugin->get_lang('SrcPresential');
-    } else {
-        $showBlock = "style='display: none;'";
-        $source[SRC_PLATFORM] = $plugin->get_lang('SrcPlatform');
+        $sourceAttributes = array(
+            'id' => 'source_id',
+            'for' => 'source_id',
+            'style' => 'width: 562px;'
+        );
+        $sourceList[SRC_EMAIL] = $plugin->get_lang('SrcEmail');
+        $sourceList[SRC_PHONE] = $plugin->get_lang('SrcPhone');
+        $sourceList[SRC_PRESC] = $plugin->get_lang('SrcPresential');
     }
+    //End Source List
+    
+    //Priority List
+    $priorityList = array();
+    $priorityList[NORMAL] = $plugin->get_lang('PriorityNormal');
+    $priorityList[HIGH] = $plugin->get_lang('PriorityHigh');
+    $priorityList[LOW] = $plugin->get_lang('PriorityLow');
+    //End Priority List
+    
+    $form = new FormValidator('send_ticket', 
+        'POST',
+        api_get_self(),
+        "",
+        array(
+            'enctype' => 'multipart/form-data',
+            'onsubmit' => 'return validate()',
+            'class' => 'span8 offset1 form-horizontal'
+        )
+    );
+    
+    $form->addElement(
+        'hidden', 
+        'user_id_request', 
+        '', 
+        array(
+            'id' => 'user_id_request'
+        )
+    );
+    
+    $form->addElement(
+        'hidden', 
+        'project_id', 
+        '', 
+        array(
+            'id' => 'project_id'
+        )
+    );
+    
+    $form->addElement(
+        'hidden', 
+        'other_area', 
+        '', 
+        array(
+            'id' => 'other_area'
+        )
+    );
+    
+    $form->addElement(
+        'hidden', 
+        'email', 
+        '', 
+        array(
+            'id' => 'email'
+        )
+    );
+    
+    $form->addElement(
+        'select',
+        'category_id',
+        get_lang('Category'),
+        $categoryList,
+        array(
+            'onchange' => 'changeType()',
+            'id' => 'category_id',
+            'for' => 'category_id',
+            'style' => 'width: 562px;'
+        )
+    );
+    
+    $form->addElement(
+        'html', 
+        Display::div(
+            '', 
+            array(
+                'id' => 'user_request'
+            )
+        )
+    );
+    
+    $form->addElement(
+        'select',
+        'status_id',
+        get_lang('Status'),
+        $statusList,
+        $statusAttributes    
+    );
+    
+    $form->addElement(
+        'select',
+        'source_id',
+        $plugin->get_lang('Source'),
+        $sourceList,
+        $sourceAttributes   
+    );
+    
+    $form->addElement(
+        'text', 
+        'subject', 
+        get_lang('Subject'), 
+        array(
+            'id' => 'subject',
+            'style' => 'width: 550px;'
+        )
+    );
+    
+    $form->addElement(
+        'text', 
+        'personal_email', 
+        $plugin->get_lang('PersonalEmail'), 
+        array(
+            'id' => 'personal_email',
+            'style' => 'width: 550px;'
+        )
+    );
+    
+    $form->add_html_editor(
+        'content', 
+        get_lang('Message'),
+        false, 
+        false, 
+        array(
+            'ToolbarSet' => 'Profile', 
+            'Width' => '600', 
+            'Height' => '250'
+        )
+    );
 
-    $select_source = '
-	<div class="row" ' . $showBlock . '>
-	<div class="label2">' . $plugin->get_lang('Source') . ':</div>
-       <div class="formw2">
-			<select style="width: 95%; " name="source_id" id="source_id" >';
-    foreach ($source as $src_key => $src_name) {
-        $select_source.= "<option value = '" . $src_key . "'>" . $src_name . "</option>";
-    }
-    $select_source .='
-			</select>
-		</div>
-	</div>';
-    echo $select_source;
-
-    // Subject
-    echo '<div class="row" ><div class ="label2">' . get_lang('Subject') . ':</div>
-       		<div class="formw2"><input type = "text" id ="subject" name="subject" value="" required ="" style="width:94%"/></div>
-		  </div>';
-
-    // Email
-    echo '<div class="row" id="divEmail" ><div class ="label2">' . $plugin->get_lang('PersonalEmail') . ':</div>
-       		<div class="formw2"><input type = "email" id ="personal_email" name="personal_email" value=""  style="width:94%"/></div>
-		  </div>';
-    echo '<input name="project_id" id="project_id" type="hidden" value="">';
-    echo '<input name="other_area" id="other_area" type="hidden" value="">';
-    echo '<input name="email" id="email" type="hidden" value="">';
-
-    // Message
-    echo '<div class="row">
-		<div class="label2">' . get_lang('Message') . ':</div>
-		<div class="formw2">
-			<input type="hidden" id="content" name="content" value="" style="display:none">
-		<input type="hidden" id="content___Config" value="&amp;Width=95%25&amp;Height=250&amp;ToolbarSets={ %22Messages%22: [  [ %22Bold%22,%22Italic%22,%22-%22,%22InsertOrderedList%22,%22InsertUnorderedList%22,%22Link%22,%22RemoveLink%22 ] ], %22MessagesMaximized%22: [  ] }&amp;LoadPlugin=[%22customizations%22]&amp;EditorAreaStyles=body { background: #ffffff; }&amp;ToolbarStartExpanded=false&amp;CustomConfigurationsPath='.api_get_path(WEB_CODE_PATH).'inc/lib/fckeditor/myconfig.js&amp;EditorAreaCSS='.api_get_path(WEB_PATH).'main/css/chamilo/default.css&amp;ToolbarComboPreviewCSS='.api_get_path(WEB_CODE_PATH).'main/css/chamilo/default.css&amp;DefaultLanguage=es&amp;ContentLangDirection=ltr&amp;AdvancedFileManager=true&amp;BaseHref=' . api_get_path(WEB_PLUGIN_PATH) . PLUGIN_NAME . '/s/&amp;&amp;UserIsCourseAdmin=true&amp;UserIsPlatformAdmin=true" style="display:none">
-		<iframe id="content___Frame" src="' . api_get_path(WEB_CODE_PATH) . 'inc/lib/fckeditor/editor/fckeditor.html?InstanceName=content&amp;Toolbar=Messages" width="95%" height="250" frameborder="0" scrolling="no" style="margin: 0px; padding: 0px; border: 0px; background-color: transparent; background-image: none; width: 95%; height: 250px;">
-		</iframe>
-		</div>
-	</div>';
-
-    // Phone
-    echo '<div class="row" ><div class ="label2">' . get_lang('Phone') . ' (' . $plugin->get_lang('Optional') . '):</div>
-       		<div class="formw2"><input type = "text" id ="phone" name="phone" value="" style="width:94%"/></div>
-		  </div>';
-
-    // Priority
-    $select_priority = '<div class="row"  >
-	<div class="label2"  >' . $plugin->get_lang('Priority') . ':</div>
-	<div class="formw2">';
-
-    $priority = array();
-    $priority[NORMAL] = $plugin->get_lang('PriorityNormal');
-    $priority[HIGH] = $plugin->get_lang('PriorityHigh');
-    $priority[LOW] = $plugin->get_lang('PriorityLow');
-
-    $select_priority .= '<select style="width: 85px; " name = "priority_id" id="priority_id">';
-    foreach ($priority as $prty_key => $prty_name) {
-        if ($sts_key == NORMAL) {
-            $select_priority .= "<option value = '" . $prty_key . "' selected >" . $prty_name . "</option>";
-        } else {
-            $select_priority.= "<option value = '" . $prty_key . "'>" . $prty_name . "</option>";
-        }
-    }
-    $select_priority .= "</select>";
-    $select_priority .= '</div></div>';
-    echo $select_priority;
-
-    // Input file attach
-    echo '<div class="row">
-		<div class="label2">' . get_lang('FilesAttachment') . ':</div>
-		<div class="formw2">
-				<span id="filepaths">
-				<div id="filepath_1">
-					<input type="file" name="attach_1" id="attach_1"  size="20" style="width:94%;"/>
-				</div></span>
-		</div>
-	</div>';
-    echo '<div class="row">
-		<div class="formw2">
-			<span id="link-more-attach">
-				<a href="javascript://" onclick="return add_image_form()">' . get_lang('AddOneMoreFile') . '</a></span>&nbsp;
-					(' . sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))) . ')
-			</div>
-		</div>';
-    echo '<div class="row">
-		<div class="label2">
-		</div>
-		<div class="formw2"><button class="save" name="compose"  type="submit" id="btnsubmit">' . get_lang('SendMessage') . '</button>
-		</div>
-	</div>';
-    echo '</form></div>';
+    $form->addElement(
+        'text', 
+        'phone', 
+        get_lang('Phone') . ' (' . $plugin->get_lang('Optional') . ')', 
+        array(
+            'id' => 'phone'
+        )
+    );
+    
+    $form->addElement(
+        'select', 
+        'priority_id', 
+        $plugin->get_lang('Priority'), 
+        $priorityList,
+        array(
+            'id' => 'priority_id',
+            'for' => 'priority_id'
+        )
+    );
+    
+     
+    $form->addElement('html', '<span id="filepaths">');
+    $form->addElement('html', '<div id="filepath_1">');
+    $form->addElement('file', 'attach_1', get_lang('FilesAttachment'));
+    $form->addElement('html', '</div>');
+    $form->addElement('html', '</span>');
+    
+    $form->addElement('html', '<div class="controls">');
+    $form->addElement('html', '<span id="link-more-attach" >');
+    $form->addElement('html', '<span class="label label-info" onclick="return add_image_form()">' . get_lang('AddOneMoreFile') . '</span>');
+    $form->addElement('html', '</span>');
+    $form->addElement('html', '(' . sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))) . ')');
+    
+    $form->addElement('html', '<br/>');
+    $form->addElement(
+        'button', 
+        'compose', 
+        get_lang('SendMessage'), 
+        array(
+            'class' => 'save',
+            'id' => 'btnsubmit'
+        )
+    );
+    
+    $form->display();
 }
 
 /**

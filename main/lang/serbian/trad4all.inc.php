@@ -328,6 +328,7 @@ $Notebook = "Beležnica";
 $FieldRequired = "Obavezno polje";
 $DateSend = "Datum slanja";
 $Image = "Slika";
+$NextWeek = "Sledeća nedelja";
 $GeneralDescription = "Opšti opis";
 $GeneralDescriptionQuestions = "Kakvo je mesto kursa u programu? Postoje li nekakvi uslovi? Kako je kurs povezan sa drugim kursevima?";
 $GeneralDescriptionInformation = "Opišite kurs (broj sati, šifra kursa, prostorija u kojoj se odvija...) i predavača (prezime, ime, kancelarija, telefon, e-mail...).";

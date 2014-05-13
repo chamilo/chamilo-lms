@@ -89,7 +89,6 @@ $langPeriodMonth = "Mes";
 $langPeriodYear = "Ano";
 $langNextDay = "Día Seguinte";
 $langPreviousDay = "Día Previo";
-$langNextWeek = "Semana Seguinte";
 $langPreviousWeek = "Semana Previa";
 $langNextMonth = "Mes Seguinte";
 $langPreviousMonth = "Mes Previo";

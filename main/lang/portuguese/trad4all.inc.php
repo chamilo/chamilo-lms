@@ -828,6 +828,7 @@ $Until = "Até";
 $FirstPage = "Primeira página";
 $LastPage = "Última página";
 $Coachs = "Tutores";
+$NextWeek = "Semana seguinte";
 $GeneralDescription = "Descrição";
 $GeneralDescriptionQuestions = "Qual é o objectivo deste curso? Existem pré-requisitos? De que forma é que este curso está interligado com outros cursos?";
 $GeneralDescriptionInformation = "Descreva o curso (número de horas, número sser, localização) e o instrutor (nome, escritório, tel., E-mail, o horário de expediente....).";

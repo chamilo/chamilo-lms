@@ -89,7 +89,6 @@ $langPeriodMonth = "Hila";
 $langPeriodYear = "Urtea";
 $langNextDay = "Biharamuna";
 $langPreviousDay = "Aurreko eguna";
-$langNextWeek = "Hurrengo astea";
 $langPreviousWeek = "Aurreko astea";
 $langNextMonth = "Hurrengo hila";
 $langPreviousMonth = "Aurreko hila";

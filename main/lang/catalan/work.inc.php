@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$WorkFileNotUploadedDirXDoesNotExist = "La tasca no s'ha pogut enviar perquè la carpeta %s no existeix";
 $FolderDoesntExistsInFileSystem = "La carpeta de destinació no existeix al servidor";
 $HandedOutDate = "Data de recepció";
 $HandedOut = "Entregat";

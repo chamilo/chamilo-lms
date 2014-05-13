@@ -2,6 +2,18 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$CustomRange = "Période spécifique";
+$ThisWeek = "Cette semaine-ci";
+$SendToUsersInSessions = "Envoyer aux utilisateurs de toutes les sessions de ce cours";
+$ParametersNotFound = "Paramètres non trouvés";
+$UsersToAdd = "Utilisateurs à ajouter";
+$DocumentsAdded = "Documents ajoutés";
+$NoUsersToAdd = "Aucun utilisateurs à ajouter";
+$Subgroup = "Sous-groupe";
+$Subgroups = "Sous-groupes";
+$EnterTheLettersYouSee = "Introduisez les lettres que vous voyez.";
+$ClickOnTheImageForANewOne = "Cliquez sur l'image pour en charger une nouvelle.";
+$AccountBlockedByCaptcha = "Compte bloqué par CAPTCHA";
 $CatchScreenCasts = "Capturer un screenshot/screencast";
 $View = "Visualiser";
 $AmountSubmitted = "Envoyés";
@@ -849,6 +861,7 @@ $FirstPage = "Première page";
 $LastPage = "Dernière page";
 $Coachs = "Formateurs";
 $FieldTypeFile = "Envoi de fichier";
+$NextWeek = "Semaine suivante";
 $DragAndDropAnElementHere = "Glisser déposer un élément ici.";
 $ThereAreNoRegisteredDatetimeYet = "Il n'y a aucune date/heure enregistrée pour le moment";
 $CalendarList = "Liste calendrier des assistances";

@@ -22,6 +22,9 @@
                     {% endif %}
 
                     <li class="dropdown">
+
+                        {% if _u.status != 6 %}
+
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <img src="{{ _u.avatar_small }}"/>
                             {{ _u.complete_name }}
@@ -33,6 +36,7 @@
                                 {{ message_link }}
                             </li>
                         </ul>
+                        {% endif %}
 
                     <li>
                         <a id="logout_button" class="logout" title="{{ "Logout"|get_lang }}" href="{{ logout_link }}" >

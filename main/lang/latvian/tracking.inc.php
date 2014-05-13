@@ -89,7 +89,6 @@ $langPeriodMonth = "Mēnesis";
 $langPeriodYear = "Gads";
 $langNextDay = "Nākošā diena";
 $langPreviousDay = "Iepriekšējā diena";
-$langNextWeek = "Nākošā nedēļa";
 $langPreviousWeek = "Iepriekšējā nedēļa";
 $langNextMonth = "Nākošais mēnesis";
 $langPreviousMonth = "Iepriekšējais mēnesis";

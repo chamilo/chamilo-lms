@@ -549,6 +549,7 @@ $ImportantActivities = "重要活动";
 $SearchActivities = "查找活动";
 $DisplayTrainingList = "显示培训列表";
 $HistoryTrainingSession = "培训历史记录";
+$NextWeek = "下周";
 $ThereAreNoRegisteredDatetimeYet = "暂时没有注册的日期";
 $CalendarList = "出勤日历表";
 $AttendanceCalendarDescription = "出勤日历允许你注册考勤表。添加新的考勤表。";

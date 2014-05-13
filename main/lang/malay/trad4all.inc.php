@@ -79,4 +79,5 @@ $langMyCourses = "Senarai Subjek";
 $langModifyProfile = "Kemaskini Butir Peribadi";
 $langMyStats = "Papar Statistik";
 $langLogout = "Keluar";
+$NextWeek = "Minggu Seterusnya";
 ?>

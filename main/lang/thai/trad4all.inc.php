@@ -315,6 +315,7 @@ $Other = "อื่นๆ";
 $AddRight = "สิทธิ์เพิ่ม";
 $CampusHomepage = "โฮมเพจของระบบอีเลิร์นนิ่ง";
 $InCourse = "ในวิชา";
+$NextWeek = "สัปดาห์หน้า";
 $GeneralDescription = "คำอธิบายทั่วไป";
 $GeneralDescriptionQuestions = "What is the place of the course in the program? Are there pre-requisites? How is the course connected with other courses?";
 $GeneralDescriptionInformation = "แนะนำรายละเอียดต่างๆที่เกี่ยวข้องกับรายวิชา";

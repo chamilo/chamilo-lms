@@ -670,6 +670,7 @@ $SendAMessage = "Enviar mensaje";
 $Menu = "Menú";
 $BackToUserList = "Regresar a lista de usurios";
 $GraphicNotAvailable = "Gráfico no disponible";
+$NextWeek = "Hamuq qanchis p'unchayuq";
 $GeneralDescription = "Llipin nisqasqay";
 $GeneralDescriptionQuestions = "Iman yachachinaq ruwaynin kay programapi ? Munakunchu ñaupaq ruwanakunata ? Ima masichay kan kay yachachinawan hoqkunawan ?";
 $GeneralDescriptionInformation = "Yachachinamanta nisqasqakuna (hayka pacha, chinpu, may k'itipi ruwakuynin...). Yachachiq (suti, mamataytamanta suti, kamachiynin, telÃ©fono nisqa, e-chaski...).";

@@ -88,7 +88,6 @@ $langPeriodMonth = "Killa";
 $langPeriodYear = "Wata";
 $langNextDay = "Hamuq p'unchay";
 $langPreviousDay = "Ñaupaq p'unchay";
-$langNextWeek = "Hamuq qanchis p'unchayuq";
 $langPreviousWeek = "Ñaupaq qanchis p'unchayuq";
 $langNextMonth = "Hamuq killa";
 $langPreviousMonth = "Ñaupaq killa";

@@ -76,7 +76,6 @@ $langPeriodMonth = "Ay";
 $langPeriodYear = "Yıl";
 $langNextDay = "Sonraki gün";
 $langPreviousDay = "Önceki gün";
-$langNextWeek = "Sonraki hafta";
 $langPreviousWeek = "Önceki hafta";
 $langNextMonth = "Sonraki ay";
 $langPreviousMonth = "Önceki ay";

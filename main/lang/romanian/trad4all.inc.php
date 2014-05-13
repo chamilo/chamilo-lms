@@ -609,6 +609,7 @@ $SaveIntroText = "Salvati introducerea textului";
 $CourseName = "Numele cursului";
 $SendAMessage = "Trimite un mesaj";
 $Menu = "Meniu";
+$NextWeek = "Saptamana viitoare";
 $GeneralDescription = "Descriere generala";
 $GeneralDescriptionQuestions = "Care este locul cursului in prgram? Exista cerinte de indeplinit? Cum este cursul in relatie cu alte cursuri?";
 $GeneralDescriptionInformation = "Descrie cursul (numarul de ore, codul oficial, camera unde se desfasoara...) si profesorul (nume, prenume, birou, telefon, e-mail...).";

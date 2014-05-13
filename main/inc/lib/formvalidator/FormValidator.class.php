@@ -124,13 +124,12 @@ class FormValidator extends HTML_QuickForm
 
         // Load some custom elements and rules
         $dir = api_get_path(LIBRARY_PATH) . 'formvalidator/';
-        $this->registerElementType('html_editor', $dir . 'Element/html_editor.php', 'HTML_QuickForm_html_editor');
 
+        $this->registerElementType('html_editor', $dir . 'Element/html_editor.php', 'HTML_QuickForm_html_editor');
         $this->registerElementType('date_range_picker', $dir . 'Element/DateRangePicker.php', 'DateRangePicker');
         $this->registerElementType('date_time_picker', $dir . 'Element/DateTimePicker.php', 'DateTimePicker');
         $this->registerElementType('date_picker', $dir . 'Element/DatePicker.php', 'DatePicker');
-
-        $this->registerElementType('datepicker', $dir . 'Element/datepicker.php', 'HTML_QuickForm_datepicker');
+        $this->registerElementType('datepicker', $dir . 'Element/datepicker_old.php', 'HTML_QuickForm_datepicker');
         $this->registerElementType('datepickerdate', $dir . 'Element/datepickerdate.php', 'HTML_QuickForm_datepickerdate');
         $this->registerElementType('receivers', $dir . 'Element/receivers.php', 'HTML_QuickForm_receivers');
         $this->registerElementType('select_language', $dir . 'Element/select_language.php', 'HTML_QuickForm_Select_Language');
@@ -540,7 +539,7 @@ EOT;
      * If an element in the form didn't validate, an error message is showed
      * asking the user to complete the form.
      */
-    function display()
+    public function display()
     {
         echo $this->return_form();
     }
@@ -572,20 +571,22 @@ EOT;
         $return_value = '';
         $js = null;
         if ($addDateLibraries) {
-            $js = api_get_js('jquery-ui/jquery-ui-i18n.min.js');
+
+            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/moment.min.js" type="text/javascript"></script>';
             $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.js" type="text/javascript"></script>';
             $js .= '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/jquery-ui-timepicker-addon.css" rel="stylesheet" type="text/css" />';
-            $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/moment.min.js" type="text/javascript"></script>';
             $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/daterangepicker.js" type="text/javascript"></script>';
             $js .= '<link href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/daterange/daterangepicker-bs2.css" rel="stylesheet" type="text/css" />';
 
-            $isocode = api_get_language_isocode();
-            if ($isocode != 'en') {
-                $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/i18n/jquery-ui-timepicker-'.$isocode.'.js" type="text/javascript"></script>';
+            $isoCode = api_get_language_isocode();
+
+            if ($isoCode != 'en') {
+                $js .= api_get_js('jquery-ui/jquery-ui-i18n.min.js');
+                $js .= '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/datetimepicker/i18n/jquery-ui-timepicker-'.$isoCode.'.js" type="text/javascript"></script>';
                 $js .= '<script>
                 $(function(){
-                    $.datepicker.setDefaults($.datepicker.regional["'.$isocode.'"]);
-                     moment.lang("'.$isocode.'");
+                    moment.lang("'.$isoCode.'");
+                    $.datepicker.setDefaults($.datepicker.regional["'.$isoCode.'"]);
                 });
                 </script>';
             }

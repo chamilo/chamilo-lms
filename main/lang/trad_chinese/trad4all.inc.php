@@ -371,6 +371,7 @@ $UplFileTooBig = "檔案太大不能上傳";
 $UplGenericError = "未能成功收到你上傳的檔案，請稍後再試或聯絡本平台的管理員。";
 $MyGradebook = "我的成績本子";
 $Gradebook = "成績本子";
+$NextWeek = "下周";
 $GeneralDescription = "概略介紹";
 $GeneralDescriptionQuestions = "這課程處於這計劃的甚麼位置？有沒有甚麼先決要素？這課程如何連接其他課程？";
 $GeneralDescriptionInformation = "有關課程(時數、編號、室號......)及教師(名、姓、辦公室、電話、電郵......)";

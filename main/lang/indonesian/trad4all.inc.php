@@ -310,6 +310,7 @@ $CourseAdminRoleDescription = "Admin Mata Kuliah";
 $h = "h";
 $CreateNewGlobalRole = "Buat role/peran global baru";
 $CreateNewLocalRole = "Buat role/peran lokal baru";
+$NextWeek = "Minggu Berikutnya";
 $GeneralDescription = "Deskripsi Umum";
 $GeneralDescriptionQuestions = "Dimana tempat mata kuliah dalam program? Adakah pra-syarat? Bagaimana keterkaitan mata kulliah ini dengan mata kuliah lain?";
 $GeneralDescriptionInformation = "Deskripsi mata kuliah (jumlah jam, kode resmi, ruang ...) dan pengajar (nama,  kantor, telp., email ...).";

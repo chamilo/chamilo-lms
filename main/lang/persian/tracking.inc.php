@@ -76,7 +76,6 @@ $langPeriodMonth = "ماه";
 $langPeriodYear = "سال";
 $langNextDay = "روز\nبعد";
 $langPreviousDay = "روز\nقبل";
-$langNextWeek = "هفتۀ\nآینده";
 $langPreviousWeek = "هفتۀ\nپیش";
 $langNextMonth = "ماه\nآینده";
 $langPreviousMonth = "ماه\nپیش";

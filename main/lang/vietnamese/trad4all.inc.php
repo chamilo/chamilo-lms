@@ -77,4 +77,5 @@ $langMyCourses = "Danh mục khoá học";
 $langModifyProfile = "Sửa thông tin cá nhân";
 $langMyStats = "Xem thống kê";
 $langLogout = "Logout";
+$NextWeek = "Tuần kế tiếp";
 ?>

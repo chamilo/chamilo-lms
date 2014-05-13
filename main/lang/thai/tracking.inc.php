@@ -76,7 +76,6 @@ $langPeriodMonth = "เดือน";
 $langPeriodYear = "ปี";
 $langNextDay = "พรุ่งนี้";
 $langPreviousDay = "วันวาน";
-$langNextWeek = "สัปดาห์หน้า";
 $langPreviousWeek = "สัปดาห์ที่ผ่านมา";
 $langNextMonth = "เดือนหน้า";
 $langPreviousMonth = "เดือนที่ผ่านมา";

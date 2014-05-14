@@ -842,6 +842,7 @@ $FirstPage = "Prvá stránka";
 $LastPage = "Posledná stránka";
 $Coachs = "Tútori";
 $FieldTypeFile = "Nahrať súbor";
+$NextWeek = "Nasledujúci týždeň";
 $DragAndDropAnElementHere = "Presuňte prvok tu";
 $ThereAreNoRegisteredDatetimeYet = "Neexistuje žiadny dátum / nie je registrovaný čas";
 $CalendarList = "Kalendárový zozznam návštevnosti";

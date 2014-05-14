@@ -631,6 +631,7 @@ $Menu = "Menü";
 $BackToUserList = "Vissza a felhasználói listához";
 $GraphicNotAvailable = "Kép nem található";
 $Parent = "Szülő";
+$NextWeek = "Következő hét";
 $GeneralDescription = "Általános meghatározás";
 $GeneralDescriptionQuestions = "Hol van a kurzus helye a képzési programban? Hogyan kapcsolódik a kurzus más kurzusokhoz?";
 $GeneralDescriptionInformation = "A kurzus meghatározása (órák száma, hivatalos kód, osztályterem helye, stb.) és az oktató bemutatása (név, fogadóóra ideje, helye, telefonszáma, e-mail címe)";

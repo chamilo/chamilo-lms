@@ -88,7 +88,6 @@ $langPeriodMonth = "الشهر";
 $langPeriodYear = "السنة";
 $langNextDay = "اليوم التالي";
 $langPreviousDay = "اليوم السابق";
-$langNextWeek = "الأسبوع التالي";
 $langPreviousWeek = "الأسبوع الماضي";
 $langNextMonth = "الشهر التالي";
 $langPreviousMonth = "الشهر الماضي";

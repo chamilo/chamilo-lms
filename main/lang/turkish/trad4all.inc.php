@@ -335,6 +335,7 @@ $Other = "Diğer";
 $AddRight = "Ekle";
 $year = "yıl";
 $ReadOnly = "Salt okunur";
+$NextWeek = "Sonraki hafta";
 $GeneralDescription = "Genel Açıklama";
 $GeneralDescriptionQuestions = "Dersin programdaki yeri neresi? Gerekli şeyler varmı? Ders diğer derslerle nasıl bir bağlantı içinde?";
 $GeneralDescriptionInformation = "Dersi tanımları (saatleri bilinen kodu, oda nerede oluyor...) ve öğretmen (isim, ofis, tel, email...).";

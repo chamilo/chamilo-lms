@@ -755,6 +755,7 @@ $Until = "Do";
 $FirstPage = "Pierwsza strona";
 $LastPage = "Ostatnia strona";
 $Coachs = "Trenerzy";
+$NextWeek = "Następny tydzień";
 $DragAndDropAnElementHere = "Przeciągnij i upuść element tutaj";
 $ThereAreNoRegisteredDatetimeYet = "Nie ma jeszcze zarejestrowanej daty/czasu";
 $CalendarList = "Lista kalendarza frekwencji";

@@ -729,6 +729,7 @@ $Until = "Fino a";
 $FirstPage = "Prima pagina";
 $LastPage = "Ultima pagina";
 $Coachs = "Tutor";
+$NextWeek = "Settimana successiva";
 $ThereAreNoRegisteredDatetimeYet = "Non ci sono ancora indicazioni sulla data e l'ora";
 $CalendarList = "Calendario delle presenze";
 $AttendanceCalendarDescription = "Il calendario delle presenze ti permette di registrare le presenze per le sessioni che i corsisti devono frequentare. Crea qui un nuovo calendario.";

@@ -66,29 +66,35 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
              };
          });
         });
-         $(document).ready(function(){
+        $(document).ready(function(){
                 $('#user-online-scroll').tinyscrollbar();
             });
+        //Sound send message
+        $(document).ready(function(){
+            $("#message").keypress(function(event){
+            if (event.which == 13) {
+                $("#audio")[0].play();
+                }
+            });
+        });
+        $(document).ready(function(){
+            $("#send").on("click",function(){
+                $("#audio")[0].play();
+            });
+        });
+
     </script>
-    <style>
-        a {
-            font-size: 12px;
-        }
-        .background_submit {
-            background: url(../img/chat_little.gif) 2px 2px no-repeat;
-            padding: 2px 1px 1px 20px;
-        }
-        th {
-            font-size: 12px;
-        }
-    </style>
-<script>
+
+<script type="text/javascript">
 function updateChat()
 {
 	if ('<?php echo $chat_size_old; ?>' != '<?php echo $chat_size_new; ?>') {
 		parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size_new.'&'.api_get_cidreq(); ?>#bottom';
 	}
 }
+//$(window).load(function(updateChat){
+  //      $("#audio")[0].play();
+//});
 
 function updateConnected()
 {

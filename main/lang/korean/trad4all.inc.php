@@ -280,6 +280,7 @@ $OnlyLettersAndNumbersAllowed = "문자와 숫자만 허용됩니다";
 $CourseAdminRole = "과정 관리자";
 $UserRole = "역할";
 $OnlyImagesAllowed = "PNG, JPG 또는 GIF 형식의 파일만 허용됩니다";
+$NextWeek = "다음 주";
 $GeneralDescription = "일반적 설명";
 $GeneralDescriptionQuestions = "이 프로그램에서 이 과정은 어느 단계입니까? 선수조건이 있습니까? 다른 과정과 어떻게 연계됩니까?";
 $GeneralDescriptionInformation = "과정 설명( 시수, 공식 코드, 교실)과 교사(이름, 성, 사무실, 전화번호, 이메일...)";

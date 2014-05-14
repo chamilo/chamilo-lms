@@ -107,9 +107,10 @@ if (!empty($course)) {
 	require 'header_frame.inc.php';
 
 	?>
+	<div class="user-connected">
 	<div id="user-online-scroll" class="user-online">
 
-		<div class="title"><?php echo get_lang('Connected'); ?></div>
+		<div class="title"><?php echo get_lang('Users'); ?> <?php echo get_lang('Connected'); ?></div>
 		<div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
 		<div class="viewport"><div id="hidden" class="overview">
 		<ul class="perfil list-group">
@@ -136,7 +137,7 @@ if (!empty($course)) {
 			</li>
 			<?php  } unset($users); ?>
 		</ul>
-	</div></div></div>
+	</div></div></div></div>
 	<?php
 }
 require 'footer_frame.inc.php';

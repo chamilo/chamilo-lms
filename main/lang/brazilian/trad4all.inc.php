@@ -732,6 +732,7 @@ $Until = "até";
 $FirstPage = "Primeira página";
 $LastPage = "Última página";
 $Coachs = "Professores";
+$NextWeek = "Próxima Semana";
 $DragAndDropAnElementHere = "Arraste e solte aqui um elemento";
 $ThereAreNoRegisteredDatetimeYet = "Não há uma data/hora registrada ainda";
 $CalendarList = "Lista do calendário de presença";

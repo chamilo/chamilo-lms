@@ -72,7 +72,6 @@ $langPeriodMonth = "달";
 $langPeriodYear = "해";
 $langNextDay = "하루 후";
 $langPreviousDay = "하루 전";
-$langNextWeek = "다음 주";
 $langPreviousWeek = "이전 주";
 $langNextMonth = "다음 달";
 $langPreviousMonth = "이전 달";

@@ -707,6 +707,7 @@ $Until = "تا";
 $FirstPage = "اولین صفحه";
 $LastPage = "آخرین صفحه";
 $Coachs = "مربی ها";
+$NextWeek = "هفتۀ\nآینده";
 $ThereAreNoRegisteredDatetimeYet = "هیچ تاریخ و زمانی تا بحال ثبت نشده است";
 $CalendarList = "فهرست تقویم مشارکت کنندگان";
 $CleanCalendar = "پاک کردن تقویم تمام فهرست ها";

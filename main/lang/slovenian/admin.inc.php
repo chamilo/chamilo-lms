@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ClassIdDoesntExists = "ID razreda ne obstaja";
 $SearchSessions = "Iskanje po sejah";
 $DeleteUsersNotInList = "Izpiši uporabnike, ki niso na spisku uvoza";
 $IfSessionExistsUpdate = "Če seja obstaja, jo ažuriraj";

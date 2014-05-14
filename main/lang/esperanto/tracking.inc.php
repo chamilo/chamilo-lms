@@ -76,7 +76,6 @@ $langPeriodMonth = "Monato";
 $langPeriodYear = "Jaro";
 $langNextDay = "Venonta tago";
 $langPreviousDay = "Antaŭa tago";
-$langNextWeek = "Venonta semajno";
 $langPreviousWeek = "Pasinta semajno";
 $langNextMonth = "Venonta monato";
 $langPreviousMonth = "Pasinta monato";

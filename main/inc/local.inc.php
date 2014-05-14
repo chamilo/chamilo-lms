@@ -659,12 +659,13 @@ if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) &
 
 /* USER INIT */
 
-if (isset($uidReset) && $uidReset) {    // session data refresh requested
+if (isset($uidReset) && $uidReset) {
+    // session data refresh requested
     unset($_SESSION['_user']['uidReset']);
     $is_platformAdmin = false;
     $is_allowedCreateCourse = false;
 
-    if (isset($_user['user_id']) && $_user['user_id'] && ! api_is_anonymous()) {
+    if (isset($_user['user_id']) && $_user['user_id']) {
         // a uid is given (log in succeeded)
 
         $_SESSION['loginFailed'] = false;
@@ -692,10 +693,10 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
             $uData = Database::fetch_array($result);
 
             $_user =  _api_format_user($uData, false);
-            $_user['lastLogin']        = api_strtotime($uData['login_date'], 'UTC');
+            $_user['lastLogin'] = api_strtotime($uData['login_date'], 'UTC');
 
-            $is_platformAdmin           = (bool) (! is_null( $uData['is_admin']));
-            $is_allowedCreateCourse     = (bool) (($uData ['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == DRH));
+            $is_platformAdmin = (bool) (! is_null( $uData['is_admin']));
+            $is_allowedCreateCourse = (bool) (($uData ['status'] == COURSEMANAGER) or (api_get_setting('drhCourseManagerRights') and $uData['status'] == DRH));
             ConditionalLogin::check_conditions($uData);
 
             Session::write('_user',$_user);
@@ -706,7 +707,8 @@ if (isset($uidReset) && $uidReset) {    // session data refresh requested
             header('location:'.api_get_path(WEB_PATH));
             //exit("WARNING UNDEFINED UID !! ");
         }
-    } else { // no uid => logout or Anonymous
+    } else {
+        // no uid => logout or Anonymous
         Session::erase('_user');
         Session::erase('_uid');
     }
@@ -1136,14 +1138,14 @@ if ((isset($uidReset) && $uidReset) || (isset($cidReset) && $cidReset))
     }
 
     if (!$is_platformAdmin) {
-        if (!$is_courseMember && 
-            isset($_course['registration_code']) && 
-            !empty($_course['registration_code']) && 
+        if (!$is_courseMember &&
+            isset($_course['registration_code']) &&
+            !empty($_course['registration_code']) &&
             !Session::read('course_password_'.$_course['real_id'], false)
         ) {
             // if we are here we try to access to a course requiring password
             if ($is_allowed_in_course) {
-                // the course visibility allows to access the course 
+                // the course visibility allows to access the course
                 // with a password
                 $url = api_get_path(WEB_CODE_PATH).'auth/set_temp_password.php?course_id='.$_course['real_id'].'&session_id='.$session_id;
                 header('Location: '.$url);

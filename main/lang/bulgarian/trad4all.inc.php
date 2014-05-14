@@ -721,6 +721,7 @@ $HistoryTrainingSession = "История на обучителната сеси
 $FirstPage = "Първа страница";
 $LastPage = "Последна страница";
 $Coachs = "Инструктори";
+$NextWeek = "Следващата седмица";
 $CalendarList = "Календарен списък на присъствията";
 $AddDateAndTime = "Добавяне на дата и час";
 $AttendanceSheet = "Присъствия";

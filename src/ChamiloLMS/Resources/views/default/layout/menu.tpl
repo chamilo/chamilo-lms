@@ -64,7 +64,7 @@
                         </li>
                     {% endfor %}
                     <li>
-                        <a href=" {{ url('portal_news') }}">
+                        <a href=" {{ url('news.controller:indexAction') }}">
                             {{ 'SeeAllNotifications' | trans }}
                             <i class="fa fa-arrow-right"></i>
                         </a>

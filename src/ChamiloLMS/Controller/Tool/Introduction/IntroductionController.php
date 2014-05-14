@@ -4,19 +4,41 @@
 namespace ChamiloLMS\Controller\Tool\Introduction;
 
 use ChamiloLMS\Entity\CToolIntro;
-use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
-use ChamiloLMS\Controller\CommonController;
+use ChamiloLMS\Controller\CrudController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
  * Class IntroductionToolController
- * @package ChamiloLMS\Controller
+ * @package ChamiloLMS\Controller\Tool\Introduction
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class IntroductionController extends CommonController
+class IntroductionController extends CrudController
 {
+    public function getClass()
+    {
+        return 'ChamiloLMS\Entity\CToolIntro';
+    }
+
+    public function getType()
+    {
+        return 'ChamiloLMS\Form\BranchType';
+    }
+
+    public function getControllerAlias()
+    {
+        return 'branch.controller';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplatePath()
+    {
+        return 'admin/administrator/branches/';
+    }
+
     /**
      * @Route("/edit/{tool}")
      * @Method({"GET"})
@@ -36,14 +58,14 @@ class IntroductionController extends CommonController
 
         $url = $this->generateUrl(
             'introduction.controller:editAction',
-            array('tool' => $tool, 'course' => api_get_course_id())
+            array('tool' => $tool, 'courseCode' => api_get_course_id())
         );
 
         $form = $this->getForm($url, $tool);
 
         if ($form->validate()) {
             $values  = $form->exportValues();
-			$content = $values['content'];
+            $content = $values['content'];
 
             $sql = "REPLACE $TBL_INTRODUCTION
                     SET c_id = $courseId,
@@ -98,7 +120,7 @@ class IntroductionController extends CommonController
 
         $url = $this->generateUrl(
             'introduction.controller:editAction',
-            array('tool' => $tool, 'course' => api_get_course_id())
+            array('tool' => $tool, 'courseCode' => api_get_course_id())
         );
 
         $form = $this->getForm($url, $tool);
@@ -133,22 +155,6 @@ class IntroductionController extends CommonController
         }
         $form->addElement('button', 'submit', get_lang('SaveIntroText'));
         return $form;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRepository()
-    {
-        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\CToolIntro');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getNewEntity()
-    {
-        return new CToolIntro();
     }
 
 }

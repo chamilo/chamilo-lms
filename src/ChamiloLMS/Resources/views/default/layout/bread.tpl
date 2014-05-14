@@ -29,6 +29,7 @@
         {% endif %}
     {% endfor %}
 {% endblock %}
+
 {% block label %}
-    {{ item.label }}
+{{ item.label }}
 {% endblock %}

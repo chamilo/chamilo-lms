@@ -3,73 +3,29 @@
 
 namespace ChamiloLMS\Controller\Admin\Administrator;
 
-use ChamiloLMS\Controller\CommonController;
-use Silex\Application;
-use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use ChamiloLMS\Controller\CrudController;
 use ChamiloLMS\Entity;
-use ChamiloLMS\Form\QuestionScoreNameType;
-use ChamiloLMS\Entity\QuestionScoreName;
 
 /**
  * Class QuestionScoreController
  * @todo @route and @method function don't work yet
- * @package ChamiloLMS\Controller
+ * @package ChamiloLMS\Controller\Admin\Administrator
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class QuestionScoreNameController extends CommonController
+
+class QuestionScoreNameController extends CrudController
 {
-    /**
-     * @Route("/")
-     * @Method({"GET"})
-     */
-    public function indexAction()
+    public function getClass()
     {
-        return parent::listingAction();
+        return 'ChamiloLMS\Entity\QuestionScoreName';
     }
 
-    /**
-    *
-    * @Route("/{id}", requirements={"id" = "\d+"})
-    * @Method({"GET"})
-    */
-    public function readAction($id)
+    public function getType()
     {
-        return parent::readAction($id);
+        return 'ChamiloLMS\Form\QuestionScoreNameType';
     }
 
-    /**
-    * @Route("/add")
-    * @Method({"GET"})
-    */
-    public function addAction()
-    {
-        return parent::addAction();
-    }
-
-    /**
-    *
-    * @Route("/{id}/edit", requirements={"id" = "\d+"})
-    * @Method({"GET"})
-    */
-    public function editAction($id)
-    {
-        return parent::editAction($id);
-    }
-
-    /**
-    *
-    * @Route("/{id}/delete", requirements={"id" = "\d+"})
-    * @Method({"GET"})
-    */
-    public function deleteAction($id)
-    {
-        return parent::deleteAction($id);
-    }
-
-    protected function getControllerAlias()
+    public function getControllerAlias()
     {
         return 'question_score_name.controller';
     }
@@ -77,32 +33,9 @@ class QuestionScoreNameController extends CommonController
     /**
      * {@inheritdoc}
      */
-    protected function getRepository()
-    {
-        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\QuestionScoreName');
-    }
-
-     /**
-     * {@inheritdoc}
-     */
-    protected function getNewEntity()
-    {
-        return new QuestionScoreName();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFormType()
-    {
-        return new QuestionScoreNameType();
-    }
-
-    /**
-    * {@inheritdoc}
-    */
-    protected function getTemplatePath()
+    public function getTemplatePath()
     {
         return 'admin/administrator/question_score_name/';
     }
 }
+

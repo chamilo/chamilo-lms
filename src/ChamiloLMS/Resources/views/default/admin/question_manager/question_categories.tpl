@@ -2,9 +2,9 @@
 {% block left_column %}
     <script>
         function loadQuestions(id) {
-            var categoryUrl = '{{ url('admin_questions_get_categories', {id : ':s'}) }}';
+            var categoryUrl = '{{ url('question_manager.controller:getCategoriesAction', {id : ':s'}) }}';
             categoryUrl = categoryUrl.replace(':s', id);
-            var questionContentUrl = '{{ url('admin_get_questions_by_category', {categoryId : ':s'}) }}';
+            var questionContentUrl = '{{ url('question_manager.controller:getQuestionsByCategoryAction', {categoryId : ':s'}) }}';
             questionContentUrl = questionContentUrl.replace(':s', id);
             $('.questions').load(questionContentUrl);
             var parent = $('.load_categories li #'+id).parent();

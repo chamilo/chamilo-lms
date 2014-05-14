@@ -6,6 +6,7 @@
                 {% if is_granted('ROLE_ADMIN') %}
                     {# Skip session admin #}
                     {% if (role != 'session_manager') %}
+                        {{ role | var_dump }}
                         {% include app.template_style ~ "/admin/" ~ role ~ "/role_index.tpl" %}
                     {% endif %}
                 {% else %}

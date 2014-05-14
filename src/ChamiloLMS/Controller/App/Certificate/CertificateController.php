@@ -1,8 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace ChamiloLMS\Controller;
+namespace ChamiloLMS\Controller\App\Certificate;
 
+use ChamiloLMS\Controller\BaseController;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -11,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class CertificateController
+class CertificateController extends BaseController
 {
     /**
      * @param $id

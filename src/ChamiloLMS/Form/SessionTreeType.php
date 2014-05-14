@@ -68,7 +68,7 @@ class SessionTreeType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Entity\SessionTree'
+                'data_class' => 'ChamiloLMS\Entity\SessionTree'
             )
         );
     }

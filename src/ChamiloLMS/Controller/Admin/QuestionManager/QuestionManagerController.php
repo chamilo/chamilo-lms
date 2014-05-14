@@ -3,9 +3,11 @@
 
 namespace ChamiloLMS\Controller\Admin\QuestionManager;
 
+use ChamiloLMS\Controller\BaseController;
 use Silex\Application;
-use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
  * Class QuestionManagerController
@@ -13,38 +15,45 @@ use Symfony\Component\HttpFoundation\Response;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class QuestionManagerController
+class QuestionManagerController extends BaseController
 {
     /**
-     * @param Application $app
+     * Show the index page for the question manager
+     *
+     * @Route("/")
+     * @Method({"GET"})
+     * @return Response
      */
-    public function indexAction(Application $app)
+    public function indexAction()
     {
+        $response = $this->renderTemplate('questionmanager.tpl');
 
+        return new Response($response, 200, array());
     }
 
     /**
      * Edits a question for the question manager
      *
-     * @param Application $app
+     * @Route("/edit")
+     * @Method({"GET"})
      * @param int $id
      * @return Response
      */
-    public function editQuestionAction(Application $app, $id)
+    public function editQuestionAction($id)
     {
         // Setting exercise obj.
-        $exercise                      = new \Exercise();
+        $exercise = new \Exercise();
         $exercise->edit_exercise_in_lp = true;
 
         // Setting question obj.
         /** @var  \Question $question */
-        $question                   = \Question::read($id, null, $exercise);
-        $question->submitClass      = "btn save";
-        $question->submitText       = get_lang('ModifyQuestion');
+        $question = \Question::read($id, null, $exercise);
+        $question->submitClass = "btn save";
+        $question->submitText = get_lang('ModifyQuestion');
         $question->setDefaultValues = true;
 
         // Generating edit URL.
-        $url = $app['url_generator']->generate('admin_questions_edit', array('id' => $id));
+        $url = $this->generateControllerUrl('editQuestionAction', array('id' => $id));
 
         // Creating a new form
         $form = new \FormValidator('edit_question', 'post', $url);
@@ -55,10 +64,10 @@ class QuestionManagerController
         if (count($form->_elements) > 1) {
             $form->addElement('button', 'submit', get_lang('Update'));
 
-            $app['template']->assign('question', $question);
-            $app['template']->assign('form', $form->toHtml());
+            $this->getTemplate()->assign('question', $question);
+            $this->getTemplate()->assign('form', $form->toHtml());
         } else {
-            $app['template']->assign('message', \Display::return_message(get_lang('ThereAreNotExtrafieldsAvailable'), 'warning'));
+            $this->addMessage(get_lang('ThereAreNotExtrafieldsAvailable'), 'warning');
         }
 
         // If form was submitted.
@@ -67,39 +76,29 @@ class QuestionManagerController
             $params = $form->exportValues();
             $params['question_id'] = $id;
             $field_value->save_field_values($params);
-            $app['template']->assign('message', \Display::return_message(get_lang('ItemUpdated'), 'success'));
-            $url = $app['url_generator']->generate('admin_questions_edit', array('id' => $id));
+            $this->addMessage(get_lang('ItemUpdated'), 'success');
+            $url = $this->generateControllerUrl('editQuestionAction', array('id' => $id));
 
-            return $app->redirect($url);
+            return $this->redirect($url);
         }
 
-        $response = $app['template']->render_template('admin/questionmanager/edit_question.tpl');
-
-        return new Response($response, 200, array());
-    }
-
-    /**
-     * Show the index page for the question manager
-     * @param Application $app
-     * @return Response
-     */
-    public function questionManagerIndexAction(Application $app)
-    {
-        $response = $app['template']->render_template('admin/questionmanager/questionmanager.tpl');
+        $response = $this->renderTemplate('edit_question.tpl');
 
         return new Response($response, 200, array());
     }
 
     /**
      * Get question categories per id
-     * @param Application $app
+     *
+     * @Route("/get_categories")
+     * @Method({"GET"})
      * @param int $id
      * @return string
      */
-    public function getCategoriesAction(Application $app, $id)
+    public function getCategoriesAction($id)
     {
         // Getting CQuizCategory repo.
-        $repo = $app['orm.em']->getRepository('ChamiloLMS\Entity\CQuizCategory');
+        $repo = $this->getManager()->getRepository('ChamiloLMS\Entity\CQuizCategory');
 
         $options  = array(
             'decorate'      => true,
@@ -107,15 +106,22 @@ class QuestionManagerController
             'rootClose'     => '</ul>',
             'childOpen'     => '<li>',
             'childClose'    => '</li>',
-            'nodeDecorator' => function ($row) use ($app) {
-                $url = $app['url_generator']->generate('admin_questions_get_categories', array('id' => $row['iid']));
+            'nodeDecorator' => function ($row) {
+                $url = $this->generateControllerUrl(
+                    'getQuestionsByCategoryAction',
+                    array('id' => $row['iid'])
+                );
 
-                return \Display::url($row['title'], $url, array('id' => $row['iid']));
+                return \Display::url(
+                    $row['title'],
+                    $url,
+                    array('id' => $row['iid'])
+                );
             }
             //'representationField' => 'slug',
             //'html' => true
         );
-        $cats     = $repo->findOneByIid($id);
+        $cats = $repo->findOneByIid($id);
         $htmlTree = $repo->childrenHierarchy(
             $cats, /* starting from root nodes */
             true, /* false: load all children, true: only direct */
@@ -127,15 +133,16 @@ class QuestionManagerController
 
     /**
      * Gets the question list per category
-     * @param Application $app
+     * @Route("/get_questions_by_category")
+     * @Method({"GET"})
      * @param $categoryId
      * @return Response
      */
-    public function getQuestionsByCategoryAction(Application $app, $categoryId)
+    public function getQuestionsByCategoryAction($categoryId)
     {
         // Getting CQuizCategory repo.
         /** @var \Doctrine\ORM\EntityManager $em */
-        $em   = $app['orm.em'];
+        $em   = $this->getManager();
         $repo = $em->getRepository('ChamiloLMS\Entity\CQuizCategory');
 
         /** @var \ChamiloLMS\Entity\CQuizCategory $category */
@@ -149,7 +156,7 @@ class QuestionManagerController
         $grid = \Display::grid_html('questions');
 
         //jqgrid will use this URL to do the selects
-        $url = $app['url_generator']->generate('model_ajax').'?a=get_questions&categoryId='.$categoryId;
+        $url = $this->generateUrl('model_ajax').'?a=get_questions&categoryId='.$categoryId;
 
         $extraParams['postData'] = array(
             'filters' => array(
@@ -163,7 +170,7 @@ class QuestionManagerController
         // Height auto.
         $extraParams['height'] = 'auto';
         $token                 = null;
-        $editUrl               = $app['url_generator']->generate('admin_questions');
+        $editUrl = $this->generateControllerUrl('getQuestionsAction');
 
         $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
             return \'<a href="'.$editUrl.'/\'+rowObject[0]+\'/edit">'.\Display::return_icon(
@@ -188,32 +195,33 @@ class QuestionManagerController
             true
         );
         //$count = $repo->childCount($category);
-        $app['template']->assign('category_children', $count);
-        $app['template']->assign('category', $category);
-        $app['template']->assign('grid', $grid);
-        $app['template']->assign('js', $js);
+        $this->getTemplate()->assign('category_children', $count);
+        $this->getTemplate()->assign('category', $category);
+        $this->getTemplate()->assign('grid', $grid);
+        $this->getTemplate()->assign('js', $js);
 
-        $response = $app['template']->render_template('admin/questionmanager/questions.tpl');
+        $response = $this->renderTemplate('questions.tpl');
 
         return new Response($response, 200, array());
     }
 
     /**
      * Index of the question manager
-     * @param Application $app
+     * @Route("/questions")
+     * @Method({"GET"})
      * @return Response
      *
      */
-    public function questionsAction(Application $app)
+    public function getQuestionsAction($categoryId = null)
     {
-        $app['template']->addResource(api_get_jqgrid_js());
+        //$this->getTemplate()->addResource(api_get_jqgrid_js());
 
         // Getting CQuizCategory repo.
         /** @var \Gedmo\Tree\Entity\Repository\NestedTreeRepository $repo */
-        $repo = $app['orm.em']->getRepository('ChamiloLMS\Entity\CQuizCategory');
 
-        $categoryId = $app['request']->get('categoryId');
-        $subtree    = null;
+        $repo = $this->getManager()->getRepository('ChamiloLMS\Entity\CQuizCategory');
+        $categoryId = $this->getRequest()->get('categoryId');
+        $subtree = null;
 
         if (isset($categoryId)) {
             //$repo->getChildrenQueryBuilder();
@@ -241,8 +249,11 @@ class QuestionManagerController
             'rootClose'     => '</ul>',
             'childOpen'     => '<li>',
             'childClose'    => '</li>',
-            'nodeDecorator' => function ($row) use ($app, $categoryId, $subtree) {
-                $url   = $app['url_generator']->generate('admin_questions_get_categories', array('id' => $row['iid']));
+            'nodeDecorator' => function ($row) use ($categoryId, $subtree) {
+                $url   = $this->generateUrl(
+                    'question_manager.controller:getQuestionsByCategoryAction',
+                    array('id' => $row['iid'])
+                );
                 $title = $row['title'];
                 $url   = \Display::url($title, $url, array('id' => $row['iid']));
                 if ($row['iid'] == $categoryId) {
@@ -257,22 +268,22 @@ class QuestionManagerController
 
         // Getting all categories only first level lvl=1
         /** @var \Doctrine\ORM\QueryBuilder $qb */
-        $qb = $app['orm.em']->createQueryBuilder()
+
+        $qb = $this->getManager()->createQueryBuilder()
             ->select('node')
             ->from('ChamiloLMS\Entity\CQuizCategory', 'node')
             ->where('node.cId <> 0 AND node.lvl = 0')
             ->orderBy('node.root, node.lft', 'ASC');
-
 
         //$node = null, $direct = false, $sortByField = null, $direction = 'ASC', $includeNode = false
         //$qb = $repo->getChildrenQueryBuilder(null, true, 'title', 'ASC', true);
         $query = $qb->getQuery();
         $tree  = $repo->buildTree($query->getArrayResult(), $options);
 
-        $app['template']->assign('category_tree', $tree);
+        $this->getTemplate()->assign('category_tree', $tree);
 
         // Getting globals
-        $query = $app['orm.em']
+        $query = $this->getManager()
             ->createQueryBuilder()
             ->select('node')
             ->from('ChamiloLMS\Entity\CQuizCategory', 'node')
@@ -281,64 +292,72 @@ class QuestionManagerController
             ->getQuery();
 
         $tree = $repo->buildTree($query->getArrayResult(), $options);
-        $app['template']->assign('global_category_tree', $tree);
+        $this->getTemplate()->assign('global_category_tree', $tree);
 
-        $response = $app['template']->render_template('admin/questionmanager/question_categories.tpl');
+        $response = $this->renderTemplate('question_categories.tpl');
 
         return new Response($response, 200, array());
-
     }
 
     /**
      * New category
-     *
-     * @param Application $app
+     * @Route("/new_category")
+     * @Method({"GET"})
      * @return Response
      */
-    public function newCategoryAction(Application $app)
+    public function newCategoryAction()
     {
-        $url  = $app['url_generator']->generate('admin_category_new');
+        $url  = $this->generateUrl('question_manager.controller:newCategoryAction');
         $form = new \FormValidator('new', 'post', $url);
 
         $objcat = new \Testcategory();
         $objcat->getForm($form, 'new');
         $message = null;
         if ($form->validate()) {
-            $values     = $form->getSubmitValues();
-            $parent_id  = isset($values['parent_id']) && isset($values['parent_id'][0]) ? $values['parent_id'][0] : null;
-            $objcat     = new \Testcategory(0, $values['category_name'], $values['category_description'], $parent_id, 'global');
-            $categoryId = $objcat->addCategoryInBDD();
+            $values = $form->getSubmitValues();
+
+            $parent_id = isset($values['parent_id']) && isset($values['parent_id'][0]) ? $values['parent_id'][0] : null;
+            $category = new \Testcategory(
+                0,
+                $values['category_name'],
+                $values['category_description'],
+                $parent_id,
+                'global'
+            );
+            $categoryId = $category->addCategoryInBDD();
+
             if ($categoryId) {
-                $message = \Display::return_message(get_lang('AddCategoryDone'), 'confirmation');
-                //$url = $app['url_generator']->generate('admin_category_show', array('id' => $categoryId));
-                $url = $app['url_generator']->generate('admin_questions');
-                return $app->redirect($url);
+                $this->addMessage(get_lang('AddCategoryDone'), 'confirmation');
+                //$message = \Display::return_message(get_lang('AddCategoryDone'), 'confirmation');
+                //$url = $this->generateUrl('admin_category_show', array('id' => $categoryId));
+                $url = $this->generateUrl('question_manager.controller:indexAction');
+                return $this->redirect($url);
             } else {
-                $message = \Display::return_message(get_lang('AddCategoryNameAlreadyExists'), 'warning');
+                $this->addMessage(get_lang('AddCategoryNameAlreadyExists'), 'warning');
             }
         }
-        $app['template']->assign('form', $form->toHtml());
-        $response = $app['template']->render_template('admin/questionmanager/edit_category.tpl');
+        $this->getTemplate()->assign('form', $form->toHtml());
+        $response = $this->renderTemplate('edit_category.tpl');
 
         return new Response($response, 200, array());
     }
 
     /**
      * Edit category
-     *
-     * @param Application $app
+     * @Route("/edit_category")
+     * @Method({"GET"})
      * @param $id
      * @return Response
      */
-    public function editCategoryAction(Application $app, $id)
+    public function editCategoryAction($id)
     {
         $objcat = new \Testcategory($id);
 
         if (!empty($objcat->c_id) || empty($objcat->id)) {
-            $app->abort(401);
+            $this->abort(401);
         }
 
-        $url  = $app['url_generator']->generate('admin_category_edit', array('id' => $id));
+        $url  = $this->generateUrl('editCategoryAction', array('id' => $id));
         $form = new \FormValidator('edit', 'post', $url);
 
         $objcat->getForm($form, 'edit');
@@ -353,32 +372,33 @@ class QuestionManagerController
                 'global'
             );
             if ($objcat->modifyCategory()) {
-                $message = \Display::return_message(get_lang('MofidfyCategoryDone'), 'confirmation');
+                $this->addMessage(get_lang('MofidfyCategoryDone'), 'confirmation');
             } else {
-                $message = \Display::return_message(get_lang('ModifyCategoryError'), 'warning');
+                $this->addMessage(get_lang('ModifyCategoryError'), 'warning');
             }
-            $url = $app['url_generator']->generate('admin_questions');
-            return $app->redirect($url);
+            $url = $this->generateUrl('admin_questions');
+            return $this->redirect($url);
         }
-        $app['template']->assign('message', $message);
-        $app['template']->assign('form', $form->toHtml());
-        $response = $app['template']->render_template('admin/questionmanager/edit_category.tpl');
+        $this->getTemplate()->assign('message', $message);
+        $this->getTemplate()->assign('form', $form->toHtml());
+        $response = $this->renderTemplate('edit_category.tpl');
 
         return new Response($response, 200, array());
     }
 
     /**
-     * @param Application $app
+     * @Route("/delete_category")
+     * @Method({"GET"})
      * @param int $id
      *
      * @return Response
      */
-    public function deleteCategoryAction(Application $app, $id)
+    public function deleteCategoryAction($id)
     {
-        $repo     = $app['orm.ems']['db_write']->getRepository('ChamiloLMS\Entity\CQuizCategory');
+        $repo = $this->getManager()->getRepository('ChamiloLMS\Entity\CQuizCategory');
         $category = $repo->find($id);
         if (empty($category)) {
-            $app->abort(404);
+            $this->abort(404);
         }
         $count = $repo->childCount($category);
 
@@ -388,11 +408,11 @@ class QuestionManagerController
             if ($count == 0) {
                 $objcat = new \Testcategory($id);
                 $objcat->removeCategory();
-                $url = $app['url_generator']->generate('admin_questions');
+                $url = $this->generateUrl('admin_questions');
             }
-            return $app->redirect($url);
+            return $this->redirect($url);
         } else {
-            $app->abort(401);
+            $this->abort(401);
         }
     }
 
@@ -400,25 +420,21 @@ class QuestionManagerController
     /**
      * Show category
      *
-     * @param Application $app
      * @param $id
      * @return Response
      */
-    public function showCategoryAction(Application $app, $id)
+    public function showCategoryAction($id)
     {
         $objcat = new \Testcategory($id);
 
         if (!empty($objcat->c_id)) {
-            $app->abort(401);
+            $this->abort(401);
         }
 
-        $app['template']->assign('category', $objcat);
+        $this->getTemplate()->assign('category', $objcat);
 
-        $response = $app['template']->render_template('admin/questionmanager/show_category.tpl');
+        $response = $this->renderTemplate('show_category.tpl');
 
         return new Response($response, 200, array());
     }
-
-
-
 }

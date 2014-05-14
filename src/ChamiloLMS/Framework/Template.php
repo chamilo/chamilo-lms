@@ -146,7 +146,9 @@ class Template
      */
     public function setBreadcrumb($breadCrumb)
     {
-        if (isset($this->app['breadcrumb']) && !empty($this->app['breadcrumb'])) {
+        if (isset($this->app['breadcrumb']) &&
+            !empty($this->app['breadcrumb'])
+        ) {
             if (empty($breadCrumb)) {
                 $breadCrumb = $this->app['breadcrumb'];
             } else {
@@ -465,6 +467,9 @@ class Template
         }
     }
 
+    /**
+     * Set js files
+     */
     public function setJsFiles()
     {
         $jsFolder = api_get_path(WEB_LIBRARY_JS_PATH);
@@ -497,7 +502,10 @@ class Template
 
         if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP
-            if ($this->show_learnpath == false && $this->show_footer == true && $this->app['template.hide_global_chat'] == false) {
+            if ($this->show_learnpath == false &&
+                $this->show_footer == true &&
+                $this->app['template.hide_global_chat'] == false
+            ) {
                 $jsFiles[] = $jsFolder.'chat/js/chat.js';
             }
         }
@@ -522,7 +530,7 @@ class Template
      */
     public function getResources()
     {
-       return $this->resources;
+        return $this->resources;
     }
 
     /**
@@ -554,27 +562,27 @@ class Template
             switch($type) {
                 case 'js':
                     if ($this->disableJsAndCss == false) {
-                        foreach($resources as $resource) {
+                        foreach ($resources as $resource) {
                             $resourceToString .= api_get_js_simple($resource);
                         }
                     }
                     break;
                 case 'css':
                     if ($this->disableJsAndCss == false) {
-                        foreach($resources as $resource) {
+                        foreach ($resources as $resource) {
                             $resourceToString .= api_get_css($resource);
                         }
                     }
                     break;
                 case 'string':
                     if ($this->disableJsAndCss == false) {
-                        foreach($resources as $resource) {
+                        foreach ($resources as $resource) {
                             $resourceToString .= $resource;
                         }
                     }
                     break;
                 case 'no_js_css':
-                    foreach($resources as $resource) {
+                    foreach ($resources as $resource) {
                         $resourceToString .= $resource;
                     }
                     break;
@@ -714,8 +722,10 @@ class Template
 
         // Breadcrumb
         if ($this->loadBreadcrumb) {
-            $this->loadBreadcrumbToTemplate();
+            //$this->loadBreadcrumbToTemplate();
         }
+
+        //$this->app['new_breadcrumb'] =
 
         // Extra content
         $extra_header = null;
@@ -728,13 +738,13 @@ class Template
     /**
      *
      */
-    public function loadBreadcrumbToTemplate()
+    public function getBreadCrumbLegacyArray()
     {
         if (api_get_setting('breadcrumb_navigation_display') == 'false') {
             return;
         }
-        $breadcrumb = $this->returnBreadcrumb();
-        $this->assign('breadcrumb', $breadcrumb);
+
+        return $this->returnBreadcrumb();
     }
 
     /**
@@ -990,7 +1000,11 @@ class Template
     public function renderTemplate($template, $elements = array())
     {
         $this->parseResources();
-        return $this->app['twig']->render($this->app['template_style'].'/'.$template, $elements);
+
+        return $this->app['twig']->render(
+            $this->app['template_style'].'/'.$template,
+            $elements
+        );
     }
 
     /**
@@ -1076,7 +1090,7 @@ class Template
                         $role = 'administrator';
                     }
                     if ($role == 'ROLE_QUESTION_MANAGER') {
-                        $role = 'QUESTIONMANAGER';
+                        $role = 'QUESTION_MANAGER';
                     }
                     $stripRole = strtolower(str_replace('ROLE_', '', $role));
                     $roleTemplate[] = $stripRole;
@@ -1369,9 +1383,6 @@ class Template
         $session_name = api_get_session_name($session_id);
         $_course = api_get_course_info();
 
-        /*  Plugins for banner section */
-        $web_course_path = $this->app['path.data'];
-
         /* If the user is a coach he can see the users who are logged in its session */
         $navigation = array();
 
@@ -1381,40 +1392,49 @@ class Template
         $my_session_name = is_null($session_name) ? '' : '&nbsp;('.$session_name.')';
 
         if (!empty($_course) && !isset($_GET['hide_course_breadcrumb'])) {
-
-            $navigation_item['url'] = $web_course_path.$_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');
+            $navigation_item['url'] = $this->urlGenerator->generate(
+                'course_home.controller:indexAction',
+                array('courseCode' => $_course['code'], 'sessionId' => $session_id)
+            );
+            //$navigation_item['url'] = $web_course_path.$_course['path'].'/index.php'.(!empty($session_id) ? '?id_session='.$session_id : '');
             $course_title = Text::cut($_course['name'], MAX_LENGTH_BREADCRUMB);
 
             switch (api_get_setting('breadcrumbs_course_homepage')) {
                 case 'get_lang':
-                    $navigation_item['title'] = Display::img(
+                    $navigation_item['title'] = /*Display::img(
                         api_get_path(WEB_CSS_PATH).'home.png',
                         get_lang('CourseHomepageLink')
-                    ).' '.get_lang('CourseHomepageLink');
+                    ).' '.*/
+                        get_lang('CourseHomepageLink');
                     break;
                 case 'course_code':
-                    $navigation_item['title'] = Display::img(
+                    $navigation_item['title'] = /*Display::img(
                         api_get_path(WEB_CSS_PATH).'home.png',
                         $_course['official_code']
-                    ).' '.$_course['official_code'];
+                    ).' '.
+                        */
+                        $_course['official_code'];
                     break;
                 case 'session_name_and_course_title':
-                    $navigation_item['title'] = Display::img(
+                    $navigation_item['title'] = /*Display::img(
                         api_get_path(WEB_CSS_PATH).'home.png',
                         $_course['name'].$my_session_name
-                    ).' '.$course_title.$my_session_name;
+                    ).' '.*/
+                        $course_title.$my_session_name;
                     break;
                 default:
                     if (api_get_session_id() != -1) {
-                        $navigation_item['title'] = Display::img(
+                        $navigation_item['title'] = /*Display::img(
                             api_get_path(WEB_CSS_PATH).'home.png',
                             $_course['name'].$my_session_name
-                        ).' '.$course_title.$my_session_name;
+                        ).' '.*/
+                            $course_title.$my_session_name;
                     } else {
-                        $navigation_item['title'] = Display::img(
+                        $navigation_item['title'] = /*Display::img(
                             api_get_path(WEB_CSS_PATH).'home.png',
                             $_course['name']
-                        ).' '.$course_title;
+                        ).' '.*/
+                            $course_title;
                     }
                     break;
             }
@@ -1469,6 +1489,9 @@ class Template
         $counter = 0;
         $navigation[] = array('url' => '#', 'title' => strip_tags($this->title));
 
+
+        return $navigation;
+
         foreach ($navigation as $index => $navigation_info) {
             if (!empty($navigation_info['title'])) {
                 if ($navigation_info['url'] == '#') {
@@ -1479,6 +1502,7 @@ class Template
                 $counter++;
             }
         }
+
 
         $html = '';
         if (!empty($final_navigation)) {

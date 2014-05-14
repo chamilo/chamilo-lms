@@ -3,9 +3,8 @@
 
 namespace ChamiloLMS\Controller\Admin\Administrator;
 
-use ChamiloLMS\Controller\CommonController;
+use ChamiloLMS\Controller\CrudController;
 use Silex\Application;
-use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Entity;
@@ -19,12 +18,34 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
  * Class RoleController
- * @todo @route and @method function don't work yet
- * @package ChamiloLMS\Controller
+ * @package ChamiloLMS\Controller\Admin\Administrator
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class BranchController extends CommonController
+class BranchController extends CrudController
 {
+    public function getClass()
+    {
+        return 'ChamiloLMS\Entity\BranchSync';
+    }
+
+    public function getType()
+    {
+        return 'ChamiloLMS\Form\BranchType';
+    }
+
+    public function getControllerAlias()
+    {
+        return 'branch.controller';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplatePath()
+    {
+        return 'admin/administrator/branches/';
+    }
+
     /**
      * @Route("/")
      * @Method({"GET"})
@@ -63,7 +84,8 @@ class BranchController extends CommonController
         $htmlTree = $repo->buildTree($query->getArrayResult(), $options);
         $this->get('template')->assign('tree', $htmlTree);
         $this->get('template')->assign('links', $this->generateLinks());
-        $response = $this->get('template')->render_template($this->getTemplatePath().'list.tpl');
+        $response = $this->renderTemplate('list.tpl');
+
         return new Response($response, 200, array());
     }
 
@@ -114,7 +136,7 @@ class BranchController extends CommonController
         $template = $this->get('template');
         $template->assign('form', $form->createView());
         $template->assign('id', $id);
-        $response = $template->render_template($this->getTemplatePath().'add_director.tpl');
+        $response = $this->renderTemplate('add_director.tpl');
         return new Response($response, 200, array());
     }
 
@@ -159,17 +181,8 @@ class BranchController extends CommonController
         $children = $repo->children($item);
         $template->assign('item', $item);
         $template->assign('subitems', $children);
-        $response = $template->render_template($this->getTemplatePath().'read.tpl');
+        $response = $this->renderTemplate('read.tpl');
         return new Response($response, 200, array());
-    }
-
-    /**
-    * @Route("/add")
-    * @Method({"GET"})
-    */
-    public function addAction()
-    {
-        return parent::addAction();
     }
 
     /**
@@ -207,19 +220,9 @@ class BranchController extends CommonController
         $template->assign('links', $this->generateLinks());
         $template->assign('form', $form->createView());
         $template->assign('parent_id', $id);
-        $response = $template->render_template($this->getTemplatePath().'add_from_parent.tpl');
+        $response = $this->renderTemplate('add_from_parent.tpl');
 
         return new Response($response, 200, array());
-    }
-
-    /**
-    *
-    * @Route("/{id}/edit", requirements={"id" = "\d+"})
-    * @Method({"GET"})
-    */
-    public function editAction($id)
-    {
-        return parent::editAction($id);
     }
 
     /**
@@ -236,9 +239,11 @@ class BranchController extends CommonController
         if (count($children) == 0) {
             return parent::deleteAction($id);
         } else {
-            $this->get('session')->getFlashBag()->
-                add('warning', "Please remove all children of this node before you try to delete it.");
-            $url = $this->createUrl('list_link');
+            $this->addMessage(
+                'Please remove all children of this node before you try to delete it.',
+                'warning'
+            );
+            $url = $this->generateControllerUrl('listingAction');
             return $this->redirect($url);
         }
     }
@@ -276,7 +281,6 @@ class BranchController extends CommonController
         $request = $this->getRequest();
         $id = $request->get('id');
         $item = $this->getEntity($id);
-        $repo = $this->getRepository();
         $result = 0;
         if ($item) {
             $result  = 1;
@@ -284,48 +288,10 @@ class BranchController extends CommonController
         return new Response($result, 200, array());
     }
 
-    protected function getControllerAlias()
-    {
-        return 'branch.controller';
-    }
-
     protected function generateDefaultCrudRoutes()
     {
         $routes = parent::generateDefaultCrudRoutes();
         $routes['add_from_parent_link'] = 'branch.controller:addFromParentAction';
         return $routes ;
-    }
-
-
-    /**
-    * {@inheritdoc}
-    */
-    protected function getTemplatePath()
-    {
-        return 'admin/administrator/branches/';
-    }
-
-    /**
-     * @return \ChamiloLMS\Entity\Repository\BranchSyncRepository
-     */
-    protected function getRepository()
-    {
-        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\BranchSync');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getNewEntity()
-    {
-        return new BranchSync();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFormType()
-    {
-        return new BranchType();
     }
 }

@@ -83,108 +83,6 @@ $checkLogin = function (Request $request) use ($app) {
     }
 };
 
-/** Setting course session and group global values */
-$settingCourseConditions = function (Request $request) use ($cidReset, $app) {
-
-    $cidReq    = $request->get('cidReq');
-    $sessionId = $request->get('id_session');
-    $groupId   = $request->get('gidReq');
-
-    $tempCourseId  = api_get_course_id();
-    $tempGroupId   = api_get_group_id();
-    $tempSessionId = api_get_session_id();
-
-    $courseReset = false;
-    if ((!empty($cidReq) && $tempCourseId != $cidReq) || empty($tempCourseId) || empty($tempCourseId) == -1) {
-        $courseReset = true;
-    }
-
-    if (isset($cidReset) && $cidReset == 1) {
-        $courseReset = true;
-    }
-
-    Session::write('courseReset', $courseReset);
-
-    $groupReset = false;
-    if ($tempGroupId != $groupId || empty($tempGroupId)) {
-        $groupReset = true;
-    }
-
-    $sessionReset = false;
-    if ($tempSessionId != $sessionId || empty($tempSessionId)) {
-        $sessionReset = true;
-    }
-    /*
-        $app['monolog']->addDebug('Start');
-        $app['monolog']->addDebug($courseReset);
-        $app['monolog']->addDebug($cidReq);
-        $app['monolog']->addDebug($tempCourseId);
-        $app['monolog']->addDebug('End');
-    */
-
-    if ($courseReset) {
-        if (!empty($cidReq) && $cidReq != -1) {
-            $courseInfo = api_get_course_info($cidReq, true, true);
-
-            if (!empty($courseInfo)) {
-                $courseCode = $courseInfo['code'];
-                $courseId   = $courseInfo['real_id'];
-
-                Session::write('_real_cid', $courseId);
-                Session::write('_cid', $courseCode);
-                Session::write('_course', $courseInfo);
-
-            } else {
-                $app->abort(404, 'Course not available');
-            }
-        } else {
-            Session::erase('_real_cid');
-            Session::erase('_cid');
-            Session::erase('_course');
-        }
-    }
-
-    $courseCode = api_get_course_id();
-
-    if (!empty($courseCode) && $courseCode != -1) {
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $time = api_get_utc_datetime();
-        $sql = "UPDATE $tbl_course SET last_visit= '$time' WHERE code='$courseCode'";
-        Database::query($sql);
-    }
-
-    if ($sessionReset) {
-        Session::erase('session_name');
-        Session::erase('id_session');
-
-        if (!empty($sessionId)) {
-            $sessionInfo = api_get_session_info($sessionId);
-            if (empty($sessionInfo)) {
-                $app->abort(404, 'Session not available');
-            } else {
-                Session::write('id_session', $sessionId);
-            }
-        }
-    }
-
-    if ($groupReset) {
-        Session::erase('_gid');
-        if (!empty($groupId)) {
-            Session::write('_gid', $groupId);
-        }
-    }
-
-    /*if (!isset($_SESSION['login_as'])) {
-        $userId = api_get_user_id();
-
-        // Course login
-        if (isset($userId)) {
-            //@todo move to
-            //event_course_login(api_get_course_int_id(), $userId, api_get_session_id());
-        }
-    }*/
-};
-
 /** Only course admin has access. */
 $userCourseAdmin = function (Request $request) use ($app) {
     if (api_is_allowed_to_edit()) {
@@ -479,37 +377,38 @@ $removeCidResetDependingOfSection = function (Request $request) use ($app, $remo
 };
 
 /** "/" and "/index" paths */
-$app->match('/', 'index.controller:indexAction', 'GET')
+/*$app->match('/', 'index.controller:indexAction', 'GET')
     ->assert('type', '.+') //allowing slash "/"
     ->before($removeCidReset)
     ->after($afterLogin)
     ->bind('root')
-;
+;*/
 
+/*
 $app->match('/index', 'index.controller:indexAction', 'GET')
     ->before($removeCidReset)
     ->after($afterLogin)
-    ->bind('index');
+    ->bind('index');*/
 
 /** User portal */
-$app->get('/userportal', 'userPortal.controller:indexAction')
+/*$app->get('/userportal', 'userPortal.controller:indexAction')
     ->before($userIsLoggedIn)
-    ->before($removeCidReset);
+    ->before($removeCidReset);*/
 
-$app->get('/toggleStudentView', 'userPortal.controller:toggleStudentViewAction')->bind('toggle_student_view');
+//$app->get('/toggleStudentView', 'userPortal.controller:toggleStudentViewAction')->bind('toggle_student_view');
 
-$app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexAction')
+/*$app->get('/userportal/{type}/{filter}/{page}', 'userPortal.controller:indexAction')
     ->before($userIsLoggedIn)
     ->before($removeCidReset)
     ->value('type', 'courses') //default values
     ->value('filter', 'current')
     ->value('page', '1')
-    ->bind('userportal');
+    ->bind('userportal');*/
 
 /** Legacy wrapper */
 $app->match('/main/{file}', 'legacy.controller:classicAction', 'GET|POST')
     ->before($removeCidResetDependingOfSection)
-    ->before($settingCourseConditions)
+    //->before($settingCourseConditions)
     ->before($checkLogin)
     ->before(function () use ($app) {
         // Do not load breadcrumbs
@@ -524,7 +423,7 @@ $app->match('/login', 'index.controller:loginAction', 'GET|POST')
     ->bind('login');
 
 /** Course home instead of courses/MATHS the new URL is web/courses/MATHS  */
-$app->match('/courses/{cidReq}/{id_session}/', 'course_home.controller:indexAction', 'GET|POST')
+/*$app->match('/courses/{cidReq}/{id_session}/', 'course_home.controller:indexAction', 'GET|POST')
     ->assert('id_session', '\d+')
     ->assert('type', '.+')
     ->before($settingCourseConditions)
@@ -536,13 +435,13 @@ $app->match('/courses/{cidReq}', 'course_home.controller:indexAction', 'GET|POST
     ->assert('type', '.+')
     ->before($settingCourseConditions)
     ->before($userPermissionsInsideACourse)
-    ->before($checkLogin);
+    ->before($checkLogin);*/
 
 // @todo this is the same as above but with out slash (otherwise we will have an httpexception)
-$app->match('/courses/{cidReq}/', 'course_home.controller:indexAction', 'GET|POST')
+/*$app->match('/courses/{cidReq}/', 'course_home.controller:indexAction', 'GET|POST')
     ->assert('type', '.+')
     ->before($settingCourseConditions)
-    ->before($userPermissionsInsideACourse);
+    ->before($userPermissionsInsideACourse);*/
 
 /** Course documents */
 $app->get('/data/courses/{courseCode}/document/{file}', 'index.controller:getDocumentAction')
@@ -562,16 +461,9 @@ $app->get('/data/courses/{courseCode}/upload/{file}', 'index.controller:getCours
     ->assert('type', '.+')
     ->bind('getCourseUploadFileAction');
 
-/** Certificates */
-$app->match('/certificates/{id}', 'certificate.controller:indexAction', 'GET');
-
 /** Portal news */
-$app->match('/news/{id}', 'news.controller:indexAction', 'GET')
-    ->bind('portal_news_per_id');
-
-/** Portal news */
-$app->match('/news', 'news.controller:newsAction', 'GET')
-    ->bind('portal_news');
+/*$app->match('/news', 'news.controller:newsAction', 'GET')
+    ->bind('portal_news');*/
 
 /** LP controller (subscribe users to a LP) */
 $app->match('/learnpath/subscribe_users/{lpId}', 'learnpath.controller:indexAction', 'GET|POST')
@@ -602,20 +494,8 @@ $app->get('/data/upload/groups/{groupId}/{file}', 'index.controller:getGroupFile
     ->assert('file', '.+')
     ->assert('type', '.+');
 
-/** Admin */
-$app->get('/admin/dashboard', 'index.controller:dashboardAction')
-    ->assert('type', '.+')
-    ->bind('admin_dashboard');
-
 /** Question manager - admin */
-$app->get('/admin/questionmanager', 'question_manager.controller:questionManagerIndexAction')
-    ->assert('type', '.+')
-    ->bind('admin_questionmanager');
-
-$app->match('/admin/questionmanager/questions', 'question_manager.controller:questionsAction', 'GET|POST')
-    ->assert('type', '.+')
-    ->bind('admin_questions');
-
+/*
 $app->match('/admin/questionmanager/questions/{id}/edit', 'question_manager.controller:editQuestionAction', 'GET|POST')
     ->assert('type', '.+')
     ->bind('admin_questions_edit');
@@ -644,16 +524,17 @@ $app->match('/admin/questionmanager/categories/new', 'question_manager.controlle
 
 $app->match('/admin/questionmanager/categories/{id}/delete', 'question_manager.controller:deleteCategoryAction', 'POST')
     ->bind('admin_category_delete');
+*/
 
 /** Exercises */
 $app->match('courses/{cidReq}/{id_session}/exercise/question-pool', 'exercise_manager.controller:questionPoolAction', 'POST')
-    ->before($settingCourseConditions)
+    //->before($settingCourseConditions)
     ->before($userPermissionsInsideACourse)
     ->bind('exercise_question_pool_global');
 
 $app->match('courses/{cidReq}/{id_session}/exercise/{exerciseId}/question-pool', 'exercise_manager.controller:questionPoolAction', 'GET|POST')
     ->assert('exerciseId', '\d+')
-    ->before($settingCourseConditions)
+    //->before($settingCourseConditions)
     ->before($userCourseAdmin)
     ->before($userPermissionsInsideACourse)
     ->bind('exercise_question_pool');
@@ -661,7 +542,7 @@ $app->match('courses/{cidReq}/{id_session}/exercise/{exerciseId}/question-pool',
 $app->match('courses/{cidReq}/{id_session}/exercise/{exerciseId}/copy-question/{questionId}', 'exercise_manager.controller:copyQuestionAction', 'GET|POST')
     ->assert('questionId', '\d+')
     ->assert('exerciseId', '\d+')
-    ->before($settingCourseConditions)
+    //->before($settingCourseConditions)
     ->before($userCourseAdmin)
     ->before($userPermissionsInsideACourse)
     ->bind('exercise_copy_question');
@@ -669,7 +550,7 @@ $app->match('courses/{cidReq}/{id_session}/exercise/{exerciseId}/copy-question/{
 $app->match('courses/{cidReq}/{id_session}/exercise/{exerciseId}/reuse-question/{questionId}', 'exercise_manager.controller:reuseQuestionAction', 'GET|POST')
     ->assert('questionId', '\d+')
     ->assert('exerciseId', '\d+')
-    ->before($settingCourseConditions)
+    //->before($settingCourseConditions)
     ->before($userCourseAdmin)
     ->before($userPermissionsInsideACourse)
     ->bind('exercise_reuse_question');
@@ -679,7 +560,7 @@ $app->match('/courses/{cidReq}/{id_session}/exercise/question/{id}', 'exercise_m
     ->assert('id_session', '\d+')
     ->assert('id', '\d+')
     ->assert('type', '.+')
-    ->before($settingCourseConditions)
+    //->before($settingCourseConditions)
     ->before($userPermissionsInsideACourse)
     ->before($userCourseAdmin)
     ->bind('question_show');
@@ -689,7 +570,7 @@ $app->match('/courses/{cidReq}/{id_session}/exercise/{exerciseId}/question/{id}'
     ->assert('exerciseId', '\d+')
     ->assert('id', '\d+')
     ->assert('type', '.+')
-    ->before($settingCourseConditions)
+    //->before($settingCourseConditions)
     ->before($userPermissionsInsideACourse)
     ->before($userCourseAdmin)
     ->bind('exercise_question_show');
@@ -698,48 +579,50 @@ $app->match('/courses/{cidReq}/{id_session}/exercise/{exerciseId}/dashboard', 'e
     ->assert('id_session', '\d+')
     ->assert('exerciseId', '\d+')
     ->assert('type', '.+')
-    ->before($settingCourseConditions)
+    //->before($settingCourseConditions)
     ->before($userPermissionsInsideACourse)
     ->before($userCourseAdmin)
     ->bind('exercise_dashboard');
 
 $app->match('/courses/{cidReq}/{id_session}/exercise/question/{id}/edit', 'exercise_manager.controller:editQuestionAction', 'GET|POST')
     ->assert('type', '.+')
-    ->before($settingCourseConditions)
+    //->before($settingCourseConditions)
     ->before($userPermissionsInsideACourse)
     ->before($userCourseAdmin)
     ->bind('exercise_question_edit');
 
-$app->match('/admin/administrator/', 'admin.controller:indexAction', 'GET')
+/*$app->match('/ajax', 'model_ajax.controller:indexAction', 'GET')
     ->assert('type', '.+')
-    ->bind('admin_administrator');
-
-$app->match('/ajax', 'model_ajax.controller:indexAction', 'GET')
-    ->assert('type', '.+')
-    ->bind('model_ajax');
+    ->bind('model_ajax');*/
 
 if ($alreadyInstalled) {
     // Mount controllers.
     $controllers = array(
-        '/admin/' => 'admin.controller',
-        '/admin/administrator/upgrade' => 'upgrade.controller',
-        '/admin/administrator/roles' => 'role.controller',
-        '/admin/administrator/question_scores' => 'question_score.controller',
-        '/admin/administrator/question_score_names' => 'question_score_name.controller',
-        '/editor/' => 'editor.controller',
-        '/user/' => 'profile.controller',
-        '/app/session_path' => 'session_path.controller',
-        '/app/session_path/tree' => 'session_tree.controller',
-        '/courses/{course}/curriculum/category' => 'curriculum_category.controller',
-        '/courses/{course}/curriculum/item' => 'curriculum_item.controller',
-        '/courses/{course}/curriculum/user' => 'curriculum_user.controller',
-        '/courses/{course}/curriculum' => 'curriculum.controller',
-        '/courses/{course}/course_home' => 'course_home.controller',
-        '/courses/{course}/introduction' => 'introduction.controller',
+        //'/ajax' => 'model_ajax.controller',
+        //'/admin/' => 'admin.controller',
+        //'/admin/administrator/upgrade' => 'upgrade.controller',
+        //'/admin/administrator/branch' => 'branch.controller',
+        //'/admin/administrator/roles' => 'role.controller',
+        //'/admin/administrator/question_scores' => 'question_score.controller',
+        //'/admin/administrator/question_score_names' => 'question_score_name.controller',
+//        '/editor/' => 'editor.controller',
+        //'/user/' => 'profile.controller',
+        //'/app/session_path' => 'session_path.controller',
+        //'/app/session_path/tree' => 'session_tree.controller',
+        //'/courses/{course}/curriculum/category' => 'curriculum_category.controller',
+        //'/courses/{course}/curriculum/item' => 'curriculum_item.controller',
+        //'/courses/{course}/curriculum/user' => 'curriculum_user.controller',
+        //'/courses/{course}/curriculum' => 'curriculum.controller',
+        //'/courses/{course}/course_home' => 'course_home.controller',
+        //'/courses/{course}/introduction' => 'introduction.controller',
     );
-
-    foreach ($controllers as $route => $controller) {
-        $app->mount($route, new ReflectionControllerProvider($controller));
+    foreach ($app['controller_array'] as $route => $controllerInfo) {
+        if (isset($controllerInfo[1]) && $controllerInfo[1]) {
+            $app->mount(
+                $controllerInfo[1],
+                new ReflectionControllerProvider($route)
+            );
+        }
     }
 }
 

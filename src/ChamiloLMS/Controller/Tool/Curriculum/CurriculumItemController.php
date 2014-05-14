@@ -3,7 +3,7 @@
 
 namespace ChamiloLMS\Controller\Tool\Curriculum;
 
-use ChamiloLMS\Controller\CommonController;
+use ChamiloLMS\Controller\CrudController;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,8 +18,37 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class CurriculumItemController extends CommonController
+class CurriculumItemController extends CrudController
 {
+    public function getControllerAlias()
+    {
+        return 'curriculum_item.controller';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplatePath()
+    {
+        return 'tool/curriculum/item/';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClass()
+    {
+        return 'ChamiloLMS\Entity\CurriculumItem';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return 'ChamiloLMS\Form\CurriculumItemType';
+    }
+
     /**
      *
      * @Route("/")
@@ -55,26 +84,7 @@ class CurriculumItemController extends CommonController
         return parent::listingAction();
     }
 
-    /**
-    *
-    * @Route("/{id}", requirements={"id" = "\d+"})
-    * @Method({"GET"})
-    */
-    public function readAction($id)
-    {
-        return parent::readAction($id);
-    }
-
-    /**
-    * @Route("/add")
-    * @Method({"GET"})
-    */
-    public function addAction()
-    {
-        return parent::addAction();
-    }
-
-    /**
+      /**
     * @Route("/add-from-category/{id}")
     * @Method({"GET, POST"})
     */
@@ -174,57 +184,13 @@ class CurriculumItemController extends CommonController
         return parent::editAction($id);
     }
 
-    /**
-    *
-    * @Route("/{id}/delete", requirements={"id" = "\d+"})
-    * @Method({"GET"})
-    */
-    public function deleteAction($id)
-    {
-        return parent::deleteAction($id);
-    }
 
-    protected function getControllerAlias()
-    {
-        return 'curriculum_item.controller';
-    }
+
 
     protected function generateDefaultCrudRoutes()
     {
         $routes = parent::generateDefaultCrudRoutes();
         $routes['add_from_category'] = 'curriculum_item.controller:addFromCategoryAction';
         return $routes ;
-    }
-
-    /**
-    * {@inheritdoc}
-    */
-    protected function getTemplatePath()
-    {
-        return 'tool/curriculum/item/';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRepository()
-    {
-        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\CurriculumItem');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getNewEntity()
-    {
-        return new CurriculumItem();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFormType()
-    {
-        return new CurriculumItemType();
     }
 }

@@ -36,27 +36,19 @@ Patchwork\Utf8\Bootup::initAll();
 
 $app = new Application();
 
+// Installing Chamilo paths.
 $app->bindInstallPaths(require __DIR__.'/paths.php');
 
+// Reading configuration files.
 $app->readConfigurationFiles();
 
 $alreadyInstalled = $app->isInstalled();
 
-/** End loading config files */
-
-/** Including legacy libs */
 $basePath = $app['path.base'];
 
+/** Including legacy libs */
 require_once $basePath . 'main/inc/lib/api.lib.php';
-
-// Setting $_configuration['url_append']
-/*
-$urlInfo = isset($_configuration['root_web']) ? parse_url($_configuration['root_web']) : null;
-$_configuration['url_append'] = null;
-if (isset($urlInfo['path'])) {
-    $_configuration['url_append'] = '/'.basename($urlInfo['path']);
-}*/
-
+// @todo remove $_configuration['url_append'] calls
 $libPath = $basePath.'/main/inc/lib/';
 
 // Database constants
@@ -70,10 +62,9 @@ require_once $libPath . 'formvalidator/Rule/allowed_tags.inc.php';
 
 $app['app.theme'] = 'chamilo';
 
-// Developer options relies in the configuration.php file
-
-$app['debug'] = isset($_configuration['debug']) ? $_configuration['debug'] : false;
-$app['show_profiler'] = isset($_configuration['show_profiler']) ? $_configuration['show_profiler'] : false;
+// Developer options relies in the configuration.php file.
+$app['debug'] = isset($app->getConfiguration()->debug) ? $app->getConfiguration()->debug : false;
+$app['show_profiler'] = isset($app->getConfiguration()->show_profiler) ? $app->getConfiguration()->show_profiler : false;
 
 // Enables assetic in order to load 1 compressed stylesheet or split files
 //$app['assetic.enabled'] = $app['debug'];
@@ -199,18 +190,9 @@ $app->error(
     }
 );
 
-// Checking if we have a valid language. If not we set it to the platform language.
-$cidReset = null;
+$app['cidReset'] = null;
 
 require_once $app['path.app'].'filters.php';
-
-// The global variable $charset has been defined in a language file too (trad4all.inc.php), this is legacy situation.
-// So, we have to reassign this variable again in order to keep its value right.
-$charset = $charset_initial_value;
-
-// The global variable $text_dir has been defined in the language file trad4all.inc.php.
-// For determing text direction correspondent to the current language we use now information from the internationalization library.
-$text_dir = api_get_text_direction();
 
 /** Setting the is_admin key */
 $app['is_admin'] = false;

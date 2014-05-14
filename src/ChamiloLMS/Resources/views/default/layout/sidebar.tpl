@@ -49,20 +49,6 @@
                 </li>
 
                 <li class="active">
-                    <a href="{{ _p.web_main }}calendar/agenda_js.php?type=personal">
-                        <i class="fa fa-calendar fa-lg"></i>
-                        <span class="text">{{ 'Agenda' | get_lang }}</span>
-                    </a>
-                </li>
-
-                <li class="active">
-                    <a href="{{ _p.web }}main/social/home.php">
-                        <i class="fa fa-user fa-lg"></i>
-                        <span class="text">{{ 'Profile' | get_lang }}</span>
-                    </a>
-                </li>
-
-                <li class="active">
                     <a href="{{ _p.web }}main/social/groups.php">
                         <i class="fa fa-users fa-lg"></i>
                         <span class="text">{{ 'Groups' | get_lang }}</span>
@@ -70,9 +56,9 @@
                 </li>
 
                 <li class="active">
-                    <a href="{{ _p.web_main }}mySpace/index.php">
-                        <i class="fa  fa-bar-chart-o fa-lg"></i>
-                        <span class="text">{{ 'Reporting' | get_lang }}</span>
+                    <a href="{{ _p.web }}main/social/groups.php">
+                        <i class="fa fa-users fa-lg"></i>
+                        <span class="text">{{ 'Sessions' | get_lang }}</span>
                     </a>
                 </li>
 

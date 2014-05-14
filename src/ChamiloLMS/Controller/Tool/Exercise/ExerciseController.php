@@ -1,8 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace ChamiloLMS\Controller;
+namespace ChamiloLMS\Controller\Tool\Exercise;
 
+use ChamiloLMS\Controller\BaseController;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +15,7 @@ use \ChamiloSession as Session;
  * @package ChamiloLMS.Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class ExerciseController extends CommonController
+class ExerciseController extends BaseController
 {
 
     public function dashboardAction(Application $app, $exerciseId)

@@ -3,9 +3,10 @@
 
 namespace ChamiloLMS\Controller\Tool\CourseHome;
 
+use ChamiloLMS\Controller\ToolBaseController;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
-use ChamiloLMS\Controller\CommonController;
+use ChamiloLMS\Controller\CrudController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use ChamiloLMS\Entity\CTool;
@@ -15,26 +16,38 @@ use Display;
 
 /**
  * Class CourseHomeController
- * @package ChamiloLMS\Controller
+ * @package ChamiloLMS\Controller\Tool\CourseHome
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class CourseHomeController extends CommonController
+class CourseHomeController extends ToolBaseController
 {
+    public function getClass()
+    {
+        return 'ChamiloLMS\Entity\CTool';
+    }
+
     /**
-     * @Route("/courses/{cidReq}/{sessionId}")
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return 'ChamiloLMS\Form\CourseHomeToolType';
+    }
+
+    /**
+     * @Route("/")
+     * @Route("/home")
      * @Method({"GET"})
      *
-     * @param string $cidReq
-     * @param int $id_session
      * @return Response
      */
-    public function indexAction($cidReq, $id_session = null)
+    public function indexAction()
     {
         $courseCode = api_get_course_id();
         $sessionId = api_get_session_id();
         $userId = $this->getUser()->getUserId();
 
-        $coursesAlreadyVisited = $this->getRequest()->getSession()->get('coursesAlreadyVisited');
+        $coursesAlreadyVisited = $this->getSessionHandler()->get('coursesAlreadyVisited');
 
         $result = $this->autolaunch();
 
@@ -42,21 +55,17 @@ class CourseHomeController extends CommonController
         $showAutoLaunchExerciseWarning = $result['show_autolaunch_exercise_warning'];
 
         if ($showAutoLaunchLpWarning) {
-            $this->getTemplate()->assign(
-                'lp_warning',
-                Display::return_message(get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP'), 'warning')
-            );
+            $this->addMessage('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP', 'warning');
         }
         if ($showAutoLaunchExerciseWarning) {
-            $this->getTemplate()->assign(
-                'exercise_warning',
-                Display::return_message(get_lang('TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise'), 'warning')
-            );
+            $this->addMessage('TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise', 'warning');
         }
+
         if ($this->isCourseTeacher()) {
+
             $editIcons = Display::url(
                 Display::return_icon('edit.png'),
-                $this->generateUrl('course_home.controller:iconListAction', array('course' => api_get_course_id()))
+                $this->generateControllerUrl('iconListAction', array('courseCode' => api_get_course_id()))
             );
 
             $this->getTemplate()->assign('edit_icons', $editIcons);
@@ -65,11 +74,11 @@ class CourseHomeController extends CommonController
         if (!isset($coursesAlreadyVisited[$courseCode])) {
             event_access_course();
             $coursesAlreadyVisited[$courseCode] = 1;
-            $this->getRequest()->getSession()->set('coursesAlreadyVisited', $coursesAlreadyVisited);
+            $this->getSessionHandler()->set('coursesAlreadyVisited', $coursesAlreadyVisited);
         }
 
-        $this->getRequest()->getSession()->remove('toolgroup');
-        $this->getRequest()->getSession()->remove('_gid');
+        $this->getSessionHandler()->remove('toolgroup');
+        $this->getSessionHandler()->remove('_gid');
 
         $isSpecialCourse = \CourseManager::is_special_course($courseCode);
 
@@ -108,7 +117,7 @@ class CourseHomeController extends CommonController
             $this->getTemplate()->assign('session_info', $sessionInfo);
         }
 
-        $response = $this->get('template')->render_template($this->getTemplatePath().'index.tpl');
+        $response = $this->renderTemplate('index.tpl');
 
         return new Response($response, 200, array());
     }
@@ -145,7 +154,9 @@ class CourseHomeController extends CommonController
                 $condition = '';
                 if (!empty($session_id)) {
                     $condition =  api_get_session_condition($session_id);
-                    $sql = "SELECT iid FROM $table WHERE c_id = $course_id AND autolaunch = 1 $condition LIMIT 1";
+                    $sql = "SELECT iid FROM $table
+                            WHERE c_id = $course_id AND autolaunch = 1 $condition
+                            LIMIT 1";
                     $result = \Database::query($sql);
                     //If we found nothing in the session we just called the session_id =  0 autolaunch
                     if (\Database::num_rows($result) ==  0) {
@@ -155,10 +166,12 @@ class CourseHomeController extends CommonController
                     }
                 }
 
-                $sql = "SELECT iid FROM $table WHERE c_id = $course_id AND autolaunch = 1 $condition LIMIT 1";
+                $sql = "SELECT iid FROM $table
+                        WHERE c_id = $course_id AND autolaunch = 1 $condition
+                        LIMIT 1";
                 $result = \Database::query($sql);
                 if (\Database::num_rows($result) >  0) {
-                    $data = \Database::fetch_array($result,'ASSOC');
+                    $data = \Database::fetch_array($result, 'ASSOC');
                     if (!empty($data['iid'])) {
                         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
                             $showAutoLaunchExerciseWarning = true;
@@ -213,10 +226,12 @@ class CourseHomeController extends CommonController
                     }
                 }
 
-                $sql = "SELECT id FROM $lp_table WHERE c_id = $course_id AND autolunch = 1 $condition LIMIT 1";
+                $sql = "SELECT id FROM $lp_table
+                        WHERE c_id = $course_id AND autolunch = 1 $condition
+                        LIMIT 1";
                 $result = \Database::query($sql);
                 if (\Database::num_rows($result) >  0) {
-                    $lp_data = \Database::fetch_array($result,'ASSOC');
+                    $lp_data = \Database::fetch_array($result, 'ASSOC');
                     if (!empty($lp_data['id'])) {
                         if (api_is_platform_admin() || api_is_allowed_to_edit()) {
                             $showAutoLaunchLpWarning = true;
@@ -386,6 +401,7 @@ class CourseHomeController extends CommonController
         $this->getTemplate()->assign('items_from_course', $itemsFromCourse);
         $this->getTemplate()->assign('items_from_session', $itemsFromSession);
         $this->getTemplate()->assign('links', $this->generateLinks());
+
         return $this->get('template')->render_template($this->getTemplatePath().'tool/list.tpl');
     }
 
@@ -520,42 +536,5 @@ class CourseHomeController extends CommonController
         $this->getTemplate()->assign('links', $this->generateLinks());
         $url = $this->generateUrl('course_home.controller:iconListAction');
         return $this->redirect($url);
-    }
-
-    protected function getControllerAlias()
-    {
-        return 'course_home.controller';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getTemplatePath()
-    {
-        return 'tool/course_home/';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRepository()
-    {
-        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\CTool');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getNewEntity()
-    {
-        return new CTool();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFormType()
-    {
-        return new CourseHomeToolType();
     }
 }

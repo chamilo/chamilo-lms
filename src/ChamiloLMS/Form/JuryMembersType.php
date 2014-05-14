@@ -46,7 +46,7 @@ class JuryMembersType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Entity\JuryMembers'
+                'data_class' => 'ChamiloLMS\Entity\JuryMembers'
             )
         );
     }

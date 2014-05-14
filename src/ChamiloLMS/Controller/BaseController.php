@@ -4,19 +4,21 @@
 namespace ChamiloLMS\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Knp\Menu\Matcher\Matcher;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Doctrine\ORM\Query;
-use Doctrine\ORM\NoResultException;
 use Silex\Application;
 use Flint\Controller\Controller as FlintController;
-
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Symfony\Component\DependencyInjection\Container;
+
+use Knp\Menu\FactoryInterface as MenuFactoryInterface;
+use Knp\Menu\ItemInterface as MenuItemInterface;
+use Knp\Menu\Renderer\ListRenderer;
 
 /**
  * Each entity controller must extends this class.
@@ -27,45 +29,9 @@ abstract class BaseController extends FlintController
 {
     protected $app;
     protected $pimple;
-
-    /**
-     * This method should return the entity's repository.
-     *
-     * @abstract
-     * @return \Doctrine\ORM\EntityRepository
-     */
-    abstract protected function getRepository();
-
-    /**
-     * This method should return a new entity instance to be used for the "create" action.
-     *
-     * @abstract
-     * @return Object
-     */
-    abstract protected function getNewEntity();
-
-    /**
-     * Returns a new Form Type
-     * @return AbstractType
-     */
-    abstract protected function getFormType();
-
-    /**
-     * Returns the template path
-     * */
-    abstract protected function getTemplatePath();
-
-    /**
-     * Returns the controller alias
-     * @example for QuestionScoreController: question_score_controller
-     */
-    abstract protected function getControllerAlias();
-
-    /**
-     * Array with links
-     * @return array
-     */
-    abstract protected function generateLinks();
+    private $classParts;
+    protected $breadcrumbs = array();
+    protected $classNameLabel;
 
     /**
      * @param Application $app
@@ -75,6 +41,191 @@ abstract class BaseController extends FlintController
         $this->app = $app;
         // In order to use the Flint Controller.
         $this->pimple = $app;
+
+        $className = get_class($this);
+        $this->classParts = explode('\\', Container::underscore($className));
+
+        //if (!$this->classnameLabel) {
+        $this->classNameLabel = str_replace('Controller', '', substr($className, strrpos($className, '\\') + 1));
+        //}
+    }
+
+    /**
+     * @return array
+     */
+    protected function getClassParts()
+    {
+        return $this->classParts;
+    }
+
+    /**
+     * Converts string 'ChamiloLMS\Controller\Admin\QuestionManager' into
+     * 'admin/question_manager'
+     */
+    public function getTemplatePath()
+    {
+        $parts = $this->classParts;
+
+        $newPath = array();
+        foreach ($parts as $part) {
+            if (in_array($part, array('chamilo_lms', 'controller'))
+                //strpos($part, '_controller') > 0
+            ) {
+                continue;
+            }
+            $newPath[] = $part;
+        }
+
+        $template = implode('/', $newPath);
+        return str_replace('_controller', '', $template);
+    }
+
+    /**
+     * Transforms 'QuestionManagerController' to 'question_manager.controller'
+     * @return string
+     */
+    public function getControllerAlias()
+    {
+        $parts = $this->classParts;
+        $parts = array_reverse($parts);
+        $alias = str_replace('_controller', '.controller', $parts[0]);
+        return $alias;
+    }
+
+    /**
+     * Translator shortcut
+     * @param string $variable
+     * @return string
+     */
+    public function trans($variable)
+    {
+        return $this->get('translator')->trans($variable);
+    }
+
+    /**
+     * Returns the class name label
+     * @example RoleController -> Role
+     *
+     * @return string the class name label
+     */
+    public function getClassNameLabel()
+    {
+        return $this->classNameLabel;
+    }
+
+    /**
+     * @return MenuFactoryInterface
+     */
+    public function getMenuFactory()
+    {
+        return $this->get('knp_menu.factory');
+    }
+
+    /**
+     * @param string $action
+     * @return MenuItemInterface
+     */
+    protected function getBreadcrumbs($action)
+    {
+        $breadcrumbs = $this->buildBreadcrumbs($action);
+
+        return $breadcrumbs;
+    }
+
+    /** Main home URL
+     * @return MenuItemInterface
+     */
+    protected function getHomeBreadCrumb()
+    {
+        $menu = $this->getMenuFactory()->createItem(
+            'root',
+            array(
+                'childrenAttributes' => array(
+                    'class'        => 'breadcrumb',
+                    'currentClass' => 'active'
+                )
+            )
+        );
+
+        $menu->addChild(
+            $this->trans('Home'),
+            array('uri' => $this->generateUrl('home'))
+        );
+
+        return $menu;
+    }
+
+    /**
+     * @param $action
+     * @param MenuItemInterface $menu
+     * @return MenuItemInterface
+     */
+    public function buildBreadcrumbs($action, MenuItemInterface $menu = null)
+    {
+        if (!$menu) {
+            $menu = $this->getHomeBreadCrumb();
+        }
+
+        $menu->addChild(
+            $this->trans($this->getClassnameLabel().'List'),
+            array('uri' => $this->generateControllerUrl('listingAction'))
+        );
+
+        $action = str_replace(
+            array($this->getControllerAlias().':', 'Action'),
+            '',
+            $action
+        );
+
+        switch ($action) {
+            case 'add':
+            case 'edit':
+                $menu->addChild(
+                    $this->trans($this->getClassnameLabel().ucfirst($action))
+                    //array('uri' => $this->generateControllerUrl($action.'Action'))
+                );
+                break;
+        }
+
+        return $menu;
+    }
+
+    /**
+     * @param array $breadCrumbList
+     * @return string
+     */
+    protected function parseLegacyBreadCrumb($breadCrumbList = array())
+    {
+        $menu = $this->getHomeBreadCrumb();
+        foreach ($breadCrumbList as $item) {
+            $menu->addChild(
+                $this->trans($item['title']),
+                array('uri' => $item['url'])
+            );
+        }
+
+        $renderer = new ListRenderer(new \Knp\Menu\Matcher\Matcher());
+        $result = $renderer->render($menu);
+
+        return $result;
+    }
+
+    /**
+     * Renders the current controller template
+     * @param string $name
+     * @param array $elements
+     * @return mixed
+     */
+    public function renderTemplate($name, $elements = array())
+    {
+        $name = $this->getTemplatePath().'/'.$name;
+
+        $renderer = new ListRenderer(new \Knp\Menu\Matcher\Matcher());
+        $action = $this->getRequest()->get('_route');
+        $result = $renderer->render($this->getBreadcrumbs($action));
+        $elements['new_breadcrumb'] = $result;
+
+        return $this->getTemplate()->renderTemplate($name, $elements);
     }
 
     /**
@@ -100,7 +251,15 @@ abstract class BaseController extends FlintController
     }
 
     /**
-     * @return \Template
+     * @return null|\Symfony\Component\HttpFoundation\Session\SessionInterface
+     */
+    protected function getSessionHandler()
+    {
+        return $this->getRequest()->getSession();
+    }
+
+    /**
+     * @return \ChamiloLMS\Framework\Template
      */
     protected function getTemplate()
     {
@@ -138,7 +297,7 @@ abstract class BaseController extends FlintController
     {
         $user = parent::getUser();
         if (empty($user)) {
-            return $this->abort(404, 'Login required.');
+            return $this->abort(404, $this->trans('Login required.'));
         }
         return $user;
     }
@@ -159,6 +318,28 @@ abstract class BaseController extends FlintController
         return $this->get('orm.em');
     }
 
+    /**
+     * @return \Doctrine\DBAL\Connection
+     */
+    protected function getDatabase()
+    {
+        return $this->get('db');
+    }
+
+    /**
+     * Shortcut of
+     * $this->getManager()->getRepository('ChamiloLMS\Entity\MyClass')
+     * @param string $entity
+     * @return \Doctrine\ORM\EntityRepository
+     */
+    /*sprotected function getRepository($entity)
+    {
+        return $this->getManager()->getRepository('ChamiloLMS\Entity\\'.$entity);
+    }*/
+
+    /**
+     * @see \Silex\Application::sendFile
+     */
     public function sendFile($file, $status = 200, $headers = array(), $contentDisposition = null)
     {
         return $this->pimple->sendFile($file, $status, $headers, $contentDisposition);
@@ -169,6 +350,7 @@ abstract class BaseController extends FlintController
      * @param string $label
      * @param array
      * @return mixed
+     * @deprecated
      */
     protected function createUrl($label, $parameters = array())
     {
@@ -216,186 +398,39 @@ abstract class BaseController extends FlintController
     /**
      * @see Symfony\Component\Routing\RouterInterface::generate()
      */
-    public function generateUrl($name, array $parameters = array(), $reference = UrlGeneratorInterface::ABSOLUTE_PATH)
-    {
-        $course = $this->getCourse();
-        if (!empty($course)) {
-            $parameters['course'] = $course->getCode();
+    public function generateUrl(
+        $name,
+        array $parameters = array(),
+        $reference = UrlGeneratorInterface::ABSOLUTE_PATH
+    ) {
+        if ($name != 'home') {
+            $course = $this->getCourse();
+            if (!empty($course)) {
+                $parameters['cidReq'] = $course->getCode();
+            }
+            $session = $this->getSession();
+            if (!empty($session)) {
+                $parameters['id_session'] = $session->getId();
+            }
         }
-        $session = $this->getSession();
-        if (!empty($session)) {
-            $parameters['id_session'] = $session->getId();
-        }
-
         return parent::generateUrl($name, $parameters, $reference);
     }
 
-    // CRUD default actions
-
     /**
-     * @Route("/")
-     * @Method({"GET"})
+     * In a controller like RoleController when calling the indexAction URL
+     * this function will transform to role.controller:indexAction
+     * @param string $name
+     * @param array $parameters
+     * @param bool $reference
+     * @return mixed
      */
-    public function listingAction()
-    {
-        $items = $this->listAction('array');
-        $template = $this->getTemplate();
-        $template->assign('items', $items);
-        $template->assign('links', $this->generateLinks());
-        $response = $template->renderTemplate($this->getTemplatePath().'list.tpl');
-        return new Response($response, 200, array());
-    }
-
-    /**
-     *
-     * @Route("/add")
-     * @Method({"GET"})
-     */
-    public function addAction()
-    {
-        $request = $this->getRequest();
-        $form = $this->createForm($this->getFormType(), $this->getDefaultEntity());
-
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $item = $form->getData();
-            $this->createAction($item);
-            $this->get('session')->getFlashBag()->add('success', "Added");
-            $url = $this->createUrl('list_link');
-            return $this->redirect($url);
-        }
-
-        $template = $this->getTemplate();
-        $template->assign('links', $this->generateLinks());
-        $template->assign('form', $form->createView());
-        $response = $template->renderTemplate($this->getTemplatePath().'add.tpl');
-        return new Response($response, 200, array());
-    }
-
-    /**
-     *
-     * @Route("/{id}", requirements={"id" = "\d+"})
-     * @Method({"GET"})
-     */
-    public function readAction($id)
-    {
-        $template = $this->getTemplate();
-        $template->assign('links', $this->generateLinks());
-        return $this->readEntity($id);
-    }
-
-    /**
-     *
-     * @Route("/{id}/edit", requirements={"id" = "\d+"})
-     * @Method({"GET"})
-     */
-    public function editAction($id)
-    {
-        $repo = $this->getRepository();
-        $request = $this->getRequest();
-        $item = $repo->findOneById($id);
-
-        if ($item) {
-
-            $form = $this->createForm($this->getFormType(), $item);
-
-            $form->handleRequest($request);
-
-            if ($form->isValid()) {
-                $data = $form->getData();
-                $this->updateAction($data);
-                $this->get('session')->getFlashBag()->add('success', "Updated");
-                $url = $this->createUrl('list_link');
-                return $this->redirect($url);
-            }
-
-            $template = $this->getTemplate();
-            $template->assign('item', $item);
-            $template->assign('form', $form->createView());
-            $template->assign('links', $this->generateLinks());
-            $response = $template->renderTemplate($this->getTemplatePath().'edit.tpl');
-            return new Response($response, 200, array());
-        } else {
-            return $this->createNotFoundException();
-        }
-    }
-
-    /**
-     * @Route("/{id}/delete", requirements={"id" = "\d+"})
-     * @Method({"GET"})
-     */
-    public function deleteAction($id)
-    {
-        $result = $this->removeEntity($id);
-        if ($result) {
-            $url = $this->createUrl('list_link');
-            $this->get('session')->getFlashBag()->add('success', "Deleted");
-
-            return $this->redirect($url);
-        }
-    }
-
-    /**
-     * Base "read" action.
-     *
-     * @param int $id
-     * @return JsonResponse|NotFoundHttpException
-     */
-    protected function readEntity($id)
-    {
-        $entityInstance = $this->getEntityForJson($id);
-        if (false === $entityInstance) {
-            return $this->createNotFoundException();
-        }
-
-        return new JsonResponse($entityInstance);
-    }
-
-    /**
-     * Base "delete" action.
-     * @param int id
-     * @return JsonResponse|NotFoundHttpException
-     */
-    protected function removeEntity($id)
-    {
-        $object = $this->getEntity($id);
-        if (false === $object) {
-            return $this->createNotFoundException();
-        }
-        $em = $this->getManager();
-        $em->remove($object);
-        $em->flush();
-        return new JsonResponse(array());
-    }
-
-    /**
-     * Base "list" action.
-     * @param string format
-     * @return JsonResponse
-     */
-    protected function listAction($format = 'json')
-    {
-        return $this->getList($format);
-    }
-
-    /**
-     * @param string $format
-     * @return JsonResponse
-     */
-    protected function getList($format = 'json')
-    {
-        $qb = $this->getRepository()->createQueryBuilder('e');
-        $list = $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
-
-        switch ($format) {
-            case 'json':
-                return new JsonResponse($list);
-                break;
-            default:
-                return $list;
-                break;
-        }
+    public function generateControllerUrl(
+        $name,
+        array $parameters = array(),
+        $reference = UrlGeneratorInterface::ABSOLUTE_PATH
+    ) {
+        $name = $this->getControllerAlias().':'.$name;
+        return $this->generateUrl($name, $parameters, $reference);
     }
 
     /**
@@ -418,198 +453,161 @@ abstract class BaseController extends FlintController
     }
 
     /**
-     * Base "read" action.
-     *
-     * @param int $id
-     * @param string format
-     *
-     * @return JsonResponse|NotFoundHttpException
+     * Get system setting.
+     * @param string $variable
+     * @param string $key
+     * @return string
      */
-    protected function readActionByFormat($id, $format = 'array')
+    public function getSetting($variable, $key = null)
     {
-        $entityInstance = $this->getEntityForJson($id);
-        if (false === $entityInstance) {
-            return $this->createNotFoundException();
-        }
-        switch($format) {
-            case 'json':
-                return new JsonResponse($entityInstance);
-            case 'array':
-                return $entityInstance;
-        }
-
-        return $entityInstance;
-    }
-
-    /**
-     * Base "create" action.
-     * @param $object
-     * @return JsonResponse|NotFoundHttpException
-     */
-    protected function createAction($object)
-    {
-        if (false === $object) {
-            throw new \Exception('Unable to create the entity');
-        }
-
-        $em = $this->getManager();
-        $em->persist($object);
-        $em->flush();
-
-        return new JsonResponse($this->getEntityForJson($object->getId()));
-    }
-
-    /**
-     * Base "create" action.
-     *
-     * @return JsonResponse|NotFoundHttpException
-     */
-    protected function createJsonAction()
-    {
-        $json = $this->getJsonDataFromRequest();
-
-        if (false === $json) {
-            throw new \Exception('Invalid JSON');
-        }
-
-        $object = $this->updateEntity($this->getNewEntity(), $json);
-
-        if (false === $object) {
-            throw new \Exception('Unable to create the entity');
-        }
-        $em = $this->getManager();
-        $em->persist($object);
-        $em->flush();
-
-        return new JsonResponse($this->getEntityForJson($object->getId()));
-    }
-
-    /**
-     * Base "upload" action.
-     * @param int id
-     * @return JsonResponse|NotFoundHttpException
-     */
-    protected function updateAction($object)
-    {
-        if (false === $object) {
-            return $this->createNotFoundException();
-        }
-        $this->getManager()->flush($object);
-
-        return new JsonResponse($this->getEntityForJson($object->getId()));
-    }
-
-    /**
-     * Base "upload" action.
-     * @param int id
-     * @return JsonResponse|NotFoundHttpException
-     */
-    protected function updateJsonAction($id, $data)
-    {
-        $object = $this->getEntity($id);
-        if (false === $object) {
-            return $this->createNotFoundException();
-        }
-
-        $json = $this->getJsonDataFromRequest();
-
-        if (false === $json) {
-            throw new \Exception('Invalid JSON');
-        }
-        if (false === $this->updateEntity($object, $json)) {
-            throw new \Exception('Unable to update the entity');
-        }
-        $this->getManager()->flush($object);
-
-        return new JsonResponse($this->getEntityForJson($object->getId()));
-    }
-
-    /**
-     * Returns an entity from its ID, or FALSE in case of error.
-     *
-     * @param int $id
-     * @return Object|boolean
-     */
-    protected function getEntity($id)
-    {
-        try {
-            return $this->getRepository()->find($id);
-        } catch (NoResultException $ex) {
-            return false;
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns an entity from its ID as an associative array, or FALSE in case of error.
-     *
-     * @param int $id
-     * @return array|boolean
-     */
-    protected function getEntityForJson($id)
-    {
-        try {
-            return $this->getRepository()->createQueryBuilder('e')
-                ->where('e.id = :id')
-                ->setParameter('id', $id)
-                ->getQuery()
-                ->getSingleResult(Query::HYDRATE_ARRAY);
-        } catch (NoResultException $ex) {
-            return false;
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns the request's JSON content, or FALSE in case of error.
-     *
-     * @return string|boolean
-     */
-    protected function getJsonDataFromRequest()
-    {
-        $data = $this->getRequest()->getContent();
-        if (!$data) {
-            return false;
-        }
-
-        return $data;
-    }
-
-    /**
-     * Updates an entity with data from a JSON string.
-     * Returns the entity, or FALSE in case of error.
-     *
-     * @param Object $entity
-     * @param string $data
-     * @return Object|boolean
-     */
-    protected function updateEntity($entity, $data)
-    {
-        $data = json_decode($data, true);
-
-        if ($data == null) {
-            return false;
-        }
-
-        foreach ($data as $name => $value) {
-            if ($name != 'id') {
-                $setter = 'set'.ucfirst($name);
-                if (method_exists($entity, $setter)) {
-                    call_user_func_array(array($entity, $setter), array($value));
-                }
+        $session = $this->getRequest()->getSession();
+        $settings = $session->get('_setting');
+        if (empty($key)) {
+            if (isset($settings[$variable])) {
+                return $settings[$variable];
+            }
+        } else {
+            if (isset($settings[$variable]) && isset($settings[$variable])) {
+                return $settings[$variable];
             }
         }
-
-        return $entity;
     }
 
     /**
-     * @return null
+     * @return bool
      */
-    protected function getDefaultEntity()
+    public function isCourseTeacher()
     {
-        return null;
+        $course = $this->getCourse();
+        if (!$course) {
+            return false;
+        } else {
+            if ($this->getSecurity()->isGranted('ROLE_ADMIN')) {
+                return true;
+            }
+            $course->getId();
+            $role = "ROLE_TEACHER_COURSE_".$course->getId().'_SESSION_0';
+
+            return $this->getSecurity()->isGranted($role);
+        }
+    }
+
+    /**
+     * Add flash messages.
+     * @param string $message
+     * @param string $type example: info|success|warning
+     */
+    public function addMessage($message, $type = 'info')
+    {
+        if ($type == 'confirmation') {
+            $type = 'info';
+        }
+        $this->get('session')->getFlashBag()->add($type, $message);
+    }
+
+    /**
+     * @param array $breadcrumbs
+     * @deprecated
+     */
+    protected function setBreadcrumb($breadcrumbs)
+    {
+        $course = $this->getCourse();
+        //$session =  $this->getSession();
+
+        // Adding course breadcrumb.
+        if (!empty($course)) {
+            $courseBreadcrumb = array(
+                'name' => \Display::return_icon('home.png').' '.$course->getTitle(),
+                'url' => array(
+                    'route' => 'course',
+                    'routeParameters' => array(
+                        'cidReq' => $course->getCode(),
+                        'id_session' => api_get_session_id()
+                    )
+                )
+            );
+            array_unshift($breadcrumbs, $courseBreadcrumb);
+        }
+
+        $app = $this->app;
+
+        $app['main_breadcrumb'] = function ($app) use ($breadcrumbs) {
+            /** @var \Knp\Menu\MenuItem $menu */
+            $menu = $app['knp_menu.factory']->createItem(
+                'root',
+                array(
+                    'childrenAttributes' => array(
+                        'class'        => 'breadcrumb',
+                        'currentClass' => 'active'
+                    )
+                )
+            );
+
+            if (!empty($breadcrumbs)) {
+                foreach ($breadcrumbs as $item) {
+                    if (empty($item['url'])) {
+                        $item['url'] = array();
+                    }
+                    $menu->addChild($item['name'], $item['url']);
+                }
+            }
+
+            return $menu;
+        };
+
+        $matcher = new Matcher();
+        $voter = new \Knp\Menu\Silex\Voter\RouteVoter();
+        $voter->setRequest($this->getRequest());
+        $matcher->addVoter($voter);
+        $renderer = new \Knp\Menu\Renderer\TwigRenderer(
+            $this->get('twig'),
+            'bread.tpl',
+            $matcher
+        );
+        $bread = $renderer->render(
+            $this->get('main_breadcrumb'),
+            array(
+                'template' => 'default/layout/bread.tpl'
+            )
+        );
+        $app['breadcrumbs'] = $bread;
+    }
+
+    /**
+     * @return array
+     */
+    public function menuList()
+    {
+        return array(
+            'index',
+            'users' => array(
+                'list', 'add', 'edit', 'export', 'import', 'profiling', 'roles'
+            ),
+            'courses' => array(
+                array(
+                    'list',
+                    'add',
+                    'edit',
+                    'export',
+                    'import',
+                    'add_users',
+                    'import_users',
+                    'course_categories',
+                    'extra_fields',
+                    'question_extra_fields'
+                )
+            ),
+            'sessions',
+            'classes',
+            'appearance',
+            'plugins',
+            'settings',
+            'tools'
+        );
+    }
+
+    public function before(Request $request)
+    {
+
     }
 }

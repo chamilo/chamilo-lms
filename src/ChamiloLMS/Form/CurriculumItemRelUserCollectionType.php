@@ -46,7 +46,7 @@ class CurriculumItemRelUserCollectionType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Entity\CurriculumItem'
+                'data_class' => 'ChamiloLMS\Entity\CurriculumItem'
             )
         );
     }

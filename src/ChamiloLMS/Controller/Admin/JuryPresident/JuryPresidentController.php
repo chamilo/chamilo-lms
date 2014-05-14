@@ -3,7 +3,7 @@
 
 namespace ChamiloLMS\Controller\Admin\JuryPresident;
 
-use ChamiloLMS\Controller\CommonController;
+use ChamiloLMS\Controller\CrudController;
 use ChamiloLMS\Form\JuryType;
 use ChamiloLMS\Form\JuryUserType;
 use ChamiloLMS\Entity\Jury;
@@ -26,9 +26,33 @@ use Whoops\Example\Exception;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class JuryPresidentController extends CommonController
+class JuryPresidentController extends CrudController
 {
     public $maxCountOfMemberToVoteToConsiderEvaluated = 3;
+
+    public function getClass()
+    {
+        return 'ChamiloLMS\Entity\BranchSync';
+    }
+
+    public function getType()
+    {
+        return 'ChamiloLMS\Form\JuryType';
+    }
+
+    public function getControllerAlias()
+    {
+        return 'jury_president.controller';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplatePath()
+    {
+        return 'admin/jury_president/';
+    }
+
     /**
     * @Route("/")
     * @Method({"GET"})
@@ -286,42 +310,5 @@ class JuryPresidentController extends CommonController
         $template = $this->get('template');
         $response = $template->render_template($this->getTemplatePath().'check_answers.tpl');
         return new Response($response, 200, array());
-    }
-
-    protected function getControllerAlias()
-    {
-        return 'jury_president.controller';
-    }
-
-    /**
-    * {@inheritdoc}
-    */
-    protected function getTemplatePath()
-    {
-        return 'admin/jury_president/';
-    }
-
-    /**
-     * @return \ChamiloLMS\Entity\Repository\JuryRepository
-     */
-    protected function getRepository()
-    {
-        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\Jury');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getNewEntity()
-    {
-        return new Jury();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFormType()
-    {
-        return new JuryType();
     }
 }

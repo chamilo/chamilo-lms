@@ -3,7 +3,7 @@
 
 namespace ChamiloLMS\Controller\Tool\Curriculum;
 
-use ChamiloLMS\Controller\CommonController;
+use ChamiloLMS\Controller\BaseController;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class CurriculumController extends CommonController
+class CurriculumController extends BaseController
 {
     /**
      *

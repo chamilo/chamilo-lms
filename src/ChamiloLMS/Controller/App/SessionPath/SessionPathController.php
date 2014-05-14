@@ -4,7 +4,7 @@
 namespace ChamiloLMS\Controller\App\SessionPath;
 
 use Silex\Application;
-use ChamiloLMS\Controller\CommonController;
+use ChamiloLMS\Controller\CrudController;
 use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,15 +17,32 @@ use ChamiloLMS\Form\SessionPathType;
  * @package ChamiloLMS.Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class SessionPathController extends CommonController
+class SessionPathController extends CrudController
 {
-    /**
-     * @Route("/")
-     * @Method({"GET"})
-     */
-    public function indexAction()
+    public function getClass()
     {
-        return $this->listingAction();
+        return 'ChamiloLMS\Entity\SessionPath';
+    }
+
+    public function getControllerAlias()
+    {
+        return 'session_path.controller';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplatePath()
+    {
+        return 'app/session_path/';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return 'ChamiloLMS\Form\SessionPathType';
     }
 
     /**
@@ -75,42 +92,4 @@ class SessionPathController extends CommonController
 
         $this->readEntity($id);
     }
-
-    protected function getControllerAlias()
-    {
-        return 'session_path.controller';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getTemplatePath()
-    {
-        return 'app/session_path/';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRepository()
-    {
-        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\SessionPath');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getNewEntity()
-    {
-        return new SessionPath();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFormType()
-    {
-        return new SessionPathType();
-    }
-
 }

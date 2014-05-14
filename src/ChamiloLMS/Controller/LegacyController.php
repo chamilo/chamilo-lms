@@ -6,7 +6,6 @@ namespace ChamiloLMS\Controller;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use \ChamiloSession as Session;
 
 /**
  * Class LegacyController
@@ -14,7 +13,7 @@ use \ChamiloSession as Session;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class LegacyController extends CommonController
+class LegacyController extends BaseController
 {
     public $section;
 
@@ -29,8 +28,7 @@ class LegacyController extends CommonController
     public function classicAction(Application $app, $file)
     {
         $responseHeaders = array();
-        /** @var Request $request */
-        $request = $app['request'];
+        $request = $this->getRequest();
 
         // get.
         $_GET = $request->query->all();
@@ -42,6 +40,8 @@ class LegacyController extends CommonController
         $mainPath = $app['paths']['sys_root'].'main/';
 
         $fileToLoad = $mainPath.$file;
+
+        $template = $this->getTemplate();
 
         if (is_file($fileToLoad) &&
             \Security::check_abs_path($fileToLoad, $mainPath)
@@ -70,30 +70,32 @@ class LegacyController extends CommonController
             }
 
             // Setting page header/footer conditions (important for LPs)
-            $app['template']->setFooter($app['template.show_footer']);
-            $app['template']->setHeader($app['template.show_header']);
+            $template->setFooter($app['template.show_footer']);
+            $template->setHeader($app['template.show_header']);
 
             if (isset($htmlHeadXtra)) {
-                $app['template']->addResource($htmlHeadXtra, 'string');
+                $template->addResource($htmlHeadXtra, 'string');
             }
-
+            // $interbreadcrumb is loaded in the require_once file.
             if (isset($interbreadcrumb)) {
-                $app['template']->setBreadcrumb($interbreadcrumb);
-                $app['template']->loadBreadcrumbToTemplate();
+                $template->setBreadcrumb($interbreadcrumb);
+                $breadCrumb = $template->getBreadCrumbLegacyArray();
+                $menu = $this->parseLegacyBreadCrumb($breadCrumb);
+                $template->assign('new_breadcrumb', $menu);
             }
 
-            $app['template']->parseResources();
+            $template->parseResources();
 
             if (isset($tpl)) {
                 $response = $app['twig']->render($app['default_layout']);
             } else {
-                $app['template']->assign('content', $out);
+                $template->assign('content', $out);
                 $response = $app['twig']->render($app['default_layout']);
             }
         } else {
             return $app->abort(404, 'File not found');
         }
+
         return new Response($response, 200, $responseHeaders);
     }
-
 }

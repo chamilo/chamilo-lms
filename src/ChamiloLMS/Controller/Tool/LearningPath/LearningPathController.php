@@ -1,17 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace ChamiloLMS\Controller;
+namespace ChamiloLMS\Controller\Tool\LearningPath;
 
+use ChamiloLMS\Controller\BaseController;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * Class LearnpathController
+ * Class LearningPathController
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class LearnpathController
+class LearningPathController extends BaseController
 {
     /**
      * Index

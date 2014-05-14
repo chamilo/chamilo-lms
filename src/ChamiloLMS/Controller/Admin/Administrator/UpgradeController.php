@@ -3,7 +3,7 @@
 
 namespace ChamiloLMS\Controller\Admin\Administrator;
 
-use ChamiloLMS\Controller\CommonController;
+use ChamiloLMS\Controller\BaseController;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
@@ -20,7 +20,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class UpgradeController extends CommonController
+class UpgradeController extends BaseController
 {
     /**
      * @Route("/")
@@ -29,7 +29,7 @@ class UpgradeController extends CommonController
     public function indexAction()
     {
         //$version = api_http_request('version.chamilo.org', 80, '/version.php');
-        $version = '1.11.0';
+        $version = '11';
 
         $request = $this->getRequest();
         $builder = $this->createFormBuilder();
@@ -180,24 +180,16 @@ class UpgradeController extends CommonController
         return new Response($response, 200, array());
     }
 
-    protected function getControllerAlias()
+    /*protected function getControllerAlias()
     {
         return 'upgrade.controller';
-    }
+    }*/
 
     /**
     * {@inheritdoc}
     */
-    protected function getTemplatePath()
+    public function getTemplatePath()
     {
         return 'admin/administrator/upgrade/';
-    }
-
-    /**
-     * @return \ChamiloLMS\Entity\Repository\BranchSyncRepository
-     */
-    protected function getRepository()
-    {
-
     }
 }

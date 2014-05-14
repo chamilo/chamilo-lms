@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace ChamiloLMS\Controller;
+namespace ChamiloLMS\Controller\App\ModelAjax;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;

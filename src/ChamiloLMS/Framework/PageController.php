@@ -3,7 +3,7 @@
 
 namespace ChamiloLMS\Framework;
 
-use Silex\Application;
+use ChamiloLMS\Framework\Application;
 use Pagerfanta\Adapter\FixedAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\View\TwitterBootstrapView;
@@ -711,10 +711,8 @@ class PageController
                         ).'?category='.$catLine['code'].'">'.$catLine['name'].'</a>';
                         $htmlListCat .= "</li>";
                         $thereIsSubCat = true;
-                    } /* End changed code to eliminate the (0 courses) after empty categories. */ elseif (api_get_setting(
-                        'show_empty_course_categories'
-                    ) == 'true'
-                    ) {
+                    } elseif (api_get_setting('show_empty_course_categories') == 'true') {
+                        /* End changed code to eliminate the (0 courses) after empty categories. */
                         $htmlListCat .= '<li>';
                         $htmlListCat .= $catLine['name'];
                         $htmlListCat .= "</li>";
@@ -725,9 +723,9 @@ class PageController
                     if (api_get_setting('show_back_link_on_top_of_tree') == 'true') {
                         $htmlTitre .= '<a href="'.api_get_self().'">&lt;&lt; '.get_lang('BackToHomePage').'</a>';
                     }
-                    if (!is_null($catLine['parent_id']) || (api_get_setting(
-                        'show_back_link_on_top_of_tree'
-                    ) != 'true' && !is_null($catLine['code']))
+                    if (!is_null($catLine['parent_id']) ||
+                        (api_get_setting('show_back_link_on_top_of_tree') != 'true' &&
+                        !is_null($catLine['code']))
                     ) {
                         $htmlTitre .= '<a href="'.api_get_self(
                         ).'?category='.$catLine['parent_id'].'">&lt;&lt; '.get_lang('Up').'</a>';
@@ -848,7 +846,7 @@ class PageController
                     // We display a subscription link if:
                     // 1. it is allowed to register for the course and if the course is not already in the courselist of the user and if the user is identiefied
                     // 2.
-                    if ($user_identified && !key_exists($course['code'], $courses_of_user)) {
+                    if ($user_identified && !array_key_exists($course['code'], $courses_of_user)) {
                         if ($course['subscribe'] == '1') {
                             $courses_list_string .= '<form action="main/auth/courses.php?action=subscribe&category='.Security::remove_XSS(
                                 $_GET['category']
@@ -872,10 +870,7 @@ class PageController
             $result .= $courses_list_string;
         }
         if ($category != '') {
-            $result .= '<p><a href="'.api_get_self().'"> '.Display :: return_icon(
-                'back.png',
-                get_lang('BackToHomePage')
-            ).get_lang('BackToHomePage').'</a></p>';
+            $result .= '<p><a href="'.api_get_self().'"> '.Display :: return_icon('back.png', get_lang('BackToHomePage')).get_lang('BackToHomePage').'</a></p>';
         }
 
         return $result;

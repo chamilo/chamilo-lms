@@ -19,7 +19,7 @@ use ChamiloLMS\Entity\User;
 
 /* A "before" middleware allows you to tweak the Request
  * before the controller is executed. */
-
+/** @var ChamiloLMS\Framework\Application $app */
 $app->before(
     function () use ($app) {
         /** @var Request $request */
@@ -31,7 +31,7 @@ $app->before(
             return new RedirectResponse($url);
         }
 
-        // Check data folder
+        // Check data folder.
         if (!is_writable($app['path.data'])) {
             $app->abort(500, "data folder must be writable.");
         }
@@ -41,7 +41,9 @@ $app->before(
             $app->abort(500, "data/temp folder must be writable.");
         }
 
-        // Checking that configuration is loaded
+        //$this->app['new_breadcrumb'] = $this->getBreadcrumbs(null);
+
+        // Checking that configuration is loaded.
         $configuration = $app->getConfigurationArray();
         if (!isset($configuration)) {
             $app->abort(500, '$configuration array must be set in the configuration.php file.');

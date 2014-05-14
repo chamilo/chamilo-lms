@@ -15,9 +15,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Routing\AnnotatedRouteControllerLoader;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use ChamiloLMS\Middleware\CourseMiddleware;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Class ReflectionControllerProvider
+ * Parses the controllers classes in order to transform the
+ * @route and @method annotations into routes.
  * @package ChamiloLMS\Provider
  */
 class ReflectionControllerProvider implements ControllerProviderInterface
@@ -58,6 +61,10 @@ class ReflectionControllerProvider implements ControllerProviderInterface
 
         $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC);
 
+        /*$app['dispatcher']->addListener(KernelEvents::REQUEST, function() use ($path) {
+            unlink($path);
+        });*/
+
         foreach ($methods as $method) {
             $methodName = $method->getName();
             $controllerName = $this->controllerName.':'.$methodName;
@@ -79,20 +86,49 @@ class ReflectionControllerProvider implements ControllerProviderInterface
                 $methodsToString = implode('|', $methodObject->getMethods());
             }
 
-            /** @var Route $routeObject */
-            foreach ($routeObjects as $routeObject) {
+            /*$print = false;
+            if ($controllerName == 'course_home.controller:indexAction') {
+                $print = true;
+                //var_dump($routeObjects);
+            }*/
 
+            /** @var Route $routeObject */
+            $routes = array();
+
+            foreach ($routeObjects as $routeObject) {
                 if ($routeObject && is_a($routeObject, 'Symfony\Component\Routing\Annotation\Route')) {
-                    $match = $controllers->match($routeObject->getPath(), $controllerName, $methodsToString);
-                    // Setting requirements
+                    $name = $routeObject->getName();
+
+                    $routeName = $controllerName;
+                    // If route already exists add a "_XX" where XX is an int.
+                    $bindName = $controllerName;
+                    if (in_array($bindName, $routes)) {
+                        $counter = 1;
+                        while (in_array($bindName, $routes)) {
+                            $bindName = $controllerName.'_'.$counter;
+                            $counter++;
+                        }
+                    }
+
+                    $match = $controllers->match(
+                        $routeObject->getPath(),
+                        $routeName
+                    )
+                        ->method($methodsToString)
+                        ->before($this->controllerName . ':before');
+
+                    $routes[] = $bindName;
+
+                    // Setting requirements.
                     $req = $routeObject->getRequirements();
+
                     if (!empty($req)) {
                         foreach ($req as $key => $value) {
                             $match->assert($key, $value);
                         }
                     }
 
-                    // Setting defaults
+                    // Setting defaults.
                     $defaults = $routeObject->getDefaults();
                     if (!empty($defaults)) {
                         foreach ($defaults as $key => $value) {
@@ -100,10 +136,20 @@ class ReflectionControllerProvider implements ControllerProviderInterface
                         }
                     }
 
-                    $match->bind($controllerName);
+                    // Setting options
+                    //$options = $routeObject->getOptions();
+
+                    // Adding bind
+                    $match->bind($bindName);
+
+                    // Adding alias if exists.
+                    if (!empty($name)) {
+                        $match->bind($name);
+                    }
                 }
             }
         }
+
         return $controllers;
     }
 }

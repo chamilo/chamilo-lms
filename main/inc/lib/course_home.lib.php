@@ -673,7 +673,10 @@ class CourseHome
                             if (!empty($tool['id'])) {
                                 $link['cmd'] = $urlGenerator->generate(
                                     'course_home.controller:hideIconAction',
-                                    array('course' => api_get_course_id(), 'iconId' => $tool['id'])
+                                    array(
+                                        'courseCode' => api_get_course_id(),
+                                        'iconId' => $tool['id']
+                                    )
                                 );
                             }
                             $lnk[] = $link;
@@ -683,7 +686,10 @@ class CourseHome
                             if (!empty($tool['id'])) {
                                 $link['cmd'] = $urlGenerator->generate(
                                     'course_home.controller:showIconAction',
-                                    array('course' => api_get_course_id(), 'iconId' => $tool['id'])
+                                    array(
+                                        'courseCode' => api_get_course_id(),
+                                        'iconId' => $tool['id']
+                                    )
                                 );
                             }
                             $lnk[] = $link;
@@ -691,7 +697,8 @@ class CourseHome
                     }
 
                     if (!empty($tool['adminlink'])) {
-                        $item['extra'] = '<a href="'.$tool['adminlink'].'">'.Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
+                        $item['extra'] = '<a href="'.$tool['adminlink'].'">'.
+                            Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
                     }
                 }
 
@@ -755,7 +762,7 @@ class CourseHome
                         'id'      => 'tooldesc_'.$tool["id"],
                         'href'    => '"javascript: void(0);"',
                         'class'   => $class,
-                        'onclick' => 'javascript: window.open(\'' . $tool['link'] . '\',\'window_visio'.$_SESSION['_cid'].'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
+                        'onclick' => 'javascript: window.open(\'' . $tool['link'] . '\',\'window_visio'.api_get_course_id().'\',config=\'height=\'+730+\', width=\'+1020+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
                         'target'  =>  $tool['target']
                     );
                 } elseif (strpos($tool['name'], 'chat') !== false && api_get_course_setting('allow_open_chat_window')) {
@@ -763,7 +770,7 @@ class CourseHome
                         'id'      => 'tooldesc_'.$tool["id"],
                         'class'   => $class,
                         'href'    => 'javascript: void(0);',
-                        'onclick' => 'javascript: window.open(\'' . $tool['link'] . '\',\'window_chat'.$_SESSION['_cid'].'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
+                        'onclick' => 'javascript: window.open(\'' . $tool['link'] . '\',\'window_chat'.api_get_course_id().'\',config=\'height=\'+380+\', width=\'+625+\', left=2, top=2, toolbar=no, menubar=no, scrollbars=yes, resizable=yes, location=no, directories=no, status=no\')',
                         'target'  =>  $tool['target']
                     );
                 } else {

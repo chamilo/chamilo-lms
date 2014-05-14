@@ -3,7 +3,7 @@
 
 namespace ChamiloLMS\Controller\Tool\Curriculum;
 
-use ChamiloLMS\Controller\CommonController;
+use ChamiloLMS\Controller\CrudController;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,8 +17,45 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class CurriculumCategoryController extends CommonController
+class CurriculumCategoryController extends CrudController
 {
+    public function getClass()
+    {
+        return 'ChamiloLMS\Entity\CurriculumCategory';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplatePath()
+    {
+        return 'tool/curriculum/category/';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return 'ChamiloLMS\Form\CurriculumCategoryType';
+    }
+
+    public function getControllerAlias()
+    {
+        return 'curriculum_category.controller';
+    }
+
+    protected function getDefaultEntity()
+    {
+        $entity = $this->getNewEntity();
+        $entity->setCourse($this->getCourse());
+        $session = $this->getSession();
+        if (!empty($session)) {
+            $entity->setSession($session);
+        }
+        return $entity;
+    }
+
     /**
      *
      * @Route("/")
@@ -360,10 +397,6 @@ class CurriculumCategoryController extends CommonController
         return new Response($response, 200, array());
     }
 
-    protected function getControllerAlias()
-    {
-        return 'curriculum_category.controller';
-    }
 
     protected function generateDefaultCrudRoutes()
     {
@@ -373,49 +406,5 @@ class CurriculumCategoryController extends CommonController
         $routes['edit_item'] = 'curriculum_item.controller:editAction';
 
         return $routes ;
-    }
-
-    /**
-    * {@inheritdoc}
-    */
-    protected function getTemplatePath()
-    {
-        return 'tool/curriculum/category/';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRepository()
-    {
-        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\CurriculumCategory');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getNewEntity()
-    {
-        return new CurriculumCategory();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFormType()
-    {
-        return new CurriculumCategoryType();
-    }
-
-    protected function getDefaultEntity()
-    {
-
-        $entity = $this->getNewEntity();
-        $entity->setCourse($this->getCourse());
-        $session = $this->getSession();
-        if (!empty($session)) {
-            $entity->setSession($session);
-        }
-        return $entity;
     }
 }

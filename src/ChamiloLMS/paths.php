@@ -10,6 +10,7 @@ return array(
     'config' => __DIR__.'/../../config',
 
     // Can be overwritten in configuration.php
+
     /* data */
     'data' => __DIR__.'/../../data',
     /* temp */

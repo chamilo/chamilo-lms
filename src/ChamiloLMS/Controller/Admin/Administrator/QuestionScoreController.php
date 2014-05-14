@@ -3,31 +3,43 @@
 
 namespace ChamiloLMS\Controller\Admin\Administrator;
 
-use ChamiloLMS\Controller\CommonController;
-use Silex\Application;
-use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
+use ChamiloLMS\Controller\CrudController;
 use Symfony\Component\HttpFoundation\Response;
+use ChamiloLMS\Entity;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use ChamiloLMS\Entity;
-use ChamiloLMS\Form\QuestionScoreType;
-use ChamiloLMS\Entity\QuestionScore;
 
 /**
  * Class QuestionScoreController
- * @todo @route and @method function don't work yet
- * @package ChamiloLMS\Controller
+ * @package ChamiloLMS\Controller\Admin\Administrator
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class QuestionScoreController extends CommonController
+class QuestionScoreController extends CrudController
 {
-    /**
-     * @Route("/")
-     * @Method({"GET"})
-     */
-    public function indexAction()
+    public function getClass()
     {
-        return parent::listingAction();
+        return 'ChamiloLMS\Entity\BranchSync';
+    }
+
+    public function getType()
+    {
+        return 'ChamiloLMS\Form\QuestionScoreType';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getControllerAlias()
+    {
+        return 'question_score.controller';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplatePath()
+    {
+        return 'admin/administrator/question_score/';
     }
 
     /**
@@ -37,7 +49,6 @@ class QuestionScoreController extends CommonController
     */
     public function readAction($id)
     {
-        // return parent::readAction($id);
         $template = $this->get('template');
         $template->assign('links', $this->generateLinks());
         $item = $this->getEntity($id);
@@ -49,79 +60,10 @@ class QuestionScoreController extends CommonController
         return new Response($response, 200, array());
     }
 
-    /**
-    * @Route("/add")
-    * @Method({"GET"})
-    */
-    public function addAction()
-    {
-        return parent::addAction();
-    }
-
-    /**
-    *
-    * @Route("/{id}/edit", requirements={"id" = "\d+"})
-    * @Method({"GET"})
-    */
-    public function editAction($id)
-    {
-        return parent::editAction($id);
-    }
-
-    /**
-    *
-    * @Route("/{id}/delete", requirements={"id" = "\d+"})
-    * @Method({"GET"})
-    */
-    public function deleteAction($id)
-    {
-        return parent::deleteAction($id);
-    }
-
     protected function generateDefaultCrudRoutes()
     {
         $routes = parent::generateDefaultCrudRoutes();
         $routes['question_score_name_read_link'] = 'question_score_name.controller:readAction';
         return $routes ;
-    }
-
-    /**
-    * {@inheritdoc}
-    */
-    protected function getControllerAlias()
-    {
-        return 'question_score.controller';
-    }
-
-    /**
-    * {@inheritdoc}
-    */
-    protected function getRepository()
-    {
-        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\QuestionScore');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getNewEntity()
-    {
-        return new QuestionScore();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFormType()
-    {
-        return new QuestionScoreType();
-    }
-
-    /**
-    * {@inheritdoc}
-    */
-    protected function getTemplatePath()
-    {
-        return 'admin/administrator/question_score/';
     }
 }

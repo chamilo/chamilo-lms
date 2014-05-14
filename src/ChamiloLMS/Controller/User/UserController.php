@@ -6,7 +6,7 @@ namespace ChamiloLMS\Controller\User;
 use Silex\Application;
 
 use Symfony\Component\HttpFoundation\Response;
-use ChamiloLMS\Controller\CommonController;
+use ChamiloLMS\Controller\BaseController;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class UserController extends CommonController
+class UserController extends BaseController
 {
     /**
      * @Route("/me")

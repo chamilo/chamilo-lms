@@ -21,7 +21,7 @@ class RoleType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Entity\Role'
+                'data_class' => 'ChamiloLMS\Entity\Role'
             )
         );
     }

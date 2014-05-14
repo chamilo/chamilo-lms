@@ -3,7 +3,7 @@
 
 namespace ChamiloLMS\Controller\Tool\Curriculum;
 
-use ChamiloLMS\Controller\CommonController;
+use ChamiloLMS\Controller\CrudController;
 use Silex\Application;
 use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,14 +21,51 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class CurriculumUserController extends CommonController
+class CurriculumUserController extends CrudController
 {
+    public function getControllerAlias()
+    {
+        return 'curriculum_user.controller';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplatePath()
+    {
+        return 'tool/curriculum/user/';
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClass()
+    {
+        return 'ChamiloLMS\Entity\CurriculumItemRelUser';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return 'ChamiloLMS\Form\CurriculumItemRelUserCollectionType';
+    }
+
+    protected function generateDefaultCrudRoutes()
+    {
+        $routes = parent::generateDefaultCrudRoutes();
+        $routes['add_from_category'] = 'curriculum_item.controller:addFromCategoryAction';
+        return $routes;
+    }
+
     /**
      *
      * @Route("/")
      * @Method({"GET"})
      */
-    public function indexAction(Application $app)
+    public function indexAction()
     {
         // @todo Use filters like "after/before|finish" to manage user access
         api_block_anonymous_users();
@@ -118,7 +155,7 @@ class CurriculumUserController extends CommonController
     {
         $request = $this->getRequest();
         $form = $this->get('form.factory')->create($this->getFormType(), $this->getDefaultEntity());
-        $token = $this->get('security')->getToken();
+        $token = $this->getSecurity()->getToken();
         $user = $token->getUser();
 
         if ($request->getMethod() == 'POST') {
@@ -330,73 +367,6 @@ class CurriculumUserController extends CommonController
         return false;
     }
 
-    /**
-    *
-    * @Route("/{id}", requirements={"id" = "\d+"})
-    * @Method({"GET"})
-    */
-    public function readAction($id)
-    {
-        return parent::readAction($id);
-    }
-
-    /**
-    * @Route("/add")
-    * @Method({"GET"})
-    */
-    public function addAction()
-    {
-        return parent::addAction();
-    }
-
-    /**
-    *
-    * @Route("/{id}/edit", requirements={"id" = "\d+"})
-    * @Method({"GET"})
-    */
-    public function editAction($id)
-    {
-        return parent::editAction($id);
-    }
-
-    /**
-    *
-    * @Route("/{id}/delete", requirements={"id" = "\d+"})
-    * @Method({"GET"})
-    */
-    public function deleteAction($id)
-    {
-        return parent::deleteAction($id);
-    }
-
-    protected function getControllerAlias()
-    {
-        return 'curriculum_user.controller';
-    }
-
-    protected function generateDefaultCrudRoutes()
-    {
-        $routes = parent::generateDefaultCrudRoutes();
-        $routes['add_from_category'] = 'curriculum_item.controller:addFromCategoryAction';
-        return $routes;
-    }
-
-    /**
-    * {@inheritdoc}
-    */
-    protected function getTemplatePath()
-    {
-        return 'tool/curriculum/user/';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRepository()
-    {
-        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\CurriculumItemRelUser');
-    }
-
     private function getCurriculumCategoryRepository()
     {
         return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\CurriculumCategory');
@@ -407,19 +377,4 @@ class CurriculumUserController extends CommonController
         return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\CurriculumItem');
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getNewEntity()
-    {
-        return new CurriculumItemRelUser();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFormType()
-    {
-        return new CurriculumItemRelUserCollectionType();
-    }
 }

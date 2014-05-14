@@ -20,7 +20,7 @@ class QuestionScoreType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'Entity\QuestionScore'
+                'data_class' => 'ChamiloLMS\Entity\QuestionScore'
             )
         );
     }

@@ -3,15 +3,13 @@
 
 namespace ChamiloLMS\Controller\Admin\JuryMember;
 
-use ChamiloLMS\Controller\CommonController;
-use ChamiloLMS\Form\JuryType;
+use ChamiloLMS\Controller\CrudController;
 use ChamiloLMS\Entity\TrackExercise;
 use ChamiloLMS\Entity\Jury;
 use ChamiloLMS\Entity\TrackExerciseAttemptJury;
 use ChamiloLMS\Entity\JuryMembers;
 use ChamiloLMS\Entity;
 use Silex\Application;
-use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
 use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,9 +20,36 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class JuryMemberController extends CommonController
+class JuryMemberController extends CrudController
 {
     public $maxCountOfMemberToVoteToConsiderEvaluated = 3;
+
+    public function getClass()
+    {
+        return 'ChamiloLMS\Entity\Jury';
+    }
+
+    public function getControllerAlias()
+    {
+        return 'jury_member.controller';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplatePath()
+    {
+        return 'admin/jury_member/';
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getType()
+    {
+        return 'ChamiloLMS\Form\JuryType';
+    }
 
     /**
     * @Route("/")
@@ -159,7 +184,7 @@ class JuryMemberController extends CommonController
             $this->createNotFoundException('You are not assigned to this user.');
         }
 
-        $security = $this->get('security');
+        $security = $this->getSecurity();
 
         // Setting member only for president.
         if ($security->isGranted('ROLE_JURY_PRESIDENT')) {
@@ -379,40 +404,4 @@ class JuryMemberController extends CommonController
 
     }
 
-    protected function getControllerAlias()
-    {
-        return 'jury_member.controller';
-    }
-
-    /**
-    * {@inheritdoc}
-    */
-    protected function getTemplatePath()
-    {
-        return 'admin/jury_member/';
-    }
-
-    /**
-     * @return \ChamiloLMS\Entity\Repository\JuryRepository
-     */
-    protected function getRepository()
-    {
-        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\Jury');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getNewEntity()
-    {
-        return new Jury();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFormType()
-    {
-        return new JuryType();
-    }
 }

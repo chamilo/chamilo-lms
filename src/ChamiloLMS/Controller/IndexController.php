@@ -8,64 +8,23 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
  * @package ChamiloLMS.Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class IndexController extends CommonController
+class IndexController extends BaseController
 {
     /**
-     * @param \Silex\Application $app
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/index")
+     * @Method({"GET"})
+     * @return Response
      */
-    public function indexAction(Application $app)
+    public function indexAction()
     {
         $template = $this->getTemplate();
-
-        /*$user = $this->getManager()->getRepository('ChamiloLMS\Entity\User')->find(1);
-        foreach($user->getPortals() as $portal) {
-            var_dump($portal->getUrl());
-        }*/
-
-        /*
-        $token = $app['security']->getToken();
-        if (null !== $token) {
-            $user = $token->getUser();
-        }*/
-
-        /*\ChamiloSession::write('name', 'clara');
-        var_dump(\ChamiloSession::read('name'));
-        var_dump($_SESSION['name']);*/
-
-        //var_dump(\ChamiloSession::read('aaa'));
-
-        /*\ChamiloSession::write('name', 'clar');
-        echo \ChamiloSession::read('name');
-        $app['session']->set('name', 'julio');
-        echo $app['session']->get('name');*/
-        /*
-        $token = $app['security']->getToken();
-        if (null !== $token) {
-            $user = $token->getUser();
-            var_dump($user );
-        }
-        if ($app['security']->isGranted('ROLE_ADMIN')) {
-        }*/
-
-        /** @var \ChamiloLMS\Entity\User $user */
-        /*$em = $app['orm.ems']['db_write'];
-        $user = $em->getRepository('ChamiloLMS\Entity\User')->find(6);
-        $role = $em->getRepository('ChamiloLMS\Entity\Role')->findOneByRole('ROLE_STUDENT');
-        $user->getRolesObj()->add($role);
-        $em->persist($user);
-        $em->flush();*/
-
-        //$user->roles->add($status);
-        /*$roles = $user->getRolesObj();
-        foreach ($roles as $role) {
-        }*/
 
         // $countries = Intl::getRegionBundle()->getCountryNames('es');
         //var_dump($countries);
@@ -74,31 +33,19 @@ class IndexController extends CommonController
         //http://userguide.icu-project.org/formatparse/datetime for date formats
         $formatter->setPattern("EEEE d MMMM Y");
         echo $formatter->format(time());*/
+
         $extra = array();
-        if (api_get_setting('use_virtual_keyboard') == 'true') {
+        if ($this->getSetting('use_virtual_keyboard') == 'true') {
             $extra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'keyboard/keyboard.css');
             $extra[] = api_get_js('keyboard/jquery.keyboard.js');
         }
-        $app['template']->addResource(api_get_jqgrid_js(), 'string');
 
-        $app['this_section'] = SECTION_CAMPUS;
-        $request = $app['request'];
+        $template->addResource(api_get_jqgrid_js(), 'string');
 
-        if (api_get_setting('allow_terms_conditions') == 'true') {
-            unset($_SESSION['term_and_condition']);
-        }
+        $this->app['this_section'] = SECTION_CAMPUS;
 
-        // If we are not logged in and custompages activated
-        if (!api_get_user_id() && \CustomPages::enabled()) {
-            $loggedOut = $request->get('loggedout');
-            if ($loggedOut) {
-                \CustomPages::display(\CustomPages::LOGGED_OUT);
-            } else {
-                \CustomPages::display(\CustomPages::INDEX_UNLOGGED);
-            }
-        }
         /** @var \PageController $pageController */
-        $pageController = $app['page_controller'];
+        $pageController = $this->get('page_controller');
 
         if (api_get_setting('display_categories_on_homepage') == 'true') {
             $template->assign('course_category_block', $pageController->return_courses_in_categories());
@@ -110,12 +57,9 @@ class IndexController extends CommonController
             facebook_connect();
         }
 
-        $this->setLoginForm($app);
+        $this->setLoginForm();
 
         if (!api_is_anonymous()) {
-            //$pageController->setProfileBlock();
-            //$pageController->setUserImageBlock();
-
             if (api_is_platform_admin()) {
                 $pageController->setCourseBlock();
             } else {
@@ -172,10 +116,7 @@ class IndexController extends CommonController
         return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
     }
 
-    /**
-     * @param \Silex\Application $app
-     */
-    public function setLoginForm(Application $app)
+    public function setLoginForm()
     {
         $userId    = api_get_user_id();
         $loginForm = null;
@@ -183,8 +124,8 @@ class IndexController extends CommonController
 
             // Only display if the user isn't logged in
 
-            $app['template']->assign('login_language_form', api_display_language_form(true));
-            $app['template']->assign('login_form', self::displayLoginForm($app));
+            $this->getTemplate()->assign('login_language_form', api_display_language_form(true));
+            $this->getTemplate()->assign('login_form', self::displayLoginForm());
 
             if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
                 $loginForm .= '<ul class="nav nav-list">';
@@ -196,7 +137,7 @@ class IndexController extends CommonController
                 }
                 $loginForm .= '</ul>';
             }
-            $app['template']->assign('login_options', $loginForm);
+            $this->getTemplate()->assign('login_options', $loginForm);
         }
     }
 
@@ -205,7 +146,7 @@ class IndexController extends CommonController
      *
      * @return string
      */
-    public function displayLoginForm(Application $app)
+    public function displayLoginForm()
     {
         /* {{ form_widget(form) }}
           $form = $app['form.factory']->createBuilder('form')
@@ -221,7 +162,7 @@ class IndexController extends CommonController
         $form = new \FormValidator(
             'formLogin',
             'POST',
-            $app['url_generator']->generate('secured_login_check'),
+            $this->get('url_generator')->generate('secured_login_check'),
             null,
             array('class'=> 'form-signin-block')
         );
@@ -248,6 +189,7 @@ class IndexController extends CommonController
                 'icon' => 'fa fa-key fa-fw'
             )
         );
+
         $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn btn-primary btn-block'));
         $html = $form->return_form();
 
@@ -448,18 +390,118 @@ class IndexController extends CommonController
         return \Display::return_message($message, 'error');
     }
 
-    /**
-     * @param Application $app
-     * @return Response
-     */
-    function dashboardAction(Application $app)
+    public function dashboardAction()
     {
-        $template = $this->getTemplate();
+        /*$template = $this->getTemplate();
 
         $template->assign('content', 'welcome!');
         $response = $template->renderLayout('layout_2_col.tpl');
 
         //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
+        return new Response($response, 200, array());*/
+    }
+
+    /**
+     * @Route("/userportal")
+     * @Method({"GET"})
+     *
+     * @param string $type courses|sessions|mycoursecategories
+     * @param string $filter for the userportal courses page. Only works when setting 'history'
+     * @param int $page
+     * @return Response
+     */
+    public function userPortalAction($type = 'courses', $filter = 'current', $page = 1)
+    {
+        // @todo Use filters like "after/before|finish" to manage user access
+        api_block_anonymous_users();
+
+
+        // Abort request because the user is not allowed here - @todo use filters
+        if ($this->app['allowed'] == false) {
+            return $this->abort(403, 'Not allowed');
+        }
+
+        // Main courses and session list
+        $items = null;
+        $type = str_replace('/', '', $type);
+
+        /** @var \PageController $pageController */
+        $pageController = $this->get('page_controller');
+
+        switch ($type) {
+            case 'sessions':
+                $items = $pageController->returnSessions(api_get_user_id(), $filter, $page);
+                break;
+            case 'sessioncategories':
+                $items = $pageController->returnSessionsCategories(api_get_user_id(), $filter, $page);
+                break;
+            case 'courses':
+                $items = $pageController->returnCourses(api_get_user_id(), $filter, $page);
+                break;
+            case 'mycoursecategories':
+                $items = $pageController->returnMyCourseCategories(api_get_user_id(), $filter, $page);
+                break;
+            case 'specialcourses':
+                $items = $pageController->returnSpecialCourses(api_get_user_id(), $filter, $page);
+                break;
+        }
+
+        $template = $this->getTemplate();
+        //Show the chamilo mascot
+        if (empty($items) && empty($filter)) {
+            $pageController->return_welcome_to_course_block($template);
+        }
+
+        /*
+        $app['my_main_menu'] = function($app) {
+            $menu = $app['knp_menu.factory']->createItem('root');
+            $menu->addChild('Home', array('route' => api_get_path(WEB_CODE_PATH)));
+            return $menu;
+        };
+        $app['knp_menu.menus'] = array('main' => 'my_main_menu');*/
+        $template->assign('content', $items);
+        $pageController->setCourseSessionMenu();
+
+        $pageController->setProfileBlock();
+        $pageController->setUserImageBlock();
+        $pageController->setCourseBlock($filter);
+        $pageController->setSessionBlock();
+        $pageController->return_reservation_block();
+        $pageController->returnNavigationLinks($template->getNavigationLinks());
+
+        $template->assign('search_block', $pageController->return_search_block());
+        $template->assign('classes_block', $pageController->return_classes_block());
+        $pageController->returnSkillsLinks();
+
+        // Deleting the session_id.
+        $this->getSessionHandler()->remove('session_id');
+
+        $response = $template->renderTemplate('userportal/index.tpl');
+
         return new Response($response, 200, array());
+    }
+
+    /**
+     * Toggle the student view action
+     *
+     * @Route("/toggle_student_view")
+     * @Method({"GET"})
+     *
+     * @return Response
+     */
+    public function toggleStudentViewAction()
+    {
+        if (!api_is_allowed_to_edit(false, false, false, false)) {
+            return '';
+        }
+        $request = $this->getRequest();
+        $studentView = $request->getSession()->get('studentview');
+        if (empty($studentView) || $studentView == 'studentview') {
+            $request->getSession()->set('studentview', 'teacherview');
+            return 'teacherview';
+        } else {
+            $request->getSession()->set('studentview', 'studentview');
+            return 'studentview';
+        }
     }
 }

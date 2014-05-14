@@ -2,11 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * This file includes all the services that are loaded via the ServiceProviderInterface
- *
+ * This file includes all the services that are loaded via
+ * the ServiceProviderInterface
  * @package chamilo.services
  */
-
 use Doctrine\Common\Persistence\AbstractManagerRegistry;
 use Symfony\Bridge\Doctrine\Form\DoctrineOrmExtension;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntityValidator;
@@ -35,7 +34,7 @@ use ChamiloLMS\Framework\PageController;
 use ChamiloLMS\Framework\Template;
 
 // Flint
-$app->register(new Flint\Provider\ConfigServiceProvider());
+$app->register(new Flint\Provider\TackerServiceProvider());
 $app['root_dir'] = $app['path.base'];
 
 $app->register(new Flint\Provider\RoutingServiceProvider(), array(
@@ -433,6 +432,7 @@ if (isset($app->getConfiguration()->main_database)) {
 $app['view_path'] = $app['path.base'].'src/ChamiloLMS/Resources/views/';
 
 // Setting Twig as a service provider.
+
 $app->register(
     new Silex\Provider\TwigServiceProvider(),
     array(
@@ -471,9 +471,8 @@ $app['twig'] = $app->share($app->extend('twig', function (\Twig_Environment $twi
 }));
 
 // Developer tools.
-
 if (is_writable($app['path.temp'])) {
-    if ($app['show_profiler']) {
+    if ($app->getConfiguration()->show_profiler) {
         // Adding Symfony2 web profiler (memory, time, logs, etc)
         $app->register(
             $p = new Silex\Provider\WebProfilerServiceProvider(),
@@ -484,7 +483,7 @@ if (is_writable($app['path.temp'])) {
         $app->mount('/_profiler', $p);
 
         // Better PHP errors
-        $app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
+        //$app->register(new Whoops\Provider\Silex\WhoopsServiceProvider);
 
         /*$app['xhprof.location'] = '/var/www/xhprof';
         $app['xhprof.host'] = 'http://localhost/xhprof/xhprof_html/index.php';
@@ -759,166 +758,132 @@ class ChamiloServiceProvider implements ServiceProviderInterface
 $app->register(new ChamiloServiceProvider(), array());
 
 // Controller as services definitions.
-$app['pages.controller'] = $app->share(
+/*$app['pages.controller'] = $app->share(
     function () use ($app) {
         return new PagesController($app['pages.repository']);
     }
+);*/
+
+$controllers = array(
+    'index.controller' => array(
+        'IndexController',
+        '/'
+    ),
+    'legacy.controller' => array(
+        'LegacyController',
+        false
+    ),
+    // Admin group
+    'admin.controller' => array(
+        'Admin\AdminController',
+        '/admin/'
+    ),
+    'branch.controller' => array(
+        'Admin\Administrator\BranchController',
+        '/admin/administrator/branch'
+    ),
+    'jury.controller' => array(
+        'Admin\Administrator\JuryController',
+        '/admin/administrator/jury'
+    ),
+    'question_manager.controller' => array(
+        'Admin\QuestionManager\QuestionManagerController',
+        '/admin/questionmanager'
+    ),
+    'question_score.controller' => array(
+        'Admin\Administrator\QuestionScoreController',
+        '/admin/administrator/question_scores'
+    ),
+    'question_score_name.controller' => array(
+        'Admin\Administrator\QuestionScoreNameController',
+        '/admin/administrator/question_score_names'
+    ),
+    'role.controller' => array(
+        'Admin\Administrator\RoleController',
+        '/admin/administrator/roles'
+    ),
+    'upgrade.controller' => array(
+        'Admin\Administrator\UpgradeController',
+        '/admin/administrator/upgrade'
+    ),
+    // App group
+    'session_tree.controller' => array(
+        'App\SessionPath\SessionTreeController',
+        'app/session_path/tree'
+    ),
+    'session_path.controller' => array(
+        'App\SessionPath\SessionPathController',
+        'app/session_path'
+    ),
+    'model_ajax.controller' => array(
+        'App\ModelAjax\ModelAjaxController',
+        '/ajax'
+    ),
+    'editor.controller' => array(
+        'App\Editor\EditorController',
+        '/editor/'
+    ),
+    'news.controller' => array(
+        'App\News\NewsController',
+        '/app/news/'
+    ),
+    'certificate.controller' => array(
+        'App\Certificate\CertificateController',
+        '/app/certificates/'
+    ),
+    // Tools (Course Tools)
+    'course_home.controller' => array(
+        'Tool\CourseHome\CourseHomeController',
+        'courses/{courseCode}/'
+    ),
+    'introduction.controller' => array(
+        'Tool\Introduction\IntroductionController',
+        'courses/{courseCode}/introduction'
+    ),
+    'learnpath.controller' => array(
+        'Tool\LearningPath\LearningPathController',
+        'courses/{courseCode}/learning_path'
+    ),
+    'exercise_manager.controller' => array(
+        'Tool\Exercise\ExerciseController',
+        '/courses/{courseCode}/exercise2'
+    ),
+    'curriculum.controller' => array(
+        'Tool\Curriculum\CurriculumController',
+        '/courses/{courseCode}/curriculum'
+    ),
+    'curriculum_category.controller' => array(
+        'Tool\Curriculum\CurriculumCategoryController',
+        '/courses/{courseCode}/curriculum/category'
+    ),
+    'curriculum_item.controller' => array(
+        'Tool\Curriculum\CurriculumItemController',
+        '/courses/{courseCode}/curriculum/item'
+    ),
+    'curriculum_user.controller' => array(
+        'Tool\Curriculum\CurriculumUserController',
+        '/courses/{courseCode}/curriculum/user'
+    ),
+    // Users (Social)
+    'profile.controller' => array(
+        'User\ProfileController',
+        '/user/'
+    ),
+    'user.controller' => array(
+        'User\UserController',
+    )
 );
 
-//@todo improve loading of controllers.
+$app['controller_array'] = $controllers;
 
-$app['index.controller'] = $app->share(
-    function () use ($app) {
-        $controller = new ChamiloLMS\Controller\IndexController($app);
-        return $controller;
-    }
-);
-
-$app['legacy.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\LegacyController($app);
-    }
-);
-
-$app['userPortal.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\UserPortalController($app);
-    }
-);
-
-$app['learnpath.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\LearnpathController();
-    }
-);
-
-$app['certificate.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\CertificateController();
-    }
-);
-
-$app['profile.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\User\ProfileController($app);
-    }
-);
-
-$app['user.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\User\UserController($app);
-    }
-);
-
-$app['news.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\NewsController();
-    }
-);
-
-$app['editor.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\EditorController($app);
-    }
-);
-
-$app['question_manager.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Admin\QuestionManager\QuestionManagerController();
-    }
-);
-
-$app['exercise_manager.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\ExerciseController($app);
-    }
-);
-
-$app['admin.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Admin\AdminController($app);
-    }
-);
-
-$app['role.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Admin\Administrator\RoleController($app);
-    }
-);
-
-$app['question_score.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Admin\Administrator\QuestionScoreController($app);
-    }
-);
-
-$app['question_score_name.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Admin\Administrator\QuestionScoreNameController($app);
-    }
-);
-
-$app['model_ajax.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\ModelAjaxController();
-    }
-);
-
-// Curriculum tool
-
-$app['curriculum.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumController($app);
-    }
-);
-
-$app['curriculum_category.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumCategoryController($app);
-    }
-);
-
-$app['curriculum_item.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumItemController($app);
-    }
-);
-
-$app['curriculum_user.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Tool\Curriculum\CurriculumUserController($app);
-    }
-);
-
-$app['session_path.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\App\SessionPath\SessionPathController($app);
-    }
-);
-
-$app['session_tree.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\App\SessionPath\SessionTreeController($app);
-    }
-);
-
-$app['upgrade.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Admin\Administrator\UpgradeController($app);
-    }
-);
-
-$app['course_home.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Tool\CourseHome\CourseHomeController($app);
-    }
-);
-
-$app['introduction.controller'] = $app->share(
-    function () use ($app) {
-        return new ChamiloLMS\Controller\Tool\Introduction\IntroductionController($app);
-    }
-);
+foreach ($controllers as $name => $controllerInfo) {
+    $class = 'ChamiloLMS\Controller\\' . $controllerInfo[0];
+    $app[$name] = $app->share(
+        function () use ($app, $class) {
+            return new $class($app);
+        }
+    );
+}
 
 /*if (isset($app['configuration']['unoconv.binaries'])) {
     $app->register(new Unoconv\UnoconvServiceProvider(), array(

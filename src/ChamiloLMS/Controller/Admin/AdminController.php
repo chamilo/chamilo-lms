@@ -3,14 +3,12 @@
 
 namespace ChamiloLMS\Controller\Admin;
 
-use ChamiloLMS\Controller\CommonController;
+use ChamiloLMS\Controller\BaseController;
 use Silex\Application;
-use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
+use Entity;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Entity;
-use ChamiloLMS\Form\QuestionScoreType;
 
 /**
  * Class Administrator
@@ -18,19 +16,18 @@ use ChamiloLMS\Form\QuestionScoreType;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class AdminController extends CommonController
+class AdminController extends BaseController
 {
     /**
-     *
      * @Route("/")
      * @Method({"GET"})
+     *
      * @return Response
      */
     public function indexAction()
     {
         $template = $this->getTemplate();
-        /** @var  \Symfony\Component\Security\Core\SecurityContext  $security */
-        $security = $this->get('security');
+        $security = $this->getSecurity();
 
         if (!$security->isGranted($this->app['allow_admin_toolbar'])) {
             return $this->abort(403, 'Access denied');
@@ -40,6 +37,7 @@ class AdminController extends CommonController
             $this->loadAdminMenu();
         }
         $response = $template->renderTemplate('admin/index.tpl');
+
         return new Response($response, 200, array());
     }
 

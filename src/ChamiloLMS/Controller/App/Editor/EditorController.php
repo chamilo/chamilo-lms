@@ -1,8 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace ChamiloLMS\Controller;
+namespace ChamiloLMS\Controller\App\Editor;
 
+use ChamiloLMS\Controller\BaseController;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use ChamiloLMS\Component\Editor\Connector;
@@ -16,7 +17,7 @@ use ChamiloLMS\Component\Editor\Driver\elFinderVolumePersonalDriver;
  * @package ChamiloLMS.Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class EditorController extends CommonController
+class EditorController extends BaseController
 {
     /**
      * Gets that rm.wav sound

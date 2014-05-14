@@ -3,8 +3,7 @@
 
 namespace ChamiloLMS\Controller\Admin\Director;
 
-use ChamiloLMS\Controller\CommonController;
-use ChamiloLMS\Form\BranchType;
+use ChamiloLMS\Controller\CrudController;
 use ChamiloLMS\Form\DirectorJuryUserType;
 use ChamiloLMS\Form\JuryType;
 use ChamiloLMS\Entity;
@@ -13,10 +12,7 @@ use ChamiloLMS\Entity\Jury;
 use ChamiloLMS\Entity\User;
 use ChamiloLMS\Entity\JuryMembers;
 use Silex\Application;
-use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
  * Class RoleController
@@ -24,8 +20,31 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @package ChamiloLMS\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class BranchDirectorController extends CommonController
+class BranchDirectorController extends CrudController
 {
+    public function getClass()
+    {
+        return 'ChamiloLMS\Entity\BranchSync';
+    }
+
+    public function getType()
+    {
+        return 'ChamiloLMS\Form\DirectorJuryUserType';
+    }
+
+    protected function getControllerAlias()
+    {
+        return 'branch_director.controller';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTemplatePath()
+    {
+        return 'admin/director/branches/';
+    }
+
     /**
      * @Route("/")
      * @Method({"GET"})
@@ -188,34 +207,5 @@ class BranchDirectorController extends CommonController
     public function listUsersAction()
     {
 
-    }
-
-    protected function getControllerAlias()
-    {
-        return 'branch_director.controller';
-    }
-
-    /**
-    * {@inheritdoc}
-    */
-    protected function getTemplatePath()
-    {
-        return 'admin/director/branches/';
-    }
-
-    /**
-     * @return \ChamiloLMS\Entity\Repository\BranchSyncRepository
-     */
-    protected function getRepository()
-    {
-        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\BranchSync');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getNewEntity()
-    {
-        return new BranchSync();
     }
 }

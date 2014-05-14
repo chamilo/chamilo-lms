@@ -214,7 +214,7 @@ class Display
 
                     $url = $urlGenerator->generate(
                         'introduction.controller:editAction',
-                        array('tool' => $tool, 'course' => api_get_course_id())
+                        array('tool' => $tool, 'courseCode' => api_get_course_id())
                     );
 
                     $introduction_section .=  "<a href=\"".$url."?".api_get_cidreq()."\">";
@@ -228,7 +228,7 @@ class Display
                     $introduction_section .=  '<div id="introduction_block_action" class="col-md-2 col-md-offset-10">';
                     $url = $urlGenerator->generate(
                         'introduction.controller:editAction',
-                        array('tool' => $tool, 'course' => api_get_course_id())
+                        array('tool' => $tool, 'courseCode' => api_get_course_id())
                     );
 
                     $introduction_section .=  "<a href=\"".$url."?".api_get_cidreq()."\">";
@@ -237,7 +237,7 @@ class Display
 
                     $url = $urlGenerator->generate(
                         'introduction.controller:deleteAction',
-                        array('tool' => $tool, 'course' => api_get_course_id())
+                        array('tool' => $tool, 'courseCode' => api_get_course_id())
                     );
 
                     $introduction_section .=  "<a onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\" href=\"".$url."?".api_get_cidreq()."\">";

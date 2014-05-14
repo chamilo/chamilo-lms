@@ -3,7 +3,7 @@
 
 namespace ChamiloLMS\Controller\User;
 
-use ChamiloLMS\Controller\CommonController;
+use ChamiloLMS\Controller\BaseController;
 use Silex\Application;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
  * Class ProfileController
  * @package ChamiloLMS\Controller
  */
-class ProfileController extends CommonController
+class ProfileController extends BaseController
 {
     /**
      * @Route("/{username}")
@@ -76,7 +76,7 @@ class ProfileController extends CommonController
     /**
      * {@inheritdoc}
      */
-    protected function getTemplatePath()
+    public function getTemplatePath()
     {
         return 'user/';
     }

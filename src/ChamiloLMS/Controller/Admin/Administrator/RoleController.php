@@ -3,107 +3,45 @@
 
 namespace ChamiloLMS\Controller\Admin\Administrator;
 
-use ChamiloLMS\Controller\CommonController;
-use Silex\Application;
-use Symfony\Component\Form\Extension\Validator\Constraints\FormValidator;
-use Symfony\Component\HttpFoundation\Response;
+use ChamiloLMS\Controller\CrudController;
 use ChamiloLMS\Entity;
-use ChamiloLMS\Form\RoleType;
-use ChamiloLMS\Entity\Role;
-use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 /**
  * Class RoleController
- * @todo @route and @method function don't work yet
- * @package ChamiloLMS\Controller
+ * @package ChamiloLMS\Controller\Admin\Administrator
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class RoleController extends CommonController
+class RoleController extends CrudController
 {
     /**
-     *
-     * @Route("/")
-     * @Method({"GET"})
+     * {@inheritdoc}
      */
-    public function indexAction()
+    public function getClass()
     {
-        return parent::listingAction();
+        return 'ChamiloLMS\Entity\Role';
     }
 
     /**
-    *
-    * @Route("/{id}", requirements={"id" = "\d+"})
-    * @Method({"GET"})
-    */
-    public function readAction($id)
+     * {@inheritdoc}
+     */
+    public function getType()
     {
-        return parent::readAction($id);
+        return 'ChamiloLMS\Form\RoleType';
     }
 
     /**
-    * @Route("/add")
-    * @Method({"GET"})
-    */
-    public function addAction()
-    {
-        return parent::addAction();
-    }
-
-    /**
-    *
-    * @Route("/{id}/edit", requirements={"id" = "\d+"})
-    * @Method({"GET"})
-    */
-    public function editAction($id)
-    {
-        return parent::editAction($id);
-    }
-
-    /**
-    *
-    * @Route("/{id}/delete", requirements={"id" = "\d+"})
-    * @Method({"GET"})
-    */
-    public function deleteAction($id)
-    {
-        return parent::deleteAction($id);
-    }
-
-    protected function getControllerAlias()
+     * {@inheritdoc}
+     */
+    /*public function getControllerAlias()
     {
         return 'role.controller';
-    }
+    }*/
 
     /**
-    * {@inheritdoc}
-    */
-    protected function getTemplatePath()
+     * {@inheritdoc}
+     */
+    /*public function getTemplatePath()
     {
         return 'admin/administrator/role/';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getRepository()
-    {
-        return $this->get('orm.em')->getRepository('ChamiloLMS\Entity\Role');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getNewEntity()
-    {
-        return new Role();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFormType()
-    {
-        return new RoleType();
-    }
+    }*/
 }

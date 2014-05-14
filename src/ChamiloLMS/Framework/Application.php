@@ -62,6 +62,9 @@ class Application extends \Silex\Application
         return array();
     }
 
+    /**
+     * Reads the configuration.php file
+     */
     public function readConfigurationFiles()
     {
         $this->configuration = $this->getConfigurationArrayFromFile();
@@ -70,7 +73,7 @@ class Application extends \Silex\Application
             $config = new Config($this->configuration, true);
             $this->installed = true;
 
-            /** Overwriting paths */
+            /** Overwriting paths if set */
 
             $this['path.data'] = empty($config->get('path.data')) ? $this['path.data'] : $config->get('path.data');
             $this['path.course'] = empty($config->get('path.courses')) ? $this['path.courses'] : $config->get('path.courses');

@@ -85,7 +85,9 @@ a:active {
     padding-right: 15px;
     padding-top: 3px;
 }
-
+.dropdown-menu{
+  top: 50px;
+}
 /*****************************************************
  *  CHAMILO THEME STYLE                              *
  *****************************************************/

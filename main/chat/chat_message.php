@@ -287,11 +287,11 @@ if (!empty($course) && !empty($_user['user_id'])) {
 		?>
     </div>
     </form>
-    <audio id="audio">
+    <!-- <audio id="audio">
 	    <source type="audio/wav" src="sound/sonido_notificacion.wav"></source>
 	    <source type="audio/ogg" src="sound/sonido_notificacion.ogg"></source>
 	    <source type="audio/mpeg" src="sound/sonido_notificacion.mp3"></source>
-    </audio>
+    </audio> -->
 <?php
 }
 require 'footer_frame.inc.php';

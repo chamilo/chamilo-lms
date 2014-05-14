@@ -51,7 +51,7 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
     <?php echo api_get_js('jquery.min.js'); ?>
     <?php echo api_get_js('jquery.tinyscrollbar.js'); ?>
     <script type="text/javascript">
-        $(document).ready(function() {
+        /*$(document).ready(function() {
         var posicion = $("#clear-chat").offset();
         var margenSuperior = 15;
          $(window).scroll(function() {
@@ -65,12 +65,12 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
                  });
              };
          });
-        });
+        });*/
         $(document).ready(function(){
                 $('#user-online-scroll').tinyscrollbar();
             });
         //Sound send message
-        $(document).ready(function(){
+        /*$(document).ready(function(){
             $("#message").keypress(function(event){
             if (event.which == 13) {
                 $("#audio")[0].play();
@@ -81,7 +81,7 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
             $("#send").on("click",function(){
                 $("#audio")[0].play();
             });
-        });
+        });*/
         
     </script>
 

@@ -11,12 +11,26 @@ body{
 	background: #2C2C2C;
 }
 #clear-chat{
-		position: absolute;
+		/*position: absolute;
         top:0;
-        left: 10px;
-        border: 1px solid #CCC;
-        background-color: #F2F2F2;
-        width:100px;
+        left: 10px;*/
+        background: #2C2C2C;
+		border:1px solid #2C2C2C;
+        width:140px;
+        padding: 5px;
+        font-size: 14px;
+}
+#clear-chat img{
+	width: 20px;
+	float: left;
+	margin-right: 5px;
+}
+#clear-chat a{
+	color: #fff;
+	text-decoration: none;
+}
+#clear-chat a:hover{
+	opacity: 0.7;
 }
 #content-chat{
 	background:#3E3E3E;

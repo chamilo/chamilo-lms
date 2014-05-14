@@ -1348,21 +1348,21 @@ function api_get_user_info_from_username($username = '') {
  * Returns the current course code (string)
  */
 function api_get_course_id() {
-    return isset($_SESSION['_cid']) ? $_SESSION['_cid'] : null;
+    return Session::read('_cid');
 }
 
 /**
  * Returns the current course id (integer)
  */
 function api_get_real_course_id() {
-    return isset($_SESSION['_real_cid']) ? intval($_SESSION['_real_cid']) : 0;
+    return Session::read('_real_cid', 0);
 }
 
 /**
  * Returns the current course id (integer)
  */
 function api_get_course_int_id() {
-    return isset($_SESSION['_real_cid']) ? intval($_SESSION['_real_cid']) : 0;
+    return Session::read('_real_cid', 0);
 }
 
 
@@ -4921,12 +4921,12 @@ function api_replace_dangerous_char($filename, $strict = 'loose') {
     static $replace = array('',   '_', '_',  '_',  '_',  '_',    '-', '-',  '-', '_', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-');
 
     // Encoding detection.
-    $encoding = api_detect_encoding($filename);
+    //$encoding = api_detect_encoding($filename);
 
     // Converting html-entities into encoded characters.
-    $filename = api_html_entity_decode($filename, ENT_QUOTES, $encoding);
+    ///$filename = api_html_entity_decode($filename, ENT_QUOTES, $encoding);
     // Transliteration to ASCII letters, they are not dangerous for filesystems.
-    $filename = api_transliterate($filename, 'x', $encoding);
+    $filename = api_transliterate($filename, 'x');
 
     // Trimming leading/trailing whitespace.
     $filename = trim($filename);

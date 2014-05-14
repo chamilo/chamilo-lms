@@ -125,8 +125,7 @@
         "stof/doctrine-extensions-bundle": "~1.1@dev",
         "gedmo/doctrine-extensions": "~2.3",
 
-
-
+        "zendframework/zend-filter": "2.3.*@dev",
 
         "jbroadway/urlify": "1.0.0-stable",
         "composer/composer": "1.0.*@dev",

@@ -82,22 +82,24 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
                 $("#audio")[0].play();
             });
         });
-
+        
     </script>
 
 <script type="text/javascript">
+function play_notification() {
+    document.getElementById('audio').play();
+}
 function updateChat()
 {
 	if ('<?php echo $chat_size_old; ?>' != '<?php echo $chat_size_new; ?>') {
 		parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size_new.'&'.api_get_cidreq(); ?>#bottom';
+        play_notification();
 	}
 }
-//$(window).load(function(updateChat){
-  //      $("#audio")[0].play();
-//});
 
 function updateConnected()
 {
+
 	if ('<?php echo $connected_old; ?>' != '<?php echo $connected_new; ?>')
 	{
 		parent.chat_whoisonline.location.href='chat_whoisonline.php?size=<?php echo $connected_new; ?>';
@@ -116,6 +118,7 @@ function eventMessage()
 	parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size.'&'.api_get_cidreq(); ?>#bottom';
 	<?php endif; ?>
 	document.formMessage.message.focus();
+
 }
 
 function send_message(evenement) {

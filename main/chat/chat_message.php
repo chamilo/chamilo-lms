@@ -48,6 +48,7 @@ function close_chat_window() {
 	chat_window.opener = top.window.self;
 	chat_window.top.close();
 }
+
 </script>
 
 <?php
@@ -246,10 +247,10 @@ if (!empty($course) && !empty($_user['user_id'])) {
 	<tr>
         <td width="320" valign="middle">
 		<?php $talkboxsize=(api_get_course_setting('allow_open_chat_window')) ? 'width: 350px; height: 80px' : 'width: 450px; height: 35px'; ?>
-        <textarea class="message-text" name="message" style=" <?php echo $talkboxsize; ?>" onkeydown="send_message(event);" onclick="javascript: insert_smile(this);"></textarea>
+        <textarea id="message" class="message-text" name="message" style=" <?php echo $talkboxsize; ?>" onkeydown="send_message(event);" onclick="javascript: insert_smile(this);"></textarea>
         </td>
         <td>
-            <button type="submit" value="<?php echo get_lang('Send'); ?>" class="btn-enviar"><?php echo get_lang('Send'); ?></button>
+            <button id="send" type="submit" value="<?php echo get_lang('Send'); ?>" class="btn-enviar"><?php echo get_lang('Send'); ?></button>
         </td>
 	</tr>
 	</table>
@@ -286,6 +287,11 @@ if (!empty($course) && !empty($_user['user_id'])) {
 		?>
     </div>
     </form>
+    <audio id="audio">
+	    <source type="audio/wav" src="sound/sonido_notificacion.wav"></source>
+	    <source type="audio/ogg" src="sound/sonido_notificacion.ogg"></source>
+	    <source type="audio/mpeg" src="sound/sonido_notificacion.mp3"></source>
+    </audio>
 <?php
 }
 require 'footer_frame.inc.php';

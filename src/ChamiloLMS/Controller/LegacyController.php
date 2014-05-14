@@ -41,11 +41,10 @@ class LegacyController extends BaseController
 
         $fileToLoad = $mainPath.$file;
 
-        $template = $this->getTemplate();
-
         if (is_file($fileToLoad) &&
             \Security::check_abs_path($fileToLoad, $mainPath)
         ) {
+            $toolNameFromFile = basename(dirname($fileToLoad));
 
             // Default values
             $_course = api_get_course_info();
@@ -70,26 +69,24 @@ class LegacyController extends BaseController
             }
 
             // Setting page header/footer conditions (important for LPs)
-            $template->setFooter($app['template.show_footer']);
-            $template->setHeader($app['template.show_header']);
+            $this->getTemplate()->setFooter($app['template.show_footer']);
+            $this->getTemplate()->setHeader($app['template.show_header']);
 
             if (isset($htmlHeadXtra)) {
-                $template->addResource($htmlHeadXtra, 'string');
+                $this->getTemplate()->addResource($htmlHeadXtra, 'string');
             }
             // $interbreadcrumb is loaded in the require_once file.
-            if (isset($interbreadcrumb)) {
-                $template->setBreadcrumb($interbreadcrumb);
-                $breadCrumb = $template->getBreadCrumbLegacyArray();
-                $menu = $this->parseLegacyBreadCrumb($breadCrumb);
-                $template->assign('new_breadcrumb', $menu);
-            }
-
-            $template->parseResources();
+            $interbreadcrumb = isset($interbreadcrumb) ? $interbreadcrumb : null;
+            $this->getTemplate()->setBreadcrumb($interbreadcrumb);
+            $breadCrumb = $this->getTemplate()->getBreadCrumbLegacyArray();
+            $menu = $this->parseLegacyBreadCrumb($breadCrumb);
+            $this->getTemplate()->assign('new_breadcrumb', $menu);
+            $this->getTemplate()->parseResources();
 
             if (isset($tpl)) {
                 $response = $app['twig']->render($app['default_layout']);
             } else {
-                $template->assign('content', $out);
+                $this->getTemplate()->assign('content', $out);
                 $response = $app['twig']->render($app['default_layout']);
             }
         } else {

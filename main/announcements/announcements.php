@@ -75,7 +75,7 @@ if (((!empty($_GET['action']) && $_GET['action'] == 'add') && $_GET['origin'] ==
     $display_form = true;
 }
 
-$htmlHeadXtra[] = AnnouncementManager::to_javascript();
+//$htmlHeadXtra[] = AnnouncementManager::to_javascript();
 
 $email_ann = null;
 $group_id = api_get_group_id();

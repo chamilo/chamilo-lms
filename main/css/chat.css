@@ -8,17 +8,19 @@ body{
 }
 .page-chat{
 	padding: 10px;
-	background: #2C2C2C;
+	background: #e5e5e5; /* Old browsers */
+	background: -moz-linear-gradient(top, #e5e5e5 0%, #ffffff 99%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e5e5e5), color-stop(99%,#ffffff)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #e5e5e5 0%,#ffffff 99%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #e5e5e5 0%,#ffffff 99%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #e5e5e5 0%,#ffffff 99%); /* IE10+ */
+	background: linear-gradient(to bottom, #e5e5e5 0%,#ffffff 99%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e5e5', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
 }
 #clear-chat{
-		/*position: absolute;
-        top:0;
-        left: 10px;*/
-        background: #2C2C2C;
-		border:1px solid #2C2C2C;
-        width:140px;
-        padding: 5px;
-        font-size: 14px;
+	width:140px;
+    padding: 5px;
+    font-size: 14px;
 }
 #clear-chat img{
 	width: 20px;
@@ -26,14 +28,14 @@ body{
 	margin-right: 5px;
 }
 #clear-chat a{
-	color: #fff;
+	color: #0088AA;
 	text-decoration: none;
 }
 #clear-chat a:hover{
 	opacity: 0.7;
 }
 #content-chat{
-	background:#3E3E3E;
+	background:#ffffff;
 	padding: 30px;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
@@ -45,15 +47,15 @@ textarea {
 	height: 100px;
 	float: left;
 	border: 0;
-	background-color: #434343; 
+	background-color: #ffffff; 
 	font-size: 0.75em;
 	font-family: Helvetica, arial, sans-serif;
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
-	border: 1px solid #434343;
-	color: #BDBDBA;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.075) inset;
+	border: 1px solid #EEEEEE;
+	color: #666;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35) inset;
 }
 .message-student .chat-image, .message-teacher .chat-image{
  	width: 80px;
@@ -65,17 +67,17 @@ textarea {
 	-moz-border-radius: 10px;
 	border-radius: 10px;
 	border:2px solid #fff;
-	box-shadow: 1px 1px 10px #484848; 
+	box-shadow: 1px 1px 2px rgba(0,0,0,0.2); 
  }
 .message-student .content-message{
-	background-color: #FAEDCE;
+	background-color: #F9F2E0;
     color: #000;
     padding: 10px;
     margin-bottom: 15px;
-    border-top: 1px solid #FAEDCE;
-    border-left: 1px solid #FAEDCE;
-    border-right: 1px solid #FAEDCE;
-    border-bottom: 1px solid #FAEDCE;
+    border-top: 1px solid #F9F2E0;
+    border-left: 1px solid #F9F2E0;
+    border-right: 2px solid #F7E5B9;
+    border-bottom: 3px solid #F7E5B9;
     border-radius: 10px;
 
 	display: inline-block;
@@ -92,7 +94,7 @@ textarea {
 	height: 0; 
 	border-top: 0px solid transparent;
 	border-bottom: 15px solid transparent;
-	border-left: 15px solid #EFE856;
+	border-left: 15px solid #EBEFF3;
 }
 .message-student .icon-message{
 	display: inline-block;
@@ -102,17 +104,17 @@ textarea {
 	height: 0; 
 	border-top: 0px solid transparent;
 	border-bottom: 15px solid transparent;
-	border-right: 15px solid #FAEDCE;
+	border-right: 15px solid #F9F2E0;
 }
 .message-teacher .content-message{
-	background-color: #EFE856;
+	background-color: #EBEFF3;
     color: #000;
     padding: 10px;
     margin-bottom: 15px;
-    border-top: 1px solid #EFE856;
-    border-left: 1px solid #EFE856;
-    border-right: 1px solid #EFE856;
-    border-bottom: 1px solid #EFE856;
+    border-top: 1px solid #EBEFF3;
+    border-left: 2px solid #DEE1E5;
+    border-right: 1px solid #EBEFF3;
+    border-bottom: 3px solid #DEE1E5;
     border-radius: 10px;
 	display: inline-block;
 	font-size: 13px;
@@ -144,12 +146,12 @@ textarea {
 	margin-bottom: 5px;
 }
 .user-online .profile li a{
-	color: #fff;
+	color: #0088AA;
 	text-decoration: none;
 }
 .user-online .title{
 	background: url(chat.png) no-repeat 0 center;
-	color: #ffffff;
+	color: #0088AA;
 	padding-top: 5px;
 	padding-left: 30px;
 	font-weight: bold;
@@ -170,16 +172,19 @@ textarea {
   display: block;
   padding: 10px 15px;
   margin-bottom: -1px;
-  background-color: #3D3D3D;
-  border: 1px solid #3D3D3D;
+  background-color: #EEEEEE;
+  border: 1px solid #E2E2E2;
   -webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
 	color: #666;
 }
+
 li.list-group-item:hover, li.list-group-item:focus {
   text-decoration: none;
-  background-color: #EEEEEE;
+  background-color: #E2E2E2;
+  cursor: pointer;
+  border: 1px solid #EEEEEE;
 }
 li.list-group-item:hover a{
 	color: #000;
@@ -207,18 +212,18 @@ li.list-group-item:hover a{
 .noSelect { user-select: none; -o-user-select: none; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; }
 
 .btn-send {
-	background: #fc585d; /* Old browsers */
-	background: -moz-linear-gradient(top, #fc585d 0%, #fd3746 99%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fc585d), color-stop(99%,#fd3746)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, #fc585d 0%,#fd3746 99%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, #fc585d 0%,#fd3746 99%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, #fc585d 0%,#fd3746 99%); /* IE10+ */
-	background: linear-gradient(to bottom, #fc585d 0%,#fd3746 99%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fc585d', endColorstr='#fd3746',GradientType=0 ); /* IE6-9 */
+	background: #87e0fd; /* Old browsers */
+	background: -moz-linear-gradient(top, #87e0fd 0%, #53cbf1 40%, #05abe0 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#87e0fd), color-stop(40%,#53cbf1), color-stop(100%,#05abe0)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #87e0fd 0%,#53cbf1 40%,#05abe0 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #87e0fd 0%,#53cbf1 40%,#05abe0 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #87e0fd 0%,#53cbf1 40%,#05abe0 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #87e0fd 0%,#53cbf1 40%,#05abe0 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87e0fd', endColorstr='#05abe0',GradientType=0 ); /* IE6-9 */
 	-webkit-border-radius: 15px;
 	-moz-border-radius: 15px;
 	border-radius: 15px;
-	border:1px solid #FD3746;
+	border:1px solid #53cbf1;
 	display:inline-block;
 	color:#ffffff;
 	font-family:Arial;
@@ -234,7 +239,8 @@ li.list-group-item:hover a{
 }
 .btn-send:hover {
 	opacity: 0.8;
-}.btn-send:active {
+}
+.btn-send:active {
 	position:relative;
 	top:1px;
 }
@@ -248,5 +254,5 @@ li.list-group-item:hover a{
 	-webkit-border-radius: 10px;
 	-moz-border-radius: 10px;
 	border-radius: 10px;
-	background: #3D3D3D;
+	background: #EEEEEE;
 }

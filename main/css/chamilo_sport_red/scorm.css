@@ -7,7 +7,6 @@
 }
 
 .inner_lp_toc .scorm_item a {
-    font-weight: bold;
     font-size: 13px;
     margin-right: 1px;
     padding-bottom: 2px;
@@ -105,7 +104,7 @@
 
 .inner_lp_toc .scorm_item_section .scorm_item:before
 {
-    content : url('../../img/lp_section.png');  /* from main/newscorm/lp_controller.php file */
+    content : url('../lp_section.png');  /* from main/newscorm/lp_controller.php file */
     vertical-align: text-top;
     margin-right : 5px;
 }
@@ -219,7 +218,7 @@
     background:#333;
     font-weight:normal;
     color:#fff;
-    text-shadow:0 -1px 1px #000;
+    text-shadow:none;
     background-image:-webkit-gradient(linear,left top,left bottom,from(#555),to(#333));
     background-image:-webkit-linear-gradient(top,#555,#333);
     background-image:-moz-linear-gradient(top,#555,#333);
@@ -233,7 +232,7 @@
 }
 
 .inner_lp_toc .scorm_item {
-    font-size: 16px;
+    font-size: 14px;
     margin-left: 10px;
     margin-right:10px;
     text-decoration: none;

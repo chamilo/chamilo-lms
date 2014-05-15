@@ -494,6 +494,10 @@ class CommonCommand extends AbstractCommand
                 'require_update' => false,
                 'parent' => '1.9.0'
             ),
+            '1.9.6.1' => array(
+                'require_update' => false,
+                'parent' => '1.9.0'
+            ),
             '1.9.6' => array(
                 'require_update' => false,
                 'parent' => '1.9.0'
@@ -964,15 +968,15 @@ class CommonCommand extends AbstractCommand
     public function removeFiles(Finder $files, OutputInterface $output)
     {
         $dryRun = $this->getConfigurationHelper()->getDryRun();
+
+        if (count($files) < 1) {
+            $output->writeln('<comment>No files found.</comment>');
+
+            return 0;
+        }
+
+        $fs = new Filesystem();
         try {
-            $fs = new Filesystem();
-
-            if (isset($files) && count($files) < 1) {
-               $output->writeln('<comment>No files found.</comment>');
-
-               return 0;
-            }
-
             if ($dryRun) {
                 $output->writeln('<comment>Files to be removed (--dry-run is on).</comment>');
                 foreach ($files as $file) {

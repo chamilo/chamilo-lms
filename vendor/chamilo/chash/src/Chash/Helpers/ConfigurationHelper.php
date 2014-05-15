@@ -226,10 +226,11 @@ class ConfigurationHelper extends Helper
                 $confInfo = pathinfo($configurationFile);
                 switch ($confInfo['extension']) {
                     case 'php':
+                        // New configuration.php in 10 returns the array.
                         $temp = require $configurationFile;
 
                         // The file return the array?
-                        if (!empty($temp)) {
+                        if (!empty($temp) && is_array($temp)) {
                             $_configuration = $temp;
                         }
 

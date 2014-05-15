@@ -220,17 +220,17 @@ function show_form_send_ticket()
         'id' => 'status_id',
         'for' => 'status_id'
     );
-    $statusList[NEWTCK] = $plugin->get_lang('StsNew');
+    $statusList[NEWTCK] = $plugin->get_lang('StatusNew');
     if (api_is_platform_admin()) {
         $statusAttributes = array(
             'id' => 'status_id',
             'for' => 'status_id',
             'style' => 'width: 562px;'
         );
-        $statusList[PENDING] = $plugin->get_lang('StsPending');
-        $statusList[UNCONFIRMED] = $plugin->get_lang('StsUnconfirmed');
-        $statusList[CLOSE] = $plugin->get_lang('StsClose');
-        $statusList[REENVIADO] = $plugin->get_lang('StsForwarded');
+        $statusList[PENDING] = $plugin->get_lang('StatusPending');
+        $statusList[UNCONFIRMED] = $plugin->get_lang('StatusUnconfirmed');
+        $statusList[CLOSE] = $plugin->get_lang('StatusClose');
+        $statusList[REENVIADO] = $plugin->get_lang('StatusForwarded');
     }
     //End Status List
     
@@ -399,7 +399,6 @@ function show_form_send_ticket()
         )
     );
     
-     
     $form->addElement('html', '<span id="filepaths">');
     $form->addElement('html', '<div id="filepath_1">');
     $form->addElement('file', 'attach_1', get_lang('FilesAttachment'));
@@ -590,7 +589,7 @@ if (!isset($_POST['compose'])) {
               </form>
             </div>';
         echo '<div class="users-list">';
-            $order = (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2;
+            $order = (api_is_western_name_order() || api_sort_by_first_name()) ? 3 : 2;
             $table = new SortableTable(
                         'users', 'get_number_of_users', 
                         'get_user_data', $order, 10

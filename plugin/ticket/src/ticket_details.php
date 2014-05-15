@@ -35,10 +35,10 @@ $(document).ready(function(){
 		width: 600,
 		modal: true,
 		buttons: {
-                    Asignar: function(){
-                        $("#genesis").submit()
+                    ' . get_lang('Accept') . ': function(){
+                        $("#frmResponsable").submit()
                     },
-                    Close: function() {
+                    ' . ucfirst(get_lang('Close')) . ': function() {
                         $(this).dialog("close");
                     }
                 }
@@ -206,7 +206,7 @@ if (isset($_POST['response'])) {
         } else if (!is_null($response) && $ticket['ticket']['status_id'] == 'XCF') {
             TicketManager::update_ticket_status('PND', $_GET['ticket_id'], $user_id);
             $ticket['ticket']['status_id'] = 'PND';
-            $ticket['ticket']['status'] = $plugin->get_lang('StsPending');
+            $ticket['ticket']['status'] = $plugin->get_lang('StatusPending');
         }
     }
 }
@@ -319,7 +319,7 @@ if (!isset($_POST['compose'])) {
     }
     $select_admins .= "</select>";
     echo '<div id="dialog-form" title="' . $plugin->get_lang('AssignTicket') . '" >';
-    echo '<form id="genesis" method="POST" action="ticket_details.php?ticket_id=' . $ticket['ticket']['ticket_id'] . '">
+    echo '<form id="frmResponsable" method="POST" action="ticket_details.php?ticket_id=' . $ticket['ticket']['ticket_id'] . '">
 			<input type="hidden" name ="action" id="action" value="assign"/>
 			<div>
 				<div class="label">' . get_lang('Responsable') . ':</div>
@@ -360,7 +360,7 @@ if (!isset($_POST['compose'])) {
     }
     echo "</div>";
     echo "</div>";
-    $subject = "RE: " . $message['subject'];
+    $subject = get_lang('ReplyShort') .": " . $message['subject'];
     $user_admin = api_is_platform_admin();
     if ($ticket['ticket']['status_id'] != 'REE' AND $ticket['ticket']['status_id'] != 'CLS') {
         if (!$isAdmin && $ticket['ticket']['status_id'] != 'XCF') {
@@ -396,7 +396,7 @@ function show_form_send_message()
         'send_ticket', 
         'POST',
         api_get_self() . '?ticket_id=' . $ticket['ticket']['ticket_id'],
-        "",
+        '',
         array(
             'enctype' => 'multipart/form-data',
             'onsubmit' => 'return validate()',

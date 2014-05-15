@@ -302,7 +302,6 @@ The more frequent ones have been marked with *
         font-size: 19px;
         font-weight: normal;
         left: 20px;
-        position: absolute;
         text-transform: uppercase;
         top: 179px;
     }
@@ -623,9 +622,6 @@ The more frequent ones have been marked with *
         float: left;
         width: 660px;
     }
-    .section-mycampus #hot_courses .page-header {
-        width: 650px;
-    }
     .section-mycourses .course-box .course-box-actions {
         display: none;
     }
@@ -744,7 +740,11 @@ The more frequent ones have been marked with *
         background:none;
     }
     .page-header {
-        width: 560px;
+        display: none;
+    }
+    #course_category,#skill_block,.user_notification{
+        display: none;
+        visibility: hidden;
     }
     #course_tools .row .home-course-intro{
         width: 100%;

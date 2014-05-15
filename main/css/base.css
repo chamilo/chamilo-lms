@@ -1046,6 +1046,22 @@ a.personal_agenda:hover, a.personal_agenda:hover {
     background-color: #FFFFDD;
 }
 
+#profile .control-group .controls .files-production{
+  padding: 5px 25px;
+    -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  background-color: #F1F3F5;
+  border: 1px solid #EAEBED;
+}
+#productions{
+  list-style: none;
+}
+#productions li{
+  list-style: none;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
 
 .message-group-content {
     float:right;

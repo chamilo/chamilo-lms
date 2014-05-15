@@ -52,7 +52,7 @@ if (!empty($course)) {
     $course_id = api_get_course_int_id();
 
     if (empty($session_id)) {
-		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,t3.status
+		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,email,t3.status
 				  FROM $tbl_user t1, $tbl_chat_connected t2, $tbl_course_user t3
 				  WHERE t2.c_id = $course_id AND
 				  		t1.user_id=t2.user_id AND
@@ -65,7 +65,7 @@ if (!empty($course)) {
         $users = Database::store_result($result);
 	} else {
 		// select learners
-		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri
+		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,email
                   FROM $tbl_user t1, $tbl_chat_connected t2, $tbl_session_course_user t3
 		          WHERE
 		          t2.c_id = $course_id AND
@@ -78,7 +78,7 @@ if (!empty($course)) {
 		}
 
 		// select session coach
-		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri
+		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,email
 		          FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session t3
 		          WHERE t2.c_id = $course_id AND
 		             t1.user_id=t2.user_id AND t3.id_coach=t2.user_id AND t3.id = '".$session_id."' AND t2.last_connection>'".$date_inter."' $extra_condition ORDER BY username";
@@ -88,7 +88,7 @@ if (!empty($course)) {
 		}
 
 		// select session course coach
-		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri
+		$query = "SELECT DISTINCT t1.user_id,username,firstname,lastname,picture_uri,email
 				FROM $tbl_user t1,$tbl_chat_connected t2,$tbl_session_course_user t3
 				WHERE
 				t2.c_id = $course_id AND
@@ -107,34 +107,37 @@ if (!empty($course)) {
 	require 'header_frame.inc.php';
 
 	?>
-	<table border="0" cellpadding="0" cellspacing="0" width="100%" class="data_table">
-	<tr><th colspan="2"><?php echo get_lang('Connected'); ?></th></tr>
-	<?php
-	foreach ($users as & $user) {
-		if (empty($session_id)) {
-			$status = $user['status'];
-		} else {
-			$status = CourseManager::is_course_teacher($user['user_id'], $_SESSION['_course']['id']) ? 1 : 5;
-		}
-		$user_image = UserManager::get_user_picture_path_by_id($user['user_id'], 'web', false, true);
-		$file_url = $user_image['dir'].$user_image['file'];
-	?>
-    <tr>
-	  <td width="1%" valign="top"><img src="<?php echo $file_url;?>" border="0" width="22" alt="" /></td>
-	  <td width="99%"><?php if ($status == 1) echo Display::return_icon('teachers.gif', get_lang('Teacher'), array('height' => '11')).' '; else echo Display::return_icon('students.gif', get_lang('Student'), array('height' => '11')); ?><a <?php if ($status == 1) echo 'class="master"'; ?> name="user_<?php echo $user['user_id']; ?>" href="<?php echo api_get_self(); ?>?<?php echo api_get_cidreq(); ?>&showPic=<?php if ($showPic == $user['user_id']) echo '0'; else echo $user['user_id']; ?>#user_<?php echo $user['user_id']; ?>"><?php echo api_get_person_name($user['firstname'], $user['lastname']); ?></a></td>
-	</tr>
-	<?php
+	<div class="user-connected">
+	<div id="user-online-scroll" class="user-online">
 
-		if ($showPic == $user['user_id']) { ?>
-	<tr>
-	  <td colspan="2" align="center"><img src="<?php echo $file_url; ?>" border="0" width="100" alt="" /></td>
-	</tr>
-	<?php
-		}
-	}
-	unset($users);
-	?>
-	</table>
+		<div class="title"><?php echo get_lang('Users'); ?> <?php echo get_lang('Connected'); ?></div>
+		<div class="scrollbar"><div class="track"><div class="thumb"><div class="end"></div></div></div></div>
+		<div class="viewport"><div id="hidden" class="overview">
+		<ul class="perfil list-group">
+			<?php
+				foreach ($users as & $user) {
+					if (empty($session_id)) {
+						$status = $user['status'];
+					} else {
+						$status = CourseManager::is_course_teacher($user['user_id'], $_SESSION['_course']['id']) ? 1 : 5;
+					}
+					$user_image = UserManager::get_user_picture_path_by_id($user['user_id'], 'web', false, true);
+					$file_url = $user_image['dir'].'medium_'.$user_image['file'];
+					$email_url = $user['email'];
+					$url_user_profile=api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user['user_id'].'&';
+			?>
+			<li class="list-group-item">
+				<img src="<?php echo $file_url;?>" border="0" width="50" alt="" class="user-image-chat" />
+				<div class="user-name">
+					<a href="<?php echo $url_user_profile; ?>" target="_blank"><?php echo api_get_person_name($user['firstname'], $user['lastname']); ?></a>
+					<?php if ($status == 1) echo Display::return_icon('teachers.gif', get_lang('Teacher'), array('height' => '18')).' '; else echo Display::return_icon('students.gif', get_lang('Student'), array('height' => '18')); ?>
+				</div>
+				<div class="user-email"><?php echo $email_url; ?></div>
+				
+			</li>
+			<?php  } unset($users); ?>
+		</ul>
+	</div></div></div></div>
 	<?php
 }
 require 'footer_frame.inc.php';

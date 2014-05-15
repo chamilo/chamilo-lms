@@ -50,6 +50,7 @@ $cidreq = Security::remove_XSS($_GET['cidReq']);
 <html>
 <head>
 <meta charset="<?php echo api_get_system_encoding(); ?>" />
+<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH); ?>chat.css">
 <?php
 echo'<title>'.get_lang('Chat').' - '.$mycourseid.' - '.api_get_setting('siteName').'</title>';
 
@@ -75,10 +76,13 @@ if (empty($open_chat_window)) {
     Display::display_header($tool_name, 'Chat');
 }
 
-echo '<iframe src="chat_whoisonline.php?cidReq='.$cidreq.'" name="chat_whoisonline" scrolling="auto" style="height:320px; width:19%; border: 0px none; float:left"></iframe>';
-echo '<iframe src="chat_chat.php?origin='.$origin.'&target='.$target.'&amp;cidReq='.$cidreq.'" name="chat_chat" scrolling="auto" height="240" style="width:80%; border: 0px none; float:right"></iframe>';
-echo '<iframe src="chat_message.php?cidReq='.$cidreq.'" name="chat_message" scrolling="no" height="80" style="width:80%; border: 0px none; float:right"></iframe>';
+
+echo '<div class="page-chat">';
+echo '<iframe src="chat_whoisonline.php?cidReq='.$cidreq.'" name="chat_whoisonline" scrolling="no" style="height:500px; width:35%; border: 0px none; float:left"></iframe>';
+echo '<iframe src="chat_chat.php?origin='.$origin.'&target='.$target.'&amp;cidReq='.$cidreq.'" name="chat_chat" id="chat_chat" scrolling="auto" height="380" style="width:65%; border: 0px none; float:right"></iframe>';
+echo '<iframe src="chat_message.php?cidReq='.$cidreq.'" name="chat_message" scrolling="no" height="180" style="width:65%; border: 0px none; float:right"></iframe>';
 echo '<iframe src="chat_hidden.php?cidReq='.$cidreq.'" name="chat_hidden" height="0" style="border: 0px none"></iframe>';
+echo '</div>';
 
 if (empty($open_chat_window)) {
     Display::display_footer();

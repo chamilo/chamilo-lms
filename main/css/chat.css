@@ -135,15 +135,15 @@ textarea {
 	text-align: left;
 	margin-top: 10px;
 }
-.user-online .perfil{
+.user-online .profile{
 	list-style: none;
 	padding: 0;
 	margin:0;
 }
-.user-online .perfil li{
+.user-online .profile li{
 	margin-bottom: 5px;
 }
-.user-online .perfil li a{
+.user-online .profile li a{
 	color: #fff;
 	text-decoration: none;
 }
@@ -206,7 +206,7 @@ li.list-group-item:hover a{
 #user-online-scroll .disable { display: none; }
 .noSelect { user-select: none; -o-user-select: none; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; }
 
-.btn-enviar {
+.btn-send {
 	background: #fc585d; /* Old browsers */
 	background: -moz-linear-gradient(top, #fc585d 0%, #fd3746 99%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fc585d), color-stop(99%,#fd3746)); /* Chrome,Safari4+ */
@@ -232,15 +232,15 @@ li.list-group-item:hover a{
 	text-align:center;
 	cursor: pointer;
 }
-.btn-enviar:hover {
+.btn-send:hover {
 	opacity: 0.8;
-}.btn-enviar:active {
+}.btn-send:active {
 	position:relative;
 	top:1px;
 }
 .emoticons-chat img{
-  width: 24px;
-  border: none;
+  	width: 24px;
+  	border: none;
 }
 .message-form-chat{
 	margin-top: 20px;

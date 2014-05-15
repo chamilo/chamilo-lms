@@ -3,11 +3,11 @@
 /**
  * Automatically generated timezone file
  *
- * Last update: 2013-10-15T12:50:14+02:00
+ * Last update: 2014-04-30T14:05:46-04:00
  * Source: http://unicode.org/repos/cldr/trunk/common/supplemental/windowsZones.xml
  *
  * @copyright Copyright (C) 2007-2014 fruux GmbH (https://fruux.com/).
- * @license http://code.google.com/p/sabredav/wiki/License Modified BSD License
+ * @license http://sabre.io/license/ Modified BSD License
  */
 
 return array (
@@ -40,7 +40,6 @@ return array (
   'Dateline Standard Time' => 'Etc/GMT+12',
   'E. Africa Standard Time' => 'Africa/Nairobi',
   'E. Australia Standard Time' => 'Australia/Brisbane',
-  'E. Europe Standard Time' => 'Asia/Nicosia',
   'E. South America Standard Time' => 'America/Sao_Paulo',
   'Eastern Standard Time' => 'America/New_York',
   'Egypt Standard Time' => 'Africa/Cairo',

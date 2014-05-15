@@ -87,6 +87,7 @@ return array(
     'FranMoreno' => array($vendorDir . '/franmomu/silex-pagerfanta-provider/src'),
     'Flint' => array($vendorDir . '/flint/flint/src'),
     'FFMpeg' => array($vendorDir . '/php-ffmpeg/php-ffmpeg/src'),
+    'Exporter' => array($vendorDir . '/sonata-project/exporter/lib'),
     'Evenement' => array($vendorDir . '/evenement/evenement/src'),
     'Entity' => array($baseDir . '/main/inc'),
     'Doctrine\\ORM\\' => array($vendorDir . '/doctrine/orm/lib'),

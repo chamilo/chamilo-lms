@@ -35,7 +35,8 @@ class ReadLimitEntityBody extends AbstractEntityBodyDecorator
 
     public function isConsumed()
     {
-        return (($this->offset + $this->limit) - $this->body->ftell()) <= 0;
+        return $this->body->isConsumed() ||
+            ($this->body->ftell() >= $this->offset + $this->limit);
     }
 
     /**

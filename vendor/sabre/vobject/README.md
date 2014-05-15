@@ -5,7 +5,7 @@ The VObject library allows you to easily parse and manipulate [iCalendar](https:
 and [vCard](https://tools.ietf.org/html/rfc6350) objects using PHP.
 The goal of the VObject library is to create a very complete library, with an easy to use API.
 
-This project is a spin-off from [SabreDAV](http://code.google.com/p/sabredav/), where it has
+This project is a spin-off from [SabreDAV](http://sabre.io/), where it has
 been used for several years. The VObject library has 100% unittest coverage.
 
 Build status

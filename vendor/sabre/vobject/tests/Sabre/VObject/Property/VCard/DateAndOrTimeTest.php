@@ -158,7 +158,7 @@ class DateAndOrTimeTest extends \PHPUnit_Framework_TestCase {
         $prop = $vcard->createProperty('BDAY', $datetime);
 
         $dt = $prop->getDateTime();
-        $this->assertEquals($datetime, $dt);
+        $this->assertEquals('2014-04-02T18:37:00-04:00', $dt->format('c'), "For some reason this one failed. Current default timezone is: " . date_default_timezone_get());
 
     }
 

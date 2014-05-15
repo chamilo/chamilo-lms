@@ -1,6 +1,13 @@
 CHANGELOG
 =========
 
+3.9.1 (2014-05-07)
+------------------
+
+* Added a fix to ReadLimitEntityBody to ensure it doesn't infinitely loop.
+* Added a fix to the stream checksum function so that when the first read
+  returns a falsey value, it still continues to consume the stream until EOF.
+
 3.9.0 (2014-04-23)
 ------------------
 

@@ -1,6 +1,19 @@
 ChangeLog
 =========
 
+3.2.2 (2014-05-07)
+------------------
+* Minor tweak in unittests to make it run on PHP 5.5.12. Json-prettifying
+  slightly changed which caused the test to fail.
+
+
+3.2.1 (2014-05-03)
+------------------
+* Minor tweak to make the unittests run with the latest hhvm on travis.
+* Updated timezone definitions.
+* Updated copyright links to point to http://sabre.io/
+
+
 3.2.0 (2014-04-02)
 ------------------
 

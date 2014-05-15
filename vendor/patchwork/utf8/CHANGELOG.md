@@ -1,3 +1,7 @@
+## v1.1.22 (2014-04-06)
+
+- fix #19: don't call ini_set() when not required and gain compat with PHP5.6
+
 ## v1.1.21 (2014-03-26)
 
 - fix #18 u::wordwrap() now relies on native behavior

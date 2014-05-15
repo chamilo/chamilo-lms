@@ -441,7 +441,8 @@ function browseCourseCategories()
     if (api_is_multiple_url_enabled()) {
         $url_access_id = api_get_current_access_url_id();
     }
-    $countCourses = CourseManager :: count_courses($url_access_id);
+    $countCourses = CourseManager :: countAvailableCourses($url_access_id);
+    
     $categories = array();
     $categories[0][0] = array(
         'id' => 0,
@@ -509,7 +510,7 @@ function countCoursesInCategory($category_code="")
     }
 
     $sql = "SELECT * FROM $tbl_course
-            WHERE category_code" . "='" . $category_code . "'" . $without_special_courses;
+            WHERE visibility != '0' AND visibility != '4' AND category_code" . "='" . $category_code . "'" . $without_special_courses;
     // Showing only the courses of the current portal access_url_id.
 
     if (api_is_multiple_url_enabled()) {
@@ -519,7 +520,7 @@ function countCoursesInCategory($category_code="")
             $sql = "SELECT * FROM $tbl_course as course
                     INNER JOIN $tbl_url_rel_course as url_rel_course
                     ON (url_rel_course.course_code=course.code)
-                    WHERE access_url_id = $url_access_id AND category_code" . "='" . $category_code . "'" . $without_special_courses;
+                    WHERE access_url_id = $url_access_id AND course.visibility != '0' AND course.visibility != '4' AND category_code" . "='" . $category_code . "'" . $without_special_courses;
         }
     }
     return Database::num_rows(Database::query($sql));
@@ -654,7 +655,7 @@ function browseCoursesInCategory($category_code, $random_value = null)
             'count_connections' => $count_connections_last_month
         );
     }
-    return $courses;
+    return $courses;      
 }
 
 /**

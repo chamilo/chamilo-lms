@@ -1780,8 +1780,9 @@ class Display
             case 'warning':
                 $class = 'label-warning';
                 break;
+            case 'danger':
             case 'important':
-                $class = 'label-important';
+                $class = 'label-danger';
                 break;
             case 'info':
                 $class = 'label-info';

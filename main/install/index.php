@@ -173,7 +173,7 @@ $app->match('/', function () use ($app) {
         ))
         ->add('continue', 'submit', array('attr' => array('class' => 'btn')))
         ->getForm();
-
+    
     if ('POST' == $request->getMethod()) {
         $url = $app['url_generator']->generate('requirements');
 
@@ -189,13 +189,13 @@ $app->match('/', function () use ($app) {
 ->before($blockInstallation);
 
 $app->match('/requirements', function () use ($app) {
-
+    
     $allowedToContinue = checkRequiredSettings();
 
     $request = $app['request'];
     $builder = $app['form.factory']->createBuilder('form');
     if ($allowedToContinue) {
-        $builder->add('continue', 'submit', array('attr' => array('class' => 'btn-default')));
+        $builder->add('continue', 'submit', array('attr' => array('class' => 'btn btn-default')));
     } else {
         $message = $app['translator']->trans("You need to check your server settings.");
         $app['session']->getFlashBag()->add('error', $message);

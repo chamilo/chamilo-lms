@@ -1,0 +1,39 @@
+services:
+    twig.extension.chamilo_extension:
+        class: ChamiloLMS\CoreBundle\Twig\Extension\ChamiloExtension
+        tags:
+            - { name: twig.extension }
+
+    listener.request_response:
+      class: ChamiloLMS\CoreBundle\Listener\LegacyListener
+      arguments: [ @service_container]
+      tags:
+        - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+        - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+        - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+    listener.locale:
+        class: ChamiloLMS\CoreBundle\Listener\LocaleListener
+        arguments: ["%kernel.default_locale%"]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    listener.login_success_handler:
+      class: ChamiloLMS\CoreBundle\Listener\LoginSuccessHandler
+      arguments:  [@database_connection, @router, @security.context]
+
+    listener.logout_success_handler:
+        class: ChamiloLMS\CoreBundle\Listener\LogoutSuccessHandler
+        arguments:  [@database_connection, @router, @security.context]
+
+    sonata.block.service.course:
+      class: ChamiloLMS\CoreBundle\Block\CourseBlockService
+      arguments: ["sonata.block.service.course", @templating ]
+      tags:
+          - { name: sonata.block }
+
+    translation.loader.po:
+        class: Symfony\Component\Translation\Loader\PoFileLoader
+        tags:
+            - { name: translation.loader, alias: po }
+

@@ -1,0 +1,58 @@
+index:
+    resource: "@ChamiloLMSCoreBundle/Controller/IndexController.php"
+    type:     annotation
+    prefix:   /
+
+front:
+    resource: "@ChamiloLMSCoreBundle/Controller/FrontController.php"
+    type:     annotation
+    prefix:   /front
+
+# legacy routes
+main:
+    path:     /main/{name}
+    defaults: { _controller: ChamiloLMSCoreBundle:Legacy:classic }
+    requirements:
+      name: .+
+
+courses:
+    path:     /courses/{code}
+    defaults: { _controller: ChamiloLMSCoreBundle:Tool/CourseHome/CourseHome:index }
+
+courses:
+    path:     /courses/{code}/index.php
+    defaults: { _controller: ChamiloLMSCoreBundle:Tool/CourseHome/CourseHome:index }
+
+# web url shortcuts
+web.ajax:
+    path: main/inc/ajax/
+
+web.img:
+    path: ChamiloLMS/img/
+
+# core controllers
+
+core_admin:
+    resource: "@ChamiloLMSCoreBundle/Controller/Admin"
+    type: annotation
+    prefix:   /admin
+
+core_app:
+    resource: "@ChamiloLMSCoreBundle/Controller/App"
+    type: annotation
+    prefix:   /app
+
+core_tool:
+    resource: "@ChamiloLMSCoreBundle/Controller/Tool"
+    type: annotation
+    prefix:   /tool
+
+# redirects /url/ to /url
+
+remove_trailing_slash:
+    path: /{url}
+    defaults: { _controller: ChamiloLMSCoreBundle:Redirecting:removeTrailingSlash }
+    requirements:
+        url: .*/$
+        _method: GET
+

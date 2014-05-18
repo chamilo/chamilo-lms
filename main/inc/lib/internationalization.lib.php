@@ -10,7 +10,7 @@
  * @author More authors, mentioned in the correpsonding fragments of this source.
  * @package chamilo.library
  */
-use Patchwork\Utf8 as u;
+use \ChamiloSession as Session;
 use Symfony\Component\Intl\DateFormatter\IntlDateFormatter;
 
 // Predefined date formats in Chamilo provided by the language sub-system.
@@ -49,11 +49,10 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER); // Contextual: for
  */
 function get_lang($variable)
 {
-    global $app;
-    $translated = $app['translator']->trans($variable);
+    $translated = Session::getTranslator()->trans($variable);
     if ($translated == $variable) {
         // Check the langVariable for BC
-        $translated = $app['translator']->trans("lang$variable");
+        $translated = Session::getTranslator()->trans("lang$variable");
         if ($translated == "lang$variable") {
             return $variable;
         }

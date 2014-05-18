@@ -431,6 +431,7 @@ class CourseHome
                 break;
             case TOOL_AUTHORING:
                 $sql = "SELECT * FROM $course_tool_table WHERE category = 'authoring' AND c_id = $course_id $condition_session ORDER BY id";
+
                 $result = Database::query($sql);
                 $col_link ="##003399";
                 break;
@@ -642,7 +643,8 @@ class CourseHome
                 if ($tool['image'] == 'scormbuilder.gif') {
                     // Check if the published learnpath is visible for student
                     $published_lp_id = self::get_published_lp_id_from_link($tool['link']);
-                    if (!api_is_allowed_to_edit(null, true) && !learnpath::is_lp_visible_for_student($published_lp_id, api_get_user_id())) {
+                    if (!api_is_allowed_to_edit(null, true) &&
+                        !learnpath::is_lp_visible_for_student($published_lp_id, api_get_user_id())) {
                         continue;
                     }
                 }
@@ -660,7 +662,9 @@ class CourseHome
                 unset($lnk);
 
                 $item['extra'] = null;
+
                 if ($is_allowed_to_edit && !api_is_coach()) {
+
                     if (empty($session_id)) {
                         if ($tool['visibility'] == '1' && $tool['admin'] != '1') {
                             $link['name'] = Display::return_icon(
@@ -672,7 +676,7 @@ class CourseHome
                             );
                             if (!empty($tool['id'])) {
                                 $link['cmd'] = $urlGenerator->generate(
-                                    'course_home.controller:hideIconAction',
+                                    'chamilolms_core_tool_coursehome_coursehome_hideicon',
                                     array(
                                         'courseCode' => api_get_course_id(),
                                         'iconId' => $tool['id']
@@ -685,7 +689,7 @@ class CourseHome
                             $link['name'] = Display::return_icon('invisible.gif', get_lang('Activate'), array('id' => 'linktool_'.$tool['id']), ICON_SIZE_MEDIUM, false);
                             if (!empty($tool['id'])) {
                                 $link['cmd'] = $urlGenerator->generate(
-                                    'course_home.controller:showIconAction',
+                                    'chamilolms_core_tool_coursehome_coursehome_showicon',
                                     array(
                                         'courseCode' => api_get_course_id(),
                                         'iconId' => $tool['id']
@@ -921,6 +925,7 @@ class CourseHome
                         $content .=  $item['link'];
                         $html .= Display::div($content, array('class'=>'activity_content'));
                         $html .=  '</div>';
+
 
                         if ($counter == 1) {
                             $html .=  '</div>';

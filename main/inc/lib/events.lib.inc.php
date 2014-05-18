@@ -11,8 +11,8 @@
  *
  * @package chamilo.library
  */
-use ChamiloLMS\Entity\User;
-use ChamiloLMS\Entity\Role;
+use ChamiloLMS\CoreBundle\Entity\User;
+use ChamiloLMS\CoreBundle\Entity\Role;
 
 /**
  * @author Sebastien Piraux <piraux_seb@hotmail.com> old code

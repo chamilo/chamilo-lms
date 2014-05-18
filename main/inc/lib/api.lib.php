@@ -565,7 +565,6 @@ define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
  * ...
  */
 function api_get_path($path_type, $path = null) {
-    global $app;
 
     static $paths = array(
         SYS_DATA_PATH           => 'data/',
@@ -575,20 +574,20 @@ function api_get_path($path_type, $path = null) {
         WEB_DATA_COURSE_PATH    => 'courses/',
         WEB_DATA_PATH           => '/',
         SYS_COURSE_PATH         => 'data/',
-        SYS_CSS_PATH            => 'web/ChamiloLMS/css/',
+        SYS_CSS_PATH            => 'ChamiloLMS/css/',
         SYS_LANG_PATH           => 'lang/',
-        WEB_IMG_PATH            => 'web/ChamiloLMS/img/',
+        WEB_IMG_PATH            => 'ChamiloLMS/img/',
         SYS_IMG_PATH            => 'web/ChamiloLMS/img/',
-        WEB_CSS_PATH            => 'web/ChamiloLMS/css/',
+        WEB_CSS_PATH            => 'ChamiloLMS/css/',
         SYS_PLUGIN_PATH         => 'plugin/',
         WEB_PLUGIN_PATH         => 'plugin/',
         WEB_ARCHIVE_PATH        => 'temp/',
         INCLUDE_PATH            => 'inc/',
         LIBRARY_PATH            => 'inc/lib/',
-        SYS_LIBRARY_JS_PATH     => 'web/ChamiloLMS/js/',
+        SYS_LIBRARY_JS_PATH     => 'ChamiloLMS/js/',
         CONFIGURATION_PATH      => 'inc/conf/',
         WEB_LIBRARY_PATH        => 'inc/lib/',
-        WEB_LIBRARY_JS_PATH     => 'web/ChamiloLMS/js/',
+        WEB_LIBRARY_JS_PATH     => 'ChamiloLMS/js/',
         WEB_AJAX_PATH           => 'inc/ajax/',
         SYS_TEST_PATH           => 'tests/',
         WEB_TEMPLATE_PATH       => 'template/',
@@ -610,16 +609,17 @@ function api_get_path($path_type, $path = null) {
     static $code_folder;
     static $course_folder;
 
+    global $_configuration;
     // Always load root_web modifications for multiple url features.
-    $_configuration = $app->getConfiguration();
 
     // Default $_configuration['root_web'] configuration
     //$root_web = isset($_configuration['root_web']) ? $_configuration['root_web'] : $app['url_generator'];
-    $root_web = $app['url_generator']->generate('root'); //$_configuration['root_web'];
-    $root_web = str_replace('web/', '', $root_web);
+
+    $root_web = Session::getUrlGenerator()->generate('root'); //$_configuration['root_web'];
+    $rootDir = Session::getRootDir();
 
     // Configuration data for already installed system.
-    $root_sys = $app['path.base'];
+    $root_sys = $rootDir;
 
     $load_new_config = false;
 
@@ -657,10 +657,10 @@ function api_get_path($path_type, $path = null) {
         $paths[SYS_PATH]                = $root_sys;
 
         // Update data path to get it from config file if defined
-        $paths[SYS_DATA_PATH]           = $app['path.data'];
-        $paths[SYS_LOG_PATH]            = $app['path.logs'];
-        $paths[SYS_CONFIG_PATH]         = $app['path.config'];
-        $paths[SYS_COURSE_PATH]         = $app['path.courses'];
+        $paths[SYS_DATA_PATH]           = Session::getDataDir();
+        $paths[SYS_LOG_PATH]            = Session::getLogDir();
+        $paths[SYS_CONFIG_PATH]         = Session::getConfigDir();
+        $paths[SYS_COURSE_PATH]         = Session::getCourseDir();
 
         $paths[SYS_DEFAULT_COURSE_DOCUMENT_PATH] = $paths[SYS_DATA_PATH].'default_course_document/';
 
@@ -687,7 +687,7 @@ function api_get_path($path_type, $path = null) {
         // Now we can switch into api_get_path() "terminology".
         $paths[SYS_LANG_PATH]           = $paths[SYS_CODE_PATH].$paths[SYS_LANG_PATH];
         $paths[SYS_PLUGIN_PATH]         = $paths[SYS_PATH].$paths[SYS_PLUGIN_PATH];
-        $paths[SYS_ARCHIVE_PATH]        = $app['path.temp'];
+        $paths[SYS_ARCHIVE_PATH]        = Session::getTempDir();
         $paths[SYS_TEST_PATH]           = $paths[SYS_PATH].$paths[SYS_TEST_PATH];
         $paths[SYS_TEMPLATE_PATH]       = $paths[SYS_CODE_PATH].$paths[SYS_TEMPLATE_PATH];
         $paths[SYS_CSS_PATH]            = $paths[SYS_PATH].$paths[SYS_CSS_PATH];
@@ -1364,7 +1364,6 @@ function api_get_real_course_id() {
 function api_get_course_int_id() {
     return Session::read('_real_cid', 0);
 }
-
 
 /**
  * Returns the current course directory
@@ -2196,16 +2195,18 @@ function api_get_self() {
  */
 function api_is_platform_admin($allow_sessions_admins = false)
 {
-    global $app;
-    $token = $app['security']->getToken();
+    $security = Session::getSecurity();
+    if ($security) {
+        $token = $security->getToken();
 
-    if (!empty($token)) {
-        if ($app['security']->isGranted('ROLE_ADMIN')) {
-        return true;
-    }
-        if ($allow_sessions_admins) {
-            if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
+        if (!empty($token)) {
+            if ($security->isGranted('ROLE_ADMIN')) {
                 return true;
+            }
+            if ($allow_sessions_admins) {
+                if ($security->isGranted('ROLE_SESSION_MANAGER')) {
+                    return true;
+                }
             }
         }
     }
@@ -2217,11 +2218,10 @@ function api_is_platform_admin($allow_sessions_admins = false)
  */
 function api_is_question_manager()
 {
-    global $app;
-    $token = $app['security']->getToken();
-
+    $security = Session::getSecurity();
+    $token = $security->getToken();
     if (!empty($token)) {
-        if ($app['security']->isGranted('ROLE_QUESTION_MANAGER')) {
+        if ($security->isGranted('ROLE_QUESTION_MANAGER')) {
             return true;
         }
     }
@@ -2235,11 +2235,10 @@ function api_is_question_manager()
  */
 function api_is_session_admin()
 {
-    global $app;
-    $token = $app['security']->getToken();
-
+    $security = Session::getSecurity();
+    $token = $security->getToken();
     if (!empty($token)) {
-        if ($app['security']->isGranted('ROLE_SESSION_MANAGER')) {
+        if ($security->isGranted('ROLE_SESSION_MANAGER')) {
             return true;
         }
     }
@@ -2251,11 +2250,10 @@ function api_is_session_admin()
  * @return boolean True if current user is a human resources manager
  */
 function api_is_drh() {
-    global $app;
-    $token = $app['security']->getToken();
-
+    $security = Session::getSecurity();
+    $token = $security->getToken();
     if (!empty($token)) {
-        if ($app['security']->isGranted('ROLE_RRHH')) {
+        if ($security->isGranted('ROLE_RRHH')) {
             return true;
         }
     }
@@ -2267,11 +2265,10 @@ function api_is_drh() {
  * @return boolean True if current user is a human resources manager
  */
 function api_is_student() {
-    global $app;
-    $token = $app['security']->getToken();
-
+    $security = Session::getSecurity();
+    $token = $security->getToken();
     if (!empty($token)) {
-        if ($app['security']->isGranted('ROLE_STUDENT')) {
+        if ($security->isGranted('ROLE_STUDENT')) {
             return true;
         }
     }
@@ -2283,9 +2280,12 @@ function api_is_student() {
  * @return boolean True if current user is a human resources manager
  */
 function api_is_teacher() {
-    global $app;
-    if ($app['security']->isGranted('ROLE_TEACHER')) {
-        return true;
+    $security = Session::getSecurity();
+    $token = $security->getToken();
+    if (!empty($token)) {
+        if ($security->isGranted('ROLE_TEACHER')) {
+            return true;
+        }
     }
     return false;
 }
@@ -2973,17 +2973,8 @@ function api_is_anonymous($user_id = null, $db_check = false) {
  */
 function api_not_allowed($printHeaders = false, $message = null)
 {
-    global $app;
-    if (empty($message)) {
-        $message = 'Unauthorized';
-    }
-    if ($printHeaders == false) {
-        $app['template.show_footer'] = false;
-        $app['template.show_header'] = false;
-    }
-    return $app->abort('401', $message);
+   throw new Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 }
-
 
 /* WHAT'S NEW
    functions for the what's new icons

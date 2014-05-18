@@ -3740,7 +3740,7 @@ class CourseManager
         $urlId = api_get_current_access_url_id();
         $limit  = intval($limit);
 
-        //Getting my courses
+        // Getting my courses
         $my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id());
 
         $my_course_code_list = array();

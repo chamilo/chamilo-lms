@@ -1,0 +1,18 @@
+main:
+    resource: "@ChamiloLMSCoreBundle/Resources/config/routing.yml"
+
+login_check:
+    path: /login_check
+
+login:
+    path:     /login
+    defaults: { _controller: ChamiloLMSCoreBundle:Security:login }
+
+secured_logout:
+    pattern:   /secured/logout
+
+logout:
+    pattern:   /secured/logout
+
+root:
+    path: /

@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+use  \ChamiloSession as Session;
 
 /**
  *   HOME PAGE FOR EACH COURSE
@@ -22,17 +23,21 @@ function return_block($title, $content)
 }
 
 $session_id = api_get_session_id();
-global $app;
-$urlGenerator = $app['url_generator'];
+
+$urlGenerator = Session::$urlGenerator;
 
 $content = null;
 
 // Start of tools for CourseAdmins (teachers/tutors)
 $totalList = array();
+
 if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, true)) {
     $list = CourseHome::get_tools_category(TOOL_AUTHORING);
+
 	$result = CourseHome::show_tools_category($urlGenerator, $list);
+
     $content .= return_block(get_lang('Authoring'), $result['content']);
+
     $totalList = $result['tool_list'];
 
     $list = CourseHome::get_tools_category(TOOL_INTERACTION);

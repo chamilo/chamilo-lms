@@ -1,3 +1,0 @@
-example:
-    path:      /example
-    defaults:  { _controller: index.controller:indexAction, culture: en }

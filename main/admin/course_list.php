@@ -289,9 +289,6 @@ if (isset ($_GET['search']) && $_GET['search'] == 'advanced') {
     $content .= $table->return_table();
 }
 
-$app['title'] = $tool_name;
-$tpl = $app['template'];
-$tpl->assign('actions', $actions);
-$tpl->assign('message', $message);
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
+echo $actions;
+echo $message;
+echo $content;

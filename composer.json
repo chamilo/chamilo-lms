@@ -9,9 +9,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Entity" : "main/inc/",
-            "Gedmo": "vendor/gedmo/doctrine-extensions/lib",
-            "ChamiloLMS" : "src/"
+            "": "src/"
         },
         "classmap": [
             "main/auth",
@@ -29,89 +27,66 @@
     },
     "repositories": [
         {
-            "type": "vcs",
-            "url": "https://github.com/jmontoyaa/phpqrcode"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/jmontoyaa/silex-pagerfanta-provider"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/jmontoyaa/XHProfServiceProvider"
+            "type": "package",
+            "package": {
+                "name": "jquery/jquery",
+                "version": "1.10.2",
+                "dist": {
+                    "url": "http://code.jquery.com/jquery-1.10.2.js",
+                    "type": "file"
+                }
+            }
         }
     ],
     "require": {
         "php": ">=5.3.3",
-        "silex/silex": "~1.1",
-        "symfony/console"  : "~2.3",
-        "symfony/twig-bridge": "~2.3",
-        "symfony/doctrine-bridge": "~2.3",
-        "symfony/security": "~2.3",
-        "symfony/form": "~2.3",
-        "symfony/property-access": "~2.3",
-        "symfony/validator": "~2.3",
-        "symfony/translation": "~2.3",
-        "symfony/dependency-injection": "~2.3",
-        "symfony/filesystem": "~2.3",
-        "symfony/finder": "~2.3",
-        "monolog/monolog" : ">=1.0.0",
-        "symfony/config": "~2.3",
-        "symfony/yaml": "~2.3",
-        "symfony/locale": "~2.3",
-        "symfony/monolog-bridge": "~2.3",
-        "twig/twig": ">=1.8,<2.0-dev",
-        "braincrafted/bootstrap-bundle": "dev-master",
-        "dflydev/doctrine-orm-service-provider": "1.0.*@dev",
-        "doctrine/migrations": "dev-master",
+        "symfony/symfony": "~2.4",
+        "doctrine/orm": "~2.2,>=2.2.3",
+        "doctrine/doctrine-bundle": "~1.2",
+        "twig/extensions": "~1.0",
+        "symfony/assetic-bundle": "~2.3",
+        "symfony/swiftmailer-bundle": "~2.3",
+        "symfony/monolog-bundle": "~2.4",
+        "sensio/distribution-bundle": "~2.3",
+        "sensio/framework-extra-bundle": "~3.0",
+        "sensio/generator-bundle": "~2.3",
+        "incenteev/composer-parameter-handler": "~2.0",
+        "braincrafted/bootstrap-bundle": "~2.0",
         "gedmo/doctrine-extensions": "~2.3",
-        "swiftmailer/swiftmailer": ">=4.1.2,<4.2-dev",
-        "pagerfanta/pagerfanta": "dev-master",
-        "franmomu/silex-pagerfanta-provider": "1.0.*@dev",
-        "igorw/config-service-provider": "1.2.*@dev",
-        "mpdf/mpdf": "v5.6.1",
-        "ezyang/htmlpurifier": "v4.6.0",
-        "realityking/pchart": "dev-master",
-        "imagine/imagine": "0.6.*@dev",
-        "grom/silex-service-provider": "dev-master",
-        "knplabs/knp-menu": "2.0.*@dev",
-        "knplabs/knp-snappy": "dev-master",
-        "knplabs/console-service-provider": "dev-master",
-        "jmontoyaa/phpqrcode": "dev-master",
-        "neutron/silex-filesystem-provider": "dev-master",
-        "jbroadway/urlify": "1.0.0-stable",
-        "sensio/framework-extra-bundle": "~2.3",
-        "chamilo/chash": "dev-master",
-        "composer/composer": "1.0.0-alpha7",
-        "flint/flint": "1.6.0",
-        "icehero/silex-opauth": "dev-master",
-        "opauth/openid": "0.1.0",
-        "opauth/facebook": "0.2.1",
-        "opauth/google": "0.2.2",
-        "media-alchemyst/media-alchemyst": "0.4.4",
-        "php-ffmpeg/php-ffmpeg": "0.4.4",
-        "sunra/php-simple-html-dom-parser": "1.5.0",
-        "zendframework/zend-config": "~2.3",
-        "zendframework/zend-feed": "~2.3",
-        "zendframework/zend-http": "~2.3",
-        "zendframework/zend-servicemanager": "~2.3",
-        "sabre/vobject" : "~3.1",
-        "patchwork/utf8": "1.1.*",
-        "sonata-project/exporter": "1.3.3"
-    },
-    "require-dev": {
-        "league/flysystem": "0.3.3",
-        "symfony/browser-kit": "~2.3",
-        "symfony/web-profiler-bundle": "~2.3",
-        "silex/web-profiler": "~1.0",
-        "natxet/CssMin": "dev-master",
-        "leafo/lessphp": "dev-master",
-        "mheap/silex-assetic": "1.0.*@dev",
-        "filp/whoops": "dev-master",
-        "jmontoyaa/xhprof-service-provider": "dev-master"
+        "twbs/bootstrap": "3.0.*",
+        "jquery/jquery":  "1.10.*",
+        "oyejorge/less.php": "~1.5",
+        "sonata-project/block-bundle": "~2.2",
+        "knplabs/knp-menu-bundle": "~1.1",
+        "white-october/pagerfanta-bundle": "dev-master"
     },
     "scripts": {
-        "post-install-cmd": "ChamiloLMS\\Composer\\Tasks::postInstall",
-        "post-update-cmd": "ChamiloLMS\\Composer\\Tasks::postUpdate"
+        "post-install-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+        ],
+        "post-update-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+        ]
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-web-dir": "web",
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml"
+        },
+        "branch-alias": {
+            "dev-master": "2.4-dev"
+        }
     }
 }

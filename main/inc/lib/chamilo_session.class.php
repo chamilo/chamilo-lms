@@ -6,6 +6,79 @@
 class ChamiloSession
 {
     public static $session;
+    public static $configuration;
+    public static $urlGenerator;
+    public static $security;
+    public static $translator;
+
+    public static $rootDir;
+    public static $logDir;
+    public static $tempDir;
+    public static $dataDir;
+    public static $courseDir;
+    public static $configDir;
+
+    public static function getConfigDir()
+    {
+        return self::$configDir;
+    }
+
+    public static function getLogDir()
+    {
+        return self::$logDir;
+    }
+
+    public static function getTempDir()
+    {
+        return self::$tempDir;
+    }
+
+    public static function getRootDir()
+    {
+        return self::$rootDir;
+    }
+
+    public static function getDataDir()
+    {
+        return self::$dataDir;
+    }
+
+    public static function getCourseDir()
+    {
+        return self::$courseDir;
+    }
+
+    /**
+     * @return Symfony\Component\Routing\Generator\UrlGeneratorInterface
+     */
+    public static function getUrlGenerator()
+    {
+        return self::$urlGenerator;
+    }
+
+    /**
+     * @return Symfony\Component\HttpFoundation\Session\SessionInterface;
+     */
+    public static function getSession()
+    {
+        return self::$session;
+    }
+
+    /**
+     * @return Symfony\Component\Security\Core\SecurityContextInterface
+     */
+    public static function getSecurity()
+    {
+        return self::$security;
+    }
+
+    /**
+     * @return Symfony\Component\Security\Core\SecurityContextInterface
+     */
+    public static function getTranslator()
+    {
+        return self::$translator;
+    }
 
     /**
      * @param $session

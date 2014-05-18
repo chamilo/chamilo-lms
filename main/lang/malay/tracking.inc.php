@@ -68,7 +68,6 @@ $langPeriodMonth = "Bulan";
 $langPeriodYear = "Tahun";
 $langNextDay = "Hari Seterusnya";
 $langPreviousDay = "Hari Sebelumnya";
-$langNextWeek = "Minggu Seterusnya";
 $langPreviousWeek = "Minggu Sebelumnya";
 $langNextMonth = "Bulan Seterusnya";
 $langPreviousMonth = "Bulan Sebelumnya";

@@ -88,7 +88,6 @@ $langPeriodMonth = "月";
 $langPeriodYear = "年";
 $langNextDay = "明天";
 $langPreviousDay = "昨天";
-$langNextWeek = "下周";
 $langPreviousWeek = "上周";
 $langNextMonth = "下月";
 $langPreviousMonth = "上月";

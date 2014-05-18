@@ -1,5 +1,3 @@
-{% if menu is not null %}
-
 <div class="navbar subnav">
     <div class="navbar-inner">
         <div class="container">
@@ -24,6 +22,9 @@
                     {% endif %}
 
                     <li class="dropdown">
+
+                        {% if _u.status != 6 %}
+
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             <img src="{{ _u.avatar_small }}"/>
                             {{ _u.complete_name }}
@@ -35,6 +36,7 @@
                                 {{ message_link }}
                             </li>
                         </ul>
+                        {% endif %}
 
                     <li>
                         <a id="logout_button" class="logout" title="{{ "Logout"|get_lang }}" href="{{ logout_link }}" >
@@ -46,7 +48,11 @@
                     {# direct login to course - no visible if logged and on the index page #}
                     {% if course_code != "" %}
                         <ul class="nav pull-right">
-                            <li class="dropdown" style="color:white;"><a href='{{ _p.web }}/main/auth/gotocourse.php?firstpage={{ course_code }}'>{{ "LoginEnter"|get_lang }}</a></li>
+                            <li class="dropdown" style="color:white;">
+                                <a href='{{ _p.web }}/main/auth/gotocourse.php?firstpage={{ course_code }}'>
+                                    {{ "LoginEnter"|get_lang }}
+                                </a>
+                            </li>
                         </ul>
                     {% endif %}
                 {% endif %}
@@ -54,4 +60,3 @@
         </div>
     </div>
 </div>
-{% endif %}

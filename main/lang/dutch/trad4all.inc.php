@@ -735,6 +735,7 @@ $Until = "Tot";
 $FirstPage = "Eerste pagina";
 $LastPage = "Laatste pagina";
 $Coachs = "Coach";
+$NextWeek = "Volgende week";
 $DragAndDropAnElementHere = "Sleep hier een element naartoe";
 $ThereAreNoRegisteredDatetimeYet = "Er is nog geen datum/tijd geregistreerd";
 $CalendarList = "Kalender lijst aanwezigheden";

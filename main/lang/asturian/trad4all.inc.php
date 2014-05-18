@@ -727,6 +727,7 @@ $Until = "Fasta";
 $FirstPage = "Primer páxina";
 $LastPage = "Páxina cabera";
 $Coachs = "Tutores";
+$NextWeek = "Siguiente selmana";
 $GeneralDescription = "Descripción xeneral";
 $GeneralDescriptionQuestions = "¿ Qué papel y función tien esti cursu nel programa ? ¿ Necesítense actividaes previes ? ¿Qué rellación tien con otros cursos ?";
 $GeneralDescriptionInformation = "Descripción del crusu (númberu d'hores, códigu, llugar onde se da...), Profesor (nome, apellíos, despachu, teléfonu, e-mail...).";

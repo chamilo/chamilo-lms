@@ -305,6 +305,7 @@ $Progress = "Fremdrift";
 $MyProgress = "Min fremdrift";
 $MyGradebook = "Min karakterbok";
 $Gradebook = "Karakterbok";
+$NextWeek = "Neste uke";
 $GeneralDescription = "Generell beskrivelse";
 $Objectives = "Målsettning";
 $Topics = "Emner";

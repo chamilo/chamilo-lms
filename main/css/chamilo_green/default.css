@@ -45,8 +45,8 @@ a:active {
 }
 
 .subnav .nav > li > a {
-    border-left: none;
-    border-right: none;
+    border-left: 1px solid #84AE00;
+    border-right: 1px solid #78A400;
     color: white;
     font-weight: normal;
     font-size: 13px;
@@ -57,7 +57,7 @@ a:active {
 .subnav .nav > #current > a:hover {
     color: #fff;
     background: #77A300;
-    border-right-color: #178ACC;
+    border-right-color: #78A400;
 }
 
 .subnav li a {

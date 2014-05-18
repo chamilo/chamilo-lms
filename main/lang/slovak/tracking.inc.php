@@ -136,7 +136,6 @@ $langPeriodMonth = "Mesiac";
 $langPeriodYear = "Rok";
 $langNextDay = "Nasledujúci deň";
 $langPreviousDay = "Predchádzajúci deň";
-$langNextWeek = "Nasledujúci týždeň";
 $langPreviousWeek = "Predchádzajúci týždeň";
 $langNextMonth = "Nasledujúci mesiac";
 $langPreviousMonth = "Predchádzajúci mesiac";

@@ -3691,7 +3691,7 @@ function display_forum_search_results($search_term)
           4. post is visible
          */
         if (!api_is_allowed_to_edit(null, true)) {
-            if ($forum_categories_list[$row['forum_id']['forum_category']]['visibility'] == '1' AND
+            if ($forum_categories_list[$forum_list[$row['forum_id']]['forum_category']]['visibility'] == '1' AND
                 $forum_list[$row['forum_id']]['visibility'] == '1' AND $row['visible'] == '1'
             ) {
                 $display_result = true;

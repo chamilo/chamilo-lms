@@ -34,7 +34,7 @@ api_block_anonymous_users();
 $document_data = DocumentManager::get_document_data_by_id($_GET['id'], api_get_course_id(), true);
 if (empty($document_data)) {
     if (api_is_in_group()) {
-        $group_properties   = GroupManager::get_group_properties(api_get_group_id());        
+        $group_properties   = GroupManager::get_group_properties(api_get_group_id());
         $document_id        = DocumentManager::get_document_id(api_get_course_info(), $group_properties['directory']);
         $document_data      = DocumentManager::get_document_data_by_id($document_id, api_get_course_id());
     }
@@ -117,7 +117,7 @@ if (isset ($group)) {
 	// Copied from document.php
 	$dir_array = explode('/', $dir);
 	$array_len = count($dir_array);
-	
+
 	/*
 	TODO:check and delete this code
 	if (!$is_certificate_mode) {
@@ -143,37 +143,35 @@ echo '<div class="actions">';
 		echo '<a href="document.php?id='.$document_id.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('DocumentsOverview'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
-if (api_browser_support('svg')){
-	
+if (api_browser_support('svg')) {
+
 	//automatic loading the course language
 	$svgedit_code_translation_table = array('' => 'en', 'pt' => 'pt-Pt', 'sr' => 'sr_latn');
 	$langsvgedit  = api_get_language_isocode();
 	$langsvgedit = isset($svgedit_code_translation_table[$langsvgedit]) ? $svgedit_code_translation_table[$langsvgedit] : $langsvgedit;
 	$langsvgedit = file_exists(api_get_path(LIBRARY_PATH).'svg-edit/locale/lang.'.$langsvgedit.'.js') ? $langsvgedit : 'en';
-	$svg_url= api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?lang='.$langsvgedit ;
+	$svg_url= api_get_path(WEB_LIBRARY_PATH).'svg-edit/svg-editor.php?lang='.$langsvgedit;
 	?>
-    
-	<script type="text/javascript">
-	
+	<script>
 		document.write ('<iframe id="frame" frameborder="0" scrolling="no" src="<?php echo  $svg_url; ?>" width="100%" height="100%"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>');
-	function resizeIframe() {
-    	var height = window.innerHeight -50;
-		//max lower size
-		if (height<550) {
-			height=550;
-		}
-    	document.getElementById('frame').style.height = height +"px";
-	};
+        function resizeIframe() {
+            var height = window.innerHeight -50;
+            //max lower size
+            if (height<550) {
+                height=550;
+            }
+            document.getElementById('frame').style.height = height +"px";
+        }
 	document.getElementById('frame').onload = resizeIframe;
 	window.onresize = resizeIframe;
-	
+
 	</script>
-    
+
     <?php
     echo '<noscript>';
 	echo '<iframe style="height: 550px; width: 100%;" scrolling="no" frameborder="0" src="'.$svg_url.'"><noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>';
 	echo '</noscript>';
-} else {	
+} else {
 	Display::display_error_message(get_lang('BrowserDontSupportsSVG'));
 }
 

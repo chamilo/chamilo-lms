@@ -327,6 +327,7 @@ $From = "de";
 $To = "al";
 $Category = "Kategorio";
 $UserAge = "Aĝo";
+$NextWeek = "Venonta semajno";
 $GeneralDescription = "Ĝenerala Priskribo";
 $GeneralDescriptionQuestions = "Kiel rolas la kurso ene de la programo? Ĉu ekzistas antaŭkondiĉoj? Kiel la kurso ligiĝas kun aliaj kursoj?";
 $GeneralDescriptionInformation = "Priskribo de la kurso (nombro da horoj, oficiala kodo, klasĉambro...) kaj la instruisto (nomo, persona nomo, oficejo, telefono, retadreso...)";

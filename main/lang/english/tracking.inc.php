@@ -136,7 +136,6 @@ $langPeriodMonth = "Month";
 $langPeriodYear = "Year";
 $langNextDay = "Next Day";
 $langPreviousDay = "Previous Day";
-$langNextWeek = "Next Week";
 $langPreviousWeek = "Previous Week";
 $langNextMonth = "Next Month";
 $langPreviousMonth = "Previous Month";

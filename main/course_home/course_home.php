@@ -38,7 +38,7 @@ $language_file = array('course_home','courses');
 $use_anonymous = true;
 
 // Inlcuding the global initialization file.
-require dirname(__FILE__).'/../inc/global.inc.php';
+require_once dirname(__FILE__).'/../inc/global.inc.php';
 
 // Delete LP sessions - commented out after seeing that normal
 // users in their first learnpath step (1st SCO of a SCORM)
@@ -233,7 +233,6 @@ $reqdate = "&reqdate=$temps";
 /*	MAIN CODE */
 
 /*	Introduction section (editable by course admins) */
-
 $content = Display::return_introduction_section(TOOL_COURSE_HOMEPAGE, array(
 		'CreateDocumentWebDir' => api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/',
 		'CreateDocumentDir'    => 'document/',
@@ -245,7 +244,7 @@ $content = Display::return_introduction_section(TOOL_COURSE_HOMEPAGE, array(
 	the setting homepage_view is adjustable through
 	the platform administration section */
 
-require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
+//require_once api_get_path(LIBRARY_PATH).'course_home.lib.php';
 
 if ($show_autolunch_lp_warning) {
     $show_message .= Display::return_message(get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP'),'warning');

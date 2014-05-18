@@ -293,10 +293,10 @@ function return_navigation_array() {
         // Social Networking
         if (api_get_setting('show_tabs', 'social') == 'true') {
             if (api_get_setting('allow_social_tool') == 'true') {
-                $navigation['social'] = $possible_tabs['social'];
+                $navigation['social'] = isset($possible_tabs['social']) ? $possible_tabs['social'] : null;
             }
         } else{
-            $menu_navigation['social'] = $possible_tabs['social'];
+            $menu_navigation['social'] = isset($possible_tabs['social']) ? $possible_tabs['social'] : null;
         }
 
         // Dashboard

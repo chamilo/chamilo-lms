@@ -68,7 +68,6 @@ $langPeriodMonth = "Tháng";
 $langPeriodYear = "Năm";
 $langNextDay = "Ngày kế tiếp";
 $langPreviousDay = "Ngày trước";
-$langNextWeek = "Tuần kế tiếp";
 $langPreviousWeek = "Tuần trước";
 $langNextMonth = "Tháng kê tiếp";
 $langPreviousMonth = "Tháng trước";

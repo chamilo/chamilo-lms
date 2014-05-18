@@ -47,29 +47,59 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
 <head>
     <meta charset="<?php echo api_get_system_encoding(); ?>" />
     <title>Chat</title>
-    <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH).$my_style; ?>/default.css">
-    <style>
-        a {
-            font-size: 12px;
-        }
-        .background_submit {
-            background: url(../img/chat_little.gif) 2px 2px no-repeat;
-            padding: 2px 1px 1px 20px;
-        }
-        th {
-            font-size: 12px;
-        }
-    </style>
-<script>
+    <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH); ?>chat.css">
+    <?php echo api_get_js('jquery.min.js'); ?>
+    <?php echo api_get_js('jquery.tinyscrollbar.js'); ?>
+    <script type="text/javascript">
+        /*$(document).ready(function() {
+        var posicion = $("#clear-chat").offset();
+        var margenSuperior = 15;
+         $(window).scroll(function() {
+             if ($(window).scrollTop() > posicion.top) {
+                 $("#clear-chat").stop().animate({
+                     marginTop: $(window).scrollTop() - posicion.top + margenSuperior
+                 });
+             } else {
+                 $("#clear-chat").stop().animate({
+                     marginTop: 0
+                 });
+             };
+         });
+        });*/
+        $(document).ready(function(){
+                $('#user-online-scroll').tinyscrollbar();
+            });
+        //Sound send message
+        /*$(document).ready(function(){
+            $("#message").keypress(function(event){
+            if (event.which == 13) {
+                $("#audio")[0].play();
+                }
+            });
+        });
+        $(document).ready(function(){
+            $("#send").on("click",function(){
+                $("#audio")[0].play();
+            });
+        });*/
+        
+    </script>
+
+<script type="text/javascript">
+function play_notification() {
+    document.getElementById('audio').play();
+}
 function updateChat()
 {
 	if ('<?php echo $chat_size_old; ?>' != '<?php echo $chat_size_new; ?>') {
 		parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size_new.'&'.api_get_cidreq(); ?>#bottom';
+        play_notification();
 	}
 }
 
 function updateConnected()
 {
+
 	if ('<?php echo $connected_old; ?>' != '<?php echo $connected_new; ?>')
 	{
 		parent.chat_whoisonline.location.href='chat_whoisonline.php?size=<?php echo $connected_new; ?>';
@@ -88,6 +118,7 @@ function eventMessage()
 	parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size.'&'.api_get_cidreq(); ?>#bottom';
 	<?php endif; ?>
 	document.formMessage.message.focus();
+
 }
 
 function send_message(evenement) {

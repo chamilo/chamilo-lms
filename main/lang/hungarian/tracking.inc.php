@@ -88,7 +88,6 @@ $langPeriodMonth = "Hónap";
 $langPeriodYear = "Év";
 $langNextDay = "Következő nap";
 $langPreviousDay = "Előző nap";
-$langNextWeek = "Következő hét";
 $langPreviousWeek = "Előző hét";
 $langNextMonth = "Következő hónap";
 $langPreviousMonth = "Előző hónap";

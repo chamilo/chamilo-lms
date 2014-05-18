@@ -13,7 +13,7 @@ body {
 }
 a {
     text-decoration: none;
-    color :#6E6E6E;
+    color :#666666;
 }
 a:visited {
     text-decoration: none;
@@ -85,7 +85,9 @@ a:active {
     padding-right: 15px;
     padding-top: 3px;
 }
-
+.dropdown-menu{
+  top: 50px;
+}
 /*****************************************************
  *  CHAMILO THEME STYLE                              *
  *****************************************************/
@@ -558,8 +560,8 @@ a.thumbnail:hover{
 
 .pagerslide h2{
     font-size: 18px;
-    background-color:  #0191C7;
-    color: #FFFFFF;
+    background-color:  #E6E6E6;
+    color: #666666;
     padding-left: 15px;
 }
 
@@ -812,7 +814,6 @@ footer a:link, footer a:visited {
 #social-content-online {
     background-color:#00AAE3;
 }
-
 .admin_section li {
     background-image:url(images/bullet.gif);
 }
@@ -850,7 +851,7 @@ button.login:hover {
 
 /*including "save" image*/
 button.save {
-    background-image:url(images/button_accept.png)
+    background-image:url(images/button_accept.png);
 }
 /*including "add" image*/
 .controls .btn.add {

@@ -415,6 +415,7 @@ $SeeDetail = "See detail";
 $GroupSingle = "Group";
 $PleaseLoginAgainFromHomepage = "Please try to login again from the homepage";
 $PleaseLoginAgainFromFormBelow = "Please try to login again using the form below";
+$NextWeek = "Kita savaitė";
 $GeneralDescription = "Apibūdinimas";
 $GeneralDescriptionQuestions = "Koks kurso vaidmuo studijų modulyje? Ar yra kokių išankstinių reikalavimų? Kaip šis kursas siejasi su kitais kursais?";
 $GeneralDescriptionInformation = "Apibūdinkite kursą (valandų skaičius, oficialus kodas, kokiai auditorijai jis skirtas...) ir dėstytoją (vardas, pavardė, pareigos, telefonas, el. pašto adresas...).";

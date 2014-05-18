@@ -488,6 +488,7 @@ $Phone = "الهاتف";
 $SocialNetwork = "شبكة التواصل";
 $Photo = "الصورة";
 $HistoryTrainingSessions = "سجل مواهيد المقررات";
+$NextWeek = "الأسبوع التالي";
 $GeneralDescription = "نبذة عامة";
 $GeneralDescriptionQuestions = "ما هي أهمية هذا المقرر؟  هل هناك متطلبات مسبقة ؟ كيف هو حال هذا المقرر  مع المقررات الأخرى؟";
 $GeneralDescriptionInformation = "وصف مختصر (عدد الساعات الرسمية المدونه الغرفة...) والمعلمين (الاسم واسم مكتب الهاتف البريد الالكتروني...";

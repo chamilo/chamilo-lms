@@ -1,13 +1,10 @@
 <?php
-
 /* For licensing terms, see /license.txt */
 /**
  *
  * @package chamilo.plugin.ticket
  */
-/**
- *
- */
+
 $language_file = array('messages', 'userInfo', 'admin');
 $cidReset = true;
 require_once '../config.php';

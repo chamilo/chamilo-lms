@@ -9,6 +9,9 @@
  */
 use \ChamiloSession as Session;
 
+// Flag to allow for anonymous user - needs to be set before global.inc.php.
+$use_anonymous = true;
+
 $debug = 0;
 if ($debug > 0) error_log('New LP -+- Entered lp_controller.php -+- (action: '.$_REQUEST['action'].')', 0);
 
@@ -224,10 +227,6 @@ $htmlHeadXtra[] = '
     });
 </script>
 ';
-
-
-// Flag to allow for anonymous user - needs to be set before global.inc.php.
-$use_anonymous = true;
 
 // Include class definitions before session_start() to ensure availability when touching
 // session vars containing learning paths.
@@ -586,7 +585,7 @@ switch ($action) {
                 if (isset($_FILES['mp3'])) {
                     $audio = $_FILES['mp3'];
                 }
-                $_SESSION['oLP']->edit_item($_REQUEST['id'], $_POST['parent'], $_POST['previous'], $post_title, $_POST['description'], $_POST['prerequisites'], $audio, $_POST['maxTimeAllowed']);
+                $_SESSION['oLP']->edit_item($_REQUEST['id'], $_POST['parent'], $_POST['previous'], $post_title, $_POST['description'], $_POST['prerequisites'], $audio, $_POST['maxTimeAllowed'], $_POST['url']);
 
                 if (isset($_POST['content_lp'])) {
                     $_SESSION['oLP']->edit_document($_course);

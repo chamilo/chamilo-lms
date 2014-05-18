@@ -4359,6 +4359,30 @@ class CourseManager
         $row = Database::fetch_row($res);
         return $row[0];
     }
+    
+    /**
+     * Get availab le courses count
+     * @param int Access URL ID (optional)
+     * @return int Number of courses
+     */
+    public static function countAvailableCourses($accessUrlId = null)
+    {
+        $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tableCourseRelAccessUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $specialCourseList = self::get_special_course_list();
+
+        $withoutSpecialCourses = '';
+        if (!empty($specialCourseList)) {
+            $withoutSpecialCourses = ' AND c.code NOT IN ("'.implode('","',$specialCourseList).'")';
+        }
+        
+        if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
+            $sql = "SELECT count(id) FROM $tableCourse c, $tableCourseRelAccessUrl u WHERE c.code = u.course_code AND u.access_url_id = $accessUrlId AND c.visibility != 0 AND c.visibility != 4 $withoutSpecialCourses";
+        }
+        $res = Database::query($sql);
+        $row = Database::fetch_row($res);
+        return $row[0];
+    }
 
     /**
      * Return a link to go to the course, validating the visibility of the
@@ -4421,7 +4445,7 @@ class CourseManager
             $options[]=  'enter';
         }
 
-         if ($course['visibility'] != HIDDEN && empty($course['registration_code']) && $course['unsubscribe'] == UNSUBSCRIBE_ALLOWED && api_user_is_login($uid) && (in_array($course['real_id'], $user_courses))) {
+         if ($course['visibility'] != COURSE_VISIBILITY_HIDDEN && empty($course['registration_code']) && $course['unsubscribe'] == UNSUBSCRIBE_ALLOWED && api_user_is_login($uid) && (in_array($course['real_id'], $user_courses))) {
             $options[]=  'unsubscribe';
         }
 

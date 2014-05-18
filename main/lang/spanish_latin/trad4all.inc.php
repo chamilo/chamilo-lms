@@ -375,6 +375,7 @@ $InCourse = "en curso";
 $UserOnlineListSession = "Lista de usuarios en línea - Sesión";
 $From = "de";
 $To = "para";
+$NextWeek = "Semana siguente";
 $GeneralDescription = "Descripción General";
 $GeneralDescriptionQuestions = "¿ Cuál es el papel y función del curso en el programa ? ¿ Se requieren actividades previas ? ¿ Qué relación tiene este curso con otros ?";
 $GeneralDescriptionInformation = "Describe el curso (número de horas, código, lugar donde se desarrolla...). Profesor (nombre, apellidos, despacho, teléfono, e-mail...).";

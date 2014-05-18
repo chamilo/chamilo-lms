@@ -726,6 +726,7 @@ $Until = "Μέχρι";
 $FirstPage = "Πρώτη σελίδα";
 $LastPage = "Τελευταία σελίδα";
 $Coachs = "Υπεύθυνοι";
+$NextWeek = "Επόμενη εβδομάδα";
 $DragAndDropAnElementHere = "Σύρετε και αφήστε ένα στοιχείο εδώ";
 $ThereAreNoRegisteredDatetimeYet = "There is no date/time registered yet";
 $CalendarList = "Ημερολόγιο συμμετοχών";

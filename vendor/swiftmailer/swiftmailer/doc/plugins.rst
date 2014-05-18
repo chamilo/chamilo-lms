@@ -2,7 +2,7 @@ Plugins
 =======
 
 Plugins are provided with Swift Mailer and can be used to extend the behavior
-of the library in ways that simple class inheritance would be more complex.
+of the library in situations where using simple class inheritance would be more complex.
 
 AntiFlood Plugin
 ----------------
@@ -34,7 +34,7 @@ chance to process its queue and recover some resources.
 Using the AntiFlood Plugin
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The AntiFlood Plugin -- like all plugins -- is added with the Mailer class'
+The AntiFlood Plugin -- like all plugins -- is added with the Mailer class's
 ``registerPlugin()`` method. It takes two constructor parameters: the number of
 emails to pause after, and optionally the number of seconds to pause for.
 
@@ -275,7 +275,7 @@ you'll be sending the message to.
           );
         }
 
-Now create an instance of the Decorator plugin using this array of replacements 
+Now create an instance of the Decorator plugin using this array of replacements
 and then register it with the Mailer. Do this only once!
 
 .. code-block:: php
@@ -296,14 +296,14 @@ line) with your placeholders.
         "Please log in and change it at your earliest convenience."
       )
       ;
-  
+
     foreach ($users as $user) {
       $message->addTo($user['email']);
     }
 
 When you send this message to each of your recipients listed in your
-``$replacements`` array they will receive a message customized for just 
-themselves. For example, the message used above when received may appear like 
+``$replacements`` array they will receive a message customized for just
+themselves. For example, the message used above when received may appear like
 this to one user:
 
 .. code-block:: text
@@ -354,9 +354,9 @@ provide an implementation that does this. You need to create a small class.
           "SELECT * FROM user WHERE email = '%s'",
           mysql_real_escape_string($address)
         );
-    
+
         $result = mysql_query($sql);
-    
+
         if ($row = mysql_fetch_assoc($result)) {
           return array(
             '{username}'=>$row['username'],

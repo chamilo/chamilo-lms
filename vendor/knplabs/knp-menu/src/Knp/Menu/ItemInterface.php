@@ -12,16 +12,9 @@ namespace Knp\Menu;
 interface ItemInterface extends  \ArrayAccess, \Countable, \IteratorAggregate
 {
     /**
-     * @param FactoryInterface $factory
-     *
-     * @return ItemInterface
-     */
-    public function setFactory(FactoryInterface $factory);
-
-    /**
      * @return string
      */
-    public function getName();
+    function getName();
 
     /**
      * Renames the item.
@@ -30,31 +23,33 @@ interface ItemInterface extends  \ArrayAccess, \Countable, \IteratorAggregate
      *
      * Provides a fluent interface
      *
-     * @param string $name
-     *
-     * @return ItemInterface
-     *
-     * @throws \InvalidArgumentException if the name is already used by a sibling
+     * @param  string $name
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setName($name);
+    function setName($name);
+
+    /**
+     * @param  \Knp\Menu\FactoryInterface $factory
+     * @return \Knp\Menu\ItemInterface
+     */
+    function setFactory(FactoryInterface $factory);
 
     /**
      * Get the uri for a menu item
      *
      * @return string
      */
-    public function getUri();
+    function getUri();
 
     /**
      * Set the uri for a menu item
      *
      * Provides a fluent interface
      *
-     * @param string $uri The uri to set on this menu item
-     *
-     * @return ItemInterface
+     * @param  string $uri The uri to set on this menu item
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setUri($uri);
+    function setUri($uri);
 
     /**
      * Returns the label that will be used to render this menu item
@@ -63,183 +58,167 @@ interface ItemInterface extends  \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @return string
      */
-    public function getLabel();
+    function getLabel();
 
     /**
      * Provides a fluent interface
      *
-     * @param string $label The text to use when rendering this menu item
-     *
-     * @return ItemInterface
+     * @param  string $label    The text to use when rendering this menu item
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setLabel($label);
+    function setLabel($label);
 
     /**
      * @return array
      */
-    public function getAttributes();
+    function getAttributes();
 
     /**
      * Provides a fluent interface
      *
-     * @param array $attributes
-     *
-     * @return ItemInterface
+     * @param  array $attributes
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setAttributes(array $attributes);
+    function setAttributes(array $attributes);
 
     /**
-     * @param string $name    The name of the attribute to return
-     * @param mixed  $default The value to return if the attribute doesn't exist
-     *
+     * @param  string $name     The name of the attribute to return
+     * @param  mixed  $default  The value to return if the attribute doesn't exist
      * @return mixed
      */
-    public function getAttribute($name, $default = null);
+    function getAttribute($name, $default = null);
 
     /**
      * Provides a fluent interface
      *
      * @param string $name
-     * @param mixed  $value
-     *
-     * @return ItemInterface
+     * @param mixed $value
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setAttribute($name, $value);
+    function setAttribute($name, $value);
 
     /**
      * @return array
      */
-    public function getLinkAttributes();
+    function getLinkAttributes();
 
     /**
      * Provides a fluent interface
      *
-     * @param array $linkAttributes
-     *
-     * @return ItemInterface
+     * @param  array $linkAttributes
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setLinkAttributes(array $linkAttributes);
+    function setLinkAttributes(array $linkAttributes);
 
     /**
-     * @param string $name    The name of the attribute to return
-     * @param mixed  $default The value to return if the attribute doesn't exist
-     *
+     * @param  string $name     The name of the attribute to return
+     * @param  mixed  $default  The value to return if the attribute doesn't exist
      * @return mixed
      */
-    public function getLinkAttribute($name, $default = null);
+    function getLinkAttribute($name, $default = null);
 
     /**
      * Provides a fluent interface
      *
      * @param string $name
      * @param string $value
-     *
-     * @return ItemInterface
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setLinkAttribute($name, $value);
+    function setLinkAttribute($name, $value);
 
     /**
      * @return array
      */
-    public function getChildrenAttributes();
+    function getChildrenAttributes();
 
     /**
      * Provides a fluent interface
      *
-     * @param array $childrenAttributes
-     *
-     * @return ItemInterface
+     * @param  array $childrenAttributes
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setChildrenAttributes(array $childrenAttributes);
+    function setChildrenAttributes(array $childrenAttributes);
 
     /**
-     * @param string $name    The name of the attribute to return
-     * @param mixed  $default The value to return if the attribute doesn't exist
-     *
+     * @param  string $name     The name of the attribute to return
+     * @param  mixed  $default  The value to return if the attribute doesn't exist
      * @return mixed
      */
-    public function getChildrenAttribute($name, $default = null);
+    function getChildrenAttribute($name, $default = null);
 
     /**
      * Provides a fluent interface
      *
      * @param string $name
      * @param string $value
-     *
-     * @return ItemInterface
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setChildrenAttribute($name, $value);
+    function setChildrenAttribute($name, $value);
 
     /**
      * @return array
      */
-    public function getLabelAttributes();
+    function getLabelAttributes();
 
     /**
      * Provides a fluent interface
      *
-     * @param array $labelAttributes
-     *
-     * @return ItemInterface
+     * @param  array $labelAttributes
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setLabelAttributes(array $labelAttributes);
+    function setLabelAttributes(array $labelAttributes);
 
     /**
-     * @param string $name    The name of the attribute to return
-     * @param mixed  $default The value to return if the attribute doesn't exist
-     *
+     * @param  string $name     The name of the attribute to return
+     * @param  mixed  $default  The value to return if the attribute doesn't exist
      * @return mixed
      */
-    public function getLabelAttribute($name, $default = null);
+    function getLabelAttribute($name, $default = null);
 
     /**
      * Provides a fluent interface
      *
      * @param string $name
-     * @param mixed  $value
-     *
-     * @return ItemInterface
+     * @param mixed $value
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setLabelAttribute($name, $value);
+    function setLabelAttribute($name, $value);
 
     /**
      * @return array
      */
-    public function getExtras();
+    function getExtras();
 
     /**
      * Provides a fluent interface
      *
-     * @param array $extras
-     *
-     * @return ItemInterface
+     * @param  array $extras
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setExtras(array $extras);
+    function setExtras(array $extras);
 
     /**
-     * @param string $name    The name of the extra to return
-     * @param mixed  $default The value to return if the extra doesn't exist
-     *
+     * @param  string $name     The name of the extra to return
+     * @param  mixed  $default  The value to return if the extra doesn't exist
      * @return mixed
      */
-    public function getExtra($name, $default = null);
+    function getExtra($name, $default = null);
 
     /**
      * Provides a fluent interface
      *
      * @param string $name
-     * @param mixed  $value
-     *
-     * @return ItemInterface
+     * @param mixed $value
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setExtra($name, $value);
+    function setExtra($name, $value);
 
     /**
      * Whether or not this menu item should show its children.
      *
      * @return boolean
      */
-    public function getDisplayChildren();
+    function getDisplayChildren();
 
     /**
      * Set whether or not this menu item should show its children
@@ -247,17 +226,16 @@ interface ItemInterface extends  \ArrayAccess, \Countable, \IteratorAggregate
      * Provides a fluent interface
      *
      * @param boolean $bool
-     *
-     * @return ItemInterface
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setDisplayChildren($bool);
+    function setDisplayChildren($bool);
 
     /**
      * Whether or not to display this menu item
      *
      * @return boolean
      */
-    public function isDisplayed();
+    function isDisplayed();
 
     /**
      * Set whether or not this menu should be displayed
@@ -265,32 +243,67 @@ interface ItemInterface extends  \ArrayAccess, \Countable, \IteratorAggregate
      * Provides a fluent interface
      *
      * @param boolean $bool
-     *
-     * @return ItemInterface
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setDisplay($bool);
+    function setDisplay($bool);
 
     /**
      * Add a child menu item to this menu
      *
      * Returns the child item
      *
-     * @param ItemInterface|string $child   An ItemInterface instance or the name of a new item to create
-     * @param array                $options If creating a new item, the options passed to the factory for the item
-     *
-     * @return ItemInterface
-     * @throws \InvalidArgumentException if the item is already in a tree
+     * @param mixed $child   An ItemInterface instance or the name of a new item to create
+     * @param array $options If creating a new item, the options passed to the factory for the item
+     * @return \Knp\Menu\ItemInterface
      */
-    public function addChild($child, array $options = array());
+    function addChild($child, array $options = array());
 
     /**
      * Returns the child menu identified by the given name
      *
-     * @param string $name Then name of the child menu to return
-     *
-     * @return ItemInterface|null
+     * @param  string $name  Then name of the child menu to return
+     * @return \Knp\Menu\ItemInterface|null
      */
-    public function getChild($name);
+    function getChild($name);
+
+    /**
+     * Moves child to specified position. Rearange other children accordingly.
+     *
+     * Provides a fluent interface
+     *
+     * @param integer $position Position to move child to.
+     * @return \Knp\Menu\ItemInterface
+     */
+    function moveToPosition($position);
+
+    /**
+     * Moves child to specified position. Rearange other children accordingly.
+     *
+     * Provides a fluent interface
+     *
+     * @param \Knp\Menu\ItemInterface $child Child to move.
+     * @param integer $position Position to move child to.
+     * @return \Knp\Menu\ItemInterface
+     */
+    function moveChildToPosition(ItemInterface $child, $position);
+
+    /**
+     * Moves child to first position. Rearange other children accordingly.
+     *
+     * Provides a fluent interface
+     *
+     * @return \Knp\Menu\ItemInterface
+     */
+    function moveToFirstPosition();
+
+    /**
+     * Moves child to last position. Rearange other children accordingly.
+     *
+     * Provides a fluent interface
+     *
+     * @return \Knp\Menu\ItemInterface
+     */
+    function moveToLastPosition();
 
     /**
      * Reorder children.
@@ -298,17 +311,48 @@ interface ItemInterface extends  \ArrayAccess, \Countable, \IteratorAggregate
      * Provides a fluent interface
      *
      * @param array $order New order of children.
-     *
-     * @return ItemInterface
+     * @return \Knp\Menu\ItemInterface
      */
-    public function reorderChildren($order);
+    function reorderChildren($order);
 
     /**
      * Makes a deep copy of menu tree. Every item is copied as another object.
      *
-     * @return ItemInterface
+     * @return \Knp\Menu\ItemInterface
      */
-    public function copy();
+    function copy();
+
+    /**
+     * Get slice of menu as another menu.
+     *
+     * If offset and/or length are numeric, it works like in array_slice function:
+     *
+     *   If offset is non-negative, slice will start at the offset.
+     *   If offset is negative, slice will start that far from the end.
+     *
+     *   If length is null, slice will have all elements.
+     *   If length is positive, slice will have that many elements.
+     *   If length is negative, slice will stop that far from the end.
+     *
+     * It's possible to mix names/object/numeric, for example:
+     *   slice("child1", 2);
+     *   slice(3, $child5);
+     * Note: when using a child as limit, it will not be included in the returned menu.
+     * the slice is done before this menu.
+     *
+     * @param mixed $offset Name of child, child object, or numeric offset.
+     * @param mixed $length Name of child, child object, or numeric length.
+     * @return \Knp\Menu\ItemInterface
+     */
+    function slice($offset, $length = 0);
+
+    /**
+     * Split menu into two distinct menus.
+     *
+     * @param mixed $length Name of child, child object, or numeric length.
+     * @return array Array with two menus, with "primary" and "secondary" key
+     */
+    function split($length);
 
     /**
      * Returns the level of this menu item
@@ -317,74 +361,71 @@ interface ItemInterface extends  \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @return integer
      */
-    public function getLevel();
+    function getLevel();
 
     /**
      * Returns the root ItemInterface of this menu tree
      *
-     * @return ItemInterface
+     * @return \Knp\Menu\ItemInterface
      */
-    public function getRoot();
+    function getRoot();
 
     /**
      * Returns whether or not this menu item is the root menu item
      *
      * @return boolean
      */
-    public function isRoot();
+    function isRoot();
 
     /**
-     * @return ItemInterface|null
+     * @return MenuItem|null
      */
-    public function getParent();
+    function getParent();
 
     /**
      * Used internally when adding and removing children
      *
      * Provides a fluent interface
      *
-     * @param ItemInterface|null $parent
-     *
-     * @return ItemInterface
+     * @param \Knp\Menu\ItemInterface|null $parent
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setParent(ItemInterface $parent = null);
+    function setParent(ItemInterface $parent = null);
 
     /**
      * Return the children as an array of ItemInterface objects
      *
      * @return array
      */
-    public function getChildren();
+    function getChildren();
 
     /**
      * Provides a fluent interface
      *
-     * @param array $children An array of ItemInterface objects
-     *
-     * @return ItemInterface
+     * @param  array $children An array of ItemInterface objects
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setChildren(array $children);
+    function setChildren(array $children);
 
     /**
      * Removes a child from this menu item
      *
      * Provides a fluent interface
      *
-     * @param ItemInterface|string $name The name of ItemInterface instance or the ItemInterface to remove
-     *
-     * @return ItemInterface
+     * @param mixed $name The name of ItemInterface instance or the ItemInterface to remove
+     * @return \Knp\Menu\ItemInterface
      */
-    public function removeChild($name);
+    function removeChild($name);
 
     /**
-     * @return ItemInterface
+     * @return \Knp\Menu\ItemInterface
      */
-    public function getFirstChild();
+    function getFirstChild();
 
     /**
-     * @return ItemInterface
+     * @return \Knp\Menu\ItemInterface
      */
-    public function getLastChild();
+    function getLastChild();
 
     /**
      * Returns whether or not this menu items has viewable children
@@ -394,41 +435,85 @@ interface ItemInterface extends  \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @return boolean
      */
-    public function hasChildren();
+    function hasChildren();
 
     /**
-     * Sets whether or not this menu item is "current".
+     * A string representation of this menu item
      *
-     * If the state is unknown, use null.
+     * e.g. Top Level > Second Level > This menu
+     *
+     * @param string $separator
+     * @return string
+     */
+    function getPathAsString($separator = ' > ');
+
+    /**
+     * Renders an array of label => uri pairs ready to be used for breadcrumbs.
+     *
+     * The subItem can be one of the following forms
+     *   * 'subItem'
+     *   * array('subItem' => '@homepage')
+     *   * array('subItem1', 'subItem2')
+     *
+     * @example
+     * // drill down to the Documentation menu item, then add "Chapter 1" to the breadcrumb
+     * $arr = $menu['Documentation']->getBreadcrumbsArray('Chapter 1');
+     * foreach ($arr as $name => $url)
+     * {
+     *
+     * }
+     *
+     * @param  mixed $subItem A string or array to append onto the end of the array
+     * @return array
+     */
+    function getBreadcrumbsArray($subItem = null);
+
+    /**
+     * Returns the current menu item if it is a child of this menu item
+     *
+     * @return \Knp\Menu\ItemInterface|null
+     * @deprecated this method is flawed and will be removed in 2.0
+     * @see \Knp\Menu\Iterator\CurrentItemFilterIterator
+     */
+    function getCurrentItem();
+
+    /**
+     * Set whether or not this menu item is "current"
      *
      * Provides a fluent interface
      *
-     * @param boolean|null $bool Specify that this menu item is current
-     *
-     * @return ItemInterface
+     * @param boolean $bool Specify that this menu item is current
+     * @return \Knp\Menu\ItemInterface
      */
-    public function setCurrent($bool);
+    function setCurrent($bool);
 
     /**
-     * Gets whether or not this menu item is "current".
-     *
-     * @return boolean|null
-     */
-    public function isCurrent();
-
-    /**
-     * Whether this menu item is last in its parent
+     * Get whether or not this menu item is "current"
      *
      * @return boolean
      */
-    public function isLast();
+    function isCurrent();
 
     /**
-     * Whether this menu item is first in its parent
+     * Returns whether or not this menu is an ancestor of the current menu item
      *
      * @return boolean
      */
-    public function isFirst();
+    function isCurrentAncestor();
+
+    /**
+     * Whether or not this menu item is last in its parent
+     *
+     * @return boolean
+     */
+    function isLast();
+
+    /**
+     * Whether or not this menu item is first in its parent
+     *
+     * @return boolean
+     */
+    function isFirst();
 
     /**
      * Whereas isFirst() returns if this is the first child of the parent
@@ -439,7 +524,7 @@ interface ItemInterface extends  \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @return boolean
      */
-    public function actsLikeFirst();
+    function actsLikeFirst();
 
     /**
      * Whereas isLast() returns if this is the last child of the parent
@@ -450,5 +535,59 @@ interface ItemInterface extends  \ArrayAccess, \Countable, \IteratorAggregate
      *
      * @return boolean
      */
-    public function actsLikeLast();
+    function actsLikeLast();
+
+    /**
+     * Returns the current uri, which is used for determining the current
+     * menu item.
+     *
+     * If the uri isn't set, this asks the parent menu for its current uri.
+     * This would recurse up the tree until the root is hit. Once the root
+     * is hit, if it still doesn't know the currentUri, it gets it from the
+     * request object.
+     *
+     * @return string
+     */
+    function getCurrentUri();
+
+    /**
+     * Sets the current uri, used when determining the current menu item
+     *
+     * This will set the current uri on the root menu item, which all other
+     * menu items will use
+     *
+     * Provides a fluent interface
+     *
+     * @param string $uri
+     * @return \Knp\Menu\ItemInterface
+     */
+    function setCurrentUri($uri);
+
+    /**
+     * Calls a method recursively on all of the children of this item
+     *
+     * @example
+     * $menu->callRecursively('setShowChildren', array(false));
+     *
+     * Provides a fluent interface
+     *
+     * @param string $method
+     * @param array $arguments
+     * @return \Knp\Menu\ItemInterface
+     */
+    function callRecursively($method, $arguments = array());
+
+    /**
+     * Exports this menu item to an array
+     *
+     * The children are exported until the specified depth:
+     *      null: no limit
+     *      0: no children
+     *      1: only direct children
+     *      ...
+     *
+     * @param integer $depth
+     * @return array
+     */
+    function toArray($depth = null);
 }

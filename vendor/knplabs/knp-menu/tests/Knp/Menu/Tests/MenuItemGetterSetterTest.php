@@ -173,7 +173,7 @@ class MenuItemGetterSetterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException InvalidArgumentException
      */
     public function testSetExistingNameThrowsAnException()
     {
@@ -195,6 +195,175 @@ class MenuItemGetterSetterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('my_name', $menu->getName());
     }
 
+    public function testToArrayWithChildren()
+    {
+        $menu = $this->createMenu();
+        $menu->addChild('jack', array('uri' => 'http://php.net', 'linkAttributes' => array('title' => 'php'), 'display' => false))
+            ->addChild('john')
+        ;
+        $menu->addChild('joe', array('attributes' => array('class' => 'leaf'), 'label' => 'test', 'labelAttributes' => array('class' => 'center'), 'displayChildren' => false));
+
+        $this->assertEquals(
+            array(
+                'name' => 'test_menu',
+                'label' => null,
+                'uri' => 'homepage',
+                'attributes' => array(),
+                'labelAttributes' => array(),
+                'linkAttributes' => array(),
+                'childrenAttributes' => array(),
+                'extras' => array(),
+                'display' => true,
+                'displayChildren' => true,
+                'children' => array(
+                    'jack' => array(
+                        'name' => 'jack',
+                        'label' => null,
+                        'uri' => 'http://php.net',
+                        'attributes' => array(),
+                        'labelAttributes' => array(),
+                        'linkAttributes' => array('title' => 'php'),
+                        'childrenAttributes' => array(),
+                        'extras' => array(),
+                        'display' => false,
+                        'displayChildren' => true,
+                        'children' => array(
+                            'john' => array(
+                                'name' => 'john',
+                                'label' => null,
+                                'uri' => null,
+                                'attributes' => array(),
+                                'labelAttributes' => array(),
+                                'linkAttributes' => array(),
+                                'childrenAttributes' => array(),
+                                'extras' => array(),
+                                'display' => true,
+                                'displayChildren' => true,
+                                'children' => array(),
+                            ),
+                        ),
+                    ),
+                    'joe' => array(
+                        'name' => 'joe',
+                        'label' => 'test',
+                        'uri' => null,
+                        'attributes' => array('class' => 'leaf'),
+                        'labelAttributes' => array('class' => 'center'),
+                        'linkAttributes' => array(),
+                        'childrenAttributes' => array(),
+                        'extras' => array(),
+                        'display' => true,
+                        'displayChildren' => false,
+                        'children' => array(),
+                    ),
+                ),
+            ),
+            $menu->toArray()
+        );
+    }
+
+    public function testToArrayWithLimitedChildren()
+    {
+        $menu = $this->createMenu();
+        $menu->addChild('jack', array('uri' => 'http://php.net', 'linkAttributes' => array('title' => 'php'), 'display' => false))
+            ->addChild('john')
+        ;
+        $menu->addChild('joe', array('attributes' => array('class' => 'leaf'), 'label' => 'test', 'labelAttributes' => array('class' => 'center'), 'displayChildren' => false));
+
+        $this->assertEquals(
+            array(
+                'name' => 'test_menu',
+                'label' => null,
+                'uri' => 'homepage',
+                'attributes' => array(),
+                'labelAttributes' => array(),
+                'linkAttributes' => array(),
+                'childrenAttributes' => array(),
+                'extras' => array(),
+                'display' => true,
+                'displayChildren' => true,
+                'children' => array(
+                    'jack' => array(
+                        'name' => 'jack',
+                        'label' => null,
+                        'uri' => 'http://php.net',
+                        'attributes' => array(),
+                        'labelAttributes' => array(),
+                        'linkAttributes' => array('title' => 'php'),
+                        'childrenAttributes' => array(),
+                        'extras' => array(),
+                        'display' => false,
+                        'displayChildren' => true,
+                    ),
+                    'joe' => array(
+                        'name' => 'joe',
+                        'label' => 'test',
+                        'uri' => null,
+                        'attributes' => array('class' => 'leaf'),
+                        'labelAttributes' => array('class' => 'center'),
+                        'linkAttributes' => array(),
+                        'childrenAttributes' => array(),
+                        'extras' => array(),
+                        'display' => true,
+                        'displayChildren' => false,
+                    ),
+                ),
+            ),
+            $menu->toArray(1)
+        );
+    }
+
+    public function testToArrayWithoutChildren()
+    {
+        $menu = $this->createMenu();
+        $menu->addChild('jack', array('uri' => 'http://php.net', 'linkAttributes' => array('title' => 'php'), 'display' => false));
+        $menu->addChild('joe', array('attributes' => array('class' => 'leaf'), 'label' => 'test', 'labelAttributes' => array('class' => 'center'), 'displayChildren' => false));
+
+        $this->assertEquals(
+            array(
+                'name' => 'test_menu',
+                'label' => null,
+                'uri' => 'homepage',
+                'attributes' => array(),
+                'labelAttributes' => array(),
+                'linkAttributes' => array(),
+                'childrenAttributes' => array(),
+                'extras' => array(),
+                'display' => true,
+                'displayChildren' => true,
+            ),
+            $menu->toArray(0)
+        );
+    }
+
+    public function testCallRecursively()
+    {
+        $menu = $this->createMenu();
+        $child1 = $this->getMock('Knp\Menu\ItemInterface');
+        $child1->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('Child 1'))
+        ;
+        $child1->expects($this->once())
+            ->method('callRecursively')
+            ->with('setDisplay', array(false))
+        ;
+        $menu->addChild($child1);
+        $child2 = $this->getMock('Knp\Menu\ItemInterface');
+        $child2->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('Child 2'))
+        ;
+        $child2->expects($this->once())
+            ->method('callRecursively')
+            ->with('setDisplay', array(false))
+        ;
+        $menu->addChild($child2);
+
+        $menu->callRecursively('setDisplay', array(false));
+        $this->assertFalse($menu->isDisplayed());
+    }
+
     public function testFactory()
     {
         $child1 = $this->getMock('Knp\Menu\ItemInterface');
@@ -214,8 +383,7 @@ class MenuItemGetterSetterTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $name
      * @param string $uri
-     * @param array  $attributes
-     *
+     * @param array $attributes
      * @return \Knp\Menu\MenuItem
      */
     protected function createMenu($name = 'test_menu', $uri = 'homepage', array $attributes = array())

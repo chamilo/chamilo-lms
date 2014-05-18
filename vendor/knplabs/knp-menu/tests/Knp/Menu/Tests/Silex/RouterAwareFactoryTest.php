@@ -21,29 +21,34 @@ class RouterAwareFactoryTest extends \PHPUnit_Framework_TestCase
             ->with('homepage', array(), false)
             ->will($this->returnValue('/foobar'))
         ;
-
-        $deprecatedErrorCatched = false;
-        set_error_handler(function ($errorNumber, $message, $file, $line) use (&$deprecatedErrorCatched) {
-            if ($errorNumber & E_USER_DEPRECATED) {
-                $deprecatedErrorCatched = true;
-                return true;
-            }
-
-            return \PHPUnit_Util_ErrorHandler::handleError($errorNumber, $message, $file, $line);
-        });
-
-        try {
-            $factory = new RouterAwareFactory($generator);
-        } catch (\Exception $e) {
-            restore_error_handler();
-            throw $e;
-        }
-
-        restore_error_handler();
-
-        $this->assertTrue($deprecatedErrorCatched, 'The RouterAwareFactory throws a E_USER_DEPRECATED when instantiating it.');
-
+        $factory = new RouterAwareFactory($generator);
         $item = $factory->createItem('test_item', array('uri' => '/hello', 'route' => 'homepage'));
         $this->assertEquals('/foobar', $item->getUri());
+    }
+
+    public function testCreateItemWithRouteAndParameters()
+    {
+        $generator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
+        $generator->expects($this->once())
+            ->method('generate')
+            ->with('homepage', array('id' => 12), false)
+            ->will($this->returnValue('/foobar'))
+        ;
+        $factory = new RouterAwareFactory($generator);
+        $item = $factory->createItem('test_item', array('route' => 'homepage', 'routeParameters' => array('id' => 12)));
+        $this->assertEquals('/foobar', $item->getUri());
+    }
+
+    public function testCreateItemWithAbsoluteRoute()
+    {
+        $generator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
+        $generator->expects($this->once())
+            ->method('generate')
+            ->with('homepage', array(), true)
+            ->will($this->returnValue('http://php.net'))
+        ;
+        $factory = new RouterAwareFactory($generator);
+        $item = $factory->createItem('test_item', array('route' => 'homepage', 'routeAbsolute' => true));
+        $this->assertEquals('http://php.net', $item->getUri());
     }
 }

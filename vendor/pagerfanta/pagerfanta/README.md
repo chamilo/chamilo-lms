@@ -1,6 +1,6 @@
 # Pagerfanta
 
-[![Build Status](https://travis-ci.org/whiteoctober/Pagerfanta.png?branch=master)](https://travis-ci.org/whiteoctober/Pagerfanta) [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/whiteoctober/Pagerfanta/badges/quality-score.png?s=1ee480491644c07812b5206cf07d33a5035d0118)](https://scrutinizer-ci.com/g/whiteoctober/Pagerfanta/) [![Code Coverage](https://scrutinizer-ci.com/g/whiteoctober/Pagerfanta/badges/coverage.png?s=284be0616a9ba0439ee1123bcaf5fb3f6bfb0e50)](https://scrutinizer-ci.com/g/whiteoctober/Pagerfanta/) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/9e710230-b088-4904-baef-5f5e2d62e681/mini.png)](https://insight.sensiolabs.com/projects/9e710230-b088-4904-baef-5f5e2d62e681) [![Latest Stable Version](https://poser.pugx.org/pagerfanta/pagerfanta/v/stable.png)](https://packagist.org/packages/pagerfanta/pagerfanta) [![Total Downloads](https://poser.pugx.org/pagerfanta/pagerfanta/downloads.png)](https://packagist.org/packages/pagerfanta/pagerfanta)
+[![Build Status](https://travis-ci.org/whiteoctober/Pagerfanta.png?branch=master)](https://travis-ci.org/whiteoctober/Pagerfanta)
 
 Pagination for PHP 5.3
 
@@ -154,7 +154,7 @@ $countQueryBuilderModifier = function ($queryBuilder) {
           ->setMaxResults(1);
 };
 
-$adapter = new DoctrineDbalAdapter($queryBuilder, $countQueryBuilderModifier);
+$adapter = new DoctrineDbalAdapter($queryBuilder, $countQueryModifier);
 ```
 
 ### DoctrineDbalSingleTableAdapter
@@ -205,20 +205,6 @@ use Pagerfanta\Adapter\DoctrineODMMongoDBAdapter;
 
 $queryBuilder = $documentManager->createQueryBuilder('Model\Article');
 $adapter = new DoctrineODMMongoDBAdapter($queryBuilder);
-```
-
-### DoctrineODMPhpcrAdapter
-
-To paginate [Doctrine PHPCR-ODM](http://docs.doctrine-project.org/projects/doctrine-phpcr-odm/en/latest/) query builders.
-
-```php
-<?php
-
-use Pagerfanta\Adapter\DoctrineODMPhpcrAdapter;
-
-$queryBuilder = $documentManager->createQueryBuilder();
-$queryBuilder->from('Model\Article');
-$adapter = new DoctrineODMPhpcrAdapter($queryBuilder);
 ```
 
 ### DoctrineCollectionAdapter

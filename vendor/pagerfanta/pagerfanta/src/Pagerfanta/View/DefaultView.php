@@ -54,7 +54,7 @@ class DefaultView implements ViewInterface
         return $this->generate();
     }
 
-    private function initializePagerfanta(PagerfantaInterface $pagerfanta)
+    private function initializePagerfanta($pagerfanta)
     {
         $this->pagerfanta = $pagerfanta;
 

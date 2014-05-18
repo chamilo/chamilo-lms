@@ -14,19 +14,19 @@ interface NodeInterface
      *
      * @return string
      */
-    public function getName();
+    function getName();
 
     /**
      * Get the options for the factory to create the item for this node
      *
      * @return array
      */
-    public function getOptions();
+    function getOptions();
 
     /**
      * Get the child nodes implementing NodeInterface
      *
      * @return \Traversable
      */
-    public function getChildren();
+    function getChildren();
 }

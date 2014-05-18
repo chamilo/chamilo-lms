@@ -11,6 +11,7 @@
 
 namespace Pagerfanta\View;
 
+use Pagerfanta\PagerfantaInterface;
 use Pagerfanta\Exception\InvalidArgumentException;
 
 /**

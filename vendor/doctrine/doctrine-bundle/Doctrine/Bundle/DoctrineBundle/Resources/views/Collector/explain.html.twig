@@ -1,0 +1,20 @@
+<strong>Explanation:</strong>
+
+<table style="margin: 5px 0;">
+    <thead>
+        <tr>
+            {% for label in data[0]|keys %}
+                <th>{{ label }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in data %}
+        <tr>
+            {% for item in row %}
+                <td>{{ item }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

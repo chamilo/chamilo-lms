@@ -54,7 +54,7 @@ To detect which converter is run on a parameter the following process is run:
 Built-in Converters
 -------------------
 
-The bundle has two built-in converter, the Doctrine one and a DateTime
+The bundle has two built-in converters, the Doctrine one and a DateTime
 converter.
 
 Doctrine Converter
@@ -65,7 +65,7 @@ Converter Name: ``doctrine.orm``
 The Doctrine Converter attempts to convert request attributes to Doctrine
 entities fetched from the database. Two different approaches are possible:
 
-- Fetch object by primary key
+- Fetch object by primary key.
 - Fetch object by one or several fields which contain unique values in the
   database.
 
@@ -102,6 +102,11 @@ option::
     {
     }
 
+.. tip::
+
+   The ``id`` option specifies which placeholder from the route gets passed to the repository
+   method used. If no repository method is specified, ``find()`` is used by default.
+
 This also allows you to have multiple converters in one action::
 
     /**
@@ -112,7 +117,7 @@ This also allows you to have multiple converters in one action::
     {
     }
 
-In the example above, the post parameter is handled automatically, but the comment is 
+In the example above, the ``$post`` parameter is handled automatically, but ``$comment`` is
 configured with the annotation since they can not both follow the default convention.
 
 If you want to match an entity using multiple fields use the ``mapping`` hash
@@ -133,7 +138,7 @@ route parameter from being part of the criteria::
 
     /**
      * @Route("/blog/{date}/{slug}")
-     * @ParamConverter("post", options={"exclude": ["date"]})
+     * @ParamConverter("post", options={"exclude": {"date"}})
      */
     public function showAction(Post $post, \DateTime $date)
     {
@@ -180,8 +185,7 @@ is accepted. You can be stricter with input given through the options::
 Creating a Converter
 --------------------
 
-All converters must implement the
-:class:`Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterInterface`::
+All converters must implement the ``ParamConverterInterface``::
 
     namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
@@ -203,14 +207,14 @@ The ``ParamConverter`` instance has three information about the annotation:
 * ``name``: The attribute name;
 * ``class``: The attribute class name (can be any string representing a class
   name);
-* ``options``: An array of options
+* ``options``: An array of options.
 
 The ``apply()`` method is called whenever a configuration is supported. Based
 on the request attributes, it should set an attribute named
 ``$configuration->getName()``, which stores an object of class
 ``$configuration->getClass()``.
 
-To register your converter service you must add a tag to your service
+To register your converter service you must add a tag to your service:
 
 .. configuration-block::
 

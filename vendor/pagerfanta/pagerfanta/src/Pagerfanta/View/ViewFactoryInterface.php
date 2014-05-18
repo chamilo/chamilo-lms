@@ -11,6 +11,8 @@
 
 namespace Pagerfanta\View;
 
+use Pagerfanta\PagerfantaInterface;
+
 /**
  * ViewFactoryInterface.
  *

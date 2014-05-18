@@ -37,7 +37,7 @@ class DoctrineDbalSingleTableAdapter extends DoctrineDbalAdapter
         parent::__construct($queryBuilder, $countQueryBuilderModifier);
     }
 
-    private function hasQueryBuilderJoins(QueryBuilder $queryBuilder)
+    private function hasQueryBuilderJoins($queryBuilder)
     {
         $joins = $queryBuilder->getQueryPart('join');
 

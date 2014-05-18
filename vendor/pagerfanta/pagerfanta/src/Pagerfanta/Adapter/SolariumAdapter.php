@@ -27,9 +27,6 @@ class SolariumAdapter implements AdapterInterface
     private $client;
     private $query;
     private $resultSet;
-    private $endPoint;
-    private $resultSetStart;
-    private $resultSetRows;
 
     /**
      * Constructor.
@@ -99,71 +96,39 @@ class SolariumAdapter implements AdapterInterface
      */
     public function getSlice($offset, $length)
     {
-        return $this->getResultSet($offset, $length);
+        $this->query
+            ->setStart($offset)
+            ->setRows($length);
+
+        $this->clearResultSet();
+
+        return $this->getResultSet();
     }
 
     /**
      * @return Solarium_Result_Select|Solarium\QueryType\Select\Result\Result
      **/
-    public function getResultSet($start = null, $rows = null)
+    public function getResultSet()
     {
-        if ($this->resultSetStartAndRowsAreNotNullAndChange($start, $rows)) {
-            $this->resultSetStart = $start;
-            $this->resultSetRows = $rows;
-
-            $this->modifyQuery();
-            $this->clearResultSet();
-        }
-
-        if ($this->resultSetEmpty()) {
+        if ($this->isResultSetNotCached()) {
             $this->resultSet = $this->createResultSet();
         }
 
         return $this->resultSet;
     }
 
-    private function resultSetStartAndRowsAreNotNullAndChange($start, $rows)
+    private function isResultSetNotCached()
     {
-        return $this->resultSetStartAndRowsAreNotNull($start, $rows) &&
-               $this->resultSetStartAndRowsChange($start, $rows);
-    }
-
-    private function resultSetStartAndRowsAreNotNull($start, $rows)
-    {
-        return $start !== null && $rows !== null;
-    }
-
-    private function resultSetStartAndRowsChange($start, $rows)
-    {
-        return $start !== $this->resultSetStart || $rows !== $this->resultSetRows;
-    }
-
-    private function modifyQuery()
-    {
-        $this->query
-            ->setStart($this->resultSetStart)
-            ->setRows($this->resultSetRows);
+        return $this->resultSet === null;
     }
 
     private function createResultSet()
     {
-        return $this->client->select($this->query, $this->endPoint);
+        return $this->client->select($this->query);
     }
 
     private function clearResultSet()
     {
         $this->resultSet = null;
-    }
-
-    private function resultSetEmpty()
-    {
-        return $this->resultSet === null;
-    }
-
-    public function setEndPoint($endPoint)
-    {
-        $this->endPoint = $endPoint;
-
-        return $this;
     }
 }

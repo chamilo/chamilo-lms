@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="" >
+        <body>
+            <trans-unit id="link_add">
+                <source>link_add</source>
+                <target>Afegeix</target>
+            </trans-unit>
+            <trans-unit id="label_type_yes">
+                <source>label_type_yes</source>
+                <target>sí</target>
+            </trans-unit>
+            <trans-unit id="label_type_no">
+                <source>label_type_no</source>
+                <target>no</target>
+            </trans-unit>
+            <trans-unit id="sonata_core_template_box_file_found_in">
+                <source>sonata_core_template_box_file_found_in</source>
+                <target>This file can be found in</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

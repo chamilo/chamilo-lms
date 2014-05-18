@@ -1,0 +1,38 @@
+{
+    "name": "sonata-project/core-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony SonataCoreBundle",
+    "keywords": ["sonata"],
+    "homepage": "http://sonata-project.org/bundles/core",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Rabaix",
+            "email": "thomas.rabaix@sonata-project.org"
+        },
+        {
+            "name": "Sonata Community",
+            "homepage": "https://github.com/sonata-project/SonataCoreBundle/contributors"
+        }
+    ],
+    "require": {
+        "symfony/http-foundation": "~2.2",
+        "symfony/form": "~2.2",
+        "symfony/config": "~2.0",
+        "symfony/translation": "~2.2",
+        "twig/twig": "~1.12"
+    },
+    "require-dev": {
+        "sonata-project/exporter": "~1.3",
+        "doctrine/orm": "~2.4",
+        "doctrine/phpcr-odm": "~1.0"
+    },
+    "autoload": {
+        "psr-4": { "Sonata\\CoreBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.2.x-dev"
+        }
+    }
+}

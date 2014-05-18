@@ -14,13 +14,7 @@ env:
 services: mongodb
 
 before_script:
-  - echo "extension = mongo.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - pecl -q install -f mongo-1.3.4 && echo "extension=mongo.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
   - sh -c "if [ $DOCTRINE_ORM_VERSION ]; then composer require doctrine/orm:${DOCTRINE_ORM_VERSION} --dev --no-update; fi"
   - sh -c "if [ $SOLARIUM_VERSION ]; then composer require solarium/solarium:${SOLARIUM_VERSION} --dev --no-update; fi"
   - composer install --dev
-
-script: vendor/bin/phpunit --coverage-clover=coverage.clover
-
-after_script:
-  - wget https://scrutinizer-ci.com/ocular.phar
-  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover

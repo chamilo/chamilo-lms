@@ -1,0 +1,139 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: parameters.php }
+
+framework:
+    #esi:             ~
+    translator:      { fallback: "%locale%" }
+    secret:          "%secret%"
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+        #assets_version: SomeVersionScheme
+    default_locale:  "%locale%"
+    trusted_hosts:   ~
+    trusted_proxies: ~
+    session:
+        # handler_id set to null will use default session handler from php.ini
+        handler_id:  ~
+    fragments:       ~
+    http_method_override: true
+
+# Twig Configuration
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+    paths:
+      "%kernel.root_dir%/../src/ChamiloLMS/CoreBundle/Resources/views/default": template_style
+    globals:
+
+      show_toolbar: true
+      show_footer: true
+      software_name:
+      version:
+
+      session_teachers: 1
+      teachers: 1
+      news_counter:
+      news_list:
+      messages_count:
+      message_link:
+      is_profile_editable:
+      administrator_name:
+      plugin_footer_left:
+      plugin_footer_center:
+      plugin_content_bottom:
+      plugin_header_left:
+      plugin_header_center:
+      plugin_header_right:
+      plugin_header_main:
+      plugin_menu_bottom:
+      plugin_menu_top:
+      plugin_content_top:
+      plugin_footer_right:
+      footer_extra_content:
+      course_session_block:
+      show_course_shortcut:
+      show_course_navigation_menu:
+      actions:
+      header:
+      message:
+      welcome_to_course_block:
+
+# Assetic Configuration
+assetic:
+    debug:          "%kernel.debug%"
+    use_controller: false
+    bundles:        [ ]
+    #java: /usr/bin/java
+    filters:
+        cssrewrite: ~
+        #closure:
+        #    jar: "%kernel.root_dir%/Resources/java/compiler.jar"
+        #yui_css:
+        #    jar: "%kernel.root_dir%/Resources/java/yuicompressor-2.4.7.jar"
+
+        lessphp:
+          file: %kernel.root_dir%/../vendor/oyejorge/less.php/lessc.inc.php
+          apply_to: "\.less$"
+        cssrewrite: ~
+
+braincrafted_bootstrap:
+  less_filter: lessphp
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        driver:   "%database_driver%"
+        host:     "%database_host%"
+        port:     "%database_port%"
+        dbname:   "%database_name%"
+        user:     "%database_user%"
+        password: "%database_password%"
+        charset:  UTF8
+        # if using pdo_sqlite as your database driver, add the path in parameters.yml
+        # e.g. database_path: "%kernel.root_dir%/data/data.db3"
+        # path:     "%database_path%"
+
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        auto_mapping: true
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+    spool:     { type: memory }
+
+sonata_block:
+    default_contexts: [cms]
+    blocks:
+        sonata.admin.block.admin_list:
+            contexts:   [admin]
+
+        #sonata.admin_doctrine_orm.block.audit:
+        #    contexts:   [admin]
+
+        sonata.block.service.text:
+        sonata.block.service.rss:
+        sonata.block.service.course:
+        sonata.block.service.menu:
+
+        # Some specific block from the SonataMediaBundle
+        #sonata.media.block.media:
+        #sonata.media.block.gallery:
+        #sonata.media.block.feature_media:
+
+knp_menu:
+    twig:  # use "twig: false" to disable the Twig extension and the TwigRenderer
+        template: knp_menu.html.twig
+    templating: false # if true, enables the helper for PHP templates
+    default_renderer: twig # The renderer to use, list is also available by default

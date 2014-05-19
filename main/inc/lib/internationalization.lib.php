@@ -49,10 +49,12 @@ define('PERSON_NAME_DATA_EXPORT', PERSON_NAME_EASTERN_ORDER); // Contextual: for
  */
 function get_lang($variable)
 {
-    $translated = Session::getTranslator()->trans($variable);
+    $defaultDomain = 'all';
+    $translated = Session::getTranslator()->trans($variable, array(), $defaultDomain);
+
     if ($translated == $variable) {
         // Check the langVariable for BC
-        $translated = Session::getTranslator()->trans("lang$variable");
+        $translated = Session::getTranslator()->trans("lang$variable", array(), $defaultDomain);
         if ($translated == "lang$variable") {
             return $variable;
         }
@@ -966,7 +968,7 @@ function _api_mb_internal_encoding()
 
  */
 function api_transliterate($string, $unknown = '?', $from_encoding = null)
-{
+{ return $string;
     return URLify::transliterate($string);
     //return u::toAscii($string, $unknown);
 }

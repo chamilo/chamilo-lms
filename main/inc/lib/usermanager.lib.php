@@ -336,13 +336,12 @@ class UserManager
                 UrlManager::add_user_to_url($return, 1);
             }
 
-
             // Adding user
             /** @var ChamiloLMS\Entity\User $user */
-            $em = self::$em;
+            $em = Database::getManager();
 
-            $user = $em->getRepository('ChamiloLMS\Entity\User')->find($return);
-            $role = $em->getRepository('ChamiloLMS\Entity\Role')->find($status);
+            $user = $em->getRepository('ChamiloLMSCoreBundle:User')->find($return);
+            $role = $em->getRepository('ChamiloLMSCoreBundle:Role')->find($status);
 
             $user->getRolesObj()->add($role);
             $em->persist($user);

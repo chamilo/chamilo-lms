@@ -28,6 +28,7 @@ class LegacyListener
         Session::setSession($request->getSession());
         $dbConnection = $this->container->get('database_connection');
         $database  = new \Database($dbConnection, array());
+        \Database::setManager($this->container->get('doctrine')->getManager());
         Session::$urlGenerator = $this->container->get('router');
         Session::$security = $this->container->get('security.context');
         Session::$translator = $this->container->get('translator');
@@ -37,6 +38,8 @@ class LegacyListener
         Session::$tempDir = $this->container->get('kernel')->getCacheDir();
         Session::$courseDir = $this->container->get('kernel')->getDataDir();
         Session::$configDir = $this->container->get('kernel')->getConfigDir();
+
+
 
         // Injecting course in twig
 

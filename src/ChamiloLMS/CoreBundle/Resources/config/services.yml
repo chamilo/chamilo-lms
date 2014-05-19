@@ -31,9 +31,3 @@ services:
       arguments: ["sonata.block.service.course", @templating ]
       tags:
           - { name: sonata.block }
-
-    translation.loader.po:
-        class: Symfony\Component\Translation\Loader\PoFileLoader
-        tags:
-            - { name: translation.loader, alias: po }
-

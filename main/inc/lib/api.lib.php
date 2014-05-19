@@ -6775,9 +6775,8 @@ function api_get_language_interface()
  */
 function api_get_user_roles()
 {
-    global $app;
-    $em = $app['orm.ems']['db_read'];
-    $roles = $em->getRepository('ChamiloLMS\Entity\Role')->findBy(array(), array('name'=>'asc'));
+    $em = Database::getManager();
+    $roles = $em->getRepository('ChamiloLMSCoreBundle:Role')->findBy(array(), array('name'=>'asc'));
     $userRoles = array();
     foreach ($roles as $role) {
         $userRoles[$role->getId()] = $role->getName();

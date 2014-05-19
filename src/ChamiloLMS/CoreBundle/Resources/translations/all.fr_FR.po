@@ -1,6 +1,13 @@
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=utf-8 \n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
 
 msgid "ResourceAdded"
 msgstr "Ressource ajoutée"
@@ -922,13 +929,13 @@ msgid "ScoringUpdated"
 msgstr "Cotations mises à jour"
 
 msgid "CertificateWCertifiesStudentXFinishedCourseYWithGradeZ"
-msgstr "%s certifie que 
+msgstr "%s certifie que
 
- %s 
+ %s
 
-a réussi le cours 
+a réussi le cours
 
- '%s' 
+ '%s'
 
 avec la mention
 

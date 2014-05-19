@@ -73,7 +73,7 @@ class ChamiloSession
     }
 
     /**
-     * @return Symfony\Component\Security\Core\SecurityContextInterface
+     * @return Symfony\Bundle\FrameworkBundle\Translation\Translator
      */
     public static function getTranslator()
     {

@@ -58,7 +58,11 @@
         "oyejorge/less.php": "~1.5",
         "sonata-project/block-bundle": "~2.2",
         "knplabs/knp-menu-bundle": "~1.1",
-        "white-october/pagerfanta-bundle": "dev-master"
+        "white-october/pagerfanta-bundle": "dev-master",
+        "jbroadway/urlify": "1.0.0-stable",
+        "chamilo/chash": "dev-master",
+        "doctrine/migrations": "dev-master",
+        "composer/composer": "1.0.*@dev"
     },
     "scripts": {
         "post-install-cmd": [

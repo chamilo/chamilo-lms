@@ -15,6 +15,7 @@
 
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Filesystem;
+use ChamiloLMS\CoreBundle\Entity\Course;
 
 class FileManager
 {
@@ -1627,7 +1628,7 @@ class FileManager
         if (is_array($course)) {
             $c_id = $course['real_id'];
         } else {
-            if ($course instanceof \ChamiloLMS\Entity\Course) {
+            if ($course instanceof Course) {
                 $c_id = $course->getId();
             }
         }

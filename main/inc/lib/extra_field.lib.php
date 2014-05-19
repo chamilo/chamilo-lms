@@ -735,10 +735,11 @@ class ExtraField extends Model
                                 'extra_'.$field_details['field_variable'].'_comment',
                                 $field_details['field_display_text'].' '.get_lang('Comment')
                             );
+                            $em = Database::getManager();
 
                             $extraFieldValue = new ExtraFieldValue($this->type);
-                            $repo = $app['orm.em']->getRepository($extraFieldValue->entityName);
-                            $repoLog = $app['orm.em']->getRepository('Gedmo\Loggable\Entity\LogEntry');
+                            $repo = $em->getRepository($extraFieldValue->entityName);
+                            $repoLog = $em->getRepository('Gedmo\Loggable\Entity\LogEntry');
                             $newEntity = $repo->findOneBy(
                                 array(
                                     $this->handlerEntityId => $itemId,

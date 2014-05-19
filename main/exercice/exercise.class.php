@@ -957,9 +957,9 @@ class Exercise
         // Adding category info in the category list with question list:
 
         if (!empty($questions_by_category)) {
-            global $app;
-            $em = $app['orm.em'];
-            $repo = $em->getRepository('ChamiloLMS\Entity\CQuizCategory');
+
+            $em = Database::getManager();
+            $repo = $em->getRepository('ChamiloLMSCoreBundle:CQuizCategory');
 
             $newCategoryList = array();
 
@@ -974,7 +974,7 @@ class Exercise
 
                 if (!empty($cat['parent_id'])) {
                     if (!isset($parentsLoaded[$cat['parent_id']])) {
-                        $categoryEntity = $em->find('ChamiloLMS\Entity\CQuizCategory', $cat['parent_id']);
+                        $categoryEntity = $em->find('ChamiloLMSCoreBundle:CQuizCategory', $cat['parent_id']);
                         $parentsLoaded[$cat['parent_id']] = $categoryEntity;
                     } else {
                         $categoryEntity = $parentsLoaded[$cat['parent_id']];
@@ -1746,9 +1746,8 @@ class Exercise
 
         // QuestionScoreType
 
-        global $app;
-        $em = $app['orm.em'];
-        $types = $em->getRepository('ChamiloLMS\Entity\QuestionScore')->findAll();
+        $em = Database::getManager();
+        $types = $em->getRepository('ChamiloLMSCoreBundle:QuestionScore')->findAll();
         $options = array(
             '0' => get_lang('SelectAnOption')
         );

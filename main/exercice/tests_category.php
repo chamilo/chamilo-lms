@@ -234,9 +234,8 @@ function display_add_category($type) {
 
 // Display category list
 
-function display_categories($type = 'simple') {
-    global $app;
-
+function display_categories($type = 'simple')
+{
     $options = array(
         'decorate' => true,
         'rootOpen' => '<ul>',
@@ -278,22 +277,22 @@ function display_categories($type = 'simple') {
     );
 
     // @todo put this in a function
-    $repo = $app['orm.em']->getRepository('ChamiloLMS\Entity\CQuizCategory');
+    $repo = Database::getManager()->getRepository('ChamiloLMSCoreBundle:CQuizCategory');
 
     $query = null;
     if ($type == 'global') {
-        $query = $app['orm.em']
+        $query = Database::getManager()
             ->createQueryBuilder()
             ->select('node')
-            ->from('ChamiloLMS\Entity\CQuizCategory', 'node')
+            ->from('ChamiloLMSCoreBundle:CQuizCategory', 'node')
             ->where('node.cId = 0')
             ->orderBy('node.root, node.lft', 'ASC')
             ->getQuery();
     } else {
-        $query = $app['orm.em']
+        $query = Database::getManager()
             ->createQueryBuilder()
             ->select('node')
-            ->from('ChamiloLMS\Entity\CQuizCategory', 'node')
+            ->from('ChamiloLMSCoreBundle:CQuizCategory', 'node')
             ->where('node.cId = :courseId')
             //->add('orderBy', 'node.title ASC')
             ->orderBy('node.root, node.lft', 'ASC')

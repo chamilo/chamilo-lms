@@ -10,6 +10,8 @@
 
 use \ChamiloSession as Session;
 use Symfony\Component\Validator\Constraints as Assert;
+use ChamiloLMS\CoreBundle\Entity\User;
+use ChamiloLMS\CoreBundle\Entity\Course;
 
 /**
  * Constants declaration
@@ -1690,7 +1692,7 @@ function api_generate_password($length = 8) {
  */
 function api_check_password($password) {
     global $app;
-    $constraints = ChamiloLMS\Entity\User::getPasswordConstraints();
+    $constraints = User::getPasswordConstraints();
     $errors = $app['validator']->validateValue($password, $constraints);
     return count($errors) > 0 ? false : true;
 }
@@ -3095,7 +3097,7 @@ function api_item_property_update(
     if (is_array($_course)) {
         $course_id	 = $_course['real_id'];
     } else {
-        if ($_course instanceof \ChamiloLMS\Entity\Course) {
+        if ($_course instanceof Course) {
             $course_id = $_course->getId();
         }
     }
@@ -6091,7 +6093,7 @@ function api_set_default_visibility($course, $item_id, $tool_id, $group_id = nul
     if (is_array($course)) {
         $courseId = $course['real_id'];
     } else {
-        if ($course instanceof \ChamiloLMS\Entity\Course) {
+        if ($course instanceof Course) {
             $courseId = $course->getId();
         }
     }

@@ -124,25 +124,25 @@ class CItemProperty
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="items")
      * @ORM\JoinColumn(name="to_user_id", referencedColumnName="user_id")
      **/
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Course")
+     * @ORM\ManyToOne(targetEntity="Course", inversedBy="items")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     private $course;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CGroupInfo")
+     * @ORM\ManyToOne(targetEntity="CGroupInfo", inversedBy="items")
      * @ORM\JoinColumn(name="to_group_id", referencedColumnName="iid")
      */
     private $group;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Session")
+     * @ORM\ManyToOne(targetEntity="Session", inversedBy="items")
      * @ORM\JoinColumn(name="id_session", referencedColumnName="id", nullable=true)
      */
     private $session;

@@ -161,7 +161,7 @@ class TrackExercise
     private $exercise;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Jury")
+     * @ORM\ManyToOne(targetEntity="Jury", inversedBy="exerciseAttempts")
      * @ORM\JoinColumn(name="exe_exo_id", referencedColumnName="exercise_id")
      */
     private $attempt;

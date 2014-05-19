@@ -57,7 +57,7 @@ class TrackExerciseAttemptJury
     private $questionScoreNameId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="TrackExercise")
+     * @ORM\ManyToOne(targetEntity="TrackExercise", inversedBy="juryAttempts")
      * @ORM\JoinColumn(name="exe_id", referencedColumnName="exe_id")
      */
     private $attempt;

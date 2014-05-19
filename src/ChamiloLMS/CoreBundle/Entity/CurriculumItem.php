@@ -51,7 +51,7 @@ class CurriculumItem
     private $maxRepeat;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CurriculumCategory")
+     * @ORM\ManyToOne(targetEntity="CurriculumCategory", inversedBy="items")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=true)
      */
     private $category;

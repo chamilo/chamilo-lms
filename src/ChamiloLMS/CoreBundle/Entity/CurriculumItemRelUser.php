@@ -50,13 +50,13 @@ class CurriculumItemRelUser
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User",  inversedBy="curriculumItems"))
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="curriculumItems"))
      * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", nullable=true)
      */
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CurriculumItem")
+     * @ORM\ManyToOne(targetEntity="CurriculumItem", inversedBy="userItems")
      * @ORM\JoinColumn(name="item_id", referencedColumnName="id", nullable=true)
      */
     private $item;

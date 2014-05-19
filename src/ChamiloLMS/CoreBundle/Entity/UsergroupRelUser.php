@@ -38,14 +38,14 @@ class UsergroupRelUser
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="classes")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
      **/
     private $user;
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="Usergroup")
+     * @ORM\ManyToOne(targetEntity="Usergroup", inversedBy="users")
      * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id")
      **/
     private $class;

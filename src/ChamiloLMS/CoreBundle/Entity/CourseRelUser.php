@@ -99,13 +99,13 @@ class CourseRelUser
     private $cId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="courses")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
      */
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Course")
+     * @ORM\ManyToOne(targetEntity="Course", inversedBy="users")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     private $course;

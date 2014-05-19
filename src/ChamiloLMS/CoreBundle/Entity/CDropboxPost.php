@@ -69,18 +69,14 @@ class CDropboxPost
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="dropBoxReceivedFiles")
      * @ORM\JoinColumn(name="dest_user_id", referencedColumnName="user_id")
      **/
     private $user;
 
-
-
-
-
     /**
      *
-     * @ORM\ManyToOne(targetEntity="CDropboxFile")
+     * @ORM\ManyToOne(targetEntity="CDropboxFile", inversedBy="file")
      *
      * @ORM\JoinColumns({
      *      @ORM\JoinColumn(name="file_id", referencedColumnName="id"),
@@ -88,7 +84,6 @@ class CDropboxPost
      * })
      **/
     private $file;
-
 
     /**
      * @return CDropboxFile

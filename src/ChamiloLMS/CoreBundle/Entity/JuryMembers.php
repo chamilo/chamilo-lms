@@ -49,13 +49,13 @@ class JuryMembers
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Jury")
+     * @ORM\ManyToOne(targetEntity="Jury", inversedBy="members")
      * @ORM\JoinColumn(name="jury_id", referencedColumnName="id")
      */
     private $jury;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Role")
+     * @ORM\ManyToOne(targetEntity="Role", inversedBy="rolesFromJury")
      * @ORM\JoinColumn(name="role_id", referencedColumnName="id")
      */
     private $role;

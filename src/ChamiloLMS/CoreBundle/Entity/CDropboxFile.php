@@ -105,9 +105,8 @@ class CDropboxFile
      */
     private $file;
 
-
     /**
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="dropBoxSentFiles")
      * @ORM\JoinColumn(name="uploader_id", referencedColumnName="user_id")
      **/
     private $userSent;

@@ -790,12 +790,11 @@ class UserManager
             self::change_active_state($user_id, $active);
         }
 
-        global $app;
         // Adding user
         /** @var ChamiloLMS\Entity\User $user */
-        $em = $app['orm.ems']['db_write'];
-        $user = $em->getRepository('ChamiloLMS\Entity\User')->find($user_id);
-        $role = $em->getRepository('ChamiloLMS\Entity\Role')->find($status);
+        $em = Database::getManager()
+        $user = $em->getRepository('ChamiloLMSCoreBundle:User')->find($user_id);
+        $role = $em->getRepository('ChamiloLMSCoreBundle:Role')->find($status);
 
         $user->getRolesObj()->remove(0);
         $user->getRolesObj()->add($role);

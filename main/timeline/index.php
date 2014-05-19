@@ -4,13 +4,13 @@ require_once '../inc/global.inc.php';
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
-use ChamiloLMS\Entity\CTimeline;
+use ChamiloLMSCoreBundle:CTimeline;
 
 class TimeLineController {
 
     function indexAction(Application $app) {
-        $timeline_query = $app['orm.em']->getRepository('ChamiloLMS\Entity\CTimeline')->findAll();
-        $timeline_query = $app['orm.em']->createQuery('SELECT a FROM ChamiloLMS\Entity\CTimeline a');
+        $timeline_query = $app['orm.em']->getRepository('ChamiloLMSCoreBundle:CTimeline')->findAll();
+        $timeline_query = $app['orm.em']->createQuery('SELECT a FROM ChamiloLMSCoreBundle:CTimeline a');
 
         $paginator = new Doctrine\ORM\Tools\Pagination\Paginator($timeline_query, $fetchJoinCollection = true);
         $c = count($paginator);

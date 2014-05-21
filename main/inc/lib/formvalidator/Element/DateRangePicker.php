@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 require_once 'HTML/QuickForm/date.php';
 
 /**
@@ -7,30 +8,34 @@ require_once 'HTML/QuickForm/date.php';
  */
 class DateRangePicker extends HTML_QuickForm_text
 {
-	/**
-	 * Constructor
-	 */
-	public function DateRangePicker($elementName = null, $elementLabel = null, $attributes = null)
-	{
+    /**
+    * Constructor
+    */
+    public function DateRangePicker($elementName = null, $elementLabel = null, $attributes = null)
+    {
         if (!isset($attributes['id'])) {
             $attributes['id'] = $elementName;
         }
         $attributes['class'] = 'span3';
-		HTML_QuickForm_element::HTML_QuickForm_element($elementName, $elementLabel, $attributes);
-		$this->_appendName = true;
-		$this->_type = 'date_range_picker';
-	}
+        HTML_QuickForm_element::HTML_QuickForm_element($elementName, $elementLabel, $attributes);
+        $this->_appendName = true;
+        $this->_type = 'date_range_picker';
+    }
 
-	/**
-	 * HTML code to display this datepicker
-	 */
-	public function toHtml()
-	{
-		$js = $this->getElementJS();
-		return $js.parent::toHtml();
-	}
+    /**
+     * HTML code to display this datepicker
+     */
+    public function toHtml()
+    {
+        $js = $this->getElementJS();
 
-    function setValue($value)
+        return $js.parent::toHtml();
+    }
+
+    /**
+     * @param string $value
+     */
+    public function setValue($value)
     {
         $this->updateAttributes(
             array(
@@ -39,14 +44,25 @@ class DateRangePicker extends HTML_QuickForm_text
         );
     }
 
-	/**
-	 * Get the necessary javascript for this datepicker
-	 */
-	private function getElementJS()
-	{
+    /**
+     * Get the necessary javascript for this datepicker
+     * @return string
+     */
+    private function getElementJS()
+    {
         $js = null;
-
         $id = $this->getAttribute('id');
+
+        $dateRange = $this->getAttribute('value');
+
+        $defaultDates = null;
+        if (!empty($dateRange)) {
+            $dates = $this->parseDateRange($dateRange);
+            $defaultDates = "
+                    startDate: '".$dates['start']."',
+                    endDate: '".$dates['end']."', ";
+        }
+
         //timeFormat: 'hh:mm'
         $js .= "<script>
             $(function() {
@@ -55,6 +71,7 @@ class DateRangePicker extends HTML_QuickForm_text
                     timePicker: true,
                     timePickerIncrement: 30,
                     timePicker12Hour: false,
+                    $defaultDates
                     ranges: {
                          '".addslashes(get_lang('Today'))."': [moment(), moment()],
                          '".addslashes(get_lang('ThisWeek'))."': [moment().weekday(1), moment().weekday(5)],
@@ -73,15 +90,15 @@ class DateRangePicker extends HTML_QuickForm_text
             });
         </script>";
 
-		return $js;
-	}
+        return $js;
+    }
 
     /**
      * @param array $dateRange
-
+     *
      * @return array
      */
-    function parseDateRange($dateRange)
+    public function parseDateRange($dateRange)
     {
         $dates = explode('/', $dateRange);
         $dates = array_map('trim', $dates);
@@ -93,10 +110,11 @@ class DateRangePicker extends HTML_QuickForm_text
     }
 
     /**
-     * @param array $dates result of parseDateRange()
-     * @return bool
-     */
-    function validateDates($dates)
+    * @param array $dates result of parseDateRange()
+    *
+    * @return bool
+    */
+    public function validateDates($dates)
     {
         if (empty($dates['start']) || empty($dates['end'])) {
             return false;

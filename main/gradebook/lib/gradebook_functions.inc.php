@@ -242,7 +242,7 @@ function build_edit_icons_cat($cat, $selectcat)
             }
 
             $modify_icons .= '<a href="gradebook_edit_all.php?&selectcat=' . $cat->get_id() . '">' . Display::return_icon('percentage.png', get_lang('EditAllWeights'), '', ICON_SIZE_SMALL) . '</a>';
-            $modify_icons .= '<a href="gradebook_flatview.php?' . api_get_self() . '&selectcat=' . $cat->get_id() . '">' . Display::return_icon('stats.png', get_lang('FlatView'), '', ICON_SIZE_SMALL) . '</a>';
+            $modify_icons .= '<a href="gradebook_flatview.php?selectcat=' . $cat->get_id() . '">' . Display::return_icon('stats.png', get_lang('FlatView'), '', ICON_SIZE_SMALL) . '</a>';
             $modify_icons .= '&nbsp;<a href="' . api_get_self() . '?visiblecat=' . $cat->get_id() . '&amp;' . $visibility_command . '=&amp;selectcat=' . $selectcat . ' ">' . Display::return_icon($visibility_icon . '.png', get_lang('Visible'), '', ICON_SIZE_SMALL) . '</a>';
 
             //no move ability for root categories

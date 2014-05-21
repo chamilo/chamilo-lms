@@ -40,7 +40,8 @@ class ThematicController {
 
         $check = Security::check_token('request');
         $thematic_id = isset($_REQUEST['thematic_id']) ? intval($_REQUEST['thematic_id']) : null;
-
+        $displayHeader = (!empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header') ? false : true;
+ 
         if ($check) {
             switch ($action) {
                 case 'thematic_add':
@@ -248,9 +249,11 @@ class ThematicController {
         $data['default_thematic_plan_title'] = $thematic->get_default_thematic_plan_title();
 
         $data['action'] = $action;
+        $layoutName = $displayHeader ? 'layout' : 'layout_no_header';
+       
         // render to the view
         $this->view->set_data($data);
-        $this->view->set_layout('layout');
+        $this->view->set_layout($layoutName);
         $this->view->set_template('thematic');
         $this->view->render();
     }
@@ -357,7 +360,9 @@ class ThematicController {
         $thematic = new Thematic();
         $attendance = new Attendance();
         $data = array();
-
+        
+        $displayHeader = (!empty($_REQUEST['display']) && $_REQUEST['display'] === 'no_header') ? false : true;
+  
         // get data for attendance input select		
         $attendance_list = $attendance->get_attendances_list();
         $attendance_select = array();
@@ -365,7 +370,7 @@ class ThematicController {
         foreach ($attendance_list as $attendance_id => $attendance_data) {
             $attendance_select[$attendance_id] = $attendance_data['name'];
         }
-
+       
         $thematic_id = intval($_REQUEST['thematic_id']);
         $thematic_advance_id = intval($_REQUEST['thematic_advance_id']);
 
@@ -459,10 +464,11 @@ class ThematicController {
         $data['attendance_select'] = $attendance_select;
         $data['thematic_advance_data'] = $thematic_advance_data;
         $data['calendar_select'] = $calendar_select;
-
+        $layoutName = $displayHeader ? 'layout' : 'layout_no_header';
+        
         // render to the view
         $this->view->set_data($data);
-        $this->view->set_layout('layout');
+        $this->view->set_layout($layoutName);
         $this->view->set_template('thematic_advance');
         $this->view->render();
     }

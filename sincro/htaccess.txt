@@ -1,3 +1,0 @@
-# We need to allow POST on .html files since we are uploading data using HTTP POST
-# If HTTP POST is disallowed, the test will not functioning properly.
-AddType application/x-httpd-php .php .htm .html

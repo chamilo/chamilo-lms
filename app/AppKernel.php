@@ -17,10 +17,16 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
 
+            new ChamiloLMS\CoreBundle\ChamiloLMSCoreBundle(),
+
+            new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
+
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             // Vendor specifics bundles
             new Sonata\CoreBundle\SonataCoreBundle(),
             new Sonata\BlockBundle\SonataBlockBundle(),
+            new Sonata\MediaBundle\SonataMediaBundle(),
+            new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -28,9 +34,6 @@ class AppKernel extends Kernel
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
         }
-
-        $bundles[] = new ChamiloLMS\CoreBundle\ChamiloLMSCoreBundle();
-        $bundles[] = new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle();
 
         return $bundles;
     }
@@ -50,7 +53,7 @@ class AppKernel extends Kernel
         return $this->rootDir.'/../data/temp/'.$this->environment.'/cache/';
     }
 
-    // Custom
+    // Custom paths
 
     public function getRealRootDir()
     {

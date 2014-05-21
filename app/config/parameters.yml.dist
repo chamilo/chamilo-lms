@@ -2,9 +2,9 @@ parameters:
     database_driver:   pdo_mysql
     database_host:     127.0.0.1
     database_port:     ~
-    database_name:     symfony
+    database_name:     chamilo10
     database_user:     root
-    database_password: ~
+    database_password: root
 
     mailer_transport:  smtp
     mailer_host:       127.0.0.1
@@ -13,3 +13,16 @@ parameters:
 
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    path.data: ~
+    path.temp: ~
+    path.courses: ~
+    path.logs: ~
+
+    session_lifetime: ~
+    security_key: ~
+    password_encryption: sha1
+    deny_delete_users: false
+    login_as_forbidden_globally: false
+    name_order_conventions:
+

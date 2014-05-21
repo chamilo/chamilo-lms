@@ -350,7 +350,7 @@ function email_filter($email) {
  * @return string Some HTML-code with modify-buttons
  */
 function modify_filter($user_id, $url_params, $row) {
-	global $_admins_list, $delete_user_available, $app;
+	global $_admins_list, $delete_user_available;
     $is_admin = false;
 
     $userId = api_get_user_id();

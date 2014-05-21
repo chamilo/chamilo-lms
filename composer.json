@@ -62,7 +62,8 @@
         "jbroadway/urlify": "1.0.0-stable",
         "chamilo/chash": "dev-master",
         "doctrine/migrations": "dev-master",
-        "composer/composer": "1.0.*@dev"
+        "composer/composer": "1.0.*@dev",
+        "sonata-project/media-bundle": "~2.2"
     },
     "scripts": {
         "post-install-cmd": [
@@ -87,7 +88,7 @@
         "symfony-app-dir": "app",
         "symfony-web-dir": "web",
         "incenteev-parameters": {
-            "file": "app/config/parameters.yml"
+            "file": "config/configuration.php"
         },
         "branch-alias": {
             "dev-master": "2.4-dev"

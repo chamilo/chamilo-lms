@@ -1,4 +1,5 @@
 <?php
+
 namespace ChamiloLMS\CoreBundle\Block;
 
 use Symfony\Component\HttpFoundation\Response;

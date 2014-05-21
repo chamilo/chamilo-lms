@@ -261,7 +261,6 @@ class ExtraFieldValue extends Model
             // Insert
             if (empty($field_values)) {
                 if ($extra_field_info['field_loggeable'] == 1) {
-                    global $app;
                     switch($this->type) {
                         case 'question':
                             $extraFieldValue = new QuestionFieldValues();
@@ -320,7 +319,6 @@ class ExtraFieldValue extends Model
             } else {
                 // Update
                 if ($extra_field_info['field_loggeable'] == 1) {
-                    global $app;
                     switch($this->type) {
                         case 'question':
                             $extraFieldValue = Database::getManager()->getRepository('ChamiloLMSCoreBundle:QuestionFieldValues')->find($field_values['id']);

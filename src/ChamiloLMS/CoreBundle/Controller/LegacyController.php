@@ -75,7 +75,6 @@ class LegacyController extends BaseController
             require_once $fileToLoad;
             $out = ob_get_contents();
             ob_end_clean();
-
             // No browser cache when executing an exercise.
             if ($name == 'exercice/exercise_submit.php') {
                 $responseHeaders = array(

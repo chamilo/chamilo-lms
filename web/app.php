@@ -17,6 +17,7 @@ $apcLoader->register(true);
 require_once __DIR__.'/../app/AppKernel.php';
 //require_once __DIR__.'/../app/AppCache.php';
 
+// Chamilo legacy code.
 require_once __DIR__.'/legacy.php';
 
 $kernel = new AppKernel('prod', true);

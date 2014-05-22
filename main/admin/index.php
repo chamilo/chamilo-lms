@@ -7,6 +7,7 @@
 /**
  * Code
  */
+
 // Language files that need to be included.
 $language_file = array('admin', 'tracking','coursebackup');
 
@@ -228,9 +229,20 @@ if (api_is_platform_admin()) {
 		$items[] = array('url'=>'filler.php', 	'label' => get_lang('DataFiller'));
 	}
 	$items[] = array('url'=>'archive_cleanup.php', 	'label' => get_lang('ArchiveDirCleanup'));
-        if (api_get_setting('server_type') === 'test') {
-            $items[] = array('url'=>'system_management.php', 'label' => get_lang('SystemManagement'));
-        }
+    if (api_get_setting('server_type') === 'test') {
+        $items[] = array('url'=>'system_management.php', 'label' => get_lang('SystemManagement'));
+    }
+
+    if (isset($_configuration['db_manager_enabled']) &&
+        $_configuration['db_manager_enabled'] == true &&
+        api_is_global_platform_admin()
+    ) {
+        $host = $_configuration['db_host'];
+        $username = $_configuration['db_user'];
+        $databaseName = $_configuration['main_database'];
+
+        $items[] = array('url'=>"db.php?username=$username&db=$databaseName&server=$host", 'label' => get_lang('Database Manager'));
+    }
 
 	$blocks['settings']['items'] = $items;
     $blocks['settings']['extra'] = null;

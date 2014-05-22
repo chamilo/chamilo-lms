@@ -44,12 +44,12 @@ $course_access_settings 	= CourseManager :: get_access_settings($course_code);
 
 //LOGIC FUNCTIONS
 function is_settings_editable() {
-	return isset($GLOBALS['course_info_is_editable']) && $GLOBALS['course_info_is_editable'];
+    return isset($GLOBALS['course_info_is_editable']) && $GLOBALS['course_info_is_editable'];
 }
 
 /* MAIN CODE */
 if (!$is_allowedToEdit) {
-	api_not_allowed(true);
+    api_not_allowed(true);
 }
 
 $show_delete_watermark_text_message = false;
@@ -78,8 +78,8 @@ $s_sql_course_titular = "SELECT DISTINCT username, lastname, firstname FROM $tbl
 $q_result_titulars = Database::query($s_sql_course_titular);
 
 if (Database::num_rows($q_result_titulars) == 0) {
-	$sql = "SELECT username, lastname, firstname FROM $tbl_user as user, $tbl_admin as admin WHERE admin.user_id=user.user_id ORDER BY ".$target_name." ASC";
-	$q_result_titulars = Database::query($sql);
+    $sql = "SELECT username, lastname, firstname FROM $tbl_user as user, $tbl_admin as admin WHERE admin.user_id=user.user_id ORDER BY ".$target_name." ASC";
+    $q_result_titulars = Database::query($sql);
 }
 
 $a_profs[0] = '-- '.get_lang('NoManager').' --';
@@ -134,7 +134,7 @@ $form->addElement('html', $image_html);
 
 
 $form->add_textfield('title', get_lang('Title'), true, array('class' => 'span6'));
-//$form->applyFilter('title', 'html_filter');
+$form->applyFilter('title', 'html_filter');
 $form->applyFilter('title', 'trim');
 
 //$form->add_textfield('tutor_name', get_lang('Professors'), true, array ('size' => '60'));
@@ -154,9 +154,11 @@ $form->addElement('select', 'category_code', get_lang('Fac'), $categories, array
 $form->addElement('select_language', 'course_language', array(get_lang('Ln'), get_lang('TipLang')));
 
 $form->add_textfield('department_name', get_lang('Department'), false, array('class' => 'span5'));
+$form->applyFilter('department_name', 'html_filter');
 $form->applyFilter('department_name', 'trim');
 
 $form->add_textfield('department_url', get_lang('DepartmentUrl'), false, array('class' => 'span5'));
+$form->applyFilter('department_url', 'html_filter');
 //$form->addRule('tutor_name', get_lang('ThisFieldIsRequired'), 'required');
 
 
@@ -424,7 +426,7 @@ if ($form->validate() && is_settings_editable()) {
 
     //Variables that will be saved in the TABLE_MAIN_COURSE table
     $update_in_course_table = array('title', 'course_language','category_code','department_name', 'department_url','visibility',
-    								'subscribe', 'unsubscribe','tutor_name','course_registration_password', 'legal', 'activate_legal');
+        'subscribe', 'unsubscribe','tutor_name','course_registration_password', 'legal', 'activate_legal');
 
     foreach ($update_values as $index =>$value) {
         $update_values[$index] = Database::escape_string($value);

@@ -356,7 +356,7 @@ function check_user_password($password){
     $user_id = api_get_user_id();
     if ($user_id != strval(intval($user_id)) || empty($password)) { return false; }
     $table_user = Database :: get_main_table(TABLE_MAIN_USER);
-    $password = api_get_encrypted_password($password);
+    $password = Database::escape_string(api_get_encrypted_password($password));
     $sql_password = "SELECT * FROM $table_user WHERE user_id='".$user_id."' AND password='".$password."'";
     $result = Database::query($sql_password);
     return Database::num_rows($result) != 0;

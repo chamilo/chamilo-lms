@@ -104,7 +104,6 @@ class ExtraFieldValue extends Model
                 if (!isset($params[$tempKey])) {
                     $params[$tempKey] = array();
                 }
-                break;
             }
         }
 
@@ -123,8 +122,8 @@ class ExtraFieldValue extends Model
                         case ExtraField::FIELD_TYPE_TAG :
 
                             $old = self::getAllValuesByItemAndField(
-                                $extra_field_info['id'],
-                                $params[$this->handler_id]
+                                $params[$this->handler_id],
+                                $extra_field_info['id']
                             );
 
                             $deleteItems = array();
@@ -149,8 +148,8 @@ class ExtraFieldValue extends Model
                             if (!empty($deleteItems)) {
                                 foreach ($deleteItems as $deleteFieldValue) {
                                     self::deleteValuesByHandlerAndFieldAndValue(
-                                        $extra_field_info['id'],
                                         $params[$this->handler_id],
+                                        $extra_field_info['id'],
                                         $deleteFieldValue
                                     );
                                 }

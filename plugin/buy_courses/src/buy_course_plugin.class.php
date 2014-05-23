@@ -39,7 +39,7 @@ class Buy_CoursesPlugin extends Plugin
         $table = Database::get_main_table(TABLE_BUY_COURSE);
         $sql = "DROP TABLE IF EXISTS $table";
         Database::query($sql);
-
+   
         $table = Database::get_main_table(TABLE_BUY_COURSE_COUNTRY);
         $sql = "DROP TABLE IF EXISTS $table";
         Database::query($sql);

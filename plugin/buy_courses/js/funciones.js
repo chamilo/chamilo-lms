@@ -30,7 +30,7 @@ $(document).ready(function () {
         var vvisible = $(this).parent().parent().prev().prev().children().attr("checked");
         var vprice = $(this).parent().parent().prev().children().attr("value");
         var idcurso = $(this).parent().parent().attr("id");
-        $.post("function/func.php", {tab: "guardar_mod", id: idcurso, visible: vvisible, price: vprice},
+        $.post("function.php", {tab: "save_mod", id: idcurso, visible: vvisible, price: vprice},
             function (data) {
                 if (data.status == "false") {
                     alert("Error database");
@@ -47,7 +47,7 @@ $(document).ready(function () {
     });
 
     $('#sincronizar').click(function (e) {
-        $.post("function/func.php", {tab: "sincronizar"},
+        $.post("function.php", {tab: "sincronizar"},
             function (data) {
                 if (data.status == "false") {
                     alert(data.contenido);
@@ -71,7 +71,7 @@ $(document).ready(function () {
             var vmostrar = "NO";
         }
         var vcategoria = $("#categoria_cursos").attr("value");
-        $.post("function/func.php", {tab: "filtro_cursos", curso: vcurso, pricemin: pmin, pricemax: pmax, mostrar: vmostrar, categoria: vcategoria},
+        $.post("function.php", {tab: "filtro_cursos", curso: vcurso, pricemin: pmin, pricemax: pmax, mostrar: vmostrar, categoria: vcategoria},
             function (data) {
                 if (data.status == "false") {
                     alert(data.contenido);
@@ -88,7 +88,7 @@ $(document).ready(function () {
 
     $("#save_money").click(function (e) {
         var tipo_moneda = $("#tipo_moneda").attr("value");
-        $.post("function/func.php", {tab: "guardar_moneda", moneda: tipo_moneda},
+        $.post("function.php", {tab: "guardar_moneda", moneda: tipo_moneda},
             function (data) {
                 alert(data.contenido);
             }, "json");
@@ -106,7 +106,7 @@ $(document).ready(function () {
         } else {
             var vsandbox = "NO";
         }
-        $.post("function/func.php", {tab: "guardar_paypal", username: name, password: clave, signature: firma, sandbox: vsandbox},
+        $.post("function.php", {tab: "guardar_paypal", username: name, password: clave, signature: firma, sandbox: vsandbox},
             function (data) {
                 alert(data.contenido);
             }, "json");
@@ -122,7 +122,7 @@ $(document).ready(function () {
         if (tname == '' || taccount == '') {
             alert("Complete los campos antes de insertar");
         } else {
-            $.post("function/func.php", {tab: "add_account", name: tname, account: taccount, swift: tswift},
+            $.post("function.php", {tab: "add_account", name: tname, account: taccount, swift: tswift},
                 function (data) {
                     location.reload();
                 }, "json");
@@ -133,7 +133,7 @@ $(document).ready(function () {
 
     $(".delete_account").click(function (e) {
         var vid = $(this).parent().attr("id");
-        $.post("function/func.php", {tab: "delete_account", id: vid},
+        $.post("function.php", {tab: "delete_account", id: vid},
             function (data) {
                 location.reload();
             }, "json");
@@ -143,13 +143,13 @@ $(document).ready(function () {
     });
 
     $("#cancelapedido").click(function (e) {
-        $.post("function/func.php", {tab: "borrar_variables"});
+        $.post("function.php", {tab: "borrar_variables"});
         window.location.replace("list.php");
     });
 
     $(".borrar_pedido").click(function (e) {
         var vid = $(this).parent().attr("id");
-        $.post("function/func.php", {tab: "borrar_pedido", id: vid},
+        $.post("function.php", {tab: "borrar_pedido", id: vid},
             function (data) {
                 location.reload();
             }, "json");
@@ -160,7 +160,7 @@ $(document).ready(function () {
 
     $(".confirmar_pedido").click(function (e) {
         var vid = $(this).parent().attr("id");
-        $.post("function/func.php", {tab: "confirmar_pedido", id: vid},
+        $.post("function.php", {tab: "confirmar_pedido", id: vid},
             function (data) {
                 location.reload();
             }, "json");
@@ -171,7 +171,7 @@ $(document).ready(function () {
 
     $(".setting_tpv").click(function () {
         var vcod = $(this).attr("id");
-        $.post("function/func.php", {tab: "cargar_tpv_configuracion", cod: vcod},
+        $.post("function.php", {tab: "cargar_tpv_configuracion", cod: vcod},
             function (data) {
                 $("#resultado_tpv").html(data.contenido);
                 $("#guardar_datos_tpv").click(function (e) {
@@ -183,7 +183,7 @@ $(document).ready(function () {
                         var selector = '#valor_tpv' + i;
                         array.push($(selector).attr("value"));
                     }
-                    $.post("function/func.php", {tab: "save_tpv", cod: vcod, nump: num, action: vaction, parametros: array},
+                    $.post("function.php", {tab: "save_tpv", cod: vcod, nump: num, action: vaction, parametros: array},
                         function (data) {
                             alert(data.contenido);
                             $("#resultado_tpv").html("");
@@ -197,7 +197,7 @@ $(document).ready(function () {
 
     $(".slt_tpv").change(function () {
         var vcod = $(this).attr("value");
-        $.post("function/func.php", {tab: "activar_tpv", cod: vcod});
+        $.post("function.php", {tab: "activar_tpv", cod: vcod});
     });
 });
 

@@ -4,6 +4,7 @@
  * @package chamilo.plugin.notify
  */
 require_once '../../../main/inc/global.inc.php';
+require_once '../config.php';
 require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
 
 function sincronizar()
@@ -28,9 +29,12 @@ function sincronizar()
     Database::query($sql);
 }
 
-function listado_cursos()
+function listCourses()
 {
-    $sql = "SELECT a.id_course, a.visible, a.price, b.* FROM plugin_buycourses a, course b WHERE a.id_course=b.id;";
+    $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
+    $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+    $sql = "SELECT a.id_course, a.visible, a.price, b.* FROM $tableBuyCourse a, $tableCourse b WHERE a.id_course = b.id;";
+
     $res = Database::query($sql);
     $aux = array();
     while ($row = Database::fetch_assoc($res)) {

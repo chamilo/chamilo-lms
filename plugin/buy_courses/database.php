@@ -10,12 +10,14 @@ $table = Database::get_main_table(TABLE_BUY_COURSE);
 $sql = "CREATE TABLE IF NOT EXISTS $table (
     id INT unsigned NOT NULL auto_increment PRIMARY KEY,
     id_course INT unsigned NOT NULL DEFAULT '0',
+    code VARCHAR(40),
+    title VARCHAR(250),
     visible CHAR(2) NOT NULL DEFAULT '',
     price FLOAT(11,2) NOT NULL DEFAULT '0',
     synchronized CHAR(2) NOT NULL DEFAULT '')";
 Database::query($sql);
-
-$sql = "SELECT id, code, title FROM course";
+$tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+$sql = "SELECT id, code, title FROM $tableCourse";
 $res = Database::query($sql);
 while ($row = Database::fetch_assoc($res)) {
     $presql = "INSERT INTO $table (id_course, code, title, visible) VALUES ('" . $row['id'] . "','" . $row['code'] . "','" . $row['title'] . "','NO')";
@@ -311,23 +313,23 @@ Database::query($sql);
 
 $table = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
 $sql = "CREATE TABLE IF NOT EXISTS $table (
-			cod INT unsigned NOT NULL auto_increment PRIMARY KEY,
-			user_id INT unsigned NOT NULL,
-			name VARCHAR(255) NOT NULL DEFAULT '',
-			course_code VARCHAR(200) NOT NULL DEFAULT '',
-			title VARCHAR(200) NOT NULL DEFAULT '',
-			reference VARCHAR(20) NOT NULL DEFAULT '',
-			price FLOAT(11,2) NOT NULL DEFAULT '0',
-			date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)";
+    cod INT unsigned NOT NULL auto_increment PRIMARY KEY,
+    user_id INT unsigned NOT NULL,
+    name VARCHAR(255) NOT NULL DEFAULT '',
+    course_code VARCHAR(200) NOT NULL DEFAULT '',
+    title VARCHAR(200) NOT NULL DEFAULT '',
+    reference VARCHAR(20) NOT NULL DEFAULT '',
+    price FLOAT(11,2) NOT NULL DEFAULT '0',
+    date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)";
 Database::query($sql);
 
-$table = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
+$table = Database::get_main_table(TABLE_BUY_COURSE_SALE);
 $sql = "CREATE TABLE IF NOT EXISTS $table (
-			cod INT unsigned NOT NULL auto_increment PRIMARY KEY,
-			user_id INT unsigned NOT NULL,
-			course_code VARCHAR(200) NOT NULL DEFAULT '',
-			price FLOAT(11,2) NOT NULL DEFAULT '0',
-			payment_type VARCHAR(100) NOT NULL DEFAULT '',
-			status VARCHAR(20) NOT NULL DEFAULT '',
-			date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)";
+    cod INT unsigned NOT NULL auto_increment PRIMARY KEY,
+    user_id INT unsigned NOT NULL,
+    course_code VARCHAR(200) NOT NULL DEFAULT '',
+    price FLOAT(11,2) NOT NULL DEFAULT '0',
+    payment_type VARCHAR(100) NOT NULL DEFAULT '',
+    status VARCHAR(20) NOT NULL DEFAULT '',
+    date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)";
 Database::query($sql);

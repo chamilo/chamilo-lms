@@ -2,8 +2,17 @@
 require_once '../../../main/inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
 require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
-require_once '../lib/buy_course_plugin.class.php';
+require_once 'buy_course_plugin.class.php';
 require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
+
+$tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
+$tableBuyCourseCountry = Database::get_main_table(TABLE_BUY_COURSE_COUNTRY);
+$tableBuyCoursePaypal = Database::get_main_table(TABLE_BUY_COURSE_PAYPAL);
+$tableBuyCourseTransference = Database::get_main_table(TABLE_BUY_COURSE_TRANSFERENCE);
+$tableBuyCourseTemporal = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
+$tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
+$tableCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+$tableUser = Database::get_main_table(TABLE_MAIN_USER);
 
 $plugin = Buy_CoursesPlugin::create();
 $buy_name = $plugin->get_lang('Buy');
@@ -45,7 +54,7 @@ function quitar_html($cadena)
 }
 
 if ($_REQUEST['tab'] == 'sincronizar') {
-    $sql = "SELECT code,title FROM course;";
+    $sql = "SELECT code,title FROM $tableCourse;";
     $res = Database::query($sql);
     while ($row = Database::fetch_assoc($res)) {
         $aux_code .= $row['code'];
@@ -91,9 +100,15 @@ if ($_REQUEST['tab'] == 'filtro_cursos') {
     }
 
     if ($filtro == '') {
-        $sql = "SELECT a.id_course, a.visible, a.price, b.* FROM plugin_buycourses a, course b WHERE a.id_course=b.id AND a.visible='SI';";
+        $sql = "SELECT a.id_course, a.visible, a.price, b.*
+            FROM $tableBuyCourse a, $tableCourse b
+            WHERE a.id_course = b.id
+            AND a.visible = 'SI';";
     } else {
-        $sql = "SELECT a.id_course, a.visible, a.price, b.* FROM plugin_buycourses a, course b WHERE a.id_course=b.id AND a.visible='SI' AND " . $filtro . ";";
+        $sql = "SELECT a.id_course, a.visible, a.price, b.*
+            FROM $tableBuyCourse a, $tableCourse b
+            WHERE a.id_course=b.id
+            AND a.visible='SI' AND " . $filtro . ";";
     }
 
     //echo $sql;
@@ -101,13 +116,22 @@ if ($_REQUEST['tab'] == 'filtro_cursos') {
     $aux = array();
     while ($row = Database::fetch_assoc($res)) {
         //Comprobamos profesor
-        $sql = "SELECT lastname,firstname FROM course_rel_user a, user b WHERE a.course_code='" . $row['code'] . "' AND a.role<>'' AND a.role<>'NULL' AND a.user_id=b.user_id;";
+        $sql = "SELECT lastname, firstname
+            FROM $tableCourseRelUser a, $tableUser b
+            WHERE a.course_code = '" . $row['code'] . "'
+            AND a.role <> ''
+            AND a.role <> 'NULL'
+            AND a.user_id = b.user_id;";
+
         $tmp = Database::query($sql);
         $fila = Database::fetch_assoc($tmp);
         $row['profesor'] = $fila['firstname'] . ' ' . $fila['lastname'];
         //Comprobamos si el alumno est� matriculado
         if (isset($_SESSION['_user']) || $_SESSION['_user']['user_id'] != '') {
-            $sql = "SELECT 1 FROM course_rel_user WHERE course_code='" . $row['code'] . "' AND user_id='" . $_SESSION['_user']['user_id'] . "';";
+            $sql = "SELECT 1 FROM $tableCourseRelUser
+                WHERE course_code='" . $row['code'] . "'
+                AND user_id='" . $_SESSION['_user']['user_id'] . "';";
+
             $tmp = Database::query($sql);
             if (Database::affected_rows() > 0) {
                 $row['matriculado'] = "SI";
@@ -131,7 +155,6 @@ if ($_REQUEST['tab'] == 'filtro_cursos') {
         }
 
     }
-
 
     foreach ($aux as $curso) { //{% for curso in cursos %}
         $contenido .= '<div class="well_border span8">';
@@ -166,16 +189,14 @@ if ($_REQUEST['tab'] == 'filtro_cursos') {
         $contenido .= '</div>';
     } //{% endfor %}
 
-
     echo json_encode(array("status" => "true", "contenido" => $contenido));
-
 }
 
 if ($_REQUEST['tab'] == 'guardar_moneda') {
     $id = $_REQUEST['moneda'];
-    $sql = "UPDATE plugin_buycourses_countries SET status='0';";
+    $sql = "UPDATE $tableBuyCourseCountry SET status='0';";
     $res = Database::query($sql);
-    $sql = "UPDATE plugin_buycourses_countries SET status='1' WHERE id_country='" . $id . "';";
+    $sql = "UPDATE $tableBuyCourseCountry SET status='1' WHERE id_country='" . $id . "';";
     $res = Database::query($sql);
     if (!res) {
         $contenido = 'Problema al guardar el tipo de moneda: ' . Database::error();
@@ -191,8 +212,13 @@ if ($_REQUEST['tab'] == 'guardar_paypal') {
     $password = mysql_real_escape_string($_REQUEST['password']);
     $signature = mysql_real_escape_string($_REQUEST['signature']);
     $sandbox = mysql_real_escape_string($_REQUEST['sandbox']);
-    $sql = "UPDATE plugin_bc_paypal SET sandbox='" . $sandbox . "', username='" . $username . "', password='" . $password . "', signature='" . $signature . "' WHERE id='1';";
-    //echo $sql;
+    $sql = "UPDATE $tableBuyCoursePaypal
+        SET sandbox = '" . $sandbox . "',
+        username = '" . $username . "',
+        password = '" . $password . "',
+        signature = '" . $signature . "'
+        WHERE id = '1';";
+
     $res = Database::query($sql);
     if (!res) {
         $contenido = 'Problema al guardar los parametros de paypal: ' . Database::error();
@@ -207,9 +233,8 @@ if ($_REQUEST['tab'] == 'add_account') {
     $name = mysql_real_escape_string($_REQUEST['name']);
     $account = mysql_real_escape_string($_REQUEST['account']);
     $swift = mysql_real_escape_string($_REQUEST['swift']);
-    $sql = "INSERT INTO plugin_bc_transf (name, account, swift) VALUES ('" . $name . "','" . $account . "', '" . $swift . "');";
-    //echo $sql;
-
+    $sql = "INSERT INTO $tableBuyCourseTransference (name, account, swift)
+        VALUES ('" . $name . "','" . $account . "', '" . $swift . "');";
 
     $res = Database::query($sql);
     if (!res) {
@@ -223,8 +248,7 @@ if ($_REQUEST['tab'] == 'add_account') {
 
 if ($_REQUEST['tab'] == 'delete_account') {
     $id = substr($_REQUEST['id'], 6);
-    $sql = "DELETE FROM plugin_bc_transf WHERE id='" . $id . "';";
-    //echo $sql;
+    $sql = "DELETE FROM $tableBuyCourseTransference WHERE id='" . $id . "';";
     $res = Database::query($sql);
     if (!res) {
         $contenido = 'Problema al borrar la cuenta: ' . Database::error();
@@ -235,14 +259,17 @@ if ($_REQUEST['tab'] == 'delete_account') {
     }
 }
 
-if ($_REQUEST['tab'] == 'guardar_mod') {
+if ($_REQUEST['tab'] == 'save_mod') {
     $id = substr($_REQUEST['id'], 5);
     $visible = ($_REQUEST['visible'] == "checked") ? ('SI') : ('NO');
     $price = mysql_real_escape_string($_REQUEST['price']);
     $obj = $_REQUEST['obj'];
 
+    $sql = "UPDATE $tableBuyCourse
+        SET visible='" . $visible . "',
+        price='" . $price . "'
+        WHERE id_course='" . $id . "';";
 
-    $sql = "UPDATE plugin_buycourses SET visible='" . $visible . "', price='" . $price . "' WHERE id_course='" . $id . "';";
     $res = Database::query($sql);
     if (!res) {
         $contenido = 'Problema al guardar el mensaje: ' . Database::error();
@@ -269,8 +296,8 @@ if ($_REQUEST['tab'] == 'borrar_variables') {
 
 if ($_REQUEST['tab'] == 'borrar_pedido') {
     $id = substr($_REQUEST['id'], 6);
-    $sql = "DELETE FROM plugin_bc_temporal WHERE cod='" . $id . "';";
-    //echo $sql;
+    $sql = "DELETE FROM $tableBuyCourseTemporal WHERE cod='" . $id . "';";
+
     $res = Database::query($sql);
     if (!res) {
         $contenido = 'Problema al borrar la cuenta: ' . Database::error();
@@ -283,7 +310,7 @@ if ($_REQUEST['tab'] == 'borrar_pedido') {
 
 if ($_REQUEST['tab'] == 'confirmar_pedido') {
     $id = substr($_REQUEST['id'], 6);
-    $sql = "SELECT * FROM plugin_bc_temporal WHERE cod='" . $id . "';";
+    $sql = "SELECT * FROM $tableBuyCourseTemporal WHERE cod='" . $id . "';";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);
 
@@ -299,14 +326,13 @@ if ($_REQUEST['tab'] == 'confirmar_pedido') {
     }
     //Activamos al usuario su cuenta
     if ($seguir) {
-        $TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
         // 1. set account inactive
-        $sql = "UPDATE " . $TABLE_USER . " SET active='1' WHERE user_id='" . $_SESSION['bc_user_id'] . "'";
+        $sql = "UPDATE $tableUser SET active='1' WHERE user_id='" . $_SESSION['bc_user_id'] . "'";
         Database::query($sql);
 
-        $sql = "DELETE FROM plugin_bc_temporal WHERE cod='" . $id . "';";
-        //echo $sql;
+        $sql = "DELETE FROM $tableBuyCourseTemporal WHERE cod='" . $id . "';";
         $res = Database::query($sql);
+
         $contenido = 'Se ha realizado con exito la subscripcion y activacion del usuario';
         echo json_encode(array("status" => "true", "contenido" => $contenido));
     } else {
@@ -347,9 +373,9 @@ if ($_REQUEST['tab'] == 'cargar_tpv_configuracion') {
 
 if ($_REQUEST['tab'] == 'cargar_tpv_configuracion') {
     $cod = $_REQUEST['cod'];
-    $sql = "UDPATE plugin_bc_tpv SET activo='NO'";
+    $sql = "UDPATE plugin_bc_tpv SET status='NO'";
     Database::query($sql);
-    $sql = "UPDATE plugin_bc_tpv SET activo='SI' WHERE cod='" . $cod . "';";
+    $sql = "UPDATE plugin_bc_tpv SET status='SI' WHERE cod='" . $cod . "';";
     Database::query($sql);
 }
 

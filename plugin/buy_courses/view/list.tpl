@@ -62,9 +62,9 @@
 <div class="cleared"></div>
 <div class="btn-toolbar right">
     <a class="ajax btn btn-primary" title=""
-       href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ curso.code }}">{{ 'Description'|get_lang }}</a>
+       href="{{ server }}plugin/buy_courses/src/ajax.php?code={{ curso.code }}">{{ 'Description'|get_lang }}</a>
     {% if curso.matriculado == "NO" %}
-    <a class="btn btn-success" title="" href="{{ server }}plugin/buy_courses/process.php?code={{ curso.id }}">{{
+    <a class="btn btn-success" title="" href="{{ server }}plugin/buy_courses/src/process.php?code={{ curso.id }}">{{
     'Buy'|get_lang }}</a>
 {% endif %}
 </div>

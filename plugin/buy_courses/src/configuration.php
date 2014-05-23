@@ -24,13 +24,13 @@ if ($teacher) {
     $visibilidad[] = get_course_visibility_icon('2');
     $visibilidad[] = get_course_visibility_icon('3');
 
-    $lista_cursos = listado_cursos();
+    $coursesList = listCourses();
     $ruta = api_get_path(WEB_PLUGIN_PATH) . 'buy_courses/resources/message_confirmation.png';
     $ruta2 = api_get_path(WEB_PLUGIN_PATH) . 'buy_courses/resources/save.png';
     $tipo_moneda = busca_moneda();
 
     $tpl->assign('server', $_configuration['root_web']);
-    $tpl->assign('cursos', $lista_cursos);
+    $tpl->assign('cursos', $coursesList);
     $tpl->assign('visibilidad', $visibilidad);
     $tpl->assign('ruta_imagen_ok', $ruta);
     $tpl->assign('ruta_imagen_save', $ruta2);

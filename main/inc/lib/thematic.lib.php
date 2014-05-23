@@ -541,70 +541,62 @@ class Thematic
 		return $final_return;
 	}
 
-	 /**
+	/**
 	 * get thematic advance list
-	 * @param	int		Thematic advance id (optional), get data by thematic advance list
-	 * @param	string	Course code (optional)
-	 * @return	array	data
+	 * @param int $thematic_advance_id Thematic advance id (optional), get data by thematic advance list
+	 * @param string $course_code Course code (optional)
+         * @param bool $force_session_id Force to have a session id
+	 * @return array $data
 	 */
-	 public function get_thematic_advance_list($thematic_advance_id = null, $course_code = null, $force_session_id = false) {	 	// set current course
-	    $course_info = api_get_course_info($course_code);
+        public function get_thematic_advance_list($thematic_advance_id = null, $course_code = null, $force_session_id = false) { // set current course
+            $course_info = api_get_course_info($course_code);
+            $tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
+            $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
 
-        $tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
-        $tbl_thematic = Database::get_course_table(TABLE_THEMATIC);
+            $data = array();
 
-        $data = array();
+            $condition = '';
+            if (isset($thematic_advance_id)) {
+                $thematic_advance_id = intval($thematic_advance_id);
+                $condition = " AND a.id = $thematic_advance_id ";
+            }
 
-	 	$condition = '';
-	 	if (isset($thematic_advance_id)) {
-	 		$thematic_advance_id = intval($thematic_advance_id);
-	 		$condition = " AND a.id = $thematic_advance_id ";
-	 	}
+            $course_id = $course_info['real_id'];
 
-        $course_id = $course_info['real_id'];
+            $sql = "SELECT * FROM $tbl_thematic_advance a WHERE  c_id = $course_id $condition  ORDER BY start_date ";
 
+            $elements = array();
+            if ($force_session_id) {
+                $list = api_get_item_property_by_tool('thematic_advance', $course_info['code'], api_get_session_id());
+                foreach($list as $value) {
+                    $elements[$value['ref']]= $value;
+                }
+            }
 
-	 	/*if ($force_session_id) {
-            $sql = "SELECT a.* FROM $tbl_thematic_advance a INNER JOIN $tbl_thematic t ON t.id = a.thematic_id WHERE 1 $condition AND t.session_id = ".api_get_session_id()." ORDER BY start_date ";
-	 	} else {
-		    $sql = "SELECT * FROM $tbl_thematic_advance a WHERE 1 $condition  ORDER BY start_date ";
-	 	}*/
+            $res = Database::query($sql);
+            if (Database::num_rows($res) > 0) {
+                if (!empty($thematic_advance_id)) {
+                    $data = Database::fetch_array($res);
+                } else {
+                    // group all data group by thematic id
+                    $tmp = array();
+                    while ($row = Database::fetch_array($res, 'ASSOC')) {
+                        $tmp[] = $row['thematic_id'];
+                        if (in_array($row['thematic_id'], $tmp)) {
+                            if ($force_session_id) {
+                                if (in_array($row['id'], array_keys($elements))) {
+                                    $row['session_id'] = $elements[$row['id']]['id_session'];
+                                    $data[$row['thematic_id']][$row['id']] = $row;
+                                }
+                            } else {
+                                $data[$row['thematic_id']][$row['id']] = $row;
+                            }
+                        }
 
-	 	$sql = "SELECT * FROM $tbl_thematic_advance a WHERE  c_id = $course_id $condition  ORDER BY start_date ";
-
-        $elements =  array();
-	 	if ($force_session_id) {
-    	 	$list = api_get_item_property_by_tool('thematic_advance', $course_info['code'], api_get_session_id());
-    	 	foreach($list as $value) {
-    	 	    $elements[$value['ref']]= $value;
-    	 	}
-	 	}
-
-        $res = Database::query($sql);
-		if (Database::num_rows($res) > 0) {
-			if (!empty($thematic_advance_id)) {
-				$data = Database::fetch_array($res);
-			} else {
-				// group all data group by thematic id
-				$tmp = array();
-				while ($row = Database::fetch_array($res, 'ASSOC')) {
-
-					$tmp[] = $row['thematic_id'];
-					if (in_array($row['thematic_id'], $tmp)) {
-					    if ($force_session_id) {
-					        if (in_array($row['id'], array_keys($elements))) {
-					            $row['session_id'] = $elements[$row['id']]['id_session'];
-						        $data[$row['thematic_id']][$row['id']] = $row;
-					        }
-					    } else {
-					        $data[$row['thematic_id']][$row['id']] = $row;
-					    }
-					}
-
-				}
-			}
-		}
-		return $data;
+                    }
+                }
+            }
+            return $data;
 	 }
 
 	/**

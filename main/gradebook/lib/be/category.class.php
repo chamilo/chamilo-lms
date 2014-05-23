@@ -1378,7 +1378,17 @@ class Category implements GradebookItem
 
         return $links;
     }
-
+    public function getCategories($catId)
+    {
+        $tblGradeCategories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $courseInfo = api_get_course_info(api_get_course_id());
+        $courseCode = $courseInfo['code'];
+        $sql='SELECT * FROM '.$tblGradeCategories.' WHERE parent_id = '.intval($catId);
+       
+        $result = Database::query($sql);
+        $allcats = Category::create_category_objects_from_sql_result($result);
+        return $allcats;
+    }
     public function get_item_type()
     {
         return 'C';

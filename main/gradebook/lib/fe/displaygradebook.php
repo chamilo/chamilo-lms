@@ -357,14 +357,24 @@ class DisplayGradebook
      * @param int $showtree '1' will show the browse tree and naviation buttons
      * @param boolean $is_course_admin
      * @param boolean $is_platform_admin
-     * @param boolean Whether to show or not the link to add a new qualification (we hide it in case of the course-embedded tool where we have only one calification per course or session)
-     * @param boolean Whether to show or not the link to add a new item inside the qualification (we hide it in case of the course-embedded tool where we have only one calification per course or session)
+     * @param boolean Whether to show or not the link to add a new qualification
+     * (we hide it in case of the course-embedded tool where we have only one
+     * calification per course or session)
+     * @param boolean Whether to show or not the link to add a new item inside
+     * the qualification (we hide it in case of the course-embedded tool
+     * where we have only one calification per course or session)
      * @return void Everything is printed on screen upon closing
      */
     static function display_header_gradebook(
-    $catobj, $showtree, $selectcat, $is_course_admin, $is_platform_admin, $simple_search_form, $show_add_qualification = true, $show_add_link = true
-    )
-    {
+        $catobj,
+        $showtree,
+        $selectcat,
+        $is_course_admin,
+        $is_platform_admin,
+        $simple_search_form,
+        $show_add_qualification = true,
+        $show_add_link = true
+    ) {
         // Student.
         $status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
         $objcat = new Category();
@@ -375,6 +385,7 @@ class DisplayGradebook
 
         //@todo move these in a function
         $sum_categories_weight_array = array();
+
         if (isset($catobj) && !empty($catobj)) {
             $categories = Category::load(null, null, null, $catobj->get_id());
             if (!empty($categories)) {
@@ -388,10 +399,10 @@ class DisplayGradebook
 
         if (!$is_course_admin && $status <> 1 && $selectcat <> 0) {
             $user_id = api_get_user_id();
+
             $catcourse = Category::load($catobj->get_id());
             $main_weight = $catcourse[0]->get_weight();
             $scoredisplay = ScoreDisplay :: instance();
-
             // generating the total score for a course
             $allevals = $catcourse[0]->get_evaluations($user_id, true);
             $alllinks = $catcourse[0]->get_links($user_id, true);
@@ -409,13 +420,13 @@ class DisplayGradebook
                 $divide = ( ($score[1]) == 0 ) ? 1 : $score[1];
 
                 $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
-                //$item_value     = $score[0]/$divide;
                 $item_value = $score[0] / $divide * $item->get_weight() * $sub_cat_percentage / $main_weight;
-                $item_value_total +=$item_value;
+                $item_value_total += $item_value;
             }
             $item_total = $main_weight;
 
             $total_score = array($item_value_total, $item_total);
+
             $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
 
             if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search']))) {

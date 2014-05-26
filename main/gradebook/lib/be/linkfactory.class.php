@@ -1,16 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * Script
- * @package chamilo.gradebook
- */
-/**
- * Init
- */
-// To add your new link type here:
-// - define a unique type id
-// - add include
-// - change create() and get_all_types()
 
 require_once 'gradebookitem.class.php';
 require_once 'abstractlink.class.php';
@@ -24,6 +13,7 @@ require_once 'attendancelink.class.php';
 require_once 'surveylink.class.php';
 
 /**
+ * Class LinkFactory
  * Factory for link objects
  * @author Bert Steppé
  * @package chamilo.gradebook
@@ -32,18 +22,33 @@ class LinkFactory
 {
 	/**
 	 * Retrieve links and return them as an array of extensions of AbstractLink.
-	 * @param $id link id
-	 * @param $type link type
-	 * @param $ref_id reference id
-	 * @param $user_id user id (link owner)
-	 * @param $course_code course code
-	 * @param $category_id parent category
-	 * @param $visible visible
+	 * @param int $id link id
+	 * @param int $type link type
+	 * @param int $ref_id reference id
+	 * @param int $user_id user id (link owner)
+	 * @param string $course_code course code
+	 * @param int $category_id parent category
+	 * @param int $visible visible
 	 */
-	public static function load($id = null, $type = null, $ref_id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null)
-    {
-		return AbstractLink::load($id, $type, $ref_id, $user_id, $course_code, $category_id, $visible);
-	}
+    public static function load(
+        $id = null,
+        $type = null,
+        $ref_id = null,
+        $user_id = null,
+        $course_code = null,
+        $category_id = null,
+        $visible = null
+    ) {
+        return AbstractLink::load(
+            $id,
+            $type,
+            $ref_id,
+            $user_id,
+            $course_code,
+            $category_id,
+            $visible
+        );
+    }
 
 	/**
 	 * Get the link object referring to an evaluation

@@ -131,18 +131,22 @@ class Evaluation implements GradebookItem
 		$this->locked = $locked;
 	}
 
-
-    // CRUD FUNCTIONS
-
 	/**
 	 * Retrieve evaluations and return them as an array of Evaluation objects
-	 * @param $id evaluation id
-	 * @param $user_id user id (evaluation owner)
-	 * @param $course_code course code
-	 * @param $category_id parent category
+	 * @param int $id evaluation id
+	 * @param int $user_id user id (evaluation owner)
+	 * @param string $course_code course code
+	 * @param int $category_id parent category
 	 * @param $visible visible
 	 */
-	public static function load ($id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null, $locked = null) {
+    public static function load(
+        $id = null,
+        $user_id = null,
+        $course_code = null,
+        $category_id = null,
+        $visible = null,
+        $locked = null
+    ) {
     	$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 		$sql = 'SELECT * FROM '.$tbl_grade_evaluations;
 		$paramcount = 0;
@@ -178,14 +182,16 @@ class Evaluation implements GradebookItem
 			if ($paramcount != 0) $sql .= ' AND';
 			else $sql .= ' WHERE';
 			$sql .= ' locked = '.intval($locked);
-			$paramcount ++;
 		}
+
 		$result = Database::query($sql);
 		$alleval = Evaluation::create_evaluation_objects_from_sql_result($result);
+
 		return $alleval;
 	}
 
-    private static function create_evaluation_objects_from_sql_result($result) {
+    private static function create_evaluation_objects_from_sql_result($result)
+    {
     	$alleval=array();
     	if (Database::num_rows($result)) {
     		while ($data = Database::fetch_array($result)) {

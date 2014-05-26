@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
+ * Class AbstractLink
  * Defines a gradebook AbstractLink object.
  * To implement specific links,
  * extend this class and define a type in LinkFactory.
@@ -8,15 +10,10 @@
  * @author Bert Steppé
  * @author Julio Montoya <gugli100@gmail.com> security improvements
  * @package chamilo.gradebook
- */
-/**
- * Class
  * @package chamilo.gradebook
  */
 abstract class AbstractLink implements GradebookItem
 {
-    // PROPERTIES
-
     protected $id;
     protected $type;
     protected $ref_id;
@@ -27,16 +24,12 @@ abstract class AbstractLink implements GradebookItem
     protected $weight;
     protected $visible;
     protected $session_id;
-    public    $course_id;
+    public $course_id;
 
-    // CONSTRUCTORS
-
-    function __construct()
+    public function __construct()
     {
         $this->course_id = api_get_course_int_id();
     }
-
-    // GETTERS AND SETTERS
 
     public function get_id()
     {
@@ -145,26 +138,38 @@ abstract class AbstractLink implements GradebookItem
         $this->session_id = $id;
     }
 
-    public function set_locked ($locked)
+    /**
+     * @param $locked
+     */
+    public function set_locked($locked)
     {
         $this->locked = $locked;
     }
 
+    /**
+     * @return int
+     */
     public function getCourseId()
     {
         return $this->course_id;
     }
 
-    // CRUD FUNCTIONS
-
     /**
      * Retrieve links and return them as an array of extensions of AbstractLink.
      * To keep consistency, do not call this method but LinkFactory::load instead.
      */
-    public static function load ($id = null, $type = null, $ref_id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null)
+    public static function load(
+        $id = null,
+        $type = null,
+        $ref_id = null,
+        $user_id = null,
+        $course_code = null,
+        $category_id = null,
+        $visible = null
+    )
     {
         $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $sql='SELECT * FROM '.$tbl_grade_links;
+        $sql = 'SELECT * FROM '.$tbl_grade_links;
         $paramcount = 0;
         if (isset ($id)) {
             $sql.= ' WHERE id = '.Database::escape_string($id);
@@ -184,9 +189,9 @@ abstract class AbstractLink implements GradebookItem
         }
         if (isset ($user_id)) {
             if ($paramcount != 0) {
-            $sql .= ' AND';
+                $sql .= ' AND';
             }else {
-             $sql .= ' WHERE';
+                $sql .= ' WHERE';
             }
             $sql .= ' user_id = '.intval($user_id);
             $paramcount ++;
@@ -216,7 +221,6 @@ abstract class AbstractLink implements GradebookItem
                  $sql .= ' WHERE';
             }
             $sql .= ' visible = '.intval($visible);
-            $paramcount ++;
         }
 
         $result = Database::query($sql);
@@ -230,8 +234,8 @@ abstract class AbstractLink implements GradebookItem
      */
     private static function create_objects_from_sql_result($result)
     {
-        $links=array();
-        while ($data=Database::fetch_array($result)) {
+        $links = array();
+        while ($data = Database::fetch_array($result)) {
             $link = LinkFactory::create($data['type']);
             $link->set_id($data['id']);
             $link->set_type($data['type']);

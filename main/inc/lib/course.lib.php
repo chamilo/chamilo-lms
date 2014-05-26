@@ -4359,7 +4359,7 @@ class CourseManager
         $row = Database::fetch_row($res);
         return $row[0];
     }
-    
+
     /**
      * Get availab le courses count
      * @param int Access URL ID (optional)
@@ -4375,7 +4375,7 @@ class CourseManager
         if (!empty($specialCourseList)) {
             $withoutSpecialCourses = ' AND c.code NOT IN ("'.implode('","',$specialCourseList).'")';
         }
-        
+
         if (!empty($accessUrlId) && $accessUrlId == intval($accessUrlId)) {
             $sql = "SELECT count(id) FROM $tableCourse c, $tableCourseRelAccessUrl u WHERE c.code = u.course_code AND u.access_url_id = $accessUrlId AND c.visibility != 0 AND c.visibility != 4 $withoutSpecialCourses";
         }

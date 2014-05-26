@@ -3781,7 +3781,12 @@ class Exercise
      *  Checks if the exercise is visible due a lot of conditions - visibility, time limits, student attempts
      * @return bool true if is active
      */
-    public function is_visible($lp_id = 0, $lp_item_id = 0 , $lp_item_view_id = 0, $filter_by_admin = true) {
+    public function is_visible(
+        $lp_id = 0,
+        $lp_item_id = 0,
+        $lp_item_view_id = 0,
+        $filter_by_admin = true
+    ) {
         //1. By default the exercise is visible
         $is_visible = true;
         $message = null;
@@ -3836,28 +3841,50 @@ class Exercise
                 }
             }
             if ($is_visible == false && $this->start_time != '0000-00-00 00:00:00' && $this->end_time != '0000-00-00 00:00:00') {
-                $message =  sprintf(get_lang('ExerciseWillBeActivatedFromXToY'), api_convert_and_format_date($this->start_time), api_convert_and_format_date($this->end_time));
+                $message = sprintf(
+                    get_lang('ExerciseWillBeActivatedFromXToY'),
+                    api_convert_and_format_date($this->start_time),
+                    api_convert_and_format_date($this->end_time)
+                );
             }
         }
 
         // 4. We check if the student have attempts
+        $exerciseAttempts = $this->selectAttempts();
         if ($is_visible) {
-            if ($this->selectAttempts() > 0) {
-                $attempt_count = get_attempt_count_not_finished(api_get_user_id(), $this->id, $lp_id, $lp_item_id, $lp_item_view_id);
+            if ($exerciseAttempts > 0) {
 
-                if ($attempt_count >= $this->selectAttempts()) {
-                    $message = sprintf(get_lang('ReachedMaxAttempts'), $this->name, $this->selectAttempts());
+                $attempt_count = get_attempt_count_not_finished(
+                    api_get_user_id(),
+                    $this->id,
+                    $lp_id,
+                    $lp_item_id,
+                    $lp_item_view_id
+                );
+
+                if ($attempt_count >= $exerciseAttempts) {
+                    $message = sprintf(
+                        get_lang('ReachedMaxAttempts'),
+                        $this->name,
+                        $exerciseAttempts
+                    );
                     $is_visible = false;
                 }
             }
         }
+
         if (!empty($message)){
-            $message = Display :: return_message($message, 'warning', false);
+            $message = Display::return_message($message, 'warning', false);
         }
-        return array('value' => $is_visible, 'message' => $message);
+
+        return array(
+            'value' => $is_visible,
+            'message' => $message
+        );
     }
 
-    function added_in_lp() {
+    public function added_in_lp()
+    {
         $TBL_LP_ITEM	= Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT max_score FROM $TBL_LP_ITEM WHERE c_id = ".$this->course_id." AND item_type = '".TOOL_QUIZ."' AND path = '".$this->id."'";
         $result = Database::query($sql);

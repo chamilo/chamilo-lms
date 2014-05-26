@@ -558,7 +558,11 @@ class Category implements GradebookItem
         }
 
         $gradebook= new Gradebook();
-        $gradebook->update_skills_to_gradebook($this->id, $this->get_skills(false));
+        $gradebook->update_skills_to_gradebook(
+            $this->id,
+            $this->get_skills(false),
+            false
+        );
     }
 
     /**

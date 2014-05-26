@@ -479,8 +479,9 @@ class AppPlugin
             foreach ($pluginList as $obj) {
                 $pluginName = $obj->get_name();
                 $plugin_path = api_get_path(SYS_PLUGIN_PATH).$pluginName.'/plugin.php';
+
                 if (file_exists($plugin_path)) {
-                    require_once $plugin_path;
+                    require $plugin_path;
                     if (isset($plugin_info) && isset($plugin_info['plugin_class'])) {
                         $obj->course_install($courseId);
                     }

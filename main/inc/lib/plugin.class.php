@@ -314,18 +314,22 @@ class Plugin
         if (empty($courseId)) {
             return false;
         }
-        // Ads course settings.
+
+        // Adding course settings.
         if (!empty($this->course_settings)) {
             foreach ($this->course_settings as $setting) {
                 $variable = Database::escape_string($setting['name']);
                 $value ='';
+
                 if (isset($setting['init_value'])) {
                     $value = Database::escape_string($setting['init_value']);
                 }
+
                 $type = 'textfield';
                 if (isset($setting['type'])) {
                     $type = Database::escape_string($setting['type']);
                 }
+
                 if (isset($setting['group'])) {
                     $group = Database::escape_string($setting['group']);
                     $sql = "SELECT value FROM $t_course

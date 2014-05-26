@@ -1366,6 +1366,10 @@ class Category implements GradebookItem
             $course_code = api_get_course_id();
         }
 
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
+        }
+
         // no links in root or course independent categories
         if ($this->id == 0) {
         } elseif (isset($stud_id)) {
@@ -1393,7 +1397,11 @@ class Category implements GradebookItem
         }
 
         if ($recursive) {
-            $subcats = $this->get_subcategories($stud_id, $course_code);
+            $subcats = $this->get_subcategories(
+                $stud_id,
+                $course_code,
+                $sessionId
+            );
             if (!empty($subcats)) {
                 foreach ($subcats as $subcat) {
                     $sublinks = $subcat->get_links($stud_id, false, $course_code, $sessionId);

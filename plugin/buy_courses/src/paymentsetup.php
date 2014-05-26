@@ -16,11 +16,11 @@ $teacher = api_is_platform_admin();
 api_protect_course_script(true);
 
 if ($teacher) {
-    // SINCRONIZAR TABLA DE CURSOS CON TABLA DEL PLUGIN
-    $lista_monedas = listado_monedas();
+    // Sync course table with the plugin
+    $listCurrency = listCurrency();
 
-    $param_paypal = parametros_paypal();
-    $param_transf = parametros_transf();
+    $paypalParams = paypalParameters();
+    $transferenceParams = transferenceParameters();
 
     $ruta = api_get_path(WEB_PLUGIN_PATH) . 'buy_courses/resources/message_confirmation.png';
     $ruta2 = api_get_path(WEB_PLUGIN_PATH) . 'buy_courses/resources/save.png';
@@ -34,11 +34,11 @@ if ($teacher) {
     $transference_enable = $plugin->get('transference_enable');
 
     $tpl->assign('server', $_configuration['root_web']);
-    $tpl->assign('monedas', $lista_monedas);
-    $tpl->assign('paypal', $param_paypal);
-    $tpl->assign('transferencia', $param_transf);
-    $tpl->assign('ruta_imagen_ok', $ruta);
-    $tpl->assign('ruta_imagen_save', $ruta2);
+    $tpl->assign('currencies', $listCurrency);
+    $tpl->assign('paypal', $paypalParams);
+    $tpl->assign('transferencia', $transferenceParams);
+    $tpl->assign('confirmation_img', $ruta);
+    $tpl->assign('save_img', $ruta2);
     $tpl->assign('ruta_more', $ruta3);
     $tpl->assign('ruta_borrar', $ruta4);
     $tpl->assign('ruta_ver', $ruta5);

@@ -328,7 +328,6 @@ if ($form->validate()) {
     Session::write('bc_user', $_user);
     header('Location:process.php');
 } else {
-
     Display :: display_header($tool_name);
     echo Display::page_header($tool_name);
     echo $content;

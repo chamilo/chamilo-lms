@@ -15,7 +15,7 @@ table td.ta-center, table th.ta-center {
     vertical-align: middle;
 }
 
-#tabla_cursos td input.price, #tabla_trasferencia td input, #tipo_moneda {
+#tabla_cursos td input.price, #tabla_trasferencia td input, #currency_type {
     margin: 0;
 }
 

@@ -23,13 +23,13 @@
                 <td class="ta-center">{{ pedido.reference }}</td>
                 <td>{{ pedido.name }}</td>
                 <td>{{ pedido.title }}</td>
-                <td>{{ pedido.price }} {{ moneda }}</td>
+                <td>{{ pedido.price }} {{ currency }}</td>
                 <td class="ta-center">{{ pedido.date }}</td>
                 <td class="ta-center" id="pedido{{ pedido.cod }}">
-                    <img src="{{ ruta_imagen_ok }}" alt="ok" class="cursor confirmar_pedido"
+                    <img src="{{ confirmation_img }}" alt="ok" class="cursor confirm_order"
                          title="Subscribir al usuario"/>
                     &nbsp;&nbsp;
-                    <img src="{{ ruta_imagen_borrar }}" alt="borrar" class="cursor borrar_pedido"
+                    <img src="{{ ruta_imagen_borrar }}" alt="borrar" class="cursor clear_order"
                          title="Eliminar el pedido"/>
                 </td>
             </tr>

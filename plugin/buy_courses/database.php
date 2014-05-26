@@ -12,9 +12,9 @@ $sql = "CREATE TABLE IF NOT EXISTS $table (
     id_course INT unsigned NOT NULL DEFAULT '0',
     code VARCHAR(40),
     title VARCHAR(250),
-    visible CHAR(2) NOT NULL DEFAULT '',
+    visible int(1),
     price FLOAT(11,2) NOT NULL DEFAULT '0',
-    synchronized CHAR(2) NOT NULL DEFAULT '')";
+    sync int(1))";
 Database::query($sql);
 $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
 $sql = "SELECT id, code, title FROM $tableCourse";

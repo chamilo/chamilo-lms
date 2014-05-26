@@ -16,7 +16,7 @@ require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
 $sql = "SELECT * FROM plugin_bc_paypal WHERE id='1';";
 $res = Database::query($sql);
 $row = Database::fetch_assoc($res);
-$pruebas = ($row['sandbox'] == "SI") ? (true) : (false);
+$pruebas = ($row['sandbox'] == "YES") ? true: false;
 $paypal_username = $row['username'];
 $paypal_password = $row['password'];
 $paypal_firma = $row['signature'];
@@ -99,14 +99,14 @@ if (!isset($_POST['paymentOption'])) {
 
     $tpl = new Template('Tipo de pago');
 
-    $code = $_SESSION['bc_curso_code'];
-    $infocurso = info_curso($code);
+    $code = $_SESSION['bc_course_code'];
+    $courseInfo = courseInfo($code);
 
-    $tpl->assign('curso', $infocurso);
+    $tpl->assign('curso', $courseInfo);
     $tpl->assign('server', $_configuration['root_web']);
-    $tpl->assign('title', $_SESSION['bc_curso_title']);
+    $tpl->assign('title', $_SESSION['bc_course_title']);
     $tpl->assign('price', $_SESSION['Payment_Amount']);
-    $tpl->assign('moneda', $_SESSION['bc_tipomoneda']);
+    $tpl->assign('currency', $_SESSION['bc_currency_type']);
     if (!isset($_SESSION['_user'])) {
         $tpl->assign('name', $_SESSION['bc_user']['firstName'] . ' ' . $_SESSION['bc_user']['lastName']);
         $tpl->assign('email', $_SESSION['bc_user']['mail']);
@@ -221,7 +221,7 @@ if (!isset($_POST['paymentOption'])) {
                 //echo "Se ha realizado la compra correctamente";
 
                 $user_id = $_SESSION['bc_user_id']; //api_get_user_id();
-                $course_code = $_SESSION['bc_curso_codetext'];
+                $course_code = $_SESSION['bc_course_codetext'];
                 $all_course_information = CourseManager::get_course_information($course_code);
 
                 if (CourseManager::subscribe_user($user_id, $course_code)) {
@@ -232,13 +232,13 @@ if (!isset($_POST['paymentOption'])) {
                         CourseManager::email_to_tutor($user_id, $course_code, $send_to_tutor_also = true);
                     }
                     $url = Display::url($all_course_information['title'], api_get_course_url($course_code));
-                    $_SESSION['bc_mensaje'] = 'EnrollToCourseXSuccessful';
+                    $_SESSION['bc_message'] = 'EnrollToCourseXSuccessful';
                     $_SESSION['bc_url'] = $url;
-                    $_SESSION['bc_exito'] = true;
+                    $_SESSION['bc_success'] = true;
                     //$message = sprintf($plugin->get_lang('EnrollToCourseXSuccessful'), $url);
                 } else {
-                    $_SESSION['bc_mensaje'] = 'ErrorContactPlatformAdmin';
-                    $_SESSION['bc_exito'] = false;
+                    $_SESSION['bc_message'] = 'ErrorContactPlatformAdmin';
+                    $_SESSION['bc_success'] = false;
                     //$message = $plugin->get_lang('ErrorContactPlatformAdmin');
                 }
                 //Activamos al usuario su cuenta
@@ -288,9 +288,9 @@ if (!isset($_POST['paymentOption'])) {
 
                 //Eliminamos las variables
                 unset($_SESSION['bc_user_id']);
-                unset($_SESSION['bc_curso_code']);
-                unset($_SESSION['bc_curso_codetext']);
-                unset($_SESSION['bc_curso_title']);
+                unset($_SESSION['bc_course_code']);
+                unset($_SESSION['bc_course_codetext']);
+                unset($_SESSION['bc_course_title']);
                 unset($_SESSION['bc_user']);
                 unset($_SESSION["Payment_Amount"]);
                 unset($_SESSION["sec_token"]);
@@ -300,9 +300,9 @@ if (!isset($_POST['paymentOption'])) {
                 unset($_SESSION['TOKEN']);
                 header('Location:list.php');
             } else {
-                $_SESSION['bc_mensaje'] = 'Cancelacionpedido';
-                unset($_SESSION['bc_curso_code']);
-                unset($_SESSION['bc_curso_title']);
+                $_SESSION['bc_message'] = 'CancelOrder';
+                unset($_SESSION['bc_course_code']);
+                unset($_SESSION['bc_course_title']);
                 unset($_SESSION["Payment_Amount"]);
                 unset($_SESSION["currencyCodeType"]);
                 unset($_SESSION["PaymentType"]);
@@ -316,10 +316,10 @@ if (!isset($_POST['paymentOption'])) {
             $ErrorShortMsg = urldecode($resArray["L_SHORTMESSAGE0"]);
             $ErrorLongMsg = urldecode($resArray["L_LONGMESSAGE0"]);
             $ErrorSeverityCode = urldecode($resArray["L_SEVERITYCODE0"]);
-            $_SESSION['bc_mensaje'] = 'ErrorContactPlatformAdmin';
-            unset($_SESSION['bc_curso_code']);
-            unset($_SESSION['bc_curso_codetext']);
-            unset($_SESSION['bc_curso_title']);
+            $_SESSION['bc_message'] = 'ErrorContactPlatformAdmin';
+            unset($_SESSION['bc_course_code']);
+            unset($_SESSION['bc_course_codetext']);
+            unset($_SESSION['bc_course_title']);
             unset($_SESSION["Payment_Amount"]);
             unset($_SESSION["currencyCodeType"]);
             unset($_SESSION["PaymentType"]);

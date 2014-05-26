@@ -1,27 +1,29 @@
 <?php
-/**
- *
- * @copyright (c) 2012 University of Geneva
- * @license GNU General Public License - http://www.gnu.org/copyleft/gpl.html
- * @author Laurent Opprecht <laurent@opprecht.info>
- */
-
 //Needed in order to show the plugin title
-$strings['plugin_title'] = "Buy Courses";
+$strings['plugin_title'] = "Comprar cursos";
 $strings['plugin_comment'] = "Configurar precios, tipos de pago, visibilidad de cursos.";
 
 $strings['Visible'] = "Mostrar en el listado";
 $strings['Options'] = "Opciones";
 $strings['Price'] = "Precio";
-$strings['sincronizar'] = "Sincronizar cursos de la base de datos";
+$strings['SyncCourseDatabase'] = "Sincronizar cursos de la base de datos";
 
 $strings['Private'] = "Privado - acceso autorizado s&oacute;lo para los miembros del curso";
 $strings['CourseVisibilityClosed'] = "Cerrado - no hay acceso a este curso";
 $strings['OpenToThePlatform'] = "Abierto - acceso autorizado s&oacute;lo para los usuarios registrados en la plataforma";
 $strings['OpenToTheWorld'] = "P&uacute;blico - acceso autorizado a cualquier persona";
 
+$strings['bc_setting_courses_available'] = "Configuraci&oacute;n de cursos disponibles";
+$strings['bc_setting_pay'] = "Configuraci&oacute;n pagos";
+
 $strings['Description'] = "Descripci&oacute;n";
 $strings['Buy'] = "Comprar";
+$strings['Filtro_buscar'] = "Filtro de busqueda";
+$strings['Curso'] = "Curso";
+$strings['Price_Maximum'] = "Precio mayor de";
+$strings['Price_Minimum'] = "Precio menor de";
+$strings['Mostrar_disponibles'] = "Mostrar cursos disponibles";
+$strings['Categorias'] = "Categorias";
 
 $strings['paypal_enable'] = "Habilitar PayPal";
 $strings['tarjet_credit_enable'] = "Habilitar TPV";
@@ -43,3 +45,8 @@ $strings['bc_pagos_index'] = 'Configuraci�n pagos';
 $strings['bc_pending'] = 'Pedidos pendientes de pago';
 
 $strings['Ref_pedido'] = 'Referencia del pedido';
+$strings['transferencia_bancaria'] = 'Transferencia Bancaria';
+$strings['paypal'] = 'PayPal';
+$strings['confirmar_compra'] = 'Confirmar compra de curso';
+
+$strings['The_User_Is_Already_Registered'] = 'El usuario ya está registrado';

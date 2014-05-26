@@ -6,7 +6,7 @@
         <div id="course_category_well" class="well">
             <ul class="nav nav-list">
                 <li class="nav-header"><h4>{{ 'Filtro_buscar'|get_lang }}:</h4></li>
-                <li class="nav-header">{{ 'Curso'|get_lang }}:</li>
+                <li class="nav-header">{{ 'Course'|get_lang }}:</li>
                 <li><input type="text" id="course_name" style="width:95%"/></li>
                 <li class="nav-header">{{ 'Price_Minimum'|get_lang }}: <input type="text" id="price_min" class="span1"/>
                 </li>
@@ -29,56 +29,46 @@
                         </div>
                         </div>
                         <div class="span9" id="resultado_cursos">
-                        {% if rmensaje == "SI" %}
+                        {% if rmessage == "YES" %}
                         <div class="{{ estilo }}">{{ mensaje }}
-        </div>
-        {% endif %}
-        {% for curso in cursos %}
+                        </div>
+                        {% endif %}
+        {% for course in courses %}
         <div class="well_border span8">
         <div class="row">
         <div class="span">
         <div class="thumbnail">
-        <a class="ajax" rel="gb_page_center[778]" title="" href="{{ server }}plugin/buy_courses/function/ajax.php?code={
-        { curso.code }}">
-        <img alt="" src="{{ server }}{{ curso.imagen_curso }}">
+        <a class="ajax" rel="gb_page_center[778]" title="" href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ course.code }}">
+        <img alt="" src="{{ server }}{{ course.course_img }}">
         </a>
     </div>
 </div>
 <div class="span4">
     <div class="categories-course-description">
-        <h3>{{ curso.title }}</h3>
-        <h5>Profesor: {{ curso.profesor }}</h5>
+        <h3>{{ course.title }}</h3>
+        <h5>{{ 'Teacher'|get_lang }}: {{ course.teacher }}</h5>
     </div>
-    {% if curso.matriculado == "SI" %}
-    <span class="label label-info">{{ 'bc_registrado'|get_lang }}</span>
+    {% if course.enrolled == "YES" %}
+    <span class="label label-info">{{ 'TheUserIsAlreadyRegisteredInTheCourse'|get_lang }}</span>
     {% endif %}
-    {% if curso.matriculado == "TMP" %}
+    {% if course.enrolled == "TMP" %}
     <span class="label label-warning">{{ 'bc_tmp_registrado'|get_lang }}</span>
     {% endif %}
     </div>
     <div class="span right">
-    <div class="sprice right">{{ curso.price }} {{ moneda }}
+    <div class="sprice right">{{ course.price }} {{ currency }}
 </div>
 <div class="cleared"></div>
 <div class="btn-toolbar right">
     <a class="ajax btn btn-primary" title=""
-       href="{{ server }}plugin/buy_courses/src/ajax.php?code={{ curso.code }}">{{ 'Description'|get_lang }}</a>
-    {% if curso.matriculado == "NO" %}
-    <a class="btn btn-success" title="" href="{{ server }}plugin/buy_courses/src/process.php?code={{ curso.id }}">{{
-    'Buy'|get_lang }}</a>
-{% endif %}
+       href="{{ server }}plugin/buy_courses/src/ajax.php?code={{ course.code }}">{{ 'Description'|get_lang }}</a>
+    {% if course.enrolled == "NO" %}
+    <a class="btn btn-success" title="" href="{{ server }}plugin/buy_courses/src/process.php?code={{ course.id }}">{{'Buy'|get_lang }}</a>
+    {% endif %}
 </div>
 </div>
 </div>
 </div>
 {% endfor %}
 </div>
-
-
-
-
-
-
-
-
 </div>

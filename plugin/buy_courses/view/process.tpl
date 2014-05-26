@@ -25,24 +25,23 @@
                     <div class="thumbnail">
                         <a class="ajax" rel="gb_page_center[778]" title=""
                            href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ curso.code }}">
-                            <img alt="" src="{{ server }}{{ curso.imagen_curso }}">
+                            <img alt="" src="{{ server }}{{ curso.course_img }}">
                         </a>
                     </div>
                 </div>
                 <div class="span4">
                     <div class="categories-course-description">
                         <h3>{{ curso.title }}</h3>
-                        <h5>Profesor: {{ curso.profesor }}</h5>
+                        <h5>{{ 'Teacher'|get_lang }}: {{ curso.teacher }}</h5>
                     </div>
                 </div>
                 <div class="span right">
-                    <div class="sprice right">{{ curso.price }} {{ moneda }}</div>
+                    <div class="sprice right">{{ curso.price }} {{ currency }}</div>
                     <div class="cleared"></div>
                     <div class="btn-toolbar right">
                         <a class="ajax btn btn-primary" title=""
-                           href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ curso.code }}">{{
-                            'Description'|get_lang }}</a>
-
+                           href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ curso.code }}">{{'Description'|get_lang }}
+                        </a>
                     </div>
                 </div>
             </div>
@@ -70,7 +69,7 @@
                 'transferencia_bancaria'|get_lang }}</td></tr>
                 {% endif %}
                 <tr><td>
-                <input type="hidden" name="tipomoneda" value="{{ moneda }}" />
+                <input type="hidden" name="currency_type" value="{{ currency }}" />
                 <input type="hidden" name="server" value="{{ server }}"/>
                 <input type="submit" class="btn btn-success" value="{{ 'confirmar_compra'|get_lang }}"/>
                 </td></tr>

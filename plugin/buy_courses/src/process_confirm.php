@@ -26,7 +26,7 @@ if ($_POST['payment_type'] == '') {
 if (isset($_POST['Aceptar'])) {
     //Almacenamos usuario, curso, referencia en tabla temporal
     $user_id = $_SESSION['bc_user_id'];
-    $course_code = $_SESSION['bc_curso_codetext'];
+    $course_code = $_SESSION['bc_course_codetext'];
     $reference = calculateReference();
 
     reset($_POST);
@@ -66,8 +66,8 @@ if (isset($_POST['Aceptar'])) {
         $email = $_SESSION['bc_user']['email'];
     }
 
-    $datos_curso = info_curso($_SESSION['bc_curso_code']);
-    $title_curso = $datos_curso['title'];
+    $courseInfo = courseInfo($_SESSION['bc_course_code']);
+    $title_curso = $courseInfo['title'];
 
     $message = utf8_encode($plugin->get_lang('bc_message'));
     $message = str_replace("{{name}}", $name, $message);
@@ -81,32 +81,30 @@ if (isset($_POST['Aceptar'])) {
 }
 
 
-$tipomoneda = $_POST['tipomoneda'];
-$_SESSION['bc_tipomoneda'] = $tipomoneda;
+$currencyType = $_POST['currency_type'];
+$_SESSION['bc_currency_type'] = $currencyType;
 $server = $_POST['server'];
 
 if ($_POST['payment_type'] == "PayPal") {
     $sql = "SELECT * FROM plugin_bc_paypal WHERE id='1';";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);
-    $pruebas = ($row['sandbox'] == "SI") ? (true) : (false);
+    $pruebas = ($row['sandbox'] == "YES") ? true: false;
     $paypal_username = $row['username'];
     $paypal_password = $row['password'];
     $paypal_firma = $row['signature'];
     require_once("function/paypalfunctions.php");
-    // ==================================
     // PayPal Express Checkout Module
-    // ==================================
     $paymentAmount = $_SESSION["Payment_Amount"];
-    $currencyCodeType = $tipomoneda;
+    $currencyCodeType = $currencyType;
     $paymentType = "Sale";
     $returnURL = $server . "plugin/buy_courses/success.php";
     $cancelURL = $server . "plugin/buy_courses/error.php";
 
-    $datos_curso = info_curso($_SESSION['bc_curso_code']);
-    $title_curso = $datos_curso['title'];
+    $courseInfo = courseInfo($_SESSION['bc_course_code']);
+    $courseTitle = $courseInfo['title'];
     $i = 0;
-    $extra = "&L_PAYMENTREQUEST_0_NAME" . $i . "=" . $title_curso;
+    $extra = "&L_PAYMENTREQUEST_0_NAME" . $i . "=" . $courseTitle;
     $extra .= "&L_PAYMENTREQUEST_0_AMT" . $i . "=" . $paymentAmount;
     $extra .= "&L_PAYMENTREQUEST_0_QTY" . $i . "=1";
 
@@ -116,7 +114,6 @@ if ($_POST['payment_type'] == "PayPal") {
     if ($ack == "SUCCESS" || $ack == "SUCCESSWITHWARNING") {
         RedirectToPayPal($resArray["TOKEN"]);
     } else {
-        //Mostrar errores
         $ErrorCode = urldecode($resArray["L_ERRORCODE0"]);
         $ErrorShortMsg = urldecode($resArray["L_SHORTMESSAGE0"]);
         $ErrorLongMsg = urldecode($resArray["L_LONGMESSAGE0"]);
@@ -137,14 +134,14 @@ if ($_POST['payment_type'] == "Transferencia") {
 
     $tpl = new Template('Tipo de pago');
 
-    $code = $_SESSION['bc_curso_code'];
-    $infocurso = info_curso($code);
+    $code = $_SESSION['bc_course_code'];
+    $courseInfo = courseInfo($code);
 
-    $tpl->assign('curso', $infocurso);
+    $tpl->assign('curso', $courseInfo);
     $tpl->assign('server', $_configuration['root_web']);
-    $tpl->assign('title', $_SESSION['bc_curso_title']);
+    $tpl->assign('title', $_SESSION['bc_course_title']);
     $tpl->assign('price', $_SESSION['Payment_Amount']);
-    $tpl->assign('moneda', $_SESSION['bc_tipomoneda']);
+    $tpl->assign('currency', $_SESSION['bc_currency_type']);
     if (!isset($_SESSION['_user'])) {
         $tpl->assign('name', $_SESSION['bc_user']['firstName'] . ' ' . $_SESSION['bc_user']['lastName']);
         $tpl->assign('email', $_SESSION['bc_user']['mail']);

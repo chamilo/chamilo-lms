@@ -14,15 +14,15 @@ $tpl = new Template('Tipo de pago');
 if (isset($_GET['code'])) {
     $code = (int)$_GET['code'];
 } else {
-    $code = $_SESSION['bc_curso_code'];
+    $code = $_SESSION['bc_course_code'];
 }
 $sql = "SELECT price, title, code FROM plugin_buycourses a, course b WHERE a.id_course='" . $code . "' AND a.id_course=b.id;";
 $res = Database::query($sql);
 $row = Database::fetch_assoc($res);
 $_SESSION['Payment_Amount'] = number_format($row['price'], 2, '.', '');
-$_SESSION['bc_curso_code'] = $code;
-$_SESSION['bc_curso_title'] = $row['title'];
-$_SESSION['bc_curso_codetext'] = $row['code'];
+$_SESSION['bc_course_code'] = $code;
+$_SESSION['bc_course_title'] = $row['title'];
+$_SESSION['bc_course_code'] = $row['code'];
 
 if (!isset($_SESSION['_user'])) {
     //Necesita registro
@@ -43,36 +43,34 @@ if (!isset($_SESSION['_user'])) {
     $tpl->assign('user', $_SESSION['bc_user']['username']);
 }
 
-if (comprueba_curso_user($_SESSION['bc_curso_codetext'], $_SESSION['bc_user_id'])) {
-    $_SESSION['bc_exito'] = false;
-    $_SESSION['bc_mensaje'] = 'AlreadyBuy';
+if (checkUserCourse($_SESSION['bc_curso_codetext'], $_SESSION['bc_user_id'])) {
+    $_SESSION['bc_success'] = false;
+    $_SESSION['bc_message'] = 'AlreadyBuy';
     header('Location: list.php');
 }
 
-if (comprueba_curso_user_transf($_SESSION['bc_curso_codetext'], $_SESSION['bc_user_id'])) {
-    $_SESSION['bc_exito'] = false;
-    $_SESSION['bc_mensaje'] = 'bc_tmp_registrado';
+if (checkUserCourseTransference($_SESSION['bc_course_codetext'], $_SESSION['bc_user_id'])) {
+    $_SESSION['bc_success'] = false;
+    $_SESSION['bc_message'] = 'bc_tmp_registrado';
     header('Location: list.php');
 }
-//echo var_dump($_SESSION);
-//exit;
-$tipo_moneda = busca_moneda();
 
+$currencyType = findCurrency();
 $plugin = Buy_CoursesPlugin::create();
 $paypal_enable = $plugin->get('paypal_enable');
 $tarjeta_enable = $plugin->get('tarjet_credit_enable');
 $transference_enable = $plugin->get('transference_enable');
 
-$infocurso = info_curso($code);
+$courseInfo = courseInfo($code);
 
-$tpl->assign('curso', $infocurso);
+$tpl->assign('curso', $courseInfo);
 $tpl->assign('server', $_configuration['root_web']);
 $tpl->assign('paypal_enable', $paypal_enable);
 $tpl->assign('tarjeta_enable', $tarjeta_enable);
 $tpl->assign('transference_enable', $transference_enable);
-$tpl->assign('title', $_SESSION['bc_curso_title']);
+$tpl->assign('title', $_SESSION['bc_course_title']);
 $tpl->assign('price', $_SESSION['Payment_Amount']);
-$tpl->assign('moneda', $tipo_moneda);
+$tpl->assign('currency', $currencyType);
 
 
 $listing_tpl = 'buy_courses/view/process.tpl';

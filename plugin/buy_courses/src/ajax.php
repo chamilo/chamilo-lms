@@ -13,7 +13,7 @@ $course_info = api_get_course_info($_GET['code']);
 echo Display::tag('h2', $course_info['name']);
 echo '<br />';
 
-$sql = "SELECT * FROM $tbl_course_description WHERE c_id = " . $course_info['real_id'] . " AND session_id = 0 ORDER BY id";
+$sql = "SELECT * FROM $tbl_course_description WHERE c_id = " . intval($course_info['real_id']) . " AND session_id = 0 ORDER BY id";
 $result = Database::query($sql);
 if (Database::num_rows($result) > 0) {
     while ($description = Database::fetch_object($result)) {

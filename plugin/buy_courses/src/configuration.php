@@ -6,35 +6,37 @@ require_once dirname(__FILE__) . '/buy_course.lib.php';
 require_once '../../../main/inc/global.inc.php';
 require_once 'buy_course_plugin.class.php';
 
-$_cid = 0;
-$interbreadcrumb[] = array("url" => "list.php", "name" => 'Listado de cursos a la venta');
-$interbreadcrumb[] = array("url" => "paymentsetup.php", "name" => get_lang('Configuraci&oacute;n pagos'));
+$plugin = Buy_CoursesPlugin::create();
 
-$tpl = new Template('Configuraci&oacute;n de cursos disponibles');
+$_cid = 0;
+$interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
+$interbreadcrumb[] = array("url" => "paymentsetup.php", "name" => get_lang('Configuration'));
+
+$tpl = new Template('availableCourses');
 
 $teacher = api_is_platform_admin();
 api_protect_course_script(true);
 
 if ($teacher) {
-    // SINCRONIZAR TABLA DE CURSOS CON TABLA DEL PLUGIN
-    sincronizar();
-    $visibilidad = array();
-    $visibilidad[] = get_course_visibility_icon('0');
-    $visibilidad[] = get_course_visibility_icon('1');
-    $visibilidad[] = get_course_visibility_icon('2');
-    $visibilidad[] = get_course_visibility_icon('3');
+    // sync course table with the plugin
+    sync();
+    $visibility = array();
+    $visibility[] = getCourseVisibilityIcon('0');
+    $visibility[] = getCourseVisibilityIcon('1');
+    $visibility[] = getCourseVisibilityIcon('2');
+    $visibility[] = getCourseVisibilityIcon('3');
 
     $coursesList = listCourses();
-    $ruta = api_get_path(WEB_PLUGIN_PATH) . 'buy_courses/resources/message_confirmation.png';
-    $ruta2 = api_get_path(WEB_PLUGIN_PATH) . 'buy_courses/resources/save.png';
-    $tipo_moneda = busca_moneda();
+    $confirmationImgPath = api_get_path(WEB_PLUGIN_PATH) . 'buy_courses/resources/message_confirmation.png';
+    $saveImgPath = api_get_path(WEB_PLUGIN_PATH) . 'buy_courses/resources/save.png';
+    $currencyType = findCurrency();
 
     $tpl->assign('server', $_configuration['root_web']);
-    $tpl->assign('cursos', $coursesList);
-    $tpl->assign('visibilidad', $visibilidad);
-    $tpl->assign('ruta_imagen_ok', $ruta);
-    $tpl->assign('ruta_imagen_save', $ruta2);
-    $tpl->assign('moneda', $tipo_moneda);
+    $tpl->assign('courses', $coursesList);
+    $tpl->assign('visibility', $visibility);
+    $tpl->assign('confirmation_img', $confirmationImgPath);
+    $tpl->assign('save_img', $saveImgPath);
+    $tpl->assign('currency', $currencyType);
 
     $listing_tpl = 'buy_courses/view/configuration.tpl';
     $content = $tpl->fetch($listing_tpl);

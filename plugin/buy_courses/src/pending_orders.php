@@ -17,17 +17,17 @@ $teacher = api_is_platform_admin();
 api_protect_course_script(true);
 
 if ($teacher) {
-    $lista_pendientes = listado_pendientes();
+    $pendingList = pendingList();
     $ruta = api_get_path(WEB_PLUGIN_PATH) . 'buy_courses/resources/message_confirmation.png';
     $ruta2 = api_get_path(WEB_PLUGIN_PATH) . 'buy_courses/resources/borrar.png';
-    $tipo_moneda = busca_moneda();
+    $currencyType = findCurrency();
 
 
     $tpl->assign('server', $_configuration['root_web']);
-    $tpl->assign('pendientes', $lista_pendientes);
-    $tpl->assign('ruta_imagen_ok', $ruta);
+    $tpl->assign('pendientes', $pendingList);
+    $tpl->assign('confirmation_img', $ruta);
     $tpl->assign('ruta_imagen_borrar', $ruta2);
-    $tpl->assign('moneda', $tipo_moneda);
+    $tpl->assign('currency', $currencyType);
 
     $listing_tpl = 'buy_courses/view/pending_orders.tpl';
     $content = $tpl->fetch($listing_tpl);

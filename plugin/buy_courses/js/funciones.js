@@ -46,8 +46,8 @@ $(document).ready(function () {
 
     });
 
-    $('#sincronizar').click(function (e) {
-        $.post("function.php", {tab: "sincronizar"},
+    $('#sync').click(function (e) {
+        $.post("function.php", {tab: "sync"},
             function (data) {
                 if (data.status == "false") {
                     alert(data.contenido);
@@ -71,7 +71,7 @@ $(document).ready(function () {
             var vmostrar = "NO";
         }
         var vcategoria = $("#categoria_cursos").attr("value");
-        $.post("function.php", {tab: "filtro_cursos", curso: vcurso, pricemin: pmin, pricemax: pmax, mostrar: vmostrar, categoria: vcategoria},
+        $.post("function.php", {tab: "courses_filter", course: vcurso, pricemin: pmin, pricemax: pmax, mostrar: vmostrar, categoria: vcategoria},
             function (data) {
                 if (data.status == "false") {
                     alert(data.contenido);
@@ -86,11 +86,11 @@ $(document).ready(function () {
         e.stopPropagation();
     });
 
-    $("#save_money").click(function (e) {
-        var tipo_moneda = $("#tipo_moneda").attr("value");
-        $.post("function.php", {tab: "guardar_moneda", moneda: tipo_moneda},
+    $("#save_currency").click(function (e) {
+        var currency_type = $("#currency_type").attr("value");
+        $.post("function.php", {tab: "save_currency", currency: currency_type},
             function (data) {
-                alert(data.contenido);
+                alert(data.content);
             }, "json");
 
         e.preventDefault();
@@ -106,9 +106,9 @@ $(document).ready(function () {
         } else {
             var vsandbox = "NO";
         }
-        $.post("function.php", {tab: "guardar_paypal", username: name, password: clave, signature: firma, sandbox: vsandbox},
+        $.post("function.php", {tab: "save_paypal", username: name, password: clave, signature: firma, sandbox: vsandbox},
             function (data) {
-                alert(data.contenido);
+                alert(data.content);
             }, "json");
 
         e.preventDefault();
@@ -143,13 +143,13 @@ $(document).ready(function () {
     });
 
     $("#cancelapedido").click(function (e) {
-        $.post("function.php", {tab: "borrar_variables"});
+        $.post("function.php", {tab: "unset_variables"});
         window.location.replace("list.php");
     });
 
-    $(".borrar_pedido").click(function (e) {
+    $(".clear_order").click(function (e) {
         var vid = $(this).parent().attr("id");
-        $.post("function.php", {tab: "borrar_pedido", id: vid},
+        $.post("function.php", {tab: "clear_order", id: vid},
             function (data) {
                 location.reload();
             }, "json");
@@ -158,41 +158,15 @@ $(document).ready(function () {
         e.stopPropagation();
     });
 
-    $(".confirmar_pedido").click(function (e) {
+    $(".confirm_order").click(function (e) {
         var vid = $(this).parent().attr("id");
-        $.post("function.php", {tab: "confirmar_pedido", id: vid},
+        $.post("function.php", {tab: "confirm_order", id: vid},
             function (data) {
                 location.reload();
             }, "json");
 
         e.preventDefault();
         e.stopPropagation();
-    });
-
-    $(".setting_tpv").click(function () {
-        var vcod = $(this).attr("id");
-        $.post("function.php", {tab: "cargar_tpv_configuracion", cod: vcod},
-            function (data) {
-                $("#resultado_tpv").html(data.contenido);
-                $("#guardar_datos_tpv").click(function (e) {
-                    var vcod = $("#conf_tpv").attr("value");
-                    var num = $("#num_parametros").attr("value");
-                    var vaction = $("#action").attr("value");
-                    var array = [];
-                    for (var i = 0; i < num; i++) {
-                        var selector = '#valor_tpv' + i;
-                        array.push($(selector).attr("value"));
-                    }
-                    $.post("function.php", {tab: "save_tpv", cod: vcod, nump: num, action: vaction, parametros: array},
-                        function (data) {
-                            alert(data.contenido);
-                            $("#resultado_tpv").html("");
-                        }, "json");
-
-                    e.preventDefault();
-                    e.stopPropagation();
-                });
-            }, "json");
     });
 
     $(".slt_tpv").change(function () {

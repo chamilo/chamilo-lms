@@ -28,11 +28,18 @@ class LinkAddEditForm extends FormValidator
 	 * To add link, define category_object and link_type
 	 * To edit link, define link_object
 	 */
-    function LinkAddEditForm($form_type, $category_object, $link_type, $link_object, $form_name, $action = null) {
+    public function LinkAddEditForm(
+        $form_type,
+        $category_object,
+        $link_type,
+        $link_object,
+        $form_name,
+        $action = null
+    ) {
 		parent :: __construct($form_name, 'post', $action);
 
 		// set or create link object
-		if (isset ($link_object)) {
+		if (isset($link_object)) {
 			$link = $link_object;
 		} elseif (isset ($link_type) && isset ($category_object)) {
 			$link = LinkFactory :: create ($link_type);
@@ -40,6 +47,7 @@ class LinkAddEditForm extends FormValidator
 		} else {
 			die ('LinkAddEditForm error: define link_type/category_object or link_object');
 		}
+
 		$defaults = array();
 		$this->addElement('hidden', 'zero', 0);
 
@@ -71,6 +79,7 @@ class LinkAddEditForm extends FormValidator
             $default_weight = 0;
             if (!empty($category_object)) {
                 foreach ($category_object as $my_cat) {
+
                     if ($my_cat->get_course_code() == api_get_course_id()) {
                         $grade_model_id = $my_cat->get_grade_model_id();
                         if (empty($grade_model_id)) {

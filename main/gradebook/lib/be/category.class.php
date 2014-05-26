@@ -187,36 +187,43 @@ class Category implements GradebookItem
         return $skill_select;
     }
 
-     public static function load_session_categories($id = null, $session_id = null)
-     {
-        if ( isset($id) && (int)$id === 0 ) {
+    /**
+     * @param int $id
+     * @param int $session_id
+     *
+     * @return array
+     */
+    public static function load_session_categories($id = null, $session_id = null)
+    {
+        if (isset($id) && (int)$id === 0) {
             $cats = array();
             $cats[] = Category::create_root_category();
             return $cats;
         }
+
         $courseCode = api_get_course_info(api_get_course_id());
         $courseCode = $courseCode['code'];
+        $session_id = intval($session_id);
 
-        $cats = array();
-        if (!empty ($session_id)) {
+        if (!empty($session_id)) {
              $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-             $sql_session = 'SELECT id, course_code FROM '.$tbl_grade_categories. ' WHERE session_id = '.(int) $session_id;
-             $result_session = Database::query($sql_session);
+             $sql = 'SELECT id, course_code FROM '.$tbl_grade_categories. '
+                     WHERE session_id = '.$session_id;
+             $result_session = Database::query($sql);
              if (Database::num_rows($result_session) > 0) {
-                $cat = array();
+                $categoryList = array();
                 while ($data_session = Database::fetch_array($result_session)) {
-
                     $parent_id = $data_session['id'];
                     if ($data_session['course_code'] == $courseCode) {
-                        $cat = Category::load($parent_id);
-                        $cats = Category::load(null,null,null,$parent_id,null,null,null);
+                        $categories = Category::load($parent_id);
+                        $categoryList = array_merge($categoryList, $categories);
+                        //$allSubCategories = Category::load(null,null,null, $parent_id, null, $session_id, null);
                     }
                 }
-
-                return array_merge($cat,$cats);
+                return $categoryList;
              }
-         }
-     }
+        }
+    }
 
     /**
      * Retrieve categories and return them as an array of Category objects
@@ -323,6 +330,7 @@ class Category implements GradebookItem
         }
         $result = Database::query($sql);
         $allcat = array();
+
         if (Database::num_rows($result) > 0) {
             $allcat = Category::create_category_objects_from_sql_result($result);
         }
@@ -755,7 +763,6 @@ class Category implements GradebookItem
         if (!empty($links)) {
             foreach ($links as $link) {
                 $linkres = $link->calc_score($stud_id);
-                //if ($debug) var_dump($linkres);
 
                 if (isset($linkres) && $link->get_weight() != 0) {
                     $linkweight     = $link->get_weight();

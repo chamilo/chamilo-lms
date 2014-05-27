@@ -5,6 +5,7 @@
  * Date: 21/05/14
  * Time: 12:19 PM
  */
+$objPlugin = new Buy_CoursesPlugin();
 
 $table = Database::get_main_table(TABLE_BUY_COURSE);
 $sql = "CREATE TABLE IF NOT EXISTS $table (
@@ -333,3 +334,10 @@ $sql = "CREATE TABLE IF NOT EXISTS $table (
     status VARCHAR(20) NOT NULL DEFAULT '',
     date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP)";
 Database::query($sql);
+
+//Menu main tabs
+$rsTab = $objPlugin->addTab('Buy Courses', 'plugin/buy_courses/index.php');
+
+if ($rsTab) {
+    echo "<script>location.href = '" . $_SERVER['REQUEST_URI'] . "';</script>";
+}

@@ -12,6 +12,7 @@
 namespace Symfony\Component\Process\Tests;
 
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
+use Symfony\Component\Process\Exception\LogicException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Process\ProcessPipes;
@@ -157,6 +158,61 @@ abstract class AbstractProcessTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedLength, strlen($p->getErrorOutput()));
     }
 
+    public function testSetStdinWhileRunningThrowsAnException()
+    {
+        $process = $this->getProcess('php -r "usleep(500000);"');
+        $process->start();
+        try {
+            $process->setStdin('foobar');
+            $process->stop();
+            $this->fail('A LogicException should have been raised.');
+        } catch (LogicException $e) {
+            $this->assertEquals('STDIN can not be set while the process is running.', $e->getMessage());
+        }
+        $process->stop();
+    }
+
+    /**
+     * @dataProvider provideInvalidStdinValues
+     * @expectedException \Symfony\Component\Process\Exception\InvalidArgumentException
+     * @expectedExceptionMessage Symfony\Component\Process\Process::setStdin only accepts strings.
+     */
+    public function testInvalidStdin($value)
+    {
+        $process = $this->getProcess('php -v');
+        $process->setStdin($value);
+    }
+
+    public function provideInvalidStdinValues()
+    {
+        return array(
+            array(array()),
+            array(new NonStringifiable()),
+            array(fopen('php://temporary', 'w')),
+        );
+    }
+
+    /**
+     * @dataProvider provideStdinValues
+     */
+    public function testValidStdin($expected, $value)
+    {
+        $process = $this->getProcess('php -v');
+        $process->setStdin($value);
+        $this->assertSame($expected, $process->getStdin());
+    }
+
+    public function provideStdinValues()
+    {
+        return array(
+            array(null, null),
+            array('24.5', 24.5),
+            array('input data', 'input data'),
+            // to maintain BC, supposed to be removed in 3.0
+            array('stringifiable', new Stringifiable()),
+        );
+    }
+
     public function chainedCommandsOutputProvider()
     {
         if (defined('PHP_WINDOWS_VERSION_BUILD')) {
@@ -270,7 +326,7 @@ abstract class AbstractProcessTest extends \PHPUnit_Framework_TestCase
         }
 
         $process = $this->getProcess('echo "foo" >> /dev/null && php -r "usleep(100000);"');
-        $process->setTTY(true);
+        $process->setTty(true);
         $process->start();
         $this->assertTrue($process->isRunning());
         $process->wait();
@@ -285,10 +341,22 @@ abstract class AbstractProcessTest extends \PHPUnit_Framework_TestCase
         }
 
         $process = $this->getProcess('echo "foo" >> /dev/null');
-        $process->setTTY(true);
+        $process->setTty(true);
         $process->run();
 
         $this->assertTrue($process->isSuccessful());
+    }
+
+    public function testTTYInWindowsEnvironment()
+    {
+        if (!defined('PHP_WINDOWS_VERSION_BUILD')) {
+            $this->markTestSkipped('This test is for Windows platform only');
+        }
+
+        $process = $this->getProcess('echo "foo" >> /dev/null');
+        $process->setTty(false);
+        $this->setExpectedException('Symfony\Component\Process\Exception\RuntimeException', 'TTY mode is not supported on Windows platform.');
+        $process->setTty(true);
     }
 
     public function testExitCodeTextIsNullWhenExitCodeIsNull()
@@ -837,10 +905,22 @@ abstract class AbstractProcessTest extends \PHPUnit_Framework_TestCase
      * @param null    $cwd
      * @param array   $env
      * @param null    $stdin
-     * @param integer $timeout
+     * @param int     $timeout
      * @param array   $options
      *
      * @return Process
      */
     abstract protected function getProcess($commandline, $cwd = null, array $env = null, $stdin = null, $timeout = 60, array $options = array());
+}
+
+class Stringifiable
+{
+    public function __toString()
+    {
+        return 'stringifiable';
+    }
+}
+
+class NonStringifiable
+{
 }

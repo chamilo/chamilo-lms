@@ -15,22 +15,22 @@
                 <li class="nav-header">{{ 'Mostrar_disponibles'|get_lang }}: &nbsp;<input type="checkbox"
                                                                                           id="mostrar_disponibles"
                                                                                           value="SI"/></li>
-                <li class="nav-header">{{ 'Categorias'|get_lang }}:</li>
-                <li><select id="categoria_cursos">
+                <li class="nav-header">{{ 'Categories'|get_lang }}:</li>
+                <li><select id="courses_category">
                         <option value="" selected="selected"></option>
-                        {% for categoria in categorias %}
-                        <option value="{{ categoria.code }}">{{ categoria.name }}</option>
+                        {% for category in categories %}
+                        <option value="{{ category.code }}">{{ category.name }}</option>
                         {% endfor %}
                         </select>
                         </li>
                         <br />
-                        <li class="ta-center"><input type="button" class="btn btn-primary" value="Buscar cursos" id="confirmar_filtro" /></li>
+                        <li class="ta-center"><input type="button" class="btn btn-primary" value="Serach Courses" id="confirmar_filtro" /></li>
                         </ul>
                         </div>
                         </div>
-                        <div class="span9" id="resultado_cursos">
+                        <div class="span9" id="course_results">
                         {% if rmessage == "YES" %}
-                        <div class="{{ estilo }}">{{ mensaje }}
+                        <div class="{{ class }}">{{ message }}
                         </div>
                         {% endif %}
         {% for course in courses %}

@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class="span12">
-        <table id="tabla_cursos" class="data_table">
+        <table id="courses_table" class="data_table">
             <tr class="row_odd">
                 <th>{{ 'Title'|get_lang }}</th>
                 <th>{{ 'OfficialCode'|get_lang }}</th>
@@ -14,7 +14,7 @@
             </tr>
             {% set i = 0 %}
 
-            {% for curso in cursos %}
+            {% for course in courses %}
             {{ i%2==0 ? '
             <tr class="row_even">' : '
             <tr class="row_odd">' }}
@@ -24,9 +24,9 @@
                 <a href="{{ server }}courses/{{course.code}}/index.php">{{course.title}}</a>
                 <span class="label label-info">{{ course.visual_code }}</span>
         </td>
-        <td>{{curso.code}}</td>
+        <td>{{course.code}}</td>
                 <td class="ta-center">
-                {% if curso.visible == 1 %}
+                {% if course.visible == 1 %}
                 <input type="checkbox" name="visible" value="1" checked="checked" size="6" />
                 {% else %}
                 <input type="checkbox" name="visible" value="1" size="6" />

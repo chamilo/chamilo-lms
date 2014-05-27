@@ -4,7 +4,7 @@
 
 <div class="row">
     <div class="span12">
-        <table id="tabla_pedidos" class="data_table">
+        <table id="orders_table" class="data_table">
             <tr class="row_odd">
                 <th class="ta-center">{{ 'Ref_pedido'|get_lang }}</th>
                 <th>{{ 'Name'|get_lang }}</th>
@@ -15,22 +15,22 @@
             </tr>
             {% set i = 0 %}
 
-            {% for pedido in pendientes %}
+            {% for order in pending %}
             {{ i%2==0 ? '
             <tr class="row_even">' : '
             <tr class="row_odd">' }}
                 {% set i = i + 1 %}
-                <td class="ta-center">{{ pedido.reference }}</td>
-                <td>{{ pedido.name }}</td>
-                <td>{{ pedido.title }}</td>
-                <td>{{ pedido.price }} {{ currency }}</td>
-                <td class="ta-center">{{ pedido.date }}</td>
-                <td class="ta-center" id="pedido{{ pedido.cod }}">
+                <td class="ta-center">{{ order.reference }}</td>
+                <td>{{ order.name }}</td>
+                <td>{{ order.title }}</td>
+                <td>{{ order.price }} {{ currency }}</td>
+                <td class="ta-center">{{ order.date }}</td>
+                <td class="ta-center" id="order{{ order.cod }}">
                     <img src="{{ confirmation_img }}" alt="ok" class="cursor confirm_order"
                          title="Subscribir al usuario"/>
                     &nbsp;&nbsp;
-                    <img src="{{ ruta_imagen_borrar }}" alt="borrar" class="cursor clear_order"
-                         title="Eliminar el pedido"/>
+                    <img src="{{ delete_img }}" alt="delete" class="cursor clear_order"
+                         title="Delete the order"/>
                 </td>
             </tr>
 {% endfor %}

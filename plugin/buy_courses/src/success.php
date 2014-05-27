@@ -8,6 +8,7 @@ require_once 'lib/buy_course_plugin.class.php';
 require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
 
+$plugin = Buy_CoursesPlugin::create();
 /*
 ==================================================================
 				// DATOS DE PAYPAL //
@@ -95,14 +96,14 @@ if ($token != "") {
 if (!isset($_POST['paymentOption'])) {
     //PANTALLA DE CONFIRMACION DEL PEDIDO
     $_cid = 0;
-    $interbreadcrumb[] = array("url" => "list.php", "name" => 'Listado de cursos a la venta');
+    $interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
 
-    $tpl = new Template('Tipo de pago');
+    $tpl = new Template('PaymentType');
 
     $code = $_SESSION['bc_course_code'];
     $courseInfo = courseInfo($code);
 
-    $tpl->assign('curso', $courseInfo);
+    $tpl->assign('course', $courseInfo);
     $tpl->assign('server', $_configuration['root_web']);
     $tpl->assign('title', $_SESSION['bc_course_title']);
     $tpl->assign('price', $_SESSION['Payment_Amount']);
@@ -216,10 +217,6 @@ if (!isset($_POST['paymentOption'])) {
 
 //INSERTAMOS LOS REGISTROS NECESARIOS EN LAS TABLAS DE BASES DE DATOS PARA DAR AL USUARIO DE ALTA			
             if ($paymentStatus == "Completed") {
-                $plugin = Buy_CoursesPlugin::create();
-
-                //echo "Se ha realizado la compra correctamente";
-
                 $user_id = $_SESSION['bc_user_id']; //api_get_user_id();
                 $course_code = $_SESSION['bc_course_codetext'];
                 $all_course_information = CourseManager::get_course_information($course_code);

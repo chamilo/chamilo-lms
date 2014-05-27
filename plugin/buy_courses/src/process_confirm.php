@@ -6,25 +6,12 @@ require_once '../../../main/inc/lib/mail.lib.inc.php';
 require_once dirname(__FILE__) . '/buy_course.lib.php';
 require_once 'lib/buy_course_plugin.class.php';
 
-function completar($valor, $digitos)
-{
-    $resultado = '';
-    if (strlen($valor) < $digitos) {
-        $ceros = $digitos - strlen(ceil($valor));
-        for ($i = 0; $i < $ceros; $i++) {
-            $resultado .= '0';
-        }
-    }
-    $resultado .= $valor;
-    return $resultado;
-}
-
 if ($_POST['payment_type'] == '') {
     header('Location:process.php');
 }
 
 if (isset($_POST['Aceptar'])) {
-    //Almacenamos usuario, curso, referencia en tabla temporal
+    // Save the user, course and reference in a tmp table
     $user_id = $_SESSION['bc_user_id'];
     $course_code = $_SESSION['bc_course_codetext'];
     $reference = calculateReference();
@@ -38,7 +25,7 @@ if (isset($_POST['Aceptar'])) {
     $sql = "INSERT INTO plugin_bc_temporal (user_id, name, course_code, title, reference, price) VALUES ('" . $user_id . "', '" . $name . "','" . $course_code . "','" . $title . "','" . $reference . "','" . $price . "');";
     $res = Database::query($sql);
 
-    //Notificamos al usuario y enviamos datos bancarios
+    // Notify the user and send the bank info
 
     $accountsList = listAccounts();
     $texto = '<div align="center"><table style="width:70%"><tr><th style="text-align:center"><h3>Datos Bancarios</h3></th></tr>';
@@ -67,16 +54,16 @@ if (isset($_POST['Aceptar'])) {
     }
 
     $courseInfo = courseInfo($_SESSION['bc_course_code']);
-    $title_curso = $courseInfo['title'];
+    $title_course = $courseInfo['title'];
 
     $message = utf8_encode($plugin->get_lang('bc_message'));
     $message = str_replace("{{name}}", $name, $message);
-    $message = str_replace("{{curso}}", $title_curso, $message);
+    $message = str_replace("{{course}}", $title_course, $message);
     $message = str_replace("{{reference}}", $reference, $message);
     $message .= $texto;
 
     api_mail($name, $email, $asunto, $message);
-    // Volvemos al listado de cursos
+    // Return to course list
     header('Location:list.php');
 }
 
@@ -128,16 +115,16 @@ if ($_POST['payment_type'] == "PayPal") {
     }
 }
 
-if ($_POST['payment_type'] == "Transferencia") {
+if ($_POST['payment_type'] == "Transference") {
     $_cid = 0;
-    $interbreadcrumb[] = array("url" => "list.php", "name" => 'Listado de cursos a la venta');
+    $interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
 
     $tpl = new Template('Tipo de pago');
 
     $code = $_SESSION['bc_course_code'];
     $courseInfo = courseInfo($code);
 
-    $tpl->assign('curso', $courseInfo);
+    $tpl->assign('course', $courseInfo);
     $tpl->assign('server', $_configuration['root_web']);
     $tpl->assign('title', $_SESSION['bc_course_title']);
     $tpl->assign('price', $_SESSION['Payment_Amount']);
@@ -152,7 +139,7 @@ if ($_POST['payment_type'] == "Transferencia") {
         $tpl->assign('user', $_SESSION['bc_user']['username']);
     }
 
-    //Obtenemos el listado de cuentas bancarias.
+    //Get bank list account
     $accountsList = listAccounts();
     $tpl->assign('accounts', $accountsList);
 
@@ -161,5 +148,3 @@ if ($_POST['payment_type'] == "Transferencia") {
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
 }
-
-?>

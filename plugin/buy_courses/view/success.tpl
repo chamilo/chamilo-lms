@@ -24,23 +24,23 @@
                 <div class="span">
                     <div class="thumbnail">
                         <a class="ajax" rel="gb_page_center[778]" title=""
-                           href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ curso.code }}">
-                            <img alt="" src="{{ server }}{{ curso.course_img }}">
+                           href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ course.code }}">
+                            <img alt="" src="{{ server }}{{ course.course_img }}">
                         </a>
                     </div>
                 </div>
                 <div class="span4">
                     <div class="categories-course-description">
-                        <h3>{{ curso.title }}</h3>
-                        <h5>{{ 'Teacher'|get_lang }}: {{ curso.teacher }}</h5>
+                        <h3>{{ course.title }}</h3>
+                        <h5>{{ 'Teacher'|get_lang }}: {{ course.teacher }}</h5>
                     </div>
                 </div>
                 <div class="span right">
-                    <div class="sprice right">{{ curso.price }} {{ currency }}</div>
+                    <div class="sprice right">{{ course.price }} {{ currency }}</div>
                     <div class="cleared"></div>
                     <div class="btn-toolbar right">
                         <a class="ajax btn btn-primary" title=""
-                           href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ curso.code }}">{{
+                           href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ course.code }}">{{
                             'Description'|get_lang }}</a>
 
                     </div>
@@ -55,7 +55,7 @@
             <input type="hidden" name="paymentOption" value="PayPal"/>
 
             <div class="btn_siguiente">
-                <input class="btn btn-success" type="submit" name="Aceptar" value="Confirmar compra de curso"/>
+                <input class="btn btn-success" type="submit" name="Aceptar" value="Confirm Order"/>
                 <input class="btn btn-danger" type="button" name="Cancelar" value="Cancelar" id="cancelapedido"/>
             </div>
         </form>

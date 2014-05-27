@@ -16,14 +16,11 @@ $strings['OpenToTheWorld'] = "P&uacute;blico - acceso autorizado a cualquier per
 $strings['Description'] = "Descripci&oacute;n";
 $strings['Buy'] = "Comprar";
 $strings['Filtro_buscar'] = "Filtro de busqueda";
-$strings['Curso'] = "Curso";
 $strings['Price_Maximum'] = "Precio mayor de";
 $strings['Price_Minimum'] = "Precio menor de";
 $strings['Mostrar_disponibles'] = "Mostrar cursos disponibles";
-$strings['Categorias'] = "Categorias";
 
 $strings['paypal_enable'] = "Habilitar PayPal";
-$strings['tarjet_credit_enable'] = "Habilitar TPV";
 $strings['transference_enable'] = "Habilitar transferencia";
 $strings['unregistered_users_enable'] = "Permitir usuarios sin registro en la plataforma";
 
@@ -36,7 +33,6 @@ $strings['bc_subject'] = "Confirmaci�n pedido de cursos";
 $strings['bc_tmp_registrado'] = 'Se encuentra a la espera de recibir el pago';
 
 $strings['Ref_pedido'] = 'Referencia del pedido';
-$strings['transferencia_bancaria'] = 'Transferencia Bancaria';
 $strings['paypal'] = 'PayPal';
 $strings['confirmar_compra'] = 'Confirmar compra de curso';
 
@@ -57,3 +53,5 @@ $strings['OrdersPendingOfPayment'] = 'Pedidos pendientes de pago';
 $strings['AvailableCoursesConfiguration'] = 'Configuración de cursos disponibles';
 $strings['PaymentsConfiguration'] = 'Configuración de Pagos';
 $strings['bc_message'] = "Estimado {{name}}. <br />En cuanto recibamos confirmaci&oacute;n de pago procederemos a dar de alta su usuario en el curso <strong>{{curso}}</strong>.<br><br><strong>No olvide indicar en el concepto de la transferencia el n&uacute;mero de referencia del pedido: <div style='display:inline;text-align:center; font-weight:bold; font-size:20px; color:#333'>{{reference}}</div></strong>";
+$strings['Categories'] = "Categorias";
+$strings['BankTransference'] = 'Transferencia Bancaria';

@@ -59,4 +59,3 @@ if ($ack == "SUCCESS" || $ack == "SUCCESSWITHWARNING") {
     echo "Error Code: " . $ErrorCode;
     echo "Error Severity Code: " . $ErrorSeverityCode;
 }
-?>

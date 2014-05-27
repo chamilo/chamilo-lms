@@ -568,6 +568,3 @@ function deformatNVP($nvpstr)
     return $nvpArray;
 
 }
-
-
-?>

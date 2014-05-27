@@ -45,7 +45,7 @@
                 </tr>
                 {% set i = 0 %}
 
-                {% for transf in transferencia %}
+                {% for transf in transference %}
                 {{ i%2==0 ? '
                 <tr class="row_even">' : '
                 <tr class="row_odd">' }}
@@ -54,7 +54,7 @@
                     <td>{{ transf.account | e }}</td>
                     <td>{{ transf.swift | e }}</td>
                     <td class="ta-center" id="account{{ transf.id }}">
-                        <img src="{{ ruta_borrar }}" class="cursor delete_account" alt="ok"/>
+                        <img src="{{ delete_img }}" class="cursor delete_account" alt="ok"/>
                     </td>
                 </tr>
                 {% endfor %}
@@ -65,7 +65,7 @@
                     <td><input type="text" id="taccount"/></td>
                     <td><input class="span2" type="text" id="tswift"</td>
                     <td class="ta-center">
-                        <img class="cursor" id="add_account" src="{{ ruta_more }}" alt="add account"/>
+                        <img class="cursor" id="add_account" src="{{ more_img }}" alt="add account"/>
                     </td>
                 </tr>
             </table>

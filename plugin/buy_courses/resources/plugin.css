@@ -11,20 +11,20 @@ table td.ta-center, table th.ta-center {
     text-align: center;
 }
 
-#tabla_cursos td, #tabla_trasferencia td, #tabla_pedidos td {
+#courses_table td, #transference_table td, #order_table td {
     vertical-align: middle;
 }
 
-#tabla_cursos td input.price, #tabla_trasferencia td input, #currency_type {
+#courses_table td input.price, #transference_table td input, #currency_type {
     margin: 0;
 }
 
-#tabla_cursos td.btop {
+#courses_table td.btop {
     border-top: 1px solid red;
     border-bottom: 1px solid red;
 }
 
-#tabla_cursos tr.fmod {
+#courses_table tr.fmod {
     border: 1px solid red;
     background: #FFE0E0;
 }
@@ -53,19 +53,19 @@ table td.ta-center, table th.ta-center {
     text-align: center;
 }
 
-textarea#mensaje {
+textarea#message {
     width: 50%;
 }
 
-.envio_resultado {
+.send_result {
     font-weight: bold;
 }
 
-select#lsesiones, select#lcursos, select#lejercicios, select#estado {
+select#lsessions, select#lcourses, select#lexercises, select#status {
     margin-bottom: 0px;
 }
 
-.columna_campo_filtro {
+.column_field_filter {
     padding: 6px 10px 1px 1px;
     text-align: right;
 }

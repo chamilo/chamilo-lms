@@ -14,5 +14,5 @@ unset($_SESSION['nvpReqArray']);
 unset($_SESSION['TOKEN']);
 $_SESSION['bc_success'] = false;
 $_SESSION['bc_message'] = 'CancelOrder';
+
 header('Location:list.php');
-?>

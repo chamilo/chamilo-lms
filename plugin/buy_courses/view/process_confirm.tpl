@@ -24,23 +24,23 @@
                 <div class="span">
                     <div class="thumbnail">
                         <a class="ajax" rel="gb_page_center[778]" title=""
-                           href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ curso.code }}">
-                            <img alt="" src="{{ server }}{{ curso.course_img }}">
+                           href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ course.code }}">
+                            <img src="{{ server }}{{ course.course_img }}">
                         </a>
                     </div>
                 </div>
                 <div class="span4">
                     <div class="categories-course-description">
-                        <h3>{{ curso.title }}</h3>
-                        <h5>{{ 'Teacher'|get_lang }}: {{ curso.teacher }}</h5>
+                        <h3>{{ course.title }}</h3>
+                        <h5>{{ 'Teacher'|get_lang }}: {{ course.teacher }}</h5>
                     </div>
                 </div>
                 <div class="span right">
-                    <div class="sprice right">{{ curso.price }} {{ currency }}</div>
+                    <div class="sprice right">{{ course.price }} {{ currency }}</div>
                     <div class="cleared"></div>
                     <div class="btn-toolbar right">
                         <a class="ajax btn btn-primary" title=""
-                           href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ curso.code }}">{{
+                           href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ course.code }}">{{
                             'Description'|get_lang }}</a>
 
                     </div>
@@ -76,14 +76,14 @@
     <br/>
 
     <form method="post" name="Aceptar" action="../src/process_confirm.php">
-        <input type="hidden" name="payment_type" value="Transferencia"/>
+        <input type="hidden" name="payment_type" value="Transference"/>
         <input type="hidden" name="name" value="{{ name | e }}"/>
-        <input type="hidden" name="price" value="{{ curso.price }}"/>
-        <input type="hidden" name="title" value="{{ curso.title | e }}"/>
+        <input type="hidden" name="price" value="{{ course.price }}"/>
+        <input type="hidden" name="title" value="{{ course.title | e }}"/>
 
         <div class="btn_siguiente">
-            <input class="btn btn-success" type="submit" name="Aceptar" value="Confirmar compra de curso"/>
-            <input class="btn btn-danger" type="button" name="Cancelar" value="Cancelar" id="cancelapedido"/>
+            <input class="btn btn-success" type="submit" name="Aceptar" value="Confirm the order/>
+            <input class="btn btn-danger" type="button" name="Cancelar" value="Cancelar" id="CancelOrder"/>
         </div>
     </form>
 </div>

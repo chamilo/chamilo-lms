@@ -29,16 +29,16 @@ $(document).ready(function () {
     $(".guardar").click(function () {
         var vvisible = $(this).parent().parent().prev().prev().children().attr("checked");
         var vprice = $(this).parent().parent().prev().children().attr("value");
-        var idcurso = $(this).parent().parent().attr("id");
-        $.post("function.php", {tab: "save_mod", id: idcurso, visible: vvisible, price: vprice},
+        var courseid = $(this).parent().parent().attr("id");
+        $.post("function.php", {tab: "save_mod", id: courseid, visible: vvisible, price: vprice},
             function (data) {
                 if (data.status == "false") {
                     alert("Error database");
                 } else {
-                    $("#curso" + data.id).children().attr("style", "display:''");
-                    $("#curso" + data.id).children().next().attr("style", "display:none");
-                    $("#curso" + data.id).parent().removeClass("fmod")
-                    $("#curso" + data.id).parent().children().each(function () {
+                    $("#course" + data.id).children().attr("style", "display:''");
+                    $("#course" + data.id).children().next().attr("style", "display:none");
+                    $("#course" + data.id).parent().removeClass("fmod")
+                    $("#course" + data.id).parent().children().each(function () {
                         $(this).removeClass("btop");
                     });
                 }
@@ -62,22 +62,22 @@ $(document).ready(function () {
 
 
     $('#confirmar_filtro').click(function (e) {
-        var vcurso = $("#course_name").attr("value");
+        var vcourse = $("#course_name").attr("value");
         var pmin = $("#price_min").attr("value");
         var pmax = $("#price_max").attr("value");
         if ($("#mostrar_disponibles").attr("checked") == "checked") {
-            var vmostrar = "SI";
+            var vshow = "SI";
         } else {
-            var vmostrar = "NO";
+            var vshow = "NO";
         }
-        var vcategoria = $("#categoria_cursos").attr("value");
-        $.post("function.php", {tab: "courses_filter", course: vcurso, pricemin: pmin, pricemax: pmax, mostrar: vmostrar, categoria: vcategoria},
+        var vcategory = $("#courses_category").attr("value");
+        $.post("function.php", {tab: "courses_filter", course: vcourse, pricemin: pmin, pricemax: pmax, mostrar: vshow, category: vcategory},
             function (data) {
                 if (data.status == "false") {
-                    alert(data.contenido);
-                    $("#resultado_cursos").html('');
+                    alert(data.content);
+                    $("#course_results").html('');
                 } else {
-                    $("#resultado_cursos").html(data.contenido);
+                    $("#course_results").html(data.content);
                 }
                 $(document).ready(acciones_ajax);
             }, "json");

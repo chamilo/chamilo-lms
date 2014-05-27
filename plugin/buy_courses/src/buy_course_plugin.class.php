@@ -18,7 +18,7 @@ class Buy_CoursesPlugin extends Plugin
         return $result ? $result : $result = new self();
     }
 
-    protected function __construct()
+    public function __construct()
     {
         parent::__construct('1.0', 'Jose Angel Ruiz, Francis Gonzales', array('paypal_enable' => 'boolean', 'transference_enable' => 'boolean', 'unregistered_users_enable' => 'boolean'));
     }

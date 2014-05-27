@@ -27,12 +27,12 @@ if (isset($_SESSION['bc_success'])) {
     if ($_SESSION['bc_success'] == true) {
         $message = sprintf(utf8_encode($plugin->get_lang($_SESSION['bc_message'])), $_SESSION['bc_url']);
         unset($_SESSION['bc_url']);
-        $tpl->assign('estilo', 'confirmation-message');
+        $tpl->assign('class', 'confirmation-message');
     } else {
         $message = utf8_encode($plugin->get_lang($_SESSION['bc_message']));
-        $tpl->assign('estilo', 'warning-message');
+        $tpl->assign('class', 'warning-message');
     }
-    $tpl->assign('mensaje', $message);
+    $tpl->assign('message', $message);
     unset($_SESSION['bc_success']);
     unset($_SESSION['bc_message']);
 
@@ -45,8 +45,8 @@ $categoryList = listCategories();
 $currencyType = findCurrency();
 
 $tpl->assign('server', $_configuration['root_web']);
-$tpl->assign('cursos', $courseList);
-$tpl->assign('categorias', $categoryList);
+$tpl->assign('courses', $courseList);
+$tpl->assign('category', $categoryList);
 $tpl->assign('currency', $currencyType);
 
 $listing_tpl = 'buy_courses/view/list.tpl';

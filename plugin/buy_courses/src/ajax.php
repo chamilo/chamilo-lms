@@ -1,15 +1,15 @@
 <?php
-require_once '../../../main/inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
+
+require_once '../config.php';
 require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
-require_once '../lib/buy_course_plugin.class.php';
 
 $language_file = array('course_description');
 
 // Get the name of the database course.		
 $tbl_course_description = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
 
-$course_info = api_get_course_info($_GET['code']);
+$code = Database::escape_string($_GET['code']);
+$course_info = api_get_course_info($code);
 echo Display::tag('h2', $course_info['name']);
 echo '<br />';
 

@@ -26,19 +26,19 @@ $(document).ready(function () {
         });
     });
 
-    $(".guardar").click(function () {
-        var vvisible = $(this).parent().parent().prev().prev().children().attr("checked");
-        var vprice = $(this).parent().parent().prev().children().attr("value");
-        var courseid = $(this).parent().parent().attr("id");
-        $.post("function.php", {tab: "save_mod", id: courseid, visible: vvisible, price: vprice},
+    $(".save").click(function () {
+        var visible = $(this).parent().parent().prev().prev().children().attr("checked");
+        var price = $(this).parent().parent().prev().children().attr("value");
+        var id_course = $(this).attr('id');
+        $.post("function.php", {tab: "save_mod", id_course: id_course, visible: visible, price: price},
             function (data) {
                 if (data.status == "false") {
-                    alert("Error database");
+                    alert("Database Error");
                 } else {
-                    $("#course" + data.id).children().attr("style", "display:''");
-                    $("#course" + data.id).children().next().attr("style", "display:none");
-                    $("#course" + data.id).parent().removeClass("fmod")
-                    $("#course" + data.id).parent().children().each(function () {
+                    $("#course" + data.id_course).children().attr("style", "display:''");
+                    $("#course" + data.id_course).children().next().attr("style", "display:none");
+                    $("#course" + data.id_course).parent().removeClass("fmod")
+                    $("#course" + data.id_course).parent().children().each(function () {
                         $(this).removeClass("btop");
                     });
                 }

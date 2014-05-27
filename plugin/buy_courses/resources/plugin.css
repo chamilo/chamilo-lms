@@ -73,3 +73,7 @@ select#lsessions, select#lcourses, select#lexercises, select#status {
 .height5 {
     height: 5px;
 }
+
+.margin-left-fifty{
+    margin-left: 50px !important;
+}

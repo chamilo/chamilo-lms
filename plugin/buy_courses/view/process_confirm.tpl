@@ -24,7 +24,7 @@
                 <div class="span">
                     <div class="thumbnail">
                         <a class="ajax" rel="gb_page_center[778]" title=""
-                           href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ course.code }}">
+                           href="{{ server }}plugin/buy_courses/src/ajax.php?code={{ course.code }}">
                             <img src="{{ server }}{{ course.course_img }}">
                         </a>
                     </div>
@@ -40,7 +40,7 @@
                     <div class="cleared"></div>
                     <div class="btn-toolbar right">
                         <a class="ajax btn btn-primary" title=""
-                           href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ course.code }}">{{
+                           href="{{ server }}plugin/buy_courses/src/ajax.php?code={{ course.code }}">{{
                             'Description'|get_lang }}</a>
 
                     </div>

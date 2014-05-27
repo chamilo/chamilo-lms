@@ -2,31 +2,31 @@
 
 use ChamiloSession as Session;
 
+require_once '../config.php';
 require_once dirname(__FILE__) . '/buy_course.lib.php';
-require_once '../../../main/inc/global.inc.php';
-require_once 'lib/buy_course_plugin.class.php';
 require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
 
+$tableBuyCoursePaypal = Database::get_main_table(TABLE_BUY_COURSE_PAYPAL);
+
 $plugin = Buy_CoursesPlugin::create();
-/*
-==================================================================
-				// DATOS DE PAYPAL //
-==================================================================
-*/
-$sql = "SELECT * FROM plugin_bc_paypal WHERE id='1';";
+
+/**
+ * Paypal data
+ */
+$sql = "SELECT * FROM $tableBuyCoursePaypal WHERE id='1';";
 $res = Database::query($sql);
 $row = Database::fetch_assoc($res);
 $pruebas = ($row['sandbox'] == "YES") ? true: false;
 $paypal_username = $row['username'];
 $paypal_password = $row['password'];
 $paypal_firma = $row['signature'];
-require_once("function/paypalfunctions.php");
+require_once("paypalfunctions.php");
 
-/*==================================================================
- PayPal Express Checkout Call
- ===================================================================
-*/
+/**
+ * PayPal Express Checkout Call
+ */
+
 // Check to see if the Request object contains a variable named 'token'	
 $token = "";
 if (isset($_REQUEST['token'])) {
@@ -35,28 +35,26 @@ if (isset($_REQUEST['token'])) {
 
 // If the Request object contains the variable 'token' then it means that the user is coming from PayPal site.	
 if ($token != "") {
-    $sql = "SELECT * FROM plugin_bc_paypal WHERE id='1';";
+    $sql = "SELECT * FROM $tableBuyCoursePaypal WHERE id='1';";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);
     $paypal_username = $row['username'];
     $paypal_password = $row['password'];
     $paypal_firma = $row['signature'];
-    require_once("function/paypalfunctions.php");
-    /*
-    '------------------------------------
-    ' Calls the GetExpressCheckoutDetails API call
-    '
-    ' The GetShippingDetails function is defined in PayPalFunctions.jsp
-    ' included at the top of this file.
-    '-------------------------------------------------
-    */
+    require_once 'paypalfunctions.php';
+
+    /**
+     * Calls the GetExpressCheckoutDetails API call
+     * The GetShippingDetails function is defined in PayPalFunctions.jsp
+     *included at the top of this file.
+     */
     $resArray = GetShippingDetails($token);
     $ack = strtoupper($resArray["ACK"]);
     if ($ack == "SUCCESS" || $ack == "SUCESSWITHWARNING") {
-        /*
-        ' The information that is returned by the GetExpressCheckoutDetails call should be integrated by the partner into his Order Review
-        ' page
-        */
+        /**
+         * The information that is returned by the GetExpressCheckoutDetails
+         * call should be integrated by the partner into his Order Review page
+         */
         $email = $resArray["EMAIL"]; // ' Email address of payer.
         $payerId = $resArray["PAYERID"]; // ' Unique PayPal customer account identification number.
         $payerStatus = $resArray["PAYERSTATUS"]; // ' Status of payer. Character length and limitations: 10 single-byte alphabetic characters.
@@ -94,7 +92,7 @@ if ($token != "") {
 
 
 if (!isset($_POST['paymentOption'])) {
-    //PANTALLA DE CONFIRMACION DEL PEDIDO
+    // Confirm the order
     $_cid = 0;
     $interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
 
@@ -125,49 +123,41 @@ if (!isset($_POST['paymentOption'])) {
     $tpl->display_one_col_template();
 
 } else {
-    /*==================================================================
-     PayPal Express Checkout Call
-     ===================================================================
-    */
+    /**
+     * PayPal Express Checkout Call
+     */
     $PaymentOption = $_POST['paymentOption'];
-    $sql = "SELECT * FROM plugin_bc_paypal WHERE id='1';";
+    $sql = "SELECT * FROM $tableBuyCoursePaypal WHERE id='1';";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);
     $paypal_username = $row['username'];
     $paypal_password = $row['password'];
     $paypal_firma = $row['signature'];
-    require_once("function/paypalfunctions.php");
+    require_once("paypalfunctions.php");
     if ($PaymentOption == "PayPal") {
-        /*
-        '------------------------------------
-        ' The paymentAmount is the total value of
-        ' the shopping cart, that was set
-        ' earlier in a session variable
-        ' by the shopping cart page
-        '------------------------------------
-        */
+
+        /**
+         * The paymentAmount is the total value of
+         * the shopping cart, that was set
+         * earlier in a session variable
+         * by the shopping cart page
+         */
         $finalPaymentAmount = $_SESSION["Payment_Amount"];
-        /*
-        '------------------------------------
-        ' Calls the DoExpressCheckoutPayment API call
-        '
-        ' The ConfirmPayment function is defined in the file PayPalFunctions.jsp,
-        ' that is included at the top of this file.
-        '-------------------------------------------------
-        */
+
+        /**
+         * Calls the DoExpressCheckoutPayment API call
+         * The ConfirmPayment function is defined in the file PayPalFunctions.jsp,
+         * that is included at the top of this file.
+         */
         $resArray = ConfirmPayment($finalPaymentAmount);
         $ack = strtoupper($resArray["ACK"]);
         if ($ack == "SUCCESS" || $ack == "SUCCESSWITHWARNING") {
-            /*
-            '********************************************************************************************************************
-            '
-            ' THE PARTNER SHOULD SAVE THE KEY TRANSACTION RELATED INFORMATION LIKE
-            '                    transactionId & orderTime
-            '  IN THEIR OWN  DATABASE
-            ' AND THE REST OF THE INFORMATION CAN BE USED TO UNDERSTAND THE STATUS OF THE PAYMENT
-            '
-            '********************************************************************************************************************
-            */
+
+            /**
+             * THE PARTNER SHOULD SAVE THE KEY TRANSACTION RELATED INFORMATION LIKE transactionId & orderTime
+             * IN THEIR OWN  DATABASE
+             * AND THE REST OF THE INFORMATION CAN BE USED TO UNDERSTAND THE STATUS OF THE PAYMENT
+             */
 
             $transactionId = $resArray["PAYMENTINFO_0_TRANSACTIONID"]; // ' Unique transaction ID of the payment. Note:  If the PaymentAction of the request was Authorization or Order, this value is your AuthorizationID for use with the Authorization & Capture APIs.
             $transactionType = $resArray["PAYMENTINFO_0_TRANSACTIONTYPE"]; //' The type of transaction Possible values: l  cart l  express-checkout
@@ -180,44 +170,45 @@ if (!isset($_POST['paymentOption'])) {
             $taxAmt = $resArray["PAYMENTINFO_0_TAXAMT"]; //' Tax charged on the transaction.
             $exchangeRate = $resArray["PAYMENTINFO_0_EXCHANGERATE"]; //' Exchange rate if a currency conversion occurred. Relevant only if your are billing in their non-primary currency. If the customer chooses to pay with a currency other than the non-primary currency, the conversion occurs in the customer's account.
 
-            /*
-            ' Status of the payment:
-                    'Completed: The payment has been completed, and the funds have been added successfully to your account balance.
-
-                    'Pending: The payment is pending. See the PendingReason element for more information.
-            */
+            /**
+             * Status of the payment:
+             * Completed: The payment has been completed, and the funds have been added successfully to your account balance.
+             * Pending: The payment is pending. See the PendingReason element for more information.
+             */
 
             $paymentStatus = $resArray["PAYMENTINFO_0_PAYMENTSTATUS"];
 
-            /*
-            'The reason the payment is pending:
-            '  none: No pending reason
-            '  address: The payment is pending because your customer did not include a confirmed shipping address and your Payment Receiving Preferences is set such that you want to manually accept or deny each of these payments. To change your preference, go to the Preferences section of your Profile.
-            '  echeck: The payment is pending because it was made by an eCheck that has not yet cleared.
-            '  intl: The payment is pending because you hold a non-U.S. account and do not have a withdrawal mechanism. You must manually accept or deny this payment from your Account Overview.
-
-            '  multi-currency: You do not have a balance in the currency sent, and you do not have your Payment Receiving Preferences set to automatically convert and accept this payment. You must manually accept or deny this payment.
-            '  verify: The payment is pending because you are not yet verified. You must verify your account before you can accept this payment.
-            '  other: The payment is pending for a reason other than those listed above. For more information, contact PayPal customer service.
-            */
-
+            /**
+             * The reason the payment is pending:
+             * none: No pending reason
+             * address: The payment is pending because your customer did not include a confirmed
+             * shipping address and your Payment Receiving Preferences is set such that you want to
+             * manually accept or deny each of these payments. To change your preference, go to the Preferences section of your Profile.
+             * echeck: The payment is pending because it was made by an eCheck that has not yet cleared.
+             * intl: The payment is pending because you hold a non-U.S. account and do not have a withdrawal mechanism.
+             * You must manually accept or deny this payment from your Account Overview.
+             * multi-currency: You do not have a balance in the currency sent, and you do not have your
+             * Payment Receiving Preferences set to automatically convert and accept this payment. You must manually accept or deny this payment.
+             * verify: The payment is pending because you are not yet verified. You must verify your account before you can accept this payment.
+             * other: The payment is pending for a reason other than those listed above. For more information, contact PayPal customer service.
+             */
             $pendingReason = $resArray["PAYMENTINFO_0_PENDINGREASON"];
 
-            /*
-            'The reason for a reversal if TransactionType is reversal:
-            '  none: No reason code
-            '  chargeback: A reversal has occurred on this transaction due to a chargeback by your customer.
-            '  guarantee: A reversal has occurred on this transaction due to your customer triggering a money-back guarantee.
-            '  buyer-complaint: A reversal has occurred on this transaction due to a complaint about the transaction from your customer.
-            '  refund: A reversal has occurred on this transaction because you have given the customer a refund.
-            '  other: A reversal has occurred on this transaction due to a reason not listed above.
-            */
+            /**
+             * The reason for a reversal if TransactionType is reversal:
+             *  none: No reason code
+             *  chargeback: A reversal has occurred on this transaction due to a chargeback by your customer.
+             *  guarantee: A reversal has occurred on this transaction due to your customer triggering a money-back guarantee.
+             *  buyer-complaint: A reversal has occurred on this transaction due to a complaint about the transaction from your customer.
+             *  refund: A reversal has occurred on this transaction because you have given the customer a refund.
+             *  other: A reversal has occurred on this transaction due to a reason not listed above.
+             */
 
             $reasonCode = $resArray["PAYMENTINFO_0_REASONCODE"];
 
-//INSERTAMOS LOS REGISTROS NECESARIOS EN LAS TABLAS DE BASES DE DATOS PARA DAR AL USUARIO DE ALTA			
+            // Insert the user information to activate the user
             if ($paymentStatus == "Completed") {
-                $user_id = $_SESSION['bc_user_id']; //api_get_user_id();
+                $user_id = $_SESSION['bc_user_id'];
                 $course_code = $_SESSION['bc_course_codetext'];
                 $all_course_information = CourseManager::get_course_information($course_code);
 
@@ -232,21 +223,15 @@ if (!isset($_POST['paymentOption'])) {
                     $_SESSION['bc_message'] = 'EnrollToCourseXSuccessful';
                     $_SESSION['bc_url'] = $url;
                     $_SESSION['bc_success'] = true;
-                    //$message = sprintf($plugin->get_lang('EnrollToCourseXSuccessful'), $url);
                 } else {
                     $_SESSION['bc_message'] = 'ErrorContactPlatformAdmin';
                     $_SESSION['bc_success'] = false;
-                    //$message = $plugin->get_lang('ErrorContactPlatformAdmin');
                 }
-                //Activamos al usuario su cuenta
+                // Activate the use
                 $TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
-                // 1. set account inactive
                 $sql = "UPDATE " . $TABLE_USER . "	SET active='1' WHERE user_id='" . $_SESSION['bc_user_id'] . "'";
                 Database::query($sql);
 
-                //Logueamos al user
-
-                // a uid is given (log in succeeded)
                 $user_table = Database::get_main_table(TABLE_MAIN_USER);
                 $admin_table = Database::get_main_table(TABLE_MAIN_ADMIN);
                 $track_e_login = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_LOGIN);
@@ -264,7 +249,6 @@ if (!isset($_POST['paymentOption'])) {
 
                 if (Database::num_rows($result) > 0) {
                     // Extracting the user data
-
                     $uData = Database::fetch_array($result);
 
                     $_user = _api_format_user($uData, false);
@@ -283,7 +267,7 @@ if (!isset($_POST['paymentOption'])) {
                     header('location:' . api_get_path(WEB_PATH));
                 }
 
-                //Eliminamos las variables
+                // Delete variables
                 unset($_SESSION['bc_user_id']);
                 unset($_SESSION['bc_course_code']);
                 unset($_SESSION['bc_course_codetext']);

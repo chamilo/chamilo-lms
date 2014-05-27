@@ -38,7 +38,7 @@
         <div class="row">
         <div class="span">
         <div class="thumbnail">
-        <a class="ajax" rel="gb_page_center[778]" title="" href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ course.code }}">
+        <a class="ajax" rel="gb_page_center[778]" title="" href="{{ server }}plugin/buy_courses/src/ajax.php?code={{ course.code }}">
         <img alt="" src="{{ server }}{{ course.course_img }}">
         </a>
     </div>

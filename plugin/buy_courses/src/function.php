@@ -1,8 +1,7 @@
 <?php
-require_once '../../../main/inc/global.inc.php';
-require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
+
+require_once '../config.php';
 require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
-require_once 'buy_course_plugin.class.php';
 require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
 
 $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
@@ -144,7 +143,7 @@ if ($_REQUEST['tab'] == 'courses_filter') {
         $content .= '<div class="btn-toolbar right">';
         $content .= '<a class="ajax btn btn-primary" title="" href="' . $server . 'main/inc/ajax/course_home.ajax.php?a=show_course_information&code=' . $course['code'] . '">' . get_lang('Description') . '</a>&nbsp;';
         if ($course['enrolled'] != "YES") {
-            $content .= '<a class="btn btn-success" title="" href="' . $server . 'plugin/buy_courses/process.php?code=' . $course['id'] . '">' . $buy_name . '</a>';
+            $content .= '<a class="btn btn-success" title="" href="' . $server . 'plugin/buy_courses/src/process.php?code=' . $course['id'] . '">' . $buy_name . '</a>';
         }
         $content .= '</div>';
         $content .= '</div>';
@@ -224,23 +223,23 @@ if ($_REQUEST['tab'] == 'delete_account') {
 }
 
 if ($_REQUEST['tab'] == 'save_mod') {
-    $_REQUEST['id'] = intval($_REQUEST['id']);
-    $id = substr($_REQUEST['id'], 5);
+    $_REQUEST['id'] = Database::escape_string($_REQUEST['id']);
+    $idCourse = intval($_REQUEST['id_course']);
     $visible = ($_REQUEST['visible'] == "checked") ? 1 : 0;
-    $price = mysql_real_escape_string($_REQUEST['price']);
+    $price = Database::escape_string($_REQUEST['price']);
     $obj = $_REQUEST['obj'];
 
     $sql = "UPDATE $tableBuyCourse
         SET visible = " . $visible . ",
         price = '" . $price . "'
-        WHERE id_course = '" . $id . "';";
+        WHERE id_course = '" . $idCourse . "';";
 
     $res = Database::query($sql);
     if (!res) {
         $content = $plugin->get_lang('ProblemToSaveTheMessage') . Database::error();
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
-        echo json_encode(array("status" => "true", "id" => $id));
+        echo json_encode(array("status" => "true", "id_course" => $idCourse));
     }
 }
 

@@ -16,7 +16,7 @@
                 {% endif %}
             {% endfor %}
         </select>
-        <input type="button" id="save_currency" class="btn btn-primary" value="Guardar" />
+        <input type="button" id="save_currency" class="btn btn-primary" value="Save" />
 
         {% if paypal_enable == "true" %}
             <hr />

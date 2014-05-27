@@ -1,14 +1,15 @@
 <?php
-//error_reporting(E_ALL);
-//ini_set("display_errors", 1);
-require_once '../../../main/inc/global.inc.php';
+
+require_once '../config.php';
 require_once '../../../main/inc/lib/mail.lib.inc.php';
 require_once dirname(__FILE__) . '/buy_course.lib.php';
-require_once 'lib/buy_course_plugin.class.php';
 
 if ($_POST['payment_type'] == '') {
     header('Location:process.php');
 }
+
+$tableBuyCourseTemporal = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
+$tableBuyCoursePaypal = Database::get_main_table(TABLE_BUY_COURSE_PAYPAL);
 
 if (isset($_POST['Aceptar'])) {
     // Save the user, course and reference in a tmp table
@@ -22,24 +23,25 @@ if (isset($_POST['Aceptar'])) {
         eval($asignacion);
     }
 
-    $sql = "INSERT INTO plugin_bc_temporal (user_id, name, course_code, title, reference, price) VALUES ('" . $user_id . "', '" . $name . "','" . $course_code . "','" . $title . "','" . $reference . "','" . $price . "');";
+    $sql = "INSERT INTO $tableBuyCourseTemporal (user_id, name, course_code, title, reference, price)
+        VALUES ('" . $user_id . "', '" . $name . "','" . $course_code . "','" . $title . "','" . $reference . "','" . $price . "');";
     $res = Database::query($sql);
 
     // Notify the user and send the bank info
 
     $accountsList = listAccounts();
-    $texto = '<div align="center"><table style="width:70%"><tr><th style="text-align:center"><h3>Datos Bancarios</h3></th></tr>';
+    $text = '<div align="center"><table style="width:70%"><tr><th style="text-align:center"><h3>Datos Bancarios</h3></th></tr>';
     foreach ($accountsList as $account) {
-        $texto .= '<tr>';
-        $texto .= '<td>';
-        $texto .= '<font color="#0000FF"><strong>' . htmlspecialchars($account['name']) . '</strong></font><br />';
+        $text .= '<tr>';
+        $text .= '<td>';
+        $text .= '<font color="#0000FF"><strong>' . htmlspecialchars($account['name']) . '</strong></font><br />';
         if ($account['swift'] != '') {
-            $texto .= 'SWIFT: <strong>' . htmlspecialchars($account['swift']) . '</strong><br />';
+            $text .= 'SWIFT: <strong>' . htmlspecialchars($account['swift']) . '</strong><br />';
         }
-        $texto .= 'Cuenta Bancaria: <strong>' . htmlspecialchars($account['account']) . '</strong><br />';
-        $texto .= '</td></tr>';
+        $text .= 'Cuenta Bancaria: <strong>' . htmlspecialchars($account['account']) . '</strong><br />';
+        $text .= '</td></tr>';
     }
-    $texto .= '</table></div>';
+    $text .= '</table></div>';
 
     $plugin = Buy_CoursesPlugin::create();
     $asunto = utf8_encode($plugin->get_lang('bc_subject'));
@@ -60,7 +62,7 @@ if (isset($_POST['Aceptar'])) {
     $message = str_replace("{{name}}", $name, $message);
     $message = str_replace("{{course}}", $title_course, $message);
     $message = str_replace("{{reference}}", $reference, $message);
-    $message .= $texto;
+    $message .= $text;
 
     api_mail($name, $email, $asunto, $message);
     // Return to course list
@@ -73,14 +75,14 @@ $_SESSION['bc_currency_type'] = $currencyType;
 $server = $_POST['server'];
 
 if ($_POST['payment_type'] == "PayPal") {
-    $sql = "SELECT * FROM plugin_bc_paypal WHERE id='1';";
+    $sql = "SELECT * FROM $tableBuyCoursePaypal WHERE id='1';";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);
     $pruebas = ($row['sandbox'] == "YES") ? true: false;
     $paypal_username = $row['username'];
     $paypal_password = $row['password'];
     $paypal_firma = $row['signature'];
-    require_once("function/paypalfunctions.php");
+    require_once("paypalfunctions.php");
     // PayPal Express Checkout Module
     $paymentAmount = $_SESSION["Payment_Amount"];
     $currencyCodeType = $currencyType;
@@ -119,7 +121,7 @@ if ($_POST['payment_type'] == "Transference") {
     $_cid = 0;
     $interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
 
-    $tpl = new Template('Tipo de pago');
+    $tpl = new Template('PaymentType');
 
     $code = $_SESSION['bc_course_code'];
     $courseInfo = courseInfo($code);

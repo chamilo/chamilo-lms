@@ -2,9 +2,8 @@
 /**
  * Initialization
  */
+require_once '../config.php';
 require_once dirname(__FILE__) . '/buy_course.lib.php';
-require_once '../../../main/inc/global.inc.php';
-require_once 'lib/buy_course_plugin.class.php';
 
 $plugin = Buy_CoursesPlugin::create();
 $_cid = 0;

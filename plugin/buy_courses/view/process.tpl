@@ -24,7 +24,7 @@
                 <div class="span">
                     <div class="thumbnail">
                         <a class="ajax" rel="gb_page_center[778]" title=""
-                           href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ course.code }}">
+                           href="{{ server }}plugin/buy_courses/src/ajax.php?code={{ course.code }}">
                             <img alt="" src="{{ server }}{{ course.course_img }}">
                         </a>
                     </div>
@@ -40,39 +40,36 @@
                     <div class="cleared"></div>
                     <div class="btn-toolbar right">
                         <a class="ajax btn btn-primary" title=""
-                           href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ course.code }}">{{'Description'|get_lang }}
+                           href="{{ server }}plugin/buy_courses/src/ajax.php?code={{ course.code }}">{{'Description'|get_lang }}
                         </a>
                     </div>
                 </div>
             </div>
         </div>
-
-
     </div>
     <div class="cleared"></div>
-    <hr/>
-    <div align="center">
-        <form action="../src/process_confirm.php" method="post">
-            <table>
-                <tr>
-                    <th>
-                        <legend><h3> M&eacute;todos de Pago:</h3></legend>
-                    </th>
-                </tr>
-                {% if paypal_enable == "true" %}
-                <tr><td><input type="radio" id="payment_type-p" name="payment_type" value="PayPal" /> {{ 'paypal'|get_lang }}</td></tr>
-                {% endif %}
-
-                {% if transference_enable == "true" %}
-                <tr><td><input type="radio" id="payment_type-tra" name="payment_type" value="Transference" />{{ 'BankTransference'|get_lang }}</td></tr>
-                {% endif %}
-                <tr><td>
+    <form class="form-horizontal span3 offset4" action="../src/process_confirm.php" method="post">
+        <fieldset>
+            <legend align="center">{{ 'PaymentMethods'|get_lang }}</legend>
+            <div align="center" class="control-group">
+                <div class="controls margin-left-fifty">
+                    {% if paypal_enable == "true" %}
+                        <label class="radio">
+                            <input type="radio" id="payment_type-p" name="payment_type" value="PayPal" > Paypal
+                        </label>
+                    {% endif %}
+                    {% if transference_enable == "true" %}
+                        <label class="radio">
+                            <input type="radio" id="payment_type-tra" name="payment_type" value="Transference" > {{ 'BankTransference'|get_lang }}
+                        </label>
+                    {% endif %}
+                </div>
+                </br>
                 <input type="hidden" name="currency_type" value="{{ currency }}" />
                 <input type="hidden" name="server" value="{{ server }}"/>
-                <input type="submit" class="btn btn-success" value="{{ 'confirmar_compra'|get_lang }}"/>
-                </td></tr>
-            </table>
-        </form>
-    </div>
+                <input align="center" type="submit" class="btn btn-success" value="{{ 'confirm_order'|get_lang }}"/>
+            </div>
+        </fieldset>
+    </form>
     <div class="cleared"></div>
 </div>

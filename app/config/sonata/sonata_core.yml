@@ -1,0 +1,6 @@
+sonata_core:
+    flashmessage:
+        error:
+            css_class: danger
+        success:
+

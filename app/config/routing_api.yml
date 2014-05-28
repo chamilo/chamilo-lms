@@ -1,0 +1,58 @@
+NelmioApiDocBundle:
+    resource:     "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:       /doc
+
+sonata_api_classification:
+    type:         rest
+    prefix:       /classification
+    resource:     "@SonataClassificationBundle/Resources/config/routing/api.xml"
+
+sonata_api_news:
+    type:         rest
+    prefix:       /news
+    resource:     "@SonataNewsBundle/Resources/config/routing/api.xml"
+
+sonata_api_media:
+    type:         rest
+    prefix:       /media
+    resource:     "@SonataMediaBundle/Resources/config/routing/api.xml"
+
+sonata_api_notification:
+    type:         rest
+    prefix:       /notification
+    resource:     "@SonataNotificationBundle/Resources/config/routing/api.xml"
+
+#sonata_api_ecommerce_product:
+#    type:         rest
+#    prefix:       /ecommerce
+#    resource:     "@SonataProductBundle/Resources/config/routing/api.xml"
+#
+#sonata_api_ecommerce_order:
+#    type:         rest
+#    prefix:       /ecommerce
+#    resource:     "@SonataOrderBundle/Resources/config/routing/api.xml"
+#
+#sonata_api_ecommerce_invoice:
+#    type:         rest
+#    prefix:       /ecommerce
+#    resource:     "@SonataInvoiceBundle/Resources/config/routing/api.xml"
+#
+#sonata_api_ecommerce_customer:
+#    type:         rest
+#    prefix:       /ecommerce
+#    resource:     "@SonataCustomerBundle/Resources/config/routing/api.xml"
+#
+#sonata_api_ecommerce_basket:
+#    type:         rest
+#    prefix:       /ecommerce
+#    resource:     "@SonataBasketBundle/Resources/config/routing/api.xml"
+
+sonata_api_page:
+    type:         rest
+    prefix:       /page
+    resource:     "@SonataPageBundle/Resources/config/routing/api.xml"
+
+sonata_api_user:
+    type:         rest
+    prefix:       /user
+    resource:     "@SonataUserBundle/Resources/config/routing/api.xml"

@@ -1,18 +1,23 @@
-main:
+chamilo_lms_course:
+    resource: "@ChamiloLMSCourseBundle/Resources/config/routing.yml"
+    prefix:   /
+
+_front:
+    resource: routing_front.yml
+
+_admin:
+    resource: routing_admin.yml
+    prefix:   /admin
+
+_api:
+    resource: routing_api.yml
+    prefix:   /api
+
+core_bundle:
     resource: "@ChamiloLMSCoreBundle/Resources/config/routing.yml"
-
-login_check:
-    path: /login_check
-
-login:
-    path:     /login
-    defaults: { _controller: ChamiloLMSCoreBundle:Security:login }
-
-secured_logout:
-    pattern:   /secured/logout
-
-logout:
-    pattern:   /secured/logout
 
 root:
     path: /
+
+logout:
+    path: /logout

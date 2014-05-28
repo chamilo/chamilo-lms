@@ -1,0 +1,23 @@
+#
+#  References :
+#      Behat - BDD framework            : http://docs.behat.org/bundle/index.html
+#      Mink - Web acceptance testing    : http://mink.behat.org/
+#
+
+mink:
+    base_url:   http://localhost/app_dev.php
+    show_cmd:   mate %%s
+
+
+#    default_session: sahi              # use Javascript engine
+    default_session: goutte            # use for real HTTP test (remote server)
+#    default_session: symfony           # use symfony http client, test local symfony project
+
+    goutte:
+        server_parameters:
+            host: http://localhost
+    sahi:
+        host:     x.local
+
+
+behat: ~

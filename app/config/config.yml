@@ -1,6 +1,39 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: assetic.yml }
+
+    - { resource: @ChamiloLMSCoreBundle/Resources/config/admin.yml }
+
+    # Mopa Bootstrap
+    - { resource: mopa/mopa_bootstrap.yml }
+
+    # Knp Paginator
+    - { resource: knp/knp_paginator.yml }
+
+    # FriendOfSymfony Bundles
+    #- { resource: fos/fos_comment.yml }
+    - { resource: fos/fos_rest.yml }
+    - { resource: fos/fos_user.yml }
+    #- { resource: fos/fos_elastica.yml }
+
+    # Sonata Core Bundles
+    - { resource: sonata/sonata_block.yml }
+    - { resource: sonata/sonata_formatter.yml }
+    - { resource: sonata/sonata_cache.yml }
+    #- { resource: sonata/sonata_seo.yml }
+    - { resource: sonata/sonata_timeline.yml }
+    - { resource: sonata/sonata_intl.yml }
+    - { resource: sonata/sonata_core.yml }
+
+    # Sonata Feature Bundles
+    - { resource: sonata/sonata_admin.yml }
+    - { resource: sonata/sonata_page.yml }
+    - { resource: sonata/sonata_media.yml }
+    - { resource: sonata/sonata_news.yml }
+    - { resource: sonata/sonata_user.yml }
+    - { resource: sonata/sonata_notification.yml }
+    - { resource: sonata/sonata_classification.yml }
 
 framework:
     #esi:             ~
@@ -23,11 +56,23 @@ framework:
         handler_id:  ~
     fragments:       ~
     http_method_override: true
+    session:
+        cookie_lifetime: 1440
 
 # Twig Configuration
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+
+    base_template_class: Sonata\CacheBundle\Twig\TwigTemplate14
+
+    form:
+        resources:
+            - 'SonataFormatterBundle:Form:formatter.html.twig'
+            - 'SonataMediaBundle:Form:media_widgets.html.twig'
+            - 'SonataCoreBundle:Form:datepicker.html.twig'
+    exception_controller: 'FOS\RestBundle\Controller\ExceptionController::showAction'
+
     paths:
       "%kernel.root_dir%/../src/ChamiloLMS/CoreBundle/Resources/views/default": template_style
 
@@ -84,26 +129,33 @@ assetic:
           apply_to: "\.less$"
         cssrewrite: ~
 
-braincrafted_bootstrap:
-  less_filter: lessphp
+#braincrafted_bootstrap:
+  #less_filter: lessphp
 
 # Doctrine Configuration
 doctrine:
     dbal:
-        driver:   "%database_driver%"
-        host:     "%database_host%"
-        port:     "%database_port%"
-        dbname:   "%database_name%"
-        user:     "%database_user%"
-        password: "%database_password%"
-        charset:  UTF8
-        # if using pdo_sqlite as your database driver, add the path in parameters.yml
-        # e.g. database_path: "%kernel.root_dir%/data/data.db3"
-        # path:     "%database_path%"
-
+        default_connection: default
+        connections:
+            default:
+                driver:   "%database_driver%"
+                host:     "%database_host%"
+                port:     "%database_port%"
+                dbname:   "%database_name%"
+                user:     "%database_user%"
+                password: "%database_password%"
+                charset:  UTF8
+        types:
+            json: Sonata\Doctrine\Types\JsonType
+            #currency: Sonata\Component\Currency\CurrencyDoctrineType
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
-        auto_mapping: true
+        default_entity_manager: default
+        # auto_mapping: true
+        entity_managers:
+            default:
+                auto_mapping: true
+                mappings: ~
 
 # Swiftmailer Configuration
 swiftmailer:
@@ -113,53 +165,15 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
-sonata_block:
-    default_contexts: [cms]
-    blocks:
-        sonata.admin.block.admin_list:
-            contexts:   [admin]
+jms_security_extra:
+    secure_all_services: false
 
-        #sonata.admin_doctrine_orm.block.audit:
-        #    contexts:   [admin]
-
-        sonata.block.service.text:
-        sonata.block.service.rss:
-        sonata.block.service.course:
-        sonata.block.service.menu:
-
-        # Some specific block from the SonataMediaBundle
-        #sonata.media.block.media:
-        #sonata.media.block.gallery:
-        #sonata.media.block.feature_media:
-
-sonata_media:
-    # if you don't use default namespace configuration
-    #class:
-    #    media: MyVendor\MediaBundle\Entity\Media
-    #    gallery: MyVendor\MediaBundle\Entity\Gallery
-    #    gallery_has_media: MyVendor\MediaBundle\Entity\GalleryHasMedia
-    default_context: default
-    db_driver: doctrine_orm # or doctrine_mongodb, doctrine_phpcr
-    contexts:
-        default:  # the default context is mandatory
-            providers:
-                - sonata.media.provider.dailymotion
-                - sonata.media.provider.youtube
-                - sonata.media.provider.image
-                - sonata.media.provider.file
-
-            formats:
-                small: { width: 100 , quality: 70}
-                big:   { width: 500 , quality: 70}
-
-    cdn:
-        server:
-            path: /uploads/media # http://media.sonata-project.org/
-
-    filesystem:
-        local:
-            directory:  %kernel.root_dir%/../web/uploads/media
-            create:     false
+jms_serializer:
+    metadata:
+        directories:
+            - { path: %kernel.root_dir%/../vendor/sonata-project/user-bundle/Resources/config/serializer/FOSUserBundle, namespace_prefix: 'FOS\UserBundle' }
+            #- { path: %kernel.root_dir%/../vendor/sonata-project/ecommerce/src/BasketBundle/Resources/config/serializer/Component, namespace_prefix: 'Sonata\Component\Basket' }
+            - { path: %kernel.root_dir%/../vendor/sonata-project/datagrid-bundle/Resources/config/serializer, namespace_prefix: 'Sonata\DatagridBundle' }
 
 knp_menu:
     twig:  # use "twig: false" to disable the Twig extension and the TwigRenderer
@@ -167,9 +181,26 @@ knp_menu:
     templating: false # if true, enables the helper for PHP templates
     default_renderer: twig # The renderer to use, list is also available by default
 
-chamilo:
-    system_version: 10.0.0
-    system_stable: false
-    software_name: chamilo
-    software_url: http://www.chamilo.org/
-    platform_charset: utf-8
+# %kernel.root_dir%/DoctrineMigrations
+doctrine_migrations:
+    dir_name: %kernel.root_dir%/../vendor/chamilo/chash/src/Chash/Migrations
+    namespace: Chash\Migrations
+    table_name: chamilo_migration_versions
+    name: Chamilo Migrations
+
+fos_advanced_encoder:
+    encoders:
+        FOS\UserBundle\Model\UserInterface: sha512
+        legacy_encoder:
+            id: chamilolms.userbundle.encoder
+
+sonata_admin:
+    title:      ChamiloLMS
+    title_logo: apple-touch-icon.png
+
+nelmio_api_doc: ~
+
+sensio_framework_extra:
+    view:    { annotations: false }
+    router:  { annotations: true }
+    request: { converters:  true }

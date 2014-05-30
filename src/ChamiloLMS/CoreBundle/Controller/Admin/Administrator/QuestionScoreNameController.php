@@ -14,7 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @author Julio Montoya <gugli100@gmail.com>
  */
 
-class QuestionScoreNameController extends CrudController
+class QuestionScoreNameController
 {
     public function getClass()
     {

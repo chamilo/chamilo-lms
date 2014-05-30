@@ -1,12 +1,7 @@
-{% extends 'ChamiloLMSCoreBundle::page.html.twig' %}
-
-{% block layout %}
-    {% embed 'ChamiloLMSCoreBundle::3-9.html.twig' %}
-        {% block content %}
-            {{ parent() }}
-        {% endblock %}
-        {% block sidebar %}
-            {{ parent() }}
-        {% endblock %}
-    {% endembed %}
+{#{% extends "ChamiloLMSCoreBundle::main_layout.html.twig" %}#}
+{% block page_content %}
+    {{ content }}
 {% endblock %}
+
+
+

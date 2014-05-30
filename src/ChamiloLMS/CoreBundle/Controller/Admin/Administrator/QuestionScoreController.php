@@ -15,7 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @author Julio Montoya <gugli100@gmail.com>
  * @Route("/question_score")
  */
-class QuestionScoreController extends CrudController
+class QuestionScoreController
 {
     /**
      *

@@ -15,7 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @author Julio Montoya <gugli100@gmail.com>
  * @Route("/introduction")
  */
-class IntroductionController extends CrudController
+class IntroductionController
 {
     public function getClass()
     {

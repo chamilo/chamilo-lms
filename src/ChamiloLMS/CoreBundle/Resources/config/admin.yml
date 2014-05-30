@@ -1,0 +1,22 @@
+services:
+    sonata.admin.course:
+        class: ChamiloLMS\CoreBundle\Admin\CourseAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Course" }
+        arguments:
+            - ~
+            - ChamiloLMS\CoreBundle\Entity\Course
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloLMSCoreBundle]]
+
+    sonata.admin.session:
+        class: ChamiloLMS\CoreBundle\Admin\SessionAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "LMS", label: "Session" }
+        arguments:
+            - ~
+            - ChamiloLMS\CoreBundle\Entity\Session
+            - ~
+        calls:
+            - [ setTranslationDomain, [ChamiloLMSCoreBundle]]

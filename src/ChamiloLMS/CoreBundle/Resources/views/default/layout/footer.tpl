@@ -269,9 +269,9 @@ $(document).ready( function() {
     /** Makes row highlighting possible */
 
     // Chosen select.
-    $(".chzn-select").chosen({
+    /*$(".chzn-select").chosen({
         disable_search_threshold: 10
-    });
+    });*/
 
     // Adv multi-select text inputs.
     $('.select_class_filter').each(function(){

@@ -9,8 +9,8 @@ use ChamiloLMS\CoreBundle\Form\JuryType;
 use ChamiloLMS\CoreBundle\Entity;
 use ChamiloLMS\CoreBundle\Entity\BranchSync;
 use ChamiloLMS\CoreBundle\Entity\Jury;
-use ChamiloLMS\CoreBundle\Entity\User;
 use ChamiloLMS\CoreBundle\Entity\JuryMembers;
+use ChamiloLMS\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,7 +21,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @package ChamiloLMS\CoreBundle\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class BranchDirectorController extends CrudController
+class BranchDirectorController
 {
     public function getClass()
     {

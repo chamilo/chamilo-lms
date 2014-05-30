@@ -20,7 +20,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @package ChamiloLMS\CoreBundle\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class JuryMemberController extends CrudController
+class JuryMemberController
 {
     public $maxCountOfMemberToVoteToConsiderEvaluated = 3;
 

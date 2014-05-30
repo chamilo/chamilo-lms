@@ -43,3 +43,17 @@ tests/doctrine_console/Proxies
 
 # OS stuff
 .DS_Store
+
+# Symfony
+
+behat.yml
+app/cache/*
+app/logs/*
+app/*.cache
+web/bundles
+web/uploads
+web/sitemap*.xml
+app/config/parameters*.yml
+vendor
+build
+composer.lock

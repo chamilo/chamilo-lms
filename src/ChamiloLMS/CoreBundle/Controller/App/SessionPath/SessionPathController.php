@@ -17,7 +17,7 @@ use ChamiloLMS\CoreBundle\Form\SessionPathType;
  * @package ChamiloLMS.Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class SessionPathController extends CrudController
+class SessionPathController
 {
     public function getClass()
     {

@@ -111,10 +111,10 @@
             {% endif %}
 
             {# if user is not login show the login form #}
-            {% render controller("ChamiloLMSCoreBundle:Front:showLogin") %}
+            {# render (controller('FOSUserBundle:Security:login')) #}
 
             {#  course_session_block #}
-            {% render controller("ChamiloLMSCoreBundle:Front:showCourseSessionBlock") %}
+            {# render controller("ChamiloLMSCoreBundle:Front:showCourseSessionBlock") %}
 
             {#  User picture  #}
             {# include "@template_style/index/user_image_block.tpl" #}
@@ -126,17 +126,17 @@
             {# include "@template_style/index/profile_social_block.tpl" #}
 
             {#  Course block - admin #}
-            {% render controller("ChamiloLMSCoreBundle:Front:showCourseBlock") %}
+            {# render controller("ChamiloLMSCoreBundle:Front:showCourseBlock") %}
 
             {#  Course block - teacher #}
-            {% render controller("ChamiloLMSCoreBundle:Front:showTeacherBlock") %}
+            {# render controller("ChamiloLMSCoreBundle:Front:showTeacherBlock") %}
 
             {#  Session block #}
-            {% render controller("ChamiloLMSCoreBundle:Front:showSessionBlock") %}
+            {# render controller("ChamiloLMSCoreBundle:Front:showSessionBlock") %}
 
-            {% render controller("ChamiloLMSCoreBundle:Front:showNoticeBlock") %}
+            {# render controller("ChamiloLMSCoreBundle:Front:showNoticeBlock") %}
 
-            {% render controller("ChamiloLMSCoreBundle:Front:showHelpBlock") %}
+            {# render controller("ChamiloLMSCoreBundle:Front:showHelpBlock") %}
 
             {% render controller("ChamiloLMSCoreBundle:Front:showNavigationBlock") %}
 

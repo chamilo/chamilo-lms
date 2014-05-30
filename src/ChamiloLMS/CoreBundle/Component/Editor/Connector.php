@@ -4,7 +4,7 @@
 namespace ChamiloLMS\CoreBundle\Component\Editor;
 
 use Doctrine\ORM\EntityManager;
-use ChamiloLMS\CoreBundle\Entity\User;
+use Application\Sonata\UserBundle\Entity\User;
 use ChamiloLMS\CoreBundle\Entity\Course;
 
 use Symfony\Component\Translation\Translator;

@@ -21,7 +21,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @package ChamiloLMS\CoreBundle\Controller\Admin\Administrator
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class BranchController extends CrudController
+class BranchAdminController extends Controller
 {
     public function getClass()
     {
@@ -108,7 +108,7 @@ class BranchController extends CrudController
 
                 $userIdList = $item->getUserId();
                 $userId = ($userIdList[0]);
-                $user = $this->getManager()->getRepository('ChamiloLMS\CoreBundle\Entity\User')->find($userId);
+                $user = $this->getManager()->getRepository('Application\Sonata\UserBundle\Entity\User')->find($userId);
                 if (!$user) {
                     throw new \Exception('Unable to found User');
                 }

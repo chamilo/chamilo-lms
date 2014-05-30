@@ -15,11 +15,11 @@ main:
     requirements:
       name: .+
 
-courses:
+courses_code:
     path:     /courses/{code}
     defaults: { _controller: ChamiloLMSCoreBundle:Tool/CourseHome/CourseHome:index }
 
-courses:
+courses_code_index:
     path:     /courses/{code}/index.php
     defaults: { _controller: ChamiloLMSCoreBundle:Tool/CourseHome/CourseHome:index }
 
@@ -55,4 +55,3 @@ remove_trailing_slash:
     requirements:
         url: .*/$
         _method: GET
-

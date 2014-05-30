@@ -17,7 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @package ChamiloLMS\CoreBundle\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class CurriculumCategoryController extends CrudController
+class CurriculumCategoryController
 {
     public function getClass()
     {

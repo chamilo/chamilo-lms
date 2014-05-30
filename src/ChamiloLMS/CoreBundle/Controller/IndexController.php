@@ -414,7 +414,7 @@ class IndexController extends BaseController
      */
     public function userPortalAction($type = 'courses', $filter = 'current', $page = 1)
     {
-        api_block_anonymous_users();
+        //api_block_anonymous_users();
 
         // Abort request because the user is not allowed here - @todo use filters
         /*if ($this->app['allowed'] == false) {

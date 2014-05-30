@@ -5,29 +5,84 @@ services:
             - { name: twig.extension }
 
     listener.request_response:
-      class: ChamiloLMS\CoreBundle\Listener\LegacyListener
-      arguments: [ @service_container]
-      tags:
-        - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
-        - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
-        - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+        class: ChamiloLMS\CoreBundle\EventListener\LegacyListener
+        arguments: [@service_container]
+        tags:
+          - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+          - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+          - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
     listener.locale:
-        class: ChamiloLMS\CoreBundle\Listener\LocaleListener
+        class: ChamiloLMS\CoreBundle\EventListener\LocaleListener
         arguments: ["%kernel.default_locale%"]
         tags:
             - { name: kernel.event_subscriber }
 
-    listener.login_success_handler:
-      class: ChamiloLMS\CoreBundle\Listener\LoginSuccessHandler
-      arguments:  [@database_connection, @router, @security.context]
+    listener.navbar_user_listener:
+        class: ChamiloLMS\CoreBundle\EventListener\ShowUserListener
+        arguments: [@service_container]
+        tags:
+            - { name: kernel.event_listener, event: theme.navbar_user, method: onShowUser }
+            - { name: kernel.event_listener, event: theme.sidebar_user, method: onShowUser }
 
-    listener.logout_success_handler:
-        class: ChamiloLMS\CoreBundle\Listener\LogoutSuccessHandler
+    listener.message_listener:
+        class: ChamiloLMS\CoreBundle\EventListener\MessageListener
+        arguments: [@service_container]
+        tags:
+            - { name: kernel.event_listener, event: theme.messages, method: onListMessages }
+
+    listener.login_success_handler:
+        class: ChamiloLMS\CoreBundle\EventListener\LoginSuccessHandler
         arguments:  [@database_connection, @router, @security.context]
 
-    sonata.block.service.course:
-      class: ChamiloLMS\CoreBundle\Block\CourseBlockService
-      arguments: ["sonata.block.service.course", @templating ]
-      tags:
-          - { name: sonata.block }
+    listener.logout_success_handler:
+        class: ChamiloLMS\CoreBundle\EventListener\LogoutSuccessHandler
+        arguments:  [@database_connection, @router, @security.context]
+
+    # ORMs
+    chamilolms.coursebundle.course:
+        class: ChamiloLMS\CourseBundle\Entity\CourseManager
+        arguments: [@doctrine]
+
+    # Course block
+    chamilolms.corebundle.block.course:
+        class: ChamiloLMS\CoreBundle\Block\CourseBlockService
+        arguments: ["course_block", @templating ]
+        tags:
+            - { name: sonata.block }
+
+    # Course block
+    chamilolms.corebundle.block.header:
+        class: ChamiloLMS\CoreBundle\Block\CourseBlockService
+        arguments: ["header", @templating ]
+        tags:
+            - { name: sonata.block }
+
+    # Menus
+
+    chamilolms.corebundle.menu.main_menu_builder:
+        class: ChamiloLMS\CoreBundle\Menu\MainMenuBuilder
+        arguments: [@knp_menu.factory, @router]
+
+    chamilolms.corebundle.menu.course_builder:
+        class: ChamiloLMS\CoreBundle\Menu\CourseMenuBuilder
+        arguments: [@knp_menu.factory, @chamilolms.coursebundle.course, @router]
+
+    # Blocks
+
+    chamilolms.corebundle.block.main_menu:
+        class: ChamiloLMS\CoreBundle\Block\MainMenuBlockService
+        arguments: ["chamilolms.corebundle.block.main_menu", @templating, @knp_menu.menu_provider, @chamilolms.corebundle.menu.main_menu_builder ]
+        tags:
+            - { name: sonata.block }
+
+    # Breadcrumb
+    chamilolms.corebundle.block.breadcrumb:
+        class: ChamiloLMS\CoreBundle\Block\DefaultBreadcrumbBlockService
+        arguments: ["default", "chamilolms.corebundle.block.breadcrumb", @templating, @knp_menu.menu_provider, @knp_menu.factory]
+        tags:
+            - { name: sonata.block }
+            - { name: sonata.breadcrumb }
+
+    chamilolms.userbundle.encoder:
+        class: Application\Sonata\UserBundle\Security\Encoder

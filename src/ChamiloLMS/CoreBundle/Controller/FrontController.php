@@ -24,48 +24,11 @@ class FrontController extends Controller
      */
     public function showLoginAction()
     {
+        $csrfToken = $this->container->get('form.csrf_provider')->generateCsrfToken('authenticate');
         return $this->render(
             'ChamiloLMSCoreBundle:Security:only_login.html.twig',
-            array('error' => null)
+            array('error' => null, 'csrf_token' => $csrfToken)
         );
     }
 
-    public function showCourseSessionBlockAction()
-    {
-
-        return new Response('showCourseSessionBlock');
-    }
-
-    public function showCourseBlockAction()
-    {
-        return new Response('showCourseSessionBlock');
-    }
-
-    public function showTeacherBlockAction()
-    {
-        return new Response('showCourseSessionBlock');
-    }
-
-    public function showSessionBlockAction()
-    {
-        return new Response('showCourseSessionBlock');
-    }
-
-    public function showNoticeBlockAction()
-    {
-        return new Response('showCourseSessionBlock');
-    }
-    public function showHelpBlockAction()
-    {
-        return new Response('showCourseSessionBlock');
-    }
-
-    public function showNavigationBlockAction()
-    {
-        return new Response('showCourseSessionBlock');
-    }
-    public function showSkillsBlockAction()
-    {
-        return new Response('showCourseSessionBlock');
-    }
 }

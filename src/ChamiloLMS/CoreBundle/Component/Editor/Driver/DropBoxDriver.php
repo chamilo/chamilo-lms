@@ -70,7 +70,7 @@ class DropBoxDriver extends \elFinderVolumeMySQL implements InterfaceDriver
         if ($this->connector->security->isGranted('IS_AUTHENTICATED_FULLY')) {
 
             /** @var \ChamiloLMS\CoreBundle\Entity\Repository\UserRepository $repository */
-            /*$repository = $this->connector->entityManager->getRepository('ChamiloLMS\CoreBundle\Entity\User');
+            /*$repository = $this->connector->entityManager->getRepository('ChamiloLMS\UserBundle\Entity\User');
             $courses = $repository->getCourses($this->connector->user);*/
 
             //if (!empty($courses)) {

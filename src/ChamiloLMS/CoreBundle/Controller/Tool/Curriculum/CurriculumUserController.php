@@ -21,7 +21,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @package ChamiloLMS\CoreBundle\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class CurriculumUserController extends CrudController
+class CurriculumUserController
 {
     public function getControllerAlias()
     {
@@ -208,7 +208,7 @@ class CurriculumUserController extends CrudController
                 }
 
                 // @todo check this
-                $user = $this->get('orm.em')->getRepository('ChamiloLMS\CoreBundle\Entity\User')->find($user->getUserId());
+                $user = $this->get('orm.em')->getRepository('Application\Sonata\UserBundle\Entity\User')->find($user->getUserId());
 
                 $counter = 1;
                 $parsed = array();

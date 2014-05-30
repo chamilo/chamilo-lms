@@ -22,7 +22,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
  * @package ChamiloLMS\CoreBundle\Controller\Admin\Administrator
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class JuryController extends CrudController
+class JuryController
 {
     public function getClass()
     {
@@ -96,7 +96,7 @@ class JuryController extends CrudController
 
         $role = $request->get('role');
         /** @var \ChamiloLMS\CoreBundle\Entity\Repository\UserRepository $repo */
-        $repo = $this->getManager()->getRepository('ChamiloLMS\CoreBundle\Entity\User');
+        $repo = $this->getManager()->getRepository('Application\Sonata\UserBundle\Entity\User');
 
         if (empty($role)) {
             $entities = $repo->searchUserByKeyword($keyword);
@@ -106,7 +106,7 @@ class JuryController extends CrudController
 
         $data = array();
         if ($entities) {
-            /** @var \ChamiloLMS\CoreBundle\Entity\User $entity */
+            /** @var \ChamiloLMS\UserBundle\Entity\User $entity */
             foreach ($entities as $entity) {
                 $data[] = array(
                     'key' => (string) $entity->getUserId(),
@@ -136,7 +136,7 @@ class JuryController extends CrudController
 
                 $userIdList = $item->getUserId();
                 $userId = ($userIdList[0]);
-                $user = $this->getManager()->getRepository('ChamiloLMS\CoreBundle\Entity\User')->find($userId);
+                $user = $this->getManager()->getRepository('ChamiloLMS\UserBundle\Entity\User')->find($userId);
                 if (!$user) {
                     throw new \Exception('Unable to found User');
                 }

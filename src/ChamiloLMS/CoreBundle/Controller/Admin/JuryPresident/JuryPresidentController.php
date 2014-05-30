@@ -26,7 +26,7 @@ use Whoops\Example\Exception;
  * @package ChamiloLMS\CoreBundle\Controller
  * @author Julio Montoya <gugli100@gmail.com>
  */
-class JuryPresidentController extends CrudController
+class JuryPresidentController
 {
     public $maxCountOfMemberToVoteToConsiderEvaluated = 3;
 

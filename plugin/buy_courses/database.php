@@ -5,7 +5,7 @@
  * Date: 21/05/14
  * Time: 12:19 PM
  */
-$objPlugin = new Buy_CoursesPlugin();
+$objPlugin = Buy_CoursesPlugin::create();
 
 $table = Database::get_main_table(TABLE_BUY_COURSE);
 $sql = "CREATE TABLE IF NOT EXISTS $table (
@@ -295,7 +295,7 @@ Database::query($sql);
 $table = Database::get_main_table(TABLE_BUY_COURSE_PAYPAL);
 $sql = "CREATE TABLE IF NOT EXISTS $table (
     id INT unsigned NOT NULL auto_increment PRIMARY KEY,
-    sandbox VARCHAR(5) NOT NULL DEFAULT 'SI',
+    sandbox VARCHAR(5) NOT NULL DEFAULT 'YES',
     username VARCHAR(100) NOT NULL DEFAULT '',
     password VARCHAR(100) NOT NULL DEFAULT '',
     signature VARCHAR(100) NOT NULL DEFAULT '')";

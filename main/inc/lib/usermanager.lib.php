@@ -337,13 +337,13 @@ class UserManager
             }
 
             // Adding user
-            /** @var ChamiloLMS\Entity\User $user */
+            /** @var ChamiloLMS\UserBundle\Entity\User $user */
             $em = Database::getManager();
 
             $user = $em->getRepository('ChamiloLMSCoreBundle:User')->find($return);
-            $role = $em->getRepository('ChamiloLMSCoreBundle:Role')->find($status);
 
-            $user->getRolesObj()->add($role);
+            $roleName = api_get_role_name_from_status($status);
+            $user->addRole($roleName);
             $em->persist($user);
             $em->flush();
 
@@ -791,13 +791,10 @@ class UserManager
         }
 
         // Adding user
-        /** @var ChamiloLMS\Entity\User $user */
-        $em = Database::getManager()
+        /** @var ChamiloLMS\UserBundle\Entity\User $user */
+        $em = Database::getManager();
         $user = $em->getRepository('ChamiloLMSCoreBundle:User')->find($user_id);
-        $role = $em->getRepository('ChamiloLMSCoreBundle:Role')->find($status);
-
-        $user->getRolesObj()->remove(0);
-        $user->getRolesObj()->add($role);
+        $user->addRole(api_get_role_name_from_status($status));
         $em->persist($user);
         $em->flush();
 

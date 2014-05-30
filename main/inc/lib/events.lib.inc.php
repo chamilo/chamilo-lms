@@ -2,6 +2,7 @@
 /* See license terms in /license.txt */
 /**
  * EVENTS LIBRARY
+ * @ŧodo add listeners
  *
  * This is the events library for Chamilo.
  * Include/require it in your code to use its functionality.
@@ -11,7 +12,7 @@
  *
  * @package chamilo.library
  */
-use ChamiloLMS\CoreBundle\Entity\User;
+use Application\Sonata\UserBundle\Entity\User;
 use ChamiloLMS\CoreBundle\Entity\Role;
 
 /**
@@ -35,13 +36,10 @@ function event_login(User $user)
         		)";
     Database::query($sql);
 
-    $roles = $user->getRolesObj();
-
+    $roles = $user->getRoles();
     // auto subscribe
 
-    /** @var Role $role */
     foreach ($roles as $role) {
-        $role = $role->getRole();
         $userStatusParsed = 'student';
 
         switch ($role) {

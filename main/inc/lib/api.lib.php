@@ -10,7 +10,7 @@
 
 use \ChamiloSession as Session;
 use Symfony\Component\Validator\Constraints as Assert;
-use ChamiloLMS\CoreBundle\Entity\User;
+use ChamiloLMS\UserBundle\Entity\User;
 use ChamiloLMS\CoreBundle\Entity\Course;
 
 /**
@@ -6948,4 +6948,14 @@ function api_is_unoconv_installed()
         return true;
     }
     return false;
+}
+
+function api_get_role_name_from_status($status)
+{
+    switch ($status) {
+        case COURSEMANAGER:
+            return 'ROLE_TEACHER';
+        case STUDENT:
+            return 'ROLE_STUDENT';
+    }
 }

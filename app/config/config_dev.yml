@@ -32,3 +32,18 @@ assetic:
 
 #swiftmailer:
 #    delivery_address: me@example.com
+
+
+web_profiler_extra:
+    routing:
+        enabled:        true
+        display_in_wdt: true
+    container:
+        enabled:        true
+        display_in_wdt: true
+    assetic:
+        enabled:        true
+        display_in_wdt: true
+    twig:
+        enabled:        true
+        display_in_wdt: true

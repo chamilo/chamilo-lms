@@ -32,7 +32,7 @@ sonata_admin:
             - { position: center, type: sonata.timeline.block.timeline, settings: { context: SONATA_ADMIN, max_per_page: 25 }}
             #- { position: center, type: sonata.news.block.recent_posts, settings: { title: Recent Posts, number: 7, mode: admin }}
             - { position: left, type: sonata.block.service.text, settings: { content: "<div class='panel panel-default'><div class='panel-heading'><h3 class='panel-title'>Welcome!</h3></div><div class='panel-body'>You can customize this dashboard by editing the <code>sonata_admin.yml</code> file. The current dashboard presents the recent items from the NewsBundle and a non-statistical e-commerce information.</div></div>"} }
-            #- { position: center, type: sonata.news.block.recent_comments, settings: { title: Recent Comments, number: 7, mode: admin }}
+            - { position: center, type: sonata.news.block.recent_comments, settings: { title: Recent Comments, number: 7, mode: admin }}
             #- { position: right, type: sonata.order.block.recent_orders, settings: { title: Recent Orders, number: 5, mode: admin }}
             #- { position: right, type: sonata.customer.block.recent_customers, settings: { title: Recent Customers, number: 5, mode: admin }}
             #- { position: right, type: sonata.block.service.rss, settings: { title: Sonata Project's Feeds, url: http://sonata-project.org/blog/archive.rss }}
@@ -48,7 +48,7 @@ sonata_admin:
                     - sonata.news.admin.post
                     - sonata.media.admin.media
                     - sonata.media.admin.gallery
-                    #- sonata.comment.admin.thread
+                    - sonata.comment.admin.thread
             #sonata.admin.group.ecommerce:
              #   label:           sonata_ecommerce
               #  label_catalogue: SonataAdminBundle

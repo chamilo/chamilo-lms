@@ -16,6 +16,7 @@ imports:
     - { resource: fos/fos_rest.yml }
     - { resource: fos/fos_user.yml }
     #- { resource: fos/fos_elastica.yml }
+    - { resource: fos/fos_message.yml }
 
     # Sonata Core Bundles
     - { resource: sonata/sonata_block.yml }
@@ -58,6 +59,7 @@ framework:
     http_method_override: true
     session:
         cookie_lifetime: 1440
+    http_method_override: true
 
 # Twig Configuration
 twig:
@@ -204,3 +206,7 @@ sensio_framework_extra:
     view:    { annotations: false }
     router:  { annotations: true }
     request: { converters:  true }
+
+
+avanzu_admin_theme:
+    bower_bin: /usr/bin/bower # that's the default value

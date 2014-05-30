@@ -1,98 +1,5 @@
 [
     {
-        "name": "symfony/filesystem",
-        "version": "v2.4.3",
-        "version_normalized": "2.4.3.0",
-        "target-dir": "Symfony/Component/Filesystem",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/Filesystem.git",
-            "reference": "b717952487176a993e9b12a08b87beae25ae419c"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Filesystem/zipball/b717952487176a993e9b12a08b87beae25ae419c",
-            "reference": "b717952487176a993e9b12a08b87beae25ae419c",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "time": "2014-03-26 11:55:03",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.4-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\Filesystem\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com",
-                "homepage": "http://fabien.potencier.org",
-                "role": "Lead Developer"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Filesystem Component",
-        "homepage": "http://symfony.com"
-    },
-    {
-        "name": "neutron/temporary-filesystem",
-        "version": "2.1.1",
-        "version_normalized": "2.1.1.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/romainneutron/Temporary-Filesystem.git",
-            "reference": "6b21fa99fd452efea16b9a7adb7304ccfff854d0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/romainneutron/Temporary-Filesystem/zipball/6b21fa99fd452efea16b9a7adb7304ccfff854d0",
-            "reference": "6b21fa99fd452efea16b9a7adb7304ccfff854d0",
-            "shasum": ""
-        },
-        "require": {
-            "symfony/filesystem": "~2.0"
-        },
-        "require-dev": {
-            "phpunit/phpunit": "~3.7"
-        },
-        "time": "2013-10-10 10:58:09",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Neutron": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Romain Neutron",
-                "email": "imprec@gmail.com",
-                "homepage": "http://www.lickmychip.com/"
-            }
-        ],
-        "description": "Symfony filesystem extension to handle temporary files"
-    },
-    {
         "name": "evenement/evenement",
         "version": "v1.0.0",
         "version_normalized": "1.0.0.0",
@@ -211,57 +118,6 @@
         ]
     },
     {
-        "name": "symfony/process",
-        "version": "v2.4.3",
-        "version_normalized": "2.4.3.0",
-        "target-dir": "Symfony/Component/Process",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/symfony/Process.git",
-            "reference": "c09c3b08455c35688eee3e481fdfc85518ef01d7"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/symfony/Process/zipball/c09c3b08455c35688eee3e481fdfc85518ef01d7",
-            "reference": "c09c3b08455c35688eee3e481fdfc85518ef01d7",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.3"
-        },
-        "time": "2014-03-26 11:35:33",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.4-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Symfony\\Component\\Process\\": ""
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com",
-                "homepage": "http://fabien.potencier.org",
-                "role": "Lead Developer"
-            },
-            {
-                "name": "Symfony Community",
-                "homepage": "http://symfony.com/contributors"
-            }
-        ],
-        "description": "Symfony Process Component",
-        "homepage": "http://symfony.com"
-    },
-    {
         "name": "psr/log",
         "version": "1.0.0",
         "version_normalized": "1.0.0.0",
@@ -298,76 +154,6 @@
         "keywords": [
             "log",
             "psr",
-            "psr-3"
-        ]
-    },
-    {
-        "name": "monolog/monolog",
-        "version": "1.8.0",
-        "version_normalized": "1.8.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/Seldaek/monolog.git",
-            "reference": "392ef35fd470638e08d0160d6b1cbab63cb23174"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/Seldaek/monolog/zipball/392ef35fd470638e08d0160d6b1cbab63cb23174",
-            "reference": "392ef35fd470638e08d0160d6b1cbab63cb23174",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0",
-            "psr/log": "~1.0"
-        },
-        "require-dev": {
-            "aws/aws-sdk-php": "~2.4, >2.4.8",
-            "doctrine/couchdb": "~1.0@dev",
-            "graylog2/gelf-php": "~1.0",
-            "phpunit/phpunit": "~3.7.0",
-            "raven/raven": "~0.5",
-            "ruflin/elastica": "0.90.*"
-        },
-        "suggest": {
-            "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
-            "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
-            "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
-            "ext-mongo": "Allow sending log messages to a MongoDB server",
-            "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
-            "raven/raven": "Allow sending log messages to a Sentry server",
-            "rollbar/rollbar": "Allow sending log messages to Rollbar",
-            "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
-        },
-        "time": "2014-03-23 19:50:26",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.8.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Monolog\\": "src/Monolog"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Jordi Boggiano",
-                "email": "j.boggiano@seld.be",
-                "homepage": "http://seld.be",
-                "role": "Developer"
-            }
-        ],
-        "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
-        "homepage": "http://github.com/Seldaek/monolog",
-        "keywords": [
-            "log",
-            "logging",
             "psr-3"
         ]
     },
@@ -502,18 +288,232 @@
         ]
     },
     {
-        "name": "sabre/vobject",
-        "version": "3.2.0",
-        "version_normalized": "3.2.0.0",
+        "name": "monolog/monolog",
+        "version": "1.9.1",
+        "version_normalized": "1.9.1.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/fruux/sabre-vobject.git",
-            "reference": "dd1dd19b6601cdc99408b70ec260052825f70b8f"
+            "url": "https://github.com/Seldaek/monolog.git",
+            "reference": "65026b610f8c19e61d7242f600530677b0466aac"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/fruux/sabre-vobject/zipball/dd1dd19b6601cdc99408b70ec260052825f70b8f",
-            "reference": "dd1dd19b6601cdc99408b70ec260052825f70b8f",
+            "url": "https://api.github.com/repos/Seldaek/monolog/zipball/65026b610f8c19e61d7242f600530677b0466aac",
+            "reference": "65026b610f8c19e61d7242f600530677b0466aac",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0",
+            "psr/log": "~1.0"
+        },
+        "require-dev": {
+            "aws/aws-sdk-php": "~2.4, >2.4.8",
+            "doctrine/couchdb": "~1.0@dev",
+            "graylog2/gelf-php": "~1.0",
+            "phpunit/phpunit": "~3.7.0",
+            "raven/raven": "~0.5",
+            "ruflin/elastica": "0.90.*"
+        },
+        "suggest": {
+            "aws/aws-sdk-php": "Allow sending log messages to AWS services like DynamoDB",
+            "doctrine/couchdb": "Allow sending log messages to a CouchDB server",
+            "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
+            "ext-mongo": "Allow sending log messages to a MongoDB server",
+            "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
+            "raven/raven": "Allow sending log messages to a Sentry server",
+            "rollbar/rollbar": "Allow sending log messages to Rollbar",
+            "ruflin/elastica": "Allow sending log messages to an Elastic Search server"
+        },
+        "time": "2014-04-24 13:29:03",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.9.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Monolog\\": "src/Monolog"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Jordi Boggiano",
+                "email": "j.boggiano@seld.be",
+                "homepage": "http://seld.be",
+                "role": "Developer"
+            }
+        ],
+        "description": "Sends your logs to files, sockets, inboxes, databases and various web services",
+        "homepage": "http://github.com/Seldaek/monolog",
+        "keywords": [
+            "log",
+            "logging",
+            "psr-3"
+        ]
+    },
+    {
+        "name": "symfony/process",
+        "version": "v2.4.5",
+        "version_normalized": "2.4.5.0",
+        "target-dir": "Symfony/Component/Process",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Process.git",
+            "reference": "a7118cb290c62068b3c8ecfbf8b2eda8421fb841"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/Process/zipball/a7118cb290c62068b3c8ecfbf8b2eda8421fb841",
+            "reference": "a7118cb290c62068b3c8ecfbf8b2eda8421fb841",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2014-05-22 13:46:01",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.4-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Process\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com",
+                "homepage": "http://fabien.potencier.org",
+                "role": "Lead Developer"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Process Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "symfony/filesystem",
+        "version": "v2.4.5",
+        "version_normalized": "2.4.5.0",
+        "target-dir": "Symfony/Component/Filesystem",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/symfony/Filesystem.git",
+            "reference": "a3af8294bcce4a7c1b2892363b0c9d8109affad4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/symfony/Filesystem/zipball/a3af8294bcce4a7c1b2892363b0c9d8109affad4",
+            "reference": "a3af8294bcce4a7c1b2892363b0c9d8109affad4",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.3"
+        },
+        "time": "2014-04-16 10:34:31",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.4-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Symfony\\Component\\Filesystem\\": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com",
+                "homepage": "http://fabien.potencier.org",
+                "role": "Lead Developer"
+            },
+            {
+                "name": "Symfony Community",
+                "homepage": "http://symfony.com/contributors"
+            }
+        ],
+        "description": "Symfony Filesystem Component",
+        "homepage": "http://symfony.com"
+    },
+    {
+        "name": "neutron/temporary-filesystem",
+        "version": "2.1.1",
+        "version_normalized": "2.1.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/romainneutron/Temporary-Filesystem.git",
+            "reference": "6b21fa99fd452efea16b9a7adb7304ccfff854d0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/romainneutron/Temporary-Filesystem/zipball/6b21fa99fd452efea16b9a7adb7304ccfff854d0",
+            "reference": "6b21fa99fd452efea16b9a7adb7304ccfff854d0",
+            "shasum": ""
+        },
+        "require": {
+            "symfony/filesystem": "~2.0"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "~3.7"
+        },
+        "time": "2013-10-10 10:58:09",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Neutron": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Romain Neutron",
+                "email": "imprec@gmail.com",
+                "homepage": "http://www.lickmychip.com/"
+            }
+        ],
+        "description": "Symfony filesystem extension to handle temporary files"
+    },
+    {
+        "name": "sabre/vobject",
+        "version": "3.2.2",
+        "version_normalized": "3.2.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/fruux/sabre-vobject.git",
+            "reference": "a829266cebcaccf602bde3af2c7e85a952034a16"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/fruux/sabre-vobject/zipball/a829266cebcaccf602bde3af2c7e85a952034a16",
+            "reference": "a829266cebcaccf602bde3af2c7e85a952034a16",
             "shasum": ""
         },
         "require": {
@@ -523,7 +523,7 @@
         "require-dev": {
             "phpunit/phpunit": "*"
         },
-        "time": "2014-04-02 23:53:27",
+        "time": "2014-05-07 20:02:21",
         "bin": [
             "bin/vobject",
             "bin/generate_vcards"

@@ -1,5 +1,6 @@
 <?php
-namespace ChamiloLMS\CoreBundle\Listener;
+
+namespace ChamiloLMS\CoreBundle\EventListener;
 
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;

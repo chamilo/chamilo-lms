@@ -17,8 +17,8 @@ class UserCourseSessionGroup
     private $course;
 
     /**
-     * @ORM\@ManyToOne(targetEntity="User", inversedBy="userCourseSessionGroup")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", nullable=false)
+     * @ORM\@ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="userCourseSessionGroup")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $user;
 

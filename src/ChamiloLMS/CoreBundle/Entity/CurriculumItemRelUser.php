@@ -3,6 +3,7 @@
 namespace ChamiloLMS\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Application\Sonata\UserBundle\Entity\User;
 
 /**
  * CurriculumItemRelUser
@@ -17,7 +18,7 @@ class CurriculumItemRelUser
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -50,8 +51,8 @@ class CurriculumItemRelUser
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="curriculumItems"))
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="curriculumItems"))
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
     private $user;
 

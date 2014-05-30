@@ -30,9 +30,9 @@ class Role extends SymfonyRole implements \Serializable
     private $role;
 
     /**
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="roles")
+     * @ORM\ManyToMany(targetEntity="Application\Sonata\UserBundle\Entity\User", mappedBy="roles")
      * @ORM\JoinTable(name="users_roles",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="user_id")})
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")})
      */
     private $users;
 
@@ -44,6 +44,15 @@ class Role extends SymfonyRole implements \Serializable
     public function __construct()
     {
         $this->users = new ArrayCollection();
+    }
+
+    /**
+     * Return the role field.
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->role;
     }
 
     /**

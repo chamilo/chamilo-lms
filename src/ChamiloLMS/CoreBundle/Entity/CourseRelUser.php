@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CourseRelUser
  *
- * @ORM\Table(name="course_rel_user")
  * @ORM\Entity
+ * @ORM\Table(name="course_rel_user")
  */
 class CourseRelUser
 {
@@ -17,7 +17,7 @@ class CourseRelUser
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -31,7 +31,7 @@ class CourseRelUser
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="user_id", type="integer")
      */
     private $userId;
 
@@ -96,19 +96,19 @@ class CourseRelUser
      *
      * @ORM\Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $cId;
+    protected $cId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="courses")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="courses")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $user;
+    protected $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Course", inversedBy="users")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
-    private $course;
+    protected $course;
 
     public function __construct(Course $course, User $user)
     {

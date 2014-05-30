@@ -17,7 +17,7 @@ class TrackExercise
      *
      * @ORM\Column(name="exe_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $exeId;
 
@@ -167,8 +167,8 @@ class TrackExercise
     private $attempt;
 
      /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="exe_user_id", referencedColumnName="user_id")
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="exe_user_id", referencedColumnName="id")
      */
     private $user;
 

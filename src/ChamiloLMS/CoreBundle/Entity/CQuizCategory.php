@@ -18,9 +18,9 @@ class CQuizCategory
     /**
      * @var integer
      *
-     * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="iid", type="bigint", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -30,7 +30,6 @@ class CQuizCategory
      * @ORM\Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $cId;
-
 
     /**
      * @var string
@@ -48,7 +47,7 @@ class CQuizCategory
 
     /**
      *
-     * @ORM\Column(name="parent_id", type="integer")
+     * @ORM\Column(name="parent_id", type="bigint", nullable=true)
      */
     private $parentId;
 

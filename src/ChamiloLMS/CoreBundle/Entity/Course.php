@@ -18,7 +18,7 @@ class Course
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -81,7 +81,7 @@ class Course
     /**
      * @var integer
      *
-     * @ORM\Column(name="show_score", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="show_score", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $showScore;
 
@@ -158,35 +158,35 @@ class Course
     /**
      * @var boolean
      *
-     * @ORM\Column(name="subscribe", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="subscribe", type="boolean", precision=0, scale=0, nullable=true, unique=false)
      */
     private $subscribe;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="unsubscribe", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="unsubscribe", type="boolean", precision=0, scale=0, nullable=true, unique=false)
      */
     private $unsubscribe;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="registration_code", type="string", length=255, precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="registration_code", type="string", length=255, precision=0, scale=0, nullable=true, unique=false)
      */
     private $registrationCode;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="legal", type="text", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="legal", type="text", precision=0, scale=0, nullable=true, unique=false)
      */
     private $legal;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="activate_legal", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="activate_legal", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $activateLegal;
 
@@ -212,11 +212,11 @@ class Course
      **/
     //private $curriculumCategories;
 
-    public function __construct()
+    /*public function __construct()
     {
         $this->users = new ArrayCollection();
         $this->items = new ArrayCollection();
-    }
+    }*/
 
     /**
      * @return ArrayCollection
@@ -232,6 +232,16 @@ class Course
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * Set id
+     *
+     * @return integer
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**

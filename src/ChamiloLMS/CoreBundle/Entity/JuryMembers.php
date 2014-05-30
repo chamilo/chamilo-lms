@@ -4,6 +4,8 @@ namespace ChamiloLMS\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Application\Sonata\UserBundle\Entity\User;
+
 /**
  * JuryMembers
  *
@@ -17,7 +19,7 @@ class JuryMembers
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -43,10 +45,10 @@ class JuryMembers
     private $juryId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
+     * @ORM\ManyToOne(targetEntity="ChamiloLMS\UserBundle\Entity\User", inversedBy="jury")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
-    private $user;
+    //private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity="Jury", inversedBy="members")

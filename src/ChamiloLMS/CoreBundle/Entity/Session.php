@@ -18,7 +18,7 @@ class Session
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -39,7 +39,7 @@ class Session
     /**
      * @var integer
      *
-     * @ORM\Column(name="nbr_courses", type="smallint", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="nbr_courses", type="smallint", precision=0, scale=0, nullable=true, unique=false)
      */
     private $nbrCourses;
 
@@ -53,14 +53,14 @@ class Session
     /**
      * @var integer
      *
-     * @ORM\Column(name="nbr_classes", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="nbr_classes", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $nbrClasses;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="session_admin_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="session_admin_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $sessionAdminId;
 
@@ -133,6 +133,12 @@ class Session
     private $items;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="sessionAsGeneralCoach")
+     * @ORM\JoinColumn(name="id_coach", referencedColumnName="id")
+     **/
+    private $generalCoach;
+
+    /**
      *
      */
     public function __construct()
@@ -148,6 +154,11 @@ class Session
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**
@@ -493,5 +504,20 @@ class Session
     public function getCoachAccessEndDate()
     {
         return $this->coachAccessEndDate;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getGeneralCoach()
+    {
+        return $this->generalCoach;
+    }
+
+    public function setGeneralCoach($coach)
+    {
+        $this->generalCoach = $coach;
     }
 }

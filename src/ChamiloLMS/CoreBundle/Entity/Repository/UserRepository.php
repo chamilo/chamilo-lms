@@ -3,18 +3,16 @@
 namespace ChamiloLMS\CoreBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Doctrine\ORM\NoResultException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use ChamiloLMS\CoreBundle\Entity\User;
+use ChamiloLMS\UserBundle\Entity\User;
 
 /**
  * Class UserRepository
  * @package Entity\Repository
  */
-class UserRepository extends EntityRepository implements UserProviderInterface
+class UserRepository extends EntityRepository
 {
     /**
     * @param string $keyword
@@ -27,7 +25,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         // Selecting user info
         $qb->select('DISTINCT b');
 
-        $qb->from('ChamiloLMS\CoreBundle\Entity\User', 'b');
+        $qb->from('Application\Sonata\UserBundle\Entity\User', 'b');
 
         // Selecting courses for users
         //$qb->innerJoin('u.courses', 'c');
@@ -46,7 +44,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
      * @return User
      * @throws UsernameNotFoundException
      */
-    public function loadUserByUsername($username)
+    /*public function loadUserByUsername($username)
     {
         $query = $this
             ->createQueryBuilder('u')
@@ -66,7 +64,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
             );
         }
         return $user;
-    }
+    }*/
 
     /**
      * Refreshes the user for the account interface.
@@ -80,7 +78,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
      *
      * @return UserInterface
      */
-    public function refreshUser(UserInterface $user)
+    /*public function refreshUser(UserInterface $user)
     {
         //return $user;
         $class = get_class($user);
@@ -88,16 +86,16 @@ class UserRepository extends EntityRepository implements UserProviderInterface
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $class));
         }
         return $this->loadUserByUsername($user->getUsername());
-    }
+    }*/
 
     /**
      * @param string $class
      * @return bool
      */
-    public function supportsClass($class)
+    /*public function supportsClass($class)
     {
         return $this->getEntityName() === $class || is_subclass_of($class, $this->getEntityName());
-    }
+    }*/
 
     /**
      * Get course user relationship based in the course_rel_user table.
@@ -111,7 +109,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface
         $queryBuilder->select('c');
 
         // Loading User.
-        //$qb->from('ChamiloLMS\CoreBundle\Entity\User', 'u');
+        //$qb->from('ChamiloLMS\UserBundle\Entity\User', 'u');
 
         // Selecting course
         $queryBuilder->innerJoin('ChamiloLMS\CoreBundle\Entity\Course', 'c');

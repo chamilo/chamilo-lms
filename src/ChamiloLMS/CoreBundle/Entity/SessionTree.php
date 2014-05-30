@@ -19,7 +19,7 @@ class SessionTree
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -47,7 +47,7 @@ class SessionTree
     /**
      * @var integer
      *
-     * @ORM\Column(name="tool_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="tool_id", type="integer")
      */
     private $toolId;
 

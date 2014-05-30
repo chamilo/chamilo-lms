@@ -17,7 +17,7 @@ class Tool
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -41,7 +41,6 @@ class Tool
      * @ORM\Column(name="description", type="text", precision=0, scale=0, nullable=true, unique=false)
      */
     private $description;
-
 
     /**
      * Get id

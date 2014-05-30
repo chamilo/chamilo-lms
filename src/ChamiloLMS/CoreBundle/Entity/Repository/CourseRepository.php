@@ -25,7 +25,7 @@ class CourseRepository extends EntityRepository
         $queryBuilder->select('DISTINCT u');
 
         // Loading EntityUser.
-        $queryBuilder->from('ChamiloLMS\CoreBundle\Entity\User', 'u');
+        $queryBuilder->from('Application\Sonata\UserBundle\Entity\User', 'u');
 
         // Selecting courses for users.
         $queryBuilder->innerJoin('u.courses', 'c');

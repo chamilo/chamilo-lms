@@ -17,7 +17,7 @@ class CurriculumItemRelUserRepository extends EntityRepository
      * @param \ChamiloLMS\CoreBundle\Entity\CurriculumItem $course
      * @return bool
      */
-    public function isAllowToInsert(\ChamiloLMS\CoreBundle\Entity\CurriculumItem $item, \ChamiloLMS\CoreBundle\Entity\User $user)
+    public function isAllowToInsert(\ChamiloLMS\CoreBundle\Entity\CurriculumItem $item, \ChamiloLMS\UserBundle\Entity\User $user)
     {
         $max = $item->getMaxRepeat();
         $count = $this->createQueryBuilder('a')

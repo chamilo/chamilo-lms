@@ -17,7 +17,7 @@ class SessionFieldOptions
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -60,7 +60,7 @@ class SessionFieldOptions
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -76,14 +76,14 @@ class SessionFieldOptions
     public function setFieldId($fieldId)
     {
         $this->fieldId = $fieldId;
-    
+
         return $this;
     }
 
     /**
      * Get fieldId
      *
-     * @return integer 
+     * @return integer
      */
     public function getFieldId()
     {
@@ -99,14 +99,14 @@ class SessionFieldOptions
     public function setOptionValue($optionValue)
     {
         $this->optionValue = $optionValue;
-    
+
         return $this;
     }
 
     /**
      * Get optionValue
      *
-     * @return string 
+     * @return string
      */
     public function getOptionValue()
     {
@@ -122,14 +122,14 @@ class SessionFieldOptions
     public function setOptionDisplayText($optionDisplayText)
     {
         $this->optionDisplayText = $optionDisplayText;
-    
+
         return $this;
     }
 
     /**
      * Get optionDisplayText
      *
-     * @return string 
+     * @return string
      */
     public function getOptionDisplayText()
     {
@@ -145,14 +145,14 @@ class SessionFieldOptions
     public function setOptionOrder($optionOrder)
     {
         $this->optionOrder = $optionOrder;
-    
+
         return $this;
     }
 
     /**
      * Get optionOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getOptionOrder()
     {
@@ -168,14 +168,14 @@ class SessionFieldOptions
     public function setTms($tms)
     {
         $this->tms = $tms;
-    
+
         return $this;
     }
 
     /**
      * Get tms
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getTms()
     {

@@ -3,7 +3,7 @@
 namespace ChamiloLMS\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Application\Sonata\UserBundle\Entity\User;
 
 /**
  * CItemProperty
@@ -25,7 +25,7 @@ class CItemProperty
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -124,8 +124,8 @@ class CItemProperty
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="items")
-     * @ORM\JoinColumn(name="to_user_id", referencedColumnName="user_id")
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="items")
+     * @ORM\JoinColumn(name="to_user_id", referencedColumnName="id")
      **/
     private $user;
 

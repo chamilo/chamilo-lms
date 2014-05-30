@@ -18,7 +18,7 @@ class UsergroupRelUser
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -38,8 +38,8 @@ class UsergroupRelUser
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="classes")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="user_id")
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="classes")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      **/
     private $user;
 

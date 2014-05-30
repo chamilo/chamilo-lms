@@ -17,7 +17,7 @@ class CQuizQuestionRelCategory
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -25,8 +25,6 @@ class CQuizQuestionRelCategory
      * @var integer
      *
      * @ORM\Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $cId;
 
@@ -34,22 +32,20 @@ class CQuizQuestionRelCategory
      * @var integer
      *
      * @ORM\Column(name="question_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $questionId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="category_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="category_id", type="bigint", precision=0, scale=0, nullable=false, unique=false)
      */
     private $categoryId;
 
     /** Relationships */
 
     /**
-     * @ORM\ManyToOne(targetEntity="CQuizCategory")
+     * @ORM\ManyToOne(targetEntity="CQuizCategory", inversedBy="quizQuestionRelCategoryList")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
      */
     private $category;

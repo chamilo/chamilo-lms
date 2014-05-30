@@ -15,9 +15,16 @@ class CDropboxPost
     /**
      * @var integer
      *
-     * @ORM\Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $cId;
 
@@ -25,8 +32,6 @@ class CDropboxPost
      * @var integer
      *
      * @ORM\Column(name="file_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $fileId;
 
@@ -34,8 +39,6 @@ class CDropboxPost
      * @var integer
      *
      * @ORM\Column(name="dest_user_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="NONE")
      */
     private $destUserId;
 
@@ -69,8 +72,8 @@ class CDropboxPost
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="dropBoxReceivedFiles")
-     * @ORM\JoinColumn(name="dest_user_id", referencedColumnName="user_id")
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="dropBoxReceivedFiles")
+     * @ORM\JoinColumn(name="dest_user_id", referencedColumnName="id")
      **/
     private $user;
 
@@ -79,8 +82,7 @@ class CDropboxPost
      * @ORM\ManyToOne(targetEntity="CDropboxFile", inversedBy="file")
      *
      * @ORM\JoinColumns({
-     *      @ORM\JoinColumn(name="file_id", referencedColumnName="id"),
-     *      @ORM\JoinColumn(name="c_id", referencedColumnName="c_id")
+     *      @ORM\JoinColumn(name="file_id", referencedColumnName="iid")
      * })
      **/
     private $file;

@@ -3315,6 +3315,7 @@ function api_is_valid_date($date, $format = 'Y-m-d H:i:s') {
     $d = DateTime::createFromFormat($format, $date);
     return $d && $d->format($format) == $date;
 }
+
 /**
  * Return the encoding country code for jquery datepicker
  * used for exemple in main/exercice/exercise_report.php
@@ -3331,6 +3332,16 @@ function get_datepicker_langage_code() {
     return $languaje;
 }
 
+/**
+ * Returns the variable translated
+ * @param $variable the string to translate
+ * @param $pluginName the Plugin name
+ * @return string the variable translated
+ */
+function get_plugin_lang($variable, $pluginName) {
+    eval("\$plugin = {$pluginName}::create();");
+    return $plugin->get_lang($variable);
+}
 /**
  * Functions for internal use behind this API
  */

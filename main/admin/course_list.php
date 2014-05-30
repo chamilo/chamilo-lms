@@ -12,7 +12,6 @@
 // Language files that need to be included.
 $language_file = array('admin', 'courses');
 $cidReset = true;
-require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();

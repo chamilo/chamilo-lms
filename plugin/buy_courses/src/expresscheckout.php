@@ -15,24 +15,7 @@ $paymentAmount = $_SESSION["Payment_Amount"];
  * The currencyCodeType and paymentType
  * are set to the selections made on the Integration Assistant
  */
-$currencyCodeType = "EUR";
 $paymentType = "Sale";
-
-/**
- * The returnURL is the location where buyers return to when a
- * payment has been succesfully authorized.
- * This is set to the value entered on the Integration Assistant
- */
-$returnURL = "http://www.nosolored.me/pluging/paypal/confirm.php";
-
-
-/**
- * The cancelURL is the location buyers are sent to when they hit the
- * cancel button during authorization of payment during the PayPal flow
- *
- * This is set to the value entered on the Integration Assistant
- */
-$cancelURL = "http://www.nosolored.me/pluging/paypal/error.php";
 
 /**
  * Calls the SetExpressCheckout API call

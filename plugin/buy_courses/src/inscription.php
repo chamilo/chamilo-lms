@@ -13,7 +13,7 @@ $language_file = array('registration', 'admin');
 if (!empty($_POST['language'])) { //quick hack to adapt the registration form result to the selected registration language
     $_GET['language'] = $_POST['language'];
 }
-require_once '../../main/inc/global.inc.php';
+require_once '../config.php';
 require_once api_get_path(CONFIGURATION_PATH) . 'profile.conf.php';
 require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
 

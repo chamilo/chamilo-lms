@@ -1,6 +1,7 @@
 <?php
 
 require_once '../config.php';
+require_once 'buy_course.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
 require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
 
@@ -96,14 +97,14 @@ if ($_REQUEST['tab'] == 'courses_filter') {
 
             $tmp = Database::query($sql);
             if (Database::affected_rows() > 0) {
-                $row['enrolled'] = "SI";
+                $row['enrolled'] = "YES";
             } else {
                 $row['enrolled'] = "NO";
             }
         } else {
             $row['enrolled'] = "NO";
         }
-        //Comprobamos imagen
+        // Check img
         if (file_exists("../../../courses/" . $row['code'] . "/course-pic85x85.png")) {
             $row['course_img'] = "courses/" . $row['code'] . "/course-pic85x85.png";
         } else {
@@ -117,7 +118,7 @@ if ($_REQUEST['tab'] == 'courses_filter') {
         }
 
     }
-
+    $currencyType = findCurrency();
     foreach ($aux as $course) {
         $content .= '<div class="well_border span8">';
         $content .= '<div class="row">';
@@ -131,14 +132,14 @@ if ($_REQUEST['tab'] == 'courses_filter') {
         $content .= '<div class="span4">';
         $content .= '<div class="categories-course-description">';
         $content .= '<h3>' . $course['title'] . '</h3>';
-        $content .= '<h5>' . get_lang('teacher') . ': ' . $course['teacher'] . '</h5>';
+        $content .= '<h5>' . get_lang('Teacher') . ': ' . $course['teacher'] . '</h5>';
         $content .= '</div>';
         if ($course['enrolled'] == "YES") {
             $content .= '<span class="label label-info">' .  $plugin->get_lang('TheUserIsAlreadyRegistered') . '</span>';
         }
         $content .= '</div>';
         $content .= '<div class="span right">';
-        $content .= '<div class="sprice right">' . $course['price'] . ' &euro; </div>';
+        $content .= '<div class="sprice right">' . $course['price'] . ' ' . $currencyType . ' </div>';
         $content .= '<div class="cleared"></div>';
         $content .= '<div class="btn-toolbar right">';
         $content .= '<a class="ajax btn btn-primary" title="" href="' . $server . 'main/inc/ajax/course_home.ajax.php?a=show_course_information&code=' . $course['code'] . '">' . get_lang('Description') . '</a>&nbsp;';
@@ -210,7 +211,8 @@ if ($_REQUEST['tab'] == 'add_account') {
 
 if ($_REQUEST['tab'] == 'delete_account') {
     $_REQUEST['id'] = intval($_REQUEST['id']);
-    $id = substr($_REQUEST['id'], 6);
+    $id = $_REQUEST['id'];
+
     $sql = "DELETE FROM $tableBuyCourseTransference WHERE id='" . $id . "';";
     $res = Database::query($sql);
     if (!res) {

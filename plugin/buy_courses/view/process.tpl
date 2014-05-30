@@ -6,12 +6,12 @@
     <div class="span12">
         <div id="course_category_well" class="well span3">
             <ul class="nav nav-list">
-                <li class="nav-header"><h4>Datos del Usuario:</h4></li>
-                <li class="nav-header">Nombre:</li>
+                <li class="nav-header"><h4>{{ 'UserInformation'|get_plugin_lang('Buy_CoursesPlugin') }}:</h4></li>
+                <li class="nav-header">{{ 'Name'|get_lang }}:</li>
                 <li><h5>{{ name }}</h5></li>
-                <li class="nav-header">Usuario</li>
+                <li class="nav-header">{{ 'User'|get_lang }}:</li>
                 <li><h5>{{ user }}</h5></li>
-                <li class="nav-header">E-mail de notificaciones:</li>
+                <li class="nav-header">{{ 'Email'|get_lang }}:</li>
                 <li><h5>{{ email }}</h5></li>
                 <br/>
             </ul>
@@ -50,7 +50,7 @@
     <div class="cleared"></div>
     <form class="form-horizontal span3 offset4" action="../src/process_confirm.php" method="post">
         <fieldset>
-            <legend align="center">{{ 'PaymentMethods'|get_lang }}</legend>
+            <legend align="center">{{ 'PaymentMethods'|get_plugin_lang('Buy_CoursesPlugin') }}</legend>
             <div align="center" class="control-group">
                 <div class="controls margin-left-fifty">
                     {% if paypal_enable == "true" %}
@@ -60,14 +60,14 @@
                     {% endif %}
                     {% if transference_enable == "true" %}
                         <label class="radio">
-                            <input type="radio" id="payment_type-tra" name="payment_type" value="Transference" > {{ 'BankTransference'|get_lang }}
+                            <input type="radio" id="payment_type-tra" name="payment_type" value="Transference" > {{ 'BankTransference'|get_plugin_lang('Buy_CoursesPlugin') }}
                         </label>
                     {% endif %}
                 </div>
                 </br>
                 <input type="hidden" name="currency_type" value="{{ currency }}" />
                 <input type="hidden" name="server" value="{{ server }}"/>
-                <input align="center" type="submit" class="btn btn-success" value="{{ 'confirm_order'|get_lang }}"/>
+                <input align="center" type="submit" class="btn btn-success" value="{{ 'ConfirmOrder'|get_plugin_lang('Buy_CoursesPlugin') }}"/>
             </div>
         </fieldset>
     </form>

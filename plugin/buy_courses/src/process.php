@@ -7,26 +7,31 @@ require_once dirname(__FILE__) . '/buy_course.lib.php';
 
 $plugin = Buy_CoursesPlugin::create();
 $_cid = 0;
+$templateName = $plugin->get_lang('PaymentMethods');
 $interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
 
-$tpl = new Template('PaymentType');
+$tpl = new Template($templateName);
 
-if (isset($_GET['code'])) {
+if (!empty($_GET['code'])) {
     $code = (int)$_GET['code'];
 } else {
     $code = $_SESSION['bc_course_code'];
 }
 
+$tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
 $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
-$sql = "SELECT price, title, code FROM $tableBuyCourse a, course b
-    WHERE a.id_course='" . $code . "'
-    AND a.id_course=b.id;";
+
+$sql = "SELECT a.price, a.title, b.code
+    FROM $tableBuyCourse a, $tableCourse b
+    WHERE a.id_course = " . $code . "
+    AND a.id_course = b.id;";
 $res = Database::query($sql);
 $row = Database::fetch_assoc($res);
+
 $_SESSION['Payment_Amount'] = number_format($row['price'], 2, '.', '');
 $_SESSION['bc_course_code'] = $code;
 $_SESSION['bc_course_title'] = $row['title'];
-$_SESSION['bc_course_code'] = $row['code'];
+$_SESSION['bc_course_codetext'] = $row['code'];
 
 if (!isset($_SESSION['_user'])) {
     //Needs to be Registered
@@ -60,7 +65,7 @@ if (checkUserCourseTransference($_SESSION['bc_course_codetext'], $_SESSION['bc_u
 }
 
 $currencyType = findCurrency();
-$plugin = Buy_CoursesPlugin::create();
+
 $paypalEnable = $plugin->get('paypal_enable');
 $transferenceEnable = $plugin->get('transference_enable');
 

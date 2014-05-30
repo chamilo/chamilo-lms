@@ -15,9 +15,9 @@ $SandboxFlag = $pruebas;
  * Replace <API_PASSWORD> with your API Password
  * Replace <API_SIGNATURE> with your Signature
  */
-$API_UserName = $paypal_username;
-$API_Password = $paypal_password;
-$API_Signature = $paypal_firma;
+$API_UserName = $paypalUsername;
+$API_Password = $paypalPassword;
+$API_Signature = $paypalSignature;
 
 // BN Code is only applicable for partners
 $sBNCode = "PP-ECWizard";
@@ -42,8 +42,9 @@ if ($SandboxFlag == true) {
 $USE_PROXY = false;
 $version = "93";
 
-if (session_id() == "")
+if (session_id() == "") {
     session_start();
+}
 
 /**
  * An express checkout transaction starts with a token, that
@@ -66,14 +67,13 @@ if (session_id() == "")
 function CallShortcutExpressCheckout($paymentAmount, $currencyCodeType, $paymentType, $returnURL, $cancelURL, $extra)
 {
     // Construct the parameter string that describes the SetExpressCheckout API call in the shortcut implementation
-
     $nvpstr = "&PAYMENTREQUEST_0_AMT=" . $paymentAmount;
-    $nvpstr = $nvpstr . "&PAYMENTREQUEST_0_PAYMENTACTION=" . $paymentType;
-    $nvpstr = $nvpstr . "&RETURNURL=" . $returnURL;
-    $nvpstr = $nvpstr . "&CANCELURL=" . $cancelURL;
-    $nvpstr = $nvpstr . "&PAYMENTREQUEST_0_CURRENCYCODE=" . $currencyCodeType;
-
-    $nvpstr = $nvpstr . $extra;
+    $nvpstr .= "&PAYMENTREQUEST_0_ITEMAMT=" . $paymentAmount;
+    $nvpstr .= "&PAYMENTREQUEST_0_PAYMENTACTION=" . $paymentType;
+    $nvpstr .= "&RETURNURL=" . $returnURL;
+    $nvpstr .= "&CANCELURL=" . $cancelURL;
+    $nvpstr .= "&PAYMENTREQUEST_0_CURRENCYCODE=" . $currencyCodeType;
+    $nvpstr .= $extra;
 
     $_SESSION["currencyCodeType"] = $currencyCodeType;
     $_SESSION["PaymentType"] = $paymentType;
@@ -164,27 +164,28 @@ function GetShippingDetails($token)
     /**
      * At this point, the buyer has completed authorizing the payment
      * at PayPal.  The function will call PayPal to obtain the details
-     * of the authorization, incuding any shipping information of the
+     * of the authorization, including any shipping information of the
      * buyer.  Remember, the authorization is not a completed transaction
      * at this state - the buyer still needs an additional step to finalize
      * the transaction
      *
      * Build a second API request to PayPal, using the token as the
-     *  ID to get the details on the payment authorization
+     * ID to get the details on the payment authorization
      */
     $nvpstr = "&TOKEN=" . $token;
 
     /**
      * Make the API call and store the results in an array.
-     *	If the call was a success, show the authorization details, and provide
-     * 	an action to complete the payment.
-     *	If failed, show the error
+     * If the call was a success, show the authorization details, and provide
+     * an action to complete the payment.
+     * If failed, show the error
      */
     $resArray = hash_call("GetExpressCheckoutDetails", $nvpstr);
     $ack = strtoupper($resArray["ACK"]);
     if ($ack == "SUCCESS" || $ack == "SUCCESSWITHWARNING") {
         $_SESSION['payer_id'] = $resArray['PAYERID'];
     }
+
     return $resArray;
 }
 
@@ -293,7 +294,6 @@ function hash_call($methodName, $nvpStr)
     //declaring of global variables
     global $API_Endpoint, $version, $API_UserName, $API_Password, $API_Signature;
     global $USE_PROXY, $PROXY_HOST, $PROXY_PORT;
-    global $gv_ApiErrorURL;
     global $sBNCode;
 
     //setting the curl parameters.
@@ -308,7 +308,6 @@ function hash_call($methodName, $nvpStr)
 
     //if USE_PROXY constant set to TRUE in Constants.php, then only proxy will be enabled.
     //Set proxy name to PROXY_HOST and port number to PROXY_PORT in constants.php
-
     if ($USE_PROXY) {
         curl_setopt($ch, CURLOPT_PROXY, $PROXY_HOST . ":" . $PROXY_PORT);
     }

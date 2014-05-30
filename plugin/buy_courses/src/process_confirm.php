@@ -11,7 +11,7 @@ if ($_POST['payment_type'] == '') {
 $tableBuyCourseTemporal = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
 $tableBuyCoursePaypal = Database::get_main_table(TABLE_BUY_COURSE_PAYPAL);
 
-if (isset($_POST['Aceptar'])) {
+if (isset($_POST['Confirm'])) {
     // Save the user, course and reference in a tmp table
     $user_id = $_SESSION['bc_user_id'];
     $course_code = $_SESSION['bc_course_codetext'];
@@ -58,7 +58,7 @@ if (isset($_POST['Aceptar'])) {
     $courseInfo = courseInfo($_SESSION['bc_course_code']);
     $title_course = $courseInfo['title'];
 
-    $message = utf8_encode($plugin->get_lang('bc_message'));
+    $message = $plugin->get_lang('bc_message');
     $message = str_replace("{{name}}", $name, $message);
     $message = str_replace("{{course}}", $title_course, $message);
     $message = str_replace("{{reference}}", $reference, $message);
@@ -79,16 +79,16 @@ if ($_POST['payment_type'] == "PayPal") {
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);
     $pruebas = ($row['sandbox'] == "YES") ? true: false;
-    $paypal_username = $row['username'];
-    $paypal_password = $row['password'];
-    $paypal_firma = $row['signature'];
+    $paypalUsername = $row['username'];
+    $paypalPassword = $row['password'];
+    $paypalSignature = $row['signature'];
     require_once("paypalfunctions.php");
     // PayPal Express Checkout Module
     $paymentAmount = $_SESSION["Payment_Amount"];
     $currencyCodeType = $currencyType;
     $paymentType = "Sale";
-    $returnURL = $server . "plugin/buy_courses/success.php";
-    $cancelURL = $server . "plugin/buy_courses/error.php";
+    $returnURL = $server . "plugin/buy_courses/src/success.php";
+    $cancelURL = $server . "plugin/buy_courses/src/error.php";
 
     $courseInfo = courseInfo($_SESSION['bc_course_code']);
     $courseTitle = $courseInfo['title'];
@@ -113,15 +113,15 @@ if ($_POST['payment_type'] == "PayPal") {
         echo "<br />Short Error Message: " . $ErrorShortMsg;
         echo "<br />Error Code: " . $ErrorCode;
         echo "<br />Error Severity Code: " . $ErrorSeverityCode;
-
     }
 }
 
 if ($_POST['payment_type'] == "Transference") {
     $_cid = 0;
+    $templateName = $plugin->get_lang('PaymentMethods');
     $interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
 
-    $tpl = new Template('PaymentType');
+    $tpl = new Template($templateName);
 
     $code = $_SESSION['bc_course_code'];
     $courseInfo = courseInfo($code);

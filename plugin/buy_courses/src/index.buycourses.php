@@ -8,25 +8,18 @@ $guess_enable = $plugin->get('unregistered_users_enable');
 
 if ($guess_enable == "true" || isset($_SESSION['_user'])) {
     $title = $plugin->get_lang('CourseListOnSale');
+    $templateName = $plugin->get_lang('BuyCourses');
 
-    echo '<div class="well sidebar-nav static">';
-    echo '<h4>' . $title . '</h4>';
-    echo '<ul class="nav nav-list">';
-    echo '<li>';
-    echo '<a href="src/list.php">' . $plugin->get_lang('BuyCourses') . '</a>';
-    echo '</li>';
-    if (api_is_platform_admin()) {
-        echo '<li>';
-        echo '<a href="src/configuration.php">' . $plugin->get_lang('ConfigurationOfCoursesAndPrices') . '</a>';
-        echo '</li>';
-        echo '<li>';
-        echo '<a href="src/paymentsetup.php">' . $plugin->get_lang('ConfigurationOfPayments') . '</a>';
-        echo '</li>';
-        echo '<li>';
-        echo '<a href="src/pending_orders.php">' . $plugin->get_lang('OrdersPendingOfPayment') . '</a>';
-        echo '</li>';
-    }
-    echo '</ul>';
-    echo '</div>';
+    $tpl = new Template($templateName);
+    $tpl->assign('isAdmin', api_is_platform_admin());
+    $tpl->assign('title', $title);
+    $tpl->assign('BuyCourses', $templateName);
+    $tpl->assign('ConfigurationOfCoursesAndPrices', $plugin->get_lang('ConfigurationOfCoursesAndPrices'));
+    $tpl->assign('ConfigurationOfPayments', $plugin->get_lang('ConfigurationOfPayments'));
+    $tpl->assign('OrdersPendingOfPayment', $plugin->get_lang('OrdersPendingOfPayment'));
+    $listing_tpl = 'buy_courses/view/index.tpl';
+    $content = $tpl->fetch($listing_tpl);
+    $tpl->assign('content', $content);
+    $tpl->display_one_col_template();
 }
  

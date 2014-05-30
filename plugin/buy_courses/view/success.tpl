@@ -6,12 +6,12 @@
     <div class="span12">
         <div id="course_category_well" class="well span3">
             <ul class="nav nav-list">
-                <li class="nav-header"><h4>Datos del Usuario:</h4></li>
-                <li class="nav-header">Nombre:</li>
+                <li class="nav-header"><h4>{{ 'UserInformation'|get_plugin_lang('Buy_CoursesPlugin') }}:</h4></li>
+                <li class="nav-header">{{ 'Name'|get_lang }}:</li>
                 <li><h5>{{ name }}</h5></li>
-                <li class="nav-header">Usuario</li>
+                <li class="nav-header">{{ 'User'|get_lang }}:</li>
                 <li><h5>{{ user }}</h5></li>
-                <li class="nav-header">E-mail de notificaciones:</li>
+                <li class="nav-header">{{ 'Email'|get_lang }}:</li>
                 <li><h5>{{ email }}</h5></li>
                 <br/>
             </ul>
@@ -40,8 +40,7 @@
                     <div class="cleared"></div>
                     <div class="btn-toolbar right">
                         <a class="ajax btn btn-primary" title=""
-                           href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ course.code }}">{{
-                            'Description'|get_lang }}</a>
+                           href="{{ server }}plugin/buy_courses/function/ajax.php?code={{ course.code }}">{{'Description'|get_lang }}</a>
 
                     </div>
                 </div>
@@ -51,12 +50,12 @@
     <div class="cleared"></div>
     <hr/>
     <div align="center">
-        <form method="post" name="Aceptar" action="../src/success.php">
+        <form method="post" name="frmConfirm" action="../src/success.php">
             <input type="hidden" name="paymentOption" value="PayPal"/>
 
-            <div class="btn_siguiente">
-                <input class="btn btn-success" type="submit" name="Aceptar" value="Confirm Order"/>
-                <input class="btn btn-danger" type="button" name="Cancelar" value="Cancelar" id="cancelapedido"/>
+            <div class="btn_next">
+                <input class="btn btn-success" type="submit" name="Confirm" value="{{ 'ConfirmOrder'|get_plugin_lang('Buy_CoursesPlugin') }}"/>
+                <input class="btn btn-danger" type="button" name="Cancel" value="{{ 'CancelOrder'|get_plugin_lang('Buy_CoursesPlugin') }}" id="cancel_order"/>
             </div>
         </form>
     </div>

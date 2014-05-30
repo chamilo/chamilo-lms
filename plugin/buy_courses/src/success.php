@@ -18,9 +18,9 @@ $sql = "SELECT * FROM $tableBuyCoursePaypal WHERE id='1';";
 $res = Database::query($sql);
 $row = Database::fetch_assoc($res);
 $pruebas = ($row['sandbox'] == "YES") ? true: false;
-$paypal_username = $row['username'];
-$paypal_password = $row['password'];
-$paypal_firma = $row['signature'];
+$paypalUsername = $row['username'];
+$paypalPassword = $row['password'];
+$paypalSignature = $row['signature'];
 require_once("paypalfunctions.php");
 
 /**
@@ -38,9 +38,9 @@ if ($token != "") {
     $sql = "SELECT * FROM $tableBuyCoursePaypal WHERE id='1';";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);
-    $paypal_username = $row['username'];
-    $paypal_password = $row['password'];
-    $paypal_firma = $row['signature'];
+    $paypalUsername = $row['username'];
+    $paypalPassword = $row['password'];
+    $paypalSignature = $row['signature'];
     require_once 'paypalfunctions.php';
 
     /**
@@ -82,11 +82,11 @@ if ($token != "") {
         $ErrorLongMsg = urldecode($resArray["L_LONGMESSAGE0"]);
         $ErrorSeverityCode = urldecode($resArray["L_SEVERITYCODE0"]);
 
-        echo "GetExpressCheckoutDetails API call failed. ";
-        echo "Detailed Error Message: " . $ErrorLongMsg;
-        echo "Short Error Message: " . $ErrorShortMsg;
-        echo "Error Code: " . $ErrorCode;
-        echo "Error Severity Code: " . $ErrorSeverityCode;
+        echo "<br />GetExpressCheckoutDetails API call failed. ";
+        echo "<br />Detailed Error Message: " . $ErrorLongMsg;
+        echo "<br />Short Error Message: " . $ErrorShortMsg;
+        echo "<br />Error Code: " . $ErrorCode;
+        echo "<br />Error Severity Code: " . $ErrorSeverityCode;
     }
 }
 
@@ -94,9 +94,10 @@ if ($token != "") {
 if (!isset($_POST['paymentOption'])) {
     // Confirm the order
     $_cid = 0;
+    $templateName = $plugin->get_lang('PaymentMethods');
     $interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
 
-    $tpl = new Template('PaymentType');
+    $tpl = new Template($templateName);
 
     $code = $_SESSION['bc_course_code'];
     $courseInfo = courseInfo($code);
@@ -117,7 +118,7 @@ if (!isset($_POST['paymentOption'])) {
     }
 
 
-    $listing_tpl = 'buy_courses/success.tpl';
+    $listing_tpl = 'buy_courses/view/success.tpl';
     $content = $tpl->fetch($listing_tpl);
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();
@@ -130,9 +131,9 @@ if (!isset($_POST['paymentOption'])) {
     $sql = "SELECT * FROM $tableBuyCoursePaypal WHERE id='1';";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);
-    $paypal_username = $row['username'];
-    $paypal_password = $row['password'];
-    $paypal_firma = $row['signature'];
+    $paypalUsername = $row['username'];
+    $paypalPassword = $row['password'];
+    $paypalSignature = $row['signature'];
     require_once("paypalfunctions.php");
     if ($PaymentOption == "PayPal") {
 

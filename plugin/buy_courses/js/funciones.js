@@ -61,12 +61,12 @@ $(document).ready(function () {
     });
 
 
-    $('#confirmar_filtro').click(function (e) {
+    $('#confirm_filter').click(function (e) {
         var vcourse = $("#course_name").attr("value");
         var pmin = $("#price_min").attr("value");
         var pmax = $("#price_max").attr("value");
         if ($("#mostrar_disponibles").attr("checked") == "checked") {
-            var vshow = "SI";
+            var vshow = "YES";
         } else {
             var vshow = "NO";
         }
@@ -102,7 +102,7 @@ $(document).ready(function () {
         var clave = $("#password").attr("value");
         var firma = $("#signature").attr("value");
         if ($("#sandbox").attr("checked") == "checked") {
-            var vsandbox = "SI";
+            var vsandbox = "YES";
         } else {
             var vsandbox = "NO";
         }
@@ -132,8 +132,9 @@ $(document).ready(function () {
     });
 
     $(".delete_account").click(function (e) {
-        var vid = $(this).parent().attr("id");
-        $.post("function.php", {tab: "delete_account", id: vid},
+        var fieldName = $(this).parent().attr("id");
+        var id = $("#id_" + fieldName).val();
+        $.post("function.php", {tab: "delete_account", id: id},
             function (data) {
                 location.reload();
             }, "json");
@@ -142,7 +143,7 @@ $(document).ready(function () {
         e.stopPropagation();
     });
 
-    $("#cancelapedido").click(function (e) {
+    $("#cancel_order").click(function (e) {
         $.post("function.php", {tab: "unset_variables"});
         window.location.replace("list.php");
     });

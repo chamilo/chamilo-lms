@@ -9,10 +9,11 @@ require_once 'buy_course_plugin.class.php';
 $plugin = Buy_CoursesPlugin::create();
 
 $_cid = 0;
+$templateName = $plugin->get_lang('AvailableCourses');
 $interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
 $interbreadcrumb[] = array("url" => "paymentsetup.php", "name" => get_lang('Configuration'));
 
-$tpl = new Template('availableCourses');
+$tpl = new Template($templateName);
 
 $teacher = api_is_platform_admin();
 api_protect_course_script(true);

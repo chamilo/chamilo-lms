@@ -14,25 +14,25 @@ require_once 'buy_course.lib.php';
 $course_plugin = 'buy_courses';
 $plugin = Buy_CoursesPlugin::create();
 $_cid = 0;
-$teacher = api_is_platform_admin();
 
-if ($teacher) {
+if (api_is_platform_admin()) {
     $interbreadcrumb[] = array("url" => "configuration.php", "name" => $plugin->get_lang('AvailableCoursesConfiguration'));
     $interbreadcrumb[] = array("url" => "paymentsetup.php", "name" => $plugin->get_lang('PaymentsConfiguration'));
 }
 
-$tpl = new Template('CourseListOnSale');
+$templateName = $plugin->get_lang('CourseListOnSale');
+$tpl = new Template($templateName);
 if (isset($_SESSION['bc_success'])) {
     $tpl->assign('rmessage', 'YES');
     if ($_SESSION['bc_success'] == true) {
-        $message = sprintf(utf8_encode($plugin->get_lang($_SESSION['bc_message'])), $_SESSION['bc_url']);
+        $message = sprintf($plugin->get_lang($_SESSION['bc_message']), $_SESSION['bc_url']);
         unset($_SESSION['bc_url']);
         $tpl->assign('class', 'confirmation-message');
     } else {
-        $message = utf8_encode($plugin->get_lang($_SESSION['bc_message']));
+        $message = $plugin->get_lang($_SESSION['bc_message']);
         $tpl->assign('class', 'warning-message');
     }
-    $tpl->assign('message', $message);
+    $tpl->assign('responseMessage', $message);
     unset($_SESSION['bc_success']);
     unset($_SESSION['bc_message']);
 

@@ -7,10 +7,11 @@ require_once dirname(__FILE__) . '/buy_course.lib.php';
 
 $plugin = Buy_CoursesPlugin::create();
 $_cid = 0;
+$tableName = $plugin->get_lang('AvailableCoursesConfiguration');
 $interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
 $interbreadcrumb[] = array("url" => "paymentsetup.php", "name" => $plugin->get_lang('PaymentsConfiguration'));
 
-$tpl = new Template('AvailableCoursesConfiguration');
+$tpl = new Template($tableName);
 
 $teacher = api_is_platform_admin();
 api_protect_course_script(true);

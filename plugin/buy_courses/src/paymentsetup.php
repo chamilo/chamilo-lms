@@ -7,11 +7,11 @@ require_once '../../../main/inc/global.inc.php';
 require_once 'buy_course_plugin.class.php';
 $plugin = Buy_CoursesPlugin::create();
 $_cid = 0;
+$templateName = $plugin->get_lang('PaymentConfiguration');
 $interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
 $interbreadcrumb[] = array("url" => "configuration.php", "name" => $plugin->get_lang('AvailableCoursesConfiguration'));
 
-$tpl = new Template('PaymentConfiguration');
-
+$tpl = new Template($templateName);
 $teacher = api_is_platform_admin();
 api_protect_course_script(true);
 
@@ -27,7 +27,6 @@ if ($teacher) {
     $deleteImg = api_get_path(WEB_PLUGIN_PATH) . 'buy_courses/resources/delete.png';
     $showImg = api_get_path(WEB_PLUGIN_PATH) . 'buy_courses/resources/acces_tool.gif';
 
-    $plugin = Buy_CoursesPlugin::create();
     $paypalEnable = $plugin->get('paypal_enable');
     $transferenceEnable = $plugin->get('transference_enable');
 

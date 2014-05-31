@@ -36,7 +36,6 @@ $LastPost = "Zadnji članak";
 $Quoting = "Citiranje";
 $NotifyByEmail = "Obavesti me putem e-maila kada neko odgovora";
 $StickyPost = "Ovo je važna poruka (pozicionirana je uvijek na vrhu i ima posebnu oznaku)";
-$ReplyShort = "Odg:";
 $DeletePost = "Jeste li sigurni da želite da izbrišete ovaj post? Brisanje ovaj post će takođe obrisati odgovore na ovaj post. Molimo proverite tematski pregled da biste videli koje poruke će takođe biti obrisani";
 $Locked = "Zaključano: koristnici ne mogu dodavati nove poruke unutar ove kategorije foruma, forum ili temu, ali mogu čitati već objavljene članke";
 $Unlocked = "Otključano: koristnici mogu dodavati nove poruke unutar ove kategorije foruma, forum ili temu";

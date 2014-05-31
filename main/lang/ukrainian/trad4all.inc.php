@@ -3,6 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Додати новий форум";
+$ReplyShort = "Віпд.:";
 $Title = "Заголовок";
 $UsersOnline = "Користувачі онлайн";
 $Remove = "Видалити";

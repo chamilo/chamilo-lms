@@ -36,7 +36,6 @@ $LastPost = "Ostatni post";
 $Quoting = "Cytowanie";
 $NotifyByEmail = "Powiadom mnie poprzez e-mail kiedy ktoś odpowie";
 $StickyPost = "To jest przyczepiona wiadomość (pojawia się zawsze na górze, ma specjalną ikonę)";
-$ReplyShort = "Odp:";
 $DeletePost = "Czy na pewno chcesz usunąć ten wpis? Usuwając post usuniesz również odpowiedzi do niego. Sprawdź wątki, aby zobaczyć, które posty zostaną  usunięte.";
 $Locked = "Zablokowane: studenci nie mogą publikować postów w forach tej kategorii, na tym forum lub wątku. Mogą natomiast czytać posty już opublikowane.";
 $Unlocked = "Odblokowane: studenci mogą publikować posty w forach tej kategorii, na tym forum lub wątku";

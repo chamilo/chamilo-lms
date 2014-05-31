@@ -3,6 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $AddForum = "Sukurti naują forumą";
+$ReplyShort = "Re:";
 $Title = "Antraštė";
 $By = "By";
 $UsersOnline = "Prisijungę vartotojai";

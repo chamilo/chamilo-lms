@@ -6,6 +6,7 @@ $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Dieses Element ist f
 $DeleteAllAttendances = "Alle erstellten Anwesenheiten löschen";
 $Unsubscribe = "Abmelden";
 $AddForum = "Neues Forum hinzufügen";
+$ReplyShort = "Aw:";
 $SearchXapianModuleNotInstalled = "Das Xapian Such-Modul ist nicht installiert";
 $Title = "Titel";
 $By = "von";

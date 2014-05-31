@@ -131,6 +131,7 @@ $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "This item is invisib
 $DeleteAllAttendances = "Delete all created attendances";
 $Unsubscribe = "Unsubscribe";
 $AddForum = "Add a forum";
+$ReplyShort = "Re:";
 $SendToAllUsers = "Send to all users";
 $SelectACategory = "Select a category";
 $AdvancedEdit = "Advanced edit";

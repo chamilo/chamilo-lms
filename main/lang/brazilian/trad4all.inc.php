@@ -6,6 +6,7 @@ $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Este item é invisí
 $DeleteAllAttendances = "Apagar todas as presenças criadas";
 $Unsubscribe = "Apagar a conta";
 $AddForum = "Adicionar um novo fórum";
+$ReplyShort = "Re:";
 $SearchXapianModuleNotInstalled = "O módulo de busca Xampian não está instalado";
 $Title = "Título";
 $By = "Por";

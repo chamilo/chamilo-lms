@@ -87,6 +87,7 @@ $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Aquest element no é
 $DeleteAllAttendances = "Elimina totes les assistències creades";
 $Unsubscribe = "Dóna de baixa";
 $AddForum = "Afegir un nou fòrum";
+$ReplyShort = "Re:";
 $SelectACategory = "Seleccioneu una categoria";
 $AdvancedEdit = "Edició avançada";
 $SearchXapianModuleNotInstalled = "El mòdul Xapian de PHP no està configurat en el seu servidor";

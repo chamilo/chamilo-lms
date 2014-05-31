@@ -36,7 +36,6 @@ $LastPost = "Zadnja objava";
 $Quoting = "Navajanje";
 $NotifyByEmail = "V primeru odgovora me obvesti preko e-pošte";
 $StickyPost = "To je lepljiva objava (vedno se pojavi na vrhu seznama objav, označuje jo posebna ikona)";
-$ReplyShort = "Odg:";
 $DeletePost = "Resnično želite odstraniti to objavo ? Brisanje te objave odstrani tudi vse morebitne povezane odgovore. Preverite v pogledu tematske niti, katere objave bodo dejansko odstranjene.";
 $Locked = "Zaklenjeno: tečajniki ne morejo več objavljati sporočil v tej kategoriji forumov, v tem forumu ali tematski niti, lahko pa še vedno prebirajo že poslana sporočila";
 $Unlocked = "Odklenjeno: tečajniki lahko objavljajo sporočila v tej kategoriji forumov, v tem forumu oz. tematski niti";

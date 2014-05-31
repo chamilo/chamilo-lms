@@ -2,6 +2,23 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AgendaList = "Agenda zoznam";
+$Calendar = "Kalendár";
+$CustomRange = "Vlastný rozsah";
+$ThisWeek = "Tento týždeň";
+$SendToUsersInSessions = "Poslať používateľom vo všetkých stretnutiach tohto kurzu";
+$ParametersNotFound = "Parametre neboli nájdené";
+$UsersToAdd = "Používateľov pridať";
+$DocumentsAdded = "Dokumenty pridané";
+$NoUsersToAdd = "Žiadni používatelia na pridanie";
+$Subgroup = "Podskupina";
+$Subgroups = "Podskupiny";
+$EnterTheLettersYouSee = "Zadajte písmená, ktoré vidíte.";
+$ClickOnTheImageForANewOne = "Kliknite na obrázok pre nové načítanie.";
+$AccountBlockedByCaptcha = "Účet zablokovaný captchou.";
+$CatchScreenCasts = "Snímanie obrazovky/činnosti na obrazovke";
+$View = "Pohľad";
+$AmountSubmitted = "Počet prihlásených";
 $BeforeX = "Pred %s";
 $AfterX = "Po %s";
 $ExportSettingsAsXLS = "Exportovať nastavenia ako XLS";
@@ -111,6 +128,7 @@ $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Tieto položky sú n
 $DeleteAllAttendances = "Odstrániť všetky vytvorené dochádzky";
 $Unsubscribe = "Odhlásení";
 $AddForum = "Pridať nové fórum";
+$ReplyShort = "Re:";
 $SendToAllUsers = "Poslať všetkým používateľom";
 $SelectACategory = "Vybrať kategóriu";
 $AdvancedEdit = "Pokročilá úprava";

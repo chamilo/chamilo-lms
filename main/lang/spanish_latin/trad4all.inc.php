@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $DeleteAllAttendances = "Eliminar todas las asistencias creadas";
 $AddForum = "Agregar un nuevo foro";
+$ReplyShort = "Re:";
 $Title = "Título";
 $UsersOnline = "Usuarios en línea";
 $Remove = "Eliminar";

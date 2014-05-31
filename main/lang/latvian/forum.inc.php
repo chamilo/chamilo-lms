@@ -36,7 +36,6 @@ $LastPost = "Jaunākais ieraksts";
 $Quoting = "Citējumi";
 $NotifyByEmail = "Paziņot uz e-pastu, kad kāds uz tematu atbild";
 $StickyPost = "Izcelt šī temata svarīgumu. Pie šī temata tiks pievienota izsaukuma zīme <b>!</b> un tas vienmēr atradīsies tematu saraksta augšā";
-$ReplyShort = "Atbildēt:";
 $DeletePost = "Vai tiešām vēlaties dzēst šo ierakstu? <br>Kopā ar ierakstu tiks izdzēstas visas atbildes. Lūdzu apskatīties temata skatu, lai redzētu visus ierakstus, kas tiks izdzēsti.";
 $Locked = "Slēgts: kursanti vairs nevar publicēt jaunus ziņojumus šajā foruma kategorijā, forumā vai tematā, bet viņi joprojām var lasīt līdz šim ievadītos ziņojumus.";
 $Unlocked = "Atvērts: kursanti var publicēt jaunus ziņojumus šajā forumu kategorijā, forumā vai tematā.";

@@ -2,6 +2,8 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AgendaList = "Liste d'événements";
+$Calendar = "Calendrier";
 $CustomRange = "Période spécifique";
 $ThisWeek = "Cette semaine-ci";
 $SendToUsersInSessions = "Envoyer aux utilisateurs de toutes les sessions de ce cours";
@@ -130,6 +132,7 @@ $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Cet élément est in
 $DeleteAllAttendances = "Supprimer toutes les présences créées";
 $Unsubscribe = "Désinscription";
 $AddForum = "Ajouter un nouveau forum";
+$ReplyShort = "Re:";
 $SendToAllUsers = "Envoyer à tous";
 $SelectACategory = "Sélectionnez une catégorie";
 $AdvancedEdit = "Édition avancée";

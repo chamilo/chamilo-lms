@@ -8,6 +8,7 @@ $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Dit item is onzichtb
 $DeleteAllAttendances = "Verwijder alle gemaakte aanwezigheden";
 $Unsubscribe = "Uitschrijven";
 $AddForum = "Nieuw forum toevoegen";
+$ReplyShort = "Antwoord:";
 $SearchXapianModuleNotInstalled = "The Xapian zoekmodule is niet geïnstalleerd";
 $Title = "Titel";
 $By = "Door";

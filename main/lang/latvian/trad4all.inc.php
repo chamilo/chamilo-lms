@@ -6,6 +6,7 @@ $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Šis postenis skolē
 $DeleteAllAttendances = "Dzēst visu klātienes reģistru";
 $Unsubscribe = "Atrakstīties";
 $AddForum = "Pievienot jaunu forumu";
+$ReplyShort = "Atbildēt:";
 $SearchXapianModuleNotInstalled = "Xapian meklēšanas modulis nav instalēts";
 $Title = "Virsraksts";
 $By = "Autors";

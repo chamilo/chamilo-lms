@@ -2,6 +2,10 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AgendaList = "Agenda-seznam";
+$Calendar = "Koledar";
+$CustomRange = "Izbrano obdobje";
+$ThisWeek = "Ta teden";
 $SendToUsersInSessions = "Pošlji uporabnikom vseh sej s tem tečajem";
 $ParametersNotFound = "Ne najdem parametrov";
 $UsersToAdd = "Uporabniki za dodajanje";
@@ -127,6 +131,7 @@ $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Ta posnetek je nevid
 $DeleteAllAttendances = "Odstrani vso obstoječo prisotnost";
 $Unsubscribe = "Izpiši se";
 $AddForum = "Dodaj nov forum";
+$ReplyShort = "Odg:";
 $SendToAllUsers = "Pošlji vsem uporabnikom";
 $SelectACategory = "Izberi kategorijo";
 $AdvancedEdit = "Napredno urejanje";

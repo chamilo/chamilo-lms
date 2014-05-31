@@ -33,7 +33,6 @@ $LastPost = "Último mensaje";
 $Quoting = "Citando";
 $NotifyByEmail = "Notificarme por e-mail cuando alguien responda";
 $StickyPost = "Este es un mensaje fijo (aparece siempre arriba y tiene un icono fijo especial)";
-$ReplyShort = "Re:";
 $DeletePost = "¿ Está seguro de querer borrar este mensaje ? Al borrar este mensaje también borrará las respuestas que tenga. Por favor verifique el hilo del tema para ver que mensajes serán eliminados.";
 $Locked = "Cerrado: los estudiantes no pueden publicar más mensajes en esta categoría, foro o tema, pero pueden leer los mensajes que anteriormente hayan sido publicados.";
 $Unlocked = "Abierto: los estudiantes pueden publicar nuevos mensajes en esta categoría, foro o tema";

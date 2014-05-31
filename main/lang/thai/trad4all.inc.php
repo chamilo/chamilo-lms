@@ -3,6 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $AddForum = "เพิ่มรายการอภิปรายใหม่";
+$ReplyShort = "ตอบ";
 $By = "โดย";
 $UsersOnline = "สมาชิกที่กำลังใช้งาน";
 $Remove = "เอาออก";

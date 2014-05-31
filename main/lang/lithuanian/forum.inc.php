@@ -36,7 +36,6 @@ $LastPost = "Paskutinis pranešimas";
 $Quoting = "Citavimas";
 $NotifyByEmail = "Pranešti man el. paštu kai bus atsakymas į mano pranešimą";
 $StickyPost = "Svarbi žinutė (visada bus viršuje su specialia ikona)";
-$ReplyShort = "Re:";
 $DeletePost = "Ar tikrai norite ištrinti šį pranešimą? Ištrinant pranešimą ištrinami ir visi atsakymai į jį.";
 $Locked = "Užrakinta: Studentai šioje kategorijoje, forume ar temoje negali rašyti naujų žinučių, bet gali jas skaityti";
 $Unlocked = "Atrakinti: Studentai gali rašyti naujas žinutes kategorijoje, forume ar temoje";

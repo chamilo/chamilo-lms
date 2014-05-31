@@ -4,6 +4,7 @@ for more information: see languages.txt in the lang folder.
 */
 $DeleteAllAttendances = "Изтриване на всички присъствия";
 $AddForum = "Добавяне";
+$ReplyShort = "Re:";
 $Title = "Заглавие";
 $By = "От";
 $UsersOnline = "Посетители";

@@ -6,6 +6,7 @@ $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "متاح للمعل�
 $DeleteAllAttendances = "الغاء كل الحضور";
 $Unsubscribe = "الغاء التسجيل";
 $AddForum = "أضف منتدى جديد";
+$ReplyShort = " رد:";
 $SelectACategory = " اختار الفئة";
 $AdvancedEdit = "تعديل متقدم";
 $Title = "العنوان";

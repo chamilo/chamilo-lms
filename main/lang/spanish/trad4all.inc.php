@@ -126,6 +126,7 @@ $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Este item no es visi
 $DeleteAllAttendances = "Eliminar todas las asistencias creadas";
 $Unsubscribe = "Dar de baja";
 $AddForum = "Añadir un foro";
+$ReplyShort = "Re:";
 $SendToAllUsers = "Enviar a todos los usuarios";
 $SelectACategory = "Seleccione una categoría";
 $AdvancedEdit = "Edición avanzada";

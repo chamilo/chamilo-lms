@@ -36,7 +36,6 @@ $LastPost = "Posledná správa";
 $Quoting = "Citujem";
 $NotifyByEmail = "Keď niekto odpovie, upozorni ma emailom";
 $StickyPost = "To je opakujúca sa správa (zobrazí sa vždy hore a má špeciálnu ikonu opakujúcej sa správy)";
-$ReplyShort = "Re:";
 $DeletePost = "Naozaj chcete zmazať túto správu? Jej zmazanie zmaže tiež odpovede na ňu. Skontrolujte prosím prehľad tém, aby ste videli, ktoré správy budú tiež zmazané.";
 $Locked = "Zadblokované: študenti už nemôžu posielať nové správy do tejto kategórie fóra, fóra alebo témy ale stále môžu čítať správy, ktoré tam už poslané boli.";
 $Unlocked = "Odblokované: študenti môžu poslať nové správy do tejto kategórie fóra, do fóra alebo témy";

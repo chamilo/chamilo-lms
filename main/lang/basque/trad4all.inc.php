@@ -7,6 +7,7 @@ $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "Ikasle batek ezin iz
 $DeleteAllAttendances = "Ezabatu sortutako asistentzia guztiak";
 $Unsubscribe = "Kendu inskripzioa";
 $AddForum = "Gehitu foroa";
+$ReplyShort = "Erantz:";
 $SelectACategory = "Hautatu kategoria bat";
 $AdvancedEdit = "Edizio aurreratua";
 $SearchXapianModuleNotInstalled = "PHPren Xapian bilaketa modulua ez dago instalaturik zerbitzarian, mesedez, jarri harremanetan zure kudeatzailearekin";

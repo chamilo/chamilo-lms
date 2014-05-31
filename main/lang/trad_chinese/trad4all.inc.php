@@ -3,6 +3,7 @@
 for more information: see languages.txt in the lang folder.
 */
 $AddForum = "新增討論區";
+$ReplyShort = "回覆：";
 $Title = "標題";
 $UsersOnline = "線上使用者";
 $Remove = "移除";

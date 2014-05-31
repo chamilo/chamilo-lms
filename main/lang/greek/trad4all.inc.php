@@ -6,6 +6,7 @@ $ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher = "This item is invisib
 $DeleteAllAttendances = "Διαγραφή όλων";
 $Unsubscribe = "Ακύρωση εγγραφής";
 $AddForum = "Προσθήκη Forum";
+$ReplyShort = "Απ.:";
 $SelectACategory = "Επιλογή Κατηγορίας";
 $AdvancedEdit = "Επεξεργασία για προχωρημένους";
 $SearchXapianModuleNotInstalled = "The Xapian search module is not installed";

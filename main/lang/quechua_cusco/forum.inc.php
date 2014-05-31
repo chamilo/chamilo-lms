@@ -36,7 +36,6 @@ $LastPost = "Qepa willay";
 $Quoting = "Cita nisqa";
 $NotifyByEmail = "Willaway e-chakipi pipas kutichiqtin";
 $StickyPost = "Kayqa qhawanapaqpuni (kayraqmi rikurinqa ancha icono nisqawan kuska)";
-$ReplyShort = "Kuti:";
 $DeletePost = "Cheqaychu pichanki kay willayta? kay willayta pichaspaqa, pichakunqan llapan kutichikuynin kasqanpas. Ama hina kaychu, k'allmachasqa qhawanapi qhawariy mayqen willaykuna pichachikunqa chayta";
 $Locked = "Wisqasqa: yachaqekunaqa manañan churanqakuchu kay mitapi, k'itirimanapi nitaq rimanapipas, ichaqa ñaupaq willaykuna churasqataqa ñauwichallankuman.";
 $Unlocked = " Kichasqa: yachaqekunaqa atinqaku musuq willaykunata churayta kay mitapi, k'itirimanapi utaq  rimanapipas";

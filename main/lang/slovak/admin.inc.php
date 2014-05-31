@@ -2,6 +2,7 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$ClassIdDoesntExists = "ID triedy neexistuje";
 $SearchSessions = "Hľadať stretnutie";
 $DeleteUsersNotInList = "Odhlásiť študentov, ktorí nie sú v importovanom zozname";
 $IfSessionExistsUpdate = "Aktualizovať, ak existuje stretnutie";

@@ -36,7 +36,6 @@ $LastPost = "Ultimul mesaj";
 $Quoting = "Citeaza";
 $NotifyByEmail = "Atentioneaza-ma prin e-mail cand cineva raspunde";
 $StickyPost = "Acesta este un mesaj fix (apare mereu deasupra si are o iconita speciala)";
-$ReplyShort = "Re:";
 $DeletePost = "Sunteti sigur ca doriti sa stergeti acest mesaj? Stergand acest mesaj veti sterge deasemenea si raspunsurile acestuia. Va rog bifati lista arborescenta cu discutii pentru a vedea ce mesaje vor fi deasemenea sterse";
 $Locked = "Blocat: studentii nu mai pot posta mesaje noi in acesta categorie de forum, forum sau discutii dar pot citi mesajele existente.";
 $Unlocked = "Deblocat: studentii pot posta mesaje noi in aceasta categorie de forum, forum sau discutie";

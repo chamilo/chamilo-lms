@@ -7,7 +7,6 @@
 }
 
 .inner_lp_toc .scorm_item a {
-    font-weight: bold;
     font-size: 13px;
     margin-right: 1px;
     padding-bottom: 2px;
@@ -105,7 +104,7 @@
 
 .inner_lp_toc .scorm_item_section .scorm_item:before
 {
-    content : url('../../img/lp_section.png');  /* from main/newscorm/lp_controller.php file */
+    content : url('../lp_section.png');  /* from main/newscorm/lp_controller.php file */
     vertical-align: text-top;
     margin-right : 5px;
 }
@@ -231,9 +230,8 @@
     text-decoration: none;  
     
 }
-
 .inner_lp_toc .scorm_item {
-    font-size: 16px;
+    font-size: 14px;
     margin-left: 10px;
     margin-right:10px;
     text-decoration: none;

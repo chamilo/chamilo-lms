@@ -18,7 +18,7 @@ $bodyXtra = ' class="course_chat" dir="'.api_get_text_direction().'" ';
 
 if (FRAME == 'hidden') {
 	$bodyXtra .= 'onload="javascript: updateChat(); updateConnected(); setTimeout(\'submitHiddenForm();\', 5000);"';
-    // Change timeout to change refresh time of the chat window
+	// Change timeout to change refresh time of the chat window
 } elseif (FRAME == 'message') {
 	$bodyXtra .= 'onload="javascript: eventMessage();"';
 }
@@ -45,91 +45,53 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
 ?><!DOCTYPE html>
 <html>
 <head>
-    <meta charset="<?php echo api_get_system_encoding(); ?>" />
-    <title>Chat</title>
-    <link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH); ?>chat.css">
-    <?php echo api_get_js('jquery.min.js'); ?>
-    <?php echo api_get_js('jquery.tinyscrollbar.js'); ?>
-    <script type="text/javascript">
-        /*$(document).ready(function() {
-        var posicion = $("#clear-chat").offset();
-        var margenSuperior = 15;
-         $(window).scroll(function() {
-             if ($(window).scrollTop() > posicion.top) {
-                 $("#clear-chat").stop().animate({
-                     marginTop: $(window).scrollTop() - posicion.top + margenSuperior
-                 });
-             } else {
-                 $("#clear-chat").stop().animate({
-                     marginTop: 0
-                 });
-             };
-         });
-        });*/
-        $(document).ready(function(){
-                $('#user-online-scroll').tinyscrollbar();
-            });
-        //Sound send message
-        /*$(document).ready(function(){
-            $("#message").keypress(function(event){
-            if (event.which == 13) {
-                $("#audio")[0].play();
-                }
-            });
-        });
-        $(document).ready(function(){
-            $("#send").on("click",function(){
-                $("#audio")[0].play();
-            });
-        });*/
-        
-    </script>
-
+<meta charset="<?php echo api_get_system_encoding(); ?>" />
+<title>Chat</title>
+<link rel="stylesheet" type="text/css" href="<?php echo api_get_path(WEB_CSS_PATH); ?>chat.css">
+<?php echo api_get_js('jquery.min.js'); ?>
+<?php echo api_get_js('jquery.tinyscrollbar.js'); ?>
 <script type="text/javascript">
-function play_notification() {
-    document.getElementById('audio').play();
-}
-function updateChat()
-{
-	if ('<?php echo $chat_size_old; ?>' != '<?php echo $chat_size_new; ?>') {
-		parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size_new.'&'.api_get_cidreq(); ?>#bottom';
-        play_notification();
+	$(document).ready(function(){
+		$('#user-online-scroll').tinyscrollbar();
+	});
+
+	function play_notification() {
+		document.getElementById('audio').play();
 	}
-}
 
-function updateConnected()
-{
-
-	if ('<?php echo $connected_old; ?>' != '<?php echo $connected_new; ?>')
-	{
-		parent.chat_whoisonline.location.href='chat_whoisonline.php?size=<?php echo $connected_new; ?>';
+	function updateChat(){
+		if ('<?php echo $chat_size_old; ?>' != '<?php echo $chat_size_new; ?>') {
+			parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size_new.'&'.api_get_cidreq(); ?>#bottom';
+			play_notification();
+		}
 	}
-}
 
-function submitHiddenForm()
-{
-	document.formHidden.submit();
-}
+	function updateConnected(){
+		if ('<?php echo $connected_old; ?>' != '<?php echo $connected_new; ?>'){
+			parent.chat_whoisonline.location.href='chat_whoisonline.php?size=<?php echo $connected_new; ?>';
+		}
+	}
 
-function eventMessage()
-{
-	<?php if (isset($chat_size) && $chat_size): ?>
-	parent.chat_hidden.document.formHidden.chat_size_old.value='<?php echo $chat_size; ?>';
-	parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size.'&'.api_get_cidreq(); ?>#bottom';
-	<?php endif; ?>
-	document.formMessage.message.focus();
+	function submitHiddenForm(){
+		document.formHidden.submit();
+	}
 
-}
+	function eventMessage(){
+		<?php if (isset($chat_size) && $chat_size): ?>
+		parent.chat_hidden.document.formHidden.chat_size_old.value='<?php echo $chat_size; ?>';
+		parent.chat_chat.location.href='chat_chat.php?size=<?php echo $chat_size.'&'.api_get_cidreq(); ?>#bottom';
+		<?php endif; ?>
+		document.formMessage.message.focus();
+	}
 
-function send_message(evenement) {
-    for (prop in evenement) {
-    	if(prop == 'which') touche = evenement.which; else touche = evenement.keyCode;
-    }
-
-    if (touche == 13) {
-    	document.formMessage.submit();
-    }
-}
+	function send_message(evenement) {
+		for (prop in evenement) {
+			if(prop == 'which') touche = evenement.which; else touche = evenement.keyCode;
+		}
+		if (touche == 13) {
+			document.formMessage.submit();
+		}
+	}
 </script>
 </head>
 <body <?php echo $bodyXtra; ?> >

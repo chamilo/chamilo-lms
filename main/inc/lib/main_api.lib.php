@@ -1512,8 +1512,8 @@ function api_format_course_array($course_data) {
         $_course['add_teachers_to_sessions_courses'] = $course_data['add_teachers_to_sessions_courses'];
     }
 
-    if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
-        $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png';
+    if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic300x180.png')) {
+        $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic300x180.png';
     } else {
         $url_image = api_get_path(WEB_IMG_PATH).'without_picture.png';
     }

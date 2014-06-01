@@ -84,11 +84,11 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
 		document.formMessage.message.focus();
 	}
 
-	function send_message(evenement) {
-		for (prop in evenement) {
-			if(prop == 'which') touche = evenement.which; else touche = evenement.keyCode;
+	function send_message(keyEvent) {
+		for (prop in keyEvent) {
+			if(prop == 'which') key = keyEvent.which; else key = keyEvent.keyCode;
 		}
-		if (touche == 13) {
+		if (key == 13) {
 			document.formMessage.submit();
 		}
 	}

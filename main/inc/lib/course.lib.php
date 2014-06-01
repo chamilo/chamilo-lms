@@ -3206,7 +3206,8 @@ class CourseManager
 
         $my_course_image = new Image($source_file);
         $result = $my_course_image->send_image($course_image, -1, 'png');
-        //Redimension image to 100x85
+        //Redimension image to 100x85 (should be 85x85 but 100x85 visually gives
+        // better results for most images people put as course icon)
         if ($result) {
             $medium = new Image($course_image);
             //$picture_infos = $medium->get_image_size();

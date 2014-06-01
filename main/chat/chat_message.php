@@ -215,21 +215,19 @@ if (!empty($course) && !empty($_user['user_id'])) {
 
 				$fp = fopen($chat_path.$basename_chat.'.log.html', 'a');
 					// view user picture
-					$user_image = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
-					$user_photo = $user_image['dir'].'medium_'.$user_image['file'];
-					$file_photo = '<img class="chat-image" src="'.$user_photo.'"/>';
+					$userImage = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
+                                        if (substr($userImage['file'],0,7) != 'unknown') {
+    					$userPhoto = $userImage['dir'].'medium_'.$userImage['file'];
+                                        } else {
+    					$userPhoto = $userImage['dir'].$userImage['file'];
+                                        }
+					$filePhoto = '<img class="chat-image" src="'.$userPhoto.'"/>';
 
 				if ($isMaster) {
-
-					// $photo = '<img src="'.api_get_path(WEB_IMG_PATH).'teachers.gif" alt="'.get_lang('Teacher').'"  width="11" height="11" align="top"  title="'.get_lang('Teacher').'"  />';
-					fputs($fp, '<div class="message-teacher"><div class="content-message"><div>'.$message.'</div><div class="message-date">'.$timeNow.'</div></div><div class="icon-message"></div>'.$file_photo.'</div>'."\n");
-					//fputs($fp, '<span style="color:#999; font-size: smaller;">['.$timeNow.']</span>'.$file_photo.' <span id="chat_login_name"><b>'.api_get_person_name($firstname, $lastname).'</b></span> : <i>'.$message.'</i><br />'."\n");
+					fputs($fp, '<div class="message-teacher"><div class="content-message"><div>'.$message.'</div><div class="message-date">'.$timeNow.'</div></div><div class="icon-message"></div>'.$filePhoto.'</div>'."\n");
 				} else {
-					// $photo = '<img src="'.api_get_path(WEB_IMG_PATH).'students.gif" alt="'.get_lang('Student').'"  width="11" height="11" align="top"  title="'.get_lang('Student').'"  />';
-					//fputs($fp, '<span style="color:#999; font-size: smaller;">['.$timeNow.']</span>'.$file_photo.' <b>'.api_get_person_name($firstname, $lastname).'</b> : <i>'.$message.'</i><br />'."\n");
-					fputs($fp, '<div class="message-student">'.$file_photo.'<div class="icon-message"></div><div class="content-message"><div>'.$message.'</div><div class="message-date">'.$timeNow.'</div></div></div>'."\n");
+					fputs($fp, '<div class="message-student">'.$filePhoto.'<div class="icon-message"></div><div class="content-message"><div>'.$message.'</div><div class="message-date">'.$timeNow.'</div></div></div>'."\n");
 				}
-
 				fclose($fp);
 
 				$chat_size = filesize($chat_path.$basename_chat.'.log.html');
@@ -250,7 +248,7 @@ if (!empty($course) && !empty($_user['user_id'])) {
         <textarea id="message" class="message-text" name="message" style=" <?php echo $talkboxsize; ?>" onkeydown="send_message(event);" onclick="javascript: insert_smile(this);"></textarea>
         </td>
         <td>
-            <button id="send" type="submit" value="<?php echo get_lang('Send'); ?>" class="btn-enviar"><?php echo get_lang('Send'); ?></button>
+        <button id="send" type="submit" value="<?php echo get_lang('Send'); ?>" class="btn-send"><?php echo get_lang('Send'); ?></button>
         </td>
 	</tr>
 	</table>
@@ -287,11 +285,6 @@ if (!empty($course) && !empty($_user['user_id'])) {
 		?>
     </div>
     </form>
-    <!-- <audio id="audio">
-	    <source type="audio/wav" src="sound/sonido_notificacion.wav"></source>
-	    <source type="audio/ogg" src="sound/sonido_notificacion.ogg"></source>
-	    <source type="audio/mpeg" src="sound/sonido_notificacion.mp3"></source>
-    </audio> -->
 <?php
 }
 require 'footer_frame.inc.php';

@@ -9042,29 +9042,27 @@ class learnpath
 
         if (is_array($links_to_create)) {
             foreach ($links_to_create as $file => $link) {
-               $file_content = '<!DOCTYPE html>
-    <head>
-                   <meta charset="'.api_get_language_isocode().'" />
-        <title>'.$link['title'].'</title>
-    </head>
-    <body dir="'.api_get_text_direction().'">
-                        <div style="text-align:center">
-                        <a href="'.$link['url'].'">'.$link['title'].'</a></div>
-    </body>
-</html>';
+               $file_content = '<!DOCTYPE html><head>
+                                <meta charset="'.api_get_language_isocode().'" />
+                                <title>'.$link['title'].'</title>
+                                </head>
+                                <body dir="'.api_get_text_direction().'">
+                                <div style="text-align:center">
+                                <a href="'.$link['url'].'">'.$link['title'].'</a></div>
+                                </body>
+                                </html>';
                 file_put_contents($archive_path.$temp_dir_short.'/'.$file, $file_content);
             }
         }
 
         // Add non exportable message explanation.
         $lang_not_exportable = get_lang('ThisItemIsNotExportable');
-        $file_content = '<!DOCTYPE html>
-    <head>
-            <meta charset="'.api_get_language_isocode().'" />
-        <title>'.$lang_not_exportable.'</title>
-        <meta http-equiv="Content-Type" content="text/html; charset='.api_get_system_encoding().'" />
-    </head>
-        <body dir="'.api_get_text_direction().'">';
+        $file_content = '<!DOCTYPE html><head>
+                        <meta charset="'.api_get_language_isocode().'" />
+                        <title>'.$lang_not_exportable.'</title>
+                        <meta http-equiv="Content-Type" content="text/html; charset='.api_get_system_encoding().'" />
+                        </head>
+                        <body dir="'.api_get_text_direction().'">';
         $file_content .=
 <<<EOD
         <style>

@@ -40,7 +40,7 @@
 <h2><b>Contents</b></h2>
 
 <ol>
-  <li><a href="#1.Using-XCache">Using xCache, APC or Memcache</a></li>
+  <li><a href="#1.Using-XCache">Using xCache, APC, Memcache or Memcached</a></li>
   <li><a href="#2.Slow-queries">Slow queries</a></li>
   <li><a href="#3.Indexes-caching">Indexes caching</a></li>
   <li><a href="#4.Sessions-directories">Sessions directories</a></li>
@@ -173,6 +173,55 @@ If you prefer using <a href="http://php.net/manual/en/book.apc.php">APC</a>, you
         }
      ...
 </pre>
+<br />
+If you use php5-memcached (different set of functions than php5-memcache!), then this piece of code would look like this (you need to adjust depending on your settings):
+<pre>
+    global $_configuration;
+    $_course    = api_get_course_info();
+    $course_id  = api_get_course_id();
+    $user_id    = api_get_user_id();
+
+    $html = '';
+    $xc = method_exists('Memcached', 'add');
+    if ($xc) {
+        // Make sure the server is available
+        $xm = new Memcached;
+        $xm->addServer('localhost', 11211);
+        // The following concatenates the name of the database + the id of the
+        // access url to make it a unique variable prefix for the variables to
+        // be stored
+        $xs = $_configuration['main_database'].'_'.$_configuration['access_url'].'_';
+    }
+    $number = 0;
+    if ((api_get_setting('showonline', 'world') == 'true' AND !$user_id) OR (api_get_setting('showonline', 'users') == 'true' AND $user_id) OR (api_get_setting('showonline', 'course') == 'true' AND $user_id AND $course_id)) {
+        if ($xc) {
+            if ($xm->get($xs.'wio_count_simple')) {
+                $number = $xm->get($xs.'wio_count_simple');
+            } else {
+                $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+                $xm->set($xs.'wio_count_simple',$number,120);
+            }
+        } else {
+              $number = who_is_online_count(api_get_setting('time_limit_whosonline'));
+        }
+        $number_online_in_course = 0;
+        if (!empty($_course['id'])) {
+            if ($xc) {
+                if ($xm->get($xs.'wio_count_simple_'.$_course['id'])) {
+                    $number_online_in_course = $xm->get($xs.'wio_count_simple_'.$_course['id']);
+                } else {
+                    $number_online_in_course = who_is_online_in_this_course_count($user_id, api_get_setting('time_limit_whosonline'), $_course['id']);
+                    $xm->set($xs.'wio_count_simple_'.$_course['id'],$number_online_in_course,120);
+                }
+            } else {
+                $number_online_in_course = who_is_online_in_this_course_count(api_get_user_id(), api_get_setting('time_limit_whosonline'), $_course['id']);
+            }
+        }
+        // ...
+</pre>
+
+
+
 <p>It is also worth noting that the Université de Genève, Switzerland, observed that the calculation of the total size used by course documents is one of the heaviest queries in Chamilo, so you might want to cache the results of this one as well, using the same technique.</p>
 <p>Finally, if your portal is highly public *and* you are showing the popular courses on the homepage, you might want to also reduce the amount of queries this generates, using the same technique as above, but for the main/inc/lib/auth.lib.php library, looking for the "Tracking::get_course_connections_count()" call:</p>
 <pre>

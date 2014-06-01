@@ -81,4 +81,6 @@ $strings['TicketWasThisAnswerSatisfying'] = "La réponse au ticket est-elle sati
 $strings['TicketDetail'] = "Détails du ticket";
 $strings['AreYouSure'] = "Êtes-vous certain?";
 $strings['allow_student_add'] = "Permettre à l'étudiant de générer des tickets";
-?>
+$strings['PleaseBeforeRegisterATicketSelectOneUser'] = "Veuillez sélectionner un utilisateur avant d'enregistrer un ticket.";
+$strings['RequestConfirmation'] = "Demander confirmation";
+

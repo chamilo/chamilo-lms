@@ -251,7 +251,7 @@ echo '<div class="actions">
         <div class="clear">&nbsp;</div>
     </form></div>';
 if (isset($_GET['keyword'])) {
-    $table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() xor api_sort_by_first_name()) ? 3 : 2);
+    $table = new SortableTable('users', 'get_number_of_users', 'get_user_data', (api_is_western_name_order() || api_sort_by_first_name()) ? 3 : 2);
     $table->set_header(0, '', false, 'width="18px"');
     $table->set_header(0, get_lang('Photo'), false);
     $table->set_header(1, get_lang('OfficialCode'));

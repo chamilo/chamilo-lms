@@ -11,25 +11,38 @@ $language_file = array('registration');
 require_once '../config.php';
 $plugin = TicketPlugin::create();
 
-$user_id = intval($_GET['user_id']);
-$user_info = api_get_user_info($user_id);
-$courses_list = CourseManager::get_courses_list_by_user_id($user_id, false, true);
-?>
-<div class="row">
-    <div class="label2"><?php echo get_lang('User') ?>:</div>
-    <div class="formw2" id="user_request"><?php echo $user_info['firstname'] . " " . $user_info['lastname']; ?></div>
-</div>
-<div class="row" id="divCourse">
-    <div class="label2"><?php echo get_lang('Course') ?>:</div>
-    <div class="formw2" id="courseuser">
-        <select  class="chzn-select" name = "course_id" id="course_id"  style="width:95%;">
-            <option value="0">---<?php echo get_lang('Select') ?>---</option>
-            <?php
-            foreach ($courses_list as $key => $course) {
-                $courseinfo = CourseManager::get_course_information($course['code']);
-                echo '<option value="' . $courseinfo['code'] . '"> ' . $courseinfo['title'] . '</option>';
-            }
-            ?>
-        </select>
-    </div>
-</div>
+$userId = intval($_GET['user_id']);
+$userInfo = api_get_user_info($userId);
+
+$coursesList = CourseManager::get_courses_list_by_user_id($userId, false, true);
+$arrCourseList = array(get_lang('Select'));
+//Course List
+foreach ($coursesList as $key => $course) {
+    $courseInfo = CourseManager::get_course_information($course['code']);
+    $arrCourseList[$courseInfo['code']] = $courseInfo['title'];
+}
+//End Course List
+
+
+$userLabel = Display::tag('label', get_lang('User'), array('class' => 'control-label'));
+$personName = api_get_person_name($userInfo['firstname'], $userInfo['lastname']);
+$userInput = Display::tag(
+    'input',
+    '', 
+    array(
+        'disabled' => 'disabled',
+        'type' => 'text',
+        'value' => $personName
+    )
+);
+$userControl = Display::div($userInput, array('class' => 'controls'));
+
+$courseLabel = Display::tag('label', get_lang('Course'), array('class' => 'control-label'));
+$courseSelect = Display::select('course_id', $arrCourseList, 0, array(), false);
+$courseControl = Display::div($courseSelect, array('class' => 'controls'));
+
+$userDiv = Display::div($userLabel . " " . $userControl, array('class' => 'control-group'));
+$courseDiv = Display::div($courseLabel . " " . $courseControl, array('class' => 'control-group'));
+echo $userDiv;
+echo $courseDiv;
+

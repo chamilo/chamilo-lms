@@ -46,7 +46,7 @@ practical features. Some of this third-party software usually come bundled with
 your operating system, but some don't. This means that if that software is
 not installed on your Chamilo server, along with Chamilo, you might not enjoy 
 the best possible experience with your Chamilo platform. To avoid this problem,
-most of the sofware we used is bundled into a typical Chamilo install.</p>
+most of the sofware we used is bundled into a typical Chamilo installation.</p>
 <p>
 However, if such a third-party software is too big to be included, or if it 
 doesn't make sense to include it for whatever reason, you must make sure it is 
@@ -56,18 +56,24 @@ required information to install it.</p>
 
 <a name="dependencies"></a>
 <h2>Dependencies - client-side</h2>
+We recommend using HTML5-compatible technology.
 <ul>
-  <li>Any modern browser (IE6 and IE7 are obviously *excluded*). Safari is known to have small issues with the WYSIWYG editor.</li>
-  <li>Optional: Flash plugin (only required for a few features)</li>
+  <li>PC with a minimum of 512MB or any tablet or smartphone</li>
+  <li>We recommend a Pentium-I as a minimum processor capability for PCs</li>
+  <li>Works on Windows XP (SP3 recommended) and later versions, Linux (any version with a graphical interface), Mac OS (any version), FreeBSD, Android, iOS and pretty much any other operating system with a graphical interface you might think about</li>
+  <li>Any modern browser (IE6 and IE7 excluded). Safari is known to have small issues with the WYSIWYG editor.</li>
+  <li>Optional: Flash plugin (only required for a few features like the hotspot image question type and the audio recorder)</li>
+  <li>Optional: Java applet capability (only required in case you don't use the Flash version of the audio recorder)</li>
 </ul>
+
 <h2>Dependencies - server-side</h2>
 <ul>
-  <li> Apache 2+</li>
-  <li> PHP 5.3 or higher with MySQL bindings and php-gd extension to allow Chamilo to resize pictures. The
+  <li>Apache 2+</li>
+  <li>PHP 5.3 or higher with recent MySQL bindings and php-gd extension to allow Chamilo to resize pictures. The
   new components we have included from the Symfony framework highly depend on namespaces, a feature that appeared in PHP 5.3.0+</li>
-  <li> MySQL 5.1+ or any version of MariaDB database server</li>
-  <li>php5-intl</li>
-  <li>php5-curl (only required for a feature in the links tool)</li>
+  <li>MySQL 5.1+ or any version of MariaDB database server</li>
+  <li>php5-intl package (for international behaviour support)</li>
+  <li>php5-curl (only required for a feature in the links tool and an optional installer check)</li>
   <li>php5-mcrypt (only required for a feature in the survey tool)</li>
 </ul><br />
 <a name="included_dependencies"></a>

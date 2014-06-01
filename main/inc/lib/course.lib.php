@@ -3194,7 +3194,7 @@ class CourseManager
         $course_info          = api_get_course_info($course_code);
         $store_path           = api_get_path(SYS_COURSE_PATH).$course_info['path'];   // course path
         $course_image         = $store_path.'/course-pic.png';                      // image name for courses
-        $course_medium_image  = $store_path.'/course-pic300x180.png';
+        $course_medium_image  = $store_path.'/course-pic85x85.png';
         //$extension            = strtolower(substr(strrchr($filename, '.'), 1));
 
         if (file_exists($course_image)) {
@@ -3206,12 +3206,13 @@ class CourseManager
 
         $my_course_image = new Image($source_file);
         $result = $my_course_image->send_image($course_image, -1, 'png');
-        //Redimension image to 100x85
+        //Redimension image to 100x85 (should be 85x85 but 100x85 visually gives
+        // better results for most images people put as course icon)
         if ($result) {
             $medium = new Image($course_image);
             //$picture_infos = $medium->get_image_size();
-            $medium->resize(300, 180, 0, false);
-            $medium->send_image($store_path.'/course-pic300x180.png', -1, 'png');
+            $medium->resize(100, 85, 0, false);
+            $medium->send_image($store_path.'/course-pic85x85.png', -1, 'png');
         }
         return $result;
     }

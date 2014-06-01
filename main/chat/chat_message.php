@@ -216,7 +216,11 @@ if (!empty($course) && !empty($_user['user_id'])) {
 				$fp = fopen($chat_path.$basename_chat.'.log.html', 'a');
 					// view user picture
 					$userImage = UserManager::get_user_picture_path_by_id($user_id, 'web', false, true);
-					$userPhoto = $userImage['dir'].'medium_'.$userImage['file'];
+                                        if (substr($userImage['file'],0,7) != 'unknown') {
+    					$userPhoto = $userImage['dir'].'medium_'.$userImage['file'];
+                                        } else {
+    					$userPhoto = $userImage['dir'].$userImage['file'];
+                                        }
 					$filePhoto = '<img class="chat-image" src="'.$userPhoto.'"/>';
 
 				if ($isMaster) {

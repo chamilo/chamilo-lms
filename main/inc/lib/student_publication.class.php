@@ -425,7 +425,7 @@ class StudentPublicationRepository
         if (empty($result)) {
             $result = new self();
         }
-        return $resutl;
+        return $result;
     }
 
     /**

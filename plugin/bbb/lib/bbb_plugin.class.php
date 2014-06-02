@@ -6,26 +6,35 @@
      * main/img/icons/64/plugin_name.png
      * main/img/icons/64/plugin_name_na.png
 */
+
+/**
+ * Class BBBPlugin
+ */
 class BBBPlugin extends Plugin
 {
     public $isCoursePlugin = true;
 
     //When creating a new course this settings are added to the course
     public $course_settings = array(
-//                    array('name' => 'big_blue_button_welcome_message',  'type' => 'text'),
-                    array('name' => 'big_blue_button_record_and_store', 'type' => 'checkbox')
+        array(
+            'name' => 'big_blue_button_record_and_store',
+            'type' => 'checkbox'
+        )
     );
 
-    static function create() {
+    static function create()
+    {
         static $result = null;
         return $result ? $result : $result = new self();
     }
 
-    protected function __construct() {
+    protected function __construct()
+    {
         parent::__construct('2.1', 'Julio Montoya, Yannick Warnier', array('tool_enable' => 'boolean', 'host' =>'text', 'salt' => 'text'));
     }
 
-    function install() {
+    public function install()
+    {
         $table = Database::get_main_table('plugin_bbb_meeting');
         $sql = "CREATE TABLE IF NOT EXISTS $table (
                 id INT unsigned NOT NULL auto_increment PRIMARY KEY,
@@ -46,7 +55,8 @@ class BBBPlugin extends Plugin
         $this->install_course_fields_in_all_courses();
     }
 
-    function uninstall() {
+    public function uninstall()
+    {
         $t_settings = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
         $t_options = Database::get_main_table(TABLE_MAIN_SETTINGS_OPTIONS);
         $t_tool = Database::get_course_table(TABLE_TOOL_LIST);

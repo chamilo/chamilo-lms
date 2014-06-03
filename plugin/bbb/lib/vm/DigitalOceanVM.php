@@ -1,10 +1,11 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 use DigitalOcean\DigitalOcean;
 use DigitalOcean\Credentials;
 
 /**
- * Class DigitalOceanWrapper
+ * Class DigitalOceanVM
  */
 class DigitalOceanVM extends AbstractVM implements VirtualMachineInterface
 {

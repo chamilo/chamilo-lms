@@ -1,10 +1,11 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 use DigitalOcean\DigitalOcean;
 use DigitalOcean\Credentials;
 
 /**
- * Class DigitalOceanWrapper
+ * Class AmazonVM
  */
 class AmazonVM extends AbstractVM implements VirtualMachineInterface
 {

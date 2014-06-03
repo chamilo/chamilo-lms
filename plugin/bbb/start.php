@@ -54,27 +54,23 @@ if ($bbb->plugin_enabled) {
             if ($bbb->meeting_exists($meeting_params['meeting_name'])) {
                 $url = $bbb->join_meeting($meeting_params['meeting_name']);
                 if ($url) {
-                    header('location: '.$url);
-                    exit;
+                    $bbb->redirectToBBB($url);
                 } else {
                     $url = $bbb->create_meeting($meeting_params);
-                    header('location: '.$url);
-                    exit;
+                    $bbb->redirectToBBB($url);
                 }
             } else {
                 if ($bbb->is_teacher()) {
                     $url = $bbb->create_meeting($meeting_params);
-                    header('location: '.$url);
-                    exit;
+                    $bbb->redirectToBBB($url);
                 } else {
                     $url = 'listing.php?'.api_get_cidreq();
-                    header('location: '.$url);
-                    exit;
+                    $bbb->redirectToBBB($url);
                 }
             }
         } else {
             $url = 'listing.php?'.api_get_cidreq();
-            header('location: '.$url);
+            header('Location: ' . $url);
             exit;
         }
     } else {

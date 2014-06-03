@@ -254,6 +254,10 @@ To solve this performance issue, you can execute the following queries manually 
 ALTER TABLE lp_item ADD INDEX idx_c_lp_item_cid_lp_id (c_id, lp_id);
 ALTER TABLE lp_item_view ADD INDEX  idx_c_lp_item_view_cid_lp_view_id_lp_item_id (c_id, lp_view_id, lp_item_id);
 </pre>
+In Chamilo 1.9.8, we use the c_item_property table more actively. This causes issues with the reporting pages for the assignments. You can reduce the impact by adding the following index:
+<pre>
+alter table c_item_property add index idx_itemprop_tooliuid(tool, insert_user_id);
+</pre>
 These will be available in Chamilo 1.10 directly, but we cannot put them into Chamilo 1.9 from now on for organizational reasons.<br />
 <hr />
 <h2><a name="3.Indexes-caching"></a>3. Indexes caching</h2>

@@ -2,16 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
+ *  Class DocumentManager
  * 	This is the document library for Chamilo.
  * 	It is / will be used to provide a service layer to all document-using tools.
  * 	and eliminate code duplication fro group documents, scorm documents, main documents.
  * 	Include/require it in your code to use its functionality.
  *
  * 	@package chamilo.library
- */
-
-/**
- * Code
  */
 class DocumentManager
 {
@@ -2234,15 +2231,18 @@ class DocumentManager
                 }
             }
         }
+
         return $attributes;
     }
 
     /**
      * Replace urls inside content html from a copy course
-     * @param string		content html
-     * @param string		origin course code
-     * @param string		destination course directory
-     * @param string
+     * @param string $content_html
+     * @param string $origin_course_code
+     * @param string $destination_course_directory
+     * @param string $origin_course_path_from_zip
+     * @param string $origin_course_info_path
+     *
      * @return string	new content html with replaced urls or return false if content is not a string
      */
     static function replace_urls_inside_content_html_from_copy_course(
@@ -2260,7 +2260,8 @@ class DocumentManager
 
         $orig_source_html = DocumentManager::get_resources_from_source_html($content_html);
         $orig_course_info = api_get_course_info($origin_course_code);
-        //Course does not exist in the current DB probably this cames from a zip file?
+
+        // Course does not exist in the current DB probably this came from a zip file?
         if (empty($orig_course_info)) {
             if (!empty($origin_course_path_from_zip)) {
                 $orig_course_path = $origin_course_path_from_zip.'/';
@@ -2274,15 +2275,19 @@ class DocumentManager
         $destination_course_code = CourseManager::get_course_id_from_path($destination_course_directory);
         $destination_course_info = api_get_course_info($destination_course_code);
         $dest_course_path = api_get_path(SYS_COURSE_PATH) . $destination_course_directory . '/';
+        $dest_course_path_rel = api_get_path(
+                REL_COURSE_PATH
+            ) . $destination_course_directory . '/';
 
         $user_id = api_get_user_id();
 
         if (!empty($orig_source_html)) {
             foreach ($orig_source_html as $source) {
-                // get information about source url
+
+                // Get information about source url
                 $real_orig_url = $source[0]; // url
                 $scope_url = $source[1];   // scope (local, remote)
-                $type_url = $source[2]; // tyle (rel, abs, url)
+                $type_url = $source[2]; // type (rel, abs, url)
 
                 // Get path and query from origin url
                 $orig_parse_url = parse_url($real_orig_url);
@@ -2307,6 +2312,8 @@ class DocumentManager
                             $origin_filepath = $orig_course_path.$document_file;
                             $destination_filepath = $dest_course_path.$document_file;
 
+                            //var_dump($origin_filepath, $destination_filepath);
+
                             // copy origin file inside destination course
                             if (file_exists($origin_filepath)) {
                                 $filepath_dir = dirname($destination_filepath);
@@ -2318,8 +2325,24 @@ class DocumentManager
                                         $filepath_to_add = str_replace(array($dest_course_path, 'document'), '', $filepath_dir);
 
                                         //Add to item properties to the new folder
-                                        $doc_id = add_document($destination_course_info, $filepath_to_add, 'folder', 0, basename($filepath_to_add));
-                                        api_item_property_update($destination_course_info, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $user_id, null, null, null, null);
+                                        $doc_id = add_document(
+                                            $destination_course_info,
+                                            $filepath_to_add,
+                                            'folder',
+                                            0,
+                                            basename($filepath_to_add)
+                                        );
+                                        api_item_property_update(
+                                            $destination_course_info,
+                                            TOOL_DOCUMENT,
+                                            $doc_id,
+                                            'FolderCreated',
+                                            $user_id,
+                                            null,
+                                            null,
+                                            null,
+                                            null
+                                        );
                                     }
                                 }
 
@@ -2329,20 +2352,36 @@ class DocumentManager
                                         $filepath_to_add = str_replace(array($dest_course_path, 'document'), '', $destination_filepath);
                                         $size = filesize($destination_filepath);
 
-                                        //Add to item properties to the file
-                                        $doc_id = add_document($destination_course_info, $filepath_to_add, 'file', $size, basename($filepath_to_add));
-                                        api_item_property_update($destination_course_info, TOOL_DOCUMENT, $doc_id, 'FolderCreated', $user_id, null, null, null, null);
+                                        // Add to item properties to the file
+                                        $doc_id = add_document(
+                                            $destination_course_info,
+                                            $filepath_to_add,
+                                            'file',
+                                            $size,
+                                            basename($filepath_to_add)
+                                        );
+                                        api_item_property_update(
+                                            $destination_course_info,
+                                            TOOL_DOCUMENT,
+                                            $doc_id,
+                                            'FolderCreated',
+                                            $user_id,
+                                            null,
+                                            null,
+                                            null,
+                                            null
+                                        );
                                     }
                                 }
                             }
 
-                            // Replace origin course path by destination course path
+                            // Replace origin course path by destination course path.
                             if (strpos($content_html, $real_orig_url) !== false) {
-                                //$origin_course_code
                                 $url_course_path = str_replace($orig_course_info_path.'/'.$document_file, '', $real_orig_path);
+                                //var_dump($dest_course_path_rel);
                                 $destination_url = $url_course_path . $destination_course_directory . '/' . $document_file . $dest_url_query;
 
-                                //If the course code doesn't exist in the path? what we do? Nothing! see BT#1985
+                                // If the course code doesn't exist in the path? what we do? Nothing! see BT#1985
                                 if (strpos($real_orig_path, $origin_course_code) === false) {
                                     $url_course_path = $real_orig_path;
                                     $destination_url = $real_orig_path;
@@ -2355,9 +2394,6 @@ class DocumentManager
                         if (strpos($real_orig_url, '?') === 0) {
                             $dest_url = str_replace($origin_course_code, $destination_course_code, $real_orig_url);
                             $content_html = str_replace($real_orig_url, $dest_url, $content_html);
-                        }
-                    } else {
-                        if ($type_url == 'url') {
                         }
                     }
                 }

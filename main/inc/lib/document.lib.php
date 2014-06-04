@@ -2275,9 +2275,7 @@ class DocumentManager
         $destination_course_code = CourseManager::get_course_id_from_path($destination_course_directory);
         $destination_course_info = api_get_course_info($destination_course_code);
         $dest_course_path = api_get_path(SYS_COURSE_PATH) . $destination_course_directory . '/';
-        $dest_course_path_rel = api_get_path(
-                REL_COURSE_PATH
-            ) . $destination_course_directory . '/';
+        $dest_course_path_rel = api_get_path(REL_COURSE_PATH) . $destination_course_directory . '/';
 
         $user_id = api_get_user_id();
 
@@ -2380,6 +2378,7 @@ class DocumentManager
                                 $url_course_path = str_replace($orig_course_info_path.'/'.$document_file, '', $real_orig_path);
                                 //var_dump($dest_course_path_rel);
                                 //$destination_url = $url_course_path . $destination_course_directory . '/' . $document_file . $dest_url_query;
+                                // See BT#7780
                                 $destination_url = $dest_course_path_rel . $document_file . $dest_url_query;
 
                                 // If the course code doesn't exist in the path? what we do? Nothing! see BT#1985

@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
  * Class bbb
  * This script initiates a video conference session, calling the BigBlueButton
@@ -19,19 +21,29 @@ class bbb
     public $plugin_enabled = false;
 
     /**
+     *
      * Constructor (generates a connection to the API and the Chamilo settings
-     * required for the connection to the videoconference server)
+     * required for the connection to the video conference server)
+     * @param string $host
+     * @param string $salt
      */
-    public function __construct()
+    public function __construct($host = null, $salt = null)
     {
-        // initialize video server settings from global settings
+        // Initialize video server settings from global settings
         $plugin = BBBPlugin::create();
 
         $bbb_plugin = $plugin->get('tool_enable');
-        $bbb_host   = $plugin->get('host');
-        $bbb_salt   = $plugin->get('salt');
 
-        //$course_code = api_get_course_id();
+        if (empty($host)) {
+            $bbb_host = $plugin->get('host');
+        } else {
+            $bbb_host = $host;
+        }
+        if (empty($salt)) {
+            $bbb_salt = $plugin->get('salt');
+        } else {
+            $bbb_salt = $salt;
+        }
 
         $this->logout_url = api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.api_get_cidreq();
         $this->table = Database::get_main_table('plugin_bbb_meeting');
@@ -65,7 +77,7 @@ class bbb
         return api_is_course_admin() || api_is_coach() || api_is_platform_admin();
     }
 
-    /*
+    /**
      * See this file in you BBB to set up default values
 
        /var/lib/tomcat6/webapps/bigbluebutton/WEB-INF/classes/bigbluebutton.properties
@@ -123,8 +135,8 @@ class bbb
             $record             = isset($params['record']) && $params['record'] ? 'true' : 'false';
             $duration           = isset($params['duration']) ? intval($params['duration']) : 0;
             // This setting currently limits the maximum conference duration,
-            // to avoid llingering sessions on the videoconference server #6261
-            $duration           = 300;
+            // to avoid lingering sessions on the videoconference server #6261
+            $duration = 300;
 
             $bbb_params = array(
                 'meetingId' => $id, 					// REQUIRED
@@ -141,11 +153,29 @@ class bbb
                 'duration' => $duration, 				// Default = 0 which means no set duration in minutes. [number]
                 //'meta_category' => '', 				// Use to pass additional info to BBB server. See API docs.
             );
+
             if ($this->debug) error_log("create_meeting params: ".print_r($bbb_params,1));
-            $result = $this->api->createMeetingWithXmlResponseArray($bbb_params);
-            if (isset($result) && (string)$result['returncode'] == 'SUCCESS') {
-                if ($this->debug) error_log("create_meeting result: ".print_r($result,1));
-                return $this->join_meeting($meeting_name);
+
+            $status = false;
+            $meeting = null;
+
+            while ($status == false) {
+                $result = $this->api->createMeetingWithXmlResponseArray(
+                    $bbb_params
+                );
+                if (isset($result) && strval(
+                        $result['returncode']
+                    ) == 'SUCCESS'
+                ) {
+                    if ($this->debug) {
+                        error_log(
+                            "create_meeting result: " . print_r($result, 1)
+                        );
+                    }
+                    $meeting = $this->join_meeting($meeting_name, true);
+
+                    return $meeting;
+                }
             }
             return $this->logout;
         }
@@ -154,7 +184,8 @@ class bbb
     /**
      * Tells whether the given meeting exists and is running
      * (using course code as name)
-     * @param string Meeting name (usually the course code)
+     * @param string $meeting_name Meeting name (usually the course code)
+     *
      * @return bool True if meeting exists, false otherwise
      * @assert ('') === false
      * @assert ('abcdefghijklmnopqrstuvwxyzabcdefghijklmno') === false
@@ -191,30 +222,68 @@ class bbb
      * @assert ('') === false
      * @assert ('abcdefghijklmnopqrstuvwxyzabcdefghijklmno') === false
      */
-    public function join_meeting($meeting_name)
+    public function join_meeting($meeting_name, $loop = false)
     {
-        if (empty($meeting_name)) { return false; }
+        if (empty($meeting_name)) {
+            return false;
+        }
+
         $pass = $this->get_user_meeting_password();
-        $meeting_data = Database::select('*', $this->table, array('where' => array('meeting_name = ? AND status = 1 ' => $meeting_name)), 'first');
-        if (empty($meeting_data)) {
+
+        $meeting_data = Database::select(
+            '*',
+            $this->table,
+            array('where' => array('meeting_name = ? AND status = 1 ' => $meeting_name)),
+            'first'
+        );
+
+        if (empty($meeting_data) || !is_array($meeting_data)) {
             if ($this->debug) error_log("meeting does not exist: $meeting_name ");
 
             return false;
         }
 
-        $meeting_is_running_info = $this->api->isMeetingRunningWithXmlResponseArray($meeting_data['id']);
-        $meeting_is_running = $meeting_is_running_info['running'] == 'true' ? true : false;
-
-        if ($this->debug) error_log("meeting is running: ".$meeting_is_running);
-
         $params = array(
-			'meetingId' => $meeting_data['id'],	//	-- REQUIRED - The unique id for the meeting
-			'password' => $this->get_mod_meeting_password()		//	-- REQUIRED - The moderator password for the meeting
-		);
+            'meetingId' => $meeting_data['id'],
+            //	-- REQUIRED - The unique id for the meeting
+            'password' => $this->get_mod_meeting_password()
+            //	-- REQUIRED - The moderator password for the meeting
+        );
 
-        $meeting_info_exists = $this->get_meeting_info($params);
+        $status = false;
+        $meeting_info_exists = false;
+        while ($status == false) {
 
-        if (isset($meeting_is_running) && $meeting_info_exists) {
+            $meeting_is_running_info = $this->get_meeting_info($params);
+
+            error_log(print_r($meeting_is_running_info, 1));
+
+            if (strval($meeting_is_running_info['returncode']) == 'SUCCESS' &&
+                isset($meeting_is_running_info['meetingName']) &&
+                !empty($meeting_is_running_info['meetingName'])
+                //strval($meeting_is_running_info['running']) == 'true'
+            ) {
+                $meeting_info_exists = true;
+            }
+
+            if ($this->debug) {
+                error_log(
+                    "meeting is running: " . intval($meeting_info_exists)
+                );
+            }
+
+            if ($meeting_info_exists) {
+                $status = true;
+            }
+
+            if ($loop) {
+                continue;
+            } else {
+                break;
+            }
+        }
+
+        if ($meeting_info_exists) {
             $joinParams = array(
                 'meetingId' => $meeting_data['id'],	//	-- REQUIRED - A unique id for the meeting
                 'username' => $this->user_complete_name,	//-- REQUIRED - The name that will display for the user in the meeting
@@ -495,6 +564,7 @@ class bbb
                 }
             }
         }
+
         return false;
     }
 
@@ -508,5 +578,42 @@ class bbb
     {
         return true;
         //return BigBlueButtonBN::isServerRunning($this->protocol.$this->url);
+    }
+
+    /**
+     * Get active session in the all platform
+     */
+    public function getActiveSessionsCount()
+    {
+        $meetingList = Database::select(
+            'count(id) as count',
+            $this->table,
+            array('where' => array('status = ?' => array(1))),
+            'first'
+        );
+
+        return $meetingList['count'];
+    }
+
+    /**
+     * @param string $url
+     */
+    public function redirectToBBB($url)
+    {
+        if (file_exists(__DIR__ . '/../config.vm.php')) {
+            // Using VM
+            echo Display::url(get_lang('ClickToContinue'), $url);
+            exit;
+        } else {
+            // Classic
+            header("Location: $url");
+            exit;
+        }
+
+        // js
+        /*echo '<script>';
+        echo 'window.location = "'.$url.'"';
+        echo '</script>';
+        exit;*/
     }
 }

@@ -394,7 +394,13 @@ function getWorkPerUser($userId)
     return $result;
 }
 
-
+/**
+ * @param int $workId
+ * @param int $groupId
+ * @param int $course_id
+ * @param int $sessionId
+ * @return mixed
+ */
 function getUniqueStudentAttemptsTotal($workId, $groupId, $course_id, $sessionId)
 {
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
@@ -1708,13 +1714,18 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
                 true
             );
 
+            $countUniqueAttempts = getUniqueStudentAttemptsTotal(
+                $workId,
+                $group_id,
+                $course_id,
+                $session_id
+            );
+
             $work['amount'] = Display::label(
-                getUniqueStudentAttemptsTotal($workId, $group_id, $course_id, $session_id).'/'.
+                $countUniqueAttempts . '/' .
                 $totalUsers,
                 'success'
             );
-
-            //$work['amount'] =
 
             if (empty($work['title'])) {
                 $work['title'] = basename($work['url']);
@@ -1728,10 +1739,30 @@ function getWorkListTeacher($start, $limit, $column, $direction, $where_conditio
                 api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq()
             );
 
-            $downloadLink = Display::url(
-                Display::return_icon('save_pack.png', get_lang('Save'), array(), ICON_SIZE_SMALL),
-                api_get_path(WEB_CODE_PATH).'work/downloadfolder.inc.php?id='.$workId.'&'.api_get_cidreq()
-            );
+            if ($countUniqueAttempts > 0) {
+                $downloadLink = Display::url(
+                    Display::return_icon(
+                        'save_pack.png',
+                        get_lang('Save'),
+                        array(),
+                        ICON_SIZE_SMALL
+                    ),
+                    api_get_path(
+                        WEB_CODE_PATH
+                    ) . 'work/downloadfolder.inc.php?id=' . $workId . '&' . api_get_cidreq(
+                    )
+                );
+            } else {
+                $downloadLink = Display::url(
+                    Display::return_icon(
+                        'save_pack_na.png',
+                        get_lang('Save'),
+                        array(),
+                        ICON_SIZE_SMALL
+                    ),
+                    '#'
+                );
+            }
             $deleteUrl = api_get_path(WEB_CODE_PATH).'work/work.php?id='.$workId.'&action=delete_dir&'.api_get_cidreq();
             $deleteLink = '<a href="#" onclick="showConfirmationPopup(this, \''.$deleteUrl.'\' ) " >'.
                 Display::return_icon('delete.png', get_lang('Delete'), array(), ICON_SIZE_SMALL).'</a>';

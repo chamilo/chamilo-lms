@@ -2485,7 +2485,7 @@ class CourseRestorer
 
                 $id_work = $obj->params['id'];
                 $obj->params['id'] = null;
-                $obj->params['c_id'] = $this->destination_course_id;
+                $obj->params['c_id'] = $this->destination_course_info['real_id'];
 
                 // re-create dir
                 // @todo check security against injection of dir in crafted course backup here!
@@ -2504,38 +2504,49 @@ class CourseRestorer
                         $workData = get_work_data_by_path($path, $this->destination_course_info['real_id']);
                     case FILE_RENAME:
                         $obj->params['new_dir'] = $obj->params['title'];
-                        $sql = 'SELECT * FROM '.$table_work_assignment.'
-                                WHERE
-                                    c_id = '.$this->course_origin_id.' AND
-                                    publication_id = '.$id_work;
 
-                        $result = Database::query($sql);
-                        $cant = Database::num_rows($result);
-                        if ($cant > 0) {
-                            $row = Database::fetch_assoc($result);
-                        }
+                        if (!empty($this->course_origin_id)) {
+                            $sql = 'SELECT * FROM ' . $table_work_assignment . '
+                                    WHERE
+                                        c_id = ' . $this->course_origin_id . ' AND
+                                        publication_id = ' . $id_work;
 
-                        //$obj->params['qualification'] = empty($row['enable_qualification']) ? true : false;
-                        $obj->params['enableExpiryDate'] = $row['expires_on'] == '0000-00-00 00:00:00' ? false : true;
-                        $obj->params['enableEndDate'] = $row['ends_on'] == '0000-00-00 00:00:00' ? false : true;
+                            $result = Database::query($sql);
+                            $cant = Database::num_rows($result);
+                            if ($cant > 0) {
+                                $row = Database::fetch_assoc($result);
+                            }
 
-                        $obj->params['expires_on'] = $row['expires_on'];
-                        $obj->params['ends_on'] = $row['ends_on'];
-                        $obj->params['enable_qualification'] = $row['enable_qualification'];
-                        $obj->params['add_to_calendar'] = !empty($row['add_to_calendar']) ? 1 : 0;
+                            //$obj->params['qualification'] = empty($row['enable_qualification']) ? true : false;
+                            $obj->params['enableExpiryDate'] = $row['expires_on'] == '0000-00-00 00:00:00' ? false : true;
+                            $obj->params['enableEndDate'] = $row['ends_on'] == '0000-00-00 00:00:00' ? false : true;
+                            $obj->params['expires_on'] = $row['expires_on'];
+                            $obj->params['ends_on'] = $row['ends_on'];
+                            $obj->params['enable_qualification'] = $row['enable_qualification'];
+                            $obj->params['add_to_calendar'] = !empty($row['add_to_calendar']) ? 1 : 0;
 
-                        if (empty($workData)) {
-                            addDir(
-                                $obj->params,
-                                api_get_user_id(),
-                                $this->destination_course_info,
-                                0,
-                                0
-                            );
-                        } else {
-                            $workId = $workData['id'];
-                            updateWork($workId, $obj->params, $this->destination_course_info);
-                            updatePublicationAssignment($workId, $obj->params, $this->destination_course_info, 0);
+                            if (empty($workData)) {
+                                addDir(
+                                    $obj->params,
+                                    api_get_user_id(),
+                                    $this->destination_course_info,
+                                    0,
+                                    0
+                                );
+                            } else {
+                                $workId = $workData['id'];
+                                updateWork(
+                                    $workId,
+                                    $obj->params,
+                                    $this->destination_course_info
+                                );
+                                updatePublicationAssignment(
+                                    $workId,
+                                    $obj->params,
+                                    $this->destination_course_info,
+                                    0
+                                );
+                            }
                         }
                         break;
                 }

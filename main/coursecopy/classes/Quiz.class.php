@@ -1,17 +1,11 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-/**
- * Exercises backup script
- * @package chamilo.backup
- */
-/**
- * Code
- */
+
 require_once 'Resource.class.php';
 
 /**
  * An Quiz
+ * Exercises backup script
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @package chamilo.backup
  */
@@ -27,7 +21,8 @@ class Quiz extends Resource
      */
     public $obj; //question
 
-    function Quiz($obj) {
+    public function Quiz($obj)
+    {
         $this->obj = $obj;
         $this->obj->quiz_type = $this->obj->type;
         parent::Resource($obj->id, RESOURCE_QUIZ);
@@ -36,7 +31,8 @@ class Quiz extends Resource
     /**
      * Add a question to this Quiz
      */
-    function add_question($id, $question_order) {
+    public function add_question($id, $question_order)
+    {
         $this->obj->question_ids[] = $id;
         $this->obj->question_orders[] = $question_order;
     }
@@ -44,7 +40,8 @@ class Quiz extends Resource
     /**
      * Show this question
      */
-    function show() {
+    public function show()
+    {
         parent::show();
         echo $this->obj->title;
     }

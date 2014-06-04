@@ -3043,8 +3043,9 @@ function api_not_allowed($print_headers = false, $message = null)
 
     global $this_section;
 
-    if (!isset($user_id)) {
-        //Why the CustomPages::enabled() need to be to set the request_uri
+    if (empty($user_id)) {
+
+        // Why the CustomPages::enabled() need to be to set the request_uri
         $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
     }
 

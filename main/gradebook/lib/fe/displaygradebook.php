@@ -353,7 +353,7 @@ class DisplayGradebook
 
     /**
      * Displays the header for the gradebook containing the navigation tree and links
-     * @param category_object $currentcat
+     * @param Category $currentcat
      * @param int $showtree '1' will show the browse tree and naviation buttons
      * @param boolean $is_course_admin
      * @param boolean $is_platform_admin
@@ -403,41 +403,39 @@ class DisplayGradebook
             $catcourse = Category::load($catobj->get_id());
             $main_weight = $catcourse[0]->get_weight();
             $scoredisplay = ScoreDisplay :: instance();
-            $categories = Category::getCategories($catcourse[0]->get_id());
+            //$categories = Category::getCategories($catcourse[0]->get_id());
             // generating the total score for a course
-            if (count($categories) > 0) {
+            /*if (count($categories) > 0) {
                 foreach ($categories as $category) {
                     $allevals = $category->get_evaluations($user_id, true);
                     $alllinks = $category->get_links($user_id, true);
                     $catEvalsLinks = array_merge($allevals, $alllinks);
                 }
-            }
+            }*/
             $allevals = $catcourse[0]->get_evaluations($user_id, true);
             $alllinks = $catcourse[0]->get_links($user_id, true);
-            $allEvalsLinks = array_merge($allevals, $alllinks);
-            //echo count($alllinks);
-            //$allEvalsLinks = array_merge($catEvalsLinks, $evalsLinks);
 
-            $item_value = 0;
-            $item_total = 0;
-            $item_total_value = 0;
+            $allEvalsLinks = array_merge($allevals, $alllinks);
+
             $item_value_total = 0;
             $scoreinfo = null;
 
             for ($count = 0; $count < count($allEvalsLinks); $count++) {
-                
                 $item = $allEvalsLinks[$count];
                 $score = $item->calc_score($user_id);
                 $divide = ( ($score[1]) == 0 ) ? 1 : $score[1];
                 $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
-                $item_value = $score[0] / $divide * $item->get_weight() * $sub_cat_percentage / $main_weight;
+                //$item_value = $score[0] / $divide * $item->get_weight() / $sub_cat_percentage * $sub_cat_percentage / $main_weight * $main_weight;
+                $item_value = $score[0] / $divide * $item->get_weight();
+                //var_dump($score[0], $divide, $item->get_weight(), $sub_cat_percentage, $main_weight, $item_value);
+
                 $item_value_total += $item_value;
-                $item_value_total += $score[0];
-                $item_total += $item->get_weight();
             }
-            
-            for ($count = 0; $count < count($catEvalsLinks); $count++) {
-                
+
+            $item_total = $main_weight;
+
+            /*for ($count = 0; $count < count($catEvalsLinks); $count++) {
+
                 $item = $catEvalsLinks[$count];
                 $score = $item->calc_score($user_id);
                 $divide = ( ($score[1]) == 0 ) ? 1 : $score[1];
@@ -446,11 +444,11 @@ class DisplayGradebook
                 $item_value = $score[0] / $divide * $item->get_weight() * $sub_cat_percentage / $main_weight;
                 $catItemValueTotal += $score[0];
                 $catItemTotal += $item->get_weight();
-            }
-            
+            }*/
+
             //$item_total = $item->get_weight;
-            $item_value_total += $catItemValueTotal;
-            $item_total += $catItemTotal;
+            /*$item_value_total += $catItemValueTotal;
+            $item_total += $catItemTotal;*/
             $total_score = array($item_value_total, $item_total);
 
             $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
@@ -474,7 +472,7 @@ class DisplayGradebook
 
             $tree = $cats[0]->get_tree();
             unset($cats);
-
+            $line = null;
             foreach ($tree as $cat) {
                 for ($i = 0; $i < $cat[2]; $i++) {
                     $line .= '&mdash;';

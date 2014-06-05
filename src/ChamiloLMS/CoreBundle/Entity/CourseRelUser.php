@@ -22,18 +22,11 @@ class CourseRelUser
     private $id;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="course_code", type="string", length=40, precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $courseCode;
-
-    /**
      * @var integer
      *
      * @ORM\Column(name="user_id", type="integer")
      */
-    private $userId;
+    //private $userId;
 
     /**
      * @var integer
@@ -59,14 +52,14 @@ class CourseRelUser
     /**
      * @var integer
      *
-     * @ORM\Column(name="group_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="group_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
-    private $groupId;
+    //private $groupId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="tutor_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="tutor_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $tutorId;
 
@@ -96,24 +89,70 @@ class CourseRelUser
      *
      * @ORM\Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    protected $cId;
+    //protected $cId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="courses")
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="courses", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Course", inversedBy="users")
+     * @ORM\ManyToOne(targetEntity="Course", inversedBy="users", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     protected $course;
 
-    public function __construct(Course $course, User $user)
+    /**
+     * @ORM\ManyToOne(targetEntity="CGroupInfo", inversedBy="course", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="group_id", referencedColumnName="iid")
+     */
+    protected $group;
+
+    public function __toString()
     {
-        $this->course = $course;
-        $this->user = $user;
+        return strval($this->getCourse()->getCode());
+    }
+
+    public function __construct()
+    {
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @param $group
+     * @return $this
+     */
+    public function setGroup($group)
+    {
+        $this->group = $group;
+
+        return $this;
+    }
+
+    /**
+     * Get group
+     *
+     * @return integer
+     */
+    public function getGroup()
+    {
+        return $this->group;
     }
 
     /**
@@ -139,27 +178,42 @@ class CourseRelUser
         return $this->cId;
     }
 
-    /**
-     * Set courseCode
-     *
-     * @param string $courseCode
-     * @return CourseRelUser
-     */
-    public function setCourseCode($courseCode)
+    public function setCourse($course)
     {
-        $this->courseCode = $courseCode;
+        $this->course = $course;
 
         return $this;
     }
 
     /**
-     * Get courseCode
+     * Get Course
      *
      * @return string
      */
-    public function getCourseCode()
+    public function getCourse()
     {
-        return $this->courseCode;
+        return $this->course;
+    }
+
+    /**
+     * @param $user
+     * @return $this
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get User
+     *
+     * @return string
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**
@@ -367,5 +421,30 @@ class CourseRelUser
     public function getLegalAgreement()
     {
         return $this->legalAgreement;
+    }
+
+    /**
+     * Get relation_type list
+     *
+     * @return array
+     */
+    public static function getRelationTypeList()
+    {
+        return array(
+            '0' => '',
+            COURSE_RELATION_TYPE_RRHH => 'drh',
+        );
+    }
+
+    /**
+     * Get status list
+     * @return array
+     */
+    public static function getStatusList()
+    {
+        return array(
+            COURSEMANAGER => 'Teacher',
+            STUDENT => 'Student'
+        );
     }
 }

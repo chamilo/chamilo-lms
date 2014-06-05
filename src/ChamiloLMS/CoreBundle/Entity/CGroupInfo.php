@@ -16,13 +16,6 @@ class CGroupInfo
     /**
      * @var integer
      *
-     * @ORM\Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $cId;
-
-    /**
-     * @var integer
-     *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -32,7 +25,14 @@ class CGroupInfo
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $cId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, unique=false)
      */
     private $id;
 
@@ -141,11 +141,15 @@ class CGroupInfo
      */
     private $sessionId;
 
-
     /**
      *  @ORM\OneToMany(targetEntity="CItemProperty", mappedBy="group")
      **/
     private $items;
+
+    /**
+     * @ORM\OneToMany(targetEntity="CourseRelUser", mappedBy="group")
+     **/
+    protected $course;
 
     /**
      *

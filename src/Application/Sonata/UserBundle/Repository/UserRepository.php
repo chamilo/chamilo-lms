@@ -1,12 +1,12 @@
 <?php
 
-namespace ChamiloLMS\CoreBundle\Entity\Repository;
+namespace Application\Sonata\UserBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use ChamiloLMS\UserBundle\Entity\User;
+use Application\Sonata\UserBundle\Entity\User as User;
 
 /**
  * Class UserRepository
@@ -66,27 +66,6 @@ class UserRepository extends EntityRepository
         return $user;
     }*/
 
-    /**
-     * Refreshes the user for the account interface.
-     *
-     * It is up to the implementation if it decides to reload the user data
-     * from the database, or if it simply merges the passed User into the
-     * identity map of an entity manager.
-     *
-     * @throws UnsupportedUserException if the account is not supported
-     * @param UserInterface $user
-     *
-     * @return UserInterface
-     */
-    /*public function refreshUser(UserInterface $user)
-    {
-        //return $user;
-        $class = get_class($user);
-        if (!$this->supportsClass($class)) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $class));
-        }
-        return $this->loadUserByUsername($user->getUsername());
-    }*/
 
     /**
      * @param string $class
@@ -123,6 +102,39 @@ class UserRepository extends EntityRepository
         $wherePart->add($queryBuilder->expr()->eq('user.userId', $user->getUserId()));
 
         $queryBuilder->where($wherePart);
+        $query = $queryBuilder->getQuery();
+
+        return $query->execute();
+    }
+
+    public function getTeachers()
+    {
+        $queryBuilder = $this->createQueryBuilder('u');
+
+        // Selecting course info.
+        $queryBuilder
+            ->select('u')
+            ->where('u.groups.id = :groupId')
+            ->setParameter('groupId', 1);
+
+        $query = $queryBuilder->getQuery();
+
+        return $query->execute();
+
+        /*$studentGroup = $this->findOneBy(array('name' => 'students'));
+        return $this->getUsers($studentGroup);*/
+    }
+
+    public function getUsers($group)
+    {
+        $queryBuilder = $this->createQueryBuilder('u');
+
+        // Selecting course info.
+        $queryBuilder
+            ->select('u')
+            ->where('u.groups = :groupId')
+            ->setParameter('groupId', $group);
+
         $query = $queryBuilder->getQuery();
 
         return $query->execute();

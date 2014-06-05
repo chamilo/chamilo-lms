@@ -5,6 +5,7 @@ namespace ChamiloLMS\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
+
 /**
  * Course
  *
@@ -198,7 +199,7 @@ class Course
     private $courseTypeId;
 
     /**
-     * @ORM\OneToMany(targetEntity="CourseRelUser", mappedBy="course")
+     * @ORM\OneToMany(targetEntity="CourseRelUser", mappedBy="course", cascade={"persist", "remove"})
      **/
     private $users;
 
@@ -208,9 +209,14 @@ class Course
     private $items;
 
     /**
-     * @ORM\OneToMany(targetEntity="CurriculumCategory", mappedBy="course")
+     * ORM\OneToMany(targetEntity="CurriculumCategory", mappedBy="course")
      **/
     //private $curriculumCategories;
+
+    public function __toString()
+    {
+        return strval($this->getTitle());
+    }
 
     /*public function __construct()
     {
@@ -232,6 +238,11 @@ class Course
     public function getUsers()
     {
         return $this->users;
+    }
+
+    public function addUser(CourseRelUser $user)
+    {
+        $this->users[] = $user;
     }
 
     /**

@@ -920,7 +920,7 @@ class CASClient
 				$_SESSION['phpCAS']['unauth_count'] = 0;
 				$_SESSION['phpCAS']['auth_checked'] = true;
 				phpCAS::trace('user is not authenticated (cache reset)');
-				$this->redirectToCas(TRUE/* gateway */);	
+				// $this->redirectToCas(TRUE/* gateway */);
 				// never reached
 				$res = FALSE;
 			}

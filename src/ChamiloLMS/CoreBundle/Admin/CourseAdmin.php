@@ -24,6 +24,18 @@ class CourseAdmin extends Admin
             //->add('author', 'entity', array('class' => 'Acme\DemoBundle\Entity\User'))
             ->add('code') //if no type is specified, SonataAdminBundle tries to guess it
             ->add('title')
+            ->add('users', 'sonata_type_collection', array(
+                    'cascade_validation' => true,
+                ), array(
+                    'edit'              => 'inline',
+                    'inline'            => 'table',
+                    //'sortable'          => 'position',
+                    //'link_parameters'   => array('context' => $context),
+                    //'admin_code'        => 'sonata.media.admin.gallery_has_media'
+                )
+            )
+            //->add('users', 'entity', array('class' => 'Application\Sonata\UserBundle\Entity\User', 'label' => 'Cliente'))
+
         ;
     }
 

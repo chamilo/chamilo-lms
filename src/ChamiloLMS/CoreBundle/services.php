@@ -33,18 +33,6 @@ use ChamiloLMS\CoreBundle\Component\DataFilesystem\DataFilesystem;
 use ChamiloLMS\CoreBundle\Framework\PageController;
 use ChamiloLMS\CoreBundle\Framework\Template;
 
-// Flint
-$app->register(new Flint\Provider\TackerServiceProvider());
-$app['root_dir'] = $app['path.base'];
-
-$app->register(new Flint\Provider\RoutingServiceProvider(), array(
-    'routing.resource' => $app['path.config'].'routing.yml',
-    'routing.options' => array(
-        //'cache_dir' => $app['debug'] == true ? null : $app['path.temp']
-        //'cache_dir' => $app['path.temp']
-    ),
-));
-
 if (isset($app->getConfiguration()->services->mediaalchemyst)) {
     $unoconv = null;
     if (isset($app->getConfiguration()['services']['unoconv']['unoconv.binaries'])) {
@@ -130,7 +118,7 @@ $app->register(new SecurityServiceProvider, array(
                 'target' => '/'
             ),
             'users' => $app->share(function() use ($app) {
-                return $app['orm.em']->getRepository('ChamiloLMS\CoreBundle\Entity\User');
+                return $app['orm.em']->getRepository('Application\Sonata\UserBundle\Entity\User');
             }),
             'switch_user' => true,
             'anonymous' => true

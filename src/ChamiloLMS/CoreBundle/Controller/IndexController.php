@@ -4,6 +4,7 @@
 namespace ChamiloLMS\CoreBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 use ChamiloLMS\CoreBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +14,8 @@ use Symfony\Component\Finder\Finder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+//use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use JMS\SecurityExtraBundle\Annotation\Secure;
 
 /**
  * Class IndexController
@@ -406,6 +409,8 @@ class IndexController extends BaseController
     /**
      * @Route("/userportal", name="userportal")
      * @Method({"GET"})
+     * Security("has_role('ROLE_USER')")
+     * @Secure(roles="ROLE_STUDENT")
      *
      * @param string $type courses|sessions|mycoursecategories
      * @param string $filter for the userportal courses page. Only works when setting 'history'
@@ -414,35 +419,55 @@ class IndexController extends BaseController
      */
     public function userPortalAction($type = 'courses', $filter = 'current', $page = 1)
     {
-        //api_block_anonymous_users();
-
-        // Abort request because the user is not allowed here - @todo use filters
-        /*if ($this->app['allowed'] == false) {
-            return $this->abort(403, 'Not allowed');
-        }*/
-
-        // Main courses and session list
-        $items = null;
-        $type = str_replace('/', '', $type);
+        $user = $this->getUser();
 
         $pageController = new \ChamiloLMS\CoreBundle\Framework\PageController();
 
-        switch ($type) {
-            case 'sessions':
-                $items = $pageController->returnSessions(api_get_user_id(), $filter, $page);
-                break;
-            case 'sessioncategories':
-                $items = $pageController->returnSessionsCategories(api_get_user_id(), $filter, $page);
-                break;
-            case 'courses':
-                $items = $pageController->returnCourses(api_get_user_id(), $filter, $page);
-                break;
-            case 'mycoursecategories':
-                $items = $pageController->returnMyCourseCategories(api_get_user_id(), $filter, $page);
-                break;
-            case 'specialcourses':
-                $items = $pageController->returnSpecialCourses(api_get_user_id(), $filter, $page);
-                break;
+        $items = null;
+
+        if (!empty($user)) {
+            $userId = $user->getId();
+
+            // Main courses and session list
+            $type = str_replace('/', '', $type);
+
+            switch ($type) {
+                case 'sessions':
+                    $items = $pageController->returnSessions(
+                        $userId,
+                        $filter,
+                        $page
+                    );
+                    break;
+                case 'sessioncategories':
+                    $items = $pageController->returnSessionsCategories(
+                        $userId,
+                        $filter,
+                        $page
+                    );
+                    break;
+                case 'courses':
+                    $items = $pageController->returnCourses(
+                        $userId,
+                        $filter,
+                        $page
+                    );
+                    break;
+                case 'mycoursecategories':
+                    $items = $pageController->returnMyCourseCategories(
+                        $userId,
+                        $filter,
+                        $page
+                    );
+                    break;
+                case 'specialcourses':
+                    $items = $pageController->returnSpecialCourses(
+                        $userId,
+                        $filter,
+                        $page
+                    );
+                    break;
+            }
         }
 
         $template = $this->getTemplate();
@@ -450,30 +475,10 @@ class IndexController extends BaseController
         if (empty($items) && empty($filter)) {
             $pageController->return_welcome_to_course_block($template);
         }
-
-        /*
-        $app['my_main_menu'] = function($app) {
-            $menu = $app['knp_menu.factory']->createItem('root');
-            $menu->addChild('Home', array('route' => api_get_path(WEB_CODE_PATH)));
-            return $menu;
-        };
-        $app['knp_menu.menus'] = array('main' => 'my_main_menu');*/
-
-        /*$pageController->setCourseSessionMenu();
-        $pageController->setProfileBlock();
-        $pageController->setUserImageBlock();
-        $pageController->setCourseBlock($filter);
-        $pageController->setSessionBlock();
-        $pageController->return_reservation_block();
-        $pageController->returnNavigationLinks($template->getNavigationLinks());*/
-
-        //$template->assign('search_block', $pageController->return_search_block());
-        //$template->assign('classes_block', $pageController->return_classes_block());
         $pageController->returnSkillsLinks();
 
         // Deleting the session_id.
         $this->getSessionHandler()->remove('session_id');
-
 
         return $this->render(
             'ChamiloLMSCoreBundle:Index:userportal.html.twig',

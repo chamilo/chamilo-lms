@@ -45,7 +45,6 @@ class CourseHomeController extends ToolBaseController
     {
         $courseCode = api_get_course_id();
         $sessionId = api_get_session_id();
-        $userId = $this->getUser()->getUserId();
 
         $coursesAlreadyVisited = $this->getSessionHandler()->get('coursesAlreadyVisited');
 
@@ -60,6 +59,7 @@ class CourseHomeController extends ToolBaseController
         if ($showAutoLaunchExerciseWarning) {
             $this->addMessage('TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise', 'warning');
         }
+
         if (true) {
         //if ($this->isCourseTeacher()) {
 
@@ -70,12 +70,10 @@ class CourseHomeController extends ToolBaseController
                     array('courseCode' => api_get_course_id())
                 )
             );
-
-            //$this->getTemplate()->addg('edit_icons', $editIcons);
         }
 
         if (!isset($coursesAlreadyVisited[$courseCode])) {
-            event_access_course();
+            \Event::accessCourse();
             $coursesAlreadyVisited[$courseCode] = 1;
             $this->getSessionHandler()->set('coursesAlreadyVisited', $coursesAlreadyVisited);
         }
@@ -86,9 +84,17 @@ class CourseHomeController extends ToolBaseController
         $isSpecialCourse = \CourseManager::is_special_course($courseCode);
 
         if ($isSpecialCourse) {
-            $autoreg = $this->getRequest()->get('autoreg');
-            if ($autoreg == 1) {
-                \CourseManager::subscribe_user($userId, $courseCode, STUDENT);
+            $user = $this->getUser();
+            if (!empty($user)) {
+                $userId = $this->getUser()->getId();
+                $autoreg = $this->getRequest()->get('autoreg');
+                if ($autoreg == 1) {
+                    \CourseManager::subscribe_user(
+                        $userId,
+                        $courseCode,
+                        STUDENT
+                    );
+                }
             }
         }
 
@@ -116,7 +122,7 @@ class CourseHomeController extends ToolBaseController
             $sessionInfo = \CourseHome::show_session_data($sessionId);
         }
 
-        $response = $this->render(
+        /*$response = $this->render(
             'ChamiloLMSCoreBundle:Tool:CourseHome/index.html.twig',
             array(
                 'session_info' => $sessionInfo,
@@ -128,7 +134,19 @@ class CourseHomeController extends ToolBaseController
             )
         );
 
-        return new Response($response, 200, array());
+        return new Response($response, 200, array());*/
+
+        return $this->render(
+            'ChamiloLMSCoreBundle:Tool:CourseHome/index.html.twig',
+            array(
+                'session_info' => $sessionInfo,
+                'icons' => $result['content'],
+                'edit_icons' => $editIcons,
+                'introduction_text' => $introduction,
+                'exercise_warning' => null,
+                'lp_warning' => null
+            )
+        );
     }
 
     /**

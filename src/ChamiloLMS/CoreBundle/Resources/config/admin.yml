@@ -20,3 +20,14 @@ services:
             - ~
         calls:
             - [ setTranslationDomain, [ChamiloLMSCoreBundle]]
+
+    sonata.admin.course_rel_user:
+          class: ChamiloLMS\CoreBundle\Admin\CourseRelUserAdmin
+          tags:
+              - { name: sonata.admin, manager_type: orm, group: "LMS", label: "CourseRelUser" }
+          arguments:
+              - ~
+              - ChamiloLMS\CoreBundle\Entity\CourseRelUser
+              - ~
+          calls:
+              - [ setTranslationDomain, [ChamiloLMSCoreBundle]]

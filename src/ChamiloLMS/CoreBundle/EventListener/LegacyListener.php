@@ -41,6 +41,8 @@ class LegacyListener
         Session::$courseDir = $this->container->get('kernel')->getDataDir();
         Session::$configDir = $this->container->get('kernel')->getConfigDir();
 
+        Session::$assets = $this->container->get('templating.helper.assets');
+
         // Injecting course in twig
         $courseCode = $request->get('code');
 

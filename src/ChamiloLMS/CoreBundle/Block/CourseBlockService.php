@@ -17,7 +17,7 @@ class CourseBlockService extends BaseBlockService
 {
     public function getName()
     {
-        return 'My course';
+        return 'Course block';
     }
 
     public function setDefaultSettings(OptionsResolverInterface $resolver)

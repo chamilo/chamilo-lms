@@ -48,6 +48,9 @@ class LegacyController extends BaseController
         Session::$urlGenerator = $this->container->get('router');
         Session::$security = $this->container->get('security.context');
         Session::$translator = $this->container->get('translator');
+
+        Session::$assets = $this->container->get('templating.helper.assets');
+
         Session::$rootDir = $this->container->get('kernel')->getRealRootDir();
         Session::$logDir = $this->container->get('kernel')->getLogDir();
         Session::$dataDir = $this->container->get('kernel')->getDataDir();
@@ -58,13 +61,12 @@ class LegacyController extends BaseController
         if (is_file($fileToLoad) &&
             \Security::check_abs_path($fileToLoad, $mainPath)
         ) {
-
             $toolNameFromFile = basename(dirname($fileToLoad));
-
+            $charset = 'UTF-8';
             // Default values
             /*$_course = api_get_course_info();
             $_user = api_get_user_info();
-            $charset = 'UTF-8';
+
             $text_dir = api_get_text_direction();
             $is_platformAdmin = api_is_platform_admin();
             $_cid = api_get_course_id();*/

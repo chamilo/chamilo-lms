@@ -1,4 +1,8 @@
-{% embed "AvanzuAdminThemeBundle:layout:base-layout.html.twig" %}
+{% extends "AvanzuAdminThemeBundle:layout:base-layout.html.twig" %}
+
+{% block title %}
+    {{ parent() }}
+{% endblock %}
 
 {% block javascripts_head %}
     {{ parent() }}
@@ -97,6 +101,3 @@
     {% endif %}
 
 {% endblock %}
-
-
-{% endembed %}

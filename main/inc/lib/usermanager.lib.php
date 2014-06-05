@@ -174,8 +174,8 @@ class UserManager
             // Add event to system log
             $user_id_manager = api_get_user_id();
             $user_info = api_get_user_info($user_id);
-            event_system(LOG_USER_CREATE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager);
-            event_system(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);
+            Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager);
+            Event::addEvent(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);
             return $user_info;
         } else {
             return api_set_failure('error inserting in Database');
@@ -379,8 +379,8 @@ class UserManager
             // Add event to system log
             $user_id_manager = api_get_user_id();
             $user_info = api_get_user_info($return);
-            event_system(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager);
-            event_system(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);
+            Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $return, api_get_utc_datetime(), $user_id_manager);
+            Event::addEvent(LOG_USER_CREATE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id_manager);
         } else {
             return api_set_failure('error inserting in Database');
         }
@@ -567,8 +567,8 @@ class UserManager
         unset($sqlw);
         // Add event to system log
         $user_id_manager = api_get_user_id();
-        event_system(LOG_USER_DELETE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager, null, $user_info);
-        event_system(LOG_USER_DELETE, LOG_USER_OBJECT, implode(';',$user_info), api_get_utc_datetime(), $user_id_manager, null, $user_info);
+        Event::addEvent(LOG_USER_DELETE, LOG_USER_ID, $user_id, api_get_utc_datetime(), $user_id_manager, null, $user_info);
+        Event::addEvent(LOG_USER_DELETE, LOG_USER_OBJECT, implode(';',$user_info), api_get_utc_datetime(), $user_id_manager, null, $user_info);
         return true;
     }
 
@@ -817,8 +817,8 @@ class UserManager
         }
 
         $user_info = api_get_user_info($user_id);
-        event_system(LOG_USER_UPDATED, LOG_USER_ID, $user_id, api_get_utc_datetime(), api_get_user_id());
-        event_system(LOG_USER_UPDATED, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), api_get_user_id());
+        Event::addEvent(LOG_USER_UPDATED, LOG_USER_ID, $user_id, api_get_utc_datetime(), api_get_user_id());
+        Event::addEvent(LOG_USER_UPDATED, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), api_get_user_id());
         return $return;
     }
 
@@ -860,8 +860,8 @@ class UserManager
         }
 
         $user_info = api_get_user_info($user_id);
-        event_system($log_event, LOG_USER_ID, $user_id, api_get_utc_datetime(), api_get_user_id());
-        event_system($log_event, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), api_get_user_id());
+        Event::addEvent($log_event, LOG_USER_ID, $user_id, api_get_utc_datetime(), api_get_user_id());
+        Event::addEvent($log_event, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), api_get_user_id());
     }
 
     /**

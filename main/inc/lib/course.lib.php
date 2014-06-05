@@ -474,11 +474,11 @@ class CourseManager
 
             // add event to system log
             $user_id = api_get_user_id();
-            event_system(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_COURSE_CODE, $courseCode, api_get_utc_datetime(), $user_id);
+            Event::addEvent(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_COURSE_CODE, $courseCode, api_get_utc_datetime(), $user_id);
 
             foreach ($user_list as $user_id_to_delete) {
                 $user_info = api_get_user_info($user_id_to_delete);
-                event_system(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id);
+                Event::addEvent(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id);
             }
         }
     }
@@ -582,10 +582,10 @@ class CourseManager
                         sort        = '". ($course_sort)."'");
 
             // Add event to the system log
-            event_system(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_COURSE_CODE, $course_code, api_get_utc_datetime(), api_get_user_id());
+            Event::addEvent(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_COURSE_CODE, $course_code, api_get_utc_datetime(), api_get_user_id());
 
             $user_info = api_get_user_info($user_id);
-            event_system(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), api_get_user_id());
+            Event::addEvent(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), api_get_user_id());
         }
         return (bool)$result;
     }
@@ -1348,10 +1348,12 @@ class CourseManager
         $courseId = Database::escape_string($courseId);
         $teachers = array();
         $sql = "SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.email, u.username, u.status
-                FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." u
+                FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu
+                INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." u
                 ON (cu.user_id = u.user_id)
-                WHERE   cu.c_id = '$courseId' AND
-                        cu.status = 1 ";
+                WHERE
+                    cu.c_id = '$courseId' AND
+                    cu.status = 1 ";
         $rs = Database::query($sql);
         while ($teacher = Database::fetch_array($rs)) {
             $teachers[$teacher['user_id']] = $teacher;
@@ -1711,7 +1713,7 @@ class CourseManager
 
         // Add event to system log
         $user_id = api_get_user_id();
-        event_system(LOG_COURSE_DELETE, LOG_COURSE_CODE, $code, api_get_utc_datetime(), $user_id, $code);
+        Event::addEvent(LOG_COURSE_DELETE, LOG_COURSE_CODE, $code, api_get_utc_datetime(), $user_id, $code);
     }
 
     /**
@@ -4837,7 +4839,7 @@ class CourseManager
 
                 // Add event to the system log.
                 $user_id = api_get_user_id();
-                event_system(LOG_COURSE_CREATE, LOG_COURSE_CODE, $code, api_get_utc_datetime(), $user_id, $code);
+                Event::addEvent(LOG_COURSE_CREATE, LOG_COURSE_CODE, $code, api_get_utc_datetime(), $user_id, $code);
 
                 $send_mail_to_admin = api_get_setting('send_email_to_admin_when_create_course');
 

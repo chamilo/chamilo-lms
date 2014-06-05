@@ -106,13 +106,13 @@ class EventEmailTemplate extends Model {
     public function save($params) {
 	    $id = parent::save($params);
 	    if (!empty($id)) {
-	    	event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
+	    	Event::addEvent(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
    		}
    		return $id;
     }
 
     public function delete($id) {
 	    parent::delete($id);
-	    event_system(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
+	    Event::addEvent(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
     } */
 }

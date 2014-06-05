@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ChamiloSession class definition
+ * ChamiloSession class
   */
 class ChamiloSession
 {
@@ -17,6 +17,7 @@ class ChamiloSession
     public static $dataDir;
     public static $courseDir;
     public static $configDir;
+    public static $assets;
 
     public static function getConfigDir()
     {
@@ -86,6 +87,14 @@ class ChamiloSession
     public static function setSession($session)
     {
         self::$session = $session;
+    }
+
+    /**
+     * @return Symfony\Component\Templating\Helper\CoreAssetsHelper
+     */
+    public static function getAsset()
+    {
+        return self::$assets;
     }
 
     /**

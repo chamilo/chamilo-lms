@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Class Display
  *
@@ -803,16 +805,19 @@ class Display
 
         // Checking the theme icons folder example: main/css/chamilo/icons/XXX
         if (is_file($code_path.$theme.$size_extra.$image)) {
-            $icon = $w_code_path.$theme.$size_extra.$image;
+            $icon = $theme.$size_extra.$image;
         } elseif (is_file($code_path.'icons/'.$size_extra.$image)) {
             //Checking the main/img/icons/XXX/ folder
-            $icon = $w_code_path.'icons/'.$size_extra.$image;
+            $icon = 'icons/'.$size_extra.$image;
         } else {
             //Checking the img/ folder
-            $icon = $w_code_path.$image;
+            $icon = $image;
         }
 
-        $icon = api_get_cdn_path($icon);
+        $icon = 'ChamiloLMS/img/'.$icon;
+
+        $icon = Session::getAsset()->getUrl($icon);
+        //$icon = api_get_cdn_path($icon);
         if ($return_only_path) {
             return $icon;
         }

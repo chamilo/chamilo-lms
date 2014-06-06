@@ -19,6 +19,7 @@ class FlatViewTable extends SortableTable
     public $datagen;
     private $limit_enabled;
     private $offset;
+    private $mainCourseCategory;
 
     /**
      * Constructor
@@ -30,11 +31,19 @@ class FlatViewTable extends SortableTable
         $links = array(),
         $limit_enabled = false,
         $offset = 0,
-        $addparams = null
+        $addparams = null,
+        $mainCourseCategory = null
     ) {
         parent :: __construct('flatviewlist', null, null, (api_is_western_name_order() xor api_sort_by_first_name()) ? 1 : 0);
         $this->selectcat = $selectcat;
-        $this->datagen = new FlatViewDataGenerator($users, $evals, $links, array('only_subcat' => $this->selectcat->get_id()));
+
+        $this->datagen = new FlatViewDataGenerator(
+            $users,
+            $evals,
+            $links,
+            array('only_subcat' => $this->selectcat->get_id()),
+            $mainCourseCategory
+        );
 
         $this->limit_enabled = $limit_enabled;
         $this->offset = $offset;
@@ -44,6 +53,15 @@ class FlatViewTable extends SortableTable
 
         // step 2: generate rows: students
         $this->datagen->category = $this->selectcat;
+        $this->mainCourseCategory = $mainCourseCategory;
+    }
+
+    /**
+     * @return Category
+     */
+    public function getMainCourseCategory()
+    {
+        return $this->mainCourseCategory;
     }
 
     /**
@@ -61,7 +79,7 @@ class FlatViewTable extends SortableTable
         $img_file = '';
 
         if ($this->datagen->get_total_items_count() > 0 && $total_users > 0) {
-            //Removing user names and total
+            // Removing user names and total
             array_shift($header_name);
             array_shift($header_name);
             array_pop($header_name);
@@ -78,6 +96,7 @@ class FlatViewTable extends SortableTable
                     $pre_result[$i + 3]+= $result[$i + 1];
                 }
             }
+
             $i = 1;
             $show_draw = false;
             if ($total_users > 0) {

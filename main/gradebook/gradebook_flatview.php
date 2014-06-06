@@ -38,6 +38,7 @@ if (($showlink == '0') && ($showeval == '0')) {
 	$showlink = '1';
 	$showeval = '1';
 }
+
 $cat = Category::load($_REQUEST['selectcat']);
 
 if (isset($_GET['userid'])) {
@@ -92,7 +93,10 @@ if (!empty($keyword)) {
 
 $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 
-$flatviewtable = new FlatViewTable($cat[0], $users, $alleval, $alllinks, true, $offset, $addparams);
+// Main course category
+$mainCourseCategory = Category::load(null, null, api_get_course_id(), null, null, api_get_session_id());
+
+$flatviewtable = new FlatViewTable($cat[0], $users, $alleval, $alllinks, true, $offset, $addparams, $mainCourseCategory[0]);
 
 $parameters = array('selectcat' => intval($_GET['selectcat']));
 $flatviewtable->set_additional_parameters($parameters);

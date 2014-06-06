@@ -136,7 +136,7 @@ class FlatViewDataGenerator
         $session_id = api_get_session_id();
 
         $allcat  = $this->category->get_subcategories(null, $course_code, $session_id, 'ORDER BY id');
-
+        $evaluationsAdded = array();
         if ($parent_id == 0 && !empty($allcat)) {
             // Means there are any subcategory
             foreach ($allcat as $sub_cat) {
@@ -152,9 +152,11 @@ class FlatViewDataGenerator
                 (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)
             ) {
                 for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
+                    /** @var AbstractLink $item */
                     $item = $this->evals_links[$count + $items_start];
                     $weight = round(100*$item->get_weight()/$main_weight,1);
                     $headers[] = $item->get_name().' '.$weight.' % ';
+                    $evaluationsAdded[] = $item->get_id();
                 }
             }
         }
@@ -163,7 +165,7 @@ class FlatViewDataGenerator
             for ($count = 0; ($count < $items_count) && ($items_start + $count < count($this->evals_links)); $count++) {
                 /** @var AbstractLink $item */
                 $item = $this->evals_links[$count + $items_start];
-                if ($mainCategoryId == $item->get_category_id()) {
+                if ($mainCategoryId == $item->get_category_id() && !in_array($item->get_id(), $evaluationsAdded)) {
                     $weight = round(100 * $item->get_weight() / $main_weight, 1);
                     $headers[] = $item->get_name() . ' ' . $weight . ' % ';
                 }
@@ -360,6 +362,8 @@ class FlatViewDataGenerator
             $session_id = api_get_session_id();
             $allcat = $this->category->get_subcategories(null, $course_code, $session_id, 'ORDER BY id');
 
+            $evaluationsAdded = array();
+
             if ($parent_id == 0 && !empty($allcat)) {
                 foreach ($allcat as $sub_cat) {
                     $score             = $sub_cat->calc_score($user_id);
@@ -420,6 +424,7 @@ class FlatViewDataGenerator
 
                 $item_total += $result['item_total'];
                 $item_value_total += $result['item_value_total'];
+                $evaluationsAdded = $result['evaluations_added'];
                 $item_total = $main_weight;
             }
 
@@ -431,7 +436,8 @@ class FlatViewDataGenerator
                 $items_start,
                 $show_all,
                 $row,
-                $mainCategoryId
+                $mainCategoryId,
+                $evaluationsAdded
             );
 
             $item_total += $result['item_total'];
@@ -477,16 +483,25 @@ class FlatViewDataGenerator
         $items_start,
         $show_all,
         & $row,
-        $parentCategoryIdFilter = null
+        $parentCategoryIdFilter = null,
+        $evaluationsAlreadyAdded = array()
     ) {
         // Generate actual data array
         $scoredisplay = ScoreDisplay :: instance();
         $item_total = 0;
         $item_value_total = 0;
 
+        $evaluationsAdded = array();
+
         for ($count = 0; ($count < $items_count) && ($items_start + $count < count($this->evals_links)); $count++) {
             /** @var AbstractLink $item */
             $item = $this->evals_links[$count + $items_start];
+
+            if (!empty($evaluationsAlreadyAdded)) {
+                if (in_array($item->get_id(), $evaluationsAlreadyAdded)) {
+                    continue;
+                }
+            }
 
             if (!empty($parentCategoryIdFilter)) {
                 if ($item->get_category_id() != $parentCategoryIdFilter) {
@@ -494,6 +509,7 @@ class FlatViewDataGenerator
                 }
             }
 
+            $evaluationsAdded[] = $item->get_id();
             $score = $item->calc_score($user_id);
 
             $real_score = $score;
@@ -562,7 +578,8 @@ class FlatViewDataGenerator
 
         return array(
             'item_total' => $item_total,
-            'item_value_total' => $item_value_total
+            'item_value_total' => $item_value_total,
+            'evaluations_added' => $evaluationsAdded
         );
     }
 

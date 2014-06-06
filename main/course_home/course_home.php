@@ -263,7 +263,7 @@ $tpl = new Template(null);
 $tpl->assign('message', $show_message);
 $tpl->assign('content', $content);
 
-// direct login to course
+// Direct login to course
 $tpl->assign('course_code', $course_code);
 
 $tpl->display_one_col_template();

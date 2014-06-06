@@ -24,69 +24,67 @@
             {{ help_content }}
             {{ bug_notification_link }}
         </ul>
-            
+
         {# topbar #}
         {% include "default/layout/topbar.tpl" %}
 
         <header>
-                <div class="row">
-                    <div id="header_left" class="span4">
-                        {# logo #}
-                        {{ logo }}
+            <div class="row">
+                <div id="header_left" class="span4">
+                    {# logo #}
+                    {{ logo }}
 
-                        {# plugin_header left #}
-                        {% if plugin_header_left is not null %}
-                            <div id="plugin_header_left">
-                                {{ plugin_header_left }}
-                            </div>
-                        {% endif %}
-                    </div>
-                    <div id="header_center" class="span3">
-                        {# plugin_header center #}
-                        {% if plugin_header_center is not null %}
-                            <div id="plugin_header_center">
-                                {{ plugin_header_center }}
-                            </div>
-                        {% endif %}
-                        &nbsp;
-                    </div>
-                    <div id="header_right" class="span5">
-                        <ul id="notifications" class="nav nav-pills pull-right">
-                            {{ notification_menu }}
-                        </ul>
-
-                        {# plugin_header right #}
-                        {% if plugin_header_right is not null %}
-                            <div id="plugin_header_right">
-                                {{ plugin_header_right }}
-                            </div>
-                        {% endif %}
-                        &nbsp;
-                    </div>
+                    {# plugin_header left #}
+                    {% if plugin_header_left is not null %}
+                        <div id="plugin_header_left">
+                            {{ plugin_header_left }}
+                        </div>
+                    {% endif %}
                 </div>
+                <div id="header_center" class="span3">
+                    {# plugin_header center #}
+                    {% if plugin_header_center is not null %}
+                        <div id="plugin_header_center">
+                            {{ plugin_header_center }}
+                        </div>
+                    {% endif %}
+                    &nbsp;
+                </div>
+                <div id="header_right" class="span5">
+                    <ul id="notifications" class="nav nav-pills pull-right">
+                        {{ notification_menu }}
+                    </ul>
 
-                {% if plugin_header_main %}
-                    <div class="row">
-                        <div class="span12">
-                            <div id="plugin_header_main">
-                                {{ plugin_header_main }}
-                            </div>
+                    {# plugin_header right #}
+                    {% if plugin_header_right is not null %}
+                        <div id="plugin_header_right">
+                            {{ plugin_header_right }}
+                        </div>
+                    {% endif %}
+                    &nbsp;
+                </div>
+            </div>
+
+            {% if plugin_header_main %}
+                <div class="row">
+                    <div class="span12">
+                        <div id="plugin_header_main">
+                            {{ plugin_header_main }}
                         </div>
                     </div>
-                {% endif %}
-                <div class="container">
-                {# menu #}
-                {% include "default/layout/menu.tpl" %}                
                 </div>
-                {# breadcrumb #}
-                {{ breadcrumb }}
-            </header>
+            {% endif %}
+            <div class="container">
+            {# menu #}
+            {% include "default/layout/menu.tpl" %}
+            </div>
+            {# breadcrumb #}
+            {{ breadcrumb }}
+        </header>
 
+    <div id="main" class="container">
+        <div id="top_main_content" class="row">
 
-        <div id="main" class="container">
-
-            <div id="top_main_content" class="row">
-           
-            {# course navigation links/shortcuts need to be activated by the admin #}
-            {% include "default/layout/course_navigation.tpl" %}
+        {# course navigation links/shortcuts need to be activated by the admin #}
+        {% include "default/layout/course_navigation.tpl" %}
 {% endif %}

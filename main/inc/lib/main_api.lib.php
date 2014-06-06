@@ -1841,9 +1841,11 @@ function api_set_failure($failure_type) {
  */
 function api_set_anonymous() {
     global $_user;
+
     if (!empty($_user['user_id'])) {
         return false;
     }
+
     $user_id = api_get_anonymous_id();
     if ($user_id == 0) {
         return false;
@@ -1851,8 +1853,8 @@ function api_set_anonymous() {
     Session::erase('_user');
     $_user['user_id'] = $user_id;
     $_user['is_anonymous'] = true;
-    Session::write('_user',$_user);
     $GLOBALS['_user'] = $_user;
+    Session::write('_user', $_user);
     return true;
 }
 
@@ -3071,8 +3073,8 @@ function api_not_allowed($print_headers = false, $message = null)
     }
 
     $tpl = new Template(null, $show_headers, $show_headers);
-    $tpl->assign('content', $msg);
 
+    $tpl->assign('content', $msg);
     if (($user_id!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
         // if the access is not authorized and there is some login information
         // but the cidReq is not found, assume we are missing course data and send the user
@@ -3095,7 +3097,6 @@ function api_not_allowed($print_headers = false, $message = null)
             $tpl->display_one_col_template();
             exit;
         }
-
         if (!is_null(api_get_course_id())) {
             api_set_firstpage_parameter(api_get_course_id());
         }

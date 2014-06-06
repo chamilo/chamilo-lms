@@ -501,7 +501,13 @@ class FlatViewTable extends SortableTable
             $column++;
         }
 
-        $data_array = $this->datagen->get_data($users_sorting, $from, $this->per_page, $this->offset, $selectlimit);
+        $data_array = $this->datagen->get_data(
+            $users_sorting,
+            $from,
+            $this->per_page,
+            $this->offset,
+            $selectlimit
+        );
 
         $table_data = array();
         foreach ($data_array as $user_row) {

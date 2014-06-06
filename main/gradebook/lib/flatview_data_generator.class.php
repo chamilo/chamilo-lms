@@ -152,6 +152,10 @@ class FlatViewDataGenerator
         return $headers;
     }
 
+    /**
+     * @param int $id
+     * @return int
+     */
     public function get_max_result_by_link($id)
     {
         $max = 0;
@@ -198,7 +202,7 @@ class FlatViewDataGenerator
         $ignore_score_color = false,
         $show_all = false
     ) {
-        // do some checks on users/items counts, redefine if invalid values
+        // Do some checks on users/items counts, redefine if invalid values
         if (!isset($users_count)) {
             $users_count = count ($this->users) - $users_start;
         }
@@ -362,7 +366,9 @@ class FlatViewDataGenerator
                         $temp_score = Display::tip($temp_score, $real_score);
                     }
 
-                    if (!isset($this->params['only_total_category']) || (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)) {
+                    if (!isset($this->params['only_total_category']) ||
+                        (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)
+                    ) {
                         if (!$show_all) {
                            $row[] = $temp_score.' ';
                         } else {
@@ -409,7 +415,9 @@ class FlatViewDataGenerator
                         $temp_score = Display::tip($temp_score, $complete_score);
                     }
 
-                    if (!isset($this->params['only_total_category']) || (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)) {
+                    if (!isset($this->params['only_total_category']) ||
+                        (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)
+                    ) {
                         if (!$show_all) {
                             if (in_array($item->get_type() , array(LINK_EXERCISE, LINK_DROPBOX, LINK_STUDENTPUBLICATION,
                                                                    LINK_LEARNPATH, LINK_FORUM_THREAD,  LINK_ATTENDANCE, LINK_SURVEY, LINK_HOTPOTATOES))) {
@@ -445,9 +453,9 @@ class FlatViewDataGenerator
                 }
             }
             unset($score);
-            //var_dump($row);exit;
             $data[] = $row;
         }
+
         return $data;
     }
 
@@ -457,7 +465,9 @@ class FlatViewDataGenerator
     public function get_evaluation_sumary_results ($session_id = null)
     {
         $usertable = array();
-        foreach ($this->users as $user) { $usertable[] = $user; }
+        foreach ($this->users as $user) {
+            $usertable[] = $user;
+        }
         $selected_users = $usertable;
 
         // generate actual data array for all selected users

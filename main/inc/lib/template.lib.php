@@ -356,7 +356,8 @@ class Template
             'user_is_teacher' => api_is_course_admin(),
             'student_view' => (!empty($_GET['isStudentView']) && $_GET['isStudentView'] == 'true'),
         );
-        $this->assign('_c',$_c);
+        $this->assign('course_code', $course['code']);
+        $this->assign('_c', $_c);
     }
 
     /** Set user parameters */

@@ -530,7 +530,8 @@ function parse_xml_data($file) {
  * @param Datetime The date when you obtained the certificate
  * @return void()
  */
-function register_user_info_about_certificate($cat_id, $user_id, $score_certificate, $date_certificate) {
+function register_user_info_about_certificate($cat_id, $user_id, $score_certificate, $date_certificate)
+{
     $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
     $sql_exist = 'SELECT COUNT(*) as count FROM ' . $table_certificate . ' gc
     			WHERE gc.cat_id="' . intval($cat_id) . '" AND user_id="' . intval($user_id) . '" ';
@@ -539,7 +540,7 @@ function register_user_info_about_certificate($cat_id, $user_id, $score_certific
     if ($row['count'] == 0) {
         $sql = 'INSERT INTO ' . $table_certificate . ' (cat_id,user_id,score_certificate,created_at)
     		  VALUES("' . intval($cat_id) . '","' . intval($user_id) . '","' . Database::escape_string($score_certificate) . '","' . Database::escape_string($date_certificate) . '")';
-        $rs = Database::query($sql);
+        Database::query($sql);
     }
 }
 
@@ -549,11 +550,13 @@ function register_user_info_about_certificate($cat_id, $user_id, $score_certific
  * @param int The user id
  * @return Datetime The date when you obtained the certificate
  */
-function get_certificate_by_user_id($cat_id, $user_id) {
+function get_certificate_by_user_id($cat_id, $user_id)
+{
     $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-    $sql_get_date = 'SELECT * FROM ' . $table_certificate . ' WHERE cat_id="' . intval($cat_id) . '" AND user_id="' . intval($user_id) . '"';
-    $rs_get_date = Database::query($sql_get_date);
-    $row = Database::fetch_array($rs_get_date, 'ASSOC');
+    $sql = 'SELECT * FROM ' . $table_certificate . '
+            WHERE cat_id="' . intval($cat_id) . '" AND user_id="' . intval($user_id) . '"';
+    $result = Database::query($sql);
+    $row = Database::fetch_array($result, 'ASSOC');
     return $row;
 }
 

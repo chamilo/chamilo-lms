@@ -2282,7 +2282,6 @@ function api_get_self() {
     return htmlentities($_SERVER['PHP_SELF']);
 }
 
-
 /* USER PERMISSIONS */
 
 /**
@@ -3045,11 +3044,11 @@ function api_not_allowed($print_headers = false, $message = null)
 
     global $this_section;
 
-    if (empty($user_id)) {
+    //if (empty($user_id)) {
 
-        // Why the CustomPages::enabled() need to be to set the request_uri
-        $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
-    }
+    // Why the CustomPages::enabled() need to be to set the request_uri
+    $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
+    //}
 
     if (CustomPages::enabled() && !isset($user_id)) {
         CustomPages::display(CustomPages::INDEX_UNLOGGED);

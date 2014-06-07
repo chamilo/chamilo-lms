@@ -164,7 +164,7 @@ class BigBlueButtonBN {
 		*/
 		$xml = $this->_processXmlResponse($this->getCreateMeetingURL($creationParams));
 
-		if($xml) {
+        if ($xml) {
 			if($xml->meetingID)
 				return array(
 					'returncode' => $xml->returncode,

@@ -719,9 +719,11 @@ if (isset($_GET['cidReq']) && $_GET['cidReq']!='') {
 } else {
 	$addparams['cidReq']='';
 }
+
 $no_qualification = false;
 
-//here we are in a sub category
+// Show certificate link.
+
 if ($category != '0') {
 	$cat = new Category();
 	$category_id   = intval($_GET['selectcat']);
@@ -729,13 +731,13 @@ if ($category != '0') {
 	$show_message  = $cat->show_message_resource_delete($course_id);
 
 	if ($show_message == '') {
-		//student
+		// Student
 		if (!api_is_allowed_to_edit()) {
             $certificate_html = Category::register_user_certificate($category_id, $stud_id);
             if ($certificate_html) {
                 echo $certificate_html;
             }
-		} //end hack
+		}
 	}
 }
 
@@ -743,7 +745,7 @@ if (api_is_allowed_to_edit(null, true)) {
 	// Tool introduction
 	Display::display_introduction_section(TOOL_GRADEBOOK, array('ToolbarSet' => 'AssessmentsIntroduction'));
 
-	if ( (isset ($_GET['selectcat']) && $_GET['selectcat']<>0) ) {
+	if ( (isset ($_GET['selectcat']) && $_GET['selectcat']<>0)) {
 	//
 	} else {
         if (((isset ($_GET['selectcat']) && $_GET['selectcat']==0) || ((isset($_GET['cidReq']) && $_GET['cidReq']!==''))) || isset($_GET['isStudentView']) && $_GET['isStudentView']=='false') {

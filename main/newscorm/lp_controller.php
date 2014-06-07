@@ -34,7 +34,6 @@ $language_file[] = 'exercice';
 // Including the global initialization file.
 require_once '../inc/global.inc.php';
 $current_course_tool  = TOOL_LEARNPATH;
-
 if (api_get_setting('show_glossary_in_documents') == 'ismanual' || api_get_setting('show_glossary_in_documents') == 'isautomatic' ) {
     $htmlHeadXtra[] = '<script>
 <!--
@@ -325,6 +324,7 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                 switch ($type) {
                     case 1:
                         if ($debug > 0) error_log('New LP - found row - type dokeos - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
+
                         $oLP = new learnpath(api_get_course_id(), $lp_id, api_get_user_id());
                         if ($oLP !== false) { $lp_found = true; } else { error_log($oLP->error, 0); }
                         break;
@@ -335,12 +335,12 @@ if (!$lp_found || (!empty($_REQUEST['lp_id']) && $_SESSION['oLP']->get_id() != $
                         break;
                     case 3:
                         if ($debug > 0) error_log('New LP - found row - type aicc - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
-                        $oLP = new aicc(api_get_course_id(),$lp_id,api_get_user_id());
+                        $oLP = new aicc(api_get_course_id(), $lp_id, api_get_user_id());
                         if ($oLP !== false) { $lp_found = true; } else { error_log($oLP->error, 0); }
                         break;
                     default:
                         if ($debug > 0) error_log('New LP - found row - type other - Calling constructor with '.api_get_course_id().' - '.$lp_id.' - '.api_get_user_id(), 0);
-                        $oLP = new learnpath(api_get_course_id(),$lp_id,api_get_user_id());
+                        $oLP = new learnpath(api_get_course_id(), $lp_id, api_get_user_id());
                         if ($oLP !== false) { $lp_found = true; } else { error_log($oLP->error, 0); }
                         break;
                 }

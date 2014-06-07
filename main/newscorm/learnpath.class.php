@@ -1345,7 +1345,7 @@ class learnpath
 
             Database::query($sql_update_order);
         }
-        
+
         if ($row_select['item_type'] == 'link') {
             require_once api_get_path(LIBRARY_PATH).'link.lib.php';
             $link = new Link();
@@ -2511,7 +2511,6 @@ class learnpath
         if (empty($prereq)) {
             return '';
         }
-        //var_dump($this->refs_list, $prereq);
         if (preg_match('/^\d+$/', $prereq) && is_object($this->items[$prereq])) {
             // If the prerequisite is a simple integer ID and this ID exists as an item ID,
             // then simply return it (with the ITEM_ prefix).
@@ -2795,12 +2794,12 @@ class learnpath
      * used by get_html_toc() to be ready to display
      * @return	array	TOC as a table with 4 elements per row: title, link, status and level
      */
-    public function get_toc() {
+    public function get_toc()
+    {
         if ($this->debug > 0) {
             error_log('learnpath::get_toc()', 0);
         }
         $toc = array();
-        //echo "<pre>".print_r($this->items,true)."</pre>";
         foreach ($this->ordered_items as $item_id) {
             if ($this->debug > 2) {
                 error_log('learnpath::get_toc(): getting info for item ' . $item_id, 0);
@@ -2892,7 +2891,8 @@ class learnpath
      * @param	integer	Parent ID of the items to look for
      * @return	mixed	Ordered list of item IDs or false on error
      */
-    public static function get_flat_ordered_items_list($lp, $parent = 0, $course_id = null) {
+    public static function get_flat_ordered_items_list($lp, $parent = 0, $course_id = null)
+    {
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
         } else {
@@ -2903,7 +2903,10 @@ class learnpath
             return false;
         }
         $tbl_lp_item = Database :: get_course_table(TABLE_LP_ITEM);
-        $sql = "SELECT id FROM $tbl_lp_item WHERE c_id = $course_id AND lp_id = $lp AND parent_item_id = $parent ORDER BY display_order";
+        $sql = "SELECT id FROM $tbl_lp_item
+                WHERE c_id = $course_id AND lp_id = $lp AND parent_item_id = $parent
+                ORDER BY display_order";
+
         $res = Database::query($sql);
         while ($row = Database :: fetch_array($res)) {
             $sublist = learnpath :: get_flat_ordered_items_list($lp, $row['id'], $course_id);
@@ -9000,7 +9003,6 @@ class learnpath
 
                     //Add files inside the HTMLs
                     $new_path = str_replace('/courses/', '', $old_new['orig']);
-                    //var_dump($sys_course_path.$new_path); var_dump($archive_path.$temp_dir_short.'/'.$old_new['dest']); echo '---';
                     if (file_exists($sys_course_path.$new_path)) {
                         copy($sys_course_path.$new_path, $archive_path.$temp_dir_short.'/'.$old_new['dest']);
                     }

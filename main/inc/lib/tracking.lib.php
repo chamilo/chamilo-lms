@@ -442,13 +442,13 @@ class Tracking
     	$course_code = Database::escape_string($course_code);
     	$session_id  = intval($session_id);
 
-    	$tbl_track_e_course_access = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-    	$sql = 'SELECT login_course_date
-                FROM '.$tbl_track_e_course_access.'
-                WHERE   user_id = '.$student_id.' AND
-                        course_code = "'.$course_code.'" AND
-                        session_id = '.$session_id.'
-                ORDER BY login_course_date DESC
+    	$tbl_track_e_access = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+    	$sql = 'SELECT access_date
+                FROM '.$tbl_track_e_access.'
+                WHERE   access_user_id = '.$student_id.' AND
+                        access_cours_code = "'.$course_code.'" AND
+                        access_session_id = '.$session_id.'
+                ORDER BY access_date DESC
                 LIMIT 0,1';
 
     	$rs = Database::query($sql);

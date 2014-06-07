@@ -624,7 +624,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
         }
     } elseif (KeyAuth::is_enabled()) {
         $success = KeyAuth::instance()->login();
-        if($success) {
+        if ($success) {
             $use_anonymous = false;
         }
     }
@@ -633,7 +633,7 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
     //    $gidReset = true;
 } // end else
 
-//Now check for anonymous user mode
+ // Now check for anonymous user mode
 if (isset($use_anonymous) && $use_anonymous) {
     //if anonymous mode is set, then try to set the current user as anonymous
     //if he doesn't have a login yet
@@ -658,14 +658,13 @@ if (!empty($cidReq) && (!isset($_SESSION['_cid']) or (isset($_SESSION['_cid']) &
 }
 
 /* USER INIT */
-
 if (isset($uidReset) && $uidReset) {
     // session data refresh requested
     unset($_SESSION['_user']['uidReset']);
     $is_platformAdmin = false;
     $is_allowedCreateCourse = false;
-
-    if (isset($_user['user_id']) && $_user['user_id']) {
+    if (isset($_user['user_id']) && $_user['user_id'] && !api_is_anonymous()) {
+    //if (isset($_user['user_id']) && $_user['user_id']) {
         // a uid is given (log in succeeded)
 
         $_SESSION['loginFailed'] = false;
@@ -708,12 +707,14 @@ if (isset($uidReset) && $uidReset) {
             //exit("WARNING UNDEFINED UID !! ");
         }
     } else {
-        // no uid => logout or Anonymous
-        Session::erase('_user');
-        Session::erase('_uid');
+        if (!api_is_anonymous()) {
+            // no uid => logout or Anonymous
+            Session::erase('_user');
+            Session::erase('_uid');
+        }
     }
-    Session::write('is_platformAdmin',$is_platformAdmin);
-    Session::write('is_allowedCreateCourse',$is_allowedCreateCourse);
+    Session::write('is_platformAdmin', $is_platformAdmin);
+    Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 } else { // continue with the previous values
     $_user                    = $_SESSION['_user'];
     $is_platformAdmin         = isset($_SESSION['is_platformAdmin']) ? $_SESSION['is_platformAdmin'] : false;
@@ -1239,22 +1240,25 @@ if (isset($_cid)) {
     Database::query($sql);
 }
 
-
 // direct login to course
-if ((isset($cas_login) && $cas_login && exist_firstpage_parameter())
-    || ($logging_in && exist_firstpage_parameter())) {
+if ((isset($cas_login) && $cas_login && exist_firstpage_parameter()) ||
+    ($logging_in && exist_firstpage_parameter())
+) {
     $redirectCourseDir = api_get_firstpage_parameter();
     api_delete_firstpage_parameter();    // delete the cookie
-    if (CourseManager::get_course_id_from_path($redirectCourseDir)) {
-        $_SESSION['noredirection'] = false;
-        $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH).$redirectCourseDir;
+
+    if (!isset($_SESSION['request_uri'])) {
+        if (CourseManager::get_course_id_from_path($redirectCourseDir)) {
+            $_SESSION['noredirection'] = false;
+            $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH) . $redirectCourseDir;
+        }
     }
 } elseif (api_user_is_login() && exist_firstpage_parameter()) {
     $redirectCourseDir = api_get_firstpage_parameter();
-    api_delete_firstpage_parameter();    // delete the cookie
+    api_delete_firstpage_parameter(); // delete the cookie
     if (CourseManager::get_course_id_from_path($redirectCourseDir)) {
         $_SESSION['noredirection'] = false;
-        $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH).$redirectCourseDir;
+        $_SESSION['request_uri'] = api_get_path(WEB_COURSE_PATH) . $redirectCourseDir;
     }
 }
 

@@ -64,7 +64,28 @@ if ($teacher) {
             break;
         case 'end':
             $bbb->end_meeting($_GET['id']);
-            $message = Display::return_message(get_lang('MeetingClosed').'<br />'.get_lang('MeetingClosedComment'), 'success', false);
+            $message = Display::return_message(
+                get_lang('MeetingClosed') . '<br />' . get_lang(
+                    'MeetingClosedComment'
+                ),
+                'success',
+                false
+            );
+
+            if (file_exists(__DIR__ . '/config.vm.php')) {
+                require __DIR__ . '/../../vendor/autoload.php';
+
+                require __DIR__ . '/lib/vm/AbstractVM.php';
+                require __DIR__ . '/lib/vm/VMInterface.php';
+                require __DIR__ . '/lib/vm/DigitalOceanVM.php';
+                require __DIR__ . '/lib/VM.php';
+
+                $config = require __DIR__ . '/config.vm.php';
+
+                $vm = new VM($config);
+                $vm->resizeToMinLimit();
+            }
+
             break;
         case 'publish':
             //$result = $bbb->publish_meeting($_GET['id']);

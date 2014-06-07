@@ -33,3 +33,5 @@ searchdb/*
 
 *.orig
 nbproject/*
+
+plugin/bbb/config.vm.php

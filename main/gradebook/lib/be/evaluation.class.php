@@ -1,18 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
- * Defines a gradebook Evaluation object
- * @package chamilo.gradebook
- */
-/**
- * Class
+ * Class Evaluation
  * @package chamilo.gradebook
  */
 class Evaluation implements GradebookItem
 {
-
-// PROPERTIES
-
 	private $id;
 	private $name;
 	private $description;
@@ -24,112 +18,134 @@ class Evaluation implements GradebookItem
 	private $eval_max;
 	private $visible;
 
-    // CONSTRUCTORS
-
-    function __construct() {
+    public function __construct()
+    {
     }
 
-    // GETTERS AND SETTERS
+    public function get_id()
+    {
+        return $this->id;
+    }
 
-   	public function get_id() {
-		return $this->id;
-	}
+    public function get_name()
+    {
+        return $this->name;
+    }
 
-	public function get_name() {
-		return $this->name;
-	}
+    public function get_description()
+    {
+        return $this->description;
+    }
 
-	public function get_description() {
-		return $this->description;
-	}
+    public function get_user_id()
+    {
+        return $this->user_id;
+    }
 
-	public function get_user_id() {
-		return $this->user_id;
-	}
+    public function get_course_code()
+    {
+        return $this->course_code;
+    }
 
-	public function get_course_code() {
-		return $this->course_code;
-	}
+    public function get_category_id()
+    {
+        return $this->category;
+    }
 
-	public function get_category_id() {
-		return $this->category;
-	}
+    public function get_date()
+    {
+        return $this->created_at;
+    }
 
-	public function get_date() {
-		return $this->created_at;
-	}
+    public function get_weight()
+    {
+        return $this->weight;
+    }
 
-	public function get_weight() {
-		return $this->weight;
-	}
+    public function get_max()
+    {
+        return $this->eval_max;
+    }
 
-	public function get_max() {
-		return $this->eval_max;
-	}
+    public function get_type()
+    {
+        return $this->type;
+    }
 
-	public function get_type() {
-		return $this->type;
-	}
+    public function is_visible()
+    {
+        return $this->visible;
+    }
 
-	public function is_visible() {
-		return $this->visible;
-	}
+    public function get_locked()
+    {
+        return $this->locked;
+    }
 
-	public function get_locked() {
-		return $this->locked;
-	}
+    public function is_locked()
+    {
+        return isset($this->locked) && $this->locked == 1 ? true : false;
+    }
 
-    public function is_locked() {
-		return isset($this->locked) && $this->locked == 1 ? true : false ;
-	}
+    public function set_id($id)
+    {
+        $this->id = $id;
+    }
 
-	public function set_id ($id) {
-		$this->id = $id;
-	}
+    public function set_name($name)
+    {
+        $this->name = $name;
+    }
 
-	public function set_name ($name) {
-		$this->name = $name;
-	}
+    public function set_description($description)
+    {
+        $this->description = $description;
+    }
 
-	public function set_description ($description) {
-		$this->description = $description;
-	}
+    public function set_user_id($user_id)
+    {
+        $this->user_id = $user_id;
+    }
 
-	public function set_user_id ($user_id) {
-		$this->user_id = $user_id;
-	}
+    public function set_course_code($course_code)
+    {
+        $this->course_code = $course_code;
+    }
 
-	public function set_course_code ($course_code) {
-		$this->course_code = $course_code;
-	}
+    public function set_category_id($category_id)
+    {
+        $this->category = $category_id;
+    }
 
-	public function set_category_id ($category_id) {
-		$this->category = $category_id;
-	}
+    public function set_date($date)
+    {
+        $this->created_at = $date;
+    }
 
-	public function set_date ($date) {
-		$this->created_at = $date;
-	}
+    public function set_weight($weight)
+    {
+        $this->weight = $weight;
+    }
 
-	public function set_weight ($weight) {
-		$this->weight = $weight;
-	}
+    public function set_max($max)
+    {
+        $this->eval_max = $max;
+    }
 
-	public function set_max ($max) {
-		$this->eval_max = $max;
-	}
+    public function set_visible($visible)
+    {
+        $this->visible = $visible;
+    }
 
-	public function set_visible ($visible) {
-		$this->visible = $visible;
-	}
+    public function set_type($type)
+    {
+        $this->type = $type;
+    }
 
-    public function set_type ($type) {
-		$this->type = $type;
-	}
-
-	public function set_locked ($locked) {
-		$this->locked = $locked;
-	}
+    public function set_locked($locked)
+    {
+        $this->locked = $locked;
+    }
 
 	/**
 	 * Retrieve evaluations and return them as an array of Evaluation objects
@@ -218,7 +234,8 @@ class Evaluation implements GradebookItem
     /**
      * Insert this evaluation into the database
      */
-    public function add() {
+    public function add()
+    {
 		if (isset($this->name) && isset($this->user_id) && isset($this->weight) && isset ($this->eval_max) && isset($this->visible)) {
 			$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 
@@ -265,7 +282,8 @@ class Evaluation implements GradebookItem
 		}
 	}
 
-	public function add_evaluation_log($idevaluation){
+	public function add_evaluation_log($idevaluation)
+    {
 		if (!empty($idevaluation)) {
 			$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 			$tbl_grade_linkeval_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINKEVAL_LOG);
@@ -283,10 +301,12 @@ class Evaluation implements GradebookItem
 			}
 		}
 	}
+
 	/**
 	 * Update the properties of this evaluation in the database
 	 */
-	public function save() {
+	public function save()
+    {
 		$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 		$sql = 'UPDATE '.$tbl_grade_evaluations
 			." SET name = '".Database::escape_string($this->get_name())."'"
@@ -323,20 +343,20 @@ class Evaluation implements GradebookItem
 	/**
 	 * Delete this evaluation from the database
 	 */
-	public function delete() {
+	public function delete()
+    {
 		$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
 		$sql = 'DELETE FROM '.$tbl_grade_evaluations.' WHERE id = '.intval($this->id);
 		Database::query($sql);
 	}
-
-// OTHER FUNCTIONS
 
 	/**
 	 * Check if an evaluation name (with the same parent category) already exists
 	 * @param $name name to check (if not given, the name property of this object will be checked)
 	 * @param $parent parent category
 	 */
-	public function does_name_exist($name, $parent) {
+	public function does_name_exist($name, $parent)
+    {
 		if (!isset ($name)) {
 			$name = $this->name;
 			$parent = $this->category;
@@ -414,16 +434,16 @@ class Evaluation implements GradebookItem
     	return (is_numeric($score) && $score >= 0 && $score <= $this->eval_max);
     }
 
-
 	/**
 	 * Calculate the score of this evaluation
-	 * @param $stud_id student id (default: all students who have results for this eval - then the average is returned)
+	 * @param int $stud_id (default: all students who have results for this eval - then the average is returned)
 	 * @return	array (score, max) if student is given
 	 * 			array (sum of scores, number of scores) otherwise
 	 * 			or null if no scores available
 	 */
-    public function calc_score ($stud_id = null) {
-		$results = Result::load(null,$stud_id,$this->id);
+    public function calc_score($stud_id = null)
+    {
+		$results = Result::load(null, $stud_id, $this->id);
 
 		$rescount = 0;
 		$sum = 0;
@@ -484,7 +504,8 @@ class Evaluation implements GradebookItem
 	/**
 	 * Internal function used by get_target_categories()
 	 */
-	private function add_target_subcategories($targets, $level, $catid) {
+	private function add_target_subcategories($targets, $level, $catid)
+    {
 		$subcats = Category::load(null,null,null,$catid);
 		foreach ($subcats as $cat) {
 			$targets[] = array ($cat->get_id(), $cat->get_name(), $level+1);
@@ -499,7 +520,8 @@ class Evaluation implements GradebookItem
 	 * If this evaluation moves from inside a course to outside,
 	 * its course code is also changed.
 	 */
-	public function move_to_cat ($cat) {
+	public function move_to_cat($cat)
+    {
 		$this->set_category_id($cat->get_id());
 		if ($this->get_course_code() != $cat->get_course_code()) {
 			$this->set_course_code($cat->get_course_code());
@@ -515,7 +537,8 @@ class Evaluation implements GradebookItem
 	 * @param $cat_id parent category (use 'null' to retrieve them in all categories)
 	 * @param $stud_id student id
 	 */
-    public function get_evaluations_with_result_for_student ($cat_id = null, $stud_id) {
+    public function get_evaluations_with_result_for_student ($cat_id = null, $stud_id)
+    {
 		$tbl_grade_evaluations = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
     	$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 
@@ -537,12 +560,11 @@ class Evaluation implements GradebookItem
 		return $alleval;
     }
 
-
-
     /**
      * Get a list of students that do not have a result record for this evaluation
      */
-    public function get_not_subscribed_students ($first_letter_user = '') {
+    public function get_not_subscribed_students ($first_letter_user = '')
+    {
 		$tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
     	$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 
@@ -560,14 +582,14 @@ class Evaluation implements GradebookItem
 		return $db_users;
     }
 
-
     /**
      * Find evaluations by name
      * @param string $name_mask search string
      * @return array evaluation objects matching the search criterium
      * @todo can be written more efficiently using a new (but very complex) sql query
      */
-    public function find_evaluations ($name_mask,$selectcat) {
+    public function find_evaluations ($name_mask,$selectcat)
+    {
     	$rootcat = Category::load($selectcat);
 		$evals = $rootcat[0]->get_evaluations((api_is_allowed_to_create_course() ? null : api_get_user_id()), true);
 		$foundevals = array();
@@ -579,15 +601,13 @@ class Evaluation implements GradebookItem
 		return $foundevals;
     }
 
-
-
-// Other methods implementing GradebookItem
-
-    public function get_item_type() {
+    public function get_item_type()
+    {
 		return 'E';
 	}
 
-	public function get_icon_name() {
+	public function get_icon_name()
+    {
 		return $this->has_results() ? 'evalnotempty' : 'evalempty';
 	}
 
@@ -596,13 +616,15 @@ class Evaluation implements GradebookItem
   	 * @param int locked 1 or unlocked 0
   	 *
   	 **/
-  	function lock($locked) {
+  	function lock($locked)
+    {
   		$table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
   		$sql = "UPDATE $table_evaluation SET locked = '".intval($locked)."' WHERE id='".intval($this->id)."'";
   		Database::query($sql);
   	}
 
-    function check_lock_permissions() {
+    function check_lock_permissions()
+    {
         if (api_is_platform_admin()) {
             return true;
         } else {
@@ -612,7 +634,8 @@ class Evaluation implements GradebookItem
         }
     }
 
-    function delete_linked_data() {
+    function delete_linked_data()
+    {
 
     }
 }

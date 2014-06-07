@@ -1512,8 +1512,8 @@ function api_format_course_array($course_data) {
         $_course['add_teachers_to_sessions_courses'] = $course_data['add_teachers_to_sessions_courses'];
     }
 
-    if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic300x180.png')) {
-        $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic300x180.png';
+    if (file_exists(api_get_path(SYS_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png')) {
+        $url_image = api_get_path(WEB_COURSE_PATH).$course_data['directory'].'/course-pic85x85.png';
     } else {
         $url_image = api_get_path(WEB_IMG_PATH).'without_picture.png';
     }
@@ -1841,9 +1841,11 @@ function api_set_failure($failure_type) {
  */
 function api_set_anonymous() {
     global $_user;
+
     if (!empty($_user['user_id'])) {
         return false;
     }
+
     $user_id = api_get_anonymous_id();
     if ($user_id == 0) {
         return false;
@@ -1851,8 +1853,8 @@ function api_set_anonymous() {
     Session::erase('_user');
     $_user['user_id'] = $user_id;
     $_user['is_anonymous'] = true;
-    Session::write('_user',$_user);
     $GLOBALS['_user'] = $_user;
+    Session::write('_user', $_user);
     return true;
 }
 
@@ -2279,7 +2281,6 @@ function api_delete_settings_params($params) {
 function api_get_self() {
     return htmlentities($_SERVER['PHP_SELF']);
 }
-
 
 /* USER PERMISSIONS */
 
@@ -3043,10 +3044,11 @@ function api_not_allowed($print_headers = false, $message = null)
 
     global $this_section;
 
-    if (!isset($user_id)) {
-        //Why the CustomPages::enabled() need to be to set the request_uri
-        $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
-    }
+    //if (empty($user_id)) {
+
+    // Why the CustomPages::enabled() need to be to set the request_uri
+    $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
+    //}
 
     if (CustomPages::enabled() && !isset($user_id)) {
         CustomPages::display(CustomPages::INDEX_UNLOGGED);
@@ -3070,8 +3072,8 @@ function api_not_allowed($print_headers = false, $message = null)
     }
 
     $tpl = new Template(null, $show_headers, $show_headers);
-    $tpl->assign('content', $msg);
 
+    $tpl->assign('content', $msg);
     if (($user_id!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {
         // if the access is not authorized and there is some login information
         // but the cidReq is not found, assume we are missing course data and send the user
@@ -3094,7 +3096,6 @@ function api_not_allowed($print_headers = false, $message = null)
             $tpl->display_one_col_template();
             exit;
         }
-
         if (!is_null(api_get_course_id())) {
             api_set_firstpage_parameter(api_get_course_id());
         }

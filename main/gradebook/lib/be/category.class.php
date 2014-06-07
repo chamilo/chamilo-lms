@@ -611,9 +611,12 @@ class Category implements GradebookItem
     public function show_message_resource_delete($course_id)
     {
         $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = 'SELECT count(*) AS num from '.$tbl_grade_categories.' WHERE course_code ="'.Database::escape_string($course_id).'" AND visible=3';
-        $res=Database::query($sql);
-        $option=Database::fetch_array($res,'ASSOC');
+        $sql = 'SELECT count(*) AS num from '.$tbl_grade_categories.'
+                WHERE
+                    course_code = "'.Database::escape_string($course_id).'" AND
+                    visible=3';
+        $res = Database::query($sql);
+        $option = Database::fetch_array($res, 'ASSOC');
         if ($option['num']>=1) {
             return '&nbsp;&nbsp;<span class="resource-deleted">(&nbsp;'.get_lang('ResourceDeleted').'&nbsp;)</span>';
         } else {
@@ -1420,7 +1423,7 @@ class Category implements GradebookItem
     /**
      * Get all the categories from with the same given direct parent
      * @param int $catId Category parent ID
-     * @return array Array of Category objects 
+     * @return array Array of Category objects
      */
     public function getCategories($catId)
     {
@@ -1428,7 +1431,7 @@ class Category implements GradebookItem
         $courseInfo = api_get_course_info(api_get_course_id());
         $courseCode = $courseInfo['code'];
         $sql='SELECT * FROM '.$tblGradeCategories.' WHERE parent_id = '.intval($catId);
-       
+
         $result = Database::query($sql);
         $allcats = Category::create_category_objects_from_sql_result($result);
         return $allcats;
@@ -1534,8 +1537,8 @@ class Category implements GradebookItem
      */
     public static function register_user_certificate($category_id, $user_id)
     {
-        // generating the total score for a course
-        $cats_course     = Category :: load($category_id, null, null, null, null, null, false);
+        // Generating the total score for a course
+        $cats_course = Category::load($category_id, null, null, null, null, null, false);
 
         $alleval_course  = $cats_course[0]->get_evaluations($user_id, true);
         $alllink_course  = $cats_course[0]->get_links($user_id, true);
@@ -1558,30 +1561,28 @@ class Category implements GradebookItem
 
         $item_total_value = 0;
         $item_value = 0;
-
         for ($count=0; $count < count($evals_links); $count++) {
             $item = $evals_links[$count];
             $score = $item->calc_score($user_id);
             $divide = ( ($score[1])==0 ) ? 1 : $score[1];
             $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
-            $item_value = $score[0]/$divide*$item->get_weight()*$sub_cat_percentage/$main_weight;
+            //$item_value = $score[0]/$divide*$item->get_weight()*$sub_cat_percentage/$main_weight;
+            $item_value = $score[0]/$divide*$item->get_weight();
             $item_total_value += $item_value;
         }
         $item_total_value = (float)$item_total_value;
 
-        $cattotal = Category :: load($category_id);
-
+        $cattotal = Category::load($category_id);
         $scoretotal= $cattotal[0]->calc_score($user_id);
 
         //Do not remove this the gradebook/lib/fe/gradebooktable.class.php file load this variable as a global
-        $scoredisplay = ScoreDisplay :: instance();
-
+        $scoredisplay = ScoreDisplay::instance();
         $my_score_in_gradebook = $scoredisplay->display_score($scoretotal, SCORE_SIMPLE);
 
-        //Show certificate
+        // Show certificate
         $certificate_min_score = $cats_course[0]->get_certificate_min_score();
 
-        //a student always sees only the teacher's repartition
+        // A student always sees only the teacher's repartition
         $scoretotal_display = $scoredisplay->display_score($scoretotal, SCORE_DIV_PERCENT);
 
         if (isset($certificate_min_score) && $item_total_value >= $certificate_min_score) {
@@ -1590,16 +1591,26 @@ class Category implements GradebookItem
                 register_user_info_about_certificate($category_id, $user_id, $my_score_in_gradebook, api_get_utc_datetime());
                 $my_certificate = get_certificate_by_user_id($cats_course[0]->get_id(), $user_id);
             }
-
             if (!empty($my_certificate)) {
                 $certificate_obj = new Certificate($my_certificate['id']);
-
-                $url  = api_get_path(WEB_PATH) .'certificates/index.php?id='.$my_certificate['id'];
-                $certificates = Display::url(Display::return_icon('certificate.png', get_lang('Certificates'), array(), 32), $url, array('target'=>'_blank'));
-                $html = '<div class="actions" align="right">';
-                //$html .= Display::url($url, $url, array('target'=>'_blank'));
-                $html .= $certificates;
-                $html .= '</div>';
+                $fileWasGenerated = $certificate_obj->html_file_is_generated();
+                $html = null;
+                if (!empty($fileWasGenerated)) {
+                    $url = api_get_path(WEB_PATH) . 'certificates/index.php?id=' . $my_certificate['id'];
+                    $certificates = Display::url(
+                        Display::return_icon(
+                            'certificate.png',
+                            get_lang('Certificates'),
+                            array(),
+                            32
+                        ),
+                        $url,
+                        array('target' => '_blank')
+                    );
+                    $html = '<div class="actions" align="right">';
+                    $html .= $certificates;
+                    $html .= '</div>';
+                }
                 return $html;
             }
         } else {

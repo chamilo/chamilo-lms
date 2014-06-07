@@ -1,13 +1,6 @@
 <?php
-
 /* For licensing terms, see /license.txt */
-/**
- * General resources backup script
- * @package chamilo.backup
- */
-/**
- * Definition of all possible resource-types
- */
+
 define('RESOURCE_DOCUMENT', 'document');
 define('RESOURCE_GLOSSARY', 'glossary');
 define('RESOURCE_EVENT', 'calendar_event');
@@ -34,10 +27,11 @@ define('RESOURCE_ATTENDANCE', 'attendance');
 define('RESOURCE_WORK', 'work');
 
 /**
+ * Class Resource
  * Representation of a resource in a Chamilo-course.
  * This is a base class of which real resource-classes (for Links,
  * Documents,...) should be derived.
- * @author Bart Mollet <bart.mollet@hogent.be>s
+ * @author   Bart Mollet <bart.mollet@hogent.be>s
  * @package  chamilo.backup
  * @todo Use the gloabaly defined constants voor tools and remove the RESOURCE_*
  * constants

@@ -217,7 +217,9 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
 
     if ($safe_id == strval(intval($safe_id)) && $safe_item_id == strval(intval($safe_item_id))) {
 
-        $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting FROM ' . $TBL_TRACK_EXERCICES . ' WHERE exe_id = '.$safe_exe_id;
+        $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting
+                FROM ' . $TBL_TRACK_EXERCICES . '
+                WHERE exe_id = '.$safe_exe_id;
         $res = Database::query($sql);
         $row_dates = Database::fetch_array($res);
 
@@ -228,11 +230,18 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
         $score 		= (float)$row_dates['exe_result'];
         $max_score 	= (float)$row_dates['exe_weighting'];
 
-        $sql_upd_max_score = "UPDATE $TBL_LP_ITEM SET max_score = '$max_score' WHERE c_id = $course_id AND id = '".$safe_item_id."'";
-        Database::query($sql_upd_max_score);
+        $sql = "UPDATE $TBL_LP_ITEM SET max_score = '$max_score'
+                WHERE c_id = $course_id AND id = '".$safe_item_id."'";
+        Database::query($sql);
 
-        $sql_last_attempt = "SELECT id FROM $TBL_LP_ITEM_VIEW  WHERE c_id = $course_id AND lp_item_id = '$safe_item_id' AND lp_view_id = '".$_SESSION['oLP']->lp_view_id."' order by id desc limit 1";
-        $res_last_attempt = Database::query($sql_last_attempt);
+        $sql = "SELECT id FROM $TBL_LP_ITEM_VIEW
+                WHERE
+                    c_id = $course_id AND
+                    lp_item_id = '$safe_item_id' AND
+                    lp_view_id = '".$_SESSION['oLP']->lp_view_id."'
+                ORDER BY id DESC
+                LIMIT 1";
+        $res_last_attempt = Database::query($sql);
 
         if (Database::num_rows($res_last_attempt)) {
         	$row_last_attempt = Database::fetch_row($res_last_attempt);
@@ -258,7 +267,7 @@ if ($type_quiz && !empty($_REQUEST['exeId']) && isset($lp_id) && isset($_GET['lp
 }
 
 $_SESSION['oLP']->set_previous_item($lp_item_id);
-$nameTools = Security :: remove_XSS($_SESSION['oLP']->get_name());
+$nameTools = Security::remove_XSS($_SESSION['oLP']->get_name());
 
 $save_setting = api_get_setting('show_navigation_menu');
 global $_setting;
@@ -284,7 +293,7 @@ if (isset($_SESSION['status']) && $_SESSION['status'][$course_code] == 5) {
 $_SESSION['loaded_lp_view'] = true;
 
 $display_none = '';
-$margin_left = '305px';
+$margin_left = '340px';
 
 //Media player code
 
@@ -317,6 +326,7 @@ if (Database::num_rows($res_media) > 0) {
         }
     }
 }
+
 echo '<div id="learning_path_main" style="width:100%;height:100%;">';
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true, false, false);
 if ($is_allowed_to_edit) {

@@ -736,8 +736,9 @@ class Category implements GradebookItem
         $weightsum    = 0;
 
         if (!empty($cats)) {
+            /** @var Category $cat */
             foreach ($cats as $cat) {
-                $catres = $cat->calc_score($stud_id, $course_code, $session_id);     // recursive call
+                $catres = $cat->calc_score($stud_id, $course_code, $session_id);
                 if ($cat->get_weight() != 0) {
                     $catweight = $cat->get_weight();
                     $rescount++;
@@ -750,20 +751,26 @@ class Category implements GradebookItem
         }
 
         if (!empty($evals)) {
+            /** @var Evaluation $eval */
             foreach ($evals as $eval) {
                 $evalres = $eval->calc_score($stud_id);
+
                 if (isset($evalres) && $eval->get_weight() != 0) {
                     $evalweight = $eval->get_weight();
-                    $rescount++;
                     $weightsum += $evalweight;
+                    $rescount++;
                     $ressum += (($evalres[0]/$evalres[1]) * $evalweight);
                 } else {
-
+                    if ($eval->get_weight() != 0) {
+                        $evalweight = $eval->get_weight();
+                        $weightsum += $evalweight;
+                    }
                 }
             }
         }
 
         if (!empty($links)) {
+            /** @var EvalLink $link */
             foreach ($links as $link) {
                 $linkres = $link->calc_score($stud_id);
 
@@ -774,7 +781,7 @@ class Category implements GradebookItem
                     $weightsum += $linkweight;
                     $ressum += (($linkres[0]/$link_res_denom) * $linkweight);
                 } else {
-                    //adding if result does not exists
+                    // Ddding if result does not exists
                     if ($link->get_weight() != 0) {
                         $linkweight     = $link->get_weight();
                         $weightsum += $linkweight;
@@ -1538,7 +1545,7 @@ class Category implements GradebookItem
     public static function register_user_certificate($category_id, $user_id)
     {
         // Generating the total score for a course
-        $cats_course = Category::load($category_id, null, null, null, null, null, false);
+        $cats_course = Category::load($category_id, null, null, null, null, api_get_session_id(), false);
 
         $alleval_course  = $cats_course[0]->get_evaluations($user_id, true);
         $alllink_course  = $cats_course[0]->get_links($user_id, true);
@@ -1549,7 +1556,7 @@ class Category implements GradebookItem
         if (isset($cats_course) && !empty($cats_course)) {
             $categories = Category::load(null, null, null, $category_id);
             if (!empty($categories)) {
-                foreach($categories as $category) {
+                foreach ($categories as $category) {
                     $sum_categories_weight_array[$category->get_id()] = $category->get_weight();
                 }
             } else {
@@ -1561,19 +1568,23 @@ class Category implements GradebookItem
 
         $item_total_value = 0;
         $item_value = 0;
+
         for ($count=0; $count < count($evals_links); $count++) {
             $item = $evals_links[$count];
             $score = $item->calc_score($user_id);
             $divide = ( ($score[1])==0 ) ? 1 : $score[1];
-            $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
+            //$sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
             //$item_value = $score[0]/$divide*$item->get_weight()*$sub_cat_percentage/$main_weight;
             $item_value = $score[0]/$divide*$item->get_weight();
+            /*var_dump($score[0], $divide, $item->get_weight(), $item_value);
+            echo '---';-*/
             $item_total_value += $item_value;
         }
+
         $item_total_value = (float)$item_total_value;
 
         $cattotal = Category::load($category_id);
-        $scoretotal= $cattotal[0]->calc_score($user_id);
+        $scoretotal = $cattotal[0]->calc_score($user_id);
 
         //Do not remove this the gradebook/lib/fe/gradebooktable.class.php file load this variable as a global
         $scoredisplay = ScoreDisplay::instance();

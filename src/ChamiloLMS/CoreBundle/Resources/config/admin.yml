@@ -31,3 +31,37 @@ services:
               - ~
           calls:
               - [ setTranslationDomain, [ChamiloLMSCoreBundle]]
+
+    sonata.admin.session_rel_course:
+          class: ChamiloLMS\CoreBundle\Admin\SessionRelCourseAdmin
+          tags:
+              - { name: sonata.admin, manager_type: orm, group: "LMS", label: "SessionRelCourseAdmin" }
+          arguments:
+              - ~
+              - ChamiloLMS\CoreBundle\Entity\SessionRelCourse
+              - ~
+          calls:
+              - [ setTranslationDomain, [ChamiloLMSCoreBundle]]
+
+    sonata.admin.access_url:
+          class: ChamiloLMS\CoreBundle\Admin\AccessUrlAdmin
+          tags:
+              - { name: sonata.admin, manager_type: orm, group: "LMS", label: "AccessUrlAdmin" }
+          arguments:
+              - ~
+              - ChamiloLMS\CoreBundle\Entity\AccessUrl
+              - ~
+          calls:
+              - [ setTranslationDomain, [ChamiloLMSCoreBundle]]
+
+    sonata.admin.access_url_rel_course:
+          class: ChamiloLMS\CoreBundle\Admin\AccessUrlRelCourseAdmin
+          tags:
+              - { name: sonata.admin, manager_type: orm, group: "LMS", label: "AccessUrlRelCourseAdmin" }
+          arguments:
+              - ~
+              - ChamiloLMS\CoreBundle\Entity\AccessUrlRelCourse
+              - ~
+          calls:
+              - [ setTranslationDomain, [ChamiloLMSCoreBundle]]
+

@@ -16,7 +16,7 @@ use Knp\Menu\ItemInterface as MenuItemInterface;
  * Class CourseAdmin
  * @package ChamiloLMS\CoreBundle\Admin
  */
-class CourseRelUserAdmin extends Admin
+class AccessUrlRelCourseAdmin extends Admin
 {
     /**
      * @param \Sonata\AdminBundle\Show\ShowMapper $showMapper
@@ -36,16 +36,7 @@ class CourseRelUserAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('user')
-            ->add('group')
-            ->add('status', 'sonata_type_translatable_choice', array(
-                    'choices' => CourseRelUser::getStatusList()
-                )
-            )
-            ->add('relation_type', 'sonata_type_translatable_choice', array(
-                'choices' => CourseRelUser::getRelationTypeList()
-                )
-            )
+            ->add('url')
             ->end()
         ;
     }
@@ -56,8 +47,7 @@ class CourseRelUserAdmin extends Admin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('course')
-            ->add('user')
+            ->add('url')
         ;
     }
 
@@ -67,13 +57,8 @@ class CourseRelUserAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('user')
-            ->addIdentifier('course')
-            ->addIdentifier('group')
-            ->add('status', 'sonata_type_translatable_choice', array(
-                    'choices' => CourseRelUser::getStatusList()
-                )
-            )
+            ->addIdentifier('url')
         ;
     }
+
 }

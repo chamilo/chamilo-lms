@@ -16,45 +16,83 @@ use Knp\Menu\ItemInterface as MenuItemInterface;
  */
 class CourseAdmin extends Admin
 {
-    // Fields to be shown on create/edit forms
+    /**
+     * @param FormMapper $formMapper
+     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('id', 'text', array('label' => 'Course'))
-            //->add('author', 'entity', array('class' => 'Acme\DemoBundle\Entity\User'))
-            ->add('code') //if no type is specified, SonataAdminBundle tries to guess it
             ->add('title')
+            ->add('code','text',array(
+                'read_only' => true,
+            ))
+            //->add('code') //if no type is specified, SonataAdminBundle tries to guess it
+            ->add('description', 'textarea', array('attr' => array('class'=> 'ckeditor')))
+            ->add('departmentName')
+            ->add('departmentUrl')
+            ->add('urls', 'sonata_type_collection', array(
+                    'cascade_validation' => true,
+                ), array(
+                    'allow_delete' => true,
+                    'by_reference' => false,
+                    'edit'              => 'inline',
+                    'inline'            => 'table',
+                    //'btn_add' => true,
+                    //'multiple' => true
+                    //'sortable'          => 'position',
+                    //'link_parameters'   => array('content' => $users),
+                    'admin_code'        => 'sonata.admin.access_url_rel_course'
+                )
+            )
             ->add('users', 'sonata_type_collection', array(
                     'cascade_validation' => true,
                 ), array(
+                    'allow_delete' => true,
+                    'by_reference' => false,
                     'edit'              => 'inline',
                     'inline'            => 'table',
+                    //'btn_add' => true,
+                    //'multiple' => true
                     //'sortable'          => 'position',
-                    //'link_parameters'   => array('context' => $context),
-                    //'admin_code'        => 'sonata.media.admin.gallery_has_media'
+                    //'link_parameters'   => array('content' => $users),
+                    'admin_code'        => 'sonata.admin.course_rel_user'
                 )
             )
             //->add('users', 'entity', array('class' => 'Application\Sonata\UserBundle\Entity\User', 'label' => 'Cliente'))
-
         ;
     }
 
-    // Fields to be shown on filter forms
+    /**
+     * @param DatagridMapper $datagridMapper
+     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('id')
-            ->add('code')
+            ->add('title')
+            ->add('code')//->add('users')
         ;
     }
 
-    // Fields to be shown on lists
+    /**
+     * @param ListMapper $listMapper
+     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
             ->addIdentifier('id')
-            ->add('code')
-            ->add('title')
+            ->addIdentifier('code')
+            ->addIdentifier('title')
         ;
+    }
+
+    /**
+     * Very important in order to save the related entities!
+     * @param \ChamiloLMS\CoreBundle\Entity\Course $course
+     * @return mixed|void
+     */
+    public function preUpdate($course)
+    {
+        $course->setUsers($course->getUsers());
+        $course->setUrls($course->getUrls());
     }
 }

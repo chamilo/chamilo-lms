@@ -63,6 +63,27 @@ class AccessUrl
      */
     private $urlType;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="url", cascade={"persist"}, orphanRemoval=true)
+     **/
+    private $course;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->tms = new \DateTime();
+        $this->createdBy = 1;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getUrl();
+    }
 
     /**
      * Get id

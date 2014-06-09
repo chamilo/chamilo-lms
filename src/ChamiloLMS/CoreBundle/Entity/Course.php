@@ -4,7 +4,7 @@ namespace ChamiloLMS\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
-
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Course
@@ -26,7 +26,14 @@ class Course
     /**
      * @var string
      *
-     * @ORM\Column(name="code", type="string", length=40, precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="title", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
+     */
+    private $title;
+
+    /**
+     * @var string
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(name="code", type="string", length=40, precision=0, scale=0, nullable=false, unique=true)
      */
     private $code;
 
@@ -40,23 +47,9 @@ class Course
     /**
      * @var string
      *
-     * @ORM\Column(name="db_name", type="string", length=40, precision=0, scale=0, nullable=true, unique=false)
-     */
-    private $dbName;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="course_language", type="string", length=20, precision=0, scale=0, nullable=true, unique=false)
      */
     private $courseLanguage;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
-     */
-    private $title;
 
     /**
      * @var string
@@ -199,9 +192,22 @@ class Course
     private $courseTypeId;
 
     /**
-     * @ORM\OneToMany(targetEntity="CourseRelUser", mappedBy="course", cascade={"persist", "remove"})
+     * "orphanRemoval" is needed to delete the CourseRelUser relation
+     * in the CourseAdmin class. The setUsers, getUsers, removeUsers and
+     * addUsers methods need to be added.
+     * @ORM\OneToMany(targetEntity="CourseRelUser", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
      **/
     private $users;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AccessUrlRelCourse", mappedBy="course", cascade={"persist"}, orphanRemoval=true)
+     **/
+    private $urls;
+
+    /**
+     * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="session", cascade={"persist"})
+     **/
+    private $sessions;
 
     /**
      * @ORM\OneToMany(targetEntity="CItemProperty", mappedBy="course")
@@ -235,14 +241,73 @@ class Course
     /**
      * @return ArrayCollection
      */
+    public function getUrls()
+    {
+        return $this->urls;
+    }
+
+    /**
+     * @param $urls
+     */
+    public function setUrls($urls)
+    {
+        $this->urls = new ArrayCollection();
+
+        foreach ($urls as $url) {
+            $this->addUrls($url);
+        }
+    }
+
+    /**
+     * @param AccessUrlRelCourse $url
+     */
+    public function addUrls(AccessUrlRelCourse $url)
+    {
+        $url->setCourse($this);
+        $this->urls[] = $url;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
     public function getUsers()
     {
         return $this->users;
     }
 
-    public function addUser(CourseRelUser $user)
+    /**
+     * @param $users
+     */
+    public function setUsers($users)
     {
+        $this->users = new ArrayCollection();
+
+        foreach ($users as $user) {
+            $this->addUsers($user);
+        }
+    }
+
+    /**
+     * @param CourseRelUser $user
+     */
+    public function addUsers(CourseRelUser $user)
+    {
+        $user->setCourse($this);
         $this->users[] = $user;
+    }
+
+    /**
+     * Remove $user
+     *
+     * @param CourseRelUser $user
+     */
+    public function removeUsers(CourseRelUser $user)
+    {
+        foreach ($this->users as $key => $value) {
+            if ($value->getId() == $user->getId()) {
+                unset($this->users[$key]);
+            }
+        }
     }
 
     /**
@@ -311,28 +376,6 @@ class Course
         return $this->directory;
     }
 
-    /**
-     * Set dbName
-     *
-     * @param string $dbName
-     * @return Course
-     */
-    public function setDbName($dbName)
-    {
-        $this->dbName = $dbName;
-
-        return $this;
-    }
-
-    /**
-     * Get dbName
-     *
-     * @return string
-     */
-    public function getDbName()
-    {
-        return $this->dbName;
-    }
 
     /**
      * Set courseLanguage

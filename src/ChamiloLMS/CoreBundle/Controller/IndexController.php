@@ -471,10 +471,12 @@ class IndexController extends BaseController
         }
 
         $template = $this->getTemplate();
-        //Show the chamilo mascot
+
+        // Show the chamilo mascot
         if (empty($items) && empty($filter)) {
             $pageController->return_welcome_to_course_block($template);
         }
+
         $pageController->returnSkillsLinks();
 
         // Deleting the session_id.

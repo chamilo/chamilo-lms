@@ -27,7 +27,7 @@ class Session
      *
      * @ORM\Column(name="id_coach", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
-    private $idCoach;
+    //private $idCoach;
 
     /**
      * @var string
@@ -46,7 +46,7 @@ class Session
     /**
      * @var integer
      *
-     * @ORM\Column(name="nbr_users", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="nbr_users", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $nbrUsers;
 
@@ -74,14 +74,14 @@ class Session
     /**
      * @var integer
      *
-     * @ORM\Column(name="session_category_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="session_category_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $sessionCategoryId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="promotion_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="promotion_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $promotionId;
 
@@ -139,11 +139,31 @@ class Session
     private $generalCoach;
 
     /**
+     * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="session", cascade={"persist"}, orphanRemoval=true)
+     **/
+    protected $courses;
+
+    /**
      *
      */
     public function __construct()
     {
         $this->items = new ArrayCollection();
+
+        $this->displayStartDate = new \DateTime();
+        $this->displayEndDate = new \DateTime();
+        $this->accessStartDate = new \DateTime();
+        $this->accessEndDate = new \DateTime();
+        $this->coachAccessStartDate = new \DateTime();
+        $this->coachAccessEndDate = new \DateTime();
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getName();
     }
 
     /**
@@ -159,6 +179,49 @@ class Session
     public function setId($id)
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return
+     */
+    public function getCourses()
+    {
+        return $this->courses;
+    }
+
+    /**
+     * @param $courses
+     */
+    public function setCourses($courses)
+    {
+        $this->courses = new ArrayCollection();
+
+        foreach ($courses as $course) {
+            $this->addCourses($course);
+        }
+    }
+
+    /**
+     * @param SessionRelCourse $course
+     */
+    public function addCourses(SessionRelCourse $course)
+    {
+        $course->setSession($this);
+        $this->courses[] = $course;
+    }
+
+    /**
+     * Remove $user
+     *
+     * @param SessionRelCourse $course
+     */
+    public function removeCourses($course)
+    {
+        foreach ($this->courses as $key => $value) {
+            if ($value->getId() == $course->getId()) {
+                unset($this->courses[$key]);
+            }
+        }
     }
 
     /**

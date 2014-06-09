@@ -92,19 +92,19 @@ class CourseRelUser
     //protected $cId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="courses", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="courses", cascade={"persist"})
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     protected $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Course", inversedBy="users", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Course", inversedBy="users", cascade={"persist"})
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     protected $course;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CGroupInfo", inversedBy="course", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="CGroupInfo", inversedBy="course", cascade={"persist"})
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid")
      */
     protected $group;
@@ -116,6 +116,7 @@ class CourseRelUser
 
     public function __construct()
     {
+        $this->userCourseCat = 0;
     }
 
     /**
@@ -178,6 +179,10 @@ class CourseRelUser
         return $this->cId;
     }
 
+    /**
+     * @param $course
+     * @return $this
+     */
     public function setCourse($course)
     {
         $this->course = $course;

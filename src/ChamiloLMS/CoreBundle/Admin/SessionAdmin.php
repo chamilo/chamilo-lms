@@ -16,7 +16,9 @@ use Knp\Menu\ItemInterface as MenuItemInterface;
  */
 class SessionAdmin extends Admin
 {
-    // Fields to be shown on create/edit forms
+    /**
+     * @param FormMapper $formMapper
+     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -24,6 +26,18 @@ class SessionAdmin extends Admin
             ->add('name') //if no type is specified, SonataAdminBundle tries to guess it
             ->add('display_start_date', 'sonata_type_date_picker')
             ->add('generalCoach')
+            ->add('visibility')
+            //->add('courses')
+            ->add('courses', 'sonata_type_collection', array(
+                    'cascade_validation' => true,
+                ), array(
+                    'edit'              => 'inline',
+                    'inline'            => 'table',
+                    //'sortable'          => 'position',
+                    //'link_parameters'   => array('context' => $context),
+                    'admin_code'        => 'sonata.admin.session_rel_course'
+                )
+            )
         ;
 
         /*->add('student', 'sonata_type_model', array(),
@@ -32,6 +46,9 @@ class SessionAdmin extends Admin
         ))*/
     }
 
+    /**
+     * @param ShowMapper $showMapper
+     */
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
@@ -41,8 +58,9 @@ class SessionAdmin extends Admin
         ;
     }
 
-
-    // Fields to be shown on filter forms
+    /**
+     * @param DatagridMapper $datagridMapper
+     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -52,13 +70,25 @@ class SessionAdmin extends Admin
         ;
     }
 
-    // Fields to be shown on lists
+    /**
+     * @param ListMapper $listMapper
+     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
             ->addIdentifier('id')
-            ->add('name')
+            ->addIdentifier('name')
             //->add('display_start_date', 'sonata_type_date_picker')
         ;
+    }
+
+    /**
+     * Very important in order to save the related entities!
+     * @param \ChamiloLMS\CoreBundle\Entity\Session $session
+     * @return mixed|void
+     */
+    public function preUpdate($session)
+    {
+        $session->setCourses($session->getCourses());
     }
 }

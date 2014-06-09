@@ -4,6 +4,7 @@
 namespace ChamiloLMS\CoreBundle\Controller\Tool\CourseHome;
 
 use ChamiloLMS\CoreBundle\Controller\ToolBaseController;
+use ChamiloLMS\CoreBundle\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Response;
 use ChamiloLMS\CoreBundle\Controller\CrudController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -21,19 +22,6 @@ use Display;
  */
 class CourseHomeController extends ToolBaseController
 {
-    public function getClass()
-    {
-        return 'ChamiloLMS\CoreBundle\Entity\CTool';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return 'ChamiloLMS\CoreBundle\Form\CourseHomeToolType';
-    }
-
     /**
      * @Route("/")
      * @Route("/home")

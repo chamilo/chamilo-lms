@@ -630,9 +630,17 @@ function get_user_certificate_content($user_id, $course_code, $is_preview = fals
     // Generate document HTML
     $content_html = DocumentManager::replace_user_info_into_html($user_id, $course_code, $is_preview);
     $new_content_html = null;
+    $variables = null;
+    $contentHead = null;
+
     if (isset($content_html['content'])) {
         $new_content = explode('</head>', $content_html['content']);
         $new_content_html = $new_content[1];
+        $contentHead = $new_content[0];
+    }
+
+    if (isset($content_html['variables'])) {
+        $variables = $content_html['variables'];
     }
 
     $path_image = api_get_path(WEB_COURSE_PATH) . api_get_course_path($course_code) . '/document/images/gallery';
@@ -648,9 +656,13 @@ function get_user_certificate_content($user_id, $course_code, $is_preview = fals
         $print .= '<a href="javascript:window.print();" style="float:right; padding:4px;" id="print_div"><img src="' . api_get_path(WEB_CODE_PATH) . 'img/printmgr.gif" alt="' . get_lang('Print') . '" /> ' . get_lang('Print') . '</a>';
     }
 
-    //add header
-    $new_content_html = $new_content[0] . $print . '</head>' . $new_content_html;
-    return array('content' => $new_content_html, 'variables' => $content_html['variables']);
+    // Add header
+    $new_content_html =  $contentHead. $print . '</head>' . $new_content_html;
+
+    return array(
+        'content' => $new_content_html,
+        'variables' => $variables
+    );
 }
 
 function create_default_course_gradebook($course_code = null, $gradebook_model_id = 0)

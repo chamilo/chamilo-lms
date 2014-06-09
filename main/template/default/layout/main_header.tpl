@@ -28,7 +28,8 @@
         {# topbar #}
         {% include "default/layout/topbar.tpl" %}
 
-        <header>
+        <div id="main" class="container">
+          <header>
             <div class="row">
                 <div id="header_left" class="span4">
                     {# logo #}
@@ -74,10 +75,8 @@
                     </div>
                 </div>
             {% endif %}
-            <div class="container">
             {# menu #}
             {% include "default/layout/menu.tpl" %}
-            </div>
             {# breadcrumb #}
             {{ breadcrumb }}
         </header>

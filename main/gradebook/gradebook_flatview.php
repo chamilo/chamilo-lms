@@ -69,7 +69,13 @@ if (isset($_GET['selectcat'])) {
 	$category_id = '';
 }
 
-$simple_search_form = new UserForm(UserForm :: TYPE_SIMPLE_SEARCH, null, 'simple_search_form', null, api_get_self() . '?selectcat=' . $category_id);
+$simple_search_form = new UserForm(
+    UserForm :: TYPE_SIMPLE_SEARCH,
+    null,
+    'simple_search_form',
+    null,
+    api_get_self() . '?selectcat=' . $category_id
+);
 $values = $simple_search_form->exportValues();
 
 $keyword = '';

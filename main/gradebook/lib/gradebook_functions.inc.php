@@ -1,6 +1,6 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * Script
  * @package chamilo.gradebook
@@ -137,7 +137,8 @@ function get_course_name_from_code($code)
  * Builds an img tag for a gradebook item
  * @param string $type value returned by a gradebookitem's get_icon_name()
  */
-function build_type_icon_tag($kind, $attributes = array()) {
+function build_type_icon_tag($kind, $attributes = array())
+{
     return Display::return_icon(get_icon_file_name($kind), ' ', $attributes, ICON_SIZE_SMALL);
 }
 
@@ -145,7 +146,8 @@ function build_type_icon_tag($kind, $attributes = array()) {
  * Returns the icon filename for a gradebook item
  * @param string $type value returned by a gradebookitem's get_icon_name()
  */
-function get_icon_file_name($type) {
+function get_icon_file_name($type)
+{
     switch ($type) {
         case 'cat':
             $icon = 'gradebook.png';
@@ -269,7 +271,8 @@ function build_edit_icons_cat($cat, $selectcat)
  * @param object $eval evaluation object
  * @param int $selectcat id of selected category
  */
-function build_edit_icons_eval($eval, $selectcat) {
+function build_edit_icons_eval($eval, $selectcat)
+{
     $status = CourseManager::get_user_in_course_status(api_get_user_id(), api_get_course_id());
     $is_locked = $eval->is_locked();
     $eval->get_course_code();
@@ -314,7 +317,8 @@ function build_edit_icons_eval($eval, $selectcat) {
  * @param object $linkobject
  * @param int $selectcat id of selected category
  */
-function build_edit_icons_link($link, $selectcat) {
+function build_edit_icons_link($link, $selectcat)
+{
     $cat = new Category();
     $message_link = $cat->show_message_resource_delete($link->get_course_code());
     $is_locked = $link->is_locked();
@@ -400,11 +404,14 @@ function get_resource_from_course_gradebook($link_id)
  * @param    int
  * @return   String
  */
-function get_database_name_by_link_id($id_link) {
+function get_database_name_by_link_id($id_link)
+{
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $tbl_grade_links = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-    $sql = 'SELECT db_name FROM ' . $course_table . ' c INNER JOIN ' . $tbl_grade_links . ' l
-			ON c.code=l.course_code WHERE l.id=' . intval($id_link) . ' OR l.category_id=' . intval($id_link);
+    $sql = 'SELECT db_name FROM ' . $course_table . ' c
+            INNER JOIN ' . $tbl_grade_links . ' l
+			ON c.code=l.course_code
+			WHERE l.id=' . intval($id_link) . ' OR l.category_id=' . intval($id_link);
     $res = Database::query($sql);
     $my_db_name = Database::fetch_array($res, 'ASSOC');
     return $my_db_name['db_name'];
@@ -415,22 +422,27 @@ function get_database_name_by_link_id($id_link) {
  * @param    int
  * @return   String
  */
-function get_course_id_by_link_id($id_link) {
+function get_course_id_by_link_id($id_link)
+{
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-    $sql = 'SELECT c.id FROM ' . $course_table . ' c INNER JOIN ' . $tbl_grade_links . ' l
-			ON c.code = l.course_code WHERE l.id=' . intval($id_link) . ' OR l.category_id=' . intval($id_link);
+    $sql = 'SELECT c.id FROM ' . $course_table . ' c
+            INNER JOIN ' . $tbl_grade_links . ' l
+			ON c.code = l.course_code
+			WHERE l.id=' . intval($id_link) . ' OR l.category_id=' . intval($id_link);
     $res = Database::query($sql);
     $array = Database::fetch_array($res, 'ASSOC');
     return $array['id'];
 }
 
-function get_table_type_course($type) {
+function get_table_type_course($type)
+{
     global $table_evaluated;
     return Database::get_course_table($table_evaluated[$type][0]);
 }
 
-function get_printable_data($cat, $users, $alleval, $alllinks, $params) {
+function get_printable_data($cat, $users, $alleval, $alllinks, $params)
+{
     $datagen = new FlatViewDataGenerator($users, $alleval, $alllinks, $params);
 
     $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
@@ -454,7 +466,8 @@ function get_printable_data($cat, $users, $alleval, $alllinks, $params) {
 /**
  * XML-parser: handle character data
  */
-function character_data($parser, $data) {
+function character_data($parser, $data)
+{
     global $current_value;
     $current_value = $data;
 }
@@ -462,7 +475,8 @@ function character_data($parser, $data) {
 /**
  * XML-parser: handle end of element
  */
-function element_end($parser, $data) {
+function element_end($parser, $data)
+{
     global $user;
     global $users;
     global $current_value;
@@ -479,7 +493,8 @@ function element_end($parser, $data) {
 /**
  * XML-parser: handle start of element
  */
-function element_start($parser, $data) {
+function element_start($parser, $data)
+{
     global $user;
     global $current_tag;
     switch ($data) {
@@ -491,7 +506,8 @@ function element_start($parser, $data) {
     }
 }
 
-function overwritescore($resid, $importscore, $eval_max) {
+function overwritescore($resid, $importscore, $eval_max)
+{
     $result = Result :: load($resid);
     if ($importscore > $eval_max) {
         header('Location: gradebook_view_result.php?selecteval=' . Security::remove_XSS($_GET['selecteval']) . '&overwritemax=');
@@ -505,9 +521,10 @@ function overwritescore($resid, $importscore, $eval_max) {
 /**
  * Read the XML-file
  * @param string $file Path to the XML-file
- * @return array All userinformation read from the file
+ * @return array All user information read from the file
  */
-function parse_xml_data($file) {
+function parse_xml_data($file)
+{
     global $current_tag;
     global $current_value;
     global $user;
@@ -533,13 +550,13 @@ function parse_xml_data($file) {
 function register_user_info_about_certificate($cat_id, $user_id, $score_certificate, $date_certificate)
 {
     $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-    $sql_exist = 'SELECT COUNT(*) as count FROM ' . $table_certificate . ' gc
-    			WHERE gc.cat_id="' . intval($cat_id) . '" AND user_id="' . intval($user_id) . '" ';
-    $rs_exist = Database::query($sql_exist);
+    $sql = 'SELECT COUNT(*) as count FROM ' . $table_certificate . ' gc
+    	    WHERE gc.cat_id="' . intval($cat_id) . '" AND user_id="' . intval($user_id) . '" ';
+    $rs_exist = Database::query($sql);
     $row = Database::fetch_array($rs_exist);
     if ($row['count'] == 0) {
         $sql = 'INSERT INTO ' . $table_certificate . ' (cat_id,user_id,score_certificate,created_at)
-    		  VALUES("' . intval($cat_id) . '","' . intval($user_id) . '","' . Database::escape_string($score_certificate) . '","' . Database::escape_string($date_certificate) . '")';
+    		    VALUES ("' . intval($cat_id) . '","' . intval($user_id) . '","' . Database::escape_string($score_certificate) . '","' . Database::escape_string($date_certificate) . '")';
         Database::query($sql);
     }
 }
@@ -565,11 +582,13 @@ function get_certificate_by_user_id($cat_id, $user_id)
  * @param int The category id
  * @return array
  */
-function get_list_users_certificates($cat_id = null) {
+function get_list_users_certificates($cat_id = null)
+{
     $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
     $table_user = Database::get_main_table(TABLE_MAIN_USER);
     $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username
-    		FROM ' . $table_user . ' u INNER JOIN ' . $table_certificate . ' gc ON u.user_id=gc.user_id ';
+    		FROM ' . $table_user . ' u
+    		INNER JOIN ' . $table_certificate . ' gc ON u.user_id=gc.user_id ';
     if (!is_null($cat_id) && $cat_id > 0) {
         $sql.=' WHERE cat_id=' . Database::escape_string($cat_id);
     }
@@ -588,10 +607,12 @@ function get_list_users_certificates($cat_id = null) {
  * @param int The category id
  * @return array
  */
-function get_list_gradebook_certificates_by_user_id($user_id, $cat_id = null) {
+function get_list_gradebook_certificates_by_user_id($user_id, $cat_id = null)
+{
     $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-    $sql = 'SELECT gc.score_certificate, gc.created_at, gc.path_certificate, gc.cat_id, gc.user_id, gc.id FROM  ' . $table_certificate . ' gc
-    	  WHERE gc.user_id="' . Database::escape_string($user_id) . '" ';
+    $sql = 'SELECT gc.score_certificate, gc.created_at, gc.path_certificate, gc.cat_id, gc.user_id, gc.id
+            FROM  ' . $table_certificate . ' gc
+    	    WHERE gc.user_id="' . Database::escape_string($user_id) . '" ';
     if (!is_null($cat_id) && $cat_id > 0) {
         $sql.=' AND cat_id=' . Database::escape_string($cat_id);
     }
@@ -604,12 +625,16 @@ function get_list_gradebook_certificates_by_user_id($user_id, $cat_id = null) {
     return $list_certificate;
 }
 
-function get_user_certificate_content($user_id, $course_code, $is_preview = false, $hide_print_button = false) {
-    //generate document HTML
+function get_user_certificate_content($user_id, $course_code, $is_preview = false, $hide_print_button = false)
+{
+    // Generate document HTML
     $content_html = DocumentManager::replace_user_info_into_html($user_id, $course_code, $is_preview);
+    $new_content_html = null;
+    if (isset($content_html['content'])) {
+        $new_content = explode('</head>', $content_html['content']);
+        $new_content_html = $new_content[1];
+    }
 
-    $new_content = explode('</head>', $content_html['content']);
-    $new_content_html = $new_content[1];
     $path_image = api_get_path(WEB_COURSE_PATH) . api_get_course_path($course_code) . '/document/images/gallery';
     $new_content_html = str_replace('../images/gallery', $path_image, $new_content_html);
 
@@ -628,7 +653,8 @@ function get_user_certificate_content($user_id, $course_code, $is_preview = fals
     return array('content' => $new_content_html, 'variables' => $content_html['variables']);
 }
 
-function create_default_course_gradebook($course_code = null, $gradebook_model_id = 0) {
+function create_default_course_gradebook($course_code = null, $gradebook_model_id = 0)
+{
     if (api_is_allowed_to_edit(true, true)) {
         if (!isset($course_code) || empty($course_code)) {
             $course_code = api_get_course_id();
@@ -678,8 +704,8 @@ function create_default_course_gradebook($course_code = null, $gradebook_model_i
     return $category_id;
 }
 
-function load_gradebook_select_in_tool($form) {
-
+function load_gradebook_select_in_tool($form)
+{
     $course_code = api_get_course_id();
     $session_id = api_get_session_id();
 
@@ -713,7 +739,8 @@ function load_gradebook_select_in_tool($form) {
 /**
  * PDF report creation
  */
-function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array()) {
+function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array())
+{
     global $flatviewtable;
     //Getting data
     $printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks, $params);
@@ -828,7 +855,8 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
     exit;
 }
 
-function score_badges($list_values) {
+function score_badges($list_values)
+{
     $counter = 1;
     $badges = array();
     foreach ($list_values as $value) {

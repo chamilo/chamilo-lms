@@ -22,6 +22,7 @@ class DisplayGradebook
      */
     static function display_header_result($evalobj, $selectcat, $page)
     {
+        $header = null;
         if (api_is_allowed_to_edit(null, true)) {
             $header = '<div class="actions">';
             if ($page != 'statistics') {
@@ -424,35 +425,16 @@ class DisplayGradebook
                 $item = $allEvalsLinks[$count];
                 $score = $item->calc_score($user_id);
                 $divide = ( ($score[1]) == 0 ) ? 1 : $score[1];
-                $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
+                //$sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
                 //$item_value = $score[0] / $divide * $item->get_weight() / $sub_cat_percentage * $sub_cat_percentage / $main_weight * $main_weight;
                 $item_value = $score[0] / $divide * $item->get_weight();
                 //var_dump($score[0], $divide, $item->get_weight(), $sub_cat_percentage, $main_weight, $item_value);
-
                 $item_value_total += $item_value;
             }
 
             $item_total = $main_weight;
-
-            /*for ($count = 0; $count < count($catEvalsLinks); $count++) {
-
-                $item = $catEvalsLinks[$count];
-                $score = $item->calc_score($user_id);
-                $divide = ( ($score[1]) == 0 ) ? 1 : $score[1];
-                $sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
-                //$item_value     = $score[0]/$divide;
-                $item_value = $score[0] / $divide * $item->get_weight() * $sub_cat_percentage / $main_weight;
-                $catItemValueTotal += $score[0];
-                $catItemTotal += $item->get_weight();
-            }*/
-
-            //$item_total = $item->get_weight;
-            /*$item_value_total += $catItemValueTotal;
-            $item_total += $catItemTotal;*/
             $total_score = array($item_value_total, $item_total);
-
             $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
-
             if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search']))) {
                 $scoreinfo .= '<h2>' . get_lang('Total') . ' : ' . $scorecourse_display . '</h2>';
             }

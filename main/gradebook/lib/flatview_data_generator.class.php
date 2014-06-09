@@ -179,6 +179,7 @@ class FlatViewDataGenerator
 
     /**
      * @param int $id
+     *
      * @return int
      */
     public function get_max_result_by_link($id)
@@ -281,7 +282,7 @@ class FlatViewDataGenerator
         if (isset($this->category) && !empty($this->category)) {
             $categories = Category::load(null, null, null, $this->category->get_id());
             if (!empty($categories)) {
-                foreach($categories as $category) {
+                foreach ($categories as $category) {
                     $sum_categories_weight_array[$category->get_id()] = $category->get_weight();
                 }
             } else {
@@ -365,19 +366,21 @@ class FlatViewDataGenerator
             $evaluationsAdded = array();
 
             if ($parent_id == 0 && !empty($allcat)) {
+                /** @var Category $sub_cat */
                 foreach ($allcat as $sub_cat) {
-                    $score             = $sub_cat->calc_score($user_id);
-                    $real_score     = $score;
+                    $score = $sub_cat->calc_score($user_id);
 
-                    $divide            = ( ($score[1])==0 ) ? 1 : $score[1];
+                    $real_score = $score;
+
+                    $divide = ( ($score[1])==0 ) ? 1 : $score[1];
 
                     $sub_cat_percentage = $sum_categories_weight_array[$sub_cat->get_id()];
-                    $item_value     = $score[0]/$divide*$main_weight;
+                    $item_value  = $score[0]/$divide*$main_weight;
 
-                    //Fixing total when using one or multiple gradebooks
-                    $percentage     = $sub_cat->get_weight()/($sub_cat_percentage) * $sub_cat_percentage/$this->category->get_weight();
-                    $item_value     = $percentage*$item_value;
-                    $item_total        += $sub_cat->get_weight();
+                    // Fixing total when using one or multiple gradebooks
+                    $percentage = $sub_cat->get_weight()/($sub_cat_percentage) * $sub_cat_percentage/$this->category->get_weight();
+                    $item_value = $percentage*$item_value;
+                    $item_total += $sub_cat->get_weight();
 
 /*
                     if ($convert_using_the_global_weight) {
@@ -395,6 +398,8 @@ class FlatViewDataGenerator
                         $temp_score = $scoredisplay->display_score($score, SCORE_DIV_SIMPLE_WITH_CUSTOM);
                         $temp_score = Display::tip($temp_score, $real_score);
                     }
+
+
 
                     if (!isset($this->params['only_total_category']) ||
                         (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)
@@ -573,7 +578,7 @@ class FlatViewDataGenerator
                     $row[] = $temp_score;
                 }
             }
-            $item_value_total +=$item_value;
+            $item_value_total += $item_value;
         }
 
         return array(

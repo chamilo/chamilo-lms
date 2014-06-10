@@ -115,8 +115,9 @@ class FlatViewDataGenerator
         $sum_categories_weight_array = array();
 
         $mainCategoryId = null;
-        if (!empty($this->getMainCourseCategory())) {
-            $mainCategoryId = $this->getMainCourseCategory()->get_id();
+        $mainCourseCategory = $this->getMainCourseCategory();
+        if (!empty($mainCourseCategory)) {
+            $mainCategoryId = $mainCourseCategory->get_id();
         }
 
         if (isset($this->category) && !empty($this->category)) {

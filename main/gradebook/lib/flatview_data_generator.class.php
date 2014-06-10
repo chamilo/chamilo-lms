@@ -389,7 +389,6 @@ class FlatViewDataGenerator
                     $percentage = $sub_cat->get_weight()/($sub_cat_percentage) * $sub_cat_percentage/$this->category->get_weight();
                     $item_value = $percentage*$item_value;
                     $item_total += $sub_cat->get_weight();
-
 /*
                     if ($convert_using_the_global_weight) {
                         $score[0] = $score[0]/$main_weight*$sub_cat->get_weight();
@@ -407,8 +406,6 @@ class FlatViewDataGenerator
                         $temp_score = Display::tip($temp_score, $real_score);
                     }
 
-
-
                     if (!isset($this->params['only_total_category']) ||
                         (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)
                     ) {
@@ -424,7 +421,6 @@ class FlatViewDataGenerator
                     //$item_total = $main_weight;
                 }
             } else  {
-
                 // All evaluations
                 $result = $this->parseEvaluations(
                     $user_id,
@@ -462,7 +458,7 @@ class FlatViewDataGenerator
                 if ($export_to_pdf) {
                     $row['total'] = $scoredisplay->display_score($total_score);
                 } else {
-                   $row[] = $scoredisplay->display_score($total_score);
+                    $row[] = $scoredisplay->display_score($total_score);
                 }
             } else {
                 if ($export_to_pdf) {

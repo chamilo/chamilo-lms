@@ -151,14 +151,27 @@ if (isset($_GET['exportpdf']))	{
         $params['export_pdf'] = true;
         $params['only_total_category'] = false;
 		export_pdf_flatview($cat, $users, $alleval, $alllinks, $params, $mainCourseCategory[0]);
+
 	} else {
 		Display :: display_header(get_lang('ExportPDF'));
 	}
 }
 
 if (isset($_GET['print']))	{
-	$printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks, $params, $mainCourseCategory[0]);
-	echo print_table($printable_data[1],$printable_data[0], get_lang('FlatView'), $cat[0]->get_name());
+    $printable_data = get_printable_data(
+        $cat[0],
+        $users,
+        $alleval,
+        $alllinks,
+        $params,
+        $mainCourseCategory[0]
+    );
+	echo print_table(
+        $printable_data[1],
+        $printable_data[0],
+        get_lang('FlatView'),
+        $cat[0]->get_name()
+    );
 	exit;
 }
 
@@ -174,7 +187,14 @@ if (!empty($_GET['export_report']) && $_GET['export_report'] == 'export_report')
         }
 
         require_once 'gradebook_result.class.php';
-        $printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks, $params, $mainCourseCategory[0]);
+        $printable_data = get_printable_data(
+            $cat[0],
+            $users,
+            $alleval,
+            $alllinks,
+            $params,
+            $mainCourseCategory[0]
+        );
 
         switch ($_GET['export_format']) {
             case 'xls':

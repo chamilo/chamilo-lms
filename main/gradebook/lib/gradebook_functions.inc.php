@@ -445,9 +445,24 @@ function get_table_type_course($type)
     return Database::get_course_table($table_evaluated[$type][0]);
 }
 
+/**
+ * @param Category $cat
+ * @param $users
+ * @param $alleval
+ * @param $alllinks
+ * @param $params
+ * @param null $mainCourseCategory
+ * @return array
+ */
 function get_printable_data($cat, $users, $alleval, $alllinks, $params, $mainCourseCategory = null)
 {
-    $datagen = new FlatViewDataGenerator($users, $alleval, $alllinks, $params, $mainCourseCategory);
+    $datagen = new FlatViewDataGenerator(
+        $users,
+        $alleval,
+        $alllinks,
+        $params,
+        $mainCourseCategory
+    );
 
     $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
     $offset = intval($offset);
@@ -828,7 +843,6 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
 
     if ($has_data) {
         $counter = 1;
-        //var_dump($printable_data);exit;
         foreach ($printable_data[1] as &$printable_data_row) {
             $column = 0;
             $table->setCellContents($row, $column, $counter);
@@ -847,7 +861,6 @@ function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(
                 if ($key === 'total') {
                     $attributes['style'] = 'font-weight:bold';
                 }
-                //var_dump($key, $printable_data_cell, $attributes);
                 $table->setCellContents($row, $column, $printable_data_cell);
                 $table->updateCellAttributes($row, $column, $attributes);
                 $column++;

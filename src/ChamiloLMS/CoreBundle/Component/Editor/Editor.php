@@ -4,7 +4,7 @@
 namespace ChamiloLMS\CoreBundle\Component\Editor;
 
 use Symfony\Component\Translation\Translator;
-use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 use ChamiloLMS\CoreBundle\Entity\Course;
 use ChamiloLMS\CoreBundle\Framework\Template;
 
@@ -58,9 +58,7 @@ class Editor
      */
     public function __construct(
         Translator $translator,
-        Router $urlGenerator,
-        Template $template,
-        $course
+        RouterInterface $urlGenerator
     ) {
         $this->toolbarSet = 'Basic';
         $this->value = '';
@@ -70,8 +68,7 @@ class Editor
         $this->setConfigAttribute('fullPage', false);
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
-        $this->course = $course;
-        $this->template = $template;
+        //$this->course = $course;
     }
 
     /**

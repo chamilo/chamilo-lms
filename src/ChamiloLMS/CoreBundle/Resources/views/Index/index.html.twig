@@ -1,6 +1,7 @@
-
 {% block page_content %}
+    {% autoescape false %}
     {{ content }}
+    {% endautoescape %}
 {% endblock %}
 
 {% block title %}

@@ -210,7 +210,7 @@ class Course
     private $sessions;
 
     /**
-     * @ORM\OneToMany(targetEntity="CItemProperty", mappedBy="course")
+     * @ORM\OneToMany(targetEntity="ChamiloLMS\CourseBundle\Entity\CItemProperty", mappedBy="course")
      **/
     private $items;
 

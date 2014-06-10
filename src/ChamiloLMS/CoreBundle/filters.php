@@ -138,7 +138,7 @@ $app->before(
             $default_quota = 100000000;
         }
 
-        define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
+        //define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
 
         // Specification for usernames:
         // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.

@@ -3,6 +3,7 @@
 
 namespace ChamiloLMS\CoreBundle\Controller;
 
+use ChamiloLMS\CoreBundle\Framework\PageController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use ChamiloLMS\CoreBundle\Controller\BaseController;
@@ -32,10 +33,7 @@ class IndexController extends BaseController
      */
     public function indexAction()
     {
-        return $this->render(
-            'ChamiloLMSCoreBundle:Index:index.html.twig',
-            array('content' => 'julio')
-        );
+
 
         //$template = $this->get('templating');
         // $countries = Intl::getRegionBundle()->getCountryNames('es');
@@ -58,6 +56,7 @@ class IndexController extends BaseController
 
         /** @var \PageController $pageController */
         //$pageController = $this->get('page_controller');
+        $pageController = new PageController();
 
         if (api_get_setting('display_categories_on_homepage') == 'true') {
             //$template->assign('course_category_block', $pageController->return_courses_in_categories());
@@ -84,14 +83,8 @@ class IndexController extends BaseController
             $announcementsBlock = $pageController->getAnnouncements();
         }
 
-        $template->assign('hot_courses', $hotCourses);
-        $template->assign('announcements_block', $announcementsBlock);
-
-        // Homepage
-        $template->assign('home_page_block', $pageController->returnHomePage());
-
         // Navigation links
-        $pageController->returnNavigationLinks($template->getNavigationLinks());
+        //$pageController->returnNavigationLinks($template->getNavigationLinks());
         $pageController->returnNotice();
         $pageController->returnHelp();
 
@@ -99,8 +92,15 @@ class IndexController extends BaseController
             $pageController->returnSkillsLinks();
         }
 
-        $response = $template->renderLayout('layout_2_col.tpl');
-        return new Response($response, 200, array());
+        return $this->render(
+            'ChamiloLMSCoreBundle:Index:index.html.twig',
+            array(
+                'content' => null,
+                'hot_courses' => $hotCourses,
+                'announcements_block' => $announcementsBlock,
+                'home_page_block' => $pageController->returnHomePage()
+            )
+        );
     }
 
     /**
@@ -129,8 +129,8 @@ class IndexController extends BaseController
 
             // Only display if the user isn't logged in
 
-            $this->getTemplate()->assign('login_language_form', api_display_language_form(true));
-            $this->getTemplate()->assign('login_form', self::displayLoginForm());
+            //$this->getTemplate()->assign('login_language_form', api_display_language_form(true));
+            //$this->getTemplate()->assign('login_form', self::displayLoginForm());
 
             if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
                 $loginForm .= '<ul class="nav nav-list">';
@@ -142,12 +142,12 @@ class IndexController extends BaseController
                 }
                 $loginForm .= '</ul>';
             }
-            $this->getTemplate()->assign('login_options', $loginForm);
+            //$this->getTemplate()->assign('login_options', $loginForm);
         }
     }
 
     /**
-     * @param \Silex\Application $app
+     * @param
      *
      * @return string
      */

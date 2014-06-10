@@ -15,14 +15,6 @@ main:
     requirements:
       name: .+
 
-courses_code:
-    path:     /courses/{code}
-    defaults: { _controller: ChamiloLMSCoreBundle:Tool/CourseHome/CourseHome:index }
-
-courses_code_index:
-    path:     /courses/{code}/index.php
-    defaults: { _controller: ChamiloLMSCoreBundle:Tool/CourseHome/CourseHome:index }
-
 # web url shortcuts
 web.ajax:
     path: main/inc/ajax/
@@ -43,9 +35,9 @@ core_app:
     prefix:   /app
 
 core_tool:
-    resource: "@ChamiloLMSCoreBundle/Controller/Tool"
+    resource: "@ChamiloLMSCourseBundle/Controller"
     type: annotation
-    prefix:   /tool
+    prefix: /courses/{course}/
 
 # redirects /url/ to /url
 

@@ -318,7 +318,10 @@ EOT;
 
         /** @var HTML_QuickForm_html_editor $element */
         $element = $this->getElement($name);
-        $element->editor->processConfig($config);
+
+        if ($element->editor) {
+            $element->editor->processConfig($config);
+        }
     }
 
     /**

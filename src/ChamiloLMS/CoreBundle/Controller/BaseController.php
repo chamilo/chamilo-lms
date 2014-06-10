@@ -26,13 +26,16 @@ use Knp\Menu\Renderer\ListRenderer;
 abstract class BaseController extends Controller
 {
     /**
-     * @return object
+     * @return \Symfony\Component\Security\Core\SecurityContextInterface
      */
     public function getSecurity()
     {
         return $this->container->get('security.context');
     }
 
+    /**
+     * @return Symfony\Component\HttpFoundation\Session\SessionInterface
+     */
     public function getSessionHandler()
     {
         return $this->getRequest()->getSession();
@@ -224,5 +227,13 @@ abstract class BaseController extends Controller
         return $this->getTemplate()->renderTemplate($name, $elements);
     }
 
+    /**
+     * @return mixed
+     */
+    public function getCourse()
+    {
+        var_dump($this->getSessionHandler()->get('course'));
+        return $this->getSessionHandler()->get('course');
+    }
 
 }

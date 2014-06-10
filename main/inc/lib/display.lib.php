@@ -213,8 +213,8 @@ class Display
                     $introduction_section .=  '<div id="introduction_block_action" class="col-md-2 col-md-offset-10">';
 
                     $url = $urlGenerator->generate(
-                        'chamilolms_core_tool_introduction_introduction_edit',
-                        array('tool' => $tool, 'courseCode' => api_get_course_id())
+                        'chamilolms_course_introduction_introduction_edit',
+                        array('tool' => $tool, 'course' => api_get_course_id())
                     );
 
                     $introduction_section .=  "<a href=\"".$url."?".api_get_cidreq()."\">";
@@ -227,8 +227,8 @@ class Display
                     // Displays "edit intro && delete intro" commands
                     $introduction_section .=  '<div id="introduction_block_action" class="col-md-2 col-md-offset-10">';
                     $url = $urlGenerator->generate(
-                        'chamilolms_core_tool_introduction_introduction_edit',
-                        array('tool' => $tool, 'courseCode' => api_get_course_id())
+                        'chamilolms_course_introduction_introduction_edit',
+                        array('tool' => $tool, 'course' => api_get_course_id())
                     );
 
                     $introduction_section .=  "<a href=\"".$url."?".api_get_cidreq()."\">";
@@ -236,8 +236,8 @@ class Display
                     $introduction_section .=  "</a>";
 
                     $url = $urlGenerator->generate(
-                        'introduction.controller:deleteAction',
-                        array('tool' => $tool, 'courseCode' => api_get_course_id())
+                        'chamilolms_course_introduction_introduction_delete',
+                        array('tool' => $tool, 'course' => api_get_course_id())
                     );
 
                     $introduction_section .=  "<a onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\" href=\"".$url."?".api_get_cidreq()."\">";

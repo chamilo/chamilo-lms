@@ -104,7 +104,7 @@ class CourseRelUser
     protected $course;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CGroupInfo", inversedBy="course", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="ChamiloLMS\CourseBundle\Entity\CGroupInfo", inversedBy="course", cascade={"persist"})
      * @ORM\JoinColumn(name="group_id", referencedColumnName="iid")
      */
     protected $group;

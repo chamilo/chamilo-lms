@@ -15,11 +15,17 @@ class LegacyListener
 {
     protected $container;
 
+    /**
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
+    /**
+     * @param GetResponseEvent $event
+     */
     public function onKernelRequest(GetResponseEvent $event)
     {
         $kernel = $event->getKernel();
@@ -30,6 +36,7 @@ class LegacyListener
         Session::setSession($request->getSession());
         $dbConnection = $this->container->get('database_connection');
         $database  = new \Database($dbConnection, array());
+        
         \Database::setManager($this->container->get('doctrine')->getManager());
         Session::$urlGenerator = $this->container->get('router');
         Session::$security = $this->container->get('security.context');
@@ -40,12 +47,24 @@ class LegacyListener
         Session::$tempDir = $this->container->get('kernel')->getCacheDir();
         Session::$courseDir = $this->container->get('kernel')->getDataDir();
         Session::$configDir = $this->container->get('kernel')->getConfigDir();
-
         Session::$assets = $this->container->get('templating.helper.assets');
+        Session::$htmlEditor = $this->container->get('html_editor');
 
-        // Injecting course in twig
-        $courseCode = $request->get('code');
+        if (!defined('DEFAULT_DOCUMENT_QUOTA')) {
+            $default_quota = api_get_setting('default_document_quotum');
 
+            // Just in case the setting is not correctly set
+            if (empty($default_quota)) {
+                $default_quota = 100000000;
+            }
+
+            define('DEFAULT_DOCUMENT_QUOTA', $default_quota);
+        }
+
+        // Injecting course in twig.
+        $courseCode = $request->get('course');
+
+        // Detect if the course was set with a cidReq:
         if (empty($courseCode)) {
             $courseCodeFromRequest = $request->get('cidReq');
             $courseCode = $courseCodeFromRequest;
@@ -55,10 +74,10 @@ class LegacyListener
             $em = $this->container->get('doctrine')->getManager();
             $course = $em->getRepository('ChamiloLMSCoreBundle:Course')->findOneByCode($courseCode);
             if ($course) {
+                $courseInfo = api_get_course_info($course->getCode());
                 $this->container->get('twig')->addGlobal('course', $course);
                 $request->getSession()->set('_real_cid', $course->getId());
                 $request->getSession()->set('_cid', $course->getCode());
-                $courseInfo = api_get_course_info($course->getCode());
                 $request->getSession()->set('_course', $courseInfo);
             }
         }
@@ -78,6 +97,9 @@ class LegacyListener
         }
     }
 
+    /**
+     * @param FilterResponseEvent $event
+     */
     public function onKernelResponse(FilterResponseEvent $event)
     {
         $response = $event->getResponse();
@@ -96,6 +118,9 @@ class LegacyListener
         }*/
     }
 
+    /**
+     * @param FilterControllerEvent $event
+     */
     public function onKernelController(FilterControllerEvent $event)
     {
 

@@ -3,7 +3,7 @@
 
 namespace ChamiloLMS\CoreBundle\Component\Editor;
 
-use Symfony\Component\Routing\Router;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class Toolbar
@@ -21,7 +21,7 @@ class Toolbar
      * @param string $prefix
      */
     public function __construct(
-        Router $urlGenerator,
+        RouterInterface $urlGenerator,
         $toolbar = null,
         $config = array(),
         $prefix = null

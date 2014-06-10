@@ -313,7 +313,7 @@ class PageController
             'content'  => isset($params['content']) ? $params['content'] : null
         );
 
-        $app['template']->assign($id, $block_menu);
+        //$app['template']->assign($id, $block_menu);
     }
 
 
@@ -956,8 +956,8 @@ class PageController
 
         $nbResults = CourseManager::displayCourses($user_id, $filter, $loadDirs, true);
         $html = CourseManager::displayCourses($user_id, $filter, $loadDirs, false, $start, $this->maxPerPage);
-        if (!empty($html)) {
 
+        if (!empty($html)) {
             $adapter    = new FixedAdapter($nbResults, array());
             $pagerfanta = new Pagerfanta($adapter);
             $pagerfanta->setMaxPerPage($this->maxPerPage); // 10 by default

@@ -128,7 +128,7 @@ class Session
     private $coachAccessEndDate;
 
     /**
-     * @ORM\OneToMany(targetEntity="CItemProperty", mappedBy="session")
+     * @ORM\OneToMany(targetEntity="ChamiloLMS\CourseBundle\Entity\CItemProperty", mappedBy="session")
      **/
     private $items;
 

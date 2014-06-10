@@ -1,4 +1,8 @@
 services:
+    html_editor:
+        class: ChamiloLMS\CoreBundle\Component\Editor\CkEditor\CkEditor
+        arguments: [@translator, @router]
+
     twig.extension.chamilo_extension:
         class: ChamiloLMS\CoreBundle\Twig\Extension\ChamiloExtension
         tags:

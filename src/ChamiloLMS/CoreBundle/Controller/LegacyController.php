@@ -57,6 +57,7 @@ class LegacyController extends BaseController
         Session::$tempDir = $this->container->get('kernel')->getCacheDir();
         Session::$courseDir = $this->container->get('kernel')->getDataDir();
         Session::$configDir = $this->container->get('kernel')->getConfigDir();
+        Session::$htmlEditor = $this->container->get('html_editor');
 
         if (is_file($fileToLoad) &&
             \Security::check_abs_path($fileToLoad, $mainPath)

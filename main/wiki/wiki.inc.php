@@ -733,7 +733,7 @@ class Wiki
 
         //log users access to wiki (page_id)
         if (!empty($row['page_id'])) {
-            event_system(LOG_WIKI_ACCESS, LOG_WIKI_PAGE_ID, $row['page_id']);
+            Event::addEvent(LOG_WIKI_ACCESS, LOG_WIKI_PAGE_ID, $row['page_id']);
         }
         //update visits
         if ($row['id']) {

@@ -18,7 +18,11 @@ class ChamiloSession
     public static $courseDir;
     public static $configDir;
     public static $assets;
+    public static $htmlEditor;
 
+    /**
+     * @return string
+     */
     public static function getConfigDir()
     {
         return self::$configDir;
@@ -29,24 +33,44 @@ class ChamiloSession
         return self::$logDir;
     }
 
+    /**
+     * @return string
+     */
     public static function getTempDir()
     {
         return self::$tempDir;
     }
 
+    /**
+     * @return string
+     */
     public static function getRootDir()
     {
         return self::$rootDir;
     }
 
+    /**
+     * @return string
+     */
     public static function getDataDir()
     {
         return self::$dataDir;
     }
 
+    /**
+     * @return string
+     */
     public static function getCourseDir()
     {
         return self::$courseDir;
+    }
+
+    /**
+     * @return ChamiloLMS\CoreBundle\Component\Editor\Editor
+     */
+    public static function getHtmlEditor()
+    {
+        return self::$htmlEditor;
     }
 
     /**

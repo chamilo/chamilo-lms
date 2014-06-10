@@ -244,7 +244,7 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     protected $courses;
 
     /**
-     * @ORM\OneToMany(targetEntity="ChamiloLMS\CoreBundle\Entity\CItemProperty", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="ChamiloLMS\CourseBundle\Entity\CItemProperty", mappedBy="user")
      **/
     protected $items;
 
@@ -254,12 +254,12 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
     protected $classes;
 
     /**
-     * @ORM\OneToMany(targetEntity="ChamiloLMS\CoreBundle\Entity\CDropboxPost", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="ChamiloLMS\CourseBundle\Entity\CDropboxPost", mappedBy="user")
      **/
     protected $dropBoxReceivedFiles;
 
     /**
-     * @ORM\OneToMany(targetEntity="ChamiloLMS\CoreBundle\Entity\CDropboxFile", mappedBy="userSent")
+     * @ORM\OneToMany(targetEntity="ChamiloLMS\CourseBundle\Entity\CDropboxFile", mappedBy="userSent")
      **/
     protected $dropBoxSentFiles;
 

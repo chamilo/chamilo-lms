@@ -1,4 +1,6 @@
 {#{% extends "ChamiloLMSCoreBundle::main_layout.html.twig" %}#}
 {%  block page_content  %}
-{{ content }}
+    {% autoescape false %}
+    {{ content }}
+    {% endautoescape %}
 {% endblock %}

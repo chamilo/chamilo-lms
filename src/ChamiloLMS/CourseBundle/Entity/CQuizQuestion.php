@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * CQuizQuestion
  *
- * @ORM\Table(name="c_quiz_question")
+ * @ORM\Table(name="c_quiz_question", indexes={@ORM\Index(name="idx_c_q_qst_cpt", columns={"c_id", "parent_id", "type"})})
  * @ORM\Entity(repositoryClass="ChamiloLMS\CourseBundle\Entity\Repository\CQuizQuestionRepository")
  */
 class CQuizQuestion

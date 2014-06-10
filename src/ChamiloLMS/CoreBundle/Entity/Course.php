@@ -185,6 +185,13 @@ class Course
     private $activateLegal;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="add_teachers_to_sessions_courses", type="boolean", nullable=true)
+     */
+    private $addTeachersToSessionsCourses;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="course_type_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
@@ -205,7 +212,7 @@ class Course
     private $urls;
 
     /**
-     * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="session", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="SessionRelCourse", mappedBy="course", cascade={"persist"})
      **/
     private $sessions;
 
@@ -229,6 +236,14 @@ class Course
         $this->users = new ArrayCollection();
         $this->items = new ArrayCollection();
     }*/
+
+    /**
+     * @return mixed
+     */
+    public function getSessions()
+    {
+        return $this->sessions;
+    }
 
     /**
      * @return ArrayCollection

@@ -5,8 +5,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * QuestionScoreName
+ *
  * @ORM\Table(name="question_score_name")
- * @ORM\Entity()
+ * @ORM\Entity
  */
 class QuestionScoreName
 {

@@ -5,12 +5,12 @@ namespace ChamiloLMS\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrackExercise
+ * TrackEExercices
  *
  * @ORM\Table(name="track_e_exercices")
  * @ORM\Entity
  */
-class TrackExercise
+class TrackEExercices
 {
     /**
      * @var integer
@@ -214,7 +214,7 @@ class TrackExercise
      * Set exeUserId
      *
      * @param integer $exeUserId
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setExeUserId($exeUserId)
     {
@@ -237,7 +237,7 @@ class TrackExercise
      * Set exeDate
      *
      * @param \DateTime $exeDate
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setExeDate($exeDate)
     {
@@ -260,7 +260,7 @@ class TrackExercise
      * Set exeExoId
      *
      * @param integer $exeExoId
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setExeExoId($exeExoId)
     {
@@ -283,7 +283,7 @@ class TrackExercise
      * Set exeResult
      *
      * @param float $exeResult
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setExeResult($exeResult)
     {
@@ -306,7 +306,7 @@ class TrackExercise
      * Set exeWeighting
      *
      * @param float $exeWeighting
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setExeWeighting($exeWeighting)
     {
@@ -329,7 +329,7 @@ class TrackExercise
      * Set cId
      *
      * @param integer $cId
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setCId($cId)
     {
@@ -352,7 +352,7 @@ class TrackExercise
      * Set status
      *
      * @param string $status
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setStatus($status)
     {
@@ -375,7 +375,7 @@ class TrackExercise
      * Set dataTracking
      *
      * @param string $dataTracking
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setDataTracking($dataTracking)
     {
@@ -398,7 +398,7 @@ class TrackExercise
      * Set startDate
      *
      * @param \DateTime $startDate
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setStartDate($startDate)
     {
@@ -421,7 +421,7 @@ class TrackExercise
      * Set stepsCounter
      *
      * @param integer $stepsCounter
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setStepsCounter($stepsCounter)
     {
@@ -444,7 +444,7 @@ class TrackExercise
      * Set sessionId
      *
      * @param integer $sessionId
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setSessionId($sessionId)
     {
@@ -467,7 +467,7 @@ class TrackExercise
      * Set origLpId
      *
      * @param integer $origLpId
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setOrigLpId($origLpId)
     {
@@ -490,7 +490,7 @@ class TrackExercise
      * Set origLpItemId
      *
      * @param integer $origLpItemId
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setOrigLpItemId($origLpItemId)
     {
@@ -513,7 +513,7 @@ class TrackExercise
      * Set exeDuration
      *
      * @param integer $exeDuration
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setExeDuration($exeDuration)
     {
@@ -536,7 +536,7 @@ class TrackExercise
      * Set expiredTimeControl
      *
      * @param \DateTime $expiredTimeControl
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setExpiredTimeControl($expiredTimeControl)
     {
@@ -559,7 +559,7 @@ class TrackExercise
      * Set origLpItemViewId
      *
      * @param integer $origLpItemViewId
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setOrigLpItemViewId($origLpItemViewId)
     {
@@ -582,7 +582,7 @@ class TrackExercise
      * Set questionsToCheck
      *
      * @param string $questionsToCheck
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setQuestionsToCheck($questionsToCheck)
     {
@@ -615,7 +615,7 @@ class TrackExercise
      * Set juryScore
      *
      * @param integer $juryScore
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setJuryScore($juryScore)
     {
@@ -638,7 +638,7 @@ class TrackExercise
      * Set juryId
      *
      * @param integer $juryId
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setJuryId($juryId)
     {
@@ -661,7 +661,7 @@ class TrackExercise
      * Set juryMembers
      *
      * @param JuryMembers $juryMembers
-     * @return TrackExercise
+     * @return TrackEExercices
      */
     public function setJuryMembers(JuryMembers $juryMembers)
     {

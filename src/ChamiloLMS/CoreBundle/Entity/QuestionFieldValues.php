@@ -8,7 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * QuestionFieldValues
  *
- * @ORM\Table(name="question_field_values")
+ * @ORM\Table(name="question_field_values", indexes={@ORM\Index(name="idx_question_field_values_question_id", columns={"question_id"}), @ORM\Index(name="idx_question_field_values_field_id", columns={"field_id"})})
  * @ORM\Entity
  * @Gedmo\Loggable
  */
@@ -23,10 +23,10 @@ class QuestionFieldValues extends ExtraFieldValues
     private $questionId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CQuizQuestion")
+     * @ORM\ManyToOne(targetEntity="ChamiloLMS\CourseBundle\Entity\CQuizQuestion", inversedBy="extraFields")
      * @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
      */
-    //private $question;
+    protected $question;
 
     /**
      * @ORM\OneToOne(targetEntity="QuestionField")

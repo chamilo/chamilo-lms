@@ -10,11 +10,19 @@ use ChamiloLMS\CoreBundle\Entity\Session;
 /**
  * CItemProperty
  *
- * @ORM\Table(name="c_item_property")
+ * @ORM\Table(name="c_item_property", indexes={@ORM\Index(name="idx_item_property_toolref", columns={"tool", "ref"}), @ORM\Index(name="idx_item_property_tooliuid", columns={"tool", "insert_user_id"})})
  * @ORM\Entity(repositoryClass="ChamiloLMS\CoreBundle\Entity\Repository\ItemPropertyRepository")
  */
 class CItemProperty
 {
+  /**
+     * @var integer
+     *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $iid;
     /**
      * @var integer
      *
@@ -26,8 +34,6 @@ class CItemProperty
      * @var integer
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 

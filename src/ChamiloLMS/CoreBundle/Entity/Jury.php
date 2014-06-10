@@ -78,7 +78,7 @@ class Jury
     private $members;
 
     /**
-     * @ORM\OneToMany(targetEntity="TrackExercise", mappedBy="attempt")
+     * @ORM\OneToMany(targetEntity="TrackEExercices", mappedBy="attempt")
      **/
     private $exerciseAttempts;
 

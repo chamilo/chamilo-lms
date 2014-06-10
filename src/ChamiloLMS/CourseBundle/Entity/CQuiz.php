@@ -196,12 +196,68 @@ class CQuiz
      */
     private $emailNotificationTemplate;
 
+/**
+     * @var string
+     *
+     * @ORM\Column(name="email_notification_template_to_user", type="text", nullable=true)
+     */
+    private $emailNotificationTemplateToUser;
+
     /**
      * @var integer
      *
-     * @ORM\Column(name="model_type", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="model_type", type="integer", nullable=true)
      */
     private $modelType;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="question_selection_type", type="integer", nullable=true)
+     */
+    private $questionSelectionType;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="hide_question_title", type="integer", nullable=true)
+     */
+    private $hideQuestionTitle;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="score_type_model", type="integer", nullable=true)
+     */
+    private $scoreTypeModel;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="global_category_id", type="integer", nullable=true)
+     */
+    private $globalCategoryId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="on_success_message", type="text", nullable=true)
+     */
+    private $onSuccessMessage;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="on_failed_message", type="text", nullable=true)
+     */
+    private $onFailedMessage;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="notify_user_by_email", type="integer", nullable=true)
+     */
+    private $notifyUserByEmail;
 
     /**
      * Get iid

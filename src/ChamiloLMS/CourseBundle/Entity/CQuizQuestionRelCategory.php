@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CQuizQuestionRelCategory
  *
- * @ORM\Table(name="c_quiz_question_rel_category")
+ * @ORM\Table(name="c_quiz_question_rel_category", indexes={@ORM\Index(name="idx_c_q_qst_r_cat_qc", columns={"iid", "question_id", "c_id"})})
  * @ORM\Entity(repositoryClass="ChamiloLMS\CoreBundle\Entity\Repository\CQuizQuestionRelCategoryRepository")
  */
 class CQuizQuestionRelCategory
@@ -42,8 +42,6 @@ class CQuizQuestionRelCategory
      */
     private $categoryId;
 
-    /** Relationships */
-
     /**
      * @ORM\ManyToOne(targetEntity="CQuizCategory", inversedBy="quizQuestionRelCategoryList")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="iid")
@@ -51,7 +49,7 @@ class CQuizQuestionRelCategory
     private $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CQuizQuestion")
+     * @ORM\ManyToOne(targetEntity="CQuizQuestion", inversedBy="quizQuestionRelCategoryList")
      * @ORM\JoinColumn(name="question_id", referencedColumnName="iid")
      */
     private $question;

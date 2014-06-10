@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Session
  *
- * @ORM\Table(name="session")
+ * @ORM\Table(name="session", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"})}, indexes={@ORM\Index(name="idx_id_coach", columns={"id_coach"}), @ORM\Index(name="idx_id_session_admin_id", columns={"session_admin_id"})})
  * @ORM\Entity
  */
 class Session

@@ -8,7 +8,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * SessionFieldValues
  *
- * @ORM\Table(name="session_field_values")
+ * @ORM\Table(name="session_field_values", indexes={@ORM\Index(name="idx_session_field_values_session_id", columns={"session_id"}), @ORM\Index(name="idx_session_field_values_field_id", columns={"field_id"})})
  * @ORM\Entity
  * @Gedmo\Loggable
  */

@@ -13,11 +13,18 @@ use Doctrine\ORM\Mapping as ORM;
 class CToolIntro
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="iid", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $iid;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="id", type="string", length=50, precision=0, scale=0, nullable=false, unique=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 

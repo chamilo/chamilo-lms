@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CDropboxPost
  *
- * @ORM\Table(name="c_dropbox_post")
+ * @ORM\Table(name="c_dropbox_post", indexes={@ORM\Index(name="session_id", columns={"session_id"})})
  * @ORM\Entity
  */
 class CDropboxPost

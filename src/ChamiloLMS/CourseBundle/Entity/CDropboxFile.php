@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CDropboxFile
  *
- * @ORM\Table(name="c_dropbox_file")
+ * @ORM\Table(name="c_dropbox_file", uniqueConstraints={@ORM\UniqueConstraint(name="UN_filename", columns={"filename"})}, indexes={@ORM\Index(name="session_id", columns={"session_id"})})
  * @ORM\Entity
  */
 class CDropboxFile

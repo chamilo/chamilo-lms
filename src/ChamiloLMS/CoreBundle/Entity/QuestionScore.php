@@ -5,6 +5,8 @@ namespace ChamiloLMS\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * QuestionScore
+ *
  * @ORM\Table(name="question_score")
  * @ORM\Entity(repositoryClass="ChamiloLMS\CoreBundle\Entity\Repository\QuestionScoreRepository")
  */

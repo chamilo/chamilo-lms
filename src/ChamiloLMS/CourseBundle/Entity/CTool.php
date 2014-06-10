@@ -121,7 +121,7 @@ class CTool
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Course")
+     * @ORM\ManyToOne(targetEntity="ChamiloLMS\CoreBundle\Entity\Course")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     private $course;

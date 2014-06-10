@@ -4,6 +4,8 @@ namespace ChamiloLMS\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Application\Sonata\UserBundle\Entity\User;
+use ChamiloLMS\CoreBundle\Entity\Course;
+use ChamiloLMS\CoreBundle\Entity\Session;
 
 /**
  * CItemProperty

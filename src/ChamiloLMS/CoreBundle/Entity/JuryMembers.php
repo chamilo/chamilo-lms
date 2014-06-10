@@ -60,7 +60,7 @@ class JuryMembers
      * @ORM\ManyToOne(targetEntity="Role", inversedBy="rolesFromJury")
      * @ORM\JoinColumn(name="role_id", referencedColumnName="id")
      */
-    private $role;
+    //private $role;
 
     public function getRole()
     {

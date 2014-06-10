@@ -1,6 +1,6 @@
 <?php
 
-namespace ChamiloLMS\CoreBundle\Entity;
+namespace ChamiloLMS\CourseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * CQuizQuestion
  *
  * @ORM\Table(name="c_quiz_question")
- * @ORM\Entity(repositoryClass="ChamiloLMS\CoreBundle\Entity\Repository\CQuizQuestionRepository")
+ * @ORM\Entity(repositoryClass="ChamiloLMS\CourseBundle\Entity\Repository\CQuizQuestionRepository")
  */
 class CQuizQuestion
 {
@@ -107,7 +107,7 @@ class CQuizQuestion
     private $quizQuestionRelCategoryList;
 
     /**
-     * @ORM\OneToMany(targetEntity="QuestionFieldValues", mappedBy="question")
+     * @ORM\OneToMany(targetEntity="ChamiloLMS\CoreBundle\Entity\QuestionFieldValues", mappedBy="question")
      */
     private $extraFields;
 

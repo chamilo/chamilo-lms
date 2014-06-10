@@ -155,7 +155,7 @@ class TrackExercise
     private $juryId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="CQuiz")
+     * @ORM\ManyToOne(targetEntity="ChamiloLMS\CourseBundle\Entity\CQuiz")
      * @ORM\JoinColumn(name="exe_exo_id", referencedColumnName="iid")
      */
     private $exercise;

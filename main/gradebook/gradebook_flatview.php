@@ -124,7 +124,7 @@ if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
     $params['export_pdf'] = true;
     if ($cat[0]->is_locked() == true || api_is_platform_admin()) {
         Display :: set_header(null, false, false);
-        export_pdf_flatview($cat, $users, $alleval, $alllinks, $params);
+        export_pdf_flatview($cat, $users, $alleval, $alllinks, $params, $mainCourseCategory[0]);
     }
 }
 

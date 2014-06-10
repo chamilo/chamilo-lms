@@ -435,15 +435,19 @@ function get_course_id_by_link_id($id_link)
     return $array['id'];
 }
 
+/**
+ * @param $type
+ * @return string
+ */
 function get_table_type_course($type)
 {
     global $table_evaluated;
     return Database::get_course_table($table_evaluated[$type][0]);
 }
 
-function get_printable_data($cat, $users, $alleval, $alllinks, $params)
+function get_printable_data($cat, $users, $alleval, $alllinks, $params, $mainCourseCategory = null)
 {
-    $datagen = new FlatViewDataGenerator($users, $alleval, $alllinks, $params);
+    $datagen = new FlatViewDataGenerator($users, $alleval, $alllinks, $params, $mainCourseCategory);
 
     $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
     $offset = intval($offset);
@@ -453,13 +457,16 @@ function get_printable_data($cat, $users, $alleval, $alllinks, $params)
 
     $count = (($offset + 10) > $datagen->get_total_items_count()) ? ($datagen->get_total_items_count() - $offset) : LIMIT;
     $header_names = $datagen->get_header_names($offset, $count, true);
-    $data_array = $datagen->get_data(FlatViewDataGenerator :: FVDG_SORT_LASTNAME, 0, null, $offset, $count, true, true);
+    $data_array = $datagen->get_data(
+        FlatViewDataGenerator :: FVDG_SORT_LASTNAME, 0, null, $offset, $count, true, true
+    );
 
     $newarray = array();
     foreach ($data_array as $data) {
         $newarray[] = array_slice($data, 1);
     }
     $return = array($header_names, $newarray);
+
     return $return;
 }
 
@@ -751,11 +758,11 @@ function load_gradebook_select_in_tool($form)
 /**
  * PDF report creation
  */
-function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array())
+function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(), $mainCourseCategory = null)
 {
     global $flatviewtable;
-    //Getting data
-    $printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks, $params);
+    // Getting data
+    $printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks, $params, $mainCourseCategory);
 
     // HTML report creation first
     $course_code = trim($cat[0]->get_course_code());

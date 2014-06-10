@@ -28,14 +28,19 @@ class FlatViewDataGenerator
     /**
      * Constructor
      */
-    public function FlatViewDataGenerator($users = array(), $evals = array(), $links = array(), $params = array(), $mainCategory = null)
-    {
+    public function FlatViewDataGenerator(
+        $users = array(),
+        $evals = array(),
+        $links = array(),
+        $params = array(),
+        $mainCourseCategory = null
+    ) {
         $this->users = (isset($users) ? $users : array());
         $this->evals = (isset($evals) ? $evals : array());
         $this->links = (isset($links) ? $links : array());
         $this->evals_links = array_merge($this->evals, $this->links);
         $this->params = $params;
-        $this->mainCourseCategory = $mainCategory;
+        $this->mainCourseCategory = $mainCourseCategory;
     }
 
     /**
@@ -116,6 +121,7 @@ class FlatViewDataGenerator
 
         $mainCategoryId = null;
         $mainCourseCategory = $this->getMainCourseCategory();
+
         if (!empty($mainCourseCategory)) {
             $mainCategoryId = $mainCourseCategory->get_id();
         }

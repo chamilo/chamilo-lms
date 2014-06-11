@@ -11,18 +11,26 @@ set_time_limit(0);
  * @author Stijn Konings
  * @author Bert Steppé  - (refactored, optimised)
  * @author Julio Montoya Armas - Gradebook Graphics
+ *
  * @package chamilo.gradebook
  */
 class FlatViewTable extends SortableTable
 {
-    private $selectcat;
     public $datagen;
+    private $selectcat;
     private $limit_enabled;
     private $offset;
     private $mainCourseCategory;
 
     /**
-     * Constructor
+     * @param Category $selectcat
+     * @param array $users
+     * @param array $evals
+     * @param array $links
+     * @param bool $limit_enabled
+     * @param int $offset
+     * @param null $addparams
+     * @param Category $mainCourseCategory
      */
     public function FlatViewTable(
         $selectcat,
@@ -54,6 +62,14 @@ class FlatViewTable extends SortableTable
         // step 2: generate rows: students
         $this->datagen->category = $this->selectcat;
         $this->mainCourseCategory = $mainCourseCategory;
+    }
+
+    /**
+     * @param bool $value
+     */
+    public function setLimitEnabled($value)
+    {
+       $this->limit_enabled = (bool) $value;
     }
 
     /**
@@ -447,11 +463,13 @@ class FlatViewTable extends SortableTable
 
         // create page navigation if needed
         $totalitems = $this->datagen->get_total_items_count();
+
         if ($this->limit_enabled && $totalitems > LIMIT) {
             $selectlimit = LIMIT;
         } else {
             $selectlimit = $totalitems;
         }
+
         $header = null;
         if ($this->limit_enabled && $totalitems > LIMIT) {
             $header .= '<table style="width: 100%; text-align: right; margin-left: auto; margin-right: auto;" border="0" cellpadding="2">'

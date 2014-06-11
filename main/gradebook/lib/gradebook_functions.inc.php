@@ -473,14 +473,20 @@ function get_printable_data($cat, $users, $alleval, $alllinks, $params, $mainCou
     $count = (($offset + 10) > $datagen->get_total_items_count()) ? ($datagen->get_total_items_count() - $offset) : LIMIT;
     $header_names = $datagen->get_header_names($offset, $count, true);
     $data_array = $datagen->get_data(
-        FlatViewDataGenerator :: FVDG_SORT_LASTNAME, 0, null, $offset, $count, true, true
+        FlatViewDataGenerator :: FVDG_SORT_LASTNAME,
+        0,
+        null,
+        $offset,
+        $count,
+        true,
+        true
     );
 
-    $newarray = array();
+    $result = array();
     foreach ($data_array as $data) {
-        $newarray[] = array_slice($data, 1);
+        $result[] = array_slice($data, 1);
     }
-    $return = array($header_names, $newarray);
+    $return = array($header_names, $result);
 
     return $return;
 }
@@ -771,11 +777,16 @@ function load_gradebook_select_in_tool($form)
 }
 
 /**
- * PDF report creation
+ * @param FlatViewTable $flatviewtable
+ * @param Category $cat
+ * @param $users
+ * @param $alleval
+ * @param $alllinks
+ * @param array $params
+ * @param null $mainCourseCategory
  */
-function export_pdf_flatview($cat, $users, $alleval, $alllinks, $params = array(), $mainCourseCategory = null)
+function export_pdf_flatview($flatviewtable, $cat, $users, $alleval, $alllinks, $params = array(), $mainCourseCategory = null)
 {
-    global $flatviewtable;
     // Getting data
     $printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks, $params, $mainCourseCategory);
 

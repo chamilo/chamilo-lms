@@ -102,7 +102,9 @@ class FlatViewDataGenerator
 
         $parent_id = $this->category->get_parent_id();
 
-        if ($parent_id == 0 or $this->params['only_subcat'] == $this->category->get_id()) {
+        if ($parent_id == 0 or
+            $this->params['only_subcat'] == $this->category->get_id()
+        ) {
             $main_weight  = $this->category->get_weight();
             $grade_model_id = $this->category->get_grade_model_id();
         } else {
@@ -142,26 +144,35 @@ class FlatViewDataGenerator
         $course_code = api_get_course_id();
         $session_id = api_get_session_id();
 
-        $allcat  = $this->category->get_subcategories(null, $course_code, $session_id, 'ORDER BY id');
+        $allcat = $this->category->get_subcategories(
+            null,
+            $course_code,
+            $session_id,
+            'ORDER BY id'
+        );
         $evaluationsAdded = array();
         if ($parent_id == 0 && !empty($allcat)) {
             // Means there are any subcategory
             foreach ($allcat as $sub_cat) {
-                $sub_cat_weight = round(100*$sub_cat->get_weight()/$main_weight,1);
+                $sub_cat_weight = round(100 * $sub_cat->get_weight() / $main_weight, 1);
                 $add_weight = " $sub_cat_weight %";
                 if (isset($this->params['export_pdf']) && $this->params['export_pdf']) {
                    $add_weight = null;
                 }
-                $headers[] = Display::url($sub_cat->get_name(), api_get_self().'?selectcat='.$sub_cat->get_id()).$add_weight;
+                $headers[] = Display::url(
+                    $sub_cat->get_name(),
+                    api_get_self().'?selectcat='.$sub_cat->get_id()
+                ).$add_weight;
             }
         } else {
             if (!isset($this->params['only_total_category']) ||
-                (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)
+                (isset($this->params['only_total_category']) &&
+                $this->params['only_total_category'] == false)
             ) {
                 for ($count=0; ($count < $items_count ) && ($items_start + $count < count($this->evals_links)); $count++) {
                     /** @var AbstractLink $item */
                     $item = $this->evals_links[$count + $items_start];
-                    $weight = round(100*$item->get_weight()/$main_weight,1);
+                    $weight = round(100 * $item->get_weight() / $main_weight, 1);
                     $headers[] = $item->get_name().' '.$weight.' % ';
                     $evaluationsAdded[] = $item->get_id();
                 }
@@ -249,31 +260,29 @@ class FlatViewDataGenerator
             $items_count = 0;
         }
 
-        // copy users to a new array that we will sort
-        // TODO - needed ?
-        $usertable = array ();
+        $userTable = array();
         foreach ($this->users as $user) {
-            $usertable[] = $user;
+            $userTable[] = $user;
         }
 
         // sort users array
         if ($users_sorting & self :: FVDG_SORT_LASTNAME) {
-            usort($usertable, array ('FlatViewDataGenerator','sort_by_last_name'));
+            usort($userTable, array ('FlatViewDataGenerator','sort_by_last_name'));
         } elseif ($users_sorting & self :: FVDG_SORT_FIRSTNAME) {
-            usort($usertable, array ('FlatViewDataGenerator','sort_by_first_name'));
+            usort($userTable, array ('FlatViewDataGenerator','sort_by_first_name'));
         }
 
         if ($users_sorting & self :: FVDG_SORT_DESC) {
-            $usertable = array_reverse($usertable);
+            $userTable = array_reverse($userTable);
         }
 
-        // select the requested users
-        $selected_users = array_slice($usertable, $users_start, $users_count);
+        // Select the requested users
+        $selected_users = array_slice($userTable, $users_start, $users_count);
 
         // Generate actual data array
-        $scoredisplay = ScoreDisplay :: instance();
+        $scoredisplay = ScoreDisplay::instance();
 
-        $data = array ();
+        $data = array();
         $displaytype = SCORE_DIV;
         if ($ignore_score_color) {
             $displaytype |= SCORE_IGNORE_SPLIT;
@@ -321,25 +330,28 @@ class FlatViewDataGenerator
 
         foreach ($selected_users as $user) {
             $row = array();
+            // User id
             if ($export_to_pdf) {
-                $row['user_id'] = $user_id = $user[0];    //user id
+                $row['user_id'] = $user_id = $user[0];
             } else {
-                $row[] = $user_id = $user[0];    //user id
+                $row[] = $user_id = $user[0];
             }
 
+            // Official code
             if (isset($this->params['show_official_code']) && $this->params['show_official_code']) {
                 if ($export_to_pdf) {
-                    $row['official_code'] = $user[4];    //official code
+                    $row['official_code'] = $user[4];
                 } else {
-                    $row[] = $user[4];    //official code
+                    $row[] = $user[4];
                 }
             }
 
+            // Last name
             if (isset($this->params['join_firstname_lastname']) && $this->params['join_firstname_lastname']) {
                 if ($export_to_pdf) {
-                    $row['name'] = api_get_person_name($user[3], $user[2]);    //last name
+                    $row['name'] = api_get_person_name($user[3], $user[2]);
                 } else {
-                    $row[] = api_get_person_name($user[3], $user[2]);    //last name
+                    $row[] = api_get_person_name($user[3], $user[2]);
                 }
             } else {
                 if ($export_to_pdf) {
@@ -352,11 +364,11 @@ class FlatViewDataGenerator
                     }
                 } else {
                     if (api_is_western_name_order()) {
-                        $row[]   = $user[3];    //first name
-                        $row[]   = $user[2];    //last name
+                        $row[] = $user[3]; //first name
+                        $row[] = $user[2]; //last name
                     } else {
-                        $row[]   = $user[2];    //last name
-                        $row[]   = $user[3];    //first name
+                        $row[] = $user[2]; //last name
+                        $row[] = $user[3]; //first name
                     }
                 }
             }
@@ -407,7 +419,8 @@ class FlatViewDataGenerator
                     }
 
                     if (!isset($this->params['only_total_category']) ||
-                        (isset($this->params['only_total_category']) && $this->params['only_total_category'] == false)
+                        (isset($this->params['only_total_category']) &&
+                        $this->params['only_total_category'] == false)
                     ) {
                         if (!$show_all) {
                            $row[] = $temp_score.' ';

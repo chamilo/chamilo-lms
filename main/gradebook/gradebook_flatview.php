@@ -124,7 +124,7 @@ if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
     $params['export_pdf'] = true;
     if ($cat[0]->is_locked() == true || api_is_platform_admin()) {
         Display :: set_header(null, false, false);
-        export_pdf_flatview($cat, $users, $alleval, $alllinks, $params, $mainCourseCategory[0]);
+        export_pdf_flatview($flatviewtable, $cat, $users, $alleval, $alllinks, $params, $mainCourseCategory[0]);
     }
 }
 
@@ -150,7 +150,7 @@ if (isset($_GET['exportpdf']))	{
         $params['show_official_code'] = true;
         $params['export_pdf'] = true;
         $params['only_total_category'] = false;
-		export_pdf_flatview($cat, $users, $alleval, $alllinks, $params, $mainCourseCategory[0]);
+		export_pdf_flatview($flatviewtable, $cat, $users, $alleval, $alllinks, $params, $mainCourseCategory[0]);
 
 	} else {
 		Display :: display_header(get_lang('ExportPDF'));

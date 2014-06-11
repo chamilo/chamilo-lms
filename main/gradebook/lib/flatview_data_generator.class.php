@@ -156,9 +156,9 @@ class FlatViewDataGenerator
             foreach ($allcat as $sub_cat) {
                 $sub_cat_weight = round(100 * $sub_cat->get_weight() / $main_weight, 1);
                 $add_weight = " $sub_cat_weight %";
-                if (isset($this->params['export_pdf']) && $this->params['export_pdf']) {
+                /*if (isset($this->params['export_pdf']) && $this->params['export_pdf']) {
                    $add_weight = null;
-                }
+                }*/
                 $headers[] = Display::url(
                     $sub_cat->get_name(),
                     api_get_self().'?selectcat='.$sub_cat->get_id()

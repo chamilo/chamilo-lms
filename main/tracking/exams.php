@@ -14,7 +14,6 @@ require_once api_get_path(LIBRARY_PATH).'pear/Spreadsheet_Excel_Writer/Writer.ph
 
 $toolTable = Database::get_course_table(TABLE_TOOL_LIST);
 $quizTable = Database::get_course_table(TABLE_QUIZ_TEST);
-$exerciseStatsTable = Database :: get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
 
 $this_section = SECTION_TRACKING;
 $is_allowedToTrack = $is_courseAdmin || $is_platformAdmin || $is_courseCoach || $is_sessionAdmin;
@@ -47,6 +46,12 @@ if ($global) {
 
 $sessionId = api_get_session_id();
 
+if (empty($sessionId)) {
+    $sessionCondition = ' AND session_id = 0';
+} else {
+    $sessionCondition = api_get_session_condition($sessionId, true, true);
+}
+
 $form = new FormValidator('search_simple', 'POST', '', '', null, false);
 $form->addElement('text', 'score', get_lang('Percentage'));
 if ($global) {
@@ -54,11 +59,12 @@ if ($global) {
 } else {
     // Get exam lists
     $courseId = api_get_course_int_id();
+
     $sql = "SELECT quiz.title, id FROM $quizTable AS quiz
             WHERE
                 c_id = $courseId AND
-                active='1' AND
-                session_id = $sessionId
+                active='1'
+                $sessionCondition
             ORDER BY quiz.title ASC";
     $result = Database::query($sql);
 
@@ -169,8 +175,8 @@ $s_css_class = null;
 
 if (!empty($courseList) && is_array($courseList)) {
     foreach ($courseList as $courseInfo) {
-        $global_row = $row_not_global = array();
         $sessionList = SessionManager::get_session_by_course($courseInfo['code']);
+
         $newSessionList = array();
         if (!empty($sessionList)) {
             foreach ($sessionList as $session) {
@@ -183,10 +189,20 @@ if (!empty($courseList) && is_array($courseList)) {
         if ($global) {
             $sql = "SELECT count(id) as count
                     FROM $quizTable AS quiz
-                    WHERE active='1' AND c_id = $courseId";
+                    WHERE active='1' AND c_id = $courseId AND session_id = 0";
             $result = Database::query($sql);
             $countExercises = Database::store_result($result);
             $exerciseCount = $countExercises[0]['count'];
+
+            $sql = "SELECT count(id) as count
+                    FROM $quizTable AS quiz
+                    WHERE active='1' AND c_id = $courseId AND session_id <> 0";
+            $result = Database::query($sql);
+            $countExercises = Database::store_result($result);
+            $exerciseSessionCount = $countExercises[0]['count'];
+
+            $exerciseCount =  $exerciseCount + $exerciseCount *count($newSessionList) + $exerciseSessionCount;
+
             // Add course and session list.
             if ($exerciseCount == 0) {
                 $exerciseCount = 2;
@@ -210,256 +226,118 @@ if (!empty($courseList) && is_array($courseList)) {
                     WHERE c_id = $courseId AND active='1'
                     ORDER BY session_id, quiz.title ASC";
             } else {
+                //$sessionCondition = api_get_session_condition($sessionId, true, false);
                 if (!empty($exerciseId)) {
                     $sql = "SELECT quiz.title, id, session_id
                             FROM $quizTable AS quiz
                             WHERE
                                 c_id = $courseId AND
-                                active='1' AND
-                                id = $exerciseId AND
-                                session_id = $sessionId
+                                active = '1' AND
+                                id = $exerciseId
+                                $sessionCondition
+
                             ORDER BY session_id, quiz.title ASC";
                 } else {
+
                     $sql = "SELECT quiz.title, id, session_id
                             FROM $quizTable AS quiz
                             WHERE
                                 c_id = $courseId AND
-                                active='1' AND
-                                session_id = $sessionId
+                                active='1'
+                                $sessionCondition
                             ORDER BY session_id, quiz.title ASC";
                 }
             }
 
             $resultExercises = Database::query($sql);
-            $i = 0;
 
             if (Database::num_rows($resultExercises) > 0) {
+                $export_array_global = array();
+
                 while ($exercise = Database::fetch_array($resultExercises)) {
-                    $sessionId = $exercise['session_id'];
+                    $exerciseSessionId = $exercise['session_id'];
 
-                    if (empty($sessionId)) {
-                        $students = CourseManager::get_student_list_from_course_code(
-                            $courseInfo['code'],
-                            false
-                        );
-                    } else {
-                        $students = CourseManager::get_student_list_from_course_code(
-                            $courseInfo['code'],
-                            true,
-                            $sessionId
-                        );
-                    }
+                    if (empty($exerciseSessionId)) {
 
-                    $totalStudents = count($students);
+                        if ($global) {
+                            // If the exercise was created in the base course.
+                            // Load all sessions.
+                            foreach ($newSessionList as $currentSessionId => $sessionName) {
+                                $result = processStudentList(
+                                    $filter_score,
+                                    $global,
+                                    $exercise,
+                                    $courseInfo,
+                                    $currentSessionId,
+                                    $newSessionList
+                                );
 
-                    $global_row[]= $courseInfo['title'];
-
-                    if (!$global) {
-                        $html .= "<tr class='".$s_css_class."'>";
-                    }
-
-                    if (!$global) {
-                        $html .= '<td rowspan="'.$totalStudents.'">';
-                    } else {
-                        $html .= '<td>';
-                    }
-
-                    $html .= $exercise['title'];
-
-                    if ($global && !empty($sessionId)) {
-                        $sessionName = isset($newSessionList[$sessionId]) ? $newSessionList[$sessionId] : null;
-                        $html .= Display::return_icon('star.png', get_lang('Session')).' ('.$sessionName.')';
-                    }
-
-                    $html .= '</td>';
-
-                    $global_row[] = $exercise['title'];
-                    $row_not_global['exercise'] = $exercise['title'];
-
-                    $taken = 0;
-                    $total_with_parameter = 0;
-                    $fail = 0;
-                    $not_taken = 0;
-
-                    $total_with_parameter_score = 0;
-                    $total_with_parameter_porcentage = 0;
-
-                    $student_result = array();
-                    foreach ($students as $student) {
-                        $studentId = isset($student['user_id']) ? $student['user_id'] : $student['id_user'];
-                        $sql = "SELECT COUNT(ex.exe_id) as count
-                                FROM $exerciseStatsTable AS ex
-                                WHERE
-                                    ex.exe_cours_id = '".$courseInfo['code']."' AND
-                                    ex.exe_exo_id = ".$exercise['id']." AND
-                                    exe_user_id='".$studentId."' AND
-                                    session_id = $sessionId
-                                ";
-                        $result = Database::query($sql);
-                        $attempts = Database::fetch_array($result);
-
-                        $sql = "SELECT exe_id, exe_result, exe_weighting
-                                FROM $exerciseStatsTable
-                                WHERE
-                                    exe_user_id = ".$studentId." AND
-                                    exe_cours_id = '".$courseInfo['code']."' AND
-                                    exe_exo_id = ".$exercise['id']." AND
-                                    session_id = $sessionId
-                                ORDER BY exe_result DESC
-                                LIMIT 1";
-                        $result = Database::query($sql);
-                        $score = 0;
-                        $weighting = 0;
-                        while ($scoreInfo = Database::fetch_array($result)) {
-                            $score = $score + $scoreInfo['exe_result'];
-                            $weighting = $weighting + $scoreInfo['exe_weighting'];
-                        }
-
-                        $percentageScore = 0;
-                        if ($weighting != 0) {
-                            $percentageScore = round(($score*100)/$weighting);
-                        }
-
-                        $weighting = 0;
-
-                        if ($i % 2 == 0) {
-                            $s_css_class = "row_odd";
-                        } else {
-                            $s_css_class = "row_even";
-                        }
-                        $i++;
-
-                        if ($attempts['count'] > 0 ) {
-                            $taken++;
-                        }
-
-                        if ($percentageScore >= $filter_score) {
-                            $total_with_parameter_score++;
-                        }
-
-                        $tempArray = array();
-
-                        if (!$global) {
-                            $userInfo = api_get_user_info($studentId);
-
-                            // User
-                            $userRow = '<td>';
-                            $userRow .= $userInfo['complete_name'];
-                            $userRow .= '</td>';
-
-                            // Best result
-
-                            if (!empty($attempts['count'])) {
-                                $userRow .= '<td>';
-                                $userRow .= $percentageScore;
-                                $tempArray[] = $percentageScore;
-                                $userRow .= '</td>';
-
-                                if ($percentageScore >= $filter_score) {
-                                    $userRow .= '<td style="background-color:#DFFFA8">';
-                                    $userRow .= get_lang('PassExam').'</td>';
-                                    $tempArray[] = get_lang('PassExam');
-                                } else {
-                                    $userRow .= '<td style="background-color:#FC9A9E"  >';
-                                    $userRow .= get_lang('ExamFail').'</td>';
-                                    $tempArray[] = get_lang('ExamFail');
-                                }
-
-                                $userRow .= '<td>';
-                                $userRow .= $attempts['count'];
-                                $tempArray[] = $attempts['count'];
-                                $userRow .= '</td>';
-                            } else {
-                                $score = '-';
-                                $userRow .= '<td>';
-                                $userRow .=  '-';
-                                $tempArray[] = '-';
-                                $userRow .= '</td>';
-
-                                $userRow .= '<td style="background-color:#FCE89A">';
-                                $userRow .= get_lang('NoAttempt');
-                                $tempArray[] = get_lang('NoAttempt');
-                                $userRow .= '</td>';
-                                $userRow .= '<td>';
-                                $userRow .= 0;
-                                $tempArray[] = 0;
-                                $userRow .= '</td>';
+                                $html .= $result['html'];
+                                $export_array_global = array_merge($export_array_global, $result['export_array_global']);
                             }
-                            $userRow .= '</tr>';
 
-                            $student_result[$studentId] = array(
-                                'html' => $userRow,
-                                'score' => $score,
-                                'array' => $tempArray,
-                                'user' => $userInfo['complete_name']
+                            // Load base course.
+                            $result = processStudentList(
+                                $filter_score,
+                                $global,
+                                $exercise,
+                                $courseInfo,
+                                0,
+                                $newSessionList
                             );
-                        }
-                    }
-
-                    if (!$global) {
-                        if (!empty($student_result)) {
-                            $student_result_empty = $student_result_content = array();
-                            foreach ($student_result as $row) {
-                                if ($row['score'] == '-') {
-                                    $student_result_empty[] = $row;
-                                } else {
-                                    $student_result_content[] = $row;
-                                }
-                            }
-
-                            // Sort only users with content
-                            usort($student_result_content, 'sort_user');
-                            $student_result = array_merge($student_result_content, $student_result_empty);
-
-                            foreach ($student_result as $row) {
-                                $html .= $row['html'];
-                                $row_not_global['results'][]= $row['array'];
-                                $row_not_global['users'][]   = $row['user'];
-                            }
-                            $export_array[] = $row_not_global;
-                            $row_not_global = array();
-                        }
-                    }
-
-                    if ($global) {
-                        // Exam taken
-                        $html .= '<td>';
-                        $html .= $taken;
-                        $global_row[]= $taken;
-                        $html .= '</td>';
-
-                        // Exam NOT taken
-                        $html .= '<td>';
-                        $html .= $not_taken = $totalStudents - $taken;
-                        $global_row[]= $not_taken;
-                        $html .= '</td>';
-
-                        // Exam pass
-                        if (!empty($total_with_parameter_score)) {
-                            $html .= '<td style="background-color:#DFFFA8" >';
+                            $html .= $result['html'];
+                            $export_array_global = array_merge($export_array_global, $result['export_array_global']);
                         } else {
-                            $html .= '<td style="background-color:#FCE89A"  >';
+
+                            if (empty($sessionId)) {
+                                // Load base course.
+                                $result = processStudentList(
+                                    $filter_score,
+                                    $global,
+                                    $exercise,
+                                    $courseInfo,
+                                    0,
+                                    $newSessionList
+                                );
+
+                                $html .= $result['html'];
+                                $export_array_global = array_merge(
+                                    $export_array_global,
+                                    $result['export_array_global']
+                                );
+                            } else {
+
+                                $result = processStudentList(
+                                    $filter_score,
+                                    $global,
+                                    $exercise,
+                                    $courseInfo,
+                                    $sessionId,
+                                    $newSessionList
+                                );
+
+                                $html .= $result['html'];
+                                $export_array_global = array_merge(
+                                    $export_array_global,
+                                    $result['export_array_global']
+                                );
+                            }
                         }
 
-                        $html .= $total_with_parameter_score;
-                        $global_row[]= $total_with_parameter_score;
-                        $html .= '</td>';
+                    } else {
+                        // If the exercise only exists in this session.
 
-                        // Exam fail
-                        $html .= '<td>';
+                        $result = processStudentList(
+                            $filter_score,
+                            $global,
+                            $exercise,
+                            $courseInfo,
+                            $exerciseSessionId,
+                            $newSessionList
+                        );
 
-                        $html .= $fail = $taken - $total_with_parameter_score;
-                        $global_row[]= $fail;
-                        $html .= '</td>';
-
-                        $html .= '<td>';
-                        $html .= $totalStudents;
-                        $global_row[]= $totalStudents;
-
-                        $html .= '</td>';
-                        $html .= '</tr>';
-                        $export_array_global[] = $global_row;
-                        $global_row = array();
+                        $html .= $result['html'];
+                        $export_array_global = array_merge($export_array_global, $result['export_array_global']);
                     }
                 }
             } else {
@@ -586,5 +464,233 @@ function export_complete_report_xls($filename, $array)
     }
     $workbook->close();
     exit;
+}
+
+function processStudentList($filter_score, $global, $exercise, $courseInfo, $sessionId, $newSessionList)
+{
+    $exerciseStatsTable = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_EXERCICES);
+
+    if (empty($sessionId)) {
+        $students = CourseManager::get_student_list_from_course_code(
+            $courseInfo['code'],
+            false
+        );
+    } else {
+        $students = CourseManager::get_student_list_from_course_code(
+            $courseInfo['code'],
+            true,
+            $sessionId
+        );
+    }
+
+    $html = null;
+
+    $totalStudents = count($students);
+
+    if (!$global) {
+        $html .= "<tr>";
+    }
+
+    if (!$global) {
+        $html .= '<td rowspan="'.$totalStudents.'">';
+    } else {
+        $html .= '<td>';
+    }
+
+    $html .= $exercise['title'];
+
+    if ($global && !empty($sessionId)) {
+        $sessionName = isset($newSessionList[$sessionId]) ? $newSessionList[$sessionId] : null;
+        $html .= Display::return_icon('star.png', get_lang('Session')).' ('.$sessionName.')';
+    }
+
+    $html .= '</td>';
+
+    $globalRow = array(
+        $courseInfo['title'],
+        $exercise['title']
+    );
+
+    $total_with_parameter_score = 0;
+    $taken = 0;
+    $export_array_global = array();
+    $studentResult = array();
+
+    foreach ($students as $student) {
+        $studentId = isset($student['user_id']) ? $student['user_id'] : $student['id_user'];
+        $sql = "SELECT COUNT(ex.exe_id) as count
+                FROM $exerciseStatsTable AS ex
+                WHERE
+                    ex.exe_cours_id = '".$courseInfo['code']."' AND
+                    ex.exe_exo_id = ".$exercise['id']." AND
+                    exe_user_id='".$studentId."' AND
+                    session_id = $sessionId
+                ";
+        $result = Database::query($sql);
+        $attempts = Database::fetch_array($result);
+
+        $sql = "SELECT exe_id, exe_result, exe_weighting
+                FROM $exerciseStatsTable
+                WHERE
+                    exe_user_id = ".$studentId." AND
+                    exe_cours_id = '".$courseInfo['code']."' AND
+                    exe_exo_id = ".$exercise['id']." AND
+                    session_id = $sessionId
+                ORDER BY exe_result DESC
+                LIMIT 1";
+        $result = Database::query($sql);
+        $score = 0;
+        $weighting = 0;
+        while ($scoreInfo = Database::fetch_array($result)) {
+            $score = $score + $scoreInfo['exe_result'];
+            $weighting = $weighting + $scoreInfo['exe_weighting'];
+        }
+
+        $percentageScore = 0;
+
+        if ($weighting != 0) {
+            $percentageScore = round(($score*100)/$weighting);
+        }
+
+        if ($attempts['count'] > 0 ) {
+            $taken++;
+        }
+
+        if ($percentageScore >= $filter_score) {
+            $total_with_parameter_score++;
+        }
+
+        $tempArray = array();
+
+        if (!$global) {
+            $userInfo = api_get_user_info($studentId);
+
+            // User
+            $userRow = '<td>';
+            $userRow .= $userInfo['complete_name'];
+            $userRow .= '</td>';
+
+            // Best result
+
+            if (!empty($attempts['count'])) {
+                $userRow .= '<td>';
+                $userRow .= $percentageScore;
+                $tempArray[] = $percentageScore;
+                $userRow .= '</td>';
+
+                if ($percentageScore >= $filter_score) {
+                    $userRow .= '<td style="background-color:#DFFFA8">';
+                    $userRow .= get_lang('PassExam').'</td>';
+                    $tempArray[] = get_lang('PassExam');
+                } else {
+                    $userRow .= '<td style="background-color:#FC9A9E"  >';
+                    $userRow .= get_lang('ExamFail').'</td>';
+                    $tempArray[] = get_lang('ExamFail');
+                }
+
+                $userRow .= '<td>';
+                $userRow .= $attempts['count'];
+                $tempArray[] = $attempts['count'];
+                $userRow .= '</td>';
+            } else {
+                $score = '-';
+                $userRow .= '<td>';
+                $userRow .=  '-';
+                $tempArray[] = '-';
+                $userRow .= '</td>';
+
+                $userRow .= '<td style="background-color:#FCE89A">';
+                $userRow .= get_lang('NoAttempt');
+                $tempArray[] = get_lang('NoAttempt');
+                $userRow .= '</td>';
+                $userRow .= '<td>';
+                $userRow .= 0;
+                $tempArray[] = 0;
+                $userRow .= '</td>';
+            }
+            $userRow .= '</tr>';
+
+            $studentResult[$studentId] = array(
+                'html' => $userRow,
+                'score' => $score,
+                'array' => $tempArray,
+                'user' => $userInfo['complete_name']
+            );
+        }
+    }
+
+    $row_not_global['exercise'] = $exercise['title'];
+
+    if (!$global) {
+        if (!empty($studentResult)) {
+            $studentResultEmpty = $studentResultContent = array();
+            foreach ($studentResult as $row) {
+                if ($row['score'] == '-') {
+                    $studentResultEmpty[] = $row;
+                } else {
+                    $studentResultContent[] = $row;
+                }
+            }
+
+            // Sort only users with content
+            usort($studentResultContent, 'sort_user');
+            $studentResult = array_merge($studentResultContent, $studentResultEmpty);
+
+            foreach ($studentResult as $row) {
+                $html .= $row['html'];
+                $row_not_global['results'][] = $row['array'];
+                $row_not_global['users'][] = $row['user'];
+            }
+            $export_array[] = $row_not_global;
+        }
+    }
+
+
+    if ($global) {
+        // Exam taken
+        $html .= '<td>';
+        $html .= $taken;
+        $globalRow[]= $taken;
+        $html .= '</td>';
+
+        // Exam NOT taken
+        $html .= '<td>';
+        $html .= $not_taken = $totalStudents - $taken;
+        $globalRow[]= $not_taken;
+        $html .= '</td>';
+
+        // Exam pass
+        if (!empty($total_with_parameter_score)) {
+            $html .= '<td style="background-color:#DFFFA8" >';
+        } else {
+            $html .= '<td style="background-color:#FCE89A"  >';
+        }
+
+        $html .= $total_with_parameter_score;
+        $globalRow[]= $total_with_parameter_score;
+        $html .= '</td>';
+
+        // Exam fail
+        $html .= '<td>';
+
+        $html .= $fail = $taken - $total_with_parameter_score;
+        $globalRow[]= $fail;
+        $html .= '</td>';
+
+        $html .= '<td>';
+        $html .= $totalStudents;
+        $globalRow[]= $totalStudents;
+
+        $html .= '</td>';
+
+        $html .= '</tr>';
+        $export_array_global[] = $globalRow;
+    }
+
+    return array(
+        'html' => $html,
+        'export_array_global' => $export_array_global,
+        'total_students' => $totalStudents
+    );
 }
 Display :: display_footer();

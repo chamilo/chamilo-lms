@@ -179,6 +179,10 @@ if (api_is_platform_admin() || api_is_drh()) {
     $controller->tpl->assign('skills_block', $controller->return_skills_links());
 }
 
+if (api_is_anonymous()) {
+    $controller->tpl->setLoginBodyClass();
+}
+
 // direct login to course
 if (isset($_GET['firstpage'])) {
     api_set_firstpage_parameter($_GET['firstpage']);
@@ -186,8 +190,7 @@ if (isset($_GET['firstpage'])) {
     if (api_user_is_login()) {
         echo "<script type='text/javascript'>self.location.href='index.php?firstpage=".$_GET['firstpage']."'</script>";
     }
-}
-else {
+} else {
     api_delete_firstpage_parameter();
 }
 

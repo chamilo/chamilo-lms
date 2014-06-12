@@ -15,7 +15,7 @@ class CourseRelClass
     /**
      * @var string
      *
-     * @ORM\Column(name="course_code", type="string", length=40)
+     * @ORM\Column(name="course_code", type="string", length=40, precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
@@ -24,11 +24,56 @@ class CourseRelClass
     /**
      * @var integer
      *
-     * @ORM\Column(name="class_id", type="integer")
+     * @ORM\Column(name="class_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      */
     private $classId;
 
 
+    /**
+     * Set courseCode
+     *
+     * @param string $courseCode
+     * @return CourseRelClass
+     */
+    public function setCourseCode($courseCode)
+    {
+        $this->courseCode = $courseCode;
+
+        return $this;
+    }
+
+    /**
+     * Get courseCode
+     *
+     * @return string 
+     */
+    public function getCourseCode()
+    {
+        return $this->courseCode;
+    }
+
+    /**
+     * Set classId
+     *
+     * @param integer $classId
+     * @return CourseRelClass
+     */
+    public function setClassId($classId)
+    {
+        $this->classId = $classId;
+
+        return $this;
+    }
+
+    /**
+     * Get classId
+     *
+     * @return integer 
+     */
+    public function getClassId()
+    {
+        return $this->classId;
+    }
 }

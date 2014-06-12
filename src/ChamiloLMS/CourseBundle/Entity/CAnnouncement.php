@@ -77,5 +77,189 @@ class CAnnouncement
      */
     private $iid;
 
+/**
+     * Set cId
+     *
+     * @param integer $cId
+     * @return CAnnouncement
+     */
+    public function setCId($cId)
+    {
+        $this->cId = $cId;
+
+        return $this;
+    }
+
+    /**
+     * Get cId
+     *
+     * @return integer 
+     */
+    public function getCId()
+    {
+        return $this->cId;
+    }
+
+    /**
+     * Set id
+     *
+     * @param integer $id
+     * @return CAnnouncement
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return CAnnouncement
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set content
+     *
+     * @param string $content
+     * @return CAnnouncement
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * Get content
+     *
+     * @return string 
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+
+    /**
+     * Set endDate
+     *
+     * @param \DateTime $endDate
+     * @return CAnnouncement
+     */
+    public function setEndDate($endDate)
+    {
+        $this->endDate = $endDate;
+
+        return $this;
+    }
+
+    /**
+     * Get endDate
+     *
+     * @return \DateTime 
+     */
+    public function getEndDate()
+    {
+        return $this->endDate;
+    }
+
+    /**
+     * Set displayOrder
+     *
+     * @param integer $displayOrder
+     * @return CAnnouncement
+     */
+    public function setDisplayOrder($displayOrder)
+    {
+        $this->displayOrder = $displayOrder;
+
+        return $this;
+    }
+
+    /**
+     * Get displayOrder
+     *
+     * @return integer 
+     */
+    public function getDisplayOrder()
+    {
+        return $this->displayOrder;
+    }
+
+    /**
+     * Set emailSent
+     *
+     * @param boolean $emailSent
+     * @return CAnnouncement
+     */
+    public function setEmailSent($emailSent)
+    {
+        $this->emailSent = $emailSent;
+
+        return $this;
+    }
+
+    /**
+     * Get emailSent
+     *
+     * @return boolean 
+     */
+    public function getEmailSent()
+    {
+        return $this->emailSent;
+    }
+
+    /**
+     * Set sessionId
+     *
+     * @param integer $sessionId
+     * @return CAnnouncement
+     */
+    public function setSessionId($sessionId)
+    {
+        $this->sessionId = $sessionId;
+
+        return $this;
+    }
+
+    /**
+     * Get sessionId
+     *
+     * @return integer 
+     */
+    public function getSessionId()
+    {
+        return $this->sessionId;
+    }
+
 
 }

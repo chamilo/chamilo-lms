@@ -15,32 +15,111 @@ class UserCourseCategory
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="user_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $userId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="text", nullable=false)
+     * @ORM\Column(name="title", type="text", precision=0, scale=0, nullable=false, unique=false)
      */
     private $title;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="sort", type="integer", nullable=true)
+     * @ORM\Column(name="sort", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $sort;
 
+
     /**
-     * @var integer
+     * Get id
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @return integer 
      */
-    private $id;
+    public function getId()
+    {
+        return $this->id;
+    }
 
+    /**
+     * Set userId
+     *
+     * @param integer $userId
+     * @return UserCourseCategory
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
 
+        return $this;
+    }
+
+    /**
+     * Get userId
+     *
+     * @return integer 
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return UserCourseCategory
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set sort
+     *
+     * @param integer $sort
+     * @return UserCourseCategory
+     */
+    public function setSort($sort)
+    {
+        $this->sort = $sort;
+
+        return $this;
+    }
+
+    /**
+     * Get sort
+     *
+     * @return integer 
+     */
+    public function getSort()
+    {
+        return $this->sort;
+    }
 }
+

@@ -61,7 +61,15 @@ class CQuizRelQuestion
      */
     //private $question;
 
-
+	 /**
+     * Get iid
+     *
+     * @return integer 
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
 
     /**
      * Set cId

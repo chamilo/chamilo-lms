@@ -15,53 +15,200 @@ class SessionRelCourseRelUser
     /**
      * @var integer
      *
-     * @ORM\Column(name="id_session", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id_session", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $idSession;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
+     * @ORM\Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $cId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="id_user", type="integer", nullable=false)
+     * @ORM\Column(name="id_user", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $idUser;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="visibility", type="integer", nullable=false)
+     * @ORM\Column(name="visibility", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $visibility;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="status", type="integer", nullable=false)
+     * @ORM\Column(name="status", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $status;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="legal_agreement", type="integer", nullable=true)
+     * @ORM\Column(name="legal_agreement", type="integer", precision=0, scale=0, nullable=true, unique=false)
      */
     private $legalAgreement;
 
+
     /**
-     * @var integer
+     * Get id
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @return integer 
      */
-    private $id;
+    public function getId()
+    {
+        return $this->id;
+    }
 
+    /**
+     * Set idSession
+     *
+     * @param integer $idSession
+     * @return SessionRelCourseRelUser
+     */
+    public function setIdSession($idSession)
+    {
+        $this->idSession = $idSession;
 
+        return $this;
+    }
+
+    /**
+     * Get idSession
+     *
+     * @return integer 
+     */
+    public function getIdSession()
+    {
+        return $this->idSession;
+    }
+
+    /**
+     * Set cId
+     *
+     * @param integer $cId
+     * @return SessionRelCourseRelUser
+     */
+    public function setCId($cId)
+    {
+        $this->cId = $cId;
+
+        return $this;
+    }
+
+    /**
+     * Get cId
+     *
+     * @return integer 
+     */
+    public function getCId()
+    {
+        return $this->cId;
+    }
+
+    /**
+     * Set idUser
+     *
+     * @param integer $idUser
+     * @return SessionRelCourseRelUser
+     */
+    public function setIdUser($idUser)
+    {
+        $this->idUser = $idUser;
+
+        return $this;
+    }
+
+    /**
+     * Get idUser
+     *
+     * @return integer 
+     */
+    public function getIdUser()
+    {
+        return $this->idUser;
+    }
+
+    /**
+     * Set visibility
+     *
+     * @param integer $visibility
+     * @return SessionRelCourseRelUser
+     */
+    public function setVisibility($visibility)
+    {
+        $this->visibility = $visibility;
+
+        return $this;
+    }
+
+    /**
+     * Get visibility
+     *
+     * @return integer 
+     */
+    public function getVisibility()
+    {
+        return $this->visibility;
+    }
+
+    /**
+     * Set status
+     *
+     * @param integer $status
+     * @return SessionRelCourseRelUser
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return integer 
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set legalAgreement
+     *
+     * @param integer $legalAgreement
+     * @return SessionRelCourseRelUser
+     */
+    public function setLegalAgreement($legalAgreement)
+    {
+        $this->legalAgreement = $legalAgreement;
+
+        return $this;
+    }
+
+    /**
+     * Get legalAgreement
+     *
+     * @return integer 
+     */
+    public function getLegalAgreement()
+    {
+        return $this->legalAgreement;
+    }
 }

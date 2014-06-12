@@ -15,39 +15,140 @@ class UserRelUser
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="bigint", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="user_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $userId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="friend_user_id", type="integer", nullable=false)
+     * @ORM\Column(name="friend_user_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $friendUserId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="relation_type", type="integer", nullable=false)
+     * @ORM\Column(name="relation_type", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $relationType;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="last_edit", type="datetime", nullable=true)
+     * @ORM\Column(name="last_edit", type="datetime", precision=0, scale=0, nullable=true, unique=false)
      */
     private $lastEdit;
 
+
     /**
-     * @var integer
+     * Get id
      *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @return integer
      */
-    private $id;
+    public function getId()
+    {
+        return $this->id;
+    }
 
+    /**
+     * Set userId
+     *
+     * @param integer $userId
+     * @return UserRelUser
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
 
+        return $this;
+    }
+
+    /**
+     * Get userId
+     *
+     * @return integer
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * Set friendUserId
+     *
+     * @param integer $friendUserId
+     * @return UserRelUser
+     */
+    public function setFriendUserId($friendUserId)
+    {
+        $this->friendUserId = $friendUserId;
+
+        return $this;
+    }
+
+    /**
+     * Get friendUserId
+     *
+     * @return integer
+     */
+    public function getFriendUserId()
+    {
+        return $this->friendUserId;
+    }
+
+    /**
+     * Set relationType
+     *
+     * @param integer $relationType
+     * @return UserRelUser
+     */
+    public function setRelationType($relationType)
+    {
+        $this->relationType = $relationType;
+
+        return $this;
+    }
+
+    /**
+     * Get relationType
+     *
+     * @return integer
+     */
+    public function getRelationType()
+    {
+        return $this->relationType;
+    }
+
+    /**
+     * Set lastEdit
+     *
+     * @param \DateTime $lastEdit
+     * @return UserRelUser
+     */
+    public function setLastEdit($lastEdit)
+    {
+        $this->lastEdit = $lastEdit;
+
+        return $this;
+    }
+
+    /**
+     * Get lastEdit
+     *
+     * @return \DateTime
+     */
+    public function getLastEdit()
+    {
+        return $this->lastEdit;
+    }
 }

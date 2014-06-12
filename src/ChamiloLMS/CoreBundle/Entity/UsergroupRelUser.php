@@ -4,11 +4,10 @@ namespace ChamiloLMS\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-
 /**
  * UsergroupRelUser
  *
- * @ORM\Table(name="usergroup_rel_user")
+ * @ORM\Table(name="usergroup_rel_user", indexes={@ORM\Index(name="IDX_739515A9A76ED395", columns={"user_id"}), @ORM\Index(name="IDX_739515A9D2112630", columns={"usergroup_id"})})
  * @ORM\Entity
  */
 class UsergroupRelUser
@@ -18,53 +17,30 @@ class UsergroupRelUser
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var integer
+     * @var \User
      *
-     * @ORM\Column(name="usergroup_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
+     * })
      */
-    private $usergroupId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="user_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
-     */
-    private $userId;
-
-    /**
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="classes")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     **/
     private $user;
 
     /**
+     * @var \Usergroup
      *
-     * @ORM\ManyToOne(targetEntity="Usergroup", inversedBy="users")
-     * @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id")
-     **/
-    private $class;
-
-    /**
-     * Gets the class obj
-    */
-    public function getClass()
-    {
-        return $this->class;
-    }
-
-    /**
-     * Gets an user obj
+     * @ORM\ManyToOne(targetEntity="Usergroup")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="usergroup_id", referencedColumnName="id", nullable=true)
+     * })
      */
-    public function getUser()
-    {
-        return $this->user;
-    }
+    private $usergroup;
+
 
     /**
      * Get id
@@ -77,49 +53,48 @@ class UsergroupRelUser
     }
 
     /**
-     * Set usergroupId
+     * Set user
      *
-     * @param integer $usergroupId
-     *
+     * @param \User $user
      * @return UsergroupRelUser
      */
-    public function setUsergroupId($usergroupId)
+    public function setUser(\User $user = null)
     {
-        $this->usergroupId = $usergroupId;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get usergroupId
+     * Get user
      *
-     * @return integer
+     * @return \User
      */
-    public function getUsergroupId()
+    public function getUser()
     {
-        return $this->usergroupId;
+        return $this->user;
     }
 
     /**
-     * Set userId
+     * Set usergroup
      *
-     * @param integer $userId
+     * @param \Usergroup $usergroup
      * @return UsergroupRelUser
      */
-    public function setUserId($userId)
+    public function setUsergroup(\Usergroup $usergroup = null)
     {
-        $this->userId = $userId;
+        $this->usergroup = $usergroup;
 
         return $this;
     }
 
     /**
-     * Get userId
+     * Get usergroup
      *
-     * @return integer
+     * @return \Usergroup
      */
-    public function getUserId()
+    public function getUsergroup()
     {
-        return $this->userId;
+        return $this->usergroup;
     }
 }

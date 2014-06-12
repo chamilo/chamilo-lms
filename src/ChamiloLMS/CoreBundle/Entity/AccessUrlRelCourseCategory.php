@@ -15,25 +15,80 @@ class AccessUrlRelCourseCategory
     /**
      * @var integer
      *
-     * @ORM\Column(name="access_url_id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="access_url_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $accessUrlId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="course_category_id", type="integer", nullable=false)
+     * @ORM\Column(name="course_category_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $courseCategoryId;
 
+
     /**
-     * @var integer
+     * Get id
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @return integer 
      */
-    private $id;
+    public function getId()
+    {
+        return $this->id;
+    }
 
+    /**
+     * Set accessUrlId
+     *
+     * @param integer $accessUrlId
+     * @return AccessUrlRelCourseCategory
+     */
+    public function setAccessUrlId($accessUrlId)
+    {
+        $this->accessUrlId = $accessUrlId;
 
+        return $this;
+    }
+
+    /**
+     * Get accessUrlId
+     *
+     * @return integer 
+     */
+    public function getAccessUrlId()
+    {
+        return $this->accessUrlId;
+    }
+
+    /**
+     * Set courseCategoryId
+     *
+     * @param integer $courseCategoryId
+     * @return AccessUrlRelCourseCategory
+     */
+    public function setCourseCategoryId($courseCategoryId)
+    {
+        $this->courseCategoryId = $courseCategoryId;
+
+        return $this;
+    }
+
+    /**
+     * Get courseCategoryId
+     *
+     * @return integer 
+     */
+    public function getCourseCategoryId()
+    {
+        return $this->courseCategoryId;
+    }
 }

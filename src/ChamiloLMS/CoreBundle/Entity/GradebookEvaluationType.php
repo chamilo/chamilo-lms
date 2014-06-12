@@ -13,27 +13,82 @@ use Doctrine\ORM\Mapping as ORM;
 class GradebookEvaluationType
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     * @ORM\Column(name="name", type="string", length=255, precision=0, scale=0, nullable=true, unique=false)
      */
     private $name;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="external_id", type="integer", nullable=false)
+     * @ORM\Column(name="external_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $externalId;
 
+
     /**
-     * @var integer
+     * Get id
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @return integer 
      */
-    private $id;
+    public function getId()
+    {
+        return $this->id;
+    }
 
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return GradebookEvaluationType
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
 
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set externalId
+     *
+     * @param integer $externalId
+     * @return GradebookEvaluationType
+     */
+    public function setExternalId($externalId)
+    {
+        $this->externalId = $externalId;
+
+        return $this;
+    }
+
+    /**
+     * Get externalId
+     *
+     * @return integer 
+     */
+    public function getExternalId()
+    {
+        return $this->externalId;
+    }
 }

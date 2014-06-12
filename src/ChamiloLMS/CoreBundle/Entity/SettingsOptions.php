@@ -13,34 +13,112 @@ use Doctrine\ORM\Mapping as ORM;
 class SettingsOptions
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="variable", type="string", length=255, nullable=true)
+     * @ORM\Column(name="variable", type="string", length=255, precision=0, scale=0, nullable=true, unique=false)
      */
     private $variable;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="value", type="string", length=255, nullable=true)
+     * @ORM\Column(name="value", type="string", length=255, precision=0, scale=0, nullable=true, unique=false)
      */
     private $value;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="display_text", type="string", length=255, nullable=false)
+     * @ORM\Column(name="display_text", type="string", length=255, precision=0, scale=0, nullable=false, unique=false)
      */
     private $displayText;
 
+
     /**
-     * @var integer
+     * Get id
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @return integer 
      */
-    private $id;
+    public function getId()
+    {
+        return $this->id;
+    }
 
+    /**
+     * Set variable
+     *
+     * @param string $variable
+     * @return SettingsOptions
+     */
+    public function setVariable($variable)
+    {
+        $this->variable = $variable;
 
+        return $this;
+    }
+
+    /**
+     * Get variable
+     *
+     * @return string 
+     */
+    public function getVariable()
+    {
+        return $this->variable;
+    }
+
+    /**
+     * Set value
+     *
+     * @param string $value
+     * @return SettingsOptions
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get value
+     *
+     * @return string 
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Set displayText
+     *
+     * @param string $displayText
+     * @return SettingsOptions
+     */
+    public function setDisplayText($displayText)
+    {
+        $this->displayText = $displayText;
+
+        return $this;
+    }
+
+    /**
+     * Get displayText
+     *
+     * @return string 
+     */
+    public function getDisplayText()
+    {
+        return $this->displayText;
+    }
 }

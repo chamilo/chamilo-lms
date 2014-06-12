@@ -15,46 +15,170 @@ class UserRelCourseVote
     /**
      * @var integer
      *
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $cId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\Column(name="user_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $userId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="session_id", type="integer", nullable=false)
+     * @ORM\Column(name="session_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $sessionId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="url_id", type="integer", nullable=false)
+     * @ORM\Column(name="url_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $urlId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="vote", type="integer", nullable=false)
+     * @ORM\Column(name="vote", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $vote;
 
+
     /**
-     * @var integer
+     * Get id
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @return integer
      */
-    private $id;
+    public function getId()
+    {
+        return $this->id;
+    }
 
+    /**
+     * Set cId
+     *
+     * @param integer $cId
+     * @return UserRelCourseVote
+     */
+    public function setCId($cId)
+    {
+        $this->cId = $cId;
 
+        return $this;
+    }
+
+    /**
+     * Get cId
+     *
+     * @return integer
+     */
+    public function getCId()
+    {
+        return $this->cId;
+    }
+
+    /**
+     * Set userId
+     *
+     * @param integer $userId
+     * @return UserRelCourseVote
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Get userId
+     *
+     * @return integer
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * Set sessionId
+     *
+     * @param integer $sessionId
+     * @return UserRelCourseVote
+     */
+    public function setSessionId($sessionId)
+    {
+        $this->sessionId = $sessionId;
+
+        return $this;
+    }
+
+    /**
+     * Get sessionId
+     *
+     * @return integer
+     */
+    public function getSessionId()
+    {
+        return $this->sessionId;
+    }
+
+    /**
+     * Set urlId
+     *
+     * @param integer $urlId
+     * @return UserRelCourseVote
+     */
+    public function setUrlId($urlId)
+    {
+        $this->urlId = $urlId;
+
+        return $this;
+    }
+
+    /**
+     * Get urlId
+     *
+     * @return integer
+     */
+    public function getUrlId()
+    {
+        return $this->urlId;
+    }
+
+    /**
+     * Set vote
+     *
+     * @param integer $vote
+     * @return UserRelCourseVote
+     */
+    public function setVote($vote)
+    {
+        $this->vote = $vote;
+
+        return $this;
+    }
+
+    /**
+     * Get vote
+     *
+     * @return integer
+     */
+    public function getVote()
+    {
+        return $this->vote;
+    }
 }

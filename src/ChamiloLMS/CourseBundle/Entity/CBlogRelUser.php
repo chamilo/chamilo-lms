@@ -15,32 +15,110 @@ class CBlogRelUser
     /**
      * @var integer
      *
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
+     * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $cId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="blog_id", type="integer", nullable=false)
+     * @ORM\Column(name="blog_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $blogId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\Column(name="user_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $userId;
 
+
     /**
-     * @var integer
+     * Get iid
      *
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @return integer 
      */
-    private $iid;
+    public function getIid()
+    {
+        return $this->iid;
+    }
 
+    /**
+     * Set cId
+     *
+     * @param integer $cId
+     * @return CBlogRelUser
+     */
+    public function setCId($cId)
+    {
+        $this->cId = $cId;
 
+        return $this;
+    }
+
+    /**
+     * Get cId
+     *
+     * @return integer 
+     */
+    public function getCId()
+    {
+        return $this->cId;
+    }
+
+    /**
+     * Set blogId
+     *
+     * @param integer $blogId
+     * @return CBlogRelUser
+     */
+    public function setBlogId($blogId)
+    {
+        $this->blogId = $blogId;
+
+        return $this;
+    }
+
+    /**
+     * Get blogId
+     *
+     * @return integer 
+     */
+    public function getBlogId()
+    {
+        return $this->blogId;
+    }
+
+    /**
+     * Set userId
+     *
+     * @param integer $userId
+     * @return CBlogRelUser
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Get userId
+     *
+     * @return integer 
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
 }

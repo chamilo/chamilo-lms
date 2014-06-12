@@ -13,20 +13,52 @@ use Doctrine\ORM\Mapping as ORM;
 class BranchTransactionData
 {
     /**
-     * @var string
-     *
-     * @ORM\Column(name="data", type="text", nullable=false)
-     */
-    private $data;
-
-    /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Column(name="id", type="bigint", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="data", type="text", precision=0, scale=0, nullable=false, unique=false)
+     */
+    private $data;
 
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set data
+     *
+     * @param string $data
+     * @return BranchTransactionData
+     */
+    public function setData($data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    /**
+     * Get data
+     *
+     * @return string 
+     */
+    public function getData()
+    {
+        return $this->data;
+    }
 }

@@ -15,32 +15,110 @@ class CCalendarEventRepeatNot
     /**
      * @var integer
      *
-     * @ORM\Column(name="c_id", type="integer", nullable=false)
+     * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $iid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="c_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $cId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="cal_id", type="integer", nullable=false)
+     * @ORM\Column(name="cal_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $calId;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="cal_date", type="integer", nullable=false)
+     * @ORM\Column(name="cal_date", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $calDate;
 
+
     /**
-     * @var integer
+     * Get iid
      *
-     * @ORM\Column(name="iid", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @return integer 
      */
-    private $iid;
+    public function getIid()
+    {
+        return $this->iid;
+    }
 
+    /**
+     * Set cId
+     *
+     * @param integer $cId
+     * @return CCalendarEventRepeatNot
+     */
+    public function setCId($cId)
+    {
+        $this->cId = $cId;
 
+        return $this;
+    }
+
+    /**
+     * Get cId
+     *
+     * @return integer 
+     */
+    public function getCId()
+    {
+        return $this->cId;
+    }
+
+    /**
+     * Set calId
+     *
+     * @param integer $calId
+     * @return CCalendarEventRepeatNot
+     */
+    public function setCalId($calId)
+    {
+        $this->calId = $calId;
+
+        return $this;
+    }
+
+    /**
+     * Get calId
+     *
+     * @return integer 
+     */
+    public function getCalId()
+    {
+        return $this->calId;
+    }
+
+    /**
+     * Set calDate
+     *
+     * @param integer $calDate
+     * @return CCalendarEventRepeatNot
+     */
+    public function setCalDate($calDate)
+    {
+        $this->calDate = $calDate;
+
+        return $this;
+    }
+
+    /**
+     * Get calDate
+     *
+     * @return integer 
+     */
+    public function getCalDate()
+    {
+        return $this->calDate;
+    }
 }

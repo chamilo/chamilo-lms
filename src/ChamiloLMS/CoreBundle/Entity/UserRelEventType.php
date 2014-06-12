@@ -15,25 +15,80 @@ class UserRelEventType
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="user_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      */
     private $userId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="event_type_name", type="string", length=255, nullable=false)
+     * @ORM\Column(name="event_type_name", type="string", length=255, precision=0, scale=0, nullable=false, unique=false)
      */
     private $eventTypeName;
 
+
     /**
-     * @var integer
+     * Get id
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @return integer
      */
-    private $id;
+    public function getId()
+    {
+        return $this->id;
+    }
 
+    /**
+     * Set userId
+     *
+     * @param integer $userId
+     * @return UserRelEventType
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
 
+        return $this;
+    }
+
+    /**
+     * Get userId
+     *
+     * @return integer
+     */
+    public function getUserId()
+    {
+        return $this->userId;
+    }
+
+    /**
+     * Set eventTypeName
+     *
+     * @param string $eventTypeName
+     * @return UserRelEventType
+     */
+    public function setEventTypeName($eventTypeName)
+    {
+        $this->eventTypeName = $eventTypeName;
+
+        return $this;
+    }
+
+    /**
+     * Get eventTypeName
+     *
+     * @return string
+     */
+    public function getEventTypeName()
+    {
+        return $this->eventTypeName;
+    }
 }

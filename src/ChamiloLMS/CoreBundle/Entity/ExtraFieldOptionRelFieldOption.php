@@ -63,7 +63,7 @@ class ExtraFieldOptionRelFieldOption
      * Set fieldId
      *
      * @param integer $fieldId
-     * @return EntityExtraFieldOptionRelFieldOption
+     * @return ExtraFieldOptionRelFieldOption
      */
     public function setFieldId($fieldId)
     {
@@ -86,7 +86,7 @@ class ExtraFieldOptionRelFieldOption
      * Set fieldOptionId
      *
      * @param integer $fieldOptionId
-     * @return EntityExtraFieldOptionRelFieldOption
+     * @return ExtraFieldOptionRelFieldOption
      */
     public function setFieldOptionId($fieldOptionId)
     {
@@ -109,7 +109,7 @@ class ExtraFieldOptionRelFieldOption
      * Set relatedFieldOptionId
      *
      * @param integer $relatedFieldOptionId
-     * @return EntityExtraFieldOptionRelFieldOption
+     * @return ExtraFieldOptionRelFieldOption
      */
     public function setRelatedFieldOptionId($relatedFieldOptionId)
     {
@@ -132,7 +132,7 @@ class ExtraFieldOptionRelFieldOption
      * Set roleId
      *
      * @param integer $roleId
-     * @return EntityExtraFieldOptionRelRole
+     * @return ExtraFieldOptionRelFieldOption
      */
     public function setRoleId($roleId)
     {

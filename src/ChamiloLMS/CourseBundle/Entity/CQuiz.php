@@ -845,6 +845,29 @@ class CQuiz
     }
 
     /**
+     * Set emailNotificationTemplateToUser
+     *
+     * @param string $emailNotificationTemplateToUser
+     * @return CQuiz
+     */
+    public function setEmailNotificationTemplateToUser($emailNotificationTemplateToUser)
+    {
+        $this->emailNotificationTemplateToUser = $emailNotificationTemplateToUser;
+
+        return $this;
+    }
+
+    /**
+     * Get emailNotificationTemplateToUser
+     *
+     * @return string 
+     */
+    public function getEmailNotificationTemplateToUser()
+    {
+        return $this->emailNotificationTemplateToUser;
+    }
+
+    /**
      * Set modelType
      *
      * @param integer $modelType
@@ -865,5 +888,166 @@ class CQuiz
     public function getModelType()
     {
         return $this->modelType;
+    }
+
+    /**
+     * Set questionSelectionType
+     *
+     * @param integer $questionSelectionType
+     * @return CQuiz
+     */
+    public function setQuestionSelectionType($questionSelectionType)
+    {
+        $this->questionSelectionType = $questionSelectionType;
+
+        return $this;
+    }
+
+    /**
+     * Get questionSelectionType
+     *
+     * @return integer 
+     */
+    public function getQuestionSelectionType()
+    {
+        return $this->questionSelectionType;
+    }
+
+    /**
+     * Set hideQuestionTitle
+     *
+     * @param integer $hideQuestionTitle
+     * @return CQuiz
+     */
+    public function setHideQuestionTitle($hideQuestionTitle)
+    {
+        $this->hideQuestionTitle = $hideQuestionTitle;
+
+        return $this;
+    }
+
+    /**
+     * Get hideQuestionTitle
+     *
+     * @return integer 
+     */
+    public function getHideQuestionTitle()
+    {
+        return $this->hideQuestionTitle;
+    }
+
+    /**
+     * Set scoreTypeModel
+     *
+     * @param integer $scoreTypeModel
+     * @return CQuiz
+     */
+    public function setScoreTypeModel($scoreTypeModel)
+    {
+        $this->scoreTypeModel = $scoreTypeModel;
+
+        return $this;
+    }
+
+    /**
+     * Get scoreTypeModel
+     *
+     * @return integer 
+     */
+    public function getScoreTypeModel()
+    {
+        return $this->scoreTypeModel;
+    }
+
+    /**
+     * Set globalCategoryId
+     *
+     * @param integer $globalCategoryId
+     * @return CQuiz
+     */
+    public function setGlobalCategoryId($globalCategoryId)
+    {
+        $this->globalCategoryId = $globalCategoryId;
+
+        return $this;
+    }
+
+    /**
+     * Get globalCategoryId
+     *
+     * @return integer 
+     */
+    public function getGlobalCategoryId()
+    {
+        return $this->globalCategoryId;
+    }
+
+    /**
+     * Set onSuccessMessage
+     *
+     * @param string $onSuccessMessage
+     * @return CQuiz
+     */
+    public function setOnSuccessMessage($onSuccessMessage)
+    {
+        $this->onSuccessMessage = $onSuccessMessage;
+
+        return $this;
+    }
+
+    /**
+     * Get onSuccessMessage
+     *
+     * @return string 
+     */
+    public function getOnSuccessMessage()
+    {
+        return $this->onSuccessMessage;
+    }
+
+    /**
+     * Set onFailedMessage
+     *
+     * @param string $onFailedMessage
+     * @return CQuiz
+     */
+    public function setOnFailedMessage($onFailedMessage)
+    {
+        $this->onFailedMessage = $onFailedMessage;
+
+        return $this;
+    }
+
+    /**
+     * Get onFailedMessage
+     *
+     * @return string 
+     */
+    public function getOnFailedMessage()
+    {
+        return $this->onFailedMessage;
+    }
+
+    /**
+     * Set notifyUserByEmail
+     *
+     * @param integer $notifyUserByEmail
+     * @return CQuiz
+     */
+    public function setNotifyUserByEmail($notifyUserByEmail)
+    {
+        $this->notifyUserByEmail = $notifyUserByEmail;
+
+        return $this;
+    }
+
+    /**
+     * Get notifyUserByEmail
+     *
+     * @return integer 
+     */
+    public function getNotifyUserByEmail()
+    {
+        return $this->notifyUserByEmail;
     }
 }

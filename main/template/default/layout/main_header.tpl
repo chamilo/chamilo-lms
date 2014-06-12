@@ -6,7 +6,7 @@
 <head>
 {% include "default/layout/head.tpl" %}
 </head>
-<body dir="{{ text_direction }}" class="{{ section_name }}">
+<body dir="{{ text_direction }}" class="{{ section_name }} {{ login_class }}">
 <noscript>{{ "NoJavascript"|get_lang }}</noscript>
 
 {% if show_header == true %}

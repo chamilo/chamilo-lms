@@ -3127,7 +3127,7 @@ function api_not_allowed($print_headers = false, $message = null)
             $content .= "</div>";
         }
         $content .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.get_lang('ReturnToCourseHomepage').'</a></p>';
-
+        $tpl->setLoginBodyClass();
         $tpl->assign('content', $content);
         $tpl->display_one_col_template();
         exit;
@@ -3146,6 +3146,7 @@ function api_not_allowed($print_headers = false, $message = null)
         // or we try to get directly to a private course without being logged
         if (!is_null(api_get_course_int_id())) {
             api_set_firstpage_parameter(api_get_course_id());
+            $tpl->setLoginBodyClass();
             $action = api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']);
             $action = str_replace('&amp;', '&', $action);
             $form = new FormValidator('formLogin', 'post', $action, null, array('class'=>'form-stacked'));

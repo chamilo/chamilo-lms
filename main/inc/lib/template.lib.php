@@ -133,6 +133,7 @@ class Template
         $this->assign('style', $this->style);
         $this->assign('css_style', $this->theme);
         $this->assign('template', $this->style);
+        $this->assign('login_class', null);
 
         //Chamilo plugins
         if ($this->show_header) {
@@ -907,5 +908,13 @@ class Template
     public function display($template)
     {
         echo $this->twig->render($template, $this->params);
+    }
+
+    /**
+     * Adds a body class for login pages
+     */
+    public function setLoginBodyClass()
+    {
+        $this->assign('login_class', 'section-login');
     }
 }

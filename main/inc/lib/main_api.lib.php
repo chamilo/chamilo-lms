@@ -3044,11 +3044,11 @@ function api_not_allowed($print_headers = false, $message = null)
 
     global $this_section;
 
-    //if (empty($user_id)) {
+    if (empty($user_id)) {
 
-    // Why the CustomPages::enabled() need to be to set the request_uri
-    $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
-    //}
+        // Why the CustomPages::enabled() need to be to set the request_uri
+        $_SESSION['request_uri'] = $_SERVER['REQUEST_URI'];
+    }
 
     if (CustomPages::enabled() && !isset($user_id)) {
         CustomPages::display(CustomPages::INDEX_UNLOGGED);
@@ -3072,6 +3072,8 @@ function api_not_allowed($print_headers = false, $message = null)
     }
 
     $tpl = new Template(null, $show_headers, $show_headers);
+
+    $tpl->assign('hide_login_link', 1);
 
     $tpl->assign('content', $msg);
     if (($user_id!=0 && !api_is_anonymous()) && (!isset($course) || $course == -1) && empty($_GET['cidReq'])) {

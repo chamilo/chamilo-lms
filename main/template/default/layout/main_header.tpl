@@ -81,7 +81,6 @@
             {{ breadcrumb }}
         </header>
 
-    <div id="main" class="container">
         <div id="top_main_content" class="row">
 
         {# course navigation links/shortcuts need to be activated by the admin #}

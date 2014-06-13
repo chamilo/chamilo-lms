@@ -1,10 +1,10 @@
 {% for hot_course in hot_courses %}               
     {% if hot_course.extra_info.title %}        
-        <div class="span3 hot-course-box">
-            <div class="course-top">
+        <div class="span9 hot-course-box">
+            <div class="well_border">
                 <div class="row">
-                    <div class="span3">
-                        <div class="thumbnail-course">
+                    <div class="span2">
+                        <div class="thumbnail">
                             <img src="{{ hot_course.extra_info.course_image }}" alt="" />
                         </div>
                     </div>

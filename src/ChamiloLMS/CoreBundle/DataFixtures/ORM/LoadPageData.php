@@ -20,7 +20,7 @@ class LoadPageData extends AbstractFixture implements ContainerAwareInterface, O
 
     public function getOrder()
     {
-        return 2;
+        return 3;
     }
 
     public function setContainer(ContainerInterface $container = null)
@@ -31,9 +31,7 @@ class LoadPageData extends AbstractFixture implements ContainerAwareInterface, O
     public function load(ObjectManager $manager)
     {
         $site = $this->createSite();
-
         $this->createGlobalPage($site);
-
 
         // app/console sonata:page:update-core-routes --site=all
         // app/console sonata:page:create-snapshots --site=all

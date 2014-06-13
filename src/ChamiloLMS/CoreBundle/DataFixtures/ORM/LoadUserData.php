@@ -19,6 +19,9 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
         return 1;
     }
 
+    /**
+     * @param ContainerInterface $container
+     */
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
@@ -44,19 +47,21 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
         $groupManager->updateGroup($teacherGroup);
 
         // Creating admin user.
-        $user = $manager->createUser();
+        $admin = $manager->createUser();
 
-        $user->setUsername('admin');
-        $user->setUserId(1);
-        $user->setFirstname('Jane');
-        $user->setLastname('Doe');
-        $user->setEmail($faker->safeEmail);
-        $user->setPlainPassword('admin');
-        $user->setEnabled(true);
-        $user->setSuperAdmin(true);
-        $user->setLocked(false);
+        $admin->setUsername('admin');
+        $admin->setUserId(1);
+        $admin->setFirstname('Jane');
+        $admin->setLastname('Doe');
+        $admin->setEmail($faker->safeEmail);
+        $admin->setPlainPassword('admin');
+        $admin->setEnabled(true);
+        $admin->setSuperAdmin(true);
+        $admin->setLocked(false);
 
-        $manager->updateUser($user);
+        $manager->updateUser($admin);
+
+        $this->addReference('admin-user', $admin);
 
         // Creating student user.
 
@@ -70,7 +75,6 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
         $user->setPlainPassword('student');
         $user->setEnabled(true);
         $user->setLocked(false);
-
         $user->addGroup($studentGroup);
 
         $manager->updateUser($user);

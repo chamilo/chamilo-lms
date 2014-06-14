@@ -2,6 +2,11 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$AgendaList = "Lista agenda";
+$Calendar = "Calendario";
+$CustomRange = "Rango personalizado";
+$ThisWeek = "Esta semana";
+$SendToUsersInSessions = "Enviar a los usuarios de todas las sesiones de este curso";
 $ParametersNotFound = "Parámetros no encontrados";
 $UsersToAdd = "Usuarios por añadir";
 $DocumentsAdded = "Documentos añadidos";

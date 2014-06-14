@@ -1474,30 +1474,47 @@ class Display
         return $html;
     }
 
-    public static function return_default_table_class() {
+    public static function return_default_table_class()
+    {
         return 'data_table';
     }
 
-    public static function page_header($title, $second_title = null, $size = 'h2') {
-        $title = Security::remove_XSS($title);
+    /**
+     * @param string $title
+     * @param string $second_title
+     * @param string $size
+     * @param bool $filter
+     * @return string
+     */
+    public static function page_header($title, $second_title = null, $size = 'h2', $filter = true)
+    {
+        if ($filter) {
+            $title = Security::remove_XSS($title);
+        }
+
         if (!empty($second_title)) {
-            $second_title = Security::remove_XSS($second_title);
+            if ($filter) {
+                $second_title = Security::remove_XSS($second_title);
+            }
             $title .= "<small> $second_title<small>";
         }
         return '<div class="page-header"><'.$size.'>'.$title.'</'.$size.'></div>';
     }
 
-    public static function page_header_and_translate($title, $second_title = null) {
+    public static function page_header_and_translate($title, $second_title = null)
+    {
         $title = get_lang($title);
         return self::page_header($title, $second_title);
     }
 
-     public static function page_subheader_and_translate($title, $second_title = null) {
+     public static function page_subheader_and_translate($title, $second_title = null)
+     {
         $title = get_lang($title);
         return self::page_subheader($title, $second_title);
     }
 
-    public static function page_subheader($title, $second_title = null) {
+    public static function page_subheader($title, $second_title = null)
+    {
         if (!empty($second_title)) {
             $second_title = Security::remove_XSS($second_title);
             $title .= "<small> $second_title<small>";
@@ -1505,15 +1522,18 @@ class Display
         return '<div class="page-header"><h2>'.Security::remove_XSS($title).'</h2></div>';
     }
 
-    public static function page_subheader2($title, $second_title = null) {
+    public static function page_subheader2($title, $second_title = null)
+    {
         return self::page_header($title, $second_title, 'h3');
     }
 
-    public static function page_subheader3($title, $second_title = null) {
+    public static function page_subheader3($title, $second_title = null)
+    {
         return self::page_header($title, $second_title, 'h4');
     }
 
-    public static function description($list) {
+    public static function description($list)
+    {
         $html = null;
         if (!empty($list)) {
             $html = '<dl class="dl-horizontal">';
@@ -1526,7 +1546,8 @@ class Display
         return $html;
     }
 
-    public static function bar_progress($percentage, $show_percentage = true, $extra_info = null) {
+    public static function bar_progress($percentage, $show_percentage = true, $extra_info = null)
+    {
         $percentage = intval($percentage);
         $div = '<div class="progress progress-striped">
                     <div class="bar" style="width: '.$percentage.'%;"></div>

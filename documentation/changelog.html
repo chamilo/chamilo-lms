@@ -44,7 +44,7 @@
 <p><i>Note: most #wxyz references are issue numbers you can find in <a href="http://support.chamilo.org/projects/chamilo-18/issues" target="_blank">our public bug tracking system</a>. Some references marked BT#xyz are developments made externally for BeezNest customers and integrated into Chamilo. The details of these tasks cannot be seen for confidentiality reasons, but the code change is public and can be reviewed by anyone.</i></p>
 <p>&nbsp;</p>
 
-<h1>Chamilo 1.9.8 - Thon-Samson, June, 2014</h1>
+<h1>Chamilo 1.9.8 - Thon, 15th of June, 2014</h1>
 <h3>Release notes - summary</h3>
 <p>Chamilo 1.9.8 is a minor stable version with a series of improvements on top of 1.9.6.<br />
 This version is the first Chamilo version to drop support for Internet Explorer
@@ -53,7 +53,7 @@ web standards. If they *cannot* avoid Internet Explorer, make sure they use at
 least version 10, which respects a little bit more than half of the W3C
 standards (but still much less than Firefox, Chrome, Opera or even Safari)</p>
 <h3>Release name</h3>
-<p><a href="http://fr.wikipedia.org/wiki/Thon-Samson">Thon-Samson</a> is a small city in the Belgian region of Wallonia</p>
+<p><a href="http://fr.wikipedia.org/wiki/Thon-Samson">Thon</a> is a small city in the Belgian region of Wallonia, several times classified as the most beautiful village of the South region of Belgium. It is a quite, beautiful place without anything out of the ordinary but made of beautiful, hundred years old homes built from famous Wallonia blue stone and crossed by the Samson river. Its stability and it's position just next to the large cliffs surrounding the Meuse are symbolically close to Chamilo 1.9.8, highly stable but a few steps away for the huge jump to the next major version.</p>
 <h3>Security</h3>
 All security issues are published and patches are attached on <a href="https://support.chamilo.org/projects/chamilo-18/wiki/Security_issues">our security issues page</a>. If you think you found an additional security issue you'd like to report, please check our procedure there.
 <ul>
@@ -84,6 +84,7 @@ All security issues are published and patches are attached on <a href="https://s
     <li>(#7063) Added support for "for" attributes in &lt;label&gt; fields for WCAG/WAI AA compatibility</li>
     <li>(#7072) Added user profile fields of type "File upload"</li>
     <li>(BT#7010) Add Aiken (Word) import format in exercises</li>
+    <li>(#6224) Add browser language auto-detection at first connection</li>
 </ul>
 <h3>Improvements (minor features)</h3>
 <ul>
@@ -116,6 +117,9 @@ All security issues are published and patches are attached on <a href="https://s
     <li>(#6889) Exercises: Group feedback and results options in exercises creation/edition form</li>
     <li>(#7158) Increase recommended max memory limit to 128MB to avoid problems with reports with lots of users</li>
     <li>(#7161) Thematic plan's edition mode doesn't display properly</li>
+    <li>(#6768) Always redirect user to expected page after "Not allowed" message (always load the require_uri in api_not_allowed) and fix login button</li>
+    <li>(bd0320a,d2ddee1 - BT#8199) Add session support in exams report</li>
+    <li>(#6173) Add partial French translation to installation guide</li>
 </ul>
 <h3>Debugging</h3>
 <ul>
@@ -512,6 +516,10 @@ All security issues are published and patches are attached on <a href="https://s
     <li>(ef4d1ae) Add Adminer 4.1.0</li>
     <li>(a346e5a) Reversed gradebook scores array to reduce confusion</li>
     <li>(893d3ea) Fix issue getting last connexion date to a course (was getting it from the table track_e_course_access)</li>
+    <li>(40a1e95 - BT#7780) Fix issue in course URL inside documents copied from one course to another</li>
+    <li>(9b1ddc0, 82df5fb - BT#8207, BT#6768) Fix redirection issue in custom pages</li>
+    <li>(#7153) Fix partial scores, total score, PDF export, percentage score,  and certificate link in gradebook</li>
+    <li>(#5565) Fix installation bug (again)</li>
 </ul>
 <h3>Stylesheets and theming</h3>
 Stylesheets have been considerably changed in version 1.9.8, which might require a little update on your side if you have a custom stylesheet. We're sorry about it, but it was really necessary to improve the adaptability of the interface for mobile devices (which we are sure you will appreciate). If you only changed the logo, we recommend you make a copy of an existing Chamilo style (main/css/chamilo*) again, rename it and simply replace the logo then upload the new style. If you have more complex styles, you might want to ask for the assistance of your web designer at the moment you update Chamilo to this version.
@@ -522,18 +530,21 @@ Stylesheets have been considerably changed in version 1.9.8, which might require
     <li>(#7141) Great update to learning paths visualization</li>
     <li>(#7142) Changed help image in learning paths</li>
     <li>(#7147) Updated chat screen appearance</li>
+    <li>(d64b865 - BT#8230) Add "section-login" class in login pages</li>
 </ul>
 <h3>Web services</h3>
 <ul>
     <li>(BT#6246) Improved sessions list in sessions_list.soap.php and added GetLearnpathHighestLessonLocation() (also BT#6667)</li>
     <li>(BT#6246) Updated WSCreateUser() to manage active status, added WSGetUser(), WSGetUserFromUsername() and WSSubscribeUserToSessionSimple() and fixed WSListSessions() to allow sessions sales from Ubercart Drupal module</li>
-    <li>(  ?  ) Add check on existence of extra fields (optional) (43949c7b)</li>
+    <li>(43949c7) Add check on existence of extra fields (optional)</li>
     <li>(#6763) Added WSUserSubscribedInCourse()</li>
+    <li>(5ddc3c0) Assume student status in EditUser* services and prevent modifying an admin to student</li>
 </ul>
 <h3>Removals</h3>
 <ul>
-  <li>Custom tabs can no longer be defined directly in the settings_current table.
+    <li>Custom tabs can no longer be defined directly in the settings_current table.
       If you have custom_tabs in this table (select * from settings_current where variable='show_tabs' AND subkey like 'custom_tab_%'), please add them through the homepage edition screen.</li>
+    <li>(#7180) Remove custom_tab_* feature </li>
 </ul>
 
 <h1>Chamilo 1.9.6.1 - 22th of May, 2014</h1>

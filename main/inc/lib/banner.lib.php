@@ -109,8 +109,10 @@ function get_tabs() {
         $navigation['reports']['title'] = get_lang('Reports');
 	}*/
 
-	// Custom tabs
-	for ($i = 1; $i <= 3; $i++) {
+    // Custom tabs - 1.8 hidden feature, removed as useless
+    //see https://support.chamilo.org/issues/7180
+    /*
+    for ($i = 1; $i <= 3; $i++) {
             if (api_get_setting('show_tabs', 'custom_tab_' . $i) == 'true') {
                 $setting = api_get_full_setting('show_tabs', 'custom_tab_' . $i);
                 $navigation['custom_tab_' . $i]['url'] = $setting[0]['comment'];
@@ -118,6 +120,7 @@ function get_tabs() {
                 $navigation['custom_tab_' . $i]['key'] = 'custom_tab_' . $i;
             }
         }
+    */
 
 	// Platform administration
 	if (api_is_platform_admin(true)) {

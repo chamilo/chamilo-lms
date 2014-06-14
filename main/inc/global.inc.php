@@ -382,7 +382,7 @@ if (!empty($_POST['language_list'])) {
     $user_language = str_replace('index.php?language=', '', $_POST['language_list']);
 }
 
-if (empty($user_language) && !empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+if (empty($user_language) && !empty($_SERVER['HTTP_ACCEPT_LANGUAGE']) && !isset($_SESSION['_user'])) {
     require_once __DIR__.'/../admin/sub_language.class.php';
     $l = subLanguageManager::getLanguageFromBrowserPreference($_SERVER['HTTP_ACCEPT_LANGUAGE']);
     if (!empty($l)) {

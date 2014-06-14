@@ -1,7 +1,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Chamilo Installation Guide</title>
+    <title>Guide d'installation de Chamilo</title>
     <link rel="stylesheet" href="../main/css/base.css" type="text/css" media="screen,projection" />
     <link rel="stylesheet" href="default.css" type="text/css" media="screen,projection" />
     <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon" />
@@ -34,112 +34,143 @@
 </div>
 
 <div class="container">
-<h1>Chamilo - Installation Guide</h1>
+<h1>Guide d'installation de Chamilo LMS</h1>
 
-<p>Thank you for downloading Chamilo</p>
+<p>Merci d'avoir téléchargé Chamilo</p>
 <ul>
-  <li>You can test Chamilo LMS, as teacher, without installing it, on <a href="http://campus.chamilo.org">Free Campus</a></li>
+  <li>Vous pouvez tester Chamilo LMS, en tnt que professeur, sans l'installer, sur <a href="http://campus.chamilo.org/?language=french">le campus libre de Chamilo</a></li>
 </ul>
-<p>This guide explains how to install Chamilo FREE. Please read this fully before proceeding with the installation.</p>
-<p>Spanish: También puede leer <a href="installation_guide_es_ES.html">esta guía de instalación en español</a>.</p>
-<p>French: Vous pouvez aussi lire <a href="installation_guide_fr_FR.html">ce guide d'installation en français</a>.</p>
+<p>Ce guide explique comment installer Chamilo LMS. Nous recommandons activement la lecture complète de ce guide avant de commencer l'installation.</p>
+<p>English: Get back to the <a href="installation_guide.html">English version of the installation guide</a>.</p>
 
 
-<h2><b>Contents</b></h2>
+<h2><b>Index</b></h2>
 
 <ol>
 
-  <li><a href="#1._Pre-requisites">Pre-requisites</a></li>
-  <li><a href="#2._Installation_of_Chamilo_LMS">Installation of Chamilo LMS</a></li>
-  <li><a href="#3._Upgrade_from_a_previous_version_of">Upgrade from a previous version of Chamilo/Dok€os</a></li>
-  <li><a href="#4._Troubleshooting">Troubleshooting</a></li>
-  <li><a href="#5._Administration_section">Administration section</a></li>
+  <li><a href="#1._Pre-requisites">Prérequis</a></li>
+  <li><a href="#2._Installation_of_Chamilo_LMS">Installation de Chamilo LMS</a></li>
+  <li><a href="#3._Upgrade_from_a_previous_version_of">Upgrade depuis une version antérieure de Chamilo/Dok€os</a></li>
+  <li><a href="#4._Troubleshooting">Problèmes</a></li>
+  <li><a href="#5._Administration_section">La section d'administration</a></li>
   <li><a href="#6._LDAP">LDAP&nbsp;</a></li>
-  <li><a href="#7._Mathematical_formulas">Mathematical formulas with LaTeX</a></li>
-  <li><a href="#8._ASCIIMathML_mathematical_formulas">Mathematical formulas with ASCIIMathML</a></li>
-  <li><a href="#9._WIRIS_mathematical_formulas">Mathematical formulas with WIRIS</a></li>
-  <li><a href="#10._Xapian_fulltext_indexing">Full-text indexation with Xapian</a></li>
-  <li><a href="#11._Chamilo_rapid_ppt_conversion">Chamilo Rapid - PPT conversion system</a></li>
-  <li><a href="#12._Setting_cron_up">Setting chronological tasks</a></li>
-  <li><a href="#13._Changing_language_name_order">Changing the language's firstname/lastname order</a></li>
-  <li><a href="#14._Improving_files_download">Improving files download time</a></li>
+  <li><a href="#7._Mathematical_formulas">Formules mathématiques avec LaTeX</a></li>
+  <li><a href="#8._ASCIIMathML_mathematical_formulas">Formules mathématiques avec ASCIIMathML</a></li>
+  <li><a href="#9._WIRIS_mathematical_formulas">Formules mathématiques avec WIRIS</a></li>
+  <li><a href="#10._Xapian_fulltext_indexing">Indexation full-text avec Xapian</a></li>
+  <li><a href="#11._Chamilo_rapid_ppt_conversion">Chamilo Rapid - système de conversion PPT</a></li>
+  <li><a href="#12._Setting_cron_up">Configurer de tâches "chronologiques"</a></li>
+  <li><a href="#13._Changing_language_name_order">Changer l'ordre des noms/prénoms par langue</a></li>
+  <li><a href="#14._Improving_files_download">Améliorer le temps de téléchargement de fichiers</a></li>
 </ol>
 
 <br />
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="1._Pre-requisites"></a>1. Pre-requisites</h2>
+<h2><a name="1._Pre-requisites"></a>1. Prérequis</h2>
 
-Chamilo
-can be installed on Windows, Linux, Mac OS X and UNIX servers
-indifferently. However, we recommend the use of Linux server for
-optimal flexibility, remote control and scalability. <br />
-
-<br />
-
-Chamilo is mainly a LMS running <span style="font-weight: bold;">Apache (2.2 recommended)</span>, <span style="font-weight: bold;">MySQL 5.1 or 5.5 (or MariaDB)</span> and <span style="font-weight: bold;">PHP 5.3, 5.4 or 5.5 (5.5 recommended for greater efficiency)</span> (the so called <span style="font-weight: bold;">AMP</span> trilogy). <br />
-
+Chamilo peut être installé sous Windows, Linux, Max OS X et serveurs UNIX
+indifféremment. Cela dit, nous recommandons activement l'utilisation d'un
+serveur Linux pour sa flexibilité optimale, son facile contrôle à distance
+et sa capacité de redimensionnement. En particulier, nous recommandons la
+distribution Debian (ou sa petite soeur Ubuntu)<br />
 
 <br />
 
-All these pieces of software are free software and freely available. <br />
+Chamilo est un système de gestion de l'apprentissage (LMS) qui fonctionne
+principallement sur base d'un <span style="font-weight: bold;">serveur web (Apache 2.2
+recommandé)</span>, de <span style="font-weight: bold;">MySQL (5.1 ou 5.5) ou de MariaDB
+(5 ou 10)</span> et de <span style="font-weight: bold;">PHP 5.3, 5.4 ou 5.5 (5.5 recommandé
+pour une plus grande efficacité)</span> (la trilogie aussi appelée
+<span style="font-weight: bold;">AMP</span>). <br />
+
 
 <br />
 
-To run Chamilo <span style="font-weight: bold;">LMS</span> on your server, you need to install WAMP, LAMP or MAMP:
+Tous ces éléments logiciels sont sous licence de logiciels libres et sont
+disponibles gratuitement.<br />
+
+<br />
+
+Pour faire fonctionner Chamilo <span style="font-weight: bold;">LMS</span> sur votre serveur,
+il est suggéré d'installer WAMP, LAMP ou MAMP (ou leurs composants
+individuellement):
 <ul>
 
-  <li>To install <span style="font-weight: bold;">WAMP</span> (AMP on Windows), we recommend the <a href="http://www.apachefriends.org/en/xampp.html">XAMPP</a> .exe installer<a href="http://www.apachefriends.org/en/xampp.html"></a></li>
+  <li>Pour installer <span style="font-weight: bold;">WAMP</span> (AMP sous Windows), nous
+      recommandons le paquet
+      <a href="http://www.apachefriends.org/en/xampp.html">XAMPP</a> en
+      installateur ".exe"</li>
 
-  <li>To install <span style="font-weight: bold;">LAMP</span>
-(AMP on Linux), use the Package manager of your favourite distribution (Synaptic, RPMFinder etc.).
-For instance, on a Ubuntu server,&nbsp;use Shell or Synaptic following the
-    <a href="http://ubuntuguide.org/wiki/Ubuntu:Feisty#Apache_HTTP_Server">Ubuntuguide on Apache</a> and the following sections</li>
+  <li>Pour installer <span style="font-weight: bold;">LAMP</span>
+(AMP sous Linux), utilisez le système de gestion de paquets de votre
+      distribution préférée (apt, Synaptic, RPMFinder, yum etc.). Par exemple,
+      sur un serveur Ubuntu, vous pouvez utiliser le Shell (terminal) ou
+      Synaptic via le guide
+    <a href="http://ubuntuguide.org/wiki/Ubuntu:Feisty#Apache_HTTP_Server">
+        Ubuntuguide on Apache</a> et les sections suivantes du présent guide/li>
 
-  <li>To install <span style="font-weight: bold;">MAMP</span> (AMP on Mac OS X), refer to the <a href="http://www.mamp.info/en/index.php">MAMP</a> dedicated website<a href="http://www.mamp.info/en/index.php"></a></li>
-  <li>Make sure you check the <a href="dependencies.html" title="Dependencies">Dependencies page</a> if you need to know the requirements in more precise way.
+  <li>Pour installer <span style="font-weight: bold;">MAMP</span> (AMP sur Mac OS X),
+    référez-vous au site dédié de
+    <a href="http://www.mamp.info/en/index.php">MAMP</a></li>
+
+  <li>Assurez-vous de vérifier les
+      <a href="dependencies.html" title="Dependencies">dépendances</a> si vous
+      avez besoin de connaîtres les pré-requis de façon plus précise.
 </ul>
 
 
 <br />
 
 
-<h3><span style="font-weight: bold;">MySQL or MariaDB database server</span></h3>
+<h3><span style="font-weight: bold;">Serveurs de base de données MySQL ou MariaDB</span></h3>
 
-You will need a login and password allowing to manage and create
-a database. Usually, the default configuration on local computers is
-to allow you to connect as root with an empty password. It is HIGHLY
-RECOMMENDED to change the password and define a user with access to
-only a specific database. Please refer to the MySQL or MariaDB documentation
-in order to do this.<br />
-<span class="muted">Note that this has been greatly simplified since
-version 1.9, as it previously required to choose between multiple databases
-and a deprecated single-database mode.</span><br />
+Vous aurez besoin d'un login et d'un mot de passe pour gérer et créer une base
+de données. Généralement, la configuration par défaut sur des ordinateurs
+locaux est de permettre la connexion comme utilisateur root avec un mot de passe
+vide. Il est FORTEMENT RECOMMANDÉ de modifier le mot de passe et de définir un
+utilisateur avec un accès à une (et une seule) base de données spécifique.
+Veuillez vous référer à la documentation de MySQL ou MariaDB pour ce faire.
+<br />
+<span class="muted">Veuillez noter que ceci a été largement simplifié depuis la
+    version 1.9, étant donné qu'il était nécessaire antérieurement de choisir
+    entre plusieurs bases de données ou un mode base-de-données-unique
+    non maintenu..</span><br />
 
 <hr style="width: 100%; height: 2px;" />
-<h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation of Chamilo LMS</span></h2>
-
+<h2><a name="2._Installation_of_Chamilo_LMS"></a><span style="font-weight: bold;">2. Installation de Chamilo LMS</span></h2>
+Une fois votre système de base préparé, vous pouvez commencer l'installation de Chamilo proprement dite
 <ol>
-  <li><a href="http://www.chamilo.org/download">Download Chamilo LMS</a></li>
-  <li>Unzip it</li>
-  <li>Copy the Chamilo directory in your Apache web directory. This can be
-    <span style="font-weight: bold;">C:\xampp\htdocs\</span> on a Windows server or <span style="font-weight: bold;">/var/www/html/</span> (or /var/www/chamilo/) on a Linux server</li>
-  <li>Open your web browser (Internet Explorer, Firefox...) and type
-    <span style="font-weight: bold;">http://localhost/chamilo/</span> if you install locally or
-    <span style="font-weight: bold;">http://www.domain.com/chamilo/</span> if you install remotely. <span class="muted">We recommend defining a specific Virtual Host for this installation if you have the skills to do so</span>
+  <li><a href="http://www.chamilo.org/download">Télécharger Chamilo LMS</a></li>
+  <li>Décompressez-le</li>
+  <li>Copiez le répertoire de Chamilo dans le répertoire web de votre serveur web (Apache).
+      Celui-ci peut se trouver dans <span style="font-weight: bold;">C:\xampp\htdocs\</span> sur
+      une machine Windows avec WAMP, ou dans <span style="font-weight: bold;">/var/www/html/</span> (ou /var/www/) sur un serveur Linux</li>
+  <li>Ouvrez votre navigateur (Firefox, Chrome, ...) et tapez l'adresse suivante
+    <span style="font-weight: bold;">http://localhost/chamilo/</span> si vous l'avez installé localement ou
+    <span style="font-weight: bold;">http://www.domain.com/chamilo/</span> l'avez installé à distance. <span class="muted">Nous recommandons la définition d'un Virtual Host spécifique pour cette installation si vous avez les compétences requises pour configurer votre serveur web</span>
     </li>
 
-  <li>Follow the web installation process. You can accept all default
-values. Consider changing the admin password to remember it.&nbsp;</li>
+  <li>Suivez le processus d'installation. Vous pouvez accepter toutes les
+      valeurs par défaut. Pensez à modifier le mot de passe d'administrateur
+      afin de vous en souvenir plus tard.</li>
 </ol>
 <br />
-<span class="muted">Note: if installing Chamilo locally using localhost or
-the IP address of your computer during the installation, you might get issues
-while accessing from another computer. To avoid this, you can
-<a href="http://beeznest.wordpress.com/2013/01/15/answering-to-different-addresses-with-chamilo/">apply a little
-change to your configuration file</a>.</span>
+<span class="muted">Note: si vous installez Chamilo localement en utilisant
+"localhost" ou l'adresse IP de votre ordinateur durant l'installation, vous
+pourriez rencontrer des difficultés lors de l'accès depuis d'autres ordinateurs.
+Pour éviter ça, vous pouvez
+<a href="http://beeznest.wordpress.com/2013/01/15/answering-to-different-addresses-with-chamilo/">appliquer une petite modification à votre
+fichier de configuration</a>.</span>
+<br /> <br />
+Les répertoires suivants doivent êtres lisibles, éditables et exécutables par votre serveur web.
 <br />
-The following directories need to be readable, writeable and executable by your web server.
-<span class="muted">This usually requires no specific action on Windows servers, but will require a "chmod" under Linux and Mac. See instructions below.</span><br />Replace [chamilo] with the directory where your Chamilo installation is located):
+<span class="muted">Note: Cela ne requiert généralement pas de modification spécifique
+    sous Windows (ce qui est d'ailleurs l'une des raisons principales pour
+    l'existence d'autant de virus et malware pour ce système d'exploitation,
+    mais cela demande l'utilisation de "chmod" sous Linux et Mac. Dans ces
+    derniers cas, veuillez suivre les instructions qui suivent.</span>
+<br /><br />
+Remplacez [chamilo] par le répertoire où vous avez placé le contenu du zip:
 <ul>
   <li>[chamilo]/main/inc/conf/</li>
   <li>[chamilo]/main/upload/users/</li>
@@ -148,114 +179,123 @@ The following directories need to be readable, writeable and executable by your 
   <li>[chamilo]/courses/</li>
   <li>[chamilo]/home/</li>
 </ul>
-Optionally, you can do the same to the following directories if you want to
-enable CSS styles package upload and sub-language definition:
+Optionnellement, vous pouvez faire la même chose pour les répertoires suivants
+si vous souhaitez permettre l'envoi de styles CSS ou la définition de nouvelles
+langues par les administrateurs de Chamilo:
 <ul>
   <li>[chamilo]/main/css/</li>
   <li>[chamilo]/main/lang/</li>
 </ul>
-Starting from Chamilo 1.8.8, you can also enable full-text indexing features which
-require the php5-xapian PHP's extension module to be installed. If you do use
-it, you will need to allow your system to write into the sarchdb directory:
+Depuis Chamilo 1.8.8 (et pour toutes les versions suivantes), vous pouvez
+également activer l'indexation full-text, qui requiert l'installation de
+l'extension php5-xapian. Si vous l'utilisez, vous devrez autoriser votre système
+à écrire dans le répertoire searchdb:
 <ul>
   <li>[chamilo]/searchdb</li>
 </ul>
-If you find a tests/ directory at the root of your package, please delete it.
-This is a development directory that has not been checked for security issues,
-an it should *never* be accessible to final users on a production server.
+Si vous trouvez un répertoire tests/ à la racine, veuillez le supprimer.
+Il s'agit d'un répertoire de développement qui ne bénéficie pas des
+vérifications de sécurité nécessaires pour un système en production. Il ne
+devrait en tout cas *jamais* être accessible aux utilisateurs finaux sur un
+système en production.
 
-<p>On Linux, Mac OS X and BSD operating systems you can use the <em>chmod
-0775</em> command for this (although we recommend you seek advice from an
-experienced system administrator to avoid security issues).
-On Windows, you may need to check the properties of the folders (by
-right-clicking on them).</p>
+<p>Sous les systèmes d'exploitation Linux, Mac OS X et BSD, vous pouvez utiliser
+la commande <em>chmod 0775</em> pour modifier les permissions, bien que nous
+recommandions, pour des raisons de sécurité, de cherchez l'assistance d'un
+administrateur système expérimenté pour le faire.
+Sous Windows, vous pourriez avoir besoin de vérifier les propriétés de ces
+répertoires (en cliquant dessus avec le bouton droit de la souris).</p>
 
-<p>The following directory needs to be readable and writeable for the web browser
-<em>only</em> during the installation process:</p>
+<p>Le répertoire suivant doit être lisible et éditable <em>seulement</em>
+durant le processus d'installation:</p>
 <ul>
-  <li>chamilo/main/inc/conf/ (if present)</li>
+  <li>chamilo/main/inc/conf/</li>
 </ul>
-
-<p>On Linux, Mac OS X and BSD operating systems you can use the <em>chmod
-666</em> command for this (although we recommend you seek advice from an
-experienced system administrator).
-In Windows, you may need to check the properties of the files and
-folders (by right-clicking on them).</p>
 
 <p>
 <b>NOTES:</b><br />
 
-Do not modify the home_*.html files directly. Instead,
-choose "Configure the homepage" in the Chamilo administration section.</p>
+Ne modifiez *pas* les fichiers home/home_*.html directement. Choisissez plutôt
+l'option "Configurer la page d'accueil" dans la section d'administration de
+    Chamilo.</p>
 
-<p><span style="font-weight: bold;">Windows</span> : with all-in-one packages
-like XAMPP, you can install Chamilo easily. In this case (and unless you use it
-in production), the login and password for MySQL will probably remain empty.</p>
+<p><span style="font-weight: bold;">Windows</span> : avec les paquets tout-en-un comme XAMPP,
+vous pouvez installer Chamilo facilement. Dans ce cas (et à moins que vous ne
+l'utilisiez en production), le mot de passe de MySQL pourrait rester vide.</p>
 
 <p></p>
 
 
-<h3><strong> Configuration and security after installation</strong></h3>
+<h3><strong> Configuration et sécurité après l'installation</strong></h3>
 
 <ul>
 
-  <li><strong>Protect your configuration folder: </strong>
-make sure no one (but you) can overwrite it. You can find the config directory in
-<em>(chamilo folder)</em>/main/inc/conf.
-Make it read-only (windows/xwindows: right-click the file to edit the
-properties. linux/bsd/macosx: use the chmod 0555 command). The config
+  <li><strong>Protégez votre répertoire de configuration: </strong>
+assurez-vous que personne (à part vous) ne puisse l'éditer.
+Vous trouverez le répertoire de configuration dans <em>(chamilo folder)</em>/main/inc/conf.
+Rendez-le lisible uniquement (windows/xwindows: click-droit sur le répertoire
+pour en éditer les propriétés - Linux/BSD/MacOSX: utilisez la commande "chmod -r 0555".
+Le fichier de configuration (main/inc/conf/configuration.php) est créé par votre serveur webThe config
 file is created by your web server (Apache + PHP, usually) so you may
 need to be root user to change its permissions.</li>
 
-  <li><strong>Protect your installation folder: </strong>
-if the <em>(chamilo folder)</em>/main/install
-folder is still accessible, someone could install over your existing
-version (you could lose your data that way). Move the folder somewhere
-out of the web directories so it is not accessible, change its name,
-delete it completely or edit its properties so no one can read or
-execute it.</li>
+  <li><strong>Protégez votre répertoire d'installation: </strong>
+si le répertoire <em>[chamilo]</em>/main/install est toujours accessible,
+des individus mal intentionnés pourraient (potentiellement) provoquer une
+réinstallation par dessus votre installation actuelle (ce qui pourrait se
+matérialiser en une perte de données). Pour éviter ça, déplacez le répertoire
+ailleurs, changez ses permissions ou supprimez-le, tout simplement, afin que
+personne ne puisse y accéder.</li>
 
-  <li><strong>For better security: </strong>
-making the files world-writeable will help you install, and it solves many
-issues for people without much admin experience. However, it's more
-secure to make a distinct user owner of all the chamilo files and folders,
-and only give read access to the web server to all files, and write access
-only to the directories previously mentioned. This way, these files need
-only be readable and writeable by the Apache process owner, not by the
-entire world. It would also be adviseable to make all writeable directory
-refuse the interpretation of PHP files (except for the root of the courses
-directories). Don't hesitate to hire an experienced administrator to do that,
-it might be a bit more expensive now, but you'll be happy not to have to loose
-all of your data to a hacker who attacked your site.</li>
+  <li><strong>Astuces de sécurité: </strong>
+rendre tous les fichiers éditables par tout le monde (chmod -r 0777) vous
+permettra d'installer Chamilo plus facilement, il est vrai, mais cela permettra
+également à d'éventuels individus malintentionés de plus facilement attaquer
+votre installation de Chamilo. Il est donc conseillé d'utiliser un utilisateur
+système spécifique comme propriétaire de tous les fichiers et répertoires de
+Chamilo, et de seulement donner accès au serveur web sur les répertoires et
+fichiers énumérés plus haut.
+Ces fichiers et répertoires doivent uniquement être accessibles au serveur web,
+pas au reste des utilisateurs système sur votre serveur, et encore moins aux
+utilisateurs non-identifiés qui tenteraient de se connecter à votre serveur (par
+exemple via FTP). Il est aussi recommandé d'empêcher l'interprétation de
+fichiers PHP pour tous les répertoires qui autorisent l'écriture par le serveur
+web (à part la racine des répertoires de cours).
+N'hésitez pas à engager un administrateur système expérimenté pour cela. Cela
+peut s'avérer un peu plus cher maintenant, mais vous serez heureux de ne pas
+devoir faire façe aux coûts exhorbitants des pertes de données au cas où vous
+souffririez l'attaque d'un pirate.</li>
 
-  <li><strong>Configure your Chamilo portal: </strong>
-in the administration section of Chamilo, you can use the Chamilo Configuration
-Settings to adjust the behavior of your installation.</li>
+  <li><strong>Configurez votre installation de Chamilo: </strong>
+dans la section d'administration de Chamilo, vous pouvez utiliser les paramètres
+de configuration pour ajuster le comportement de votre installation.</li>
 
-  <li><strong>Configure Chamilo mail: </strong>
-most of Chamilo uses the mail settings from the php.ini file. However,
-if you use a distinct e-mail server, you might need to adjust the
-e-mail setting in <em>(chamilo folder)</em>/main/inc/conf/mail.conf.php.</li>
+  <li><strong>Configurez les mails de Chamilo: </strong>
+la plupart des installations de Chamilo utilisent la configuration de mails par
+défaut de php.ini. Cependant, si vous utilisez un serveur de mails différent,
+vous pourriez avoir besoin d'ajuster les paramètres de mails dans le fichier
+<em>[chamilo]</em>/main/inc/conf/mail.conf.php.</li>
 
-  <li>Check our new <a href="./security.html">security guide</a> for more</li>
+  <li>Jetez un oeil sur notre<a href="./security.html">guide de sécurité</a> pour plus d'information</li>
 </ul>
 
 <br />
 
 
-<h3>PHP configuration</h3>
+<h3>Configuration de PHP</h3>
 
 
-To get the best out of Chamilo, you need to finetune your PHP settings. Consider : <br />
+Pour obtenir le meilleur de votre installation de Chamilo, vous devez configurer vos paramètres PHP: <br />
 
 <ul>
 
-  <li>Editing php.ini file (on windows can be located at
+  <li>Editez le fichier php.ini (sous windows, il devrait se trouver dans
   <span style="font-weight: bold;">C:\xampp\php\php.ini</span>,
-  on Ubuntu Linux :
-  <span style="font-weight: bold;">/etc/php5/apache2/php.ini</span></li>
-  <li>search the word "_max" and increase the two values to optimise the server</li>
-  <li>we recommend the following values : </li>
+  et sous Debian ou Ubuntu (Linux) :
+  <span syle="font-weight: bold;">/etc/php5/apache2/php.ini</span></li>
+  <li>cherchez les mots contenant "_max" et augmentez les valeurs correspondantes
+      pour permettre au serveur de gérer des fichiers plus grands et des requêtes plus lourdes</li>
+  <li>nous recommandons les valeurs suivantes : </li>
 </ul>
 
 <div class="code">
@@ -266,8 +306,8 @@ To get the best out of Chamilo, you need to finetune your PHP settings. Consider
       upload_max_filesize = 100M<br />
 </div>
 
-<p>Some users could meet problems if their PHP settings don't match
-these ones:</p>
+<p>Certains de nos utilisateurs ont rencontré des problèmes parce que leurs
+    paramètres de configuration ne correspondaient pas dans les cas suivants (valeurs recommandées):</p>
 
 <ul>
   <li>short_open_tag       = Off</li>
@@ -277,23 +317,30 @@ these ones:</p>
 </ul>
 
 <p>
-Past Chamilo versions required register_globals to be set to On. This is
-no longer necessary, this can (and should) be set to Off.
-<span class="muted">It is considered a bad choice in terms of security to set register_globals to On.</a></p>
+Certaines versions antérieures de Chamilo exigeaient que register_globals soit
+configuré à On. Ce n'est plus le cas depuis bien longtemps et ce paramètres
+devrait désormais être configuré à Off (bien que les dernières versions de PHP
+ne proposent même plus ce paramètre de configuration et le mettent d'office à Off).
+<span class="muted">L'activation du register_globals est désormais largement considérée comme un mauvais choix au niveau sécurité.</a></p>
 
-<p><strong>Note:</strong> if you are using PHP 5.3 or higher, you need to set
-your <em>date.timezone</em> setting to whatever your server's timezone is.
-For example, if your server is in the 'America/New_York' timezone, set this
-in your php.ini:</p>
+<p><strong>Note:</strong> si vous utilisez PHP 5.3 ou supérieur, vous
+<em>devez</em> configurer le paramètre <em>date.timezone</em> à la zone horaire
+de votre serveur. Par exemple, si votre serveur est dans la zone horaire
+'America/New_York', configurez-le de la manière suivante dans votre php.ini:</p>
 
 <div class="code">
 date.timezone = 'America/New_York'
 </div>
 
-<p><strong>Note:</strong> PHP 5.3.9 introduces a new setting "max_input_vars", which limits the number of elements you can send in one single form. If you are dealing with numerous users or very long learning paths (many items), make sure you set this setting higher than its default value of 1000.</p>
+<p><strong>Note:</strong> PHP 5.3.9 introduit un nouveau paramètre appelé
+"max_input_vars", qui limite le nombre d'éléments que vous pouvez envoyer au
+travers d'un formulaire déterminé. Si vous devez gérer de grandes quantités
+d'utilisateurs ou de longs parcours d'apprentissage (de nombreux éléments),
+assurez-vous de configurer ce paramètre plus haut que se valeur par défault
+de 1000.</p>
 
-<p><strong>BSD users:</strong> these php libraries have to be included during
- php installation:</p>
+<p><strong>Utilisateurs de BSD:</strong> les librairies suivantes doivent être
+inclues durant l'installation de PHP:</p>
 
 <ul>
     <li>php5-mysql (or php5-mysqlnd) The mysql shared extension for php</li>
@@ -305,7 +352,7 @@ date.timezone = 'America/New_York'
     <li>(optional) php5-ldap if you want to be able to use LDAP authentication</li>
 </ul>
 
-<p>You might also add the following php modules and packages:</p>
+<p>Nous recommandons aussi les extensions suivantes:</p>
 <ul>
     <li>php5-ctype</li>
     <li>php5-iconv</li>
@@ -318,13 +365,17 @@ date.timezone = 'America/New_York'
     <li>php5-xapian</li>
 </ul>
 
+<div style="color: red;">Le reste de ce manuel n'est pas encore traduit. N'hésitez pas à consulter
+le <a href="http://www.chamilo.org/forum">forum de Chamilo</a> si la lecture
+en anglais vous est impossible.</div>
 
 <hr />
-<h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Upgrade from a
-previous version of Chamilo LMS (1.*) or Dok€os (&lt;2.0)</h2>
-Before upgrading, we <b>heavily</b> recommend you do a full backup of the previous
-Chamilo or Dok€os directories and databases. If you are unsure how to achieve this
-please ask your hosting provider for advice.<br />
+<h2><a name="3._Upgrade_from_a_previous_version_of"></a>3. Mettre à jour depuis
+une version antérieure de Chamilo LMS (1.*) ou de Dok€os (&lt;2.0)</h2>
+Avant de mettre à jour, nous recommandons chaudement la prise d'une copie de
+sauvegarde de votre installation (répertoires et bases de données).
+Si vous ne savez pas comment faire, consultez votre fournisseur d'hébergement
+ou un administrateur système qualifié.<br />
 <em>Chamilo LMS 1.9 comes with a new database structure in comparison to 1.8. 
 Although the upgrade script takes the migration in charge, it might be generating
 a very heavy load on your server during the upgrade, and will change your 
@@ -854,7 +905,7 @@ If you have issues with files taking a long time to download, make sure you reco
 <p>
   <br />
   <br />
-  Contact address<br />
+  Adresse de contact<br />
   Mail: info@chamilo.org<br />
   <br />
 </p>

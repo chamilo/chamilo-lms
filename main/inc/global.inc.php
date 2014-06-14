@@ -373,12 +373,21 @@ if (api_get_setting('server_type') == 'test') {
 // if we use the javascript version (without go button) we receive a get
 // if we use the non-javascript version (with the go button) we receive a post
 $user_language = '';
+$browser_language = '';
 if (!empty($_GET['language'])) {
     $user_language = $_GET['language'];
 }
 
 if (!empty($_POST['language_list'])) {
     $user_language = str_replace('index.php?language=', '', $_POST['language_list']);
+}
+
+if (empty($user_language) && !empty($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+    require_once __DIR__.'/../admin/sub_language.class.php';
+    $l = subLanguageManager::getLanguageFromBrowserPreference($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+    if (!empty($l)) {
+        $user_language = $browser_language = $l;
+    }
 }
 
 // Include all files (first english and then current interface language)
@@ -458,8 +467,8 @@ if (!empty($valid_languages)) {
     $language_priority3 = api_get_setting('languagePriority3');
     $language_priority4 = api_get_setting('languagePriority4');
 
-    if (in_array($user_language, $valid_languages['folder']) && (isset($_GET['language']) || isset($_POST['language_list']))) {
-        $user_selected_language = $user_language; // $_GET['language'];
+    if (in_array($user_language, $valid_languages['folder']) && (isset($_GET['language']) || isset($_POST['language_list']) || !empty($browser_language))) {
+        $user_selected_language = $user_language; // $_GET['language']; or HTTP_ACCEPT_LANGUAGE
         $_SESSION['user_language_choice'] = $user_selected_language;
         $platformLanguage = $user_selected_language;
     }

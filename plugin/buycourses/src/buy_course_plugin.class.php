@@ -22,7 +22,7 @@ class BuyCoursesPlugin extends Plugin
 
     protected function __construct()
     {
-        parent::__construct('1.0', 'Jose Angel Ruiz, Francis Gonzales', array('paypal_enable' => 'boolean', 'transfer_enable' => 'boolean', 'unregistered_users_enable' => 'boolean'));
+        parent::__construct('1.0', 'Jose Angel Ruiz - NoSoloRed (original author), Francis Gonzales and Yannick Warnier - BeezNest (integration)', array('paypal_enable' => 'boolean', 'transfer_enable' => 'boolean', 'unregistered_users_enable' => 'boolean'));
     }
 
     /**

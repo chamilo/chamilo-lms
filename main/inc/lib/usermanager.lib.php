@@ -1710,19 +1710,19 @@ class UserManager
 
         $path_info = self::get_user_picture_path_by_id($user_id, 'web', true);
         $path = $path_info['dir'];
-        $del_image = api_get_path(WEB_CODE_PATH).'img/delete.gif';
+        $del_image = api_get_path(WEB_CODE_PATH).'img/delete.png';
         $del_text = get_lang('Delete');
         $extra_file_list = '';
         if (count($extra_files) > 0) {
-            $extra_file_list = '<ul id="productions">';
+            $extra_file_list = '<div class="files-production"><ul id="productions">';
             foreach ($extra_files as $file) {
                 $filename = substr($file,strlen($extra_field)+1);
-                $extra_file_list .= '<li><a href="'.$path.$extra_field.'/'.urlencode($filename).'" target="_blank">'.htmlentities($filename).'</a>';
+                $extra_file_list .= '<li>'.Display::return_icon('archive.png').'<a href="'.$path.$extra_field.'/'.urlencode($filename).'" target="_blank">'.htmlentities($filename).'</a> ';
                 if ($showdelete) {
                     $extra_file_list .= '<input style="width:16px;" type="image" name="remove_extra_' . $extra_field . '['.urlencode($file).']" src="'.$del_image.'" alt="'.$del_text.'" title="'.$del_text.' '.htmlentities($filename).'" onclick="javascript: return confirmation(\''.htmlentities($filename).'\');" /></li>';
                 }
             }
-            $extra_file_list .= '</ul>';
+            $extra_file_list .= '</ul></div>';
         }
 
         return $extra_file_list;

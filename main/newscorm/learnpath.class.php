@@ -814,6 +814,7 @@ class learnpath
                                 error_log('Found one incomplete child of ' . $parent_id . ': ' . $child . ' is ' . $this->items[$child]->get_status(), 0);
                             }
                             $completed = false;
+                            break;
                         }
                     }
                 }
@@ -832,7 +833,7 @@ class learnpath
             }
         } else {
             if ($debug) {
-                error_log("#$item is an item doesn't have parents");
+                error_log("#$item is an item that doesn't have parents");
             }
         }
     }

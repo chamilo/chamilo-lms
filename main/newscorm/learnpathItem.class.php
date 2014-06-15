@@ -150,6 +150,17 @@ class learnpathItem
         $this->save_on_close = true;
         $this->db_id = $id;
 
+        // Load children list
+        $sql = "SELECT id FROM $items_table WHERE c_id = $course_id AND lp_id = ".$this->lp_id." AND parent_item_id = $id";
+        $res = Database::query($sql);
+        if (Database::num_rows($res) < 1) {
+            // Nothing to do (no children)
+        } else {
+            while ($row = Database::fetch_assoc($res)) {
+                $this->children[] = $row['id'];
+            }
+        }
+
         //$this->seriousgame_mode = $this->get_seriousgame_mode();
         $this->seriousgame_mode = 0;
 

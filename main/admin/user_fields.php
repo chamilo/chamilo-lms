@@ -157,6 +157,7 @@ if(1)
 	$table->set_header(7, get_lang('FieldChangeability'), false);
 	$table->set_header(8, get_lang('FieldFilter'), false);
 	$table->set_header(9, get_lang('Modify'), false);
+    $table->set_header(10, '', false);
 	$table->set_column_filter(5, 'order_filter');
 	$table->set_column_filter(6, 'modify_visibility');
 	$table->set_column_filter(7, 'modify_changeability');
@@ -210,14 +211,14 @@ function order_filter($field_order,$url_params,$row)
 	$return = '';
 	// the up icon only has to appear when the row can be moved up (all but the first row)
 	if ($row[5]<>1) {
-		$return .= '<a href="'.api_get_self().'?action=moveup&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('up.gif', get_lang('Up')).'</a>';
+		$return .= '<a href="'.api_get_self().'?action=moveup&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'#'.$row[0].'">'.Display::return_icon('up.gif', get_lang('Up')).'</a>';
 	} else {
 		$return .= Display::return_icon('blank.gif','',array('width'=>'21px'));
 	}
 
 	// the down icon only has to appear when the row can be moved down (all but the last row)
 	if ($row[5]<>$number_of_extra_fields) {
-		$return .= '<a href="'.api_get_self().'?action=movedown&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('down.gif', get_lang('Down')).'</a>';
+		$return .= '<a href="'.api_get_self().'?action=movedown&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'#'.$row[0].'">'.Display::return_icon('down.gif', get_lang('Down')).'</a>';
 	}
 	return $return;
 }
@@ -230,7 +231,7 @@ function order_filter($field_order,$url_params,$row)
  */
 function modify_visibility($visibility,$url_params,$row)
 {
-	return ($visibility?'<a href="'.api_get_self().'?action=hide_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('visible.gif', get_lang('Hide')).'</a>':'<a href="'.api_get_self().'?action=show_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('invisible.gif', get_lang('Show')).'</a>');
+	return ($visibility?'<a href="'.api_get_self().'?action=hide_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'#'.$row[0].'">'.Display::return_icon('visible.gif', get_lang('Hide')).'</a>':'<a href="'.api_get_self().'?action=show_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'#'.$row[0].'">'.Display::return_icon('invisible.gif', get_lang('Show')).'</a>');
 }
 /**
  * Modify the changeability field to show links and icons
@@ -241,13 +242,13 @@ function modify_visibility($visibility,$url_params,$row)
  */
 function modify_changeability($changeability,$url_params,$row)
 {
-	return ($changeability?'<a href="'.api_get_self().'?action=freeze_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('right.gif', get_lang('MakeUnchangeable')).'</a>':'<a href="'.api_get_self().'?action=thaw_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('wrong.gif', get_lang('MakeChangeable')).'</a>');
+	return ($changeability?'<a href="'.api_get_self().'?action=freeze_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'#'.$row[0].'">'.Display::return_icon('right.gif', get_lang('MakeUnchangeable')).'</a>':'<a href="'.api_get_self().'?action=thaw_field&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'#'.$row[0].'">'.Display::return_icon('wrong.gif', get_lang('MakeChangeable')).'</a>');
 }
 
 function modify_field_filter ($changeability,$url_params,$row)
 {
-	return ($changeability?'<a href="'.api_get_self().'?action=filter_off&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('right.gif', get_lang('FilterOff')).'</a>':'' .
-						   '<a href="'.api_get_self().'?action=filter_on&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'">'.Display::return_icon('wrong.gif', get_lang('FilterOn')).'</a>');
+	return ($changeability?'<a href="'.api_get_self().'?action=filter_off&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'#'.$row[0].'">'.Display::return_icon('right.gif', get_lang('FilterOff')).'</a>':'' .
+						   '<a href="'.api_get_self().'?action=filter_on&field_id='.$row[0].'&sec_token='.$_SESSION['sec_token'].'#'.$row[0].'">'.Display::return_icon('wrong.gif', get_lang('FilterOn')).'</a>');
 }
 
 function edit_filter($id, $url_params, $row) {

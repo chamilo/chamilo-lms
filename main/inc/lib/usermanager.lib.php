@@ -1667,7 +1667,8 @@ class UserManager
                     6 => $rowf['field_visible'],
                     7 => $rowf['field_changeable'],
                     8 => $rowf['field_filter'],
-                    9 => array()
+                    9 => array(),
+                    10 => '<a name="'.$rowf['id'].'"></a>',
                 );
 
                 $sqlo = "SELECT * FROM $t_ufo WHERE field_id = ".$rowf['id']." ORDER BY option_order ASC";

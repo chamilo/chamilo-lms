@@ -144,7 +144,7 @@ class BlockEvaluationGraph extends Block
 						$max = $min = $avg = array();
 						foreach ($evaluation_sumary as $evaluation) {
 							$max[] = $evaluation['max'];
-							$min[] = $evaluation['min'];
+							$min[] = !empty($evaluation['min'])?$evaluation['min']:0;
 							$avg[] = $evaluation['avg'];
 						}
 						// Dataset definition

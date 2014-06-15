@@ -544,8 +544,7 @@ class Plugin
     /**
      * Delete a tab to chamilo's platform
      * @param string $key
-     *
-     * @return boolean $resp
+     * @return boolean $resp Transaction response
      */
     public function deleteTab($key)
     {

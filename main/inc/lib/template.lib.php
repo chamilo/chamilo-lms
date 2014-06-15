@@ -91,6 +91,7 @@ class Template
 
         $this->twig = new Twig_Environment($loader, $options);
 
+        $this->twig->addFilter('get_plugin_lang', new Twig_Filter_Function('get_plugin_lang'));
         $this->twig->addFilter('get_lang', new Twig_Filter_Function('get_lang'));
         $this->twig->addFilter('get_path', new Twig_Filter_Function('api_get_path'));
         $this->twig->addFilter('get_setting', new Twig_Filter_Function('api_get_setting'));

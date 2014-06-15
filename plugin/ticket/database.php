@@ -3,7 +3,7 @@
  * Contains the SQL for the tickets management plugin database structure
  */
 
-$objPlugin = new TicketPlugin();
+$objPlugin = TicketPlugin::create();
 
 $table = Database::get_main_table(TABLE_TICKET_ASSIGNED_LOG);
 $sql = "CREATE TABLE IF NOT EXISTS ".$table." (

@@ -2973,18 +2973,16 @@ class learnpath
 
             $class_name = array (
                 'not attempted' => 'scorm_not_attempted',
-                'incomplete'    => 'scorm_incomplete',
-                'failed'        => 'scorm_failed',
+                'incomplete'    => 'scorm_not_attempted',
+                'failed'        => 'scorm_not_attempted',
                 'completed'     => 'scorm_completed',
-                'passed'        => 'scorm_passed',
-                'succeeded'     => 'scorm_succeeded',
+                'passed'        => 'scorm_completed',
+                'succeeded'     => 'scorm_completed',
                 'browsed'       => 'scorm_completed',
             );
 
-            $style = 'scorm_item';
             $scorm_color_background = 'scorm_item_2';
             $style_item = 'scorm_item';
-            $current = false;
 
             if ($color_counter % 2 == 0) {
                 $scorm_color_background = 'scorm_item_1';
@@ -2993,8 +2991,9 @@ class learnpath
                 $scorm_color_background =' scorm_item_section ';
             }
             if ($item['id'] == $this->current) {
-                $style = 'scorm_item_highlight';
                 $scorm_color_background .= ' scorm_item_highlight';
+            } else {
+                $scorm_color_background .= ' scorm_item_normal';
             }
 
             $html .= '<div id="toc_' . $item['id'] . '" class="' . $scorm_color_background . ' '.$class_name[$item['status']].' ">';

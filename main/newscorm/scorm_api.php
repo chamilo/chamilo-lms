@@ -1167,11 +1167,13 @@ function update_toc(update_action, update_id, change_ids) {
         if (update_action == "unhighlight" || update_action == "highlight") {
             if (update_action == "unhighlight") {
                 myelem.removeClass('scorm_item_highlight');
+                myelem.addClass('scorm_item_normal');
             } else {
                 if (change_ids=='yes') {
                    olms.lms_next_item = update_id;
                    olms.lms_previous_item = update_id;
                 }
+                myelem.removeClass('scorm_item_normal');
                 myelem.addClass('scorm_item_highlight');
             }
         } else {
@@ -1179,13 +1181,13 @@ function update_toc(update_action, update_id, change_ids) {
             if (update_action == "not attempted") {
                 myelem.addClass('scorm_not_attempted');
             } else if (update_action == "incomplete") {
-                myelem.addClass('scorm_incomplete');
+                myelem.addClass('scorm_not_attempted');
             } else if (update_action == "completed") {
                 myelem.addClass('scorm_completed');
             } else if (update_action == "failed") {
-                myelem.addClass('scorm_failed');
+                myelem.addClass('scorm_not_attempted');
             } else if (update_action == "passed") {
-                myelem.addClass('scorm_passed');
+                myelem.addClass('scorm_completed');
             } else if (update_action == "browsed") {
                 myelem.addClass('scorm_completed');
             } else {

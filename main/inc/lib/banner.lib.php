@@ -109,26 +109,48 @@ function get_tabs() {
         $navigation['reports']['title'] = get_lang('Reports');
 	}*/
 
-    // Custom tabs - 1.8 hidden feature, removed as useless
-    //see https://support.chamilo.org/issues/7180
-    /*
-    for ($i = 1; $i <= 3; $i++) {
-            if (api_get_setting('show_tabs', 'custom_tab_' . $i) == 'true') {
-                $setting = api_get_full_setting('show_tabs', 'custom_tab_' . $i);
-                $navigation['custom_tab_' . $i]['url'] = $setting[0]['comment'];
-                $navigation['custom_tab_' . $i]['title'] = $setting[0]['title'];
-                $navigation['custom_tab_' . $i]['key'] = 'custom_tab_' . $i;
+    // Custom Tabs See BT#7180
+    $customTabs = getCustomTabs();
+    if (!empty($customTabs)) {
+        foreach ($customTabs as $tab) {
+            if (api_get_setting($tab['variable'], $tab['subkey']) == 'true') {
+                if (!empty($tab['comment']) && $tab['comment'] !== 'ShowTabsComment') {
+                    $navigation[$tab['subkey']]['url'] = $tab['comment'];
+                    $navigation[$tab['subkey']]['title'] = $tab['title'];
+                    $navigation[$tab['subkey']]['key'] = $tab['subkey'];
+                }
             }
         }
-    */
+    }
+    // End Custom Tabs
 
 	// Platform administration
 	if (api_is_platform_admin(true)) {
-            $navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/';
-            $navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
-            $navigation['platform_admin']['key'] = 'admin';
+        $navigation['platform_admin']['url'] = api_get_path(WEB_CODE_PATH).'admin/';
+        $navigation['platform_admin']['title'] = get_lang('PlatformAdmin');
+        $navigation['platform_admin']['key'] = 'admin';
 	}
 	return $navigation;
+}
+
+/**
+ * This function returns the custom tabs
+ *
+ * @return array
+ */
+function getCustomTabs() {
+    $tableSettingsCurrent = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
+    $sql = "SELECT * FROM $tableSettingsCurrent
+        WHERE variable = 'show_tabs' AND
+        subkey like 'custom_tab_%'";
+    $result = Database::query($sql);
+    $customTabs = array();
+
+    while ($row = Database::fetch_assoc($result)) {
+        $customTabs[] = $row;
+    }
+
+    return $customTabs;
 }
 
 function return_logo($theme) {
@@ -332,17 +354,19 @@ function return_navigation_array() {
         }
 
         // Custom tabs
-        for ($i=1; $i <= 3; $i++) {
-            if (api_get_setting('show_tabs', 'custom_tab_' . $i) == 'true' &&
-                isset($possible_tabs['custom_tab_' . $i])
-            ) {
-
-                $possible_tabs['custom_tab_'.$i]['url'] = api_get_path(WEB_PATH).$possible_tabs['custom_tab_'.$i]['url'];
-                $navigation['custom_tab_'.$i] = $possible_tabs['custom_tab_'.$i];
-            } else {
-                if (isset($possible_tabs['custom_tab_'.$i])) {
-                    $possible_tabs['custom_tab_'.$i]['url'] = api_get_path(WEB_PATH).$possible_tabs['custom_tab_' . $i]['url'];
-                    $menu_navigation['custom_tab_' . $i] = $possible_tabs['custom_tab_' . $i];
+        $customTabs = getCustomTabs();
+        if (!empty($customTabs)) {
+            foreach ($customTabs as $tab) {
+                if (api_get_setting($tab['variable'], $tab['subkey']) == 'true' &&
+                    isset($possible_tabs[$tab['subkey']])
+                ) {
+                    $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH).$possible_tabs[$tab['subkey']]['url'];
+                    $navigation[$tab['subkey']] = $possible_tabs[$tab['subkey']];
+                } else {
+                    if (isset($possible_tabs[$tab['subkey']])) {
+                        $possible_tabs[$tab['subkey']]['url'] = api_get_path(WEB_PATH).$possible_tabs[$tab['subkey']]['url'];
+                        $menu_navigation[$tab['subkey']] = $possible_tabs[$tab['subkey']];
+                    }
                 }
             }
         }

@@ -1,12 +1,19 @@
 <?php
+/* For license terms, see /license.txt */
 /**
  * Functions
- * @package chamilo.plugin.notify
+ * @package chamilo.plugin.buycourses
+ */
+/**
+ * Init
  */
 require_once '../../../main/inc/global.inc.php';
 require_once '../config.php';
 require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
 
+/**
+ *
+ */
 function sync()
 {
     $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
@@ -18,13 +25,13 @@ function sync()
     $sql = "SELECT id FROM $tableCourse";
     $res = Database::query($sql);
     while ($row = Database::fetch_assoc($res)) {
-        $sql = "SELECT 1 FROM $tableBuyCourse WHERE id_course='" . $row['id'] . "';";
+        $sql = "SELECT 1 FROM $tableBuyCourse WHERE course_id='" . $row['id'] . "';";
         Database::query($sql);
         if (Database::affected_rows() > 0) {
-            $sql = "UPDATE $tableBuyCourse SET sync = 1 WHERE id_course='" . $row['id'] . "';";
+            $sql = "UPDATE $tableBuyCourse SET sync = 1 WHERE course_id='" . $row['id'] . "';";
             Database::query($sql);
         } else {
-            $sql = "INSERT INTO $tableBuyCourse (id_course, visible, sync) VALUES ('" . $row['id'] . "', 0, 1);";
+            $sql = "INSERT INTO $tableBuyCourse (course_id, visible, sync) VALUES ('" . $row['id'] . "', 0, 1);";
             Database::query($sql);
         }
     }
@@ -32,13 +39,17 @@ function sync()
     Database::query($sql);
 }
 
+/**
+ * List courses detils from the buy-course table and the course table
+ * @return array Results (list of courses details)
+ */
 function listCourses()
 {
     $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
     $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
-    $sql = "SELECT a.id_course, a.visible, a.price, b.*
+    $sql = "SELECT a.course_id, a.visible, a.price, b.*
         FROM $tableBuyCourse a, $tableCourse b
-        WHERE a.id_course = b.id;";
+        WHERE a.course_id = b.id;";
 
     $res = Database::query($sql);
     $aux = array();
@@ -49,6 +60,9 @@ function listCourses()
     return $aux;
 }
 
+/**
+ *
+ */
 function userCourseList()
 {
     $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
@@ -56,9 +70,9 @@ function userCourseList()
     $tableCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $tableBuyCourseTemporal = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
 
-    $sql = "SELECT a.id_course, a.visible, a.price, b.*
+    $sql = "SELECT a.course_id, a.visible, a.price, b.*
         FROM $tableBuyCourse a, $tableCourse b
-        WHERE a.id_course = b.id AND a.visible = 1;";
+        WHERE a.course_id = b.id AND a.visible = 1;";
     $res = Database::query($sql);
     $aux = array();
     while ($row = Database::fetch_assoc($res)) {
@@ -115,6 +129,9 @@ function userCourseList()
     return $aux;
 }
 
+/**
+ *
+ */
 function checkUserCourse($course, $user)
 {
     $tableCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -129,7 +146,10 @@ function checkUserCourse($course, $user)
     }
 }
 
-function checkUserCourseTransference($course, $user)
+/**
+ * 
+ */
+function checkUserCourseTransfer($course, $user)
 {
     $tableBuyCourseTemporal = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
     $sql = "SELECT 1 FROM $tableBuyCourseTemporal
@@ -143,6 +163,9 @@ function checkUserCourseTransference($course, $user)
     }
 }
 
+/**
+ *
+ */
 function listCategories()
 {
     $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
@@ -158,6 +181,8 @@ function listCategories()
 
 /**
  * Return an icon representing the visibility of the course
+ * @param int $option The course visibility
+ * @return string HTML string of the visibility icon
  */
 function getCourseVisibilityIcon($option)
 {
@@ -179,7 +204,10 @@ function getCourseVisibilityIcon($option)
             return '';
     }
 }
-
+/**
+ * List the available currencies
+ * @result array The list of currencies
+ */
 function listCurrency()
 {
     $tableBuyCourseCountry = Database::get_main_table(TABLE_BUY_COURSE_COUNTRY);
@@ -193,11 +221,14 @@ function listCurrency()
 
     return $aux;
 }
-
+/**
+ * Gets the list of accounts from the buy_course_transfer table
+ * @return array The list of accounts
+ */
 function listAccounts()
 {
-    $tableBuyCourseTransference = Database::get_main_table(TABLE_BUY_COURSE_TRANSFERENCE);
-    $sql = "SELECT * FROM $tableBuyCourseTransference";
+    $tableBuyCourseTransfer = Database::get_main_table(TABLE_BUY_COURSE_TRANSFER);
+    $sql = "SELECT * FROM $tableBuyCourseTransfer";
     $res = Database::query($sql);
     $aux = array();
     while ($row = Database::fetch_assoc($res)) {
@@ -206,7 +237,10 @@ function listAccounts()
 
     return $aux;
 }
-
+/**
+ * Gets the stored PayPal params
+ * @return array The stored PayPal params
+ */
 function paypalParameters()
 {
     $tableBuyCoursePaypal = Database::get_main_table(TABLE_BUY_COURSE_PAYPAL);
@@ -216,11 +250,14 @@ function paypalParameters()
 
     return $row;
 }
-
-function transferenceParameters()
+/**
+ * Gets the parameters for the bank transfers payment method
+ * @result array Bank transfer payment parameters stored
+ */
+function transferParameters()
 {
-    $tableBuyCourseTransference = Database::get_main_table(TABLE_BUY_COURSE_TRANSFERENCE);
-    $sql = "SELECT * FROM $tableBuyCourseTransference";
+    $tableBuyCourseTransfer = Database::get_main_table(TABLE_BUY_COURSE_TRANSFER);
+    $sql = "SELECT * FROM $tableBuyCourseTransfer";
     $res = Database::query($sql);
     $aux = array();
     while ($row = Database::fetch_assoc($res)) {
@@ -229,7 +266,10 @@ function transferenceParameters()
 
     return $aux;
 }
-
+/**
+ * Find the first enabled currency (there should be only one)
+ * @result string The code of the active currency
+ */
 function findCurrency()
 {
     $tableBuyCourseCountry = Database::get_main_table(TABLE_BUY_COURSE_COUNTRY);
@@ -239,16 +279,21 @@ function findCurrency()
 
     return $row['currency_code'];
 }
-
+/**
+ * Extended information about the course (from the course table as well as
+ * the buy_course table)
+ * @param string $code The course code
+ * @return array Info about the course
+ */
 function courseInfo($code)
 {
     $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
     $tableCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
     $tableUser = Database::get_main_table(TABLE_MAIN_USER);
-
-    $sql = "SELECT a.id_course, a.visible, a.price, b.*
+    $code = Database::escape_string($code);
+    $sql = "SELECT a.course_id, a.visible, a.price, b.*
         FROM $tableBuyCourse a, course b
-        WHERE a.id_course=b.id
+        WHERE a.course_id=b.id
         AND a.visible = 1
         AND b.id = '" . $code . "';";
     $res = Database::query($sql);
@@ -286,7 +331,14 @@ function courseInfo($code)
 
     return $row;
 }
-
+/**
+ * Generates a random text (used for order references)
+ * @param int $long
+ * @param bool $minWords
+ * @param bool $maxWords
+ * @param bool $number
+ * @return string A random text
+ */
 function randomText($long = 6, $minWords = true, $maxWords = true, $number = true)
 {
     $salt = $minWords ? 'abchefghknpqrstuvwxyz' : '';
@@ -310,7 +362,10 @@ function randomText($long = 6, $minWords = true, $maxWords = true, $number = tru
 
     return $str;
 }
-
+/**
+ * Generates an order reference
+ * @result string A reference number
+ */
 function calculateReference()
 {
     $tableBuyCourseTemporal = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
@@ -327,7 +382,11 @@ function calculateReference()
 
     return $reference;
 }
-
+/**
+ * Gets a list of pending orders
+ * @result array List of orders
+ * @todo Enable pagination
+ */
 function pendingList()
 {
     $tableBuyCourseTemporal = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);

@@ -1,52 +1,65 @@
 <?php
-//Needed in order to show the plugin title
-$strings['plugin_title'] = "Comprar cursos";
-$strings['plugin_comment'] = "Configurar precios, tipos de pago, visibilidad de cursos.";
-
-$strings['Visible'] = "Mostrar en el listado";
-$strings['Options'] = "Opciones";
-$strings['Price'] = "Precio";
-$strings['SyncCourseDatabase'] = "Sincronizar cursos de la base de datos";
-
-$strings['Private'] = "Privado - acceso autorizado s&oacute;lo para los miembros del curso";
-$strings['CourseVisibilityClosed'] = "Cerrado - no hay acceso a este curso";
-$strings['OpenToThePlatform'] = "Abierto - acceso autorizado s&oacute;lo para los usuarios registrados en la plataforma";
-$strings['OpenToTheWorld'] = "P&uacute;blico - acceso autorizado a cualquier persona";
-
-$strings['bc_setting_courses_available'] = "Configuraci&oacute;n de cursos disponibles";
-$strings['bc_setting_pay'] = "Configuraci&oacute;n pagos";
-
-$strings['Description'] = "Descripci&oacute;n";
-$strings['Buy'] = "Comprar";
-$strings['Filtro_buscar'] = "Filtro de busqueda";
-$strings['Curso'] = "Curso";
-$strings['Price_Maximum'] = "Precio mayor de";
-$strings['Price_Minimum'] = "Precio menor de";
-$strings['Mostrar_disponibles'] = "Mostrar cursos disponibles";
-$strings['Categorias'] = "Categorias";
-
-$strings['paypal_enable'] = "Habilitar PayPal";
-$strings['tarjet_credit_enable'] = "Habilitar TPV";
-$strings['transference_enable'] = "Habilitar transferencia";
-$strings['unregistered_users_enable'] = "Permitir usuarios sin registro en la plataforma";
-
-$strings['EnrollToCourseXSuccessful'] = "Su inscripci�n en el curso %s se ha completado.";
-$strings['ErrorContactPlatformAdmin'] = "Se ha producido un error desconocido. Por favor, p�ngase en contacto con el administrador de la plataforma.";
-$strings['Cancelacionpedido'] = "El pedido se ha cancelado.";
-$strings['AlreadyBuy'] = "Ya est� matriculado en el curso";
-$strings['Message_conf_transf'] = "Una vez confirmado, recibira un e-mail con los datos bancarios y una referencia del pedido.";
-$strings['bc_subject'] = "Confirmaci�n pedido de cursos";
-$strings['bc_message'] = "Estimado {{name}}. <br />En cuanto recibamos confirmaci&oacute;n de pago procederemos a dar de alta su usuario en el curso <strong>{{curso}}</strong>.<br><br><strong>No olvide indicar en el concepto de la transferencia el n&uacute;mero de referencia del pedido: <div style='display:inline;text-align:center; font-weight:bold; font-size:20px; color:#333'>{{reference}}</div></strong>";
-$strings['bc_registrado'] = 'Ya se encuentra registrado en el curso';
-$strings['bc_tmp_registrado'] = 'Se encuentra a la espera de recibir el pago';
-
-$strings['bc_confi_index'] = 'Configuraci�n cursos y precio';
-$strings['bc_pagos_index'] = 'Configuraci�n pagos';
-$strings['bc_pending'] = 'Pedidos pendientes de pago';
-
-$strings['Ref_pedido'] = 'Referencia del pedido';
-$strings['transferencia_bancaria'] = 'Transferencia Bancaria';
+$strings['plugin_title'] = "Sell courses";
+$strings['plugin_comment'] = "Sell courses directly through your Chamilo portal, using a PayPal account to receive funds. This plugin is in beta version. Neither the Chamilo association nor the developers involved could be considered responsible of any issue you might suffer using this plugin.";
+$strings['Visible'] = "Show list";
+$strings['Options'] = "Options";
+$strings['Price'] = "Price";
+$strings['SyncCourseDatabase'] = "Synchronize courses from database";
+$strings['Private'] = "Private - access authorized only for course members";
+$strings['CourseVisibilityClosed'] = "Closed - no access to this course";
+$strings['OpenToThePlatform'] = "Open - access authorized only for users registered on the platform";
+$strings['OpenToTheWorld'] = "Public - access open to anybody";
+$strings['Description'] = "Description";
+$strings['Buy'] = "Buy";
+$strings['Mostrar_disponibles'] = "Show available courses";
+$strings['paypal_enable'] = "Enable PayPal";
+$strings['transfer_enable'] = "Enable bank transfer";
+$strings['unregistered_users_enable'] = "Allow anonymous users";
+$strings['Cancelacionpedido'] = "The payment has been cancelled.";
+$strings['AlreadyBuy'] = "You are already subscribed to this course.";
+$strings['bc_subject'] = "Confirmation of course order";
 $strings['paypal'] = 'PayPal';
-$strings['confirmar_compra'] = 'Confirmar compra de curso';
-
-$strings['The_User_Is_Already_Registered'] = 'El usuario ya está registrado';
+$strings['confirmar_compra'] = 'Course purchase confirmation';
+$strings['TheUserIsAlreadyRegistered'] = 'The user is already registered';
+$strings['ProblemToSaveTheCurrencyType'] = 'Problem loading the currency type';
+$strings['ProblemToSaveThePaypalParameters'] = 'Problem saving PayPal parameters';
+$strings['ProblemToInsertANewAccount'] = 'Problem inserting the new account';
+$strings['ProblemToDeleteTheAccount'] = 'Problem removing account';
+$strings['ProblemToSaveTheMessage'] = 'Problem saving message';
+$strings['ProblemToSubscribeTheUser'] = 'Problem subscribing the user';
+$strings['TheSubscriptionAndActivationWereDoneSuccessfully'] = 'The subscription and activation were successful';
+$strings['TheUserIsAlreadyRegisteredInTheCourse'] = 'The user is already registered in the course.';
+$strings['CourseListOnSale'] = 'List of courses on sale';
+$strings['BuyCourses'] = 'Buy courses';
+$strings['ConfigurationOfCoursesAndPrices'] = 'Courses and prices configuration';
+$strings['ConfigurationOfPayments'] = 'Payments configuration';
+$strings['OrdersPendingOfPayment'] = 'Orders awaiting payment';
+$strings['AvailableCoursesConfiguration'] = 'Available courses configuration';
+$strings['PaymentsConfiguration'] = 'Payments configuration';
+$strings['bc_message'] = "Dear {{name}}. <br />We are currently waiting for the payment confirmation. Once received, we will enable your user in course <strong>{{curso}}</strong>.<br><br><strong>Please do not forget to mention your order reference number in your transfer: <div style='display:inline;text-align:center; font-weight:bold; font-size:20px; color:#333'>{{reference}}</div></strong>";
+$strings['Categories'] = "Categories";
+$strings['BankTransfer'] = 'Bank transfer';
+$strings['EnrollToCourseXSuccessful'] = "Your subscription to the course is complete";
+$strings['SearchFilter'] = "Search filter";
+$strings['MinimumPrice'] = "Minimum price";
+$strings['MaximumPrice'] = "Maximum price";
+$strings['AvailableCourses'] = "Courses available";
+$strings['PaymentConfiguration'] = "Payment configuration";
+$strings['WaitingToReceiveThePayment'] = "Currently pending payment";
+$strings['CurrencyType'] = "Currency type";
+$strings['SelectACurrency'] = "Choose a currency";
+$strings['Sandbox'] = "Test environment";
+$strings['BankAccount'] = "Bank account";
+$strings['SubscribeUser'] = "Subscribe user";
+$strings['DeleteTheOrder'] = "Delete order";
+$strings['ReferenceOrder'] = 'Order reference';
+$strings['UserInformation'] = "Buyer's details";
+$strings['OnceItIsConfirmed,YouWillReceiveAnEmailWithTheBankInformationAndAnOrderReference'] = "Once confirmed, you will receive an e-mail with the bank details and an order reference.";
+$strings['BankAccountInformation'] = 'Bank account details';
+$strings['ConfirmOrder'] = 'Confirm order';
+$strings['PaymentMethods'] = 'Payment methods';
+$strings['CancelOrder'] = 'Cancel order';
+$strings['ErrorContactPlatformAdmin'] = "Unknown error. Please contact the platform administrator.";
+$strings['PayPalConfig'] = "PayPal configuration:";
+$strings['TransfersConfig'] = "Bank transfers configuration:";
+$strings['PayPalPaymentOKPleaseConfirm'] = "PayPal reports the transaction is ready to be executed. To acknowledge that you are OK to proceed, please click the confirmation button below. Once clicked, you will be registered to the course and the funds will be transferred from your PayPal account to our shop. You can always access your courses through the 'My courses' tab. Thank you for your custom!";

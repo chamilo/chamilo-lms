@@ -1,5 +1,12 @@
 <?php
-
+/* For license terms, see /license.txt */
+/**
+ * Success page for the purchase of a course in the Buy Courses plugin
+ * @package chamilo.plugin.buycourses
+ */
+/**
+ * Init
+ */
 use ChamiloSession as Session;
 
 require_once '../config.php';
@@ -9,7 +16,7 @@ require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
 
 $tableBuyCoursePaypal = Database::get_main_table(TABLE_BUY_COURSE_PAYPAL);
 
-$plugin = Buy_CoursesPlugin::create();
+$plugin = BuyCoursesPlugin::create();
 
 /**
  * Paypal data
@@ -118,7 +125,7 @@ if (!isset($_POST['paymentOption'])) {
     }
 
 
-    $listing_tpl = 'buy_courses/view/success.tpl';
+    $listing_tpl = 'buycourses/view/success.tpl';
     $content = $tpl->fetch($listing_tpl);
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();

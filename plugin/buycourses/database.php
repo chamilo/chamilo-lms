@@ -1,46 +1,55 @@
 <?php
+/* For license terms, see /license.txt */
 /**
- * Created by PhpStorm.
- * User: fgonzales
- * Date: 21/05/14
- * Time: 12:19 PM
+ * Plugin database installation script. Can only be executed if included
+ * inside another script loading global.inc.php
+ * @package chamilo.plugin.buycourses
  */
-$objPlugin = Buy_CoursesPlugin::create();
+/**
+ * Check if script can be called
+ */
+if (!function_exists('api_get_path')) {
+    die('This script must be loaded through the Chamilo plugin installer sequence');
+}
+/**
+ * Create the script context, then execute database queries to enable
+ */
+$objPlugin = BuyCoursesPlugin::create();
 
 $table = Database::get_main_table(TABLE_BUY_COURSE);
 $sql = "CREATE TABLE IF NOT EXISTS $table (
     id INT unsigned NOT NULL auto_increment PRIMARY KEY,
-    id_course INT unsigned NOT NULL DEFAULT '0',
+    course_id INT unsigned NOT NULL DEFAULT '0',
     code VARCHAR(40),
     title VARCHAR(250),
-    visible int(1),
+    visible int,
     price FLOAT(11,2) NOT NULL DEFAULT '0',
-    sync int(1))";
+    sync int)";
 Database::query($sql);
 $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
 $sql = "SELECT id, code, title FROM $tableCourse";
 $res = Database::query($sql);
 while ($row = Database::fetch_assoc($res)) {
-    $presql = "INSERT INTO $table (id_course, code, title, visible) VALUES ('" . $row['id'] . "','" . $row['code'] . "','" . $row['title'] . "','NO')";
+    $presql = "INSERT INTO $table (course_id, code, title, visible) VALUES ('" . $row['id'] . "','" . $row['code'] . "','" . $row['title'] . "','NO')";
     Database::query($presql);
 }
 
 $table = Database::get_main_table(TABLE_BUY_COURSE_COUNTRY);
 $sql = "CREATE TABLE IF NOT EXISTS $table (
-    `id_country` int(5) NOT NULL AUTO_INCREMENT,
-    `country_code` char(2) NOT NULL DEFAULT '',
-    `country_name` varchar(45) NOT NULL DEFAULT '',
-    `currency_code` char(3) DEFAULT NULL,
-    `iso_alpha3` char(3) DEFAULT NULL,
-    `status` int(1) DEFAULT '0',
-    PRIMARY KEY (`id_country`)
+    country_id int NOT NULL AUTO_INCREMENT,
+    country_code char(2) NOT NULL DEFAULT '',
+    country_name varchar(45) NOT NULL DEFAULT '',
+    currency_code char(3) DEFAULT NULL,
+    iso_alpha3 char(3) DEFAULT NULL,
+    status int DEFAULT '0',
+    PRIMARY KEY (country_id)
     ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=0;";
 Database::query($sql);
 
-$sql = "CREATE UNIQUE INDEX index_country ON $table (`country_code`)";
+$sql = "CREATE UNIQUE INDEX index_country ON $table (country_code)";
 Database::query($sql);
 
-$sql = "INSERT INTO $table (`country_code`, `country_name`, `currency_code`, `iso_alpha3`) VALUES
+$sql = "INSERT INTO $table (country_code, country_name, currency_code, iso_alpha3) VALUES
 	('AD', 'Andorra', 'EUR', 'AND'),
 	('AE', 'United Arab Emirates', 'AED', 'ARE'),
 	('AF', 'Afghanistan', 'AFN', 'AFG'),
@@ -304,7 +313,7 @@ Database::query($sql);
 $sql = "INSERT INTO $table (id,username,password,signature) VALUES ('1', 'API_UserName', 'API_Password', 'API_Signature')";
 Database::query($sql);
 
-$table = Database::get_main_table(TABLE_BUY_COURSE_TRANSFERENCE);
+$table = Database::get_main_table(TABLE_BUY_COURSE_TRANSFER);
 $sql = "CREATE TABLE IF NOT EXISTS $table (
     id INT unsigned NOT NULL auto_increment PRIMARY KEY,
     name VARCHAR(100) NOT NULL DEFAULT '',
@@ -336,8 +345,8 @@ $sql = "CREATE TABLE IF NOT EXISTS $table (
 Database::query($sql);
 
 //Menu main tabs
-$rsTab = $objPlugin->addTab('Buy Courses', 'plugin/buy_courses/index.php');
+$rsTab = $objPlugin->addTab('Buy Courses', 'plugin/buycourses/index.php');
 
 if ($rsTab) {
-    echo "<script>location.href = '" . $_SERVER['REQUEST_URI'] . "';</script>";
+    echo "<script>location.href = '" . Security::remove_XSS($_SERVER['REQUEST_URI']) . "';</script>";
 }

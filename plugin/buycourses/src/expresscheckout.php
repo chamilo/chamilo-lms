@@ -1,8 +1,14 @@
 <?php
-
-require_once 'paypalfunctions.php';
+/* For license terms, see /license.txt */
 /**
  * PayPal Express Checkout Module
+ * @package chamilo.plugin.buycourses
+ */
+/**
+ * Init
+ */
+require_once 'paypalfunctions.php';
+/**
  *
  * The paymentAmount is the total value of
  * the shopping cart, that was set

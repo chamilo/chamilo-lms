@@ -1,4 +1,4 @@
-<script type='text/javascript' src="../js/funciones.js"></script>
+<script type='text/javascript' src="../js/buycourses.js"></script>
 
 <link rel="stylesheet" type="text/css" href="../resources/plugin.css"/>
 
@@ -6,7 +6,7 @@
     <div class="span12">
         <table id="orders_table" class="data_table">
             <tr class="row_odd">
-                <th class="ta-center">{{ 'ReferenceOrder'|get_plugin_lang('Buy_CoursesPlugin') }}</th>
+                <th class="ta-center">{{ 'ReferenceOrder'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th>{{ 'Name'|get_lang }}</th>
                 <th>{{ 'Title'|get_lang }}</th>
                 <th class="span2">{{ 'Price'|get_lang }}</th>
@@ -25,10 +25,10 @@
                 <td class="ta-center">{{ order.date }}</td>
                 <td class="ta-center" id="order{{ order.cod }}">
                     <img src="{{ confirmation_img }}" alt="ok" class="cursor confirm_order"
-                         title="{{ 'SubscribeUser'|get_plugin_lang('Buy_CoursesPlugin') }}"/>
+                         title="{{ 'SubscribeUser'|get_plugin_lang('BuyCoursesPlugin') }}"/>
                     &nbsp;&nbsp;
                     <img src="{{ delete_img }}" alt="delete" class="cursor clear_order"
-                         title="{{ 'DeleteTheOrder'|get_plugin_lang('Buy_CoursesPlugin') }}"/>
+                         title="{{ 'DeleteTheOrder'|get_plugin_lang('BuyCoursesPlugin') }}"/>
                 </td>
             </tr>
 {% endfor %}

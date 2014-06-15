@@ -11,11 +11,11 @@ table td.ta-center, table th.ta-center {
     text-align: center;
 }
 
-#courses_table td, #transference_table td, #order_table td {
+#courses_table td, #transfer_table td, #order_table td {
     vertical-align: middle;
 }
 
-#courses_table td input.price, #transference_table td input, #currency_type {
+#courses_table td input.price, #transfer_table td input, #currency_type {
     margin: 0;
 }
 

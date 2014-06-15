@@ -1,3 +1,8 @@
+/* For licensing terms, see /license.txt */
+/**
+ * JS library for the Chamilo buy-courses plugin
+ * @package chamilo.plugin.buycourses
+ */
 $(document).ready(function () {
     $("input[name='price']").change(function () {
         $(this).parent().next().children().attr("style", "display:none");
@@ -29,16 +34,16 @@ $(document).ready(function () {
     $(".save").click(function () {
         var visible = $(this).parent().parent().prev().prev().children().attr("checked");
         var price = $(this).parent().parent().prev().children().attr("value");
-        var id_course = $(this).attr('id');
-        $.post("function.php", {tab: "save_mod", id_course: id_course, visible: visible, price: price},
+        var course_id = $(this).attr('id');
+        $.post("function.php", {tab: "save_mod", course_id: course_id, visible: visible, price: price},
             function (data) {
                 if (data.status == "false") {
                     alert("Database Error");
                 } else {
-                    $("#course" + data.id_course).children().attr("style", "display:''");
-                    $("#course" + data.id_course).children().next().attr("style", "display:none");
-                    $("#course" + data.id_course).parent().removeClass("fmod")
-                    $("#course" + data.id_course).parent().children().each(function () {
+                    $("#course" + data.course_id).children().attr("style", "display:''");
+                    $("#course" + data.course_id).children().next().attr("style", "display:none");
+                    $("#course" + data.course_id).parent().removeClass("fmod")
+                    $("#course" + data.course_id).parent().children().each(function () {
                         $(this).removeClass("btop");
                     });
                 }

@@ -1,5 +1,13 @@
 <?php
-$course_plugin = 'buy_courses';
+/* For license terms, see /license.txt */
+/**
+ * Errors management for the Buy Courses plugin - Redirects to list.php
+ * @package chamilo.plugin.buycourses
+ */
+/**
+ * Config
+ */
+$course_plugin = 'buycourses';
 require_once 'buy_course.lib.php';
 require_once 'buy_course_plugin.class.php';
 

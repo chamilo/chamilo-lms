@@ -1,11 +1,16 @@
 <?php
+/* For license terms, see /license.txt */
+/**
+ * List of pending payments of the Buy Courses plugin
+ * @package chamilo.plugin.buycourses
+ */
 /**
  * Initialization
  */
 require_once '../config.php';
 require_once dirname(__FILE__) . '/buy_course.lib.php';
 
-$plugin = Buy_CoursesPlugin::create();
+$plugin = BuyCoursesPlugin::create();
 $_cid = 0;
 $tableName = $plugin->get_lang('AvailableCoursesConfiguration');
 $interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
@@ -18,8 +23,8 @@ api_protect_course_script(true);
 
 if ($teacher) {
     $pendingList = pendingList();
-    $confirmationImg = api_get_path(WEB_PLUGIN_PATH) . 'buy_courses/resources/message_confirmation.png';
-    $deleteImg = api_get_path(WEB_PLUGIN_PATH) . 'buy_courses/resources/delete.png';
+    $confirmationImg = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/message_confirmation.png';
+    $deleteImg = api_get_path(WEB_PLUGIN_PATH) . 'buycourses/resources/delete.png';
     $currencyType = findCurrency();
 
     $tpl->assign('server', $_configuration['root_web']);
@@ -28,7 +33,7 @@ if ($teacher) {
     $tpl->assign('delete_img', $deleteImg);
     $tpl->assign('currency', $currencyType);
 
-    $listing_tpl = 'buy_courses/view/pending_orders.tpl';
+    $listing_tpl = 'buycourses/view/pending_orders.tpl';
     $content = $tpl->fetch($listing_tpl);
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();

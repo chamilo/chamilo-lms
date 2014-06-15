@@ -1,5 +1,12 @@
 <?php
-
+/* For license terms, see /license.txt */
+/**
+ * AJAX script to get courses descriptions
+ * @package chamilo.plugin.buycourses
+ */
+/**
+ * Init
+ */
 require_once '../config.php';
 require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
 

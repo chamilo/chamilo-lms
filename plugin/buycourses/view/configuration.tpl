@@ -1,4 +1,4 @@
-<script type='text/javascript' src="../js/funciones.js"></script>
+<script type='text/javascript' src="../js/buycourses.js"></script>
 
 <link rel="stylesheet" type="text/css" href="../resources/plugin.css"/>
 
@@ -9,7 +9,7 @@
                 <th>{{ 'Title'|get_lang }}</th>
                 <th>{{ 'OfficialCode'|get_lang }}</th>
                 <th class="ta-center">{{ 'Visible'|get_lang }}</th>
-                <th class="span2">{{ 'Price'|get_plugin_lang('Buy_CoursesPlugin') }}</th>
+                <th class="span2">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th class="span1 ta-center">{{ 'Option'|get_lang }}</th>
             </tr>
             {% set i = 0 %}
@@ -35,7 +35,7 @@
                     <td><input type="text" name="price" value="{{course.price}}" class="span1 price" /> {{ currency }}</td>
                     <td class=" ta-center" id="course{{ course.id }}">
                         <div class="confirmed"><img src="{{ confirmation_img }}" alt="ok"/></div>
-                        <div class="modified" style="display:none"><img id="{{course.id_course}}" src="{{ save_img }}" alt="save" class="cursor save"/></div>
+                        <div class="modified" style="display:none"><img id="{{course.course_id}}" src="{{ save_img }}" alt="save" class="cursor save"/></div>
                     </td>
                 </tr>
             {% endfor %}

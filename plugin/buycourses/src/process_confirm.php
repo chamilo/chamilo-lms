@@ -1,5 +1,12 @@
 <?php
-
+/* For license terms, see /license.txt */
+/**
+ * Process purchase confirmation script for the Buy Courses plugin
+ * @package chamilo.plugin.buycourses
+ */
+/**
+ * Init
+ */
 require_once '../config.php';
 require_once '../../../main/inc/lib/mail.lib.inc.php';
 require_once dirname(__FILE__) . '/buy_course.lib.php';
@@ -43,7 +50,7 @@ if (isset($_POST['Confirm'])) {
     }
     $text .= '</table></div>';
 
-    $plugin = Buy_CoursesPlugin::create();
+    $plugin = BuyCoursesPlugin::create();
     $asunto = utf8_encode($plugin->get_lang('bc_subject'));
 
 
@@ -87,8 +94,8 @@ if ($_POST['payment_type'] == "PayPal") {
     $paymentAmount = $_SESSION["Payment_Amount"];
     $currencyCodeType = $currencyType;
     $paymentType = "Sale";
-    $returnURL = $server . "plugin/buy_courses/src/success.php";
-    $cancelURL = $server . "plugin/buy_courses/src/error.php";
+    $returnURL = $server . "plugin/buycourses/src/success.php";
+    $cancelURL = $server . "plugin/buycourses/src/error.php";
 
     $courseInfo = courseInfo($_SESSION['bc_course_code']);
     $courseTitle = $courseInfo['title'];
@@ -116,7 +123,7 @@ if ($_POST['payment_type'] == "PayPal") {
     }
 }
 
-if ($_POST['payment_type'] == "Transference") {
+if ($_POST['payment_type'] == "Transfer") {
     $_cid = 0;
     $templateName = $plugin->get_lang('PaymentMethods');
     $interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
@@ -145,7 +152,7 @@ if ($_POST['payment_type'] == "Transference") {
     $accountsList = listAccounts();
     $tpl->assign('accounts', $accountsList);
 
-    $listing_tpl = 'buy_courses/view/process_confirm.tpl';
+    $listing_tpl = 'buycourses/view/process_confirm.tpl';
     $content = $tpl->fetch($listing_tpl);
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();

@@ -1,17 +1,17 @@
-<script type='text/javascript' src="../js/funciones.js"></script>
+<script type='text/javascript' src="../js/buycourses.js"></script>
 <link rel="stylesheet" type="text/css" href="../resources/plugin.css"/>
 
 <div class="row">
     <div class="span3">
         <div id="course_category_well" class="well">
             <ul class="nav nav-list">
-                <li class="nav-header"><h4>{{ 'SearchFilter'|get_plugin_lang('Buy_CoursesPlugin') }}:</h4></li>
-                <li class="nav-header">{{ 'Course'|get_lang }}:</li>
+                <li class="nav-header"><h4>{{ 'SearchFilter'|get_plugin_lang('BuyCoursesPlugin') }}:</h4></li>
+                <li class="nav-header">{{ 'CourseName'|get_lang }}:</li>
                 <li><input type="text" id="course_name" style="width:95%"/></li>
-                <li class="nav-header">{{ 'MinimumPrice'|get_plugin_lang('Buy_CoursesPlugin') }}:
+                <li class="nav-header">{{ 'MinimumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:
                     <input type="text" id="price_min" class="span1"/>
                 </li>
-                <li class="nav-header">{{ 'MaximumPrice'|get_plugin_lang('Buy_CoursesPlugin') }}:
+                <li class="nav-header">{{ 'MaximumPrice'|get_plugin_lang('BuyCoursesPlugin') }}:
                     <input type="text" id="price_max" class="span1"/>
                 </li>
                 <li class="nav-header">{{ 'Categories'|get_lang }}:</li>
@@ -41,7 +41,7 @@
                 <div class="row">
                     <div class="span">
                         <div class="thumbnail">
-                            <a class="ajax" rel="gb_page_center[778]" title="" href="{{ server }}plugin/buy_courses/src/ajax.php?code={{ course.code }}">
+                            <a class="ajax" rel="gb_page_center[778]" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
                                 <img alt="" src="{{ server }}{{ course.course_img }}">
                             </a>
                         </div>
@@ -52,10 +52,10 @@
                             <h5>{{ 'Teacher'|get_lang }}: {{ course.teacher }}</h5>
                         </div>
                         {% if course.enrolled == "YES" %}
-                            <span class="label label-info">{{ 'TheUserIsAlreadyRegisteredInTheCourse'|get_plugin_lang('Buy_CoursesPlugin') }}</span>
+                            <span class="label label-info">{{ 'TheUserIsAlreadyRegisteredInTheCourse'|get_plugin_lang('BuyCoursesPlugin') }}</span>
                         {% endif %}
                         {% if course.enrolled == "TMP" %}
-                            <span class="label label-warning">{{ 'WaitingToReceiveThePayment'|get_plugin_lang('Buy_CoursesPlugin') }}</span>
+                            <span class="label label-warning">{{ 'WaitingToReceiveThePayment'|get_plugin_lang('BuyCoursesPlugin') }}</span>
                         {% endif %}
                     </div>
                     <div class="span right">
@@ -64,12 +64,12 @@
                         </div>
                         <div class="cleared"></div>
                         <div class="btn-toolbar right">
-                            <a class="ajax btn btn-primary" title="" href="{{ server }}plugin/buy_courses/src/ajax.php?code={{ course.code }}">
+                            <a class="ajax btn btn-primary" title="" href="{{ server }}plugin/buycourses/src/ajax.php?code={{ course.code }}">
                                 {{ 'Description'|get_lang }}
                             </a>
                             {% if course.enrolled == "NO" %}
-                                <a class="btn btn-success" title="" href="{{ server }}plugin/buy_courses/src/process.php?code={{ course.id }}">
-                                    {{ 'Buy'|get_plugin_lang('Buy_CoursesPlugin') }}
+                                <a class="btn btn-success" title="" href="{{ server }}plugin/buycourses/src/process.php?code={{ course.id }}">
+                                    {{ 'Buy'|get_plugin_lang('BuyCoursesPlugin') }}
                                 </a>
                             {% endif %}
                         </div>

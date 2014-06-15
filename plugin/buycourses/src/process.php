@@ -1,11 +1,16 @@
 <?php
+/* For license terms, see /license.txt */
+/**
+ * Process payments for the Buy Courses plugin
+ * @package chamilo.plugin.buycourses
+ */
 /**
  * Initialization
  */
 require_once '../config.php';
 require_once dirname(__FILE__) . '/buy_course.lib.php';
 
-$plugin = Buy_CoursesPlugin::create();
+$plugin = BuyCoursesPlugin::create();
 $_cid = 0;
 $templateName = $plugin->get_lang('PaymentMethods');
 $interbreadcrumb[] = array("url" => "list.php", "name" => $plugin->get_lang('CourseListOnSale'));
@@ -23,8 +28,8 @@ $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
 
 $sql = "SELECT a.price, a.title, b.code
     FROM $tableBuyCourse a, $tableCourse b
-    WHERE a.id_course = " . $code . "
-    AND a.id_course = b.id;";
+    WHERE a.course_id = " . $code . "
+    AND a.course_id = b.id;";
 $res = Database::query($sql);
 $row = Database::fetch_assoc($res);
 
@@ -58,7 +63,7 @@ if (checkUserCourse($_SESSION['bc_course_codetext'], $_SESSION['bc_user_id'])) {
     header('Location: list.php');
 }
 
-if (checkUserCourseTransference($_SESSION['bc_course_codetext'], $_SESSION['bc_user_id'])) {
+if (checkUserCourseTransfer($_SESSION['bc_course_codetext'], $_SESSION['bc_user_id'])) {
     $_SESSION['bc_success'] = false;
     $_SESSION['bc_message'] = 'bc_tmp_registered';
     header('Location: list.php');
@@ -67,19 +72,19 @@ if (checkUserCourseTransference($_SESSION['bc_course_codetext'], $_SESSION['bc_u
 $currencyType = findCurrency();
 
 $paypalEnable = $plugin->get('paypal_enable');
-$transferenceEnable = $plugin->get('transference_enable');
+$transferEnable = $plugin->get('transfer_enable');
 
 $courseInfo = courseInfo($code);
 
 $tpl->assign('course', $courseInfo);
 $tpl->assign('server', $_configuration['root_web']);
 $tpl->assign('paypal_enable', $paypalEnable);
-$tpl->assign('transference_enable', $transferenceEnable);
+$tpl->assign('transfer_enable', $transferEnable);
 $tpl->assign('title', $_SESSION['bc_course_title']);
 $tpl->assign('price', $_SESSION['Payment_Amount']);
 $tpl->assign('currency', $currencyType);
 
-$listing_tpl = 'buy_courses/view/process.tpl';
+$listing_tpl = 'buycourses/view/process.tpl';
 $content = $tpl->fetch($listing_tpl);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

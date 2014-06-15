@@ -1,12 +1,14 @@
 <?php
-
+/* For license terms, see /license.txt */
 /**
  * Description of buy_courses_plugin
- *
- * @copyright (c) 2013 Nosolored
+ * @package chamilo.plugin.buycourses
  * @author Jose Angel Ruiz    <jaruiz@nosolored.com>
  */
-class Buy_CoursesPlugin extends Plugin
+/**
+ * Plugin class for the BuyCourses plugin
+ */
+class BuyCoursesPlugin extends Plugin
 {
     /**
      *
@@ -20,7 +22,7 @@ class Buy_CoursesPlugin extends Plugin
 
     protected function __construct()
     {
-        parent::__construct('1.0', 'Jose Angel Ruiz, Francis Gonzales', array('paypal_enable' => 'boolean', 'transference_enable' => 'boolean', 'unregistered_users_enable' => 'boolean'));
+        parent::__construct('1.0', 'Jose Angel Ruiz, Francis Gonzales', array('paypal_enable' => 'boolean', 'transfer_enable' => 'boolean', 'unregistered_users_enable' => 'boolean'));
     }
 
     /**
@@ -28,7 +30,7 @@ class Buy_CoursesPlugin extends Plugin
      */
     function install()
     {
-        require_once api_get_path(SYS_PLUGIN_PATH) . 'buy_courses/database.php';
+        require_once api_get_path(SYS_PLUGIN_PATH) . 'buycourses/database.php';
     }
 
     /**
@@ -48,7 +50,7 @@ class Buy_CoursesPlugin extends Plugin
         $sql = "DROP TABLE IF EXISTS $table";
         Database::query($sql);
 
-        $table = Database::get_main_table(TABLE_BUY_COURSE_TRANSFERENCE);
+        $table = Database::get_main_table(TABLE_BUY_COURSE_TRANSFER);
         $sql = "DROP TABLE IF EXISTS $table";
         Database::query($sql);
 

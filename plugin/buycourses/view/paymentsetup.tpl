@@ -1,18 +1,18 @@
-<script type='text/javascript' src="../js/funciones.js"></script>
+<script type='text/javascript' src="../js/buycourses.js"></script>
 
 <link rel="stylesheet" type="text/css" href="../resources/plugin.css"/>
 
 <div class="row">
     <div class="span12">
-        <h3>{{ 'CurrencyType'|get_plugin_lang('Buy_CoursesPlugin') }}:</h3>
+        <h3>{{ 'CurrencyType'|get_plugin_lang('BuyCoursesPlugin') }}:</h3>
         <select id="currency_type">
-            <option value="" selected="selected">{{ 'SelectACurrency'|get_plugin_lang('Buy_CoursesPlugin') }}</option>
+            <option value="" selected="selected">{{ 'SelectACurrency'|get_plugin_lang('BuyCoursesPlugin') }}</option>
             {% for currency in currencies %}
                 {% if currency.status == 1 %}
-                    <option value="{{ currency.id_country }}" selected="selected">{{ currency.country_name }} => {{ currency.currency_code }}
+                    <option value="{{ currency.country_id }}" selected="selected">{{ currency.country_name }} => {{ currency.currency_code }}
                     </option>
                 {% else %}
-                    <option value="{{ currency.id_country }}">{{ currency.country_name }} => {{ currency.currency_code }}</option>
+                    <option value="{{ currency.country_id }}">{{ currency.country_name }} => {{ currency.currency_code }}</option>
                 {% endif %}
             {% endfor %}
         </select>
@@ -20,11 +20,11 @@
 
         {% if paypal_enable == "true" %}
             <hr />
-            <h3>Configuraci&oacute;n PayPal:</h3>
+            <h3>{{ 'PayPalConfig'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
                 {% if paypal.sandbox == "YES" %}
-                    {{ 'Sandbox'|get_plugin_lang('Buy_CoursesPlugin') }}: <input type="checkbox" id="sandbox" value="YES" checked="checked"/>
+                    {{ 'Sandbox'|get_plugin_lang('BuyCoursesPlugin') }}: <input type="checkbox" id="sandbox" value="YES" checked="checked"/>
                 {% else %}
-                    {{ 'Sandbox'|get_plugin_lang('Buy_CoursesPlugin') }}: <input type="checkbox" id="sandbox" value="YES" />
+                    {{ 'Sandbox'|get_plugin_lang('BuyCoursesPlugin') }}: <input type="checkbox" id="sandbox" value="YES" />
                 {% endif %}
             <br />
             API_UserName: <input type="text" id="username" value="{{ paypal.username | e}}" /><br/>
@@ -33,19 +33,19 @@
             <input type="button" id="save_paypal" class="btn btn-primary" value="{{ 'Save'|get_lang }}"/>
         {% endif %}
 
-        {% if transference_enable == "true" %}
+        {% if transfer_enable == "true" %}
             <hr />
-            <h3>Configuraci&oacute;n Transferencia: </h3>
-            <table id="transference_table" class="data_table">
+            <h3>{{ 'TransfersConfig'|get_plugin_lang('BuyCoursesPlugin') }}</h3>
+            <table id="transfer_table" class="data_table">
                 <tr class="row_odd">
                 <th>{{ 'Name'|get_lang }}</th>
-                <th>{{ 'BankAccount'|get_plugin_lang('Buy_CoursesPlugin') }}</th>
+                <th>{{ 'BankAccount'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 <th>{{ 'SWIFT'|get_lang }}</th>
                 <th class="span1 ta-center">{{ 'Option'|get_lang }}</th>
                 </tr>
                 {% set i = 0 %}
 
-                {% for transf in transference %}
+                {% for transf in transfer %}
                 {{ i%2==0 ? '
                 <tr class="row_even">' : '
                 <tr class="row_odd">' }}

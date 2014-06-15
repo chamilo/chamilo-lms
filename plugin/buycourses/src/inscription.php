@@ -1,11 +1,12 @@
 <?php
 /* For licensing terms, see /license.txt */
-
 /**
- * This script displays a form for registering new users.
- * @package  chamilo.auth
+ * This script displays a form for registering new users to a course directly
+ * @package  chamilo.plugin.buycourses
  */
-
+/**
+ * Init
+ */
 use ChamiloSession as Session;
 
 $language_file = array('registration', 'admin');

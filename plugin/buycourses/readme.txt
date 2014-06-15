@@ -1,5 +1,5 @@
-Buy Courses<br/><br/>
-Users can access to the catalog to buy the visible courses.<br/>
-If the user is unregistered this user will be requested to register.<br/>
-Once the course is chosen Chamilo is going to show different enabled payment types. <br/>
-Finally the user will receive through email the user and password to access to the chosen course. <br/>
+Courses purchase plugin<br/><br/>
+Users can access the courses purchase catalog to buy available courses.<br/>
+If the user is unregistered he/she will be requested to register.<br/>
+Once the course is chosen, Chamilo shows the different payment types available (currently only PayPal works). <br/>
+Finally, the user receives user and password by e-mail, to access the chosen course. <br/>

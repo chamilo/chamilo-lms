@@ -1,5 +1,12 @@
 <?php
-
+/* For license terms, see /license.txt */
+/**
+ * Functions for the Buy Courses plugin
+ * @package chamilo.plugin.buycourses
+ */
+/**
+ * Init
+ */
 require_once '../config.php';
 require_once 'buy_course.lib.php';
 require_once api_get_path(LIBRARY_PATH) . 'mail.lib.inc.php';
@@ -8,13 +15,13 @@ require_once api_get_path(LIBRARY_PATH) . 'course.lib.php';
 $tableBuyCourse = Database::get_main_table(TABLE_BUY_COURSE);
 $tableBuyCourseCountry = Database::get_main_table(TABLE_BUY_COURSE_COUNTRY);
 $tableBuyCoursePaypal = Database::get_main_table(TABLE_BUY_COURSE_PAYPAL);
-$tableBuyCourseTransference = Database::get_main_table(TABLE_BUY_COURSE_TRANSFERENCE);
+$tableBuyCourseTransfer = Database::get_main_table(TABLE_BUY_COURSE_TRANSFER);
 $tableBuyCourseTemporal = Database::get_main_table(TABLE_BUY_COURSE_TEMPORAL);
 $tableCourse = Database::get_main_table(TABLE_MAIN_COURSE);
 $tableCourseRelUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tableUser = Database::get_main_table(TABLE_MAIN_USER);
 
-$plugin = Buy_CoursesPlugin::create();
+$plugin = BuyCoursesPlugin::create();
 $buy_name = $plugin->get_lang('Buy');
 
 if ($_REQUEST['tab'] == 'sync') {
@@ -33,7 +40,7 @@ if ($_REQUEST['tab'] == 'courses_filter') {
     $priceMax = Database::escape_string($_REQUEST['pricemax']);
     $show = Database::escape_string($_REQUEST['show']);
     $category = Database::escape_string($_REQUEST['category']);
-    $server = Database::escape_string($_configuration['root_web']);
+    $server = api_get_path(WEB_PATH);
 
     $filter = '';
     if ($course != '') {
@@ -64,14 +71,14 @@ if ($_REQUEST['tab'] == 'courses_filter') {
     }
 
     if ($filter == '') {
-        $sql = "SELECT a.id_course, a.visible, a.price, b.*
+        $sql = "SELECT a.course_id, a.visible, a.price, b.*
             FROM $tableBuyCourse a, $tableCourse b
-            WHERE a.id_course = b.id
+            WHERE a.course_id = b.id
             AND a.visible = 1;";
     } else {
-        $sql = "SELECT a.id_course, a.visible, a.price, b.*
+        $sql = "SELECT a.course_id, a.visible, a.price, b.*
             FROM $tableBuyCourse a, $tableCourse b
-            WHERE a.id_course = b.id
+            WHERE a.course_id = b.id
             AND a.visible = 1 AND " . $filter . ";";
     }
 
@@ -144,7 +151,7 @@ if ($_REQUEST['tab'] == 'courses_filter') {
         $content .= '<div class="btn-toolbar right">';
         $content .= '<a class="ajax btn btn-primary" title="" href="' . $server . 'main/inc/ajax/course_home.ajax.php?a=show_course_information&code=' . $course['code'] . '">' . get_lang('Description') . '</a>&nbsp;';
         if ($course['enrolled'] != "YES") {
-            $content .= '<a class="btn btn-success" title="" href="' . $server . 'plugin/buy_courses/src/process.php?code=' . $course['id'] . '">' . $buy_name . '</a>';
+            $content .= '<a class="btn btn-success" title="" href="' . $server . 'plugin/buycourses/src/process.php?code=' . $course['id'] . '">' . $buy_name . '</a>';
         }
         $content .= '</div>';
         $content .= '</div>';
@@ -156,10 +163,10 @@ if ($_REQUEST['tab'] == 'courses_filter') {
 }
 
 if ($_REQUEST['tab'] == 'save_currency') {
-    $id = $_REQUEST['currency'];
+    $id = Database::escape_string($_REQUEST['currency']);
     $sql = "UPDATE $tableBuyCourseCountry SET status='0';";
     $res = Database::query($sql);
-    $sql = "UPDATE $tableBuyCourseCountry SET status='1' WHERE id_country='" . $id . "';";
+    $sql = "UPDATE $tableBuyCourseCountry SET status='1' WHERE country_id='" . $id . "';";
     $res = Database::query($sql);
     if (!res) {
         $content = $plugin->get_lang('ProblemToSaveTheCurrencyType') . Database::error();
@@ -196,7 +203,7 @@ if ($_REQUEST['tab'] == 'add_account') {
     $name = Database::escape_string($_REQUEST['name']);
     $account = Database::escape_string($_REQUEST['account']);
     $swift = Database::escape_string($_REQUEST['swift']);
-    $sql = "INSERT INTO $tableBuyCourseTransference (name, account, swift)
+    $sql = "INSERT INTO $tableBuyCourseTransfer (name, account, swift)
         VALUES ('" . $name . "','" . $account . "', '" . $swift . "');";
 
     $res = Database::query($sql);
@@ -210,10 +217,9 @@ if ($_REQUEST['tab'] == 'add_account') {
 }
 
 if ($_REQUEST['tab'] == 'delete_account') {
-    $_REQUEST['id'] = intval($_REQUEST['id']);
-    $id = $_REQUEST['id'];
+    $id = intval($_REQUEST['id']);
 
-    $sql = "DELETE FROM $tableBuyCourseTransference WHERE id='" . $id . "';";
+    $sql = "DELETE FROM $tableBuyCourseTransfer WHERE id='" . $id . "';";
     $res = Database::query($sql);
     if (!res) {
         $content = $plugin->get_lang('ProblemToDeleteTheAccount') . Database::error();
@@ -226,22 +232,21 @@ if ($_REQUEST['tab'] == 'delete_account') {
 
 if ($_REQUEST['tab'] == 'save_mod') {
     $_REQUEST['id'] = Database::escape_string($_REQUEST['id']);
-    $idCourse = intval($_REQUEST['id_course']);
+    $idCourse = intval($_REQUEST['course_id']);
     $visible = ($_REQUEST['visible'] == "checked") ? 1 : 0;
     $price = Database::escape_string($_REQUEST['price']);
-    $obj = $_REQUEST['obj'];
 
     $sql = "UPDATE $tableBuyCourse
         SET visible = " . $visible . ",
         price = '" . $price . "'
-        WHERE id_course = '" . $idCourse . "';";
+        WHERE course_id = '" . $idCourse . "';";
 
     $res = Database::query($sql);
     if (!res) {
         $content = $plugin->get_lang('ProblemToSaveTheMessage') . Database::error();
         echo json_encode(array("status" => "false", "content" => $content));
     } else {
-        echo json_encode(array("status" => "true", "id_course" => $idCourse));
+        echo json_encode(array("status" => "true", "course_id" => $idCourse));
     }
 }
 
@@ -261,8 +266,7 @@ if ($_REQUEST['tab'] == 'unset_variables') {
 }
 
 if ($_REQUEST['tab'] == 'clear_order') {
-    $_REQUEST['id'] = intval($_REQUEST['id']);
-    $id = substr($_REQUEST['id'], 6);
+    $id = substr(intval($_REQUEST['id']), 6);
     $sql = "DELETE FROM $tableBuyCourseTemporal WHERE cod='" . $id . "';";
 
     $res = Database::query($sql);
@@ -276,8 +280,7 @@ if ($_REQUEST['tab'] == 'clear_order') {
 }
 
 if ($_REQUEST['tab'] == 'confirm_order') {
-    $_REQUEST['id'] = intval($_REQUEST['id']);
-    $id = substr($_REQUEST['id'], 6);
+    $id = substr(intval($_REQUEST['id']), 6);
     $sql = "SELECT * FROM $tableBuyCourseTemporal WHERE cod='" . $id . "';";
     $res = Database::query($sql);
     $row = Database::fetch_assoc($res);

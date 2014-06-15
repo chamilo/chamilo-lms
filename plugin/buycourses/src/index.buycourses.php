@@ -1,9 +1,13 @@
 <?php
+/* For license terms, see /license.txt */
 /**
- * @package chamilo.plugin.themeselect
+ * Index of the Buy Courses plugin courses list
+ * @package chamilo.plugin.buycourses
  */
-
-$plugin = Buy_CoursesPlugin::create();
+/**
+ *
+ */
+$plugin = BuyCoursesPlugin::create();
 $guess_enable = $plugin->get('unregistered_users_enable');
 
 if ($guess_enable == "true" || isset($_SESSION['_user'])) {
@@ -17,7 +21,7 @@ if ($guess_enable == "true" || isset($_SESSION['_user'])) {
     $tpl->assign('ConfigurationOfCoursesAndPrices', $plugin->get_lang('ConfigurationOfCoursesAndPrices'));
     $tpl->assign('ConfigurationOfPayments', $plugin->get_lang('ConfigurationOfPayments'));
     $tpl->assign('OrdersPendingOfPayment', $plugin->get_lang('OrdersPendingOfPayment'));
-    $listing_tpl = 'buy_courses/view/index.tpl';
+    $listing_tpl = 'buycourses/view/index.tpl';
     $content = $tpl->fetch($listing_tpl);
     $tpl->assign('content', $content);
     $tpl->display_one_col_template();

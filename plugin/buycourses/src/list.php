@@ -1,6 +1,7 @@
 <?php
 /**
- * @package chamilo.plugin.buy_courses
+ * List of courses
+ * @package chamilo.plugin.buycourses
  */
 /**
  * Initialization
@@ -11,8 +12,8 @@ require_once api_get_path(LIBRARY_PATH) . 'plugin.class.php';
 require_once 'buy_course_plugin.class.php';
 require_once 'buy_course.lib.php';
 
-$course_plugin = 'buy_courses';
-$plugin = Buy_CoursesPlugin::create();
+$course_plugin = 'buycourses';
+$plugin = BuyCoursesPlugin::create();
 $_cid = 0;
 
 if (api_is_platform_admin()) {
@@ -49,7 +50,7 @@ $tpl->assign('courses', $courseList);
 $tpl->assign('category', $categoryList);
 $tpl->assign('currency', $currencyType);
 
-$listing_tpl = 'buy_courses/view/list.tpl';
+$listing_tpl = 'buycourses/view/list.tpl';
 $content = $tpl->fetch($listing_tpl);
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

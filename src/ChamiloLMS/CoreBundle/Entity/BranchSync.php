@@ -183,7 +183,6 @@ class BranchSync
      */
     private $children;
 
-
     /**
      *
      */
@@ -191,7 +190,6 @@ class BranchSync
     {
         // $this->lastSyncTransDate = new \DateTime();
     }
-
 
     /**
      * Get id

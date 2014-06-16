@@ -8,7 +8,7 @@ use ChamiloLMS\CoreBundle\Form\JuryType;
 use ChamiloLMS\CoreBundle\Form\JuryUserType;
 use ChamiloLMS\CoreBundle\Entity\Jury;
 use ChamiloLMS\CoreBundle\Entity\JuryMembers;
-use ChamiloLMS\CoreBundle\Entity\TrackExerciseAttemptJury;
+use ChamiloLMS\CoreBundle\Entity\TrackAttemptJury;
 use ChamiloLMS\CoreBundle\Entity\TrackExercise;
 
 use Silex\Application;
@@ -245,7 +245,7 @@ class JuryPresidentController
             $user = $attempt->getUser();
             $juryAttempts = $attempt->getJuryAttempts();
 
-            /** @var TrackExerciseAttemptJury $juryAttempt */
+            /** @var TrackAttemptJury $juryAttempt */
             $tempAttempt = array();
             foreach ($juryAttempts as $juryAttempt) {
                 if (!isset($tempAttempt[$juryAttempt->getJuryUserId()])) {

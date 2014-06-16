@@ -6,7 +6,7 @@ namespace ChamiloLMS\CoreBundle\Controller\Admin\JuryMember;
 use ChamiloLMS\CoreBundle\Controller\CrudController;
 use ChamiloLMS\CoreBundle\Entity\TrackExercise;
 use ChamiloLMS\CoreBundle\Entity\Jury;
-use ChamiloLMS\CoreBundle\Entity\TrackExerciseAttemptJury;
+use ChamiloLMS\CoreBundle\Entity\TrackAttemptJury;
 use ChamiloLMS\CoreBundle\Entity\JuryMembers;
 use ChamiloLMS\CoreBundle\Entity;
 use Silex\Application;
@@ -88,7 +88,7 @@ class JuryMemberController
             $user = $attempt->getUser();
             $juryAttempts = $attempt->getJuryAttempts();
 
-            /** @var TrackExerciseAttemptJury $juryAttempt */
+            /** @var TrackAttemptJury $juryAttempt */
             $tempAttempt = array();
             foreach ($juryAttempts as $juryAttempt) {
                 if (!isset($tempAttempt[$juryAttempt->getJuryUserId()])) {
@@ -204,11 +204,11 @@ class JuryMemberController
             'juryUserId' => $userId
         );
 
-        $trackJury = $this->getManager()->getRepository('ChamiloLMS\CoreBundle\Entity\TrackExerciseAttemptJury')->findBy($criteria);
+        $trackJury = $this->getManager()->getRepository('ChamiloLMS\CoreBundle\Entity\TrackAttemptJury')->findBy($criteria);
 
         if ($trackJury) {
             $this->get('session')->getFlashBag()->add('info', "You already review this exercise attempt.");
-            /** @var TrackExerciseAttemptJury $track */
+            /** @var TrackAttemptJury $track */
             foreach ($trackJury as $track) {
                 $questionScoreTypeModel[$track->getQuestionId()] = $track->getQuestionScoreNameId();
             }
@@ -372,12 +372,12 @@ class JuryMemberController
 
                     $totalScore += $score;
 
-                    $obj = $this->getManager()->getRepository('ChamiloLMS\CoreBundle\Entity\TrackExerciseAttemptJury')->findOneBy($criteria);
+                    $obj = $this->getManager()->getRepository('ChamiloLMS\CoreBundle\Entity\TrackAttemptJury')->findOneBy($criteria);
                     if ($obj) {
                         $obj->setQuestionScoreNameId($questionScoreNameId);
                         $obj->setScore($score);
                     } else {
-                        $obj = new TrackExerciseAttemptJury();
+                        $obj = new TrackAttemptJury();
                         $obj->setJuryUserId($userId);
                         $obj->setAttempt($attempt);
                         $obj->setQuestionScoreNameId($questionScoreNameId);

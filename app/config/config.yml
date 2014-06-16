@@ -159,6 +159,9 @@ doctrine:
                 auto_mapping: true
                 mappings: ~
 
+        #metadata_cache_driver: apc  # default "array" "apc", "memcache", "memcached", "xcache"
+        #query_cache_driver: apc
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
@@ -205,8 +208,19 @@ nelmio_api_doc: ~
 sensio_framework_extra:
     view:    { annotations: false }
     router:  { annotations: true }
-    request: { converters:  true }
+    request:
+        converters: true
 
+# Doctrine extensions configuration
+stof_doctrine_extensions:
+    default_locale: "%locale%"
+    translation_fallback: true
+    orm:
+        default:
+            tree: true
+            timestampable: true
+            sluggable: true
 
 avanzu_admin_theme:
     bower_bin: /usr/bin/bower # that's the default value
+

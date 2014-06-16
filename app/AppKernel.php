@@ -126,6 +126,7 @@ class AppKernel extends Kernel
             // Chamilo
             new ChamiloLMS\CoreBundle\ChamiloLMSCoreBundle(),
             new ChamiloLMS\CourseBundle\ChamiloLMSCourseBundle(),
+            new ChamiloLMS\InstallerBundle\ChamiloLMSInstallerBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle()
         );
 
@@ -158,18 +159,21 @@ class AppKernel extends Kernel
 
     // Custom paths
 
+    /**
+     * Returns the real root path
+     * @return string
+     */
     public function getRealRootDir()
     {
         return realpath($this->rootDir.'/../').'/';
     }
 
+    /**
+     * Returns the data path
+     * @return string
+     */
     public function getDataDir()
     {
-        return $this->getRealRootDir().'/data/';
-    }
-
-    public function getConfigDir()
-    {
-        return $this->getRealRootDir().'/config/';
+        return $this->getRealRootDir().'data/';
     }
 }

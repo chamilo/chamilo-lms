@@ -36,7 +36,7 @@ class LegacyListener
         Session::setSession($request->getSession());
         $dbConnection = $this->container->get('database_connection');
         $database  = new \Database($dbConnection, array());
-        
+
         \Database::setManager($this->container->get('doctrine')->getManager());
         Session::$urlGenerator = $this->container->get('router');
         Session::$security = $this->container->get('security.context');
@@ -46,7 +46,7 @@ class LegacyListener
         Session::$dataDir = $this->container->get('kernel')->getDataDir();
         Session::$tempDir = $this->container->get('kernel')->getCacheDir();
         Session::$courseDir = $this->container->get('kernel')->getDataDir();
-        Session::$configDir = $this->container->get('kernel')->getConfigDir();
+        //Session::$configDir = $this->container->get('kernel')->getConfigDir();
         Session::$assets = $this->container->get('templating.helper.assets');
         Session::$htmlEditor = $this->container->get('html_editor');
 

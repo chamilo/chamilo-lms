@@ -23,10 +23,6 @@ security:
         ROLE_STUDENT: [ROLE_STUDENT]
         ROLE_ANONYMOUS: [ROLE_ANONYMOUS]
 
-        SONATA:
-            - ROLE_SONATA_PAGE_ADMIN_PAGE_EDIT # if you are not using acl then this line must be uncommented
-            - ROLE_SONATA_PAGE_ADMIN_BLOCK_EDIT
-
     access_decision_manager:
         strategy: unanimous
 

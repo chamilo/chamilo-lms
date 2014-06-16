@@ -1,6 +1,5 @@
-#
 # more information can be found here http://sonata-project.org/bundles/page
-#
+
 cmf_routing:
     chain:
         routers_by_id:
@@ -11,27 +10,24 @@ cmf_routing:
             router.default: 100
 
 sonata_page:
-    multisite:             host_with_path_by_locale # host
+    multisite: host_with_path_by_locale # host
     use_streamed_response: false # set the value to false in debug mode or if the reverse proxy does not handle streamed response
 
     ignore_uri_patterns:
         - ^/admin(.*)
         - ^/api/(.*)
-        - ^demo-admin/(.*)
-        - ^avanzu_admin
 
     ignore_route_patterns:
         - (.*)admin(.*)     # ignore admin route, ie route containing 'admin'
         - ^_(.*)            # ignore symfony routes
-        - index
-        - (.*)avanzu_admin(.*)
+        - login
 
     ignore_routes:
         - sonata_page_cache_esi
         - sonata_page_cache_ssi
         - sonata_page_js_sync_cache
         - sonata_page_js_async_cache
-        - sonata_cache_esi
+        - sonata_cache_es
         - sonata_cache_ssi
         - sonata_cache_js_async
         - sonata_cache_js_sync
@@ -53,7 +49,8 @@ sonata_page:
     default_template: default
     templates:
         default:
-            path: 'ApplicationSonataPageBundle::default_layout.html.twig'
+            #path: 'ApplicationSonataPageBundle::default_layout.html.twig'
+            path: 'ChamiloLMSCoreBundle::main_layout.html.twig'
             name: 'default'
             containers:
                  header:

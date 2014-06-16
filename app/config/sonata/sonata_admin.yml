@@ -38,6 +38,9 @@ sonata_admin:
             #- { position: right, type: sonata.block.service.rss, settings: { title: Sonata Project's Feeds, url: http://sonata-project.org/blog/archive.rss }}
 
         groups:
+#            sonata_page:
+#                items:
+#                    - sonata.page.admin.page
             sonata.admin.group.content:
                 label:           sonata_content
                 label_catalogue: SonataDemoBundle
@@ -89,6 +92,7 @@ sonata_admin:
                 items:
                     - sonata.admin.course
                     - sonata.admin.session
+                    - sonata.admin.access_url
 
     assets:
         stylesheets:
@@ -101,10 +105,10 @@ sonata_admin:
             - assetic/sonata_jqueryui_css.css
             - bundles/sonatademo/css/demo.css
 
-#            - bundles/sonataformatter/markitup/skins/sonata/style.css
-#            - bundles/sonataformatter/markitup/sets/markdown/style.css
-#            - bundles/sonataformatter/markitup/sets/html/style.css
-#            - bundles/sonataformatter/markitup/sets/textile/style.css
+            - bundles/sonataformatter/markitup/skins/sonata/style.css
+            - bundles/sonataformatter/markitup/sets/markdown/style.css
+            - bundles/sonataformatter/markitup/sets/html/style.css
+            - bundles/sonataformatter/markitup/sets/textile/style.css
 #            - bundles/sonataadmin/vendor/bootstrap/dist/css/bootstrap.min.css
 #            - bundles/sonataadmin/vendor/AdminLTE/css/font-awesome.min.css
 #            - bundles/sonataadmin/vendor/AdminLTE/css/ionicons.min.css

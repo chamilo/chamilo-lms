@@ -17,7 +17,10 @@ require_once 'lib/fe/catform.class.php';
 api_block_anonymous_users();
 block_students();
 
-$edit_cat = isset($_REQUEST['editcat']) ? $_REQUEST['editcat'] : '';
+$edit_cat = isset($_REQUEST['editcat']) ? intval($_REQUEST['editcat']) : '';
+
+$htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/jquery.fcbkcomplete.js" type="text/javascript" language="javascript"></script>';
+$htmlHeadXtra[] = '<link  href="'.api_get_path(WEB_LIBRARY_PATH).'javascript/tag/style.css" rel="stylesheet" type="text/css" />';
 
 $htmlHeadXtra[] = '<script type="text/javascript">
 $(document).ready(function() {

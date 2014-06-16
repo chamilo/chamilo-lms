@@ -22,49 +22,60 @@ class Result
 
 // CONSTRUCTORS
 
-    function Result() {
+    function Result()
+    {
 		$this->created_at = api_get_utc_datetime();
     }
 
 // GETTERS AND SETTERS
 
-   	public function get_id() {
+    public function get_id()
+    {
 		return $this->id;
 	}
 
-   	public function get_user_id() {
+    public function get_user_id()
+    {
 		return $this->user_id;
 	}
 
-   	public function get_evaluation_id() {
+    public function get_evaluation_id()
+    {
 		return $this->evaluation;
 	}
 
-    public function get_date() {
+    public function get_date()
+    {
 		return $this->created_at;
 	}
 
-   	public function get_score() {
+    public function get_score()
+    {
 		return $this->score;
 	}
 
-    public function set_id ($id) {
+    public function set_id($id)
+    {
 		$this->id = $id;
 	}
 
-   	public function set_user_id ($user_id) {
+    public function set_user_id($user_id)
+    {
 		$this->user_id = $user_id;
 	}
 
-   	public function set_evaluation_id ($evaluation_id) {
+    public function set_evaluation_id($evaluation_id)
+    {
 		$this->evaluation = $evaluation_id;
 	}
 
-    public function set_date ($creation_date) {
+    public function set_date($creation_date)
+    {
 		$this->created_at = $creation_date;
 	}
 
-   	public function set_score ($score) {
+    public function set_score($score)
+    {
 		$this->score = $score;
 	}
 
@@ -76,7 +87,9 @@ class Result
 	 * @param $user_id user id (student)
 	 * @param $evaluation_id evaluation where this is a result for
 	 */
-	public static function load ($id = null, $user_id = null, $evaluation_id = null) {
+    public static function load($id = null, $user_id = null, $evaluation_id = null)
+    {
+        $tbl_user = Database :: get_main_table(TABLE_MAIN_USER);
 		$tbl_grade_results 				= Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$tbl_course_rel_course 			= Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 		$tbl_session_rel_course_user 	= Database :: get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -89,6 +102,7 @@ class Result
 
 			if ($info_verified_if_exist_evaluation != 0 ) {
 
+                $sql_course_rel_user = '';
 				if (api_get_session_id()) {
 					$sql_course_rel_user = 'SELECT course_code, id_user as user_id, status
 					                        FROM '.$tbl_session_rel_course_user.'
@@ -120,10 +134,12 @@ class Result
 			}
 		}
 
-		$sql = 'SELECT id,user_id,evaluation_id,created_at,score FROM '.$tbl_grade_results;
+        $sql = "SELECT gr.id, gr.user_id, gr.evaluation_id, gr.created_at, gr.score 
+                FROM $tbl_grade_results gr
+                LEFT JOIN $tbl_user u ON gr.user_id = u.user_id ";
 		$paramcount = 0;
 		if (!empty ($id)) {
-			$sql.= ' WHERE id = '.Database::escape_string($id);
+            $sql.= ' WHERE gr.id = ' . Database::escape_string($id);
 			$paramcount ++;
 		}
 		if (!empty ($user_id)) {
@@ -178,25 +194,14 @@ class Result
 			Database::query($sql);
 		} else {
 			die('Error in Result add: required field empty');
-		}
-
-	}
-        /**
-         * Group insertion assuming all data is correct
-         */
-        public function group_add($list) {
-	    $tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
-            $sql = "INSERT INTO $tbl_grade_results (user_id, evaluation_id, created_at, score) VALUES ";
-            foreach ($list as $row) {
-                $sql.= "(".intval($row['user_id']).",".$row['evaluation_id'].",'".$row['created_at']."','".$row['score']."'),";
-            }
-            $sql = substr($sql,0,-1);
-            $res = Database::query($sql);
         }
+	}
+
 	/**
 	 * insert log result
 	 */
-	 public function add_result__log($userid,$evaluationid){
+    public function add_result__log($userid, $evaluationid)
+    {
 
 	 	if (isset($userid) && isset($evaluationid) ) {
 			$tbl_grade_results_log = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_LOG);
@@ -226,7 +231,8 @@ class Result
 	/**
 	 * Update the properties of this result in the database
 	 */
-	public function save() {
+    public function save()
+    {
 		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$sql = 'UPDATE '.$tbl_grade_results.'
                 SET user_id = '.$this->get_user_id()
@@ -245,7 +251,8 @@ class Result
 	/**
 	 * Delete this result from the database
 	 */
-	public function delete() {
+    public function delete()
+    {
 		$tbl_grade_results = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
 		$sql = 'DELETE FROM '.$tbl_grade_results.' WHERE id = '.$this->id;
 		Database::query($sql);

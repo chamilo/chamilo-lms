@@ -28,7 +28,11 @@ require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 $course_id = api_get_course_int_id();
 $user_id = api_get_user_id();
 
-if (isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action'] == 'downloadcategory' AND isset($_GET['sent_received'])) {
+if (isset($_GET['cat_id']) AND
+    is_numeric($_GET['cat_id']) AND
+    $_GET['action'] == 'downloadcategory' AND
+    isset($_GET['sent_received'])
+) {
     /** step 1: constructing the sql statement.
     Due to the nature off the classes of the dropbox the categories for sent files are stored in the table
     dropbox_file while the categories for the received files are stored in dropbox_post.
@@ -39,7 +43,8 @@ if (isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action'] =
     if ($_GET['sent_received'] == 'sent') {
         // here we also incorporate the person table to make sure that deleted sent documents are not included.
         $sql = "SELECT DISTINCT file.id, file.filename, file.title
-                FROM ".$dropbox_cnf['tbl_file']." file INNER JOIN ".$dropbox_cnf['tbl_person']." person
+                FROM ".$dropbox_cnf['tbl_file']." file
+                INNER JOIN ".$dropbox_cnf['tbl_person']." person
                 ON (person.file_id=file.id AND file.c_id = $course_id AND person.c_id = $course_id)
                 WHERE
                     file.uploader_id = $user_id AND
@@ -49,7 +54,8 @@ if (isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action'] =
 
     if ($_GET['sent_received'] == 'received') {
         $sql = "SELECT DISTINCT file.id, file.filename, file.title
-                FROM ".$dropbox_cnf['tbl_file']." file INNER JOIN ".$dropbox_cnf['tbl_person']." person
+                FROM ".$dropbox_cnf['tbl_file']." file
+                INNER JOIN ".$dropbox_cnf['tbl_person']." person
                 ON (person.file_id=file.id AND file.c_id = $course_id AND person.c_id = $course_id)
                 INNER JOIN ".$dropbox_cnf['tbl_post']." post
                 ON (post.file_id = file.id AND post.c_id = $course_id AND file.c_id = $course_id)
@@ -58,6 +64,7 @@ if (isset($_GET['cat_id']) AND is_numeric($_GET['cat_id']) AND $_GET['action'] =
                     post.dest_user_id = $user_id" ;
     }
 
+    $files_to_download = array();
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result)) {
         $files_to_download[] = $row['id'];

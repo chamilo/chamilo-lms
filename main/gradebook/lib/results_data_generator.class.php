@@ -1,13 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
+ * ResultsDataGenerator Class
  * Class to select, sort and transform object data into array data,
  * used for the teacher's evaluation results view
  * @author Bert Steppé
- * @package chamilo.gradebook
- */
-/**
- * Class
  * @package chamilo.gradebook
  */
 class ResultsDataGenerator
@@ -32,9 +29,11 @@ class ResultsDataGenerator
 	/**
 	 * Constructor
 	 */
-    function ResultsDataGenerator ( $evaluation,
-    								$results = array(),
-    								$include_edit = false) {
+    public function ResultsDataGenerator(
+        $evaluation,
+		$results = array(),
+        $include_edit = false
+    ) {
     	$this->evaluation = $evaluation;
 		$this->results = (isset($results) ? $results : array());
     }
@@ -43,7 +42,8 @@ class ResultsDataGenerator
 	/**
 	 * Get total number of results (rows)
 	 */
-	public function get_total_results_count () {
+    public function get_total_results_count ()
+    {
 		return count($this->results);
 	}
 
@@ -58,7 +58,8 @@ class ResultsDataGenerator
 	 * 4 ['score']     : student's score
 	 * 5 ['display']   : custom score display (only if custom scoring enabled)
 	 */
-	public function get_data ($sorting = 0, $start = 0, $count = null, $ignore_score_color = false, $pdf=false) {
+    public function get_data ($sorting = 0, $start = 0, $count = null, $ignore_score_color = false, $pdf=false)
+    {
 
 		// do some checks on count, redefine if invalid value
 		$number_decimals = api_get_setting('gradebook_number_decimals');
@@ -86,7 +87,13 @@ class ResultsDataGenerator
 			} else {
 				$user['score'] = $this->get_score_display($result->get_score(),true, $ignore_score_color);
 			}
-            $user['percentage_score'] = intval($scoredisplay->display_score(array($result->get_score(), $this->evaluation->get_max()), SCORE_PERCENT, SCORE_BOTH, true));
+            $user['percentage_score'] = intval($scoredisplay->display_score(
+                    array($result->get_score(), $this->evaluation->get_max()),
+                    SCORE_PERCENT,
+                    SCORE_BOTH,
+                    true
+                )
+            );
 			if ($pdf && $number_decimals == null){
 				$user['scoreletter'] = $result->get_score();
 			}
@@ -122,7 +129,8 @@ class ResultsDataGenerator
      * @param bool  Whether we want to ignore the score color
      * @result string The score as we want to show it
      */
-    private function get_score_display ($score, $realscore, $ignore_score_color = false) {
+    private function get_score_display ($score, $realscore, $ignore_score_color = false)
+    {
 		if ($score != null) {
 			$scoredisplay = ScoreDisplay :: instance();
 			$type = SCORE_CUSTOM;
@@ -135,15 +143,18 @@ class ResultsDataGenerator
 	}
 
 	// Sort functions - used internally
-	function sort_by_last_name($item1, $item2) {
+    function sort_by_last_name($item1, $item2)
+    {
 		return api_strcmp($item1['lastname'], $item2['lastname']);
 	}
 
-	function sort_by_first_name($item1, $item2) {
+    function sort_by_first_name($item1, $item2)
+    {
 		return api_strcmp($item1['firstname'], $item2['firstname']);
 	}
 
-	function sort_by_score($item1, $item2) {
+    function sort_by_score($item1, $item2)
+    {
 		if ($item1['percentage_score'] == $item2['percentage_score']) {
 			return 0;
 		} else {
@@ -151,7 +162,8 @@ class ResultsDataGenerator
 		}
 	}
 
-	function sort_by_mask ($item1, $item2) {
+    function sort_by_mask ($item1, $item2)
+    {
 		$score1 = (isset($item1['score']) ? array($item1['score'],$this->evaluation->get_max()) : null);
 		$score2 = (isset($item2['score']) ? array($item2['score'],$this->evaluation->get_max()) : null);
 		return ScoreDisplay :: compare_scores_by_custom_display($score1, $score2);

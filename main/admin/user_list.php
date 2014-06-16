@@ -527,6 +527,10 @@ function active_filter($active, $url_params, $row) {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  */
 function status_filter($status) {
+    if (empty($status)) {
+        return null;
+    }
+
 	$statusname = api_get_status_langvars();
 	return $statusname[$status];
 }

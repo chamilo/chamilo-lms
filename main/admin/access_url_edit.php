@@ -6,9 +6,7 @@
  * @author Julio Montoya <gugli100@gmail.com>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-/**
- * Initialization
- */
+
 $language_file = 'admin';
 $cidReset = true;
 require_once '../inc/global.inc.php';
@@ -149,9 +147,7 @@ if (!api_is_multiple_url_enabled()) {
 $tool_name = get_lang('AddUrl');
 $interbreadcrumb[] = array ("url" => 'index.php', "name" => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array ("url" => 'access_urls.php', "name" => get_lang('MultipleAccessURLs'));
-/**
- * View
- */
+
 Display :: display_header($tool_name);
 
 if (isset ($_GET['action'])) {

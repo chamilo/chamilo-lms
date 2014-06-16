@@ -617,7 +617,7 @@ function api_get_path($path_type, $path = null) {
     // Default $_configuration['root_web'] configuration
     //$root_web = isset($_configuration['root_web']) ? $_configuration['root_web'] : $app['url_generator'];
 
-    $root_web = Session::getUrlGenerator()->generate('root'); //$_configuration['root_web'];
+    $root_web = Session::getUrlGenerator()->generate('home'); //$_configuration['root_web'];
     $rootDir = Session::getRootDir();
 
     // Configuration data for already installed system.
@@ -2991,6 +2991,9 @@ function api_not_allowed($printHeaders = false, $message = null)
  * @desc convert sql date to unix timestamp
  */
 function api_convert_sql_date($last_post_datetime) {
+    if (empty($last_post_datetime)) {
+        return null;
+    }
     list ($last_post_date, $last_post_time) = explode(' ', $last_post_datetime);
     list ($year, $month, $day) = explode('-', $last_post_date);
     list ($hour, $min, $sec) = explode(':', $last_post_time);
@@ -3477,7 +3480,8 @@ function api_get_languages() {
     $language_list = array();
     while ($row = Database::fetch_array($result)) {
         $language_list['name'][] = $row['original_name'];
-        $language_list['folder'][] = $row['dokeos_folder'];
+        //$language_list['folder'][] = $row['dokeos_folder'];
+        $language_list['folder'][] = $row['original_name'];
     }
     Session::write('_setting.api_get_languages', $language_list);
     return $language_list;

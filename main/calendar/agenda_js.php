@@ -6,6 +6,7 @@
 /**
  * INIT SECTION
  */
+use \ChamiloSession as Session;
 
 // name of the language file that needs to be included
 $language_file = array('agenda', 'group', 'announcements');
@@ -15,7 +16,8 @@ $use_anonymous = true;
 
 // Calendar type
 
-$type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin')) ?  $_REQUEST['type'] : 'personal';
+$type = isset($_REQUEST['type']) && in_array($_REQUEST['type'], array('personal', 'course', 'admin', 'platform')) ? $_REQUEST['type'] : 'personal';
+$userId = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : null;
 
 if ($type == 'personal') {
     $cidReset = true; // fixes #5162
@@ -35,7 +37,7 @@ $htmlHeadXtra[] = api_get_js('fullcalendar/gcal.js');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'fullcalendar/fullcalendar.css');
 $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'qtip2/jquery.qtip.min.css');
 
-if (api_is_platform_admin() && $type == 'admin') {
+if (api_is_platform_admin() && ($type == 'admin' || $type == 'platform')) {
     $type = 'admin';
 }
 
@@ -44,6 +46,8 @@ if (isset($_REQUEST['cidReq']) && !empty($_REQUEST['cidReq'])) {
     $type = 'course';
 }
 
+$agenda = new Agenda();
+$agenda->type = $type;
 $is_group_tutor = false;
 $session_id = api_get_session_id();
 $group_id = api_get_group_id();
@@ -51,8 +55,14 @@ $group_id = api_get_group_id();
 if (!empty($group_id)) {
     $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $group_id);
     $group_properties  = GroupManager :: get_group_properties($group_id);
-    $interbreadcrumb[] = array ("url" => "../group/group.php", "name" => get_lang('Groups'));
-    $interbreadcrumb[] = array ("url"=>"../group/group_space.php?gidReq=".$group_id, "name"=> get_lang('GroupSpace').' '.$group_properties['name']);
+    $interbreadcrumb[] = array(
+        "url" => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
+        "name" => get_lang('Groups')
+    );
+    $interbreadcrumb[] = array(
+        "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
+        "name" => get_lang('GroupSpace').' '.$group_properties['name']
+    );
 }
 
 $app['title'] = get_lang('Agenda');
@@ -70,7 +80,7 @@ switch($type) {
         }
         break;
     case 'course':
-        api_protect_course_script();
+        api_protect_course_script(true);
         $this_section = SECTION_COURSES;
         if (api_is_allowed_to_edit()) {
             $can_add_events = 1;
@@ -82,7 +92,7 @@ switch($type) {
         }
         break;
     case 'personal':
-        if (api_is_anonymous()) {
+        if (api_is_anonymous(null, true)) {
             api_not_allowed(true);
         }
         $extra_field_data = UserManager::get_extra_user_data_by_field(api_get_user_id(), 'google_calendar_url');

@@ -4,9 +4,6 @@
  * Script
  * @package chamilo.gradebook
  */
-/**
- * Init
- */
 
 $language_file = 'gradebook';
 require_once '../inc/global.inc.php';
@@ -70,7 +67,13 @@ if (isset($_GET['selectcat'])) {
 	$category_id = '';
 }
 
-$simple_search_form = new UserForm(UserForm :: TYPE_SIMPLE_SEARCH, null, 'simple_search_form', null, api_get_self() . '?selectcat=' . $category_id);
+$simple_search_form = new UserForm(
+    UserForm :: TYPE_SIMPLE_SEARCH,
+    null,
+    'simple_search_form',
+    null,
+    api_get_self() . '?selectcat=' . $category_id
+);
 $values = $simple_search_form->exportValues();
 
 $keyword = '';
@@ -95,20 +98,31 @@ if (!empty($keyword)) {
 $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
 
 //$flatviewtable = new FlatViewTable($cat[0], $users, $alleval, $alllinks, true, $offset, $addparams);
-$flatviewtable = new FlatViewTable($cat[0], $users, $alleval, $alllinks, true, $offset);
+$mainCourseCategory = Category::load(null, null, api_get_course_id(), null, null, api_get_session_id());
+
+$flatviewtable = new FlatViewTable(
+    $cat[0],
+    $users,
+    $alleval,
+    $alllinks,
+    true,
+    $offset,
+    $addparams,
+    $mainCourseCategory[0]
+);
 
 $parameters=array('selectcat'=>intval($_GET['selectcat']));
 $flatviewtable->set_additional_parameters($parameters);
 
+$params = array();
 if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
-    $params = array();
     $params['only_total_category'] = true;
     $params['join_firstname_lastname'] = true;
     $params['show_official_code'] = true;
     $params['export_pdf'] = true;
     if ($cat[0]->is_locked() == true || api_is_platform_admin()) {
         Display :: set_header(null, false, false);
-        export_pdf_flatview($cat, $users, $alleval, $alllinks, $params);
+        export_pdf_flatview($flatviewtable, $cat, $users, $alleval, $alllinks, $params, $mainCourseCategory[0]);
     }
 }
 
@@ -118,25 +132,43 @@ if (isset($_GET['exportpdf']))	{
 		'name' => get_lang('FlatView')
 	);
 
-    $export_pdf_form = new DataForm(DataForm::TYPE_EXPORT_PDF, 'export_pdf_form', null, api_get_self().'?exportpdf=&offset='.intval($_GET['offset']).'&selectcat='.intval($_GET['selectcat']), '_blank', '');
+    $export_pdf_form = new DataForm(
+        DataForm::TYPE_EXPORT_PDF,
+        'export_pdf_form',
+        null,
+        api_get_self() . '?exportpdf=&offset=' . intval($_GET['offset']) . '&selectcat=' . intval($_GET['selectcat']),
+        '_blank',
+        ''
+    );
 
 	if ($export_pdf_form->validate()) {
-        $params = array();
         $params = $export_pdf_form->exportValues();
         Display :: set_header(null, false, false);
         $params['join_firstname_lastname'] = true;
         $params['show_official_code'] = true;
         $params['export_pdf'] = true;
         $params['only_total_category'] = false;
-		export_pdf_flatview($cat, $users, $alleval, $alllinks, $params);
+		export_pdf_flatview($flatviewtable, $cat, $users, $alleval, $alllinks, $params, $mainCourseCategory[0]);
 	} else {
 		Display :: display_header(get_lang('ExportPDF'));
 	}
 }
 
 if (isset ($_GET['print']))	{
-	$printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks);
-	echo print_table($printable_data[1],$printable_data[0], get_lang('FlatView'), $cat[0]->get_name());
+    $printable_data = get_printable_data(
+        $cat[0],
+        $users,
+        $alleval,
+        $alllinks,
+        $params,
+        $mainCourseCategory[0]
+    );
+	echo print_table(
+        $printable_data[1],
+        $printable_data[0],
+        get_lang('FlatView'),
+        $cat[0]->get_name()
+    );
 	exit;
 }
 
@@ -152,7 +184,14 @@ if (!empty($_GET['export_report']) && $_GET['export_report'] == 'export_report')
 		}
 
 		require_once 'gradebook_result.class.php';
-		$printable_data = get_printable_data($cat[0], $users, $alleval, $alllinks);
+        $printable_data = get_printable_data(
+            $cat[0],
+            $users,
+            $alleval,
+            $alllinks,
+            $params,
+            $mainCourseCategory[0]
+        );
 
 		switch($_GET['export_format']) {
 			case 'xls':

@@ -12,24 +12,35 @@
  * @package chamilo.dashboard 
  */
  
-class Block {
+class Block
+{
 
 	/**
 	 * Contructor
 	 */
-    public function __construct() {}
+    public function __construct()
+    {
+
+    }
     
     /**
      * Display small blocks, @todo it will be implemented for next version
      */
-    public function display_small() {}
+    public function display_small()
+    {
+
+    }
     
     /**
      * Display larges blocks, @todo it will be implemented for next version
      */
-    public function display_large() {}
+    public function display_large()
+    {
     
-    public function get_block_path(){              
+    }
+
+    public function get_block_path()
+    {
         $result = get_class($this);
         return $result;
     }

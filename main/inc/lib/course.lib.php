@@ -2917,9 +2917,8 @@ class CourseManager
      * @param null $maxPerPage
      * @return null|string
      */
-    static function displayCourses($user_id, $filter, $load_dirs, $getCount, $start = null, $maxPerPage = null)
+    public static function displayCourses($user_id, $filter, $load_dirs, $getCount, $start = null, $maxPerPage = null)
     {
-
         // Table definitions
         $TABLECOURS                     = Database :: get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER                 = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -2935,16 +2934,17 @@ class CourseManager
             //$without_special_courses = ' AND course.code NOT IN ("'.implode('","',$special_course_list).'")';
         }
 
-        $select = " SELECT DISTINCT course.id,
-                course.title,
-                course.code,
-                course.subscribe subscr,
-                course.unsubscribe unsubscr,
-                course_rel_user.status status,
-                course_rel_user.sort sort,
-                course_rel_user.user_course_cat user_course_cat,
-                course.id as real_id
-                ";
+        $select = " SELECT DISTINCT
+                    course.id,
+                    course.title,
+                    course.code,
+                    course.subscribe subscr,
+                    course.unsubscribe unsubscr,
+                    course_rel_user.status status,
+                    course_rel_user.sort sort,
+                    course_rel_user.user_course_cat user_course_cat,
+                    course.id as real_id
+        ";
 
         $from = "$TABLECOURS course, $TABLECOURSUSER  course_rel_user, $TABLE_ACCESS_URL_REL_COURSE url ";
 
@@ -2982,7 +2982,6 @@ class CourseManager
             $row = Database::fetch_array($result);
             return $row['total'];
         }
-
         $result = Database::query($sql);
 
         $html = null;
@@ -2991,7 +2990,6 @@ class CourseManager
         // Browse through all courses.
         while ($course = Database::fetch_array($result)) {
             $course_info = api_get_course_info($course['code']);
-            //$course['id_session'] = null;
             $course_info['id_session'] = null;
             $course_info['status'] = $course['status'];
 
@@ -3037,15 +3035,17 @@ class CourseManager
                 }
             }
 
-            $course_title = $course_info['title'];
+            //$course_title = $course_info['title'];
 
             $course_title_url = '';
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
-                $course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?id_session=0';
+                //$course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?id_session=0';
+                $course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['code'].'/index.php?id_session=0';
                 $course_title = Display::url($course_info['title'], $course_title_url);
             } else {
                 $course_title = $course_info['title']." ".Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
             }
+
 
             // Start displaying the course block itself
             if (api_get_setting('display_coursecode_in_courselist') == 'true') {

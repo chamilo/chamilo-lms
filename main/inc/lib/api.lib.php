@@ -1572,8 +1572,8 @@ function api_format_course_array($course_data) {
     $_course['directory'    ]         = $course_data['directory'      ];
 
     //@todo should be deprecated
-    $_course['dbName'       ]         = $course_data['db_name'        ]; // Use as key in db list.
-    $_course['db_name'      ]         = $course_data['db_name'         ];
+    //$_course['dbName'       ]         = $course_data['db_name'        ]; // Use as key in db list.
+    //$_course['db_name'      ]         = $course_data['db_name'         ];
     //$_course['dbNameGlu'    ]         = $_configuration['table_prefix'] . $course_data['db_name'] . $_configuration['db_glue']; // Use in all queries.
 
     $_course['titular'      ]         = $course_data['tutor_name'     ];
@@ -2957,7 +2957,7 @@ function api_is_anonymous($user_id = null, $db_check = false) {
 
     $_user = Session::read('_user');
 
-    if (!isset($_user) || $_user['user_id'] == 0) {
+    if (!isset($_user) || (isset($_user['user_id']) && $_user['user_id'] == 0)) {
         // In some cases, api_set_anonymous doesn't seem to be triggered in local.inc.php. Make sure it is.
         // Occurs in agenda for admin links - YW
         /*global $use_anonymous;
@@ -6683,6 +6683,7 @@ function api_get_user_language()
 
     if (!api_is_anonymous()) {
         $userInfo = api_get_user_info();
+        //var_dump($userInfo);exit;
         if (isset($userInfo['language'])) {
             $user_language = $userInfo['language'];
         }

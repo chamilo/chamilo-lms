@@ -4,7 +4,7 @@
 
 /**
  * SubLanguageManager class definition file
- * @package chamilo.admin.sublanguage 
+ * @package chamilo.admin.sublanguage
  * @todo clean this lib and move to main/inc/lib
  */
 class SubLanguageManager {
@@ -255,9 +255,9 @@ class SubLanguageManager {
             return false;
         }
     }
-    
+
     public static function check_if_language_is_used($language_id) {
-        $language_info = self::get_all_information_of_language($language_id);        
+        $language_info = self::get_all_information_of_language($language_id);
         $user_table = Database :: get_main_table(TABLE_MAIN_USER);
         $sql = 'SELECT count(*) AS count FROM ' . $user_table . ' WHERE language ="' . Database::escape_string($language_info['english_name']).'"';
         $rs = Database::query($sql);
@@ -325,7 +325,7 @@ class SubLanguageManager {
         $lang = Database::fetch_array($result);
         $sql_update_2 = "UPDATE " . $tbl_settings_current . " SET selected_value='" . $lang['english_name'] . "' WHERE variable='platformLanguage'";
         $result_2 = Database::query($sql_update_2);
-        event_system(LOG_PLATFORM_LANGUAGE_CHANGE, LOG_PLATFORM_LANGUAGE, $lang['english_name']);
+        Event::addEvent(LOG_PLATFORM_LANGUAGE_CHANGE, LOG_PLATFORM_LANGUAGE, $lang['english_name']);
         return $result_2 !== false;
     }
 

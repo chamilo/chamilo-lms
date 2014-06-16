@@ -41,7 +41,7 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
         //$userId = api_get_user_id();
         //\Online::logout($userId, false);
 
-        $login = $this->router->generate('index');
+        $login = $this->router->generate('home');
         $response = new RedirectResponse($login);
         return $response;
     }

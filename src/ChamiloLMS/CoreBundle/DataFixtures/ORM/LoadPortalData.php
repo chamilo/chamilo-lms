@@ -131,7 +131,9 @@ class LoadPortalData extends AbstractFixture implements ContainerAwareInterface,
             $manager->persist($lang);
         }
 
+        // Ids used
         $adminUserId = $this->getReference('admin-user')->getId();
+        $accessUrlId = 1;
 
         $accessUrl = new AccessUrl();
         $accessUrl->setUrl('http://localhost/');
@@ -142,7 +144,7 @@ class LoadPortalData extends AbstractFixture implements ContainerAwareInterface,
 
         $accessUrlRelUser = new AccessUrlRelUser();
         $accessUrlRelUser->setUserId($adminUserId);
-        $accessUrlRelUser->setAccessUrlId($accessUrl->getId());
+        $accessUrlRelUser->setAccessUrlId($accessUrlId);
         $manager->persist($accessUrlRelUser);
 
         /*$systemTemplate = new SystemTemplate();
@@ -183,6 +185,10 @@ class LoadPortalData extends AbstractFixture implements ContainerAwareInterface,
 
         $skill = new Skill();
         $skill->setName('Root');
+        $skill->setDescription(' ');
+        $skill->setShortCode('root');
+        $skill->setIcon(' ');
+        $skill->setAccessUrlId($accessUrlId);
         $manager->persist($skill);
 
         $skillRelSkill = new SkillRelSkill();
@@ -201,10 +207,8 @@ class LoadPortalData extends AbstractFixture implements ContainerAwareInterface,
         $courseType->setName('Entry exam');
         $manager->persist($courseType);
 
-        return;
-
         $branch = new BranchSync();
-        $branch->setAccessUrlId(1);
+        $branch->setAccessUrlId($accessUrlId);
         $branch->setBranchName('Local');
         $branch->setBranchIp('127.0.0.1');
         $manager->persist($branch);
@@ -254,6 +258,9 @@ class LoadPortalData extends AbstractFixture implements ContainerAwareInterface,
         $manager->persist($tool);
 
         $manager->flush();
+
+
+
     }
 
     /**

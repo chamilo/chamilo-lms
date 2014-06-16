@@ -49,7 +49,7 @@ security:
 
         main:
             pattern: .*
-            context:        user
+            context: user
             form_login:
                 provider: fos_userbundle
                 login_path:     /login

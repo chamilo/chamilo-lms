@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace ChamiloLMS\CourseBundle\Controller\CourseHome;
+namespace ChamiloLMS\CourseBundle\Controller\Home;
 
 use ChamiloLMS\CourseBundle\Controller\ToolBaseController;
 use ChamiloLMS\CoreBundle\Controller\BaseController;
@@ -17,12 +17,12 @@ use ChamiloLMS\CoreBundle\Entity\Course;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
- * Class CourseHomeController
+ * Class HomeController
  * @package ChamiloLMS\CourseBundle\Controller\CourseHome
  * @author Julio Montoya <gugli100@gmail.com>
  * @Route("/")
  */
-class CourseHomeController extends ToolBaseController
+class HomeController extends ToolBaseController
 {
     /**
      * @Route("/", name="course_home")
@@ -58,7 +58,7 @@ class CourseHomeController extends ToolBaseController
             $editIcons = Display::url(
                 Display::return_icon('edit.png'),
                 $this->generateUrl(
-                    'chamilolms_course_coursehome_coursehome_iconlist',
+                    'chamilolms_course_home_coursehome_iconlist',
                     array(
                         'course' => api_get_course_id(),
                     )

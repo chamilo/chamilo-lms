@@ -26,42 +26,20 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
 class IndexController extends BaseController
 {
     /**
-     * @Route("/index", name="index")
-     * @Route("/")
+     * @Route("/home", name="homepage")
      * @Method({"GET"})
      * @return Response
      */
     public function indexAction()
     {
-
-
-        //$template = $this->get('templating');
-        // $countries = Intl::getRegionBundle()->getCountryNames('es');
-        //var_dump($countries);
-
-        /*$formatter = new \IntlDateFormatter(\Locale::getDefault(), \IntlDateFormatter::NONE, \IntlDateFormatter::NONE);
-        //http://userguide.icu-project.org/formatparse/datetime for date formats
-        $formatter->setPattern("EEEE d MMMM Y");
-        echo $formatter->format(time());*/
-
-        $extra = array();
-      /*  if ($this->getSetting('use_virtual_keyboard') == 'true') {
-            $extra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'keyboard/keyboard.css');
-            $extra[] = api_get_js('keyboard/jquery.keyboard.js');
-        }*/
-
-        //$template->addResource(api_get_jqgrid_js(), 'string');
-
-        //$this->app['this_section'] = SECTION_CAMPUS;
-
         /** @var \PageController $pageController */
         //$pageController = $this->get('page_controller');
         $pageController = new PageController();
 
+/*
         if (api_get_setting('display_categories_on_homepage') == 'true') {
             //$template->assign('course_category_block', $pageController->return_courses_in_categories());
         }
-        $this->setLoginForm();
 
         if (!api_is_anonymous()) {
             if (api_is_platform_admin()) {
@@ -77,10 +55,8 @@ class IndexController extends BaseController
 
         // When loading a chamilo page do not include the hot courses and news
         if (!isset($_REQUEST['include'])) {
-            if (api_get_setting('show_hot_courses') == 'true') {
-                $hotCourses = $pageController->returnHotCourses();
-            }
-            $announcementsBlock = $pageController->getAnnouncements();
+
+
         }
 
         // Navigation links
@@ -90,7 +66,13 @@ class IndexController extends BaseController
 
         if (api_is_platform_admin() || api_is_drh()) {
             $pageController->returnSkillsLinks();
+        }*/
+
+        if (api_get_setting('show_hot_courses') == 'true') {
+            $hotCourses = $pageController->returnHotCourses();
         }
+
+        $announcementsBlock = $pageController->getAnnouncements();
 
         return $this->render(
             'ChamiloLMSCoreBundle:Index:index.html.twig',
@@ -98,7 +80,7 @@ class IndexController extends BaseController
                 'content' => null,
                 'hot_courses' => $hotCourses,
                 'announcements_block' => $announcementsBlock,
-                'home_page_block' => $pageController->returnHomePage()
+                //'home_page_block' => $pageController->returnHomePage()
             )
         );
     }
@@ -119,31 +101,6 @@ class IndexController extends BaseController
         $app['template']->addResource($extra, 'string');
         $response = $app['template']->render_template('auth/login.tpl');
         return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
-    }
-
-    public function setLoginForm()
-    {
-        $userId    = api_get_user_id();
-        $loginForm = null;
-        if (!$userId || api_is_anonymous($userId)) {
-
-            // Only display if the user isn't logged in
-
-            //$this->getTemplate()->assign('login_language_form', api_display_language_form(true));
-            //$this->getTemplate()->assign('login_form', self::displayLoginForm());
-
-            if (api_get_setting('allow_lostpassword') == 'true' || api_get_setting('allow_registration') == 'true') {
-                $loginForm .= '<ul class="nav nav-list">';
-                if (api_get_setting('allow_registration') != 'false') {
-                    $loginForm .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'auth/inscription.php">'.get_lang('Reg').'</a></li>';
-                }
-                if (api_get_setting('allow_lostpassword') == 'true') {
-                    $loginForm .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php">'.get_lang('LostPassword').'</a></li>';
-                }
-                $loginForm .= '</ul>';
-            }
-            //$this->getTemplate()->assign('login_options', $loginForm);
-        }
     }
 
     /**

@@ -91,9 +91,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface, O
             $user->setPlainPassword($faker->randomNumber());
             $user->setEnabled(true);
             $user->setLocked(false);
-
             $user->addGroup($studentGroup);
-
             $manager->updateUser($user);
         }
     }

@@ -36,7 +36,7 @@ class SimpleMenuBuilder extends ContainerAware
         $menu = $factory->createItem('main', $menuOptions);
 
         //$shopMenuParams = array('route' => 'sonata_catalog_index');
-        $shopMenuParams = array('route' => 'root');
+        $shopMenuParams = array('route' => 'home');
 
         if (count($shopCategories) > 0 && !$isFooter) {
             $shopMenuParams = array_merge($shopMenuParams, array(
@@ -90,7 +90,7 @@ class SimpleMenuBuilder extends ContainerAware
         $extras->addChild('Bundles', array('route' => 'page_slug', 'routeParameters' => array('path' => '/bundles')));
         $extras->addChild('Api', array('route' => 'page_slug', 'routeParameters' => array('path' => '/api-landing')));
         $extras->addChild('Gallery', array('route' => 'sonata_media_gallery_index'));
-        $extras->addChild('Media & SEO', array('route' => 'root'));
+        $extras->addChild('Media & SEO', array('route' => 'home'));
         //$extras->addChild('Media & SEO', array('route' => 'sonata_demo_media'));
 
         $menu->addChild($extras);

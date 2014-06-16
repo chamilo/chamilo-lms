@@ -36,7 +36,7 @@ class LoadPageData extends AbstractFixture implements ContainerAwareInterface, O
         // app/console sonata:page:update-core-routes --site=all
         // app/console sonata:page:create-snapshots --site=all
 
-        //$this->createHomePage($site);
+        $this->createHomePage($site);
 
         /*
        $this->create404ErrorPage($site);
@@ -73,7 +73,7 @@ class LoadPageData extends AbstractFixture implements ContainerAwareInterface, O
         $site->setEnabled(true);
         $site->setName('localhost');
         $site->setEnabledFrom(new \DateTime('now'));
-        $site->setEnabledTo(new \DateTime('+10 years'));
+        $site->setEnabledTo(new \DateTime('+20 years'));
         $site->setRelativePath("");
         $site->setIsDefault(true);
 
@@ -229,6 +229,7 @@ CONTENT
      */
     public function createHomePage(SiteInterface $site)
     {
+        return;
         $pageManager = $this->getPageManager();
         $blockManager = $this->getBlockManager();
         $blockInteractor = $this->getBlockInteractor();
@@ -242,7 +243,7 @@ CONTENT
         $homepage->setDecorate(0);
         $homepage->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
         $homepage->setTemplateCode('2columns');
-        $homepage->setRouteName(PageInterface::PAGE_ROUTE_CMS_NAME);
+        $homepage->setRouteName('homepage');
         $homepage->setSite($site);
 
         $pageManager->save($homepage);
@@ -265,13 +266,11 @@ CONTENT
 <div class="col-md-3 welcome"><h2>Welcome</h2></div>
 <div class="col-md-9">
     <p>
-        This page is a demo of the Sonata Sandbox available on <a href="https://github.com/sonata-project/sandbox">github</a>.
-        This demo try to be interactive so you will be able to found out the different features provided by the Sonata's Bundle.
+        This page is a demo.
     </p>
 
     <p>
-        First this page and all the other pages are served by the <code>SonataPageBundle</code>, a page is composed by different
-        blocks.
+        Pages.
     </p>
 </div>
 CONTENT
@@ -289,6 +288,7 @@ CONTENT
         $content->setName('The content container');
         $blockManager->save($content);
 
+        /*
         // Add media gallery block
         $content->addChildren($gallery = $blockManager->create());
         $gallery->setType('sonata.media.block.gallery');
@@ -350,7 +350,7 @@ CONTENT
         $embedded->setSetting('lang', "en");
         $embedded->setPage($homepage);
 
-        $pageManager->save($homepage);
+        $pageManager->save($homepage);*/
     }
 
     /**

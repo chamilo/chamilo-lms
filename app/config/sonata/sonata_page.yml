@@ -21,6 +21,8 @@ sonata_page:
         - (.*)admin(.*)     # ignore admin route, ie route containing 'admin'
         - ^_(.*)            # ignore symfony routes
         - login
+        - home
+        - (.*)fos_user_(.*)
 
     ignore_routes:
         - sonata_page_cache_esi
@@ -39,12 +41,13 @@ sonata_page:
         classes:
             "Application\Sonata\PageBundle\Entity\Block": getId
 
+    # generate page css styles
     assets:
         stylesheets:
-            - assetic/sonata_front_css.css
+            #- assetic/sonata_front_css.css
 
         javascripts:
-            - assetic/sonata_front_js.js
+            #- assetic/sonata_front_js.js
 
     default_template: default
     templates:

@@ -56,9 +56,9 @@ class MainMenuBuilder extends ContainerAware
         //$categories = $this->categoryManager->getCategoryTree();
 
         //$this->fillMenu($menu, $categories, $options, $currentUri);
-        $menu->addChild('home', array('route' => 'root'));
+        $menu->addChild('home', array('route' => 'home'));
 
-        $menu->addChild('home2', array('route' => 'root'));
+        $menu->addChild('home2', array('route' => 'home'));
     }
 
     /**
@@ -72,7 +72,10 @@ class MainMenuBuilder extends ContainerAware
         $menu = $factory->createItem('root');
         $menu->setChildrenAttribute('class', 'nav navbar-nav');
 
-        $menu->addChild($this->container->get('translator')->trans('Home'), array('route' => 'root'));
+        $menu->addChild(
+            $this->container->get('translator')->trans('Home'),
+            array('route' => 'home')
+        );
         $menu->addChild('Administration', array(
             'route' => 'administration'
             //'routeParameters' => array('id' => 42)

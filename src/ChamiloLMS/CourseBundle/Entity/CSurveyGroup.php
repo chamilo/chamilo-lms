@@ -2,10 +2,6 @@
 
 namespace ChamiloLMS\CourseBundle\Entity;
 
-<?php
-
-
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -64,7 +60,7 @@ class CSurveyGroup
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -87,7 +83,7 @@ class CSurveyGroup
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -110,7 +106,7 @@ class CSurveyGroup
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -133,7 +129,7 @@ class CSurveyGroup
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -156,7 +152,7 @@ class CSurveyGroup
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -179,7 +175,7 @@ class CSurveyGroup
     /**
      * Get surveyId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSurveyId()
     {

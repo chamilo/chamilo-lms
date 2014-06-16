@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Language
  *
- * @ORM\Table(name="language", indexes={@ORM\Index(name="idx_language_dokeos_folder", columns={"dokeos_folder"})})
+ * @ORM\Table(name="language")
  * @ORM\Entity
  */
 class Language
@@ -43,13 +43,6 @@ class Language
     private $isocode;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="dokeos_folder", type="string", length=250, precision=0, scale=0, nullable=true, unique=false)
-     */
-    private $dokeosFolder;
-
-    /**
      * @var boolean
      *
      * @ORM\Column(name="available", type="boolean", precision=0, scale=0, nullable=false, unique=false)
@@ -67,7 +60,7 @@ class Language
     /**
      * Get id
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getId()
     {
@@ -90,7 +83,7 @@ class Language
     /**
      * Get originalName
      *
-     * @return string 
+     * @return string
      */
     public function getOriginalName()
     {
@@ -113,7 +106,7 @@ class Language
     /**
      * Get englishName
      *
-     * @return string 
+     * @return string
      */
     public function getEnglishName()
     {
@@ -136,34 +129,11 @@ class Language
     /**
      * Get isocode
      *
-     * @return string 
+     * @return string
      */
     public function getIsocode()
     {
         return $this->isocode;
-    }
-
-    /**
-     * Set dokeosFolder
-     *
-     * @param string $dokeosFolder
-     * @return Language
-     */
-    public function setDokeosFolder($dokeosFolder)
-    {
-        $this->dokeosFolder = $dokeosFolder;
-
-        return $this;
-    }
-
-    /**
-     * Get dokeosFolder
-     *
-     * @return string 
-     */
-    public function getDokeosFolder()
-    {
-        return $this->dokeosFolder;
     }
 
     /**
@@ -182,7 +152,7 @@ class Language
     /**
      * Get available
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getAvailable()
     {
@@ -205,7 +175,7 @@ class Language
     /**
      * Get parentId
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getParentId()
     {

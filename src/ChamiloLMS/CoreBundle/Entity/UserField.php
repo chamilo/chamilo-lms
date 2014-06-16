@@ -91,11 +91,15 @@ class UserField
      */
     private $tms;
 
+    public function __construct()
+    {
+        $this->tms = new \DateTime();
+    }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -118,7 +122,7 @@ class UserField
     /**
      * Get fieldType
      *
-     * @return integer 
+     * @return integer
      */
     public function getFieldType()
     {
@@ -141,7 +145,7 @@ class UserField
     /**
      * Get fieldVariable
      *
-     * @return string 
+     * @return string
      */
     public function getFieldVariable()
     {
@@ -164,7 +168,7 @@ class UserField
     /**
      * Get fieldDisplayText
      *
-     * @return string 
+     * @return string
      */
     public function getFieldDisplayText()
     {
@@ -187,7 +191,7 @@ class UserField
     /**
      * Get fieldDefaultValue
      *
-     * @return string 
+     * @return string
      */
     public function getFieldDefaultValue()
     {
@@ -210,7 +214,7 @@ class UserField
     /**
      * Get fieldOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getFieldOrder()
     {
@@ -233,7 +237,7 @@ class UserField
     /**
      * Get fieldVisible
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getFieldVisible()
     {
@@ -256,7 +260,7 @@ class UserField
     /**
      * Get fieldChangeable
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getFieldChangeable()
     {
@@ -279,7 +283,7 @@ class UserField
     /**
      * Get fieldFilter
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getFieldFilter()
     {
@@ -302,7 +306,7 @@ class UserField
     /**
      * Get fieldLoggeable
      *
-     * @return integer 
+     * @return integer
      */
     public function getFieldLoggeable()
     {
@@ -325,7 +329,7 @@ class UserField
     /**
      * Get tms
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getTms()
     {

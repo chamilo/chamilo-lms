@@ -2,10 +2,6 @@
 
 namespace ChamiloLMS\CoreBundle\Entity;
 
-<?php
-
-
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -64,7 +60,7 @@ class GradebookResultLog
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -87,7 +83,7 @@ class GradebookResultLog
     /**
      * Get idResult
      *
-     * @return integer 
+     * @return integer
      */
     public function getIdResult()
     {
@@ -110,7 +106,7 @@ class GradebookResultLog
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -133,7 +129,7 @@ class GradebookResultLog
     /**
      * Get evaluationId
      *
-     * @return integer 
+     * @return integer
      */
     public function getEvaluationId()
     {
@@ -156,7 +152,7 @@ class GradebookResultLog
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -179,7 +175,7 @@ class GradebookResultLog
     /**
      * Get score
      *
-     * @return float 
+     * @return float
      */
     public function getScore()
     {

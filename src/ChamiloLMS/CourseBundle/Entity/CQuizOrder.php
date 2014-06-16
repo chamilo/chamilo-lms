@@ -2,10 +2,6 @@
 
 namespace ChamiloLMS\CourseBundle\Entity;
 
-<?php
-
-
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -57,7 +53,7 @@ class CQuizOrder
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -80,7 +76,7 @@ class CQuizOrder
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -103,7 +99,7 @@ class CQuizOrder
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {
@@ -126,7 +122,7 @@ class CQuizOrder
     /**
      * Get exerciseId
      *
-     * @return integer 
+     * @return integer
      */
     public function getExerciseId()
     {
@@ -149,7 +145,7 @@ class CQuizOrder
     /**
      * Get exerciseOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getExerciseOrder()
     {

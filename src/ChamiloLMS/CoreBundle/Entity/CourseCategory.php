@@ -70,11 +70,16 @@ class CourseCategory
      */
     private $authCatChild;
 
+    public function __construct()
+    {
+        $this->childrenCount = 0;
+    }
+
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -97,7 +102,7 @@ class CourseCategory
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -120,7 +125,7 @@ class CourseCategory
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -143,7 +148,7 @@ class CourseCategory
     /**
      * Get parentId
      *
-     * @return string 
+     * @return string
      */
     public function getParentId()
     {
@@ -166,7 +171,7 @@ class CourseCategory
     /**
      * Get treePos
      *
-     * @return integer 
+     * @return integer
      */
     public function getTreePos()
     {
@@ -189,7 +194,7 @@ class CourseCategory
     /**
      * Get childrenCount
      *
-     * @return integer 
+     * @return integer
      */
     public function getChildrenCount()
     {
@@ -212,7 +217,7 @@ class CourseCategory
     /**
      * Get authCourseChild
      *
-     * @return string 
+     * @return string
      */
     public function getAuthCourseChild()
     {
@@ -235,7 +240,7 @@ class CourseCategory
     /**
      * Get authCatChild
      *
-     * @return string 
+     * @return string
      */
     public function getAuthCatChild()
     {

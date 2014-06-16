@@ -2,8 +2,6 @@
 
 namespace ChamiloLMS\CourseBundle\Entity;
 
-<?php
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -90,7 +88,7 @@ class CBlogAttachment
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -113,7 +111,7 @@ class CBlogAttachment
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -136,7 +134,7 @@ class CBlogAttachment
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -159,7 +157,7 @@ class CBlogAttachment
     /**
      * Get path
      *
-     * @return string 
+     * @return string
      */
     public function getPath()
     {
@@ -182,7 +180,7 @@ class CBlogAttachment
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -205,7 +203,7 @@ class CBlogAttachment
     /**
      * Get size
      *
-     * @return integer 
+     * @return integer
      */
     public function getSize()
     {
@@ -228,7 +226,7 @@ class CBlogAttachment
     /**
      * Get postId
      *
-     * @return integer 
+     * @return integer
      */
     public function getPostId()
     {
@@ -251,7 +249,7 @@ class CBlogAttachment
     /**
      * Get filename
      *
-     * @return string 
+     * @return string
      */
     public function getFilename()
     {
@@ -274,7 +272,7 @@ class CBlogAttachment
     /**
      * Get blogId
      *
-     * @return integer 
+     * @return integer
      */
     public function getBlogId()
     {
@@ -297,7 +295,7 @@ class CBlogAttachment
     /**
      * Get commentId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCommentId()
     {

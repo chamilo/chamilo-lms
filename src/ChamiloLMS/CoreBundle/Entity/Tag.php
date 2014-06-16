@@ -2,10 +2,6 @@
 
 namespace ChamiloLMS\CoreBundle\Entity;
 
-<?php
-
-
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -50,7 +46,7 @@ class Tag
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -73,7 +69,7 @@ class Tag
     /**
      * Get tag
      *
-     * @return string 
+     * @return string
      */
     public function getTag()
     {
@@ -96,7 +92,7 @@ class Tag
     /**
      * Get fieldId
      *
-     * @return integer 
+     * @return integer
      */
     public function getFieldId()
     {
@@ -119,7 +115,7 @@ class Tag
     /**
      * Get count
      *
-     * @return integer 
+     * @return integer
      */
     public function getCount()
     {

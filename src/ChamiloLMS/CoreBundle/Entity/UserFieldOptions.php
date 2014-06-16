@@ -70,6 +70,10 @@ class UserFieldOptions
      */
     private $tms;
 
+    public function __construct()
+    {
+        $this->tms = new \DateTime();
+    }
 
     /**
      * Get id

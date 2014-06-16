@@ -105,11 +105,17 @@ class SettingsCurrent
      */
     private $accessUrlLocked;
 
+    public function __construct()
+    {
+        $this->accessUrl = 1;
+        $this->accessUrlLocked = 0;
+    }
+
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -132,7 +138,7 @@ class SettingsCurrent
     /**
      * Get variable
      *
-     * @return string 
+     * @return string
      */
     public function getVariable()
     {
@@ -155,7 +161,7 @@ class SettingsCurrent
     /**
      * Get subkey
      *
-     * @return string 
+     * @return string
      */
     public function getSubkey()
     {
@@ -178,7 +184,7 @@ class SettingsCurrent
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -201,7 +207,7 @@ class SettingsCurrent
     /**
      * Get category
      *
-     * @return string 
+     * @return string
      */
     public function getCategory()
     {
@@ -224,7 +230,7 @@ class SettingsCurrent
     /**
      * Get selectedValue
      *
-     * @return string 
+     * @return string
      */
     public function getSelectedValue()
     {
@@ -247,7 +253,7 @@ class SettingsCurrent
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -270,7 +276,7 @@ class SettingsCurrent
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -293,7 +299,7 @@ class SettingsCurrent
     /**
      * Get scope
      *
-     * @return string 
+     * @return string
      */
     public function getScope()
     {
@@ -316,7 +322,7 @@ class SettingsCurrent
     /**
      * Get subkeytext
      *
-     * @return string 
+     * @return string
      */
     public function getSubkeytext()
     {
@@ -339,7 +345,7 @@ class SettingsCurrent
     /**
      * Get accessUrl
      *
-     * @return integer 
+     * @return integer
      */
     public function getAccessUrl()
     {
@@ -362,7 +368,7 @@ class SettingsCurrent
     /**
      * Get accessUrlChangeable
      *
-     * @return integer 
+     * @return integer
      */
     public function getAccessUrlChangeable()
     {
@@ -385,7 +391,7 @@ class SettingsCurrent
     /**
      * Get accessUrlLocked
      *
-     * @return integer 
+     * @return integer
      */
     public function getAccessUrlLocked()
     {

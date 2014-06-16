@@ -173,7 +173,7 @@ class TrackEExercices
     private $user;
 
      /**
-     * @ORM\OneToMany(targetEntity="TrackExerciseAttemptJury", mappedBy="attempt")
+     * @ORM\OneToMany(targetEntity="TrackAttemptJury", mappedBy="attempt")
      **/
     private $juryAttempts;
 

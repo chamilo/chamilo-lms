@@ -2,10 +2,6 @@
 
 namespace ChamiloLMS\CoreBundle\Entity;
 
-<?php
-
-
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -64,7 +60,7 @@ class TrackStoredValues
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -87,7 +83,7 @@ class TrackStoredValues
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -110,7 +106,7 @@ class TrackStoredValues
     /**
      * Get scoId
      *
-     * @return integer 
+     * @return integer
      */
     public function getScoId()
     {
@@ -133,7 +129,7 @@ class TrackStoredValues
     /**
      * Get courseId
      *
-     * @return string 
+     * @return string
      */
     public function getCourseId()
     {
@@ -156,7 +152,7 @@ class TrackStoredValues
     /**
      * Get svKey
      *
-     * @return string 
+     * @return string
      */
     public function getSvKey()
     {
@@ -179,7 +175,7 @@ class TrackStoredValues
     /**
      * Get svValue
      *
-     * @return string 
+     * @return string
      */
     public function getSvValue()
     {

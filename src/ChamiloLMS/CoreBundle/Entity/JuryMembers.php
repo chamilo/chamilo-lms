@@ -67,7 +67,7 @@ class JuryMembers
         return $this->role;
     }
 
-    public function setRole(Role $role)
+    public function setRole($role)
     {
         $this->role = $role;
     }

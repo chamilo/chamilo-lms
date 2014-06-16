@@ -3,6 +3,7 @@
 namespace ChamiloLMS\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Application\Sonata\UserBundle\Entity\User;
 
 /**
  * UsergroupRelUser
@@ -24,7 +25,7 @@ class UsergroupRelUser
     /**
      * @var \User
      *
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      * })
@@ -32,7 +33,7 @@ class UsergroupRelUser
     private $user;
 
     /**
-     * @var \Usergroup
+     * @var Usergroup
      *
      * @ORM\ManyToOne(targetEntity="Usergroup")
      * @ORM\JoinColumns({
@@ -55,10 +56,10 @@ class UsergroupRelUser
     /**
      * Set user
      *
-     * @param \User $user
+     * @param User $user
      * @return UsergroupRelUser
      */
-    public function setUser(\User $user = null)
+    public function setUser(User $user = null)
     {
         $this->user = $user;
 
@@ -68,7 +69,7 @@ class UsergroupRelUser
     /**
      * Get user
      *
-     * @return \User
+     * @return User
      */
     public function getUser()
     {
@@ -78,10 +79,10 @@ class UsergroupRelUser
     /**
      * Set usergroup
      *
-     * @param \Usergroup $usergroup
+     * @param Usergroup $usergroup
      * @return UsergroupRelUser
      */
-    public function setUsergroup(\Usergroup $usergroup = null)
+    public function setUsergroup(Usergroup $usergroup = null)
     {
         $this->usergroup = $usergroup;
 
@@ -91,7 +92,7 @@ class UsergroupRelUser
     /**
      * Get usergroup
      *
-     * @return \Usergroup
+     * @return Usergroup
      */
     public function getUsergroup()
     {

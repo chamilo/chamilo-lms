@@ -28,7 +28,6 @@ class UserFriendRelationType
      */
     private $title;
 
-
     /**
      * Get id
      *
@@ -37,6 +36,16 @@ class UserFriendRelationType
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set id
+     *
+     * @return integer
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**

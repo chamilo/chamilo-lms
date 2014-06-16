@@ -53,11 +53,21 @@ class SkillRelSkill
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set id
+     *
+     * @return integer
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**
@@ -76,7 +86,7 @@ class SkillRelSkill
     /**
      * Get skillId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSkillId()
     {
@@ -99,7 +109,7 @@ class SkillRelSkill
     /**
      * Get parentId
      *
-     * @return integer 
+     * @return integer
      */
     public function getParentId()
     {
@@ -122,7 +132,7 @@ class SkillRelSkill
     /**
      * Get relationType
      *
-     * @return integer 
+     * @return integer
      */
     public function getRelationType()
     {
@@ -145,7 +155,7 @@ class SkillRelSkill
     /**
      * Get level
      *
-     * @return integer 
+     * @return integer
      */
     public function getLevel()
     {

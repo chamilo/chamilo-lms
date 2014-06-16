@@ -2,10 +2,6 @@
 
 namespace ChamiloLMS\CourseBundle\Entity;
 
-<?php
-
-
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -64,7 +60,7 @@ class CAttendanceResult
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -87,7 +83,7 @@ class CAttendanceResult
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -110,7 +106,7 @@ class CAttendanceResult
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -133,7 +129,7 @@ class CAttendanceResult
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -156,7 +152,7 @@ class CAttendanceResult
     /**
      * Get attendanceId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAttendanceId()
     {
@@ -179,7 +175,7 @@ class CAttendanceResult
     /**
      * Get score
      *
-     * @return integer 
+     * @return integer
      */
     public function getScore()
     {

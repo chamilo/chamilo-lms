@@ -2,10 +2,6 @@
 
 namespace ChamiloLMS\CourseBundle\Entity;
 
-<?php
-
-
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -183,7 +179,7 @@ class CForumForum
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -206,7 +202,7 @@ class CForumForum
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -229,7 +225,7 @@ class CForumForum
     /**
      * Get forumId
      *
-     * @return integer 
+     * @return integer
      */
     public function getForumId()
     {
@@ -252,7 +248,7 @@ class CForumForum
     /**
      * Get forumTitle
      *
-     * @return string 
+     * @return string
      */
     public function getForumTitle()
     {
@@ -275,7 +271,7 @@ class CForumForum
     /**
      * Get forumComment
      *
-     * @return string 
+     * @return string
      */
     public function getForumComment()
     {
@@ -298,7 +294,7 @@ class CForumForum
     /**
      * Get forumThreads
      *
-     * @return integer 
+     * @return integer
      */
     public function getForumThreads()
     {
@@ -321,7 +317,7 @@ class CForumForum
     /**
      * Get forumPosts
      *
-     * @return integer 
+     * @return integer
      */
     public function getForumPosts()
     {
@@ -344,7 +340,7 @@ class CForumForum
     /**
      * Get forumLastPost
      *
-     * @return integer 
+     * @return integer
      */
     public function getForumLastPost()
     {
@@ -367,7 +363,7 @@ class CForumForum
     /**
      * Get forumCategory
      *
-     * @return integer 
+     * @return integer
      */
     public function getForumCategory()
     {
@@ -390,7 +386,7 @@ class CForumForum
     /**
      * Get allowAnonymous
      *
-     * @return integer 
+     * @return integer
      */
     public function getAllowAnonymous()
     {
@@ -413,7 +409,7 @@ class CForumForum
     /**
      * Get allowEdit
      *
-     * @return integer 
+     * @return integer
      */
     public function getAllowEdit()
     {
@@ -436,7 +432,7 @@ class CForumForum
     /**
      * Get approvalDirectPost
      *
-     * @return string 
+     * @return string
      */
     public function getApprovalDirectPost()
     {
@@ -459,7 +455,7 @@ class CForumForum
     /**
      * Get allowAttachments
      *
-     * @return integer 
+     * @return integer
      */
     public function getAllowAttachments()
     {
@@ -482,7 +478,7 @@ class CForumForum
     /**
      * Get allowNewThreads
      *
-     * @return integer 
+     * @return integer
      */
     public function getAllowNewThreads()
     {
@@ -505,7 +501,7 @@ class CForumForum
     /**
      * Get defaultView
      *
-     * @return string 
+     * @return string
      */
     public function getDefaultView()
     {
@@ -528,7 +524,7 @@ class CForumForum
     /**
      * Get forumOfGroup
      *
-     * @return string 
+     * @return string
      */
     public function getForumOfGroup()
     {
@@ -551,7 +547,7 @@ class CForumForum
     /**
      * Get forumGroupPublicPrivate
      *
-     * @return string 
+     * @return string
      */
     public function getForumGroupPublicPrivate()
     {
@@ -574,7 +570,7 @@ class CForumForum
     /**
      * Get forumOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getForumOrder()
     {
@@ -597,7 +593,7 @@ class CForumForum
     /**
      * Get locked
      *
-     * @return integer 
+     * @return integer
      */
     public function getLocked()
     {
@@ -620,7 +616,7 @@ class CForumForum
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {
@@ -643,7 +639,7 @@ class CForumForum
     /**
      * Get forumImage
      *
-     * @return string 
+     * @return string
      */
     public function getForumImage()
     {
@@ -666,7 +662,7 @@ class CForumForum
     /**
      * Get startTime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getStartTime()
     {
@@ -689,7 +685,7 @@ class CForumForum
     /**
      * Get endTime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getEndTime()
     {

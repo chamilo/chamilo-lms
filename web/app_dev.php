@@ -24,11 +24,15 @@ require_once __DIR__.'/legacy.php';
 // if you want to use the SonataPageBundle with multisite
 // using different relative paths, you must change the request
 // object to use the SiteRequest
-use Sonata\PageBundle\Request\SiteRequest as Request;
-$request = Request::createFromGlobals();
+use Sonata\PageBundle\Request\RequestFactory;
+//$request = Request::createFromGlobals('host_with_path');
+$request = RequestFactory::createFromGlobals('host_with_path');
+
 
 $kernel = new AppKernel('dev', true);
+
 $kernel->loadClassCache();
 $response = $kernel->handle($request);
+
 $response->send();
 $kernel->terminate($request, $response);

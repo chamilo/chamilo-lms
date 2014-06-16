@@ -17,7 +17,7 @@ class CDropboxCategory
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -74,7 +74,7 @@ class CDropboxCategory
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -97,7 +97,7 @@ class CDropboxCategory
     /**
      * Get catId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCatId()
     {
@@ -120,7 +120,7 @@ class CDropboxCategory
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -143,7 +143,7 @@ class CDropboxCategory
     /**
      * Get catName
      *
-     * @return string 
+     * @return string
      */
     public function getCatName()
     {
@@ -166,7 +166,7 @@ class CDropboxCategory
     /**
      * Get received
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getReceived()
     {
@@ -189,7 +189,7 @@ class CDropboxCategory
     /**
      * Get sent
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getSent()
     {
@@ -212,7 +212,7 @@ class CDropboxCategory
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -235,7 +235,7 @@ class CDropboxCategory
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {

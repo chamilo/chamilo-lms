@@ -17,7 +17,7 @@ class SessionCategory
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -53,7 +53,7 @@ class SessionCategory
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -76,7 +76,7 @@ class SessionCategory
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -99,7 +99,7 @@ class SessionCategory
     /**
      * Get dateStart
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateStart()
     {
@@ -122,7 +122,7 @@ class SessionCategory
     /**
      * Get dateEnd
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateEnd()
     {
@@ -145,7 +145,7 @@ class SessionCategory
     /**
      * Get accessUrlId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAccessUrlId()
     {

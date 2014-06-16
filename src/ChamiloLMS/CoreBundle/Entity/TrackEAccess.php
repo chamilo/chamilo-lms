@@ -17,7 +17,7 @@ class TrackEAccess
      *
      * @ORM\Column(name="access_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $accessId;
 
@@ -60,7 +60,7 @@ class TrackEAccess
     /**
      * Get accessId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAccessId()
     {
@@ -83,7 +83,7 @@ class TrackEAccess
     /**
      * Get accessUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAccessUserId()
     {
@@ -106,7 +106,7 @@ class TrackEAccess
     /**
      * Get accessDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getAccessDate()
     {
@@ -129,7 +129,7 @@ class TrackEAccess
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -152,7 +152,7 @@ class TrackEAccess
     /**
      * Get accessTool
      *
-     * @return string 
+     * @return string
      */
     public function getAccessTool()
     {
@@ -175,7 +175,7 @@ class TrackEAccess
     /**
      * Get accessSessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAccessSessionId()
     {

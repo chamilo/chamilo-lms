@@ -17,7 +17,7 @@ class CAttendanceSheetLog
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -74,7 +74,7 @@ class CAttendanceSheetLog
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -97,7 +97,7 @@ class CAttendanceSheetLog
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -120,7 +120,7 @@ class CAttendanceSheetLog
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -143,7 +143,7 @@ class CAttendanceSheetLog
     /**
      * Get attendanceId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAttendanceId()
     {
@@ -166,7 +166,7 @@ class CAttendanceSheetLog
     /**
      * Get lasteditDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLasteditDate()
     {
@@ -189,7 +189,7 @@ class CAttendanceSheetLog
     /**
      * Get lasteditType
      *
-     * @return string 
+     * @return string
      */
     public function getLasteditType()
     {
@@ -212,7 +212,7 @@ class CAttendanceSheetLog
     /**
      * Get lasteditUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLasteditUserId()
     {
@@ -235,7 +235,7 @@ class CAttendanceSheetLog
     /**
      * Get calendarDateValue
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCalendarDateValue()
     {

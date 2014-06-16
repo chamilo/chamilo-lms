@@ -17,7 +17,7 @@ class CForumMailcue
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -60,7 +60,7 @@ class CForumMailcue
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -83,7 +83,7 @@ class CForumMailcue
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -106,7 +106,7 @@ class CForumMailcue
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -129,7 +129,7 @@ class CForumMailcue
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -152,7 +152,7 @@ class CForumMailcue
     /**
      * Get threadId
      *
-     * @return integer 
+     * @return integer
      */
     public function getThreadId()
     {
@@ -175,7 +175,7 @@ class CForumMailcue
     /**
      * Get postId
      *
-     * @return integer 
+     * @return integer
      */
     public function getPostId()
     {

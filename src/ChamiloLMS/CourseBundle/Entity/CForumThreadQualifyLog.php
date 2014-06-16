@@ -17,7 +17,7 @@ class CForumThreadQualifyLog
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -81,7 +81,7 @@ class CForumThreadQualifyLog
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -104,7 +104,7 @@ class CForumThreadQualifyLog
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -127,7 +127,7 @@ class CForumThreadQualifyLog
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -150,7 +150,7 @@ class CForumThreadQualifyLog
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -173,7 +173,7 @@ class CForumThreadQualifyLog
     /**
      * Get threadId
      *
-     * @return integer 
+     * @return integer
      */
     public function getThreadId()
     {
@@ -196,7 +196,7 @@ class CForumThreadQualifyLog
     /**
      * Get qualify
      *
-     * @return float 
+     * @return float
      */
     public function getQualify()
     {
@@ -219,7 +219,7 @@ class CForumThreadQualifyLog
     /**
      * Get qualifyUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getQualifyUserId()
     {
@@ -242,7 +242,7 @@ class CForumThreadQualifyLog
     /**
      * Get qualifyTime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getQualifyTime()
     {
@@ -265,7 +265,7 @@ class CForumThreadQualifyLog
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {

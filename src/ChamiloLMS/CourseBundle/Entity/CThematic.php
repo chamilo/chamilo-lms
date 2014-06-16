@@ -17,7 +17,7 @@ class CThematic
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -74,7 +74,7 @@ class CThematic
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -97,7 +97,7 @@ class CThematic
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -120,7 +120,7 @@ class CThematic
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -143,7 +143,7 @@ class CThematic
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -166,7 +166,7 @@ class CThematic
     /**
      * Get content
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
@@ -189,7 +189,7 @@ class CThematic
     /**
      * Get displayOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getDisplayOrder()
     {
@@ -212,7 +212,7 @@ class CThematic
     /**
      * Get active
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActive()
     {
@@ -235,7 +235,7 @@ class CThematic
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {

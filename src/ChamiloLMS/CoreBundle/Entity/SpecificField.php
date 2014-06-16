@@ -17,7 +17,7 @@ class SpecificField
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -39,7 +39,7 @@ class SpecificField
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -62,7 +62,7 @@ class SpecificField
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -85,7 +85,7 @@ class SpecificField
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {

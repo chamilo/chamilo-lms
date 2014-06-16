@@ -17,7 +17,7 @@ class GradebookEvaluation
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -109,7 +109,7 @@ class GradebookEvaluation
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -132,7 +132,7 @@ class GradebookEvaluation
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -155,7 +155,7 @@ class GradebookEvaluation
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -178,7 +178,7 @@ class GradebookEvaluation
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -201,7 +201,7 @@ class GradebookEvaluation
     /**
      * Get courseCode
      *
-     * @return string 
+     * @return string
      */
     public function getCourseCode()
     {
@@ -224,7 +224,7 @@ class GradebookEvaluation
     /**
      * Get categoryId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCategoryId()
     {
@@ -247,7 +247,7 @@ class GradebookEvaluation
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -270,7 +270,7 @@ class GradebookEvaluation
     /**
      * Get weight
      *
-     * @return float 
+     * @return float
      */
     public function getWeight()
     {
@@ -293,7 +293,7 @@ class GradebookEvaluation
     /**
      * Get max
      *
-     * @return float 
+     * @return float
      */
     public function getMax()
     {
@@ -316,7 +316,7 @@ class GradebookEvaluation
     /**
      * Get visible
      *
-     * @return integer 
+     * @return integer
      */
     public function getVisible()
     {
@@ -339,7 +339,7 @@ class GradebookEvaluation
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -362,7 +362,7 @@ class GradebookEvaluation
     /**
      * Get locked
      *
-     * @return integer 
+     * @return integer
      */
     public function getLocked()
     {
@@ -385,7 +385,7 @@ class GradebookEvaluation
     /**
      * Get evaluationTypeId
      *
-     * @return integer 
+     * @return integer
      */
     public function getEvaluationTypeId()
     {

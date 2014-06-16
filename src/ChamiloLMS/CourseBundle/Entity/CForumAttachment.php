@@ -17,7 +17,7 @@ class CForumAttachment
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -67,7 +67,7 @@ class CForumAttachment
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -90,7 +90,7 @@ class CForumAttachment
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -113,7 +113,7 @@ class CForumAttachment
     /**
      * Get path
      *
-     * @return string 
+     * @return string
      */
     public function getPath()
     {
@@ -136,7 +136,7 @@ class CForumAttachment
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -159,7 +159,7 @@ class CForumAttachment
     /**
      * Get size
      *
-     * @return integer 
+     * @return integer
      */
     public function getSize()
     {
@@ -182,7 +182,7 @@ class CForumAttachment
     /**
      * Get postId
      *
-     * @return integer 
+     * @return integer
      */
     public function getPostId()
     {
@@ -205,7 +205,7 @@ class CForumAttachment
     /**
      * Get filename
      *
-     * @return string 
+     * @return string
      */
     public function getFilename()
     {

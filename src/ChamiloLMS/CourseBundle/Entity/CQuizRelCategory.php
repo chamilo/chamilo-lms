@@ -17,7 +17,7 @@ class CQuizRelCategory
      *
      * @ORM\Column(name="iid", type="bigint", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -53,7 +53,7 @@ class CQuizRelCategory
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -76,7 +76,7 @@ class CQuizRelCategory
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -99,7 +99,7 @@ class CQuizRelCategory
     /**
      * Get categoryId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCategoryId()
     {
@@ -122,7 +122,7 @@ class CQuizRelCategory
     /**
      * Get exerciseId
      *
-     * @return integer 
+     * @return integer
      */
     public function getExerciseId()
     {
@@ -145,7 +145,7 @@ class CQuizRelCategory
     /**
      * Get countQuestions
      *
-     * @return integer 
+     * @return integer
      */
     public function getCountQuestions()
     {

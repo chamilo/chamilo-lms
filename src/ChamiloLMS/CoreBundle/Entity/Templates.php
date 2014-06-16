@@ -17,7 +17,7 @@ class Templates
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -67,7 +67,7 @@ class Templates
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -90,7 +90,7 @@ class Templates
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -113,7 +113,7 @@ class Templates
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -136,7 +136,7 @@ class Templates
     /**
      * Get courseCode
      *
-     * @return string 
+     * @return string
      */
     public function getCourseCode()
     {
@@ -159,7 +159,7 @@ class Templates
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -182,7 +182,7 @@ class Templates
     /**
      * Get refDoc
      *
-     * @return integer 
+     * @return integer
      */
     public function getRefDoc()
     {
@@ -205,7 +205,7 @@ class Templates
     /**
      * Get image
      *
-     * @return string 
+     * @return string
      */
     public function getImage()
     {

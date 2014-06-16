@@ -17,7 +17,7 @@ class CLpItem
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -179,7 +179,7 @@ class CLpItem
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -202,7 +202,7 @@ class CLpItem
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -225,7 +225,7 @@ class CLpItem
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -248,7 +248,7 @@ class CLpItem
     /**
      * Get lpId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLpId()
     {
@@ -271,7 +271,7 @@ class CLpItem
     /**
      * Get itemType
      *
-     * @return string 
+     * @return string
      */
     public function getItemType()
     {
@@ -294,7 +294,7 @@ class CLpItem
     /**
      * Get ref
      *
-     * @return string 
+     * @return string
      */
     public function getRef()
     {
@@ -317,7 +317,7 @@ class CLpItem
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -340,7 +340,7 @@ class CLpItem
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -363,7 +363,7 @@ class CLpItem
     /**
      * Get path
      *
-     * @return string 
+     * @return string
      */
     public function getPath()
     {
@@ -386,7 +386,7 @@ class CLpItem
     /**
      * Get minScore
      *
-     * @return float 
+     * @return float
      */
     public function getMinScore()
     {
@@ -409,7 +409,7 @@ class CLpItem
     /**
      * Get maxScore
      *
-     * @return float 
+     * @return float
      */
     public function getMaxScore()
     {
@@ -432,7 +432,7 @@ class CLpItem
     /**
      * Get masteryScore
      *
-     * @return float 
+     * @return float
      */
     public function getMasteryScore()
     {
@@ -455,7 +455,7 @@ class CLpItem
     /**
      * Get parentItemId
      *
-     * @return integer 
+     * @return integer
      */
     public function getParentItemId()
     {
@@ -478,7 +478,7 @@ class CLpItem
     /**
      * Get previousItemId
      *
-     * @return integer 
+     * @return integer
      */
     public function getPreviousItemId()
     {
@@ -501,7 +501,7 @@ class CLpItem
     /**
      * Get nextItemId
      *
-     * @return integer 
+     * @return integer
      */
     public function getNextItemId()
     {
@@ -524,7 +524,7 @@ class CLpItem
     /**
      * Get displayOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getDisplayOrder()
     {
@@ -547,7 +547,7 @@ class CLpItem
     /**
      * Get prerequisite
      *
-     * @return string 
+     * @return string
      */
     public function getPrerequisite()
     {
@@ -570,7 +570,7 @@ class CLpItem
     /**
      * Get parameters
      *
-     * @return string 
+     * @return string
      */
     public function getParameters()
     {
@@ -593,7 +593,7 @@ class CLpItem
     /**
      * Get launchData
      *
-     * @return string 
+     * @return string
      */
     public function getLaunchData()
     {
@@ -616,7 +616,7 @@ class CLpItem
     /**
      * Get maxTimeAllowed
      *
-     * @return string 
+     * @return string
      */
     public function getMaxTimeAllowed()
     {
@@ -639,7 +639,7 @@ class CLpItem
     /**
      * Get terms
      *
-     * @return string 
+     * @return string
      */
     public function getTerms()
     {
@@ -662,7 +662,7 @@ class CLpItem
     /**
      * Get searchDid
      *
-     * @return integer 
+     * @return integer
      */
     public function getSearchDid()
     {
@@ -685,7 +685,7 @@ class CLpItem
     /**
      * Get audio
      *
-     * @return string 
+     * @return string
      */
     public function getAudio()
     {

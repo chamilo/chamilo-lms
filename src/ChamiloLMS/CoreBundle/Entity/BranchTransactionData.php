@@ -17,7 +17,7 @@ class BranchTransactionData
      *
      * @ORM\Column(name="id", type="bigint", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -32,7 +32,7 @@ class BranchTransactionData
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -55,7 +55,7 @@ class BranchTransactionData
     /**
      * Get data
      *
-     * @return string 
+     * @return string
      */
     public function getData()
     {

@@ -17,7 +17,7 @@ class CStudentPublication
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -186,7 +186,7 @@ class CStudentPublication
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -209,7 +209,7 @@ class CStudentPublication
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -232,7 +232,7 @@ class CStudentPublication
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -255,7 +255,7 @@ class CStudentPublication
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -278,7 +278,7 @@ class CStudentPublication
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -301,7 +301,7 @@ class CStudentPublication
     /**
      * Get filename
      *
-     * @return string 
+     * @return string
      */
     public function getFilename()
     {
@@ -324,7 +324,7 @@ class CStudentPublication
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -347,7 +347,7 @@ class CStudentPublication
     /**
      * Get author
      *
-     * @return string 
+     * @return string
      */
     public function getAuthor()
     {
@@ -370,7 +370,7 @@ class CStudentPublication
     /**
      * Get active
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActive()
     {
@@ -393,7 +393,7 @@ class CStudentPublication
     /**
      * Get accepted
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getAccepted()
     {
@@ -416,7 +416,7 @@ class CStudentPublication
     /**
      * Get postGroupId
      *
-     * @return integer 
+     * @return integer
      */
     public function getPostGroupId()
     {
@@ -439,7 +439,7 @@ class CStudentPublication
     /**
      * Get sentDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getSentDate()
     {
@@ -462,7 +462,7 @@ class CStudentPublication
     /**
      * Get filetype
      *
-     * @return string 
+     * @return string
      */
     public function getFiletype()
     {
@@ -485,7 +485,7 @@ class CStudentPublication
     /**
      * Get hasProperties
      *
-     * @return integer 
+     * @return integer
      */
     public function getHasProperties()
     {
@@ -508,7 +508,7 @@ class CStudentPublication
     /**
      * Get viewProperties
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getViewProperties()
     {
@@ -531,7 +531,7 @@ class CStudentPublication
     /**
      * Get qualification
      *
-     * @return float 
+     * @return float
      */
     public function getQualification()
     {
@@ -554,7 +554,7 @@ class CStudentPublication
     /**
      * Get dateOfQualification
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateOfQualification()
     {
@@ -577,7 +577,7 @@ class CStudentPublication
     /**
      * Get parentId
      *
-     * @return integer 
+     * @return integer
      */
     public function getParentId()
     {
@@ -600,7 +600,7 @@ class CStudentPublication
     /**
      * Get qualificatorId
      *
-     * @return integer 
+     * @return integer
      */
     public function getQualificatorId()
     {
@@ -623,7 +623,7 @@ class CStudentPublication
     /**
      * Get weight
      *
-     * @return float 
+     * @return float
      */
     public function getWeight()
     {
@@ -646,7 +646,7 @@ class CStudentPublication
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {
@@ -669,7 +669,7 @@ class CStudentPublication
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -692,7 +692,7 @@ class CStudentPublication
     /**
      * Get allowTextAssignment
      *
-     * @return integer 
+     * @return integer
      */
     public function getAllowTextAssignment()
     {
@@ -715,7 +715,7 @@ class CStudentPublication
     /**
      * Get containsFile
      *
-     * @return integer 
+     * @return integer
      */
     public function getContainsFile()
     {

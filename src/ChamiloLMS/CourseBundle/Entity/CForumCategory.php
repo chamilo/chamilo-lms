@@ -17,7 +17,7 @@ class CForumCategory
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -74,7 +74,7 @@ class CForumCategory
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -97,7 +97,7 @@ class CForumCategory
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -120,7 +120,7 @@ class CForumCategory
     /**
      * Get catId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCatId()
     {
@@ -143,7 +143,7 @@ class CForumCategory
     /**
      * Get catTitle
      *
-     * @return string 
+     * @return string
      */
     public function getCatTitle()
     {
@@ -166,7 +166,7 @@ class CForumCategory
     /**
      * Get catComment
      *
-     * @return string 
+     * @return string
      */
     public function getCatComment()
     {
@@ -189,7 +189,7 @@ class CForumCategory
     /**
      * Get catOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getCatOrder()
     {
@@ -212,7 +212,7 @@ class CForumCategory
     /**
      * Get locked
      *
-     * @return integer 
+     * @return integer
      */
     public function getLocked()
     {
@@ -235,7 +235,7 @@ class CForumCategory
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {

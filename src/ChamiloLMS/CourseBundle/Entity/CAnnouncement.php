@@ -73,7 +73,7 @@ class CAnnouncement
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -93,7 +93,7 @@ class CAnnouncement
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -116,7 +116,7 @@ class CAnnouncement
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -139,7 +139,7 @@ class CAnnouncement
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -162,7 +162,7 @@ class CAnnouncement
     /**
      * Get content
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
@@ -185,7 +185,7 @@ class CAnnouncement
     /**
      * Get endDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getEndDate()
     {
@@ -208,7 +208,7 @@ class CAnnouncement
     /**
      * Get displayOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getDisplayOrder()
     {
@@ -231,7 +231,7 @@ class CAnnouncement
     /**
      * Get emailSent
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEmailSent()
     {
@@ -254,7 +254,7 @@ class CAnnouncement
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {

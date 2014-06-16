@@ -17,7 +17,7 @@ class GradebookLinkevalLog
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -81,7 +81,7 @@ class GradebookLinkevalLog
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -104,7 +104,7 @@ class GradebookLinkevalLog
     /**
      * Get idLinkevalLog
      *
-     * @return integer 
+     * @return integer
      */
     public function getIdLinkevalLog()
     {
@@ -127,7 +127,7 @@ class GradebookLinkevalLog
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -150,7 +150,7 @@ class GradebookLinkevalLog
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -173,7 +173,7 @@ class GradebookLinkevalLog
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -196,7 +196,7 @@ class GradebookLinkevalLog
     /**
      * Get weight
      *
-     * @return integer 
+     * @return integer
      */
     public function getWeight()
     {
@@ -219,7 +219,7 @@ class GradebookLinkevalLog
     /**
      * Get visible
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getVisible()
     {
@@ -242,7 +242,7 @@ class GradebookLinkevalLog
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -265,7 +265,7 @@ class GradebookLinkevalLog
     /**
      * Get userIdLog
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserIdLog()
     {

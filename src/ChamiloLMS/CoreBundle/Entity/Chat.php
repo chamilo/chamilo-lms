@@ -17,7 +17,7 @@ class Chat
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -60,7 +60,7 @@ class Chat
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -83,7 +83,7 @@ class Chat
     /**
      * Get fromUser
      *
-     * @return integer 
+     * @return integer
      */
     public function getFromUser()
     {
@@ -106,7 +106,7 @@ class Chat
     /**
      * Get toUser
      *
-     * @return integer 
+     * @return integer
      */
     public function getToUser()
     {
@@ -129,7 +129,7 @@ class Chat
     /**
      * Get message
      *
-     * @return string 
+     * @return string
      */
     public function getMessage()
     {
@@ -152,7 +152,7 @@ class Chat
     /**
      * Get sent
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getSent()
     {
@@ -175,7 +175,7 @@ class Chat
     /**
      * Get recd
      *
-     * @return integer 
+     * @return integer
      */
     public function getRecd()
     {

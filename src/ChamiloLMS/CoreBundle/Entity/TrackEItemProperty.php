@@ -17,7 +17,7 @@ class TrackEItemProperty
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -81,7 +81,7 @@ class TrackEItemProperty
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -104,7 +104,7 @@ class TrackEItemProperty
     /**
      * Get courseId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCourseId()
     {
@@ -127,7 +127,7 @@ class TrackEItemProperty
     /**
      * Get itemPropertyId
      *
-     * @return integer 
+     * @return integer
      */
     public function getItemPropertyId()
     {
@@ -150,7 +150,7 @@ class TrackEItemProperty
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -173,7 +173,7 @@ class TrackEItemProperty
     /**
      * Get content
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
@@ -196,7 +196,7 @@ class TrackEItemProperty
     /**
      * Get progress
      *
-     * @return integer 
+     * @return integer
      */
     public function getProgress()
     {
@@ -219,7 +219,7 @@ class TrackEItemProperty
     /**
      * Get lasteditDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLasteditDate()
     {
@@ -242,7 +242,7 @@ class TrackEItemProperty
     /**
      * Get lasteditUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLasteditUserId()
     {
@@ -265,7 +265,7 @@ class TrackEItemProperty
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {

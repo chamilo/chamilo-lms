@@ -17,7 +17,7 @@ class CGroupCategory
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -137,7 +137,7 @@ class CGroupCategory
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -160,7 +160,7 @@ class CGroupCategory
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -183,7 +183,7 @@ class CGroupCategory
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -206,7 +206,7 @@ class CGroupCategory
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -229,7 +229,7 @@ class CGroupCategory
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -252,7 +252,7 @@ class CGroupCategory
     /**
      * Get docState
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDocState()
     {
@@ -275,7 +275,7 @@ class CGroupCategory
     /**
      * Get calendarState
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getCalendarState()
     {
@@ -298,7 +298,7 @@ class CGroupCategory
     /**
      * Get workState
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getWorkState()
     {
@@ -321,7 +321,7 @@ class CGroupCategory
     /**
      * Get announcementsState
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getAnnouncementsState()
     {
@@ -344,7 +344,7 @@ class CGroupCategory
     /**
      * Get forumState
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getForumState()
     {
@@ -367,7 +367,7 @@ class CGroupCategory
     /**
      * Get wikiState
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getWikiState()
     {
@@ -390,7 +390,7 @@ class CGroupCategory
     /**
      * Get chatState
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getChatState()
     {
@@ -413,7 +413,7 @@ class CGroupCategory
     /**
      * Get maxStudent
      *
-     * @return integer 
+     * @return integer
      */
     public function getMaxStudent()
     {
@@ -436,7 +436,7 @@ class CGroupCategory
     /**
      * Get selfRegAllowed
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getSelfRegAllowed()
     {
@@ -459,7 +459,7 @@ class CGroupCategory
     /**
      * Get selfUnregAllowed
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getSelfUnregAllowed()
     {
@@ -482,7 +482,7 @@ class CGroupCategory
     /**
      * Get groupsPerUser
      *
-     * @return integer 
+     * @return integer
      */
     public function getGroupsPerUser()
     {
@@ -505,7 +505,7 @@ class CGroupCategory
     /**
      * Get displayOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getDisplayOrder()
     {

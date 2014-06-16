@@ -17,7 +17,7 @@ class CLpIvInteraction
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -109,7 +109,7 @@ class CLpIvInteraction
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -132,7 +132,7 @@ class CLpIvInteraction
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -155,7 +155,7 @@ class CLpIvInteraction
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -178,7 +178,7 @@ class CLpIvInteraction
     /**
      * Get orderId
      *
-     * @return integer 
+     * @return integer
      */
     public function getOrderId()
     {
@@ -201,7 +201,7 @@ class CLpIvInteraction
     /**
      * Get lpIvId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLpIvId()
     {
@@ -224,7 +224,7 @@ class CLpIvInteraction
     /**
      * Get interactionId
      *
-     * @return string 
+     * @return string
      */
     public function getInteractionId()
     {
@@ -247,7 +247,7 @@ class CLpIvInteraction
     /**
      * Get interactionType
      *
-     * @return string 
+     * @return string
      */
     public function getInteractionType()
     {
@@ -270,7 +270,7 @@ class CLpIvInteraction
     /**
      * Get weighting
      *
-     * @return float 
+     * @return float
      */
     public function getWeighting()
     {
@@ -293,7 +293,7 @@ class CLpIvInteraction
     /**
      * Get completionTime
      *
-     * @return string 
+     * @return string
      */
     public function getCompletionTime()
     {
@@ -316,7 +316,7 @@ class CLpIvInteraction
     /**
      * Get correctResponses
      *
-     * @return string 
+     * @return string
      */
     public function getCorrectResponses()
     {
@@ -339,7 +339,7 @@ class CLpIvInteraction
     /**
      * Get studentResponse
      *
-     * @return string 
+     * @return string
      */
     public function getStudentResponse()
     {
@@ -362,7 +362,7 @@ class CLpIvInteraction
     /**
      * Get result
      *
-     * @return string 
+     * @return string
      */
     public function getResult()
     {
@@ -385,7 +385,7 @@ class CLpIvInteraction
     /**
      * Get latency
      *
-     * @return string 
+     * @return string
      */
     public function getLatency()
     {

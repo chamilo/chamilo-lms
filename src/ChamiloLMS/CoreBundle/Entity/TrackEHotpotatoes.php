@@ -17,7 +17,7 @@ class TrackEHotpotatoes
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -67,7 +67,7 @@ class TrackEHotpotatoes
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -90,7 +90,7 @@ class TrackEHotpotatoes
     /**
      * Get exeName
      *
-     * @return string 
+     * @return string
      */
     public function getExeName()
     {
@@ -113,7 +113,7 @@ class TrackEHotpotatoes
     /**
      * Get exeUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getExeUserId()
     {
@@ -136,7 +136,7 @@ class TrackEHotpotatoes
     /**
      * Get exeDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getExeDate()
     {
@@ -159,7 +159,7 @@ class TrackEHotpotatoes
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -182,7 +182,7 @@ class TrackEHotpotatoes
     /**
      * Get exeResult
      *
-     * @return integer 
+     * @return integer
      */
     public function getExeResult()
     {
@@ -205,7 +205,7 @@ class TrackEHotpotatoes
     /**
      * Get exeWeighting
      *
-     * @return integer 
+     * @return integer
      */
     public function getExeWeighting()
     {

@@ -17,7 +17,7 @@ class GradebookLink
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -95,7 +95,7 @@ class GradebookLink
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -118,7 +118,7 @@ class GradebookLink
     /**
      * Get type
      *
-     * @return integer 
+     * @return integer
      */
     public function getType()
     {
@@ -141,7 +141,7 @@ class GradebookLink
     /**
      * Get refId
      *
-     * @return integer 
+     * @return integer
      */
     public function getRefId()
     {
@@ -164,7 +164,7 @@ class GradebookLink
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -187,7 +187,7 @@ class GradebookLink
     /**
      * Get courseCode
      *
-     * @return string 
+     * @return string
      */
     public function getCourseCode()
     {
@@ -210,7 +210,7 @@ class GradebookLink
     /**
      * Get categoryId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCategoryId()
     {
@@ -233,7 +233,7 @@ class GradebookLink
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -256,7 +256,7 @@ class GradebookLink
     /**
      * Get weight
      *
-     * @return float 
+     * @return float
      */
     public function getWeight()
     {
@@ -279,7 +279,7 @@ class GradebookLink
     /**
      * Get visible
      *
-     * @return integer 
+     * @return integer
      */
     public function getVisible()
     {
@@ -302,7 +302,7 @@ class GradebookLink
     /**
      * Get locked
      *
-     * @return integer 
+     * @return integer
      */
     public function getLocked()
     {
@@ -325,7 +325,7 @@ class GradebookLink
     /**
      * Get evaluationTypeId
      *
-     * @return integer 
+     * @return integer
      */
     public function getEvaluationTypeId()
     {

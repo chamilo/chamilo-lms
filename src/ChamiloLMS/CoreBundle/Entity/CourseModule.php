@@ -17,7 +17,7 @@ class CourseModule
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -67,7 +67,7 @@ class CourseModule
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -90,7 +90,7 @@ class CourseModule
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -113,7 +113,7 @@ class CourseModule
     /**
      * Get link
      *
-     * @return string 
+     * @return string
      */
     public function getLink()
     {
@@ -136,7 +136,7 @@ class CourseModule
     /**
      * Get image
      *
-     * @return string 
+     * @return string
      */
     public function getImage()
     {
@@ -159,7 +159,7 @@ class CourseModule
     /**
      * Get rowModule
      *
-     * @return integer 
+     * @return integer
      */
     public function getRowModule()
     {
@@ -182,7 +182,7 @@ class CourseModule
     /**
      * Get columnModule
      *
-     * @return integer 
+     * @return integer
      */
     public function getColumnModule()
     {
@@ -205,7 +205,7 @@ class CourseModule
     /**
      * Get position
      *
-     * @return string 
+     * @return string
      */
     public function getPosition()
     {

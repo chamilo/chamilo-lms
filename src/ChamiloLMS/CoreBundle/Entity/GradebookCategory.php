@@ -17,7 +17,7 @@ class GradebookCategory
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -116,7 +116,7 @@ class GradebookCategory
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -139,7 +139,7 @@ class GradebookCategory
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -162,7 +162,7 @@ class GradebookCategory
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -185,7 +185,7 @@ class GradebookCategory
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -208,7 +208,7 @@ class GradebookCategory
     /**
      * Get courseCode
      *
-     * @return string 
+     * @return string
      */
     public function getCourseCode()
     {
@@ -231,7 +231,7 @@ class GradebookCategory
     /**
      * Get parentId
      *
-     * @return integer 
+     * @return integer
      */
     public function getParentId()
     {
@@ -254,7 +254,7 @@ class GradebookCategory
     /**
      * Get weight
      *
-     * @return float 
+     * @return float
      */
     public function getWeight()
     {
@@ -277,7 +277,7 @@ class GradebookCategory
     /**
      * Get visible
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getVisible()
     {
@@ -300,7 +300,7 @@ class GradebookCategory
     /**
      * Get certifMinScore
      *
-     * @return integer 
+     * @return integer
      */
     public function getCertifMinScore()
     {
@@ -323,7 +323,7 @@ class GradebookCategory
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {
@@ -346,7 +346,7 @@ class GradebookCategory
     /**
      * Get documentId
      *
-     * @return integer 
+     * @return integer
      */
     public function getDocumentId()
     {
@@ -369,7 +369,7 @@ class GradebookCategory
     /**
      * Get locked
      *
-     * @return integer 
+     * @return integer
      */
     public function getLocked()
     {
@@ -392,7 +392,7 @@ class GradebookCategory
     /**
      * Get defaultLowestEvalExclude
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDefaultLowestEvalExclude()
     {
@@ -415,7 +415,7 @@ class GradebookCategory
     /**
      * Get gradeModelId
      *
-     * @return integer 
+     * @return integer
      */
     public function getGradeModelId()
     {

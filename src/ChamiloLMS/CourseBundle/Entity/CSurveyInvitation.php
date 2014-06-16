@@ -17,7 +17,7 @@ class CSurveyInvitation
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -95,7 +95,7 @@ class CSurveyInvitation
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -118,7 +118,7 @@ class CSurveyInvitation
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -141,7 +141,7 @@ class CSurveyInvitation
     /**
      * Get surveyInvitationId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSurveyInvitationId()
     {
@@ -164,7 +164,7 @@ class CSurveyInvitation
     /**
      * Get surveyCode
      *
-     * @return string 
+     * @return string
      */
     public function getSurveyCode()
     {
@@ -187,7 +187,7 @@ class CSurveyInvitation
     /**
      * Get user
      *
-     * @return string 
+     * @return string
      */
     public function getUser()
     {
@@ -210,7 +210,7 @@ class CSurveyInvitation
     /**
      * Get invitationCode
      *
-     * @return string 
+     * @return string
      */
     public function getInvitationCode()
     {
@@ -233,7 +233,7 @@ class CSurveyInvitation
     /**
      * Get invitationDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getInvitationDate()
     {
@@ -256,7 +256,7 @@ class CSurveyInvitation
     /**
      * Get reminderDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getReminderDate()
     {
@@ -279,7 +279,7 @@ class CSurveyInvitation
     /**
      * Get answered
      *
-     * @return integer 
+     * @return integer
      */
     public function getAnswered()
     {
@@ -302,7 +302,7 @@ class CSurveyInvitation
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {
@@ -325,7 +325,7 @@ class CSurveyInvitation
     /**
      * Get groupId
      *
-     * @return integer 
+     * @return integer
      */
     public function getGroupId()
     {

@@ -17,7 +17,7 @@ class CAttendanceCalendar
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -60,7 +60,7 @@ class CAttendanceCalendar
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -83,7 +83,7 @@ class CAttendanceCalendar
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -106,7 +106,7 @@ class CAttendanceCalendar
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -129,7 +129,7 @@ class CAttendanceCalendar
     /**
      * Get attendanceId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAttendanceId()
     {
@@ -152,7 +152,7 @@ class CAttendanceCalendar
     /**
      * Get dateTime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateTime()
     {
@@ -175,7 +175,7 @@ class CAttendanceCalendar
     /**
      * Get doneAttendance
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDoneAttendance()
     {

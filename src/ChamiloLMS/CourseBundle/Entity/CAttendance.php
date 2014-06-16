@@ -17,7 +17,7 @@ class CAttendance
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -95,7 +95,7 @@ class CAttendance
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -118,7 +118,7 @@ class CAttendance
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -141,7 +141,7 @@ class CAttendance
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -164,7 +164,7 @@ class CAttendance
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -187,7 +187,7 @@ class CAttendance
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -210,7 +210,7 @@ class CAttendance
     /**
      * Get active
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActive()
     {
@@ -233,7 +233,7 @@ class CAttendance
     /**
      * Get attendanceQualifyTitle
      *
-     * @return string 
+     * @return string
      */
     public function getAttendanceQualifyTitle()
     {
@@ -256,7 +256,7 @@ class CAttendance
     /**
      * Get attendanceQualifyMax
      *
-     * @return integer 
+     * @return integer
      */
     public function getAttendanceQualifyMax()
     {
@@ -279,7 +279,7 @@ class CAttendance
     /**
      * Get attendanceWeight
      *
-     * @return float 
+     * @return float
      */
     public function getAttendanceWeight()
     {
@@ -302,7 +302,7 @@ class CAttendance
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {
@@ -325,7 +325,7 @@ class CAttendance
     /**
      * Get locked
      *
-     * @return integer 
+     * @return integer
      */
     public function getLocked()
     {

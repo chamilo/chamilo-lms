@@ -17,7 +17,7 @@ class CQuizQuestionOption
      *
      * @ORM\Column(name="iid", type="bigint", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -53,7 +53,7 @@ class CQuizQuestionOption
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -76,7 +76,7 @@ class CQuizQuestionOption
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -99,7 +99,7 @@ class CQuizQuestionOption
     /**
      * Get questionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getQuestionId()
     {
@@ -122,7 +122,7 @@ class CQuizQuestionOption
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -145,7 +145,7 @@ class CQuizQuestionOption
     /**
      * Get position
      *
-     * @return integer 
+     * @return integer
      */
     public function getPosition()
     {

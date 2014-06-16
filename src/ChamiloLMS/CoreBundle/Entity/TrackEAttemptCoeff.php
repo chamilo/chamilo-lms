@@ -17,7 +17,7 @@ class TrackEAttemptCoeff
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -39,7 +39,7 @@ class TrackEAttemptCoeff
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -62,7 +62,7 @@ class TrackEAttemptCoeff
     /**
      * Get attemptId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAttemptId()
     {
@@ -85,7 +85,7 @@ class TrackEAttemptCoeff
     /**
      * Get marksCoeff
      *
-     * @return float 
+     * @return float
      */
     public function getMarksCoeff()
     {

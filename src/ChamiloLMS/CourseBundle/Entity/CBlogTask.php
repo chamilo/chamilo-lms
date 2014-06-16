@@ -17,7 +17,7 @@ class CBlogTask
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -74,7 +74,7 @@ class CBlogTask
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -97,7 +97,7 @@ class CBlogTask
     /**
      * Get taskId
      *
-     * @return integer 
+     * @return integer
      */
     public function getTaskId()
     {
@@ -120,7 +120,7 @@ class CBlogTask
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -143,7 +143,7 @@ class CBlogTask
     /**
      * Get blogId
      *
-     * @return integer 
+     * @return integer
      */
     public function getBlogId()
     {
@@ -166,7 +166,7 @@ class CBlogTask
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -189,7 +189,7 @@ class CBlogTask
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -212,7 +212,7 @@ class CBlogTask
     /**
      * Get color
      *
-     * @return string 
+     * @return string
      */
     public function getColor()
     {
@@ -235,7 +235,7 @@ class CBlogTask
     /**
      * Get systemTask
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getSystemTask()
     {

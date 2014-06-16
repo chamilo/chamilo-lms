@@ -17,7 +17,7 @@ class SearchEngineRef
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -60,7 +60,7 @@ class SearchEngineRef
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -83,7 +83,7 @@ class SearchEngineRef
     /**
      * Get courseCode
      *
-     * @return string 
+     * @return string
      */
     public function getCourseCode()
     {
@@ -106,7 +106,7 @@ class SearchEngineRef
     /**
      * Get toolId
      *
-     * @return string 
+     * @return string
      */
     public function getToolId()
     {
@@ -129,7 +129,7 @@ class SearchEngineRef
     /**
      * Get refIdHighLevel
      *
-     * @return integer 
+     * @return integer
      */
     public function getRefIdHighLevel()
     {
@@ -152,7 +152,7 @@ class SearchEngineRef
     /**
      * Get refIdSecondLevel
      *
-     * @return integer 
+     * @return integer
      */
     public function getRefIdSecondLevel()
     {
@@ -175,7 +175,7 @@ class SearchEngineRef
     /**
      * Get searchDid
      *
-     * @return integer 
+     * @return integer
      */
     public function getSearchDid()
     {

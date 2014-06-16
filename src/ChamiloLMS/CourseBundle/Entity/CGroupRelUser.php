@@ -17,7 +17,7 @@ class CGroupRelUser
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -67,7 +67,7 @@ class CGroupRelUser
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -90,7 +90,7 @@ class CGroupRelUser
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -113,7 +113,7 @@ class CGroupRelUser
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -136,7 +136,7 @@ class CGroupRelUser
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -159,7 +159,7 @@ class CGroupRelUser
     /**
      * Get groupId
      *
-     * @return integer 
+     * @return integer
      */
     public function getGroupId()
     {
@@ -182,7 +182,7 @@ class CGroupRelUser
     /**
      * Get status
      *
-     * @return integer 
+     * @return integer
      */
     public function getStatus()
     {
@@ -205,7 +205,7 @@ class CGroupRelUser
     /**
      * Get role
      *
-     * @return string 
+     * @return string
      */
     public function getRole()
     {

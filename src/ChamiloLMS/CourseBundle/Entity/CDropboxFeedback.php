@@ -17,7 +17,7 @@ class CDropboxFeedback
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -67,7 +67,7 @@ class CDropboxFeedback
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -90,7 +90,7 @@ class CDropboxFeedback
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -113,7 +113,7 @@ class CDropboxFeedback
     /**
      * Get feedbackId
      *
-     * @return integer 
+     * @return integer
      */
     public function getFeedbackId()
     {
@@ -136,7 +136,7 @@ class CDropboxFeedback
     /**
      * Get fileId
      *
-     * @return integer 
+     * @return integer
      */
     public function getFileId()
     {
@@ -159,7 +159,7 @@ class CDropboxFeedback
     /**
      * Get authorUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAuthorUserId()
     {
@@ -182,7 +182,7 @@ class CDropboxFeedback
     /**
      * Get feedback
      *
-     * @return string 
+     * @return string
      */
     public function getFeedback()
     {
@@ -205,7 +205,7 @@ class CDropboxFeedback
     /**
      * Get feedbackDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getFeedbackDate()
     {

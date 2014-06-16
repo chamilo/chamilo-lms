@@ -17,7 +17,7 @@ class CGlossary
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -67,7 +67,7 @@ class CGlossary
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -90,7 +90,7 @@ class CGlossary
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -113,7 +113,7 @@ class CGlossary
     /**
      * Get glossaryId
      *
-     * @return integer 
+     * @return integer
      */
     public function getGlossaryId()
     {
@@ -136,7 +136,7 @@ class CGlossary
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -159,7 +159,7 @@ class CGlossary
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -182,7 +182,7 @@ class CGlossary
     /**
      * Get displayOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getDisplayOrder()
     {
@@ -205,7 +205,7 @@ class CGlossary
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {

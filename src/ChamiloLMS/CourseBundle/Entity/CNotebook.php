@@ -17,7 +17,7 @@ class CNotebook
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -95,7 +95,7 @@ class CNotebook
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -118,7 +118,7 @@ class CNotebook
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -141,7 +141,7 @@ class CNotebook
     /**
      * Get notebookId
      *
-     * @return integer 
+     * @return integer
      */
     public function getNotebookId()
     {
@@ -164,7 +164,7 @@ class CNotebook
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -187,7 +187,7 @@ class CNotebook
     /**
      * Get course
      *
-     * @return string 
+     * @return string
      */
     public function getCourse()
     {
@@ -210,7 +210,7 @@ class CNotebook
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {
@@ -233,7 +233,7 @@ class CNotebook
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -256,7 +256,7 @@ class CNotebook
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -279,7 +279,7 @@ class CNotebook
     /**
      * Get creationDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreationDate()
     {
@@ -302,7 +302,7 @@ class CNotebook
     /**
      * Get updateDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdateDate()
     {
@@ -325,7 +325,7 @@ class CNotebook
     /**
      * Get status
      *
-     * @return integer 
+     * @return integer
      */
     public function getStatus()
     {

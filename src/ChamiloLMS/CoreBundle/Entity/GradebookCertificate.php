@@ -17,7 +17,7 @@ class GradebookCertificate
      *
      * @ORM\Column(name="id", type="bigint", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -60,7 +60,7 @@ class GradebookCertificate
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -83,7 +83,7 @@ class GradebookCertificate
     /**
      * Get catId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCatId()
     {
@@ -106,7 +106,7 @@ class GradebookCertificate
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -129,7 +129,7 @@ class GradebookCertificate
     /**
      * Get scoreCertificate
      *
-     * @return float 
+     * @return float
      */
     public function getScoreCertificate()
     {
@@ -152,7 +152,7 @@ class GradebookCertificate
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -175,7 +175,7 @@ class GradebookCertificate
     /**
      * Get pathCertificate
      *
-     * @return string 
+     * @return string
      */
     public function getPathCertificate()
     {

@@ -17,7 +17,7 @@ class SkillProfile
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -39,7 +39,7 @@ class SkillProfile
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -62,7 +62,7 @@ class SkillProfile
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -85,7 +85,7 @@ class SkillProfile
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {

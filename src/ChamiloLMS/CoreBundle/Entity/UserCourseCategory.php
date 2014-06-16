@@ -17,7 +17,7 @@ class UserCourseCategory
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -46,7 +46,7 @@ class UserCourseCategory
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -69,7 +69,7 @@ class UserCourseCategory
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -92,7 +92,7 @@ class UserCourseCategory
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -115,7 +115,7 @@ class UserCourseCategory
     /**
      * Get sort
      *
-     * @return integer 
+     * @return integer
      */
     public function getSort()
     {

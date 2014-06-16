@@ -17,7 +17,7 @@ class CBlogTaskRelUser
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -60,7 +60,7 @@ class CBlogTaskRelUser
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -83,7 +83,7 @@ class CBlogTaskRelUser
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -106,7 +106,7 @@ class CBlogTaskRelUser
     /**
      * Get blogId
      *
-     * @return integer 
+     * @return integer
      */
     public function getBlogId()
     {
@@ -129,7 +129,7 @@ class CBlogTaskRelUser
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -152,7 +152,7 @@ class CBlogTaskRelUser
     /**
      * Get taskId
      *
-     * @return integer 
+     * @return integer
      */
     public function getTaskId()
     {
@@ -175,7 +175,7 @@ class CBlogTaskRelUser
     /**
      * Get targetDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getTargetDate()
     {

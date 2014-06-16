@@ -17,7 +17,7 @@ class SkillRelGradebook
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -46,7 +46,7 @@ class SkillRelGradebook
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -69,7 +69,7 @@ class SkillRelGradebook
     /**
      * Get gradebookId
      *
-     * @return integer 
+     * @return integer
      */
     public function getGradebookId()
     {
@@ -92,7 +92,7 @@ class SkillRelGradebook
     /**
      * Get skillId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSkillId()
     {
@@ -115,7 +115,7 @@ class SkillRelGradebook
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {

@@ -17,7 +17,7 @@ class TrackELinks
      *
      * @ORM\Column(name="links_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $linksId;
 
@@ -60,7 +60,7 @@ class TrackELinks
     /**
      * Get linksId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLinksId()
     {
@@ -83,7 +83,7 @@ class TrackELinks
     /**
      * Get linksUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLinksUserId()
     {
@@ -106,7 +106,7 @@ class TrackELinks
     /**
      * Get linksDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLinksDate()
     {
@@ -129,7 +129,7 @@ class TrackELinks
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -152,7 +152,7 @@ class TrackELinks
     /**
      * Get linksLinkId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLinksLinkId()
     {
@@ -175,7 +175,7 @@ class TrackELinks
     /**
      * Get linksSessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLinksSessionId()
     {

@@ -17,7 +17,7 @@ class TrackEUploads
      *
      * @ORM\Column(name="upload_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $uploadId;
 
@@ -60,7 +60,7 @@ class TrackEUploads
     /**
      * Get uploadId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUploadId()
     {
@@ -83,7 +83,7 @@ class TrackEUploads
     /**
      * Get uploadUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUploadUserId()
     {
@@ -106,7 +106,7 @@ class TrackEUploads
     /**
      * Get uploadDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUploadDate()
     {
@@ -129,7 +129,7 @@ class TrackEUploads
     /**
      * Get uploadCoursId
      *
-     * @return string 
+     * @return string
      */
     public function getUploadCoursId()
     {
@@ -152,7 +152,7 @@ class TrackEUploads
     /**
      * Get uploadWorkId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUploadWorkId()
     {
@@ -175,7 +175,7 @@ class TrackEUploads
     /**
      * Get uploadSessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUploadSessionId()
     {

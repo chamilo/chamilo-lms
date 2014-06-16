@@ -17,7 +17,7 @@ class UserApiKey
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -81,7 +81,7 @@ class UserApiKey
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -104,7 +104,7 @@ class UserApiKey
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -127,7 +127,7 @@ class UserApiKey
     /**
      * Get apiKey
      *
-     * @return string 
+     * @return string
      */
     public function getApiKey()
     {
@@ -150,7 +150,7 @@ class UserApiKey
     /**
      * Get apiService
      *
-     * @return string 
+     * @return string
      */
     public function getApiService()
     {
@@ -173,7 +173,7 @@ class UserApiKey
     /**
      * Get apiEndPoint
      *
-     * @return string 
+     * @return string
      */
     public function getApiEndPoint()
     {
@@ -196,7 +196,7 @@ class UserApiKey
     /**
      * Get createdDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedDate()
     {
@@ -219,7 +219,7 @@ class UserApiKey
     /**
      * Get validityStartDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getValidityStartDate()
     {
@@ -242,7 +242,7 @@ class UserApiKey
     /**
      * Get validityEndDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getValidityEndDate()
     {
@@ -265,7 +265,7 @@ class UserApiKey
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {

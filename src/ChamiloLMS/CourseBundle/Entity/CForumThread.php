@@ -17,7 +17,7 @@ class CForumThread
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -144,7 +144,7 @@ class CForumThread
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -167,7 +167,7 @@ class CForumThread
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -190,7 +190,7 @@ class CForumThread
     /**
      * Get threadId
      *
-     * @return integer 
+     * @return integer
      */
     public function getThreadId()
     {
@@ -213,7 +213,7 @@ class CForumThread
     /**
      * Get threadTitle
      *
-     * @return string 
+     * @return string
      */
     public function getThreadTitle()
     {
@@ -236,7 +236,7 @@ class CForumThread
     /**
      * Get forumId
      *
-     * @return integer 
+     * @return integer
      */
     public function getForumId()
     {
@@ -259,7 +259,7 @@ class CForumThread
     /**
      * Get threadReplies
      *
-     * @return integer 
+     * @return integer
      */
     public function getThreadReplies()
     {
@@ -282,7 +282,7 @@ class CForumThread
     /**
      * Get threadPosterId
      *
-     * @return integer 
+     * @return integer
      */
     public function getThreadPosterId()
     {
@@ -305,7 +305,7 @@ class CForumThread
     /**
      * Get threadPosterName
      *
-     * @return string 
+     * @return string
      */
     public function getThreadPosterName()
     {
@@ -328,7 +328,7 @@ class CForumThread
     /**
      * Get threadViews
      *
-     * @return integer 
+     * @return integer
      */
     public function getThreadViews()
     {
@@ -351,7 +351,7 @@ class CForumThread
     /**
      * Get threadLastPost
      *
-     * @return integer 
+     * @return integer
      */
     public function getThreadLastPost()
     {
@@ -374,7 +374,7 @@ class CForumThread
     /**
      * Get threadDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getThreadDate()
     {
@@ -397,7 +397,7 @@ class CForumThread
     /**
      * Get threadSticky
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getThreadSticky()
     {
@@ -420,7 +420,7 @@ class CForumThread
     /**
      * Get locked
      *
-     * @return integer 
+     * @return integer
      */
     public function getLocked()
     {
@@ -443,7 +443,7 @@ class CForumThread
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {
@@ -466,7 +466,7 @@ class CForumThread
     /**
      * Get threadTitleQualify
      *
-     * @return string 
+     * @return string
      */
     public function getThreadTitleQualify()
     {
@@ -489,7 +489,7 @@ class CForumThread
     /**
      * Get threadQualifyMax
      *
-     * @return float 
+     * @return float
      */
     public function getThreadQualifyMax()
     {
@@ -512,7 +512,7 @@ class CForumThread
     /**
      * Get threadCloseDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getThreadCloseDate()
     {
@@ -535,7 +535,7 @@ class CForumThread
     /**
      * Get threadWeight
      *
-     * @return float 
+     * @return float
      */
     public function getThreadWeight()
     {

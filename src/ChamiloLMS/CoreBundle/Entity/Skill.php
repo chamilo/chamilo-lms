@@ -17,7 +17,7 @@ class Skill
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -60,7 +60,7 @@ class Skill
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -83,7 +83,7 @@ class Skill
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -106,7 +106,7 @@ class Skill
     /**
      * Get shortCode
      *
-     * @return string 
+     * @return string
      */
     public function getShortCode()
     {
@@ -129,7 +129,7 @@ class Skill
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -152,7 +152,7 @@ class Skill
     /**
      * Get accessUrlId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAccessUrlId()
     {
@@ -175,7 +175,7 @@ class Skill
     /**
      * Get icon
      *
-     * @return string 
+     * @return string
      */
     public function getIcon()
     {

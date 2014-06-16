@@ -17,7 +17,7 @@ class EventEmailTemplate
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -60,7 +60,7 @@ class EventEmailTemplate
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -83,7 +83,7 @@ class EventEmailTemplate
     /**
      * Get message
      *
-     * @return string 
+     * @return string
      */
     public function getMessage()
     {
@@ -106,7 +106,7 @@ class EventEmailTemplate
     /**
      * Get subject
      *
-     * @return string 
+     * @return string
      */
     public function getSubject()
     {
@@ -129,7 +129,7 @@ class EventEmailTemplate
     /**
      * Get eventTypeName
      *
-     * @return string 
+     * @return string
      */
     public function getEventTypeName()
     {
@@ -152,7 +152,7 @@ class EventEmailTemplate
     /**
      * Get activated
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActivated()
     {
@@ -175,7 +175,7 @@ class EventEmailTemplate
     /**
      * Get languageId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLanguageId()
     {

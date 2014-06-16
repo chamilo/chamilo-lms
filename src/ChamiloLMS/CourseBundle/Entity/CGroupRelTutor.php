@@ -17,7 +17,7 @@ class CGroupRelTutor
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -53,7 +53,7 @@ class CGroupRelTutor
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -76,7 +76,7 @@ class CGroupRelTutor
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -99,7 +99,7 @@ class CGroupRelTutor
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -122,7 +122,7 @@ class CGroupRelTutor
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -145,7 +145,7 @@ class CGroupRelTutor
     /**
      * Get groupId
      *
-     * @return integer 
+     * @return integer
      */
     public function getGroupId()
     {

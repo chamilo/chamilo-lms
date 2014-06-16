@@ -17,7 +17,7 @@ class CStudentPublicationComment
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -60,7 +60,7 @@ class CStudentPublicationComment
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -83,7 +83,7 @@ class CStudentPublicationComment
     /**
      * Get workId
      *
-     * @return integer 
+     * @return integer
      */
     public function getWorkId()
     {
@@ -106,7 +106,7 @@ class CStudentPublicationComment
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -129,7 +129,7 @@ class CStudentPublicationComment
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -152,7 +152,7 @@ class CStudentPublicationComment
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -175,7 +175,7 @@ class CStudentPublicationComment
     /**
      * Get sentAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getSentAt()
     {

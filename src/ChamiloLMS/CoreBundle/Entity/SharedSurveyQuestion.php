@@ -17,7 +17,7 @@ class SharedSurveyQuestion
      *
      * @ORM\Column(name="question_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $questionId;
 
@@ -81,7 +81,7 @@ class SharedSurveyQuestion
     /**
      * Get questionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getQuestionId()
     {
@@ -104,7 +104,7 @@ class SharedSurveyQuestion
     /**
      * Get surveyId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSurveyId()
     {
@@ -127,7 +127,7 @@ class SharedSurveyQuestion
     /**
      * Get surveyQuestion
      *
-     * @return string 
+     * @return string
      */
     public function getSurveyQuestion()
     {
@@ -150,7 +150,7 @@ class SharedSurveyQuestion
     /**
      * Get surveyQuestionComment
      *
-     * @return string 
+     * @return string
      */
     public function getSurveyQuestionComment()
     {
@@ -173,7 +173,7 @@ class SharedSurveyQuestion
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -196,7 +196,7 @@ class SharedSurveyQuestion
     /**
      * Get display
      *
-     * @return string 
+     * @return string
      */
     public function getDisplay()
     {
@@ -219,7 +219,7 @@ class SharedSurveyQuestion
     /**
      * Get sort
      *
-     * @return integer 
+     * @return integer
      */
     public function getSort()
     {
@@ -242,7 +242,7 @@ class SharedSurveyQuestion
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -265,7 +265,7 @@ class SharedSurveyQuestion
     /**
      * Get maxValue
      *
-     * @return integer 
+     * @return integer
      */
     public function getMaxValue()
     {

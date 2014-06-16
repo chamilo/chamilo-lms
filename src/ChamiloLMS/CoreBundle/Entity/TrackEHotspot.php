@@ -17,7 +17,7 @@ class TrackEHotspot
      *
      * @ORM\Column(name="hotspot_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $hotspotId;
 
@@ -74,7 +74,7 @@ class TrackEHotspot
     /**
      * Get hotspotId
      *
-     * @return integer 
+     * @return integer
      */
     public function getHotspotId()
     {
@@ -97,7 +97,7 @@ class TrackEHotspot
     /**
      * Get hotspotUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getHotspotUserId()
     {
@@ -120,7 +120,7 @@ class TrackEHotspot
     /**
      * Get hotspotExeId
      *
-     * @return integer 
+     * @return integer
      */
     public function getHotspotExeId()
     {
@@ -143,7 +143,7 @@ class TrackEHotspot
     /**
      * Get hotspotQuestionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getHotspotQuestionId()
     {
@@ -166,7 +166,7 @@ class TrackEHotspot
     /**
      * Get hotspotAnswerId
      *
-     * @return integer 
+     * @return integer
      */
     public function getHotspotAnswerId()
     {
@@ -189,7 +189,7 @@ class TrackEHotspot
     /**
      * Get hotspotCorrect
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getHotspotCorrect()
     {
@@ -212,7 +212,7 @@ class TrackEHotspot
     /**
      * Get hotspotCoordinate
      *
-     * @return string 
+     * @return string
      */
     public function getHotspotCoordinate()
     {
@@ -235,7 +235,7 @@ class TrackEHotspot
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {

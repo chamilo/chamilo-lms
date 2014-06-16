@@ -17,7 +17,7 @@ class CSurvey
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -228,7 +228,7 @@ class CSurvey
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -251,7 +251,7 @@ class CSurvey
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -274,7 +274,7 @@ class CSurvey
     /**
      * Get surveyId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSurveyId()
     {
@@ -297,7 +297,7 @@ class CSurvey
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -320,7 +320,7 @@ class CSurvey
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -343,7 +343,7 @@ class CSurvey
     /**
      * Get subtitle
      *
-     * @return string 
+     * @return string
      */
     public function getSubtitle()
     {
@@ -366,7 +366,7 @@ class CSurvey
     /**
      * Get author
      *
-     * @return string 
+     * @return string
      */
     public function getAuthor()
     {
@@ -389,7 +389,7 @@ class CSurvey
     /**
      * Get lang
      *
-     * @return string 
+     * @return string
      */
     public function getLang()
     {
@@ -412,7 +412,7 @@ class CSurvey
     /**
      * Get availFrom
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getAvailFrom()
     {
@@ -435,7 +435,7 @@ class CSurvey
     /**
      * Get availTill
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getAvailTill()
     {
@@ -458,7 +458,7 @@ class CSurvey
     /**
      * Get isShared
      *
-     * @return string 
+     * @return string
      */
     public function getIsShared()
     {
@@ -481,7 +481,7 @@ class CSurvey
     /**
      * Get template
      *
-     * @return string 
+     * @return string
      */
     public function getTemplate()
     {
@@ -504,7 +504,7 @@ class CSurvey
     /**
      * Get intro
      *
-     * @return string 
+     * @return string
      */
     public function getIntro()
     {
@@ -527,7 +527,7 @@ class CSurvey
     /**
      * Get surveythanks
      *
-     * @return string 
+     * @return string
      */
     public function getSurveythanks()
     {
@@ -550,7 +550,7 @@ class CSurvey
     /**
      * Get creationDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreationDate()
     {
@@ -573,7 +573,7 @@ class CSurvey
     /**
      * Get invited
      *
-     * @return integer 
+     * @return integer
      */
     public function getInvited()
     {
@@ -596,7 +596,7 @@ class CSurvey
     /**
      * Get answered
      *
-     * @return integer 
+     * @return integer
      */
     public function getAnswered()
     {
@@ -619,7 +619,7 @@ class CSurvey
     /**
      * Get inviteMail
      *
-     * @return string 
+     * @return string
      */
     public function getInviteMail()
     {
@@ -642,7 +642,7 @@ class CSurvey
     /**
      * Get reminderMail
      *
-     * @return string 
+     * @return string
      */
     public function getReminderMail()
     {
@@ -665,7 +665,7 @@ class CSurvey
     /**
      * Get mailSubject
      *
-     * @return string 
+     * @return string
      */
     public function getMailSubject()
     {
@@ -688,7 +688,7 @@ class CSurvey
     /**
      * Get anonymous
      *
-     * @return string 
+     * @return string
      */
     public function getAnonymous()
     {
@@ -711,7 +711,7 @@ class CSurvey
     /**
      * Get accessCondition
      *
-     * @return string 
+     * @return string
      */
     public function getAccessCondition()
     {
@@ -734,7 +734,7 @@ class CSurvey
     /**
      * Get shuffle
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getShuffle()
     {
@@ -757,7 +757,7 @@ class CSurvey
     /**
      * Get oneQuestionPerPage
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getOneQuestionPerPage()
     {
@@ -780,7 +780,7 @@ class CSurvey
     /**
      * Get surveyVersion
      *
-     * @return string 
+     * @return string
      */
     public function getSurveyVersion()
     {
@@ -803,7 +803,7 @@ class CSurvey
     /**
      * Get parentId
      *
-     * @return integer 
+     * @return integer
      */
     public function getParentId()
     {
@@ -826,7 +826,7 @@ class CSurvey
     /**
      * Get surveyType
      *
-     * @return integer 
+     * @return integer
      */
     public function getSurveyType()
     {
@@ -849,7 +849,7 @@ class CSurvey
     /**
      * Get showFormProfile
      *
-     * @return integer 
+     * @return integer
      */
     public function getShowFormProfile()
     {
@@ -872,7 +872,7 @@ class CSurvey
     /**
      * Get formFields
      *
-     * @return string 
+     * @return string
      */
     public function getFormFields()
     {
@@ -895,7 +895,7 @@ class CSurvey
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {

@@ -17,7 +17,7 @@ class CSurveyQuestionOption
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -74,7 +74,7 @@ class CSurveyQuestionOption
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -97,7 +97,7 @@ class CSurveyQuestionOption
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -120,7 +120,7 @@ class CSurveyQuestionOption
     /**
      * Get questionOptionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getQuestionOptionId()
     {
@@ -143,7 +143,7 @@ class CSurveyQuestionOption
     /**
      * Get questionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getQuestionId()
     {
@@ -166,7 +166,7 @@ class CSurveyQuestionOption
     /**
      * Get surveyId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSurveyId()
     {
@@ -189,7 +189,7 @@ class CSurveyQuestionOption
     /**
      * Get optionText
      *
-     * @return string 
+     * @return string
      */
     public function getOptionText()
     {
@@ -212,7 +212,7 @@ class CSurveyQuestionOption
     /**
      * Get sort
      *
-     * @return integer 
+     * @return integer
      */
     public function getSort()
     {
@@ -235,7 +235,7 @@ class CSurveyQuestionOption
     /**
      * Get value
      *
-     * @return integer 
+     * @return integer
      */
     public function getValue()
     {

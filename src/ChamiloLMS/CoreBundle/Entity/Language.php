@@ -13,11 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
 class Language
 {
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="id", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -60,7 +60,7 @@ class Language
     /**
      * Get id
      *
-     * @return boolean
+     * @return integer
      */
     public function getId()
     {

@@ -17,7 +17,7 @@ class CLpItemView
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -116,7 +116,7 @@ class CLpItemView
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -139,7 +139,7 @@ class CLpItemView
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -162,7 +162,7 @@ class CLpItemView
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -185,7 +185,7 @@ class CLpItemView
     /**
      * Get lpItemId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLpItemId()
     {
@@ -208,7 +208,7 @@ class CLpItemView
     /**
      * Get lpViewId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLpViewId()
     {
@@ -231,7 +231,7 @@ class CLpItemView
     /**
      * Get viewCount
      *
-     * @return integer 
+     * @return integer
      */
     public function getViewCount()
     {
@@ -254,7 +254,7 @@ class CLpItemView
     /**
      * Get startTime
      *
-     * @return integer 
+     * @return integer
      */
     public function getStartTime()
     {
@@ -277,7 +277,7 @@ class CLpItemView
     /**
      * Get totalTime
      *
-     * @return integer 
+     * @return integer
      */
     public function getTotalTime()
     {
@@ -300,7 +300,7 @@ class CLpItemView
     /**
      * Get score
      *
-     * @return float 
+     * @return float
      */
     public function getScore()
     {
@@ -323,7 +323,7 @@ class CLpItemView
     /**
      * Get status
      *
-     * @return string 
+     * @return string
      */
     public function getStatus()
     {
@@ -346,7 +346,7 @@ class CLpItemView
     /**
      * Get suspendData
      *
-     * @return string 
+     * @return string
      */
     public function getSuspendData()
     {
@@ -369,7 +369,7 @@ class CLpItemView
     /**
      * Get lessonLocation
      *
-     * @return string 
+     * @return string
      */
     public function getLessonLocation()
     {
@@ -392,7 +392,7 @@ class CLpItemView
     /**
      * Get coreExit
      *
-     * @return string 
+     * @return string
      */
     public function getCoreExit()
     {
@@ -415,7 +415,7 @@ class CLpItemView
     /**
      * Get maxScore
      *
-     * @return string 
+     * @return string
      */
     public function getMaxScore()
     {

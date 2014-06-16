@@ -17,7 +17,7 @@ class TrackEDefault
      *
      * @ORM\Column(name="default_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $defaultId;
 
@@ -81,7 +81,7 @@ class TrackEDefault
     /**
      * Get defaultId
      *
-     * @return integer 
+     * @return integer
      */
     public function getDefaultId()
     {
@@ -104,7 +104,7 @@ class TrackEDefault
     /**
      * Get defaultUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getDefaultUserId()
     {
@@ -127,7 +127,7 @@ class TrackEDefault
     /**
      * Get defaultCoursCode
      *
-     * @return string 
+     * @return string
      */
     public function getDefaultCoursCode()
     {
@@ -150,7 +150,7 @@ class TrackEDefault
     /**
      * Get defaultDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDefaultDate()
     {
@@ -173,7 +173,7 @@ class TrackEDefault
     /**
      * Get defaultEventType
      *
-     * @return string 
+     * @return string
      */
     public function getDefaultEventType()
     {
@@ -196,7 +196,7 @@ class TrackEDefault
     /**
      * Get defaultValueType
      *
-     * @return string 
+     * @return string
      */
     public function getDefaultValueType()
     {
@@ -219,7 +219,7 @@ class TrackEDefault
     /**
      * Get defaultValue
      *
-     * @return string 
+     * @return string
      */
     public function getDefaultValue()
     {
@@ -242,7 +242,7 @@ class TrackEDefault
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -265,7 +265,7 @@ class TrackEDefault
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {

@@ -17,7 +17,7 @@ class CBlogComment
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -95,7 +95,7 @@ class CBlogComment
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -118,7 +118,7 @@ class CBlogComment
     /**
      * Get commentId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCommentId()
     {
@@ -141,7 +141,7 @@ class CBlogComment
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -164,7 +164,7 @@ class CBlogComment
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -187,7 +187,7 @@ class CBlogComment
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -210,7 +210,7 @@ class CBlogComment
     /**
      * Get authorId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAuthorId()
     {
@@ -233,7 +233,7 @@ class CBlogComment
     /**
      * Get dateCreation
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateCreation()
     {
@@ -256,7 +256,7 @@ class CBlogComment
     /**
      * Get blogId
      *
-     * @return integer 
+     * @return integer
      */
     public function getBlogId()
     {
@@ -279,7 +279,7 @@ class CBlogComment
     /**
      * Get postId
      *
-     * @return integer 
+     * @return integer
      */
     public function getPostId()
     {
@@ -302,7 +302,7 @@ class CBlogComment
     /**
      * Get taskId
      *
-     * @return integer 
+     * @return integer
      */
     public function getTaskId()
     {
@@ -325,7 +325,7 @@ class CBlogComment
     /**
      * Get parentCommentId
      *
-     * @return integer 
+     * @return integer
      */
     public function getParentCommentId()
     {

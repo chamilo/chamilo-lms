@@ -17,7 +17,7 @@ class BranchSyncLog
      *
      * @ORM\Column(name="id", type="bigint", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -46,7 +46,7 @@ class BranchSyncLog
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -69,7 +69,7 @@ class BranchSyncLog
     /**
      * Get transactionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getTransactionId()
     {
@@ -92,7 +92,7 @@ class BranchSyncLog
     /**
      * Get importTime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getImportTime()
     {
@@ -115,7 +115,7 @@ class BranchSyncLog
     /**
      * Get message
      *
-     * @return string 
+     * @return string
      */
     public function getMessage()
     {

@@ -17,7 +17,7 @@ class PersonalAgenda
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -81,7 +81,7 @@ class PersonalAgenda
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -104,7 +104,7 @@ class PersonalAgenda
     /**
      * Get user
      *
-     * @return integer 
+     * @return integer
      */
     public function getUser()
     {
@@ -127,7 +127,7 @@ class PersonalAgenda
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -150,7 +150,7 @@ class PersonalAgenda
     /**
      * Get text
      *
-     * @return string 
+     * @return string
      */
     public function getText()
     {
@@ -173,7 +173,7 @@ class PersonalAgenda
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -196,7 +196,7 @@ class PersonalAgenda
     /**
      * Get enddate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getEnddate()
     {
@@ -219,7 +219,7 @@ class PersonalAgenda
     /**
      * Get course
      *
-     * @return string 
+     * @return string
      */
     public function getCourse()
     {
@@ -242,7 +242,7 @@ class PersonalAgenda
     /**
      * Get parentEventId
      *
-     * @return integer 
+     * @return integer
      */
     public function getParentEventId()
     {
@@ -265,7 +265,7 @@ class PersonalAgenda
     /**
      * Get allDay
      *
-     * @return integer 
+     * @return integer
      */
     public function getAllDay()
     {

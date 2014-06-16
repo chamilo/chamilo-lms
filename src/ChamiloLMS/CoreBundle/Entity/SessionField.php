@@ -17,7 +17,7 @@ class SessionField
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -95,7 +95,7 @@ class SessionField
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -118,7 +118,7 @@ class SessionField
     /**
      * Get fieldType
      *
-     * @return integer 
+     * @return integer
      */
     public function getFieldType()
     {
@@ -141,7 +141,7 @@ class SessionField
     /**
      * Get fieldVariable
      *
-     * @return string 
+     * @return string
      */
     public function getFieldVariable()
     {
@@ -164,7 +164,7 @@ class SessionField
     /**
      * Get fieldDisplayText
      *
-     * @return string 
+     * @return string
      */
     public function getFieldDisplayText()
     {
@@ -187,7 +187,7 @@ class SessionField
     /**
      * Get fieldDefaultValue
      *
-     * @return string 
+     * @return string
      */
     public function getFieldDefaultValue()
     {
@@ -210,7 +210,7 @@ class SessionField
     /**
      * Get fieldOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getFieldOrder()
     {
@@ -233,7 +233,7 @@ class SessionField
     /**
      * Get fieldVisible
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getFieldVisible()
     {
@@ -256,7 +256,7 @@ class SessionField
     /**
      * Get fieldChangeable
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getFieldChangeable()
     {
@@ -279,7 +279,7 @@ class SessionField
     /**
      * Get fieldFilter
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getFieldFilter()
     {
@@ -302,7 +302,7 @@ class SessionField
     /**
      * Get fieldLoggeable
      *
-     * @return integer 
+     * @return integer
      */
     public function getFieldLoggeable()
     {
@@ -325,7 +325,7 @@ class SessionField
     /**
      * Get tms
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getTms()
     {

@@ -17,7 +17,7 @@ class EventSent
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -46,7 +46,7 @@ class EventSent
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -69,7 +69,7 @@ class EventSent
     /**
      * Get userFrom
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserFrom()
     {
@@ -92,7 +92,7 @@ class EventSent
     /**
      * Get userTo
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserTo()
     {
@@ -115,7 +115,7 @@ class EventSent
     /**
      * Get eventTypeName
      *
-     * @return string 
+     * @return string
      */
     public function getEventTypeName()
     {

@@ -17,7 +17,7 @@ class CCalendarEvent
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -88,7 +88,7 @@ class CCalendarEvent
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -111,7 +111,7 @@ class CCalendarEvent
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -134,7 +134,7 @@ class CCalendarEvent
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -157,7 +157,7 @@ class CCalendarEvent
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -180,7 +180,7 @@ class CCalendarEvent
     /**
      * Get content
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
@@ -203,7 +203,7 @@ class CCalendarEvent
     /**
      * Get startDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getStartDate()
     {
@@ -226,7 +226,7 @@ class CCalendarEvent
     /**
      * Get endDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getEndDate()
     {
@@ -249,7 +249,7 @@ class CCalendarEvent
     /**
      * Get parentEventId
      *
-     * @return integer 
+     * @return integer
      */
     public function getParentEventId()
     {
@@ -272,7 +272,7 @@ class CCalendarEvent
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {
@@ -295,7 +295,7 @@ class CCalendarEvent
     /**
      * Get allDay
      *
-     * @return integer 
+     * @return integer
      */
     public function getAllDay()
     {

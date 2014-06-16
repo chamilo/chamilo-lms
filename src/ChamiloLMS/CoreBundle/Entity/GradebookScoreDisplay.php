@@ -18,7 +18,7 @@ class GradebookScoreDisplay
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -54,7 +54,7 @@ class GradebookScoreDisplay
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -77,7 +77,7 @@ class GradebookScoreDisplay
     /**
      * Get score
      *
-     * @return float 
+     * @return float
      */
     public function getScore()
     {
@@ -100,7 +100,7 @@ class GradebookScoreDisplay
     /**
      * Get display
      *
-     * @return string 
+     * @return string
      */
     public function getDisplay()
     {
@@ -123,7 +123,7 @@ class GradebookScoreDisplay
     /**
      * Get categoryId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCategoryId()
     {
@@ -146,7 +146,7 @@ class GradebookScoreDisplay
     /**
      * Get scoreColorPercent
      *
-     * @return float 
+     * @return float
      */
     public function getScoreColorPercent()
     {

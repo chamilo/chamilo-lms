@@ -17,7 +17,7 @@ class CPermissionTask
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -60,7 +60,7 @@ class CPermissionTask
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -83,7 +83,7 @@ class CPermissionTask
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -106,7 +106,7 @@ class CPermissionTask
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -129,7 +129,7 @@ class CPermissionTask
     /**
      * Get taskId
      *
-     * @return integer 
+     * @return integer
      */
     public function getTaskId()
     {
@@ -152,7 +152,7 @@ class CPermissionTask
     /**
      * Get tool
      *
-     * @return string 
+     * @return string
      */
     public function getTool()
     {
@@ -175,7 +175,7 @@ class CPermissionTask
     /**
      * Get action
      *
-     * @return string 
+     * @return string
      */
     public function getAction()
     {

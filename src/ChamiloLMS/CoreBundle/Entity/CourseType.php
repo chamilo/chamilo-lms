@@ -17,7 +17,7 @@ class CourseType
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -53,7 +53,7 @@ class CourseType
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -76,7 +76,7 @@ class CourseType
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -99,7 +99,7 @@ class CourseType
     /**
      * Get translationVar
      *
-     * @return string 
+     * @return string
      */
     public function getTranslationVar()
     {
@@ -122,7 +122,7 @@ class CourseType
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -145,7 +145,7 @@ class CourseType
     /**
      * Get props
      *
-     * @return string 
+     * @return string
      */
     public function getProps()
     {

@@ -17,7 +17,7 @@ class CDocument
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -88,7 +88,7 @@ class CDocument
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -111,7 +111,7 @@ class CDocument
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -134,7 +134,7 @@ class CDocument
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -157,7 +157,7 @@ class CDocument
     /**
      * Get path
      *
-     * @return string 
+     * @return string
      */
     public function getPath()
     {
@@ -180,7 +180,7 @@ class CDocument
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -203,7 +203,7 @@ class CDocument
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -226,7 +226,7 @@ class CDocument
     /**
      * Get filetype
      *
-     * @return string 
+     * @return string
      */
     public function getFiletype()
     {
@@ -249,7 +249,7 @@ class CDocument
     /**
      * Get size
      *
-     * @return integer 
+     * @return integer
      */
     public function getSize()
     {
@@ -272,7 +272,7 @@ class CDocument
     /**
      * Get readonly
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getReadonly()
     {
@@ -295,7 +295,7 @@ class CDocument
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {

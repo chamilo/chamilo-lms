@@ -17,7 +17,7 @@ class CCalendarEventAttachment
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -74,7 +74,7 @@ class CCalendarEventAttachment
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -97,7 +97,7 @@ class CCalendarEventAttachment
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -120,7 +120,7 @@ class CCalendarEventAttachment
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -143,7 +143,7 @@ class CCalendarEventAttachment
     /**
      * Get path
      *
-     * @return string 
+     * @return string
      */
     public function getPath()
     {
@@ -166,7 +166,7 @@ class CCalendarEventAttachment
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -189,7 +189,7 @@ class CCalendarEventAttachment
     /**
      * Get size
      *
-     * @return integer 
+     * @return integer
      */
     public function getSize()
     {
@@ -212,7 +212,7 @@ class CCalendarEventAttachment
     /**
      * Get agendaId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAgendaId()
     {
@@ -235,7 +235,7 @@ class CCalendarEventAttachment
     /**
      * Get filename
      *
-     * @return string 
+     * @return string
      */
     public function getFilename()
     {

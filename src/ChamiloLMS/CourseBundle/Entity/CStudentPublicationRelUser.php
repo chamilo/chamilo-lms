@@ -17,7 +17,7 @@ class CStudentPublicationRelUser
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -46,7 +46,7 @@ class CStudentPublicationRelUser
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -69,7 +69,7 @@ class CStudentPublicationRelUser
     /**
      * Get workId
      *
-     * @return integer 
+     * @return integer
      */
     public function getWorkId()
     {
@@ -92,7 +92,7 @@ class CStudentPublicationRelUser
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -115,7 +115,7 @@ class CStudentPublicationRelUser
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {

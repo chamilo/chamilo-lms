@@ -66,7 +66,7 @@ class CAnnouncementAttachment
      *
      * @ORM\Column(name="iid", type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -86,7 +86,7 @@ class CAnnouncementAttachment
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -109,7 +109,7 @@ class CAnnouncementAttachment
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -132,7 +132,7 @@ class CAnnouncementAttachment
     /**
      * Get path
      *
-     * @return string 
+     * @return string
      */
     public function getPath()
     {
@@ -155,7 +155,7 @@ class CAnnouncementAttachment
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -178,7 +178,7 @@ class CAnnouncementAttachment
     /**
      * Get size
      *
-     * @return integer 
+     * @return integer
      */
     public function getSize()
     {
@@ -201,7 +201,7 @@ class CAnnouncementAttachment
     /**
      * Get announcementId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAnnouncementId()
     {
@@ -224,7 +224,7 @@ class CAnnouncementAttachment
     /**
      * Get filename
      *
-     * @return string 
+     * @return string
      */
     public function getFilename()
     {

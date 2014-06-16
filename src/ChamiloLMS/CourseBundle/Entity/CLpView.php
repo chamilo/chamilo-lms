@@ -17,7 +17,7 @@ class CLpView
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -81,7 +81,7 @@ class CLpView
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -104,7 +104,7 @@ class CLpView
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -127,7 +127,7 @@ class CLpView
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -150,7 +150,7 @@ class CLpView
     /**
      * Get lpId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLpId()
     {
@@ -173,7 +173,7 @@ class CLpView
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -196,7 +196,7 @@ class CLpView
     /**
      * Get viewCount
      *
-     * @return integer 
+     * @return integer
      */
     public function getViewCount()
     {
@@ -219,7 +219,7 @@ class CLpView
     /**
      * Get lastItem
      *
-     * @return integer 
+     * @return integer
      */
     public function getLastItem()
     {
@@ -242,7 +242,7 @@ class CLpView
     /**
      * Get progress
      *
-     * @return integer 
+     * @return integer
      */
     public function getProgress()
     {
@@ -265,7 +265,7 @@ class CLpView
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {

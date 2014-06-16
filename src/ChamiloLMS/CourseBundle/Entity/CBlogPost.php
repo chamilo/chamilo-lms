@@ -17,7 +17,7 @@ class CBlogPost
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -74,7 +74,7 @@ class CBlogPost
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -97,7 +97,7 @@ class CBlogPost
     /**
      * Get postId
      *
-     * @return integer 
+     * @return integer
      */
     public function getPostId()
     {
@@ -120,7 +120,7 @@ class CBlogPost
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -143,7 +143,7 @@ class CBlogPost
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -166,7 +166,7 @@ class CBlogPost
     /**
      * Get fullText
      *
-     * @return string 
+     * @return string
      */
     public function getFullText()
     {
@@ -189,7 +189,7 @@ class CBlogPost
     /**
      * Get dateCreation
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateCreation()
     {
@@ -212,7 +212,7 @@ class CBlogPost
     /**
      * Get blogId
      *
-     * @return integer 
+     * @return integer
      */
     public function getBlogId()
     {
@@ -235,7 +235,7 @@ class CBlogPost
     /**
      * Get authorId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAuthorId()
     {

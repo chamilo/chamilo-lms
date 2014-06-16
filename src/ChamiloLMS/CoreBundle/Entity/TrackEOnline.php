@@ -17,7 +17,7 @@ class TrackEOnline
      *
      * @ORM\Column(name="login_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $loginId;
 
@@ -67,7 +67,7 @@ class TrackEOnline
     /**
      * Get loginId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLoginId()
     {
@@ -90,7 +90,7 @@ class TrackEOnline
     /**
      * Get loginUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLoginUserId()
     {
@@ -113,7 +113,7 @@ class TrackEOnline
     /**
      * Get loginDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLoginDate()
     {
@@ -136,7 +136,7 @@ class TrackEOnline
     /**
      * Get loginIp
      *
-     * @return string 
+     * @return string
      */
     public function getLoginIp()
     {
@@ -159,7 +159,7 @@ class TrackEOnline
     /**
      * Get course
      *
-     * @return string 
+     * @return string
      */
     public function getCourse()
     {
@@ -182,7 +182,7 @@ class TrackEOnline
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {
@@ -205,7 +205,7 @@ class TrackEOnline
     /**
      * Get accessUrlId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAccessUrlId()
     {

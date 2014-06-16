@@ -17,7 +17,7 @@ class CThematicAdvance
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -81,7 +81,7 @@ class CThematicAdvance
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -104,7 +104,7 @@ class CThematicAdvance
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -127,7 +127,7 @@ class CThematicAdvance
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -150,7 +150,7 @@ class CThematicAdvance
     /**
      * Get thematicId
      *
-     * @return integer 
+     * @return integer
      */
     public function getThematicId()
     {
@@ -173,7 +173,7 @@ class CThematicAdvance
     /**
      * Get attendanceId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAttendanceId()
     {
@@ -196,7 +196,7 @@ class CThematicAdvance
     /**
      * Get content
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
@@ -219,7 +219,7 @@ class CThematicAdvance
     /**
      * Get startDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getStartDate()
     {
@@ -242,7 +242,7 @@ class CThematicAdvance
     /**
      * Get duration
      *
-     * @return integer 
+     * @return integer
      */
     public function getDuration()
     {
@@ -265,7 +265,7 @@ class CThematicAdvance
     /**
      * Get doneAdvance
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDoneAdvance()
     {

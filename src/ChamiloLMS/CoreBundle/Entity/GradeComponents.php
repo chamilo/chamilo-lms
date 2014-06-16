@@ -17,7 +17,7 @@ class GradeComponents
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -74,7 +74,7 @@ class GradeComponents
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -97,7 +97,7 @@ class GradeComponents
     /**
      * Get percentage
      *
-     * @return string 
+     * @return string
      */
     public function getPercentage()
     {
@@ -120,7 +120,7 @@ class GradeComponents
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -143,7 +143,7 @@ class GradeComponents
     /**
      * Get acronym
      *
-     * @return string 
+     * @return string
      */
     public function getAcronym()
     {
@@ -166,7 +166,7 @@ class GradeComponents
     /**
      * Get prefix
      *
-     * @return string 
+     * @return string
      */
     public function getPrefix()
     {
@@ -189,7 +189,7 @@ class GradeComponents
     /**
      * Get countElements
      *
-     * @return integer 
+     * @return integer
      */
     public function getCountElements()
     {
@@ -212,7 +212,7 @@ class GradeComponents
     /**
      * Get exclusions
      *
-     * @return integer 
+     * @return integer
      */
     public function getExclusions()
     {
@@ -235,7 +235,7 @@ class GradeComponents
     /**
      * Get gradeModelId
      *
-     * @return integer 
+     * @return integer
      */
     public function getGradeModelId()
     {

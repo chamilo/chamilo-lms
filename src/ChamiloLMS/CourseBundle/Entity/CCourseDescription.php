@@ -17,7 +17,7 @@ class CCourseDescription
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -67,7 +67,7 @@ class CCourseDescription
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -90,7 +90,7 @@ class CCourseDescription
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -113,7 +113,7 @@ class CCourseDescription
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -136,7 +136,7 @@ class CCourseDescription
     /**
      * Get content
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
@@ -159,7 +159,7 @@ class CCourseDescription
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {
@@ -182,7 +182,7 @@ class CCourseDescription
     /**
      * Get descriptionType
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDescriptionType()
     {
@@ -205,7 +205,7 @@ class CCourseDescription
     /**
      * Get progress
      *
-     * @return integer 
+     * @return integer
      */
     public function getProgress()
     {

@@ -17,7 +17,7 @@ class TrackEDownloads
      *
      * @ORM\Column(name="down_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $downId;
 
@@ -60,7 +60,7 @@ class TrackEDownloads
     /**
      * Get downId
      *
-     * @return integer 
+     * @return integer
      */
     public function getDownId()
     {
@@ -83,7 +83,7 @@ class TrackEDownloads
     /**
      * Get downUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getDownUserId()
     {
@@ -106,7 +106,7 @@ class TrackEDownloads
     /**
      * Get downDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDownDate()
     {
@@ -129,7 +129,7 @@ class TrackEDownloads
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -152,7 +152,7 @@ class TrackEDownloads
     /**
      * Get downDocPath
      *
-     * @return string 
+     * @return string
      */
     public function getDownDocPath()
     {
@@ -175,7 +175,7 @@ class TrackEDownloads
     /**
      * Get downSessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getDownSessionId()
     {

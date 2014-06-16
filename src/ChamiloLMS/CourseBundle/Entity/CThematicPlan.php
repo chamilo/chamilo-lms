@@ -17,7 +17,7 @@ class CThematicPlan
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -67,7 +67,7 @@ class CThematicPlan
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -90,7 +90,7 @@ class CThematicPlan
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -113,7 +113,7 @@ class CThematicPlan
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -136,7 +136,7 @@ class CThematicPlan
     /**
      * Get thematicId
      *
-     * @return integer 
+     * @return integer
      */
     public function getThematicId()
     {
@@ -159,7 +159,7 @@ class CThematicPlan
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -182,7 +182,7 @@ class CThematicPlan
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -205,7 +205,7 @@ class CThematicPlan
     /**
      * Get descriptionType
      *
-     * @return integer 
+     * @return integer
      */
     public function getDescriptionType()
     {

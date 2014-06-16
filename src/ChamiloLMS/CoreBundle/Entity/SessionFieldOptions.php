@@ -17,7 +17,7 @@ class SessionFieldOptions
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -74,7 +74,7 @@ class SessionFieldOptions
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -97,7 +97,7 @@ class SessionFieldOptions
     /**
      * Get fieldId
      *
-     * @return integer 
+     * @return integer
      */
     public function getFieldId()
     {
@@ -120,7 +120,7 @@ class SessionFieldOptions
     /**
      * Get optionValue
      *
-     * @return string 
+     * @return string
      */
     public function getOptionValue()
     {
@@ -143,7 +143,7 @@ class SessionFieldOptions
     /**
      * Get optionDisplayText
      *
-     * @return string 
+     * @return string
      */
     public function getOptionDisplayText()
     {
@@ -166,7 +166,7 @@ class SessionFieldOptions
     /**
      * Get optionOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getOptionOrder()
     {
@@ -189,7 +189,7 @@ class SessionFieldOptions
     /**
      * Get priority
      *
-     * @return integer 
+     * @return integer
      */
     public function getPriority()
     {
@@ -212,7 +212,7 @@ class SessionFieldOptions
     /**
      * Get priorityMessage
      *
-     * @return string 
+     * @return string
      */
     public function getPriorityMessage()
     {
@@ -235,7 +235,7 @@ class SessionFieldOptions
     /**
      * Get tms
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getTms()
     {

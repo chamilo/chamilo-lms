@@ -17,7 +17,7 @@ class TrackECourseAccess
      *
      * @ORM\Column(name="course_access_id", type="bigint", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $courseAccessId;
 
@@ -67,7 +67,7 @@ class TrackECourseAccess
     /**
      * Get courseAccessId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCourseAccessId()
     {
@@ -90,7 +90,7 @@ class TrackECourseAccess
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -113,7 +113,7 @@ class TrackECourseAccess
     /**
      * Get loginCourseDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLoginCourseDate()
     {
@@ -136,7 +136,7 @@ class TrackECourseAccess
     /**
      * Get logoutCourseDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLogoutCourseDate()
     {
@@ -159,7 +159,7 @@ class TrackECourseAccess
     /**
      * Get counter
      *
-     * @return integer 
+     * @return integer
      */
     public function getCounter()
     {
@@ -182,7 +182,7 @@ class TrackECourseAccess
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {
@@ -205,7 +205,7 @@ class TrackECourseAccess
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {

@@ -96,7 +96,6 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
      * @ORM\Column(name="email", type="string", length=100, precision=0, scale=0, nullable=true, unique=false)
      */
     //protected $emailCanonical;
-    //protected $email;
 
     /**
      * @var boolean

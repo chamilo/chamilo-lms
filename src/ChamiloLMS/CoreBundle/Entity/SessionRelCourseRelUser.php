@@ -17,7 +17,7 @@ class SessionRelCourseRelUser
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -67,7 +67,7 @@ class SessionRelCourseRelUser
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -90,7 +90,7 @@ class SessionRelCourseRelUser
     /**
      * Get idSession
      *
-     * @return integer 
+     * @return integer
      */
     public function getIdSession()
     {
@@ -113,7 +113,7 @@ class SessionRelCourseRelUser
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -136,7 +136,7 @@ class SessionRelCourseRelUser
     /**
      * Get idUser
      *
-     * @return integer 
+     * @return integer
      */
     public function getIdUser()
     {
@@ -159,7 +159,7 @@ class SessionRelCourseRelUser
     /**
      * Get visibility
      *
-     * @return integer 
+     * @return integer
      */
     public function getVisibility()
     {
@@ -182,7 +182,7 @@ class SessionRelCourseRelUser
     /**
      * Get status
      *
-     * @return integer 
+     * @return integer
      */
     public function getStatus()
     {
@@ -205,7 +205,7 @@ class SessionRelCourseRelUser
     /**
      * Get legalAgreement
      *
-     * @return integer 
+     * @return integer
      */
     public function getLegalAgreement()
     {

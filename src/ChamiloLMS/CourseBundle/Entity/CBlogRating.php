@@ -17,7 +17,7 @@ class CBlogRating
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -74,7 +74,7 @@ class CBlogRating
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -97,7 +97,7 @@ class CBlogRating
     /**
      * Get ratingId
      *
-     * @return integer 
+     * @return integer
      */
     public function getRatingId()
     {
@@ -120,7 +120,7 @@ class CBlogRating
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -143,7 +143,7 @@ class CBlogRating
     /**
      * Get blogId
      *
-     * @return integer 
+     * @return integer
      */
     public function getBlogId()
     {
@@ -166,7 +166,7 @@ class CBlogRating
     /**
      * Get ratingType
      *
-     * @return string 
+     * @return string
      */
     public function getRatingType()
     {
@@ -189,7 +189,7 @@ class CBlogRating
     /**
      * Get itemId
      *
-     * @return integer 
+     * @return integer
      */
     public function getItemId()
     {
@@ -212,7 +212,7 @@ class CBlogRating
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -235,7 +235,7 @@ class CBlogRating
     /**
      * Get rating
      *
-     * @return integer 
+     * @return integer
      */
     public function getRating()
     {

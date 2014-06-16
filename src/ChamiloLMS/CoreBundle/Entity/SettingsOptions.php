@@ -17,7 +17,7 @@ class SettingsOptions
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -46,7 +46,7 @@ class SettingsOptions
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -69,7 +69,7 @@ class SettingsOptions
     /**
      * Get variable
      *
-     * @return string 
+     * @return string
      */
     public function getVariable()
     {
@@ -92,7 +92,7 @@ class SettingsOptions
     /**
      * Get value
      *
-     * @return string 
+     * @return string
      */
     public function getValue()
     {
@@ -115,7 +115,7 @@ class SettingsOptions
     /**
      * Get displayText
      *
-     * @return string 
+     * @return string
      */
     public function getDisplayText()
     {

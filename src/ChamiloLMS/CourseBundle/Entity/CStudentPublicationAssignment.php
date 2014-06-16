@@ -17,7 +17,7 @@ class CStudentPublicationAssignment
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -74,7 +74,7 @@ class CStudentPublicationAssignment
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -97,7 +97,7 @@ class CStudentPublicationAssignment
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -120,7 +120,7 @@ class CStudentPublicationAssignment
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -143,7 +143,7 @@ class CStudentPublicationAssignment
     /**
      * Get expiresOn
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getExpiresOn()
     {
@@ -166,7 +166,7 @@ class CStudentPublicationAssignment
     /**
      * Get endsOn
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getEndsOn()
     {
@@ -189,7 +189,7 @@ class CStudentPublicationAssignment
     /**
      * Get addToCalendar
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getAddToCalendar()
     {
@@ -212,7 +212,7 @@ class CStudentPublicationAssignment
     /**
      * Get enableQualification
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getEnableQualification()
     {
@@ -235,7 +235,7 @@ class CStudentPublicationAssignment
     /**
      * Get publicationId
      *
-     * @return integer 
+     * @return integer
      */
     public function getPublicationId()
     {

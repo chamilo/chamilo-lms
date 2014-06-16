@@ -17,7 +17,7 @@ class CWikiConf
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -130,7 +130,7 @@ class CWikiConf
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -153,7 +153,7 @@ class CWikiConf
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -176,7 +176,7 @@ class CWikiConf
     /**
      * Get pageId
      *
-     * @return integer 
+     * @return integer
      */
     public function getPageId()
     {
@@ -199,7 +199,7 @@ class CWikiConf
     /**
      * Get task
      *
-     * @return string 
+     * @return string
      */
     public function getTask()
     {
@@ -222,7 +222,7 @@ class CWikiConf
     /**
      * Get feedback1
      *
-     * @return string 
+     * @return string
      */
     public function getFeedback1()
     {
@@ -245,7 +245,7 @@ class CWikiConf
     /**
      * Get feedback2
      *
-     * @return string 
+     * @return string
      */
     public function getFeedback2()
     {
@@ -268,7 +268,7 @@ class CWikiConf
     /**
      * Get feedback3
      *
-     * @return string 
+     * @return string
      */
     public function getFeedback3()
     {
@@ -291,7 +291,7 @@ class CWikiConf
     /**
      * Get fprogress1
      *
-     * @return string 
+     * @return string
      */
     public function getFprogress1()
     {
@@ -314,7 +314,7 @@ class CWikiConf
     /**
      * Get fprogress2
      *
-     * @return string 
+     * @return string
      */
     public function getFprogress2()
     {
@@ -337,7 +337,7 @@ class CWikiConf
     /**
      * Get fprogress3
      *
-     * @return string 
+     * @return string
      */
     public function getFprogress3()
     {
@@ -360,7 +360,7 @@ class CWikiConf
     /**
      * Get maxSize
      *
-     * @return integer 
+     * @return integer
      */
     public function getMaxSize()
     {
@@ -383,7 +383,7 @@ class CWikiConf
     /**
      * Get maxText
      *
-     * @return integer 
+     * @return integer
      */
     public function getMaxText()
     {
@@ -406,7 +406,7 @@ class CWikiConf
     /**
      * Get maxVersion
      *
-     * @return integer 
+     * @return integer
      */
     public function getMaxVersion()
     {
@@ -429,7 +429,7 @@ class CWikiConf
     /**
      * Get startdateAssig
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getStartdateAssig()
     {
@@ -452,7 +452,7 @@ class CWikiConf
     /**
      * Get enddateAssig
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getEnddateAssig()
     {
@@ -475,7 +475,7 @@ class CWikiConf
     /**
      * Get delayedsubmit
      *
-     * @return integer 
+     * @return integer
      */
     public function getDelayedsubmit()
     {

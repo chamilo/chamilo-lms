@@ -17,7 +17,7 @@ class SkillRelUser
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -53,7 +53,7 @@ class SkillRelUser
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -76,7 +76,7 @@ class SkillRelUser
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -99,7 +99,7 @@ class SkillRelUser
     /**
      * Get skillId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSkillId()
     {
@@ -122,7 +122,7 @@ class SkillRelUser
     /**
      * Get acquiredSkillAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getAcquiredSkillAt()
     {
@@ -145,7 +145,7 @@ class SkillRelUser
     /**
      * Get assignedBy
      *
-     * @return integer 
+     * @return integer
      */
     public function getAssignedBy()
     {

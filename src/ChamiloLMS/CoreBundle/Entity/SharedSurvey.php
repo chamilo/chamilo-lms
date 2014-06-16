@@ -18,7 +18,7 @@ class SharedSurvey
      *
      * @ORM\Column(name="survey_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $surveyId;
 
@@ -96,7 +96,7 @@ class SharedSurvey
     /**
      * Get surveyId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSurveyId()
     {
@@ -119,7 +119,7 @@ class SharedSurvey
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -142,7 +142,7 @@ class SharedSurvey
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -165,7 +165,7 @@ class SharedSurvey
     /**
      * Get subtitle
      *
-     * @return string 
+     * @return string
      */
     public function getSubtitle()
     {
@@ -188,7 +188,7 @@ class SharedSurvey
     /**
      * Get author
      *
-     * @return string 
+     * @return string
      */
     public function getAuthor()
     {
@@ -211,7 +211,7 @@ class SharedSurvey
     /**
      * Get lang
      *
-     * @return string 
+     * @return string
      */
     public function getLang()
     {
@@ -234,7 +234,7 @@ class SharedSurvey
     /**
      * Get template
      *
-     * @return string 
+     * @return string
      */
     public function getTemplate()
     {
@@ -257,7 +257,7 @@ class SharedSurvey
     /**
      * Get intro
      *
-     * @return string 
+     * @return string
      */
     public function getIntro()
     {
@@ -280,7 +280,7 @@ class SharedSurvey
     /**
      * Get surveythanks
      *
-     * @return string 
+     * @return string
      */
     public function getSurveythanks()
     {
@@ -303,7 +303,7 @@ class SharedSurvey
     /**
      * Get creationDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreationDate()
     {
@@ -326,7 +326,7 @@ class SharedSurvey
     /**
      * Get courseCode
      *
-     * @return string 
+     * @return string
      */
     public function getCourseCode()
     {

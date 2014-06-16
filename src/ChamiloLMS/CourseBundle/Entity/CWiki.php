@@ -17,7 +17,7 @@ class CWiki
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -214,7 +214,7 @@ class CWiki
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -237,7 +237,7 @@ class CWiki
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -260,7 +260,7 @@ class CWiki
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -283,7 +283,7 @@ class CWiki
     /**
      * Get pageId
      *
-     * @return integer 
+     * @return integer
      */
     public function getPageId()
     {
@@ -306,7 +306,7 @@ class CWiki
     /**
      * Get reflink
      *
-     * @return string 
+     * @return string
      */
     public function getReflink()
     {
@@ -329,7 +329,7 @@ class CWiki
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -352,7 +352,7 @@ class CWiki
     /**
      * Get content
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
@@ -375,7 +375,7 @@ class CWiki
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -398,7 +398,7 @@ class CWiki
     /**
      * Get groupId
      *
-     * @return integer 
+     * @return integer
      */
     public function getGroupId()
     {
@@ -421,7 +421,7 @@ class CWiki
     /**
      * Get dtime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDtime()
     {
@@ -444,7 +444,7 @@ class CWiki
     /**
      * Get addlock
      *
-     * @return integer 
+     * @return integer
      */
     public function getAddlock()
     {
@@ -467,7 +467,7 @@ class CWiki
     /**
      * Get editlock
      *
-     * @return integer 
+     * @return integer
      */
     public function getEditlock()
     {
@@ -490,7 +490,7 @@ class CWiki
     /**
      * Get visibility
      *
-     * @return integer 
+     * @return integer
      */
     public function getVisibility()
     {
@@ -513,7 +513,7 @@ class CWiki
     /**
      * Get addlockDisc
      *
-     * @return integer 
+     * @return integer
      */
     public function getAddlockDisc()
     {
@@ -536,7 +536,7 @@ class CWiki
     /**
      * Get visibilityDisc
      *
-     * @return integer 
+     * @return integer
      */
     public function getVisibilityDisc()
     {
@@ -559,7 +559,7 @@ class CWiki
     /**
      * Get ratinglockDisc
      *
-     * @return integer 
+     * @return integer
      */
     public function getRatinglockDisc()
     {
@@ -582,7 +582,7 @@ class CWiki
     /**
      * Get assignment
      *
-     * @return integer 
+     * @return integer
      */
     public function getAssignment()
     {
@@ -605,7 +605,7 @@ class CWiki
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -628,7 +628,7 @@ class CWiki
     /**
      * Get progress
      *
-     * @return string 
+     * @return string
      */
     public function getProgress()
     {
@@ -651,7 +651,7 @@ class CWiki
     /**
      * Get score
      *
-     * @return integer 
+     * @return integer
      */
     public function getScore()
     {
@@ -674,7 +674,7 @@ class CWiki
     /**
      * Get version
      *
-     * @return integer 
+     * @return integer
      */
     public function getVersion()
     {
@@ -697,7 +697,7 @@ class CWiki
     /**
      * Get isEditing
      *
-     * @return integer 
+     * @return integer
      */
     public function getIsEditing()
     {
@@ -720,7 +720,7 @@ class CWiki
     /**
      * Get timeEdit
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getTimeEdit()
     {
@@ -743,7 +743,7 @@ class CWiki
     /**
      * Get hits
      *
-     * @return integer 
+     * @return integer
      */
     public function getHits()
     {
@@ -766,7 +766,7 @@ class CWiki
     /**
      * Get linksto
      *
-     * @return string 
+     * @return string
      */
     public function getLinksto()
     {
@@ -789,7 +789,7 @@ class CWiki
     /**
      * Get tag
      *
-     * @return string 
+     * @return string
      */
     public function getTag()
     {
@@ -812,7 +812,7 @@ class CWiki
     /**
      * Get userIp
      *
-     * @return string 
+     * @return string
      */
     public function getUserIp()
     {
@@ -835,7 +835,7 @@ class CWiki
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {

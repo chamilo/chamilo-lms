@@ -17,7 +17,7 @@ class CSurveyQuestion
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -116,7 +116,7 @@ class CSurveyQuestion
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -139,7 +139,7 @@ class CSurveyQuestion
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -162,7 +162,7 @@ class CSurveyQuestion
     /**
      * Get questionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getQuestionId()
     {
@@ -185,7 +185,7 @@ class CSurveyQuestion
     /**
      * Get surveyId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSurveyId()
     {
@@ -208,7 +208,7 @@ class CSurveyQuestion
     /**
      * Get surveyQuestion
      *
-     * @return string 
+     * @return string
      */
     public function getSurveyQuestion()
     {
@@ -231,7 +231,7 @@ class CSurveyQuestion
     /**
      * Get surveyQuestionComment
      *
-     * @return string 
+     * @return string
      */
     public function getSurveyQuestionComment()
     {
@@ -254,7 +254,7 @@ class CSurveyQuestion
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -277,7 +277,7 @@ class CSurveyQuestion
     /**
      * Get display
      *
-     * @return string 
+     * @return string
      */
     public function getDisplay()
     {
@@ -300,7 +300,7 @@ class CSurveyQuestion
     /**
      * Get sort
      *
-     * @return integer 
+     * @return integer
      */
     public function getSort()
     {
@@ -323,7 +323,7 @@ class CSurveyQuestion
     /**
      * Get sharedQuestionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSharedQuestionId()
     {
@@ -346,7 +346,7 @@ class CSurveyQuestion
     /**
      * Get maxValue
      *
-     * @return integer 
+     * @return integer
      */
     public function getMaxValue()
     {
@@ -369,7 +369,7 @@ class CSurveyQuestion
     /**
      * Get surveyGroupPri
      *
-     * @return integer 
+     * @return integer
      */
     public function getSurveyGroupPri()
     {
@@ -392,7 +392,7 @@ class CSurveyQuestion
     /**
      * Get surveyGroupSec1
      *
-     * @return integer 
+     * @return integer
      */
     public function getSurveyGroupSec1()
     {
@@ -415,7 +415,7 @@ class CSurveyQuestion
     /**
      * Get surveyGroupSec2
      *
-     * @return integer 
+     * @return integer
      */
     public function getSurveyGroupSec2()
     {

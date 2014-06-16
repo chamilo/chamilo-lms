@@ -17,7 +17,7 @@ class GradeModel
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -60,7 +60,7 @@ class GradeModel
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -83,7 +83,7 @@ class GradeModel
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -106,7 +106,7 @@ class GradeModel
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -129,7 +129,7 @@ class GradeModel
     /**
      * Get defaultLowestEvalExclude
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDefaultLowestEvalExclude()
     {
@@ -152,7 +152,7 @@ class GradeModel
     /**
      * Get defaultExternalEval
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDefaultExternalEval()
     {
@@ -175,7 +175,7 @@ class GradeModel
     /**
      * Get defaultExternalEvalPrefix
      *
-     * @return string 
+     * @return string
      */
     public function getDefaultExternalEvalPrefix()
     {

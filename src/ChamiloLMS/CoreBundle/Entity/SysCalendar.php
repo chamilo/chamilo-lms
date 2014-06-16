@@ -17,7 +17,7 @@ class SysCalendar
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -67,7 +67,7 @@ class SysCalendar
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -90,7 +90,7 @@ class SysCalendar
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -113,7 +113,7 @@ class SysCalendar
     /**
      * Get content
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
@@ -136,7 +136,7 @@ class SysCalendar
     /**
      * Get startDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getStartDate()
     {
@@ -159,7 +159,7 @@ class SysCalendar
     /**
      * Get endDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getEndDate()
     {
@@ -182,7 +182,7 @@ class SysCalendar
     /**
      * Get accessUrlId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAccessUrlId()
     {
@@ -205,7 +205,7 @@ class SysCalendar
     /**
      * Get allDay
      *
-     * @return integer 
+     * @return integer
      */
     public function getAllDay()
     {

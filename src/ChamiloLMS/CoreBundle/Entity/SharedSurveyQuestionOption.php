@@ -17,7 +17,7 @@ class SharedSurveyQuestionOption
      *
      * @ORM\Column(name="question_option_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $questionOptionId;
 
@@ -53,7 +53,7 @@ class SharedSurveyQuestionOption
     /**
      * Get questionOptionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getQuestionOptionId()
     {
@@ -76,7 +76,7 @@ class SharedSurveyQuestionOption
     /**
      * Get questionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getQuestionId()
     {
@@ -99,7 +99,7 @@ class SharedSurveyQuestionOption
     /**
      * Get surveyId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSurveyId()
     {
@@ -122,7 +122,7 @@ class SharedSurveyQuestionOption
     /**
      * Get optionText
      *
-     * @return string 
+     * @return string
      */
     public function getOptionText()
     {
@@ -145,7 +145,7 @@ class SharedSurveyQuestionOption
     /**
      * Get sort
      *
-     * @return integer 
+     * @return integer
      */
     public function getSort()
     {

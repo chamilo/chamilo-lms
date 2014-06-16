@@ -17,7 +17,7 @@ class CQuizAnswer
      *
      * @ORM\Column(name="iid", type="bigint", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -102,7 +102,7 @@ class CQuizAnswer
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -125,7 +125,7 @@ class CQuizAnswer
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -148,7 +148,7 @@ class CQuizAnswer
     /**
      * Get questionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getQuestionId()
     {
@@ -171,7 +171,7 @@ class CQuizAnswer
     /**
      * Get answer
      *
-     * @return string 
+     * @return string
      */
     public function getAnswer()
     {
@@ -194,7 +194,7 @@ class CQuizAnswer
     /**
      * Get correct
      *
-     * @return integer 
+     * @return integer
      */
     public function getCorrect()
     {
@@ -217,7 +217,7 @@ class CQuizAnswer
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -240,7 +240,7 @@ class CQuizAnswer
     /**
      * Get ponderation
      *
-     * @return float 
+     * @return float
      */
     public function getPonderation()
     {
@@ -263,7 +263,7 @@ class CQuizAnswer
     /**
      * Get position
      *
-     * @return integer 
+     * @return integer
      */
     public function getPosition()
     {
@@ -286,7 +286,7 @@ class CQuizAnswer
     /**
      * Get hotspotCoordinates
      *
-     * @return string 
+     * @return string
      */
     public function getHotspotCoordinates()
     {
@@ -309,7 +309,7 @@ class CQuizAnswer
     /**
      * Get hotspotType
      *
-     * @return string 
+     * @return string
      */
     public function getHotspotType()
     {
@@ -332,7 +332,7 @@ class CQuizAnswer
     /**
      * Get destination
      *
-     * @return string 
+     * @return string
      */
     public function getDestination()
     {
@@ -355,7 +355,7 @@ class CQuizAnswer
     /**
      * Get answerCode
      *
-     * @return string 
+     * @return string
      */
     public function getAnswerCode()
     {

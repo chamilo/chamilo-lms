@@ -17,7 +17,7 @@ class CLink
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -95,7 +95,7 @@ class CLink
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -118,7 +118,7 @@ class CLink
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -141,7 +141,7 @@ class CLink
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -164,7 +164,7 @@ class CLink
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
@@ -187,7 +187,7 @@ class CLink
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -210,7 +210,7 @@ class CLink
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -233,7 +233,7 @@ class CLink
     /**
      * Get categoryId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCategoryId()
     {
@@ -256,7 +256,7 @@ class CLink
     /**
      * Get displayOrder
      *
-     * @return integer 
+     * @return integer
      */
     public function getDisplayOrder()
     {
@@ -279,7 +279,7 @@ class CLink
     /**
      * Get onHomepage
      *
-     * @return string 
+     * @return string
      */
     public function getOnHomepage()
     {
@@ -302,7 +302,7 @@ class CLink
     /**
      * Get target
      *
-     * @return string 
+     * @return string
      */
     public function getTarget()
     {
@@ -325,7 +325,7 @@ class CLink
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {

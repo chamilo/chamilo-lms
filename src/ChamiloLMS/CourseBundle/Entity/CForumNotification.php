@@ -17,7 +17,7 @@ class CForumNotification
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -67,7 +67,7 @@ class CForumNotification
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -90,7 +90,7 @@ class CForumNotification
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -113,7 +113,7 @@ class CForumNotification
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -136,7 +136,7 @@ class CForumNotification
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -159,7 +159,7 @@ class CForumNotification
     /**
      * Get forumId
      *
-     * @return integer 
+     * @return integer
      */
     public function getForumId()
     {
@@ -182,7 +182,7 @@ class CForumNotification
     /**
      * Get threadId
      *
-     * @return integer 
+     * @return integer
      */
     public function getThreadId()
     {
@@ -205,7 +205,7 @@ class CForumNotification
     /**
      * Get postId
      *
-     * @return integer 
+     * @return integer
      */
     public function getPostId()
     {

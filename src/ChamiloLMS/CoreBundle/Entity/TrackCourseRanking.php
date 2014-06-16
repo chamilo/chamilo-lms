@@ -17,7 +17,7 @@ class TrackCourseRanking
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -74,7 +74,7 @@ class TrackCourseRanking
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -97,7 +97,7 @@ class TrackCourseRanking
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -120,7 +120,7 @@ class TrackCourseRanking
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {
@@ -143,7 +143,7 @@ class TrackCourseRanking
     /**
      * Get urlId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUrlId()
     {
@@ -166,7 +166,7 @@ class TrackCourseRanking
     /**
      * Get accesses
      *
-     * @return integer 
+     * @return integer
      */
     public function getAccesses()
     {
@@ -189,7 +189,7 @@ class TrackCourseRanking
     /**
      * Get totalScore
      *
-     * @return integer 
+     * @return integer
      */
     public function getTotalScore()
     {
@@ -212,7 +212,7 @@ class TrackCourseRanking
     /**
      * Get users
      *
-     * @return integer 
+     * @return integer
      */
     public function getUsers()
     {
@@ -235,7 +235,7 @@ class TrackCourseRanking
     /**
      * Get creationDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreationDate()
     {

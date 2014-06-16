@@ -17,7 +17,7 @@ class CCalendarEventRepeatNot
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -46,7 +46,7 @@ class CCalendarEventRepeatNot
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -69,7 +69,7 @@ class CCalendarEventRepeatNot
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -92,7 +92,7 @@ class CCalendarEventRepeatNot
     /**
      * Get calId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCalId()
     {
@@ -115,7 +115,7 @@ class CCalendarEventRepeatNot
     /**
      * Get calDate
      *
-     * @return integer 
+     * @return integer
      */
     public function getCalDate()
     {

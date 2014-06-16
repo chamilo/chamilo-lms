@@ -20,7 +20,7 @@ class CCalendarEventRepeat
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -70,7 +70,7 @@ class CCalendarEventRepeat
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -93,7 +93,7 @@ class CCalendarEventRepeat
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -116,7 +116,7 @@ class CCalendarEventRepeat
     /**
      * Get calId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCalId()
     {
@@ -139,7 +139,7 @@ class CCalendarEventRepeat
     /**
      * Get calType
      *
-     * @return string 
+     * @return string
      */
     public function getCalType()
     {
@@ -162,7 +162,7 @@ class CCalendarEventRepeat
     /**
      * Get calEnd
      *
-     * @return integer 
+     * @return integer
      */
     public function getCalEnd()
     {
@@ -185,7 +185,7 @@ class CCalendarEventRepeat
     /**
      * Get calFrequency
      *
-     * @return integer 
+     * @return integer
      */
     public function getCalFrequency()
     {
@@ -208,7 +208,7 @@ class CCalendarEventRepeat
     /**
      * Get calDays
      *
-     * @return string 
+     * @return string
      */
     public function getCalDays()
     {

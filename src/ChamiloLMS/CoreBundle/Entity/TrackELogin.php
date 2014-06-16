@@ -17,7 +17,7 @@ class TrackELogin
      *
      * @ORM\Column(name="login_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $loginId;
 
@@ -53,7 +53,7 @@ class TrackELogin
     /**
      * Get loginId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLoginId()
     {
@@ -76,7 +76,7 @@ class TrackELogin
     /**
      * Get loginUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLoginUserId()
     {
@@ -99,7 +99,7 @@ class TrackELogin
     /**
      * Get loginDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLoginDate()
     {
@@ -122,7 +122,7 @@ class TrackELogin
     /**
      * Get loginIp
      *
-     * @return string 
+     * @return string
      */
     public function getLoginIp()
     {
@@ -145,7 +145,7 @@ class TrackELogin
     /**
      * Get logoutDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLogoutDate()
     {

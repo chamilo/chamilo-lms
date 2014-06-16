@@ -17,7 +17,7 @@ class ExtLogEntries
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -74,7 +74,7 @@ class ExtLogEntries
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -97,7 +97,7 @@ class ExtLogEntries
     /**
      * Get action
      *
-     * @return string 
+     * @return string
      */
     public function getAction()
     {
@@ -120,7 +120,7 @@ class ExtLogEntries
     /**
      * Get loggedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLoggedAt()
     {
@@ -143,7 +143,7 @@ class ExtLogEntries
     /**
      * Get objectId
      *
-     * @return string 
+     * @return string
      */
     public function getObjectId()
     {
@@ -166,7 +166,7 @@ class ExtLogEntries
     /**
      * Get objectClass
      *
-     * @return string 
+     * @return string
      */
     public function getObjectClass()
     {
@@ -189,7 +189,7 @@ class ExtLogEntries
     /**
      * Get version
      *
-     * @return integer 
+     * @return integer
      */
     public function getVersion()
     {
@@ -212,7 +212,7 @@ class ExtLogEntries
     /**
      * Get data
      *
-     * @return string 
+     * @return string
      */
     public function getData()
     {
@@ -235,7 +235,7 @@ class ExtLogEntries
     /**
      * Get username
      *
-     * @return string 
+     * @return string
      */
     public function getUsername()
     {

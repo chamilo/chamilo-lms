@@ -17,7 +17,7 @@ class CWikiDiscuss
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -74,7 +74,7 @@ class CWikiDiscuss
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -97,7 +97,7 @@ class CWikiDiscuss
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -120,7 +120,7 @@ class CWikiDiscuss
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -143,7 +143,7 @@ class CWikiDiscuss
     /**
      * Get publicationId
      *
-     * @return integer 
+     * @return integer
      */
     public function getPublicationId()
     {
@@ -166,7 +166,7 @@ class CWikiDiscuss
     /**
      * Get usercId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUsercId()
     {
@@ -189,7 +189,7 @@ class CWikiDiscuss
     /**
      * Get comment
      *
-     * @return string 
+     * @return string
      */
     public function getComment()
     {
@@ -212,7 +212,7 @@ class CWikiDiscuss
     /**
      * Get pScore
      *
-     * @return string 
+     * @return string
      */
     public function getPScore()
     {
@@ -235,7 +235,7 @@ class CWikiDiscuss
     /**
      * Get dtime
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDtime()
     {

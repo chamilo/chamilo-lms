@@ -17,7 +17,7 @@ class Notification
      *
      * @ORM\Column(name="id", type="bigint", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -81,7 +81,7 @@ class Notification
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -104,7 +104,7 @@ class Notification
     /**
      * Get destUserId
      *
-     * @return integer 
+     * @return integer
      */
     public function getDestUserId()
     {
@@ -127,7 +127,7 @@ class Notification
     /**
      * Get destMail
      *
-     * @return string 
+     * @return string
      */
     public function getDestMail()
     {
@@ -150,7 +150,7 @@ class Notification
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -173,7 +173,7 @@ class Notification
     /**
      * Get senderId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSenderId()
     {
@@ -196,7 +196,7 @@ class Notification
     /**
      * Get content
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
@@ -219,7 +219,7 @@ class Notification
     /**
      * Get sendFreq
      *
-     * @return integer 
+     * @return integer
      */
     public function getSendFreq()
     {
@@ -242,7 +242,7 @@ class Notification
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -265,7 +265,7 @@ class Notification
     /**
      * Get sentAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getSentAt()
     {

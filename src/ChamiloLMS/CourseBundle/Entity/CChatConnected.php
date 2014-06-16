@@ -17,7 +17,7 @@ class CChatConnected
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -60,7 +60,7 @@ class CChatConnected
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -83,7 +83,7 @@ class CChatConnected
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -106,7 +106,7 @@ class CChatConnected
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -129,7 +129,7 @@ class CChatConnected
     /**
      * Get lastConnection
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getLastConnection()
     {
@@ -152,7 +152,7 @@ class CChatConnected
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {
@@ -175,7 +175,7 @@ class CChatConnected
     /**
      * Get toGroupId
      *
-     * @return integer 
+     * @return integer
      */
     public function getToGroupId()
     {

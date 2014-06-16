@@ -17,7 +17,7 @@ class CLpIvObjective
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -88,7 +88,7 @@ class CLpIvObjective
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -111,7 +111,7 @@ class CLpIvObjective
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -134,7 +134,7 @@ class CLpIvObjective
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -157,7 +157,7 @@ class CLpIvObjective
     /**
      * Get lpIvId
      *
-     * @return integer 
+     * @return integer
      */
     public function getLpIvId()
     {
@@ -180,7 +180,7 @@ class CLpIvObjective
     /**
      * Get orderId
      *
-     * @return integer 
+     * @return integer
      */
     public function getOrderId()
     {
@@ -203,7 +203,7 @@ class CLpIvObjective
     /**
      * Get objectiveId
      *
-     * @return string 
+     * @return string
      */
     public function getObjectiveId()
     {
@@ -226,7 +226,7 @@ class CLpIvObjective
     /**
      * Get scoreRaw
      *
-     * @return float 
+     * @return float
      */
     public function getScoreRaw()
     {
@@ -249,7 +249,7 @@ class CLpIvObjective
     /**
      * Get scoreMax
      *
-     * @return float 
+     * @return float
      */
     public function getScoreMax()
     {
@@ -272,7 +272,7 @@ class CLpIvObjective
     /**
      * Get scoreMin
      *
-     * @return float 
+     * @return float
      */
     public function getScoreMin()
     {
@@ -295,7 +295,7 @@ class CLpIvObjective
     /**
      * Get status
      *
-     * @return string 
+     * @return string
      */
     public function getStatus()
     {

@@ -17,7 +17,7 @@ class PersonalAgendaRepeat
      *
      * @ORM\Column(name="cal_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $calId;
 
@@ -53,7 +53,7 @@ class PersonalAgendaRepeat
     /**
      * Get calId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCalId()
     {
@@ -76,7 +76,7 @@ class PersonalAgendaRepeat
     /**
      * Get calType
      *
-     * @return string 
+     * @return string
      */
     public function getCalType()
     {
@@ -99,7 +99,7 @@ class PersonalAgendaRepeat
     /**
      * Get calEnd
      *
-     * @return integer 
+     * @return integer
      */
     public function getCalEnd()
     {
@@ -122,7 +122,7 @@ class PersonalAgendaRepeat
     /**
      * Get calFrequency
      *
-     * @return integer 
+     * @return integer
      */
     public function getCalFrequency()
     {
@@ -145,7 +145,7 @@ class PersonalAgendaRepeat
     /**
      * Get calDays
      *
-     * @return string 
+     * @return string
      */
     public function getCalDays()
     {

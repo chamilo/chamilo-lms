@@ -17,7 +17,7 @@ class CForumPost
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -109,7 +109,7 @@ class CForumPost
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -132,7 +132,7 @@ class CForumPost
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -155,7 +155,7 @@ class CForumPost
     /**
      * Get postId
      *
-     * @return integer 
+     * @return integer
      */
     public function getPostId()
     {
@@ -178,7 +178,7 @@ class CForumPost
     /**
      * Get postTitle
      *
-     * @return string 
+     * @return string
      */
     public function getPostTitle()
     {
@@ -201,7 +201,7 @@ class CForumPost
     /**
      * Get postText
      *
-     * @return string 
+     * @return string
      */
     public function getPostText()
     {
@@ -224,7 +224,7 @@ class CForumPost
     /**
      * Get threadId
      *
-     * @return integer 
+     * @return integer
      */
     public function getThreadId()
     {
@@ -247,7 +247,7 @@ class CForumPost
     /**
      * Get forumId
      *
-     * @return integer 
+     * @return integer
      */
     public function getForumId()
     {
@@ -270,7 +270,7 @@ class CForumPost
     /**
      * Get posterId
      *
-     * @return integer 
+     * @return integer
      */
     public function getPosterId()
     {
@@ -293,7 +293,7 @@ class CForumPost
     /**
      * Get posterName
      *
-     * @return string 
+     * @return string
      */
     public function getPosterName()
     {
@@ -316,7 +316,7 @@ class CForumPost
     /**
      * Get postDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getPostDate()
     {
@@ -339,7 +339,7 @@ class CForumPost
     /**
      * Get postNotification
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPostNotification()
     {
@@ -362,7 +362,7 @@ class CForumPost
     /**
      * Get postParentId
      *
-     * @return integer 
+     * @return integer
      */
     public function getPostParentId()
     {
@@ -385,7 +385,7 @@ class CForumPost
     /**
      * Get visible
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getVisible()
     {

@@ -17,7 +17,7 @@ class CourseRequest
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -137,7 +137,7 @@ class CourseRequest
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -160,7 +160,7 @@ class CourseRequest
     /**
      * Get code
      *
-     * @return string 
+     * @return string
      */
     public function getCode()
     {
@@ -183,7 +183,7 @@ class CourseRequest
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -206,7 +206,7 @@ class CourseRequest
     /**
      * Get directory
      *
-     * @return string 
+     * @return string
      */
     public function getDirectory()
     {
@@ -229,7 +229,7 @@ class CourseRequest
     /**
      * Get dbName
      *
-     * @return string 
+     * @return string
      */
     public function getDbName()
     {
@@ -252,7 +252,7 @@ class CourseRequest
     /**
      * Get courseLanguage
      *
-     * @return string 
+     * @return string
      */
     public function getCourseLanguage()
     {
@@ -275,7 +275,7 @@ class CourseRequest
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -298,7 +298,7 @@ class CourseRequest
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -321,7 +321,7 @@ class CourseRequest
     /**
      * Get categoryCode
      *
-     * @return string 
+     * @return string
      */
     public function getCategoryCode()
     {
@@ -344,7 +344,7 @@ class CourseRequest
     /**
      * Get tutorName
      *
-     * @return string 
+     * @return string
      */
     public function getTutorName()
     {
@@ -367,7 +367,7 @@ class CourseRequest
     /**
      * Get visualCode
      *
-     * @return string 
+     * @return string
      */
     public function getVisualCode()
     {
@@ -390,7 +390,7 @@ class CourseRequest
     /**
      * Get requestDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getRequestDate()
     {
@@ -413,7 +413,7 @@ class CourseRequest
     /**
      * Get objetives
      *
-     * @return string 
+     * @return string
      */
     public function getObjetives()
     {
@@ -436,7 +436,7 @@ class CourseRequest
     /**
      * Get targetAudience
      *
-     * @return string 
+     * @return string
      */
     public function getTargetAudience()
     {
@@ -459,7 +459,7 @@ class CourseRequest
     /**
      * Get status
      *
-     * @return integer 
+     * @return integer
      */
     public function getStatus()
     {
@@ -482,7 +482,7 @@ class CourseRequest
     /**
      * Get info
      *
-     * @return integer 
+     * @return integer
      */
     public function getInfo()
     {
@@ -505,7 +505,7 @@ class CourseRequest
     /**
      * Get exemplaryContent
      *
-     * @return integer 
+     * @return integer
      */
     public function getExemplaryContent()
     {

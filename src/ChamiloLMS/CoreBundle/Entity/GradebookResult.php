@@ -17,7 +17,7 @@ class GradebookResult
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -53,7 +53,7 @@ class GradebookResult
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -76,7 +76,7 @@ class GradebookResult
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -99,7 +99,7 @@ class GradebookResult
     /**
      * Get evaluationId
      *
-     * @return integer 
+     * @return integer
      */
     public function getEvaluationId()
     {
@@ -122,7 +122,7 @@ class GradebookResult
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
@@ -145,7 +145,7 @@ class GradebookResult
     /**
      * Get score
      *
-     * @return float 
+     * @return float
      */
     public function getScore()
     {

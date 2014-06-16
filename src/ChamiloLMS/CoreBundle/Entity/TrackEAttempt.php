@@ -17,7 +17,7 @@ class TrackEAttempt
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -102,7 +102,7 @@ class TrackEAttempt
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -125,7 +125,7 @@ class TrackEAttempt
     /**
      * Get exeId
      *
-     * @return integer 
+     * @return integer
      */
     public function getExeId()
     {
@@ -148,7 +148,7 @@ class TrackEAttempt
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -171,7 +171,7 @@ class TrackEAttempt
     /**
      * Get questionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getQuestionId()
     {
@@ -194,7 +194,7 @@ class TrackEAttempt
     /**
      * Get answer
      *
-     * @return string 
+     * @return string
      */
     public function getAnswer()
     {
@@ -217,7 +217,7 @@ class TrackEAttempt
     /**
      * Get teacherComment
      *
-     * @return string 
+     * @return string
      */
     public function getTeacherComment()
     {
@@ -240,7 +240,7 @@ class TrackEAttempt
     /**
      * Get marks
      *
-     * @return float 
+     * @return float
      */
     public function getMarks()
     {
@@ -263,7 +263,7 @@ class TrackEAttempt
     /**
      * Get position
      *
-     * @return integer 
+     * @return integer
      */
     public function getPosition()
     {
@@ -286,7 +286,7 @@ class TrackEAttempt
     /**
      * Get tms
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getTms()
     {
@@ -309,7 +309,7 @@ class TrackEAttempt
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {
@@ -332,7 +332,7 @@ class TrackEAttempt
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -355,7 +355,7 @@ class TrackEAttempt
     /**
      * Get filename
      *
-     * @return string 
+     * @return string
      */
     public function getFilename()
     {

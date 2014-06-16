@@ -17,7 +17,7 @@ class TrackEAttemptRecording
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -74,7 +74,7 @@ class TrackEAttemptRecording
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -97,7 +97,7 @@ class TrackEAttemptRecording
     /**
      * Get exeId
      *
-     * @return integer 
+     * @return integer
      */
     public function getExeId()
     {
@@ -120,7 +120,7 @@ class TrackEAttemptRecording
     /**
      * Get questionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getQuestionId()
     {
@@ -143,7 +143,7 @@ class TrackEAttemptRecording
     /**
      * Get marks
      *
-     * @return integer 
+     * @return integer
      */
     public function getMarks()
     {
@@ -166,7 +166,7 @@ class TrackEAttemptRecording
     /**
      * Get insertDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getInsertDate()
     {
@@ -189,7 +189,7 @@ class TrackEAttemptRecording
     /**
      * Get author
      *
-     * @return integer 
+     * @return integer
      */
     public function getAuthor()
     {
@@ -212,7 +212,7 @@ class TrackEAttemptRecording
     /**
      * Get teacherComment
      *
-     * @return string 
+     * @return string
      */
     public function getTeacherComment()
     {
@@ -235,7 +235,7 @@ class TrackEAttemptRecording
     /**
      * Get sessionId
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessionId()
     {

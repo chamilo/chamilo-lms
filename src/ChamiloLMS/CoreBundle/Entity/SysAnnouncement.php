@@ -17,7 +17,7 @@ class SysAnnouncement
      *
      * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -88,7 +88,7 @@ class SysAnnouncement
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -111,7 +111,7 @@ class SysAnnouncement
     /**
      * Get dateStart
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateStart()
     {
@@ -134,7 +134,7 @@ class SysAnnouncement
     /**
      * Get dateEnd
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDateEnd()
     {
@@ -157,7 +157,7 @@ class SysAnnouncement
     /**
      * Get visibleTeacher
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getVisibleTeacher()
     {
@@ -180,7 +180,7 @@ class SysAnnouncement
     /**
      * Get visibleStudent
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getVisibleStudent()
     {
@@ -203,7 +203,7 @@ class SysAnnouncement
     /**
      * Get visibleGuest
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getVisibleGuest()
     {
@@ -226,7 +226,7 @@ class SysAnnouncement
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -249,7 +249,7 @@ class SysAnnouncement
     /**
      * Get content
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
@@ -272,7 +272,7 @@ class SysAnnouncement
     /**
      * Get lang
      *
-     * @return string 
+     * @return string
      */
     public function getLang()
     {
@@ -295,7 +295,7 @@ class SysAnnouncement
     /**
      * Get accessUrlId
      *
-     * @return integer 
+     * @return integer
      */
     public function getAccessUrlId()
     {

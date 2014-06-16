@@ -13,11 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
 class BranchTransactionStatus
 {
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="id", type="boolean", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -32,7 +32,7 @@ class BranchTransactionStatus
     /**
      * Get id
      *
-     * @return boolean 
+     * @return integer
      */
     public function getId()
     {
@@ -55,7 +55,7 @@ class BranchTransactionStatus
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {

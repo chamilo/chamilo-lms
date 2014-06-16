@@ -17,7 +17,7 @@ class COnlineLink
      *
      * @ORM\Column(name="iid", type="integer", precision=0, scale=0, nullable=false, unique=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $iid;
 
@@ -53,7 +53,7 @@ class COnlineLink
     /**
      * Get iid
      *
-     * @return integer 
+     * @return integer
      */
     public function getIid()
     {
@@ -76,7 +76,7 @@ class COnlineLink
     /**
      * Get cId
      *
-     * @return integer 
+     * @return integer
      */
     public function getCId()
     {
@@ -99,7 +99,7 @@ class COnlineLink
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -122,7 +122,7 @@ class COnlineLink
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -145,7 +145,7 @@ class COnlineLink
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {

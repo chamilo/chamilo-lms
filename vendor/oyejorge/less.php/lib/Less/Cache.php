@@ -21,10 +21,10 @@ class Less_Cache{
 	 *
 	 * @param array $less_files Array of .less files to compile
 	 * @param array $parser_options Array of compiler options
-	 * @param boolean $use_cache Set to false to regenerate the css file
+	 * @param array $modify_vars Array of variables
 	 * @return string Name of the css file
 	 */
-	public static function Get( $less_files, $parser_options = array(), $use_cache = true ){
+	public static function Get( $less_files, $parser_options = array(), $modify_vars = array() ){
 
 
 		//check $cache_dir
@@ -37,29 +37,53 @@ class Less_Cache{
 		}
 
 		self::CheckCacheDir();
+		$less_files = (array)$less_files;
+
+
+		//create a file for variables
+		if( !empty($modify_vars) ){
+			$lessvars = Less_Parser::serializeVars($modify_vars);
+			$vars_file = Less_Cache::$cache_dir.'lessphpvars_' . sha1($lessvars) . '.less';
+
+			if( !file_exists($vars_file) ){
+				file_put_contents($vars_file, $lessvars);
+			}
+
+			$less_files += array($vars_file => '/');
+		}
+
 
 		// generate name for compiled css file
-		$less_files = (array)$less_files;
 		$hash = md5(json_encode($less_files));
  		$list_file = Less_Cache::$cache_dir.'lessphp_'.$hash.'.list';
 
 
-		if( $use_cache === true ){
-
-	 		// check cached content
-	 		if( file_exists($list_file) ){
-
+ 		// check cached content
+ 		if( !isset($parser_options['use_cache']) || $parser_options['use_cache'] === true ){
+			if( file_exists($list_file) ){
 
 				$list = explode("\n",file_get_contents($list_file));
+
+				//pop the cached name that should match $compiled_name
+				$cached_name = array_pop($list);
+				if( !preg_match('/^lessphp_[a-f0-9]+\.css$/',$cached_name) ){
+					$list[] = $cached_name;
+					$cached_name = false;
+				}
 				$compiled_name = self::CompiledName($list);
-				$compiled_file = Less_Cache::$cache_dir.$compiled_name;
-				if( file_exists($compiled_file) ){
-					@touch($list_file);
-					@touch($compiled_file);
-					return $compiled_name;
+
+				// if $cached_name != $compiled_name, we know we need to recompile
+				if( !$cached_name || $cached_name === $compiled_name ){
+
+					$output_file = self::OutputFile($compiled_name, $parser_options );
+
+					if( $output_file && file_exists($output_file) ){
+						@touch($list_file);
+						@touch($output_file);
+						return basename($output_file); // for backwards compatibility, we just return the name of the file
+					}
 				}
 			}
-
 		}
 
 		$compiled = self::Cache( $less_files, $parser_options );
@@ -67,21 +91,25 @@ class Less_Cache{
 			return false;
 		}
 
+		$compiled_name = self::CompiledName( $less_files );
+		$output_file = self::OutputFile($compiled_name, $parser_options );
+
 
 		//save the file list
-		$cache = implode("\n",$less_files);
+		$list = $less_files;
+		$list[] = $compiled_name;
+		$cache = implode("\n",$list);
 		file_put_contents( $list_file, $cache );
 
 
 		//save the css
-		$compiled_name = self::CompiledName( $less_files );
-		file_put_contents( Less_Cache::$cache_dir.$compiled_name, $compiled );
+		file_put_contents( $output_file, $compiled );
 
 
 		//clean up
 		self::CleanCache();
 
-		return $compiled_name;
+		return basename($output_file);
 	}
 
 	/**
@@ -89,10 +117,12 @@ class Less_Cache{
 	 *
 	 * @param array $less_files Array of .less files to compile
 	 * @param array $parser_options Array of compiler options
+	 * @param array $modify_vars Array of variables
 	 * @return string Name of the css file
 	 */
-	public static function Regen( $less_files, $parser_options = array() ){
-		return self::Get( $less_files, $parser_options, false );
+	public static function Regen( $less_files, $parser_options = array(), $modify_vars = array() ){
+		$parser_options['use_cache'] = false;
+		return self::Get( $less_files, $parser_options, $modify_vars );
 	}
 
 	public static function Cache( &$less_files, $parser_options = array() ){
@@ -126,6 +156,23 @@ class Less_Cache{
 		$less_files = $parser->allParsedFiles();
 
 		return $compiled;
+	}
+
+
+	private static function OutputFile( $compiled_name, $parser_options ){
+
+		//custom output file
+		if( !empty($parser_options['output']) ){
+
+			//relative to cache directory?
+			if( preg_match('#[\\\\/]#',$parser_options['output']) ){
+				return $parser_options['output'];
+			}
+
+			return Less_Cache::$cache_dir.$parser_options['output'];
+		}
+
+		return Less_Cache::$cache_dir.$compiled_name;
 	}
 
 

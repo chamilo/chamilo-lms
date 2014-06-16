@@ -5,10 +5,10 @@ require_once dirname(__FILE__) . '/../lib/Less/Autoloader.php';
 Less_Autoloader::register();
 
 // Create our environment
-$env = array('compress' => false);
-
-$silent = false;
-$watch = false;
+$env		= array('compress' => false);
+$silent		= false;
+$watch		= false;
+$rootpath	= '';
 
 // Check for arguments
 array_shift($argv);
@@ -43,7 +43,6 @@ Usage: lessc [options] sources [destination]
  -ru, --relative-urls  re-write relative urls to the base less file.
  -rp, --rootpath=URL   Set rootpath for url rewriting in relative imports and urls.
                        Works with or without the relative-urls option.
- --insecure            Allow imports from insecure https hosts.
  -w, --watch           Watch input files for changes.
 
 
@@ -53,44 +52,48 @@ EOD;
 			case 'silent':
 				$silent = true;
 				break;
-			case 'v':
-			case 'version':
-				echo "lessc " . Less_Parser::version . " (less.php)\n\n";
-				exit;
-			case 'x':
-			case 'compress':
-				Less_Environment::$compress = true;
-				break;
-			case 'include-path':
-				$paths = preg_split('#;|\:#', $value);
-				$env->paths = $paths;
-				break;
-			case 'strict-imports':
-				$env->strictImports = true;
-				break;
-			case 'sm':
-			case 'strict-math':
-				$env->strictMath = ($value === 'on');
-				break;
-			case 'su':
-			case 'strict-units':
-				$env->strictUnits = ($value === 'on');
-				break;
-			case 'ru':
-			case 'relative-urls':
-				$env->relativeUrls = true;
-				break;
-			case 'rp':
-			case 'rootpath':
-				$env->rootpath = $value;
-				break;
-			case 'insecure':
-				$env->insecure = true;
-				break;
+
 			case 'w':
 			case 'watch':
 				$watch = true;
 				break;
+
+			case 'v':
+			case 'version':
+				echo "lessc " . Less_Version::version . " (less.php)\n\n";
+				exit;
+
+			case 'rp':
+			case 'rootpath':
+				$rootpath = $value;
+				break;
+
+
+			//parser options
+			case 'compress':
+				$env['compress'] = true;
+				break;
+
+			case 'ru':
+			case 'relative-urls':
+				$env['relativeUrls'] = true;
+				break;
+
+			case 'su':
+			case 'strict-units':
+				$env['strictUnits'] = ($value === 'on');
+				break;
+
+			case 'sm':
+			case 'strict-math':
+				$env['strictMath'] = ($value === 'on');
+				break;
+
+			case 'x':
+			case 'include-path':
+				$env['import_dirs'] = preg_split('#;|\:#', $value);
+				break;
+
 		}
 	}
 }
@@ -145,7 +148,7 @@ if ($watch) {
 			$parser = new Less_Parser($env);
 			foreach ($inputs as $input) {
 				try {
-					$parser->parseFile($input, $env->rootpath);
+					$parser->parseFile($input, $rootpath);
 				}
 				catch (Exception $e) {
 					echo("lessc: " . $e->getMessage() . " \n");

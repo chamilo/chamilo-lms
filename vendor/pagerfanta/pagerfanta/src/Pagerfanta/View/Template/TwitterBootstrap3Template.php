@@ -11,19 +11,23 @@
 
 namespace Pagerfanta\View\Template;
 
-use Pagerfanta\View\Template\TwitterBootstrapTemplate;
-
 /**
  * TwitterBootstrap3Template
  */
 class TwitterBootstrap3Template extends TwitterBootstrapTemplate
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->setOptions(array('active_suffix' => '<span class="sr-only">(current)</span>'));
+    }
 
     public function container()
     {
-        return sprintf('<ul class="%s">%%pages%%</ul>', $this->option('css_container_class')
+        return sprintf('<ul class="%s">%%pages%%</ul>',
+            $this->option('css_container_class')
         );
     }
-
 }
 

@@ -148,7 +148,7 @@ class Less_Tree_Color extends Less_Tree{
 	}
 
 	//Adapted from http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript
-	function toHSV() {
+    public function toHSV() {
 		$r = $this->rgb[0] / 255;
 		$g = $this->rgb[1] / 255;
 		$b = $this->rgb[2] / 255;
@@ -196,7 +196,7 @@ class Less_Tree_Color extends Less_Tree{
 			$x->alpha === $this->alpha) ? 0 : -1;
 	}
 
-	function toHex( $v ){
+    public function toHex( $v ){
 
 		$ret = '#';
 		foreach($v as $c){

@@ -3,9 +3,10 @@
   <head>
     <!-- Meta, title, CSS, favicons, etc. -->
     {% include header.html %}
+    <!-- Place anything custom after this. -->
   </head>
   <body class="bs-docs-home">
-    <a class="sr-only" href="#content">Skip to main content</a>
+    <a class="sr-only" href="#content">Skip navigation</a>
 
     <!-- Docs master nav -->
     {% include nav-main.html %}
@@ -14,13 +15,11 @@
     {{ content }}
 
     <footer class="container" role="contentinfo">
-      {% include ads.html %}
-
       {% include social-buttons.html %}
 
       <ul class="bs-masthead-links">
         <li class="current-version">
-          Currently v{{ site.current_version }}
+          Currently v3.0.0
         </li>
         <li>
           <a href="{{ page.base_url }}2.3.2/">Bootstrap 2.3.2 docs</a>
@@ -32,10 +31,10 @@
           <a href="{{ page.base_url }}getting-started/#examples" onclick="_gaq.push(['_trackEvent', 'Jumbotron actions', 'Jumbotron links', 'Examples']);">Examples</a>
         </li>
         <li>
-          <a href="{{ site.expo }}" onclick="_gaq.push(['_trackEvent', 'Jumbotron actions', 'Jumbotron links', 'Expo']);">Expo</a>
+          <a href="{{ page.base_url }}components/#glyphicons" onclick="_gaq.push(['_trackEvent', 'Jumbotron actions', 'Jumbotron links', 'Glyphicons']);">Glyphicons</a>
         </li>
         <li>
-          <a href="{{ site.blog }}" onclick="_gaq.push(['_trackEvent', 'Jumbotron actions', 'Jumbotron links', 'Blog']);">Blog</a>
+          <a href="{{ site.expo }}" onclick="_gaq.push(['_trackEvent', 'Jumbotron actions', 'Jumbotron links', 'Expo']);">Expo</a>
         </li>
       </ul>
     </footer>

@@ -3,22 +3,17 @@
 module.exports = function(grunt) {
   "use strict";
 
-  // Force use of Unix newlines
-  grunt.util.linefeed = '\n';
-
-  RegExp.quote = require('regexp-quote')
-  var btoa = require('btoa')
   // Project configuration.
   grunt.initConfig({
 
     // Metadata.
     pkg: grunt.file.readJSON('package.json'),
-    banner: '/*!\n' +
-              ' * Bootstrap v<%= pkg.version %> (<%= pkg.homepage %>)\n' +
-              ' * Copyright <%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
-              ' * Licensed under <%= _.pluck(pkg.licenses, "url").join(", ") %>\n' +
-              ' */\n\n',
-    jqueryCheck: 'if (typeof jQuery === "undefined") { throw new Error("Bootstrap requires jQuery") }\n\n',
+    banner: '/**\n' +
+              '* <%= pkg.name %>.js v<%= pkg.version %> by @fat and @mdo\n' +
+              '* Copyright <%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
+              '* <%= _.pluck(pkg.licenses, "url").join(", ") %>\n' +
+              '*/\n',
+    jqueryCheck: 'if (!jQuery) { throw new Error(\"Bootstrap requires jQuery\") }\n\n',
 
     // Task configuration.
     clean: {
@@ -66,8 +61,7 @@ module.exports = function(grunt) {
 
     uglify: {
       options: {
-        banner: '<%= banner %>',
-        report: 'min'
+        banner: '<%= banner %>'
       },
       bootstrap: {
         src: ['<%= concat.bootstrap.dest %>'],
@@ -77,8 +71,7 @@ module.exports = function(grunt) {
 
     recess: {
       options: {
-        compile: true,
-        banner: '<%= banner %>'
+        compile: true
       },
       bootstrap: {
         src: ['less/bootstrap.less'],
@@ -134,11 +127,7 @@ module.exports = function(grunt) {
 
     validation: {
       options: {
-        reset: true,
-        relaxerror: [
-          "Bad value X-UA-Compatible for attribute http-equiv on element meta.",
-          "Element img is missing required attribute src."
-        ]
+        reset: true
       },
       files: {
         src: ["_gh_pages/**/*.html"]
@@ -158,111 +147,6 @@ module.exports = function(grunt) {
         files: 'less/*.less',
         tasks: ['recess']
       }
-    },
-
-    sed: {
-      versionNumber: {
-        pattern: (function () {
-          var old = grunt.option('oldver')
-          return old ? RegExp.quote(old) : old
-        })(),
-        replacement: grunt.option('newver'),
-        recursive: true
-      }
-    },
-
-    'saucelabs-qunit': {
-      all: {
-        options: {
-          build: process.env.TRAVIS_JOB_ID,
-          concurrency: 3,
-          urls: ['http://127.0.0.1:3000/js/tests/index.html'],
-          browsers: [
-            // See https://saucelabs.com/docs/platforms/webdriver
-            {
-              browserName: 'safari',
-              version: '6',
-              platform: 'OS X 10.8'
-            },
-            {
-              browserName: 'chrome',
-              version: '28',
-              platform: 'OS X 10.6'
-            },
-            /* FIXME: currently fails 1 tooltip test
-            {
-              browserName: 'firefox',
-              version: '25',
-              platform: 'OS X 10.6'
-            },*/
-            // Mac Opera not currently supported by Sauce Labs
-            /* FIXME: currently fails 1 tooltip test
-            {
-              browserName: 'internet explorer',
-              version: '11',
-              platform: 'Windows 8.1'
-            },*/
-            /*
-            {
-              browserName: 'internet explorer',
-              version: '10',
-              platform: 'Windows 8'
-            },
-            {
-              browserName: 'internet explorer',
-              version: '9',
-              platform: 'Windows 7'
-            },
-            {
-              browserName: 'internet explorer',
-              version: '8',
-              platform: 'Windows 7'
-            },
-            {// unofficial
-              browserName: 'internet explorer',
-              version: '7',
-              platform: 'Windows XP'
-            },
-            */
-            {
-              browserName: 'chrome',
-              version: '31',
-              platform: 'Windows 8.1'
-            },
-            {
-              browserName: 'firefox',
-              version: '25',
-              platform: 'Windows 8.1'
-            },
-            // Win Opera 15+ not currently supported by Sauce Labs
-            {
-              browserName: 'iphone',
-              version: '6.1',
-              platform: 'OS X 10.8'
-            },
-            // iOS Chrome not currently supported by Sauce Labs
-            // Linux (unofficial)
-            {
-              browserName: 'chrome',
-              version: '30',
-              platform: 'Linux'
-            },
-            {
-              browserName: 'firefox',
-              version: '25',
-              platform: 'Linux'
-            }
-            // Android Chrome not currently supported by Sauce Labs
-            /* Android Browser (super-unofficial)
-            {
-              browserName: 'android',
-              version: '4.0',
-              platform: 'Linux'
-            }
-            */
-          ],
-        }
-      }
     }
   });
 
@@ -279,18 +163,19 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-html-validation');
   grunt.loadNpmTasks('grunt-jekyll');
   grunt.loadNpmTasks('grunt-recess');
-  grunt.loadNpmTasks('grunt-saucelabs');
-  grunt.loadNpmTasks('grunt-sed');
+  grunt.loadNpmTasks('browserstack-runner');
 
   // Docs HTML validation task
   grunt.registerTask('validate-html', ['jekyll', 'validation']);
 
   // Test task.
   var testSubtasks = ['dist-css', 'jshint', 'qunit', 'validate-html'];
-  // Only run Sauce Labs tests if there's a Sauce access key
-  if (typeof process.env.SAUCE_ACCESS_KEY !== 'undefined') {
-    testSubtasks.push('connect');
-    testSubtasks.push('saucelabs-qunit');
+  // Only run BrowserStack tests under Travis
+  if (process.env.TRAVIS) {
+    // Only run BrowserStack tests if this is a mainline commit in twbs/bootstrap, or you have your own BrowserStack key
+    if ((process.env.TRAVIS_REPO_SLUG === 'twbs/bootstrap' && process.env.TRAVIS_PULL_REQUEST === 'false') || process.env.TWBS_HAVE_OWN_BROWSERSTACK_KEY) {
+      testSubtasks.push('browserstack_runner');
+    }
   }
   grunt.registerTask('test', testSubtasks);
 
@@ -309,11 +194,6 @@ module.exports = function(grunt) {
   // Default task.
   grunt.registerTask('default', ['test', 'dist', 'build-customizer']);
 
-  // Version numbering task.
-  // grunt change-version-number --oldver=A.B.C --newver=X.Y.Z
-  // This can be overzealous, so its changes should always be manually reviewed!
-  grunt.registerTask('change-version-number', ['sed']);
-
   // task for building customizer
   grunt.registerTask('build-customizer', 'Add scripts/less files to customizer.', function () {
     var fs = require('fs')
@@ -325,13 +205,13 @@ module.exports = function(grunt) {
           return type == 'fonts' ? true : new RegExp('\\.' + type + '$').test(path)
         })
         .forEach(function (path) {
-          var fullPath = type + '/' + path
-          return files[path] = (type == 'fonts' ? btoa(fs.readFileSync(fullPath)) : fs.readFileSync(fullPath, 'utf8'))
+          return files[path] = fs.readFileSync(type + '/' + path, 'utf8')
         })
       return 'var __' + type + ' = ' + JSON.stringify(files) + '\n'
     }
 
+    var customize = fs.readFileSync('customize.html', 'utf-8')
     var files = getFiles('js') + getFiles('less') + getFiles('fonts')
-    fs.writeFileSync('docs-assets/js/raw-files.js', files)
+    fs.writeFileSync('assets/js/raw-files.js', files)
   });
 };

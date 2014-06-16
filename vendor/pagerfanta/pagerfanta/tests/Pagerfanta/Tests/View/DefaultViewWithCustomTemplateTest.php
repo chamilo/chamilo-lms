@@ -26,13 +26,13 @@ class DefaultViewTestWithCustomTemplateTest extends ViewTestCase
     <ul>
         <li class="prev"><a href="|9|">&larr; Previous</a></li>
         <li><a href="|1|">1</a></li>
-        <li class="disabled"><a href="#">&hellip;</a></li>
+        <li class="disabled"><span>&hellip;</span></li>
         <li><a href="|8|">8</a></li>
         <li><a href="|9|">9</a></li>
-        <li class="active"><a href="|10|">10</a></li>
+        <li class="active"><span>10</span></li>
         <li><a href="|11|">11</a></li>
         <li><a href="|12|">12</a></li>
-        <li class="disabled"><a href="#">&hellip;</a></li>
+        <li class="disabled"><span>&hellip;</span></li>
         <li><a href="|100|">100</a></li>
         <li class="next"><a href="|11|">Next &rarr;</a></li>
     </ul>

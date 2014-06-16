@@ -175,11 +175,23 @@ This method will check the modified time and size of each less file (including i
 Note: When changes are found, this method will return a different file name for the new cached content.
 
 ```php
-$to_cache = array( '/var/www/mysite/bootstrap.less' => '/mysite/' );
-Less_Cache::$cache_dir = '/var/www/writable_folder';
-$css_file_name = Less_Cache::Get( $to_cache );
+$less_files = array( '/var/www/mysite/bootstrap.less' => '/mysite/' );
+$options = array( 'cache_dir' => '/var/www/writable_folder' );
+$css_file_name = Less_Cache::Get( $less_files, $options );
 $compiled = file_get_contents( '/var/www/writable_folder/'.$css_file_name );
 ```
+
+#### Caching CSS With Variables
+Passing options to Less_Cache::Get()
+
+```php
+$less_files = array( '/var/www/mysite/bootstrap.less' => '/mysite/' );
+$options = array( 'cache_dir' => '/var/www/writable_folder' );
+$variables = array( 'width' => '100px' );
+$css_file_name = Less_Cache::Get( $less_files, $options, $variables );
+$compiled = file_get_contents( '/var/www/writable_folder/'.$css_file_name );
+```
+
 
 #### Parser Caching
 less.php will save serialized parser data for each .less file if a writable folder is passed to the SetCacheDir() method.
@@ -192,6 +204,19 @@ $parser = new Less_Parser( $options );
 $parser->parseFile( '/var/www/mysite/bootstrap.less', '/mysite/' );
 $css = $parser->getCss();
 ```
+
+You can specify the caching technique used by changing the ```cache_method``` option. Supported methods are:
+* ```php```: Creates valid PHP files which can be included without any changes (default method).
+* ```var_export```: Like "php", but using PHPs ```var_export()``` function without any optimizations.
+  It's recommended to use "php" instead.
+* ```serialize```: Faster, but pretty memory-intense.
+* ```callback```: Use custom callback functions to implement your own caching method. Give the "cache_callback_get" and
+  "cache_callback_set" options with callables (see PHPs ```call_user_func()``` and ```is_callable()``` functions). less.php
+  will pass the parser object (class ```Less_Parser```), the path to the parsed .less file ("/some/path/to/file.less") and
+  an identifier that will change every time the .less file is modified. The ```get``` callback must return the ruleset
+  (an array with ```Less_Tree``` objects) provided as fourth parameter of the ```set``` callback. If something goes wrong,
+  return ```NULL``` (cache doesn't exist) or ```FALSE```.
+
 
 
 Source Maps
@@ -265,7 +290,7 @@ How to use / install:
 2. Find the compiler under Appearance > LESS Compiler in your WordPress dashboard
 3. Enter your LESS code in the text area and press (re)compile
 
-Use the built-in compiler to: 
+Use the built-in compiler to:
 - set any [Bootstrap](http://getbootstrap.com/customize/) variable or use Bootstrap's mixins:
 	-`@navbar-default-color: blue;`
         - create a custom button: `.btn-custom {

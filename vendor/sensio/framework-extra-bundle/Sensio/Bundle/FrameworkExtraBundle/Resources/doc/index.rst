@@ -98,7 +98,6 @@ The following annotations are defined by the bundle:
    annotations/converters
    annotations/view
    annotations/cache
-   annotations/security
 
 This example shows all the available annotations in action::
 
@@ -107,7 +106,6 @@ This example shows all the available annotations in action::
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
     /**
      * @Route("/blog")
@@ -130,9 +128,8 @@ This example shows all the available annotations in action::
          * @Route("/{id}")
          * @Method("GET")
          * @ParamConverter("post", class="SensioBlogBundle:Post")
-         * @Template("SensioBlogBundle:Annot:show.html.twig", vars={"post"})
-         * @Cache(smaxage="15", lastmodified="post.getUpdatedAt()", etag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
-         * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
+         * @Template("SensioBlogBundle:Annot:post.html.twig", vars={"post"})
+         * @Cache(smaxage="15")
          */
         public function showAction(Post $post)
         {
@@ -144,8 +141,7 @@ annotations::
 
     /**
      * @Route("/{id}")
-     * @Cache(smaxage="15", lastModified="post.getUpdatedAt()", ETag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
-     * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
+     * @Cache(smaxage="15")
      */
     public function showAction(Post $post)
     {

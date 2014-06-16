@@ -21,7 +21,7 @@
         "symfony/dependency-injection": "~2.3",
         "symfony/config": "~2.3",
         "symfony/http-kernel": "~2.3",
-        "monolog/monolog": "~1.6"
+        "monolog/monolog": "~1.8"
     },
     "require-dev": {
         "symfony/yaml": "~2.3",
@@ -33,7 +33,7 @@
     "target-dir": "Symfony/Bundle/MonologBundle",
     "extra": {
         "branch-alias": {
-            "dev-master": "2.5.x-dev"
+            "dev-master": "2.6.x-dev"
         }
     }
 }

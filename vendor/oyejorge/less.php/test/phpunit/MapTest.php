@@ -18,6 +18,7 @@ class phpunit_MapTest extends phpunit_bootstrap{
 		$options['sourceMap']			= true;
 		$options['sourceMapWriteTo']	= $map_destination;
 		$options['sourceMapURL']		= '/';
+		$options['sourceMapBasepath']	= dirname(dirname($less_file));
 
 
 		$parser = new Less_Parser($options);

@@ -12,7 +12,6 @@
 namespace Pagerfanta\View;
 
 use Pagerfanta\View\Template\TwitterBootstrap3Template;
-use Pagerfanta\View\TwitterBootstrapView;
 
 /**
  * TwitterBootstrap3View.
@@ -24,7 +23,6 @@ use Pagerfanta\View\TwitterBootstrapView;
  */
 class TwitterBootstrap3View extends TwitterBootstrapView
 {
-
     protected function createDefaultTemplate()
     {
         return new TwitterBootstrap3Template();
@@ -37,5 +35,4 @@ class TwitterBootstrap3View extends TwitterBootstrapView
     {
         return 'twitter_bootstrap3';
     }
-
 }

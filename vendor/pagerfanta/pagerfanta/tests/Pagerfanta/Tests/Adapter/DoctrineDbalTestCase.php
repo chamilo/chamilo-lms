@@ -45,13 +45,13 @@ abstract class DoctrineDbalTestCase extends \PHPUnit_Framework_TestCase
     {
         $schema = new Schema();
         $posts = $schema->createTable('posts');
-        $posts->addColumn('id', 'integer', array('unsigned' => true));
+        $posts->addColumn('id', 'integer', array('unsigned' => true, 'autoincrement' => true));
         $posts->addColumn('username', 'string', array('length' => 32));
         $posts->addColumn('post_content', 'text');
         $posts->setPrimaryKey(array('id'));
 
         $comments = $schema->createTable('comments');
-        $comments->addColumn('id', 'integer', array('unsigned' => true));
+        $comments->addColumn('id', 'integer', array('unsigned' => true, 'autoincrement' => true));
         $comments->addColumn('post_id', 'integer', array('unsigned' => true));
         $comments->addColumn('username', 'string', array('length' => 32));
         $comments->addColumn('content', 'text');

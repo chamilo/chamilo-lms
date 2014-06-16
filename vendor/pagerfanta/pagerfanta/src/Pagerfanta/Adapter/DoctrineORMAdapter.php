@@ -12,7 +12,6 @@
 namespace Pagerfanta\Adapter;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
-use Pagerfanta\Adapter\DoctrineORM\Paginator as LegacyPaginator;
 
 /**
  * DoctrineORMAdapter.
@@ -31,14 +30,12 @@ class DoctrineORMAdapter implements AdapterInterface
      *
      * @param \Doctrine\ORM\Query|\Doctrine\ORM\QueryBuilder $query A Doctrine ORM query or query builder.
      * @param Boolean $fetchJoinCollection Whether the query joins a collection (true by default).
+     * @param Boolean $useOutputWalkers Whether to use output walkers pagination mode
      */
-    public function __construct($query, $fetchJoinCollection = true)
+    public function __construct($query, $fetchJoinCollection = true, $useOutputWalkers = null)
     {
-        if (class_exists('Doctrine\ORM\Tools\Pagination\Paginator')) {
-            $this->paginator = new DoctrinePaginator($query, $fetchJoinCollection);
-        } else {
-            $this->paginator = new LegacyPaginator($query, $fetchJoinCollection);
-        }
+        $this->paginator = new DoctrinePaginator($query, $fetchJoinCollection);
+        $this->paginator->setUseOutputWalkers($useOutputWalkers);
     }
 
     /**

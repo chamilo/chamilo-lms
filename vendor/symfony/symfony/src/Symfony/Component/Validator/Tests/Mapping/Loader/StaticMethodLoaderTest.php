@@ -17,6 +17,18 @@ use Symfony\Component\Validator\Tests\Fixtures\ConstraintA;
 
 class StaticMethodLoaderTest extends \PHPUnit_Framework_TestCase
 {
+    private $errorLevel;
+
+    protected function setUp()
+    {
+        $this->errorLevel = error_reporting();
+    }
+
+    protected function tearDown()
+    {
+        error_reporting($this->errorLevel);
+    }
+
     public function testLoadClassMetadataReturnsTrueIfSuccessful()
     {
         $loader = new StaticMethodLoader('loadMetadata');
@@ -78,11 +90,19 @@ class StaticMethodLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadClassMetadataIgnoresAbstractMethods()
     {
+        error_reporting(E_ALL | E_STRICT);
+
         $loader = new StaticMethodLoader('loadMetadata');
+        $caught = false;
         try {
-            include __DIR__ . '/AbstractMethodStaticLoader.php';
-            $this->fail('AbstractMethodStaticLoader should produce a strict standard error.');
+            include __DIR__.'/AbstractMethodStaticLoader.php';
         } catch (\Exception $e) {
+            // catching the PHP notice that is converted to an exception by PHPUnit
+            $caught = true;
+        }
+
+        if (!$caught) {
+            $this->fail('AbstractMethodStaticLoader should produce a strict standard error.');
         }
 
         $metadata = new ClassMetadata(__NAMESPACE__.'\AbstractMethodStaticLoader');

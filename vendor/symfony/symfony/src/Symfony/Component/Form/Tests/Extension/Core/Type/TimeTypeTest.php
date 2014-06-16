@@ -492,6 +492,33 @@ class TimeTypeTest extends TypeTestCase
         $this->assertEquals('time', $view->vars['type']);
     }
 
+    public function testSingleTextWidgetWithSecondsShouldHaveRightStepAttribute()
+    {
+        $form = $this->factory->create('time', null, array(
+            'widget' => 'single_text',
+            'with_seconds' => true,
+        ));
+
+        $view = $form->createView();
+        $this->assertArrayHasKey('step', $view->vars['attr']);
+        $this->assertEquals(1, $view->vars['attr']['step']);
+    }
+
+    public function testSingleTextWidgetWithSecondsShouldNotOverrideStepAttribute()
+    {
+        $form = $this->factory->create('time', null, array(
+            'widget' => 'single_text',
+            'with_seconds' => true,
+            'attr' => array(
+                'step' => 30
+            )
+        ));
+
+        $view = $form->createView();
+        $this->assertArrayHasKey('step', $view->vars['attr']);
+        $this->assertEquals(30, $view->vars['attr']['step']);
+    }
+
     public function testPassDefaultEmptyValueToViewIfNotRequired()
     {
         $form = $this->factory->create('time', null, array(
@@ -601,8 +628,8 @@ class TimeTypeTest extends TypeTestCase
         ));
         $form['hour']->addError($error);
 
-        $this->assertSame(array(), $form['hour']->getErrors());
-        $this->assertSame(array($error), $form->getErrors());
+        $this->assertSame(array(), iterator_to_array($form['hour']->getErrors()));
+        $this->assertSame(array($error), iterator_to_array($form->getErrors()));
     }
 
     /**
@@ -616,8 +643,8 @@ class TimeTypeTest extends TypeTestCase
         ));
         $form['minute']->addError($error);
 
-        $this->assertSame(array(), $form['minute']->getErrors());
-        $this->assertSame(array($error), $form->getErrors());
+        $this->assertSame(array(), iterator_to_array($form['minute']->getErrors()));
+        $this->assertSame(array($error), iterator_to_array($form->getErrors()));
     }
 
     /**
@@ -632,8 +659,8 @@ class TimeTypeTest extends TypeTestCase
         ));
         $form['second']->addError($error);
 
-        $this->assertSame(array(), $form['second']->getErrors());
-        $this->assertSame(array($error), $form->getErrors());
+        $this->assertSame(array(), iterator_to_array($form['second']->getErrors()));
+        $this->assertSame(array($error), iterator_to_array($form->getErrors()));
     }
 
     /**

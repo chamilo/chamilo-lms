@@ -115,17 +115,6 @@ abstract class Descriptor implements DescriptorInterface
     abstract protected function describeRoute(Route $route, array $options = array());
 
     /**
-     * Describes a specific container parameter.
-     *
-     * @param mixed $parameterValue
-     * @param array $options
-     */
-    protected function describeContainerParameter($parameterValue, array $options = array())
-    {
-        $this->write($this->formatParameter($parameterValue));
-    }
-
-    /**
      * Describes container parameters.
      *
      * @param ParameterBag $parameters
@@ -180,6 +169,14 @@ abstract class Descriptor implements DescriptorInterface
     abstract protected function describeContainerAlias(Alias $alias, array $options = array());
 
     /**
+     * Describes a container parameter.
+     *
+     * @param string $parameter
+     * @param array  $options
+     */
+    abstract protected function describeContainerParameter($parameter, array $options = array());
+
+    /**
      * Formats a value as string.
      *
      * @param mixed $value
@@ -211,12 +208,8 @@ abstract class Descriptor implements DescriptorInterface
         if (is_bool($value) || is_array($value) || (null === $value)) {
             $jsonString = json_encode($value);
 
-            if (!function_exists('mb_strlen')) {
-                return substr($jsonString, 0, 60).(strlen($jsonString) > 60 ? ' ...' : '');
-            }
-
-            if (mb_strlen($jsonString) > 60) {
-                return mb_substr($jsonString, 0, 60).' ...';
+            if (preg_match('/^(.{60})./us', $jsonString, $matches)) {
+                return $matches[1].'...';
             }
 
             return $jsonString;

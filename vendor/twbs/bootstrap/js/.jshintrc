@@ -1,14 +1,14 @@
 {
-  "asi"      : true,
-  "boss"     : true,
+  "validthis": true,
+  "laxcomma" : true,
+  "laxbreak" : true,
   "browser"  : true,
-  "curly"    : false,
-  "debug"    : true,
-  "devel"    : true,
   "eqeqeq"   : false,
   "eqnull"   : true,
+  "debug"    : true,
+  "devel"    : true,
+  "curly"    : false,
+  "boss"     : true,
   "expr"     : true,
-  "laxbreak" : true,
-  "laxcomma" : true,
-  "validthis": true
+  "asi"      : true
 }

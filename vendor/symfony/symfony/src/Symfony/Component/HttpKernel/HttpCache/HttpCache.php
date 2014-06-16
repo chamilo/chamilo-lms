@@ -428,12 +428,6 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
 
         $response = $this->forward($subRequest, $catch);
 
-        if ($this->isPrivateRequest($request) && !$response->headers->hasCacheControlDirective('public')) {
-            $response->setPrivate(true);
-        } elseif ($this->options['default_ttl'] > 0 && null === $response->getTtl() && !$response->headers->getCacheControlDirective('must-revalidate')) {
-            $response->setTtl($this->options['default_ttl']);
-        }
-
         if ($response->isCacheable()) {
             $this->store($request, $response);
         }
@@ -487,6 +481,12 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
 
         $this->processResponseBody($request, $response);
 
+        if ($this->isPrivateRequest($request) && !$response->headers->hasCacheControlDirective('public')) {
+            $response->setPrivate(true);
+        } elseif ($this->options['default_ttl'] > 0 && null === $response->getTtl() && !$response->headers->getCacheControlDirective('must-revalidate')) {
+            $response->setTtl($this->options['default_ttl']);
+        }
+
         return $response;
     }
 
@@ -522,7 +522,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
     protected function lock(Request $request, Response $entry)
     {
         // try to acquire a lock to call the backend
-        $lock = $this->store->lock($request, $entry);
+        $lock = $this->store->lock($request);
 
         // there is already another process calling the backend
         if (true !== $lock) {

@@ -13,6 +13,7 @@ namespace Symfony\Component\Debug;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Debug\Exception\FlattenException;
+use Symfony\Component\Debug\Exception\OutOfMemoryException;
 
 if (!defined('ENT_SUBSTITUTE')) {
     define('ENT_SUBSTITUTE', 8);
@@ -33,6 +34,8 @@ class ExceptionHandler
 {
     private $debug;
     private $charset;
+    private $handler;
+    private $caughtOutput = 0;
 
     public function __construct($debug = true, $charset = 'UTF-8')
     {
@@ -57,23 +60,86 @@ class ExceptionHandler
     }
 
     /**
+     * Sets a user exception handler.
+     *
+     * @param callable $handler An handler that will be called on Exception
+     *
+     * @return callable|null The previous exception handler if any
+     */
+    public function setHandler($handler)
+    {
+        if (isset($handler) && !is_callable($handler)) {
+            throw new \LogicException('The exception handler must be a valid PHP callable.');
+        }
+        $old = $this->handler;
+        $this->handler = $handler;
+
+        return $old;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
      * Sends a response for the given Exception.
      *
      * If you have the Symfony HttpFoundation component installed,
      * this method will use it to create and send the response. If not,
      * it will fallback to plain PHP functions.
      *
-     * @param \Exception $exception An \Exception instance
-     *
      * @see sendPhpResponse
      * @see createResponse
      */
     public function handle(\Exception $exception)
     {
-        if (class_exists('Symfony\Component\HttpFoundation\Response')) {
-            $this->createResponse($exception)->send();
-        } else {
+        if ($exception instanceof OutOfMemoryException) {
             $this->sendPhpResponse($exception);
+
+            return;
+        }
+
+        // To be as fail-safe as possible, the exception is first handled
+        // by our simple exception handler, then by the user exception handler.
+        // The latter takes precedence and any output from the former is cancelled,
+        // if and only if nothing bad happens in this handling path.
+
+        $caughtOutput = 0;
+
+        $this->caughtOutput = false;
+        ob_start(array($this, 'catchOutput'));
+        try {
+            if (class_exists('Symfony\Component\HttpFoundation\Response')) {
+                $response = $this->createResponse($exception);
+                $response->sendHeaders();
+                $response->sendContent();
+            } else {
+                $this->sendPhpResponse($exception);
+            }
+        } catch (\Exception $e) {
+            // Ignore this $e exception, we have to deal with $exception
+        }
+        if (false === $this->caughtOutput) {
+            ob_end_clean();
+        }
+        if (isset($this->caughtOutput[0])) {
+            ob_start(array($this, 'cleanOutput'));
+            echo $this->caughtOutput;
+            $caughtOutput = ob_get_length();
+        }
+        $this->caughtOutput = 0;
+
+        if (!empty($this->handler)) {
+            try {
+                call_user_func($this->handler, $exception);
+
+                if ($caughtOutput) {
+                    $this->caughtOutput = $caughtOutput;
+                }
+            } catch (\Exception $e) {
+                if (!$caughtOutput) {
+                    // All handlers failed. Let PHP handle that now.
+                    throw $exception;
+                }
+            }
         }
     }
 
@@ -314,5 +380,31 @@ EOF;
         }
 
         return implode(', ', $result);
+    }
+
+    /**
+     * @internal
+     */
+    public function catchOutput($buffer)
+    {
+        $this->caughtOutput = $buffer;
+
+        return '';
+    }
+
+    /**
+     * @internal
+     */
+    public function cleanOutput($buffer)
+    {
+        if ($this->caughtOutput) {
+            // use substr_replace() instead of substr() for mbstring overloading resistance
+            $cleanBuffer = substr_replace($buffer, '', 0, $this->caughtOutput);
+            if (isset($cleanBuffer[0])) {
+                $buffer = $cleanBuffer;
+            }
+        }
+
+        return $buffer;
     }
 }

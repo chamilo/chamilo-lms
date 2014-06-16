@@ -11,14 +11,19 @@ set_error_handler(array('ParserTest','showError'),E_ALL | E_STRICT);
 set_time_limit(60);
 //error_reporting(E_ALL | E_STRICT);
 
+$dir = dirname(dirname(__FILE__));
 
 
 //get parser
-$dir = dirname(dirname(__FILE__));
 require_once $dir.'/lib/Less/Autoloader.php';
 Less_Autoloader::register();
-
 require_once $dir.'/lessc.inc.php';
+
+
+
+//using release
+/* require_once $dir.'/test/release/Less.php'; */
+
 
 
 //get diff
@@ -246,7 +251,8 @@ class ParserTest{
 			 * Less_Cache Testing
 			Less_Cache::$cache_dir = $this->cache_dir;
 			//$cached_css_file = Less_Cache::Regen( array($file_less=>'') );
-			$cached_css_file = Less_Cache::Get( array($file_less=>'') );
+			//$options['output'] = md5($file_less).'.css';
+			$cached_css_file = Less_Cache::Get( array($file_less=>''), $options );
 			$compiled = file_get_contents( $this->cache_dir.'/'.$cached_css_file );
 			*/
 
@@ -809,7 +815,7 @@ function func_trace($len = 1){
 		}
 		if( !in_array($trace, $traces) ){
 			msg($trace);
-			$traces[] = $trace;
+			//$traces[] = $trace;
 		}
 	}
 }

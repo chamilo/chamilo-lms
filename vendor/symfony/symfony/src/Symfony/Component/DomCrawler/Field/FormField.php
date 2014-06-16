@@ -19,7 +19,7 @@ namespace Symfony\Component\DomCrawler\Field;
 abstract class FormField
 {
     /**
-     * @var \DOMNode
+     * @var \DOMElement
      */
     protected $node;
     /**
@@ -46,19 +46,13 @@ abstract class FormField
     /**
      * Constructor.
      *
-     * @param \DOMNode $node The node associated with this field
+     * @param \DOMElement $node The node associated with this field
      */
-    public function __construct(\DOMNode $node)
+    public function __construct(\DOMElement $node)
     {
         $this->node = $node;
         $this->name = $node->getAttribute('name');
-
-        $this->document = new \DOMDocument('1.0', 'UTF-8');
-        $this->node = $this->document->importNode($this->node, true);
-
-        $root = $this->document->appendChild($this->document->createElement('_root'));
-        $root->appendChild($this->node);
-        $this->xpath = new \DOMXPath($this->document);
+        $this->xpath = new \DOMXPath($node->ownerDocument);
 
         $this->initialize();
     }

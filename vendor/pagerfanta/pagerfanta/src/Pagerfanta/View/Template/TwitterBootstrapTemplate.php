@@ -18,11 +18,9 @@ class TwitterBootstrapTemplate extends Template
 {
     static protected $defaultOptions = array(
         'prev_message'        => '&larr; Previous',
-        'prev_disabled_href'  => '#',
         'next_message'        => 'Next &rarr;',
-        'next_disabled_href'  => '#',
         'dots_message'        => '&hellip;',
-        'dots_href'           => '#',
+        'active_suffix'       => '',
         'css_container_class' => 'pagination',
         'css_prev_class'      => 'prev',
         'css_next_class'      => 'next',
@@ -56,16 +54,15 @@ class TwitterBootstrapTemplate extends Template
     {
         $href = $this->generateRoute($page);
 
-        return $this->li($class, $href, $text);
+        return $this->linkLi($class, $href, $text);
     }
 
     public function previousDisabled()
     {
         $class = $this->previousDisabledClass();
-        $href = $this->option('prev_disabled_href');
         $text = $this->option('prev_message');
 
-        return $this->li($class, $href, $text);
+        return $this->spanLi($class, $text);
     }
 
     private function previousDisabledClass()
@@ -84,10 +81,9 @@ class TwitterBootstrapTemplate extends Template
     public function nextDisabled()
     {
         $class = $this->nextDisabledClass();
-        $href = $this->option('next_disabled_href');
         $text = $this->option('next_message');
 
-        return $this->li($class, $href, $text);
+        return $this->spanLi($class, $text);
     }
 
     private function nextDisabledClass()
@@ -115,25 +111,31 @@ class TwitterBootstrapTemplate extends Template
 
     public function current($page)
     {
-        $text = $page;
+        $text = trim($page . ' ' . $this->option('active_suffix'));
         $class = $this->option('css_active_class');
 
-        return $this->pageWithTextAndClass($page, $text, $class);
+        return $this->spanLi($class, $text);
     }
 
     public function separator()
     {
         $class = $this->option('css_dots_class');
-        $href = $this->option('dots_href');
         $text = $this->option('dots_message');
 
-        return $this->li($class, $href, $text);
+        return $this->spanLi($class, $text);
     }
 
-    private function li($class, $href, $text)
+    private function linkLi($class, $href, $text)
     {
         $liClass = $class ? sprintf(' class="%s"', $class) : '';
 
         return sprintf('<li%s><a href="%s">%s</a></li>', $liClass, $href, $text);
+    }
+
+    private function spanLi($class, $text)
+    {
+        $liClass = $class ? sprintf(' class="%s"', $class) : '';
+
+        return sprintf('<li%s><span>%s</span></li>', $liClass, $text);
     }
 }

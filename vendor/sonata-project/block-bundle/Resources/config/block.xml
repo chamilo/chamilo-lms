@@ -9,6 +9,7 @@
         <parameter key="sonata.block.service.text.class">Sonata\BlockBundle\Block\Service\TextBlockService</parameter>
         <parameter key="sonata.block.service.rss.class">Sonata\BlockBundle\Block\Service\RssBlockService</parameter>
         <parameter key="sonata.block.service.menu.class">Sonata\BlockBundle\Block\Service\MenuBlockService</parameter>
+        <parameter key="sonata.block.service.template.class">Sonata\BlockBundle\Block\Service\TemplateBlockService</parameter>
     </parameters>
 
     <services>
@@ -41,7 +42,14 @@
             <argument>sonata.block.menu</argument>
             <argument type="service" id="templating" />
             <argument type="service" id="knp_menu.menu_provider" />
-            <argument type="collection"></argument>
+            <argument type="collection" />
         </service>
+
+        <service id="sonata.block.service.template" class="%sonata.block.service.template.class%">
+            <tag name="sonata.block" />
+            <argument>sonata.block.template</argument>
+            <argument type="service" id="templating" />
+        </service>
+
     </services>
 </container>

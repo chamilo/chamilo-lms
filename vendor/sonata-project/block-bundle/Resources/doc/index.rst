@@ -16,3 +16,13 @@ Reference Guide
    reference/exceptions
    reference/advanced_usage
    reference/cache
+   reference/events
+
+Cookbooks
+---------
+
+.. toctree::
+   :maxdepth: 1
+   :numbered:
+
+   cookbooks/rapid_prototyping

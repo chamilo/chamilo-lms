@@ -37,6 +37,7 @@ class SonataCoreExtension extends Extension
         $config = $processor->processConfiguration($configuration, $configs);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('date.xml');
         $loader->load('flash.xml');
         $loader->load('form_types.xml');
         $loader->load('twig.xml');
@@ -81,7 +82,7 @@ class SonataCoreExtension extends Extension
                 'warning' => array('domain' => 'SonataCoreBundle'),
                 'sonata_flash_info' => array('domain' => 'SonataAdminBundle'),
             )),
-            'error' => array('types' => array(
+            'danger' => array('types' => array(
                 'error' => array('domain' => 'SonataCoreBundle'),
                 'sonata_flash_error' => array('domain' => 'SonataAdminBundle'),
                 'sonata_user_error'  => array('domain' => 'SonataUserBundle'),

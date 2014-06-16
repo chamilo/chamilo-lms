@@ -1,3 +1,6 @@
+.. index::
+    double: Flash Message; Definition
+
 Flash Messages
 ==============
 
@@ -40,17 +43,17 @@ To use this feature in your PHP classes/controllers, you can use for example:
 
     <?php
 
-    $this->get('sonata.core.flashmessage.manager')
+    $flashManager = $this->get('sonata.core.flashmessage.manager');
     $messages = $flashManager->get('success');
 
 To use this feature in your templates, simply include the following template (with an optional domain parameter):
 
-.. code-block:: twig
+.. code-block:: jinja
 
     {% include 'SonataCoreBundle:FlashMessage:render.html.twig' %}
 
 Please note that if necessary, you can also specify a translation domain to override configuration here:
 
-.. code-block:: twig
+.. code-block:: jinja
 
     {% include 'SonataCoreBundle:FlashMessage:render.html.twig' with {domain: 'MyCustomBundle'} %}

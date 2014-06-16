@@ -16,7 +16,8 @@
         "psr/log": "~1.0",
         "doctrine/orm": "~2.2",
         "predis/predis": "~0.8,<1.0",
-        "doctrine/phpcr-odm": "~1.0"
+        "doctrine/phpcr-odm": "~1.0",
+        "jackalope/jackalope-doctrine-dbal": "~1.0"
     },
     "suggest": {
         "doctrine/orm": "ORM support",

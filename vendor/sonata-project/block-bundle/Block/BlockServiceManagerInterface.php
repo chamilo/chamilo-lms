@@ -18,10 +18,11 @@ interface BlockServiceManagerInterface
     /**
      * @param string $name
      * @param string $service
+     * @param array  $contexts
      *
      * @return void
      */
-    public function add($name, $service);
+    public function add($name, $service, $contexts = array());
 
     /**
      * Return the block service linked to the link
@@ -33,6 +34,8 @@ interface BlockServiceManagerInterface
     public function get(BlockInterface $block);
 
     /**
+     * @deprecated will be remove in 2.4, use the add method instead
+     *
      * @param array $blockServices
      *
      * @return void
@@ -45,7 +48,13 @@ interface BlockServiceManagerInterface
     public function getServices();
 
     /**
+     * @param string $name
      *
+     * @return array
+     */
+    public function getServicesByContext($name);
+
+    /**
      * @param string $name
      *
      * @return boolean
@@ -60,6 +69,8 @@ interface BlockServiceManagerInterface
     public function getService($name);
 
     /**
+     * @deprecated will be remove in 2.4
+     *
      * @return array
      */
     public function getLoadedServices();

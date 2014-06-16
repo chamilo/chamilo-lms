@@ -27,13 +27,11 @@ class ServiceListTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('choice', $type->getParent());
     }
 
+    /**
+     * @expectedException Symfony\Component\OptionsResolver\Exception\MissingOptionsException
+     */
     public function testOptionsWithInvalidContext()
     {
-        if (Kernel::MINOR_VERSION < 3) {
-            $this->setExpectedException('RuntimeException');
-        } else {
-            $this->setExpectedException('\Symfony\Component\Form\Exception\InvalidArgumentException');
-        }
 
         $blockServiceManager = $this->getMock('Sonata\BlockBundle\Block\BlockServiceManagerInterface');
 
@@ -52,7 +50,12 @@ class ServiceListTypeTest extends \PHPUnit_Framework_TestCase
         $blockService->expects($this->once())->method('getName')->will($this->returnValue('value'));
 
         $blockServiceManager = $this->getMock('Sonata\BlockBundle\Block\BlockServiceManagerInterface');
-        $blockServiceManager->expects($this->once())->method('getService')->will($this->returnValue($blockService));
+        $blockServiceManager
+            ->expects($this->once())
+            ->method('getServicesByContext')
+            ->with($this->equalTo('cms'))
+            ->will($this->returnValue(array('my.service.code' => $blockService)));
+
         $type = new ServiceListType($blockServiceManager, array(
             'cms' => array('my.service.code')
         ));

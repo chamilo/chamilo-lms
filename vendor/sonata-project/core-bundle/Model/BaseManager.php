@@ -49,7 +49,15 @@ abstract class BaseManager implements ManagerInterface
      */
     public function getObjectManager()
     {
-        return $this->registry->getManagerForClass($this->class);
+        $manager = $this->registry->getManagerForClass($this->class);
+
+        if (!$manager) {
+            throw new \RuntimeException(sprintf("Unable to find the mapping information for the class %s."
+                ." Please check the 'auto_mapping' option (http://symfony.com/doc/current/reference/configuration/doctrine.html#configuration-overview)"
+                ." or add the bundle to the 'mappings' section in the doctrine configuration.", $this->class));
+        }
+
+        return $manager;
     }
 
     /**
@@ -82,6 +90,14 @@ abstract class BaseManager implements ManagerInterface
     public function findOneBy(array $criteria, array $orderBy = null)
     {
         return $this->getRepository()->findOneBy($criteria, $orderBy);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function find($id)
+    {
+        return $this->getRepository()->find($id);
     }
 
     /**
@@ -139,16 +155,16 @@ abstract class BaseManager implements ManagerInterface
     }
 
     /**
-     * @param $entity
+     * @param $object
      *
      * @throws \InvalidArgumentException
      */
-    protected function checkObject($entity)
+    protected function checkObject($object)
     {
-        if (!$entity instanceof $this->class) {
+        if (!$object instanceof $this->class) {
             throw new \InvalidArgumentException(sprintf(
-                'Entity must be instance of %s, %s given',
-                $this->class, is_object($entity)? get_class($entity) : gettype($entity)
+                'Object must be instance of %s, %s given',
+                $this->class, is_object($object)? get_class($object) : gettype($object)
             ));
         }
     }

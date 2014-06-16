@@ -48,7 +48,14 @@ class PRedisCache extends BaseCacheHandler
      */
     public function flush(array $keys = array())
     {
-        return $this->getClient()->del($this->computeCacheKeys($keys));
+        $this->getClient()->del($this->computeCacheKeys($keys));
+
+        // http://redis.io/commands/del
+        // it is not possible to know is the command succeed as the del command returns
+        // the number of row deleted.
+        // we can flush an non existant row
+
+        return true;
     }
 
     /**

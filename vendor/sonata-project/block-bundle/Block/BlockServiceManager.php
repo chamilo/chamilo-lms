@@ -32,6 +32,8 @@ class BlockServiceManager implements BlockServiceManagerInterface
 
     protected $inValidate;
 
+    protected $contexts;
+
     /**
      * @param ContainerInterface $container
      * @param $debug
@@ -40,6 +42,7 @@ class BlockServiceManager implements BlockServiceManagerInterface
     public function __construct(ContainerInterface $container, $debug, LoggerInterface $logger = null)
     {
         $this->services  = array();
+        $this->contexts  = array();
         $this->container = $container;
     }
 
@@ -96,9 +99,17 @@ class BlockServiceManager implements BlockServiceManagerInterface
     /**
      * {@inheritdoc}
      */
-    public function add($name, $service)
+    public function add($name, $service, $contexts = array())
     {
         $this->services[$name] = $service;
+
+        foreach ($contexts as $context) {
+            if (!array_key_exists($context, $this->contexts)) {
+                $this->contexts[$context] = array();
+            }
+
+            $this->contexts[$context][] = $name;
+        }
     }
 
     /**
@@ -106,7 +117,9 @@ class BlockServiceManager implements BlockServiceManagerInterface
      */
     public function setServices(array $blockServices)
     {
-        $this->services = $blockServices;
+        foreach($blockServices as $name => $service) {
+            $this->add($name, $service);
+        }
     }
 
     /**
@@ -121,6 +134,24 @@ class BlockServiceManager implements BlockServiceManagerInterface
         }
 
         return $this->services;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getServicesByContext($context)
+    {
+        if (!array_key_exists($context, $this->contexts)) {
+            return array();
+        }
+
+        $services = array();
+
+        foreach ($this->contexts[$context] as $name) {
+            $services[$name] = $this->getService($name);
+        }
+
+        return $services;
     }
 
     /**
@@ -142,6 +173,8 @@ class BlockServiceManager implements BlockServiceManagerInterface
     }
 
     /**
+     * @todo: this function should be remove into a proper statefull object
+     *
      * {@inheritdoc}
      */
     public function validate(ErrorElement $errorElement, BlockInterface $block)

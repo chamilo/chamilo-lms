@@ -11,6 +11,7 @@
 
 namespace Sonata\Cache\Tests\Adapter\Cache;
 
+use Sonata\Cache\Adapter\Cache\MongoCache;
 use Sonata\Cache\Adapter\Counter\MongoCounter;
 use Sonata\Cache\Counter;
 
@@ -18,7 +19,9 @@ class MongoCounterTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
-        if (!class_exists('\Mongo', true)) {
+        $class = MongoCache::getMongoClass();
+
+        if (!class_exists($class, true)) {
             $this->markTestSkipped('Mongo is not installed');
         }
 
@@ -35,7 +38,7 @@ class MongoCounterTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('MongoDB is not running');
         }
 
-        $mongo = new \Mongo('mongodb://127.0.0.1:27017');
+        $mongo = new $class('mongodb://127.0.0.1:27017');
 
         $mongo
             ->selectDB('sonata_counter_test')

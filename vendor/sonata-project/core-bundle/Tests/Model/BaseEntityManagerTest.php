@@ -35,19 +35,34 @@ class BaseEntityManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
+     * @expectedExceptionMessage The property exception does not exists
      */
     public function testException()
     {
         $this->getManager()->exception;
     }
 
-    public function testGetEntityManager()
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Unable to find the mapping information for the class classname. Please check the 'auto_mapping' option (http://symfony.com/doc/current/reference/configuration/doctrine.html#configuration-overview) or add the bundle to the 'mappings' section in the doctrine configuration
+     */
+    public function testExceptionOnNonMappedEntity()
     {
         $registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
-        $registry->expects($this->once())->method('getManagerForClass');
+        $registry->expects($this->once())->method('getManagerForClass')->will($this->returnValue(null));
 
         $manager = new EntityManager('classname', $registry);
+        $manager->getObjectManager();
+    }
 
+    public function testGetEntityManager()
+    {
+        $objectManager = $this->getMock('Doctrine\Common\Persistence\ObjectManager');
+
+        $registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $registry->expects($this->once())->method('getManagerForClass')->will($this->returnValue($objectManager));
+
+        $manager = new EntityManager('classname', $registry);
 
         $manager->em;
     }

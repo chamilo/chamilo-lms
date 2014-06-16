@@ -40,7 +40,7 @@ class MongoCache extends BaseCacheHandler
      */
     public function flushAll()
     {
-        return $this->getCollection()->remove(array());
+        return $this->flush(array());
     }
 
     /**
@@ -48,7 +48,11 @@ class MongoCache extends BaseCacheHandler
      */
     public function flush(array $keys = array())
     {
-        return $this->getCollection()->remove($keys);
+        $result = $this->getCollection()->remove($keys, array(
+            'w' => 1
+        ));
+
+        return $result['ok'] == 1 && $result['err'] === null;
     }
 
     /**
@@ -67,7 +71,9 @@ class MongoCache extends BaseCacheHandler
     private function getCollection()
     {
         if (!$this->collection) {
-            $mongo = new \Mongo(sprintf('mongodb://%s', implode(',', $this->servers)));
+            $class = self::getMongoClass();
+
+            $mongo = new $class(sprintf('mongodb://%s', implode(',', $this->servers)));
 
             $this->collection = $mongo
                 ->selectDB($this->databaseName)
@@ -75,6 +81,20 @@ class MongoCache extends BaseCacheHandler
         }
 
         return $this->collection;
+    }
+
+    /**
+     * Returns the valid Mongo class client for the current php driver
+     *
+     * @return string
+     */
+    public static function getMongoClass()
+    {
+        if (class_exists('\MongoClient')) {
+            return '\MongoClient';
+        }
+
+        return '\Mongo';
     }
 
     /**

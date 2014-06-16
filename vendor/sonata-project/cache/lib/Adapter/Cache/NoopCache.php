@@ -10,8 +10,8 @@
 
 namespace Sonata\Cache\Adapter\Cache;
 
-use Sonata\Cache\CacheAdapterInterface;
 use Sonata\Cache\CacheElement;
+use Sonata\Cache\Exception\UnsupportedException;
 
 class NoopCache extends BaseCacheHandler
 {
@@ -52,7 +52,7 @@ class NoopCache extends BaseCacheHandler
      */
     public function get(array $keys)
     {
-        throw new \RunTimeException('The NoopCache::get() cannot called');
+        throw new UnsupportedException('The NoopCache::get() cannot called');
     }
 
     /**

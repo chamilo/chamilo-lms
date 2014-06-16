@@ -11,6 +11,7 @@
 
 namespace Sonata\BlockBundle\Block;
 
+use Sonata\AdminBundle\Validator\ErrorElement;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Sonata\BlockBundle\Model\BlockInterface;
@@ -188,5 +189,27 @@ abstract class BaseBlockService implements BlockServiceInterface
             'block_context'  => $blockContext,
             'block'          => $blockContext->getBlock(),
         ), $response);
+    }
+
+    /**
+     * @param FormMapper     $form
+     * @param BlockInterface $block
+     *
+     * @return void
+     */
+    public function buildEditForm(FormMapper $form, BlockInterface $block)
+    {
+
+    }
+
+    /**
+     * @param ErrorElement   $errorElement
+     * @param BlockInterface $block
+     *
+     * @return void
+     */
+    public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
+    {
+
     }
 }

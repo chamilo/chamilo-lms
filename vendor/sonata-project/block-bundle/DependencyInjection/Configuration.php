@@ -21,6 +21,19 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
+     * @var array
+     */
+    protected $defaultContainerTemplates;
+
+    /**
+     * @param array $defaultContainerTemplates
+     */
+    public function __construct(array $defaultContainerTemplates)
+    {
+        $this->defaultContainerTemplates = $defaultContainerTemplates;
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getConfigTreeBuilder()
@@ -33,6 +46,23 @@ class Configuration implements ConfigurationInterface
             ->fixXmlConfig('template')
             ->fixXmlConfig('block')
             ->fixXmlConfig('block_by_class')
+            ->validate()
+                ->always(function($value) {
+                    foreach ($value['blocks'] as $name => &$block) {
+                        if (count($block['contexts']) == 0) {
+                            $block['contexts'] = $value['default_contexts'];
+                        }
+                    }
+
+                    if (isset($value['profiler']['container_types']) && !empty($value['profiler']['container_types'])
+                        && isset($value['container']['types']) && !empty($value['container']['types'])
+                        && 0 !== count(array_diff($value['profiler']['container_types'], $value['container']['types']))) {
+                        throw new \RuntimeException("You cannot have different config options for sonata_block.profiler.container_types and sonata_block.container.types; the first one is deprecated, in case of doubt use the latter");
+                    }
+
+                    return $value;
+                })
+            ->end()
             ->children()
                 ->arrayNode('profiler')
                     ->addDefaultsIfNotSet()
@@ -67,6 +97,29 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->scalarNode('block_base')->defaultValue(null)->end()
                         ->scalarNode('block_container')->defaultValue(null)->end()
+                    ->end()
+                ->end()
+
+                ->arrayNode('container')
+                    ->info('block container configuration')
+                    ->addDefaultsIfNotSet()
+                    ->fixXmlConfig('type', 'types')
+                    ->fixXmlConfig('template', 'templates')
+                    ->children()
+                        ->arrayNode('types')
+                            ->info('container service ids')
+                            ->isRequired()
+                            // add default value to well know users of BlockBundle
+                            ->defaultValue(array('sonata.block.service.container', 'sonata.page.block.container', 'cmf.block.container', 'cmf.block.slideshow'))
+                            ->prototype('scalar')->end()
+                        ->end()
+                        ->arrayNode('templates')
+                            ->info('container templates')
+                            ->isRequired()
+                            ->defaultValue($this->defaultContainerTemplates)
+                            ->prototype('scalar')->end()
+                        ->end()
+
                     ->end()
                 ->end()
 
@@ -156,5 +209,10 @@ class Configuration implements ConfigurationInterface
         ;
 
         return $treeBuilder;
+    }
+
+    public function getConfiguration(array $config, ContainerBuilder $container)
+    {
+        return new Configuration(array());
     }
 }

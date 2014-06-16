@@ -1,7 +1,10 @@
+.. index::
+    double: Twig Status Helpers; Definition
+
 Twig status helper
 ==================
 
-The bundle comes with a Twig helper allowing you to generate CSS class names depending on an entity field.
+The bundle comes with a `Twig` helper allowing you to generate CSS class names, depending on an entity field.
 
 Define a service
 ----------------

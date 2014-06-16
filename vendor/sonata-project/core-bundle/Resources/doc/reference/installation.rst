@@ -1,11 +1,15 @@
+.. index::
+    single: Installation
+
 Installation
 ============
 
-* Add ``SonataCoreBundle`` to your ``vendor/bundles`` directory with the deps file::
+* Add ``SonataCoreBundle`` to your ``vendor/bundles`` directory with the `deps` file:
 
 .. code-block:: json
 
-    //composer.json
+    // composer.json
+
     "require": {
     //...
         "sonata-project/core-bundle": "~2.2@dev",
@@ -13,13 +17,14 @@ Installation
     }
 
 
-* Add ``SonataCoreBundle`` to your application kernel::
+* Add ``SonataCoreBundle`` to your application kernel:
 
 .. code-block:: php
 
     <?php
 
     // app/AppKernel.php
+
     public function registerBundles()
     {
         return array(
@@ -29,13 +34,13 @@ Installation
         );
     }
 
-* Create a configuration file ``sonata_core.yml`` with this content::
+* Create a configuration file ``sonata_core.yml`` with this content:
 
 .. code-block:: yaml
 
     sonata_core: ~
 
-* Update the ``config.yml`` with the new resource to import::
+* Update the ``config.yml`` with the new resource to import:
 
 .. code-block:: yaml
 

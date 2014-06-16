@@ -8,6 +8,10 @@
         <service id="sonata.block.form.type.block" class="Sonata\BlockBundle\Form\Type\ServiceListType">
             <tag name="form.type" alias="sonata_block_service_choice" />
             <argument type="service" id="sonata.block.manager" />
+        </service>
+
+        <service id="sonata.block.form.type.container_template" class="Sonata\BlockBundle\Form\Type\ContainerTemplateType">
+            <tag name="form.type" alias="sonata_type_container_template_choice" />
             <argument />
         </service>
     </services>

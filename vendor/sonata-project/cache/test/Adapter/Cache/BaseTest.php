@@ -32,7 +32,8 @@ abstract class BaseTest extends \PHPUnit_Framework_TestCase
         $cache->set(array('id' => 42), 'data');
         $this->assertTrue($cache->has(array('id' => 42)));
 
-        $cache->flush(array('id' => 42));
+        $res = $cache->flush(array('id' => 42));
+        $this->assertTrue(true === $res); // make sure it's really boolean TRUE
         $this->assertFalse($cache->has(array('id' => 42)));
 
         $cacheElement = $cache->get(array('id' => 7));

@@ -12,6 +12,7 @@
 namespace Sonata\BlockBundle\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,11 +23,19 @@ class DebugBlocksCommand extends BaseCommand
     {
         $this->setName('sonata:block:debug');
         $this->setDescription('Debug all blocks available, show default settings of each block');
+
+        $this->addOption('context', 'c', InputOption::VALUE_REQUIRED, 'display service for the specified context');
     }
 
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        foreach ($this->getBlockServiceManager()->getServices() as $code => $service) {
+        if ($input->getOption('context')) {
+            $services = $this->getBlockServiceManager()->getServicesByContext($input->getOption('context'));
+        } else {
+            $services = $this->getBlockServiceManager()->getServices();
+        }
+
+        foreach ($services as $code => $service) {
 
             $resolver = new OptionsResolver();
             $service->setDefaultSettings($resolver);

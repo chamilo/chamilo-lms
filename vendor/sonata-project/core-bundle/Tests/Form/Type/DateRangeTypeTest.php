@@ -29,6 +29,6 @@ class DateRangeTypeTest extends TypeTestCase
 
         $options = $resolver->resolve();
 
-        $this->assertEquals(array('field_options' => array()), $options);
+        $this->assertEquals(array('field_options' => array(), 'field_type' => 'date'), $options);
     }
 }

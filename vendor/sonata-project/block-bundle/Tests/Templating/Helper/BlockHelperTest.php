@@ -37,8 +37,12 @@ class BlockHelperTest extends \PHPUnit_Framework_TestCase
     public function testRenderEventWithListeners()
     {
         $blockService = $this->getMock('Sonata\BlockBundle\Block\BlockServiceInterface');
-        $blockService->expects($this->once())->method('getJavascripts')->will($this->returnValue(array()));
-        $blockService->expects($this->once())->method('getStylesheets')->will($this->returnValue(array()));
+        $blockService->expects($this->once())->method('getJavascripts')->will($this->returnValue(array(
+            '/js/base.js'
+        )));
+        $blockService->expects($this->once())->method('getStylesheets')->will($this->returnValue(array(
+            '/css/base.css'
+        )));
 
         $blockServiceManager = $this->getMock('Sonata\BlockBundle\Block\BlockServiceManagerInterface');
         $blockServiceManager->expects($this->any())->method('get')->will($this->returnValue($blockService));
@@ -61,7 +65,6 @@ class BlockHelperTest extends \PHPUnit_Framework_TestCase
                 'use_cache' => false
             ));
             $block->setType('test');
-
             $event->addBlock($block);
 
             return $event;
@@ -70,5 +73,21 @@ class BlockHelperTest extends \PHPUnit_Framework_TestCase
         $helper = new BlockHelper($blockServiceManager, array(), $blockRenderer, $blockContextManager, $eventDispatcher);
 
         $this->assertEquals('<span>test</span>', $helper->renderEvent('my.event'));
+
+        $this->assertEquals(trim($helper->includeJavascripts('screen', '/application')), '<script src="/application/js/base.js" type="text/javascript"></script>');
+        $this->assertEquals(trim($helper->includeJavascripts('screen', '')), '<script src="/js/base.js" type="text/javascript"></script>');
+
+        $this->assertEquals($helper->includeStylesheets('screen', '/application'), <<<EXPECTED
+<style type='text/css' media='screen'>
+@import url(/application/css/base.css);
+</style>
+EXPECTED
+);
+        $this->assertEquals($helper->includeStylesheets('screen', ''), <<<EXPECTED
+<style type='text/css' media='screen'>
+@import url(/css/base.css);
+</style>
+EXPECTED
+);
     }
 }

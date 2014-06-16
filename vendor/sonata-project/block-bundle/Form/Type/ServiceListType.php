@@ -23,16 +23,12 @@ class ServiceListType extends AbstractType
 {
     protected $manager;
 
-    protected $contexts;
-
     /**
      * @param BlockServiceManagerInterface $manager
-     * @param array                        $contexts
      */
-    public function __construct(BlockServiceManagerInterface $manager, array $contexts = array())
+    public function __construct(BlockServiceManagerInterface $manager)
     {
         $this->manager  = $manager;
-        $this->contexts = $contexts;
     }
 
     /**
@@ -56,25 +52,19 @@ class ServiceListType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $contexts = $this->contexts;
         $manager = $this->manager;
 
+        $resolver->setRequired(array(
+            'context',
+        ));
+
         $resolver->setDefaults(array(
-            'context'           => false,
             'multiple'          => false,
             'expanded'          => false,
-            'choices'           => function (Options $options, $previousValue) use ($contexts, $manager) {
-                if (!isset($contexts[$options['context']])) {
-                    if (Kernel::MINOR_VERSION < 3) {
-                        throw new \RuntimeException(sprintf('Invalid context: `%s`', $options['context']));
-                    }
-
-                    throw new InvalidArgumentException(sprintf('Invalid context: `%s`', $options['context']));
-                }
-
+            'choices'           => function (Options $options, $previousValue) use ($manager) {
                 $types = array();
-                foreach ($contexts[$options['context']] as $service) {
-                    $types[$service] = sprintf('%s - %s', $manager->getService($service)->getName(), $service);
+                foreach ($manager->getServicesByContext($options['context']) as $code => $service) {
+                    $types[$code] = sprintf('%s - %s', $service->getName(), $code);
                 }
 
                 return $types;

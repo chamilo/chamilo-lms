@@ -17,7 +17,9 @@ class MongoCacheTest extends BaseTest
 {
     public function setUp()
     {
-        if (!class_exists('\Mongo', true)) {
+        $class = MongoCache::getMongoClass();
+
+        if (!class_exists($class, true)) {
             $this->markTestSkipped('Mongo is not installed');
         }
 
@@ -34,7 +36,7 @@ class MongoCacheTest extends BaseTest
             $this->markTestSkipped('MongoDB is not running');
         }
 
-        $mongo = new \Mongo('mongodb://127.0.0.1:27017');
+        $mongo = new $class('mongodb://127.0.0.1:27017');
 
         $mongo
             ->selectDB('sonata_counter_test')

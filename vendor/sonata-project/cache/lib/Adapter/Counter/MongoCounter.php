@@ -10,6 +10,7 @@
 
 namespace Sonata\Cache\Adapter\Counter;
 
+use Sonata\Cache\Adapter\Cache\MongoCache;
 use Sonata\Cache\Counter;
 
 class MongoCounter extends BaseCounter
@@ -40,7 +41,9 @@ class MongoCounter extends BaseCounter
     private function getCollection()
     {
         if (!$this->collection) {
-            $mongo = new \Mongo(sprintf('mongodb://%s', implode(',', $this->servers)));
+            $class = MongoCache::getMongoClass();
+
+            $mongo = new $class(sprintf('mongodb://%s', implode(',', $this->servers)));
 
             $this->collection = $mongo
                 ->selectDB($this->databaseName)

@@ -44,4 +44,13 @@ class HttpCacheHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(42, $response->getTtl());
     }
+
+    public function testResponseTtlNotAlteredIfNoRenderedBlock()
+    {
+        $handler = new HttpCacheHandler();
+
+        $handler->alterResponse($response = Response::create()->setTtl(84));
+
+        $this->assertEquals(84, $response->getTtl());
+    }
 }

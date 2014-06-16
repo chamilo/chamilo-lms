@@ -57,6 +57,15 @@ interface ManagerInterface
     public function findOneBy(array $criteria, array $orderBy = null);
 
     /**
+     * Finds an entity by its primary key / identifier.
+     *
+     * @param mixed $id The identifier
+     *
+     * @return object
+     */
+    public function find($id);
+
+    /**
      * Create an empty Entity instance.
      *
      * @return object

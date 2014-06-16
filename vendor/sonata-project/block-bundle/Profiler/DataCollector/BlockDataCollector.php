@@ -56,7 +56,7 @@ class BlockDataCollector implements DataCollectorInterface, \Serializable
     /**
      * Constructor
      *
-     * @param BlockHelper $renderer       Block renderer
+     * @param BlockHelper $blockHelper    Block renderer
      * @param array       $containerTypes array of container types
      */
     public function __construct(BlockHelper $blockHelper, array $containerTypes)

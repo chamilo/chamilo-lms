@@ -11,6 +11,8 @@
 
 namespace Sonata\CoreBundle\Model;
 
+use Doctrine\ODM\MongoDB\DocumentManager;
+
 /**
  * Class DocumentBaseManager
  *
@@ -28,6 +30,9 @@ abstract class BaseDocumentManager extends BaseManager
         return $this->getObjectManager()->getConnection();
     }
 
+    /**
+     * @return DocumentManager
+     */
     public function getDocumentManager()
     {
         return $this->getObjectManager();

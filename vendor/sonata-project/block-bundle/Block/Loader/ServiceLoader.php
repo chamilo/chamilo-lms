@@ -32,7 +32,10 @@ class ServiceLoader implements BlockLoaderInterface
     public function load($configuration)
     {
         if (!in_array($configuration['type'], $this->types)) {
-            throw new \RuntimeException(sprintf('The block type %s does not exist', $configuration['type']));
+            throw new \RuntimeException(sprintf(
+                'The block type "%s" does not exist',
+                $configuration['type']
+            ));
         }
 
         $block = new Block;

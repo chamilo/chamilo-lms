@@ -31,7 +31,7 @@
             <argument type="service" id="sonata.block.templating.helper" />
         </service>
 
-        <service id="sonata.block.templating.helper" class="Sonata\BlockBundle\Templating\Helper\BlockHelper" public="false">
+        <service id="sonata.block.templating.helper" class="Sonata\BlockBundle\Templating\Helper\BlockHelper">
             <tag name="templating.helper" alias="sonata_block" />
 
             <argument type="service" id="sonata.block.manager" />

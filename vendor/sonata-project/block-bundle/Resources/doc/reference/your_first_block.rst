@@ -1,22 +1,25 @@
+.. index::
+    single: Block
+    single: Tutorial
+    single: RSS Block
+
 Your first block
-===============
+================
 
-This quick tutorial explains how to create a RSS reader block.
+This quick tutorial explains how to create a `RSS reader` block.
 
-A block service is just a service which must implement the ``BlockServiceInterface``
-interface. There is only one instance of a block service, however there are many block
-instances.
+A `block service` is just a service which must implement the ``BlockServiceInterface`` interface. There is only one instance of a block service, however there are many block instances.
 
 First namespaces
 ----------------
 
 The ``BaseBlockService`` implements some basic methods defined by the interface.
-The current Rss block will extend this base class. The others `use` statements are required
-by the interface and remaining methods.
+The current RSS block will extend this base class. The others `use` statements are required by the interface and remaining methods.
 
 .. code-block:: php
 
     <?php
+
     namespace Sonata\BlockBundle\Block;
 
     use Symfony\Component\HttpFoundation\Response;
@@ -31,17 +34,17 @@ by the interface and remaining methods.
 Default settings
 ----------------
 
-A block service needs settings to work properly, so to ensure consistency, the service should
-define a ``setDefaultSettings`` method. In the current tutorial, the default settings are:
+A `block service` needs settings to work properly, so to ensure consistency, the service should define a ``setDefaultSettings`` method.
+In the current tutorial, the default settings are:
 
-    - url : the feed url
-    - title : the block title
-    - template : the template to render the block
+* `URL`: the feed url,
+* `title`: the block title,
+* `template`: the template to render the block.
 
 .. code-block:: php
 
     <?php
-    function setDefaultSettings(OptionsResolverInterface $resolver)
+    public function setDefaultSettings(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
             'url'      => false,
@@ -53,8 +56,7 @@ define a ``setDefaultSettings`` method. In the current tutorial, the default set
 Form Edition
 ------------
 
-The ``BlockBundle`` relies on the ``AdminBundle`` to manage form edition and keep
-a good consistency.
+The ``BlockBundle`` relies on the ``AdminBundle`` to manage form edition and keep a good consistency.
 
 .. code-block:: php
 
@@ -69,13 +71,12 @@ a good consistency.
         ));
     }
 
-The validation is done at runtime through a ``validateBlock`` method. You can call any
-Symfony2 assertions, like :
+The validation is done at runtime through a ``validateBlock`` method. You can call any Symfony2 assertions, like:
 
 .. code-block:: php
 
     <?php
-    function validateBlock(ErrorElement $errorElement, BlockInterface $block)
+    public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
     {
         $errorElement
             ->with('settings.url')
@@ -89,18 +90,17 @@ Symfony2 assertions, like :
             ->end();
     }
 
-The ``sonata_type_immutable_array`` type is a specific form type which allows to edit
-an array.
+The ``sonata_type_immutable_array`` type is a specific `form type` which allows to edit an array.
 
 Execute
 -------
 
-The next step is the execute method, this method must return a ``Response`` object, this
-object is used to render the block.
+The next step is the `Execute` method. This method must return a ``Response`` object, which is used to render the block.
 
 .. code-block:: php
 
     <?php
+
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
         // merge settings
@@ -139,8 +139,7 @@ object is used to render the block.
 Template
 --------
 
-A block template is very simple, in the current tutorial, we are looping on feeds or if not
-defined, a error message is displayed.
+A block template is very simple, in the current tutorial. Indeed, we are looping on feeds or if not defined, a error message is displayed.
 
 .. code-block:: jinja
 
@@ -164,7 +163,7 @@ defined, a error message is displayed.
 Service
 -------
 
-We are almost done! Now just declare the block as a service
+We are almost done! Now, just declare the block as a service:
 
 .. code-block:: xml
 
@@ -174,11 +173,12 @@ We are almost done! Now just declare the block as a service
         <argument type="service" id="templating" />
     </service>
 
-and add it to sonata configuration
+and add it to Sonata configuration:
 
 .. code-block:: yaml
 
-    #config.yml
+    # app/config/config.yml
+
     sonata_block:
         blocks:
             sonata.block.service.rss:

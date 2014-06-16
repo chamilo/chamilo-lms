@@ -67,4 +67,28 @@ class BlockServiceManagerTest extends \PHPUnit_Framework_TestCase
 
         $manager->get($block);
     }
+
+    public function testGetEmptyListFromInvalidContext()
+    {
+        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $manager = new BlockServiceManager($container, true);
+
+        $service = $this->getMock('Sonata\BlockBundle\Block\BlockServiceInterface');
+
+        $manager->add('foo.bar', $service);
+
+        $this->assertEmpty($manager->getServicesByContext('fake'));
+    }
+
+    public function testGetListFromValidContext()
+    {
+        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $manager = new BlockServiceManager($container, true);
+
+        $service = $this->getMock('Sonata\BlockBundle\Block\BlockServiceInterface');
+
+        $manager->add('foo.bar', $service, array('fake'));
+
+        $this->assertNotEmpty($manager->getServicesByContext('fake'));
+    }
 }

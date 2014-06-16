@@ -13,8 +13,8 @@ namespace Sonata\BlockBundle\Tests;
 
 use Sonata\BlockBundle\Event\BlockEvent;
 use Sonata\BlockBundle\Event\TextBlockListener;
-
 use Sonata\AdminBundle\Admin\AdminInterface;
+
 class TextBlockListenerTest extends \PHPUnit_Framework_TestCase
 {
 

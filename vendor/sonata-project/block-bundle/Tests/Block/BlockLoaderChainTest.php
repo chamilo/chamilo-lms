@@ -25,11 +25,29 @@ class BlockLoaderChainTest extends \PHPUnit_Framework_TestCase
         $loader->load('foo');
     }
 
-    public function testLoader()
+    public function testLoaderWithSupportedLoader()
     {
+        $block = $this->getMock('Sonata\BlockBundle\Model\BlockInterface');
+
         $loader = $this->getMock('Sonata\BlockBundle\Block\BlockLoaderInterface');
         $loader->expects($this->once())->method('support')->will($this->returnValue(true));
-        $loader->expects($this->once())->method('load');
+        $loader->expects($this->once())->method('load')->will($this->returnValue($block));
+
+        $loaderChain = new BlockLoaderChain(array($loader));
+
+        $this->assertTrue($loaderChain->support('foo'));
+
+        $this->assertEquals($block, $loaderChain->load('foo'));
+    }
+
+    /**
+     * @expectedException \Sonata\BlockBundle\Exception\BlockNotFoundException
+     */
+    public function testLoaderWithUnSupportedLoader()
+    {
+        $loader = $this->getMock('Sonata\BlockBundle\Block\BlockLoaderInterface');
+        $loader->expects($this->once())->method('support')->will($this->returnValue(false));
+        $loader->expects($this->never())->method('load');
 
         $loaderChain = new BlockLoaderChain(array($loader));
 

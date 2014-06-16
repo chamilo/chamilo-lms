@@ -1,7 +1,7 @@
 Core Bundle
-===============
+===========
 
-The ``SonataCoreBundle`` provided defaults elements required by the different Sonata's Bundles
+The ``SonataCoreBundle`` provided defaults elements required by the different Sonata's Bundles.
 
 
 Reference Guide
@@ -17,3 +17,5 @@ Reference Guide
    reference/flash_messages
    reference/twig_helpers
    reference/doctrine_base_manager
+   reference/serialization
+   reference/request_body_param_converter

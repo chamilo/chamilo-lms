@@ -262,7 +262,7 @@ abstract class BaseBlock implements BlockInterface
             return 0;
         }
 
-        $ttl = $this->getSetting('ttl', 84600);
+        $ttl = $this->getSetting('ttl', 86400);
 
         foreach ($this->getChildren() as $block) {
             $blockTtl = $block->getTtl();

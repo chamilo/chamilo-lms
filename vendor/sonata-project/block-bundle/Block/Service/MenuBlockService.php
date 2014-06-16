@@ -94,7 +94,7 @@ class MenuBlockService extends BaseBlockService
         if (($name = $block->getSetting('menu_name')) && $name !== "" && !$this->menuProvider->has($name)) {
             // If we specified a menu_name, check that it exists
             $errorElement->with('menu_name')
-                ->addViolation('soanta.block.menu.not_existing', array('name' => $name))
+                ->addViolation('sonata.block.menu.not_existing', array('name' => $name))
             ->end();
         }
     }
@@ -104,22 +104,20 @@ class MenuBlockService extends BaseBlockService
      */
     public function setDefaultSettings(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(
-            array(
-                'title'          => $this->getName(),
-                'cache_policy'   => 'public',
-                'template'       => 'SonataBlockBundle:Block:block_core_menu.html.twig',
-                'menu_name'      => "",
-                'safe_labels'    => false,
-                'current_class'  => 'active',
-                'first_class'    => false,
-                'last_class'     => false,
-                'current_uri'    => null,
-                'menu_class'     => "list-group",
-                'children_class' => "list-group-item",
-                'menu_template'  => null,
-            )
-        );
+        $resolver->setDefaults(array(
+            'title'          => $this->getName(),
+            'cache_policy'   => 'public',
+            'template'       => 'SonataBlockBundle:Block:block_core_menu.html.twig',
+            'menu_name'      => "",
+            'safe_labels'    => false,
+            'current_class'  => 'active',
+            'first_class'    => false,
+            'last_class'     => false,
+            'current_uri'    => null,
+            'menu_class'     => "list-group",
+            'children_class' => "list-group-item",
+            'menu_template'  => null,
+        ));
     }
 
     /**
@@ -167,6 +165,8 @@ class MenuBlockService extends BaseBlockService
      * Replaces setting keys with knp menu item options keys
      *
      * @param array $settings
+     *
+     * @return array
      */
     protected function getMenuOptions(array $settings)
     {

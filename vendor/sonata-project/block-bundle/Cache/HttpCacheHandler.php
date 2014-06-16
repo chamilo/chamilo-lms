@@ -29,6 +29,11 @@ class HttpCacheHandler implements HttpCacheHandlerInterface
             return;
         }
 
+        // no block has been rendered
+        if (null === $this->currentTtl) {
+            return;
+        }
+
         // a block has a lower ttl that the current response, so we update the ttl to match
         // the one provided in the block
         if ($this->currentTtl < $response->getTtl()) {

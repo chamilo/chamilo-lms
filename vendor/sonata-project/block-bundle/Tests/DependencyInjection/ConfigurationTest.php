@@ -18,10 +18,16 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
     public function testOptions()
     {
+        $defaultTemplates = array(
+            "SonataPageBundle:Block:block_container.html.twig"       => "SonataPageBundle template",
+            "SonataSeoBundle:Block:block_social_container.html.twig" => "SonataSeoBundle (to contain social buttons)"
+        );
+
         $processor = new Processor();
 
-        $config = $processor->processConfiguration(new Configuration(), array(array(
-            'default_contexts' => array('cms')
+        $config = $processor->processConfiguration(new Configuration($defaultTemplates), array(array(
+            'default_contexts' => array('cms'),
+            'blocks' => array('my.block.type' => array())
         )));
 
 
@@ -48,7 +54,22 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
                 'block_base' => NULL,
                 'block_container' => NULL,
             ),
-            'blocks' => array(),
+            'container' => array(
+                'types' => array(
+                    0 => 'sonata.block.service.container',
+                    1 => 'sonata.page.block.container',
+                    2 => 'cmf.block.container',
+                    3 => 'cmf.block.slideshow',
+                ),
+                'templates' => $defaultTemplates,
+            ),
+            'blocks' => array(
+                'my.block.type' => array(
+                    'contexts' => array('cms'),
+                    'cache' => 'sonata.cache.noop',
+                    'settings' => array ()
+                )
+            ),
             'menus' => array(),
             'blocks_by_class' => array(),
             'exception' => array(
@@ -71,5 +92,24 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($expected, $config);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Invalid configuration for path "sonata_block": You cannot have different config options for sonata_block.profiler.container_types and sonata_block.container.types; the first one is deprecated, in case of doubt use the latter
+     */
+    public function testOptionsDuplicated()
+    {
+        $defaultTemplates = array(
+            "SonataPageBundle:Block:block_container.html.twig"       => "SonataPageBundle template",
+            "SonataSeoBundle:Block:block_social_container.html.twig" => "SonataSeoBundle (to contain social buttons)"
+        );
+
+        $processor = new Processor();
+        $processor->processConfiguration(new Configuration($defaultTemplates), array(array(
+            'default_contexts' => array('cms'),
+            'profiler' => array('container_types' => array('test_type')),
+            'container' => array('types' => array('test_type2'), 'templates' => array()),
+        )));
     }
 }

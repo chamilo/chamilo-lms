@@ -1,7 +1,12 @@
+.. index::
+    single: Twig
+    single: Helpers
+
 Provided Blocks
 ===============
 
 Some block services are already provided. You may use them or check out the code to get ideas on how to create your own.
+You can also check this documentation: :doc:`your_first_block`.
 
 EmptyBlockService
 -----------------
@@ -20,7 +25,7 @@ RssBlockService
 
 This block displays an RSS feed.
 
-When you add this block, specify a title and an RSS URL and the last messages from the RSS feed will be displayed in your block.
+When you add this block, specify a title and an RSS URL. Then, the last messages from the RSS feed will be displayed in your block.
 
 Base template is ``SonataBlockBundle:Block:block_core_rss.html.twig`` but you may of course override it.
 
@@ -33,4 +38,4 @@ Upon configuration, you may set a KNP Menu name (as specified in `KnpMenuBundle 
 
 Set ``cache_policy`` to private if this menu is dedicated to be in a user part.
 
-A specific menu template is provided as well to render Bootstrap3's side menu, you may use it by setting the ``menu_template`` option to ``SonataBlockBundle:Block:block_side_menu_template.html.twig`` (see the implementation in SonataUserBundle or Sonata's ecommerce suite).
+A specific menu template is provided as well to render Bootstrap3's side menu, you may use it by setting the ``menu_template`` option to ``SonataBlockBundle:Block:block_side_menu_template.html.twig`` (see the implementation in SonataUserBundle or Sonata's e-commerce suite).

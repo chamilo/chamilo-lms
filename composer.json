@@ -48,7 +48,7 @@
         "twig/twig": "~1.12",
         "twig/extensions": "~1.0",
 
-        "symfony/symfony": "~2.3.7",
+        "symfony/symfony": "~2.4",
 
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
@@ -123,7 +123,11 @@
         "hwi/oauth-bundle": "0.4.*@dev",
         "friendsofsymfony/message-bundle": "~1.2",
         "stof/doctrine-extensions-bundle": "~1.1@dev",
-        "avanzu/admin-theme-bundle": "dev-master"
+        "avanzu/admin-theme-bundle": "dev-master",
+
+        "sylius/flow-bundle": "0.10.*@dev",
+        "liip/theme-bundle": "1.0.*@dev",
+        "chamilo/chash" : "dev-master"
     },
     "require-dev": {
         "elao/web-profiler-extra-bundle" : "~2.3@dev",

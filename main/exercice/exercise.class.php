@@ -2431,7 +2431,7 @@ class Exercise
                             }
                         } else {
 							// This value is the user input, not escaped while correct answer is escaped by fckeditor
-							$choice[$j] = htmlentities(trim($choice[$j]));
+							$choice[$j] = api_htmlentities(trim($choice[$j]));
                         }
 
                         //No idea why we api_strtolower user reponses

@@ -658,9 +658,14 @@ class TicketManager
             $actions = "";
 
             if ($row['responsible'] != 0) {
-                $hrefResp = $webPath . 'main/admin/user_information.php?user_id=' . $row['responsible']['user_id'];
                 $row['responsible'] = api_get_user_info($row['responsible']);
-                $row['responsible'] = "<a href='$hrefResp'> {$row['responsible']['username']} </a>";
+                if (!empty($row['responsible'])) {
+                    $hrefResp = $webPath . 'main/admin/user_information.php?user_id=' . $row['responsible']['user_id'];
+                    $row['responsible'] = "<a href='$hrefResp'> {$row['responsible']['username']} </a>";
+                } else {
+                    $row['responsible'] = get_lang('UnknownUser');
+                }
+
             } else {
                 if ($row['status_id'] != 'REE') {
                     $row['responsible'] = '<span style="color:#ff0000;">' . $plugin->get_lang('ToBeAssigned') . '</span>';
@@ -668,6 +673,7 @@ class TicketManager
                     $row['responsible'] = '<span style="color:#00ff00;">' . get_lang('MessageResent') . '</span>';
                 }
             }
+
             switch ($row['source']) {
                 case 'PRE':
                     $img_source = 'icons/32/user.png';

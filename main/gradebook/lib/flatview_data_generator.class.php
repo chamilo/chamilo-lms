@@ -607,6 +607,8 @@ class FlatViewDataGenerator
 
     /**
      * Get actual array data evaluation/link scores
+     * @param int $session_id
+     * @return array
      */
     public function get_evaluation_sumary_results ($session_id = null)
     {
@@ -642,16 +644,21 @@ class FlatViewDataGenerator
             }
         }
 
-        // get evaluation sumary results (maximum, minimum and average of evaluations for all students)
+        /* Get evaluation summary results
+           (maximum, minimum and average of evaluations for all students)
+        */
         $result = array();
-        $maximum = $minimum = $average = 0;
         foreach ($data_by_item as $k => $v) {
             $average = round(array_sum($v)/count($v));
             arsort($v);
             $maximum = array_shift($v);
             $minimum = array_pop($v);
-            $sumary_item = array('max'=>$maximum, 'min'=>$minimum, 'avg'=>$average);
-            $result[$k] = $sumary_item;
+            $summary= array(
+                'max' => $maximum,
+                'min' => $minimum,
+                'avg' => $average
+            );
+            $result[$k] = $summary;
         }
 
         return $result;

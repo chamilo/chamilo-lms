@@ -1,16 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * This file is part of evaluation graph block plugin for dashboard,
- * it should be required inside dashboard controller for showing it into dashboard interface from plattform
- * @package chamilo.dashboard
- * @author Christian Fasanando
- */
-
-/**
- * required files for getting data
- */
 require_once api_get_path(LIBRARY_PATH).'pchart/pData.class.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pChart.class.php';
 require_once api_get_path(LIBRARY_PATH).'pchart/pCache.class.php';
@@ -23,9 +13,18 @@ require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/gradebook_functions.inc.
 require_once api_get_path(SYS_CODE_PATH).'gradebook/lib/be/category.class.php';
 
 /**
+ * Class BlockEvaluationGraph
  * This class is used like controller for this evaluations graph block plugin,
- * the class name must be registered inside path.info file (e.g: controller = "BlockEvaluationGraph"), so dashboard controller will be instantiate it
+ * the class name must be registered inside path.info file
+ * (e.g: controller = "BlockEvaluationGraph"),
+ * so dashboard controller will be instantiate it
+ *
+ * This file is part of evaluation graph block plugin for dashboard,
+ * it should be required inside dashboard controller for showing it
+ * into dashboard interface from platform
+ *
  * @package chamilo.dashboard
+ * @author Christian Fasanando
  */
 class BlockEvaluationGraph extends Block
 {
@@ -75,7 +74,6 @@ class BlockEvaluationGraph extends Block
      */
     public function get_block()
     {
-
 		global $charset;
     	$column = 1;
     	$data   = array();
@@ -116,6 +114,7 @@ class BlockEvaluationGraph extends Block
 
     	$data['column'] = $column;
     	$data['content_html'] = $html;
+
     	return $data;
 	}
 
@@ -144,7 +143,7 @@ class BlockEvaluationGraph extends Block
 						$max = $min = $avg = array();
 						foreach ($evaluation_sumary as $evaluation) {
 							$max[] = $evaluation['max'];
-							$min[] = !empty($evaluation['min'])?$evaluation['min']:0;
+                            $min[] = !empty($evaluation['min']) ? $evaluation['min'] : 0;
 							$avg[] = $evaluation['avg'];
 						}
 						// Dataset definition

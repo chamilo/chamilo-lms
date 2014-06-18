@@ -653,6 +653,11 @@ class FlatViewDataGenerator
             arsort($v);
             $maximum = array_shift($v);
             $minimum = array_pop($v);
+
+            if (is_null($minimum)) {
+                $minimum = 0;
+            }
+
             $summary= array(
                 'max' => $maximum,
                 'min' => $minimum,

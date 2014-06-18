@@ -1,21 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
-*	File containing the FillBlanks class.
-*	@package chamilo.exercise
-* 	@author Eric Marguin
-* 	@author Julio Montoya Armas switchable fill in blank option added
-* 	@version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
-*/
-/**
- * Code
- */
-
-/**
  *
- *	This class allows to instantiate an object of type MULTIPLE_ANSWER
- *  (MULTIPLE CHOICE, MULTIPLE ANSWER),
- *	extending the class question
+ *	Class FillBlanks
  *
  *	@author Eric Marguin
  * 	@author Julio Montoya multiple fill in blank option added
@@ -37,7 +24,7 @@ class FillBlanks extends Question
     }
 
     /**
-     * function which redifines Question::createAnswersForm
+     * function which redefines Question::createAnswersForm
      * @param the formvalidator instance
      */
     function createAnswersForm($form)
@@ -101,7 +88,7 @@ class FillBlanks extends Question
                 if (firstTime) {
                     field = document.getElementById("answer");
                     var answer = field.value;
-                    
+
                 } else {
                     var oEditor = FCKeditorAPI.GetInstance("answer");
                     //var answer =  oEditor.GetXHTML(true);
@@ -164,31 +151,30 @@ class FillBlanks extends Question
 		$answer = $form->getSubmitValue('answer');
 
 		//remove the :: eventually written by the user
-		$answer = str_replace('::','',$answer);
+        $answer = str_replace('::', '', $answer);
 
-		// get the blanks weightings
-		$nb = preg_match_all('/\[[^\]]*\]/', $answer, $blanks);
-		if (isset($_GET['editQuestion'])) {
-			$this -> weighting = 0;
-		}
+        // get the blanks weightings
+        $nb = preg_match_all('/\[[^\]]*\]/', $answer, $blanks);
+        if (isset($_GET['editQuestion'])) {
+            $this ->weighting = 0;
+        }
 
-		if ($nb>0) {
+		if ($nb > 0) {
 		  	$answer .= '::';
-			for($i=0 ; $i<$nb ; ++$i) {
-			        $blankItem = $blanks[0][$i];
-                               $replace = array("[", "]");
-                               $newBlankItem = str_replace($replace, "", $blankItem);
-                               $newBlankItem = "[".trim($newBlankItem)."]";
-                               $answer = str_replace($blankItem, $newBlankItem, $answer);
-				$answer .= $form->getSubmitValue('weighting['.$i.']').',';
-				$this -> weighting += $form->getSubmitValue('weighting['.$i.']');
-			}
-			$answer = api_substr($answer,0,-1);
+			for ($i=0 ; $i < $nb; ++$i) {
+                $blankItem = $blanks[0][$i];
+                $replace = array("[", "]");
+                $newBlankItem = str_replace($replace, "", $blankItem);
+                $newBlankItem = "[".trim($newBlankItem)."]";
+                $answer = str_replace($blankItem, $newBlankItem, $answer);
+                $answer .= $form->getSubmitValue('weighting['.$i.']').',';
+                $this -> weighting += $form->getSubmitValue('weighting['.$i.']');
+            }
+            $answer = api_substr($answer, 0, -1);
 		}
 
 		$is_multiple = $form->getSubmitValue('multiple_answer');
-
-		$answer.='@'.$is_multiple;
+		$answer.= '@'.$is_multiple;
 
 		$this->save();
         $objAnswer = new answer($this->id);
@@ -196,7 +182,13 @@ class FillBlanks extends Question
         $objAnswer->save();
 	}
 
-	function return_header($feedback_type = null, $counter = null, $score = null)
+    /**
+     * @param null $feedback_type
+     * @param null $counter
+     * @param null $score
+     * @return null|string
+     */
+    function return_header($feedback_type = null, $counter = null, $score = null)
     {
 	    $header = parent::return_header($feedback_type, $counter, $score);
 	    $header .= '<table class="'.$this->question_table_class .'">

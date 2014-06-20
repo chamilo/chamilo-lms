@@ -95,6 +95,8 @@ class learnpathItem
         $course_id = null,
         $item_content = null
     ) {
+        $items_table = Database::get_course_table(TABLE_LP_ITEM);
+
         // Get items table.
         if (!isset($user_id)) {
             $user_id = api_get_user_id();
@@ -109,7 +111,7 @@ class learnpathItem
         $id = intval($id);
 
         if (empty($item_content)) {
-            $items_table = Database::get_course_table(TABLE_LP_ITEM);
+
             if (empty($course_id)) {
                 $course_id = api_get_course_int_id();
             } else {

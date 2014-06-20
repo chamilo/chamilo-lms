@@ -49,6 +49,7 @@
   <li><a href="#7.High-numbers-memory">Memory considerations for high numbers of users</a></li>
   <li><a href="#8.Avoid-non-fixed-values">Avoiding non-fixed values</a></li>
   <li><a href="#9.xsendfile">Speeding file downloads with mod_xsendfile</a></li>
+  <li><a href="#10.igbinary">IGBinary for faster courses backups and better sessions</a></li>
 </ol>
 
 <h2><a name="1.Using-XCache"></a>1. Using xCache or APC</h2>
@@ -362,6 +363,10 @@ Finally, you'll have to got to your Chamilo configuration file, and add the foll
 $_configuration['enable_x_sendfile_headers'] = true;
 </pre>
 Done! Now your downloads should go substantially faster. This is still a feature in observation. We're not sure the benefits are sufficient, so don't hesitate to let us know in <a href="https://support.chamilo.org/issues/6853">the related issue in Chamilo's tracking system</a>
+</p>
+<h2><a name="#10.igbinary"></a>IGBinary for courses backups and better sessions management</h2>
+<p>
+<a href="http://pecl.php.net/package/igbinary">IGBinary</a> is a small PECL library that replaces the PHP serializer. It uses less space (so less memory for serialized objects) and is particularly efficient with memory-based storages (like Memcached). Use it for course backups (see <a href="https://support.chamilo.org/issues/4443">issue 4443</a>) or <a href="http://www.neanderthal-technology.com/2011/11/ubuntu-10-install-php-memcached-with-igbinary-support/">to boost sessions management</a>.
 </p>
 <hr />
 <h2>Authors</h2>

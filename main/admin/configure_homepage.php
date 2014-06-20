@@ -169,18 +169,24 @@ $homef = array($menuf, $newsf, $topf, $noticef, $menutabs, $mtloggedin);
 
 // If language-specific file does not exist, create it by copying default file
 foreach ($homef as $my_file) {
-	if (api_is_multiple_url_enabled()) {
-		if (!file_exists($homep_new.$my_file.'_'.$lang.$ext)) {
-			copy($homep.$my_file.$ext, $homep_new.$my_file.'_'.$lang.$ext);
-		}
-	} else {
-		if (!file_exists($homep.$my_file.'_'.$lang.$ext)) {
-			copy($homep.$my_file.$ext, $homep.$my_file.'_'.$lang.$ext);
-		}
-	}
+    if (api_is_multiple_url_enabled()) {
+        if (!file_exists($homep_new.$my_file.'_'.$lang.$ext)) {
+            if (!file_exists($homep.$my_file.$ext)) {
+                touch($homep.$my_file.$ext);
+            }
+            @copy($homep.$my_file.$ext, $homep_new.$my_file.'_'.$lang.$ext);
+        }
+    } else {
+        if (!file_exists($homep.$my_file.'_'.$lang.$ext)) {
+            if (!file_exists($homep.$my_file.$ext)) {
+                touch($homep.$my_file.$ext);
+            }
+            @copy($homep.$my_file.$ext, $homep.$my_file.'_'.$lang.$ext);
+        }
+    }
 }
 if (api_is_multiple_url_enabled()) {
-	$homep = $homep_new;
+    $homep = $homep_new;
 }
 
 // Check WCAG settings and prepare edition using WCAG

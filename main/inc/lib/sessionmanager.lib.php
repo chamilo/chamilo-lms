@@ -4031,7 +4031,7 @@ class SessionManager
                                 sprintf(get_lang('AddingStudentsFromSessionXToSessionY'), $sessionInfo['name'], $sessionDestinationInfo['name']), 'info', false
                             );
                             if ($sessionId == $sessionDestinationId) {
-                                $messages[] = Display::return_message(get_lang('SkipSession'), 'warning', false);
+                                $messages[] = Display::return_message(sprintf(get_lang('SessionXSkipped'), $sessionDestinationId), 'warning', false);
                                 continue;
                             }
                             $messages[] = Display::return_message(get_lang('StudentList') . '<br />' . $userToString, 'info', false);

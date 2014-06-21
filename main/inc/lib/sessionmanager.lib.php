@@ -4431,7 +4431,7 @@ class SessionManager
                         $message .= '<strong>' . get_lang('Sessions') . ':</strong> <br />';
                         $message .= implode(', ', $sessionList) . '<br /><br />';
                     } else {
-                        $message .= get_lang('NoSessions') . ' <br /><br />';
+                        $message .= get_lang('NoSessionProvided') . ' <br /><br />';
                     }
                 }
             }

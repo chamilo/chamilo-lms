@@ -370,7 +370,7 @@ if ($form->validate()) {
             $values['official_code'],
             $values['language'],
             $values['phone'],
-            $picture_uri,
+            null,
             PLATFORM_AUTH_SOURCE,
             null,
             1,
@@ -383,8 +383,9 @@ if ($form->validate()) {
         // Register extra fields
         $extras = array();
         foreach ($values as $key => $value) {
-            if (substr($key, 0, 6) == 'extra_') { //an extra field
-                $extras[substr($key,6)] = $value;
+            if (substr($key, 0, 6) == 'extra_') {
+                //an extra field
+                $extras[substr($key, 6)] = $value;
             } elseif (strpos($key, 'remove_extra_') !== false) {
                 $extra_value = Security::filter_filename(urldecode(key($value)));
                 // To remove from user_field_value and folder
@@ -452,7 +453,27 @@ if ($form->validate()) {
                 Database::query($sql);
             }
 
+            $course_code_redirect = Session::read('course_redirect');
 
+            // Saving user to course if it was set.
+            if (!empty($course_code_redirect)) {
+                $course_info = api_get_course_info($course_code_redirect);
+                if (!empty($course_info)) {
+                    if (in_array(
+                        $course_info['visibility'],
+                        array(
+                            COURSE_VISIBILITY_OPEN_PLATFORM,
+                            COURSE_VISIBILITY_OPEN_WORLD
+                        )
+                    )
+                    ) {
+                        CourseManager::subscribe_user(
+                            $user_id,
+                            $course_info['code']
+                        );
+                    }
+                }
+            }
 
             /* If the account has to be approved then we set the account to inactive,
             sent a mail to the platform admin and exit the page.*/
@@ -460,7 +481,7 @@ if ($form->validate()) {
             if (api_get_setting('allow_registration') == 'approval') {
                 $TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
                 // 1. set account inactive
-                $sql = "UPDATE $TABLE_USER SET active='0' WHERE user_id = ".intval($user_id);
+                $sql = "UPDATE $TABLE_USER SET active='0' WHERE user_id = ".$user_id;
                 Database::query($sql);
 
                 // 2. Send mail to all platform admin
@@ -605,7 +626,7 @@ if ($form->validate()) {
                 array(COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD))
             ) {
                 $user_id = api_get_user_id();
-                if (CourseManager::subscribe_user($user_id, $course_info['code'])) {
+                if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'])) {
 
                     $form_data['action'] = $course_info['course_public_url'];
                     $form_data['message'] = sprintf(get_lang('YouHaveBeenRegisteredToCourseX'), $course_info['title']);

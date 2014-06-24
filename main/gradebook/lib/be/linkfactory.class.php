@@ -1,12 +1,5 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * Script
- * @package chamilo.gradebook
- */
-/**
- * Init
- */
 // To add your new link type here:
 // - define a unique type id
 // - add include
@@ -24,6 +17,7 @@ require_once 'attendancelink.class.php';
 require_once 'surveylink.class.php';
 
 /**
+ * Class LinkFactory
  * Factory for link objects
  * @author Bert Steppé
  * @package chamilo.gradebook
@@ -33,22 +27,39 @@ class LinkFactory
 
 	/**
 	 * Retrieve links and return them as an array of extensions of AbstractLink.
-	 * @param $id link id
-	 * @param $type link type
-	 * @param $ref_id reference id
-	 * @param $user_id user id (link owner)
-	 * @param $course_code course code
-	 * @param $category_id parent category
-	 * @param $visible visible
+	 * @param int $id link id
+	 * @param int $type link type
+	 * @param int $ref_id reference id
+	 * @param int $user_id user id (link owner)
+	 * @param string $course_code course code
+	 * @param int $category_id parent category
+	 * @param int $visible visible
 	 */
-	public static function load ($id = null, $type = null, $ref_id = null, $user_id = null, $course_code = null, $category_id = null, $visible = null) {
-		return AbstractLink::load($id, $type, $ref_id, $user_id, $course_code, $category_id, $visible);
+    public static function load(
+        $id = null,
+        $type = null,
+        $ref_id = null,
+        $user_id = null,
+        $course_code = null,
+        $category_id = null,
+        $visible = null
+    ) {
+        return AbstractLink::load(
+            $id,
+            $type,
+            $ref_id,
+            $user_id,
+            $course_code,
+            $category_id,
+            $visible
+        );
 	}
 
 	/**
 	 * Get the link object referring to an evaluation
 	 */
-	public function get_evaluation_link ($eval_id) {
+	public function get_evaluation_link ($eval_id)
+    {
 		$links = AbstractLink :: load(null, null, $eval_id);
 		foreach ($links as $link) {
 			if (is_a($link, 'EvalLink')) {
@@ -63,7 +74,8 @@ class LinkFactory
      * @param string $name_mask search string
      * @return array link objects matching the search criterium
      */
-    public function find_links ($name_mask,$selectcat) {
+    public function find_links ($name_mask,$selectcat)
+    {
     	return AbstractLink::find_links($name_mask,$selectcat);
     }
 
@@ -71,7 +83,8 @@ class LinkFactory
 	 * Static method to create specific link objects
 	 * @param $type link type
 	 */
-	public static function create ($type) {
+	public static function create ($type)
+    {
         $type = intval($type);
 		switch ($type) {
 			case LINK_EXERCISE:
@@ -96,21 +109,25 @@ class LinkFactory
 
 	/**
 	 * Return an array of all known link types
+     * @return array
 	 */
-	public static function get_all_types () {
+	public static function get_all_types ()
+    {
 		//LINK_DROPBOX,
-		return array (LINK_EXERCISE,
-					  //LINK_DROPBOX,
-                      LINK_HOTPOTATOES,
-					  LINK_STUDENTPUBLICATION,
-					  LINK_LEARNPATH,
-                      LINK_FORUM_THREAD,
-                      LINK_ATTENDANCE,
-                      LINK_SURVEY
-					  );
+		return array (
+			LINK_EXERCISE,
+			//LINK_DROPBOX,
+			LINK_HOTPOTATOES,
+			LINK_STUDENTPUBLICATION,
+			LINK_LEARNPATH,
+			LINK_FORUM_THREAD,
+			LINK_ATTENDANCE,
+			LINK_SURVEY
+		);
 	}
 
-    public function delete() {
+    public function delete()
+    {
 
     }
 

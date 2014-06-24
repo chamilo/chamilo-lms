@@ -1,0 +1,43 @@
+{
+    "name": "sonata-project/block-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony SonataBlockBundle",
+    "keywords": ["sonata", "block"],
+    "homepage": "http://sonata-project.org/bundles/block",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Rabaix",
+            "email": "thomas.rabaix@sonata-project.org",
+            "homepage": "http://sonata-project.org"
+        },
+        {
+            "name": "Sonata Community",
+            "homepage": "https://github.com/sonata-project/SonataBlockBundle/contributors"
+        }
+    ],
+    "require": {
+        "symfony/http-kernel": "~2.2",
+        "symfony/form": "~2.2",
+        "doctrine/common": "~2.3",
+        "sonata-project/core-bundle": "~2.2",
+        "sonata-project/cache": "~1.0"
+    },
+    "require-dev": {
+        "knplabs/knp-menu-bundle": "~1.1",
+        "sonata-project/admin-bundle": "~2.2"
+    },
+    "suggest": {
+        "knplabs/knp-menu-bundle": "~1.1",
+        "sonata-project/cache-bundle": "~2.1",
+        "sonata-project/admin-bundle": "~2.2"
+    },
+    "autoload": {
+        "psr-4": { "Sonata\\BlockBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.2.x-dev"
+        }
+    }
+}

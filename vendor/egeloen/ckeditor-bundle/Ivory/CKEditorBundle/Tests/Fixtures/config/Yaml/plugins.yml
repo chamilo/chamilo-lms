@@ -1,0 +1,5 @@
+ivory_ck_editor:
+    plugins:
+        wordcount:
+            path:     "/my/path"
+            filename: "plugin.js"

@@ -1,0 +1,33 @@
+#
+# more information can be found here http://sonata-project.org/bundles/cache
+#
+#sonata_cache:
+#    caches:
+#        esi:
+#            servers:
+#                - varnishadm -T 127.0.0.1:2000 {{ COMMAND }} "{{ EXPRESSION }}"
+#
+#        ssi:
+#            token: TheToken
+#
+#        mongo:
+#            database:   cache
+#            collection: cache
+#            servers:
+#                - {host: 127.0.0.1, port: 27017, user: username, password: pASS'}
+#                - {host: 127.0.0.2}
+#
+#        memcached:
+#            prefix: test     # prefix to ensure there is no clash between instances
+#            servers:
+#                - {host: 127.0.0.1, port: 11211, weight: 0}
+#
+#        predis:
+#            servers:
+#                - {host: 127.0.0.1, port: 11211, database: 6379}
+#
+#        apc:
+#            token:  s3cur3   # token used to clear the related cache
+#            prefix: test     # prefix to ensure there is no clash between instances
+#            servers:
+#                - { domain: kooqit.local, ip: 127.0.0.1, port: 80}

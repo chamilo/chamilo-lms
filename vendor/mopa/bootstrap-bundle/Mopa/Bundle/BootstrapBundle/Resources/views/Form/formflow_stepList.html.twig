@@ -1,0 +1,19 @@
+{% if flow.getStepDescriptions() | length == flow.getMaxSteps() %}
+    <ul class="breadcrumb">
+        {% for stepDescription in flow.getStepDescriptions() %}
+            <li{% if loop.index == flow.getCurrentStep() %} class="active"{% endif %}>
+                {%- if flow.isAllowDynamicStepNavigation() and (loop.index == 1 or flow.isStepDone(loop.index - 1)) -%}
+                    <a href="{{ path(app.request.attributes.get('_route'),
+                            app.request.query.all | craue_addDynamicStepNavigationParameter(flow, loop.index)|merge(app.request.attributes.all)) }}">
+                        {{- stepDescription|trans -}}
+                    </a>
+                {%- else -%}
+                    {{- stepDescription|trans -}}
+                {%- endif -%}
+                {% if loop.index != flow.getMaxSteps() %}
+                <span class="divider">/</span>
+                {%- endif -%}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}

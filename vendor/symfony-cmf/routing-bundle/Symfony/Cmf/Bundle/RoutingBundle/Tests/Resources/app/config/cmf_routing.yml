@@ -1,0 +1,17 @@
+cmf_routing:
+    chain:
+        routers_by_id:
+            cmf_routing.dynamic_router: 20
+            router.default: 100
+    dynamic:
+        enabled: true
+        generic_controller: cmf_content.controller:indexAction
+        controllers_by_type:
+            demo_alias: test.controller:aliasAction
+        controllers_by_class:
+            Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Phpcr\RedirectRoute:  cmf_routing.redirect_controller:redirectAction
+        templates_by_class:
+            Symfony\Cmf\Bundle\RoutingBundle\Tests\Resources\Document\Content: TestBundle:Content:index.html.twig
+        locales:
+            - en
+            - de

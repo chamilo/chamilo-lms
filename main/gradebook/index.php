@@ -7,7 +7,7 @@
 /**
  * Init
  */
-$language_file= 'gradebook';
+$language_file = array('gradebook', 'exercice');
 // $cidReset : This is the main difference with gradebook.php, here we say,
 // basically, that we are inside a course, and many things depend from that
 $cidReset= false;
@@ -300,13 +300,15 @@ if (isset ($_GET['visiblecat'])) {
 if (isset($_GET['deletecat'])) {
 	block_students();
 	$cats = Category :: load($_GET['deletecat']);
-	//delete all categories,subcategories and results
-	if ($cats[0] != null) {
-		if ($cats[0]->get_id() != 0) {
-			 // better don't try to delete the root...
-			 $cats[0]->delete_all();
+    if (isset($cats[0])) {
+		//delete all categories,subcategories and results
+		if ($cats[0] != null) {
+			if ($cats[0]->get_id() != 0) {
+				 // better don't try to delete the root...
+				 $cats[0]->delete_all();
+			}
 		}
-	}
+    }
 	$confirmation_message = get_lang('CategoryDeleted');
 	$filter_confirm_msg = false;
 }
@@ -813,6 +815,7 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
         }
 
 		$i = 0;
+        $allcat = array();
 
 		foreach ($cats as $cat) {
 			$allcat  = $cat->get_subcategories($stud_id, $course_code, $session_id);
@@ -824,9 +827,20 @@ if (isset($first_time) && $first_time==1 && api_is_allowed_to_edit(null,true)) {
 			} else {
 				//This is the father
 				//Create gradebook/add gradebook links
-                DisplayGradebook::display_header_gradebook($cat, 0, $cat->get_id(), $is_course_admin, $is_platform_admin, $simple_search_form, false, true);
+                DisplayGradebook::display_header_gradebook(
+                    $cat,
+                    0,
+                    $cat->get_id(),
+                    $is_course_admin,
+                    $is_platform_admin,
+                    $simple_search_form,
+                    false,
+                    true
+                );
 
-				if (api_is_allowed_to_edit(null,true) && api_get_setting('gradebook_enable_grade_model') == 'true') {
+				if (api_is_allowed_to_edit(null,true) &&
+                    api_get_setting('gradebook_enable_grade_model') == 'true'
+                ) {
 					//Showing the grading system
 					if (!empty($grade_models[$grade_model_id])) {
                         Display::display_normal_message(get_lang('GradeModel').': '.$grade_models[$grade_model_id]['name']);

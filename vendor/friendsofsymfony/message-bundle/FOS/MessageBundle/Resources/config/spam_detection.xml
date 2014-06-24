@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="fos_message.noop_spam_detector" class="FOS\MessageBundle\SpamDetection\NoopSpamDetector" public="false" />
+
+        <service id="fos_message.akismet_spam_detector" class="FOS\MessageBundle\SpamDetection\AkismetSpamDetector" public="false" scope="request">
+            <argument type="service" id="ornicar_akismet" />
+            <argument type="service" id="fos_message.participant_provider" />
+        </service>
+
+    </services>
+
+</container>

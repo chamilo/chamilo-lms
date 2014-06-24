@@ -1,0 +1,407 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <!-- Always force latest IE rendering engine (even in intranet) and Chrome Frame -->
+        <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible" />
+        <title>{{ apiName }}</title>
+        <style type="text/css">
+            {{ css|raw }}
+        </style>
+        <script type="text/javascript">
+            {{ js|raw }}
+        </script>
+    </head>
+    <body>
+        <div id="header">
+            <a href="{{ path('nelmio_api_doc_index') }}"><h1>{{ apiName }}</h1></a>
+            {% if enableSandbox %}
+                <div id="sandbox_configuration">
+                    body format:
+                    <select id="body_format">
+                        <option value="x-www-form-urlencoded"{{ bodyFormat == 'form' ? ' selected' : '' }}>Form Data</option>
+                        <option value="json"{{ bodyFormat == 'json' ? ' selected' : '' }}>JSON</option>
+                    </select>
+                    request format:
+                    <select id="request_format">
+                        <option value="json"{{ defaultRequestFormat == 'json' ? ' selected' : '' }}>JSON</option>
+                        <option value="xml"{{ defaultRequestFormat == 'xml' ? ' selected' : '' }}>XML</option>
+                    </select>
+                    {% if authentication and authentication.delivery in ['query', 'http_basic', 'header'] %}
+                        api key: <input type="text" id="api_key" value=""/>
+                    {% endif %}
+                    {% if authentication and authentication.delivery in ['http_basic'] %}
+                        api pass: <input type="text" id="api_pass" value=""/>
+                    {% endif %}
+                    {% if authentication and authentication.custom_endpoint %}
+                        api endpoint: <input type="text" id="api_endpoint" value=""/>
+                    {% endif %}
+                </div>
+            {% endif %}
+            <br style="clear: both;" />
+        </div>
+        {% include motdTemplate %}
+        <div class="container" id="resources_container">
+            <ul id="resources">
+                {% block content %}{% endblock %}
+            </ul>
+        </div>
+        <p id="colophon">
+            Documentation auto-generated on {{ date }}
+        </p>
+        <script type="text/javascript">
+
+            $(window).load(function() {
+                var id = (window.location.hash || '').substr(1).replace( /([:\.\[\]\{\}])/g, "\\$1");
+                var elem = $('#' + id);
+                if (elem.length) {
+                    setTimeout(function() {
+                        $('body,html').scrollTop(elem.position().top);
+                    });
+                    elem.find('a.toggler').click();
+                }
+            });
+
+            $('.toggler').click(function() {
+                $(this).next().slideToggle('fast');
+            });
+
+            {% if enableSandbox %}
+                var toggleButtonText = function ($btn) {
+                    if ($btn.text() === 'Default') {
+                        $btn.text('Raw');
+                    } else {
+                        $btn.text('Default');
+                    }
+                };
+
+                var renderRawBody = function ($container) {
+                    var rawData, $btn;
+
+                    rawData = $container.data('raw-response');
+                    $btn = $container.parents('.pane').find('.to-raw');
+
+                    $container.addClass('prettyprinted');
+                    $container.html($('<div/>').text(rawData).html());
+
+                    $btn.removeClass('to-raw');
+                    $btn.addClass('to-prettify');
+
+                    toggleButtonText($btn);
+                };
+
+                var renderPrettifiedBody = function ($container) {
+                    var rawData, $btn;
+
+                    rawData = $container.data('raw-response');
+                    $btn = $container.parents('.pane').find('.to-prettify');
+
+                    $container.removeClass('prettyprinted');
+                    $container.html(prettifyResponse(rawData));
+                    prettyPrint && prettyPrint();
+
+                    $btn.removeClass('to-prettify');
+                    $btn.addClass('to-raw');
+
+                    toggleButtonText($btn);
+                };
+
+                var unflattenDict = function (body) {
+                    var found = true;
+                    while(found) {
+                        found = false;
+
+                        for (var key in body) {
+                            var okey;
+                            var value = body[key];
+                            var dictMatch = key.match(/^(.+)\[([^\]]+)\]$/);
+
+                            if(dictMatch) {
+                                found = true;
+                                okey = dictMatch[1];
+                                var subkey = dictMatch[2];
+                                body[okey] = body[okey] || {};
+                                body[okey][subkey] = value;
+                                delete body[key];
+                            } else {
+                                body[key] = value;
+                            }
+                        }
+                    }
+                    return body;
+                }
+
+                $('.tabs li').click(function() {
+                    var contentGroup = $(this).parents('.content');
+
+                    $('.pane.selected', contentGroup).removeClass('selected');
+                    $('.pane.' + $(this).data('pane'), contentGroup).addClass('selected');
+
+                    $('li', $(this).parent()).removeClass('selected');
+                    $(this).addClass('selected');
+                });
+
+                var prettifyResponse = function(text) {
+                    try {
+                        var data = typeof text === 'string' ? JSON.parse(text) : text;
+                        text = JSON.stringify(data, undefined, '  ');
+                    } catch (err) {
+                    }
+
+                    // HTML encode the result
+                    return $('<div>').text(text).html();
+                };
+
+                var displayFinalUrl = function(xhr, method, url, container) {
+                    container.text(method + ' ' + url);
+                };
+
+                var displayResponseData = function(xhr, container) {
+                    var data = xhr.responseText;
+
+                    container.data('raw-response', data);
+
+                    renderPrettifiedBody(container);
+
+                    container.parents('.pane').find('.to-prettify').text('Raw');
+                    container.parents('.pane').find('.to-raw').text('Raw');
+                };
+
+                var displayResponseHeaders = function(xhr, container) {
+                    var text = xhr.status + ' ' + xhr.statusText + "\n\n";
+                    text += xhr.getAllResponseHeaders();
+
+                    container.text(text);
+                };
+
+                var displayResponse = function(xhr, method, url, result_container) {
+                    displayFinalUrl(xhr, method, url, $('.url', result_container));
+                    displayResponseData(xhr, $('.response', result_container));
+                    displayResponseHeaders(xhr, $('.headers', result_container));
+
+                    result_container.show();
+                };
+
+                $('.pane.sandbox form').submit(function() {
+                    var url = $(this).attr('action'),
+                        method = $(this).attr('method'),
+                        self = this,
+                        params = {},
+                        headers = {},
+                        content = $(this).find('textarea.content').val(),
+                        result_container = $('.result', $(this).parent());
+
+                    if (method === 'ANY') {
+                        method = 'POST';
+                    } else if (method.indexOf('|') !== -1) {
+                        method = method.split('|').sort().pop();
+                    }
+
+                    // set default requestFormat
+                    var requestFormat = $('#request_format').val();
+                    var requestFormatMethod = '{{ requestFormatMethod }}';
+                    if (requestFormatMethod == 'format_param') {
+                        params['_format'] = requestFormat;
+                    } else if (requestFormatMethod == 'accept_header') {
+                        headers['Accept'] = 'application/' + requestFormat;
+                    }
+
+                    // set default bodyFormat
+                    var bodyFormat = $('#body_format').val();
+
+                    if(!('Content-type' in headers)) {
+                        headers['Content-type'] = 'application/'+bodyFormat;
+                    }
+
+                    // retrieve all the parameters to send
+                    $('.parameters .tuple', $(this)).each(function() {
+                        var key, value;
+
+                        key = $('.key', $(this)).val();
+                        value = $('.value', $(this)).val();
+
+                        if (value) {
+                            params[key] = value;
+                        }
+                    });
+
+                    // retrieve the additional headers to send
+                    $('.headers .tuple', $(this)).each(function() {
+                        var key, value;
+
+                        key = $('.key', $(this)).val();
+                        value = $('.value', $(this)).val();
+
+                        if (value) {
+                            headers[key] = value;
+                        }
+
+                    });
+
+                    // fix parameters in URL
+                    for (var key in $.extend({}, params)) {
+                        if (url.indexOf('{' + key + '}') !== -1) {
+                            url = url.replace('{' + key + '}', params[key]);
+                            delete params[key];
+                        }
+                    };
+
+                    // disable all the fiels and buttons
+                    $('input, button', $(this)).attr('disabled', 'disabled');
+
+                    // append the query authentication
+                    if (authentication_delivery == 'query') {
+                        url += url.indexOf('?') > 0 ? '&' : '?';
+                        url += api_key_parameter + '=' + $('#api_key').val();
+                    }
+
+                    // prepare the api enpoint
+                    {% if endpoint == '' and app.request is not null and app.request.host -%}
+                    var endpoint = '{{ app.request.getBaseUrl() }}';
+                    {% else -%}
+                    var endpoint = '{{ endpoint }}';
+                    {% endif -%}
+                    if ($('#api_endpoint') && $('#api_endpoint').val() != null) {
+                        endpoint = $('#api_endpoint').val();
+                    }
+
+                    // prepare final parameters
+                    var body = {};
+                    if(bodyFormat == 'json' && method != 'GET') {
+                        body = unflattenDict(params);
+                        body = JSON.stringify(body);
+                    } else {
+                        body = params;
+                    }
+                    var data = content.length ? content : body;
+
+                    // and trigger the API call
+                    $.ajax({
+                        url: endpoint + url,
+                        type: method,
+                        data: data,
+                        headers: headers,
+                        crossDomain: true,
+                        beforeSend: function (xhr) {
+                            if (authentication_delivery == 'http_basic') {
+                                xhr.setRequestHeader('Authorization', 'Basic ' + btoa($('#api_key').val() + ':' + $('#api_pass').val()));
+                            }else if(authentication_delivery == 'header') {
+                                xhr.setRequestHeader(api_key_parameter, $('#api_key').val());
+                            }
+                        },
+                        complete: function(xhr) {
+                            displayResponse(xhr, method, url, result_container);
+
+                            // and enable them back
+                            $('input:not(.content-type), button', $(self)).removeAttr('disabled');
+                        }
+                    });
+
+                    return false;
+                });
+
+                $('.operations').on('click', '.operation > a', function(e) {
+                    if (history.pushState) {
+                        history.pushState(null, null, $(this).attr('href'));
+                        e.preventDefault();
+                    }
+                });
+
+                $('.pane.sandbox').on('click', '.to-raw', function(e) {
+                    renderRawBody($(this).parents('.pane').find('.response'));
+
+                    e.preventDefault();
+                });
+
+                $('.pane.sandbox').on('click', '.to-prettify', function(e) {
+                    renderPrettifiedBody($(this).parents('.pane').find('.response'));
+
+                    e.preventDefault();
+                });
+
+                $('.pane.sandbox').on('click', '.to-expand, .to-shrink', function(e) {
+                    var $headers = $(this).parents('.result').find('.headers');
+                    var $label = $(this).parents('.result').find('a.to-expand');
+
+                    if ($headers.hasClass('to-expand')) {
+                        $headers.removeClass('to-expand');
+                        $headers.addClass('to-shrink');
+                        $label.text('Shrink');
+                    } else {
+                        $headers.removeClass('to-shrink');
+                        $headers.addClass('to-expand');
+                        $label.text('Expand');
+                    }
+
+                    e.preventDefault();
+                });
+
+                $('.pane.sandbox').on('click', '.add', function() {
+                    var html = $(this).parents('.pane').find('.tuple_template').html();
+
+                    $(this).before(html);
+
+                    return false;
+                });
+
+                $('.pane.sandbox').on('click', '.remove', function() {
+                    $(this).parent().remove();
+                });
+
+                $('.pane.sandbox').on('click', '.set-content-type', function(e) {
+                    var html;
+                    var $element;
+                    var $headers = $(this).parents('form').find('.headers');
+                    var content_type = $(this).prev('input.value').val();
+
+                    e.preventDefault();
+
+                    if (content_type.length === 0) {
+                        return;
+                    }
+
+                    $headers.find('input.key').each(function() {
+                        if ($.trim($(this).val().toLowerCase()) === 'content-type') {
+                            $element = $(this).parents('p');
+                            return false;
+                        }
+                    });
+
+                    if (typeof $element === 'undefined') {
+                        html = $(this).parents('.pane').find('.tuple_template').html();
+
+                        $element = $headers.find('legend').after(html).next('p');
+                    }
+
+                    $element.find('input.key').val('Content-Type');
+                    $element.find('input.value').val(content_type);
+
+                });
+
+                {% if authentication and authentication.delivery == 'http_basic' %}
+                var authentication_delivery = '{{ authentication.delivery }}';
+                {% elseif authentication and authentication.delivery == 'query' %}
+                var authentication_delivery = '{{ authentication.delivery }}';
+                var api_key_parameter = '{{ authentication.name }}';
+                var search = window.location.search;
+                var api_key_start = search.indexOf(api_key_parameter) + api_key_parameter.length + 1;
+
+                if (api_key_start > 0 ) {
+                    var api_key_end = search.indexOf('&', api_key_start);
+
+                    var api_key = -1 == api_key_end
+                        ? search.substr(api_key_start)
+                        : search.substring(api_key_start, api_key_end);
+
+                    $('#api_key').val(api_key);
+                }
+                {% elseif authentication and authentication.delivery == 'header' %}
+                var authentication_delivery = '{{ authentication.delivery }}';
+                var api_key_parameter = '{{ authentication.name }}';
+                {% else %}
+                var authentication_delivery = false;
+                {% endif %}
+            {% endif %}
+        </script>
+    </body>
+</html>

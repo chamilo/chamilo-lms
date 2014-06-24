@@ -1,0 +1,188 @@
+{% extends 'MopaBootstrapBundle::base.html.twig' %}
+
+{% block html_tag %}
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+
+{# make your site working offline with Application Cache (AppCache)
+   http://www.html5rocks.com/en/tutorials/appcache/beginner/
+<html manifest="manifest.appcache"> #}
+{% endblock html_tag %}
+
+{% block head %}
+<head>
+    {# TODO: meta variable format, associative array or underscored string type #}
+    <meta charset="utf-8" />
+
+    {# About DNS prefetching: http://html5boilerplate.com/docs/DNS-Prefetching/
+       If you fetch data from other domains, add them too #}
+    {% block dns_prefetch %}
+        {% for domain in dns_prefetch %}
+        <link rel="dns-prefetch" href="{{ domain }}" />
+        {% endfor %}
+    {% endblock dns_prefetch %}
+
+    {# IE10 does not support plugins, such as Flash, in Metro Mode.
+       If your site requires plugins, you can let users know that via the
+       X-UA-Compatible meta element, which will prompt them to switch to Desktop Mode.
+       http://html5boilerplate.com/docs/html-head/#prompt-users-to-switch-to-desktop-mode-in-ie10-metro
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1,requiresActiveX=true"> #}
+    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><![endif]-->
+
+    {# WARNING: do not add "initial-scale=1" to viewport, breaks iOS view!
+       https://github.com/h5bp/html5-boilerplate/issues/824 #}
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="{{ meta['description'] }}" />
+    <meta name="keywords" content="{{ meta['keywords'] }}" />
+    <meta name="author" content="{{ meta['author_name'] }}" />
+    {# example: href="/humans.txt" #}
+    <link rel="author" href="{{ meta['author_url'] }}" title="{{ meta['author_name'] }}" />
+
+    {# <title>{% block title %}{% endblock %}</title> #}
+    <title>{% block title%}{{ meta['title'] }}{% endblock %}</title>
+
+    {# TODO: to be removed as HTML5 has no such tag
+    <meta name="title" content="{{ meta_title|default('') }}"> #}
+
+    {# TODO: read more about canonical urls and then decide whether enable this part or remove
+       http://html5boilerplate.com/docs/html-head/#canonical-url
+    <link rel="canonical" href=""> #}
+
+    {# TODO: Official short link, poorly supported now
+    <link rel="shortlink" href="h5bp.com"> #}
+
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="apple-touch-icon" href="{{ asset('apple-touch-icon.png') }}" />
+
+    {# TODO: allow BOTs see SITEMAP #}
+    {% if meta['sitemap'] is defined %}
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="{{ meta['sitemap'] }}" />
+    {% endif %}
+
+    {# TODO: Feeds RSS & ATOM #}
+    {% if meta['feed_atom'] is defined %}
+    <link rel="alternate" type="application/atom+xml" title="Atom" href="{{ meta['feed_atom'] }}" />
+    {% endif %}
+    {% if meta['feed_rss'] is defined %}
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="{{ meta['feed_rss'] }}" />
+    {% endif %}
+
+    {# TODO: allow changing this values from controller scope #}
+    {% if meta['noindex'] %}
+        {% set meta_robots = 'noindex,' %}
+    {% else %}
+        {% set meta_robots = '' %}
+    {% endif %}
+    {% if meta['nofollow'] %}
+        {% set meta_robots = meta_robots ~ 'nofollow' %}
+    {% else %}
+        {% set meta_robots = meta_robots ~ 'follow' %}
+    {% endif %}
+    <meta name="robots" content="{{ meta_robots }}" />
+
+    {% if google['wt'] is defined %}
+    <meta name="google-site-verification" content="{{ google['wt'] }}" />
+    {% endif %}
+
+    {# TODO: Pingbacks http://html5boilerplate.com/docs/html-head/#pingbacks #}
+
+    {# TODO: Site Search Browser plugin:
+       http://www.google.com/search?ie=UTF-8&q=how+to+make+browser+search+plugin
+    <link rel="search" title="" type="application/opensearchdescription+xml" href=""> #}
+
+    {# Override this block to add your own files! #}
+    {% block head_style %}
+        {{ parent() }}
+
+        {# Find places where your CSS is broken, docs how to use:
+           http://meyerweb.com/eric/tools/css/diagnostics/' #}
+        {% if diagnostic_mode %}
+        {% stylesheets
+            '@MopaBootstrapBundle/Resources/public/css/diagnostic.css'
+            output='css/screen_diagnostic.css'
+        %}
+            <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+        {% endstylesheets %}
+        {% endif %}
+    {% endblock head_style %}
+
+    {% block head_scripts %}
+        {% javascripts
+            '@MopaBootstrapBundle/Resources/public/js/modernizr-2.5.3-respond-1.1.0.min.js'
+            output='js/head_compiled.js'
+        %}
+            <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+    {% endblock head_scripts %}
+</head>
+{% endblock head %}
+
+{% block body_start %}
+<!--[if lt IE 7]><p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+{% endblock body_start %}
+
+{% block body %}
+    {% block navbar %}
+    {{ parent() }}
+    {% endblock navbar %}
+
+    {% block container %}
+    {{ parent() }}
+    {% endblock container %}
+
+    {% block foot_script %}
+    {# Load jQuery from Google CDN
+       http://encosia.com/3-reasons-why-you-should-let-google-host-jquery-for-you/ #}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script>
+        window.jQuery || document.write('<script src="../js/libs/jquery-1.7.2.min.js"><\/script>')
+    </script>
+
+    {# Asynchronous Google Analytics snippet grabbed from:
+       http://mathiasbynens.be/notes/async-analytics-snippet#dont-push-it #}
+    {# more GA tweaks:
+       http://html5boilerplate.com/docs/ga-augments/ #}
+    {% if google['analytics'] is defined %}
+    <script>
+        var _gaq = [['_setAccount', '{{ google['analytics'] }}'], ['_trackPageview']];
+        (function(d, t) {
+            var g = d.createElement(t),
+                s = d.getElementsByTagName(t)[0];
+            g.async = g.src = '//www.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g, s);
+        }(document, 'script'));
+    </script>
+    {% endif %}
+
+    {# To only use a subset or add more js overwrite and copy paste this block
+       To speed up page loads save a copy of jQuery in your project and override
+       this block to include the correct path. Otherwise the regeneration is
+       done on every load in dev more with use_controller: true #}
+
+    {# removed jQuery from assetic load as it is loaded from Google CDN above #}
+    {% javascripts
+        '@MopaBootstrapBundle/Resources/public/bootstrap/js/tooltip.js'
+        '@MopaBootstrapBundle/Resources/public/bootstrap/js/affix.js'
+        '@MopaBootstrapBundle/Resources/public/bootstrap/js/alert.js'
+        '@MopaBootstrapBundle/Resources/public/bootstrap/js/button.js'
+        '@MopaBootstrapBundle/Resources/public/bootstrap/js/carousel.js'
+        '@MopaBootstrapBundle/Resources/public/bootstrap/js/collapse.js'
+        '@MopaBootstrapBundle/Resources/public/bootstrap/js/dropdown.js'
+        '@MopaBootstrapBundle/Resources/public/bootstrap/js/modal.js'
+        '@MopaBootstrapBundle/Resources/public/bootstrap/js/popover.js'
+        '@MopaBootstrapBundle/Resources/public/bootstrap/js/scrollspy.js'
+        '@MopaBootstrapBundle/Resources/public/bootstrap/js/tab.js'
+        '@MopaBootstrapBundle/Resources/public/bootstrap/js/transition.js'
+        '@MopaBootstrapBundle/Resources/public/js/mopabootstrap-collection.js'
+        '@MopaBootstrapBundle/Resources/public/js/mopabootstrap-subnav.js'
+        '@MopaBootstrapBundle/Resources/public/js/html5bp_plugins.js'
+        '@MopaBootstrapBundle/Resources/public/js/html5bp_script.js'
+        '@MopaBootstrapBundle/Resources/public/js/eyecon-bootstrap-datepicker.js'
+        output='js/foot_compiled.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+	{% endblock foot_script %}
+{% endblock body %}

@@ -228,6 +228,19 @@ $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class=
 $form->addElement('html', '</div></div>');
 
 // EMAIL NOTIFICATIONS
+if (api_get_setting('documents_default_visibility_defined_in_course') == 'true') {
+    $form->addElement('html', '<div> <h3>'.Display::return_icon('folder.png', Security::remove_XSS(get_lang('Documents')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('Documents')).'</h3><div>');
+
+    $group = array(
+        $form->createElement('radio', 'documents_default_visibility', null, get_lang('Visible'), 'visible'),
+        $form->createElement('radio', 'documents_default_visibility', null, get_lang('Invisible'), 'invisible')
+    );
+    $form->addGroup($group, '', array(get_lang("DocumentsDefaultVisibility")), '');
+
+    $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
+
+    $form->addElement('html', '</div></div>');
+}
 $form->addElement('html', '<div> <h3>'.Display::return_icon('mail.png', Security::remove_XSS(get_lang('EmailNotifications')),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('EmailNotifications')).'</h3><div>');
 
 $group = array();

@@ -1,20 +1,20 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Sensio\Bundle\FrameworkExtraBundle\Routing;
 
 use Symfony\Component\Routing\Loader\AnnotationClassLoader;
 use Symfony\Component\Routing\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route as FrameworkExtraBundleRoute;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-
-/*
- * This file is part of the Symfony framework.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
 
 /**
  * AnnotatedRouteControllerLoader is an implementation of AnnotationClassLoader
@@ -55,6 +55,19 @@ class AnnotatedRouteControllerLoader extends AnnotationClassLoader
                 throw new \LogicException('The service option can only be specified at class level.');
             }
         }
+    }
+
+    protected function getGlobals(\ReflectionClass $class)
+    {
+        $globals = parent::getGlobals($class);
+
+        foreach ($this->reader->getClassAnnotations($class) as $configuration) {
+            if ($configuration instanceof Method) {
+                $globals['methods'] = array_merge($globals['methods'], $configuration->getMethods());
+            }
+        }
+
+        return $globals;
     }
 
     /**

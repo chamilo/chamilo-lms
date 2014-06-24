@@ -143,14 +143,14 @@ handle_forum_and_forumcategories();
 // Action links
 echo '<div class="actions">';
 echo '<span style="float:right;">'.search_link().'</span>';
-echo '<a href="viewforum.php?origin='.$origin.'&forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'">'.Display::return_icon('back.png',get_lang('BackToForum'),'',ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="viewforum.php?origin='.$origin.'&forum='.Security::remove_XSS($_GET['forum']).'&'.api_get_cidreq().'">'.Display::return_icon('back.png',get_lang('BackToForum'),'',ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
-$values = show_add_post_form('newthread', '', isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null);
+$values = show_add_post_form($current_forum, $forum_setting, 'newthread', '', isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null);
 
 if (!empty($values) && isset($values['SubmitPost'])) {
     // Add new thread in table forum_thread.
-    store_thread($values);
+    store_thread($current_forum, $values);
 }
 
 /* FOOTER */

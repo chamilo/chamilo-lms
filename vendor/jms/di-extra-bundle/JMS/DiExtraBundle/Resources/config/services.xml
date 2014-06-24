@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="jms_di_extra.metadata.driver.annotation_driver.class">JMS\DiExtraBundle\Metadata\Driver\AnnotationDriver</parameter>
+        <parameter key="jms_di_extra.metadata.driver.configured_controller_injections.class">JMS\DiExtraBundle\Metadata\Driver\ConfiguredControllerInjectionsDriver</parameter>
+        <parameter key="jms_di_extra.metadata.driver.lazy_loading_driver.class">Metadata\Driver\LazyLoadingDriver</parameter>
+
+        <parameter key="jms_di_extra.metadata.metadata_factory.class">Metadata\MetadataFactory</parameter>
+        <parameter key="jms_di_extra.metadata.cache.file_cache.class">Metadata\Cache\FileCache</parameter>
+
+        <parameter key="jms_di_extra.metadata.converter.class">JMS\DiExtraBundle\Metadata\MetadataConverter</parameter>
+        <parameter key="jms_di_extra.controller_resolver.class">JMS\DiExtraBundle\HttpKernel\ControllerResolver</parameter>
+
+        <parameter key="jms_di_extra.controller_injectors_warmer.class">JMS\DiExtraBundle\HttpKernel\ControllerInjectorsWarmer</parameter>
+    </parameters>
+
+    <services>
+        <!-- Metadata Drivers -->
+        <service id="jms_di_extra.metadata.driver.annotation_driver" class="%jms_di_extra.metadata.driver.annotation_driver.class%" public="false">
+            <argument type="service" id="annotation_reader" />
+        </service>
+        <service id="jms_di_extra.metadata.driver.configured_controller_injections" class="%jms_di_extra.metadata.driver.configured_controller_injections.class%" public="false">
+            <argument type="service" id="jms_di_extra.metadata.driver.annotation_driver" />
+        </service>
+        <service id="jms_di_extra.metadata.driver.lazy_loading_driver" class="%jms_di_extra.metadata.driver.lazy_loading_driver.class%" public="false">
+            <argument type="service" id="service_container" />
+            <argument>jms_di_extra.metadata_driver</argument>
+        </service>
+        <service id="jms_di_extra.metadata_driver" alias="jms_di_extra.metadata.driver.configured_controller_injections" />
+
+        <!-- Metadata Factory -->
+        <service id="jms_di_extra.metadata.cache.file_cache" class="%jms_di_extra.metadata.cache.file_cache.class%" public="false">
+            <argument /><!-- Directory -->
+        </service>
+        <service id="jms_di_extra.metadata.cache" alias="jms_di_extra.metadata.cache.file_cache" public="false" />
+        <service id="jms_di_extra.metadata.metadata_factory" class="%jms_di_extra.metadata.metadata_factory.class%">
+            <argument type="service" id="jms_di_extra.metadata.driver.lazy_loading_driver" />
+            <argument>Metadata\ClassHierarchyMetadata</argument>
+            <argument>%kernel.debug%</argument>
+            <call method="setCache">
+                <argument type="service" id="jms_di_extra.metadata.cache" on-invalid="ignore" />
+            </call>
+        </service>
+
+        <service id="jms_di_extra.metadata.converter" class="%jms_di_extra.metadata.converter.class%" />
+
+        <service id="jms_di_extra.controller_resolver" class="%jms_di_extra.controller_resolver.class%" public="false">
+            <tag name="monolog.logger" channel="request" />
+            <argument type="service" id="service_container" />
+            <argument type="service" id="controller_name_converter" />
+            <argument type="service" id="logger" on-invalid="ignore" />
+        </service>
+
+        <service id="jms_di_extra.controller_injectors_warmer" class="%jms_di_extra.controller_injectors_warmer.class%" public="false">
+            <tag name="kernel.cache_warmer" />
+            <argument type="service" id="kernel" />
+            <argument type="service" id="jms_di_extra.controller_resolver" />
+            <argument>%jms_di_extra.cache_warmer.controller_file_blacklist%</argument>
+        </service>
+    </services>
+</container>

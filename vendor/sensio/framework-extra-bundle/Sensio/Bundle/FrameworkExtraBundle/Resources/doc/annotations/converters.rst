@@ -19,7 +19,7 @@ they can be injected as controller method arguments::
     {
     }
 
-Several things happens under the hood:
+Several things happen under the hood:
 
 * The converter tries to get a ``SensioBlogBundle:Post`` object from the
   request attributes (request attributes comes from route placeholders -- here
@@ -41,6 +41,27 @@ If you use type hinting as in the example above, you can even omit the
     {
     }
 
+.. tip::
+
+    You can disable the auto-conversion of type-hinted method arguments feature
+    by setting the ``auto_convert`` flag to ``false``:
+
+    .. configuration-block::
+
+        .. code-block:: yaml
+
+            # app/config/config.yml
+            sensio_framework_extra:
+                request:
+                    converters: true
+                    auto_convert: false
+
+        .. code-block:: xml
+
+            <sensio-framework-extra:config>
+                <request converters="true" auto-convert="true" />
+            </sensio-framework-extra:config>
+
 To detect which converter is run on a parameter the following process is run:
 
 * If an explicit converter choice was made with
@@ -54,7 +75,7 @@ To detect which converter is run on a parameter the following process is run:
 Built-in Converters
 -------------------
 
-The bundle has two built-in converter, the Doctrine one and a DateTime
+The bundle has two built-in converters, the Doctrine one and a DateTime
 converter.
 
 Doctrine Converter
@@ -65,7 +86,7 @@ Converter Name: ``doctrine.orm``
 The Doctrine Converter attempts to convert request attributes to Doctrine
 entities fetched from the database. Two different approaches are possible:
 
-- Fetch object by primary key
+- Fetch object by primary key.
 - Fetch object by one or several fields which contain unique values in the
   database.
 
@@ -102,6 +123,11 @@ option::
     {
     }
 
+.. tip::
+
+   The ``id`` option specifies which placeholder from the route gets passed to the repository
+   method used. If no repository method is specified, ``find()`` is used by default.
+
 This also allows you to have multiple converters in one action::
 
     /**
@@ -112,7 +138,7 @@ This also allows you to have multiple converters in one action::
     {
     }
 
-In the example above, the post parameter is handled automatically, but the comment is 
+In the example above, the ``$post`` parameter is handled automatically, but ``$comment`` is
 configured with the annotation since they can not both follow the default convention.
 
 If you want to match an entity using multiple fields use the ``mapping`` hash
@@ -133,7 +159,7 @@ route parameter from being part of the criteria::
 
     /**
      * @Route("/blog/{date}/{slug}")
-     * @ParamConverter("post", options={"exclude": ["date"]})
+     * @ParamConverter("post", options={"exclude": {"date"}})
      */
     public function showAction(Post $post, \DateTime $date)
     {
@@ -180,37 +206,36 @@ is accepted. You can be stricter with input given through the options::
 Creating a Converter
 --------------------
 
-All converters must implement the
-:class:`Sensio\\Bundle\\FrameworkExtraBundle\\Request\\ParamConverter\\ParamConverterInterface`::
+All converters must implement the ``ParamConverterInterface``::
 
     namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
-    use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
     use Symfony\Component\HttpFoundation\Request;
 
     interface ParamConverterInterface
     {
-        function apply(Request $request, ConfigurationInterface $configuration);
+        function apply(Request $request, ParamConverter $configuration);
 
-        function supports(ConfigurationInterface $configuration);
+        function supports(ParamConverter $configuration);
     }
 
 The ``supports()`` method must return ``true`` when it is able to convert the
 given configuration (a ``ParamConverter`` instance).
 
-The ``ParamConverter`` instance has three information about the annotation:
+The ``ParamConverter`` instance has three pieces of information about the annotation:
 
 * ``name``: The attribute name;
 * ``class``: The attribute class name (can be any string representing a class
   name);
-* ``options``: An array of options
+* ``options``: An array of options.
 
 The ``apply()`` method is called whenever a configuration is supported. Based
 on the request attributes, it should set an attribute named
 ``$configuration->getName()``, which stores an object of class
 ``$configuration->getClass()``.
 
-To register your converter service you must add a tag to your service
+To register your converter service you must add a tag to your service:
 
 .. configuration-block::
 
@@ -234,6 +259,11 @@ both. If you don't specifiy a priority or name the converter will be added to
 the converter stack with a priority of `0`. To explicitly disable the
 registration by priority you have to set `priority="false"` in your tag
 definition.
+
+.. tip::
+
+   If you would like to inject services or additional arguments to custom param converter, the priority shouldn't
+   be higher than 1. Otherwise, the service wouldn't be loaded.
 
 .. tip::
 

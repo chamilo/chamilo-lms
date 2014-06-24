@@ -1,0 +1,15 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+
+    <mapped-superclass name="Symfony\Cmf\Bundle\RoutingBundle\Model\Route">
+        <field name="variablePattern" type="string" nullable="true"/>
+        <field name="staticPrefix" type="string" nullable="true"/>
+
+        <indexes>
+            <index name="name_idx" columns="name"/>
+            <index name="prefix_idx" columns="staticPrefix"/>
+        </indexes>
+    </mapped-superclass>
+
+</doctrine-mapping>

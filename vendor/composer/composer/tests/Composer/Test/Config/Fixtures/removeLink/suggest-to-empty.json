@@ -1,7 +1,0 @@
-{
-    "name": "my-vend/my-app",
-    "license": "MIT",
-    "suggest": {
-        "my-vend/my-optional-extension": "1.*"
-    }
-}

@@ -154,7 +154,7 @@ $countQueryBuilderModifier = function ($queryBuilder) {
           ->setMaxResults(1);
 };
 
-$adapter = new DoctrineDbalAdapter($queryBuilder, $countQueryModifier);
+$adapter = new DoctrineDbalAdapter($queryBuilder, $countQueryBuilderModifier);
 ```
 
 ### DoctrineDbalSingleTableAdapter

@@ -6,7 +6,7 @@
 
 // User permissions
 api_protect_admin_script(true);
-
+$is_platform_admin = api_is_platform_admin();
 $message = null;
 
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#password');
@@ -268,9 +268,9 @@ if( $form->validate()) {
 		$language       = $user['language'];
 		$picture        = $_FILES['picture'];
 		$send_mail      = intval($user['mail']['send_mail']);
-		$hr_dept_id     = intval($user['hr_dept_id']);
+		$hr_dept_id     = isset($user['hr_dept_id']) ? intval($user['hr_dept_id']) : 0;
 
-		if (count($extAuthSource) > 0 && $user['password']['password_auto'] == '2') {
+		if (isset($extAuthSource) && count($extAuthSource) > 0 && $user['password']['password_auto'] == '2') {
 			$auth_source = $user['password']['auth_source'];
 			$password = 'PLACEHOLDER';
 		} else {
@@ -380,7 +380,7 @@ if (!empty($message)){
 $content = $form->return_form();
 
 $app['title'] = $tool_name;
-$tpl = $app['template'];
-$tpl->assign('message', $message);
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
+//$tpl = $app['template'];
+echo $message;
+
+echo $content;

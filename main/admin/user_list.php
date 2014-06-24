@@ -5,7 +5,7 @@
 	@author Julio Montoya <gugli100@gmail.com> BeezNest 2011
 *	@package chamilo.admin
 */
-
+use ChamiloSession as Session;
 // name of the language file that needs to be included
 $language_file = array ('registration','admin');
 $cidReset = true;
@@ -350,7 +350,7 @@ function email_filter($email) {
  * @return string Some HTML-code with modify-buttons
  */
 function modify_filter($user_id, $url_params, $row) {
-	global $_admins_list, $delete_user_available, $app;
+	global $_admins_list, $delete_user_available;
     $is_admin = false;
 
     $userId = api_get_user_id();
@@ -410,7 +410,7 @@ function modify_filter($user_id, $url_params, $row) {
         )
     ) {
         if (!$user_is_anonymous) {
-            if ($app['security']->isGranted('ROLE_GLOBAL_ADMIN')) {
+            if (Session::getSecurity()->isGranted('ROLE_GLOBAL_ADMIN')) {
                 // everything looks good, show "login as" link
                 if ($user_id != $userId) {
                     $result .= '<a href="'.api_get_path(WEB_PUBLIC_PATH).'?_switch_user='.$row[5].'">'.Display::return_icon('login_as.gif', get_lang('LoginAs')).'</a>&nbsp;&nbsp;';
@@ -527,6 +527,10 @@ function active_filter($active, $url_params, $row) {
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
  */
 function status_filter($status) {
+    if (empty($status)) {
+        return null;
+    }
+
 	$statusname = api_get_status_langvars();
 	return $statusname[$status];
 }
@@ -801,9 +805,8 @@ if ($table->get_total_number_of_items() == 0) {
     }
 }
 
-$app['title'] = $tool_name;
-$tpl = $app['template'];
+echo $message;
+echo $actions;
+echo $form.$table_result.$extra_search_options;
 
-$tpl->assign('actions', $actions);
-$tpl->assign('message', $message);
-$tpl->assign('content', $form.$table_result.$extra_search_options);
+

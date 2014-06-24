@@ -1,0 +1,36 @@
+{
+    "name": "sonata-project/markitup-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony SonataMarkItUpBundle",
+    "keywords": ["markitup", "sonata", "jquery", "markup", "editor", "markdown", "wiki", "bbcode", "html", "textile"],
+    "homepage": "http://sonata-project.org/bundles/markitup",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Rabaix",
+            "email": "thomas.rabaix@sonata-project.org",
+            "homepage": "http://sonata-project.org"
+        },
+        {
+            "name": "Jay Salvat",
+            "homepage": "http://jaysalvat.com"
+        },
+        {
+            "name": "Sonata Community",
+            "homepage": "https://github.com/sonata-project/SonataMarkItUpBundle/contributors"
+        }
+    ],
+    "require": {
+        "sonata-project/jquery-bundle": "1.*"
+    },
+    "autoload": {
+        "psr-0": { "Sonata\\MarkItUpBundle": "" }
+    },
+    "target-dir": "Sonata/MarkItUpBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-2.0": "2.0.x-dev",
+            "dev-master": "2.1.x-dev"
+        }
+    }
+}

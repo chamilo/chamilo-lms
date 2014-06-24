@@ -101,9 +101,6 @@ if ($origin=='learnpath') {
 }
 
 
-/*
-    Is the user allowed here?
-*/
 // if the user is not a course administrator and the forum is hidden
 // then the user is not allowed here.
 if (!api_is_allowed_to_edit(false,true) AND ($current_forum['visibility']==0 OR $current_thread['visibility']==0)) {

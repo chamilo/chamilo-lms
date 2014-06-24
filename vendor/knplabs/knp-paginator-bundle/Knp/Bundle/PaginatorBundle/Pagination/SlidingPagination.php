@@ -1,0 +1,183 @@
+<?php
+
+namespace Knp\Bundle\PaginatorBundle\Pagination;
+
+use Knp\Component\Pager\Pagination\AbstractPagination;
+
+class SlidingPagination extends AbstractPagination
+{
+    private $route;
+    private $params;
+    private $pageRange = 5;
+    private $template;
+    private $sortableTemplate;
+    private $filtrationTemplate;
+    private $extraViewParams = array();
+
+    public function __construct(array $params)
+    {
+        $this->params = $params;
+    }
+
+    public function setUsedRoute($route)
+    {
+        $this->route = $route;
+    }
+
+    public function getRoute()
+    {
+        return $this->route;
+    }
+
+    public function setSortableTemplate($template)
+    {
+        $this->sortableTemplate = $template;
+    }
+
+    public function getSortableTemplate()
+    {
+        return $this->sortableTemplate;
+    }
+
+    public function setFiltrationTemplate($template)
+    {
+        $this->filtrationTemplate = $template;
+    }
+
+    public function getFiltrationTemplate()
+    {
+        return $this->filtrationTemplate;
+    }
+
+    public function setParam($name, $value)
+    {
+        $this->params[$name] = $value;
+    }
+
+    public function getParams()
+    {
+        return $this->params;
+    }
+
+    public function setTemplate($template)
+    {
+        $this->template = $template;
+    }
+
+    public function getTemplate()
+    {
+        return $this->template;
+    }
+
+    public function setPageRange($range)
+    {
+        $this->pageRange = abs(intval($range));
+    }
+
+    /**
+     * Get url query with all parameters
+     *
+     * @param array $additionalQueryParams
+     * @return array - list of query parameters
+     */
+    public function getQuery(array $additionalQueryParams = array())
+    {
+        return array_merge($this->params, $additionalQueryParams);
+    }
+
+    public function isSorted($key, array $params = array())
+    {
+        $params = array_merge($this->params, $params);
+
+        return isset($params[$this->getPaginatorOption('sortFieldParameterName')]) && $params[$this->getPaginatorOption('sortFieldParameterName')] === $key;
+    }
+
+    public function getDirection ()
+    {
+        return $this->params[$this->getPaginatorOption('sortDirectionParameterName')];
+    }
+
+    public function getPaginationData()
+    {
+        $pageCount = intval(ceil($this->totalCount / $this->numItemsPerPage));
+        $current = $this->currentPageNumber;
+
+        if ($pageCount < $current) {
+            $this->currentPageNumber = $current = $pageCount;
+        }
+
+        if ($this->pageRange > $pageCount) {
+            $this->pageRange = $pageCount;
+        }
+
+        $delta = ceil($this->pageRange / 2);
+
+        if ($current - $delta > $pageCount - $this->pageRange) {
+            $pages = range($pageCount - $this->pageRange + 1, $pageCount);
+        } else {
+            if ($current - $delta < 0) {
+                $delta = $current;
+            }
+
+            $offset = $current - $delta;
+            $pages = range($offset + 1, $offset + $this->pageRange);
+        }
+
+        $proximity = floor($this->pageRange / 2);
+
+        $startPage  = $current - $proximity;
+        $endPage    = $current + $proximity;
+
+        if ($startPage < 1) {
+            $endPage = min($endPage + (1 - $startPage), $pageCount);
+            $startPage = 1;
+        }
+
+        if ($endPage > $pageCount) {
+            $startPage = max($startPage - ($endPage - $pageCount), 1);
+            $endPage = $pageCount;
+        }
+
+        $viewData = array(
+            'last'              => $pageCount,
+            'current'           => $current,
+            'numItemsPerPage'   => $this->numItemsPerPage,
+            'first'             => 1,
+            'pageCount'         => $pageCount,
+            'totalCount'        => $this->totalCount,
+            'pageRange'         => $this->pageRange,
+            'startPage'         => $startPage,
+            'endPage'           => $endPage
+        );
+
+        if ($current - 1 > 0) {
+            $viewData['previous'] = $current - 1;
+        }
+
+        if ($current + 1 <= $pageCount) {
+            $viewData['next'] = $current + 1;
+        }
+
+        $viewData['pagesInRange'] = $pages;
+        $viewData['firstPageInRange'] = min($pages);
+        $viewData['lastPageInRange']  = max($pages);
+
+        if ($this->getItems() !== null) {
+            $viewData['currentItemCount'] = $this->count();
+            $viewData['firstItemNumber'] = (($current - 1) * $this->numItemsPerPage) + 1;
+            $viewData['lastItemNumber'] = $viewData['firstItemNumber'] + $viewData['currentItemCount'] - 1;
+        }
+
+        return $viewData;
+    }
+
+    public function getPaginatorOptions()
+    {
+        return $this->paginatorOptions;
+    }
+
+    public function getCustomParameters()
+    {
+        return $this->customParameters;
+    }
+}

@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd"
+>
+    <parameters>
+        <parameter key="ivory_ck_editor.form.type.class">Ivory\CKEditorBundle\Form\Type\CKEditorType</parameter>
+        <parameter key="ivory_ck_editor.config_manager.class">Ivory\CKEditorBundle\Model\ConfigManager</parameter>
+        <parameter key="ivory_ck_editor.plugin_manager.class">Ivory\CKEditorBundle\Model\PluginManager</parameter>
+        <parameter key="ivory_ck_editor.styles_set_manager.class">Ivory\CKEditorBundle\Model\StylesSetManager</parameter>
+        <parameter key="ivory_ck_editor.template_manager.class">Ivory\CKEditorBundle\Model\TemplateManager</parameter>
+    </parameters>
+
+    <services>
+        <service id="ivory_ck_editor.form.type" class="%ivory_ck_editor.form.type.class%">
+            <argument>%ivory_ck_editor.form.type.enable%</argument>
+            <argument>%ivory_ck_editor.form.type.base_path%</argument>
+            <argument>%ivory_ck_editor.form.type.js_path%</argument>
+            <argument type="service" id="ivory_ck_editor.config_manager" />
+            <argument type="service" id="ivory_ck_editor.plugin_manager" />
+            <argument type="service" id="ivory_ck_editor.styles_set_manager" />
+            <argument type="service" id="ivory_ck_editor.template_manager" />
+            <tag name="form.type" alias="ckeditor" />
+        </service>
+
+        <service id="ivory_ck_editor.config_manager" class="%ivory_ck_editor.config_manager.class%" />
+        <service id="ivory_ck_editor.plugin_manager" class="%ivory_ck_editor.plugin_manager.class%" />
+        <service id="ivory_ck_editor.styles_set_manager" class="%ivory_ck_editor.styles_set_manager.class%" />
+        <service id="ivory_ck_editor.template_manager" class="%ivory_ck_editor.template_manager.class%" />
+    </services>
+</container>

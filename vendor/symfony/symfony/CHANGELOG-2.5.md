@@ -1,0 +1,95 @@
+CHANGELOG for 2.5.x
+===================
+
+This changelog references the relevant changes (bug and security fixes) done
+in 2.5 minor versions.
+
+To get the diff for a specific change, go to https://github.com/symfony/symfony/commit/XXX where XXX is the change hash
+To get the diff between two versions, go to https://github.com/symfony/symfony/compare/v2.5.0...v2.5.1
+
+* 2.5.0 (2014-05-31)
+
+ * bug #11014 [Validator] Remove property and method targets from the optional and required constraints (jakzal)
+ * bug #10983 [DomCrawler] Fixed charset detection in html5 meta charset tag (77web)
+
+* 2.5.0-RC1 (2014-05-28)
+
+ * bug #10979 Make rootPath part of regex greedy (artursvonda)
+ * bug #10995 [TwigBridge][Trans]set %count% only on transChoice from the current context. (aitboudad)
+ * bug #10989 [Debug] throw even in stacking mode to preserve code paths (nicolas-grekas)
+ * bug #10987 [DomCrawler] Fixed a forgotten case of complex XPath queries (stof)
+ * feature #10930 [Process] Deprecate using values that are not string for Process::setStdin and ProcessBuilder::setInput (romainneutron)
+ * bug #10971 [Process] Fix conflicts between latest 2.3 fix and 2.5 deprecation (romainneutron)
+ * feature #10932 [Process] Deprecate Process::setStdin in favor of Process::setInput (romainneutron)
+ * bug #10849 [WIP][Finder] Fix wrong implementation on sortable callback comparator (ProPheT777)
+ * bug #10929 [Process] Add validation on Process input (romainneutron)
+ * bug #10946 [PropertyAccess] Fixed getValue() when accessing non-existing indices of ArrayAccess implementations (webmozart)
+ * bug #10958 [DomCrawler] Fixed filterXPath() chaining loosing the parent DOM nodes (stof, robbertkl)
+ * bug #10953 [HttpKernel] fixed file uploads in functional tests without file selected (realmfoo)
+ * feature #10941 [Debug] cleanup interfaces before 2.5-final (nicolas-grekas)
+ * bug #10947 [PropertyAccess] Fixed getValue() when accessing non-existing indices of ArrayAccess implementations (webmozart)
+ * bug #10937 [HttpKernel] Fix "absolute path" when we look to the cache directory (BenoitLeveque)
+ * bug #10933 Changed the default value of checkbox and radio to match the HTML spec (stof)
+ * bug #10927 [DomCrawler] Changed typehints form DomNode to DomElement (stof)
+ * bug #10894 [HttpKernel] removed absolute paths from the generated container (fabpot)
+ * bug #10926 [DomCrawler] Fixed the initial state for options without value attribute (stof)
+ * bug #10925 [DomCrawler] Fixed the handling of boolean attributes in ChoiceFormField (stof)
+ * feature #10882 Fix issue #10867 (umpirsky)
+ * bug #10902 [Yaml] Fixed YAML Parser does not ignore duplicate keys, violating YAML spec. (sun)
+ * feature #10912 [Form] Added support for injecting HttpFoundation's Request in ServerParams for the Validator extension (csarrazi)
+ * bug #10777 [Form] Automatically add step attribute to HTML5 time widgets to display seconds if needed (tucksaun)
+ * bug #10909 [PropertyAccess] Fixed plurals for -ves words (csarrazi)
+ * bug #10904 [HttpKernel] Replace sha1 with sha256 in recently added tests (jakzal)
+ * bug #10899 Explicitly define the encoding. (jakzal)
+ * bug #10897 [Console] Fix a console test (jakzal)
+ * bug #10896 [HttpKernel] Fixed cache behavior when TTL has expired and a default "global" TTL is defined (alquerci, fabpot)
+ * bug #10841 [DomCrawler] Fixed image input case sensitive (geoffrey-brier)
+ * bug #10714 [Console]Improve formatter for double-width character (denkiryokuhatsuden)
+ * bug #10872 [Form] Fixed TrimListenerTest as of PHP 5.5 (webmozart)
+ * feature #10880 [DependencyInjection] GraphvizDumper now displays unresolved parameters (rosstuck)
+ * bug #10876 [Console] Make `Helper\Table::setStyle()` chainable again (stloyd)
+ * bug #10762 [BrowserKit] Allow URLs that don't contain a path when creating a cookie from a string (thewilkybarkid)
+ * bug #10861 [Debug] enhance perf of DebugClassLoader (nicolas-grekas)
+ * bug #10863 [Security] Add check for supported attributes in AclVoter (artursvonda)
+ * bug #10854 [Debug] fix handling deprecated warnings and stacked errors turned into exceptions (nicolas-grekas)
+ * feature #10843 [TwigBridge] Added compile-time issues checking in twig:lint command (maxromanovsky)
+ * feature #10829 Fix issue 9172 (umpirsky)
+ * bug #10833 [TwigBridge][Transchoice] set %count% from the current context. (aitboudad)
+ * bug #10820 [WebProfilerBundle] Fixed profiler seach/homepage with empty token (tucksaun)
+ * bug #10809 Fixed composer to include config component for mocks in phpunit (jpauli)
+ * bug #10815 Fixed issue #5427 (umpirsky)
+ * bug #10817 [Debug] fix #10313: FlattenException not found (nicolas-grekas)
+
+* 2.5.0-BETA2 (2014-04-29)
+
+ * bug #10803 [Debug] fix ErrorHandlerTest when context is not an array (nicolas-grekas)
+ * bug #10801 [Debug] ErrorHandler: remove $GLOBALS from context in PHP5.3 fix #10292 (nicolas-grekas)
+ * bug #10799 [Debug] less intrusive work around for https://bugs.php.net/54275 (nicolas-grekas)
+ * bug #10797 [HttpFoundation] Allow File instance to be passed to BinaryFileResponse (anlutro)
+ * bug #10798 [Console] Fix #10795: Allow instancing Console Application when STDIN is not declared (romainneutron)
+ * bug #10643 [TwigBridge] Removed strict check when found variables inside a translation (goetas)
+ * bug #10605 [ExpressionLanguage] Strict in_array check in Parser.php (parnas)
+ * bug #10789 [Console] Fixed the rendering of exceptions on HHVM with a terminal width (stof)
+ * bug #10773 [WebProfilerBundle ] Fixed an edge case on WDT loading (tucksaun)
+ * feature #10786 [FrameworkBundle] removed support for HHVM built-in web server as it is deprecated now (fabpot)
+ * bug #10784 [Security] removed $csrfTokenManager type hint from SimpleFormAuthenticationListener constructor argument (choonge)
+ * bug #10776 [Debug] fix #10771 DebugClassLoader can't load PSR4 libs (nicolas-grekas)
+ * bug #10763 [Process] Disable TTY mode on Windows platform (romainneutron)
+ * bug #10772 [Finder] Fix ignoring of unreadable dirs in the RecursiveDirectoryIterator (jakzal)
+ * bug #10757 [Process] Setting STDIN while running should not be possible (romainneutron)
+ * bug #10749 Fixed incompatibility of x509 auth with nginx (alcaeus)
+ * feature #10725 [Debug] Handled errors (nicolas-grekas)
+ * bug #10735 [Translation] [PluralizationRules] Little correction for case 'ar' (klyk50)
+ * bug #10720 [HttpFoundation] Fix DbalSessionHandler  (Tobion)
+ * bug #10721 [HttpFoundation] status 201 is allowed to have a body (Tobion)
+ * bug #10728 [Process] Fix #10681, process are failing on Windows Server 2003 (romainneutron)
+ * bug #10733 [DomCrawler] Textarea value should default to empty string instead of null. (Berdir)
+ * bug #10723 [Security] fix DBAL connection typehint (Tobion)
+ * bug #10715 [Debug] Fixed ClassNotFoundFatalErrorHandler on windows. (lyrixx)
+ * bug #10700 Fixes various inconsistencies in the code (fabpot)
+ * bug #10697 [Translation] Make IcuDatFileLoader/IcuResFileLoader::load invalid resource compatible with HHVM. (idn2104)
+
+* 2.5.0-BETA1 (2014-04-11)
+
+ * first beta release
+

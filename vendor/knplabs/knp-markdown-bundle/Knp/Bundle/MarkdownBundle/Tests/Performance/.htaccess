@@ -1,0 +1,3 @@
+php_value xdebug.profiler_output_dir /tmp
+php_value xdebug.profiler_output_name cachegrind.out.11111
+php_value xdebug.profiler_enable 1

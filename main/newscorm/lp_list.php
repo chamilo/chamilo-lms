@@ -266,9 +266,9 @@ foreach ($categories as $item) {
 
             $dsp_desc = '';
             $dsp_export = '';
-        $dsp_edit = '';
+            $dsp_edit = '';
             $dsp_build = '';
-        $dsp_edit_close = '';
+            $dsp_edit_close = '';
             $dsp_delete = '';
             $dsp_visible = '';
             $dsp_default_view = '';

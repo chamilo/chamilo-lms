@@ -4,8 +4,7 @@
     "keywords": ["json", "schema"],
     "homepage": "https://github.com/justinrainbow/json-schema",
     "type": "library",
-    "license": "NewBSD",
-    "version": "1.1.0",
+    "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "Bruno Prieto Reis",
@@ -24,10 +23,33 @@
             "email": "seroscho@googlemail.com"
         }
     ],
+    "repositories": [{
+        "type": "package",
+        "package": {
+            "name": "json-schema/JSON-Schema-Test-Suite",
+            "version": "1.1.0",
+            "source": {
+                "url": "https://github.com/json-schema/JSON-Schema-Test-Suite",
+                "type": "git",
+                "reference": "1.1.0"
+            }
+        }
+    }],
     "require": {
         "php": ">=5.3.0"
     },
+    "require-dev": {
+        "json-schema/JSON-Schema-Test-Suite": "1.1.0",
+        "phpunit/phpunit": "~3.7",
+        "phpdocumentor/phpdocumentor": "~2"
+    },
     "autoload": {
         "psr-0": { "JsonSchema": "src/" }
+    },
+    "bin": ["bin/validate-json"],
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.4.x-dev"
+        }
     }
 }

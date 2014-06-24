@@ -90,7 +90,8 @@ class EvalForm extends FormValidator
     /**
      * This form will build a form to add users to an evaluation
      */
-    protected function build_add_user_to_eval() {
+    protected function build_add_user_to_eval()
+    {
         $this->addElement('header', get_lang('ChooseUser'));
         $select= $this->addElement('select', 'firstLetterUser', get_lang('FirstLetter'), null, array(
                 'onchange'=> 'document.add_users_to_evaluation.submit()'
@@ -120,7 +121,8 @@ class EvalForm extends FormValidator
     /**
      * This function builds a form to edit all results in an evaluation
      */
-    protected function build_all_results_edit_form() {
+    protected function build_all_results_edit_form()
+    {
         //extra field for check on maxvalue
         $this->addElement('hidden', 'maxvalue', $this->evaluation_object->get_max());
         $this->addElement('hidden', 'minvalue', 0);
@@ -178,10 +180,7 @@ class EvalForm extends FormValidator
             $result = $result_and_user['result'];
 
             $renderer = &$this->defaultRenderer();
-            $this->add_textfield('score[' . $result->get_id() . ']',
-                $this->build_stud_label($user['user_id'], $user['username'], $user['lastname'], $user['firstname']),
-                false,
-                array ('class' => "span2",
+            $this->add_textfield('score[' . $result->get_id() . ']', $this->build_stud_label($user['user_id'], $user['username'], $user['lastname'], $user['firstname']), false, array('class' => "span2",
                        'maxlength' => 5));
 
             $this->addRule('score[' . $result->get_id() . ']', get_lang('OnlyNumbers'), 'numeric');
@@ -218,7 +217,8 @@ class EvalForm extends FormValidator
      * This function builds a form to move an item to another category
      *
      */
-    protected function build_move_form() {
+    protected function build_move_form()
+    {
         $renderer = & $this->defaultRenderer();
         $renderer->setElementTemplate('<span>{element}</span> ');
         $this->addElement('static', null, null, '"'.$this->evaluation_object->get_name().'" ');
@@ -237,7 +237,8 @@ class EvalForm extends FormValidator
     /**
      * Builds a result form containing inputs for all students with a given course_code
      */
-    protected function build_result_add_form() {
+    protected function build_result_add_form()
+    {
         $renderer =& $this->defaultRenderer();
         $renderer->setFormTemplate(
             '<form{attributes}>
@@ -326,7 +327,8 @@ class EvalForm extends FormValidator
     /**
      * Builds a form to edit a result
      */
-    protected function build_result_edit_form() {
+    protected function build_result_edit_form()
+    {
         $this->setDefaults(array (
                 'score' => $this->result_object->get_score(),
                 'maximum' => $this->evaluation_object->get_max()
@@ -365,7 +367,8 @@ class EvalForm extends FormValidator
     /**
      * Builds a form to add an evaluation
      */
-    protected function build_add_form() {
+    protected function build_add_form()
+    {
         $this->setDefaults(array (	'hid_user_id' => $this->evaluation_object->get_user_id(),
                                       'hid_category_id' => $this->evaluation_object->get_category_id(),
                                       'hid_course_code' => $this->evaluation_object->get_course_code(), 'created_at' => api_get_utc_datetime()));
@@ -381,7 +384,8 @@ class EvalForm extends FormValidator
     /**
      * Builds a form to edit an evaluation
      */
-    protected function build_editing_form() {
+    protected function build_editing_form()
+    {
         $parent_cat = Category :: load($this->evaluation_object->get_category_id());
         if ($parent_cat[0]->get_parent_id() == 0) {
             $weight_mask = $this->evaluation_object->get_weight();
@@ -412,10 +416,11 @@ class EvalForm extends FormValidator
     /**
      * Builds a basic form that is used in add and edit
      */
-    private function build_basic_form($edit= 0) {
+    private function build_basic_form($edit = 0)
+    {
         $form_title = get_lang('NewEvaluation');
 
-        if ($_GET['editeval']==1) {
+        if (!empty($_GET['editeval']) && $_GET['editeval'] == 1) {
             $form_title = get_lang('EditEvaluation');
         }
 
@@ -467,7 +472,7 @@ class EvalForm extends FormValidator
             }
         }
 
-        $this->add_textfield('weight_mask', array(get_lang('Weight'), null, ' [0 .. '.$all_categories[0]->get_weight().'] '), true, array (
+        $this->add_textfield('weight_mask', array(get_lang('Weight'), null, ' [0 .. <span id="max_weight">' . $all_categories[0]->get_weight() . '</span>] '), true, array(
                 'size' => '4',
                 'maxlength' => '5',
                 'class' => 'span1'
@@ -524,15 +529,18 @@ class EvalForm extends FormValidator
 
     }
 
-    function display() {
+    function display()
+    {
         parent :: display();
     }
 
-    function setDefaults($defaults= array(), $filter = null) {
+    function setDefaults($defaults = array(), $filter = null)
+    {
         parent :: setDefaults($defaults, $filter);
     }
 
-    private function build_stud_label ($id, $username,$lastname, $firstname) {
+    private function build_stud_label($id, $username, $lastname, $firstname)
+    {
         $opendocurl_start = '';
         $opendocurl_end = '';
         // evaluation's origin is a link
@@ -547,7 +555,8 @@ class EvalForm extends FormValidator
         return $opendocurl_start . api_get_person_name($firstname, $lastname) .' ('.$username.')'. $opendocurl_end;
     }
 
-    function sort_by_user ($item1, $item2) {
+    function sort_by_user($item1, $item2)
+    {
         $user1 = $item1['user'];
         $user2 = $item2['user'];
         if (api_sort_by_first_name()) {

@@ -4,7 +4,6 @@ namespace Knp\Menu\Silex;
 
 use Silex\Application;
 use Silex\ServiceProviderInterface;
-use Knp\Menu\Matcher\Matcher;
 use Knp\Menu\MenuFactory;
 use Knp\Menu\Renderer\ListRenderer;
 use Knp\Menu\Renderer\TwigRenderer;
@@ -18,27 +17,15 @@ class KnpMenuServiceProvider implements ServiceProviderInterface
     public function register(Application $app)
     {
         $app['knp_menu.factory'] = $app->share(function () use ($app) {
-            $factory = new MenuFactory();
-
             if (isset($app['url_generator'])) {
-                $factory->addExtension(new RoutingExtension($app['url_generator']));
+                return new RouterAwareFactory($app['url_generator']);
             }
 
-            return $factory;
-        });
-
-        $app['knp_menu.matcher'] = $app->share(function () use ($app) {
-            $matcher = new Matcher();
-
-            if (isset($app['knp_menu.matcher.configure'])) {
-                $app['knp_menu.matcher.configure']($matcher);
-            }
-
-            return $matcher;
+            return new MenuFactory();
         });
 
         $app['knp_menu.renderer.list'] = $app->share(function () use ($app) {
-            return new ListRenderer($app['knp_menu.matcher'], array(), $app['charset']);
+            return new ListRenderer(array(), $app['charset']);
         });
 
         $app['knp_menu.menu_provider'] = $app->share(function () use ($app) {
@@ -63,7 +50,7 @@ class KnpMenuServiceProvider implements ServiceProviderInterface
             $app['knp_menu.default_renderer'] = 'list';
         }
 
-        $app['knp_menu.helper'] = $app->share(function () use ($app) {
+        $app['knp_menu.helper'] = $app->share(function () use ($app){
             return new Helper($app['knp_menu.renderer_provider'], $app['knp_menu.menu_provider']);
         });
 
@@ -73,7 +60,7 @@ class KnpMenuServiceProvider implements ServiceProviderInterface
             });
 
             $app['knp_menu.renderer.twig'] = $app->share(function () use ($app) {
-                return new TwigRenderer($app['twig'], $app['knp_menu.template'], $app['knp_menu.matcher']);
+                return new TwigRenderer($app['twig'], $app['knp_menu.template']);
             });
 
             if (!isset($app['knp_menu.template'])) {
@@ -93,6 +80,13 @@ class KnpMenuServiceProvider implements ServiceProviderInterface
             }));
         }
     }
-
+    
+    /**
+     * Bootstraps the application.
+     *
+     * This method is called after all services are registers
+     * and should be used for "dynamic" configuration (whenever
+     * a service must be requested).
+     */
     public function boot(Application $app){}
 }

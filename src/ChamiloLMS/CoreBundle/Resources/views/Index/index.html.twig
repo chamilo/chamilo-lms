@@ -1,0 +1,11 @@
+{% extends "ChamiloLMSCoreBundle::main_layout.html.twig" %}
+{% block page_content %}
+    {% autoescape false %}
+    {{ content }}
+    {% include "@template_style/layout/hot_courses.tpl" %}
+    {% endautoescape %}
+{% endblock %}
+
+{% block title %}
+    Index 2
+{% endblock %}

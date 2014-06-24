@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="fos_message.new_thread_form.type.default" class="FOS\MessageBundle\FormType\NewThreadMessageFormType" public="false" />
+
+        <service id="fos_message.new_thread_multiple_form.type" class="FOS\MessageBundle\FormType\NewThreadMultipleMessageFormType" public="false" />
+
+        <service id="fos_message.reply_form.type.default" class="FOS\MessageBundle\FormType\ReplyMessageFormType" public="false" />
+
+        <service id="fos_message.new_thread_form.factory.default" class="FOS\MessageBundle\FormFactory\NewThreadMessageFormFactory" public="false">
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="fos_message.new_thread_form.type" />
+            <argument>%fos_message.new_thread_form.name%</argument>
+            <argument>%fos_message.new_thread_form.model%</argument>
+        </service>
+
+        <service id="fos_message.reply_form.factory.default" class="FOS\MessageBundle\FormFactory\ReplyMessageFormFactory" public="false">
+            <argument type="service" id="form.factory" />
+            <argument type="service" id="fos_message.reply_form.type" />
+            <argument>%fos_message.reply_form.name%</argument>
+            <argument>%fos_message.reply_form.model%</argument>
+        </service>
+
+        <service id="fos_message.new_thread_form.handler.default" class="FOS\MessageBundle\FormHandler\NewThreadMessageFormHandler" scope="request" public="false">
+            <argument type="service" id="request" />
+            <argument type="service" id="fos_message.composer" />
+            <argument type="service" id="fos_message.sender" />
+            <argument type="service" id="fos_message.participant_provider" />
+        </service>
+
+        <service id="fos_message.new_thread_multiple_form.handler" class="FOS\MessageBundle\FormHandler\NewThreadMultipleMessageFormHandler" scope="request" public="false">
+            <argument type="service" id="request" />
+            <argument type="service" id="fos_message.composer" />
+            <argument type="service" id="fos_message.sender" />
+            <argument type="service" id="fos_message.participant_provider" />
+        </service>
+
+        <service id="fos_message.reply_form.handler.default" class="FOS\MessageBundle\FormHandler\ReplyMessageFormHandler" scope="request" public="false">
+            <argument type="service" id="request" />
+            <argument type="service" id="fos_message.composer" />
+            <argument type="service" id="fos_message.sender" />
+            <argument type="service" id="fos_message.participant_provider" />
+        </service>
+
+        <service id="fos_message.recipients_data_transformer" class="FOS\MessageBundle\DataTransformer\RecipientsDataTransformer"  public="false">
+            <argument type="service" id="fos_user.user_to_username_transformer" />
+        </service>
+
+        <service id="fos_message.recipients_selector" class="FOS\MessageBundle\FormType\RecipientsType" public="true">
+            <argument type="service" id="fos_message.recipients_data_transformer" />
+            <tag name="form.type" alias="recipients_selector" />
+        </service>
+    </services>
+
+</container>

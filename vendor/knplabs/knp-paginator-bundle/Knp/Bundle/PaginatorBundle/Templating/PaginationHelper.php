@@ -1,0 +1,107 @@
+<?php
+
+namespace Knp\Bundle\PaginatorBundle\Templating;
+
+use Symfony\Component\Templating\PhpEngine;
+use Symfony\Component\Templating\Helper\Helper;
+
+use Knp\Bundle\PaginatorBundle\Helper\Processor;
+
+/**
+ * Pagination PHP helper
+ *
+ * Basically provides access to KnpPaginator from PHP templates
+ *
+ * @author Rafa³ Wrzeszcz <rafal.wrzeszcz@wrzasq.pl>
+ */
+class PaginationHelper extends Helper
+{
+    /**
+     * @var PhpEngine
+     */
+    protected $templating;
+
+    /**
+     * @var Processor
+     */
+    protected $processor;
+
+    public function __construct(Processor $processor, PhpEngine $templating)
+    {
+        $this->processor = $processor;
+        $this->templating = $templating;
+    }
+
+    /**
+     * Renders the pagination template
+     *
+     * @param string $template
+     * @param array $queryParams
+     * @param array $viewParams
+     *
+     * @return string
+     */
+    public function render($pagination, $template = null, array $queryParams = array(), array $viewParams = array())
+    {
+        return $this->templating->render(
+            $template ?: $pagination->getTemplate(),
+            $this->processor->render($pagination, $queryParams, $viewParams)
+        );
+    }
+
+    /**
+     * Create a sort url for the field named $title
+     * and identified by $key which consists of
+     * alias and field. $options holds all link
+     * parameters like "alt, class" and so on.
+     *
+     * $key example: "article.title"
+     *
+     * @param string $title
+     * @param string $key
+     * @param array $options
+     * @param array $params
+     * @param string $template
+     * @return string
+     */
+    public function sortable($pagination, $title, $key, $options = array(), $params = array(), $template = null)
+    {
+        return $this->templating->render(
+            $template ?: $pagination->getSortableTemplate(),
+            $this->processor->sortable($pagination, $title, $key, $options, $params)
+        );
+    }
+
+    /**
+     * Create a filter url for the field named $title
+     * and identified by $key which consists of
+     * alias and field. $options holds all link
+     * parameters like "alt, class" and so on.
+     *
+     * $key example: "article.title"
+     *
+     * @param string $title
+     * @param string $key
+     * @param array $options
+     * @param array $params
+     * @param string $template
+     * @return string
+     */
+    public function filter($pagination, array $fields, $options = array(), $params = array(), $template = null)
+    {
+        return $this->templating->render(
+            $template ?: $pagination->getFiltrationTemplate(),
+            $this->processor->filter($pagination, $fields, $options, $params)
+        );
+    }
+
+    /**
+     * Get helper name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'knp_pagination';
+    }
+}

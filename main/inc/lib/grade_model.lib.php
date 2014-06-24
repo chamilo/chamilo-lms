@@ -249,7 +249,7 @@ class GradeModel extends Model
             }
         }
 
-        //event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
+        //Event::addEvent(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
         return $id;
     }
 
@@ -282,7 +282,7 @@ class GradeModel extends Model
     public function delete($id)
     {
         parent::delete($id);
-        //event_system(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
+        //Event::addEvent(LOG_CAREER_DELETE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
     }
 
     public function fill_grade_model_select_in_form(&$form, $name = 'gradebook_model_id', $default_value = null)

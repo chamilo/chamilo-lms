@@ -1,0 +1,1 @@
+Currently tests only run in a Symfony2 context.

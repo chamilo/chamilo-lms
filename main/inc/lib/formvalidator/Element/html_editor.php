@@ -27,13 +27,15 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
         $this->_persistantFreeze = true;
         $this->_type = 'html_editor';
 
-        global $app, $fck_attribute;
-        /** @var ChamiloLMS\Component\Editor\Editor $editor */
-        $editor = $app['html_editor'];
-        $this->editor = $editor;
-        $this->editor->setName($name);
-        $this->editor->processConfig($fck_attribute);
-        $this->editor->processConfig($config);
+        global $fck_attribute;
+
+        $editor = \ChamiloSession::getHtmlEditor();
+        if ($editor) {
+            $this->editor = $editor;
+            $this->editor->setName($name);
+            $this->editor->processConfig($fck_attribute);
+            $this->editor->processConfig($config);
+        }
     }
 
     /**
@@ -43,11 +45,13 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
     public function toHtml()
     {
         $value = $this->getValue();
-        if ($this->editor->getConfigAttribute('fullPage')) {
-            if (strlen(trim($value)) == 0) {
-                // TODO: To be considered whether here to be added DOCTYPE, language and character set declarations.
-                $value = '<html><head><title></title></head><body></body></html>';
-                $this->setValue($value);
+        if ($this->editor) {
+            if ($this->editor->getConfigAttribute('fullPage')) {
+                if (strlen(trim($value)) == 0) {
+                    // TODO: To be considered whether here to be added DOCTYPE, language and character set declarations.
+                    $value = '<html><head><title></title></head><body></body></html>';
+                    $this->setValue($value);
+                }
             }
         }
 
@@ -72,9 +76,12 @@ class HTML_QuickForm_html_editor extends HTML_QuickForm_textarea
      */
     public function buildEditor()
     {
-        $this->editor->value = $this->getValue();
-        $this->editor->setName($this->getName());
-        $result = $this->editor->createHtml();
+        $result = null;
+        if ($this->editor) {
+            $this->editor->value = $this->getValue();
+            $this->editor->setName($this->getName());
+            $result = $this->editor->createHtml();
+        }
         return $result;
     }
 }

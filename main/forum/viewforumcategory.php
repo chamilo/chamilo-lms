@@ -93,7 +93,7 @@ if ($origin=='learnpath') {
 
 /* ACTIONS */
 
-$whatsnew_post_info = $_SESSION['whatsnew_post_info'];
+$whatsnew_post_info = isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null;
 
 /* Is the user allowed here? */
 

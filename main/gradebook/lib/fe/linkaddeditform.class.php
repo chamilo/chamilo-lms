@@ -27,7 +27,14 @@ class LinkAddEditForm extends FormValidator
 	 * To add link, define category_object and link_type
 	 * To edit link, define link_object
 	 */
-    function LinkAddEditForm($form_type, $category_object, $link_type, $link_object, $form_name, $action = null) {
+    public function LinkAddEditForm(
+        $form_type,
+        $category_object,
+        $link_type,
+        $link_object,
+        $form_name,
+        $action = null
+    ) {
 		parent :: __construct($form_name, 'post', $action);
 
 		// set or create link object
@@ -91,11 +98,16 @@ class LinkAddEditForm extends FormValidator
             }
         }
 
-		$this->add_textfield('weight_mask', array(get_lang('Weight'), null, ' [0 .. '.$category_object[0]->get_weight().'] '), true, array (
+		$this->add_textfield(
+            'weight_mask',
+            array(get_lang('Weight'), null, ' [0 .. <span id="max_weight">'.$category_object[0]->get_weight().'</span>] '),
+            true,
+            array(
 			'size' => '4',
 			'maxlength' => '5',
             'class' => 'span1'
-		));
+		    )
+        );
 
         $this->addElement('hidden', 'weight');
 

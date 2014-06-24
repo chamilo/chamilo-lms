@@ -1,0 +1,36 @@
+sonata_notification:
+    backend: sonata.notification.backend.postpone
+#    backend: sonata.notification.backend.doctrine
+#    backend: sonata.notification.backend.rabbitmq
+
+#    queues:
+#        default:
+#            queue: message
+#            routing_key: ''
+
+#    backends:
+#        doctrine:
+#            max_age:      86400     # max age in second
+#            pause:        500000    # delay in microseconds
+#            states:                 # raising errors level
+#                in_progress: 10
+#                error:       20
+#                open:        100
+#                done:        10000
+
+#        rabbitmq:
+#            exchange:     router
+#            connection:
+#                host:     localhost
+#                user:     guest
+#                pass:     guest
+#                port:     5672
+#                vhost:    /
+
+doctrine:
+    orm:
+        entity_managers:
+            default:
+                mappings:
+                    SonataNotificationBundle: ~
+                    ApplicationSonataNotificationBundle: ~

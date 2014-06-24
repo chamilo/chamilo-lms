@@ -4,7 +4,7 @@
 /**
  *  @package chamilo.admin
  */
-
+use \ChamiloSession as Session;
 // Language files that need to be included.
 $language_file = array('admin');
 
@@ -122,7 +122,7 @@ $options[0] = get_lang('SelectAnOption');
 ksort($options);
 $form->addElement('select', 'status', get_lang('SelectRole'), $options, array('onclick' => 'changeStatus(this)'));
 
-$checks = $app['orm.em']->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')->findBy(array('fieldId' => $field_id, 'roleId' => $roleId));
+$checks = Database::getManager()->getRepository('ChamiloLMSCoreBundle:ExtraFieldOptionRelFieldOption')->findBy(array('fieldId' => $field_id, 'roleId' => $roleId));
 $includedFields = array();
 if (!empty($checks)) {
     foreach ($checks as $availableField) {
@@ -173,10 +173,11 @@ $form->display();
 if ($form->validate()) {
     $values = $form->getSubmitValues();
     $result = $values['hidden_extra_field_status'];
+    $em = Database::getManager();
     if (!empty($result)) {
         foreach ($result as $id => $items) {
             foreach ($items as $subItemId => $value) {
-                $extraFieldOptionRelFieldOption = $app['orm.em']->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')->findOneBy(
+                $extraFieldOptionRelFieldOption = $em->getRepository('ChamiloLMSCoreBundle:ExtraFieldOptionRelFieldOption')->findOneBy(
                     array(
                     'fieldId' => $field_id,
                     'fieldOptionId' => $subItemId,
@@ -187,23 +188,23 @@ if ($form->validate()) {
 
                 if ($value == 1) {
                     if (empty($extraFieldOptionRelFieldOption)) {
-                        $extraFieldOptionRelFieldOption = new \ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption();
+                        $extraFieldOptionRelFieldOption = new \ChamiloLMSCoreBundle:ExtraFieldOptionRelFieldOption();
                         $extraFieldOptionRelFieldOption->setFieldId($field_id);
                         $extraFieldOptionRelFieldOption->setFieldOptionId($subItemId);
                         $extraFieldOptionRelFieldOption->setRelatedFieldOptionId($id);
                         $extraFieldOptionRelFieldOption->setRoleId($roleId);
-                        $app['orm.ems']['db_write']->persist($extraFieldOptionRelFieldOption);
+                        $em->persist($extraFieldOptionRelFieldOption);
                     }
                 } else {
 
                     if ($extraFieldOptionRelFieldOption) {
-                        $app['orm.ems']['db_write']->remove($extraFieldOptionRelFieldOption);
+                        $em->remove($extraFieldOptionRelFieldOption);
                     }
                 }
 
             }
         }
-        $app['orm.ems']['db_write']->flush();
+        $em->flush();
         header('Location:'.api_get_self().'?'.$params);
         exit;
     }

@@ -318,7 +318,10 @@ EOT;
 
         /** @var HTML_QuickForm_html_editor $element */
         $element = $this->getElement($name);
-        $element->editor->processConfig($config);
+
+        if ($element->editor) {
+            $element->editor->processConfig($config);
+        }
     }
 
     /**
@@ -673,6 +676,7 @@ EOT;
 function html_filter($html, $mode = NO_HTML)
 {
     return $html;
+    //$filter = new Zend\Filter\StripTags(array('allowTags' => 'a'));
     $allowed_tags = HTML_QuickForm_Rule_HTML::get_allowed_tags($mode);
     $cleaned_html = kses($html, $allowed_tags);
     return $cleaned_html;

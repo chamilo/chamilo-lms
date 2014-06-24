@@ -2,9 +2,8 @@
 
 namespace Knp\Menu\Tests\Silex;
 
-use Knp\Menu\Matcher\Matcher;
+use Knp\Menu\ItemInterface;
 use Knp\Menu\Silex\KnpMenuServiceProvider;
-use Knp\Menu\Silex\Voter\RouteVoter;
 use Silex\Application;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
@@ -25,6 +24,15 @@ class KnpMenuServiceProviderTest extends \PHPUnit_Framework_TestCase
         $app->register(new KnpMenuServiceProvider());
 
         $this->assertEquals('Knp\Menu\MenuFactory', get_class($app['knp_menu.factory']));
+    }
+
+    public function testFactoryWithRouter()
+    {
+        $app = new Application();
+        $app->register(new KnpMenuServiceProvider());
+        $app->register(new UrlGeneratorServiceProvider());
+
+        $this->assertInstanceOf('Knp\Menu\Silex\RouterAwareFactory', $app['knp_menu.factory']);
     }
 
     public function testTwigRendererNotRegistered()
@@ -57,13 +65,13 @@ class KnpMenuServiceProviderTest extends \PHPUnit_Framework_TestCase
     {
         $app = $this->bootstrapApp();
 
+        $app['test.menu.my'] = $app->extend('test.menu.my', function (\Knp\Menu\ItemInterface $menu) {
+            $menu->setCurrentUri('http://knplabs.com');
+
+            return $menu;
+        });
+
         $request = Request::create('/twig');
-        $response = $app->handle($request);
-        $this->assertEquals('<ul class="nav"><li class="current first"><a href="/twig">Home</a></li><li class="last"><a href="http://knplabs.com">KnpLabs</a></li></ul>', $response->getContent());
-
-        $app = $this->bootstrapApp();
-
-        $request = Request::create('/other-twig');
         $response = $app->handle($request);
         $this->assertEquals('<ul class="nav"><li class="first"><a href="/twig">Home</a></li><li class="current last"><a href="http://knplabs.com">KnpLabs</a></li></ul>', $response->getContent());
     }
@@ -86,29 +94,14 @@ class KnpMenuServiceProviderTest extends \PHPUnit_Framework_TestCase
 
             $root = $factory->createItem('root', array('childrenAttributes' => array('class' => 'nav')));
             $root->addChild('home', array('route' => 'homepage', 'label' => 'Home'));
-            $root->addChild('KnpLabs', array('uri' => 'http://knplabs.com', 'extras' => array('routes' => 'other_route')));
+            $root->addChild('KnpLabs', array('uri' => 'http://knplabs.com', 'extras' => array('routes' => 'homepage')));
 
             return $root;
         };
 
-        $app['test.voter'] = $app->share(function (Application $app) {
-            $voter = new RouteVoter();
-            $voter->setRequest($app['request']);
-
-            return $voter;
-        });
-
-        $app['knp_menu.matcher.configure'] = $app->protect(function (Matcher $matcher) use ($app) {
-            $matcher->addVoter($app['test.voter']);
-        });
-
         $app->get('/twig', function (Application $app) {
             return $app['twig']->render('main', array('renderer' => 'twig'));
         })->bind('homepage');
-
-        $app->get('/other-twig', function (Application $app) {
-            return $app['twig']->render('main', array('renderer' => 'twig'));
-        })->bind('other_route');
 
         $app->get('/list', function (Application $app) {
             return $app['twig']->render('main', array('renderer' => 'list'));

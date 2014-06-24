@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="cmf_routing.dynamic_router.class">Symfony\Cmf\Bundle\RoutingBundle\Routing\DynamicRouter</parameter>
+        <parameter key="cmf_routing.route_model.class">null</parameter>
+        <parameter key="cmf_routing.uri_filter_regexp">null</parameter>
+        <parameter key="cmf_routing.nested_matcher.class">Symfony\Cmf\Component\Routing\NestedMatcher\NestedMatcher</parameter>
+        <parameter key="cmf_routing.final_matcher.class">Symfony\Cmf\Component\Routing\NestedMatcher\UrlMatcher</parameter>
+        <parameter key="cmf_routing.url_matcher.class">Symfony\Bundle\FrameworkBundle\Routing\RedirectableUrlMatcher</parameter>
+        <parameter key="cmf_routing.generator.class">Symfony\Cmf\Component\Routing\ContentAwareGenerator</parameter>
+        <parameter key="cmf_routing.enhancer.route_content.class">Symfony\Cmf\Component\Routing\Enhancer\RouteContentEnhancer</parameter>
+        <parameter key="cmf_routing.enhancer.default_controller.class">Symfony\Cmf\Component\Routing\Enhancer\FieldPresenceEnhancer</parameter>
+        <parameter key="cmf_routing.enhancer.explicit_template.class">Symfony\Cmf\Component\Routing\Enhancer\FieldPresenceEnhancer</parameter>
+        <parameter key="cmf_routing.enhancer.controllers_by_type.class">Symfony\Cmf\Component\Routing\Enhancer\FieldMapEnhancer</parameter>
+        <parameter key="cmf_routing.enhancer.field_by_class.class">Symfony\Cmf\Component\Routing\Enhancer\FieldByClassEnhancer</parameter>
+        <parameter key="cmf_routing.redirect_controller.class">Symfony\Cmf\Bundle\RoutingBundle\Controller\RedirectController</parameter>
+    </parameters>
+
+    <services>
+        <service id="cmf_routing.enhancer.route_content" class="%cmf_routing.enhancer.route_content.class%">
+            <argument>_route_object</argument>
+            <argument>_content</argument>
+        </service>
+
+        <service id="cmf_routing.enhancer.default_controller" class="%cmf_routing.enhancer.default_controller.class%" public="false">
+            <argument>null</argument>
+            <argument>_controller</argument>
+            <argument>%cmf_routing.default_controller%</argument>
+        </service>
+
+        <service id="cmf_routing.enhancer.explicit_template" class="%cmf_routing.enhancer.explicit_template.class%" public="false">
+            <argument>_template</argument>
+            <argument>_controller</argument>
+            <argument>%cmf_routing.generic_controller%</argument>
+        </service>
+
+        <service id="cmf_routing.enhancer.controllers_by_type" class="%cmf_routing.enhancer.controllers_by_type.class%" public="false">
+            <argument>type</argument>
+            <argument>_controller</argument>
+            <argument>%cmf_routing.controllers_by_type%</argument>
+        </service>
+
+        <service id="cmf_routing.enhancer.controllers_by_class" class="%cmf_routing.enhancer.field_by_class.class%" public="false">
+            <argument>_content</argument>
+            <argument>_controller</argument>
+            <argument>%cmf_routing.controllers_by_class%</argument>
+        </service>
+
+        <service id="cmf_routing.enhancer.controller_for_templates_by_class" class="%cmf_routing.enhancer.field_by_class.class%" public="false">
+            <argument>_content</argument>
+            <argument>_controller</argument>
+            <argument type="collection" />
+        </service>
+
+        <service id="cmf_routing.enhancer.templates_by_class" class="%cmf_routing.enhancer.field_by_class.class%" public="false">
+            <argument>_content</argument>
+            <argument>_template</argument>
+            <argument>%cmf_routing.templates_by_class%</argument>
+        </service>
+
+        <service id="cmf_routing.dynamic_router" class="%cmf_routing.dynamic_router.class%">
+            <argument type="service" id="router.request_context"/>
+            <argument type="service" id="cmf_routing.nested_matcher" />
+            <argument type="service" id="cmf_routing.generator" />
+            <argument>%cmf_routing.uri_filter_regexp%</argument>
+            <argument type="service" id="event_dispatcher" on-invalid="ignore"/>
+            <argument type="service" id="cmf_routing.route_provider"/>
+            <call method="setRequest"><argument type="service" id="request" on-invalid="null" strict="false"/></call>
+            <call method="addRouteEnhancer">
+                <argument type="service" id="cmf_routing.enhancer.route_content"/>
+                <argument>100</argument>
+            </call>
+        </service>
+
+        <service id="cmf_routing.nested_matcher" class="%cmf_routing.nested_matcher.class%">
+            <argument type="service" id="cmf_routing.route_provider" />
+            <argument type="service" id="cmf_routing.final_matcher"/>
+        </service>
+
+        <service id="cmf_routing.matcher.dummy_collection" class="Symfony\Component\Routing\RouteCollection" public="false"/>
+
+        <service id="cmf_routing.matcher.dummy_context" class="Symfony\Component\Routing\RequestContext" public="false"/>
+
+        <service id="cmf_routing.final_matcher" class="%cmf_routing.final_matcher.class%">
+            <argument type="service" id="cmf_routing.matcher.dummy_collection"/>
+            <argument type="service" id="cmf_routing.matcher.dummy_context"/>
+        </service>
+
+        <service id="cmf_routing.generator" class="%cmf_routing.generator.class%">
+            <argument type="service" id="cmf_routing.route_provider" />
+            <argument type="service" id="logger" on-invalid="ignore" />
+        </service>
+
+        <service id="cmf_routing.redirect_controller" class="%cmf_routing.redirect_controller.class%">
+            <argument type="service" id="router" />
+        </service>
+
+    </services>
+</container>

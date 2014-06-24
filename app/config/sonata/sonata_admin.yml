@@ -1,0 +1,129 @@
+# more information can be found here http://sonata-project.org/bundles/admin
+
+sonata_admin:
+    # default value, change it to sonata.admin.security.handler.acl to use ACL
+    security:
+        handler: sonata.admin.security.handler.role
+
+    title:      %sonata_admin.title%
+    title_logo: %sonata_admin.logo_title%
+    options:
+        html5_validate: false # does not use html5 validation
+        pager_links: 5 # pager max links to display
+
+    templates:
+        # default global templates
+        # the layout template include javascript/stylesheet to the formatter bundle,
+        # if you don't need it use the default one: SonataAdminBundle::standard_layout.html.twig
+        #layout:  ApplicationSonataAdminBundle::layout.html.twig
+        layout:  SonataAdminBundle::standard_layout.html.twig
+        ajax:    SonataAdminBundle::ajax_layout.html.twig
+
+        # default value if done set, actions templates, should extends a global templates
+        list:    SonataAdminBundle:CRUD:list.html.twig
+        show:    SonataAdminBundle:CRUD:show.html.twig
+        edit:    SonataAdminBundle:CRUD:edit.html.twig
+
+    dashboard:
+        blocks:
+            - { position: left, type: sonata.admin.block.admin_list }
+#            - { position: right, type: sonata.admin_doctrine_orm.block.audit}
+            - { position: center, type: sonata.block.service.text, settings: { content: "<h2>Welcome!</h2> You can customize this dashboard by editing the sonata_admin.yml file. The current dashboard presents the recent items from the NewsBundle and a timeline with the latest action"} }
+            - { position: center, type: sonata.timeline.block.timeline, settings: { context: SONATA_ADMIN, max_per_page: 25 }}
+            #- { position: center, type: sonata.news.block.recent_posts, settings: { title: Recent Posts, number: 7, mode: admin }}
+            - { position: left, type: sonata.block.service.text, settings: { content: "<div class='panel panel-default'><div class='panel-heading'><h3 class='panel-title'>Welcome!</h3></div><div class='panel-body'>You can customize this dashboard by editing the <code>sonata_admin.yml</code> file. The current dashboard presents the recent items from the NewsBundle and a non-statistical e-commerce information.</div></div>"} }
+            - { position: center, type: sonata.news.block.recent_comments, settings: { title: Recent Comments, number: 7, mode: admin }}
+            #- { position: right, type: sonata.order.block.recent_orders, settings: { title: Recent Orders, number: 5, mode: admin }}
+            #- { position: right, type: sonata.customer.block.recent_customers, settings: { title: Recent Customers, number: 5, mode: admin }}
+            #- { position: right, type: sonata.block.service.rss, settings: { title: Sonata Project's Feeds, url: http://sonata-project.org/blog/archive.rss }}
+
+        groups:
+#            sonata_page:
+#                items:
+#                    - sonata.page.admin.page
+            sonata.admin.group.content:
+                label:           sonata_content
+                label_catalogue: SonataDemoBundle
+                icon:            '<i class="fa fa-th"></i>'
+                items:
+                    #- sonata.page.admin.page
+                    - sonata.news.admin.comment
+                    - sonata.news.admin.post
+                    - sonata.media.admin.media
+                    - sonata.media.admin.gallery
+                    - sonata.comment.admin.thread
+            #sonata.admin.group.ecommerce:
+             #   label:           sonata_ecommerce
+              #  label_catalogue: SonataAdminBundle
+               # items:
+                #    - sonata.customer.admin.customer
+                 #   - sonata.invoice.admin.invoice
+                 #   - sonata.order.admin.order
+                  #  - sonata.product.admin.product
+            sonata.admin.group.classification:
+                label:           sonata_classification
+                label_catalogue: SonataClassificationBundle
+                icon:            '<i class="fa fa-sitemap"></i>'
+                items:
+                    - sonata.classification.admin.category
+                    - sonata.classification.admin.tag
+                    - sonata.classification.admin.collection
+            sonata.admin.group.site_builder:
+                label:           Site Builder
+                label_catalogue: SonataDemoBundle
+                icon:            '<i class="fa fa-puzzle-piece"></i>'
+                items:
+                    - sonata.page.admin.page
+                    - sonata.page.admin.site
+            sonata.admin.group.administration:
+                label:           sonata_administration
+                label_catalogue: SonataAdminBundle
+                icon:            '<i class="fa fa-cogs"></i>'
+                items:
+                    - sonata.user.admin.user
+                    - sonata.user.admin.group
+                    #- sonata.page.admin.site
+                    - sonata.page.admin.site
+                    - sonata.notification.admin.message
+            sonata.admin.group.lms:
+                label: LMS
+                icon:  '<i class="fa fa-play-circle"></i>'
+                label_catalogue: SonataAdminBundle
+                items:
+                    - sonata.admin.course
+                    - sonata.admin.session
+                    - sonata.admin.access_url
+
+    assets:
+        stylesheets:
+            # The sandbox includes default pre-optimized version of some css and js
+            # So you can either use them, and add your custom assets here
+            #   ~ or ~
+            # tweak the assetic.yml and the following lines
+            - assetic/sonata_admin_css.css
+            - assetic/sonata_formatter_css.css
+            - assetic/sonata_jqueryui_css.css
+            - bundles/sonatademo/css/demo.css
+
+            - bundles/sonataformatter/markitup/skins/sonata/style.css
+            - bundles/sonataformatter/markitup/sets/markdown/style.css
+            - bundles/sonataformatter/markitup/sets/html/style.css
+            - bundles/sonataformatter/markitup/sets/textile/style.css
+#            - bundles/sonataadmin/vendor/bootstrap/dist/css/bootstrap.min.css
+#            - bundles/sonataadmin/vendor/AdminLTE/css/font-awesome.min.css
+#            - bundles/sonataadmin/vendor/AdminLTE/css/ionicons.min.css
+#            - bundles/sonataadmin/vendor/AdminLTE/css/AdminLTE.css
+#            - bundles/sonataadmin/vendor/jqueryui/themes/flick/jquery-ui.min.css
+#            - bundles/sonataadmin/vendor/select2/select2.css
+#            - bundles/sonataadmin/vendor/select2/select2-bootstrap.css
+#            - bundles/sonataadmin/vendor/x-editable/dist/bootstrap3-editable/css/bootstrap-editable.css
+#            - bundles/sonataadmin/css/styles.css
+#            - bundles/sonataadmin/css/layout.css
+
+        javascripts:
+            - assetic/sonata_admin_js.js
+            - assetic/sonata_jqueryui_js.js
+            - assetic/sonata_formatter_js.js
+            - bundles/sonataformatter/vendor/ckeditor/ckeditor.js
+                    #- sonata.demo.admin.car
+                    #- sonata.demo.admin.engine

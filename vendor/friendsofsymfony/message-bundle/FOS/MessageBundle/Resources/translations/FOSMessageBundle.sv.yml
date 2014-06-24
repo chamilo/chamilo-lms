@@ -1,0 +1,22 @@
+messenger:      Meddelanden
+inbox:          Inkorg
+sent:           Skickat
+send_new:       Skriv nytt meddelande
+search:         Sök
+threads_found:  %num% tråd hittad | %num% trådar hittade
+
+message_info:   Av %sender%, den %date%
+reply:          Svara
+
+subject:        Ämne
+starter:        Avsändare
+startdate:      Påbörjad den
+messages:       Meddelanden
+last_message:   Senaste meddelande
+actions:        Åtgärder
+new:            Ny
+goto_last:      Gå till senaste meddelande
+on:             den %date%
+by:             av %sender%
+no_thread:      Det finns inga trådar
+delete:         Ta bort

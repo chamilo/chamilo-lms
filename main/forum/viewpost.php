@@ -22,9 +22,11 @@ require 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 $htmlHeadXtra[] = '<script language="javascript">
-                                        $(document).ready(function(){ $(\'.hide-me\').slideUp() });
-                                    function hidecontent(content){ $(content).slideToggle(\'normal\'); }
-                                    </script>';
+$(document).ready(function(){ $(\'.hide-me\').slideUp() });
+	function hidecontent(content){
+	$(content).slideToggle(\'normal\');
+	}
+</script>';
 
 // Are we in a lp ?
 $origin = '';

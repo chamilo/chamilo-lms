@@ -1,6 +1,15 @@
 <?php
 
+/*
+ * This file is part of the JsonSchema package.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace JsonSchema\Constraints;
+
+use JsonSchema\Uri\UriRetriever;
 
 /**
  * The Base Constraints, all Validators should extend this class
@@ -11,6 +20,7 @@ namespace JsonSchema\Constraints;
 abstract class Constraint implements ConstraintInterface
 {
     protected $checkMode = self::CHECK_MODE_NORMAL;
+    protected $uriRetriever;
     protected $errors = array();
     protected $inlineSchemaProperty = '$schema';
 
@@ -18,15 +28,38 @@ abstract class Constraint implements ConstraintInterface
     const CHECK_MODE_TYPE_CAST = 2;
 
     /**
-     * @param int $checkMode
+     * @param int          $checkMode
+     * @param UriRetriever $uriRetriever
      */
-    public function __construct($checkMode = self::CHECK_MODE_NORMAL)
+    public function __construct($checkMode = self::CHECK_MODE_NORMAL, UriRetriever $uriRetriever = null)
     {
-        $this->checkMode = $checkMode;
+        $this->checkMode    = $checkMode;
+        $this->uriRetriever = $uriRetriever;
     }
 
     /**
-     * {inheritDoc}
+     * @return UriRetriever $uriRetriever
+     */
+    public function getUriRetriever()
+    {
+        if (is_null($this->uriRetriever))
+        {
+            $this->setUriRetriever(new UriRetriever);
+        }
+
+        return $this->uriRetriever;
+    }
+
+    /**
+     * @param UriRetriever $uriRetriever
+     */
+    public function setUriRetriever(UriRetriever $uriRetriever)
+    {
+        $this->uriRetriever = $uriRetriever;
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function addError($path, $message)
     {
@@ -37,7 +70,7 @@ abstract class Constraint implements ConstraintInterface
     }
 
     /**
-     * {inheritDoc}
+     * {@inheritDoc}
      */
     public function addErrors(array $errors)
     {
@@ -45,7 +78,7 @@ abstract class Constraint implements ConstraintInterface
     }
 
     /**
-     * {inheritDoc}
+     * {@inheritDoc}
      */
     public function getErrors()
     {
@@ -53,10 +86,28 @@ abstract class Constraint implements ConstraintInterface
     }
 
     /**
-     * bubble down the path
+     * {@inheritDoc}
+     */
+    public function isValid()
+    {
+        return !$this->getErrors();
+    }
+
+    /**
+     * Clears any reported errors.  Should be used between
+     * multiple validation checks.
+     */
+    public function reset()
+    {
+        $this->errors = array();
+    }
+
+    /**
+     * Bubble down the path
      *
-     * @param string $path
-     * @param mixed $i
+     * @param string $path Current path
+     * @param mixed  $i    What to append to the path
+     *
      * @return string
      */
     protected function incrementPath($path, $i)
@@ -64,7 +115,7 @@ abstract class Constraint implements ConstraintInterface
         if ($path !== '') {
             if (is_int($i)) {
                 $path .= '[' . $i . ']';
-            } else if ($i == '') {
+            } elseif ($i == '') {
                 $path .= '';
             } else {
                 $path .= '.' . $i;
@@ -77,7 +128,7 @@ abstract class Constraint implements ConstraintInterface
     }
 
     /**
-     * validates an array
+     * Validates an array
      *
      * @param mixed $value
      * @param mixed $schema
@@ -86,30 +137,31 @@ abstract class Constraint implements ConstraintInterface
      */
     protected function checkArray($value, $schema = null, $path = null, $i = null)
     {
-        $validator = new Collection($this->checkMode);
+        $validator = new Collection($this->checkMode, $this->uriRetriever);
         $validator->check($value, $schema, $path, $i);
 
         $this->addErrors($validator->getErrors());
     }
 
     /**
-     * validates an object
+     * Validates an object
      *
      * @param mixed $value
      * @param mixed $schema
      * @param mixed $path
      * @param mixed $i
+     * @param mixed $patternProperties
      */
-    protected function checkObject($value, $schema = null, $path = null, $i = null)
+    protected function checkObject($value, $schema = null, $path = null, $i = null, $patternProperties = null)
     {
-        $validator = new Object($this->checkMode);
-        $validator->check($value, $schema, $path, $i);
+        $validator = new Object($this->checkMode, $this->uriRetriever);
+        $validator->check($value, $schema, $path, $i, $patternProperties);
 
         $this->addErrors($validator->getErrors());
     }
 
     /**
-     * validates the type of a property
+     * Validates the type of a property
      *
      * @param mixed $value
      * @param mixed $schema
@@ -118,14 +170,14 @@ abstract class Constraint implements ConstraintInterface
      */
     protected function checkType($value, $schema = null, $path = null, $i = null)
     {
-        $validator = new Type($this->checkMode);
+        $validator = new Type($this->checkMode, $this->uriRetriever);
         $validator->check($value, $schema, $path, $i);
 
         $this->addErrors($validator->getErrors());
     }
 
     /**
-     * checks a undefined element
+     * Checks a undefined element
      *
      * @param mixed $value
      * @param mixed $schema
@@ -134,14 +186,14 @@ abstract class Constraint implements ConstraintInterface
      */
     protected function checkUndefined($value, $schema = null, $path = null, $i = null)
     {
-        $validator = new Undefined($this->checkMode);
+        $validator = new Undefined($this->checkMode, $this->uriRetriever);
         $validator->check($value, $schema, $path, $i);
 
         $this->addErrors($validator->getErrors());
     }
 
     /**
-     * checks a string element
+     * Checks a string element
      *
      * @param mixed $value
      * @param mixed $schema
@@ -150,14 +202,14 @@ abstract class Constraint implements ConstraintInterface
      */
     protected function checkString($value, $schema = null, $path = null, $i = null)
     {
-        $validator = new String($this->checkMode);
+        $validator = new String($this->checkMode, $this->uriRetriever);
         $validator->check($value, $schema, $path, $i);
 
         $this->addErrors($validator->getErrors());
     }
 
     /**
-     * checks a number element
+     * Checks a number element
      *
      * @param mixed $value
      * @param mixed $schema
@@ -166,14 +218,14 @@ abstract class Constraint implements ConstraintInterface
      */
     protected function checkNumber($value, $schema = null, $path = null, $i = null)
     {
-        $validator = new Number($this->checkMode);
+        $validator = new Number($this->checkMode, $this->uriRetriever);
         $validator->check($value, $schema, $path, $i);
 
         $this->addErrors($validator->getErrors());
     }
 
     /**
-     * checks a enum element
+     * Checks a enum element
      *
      * @param mixed $value
      * @param mixed $schema
@@ -182,17 +234,31 @@ abstract class Constraint implements ConstraintInterface
      */
     protected function checkEnum($value, $schema = null, $path = null, $i = null)
     {
-        $validator = new Enum($this->checkMode);
+        $validator = new Enum($this->checkMode, $this->uriRetriever);
+        $validator->check($value, $schema, $path, $i);
+
+        $this->addErrors($validator->getErrors());
+    }
+
+    protected function checkFormat($value, $schema = null, $path = null, $i = null)
+    {
+        $validator = new Format($this->checkMode, $this->uriRetriever);
         $validator->check($value, $schema, $path, $i);
 
         $this->addErrors($validator->getErrors());
     }
 
     /**
-     * {inheritDoc}
+     * @param string $uri JSON Schema URI
+     * @return string JSON Schema contents
      */
-    public function isValid()
+    protected function retrieveUri($uri)
     {
-        return !$this->getErrors();
+        if (null === $this->uriRetriever) {
+            $this->setUriRetriever(new UriRetriever);
+        }
+        $jsonSchema = $this->uriRetriever->retrieve($uri);
+        // TODO validate using schema
+        return $jsonSchema;
     }
 }

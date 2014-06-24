@@ -352,15 +352,13 @@ class SocialManager extends UserManager
      */
     public static function get_user_feeds($user, $limit = 5)
     {
-        if (!function_exists('fetch_rss')) {
-            return '';
-        }
-        $feeds = array();
-        $feed = UserManager::get_extra_user_data_by_field($user,'rssfeeds');
+        $feed = UserManager::get_extra_user_data_by_field($user, 'rssfeeds');
+
         if (empty($feed)) {
             return '';
         }
-        $feeds = explode(';',$feed['rssfeeds']);
+        $feeds = explode(';', $feed['rssfeeds']);
+
         if (count($feeds) == 0) {
             return '';
         }
@@ -369,22 +367,28 @@ class SocialManager extends UserManager
             if (empty($url)) {
                 continue;
             }
-            $rss = @fetch_rss($url);
+
+            $rss = Zend\Feed\Reader\Reader::import($url);
+
             $i = 1;
-            if (!empty($rss->items)) {
+            if (!empty($rss)) {
                 $icon_rss = '';
                 if (!empty($feed)) {
-                    $icon_rss = Display::url(Display::return_icon('rss.png', '', array(), 32), Security::remove_XSS($feed['rssfeeds']), array('target'=>'_blank'));
+                    $icon_rss = Display::url(
+                        Display::return_icon('rss.png', '', array(), 32),
+                        Security::remove_XSS($feed['rssfeeds']), array('target'=>'_blank')
+                    );
                 }
-                $res .= '<h2>'.$rss->channel['title'].''.$icon_rss.'</h2>';
+                $res .= '<h2>'.$rss->getTitle().''.$icon_rss.'</h2>';
                 $res .= '<div class="social-rss-channel-items">';
-                foreach ($rss->items as $item) {
+                /** @var Zend\Feed\Reader\Extension\Atom\Entry $item */
+                foreach ($rss as $item) {
                     if ($limit >= 0 and $i > $limit) {
                         break;
                     }
-                    $res .= '<h3><a href="'.$item['link'].'">'.$item['title'].'</a></h3>';
-                    $res .= '<div class="social-rss-item-date">'.api_get_datetime($item['date_timestamp']).'</div>';
-                    $res .= '<div class="social-rss-item-content">'.$item['description'].'</div><br />';
+                    $res .= '<h3><a href="'.$item->getTitle().'">'.$item->getTitle().'</a></h3>';
+                    $res .= '<div class="social-rss-item-date">'.$item->getDateCreated()->format('Y-m-d').'</div>';
+                    $res .= '<div class="social-rss-item-content">'.$item->getDescription().'</div><br />';
                     $i++;
                 }
                 $res .= '</div>';

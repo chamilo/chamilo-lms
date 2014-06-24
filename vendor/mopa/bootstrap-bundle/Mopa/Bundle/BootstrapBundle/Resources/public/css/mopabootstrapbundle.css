@@ -1,0 +1,19 @@
+/*!
+ * MopaBootstrapBundle
+ *
+ * Copyright 2011 Mohrenweiser & Partner
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Import this file in your css files as first 
+ * OR
+ * Add it to the stylesheets of assetic or 
+ * Add it as described on http://www.lesscss.org with the less.js
+ *  (maybe pathes must be adapted in that case)
+ */
+
+// Main bootstrap.less entry point
+@import "../bootstrap/bootstrap.css";
+
+// The Example css for this bundle
+@import "../path/to/your/example.css"; 

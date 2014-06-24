@@ -24,10 +24,9 @@ $twigLoader = new \Twig_Loader_Filesystem(array(
 ));
 $twig = new \Twig_Environment($twigLoader);
 
-$itemMatcher = new \Knp\Menu\Matcher\Matcher();
 // setup some renderer
-$renderer = new \Knp\Menu\Renderer\ListRenderer($itemMatcher);
-//$menuRenderer = new \Knp\Menu\Renderer\TwigRenderer($twig, 'knp_menu.html.twig', $itemMatcher);
+$renderer = new \Knp\Menu\Renderer\ListRenderer();
+//$menuRenderer = new \Knp\Menu\Renderer\TwigRenderer($twig, 'knp_menu.html.twig');
 
 // render a template
 $template = $twig->loadTemplate('menu.twig');
@@ -63,9 +62,8 @@ so that your renderers can be lazy-loaded.
 <?php
 // setup pimple, and assign the renderer to "menu_renderer"
 $pimple = new \Pimple();
-$itemMatcher = \Knp\Menu\Matcher\Matcher();
 $pimple['list_renderer'] = function() {
-    return new \Knp\Menu\Renderer\ListRenderer($itemMatcher);
+    return new \Knp\Menu\Renderer\ListRenderer();
 };
 
 $rendererProvider = new \Knp\Menu\Renderer\PimpleProvider(
@@ -227,8 +225,7 @@ $twigLoader = new \Twig_Loader_Filesystem(array(
     // your own paths
 ));
 $twig = new \Twig_Environment($twigLoader);
-$itemMatcher = \Knp\Menu\Matcher\Matcher();
-$menuRenderer = new \Knp\Menu\Renderer\TwigRenderer($twig, 'knp_menu.html.twig', $itemMatcher);
+$menuRenderer = new \Knp\Menu\Renderer\TwigRenderer($twig, 'knp_menu.html.twig');
 ```
 
 This works just like any other renderer, and will output an un-ordered list

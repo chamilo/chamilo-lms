@@ -7,7 +7,6 @@
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
-require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -33,8 +32,13 @@ if (empty($course)) {
 // Get course teachers
 $table_course_user = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
 $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
-$sql = "SELECT user.user_id,lastname,firstname FROM $table_user as user,$table_course_user as course_user
-WHERE course_user.status='1' AND course_user.user_id=user.user_id AND course_user.c_id ='".$course['real_id']."'".$order_clause;
+$sql = "SELECT user.user_id,lastname,firstname
+    FROM $table_user as user,$table_course_user as course_user
+    WHERE
+        course_user.status='1' AND
+        course_user.user_id=user.user_id AND
+        course_user.c_id ='".$course['real_id']."'".
+    $order_clause;
 $res = Database::query($sql);
 $course_teachers = array();
 while ($obj = Database::fetch_object($res)) {
@@ -42,34 +46,39 @@ while ($obj = Database::fetch_object($res)) {
 }
 
 // Get all possible teachers without the course teachers
-if (api_is_multiple_url_enabled()) {
-	$access_url_rel_user_table= Database :: get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-	$sql = "SELECT u.user_id,lastname,firstname FROM $table_user as u
-			INNER JOIN $access_url_rel_user_table url_rel_user
-			ON (u.user_id=url_rel_user.user_id) WHERE url_rel_user.access_url_id=".api_get_current_access_url_id()." AND status = 1 or status = 2 ".$order_clause;
-} else {
-	$sql = "SELECT user_id,lastname,firstname FROM $table_user WHERE status = 1 or status = 2 ".$order_clause;
-}
+/*$sql = "SELECT u.user_id,lastname,firstname
+        FROM $table_user as u
+        INNER JOIN $access_url_rel_user_table url_rel_user
+        ON (u.user_id=url_rel_user.user_id)
+        WHERE
+            url_rel_user.access_url_id=".api_get_current_access_url_id()." AND
+            status = 1 or status = 2 ".$order_clause;*/
+/** @var Doctrine\ORM\EntityManager $em */
+/*$em = $this->getDoctrine()->getManager();
+$userManager = $em->getRepository('ApplicationSonataUserBundle:User');
+var_dump($userManager->getTeachers());*/
+//$userManager->get
 
-$res = Database::query($sql);
+
+$teachersInPlatform = CourseManager::get_teacher_list_from_course_code($course['real_id']);
 $teachers = array();
 
 $platform_teachers[0] = '-- '.get_lang('NoManager').' --';
-while ($obj = Database::fetch_object($res)) {
-
-	if (!array_key_exists($obj->user_id,$course_teachers)) {
-		$teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
+foreach ($teachersInPlatform as $teacher) {
+    $teacherId = $teacher['user_id'];
+	if (!array_key_exists($teacherId, $course_teachers)) {
+		$teachers[$teacherId] = api_get_person_name($teacher['firstname'], $teacher['lastname']);
 	}
 
-	if (isset($course['tutor_name']) && isset($course_teachers[$obj->user_id]) && $course['tutor_name']== $course_teachers[$obj->user_id]) {
-		$course['tutor_name']=$obj->user_id;
+	if (isset($course['tutor_name']) && isset($course_teachers[$teacherId]) && $course['tutor_name'] == $course_teachers[$teacherId]) {
+		$course['tutor_name'] = $teacherId;
 	}
 	//We add in the array platform teachers
-	$platform_teachers[$obj->user_id] = api_get_person_name($obj->firstname, $obj->lastname);
+	$platform_teachers[$teacherId] = api_get_person_name($teacher['firstname'], $teacher['lastname']);
 }
 
 //Case where there is no teacher in the course
-if (count($course_teachers)==0) {
+if (count($course_teachers) ==0 ) {
 	$sql='SELECT tutor_name FROM '.$course_table.' WHERE code="'.$course_code.'"';
 	$res = Database::query($sql);
 	$tutor_name=Database::result($res,0,0);

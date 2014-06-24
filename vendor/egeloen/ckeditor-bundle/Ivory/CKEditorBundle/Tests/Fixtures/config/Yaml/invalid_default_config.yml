@@ -1,0 +1,5 @@
+ivory_ck_editor:
+    default_config: bar
+    configs:
+        foo:
+            uiColor: "#000000"

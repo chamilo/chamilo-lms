@@ -13,6 +13,8 @@
  * Defines the learnpath parent class
  * @package chamilo.learnpath
  */
+
+use ChamiloLMS\CoreBundle\Entity\CLpCategory;
 use \ChamiloSession as Session;
 
 class learnpath
@@ -10543,9 +10545,8 @@ EOD;
 
     static function create_category($params)
     {
-        global $app;
-        $em = $app['orm.ems']['db_write'];
-        $item = new ChamiloLMS\Entity\CLpCategory();
+        $em = Database::getManager();
+        $item = new CLpCategory();
         $item->setName($params['name']);
         $item->setCId($params['c_id']);
         $em->persist($item);
@@ -10554,9 +10555,8 @@ EOD;
 
     static function update_category($params)
     {
-        global $app;
-        $em = $app['orm.ems']['db_write'];
-        $item = $em->find('ChamiloLMS\Entity\CLpCategory', $params['id']);
+        $em = Database::getManager();
+        $item = $em->find('ChamiloLMSCoreBundle:CLpCategory', $params['id']);
         if ($item) {
             $item->setName($params['name']);
             $item->setCId($params['c_id']);
@@ -10567,9 +10567,8 @@ EOD;
 
     static function move_up_category($id)
     {
-        global $app;
-        $em = $app['orm.ems']['db_write'];
-        $item = $em->find('ChamiloLMS\Entity\CLpCategory', $id);
+        $em = Database::getManager();
+        $item = $em->find('ChamiloLMSCoreBundle:CLpCategory', $id);
         if ($item) {
             $position = $item->getPosition() - 1;
             $item->setPosition($position);
@@ -10580,9 +10579,8 @@ EOD;
 
     static function move_down_category($id)
     {
-        global $app;
-        $em = $app['orm.ems']['db_write'];
-        $item = $em->find('ChamiloLMS\Entity\CLpCategory', $id);
+        $em = Database::getManager();
+        $item = $em->find('ChamiloLMSCoreBundle:CLpCategory', $id);
         if ($item) {
             $position = $item->getPosition() + 1;
             $item->setPosition($position);
@@ -10593,12 +10591,11 @@ EOD;
 
     static function get_count_categories($course_id)
     {
-        global $app;
         if (empty($course_id)) {
             return 0;
         }
-        $em = $app['orm.em'];
-        $query = $em->createQuery('SELECT COUNT(u.id) FROM ChamiloLMS\Entity\CLpCategory u WHERE u.cId = :id');
+        $em = Database::getManager();
+        $query = $em->createQuery('SELECT COUNT(u.id) FROM ChamiloLMSCoreBundle:CLpCategory u WHERE u.cId = :id');
         $query->setParameter('id', $course_id);
         return $query->getSingleScalarResult();
     }
@@ -10606,16 +10603,15 @@ EOD;
 
     static function get_categories($course_id)
     {
-        global $app;
-        $em = $app['orm.em'];
+        $em = Database::getManager();
         //Default behaviour
-        /*$items = $em->getRepository('ChamiloLMS\Entity\CLpCategory')->findBy(
+        /*$items = $em->getRepository('ChamiloLMSCoreBundle:CLpCategory')->findBy(
             array('cId' => $course_id),
             array('name' => 'ASC')
         );*/
 
         //Using doctrine extensions
-        $items = $em->getRepository('ChamiloLMS\Entity\CLpCategory')->getBySortableGroupsQuery(
+        $items = $em->getRepository('ChamiloLMSCoreBundle:CLpCategory')->getBySortableGroupsQuery(
             array('cId' => $course_id)
         )->getResult();
 
@@ -10624,30 +10620,28 @@ EOD;
 
     static function get_category($id)
     {
-        global $app;
-        $em = $app['orm.em'];
-        $item = $em->find('ChamiloLMS\Entity\CLpCategory', $id);
+        $em = Database::getManager();
+        $item = $em->find('ChamiloLMSCoreBundle:CLpCategory', $id);
 
         return $item;
     }
 
     static function get_category_by_course($course_id)
     {
-        global $app;
-        $items = $app['orm.em']->getRepository('ChamiloLMS\Entity\CLpCategory')->findBy(array('cId' => $course_id));
+        $em = Database::getManager();
+        $items = $em->getRepository('ChamiloLMSCoreBundle:CLpCategory')->findBy(array('cId' => $course_id));
 
         return $items;
     }
 
     static function delete_category($id)
     {
-        global $app;
-        $em = $app['orm.ems']['db_write'];
-        $item = $em->find('ChamiloLMS\Entity\CLpCategory', $id);
+        $em = Database::getManager();
+        $item = $em->find('ChamiloLMSCoreBundle:CLpCategory', $id);
         if ($item) {
 
             $courseId = $item->getCId();
-            $query = $em->createQuery('SELECT u FROM ChamiloLMS\Entity\CLp u WHERE u.cId = :id AND u.categoryId = :catId');
+            $query = $em->createQuery('SELECT u FROM ChamiloLMSCoreBundle:CLp u WHERE u.cId = :id AND u.categoryId = :catId');
             $query->setParameter('id', $courseId);
             $query->setParameter('catId', $item->getId());
             $lps = $query->getResult();

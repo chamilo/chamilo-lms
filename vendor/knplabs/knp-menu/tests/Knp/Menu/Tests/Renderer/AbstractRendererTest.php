@@ -4,35 +4,86 @@ namespace Knp\Menu\Tests\Renderer;
 
 use Knp\Menu\MenuItem;
 use Knp\Menu\MenuFactory;
-use Knp\Menu\Matcher\MatcherInterface;
-use Knp\Menu\Matcher\Matcher;
-use Knp\Menu\Tests\TestCase;
 
-abstract class AbstractRendererTest extends TestCase
+abstract class AbstractRendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Knp\Menu\Renderer\RendererInterface
      */
-    protected $renderer;
+    private $renderer;
 
     /**
-     * @var MatcherInterface
+     * @var \Knp\Menu\MenuItem
      */
-    private $matcher;
+    private $menu;
 
-    protected function setUp()
+    /**
+     * @var \Knp\Menu\MenuItem
+     */
+    private $pt1;
+
+    /**
+     * @var \Knp\Menu\MenuItem
+     */
+    private $ch1;
+
+    /**
+     * @var \Knp\Menu\MenuItem
+     */
+    private $ch2;
+
+    /**
+     * @var \Knp\Menu\MenuItem
+     */
+    private $ch3;
+
+    /**
+     * @var \Knp\Menu\MenuItem
+     */
+    private $pt2;
+
+    /**
+     * @var \Knp\Menu\MenuItem
+     */
+    private $ch4;
+
+    /**
+     * @var \Knp\Menu\MenuItem
+     */
+    private $gc1;
+
+    public function setUp()
     {
-        parent::setUp();
-        $this->matcher = new Matcher();
-        $this->renderer = $this->createRenderer($this->matcher);
+        $this->renderer = $this->createRenderer();
+
+        $this->menu = new MenuItem('Root li', new MenuFactory());
+        $this->menu->setChildrenAttributes(array('class' => 'root'));
+        $this->pt1 = $this->menu->addChild('Parent 1');
+        $this->ch1 = $this->pt1->addChild('Child 1');
+        $this->ch2 = $this->pt1->addChild('Child 2');
+
+        // add the 3rd child via addChild with an object
+        $this->ch3 = new MenuItem('Child 3', new MenuFactory());
+        $this->pt1->addChild($this->ch3);
+
+        $this->pt2 = $this->menu->addChild('Parent 2');
+        $this->ch4 = $this->pt2->addChild('Child 4');
+        $this->gc1 = $this->ch4->addChild('Grandchild 1');
     }
 
-    abstract protected function createRenderer(MatcherInterface $matcher);
+    abstract protected function createRenderer();
 
-    protected function tearDown()
+    public function tearDown()
     {
-        parent::tearDown();
         $this->renderer = null;
+        $this->menu = null;
+        $this->pt1 = null;
+        $this->ch1 = null;
+        $this->ch2 = null;
+        $this->ch3 = null;
+        $this->pt2 = null;
+        $this->ch4 = null;
+        $this->gc1 = null;
     }
 
     public function testRenderEmptyRoot()
@@ -290,33 +341,5 @@ abstract class AbstractRendererTest extends TestCase
     {
         $rendered = '';
         $this->assertEquals($rendered, $this->renderer->render($this->menu, array('depth' => 0, 'compressed' => false)));
-    }
-
-    public function testMatchingDepth0()
-    {
-        $this->menu['Parent 1']['Child 1']->setCurrent(true);
-        $rendered = '<ul class="root"><li class="first"><span>Parent 1</span></li><li class="last"><span>Parent 2</span></li></ul>';
-        $this->assertEquals($rendered, $this->renderer->render($this->menu, array('depth' => 1,'matchingDepth' => 1)));
-    }
-
-    public function testMatchingDepth1()
-    {
-        $this->menu['Parent 1']['Child 1']->setCurrent(true);
-        $rendered = '<ul class="root"><li class="current_ancestor first"><span>Parent 1</span></li><li class="last"><span>Parent 2</span></li></ul>';
-        $this->assertEquals($rendered, $this->renderer->render($this->menu, array('depth' => 1,'matchingDepth' => 2)));
-    }
-
-    public function testMatchingDepth2()
-    {
-        $this->menu['Parent 1']['Child 1']->setCurrent(true);
-        $rendered = '<ul class="root"><li class="first"><span>Parent 1</span></li><li class="last"><span>Parent 2</span></li></ul>';
-        $this->assertEquals($rendered, $this->renderer->render($this->menu, array('depth' => 1,'matchingDepth' => 0)));
-    }
-
-    public function testLeafAndBranchRendering()
-    {
-        $rendered = '<ul class="root"><li class="first branch"><span>Parent 1</span><ul class="menu_level_1"><li class="first leaf"><span>Child 1</span></li><li class="leaf"><span>Child 2</span></li><li class="last leaf"><span>Child 3</span></li></ul></li><li class="last branch"><span>Parent 2</span><ul class="menu_level_1"><li class="first last leaf"><span>Child 4</span></li></ul></li></ul>';
-
-        $this->assertEquals($rendered, $this->renderer->render($this->menu, array('depth' => 2, 'leaf_class' => 'leaf', 'branch_class' => 'branch')));
     }
 }

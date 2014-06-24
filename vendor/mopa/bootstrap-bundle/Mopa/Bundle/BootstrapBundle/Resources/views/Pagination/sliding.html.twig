@@ -1,0 +1,41 @@
+{% if pageCount > 1 %}
+    {% set item = 'MopaBootstrapBundle:Pagination:sliding_item.html.twig' %}
+
+    <ul class="{{ pagination_class|default('pagination') }}">
+        {% include item with {name: 'first',
+                text: first_text|default('«') | trans({}, 'pagination'),
+                page: first is defined ? first : null,
+                clickable: first is defined and current != first
+            }
+        %}
+
+        {% include item with {name: 'prev',
+                text: prev_text|default('‹ Previous') | trans({}, 'pagination'),
+                page: previous is defined ? previous : null,
+                clickable: previous is defined
+            }
+        %}
+
+        {% for page in pagesInRange %}
+            {% include item %}
+        {% endfor %}
+
+        {%
+            include item with {
+                name: 'next',
+                text: next_text|default('Next ›') | trans({}, 'pagination'),
+                page: next is defined ? next : null,
+                clickable: next is defined
+            }
+        %}
+
+        {%
+            include item with {
+                name: 'last',
+                text: last_text|default('»') | trans({}, 'pagination'),
+                page: last is defined ? last : null,
+                clickable: last is defined and current != last
+            }
+        %}
+    </ul>
+{% endif %}

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Class Display
  *
@@ -39,9 +41,7 @@ class Display
      */
     public static function display_header($tool_name = '', $help = null, $page_header = null)
     {
-        global $app;
-        $app['classic_layout'] = true;
-        $app['template']->setTitle($tool_name);
+        //$app['template']->setTitle($tool_name);
     }
 
     /**
@@ -213,8 +213,8 @@ class Display
                     $introduction_section .=  '<div id="introduction_block_action" class="col-md-2 col-md-offset-10">';
 
                     $url = $urlGenerator->generate(
-                        'introduction.controller:editAction',
-                        array('tool' => $tool, 'courseCode' => api_get_course_id())
+                        'chamilolms_course_introduction_introduction_edit',
+                        array('tool' => $tool, 'course' => api_get_course_id())
                     );
 
                     $introduction_section .=  "<a href=\"".$url."?".api_get_cidreq()."\">";
@@ -227,8 +227,8 @@ class Display
                     // Displays "edit intro && delete intro" commands
                     $introduction_section .=  '<div id="introduction_block_action" class="col-md-2 col-md-offset-10">';
                     $url = $urlGenerator->generate(
-                        'introduction.controller:editAction',
-                        array('tool' => $tool, 'courseCode' => api_get_course_id())
+                        'chamilolms_course_introduction_introduction_edit',
+                        array('tool' => $tool, 'course' => api_get_course_id())
                     );
 
                     $introduction_section .=  "<a href=\"".$url."?".api_get_cidreq()."\">";
@@ -236,8 +236,8 @@ class Display
                     $introduction_section .=  "</a>";
 
                     $url = $urlGenerator->generate(
-                        'introduction.controller:deleteAction',
-                        array('tool' => $tool, 'courseCode' => api_get_course_id())
+                        'chamilolms_course_introduction_introduction_delete',
+                        array('tool' => $tool, 'course' => api_get_course_id())
                     );
 
                     $introduction_section .=  "<a onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice')))."')) return false;\" href=\"".$url."?".api_get_cidreq()."\">";
@@ -792,9 +792,6 @@ class Display
         $code_path   = api_get_path(SYS_IMG_PATH);
         $w_code_path = api_get_path(WEB_IMG_PATH);
 
-        //$code_path = self::$urlGenerator->generate('root');
-        //$w_code_path = self::$urlGenerator->generate('root');
-
         $image      = trim($image);
         $theme      = 'css/'.api_get_visual_theme().'/icons/';
         $size_extra = '';
@@ -807,22 +804,23 @@ class Display
         }
 
         // Checking the theme icons folder example: main/css/chamilo/icons/XXX
-
         if (is_file($code_path.$theme.$size_extra.$image)) {
-            $icon = $w_code_path.$theme.$size_extra.$image;
+            $icon = $theme.$size_extra.$image;
         } elseif (is_file($code_path.'icons/'.$size_extra.$image)) {
             //Checking the main/img/icons/XXX/ folder
-            $icon = $w_code_path.'icons/'.$size_extra.$image;
+            $icon = 'icons/'.$size_extra.$image;
         } else {
             //Checking the img/ folder
-            $icon = $w_code_path.$image;
+            $icon = $image;
         }
 
-        $icon = api_get_cdn_path($icon);
+        $icon = 'ChamiloLMS/img/'.$icon;
+
+        $icon = Session::getAsset()->getUrl($icon);
+        //$icon = api_get_cdn_path($icon);
         if ($return_only_path) {
             return $icon;
         }
-
         $img = self::img($icon, $alt_text, $additional_attributes);
         if (SHOW_TEXT_NEAR_ICONS == true and !empty($alt_text)) {
             if ($show_text) {

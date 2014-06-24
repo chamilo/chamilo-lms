@@ -181,7 +181,7 @@ if (!empty($action)) {
                 if (EventsMail::check_if_using_class('portal_homepage_edited')) {
                     EventsDispatcher::events('portal_homepage_edited', array('about_user' => api_get_user_id()));
                 }
-                event_system(
+                Event::addEvent(
                     LOG_HOMEPAGE_CHANGED,
                     'edit_top',
                     Text::cut(strip_tags($home_top), 254),
@@ -221,7 +221,7 @@ if (!empty($action)) {
                     fputs($fp, "<b>$notice_title</b><br />\n$notice_text");
                     fclose($fp);
                 }
-                event_system(
+                Event::addEvent(
                     LOG_HOMEPAGE_CHANGED,
                     'edit_notice',
                     Text::cut(strip_tags($notice_title), 254),
@@ -274,7 +274,7 @@ if (!empty($action)) {
                         }
                     }
                 }
-                event_system(
+                Event::addEvent(
                     LOG_HOMEPAGE_CHANGED,
                     'edit_news',
                     strip_tags(Text::cut($home_news, 254)),
@@ -422,7 +422,7 @@ if (!empty($action)) {
                         fclose($fp);
                     }
                 }
-                event_system(
+                Event::addEvent(
                     LOG_HOMEPAGE_CHANGED,
                     $action,
                     Text::cut($link_name.':'.$link_url, 254),

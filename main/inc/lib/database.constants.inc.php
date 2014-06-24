@@ -21,11 +21,8 @@ define('DB_COURSE_PREFIX', 'c_');
 // Main database tables
 define('TABLE_MAIN_COURSE',                 'course');
 define('TABLE_MAIN_USER',                   'user');
-define('TABLE_MAIN_CLASS',                  'class');
 define('TABLE_MAIN_ADMIN',                  'admin');
-define('TABLE_MAIN_COURSE_CLASS',           'course_rel_class');
 define('TABLE_MAIN_COURSE_USER',            'course_rel_user');
-define('TABLE_MAIN_CLASS_USER',             'class_user');
 define('TABLE_MAIN_CATEGORY',               'course_category');
 define('TABLE_MAIN_COURSE_MODULE',          'course_module');
 define('TABLE_MAIN_SYSTEM_ANNOUNCEMENTS',   'sys_announcement');
@@ -44,7 +41,6 @@ define('TABLE_MAIN_SHARED_SURVEY_QUESTION', 'shared_survey_question');
 define('TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION', 'shared_survey_question_option');
 define('TABLE_MAIN_TEMPLATES',              'templates');
 define('TABLE_MAIN_SYSTEM_TEMPLATE',        'system_template');
-define('TABLE_MAIN_OPENID_ASSOCIATION',     'openid_association');
 define('TABLE_MAIN_COURSE_REQUEST',         'course_request');
 
 // Gradebook
@@ -67,7 +63,6 @@ define('TABLE_MAIN_USER_FIELD_VALUES',  'user_field_values');
 define('TABLE_MAIN_TAG',                'tag');
 define('TABLE_MAIN_USER_REL_TAG',       'user_rel_tag');
 
-
 // Search engine
 define('TABLE_MAIN_SPECIFIC_FIELD',         'specific_field');
 define('TABLE_MAIN_SPECIFIC_FIELD_VALUES',  'specific_field_values');
@@ -81,13 +76,6 @@ define('TABLE_MAIN_ACCESS_URL_REL_SESSION', 'access_url_rel_session');
 
 // Global calendar
 define('TABLE_MAIN_SYSTEM_CALENDAR', 'sys_calendar');
-
-// Reservation System
-define('TABLE_MAIN_RESERVATION_ITEM',           'reservation_item');
-define('TABLE_MAIN_RESERVATION_RESERVATION',    'reservation_main');
-define('TABLE_MAIN_RESERVATION_SUBSCRIBTION',   'reservation_subscription');
-define('TABLE_MAIN_RESERVATION_CATEGORY',       'reservation_category');
-define('TABLE_MAIN_RESERVATION_ITEM_RIGHTS',    'reservation_item_rights');
 
 // Social networking
 define('TABLE_MAIN_USER_REL_USER', 'user_rel_user');
@@ -108,7 +96,6 @@ define('TABLE_MAIN_SESSION_FIELD_VALUES',   'session_field_values');
 define('TABLE_MAIN_QUESTION_FIELD',          'question_field');
 define('TABLE_MAIN_QUESTION_FIELD_OPTIONS',  'question_field_options');
 define('TABLE_MAIN_QUESTION_FIELD_VALUES',   'question_field_values');
-
 
 // Message
 define('TABLE_MAIN_MESSAGE', 'message');
@@ -212,7 +199,6 @@ define('TABLE_LP_ITEM_VIEW', 'lp_item_view');
 define('TABLE_LP_IV_INTERACTION', 'lp_iv_interaction'); // IV = Item View
 define('TABLE_LP_IV_OBJECTIVE', 'lp_iv_objective'); // IV = Item View
 
-// Smartblogs (Kevin Van Den Haute::kevin@develop-it.be)
 // Permission tables
 define('TABLE_PERMISSION_USER', 'permission_user');
 define('TABLE_PERMISSION_TASK', 'permission_task');
@@ -222,6 +208,7 @@ define('TABLE_ROLE', 'role');
 define('TABLE_ROLE_PERMISSION', 'role_permissions');
 define('TABLE_ROLE_USER', 'role_user');
 define('TABLE_ROLE_GROUP', 'role_group');
+
 // Blog tables
 define('TABLE_BLOGS', 'blog');
 define('TABLE_BLOGS_POSTS', 'blog_post');
@@ -232,11 +219,6 @@ define('TABLE_BLOGS_TASKS_REL_USER', 'blog_task_rel_user');
 define('TABLE_BLOGS_RATING', 'blog_rating');
 define('TABLE_BLOGS_ATTACHMENT', 'blog_attachment');
 define('TABLE_BLOGS_TASKS_PERMISSIONS', 'permission_task');
-//end of Smartblogs
-
-// User information tables
-define('TABLE_USER_INFO',           'userinfo_def');
-define('TABLE_USER_INFO_CONTENT',   'userinfo_content');
 
 // Course settings table
 define('TABLE_COURSE_SETTING', 'course_setting');
@@ -298,7 +280,6 @@ define('TABLE_THEMATIC_ADVANCE','thematic_advance');
 //User groups
 //Needed for migration
 define('TABLE_MAIN_GROUP',              'groups');
-
 /*
 define('TABLE_MAIN_USER_REL_GROUP',     'group_rel_user');
 define('TABLE_MAIN_GROUP_REL_TAG',      'group_rel_tag');

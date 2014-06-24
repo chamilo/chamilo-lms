@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="SonataCoreBundle.en.xliff" >
+        <body>
+            <trans-unit id="link_add">
+                <source>link_add</source>
+                <target>Berria gehitu</target>
+            </trans-unit>
+            <trans-unit id="label_type_yes">
+                <source>label_type_yes</source>
+                <target>Bai</target>
+            </trans-unit>
+            <trans-unit id="label_type_no">
+                <source>label_type_no</source>
+                <target>Ez</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

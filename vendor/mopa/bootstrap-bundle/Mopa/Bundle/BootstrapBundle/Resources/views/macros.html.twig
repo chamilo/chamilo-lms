@@ -1,0 +1,15 @@
+{% macro badge(text, use_raw) %}
+<span class="badge">{{ use_raw|default(false) ? text|raw : text }}</span>
+{% endmacro %}
+
+{% macro label(text, type, use_raw, block) %}
+{% set tag = block|default(false) ? 'div' : 'span' %}
+<{{ tag }} class="label {{ type|default(false) ? 'label-'~type: 'label-default' }}">{{ use_raw|default(false) ? text|raw : text }}</{{ tag }}>
+{% endmacro %}
+
+
+{% macro progressBar(class, width) %}
+<div class="progress {{ class|default('') }}">
+    <div class="bar" style="width: {{ width|default(0) }}%;"></div>
+</div>
+{% endmacro %}

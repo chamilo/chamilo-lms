@@ -100,7 +100,7 @@ class SessionManager
             UrlManager::add_session_to_url($session_id, $access_url_id);
 
             // Add event to system log
-            event_system(LOG_SESSION_CREATE, LOG_SESSION_ID, $session_id, api_get_utc_datetime(), api_get_user_id());
+            Event::addEvent(LOG_SESSION_CREATE, LOG_SESSION_ID, $session_id, api_get_utc_datetime(), api_get_user_id());
 
             if (isset($params['course_code'])) {
                 $courseInfo = api_get_course_info($params['course_code']);
@@ -755,7 +755,7 @@ class SessionManager
         */
         // Add event to system log
         $user_id = api_get_user_id();
-        event_system(LOG_SESSION_DELETE, LOG_SESSION_ID, $id_checked, api_get_utc_datetime(), $user_id);
+        Event::addEvent(LOG_SESSION_DELETE, LOG_SESSION_ID, $id_checked, api_get_utc_datetime(), $user_id);
     }
 
      /**
@@ -1305,7 +1305,7 @@ class SessionManager
         $id_session = Database::insert_id();
         // Add event to system log
         $user_id = api_get_user_id();
-        event_system(LOG_SESSION_CATEGORY_CREATE, LOG_SESSION_CATEGORY_ID, $id_session, api_get_utc_datetime(), $user_id);
+        Event::addEvent(LOG_SESSION_CATEGORY_CREATE, LOG_SESSION_CATEGORY_ID, $id_session, api_get_utc_datetime(), $user_id);
         return $id_session;
     }
 
@@ -1404,7 +1404,7 @@ class SessionManager
         // Add event to system log
         $user_id = api_get_user_id();
 
-        event_system(LOG_SESSION_CATEGORY_DELETE, LOG_SESSION_CATEGORY_ID, $id_checked, api_get_utc_datetime(), $user_id);
+        Event::addEvent(LOG_SESSION_CATEGORY_DELETE, LOG_SESSION_CATEGORY_ID, $id_checked, api_get_utc_datetime(), $user_id);
 
 
         // delete extra session fields where field variable is "PERIODO"

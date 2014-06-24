@@ -1,0 +1,12 @@
+{% set attr = attr|merge({ 'class': attr.class|default('') ~ ' modal' }) %}
+<div{% for attrname, attrvalue in attr %} {{ attrname }}="{{- attrvalue -}}"{% endfor %}>
+    <div class="modal-header">
+        {% block header %}{% endblock %}
+    </div>
+    <div class="modal-body">
+        {% block body %}{% endblock %}
+    </div>
+    <div class="modal-footer">
+        {% block footer %}{% endblock %}
+    </div>
+</div>

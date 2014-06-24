@@ -1,0 +1,11 @@
+ivory_ck_editor:
+    styles:
+        default:
+            -
+                name: "Blue Title"
+                element: "h2"
+                styles: { color: "Blue" }
+            -
+                name: "CSS Style"
+                element: "span"
+                attributes: { class: "my_style" }

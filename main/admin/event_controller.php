@@ -94,9 +94,7 @@ $(function() {
 $interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
 $interbreadcrumb[] = array('url' => '#', 'name' => get_lang('Events'));
 
-$app['title'] = $tool_name;
-$tpl = $app['template'];
-$tpl->assign('actions', $actions);
-$tpl->assign('message', $message);
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
+//$app['title'] = $tool_name;
+echo $message;
+echo $actions;
+echo $content;

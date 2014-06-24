@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="cmf_routing.route_entity.class">Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\Route</parameter>
+        <parameter key="cmf_routing.orm_candidates.class">Symfony\Cmf\Component\Routing\Candidates\Candidates</parameter>
+        <parameter key="cmf_routing.route_entity_provider">Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\RouteProvider</parameter>
+        <parameter key="cmf_routing.orm.content_repository.class">Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Orm\ContentRepository</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="cmf_routing.content_repository" class="%cmf_routing.orm.content_repository.class%">
+            <argument type="service" id="doctrine"/>
+            <call method="setManagerName"><argument>%cmf_routing.dynamic.persistence.orm.manager_name%</argument></call>
+        </service>
+
+        <service id="cmf_routing.orm_candidates" class="%cmf_routing.orm_candidates.class%">
+            <argument>%cmf_routing.dynamic.locales%</argument>
+            <argument>%cmf_routing.dynamic.limit_candidates%</argument>
+        </service>
+
+        <service id="cmf_routing.route_provider" class="%cmf_routing.route_entity_provider%">
+            <argument type="service" id="doctrine" />
+            <argument type="service" id="cmf_routing.orm_candidates" />
+            <argument>%cmf_routing.route_entity.class%</argument>
+            <call method="setManagerName"><argument>%cmf_routing.dynamic.persistence.orm.manager_name%</argument></call>
+            <call method="setRouteCollectionLimit"><argument>%cmf_routing.route_collection_limit%</argument></call>
+        </service>
+    </services>
+</container>

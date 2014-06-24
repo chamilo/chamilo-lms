@@ -1,18 +1,18 @@
 <?php
 
-namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
-
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
-use Symfony\Component\HttpFoundation\Request;
-
 /*
- * This file is part of the Symfony framework.
+ * This file is part of the Symfony package.
  *
  * (c) Fabien Potencier <fabien@symfony.com>
  *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
+
+namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Converts request parameters to objects and stores them as request
@@ -24,20 +24,20 @@ interface ParamConverterInterface
 {
     /**
      * Stores the object in the request.
-     * 
-     * @param Request                $request       The request
-     * @param ConfigurationInterface $configuration Contains the name, class and options of the object
-     * 
-     * @return boolean True if the object has been successfully set, else false
+     *
+     * @param Request        $request       The request
+     * @param ParamConverter $configuration Contains the name, class and options of the object
+     *
+     * @return bool    True if the object has been successfully set, else false
      */
-    function apply(Request $request, ConfigurationInterface $configuration);
+    public function apply(Request $request, ParamConverter $configuration);
 
     /**
      * Checks if the object is supported.
-     * 
-     * @param ConfigurationInterface $configuration Should be an instance of ParamConverter
-     * 
-     * @return boolean True if the object is supported, else false
+     *
+     * @param ParamConverter $configuration Should be an instance of ParamConverter
+     *
+     * @return bool    True if the object is supported, else false
      */
-    function supports(ConfigurationInterface $configuration);
+    public function supports(ParamConverter $configuration);
 }

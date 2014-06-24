@@ -1,0 +1,41 @@
+{% extends "SimpleThingsEntityAuditBundle::layout.html.twig" %}
+
+{% block simplethings_entityaudit_content %}
+<h1>Change history for {{ className }} with identifiers of {{ id }}</h1>
+
+<p><a href="{{ path('simple_things_entity_audit_home') }}">Home</a></p>
+
+<form action="{{ path('simple_things_entity_audit_compare', { 'className': className, 'id': id }) }}" method="get">
+<table>
+    <thead>
+    <tr>
+        <th colspan="3">&nbsp;</th>
+        <th colspan="2">Compare</th>
+    </tr>
+    <tr>
+        <th>Revision</th>
+        <th>Date</th>
+        <th>User</th>
+        <th>Old</th>
+        <th>New</th>
+    </tr>
+    </thead>
+    <tbody>
+
+{% for revision in revisions %}
+    <tr>
+        <td><a href="{{ path('simple_things_entity_audit_viewentity_detail', { 'rev': revision.rev, 'className': className, 'id': id })}}">{{ revision.rev }}</a></td>
+        <td>{{ revision.timestamp | date('r') }}</td>
+        <td>{{ revision.username|default('Anonymous') }}</td>
+
+        <td><input type="radio" name="oldRev" value="{{ revision.rev }}"{% if loop.index == 2 %} checked="checked"{% endif %} /></td>
+        <td><input type="radio" name="newRev" value="{{ revision.rev }}"{% if loop.index == 1 %} checked="checked"{% endif %} /></td>
+    </tr>
+{% endfor %}
+    </tbody>
+</table>
+
+    <input type="submit" value="Compare Revisions" />
+</form>
+
+{% endblock simplethings_entityaudit_content %}

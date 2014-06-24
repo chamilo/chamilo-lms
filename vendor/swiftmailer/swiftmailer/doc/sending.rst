@@ -10,7 +10,7 @@ create the Mailer, then you use the Mailer to send the message.
 To send a Message:
 
 * Create a Transport from one of the provided Transports --
-  ``Swift_SmtpTransport``, ``Swift_SendmailTransport``, ``Swift_MailTransport`` 
+  ``Swift_SmtpTransport``, ``Swift_SendmailTransport``, ``Swift_MailTransport``
   or one of the aggregate Transports.
 
 * Create an instance of the ``Swift_Mailer`` class, using the Transport as
@@ -24,9 +24,9 @@ To send a Message:
 
     The ``Swift_SmtpTransport`` and ``Swift_SendmailTransport`` transports use
     ``proc_*`` PHP functions, which might not be available on your PHP
-    installation. You can easily check if that the case by running the
+    installation. You can easily check if that's the case by running the
     following PHP script: ``<?php echo function_exists('proc_open') ? "Yep,
-    that will work" : "Sorry, that won't work"; ``
+    that will work" : "Sorry, that won't work";``
 
 When using ``send()`` the message will be sent just like it would be sent if you
 used your mail client. An integer is returned which includes the number of
@@ -64,7 +64,7 @@ recipients are delivered to successfully then the value 5 will be returned.
       ->setTo(array('receiver@domain.org', 'other@domain.org' => 'A name'))
       ->setBody('Here is the message itself')
       ;
-  
+
     // Send the message
     $result = $mailer->send($message);
 
@@ -108,7 +108,7 @@ easily store the SMTP server address and port number in a configuration file
 within your application and adjust the settings accordingly if the code is
 moved or if the SMTP server is changed.
 
-Some SMTP servers -- Google for example -- use encryption for security reasons. 
+Some SMTP servers -- Google for example -- use encryption for security reasons.
 Swift Mailer supports using both SSL and TLS encryption settings.
 
 Using the SMTP Transport
@@ -170,7 +170,7 @@ settings.
 
 .. note::
 
-    For SSL or TLS encryption to work your PHP installation must have 
+    For SSL or TLS encryption to work your PHP installation must have
     appropriate OpenSSL transports wrappers. You can check if "tls" and/or
     "ssl" are present in your PHP installation by using the PHP function
     ``stream_get_transports()``
@@ -210,7 +210,7 @@ To use a username and password with the SMTP Transport:
 Your username and password will be used to authenticate upon first connect
 when ``send()`` are first used on the Mailer.
 
-If authentication fails, an Exception of type ``Swift_TransportException`` will 
+If authentication fails, an Exception of type ``Swift_TransportException`` will
 be thrown.
 
 .. note::
@@ -294,7 +294,7 @@ flags). Swift Mailer supports operational modes of "``-bs``" (default) and
 
 .. note::
 
-    If you run sendmail in "``-t``" mode you will get no feedback as to whether 
+    If you run sendmail in "``-t``" mode you will get no feedback as to whether
     or not sending has succeeded. Use "``-bs``" unless you have a reason not to.
 
 To use the Sendmail Transport:
@@ -335,9 +335,9 @@ SMTP.
 In order for the ``mail()`` function to even work at all ``php.ini`` needs to be
 configured correctly, specifying the location of sendmail or of an SMTP server.
 
-The problem with ``mail()`` is that it "tries" to simplify things to the point 
-that it actually makes things more complex due to poor interface design. The 
-developers of Swift Mailer have gone to a lot of effort to make the Mail 
+The problem with ``mail()`` is that it "tries" to simplify things to the point
+that it actually makes things more complex due to poor interface design. The
+developers of Swift Mailer have gone to a lot of effort to make the Mail
 Transport work with a reasonable degree of consistency.
 
 Serious drawbacks when using this Transport are:
@@ -446,7 +446,7 @@ recipients are delivered to successfully then the value 5 will be returned.
       ->setTo(array('receiver@domain.org', 'other@domain.org' => 'A name'))
       ->setBody('Here is the message itself')
       ;
-  
+
     // Send the message
     $numSent = $mailer->send($message);
 
@@ -454,7 +454,7 @@ recipients are delivered to successfully then the value 5 will be returned.
 
     /* Note that often that only the boolean equivalent of the
        return value is of concern (zero indicates FALSE)
-   
+
     if ($mailer->send($message))
     {
       echo "Sent\n";
@@ -486,6 +486,21 @@ own address shows up in the ``To:`` field, follow the following recipe:
 
 Each recipient of the messages receives a different copy with only their own
 email address on the ``To:`` field.
+
+Make sure to add only valid email addresses as recipients. If you try to add an
+invalid email address with ``setTo()``, ``setCc()`` or ``setBcc()``, Swift
+Mailer will throw a ``Swift_RfcComplianceException``.
+
+If you add recipients automatically based on a data source that may contain
+invalid email addresses, you can prevent possible exceptions by validating the
+addresses using ``Swift_Validate::email($email)`` and only adding addresses
+that validate. Another way would be to wrap your ``setTo()``, ``setCc()`` and
+``setBcc()`` calls in a try-catch block and handle the
+``Swift_RfcComplianceException`` in the catch block.
+
+Handling invalid addresses properly is especially important when sending emails
+in large batches since a single invalid address might cause an unhandled
+exception and stop the execution or your script early.
 
 .. note::
 

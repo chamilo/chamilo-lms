@@ -60,7 +60,6 @@ class DoctrineODMPhpcrAdapter implements AdapterInterface
             ->getQuery()
             ->setMaxResults($length)
             ->setFirstResult($offset)
-            ->execute()
-        ;
+            ->execute();
     }
 }

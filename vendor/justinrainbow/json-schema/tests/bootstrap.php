@@ -1,17 +1,29 @@
 <?php
 
-if(is_readable(__DIR__.'/../vendor/.composer/autoload.php')) {
-    //composer
-    $loader = require_once(__DIR__.'/../vendor/.composer/autoload.php');
-    $loader->add('JsonSchema\Tests', __DIR__);
-    $loader->register();
+/*
+ * This file is part of the JsonSchema package.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-} elseif(is_readable(__DIR__.'/../vendor/symfony/Component/ClassLoader/UniversalClassLoader.php')) {
-    //submodule
-    require_once __DIR__.'/../vendor/symfony/Component/ClassLoader/UniversalClassLoader.php';
+$autoloadFile = dirname(__DIR__) . '/vendor/autoload.php';
+if (! is_readable($autoloadFile)) {
+    echo <<<EOT
+You must run `composer.phar install` to install the dependencies
+before running the test suite.
 
-    $loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
-    $loader->registerNamespace('JsonSchema', __DIR__.'/../src');
-    $loader->registerNamespace('JsonSchema\Tests', __DIR__);
-    $loader->register();
+EOT;
+    exit(1);
 }
+
+// Include the Composer generated autoloader
+require_once $autoloadFile;
+
+spl_autoload_register(function ($class)
+{
+    if (0 === strpos($class, 'JsonSchema\\Tests')) {
+        $classFile = str_replace('\\', '/', $class) . '.php';
+        require __DIR__ . '/' . $classFile;
+    }
+});

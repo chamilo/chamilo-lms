@@ -3,6 +3,8 @@
 /**
  * @author hubert.borderiou & jmontoya
  */
+use ChamiloLMS\CoreBundle\CQuizCategory;
+
 class Testcategory
 {
     public $id;
@@ -127,21 +129,19 @@ class Testcategory
 
         // lets add in BD if not the same name
         if ($data['nb'] <= 0) {
-            // @todo inject the app in the class
-            global $app;
-            $category = new ChamiloLMS\Entity\CQuizCategory();
+            $category = new CQuizCategory();
             $category->setTitle($this->name);
             $category->setDescription($this->description);
 
             if (!empty($parent_id)) {
-                $parent = $app['orm.ems']['db_write']->find('\Entity\CQuizCategory', $parent_id);
+                $parent = Database::getManager()->find('\Entity\CQuizCategory', $parent_id);
                 if ($parent) {
                     $category->setParent($parent);
                 }
             }
             $category->setCId($course_id);
-            $app['orm.ems']['db_write']->persist($category);
-            $app['orm.ems']['db_write']->flush();
+            Database::getManager()->persist($category);
+            Database::getManager()->flush();
 
             if ($category->getIid()) {
                 return $category->getIid();
@@ -158,9 +158,7 @@ class Testcategory
      */
     public function modifyCategory()
     {
-        // @todo inject the app in the class
-        global $app;
-        $category = $app['orm.ems']['db_write']->find('\Entity\CQuizCategory', $this->id);
+        $category = Database::getManager()->find('\Entity\CQuizCategory', $this->id);
         if (!$category) {
             return false;
         }
@@ -180,7 +178,7 @@ class Testcategory
                 if ($this->id == $parentId) {
                     continue;
                 }
-                $parent = $app['orm.ems']['db_write']->find('\Entity\CQuizCategory', $parentId);
+                $parent = Database::getManager()->find('\Entity\CQuizCategory', $parentId);
                 if ($parent) {
                     $category->setParent($parent);
                 }
@@ -190,8 +188,8 @@ class Testcategory
             $category->setParent(null);
         }
 
-        $app['orm.ems']['db_write']->persist($category);
-        $app['orm.ems']['db_write']->flush();
+        Database::getManager()->persist($category);
+        Database::getManager()->flush();
 
         if ($category->getIid()) {
             return $category->getIid();
@@ -208,8 +206,7 @@ class Testcategory
      */
     public function removeCategory()
     {
-        global $app;
-        $category = $app['orm.ems']['db_write']->find('\Entity\CQuizCategory', $this->id);
+        $category = Database::getManager()->find('ChamiloLMS\CoreBundle\CQuizCategory', $this->id);
         if (!$category) {
             return false;
         }
@@ -221,10 +218,10 @@ class Testcategory
             return false;
         }
 
-        $repo = $app['orm.ems']['db_write']->getRepository('ChamiloLMS\Entity\CQuizCategory');
+        $repo = Database::getManager()->getRepository('ChamiloLMSCoreBundle:CQuizCategory');
         $repo->removeFromTree($category);
         // clear cached nodes
-        $app['orm.ems']['db_write']->clear();
+        Database::getManager()->clear();
         return true;
     }
 
@@ -932,7 +929,6 @@ class Testcategory
      */
     public static function get_stats_table_by_attempt($exercise_id, $category_list = array(), $categoryMinusOne = false)
     {
-        global $app;
         if (empty($category_list)) {
             return null;
         }
@@ -956,8 +952,8 @@ class Testcategory
             $total = $category_list['total'];
             unset($category_list['total']);
         }
-        $em = $app['orm.em'];
-        $repo = $em->getRepository('ChamiloLMS\Entity\CQuizCategory');
+        $em = Database::getManager();
+        $repo = $em->getRepository('ChamiloLMSCoreBundle:CQuizCategory');
 
         $redefineCategoryList = array();
 
@@ -965,7 +961,7 @@ class Testcategory
             $globalCategoryScore = array();
 
             foreach ($category_list as $category_id => $category_item) {
-                $cat = $em->find('ChamiloLMS\Entity\CQuizCategory', $category_id);
+                $cat = $em->find('ChamiloLMSCoreBundle:CQuizCategory', $category_id);
                 $path = $repo->getPath($cat);
 
                 $categoryName = $category_name_list[$category_id];

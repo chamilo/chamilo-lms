@@ -62,16 +62,20 @@ function save_item($lp_id, $user_id, $view_id, $item_id, $score = -1, $max = -1,
         $lpobject = new learnpathItem($lp_id, $user_id, $courseId);
     }
     if (isset($lpobject)) {
-        $oLP = unserialize($lpobject);
-        if ($debug) error_log("lpobject was set");
-        if (!is_object($oLP)) {
-            unset($oLP);
-            $code = api_get_course_id();
-            $mylp = new learnpath($code, $lp_id, $user_id);
-            if ($debug) error_log("Creating learnpath");
+        if (is_object($lpobject)) {
+            $mylp = $lpobject;
         } else {
-            $mylp = $oLP;
-            if ($debug) error_log("Loading learnpath from unserialize");
+            $oLP = unserialize($lpobject);
+            if ($debug) error_log("lpobject was set");
+            if (!is_object($oLP)) {
+                unset($oLP);
+                $code = api_get_course_id();
+                $mylp = new learnpath($code, $lp_id, $user_id);
+                if ($debug) error_log("Creating learnpath");
+            } else {
+                $mylp = $oLP;
+                if ($debug) error_log("Loading learnpath from unserialize");
+            }
         }
     } else {
         if ($debug) {

@@ -7205,7 +7205,7 @@ function api_get_protocol()
 /**
  * Return a string where " are replaced with 2 '
  * It is useful when you pass a PHP variable in a Javascript browser dialog
- * e.g. : alert("<?php get_lang('message') ?>");
+ * e.g. : alert("<?php get_lang('Message') ?>");
  * and message contains character "
  *
  * @param string $in_text

@@ -184,10 +184,10 @@ if (!empty($errorMsg)) {
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <!-- Users -->
 <tr>
-  <td align="center"><b><?php echo get_lang('CourseCategoryInPlatform') ?> :</b>
+  <td align="center"><b><?php echo get_lang('CourseCategoryInPlatform') ?></b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('CourseCategoryListIn').' '.$url_selected; ?></b></td>
+  <td align="center"><b><?php printf(get_lang('CourseCategoryListInX'),$url_selected); ?></b></td>
 </tr>
 
 <tr>

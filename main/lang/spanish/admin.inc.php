@@ -2,6 +2,20 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$HumanResourcesManagerShouldNotBeRegisteredToCourses = "Los directores de recursos humanos no pueden ser registrados directamente a los cursos (en su lugar, deberían 'seguirlos'). Los usuarios que corresponden a este perfil no han sido inscritos.";
+$CleanAndUpdateCourseCoaches = "Limpiar y actualizar los tutores de cursos";
+$NoPDFFoundAtRoot = "No se encontraron PDFs a la raíz: tiene que poner los PDFs en la raíz de su archivo zip (sin carpeta intermedia)";
+$PDFsMustLookLike = "Los PDFs tienen que verse así:";
+$ImportZipFileLocation = "Ubicación del archivo de importación zip";
+$YouMustImportAZipFile = "Tiene que importar como archivo zip";
+$ImportPDFIntroToCourses = "Importar introducciónes de cursos en PDF";
+$SubscribeTeachersToSession = "Inscribir profesores a sesiones";
+$SubscribeStudentsToSession = "Inscribir estudiantes a sesiones";
+$ManageCourseCategories = "Gestionar las categorías de cursos";
+$CourseCategoryListInX = "Categorías de cursos en el sitio %s:";
+$CourseCategoryInPlatform = "Categorías de cursos disponibles";
+$UserGroupBelongURL = "El grupo ahora pertenece al grupo seleccionado";
+$AtLeastOneUserGroupAndOneURL = "Tiene que seleccionar por lo mínimo un grupo y un sitio";
 $ClassIdDoesntExists = "ID de clase no existe";
 $SearchSessions = "Búsqueda de sesiones";
 $DeleteUsersNotInList = "Desinscribir los alumnos que no están en una sesión en la lista importada";

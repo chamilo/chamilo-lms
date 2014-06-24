@@ -105,7 +105,8 @@ if (is_array($document_list)) {
                 $quota_percentage = round($quota_bytes/$total_quota_bytes, 2)*100;
             }
         }
-        $session[] = array(addslashes(get_lang('Teacherinsession').': '.$user_name), $quota_percentage);
+        $session[] = array(addslashes(sprintf(get_lang('TeacherXInSession'),$user_name)), $quota_percentage);
+
    }
 }
 

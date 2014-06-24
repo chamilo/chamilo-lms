@@ -2,6 +2,24 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$langHGlossary = "Ajuda del glossari";
+$langGlossaryContent = "Aquesta eina us permet crear termes de glossari per al seu curs, els quals poden després ser usats en l'eina de documents.";
+$langForumContent = "El fòrum és una eina de conversa per al treball escrit asíncron. A diferència del correu electrònic, un fòrum és per a converses públiques, semi-públiques o de grups.
+
+Per utilitzar el fòrum de Chamilo, els alumnes del curs poden simplement usar el seu navegador - no requereixen de cap altre tipus d'eina.
+
+Per organitzar els fòrums, feu clic en l'eina de fòrums. Les converses s'organitzen segons l'estructura següent: Categoria> Fòrum> Tema de conversa> Resposta. Per permetre als alumnes participar en els fòrums de manera ordenada i efectiva, és essencial crear primer categories i fòrums. Després, pertany als participants crear temes de conversa i enviar respostes. Per defecte, si el curs s'ha creat amb les dades de mostra, el fòrum conté una única categoria, un fòrum, un tema de fòrum i una resposta. Podeu afegir fòrums a la categoria, canviar el seu títol o crear altres categories dins les quals podria llavors crear nous fòrums (no confongui categories i fòrums, i recordeu que una categoria que no conté fòrums és inútil i no es mostrarà als alumnes).
+
+La descripció del fòrum pot incloure una llista dels seus membres, una definició del seu propòsit, una tasca, un objectiu, un tema, etc. 
+
+Els fòrums de grups no són creats per l'eina de fòrums directament, sinó per l'eina de grups, on pot determinar si els fòrums seran públics o privats, permetent al mateix temps als membres seus grups compartir documents i altres recursos.
+
+Consells d'ensenyament: Un fòrum d'aprenentatge no és el mateix que un fòrum dels que veu a Internet. D'una banda, no és possible que els alumnes modifiquin les seves respostes una vegada que un tema de conversa hagi estat tancat. Això és amb l'objectiu de valorar la seva contribució al fòrum. Després, alguns usuaris privilegiats (professor, tutor, assistent) poden corregir directament les respostes dins del fòrum. 
+
+Per fer-ho, poden seguir el procediment següent: 
+
+Fer clic a la icona d'edició (llapis groc) i marcar-utilitzant una funcionalitat d'edició (color, subratllat, etc.). Finalment, altres alumnes es poden beneficiar d'aquesta correcció visualitzant el fòrum novament. La mateixa idea pot ser aplicada entre alumnes però requereix utilitzar l'eina de citació per després indicar els elements incorrectes (ja que no poden editar directament la resposta d'un altre alumne).";
+$langHForum = "Ajuda del fòrum";
 $langHFor = "Ajuda: Fòrums";
 $langForContent = " Un fòrum és una eina de debat asíncrona. Mentre que un correu electrònic permet un diàleg privat entre dues persones, en els fòrums aquest diàleg serà públic o semipúblic i podran intervenir més persones.Des del punt de vista tècnic, els usuaris només necessiten un navegador d'Internet per a usar els fòrums de la Plataforma.Per a organitzar els fòrums de debat, premi en 'Administració dels fòrums'. Els debats s'organitzen en categories i subcategories tal com segueix:Categoria > Fòrum > Temi > RespostesPer a estructurar els debats dels seus usuaris, és necessari organitzar per endavant les categories i els fòrums, deixant que ells siguin els quals creuen els temes i les possibles respostes. Per defecte, els fòrums de cada curs contenen dues categories: una reservada als grups del curs 'Fòrums de grups' i altra comuna al curs, denominada per defecte'Principal' (encara que aquest nom pot canviar-se); dintre d'aquesta última hi ha creat un 'Fòrum de proves' amb un tema d'exemple.El primer que ha de fer és esborrar el tema d'exemple i canviar el nom del fòrum de proves. Després pot crear, en la categoria públic, altres fòrums, bé sigui per grups o temes, per a ajustar-se als requisits de la seva proposta d'aprenentatge.No confongui les categories amb els fòrums, ni aquests amb els temes, i no oblidi que una categoria buida (sense fòrums) no apareixerà en la vista de l'usuari.Finalment, cada fòrum pot tenir una descripció que pot consistir en la llista dels seus membres, els seus objectius, temàtica...Els fòrums dels grups no han de crear-se a través de l'eina 'Fòrums', sinó mitjançant l'eina 'Grups'; en aquesta última podrà decidir si els fòrums del grup seran privats o públics.Ús pedagògic avançatAlguns professors utilitzen el fòrum per a realitzar correccions. Un estudiant publica un document. El professor ho corregeix usant el botó marcador de l'editor HTML (marca amb un color la correcció o els errors), de manera que altres estudiants i professors podran beneficiar-se d'elles.";
 $langHDropbox = "Ajuda: Compartició de fitxers";

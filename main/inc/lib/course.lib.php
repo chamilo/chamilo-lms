@@ -4583,7 +4583,8 @@ class CourseManager
             'email_alert_to_teacher_on_new_user_in_course',
             'enable_lp_auto_launch',
             'pdf_export_watermark_text',
-            'show_system_folders'
+            'show_system_folders',
+            //'lp_return_link'
         );
         if (!empty($pluginCourseSettings)) {
             $courseSettings = array_merge(

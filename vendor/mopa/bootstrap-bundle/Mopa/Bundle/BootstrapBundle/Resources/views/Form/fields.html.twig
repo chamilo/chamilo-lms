@@ -1,0 +1,598 @@
+{% extends 'form_div_layout.html.twig' %}
+
+{# Buttons #}
+{% block button_attributes %}
+    {% set attr = attr|merge({class: 'btn ' ~ attr.class | default("")}) %}
+    {{ parent() }}
+{% endblock button_attributes %}
+
+{% block button_widget %}
+{% spaceless %}
+    {% if label is empty %}
+        {% set label = name|humanize %}
+    {% endif %}
+    <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>
+    {% if icon is not empty %} <span class="glyphicon glyphicon-{{ icon }}"{% if icon_color is not empty %} style="color: {{ icon_color }};" {% endif %} ></span> {% endif %} {{ label|trans({}, translation_domain) }}</button>
+{% endspaceless %}
+{% endblock button_widget %}
+
+{# Widgets #}
+
+{% block choice_widget_collapsed %}
+    {% set attr = attr|merge({'class': attr.class|default('') ~ ' form-control'}) %}
+    {% if not inline and horizontal %}
+        {% if not label_render %}
+        {% set horizontal_input_wrapper_class = horizontal_input_wrapper_class ~ ' ' ~ horizontal_label_offset_class %}
+        {% endif %}
+        <div class="{{ horizontal_input_wrapper_class }}">
+    {% endif %}
+    {{ parent() }}
+    {% if not inline and horizontal %}
+            {{ block('form_message') }}
+        </div>
+    {% endif %}
+{% endblock choice_widget_collapsed %}
+
+{% block textarea_widget %}
+{% set attr = attr|merge({'class': attr.class|default('') ~ ' form-control'}) %}
+    {% if not inline and horizontal %}
+    {% if not label_render %}
+    {% set horizontal_input_wrapper_class = horizontal_input_wrapper_class ~ ' ' ~ horizontal_label_offset_class %}
+    {% endif %}
+    <div class="{{ horizontal_input_wrapper_class }}">
+    {% endif %}
+    {{ parent() }}
+    {% if not inline and horizontal %}
+            {{ block('form_message') }}
+    </div>
+    {% endif %}
+{% endblock textarea_widget %}
+
+{% block form_widget_simple %}
+{% spaceless %}
+    {% set type = type|default('text') %}
+    {% if type != 'hidden' and not inline and horizontal %}
+    <div class="{{ horizontal_input_wrapper_class }}">
+    {% endif %}
+    {% if type != 'hidden' and ( widget_addon_prepend|default(null) is not null or widget_addon_append|default(null) is not null ) %}
+    <div class="input-group">
+        {% if widget_addon_prepend|default(null) is not null %}
+            {% set widget_addon = widget_addon_prepend %}
+            {{ block('widget_addon') }}
+        {% endif %}
+    {% endif %}
+    {% if not widget_remove_btn|default(null) %}
+        {% set attr = attr|merge({'class': attr.class|default('') ~ ' not-removable'}) %}
+    {% endif %}
+    {% set attr = attr|merge({'class': attr.class|default('') ~ ' form-control'}) %}
+    {{ parent() }}
+    {% if type != 'hidden' and ( widget_addon_prepend|default(null) is not null or widget_addon_append|default(null) is not null ) %}
+        {% if widget_addon_append|default(null) is not null %}
+        {% set widget_addon = widget_addon_append %}
+        {{ block('widget_addon') }}
+        {% endif %}
+    </div>
+    {% endif %}
+    {% if type != 'hidden' and not inline and horizontal %}
+        {{ block('form_message') }}
+    </div>
+    {% endif %}
+{% endspaceless %}
+{% endblock form_widget_simple %}
+
+{% block form_widget_compound %}
+{% spaceless %}
+    {% if form.parent == null %}
+        {% if render_fieldset %}<fieldset>{% endif %}
+        {% if show_legend %}{{ block('form_legend') }}{% endif %}
+    {% endif %}
+
+    {% if form.vars.tabbed %}
+        {{ form_tabs(form) }}
+        <div class="tab-content">
+    {% endif %}
+
+    {{ block('form_rows_visible') }}
+
+    {% if form.vars.tabbed %}
+        </div>
+    {% endif %}
+
+    {{ form_rest(form) }}
+
+    {% if form.parent == null %}
+        {% if render_fieldset %}</fieldset>{% endif %}
+    {% endif %}
+{% endspaceless %}
+{% endblock form_widget_compound %}
+
+{% block form_tabs %}
+{% if form.vars.tabsView is defined %}
+{{ form_widget(form.vars.tabsView) }}
+{% endif %}
+{% endblock %}
+
+{% block tabs_widget %}
+{% spaceless %}
+<ul class="{{ form.vars.attr.class }}">
+    {% for tab in form.vars.tabs %}
+        <li{% if tab.active %} class="active"{% endif %}>
+            <a data-toggle="tab" href="#{{ tab.id }}">
+                {% if tab.icon %}<span class="glyphicon glyphicon-{{ tab.icon }}"></span>{% endif %}
+                {{ tab.label }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+{% endspaceless %}
+{% endblock %}
+
+{% block form_tab %}
+<div class="tab-pane{{ form.vars.tab_active ? ' active' : '' }}" id="{{ id }}">
+    {{ block('form_widget') }}
+</div>
+{% endblock %}
+
+{% block collection_widget %}
+{% spaceless %}
+    <div class="collection-items col-lg-9">
+    {{ block('form_widget') }}
+    </div>
+{% endspaceless %}
+{% endblock collection_widget %}
+
+{% block choice_widget_expanded %}
+{% spaceless %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class|default(''))}) %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class ~ ' ' ~ (widget_type != '' ? (multiple ? 'checkbox' : 'radio') ~ '-' ~ widget_type : ''))}) %}
+    {% if expanded %}
+        {% set attr = attr|merge({'class': attr.class|default(horizontal_input_wrapper_class)}) %}
+        <div {{ block('widget_container_attributes') }}>
+    {% endif %}
+    {% for child in form %}
+        {% if widget_type != 'inline' %}
+        <div class="{{ multiple ? 'checkbox' : 'radio' }}">
+        {% endif %}
+            <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+                {{ form_widget(child, {'horizontal_label_class': horizontal_label_class, 'horizontal_input_wrapper_class': horizontal_input_wrapper_class, 'attr': {'class': attr.widget_class|default('')}}) }}
+                {{ child.vars.label|trans({}, translation_domain) }}
+            </label>
+        {% if widget_type != 'inline' %}
+        </div>
+        {% endif %}
+    {% endfor %}
+    {{ block('form_message') }}
+    {% if expanded %}
+        </div>
+    {% endif %}
+{% endspaceless %}
+{% endblock choice_widget_expanded %}
+
+{% block checkbox_widget %}
+{% spaceless %}
+{% if label is not sameas(false) and label is empty %}
+    {% set label = name|humanize %}
+{% endif %}
+{% if form.parent != null and 'choice' not in form.parent.vars.block_prefixes %}
+<div class="{{ horizontal_input_wrapper_class}}">
+    <div class="checkbox">
+{% endif %}
+
+{% if form.parent != null and 'choice' not in form.parent.vars.block_prefixes and label_render %}
+    <label class="{% if inline is defined and inline %}checkbox-inline{% endif %}">
+{% endif %}
+        <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %}/>
+{% if form.parent != null and 'choice' not in form.parent.vars.block_prefixes %}
+    {% if label_render and widget_checkbox_label in ['both', 'widget'] %}
+        {{ label|trans({}, translation_domain) }}
+    </label>
+    {% endif %}
+{% endif %}
+{% if form.parent != null and 'choice' not in form.parent.vars.block_prefixes %}
+    </div>
+    {{ block('form_message') }}
+</div>
+{% endif %}
+{% endspaceless %}
+{% endblock checkbox_widget %}
+
+{% block date_widget %}
+{% spaceless %}
+{% if widget == 'single_text' %}
+    {% if datepicker is defined %}
+        <div class="input-group date col-lg-9">
+            {% if widget_addon_prepend|default(null) is not null %}
+                {% set widget_addon = widget_addon_prepend %}
+                {{ block('widget_addon') }}
+            {% endif %}
+            {% set attr = attr|merge({'class': attr.class|default('') ~ ' not-removable grd-white form-control'}) %}
+            <input type="text" {{ block('widget_attributes') }} value="{{ value }}"  data-form="datepicker" data-date-format="{{ format|lower }}"/>
+            {% if widget_addon_append|default(null) is not null %}
+                {% set widget_addon = widget_addon_append %}
+                {{ block('widget_addon') }}
+            {% endif %}
+	    <script type="text/javascript">
+		$(document).ready(function () {
+		    $({{ id }}).datepicker();
+                    $({{ id }}).keydown(function(e) {
+                        if(e.which == 27) {
+                            $({{ id }}).datepicker('hide');
+                                return false;
+                            }
+                        });
+                });
+            </script>
+        </div>
+    {% else %}
+        {{ block('form_widget_simple') }}
+    {% endif %}
+    {{ block('form_message') }}
+{% else %}
+    {% set attr = attr|merge({'class': attr.class|default('inline')}) %}
+        {{ date_pattern|replace({
+            '{{ year }}':  form_widget(form.year, {'attr': {'class': attr.widget_class|default('') ~ ''}, 'horizontal_input_wrapper_class': horizontal_input_wrapper_class|default('col-lg-3')}),
+            '{{ month }}': form_widget(form.month, {'attr': {'class': attr.widget_class|default('') ~ ''}, 'horizontal_input_wrapper_class': horizontal_input_wrapper_class|default('col-lg-3')}),
+            '{{ day }}':   form_widget(form.day, {'attr': {'class': attr.widget_class|default('') ~ ''}, 'horizontal_input_wrapper_class': horizontal_input_wrapper_class|default('col-lg-3')}),
+        })|raw }}
+    {{ block('form_message') }}
+{% endif %}
+{% endspaceless %}
+{% endblock date_widget %}
+
+{% block time_widget %}
+{% spaceless %}
+    {% if widget == 'single_text' %}
+        {{ block('form_widget_simple') }}
+    {% else %}
+        {% set attr = attr|merge({'class': attr.class|default('')}) %}
+        {% spaceless %}
+        {{ form_widget(form.hour, { 'attr': {  'size': '1'}, 'horizontal_input_wrapper_class': horizontal_input_wrapper_class|default('col-lg-2')}) }}
+        {{ form_widget(form.minute, { 'attr': { 'size': '1' }, 'horizontal_input_wrapper_class': horizontal_input_wrapper_class|default('col-lg-2')}) }}
+        {% if with_seconds %}
+            :{{ form_widget(form.second, { 'attr': { 'size': '1' } }) }}
+        {% endif %}
+        {% endspaceless %}
+        {{ block('form_message') }}
+    {% endif %}
+{% endspaceless %}
+{% endblock time_widget %}
+
+{% block datetime_widget %}
+{% spaceless %}
+    {% if widget == 'single_text' %}
+        {{ block('form_widget_simple') }}
+    {% else %}
+            {% set attr = attr|merge({'class': attr.class|default('')}) %}
+            <div {{ block('widget_container_attributes') }}>
+                {{ form_errors(form.date) }}
+                {{ form_errors(form.time) }}
+                {{ form_widget(form.date, {'attr': {'class': attr.widget_class|default('')}, 'horizontal_input_wrapper_class': horizontal_input_wrapper_class|default('col-lg-3')}) }}
+                {{ form_widget(form.time, {'attr': {'class': attr.widget_class|default('')}, 'horizontal_input_wrapper_class': horizontal_input_wrapper_class|default('col-lg-2')}) }}
+                {{ block('form_message') }}
+            </div>
+    {% endif %}
+{% endspaceless %}
+{% endblock datetime_widget %}
+
+{% block percent_widget %}
+{% spaceless %}
+    {% set widget_addon_append = widget_addon_append|merge({'text': widget_addon_append.text|default('%')}) %}
+    {{ block('form_widget_simple') }}
+{% endspaceless %}
+{% endblock percent_widget %}
+
+{% block money_widget %}
+{% spaceless %}
+    {% set widget_addon_prepend = (widget_addon_prepend != false or widget_addon_prepend == null) and money_pattern != '{{ widget }}' ? {'text': money_pattern|replace({ '{{ widget }}': ''})} : widget_addon_prepend|default(null) %}
+    {{ block('form_widget_simple') }}
+{% endspaceless %}
+{% endblock money_widget %}
+
+{% block file_widget %}
+{% spaceless %}
+{% set type = type|default('file') %}
+<div class="{{ horizontal_input_wrapper_class }}">
+    {% if widget_addon_prepend|default(null) is not null %}
+        {% set widget_addon = widget_addon_prepend %}
+        {{ block('widget_addon') }}
+    {% endif %}
+<input type="{{ type }}" {{ block('widget_attributes') }}/>
+{% if type != 'hidden' and  widget_addon.type|default(null) is not null %}
+    {% if widget_addon_append|default(null) is not null %}
+        {% set widget_addon = widget_addon_append %}
+        {{ block('widget_addon') }}
+    {% endif %}
+{% endif %}
+</div>
+{% endspaceless %}
+{% endblock file_widget %}
+
+{# Labels #}
+
+{% block form_legend %}
+{% spaceless %}
+    {% if label is empty %}
+        {% set label = name|humanize %}
+    {% endif %}
+    <legend>{{ label|trans({}, translation_domain) }}</legend>
+{% endspaceless %}
+{% endblock form_legend %}
+
+{% block form_label %}
+{% if 'checkbox' not in block_prefixes or widget_checkbox_label in ['label', 'both'] %}
+{% spaceless %}
+    {% if label is not sameas(false) %}
+        {% if label is empty %}
+            {% set label = name|humanize %}
+        {% endif %}
+        {% if not compound %}
+            {% set label_attr = label_attr|merge({'for': id}) %}
+        {% endif %}
+        {% set label_attr_class = ' control-label ' %}
+        {% if horizontal %}
+            {% set label_attr_class = label_attr_class ~ horizontal_label_class %}
+        {% endif %}
+        {% set label_attr = label_attr|merge({'class': label_attr.class|default('') ~ label_attr_class ~ (required ? ' required' : ' optional') }) %}
+        <label{% for attrname,attrvalue in label_attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>
+        {{ label|trans({}, translation_domain) }}
+        {{- block('label_asterisk') }}
+        {% if 'collection' in form.vars.block_prefixes and widget_add_btn|default(null) %}
+            {{ block('form_widget_add_btn') }}
+        {% endif %}
+        {% if help_label %}
+            {{ block('help_label') }}
+        {% endif %}
+        {% if help_label_tooltip.title %}
+            {{ block('help_label_tooltip') }}
+        {% endif %}
+        {% if help_label_popover.title %}
+            {{ block('help_label_popover') }}
+        {% endif %}
+        </label>
+    {% endif %}
+{% endspaceless %}
+{% endif %}
+{% endblock form_label %}
+
+{% block help_label %}
+    <span class="help-block">{{ help_label|trans({}, translation_domain) }}</span>
+{% endblock help_label %}
+
+{% block help_label_tooltip %}
+    <span class="help-block">
+        <a href="#" data-toggle="tooltip" data-placement="{{ help_label_tooltip.placement}}" data-title="{{ help_label_tooltip.title|trans({}, translation_domain) }}">
+            {% if help_label_tooltip.icon is not sameas(false) %}
+            <span class="glyphicon glyphicon-{{help_label_tooltip.icon}}"></span>
+            {% endif %}
+            {% if help_label_tooltip.text is not sameas(null) %}
+            {{ help_label_tooltip.text }}
+            {% endif %}
+        </a>
+    </span>
+{% endblock help_label_tooltip %}
+
+{% block help_label_popover %}
+    <span class="help-block">
+        <a href="#" data-toggle="popover" data-trigger="hover" data-placement="{{ help_label_popover.placement}}" data-title="{{ help_label_popover.title|trans({}, translation_domain) }}" data-content="{{ help_label_popover.content|trans({}, translation_domain) }}" >
+            {% if help_label_popover.icon is not sameas(false) %}
+            <span class="glyphicon glyphicon-{{help_label_popover.icon}}"></span>
+            {% endif %}
+            {% if help_label_popover.text is not sameas(null) %}
+            {{ help_label_popover.text }}
+            {% endif %}
+        </a>
+    </span>
+{% endblock help_label_popover %}
+
+
+
+{# Rows #}
+
+{% block form_rows_visible %}
+{% spaceless %}
+    {% if form_errors(form) %}
+        <div class="symfony-form-errors">
+            {{ form_errors(form) }}
+        </div>
+    {% endif %}
+    {% for child in form %}
+        {% if 'hidden' not in child.vars.block_prefixes %} {# smbdy: why do we not add the hiddens of childs? 131024 phiamo: i think form rest should do this !? it was afaik removed because it cause side effekts #}
+            {{ form_row(child) }}
+        {% endif %}
+    {% endfor %}
+{% endspaceless %}
+{% endblock form_rows_visible %}
+
+{% block form_row %}
+{% spaceless %}
+    {% if 'tab' in form.vars.block_prefixes %}
+        {{ block('form_tab') }}
+    {% else %}
+        {{ block('widget_form_group_start') }}
+        {{ widget_prefix|trans({}, translation_domain)|raw }} {{ form_widget(form, _context) }} {{ widget_suffix|trans({}, translation_domain)|raw }}
+        {% if 'collection' in form.parent.vars.block_prefixes and widget_remove_btn|default(null) %}
+            {{ block('form_widget_remove_btn') }}
+        {% endif -%}
+        {{ block('widget_form_group_end') }}
+    {% endif %}
+{% endspaceless %}
+{% endblock form_row %}
+
+{# Support #}
+
+{% block form_message %}
+{% spaceless %}
+    {{ form_errors(form) }}
+    {{ block('form_help') }}
+{% endspaceless %}
+{% endblock form_message %}
+
+{# Help #}
+
+{% block form_help %}
+{% spaceless %}
+{% if help_block %}<p class="help-block">{{ help_block|trans({}, translation_domain)|raw }}</p>{%endif %}
+{% endspaceless %}
+{% endblock form_help %}
+
+{% block form_widget_add_btn %}
+{% spaceless %}
+    {% if widget_add_btn|default(null) %}
+        {% set button_type = 'add' %}
+        {% set button_values = widget_add_btn %}
+        {{ block('collection_button') }}
+    {% endif %}
+{% endspaceless %}
+{% endblock form_widget_add_btn %}
+
+{% block form_widget_remove_btn %}
+{% spaceless %}
+    {% if widget_remove_btn|default(null) %}
+    {% set button_type = 'remove' %}
+    {% set button_values = widget_remove_btn %}
+    {{ block('collection_button') }}
+    {% endif %}
+{% endspaceless %}
+{% endblock form_widget_remove_btn %}
+
+{% block collection_button %}
+<a {% for attrname,attrvalue in button_values.attr %} {{attrname}}="{{attrvalue}}"{% endfor %} data-collection-{{ button_type }}-btn=".{{ form.vars['id'] }}_form_group">
+{% if button_values.icon != "" %}
+<span class="glyphicon glyphicon-{{ button_values.icon }} {% if button_values.icon_color is not null %}icon-{{ button_values.icon_color }}{% endif %}"></span>
+{% endif %}
+{{ button_values.label|trans({}, translation_domain) }}
+</a>
+
+{% endblock collection_button %}
+
+{% block label_asterisk %}
+{% if required %}
+    {%- if render_required_asterisk %} <span class="asterisk">*</span>{% endif %}
+{% else %}
+    {%- if render_optional_text %} <span>{{ "(optional)"|trans({}, translation_domain) }}</span>{% endif %}
+{% endif %}
+{% endblock label_asterisk %}
+
+{% block widget_addon %}
+{% spaceless %}
+{% set widget_addon_icon = widget_addon.icon is defined ? widget_addon.icon : null  %}
+    <span class="input-group-addon">{{ (widget_addon.text|default(false) ? widget_addon.text|trans({}, translation_domain)|raw : mopa_bootstrap_icon(widget_addon_icon)) }}</span>
+{% endspaceless %}
+{% endblock widget_addon %}
+
+{# Errors #}
+
+{% block form_errors %}
+{% spaceless %}
+{% if error_delay %}
+    {% for child in form %}
+        {% if loop.index == 1 %}
+            {% if child.set('errors', errors) %}{% endif %}
+        {% endif %}
+    {% endfor %}
+{% else %}
+    {% if errors|length > 0 %}
+        {% if form.parent == null %}
+            {% from 'MopaBootstrapBundle::flash.html.twig' import flash %}
+            {% for error in errors %}
+                {{
+                    flash('danger', error.messagePluralization is null
+                        ? error.messageTemplate|trans(error.messageParameters, 'validators')
+                        : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
+                    )
+                }}
+            {% endfor %}
+        {% else %}
+            <span class="help-{{ block('error_type') }}">
+            {% for error in errors %}
+                {{
+                    error.messagePluralization is null
+                        ? error.messageTemplate|trans(error.messageParameters, 'validators')
+                        : error.messageTemplate|transchoice(error.messagePluralization, error.messageParameters, 'validators')
+                }} <br>
+            {% endfor %}
+            </span>
+        {% endif %}
+    {% endif %}
+{% endif %}
+{% endspaceless %}
+{% endblock form_errors %}
+
+{# used to determine which type of error #}
+
+{% block error_type %}
+{% spaceless %}
+{% if error_type %}
+    {{ error_type }}
+{% elseif form.parent == null %}
+    {{ form.vars.error_type | default('inline') }}
+{% else %}
+    block
+{% endif %}
+{% endspaceless %}
+{% endblock error_type %}
+
+{# widget helper blocks #}
+
+{% block widget_form_group_start %}
+{% if widget_form_group|default(false) or form.parent == null %}
+    {% if 'collection'in form.parent.vars.block_prefixes %} {# i am a collection child #}
+        {% if not omit_collection_item %}
+        {% set widget_form_group_attr = widget_form_group_attr|merge({class: widget_form_group_attr.class ~ ' collection-item'}) %}
+        {% endif %}
+    {% endif %}
+    {% if prototype is defined %}
+        {% set data_prototype_name = form.vars.form.vars.prototype.vars.name|default('__name__') %}
+        {% set widget_form_group_attr = widget_form_group_attr|merge({'data-prototype': form_row(prototype), 'data-prototype-name': data_prototype_name})|merge(attr) %}
+    {% endif %}
+    {# collection item adds class to form-group #}
+    {% set widget_form_group_attr = widget_form_group_attr|merge({'class': widget_form_group_attr.class ~ ' ' ~ id ~ '_form_group'}) %}
+    {% if errors|length > 0 %}
+        {% set widget_form_group_attr = widget_form_group_attr|merge({'class': widget_form_group_attr.class|default('') ~ ' has-error'}) %}
+    {% endif %}
+	{% if 'collection' in form.vars.block_prefixes and attr.class is defined %}
+		{% set widget_form_group_attr = widget_form_group_attr|merge({'class': widget_form_group_attr.class|default('row') ~ ' ' ~ attr.class}) %}
+	{% endif %}
+    <div{% if help_widget_popover.title is not sameas(null) %}{{ block('help_widget_popover') }}{% endif %} {% for attrname,attrvalue in widget_form_group_attr %} {{attrname}}="{{attrvalue}}"{% endfor %}>
+    {# a form item containing the field in block_prefixes is a near subform or a field directly #}
+    {% if (form|length > 0 and form.parent != null)
+        and 'field' not in form.vars.block_prefixes %}
+        {% if show_child_legend%}
+            {{ block('form_legend') }}
+        {% elseif label_render %}
+            {{ form_label(form, label|default(null)) }}
+        {% endif %}
+    {% else %}
+        {% if label_render %}
+            {{ form_label(form, label|default(null)) }}
+        {% endif %}
+    {% endif %}
+{% else %}
+    {% if label_render %}
+        {{ form_label(form, label|default(null)) }}
+    {% endif %}
+{% endif %}
+{% endblock widget_form_group_start %}
+
+{% block help_widget_popover %}
+ {% spaceless %}
+ {% for attrname,attrvalue in help_widget_popover %}
+ data-{{attrname}}="{{attrvalue}}"
+ {% endfor %}
+ {% endspaceless %}
+{% endblock help_widget_popover %}
+
+{% block widget_form_group_end %}
+{% spaceless %}
+{% if widget_form_group|default(false) or form.parent == null %}
+    </div>
+{% endif %}
+{% endspaceless %}
+{% endblock widget_form_group_end %}
+
+{% block form_widget %}
+{% if horizontal and not label_render %}
+    {% set horizontal_input_wrapper_class = horizontal_input_wrapper_class ~ ' ' ~ horizontal_label_offset_class %}
+{% endif %}
+{{ parent() }}
+{% endblock form_widget %}

@@ -1,0 +1,20 @@
+/*!
+ * MopaBootstrapBundle pagination support
+ */
+.pagination{ 
+    .disabled{
+        a, a:hover {
+            background-color: transparent;
+            text-decoration: none;
+            color: #BFBFBF;
+            cursor: default;
+        }
+    }
+    .last a{
+        border: 0;
+    }
+    .next a {
+        border-right: 1px solid;
+        border-right-color: rgba(0, 0, 0, 0.15);
+    }
+}

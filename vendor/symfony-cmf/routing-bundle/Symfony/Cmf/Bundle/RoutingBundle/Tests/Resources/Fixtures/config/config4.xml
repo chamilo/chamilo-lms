@@ -1,0 +1,19 @@
+<config xmlns="http://cmf.symfony.com/schema/dic/routing">
+
+    <dynamic
+        route-collection-limit="42"
+        generic-controller="my-controller"
+        default-controller="other-controller"
+        uri-filter-regexp=".*"
+        route-provider-service-id="my-provider"
+        content-repository-service-id="my-repo"
+        auto-locale-pattern="true"
+    >
+        <controller-by-type type="type-a">type-controller</controller-by-type>
+        <controller-by-class class="class-a">class-controller</controller-by-class>
+        <template-by-class class="class-b">template-b</template-by-class>
+        <route-filter-by-id id="my-filter">20</route-filter-by-id>
+        <locale>en</locale>
+        <locale>de</locale>
+    </dynamic>
+</config>

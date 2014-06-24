@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="simplethings.entityaudit.audited_entities" type="collection" />
+        <parameter key="simplethings.entityaudit.table_prefix" type="string" />
+        <parameter key="simplethings.entityaudit.table_suffix" type="string" />
+        <parameter key="simplethings.entityaudit.revision_field_name" type="string" />
+        <parameter key="simplethings.entityaudit.revision_type_field_name" type="string" />
+        <parameter key="simplethings.entityaudit.revision_table_name" type="string" />
+        <parameter key="simplethings.entityaudit.revision_id_field_type" type="string" />
+    </parameters>
+
+    <services>
+        <service id="simplethings_entityaudit.manager" class="SimpleThings\EntityAudit\AuditManager">
+            <argument id="simplethings_entityaudit.config" type="service" />
+        </service>
+
+        <service id="simplethings_entityaudit.reader" class="SimpleThings\EntityAudit\AuditReader" factory-service="simplethings_entityaudit.manager" factory-method="createAuditReader">
+            <argument type="service" id="doctrine.orm.default_entity_manager" />
+        </service>
+
+        <service id="simplethings_entityaudit.log_revisions_listener" class="SimpleThings\EntityAudit\EventListener\LogRevisionsListener">
+            <argument id="simplethings_entityaudit.manager" type="service" />
+            <tag name="doctrine.event_subscriber" connection="default" />
+        </service>
+
+        <service id="simplethings_entityaudit.create_schema_listener" class="SimpleThings\EntityAudit\EventListener\CreateSchemaListener">
+            <argument id="simplethings_entityaudit.manager" type="service" />
+            <tag name="doctrine.event_subscriber" connection="default" />
+        </service>
+
+        <service id="simplethings_entityaudit.config" class="SimpleThings\EntityAudit\AuditConfiguration">
+            <call method="setAuditedEntityClasses">
+                <argument>%simplethings.entityaudit.audited_entities%</argument>
+            </call>
+            <call method="setTablePrefix">
+                <argument>%simplethings.entityaudit.table_prefix%</argument>
+            </call>
+            <call method="setTableSuffix">
+                <argument>%simplethings.entityaudit.table_suffix%</argument>
+            </call>
+            <call method="setRevisionFieldName">
+                <argument>%simplethings.entityaudit.revision_field_name%</argument>
+            </call>
+            <call method="setRevisionTypeFieldName">
+                <argument>%simplethings.entityaudit.revision_type_field_name%</argument>
+            </call>
+            <call method="setRevisionTableName">
+                <argument>%simplethings.entityaudit.revision_table_name%</argument>
+            </call>
+            <call method="setRevisionIdFieldType">
+                <argument>%simplethings.entityaudit.revision_id_field_type%</argument>
+            </call>
+        </service>
+    </services>
+</container>
+

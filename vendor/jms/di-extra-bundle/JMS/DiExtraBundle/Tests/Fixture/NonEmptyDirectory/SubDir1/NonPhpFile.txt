@@ -1,0 +1,10 @@
+<?php
+
+namespace FooBar;
+
+use JMS\DiExtraBundle\Annotation\Service;
+
+/** @Service */
+class Foo
+{
+}

@@ -1,0 +1,44 @@
+{
+    "name":        "knplabs/knp-components",
+    "type":        "library",
+    "description": "Knplabs component library",
+    "keywords":    ["components", "paginator", "pager", "knp", "knplabs"],
+    "homepage":    "http://github.com/KnpLabs/knp-components",
+    "license":     "MIT",
+
+    "authors": [
+        {
+            "name": "KnpLabs Team",
+            "homepage": "http://knplabs.com"
+        },
+        {
+            "name": "Symfony Community",
+            "homepage": "http://github.com/KnpLabs/knp-components/contributors"
+        }
+    ],
+
+    "require": {
+        "php": ">=5.3.2"
+    },
+
+    "suggest": {
+        "doctrine/orm" : "to allow usage pagination with Doctrine ORM",
+        "doctrine/common" : "to allow usage pagination with Doctrine ArrayCollection",
+        "doctrine/mongodb-odm" : "to allow usage pagination with Doctrine ODM MongoDB",
+        "ruflin/Elastica" : "to allow usage pagination with ElasticSearch Client",
+        "propel/propel1" : "to allow usage pagination with Propel ORM",
+        "solarium/solarium" : "to allow usage pagination with Solarium Client"
+    },
+
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.2.x-dev"
+        }
+    },
+
+    "autoload": {
+        "psr-0": {
+            "Knp\\Component": "src/"
+        }
+    }
+}

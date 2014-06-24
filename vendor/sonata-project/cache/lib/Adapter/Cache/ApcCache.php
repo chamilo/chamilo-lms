@@ -72,7 +72,7 @@ class ApcCache extends BaseCacheHandler
     public function flushAll()
     {
         if ($this->currentOnly) {
-            return apc_clear_cache('user');
+            return apc_clear_cache('user') && apc_clear_cache();
         }
 
         $result = true;

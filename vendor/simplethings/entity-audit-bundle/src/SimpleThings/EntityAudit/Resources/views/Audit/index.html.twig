@@ -1,0 +1,11 @@
+{% extends "SimpleThingsEntityAuditBundle::layout.html.twig" %}
+
+{% block simplethings_entityaudit_content %}
+<h1>Revisions</h1>
+
+<ul>
+{% for revision in revisions %}
+    <li><a href="{{ path('simple_things_entity_audit_viewrevision', { 'rev': revision.rev }) }}">{{ revision.timestamp|date('r') }} -- {{ revision.username|default('Anonymous') }}</a></li>
+{% endfor %}
+</ul>
+{% endblock simplethings_entityaudit_content %}

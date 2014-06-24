@@ -1,0 +1,14 @@
+language: php
+
+php:
+  - 5.3
+  - 5.4
+  - 5.5
+  - hhvm
+
+before_script:
+    - COMPOSER_ROOT_VERSION=dev-master composer --prefer-source --dev install
+
+matrix:
+  allow_failures:
+    - php: hhvm

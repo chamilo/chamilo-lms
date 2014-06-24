@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="robots" content="index, follow, all" />
+        <title>Alchemy\Zippy\Archive\MemberInterface | Zippy API</title>
+                    <link rel="stylesheet" type="text/css" href="../../../stylesheet.css">
+                            </head>
+        <body id="class">
+            <div class="header">
+        <ul>
+            <li><a href="../../../classes.html">Classes</a></li>
+                            <li><a href="../../../namespaces.html">Namespaces</a></li>
+                        <li><a href="../../../interfaces.html">Interfaces</a></li>
+            <li><a href="../../../doc-index.html">Index</a></li>
+            
+        </ul>
+
+        <div id="title">Zippy API</div>
+
+            <div class="type">Interface</div>
+    <h1><a href="../../../Alchemy/Zippy/Archive.html">Alchemy\Zippy\Archive</a>\MemberInterface</h1>
+    </div>
+        <div class="content">
+                <p>interface    <strong>MemberInterface</strong></p>
+
+    
+    
+    
+            <h2>Methods</h2>
+
+            <table>
+                    <tr>
+                <td class="type">
+                    String
+                </td>
+                <td class="last">
+                    <a href="#method_getLocation">getLocation</a>()
+                    <p>Gets the location of an archive member</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    Boolean
+                </td>
+                <td class="last">
+                    <a href="#method_isDir">isDir</a>()
+                    <p>Tells whether the member is a directory or not</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method_getLastModifiedDate">getLastModifiedDate</a>()
+                    <p></p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    Integer
+                </td>
+                <td class="last">
+                    <a href="#method_getSize">getSize</a>()
+                    <p>Returns the (uncompressed) size of the member</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    <a href="http://php.net/SplFileInfo"><abbr title="SplFileInfo">SplFileInfo</abbr></a>
+                </td>
+                <td class="last">
+                    <a href="#method_extract">extract</a>(String|null $to = null)
+                    <p>Extract the member from its archive</p>
+                </td>
+                <td></td>
+            </tr>
+                    <tr>
+                <td class="type">
+                    
+                </td>
+                <td class="last">
+                    <a href="#method___toString">__toString</a>()
+                    <p></p>
+                </td>
+                <td></td>
+            </tr>
+            </table>
+
+
+        <h2>Details</h2>
+
+                        <h3 id="method_getLocation">
+        <div class="location">at line 21</div>
+        <code>            public            String
+    <strong>getLocation</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Gets the location of an archive member</p>
+        <p></p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>String</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_isDir">
+        <div class="location">at line 28</div>
+        <code>            public            Boolean
+    <strong>isDir</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Tells whether the member is a directory or not</p>
+        <p></p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>Boolean</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getLastModifiedDate">
+        <div class="location">at line 35</div>
+        <code>            public            
+    <strong>getLastModifiedDate</strong>()</code>
+    </h3>
+    <div class="details">
+        <p></p>
+        <p></p>
+        <div class="tags">
+            
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_getSize">
+        <div class="location">at line 44</div>
+        <code>            public            Integer
+    <strong>getSize</strong>()</code>
+    </h3>
+    <div class="details">
+        <p>Returns the (uncompressed) size of the member</p>
+        <p>If the size is unknown, returns -1</p>
+        <div class="tags">
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td>Integer</td>
+            <td></td>
+        </tr>
+    </table>
+
+            
+            
+                    </div>
+    </div>
+
+                <h3 id="method_extract">
+        <div class="location">at line 60</div>
+        <code>            public            <a href="http://php.net/SplFileInfo"><abbr title="SplFileInfo">SplFileInfo</abbr></a>
+    <strong>extract</strong>(String|null $to = null)</code>
+    </h3>
+    <div class="details">
+        <p>Extract the member from its archive</p>
+        <p>Be carefull using this method within a loop<br />
+ This will execute one extraction process for each file<br />
+ Prefer the use of ArchiveInterface::extractMembers in that use case</p>
+        <div class="tags">
+                            <h4>Parameters</h4>
+
+                    <table>
+                    <tr>
+                <td>String|null</td>
+                <td>$to</td>
+                <td>The path where to extract the member, if no path is not provided the member is extracted in the same direcoty of its archive</td>
+            </tr>
+            </table>
+
+            
+                            <h4>Return Value</h4>
+
+                    <table>
+        <tr>
+            <td><a href="http://php.net/SplFileInfo"><abbr title="SplFileInfo">SplFileInfo</abbr></a></td>
+            <td>The extracted file</td>
+        </tr>
+    </table>
+
+            
+                            <h4>Exceptions</h4>
+
+                    <table>
+                    <tr>
+                <td><a href="http://php.net/RuntimeException"><abbr title="RuntimeException">RuntimeException</abbr></a></td>
+                <td>In case of failure</td>
+            </tr>
+                    <tr>
+                <td><a href="http://php.net/InvalidArgumentException"><abbr title="InvalidArgumentException">InvalidArgumentException</abbr></a></td>
+                <td>In case no members could be removed or provide extract target direcotry is not valid</td>
+            </tr>
+            </table>
+
+            
+                    </div>
+    </div>
+
+                <h3 id="method___toString">
+        <div class="location">at line 65</div>
+        <code>            public            
+    <strong>__toString</strong>()</code>
+    </h3>
+    <div class="details">
+        <p></p>
+        <p></p>
+        <div class="tags">
+            
+            
+            
+                    </div>
+    </div>
+
+    
+            </div>
+            <div id="footer">
+        Generated by <a href="http://sami.sensiolabs.org/" target="_top">Sami, the API Documentation Generator</a>.
+    </div>
+    </body>
+</html>

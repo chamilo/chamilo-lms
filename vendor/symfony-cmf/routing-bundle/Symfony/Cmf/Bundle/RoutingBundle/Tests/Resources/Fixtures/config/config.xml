@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services">
+
+    <config xmlns="http://cmf.symfony.com/schema/dic/routing">
+
+        <chain replace-symfony-router="true">
+            <router-by-id id="cmf_routing.router">300</router-by-id>
+            <router-by-id id="router.default">100</router-by-id>
+        </chain>
+
+        <dynamic
+            generic-controller="acme_main.controller:mainAction"
+            auto-locale-pattern="true"
+            match-implicit-locale="true"
+        >
+            <controller-by-type type="editable">acme_main.some_controller:editableAction</controller-by-type>
+            <controller-by-class class="Symfony\Cmf\Bundle\ContentBundle\Document\StaticContent">
+                cmf_content.controller:indexAction
+            </controller-by-class>
+            <template-by-class class="Symfony\Cmf\Bundle\ContentBundle\Document\StaticContent">
+                CmfContentBundle:StaticContent:index.html.twig
+            </template-by-class>
+
+            <persistence>
+                <phpcr
+                    route-basepath="/cms/routes"
+                    content-basepath="/cms/content"
+                    use-sonata-admin="false"
+                >
+                    <route-basepath>/simple</route-basepath>
+                </phpcr>
+            </persistence>
+
+            <locale>en</locale>
+            <locale>fr</locale>
+        </dynamic>
+    </config>
+</container>

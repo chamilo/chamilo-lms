@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="nelmio_api_doc.formatter.abstract_formatter.class">Nelmio\ApiDocBundle\Formatter\AbstractFormatter</parameter>
+        <parameter key="nelmio_api_doc.formatter.markdown_formatter.class">Nelmio\ApiDocBundle\Formatter\MarkdownFormatter</parameter>
+        <parameter key="nelmio_api_doc.formatter.simple_formatter.class">Nelmio\ApiDocBundle\Formatter\SimpleFormatter</parameter>
+        <parameter key="nelmio_api_doc.formatter.html_formatter.class">Nelmio\ApiDocBundle\Formatter\HtmlFormatter</parameter>
+        <parameter key="nelmio_api_doc.sandbox.authentication">null</parameter>
+    </parameters>
+
+    <services>
+        <service id="nelmio_api_doc.formatter.abstract_formatter" class="%nelmio_api_doc.formatter.abstract_formatter.class%" />
+        <service id="nelmio_api_doc.formatter.markdown_formatter" class="%nelmio_api_doc.formatter.markdown_formatter.class%"
+            parent="nelmio_api_doc.formatter.abstract_formatter" />
+        <service id="nelmio_api_doc.formatter.simple_formatter" class="%nelmio_api_doc.formatter.simple_formatter.class%"
+            parent="nelmio_api_doc.formatter.abstract_formatter" />
+        <service id="nelmio_api_doc.formatter.html_formatter" class="%nelmio_api_doc.formatter.html_formatter.class%"
+            parent="nelmio_api_doc.formatter.abstract_formatter">
+            <call method="setTemplatingEngine">
+                <argument type="service" id="templating" />
+            </call>
+            <call method="setMotdTemplate">
+                <argument>%nelmio_api_doc.motd.template%</argument>
+            </call>
+            <call method="setApiName">
+                <argument>%nelmio_api_doc.api_name%</argument>
+            </call>
+            <call method="setEnableSandbox">
+                <argument>%nelmio_api_doc.sandbox.enabled%</argument>
+            </call>
+            <call method="setEndpoint">
+                <argument>%nelmio_api_doc.sandbox.endpoint%</argument>
+            </call>
+            <call method="setRequestFormatMethod">
+                <argument>%nelmio_api_doc.sandbox.request_format.method%</argument>
+            </call>
+            <call method="setDefaultRequestFormat">
+                <argument>%nelmio_api_doc.sandbox.request_format.default_format%</argument>
+            </call>
+            <call method="setAcceptType">
+                <argument>%nelmio_api_doc.sandbox.accept_type%</argument>
+            </call>
+            <call method="setBodyFormat">
+                <argument>%nelmio_api_doc.sandbox.body_format%</argument>
+            </call>
+            <call method="setAuthentication">
+                <argument>%nelmio_api_doc.sandbox.authentication%</argument>
+            </call>
+        </service>
+    </services>
+
+</container>

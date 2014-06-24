@@ -1,0 +1,44 @@
+{
+    "name": "jms/di-extra-bundle",
+    "type": "symfony-bundle",
+    "description": "Allows to configure dependency injection using annotations",
+    "keywords": ["annotations","dependency injection"],
+    "homepage": "http://jmsyst.com/bundles/JMSDiExtraBundle",
+    "license": "Apache",
+    "authors": [
+        {
+            "name": "Johannes M. Schmitt",
+            "email": "schmittjoh@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/framework-bundle": "~2.1",
+        "symfony/process": "~2.1",
+        "symfony/finder": "~2.1",
+        "jms/aop-bundle": ">=1.0.0,<1.2-dev",
+        "jms/metadata": "1.*"
+    },
+    "require-dev": {
+        "symfony/validator": "*",
+        "symfony/form": "*",
+        "symfony/class-loader": "*",
+        "symfony/yaml": "*",
+        "symfony/browser-kit": "*",
+        "symfony/security-bundle": "*",
+        "symfony/twig-bundle": "*",
+        "sensio/framework-extra-bundle": "*",
+        "jms/security-extra-bundle": "1.*",
+        "doctrine/doctrine-bundle": "*",
+        "doctrine/orm": "*",
+        "phpcollection/phpcollection": ">=0.1,<0.3-dev"
+    },
+    "autoload": {
+        "psr-0": { "JMS\\DiExtraBundle": "" }
+    },
+    "target-dir": "JMS/DiExtraBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.3-dev"
+        }
+    }
+}

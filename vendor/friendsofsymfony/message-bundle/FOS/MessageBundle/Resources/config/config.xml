@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="fos_message.sender.default" class="FOS\MessageBundle\Sender\Sender" public="false">
+            <argument type="service" id="fos_message.message_manager" />
+            <argument type="service" id="fos_message.thread_manager" />
+            <argument type="service" id="event_dispatcher" />
+        </service>
+
+        <service id="fos_message.composer.default" class="FOS\MessageBundle\Composer\Composer" public="false">
+            <argument type="service" id="fos_message.message_manager" />
+            <argument type="service" id="fos_message.thread_manager" />
+        </service>
+
+        <service id="fos_message.participant_provider.default" class="FOS\MessageBundle\Security\ParticipantProvider" public="false">
+            <argument type="service" id="security.context" />
+        </service>
+
+        <service id="fos_message.authorizer.default" class="FOS\MessageBundle\Security\Authorizer" public="false">
+            <argument type="service" id="fos_message.participant_provider" />
+        </service>
+
+        <service id="fos_message.provider.default" class="FOS\MessageBundle\Provider\Provider" public="false">
+            <argument type="service" id="fos_message.thread_manager" />
+            <argument type="service" id="fos_message.message_manager" />
+            <argument type="service" id="fos_message.thread_reader" />
+            <argument type="service" id="fos_message.authorizer" />
+            <argument type="service" id="fos_message.participant_provider" />
+        </service>
+
+        <service id="fos_message.message_reader.default" class="FOS\MessageBundle\Reader\Reader" public="false">
+            <argument type="service" id="fos_message.participant_provider" />
+            <argument type="service" id="fos_message.message_manager" />
+            <argument type="service" id="event_dispatcher" />
+        </service>
+
+        <service id="fos_message.thread_reader.default" class="FOS\MessageBundle\Reader\Reader" public="false">
+            <argument type="service" id="fos_message.participant_provider" />
+            <argument type="service" id="fos_message.thread_manager" />
+            <argument type="service" id="event_dispatcher" />
+        </service>
+
+        <service id="fos_message.deleter.default" class="FOS\MessageBundle\Deleter\Deleter" public="false">
+            <argument type="service" id="fos_message.authorizer" />
+            <argument type="service" id="fos_message.participant_provider" />
+            <argument type="service" id="event_dispatcher" />
+        </service>
+
+        <service id="fos_message.twig_extension.default" class="FOS\MessageBundle\Twig\Extension\MessageExtension" public="false">
+            <argument type="service" id="fos_message.participant_provider" />
+            <argument type="service" id="fos_message.provider" />
+            <argument type="service" id="fos_message.authorizer" />
+            <tag name="twig.extension" alias="fos_message" />
+        </service>
+
+        <service id="fos_message.search_query_factory.default" class="FOS\MessageBundle\Search\QueryFactory" scope="request" public="true">
+            <argument type="service" id="request" />
+            <argument /> <!-- query parameter containing the search terms -->
+        </service>
+
+        <service id="fos_message.search_finder.default" class="FOS\MessageBundle\Search\Finder" public="true">
+            <argument type="service" id="fos_message.participant_provider" />
+            <argument type="service" id="fos_message.thread_manager" />
+        </service>
+
+    </services>
+
+</container>

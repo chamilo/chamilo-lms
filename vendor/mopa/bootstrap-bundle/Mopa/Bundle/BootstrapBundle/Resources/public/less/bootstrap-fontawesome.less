@@ -1,0 +1,43 @@
+/*!
+ * MopaBootstrapBundle
+ *
+ * Copyright 2011 Mohrenweiser & Partner
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Import this file in your less files as first to be abled to access less vars from your file
+ * OR
+ * Add it to the stylesheets of assetic or
+ * Add it as described on http://www.lesscss.org with the less.js (maybe pathes must be adapted in that case)
+ *
+ * Be careful when using less this way, might be most straight forward, but assetic doesnt check the included files
+ * for changes, and will only regenerate the css if it detects changes in this file!
+ *
+ * For development it might be easier to include all you less files in the layout directly
+ * But then assetic will compile each less file in a own compiler session so you cant mix in the less style into bootstrap, which might not be OK
+ */
+
+
+// Main bootstrap.less entry point
+@import "../bootstrap/less/bootstrap.less";
+
+// Font Awesome
+@import "font-awesome/font-awesome.less";
+
+// variables
+@FontAwesomePath:   "/bundles/mopabootstrap/font";
+@icon-font-path:    "/bundles/mopabootstrap/bootstrap/fonts/";
+
+// The Paginator less for MopaBootstrapBundle
+@import "paginator.less";
+
+// The Subnav less for MopaBootstrapBundle
+@import "subnav.less";
+
+// Collection support for MopaBootstrapBundle
+@import "collections.less";
+
+// Collection support for MopaBootstrapBundle
+@import "google-maps.less";
+
+// if you have any variables.less file INCLUDE IT AFTER EVERYTHING cause responsive.less also overrides it with the one from bootstrap!!!!!

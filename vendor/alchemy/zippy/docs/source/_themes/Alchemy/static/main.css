@@ -1,0 +1,12 @@
+html, body {
+    background-color: #CE8B15;
+    color: #543A1B;
+}
+
+.hero-unit, .well {
+    background-color: #CE8B15;
+}
+
+a, a:visited {
+    color: #B01122;
+}

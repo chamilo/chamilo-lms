@@ -1,0 +1,22 @@
+messenger:      Messagerie
+inbox:          Boîte de réception
+sent:           Envoyés
+deleted:        Supprimés
+send_new:       Envoyer un nouveau message
+search:         Rechercher
+threads_found:  %num% conversations trouvé avec | %num% conversations trouvés avec
+
+message_info:   De %sender%, le %date%
+reply:          Répondre
+
+subject:        Sujet
+starter:        Débuté par
+startdate:      Débuté le
+messages:       Messages
+last_message:   Dernier message
+actions:        Actions
+new:            Nouveau
+goto_last:      Aller au dernier message
+on:             Le %date%
+by:             De %sender%
+no_thread:      Aucune conversation

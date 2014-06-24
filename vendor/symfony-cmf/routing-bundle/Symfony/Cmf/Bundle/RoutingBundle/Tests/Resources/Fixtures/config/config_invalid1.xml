@@ -1,0 +1,9 @@
+<config xmlns="http://cmf.symfony.com/schema/dic/routing">
+
+    <dynamic>
+        <persistence>
+            <phpcr />
+            <orm />
+        </persistence>
+    </dynamic>
+</config>

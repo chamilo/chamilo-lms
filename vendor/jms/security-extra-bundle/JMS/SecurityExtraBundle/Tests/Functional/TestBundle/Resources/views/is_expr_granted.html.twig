@@ -1,0 +1,5 @@
+{% if (is_expr_granted("hasRole('FOO')")) -%}
+granted
+{%- else -%}
+denied
+{%- endif %}

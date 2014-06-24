@@ -1,0 +1,49 @@
+{
+    "name": "symfony-cmf/routing-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony RoutingBundle",
+    "keywords": ["routing", "database"],
+    "homepage": "http://cmf.symfony.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Symfony CMF Community",
+            "homepage": "https://github.com/symfony-cmf/RoutingBundle/contributors"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": false,
+    "require": {
+        "php": ">=5.3.3",
+        "symfony-cmf/routing": "~1.2.0",
+        "symfony/framework-bundle": "~2.3"
+    },
+    "require-dev": {
+        "symfony-cmf/core-bundle": "~1.1",
+        "symfony-cmf/testing": "1.1.*",
+        "matthiasnoback/symfony-dependency-injection-test": "0.*",
+        "matthiasnoback/symfony-config-test": "0.*",
+        "sonata-project/doctrine-phpcr-admin-bundle": "1.1.*",
+        "symfony/monolog-bundle": "2.3.*",
+        "doctrine/orm": "2.3.*"
+    },
+    "suggest": {
+        "doctrine/phpcr-odm": "To enable support for the PHPCR ODM documents",
+        "doctrine/phpcr-bundle": "To enable support for the PHPCR ODM documents",
+        "doctrine/orm": "To enable support for the ORM entities",
+
+        "symfony-cmf/content-bundle": "To optionally use the configured value for 'content_basepath' from the CoreBundle",
+        "symfony-cmf/core-bundle": "To use the provided Doctrine\\Phpcr documents and for easier configuration",
+
+        "sonata-project/doctrine-phpcr-admin-bundle": "To provide an admin interface for the PHPCR ODM documents"
+    },
+    "autoload": {
+        "psr-0": { "Symfony\\Cmf\\Bundle\\RoutingBundle": "" }
+    },
+    "target-dir": "Symfony/Cmf/Bundle/RoutingBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.2-dev"
+        }
+    }
+}

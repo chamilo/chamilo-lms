@@ -1,0 +1,5 @@
+cmf_routing:
+    dynamic:
+        persistence:
+            orm:
+                enabled: true

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="mopa_bootstrap.form.type_extension.button.class">Mopa\Bundle\BootstrapBundle\Form\Extension\IconButtonExtension</parameter>
+        <parameter key="mopa_bootstrap.form.type_extension.help.class">Mopa\Bundle\BootstrapBundle\Form\Extension\HelpFormTypeExtension</parameter>
+        <parameter key="mopa_bootstrap.form.type_extension.legend.class">Mopa\Bundle\BootstrapBundle\Form\Extension\LegendFormTypeExtension</parameter>
+        <parameter key="mopa_bootstrap.form.type_extension.error.class">Mopa\Bundle\BootstrapBundle\Form\Extension\ErrorTypeFormTypeExtension</parameter>
+        <parameter key="mopa_bootstrap.form.type_extension.widget.class">Mopa\Bundle\BootstrapBundle\Form\Extension\WidgetFormTypeExtension</parameter>
+        <parameter key="mopa_bootstrap.form.type_extension.horizontal.class">Mopa\Bundle\BootstrapBundle\Form\Extension\HorizontalFormTypeExtension</parameter>
+        <parameter key="mopa_bootstrap.form.type_extension.widget_collection.class">Mopa\Bundle\BootstrapBundle\Form\Extension\WidgetCollectionFormTypeExtension</parameter>
+        <parameter key="mopa_bootstrap.form.type_extension.date.class">Mopa\Bundle\BootstrapBundle\Form\Extension\DateTypeExtension</parameter>
+        <parameter key="mopa_bootstrap.form.type_extension.tabbed.class">Mopa\Bundle\BootstrapBundle\Form\Extension\TabbedFormTypeExtension</parameter>
+        <parameter key="mopa_bootstrap.form.type.tab.class">Mopa\Bundle\BootstrapBundle\Form\Type\TabType</parameter>
+    </parameters>
+
+    <services>
+        <service id="mopa_bootstrap.form.type_extension.button" class="%mopa_bootstrap.form.type_extension.button.class%">
+            <tag name="form.type_extension" alias="button" />
+        </service>
+
+        <service id="mopa_bootstrap.form.type_extension.help" class="%mopa_bootstrap.form.type_extension.help.class%">
+            <argument type="collection">
+                <argument key="help_label_tooltip">%mopa_bootstrap.form.help_label.tooltip%</argument>
+                <argument key="help_label_popover">%mopa_bootstrap.form.help_label.popover%</argument>
+                <argument key="help_widget_popover">%mopa_bootstrap.form.help_widget.popover%</argument>
+            </argument>
+
+            <tag name="form.type_extension" alias="form" />
+        </service>
+
+        <service id="mopa_bootstrap.form.type_extension.legend" class="%mopa_bootstrap.form.type_extension.legend.class%">
+            <argument type="collection">
+                <argument key="render_fieldset">%mopa_bootstrap.form.render_fieldset%</argument>
+                <argument key="show_legend">%mopa_bootstrap.form.show_legend%</argument>
+                <argument key="show_child_legend">%mopa_bootstrap.form.show_child_legend%</argument>
+                <argument key="render_required_asterisk">%mopa_bootstrap.form.render_required_asterisk%</argument>
+                <argument key="render_optional_text">%mopa_bootstrap.form.render_optional_text%</argument>
+            </argument>
+
+            <tag name="form.type_extension" alias="form" />
+        </service>
+
+        <service id="mopa_bootstrap.form.type_extension.error" class="%mopa_bootstrap.form.type_extension.error.class%">
+            <argument type="collection">
+                <argument key="error_type">%mopa_bootstrap.form.error_type%</argument>
+            </argument>
+
+            <tag name="form.type_extension" alias="form" />
+        </service>
+
+        <service id="mopa_bootstrap.form.type_extension.widget" class="%mopa_bootstrap.form.type_extension.widget.class%">
+            <argument type="collection">
+                <argument key="checkbox_label">%mopa_bootstrap.form.checkbox_label%</argument>
+            </argument>
+
+            <tag name="form.type_extension" alias="form" />
+        </service>
+
+        <service id="mopa_bootstrap.form.type_extension.horizontal" class="%mopa_bootstrap.form.type_extension.horizontal.class%">
+            <argument type="collection">
+                <argument key="horizontal_label_class">%mopa_bootstrap.form.horizontal_label_class%</argument>
+                <argument key="horizontal_label_offset_class">%mopa_bootstrap.form.horizontal_label_offset_class%</argument>
+                <argument key="horizontal_input_wrapper_class">%mopa_bootstrap.form.horizontal_input_wrapper_class%</argument>
+            </argument>
+
+            <tag name="form.type_extension" alias="form" />
+        </service>
+
+        <service id="mopa_bootstrap.form.type_extension.widget_collection" class="%mopa_bootstrap.form.type_extension.widget_collection.class%">
+            <argument type="collection">
+                <argument key="render_collection_item">%mopa_bootstrap.form.render_collection_item%</argument>
+                <argument key="widget_add_btn">%mopa_bootstrap.form.collection.widget_add_btn%</argument>
+                <argument key="widget_remove_btn">%mopa_bootstrap.form.collection.widget_remove_btn%</argument>
+            </argument>
+
+            <tag name="form.type_extension" alias="form" />
+        </service>
+
+        <service id="mopa_bootstrap.form.type_extension.date" class="%mopa_bootstrap.form.type_extension.date.class%">
+            <tag name="form.type_extension" alias="date" />
+        </service>
+
+        <service id="mopa_bootstrap.form.type_extension.tabbed" class="%mopa_bootstrap.form.type_extension.tabbed.class%">
+            <argument type="service" id="form.factory" />
+            <argument type="collection">
+                <argument key="class">%mopa_bootstrap.form.tabs.class%</argument>
+            </argument>
+
+            <tag name="form.type_extension" alias="form" />
+        </service>
+
+        <service id="mopa_bootstrap.form.type.tab" class="%mopa_bootstrap.form.type.tab.class%">
+            <tag name="form.type" alias="tab" />
+        </service>
+    </services>
+</container>

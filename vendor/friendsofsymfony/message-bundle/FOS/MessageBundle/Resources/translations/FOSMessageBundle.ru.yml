@@ -1,0 +1,21 @@
+messenger:      Мессенджер
+inbox:          Входящие
+sent:           Отправленные
+send_new:       Отправить новое сообщение
+search:         Поиск
+threads_found:  найдена %num% цепочка сообщений | найдено %num% цепочки сообщений | найдено %num% цепочек сообщений
+
+message_info:   От %sender%, %date%
+reply:          Ответить
+
+subject:        Тема
+starter:        Инициатор
+startdate:      Дата начала
+messages:       Сообщения
+last_message:   Последнее сообщение
+actions:        Действия
+new:            Новое
+goto_last:      К последнему сообщению
+on:             Дата %date%
+by:             От %sender%
+no_thread:      Нет сообщений для отображения

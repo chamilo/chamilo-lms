@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="cmf_routing.route_admin.class">Symfony\Cmf\Bundle\RoutingBundle\Admin\RouteAdmin</parameter>
+        <parameter key="cmf_routing.redirect_route_admin.class">Symfony\Cmf\Bundle\RoutingBundle\Admin\RedirectRouteAdmin</parameter>
+        <parameter key="cmf_routing.route_document.class">Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Phpcr\Route</parameter>
+        <parameter key="cmf_routing.redirect_route_document.class">Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Phpcr\RedirectRoute</parameter>
+        <parameter key="cmf_routing.admin_extension.route_referrers.class">Symfony\Cmf\Bundle\RoutingBundle\Admin\Extension\RouteReferrersExtension</parameter>
+    </parameters>
+
+    <services>
+
+        <service id="cmf_routing.route_admin" class="%cmf_routing.route_admin.class%">
+            <tag name="sonata.admin" manager_type="doctrine_phpcr" group="dashboard.cmf" label_catalogue="CmfRoutingBundle" label="dashboard.label_routing" label_translator_strategy="sonata.admin.label.strategy.underscore" />
+            <argument/>
+            <argument>%cmf_routing.route_document.class%</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+
+            <call method="setRouteBuilder">
+                <argument type="service" id="sonata.admin.route.path_info_slashes" />
+            </call>
+
+            <call method="setContentRoot">
+                <argument>%cmf_routing.dynamic.persistence.phpcr.content_basepath%</argument>
+            </call>
+
+            <call method="setRouteRoot">
+                <argument>%cmf_routing.dynamic.persistence.phpcr.admin_basepath%</argument>
+            </call>
+            <call method="setControllerResolver">
+                <argument type="service" id="controller_resolver" />
+            </call>
+        </service>
+
+        <service id="cmf_routing.redirect_route_admin" class="%cmf_routing.redirect_route_admin.class%">
+            <tag name="sonata.admin" manager_type="doctrine_phpcr" group="dashboard.cmf" label_catalogue="CmfRoutingBundle" label="dashboard.label_redirect_routing" label_translator_strategy="sonata.admin.label.strategy.underscore" />
+            <argument/>
+            <argument>%cmf_routing.redirect_route_document.class%</argument>
+            <argument>SonataAdminBundle:CRUD</argument>
+
+            <call method="setRouteBuilder">
+                <argument type="service" id="sonata.admin.route.path_info_slashes" />
+            </call>
+
+            <call method="setRouteRoot">
+                <argument>%cmf_routing.dynamic.persistence.phpcr.admin_basepath%</argument>
+            </call>
+        </service>
+
+        <service id="cmf_routing.admin_extension.route_referrers" class="%cmf_routing.admin_extension.route_referrers.class%">
+            <tag name="sonata.admin.extension"/>
+        </service>
+
+        <service id="cmf_routing.initializer" class="Doctrine\Bundle\PHPCRBundle\Initializer\GenericInitializer">
+            <argument>CmfRoutingBundle</argument>
+            <argument type="collection">
+                <argument>%cmf_routing.dynamic.persistence.phpcr.admin_basepath%</argument>
+            </argument>
+            <tag name="doctrine_phpcr.initializer"/>
+        </service>
+
+    </services>
+</container>

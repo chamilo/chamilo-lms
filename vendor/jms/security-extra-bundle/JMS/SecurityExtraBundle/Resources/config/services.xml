@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="security.secured_services" type="collection"></parameter>
+    
+        <parameter key="security.access.method_interceptor.class">JMS\SecurityExtraBundle\Security\Authorization\Interception\MethodSecurityInterceptor</parameter>
+        <parameter key="security.access.method_access_control" type="collection" />
+        
+        <parameter key="security.access.remembering_access_decision_manager.class">JMS\SecurityExtraBundle\Security\Authorization\RememberingAccessDecisionManager</parameter>
+
+        <parameter key="security.access.run_as_manager.class">JMS\SecurityExtraBundle\Security\Authorization\RunAsManager</parameter>
+        <parameter key="security.authentication.provider.run_as.class">JMS\SecurityExtraBundle\Security\Authentication\Provider\RunAsAuthenticationProvider</parameter>
+        <parameter key="security.run_as.key">RunAsToken</parameter>
+        <parameter key="security.run_as.role_prefix">ROLE_</parameter>
+
+        <parameter key="security.access.after_invocation_manager.class">JMS\SecurityExtraBundle\Security\Authorization\AfterInvocation\AfterInvocationManager</parameter>
+        <parameter key="security.access.after_invocation.acl_provider.class">JMS\SecurityExtraBundle\Security\Authorization\AfterInvocation\AclAfterInvocationProvider</parameter>
+        
+        <parameter key="security.access.iddqd_voter.class">JMS\SecurityExtraBundle\Security\Authorization\Voter\IddqdVoter</parameter>
+        
+        <parameter key="security.extra.metadata_factory.class">Metadata\MetadataFactory</parameter>
+        <parameter key="security.extra.lazy_loading_driver.class">Metadata\Driver\LazyLoadingDriver</parameter>
+        <parameter key="security.extra.driver_chain.class">Metadata\Driver\DriverChain</parameter>
+        <parameter key="security.extra.annotation_driver.class">JMS\SecurityExtraBundle\Metadata\Driver\AnnotationDriver</parameter>
+        <parameter key="security.extra.file_cache.class">Metadata\Cache\FileCache</parameter>
+    </parameters>
+
+    <services>
+        <service id="security.access.run_as_manager" class="%security.access.run_as_manager.class%" public="false">
+            <argument>%security.run_as.key%</argument>
+            <argument>%security.run_as.role_prefix%</argument>
+        </service>
+    
+        <service id="security.access.method_interceptor" class="%security.access.method_interceptor.class%">
+            <tag name="monolog.logger" channel="security" />
+            <argument type="service" id="security.context" />
+            <argument type="service" id="security.authentication.manager" />
+            <argument type="service" id="security.access.decision_manager" />
+            <argument type="service" id="security.access.after_invocation_manager" />
+            <argument type="service" id="security.access.run_as_manager" />
+            <argument type="service" id="security.extra.metadata_factory" />
+            <argument type="service" id="logger" on-invalid="null" />
+        </service>
+        
+        <service id="security.access.pointcut" class="JMS\SecurityExtraBundle\Security\Authorization\Interception\SecurityPointcut">
+            <argument type="service" id="security.extra.metadata_factory" />
+            <argument>%security.access.secure_all_services%</argument>
+            <argument>%security.access.method_access_control%</argument>
+        
+            <tag name="jms_aop.pointcut" interceptor="security.access.method_interceptor" />
+        </service>
+            
+        <service id="security.access.after_invocation_manager" class="%security.access.after_invocation_manager.class%" public="false">
+            <argument type="collection"></argument>
+        </service>
+        
+        <service id="security.access.after_invocation.acl_provider" class="%security.access.after_invocation.acl_provider.class%" public="false">
+            <argument type="service" id="security.acl.provider" />
+            <argument type="service" id="security.acl.object_identity_retrieval_strategy" />
+            <argument type="service" id="security.acl.security_identity_retrieval_strategy" />
+            <argument type="service" id="security.acl.permission.map" />
+            <tag name="security.after_invocation.provider" />
+        </service>
+        
+        <service id="security.extra.iddqd_voter" class="%security.access.iddqd_voter.class%" public="false">
+            <argument>%security.iddqd_aliases%</argument>
+            <argument>%security.extra.iddqd_ignore_roles%</argument>
+        </service>
+        
+        <service id="security.extra.driver_chain" class="%security.extra.driver_chain.class%" public="false">
+            <argument type="collection">
+                <argument type="service" id="security.extra.annotation_driver" />
+            </argument>
+        </service>
+        <service id="security.extra.metadata_driver" alias="security.extra.driver_chain"></service>
+        
+        <service id="security.extra.lazy_loading_driver" class="%security.extra.lazy_loading_driver.class%" public="false">
+            <argument type="service" id="service_container" />
+            <argument>security.extra.metadata_driver</argument>
+        </service>
+        
+        <service id="security.extra.annotation_driver" class="%security.extra.annotation_driver.class%" public="false">
+            <argument type="service" id="annotation_reader" />
+        </service>
+        
+        <service id="security.extra.file_cache" class="%security.extra.file_cache.class%" public="false">
+            <argument>%security.extra.cache_dir%</argument>
+            <argument>%kernel.debug%</argument>
+        </service>
+        
+        <service id="security.extra.metadata_factory" class="%security.extra.metadata_factory.class%" public="false">
+            <argument type="service" id="security.extra.lazy_loading_driver" />
+            <argument type="service" id="security.extra.file_cache" />
+            <call method="setIncludeInterfaces">
+                <argument>true</argument>
+            </call>
+        </service>
+    </services>
+
+</container>

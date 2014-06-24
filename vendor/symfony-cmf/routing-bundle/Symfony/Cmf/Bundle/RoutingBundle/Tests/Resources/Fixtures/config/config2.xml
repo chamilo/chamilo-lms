@@ -1,0 +1,17 @@
+<config xmlns="http://cmf.symfony.com/schema/dic/routing">
+
+    <dynamic route-collection-limit="12"
+        default-controller="acme_main.controller:mainAction"
+        uri-filter-regexp="/foo/"
+        route-provider-service-id="acme_service"
+        content-repository-service-id="acme_service"
+    >
+        <persistence>
+            <orm
+                manager-name="default"
+            />
+        </persistence>
+
+        <route-filter-by-id id="foo">bar</route-filter-by-id>
+    </dynamic>
+</config>

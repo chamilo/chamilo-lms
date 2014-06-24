@@ -32,7 +32,7 @@ class PRedisCache extends BaseCacheHandler
     public function __construct(array $parameters = array(), array $options = array())
     {
         $this->prefix  = $parameters;
-        $this->servers = $options;
+        $this->options = $options;
     }
 
     /**

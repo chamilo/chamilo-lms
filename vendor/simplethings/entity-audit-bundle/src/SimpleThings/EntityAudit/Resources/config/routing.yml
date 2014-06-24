@@ -1,0 +1,33 @@
+simple_things_entity_audit_home:
+    pattern: /{page}
+    defaults:
+        _controller: SimpleThingsEntityAuditBundle:Audit:index
+        page: 1
+    requirements:
+        page: \d+
+
+simple_things_entity_audit_viewrevision:
+    pattern: /viewrev/{rev}
+    defaults:
+        _controller: SimpleThingsEntityAuditBundle:Audit:viewRevision
+    requirements:
+        rev: \d+
+
+simple_things_entity_audit_viewentity_detail:
+    pattern: /viewent/{className}/{id}/{rev}
+    defaults:
+        _controller: SimpleThingsEntityAuditBundle:Audit:viewDetail
+    requirements:
+        rev: \d+
+
+simple_things_entity_audit_viewentity:
+    pattern: /viewent/{className}/{id}
+    defaults:
+        _controller: SimpleThingsEntityAuditBundle:Audit:viewEntity
+
+simple_things_entity_audit_compare:
+    pattern: /compare/{className}/{id}/{oldRev}/{newRev}
+    defaults:
+        _controller: SimpleThingsEntityAuditBundle:Audit:compare
+        oldRev: ~
+        newRev: ~

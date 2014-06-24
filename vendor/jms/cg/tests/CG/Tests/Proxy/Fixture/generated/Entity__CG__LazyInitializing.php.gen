@@ -1,0 +1,37 @@
+namespace CG\Tests\Proxy\Fixture;
+
+/**
+ * CG library enhanced proxy class.
+ *
+ * This code was generated automatically by the CG library, manual changes to it
+ * will be lost upon next generation.
+ */
+class Entity__CG__LazyInitializing extends \CG\Tests\Proxy\Fixture\Entity
+{
+    private $__CG__lazyInitializer;
+    private $__CG__initialized = false;
+
+    public function getName()
+    {
+        if (false === $this->__CG__initialized) {
+            $this->__CG__initialize();
+        }
+
+        return \CG\Tests\Proxy\Fixture\Entity::getName();
+    }
+
+    public function __CG__setLazyInitializer(\CG\Proxy\LazyInitializerInterface $initializer)
+    {
+        $this->__CG__lazyInitializer = $initializer;
+    }
+
+    private function __CG__initialize()
+    {
+        if (null === $this->__CG__lazyInitializer) {
+            throw new \RuntimeException("__CG__setLazyInitializer() must be called prior to any other public method on this object.");
+        }
+
+        $this->__CG__lazyInitializer->initializeObject($this);
+        $this->__CG__initialized = true;
+    }
+}

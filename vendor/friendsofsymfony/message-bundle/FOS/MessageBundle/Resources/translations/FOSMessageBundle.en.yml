@@ -1,0 +1,24 @@
+messenger:      Messenger
+inbox:          Inbox
+sent:           Sent
+deleted:        Deleted
+send_new:       Send a new message
+search:         Search
+threads_found:  %num% thread found with | %num% threads found with
+
+message_info:   By %sender%, on %date%
+reply:          Reply
+
+subject:        Subject
+starter:        Starter
+startdate:      StartDate
+messages:       Messages
+last_message:   Last message
+actions:        Actions
+new:            New
+goto_last:      Go to last message
+on:             On %date%
+by:             By %sender%
+no_thread:      There is no thread to show
+delete:         Delete
+undelete:       Undelete

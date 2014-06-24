@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="fos_message.validator.authorization" class="FOS\MessageBundle\Validator\AuthorizationValidator">
+            <argument type="service" id="fos_message.authorizer" />
+            <tag name="validator.constraint_validator" alias="fos_message.validator.authorization" />
+        </service>
+
+        <service id="fos_message.validator.reply_authorization" class="FOS\MessageBundle\Validator\ReplyAuthorizationValidator">
+            <argument type="service" id="fos_message.authorizer" />
+            <argument type="service" id="fos_message.participant_provider" />
+            <tag name="validator.constraint_validator" alias="fos_message.validator.reply_authorization" />
+        </service>
+
+        <service id="fos_message.validator.spam" class="FOS\MessageBundle\Validator\SpamValidator" scope="request">
+            <argument type="service" id="fos_message.spam_detector" />
+            <tag name="validator.constraint_validator" alias="fos_message.validator.spam" />
+        </service>
+
+        <service id="fos_message.validator.self_recipient" class="FOS\MessageBundle\Validator\SelfRecipientValidator">
+            <argument type="service" id="fos_message.participant_provider" />
+            <tag name="validator.constraint_validator" alias="fos_message.validator.self_recipient" />
+        </service>
+
+    </services>
+
+</container>

@@ -102,7 +102,7 @@ class ControllerGenerator extends Generator
             }
 
             $content .= sprintf(
-                "\n%s:\n    pattern: %s\n    defaults: { _controller: %s }\n",
+                "\n%s:\n    path:     %s\n    defaults: { _controller: %s }\n",
                 $name,
                 $action['route'],
                 $controller
@@ -124,7 +124,7 @@ EOT;
 
             $route = $sxe->addChild('route');
             $route->addAttribute('id', $name);
-            $route->addAttribute('pattern', $action['route']);
+            $route->addAttribute('path', $action['route']);
 
             $default = $route->addChild('default', $controller);
             $default->addAttribute('key', '_controller');

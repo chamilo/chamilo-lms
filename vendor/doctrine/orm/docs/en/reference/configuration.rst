@@ -100,7 +100,7 @@ Doctrine ships with a number of command line tools that are very helpful
 during development. You can call this command from the Composer binary
 directory:
 
-.. code-block:: sh
+.. code-block::
 
     $ php vendor/bin/doctrine
 

@@ -430,7 +430,12 @@ class CourseHome
                 $col_link ="##003399";
                 break;
             case TOOL_AUTHORING:
-                $sql = "SELECT * FROM $course_tool_table WHERE category = 'authoring' AND c_id = $course_id $condition_session ORDER BY id";
+                $sql = "SELECT * FROM $course_tool_table
+                        WHERE
+                            category = 'authoring' AND
+                            c_id = $course_id
+                            $condition_session
+                        ORDER BY id";
 
                 $result = Database::query($sql);
                 $col_link ="##003399";

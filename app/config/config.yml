@@ -151,6 +151,7 @@ doctrine:
             json: Sonata\Doctrine\Types\JsonType
             #currency: Sonata\Component\Currency\CurrencyDoctrineType
     orm:
+
         auto_generate_proxy_classes: "%kernel.debug%"
         default_entity_manager: default
         # auto_mapping: true

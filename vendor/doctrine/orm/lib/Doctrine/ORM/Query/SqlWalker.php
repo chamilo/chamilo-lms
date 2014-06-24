@@ -1497,7 +1497,6 @@ class SqlWalker implements TreeWalker
                     break;
             }
 
-            $fieldType = 'string';
             switch (true) {
                 case ($e instanceof AST\PathExpression):
                     $fieldName = $e->field;
@@ -1517,6 +1516,10 @@ class SqlWalker implements TreeWalker
                             $fieldType = is_float($e->value) ? 'float' : 'integer';
                             break;
                     }
+                    break;
+
+                default:
+                    $fieldType = 'string';
                     break;
             }
 

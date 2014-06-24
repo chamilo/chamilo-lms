@@ -27,7 +27,7 @@ Available Options
 
 * ``--controller``: The controller name given as a shortcut notation containing 
   the bundle name in which the controller is located and the name of the 
-  bundle. For instance: ``AcmeBlogBundle:Post`` (creates a ``PostController`` 
+  controller. For instance: ``AcmeBlogBundle:Post`` (creates a ``PostController``
   inside the ``AcmeBlogBundle`` bundle):
 
     .. code-block:: bash
@@ -36,7 +36,7 @@ Available Options
 
 * ``--actions``: The list of actions to generate in the controller class. This
   has a format like ``%actionname%:%route%:%template`` (where ``:%template%``
-  is optional:
+  is optional):
 
     .. code-block:: bash
 

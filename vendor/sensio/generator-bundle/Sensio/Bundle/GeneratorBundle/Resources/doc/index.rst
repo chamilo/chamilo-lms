@@ -9,7 +9,7 @@ Doctrine 2 schema.
 Installation
 ------------
 
-`Download`_ the bundle and put it under the ``Sensio\\Bundle\\`` namespace.
+`Download`_ the bundle and put it under the ``Sensio\Bundle`` namespace.
 Then, like for any other bundle, include it in your Kernel class::
 
     public function registerBundles()
@@ -68,7 +68,7 @@ about the available templates, their path, and the variables they have access.
 Instead of copy/pasting the original template to create your own, you can also
 extend it and only override the relevant parts:
 
-.. code-block: jinja
+.. code-block:: jinja
 
   {# in app/Resources/SensioGeneratorBundle/skeleton/crud/actions/create.php.twig #}
 
@@ -88,7 +88,7 @@ easy inheritance and to avoid copy/pasting large chunks of code.
 In some cases, templates in the skeleton include other ones, like
 in the ``crud/views/edit.html.twig.twig`` template for instance:
 
-.. code-block: jinja
+.. code-block:: jinja
 
   {% include 'crud/views/others/record_actions.html.twig.twig' %}
 
@@ -96,7 +96,7 @@ If you have defined a custom template for this template, it is going to be
 used instead of the default one. But you can explicitly include the original
 skeleton template by prefixing its path with ``skeleton/`` like we did above:
 
-.. code-block: jinja
+.. code-block:: jinja
 
   {% include 'skeleton/crud/views/others/record_actions.html.twig.twig' %}
 

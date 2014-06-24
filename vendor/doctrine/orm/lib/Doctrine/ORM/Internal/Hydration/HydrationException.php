@@ -88,18 +88,4 @@ class HydrationException extends \Doctrine\ORM\ORMException
             $discrColumnName, $entityName, $dqlAlias
         ));
     }
-    
-    /**
-     * @param string $discrValue
-     * @param array  $discrMap
-     *
-     * @return HydrationException
-     */
-    public static function invalidDiscriminatorValue($discrValue, $discrMap)
-    {
-        return new self(sprintf(
-            'The discriminator value "%s" is invalid. It must be one of "%s".',
-            $discrValue, implode('", "', $discrMap)
-        ));
-    }
 }

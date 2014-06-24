@@ -11,7 +11,7 @@
 
 namespace Sensio\Bundle\GeneratorBundle\Command;
 
-use Doctrine\Bundle\DoctrineBundle\Mapping\MetadataFactory;
+use Doctrine\Bundle\DoctrineBundle\Mapping\DisconnectedMetadataFactory;
 
 abstract class GenerateDoctrineCommand extends GeneratorCommand
 {
@@ -33,7 +33,7 @@ abstract class GenerateDoctrineCommand extends GeneratorCommand
 
     protected function getEntityMetadata($entity)
     {
-        $factory = new MetadataFactory($this->getContainer()->get('doctrine'));
+        $factory = new DisconnectedMetadataFactory($this->getContainer()->get('doctrine'));
 
         return $factory->getClassMetadata($entity)->getMetadata();
     }

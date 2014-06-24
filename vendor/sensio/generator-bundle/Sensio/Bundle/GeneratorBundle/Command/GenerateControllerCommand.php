@@ -31,32 +31,10 @@ class GenerateControllerCommand extends GeneratorCommand
     {
         $this
             ->setDefinition(array(
-                new InputOption(
-                    'controller',
-                    '',
-                    InputOption::VALUE_REQUIRED,
-                    'The name of the controller to create'
-                ),
-                new InputOption(
-                    'route-format',
-                    '',
-                    InputOption::VALUE_REQUIRED,
-                    'The format that is used for the routing (yml, xml, php, annotation)',
-                    'annotation'
-                ),
-                new InputOption(
-                    'template-format',
-                    '',
-                    InputOption::VALUE_REQUIRED,
-                    'The format that is used for templating (twig, php)',
-                    'twig'
-                ),
-                new InputOption(
-                    'actions',
-                    '',
-                    InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-                    'The actions in the controller'
-                ),
+                new InputOption('controller', '', InputOption::VALUE_REQUIRED, 'The name of the controller to create'),
+                new InputOption('route-format', '', InputOption::VALUE_REQUIRED, 'The format that is used for the routing (yml, xml, php, annotation)', 'annotation'),
+                new InputOption('template-format', '', InputOption::VALUE_REQUIRED, 'The format that is used for templating (twig, php)', 'twig'),
+                new InputOption('actions', '', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'The actions in the controller'),
             ))
             ->setDescription('Generates a controller')
             ->setHelp(<<<EOT
@@ -171,7 +149,7 @@ EOT
         $input->setOption('route-format', $routeFormat);
 
         // templating format
-        $validateTemplateFormat = function($format) {
+        $validateTemplateFormat = function ($format) {
             if (!in_array($format, array('twig', 'php'))) {
                 throw new \InvalidArgumentException(sprintf('The template format must be twig or php, "%s" given', $format));
             }
@@ -212,7 +190,7 @@ EOT
             '',
         ));
 
-        $templateNameValidator = function($name) {
+        $templateNameValidator = function ($name) {
             if ('default' == $name) {
                 return $name;
             }

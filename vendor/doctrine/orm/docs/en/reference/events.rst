@@ -207,13 +207,10 @@ listeners:
 
 
 -  Lifecycle Callbacks are methods on the entity classes that are
-   called when the event is triggered. As of v2.4 they receive some kind
-   of ``EventArgs`` instance.
+   called when the event is triggered. They receives some kind of ``EventArgs``.
 -  Lifecycle Event Listeners and Subscribers are classes with specific callback
-   methods that receives some kind of ``EventArgs`` instance.
-
-The EventArgs instance received by the listener gives access to the entity,
-EntityManager and other relevant data.
+   methods that receives some kind of ``EventArgs`` instance which
+   give access to the entity, EntityManager or other relevant data.
 
 .. note::
 
@@ -227,11 +224,10 @@ EntityManager and other relevant data.
 Lifecycle Callbacks
 -------------------
 
-Lifecycle Callbacks are defined on an entity class. They allow you to
-trigger callbacks whenever an instance of that entity class experiences
-a relevant lifecycle event. More than one callback can be defined for each
-lifecycle event. Lifecycle Callbacks are best used for simple operations
-specific to a particular entity class's lifecycle.
+A lifecycle event is a regular event with the additional feature of
+providing a mechanism to register direct callbacks inside the
+corresponding entity classes that are executed when the lifecycle
+event occurs.
 
 .. code-block:: php
 
@@ -281,9 +277,8 @@ specific to a particular entity class's lifecycle.
         }
     }
 
-Note that the methods set as lifecycle callbacks need to be public and,
-when using these annotations, you have to apply the
-``@HasLifecycleCallbacks`` marker annotation on the entity class.
+Note that when using annotations you have to apply the
+@HasLifecycleCallbacks marker annotation on the entity class.
 
 If you want to register lifecycle callbacks from YAML or XML you
 can do it with the following.
@@ -299,10 +294,6 @@ can do it with the following.
       lifecycleCallbacks:
         prePersist: [ doStuffOnPrePersist, doOtherStuffOnPrePersistToo ]
         postPersist: [ doStuffOnPostPersist ]
-
-In YAML the ``key`` of the lifecycleCallbacks entry is the event that you
-are triggering on and the value is the method (or methods) to call. The allowed
-event types are the ones listed in the previous Lifecycle Events section.
 
 XML would look something like this:
 
@@ -326,14 +317,9 @@ XML would look something like this:
 
     </doctrine-mapping>
 
-In XML the ``type`` of the lifecycle-callback entry is the event that you
-are triggering on and the ``method`` is the method to call. The allowed event
-types are the ones listed in the previous Lifecycle Events section.
-
-When using YAML or XML you need to remember to create public methods to match the
-callback names you defined. E.g. in these examples ``doStuffOnPrePersist()``,
-``doOtherStuffOnPrePersist()`` and ``doStuffOnPostPersist()`` methods need to be
-defined on your ``User`` model.
+You just need to make sure a public ``doStuffOnPrePersist()`` and
+``doStuffOnPostPersist()`` method is defined on your ``User``
+model.
 
 .. code-block:: php
 
@@ -389,10 +375,8 @@ Listening and subscribing to Lifecycle Events
 
 Lifecycle event listeners are much more powerful than the simple
 lifecycle callbacks that are defined on the entity classes. They
-sit at a level above the entities and allow you to implement re-usable
-behaviors across different entity classes.
-
-Note that they require much more detailed knowledge about the inner
+allow to implement re-usable behaviors between different entity
+classes, yet require much more detailed knowledge about the inner
 workings of the EntityManager and UnitOfWork. Please read the
 *Implementing Event Listeners* section carefully if you are trying
 to write your own listener.
@@ -492,8 +476,8 @@ data and lost updates/persists/removes.
 
 For the described events that are also lifecycle callback events
 the restrictions apply as well, with the additional restriction
-that (prior to version 2.4) you do not have access to the
-EntityManager or UnitOfWork APIs inside these events.
+that you do not have access to the EntityManager or UnitOfWork APIs
+inside these events.
 
 prePersist
 ~~~~~~~~~~
@@ -517,9 +501,11 @@ The following restrictions apply to ``prePersist``:
 -  If you are using a PrePersist Identity Generator such as
    sequences the ID value will *NOT* be available within any
    PrePersist events.
--  Doctrine will not recognize changes made to relations in a prePersist
-   event. This includes modifications to
-   collections such as additions, removals or replacement.
+-  Doctrine will not recognize changes made to relations in a pre
+   persist event called by "reachability" through a cascade persist
+   unless you use the internal ``UnitOfWork`` API. We do not recommend
+   such operations in the persistence by reachability context, so do
+   this at your own risk and possibly supported by unit-tests.
 
 preRemove
 ~~~~~~~~~
@@ -713,8 +699,7 @@ Restrictions for this event:
    recognized by the flush operation anymore.
 -  Changes to fields of the passed entities are not recognized by
    the flush operation anymore, use the computed change-set passed to
-   the event to modify primitive field values, e.g. use
-   ``$eventArgs->setNewValue($field, $value);`` as in the Alice to Bob example above.
+   the event to modify primitive field values.
 -  Any calls to ``EntityManager#persist()`` or
    ``EntityManager#remove()``, even in combination with the UnitOfWork
    API are strongly discouraged and don't work as expected outside the
@@ -784,10 +769,9 @@ An ``Entity Listener`` could be any class, by default it should be a class with 
 
 - Different from :ref:`reference-events-implementing-listeners` an ``Entity Listener`` is invoked just to the specified entity
 - An entity listener method receives two arguments, the entity instance and the lifecycle event.
-- The callback method can be defined by naming convention or specifying a method mapping.
-- When a listener mapping is not given the parser will use the naming convention to look for a matching method,
-  e.g. it will look for a public ``preUpdate()`` method if you are listening to the ``preUpdate`` event.
-- When a listener mapping is given the parser will not look for any methods using the naming convention.
+- A callback method could be defined by naming convention or specifying a method mapping.
+- When the listener mapping is not given the parser will lookup for methods that match with the naming convention.
+- When the listener mapping is given the parser won't lookup for any naming convention.
 
 .. code-block:: php
 

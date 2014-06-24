@@ -66,9 +66,8 @@ EOT
         $entityClass = $this->getContainer()->get('doctrine')->getAliasNamespace($bundle).'\\'.$entity;
         $metadata = $this->getEntityMetadata($entityClass);
         $bundle   = $this->getApplication()->getKernel()->getBundle($bundle);
+        $generator = $this->getGenerator($bundle);
 
-        $generator = new DoctrineFormGenerator($this->getContainer()->get('filesystem'));
-        $generator->setSkeletonDirs($this->getSkeletonDirs($bundle));
         $generator->generate($bundle, $entity, $metadata[0]);
 
         $output->writeln(sprintf(

@@ -100,9 +100,9 @@ class LimitSubqueryOutputWalker extends SqlWalker
                 $hiddens[$idx] = $expr->hiddenAliasResultVariable;
                 $expr->hiddenAliasResultVariable = false;
             }
-
+            
             $innerSql = parent::walkSelectStatement($AST);
-
+    
             // Restore hiddens
             foreach ($AST->selectClause->selectExpressions as $idx => $expr) {
                 $expr->hiddenAliasResultVariable = $hiddens[$idx];
@@ -160,8 +160,11 @@ class LimitSubqueryOutputWalker extends SqlWalker
         $sql = sprintf('SELECT DISTINCT %s FROM (%s) dctrn_result',
             implode(', ', $sqlIdentifier), $innerSql);
 
-        // http://www.doctrine-project.org/jira/browse/DDC-1958
-        $sql = $this->preserveSqlOrdering($AST, $sqlIdentifier, $innerSql, $sql);
+        if ($this->platform instanceof PostgreSqlPlatform ||
+            $this->platform instanceof OraclePlatform) {
+            //http://www.doctrine-project.org/jira/browse/DDC-1958
+            $this->preserveSqlOrdering($AST, $sqlIdentifier, $innerSql, $sql);
+        }
 
         // Apply the limit and offset.
         $sql = $this->platform->modifyLimitQuery(
@@ -178,7 +181,7 @@ class LimitSubqueryOutputWalker extends SqlWalker
 
         return $sql;
     }
-
+    
     /**
      * Generates new SQL for Postgresql or Oracle if necessary.
      *
@@ -189,7 +192,7 @@ class LimitSubqueryOutputWalker extends SqlWalker
      *
      * @return void
      */
-    public function preserveSqlOrdering(SelectStatement $AST, array $sqlIdentifier, $innerSql, $sql)
+    public function preserveSqlOrdering(SelectStatement $AST, array $sqlIdentifier, $innerSql, &$sql)
     {
         // For every order by, find out the SQL alias by inspecting the ResultSetMapping.
         $sqlOrderColumns = array();
@@ -212,6 +215,11 @@ class LimitSubqueryOutputWalker extends SqlWalker
             $sqlOrderColumns = array_diff($sqlOrderColumns, $sqlIdentifier);
         }
 
+        // We don't need orderBy in inner query.
+        // However at least on 5.4.6 I'm getting a segmentation fault and thus we don't clear it for now.
+        /*$AST->orderByClause = null;
+        $innerSql = parent::walkSelectStatement($AST);*/
+
         if (count($orderBy)) {
             $sql = sprintf(
                 'SELECT DISTINCT %s FROM (%s) dctrn_result ORDER BY %s',
@@ -220,7 +228,5 @@ class LimitSubqueryOutputWalker extends SqlWalker
                 implode(', ', $orderBy)
             );
         }
-
-        return $sql;
     }
 }

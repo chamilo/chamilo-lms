@@ -24,21 +24,27 @@ class MessageListener
 
     protected function getMessages()
     {
+        return array();
+
         $threads = $this->container->get('fos_message.provider')->getInboxThreads();
         $security = $this->container->get('security.context');
         $token = $security->getToken();
-        $user = $token->getUser();
-        $messages = array();
 
-        /** @var \ChamiloLMS\CoreBundle\Entity\Thread $thread*/
-        foreach ($threads as $thread) {
-            if ($thread->isReadByParticipant($user)) {
-                foreach($thread->getMessages() as $message) {
-                    $messages[] = $message;
+        $user = $token->getUser();
+        if (!empty($user)) {
+            $messages = array();
+
+            /** @var \ChamiloLMS\CoreBundle\Entity\Thread $thread */
+            foreach ($threads as $thread) {
+                if ($thread->isReadByParticipant($user)) {
+                    foreach ($thread->getMessages() as $message) {
+                        $messages[] = $message;
+                    }
                 }
             }
+
+            return $messages;
         }
 
-        return $messages;
     }
 }

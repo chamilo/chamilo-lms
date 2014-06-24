@@ -34,7 +34,7 @@ abstract class BaseController extends Controller
     }
 
     /**
-     * @return Symfony\Component\HttpFoundation\Session\SessionInterface
+     * @return \Symfony\Component\HttpFoundation\Session\SessionInterface
      */
     public function getSessionHandler()
     {
@@ -55,6 +55,18 @@ abstract class BaseController extends Controller
     public function abort()
     {
         return new NotFoundHttpException();
+    }
+
+    /**
+     * @param string $message
+     * @param string $class
+     */
+    public function addMessage($message, $class)
+    {
+        $this->get('session')->getFlashBag()->add(
+            $class,
+            $message
+        );
     }
 
     /**
@@ -232,7 +244,6 @@ abstract class BaseController extends Controller
      */
     public function getCourse()
     {
-        var_dump($this->getSessionHandler()->get('course'));
         return $this->getSessionHandler()->get('course');
     }
 

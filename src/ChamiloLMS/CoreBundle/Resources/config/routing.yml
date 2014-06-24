@@ -3,11 +3,6 @@ index:
     type:     annotation
     prefix:   /
 
-front:
-    resource: "@ChamiloLMSCoreBundle/Controller/FrontController.php"
-    type:     annotation
-    prefix:   /front
-
 # legacy routes
 main:
     path:     /main/{name}

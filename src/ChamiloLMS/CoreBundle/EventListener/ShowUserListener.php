@@ -19,16 +19,22 @@ class ShowUserListener
     public function onShowUser(ShowUserEvent $event)
     {
         $user = $this->getUser();
-        $event->setUser($user);
+        if (!empty($user)) {
+            $event->setUser($user);
+        }
     }
 
     public function getUser()
     {
+        /** @var  $security */
         $security = $this->container->get('security.context');
         $token = $security->getToken();
 
-
-        // $user = $this->getUser();
-        return $token->getUser();
+        if ($token) {
+            $user = $token->getUser();
+            if ($user) {
+                return $user;
+            }
+        }
     }
 }

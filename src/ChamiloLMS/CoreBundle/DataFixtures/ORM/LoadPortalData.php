@@ -258,9 +258,6 @@ class LoadPortalData extends AbstractFixture implements ContainerAwareInterface,
         $manager->persist($tool);
 
         $manager->flush();
-
-
-
     }
 
     /**

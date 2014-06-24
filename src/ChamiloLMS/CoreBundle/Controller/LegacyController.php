@@ -48,16 +48,15 @@ class LegacyController extends BaseController
         Session::$urlGenerator = $this->container->get('router');
         Session::$security = $this->container->get('security.context');
         Session::$translator = $this->container->get('translator');
-
         Session::$assets = $this->container->get('templating.helper.assets');
-
         Session::$rootDir = $this->container->get('kernel')->getRealRootDir();
         Session::$logDir = $this->container->get('kernel')->getLogDir();
         Session::$dataDir = $this->container->get('kernel')->getDataDir();
         Session::$tempDir = $this->container->get('kernel')->getCacheDir();
         Session::$courseDir = $this->container->get('kernel')->getDataDir();
-        Session::$configDir = $this->container->get('kernel')->getConfigDir();
+        //Session::$configDir = $this->container->get('kernel')->getConfigDir();
         Session::$htmlEditor = $this->container->get('html_editor');
+        Session::$twig = $this->container->get('twig');
 
         if (is_file($fileToLoad) &&
             \Security::check_abs_path($fileToLoad, $mainPath)

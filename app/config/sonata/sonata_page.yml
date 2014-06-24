@@ -22,6 +22,7 @@ sonata_page:
         - ^_(.*)            # ignore symfony routes
         - login
         - home
+        - homepage
         - (.*)fos_user_(.*)
 
     ignore_routes:
@@ -82,7 +83,8 @@ sonata_page:
                      F: footer
 
         2columns:
-            path: 'ApplicationSonataPageBundle::default_2columns_layout.html.twig'
+            #path: 'ApplicationSonataPageBundle::default_2columns_layout.html.twig'
+            path: 'ChamiloLMSCoreBundle::main_layout.html.twig'
             name: '2 columns layout'
             containers:
                  header:

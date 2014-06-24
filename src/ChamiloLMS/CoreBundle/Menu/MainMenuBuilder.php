@@ -22,8 +22,8 @@ class MainMenuBuilder extends ContainerAware
     /**
      * Constructor
      *
-     * @param MenuFactory                     $factory
-     * @param RouterInterface                 $router
+     * @param MenuFactory $factory
+     * @param RouterInterface $router
      */
     public function __construct(FactoryInterface $factory, RouterInterface $router)
     {

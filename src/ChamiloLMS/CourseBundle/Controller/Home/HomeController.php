@@ -13,12 +13,13 @@ use ChamiloLMS\CoreBundle\Entity\CTool;
 use ChamiloLMS\CoreBundle\Form\CourseHomeToolType;
 use Doctrine\Common\Collections\Criteria;
 use Display;
+use CourseHome;
 use ChamiloLMS\CoreBundle\Entity\Course;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 /**
  * Class HomeController
- * @package ChamiloLMS\CourseBundle\Controller\CourseHome
+ * @package ChamiloLMS\CourseBundle\Controller\Home
  * @author Julio Montoya <gugli100@gmail.com>
  * @Route("/")
  */
@@ -58,7 +59,7 @@ class HomeController extends ToolBaseController
             $editIcons = Display::url(
                 Display::return_icon('edit.png'),
                 $this->generateUrl(
-                    'chamilolms_course_home_coursehome_iconlist',
+                    'chamilolms_course_home_home_iconlist',
                     array(
                         'course' => api_get_course_id(),
                     )
@@ -92,18 +93,16 @@ class HomeController extends ToolBaseController
             }
         }
 
-        $script =  'activity.php';
         if (api_get_setting('homepage_view') == 'activity' || api_get_setting('homepage_view') == 'activity_big') {
-            $script =  'activity.php';
+            $result = $this->renderActivityView();
         } elseif (api_get_setting('homepage_view') == '2column') {
-            $script = '2column.php';
+            $result = $this->render2ColumnView();
         } elseif (api_get_setting('homepage_view') == '3column') {
-            $script = '3column.php';
+            $result = $this->render3ColumnView();
         } elseif (api_get_setting('homepage_view') == 'vertical_activity') {
-            $script = 'vertical_activity.php';
+            $result = $this->renderVerticalActivityView();
         }
 
-        $result = require_once api_get_path(SYS_CODE_PATH).'course_home/'.$script;
         $toolList = $result['tool_list'];
 
         $introduction = Display::return_introduction_section(
@@ -113,11 +112,11 @@ class HomeController extends ToolBaseController
         );
         $sessionInfo = null;
         if (api_get_setting('show_session_data') == 'true' && $sessionId) {
-            $sessionInfo = \CourseHome::show_session_data($sessionId);
+            $sessionInfo = CourseHome::show_session_data($sessionId);
         }
 
         /*$response = $this->render(
-            'ChamiloLMSCoreBundle:Tool:CourseHome/index.html.twig',
+            'ChamiloLMSCoreBundle:Tool:Home/index.html.twig',
             array(
                 'session_info' => $sessionInfo,
                 'icons' => $result['content'],
@@ -131,7 +130,7 @@ class HomeController extends ToolBaseController
         return new Response($response, 200, array());*/
 
         return $this->render(
-            'ChamiloLMSCourseBundle:CourseHome:index.html.twig',
+            'ChamiloLMSCourseBundle:Home:index.html.twig',
             array(
                 'session_info' => $sessionInfo,
                 'icons' => $result['content'],
@@ -141,6 +140,85 @@ class HomeController extends ToolBaseController
                 'lp_warning' => null
             )
         );
+    }
+
+    function return_block($title, $content)
+    {
+        $html = '<div class="page-header">
+                <h3>'.$title.'</h3>
+            </div>
+            '.$content.'</div>';
+        return $html;
+    }
+
+    private function renderActivityView()
+    {
+        $session_id = api_get_session_id();
+        $urlGenerator = $this->get('router');
+
+        $content = null;
+
+        // Start of tools for CourseAdmins (teachers/tutors)
+        $totalList = array();
+
+        if ($session_id == 0 && api_is_course_admin() && api_is_allowed_to_edit(null, true)) {
+            $list = CourseHome::get_tools_category(TOOL_AUTHORING);
+            $result = CourseHome::show_tools_category($urlGenerator, $list);
+            $content .= $this->return_block(get_lang('Authoring'), $result['content']);
+
+            $totalList = $result['tool_list'];
+
+            $list = CourseHome::get_tools_category(TOOL_INTERACTION);
+            $list2 = CourseHome::get_tools_category(TOOL_COURSE_PLUGIN);
+            $list = array_merge($list, $list2);
+            $result =  CourseHome::show_tools_category($urlGenerator, $list);
+            $totalList = array_merge($totalList, $result['tool_list']);
+
+            $content .= $this->return_block(get_lang('Interaction'), $result['content']);
+
+            $list = CourseHome::get_tools_category(TOOL_ADMIN_PLATFORM);
+            $totalList = array_merge($totalList, $list);
+            $result = CourseHome::show_tools_category($urlGenerator, $list);
+            $totalList = array_merge($totalList, $result['tool_list']);
+            $content .= $this->return_block(get_lang('Administration'), $result['content']);
+
+        } elseif (api_is_coach()) {
+
+            $content .=  '<div class="row">';
+            $list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
+            $content .= CourseHome::show_tools_category($urlGenerator, $result['content']);
+            $totalList = array_merge($totalList, $result['tool_list']);
+            $content .= '</div>';
+        } else {
+            $list = CourseHome::get_tools_category(TOOL_STUDENT_VIEW);
+            if (count($list) > 0) {
+                $content .= '<div class="row">';
+                $result = CourseHome::show_tools_category($urlGenerator, $list);
+                $content .= $result['content'];
+                $totalList = array_merge($totalList, $result['tool_list']);
+                $content .= '</div>';
+            }
+        }
+
+        return array(
+            'content' => $content,
+            'tool_list' => $totalList
+        );
+    }
+
+    private function render2ColumnView()
+    {
+
+    }
+
+    private function render3ColumnView()
+    {
+
+    }
+
+    private function renderVerticalActivityView()
+    {
+
     }
 
     /**

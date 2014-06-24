@@ -76,7 +76,6 @@ class LoadPageData extends AbstractFixture implements ContainerAwareInterface, O
         $site->setEnabledTo(new \DateTime('+20 years'));
         $site->setRelativePath("");
         $site->setIsDefault(true);
-
         $this->getSiteManager()->save($site);
 
         return $site;
@@ -229,11 +228,11 @@ CONTENT
      */
     public function createHomePage(SiteInterface $site)
     {
-        return;
         $pageManager = $this->getPageManager();
         $blockManager = $this->getBlockManager();
         $blockInteractor = $this->getBlockInteractor();
 
+        /** @var \Sonata\PageBundle\Model\Page $homepage */
         $this->addReference('page-homepage', $homepage = $pageManager->create());
         $homepage->setSlug('/');
         $homepage->setUrl('/');
@@ -243,43 +242,28 @@ CONTENT
         $homepage->setDecorate(0);
         $homepage->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
         $homepage->setTemplateCode('2columns');
-        $homepage->setRouteName('homepage');
+        $homepage->setRouteName(PageInterface::PAGE_ROUTE_CMS_NAME);
         $homepage->setSite($site);
-
         $pageManager->save($homepage);
 
-        // CREATE A HEADER BLOCK
+        // Header
         $homepage->addBlocks($contentTop = $blockInteractor->createNewContainer(array(
             'enabled' => true,
             'page' => $homepage,
             'code' => 'content_top',
         )));
-
         $contentTop->setName('The container top container');
-
         $blockManager->save($contentTop);
 
-        // add a block text
+        // Add a block text for the header
         $contentTop->addChildren($text = $blockManager->create());
         $text->setType('sonata.block.service.text');
-        $text->setSetting('content', <<<CONTENT
-<div class="col-md-3 welcome"><h2>Welcome</h2></div>
-<div class="col-md-9">
-    <p>
-        This page is a demo.
-    </p>
-
-    <p>
-        Pages.
-    </p>
-</div>
-CONTENT
-        );
+        $text->setSetting('content', 'Welcome to Chamilo (header)');
         $text->setPosition(1);
         $text->setEnabled(true);
         $text->setPage($homepage);
 
-
+        // Create content block
         $homepage->addBlocks($content = $blockInteractor->createNewContainer(array(
             'enabled' => true,
             'page' => $homepage,
@@ -288,7 +272,17 @@ CONTENT
         $content->setName('The content container');
         $blockManager->save($content);
 
-        /*
+        // Add a block text for the content
+        $contentTop->addChildren($text = $blockManager->create());
+        $text->setType('sonata.block.service.text');
+        $text->setSetting('content', 'Welcome to chamilo (content)');
+        $text->setPosition(1);
+        $text->setEnabled(true);
+        $text->setPage($homepage);
+
+        return;
+
+
         // Add media gallery block
         $content->addChildren($gallery = $blockManager->create());
         $gallery->setType('sonata.media.block.gallery');
@@ -299,58 +293,60 @@ CONTENT
         $gallery->setEnabled(true);
         $gallery->setPage($homepage);
 
-        // Add recent products block
-        $content->addChildren($newProductsBlock = $blockManager->create());
-        $newProductsBlock->setType('sonata.product.block.recent_products');
-        $newProductsBlock->setSetting('number', 4);
-        $newProductsBlock->setSetting('title', 'New products');
-        $newProductsBlock->setPosition(2);
-        $newProductsBlock->setEnabled(true);
-        $newProductsBlock->setPage($homepage);
+        /*
 
-        // Add homepage bottom container
-        $homepage->addBlocks($bottom = $blockInteractor->createNewContainer(array(
-            'enabled' => true,
-            'page'    => $homepage,
-            'code'    => 'content_bottom',
-        ), function ($container) {
-            $container->setSetting('layout', '{{ CONTENT }}');
-        }));
-        $bottom->setName('The bottom content container');
+       // Add recent products block
+       $content->addChildren($newProductsBlock = $blockManager->create());
+       $newProductsBlock->setType('sonata.product.block.recent_products');
+       $newProductsBlock->setSetting('number', 4);
+       $newProductsBlock->setSetting('title', 'New products');
+       $newProductsBlock->setPosition(2);
+       $newProductsBlock->setEnabled(true);
+       $newProductsBlock->setPage($homepage);
 
-        // Add homepage newsletter container
-        $bottom->addChildren($bottomNewsletter = $blockInteractor->createNewContainer(array(
-            'enabled' => true,
-            'page'    => $homepage,
-            'code'    => 'bottom_newsletter',
-        ), function ($container) {
-            $container->setSetting('layout', '<div class="block-newsletter col-sm-6 well">{{ CONTENT }}</div>');
-        }));
-        $bottomNewsletter->setName('The bottom newsetter container');
-        $bottomNewsletter->addChildren($newsletter = $blockManager->create());
-        $newsletter->setType('sonata.demo.block.newsletter');
-        $newsletter->setPosition(1);
-        $newsletter->setEnabled(true);
-        $newsletter->setPage($homepage);
+       // Add homepage bottom container
+       $homepage->addBlocks($bottom = $blockInteractor->createNewContainer(array(
+           'enabled' => true,
+           'page'    => $homepage,
+           'code'    => 'content_bottom',
+       ), function ($container) {
+           $container->setSetting('layout', '{{ CONTENT }}');
+       }));
+       $bottom->setName('The bottom content container');
 
-        // Add homepage embed tweet container
-        $bottom->addChildren($bottomEmbed = $blockInteractor->createNewContainer(array(
-            'enabled' => true,
-            'page'    => $homepage,
-            'code'    => 'bottom_embed',
-        ), function ($container) {
-            $container->setSetting('layout', '<div class="col-sm-6">{{ CONTENT }}</div>');
-        }));
-        $bottomEmbed->setName('The bottom embedded tweet container');
-        $bottomEmbed->addChildren($embedded = $blockManager->create());
-        $embedded->setType('sonata.seo.block.twitter.embed');
-        $embedded->setPosition(1);
-        $embedded->setEnabled(true);
-        $embedded->setSetting('tweet', "https://twitter.com/dunglas/statuses/438337742565826560");
-        $embedded->setSetting('lang', "en");
-        $embedded->setPage($homepage);
+       // Add homepage newsletter container
+       $bottom->addChildren($bottomNewsletter = $blockInteractor->createNewContainer(array(
+           'enabled' => true,
+           'page'    => $homepage,
+           'code'    => 'bottom_newsletter',
+       ), function ($container) {
+           $container->setSetting('layout', '<div class="block-newsletter col-sm-6 well">{{ CONTENT }}</div>');
+       }));
+       $bottomNewsletter->setName('The bottom newsetter container');
+       $bottomNewsletter->addChildren($newsletter = $blockManager->create());
+       $newsletter->setType('sonata.demo.block.newsletter');
+       $newsletter->setPosition(1);
+       $newsletter->setEnabled(true);
+       $newsletter->setPage($homepage);
 
-        $pageManager->save($homepage);*/
+       // Add homepage embed tweet container
+       $bottom->addChildren($bottomEmbed = $blockInteractor->createNewContainer(array(
+           'enabled' => true,
+           'page'    => $homepage,
+           'code'    => 'bottom_embed',
+       ), function ($container) {
+           $container->setSetting('layout', '<div class="col-sm-6">{{ CONTENT }}</div>');
+       }));
+       $bottomEmbed->setName('The bottom embedded tweet container');
+       $bottomEmbed->addChildren($embedded = $blockManager->create());
+       $embedded->setType('sonata.seo.block.twitter.embed');
+       $embedded->setPosition(1);
+       $embedded->setEnabled(true);
+       $embedded->setSetting('tweet', "https://twitter.com/dunglas/statuses/438337742565826560");
+       $embedded->setSetting('lang', "en");
+       $embedded->setPage($homepage);
+
+       $pageManager->save($homepage);*/
     }
 
     /**

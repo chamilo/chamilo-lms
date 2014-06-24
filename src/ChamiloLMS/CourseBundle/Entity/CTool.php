@@ -121,7 +121,7 @@ class CTool
     private $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity="ChamiloLMS\CoreBundle\Entity\Course")
+     * @ORM\ManyToOne(targetEntity="ChamiloLMS\CoreBundle\Entity\Course", inversedBy="tools")
      * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
      */
     private $course;
@@ -132,6 +132,9 @@ class CTool
      */
     public function __construct()
     {
+        // Default values
+        $this->id = 0;
+        $this->sessionId = 0;
     }
 
     /**

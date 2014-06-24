@@ -123,6 +123,8 @@ function api_purify_language_id($language)
  */
 function api_get_language_isocode($language = null, $default_code = 'en')
 {
+    return Session::getTranslator()->getLocale();
+
     static $iso_code = array();
     if (empty($language)) {
         $language = api_get_interface_language(false, true);

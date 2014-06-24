@@ -2,13 +2,14 @@
 
 namespace ChamiloLMS\CoreBundle\Entity;
 
+use ChamiloLMS\CourseBundle\Entity\CTool;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Course
- *
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="course")
  * @ORM\Entity(repositoryClass="ChamiloLMS\CoreBundle\Entity\Repository\CourseRepository")
  */
@@ -222,20 +223,29 @@ class Course
     private $items;
 
     /**
+     * @ORM\OneToMany(targetEntity="ChamiloLMS\CourseBundle\Entity\CTool", mappedBy="course", cascade={"persist"})
+     **/
+    private $tools;
+
+    /**
      * ORM\OneToMany(targetEntity="CurriculumCategory", mappedBy="course")
      **/
     //private $curriculumCategories;
 
+    /**
+     *
+     */
+    public function __construct()
+    {
+    }
+
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return strval($this->getTitle());
     }
-
-    /*public function __construct()
-    {
-        $this->users = new ArrayCollection();
-        $this->items = new ArrayCollection();
-    }*/
 
     /**
      * @return mixed
@@ -251,6 +261,35 @@ class Course
     public function getItems()
     {
         return $this->items;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getTools()
+    {
+        return $this->tools;
+    }
+
+    /**
+     * @param $tools
+     */
+    public function setTools($tools)
+    {
+        $this->tools = new ArrayCollection();
+
+        foreach ($tools as $tool) {
+            $this->addTool($tool);
+        }
+    }
+
+    /**
+     * @param CTool $tool
+     */
+    public function addTools(CTool $tool)
+    {
+        $tool->setCourse($this);
+        $this->tools[] = $tool;
     }
 
     /**

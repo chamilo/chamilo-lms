@@ -19,6 +19,7 @@ class ChamiloSession
     public static $configDir;
     public static $assets;
     public static $htmlEditor;
+    public static $twig;
 
     /**
      * @return string
@@ -28,6 +29,9 @@ class ChamiloSession
         return self::$configDir;
     }
 
+    /**
+     * @return string
+     */
     public static function getLogDir()
     {
         return self::$logDir;
@@ -63,6 +67,14 @@ class ChamiloSession
     public static function getCourseDir()
     {
         return self::$courseDir;
+    }
+
+    /**
+     * @return Twig_Environment
+     */
+    public static function getTwig()
+    {
+        return self::$twig;
     }
 
     /**

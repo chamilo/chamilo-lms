@@ -2,11 +2,14 @@
 
 namespace ChamiloLMS\CoreBundle\Admin;
 
+use ChamiloLMS\CoreBundle\Entity\Listener\CourseListener;
+use ChamiloLMS\CourseBundle\Entity\CTool;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use ChamiloLMS\CourseBundle\ToolChain;
 
 use Knp\Menu\ItemInterface as MenuItemInterface;
 
@@ -80,8 +83,8 @@ class CourseAdmin extends Admin
     {
         $listMapper
             ->addIdentifier('id')
-            ->addIdentifier('code')
             ->addIdentifier('title')
+            ->addIdentifier('code')
         ;
     }
 
@@ -94,5 +97,63 @@ class CourseAdmin extends Admin
     {
         $course->setUsers($course->getUsers());
         $course->setUrls($course->getUrls());
+        $this->updateTools($course);
+    }
+
+    /**
+     * @param Course $course
+     * @return mixed|void
+     */
+    public function prePersist($course)
+    {
+        $this->updateTools($course);
+    }
+
+    /***
+     * @param Course $course
+     */
+    public function updateTools($course)
+    {
+        $toolChain = $this->getToolChain();
+        $tools = $toolChain->getTools();
+
+        $currentTools = $course->getTools();
+        $addedTools = array();
+        if (!empty($currentTools)) {
+            foreach ($currentTools as $tool) {
+                $addedTools[] = $tool->getName();
+            }
+        }
+
+        foreach ($tools as $tool) {
+            $toolName = $tool->getName();
+            if (!in_array($toolName, $addedTools)) {
+
+                $toolEntity = new CTool();
+                $toolEntity->setCId($course->getId());
+                $toolEntity->setName($tool->getName());
+                $toolEntity->setLink($tool->getLink());
+                $toolEntity->setTarget($tool->getTarget());
+                $toolEntity->setCategory($tool->getCategory());
+
+                $course->addTools($toolEntity);
+            }
+        }
+    }
+
+    /**
+     * @param ToolChain $chainTool
+     */
+    public function setToolChain(ToolChain $chainTool)
+    {
+        $this->toolChain = $chainTool;
+    }
+
+    /**
+     * @return ToolChain
+     */
+    public function getToolChain()
+    {
+        return $this->toolChain;
     }
 }

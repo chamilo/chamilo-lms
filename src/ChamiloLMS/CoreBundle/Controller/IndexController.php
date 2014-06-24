@@ -11,12 +11,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Finder\Finder;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-//use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use JMS\SecurityExtraBundle\Annotation\Secure;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 /**
  * Class IndexController
@@ -25,11 +23,6 @@ use JMS\SecurityExtraBundle\Annotation\Secure;
  */
 class IndexController extends BaseController
 {
-    /**
-     * @Route("/home", name="homepage")
-     * @Method({"GET"})
-     * @return Response
-     */
     public function indexAction()
     {
         /** @var \PageController $pageController */
@@ -77,7 +70,7 @@ class IndexController extends BaseController
         return $this->render(
             'ChamiloLMSCoreBundle:Index:index.html.twig',
             array(
-                'content' => null,
+                'content' => 'hello',
                 'hot_courses' => $hotCourses,
                 'announcements_block' => $announcementsBlock,
                 //'home_page_block' => $pageController->returnHomePage()
@@ -85,98 +78,6 @@ class IndexController extends BaseController
         );
     }
 
-    /**
-     * @param Application $app
-     * @return Response
-     */
-    public function loginAction(Application $app)
-    {
-        $request = $this->getRequest();
-        $app['template']->assign('error', $app['security.last_error']($request));
-        $extra = array();
-        if (api_get_setting('use_virtual_keyboard') == 'true') {
-            $extra[] = api_get_css(api_get_path(WEB_LIBRARY_JS_PATH).'keyboard/keyboard.css');
-            $extra[] = api_get_js('keyboard/jquery.keyboard.js');
-        }
-        $app['template']->addResource($extra, 'string');
-        $response = $app['template']->render_template('auth/login.tpl');
-        return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
-    }
-
-    /**
-     * @param
-     *
-     * @return string
-     */
-    public function displayLoginForm()
-    {
-        /* {{ form_widget(form) }}
-          $form = $app['form.factory']->createBuilder('form')
-          ->add('name')
-          ->add('email')
-          ->add('gender', 'choice', array(
-          'choices' => array(1 => 'male', 2 => 'female'),
-          'expanded' => true,
-          ))
-          ->getForm();
-          return $app['template']->assign('form', $form->createView());
-         */
-        $form = new \FormValidator(
-            'formLogin',
-            'POST',
-            $this->get('url_generator')->generate('secured_login_check'),
-            null,
-            array('class'=> 'form-signin-block')
-        );
-
-        $form->addElement(
-            'text',
-            'username',
-            null,
-            array(
-                'class' => 'input-medium autocapitalize_off virtualkey',
-                'placeholder' => get_lang('UserName'),
-                'autofocus' => 'autofocus',
-                'icon' => 'fa fa-user fa-fw'
-            )
-        );
-
-        $form->addElement(
-            'password',
-            'password',
-            null,
-            array(
-                'placeholder' => get_lang('Pass'),
-                'class' => 'input-medium virtualkey',
-                'icon' => 'fa fa-key fa-fw'
-            )
-        );
-
-        $form->addElement('style_submit_button', 'submitAuth', get_lang('LoginEnter'), array('class' => 'btn btn-primary btn-block'));
-        $html = $form->return_form();
-
-        /** Verify if settings is active to set keyboard. Included extra class in form input elements */
-
-        if (api_get_setting('use_virtual_keyboard') == 'true') {
-            $html .= "<script>
-                $(function(){
-                    $('.virtualkey').keyboard({
-                        layout:'custom',
-                        customLayout: {
-                        'default': [
-                            '1 2 3 4 5 6 7 8 9 0 {bksp}',
-                            'q w e r t y u i o p',
-                            'a s d f g h j k l',
-                            'z x c v b n m',
-                            '{cancel} {accept}'
-                        ]
-                        }
-                    });
-                });
-            </script>";
-        }
-        return $html;
-    }
 
     /**
      * @todo move all this getDocument* actions into another controller
@@ -312,62 +213,9 @@ class IndexController extends BaseController
     }
 
     /**
-     * Reacts on a failed login.
-     * Displays an explanation with a link to the registration form.
-     *
-     * @todo use twig template to prompt errors + move this into a helper
-     */
-    private function handleLoginFailed($error)
-    {
-        $message = get_lang('InvalidId');
-
-        if (!isset($error)) {
-            if (api_is_self_registration_allowed()) {
-                $message = get_lang('InvalidForSelfRegistration');
-            }
-        } else {
-            switch ($error) {
-                case '':
-                    if (api_is_self_registration_allowed()) {
-                        $message = get_lang('InvalidForSelfRegistration');
-                    }
-                    break;
-                case 'account_expired':
-                    $message = get_lang('AccountExpired');
-                    break;
-                case 'account_inactive':
-                    $message = get_lang('AccountInactive');
-                    break;
-                case 'user_password_incorrect':
-                    $message = get_lang('InvalidId');
-                    break;
-                case 'access_url_inactive':
-                    $message = get_lang('AccountURLInactive');
-                    break;
-                case 'unrecognize_sso_origin':
-                    //$message = get_lang('SSOError');
-                    break;
-            }
-        }
-        return \Display::return_message($message, 'error');
-    }
-
-    public function dashboardAction()
-    {
-        /*$template = $this->getTemplate();
-
-        $template->assign('content', 'welcome!');
-        $response = $template->renderLayout('layout_2_col.tpl');
-
-        //return new Response($response, 200, array('Cache-Control' => 's-maxage=3600, public'));
-        return new Response($response, 200, array());*/
-    }
-
-    /**
      * @Route("/userportal", name="userportal")
      * @Method({"GET"})
-     * Security("has_role('ROLE_USER')")
-     * @Secure(roles="ROLE_STUDENT")
+     * @Security("has_role('ROLE_USER')")
      *
      * @param string $type courses|sessions|mycoursecategories
      * @param string $filter for the userportal courses page. Only works when setting 'history'
@@ -377,9 +225,7 @@ class IndexController extends BaseController
     public function userPortalAction($type = 'courses', $filter = 'current', $page = 1)
     {
         $user = $this->getUser();
-
         $pageController = new \ChamiloLMS\CoreBundle\Framework\PageController();
-
         $items = null;
 
         if (!empty($user)) {
@@ -449,6 +295,7 @@ class IndexController extends BaseController
      * Toggle the student view action
      *
      * @Route("/toggle_student_view")
+     * @Security("has_role('ROLE_TEACHER')")
      * @Method({"GET"})
      *
      * @return Response

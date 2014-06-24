@@ -1,0 +1,19 @@
+parameters:
+    tool_chain.class: ChamiloLMS\CourseBundle\ToolChain
+services:
+    chamilolms.tool_chain:
+        class: %tool_chain.class%
+
+    chamilolms.coursebundle.tool.calendar.class:
+        class: ChamiloLMS\CourseBundle\Tool\Calendar
+        arguments:
+            - calendar
+        tags:
+            - { name: chamilolm.course.tool }
+
+    chamilolms.coursebundle.tool.document.class:
+        class: ChamiloLMS\CourseBundle\Tool\Document
+        arguments:
+            - document
+        tags:
+            - { name: chamilolm.course.tool }

@@ -25,6 +25,11 @@
                 {% endif -%}
                 {{ data.uri }}
             </span>
+           {% if data.tags is defined %}
+                {% for tag in data.tags %}
+                <span class="tag">{{ tag }}</span>
+                {% endfor %}
+            {%  endif %}
         </h3>
         <ul class="options">
             {% if data.description is defined %}
@@ -230,7 +235,7 @@
                                         </p>
                                     {% endif %}
                                     {% endfor %}
-                                    <button class="add">New parameter</button>
+                                    <button type="button" class="add">New parameter</button>
                                 {% endif %}
 
                             </fieldset>
@@ -252,7 +257,7 @@
                                     <input type="text" class="value" placeholder="Value" /> <span class="remove">-</span>
                                 </p>
 
-                                <button class="add">New header</button>
+                                <button type="button" class="add">New header</button>
                             </fieldset>
 
                             <fieldset class="request-content">
@@ -264,7 +269,7 @@
                                     <input type="text" class="key content-type" value="Content-Type" disabled="disabled" />
                                     <span>=</span>
                                     <input type="text" class="value" placeholder="Value" />
-                                    <button class="set-content-type">Set header</button> <small>Replaces header if set</small>
+                                    <button  type="button" class="set-content-type">Set header</button> <small>Replaces header if set</small>
                                 </p>
                             </fieldset>
 

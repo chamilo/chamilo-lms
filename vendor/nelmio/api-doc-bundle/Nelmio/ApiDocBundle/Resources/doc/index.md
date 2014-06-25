@@ -127,6 +127,8 @@ The following properties are available:
 
 * `deprecated`: allow to set method as deprecated (default: `false`);
 
+* `tags`: allow to tag a method (e.g. `beta` or `in-development`). Either a single tag or an array of tags. 
+
 * `filters`: an array of filters;
 
 * `requirements`: an array of requirements;
@@ -326,11 +328,15 @@ configure this sandbox using the following parameters:
                                                     # sandbox requests
 
             request_format:
+                formats:                            # default `json` and `xml`,
+                    json: application/json          # override to add custom formats or disable
+                    xml: application/xml            # default formats
+
                 method: format_param    # default `format_param`, alternately `accept_header`,
                                         # decides how to request the response format
 
-                default_format: json    # default `json`, alternately `xml`, determines which
-                                        # content format to request back by default
+                default_format: json    # default `json`,
+                                        # default content format to request (see formats)
 
 ### Command
 
@@ -416,6 +422,9 @@ nelmio_api_doc:
         accept_type:          ~
         body_format:          form
         request_format:
+            formats:
+                json: application/json
+                xml: application/xml
             method:               format_param
             default_format:       json
         authentication:

@@ -76,7 +76,7 @@ function WSHelperVerifyKey($params) {
 // Create the server instance
 $server = new soap_server();
 
-//$server->soap_defencoding = 'UTF-8';
+$server->soap_defencoding = 'UTF-8';
 
 // Initialize WSDL support
 $server->configureWSDL('WSRegistration', 'urn:WSRegistration');
@@ -5370,4 +5370,14 @@ function WSUserSubscribedInCourse ($params)
 
 // Use the request to (try to) invoke the service
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
+// If you send your data in utf8 then this value must be false.
+if (isset($_configuration['registration.soap.php.decode_utf8'])) {
+    if ($_configuration['registration.soap.php.decode_utf8']) {
+        $server->decode_utf8 = true;
+    } else {
+        $server->decode_utf8 = false;
+    }
+}
+
 $server->service($HTTP_RAW_POST_DATA);
+

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- * Definition of language-related functions for cases where th user isn't 
+ * Definition of language-related functions for cases where th user isn't
  * logged in yet
  * @package chamilo.custompages
  */
@@ -35,11 +35,11 @@ function custompages_get_lang($variable) {
 	return get_lang($variable, null, $_SESSION['user_language_choice']);
 }
 
-$language_file = array('courses', 'index', 'registration', 'admin','userInfo');
-$available_langs = array('en','fr');
+$language_file = array('courses', 'index', 'registration', 'admin', 'userInfo');
+$available_langs = array('en', 'fr', 'es');
 $chamilo_langs = array(null => 'english', 'en' => 'english', 'fr' => 'french', 'nl' => 'dutch', 'de' => 'german', 'es' => 'spanish');
 $lang_match = $chamilo_langs[get_preferred_language($available_langs)];
-// recover previous value ... 
+// recover previous value ...
 if (isset($_SESSION['user_language_choice']))
 	$lang_match = $_SESSION['user_language_choice'];
 
@@ -52,5 +52,6 @@ if (isset($_REQUEST['lang']) && !empty($_REQUEST['lang']) && in_array($_REQUEST[
 	$lang_match = $chamilo_langs[$_REQUEST['lang']];
 }
 $_user['language'] = $lang_match;
+
 $_SESSION['user_language_choice'] = $lang_match;
-?>
+

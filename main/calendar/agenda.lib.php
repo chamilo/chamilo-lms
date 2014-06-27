@@ -1224,7 +1224,7 @@ class Agenda
                 if ($user_id == 0) {
                     $where_condition = "";
                 } else {
-                    $where_condition = " ( ip.to_user_id = ".$user_id. ") AND ";
+                    $where_condition = " ( ip.to_user_id = ".$user_id. " OR ip.to_group_id='0' ) AND ";
                 }
                 $visibilityCondition = " (ip.visibility IN ('1', '0')) AND ";
             } else {

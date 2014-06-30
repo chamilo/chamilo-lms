@@ -222,7 +222,6 @@ $(document).ready(function() {
             function(stream) {
                 if (window.IsChrome) stream = new window.MediaStream(stream.getAudioTracks());
                 preview.src = myURL.createObjectURL(stream);
-                    console.log(preview.src);
                 preview.play();
 
                 recordAudio = RecordRTC(stream, {

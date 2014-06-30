@@ -230,18 +230,22 @@ class Nanogong
 			}
 		}
 
-		//temp_exe
+		// temp_exe
 		if ($load_from_database) {
 
 			//Load the real filename just if exists
-			if (isset($this->params['exe_id']) && isset($this->params['user_id']) && isset($this->params['question_id']) && isset($this->params['session_id']) && isset($this->params['course_id'])) {
+			if (isset($this->params['exe_id']) && isset($this->params['user_id']) &&
+                isset($this->params['question_id']) && isset($this->params['session_id']) && isset($this->params['course_id'])
+            ) {
 				$attempt_table = Database::get_statistic_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 				$sql = "SELECT filename FROM $attempt_table
-								WHERE 	exe_id 		= ".$this->params['exe_id']." AND
-										user_id 	= ".$this->params['user_id']." AND
-										question_id = ".$this->params['question_id']." AND
-										session_id 	= ".$this->params['session_id']." AND
-										course_code = '".$this->course_info['code']."' LIMIT 1";
+                        WHERE
+                            exe_id 		= ".$this->params['exe_id']." AND
+                            user_id 	= ".$this->params['user_id']." AND
+                            question_id = ".$this->params['question_id']." AND
+                            session_id 	= ".$this->params['session_id']." AND
+                            course_code = '".$this->course_info['code']."'
+                        LIMIT 1";
 				$result = Database::query($sql);
 				$result = Database::fetch_row($result,'ASSOC');
 
@@ -254,6 +258,7 @@ class Nanogong
 		if (is_file($this->store_path.$filename)) {
 			return $this->store_path.$filename;
 		}
+
 		return null;
 	}
 
@@ -267,8 +272,8 @@ class Nanogong
 	 */
     public function get_public_url($force_download = 0)
     {
-		$params = $this->get_params(true);
-		$url = api_get_path(WEB_AJAX_PATH).'nanogong.ajax.php?a=get_file&download='.$force_download.'&'.$params;
+		//$params = $this->get_params(true);
+		//$url = api_get_path(WEB_AJAX_PATH).'nanogong.ajax.php?a=get_file&download='.$force_download.'&'.$params;
 		$params = $this->get_params();
 		$filename = basename($this->load_filename_if_exists());
         $url = api_get_path(WEB_COURSE_PATH).$this->course_info['path'].'/exercises/'.$params['session_id'].'/'.$params['exercise_id'].'/'.$params['question_id'].'/'.$params['user_id'].'/'.$filename;
@@ -320,6 +325,7 @@ class Nanogong
 				}
 			}
 		}
+
 		return 0;
 	}
 
@@ -364,7 +370,6 @@ class Nanogong
 					$html .= '<div class="action_player">'.$actions.'</div>';
 					$html .= '<div class="nanogong_player">';
 						$html .= '<applet id="nanogong_player" archive="'.api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar" code="gong.NanoGong" width="250" height="95" ALIGN="middle">';
-
 						$html .= '<param name="ShowRecordButton" value="false" />'; // default true
 						$html .= '<param name="ShowSaveButton" value="false" />'; //you can save in local computer | (default true)
 						//echo '<param name="ShowAudioLevel" value="false" />'; //  it displays the audiometer | (default true)
@@ -375,7 +380,6 @@ class Nanogong
 						//echo '<param name="EndTime" value="65" />';
 						$html .= '<param name="AudioFormat" value="ImaADPCM" />';// ImaADPCM (more speed), Speex (more compression)|(default Speex)
 						//$html .= '<param name="AudioFormat" value="Speex" />';// ImaADPCM (more speed), Speex (more compression)|(default Speex)
-
 						//Quality for ImaADPCM (low 8000, medium 11025, normal 22050, hight 44100) OR Quality for Speex (low 8000, medium 16000, normal 32000, hight 44100) | (default 44100)
 						//echo '<param name="SamplingRate" value="32000" />';
 						//echo '<param name="MaxDuration" value="60" />';
@@ -383,15 +387,10 @@ class Nanogong
 						$html .= '</applet>';
 					$html .= '</div>';
 				$html .= '</div>';
-
-                $html .= '<div id="nanogong_warning">'.Display::return_message(
-                    get_lang('BrowserDoesNotSupportNanogongPlayer'),
-                    'warning'
-                ).$download_button.'</div>';
+                $html .= '<div id="nanogong_warning">'.Display::return_message(get_lang('BrowserDoesNotSupportNanogongPlayer'), 'warning').$download_button.'</div>';
 
 			} elseif(in_array($path_info['extension'],array('mp3', 'ogg','wav'))) {
-				$js_path 		= api_get_path(WEB_LIBRARY_PATH).'javascript/';
-
+				$js_path = api_get_path(WEB_LIBRARY_PATH).'javascript/';
 				$html .= '<link rel="stylesheet" href="'.$js_path.'jquery-jplayer/skins/blue/jplayer.blue.monday.css" type="text/css">';
                 //$html .= '<link rel="stylesheet" href="' . $js_path . 'jquery-jplayer/skins/chamilo/jplayer.blue.monday.css" type="text/css">';
 				$html .= '<script type="text/javascript" src="'.$js_path.'jquery-jplayer/jquery.jplayer.min.js"></script>';
@@ -405,8 +404,6 @@ class Nanogong
                     'count'=> 1
                  );
                 $jquery = DocumentManager::generate_jplayer_jquery($params);
-
-
 				$html .= '<script>
 				$(document).ready( function() {
 				    //Experimental changes to preview mp3, ogg files

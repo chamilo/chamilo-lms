@@ -459,4 +459,5 @@ learnpath::generate_learning_path_folder($course_info);
 //Deleting the objects
 Session::erase('oLP');
 Session::erase('lpobject');
+DocumentManager::removeGeneratedAudioTempFile();
 Display::display_footer();

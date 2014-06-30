@@ -2117,10 +2117,12 @@ class learnpath
         $tbl_lp_item_view 	= Database :: get_course_table(TABLE_LP_ITEM_VIEW);
 
         // Getting all the information about the item.
-        $sql = "SELECT * FROM ".$tbl_lp_item." as lp INNER  JOIN ".$tbl_lp_item_view." as lp_view on lp.id = lp_view.lp_item_id ".
-                "WHERE  lp.id = '".$_SESSION['oLP']->current."' AND
-                        lp.c_id = $course_id AND
-                        lp_view.c_id = $course_id";
+        $sql = "SELECT * FROM ".$tbl_lp_item." as lp
+                INNER JOIN ".$tbl_lp_item_view." as lp_view on lp.id = lp_view.lp_item_id
+                WHERE
+                    lp.id = '".$_SESSION['oLP']->current."' AND
+                    lp.c_id = $course_id AND
+                    lp_view.c_id = $course_id";
         $result = Database::query($sql);
         $row 	= Database::fetch_assoc($result);
         $output = '';
@@ -2151,11 +2153,12 @@ class learnpath
             $audio = $row['audio'];
 
             $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$audio;
-            $url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$audio;
+            $url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$audio.'?'.api_get_cidreq();
+
             if (!file_exists($file)) {
                 $lpPathInfo = $_SESSION['oLP']->generate_lp_folder(api_get_course_info());
                 $file = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$lpPathInfo['dir'].$audio;
-                $url = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$lpPathInfo['dir'].$audio;
+                $url = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$lpPathInfo['dir'].$audio.'?'.api_get_cidreq();
             }
 
             $player = Display::getMediaPlayer(

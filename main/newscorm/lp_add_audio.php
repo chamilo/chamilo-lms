@@ -86,11 +86,11 @@ $lpPathInfo = $_SESSION['oLP']->generate_lp_folder(api_get_course_info());
 $file = null;
 if (isset($lp_item->audio) && !empty($lp_item->audio)) {
     $file = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document/audio/'.$lp_item->audio;
-    $urlFile = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/audio/'.$lp_item->audio;
+    $urlFile = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document/audio/'.$lp_item->audio.'?'.api_get_cidreq();
 
     if (!file_exists($file)) {
         $file = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document'.$lpPathInfo['dir'].$lp_item->audio;
-        $urlFile = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$lpPathInfo['dir'].$lp_item->audio;
+        $urlFile = api_get_path(WEB_COURSE_PATH).$_course['path'].'/document'.$lpPathInfo['dir'].$lp_item->audio.'?'.api_get_cidreq();
     }
 }
 
@@ -127,7 +127,9 @@ if (!empty($file)) {
 $form->addElement('hidden', 'id', $lp_item_id);
 
 if (!empty($file)) {
-    $audioPlayer = '<div id="preview">'.Display::getMediaPlayer($file, array('url' => $urlFile))."</div>";
+    $audioPlayer = '<div id="preview">'.
+        Display::getMediaPlayer($file, array('url' => $urlFile)).
+        "</div>";
     $form->addElement('label', get_lang('Preview'), $audioPlayer);
 }
 

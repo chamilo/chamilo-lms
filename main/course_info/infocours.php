@@ -427,6 +427,7 @@ if ($form->validate() && is_settings_editable()) {
         'legal',
         'activate_legal'
     );
+
     foreach ($updateValues as $index =>$value) {
         $updateValues[$index] = Database::escape_string($value);
     }
@@ -458,11 +459,12 @@ if ($form->validate() && is_settings_editable()) {
         );
     }
 
-    $appPlugin->saveCourseSettingsHook($update_values);
+    $appPlugin->saveCourseSettingsHook($updateValues);
     $cidReset = true;
     $cidReq = $course_code;
     require '../inc/local.inc.php';
-    header('Location: infocours.php?action=show_message&cidReq='.$course_code);
+    $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?action=show_message&cidReq='.$course_code;
+    header("Location: $url");
     exit;
 }
 

@@ -35,15 +35,32 @@ $tbl_session_category				= Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY)
 
 $table_access_url_user              = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 
-$sql = 'SELECT name, nbr_courses, nbr_users, nbr_classes, DATE_FORMAT(date_start,"%d-%m-%Y") as date_start, DATE_FORMAT(date_end,"%d-%m-%Y") as date_end, lastname, firstname, username, session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id, visibility
-		FROM '.$tbl_session.' LEFT JOIN '.$tbl_user.' ON id_coach = user_id
+$sql = 'SELECT
+            name,
+            nbr_courses,
+            nbr_users,
+            nbr_classes,
+            DATE_FORMAT(date_start,"%d-%m-%Y") as date_start,
+            DATE_FORMAT(date_end,"%d-%m-%Y") as date_end,
+            lastname,
+            firstname,
+            username,
+            session_admin_id,
+            nb_days_access_before_beginning,
+            nb_days_access_after_end,
+            session_category_id,
+            visibility
+		FROM '.$tbl_session.'
+		LEFT JOIN '.$tbl_user.'
+		ON id_coach = user_id
 		WHERE '.$tbl_session.'.id='.$id_session;
 
 $rs      = Database::query($sql);
 $session = Database::store_result($rs);
 $session = $session[0];
 
-$sql = 'SELECT name FROM  '.$tbl_session_category.' WHERE id = "'.intval($session['session_category_id']).'"';
+$sql = 'SELECT name FROM  '.$tbl_session_category.'
+        WHERE id = "'.intval($session['session_category_id']).'"';
 $rs = Database::query($sql);
 $session_category = '';
 
@@ -63,12 +80,15 @@ switch($action) {
         $result = UrlManager::add_user_to_url($user_id, $url_id);
         $user_info = api_get_user_info($user_id);
         if ($result) {
-            $message = Display::return_message(get_lang('UserAdded').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']), 'confirm');
+            $message = Display::return_message(
+                get_lang('UserAdded').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']),
+                'confirm'
+            );
         }
         break;
     case 'delete':
         $idChecked = $_GET['idChecked'];
-        if(is_array($idChecked)) {
+        if (is_array($idChecked)) {
             $my_temp = array();
             foreach ($idChecked as $id){
                 $my_temp[]= Database::escape_string($id);// forcing the escape_string
@@ -84,7 +104,7 @@ switch($action) {
             Database::query("UPDATE $tbl_session SET nbr_courses=nbr_courses-$nbr_affected_rows WHERE id='$id_session'");
         }
 
-        if(!empty($_GET['class'])){
+        if (!empty($_GET['class'])){
             Database::query("DELETE FROM $tbl_session_rel_class WHERE session_id='$id_session' AND class_id=".Database::escape_string($_GET['class']));
             $nbr_affected_rows=Database::affected_rows();
             Database::query("UPDATE $tbl_session SET nbr_classes=nbr_classes-$nbr_affected_rows WHERE id='$id_session'");
@@ -115,7 +135,10 @@ if (!empty($message)) {
 
 echo Display::page_header(Display::return_icon('session.png', get_lang('Session')).' '.$session['name']);
 
-$url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "session_edit.php?page=resume_session.php&id=$id_session");
+$url = Display::url(
+    Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
+    "session_edit.php?page=resume_session.php&id=$id_session"
+);
 echo Display::page_subheader(get_lang('GeneralProperties').$url);
 
 ?>
@@ -139,7 +162,6 @@ echo Display::page_subheader(get_lang('GeneralProperties').$url);
 			echo get_lang('NoTimeLimits');
 		else {
             if ($session['date_start'] != '00-00-0000') {
-            	//$session['date_start'] = Display::tag('i', get_lang('NoTimeLimits'));
                 $session['date_start'] =  get_lang('From').' '.$session['date_start'];
             } else {
             	$session['date_start'] = '';
@@ -176,7 +198,14 @@ echo Display::page_subheader(get_lang('GeneralProperties').$url);
 		<?php echo api_ucfirst(get_lang('SessionVisibility')) ?> :
 	</td>
 	<td>
-		<?php if ($session['visibility']==1) echo get_lang('ReadOnly'); elseif($session['visibility']==2) echo get_lang('Visible');elseif($session['visibility']==3) echo api_ucfirst(get_lang('Invisible'))  ?>
+		<?php
+        if ($session['visibility']==1)
+            echo get_lang('ReadOnly');
+        elseif($session['visibility']==2)
+            echo get_lang('Visible');
+        elseif($session['visibility']==3)
+            echo api_ucfirst(get_lang('Invisible'));
+        ?>
 	</td>
 </tr>
 
@@ -201,7 +230,10 @@ if ($multiple_url_is_on) {
 
 <?php
 
-$url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "add_courses_to_session.php?page=resume_session.php&id_session=$id_session");
+$url = Display::url(
+    Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
+    "add_courses_to_session.php?page=resume_session.php&id_session=$id_session"
+);
 echo Display::page_subheader(get_lang('CourseList').$url);
 
 ?>
@@ -215,7 +247,7 @@ echo Display::page_subheader(get_lang('CourseList').$url);
   <th width="15%"><?php echo get_lang('Actions'); ?></th>
 </tr>
 <?php
-if ($session['nbr_courses'] == 0){
+if ($session['nbr_courses'] == 0) {
 	echo '<tr>
 			<td colspan="4">'.get_lang('NoCoursesForThisSession').'</td>
 		</tr>';
@@ -223,25 +255,36 @@ if ($session['nbr_courses'] == 0){
 	// select the courses
 	$sql = "SELECT code,title,visual_code, nbr_users
 			FROM $tbl_course,$tbl_session_rel_course
-			WHERE course_code = code
-			AND	id_session='$id_session'
+			WHERE
+			    course_code = code AND
+			    id_session='$id_session'
 			ORDER BY title";
 	$result=Database::query($sql);
 	$courses=Database::store_result($result);
 	foreach ($courses as $course) {
 		//select the number of users
 
-		$sql = " SELECT count(*) FROM $tbl_session_rel_user sru, $tbl_session_rel_course_rel_user srcru
-				WHERE srcru.id_user = sru.id_user AND srcru.id_session = sru.id_session AND srcru.course_code = '".Database::escape_string($course['code'])."'
-				AND sru.relation_type<>".SESSION_RELATION_TYPE_RRHH." AND srcru.id_session = '".intval($id_session)."'";
+		$sql = "SELECT count(*)
+                FROM $tbl_session_rel_user sru, $tbl_session_rel_course_rel_user srcru
+				WHERE
+				    srcru.id_user = sru.id_user AND
+				    srcru.id_session = sru.id_session AND
+				    srcru.course_code = '".Database::escape_string($course['code'])."' AND
+				    sru.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
+				    srcru.id_session = '".intval($id_session)."'";
 
 		$rs = Database::query($sql);
 		$course['nbr_users'] = Database::result($rs,0,0);
 
 		// Get coachs of the courses in session
 
-		$sql = "SELECT user.lastname,user.firstname,user.username FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
-				WHERE session_rcru.id_user = user.user_id AND session_rcru.id_session = '".intval($id_session)."' AND session_rcru.course_code ='".Database::escape_string($course['code'])."' AND session_rcru.status=2";
+		$sql = "SELECT user.lastname,user.firstname,user.username
+                FROM $tbl_session_rel_course_rel_user session_rcru, $tbl_user user
+				WHERE
+				    session_rcru.id_user = user.user_id AND
+				    session_rcru.id_session = '".intval($id_session)."' AND
+				    session_rcru.course_code ='".Database::escape_string($course['code'])."' AND
+				    session_rcru.status=2";
 		$rs = Database::query($sql);
 
 		$coachs = array();
@@ -283,8 +326,14 @@ if ($session['nbr_courses'] == 0){
 
 <?php
 
-$url = Display::url(Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL), "add_users_to_session.php?page=resume_session.php&id_session=$id_session");
-$url .= Display::url(Display::return_icon('import_csv.png', get_lang('ImportUsers'), array(), ICON_SIZE_SMALL), "session_user_import.php?id_session=$id_session");
+$url = Display::url(
+    Display::return_icon('edit.png', get_lang('Edit'), array(), ICON_SIZE_SMALL),
+    "add_users_to_session.php?page=resume_session.php&id_session=$id_session"
+);
+$url .= Display::url(
+    Display::return_icon('import_csv.png', get_lang('ImportUsers'), array(), ICON_SIZE_SMALL),
+    "session_user_import.php?id_session=$id_session"
+);
 echo Display::page_subheader(get_lang('UserList').$url);
 
 ?>

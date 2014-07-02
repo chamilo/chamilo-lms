@@ -897,6 +897,9 @@ class IndexManager
             }
         }
 
+        $show_course_link = false;
+        $show_create_link = false;
+
         // My account section
         $my_account_content = '<ul class="nav nav-list">';
 
@@ -1063,6 +1066,7 @@ class IndexManager
                             $params['icon'] =  Display::return_icon('window_list.png', $session_box['title'], array('id' => 'session_img_'.$session_id), ICON_SIZE_LARGE);
                             $extra_info = !empty($session_box['coach']) ? $session_box['coach'] : null;
                             $extra_info .= !empty($session_box['coach']) ? ' - '.$session_box['dates'] : $session_box['dates'];
+                            $extra_info .= isset($session_box['duration']) ? ' '.$session_box['duration'] : null;
 
                             if (api_is_drh()) {
                                 $session_link = $session_box['title'];

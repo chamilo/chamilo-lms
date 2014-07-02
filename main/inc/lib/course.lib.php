@@ -4645,4 +4645,47 @@ class CourseManager
         return Database::num_rows($result) > 0;
     }
 
+    /**
+     * Get information from the track_e_course_access table
+     * @param int $sessionId
+     * @param int $userId
+     * @return array
+     */
+    public static function getCourseAccessPerSessionAndUser($sessionId, $userId, $limit = null)
+    {
+        $table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $sql = "SELECT * FROM $table
+                WHERE session_id = $sessionId AND user_id = $userId";
+
+        if (!empty($limit)) {
+            $limit = intval($limit);
+            $sql .= " LIMIT $limit";
+        }
+        $result = Database::query($sql);
+
+        return Database::store_result($result);
+    }
+
+    /**
+     * Get information from the track_e_course_access table
+     * @param int $sessionId
+     * @param int $userId
+     * @return array
+     */
+    public static function getFirstCourseAccessPerSessionAndUser($sessionId, $userId)
+    {
+        $table = Database :: get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $sql = "SELECT * FROM $table
+                WHERE session_id = $sessionId AND user_id = $userId
+                ORDER BY login_course_date ASC
+                LIMIT 1";
+
+        $result = Database::query($sql);
+        $courseAccess = array();
+        if (Database::num_rows($result)) {
+            $courseAccess = Database::fetch_array($result, 'ASSOC');
+        }
+        return $courseAccess;
+    }
+
 }

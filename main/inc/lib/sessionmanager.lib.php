@@ -78,7 +78,8 @@ class SessionManager
         $id_visibility,
         $start_limit = true,
         $end_limit = true,
-        $fix_name = false
+        $fix_name = false,
+        $duration = null
     ) {
         global $_configuration;
 
@@ -169,10 +170,27 @@ class SessionManager
             }
 
             if ($ready_to_create) {
-                $sql_insert = "INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id,visibility)
-							   VALUES('" . $name . "','$date_start','$date_end','$id_coach'," . api_get_user_id() . "," . $nb_days_acess_before . ", " . $nb_days_acess_after . ", " . $id_session_category . ", " . $id_visibility . ")";
-                Database::query($sql_insert);
+                $sql = "INSERT INTO $tbl_session(name,date_start,date_end,id_coach,session_admin_id, nb_days_access_before_beginning, nb_days_access_after_end, session_category_id,visibility)
+                        VALUES('" . $name . "','$date_start','$date_end','$id_coach'," . api_get_user_id() . "," . $nb_days_acess_before . ", " . $nb_days_acess_after . ", " . $id_session_category . ", " . $id_visibility . ")";
+                Database::query($sql);
                 $session_id = Database::insert_id();
+
+                if (self::durationPerUserIsEnabled()) {
+                    $duration = intval($duration);
+
+                    if (empty($duration)) {
+                        $duration = null;
+                    } else {
+                        $sql = "UPDATE $tbl_session SET
+                                  date_start = '0000-00-00',
+                                  date_end = '0000-00-00'
+                                WHERE id = $session_id";
+                        Database::query($sql);
+                    }
+                    $sql = "UPDATE $tbl_session SET duration = $duration
+                            WHERE id = $session_id";
+                    Database::query($sql);
+                }
 
                 if (!empty($session_id)) {
                     /*
@@ -1308,9 +1326,26 @@ class SessionManager
      * The parameter id is a primary key
      * */
     public static function edit_session(
-        $id, $name, $year_start, $month_start, $day_start, $year_end, $month_end, $day_end, $nb_days_acess_before, $nb_days_acess_after, $nolimit, $id_coach, $id_session_category, $id_visibility, $start_limit = true, $end_limit = true, $description = null, $showDescription = null
-    )
-    {
+        $id,
+        $name,
+        $year_start,
+        $month_start,
+        $day_start,
+        $year_end,
+        $month_end,
+        $day_end,
+        $nb_days_acess_before,
+        $nb_days_acess_after,
+        $nolimit,
+        $id_coach,
+        $id_session_category,
+        $id_visibility,
+        $start_limit = true,
+        $end_limit = true,
+        $description = null,
+        $showDescription = null,
+        $duration = null
+    ) {
         $name = trim(stripslashes($name));
         $year_start = intval($year_start);
         $month_start = intval($month_start);
@@ -1390,8 +1425,22 @@ class SessionManager
                     $showDescriptionCondition = ' show_description = "' . Database::escape_string($showDescription) . '" ,';
                 }
 
-                $sql = "UPDATE $tbl_session " .
-                    "SET name='" . Database::escape_string($name) . "',
+                $durationCondition = null;
+                if (self::durationPerUserIsEnabled()) {
+
+                    if (empty($duration)) {
+                        $duration = null;
+                    } else {
+                        $date_start = '0000-00-00';
+                        $date_end = "0000-00-00";
+                        $duration = intval($duration);
+                    }
+
+                    $durationCondition = ' duration = "' . $duration . '" ,';
+                }
+
+                $sql = "UPDATE $tbl_session SET
+                        name='" . Database::escape_string($name) . "',
 						date_start='" . $date_start . "',
 						date_end='" . $date_end . "',
 						id_coach='" . $id_coach . "',
@@ -1400,8 +1449,10 @@ class SessionManager
 						session_category_id = " . $id_session_category . " ,
                         $descriptionCondition
                         $showDescriptionCondition
+                        $durationCondition
 						visibility= " . $id_visibility . "
 					  WHERE id='$id'";
+
                 Database::query($sql);
                 return $id;
             }
@@ -1482,9 +1533,12 @@ class SessionManager
      * @return bool
      */
     public static function suscribe_users_to_session(
-        $id_session, $user_list, $session_visibility = SESSION_VISIBLE_READ_ONLY, $empty_users = true, $send_email = false
-    )
-    {
+        $id_session,
+        $user_list,
+        $session_visibility = SESSION_VISIBLE_READ_ONLY,
+        $empty_users = true,
+        $send_email = false
+    ) {
 
         if ($id_session != strval(intval($id_session))) {
             return false;
@@ -3024,7 +3078,24 @@ class SessionManager
             $consider_end = false;
         }
 
-        $sid = self::create_session($s['name'] . ' ' . get_lang('CopyLabelSuffix'), $s['year_start'], $s['month_start'], $s['day_start'], $s['year_end'], $s['month_end'], $s['day_end'], $s['nb_days_acess_before_beginning'], $s['nb_days_acess_after_end'], false, (int) $s['id_coach'], $s['session_category_id'], (int) $s['visibility'], $consider_start, $consider_end, true);
+        $sid = self::create_session(
+            $s['name'] . ' ' . get_lang('CopyLabelSuffix'),
+            $s['year_start'],
+            $s['month_start'],
+            $s['day_start'],
+            $s['year_end'],
+            $s['month_end'],
+            $s['day_end'],
+            $s['nb_days_acess_before_beginning'],
+            $s['nb_days_acess_after_end'],
+            false,
+            (int)$s['id_coach'],
+            $s['session_category_id'],
+            (int)$s['visibility'],
+            $consider_start,
+            $consider_end,
+            true
+        );
 
         if (!is_numeric($sid) || empty($sid)) {
             return false;
@@ -4478,7 +4549,7 @@ class SessionManager
     }
 
     /**
-     * Courses re-ordering in resume_session.php flag
+     * Courses re-ordering in resume_session.php flag see BT#8316
      */
     public static function orderCourseIsEnabled()
     {
@@ -4578,5 +4649,45 @@ class SessionManager
     public function moveDown($sessionId, $courseCode)
     {
         return self::move('down', $sessionId, $courseCode);
+    }
+
+    /**
+     * Use the session duration to allow/block user access see BT#8317
+     * Needs "ALTER TABLE session ADD COLUMN duration int;"
+     */
+    public static function durationPerUserIsEnabled()
+    {
+        global $_configuration;
+        if (isset($_configuration['session_duration_feature']) &&
+            $_configuration['session_duration_feature']
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $sessionId
+     * @return int
+     */
+    public function getDayLeftInSession($sessionId, $userId, $duration)
+    {
+        $courseAccess = CourseManager::getFirstCourseAccessPerSessionAndUser(
+            $sessionId,
+            $userId
+        );
+        $currentTime = time();
+
+        $firstAccess = api_strtotime($courseAccess['login_course_date'], 'UTC');
+        //var_dump(api_get_utc_datetime($firstAccess));
+        //var_dump($duration);
+        $endDateInSeconds = $firstAccess + $duration*24*60*60;
+        $leftDays = round(($endDateInSeconds- $currentTime) / 60 / 60 / 24);
+        /*var_dump(api_get_utc_datetime($endDateInSeconds));
+        var_dump(api_get_utc_datetime($currentTime));*/
+        return $leftDays;
+
     }
 }

@@ -1388,6 +1388,10 @@ class Display
                 if (api_get_setting('show_session_coach') === 'true') {
                     $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info['firstname'], $session_info['lastname']);
                 }
+                if (isset($session_info['duration']) && !empty($session_info['duration'])) {
+                    $daysLeft = SessionManager::getDayLeftInSession($session_id, api_get_user_id(), $session_info['duration']);
+                    $session['duration'] = sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft);
+                }
                 $active = true;
             } else {
                 $start = $stop = false;

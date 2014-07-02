@@ -1618,9 +1618,11 @@ class SessionManager
      * @return bool
      */
     public static function subscribe_users_to_session_course(
-        $user_list, $session_id, $course_code, $session_visibility = SESSION_VISIBLE_READ_ONLY
-    )
-    {
+        $user_list,
+        $session_id,
+        $course_code,
+        $session_visibility = SESSION_VISIBLE_READ_ONLY
+    ) {
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
@@ -1965,7 +1967,10 @@ class SessionManager
     {
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $return_value = false;
-        $sql = "SELECT course_code FROM $tbl_session_course WHERE id_session = " . Database::escape_string($session_id) . " AND course_code = '" . Database::escape_string($course_id) . "'";
+        $sql = "SELECT course_code FROM $tbl_session_course
+                WHERE
+                  id_session = " . Database::escape_string($session_id) . " AND
+                  course_code = '" . Database::escape_string($course_id) . "'";
         $result = Database::query($sql);
         $num = Database::num_rows($result);
         if ($num > 0) {
@@ -2614,7 +2619,7 @@ class SessionManager
      * @param string $course_name
      * @return array list of courses
      */
-    public static function get_course_list_by_session_id($session_id, $course_name = '')
+    public static function get_course_list_by_session_id($session_id, $course_name = '', $orderBy = 'title')
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -2625,12 +2630,16 @@ class SessionManager
         $sql = "SELECT * FROM $tbl_course c
                 INNER JOIN $tbl_session_rel_course src ON c.code = src.course_code
 		        WHERE src.id_session = '$session_id'";
+
         if (!empty($course_name)) {
             $course_name = Database::escape_string($course_name);
             $sql .= " AND c.title LIKE '%$course_name%' ";
         }
 
-        $sql .= "ORDER BY title;";
+        $orderBy = Database::escape_string($orderBy);
+
+        $sql .= "ORDER BY $orderBy";
+
         $result 	= Database::query($sql);
         $num_rows 	= Database::num_rows($result);
         $courses = array();
@@ -4466,5 +4475,108 @@ class SessionManager
             self::subscribeDrhToSessionList($userSessionList, $sendEmail, $removeOldRelationShips);
             return self::checkSubscribeDrhToSessionList($userSessionList);
         }
+    }
+
+    /**
+     * Courses re-ordering in resume_session.php flag
+     */
+    public static function orderCourseIsEnabled()
+    {
+        global $_configuration;
+        if (isset($_configuration['session_course_ordering']) &&
+            $_configuration['session_course_ordering']
+        ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $direction (up/down)
+     * @param int $sessionId
+     * @param string $courseCode
+     * @return bool
+     */
+    public function move($direction, $sessionId, $courseCode)
+    {
+        if (!self::orderCourseIsEnabled()) {
+            return false;
+        }
+
+        $sessionId = intval($sessionId);
+        $courseCode = Database::escape_string($courseCode);
+
+        $table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
+        $courseList = self::get_course_list_by_session_id($sessionId, null, 'position');
+
+        $position = array();
+        $count = 0;
+
+        foreach ($courseList as $course) {
+            if ($course['position'] == '') {
+                $course['position'] = $count;
+            }
+            $position[$course['code']] = $course['position'];
+            // Saving current order.
+            $sql = "UPDATE $table SET position = $count
+                    WHERE id_session = $sessionId AND course_code = '".$course['code']."'";
+            Database::query($sql);
+            $count++;
+        }
+
+        $found = false;
+
+        switch ($direction) {
+            case 'up':
+                $courseList = array_reverse($courseList);
+                break;
+            case 'down':
+                break;
+        }
+
+        foreach ($courseList as $course) {
+            if ($found) {
+                $nextId = $course['code'];
+                $nextOrder = $course['position'];
+                break;
+            }
+
+            if ($courseCode == $course['code']) {
+                $thisCourseCode = $course['code'];
+                $thisOrder = $course['position'];
+                $found = true;
+            }
+        }
+
+        $sql1 = "UPDATE $table SET position = '".intval($nextOrder)."'
+                 WHERE id_session = $sessionId AND course_code =  '".$thisCourseCode."'";
+
+        $sql2 = "UPDATE $table SET position = '".intval($thisOrder)."'
+                 WHERE id_session = $sessionId AND course_code =  '".$nextId."'";
+        Database::query($sql1);
+        Database::query($sql2);
+
+        return true;
+    }
+
+    /**
+     * @param int $sessionId
+     * @param string $courseCode
+     * @return bool
+     */
+    public function moveUp($sessionId, $courseCode)
+    {
+        return self::move('up', $sessionId, $courseCode);
+    }
+
+    /**
+     * @param int $sessionId
+     * @param string $courseCode
+     * @return bool
+     */
+    public function moveDown($sessionId, $courseCode)
+    {
+        return self::move('down', $sessionId, $courseCode);
     }
 }

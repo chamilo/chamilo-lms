@@ -251,7 +251,6 @@ class CourseBuilder
                             $avoid_paths AND
                             d.session_id = 0
                         ORDER BY path";
-                var_dump($sql);
             } else {
                 $sql = "SELECT d.id, d.path, d.comment, d.title, d.filetype, d.size
                         FROM $table_doc d INNER JOIN $table_prop p

@@ -24,7 +24,8 @@ block_students();
 $resultadd = new Result();
 $resultadd->set_evaluation_id($_GET['selecteval']);
 $evaluation = Evaluation :: load($_GET['selecteval']);
-$add_result_form = new EvalForm(EvalForm :: TYPE_RESULT_ADD, $evaluation[0], $resultadd, 'add_result_form', null, api_get_self() . '?selectcat=' . Security::remove_XSS($_GET['selectcat']) . '&selecteval=' . Security::remove_XSS($_GET['selecteval']));
+$category = !empty($_GET['selectcat']) ? $_GET['selectcat'] : "";
+$add_result_form = new EvalForm(EvalForm :: TYPE_RESULT_ADD, $evaluation[0], $resultadd, 'add_result_form', null, api_get_self() . '?selectcat=' . Security::remove_XSS($category) . '&selecteval=' . Security::remove_XSS($_GET['selecteval']));
 $table = $add_result_form->toHtml();
 if ($add_result_form->validate()) {
 	$values = $add_result_form->exportValues();

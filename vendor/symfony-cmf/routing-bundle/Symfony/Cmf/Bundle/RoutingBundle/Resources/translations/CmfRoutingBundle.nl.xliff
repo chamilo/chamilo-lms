@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="nl" datatype="plaintext" original="file.ext">
+    <body>
+      <trans-unit id="dashboard.cmf">
+        <source>dashboard.cmf</source>
+        <target>Symfony CMF</target>
+      </trans-unit>
+      <trans-unit id="dashboard.label_routing">
+        <source>dashboard.label_routing</source>
+        <target>Route</target>
+      </trans-unit>
+      <trans-unit id="dashboard.label_redirect_routing">
+        <source>dashboard.label_redirect_routing</source>
+        <target>Doorstuur Route</target>
+      </trans-unit>
+      <trans-unit id="breadcrumb.link_route_list">
+        <source>breadcrumb.link_route_list</source>
+        <target>Routes</target>
+      </trans-unit>
+      <trans-unit id="breadcrumb.link_route_create">
+        <source>breadcrumb.link_route_create</source>
+        <target>Aanmaken</target>
+      </trans-unit>
+      <trans-unit id="breadcrumb.link_route_edit">
+        <source>breadcrumb.link_route_edit</source>
+        <target>Bijwerken</target>
+      </trans-unit>
+      <trans-unit id="breadcrumb.link_route_delete">
+        <source>breadcrumb.link_route_delete</source>
+        <target>Verwijderen</target>
+      </trans-unit>
+      <trans-unit id="breadcrumb.link_redirect_route_list">
+        <source>breadcrumb.link_redirect_route_list</source>
+        <target>Doorstuur Routes</target>
+      </trans-unit>
+      <trans-unit id="breadcrumb.link_redirect_route_create">
+        <source>breadcrumb.link_redirect_route_create</source>
+        <target>Aanmaken</target>
+      </trans-unit>
+      <trans-unit id="breadcrumb.link_redirect_route_edit">
+        <source>breadcrumb.link_redirect_route_edit</source>
+        <target>Bijwerken</target>
+      </trans-unit>
+      <trans-unit id="breadcrumb.link_redirect_route_delete">
+        <source>breadcrumb.link_redirect_route_delete</source>
+        <target>Verwijderen</target>
+      </trans-unit>
+      <trans-unit id="filter.label_name">
+        <source>filter.label_name</source>
+        <target>Naam</target>
+      </trans-unit>
+      <trans-unit id="list.label_path">
+        <source>list.label_path</source>
+        <target>URL</target>
+      </trans-unit>
+      <trans-unit id="form.group_general">
+        <source>form.group_general</source>
+        <target>Algemeen</target>
+      </trans-unit>
+      <trans-unit id="form.label_parent">
+        <source>form.label_parent</source>
+        <target>Ouder</target>
+      </trans-unit>
+      <trans-unit id="form.label_name">
+        <source>form.label_name</source>
+        <target>Laatste URL onderdeel</target>
+      </trans-unit>
+      <trans-unit id="form.label_variable_pattern">
+        <source>form.label_variable_pattern</source>
+        <target>Variabel patroon</target>
+      </trans-unit>
+      <trans-unit id="form.label_content">
+        <source>form.label_content</source>
+        <target>Inhoud</target>
+      </trans-unit>
+      <trans-unit id="form.label_defaults">
+        <source>form.label_defaults</source>
+        <target>Standaardwaarden</target>
+      </trans-unit>
+      <trans-unit id="form.label_route_name">
+        <source>form.label_route_name</source>
+        <target>Naam</target>
+      </trans-unit>
+      <trans-unit id="form.label_uri">
+        <source>form.label_uri</source>
+        <target>URI</target>
+      </trans-unit>
+      <trans-unit id="form.label_route_target">
+        <source>form.label_route_target</source>
+        <target>Route doel</target>
+      </trans-unit>
+      <trans-unit id="form.group_routes">
+        <source>form.group_routes</source>
+        <target>Routes</target>
+      </trans-unit>
+      <trans-unit id="form.label_routes">
+        <source>form.label_routes</source>
+        <target>Routes</target>
+      </trans-unit>
+      <trans-unit id="form.label_add_format_pattern">
+        <source>form.label_add_format_pattern</source>
+        <target>Formaat patroon toevoegen</target>
+      </trans-unit>
+      <trans-unit id="form.label_add_trailing_slash">
+        <source>form.label_add_trailing_slash</source>
+        <target>Slash aan het eind toevoegen</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,23 @@
+{% set renderBackButton = flow.getCurrentStep() in (flow.getFirstStep() + 1) .. flow.getLastStep() %}
+<div class="form-actions form-flow-actions">
+    {#
+        Default button (the one trigged by pressing the enter/return key) must be defined first.
+        Thus, all buttons are defined in reverse order and will be reversed again via CSS.
+        See http://stackoverflow.com/questions/1963245/multiple-submit-buttons-specifying-default-button
+    #}
+    <button type="submit" class="btn btn-primary">
+        {%- if flow.getCurrentStep() < flow.getMaxSteps() -%}
+            {{- 'button.next' | trans({}, 'CraueFormFlowBundle') -}}
+        {%- else -%}
+            {{- 'button.finish' | trans({}, 'CraueFormFlowBundle') -}}
+        {%- endif -%}
+    </button>
+
+    <button type="submit" name="{{ flow.getFormTransitionKey() }}" value="back" class="btn btn-primary{% if not renderBackButton %} disabled{% endif %}" formnovalidate="formnovalidate"{% if not renderBackButton %} disabled="disabled"{% endif %}>
+        {{- 'button.back' | trans({}, 'CraueFormFlowBundle') -}}
+    </button>
+
+    <button type="submit" name="{{ flow.getFormTransitionKey() }}" value="reset" class="btn btn-primary" formnovalidate="formnovalidate">
+        {{- 'button.reset' | trans({}, 'CraueFormFlowBundle') -}}
+    </button>
+</div>

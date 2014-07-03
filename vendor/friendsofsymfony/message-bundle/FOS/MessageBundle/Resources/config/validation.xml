@@ -1,0 +1,98 @@
+<?xml version="1.0" ?>
+<constraint-mapping xmlns="http://symfony.com/schema/dic/constraint-mapping"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/constraint-mapping
+        http://symfony.com/schema/dic/services/constraint-mapping-1.0.xsd">
+
+    <class name="FOS\MessageBundle\FormModel\NewThreadMultipleMessage">
+        <property name="recipients">
+            <constraint name="All">
+                <constraint name="FOS\MessageBundle\Validator\Authorization" />
+                <constraint name="FOS\MessageBundle\Validator\SelfRecipient" />
+                <constraint name="NotBlank">
+                    <option name="message">No recipient specified</option>
+                </constraint>
+                <constraint name="Type">
+                    <option name="type">FOS\MessageBundle\Model\ParticipantInterface</option>
+                </constraint>
+            </constraint>
+        </property>
+        <property name="subject">
+            <constraint name="NotBlank">
+                <option name="message">Please enter a subject</option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="max">255</option>
+                <option name="minMessage">The subject is too short|The subject is too short</option>
+                <option name="maxMessage">The subject is too long|The subject is too long</option>
+            </constraint>
+        </property>
+
+        <property name="body">
+            <constraint name="NotBlank">
+                <option name="message">Please enter a body</option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="minMessage">The body is too short</option>
+            </constraint>
+        </property>
+    </class>
+
+    <class name="FOS\MessageBundle\FormModel\NewThreadMessage">
+
+        <constraint name="FOS\MessageBundle\Validator\Spam" />
+
+        <property name="recipient">
+            <constraint name="FOS\MessageBundle\Validator\Authorization" />
+            <constraint name="FOS\MessageBundle\Validator\SelfRecipient" />
+            <constraint name="NotBlank">
+                <option name="message">No user with that username</option>
+            </constraint>
+            <constraint name="Type">
+                <option name="type">FOS\MessageBundle\Model\ParticipantInterface</option>
+            </constraint>
+        </property>
+
+        <property name="subject">
+            <constraint name="NotBlank">
+                <option name="message">Please enter a subject</option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="max">255</option>
+                <option name="minMessage">The subject is too short|The subject is too short</option>
+                <option name="maxMessage">The subject is too long|The subject is too long</option>
+            </constraint>
+        </property>
+
+        <property name="body">
+            <constraint name="NotBlank">
+                <option name="message">Please enter a body</option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="minMessage">The body is too short|The body is too short</option>
+            </constraint>
+        </property>
+
+    </class>
+
+    <class name="FOS\MessageBundle\FormModel\ReplyMessage">
+
+        <constraint name="FOS\MessageBundle\Validator\ReplyAuthorization" />
+
+        <property name="body">
+            <constraint name="NotBlank">
+                <option name="message">Please enter a body</option>
+            </constraint>
+            <constraint name="Length">
+                <option name="min">2</option>
+                <option name="minMessage">The body is too short|The body is too short</option>
+            </constraint>
+        </property>
+
+    </class>
+
+</constraint-mapping>

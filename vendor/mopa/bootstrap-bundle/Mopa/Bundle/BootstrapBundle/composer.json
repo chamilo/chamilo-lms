@@ -1,0 +1,69 @@
+{
+    "name": "mopa/bootstrap-bundle",
+    "type": "symfony-bundle",
+    "description": "Easy integration of twitters bootstrap into symfony2",
+    "keywords": ["form", "extra form", "bootstrap", "bootstrap form", "template"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Philipp A. Mohrenweiser",
+            "email": "phiamo@googlemail.com"
+        },
+        {
+            "name": "Community contributions",
+            "homepage": "https://github.com/phiamo/MopaBootstrapBundle/contributors"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Mopa\\Bundle\\BootstrapBundle\\": ""
+        }
+    },
+    "target-dir": "Mopa/Bundle/BootstrapBundle",
+    "require": {
+        "symfony/framework-bundle": "~2.3",
+        "symfony/twig-bundle": "~2.3",
+        "symfony/form": "~2.3",
+        "symfony/console": "~2.3",
+        "mopa/composer-bridge": "~1.3"
+    },
+    "suggest":  {
+        "twbs/bootstrap": ">2.0,<4.0-dev",
+        "knplabs/knp-paginator-bundle": "~2.3",
+        "knplabs/knp-menu-bundle": "~2.0@dev",
+        "mopa/bootstrap-sandbox-bundle": "~2.3",
+        "craue/formflow-bundle": "~2.0",
+        "jlong/sass-twitter-bootstrap": "dev-master"
+    },
+    "repositories": [
+        {
+            "type":"package",
+            "package": {
+                "version":"dev-master",
+                "name":"jlong/sass-twitter-bootstrap",
+                "source": {
+                    "url":"https://github.com/jlong/sass-twitter-bootstrap.git",
+                    "type":"git",
+                    "reference":"master"
+                },
+                "dist": {
+                    "url":"https://github.com/jlong/sass-twitter-bootstrap/zipball/master",
+                    "type":"zip"
+                }
+            }
+        }
+    ],
+    "scripts": {
+        "post-install-cmd": [
+            "Mopa\\Bundle\\BootstrapBundle\\Composer\\ScriptHandler::postInstallSymlinkTwitterBootstrap"
+        ],
+        "post-update-cmd": [
+            "Mopa\\Bundle\\BootstrapBundle\\Composer\\ScriptHandler::postInstallSymlinkTwitterBootstrap"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.x-dev"
+        }
+    }
+}

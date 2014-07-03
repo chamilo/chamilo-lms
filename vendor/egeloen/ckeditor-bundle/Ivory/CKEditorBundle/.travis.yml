@@ -1,0 +1,25 @@
+language: php
+
+php: 5.3.3
+
+env:
+    - SYMFONY_VERSION="2.1.*"
+    - SYMFONY_VERSION="2.2.*"
+    - SYMFONY_VERSION="2.3.*"
+    - SYMFONY_VERSION="2.4.*"
+    - SYMFONY_VERSION="2.5.*"
+
+before_script:
+    - composer require --no-update symfony/framework-bundle:${SYMFONY_VERSION}
+    - composer require --no-update symfony/form:${SYMFONY_VERSION}
+    - composer install --dev --prefer-source
+
+script: bin/phpunit --coverage-clover clover.xml
+
+after_script: bin/coveralls
+
+branches:
+    only: master
+
+notifications:
+    email: geloen.eric@gmail.com

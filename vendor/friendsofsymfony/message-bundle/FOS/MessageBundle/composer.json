@@ -1,0 +1,39 @@
+{
+    "name": "friendsofsymfony/message-bundle",
+    "type": "symfony-bundle",
+    "description": "Provides user-to-user messaging features for your Symfony2 application.",
+    "keywords": ["symfony", "message", "messaging"],
+    "homepage": "https://github.com/FriendsOfSymfony/FOSMessageBundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thibault Duplessis",
+            "email": "thibault.duplessis@gmail.com",
+            "homepage": "http://ornicar.github.com"
+        },
+        {
+            "name": "FriendsOfSymfony Community",
+            "homepage": "https://github.com/friendsofsymfony/FOSMessageBundle/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/form": "~2.1",
+        "symfony/framework-bundle": "~2.1",
+        "symfony/security": "~2.1",
+        "symfony/twig-bundle": "~2.1"
+    },
+    "suggest": {
+        "doctrine/doctrine-bundle": "dev-master",
+        "doctrine/mongodb-odm-bundle": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "FOS\\MessageBundle": "" }
+    },
+    "target-dir": "FOS/MessageBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.2-dev"
+        }
+    }
+}

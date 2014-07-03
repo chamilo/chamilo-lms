@@ -1,7 +1,5 @@
 <?php
 
-namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
-
 /*
  * This file is part of the Symfony package.
  *
@@ -11,8 +9,10 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  * file that was distributed with this source code.
  */
 
+namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
+
 /**
- * The Method class handles the @Method annotation parts.
+ * The Method class handles the Method annotation parts.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @Annotation
@@ -68,9 +68,9 @@ class Method extends ConfigurationAnnotation
     }
 
     /**
-     * Only one cache directive is allowed
+     * Only one method directive is allowed
      *
-     * @return Boolean
+     * @return bool
      * @see ConfigurationInterface
      */
     public function allowArray()

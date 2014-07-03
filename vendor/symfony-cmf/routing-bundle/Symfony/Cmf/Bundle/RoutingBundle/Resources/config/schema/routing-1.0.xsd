@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<xsd:schema xmlns="http://cmf.symfony.com/schema/dic/routing"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://cmf.symfony.com/schema/dic/routing"
+    elementFormDefault="qualified">
+
+    <xsd:element name="config" type="config" />
+
+    <xsd:complexType name="config">
+        <xsd:sequence>
+            <xsd:element name="chain" type="chain" minOccurs="0" />
+            <xsd:element name="dynamic" type="dynamic" minOccurs="0" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="chain">
+        <xsd:sequence>
+            <xsd:element name="router-by-id" type="by_id" maxOccurs="unbounded" />
+        </xsd:sequence>
+
+        <xsd:attribute name="replace-symfony-router" type="xsd:boolean" />
+    </xsd:complexType>
+
+    <xsd:complexType name="dynamic">
+        <xsd:sequence>
+            <xsd:element name="controller-by-type" type="controller_by_type" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element name="controller-by-class" type="controller_by_class" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element name="template-by-class" type="template_by_class" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element name="persistence" type="persistence" minOccurs="0"/>
+            <xsd:element name="route-filter-by-id" type="by_id" minOccurs="0" maxOccurs="unbounded" />
+            <xsd:element name="locale" type="xsd:string" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+
+        <xsd:attribute name="enabled" type="xsd:boolean" />
+        <xsd:attribute name="route-collection-limit" type="xsd:integer" />
+        <xsd:attribute name="generic-controller" type="xsd:string" />
+        <xsd:attribute name="default-controller" type="xsd:string" />
+        <xsd:attribute name="uri-filter-regexp" type="xsd:string" />
+        <xsd:attribute name="route-provider-service-id" type="xsd:string" />
+        <xsd:attribute name="content-repository-service-id" type="xsd:string" />
+        <xsd:attribute name="auto-locale-pattern" type="xsd:boolean" />
+        <xsd:attribute name="match-implicit-locale" type="xsd:boolean" />
+    </xsd:complexType>
+
+    <xsd:complexType name="controller_by_type">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="type" type="xsd:string" />
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="controller_by_class">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="class" type="xsd:string" />
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="template_by_class">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="class" type="xsd:string" />
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="persistence">
+        <xsd:choice>
+            <xsd:element name="phpcr" type="phpcr" minOccurs="0"/>
+            <xsd:element name="orm" type="orm" minOccurs="0"/>
+        </xsd:choice>
+    </xsd:complexType>
+
+    <xsd:complexType name="phpcr">
+        <xsd:sequence>
+            <xsd:element name="route-basepath" type="route_basepath" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+
+        <xsd:attribute name="enabled" type="xsd:boolean" />
+        <xsd:attribute name="manager-name" type="xsd:string" />
+        <!-- the route-basepath is for BC only. you should use the route-basepath children elements -->
+        <xsd:attribute name="route-basepath" type="xsd:string" />
+        <xsd:attribute name="content-basepath" type="xsd:string" />
+        <xsd:attribute name="use-sonata-admin" type="enable_auto" />
+    </xsd:complexType>
+
+    <xsd:complexType name="route_basepath">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string"/>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="orm">
+        <xsd:attribute name="enabled" type="xsd:boolean" />
+        <xsd:attribute name="manager-name" type="xsd:string" />
+    </xsd:complexType>
+
+    <xsd:complexType name="by_id">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="id" type="xsd:string" />
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:simpleType name="enable_auto">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="true" />
+            <xsd:enumeration value="false" />
+            <xsd:enumeration value="auto" />
+        </xsd:restriction>
+    </xsd:simpleType>
+</xsd:schema>

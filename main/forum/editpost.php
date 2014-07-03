@@ -181,7 +181,7 @@ echo "</tr>";
 echo '</table>';
 
 // The form for the reply
-$values = show_edit_post_form($current_post, $current_thread, $current_forum, isset($_SESSION['formelements']) ? $_SESSION['formelements'] : '');
+$values = show_edit_post_form($forum_setting, $current_post, $current_thread, $current_forum, isset($_SESSION['formelements']) ? $_SESSION['formelements'] : '');
 
 if (!empty($values) and isset($_POST['SubmitPost'])) {
     store_edit_post($values);

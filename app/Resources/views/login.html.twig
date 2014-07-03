@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html class="bg-black">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} Log in {% endblock %}</title>
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    {% stylesheets '@admin_lte_css' %}
+    <link href="{{ asset_url }}" rel="stylesheet" type="text/css" />
+    {% endstylesheets %}
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+
+    <![endif]-->
+</head>
+<body class="bg-black">
+
+<div class="form-box" id="login-box">
+    {% block fos_user_content %}
+    {% endblock fos_user_content %}
+    {#
+    <div class="margin text-center">
+        <span>Sign in using social networks</span>
+        <br/>
+        <button class="btn bg-light-blue btn-circle"><i class="fa fa-facebook"></i></button>
+        <button class="btn bg-aqua btn-circle"><i class="fa fa-twitter"></i></button>
+        <button class="btn bg-red btn-circle"><i class="fa fa-google-plus"></i></button>
+    </div>
+    #}
+</div>
+
+<!-- jQuery 2.0.2 -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="../../js/bootstrap.min.js" type="text/javascript"></script>
+
+</body>
+</html>

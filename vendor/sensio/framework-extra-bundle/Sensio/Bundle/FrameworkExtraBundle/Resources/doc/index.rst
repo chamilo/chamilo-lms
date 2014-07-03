@@ -41,29 +41,32 @@ The default configuration is as follow:
     .. code-block:: yaml
 
         sensio_framework_extra:
-            router:  { annotations: true }
-            request: { converters: true }
-            view:    { annotations: true }
-            cache:   { annotations: true }
+            router:   { annotations: true }
+            request:  { converters: true, auto_convert: true }
+            view:     { annotations: true }
+            cache:    { annotations: true }
+            security: { annotations: true }
 
     .. code-block:: xml
 
         <!-- xmlns:sensio-framework-extra="http://symfony.com/schema/dic/symfony_extra" -->
         <sensio-framework-extra:config>
             <router annotations="true" />
-            <request converters="true" />
+            <request converters="true" auto_convert="true" />
             <view annotations="true" />
             <cache annotations="true" />
+            <security annotations="true" />
         </sensio-framework-extra:config>
 
     .. code-block:: php
 
         // load the profiler
         $container->loadFromExtension('sensio_framework_extra', array(
-            'router'  => array('annotations' => true),
-            'request' => array('converters' => true),
-            'view'    => array('annotations' => true),
-            'cache'   => array('annotations' => true),
+            'router'   => array('annotations' => true),
+            'request'  => array('converters' => true, 'auto_convert' => true),
+            'view'     => array('annotations' => true),
+            'cache'    => array('annotations' => true),
+            'security' => array('annotations' => true),
         ));
 
 You can disable some annotations and conventions by defining one or more
@@ -98,6 +101,7 @@ The following annotations are defined by the bundle:
    annotations/converters
    annotations/view
    annotations/cache
+   annotations/security
 
 This example shows all the available annotations in action::
 
@@ -106,6 +110,7 @@ This example shows all the available annotations in action::
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
     use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+    use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
     /**
      * @Route("/blog")
@@ -128,8 +133,9 @@ This example shows all the available annotations in action::
          * @Route("/{id}")
          * @Method("GET")
          * @ParamConverter("post", class="SensioBlogBundle:Post")
-         * @Template("SensioBlogBundle:Annot:post.html.twig", vars={"post"})
-         * @Cache(smaxage="15")
+         * @Template("SensioBlogBundle:Annot:show.html.twig", vars={"post"})
+         * @Cache(smaxage="15", lastmodified="post.getUpdatedAt()", etag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
+         * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
          */
         public function showAction(Post $post)
         {
@@ -141,7 +147,8 @@ annotations::
 
     /**
      * @Route("/{id}")
-     * @Cache(smaxage="15")
+     * @Cache(smaxage="15", lastModified="post.getUpdatedAt()", ETag="'Post' ~ post.getId() ~ post.getUpdatedAt()")
+     * @Security("has_role('ROLE_ADMIN') and is_granted('POST_SHOW', post)")
      */
     public function showAction(Post $post)
     {

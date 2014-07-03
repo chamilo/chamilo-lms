@@ -1,0 +1,12 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
+
+    <mapped-superclass name="Symfony\Component\Routing\Route">
+        <field name="host" type="string"/>
+        <field name="defaults" type="array"/>
+        <field name="requirements" type="array"/>
+        <field name="options" type="array"/>
+    </mapped-superclass>
+
+</doctrine-mapping>

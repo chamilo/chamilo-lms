@@ -1,0 +1,10 @@
+ivory_ck_editor:
+    templates:
+        default:
+            imagesPath: "/my/path"
+            templates:
+                -
+                    title: "My Template"
+                    image: "image.jpg"
+                    description: "My awesome description"
+                    html: "<h1>Template</h1><p>Type your text here.</p>"

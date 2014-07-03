@@ -1,7 +1,5 @@
 <?php
 
-namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
-
 /*
  * This file is part of the Symfony package.
  *
@@ -10,6 +8,8 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
 
 /**
  * ConfigurationInterface.
@@ -23,12 +23,12 @@ interface ConfigurationInterface
      *
      * @return string
      */
-    function getAliasName();
+    public function getAliasName();
 
     /**
      * Returns whether multiple annotations of this type are allowed
      *
-     * @return Boolean
+     * @return bool
      */
-    function allowArray();
+    public function allowArray();
 }

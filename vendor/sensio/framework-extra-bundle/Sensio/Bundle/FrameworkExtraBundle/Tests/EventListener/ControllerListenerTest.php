@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Sensio\Bundle\FrameworkExtraBundle\Tests\EventListener;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
@@ -20,6 +29,9 @@ class ControllerListenerTest extends \PHPUnit_Framework_TestCase
     {
         $this->listener = new ControllerListener(new AnnotationReader());
         $this->request = $this->createRequest();
+
+        // trigger the autoloading of the @Cache annotation
+        class_exists('Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache');
     }
 
     public function tearDown()

@@ -1,0 +1,22 @@
+messenger: Mensajes
+inbox: Carpeta de entrada
+sent: Enviado
+send_new: Enviar nuevo mensaje
+search: Buscar
+threads_found: %num% hilo encontrado | %num% hilos encontrados
+
+message_info: Por %sender%, el %date%
+reply: Responder
+
+subject: Asunto
+starter: Emisor
+startdate: Fecha de emisión
+messages: Mensajes
+last_message: Último mensaje
+actions: Acciones
+new: Nuevo
+goto_last: Ir al último mensaje
+on: En %date%
+by: Por %sender%
+no_thread: No hay hilos que mostrar
+delete: Eliminar

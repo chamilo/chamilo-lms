@@ -1,0 +1,25 @@
+{% extends "SimpleThingsEntityAuditBundle::layout.html.twig" %}
+
+{% block simplethings_entityaudit_content %}
+<h1>Entities changed in revision {{ revision.rev }}</h1>
+
+<p><a href="{{ path('simple_things_entity_audit_home') }}">Home</a></p>
+
+<table>
+    <thead><tr>
+        <th>Class Name</th>
+        <th>Identifiers</th>
+        <th>Revision Type</th>
+    </tr></thead>
+    <tbody>
+{% for changedEntity in changedEntities %}
+    <tr>
+        <td><a href="{{ path('simple_things_entity_audit_viewentity_detail', { 'rev': revision.rev, 'className': changedEntity.className, 'id': changedEntity.id | join(',') }) }}">{{ changedEntity.className }}</a></td>
+        <td>{{ changedEntity.id | join(', ') }}</td>
+        <td>{{ changedEntity.revisionType }}</td>
+    </tr>
+{% endfor %}
+    </tbody>
+</table>
+
+{% endblock simplethings_entityaudit_content %}

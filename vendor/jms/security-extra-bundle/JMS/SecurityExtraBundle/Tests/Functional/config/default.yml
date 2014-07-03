@@ -1,0 +1,5 @@
+imports:
+    - { resource: framework.yml }
+    - { resource: twig.yml }
+    - { resource: security.yml }
+    - { resource: doctrine.yml }

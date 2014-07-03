@@ -1,0 +1,55 @@
+chamilo_lms_course:
+    resource: "@ChamiloLMSCourseBundle/Resources/config/routing.yml"
+    prefix:   /
+
+_front:
+    resource: routing_front.yml
+
+_admin:
+    resource: routing_admin.yml
+    prefix:   /admin
+
+_api:
+    resource: routing_api.yml
+    prefix:   /api
+
+fos_message:
+    resource: "@FOSMessageBundle/Resources/config/routing.xml"
+    prefix: /messages
+
+fos_comment_api:
+    type: rest
+    resource: "@FOSCommentBundle/Resources/config/routing.yml"
+    prefix: /api
+    defaults: { _format: html }
+
+avanzu_admin_profile:
+    path: /profile
+
+avanzu_admin_all_messages:
+    path: /messages/
+avanzu_admin_show_message:
+    path: /messages/{messageid}/
+avanzu_admin_all_notifications:
+    path: /notifications/
+avanzu_admin_show_notification:
+    path: /notifications/{notifyid}/
+avanzu_admin_all_tasks:
+    path: /tasks/
+avanzu_admin_show_task:
+    path: /tasks/{taskid}/
+avanzu_admin_logout:
+    path: /logout
+
+home:
+    path: /
+
+logout:
+    path: /logout
+
+login_check:
+    path: /login_check
+
+# Always at the end
+core_bundle:
+    resource: "@ChamiloLMSCoreBundle/Resources/config/routing.yml"

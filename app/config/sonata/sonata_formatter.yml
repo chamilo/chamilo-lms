@@ -1,0 +1,70 @@
+#
+# more information can be found here http://sonata-project.org/bundles/formatter
+#
+sonata_formatter:
+    formatters:
+        markdown:
+            service: sonata.formatter.text.markdown
+            extensions:
+                - sonata.formatter.twig.control_flow
+                - sonata.formatter.twig.gist
+                - sonata.media.formatter.twig
+
+        text:
+            service: sonata.formatter.text.text
+            extensions:
+                - sonata.formatter.twig.control_flow
+                - sonata.formatter.twig.gist
+                - sonata.media.formatter.twig
+        rawhtml:
+            service: sonata.formatter.text.raw
+            extensions:
+                - sonata.formatter.twig.control_flow
+                - sonata.formatter.twig.gist
+                - sonata.media.formatter.twig
+        richhtml:
+            service: sonata.formatter.text.raw
+            extensions:
+                - sonata.formatter.twig.control_flow
+                - sonata.formatter.twig.gist
+                - sonata.media.formatter.twig
+    ckeditor:
+        templates:
+            browser: 'SonataFormatterBundle:Ckeditor:browser.html.twig'
+            upload: 'SonataFormatterBundle:Ckeditor:upload.html.twig'
+
+# This section can be used to include the SonataMediaBundle with CKEDITOR
+#  => http://sonata-project.org/bundles/media/master/doc/reference/extra.html#ckeditor-integration
+#  there is also a configuration in the sonata_formatter section (see sonata_formatter.yml)
+ivory_ck_editor:
+    default_config: default
+    configs:
+        default:
+            filebrowserBrowseRoute: admin_sonata_media_media_ckeditor_browser
+            filebrowserImageBrowseRoute: admin_sonata_media_media_ckeditor_browser
+            # Display images by default when clicking the image dialog browse button
+            filebrowserImageBrowseRouteParameters:
+                provider: sonata.media.provider.image
+            filebrowserUploadRoute: admin_sonata_media_media_ckeditor_upload
+            filebrowserUploadRouteParameters:
+                provider: sonata.media.provider.file
+            # Upload file as image when sending a file from the image dialog
+            filebrowserImageUploadRoute: admin_sonata_media_media_ckeditor_upload
+            filebrowserImageUploadRouteParameters:
+                provider: sonata.media.provider.image
+                context: default # Optional, to upload in a custom context
+
+        news:
+            filebrowserBrowseRoute: admin_sonata_media_media_ckeditor_browser
+            filebrowserImageBrowseRoute: admin_sonata_media_media_ckeditor_browser
+            # Display images by default when clicking the image dialog browse button
+            filebrowserImageBrowseRouteParameters:
+                provider: sonata.media.provider.image
+            filebrowserUploadRoute: admin_sonata_media_media_ckeditor_upload
+            filebrowserUploadRouteParameters:
+                provider: sonata.media.provider.file
+            # Upload file as image when sending a file from the image dialog
+            filebrowserImageUploadRoute: admin_sonata_media_media_ckeditor_upload
+            filebrowserImageUploadRouteParameters:
+                provider: sonata.media.provider.image
+                context: news # Optional, to upload in a custom context

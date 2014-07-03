@@ -11,7 +11,6 @@
 $language_file = array('admin', 'create_course');
 
 $cidReset = true;
-require_once '../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
@@ -150,7 +149,4 @@ if ($form->validate()) {
 // Display the form.
 $content = $form->return_form();
 
-$tpl = $app['template'];
-$app['title'] = $tool_name;
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
+echo $content;

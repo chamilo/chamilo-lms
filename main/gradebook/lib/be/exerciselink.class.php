@@ -18,7 +18,10 @@ class ExerciseLink extends AbstractLink
     private $is_hp;
 
     // CONSTRUCTORS
-    function __construct($hp=0) 
+    /**
+     * @param int $hp
+     */
+    public function __construct($hp = 0)
     {
     	parent::__construct();
     	$this->set_type(LINK_EXERCISE);
@@ -34,7 +37,8 @@ class ExerciseLink extends AbstractLink
 	 * Generate an array of exercises that a teacher hasn't created a link for.
 	 * @return array 2-dimensional array - every element contains 2 subelements (id, name)
 	 */
-    public function get_not_created_links() {
+    public function get_not_created_links()
+    {
         return false;
     	if (empty($this->course_code)) {
             die('Error in get_not_created_links() : course code not set');
@@ -61,7 +65,8 @@ class ExerciseLink extends AbstractLink
 	 * Generate an array of all exercises available.
 	 * @return array 2-dimensional array - every element contains 2 subelements (id, name)
 	 */
-    public function get_all_links() {
+    public function get_all_links()
+    {
         $TBL_DOCUMENT = Database :: get_course_table(TABLE_DOCUMENT);
         $TBL_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);
         $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code."/document";
@@ -74,6 +79,7 @@ class ExerciseLink extends AbstractLink
         } else {
             $session_condition = api_get_session_condition($session_id, true, true);
         }        
+        $uploadPath = null;
         
 		$sql = 'SELECT id,title from '.$this->get_exercise_table().' 
 				WHERE c_id = '.$this->course_id.' AND active=1  '.$session_condition;        
@@ -104,7 +110,7 @@ class ExerciseLink extends AbstractLink
             }
         }
         if (isset($result2)) {
-            if (mysql_numrows($result2) > 0) {
+            if (Database::num_rows($result2) > 0) {
         		while ($row=Database::fetch_array($result2)) {
                     /*$path = $data['path'];
                     $fname = GetQuizName($path,$documentPath);
@@ -113,7 +119,6 @@ class ExerciseLink extends AbstractLink
                     $attribute['visibility'][] = $row['visibility'];
                     $attribute['comment'][] = $row['comment'];
                     $attribute['id'] = $row['id'];
-        		}
                 if (isset($attribute['path']) && is_array($attribute['path'])) {
                     $hotpotatoes_exist = true;
                     while (list($key, $path) = each($attribute['path'])) {
@@ -123,6 +128,7 @@ class ExerciseLink extends AbstractLink
                             $title = basename($path);
                         }
                         $cats[] = array ($attribute['id'], $title.'(HP)');
+                        }
                     }
                 }
             }
@@ -210,7 +216,8 @@ class ExerciseLink extends AbstractLink
      * First we go to exercise_jump.php and then to the result page.
      * Check this php file for more info.
      */
-	public function get_link() {
+    public function get_link()
+    {
 		//status student
 		$user_id = api_get_user_id();
 		//$course_code = $this->get_course_code();
@@ -226,7 +233,8 @@ class ExerciseLink extends AbstractLink
     /**
      * Get name to display: same as exercise title
      */
-    public function get_name() {
+    public function get_name()
+    {
         $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code."/document";
         require_once api_get_path(SYS_CODE_PATH).'exercice/hotpotatoes.lib.php';
     	$data = $this->get_exercise_data();        
@@ -247,9 +255,10 @@ class ExerciseLink extends AbstractLink
     /**
      * Get description to display: same as exercise description
      */
-    public function get_description() {
+    public function get_description()
+    {
     	$data = $this->get_exercise_data();
-    	return $data['description'];
+    	return isset($data['description']) ? $data['description'] : null;
     }
 
     /**
@@ -263,23 +272,30 @@ class ExerciseLink extends AbstractLink
 		return ($number[0] != 0);
     }
 
-    public function get_type_name() {
+    /**
+     * @return array|string
+     */
+    public function get_type_name()
+    {
         if ($this->is_hp == 1) {
-            return get_lang('Hopotatoe');
+            return get_lang('HotPotatoes');
         } else {
     	return get_lang('Quiz');
     }
 
     }
-	public function needs_name_and_description() {
+	public function needs_name_and_description()
+    {
 		return false;
 	}
 
-	public function needs_max() {
+	public function needs_max()
+    {
 		return false;
 	}
 
-	public function needs_results() {
+	public function needs_results()
+    {
 		return false;
 	}
 
@@ -293,7 +309,8 @@ class ExerciseLink extends AbstractLink
     /**
      * Lazy load function to get the database table of the exercise
      */
-    private function get_exercise_table() {
+    private function get_exercise_table()
+    {
     	$this->exercise_table = Database :: get_course_table(TABLE_QUIZ_TEST);
     	return $this->exercise_table;   		
     }
@@ -301,7 +318,8 @@ class ExerciseLink extends AbstractLink
     /**
      * Lazy load function to get the database contents of this exercise
      */
-    private function get_exercise_data() {
+    private function get_exercise_data()
+    {
         if ($this->is_hp == 1) {
            $tbl_exercise = Database :: get_course_table(TABLE_DOCUMENT); 
            $TBL_ITEM_PROPERTY = Database :: get_course_table(TABLE_ITEM_PROPERTY);           
@@ -326,7 +344,11 @@ class ExerciseLink extends AbstractLink
     	return $this->exercise_data;
     }
 
-    public function get_icon_name() {
+    /**
+     * @return string
+     */
+    public function get_icon_name()
+    {
 		return 'exercise';
 	}
 }

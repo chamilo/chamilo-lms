@@ -8,93 +8,26 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\Yaml\Parser;
 
-AnnotationRegistry::registerFile(api_get_path(SYS_PATH)."vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php");
+$sysPath = __DIR__."/../../";
+AnnotationRegistry::registerFile($sysPath."vendor/doctrine/orm/lib/Doctrine/ORM/Mapping/Driver/DoctrineAnnotations.php");
 $reader = new AnnotationReader();
 
-$driverImpl = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver($reader, array(api_get_path(SYS_PATH)."tests/doctrine_console/mapping"));
+$driverImpl = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver(
+    $reader,
+    array($sysPath."tests/doctrine_console/mapping")
+);
 
 $config->setMetadataDriverImpl($driverImpl);
 $config->setProxyDir(__DIR__ . '/Proxies');
 $config->setProxyNamespace('Proxies');
 
-$courseList = CourseManager::get_real_course_list();
-//$courseList = array();
-
-$configurationPath = api_get_path(SYS_PATH).'main/inc/conf/';
-$newConfigurationFile = $configurationPath.'configuration.yml';
-
-if (is_file($newConfigurationFile) && file_exists($newConfigurationFile)) {
-    $yaml = new Parser();
-    $_configuration = $yaml->parse(file_get_contents($newConfigurationFile));
-}
-
-$connectionOptions = array();
-
-if (!empty($courseList)) {
-
-    $dbPrefix = isset($_configuration['db_prefix']) && !empty($_configuration['db_prefix']) ? $_configuration['db_prefix'].Database::get_database_glue() : null;
-    foreach ($courseList as $course) {
-        $connectionOptions['_chamilo_course_'.$course['db_name']] = array(
-            'driver'    => 'pdo_mysql',
-            'dbname'    => $dbPrefix.$course['db_name'],
-            'user'      => $_configuration['db_user'],
-            'password'  => $_configuration['db_password'],
-            'host'      => $_configuration['db_host'],
-        );
-    }
-}
-
-if (isset($_configuration['main_database'])) {
-    $connectionOptions['main_database'] = array(
-        'driver'    => 'pdo_mysql',
-        'dbname'    => $_configuration['main_database'],
-        'user'      => $_configuration['db_user'],
-        'password'  => $_configuration['db_password'],
-        'host'      => $_configuration['db_host'],
-    );
-}
-
-if (isset($_configuration['statistics_database'])) {
-    $connectionOptions['statistics_database'] = array(
-        'driver'    => 'pdo_mysql',
-        'dbname'    => $_configuration['statistics_database'],
-        'user'      => $_configuration['db_user'],
-        'password'  => $_configuration['db_password'],
-        'host'      => $_configuration['db_host'],
-    );
-} else {
-    if (isset($_configuration['main_database'])) {
-        $connectionOptions['statistics_database'] = $connectionOptions['main_database'];
-    }
-}
-
-if (isset($_configuration['user_personal_database'])) {
-    $connectionOptions['user_personal_database'] = array(
-        'driver'    => 'pdo_mysql',
-        'dbname'    => $_configuration['user_personal_database'],
-        'user'      => $_configuration['db_user'],
-        'password'  => $_configuration['db_password'],
-        'host'      => $_configuration['db_host'],
-    );
-} else {
-    if (isset($_configuration['main_database'])) {
-        $connectionOptions['user_personal_database'] = $connectionOptions['main_database'];
-    }
-}
-
 $defaultConnection = array(
-    'driver' => 'pdo_mysql'
+    'driver'    => 'pdo_mysql',
+    'dbname'    => 'chamilo',
+    'user'      => 'root',
+    'password'  => 'root',
+    'host'      => 'localhost',
 );
-
-if (isset($_configuration['main_database'])) {
-    $defaultConnection = array(
-        'driver'    => 'pdo_mysql',
-        'dbname'    => $_configuration['main_database'],
-        'user'      => $_configuration['db_user'],
-        'password'  => $_configuration['db_password'],
-        'host'      => $_configuration['db_host'],
-    );
-}
 
 $em = \Doctrine\ORM\EntityManager::create($defaultConnection, $config);
 
@@ -102,20 +35,18 @@ $em = \Doctrine\ORM\EntityManager::create($defaultConnection, $config);
 $platform = $em->getConnection()->getDatabasePlatform();
 $platform->registerDoctrineTypeMapping('enum', 'string');
 $platform->registerDoctrineTypeMapping('set', 'string');
-
+ \Doctrine\DBAL\Types\Type::addType('json', 'Sonata\Doctrine\Types\JsonType');
 $helpers = array(
     'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection()),
     'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em),
     'configuration' => new \Chash\Helpers\ConfigurationHelper()
 );
 
-use Doctrine\DBAL\DriverManager;
-$multipleEM = array();
-foreach ($connectionOptions as $name => $connection) {
-    $em = \Doctrine\ORM\EntityManager::create($connection, $config);
-    //$helpers[$name] = new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em);
-    $helpers[$name] = new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection());
-}
+$em = \Doctrine\ORM\EntityManager::create($defaultConnection, $config);
+
+use Doctrine\ORM\Tools\Console\ConsoleRunner;
+return ConsoleRunner::createHelperSet($em);
+
 
 /*
 To generate doctrine2 entities you must:

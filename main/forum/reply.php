@@ -80,6 +80,7 @@ if ($current_forum['forum_of_group'] != 0) {
 
 /* Breadcrumbs */
 
+$gradebook = null;
 if (isset($_SESSION['gradebook'])){
     $gradebook = Security::remove_XSS($_SESSION['gradebook']);
 }
@@ -142,10 +143,10 @@ $my_action   = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : 
 $my_post     = isset($_GET['post']) ?   Security::remove_XSS($_GET['post']) : '';
 $my_elements = isset($_SESSION['formelements']) ? $_SESSION['formelements'] : '';
 
-$values      = show_add_post_form($my_action, $my_post, $my_elements); // Note: This has to be cleaned first.
+$values = show_add_post_form($current_forum, $forum_setting, $my_action, $my_post, $my_elements);
 
 if (!empty($values) AND isset($_POST['SubmitPost'])) {
-    $result = store_reply($values);
+    $result = store_reply($current_forum, $values);
     //@todo split the show_add_post_form function
 
     $url = 'viewthread.php?forum='.$current_thread['forum_id'].'&gradebook='.$gradebook.'&thread='.intval($_GET['thread']).'&gidReq='.api_get_group_id().'&origin='.$origin.'&msg='.$result['msg'].'&type='.$result['type'];

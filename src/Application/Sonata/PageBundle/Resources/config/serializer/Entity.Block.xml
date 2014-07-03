@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<serializer>
+    <class name="Application\Sonata\PageBundle\Entity\Block" exclusion-policy="all" xml-root-name="block">
+
+        <property xml-attribute-map="true" name="id" type="integer" expose="true" since-version="1.0" groups="sonata_api_read,sonata_api_write,sonata_search" />
+
+    </class>
+</serializer>

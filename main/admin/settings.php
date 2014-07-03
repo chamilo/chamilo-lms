@@ -336,7 +336,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
         // Add event configuration settings category to the system log.
         $user_id = api_get_user_id();
         $category = $_GET['category'];
-        event_system(
+        Event::addEvent(
             LOG_CONFIGURATION_SETTINGS_CHANGE,
             LOG_CONFIGURATION_SETTINGS_CATEGORY,
             $category,
@@ -352,7 +352,7 @@ if (!empty($_GET['category']) && !in_array($_GET['category'], array('Plugins', '
                 if (in_array($key, $settings_to_avoid)) {
                     continue;
                 }
-                event_system(
+                Event::addEvent(
                     LOG_CONFIGURATION_SETTINGS_CHANGE,
                     LOG_CONFIGURATION_SETTINGS_VARIABLE,
                     $variable,
@@ -502,7 +502,7 @@ if (!empty($_GET['category'])) {
                     // add event to system log
                     $user_id = api_get_user_id();
                     $category = $_GET['category'];
-                    event_system(
+                    Event::addEvent(
                         LOG_CONFIGURATION_SETTINGS_CHANGE,
                         LOG_CONFIGURATION_SETTINGS_CATEGORY,
                         $category,

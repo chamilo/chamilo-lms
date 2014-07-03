@@ -1,0 +1,7 @@
+<li class="{{ name is defined ? name : '' }} {{ page == current ? 'active' : '' }} {{ clickable is defined and not clickable ? 'disabled' : '' }}">
+    {% if page != current and (clickable is not defined or clickable) %}
+        <a href="{{ path(route, query | merge({(pageParameterName): page})) }}">{{ text is defined ? text : page }}</a>
+    {% else %}
+        <span>{{ text is defined ? text : page }}</span>
+    {% endif %}
+</li>

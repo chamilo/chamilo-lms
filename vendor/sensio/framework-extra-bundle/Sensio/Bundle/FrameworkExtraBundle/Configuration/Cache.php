@@ -1,7 +1,5 @@
 <?php
 
-namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
-
 /*
  * This file is part of the Symfony package.
  *
@@ -11,8 +9,10 @@ namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
  * file that was distributed with this source code.
  */
 
+namespace Sensio\Bundle\FrameworkExtraBundle\Configuration;
+
 /**
- * The Cache class handles the @Cache annotation parts.
+ * The Cache class handles the Cache annotation parts.
  *
  * @author Fabien Potencier <fabien@symfony.com>
  * @Annotation
@@ -30,7 +30,7 @@ class Cache extends ConfigurationAnnotation
      * The number of seconds that the response is considered fresh by a private
      * cache like a web browser.
      *
-     * @var integer
+     * @var int
      */
     protected $maxage;
 
@@ -38,14 +38,14 @@ class Cache extends ConfigurationAnnotation
      * The number of seconds that the response is considered fresh by a public
      * cache like a reverse proxy cache.
      *
-     * @var integer
+     * @var int
      */
     protected $smaxage;
 
     /**
-     * Whether or not the response is public or not.
+     * Whether the response is public or not.
      *
-     * @var integer
+     * @var bool
      */
     protected $public;
 
@@ -55,6 +55,20 @@ class Cache extends ConfigurationAnnotation
      * @var array
      */
     protected $vary = array();
+
+    /**
+     * An expression to compute the Last-Modified HTTP header.
+     *
+     * @var string
+     */
+    protected $lastModified;
+
+    /**
+     * An expression to compute the ETag HTTP header.
+     *
+     * @var string
+     */
+    protected $etag;
 
     /**
      * Returns the expiration date for the Expires header field.
@@ -79,7 +93,7 @@ class Cache extends ConfigurationAnnotation
     /**
      * Sets the number of seconds for the max-age cache-control header field.
      *
-     * @param integer $maxage A number of seconds
+     * @param int     $maxage A number of seconds
      */
     public function setMaxAge($maxage)
     {
@@ -90,7 +104,7 @@ class Cache extends ConfigurationAnnotation
      * Returns the number of seconds the response is considered fresh by a
      * private cache.
      *
-     * @return integer
+     * @return int
      */
     public function getMaxAge()
     {
@@ -100,7 +114,7 @@ class Cache extends ConfigurationAnnotation
     /**
      * Sets the number of seconds for the s-maxage cache-control header field.
      *
-     * @param integer $smaxage A number of seconds
+     * @param int     $smaxage A number of seconds
      */
     public function setSMaxAge($smaxage)
     {
@@ -111,7 +125,7 @@ class Cache extends ConfigurationAnnotation
      * Returns the number of seconds the response is considered fresh by a
      * public cache.
      *
-     * @return integer
+     * @return int
      */
     public function getSMaxAge()
     {
@@ -121,21 +135,21 @@ class Cache extends ConfigurationAnnotation
     /**
      * Returns whether or not a response is public.
      *
-     * @return Boolean
+     * @return bool
      */
     public function isPublic()
     {
-        return (Boolean) $this->public;
+        return (bool) $this->public;
     }
 
     /**
      * Sets a response public.
      *
-     * @param Boolean $public A boolean value
+     * @param bool    $public A boolean value
      */
     public function setPublic($public)
     {
-        $this->public = (Boolean) $public;
+        $this->public = (bool) $public;
     }
 
     /**
@@ -159,6 +173,46 @@ class Cache extends ConfigurationAnnotation
     }
 
     /**
+     * Sets the "Last-Modified"-header expression.
+     *
+     * @param string $expression
+     */
+    public function setLastModified($expression)
+    {
+        $this->lastModified = $expression;
+    }
+
+    /**
+     * Returns the "Last-Modified"-header expression.
+     *
+     * @return string
+     */
+    public function getLastModified()
+    {
+        return $this->lastModified;
+    }
+
+    /**
+     * Sets the "ETag"-header expression.
+     *
+     * @param string $expression
+     */
+    public function setETag($expression)
+    {
+        $this->etag = $expression;
+    }
+
+    /**
+     * Returns the "ETag"-header expression.
+     *
+     * @return string
+     */
+    public function getETag()
+    {
+        return $this->etag;
+    }
+
+    /**
      * Returns the annotation alias name.
      *
      * @return string
@@ -172,7 +226,7 @@ class Cache extends ConfigurationAnnotation
     /**
      * Only one cache directive is allowed
      *
-     * @return Boolean
+     * @return bool
      * @see ConfigurationInterface
      */
     public function allowArray()

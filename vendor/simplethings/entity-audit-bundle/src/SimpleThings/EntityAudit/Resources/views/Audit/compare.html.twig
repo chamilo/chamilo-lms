@@ -1,0 +1,25 @@
+{% extends "SimpleThingsEntityAuditBundle::layout.html.twig" %}
+
+{% block simplethings_entityaudit_content %}
+<h1>Comparing {{ className }} with identifiers of {{ id }} between revisions {{ oldRev }} and {{ newRev }}</h1>
+
+<table>
+    <thead><tr>
+        <th>Field</th>
+        <th>Deleted</th>
+        <th>Same</th>
+        <th>Updated</th>
+    </tr></thead>
+    <tbody>
+    {% for field, value in diff %}
+    <tr>
+        <td>{{ field }}</td>
+        <td>{{ value.old }}</td>
+        <td>{{ value.same }}</td>
+        <td>{{ value.new }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock simplethings_entityaudit_content %}

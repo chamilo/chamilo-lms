@@ -1,0 +1,15 @@
+fos_message:
+    db_driver: orm
+
+    thread_class: ChamiloLMS\CoreBundle\Entity\Thread
+    message_class: ChamiloLMS\CoreBundle\Entity\Message
+
+fos_comment:
+    db_driver: orm
+    class:
+        model:
+            comment: ChamiloLMS\CoreBundle\Entity\Comment
+            thread: ChamiloLMS\CoreBundle\Entity\Thread
+
+assetic:
+    bundles: [ "FOSCommentBundle" ]

@@ -1,0 +1,26 @@
+{% extends "SimpleThingsEntityAuditBundle::layout.html.twig" %}
+
+{% block simplethings_entityaudit_content %}
+<h1>Detail of {{ className }} with identifiers of {{ id }} at revisions {{ rev }}</h1>
+
+<p><a href="{{ path('simple_things_entity_audit_viewentity', { 'className': className, 'id': id }) }}">Compare revisions</a></p>
+<table>
+    <thead><tr>
+        <th>Field</th>
+        <th>Value</th>
+    </tr></thead>
+    <tbody>
+    {% for field, value in data %}
+    <tr>
+        <td>{{ field }}</td>
+        {% if value.timestamp is defined %}
+        <td>{{ value|date('m/d/Y') }}</td>
+        {% else %}
+        <td>{{ value }}</td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock simplethings_entityaudit_content %}

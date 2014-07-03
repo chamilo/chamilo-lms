@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * This file is part of the JsonSchema package.
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace JsonSchema\Constraints;
 
 /**
@@ -11,19 +18,21 @@ namespace JsonSchema\Constraints;
 class Enum extends Constraint
 {
     /**
-     * {inheritDoc}
+     * {@inheritDoc}
      */
     public function check($element, $schema = null, $path = null, $i = null)
     {
-        foreach ($schema->enum as $possibleValue) {
-            if ($possibleValue == $element) {
-                $found = true;
-                break;
+        // Only validate enum if the attribute exists
+        if ($element instanceof Undefined && (!isset($schema->required) || !$schema->required))  {
+            return;
+        }
+
+        foreach ($schema->enum as $enum) {
+            if ((gettype($element) === gettype($enum)) && ($element == $enum)) {
+                return;
             }
         }
 
-        if (!isset($found)) {
-            $this->addError($path, "does not have a value in the enumeration " . implode(', ', $schema->enum));
-        }
+        $this->addError($path, "does not have a value in the enumeration " . print_r($schema->enum, true));
     }
 }

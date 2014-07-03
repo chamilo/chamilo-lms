@@ -12,7 +12,6 @@
 namespace Pagerfanta\Adapter;
 
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
-use Pagerfanta\Adapter\DoctrineORM\Paginator as LegacyPaginator;
 
 /**
  * DoctrineORMAdapter.
@@ -35,15 +34,8 @@ class DoctrineORMAdapter implements AdapterInterface
      */
     public function __construct($query, $fetchJoinCollection = true, $useOutputWalkers = null)
     {
-        if (class_exists('Doctrine\ORM\Tools\Pagination\Paginator')) {
-            $this->paginator = new DoctrinePaginator($query, $fetchJoinCollection);
-            $this->paginator->setUseOutputWalkers($useOutputWalkers);
-        } else {
-            $this->paginator = new LegacyPaginator($query, $fetchJoinCollection);
-            if ($useOutputWalkers) {
-                throw new \InvalidArgumentException('There is no support for output walkers in legacy paginator. Please upgrade your doctrine ORM.');
-            }
-        }
+        $this->paginator = new DoctrinePaginator($query, $fetchJoinCollection);
+        $this->paginator->setUseOutputWalkers($useOutputWalkers);
     }
 
     /**

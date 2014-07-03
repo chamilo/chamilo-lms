@@ -1,0 +1,18 @@
+{% extends 'knp_menu.html.twig' %}
+
+{% block linkElement %}
+{% spaceless %}
+{% import 'knp_menu.html.twig' as macros %}
+<a href="{{ item.uri }}"{{ macros.attributes(item.linkAttributes) }}>
+{% if item.extras.icon|default(false) %}
+    {{ mopa_bootstrap_icon(item.extras.icon, item.extras.icon_white|default(false)) }}{{ ' ' }}
+{%- endif %}
+{{ block('label') }}
+{%- if item.extras.caret|default(false) %}
+    <b class="caret"></b>
+{% endif -%}
+</a>
+{% endspaceless %}
+{% endblock %}
+
+{% block label %}{{ item.label|trans()}}{% endblock %}

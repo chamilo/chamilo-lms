@@ -1,0 +1,13 @@
+{% extends "::login.html.twig" %}
+
+{% block fos_user_content %}
+    <div class="header"> {{ 'title_user_registration'|trans({}, 'SonataUserBundle') }}</div>
+    <form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register form-horizontal">
+        <div class="body bg-gray">
+            {{ form_widget(form) }}
+        </div>
+        <div class="footer">
+            <button type="submit" class="btn bg-olive btn-block">{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}</button>
+        </div>
+    </form>
+{% endblock %}

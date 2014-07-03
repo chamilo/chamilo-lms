@@ -1,0 +1,37 @@
+{% extends 'MopaBootstrapBundle::base.html.twig' %}
+
+
+{% block head_style %}
+{#
+uncomment and adapt this to your path
+{% stylesheets
+    '/Resources/public/css/bootstrap.css'
+%}
+<link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
+{% endstylesheets %}
+#}
+{% endblock head_style %}
+
+{#
+uncomment and adapt this to your path
+{% block foot_script %}
+{%- javascripts
+    'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'
+    '@MopaBootstrapBundle/Resources/bootstrap/js/tooltip.js'
+    '@MopaBootstrapBundle/Resources/bootstrap/js/affix.js'
+    '@MopaBootstrapBundle/Resources/bootstrap/js/alert.js'
+    '@MopaBootstrapBundle/Resources/bootstrap/js/button.js'
+    '@MopaBootstrapBundle/Resources/bootstrap/js/carousel.js'
+    '@MopaBootstrapBundle/Resources/bootstrap/js/collapse.js'
+    '@MopaBootstrapBundle/Resources/bootstrap/js/dropdown.js'
+    '@MopaBootstrapBundle/Resources/bootstrap/js/modal.js'
+    '@MopaBootstrapBundle/Resources/bootstrap/js/popover.js'
+    '@MopaBootstrapBundle/Resources/bootstrap/js/scrollspy.js'
+    '@MopaBootstrapBundle/Resources/bootstrap/js/tab.js'
+    '@MopaBootstrapBundle/Resources/bootstrap/js/transition.js'
+    '@MopaBootstrapBundle/Resources/public/js/mopabootstrap-collection.js'
+%}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+{% endblock foot_script %}
+#}

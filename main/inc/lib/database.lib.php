@@ -36,6 +36,8 @@ class Database
      */
     private static $connectionWrite;
 
+    private static $em;
+
     /**
      * Constructor
      *
@@ -58,6 +60,16 @@ class Database
         // Using read/write connections see the services.php file
         self::$connectionRead = isset($dbs['db_read']) ? $dbs['db_read'] : $db;
         self::$connectionWrite = isset($dbs['db_write']) ? $dbs['db_write'] : $db;
+    }
+
+    public static function setManager($em)
+    {
+        self::$em = $em;
+    }
+
+    public static function getManager()
+    {
+        return self::$em;
     }
 
     /**

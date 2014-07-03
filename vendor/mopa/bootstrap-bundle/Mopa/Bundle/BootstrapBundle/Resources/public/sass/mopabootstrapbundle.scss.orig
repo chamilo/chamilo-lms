@@ -1,0 +1,33 @@
+/*!
+ * MopaBootstrapBundle
+ *
+ * Copyright 2011 Mohrenweiser & Partner
+ * Licensed under the Apache License v2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Import this file in your sass files as first to be abled to access sass vars from your file
+ * OR
+ * Add it to the stylesheets of assetic or
+ *
+ * Be careful when using less this way, might be most straight forward, but assetic doesnt check the included files
+ * for changes, and will only regenerate the css if it detects changes in this file!
+ *
+ * For development it might be easier to include all you sass files in the layout directly
+ * But then assetic will compile each sass file in a own compiler session so you cant mix in the sass style into bootstrap, which might not be OK
+ */
+
+
+// Main bootstrap.sass entry point
+@import "../../bootstrap-sass/lib/bootstrap.scss";
+
+// The Paginator less for MopaBootstrapBundle
+@import "paginator.scss";
+
+// Collection support for MopaBootstrapBundle
+@import "collections.scss";
+
+// FormFlow support for MopaBootstrapBundle
+@import "form_flow.scss";
+
+// include the responsive after all of your stuff!
+// @import "../../bootstrap-sass/lib/responsive.scss";

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="cmf_routing.route_type_type.class">Symfony\Cmf\Bundle\RoutingBundle\Form\Type\RouteTypeType</parameter>
+    </parameters>
+
+    <services>
+        <service id="cmf_routing.route_type_form_type" class="%cmf_routing.route_type_type.class%">
+            <tag name="form.type" alias="cmf_routing_route_type" />
+        </service>
+    </services>
+</container>

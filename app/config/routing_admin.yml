@@ -1,0 +1,14 @@
+# cross links between kernels
+admin:
+    resource: '@SonataAdminBundle/Resources/config/routing/sonata_admin.xml'
+
+_sonata_admin:
+    resource: .
+    type:     sonata_admin
+
+soanata_user_admin:
+    resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
+
+sonata_media_pixlr:
+    resource: '@SonataMediaBundle/Resources/config/routing/pixlr.xml'
+    prefix:   /admin/media

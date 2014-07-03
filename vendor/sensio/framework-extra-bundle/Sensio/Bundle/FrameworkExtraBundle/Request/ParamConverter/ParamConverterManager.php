@@ -1,18 +1,18 @@
 <?php
 
+/*
+ * This file is part of the Symfony package.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter;
 
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ConfigurationInterface;
-
-/*
- * This file is part of the Symfony framework.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
 
 /**
  * Managers converters.
@@ -62,7 +62,7 @@ class ParamConverterManager
         $className = $configuration->getClass();
 
         // If the value is already an instance of the class we are trying to convert it into
-        // we should continue as no convertion is required
+        // we should continue as no conversion is required
         if (is_object($value) && $value instanceof $className) {
             return;
         }
@@ -107,7 +107,7 @@ class ParamConverterManager
     * be invoked explicitly.
     *
     * @param ParamConverterInterface $converter A ParamConverterInterface instance
-    * @param integer                 $priority  The priority (between -10 and 10).
+    * @param int                     $priority  The priority (between -10 and 10).
     * @param string                  $name      Name of the converter.
     */
     public function add(ParamConverterInterface $converter, $priority = 0, $name = null)

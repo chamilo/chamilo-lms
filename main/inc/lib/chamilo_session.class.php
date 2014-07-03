@@ -1,11 +1,121 @@
 <?php
 
 /**
- * ChamiloSession class definition
+ * ChamiloSession class
   */
 class ChamiloSession
 {
     public static $session;
+    public static $configuration;
+    public static $urlGenerator;
+    public static $security;
+    public static $translator;
+
+    public static $rootDir;
+    public static $logDir;
+    public static $tempDir;
+    public static $dataDir;
+    public static $courseDir;
+    public static $configDir;
+    public static $assets;
+    public static $htmlEditor;
+    public static $twig;
+
+    /**
+     * @return string
+     */
+    public static function getConfigDir()
+    {
+        return self::$configDir;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getLogDir()
+    {
+        return self::$logDir;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getTempDir()
+    {
+        return self::$tempDir;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getRootDir()
+    {
+        return self::$rootDir;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getDataDir()
+    {
+        return self::$dataDir;
+    }
+
+    /**
+     * @return string
+     */
+    public static function getCourseDir()
+    {
+        return self::$courseDir;
+    }
+
+    /**
+     * @return Twig_Environment
+     */
+    public static function getTwig()
+    {
+        return self::$twig;
+    }
+
+    /**
+     * @return ChamiloLMS\CoreBundle\Component\Editor\Editor
+     */
+    public static function getHtmlEditor()
+    {
+        return self::$htmlEditor;
+    }
+
+    /**
+     * @return Symfony\Component\Routing\Generator\UrlGeneratorInterface
+     */
+    public static function getUrlGenerator()
+    {
+        return self::$urlGenerator;
+    }
+
+    /**
+     * @return Symfony\Component\HttpFoundation\Session\SessionInterface;
+     */
+    public static function getSession()
+    {
+        return self::$session;
+    }
+
+    /**
+     * @return Symfony\Component\Security\Core\SecurityContextInterface
+     */
+    public static function getSecurity()
+    {
+        return self::$security;
+    }
+
+    /**
+     * @return Symfony\Bundle\FrameworkBundle\Translation\Translator
+     */
+    public static function getTranslator()
+    {
+        return self::$translator;
+    }
 
     /**
      * @param $session
@@ -13,6 +123,14 @@ class ChamiloSession
     public static function setSession($session)
     {
         self::$session = $session;
+    }
+
+    /**
+     * @return Symfony\Component\Templating\Helper\CoreAssetsHelper
+     */
+    public static function getAsset()
+    {
+        return self::$assets;
     }
 
     /**

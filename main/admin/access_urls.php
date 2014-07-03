@@ -6,9 +6,6 @@
  * @author Julio Montoya <gugli100@gmail.com>
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-/**
- * Initialization
- */
 // name of the language file that needs to be included
 $language_file = 'admin';
 $cidReset = true;
@@ -30,9 +27,7 @@ Display :: display_header($tool_name);
 $my_user_url_list = api_get_access_url_from_user(api_get_user_id());
 $current_access_url_id = api_get_current_access_url_id();
 $url_list = UrlManager::get_url_data();
-/**
- * Controller
- */
+
 if (isset ($_GET['action'])) {
     if ($_GET['action'] == 'show_message') {
         Display :: display_normal_message(Security::remove_XSS(stripslashes($_GET['message'])));

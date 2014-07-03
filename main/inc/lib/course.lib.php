@@ -474,11 +474,11 @@ class CourseManager
 
             // add event to system log
             $user_id = api_get_user_id();
-            event_system(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_COURSE_CODE, $courseCode, api_get_utc_datetime(), $user_id);
+            Event::addEvent(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_COURSE_CODE, $courseCode, api_get_utc_datetime(), $user_id);
 
             foreach ($user_list as $user_id_to_delete) {
                 $user_info = api_get_user_info($user_id_to_delete);
-                event_system(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id);
+                Event::addEvent(LOG_UNSUBSCRIBE_USER_FROM_COURSE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), $user_id);
             }
         }
     }
@@ -582,10 +582,10 @@ class CourseManager
                         sort        = '". ($course_sort)."'");
 
             // Add event to the system log
-            event_system(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_COURSE_CODE, $course_code, api_get_utc_datetime(), api_get_user_id());
+            Event::addEvent(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_COURSE_CODE, $course_code, api_get_utc_datetime(), api_get_user_id());
 
             $user_info = api_get_user_info($user_id);
-            event_system(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), api_get_user_id());
+            Event::addEvent(LOG_SUBSCRIBE_USER_TO_COURSE, LOG_USER_OBJECT, $user_info, api_get_utc_datetime(), api_get_user_id());
         }
         return (bool)$result;
     }
@@ -1348,10 +1348,12 @@ class CourseManager
         $courseId = Database::escape_string($courseId);
         $teachers = array();
         $sql = "SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.email, u.username, u.status
-                FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." u
+                FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)." cu
+                INNER JOIN ".Database::get_main_table(TABLE_MAIN_USER)." u
                 ON (cu.user_id = u.user_id)
-                WHERE   cu.c_id = '$courseId' AND
-                        cu.status = 1 ";
+                WHERE
+                    cu.c_id = '$courseId' AND
+                    cu.status = 1 ";
         $rs = Database::query($sql);
         while ($teacher = Database::fetch_array($rs)) {
             $teachers[$teacher['user_id']] = $teacher;
@@ -1711,7 +1713,7 @@ class CourseManager
 
         // Add event to system log
         $user_id = api_get_user_id();
-        event_system(LOG_COURSE_DELETE, LOG_COURSE_CODE, $code, api_get_utc_datetime(), $user_id, $code);
+        Event::addEvent(LOG_COURSE_DELETE, LOG_COURSE_CODE, $code, api_get_utc_datetime(), $user_id, $code);
     }
 
     /**
@@ -2915,9 +2917,8 @@ class CourseManager
      * @param null $maxPerPage
      * @return null|string
      */
-    static function displayCourses($user_id, $filter, $load_dirs, $getCount, $start = null, $maxPerPage = null)
+    public static function displayCourses($user_id, $filter, $load_dirs, $getCount, $start = null, $maxPerPage = null)
     {
-
         // Table definitions
         $TABLECOURS                     = Database :: get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER                 = Database :: get_main_table(TABLE_MAIN_COURSE_USER);
@@ -2933,16 +2934,17 @@ class CourseManager
             //$without_special_courses = ' AND course.code NOT IN ("'.implode('","',$special_course_list).'")';
         }
 
-        $select = " SELECT DISTINCT course.id,
-                course.title,
-                course.code,
-                course.subscribe subscr,
-                course.unsubscribe unsubscr,
-                course_rel_user.status status,
-                course_rel_user.sort sort,
-                course_rel_user.user_course_cat user_course_cat,
-                course.id as real_id
-                ";
+        $select = " SELECT DISTINCT
+                    course.id,
+                    course.title,
+                    course.code,
+                    course.subscribe subscr,
+                    course.unsubscribe unsubscr,
+                    course_rel_user.status status,
+                    course_rel_user.sort sort,
+                    course_rel_user.user_course_cat user_course_cat,
+                    course.id as real_id
+        ";
 
         $from = "$TABLECOURS course, $TABLECOURSUSER  course_rel_user, $TABLE_ACCESS_URL_REL_COURSE url ";
 
@@ -2980,7 +2982,6 @@ class CourseManager
             $row = Database::fetch_array($result);
             return $row['total'];
         }
-
         $result = Database::query($sql);
 
         $html = null;
@@ -2989,7 +2990,6 @@ class CourseManager
         // Browse through all courses.
         while ($course = Database::fetch_array($result)) {
             $course_info = api_get_course_info($course['code']);
-            //$course['id_session'] = null;
             $course_info['id_session'] = null;
             $course_info['status'] = $course['status'];
 
@@ -3035,15 +3035,17 @@ class CourseManager
                 }
             }
 
-            $course_title = $course_info['title'];
+            //$course_title = $course_info['title'];
 
             $course_title_url = '';
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED || $course['status'] == COURSEMANAGER) {
-                $course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?id_session=0';
+                //$course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?id_session=0';
+                $course_title_url = api_get_path(WEB_COURSE_PATH).$course_info['code'].'/index.php?id_session=0';
                 $course_title = Display::url($course_info['title'], $course_title_url);
             } else {
                 $course_title = $course_info['title']." ".Display::tag('span',get_lang('CourseClosed'), array('class'=>'item_closed'));
             }
+
 
             // Start displaying the course block itself
             if (api_get_setting('display_coursecode_in_courselist') == 'true') {
@@ -3740,7 +3742,7 @@ class CourseManager
         $urlId = api_get_current_access_url_id();
         $limit  = intval($limit);
 
-        //Getting my courses
+        // Getting my courses
         $my_course_list = CourseManager::get_courses_list_by_user_id(api_get_user_id());
 
         $my_course_code_list = array();
@@ -4837,7 +4839,7 @@ class CourseManager
 
                 // Add event to the system log.
                 $user_id = api_get_user_id();
-                event_system(LOG_COURSE_CREATE, LOG_COURSE_CODE, $code, api_get_utc_datetime(), $user_id, $code);
+                Event::addEvent(LOG_COURSE_CREATE, LOG_COURSE_CODE, $code, api_get_utc_datetime(), $user_id, $code);
 
                 $send_mail_to_admin = api_get_setting('send_email_to_admin_when_create_course');
 

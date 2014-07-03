@@ -2,17 +2,14 @@
 /* For licensing terms, see /license.txt */
 
 /**
+ * Class CourseDescriptionController
  * This file contains class used like controller, it should be included inside a dispatcher file (e.g: index.php)
  * @author Christian Fasanando <christian1827@gmail.com>
  * @package chamilo.course_description
  */
 
-/**
- * Controller script. Prepares the common background variables to give to the scripts corresponding to
- * the requested action
- * @package chamilo.course_description 
- */
-class CourseDescriptionController { // extends Controller {	
+class CourseDescriptionController
+{
 		
 	private $toolname;    
 	private $view; 
@@ -20,7 +17,8 @@ class CourseDescriptionController { // extends Controller {
 	/**
 	 * Constructor
 	 */
-	public function __construct() {		
+	public function __construct()
+    {
 		$this->toolname = 'course_description';	
 		$this->view = new View($this->toolname);			
 	}
@@ -31,7 +29,8 @@ class CourseDescriptionController { // extends Controller {
 	 * @param boolean   	true for listing history (optional)
 	 * @param array 	message for showing by action['edit','add','destroy'] (optional) 
 	 */
-	public function listing($history=false, $messages=array()) {
+    public function listing($history=false, $messages=array())
+    {
 		$course_description = new CourseDescription();
 		$session_id = api_get_session_id();
 		$course_description->set_session_id($session_id);        
@@ -44,6 +43,11 @@ class CourseDescriptionController { // extends Controller {
 		$data['default_description_title_editable'] = $course_description->get_default_description_title_editable();
 		$data['default_description_icon'] = $course_description->get_default_description_icon();		
 		$data['messages'] = $messages;
+        $browser = api_get_navigator();
+
+        if (strpos($data['descriptions'], '<iframe') !== false && $browser['name'] == 'Chrome') {
+            header("X-XSS-Protection: 0");
+        }
 		
 		// render to the view
 		$this->view->set_data($data);
@@ -57,7 +61,8 @@ class CourseDescriptionController { // extends Controller {
 	 * render to listing or edit view
 	 * @param int description type
 	 */
-	public function edit($id, $description_type) {
+    public function edit($id, $description_type)
+    {
 		$course_description = new CourseDescription();
 		$session_id = api_get_session_id();
 		$course_description->set_session_id($session_id);		
@@ -151,7 +156,8 @@ class CourseDescriptionController { // extends Controller {
 	 * It's used for adding a course description,
 	 * render to listing or add view
 	 */
-	public function add() {
+	public function add()
+    {
 		$course_description = new CourseDescription();
 		$session_id = api_get_session_id();
 		$course_description->set_session_id($session_id);
@@ -216,7 +222,8 @@ class CourseDescriptionController { // extends Controller {
 	 * render to listing view
 	 * @param int description type
 	 */
-	public function destroy($id) {		
+	public function destroy($id)
+    {
 		$course_description = new CourseDescription();
 		$session_id = api_get_session_id();
 		$course_description->set_session_id($session_id);		

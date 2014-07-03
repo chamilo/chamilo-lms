@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en" target-language="de" datatype="plaintext" original="file.ext">
+    <body>
+      <trans-unit id="dashboard.cmf">
+        <source>dashboard.cmf</source>
+        <target>Symfony CMF</target>
+      </trans-unit>
+      <trans-unit id="dashboard.label_routing">
+        <source>dashboard.label_routing</source>
+        <target>Route</target>
+      </trans-unit>
+      <trans-unit id="dashboard.label_redirect_routing">
+        <source>dashboard.label_redirect_routing</source>
+        <target>Umleitung</target>
+      </trans-unit>
+      <trans-unit id="breadcrumb.link_route_list">
+        <source>breadcrumb.link_route_list</source>
+        <target>Routen</target>
+      </trans-unit>
+      <trans-unit id="breadcrumb.link_route_create">
+        <source>breadcrumb.link_route_create</source>
+        <target>Erstellen</target>
+      </trans-unit>
+      <trans-unit id="breadcrumb.link_route_edit">
+        <source>breadcrumb.link_route_edit</source>
+        <target>Bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="breadcrumb.link_route_delete">
+        <source>breadcrumb.link_route_delete</source>
+        <target>Löschen</target>
+      </trans-unit>
+      <trans-unit id="breadcrumb.link_redirect_route_list">
+        <source>breadcrumb.link_redirect_route_list</source>
+        <target>Umleitungen</target>
+      </trans-unit>
+      <trans-unit id="breadcrumb.link_redirect_route_create">
+        <source>breadcrumb.link_redirect_route_create</source>
+        <target>Erstellen</target>
+      </trans-unit>
+      <trans-unit id="breadcrumb.link_redirect_route_edit">
+        <source>breadcrumb.link_redirect_route_edit</source>
+        <target>Bearbeiten</target>
+      </trans-unit>
+      <trans-unit id="breadcrumb.link_redirect_route_delete">
+        <source>breadcrumb.link_redirect_route_delete</source>
+        <target>Löschen</target>
+      </trans-unit>
+      <trans-unit id="filter.label_name">
+        <source>filter.label_name</source>
+        <target>Name</target>
+      </trans-unit>
+      <trans-unit id="list.label_path">
+        <source>list.label_path</source>
+        <target>URL</target>
+      </trans-unit>
+      <trans-unit id="form.group_general">
+        <source>form.group_general</source>
+        <target>Allgemein</target>
+      </trans-unit>
+      <trans-unit id="form.group_advanced">
+        <source>form.group_advanced</source>
+        <target>Details</target>
+      </trans-unit>
+      <trans-unit id="form.label_parent">
+        <source>form.label_parent</source>
+        <target>Übergeordnet</target>
+      </trans-unit>
+      <trans-unit id="form.label_name">
+        <source>form.label_name</source>
+        <target>Letzter URL-Teil</target>
+      </trans-unit>
+      <trans-unit id="form.label_variable_pattern">
+        <source>form.label_variable_pattern</source>
+        <target>Variablenmuster</target>
+      </trans-unit>
+      <trans-unit id="form.help_variable_pattern">
+        <source>form.help_variable_pattern</source>
+        <target>Ein Muster im Format {variable}/{mehr}... Die Felder werden dem Controller übergeben falls er sie deklariert.</target>
+      </trans-unit>
+      <trans-unit id="form.label_content">
+        <source>form.label_content</source>
+        <target>Inhalt</target>
+      </trans-unit>
+      <trans-unit id="form.label_defaults">
+        <source>form.label_defaults</source>
+        <target>Vorgabewerte</target>
+      </trans-unit>
+      <trans-unit id="form.label_options">
+        <source>form.label_options</source>
+        <target>Optionen</target>
+      </trans-unit>
+      <trans-unit id="form.label_route_name">
+        <source>form.label_route_name</source>
+        <target>Name</target>
+      </trans-unit>
+      <trans-unit id="form.label_uri">
+        <source>form.label_uri</source>
+        <target>URI</target>
+      </trans-unit>
+      <trans-unit id="form.label_route_target">
+        <source>form.label_route_target</source>
+        <target>Routenziel</target>
+      </trans-unit>
+      <trans-unit id="form.group_routes">
+        <source>form.group_routes</source>
+        <target>Routen</target>
+      </trans-unit>
+      <trans-unit id="form.label_routes">
+        <source>form.label_routes</source>
+        <target>Routen</target>
+      </trans-unit>
+      <trans-unit id="form.label_add_locale_pattern">
+        <source>form.label_add_locale_pattern</source>
+        <target>Sprache hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="form.label_add_format_pattern">
+        <source>form.label_add_format_pattern</source>
+        <target>Formatmuster hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="form.label_add_trailing_slash">
+        <source>form.label_add_trailing_slash</source>
+        <target>Abschließenden Schrägstrich hinzufügen</target>
+      </trans-unit>
+      <trans-unit id="form.help_add_format_pattern">
+        <source>form.help_options</source>
+        <target>
+            <![CDATA[
+                Sprache: Die URL enthält in diesem Fall die Sprache: /{locale}/eine/url
+                Format: Format zu URL hinzufügen: /eine/url.{format}. Wenn nichts angegeben wird, ist das Format 'html'<br/>
+                Schrägstrich: Die URL hört in diesem Fall mit einem Schrägstrich auf, zum Beispiel /eine/url/
+            ]]>
+        </target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -1,0 +1,21 @@
+spy_timeline:
+    drivers:
+        orm:
+            object_manager: doctrine.orm.entity_manager
+            classes:
+                query_builder: ~ # Spy\TimelineBundle\Driver\ORM\QueryBuilder\QueryBuilder
+                timeline:         Application\Sonata\TimelineBundle\Entity\Timeline
+                action:           Application\Sonata\TimelineBundle\Entity\Action
+                component:        Application\Sonata\TimelineBundle\Entity\Component
+                action_component: Application\Sonata\TimelineBundle\Entity\ActionComponent
+
+    filters:
+        data_hydrator:
+            priority:             20
+            service:              spy_timeline.filter.data_hydrator
+            filter_unresolved:    false
+            locators:
+                - spy_timeline.filter.data_hydrator.locator.doctrine_orm
+
+sonata_timeline:
+    manager_type: orm

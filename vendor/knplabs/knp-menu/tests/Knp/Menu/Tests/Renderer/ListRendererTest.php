@@ -3,19 +3,26 @@
 namespace Knp\Menu\Tests\Renderer;
 
 use Knp\Menu\Renderer\ListRenderer;
-use Knp\Menu\Matcher\MatcherInterface;
+use Knp\Menu\MenuItem;
+use Knp\Menu\MenuFactory;
 
 class ListRendererTest extends AbstractRendererTest
 {
-    protected function createRenderer(MatcherInterface $matcher)
+    protected function createRenderer()
     {
-        $renderer = new ListRenderer($matcher, array('compressed' => true));
+        $renderer = new ListRenderer(array('compressed' => true));
 
         return $renderer;
     }
 
     public function testPrettyRendering()
     {
+        $menu = new MenuItem('Root li', new MenuFactory());
+        $menu->setChildrenAttributes(array('class' => 'root'));
+        $menu->addChild('Parent 1');
+        $menu->addChild('Parent 2');
+
+        $renderer = new ListRenderer();
         $rendered = <<<HTML
 <ul class="root">
   <li class="first">
@@ -28,6 +35,6 @@ class ListRendererTest extends AbstractRendererTest
 
 HTML;
 
-        $this->assertEquals($rendered, $this->renderer->render($this->menu, array('compressed' => false, 'depth' => 1)));
+        $this->assertEquals($rendered, $renderer->render($menu));
     }
 }

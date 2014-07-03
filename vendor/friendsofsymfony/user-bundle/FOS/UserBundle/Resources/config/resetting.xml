@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+
+        <service id="fos_user.resetting.form" factory-method="createNamed" factory-service="form.factory" class="Symfony\Component\Form\Form">
+            <argument>%fos_user.resetting.form.name%</argument>
+            <argument>%fos_user.resetting.form.type%</argument>
+            <argument>null</argument>
+            <argument type="collection">
+                <argument key="validation_groups">%fos_user.resetting.form.validation_groups%</argument>
+            </argument>
+        </service>
+
+        <service id="fos_user.resetting.form.type" class="FOS\UserBundle\Form\Type\ResettingFormType">
+            <tag name="form.type" alias="fos_user_resetting" />
+        </service>
+
+        <service id="fos_user.resetting.form.handler.default" class="FOS\UserBundle\Form\Handler\ResettingFormHandler" scope="request" public="false">
+            <argument type="service" id="fos_user.resetting.form" />
+            <argument type="service" id="request" />
+            <argument type="service" id="fos_user.user_manager" />
+        </service>
+
+    </services>
+
+</container>

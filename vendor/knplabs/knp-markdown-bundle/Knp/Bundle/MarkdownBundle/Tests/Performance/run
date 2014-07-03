@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+
+if (!defined('STDIN'))
+{
+  die('This tool is designed to be run from the command line.'."\n");
+}
+
+if(!isset($_SERVER['argv'][1]))
+{
+    die('No test name provided');
+}
+
+$name = ucfirst($_SERVER['argv'][1]);
+
+require_once __DIR__.'/'.$name.'.php';
+
+$class = 'Bundle\\MarkdownBundle\\Tests\\Performance\\'.$name;
+$test = new $class();
+print $test->run();
+
+return 0;

@@ -23,12 +23,15 @@ require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 $nameTools = get_lang('Forum');
+$forumUrl = api_get_path(WEB_CODE_PATH).'forum/';
 
 // Are we in a lp ?
 $origin = '';
 if (isset($_GET['origin'])) {
     $origin =  Security::remove_XSS($_GET['origin']);
 }
+$my_search = null;
+$gradebook = null;
 
 /* MAIN DISPLAY SECTION */
 
@@ -42,7 +45,7 @@ $current_thread	= get_thread_information($_GET['thread']); // Nnote: This has to
 $current_forum	= get_forum_information($current_thread['forum_id']); // Note: This has to be validated that it is an existing forum.
 $current_forum_category	= get_forumcategory_information($current_forum['forum_category']);
 
-$whatsnew_post_info	= $_SESSION['whatsnew_post_info']; // This variable should be deprecated?
+$whatsnew_post_info	= isset($_SESSION['whatsnew_post_info']) ? $_SESSION['whatsnew_post_info'] : null; // This variable should be deprecated?
 
 /* Header and Breadcrumbs */
 
@@ -59,7 +62,7 @@ if (!empty($gradebook) && $gradebook == 'view') {
 }
 
 if ($origin == 'group') {
-    $session_toolgroup = intval($_SESSION['toolgroup']);
+    $session_toolgroup = api_get_group_id();
     $group_properties = GroupManager :: get_group_properties($session_toolgroup);
     $interbreadcrumb[] = array('url'=>'../group/group.php', 'name' => get_lang('Groups'));
     $interbreadcrumb[] = array('url'=>'../group/group_space.php?gidReq='.$session_toolgroup, 'name'=> get_lang('GroupSpace').' '.$group_properties['name']);
@@ -130,14 +133,8 @@ if ($my_message != 'PostDeletedSpecial') {
     echo '<span style="float:right;">'.search_link().'</span>';
     if ($origin != 'learnpath') {
 
-        /*if ($origin == 'group') {
-            echo '<a href="../group/group_space.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('Groups'), '', ICON_SIZE_MEDIUM).'</a>';
-            echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'&amp;origin='.$origin.'">'.Display::return_icon('forum.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
-        } else {
-            echo '<a href="index.php?gradebook='.$gradebook.'">'.Display::return_icon('back.png', get_lang('BackToForumOverview'), '', ICON_SIZE_MEDIUM).'</a>';
-            echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'">'.Display::return_icon('forum.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
-        }*/
-        echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'&amp;origin='.$origin.'">'.Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
+        echo '<a href="'.$forumUrl.'viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&'.api_get_cidreq().'">'.
+            Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
 
     }
     // The reply to thread link should only appear when the forum_category is not locked AND the forum is not locked AND the thread is not locked.
@@ -147,18 +144,13 @@ if ($my_message != 'PostDeletedSpecial') {
         if ($_user['user_id'] OR ($current_forum['allow_anonymous'] == 1 AND !$_user['user_id'])) {
             // reply link
             if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
-                echo '<a href="reply.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread&amp;origin='.$origin.'">'.Display::return_icon('reply_thread.png', get_lang('ReplyToThread'), '', ICON_SIZE_MEDIUM).'</a>';
+                echo '<a href="'.$forumUrl.'reply.php?'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&amp;action=replythread">'.
+                    Display::return_icon('reply_thread.png', get_lang('ReplyToThread'), '', ICON_SIZE_MEDIUM).'</a>';
             }
             // new thread link
             if ((api_is_allowed_to_edit(false, true) && !(api_is_course_coach() && $current_forum['session_id'] != $_SESSION['id_session'])) OR ($current_forum['allow_new_threads'] == 1 AND isset($_user['user_id'])) OR ($current_forum['allow_new_threads'] == 1 AND !isset($_user['user_id']) AND $current_forum['allow_anonymous'] == 1)) {
                 if ($current_forum['locked'] <> 1 AND $current_forum['locked'] <> 1) {
                     echo '&nbsp;&nbsp;';
-/*					if ( isset($_GET['gradebook']) && $_GET['gradebook'] != '') {
-                        $info_thread = get_thread_information($_GET['thread']);
-                        echo '<a href="newthread.php?'.api_get_cidreq().'&amp;forum='.$info_thread['forum_id'].'&amp;origin='.$origin.'&amp;gradebook='.Security::remove_XSS($_GET['gradebook']).'">'.Display::return_icon('new_thread.png', get_lang('NewTopic'), '', ICON_SIZE_MEDIUM).'</a>';
-                    } else {
-                        echo '<a href="newthread.php?'.api_get_cidreq().'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'">'.Display::return_icon('new_thread.png', get_lang('NewTopic'), '', ICON_SIZE_MEDIUM).'</a>';
-                    } */
                 } else {
                     echo get_lang('ForumLocked');
                 }
@@ -168,10 +160,10 @@ if ($my_message != 'PostDeletedSpecial') {
 
     // The different views of the thread.
     if ($origin != 'learnpath') {
-        $my_url = '<a href="viewthread.php?'.api_get_cidreq().'&amp;gidReq='.Security::remove_XSS($_GET['gidReq']).'&amp;forum='.Security::remove_XSS($_GET['forum']).'&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'&amp;thread='.Security::remove_XSS($_GET['thread']).'&amp;search='.Security::remove_XSS(urlencode($my_search));
-        echo $my_url.'&amp;view=flat&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('forum_listview.gif', get_lang('FlatView')).get_lang('FlatView').'</a>';
-        echo $my_url.'&amp;view=threaded&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('forum_threadedview.gif', get_lang('ThreadedView')).get_lang('ThreadedView').'</a>';
-        echo $my_url.'&amp;view=nested&amp;origin='.$origin.'&amp;gradebook='.$gradebook.'">'.Display::return_icon('forum_nestedview.gif', get_lang('NestedView')).get_lang('NestedView').'</a>';
+        $my_url = '<a href="'.$forumUrl.'viewthread.php?'.api_get_cidreq().'&'.api_get_cidreq().'&forum='.Security::remove_XSS($_GET['forum']).'&thread='.Security::remove_XSS($_GET['thread']).'&search='.Security::remove_XSS(urlencode($my_search));
+        echo $my_url.'&amp;view=flat">'.Display::return_icon('forum_listview.gif', get_lang('FlatView')).get_lang('FlatView').'</a>';
+        echo $my_url.'&amp;view=threaded">'.Display::return_icon('forum_threadedview.gif', get_lang('ThreadedView')).get_lang('ThreadedView').'</a>';
+        echo $my_url.'&amp;view=nested">'.Display::return_icon('forum_nestedview.gif', get_lang('NestedView')).get_lang('NestedView').'</a>';
     }
     $my_url = null;
 
@@ -200,19 +192,6 @@ if ($my_message != 'PostDeletedSpecial') {
     // Note pcool: I tried to use only one sql statement (and function) for this,
     // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
 
-    /*echo '<table class="forum_table_title" width="100%">';
-
-    // The thread
-    echo '<tr><th style="padding:5px;" align="left" colspan="6">';
-    echo '<div class="forum_title">';
-        echo '<a href="viewforum.php?forum='.Security::remove_XSS($_GET['forum']).'&amp;gidReq='.$session_toolgroup.'&amp;origin='.$origin.'">'.$current_forum['forum_title'].'</a><br />';
-        echo '<span class="forum_description">';
-        echo $current_forum['forum_comment'];
-        echo '</span>';
-    echo '</div>';
-
-    echo '</th></tr>';
-    echo '</table>';*/
     
     if (isset($_GET['msg']) && isset($_GET['type'])) {
     	switch($_GET['type']) {

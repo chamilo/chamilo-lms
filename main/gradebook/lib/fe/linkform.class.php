@@ -69,29 +69,40 @@ class LinkForm extends FormValidator
    		$this->addElement('submit', null, get_lang('Ok'));
 	}
 
-	protected function build_create() {
+	protected function build_create()
+    {
 		$this->addElement('header', get_lang('MakeLink'));
 		$select = $this->addElement('select', 'select_link', get_lang('ChooseLink'), null, array('onchange' => 'document.create_link.submit()'));
 
-		$linktypes = LinkFactory :: get_all_types();
+		$linkTypes = LinkFactory::get_all_types();
 
 		$select->addoption('['.get_lang('ChooseLink').']', 0);
 
-		$cc = $this->category_object->get_course_code();
+		$courseCode = $this->category_object->get_course_code();
 
-		foreach ($linktypes as $linktype) {
-			$link = LinkFactory :: create ($linktype);
-			if (!empty($cc)) {
-				$link->set_course_code($cc);
-			} elseif(!empty($_GET['course_code'])) {
-				$link->set_course_code(Database::escape_string($_GET['course_code']));
+		foreach ($linkTypes as $linkType) {
+            // The hot potatoe link will be added "inside" the exercise option.
+            if ($linkType == LINK_HOTPOTATOES) {
+                continue;
 			}
+            $link = $this->createLink($linkType, $courseCode);
 			// disable this element if the link works with a dropdownlist
 			// and if there are no links left
 			if (!$link->needs_name_and_description() && count($link->get_all_links()) == '0') {
-				$select->addoption($link->get_type_name(), $linktype, 'disabled');
+				$select->addoption($link->get_type_name(), $linkType, 'disabled');
 			} else {
-				$select->addoption($link->get_type_name(), $linktype);
+                if ($link->get_type() == LINK_EXERCISE) {
+                    // Adding exercise
+				    $select->addoption($link->get_type_name(), $linkType);
+                    // Adding hot potatoes
+                    $linkHot = $this->createLink(LINK_HOTPOTATOES, $courseCode);
+                    $select->addoption(
+                        '&nbsp;&nbsp;&nbsp;'.$linkHot->get_type_name(),
+                        LINK_HOTPOTATOES
+                    );
+                } else {
+                    $select->addoption($link->get_type_name(), $linkType);
+                }
 			}
 		}
 
@@ -99,4 +110,16 @@ class LinkForm extends FormValidator
 			$this->setDefaults(array('select_link' => $this->extra));
 		}
 	}
+    /**
+     * @param $link
+     * @param $courseCode
+     * @return AttendanceLink|DropboxLink|ExerciseLink|ForumThreadLink|LearnpathLink|null|StudentPublicationLink|SurveyLink
+     */
+    private function createLink($link, $courseCode)
+    {
+        $link = LinkFactory::create($link);
+        if (!empty($courseCode)) {
+            $link->set_course_code($courseCode);
+        } elseif(!empty($_GET['course_code'])) {
+            $link->set_course_code(Database::escape_string($_GET['course_code']));
 }

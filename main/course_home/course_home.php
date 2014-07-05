@@ -268,3 +268,4 @@ $tpl->assign('course_code', $course_code);
 
 $tpl->display_one_col_template();
 Session::erase('_gid');
+DocumentManager::removeGeneratedAudioTempFile();

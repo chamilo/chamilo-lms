@@ -3899,7 +3899,6 @@ class DocumentManager
     public static function readNanogongFile($file)
     {
         $nanoGongJarFile = api_get_path(WEB_LIBRARY_PATH).'nanogong/nanogong.jar';
-
         $html = '<applet id="applet" archive="'.$nanoGongJarFile.'" code="gong.NanoGong" width="160" height="95">';
             $html .= '<param name="SoundFileURL" value="'.$file.'" />';
             $html .= '<param name="ShowSaveButton" value="false" />';
@@ -4025,5 +4024,63 @@ class DocumentManager
         }
 
         return false;
+    }
+
+    /**
+     * @param string $file ($document_data['path'])
+     * @param string $file_url_sys
+     * @return string
+     */
+    public static function generateAudioTempFile($file, $file_url_sys)
+    {
+        //make temp audio
+        $temp_folder = api_get_path(SYS_ARCHIVE_PATH).'temp/audio';
+        if (!file_exists($temp_folder)) {
+            @mkdir($temp_folder, api_get_permissions_for_new_directories(), true);
+        }
+
+        //make htaccess with allow from all, and file index.html into temp/audio
+        $htaccess = api_get_path(SYS_ARCHIVE_PATH).'temp/audio/.htaccess';
+        if (!file_exists($htaccess)) {
+            $htaccess_content="order deny,allow\r\nallow from all\r\nOptions -Indexes";
+            $fp = @ fopen(api_get_path(SYS_ARCHIVE_PATH).'temp/audio/.htaccess', 'w');
+            if ($fp) {
+                fwrite($fp, $htaccess_content);
+                fclose($fp);
+            }
+        }
+
+        //encript temp name file
+        $name_crip = sha1(uniqid());//encript
+        $findext= explode(".", $file);
+        $extension = $findext[count($findext)-1];
+        $file_crip = $name_crip.'.'.$extension;
+
+        //copy file to temp/audio directory
+        $from_sys = $file_url_sys;
+        $to_sys = api_get_path(SYS_ARCHIVE_PATH).'temp/audio/'.$file_crip;
+
+        if (file_exists($from_sys)) {
+            copy($from_sys, $to_sys);
+        }
+
+        //get  file from tmp directory
+        $_SESSION['temp_audio_nanogong'] = $to_sys;
+
+        return api_get_path(WEB_ARCHIVE_PATH).'temp/audio/'.$file_crip;
+    }
+
+    /**
+     * Erase temp nanogons' audio, image edit
+     */
+    public static function removeGeneratedAudioTempFile()
+    {
+        if (isset($_SESSION['temp_audio_nanogong'])
+            && !empty($_SESSION['temp_audio_nanogong'])
+            && is_file($_SESSION['temp_audio_nanogong'])) {
+
+            unlink($_SESSION['temp_audio_nanogong']);
+            unset($_SESSION['temp_audio_nanogong']);
+        }
     }
 }

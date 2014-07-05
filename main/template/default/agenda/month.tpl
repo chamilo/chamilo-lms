@@ -265,7 +265,6 @@ $(document).ready(function() {
 
                 {% if type != 'admin' %}
                     $('#visible_to_read_only').show();
-                console.log(calEvent.sent_to);
                     $("#visible_to_read_only_users").html(calEvent.sent_to);
 				{% endif %}
 

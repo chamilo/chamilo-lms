@@ -1,4 +1,4 @@
- <?php
+<?php
 /**
  * HTML class for static data
  * @example  $form->addElement('label', 'My label', 'Content');
@@ -18,7 +18,7 @@ require_once 'HTML/QuickForm/static.php';
  * @since       3.0
  * @deprecated  Please use the templates rather than add raw HTML via this element
  */
-class HTML_QuickForm_label extends HTML_QuickForm_static 
+class HTML_QuickForm_label extends HTML_QuickForm_static
 {
     // {{{ constructor
 
@@ -47,7 +47,7 @@ class HTML_QuickForm_label extends HTML_QuickForm_static
     function accept(&$renderer, $required=false, $error=null) {
         $renderer->renderHtml($this);
     }
-    
+
     function toHtml() {
          $for = $this->getLabelFor();
          return '<div class="control-group ">
@@ -56,11 +56,11 @@ class HTML_QuickForm_label extends HTML_QuickForm_static
                     '.HTML_QuickForm_static::toHtml().'
                         </div>
                  </div>
-                                        
+
                 ';
     } //end func toHtml
 
-    
+
 
     // }}}
 } //end class HTML_QuickForm_html

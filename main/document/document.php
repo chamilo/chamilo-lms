@@ -48,18 +48,14 @@ require_once $lib_path.'fileManage.lib.php';
 
 api_protect_course_script(true);
 
-//erase temp nanogons' audio, image edit
-if (isset($_SESSION['temp_audio_nanogong'])
-    && !empty($_SESSION['temp_audio_nanogong'])
-    && is_file($_SESSION['temp_audio_nanogong'])) {
-    unlink($_SESSION['temp_audio_nanogong']);
-}
+DocumentManager::removeGeneratedAudioTempFile();
 
 if (isset($_SESSION['temp_realpath_image'])
     && !empty($_SESSION['temp_realpath_image'])
     && is_file($_SESSION['temp_realpath_image'])) {
     unlink($_SESSION['temp_realpath_image']);
 }
+
 $courseInfo = api_get_course_info();
 $course_dir = $courseInfo['directory'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
@@ -1516,7 +1512,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
             $row = array();
             $row['id'] = $document_data['id'];
             $row['type'] = $document_data['filetype'];
-            
+
             // If the item is invisible, wrap it in a span with class invisible.
             $is_visible = DocumentManager::is_visible_by_id(
                 $document_data['id'],

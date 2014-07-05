@@ -3,19 +3,15 @@
 /**
  * Quick form to ask for password reminder.
  * @package chamilo.custompages
- */ 
-/**
- * Initialization
  */
-require_once('../../main/inc/global.inc.php'); 
+
+require_once('../../main/inc/global.inc.php');
 require_once('language.php');
-/**
- * HTML
- */
+
 ?>
 <html>
 <head>
-	<title>Password recovery</title>
+	<title><?php echo custompages_get_lang('LostPassword');?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<!--[if !IE 6]><!-->
 	<link rel="stylesheet" type="text/css" href="../../custompages/style.css" />
@@ -27,7 +23,7 @@ require_once('language.php');
 	<script type="text/javascript">
 		$(document).ready(function() {
 			// Handler pour la touche retour
-			$('input').keyup(function(e) { 
+			$('input').keyup(function(e) {
 				if (e.keyCode == 13) {
 					$('#lostpassword-form').submit();
 				}

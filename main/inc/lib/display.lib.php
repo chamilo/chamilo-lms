@@ -1205,6 +1205,7 @@ class Display
         $notifications = array();
         // Filter all last edits of all tools of the course
         while ($res && ($item_property = Database::fetch_array($res))) {
+
             // First thing to check is if the user never entered the tool
             // or if his last visit was earlier than the last modification.
             if ((!isset($lastTrackInCourseDate[$item_property['tool']])
@@ -1217,12 +1218,15 @@ class Display
                       && $item_property['tool'] != TOOL_NOTEBOOK
                       && $item_property['tool'] != TOOL_CHAT)
                    )
-                  )
+                )
                 // Take only what's visible or "invisible but where the user is a teacher" or where the visibility is unset.
                 && ($item_property['visibility'] == '1'
                     || ($course_info['status'] == '1' && $item_property['visibility'] == '0')
-                    || !isset($item_property['visibility'])))
-            {
+                    || !isset($item_property['visibility']))
+            ) {
+                if ($course_info['real_id'] == 1) {
+                  //  var_dump($item_property);
+                }
                 // Also drop announcements and events that are not for the user or his group.
                 if (($item_property['tool'] == TOOL_ANNOUNCEMENT
                          || $item_property['tool'] == TOOL_CALENDAR_EVENT)
@@ -1250,6 +1254,12 @@ class Display
                 $notifications[$item_property['tool']] = $item_property;
             }
         }
+
+        if ($course_info['real_id'] == 1) {
+            /*var_dump($notifications);
+            exit;*/
+        }
+
         // Show all tool icons where there is something new.
         $retvalue = '&nbsp;';
         while (list($key, $notification) = each($notifications)) {
@@ -1377,6 +1387,10 @@ class Display
             if ($session_info['date_end'] == '0000-00-00' && $session_info['date_start'] == '0000-00-00') {
                 if (api_get_setting('show_session_coach') === 'true') {
                     $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info['firstname'], $session_info['lastname']);
+                }
+                if (isset($session_info['duration']) && !empty($session_info['duration'])) {
+                    $daysLeft = SessionManager::getDayLeftInSession($session_id, api_get_user_id(), $session_info['duration']);
+                    $session['duration'] = sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft);
                 }
                 $active = true;
             } else {
@@ -1715,7 +1729,8 @@ class Display
         switch ($fileInfo['extension']) {
             case 'wav':
                 if (isset($params['url'])) {
-                    return DocumentManager::readNanogongFile($params['url']);
+                    $url = DocumentManager::generateAudioTempFile(basename($file), $file);
+                    return DocumentManager::readNanogongFile($url);
                 }
                 break;
             case 'mp3':

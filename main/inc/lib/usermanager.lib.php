@@ -2656,8 +2656,13 @@ class UserManager
                 INNER JOIN $tbl_session_course sc
                 ON (scu.id_session = sc.id_session AND scu.course_code = sc.course_code)
                 $join_access_url
-                WHERE scu.id_user = $user_id AND scu.id_session = $session_id $where_access_url
-                ORDER BY code";
+                WHERE scu.id_user = $user_id AND scu.id_session = $session_id $where_access_url";
+
+        $orderBy = " ORDER BY code ";
+        if (SessionManager::orderCourseIsEnabled()) {
+            $orderBy =  ' ORDER BY position';
+        }
+        $sql .= $orderBy;
 
         $result = Database::query($sql);
 
@@ -2686,7 +2691,7 @@ class UserManager
                         s.id_coach = $user_id
                       )
                     $where_access_url
-                    ORDER BY code";
+                    $orderBy";
             $result = Database::query($sql);
 
             if (Database::num_rows($result) > 0) {

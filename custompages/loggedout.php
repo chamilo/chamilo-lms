@@ -8,12 +8,11 @@
  * Init
  */
 $called_direcly = !function_exists('api_get_path');
-if ($called_direcly)
-{
+if ($called_direcly) {
     return '';
 }
 
-require_once('language.php');
+require_once 'language.php';
 $www = api_get_path('WEB_PATH');
 
 /**
@@ -31,12 +30,10 @@ $www = api_get_path('WEB_PATH');
         <!--[if IE 6]>
         <link rel="stylesheet" type="text/css" href="/custompages/style-ie6.css" />
         <![endif]-->
-
         <script type="text/javascript" src="<?php echo $www ?>main/inc/lib/javascript/jquery.min.js"></script>
-
         <script type="text/javascript">
             $(document).ready(function() {
-                if (top.location != location) 
+                if (top.location != location)
                     top.location.href = document.location.href ;
             });
         </script>
@@ -58,7 +55,7 @@ $www = api_get_path('WEB_PATH');
             <a href="<?php echo $www . 'user_portal.php'; ?>">Go to your portal</a>
             <div id="footer">
                 <img src="<?php echo $www ?>/custompages/images/footer.png" alt="footer"/>
-            </div> 
-        </div> 
+            </div>
+        </div>
     </body>
 </html>

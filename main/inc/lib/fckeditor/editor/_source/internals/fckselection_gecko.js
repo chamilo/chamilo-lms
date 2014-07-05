@@ -183,9 +183,9 @@ FCKSelection.MoveToAncestorNode = function( nodeTagName )
 	var oNode ;
 
 	var oContainer = this.GetSelectedElement() ;
-	if ( ! oContainer )
+	/*if ( ! oContainer )
 		oContainer = this.GetSelection().getRangeAt(0).startContainer ;
-
+    */
 	while ( oContainer )
 	{
 		if ( oContainer.nodeName.IEquals( nodeTagName ) )

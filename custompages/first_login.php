@@ -16,29 +16,29 @@ require_once (api_get_path(LIBRARY_PATH).'usermanager.lib.php');
 if (! isset($_SESSION['conditional_login']['uid']))
   die("Not Authorised");
 
-if (isset($_POST['password'])){
-  $u = UserManager::get_user_info_by_id($_SESSION['conditional_login']['uid']);
-  if ($_POST['password'] != $_POST['password2']) { 
-    header('Location: '. api_get_self().'?invalid=2');
-    exit();
-  }
-  if (empty($_POST['password'])){ //|| !api_check_password($password)) { //Pass must be at least 5 char long with 2 digits and 3 letters
-    header('Location: '. api_get_self().'?invalid=1');
-    exit();
-  }
-  $password = $_POST['password'];
-  $updated = UserManager::update_user($u['user_id'], $u['firstname'], $u['lastname'], $u['username'], $password, $u['auth_source'], $u['email'], $u['status'], $u['official_code'], $u['phone'], $u['picture_uri'], $u['expiration_date'], $u['active'], $u['creator_id'], $u['hr_dept_id'], null, $u['language'],'');
+if (isset($_POST['password'])) {
+    $u = UserManager::get_user_info_by_id($_SESSION['conditional_login']['uid']);
+    if ($_POST['password'] != $_POST['password2']) {
+        header('Location: '. api_get_self().'?invalid=2');
+        exit();
+    }
+    if (empty($_POST['password'])){ //|| !api_check_password($password)) { //Pass must be at least 5 char long with 2 digits and 3 letters
+        header('Location: '. api_get_self().'?invalid=1');
+        exit();
+    }
+    $password = $_POST['password'];
+    $updated = UserManager::update_user($u['user_id'], $u['firstname'], $u['lastname'], $u['username'], $password, $u['auth_source'], $u['email'], $u['status'], $u['official_code'], $u['phone'], $u['picture_uri'], $u['expiration_date'], $u['active'], $u['creator_id'], $u['hr_dept_id'], null, $u['language'],'');
 
-  if ($updated) {
-    UserManager::update_extra_field_value($u['user_id'], 'already_logged_in', 'true');
-    ConditionalLogin::login();
-  }
+    if ($updated) {
+        UserManager::update_extra_field_value($u['user_id'], 'already_logged_in', 'true');
+        ConditionalLogin::login();
+    }
 }
 if ($_GET['invalid'] == 1) {
-  $error_message = get_lang('CurrentPasswordEmptyOrIncorrect');
+    $error_message = get_lang('CurrentPasswordEmptyOrIncorrect');
 }
 if ($_GET['invalid'] == 2) {
-  $error_message = get_lang('PassTwo');
+    $error_message = get_lang('PassTwo');
 }
 /**
  * HTML output
@@ -59,11 +59,11 @@ if ($_GET['invalid'] == 2) {
 	<script type="text/javascript" src="/main/inc/lib/javascript/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
-			if (top.location != location) 
+			if (top.location != location)
 				top.location.href = document.location.href ;
 
 			// Handler pour la touche retour
-			$('input').keyup(function(e) { 
+			$('input').keyup(function(e) {
 				if (e.keyCode == 13) {
 					$('#changepassword-form').submit();
 				}
@@ -80,12 +80,12 @@ if ($_GET['invalid'] == 2) {
 			<img src="/custompages/images/header.png" alt="Logo" />
 		</div> <!-- #header -->
     <h2> <?php echo custompages_get_lang('FirstLogin');?> </h2>
-        
+
 		<div id="changepassword-form-box" class="form-box">
       <div class="info"> <?php echo custompages_get_lang('FirstLoginChangePassword');?> </div>
 		<?php if (isset($error_message)) {
 			echo '<div id="changepassword-form-error" class="form-error">'.$error_message.'</div>';
-		}?> 
+		}?>
 			<form id="changepassword-form" class="form" method="post">
 				<div>
           <label for="password">*<?php echo custompages_get_lang('langPass');?></label>

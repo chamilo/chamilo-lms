@@ -87,7 +87,7 @@ function change_select(val) {
 $form_sent  = 0;
 $errorMsg   = '';
 
-$extra_field_list= UserManager::get_extra_fields();
+$extra_field_list = UserManager::get_extra_fields();
 $new_field_list = array();
 if (is_array($extra_field_list)) {
     foreach ($extra_field_list as $extra_field) {
@@ -121,6 +121,24 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
         //added a parameter to send emails when registering a user
         $usergroup->subscribe_users_to_usergroup($id, $elements_posted);
         header('Location: usergroups.php');
+        exit;
+    }
+}
+
+if (isset($_GET['action']) && $_GET['action'] == 'export') {
+    $groupInfo = $usergroup->get($id);
+    $users = $usergroup->getUserListByUserGroup($id);
+    if (!empty($users)) {
+        require_once api_get_path(LIBRARY_PATH) . 'export.lib.inc.php';
+
+        $data = array(
+            array('UserName', 'ClassName')
+        );
+        foreach ($users as $user) {
+            $data[] = array($user['username'], $groupInfo['name']);
+        }
+        $filename = 'export_user_class_' . api_get_local_time();
+        Export::export_table_csv($data, $filename);
         exit;
     }
 }
@@ -182,9 +200,9 @@ if ($searchForm->validate()) {
     $filterData = $searchForm->getSubmitValues();
 }
 
-$data       = $usergroup->get($id);
-$list_in    = $usergroup->get_users_by_usergroup($id);
-$list_all   = $usergroup->get_users_by_usergroup();
+$data = $usergroup->get($id);
+$list_in = $usergroup->get_users_by_usergroup($id);
+$list_all = $usergroup->get_users_by_usergroup();
 
 $order = array('lastname');
 if (api_is_western_name_order()) {
@@ -280,6 +298,9 @@ echo Display::url(get_lang('AdvancedSearch'), '#', array('class' => 'advanced_op
 
 echo '<a href="usergroup_user_import.php">'.
     Display::return_icon('import_csv.png', get_lang('Import'), array(), ICON_SIZE_MEDIUM).'</a>';
+
+echo '<a href="'.api_get_self().'?id='.$id.'&action=export">'.
+    Display::return_icon('export_csv.png', get_lang('Export'), array(), ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 echo '<div id="advanced_search_options" style="display:none">';

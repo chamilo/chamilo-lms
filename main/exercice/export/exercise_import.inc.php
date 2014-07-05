@@ -102,14 +102,14 @@ function import_exercise($file)
 	// if file is not a .zip, then we cancel all
 
 	if (!preg_match('/.zip$/i', $file)) {
-		Display :: display_error_message(get_lang('You must upload a zip file'));
-		return false;
+
+		return 'UplZipCorrupt';
 	}
 
 	// unzip the uploaded file in a tmp directory
 	if (!get_and_unzip_uploaded_exercise($baseWorkDir, $uploadPath)) {
-		Display :: display_error_message(get_lang('You must upload a zip file'));
-		return false;
+
+		return 'UplZipCorrupt';
 	}
 
 	// find the different manifests for each question and parse them.
@@ -144,14 +144,13 @@ function import_exercise($file)
 	}
 
 	if (!$file_found) {
-		Display :: display_error_message(get_lang('No XML file found in the zip'));
-		return false;
+
+		return 'No XML file found in the zip';
 	}
 
     if ($result == false) {
         return false;
     }
-
 
     $doc = new DOMDocument();
     $doc->load($filePath);
@@ -207,9 +206,10 @@ function import_exercise($file)
 
 		// delete the temp dir where the exercise was unzipped
 		my_delete($baseWorkDir . $uploadPath);
-		$operation = true;
+		return $last_exercise_id;
 	}
-	return $operation;
+
+	return false;
 }
 /**
  * We assume the file charset is UTF8

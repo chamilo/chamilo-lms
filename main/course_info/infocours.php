@@ -291,7 +291,7 @@ $form->addElement('html', '</div></div>');
 // LEARNING PATH
 $form->addElement('html', '<div><h3>'.Display::return_icon('scorms.png', get_lang('ConfigLearnpath'),'',ICON_SIZE_SMALL).' '.Security::remove_XSS(get_lang('ConfigLearnpath')).'</h3><div>');
 
-//Auto launch LP
+// Auto launch LP
 $group = array();
 $group[]=$form->createElement('radio', 'enable_lp_auto_launch', get_lang('LPAutoLaunch'), get_lang('RedirectToALearningPath'), 1);
 $group[]=$form->createElement('radio', 'enable_lp_auto_launch', get_lang('LPAutoLaunch'), get_lang('RedirectToTheLearningPathList'), 2);
@@ -305,6 +305,13 @@ if (api_get_setting('allow_course_theme') == 'true') {
     $group[]=$form->createElement('radio', 'allow_learning_path_theme', null, get_lang('AllowLearningPathThemeDisallow'), 0);
     $form->addGroup($group, '', array(get_lang("AllowLearningPathTheme")), '');
 }
+/*
+$group = array(
+    $form->createElement('radio', 'lp_return_link', get_lang('LpReturnLink'), get_lang('RedirectToTheLearningPathList'), 1),
+    $form->createElement('radio', 'lp_return_link', null, get_lang('RedirectToCourseHome'), 0)
+);
+$form->addGroup($group, '', array(get_lang("LpReturnLink")), '');
+*/
 
 if (is_settings_editable()) {
     $form->addElement('style_submit_button', null, get_lang('SaveSettings'), 'class="save"');
@@ -420,6 +427,7 @@ if ($form->validate() && is_settings_editable()) {
         'legal',
         'activate_legal'
     );
+
     foreach ($updateValues as $index =>$value) {
         $updateValues[$index] = Database::escape_string($value);
     }
@@ -451,11 +459,12 @@ if ($form->validate() && is_settings_editable()) {
         );
     }
 
-    $appPlugin->saveCourseSettingsHook($update_values);
+    $appPlugin->saveCourseSettingsHook($updateValues);
     $cidReset = true;
     $cidReq = $course_code;
     require '../inc/local.inc.php';
-    header('Location: infocours.php?action=show_message&cidReq='.$course_code);
+    $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?action=show_message&cidReq='.$course_code;
+    header("Location: $url");
     exit;
 }
 

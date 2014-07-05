@@ -348,14 +348,33 @@ if ($is_allowed_to_edit) {
                         </a>
                     </td>
                     <td>';
-                         if ($is_allowed_to_edit) {
-                            echo '<a class="link no-border" href="lp_controller.php?isStudentView=false&action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();">';
-                         } else {
-                            echo '<a class="link no-border" href="lp_controller.php?action=return_to_course_homepage&'.api_get_cidreq().'" target="_self" onclick="javascript: window.parent.API.save_asset();">';
-                         }
-                        echo get_lang('CourseHomepageLink').'
-                        </a>
-                    </td>
+
+                    // Return to course home.
+                    if ($is_allowed_to_edit) {
+                        $url = 'lp_controller.php?isStudentView=false&action=return_to_course_homepage&' . api_get_cidreq();
+                    } else {
+                        $url = 'lp_controller.php?action=return_to_course_homepage&' . api_get_cidreq();
+                    }
+
+                    $name = get_lang('CourseHomepageLink');
+                    // Return to lp list
+                    if (api_get_course_setting('lp_return_link') == 1) {
+                        $url .= '&redirectTo=lp_list';
+                        $name = get_lang('LearningPathList');
+                    }
+
+                    echo Display::url(
+                        $name,
+                        $url,
+                        array(
+                            'class' => 'link no-border',
+                            'target' => '_self',
+                            'onclick' => 'javascript: window.parent.API.save_asset();'
+                        )
+                    );
+
+
+                    echo '</td>
                 </tr>
             </table>
         </div>';

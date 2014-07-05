@@ -334,40 +334,66 @@ if (api_get_setting('allow_terms_conditions') == 'true') {
 $form->addElement('button', 'submit', get_lang('RegisterUser'), array('class' => 'btn btn-primary btn-large'));
 
 if ($form->validate()) {
-
-    //$values = $form->exportValues();
     $values = $form->getSubmitValues(1);
-    $values['username'] = api_substr($values['username'], 0, USERNAME_MAX_LENGTH); //make *sure* the login isn't too long
+    //make *sure* the login isn't too long
+    $values['username'] = api_substr($values['username'], 0, USERNAME_MAX_LENGTH);
 
     if (api_get_setting('allow_registration_as_teacher') == 'false') {
         $values['status'] = STUDENT;
     }
+
     // Added by Ivan Tcholakov, 06-MAR-2008.
     if (empty($values['official_code'])) {
-        $values['official_code'] =  api_strtoupper($values['username']);
+        $values['official_code'] = api_strtoupper($values['username']);
     }
 
     if (api_get_setting('login_is_email') == 'true') {
         $values['username'] = $values['email'];
     }
 
-    if ($user_already_registered_show_terms && api_get_setting('allow_terms_conditions') == 'true') {
+    if ($user_already_registered_show_terms &&
+        api_get_setting('allow_terms_conditions') == 'true'
+    ) {
         $user_id = $_SESSION['term_and_condition']['user_id'];
         $is_admin = UserManager::is_admin($user_id);
         Session::write('is_platformAdmin', $is_admin);
     } else {
+
         // Creates a new user
-        $user_id = UserManager::create_user($values['firstname'], $values['lastname'], $values['status'], $values['email'], $values['username'], $values['pass1'], $values['official_code'], $values['language'], $values['phone'], $picture_uri, PLATFORM_AUTH_SOURCE, null, 1, 0, null, null, true);
+        $user_id = UserManager::create_user(
+            $values['firstname'],
+            $values['lastname'],
+            $values['status'],
+            $values['email'],
+            $values['username'],
+            $values['pass1'],
+            $values['official_code'],
+            $values['language'],
+            $values['phone'],
+            null,
+            PLATFORM_AUTH_SOURCE,
+            null,
+            1,
+            0,
+            null,
+            null,
+            true
+        );
 
         // Register extra fields
         $extras = array();
         foreach ($values as $key => $value) {
-            if (substr($key, 0, 6) == 'extra_') { //an extra field
-                $extras[substr($key,6)] = $value;
+            if (substr($key, 0, 6) == 'extra_') {
+                //an extra field
+                $extras[substr($key, 6)] = $value;
             } elseif (strpos($key, 'remove_extra_') !== false) {
                 $extra_value = Security::filter_filename(urldecode(key($value)));
                 // To remove from user_field_value and folder
-                UserManager::update_extra_field_value($user_id, substr($key,13), $extra_value);
+                UserManager::update_extra_field_value(
+                    $user_id,
+                    substr($key,13),
+                    $extra_value
+                );
             }
         }
 
@@ -396,7 +422,7 @@ if ($form->validate()) {
         }
 
         if ($user_id) {
-            // storing the extended profile
+            // Storing the extended profile
             $store_extended = false;
             $sql = "UPDATE ".Database::get_main_table(TABLE_MAIN_USER)." SET ";
             if (api_get_setting('extended_profile') == 'true' && api_get_setting('extendedprofile_registration', 'mycomptetences') == 'true') {
@@ -427,15 +453,38 @@ if ($form->validate()) {
                 Database::query($sql);
             }
 
-            // if the account has to be approved then we set the account to inactive, sent a mail to the platform admin and exit the page.
+            $course_code_redirect = Session::read('course_redirect');
+
+            // Saving user to course if it was set.
+            if (!empty($course_code_redirect)) {
+                $course_info = api_get_course_info($course_code_redirect);
+                if (!empty($course_info)) {
+                    if (in_array(
+                        $course_info['visibility'],
+                        array(
+                            COURSE_VISIBILITY_OPEN_PLATFORM,
+                            COURSE_VISIBILITY_OPEN_WORLD
+                        )
+                    )
+                    ) {
+                        CourseManager::subscribe_user(
+                            $user_id,
+                            $course_info['code']
+                        );
+                    }
+                }
+            }
+
+            /* If the account has to be approved then we set the account to inactive,
+            sent a mail to the platform admin and exit the page.*/
+
             if (api_get_setting('allow_registration') == 'approval') {
                 $TABLE_USER = Database::get_main_table(TABLE_MAIN_USER);
                 // 1. set account inactive
-                $sql = "UPDATE ".$TABLE_USER."	SET active='0' WHERE user_id='".$user_id."'";
+                $sql = "UPDATE $TABLE_USER SET active='0' WHERE user_id = ".$user_id;
                 Database::query($sql);
 
                 // 2. Send mail to all platform admin
-
                 $emailsubject	 = get_lang('ApprovalForNewAccount',null,$values['language']).': '.$values['username'];
                 $emailbody		 = get_lang('ApprovalForNewAccount',null,$values['language'])."\n";
                 $emailbody		.= get_lang('UserName',null,$values['language']).': '.$values['username']."\n";
@@ -449,12 +498,28 @@ if ($form->validate()) {
                 }
                 $emailbody		.= get_lang('Email',null,$values['language']).': '.$values['email']."\n";
                 $emailbody		.= get_lang('Status',null,$values['language']).': '.$values['status']."\n\n";
-                $url_edit        = Display::url(api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id, api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id);
+
+                $url_edit = Display::url(
+                    api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id,
+                    api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
+                );
+
                 $emailbody		.= get_lang('ManageUser',null,$values['language']).": $url_edit";
 
                 $admins = UserManager::get_all_administrators();
                 foreach ($admins as $admin_info) {
-                    MessageManager::send_message($admin_info['user_id'], $emailsubject, $emailbody, null, null, null, null, null, null, $user_id);
+                    MessageManager::send_message(
+                        $admin_info['user_id'],
+                        $emailsubject,
+                        $emailbody,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        $user_id
+                    );
                 }
 
                 // 3. exit the page
@@ -471,8 +536,7 @@ if ($form->validate()) {
 
     // Terms & Conditions
     if (api_get_setting('allow_terms_conditions') == 'true') {
-        // update the terms & conditions
-
+        // Update the terms & conditions.
         if (isset($values['legal_accept_type'])) {
             $cond_array = explode(':', $values['legal_accept_type']);
             if (!empty($cond_array[0]) && !empty($cond_array[1])) {
@@ -497,7 +561,7 @@ if ($form->validate()) {
     Session::write('_user', $_user);
     Session::write('is_allowedCreateCourse', $is_allowedCreateCourse);
 
-    //stats
+    // Stats
     event_login();
 
     // last user login date is now
@@ -507,9 +571,11 @@ if ($form->validate()) {
 
     $text_after_registration = '<p>'.get_lang('Dear', null, $_user['language']).' '.stripslashes(Security::remove_XSS($recipient_name)).',<br /><br />'.get_lang('PersonalSettings',null,$_user['language']).".</p>";
 
-    $form_data = array( 'button' => Display::button('next', get_lang('Next', null, $_user['language']), array('class' => 'btn btn-primary btn-large')),
-                        'message' => null,
-                        'action' => api_get_path(WEB_PATH).'user_portal.php');
+    $form_data = array(
+        'button' => Display::button('next', get_lang('Next', null, $_user['language']), array('class' => 'btn btn-primary btn-large')),
+        'message' => null,
+        'action' => api_get_path(WEB_PATH).'user_portal.php'
+    );
 
     if (api_get_setting('allow_terms_conditions') == 'true' && $user_already_registered_show_terms) {
         $form_data['action'] = api_get_path(WEB_PATH).'user_portal.php';
@@ -547,7 +613,8 @@ if ($form->validate()) {
      *
      * You can send to your students an URL like this
      * http://chamilodev.beeznest.com/main/auth/inscription.php?c=ABC&e=3
-     * Where "c" is the course code and "e" is the exercise Id, after a succesfull registration the user will be sent to the course or exercise
+     * Where "c" is the course code and "e" is the exercise Id, after a successful
+     * registration the user will be sent to the course or exercise
      *
      */
     $course_code_redirect = Session::read('course_redirect');
@@ -555,23 +622,34 @@ if ($form->validate()) {
     if (!empty($course_code_redirect)) {
         $course_info = api_get_course_info($course_code_redirect);
         if (!empty($course_info)) {
-
-            if (in_array($course_info['visibility'], array(COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD))) {
+            if (in_array($course_info['visibility'],
+                array(COURSE_VISIBILITY_OPEN_PLATFORM, COURSE_VISIBILITY_OPEN_WORLD))
+            ) {
                 $user_id = api_get_user_id();
-                if (CourseManager::subscribe_user($user_id, $course_info['code'])) {
+                if (CourseManager::is_user_subscribed_in_course($user_id, $course_info['code'])) {
 
                     $form_data['action'] = $course_info['course_public_url'];
                     $form_data['message'] = sprintf(get_lang('YouHaveBeenRegisteredToCourseX'), $course_info['title']);
-                    $form_data['button'] = Display::button('next', get_lang('GoToCourse', null, $_user['language']), array('class' => 'btn btn-primary btn-large'));
+                    $form_data['button'] = Display::button(
+                        'next',
+                        get_lang('GoToCourse', null, $_user['language']),
+                        array('class' => 'btn btn-primary btn-large')
+                    );
 
                     $exercise_redirect = intval(Session::read('exercise_redirect'));
                     $objExercise = new Exercise();
-                    $result = $objExercise->read($exercise_id);
+                    $result = $objExercise->read($exercise_redirect);
+
                     if (!empty($exercise_redirect) && !empty($result)) {
-                        $form_data['action'] = api_get_path(WEB_CODE_PATH).'exercice/overview.php?exerciseId='.intval($exercise_redirect).'&cidReq='.$course_info['code'];
+                        $form_data['action'] = api_get_path(WEB_CODE_PATH).'exercice/overview.php?exerciseId='.$exercise_redirect.'&cidReq='.$course_info['code'];
                         $form_data['message'] .= '<br />'.get_lang('YouCanAccessTheExercise');
-                        $form_data['button'] = Display::button('next', get_lang('Go', null, $_user['language']), array('class' => 'btn btn-primary btn-large'));
+                        $form_data['button'] = Display::button(
+                            'next',
+                            get_lang('Go', null, $_user['language']),
+                            array('class' => 'btn btn-primary btn-large')
+                        );
                     }
+
                     if (!empty($form_data['action'])) {
                         header('Location: '.$form_data['action']);
                         exit;
@@ -592,7 +670,7 @@ if ($form->validate()) {
     }
     $text_after_registration .= $form_register->return_form();
 
-    //Just in case
+    // Just in case
     Session::erase('course_redirect');
     Session::erase('exercise_redirect');
 

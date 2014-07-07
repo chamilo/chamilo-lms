@@ -25,7 +25,8 @@ class sso {
     /**
      * Instanciates the object, initializing all relevant URL strings
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->protocol   = api_get_setting('sso_authentication_protocol');
         // There can be multiple domains, so make sure to take only the first
         // This might be later extended with a decision process
@@ -43,7 +44,8 @@ class sso {
     /**
      * Unlogs the user from the remote server 
      */
-    public function logout() {
+    public function logout()
+    {
         header('Location: '.$this->deauth_url);
         exit;
     }
@@ -51,12 +53,13 @@ class sso {
     /**
      * Sends the user to the master URL for a check of active connection
      */
-    public function ask_master() {
+    public function ask_master()
+    {
         $tempKey = api_generate_password(32);
         $params = 'sso_referer='.urlencode($this->referer).
             '&sso_target='.urlencode($this->target).
             '&sso_challenge='.$tempKey;
-        Session::write('tempkey',$tempKey);
+        Session::write('tempkey', $tempKey);
         if (strpos($this->master_url, "?") === false) {
             $params = "?$params";
         } else {
@@ -70,7 +73,8 @@ class sso {
      * Validates the received active connection data with the database
      * @return	bool	Return the loginFailed variable value to local.inc.php
      */
-    public function check_user() {
+    public function check_user()
+    {
         global $_user;
         $loginFailed = false;
         //change the way we recover the cookie depending on how it is formed
@@ -103,8 +107,7 @@ class sso {
                 global $_configuration;
                 // Two possible authentication methods here: legacy using password
                 // and new using a temporary, session-fixed, tempkey
-                if (
-                    ($sso['username'] == $uData['username']
+                if (($sso['username'] == $uData['username']
                         && $sso['secret'] === sha1(
                             $uData['username'].
                             Session::read('tempkey').
@@ -120,14 +123,16 @@ class sso {
                     //Check if the account is active (not locked)
                     if ($uData['active']=='1') {
                         // check if the expiration date has not been reached
-                        if ($uData['expiration_date'] > date('Y-m-d H:i:s') OR $uData['expiration_date']=='0000-00-00 00:00:00') {                            
+                        if ($uData['expiration_date'] > date('Y-m-d H:i:s')
+                            or $uData['expiration_date']=='0000-00-00 00:00:00') {
                             
                             //If Multiple URL is enabled
                             if (api_get_multiple_access_url()) {
-                                //Check the access_url configuration setting if the user is registered in the access_url_rel_user table
+                                //Check the access_url configuration setting if
+                                // the user is registered in the access_url_rel_user table
                                 //Getting the current access_url_id of the platform
                                 $current_access_url_id = api_get_current_access_url_id();
-                                // my user is subscribed in these 
+                                // my user is subscribed in these
                                 //sites: $my_url_list
                                 $my_url_list = api_get_access_url_from_user($uData['user_id']);
                             } else {
@@ -138,7 +143,7 @@ class sso {
                             $my_user_is_admin = UserManager::is_admin($uData['user_id']);
                             
                             if ($my_user_is_admin === false) {
-                                if (is_array($my_url_list) && count($my_url_list) > 0 ) {
+                                if (is_array($my_url_list) && count($my_url_list) > 0) {
                                     if (in_array($current_access_url_id, $my_url_list)) {
                                         // the user has permission to enter at this site
                                         $_user['user_id'] = $uData['user_id'];
@@ -157,7 +162,7 @@ class sso {
                                         exit;
                                     }
                                 } else {
-                                    // there is no URL in the multiple 
+                                    // there is no URL in the multiple
                                     // urls list for this user
                                     $loginFailed = true;
                                     Session::erase('_uid');
@@ -182,21 +187,27 @@ class sso {
                                     if (in_array($current_access_url_id, $my_url_list)) {
                                         $_user['user_id'] = $uData['user_id'];
                                         $_user = api_get_user_info($_user['user_id']);
-                                        Session::write('_user',$_user);
+                                        Session::write('_user', $_user);
                                         event_login();
                                     } else {
                                         $loginFailed = true;
                                         Session::erase('_uid');
-                                        header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=access_url_inactive');
+                                        header(
+                                            'Location: '.api_get_path(WEB_PATH)
+                                            .'index.php?loginFailed=1&error=access_url_inactive'
+                                        );
                                         exit;
                                     }
                                 }
-                            }                       
+                            }
                         } else {
                             // user account expired
                             $loginFailed = true;
                             Session::erase('_uid');
-                            header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=account_expired');
+                            header(
+                                'Location: '.api_get_path(WEB_PATH)
+                                .'index.php?loginFailed=1&error=account_expired'
+                            );
                             exit;
                         }
                     } else {
@@ -217,7 +228,10 @@ class sso {
                 //Auth_source is wrong
                 $loginFailed = true;
                 Session::erase('_uid');
-                header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=wrong_authentication_source');
+                header(
+                    'Location: '.api_get_path(WEB_PATH)
+                    .'index.php?loginFailed=1&error=wrong_authentication_source'
+                );
                 exit;
             }
         } else {
@@ -236,7 +250,8 @@ class sso {
      * @param	string	Encoded cookie
      * @return  array   Parsed and unencoded cookie
      */
-    private function decode_cookie($cookie) {
+    private function decode_cookie($cookie)
+    {
         return unserialize(base64_decode($cookie));
     }
 }

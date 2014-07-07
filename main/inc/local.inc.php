@@ -525,8 +525,12 @@ if (!empty($_SESSION['_user']['user_id']) && !($login || $logout)) {
                         $master_auth_uri = api_get_setting('sso_authentication_auth_uri');
                         foreach ($master_urls as $mu) {
                             if (empty($mu)) { continue; }
-                            // for each URL, check until we find *one* that matches the $_GET['sso_referer'], then skip the rest
-                            if ($protocol.trim($mu).$master_auth_uri === $_GET['sso_referer']) {
+                            // For each URL, check until we find *one* that matches the $_GET['sso_referer'],
+                            //  then skip other possibilities
+                            // Do NOT compare the whole referer, as this might cause confusing errors with friendly urls,
+                            // like in Drupal /?q=user& vs /user?
+                            $referer = substr($_GET['sso_referer'], 0, strrpos($_GET['sso_referer'],'/'));
+                            if ($protocol.trim($mu) === $referer) {
                                 $matches_domain = true;
                                 break;
                             }

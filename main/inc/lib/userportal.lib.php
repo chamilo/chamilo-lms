@@ -897,9 +897,6 @@ class IndexManager
             }
         }
 
-        $show_course_link = false;
-        $show_create_link = false;
-
         // My account section
         $my_account_content = '<ul class="nav nav-list">';
 

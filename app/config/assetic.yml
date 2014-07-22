@@ -138,12 +138,9 @@ assetic:
                 - %kernel.root_dir%/../web/bundles/sonataadmin/vendor/bootstrap/dist/css/bootstrap.min.css
                 - %kernel.root_dir%/../web/bundles/sonatacore/select2/select2.css
                 - %kernel.root_dir%/../web/bundles/mopabootstrap/css/datepicker.css
-                - %kernel.root_dir%/../web/bundles/sonatademo/css/demo.css
+                #- %kernel.root_dir%/../web/bundles/sonatademo/css/demo.css
 
             filters:
                 - cssrewrite
                 - yui_css
-        common_js:
-            inputs:
-                - %kernel.root_dir%/../web/bundles/admin-theme-bundle/vendor/jquery/dist/jquery.js
-                - %kernel.root_dir%/../web/bundles/admin-theme-bundle/vendor/jquery-ui/ui/jquery-ui.js
+

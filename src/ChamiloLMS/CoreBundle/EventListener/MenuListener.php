@@ -12,11 +12,17 @@ class MenuListener
 {
     protected $container;
 
+    /**
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
+    /**
+     * @param SidebarMenuKnpEvent $event
+     */
     public function onSetupMenu(SidebarMenuKnpEvent $event)
     {
         $request = $event->getRequest();
@@ -26,6 +32,10 @@ class MenuListener
         }
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     protected function getMenu(Request $request)
     {
         $menu = $this->container->get('chamilolms.menu.simple_menu');
@@ -39,8 +49,14 @@ class MenuListener
         return $this->activateByRoute($request->get('_route'), $menuItems);
     }
 
+    /**
+     * @param $route
+     * @param $items
+     * @return mixed
+     */
     protected function activateByRoute($route, $items)
     {
+
         /** @var \Knp\Menu\MenuItem $item */
         foreach ($items as $item) {
             if ($item->hasChildren()) {

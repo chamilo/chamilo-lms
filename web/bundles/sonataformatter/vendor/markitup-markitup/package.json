@@ -1,0 +1,27 @@
+{
+  "name": "markItUp! ",
+  "title": "markItUp! universal markup jQuery editor",
+  "description": "markItUp! is a JavaScript plugin built on the jQuery library. It allows you to turn any textarea into a markup editor. Html, Textile, Wiki Syntax, Markdown, BBcode or even your own Markup system can be easily implemented.",
+  "version": "1.1",
+  "homepage": "http://markitup.jaysalvat.com/",
+  "author": {
+    "name": "Jay Salvat",
+    "email": "",
+    "url": "http://jaysalvat.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/markitup/1.x"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/MIT"
+    },
+    {
+      "type": "GPL",
+      "url": "http://www.opensource.org/licenses/GPL-2.0"
+    }
+  ],
+  "keywords": [ "jquery", "markup", "editor", "markdown", "wiki", "bbcode", "html", "textile" ]
+}

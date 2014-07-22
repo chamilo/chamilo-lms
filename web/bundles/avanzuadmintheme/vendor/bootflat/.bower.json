@@ -1,0 +1,13 @@
+{
+  "name": "bootflat",
+  "homepage": "https://github.com/flathemes/bootflat",
+  "_release": "affdd96590",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "affdd9659018160a812c527742392581b73e2473"
+  },
+  "_source": "git://github.com/flathemes/bootflat.git",
+  "_target": "*",
+  "_originalSource": "bootflat"
+}

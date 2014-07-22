@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>markItUp! Universal markup editor</title>
+	<link rel="stylesheet" type="text/css" href="images/style.css">
+	<!-- markItUp! skin -->
+	<link rel="stylesheet" type="text/css" href="markitup/skins/markitup/style.css">
+	<!--  markItUp! toolbar skin -->
+	<link rel="stylesheet" type="text/css" href="markitup/sets/default/style.css">
+	<!-- jQuery -->
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.8.0.min.js"></script>
+	<!-- markItUp! -->
+	<script type="text/javascript" src="markitup/jquery.markitup.js"></script>
+	<!-- markItUp! toolbar settings -->
+	<script type="text/javascript" src="markitup/sets/default/set.js"></script>
+</head>
+<body>
+<h1><a href="http://markitup.jaysalvat.com/">markItUp!</a></h1>
+<p><em><a href="http://www.jaysalvat.com">By Jay Salvat</a></em></p>
+<p>Downloads, examples and documentation at <a href="http://markitup.jaysalvat.com">http://markitup.jaysalvat.com</a>.</p>
+<p>Click <a href="#" class="add">this link to insert content</a> from anywhere in the page or <a href="#" class="toggle">this one to <span>remove markItUp!</span></a></p>
+<textarea id="markItUp" cols="80" rows="20">
+&lt;h1&gt;Welcome on markItUp!&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;markItUp!&lt;/strong&gt; is a JavaScript plugin built on the jQuery library. It allows you to turn any textarea into a markup editor. Html, Textile, Wiki Syntax, Markdown, BBcode or even your own markup system can be easily implemented.&lt;/p&gt;
+</textarea>
+<p>Support the project : <a href="http://markitup.jaysalvat.com/">Donate</a> | <a href="http://markitup.jaysalvat.com/">Contact</a></p>
+
+<script type="text/javascript">
+$(function() {
+	// Add markItUp! to your textarea in one line
+	// $('textarea').markItUp( { Settings }, { OptionalExtraSettings } );
+	$('#markItUp').markItUp(mySettings);
+
+
+
+	// You can add content from anywhere in your page
+	// $.markItUp( { Settings } );	
+	$('.add').click(function() {
+ 		$('#markItUp').markItUp('insert',
+			{ 	openWith:'<opening tag>',
+				closeWith:'<\/closing tag>',
+				placeHolder:"New content"
+			}
+		);
+ 		return false;
+	});
+	
+	// And you can add/remove markItUp! whenever you want
+	// $(textarea).markItUpRemove();
+	$('.toggle').click(function() {
+		if ($("#markItUp.markItUpEditor").length === 1) {
+ 			$("#markItUp").markItUp('remove');
+			$("span", this).text("get markItUp! back");
+		} else {
+			$('#markItUp').markItUp(mySettings);
+			$("span", this).text("remove markItUp!");
+		}
+ 		return false;
+	});
+});
+</script>
+</body>
+</html>

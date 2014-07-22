@@ -108,10 +108,17 @@ $js = "<script>
 
         // add the red cross on top of each column
         function init_hide() {
-            $('div#reporting_table table tr th').each(
+            $('#reporting_table .data_table tr th').each(
                 function(index) {
                     num_index = index + 1;
-                   // $(this).prepend('<div style=\"cursor:pointer\" onclick=\"foldup('+num_index+')\">".Display :: return_icon('visible.png', get_lang('HideColumn'), array('align' => 'absmiddle', 'hspace' => '3px'), 22)."</div>');
+                    $(this).prepend(
+                        '<div style=\"cursor:pointer\" onclick=\"foldup('+num_index+')\">".Display::return_icon(
+                            'visible.png',
+                            get_lang('HideColumn'),
+                            array('align' => 'absmiddle', 'hspace' => '3px'),
+                            ICON_SIZE_SMALL
+                         )."</div>'
+                    );
                 }
             );
         }
@@ -120,7 +127,7 @@ $js = "<script>
         // be sure that these columns always exists
         // see tab_table_header = array();    // tab of header texts
         $(document).ready( function() {
-            //init_hide();
+            init_hide();
             foldup(1);
             foldup(9);
             foldup(10);
@@ -183,6 +190,7 @@ if (empty($session_id)) {
 }
 
 $nbStudents = count($a_students);
+$extra_info = array();
 
 // Getting all the additional information of an additional profile field.
 if (isset($_GET['additional_profile_field']) && is_numeric($_GET['additional_profile_field'])) {
@@ -298,6 +306,9 @@ if (!empty($sessionList)) {
 
 echo Display::page_subheader2(get_lang('StudentList'));
 
+// PERSON_NAME_DATA_EXPORT is buggy
+$is_western_name_order = api_is_western_name_order();
+
 if (count($a_students) > 0) {
     $form = new FormValidator('reminder_form', 'get', api_get_path(REL_CODE_PATH).'announcements/announcements.php');
     $renderer = $form->defaultRenderer();
@@ -328,9 +339,6 @@ if (count($a_students) > 0) {
 
     $form->display();
 
-    // PERSON_NAME_DATA_EXPORT is buggy
-    $is_western_name_order = api_is_western_name_order();
-
     if ($export_csv) {
         $csv_content = array();
         //override the SortableTable "per page" limit if CSV
@@ -353,7 +361,8 @@ if (count($a_students) > 0) {
     $parameters['from'] 		= isset($_GET['myspace']) ? Security::remove_XSS($_GET['myspace']) : null;
 
     $table->set_additional_parameters($parameters);
-    $tab_table_header = array();    // tab of header texts
+    $tab_table_header = array();
+    // tab of header texts
     $table->set_header(0, get_lang('OfficialCode'), true);
     $tab_table_header[] = get_lang('OfficialCode');
     if ($is_western_name_order) {

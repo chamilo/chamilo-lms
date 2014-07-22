@@ -4028,6 +4028,7 @@ class DocumentManager
     }
 
     /**
+     * Sets 
      * @param string $file ($document_data['path'])
      * @param string $file_url_sys
      * @return string
@@ -4072,7 +4073,7 @@ class DocumentManager
     }
 
     /**
-     * Erase temp nanogons' audio, image edit
+     * Erase temp nanogong audio.
      */
     public static function removeGeneratedAudioTempFile()
     {

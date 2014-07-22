@@ -16,7 +16,6 @@ data/*
 
 # IDE settings
 .idea
-
 *.orig
 nbproject/*
 .*.swp
@@ -46,5 +45,6 @@ web/uploads/*
 web/sitemap*.xml
 app/config/parameters*.yml
 vendor/*
+
 build
 composer.lock

@@ -45,17 +45,15 @@
     "require": {
         "php": ">=5.3.3",
 
-        "twig/twig": "~1.12",
         "twig/extensions": "~1.0",
-
         "symfony/symfony": "~2.5",
 
         "symfony/assetic-bundle": "~2.3",
         "symfony/swiftmailer-bundle": "~2.3",
-        "symfony/monolog-bundle": "~2.3",
+        "symfony/monolog-bundle": "~2.4",
 
-        "sensio/distribution-bundle": "~2.3",
-        "sensio/framework-extra-bundle": "~3.0.0",
+        "sensio/distribution-bundle": "~3.0",
+        "sensio/framework-extra-bundle": "~3.0",
         "sensio/generator-bundle": "~2.3",
 
         "jms/security-extra-bundle": "~1.5",
@@ -125,7 +123,6 @@
         "stof/doctrine-extensions-bundle": "~1.1@dev",
         "avanzu/admin-theme-bundle": "dev-master",
 
-        "sylius/flow-bundle": "0.10.*@dev",
         "liip/theme-bundle": "1.0.*@dev",
         "chamilo/chash" : "dev-master"
     },

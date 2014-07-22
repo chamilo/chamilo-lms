@@ -131,23 +131,27 @@ class Configurator
     /**
      * Renders parameters as a string.
      *
+     * @param int $expanded
+     *
      * @return string
      */
-    public function render()
+    public function render($expanded = 0)
     {
-        return Yaml::dump(array('parameters' => $this->parameters));
+        return Yaml::dump(array('parameters' => $this->parameters), $expanded);
     }
 
     /**
      * Writes parameters to parameters.yml or temporary in the cache directory.
-     *
-     * @return boolean
+     * 
+     * @param int $expanded
+     * 
+     * @return int
      */
-    public function write()
+    public function write($expanded = 0)
     {
         $filename = $this->isFileWritable() ? $this->filename : $this->getCacheFilename();
 
-        return file_put_contents($filename, $this->render());
+        return file_put_contents($filename, $this->render($expanded));
     }
 
     /**

@@ -468,6 +468,7 @@ return array(
     'SurveyQuestion' => $baseDir . '/main/coursecopy/classes/SurveyQuestion.class.php',
     'SurveyTree' => $baseDir . '/main/inc/lib/surveymanager.lib.php',
     'SurveyUtil' => $baseDir . '/main/survey/survey.lib.php',
+    'Symfony\\Component\\HttpFoundation\\Resources\\stubs\\FakeFile' => $vendorDir . '/symfony/symfony/src/Symfony/Component/HttpFoundation/Resources/stubs/FakeFile.php',
     'SystemAnnouncementManager' => $baseDir . '/main/inc/lib/system_announcements.lib.php',
     'SystemManagementPage' => $baseDir . '/main/admin/system_management.php',
     'TCPDF_Adapter' => $baseDir . '/main/inc/lib/phpdocx/pdf/include/tcpdf_adapter.cls.php',

@@ -4,15 +4,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="_configurator_home" pattern="/">
+    <route id="_configurator_home" path="/">
         <default key="_controller">SensioDistributionBundle:Configurator:check</default>
     </route>
 
-    <route id="_configurator_step" pattern="/step/{index}">
+    <route id="_configurator_step" path="/step/{index}">
         <default key="_controller">SensioDistributionBundle:Configurator:step</default>
     </route>
 
-    <route id="_configurator_final" pattern="/final">
+    <route id="_configurator_final" path="/final">
         <default key="_controller">SensioDistributionBundle:Configurator:final</default>
     </route>
 </routes>

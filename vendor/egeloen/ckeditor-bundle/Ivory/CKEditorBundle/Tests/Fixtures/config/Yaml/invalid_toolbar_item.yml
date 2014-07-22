@@ -1,7 +1,0 @@
-ivory_ck_editor:
-    configs:
-        default:
-            toolbar: "default"
-    toolbars:
-        configs:
-            default: [ "@foo" ]

@@ -32,8 +32,8 @@ class ConfiguratorController extends ContainerAware
         $form = $this->container->get('form.factory')->create($step->getFormType(), $step);
 
         $request = $this->container->get('request');
-        if ('POST' === $request->getMethod()) {
-            $form->bind($request);
+        if ($request->isMethod('POST')) {
+            $form->submit($request);
             if ($form->isValid()) {
                 $configurator->mergeParameters($step->update($form->getData()));
                 $configurator->write();

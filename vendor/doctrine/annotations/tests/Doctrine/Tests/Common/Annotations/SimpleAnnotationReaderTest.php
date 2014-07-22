@@ -61,11 +61,16 @@ class SimpleAnnotationReaderTest extends AbstractReaderTest
     }
 
     /**
-     * @expectedException Doctrine\Common\Annotations\AnnotationException
+     * @expectedException \Doctrine\Common\Annotations\AnnotationException
      */
     public function testInvalidAnnotationUsageButIgnoredClass()
     {
         parent::testInvalidAnnotationUsageButIgnoredClass();
+    }
+
+    public function testIncludeIgnoreAnnotation()
+    {
+        $this->markTestSkipped('The simplified annotation reader would always autoload annotations');
     }
 
     /**
@@ -84,7 +89,7 @@ class SimpleAnnotationReaderTest extends AbstractReaderTest
         $this->assertCount(1, $reader->getMethodAnnotations($class->getMethod('bar')));
         $this->assertCount(1, $reader->getPropertyAnnotations($class->getProperty('foo')));
     }
-    
+
     protected function getReader()
     {
         $reader = new SimpleAnnotationReader();

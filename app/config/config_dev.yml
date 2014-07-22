@@ -47,9 +47,3 @@ web_profiler_extra:
     twig:
         enabled:        true
         display_in_wdt: true
-
-services:
-    twig.extension.debug:
-        class: Twig_Extensions_Extension_Debug
-        tags:
-            - { name: twig.extension }

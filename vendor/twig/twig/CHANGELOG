@@ -1,4 +1,11 @@
-* 1.15.1 (2013-02-13)
+* 1.16.0 (2014-07-05)
+
+ * changed url_encode to always encode according to RFC 3986
+ * fixed inheritance in a 'use'-hierarchy
+ * removed the __toString policy check when the sandbox is disabled
+ * fixed recursively calling blocks in templates with inheritance
+
+* 1.15.1 (2014-02-13)
 
  * fixed the conversion of the special '0000-00-00 00:00' date
  * added an error message when trying to import an undefined block from a trait

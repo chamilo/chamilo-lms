@@ -148,7 +148,7 @@ $form->addElement('html','</div>');
 $defaults['activate_start_date_check']  = 1;
 
 $defaults['publicated_on']  = date('Y-m-d 08:00:00');
-$defaults['expired_on']     = date('Y-m-d 08:00:00',time()+84600);
+$defaults['expired_on']     = date('Y-m-d 08:00:00',time()+86400);
 
 $form->setDefaults($defaults);
 $form->addElement('style_submit_button', 'Submit',get_lang('CreateLearningPath'),'class="save"');

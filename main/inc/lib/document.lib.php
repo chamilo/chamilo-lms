@@ -304,6 +304,7 @@ class DocumentManager
      */
     public static function file_send_for_download($full_file_name, $forced = false, $name = '')
     {
+        session_write_close(); //we do not need write access to session anymore
         if (!is_file($full_file_name)) {
             return false;
         }

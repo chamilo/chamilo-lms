@@ -90,13 +90,13 @@ function WSCourseList($username, $signature, $visibilities = 'public') {
 
     $local_key = $username.$key;
 
-    if (!api_is_valid_secret_key($signature, $local_key)) {
+    if (!api_is_valid_secret_key($signature, $local_key) && !api_is_valid_secret_key($signature, $username.$_configuration['security_key'])) {
         return -1; // The secret key is incorrect.
     }
-        //public-registered = open
-	$vis = array('public' => '3', 'public-registered' => '2', 'private' => '1', 'closed' => '0');
+    //public-registered = open
+    $vis = array('public' => '3', 'public-registered' => '2', 'private' => '1', 'closed' => '0');
 
-	$courses_list = array();
+    $courses_list = array();
 
 	if (!is_array($visibilities)) {
 		$visibilities = split(',', $visibilities);
@@ -111,7 +111,7 @@ function WSCourseList($username, $signature, $visibilities = 'public') {
 			$courses_list[] = array('code' => $course['code'], 'title' => api_utf8_encode($course_info['title']), 'url' => api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/', 'teacher' => api_utf8_encode($course_info['tutor_name']), 'language' => $course_info['course_language']);
 		}
 	}
-	return $courses_list;
+    return $courses_list;
 }
 
 // Use the request to (try to) invoke the service.

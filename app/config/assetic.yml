@@ -143,3 +143,7 @@ assetic:
             filters:
                 - cssrewrite
                 - yui_css
+        common_js:
+            inputs:
+                - %kernel.root_dir%/../web/bundles/admin-theme-bundle/vendor/jquery/dist/jquery.js
+                - %kernel.root_dir%/../web/bundles/admin-theme-bundle/vendor/jquery-ui/ui/jquery-ui.js

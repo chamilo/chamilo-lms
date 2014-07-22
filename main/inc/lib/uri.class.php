@@ -2,13 +2,13 @@
 
 /**
  * Utility functions to manage uris/urls.
- * 
+ *
  * @license see /license.txt
  * @author Laurent Opprecht <laurent@opprecht.info> for the Univesity of Geneva
  */
 class Uri
 {
-    
+
     public static function chamilo()
     {
         return 'http://chamilo.org/';
@@ -20,21 +20,20 @@ class Uri
     public static function www()
     {
         static $result = false;
-        if (empty($result))
-        {
+        if (empty($result)) {
             $result = api_get_path(WEB_PATH);
         }
         return $result;
     }
-    
+
     public static function here($params = array(), $html = true)
     {
         $protocol = Request::server()->server_protocol();
         $protocol = stripos($protocol, 'https') !== false ? 'https' : 'http';
-        
+
         $host = Request::server()->server_name();
         $host = $host ? $host : Request::server()->server_addr();
-        
+
         $here = Request::server()->request_uri();
         $here = explode('?', $here);
         $here = reset($here);
@@ -45,10 +44,10 @@ class Uri
     /**
      * Returns a full url from local/absolute path and parameters.
      * Append the root as required for relative urls.
-     * 
+     *
      * @param string $path
      * @param array $params
-     * @return string 
+     * @return string
      */
     public static function url($path = '', $params = array(), $html = true)
     {
@@ -69,7 +68,7 @@ class Uri
 
     /**
      * Format url parameters
-     * 
+     *
      * @param array $params
      * @return string
      */
@@ -86,11 +85,11 @@ class Uri
 
     /**
      * Returns the course parameters. If null default to the current user parameters.
-     * 
+     *
      * @param string $course_code
      * @param string|int $session_id
      * @param string|int $group_id
-     * @return type 
+     * @return type
      */
     public static function course_params($course_code = null, $session_id = null, $group_id = null)
     {

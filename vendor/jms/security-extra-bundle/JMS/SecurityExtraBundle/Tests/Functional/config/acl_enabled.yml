@@ -1,9 +1,0 @@
-imports:
-    - { resource: default.yml }
-
-security:
-    acl: ~
-
-jms_security_extra:
-    expressions: true
-    voters: false

@@ -1,6 +1,0 @@
-imports:
-    - { resource: default.yml }
-
-jms_security_extra:
-    expressions: true
-    voters: false

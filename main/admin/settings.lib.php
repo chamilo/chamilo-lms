@@ -111,7 +111,7 @@ function handle_extensions()
 function handle_plugins()
 {
     $plugin_obj = new AppPlugin();
-
+    $token = Security::get_token();
      if (isset($_POST['submit_plugins'])) {
         store_plugins();
         // Add event to the system log.
@@ -126,7 +126,7 @@ function handle_plugins()
 
     //Plugins NOT installed
     echo Display::page_subheader(get_lang('Plugins'));
-    echo '<form class="form-horizontal" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
+    echo '<form class="form-horizontal" name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'&sec_token=' . $token . '">';
     echo '<table class="data_table">';
     echo '<tr>';
     echo '<th width="20px">';

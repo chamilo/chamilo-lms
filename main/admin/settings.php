@@ -443,7 +443,9 @@ if (!empty($_GET['category'])) {
         case 'Plugins':
             // Displaying the extensions: Plugins.
             // This will be available to all the sites (access_urls).
-            if (isset($_POST['submit_dashboard_plugins'])) {
+            $securityToken = Security::remove_XSS($_GET['sec_token']);
+            if (isset($_POST['submit_dashboard_plugins']) && Security::check_token($securityToken)) {
+                Security::clear_token();
                 $affected_rows = DashboardManager::store_dashboard_plugins($_POST);
                 if ($affected_rows) {
                     // add event to system log

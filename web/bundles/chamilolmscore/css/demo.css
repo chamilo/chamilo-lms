@@ -1,0 +1,247 @@
+/*
+ * Helpers
+ */
+.number {
+    text-align: right !important;
+}
+.truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/*
+ * Sonata Demo
+ */
+
+@media screen and (min-width: 1200px) {
+    .sonata-bc .container {
+        max-width: 970px;
+    }
+}
+
+.sonata-bc .page-header .nav {
+    clear: both;
+}
+
+.sonata-bc .block-newsletter {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.sonata-bc .block-newsletter > div.col-sm-6 {
+    min-height: 155px;
+}
+
+.sonata-bc .block-newsletter input[type="email"] {
+    margin-bottom: 0px;
+}
+
+.sonata-bc .block-newsletter p {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.sonata-bc #newsletter-confirmation {
+    margin-top: 20px;
+}
+
+.sonata-bc .page-footer {
+    background-color: #dedede;
+    margin: 0px;
+}
+
+.sonata-bc .page-footer ul li {
+    list-style: none;
+    text-align: left;
+    line-height: 25px;
+}
+
+.sonata-bc .page-footer p.handcraft {
+    margin-top: 80px;
+}
+
+.sonata-bc .page-header .col-sm-4, .sonata-bc .welcome {
+    padding-left: 0px;
+}
+
+.sonata-bc .nivoGallery ul img {
+    max-height: none;
+}
+
+.sonata_breadcrumb .breadcrumb>li+li:before {
+    content: "\00BB";
+}
+
+form div.alert ~ .form-actions {
+    min-height: 54px;
+}
+
+form .form-actions {
+    min-height: 48px;
+}
+
+/*
+ * Basket
+ */
+table.basket thead tr {
+    background-color: #428bca;
+    color: #ffffff;
+}
+
+table.basket thead tr th {
+    text-align: center;
+}
+
+table.basket .unavailable .help-inline {
+    color: #b94a48;
+    font-weight: bold;
+    vertical-align: inherit;
+}
+
+.checkbox input[type="checkbox"] {
+    float: none;
+}
+
+.sonata-bc .demonstration-bar {
+    position: static;
+    width: 100%;
+    z-index: 999;
+    background-color: #000000;
+    color: #ffffff;
+    opacity: 0.8;
+    min-height: 30px;
+    padding-top: 5px;
+    text-align: center;
+    font-size: 1em;
+}
+
+.sonata-bc #add_basket_modal {
+    top: 15%;
+}
+
+/*
+ * Product catalog
+ */
+.sonata-product-navigation-bar {
+    margin-bottom: 30px;
+}
+.sonata-product-navigation-bar .pagination {
+    margin: 0 !important;
+}
+.no-products-available {
+    padding: 100px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/*
+ * Product catalog menu
+ */
+div.col-sm-3 div.list-group a.lead.list-group-item:first-child {
+    margin-top: 0px;
+}
+
+div.col-sm-3 div.list-group a.lead.list-group-item {
+    margin-top: 20px;
+}
+
+div.col-sm-3 div.list-group a:not(.lead).list-group-item,
+div.col-sm-3 div.list-group div.menu_level_1,
+div.col-sm-3 div.list-group div.menu_level_2,
+div.col-sm-3 div.list-group div.menu_level_3,
+div.col-sm-3 div.list-group div.menu_level_4 {
+    width: 96%;
+    margin-left: 4%;
+}
+
+/*
+ * Product grid
+ */
+.product-grid {
+    padding: 10px 0px 10px 0px;
+}
+.product-grid .thumbnail {
+    margin-bottom: 20px;
+}
+.product-grid .product-thumbnail {
+    min-height: 100px;
+    max-height: 100px;
+    text-align: center;
+}
+.product-grid .col-sm-3 {
+    min-height: 175px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+.product-grid .col-sm-3 .panel .panel-body,
+.product-grid .col-sm-4 .panel .panel-body {
+    padding: 0px;
+}
+.product-grid .col-sm-3 .panel .panel-body img.img-responsive,
+.product-grid .col-sm-4 .panel .panel-body img.img-responsive {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Small resolution */
+@media(max-width:767px) {
+    .product-grid .col-sm-3 {
+        margin-top: 30px;
+        min-width: 250px;
+    }
+    .product-grid li:not(:last-child) {
+        margin-top: 0px;
+    }
+}
+
+/* Extra-small resolution */
+@media(max-width:475px) {
+    .product-grid li:not(:last-child) {
+        margin-top: 25px;
+    }
+
+    .product-grid li:first-child {
+        margin-top: 0px;
+    }
+}
+
+.product-grid .col-sm-3:first-line {
+    margin-top: 10px;
+}
+
+/*
+ * Product slider thumbnails
+ */
+
+div#slider-thumbs ul.list-inline {
+    width: 620px;
+}
+
+div#slider-thumbs ul li {
+    padding-left: 0px;
+    margin-bottom: 10px;
+}
+
+/*
+ * News
+ */
+h2.sonata-blog-post-title {
+    font-size: 22px;
+}
+
+.sonata-blog-post-abtract {
+    margin-top: 10px;
+}
+
+.sonata-blog-post-list hr {
+    margin: 20px 0px 5px 0px;
+}
+
+/*
+ * Comments
+ */
+
+.fos_comment_comment_show {
+    border-top: 1px solid #ccc;
+}

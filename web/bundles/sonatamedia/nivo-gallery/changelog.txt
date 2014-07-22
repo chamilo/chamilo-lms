@@ -1,0 +1,19 @@
+*** Nivo Slider Gallery Changelog ***
+
+2011.09.22 - version 0.7
+ * [New] Added changelog.txt
+ * [Changed] Made gallery react to responsive width
+ * [Changed] Images won't get scaled bigger than their dimensions (i.e. not stretched)
+ * [Changed] The way images are centered. Removed centreImage() func but lost support for IE7
+ * [Fixed] Gallery width and height can now be overwritten properly
+ * [Fixed] Added padding to HTML slide in fullscreen mode so caption doesn't obscure content
+ * [Fixed] Added bottom margin to Gallery to push content below navbar
+
+2011.09.21 - version 0.6
+ * [New] Added 4 new callback events
+ * [New] Added 3 new public functions
+ * [Changed] Default animSpeed to 300
+ * [Fixed] Fullscreen image centering bug
+ 
+2011.06.02 - version 0.5
+ * Initial release

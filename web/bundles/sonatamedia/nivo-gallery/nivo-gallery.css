@@ -1,0 +1,215 @@
+/*
+ * jQuery Nivo Gallery v0.7
+ * http://dev7studios.com
+ *
+ * Copyright 2011, Gilbert Pellegrom
+ * Free to use and abuse under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ * 
+ * October 2011
+ */
+ 
+.nivoGallery {
+    position:relative;
+    background:#000 url(images/loading.gif) no-repeat 50% 50%;
+    width:100%; /* Width can be fixed px or dynamic % value */
+    height:400px; /* Height must be fixed px value */
+    margin-bottom:28px;
+}
+.nivoGallery.loaded {
+    background:#000; /* Remove the loading gif */
+}
+.nivoGallery ul {
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+.nivoGallery ul li {
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    display:none;
+    font: 14px/1.6em arial,sans-serif;
+    color:#fff;
+}
+.nivoGallery ul img {
+    display:block;
+    max-width:100%;
+    max-height:100%;
+    position:absolute; 
+    top:0; 
+    bottom:0; 
+    left:0; 
+    right:0;
+	margin:auto;
+    -ms-interpolation-mode:bicubic;
+}
+
+.nivoGallery-slides {
+    position:relative;
+    height:100%;
+    overflow:hidden;
+}
+
+.nivoGallery-htmlwrap {
+    padding:20px;
+    height:100%;
+    overflow:auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.nivoGallery-videowrap video,
+.nivoGallery-videowrap iframe,  
+.nivoGallery-videowrap object,  
+.nivoGallery-videowrap embed {
+	position:absolute;
+	top:0;
+	left:0;
+	width:100%;
+	height:100%;
+}
+
+.nivoGallery-directionNav a {
+    position:absolute;
+    top:45%;
+    cursor:pointer;
+    display:block;
+	width:32px;
+	height:34px;
+	background:url(images/arrows.png) no-repeat;
+	text-indent:-9999px;
+	border:0;
+    opacity:0;
+    z-index:5;
+    -webkit-transition:opacity 150ms ease-in-out;
+    -moz-transition:opacity 150ms ease-in-out;
+    -o-transition:opacity 150ms ease-in-out;
+    transition:opacity 150ms ease-in-out;
+}
+.nivoGallery-directionNav .nivoGallery-prev {
+    left:10px;
+}
+.nivoGallery-directionNav .nivoGallery-next {
+    right:10px;
+    background-position:-32px 0;
+}
+.nivoGallery:hover .nivoGallery-directionNav a {
+    opacity:0.7;
+}
+.nivoGallery:hover .nivoGallery-directionNav a:hover {
+    opacity:1;
+}
+
+.nivoGallery-bar {
+    position:absolute;
+    bottom:-28px;
+    left:0;
+    height:28px;
+    width:100%;
+    font: 11px/28px arial,sans-serif;
+    background: #515151;
+    background: -moz-linear-gradient(top, #515151 0%, #0e0e0e 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#515151), color-stop(100%,#0e0e0e));
+    background: -webkit-linear-gradient(top, #515151 0%,#0e0e0e 100%);
+    background: -o-linear-gradient(top, #515151 0%,#0e0e0e 100%);
+    background: -ms-linear-gradient(top, #515151 0%,#0e0e0e 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#515151', endColorstr='#0e0e0e',GradientType=0 );
+    background: linear-gradient(top, #515151 0%,#0e0e0e 100%);
+    border-top:1px solid #222;
+    z-index:5;
+}
+.nivoGallery-play {
+    display:inline-block;
+    width:32px;
+    height:28px;
+    border:0;
+    background:url(images/playpause.png) no-repeat 50% 8px;
+    cursor:pointer;
+    border-right:1px solid rgba(0,0,0,0.3);
+}
+.nivoGallery-play.playing {
+    background-position:50% -92px;
+}
+.nivoGallery-count {
+    display:inline-block;
+    vertical-align:top;
+    height:28px;
+    padding:0 8px;
+    color:#aaa;
+    border-left:1px solid rgba(255,255,255,0.2);
+    border-right:1px solid rgba(0,0,0,0.3);
+    text-shadow:0 1px 0 #000;
+}
+.nivoGallery-caption {
+    display:inline-block;
+    vertical-align:top;
+    height:28px;
+    border-left:1px solid rgba(255,255,255,0.2);
+    padding:0 15px;
+    overflow:hidden;
+    color:#aaa;
+    text-shadow:0 1px 0 #000;
+}
+.nivoGallery-captionTitle {
+    color:#fff;
+    font-weight:bold;
+    margin-right:5px;
+}
+.nivoGallery-fullscreen {
+    float:right;
+    display:inline-block;
+    width:32px;
+    height:28px;
+    border:0;
+    background:url(images/fullscreen.png) no-repeat 50% 7px;
+    cursor:pointer;
+    border-left:1px solid rgba(0,0,0,0.3);
+}
+
+.nivoGallery-progress {
+    position:absolute;
+    top:0;
+    left:0;
+    background:#fff;
+    opacity:0.5;
+    width:100%;
+    height:2px;
+    z-index:5;
+}
+
+.nivoGallery.fullscreen {
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:100% !important;
+    max-width:100%;
+    height:100% !important;
+    z-index:10000;
+}
+.nivoGallery.fullscreen .nivoGallery-caption {
+    position:fixed;
+    top:0;
+    left:0;
+    display:block;
+    width:100%;
+    background:#000;
+    padding:20px;
+    opacity:0.8;
+}
+.nivoGallery.fullscreen .nivoGallery-play {
+    position:fixed;
+    top:20px;
+    right:45px;
+    z-index:6;
+}
+.nivoGallery.fullscreen .nivoGallery-fullscreen {
+    position:fixed;
+    top:20px;
+    right:20px;
+}
+.nivoGallery.fullscreen .nivoGallery-htmlwrap {
+    padding:90px 20px 20px 20px;
+}

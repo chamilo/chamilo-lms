@@ -1,0 +1,43 @@
+<div class="box box-solid">
+    <div class="box-body">
+        <div class="row">
+            <div class="col-md-3 col-sm-4">
+                <div class="box-header">
+                    <i class="fa fa-inbox"></i>
+                    <h3 class="box-title">
+                        {% trans from 'FOSMessageBundle' %}messenger{% endtrans %}
+                    </h3>
+                </div>
+
+                <a class="btn btn-block btn-primary" href="{{ url('fos_message_thread_new' )}}">
+                    <i class="fa fa-pencil"></i>
+                    {% trans from 'FOSMessageBundle' %}send_new{% endtrans %}
+                </a>
+                <ul class="nav nav-pills nav-stacked">
+                    <li>
+                        <a href="{{ url('fos_message_inbox') }}">
+                            <i class="fa fa-inbox"></i>
+                            {% trans from 'FOSMessageBundle' %}inbox{% endtrans %}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url('fos_message_sent') }}">
+                            <i class="fa fa-mail-forward"></i>
+                            {% trans from 'FOSMessageBundle' %}sent{% endtrans %}</a></li>
+                    <li>
+                        <a href="{{ url('fos_message_deleted') }}">
+                            <i class="fa fa fa-folder"></i>
+                            {% trans from 'FOSMessageBundle' %}deleted{% endtrans %}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-md-9 col-sm-8">
+                {% block fos_message_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+    <div class="box-footer clearfix">
+    </div>
+</div>

@@ -24,10 +24,9 @@ class FrontController extends Controller
      */
     public function showLoginAction()
     {
-        $csrfToken = $this->container->get('form.csrf_provider')->generateCsrfToken('authenticate');
         return $this->render(
             'ChamiloLMSCoreBundle:Security:only_login.html.twig',
-            array('error' => null, 'csrf_token' => $csrfToken)
+            array('error' => null)
         );
     }
 

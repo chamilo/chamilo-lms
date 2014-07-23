@@ -19,7 +19,25 @@
 
 {% block avanzu_sidebar %}
     {{ parent() }}
-
+    {% if is_granted('IS_AUTHENTICATED_FULLY') %}
     {{ mopa_bootstrap_menu('ChamiloLMSCoreBundle:SimpleMenuBuilder:mainMenu', {'automenu': 'pills', 'stacked':true}) }}
+    {% endif %}
+
+    {% if is_granted('IS_AUTHENTICATED_FULLY') == false %}
+        <form action="{{ path("fos_user_security_check") }}" method="post" role="form">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
+            <div class="form-group">
+                <label for="username">{{ 'security.login.username'|trans({}, 'SonataUserBundle') }}</label>
+                <input type="text" class="form-control" id="username" name="_username" >
+            </div>
+            <div class="form-group">
+                <label for="password">{{ 'security.login.password'|trans({}, 'SonataUserBundle') }}</label>
+                <input type="password" class="form-control" id="password" name="_password">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+    {% endif %}
+
+    {{ mopa_bootstrap_menu('ChamiloLMSCoreBundle:SimpleMenuBuilder:helpMenu', {'automenu': 'pills', 'stacked':true}) }}
 
 {% endblock %}

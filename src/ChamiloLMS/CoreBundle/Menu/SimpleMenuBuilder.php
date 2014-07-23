@@ -14,6 +14,21 @@ use Symfony\Component\DependencyInjection\ContainerAware;
  */
 class SimpleMenuBuilder extends ContainerAware
 {
+    public function helpMenu(FactoryInterface $factory, array $options)
+    {
+        $menu = $factory->createItem('main');
+
+        $child = $menu->addChild(
+            'Help',
+            array(
+                'route' => 'userportal',
+                array("attributes" => array("id" => 'nav'))
+            )
+        );
+
+        return $menu;
+    }
+
     /**
      * Creates the header menu
      *
@@ -53,14 +68,12 @@ class SimpleMenuBuilder extends ContainerAware
         );
 
         $child = $menu->addChild(
-            'Administration',
+            'Settings',
             array(
-                'route' => 'sonata_admin_dashboard',
+                'uri' => '/main/admin/settings.php',
                 array("attributes" => array("id" => 'nav'))
             )
         );
-
-
 
         /*
         $dropdownExtrasOptions = $isFooter ? array(

@@ -79,7 +79,6 @@ twig:
       "%kernel.root_dir%/../src/ChamiloLMS/CoreBundle/Resources/views/default": template_style
 
     globals:
-
       show_toolbar: true
       show_footer: true
       software_name:

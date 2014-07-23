@@ -66,13 +66,12 @@ class IndexController extends BaseController
         }
 
         $announcementsBlock = $pageController->getAnnouncements();
-
         return $this->render(
             'ChamiloLMSCoreBundle:Index:index.html.twig',
             array(
                 'content' => 'hello',
                 'hot_courses' => $hotCourses,
-                'announcements_block' => $announcementsBlock,
+                'announcements_block' => $announcementsBlock
                 //'home_page_block' => $pageController->returnHomePage()
             )
         );

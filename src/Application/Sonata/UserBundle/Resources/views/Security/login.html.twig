@@ -17,9 +17,7 @@
                   class="form-horizontal">
 
                 <div class="body bg-gray">
-
-                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}"/>
-
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
                     <div class="form-group">
                         <label for="username"
                                class="col-sm-4 control-label">{{ 'security.login.username'|trans({}, 'SonataUserBundle') }}</label>

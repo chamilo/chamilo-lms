@@ -24,7 +24,11 @@
     {% endif %}
 
     {% if is_granted('IS_AUTHENTICATED_FULLY') == false %}
-        <form action="{{ path("fos_user_security_check") }}" method="post" role="form">
+
+        <div class="user-panel">
+        </div>
+
+        <form action="{{ path("fos_user_security_check") }}" method="post" role="form" class="sidebar-form">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
             <div class="form-group">
                 <label for="username">{{ 'security.login.username'|trans({}, 'SonataUserBundle') }}</label>
@@ -36,6 +40,8 @@
             </div>
             <button type="submit" class="btn btn-default">Submit</button>
         </form>
+
+        {{ mopa_bootstrap_menu('ChamiloLMSCoreBundle:SimpleMenuBuilder:loginMenu', {'automenu': 'pills', 'stacked':true}) }}
     {% endif %}
 
     {{ mopa_bootstrap_menu('ChamiloLMSCoreBundle:SimpleMenuBuilder:helpMenu', {'automenu': 'pills', 'stacked':true}) }}

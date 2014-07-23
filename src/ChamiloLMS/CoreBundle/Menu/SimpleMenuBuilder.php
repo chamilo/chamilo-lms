@@ -14,11 +14,33 @@ use Symfony\Component\DependencyInjection\ContainerAware;
  */
 class SimpleMenuBuilder extends ContainerAware
 {
-    public function helpMenu(FactoryInterface $factory, array $options)
+    public function loginMenu(FactoryInterface $factory, array $options)
     {
         $menu = $factory->createItem('main');
 
-        $child = $menu->addChild(
+        $menu->addChild(
+            'Register',
+            array(
+                'route' => 'sonata_user_registration_register',
+                array("attributes" => array("id" => 'nav'))
+            )
+        );
+
+        $menu->addChild(
+            'Reset Password',
+            array(
+                'route' => 'fos_user_resetting_request',
+                array("attributes" => array("id" => 'nav'))
+            )
+        );
+
+        return $menu;
+    }
+
+    public function helpMenu(FactoryInterface $factory, array $options)
+    {
+        $menu = $factory->createItem('main');
+        $menu->addChild(
             'Help',
             array(
                 'route' => 'userportal',
@@ -52,25 +74,28 @@ class SimpleMenuBuilder extends ContainerAware
         );
 
         $child = $menu->addChild(
-            'Agenda',
-            array(
-                'route' => 'userportal',
-                array("attributes" => array("id" => 'nav'))
-            )
-        );
-
-        $child = $menu->addChild(
             'Progress',
             array(
-                'route' => 'userportal',
+                'route' => 'main',
+                'routeParameters' => array('name' => 'mySpace/index.php'),
                 array("attributes" => array("id" => 'nav'))
             )
         );
 
-        $child = $menu->addChild(
+        $menu->addChild(
+            'Calendar',
+            array(
+                'route' => 'main',
+                'routeParameters' => array('name' => 'calendar/agenda_js.php'),
+                array("attributes" => array("id" => 'nav'))
+            )
+        );
+
+        $menu->addChild(
             'Settings',
             array(
-                'uri' => '/main/admin/settings.php',
+                'route' => 'main',
+                'routeParameters' => array('name' => 'admin/settings.php'),
                 array("attributes" => array("id" => 'nav'))
             )
         );

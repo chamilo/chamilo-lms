@@ -3,9 +3,7 @@
 /**
  * @package chamilo.calendar
  */
-/**
- * INIT SECTION
- */
+
 use \ChamiloSession as Session;
 
 // use anonymous mode when accessing this course tool

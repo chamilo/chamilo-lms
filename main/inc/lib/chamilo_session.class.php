@@ -140,8 +140,11 @@ class ChamiloSession
      */
     public static function read($variable, $default = null)
     {
-        $result = self::$session->get($variable);
-        // check if the value exists in the $_SESSION array
+        $result = null;
+        if (isset(self::$session)) {
+            $result = self::$session->get($variable);
+        }
+        // Check if the value exists in the $_SESSION array
         if (empty($result)) {
             return isset($_SESSION[$variable]) ? $_SESSION[$variable] : $default;
         } else {

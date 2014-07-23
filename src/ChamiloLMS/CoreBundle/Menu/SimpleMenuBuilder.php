@@ -26,12 +26,39 @@ class SimpleMenuBuilder extends ContainerAware
     {
         $isFooter = array_key_exists('is_footer', $options) ? $options['is_footer'] : false;
 
-        $menuOptions = array_merge($options, array(
-            'childrenAttributes' => array('class' => 'nav nav-pills'),
-        ));
+        $menu = $factory->createItem('main');
 
-        $menu = $factory->createItem('main', $menuOptions);
-        $child = $menu->addChild('News', array('route' => 'sonata_news_home', array("attributes" => array("id" => 'nav'))));
+        $child = $menu->addChild(
+            'My courses',
+            array(
+                'route' => 'userportal',
+                array("attributes" => array("id" => 'nav'))
+            )
+        );
+
+        $child = $menu->addChild(
+            'Agenda',
+            array(
+                'route' => 'userportal',
+                array("attributes" => array("id" => 'nav'))
+            )
+        );
+
+        $child = $menu->addChild(
+            'Progress',
+            array(
+                'route' => 'userportal',
+                array("attributes" => array("id" => 'nav'))
+            )
+        );
+
+        $child = $menu->addChild(
+            'Administration',
+            array(
+                'route' => 'sonata_admin_dashboard',
+                array("attributes" => array("id" => 'nav'))
+            )
+        );
 
 
 
@@ -60,23 +87,23 @@ class SimpleMenuBuilder extends ContainerAware
         $menu->addChild($extras);
         */
 
-        $menu->addChild('Admin', array(
+        /*$menu->addChild('Admin', array(
             'route' => 'page_slug',
             'routeParameters' => array(
                 'path' => '/user'
             ),
             'id' => 'admin'
-        ));
+        ));*/
 
-        if ($isFooter) {
-            $menu->addChild('Legal notes', array(
+        //if ($isFooter) {
+            /*$menu->addChild('Legal notes', array(
                 'route' => 'page_slug',
                 'routeParameters' => array(
                     'path' => '/legal-notes',
                 ),
                 'id' => 'legal'
-            ));
-        }
+            ));*/
+        //}
         return $menu;
     }
 

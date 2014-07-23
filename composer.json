@@ -74,13 +74,15 @@
         "symfony-cmf/routing-bundle": "~1.1",
 
         "knplabs/gaufrette": "0.1.4",
-        "knplabs/knp-menu-bundle": "1.1.x-dev",
+
+        "knplabs/knp-paginator-bundle": "dev-master",
+        "knplabs/knp-menu-bundle": "dev-master as 1.1",
 
         "sonata-project/easy-extends-bundle": "~2.1@dev",
         "sonata-project/seo-bundle": "~1@dev",
         "sonata-project/doctrine-extensions": "~1@dev",
         "sonata-project/intl-bundle": "~2.2@dev",
-        "sonata-project/admin-bundle": "~2.3@dev",
+        "sonata-project/admin-bundle": "dev-master",
         "sonata-project/doctrine-orm-admin-bundle": "~2.3@dev",
         "sonata-project/notification-bundle": "~2.2@dev",
         "sonata-project/block-bundle": "~2.2@dev",
@@ -105,7 +107,9 @@
         "simplethings/entity-audit-bundle": "~0.5",
         "willdurand/faker-bundle": "~1.0",
 
+
         "mopa/bootstrap-bundle": "v3.0.0-beta3",
+
         "twbs/bootstrap": "v3.0.0",
 
         "stof/doctrine-extensions-bundle": "~1.1",

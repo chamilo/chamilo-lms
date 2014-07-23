@@ -16,3 +16,10 @@
         {{ parent() }}
     {% endif %}
 {% endblock %}
+
+{% block avanzu_sidebar %}
+    {{ parent() }}
+
+    {{ mopa_bootstrap_menu('ChamiloLMSCoreBundle:SimpleMenuBuilder:mainMenu', {'automenu': 'pills', 'stacked':true}) }}
+
+{% endblock %}

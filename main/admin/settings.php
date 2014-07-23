@@ -10,25 +10,10 @@
  * @package chamilo.admin
  */
 
-/* INIT SECTION */
-
-// Language files that need to be included.
-if (isset($_GET['category']) && $_GET['category'] == 'Templates') {
-    $language_file = array('admin', 'document');
-} else {
-    if (isset($_GET['category']) && $_GET['category'] == 'Gradebook') {
-        $language_file = array('admin', 'gradebook');
-    } else {
-        $language_file = array('admin', 'document');
-    }
-}
-$language_file[] = 'tracking';
-
 // Resetting the course id.
 $cidReset = true;
 
 // Including some necessary library files.
-require_once '../inc/global.inc.php';
 require_once 'settings.lib.php';
 
 // Setting the section (for the tabs).

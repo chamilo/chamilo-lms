@@ -287,7 +287,7 @@ class IndexController extends BaseController
 
         return $this->render(
             'ChamiloLMSCoreBundle:Index:userportal.html.twig',
-            array('content' => $items)
+            array('content' => $items, 'page_title' => 'dsqd')
         );
     }
 

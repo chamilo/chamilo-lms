@@ -1,8 +1,4 @@
-{% extends "AvanzuAdminThemeBundle:layout:base-layout.html.twig" %}
-
-{% block title %}
-    {{ parent() }}
-{% endblock %}
+{% extends "::layout.html.twig" %}
 
 {% block javascripts_head %}
     {{ parent() }}
@@ -43,18 +39,11 @@
     {% endblock %}
 {% endblock %}
 
-{% block page_title %}
-    {% if page is defined %}
-        {{ page.name }}
-    {% else %}
-        {{ parent() }}
-    {% endif %}
-{% endblock %}
-
 {% block page_content %}
     {% if page is defined %}
         {% block sonata_page_container %}
             <div class="row">
+
                 <div class="col-xs-12">
                     {#{{ sonata_page_render_container('header', page) }}#}
                     {{ sonata_page_render_container('header', page) }}
@@ -99,5 +88,4 @@
             </div>
         {% endblock %}
     {% endif %}
-
 {% endblock %}

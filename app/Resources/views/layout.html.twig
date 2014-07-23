@@ -1,1 +1,18 @@
-123
+{% extends "AvanzuAdminThemeBundle:layout:base-layout.html.twig" %}
+
+{% block title %}
+    {#{{ parent() }}#}
+    {{ 'Institution' | get_setting }} - {{ 'siteName' | get_setting }}
+{% endblock %}
+
+{% block avanzu_logo %}
+    {{ 'Institution' | get_setting }}
+{% endblock %}
+
+{% block page_title %}
+    {% if page is defined %}
+        {{ page.name }}
+    {% else %}
+        {{ parent() }}
+    {% endif %}
+{% endblock %}

@@ -1247,22 +1247,33 @@ class User extends BaseUser implements ParticipantInterface, ThemeUser
         return $this->hrDeptId;
     }
 
-
+    /**
+     * @return string
+     */
     public function getAvatar()
     {
-        return 'avatar';
+        return '';
     }
 
+    /**
+     * @return \DateTime
+     */
     public function getMemberSince()
     {
         return $this->registrationDate;
     }
 
+    /**
+     * @return bool
+     */
     public function isOnline()
     {
         return false;
     }
 
+    /**
+     * @return int
+     */
     public function getIdentifier()
     {
         return $this->getId();

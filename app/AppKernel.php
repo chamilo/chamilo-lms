@@ -127,6 +127,8 @@ class AppKernel extends Kernel
             new ChamiloLMS\CoreBundle\ChamiloLMSCoreBundle(),
             new ChamiloLMS\CourseBundle\ChamiloLMSCourseBundle(),
             new ChamiloLMS\InstallerBundle\ChamiloLMSInstallerBundle(),
+            new ChamiloLMS\MessageBundle\ChamiloLMSMessageBundle(),
+
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle()
         );
 

@@ -100,16 +100,20 @@ $rootWeb = api_get_path('WEB_PATH');
                 <span><?php echo custompages_get_lang('LoginEnter');?></span>
             </div> <!-- #form-submit -->
 			<div id="links">
-                <a href="<?php echo api_get_path(WEB_PATH)?>main/auth/inscription.php">
+
+                <?php if (api_get_setting('allow_registration') === 'true') { ?>
+                <a href="<?php echo api_get_path(WEB_PATH); ?>main/auth/inscription.php">
                     <?php echo custompages_get_lang('langReg')?>
                 </a><br />
-                <a href="<?php echo api_get_path(WEB_PATH)?>main/auth/lostPassword.php">
+                <?php } ?>
+
+                <a href="<?php echo api_get_path(WEB_PATH); ?>main/auth/lostPassword.php">
                     <?php echo custompages_get_lang('langLostPassword')?>
                 </a>
 			</div>
 		</div> <!-- #form -->
 		<div id="footer">
-			<img src="<?php echo api_get_path(WEB_PATH)?>/custompages/images/footer.png" />
+			<img src="<?php echo api_get_path(WEB_PATH); ?>/custompages/images/footer.png" />
 		</div> <!-- #footer -->
 	</div> <!-- #wrapper -->
 </body>

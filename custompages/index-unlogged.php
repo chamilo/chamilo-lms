@@ -78,30 +78,34 @@ $rootWeb = api_get_path('WEB_PATH');
 			<img src="<?php echo api_get_path(WEB_PATH)?>/custompages/images/header.png" alt="Logo" />
 		</div> <!-- #header -->
 		<div id="login-form-box" class="form-box">
-      <div id="login-form-info" class="form-info">
-        <?php if (isset($content['info']) && !empty($content['info'])) {
-          echo $content['info'];
-        }
-        ?>
-      </div>
-		<?php if (isset($error_message)) {
-			echo '<div id="login-form-info" class="form-error">'.$error_message.'</div>';
-		}
-        ?>
-			<form id="login-form" class="form" action="<?php echo api_get_path(WEB_PATH)?>index.php" method="post">
-				<div>
-        <label for="login">*<?php echo custompages_get_lang('User');?></label>
-					<input name="login" type="text" /><br />
-          <label for="password">*<?php echo custompages_get_lang('langPass');?></label>
-					<input name="password" type="password" /><br />
-				</div>
-			</form>
-			<div id="login-form-submit" class="form-submit" onclick="document.forms['login-form'].submit();">
-      <span><?php echo custompages_get_lang('LoginEnter');?></span>
-			</div> <!-- #form-submit -->
+            <div id="login-form-info" class="form-info">
+            <?php if (isset($content['info']) && !empty($content['info'])) {
+              echo $content['info'];
+            }
+            ?>
+            </div>
+            <?php if (isset($error_message)) {
+                echo '<div id="login-form-info" class="form-error">'.$error_message.'</div>';
+            }
+            ?>
+            <form id="login-form" class="form" action="<?php echo api_get_path(WEB_PATH)?>index.php" method="post">
+                <div>
+                    <label for="login">*<?php echo custompages_get_lang('User');?></label>
+                    <input name="login" type="text" /><br />
+                    <label for="password">*<?php echo custompages_get_lang('langPass');?></label>
+                    <input name="password" type="password" /><br />
+                </div>
+            </form>
+            <div id="login-form-submit" class="form-submit" onclick="document.forms['login-form'].submit();">
+                <span><?php echo custompages_get_lang('LoginEnter');?></span>
+            </div> <!-- #form-submit -->
 			<div id="links">
-      <a href="<?php echo api_get_path(WEB_PATH)?>main/auth/inscription.php"><?php echo custompages_get_lang('langReg')?></a><br />
-      <a href="<?php echo api_get_path(WEB_PATH)?>main/auth/lostPassword.php"><?php echo custompages_get_lang('langLostPassword')?></a>
+                <a href="<?php echo api_get_path(WEB_PATH)?>main/auth/inscription.php">
+                    <?php echo custompages_get_lang('langReg')?>
+                </a><br />
+                <a href="<?php echo api_get_path(WEB_PATH)?>main/auth/lostPassword.php">
+                    <?php echo custompages_get_lang('langLostPassword')?>
+                </a>
 			</div>
 		</div> <!-- #form -->
 		<div id="footer">

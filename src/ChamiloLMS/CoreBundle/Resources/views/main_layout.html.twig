@@ -1,15 +1,10 @@
 {% extends "::layout.html.twig" %}
 
 {% block javascripts_head %}
-    {{ parent() }}
+    {{- parent() }}
 
     {% block sonata_page_javascripts %}
         {% block page_javascripts %} {# Deprecated block #}
-            <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-            <!--[if lt IE 9]>
-            <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-            <![endif]-->
-
             {% for js in sonata_page.assets.javascripts %}
                 <script src="{{ asset(js) }}" type="text/javascript"></script>
             {% endfor %}

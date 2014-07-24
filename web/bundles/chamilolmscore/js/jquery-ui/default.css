@@ -1,0 +1,124 @@
+/*
+	Custom changes for the jquery-ui see the readme file
+*/
+
+/*  Smoothness */
+
+/* Removing glow effect in tables */
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { 
+	border: 1px solid #d3d3d3; 
+	/* background: #e6e6e6 url(images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x;*/
+	/*background: #F2F2F2;  */
+	font-weight: normal; 
+	color: #555555; 
+	/* height:30px; */	
+}	
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #555555; text-decoration: none; }
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { 
+	border: 1px solid #999999;
+	/*background: #dadada url(images/ui-bg_glass_75_dadada_1x400.png) 50% 50% repeat-x;*/
+	background: #E5EDF9; 
+	font-weight: normal; 
+	color: #212121; 
+}
+
+.ui-jqgrid .ui-pg-selbox {   
+    height: 23px !important;
+}
+    
+
+/* jqgrid: Changes the row style in a table (even, odd) */
+.ui-priority-secondary, .ui-widget-content .ui-priority-secondary,  .ui-widget-header .ui-priority-secondary { 
+	opacity: 1; 
+	font-weight: normal;
+	background-color: #F9F9F9; 
+}
+.ui-widget-content { 
+	background: #fff;
+	border: 1px solid #ddd;
+}
+
+.ui-jqgrid .ui-jqgrid-htable th {
+	height:30px;
+}
+
+/* jqgrid: Changing anchors colors see main/session/ */
+
+.ui-widget-content a {
+    color: #3757F7;
+    cursor: pointer;    
+}
+.ui-widget-content .btn-primary, .ui-widget-content .btn-primary:hover {
+    color: white;
+}
+
+.ui-widget-content a:hover{
+    color: #3757F7;
+    cursor: pointer;
+}
+
+/* Removes the gray background in the jqgrid main/session/index.php */
+.ui-widget-header {
+	background: #FFF;
+	border: none;
+	border-bottom: 1px solid #ccc;
+	border-radius:0px;
+}
+
+/* tabs: anchor size otherwise anchors will have a bigger font size */
+.ui-widget {
+	font-size:100%;
+}
+
+/* tabs: removing a lot of padding */
+.ui-tabs .ui-tabs-panel {
+	padding: 10px 0px 0px 0px;
+}
+
+/* Set the selected tab background to white */
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected {
+   background-color:#fff;
+}
+
+/* Calendary day fix */
+.ui-datepicker-calendar .ui-state-default {
+	height:15px;
+}
+
+/* LP add items */
+#resource_tab.ui-tabs .ui-tabs-nav {
+    height: 77px;
+}
+
+#resource_tab.ui-tabs .ui-tabs-nav li {
+    height: 75px;
+	border:1px solid #ccc;
+	 
+}
+
+.ui-tabs  {
+	border: none;
+}
+
+
+/** Removes a border-bottom black line in the jqgrids */
+.ui-jqgrid .ui-jqgrid-htable {
+    border-collapse: separate !important;
+}
+
+/* Fixes the input size in the jqgrid pagination */
+.ui-jqgrid .ui-pg-input {
+    width:30px;
+}
+
+/* Fixes btn class when using bootstrap */
+.ui-widget-content a, .ui-widget-content a:hover {
+    /* color:inherit; */
+}
+
+/*  cupertino */
+
+
+/* ui-lightness */
+
+

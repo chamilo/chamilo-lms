@@ -1,0 +1,76 @@
+<html>
+<head>
+<title>Extending ASCIIMathML</title>
+<script type="text/javascript" src="ASCIIMathML.js"></script>
+
+<script type="text/javascript">
+define("!<=","\u2270")
+define("!>=","\u2271")
+newcommand("\\nle","\u2270")
+newcommand("\\nge","\u2271")
+</script>
+</head>
+<body bgcolor="beige">
+
+<h2>ASCIIMathML.js: Extending the symbol table</h2>
+
+<p>
+The standard symbol table of ASCIIMathML.js does not contain many symbols.
+It can be extended by adding additional symbols on any webpage that
+requires them. This is done by adding a few lines of JavaScript code.
+
+</p>
+
+<p>
+For example, suppose we want to add symbols for "not less or equal" and
+"not greater or equal".
+</p>
+
+<p>
+We first have to find the four-digit hexadecimal Unicode value for
+these symbols by looking them up at, say, <a
+href="http://www.w3.org/TR/MathML2/chapter6.html#chars.entity.tables">http://www.w3.org/TR/MathML2/chapter6.html#chars.entity.tables</a>
+</p>
+
+<p>
+Next we have to decide what input strings we want to associate with these
+symbols, say "!<=" and "!>=".
+</p>
+
+<p>
+Finally we add the following lines to the head or body of our HTML file:
+<pre style="border-style:groove">&lt;script type="text/javascript">
+define("!<=","\u2270")
+define("!>=","\u2271")
+&lt;/script>
+</pre>
+</p>
+
+<p>
+Here we test the modified symbol table:
+<tt>\`a !<= b !>= c\`</tt> produces `a !<= b !>= c`
+</p>
+
+<p>To add a symbol to the LaTeX commands, use the following alternate syntax:
+<pre style="border-style:groove">&lt;script type="text/javascript">
+newcommand("\\nle","\u2270")
+newcommand("\\nge","\u2271")
+&lt;/script>
+</pre>
+</p>
+
+<p>
+Now
+<tt>\$a \nle b \nge c\$</tt> produces $a \nle b \nge c$.
+</p>
+
+<hr/>
+<p>
+If you know the numeric entity reference of the symbol you want to use
+on an ASCIIMathML webpage, you can also refer to the symbol directly
+by using that reference. E.g \`&amp;#x2270;\` produces `&#x2270;`.
+If a symbol is only used occasionally, this is certainly the simplest
+way to include it.
+</p>
+</body>
+</html>

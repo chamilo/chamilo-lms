@@ -2,11 +2,11 @@
 
 {% block title %}
     {#{{ parent() }}#}
-    {{ 'Institution' | get_setting }} - {{ 'siteName' | get_setting }}
+    {{- 'Institution' | get_setting }} - {{ 'siteName' | get_setting -}}
 {% endblock %}
 
 {% block avanzu_logo %}
-    {{ 'Institution' | get_setting }}
+    {{- 'Institution' | get_setting -}}
 {% endblock %}
 
 {% block page_title %}
@@ -18,16 +18,14 @@
 {% endblock %}
 
 {% block avanzu_sidebar %}
-    {{ parent() }}
+    {{- parent() -}}
     {% if is_granted('IS_AUTHENTICATED_FULLY') %}
     {{ mopa_bootstrap_menu('ChamiloLMSCoreBundle:SimpleMenuBuilder:mainMenu', {'automenu': 'pills', 'stacked':true}) }}
     {% endif %}
-
     {% if is_granted('IS_AUTHENTICATED_FULLY') == false %}
 
         <div class="user-panel">
         </div>
-
         <form action="{{ path("fos_user_security_check") }}" method="post" role="form" class="sidebar-form">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}"/>
             <div class="form-group">
@@ -45,5 +43,11 @@
     {% endif %}
 
     {{ mopa_bootstrap_menu('ChamiloLMSCoreBundle:SimpleMenuBuilder:helpMenu', {'automenu': 'pills', 'stacked':true}) }}
+{% endblock %}
 
+{% block javascripts_head %}
+    {{ parent() }}
+    {% javascripts 'bundles/chamilolmscore/js/app.js'%}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 {% endblock %}

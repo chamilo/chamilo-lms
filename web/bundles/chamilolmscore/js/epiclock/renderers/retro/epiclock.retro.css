@@ -1,0 +1,75 @@
+/*!
+ * Retro Style Flip Clock
+ * Copyright (c) 2009 Eric Garside (http://eric.garside.name)
+ * Dual licensed under:
+ *  MIT: http://www.opensource.org/licenses/mit-license.php
+ *  GPLv3: http://www.opensource.org/licenses/gpl-3.0.html
+ */
+
+/* Master Style
+----------------------------------*/
+
+.epiclock-retro .epiclock, .epiclock-retro .epiclock-img
+    { display: block; float: left; }
+
+.epiclock-retro .epiclock-img .epiclock-animation,
+.epiclock-retro .epiclock-meridian,
+.epiclock-retro .epiclock-separator { display: block; float: left; background-image: url(epiclock.retro.png); background-repeat: no-repeat; height: 40px; }
+
+/* Individual Styles
+----------------------------------*/
+.epiclock-retro .epiclock-spacer { display: block; float: left; width: 10px; height: 1px; margin: 0; }
+.epiclock-retro .epiclock-animation { width: 40px; }
+.epiclock-retro .epiclock-separator { width: 26px; text-indent: -999999px; background-position: 0 -840px; }
+
+/* Container Clearfix
+----------------------------------*/
+.epiclock-retro:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.epiclock-retro { display: inline-block; }
+* html .epiclock-retro { height:1%; }
+.epiclock-retro { display:block; }
+
+/* Static Positions
+----------------------------------*/
+.epiclock-retro .d1 .s { background-position: 0 -40px; }
+.epiclock-retro .d2 .s { background-position: -40px -80px; }
+.epiclock-retro .d3 .s { background-position: 0 -160px; }
+.epiclock-retro .d4 .s { background-position: -40px -200px; }
+.epiclock-retro .d5 .s { background-position: 0 -280px; }
+.epiclock-retro .d6 .s { background-position: -40px -320px; }
+.epiclock-retro .d7 .s { background-position: 0 -400px; }
+.epiclock-retro .d8 .s { background-position: -40px -440px; }
+.epiclock-retro .d9 .s { background-position: 0 -520px; }
+.epiclock-retro .d0 .s { background-position: -40px -560px; }
+.epiclock-retro .dpm .s { background-position: 0 -680px; width: 80px; }
+.epiclock-retro .dam .s { background-position: 0 -800px; width: 80px; }
+
+/* Animation Phase 1
+----------------------------------*/
+.epiclock-retro .d1 .a1 { background-position: 0 0; }
+.epiclock-retro .d2 .a1 { background-position: -40px -40px; }
+.epiclock-retro .d3 .a1 { background-position: 0 -120px; }
+.epiclock-retro .d4 .a1 { background-position: -40px -160px; }
+.epiclock-retro .d5 .a1 { background-position: 0 -240px; }
+.epiclock-retro .d6 .a1 { background-position: -40px -280px; }
+.epiclock-retro .d7 .a1 { background-position: 0 -360px; }
+.epiclock-retro .d8 .a1 { background-position: -40px -400px; }
+.epiclock-retro .d9 .a1 { background-position: 0 -480px; }
+.epiclock-retro .d0 .a1 { background-position: -40px -520px; }
+.epiclock-retro .dpm .a1 { background-position: 0 -720px; width: 80px; }
+.epiclock-retro .dam .a1 { background-position: 0 -600px; width: 80px; }
+
+/* Animation Phase 2
+----------------------------------*/
+.epiclock-retro .d1 .a2 { background-position: -40px 0; }
+.epiclock-retro .d2 .a2 { background-position: 0 -80px; }
+.epiclock-retro .d3 .a2 { background-position: -40px -120px; }
+.epiclock-retro .d4 .a2 { background-position: 0 -200px; }
+.epiclock-retro .d5 .a2 { background-position: -40px -240px; }
+.epiclock-retro .d6 .a2 { background-position: 0 -320px; }
+.epiclock-retro .d7 .a2 { background-position: -40px -360px; }
+.epiclock-retro .d8 .a2 { background-position: 0 -440px; }
+.epiclock-retro .d9 .a2 { background-position: -40px -480px; }
+.epiclock-retro .d0 .a2 { background-position: 0 -560px; }
+.epiclock-retro .dpm .a2 { background-position: 0 -760px; width: 80px; }
+.epiclock-retro .dam .a2 { background-position: 0 -640px; width: 80px; }

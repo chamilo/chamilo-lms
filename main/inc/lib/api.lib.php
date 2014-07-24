@@ -543,7 +543,7 @@ define('TOOL_ADMIN_VISIBLE',             'tooladminvisible');
  * api_get_path(WEB_PLUGIN_PATH)                http://www.mychamilo.org/chamilo/plugin/
  * api_get_path(WEB_ARCHIVE_PATH)               http://www.mychamilo.org/chamilo/archive/
  * api_get_path(WEB_IMG_PATH)                   http://www.mychamilo.org/chamilo/web/chamiloLMS/img/
- * api_get_path(SYS_IMG_PATH)                   /var/www/chamilo/web/ChamiloLMS/img/
+ * api_get_path(SYS_IMG_PATH)                   /var/www/chamilo/web/bundles/chamilolmscore/img/
  *
  * api_get_path(WEB_CSS_PATH)                   http://www.mychamilo.org/chamilo/main/css/
  * api_get_path(WEB_LIBRARY_PATH)               http://www.mychamilo.org/chamilo/main/inc/lib/
@@ -576,20 +576,20 @@ function api_get_path($path_type, $path = null) {
         WEB_DATA_COURSE_PATH    => 'courses/',
         WEB_DATA_PATH           => '/',
         SYS_COURSE_PATH         => 'data/',
-        SYS_CSS_PATH            => 'ChamiloLMS/css/',
+        SYS_CSS_PATH            => 'bundles/chamilolmscore/css/',
         SYS_LANG_PATH           => 'lang/',
-        WEB_IMG_PATH            => 'ChamiloLMS/img/',
-        SYS_IMG_PATH            => 'web/ChamiloLMS/img/',
-        WEB_CSS_PATH            => 'ChamiloLMS/css/',
+        WEB_IMG_PATH            => 'bundles/chamilolmscore/img/',
+        SYS_IMG_PATH            => 'web/bundles/chamilolmscore/img/',
+        WEB_CSS_PATH            => 'bundles/chamilolmscore/css/',
         SYS_PLUGIN_PATH         => 'plugin/',
         WEB_PLUGIN_PATH         => 'plugin/',
         WEB_ARCHIVE_PATH        => 'temp/',
         INCLUDE_PATH            => 'inc/',
         LIBRARY_PATH            => 'inc/lib/',
-        SYS_LIBRARY_JS_PATH     => 'ChamiloLMS/js/',
+        SYS_LIBRARY_JS_PATH     => 'bundles/chamilolmscore//js/',
         CONFIGURATION_PATH      => 'inc/conf/',
         WEB_LIBRARY_PATH        => 'inc/lib/',
-        WEB_LIBRARY_JS_PATH     => 'ChamiloLMS/js/',
+        WEB_LIBRARY_JS_PATH     => 'bundles/chamilolmscore//js/',
         WEB_AJAX_PATH           => 'inc/ajax/',
         SYS_TEST_PATH           => 'tests/',
         WEB_TEMPLATE_PATH       => 'template/',

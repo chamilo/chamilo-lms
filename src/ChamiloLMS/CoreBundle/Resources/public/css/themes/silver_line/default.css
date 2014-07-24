@@ -1,0 +1,2293 @@
+/*****************************************************
+ *  MAIN  - CORPORATE
+ *****************************************************/
+/* Adding default generic style for non chamilo_X themes */
+@import url('../base.css');
+
+/* Redefining html styles */
+body {
+    /* hack ignored by non-IE to enable ie to support :hover on button */
+    behavior:url("/main/css/csshover3.htc");
+    margin: 0;
+    padding: 0;
+    font-size: .85em;
+    font-family: 'Lucida Grande', verdana, Arial, sans-serif, sans;
+    color: #000;
+    background-color: #fff;    
+}
+
+a {
+    text-decoration: none;
+    color: #900;
+}
+a:hover, a:focus {
+    color: #990;
+}
+blockquote {
+    font: 1.1em arial, sans, sans-serif;
+}
+h3 {
+    font: bold 1.3em Arial, sans-serif, sans;
+}
+h4 {
+    font: bold 1.2em Arial, sans-serif, sans;
+}
+img {
+    border: 0;
+}
+input {
+    margin-left: 1em;
+    border-color: #4170b4;
+    border-width: 1px;
+    background-color: #fff;
+    font: normal 90% "Lucida Grande", verdana, Arial, sans, sans-serif;
+}
+p {
+    clear: both;
+    width: 90%;
+}
+select, textarea {
+    font: normal 90% "Lucida Grande", verdana, Arial, sans, sans-serif;
+    border: 1px solid #4170b4;
+}
+small {
+    font-size: .9em;
+}
+table {
+    padding: 0;
+}
+tr, td {
+    padding: 0;
+}
+ul {
+    list-style: none;
+}
+
+
+
+/*
+-----------------------------------------------------------------------------
+Menu Slide JQuery
+-----------------------------------------------------------------------------
+*/
+ul#navigation {
+    position: fixed;
+    margin: 0px;
+    padding: 0px;
+    top: 60px;
+    right: -10px;
+    list-style: none;
+    z-index:9999;
+}
+
+ul#navigation li {
+    width: 73px;
+}
+
+ul#navigation li a {
+    display: block;
+    margin-left: 1px;
+    width: 65px;
+    height: 60px;
+    background-color:#CFCFCF;
+    background-repeat:no-repeat;
+    background-position:center center;
+    border:1px solid #AFAFAF;
+    -moz-border-radius:10px 0px 0px 10px;
+    -webkit-border-bottom-right-radius: 10px;
+    -webkit-border-top-right-radius: 10x;
+    -khtml-border-bottom-right-radius: 10px;
+    -khtml-border-top-right-radius: 10px;
+    -moz-box-shadow: 0px 4px 3px #000;
+    opacity: 0.6;
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=60);
+    -webkit-box-shadow: 0px 4px 3px #000;
+}
+
+ul#navigation .help a{
+    background-image: url(images/help2.png);
+}
+
+/*
+==============================================================================
+    PAGE STRUCTURE
+==============================================================================
+*/
+/* user_portal course status icon */
+.coursestatusicons {
+    float: left;
+    clear: left;
+    margin-right: .5em;
+}
+/* user_portal course list */
+.courses {
+    list-style-type: none;
+    margin-bottom: 5px;
+    height: 30px;
+}
+/* user_portal session list */
+.session_course_item .courses {
+    margin-bottom: 5px;
+    height:35px;
+}
+.session_course_item {
+    /* padding: 0px; */
+    margin: 0px;
+    font-size:135%;
+}
+.session_course_item .item_closed, .userportal-course-item-title .item_closed {
+     font-size:80%; 
+}
+
+/*
+-----------------------------------------------------------------------------
+Side-Menu Slider (JQuery) see banner.inc.php
+-----------------------------------------------------------------------------
+*/
+ul#navigation {
+    position: fixed;
+    margin: 0px;
+    padding: 0px;
+    top: 10px;
+    right: -10px;
+    list-style: none;
+    z-index:9999;
+}
+
+ul#navigation li {
+    width: 73px;
+}
+
+ul#navigation li a {
+    display: block;
+    margin-left: 1px;
+    width: 65px;
+    height: 60px;
+    background-color:#CFCFCF;
+    background-repeat:no-repeat;
+    background-position:center center;
+    border:1px solid #AFAFAF;
+    -moz-border-radius:10px 0px 0px 10px;
+    -webkit-border-bottom-right-radius: 10px;
+    -webkit-border-top-right-radius: 10x;
+    -khtml-border-bottom-right-radius: 10px;
+    -khtml-border-top-right-radius: 10px;
+    -moz-box-shadow: 0px 4px 3px #000;
+    opacity: 0.6;
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=60);
+    -webkit-box-shadow: 0px 4px 3px #000;
+}
+
+ul#navigation .help a {
+    -moz-border-radius:8px 0 0 8px;
+    -moz-box-shadow:0 2px 2px #000000;
+    background-color:#879DAA;
+    background-position:center center;
+    background-repeat:no-repeat;
+    border:1px solid #FFFFFF;
+    display:block;
+    height:44px;
+    margin-left:1px;
+    opacity:0.6;
+    width:65px;
+    padding: 6px 0 8px 6px;
+}
+
+
+ul#navigation .report a {
+    -moz-border-radius:8px 0 0 8px;
+    -moz-box-shadow:0 2px 2px #000000;
+    background-color:#8fd400;
+    background-position:center center;
+    background-repeat:no-repeat;
+    border:1px solid #FFFFFF;
+    display:block;
+    height:44px;
+    margin-left:1px;
+    opacity:0.6;
+    width:65px;
+    padding: 6px 0 8px 6px;
+}
+
+
+ul#navigation .student a {
+    -moz-border-radius:8px 0 0 8px;
+    -moz-box-shadow:0 2px 2px #000000;
+    background-color:#b27651 ;
+    background-position:center center;
+    background-repeat:no-repeat;
+    border:1px solid #FFFFFF;
+    display:block;
+    height:44px;
+    margin-left:1px;
+    opacity:0.6;
+    width:65px;
+        padding-bottom: 8px;
+}
+
+
+ul#navigation .user-online a {
+    -moz-border-radius:8px 0 0 8px;
+    -moz-box-shadow:0 2px 2px #000000;
+    background-color:#ccbc67 ;
+    background-position:center center;
+    background-repeat:no-repeat;
+    border:1px solid #FFFFFF;
+    display:block;
+    height:44px;
+    margin-left:1px;
+    opacity:0.6;
+    width:65px;
+    padding: 6px 0 8px 6px;
+}
+
+/* Other colors for other tabs in the earth tones */
+    ul#navigation .user-connect a {
+    -moz-border-radius:8px 0 0 8px;
+    -moz-box-shadow:0 2px 2px #000000;
+    background-color:#fac97a ;
+    background-position:center center;
+    background-repeat:no-repeat;
+    border:1px solid #FFFFFF;
+    display:block;
+    height:44px;
+    margin-left:1px;
+    opacity:0.6;
+    width:65px;
+    padding: 6px 0 8px 6px;
+}
+
+ul#navigation .student-connect a {
+    -moz-border-radius:8px 0 0 8px;
+    -moz-box-shadow:0 2px 2px #000000;
+    background-color:#d0d5d1 ;
+    background-position:center center;
+    background-repeat:no-repeat;
+    border:1px solid #FFFFFF;
+    display:block;
+    height:44px;
+    margin-left:1px;
+    opacity:0.6;
+    width:65px;
+    padding: 6px 0 8px 6px;
+}
+
+
+/* For ie6 browsers or older*/
+* html #main {
+    padding: 0 1% 15px 2.96%;
+}
+.maincontent {
+    margin: 0 0 1em 1em;
+    width: 69%;
+    float: left;
+}
+#outerframe {
+    background-color: #fff;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+.user_course_category {
+    font: bold 100% sans, sans-serif, arial;
+    text-transform: capitalize;
+    padding: .25em;
+    background: #eee url('images/headertables.jpg') repeat-x top center;
+    border: 1px solid #ddd;
+    vertical-align: top;
+    margin:.8em 0;
+}
+.sessions_list {
+    line-height: 20px;
+    margin-top: 20px;
+}
+.sessions_list_inactive {
+    line-height: 20px;
+}
+.session_box {
+    border: 1px solid #DCE5F3;
+    /* font-weight: bold; */
+    color: #666;
+    list-style-type: none;
+    margin:5px 5px 10px 5px;
+    padding: 5px;
+    background-color:#FFF;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+.sub_session_box {
+     border: 1px solid #DCE5F3;
+    /* font-weight: bold; */
+    color: #666;
+    list-style-type: none;
+    margin:5px 5px 10px 0px;
+    padding: 5px;
+    background-color:#FFF;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+.sub_session_box_title {
+    margin-bottom: 10px;
+    background-color:#F9F9F9;
+}
+.session_box_title {
+    margin-bottom: 10px;
+    background-color:#F9F9F9;
+}
+.session_course_item {
+    margin: 0px;
+    margin-bottom:20px;
+}
+.session_course_item .courses {
+    margin-bottom: 5px;
+    height:35px;
+}
+/*
+==============================================================================
+    HEADER STYLES
+==============================================================================
+*/
+
+#header {
+    background: transparent url('images/headerbg.jpg') repeat-y top right;
+    font: bold .85em Arial, sans-serif, sans;
+    width: 100%;
+    line-height: .8em;
+    float: left;
+    clear: both;
+    margin-bottom: .5em;
+    position:relative;
+}
+
+#institution {
+    margin: 0 0 0 3.9em;
+}
+
+
+/*
+------------------------------------------------------------------------------
+    SHORTCUTS
+------------------------------------------------------------------------------
+*/
+
+#toolshortcuts {
+    width:550px;
+    position: absolute;
+    bottom:-.75em;
+    right: 1em;
+    padding: 0;
+    margin:0;
+    text-align: right;
+}
+#toolshortcuts a {
+    margin:0 3px 0 3px;
+}
+/*
+==============================================================================
+    FOOTER STYLES
+==============================================================================
+*/
+footer {
+	background-image: url(images/bg.jpg);
+	background-repeat:repeat-x;
+    background-color:#E4E2E5;
+    font-weight: bold;
+    font-size: 12px;
+    color:#000;
+    width: 100%;
+    height: 9em;
+    overflow:hidden;
+    padding-top: 51px;
+}
+.push {
+    height: 9em; /* Very important */
+}
+.menu {
+    background: url('images/bglogin.jpg') repeat-y top center;
+    float: left;
+    clear: left;
+    width: 215px;
+    /* min-height hack for ie6 or older*/
+    min-height: 380px;
+    height: auto !important;
+    height: 380px;
+    border: 1px solid #999;
+    margin: 0 0 1em 0;
+    padding: 0 0 .3em 0;
+    font-family: Arial, sans-serif, sans;
+}
+.menu #formLogin {
+    text-align: center;
+    color: #111;
+    font-weight: bold;
+    margin-bottom: .8em;
+}
+.menu #formLogin input {
+    margin: .3em auto;
+}
+.menu .note {
+    margin: .3em 0 .3em .5em;
+}
+td #lang_form select {
+    margin: 1em 31px;
+}
+td .menu {
+    background: url('images/bgloginconf.jpg') repeat-y top left;
+    width: 244px;
+    margin: 0 auto;
+}
+.menulist {
+    list-style: none;
+    margin: 0 0 12px 0;
+    padding: 0;
+}
+#centerwrap {
+    float: left;
+    width: 100%;
+    margin-right: -95%;/* this needs to be less than 100% for Moz/Mac which thinks
+         it's empty otherwise. The difference is made up by putting a
+         negative left margin on the left float:
+       Note IE/Mac doesn't like this method ~ it wants the 100% so it can
+       be fed in using IE only CSS below becasue IE/Win also works with the 100% method.
+    */
+}
+/*
+this lets the navigation menu appear to the left:
+#center { margin: 0 0 0 180px; padding: 10px 0 40px 0;
+ min-height: 300px; }
+
+float:right;
+    margin:-7px 0 0 -5%;
+    overflow:hidden;
+    padding:0;
+    width:180px;
+
+#toolnav { float: left; width: 180px; padding: 0;
+ margin-left: -5%;
+}
+#toolnav { float: right; width: 180px; padding: 0; margin: -7px 0 0 -5%;
+ margin-left: -5%; /* the difference to make the left colum appear flush left
+}*/
+/* Hide from IE5-mac. Only IE-win sees this. \*/
+* html #toolnav {
+    margin-right: 0px;
+    overflow:hidden;
+    padding:0;
+    width:180px;
+}
+
+* html #center {
+    height: 1%;
+    margin-left: 0;
+}
+
+
+/* Data tables */
+.data_table {
+    margin: 0 auto;
+    font: bold 100% Arial, sans, sans-serif;
+    width: 100%;
+}
+.data_table a {
+    font: bold 100% Arial, sans, sans-serif;
+    text-decoration: none;
+}
+.data_table .row_even {
+    border-right: 1px solid #fff;
+    background-color: #eee;
+    padding: .2em;
+}
+.data_table .row_odd {
+    border-right: 1px solid #fff;
+    background-color: #f9f9f9;
+    padding: .2em;
+    color: #333;
+}
+.data_table th, .data_table .row_odd th, .row_odd th {
+    font: bold 100% sans, sans-serif, arial;
+    text-transform: capitalize;
+    padding: .2em;
+    background: transparent url('images/headertables.jpg') repeat-x top  center !important;
+}
+.data_table .row_odd th a {
+    text-decoration: none;
+    font-size: 110%;
+}
+.row_odd img, .row_even img {
+    margin: 0 0 0 0;
+}
+/* Document links */
+#doc_links {
+    margin-left: .5em;
+}
+#doc_links a, #folderselector {
+    font: bold 100% Arial, sans-serif, sans;
+    text-decoration: none;
+}
+#doc_links a:hover, #doc_links a:focus {
+    color: #111;
+}
+#folderselector {
+    color: #000;
+}
+#folderselector select {
+    margin: 0 .2em;
+}
+.document_owner {
+    text-align: right;
+}
+
+/* Solves the IE inherited margin bug */
+/* IE-7*/
+*:first-child+html .row .formw input {
+    margin-left: -1em;
+}
+/*IE-6 or older*/
+* html .row .formw input {
+    margin-left: -1em;
+}
+/* Specific forms: profile,add course,advanced search,advanced course search,etc.. */
+#add_course, #profile, #advanced_course_search, #advanced_search, #category, #course_user_import, #export_users, #update_course, #user_add, #user_import {
+    /*border: 1px solid #ddd;
+    background: transparent url("images/headerform.jpg") no-repeat top left;
+    width: 550px;
+    position: relative;
+    padding: 60px 0 1em 0;*/
+}
+#add_course, #advanced_course_search, #advanced_search, #course_user_import, #export_users, #update_course, #user_add, #user_import {
+/*    width: 650px;
+    float: left;
+    clear: left;
+    padding-top: 50px;
+    margin-bottom: 1em;*/
+}
+#add_course .label, #advanced_course_search .label, #advanced_search .label, #category .label, #course_user_import .label, #export_users .label, #user_import .label {
+    text-align: left;
+}
+#advanced_search, #course_user_import, #export_users, #user_import {
+    width: 550px;
+}
+#category {
+    clear: both;
+}
+#category select {
+    margin-right: .8em;
+}
+#export_users .label, #user_import .label {
+    width: 45%;
+    text-align: left;
+}
+#export_users .formw, #user_import .formw {
+    width: 53%;
+}
+#myprofilefooter {
+    float: left;
+    clear: both;
+    width: 50%;
+    margin: 3em auto;
+    background: #fff url("images/tinydivider.png") no-repeat bottom center;
+    font-size: 110%;
+    text-align: center;
+    height: 3.5em;
+    width: 550px;
+}
+#profile {
+    border:none;
+}
+#profile .clear {
+    position: absolute;
+    background: transparent url("images/divider3.jpg") no-repeat top center;
+    top: 30px;
+    left: 1em;
+    height: 55px;
+    width: 100%;
+}
+#profile .label, #update_course .label, #user_add .label {
+    text-align: right;
+}
+#profile .formw, #profile .label {
+    position: relative;
+    left: 20%;
+}
+#update_course {
+    width: 90%;
+}
+#update_course .formw {
+    margin-top: .7em;
+}
+#update_course .label {
+    margin-top: .6em;
+}
+#user_add {
+    width: 80%;
+}
+#user_add input {
+    margin-left: .3em;
+}
+/*
+==============================================================================
+    ADMIN SECTION
+==============================================================================
+*/
+
+.admin_section {
+    float: left;
+    margin: 1em 1em;
+    width: 40%;
+    border: 1px solid #999;
+    padding: .5em .7em .5em .7em;
+    line-height: 120%;
+    min-height:200px;
+}
+.admin_section h4 {
+    margin: 0;
+    width: 100%;
+    font-size: 120%;
+    font-family: Arial, sans, sans-serif;
+    font-weight: bold;
+}
+.admin_section input {
+    margin: .5em;
+}
+
+/* Report section */
+
+.report_section {
+    float: left;
+    margin: 1em 1em;
+    width: 40%;
+    border: 1px solid #999;
+    padding: .5em .7em .5em .7em;
+    line-height: 120%;
+}
+.report_section h4 {
+    margin: 0;
+    width: 100%;
+    font-size: 120%;
+    font-family: Arial, sans, sans-serif;
+    font-weight: bold;
+}
+.report_section input {
+    margin: .5em;
+}
+
+/*
+==============================================================================
+    COURSE ADMIN
+==============================================================================
+*/
+
+.courseadminview {
+    width: 80%;
+    text-align: center;
+    border: 1px solid #999;
+    margin: 1.5em auto;
+}
+.courseadminview a {
+    text-decoration: none;
+    margin: 0 auto;
+    text-align: center;
+    font: bold 100% Arial, sans-serif, sans;
+}
+.courseadminview table td {
+    text-align: left;
+    padding:3px;
+}
+#courseintro_icons {
+    margin: 1em auto;
+    clear: both;
+    width: 80%;
+}
+.viewcaption {
+    font: bold 110% arial, sans, sans-serif;
+    position: relative;
+    background-color: #fff;
+    float: left;
+    clear: left;
+    top: -1.1em;
+    padding: 0 .2em;
+    margin: 0;
+}
+.tool-icon {
+    margin-bottom: -3px;
+}
+
+/*
+==============================================================================
+    DOKEOS CONFIG SETTINGS
+==============================================================================
+*/
+
+#settings {
+    width: 70%;
+    margin: .5em auto;
+    border: 1px solid #ccc;
+    padding: .2em;
+}
+.sectiontitle {
+    text-align: left;
+    text-indent: .5em;
+    font: bold 130% Arial, sans-serif, sans;
+    color: #666;
+    margin: .1em auto .1em auto;
+    padding: .1em;
+    border: 1px solid #ccc;
+    background: transparent url('images/headertables.jpg') repeat-x top  center;
+    width: 99.5%;
+    letter-spacing: -.03em;
+}
+.sectioncomment {
+    margin: .5em 0 .5em .5em;
+    font: bold 110% Arial, sans-serif, sans;
+}
+.sectionvalue {
+    margin: .5em 0 2em .5em;
+}
+/*
+==============================================================================
+    BLOG
+==============================================================================
+*/
+
+.blog_left, .blog_right {
+    background: #fff url("images/vertdivider.jpg") no-repeat top left;
+    padding-left: 10px;
+}
+.blog_menu_title {
+    width: 99%;
+    border-bottom: 1px solid #4170b4;
+    background: transparent url('images/headertables.jpg') repeat-x top  center;
+}
+.blog_right {
+    text-align: justify;
+    padding-left: 1em;
+    background-color: transparent;
+}
+.blog_right a img {
+    margin-right: .2em;
+}
+.blog_right table {
+    margin-left: .8em;
+}
+.blog_menu_title, .blogpost_title {
+    color: #4170b4;
+    font: bold 110% Arial, sans-serif, sans;
+}
+.blogpost {
+    margin: .2em 1.5em;
+    background: transparent url("images/tinydivider.png") no-repeat bottom  center;
+    padding-bottom: 2em;
+    text-indent: 1em;
+}
+.blogpost_actions img {
+    margin: 0 0 0 .8em;
+    vertical-align: bottom;
+}
+.blogpost_comment {
+    text-indent: 2em;
+    margin-top: .5em;
+}
+.blogpost_date, .blog_subtitle, .blog_menu_title, .blogpost_comment_date {
+    color: #888;
+    font: bold 110% Arial, sans-serif, sans;
+}
+.blogpost_date, .blogpost_comment_date {
+    border: none;
+    margin-left: 1em;
+}
+.blogpost_info, .blogpost_comment_info {
+    margin-left: 1em;
+    font: bold 100% Arial, sans-serif, sans;
+}
+.blogpost_introduction, .blogpost_text {
+    display: block;
+    clear: both;
+    margin: .5em 0;
+    text-indent: 2em;
+}
+.blogpost_title {
+    font: bold 130% Arial, sans-serif, sans;
+    margin: 0 0 .5em 1em;
+}
+.blog_subtitle {
+    position: relative;
+    top: .8em;
+    padding: .2em 1em;
+    witdh: 100%;
+    border: 1px solid #ddd;
+    background: #ddd url('images/headertables.jpg') repeat-x top center;
+    display:block;
+    width:250px;
+    margin:0 0 -1em 0;
+}
+
+/*Hack for KHTML and safari browser to fit left*/
+body:last-child:not(:root:root) .blog_subtitle {
+ width:220px;
+}
+.blog_title {
+    padding: .1em .9em;
+    font: bold 130% Arial, sans-serif, sans;
+    color: #fff;
+    background-color: #999;
+    margin:0 0 -1.3em 0;
+    display:block;
+    width:250px;
+}
+
+/*Hack for KHTML and safari browser to fit left*/
+body:last-child:not(:root:root) .blog_title {
+ width:222px;
+}
+.comments, .new_comment {
+    margin-left: 1em;
+}
+.blogpost_comment {
+    background: transparent url('images/thindivider.png') no-repeat bottom  center;
+    padding-bottom: 25px;
+    margin-bottom: 2em;
+}
+.blogpost_comment_date {
+    font-size: 95%;
+}
+.blogpost_comment_title {
+    font-size: 95%;
+    background: transparent url('images/headertables.jpg') repeat-x top  center;
+    padding: 0.4em;
+    border: 1px solid #ddd;
+}
+.blogpost_comment .blogpost_text {
+    border: 1px solid #ccc;
+    padding: .6em;
+}
+#title {
+    font: bold 1.2em Arial, sans-serif, sans;
+    color: #4170b4;
+    text-align: center;
+}
+.attachment_comment {
+    color: #737780;
+    font-style: italic;
+    font-weight: normal;
+}
+/*
+==============================================================================
+    TRACKING
+==============================================================================
+*/
+
+a.specialLink {
+    font: bold 80% Arial, sans-serif, sans;
+    color: #900;
+}
+a.specialLink:hover, a.specialLink:focus {
+    color: #990;
+}
+/*
+==============================================================================
+    FORUM
+==============================================================================
+*/
+
+.forum {
+    border: 1px solid #ccc;
+    padding: 1px;
+}
+.forum_header td {
+    background: transparent url('images/line.jpg') repeat-x bottom center;
+}
+.forum_attach_comment {
+    color: #737780;
+    font-style: italic;
+    font-weight: normal;
+}
+.forum-thread-header {
+    color: #000000;
+    background-color: #F7F7F7;
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    border-top: 1px solid #aaa;
+}
+.forum-thread-body {
+    color: #000000;
+    background-color: #FFFFFF;
+    border-left: 1px solid #aaa;
+    border-right: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    border-top: 1px solid #aaa;
+}
+/*
+------------------------------------------------------------------------------
+    POST
+------------------------------------------------------------------------------
+*/
+
+.forum_message_left {
+    background: #eee url('images/headertables.jpg') repeat-x top center;
+    border-right: 1px solid #ddd;
+    vertical-align: top;
+    width: 15em;
+    border-collapse: collapse;
+}
+.forum_message_post_text {
+    margin-bottom: 10px;
+    vertical-align: top;
+}
+.forum_message_post_title {
+    text-align: left;
+    font: bold 95% Arial, sans-serif, sans;
+    background: transparent url('images/headertables.jpg') repeat-x top  center;
+    padding: 0.2em;
+    vertical-align: top;
+    height: 20px;
+    border: 1px solid #ddd;
+}
+.quote {
+    background-color: #EFEFEF;
+}
+.forum_description {
+    color: #000;
+    font-weight: normal;
+    font-family:Arial, sans, sans-serif;
+}
+.forum_title {
+    color: #000;
+    font-size: 14px;
+    font-family:Arial, sans, sans-serif;
+}
+.forum_low_description {
+    color: #737780;
+    font-style: italic;
+    font-weight: normal;
+    font-family:Arial, sans, sans-serif;
+}
+/*
+==============================================================================
+    DISPLAY MESSAGES
+==============================================================================
+*/
+
+/* Common message styles */
+.confirmation-message, .error-message, .normal-message, .warning-message {
+    border: 1px solid #ddd;
+    color: #00407F;
+ //This image is wrong size, so is commented until one solution  //background: transparent url('images/alert.jpg') no-repeat 10px 5px;
+    font: bold 110% Arial, sans-serif, sans;
+}
+
+/*SESSIONS*/
+.sessions_list {
+    line-height: 20px;
+    margin-top: 20px;
+}
+.sessions_list_inactive {
+    line-height: 20px;
+}
+.session_box {
+    background-color: #efefef;
+    border: 1px solid #666;
+    font-weight: bold;
+    color: #666;
+    list-style-type: none;
+    margin: 5px 5px 5px 40px;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+.session_box_title {
+    margin-bottom: 7px;
+}
+.session_box_coach {
+}
+.session_course_item {
+    /* padding: 0px; */
+    margin: 7px 0px;
+}
+
+.session_course_item .courses {
+    margin-bottom: 5px;
+    height:35px;
+}
+/*
+==============================================================================
+    DROPBOX
+==============================================================================
+*/
+
+#tabbed_menu {
+    border: 1px solid #ccc;
+    background: transparent url('images/dropbox.jpg') no-repeat top left;
+    width: 10em;
+    margin: 0 0 1em 0;
+}
+#tabbed_menu_tabs {
+    width: 90%;
+    margin: 15px .2em 0 .2em;
+    padding: 0;
+}
+#tabbed_menu_tabs li {
+    padding: 0;
+    margin: 0 .8em;
+}
+.dropbox_date {
+    color: #737780;
+    font-style: italic;
+    font-weight: normal;
+}
+/*
+==============================================================================
+    SYSTEM ANNOUNCEMENTS
+==============================================================================
+*/
+
+div.system_announcement {
+    padding: 10px;
+    border: 1px solid #ddd;
+    -moz-border-radius-topright : 5px;
+    -moz-border-radius-topleft : 5px;
+    -moz-border-radius-bottomright : 5px;
+    -moz-border-radius-bottomleft : 5px;
+    min-height:20px;
+}
+.system_announcement {
+    background: #eee url('images/headertables.jpg') repeat-x top center;
+    font: bold 100% arial, sans-serif, sans;
+
+}
+.system_announcement_content {
+    font: normal 100% 'Lucida Grande', verdana, Arial, sans-serif, sans;
+}
+.system_announcements {
+    background: transparent url('images/systemenouvelles.jpg') no-repeat top  left;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 90%;
+}
+.system_announcements h3 {
+    padding-left:70px;
+    padding-top: 30px;
+}
+
+.system_announcement_title {
+    font-weight: bold;
+    font-size: 120%;
+    float:left;
+}
+
+.system_announcement_date {
+    font-color: #ccc;
+    float:right;
+}
+/*
+==============================================================================
+    WCAG
+==============================================================================
+*/
+
+.skip {
+    position:absolute;
+    top:0;
+    left:-9000px;
+}
+/*
+==============================================================================
+    INSTALLATION
+==============================================================================
+*/
+
+#installation_steps {
+    background-color: #EFEFEF;
+    float: left;
+}
+.current_step {
+    font-weight: bold;
+}
+.RequirementHeading {
+    margin-right: 10px;
+}
+.RequirementHeading h1 {
+    border-bottom: 1px solid #0066CC;
+    color: #0066CC;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+.RequirementText {
+    color: #666;
+    float: right;
+    font-size: 1.0em;
+    font-weight: normal;
+    width: 200px;
+}
+.RequirementContent {
+    color: #000;
+    font-size: 1.0em;
+    font-weight: normal;
+}
+.RequirementContent table {
+    border: 1px solid #ccc;
+    width: 400px;
+}
+.RequirementContent table th {
+    border-bottom: 1px solid #ccc;
+    text-align: left;
+}
+.requirements-item {
+    background-color: #f7f7f7;
+    padding-left: 2px;
+    width: 50%;
+}
+/*
+------------------------------------------------------------------------------
+    Survey
+------------------------------------------------------------------------------
+*/
+#survey_title {
+    background-color:#264269;
+    color:#FFF;
+    padding:2px;
+    border: 1px solid #264269;
+}
+#survey_subtitle {
+    background-color:#264269;
+    color:#FFF;
+    padding:2px;
+    border: 1px solid #264269;
+}
+.survey_content {
+    background-color:#EFEFEF;
+    color:#264269;
+    padding:5px;
+    border: 1px solid #264269;
+}
+.survey_question_wrapper {
+    border: 1px solid #4271b5;
+}
+.survey_question {    
+    background-color:#4271b5;
+    color:#FFFFFF;
+    padding:5px;/*border: 1px solid #264269;*/
+}
+.survey_question_options {    
+    background-color:#FFF;
+    color:#000;
+    padding:5px;/*border: 1px solid #264269;*/
+}
+.survey_export_link {
+    float: right;
+}
+/*
+------------------------------------------------------------------------------^M
+    sessions
+------------------------------------------------------------------------------^M
+*/
+
+#ajax_list_coachs {
+    position:absolute;
+    border:1px solid #4171B5;
+    margin:0px;
+    padding:0px;
+    margin-left:200px;
+    margin-top:-23px;
+    background-color:#FFFFFF;
+    height:auto;
+    overflow:auto;
+}
+#ajax_list_courses {
+    position:absolute;
+    border:1px solid #4171B5;
+    margin:0px;
+    padding:0px;
+    margin-left:200px;
+    background-color:#FFFFFF;
+    height:auto;
+    overflow:auto;
+}
+#ajax_list_users {
+    position:absolute;
+    border:1px solid #4171B5;
+    margin:0px;
+    padding:0px;
+    margin-left:200px;
+    background-color:#FFFFFF;
+    height:auto;
+    overflow:auto;
+}
+#chat_login_name {
+    color : #900;
+}
+/* Quizzes tool */
+.quiz_export_link {
+    float: right;
+}
+/*
+------------------------------------------------------------------------------
+    Learning path
+------------------------------------------------------------------------------
+*/
+#show_audiorecorder_div {
+    background:#F0F0F0;
+    border:1px solid #999999;
+    font-weight:bold;
+    padding:2px;
+    width:350px;
+}
+/* Glossary tool */
+.glossary-term {
+    margin: 1em;
+    background-color: #ffe99b;
+    padding: 0.5em 0.5em 1.8em 0;
+    -moz-border-radius: 0.5em;
+}
+.glossary-term-title {
+    margin: 2em 0 1em 0.5em;
+    font-weight: bold;
+    font-size: 120%;
+}
+.glossary-term-desc {
+    margin-left: 1em;
+}
+.glossary-term-action-links {
+    float: right;
+}
+.glossary-term-edit-form {
+    margin: 1em;
+    background-color: #FFE4C4;
+    padding: 0.5em 0.5em 2em 0;
+    -moz-border-radius: 0.5em;
+}
+.glossary-term-edit-desc {
+    font-weight: bold;
+    font-size: 120%;
+}
+.glossary-term-edit-title {
+    font-weight: bold;
+    font-size: 120%;
+}
+.glossary-add-form {
+    font-weight: bold;
+    font-size: 120%;
+    margin: 1em;
+}
+.glossary-orderby-link {
+    float:right;
+    margin: 1em;
+}
+.glossary-msg-error {
+    color: #FF0000;
+    display :none;
+    font-weight: normal;
+    font-size: 80%;
+}
+
+#centerwrap {
+    float: left;
+    width: 100%;
+    margin-right: -95%;/* this needs to be less than 100% for Moz/Mac which thinks
+         it's empty otherwise. The difference is made up by putting a
+         negative left margin on the left float:
+       Note IE/Mac doesn't like this method ~ it wants the 100% so it can
+       be fed in using IE only CSS below becasue IE/Win also works with the 100% method.
+    */
+}
+#center {
+    margin: 0 190px 0 0;
+    padding: 10px 0 40px 0;
+    min-height: 300px;
+}
+#toolnav {
+    float: right;
+    width: 180px;
+    padding: 0;
+    margin: 0;
+    margin-left: -5%; /* the difference to make the left colum appear flush left */
+}
+/* Hide from IE5-mac. Only IE-win sees this. \*/
+* html #toolnav {
+    margin-right: 0px;
+}
+* html #center {
+    height: 1%;
+    margin-left: 0;
+}
+/* End hide from IE5/mac */
+
+
+
+/* --- course navigation menu as a definition list  --- */
+#swap_menu_link {
+    float: left;
+}
+#toolnavbox {
+    margin: 0 0 0 10px;
+    padding: 0;
+    float: left;
+    border: 1px solid #4271b5;
+}
+#toolnavbox dl {
+    width: 160px;
+    margin: 0 auto;
+    padding: 0;
+    background: transparent;
+    font-size: 12px;
+    text-align: center;
+}
+#toolnavbox dt {
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: center;
+    color: #000;
+    border-bottom: 1px solid #fff;
+    background: transparent;
+}
+#toolnavbox dd {
+    margin: 0;
+    padding: 0;
+    color: #009;
+    text-align: left;
+    border-bottom:1px solid #fff;
+    background: #E5EDF9;
+}
+#toolnav img {
+    float: left;
+    width: 25px;
+    height: 25px;
+    margin: 0 4px 0 0;
+}
+#toolnavlist a, #toolnavlist a:link {
+    background: #D3D3D3;
+    color: #4171b5;
+    padding: 5px 5px 5px 10px;
+    margin: 0;
+    text-decoration: none;
+    display: block;
+    line-height:24px;
+}
+#toolnavlist a:hover {
+    background: #fff;
+    color:#4171b5;
+}
+#toolnavlist a#here {
+    background: #fff;
+    color:#4171b5;
+}
+/* Notebook */
+.notebook-add-form {
+    margin: 1em;
+    background-color: #c3d9ff;
+    padding: 1em 1em;
+}
+.notebook-add-desc-textarea {
+    background-color: #f2f5f8;
+    border-color: #ffe99b;
+    overflow: hidden;
+}
+.notebook-add-title-text {
+    background-color: #f2f5f8;
+    border-color: #ffe99b;
+}
+.notebook-edit-desc-textarea {
+    background-color: #e0ecff;
+    border-color: #ffe99b;
+    overflow: hidden;
+}
+.notebook-edit-title-text {
+    background-color: #e0ecff;
+    border-color: #ffe99b;
+}
+.notebook-msg-error {
+    color: #FF0000;
+    display :none;
+    background-color: #ffe99b;
+    width: 40%;
+}
+.notebook-list {
+    margin: 1em 1em 0em 1em;
+    background-color: #79b;
+    padding: 0.3em 0.3em;
+    -moz-border-radius: 0.5em;
+}
+.notebook-title-list {
+    color : #fff;
+    padding: 0.3em 0.3em;
+    font-weight: bold;
+    font-size: 120%;
+}
+.notebook-desc-list {
+    margin: 0em;
+    background-color: #f2f5f8;
+    padding: 0.5em 0.3em 2em 0.3em;
+    border: 1px solid #79b;
+}
+.notebook-term-action-links {
+    padding: 0.3em 0.3em;
+    width: 50%;
+    color : #fff;
+}
+.notebook-orderby-link {
+    text-align:right;
+    margin-right: 1em;
+}
+.notebook-search-title {
+    text-align:right;
+    margin: 1em;
+}
+.notebook-date-information {
+    color : #fff;
+    padding: 0.3em;
+    font-size: 120%;
+    font-weight: bold;
+}
+/* --- end of course navigation menu section  --- */
+/* Gradebook */
+.resource-deleted {
+    color:#990000;
+}
+.gradebook-table-header {
+    border: 1px solid rgb(153, 153, 153);
+    background: rgb(240, 240, 240) none repeat scroll 0% 0%;
+}
+.gradebook-table-body {
+    border: 1px solid rgb(153, 153, 153);
+    background: rgb(255, 255, 255) none repeat scroll 0% 0%;
+}
+.label_result {
+    float: left;
+    width: 25%;
+    text-align: left;
+    padding-top:8px;
+}
+.formw_result {
+    width: 75%;
+    float:left;
+}
+/* actions */
+.actions_lp {
+    background:#F8F8F8;
+    height:29px;    
+}
+.actions_lp img {
+    vertical-align:middle;
+}
+.actions_lp span {
+    margin-right: 10px;
+    vertical-align:middle;
+}
+.actions_lp form {
+    margin-right: 10px;
+    vertical-align:middle;
+}
+.actions {
+    background:#efefef;
+    border-bottom:1px dotted #999999;
+    border-top:1px dotted #999999;
+    /*height:35px;*/
+    padding:2px;
+    margin-bottom: 5px;
+    margin:5px;
+    vertical-align:middle;
+}
+.actions img {
+    /*display:inline-block;*/
+    border: none;
+    text-decoration: none;
+    /*background-color: #efefef;*/
+    padding-right: 5px;
+    vertical-align:middle;
+}
+.actions a {
+    display:inline-block;
+    margin-right: 10px;
+    vertical-align:middle;
+}
+.actions span {
+    margin-right: 10px;
+    vertical-align:middle;
+}
+.actions form {
+    margin-right: 10px;
+    vertical-align:middle;
+}
+/* big actions */
+.actionsbig {
+    background:#F8F8F8;
+    border-bottom:1px solid #999999;
+    border-top:1px solid #999999;
+    background-color:#efefef;
+    padding:2px;
+    margin-bottom: 5px;
+    vertical-align:middle;
+    float:left;
+    width:100%;
+}
+.content_table {
+    padding:2px;
+    margin-bottom: 5px;
+    vertical-align:middle;
+    float:left;
+    width:100%;
+}
+.actionsbig a {
+    float:left;
+    padding-left:12px;
+    padding-right:12px;
+    text-align:center;
+}
+.actions img {
+    vertical-align:middle;
+}
+.actions a {
+    margin-right: 10px;
+    vertical-align:middle;
+}
+.actions-title {
+    background:#efefef;
+    border-bottom:1px dotted #999999;
+    border-top:1px dotted #999999;
+    /*height:35px;*/
+    padding:4px;
+    margin-bottom: 5px;
+    font-size:14px;
+    font-weight:bolder;
+    /*background:url(images/actions.jpg) repeat-x;*/
+    vertical-align:middle;
+}
+.actions-message {
+    white-space: nowrap;
+    padding: 2px;
+    background-color: #f0f0f0;
+    border: 1px solid #bbb;
+}
+/**********************************************
+ *  EXERCISE TOOL                           *
+ **********************************************/
+.exercice_form {
+    width: 300px;
+}
+#validationButton {
+    text-decoration: none;
+    margin: 5px;
+    /*border:1px solid #999999;*/
+    /*background:#F0F0F0;  */
+    padding: 3px;
+    padding-left:10px;
+    padding-right:10px;
+    font-weight:bold;
+    color:#666;
+}
+
+.exercise_scenario_label {
+}
+.exercise_scenario_element {
+}
+span.checkbox {
+    width: 19px;
+    height: 25px;
+    padding: 0 5px 0 0;
+    background: url(images/checkbox.gif) no-repeat;
+    display: block;
+    clear: left;
+    float: left;
+}
+span.radio {
+    width: 19px;
+    height: 25px;
+    padding: 0 5px 0 0;
+    background: url(images/radio.gif) no-repeat;
+    display: block;
+    clear: left;
+    float: left;
+}
+#question_title {
+}
+#question_description {
+    padding-left:5px;
+    padding-top:10px;
+}
+#question_score {
+    padding-left:5px;
+    padding-top:10px;
+    padding-bottom:10px;
+    font-weight:bold;
+}
+#question_feedback {
+    background-color:#FCF7BA;
+    border:1px solid #CCCCCC;
+    color:#666666;
+    font-size:11px;
+    font-weight:bold;
+    list-style-type:none;
+    margin-top:5px;
+    padding:5px;
+}
+#exercise_close_link {
+    background: url(images/close.gif) no-repeat;
+    padding-left: 20px;
+}
+#exercise_close_link:hover {
+    background: url(images/close_highlight.gif) no-repeat;
+    padding-left: 20px;
+}
+/* Quizzes tool */
+.quiz_export_link {
+    float: right;
+}
+
+/*****************************************************
+ *  BUTTONS	                                         *
+ *****************************************************/
+/*including "save" image*/
+button.save {
+    background-image:url(images/button_accept.gif);
+}
+/*including "add" image*/
+button.add {
+    background-image:url(images/button_add.gif);
+}
+/*including "cancel" image*/
+button.cancel {
+    background-image:url(images/button_delete.gif);
+}
+/*including "search" image*/
+button.search {
+    background-image:url(images/button_search.gif);
+}
+/*including "login" image*/
+button.login {
+    background-image:url(images/button_login.gif);
+    margin:2px 5px 3px 5px !important;
+}
+/*including "plus" image*/
+button.plus {
+    background-image:url(images/button_plus.gif);
+}
+/*including "minus" image*/
+button.minus {
+    background-image:url(images/button_minus.gif);
+}
+/*including "next" image*/
+button.next,input[type="submit"].submit_next {
+    background-image:url(images/button_next.gif);
+}
+/*including "back" image*/
+button.back {
+    background-image:url(images/button_back.gif);
+}
+/*including "refresh" image*/
+button.refresh {
+    background-image:url(images/button_refresh.gif);
+}
+/*including "upload" image*/
+button.upload {
+    background-image:url(images/button_upload.gif);
+}
+.icon_image_content {
+    width:70px;
+    cursor:hand;
+    height:6em;
+    text-align: center;
+    padding-right: 10px;
+    padding-left: 0px;
+    border: 1px dotted #ccc;
+    background-color: #eee;
+    margin-right: 0.2em;
+    margin-top: 0.1em;
+    -moz-border-radius-topleft : 5px;
+    -moz-border-radius-bottomright : 5px;
+    -moz-border-radius-bottomleft : 5px;
+    -moz-border-radius-topright : 5px;
+}
+.icon_image_content:hover {
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+.question_menu {
+    list-style:none;
+    float:left;
+    padding:0px;
+    margin:-2px;
+    min-height:100px;
+}
+.question_menu li {
+    float:left;
+    margin:0px;
+}
+#exercise_admin {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+div#friend-header {
+    float:left;
+    width:100%;
+    line-height: 2.1em;
+}
+div#friend-header a {
+    padding-right:6px;
+}
+div#friend-container {
+    float:left;
+}
+div.image_friend_network {
+    float:left;
+    border:1px solid #CCCCCC;
+    margin:2px;
+    padding:4px;
+    background: #EFEFEF;
+    height:125px;
+    width:81px;
+    z-index:5;
+}
+div.image_friend_network span {
+    overflow:hidden;
+    display:block;
+    height:92px;
+    margin: 0px 0px;
+}
+div.image_friend_network img {
+    vertical-align:middle;
+}
+div.image_friend_network center.friend {
+    overflow:hidden;
+    height:30px;
+}
+.friend_invitations {
+    float:left;
+    margin: 0 0 4px 12px;
+}
+button.arrowr, input.arrowr {
+	background-image:url(images/2rightarrow.gif);	
+}
+button.arrowl, input.arrowl {
+    background-image:url(images/2leftarrow.gif);	
+}
+
+
+.u-m-answer {
+    width:100%;
+}
+.u-m-answer p {
+    margin:2px;
+}
+.refresh {
+    background-image:url(images/refresh.png);
+    background-repeat:no-repeat;
+    padding-left:20px;
+    padding-bottom:2px;
+}
+.portal {
+    background-image:url(images/portal.png);
+    background-repeat:no-repeat;
+    padding-left:28px;
+    padding-bottom:10px;
+    padding-top:8px;
+}
+
+.legal-terms {
+    height:150px;
+    overflow:auto;
+    background-color:#eee;
+    width:500px;
+}
+
+/* UI improvements for 1.8.6.2 this should be move to the chamilo theme and reproduce in all CSS*/
+
+* {
+    outline :none;
+}
+
+/*
+input, select, textarea {
+    -moz-border-radius-bottomleft:5px;
+    -moz-border-radius-bottomright:5px;
+    -moz-border-radius-topleft:5px;
+    -moz-border-radius-topright:5px;
+    -x-system-font:none;
+    border:1px solid #CCCCCC;
+    color:#666666;
+    font-family:Arial,Helvetica,sans-serif;
+    font-size:120%;
+    font-size-adjust:none;
+    font-stretch:normal;
+    font-style:normal;
+    font-variant:normal;
+    font-weight:normal;
+    line-height:normal;
+    padding:5px;
+}
+input[type="text"]:focus, input[type="password"]:focus, textarea:focus {
+    background-image:url(images/shadow.gif);
+}
+.independent_course_item a {
+    font-size:135%;
+}
+.session_course_item a {
+    font-size:120%;
+}
+*/
+
+#maincontent .courseslist li {
+    margin-bottom:8px;
+}
+/*
+a.read {
+    font-weight:normal;
+}
+.actions {
+    background:#efefef;
+    border:1px solid #ccc;
+    padding:2px;
+    margin-bottom: 5px;
+    vertical-align:middle;
+}
+.actions-title {
+    background:#efefef;
+    border:1px solid #ccc;
+    padding:4px;
+    margin-bottom: 5px;
+    font-size:14px;
+    font-weight:bolder;
+    vertical-align:middle;
+}*/
+
+
+/* GROUP TOOL */
+
+#group_description {
+    margin: 10px 0px 10px 0px;
+}
+
+#group_privacy {
+    margin: 10px 0px 10px 0px;
+}
+
+#group_permissions {
+    -moz-background-clip:border;
+    -moz-background-inline-policy:continuous;
+    -moz-background-origin:padding;
+    -moz-border-radius-bottomleft:8px;
+    -moz-border-radius-bottomright:8px;
+    -moz-border-radius-topleft:8px;
+    -moz-border-radius-topright:8px;
+    background:#EEE none repeat scroll 0 0;
+
+    margin: 20px 0px 20px 0px;
+}
+
+#group_permissions ul {
+    list-style-image:none;
+    list-style-position:outside;
+    list-style-type:none;
+    margin:0;
+    padding:0;
+}
+
+#group_permissions ul li {
+    margin: 10px 0px 10px 5px;
+}
+
+/* Groups boxes */
+
+.groups_grid_container {
+    width:100%;
+}
+.groups_grid_item {
+    width:80px;
+    float:left;
+    margin:5px;
+}
+.groups_grid_element_0 { width:100px; float:left; text-align:center; margin-bottom:5px;}
+.groups_grid_element_1 { width:100px; float:left; text-align:left;	margin-bottom:5px;}
+.groups_grid_element_2 { width:150px; float:left;}
+
+/*POPULAR GROUP*/
+
+.popular_grid_item {
+	background: none repeat scroll 0 0 #FFFFFF;
+	border: 1px solid #E5E5E5;
+	border-radius: 11px 11px 11px 11px;
+	
+	-webkit-border-radius: 11px 11px 11px 11px;
+	-opera-border-radius: 11px 11px 11px 11px;
+	-moz-border-radius: 11px 11px 11px 11px;
+	
+	box-shadow: 0 4px 18px #C8C8C8;
+	-webkit-box-shadow: 0 4px 18px #C8C8C8;
+	-opera-box-shadow: 0 4px 18px #C8C8C8;
+	-moz-box-shadow: 0 4px 18px #C8C8C8;
+	
+	float: left;
+	height: auto;
+	margin: 0 8px 15px 15px;
+	padding: 16px 12px 5px;
+	width:90%;
+}
+
+.popular_grid_element_0 {
+	width:600px;
+    height:98px;
+    padding-left:10px;
+    padding-right:10px;
+    overflow:hidden;
+}
+
+/*NEWEST GROUP*/
+
+.newest_grid_item {
+	background: none repeat scroll 0 0 #FFFFFF;
+	border: 1px solid #E5E5E5;
+	border-radius: 11px 11px 11px 11px;
+	
+	-webkit-border-radius: 11px 11px 11px 11px;
+	-opera-border-radius: 11px 11px 11px 11px;
+	-moz-border-radius: 11px 11px 11px 11px;
+	
+	box-shadow: 0 4px 18px #C8C8C8;
+	-webkit-box-shadow: 0 4px 18px #C8C8C8;
+	-opera-box-shadow: 0 4px 18px #C8C8C8;
+	-moz-box-shadow: 0 4px 18px #C8C8C8;
+	
+	float: left;
+	height: auto;
+	margin: 0 8px 15px 15px;
+	padding: 16px 12px 5px;
+    width:90%;
+}
+
+.newest_grid_element_1 {
+    width:600px;
+    height:98x;
+    padding-left:10px;
+    padding-right:10px;
+    overflow:hidden;
+}
+
+/*MY GROUPS*/
+
+.mygroups_grid_item {
+	background: none repeat scroll 0 0 #FFFFFF;
+	border: 1px solid #E5E5E5;
+	border-radius: 11px 11px 11px 11px;
+	
+	-webkit-border-radius: 11px 11px 11px 11px;
+	-opera-border-radius: 11px 11px 11px 11px;
+	-moz-border-radius: 11px 11px 11px 11px;
+	
+	box-shadow: 0 4px 18px #C8C8C8;
+	-webkit-box-shadow: 0 4px 18px #C8C8C8;
+	-opera-box-shadow: 0 4px 18px #C8C8C8;
+	-moz-box-shadow: 0 4px 18px #C8C8C8;
+	
+	float: left;
+	height: auto;
+	margin: 0 8px 15px 15px;
+	padding: 16px 12px 5px;
+    width:90%;
+}
+
+.box_description_group_member {
+	color: #999999;
+    font-size: 10px;
+}
+
+.mygroups_grid_element_1 {
+    width:600px;
+    height:100px;
+    padding-left:10px;
+    padding-right:10px;
+    overflow:hidden;
+}
+
+.box_description_group_title h3 {
+    margin-bottom:4px;
+}
+
+.box_description_group_title {
+    float:right;width:80%;
+}
+.box_description_group_content {
+    float:right;
+    width:80%;
+    margin-top:5px;
+    /* height:45px;*/
+    font-family:Verdana, Geneva, sans-serif;
+    font-size:12px;
+    color:#666666;
+}
+.box_description_group_actions {
+    float:right;
+    width:80%;
+    text-align:right;
+    margin-top:4px;
+    margin-right:4px;
+}
+
+#menu-wrapper {
+    width:200px;
+    float: left;
+}
+#menu {
+/*	-moz-border-radius: 10px; border: 1px solid #e1e1e0;
+    -webkit-border-radius: 10px; border: 1px solid #e1e1e0;
+    -opera-border-radius: 10px; border: 1px solid #e1e1e0;
+
+    margin-top:20px;
+    margin-right:10px;
+    margin-bottom:40px;
+
+    padding-left:10px;
+    padding-right:10px;
+    padding-top:5px;
+    padding-bottom:30px;
+
+    width:240px; */
+    /* float: right; */
+    min-height: 150px;
+
+}
+
+/* INVITATIONS */
+
+.invitation_confirm {
+    border-top:1px solid #D8DFEA;
+}
+.invitation_image {
+    width:110px;
+}
+
+
+/* DASHBOARD */
+
+/* Head section */
+#head {
+    background-color: #000;
+    height: 100px;
+}
+#head h1 {
+    line-height: 100px;
+    color: #FFF;
+    text-align: center;
+    text-indent: -9999em
+}
+/* End Head Section */
+
+/* Columns section */
+#columns .column {
+    float: left;
+    width: 50%;
+        /* Min-height: */
+        min-height: 400px;
+        height: auto !important;
+        height: 400px;
+}
+
+#columns ul, #columns ol {margin:0; padding:0; list-style:none; border:none;}
+
+
+
+
+
+/* To add in 1.8.7*/
+
+.session_box_title span {
+    font-size: 130%;
+    font-weight: bold;
+}
+
+.sub_session_box_title span {
+    font-size: 130%;
+    font-weight: bold;
+}
+
+#session_category_title {
+    font-size: 140%;
+    font-weight: bold;
+    padding: 2px 0px 5px 5px;
+}
+
+/* fixes the * */
+span.form_required  {
+    padding-right:5px;
+}
+
+.userportal-course-item {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    background-color:#F9F9F9;
+    padding:5px 10px 5px 10px;
+    height:40px;
+    margin:5px;
+}
+.userportal-course-item-title {
+    font-size:135%;
+}
+.courseadminview-activity-3col, .platformadminview-activity-3col {
+    -moz-border-radius:5px 5px 5px 5px;
+    border:1px solid #E1E1E0;
+    float:left;
+    margin:0px 20px 10px 2px;
+    padding:11px;
+    width:220px;
+    height:330px;
+}
+
+.courseadminview-activity-3col ul {
+    padding:0px 20px 10px 4px;
+    list-style-type:none;
+    height:240px;
+    margin-left:0px;
+    margin: 0px 0px 0px 0px ;
+}
+
+.courseadminview-activity-3col ul li {
+    padding:4px 0px 4px 0px;
+}
+
+#activity-3col {
+    width: 800px ;
+    margin-left: auto ;
+    margin-right: auto ;
+}
+
+
+.userportal-catalog-item {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    background-color:#F9F9F9;
+    padding:5px 10px 10px 6px;
+    /* height:40px; */
+}
+
+.userportal-catalog-item .catalog_box li span {
+    font-size:130%;
+    font-weight:bold;
+    margin-left:5px;
+}
+
+/*	New forum table */
+
+.forum_table_title {
+    border-collapse: collapse;
+    width: 100%;
+    padding: 5px;
+    border-left: 1px solid gray;
+    border-top: 1px solid gray;
+    border-right: 1px solid gray;
+    padding:5px;
+}
+
+.forum_table_title th {
+    padding-right: 12px;
+    /*border: 1px solid gray;*/
+    background-color: #E5EDF9;
+}
+
+
+.forum_table {
+    border-collapse: collapse;
+    width: 100%;
+    padding: 5px;
+    border: 1px solid gray;
+    margin-bottom:15px;
+}
+
+.forum_table .forum_head{
+    padding:5px;
+    text-align: left;
+    font-size:14px;
+
+}
+
+.forum_table th {
+    padding-right: 12px;
+    /*border: 1px solid gray;*/
+    background-color: #E5EDF9;
+}
+.forum_table tr.row_odd {
+    background-color: #F2F2F2;
+}
+.forum_table tr.row_odd:hover, .data_table tr.row_even:hover {
+    background-color: #E5EDF9;
+}
+.forum_table tr.row_even {
+    background-color: #fff;
+}
+.forum_table td {
+    padding: 5px;
+    vertical-align: top;
+    border-bottom: 1px solid #b0b0b0;
+    border-right: 1px dotted #e1e1e1;
+    border-left: 1px dotted #e1e1e1;
+}
+
+.post {
+    border: 1px solid gray;
+    margin-bottom:5px;
+}
+/* Text resize icons in header */
+.resize_font { /* the canvas */
+    margin: 0 5px 0 5px;
+}
+.reset_font {
+    font-size: 1.2em;
+    color: gray;
+    border: 1px solid white;
+    padding: 2px;
+}
+.reset_font:hover {
+    border: 1px solid black;
+    cursor: pointer;
+}
+.increase_font {
+    font-size: 1.8em;
+    color: gray;
+    border: 1px solid white;
+    padding: 2px;
+}
+.increase_font:hover {
+    border: 1px solid black;
+    cursor: pointer;
+}
+.decrease_font {
+    font-size: 0.6em;
+    color: gray;
+    border: 1px solid white;
+    padding: 2px;
+}
+.decrease_font:hover {
+    border: 1px solid black;
+    cursor: pointer;
+}
+
+
+.online_grid_item {
+    float:left;
+    margin:10px;
+    text-align:center;    
+}
+.online_grid_element_0 {    
+    width: 100px; 
+    height: 100px; 
+    overflow: hidden;
+}
+/* input values to crop the image: top, right, bottom, left */
+.online_grid_element_0 img{
+     width: 200px;
+     margin: -10px 0 0 -50px;
+      /* height: 150px; */ 
+}
+.online_grid_element_1, .online_grid_element_2 {    
+    font-size:10px;
+}
+
+/* tips Abbr-plugin for FCKeditor */
+abbr {
+      border-bottom: 1px dotted rgb(102, 102, 102);
+	  background-color:#F00;
+      cursor: help;
+}

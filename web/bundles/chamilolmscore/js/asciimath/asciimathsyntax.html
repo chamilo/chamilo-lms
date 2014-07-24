@@ -1,0 +1,506 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>ASCIIMathML: Syntax and constants</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="ASCIIMathML.js"></script>
+<style type="text/css">
+#menu, #title, #subtitle, #author {text-align: center}
+body {font-family: Arial; background-color:beige}
+p,table {font-family: Times}
+</style>
+</head>
+<body>
+
+<div id="menu">
+| <a href="asciimath.html">Home Page</a> |
+<a href="asciimathsyntax.html">Syntax</a> |
+<a href="asciimathdemo.html">Try it</a> |
+<a href="asciimathcalculator.html">Calculator</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/mathml/asciimathdownload.html">Download</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathGraphs.html">Graphs</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathFAQ.html">ASCIIMath FAQ</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathMLSandbox.html">Sandbox</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathCommentsAndSuggestions.html">Comments</a> |
+</div>
+
+<hr/>
+
+<h2 id="title">
+ASCIIMathML.js (ver 2.0): Syntax and List of Constants
+</h2>
+
+<h4 id="subtitle">
+The main aims of the ASCIIMathML syntax are: -- 1. close to standard
+mathematical notation -- 2. easy to read -- 3. easy to type
+</h4>
+
+<p>
+You can use your favorite editor to write HTML pages that use this
+JavaScript program. If the page is viewed by a browser that does not
+support MathML or JavaScript, the ASCII formulas are still quite
+readable. Most users will not have to read the technicalities on
+this page. If you type
+</p>
+
+<pre>amath x^2 or a_(m n) or a_{m n} or (x+1)/y or sqrtx endamath</pre>
+
+<p>
+you pretty much get what you expect: amath x^2 or a_(m n) or a_{m n} or
+(x+1)/y or sqrtx endamath. The a``math ... enda``math tokens are used to
+start/stop the <b>new auto-math-recognize mode</b>. Of course one can still use
+the \`...\` back-quotes to delimit math formulas explicitly
+(\$...\$ should only be used for LaTeX formulas).
+The choice of grouping parenthesis is up to you
+(they don't have to match either). If the displayed expression can be
+parsed uniquely without them, they are omitted. Printing the table of
+constant symbols (below) may be helpful (but is not necessary if you
+know the LaTeX equivalents).
+</p>
+
+<p>
+It is hoped that this simple input format for MathML will further
+encourage its use on the web. The remainder of this page gives a fairly
+detailed specification of the ASCII syntax. <b>The expressions described here
+correspond to a wellspecified subset of Presentation MathML and behave
+in a predictable way.</b>
+</p>
+
+<p>
+The syntax is very permissive and does not generate syntax
+errors. This allows mathematically incorrect expressions to be
+displayed, which is important for teaching purposes. It also causes
+less frustration when previewing formulas.
+</p>
+
+<p>
+The parser uses no operator precedence and only respects the grouping
+brackets, subscripts, superscript, fractions and (square) roots. This
+is done for reasons of efficiency and generality. The resulting MathML
+code can quite easily be processed further to ensure additional syntactic
+requirements of any particular application.
+</p>
+
+<p>
+<b>The grammar:</b> Here is a definition of the grammar used to parse
+ASCIIMathML expressions. In the Backus-Naur form given below, the
+letter on the left of the ::= represents a category of symbols that
+could be one of the possible sequences of symbols listed on the right.
+The vertical bar | separates the alternatives.
+</p>
+
+<pre>c ::= [A-z] | numbers | greek letters | other constant symbols (see below)
+u ::= 'sqrt' | 'text' | 'bb' |     other unary symbols for font commands
+b ::= 'frac' | 'root' | 'stackrel' binary symbols
+l ::= ( | [ | { | (: | {:          left brackets
+r ::= ) | ] | } | :) | :}          right brackets
+S ::= c | lEr | uS | bSS | "any"   simple expression
+E ::= SE | S/S |S_S | S^S | S_S^S  expression (fraction, sub-, super-, subsuperscript)
+</pre>
+
+<p>
+<b>The translation rules:</b> Each terminal symbol is translated into
+a corresponding MathML node. The constants are mostly converted to
+their respective Unicode symbols. The other expressions are converted
+as follows:<br/>
+<table>
+<tr><td>l`S`r</td><td>`to`</td><td>&lt;mrow>l`S`r&lt;/mrow>
+(note that any pair of brackets can be used to delimit subexpressions,
+they don't have to match)</td></tr>
+<tr><td>sqrt `S`</td><td>`to`</td><td>&lt;msqrt>`S'`&lt;/msqrt></td></tr>
+
+<tr><td>text `S`</td><td>`to`</td><td>&lt;mtext>`S'`&lt;/mtext></td></tr>
+<tr><td>"any"</td><td>`to`</td><td>&lt;mtext>any&lt;/mtext></td></tr>
+<tr><td>
+frac `S_1` `S_2`</td><td>`to`</td><td>&lt;mfrac>`S_1'` `S_2'`&lt;/mfrac>
+</td></tr>
+<tr><td>
+
+root `S_1` `S_2`</td><td>`to`</td><td>&lt;mroot>`S_2'` `S_1'`&lt;/mroot>
+</td></tr>
+<tr><td>
+stackrel `S_1` `S_2`</td><td>`to`</td><td>&lt;mover>`S_2'` `S_1'`&lt;/mover>
+</td></tr>
+<tr><td>
+`S_1`/`S_2`</td><td>`to`</td><td>&lt;mfrac>`S_1'` `S_2'`&lt;/mfrac>
+</td></tr>
+
+<tr><td>
+`S_1`_`S_2`</td><td>`to`</td><td>&lt;msub>`S_1` `S_2'`&lt;/msub>
+</td></tr>
+<tr><td>
+`S_1`^`S_2`</td><td>`to`</td><td>&lt;msup>`S_1` `S_2'`&lt;/msup>
+</td></tr>
+<tr><td>
+`S_1`_`S_2`^`S_3`</td><td>`to`</td>
+<td>&lt;msubsup>`S_1` `S_2'` `S_3'`&lt;/msubsup> or
+
+&lt;munderover>`S_1` `S_2'` `S_3'`&lt;/munderover> (in some cases)
+</td></tr>
+</table>
+In the rules above, the expression `S'` is the same as `S`, except that if
+`S` has an outer level of brackets, then `S'` is the expression inside
+these brackets.
+
+<p>
+<b>Matrices:</b> A simple syntax for matrices is also recognized:
+<br/>
+<tt>l(`S_(11)`,...,`S_(1n)`),(...),(`S_(m1)`,...,`S_(mn)`)r</tt>
+&#x00A0; &#x00A0; or &#x00A0; &#x00A0;
+
+<tt>l[`S_(11)`,...,`S_(1n)`],[...],[`S_(m1)`,...,`S_(mn)`]r</tt>.
+<br/>
+
+Here <tt>l</tt> and <tt>r</tt> stand for any of the left and right
+brackets (just like in the grammar they do not have to match). Both of
+these expressions are translated to
+<br/>
+
+&lt;mrow>l&lt;mtable>&lt;mtr>&lt;mtd>`S_(11)`&lt;/mtd>...
+
+&lt;mtd>`S_(1n)`&lt;/mtd>&lt;/mtr>...
+&lt;mtr>&lt;mtd>`S_(m1)`&lt;/mtd>...
+&lt;mtd>`S_(mn)`&lt;/mtd>&lt;/mtr>&lt;/mtable>r&lt;/mrow>.
+<br/>
+
+For example
+<tt>{(S_(11),...,S_(1n)),(vdots,ddots,vdots),(S_(m1),...,S_(mn))]</tt>
+displays as `{(S_(11),...,S_(1n)),(vdots,ddots,vdots),(S_(m1),...,S_(mn))]`.
+
+<br/>
+
+Note that each row must have the same number of expressions, and there
+should be at least two rows.
+
+<p>
+<b>Tokenization:</b> The input formula is broken into tokens using a
+"longest matching initial substring search". Suppose the input formula
+has been processed from left to right up to a fixed position. The
+longest string from the list of constants (given below) that matches
+the initial part of the remainder of the formula is the next token. If
+there is no matching string, then the first character of the remainder
+is the next token. The symbol table at the top of the ASCIIMathML.js
+script specifies whether a symbol is a math operator (surrounded by a
+&lt;mo> tag) or a math identifier (surrounded by a &lt;mi> tag). For
+single character tokens, letters are treated as math identifiers, and
+non-alphanumeric characters are treated as math operators. For digits,
+see "Numbers" below.
+
+<p>
+Spaces are significant when they separate characters and thus prevent
+a certain string of characters from matching one of the
+constants. Multiple spaces and end-of-line characters are equivalent
+to a single space.
+</p>
+
+<h4>
+Now for a complete list of constants (<a
+href="http://math.chapman.edu/cgi-bin/mathxml.pl?Complete_list_of_LaTeX_constants">standard
+LaTeX names</a> also work):
+
+</h4>
+
+<p>
+Numbers: A string of digits, optionally preceded by a minus sign, and
+optionally followed by a decimal point (a period) and another string
+of digits, is parsed as a single token and converted to a MathML
+number, i.e., enclosed with the &lt;mn> tag. If it is not desirable to
+have a preceding minus sign be part of the number, a space should be inserted.
+Thus <tt>x-1</tt> is converted to &lt;mi>x&lt;/mi>&lt;mn>-1&lt;/mn>, whereas
+<tt>x - 1</tt> is converted to &lt;mi>x&lt;/mi>&lt;mo>-&lt;/mo>&lt;mn>1&lt;/mn>.
+
+</p>
+
+<p>
+Greek letters:
+alpha `alpha`
+beta `beta`
+chi `chi`
+delta `delta`
+Delta `Delta`
+epsilon `epsilon`
+varepsilon `varepsilon`
+eta `eta`
+gamma `gamma`
+Gamma `Gamma`
+iota `iota`
+kappa `kappa`
+lambda `lambda`
+Lambda `Lambda`
+mu `mu`
+nu `nu`
+omega `omega`
+Omega `Omega`
+phi `phi`
+varphi `varphi`
+Phi `Phi`
+pi `pi`
+Pi `Pi`
+psi `psi`
+Psi `Psi`
+rho `rho`
+sigma `sigma`
+Sigma `Sigma`
+tau `tau`
+theta `theta`
+vartheta `vartheta`
+Theta `Theta`
+upsilon `upsilon`
+xi `xi`
+Xi `Xi`
+zeta `zeta`
+</p>
+
+<table border="5" cellpadding="10">
+<tr valign="top"><td>
+Operation symbols
+<table border="5" cellpadding="10">
+<tr><th>Type</th><th>See</th></tr>
+<tr><td>+</td><td>`+`</td></tr>
+<tr><td>-</td><td>`-`</td></tr>
+
+<tr><td>*</td><td>`*`</td></tr>
+<tr><td>**</td><td>`**`</td></tr>
+<tr><td>//</td><td>`//`</td></tr>
+<tr><td>\\</td><td>`\\ `</td></tr>
+<tr><td>xx</td><td>`xx`</td></tr>
+<tr><td>-:</td><td>`-:`</td></tr>
+
+<tr><td>@</td><td>`@`</td></tr>
+<tr><td>o+</td><td>`o+`</td></tr>
+<tr><td>ox</td><td>`ox`</td></tr>
+<tr><td>o.</td><td>`o.`</td></tr>
+<tr><td>sum</td><td>`sum`</td></tr>
+<tr><td>prod</td><td>`prod`</td></tr>
+
+<tr><td>^^</td><td>`^^`</td></tr>
+<tr><td>^^^</td><td>`^^^`</td></tr>
+<tr><td>vv</td><td>`vv`</td></tr>
+<tr><td>vvv</td><td>`vvv`</td></tr>
+<tr><td>nn</td><td>`nn`</td></tr>
+<tr><td>nnn</td><td>`nnn`</td></tr>
+
+<tr><td>uu</td><td>`uu`</td></tr>
+<tr><td>uuu</td><td>`uuu`</td></tr>
+</table>
+</td><td>
+Relation symbols
+<table border="5" cellpadding="10">
+<tr><th>Type</th><th>See</th></tr>
+<tr><td>=</td><td>`=`</td></tr>
+<tr><td>!=</td><td>`!=`</td></tr>
+
+<tr><td>< </td><td>`<`</td></tr>
+<tr><td>></td><td>`>`</td></tr>
+<tr><td><=</td><td>`<=`</td></tr>
+<tr><td>>=</td><td>`>=`</td></tr>
+<tr><td>-<</td><td>`-<`</td></tr>
+
+<tr><td>>-</td><td>`>-`</td></tr>
+<tr><td>in</td><td>`in`</td></tr>
+<tr><td>!in</td><td>`notin`</td></tr>
+<tr><td>sub</td><td>`sub`</td></tr>
+<tr><td>sup</td><td>`sup`</td></tr>
+<tr><td>sube</td><td>`sube`</td></tr>
+
+<tr><td>supe</td><td>`supe`</td></tr>
+<tr><td>-=</td><td>`-=`</td></tr>
+<tr><td>~=</td><td>`~=`</td></tr>
+<tr><td>~~</td><td>`~~`</td></tr>
+<tr><td>prop</td><td>`prop`</td></tr>
+</table>
+</td><td>
+
+Logical symbols
+<table border="5" cellpadding="10">
+<tr><th>Type</th><th>See</th></tr>
+<tr><td>and</td><td>`and`</td></tr>
+<tr><td>or</td><td>`or`</td></tr>
+<tr><td>not</td><td>`not`</td></tr>
+<tr><td>=></td><td>`=>`</td></tr>
+
+<tr><td>if</td><td>`if`</td></tr>
+<tr><td>iff</td><td>`iff`</td></tr>
+<tr><td>AA</td><td>`AA`</td></tr>
+<tr><td>EE</td><td>`EE`</td></tr>
+<tr><td>_|_</td><td>`_|_`</td></tr>
+<tr><td>TT</td><td>`TT`</td></tr>
+
+<tr><td>|--</td><td>`|--`</td></tr>
+<tr><td>|==</td><td>`|==`</td></tr>
+</table>
+<p>
+Grouping brackets
+<table border="5" cellpadding="10">
+<tr><th>Type</th><th>See</th></tr>
+<tr><td>(</td><td>`(`</td></tr>
+<tr><td>)</td><td>`)`</td></tr>
+
+<tr><td>[</td><td>`[`</td></tr>
+<tr><td>]</td><td>`]`</td></tr>
+<tr><td>{</td><td>`{`</td></tr>
+<tr><td>}</td><td>`}`</td></tr>
+<tr><td>(:</td><td>`(:`</td></tr>
+<tr><td>:)</td><td>`:)`</td></tr>
+
+<tr><td>{:</td><td>`{:`</td></tr>
+<tr><td>:}</td><td>`{::}`</td></tr>
+</table>
+
+</td><td>
+Miscellaneous symbols
+<table border="5" cellpadding="10">
+<tr><th>Type</th><th>See</th></tr>
+<tr><td>int</td><td>`int`</td></tr>
+
+<tr><td>oint</td><td>`oint`</td></tr>
+<tr><td>del</td><td>`del`</td></tr>
+<tr><td>grad</td><td>`grad`</td></tr>
+<tr><td>+-</td><td>`+-`</td></tr>
+<tr><td>O/</td><td>`O/`</td></tr>
+<tr><td>oo</td><td>`oo`</td></tr>
+
+<tr><td>aleph</td><td>`aleph`</td></tr>
+<tr><td>/_</td><td>`/_`</td></tr>
+<tr><td>:.</td><td>`:.`</td></tr>
+<tr><td>|...|</td><td>|`...`|</td></tr>
+<tr><td>|cdots|</td><td>|`cdots`|</td></tr>
+<tr><td>vdots</td><td>`vdots`</td></tr>
+
+<tr><td>ddots</td><td>`ddots`</td></tr>
+<tr><td>|\ |</td><td>|`\ `|</td></tr>
+<tr><td>|quad|</td><td>|`quad`|</td></tr>
+<tr><td>diamond</td><td>`diamond`</td></tr>
+<tr><td>square</td><td>`square`</td></tr>
+<tr><td>|__</td><td>`|__`</td></tr>
+
+<tr><td>__|</td><td>`__|`</td></tr>
+<tr><td>|~</td><td>`|~`</td></tr>
+<tr><td>~|</td><td>`~|`</td></tr>
+<tr><td>CC</td><td>`CC`</td></tr>
+<tr><td>NN</td><td>`NN`</td></tr>
+<tr><td>QQ</td><td>`QQ`</td></tr>
+
+<tr><td>RR</td><td>`RR`</td></tr>
+<tr><td>ZZ</td><td>`ZZ`</td></tr>
+</table>
+</td><td>
+Standard functions
+<table border="5" cellpadding="10">
+<tr><th>Type</th><th>See</th></tr>
+<tr><td>sin</td><td>`sin`</td></tr>
+<tr><td>cos</td><td>`cos`</td></tr>
+
+<tr><td>tan</td><td>`tan`</td></tr>
+<tr><td>csc</td><td>`csc`</td></tr>
+<tr><td>sec</td><td>`sec`</td></tr>
+<tr><td>cot</td><td>`cot`</td></tr>
+<tr><td>sinh</td><td>`sinh`</td></tr>
+<tr><td>cosh</td><td>`cosh`</td></tr>
+
+<tr><td>tanh</td><td>`tanh`</td></tr>
+<tr><td>log</td><td>`log`</td></tr>
+<tr><td>ln</td><td>`ln`</td></tr>
+<tr><td>det</td><td>`det`</td></tr>
+<tr><td>dim</td><td>`dim`</td></tr>
+<tr><td>lim</td><td>`lim`</td></tr>
+
+<tr><td>mod</td><td>`mod`</td></tr>
+<tr><td>gcd</td><td>`gcd`</td></tr>
+<tr><td>lcm</td><td>`lcm`</td></tr>
+<tr><td>min</td><td>`min`</td></tr>
+<tr><td>max</td><td>`max`</td></tr>
+</table>
+<p>
+
+Accents
+<table border="5" cellpadding="10">
+<tr><th>Type</th><th>See</th></tr>
+<tr><td>hat x</td><td>`hat x`</td></tr>
+<tr><td>bar x</td><td>`bar x`</td></tr>
+<tr><td>ul x</td><td>`ul x`</td></tr>
+<tr><td>vec x</td><td>`vec x`</td></tr>
+
+<tr><td>dot x</td><td>`dot x`</td></tr>
+<tr><td>ddot x</td><td>`ddot x`</td></tr>
+</table>
+
+</td><td>
+Arrows
+<table border="5" cellpadding="10">
+<tr><th>Type</th><th>See</th></tr>
+<tr><td>uarr</td><td>`uarr`</td></tr>
+
+<tr><td>darr</td><td>`darr`</td></tr>
+<tr><td>rarr</td><td>`rarr`</td></tr>
+<tr><td>-></td><td>`->`</td></tr>
+<tr><td>|-></td><td>`|->`</td></tr>
+<tr><td>larr</td><td>`larr`</td></tr>
+<tr><td>harr</td><td>`harr`</td></tr>
+
+<tr><td>rArr</td><td>`rArr`</td></tr>
+<tr><td>lArr</td><td>`lArr`</td></tr>
+<tr><td>hArr</td><td>`hArr`</td></tr>
+</table>
+<p>
+Font commands
+<table border="5" cellpadding="10">
+<tr><th>Type</th><th>See</th></tr>
+<tr><td>bb A</td><td>`bb A`</td></tr>
+
+<tr><td>bbb A</td><td>`bbb A`</td></tr>
+<tr><td>cc A</td><td>`cc A`</td></tr>
+<tr><td>tt A</td><td>`tt A`</td></tr>
+<tr><td>fr A</td><td>`fr A`</td></tr>
+<tr><td>sf A</td><td>`sf A`</td></tr>
+</table>
+
+</td></tr>
+</table>
+
+<p>
+Of course you may want or need other symbols from the thousands of <a
+href="http://www.ctan.org/tex-archive/info/symbols/comprehensive/symbols-letter.pdf">LaTeX
+symbols</a> or <a
+href="http://www.alanwood.net/unicode/#links">unicode
+symbols</a>. Fortunately ASCIIMathML.js is very <a
+href="asciimathextend.html">easy
+to extend</a>, so you can tailor it to your specific needs. (This
+could be compared to the LaTeX macro files that many users have
+developed over the years.)
+</p>
+
+<!--p>
+Large files with many formulas can take quite some time to display,
+especially on older hardware. To address this problem, there is a
+version ASCIIMathMLite.js that has a shorter symbol table (without the
+LaTeX symbol names) and slightly simplified parser. Send me an email
+at <a href="mailto:jipsen@chapman.edu">jipsen@chapman.edu</a> if you
+would like a copy.
+</p>
+
+<p>
+Another version that also recognizes some <a
+href="http://www.latex-project.org/">LaTeX</a> layout commands and
+(the fairly standard) <a
+href="http://en.wikipedia.org/wiki/Wikipedia:How_to_edit_a_page">Wiki
+formatting codes</a> for ASCII text is in the works. This further
+simplifies producing mathematical content for the web. However such a
+development is less easily justified since there are good free HTML
+editors and the HTML syntax is a well-established standard that is
+simple enough to be coded by hand.
+</p-->
+
+<hr/>
+
+<div id="author">
+<a href="http://www.chapman.edu/~jipsen/">Peter Jipsen</a>,
+<a href="http://www.chapman.edu/">Chapman University</a>, September 2007
+
+<a href="http://validator.w3.org/check/referer"><img border="0"
+src="http://www.w3.org/Icons/valid-html401"
+alt="Valid HTML 4.01!" height="31" width="88"></a>
+</div>
+</body>
+</html>

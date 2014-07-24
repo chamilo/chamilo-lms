@@ -1,0 +1,118 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>ASCIIMath Calculator Demo</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="ASCIIMathML.js"></script>
+<!--script type="text/javascript">mathfontsize=".9em"</script-->
+<style type="text/css">
+#menu, #title, #subtitle, #author {text-align: center}
+body {font-family: Arial; background-color:beige}
+p,table {font-family: Times}
+</style>
+</head>
+<body>
+
+<div id="menu">
+| <a href="asciimath.html">Home Page</a> |
+<a href="asciimathsyntax.html">Syntax</a> |
+<a href="asciimathdemo.html">Try it</a> |
+<a href="asciimathcalculator.html">Calculator</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/mathml/asciimathdownload.html">Download</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathGraphs.html">Graphs</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathFAQ.html">ASCIIMath FAQ</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathMLSandbox.html">Sandbox</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathCommentsAndSuggestions.html">Comments</a> |
+</div>
+
+<hr/>
+
+<h2 id="title">
+ASCIIMath Scientific Calculator (ver 1.2)
+</h2>
+
+<h4 align="center">
+A free webpage calculator with live MathML display
+</h4>
+
+<h4 align="center">
+This page requires Internet Explorer 6+<a
+href="http://www.dessci.com/en/products/mathplayer">MathPlayer</a>
+or Mozilla/Firefox/Netscape 7+.
+</h4>
+
+<div class="ASCIIMathCalculator"></div>
+
+<p>
+More calculator areas:<br>
+<textarea id="in1" rows="2" cols="40" onkeyup="calculate('in1','out1')">
+2sin^-1(1)</textarea> &nbsp; <span id="out1"></span>
+<p/>
+
+<p>
+<textarea id="in2" rows="2" cols="30"
+onkeyup="calculate('in2','out2');calculate('in3','out3')">
+a=5; b=4; c=-1; (-b+sqrt(b^2-4a*c))/(2a)
+</textarea> &nbsp; <span id="out2"></span>
+<br/>
+<textarea id="in3" rows="1" cols="30"
+onkeyup="calculate('in2','out2');calculate('in3','out3')">
+(-b-sqrt(b^2-4a*c))/(2a)</textarea> &nbsp; <span id="out3"></span>
+
+</p>
+
+<p>
+<b>Note that this is dynamic HTML running locally on your machine.</b>
+<br/>
+Right-click on the output to copy or view the MathML code (or have it
+<b>spoken</b> in IE+MathPlayer).
+</p>
+
+<p>
+<b>Some technical remarks:</b> This calculator works only in radians.
+(Multiply angles by pi/180 to convert from degrees to radians.)
+<br/>
+
+The syntax is loosely based on JavaScript and a subset of ASCIIMathML.
+<br/>
+The multiplication symbol * can be omitted after a digit (0-9)
+or a closing parenthesis.
+<br/>
+Available constants and functions:
+<br/>
+&nbsp; &nbsp; +, -, *, /, ^, pi, e, sqrt(), ln(), abs(), sign(),
+floor(), ceil(), n!, C(n,k), ran(a,b,n)
+<br/>
+&nbsp; &nbsp; sin(), cos(), tan(), sin^-1(), cos^-1(), tan^-1(),
+sinh(), cosh(), tanh(), sinh^-1(), cosh^-1(), tanh^-1()
+<br/>
+&nbsp; &nbsp; sec(), csc(), cot(), sec^-1(), csc^-1(), cot^-1(),
+sech(), csch(), coth(), sech^-1(), csch^-1(), coth^-1()
+
+<br/>
+Values can be assigned to (legal JavaScript) variable names.
+Use ";" to separate expressions.
+<br/>
+Any number of calculator textareas can be placed anywhere on <b>your own</b>
+webpages.
+</p>
+ASCIIMathML and this calculator are freely available under the
+<a href="http://www.gnu.org/licenses/lgpl.html">GNU Lesser General
+Public License</a>. Please include a link to <a
+href="http://asciimathml.sourceforge.net">asciimathml.sourceforge.net</a>
+on any webpage that makes use of them, and send a link of your webpage
+to <a href="mailto:jipsen@chapman.edu">jipsen@chapman.edu</a>.
+
+<hr/>
+
+<div id="author">
+<a href="http://www.chapman.edu/~jipsen/">Peter Jipsen</a>,
+<a href="http://www.chapman.edu/">Chapman University</a>, May 2007
+
+<a href="http://validator.w3.org/check/referer"><img border="0"
+src="http://www.w3.org/Icons/valid-html401"
+alt="Valid HTML 4.01!" height="31" width="88"></a>
+</div>
+</body>
+</html>

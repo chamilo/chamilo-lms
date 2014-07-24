@@ -1,0 +1,363 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+          "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title>ASCIIMathML: Math on the web for everyone</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="ASCIIMathML.js"></script>
+<style type="text/css">
+#menu, #title, #subtitle, #author, .display {text-align: center}
+body {font-family: Arial; background-color:beige}
+p,table {font-family: Times}
+</style>
+</head>
+<body>
+
+<div id="menu">
+| <a href="asciimath.html">Home Page</a> |
+<a href="asciimathsyntax.html">Syntax</a> |
+<a href="asciimathdemo.html">Try it</a> |
+<a href="asciimathcalculator.html">Calculator</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/mathml/asciimathdownload.html">Download</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathGraphs.html">Graphs</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathFAQ.html">ASCIIMath FAQ</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathMLSandbox.html">Sandbox</a> |
+<a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathCommentsAndSuggestions.html">Comments</a> |
+</div>
+
+<hr/>
+
+<h2 id="title">
+ASCIIMathML.js (ver 2.0): Translating ASCII math notation to MathML
+and graphics</h2>
+
+<h4 align="center">
+Would you or your students like to <i>easily</i> produce
+<i>good-looking</i> math formulas on webpages<br/>
+using a <i>simple</i> calculator-style syntax and your
+own ASCII or HTML editor?
+<br/>
+Here is a free multi-platform solution (and if you prefer it,
+LaTeX-style formulas also work).
+</h4>
+
+<center>
+<b><font color="red">Now even easier to use:</font>
+<font color="green"> just add one line to your
+HTML file to load ASCIIMathML.js
+</font></b><p>
+ASCIIMathML.js is mentioned on the <a
+href="http://www.w3.org/Math/">MathML</a> page of the <a
+href="http://www.w3.org/">World Wide Web Consortium</a>, also on <a
+href="http://mathforge.net/index.jsp">mathforge.net</a> and <a
+href="http://mathforum.org/library/resource_types/typesetting/">The
+Math Forum.</a>
+</p>
+
+<font color="red"><b>New:</b></font> Now with <b>automatic math recognition</b>
+mode, better LaTeX support and graphics integration<br/>
+A <a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathMLMoodleFilter.html">Moodle filter</a> and a <a href="http://mathcs.chapman.edu/~jipsen/math/index.php/ASCIIMathML/ASCIIMathMLPmWikiCookbook.html">PmWiki cookbook</a> are also available<br/>
+<a href="http://www.pierce.ctc.edu/dlippman/asciimathtex/AMT.html">ASCIIMath Image Fallback Scripts</a> by David Lippman (including a Moodle filter)<br/>
+and a <a href="http://www.maths.nottingham.ac.uk/personal/drw/lm.html">LaTeXMathML</a> version of ASCIIMathML by <a href="http://www.maths.nottingham.ac.uk/personal/drw/">Dr Douglas R. Woodall</a>
+(<a href="http://www.maths.nott.ac.uk/personal/drw/lmtest.html">examples</a>)
+<br />
+<a href="http://math.chapman.edu/~jipsen/asciencepad/asciencepad.html">ASciencePad</a> is a WYSIWYG editor that integrates
+
+<a href="http://www.tiddlywiki.com/">TiddlyWiki</a>, ASCIIMathML and ASCIIsvg graphs.<br />
+It's free and works locally (no installation or server required).<br />
+Useful information about <a
+href="http://www.maths.ed.ac.uk/~james/ASCIIMathMLinfo.html">ASCIIMathML</a>
+by <a href="http://www.maths.ed.ac.uk/~james/">James Gray</a>, including
+a nice <a href="http://www.maths.ed.ac.uk/~james/ASCIIMathTutorial.html">tutorial</a>.<br />
+ASCIIMathML also works with <a href="http://www.meyerweb.com/eric/tools/s5/">S5</a> (CSS
+Presentation slide show; <a href="http://math.chapman.edu/~jipsen/talks/MathFest2005/JipsenMathFestSlides2005.html">S5 ASCIIMath example</a>)<br/>
+
+and in valid
+<a href="http://math.chapman.edu/~jipsen/mathml/asciimathandmathmlsvg.xhtml">
+XHTML pages with standard MathML and SVG</a> in several browsers.
+<br/>
+ASCIIMathML is being used with Movable Type, WordPress, phpBB, and many wikis.
+<br/>
+Also available: A PHP port of ASCIIMathML.js to <a
+href="http://www.jcphysics.com/ASCIIMath/">ASCIIMathPHP</a> by <a
+href="mailto:kc56@cornell.edu">Steven Chan</a>.
+</center>
+
+<p>
+
+This is the main page (HTML version) for the ASCIIMathML.js script which allows
+incorporating mathematical formulas on webpages with a minimum of
+fuss (just add one line to a webpage to load the script).
+If you like what you see, choose <b>Save As...</b> in your browser
+and this page should work equally well locally on your machine.
+</p>
+
+<p class="display">
+<b>
+This page requires Internet Explorer 6 + <a href=
+"http://www.dessci.com/en/products/mathplayer/welcome.asp">MathPlayer</a>
+or Netscape7.1/Mozilla/Firefox.
+</b>
+</p>
+
+<p>
+ASCIIMathML.js is freely available under the <a
+href="http://www.gnu.org/licenses/lgpl.html">GNU Lesser General Public
+License</a>. You can get your own copy from the <a href=
+"http://www.chapman.edu/~jipsen/mathml/asciimathdownload/">ASCIIMathML.js
+download page</a>. The script works with both HTML and XHTML webpages.
+(The homepage for an XML
+version is at <a href="asciimath.xml">asciimath.xml</a> but is no
+longer maintained).
+
+</p>
+
+<p>
+If you use it on a webpage, please send me an email at <a
+href="mailto:jipsen@chapman.edu">jipsen@chapman.edu</a> with the URL
+so that I can add a link to it on the <a
+href="http://math.chapman.edu/cgi-bin/mathxml.pl?Webpages_that_use_ASCIIMathML.js">users page</a>.
+(Also send me an
+email if you have problems or would like to provide some feedback.)
+I'm currently using ASCIIMathML on a Wikiserver for lecture notes and
+<!--a href="http://math.chapman.edu/cgi-bin/mathxml.pl?Calculus_Text_Puzzles">Text
+Puzzles</a>. M-->my students are also using it in Moodle
+for writing and reading homework in their calculus class and
+discrete mathematics class.
+<font color="red">
+If you just want to display MathML on HTML pages using
+Netscape/Mozilla/Firefox or IE+MathPlayer, have a look at <a
+href="http://www1.chapman.edu/~jipsen/mathml/mathhtml">mathhtmltest</a>
+(the page includes a 50 line JavaScript program that does the trick).
+</font>
+</p>
+
+<hr/>
+
+<p>
+<b>Let's test the ASCIIMathML.js translator on a simple example.</b>
+</p>
+
+<p>amath
+<b>Example:</b> Solving the quadratic equation.
+Suppose a x^2+b x+c=0 and a!=0. We first
+divide by \a to get x^2+b/a x+c/a=0.
+
+Then we complete the square and obtain x^2+b/a x+(b/(2a))^2-(b/(2a))^2+c/a=0.
+The first three terms factor to give (x+b/(2a))^2=(b^2)/(4a^2)-c/a.
+Now we take square roots on both sides and get
+x+b/(2a)=+-sqrt((b^2)/(4a^2)-c/a).
+
+Finally we subtract b/(2a) from both sides and simplify to get
+the two solutions: x_(1,2)=(-b+-sqrt(b^2 - 4a c))/(2a)
+</p>
+endamath
+
+<p>
+<b>Here is the text that was typed in (<font color="red">using the new
+auto-math-recognize mode</font> started by "a``math"):</b>
+
+</p>
+
+<pre>amath
+<b>Example:</b> Solving the quadratic equation.
+Suppose a x^2+b x+c=0 and a!=0. We first divide by \a to get x^2+b/a x+c/a=0.
+
+Then we complete the square and obtain x^2+b/a x+(b/(2a))^2-(b/(2a))^2+c/a=0.
+The first three terms factor to give (x+b/(2a))^2=(b^2)/(4a^2)-c/a.
+Now we take square roots on both sides and get x+b/(2a)=+-sqrt((b^2)/(4a^2)-c/a).
+
+Finally we move the b/(2a) to the right and simplify to get
+the two solutions: x_(1,2)=(-b+-sqrt(b^2-4a c))/(2a)
+</pre>
+
+<hr/>
+
+<center>
+<b>
+If you don't believe this, copy the text and paste it on the
+<a href="asciimathdemo.html">ASCIIMathML.js: Try it yourself</a> demo page.
+</b>
+
+</center>
+
+<hr/>
+
+<h4>
+Here are a few more examples:
+</h4>
+
+<table id="examples" border="5" cellpadding="10">
+<tr>
+<th>Type this</th>
+<th>See that</th>
+<th>Comment</th>
+</tr>
+
+<tr>
+<td>\`x^2+y_1+z_12^34\`</td>
+<td>`x^2+y_1+z_12^34`</td>
+<td>subscripts as in TeX, but numbers are treated as a unit</td>
+</tr>
+<tr>
+<td>\`sin^-1(x)\`</td>
+<td>`sin^-1(x)`</td>
+<td>function names are treated as constants</td>
+</tr>
+<tr>
+
+<td>\`d/dxf(x)=lim_(h->0)(f(x+h)-f(x))/h\`</td>
+<td>`d/dxf(x)=lim_(h->0)(f(x+h)-f(x))/h`</td>
+<td>complex subscripts are bracketed, displayed under lim</td>
+</tr>
+<tr>
+<td>\$\frac{d}{dx}f(x)=\lim_{h\to 0}\frac{f(x+h)-f(x)}{h}\$</td>
+<td>$\frac{d}{dx}f(x)=\lim_{h\to 0}\frac{f(x+h)-f(x)}{h}$</td>
+<td>standard LaTeX notation is an alternative</td>
+</tr>
+<tr>
+<td>\`f(x)=sum_(n=0)^oo(f^((n))(a))/(n!)(x-a)^n\`</td>
+
+<td>`f(x)=sum_(n=0)^oo(f^((n))(a))/(n!)(x-a)^n`</td>
+<td>f^((n))(a) must be bracketed, else the numerator is only `a`</td>
+</tr>
+<tr>
+<td>\$f(x)=\sum_{n=0}^\infty\frac{f^{(n)}(a)}{n!}(x-a)^n\$</td>
+<td>$f(x)=\sum_{n=0}^\infty\frac{f^{(n)}(a)}{n!}(x-a)^n$</td>
+<td>standard LaTeX produces the same result</td>
+</tr>
+<tr>
+<td>\`int_0^1f(x)dx\`</td>
+<td>`int_0^1f(x)dx`</td>
+
+<td>subscripts must come before superscripts</td>
+</tr>
+<tr>
+<td>\`[[a,b],[c,d]]((n),(k))\`</td>
+<td>`[[a,b],[c,d]]((n),(k))`</td>
+<td>matrices and column vectors are simple to type</td>
+</tr>
+<tr>
+<td>\`x/x={(1,if x!=0),(text{undefined},if x=0):}\`</td>
+<td>`x/x={(1,if x!=0),(text{undefined},if x=0):}`</td>
+<td>piecewise defined function are based on matrix notation</td>
+
+</tr>
+<tr>
+<td>\`a//b\`</td>
+<td>`a//b`</td>
+<td>use // for inline fractions</td>
+</tr>
+<tr>
+<td>\`(a/b)/(c/d)\`</td>
+<td>`(a/b)/(c/d)`</td>
+<td>with brackets, multiple fraction work as expected</td>
+</tr>
+
+<tr>
+<td>\`a/b/c/d\`</td>
+<td>`a/b/c/d`</td>
+<td>without brackets the parser chooses this particular expression</td>
+</tr>
+<tr>
+<td>\`((a*b))/c\`</td>
+<td>`((a*b))/c`</td>
+<td>only one level of brackets is removed; * gives standard product</td>
+</tr>
+<tr>
+
+<td>\`sqrt sqrt root3x\`</td>
+<td>`sqrt sqrt root3x`</td>
+<td>spaces are optional, only serve to split strings that should not match</td>
+</tr>
+<tr>
+<td>\`<< a,b >> and {:(x,y),(u,v):}\`</td>
+<td>`<< a,b >> and {:(x,y),(u,v):}`</td>
+<td>angle brackets and invisible brackets</td>
+</tr>
+<tr>
+<td>\`(a,b]={x in RR | a < x <= b}\`</td>
+
+<td>`(a,b]={x in RR | a < x <= b}`</td>
+<td>grouping brackets don't have to match</td>
+</tr>
+<tr>
+<td>\`abc-123.45^-1.1\`</td>
+<td>`abc-123.45^-1.1`</td>
+<td>non-tokens are split into single characters,<br/>
+but decimal numbers are parsed with possible sign</td>
+</tr>
+
+<tr>
+<td>\`hat(ab) bar(xy) ulA vec v dotx ddot y\`</td>
+<td>`hat(ab) bar(xy) ulA vec v dotx ddot y`</td>
+<td>accents can be used on any expression (work well in IE)</td>
+</tr>
+<tr>
+<td>\`bb{AB3}.bbb(AB].cc(AB).fr{AB}.tt[AB].sf(AB)\`</td>
+<td>`bb{AB3}.bbb(AB].cc(AB).fr{AB}.tt[AB].sf(AB)`</td>
+<td>font commands; can use any brackets around argument</td>
+</tr>
+<tr>
+
+<td>\`stackrel"def"= or \stackrel{\Delta}{=}" "("or ":=)\`</td>
+<td>`stackrel"def"= or \stackrel{\Delta}{=}" "("or ":=)`</td>
+<td>symbols can be stacked</td>
+</tr>
+<tr>
+<td>\`{::}_(\ 92)^238U\`</td>
+<td>`{::}_(\ 92)^238U`</td>
+<td>prescripts simulated by subsuperscripts</td>
+</tr>
+</table>
+
+<p>
+If you are familiar with MathML, you can appreciate that this ASCII
+input form is less verbose and more readable. If you are familiar with
+TeX, this is still somewhat less cluttered. The aim is to have input
+notation that is close to graphing calculator notation, so that
+students are able to use it on webpages and in emails without having
+to learn another specialized syntax.
+</p>
+
+<p>
+For an explicit description of the input syntax see <a
+href="asciimathsyntax.html">ASCIIMathML.js Syntax and List of
+Constants</a>.
+</p>
+
+<p>
+<b>Acknowledgements:</b> Many thanks to the numerous people who have
+contributed to the fantastic MathML standard. Without such a
+well designed standard, a project like this would be impossible.<br/>
+
+Thanks to the many volunteers who implemented MathML in the
+Gecko layout engine for Netscape7/Mozilla/Firefox.<br/>
+
+
+Thanks to the people at Design Science for producing the excellent
+MathPlayer plugin and making it freely available.<br/>
+
+Finally, thanks to the designers and implementors of JavaScript.  All
+these tools work together fairly seemlessly to allow us to put
+mathematical formulas on webpages in a convenient and inexpensive way.<br/>
+
+And thanks to Andrew White for making a logo for ASCIIMathML (see below).
+</p>
+<hr/>
+
+<div id="author">
+<a href="http://www.chapman.edu/~jipsen/">Peter Jipsen</a>,
+<a href="http://www.chapman.edu/">Chapman University</a>, September 2007
+
+<a href="http://validator.w3.org/check/referer"><img border="0"
+src="http://www.w3.org/Icons/valid-html401"
+alt="Valid HTML 4.01!" height="31" width="88"></a>
+</div>
+
+<p><div class="display">
+<a style="color:white" href="../asciimath.html">
+<img src="asciimathml.jpeg" alt="ASCIIMathML"></a>
+</div>
+</body>
+</html>

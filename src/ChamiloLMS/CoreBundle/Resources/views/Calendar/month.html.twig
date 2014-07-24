@@ -1,3 +1,4 @@
+{% autoescape false %}
 <script>
 function checkLength( o, n, min, max ) {
     if ( o.val().length > max || o.val().length < min ) {
@@ -17,7 +18,6 @@ function clean_user_select() {
      .removeAttr('selected')
      .end();*/
 }
-
 var region_value = '{{ region_value }}';
 $(document).ready(function() {
     var date = new Date();
@@ -42,8 +42,8 @@ $(document).ready(function() {
     });
 
     var title = $( "#title" ),
-            content = $( "#content" ),
-            allFields = $( [] ).add( title ).add( content ), tips = $(".validateTips");
+        content = $( "#content" ),
+        allFields = $( [] ).add( title ).add( content ), tips = $(".validateTips");
 
     $('#users_to_send_id').bind('change', function() {
 
@@ -96,12 +96,13 @@ $(document).ready(function() {
         ],
         {% endif %}
 
-        defaultView:    '{{ default_view }}',
-        buttonText: 	{{ button_text }},
-        monthNames: 	{{ month_names }},
+        defaultView: '{{ default_view }}',
+        buttonText:    {{ button_text }},
+        monthNames:    {{ month_names }},
         monthNamesShort:{{ month_names_short }},
-        dayNames: 		{{ day_names }},
-        dayNamesShort: 	{{ day_names_short }},
+        dayNames:        {{ day_names }},
+        dayNamesShort:    {{ day_names_short }},
+
         firstHour: 8,
         firstDay: 1,
         selectable	: true,
@@ -542,3 +543,4 @@ $(document).ready(function() {
     {{ "Loading"|trans }}...
 </div>
 <div id="calendar"></div>
+{% endautoescape %}

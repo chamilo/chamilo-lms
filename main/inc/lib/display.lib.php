@@ -814,7 +814,7 @@ class Display
             $icon = $image;
         }
 
-        $icon = 'ChamiloLMS/img/'.$icon;
+        $icon = 'bundles/chamilolmscore/img/'.$icon;
 
         $icon = Session::getAsset()->getUrl($icon);
         //$icon = api_get_cdn_path($icon);

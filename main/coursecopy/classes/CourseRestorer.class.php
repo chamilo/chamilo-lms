@@ -279,6 +279,7 @@ class CourseRestorer
         $course_info = api_get_course_info($destination_course_code);
 
         if ($this->course->has_resources(RESOURCE_DOCUMENT)) {
+
 			$table = Database :: get_course_table(TABLE_DOCUMENT);
 			$resources = $this->course->resources;
             $path = api_get_path(SYS_COURSE_PATH).$this->course->destination_path.'/';
@@ -549,7 +550,9 @@ class CourseRestorer
 												$x = $x + 1;
 												$new_base_foldername = $document_path[1].'_'.$x;
 												$new_base_path = $orig_base_path.'_'.$x;
-												if ($_SESSION['new_base_foldername'] == $new_base_foldername) break;
+                                                if ($_SESSION['new_base_foldername'] == $new_base_foldername) {
+                                                    break;
+                                                }
 												$folder_exists = file_exists($new_base_path);
 											}
 											$_SESSION['new_base_foldername'] = $new_base_foldername;
@@ -586,7 +589,9 @@ class CourseRestorer
                                             $file_info = pathinfo($dest_document_path);
                                             if (in_array($file_info['extension'], array('html','htm'))) {
                                                 $content = file_get_contents($dest_document_path);
-                                                if (UTF8_CONVERT) $content = utf8_encode($content);
+                                                if (UTF8_CONVERT) {
+                                                    $content = utf8_encode($content);
+                                                }
                                                 $content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                                                     $content,
                                                     $this->course->code,
@@ -594,7 +599,7 @@ class CourseRestorer
                                                     $this->course->backup_path,
                                                     $this->course->info['path']
                                                 );
-                                                file_put_contents($dest_document_path,$content);
+                                                file_put_contents($dest_document_path, $content);
                                             }
                                         }
 
@@ -634,7 +639,9 @@ class CourseRestorer
                                             $file_info = pathinfo($path.$new_file_name);
                                             if (in_array($file_info['extension'], array('html','htm'))) {
                                                 $content    = file_get_contents($path.$new_file_name);
-                                                if (UTF8_CONVERT) $content = utf8_encode($content);
+                                                if (UTF8_CONVERT) {
+                                                    $content = utf8_encode($content);
+                                                }
                                                 $content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                                                     $content,
                                                     $this->course->code,
@@ -680,7 +687,9 @@ class CourseRestorer
                                         $file_info = pathinfo($path.$new_file_name);
                                         if (in_array($file_info['extension'], array('html','htm'))) {
                                             $content    = file_get_contents($path.$new_file_name);
-                                            if (UTF8_CONVERT) $content = utf8_encode($content);
+                                            if (UTF8_CONVERT) {
+                                                $content = utf8_encode($content);
+                                            }
                                             $content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                                                 $content,
                                                 $this->course->code,
@@ -735,7 +744,9 @@ class CourseRestorer
                                 $file_info = pathinfo($path.$document->path);
                                 if (in_array($file_info['extension'], array('html','htm'))) {
                                     $content    = file_get_contents($path.$document->path);
-                                    if (UTF8_CONVERT) $content = utf8_encode($content);
+                                    if (UTF8_CONVERT) {
+                                        $content = utf8_encode($content);
+                                    }
                                     $content = DocumentManager::replace_urls_inside_content_html_from_copy_course(
                                         $content,
                                         $this->course->code,
@@ -874,7 +885,13 @@ class CourseRestorer
                 $params['forum_category'] = $cat_id;
                 unset($params['forum_id']);
 
-                $params['forum_comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course($params['forum_comment'], $this->course->code, $this->course->destination_path, $this->course->backup_path, $this->course->info['path']);
+                $params['forum_comment'] = DocumentManager::replace_urls_inside_content_html_from_copy_course(
+                    $params['forum_comment'],
+                    $this->course->code,
+                    $this->course->destination_path,
+                    $this->course->backup_path,
+                    $this->course->info['path']
+                );
 
                 if (!empty($params['forum_image'])) {
                     $original_forum_image = $this->course->path.'upload/forum/images/'.$params['forum_image'];
@@ -1301,7 +1318,7 @@ class CourseRestorer
                         'c_id' => $this->destination_course_id,
                         'title' => self::DBUTF8($quiz->title),
                         'description' => self::DBUTF8($quiz->description),
-                        'type' => $quiz->quiz_type,
+                        'type' => isset($quiz->quiz_type) ? $quiz->quiz_type : $quiz->type,
                         'random' => $quiz->random,
                         'active' => $quiz->active,
                         'sound' => self::DBUTF8($doc),
@@ -2320,8 +2337,14 @@ class CourseRestorer
 				            $condition_session
                         ";
 				Database::query($sql);
-				$my_id = Database::get_last_insert_id();
-				api_item_property_update($this->destination_course_info, TOOL_GLOSSARY, $my_id,"GlossaryAdded", api_get_user_id());
+                $my_id = Database::insert_id();
+                api_item_property_update(
+                    $this->destination_course_info,
+                    TOOL_GLOSSARY,
+                    $my_id,
+                    "GlossaryAdded",
+                    api_get_user_id()
+                );
 				$this->course->resources[RESOURCE_GLOSSARY][$id]->destination_id = Database::insert_id();
 
 			}

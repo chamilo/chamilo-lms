@@ -23,7 +23,6 @@ $current_course_tool = TOOL_COURSE_MAINTENANCE;
 api_protect_course_script(true);
 
 $_course = api_get_course_info();
-
 $current_course_code = $_course['official_code'];
 $current_course_name = $_course['name'];
 

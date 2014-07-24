@@ -47,8 +47,8 @@ class Announcement extends Resource
 	 * @param string $date
 	 * @param int display_order
 	 */
-	function Announcement($id, $title, $content, $date, $display_order, $email_sent, $path, $filename, $size, $comment) 
-{
+    function Announcement($id, $title, $content, $date, $display_order, $email_sent, $path, $filename, $size, $comment)
+    {
 		parent::Resource($id,RESOURCE_ANNOUNCEMENT);
 		
 		$this->content	= $content;

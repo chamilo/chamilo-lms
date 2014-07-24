@@ -25,7 +25,7 @@ api_protect_course_script(true);
 
 // Additional javascripts.
 $htmlHeadXtra[] = GlossaryManager::javascript_glossary();
-$htmlHeadXtra[] = '<script type="text/javascript">
+$htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#glossary_title").focus();
 }

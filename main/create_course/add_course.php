@@ -189,7 +189,6 @@ if ($form->validate()) {
     $course_values = $form->exportValues();
 
     $wanted_code        = $course_values['wanted_code'];
-    //$tutor_name         = $course_values['tutor_name'];
     $category_code      = $course_values['category_code'];
     $title              = $course_values['title'];
     $course_language    = $course_values['course_language'];

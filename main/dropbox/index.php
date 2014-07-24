@@ -567,7 +567,6 @@ if ($action != 'add') {
 				if ($category['sent'] == '1') {
 
                     $moveList[$category['cat_id']] = $category['cat_name'];
-
 					$dropbox_category_data[] = $category['cat_id']; // This is where the checkbox icon for the files appear.
 					$link_open = '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&amp;view_sent_category='.$category['cat_id'].'&amp;view='.$view.'">';
 					$dropbox_category_data[] = $link_open.build_document_icon_tag('folder', Security::remove_XSS($category['cat_name'])).'</a>';

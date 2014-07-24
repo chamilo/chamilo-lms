@@ -9,11 +9,6 @@
  * @author claro team <cvs@claroline.net>
  * @author Guillaume Lederer <guillaume@claroline.net>
  */
-/**
- * Security check
- */
-if (count(get_included_files()) == 1)
-	die('---');
 
 /**
  * function to create a temporary directory (SAME AS IN MODULE ADMIN)

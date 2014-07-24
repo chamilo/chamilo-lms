@@ -196,6 +196,7 @@ if (api_is_allowed_to_edit(false, true)) {
             Display::return_icon('new_forum.png', get_lang('AddForum'),'',ICON_SIZE_MEDIUM).'</a>';
     }
 }
+
 echo '</div>';
 
 // Fixes error if there forums with no category.
@@ -293,6 +294,7 @@ if (is_array($forumCategories)) {
                     if (api_is_allowed_to_edit(false, true)) {
                         $show_forum = true;
                     } else {
+                        // you are not a teacher
                         // it is not a group forum => show forum (invisible forums are already left out see get_forums function)
                         if ($forum['forum_of_group'] == '0') {
                             $show_forum = true;

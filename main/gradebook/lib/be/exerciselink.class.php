@@ -303,7 +303,6 @@ class ExerciseLink extends AbstractLink
         } else {
             return get_lang('Quiz');
         }
-
     }
 
 	public function needs_name_and_description()

@@ -322,7 +322,7 @@ switch ($action) {
         }
     case 'thematic_plan_list':
         $thematic_controller->thematic_plan($action);
-    break;
+        break;
     case 'thematic_advance_add':
     case 'thematic_advance_edit':
     case 'thematic_advance_delete':
@@ -331,5 +331,5 @@ switch ($action) {
         }
     case 'thematic_advance_list':
         $thematic_controller->thematic_advance($action);
-    break;
+        break;
 }

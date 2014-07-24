@@ -18,39 +18,39 @@ class Event extends Resource
 	/**
 	 * The title
 	 */
-	var $title;
+	public $title;
 	/**
 	 * The content
 	 */
-	var $content;
+	public $content;
 	/**
 	 * The start date
 	 */
-	var $start_date;
+	public $start_date;
 	/**
 	 * The end date
 	 */
-	var $end_date;
+	public $end_date;
 	/**
 	 * The attachment path
 	 */
-	var $attachment_path;
-	
+	public $attachment_path;
+
 	/**
 	 * The attachment filename
 	 */
-	var $attachment_filename;
+	public $attachment_filename;
 	/**
 	 * The attachment size
 	 */
-	var $attachment_size;
-	
+	public $attachment_size;
+
 	/**
 	 * The attachment comment
 	 */
-	var $attachment_comment;
-	
-	
+	public $attachment_comment;
+
+
 	/**
 	 * Create a new Event
 	 * @param int $id

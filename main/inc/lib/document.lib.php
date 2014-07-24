@@ -531,10 +531,21 @@ class DocumentManager
         $added_slash = $path == '/' ? '' : '/';
 
         // Condition for the session
-        $current_session_id = api_get_session_id();
-        $condition_session = " AND (id_session = '$current_session_id' OR (id_session = '0') )";
+        $sessionId = api_get_session_id();
+        $condition_session = " AND (id_session = '$sessionId' OR (id_session = '0') )";
+        $condition_session .= self::getSessionFolderFilters($originalPath, $sessionId);
 
-        $condition_session .= self::getSessionFolderFilters($originalPath, $current_session_id);
+        $sharedCondition = null;
+        if ($originalPath == '/shared_folder') {
+            $students = CourseManager::get_user_list_from_course_code($_course['code'], $sessionId);
+            if (!empty($students)) {
+                $conditionList = array();
+                foreach ($students as $studentId => $studentInfo) {
+                    $conditionList[] = '/shared_folder/sf_user_' . $studentInfo['user_id'];
+                }
+                $sharedCondition .= ' AND docs.path IN ("' . implode('","', $conditionList) . '")';
+            }
+        }
 
         $sql = "SELECT
                     docs.id,
@@ -563,6 +574,7 @@ class DocumentManager
                     last.visibility
                     $visibility_bit
                     $condition_session
+                    $sharedCondition
                 ";
         $result = Database::query($sql);
 
@@ -656,7 +668,7 @@ class DocumentManager
                     $is_visible = DocumentManager::check_visibility_tree(
                         $row['id'],
                         $_course['code'],
-                        $current_session_id,
+                        $sessionId,
                         api_get_user_id(),
                         $to_group_id
                     );
@@ -694,6 +706,16 @@ class DocumentManager
         $to_group_id = intval($to_group_id);
         $document_folders = array();
 
+        $students = CourseManager::get_user_list_from_course_code($_course['code'], api_get_session_id());
+        $sharedCondition = null;
+
+        if (!empty($students)) {
+            $conditionList = array();
+            foreach ($students as $studentId => $studentInfo) {
+                $conditionList[] = '/shared_folder/sf_user_' . $studentInfo['user_id'];
+            }
+        }
+
         if ($can_see_invisible) {
             //condition for the session
             $session_id = api_get_session_id();
@@ -715,7 +737,7 @@ class DocumentManager
                        WHERE
                             docs.filetype 		= 'folder' AND
                             last.to_group_id	= " . $to_group_id . " AND
-                            docs.path           NOT LIKE '%shared_folder%' AND
+                            docs.path NOT LIKE '%shared_folder%' AND
                             last.visibility 	<> 2 $condition_session ";
             } else {
                 $sql = "SELECT DISTINCT docs.id, path
@@ -739,6 +761,13 @@ class DocumentManager
                     if (DocumentManager::is_folder_to_avoid($row['path'])) {
                         continue;
                     }
+
+                    if (strpos($row['path'], '/shared_folder/') !== false) {
+                        if (!in_array($row['path'], $conditionList)) {
+                            continue;
+                        }
+                    }
+
                     $document_folders[$row['id']] = $row['path'];
                 }
 
@@ -772,7 +801,7 @@ class DocumentManager
                 $visibleFolders[$row['id']] = $row['path'];
             }
 
-            //condition for the session
+            // Condition for the session
             $session_id = api_get_session_id();
             $condition_session = api_get_session_condition($session_id);
             //get invisible folders

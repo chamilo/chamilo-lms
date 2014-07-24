@@ -809,8 +809,6 @@ $(document).ready( function() {
 });
 </script>';
 
-
-
 // Lib for event log, stats & tracking & record of the access
 event_access_tool(TOOL_DOCUMENT);
 
@@ -858,7 +856,7 @@ if ($is_allowed_to_edit ||
                 $is_allowed_to_edit || $group_member_with_upload_rights
             );
 
-            //filter if is my shared folder. TODO: move this code to build_move_to_selector function
+            // filter if is my shared folder. TODO: move this code to build_move_to_selector function
             if (is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id) && !$is_allowed_to_edit) {
                 //only main user shared folder
                 $main_user_shared_folder_main = '/shared_folder/sf_user_'.api_get_user_id();
@@ -870,6 +868,7 @@ if ($is_allowed_to_edit ||
                         $user_shared_folders[] = $fold;
                     }
                 }
+
                 $moveForm .= '<legend>'.get_lang('Move').'</legend>';
                 $moveForm .= build_move_to_selector(
                     $user_shared_folders,

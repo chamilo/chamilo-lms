@@ -17,7 +17,8 @@
  * @todo this funcionality is really bad : jmontoya
  * @return string html form
  */
-function build_directory_selector($folders, $document_id, $group_dir = '', $change_renderer = false) {
+function build_directory_selector($folders, $document_id, $group_dir = '', $change_renderer = false)
+{
     $doc_table = Database::get_course_table(TABLE_DOCUMENT);
     $course_id = api_get_course_int_id();
     $folder_titles = array();
@@ -29,7 +30,8 @@ function build_directory_selector($folders, $document_id, $group_dir = '', $chan
         }
         $folder_sql = implode("','", $escaped_folders);
 
-        $sql = "SELECT * FROM $doc_table WHERE filetype = 'folder' AND c_id = $course_id AND path IN ('" . $folder_sql . "')";
+        $sql = "SELECT * FROM $doc_table
+                WHERE filetype = 'folder' AND c_id = $course_id AND path IN ('" . $folder_sql . "')";
         $res = Database::query($sql);
         $folder_titles = array();
         while ($obj = Database::fetch_object($res)) {
@@ -88,6 +90,7 @@ function build_directory_selector($folders, $document_id, $group_dir = '', $chan
         }
     }
     $html = $form->toHtml();
+
     return $html;
 }
 
@@ -649,8 +652,8 @@ function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, 
     return $modify_icons;
 }
 
-function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = '') {
-
+function build_move_to_selector($folders, $curdirpath, $move_file, $group_dir = '')
+{
     $form = new FormValidator('move_to', 'post', api_get_self());
 
     // Form title

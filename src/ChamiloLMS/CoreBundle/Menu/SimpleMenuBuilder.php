@@ -73,7 +73,7 @@ class SimpleMenuBuilder extends ContainerAware
             )
         );
 
-        $child = $menu->addChild(
+        $menu->addChild(
             'Progress',
             array(
                 'route' => 'main',

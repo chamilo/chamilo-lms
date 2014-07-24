@@ -5,7 +5,7 @@ sonata_seo:
     encoding:             UTF-8
     page:
         default:          sonata.seo.page.default
-        title:            Sonata Project
+        title:            Chamilo LMS
         metas:
             name:
                 keywords:             foo bar
@@ -19,8 +19,8 @@ sonata_seo:
 
                 # Open Graph information
                 # see http://developers.facebook.com/docs/opengraphprotocol/#types or http://ogp.me/
-                'og:site_name':       Sonata Project Sandbox
-                'og:description':     A demo of the some rich bundles for your Symfony2 projects
+                'og:site_name':       Chamilo
+                'og:description':     Chamilo LMS
 
             http-equiv:
                 'Content-Type':         text/html; charset=utf-8

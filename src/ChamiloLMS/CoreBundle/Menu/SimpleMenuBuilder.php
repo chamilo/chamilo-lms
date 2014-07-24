@@ -91,14 +91,7 @@ class SimpleMenuBuilder extends ContainerAware
             )
         );
 
-        $menu->addChild(
-            'Settings',
-            array(
-                'route' => 'main',
-                'routeParameters' => array('name' => 'admin/settings.php'),
-                array("attributes" => array("id" => 'nav'))
-            )
-        );
+        $menu->addChild('Administration',array('route' => 'administration'));
 
         /*
         $dropdownExtrasOptions = $isFooter ? array(

@@ -1,9 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 /**
- *    This file allows creating new html documents with an online WYSIWYG html editor.
+ *	This file allows creating new html documents with an online WYSIWYG html editor.
  *
- * @package chamilo.document
+ *	@package chamilo.document
  */
 /**
  * Code

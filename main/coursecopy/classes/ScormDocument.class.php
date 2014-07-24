@@ -1,12 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
-/**
- * SCORM document backup script
- * @package chamilo.backup
- */
-/**
- * Code
- */
+
 require_once 'Resource.class.php';
 /**
  * ScormDocument class
@@ -15,8 +9,8 @@ require_once 'Resource.class.php';
  */
 class ScormDocument extends Resource
 {
-	var $path;
-	var $title;
+    public $path;
+    public $title;
 
 	/**
 	 * Create a new Scorm Document
@@ -24,25 +18,25 @@ class ScormDocument extends Resource
 	 * @param string $path
 	 * @param string $title
 	 */
-	function ScormDocument($id,$path,$title)
+    public function ScormDocument($id, $path, $title)
 	{
 		parent::Resource($id,RESOURCE_SCORM);
 		$this->path = 'scorm'.$path;
 		$this->title = $title;
 	}
 
-	/**
-	 * Show this document
-	 */
-	function show()
-	{
-		parent::show();
-		$path = preg_replace('@^scorm/@', '', $this->path);
-		echo $path;
-		if (!empty($this->title)) {
-			if (strpos($path, $this->title) === false) {
-				echo " - ".$this->title;
-			}
-		}
-	}
+    /**
+     * Show this document
+     */
+    public function show()
+    {
+        parent::show();
+        $path = preg_replace('@^scorm/@', '', $this->path);
+        echo $path;
+        if (!empty($this->title)) {
+            if (strpos($path, $this->title) === false) {
+                echo " - " . $this->title;
+            }
+        }
+    }
 }

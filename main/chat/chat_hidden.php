@@ -33,8 +33,8 @@ $isMaster = (bool)api_is_course_admin();
 
 $date_now = date('Y-m-d');
 
-$group_id = intval($_SESSION['_gid']);
-$session_id = intval($_SESSION['id_session']);
+$group_id = api_get_group_id();
+$session_id = api_get_session_id();
 $session_condition = api_get_session_condition($session_id);
 $group_condition = " AND to_group_id = '$group_id'";
 
@@ -67,7 +67,7 @@ if (!empty($group_id)) {
 	$basename_chat = 'messages-'.$date_now;
 }
 
-$chat_size_old = intval($_POST['chat_size_old']);
+$chat_size_old = isset($_POST['chat_size_old']) ? intval($_POST['chat_size_old']) : null;
 
 $file = $chat_path.$basename_chat.'.log.html';
 $chat_size_new = 0;
@@ -91,7 +91,7 @@ Database::query($query);
 $query = "SELECT COUNT(user_id) FROM $tbl_chat_connected WHERE last_connection>'".date('Y-m-d H:i:s',time()-60*5)."' $extra_condition";
 $result = Database::query($query);
 
-$connected_old = intval($_POST['connected_old']);
+$connected_old = isset($_POST['connected_old']) ? intval($_POST['connected_old']) : null;
 list($connected_new) = Database::fetch_row($result);
 /*disconnected user of chat*/
 disconnect_user_of_chat ();
@@ -103,16 +103,17 @@ require 'header_frame.inc.php';
 </form>
 <?php
 
-if ($_SESSION["origin"] == 'whoisonline') {  //check if our target has denied our request or not
-	$talk_to = $_SESSION["target"];
-	$track_user_table = Database::get_main_table(TABLE_MAIN_USER);
-	$sql = "select chatcall_text from $track_user_table where ( user_id = $talk_to )";
-	$result = Database::query($sql);
-	$row = Database::fetch_array($result);
-	if ($row['chatcall_text'] == 'DENIED') {
-		echo "<script language=\"javascript\" type=\"text/javascript\"> alert('".get_lang('ChatDenied')."'); </script>";
-		$sql = "update $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text='' WHERE (user_id = $talk_to)";
-		$result = Database::query($sql);
-	}
+if (isset($_SESSION["origin"]) && $_SESSION["origin"] == 'whoisonline') {
+    //check if our target has denied our request or not
+    $talk_to = $_SESSION["target"];
+    $track_user_table = Database::get_main_table(TABLE_MAIN_USER);
+    $sql = "select chatcall_text from $track_user_table where ( user_id = $talk_to )";
+    $result = Database::query($sql);
+    $row = Database::fetch_array($result);
+    if ($row['chatcall_text'] == 'DENIED') {
+        echo "<script language=\"javascript\" type=\"text/javascript\"> alert('".get_lang('ChatDenied')."'); </script>";
+        $sql = "update $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text='' WHERE (user_id = $talk_to)";
+        $result = Database::query($sql);
+    }
 }
 require 'footer_frame.inc.php';

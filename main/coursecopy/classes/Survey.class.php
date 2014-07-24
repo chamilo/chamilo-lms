@@ -1,13 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 require_once 'Resource.class.php';
-/**
- * Surveys backup script
- * @package chamilo.backup
- */
 
 /**
- * A survey
+ * Survey
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  * @package chamilo.backup
  */
@@ -16,63 +12,64 @@ class Survey extends Resource
 	/**
 	 * The survey code
 	 */
-	var $code;
+    public $code;
 	/**
 	 * The title and subtitle
 	 */
-	var $title;
-	var $subtitle;
+    public $title;
+    public $subtitle;
 	/**
 	 * The author's name
 	 */
-	var $author;
+    public $author;
 	/**
 	 * The survey's language
 	 */
-	var $lang;
+    public $lang;
 	/**
 	 * The availability period
 	 */
-	var $avail_from;
-	var $avail_till;
+    public $avail_from;
+    public $avail_till;
 	/**
 	 * Flag for shared status
 	 */
-	var $is_shared;
+    public $is_shared;
 	/**
 	 * Template used
 	 */
-	var $template;
+    public $template;
 	/**
 	 * Introduction text
 	 */
-	var $intro;
+    public $intro;
 	/**
 	 * Thanks text
 	 */
-	var $surveythanks;
+    public $surveythanks;
 	/**
 	 * Creation date
 	 */
-	var $creation_date;
+    public $creation_date;
 	/**
 	 * Invitation status
 	 */
-	var $invited;
+    public $invited;
 	/**
 	 * Answer status
 	 */
-	var $answered;
+    public $answered;
 	/**
 	 * Invitation and reminder mail contents
 	 */
-	var $invite_mail;
-	var $reminder_mail;
+    public $invite_mail;
+    public $reminder_mail;
 	/**
 	 * Questions and invitations lists
 	 */
-	var $question_ids;
-	var $invitation_ids;
+    public $question_ids;
+    public $invitation_ids;
+
 	/**
 	 * Create a new Survey
 	 * @param string $code
@@ -92,11 +89,25 @@ class Survey extends Resource
 	 * @param string $invite_mail
 	 * @param string $reminder_mail
 	 */
-	function Survey($id,$code,$title,$subtitle,
-					$author,$lang,$avail_from,$avail_till,
-					$is_shared, $template,$intro,$surveythanks,
-					$creation_date,$invited,$answered,$invite_mail,$reminder_mail)
-	{
+    public function Survey(
+        $id,
+        $code,
+        $title,
+        $subtitle,
+        $author,
+        $lang,
+        $avail_from,
+        $avail_till,
+        $is_shared,
+        $template,
+        $intro,
+        $surveythanks,
+        $creation_date,
+        $invited,
+        $answered,
+        $invite_mail,
+        $reminder_mail
+    ) {
 		parent::Resource($id,RESOURCE_SURVEY);
 		$this->code = $code;
 		$this->title = $title;

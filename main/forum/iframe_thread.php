@@ -54,7 +54,7 @@ require_once 'forumfunction.inc.php';
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
 $current_thread=get_thread_information($_GET['thread']); // Note: this has to be validated that it is an existing thread.
 $current_forum=get_forum_information($current_thread['forum_id']); // Note: this has to be validated that it is an existing forum.
-$current_forum_category=get_forumcategory_information($current_forum['forum_category']);
+$current_forum_category = get_forumcategory_information($current_forum['forum_category']);
 
 /* Is the user allowed here? */
 
@@ -76,8 +76,8 @@ $course_id = api_get_course_int_id();
 // but the problem is that the visibility of the forum AND forum cateogory are stored in the item_property table.
 
 $sql = "SELECT * FROM $table_posts posts, $table_users users
-        WHERE 
-        posts.c_id = $course_id AND 
+        WHERE
+        posts.c_id = $course_id AND
         posts.thread_id='".$current_thread['thread_id']."'
         AND posts.poster_id=users.user_id
         ORDER BY posts.post_id ASC";

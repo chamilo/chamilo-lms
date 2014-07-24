@@ -76,8 +76,6 @@ if (!empty($event)) {
     $event['start_date'] = api_get_local_time($event['start_date']);
     $event['end_date'] = api_get_local_time($event['end_date']);
 
-
-
     switch($type) {
         case 'personal':
         case 'platform':

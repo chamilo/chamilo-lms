@@ -81,7 +81,7 @@ function handle_multiple_actions()
 
     // STEP 3C: moving
     if (strstr($_POST['action'], 'move_')) {
-            // check move_received_n or move_sent_n command
+        // check move_received_n or move_sent_n command
         if (strstr($_POST['action'], 'received')) {
               $part = 'received';
               $to_cat_id = str_replace('move_received_', '', $_POST['action']);
@@ -93,6 +93,7 @@ function handle_multiple_actions()
         foreach ($checked_file_ids as $value) {
             store_move($value, $to_cat_id, $part);
         }
+
         return get_lang('FilesMoved');
     }
 
@@ -1046,7 +1047,6 @@ function zip_download($fileList)
 {
 	$_course = api_get_course_info();
     $dropbox_cnf = getDropboxConf();
-
     $course_id = api_get_course_int_id();
     $fileList = array_map('intval', $fileList);
 
@@ -1065,6 +1065,7 @@ function zip_download($fileList)
                     post.dest_user_id = '".api_get_user_id()."'
                 ) ";
 	$result = Database::query($sql);
+
 	$files = array();
 	while ($row = Database::fetch_array($result)) {
 		$files[$row['filename']] = array(
@@ -1108,7 +1109,6 @@ function my_pre_add_callback($p_event, &$p_header)
 	$p_header['stored_filename'] = $files[$p_header['stored_filename']]['title'];
 	return 1;
 }
-
 
 /**
  * @desc Generates the contents of a html file that gives an overview of all the files in the zip file.

@@ -24,7 +24,6 @@
 
 use \ChamiloSession as Session;
 
-
 // Language files that need to be included.
 $language_file = array('forum', 'group');
 
@@ -57,26 +56,22 @@ $userid  = api_get_user_id();
 /* MAIN DISPLAY SECTION */
 
 $groupId = api_get_group_id();
-
 $my_forum = isset($_GET['forum']) ? $_GET['forum'] : '';
-
-$current_forum = get_forum_information($my_forum); // Note: This has to be validated that it is an existing forum.
+// Note: This has to be validated that it is an existing forum.
+$current_forum = get_forum_information($my_forum);
 
 if (empty($current_forum)) {
     api_not_allowed();
 }
 
 $current_forum_category = get_forumcategory_information($current_forum['forum_category']);
-
 $is_group_tutor = false;
 
 if (!empty($groupId)) {
     //Group info & group category info
     $group_properties = GroupManager::get_group_properties($groupId);
-        
     //User has access in the group?
     $user_has_access_in_group   = GroupManager::user_has_access($userid, $groupId, GroupManager::GROUP_TOOL_FORUM);
-    
     $is_group_tutor = GroupManager::is_tutor_of_group(api_get_user_id(), $groupId);
         
     //Course
@@ -280,14 +275,13 @@ if (!empty($message)) {
 
 echo '<div class="actions">';
 
-if ($origin != 'learnpath') {
-    
+if ($origin != 'learnpath') {    
     if ($origin=='group') {
         echo '<a href='.api_get_path(WEB_CODE_PATH).'"group/group_space.php?'.api_get_cidreq().'&amp;gradebook='.$gradebook.'">'.Display::return_icon('back.png',get_lang('BackTo').' '.get_lang('Groups'),'',ICON_SIZE_MEDIUM).'</a>';
     } else {
         echo '<span style="float:right;">'.search_link().'</span>';
         echo '<a href="'.$forumUrl.'index.php">'.Display::return_icon('back.png', get_lang('BackToForumOverview'), '', ICON_SIZE_MEDIUM).'</a>';
-    }    
+    }
 }
 
 

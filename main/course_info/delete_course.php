@@ -28,10 +28,11 @@ $current_course_name = $_course['name'];
 if (!api_is_allowed_to_edit()) {
 	api_not_allowed(true);
 }
+
 $tool_name = get_lang('DelCourse');
 
 if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
-	CourseManager :: delete_course($_course['sysCode']);
+	CourseManager::delete_course($_course['sysCode']);
 	$obj_cat = new Category();
 	$obj_cat->update_category_delete($_course['sysCode']);
 
@@ -54,7 +55,4 @@ if (isset($_GET['delete']) && $_GET['delete'] == 'yes') {
 Display :: display_header($tool_name, 'Settings');
 echo Display::page_header($tool_name);
 Display::display_warning_message($message, false);
-
-/*	FOOTER */
-
 Display :: display_footer();

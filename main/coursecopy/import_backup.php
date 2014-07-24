@@ -251,5 +251,4 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') || (is
     $form->display();
 }
 
-/*	FOOTER */
 Display::display_footer();

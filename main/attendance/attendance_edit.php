@@ -7,7 +7,6 @@
 * @package chamilo.attendance
 */
 
-
 // protect a course script
 api_protect_course_script(true);
 

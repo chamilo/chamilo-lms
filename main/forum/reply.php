@@ -77,7 +77,6 @@ if ($current_forum['forum_of_group'] != 0) {
     }
 }
 
-
 /* Breadcrumbs */
 
 $gradebook = null;

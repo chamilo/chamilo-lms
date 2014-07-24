@@ -138,9 +138,6 @@ Session::write('dropbox_conf', $dropbox_cnf);
 // the dropbox file that contains additional functions
 require_once 'dropbox_functions.inc.php';
 
-//require_once api_get_path(LIBRARY_PATH).'mail.lib.inc.php';
-//require_once api_get_path(LIBRARY_PATH).'fileUpload.lib.php';
-
 // protecting the script
 api_protect_course_script();
 
@@ -151,7 +148,6 @@ require_once 'dropbox_class.inc.php';
 
 // including some libraries that are also used in the documents tool
 require_once api_get_path(SYS_CODE_PATH).'document/document.inc.php';  // we use a function build_document_icon_tag
-//require_once api_get_path(LIBRARY_PATH).'fileDisplay.lib.php'; // the function choose_image is used
 require_once api_get_path(LIBRARY_PATH).'document.lib.php';
 
 /*	Virtual course support */
@@ -361,7 +357,7 @@ if ($view == 'sent' OR empty($view)) {
 
 if (isset($origin) && $origin == 'learnpath') {
     // if we come from the learning path we have to include the stylesheet and the required javascripts manually.
-    //echo '<link rel="stylesheet" type="text/css" href="', api_get_path(WEB_CODE_PATH), 'css/default.css">';
+
     echo $javascript;
 } else {
     Display::display_header($nameTools, 'Dropbox');

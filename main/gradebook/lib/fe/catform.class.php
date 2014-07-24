@@ -10,7 +10,6 @@ require_once dirname(__FILE__).'/../be.inc.php';
  * @author Stijn Konings
  * @package chamilo.gradebook
  */
-
 class CatForm extends FormValidator
 {
 

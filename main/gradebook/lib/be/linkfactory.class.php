@@ -1,10 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 // To add your new link type here:
-// - define a unique type id
-// - add include
-// - change create() and get_all_types()
-
 require_once 'gradebookitem.class.php';
 require_once 'abstractlink.class.php';
 require_once 'exerciselink.class.php';
@@ -24,7 +20,6 @@ require_once 'surveylink.class.php';
  */
 class LinkFactory
 {
-
 	/**
 	 * Retrieve links and return them as an array of extensions of AbstractLink.
 	 * @param int $id link id
@@ -76,7 +71,7 @@ class LinkFactory
      */
     public function find_links ($name_mask,$selectcat)
     {
-    	return AbstractLink::find_links($name_mask,$selectcat);
+    	return AbstractLink::find_links($name_mask, $selectcat);
     }
 
 	/**
@@ -115,20 +110,19 @@ class LinkFactory
     {
 		//LINK_DROPBOX,
 		return array (
-			LINK_EXERCISE,
-			//LINK_DROPBOX,
-			LINK_HOTPOTATOES,
-			LINK_STUDENTPUBLICATION,
-			LINK_LEARNPATH,
-			LINK_FORUM_THREAD,
-			LINK_ATTENDANCE,
-			LINK_SURVEY
-		);
+            LINK_EXERCISE,
+            //LINK_DROPBOX,
+            LINK_HOTPOTATOES,
+            LINK_STUDENTPUBLICATION,
+            LINK_LEARNPATH,
+            LINK_FORUM_THREAD,
+            LINK_ATTENDANCE,
+            LINK_SURVEY
+        );
 	}
 
     public function delete()
     {
 
     }
-
 }

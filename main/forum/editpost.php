@@ -53,7 +53,7 @@ if (isset($_GET['origin'])) {
 
 /* MAIN DISPLAY SECTION */
 
-/* Retrieving forum and forum categorie information */
+/* Retrieving forum and forum category information */
 
 // We are getting all the information about the current forum and forum category.
 // Note pcool: I tried to use only one sql statement (and function) for this,

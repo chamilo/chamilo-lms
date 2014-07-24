@@ -2,12 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *
+ * 
  * Get the all events by session/course
- * @author Julio Montoya cleaning code, chamilo code style changes, all agenda feature work with courses and sessions, only admins and rrhh users can see this page
- *
- *
- * @author Carlos Brolo First code submittion
+ * @author Julio Montoya cleaning code, chamilo code style changes, all agenda feature work with courses and sessions, only admins and rrhh users can see this page 
+ * 
+ *  
+ * @author Carlos Brolo First code submittion  
  */
 
 // name of the language file that needs to be included
@@ -155,16 +155,13 @@ function get_agenda_items_by_course_list($course_list, $month, $year, $session_i
 						ORDER BY start_date ";
 		$result = Database::query($sqlquery);
 		while ($item = Database::fetch_array($result,'ASSOC')) {
-
 			//taking the day
 			$agendaday = date("j",strtotime($item['start_date']));
 			if(!isset($items[$agendaday])){$items[$agendaday]=array();}
 			//taking the time
 			$time = date("H:i",strtotime($item['start_date']));
-
 			$end_time= date("H:i",strtotime($item['end_date']));
 			$URL = api_get_path(WEB_PATH)."main/calendar/allagendas.php?cidReq=".urlencode($code)."&amp;sort=asc&amp;view=list&amp;day=$agendaday&amp;month=$month&amp;year=$year#$agendaday"; // RH  //Patrick Cool: to highlight the relevant agenda item
-
 			if ($setting_agenda_link == 'coursecode') {
 				//$title=$array_course_info['title'];
 				$agenda_link = api_substr($title, 0, 14);

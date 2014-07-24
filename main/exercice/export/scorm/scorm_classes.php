@@ -12,6 +12,7 @@ if ( count( get_included_files() ) == 1 ) die( '---' );
 
 require_once api_get_path(SYS_CODE_PATH).'exercice/exercise.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/question.class.php';
+require_once api_get_path(SYS_CODE_PATH).'exercice/testcategory.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/answer.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/unique_answer.class.php';
 require_once api_get_path(SYS_CODE_PATH).'exercice/multiple_answer.class.php';
@@ -714,6 +715,25 @@ class ScormAnswerHotspot extends Answer
 		}
 		$answer_list .= '</ol></div>';
 
+		/*
+		if(!$onlyAnswers)
+		{
+			$s="<tr>
+			  <td valign='top' colspan='2'>&nbsp;";
+			$questionName=text_filter($questionName);
+			$s.=$questionName;
+			$s.="</td>
+			</tr>
+			<tr>
+			  <td valign='top' colspan='2'>
+				<i>";
+			$questionDescription=text_filter($questionDescription);
+			$s.=$questionDescription;
+			$s.="</i>
+			  </td>
+			</tr>";
+		}
+		*/
 
 		//$canClick = isset($_GET['editQuestion']) ? '0' : (isset($_GET['modifyAnswers']) ? '0' : '1');
 		$canClick = true;

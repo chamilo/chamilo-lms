@@ -134,9 +134,7 @@ if ($origin == 'learnpath') {
     Display::display_reduced_header();
 } else {
     Display :: display_header(null);
-    //api_display_tool_title($nameTools);
 }
-/* Display forms / Feedback Messages */
 
 handle_forum_and_forumcategories();
 

@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 
 /**
- *    Chat frame that shows the message list
+ *	Chat frame that shows the message list
  *
- * @author Olivier Brouckaert
- * @package chamilo.chat
+ *	@author Olivier Brouckaert
+ *	@package chamilo.chat
  */
 /**
  * Code
@@ -17,12 +17,12 @@ $language_file = array('chat');
 require_once '../inc/global.inc.php';
 
 $course = $_GET['cidReq'];
-$session_id = intval($_SESSION['id_session']);
-$group_id = intval($_SESSION['_gid']);
+$session_id = api_get_session_id();
+$group_id 	= api_get_group_id();
 
 // if we have the session set up
 if (!empty($course)) {
-    $reset = (bool)$_GET['reset'];
+    $reset = isset($_GET['reset']) ? (bool)$_GET['reset'] : null;
     $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
     $query = "SELECT username FROM $tbl_user WHERE user_id='".intval($_user['user_id'])."'";
     $result = Database::query($query);
@@ -64,16 +64,14 @@ if (!empty($course)) {
         }
     }
 
-    $filename_chat = '';
-    if (!empty($group_id)) {
-        $filename_chat = 'messages-'.$date_now.'_gid-'.$group_id.'.log.html';
-    } else {
-        if (!empty($session_id)) {
-            $filename_chat = 'messages-'.$date_now.'_sid-'.$session_id.'.log.html';
-        } else {
-            $filename_chat = 'messages-'.$date_now.'.log.html';
-        }
-    }
+	$filename_chat = '';
+	if (!empty($group_id)) {
+		$filename_chat = 'messages-'.$date_now.'_gid-'.$group_id.'.log.html';
+	} else if (!empty($session_id)) {
+		$filename_chat = 'messages-'.$date_now.'_sid-'.$session_id.'.log.html';
+	} else {
+		$filename_chat = 'messages-'.$date_now.'.log.html';
+	}
 
     if (!file_exists($chat_path.$filename_chat)) {
         @fclose(fopen($chat_path.$filename_chat, 'w'));
@@ -183,41 +181,31 @@ if (!empty($course)) {
     array_splice($content, 0, $remove);
     require 'header_frame.inc.php';
 
-    if ($_GET['origin'] == 'whoisonline') { //the caller
+	if (isset($_GET['origin']) && $_GET['origin'] == 'whoisonline') {  //the caller
         $content[0] = get_lang('CallSent').'<br />'.$content[0];
     }
-    if ($_GET['origin'] == 'whoisonlinejoin') { //the joiner (we have to delete the chat request to him when he joins the chat)
+    if (isset($_GET['origin']) && $_GET['origin'] == 'whoisonlinejoin') { //the joiner (we have to delete the chat request to him when he joins the chat)
         $track_user_table = Database::get_main_table(TABLE_MAIN_USER);
         $sql = "UPDATE $track_user_table set chatcall_user_id = '', chatcall_date = '', chatcall_text='' WHERE (user_id = ".$_user['user_id'].")";
         $result = Database::query($sql);
     }
 
-    echo '<div style="margin-left: 5px;">';
-    foreach ($content as & $this_line) {
-        echo strip_tags(api_html_entity_decode($this_line), '<br> <span> <b> <i> <img> <font>');
-    }
-    echo '</div>';
-
-    ?>
-
-<a name="bottom" style="text-decoration:none;">&nbsp;</a>
-
-<?php
-    if ($isMaster || api_is_course_coach()) {
-        $rand = mt_rand(1, 1000);
-        echo '<div style="margin-left: 5px;">';
-        echo '<a href="'.api_get_self(
-        ).'?rand='.$rand.'&reset=1&cidReq='.$_GET['cidReq'].'#bottom" onclick="javascript: if(!confirm(\''.addslashes(
-            api_htmlentities(get_lang('ConfirmReset'), ENT_QUOTES)
-        ).'\')) return false;">'.Display::return_icon('delete.gif', get_lang('ClearList')).' '.get_lang(
-            'ClearList'
-        ).'</a>';
-        echo '</div>';
-    }
+	echo '<div id="content-chat">';
+	foreach ($content as & $this_line) {
+		echo strip_tags(api_html_entity_decode($this_line), '<div> <br> <span> <b> <i> <img> <font>');
+	}
+	echo '</div>';
+	echo '<a name="bottom" style="text-decoration:none;">&nbsp;</a>';
+	if ($isMaster || $is_courseCoach) {
+		$rand = mt_rand(1, 1000);
+		echo '<div id="clear-chat">';
+		echo '<a href="'.api_get_self().'?rand='.$rand.'&reset=1&'.api_get_cidreq().'#bottom" onclick="javascript: if(!confirm(\''.addslashes(api_htmlentities(get_lang('ConfirmReset'), ENT_QUOTES)).'\')) return false;">'.Display::return_icon('delete.png', get_lang('ClearList')).' '.get_lang('ClearList').'</a>';
+		echo '</div>';
+	}
 } else {
-    require 'header_frame.inc.php';
-    $message = get_lang('CloseOtherSession');
-    Display :: display_error_message($message);
+	echo '</div>';
+	require 'header_frame.inc.php';
+	$message = get_lang('CloseOtherSession');
+	Display :: display_error_message($message);
 }
-
 require 'footer_frame.inc.php';

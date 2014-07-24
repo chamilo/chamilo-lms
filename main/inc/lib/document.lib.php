@@ -17,8 +17,10 @@ class DocumentManager
     }
 
     /**
-     * @param string
-     * @return the document folder quota for the current course, in bytes, or the default quota
+     * @param string $course_code
+     *
+     * @return int the document folder quota for the current course in bytes
+     * or the default quota
      */
     public static function get_course_quota($course_code = null)
     {
@@ -300,6 +302,7 @@ class DocumentManager
      * @param string $full_file_name
      * @param boolean $forced
      * @param string $name
+     *
      * @return false if file doesn't exist, true if stream succeeded
      */
     public static function file_send_for_download($full_file_name, $forced = false, $name = '')
@@ -339,6 +342,7 @@ class DocumentManager
 
             $res = fopen($full_file_name, 'r');
             fpassthru($res);
+
             return true;
         } else {
             //no forced download, just let the browser decide what to do according to the mimetype
@@ -377,6 +381,7 @@ class DocumentManager
                 header('Content-Disposition: inline; filename= ' . $filename);
             }
             readfile($full_file_name);
+
             return true;
         }
     }
@@ -387,9 +392,10 @@ class DocumentManager
      * otherwise it may cause subsequent use of the page to want to download
      * other pages in php rather than interpreting them.
      *
-     * @param string The string contents
-     * @param boolean Whether "save" mode is forced (or opening directly authorized)
-     * @param string The name of the file in the end (including extension)
+     * @param string $full_string The string contents
+     * @param boolean $forced Whether "save" mode is forced (or opening directly authorized)
+     * @param string $name The name of the file in the end (including extension)
+     *
      * @return false if file doesn't exist, true if stream succeeded
      */
     public static function string_send_for_download($full_string, $forced = false, $name = '')
@@ -522,7 +528,7 @@ class DocumentManager
 
         // The given path will not end with a slash, unless it's the root '/'
         // so no root -> add slash
-        $added_slash = ($path == '/') ? '' : '/';
+        $added_slash = $path == '/' ? '' : '/';
 
         // Condition for the session
         $current_session_id = api_get_session_id();
@@ -614,7 +620,7 @@ class DocumentManager
                 }
 
                 //@todo use the DocumentManager::is_visible function
-                // Checking disponibility in a session
+                // Checking visibility in a session
                 foreach ($my_repeat_ids as $id) {
                     foreach ($doc_list as $row) {
                         if ($id == $row['id']) {
@@ -644,7 +650,7 @@ class DocumentManager
                     }
                 }
 
-                // Checking parents visibility
+                // Checking parents visibility.
                 $final_document_data = array();
                 foreach ($document_data as $row) {
                     $is_visible = DocumentManager::check_visibility_tree(
@@ -671,6 +677,7 @@ class DocumentManager
     /**
      * Gets the paths of all folders in a course
      * can show all folders (except for the deleted ones) or only visible ones
+     *
      * @param array $_course
      * @param int $to_group_id
      * @param boolean $can_see_invisible
@@ -679,7 +686,7 @@ class DocumentManager
      */
     public static function get_all_document_folders(
         $_course,
-        $to_group_id = '0',
+        $to_group_id = 0,
         $can_see_invisible = false
     ) {
         $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -725,7 +732,6 @@ class DocumentManager
                             last.visibility 	<> 2
                             $show_users_condition $condition_session ";
             }
-
             $result = Database::query($sql);
 
             if ($result && Database::num_rows($result) != 0) {
@@ -1498,7 +1504,6 @@ class DocumentManager
      */
     public static function is_visible_by_id($doc_id, $course_info, $session_id, $user_id, $admins_can_see_everything = true)
     {
-        $is_visible = false;
         $user_in_course = false;
 
         //1. Checking the course array
@@ -1511,7 +1516,6 @@ class DocumentManager
 
         $doc_id = intval($doc_id);
         $session_id = intval($session_id);
-
 
         //2. Course and Session visibility are handle in local.inc.php/global.inc.php
         //3. Checking if user exist in course/session
@@ -1532,11 +1536,11 @@ class DocumentManager
             }
         }
 
-        //4. Checking document visibility (i'm repeating the code in order to be more clear when reading ) - jm
+        // 4. Checking document visibility (i'm repeating the code in order to be more clear when reading ) - jm
 
         if ($user_in_course) {
 
-            //4.1 Checking document visibility for a Course
+            // 4.1 Checking document visibility for a Course
 
             if ($session_id == 0) {
                 $item_info = api_get_item_property_info($course_info['real_id'], 'document', $doc_id, 0);
@@ -1551,7 +1555,7 @@ class DocumentManager
                     }
                 }
             } else {
-                //4.2 Checking document visibility for a Course in a Session
+                // 4.2 Checking document visibility for a Course in a Session
                 $item_info = api_get_item_property_info($course_info['real_id'], 'document', $doc_id, 0);
                 $item_info_in_session = api_get_item_property_info($course_info['real_id'], 'document', $doc_id, $session_id);
 
@@ -4028,7 +4032,7 @@ class DocumentManager
     }
 
     /**
-     * Sets 
+     * Sets
      * @param string $file ($document_data['path'])
      * @param string $file_url_sys
      * @return string

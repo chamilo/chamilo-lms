@@ -849,6 +849,7 @@ if ($is_allowed_to_edit ||
             false,
             $session_id
         );
+
         $move_path = $document_to_move['path'];
         if (!empty($document_to_move)) {
             $folders = DocumentManager::get_all_document_folders(
@@ -1534,6 +1535,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
             } else {
                 $document_name = basename($document_data['path']);
             }
+
             $row['name'] = $document_name;
             // Data for checkbox
             if (($is_allowed_to_edit || $group_member_with_upload_rights) && count($documentAndFolders) > 1) {
@@ -1577,6 +1579,7 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
 
             // Comments => display comment under the document name
             $display_size = format_file_size($size);
+
             $row[] = '<span style="display:none;">'.$size.'</span>'.
                 $invisibility_span_open.
                 $display_size.
@@ -1587,9 +1590,10 @@ if (isset($documentAndFolders) && is_array($documentAndFolders)) {
             $last_edit_date = api_get_local_time($document_data['lastedit_date']);
             $display_date = date_to_str_ago($last_edit_date).
                 ' <div class="muted"><small>'.$last_edit_date."</small></div>";
-            $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
-            // Admins get an edit column
 
+            $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
+
+            // Admins get an edit column
             if ($is_allowed_to_edit || $group_member_with_upload_rights || is_my_shared_folder(api_get_user_id(), $curdirpath, $session_id)) {
                 $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
                 // If readonly, check if it the owner of the file or if the user is an admin

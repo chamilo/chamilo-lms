@@ -17,7 +17,7 @@ define('WS_ERROR_SECRET_KEY', 1);
 
 function return_error($code) {
     $fault = null;
-    switch($code) {
+    switch ($code) {
         case WS_ERROR_SECRET_KEY:
             $fault = new soap_fault('Server', '', 'Secret key is not correct or params are not correctly set');
         break;
@@ -25,7 +25,8 @@ function return_error($code) {
     return $fault;
 }
 
-function WSHelperVerifyKey($params) {
+function WSHelperVerifyKey($params)
+{
     global $_configuration, $debug;
     if (is_array($params)) {
         $secret_key = $params['secret_key'];
@@ -65,9 +66,11 @@ function WSHelperVerifyKey($params) {
         $security_key = $_configuration['security_key'];
     } else {
         $security_key = $ip.$_configuration['security_key'];
+        error_log($security_key);
     }
 
     $result = api_is_valid_secret_key($secret_key, $security_key);
+    //error_log($secret_key.'-'.$security_key);
     if ($debug)
         error_log('WSHelperVerifyKey result: '.intval($result));
     return $result;
@@ -76,7 +79,7 @@ function WSHelperVerifyKey($params) {
 // Create the server instance
 $server = new soap_server();
 
-$server->soap_defencoding = 'UTF-8';
+//$server->soap_defencoding = 'UTF-8';
 
 // Initialize WSDL support
 $server->configureWSDL('WSRegistration', 'urn:WSRegistration');
@@ -5378,6 +5381,6 @@ if (isset($_configuration['registration.soap.php.decode_utf8'])) {
         $server->decode_utf8 = false;
     }
 }
-
 $server->service($HTTP_RAW_POST_DATA);
+
 

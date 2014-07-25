@@ -325,7 +325,7 @@ if ($session['nbr_courses'] == 0) {
 
         if (SessionManager::orderCourseIsEnabled()) {
             $upIcon = 'up.png';
-            $urlUp = api_get_self().'?id_session='.$id_session.'&course_code='.$course['code'].'&action=move_up&list='.$list;
+            $urlUp = api_get_self().'?id_session='.$id_session.'&course_code='.$course['code'].'&action=move_up';
 
             if ($count == 0) {
                 $upIcon = 'up_na.png';
@@ -338,7 +338,7 @@ if ($session['nbr_courses'] == 0) {
             );
 
             $downIcon = 'down.png';
-            $downUrl = api_get_self().'?id_session='.$id_session.'&course_code='.$course['code'].'&action=move_down&list='.$list;
+            $downUrl = api_get_self().'?id_session='.$id_session.'&course_code='.$course['code'].'&action=move_down';
 
             if ($count +1 == count($courses)) {
                 $downIcon = 'down_na.png';

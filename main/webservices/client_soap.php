@@ -12,7 +12,7 @@
  *
  */
 
-exit; //Uncomment this in order to execute the page
+//exit; //Uncomment this in order to execute the page
 
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);
@@ -20,10 +20,14 @@ require_once $libpath.'nusoap/nusoap.php';
 
 // Create the client instance
 $url = api_get_path(WEB_CODE_PATH)."webservices/registration.soap.php?wsdl";
-
-$security_key = $_configuration['security_key']; // see the main/inc/configuration.php file to get this value
+global $_configuration;
+// see the main/inc/configuration.php file to get this value
+$security_key = $_configuration['security_key'];
 
 $client = new nusoap_client($url, true);
+/*$client->xml_encoding = 'UTF-8';
+$client->http_encoding = 'UTF-8';
+$client->charencoding = 'UTF-8';*/
 
 $soap_error = $client->getError();
 
@@ -33,8 +37,9 @@ if (!empty($soap_error)) {
 }
 
 $client->debug_flag = true;
-
-$ip_address = $_SERVER['SERVER_ADDR']; // This should be the IP address of the client
+// This should be the IP address of the client
+$ip_address = $_SERVER['SERVER_ADDR'];
+$ip_address = "192.168.1.54";
 
 //Secret key
 $secret_key = sha1($ip_address.$security_key);// Hash of the combination of IP Address + Chamilo security key
@@ -59,8 +64,11 @@ $params = array(
     'official_code'             => 'official',
     'phone'                     => '00000000',
     'expiration_date'           => '0000-00-00',
-    'original_user_id_name'     => $user_field, // the extra user field that will be automatically created in the user profile see: main/admin/user_fields.php
-    'original_user_id_value'    => $random_user_id, // third party user id
+    /* the extra user field that will be automatically created
+    in the user profile see: main/admin/user_fields.php */
+    'original_user_id_name'     => $user_field,
+    // third party user id
+    'original_user_id_value'    => $random_user_id,
     'secret_key'                => $secret_key,
     //Extra fields
     'extra' => array(
@@ -70,7 +78,10 @@ $params = array(
 );
 
 //1. Create user webservice
-$user_id = $client->call('WSCreateUserPasswordCrypted', array('createUserPasswordCrypted' => $params));
+$user_id = $client->call(
+    'WSCreateUserPasswordCrypted',
+    array('createUserPasswordCrypted' => $params)
+);
 
 if (!empty($user_id) && is_numeric($user_id)) {
 
@@ -150,9 +161,9 @@ if (!empty($user_id) && is_numeric($user_id)) {
     $params = array(
         'courses' => array(
             array(
-                'title'         => 'TEST 123', //Chamilo string course code
+                'title'         => 'PRUEBA', //Chamilo string course code
                 'category_code'  => 'LANG',
-                'wanted_code'    => 'TEST123',
+                'wanted_code'    => '',
                 'course_language' => 'english',
                 'original_course_id_name' => 'course_id_test',
                 'original_course_id_value' => '666',

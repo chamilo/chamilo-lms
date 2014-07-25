@@ -4569,7 +4569,7 @@ class SessionManager
      * @param string $courseCode
      * @return bool
      */
-    public function move($direction, $sessionId, $courseCode)
+    public static function move($direction, $sessionId, $courseCode)
     {
         if (!self::orderCourseIsEnabled()) {
             return false;
@@ -4595,6 +4595,9 @@ class SessionManager
             Database::query($sql);
             $count++;
         }
+
+        // Loading new positions.
+        $courseList = self::get_course_list_by_session_id($sessionId, null, 'position');
 
         $found = false;
 
@@ -4636,7 +4639,7 @@ class SessionManager
      * @param string $courseCode
      * @return bool
      */
-    public function moveUp($sessionId, $courseCode)
+    public static function moveUp($sessionId, $courseCode)
     {
         return self::move('up', $sessionId, $courseCode);
     }
@@ -4646,7 +4649,7 @@ class SessionManager
      * @param string $courseCode
      * @return bool
      */
-    public function moveDown($sessionId, $courseCode)
+    public static function moveDown($sessionId, $courseCode)
     {
         return self::move('down', $sessionId, $courseCode);
     }

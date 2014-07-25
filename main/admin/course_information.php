@@ -119,7 +119,7 @@ if(api_is_multiple_url_enabled()){
 }
 $sql .= " WHERE cu.user_id = u.user_id AND cu.course_code = '".$code."'
 		  AND cu.relation_type <> ".COURSE_RELATION_TYPE_RRHH;
-$res = Database::query($sql, __FILE__, __LINE__);
+$res = Database::query($sql);
 $is_western_name_order = api_is_western_name_order();
 if (Database::num_rows($res) > 0) {
     $users = array();

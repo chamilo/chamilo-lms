@@ -283,7 +283,6 @@ class BigBlueButtonBN {
 		$meetingId = '1234'		-- REQUIRED - The unique id for the meeting
 		*/
 		$xml = $this->_processXmlResponse($this->getIsMeetingRunningUrl($meetingId));
-        error_log(print_r($xml, 1));
 		if($xml) {
 			return array(
 				'returncode' => $xml->returncode,

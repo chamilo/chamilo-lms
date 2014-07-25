@@ -59,14 +59,15 @@ function WSHelperVerifyKey($params)
         }
     }
 
-    if ($debug)
-        error_log("checkip ".intval($check_ip));
+    if ($debug) {
+        error_log("checkip " . intval($check_ip));
+    }
 
     if ($check_ip) {
         $security_key = $_configuration['security_key'];
     } else {
         $security_key = $ip.$_configuration['security_key'];
-        error_log($security_key);
+        //error_log($secret_key.'-'.$security_key);
     }
 
     $result = api_is_valid_secret_key($secret_key, $security_key);
@@ -79,7 +80,7 @@ function WSHelperVerifyKey($params)
 // Create the server instance
 $server = new soap_server();
 
-//$server->soap_defencoding = 'UTF-8';
+$server->soap_defencoding = 'UTF-8';
 
 // Initialize WSDL support
 $server->configureWSDL('WSRegistration', 'urn:WSRegistration');

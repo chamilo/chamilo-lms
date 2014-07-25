@@ -12,7 +12,7 @@
  *
  */
 
-//exit; //Uncomment this in order to execute the page
+exit; //Uncomment this in order to execute the page
 
 require_once '../inc/global.inc.php';
 $libpath = api_get_path(LIBRARY_PATH);

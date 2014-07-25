@@ -193,7 +193,10 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 
 	if (!empty($thematic_advance_info)) {
 
-		$thematic_advance = get_lang('CourseThematicAdvance').'&nbsp;'.$thematic->get_total_average_of_thematic_advances().'%';
+		/*$thematic_advance = get_lang('CourseThematicAdvance').'&nbsp;'.$thematic->get_total_average_of_thematic_advances().'%';*/
+		$thematic_advance = get_lang('CourseThematicAdvance');
+		$thematicScore = $thematic->get_total_average_of_thematic_advances().'%';
+		$thematicUrl = api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq();
 		if (api_is_allowed_to_edit(null, true)) {
 			//$thematic_advance = '<a href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq().'">'.get_lang('CourseThematicAdvance').'&nbsp;'.$thematic->get_total_average_of_thematic_advances().'%</a>';
 		}
@@ -201,15 +204,71 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 
 		$thematic_advance_info['start_date'] = api_get_local_time($thematic_advance_info['start_date']);
 		$thematic_advance_info['start_date'] = api_format_date($thematic_advance_info['start_date'], DATE_TIME_FORMAT_LONG);
+		$userInfo = $_SESSION['_user'];
 
+		
 		$thematic_description_html = '<div class="thematic-postit">
+									  <div class="row-fluid"><div class="span12">
+			    	                  <div class="accordion" id="progress-bar-course">
+						              		<div class="accordion-group">
+						              		<div class="accordion-heading">
+									  		<div class="title-accordion">
+									  <div class="row-fluid score-thematic">
+									  <div class="span4">';
+		$thematic_description_html.='<div class="span5"><h1 class="score">'.$thematicScore.'</h1></div>
+									 <div class="span7"><h3 class="name-student">'.$userInfo['complete_name'].'</h3><p>'.$thematic_advance.'</p></div></div>';
+		$thematic_description_html.='<div class="span8">
+									 <a id="thematic-show" class="btn btn-small btn-primary accordion-toggle btn-hidden-thematic" href="#pross" data-toggle="collapse" data-parent="#progress-bar-course">
+								     '.get_lang('ClickToShowDetails').'
+								     </a>
+								     <a id="thematic-hidden" class="btn btn-small accordion-toggle btn-show-thematic" href="#pross" data-toggle="collapse" data-parent="#progress-bar-course" style="display:none;">
+									 '.get_lang('ClickToHideDetails').'
+								     </a>
+								     </div>
+								     </div>
+									</div>	 
+									</div>';
+		$thematic_description_html.='<div class="accordion-body collapse in" id="pross" >
+									<div class="accordion-inner">
+									<div class="row-fluid">
+									<div class="span4">
+										<div class="row-fluid">
+										<div class="span4">
+											<div class="thumbnail">
+												<img src="'.$userInfo['avatar'].'" class="img-polaroid">
+											</div>
+										</div>
+									<div class="span8">
+											<div class="info-progress">
+												<div class="tittle-score">'.$thematic_advance.'&nbsp;'.$thematicScore.'</div>
+													<div class="progress progress-striped">
+	    												<div class="bar" style="width: '.$thematicScore.';"></div>
+	   												</div>
+	   												<a href="'.$thematicUrl.'" class="btn btn-info">'.get_lang('ShowFullCourseAdvance').'</a>
+   												</div>
+											</div>
+										</div>
+									</div>';
+		$thematic_description_html.='<div class="span8">
+										<div class="topics">'.get_lang('NextTopics').'</div>
+										<div class="row-fluid">';
+		$thematic_description_html.='<div class="span5 items-progress">
+										<p class="date">'.$thematic_advance_info['start_date'].'</p>
+										<h3 class="title">'.$thematic_advance_info['content'].'</h3>
+										<p class="time">'.get_lang('DurationInHours').' : '.$thematic_advance_info['duration'].' <a href="'.$thematicUrl.'">'.get_lang('ShowDetails').'</a></p>
+									</div>';
+
+
+
+
+		/*$thematic_description_html = '<div class="thematic-postit">
 								  	  <div class="thematic-postit-top"><h3><a class="thematic-postit-head" style="" href="#"> '.$thematic_advance.'</h3></a></div>
 								  	  <div class="thematic-postit-center" style="display:none">';
 		$thematic_description_html .= '<div><strong>'.$thematic_info['title'].'</strong></div>';
 		$thematic_description_html .= '<div style="font-size:8pt;"><strong>'.$thematic_advance_info['start_date'].'</strong></div>';
 		$thematic_description_html .= '<div>'.$thematic_advance_info['content'].'</div>';
 		$thematic_description_html .= '<div>'.get_lang('DurationInHours').' : '.$thematic_advance_info['duration'].'</div>';
-
+*/
 
 		if (!empty($thematic_advance_info2)){
 			$thematic_info2 = $thematic->get_thematic_list($thematic_advance_info2['thematic_id']);
@@ -217,15 +276,23 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
 			$thematic_advance_info2['start_date'] = api_get_local_time($thematic_advance_info2['start_date']);
 			$thematic_advance_info2['start_date'] = api_format_date($thematic_advance_info2['start_date'], DATE_TIME_FORMAT_LONG);
 
-			$thematic_description_html .= '<div><strong>'.$thematic_info2['title'].'</strong></div>';
+			$thematic_description_html.='<div class="span5 items-progress">
+										<p class="date">'.$thematic_advance_info2['start_date'].'</p>
+										<h3 class="title">'.$thematic_advance_info2['content'].'</h3>
+										<p class="time">'.get_lang('DurationInHours').' : '.$thematic_advance_info2['duration'].' <a href="'.$thematicUrl.'">'.get_lang('ShowDetails').'</a></p>
+									</div>';
+
+
+			/*$thematic_description_html .= '<div><strong>'.$thematic_info2['title'].'</strong></div>';
 			$thematic_description_html .= '<div style="font-size:8pt;"><strong>'.$thematic_advance_info2['start_date'].'</strong></div>';
 			$thematic_description_html .= '<div>'.$thematic_advance_info2['content'].'</div>';
 			$thematic_description_html .= '<div>'.get_lang('DurationInHours').' : '.$thematic_advance_info2['duration'].'</div>';
-			$thematic_description_html .= '<br />';
+			$thematic_description_html .= '<br />';*/
 		}
-		$thematic_description_html .= '</div>
+		$thematic_description_html.='</div></div></div></div></div></div></div></div></div></div>';
+		/*$thematic_description_html .= '</div>
 								  <div class="thematic-postit-bottom"></div>
-								  </div>';
+								  </div>';*/
 	}
 }
 

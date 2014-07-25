@@ -26,6 +26,87 @@ a:active {
     text-decoration: none;
     color : #3757f7;
 }
+/* START COURSE PROGRESS */
+.thematic-postit{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.thematic-postit .tittle-score{
+  padding-bottom: 5px;
+  font-size: 16px;
+  color: #006699;
+}
+.thematic-postit .topics{
+  font-size: 12px;
+  padding-bottom: 5px;
+  color: #006699;
+}
+.items-progress {
+  border: 1px solid #ccc;
+  padding: 5px;
+  margin-top: 5px;
+  background-color: #FEF4FF;
+}
+.items-progress .date{
+  color: #666;
+  font-size: 11px;
+  display: block;
+}
+.items-progress .title{
+  font-size: 14px;
+  line-height: 18px;
+  display: block;
+}
+.items-progress .time{
+  display: block;
+  padding-top: 5px;
+}
+.info-progress{
+  padding: 10px;
+}
+.score-thematic .score{
+  text-align: right;
+}
+.score-thematic .score, .score-thematic .name-student{
+  color: #FFFFFF;
+}
+.score-thematic .name-student{
+  font-weight: bold;
+  font-size: 16px;
+  padding-bottom: 0px;
+  margin: 0px;
+}
+.score-thematic{
+  color: #FFFFFF;
+}
+.score-thematic p{
+  padding: 0px;
+  margin: 0px;
+}
+.accordion-heading .accordion-toggle {
+  display: inline;
+  padding-bottom: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 3px;
+  float: right;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.accordion-heading .title-accordion{
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.accordion-heading {
+  background:url(images/thematic.png) no-repeat left bottom #55a1d7;
+  color: #006699;
+}
+.collapse.in {
+  height: auto;
+}
+/* END COURSE PROGRESS*/
 .navbar .nav > li > a {
     float: none;
     line-height: 24px;

@@ -1295,39 +1295,6 @@ button.next.disabled {
     text-shadow: gray 3px 3px 2px;
 }
 
-/* THEMATIC ADVANCE */
-.thematic-postit {
-    width:250px;
-    height:auto;
-    overflow:hidden;
-    float:right;
-}
-.thematic-postit-top {
-    background-image: url('../img/postit_top.png');
-    height: 38px;
-
-}
-.thematic-postit-top h3 {
-    margin:20px 5px 10px 20px;
-    padding-top:40px;
-}
-
-.thematic-postit-bottom {
-    background-image: url('../img/postit_bottom.png');
-    height:40px;
-}
-.thematic-postit-center {
-    background-image: url('../img/postit_center.png');
-    height:auto;
-    margin-top: 0px;
-    margin-bottom:-16px;
-    padding: 28px 20px 0;
-}
-
-#titlethematic{
-    text-transform: uppercase;
-}
-
 /* ATTENDANCE */
 
 div.attendance-calendar-add div.row div.formw,div.attendance-calendar-edit div.row div.formw  {
@@ -3696,10 +3663,6 @@ a:active{
     line-height: 22px;
     margin-right: 70px;
     text-shadow: 1px 1px 2px #000000;
-}
-
-#course_tools .row h3 {
-    margin-top:10px;
 }
 
 .td_actions {

@@ -48,6 +48,21 @@ require_once dirname(__FILE__).'/../inc/global.inc.php';
 //unset($_SESSION['lpobject']);
 
 $htmlHeadXtra[] ='<script>
+
+/* option show/hidden thematic-postit */
+
+$(document).ready(function(){
+        $("#thematic-show").click(function(){
+            $(".btn-hidden-thematic").hide();
+            $(".btn-show-thematic").show(); //muestro mediante clase
+        });
+        $("#thematic-hidden").click(function(){
+        $(".btn-show-thematic").hide(); //muestro mediante clase
+        $(".btn-hidden-thematic").show();
+    });
+});
+
+
 $(document).ready(function() {
 	$(".make_visible_and_invisible").attr("href", "javascript:void(0);");
 	$(".make_visible_and_invisible > img").click(function () {
@@ -102,12 +117,6 @@ $(document).ready(function() {
 	});
 });
 
-/* toogle for post-it in course home */
-$(function() {
-	$(".thematic-postit-head").click(function() {
-		$(".thematic-postit-center").slideToggle("fast");
-	});
-});
 
 </script>';
 

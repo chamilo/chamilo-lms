@@ -328,7 +328,7 @@ The more frequent ones have been marked with *
     .course-tool {
         float: left;
         height: 150px;
-        width: 150px;
+        width: 165px;
     }
 
     .course-tool h4 {
@@ -503,7 +503,7 @@ The more frequent ones have been marked with *
 
     }
     .course-tool {
-        width: 210px;
+        width: 160px;
     }
     .course-tool h4 {
         font-size: 14px;
@@ -852,7 +852,7 @@ The more frequent ones have been marked with *
         float: left;
     }
     .course-tool {
-        width: 260px;
+        width: 160px;
     }
     .btn-invitations {
         margin-left: 120px;

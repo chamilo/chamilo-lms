@@ -300,9 +300,9 @@ form .formw input {
 [dir=rtl] #top_main_content .span9 {
   float: right;
 }
-#top_main_content .span6 {
+/*#top_main_content .span6 {
   width: 460px;
-}
+}*
 
 
 /* New changes Chamilo 1.9 */

@@ -2,6 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$RedirectToCourseHome = "Redirigir al inicio de Curso.";
+$LpReturnLink = "Enlace de retorno en las Lecciones";
+$LearningPathList = "Lista de lecciones";
 $UsersWithoutTask = "Estudiantes que no enviaron su tarea";
 $UsersWithTask = "Estudiantes que enviaron su tarea";
 $UploadFromTemplate = "Subir desde plantilla";

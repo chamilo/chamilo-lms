@@ -2,6 +2,9 @@
 /*
 for more information: see languages.txt in the lang folder.
 */
+$RedirectToCourseHome = "Redirect to Course home";
+$LpReturnLink = "Learning path return link";
+$LearningPathList = "Learning path list";
 $UsersWithoutTask = "Learners who didn't send their work";
 $UsersWithTask = "Learners who sent their work";
 $UploadFromTemplate = "Upload from template";
@@ -1597,5 +1600,4 @@ $DataTableSearch = "Search";
 $HideColumn = "Hide column";
 $DisplayColumn = "Show column";
 $LegalAgreementAccepted = "Legal agreement accepted";
-$SessionDurationXDaysLeft = "%s days left";
 ?>
